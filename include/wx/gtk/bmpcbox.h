@@ -133,6 +133,8 @@ protected:
     virtual void GTKCreateComboBoxWidget();
     virtual void GTKInsertComboBoxTextItem( unsigned int n, const wxString& text );
 
+    virtual wxSize DoGetBestSize() const;
+
     wxSize                  m_bitmapSize;
     int                     m_bitmapCellIndex;
 

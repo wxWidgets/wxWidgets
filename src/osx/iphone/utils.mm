@@ -82,6 +82,15 @@ int wxApp::OnRun()
     return 1;
 }
 
+bool wxApp::DoInitGui()
+{
+    return true;
+}
+
+void wxApp::DoCleanUp()
+{
+}
+
 void wxMacWakeUp()
 {
     // TODO
@@ -251,10 +260,11 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // get OS version
     int major, minor;
 
-    wxString release = wxCFStringRef( [ [UIDevice currentDevice] systemVersion] ).AsString() ;
+    wxString release = wxCFStringRef( wxCFRetain( [ [UIDevice currentDevice] systemVersion] ) ).AsString() ;
 
     if ( release.empty() ||
-         wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
+        // TODO use wx method
+         scanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
     {
         // failed to get version string or unrecognized format
         major =
@@ -271,7 +281,7 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
 
 wxString wxGetOsDescription()
 {
-    wxString release = wxCFStringRef( [ [UIDevice currentDevice] systemName] ).AsString() ;
+    wxString release = wxCFStringRef( wxCFRetain([ [UIDevice currentDevice] systemName] )).AsString() ;
 
     return release;
 }

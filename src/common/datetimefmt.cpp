@@ -811,7 +811,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
         return false;
 
     // 7. now the interesting part: the timezone
-    int offset wxDUMMY_INITIALIZE(0);
+    int offset = 0; // just to suppress warnings
     if ( *p == '-' || *p == '+' )
     {
         // the explicit offset given: it has the form of hhmm

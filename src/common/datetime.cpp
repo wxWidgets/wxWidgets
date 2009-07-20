@@ -934,7 +934,7 @@ void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
     // assert, even though it is a perfectly legal use.
     if ( am )
     {
-        if (wxStrftime(buffer, sizeof(buffer)/sizeof(wxChar), _T("%p"), &tm) > 0)
+        if (wxStrftime(buffer, WXSIZEOF(buffer), _T("%p"), &tm) > 0)
             *am = wxString(buffer);
         else
             *am = wxString();
@@ -942,7 +942,7 @@ void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
     if ( pm )
     {
         tm.tm_hour = 13;
-        if (wxStrftime(buffer, sizeof(buffer)/sizeof(wxChar), _T("%p"), &tm) > 0)
+        if (wxStrftime(buffer, WXSIZEOF(buffer), _T("%p"), &tm) > 0)
             *pm = wxString(buffer);
         else
             *pm = wxString();

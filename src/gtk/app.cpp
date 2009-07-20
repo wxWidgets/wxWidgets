@@ -127,6 +127,8 @@ bool wxApp::DoIdle()
     gdk_threads_enter();
     bool needMore;
     do {
+        ProcessPendingEvents();
+
         needMore = ProcessIdle();
     } while (needMore && gtk_events_pending() == 0);
     gdk_threads_leave();

@@ -183,7 +183,7 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     wxStatusBarBase::SetFieldsCount(nFields, widths);
 
     SetFieldsWidth();
-    
+
     // keep in synch also our m_tooltips array
 
     // reset all current tooltips
@@ -236,7 +236,9 @@ void wxStatusBar::SetFieldsWidth()
     }
 
     if ( !StatusBar_SetParts(GetHwnd(), m_panes.GetCount(), pWidths) )
+    {
         wxLogLastError("StatusBar_SetParts");
+    }
 
     delete [] pWidths;
 
@@ -309,22 +311,24 @@ void wxStatusBar::UpdateFieldText(int nField)
     }
     else
     {
-        text = wxControl::Ellipsize(text, 
+        text = wxControl::Ellipsize(text,
                                      *m_pDC,
                                      ellmode,
                                      maxWidth,
                                      wxELLIPSIZE_EXPAND_TAB);
-        
-        // update the ellipsization status for this pane; this is used later to 
-        // decide whether a tooltip should be shown or not for this pane 
+
+        // update the ellipsization status for this pane; this is used later to
+        // decide whether a tooltip should be shown or not for this pane
         // (if we have wxSTB_SHOW_TIPS)
         SetEllipsizedFlag(nField, text != GetStatusText(nField));
     }
 
-    // Set the status text in the native control passing both field number and style. 
+    // Set the status text in the native control passing both field number and style.
     // NOTE: MSDN library doesn't mention that nField and style have to be 'ORed'
     if ( !StatusBar_SetText(GetHwnd(), nField | style, text.wx_str()) )
+    {
         wxLogLastError("StatusBar_SetText");
+    }
 
     if (HasFlag(wxSTB_SHOW_TIPS))
     {
@@ -388,7 +392,9 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 
     RECT r;
     if ( !::SendMessage(GetHwnd(), SB_GETRECT, i, (LPARAM)&r) )
+    {
         wxLogLastError("SendMessage(SB_GETRECT)");
+    }
 
 #if wxUSE_UXTHEME
     wxUxThemeHandle theme(const_cast<wxStatusBar*>(this), L"Status");
@@ -514,11 +520,13 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
         }
 
         // The SB_SETTEXT message is both used to set the field's text as well as
-        // the fields' styles. 
+        // the fields' styles.
         // NOTE: MSDN library doesn't mention that nField and style have to be 'ORed'
         wxString text = GetStatusText(i);
         if (!StatusBar_SetText(GetHwnd(), style | i, text.wx_str()))
+        {
             wxLogLastError("StatusBar_SetText");
+        }
     }
 }
 

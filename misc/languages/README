@@ -1,5 +1,4 @@
-
-  Files in this directory are used to generate parts
-  of include/wx/intl.h (wxLanguage enum) and
-  src/common/intl.cpp (conversion tables)
+Run the genlang.py script from the top level wxWidgets directory to update
+include/wx/intl.h (wxLanguage enum), interface/wx/intl.h (its documentation)
+and src/common/intl.cpp (conversion tables) with the data from langtabl.txt.
 

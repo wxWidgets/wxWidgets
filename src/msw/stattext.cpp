@@ -142,7 +142,7 @@ WXDWORD wxStaticText::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-wxSize wxStaticText::DoGetBestSize() const
+wxSize wxStaticText::DoGetBestClientSize() const
 {
     wxClientDC dc(const_cast<wxStaticText *>(this));
     wxFont font(GetFont());
@@ -159,40 +159,7 @@ wxSize wxStaticText::DoGetBestSize() const
         widthTextMax += 2;
 #endif // __WXWINCE__
 
-    // border takes extra space
-    //
-    // TODO: this is probably not wxStaticText-specific and should be moved
-    wxCoord border;
-    switch ( GetBorder() )
-    {
-        case wxBORDER_STATIC:
-        case wxBORDER_SIMPLE:
-            border = 1;
-            break;
-
-        case wxBORDER_SUNKEN:
-            border = 2;
-            break;
-
-        case wxBORDER_RAISED:
-        case wxBORDER_DOUBLE:
-            border = 3;
-            break;
-
-        default:
-            wxFAIL_MSG( _T("unknown border style") );
-            // fall through
-
-        case wxBORDER_NONE:
-            border = 0;
-    }
-
-    widthTextMax += 2*border;
-    heightTextTotal += 2*border;
-
-    wxSize best(widthTextMax, heightTextTotal);
-    CacheBestSize(best);
-    return best;
+    return wxSize(widthTextMax, heightTextTotal);
 }
 
 void wxStaticText::DoSetSize(int x, int y, int w, int h, int sizeFlags)

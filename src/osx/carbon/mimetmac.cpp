@@ -1404,7 +1404,9 @@ wxFileType* wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
                 wxString sError;
                 bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
                 if (!bInfoOpenSuccess)
+                {
                     wxLogDebug(sError);
+                }
                 indictfile.Close();
             }
 
@@ -1752,7 +1754,9 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
                 wxString sError;
                 bInfoOpenSuccess = cfdInfo.ReadAsXML(cfdaInDict, &sError);
                 if (!bInfoOpenSuccess)
+                {
                     wxLogDebug(sError);
+                }
                 indictfile.Close();
             }
 
@@ -1853,7 +1857,9 @@ wxMimeTypesManagerImpl::Unassociate(wxFileType *pFileType)
                         wxLogDebug(sPrintOut);
 
                         for (size_t i = 0; i < asExtensions.GetCount(); ++i)
+                        {
                             wxLogDebug(asExtensions[i]);
+                        }
                     }
                 }
                 else

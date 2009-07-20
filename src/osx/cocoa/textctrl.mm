@@ -141,7 +141,7 @@ protected :
 
 - (void) keyDown:(NSEvent*) event
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     lastKeyDownEvent = event;
     if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
         [super keyDown:event];
@@ -150,14 +150,14 @@ protected :
 
 - (void) keyUp:(NSEvent*) event
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
         [super keyUp:event];
 }
 
 - (void) flagsChanged:(NSEvent*) event
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
         [super flagsChanged:event];
 }
@@ -170,7 +170,7 @@ protected :
 
 - (void) insertText:(id) str
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( (WXWidget) [self delegate] );
     if ( impl == NULL || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
     {
         [super insertText:str];

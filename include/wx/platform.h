@@ -338,18 +338,22 @@
 
 
 /*
-   This macro can be used to test the Open Watcom version.
+   Define Watcom-specific macros.
 */
 #ifndef __WATCOMC__
 #   define wxWATCOM_VERSION(major,minor) 0
 #   define wxCHECK_WATCOM_VERSION(major,minor) 0
 #   define wxONLY_WATCOM_EARLIER_THAN(major,minor) 0
-#elif defined(__WATCOMC__) && __WATCOMC__ < 1200
-#   error "Only Open Watcom is supported in this release"
+#   define WX_WATCOM_ONLY_CODE( x )
 #else
+#   if __WATCOMC__ < 1200
+#       error "Only Open Watcom is supported in this release"
+#   endif
+
 #   define wxWATCOM_VERSION(major,minor) ( major * 100 + minor * 10 + 1100 )
 #   define wxCHECK_WATCOM_VERSION(major,minor) ( __WATCOMC__ >= wxWATCOM_VERSION(major,minor) )
 #   define wxONLY_WATCOM_EARLIER_THAN(major,minor) ( __WATCOMC__ < wxWATCOM_VERSION(major,minor) )
+#   define WX_WATCOM_ONLY_CODE( x )  x
 #endif
 
 /*

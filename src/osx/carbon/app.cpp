@@ -508,7 +508,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
         }
         else
         {
-            URefCon refCon = NULL ;
+            URefCon refCon = 0 ;
 
             GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
             itemMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
@@ -841,11 +841,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
+#if wxOSX_USE_COCOA_OR_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
     return OnInit();
 }
+#endif
 
 bool wxApp::OnInitGui()
 {

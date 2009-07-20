@@ -64,23 +64,23 @@ msgstr "leve"
 
 #: ../src/common/paper.cpp:119
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
-msgstr "Envelope #10, 4 1/8 x 9 1/2 em"
+msgstr "Envelope #10, 4 1/8 x 9 1/2 pol."
 
 #: ../src/common/paper.cpp:120
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
-msgstr "Envelope #11, 4 1/2 x 10 3/8 em"
+msgstr "Envelope #11, 4 1/2 x 10 3/8 pol."
 
 #: ../src/common/paper.cpp:121
 msgid "#12 Envelope, 4 3/4 x 11 in"
-msgstr "Envelope #12, 4 3/4 x 11 em"
+msgstr "Envelope #12, 4 3/4 x 11 pol."
 
 #: ../src/common/paper.cpp:122
 msgid "#14 Envelope, 5 x 11 1/2 in"
-msgstr "Envelope #14, 5 x 11 1/2 em"
+msgstr "Envelope #14, 5 x 11 1/2 pol."
 
 #: ../src/common/paper.cpp:118
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
-msgstr "Envelope #9, 3 7/8 x 8 7/8 em"
+msgstr "Envelope #9, 3 7/8 x 8 7/8 pol."
 
 #: ../src/common/filename.cpp:2368
 #, c-format
@@ -726,23 +726,23 @@ msgstr "1.5"
 
 #: ../src/common/paper.cpp:142
 msgid "10 x 11 in"
-msgstr "10 x 11 em"
+msgstr "10 x 11 pol."
 
 #: ../src/common/paper.cpp:115
 msgid "10 x 14 in"
-msgstr "10 x 14 em"
+msgstr "10 x 14 pol."
 
 #: ../src/common/paper.cpp:116
 msgid "11 x 17 in"
-msgstr "11 x 17 em"
+msgstr "11 x 17 pol."
 
 #: ../src/common/paper.cpp:186
 msgid "12 x 11 in"
-msgstr "12 x 11 em"
+msgstr "12 x 11 pol."
 
 #: ../src/common/paper.cpp:143
 msgid "15 x 11 in"
-msgstr "15 x 11 em"
+msgstr "15 x 11 pol."
 
 #: ../src/richtext/richtextliststylepage.cpp:461
 #: ../src/richtext/richtextindentspage.cpp:247
@@ -784,7 +784,7 @@ msgstr "9"
 
 #: ../src/common/paper.cpp:141
 msgid "9 x 11 in"
-msgstr "9 x 11 em"
+msgstr "9 x 11 pol."
 
 #: ../src/html/htmprint.cpp:303
 msgid ": file does not exist!"
@@ -935,7 +935,7 @@ msgstr "Folha A3, 297 x 420 mm"
 
 #: ../src/common/paper.cpp:148
 msgid "A4 Extra 9.27 x 12.69 in"
-msgstr "A4 Extra, 9.27 x 12.69 em"
+msgstr "A4 Extra, 9.27 x 12.69 pol."
 
 #: ../src/common/paper.cpp:155
 msgid "A4 Plus 210 x 330 mm"
@@ -1261,7 +1261,7 @@ msgstr "Projéteis"
 
 #: ../src/common/paper.cpp:100
 msgid "C sheet, 17 x 22 in"
-msgstr "Folha C, 17 x 22 em"
+msgstr "Folha C, 17 x 22 pol."
 
 #: ../src/generic/logg.cpp:537
 msgid "C&lear"
@@ -2298,7 +2298,7 @@ msgstr "Cirílico (ISO-8859-5)"
 
 #: ../src/common/paper.cpp:101
 msgid "D sheet, 22 x 34 in"
-msgstr "Folha D, 22 x 34 em"
+msgstr "Folha D, 22 x 34 pol."
 
 #: ../src/msw/dde.cpp:706
 msgid "DDE poke request failed"
@@ -2540,7 +2540,7 @@ msgstr "Para baixo"
 
 #: ../src/common/paper.cpp:102
 msgid "E sheet, 34 x 44 in"
-msgstr "Folha E 34 x 44"
+msgstr "Folha E 34 x 44 pol."
 
 #: ../src/common/accelcmn.cpp:60
 msgid "END"
@@ -2680,7 +2680,7 @@ msgstr "A execução do comando '%s' falhou com o erro: %ul"
 
 #: ../src/common/paper.cpp:107
 msgid "Executive, 7 1/4 x 10 1/2 in"
-msgstr "Executivo, 7 1/4 x 10 1/2 em"
+msgstr "Executivo, 7 1/4 x 10 1/2 pol."
 
 #: ../src/msw/registry.cpp:1159
 #, c-format
@@ -3263,7 +3263,7 @@ msgstr "Face do tamanho fixo.<br> <b>negrito</b> <i>itálico</i> "
 
 #: ../src/common/paper.cpp:113
 msgid "Folio, 8 1/2 x 13 in"
-msgstr "Folio, 8 1/2 x 13 em"
+msgstr "Folio, 8 1/2 x 13 pol."
 
 #: ../src/richtext/richtextformatdlg.cpp:275
 #: ../src/mac/carbon/fontdlg.cpp:449
@@ -3343,11 +3343,11 @@ msgstr "PostScript Genérico"
 
 #: ../src/common/paper.cpp:137
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
-msgstr "Fanfold Legal Alemão, 8 1/2 x 13 em"
+msgstr "Fanfold Legal Alemão, 8 1/2 x 13 pol."
 
 #: ../src/common/paper.cpp:136
 msgid "German Std Fanfold, 8 1/2 x 12 in"
-msgstr "Fanfold Std Alemão, 8 1/2 x 12 em"
+msgstr "Fanfold Std Alemão, 8 1/2 x 12 pol."
 
 #: ../src/html/helpwnd.cpp:661
 msgid "Go back"
@@ -3906,7 +3906,7 @@ msgstr "Paisagem"
 
 #: ../src/common/paper.cpp:105
 msgid "Ledger, 17 x 11 in"
-msgstr "Ledger, 17 x 11 em"
+msgstr "Ledger, 17 x 11 pol."
 
 #: ../src/richtext/richtextliststylepage.cpp:248
 #: ../src/richtext/richtextliststylepage.cpp:251
@@ -3935,39 +3935,39 @@ msgstr "Alinhar o texto a esquerda."
 
 #: ../src/common/paper.cpp:146
 msgid "Legal Extra 9 1/2 x 15 in"
-msgstr "Extra Legal, 9 1/2 x 15 em"
+msgstr "Extra Legal, 9 1/2 x 15 pol."
 
 #: ../src/common/paper.cpp:98
 msgid "Legal, 8 1/2 x 14 in"
-msgstr "Legal, 8 1/2 x 14 em"
+msgstr "Legal, 8 1/2 x 14 pol."
 
 #: ../src/common/paper.cpp:145
 msgid "Letter Extra 9 1/2 x 12 in"
-msgstr "Carta Extra 9 1/2 x 12 em"
+msgstr "Carta Extra 9 1/2 x 12 pol."
 
 #: ../src/common/paper.cpp:151
 msgid "Letter Extra Transverse 9.275 x 12 in"
-msgstr "Carta Extra Transversal 9.275 x 12 em"
+msgstr "Carta Extra Transversal 9.275 x 12 pol."
 
 #: ../src/common/paper.cpp:154
 msgid "Letter Plus 8 1/2 x 12.69 in"
-msgstr "Carta Plus, 8 1/2 x 12.69 em"
+msgstr "Carta Plus, 8 1/2 x 12.69 pol."
 
 #: ../src/common/paper.cpp:171
 msgid "Letter Rotated 11 x 8 1/2 in"
-msgstr "Carta Rotacionada 11 x 8 1/2 em"
+msgstr "Carta Rotacionada 11 x 8 1/2 pol."
 
 #: ../src/common/paper.cpp:103
 msgid "Letter Small, 8 1/2 x 11 in"
-msgstr "Carta Pequena, 8 1/2 x 11 em"
+msgstr "Carta Pequena, 8 1/2 x 11 pol."
 
 #: ../src/common/paper.cpp:149
 msgid "Letter Transverse 8 1/2 x 11 in"
-msgstr "Carta Transversal 8 1/2 x 11 em"
+msgstr "Carta Transversal 8 1/2 x 11 pol."
 
 #: ../src/common/paper.cpp:97
 msgid "Letter, 8 1/2 x 11 in"
-msgstr "Carta, 8 1/2 x 11 em"
+msgstr "Carta, 8 1/2 x 11 pol."
 
 #: ../src/generic/aboutdlgg.cpp:139
 msgid "License"
@@ -4104,7 +4104,7 @@ msgstr "A inicialização do módulo \"%s\" falhou"
 
 #: ../src/common/paper.cpp:133
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
-msgstr "Envelope Monarca, 3 7/8 x 7 1/2 em"
+msgstr "Envelope Monarca, 3 7/8 x 7 1/2 pol."
 
 #: ../src/generic/editlbox.cpp:276
 msgid "Move down"
@@ -4321,7 +4321,7 @@ msgstr "Não sublinhado"
 
 #: ../src/common/paper.cpp:117
 msgid "Note, 8 1/2 x 11 in"
-msgstr "Nota, 8 1/2 x 11 em"
+msgstr "Nota, 8 1/2 x 11 pol."
 
 #: ../src/generic/notifmsgg.cpp:101
 msgid "Notice"
@@ -5301,7 +5301,7 @@ msgstr "Padrão"
 
 #: ../src/common/paper.cpp:106
 msgid "Statement, 5 1/2 x 8 1/2 in"
-msgstr "Declaração, 5 1/2 x 8 1/2 em"
+msgstr "Declaração, 5 1/2 x 8 1/2 pol."
 
 #: ../src/generic/prntdlgg.cpp:210
 msgid "Status:"
@@ -5407,11 +5407,11 @@ msgstr "TIFF: Erro ao gravar imagem."
 
 #: ../src/common/paper.cpp:147
 msgid "Tabloid Extra 11.69 x 18 in"
-msgstr "Tablóide Extra 11.69 x 18 em"
+msgstr "Tablóide Extra 11.69 x 18 pol."
 
 #: ../src/common/paper.cpp:104
 msgid "Tabloid, 11 x 17 in"
-msgstr "Tablóide, 11 x 17 em"
+msgstr "Tablóide, 11 x 17 pol."
 
 #: ../src/richtext/richtextformatdlg.cpp:287
 msgid "Tabs"
@@ -5809,7 +5809,7 @@ msgstr "UP"
 
 #: ../src/common/paper.cpp:135
 msgid "US Std Fanfold, 14 7/8 x 11 in"
-msgstr "Fanfold Std US, 14 7/8 x 11 em"
+msgstr "Fanfold Std US, 14 7/8 x 11 pol."
 
 #: ../src/common/fmapbase.cpp:153
 msgid "US-ASCII"

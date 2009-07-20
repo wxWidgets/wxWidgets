@@ -1634,18 +1634,20 @@ long wxPGProperty::GetAttributeAsLong( const wxString& name, long defVal ) const
 {
     wxVariant variant = m_attributes.FindValue(name);
 
-    return wxPGVariantToInt(variant, defVal);
+    if ( variant.IsNull() )
+        return defVal;
+
+    return variant.GetLong();
 }
 
 double wxPGProperty::GetAttributeAsDouble( const wxString& name, double defVal ) const
 {
-    double retVal;
     wxVariant variant = m_attributes.FindValue(name);
 
-    if ( wxPGVariantToDouble(variant, &retVal) )
-        return retVal;
+    if ( variant.IsNull() )
+        return defVal;
 
-    return defVal;
+    return variant.GetDouble();
 }
 
 wxVariant wxPGProperty::GetAttributesAsList() const
@@ -2329,9 +2331,13 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
 
     /*
     if ( current )
+    {
         wxLogDebug(wxT("%s::GetItemAtY(%i) -> %s"),this->GetLabel().c_str(),y,current->GetLabel().c_str());
+    }
     else
+    {
         wxLogDebug(wxT("%s::GetItemAtY(%i) -> NULL"),this->GetLabel().c_str(),y);
+    }
     */
 
     return (wxPGProperty*) result;
@@ -2682,7 +2688,7 @@ void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
 {
     AllocExclusive();
 
-    wxASSERT( m_data->m_refCount != 0xFFFFFFF );
+    wxASSERT( m_data->GetRefCount() != -1 );
     m_data->m_items.erase(m_data->m_items.begin()+nIndex,
                           m_data->m_items.begin()+nIndex+count);
 }
@@ -2798,7 +2804,7 @@ void wxPGChoices::AllocExclusive()
 {
     EnsureData();
 
-    if ( m_data->m_refCount != 1 )
+    if ( m_data->GetRefCount() != 1 )
     {
         wxPGChoicesData* data = new wxPGChoicesData();
         data->CopyDataFrom(m_data);
@@ -2816,7 +2822,7 @@ void wxPGChoices::AssignData( wxPGChoicesData* data )
     if ( data != wxPGChoicesEmptyData )
     {
         m_data = data;
-        data->m_refCount++;
+        data->IncRef();
     }
 }
 

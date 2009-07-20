@@ -131,8 +131,6 @@ public:
     // event handlers
     // --------------
 
-    void OnNcPaint( wxNcPaintEvent& event );
-    void OnEraseBackground(wxEraseEvent& event );
     void OnMouseEvent( wxMouseEvent &event );
 
     void MacOnScroll( wxScrollEvent&event );

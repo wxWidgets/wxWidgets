@@ -86,6 +86,11 @@ public:
 
     virtual bool Load(const wxString& fileName);
     virtual bool Load(const wxURI& location);
+    virtual bool Load(const wxURI& location,
+                      const wxURI& WXUNUSED(proxy))
+    {
+        return Load(location);
+    }
 
     virtual bool Play();
     virtual bool Pause();

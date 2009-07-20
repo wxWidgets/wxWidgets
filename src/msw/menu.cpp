@@ -118,7 +118,9 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
     info.fMask = MIIM_STATE;
     // MF_BYCOMMAND is zero so test MF_BYPOSITION
     if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYPOSITION ? TRUE : FALSE , & info) )
+    {
         wxLogLastError(wxT("GetMenuItemInfo"));
+    }
     return info.fState;
 }
 #endif // __WXWINCE__
@@ -569,7 +571,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     mi.fMask = MIM_STYLE;
                     mi.dwStyle = MNS_CHECKORBMP;
                     if ( !(*pfnSetMenuInfo)(GetHmenu(), &mi) )
+                    {
                         wxLogLastError(_T("SetMenuInfo(MNS_NOCHECK)"));
+                    }
                 }
 
                 // tell the item that it's not really owner-drawn but only
@@ -1446,9 +1450,13 @@ bool wxMenuBar::AddAdornments(long style)
     if (style & wxCLOSE_BOX)
     {
         if (!CommandBar_AddAdornments((HWND) m_commandBar, 0, 0))
+        {
             wxLogLastError(wxT("CommandBar_AddAdornments"));
+        }
         else
+        {
             return true;
+        }
     }
     return false;
 }

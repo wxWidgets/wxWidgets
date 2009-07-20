@@ -21,6 +21,8 @@
 
 #include "wx/osx/private.h"
 
+#if wxUSE_SCROLLBAR
+
 IMPLEMENT_DYNAMIC_CLASS(wxScrollBar, wxControl)
 
 BEGIN_EVENT_TABLE(wxScrollBar, wxControl)
@@ -175,3 +177,5 @@ void wxScrollBar::TriggerScrollEvent( wxEventType scrollEvent )
     else
         HandleWindowEvent( event );
 }
+
+#endif

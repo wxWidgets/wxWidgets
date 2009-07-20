@@ -447,7 +447,17 @@ public:
     static wxThread *This();
 
         // Returns true if current thread is the main thread.
-    static bool IsMain();
+        //
+        // Notice that it also returns true if main thread id hadn't been
+        // initialized yet on the assumption that it's too early in wx startup
+        // process for any other threads to have been created in this case.
+    static bool IsMain()
+    {
+        return !ms_idMainThread || GetCurrentId() == ms_idMainThread;
+    }
+
+        // Return the main thread id
+    static wxThreadIdType GetMainId() { return ms_idMainThread; }
 
         // Release the rest of our time slice letting the other threads run
     static void Yield();
@@ -466,7 +476,7 @@ public:
         // Get the platform specific thread ID and return as a long.  This
         // can be used to uniquely identify threads, even if they are not
         // wxThreads.  This is used by wxPython.
-   static wxThreadIdType GetCurrentId();
+    static wxThreadIdType GetCurrentId();
 
         // sets the concurrency level: this is, roughly, the number of threads
         // the system tries to schedule to run in parallel. 0 means the
@@ -586,6 +596,11 @@ private:
     virtual void OnExit() { }
 
     friend class wxThreadInternal;
+    friend class wxThreadModule;
+
+
+    // the main thread identifier, should be set on startup
+    static wxThreadIdType ms_idMainThread;
 
     // the (platform-dependent) thread class implementation
     wxThreadInternal *m_internal;

@@ -185,7 +185,6 @@ public:
     // --------------
 
     void OnPaint(wxPaintEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
 #ifdef __WXWINCE__
     void OnInitDialog(wxInitDialogEvent& event);
 #endif
@@ -501,6 +500,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+
+    virtual wxSize DoGetBorderSize() const;
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();

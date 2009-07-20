@@ -305,9 +305,13 @@ void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCheck(wxCommandEvent& WXUNUSED(event))
 {
    if(wxGetApp().GetDialer()->IsOnline())
+   {
       wxLogMessage(wxT("Network is online."));
+   }
    else
+   {
       wxLogMessage(wxT("Network is offline."));
+   }
 }
 
 void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))

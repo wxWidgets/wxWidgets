@@ -286,7 +286,7 @@ void wxToolBar::Init()
     // 32*32) size for their bitmaps, the native control itself still uses the
     // old 16*15 default size (see TB_SETBITMAPSIZE documentation in MSDN), so
     // default to it so that we don't call SetToolBitmapSize() unnecessarily in
-    // AdjustToolBitmapSize()
+    // wxToolBarBase::AdjustToolBitmapSize()
     m_defaultWidth = 16;
     m_defaultHeight = 15;
 
@@ -634,34 +634,12 @@ void wxToolBar::CreateDisabledImageList()
     }
 }
 
-void wxToolBar::AdjustToolBitmapSize()
-{
-    const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
-
-    wxSize sizeActual(sizeOrig);
-
-    for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
-          i != m_tools.end();
-          ++i )
-    {
-        const wxBitmap& bmp = (*i)->GetNormalBitmap();
-        sizeActual.IncTo(bmp.GetSize());
-    }
-
-    if ( sizeActual != sizeOrig )
-        SetToolBitmapSize(sizeActual);
-}
-
 bool wxToolBar::Realize()
 {
-    const size_t nTools = GetToolsCount();
-    if ( nTools == 0 )
-        // nothing to do
-        return true;
+    if ( !wxToolBarBase::Realize() )
+        return false;
 
-    // make sure tool size is larger enough for all all bitmaps to fit in
-    // (this is consistent with what other ports do):
-    AdjustToolBitmapSize();
+    const size_t nTools = GetToolsCount();
 
 #ifdef wxREMAP_BUTTON_COLOURS
     // don't change the values of these constants, they can be set from the
@@ -1622,7 +1600,9 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // it can also return S_FALSE which seems to simply say that it
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
+            {
                 wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+            }
         }
     }
 
@@ -1645,7 +1625,9 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // it can also return S_FALSE which seems to simply say that it
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
+            {
                 wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+            }
         }
     }
 

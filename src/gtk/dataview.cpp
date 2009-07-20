@@ -601,9 +601,8 @@ wxgtk_tree_model_iter_next (GtkTreeModel  *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
 
-    //if (wxtree_model->stamp != iter->stamp)
-    //   wxPrintf( "crash\n" );
-    // TODO: remove this code
+    // This happens when clearing the view by calling .._set_model( NULL );
+    if (iter->stamp == 0) return FALSE;
 
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (wxtree_model->stamp == iter->stamp, FALSE);
@@ -639,7 +638,7 @@ wxgtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
                                   GtkTreeIter  *iter)
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
-    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
+    g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), 0);
     g_return_val_if_fail ( !iter || wxtree_model->stamp == iter->stamp, 0);
 
     return wxtree_model->internal->iter_n_children( iter );
@@ -1489,16 +1488,9 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->m_treeview), NULL );
-
-    // this will create a new GTK model
     m_owner->GtkGetInternal()->Cleared();
-
-    SetGtkModel( m_owner->GtkGetInternal()->GetGtkModel() );
-
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->m_treeview), GTK_TREE_MODEL(m_wxgtk_model) );
-
-    return false;
+    
+    return true;
 }
 
 // ---------------------------------------------------------
@@ -2580,9 +2572,11 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
 
     if (value.GetType() != cell->GetVariantType())
+    {
         wxLogError( wxT("Wrong type, required: %s but: %s"),
                     value.GetType().c_str(),
                     cell->GetVariantType().c_str() );
+    }
 
     cell->SetValue( value );
 
@@ -3320,17 +3314,16 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
 
 bool wxDataViewCtrlInternal::Cleared()
 {
+    GtkWidget* tree_widget = GetOwner()->GtkGetTreeView();
+    gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), NULL );
+    gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), GTK_TREE_MODEL(m_gtk_model) );
+    
     if (m_root)
     {
         delete m_root;
         InitTree();
     }
-
-    // Create new GTK model
-    g_object_unref( m_gtk_model );
-    m_gtk_model = wxgtk_tree_model_new();
-    m_gtk_model->internal = this;
-
+    
     return true;
 }
 
@@ -3407,13 +3400,14 @@ GtkTreeModelFlags wxDataViewCtrlInternal::get_flags()
 
 gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path )
 {
+
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
-
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
+    
         unsigned int i = (unsigned int)gtk_tree_path_get_indices (path)[0];
-
-        if (i >= wx_model->GetLastIndex() + 1)
+        
+        if (i >= wx_model->GetCount())
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
@@ -3496,17 +3490,23 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         // user_data is just the index +1
         int n = ( (wxUIntPtr) iter->user_data ) -1;
 
         if (n == -1)
+        {
+            iter->user_data = NULL;
             return FALSE;
+        }
 
-        if (n >= (int) wx_model->GetLastIndex())
+        if (n >= (int) wx_model->GetCount()-1)
+        {
+            iter->user_data = NULL;
             return FALSE;
-
+        }
+        
         // user_data is just the index +1 (+2 because we need the next)
         iter->user_data = (gpointer) (n+2);
     }
@@ -3514,14 +3514,19 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
     {
         wxGtkTreeModelNode *parent = FindParentNode( iter );
         if( parent == NULL )
+        {
+            iter->user_data = NULL;
             return FALSE;
+        }
 
         int pos = parent->GetChildren().Index( iter->user_data );
 
         if (pos == (int) parent->GetChildCount()-1)
+        {
+            iter->user_data = NULL;
             return FALSE;
+        }
 
-        iter->stamp = m_gtk_model->stamp;
         iter->user_data = parent->GetChildren().Item( pos+1 );
     }
 
@@ -3537,12 +3542,20 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
-        iter->user_data = (gpointer) 0;
+        iter->user_data = (gpointer) 1;
 
         return TRUE;
     }
     else
     {
+        if (iter == NULL)
+        {
+            if (m_root->GetChildCount() == 0) return FALSE;
+            iter->stamp = m_gtk_model->stamp;
+            iter->user_data = (gpointer) m_root->GetChildren().Item( 0 );
+            return TRUE;
+        }
+        
         wxDataViewItem item( (void*) parent->user_data );
 
         if (!m_wx_model->IsContainer( item ))
@@ -3568,11 +3581,19 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
+
+        if (iter == NULL)
+            return (wx_model->GetCount() > 0);
+        
         // this is a list, nodes have no children
         return FALSE;
     }
     else
     {
+        if (iter == NULL)
+            return (m_root->GetChildCount() > 0);
+    
         wxDataViewItem item( (void*) iter->user_data );
 
         bool is_container = m_wx_model->IsContainer( item );
@@ -3594,10 +3615,10 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         if (iter == NULL)
-            return (gint) wx_model->GetLastIndex() + 1;
+            return (gint) wx_model->GetCount();
 
         return 0;
     }
@@ -3617,8 +3638,6 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 
         BuildBranch( parent_node );
 
-        // wxPrintf( "iter_n_children %d\n", parent_node->GetChildCount() );
-
         return parent_node->GetChildCount();
     }
 }
@@ -3627,7 +3646,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         if (parent)
             return FALSE;
@@ -3635,12 +3654,12 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
         if (n < 0)
             return FALSE;
 
-        if (n >= (gint) wx_model->GetLastIndex() + 1)
+        if (n >= (gint) wx_model->GetCount())
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
         // user_data is just the index +1
-        iter->user_data = (gpointer) (n-1);
+        iter->user_data = (gpointer) (n+1);
 
         return TRUE;
     }
@@ -3658,8 +3677,6 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
             "Did you forget a call to ItemAdded()? The parent node is unknown to the wxGtkTreeModel");
 
         BuildBranch( parent_node );
-
-        // wxPrintf( "iter_nth_child %d\n", n );
 
         iter->stamp = m_gtk_model->stamp;
         iter->user_data = parent_node->GetChildren().Item( n );
@@ -4008,8 +4025,6 @@ gtk_dataview_motion_notify_callback( GtkWidget *WXUNUSED(widget),
         {
             GtkTreeIter iter;
             dv->GtkGetInternal()->get_iter( &iter, path );
-
-            // wxPrintf( "mouse %d %d\n", (int) gdk_event->x, (int) gdk_event->y );
 
             gtk_tree_path_free( path );
         }

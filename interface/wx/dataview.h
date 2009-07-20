@@ -61,7 +61,7 @@
     wxDataViewIndexListModel, wxDataViewVirtualListModel, wxDataViewTreeStore,
     wxDataViewListStore.
 
-    Note that wxDataViewModel is reference counted, derives from wxObjectRefData
+    Note that wxDataViewModel is reference counted, derives from wxRefCounter
     and cannot be deleted directly as it can be shared by several wxDataViewCtrls.
     This implies that you need to decrease the reference count after
     associating the model with a control like this:
@@ -78,7 +78,7 @@
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewModel : public wxObjectRefData
+class wxDataViewModel : public wxRefCounter
 {
 public:
     /**
@@ -2318,6 +2318,8 @@ public:
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+    @event{EVT_DATAVIEW_CACHE_HINT(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_CACHE_HINT event.
     @endEventTable
     
     @library{wxadv}
@@ -2419,5 +2421,15 @@ public:
         Gets the data buffer for a drop data transfer.
     */
     void *GetDataBuffer() const;
+
+    /**
+        Return the first row that will be displayed.
+    */
+    int GetCacheFrom() const;
+
+    /**
+        Return the last row that will be displayed.
+    */
+    int GetCacheTo() const;
 };
 

@@ -40,15 +40,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericDirButton, wxButton)
 // wxGenericFileButton
 // ----------------------------------------------------------------------------
 
-bool wxGenericFileDirButton::Create( wxWindow *parent, wxWindowID id,
-                        const wxString &label, const wxString &path,
-                        const wxString &message, const wxString &wildcard,
-                        const wxPoint &pos, const wxSize &size, long style,
-                        const wxValidator& validator, const wxString &name)
+bool wxGenericFileDirButton::Create(wxWindow *parent,
+                                    wxWindowID id,
+                                    const wxString& label,
+                                    const wxString& path,
+                                    const wxString& message,
+                                    const wxString& wildcard,
+                                    const wxPoint& pos,
+                                    const wxSize& size,
+                                    long WXUNUSED(style),
+                                    const wxValidator& validator,
+                                    const wxString& name)
 {
     // create this button
-    if (!wxButton::Create(parent, id, label, pos, size, style,
-                          validator, name))
+    if ( !wxButton::Create(parent, id, label, pos, size, 0, validator, name) )
     {
         wxFAIL_MSG( wxT("wxGenericFileButton creation failed") );
         return false;

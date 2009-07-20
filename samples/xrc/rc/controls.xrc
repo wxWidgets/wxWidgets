@@ -403,21 +403,21 @@
                                     <style>wxCB_READONLY</style>
                                     <selection>2</selection>
                                     <object class="ownerdrawnitem">
-										<text>This is a</text>
-										<bitmap>basicdlg.xpm</bitmap>
-									 </object>
+                                        <text>This is a</text>
+                                        <bitmap>basicdlg.xpm</bitmap>
+                                     </object>
                                     <object class="ownerdrawnitem">
-										<text>read-only</text>
-										<bitmap>derivdlg.xpm</bitmap>
-									 </object>
+                                        <text>read-only</text>
+                                        <bitmap>derivdlg.xpm</bitmap>
+                                     </object>
                                     <object class="ownerdrawnitem">
-										<text>wxBitmapComboBox</text>
-										<bitmap>uncenter.xpm</bitmap>
-									 </object>
+                                        <text>wxBitmapComboBox</text>
+                                        <bitmap>uncenter.xpm</bitmap>
+                                     </object>
                                     <object class="ownerdrawnitem">
-										<text>control</text>
-										<bitmap>custclas.xpm</bitmap>
-									</object>
+                                        <text>control</text>
+                                        <bitmap>custclas.xpm</bitmap>
+                                    </object>
                                 </object>
                             </object>
                         </object>
@@ -471,20 +471,37 @@
                     </object>
                 </object>
                 <object class="notebookpage">
-                    <label>wxGenericDirCtrl</label>
+                    <label>wxFile/DirCtrl</label>
                     <object class="wxPanel" name="genericdirctrl">
                         <object class="wxFlexGridSizer">
-                            <cols>1</cols>
-                            <rows>0</rows>
-                            <vgap>0</vgap>
-                            <hgap>0</hgap>
-                            <growablecols>0</growablecols>
-                            <growablerows>0</growablerows>
+                            <cols>2</cols>
+                            <growablecols>1</growablecols>
+                            <growablerows>1</growablerows>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <object class="wxStaticText">
+                                    <label>wxGenericDirCtrl</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <object class="wxStaticText">
+                                    <label>wxFileCtrl</label>
+                                </object>
+                            </object>
+
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxGenericDirCtrl" name="controls_genericdirctrl">
                                     <size>200,200</size>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxEXPAND|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxFileCtrl">
+                                    <wildcard>Text files (*.txt)</wildcard>
                                 </object>
                             </object>
                         </object>

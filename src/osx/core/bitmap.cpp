@@ -287,8 +287,8 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     m_depth = d ;
     m_hBitmap = NULL ;
 
-    m_bytesPerRow = GetBestBytesPerRow( w * 4 ) ;
-    size_t size = m_bytesPerRow * h ;
+    m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
+    size_t size = m_bytesPerRow * m_height ;
     void* data = m_memBuf.GetWriteBuf( size ) ;
     if ( data != NULL )
     {
@@ -496,8 +496,13 @@ IconRef wxBitmapRefData::GetIconRef()
                      }
                 }
                 HUnlock( data );
+
                 OSStatus err = SetIconFamilyData( iconFamily, dataType , data );
-                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") );
+                if ( err != noErr )
+                {
+                    wxFAIL_MSG("Error when adding bitmap");
+                }
+
                 DisposeHandle( data );
             }
             else
@@ -1014,7 +1019,7 @@ IconRef wxBitmap::CreateIconRef() const
 }
 #endif
 
-#if wxOSX_USE_COCOA_OR_IPHONE
+#if wxOSX_USE_COCOA
 
 WX_NSImage wxBitmap::GetNSImage() const
 {
@@ -1024,6 +1029,15 @@ WX_NSImage wxBitmap::GetNSImage() const
 
 #endif
 
+#if wxOSX_USE_IPHONE
+
+WX_UIImage wxBitmap::GetUIImage() const
+{
+    wxCFRef< CGImageRef > cgimage(CreateCGImage());
+    return wxOSXCreateUIImageFromCGImage( cgimage );
+}
+
+#endif
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
     wxCHECK_MSG( Ok() &&
@@ -1654,8 +1668,11 @@ public:
         SetType(wxBITMAP_TYPE_PICT_RESOURCE);
     };
 
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight);
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
@@ -1663,7 +1680,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
 
 bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap,
                                      const wxString& name,
-                                     long WXUNUSED(flags),
+                                     wxBitmapType WXUNUSED(type),
                                      int WXUNUSED(desiredWidth),
                                      int WXUNUSED(desiredHeight))
 {

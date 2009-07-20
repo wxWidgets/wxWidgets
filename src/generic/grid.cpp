@@ -197,8 +197,6 @@ wxGridCellWorker::~wxGridCellWorker()
 
 void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
 {
-    m_nRef = 1;
-
     m_isReadOnly = Unset;
 
     m_renderer = NULL;
@@ -645,30 +643,30 @@ void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
     {
         if ( attr )
         {
-            // add the attribute - no need to do anything to reference count
-            //                     since we take ownership of the attribute.
+            // store the new attribute, taking its ownership
             m_rowsOrCols.Add(rowOrCol);
             m_attrs.Add(attr);
         }
         // nothing to remove
     }
-    else
+    else // we have an attribute for this row or column
     {
         size_t n = (size_t)i;
-        if ( m_attrs[n] == attr )
-            // nothing to do
-            return;
+
+        // notice that this code works correctly even when the old attribute is
+        // the same as the new one: as we own of it, we must call DecRef() on
+        // it in any case and this won't result in destruction of the new
+        // attribute if it's the same as old one because it must have ref count
+        // of at least 2 to be passed to us while we keep a reference to it too
+        m_attrs[n]->DecRef();
+
         if ( attr )
         {
-            // change the attribute, handling reference count manually,
-            //                       taking ownership of the new attribute.
-            m_attrs[n]->DecRef();
+            // replace the attribute with the new one
             m_attrs[n] = attr;
         }
-        else
+        else // remove the attribute
         {
-            // remove this attribute, handling reference count manually
-            m_attrs[n]->DecRef();
             m_rowsOrCols.RemoveAt(n);
             m_attrs.RemoveAt(n);
         }

@@ -42,7 +42,9 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
+#include "wx/private/threadinfo.h"
 #include "wx/crt.h"
+#include "wx/vector.h"
 
 // other standard headers
 #ifndef __WXWINCE__
@@ -63,27 +65,54 @@
     #include "wx/msw/private.h" // includes windows.h
 #endif
 
+#undef wxLOG_COMPONENT
+const char *wxLOG_COMPONENT = "";
+
 #if wxUSE_THREADS
 
-// define static functions providing access to the critical sections we use
-// instead of just using static critical section variables as log functions may
-// be used during static initialization and while this is certainly not
-// advisable it's still better to not crash (as we'd do if we used a yet
-// uninitialized critical section) if it happens
+wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
 
-static inline wxCriticalSection& GetTraceMaskCS()
+// this macro allows to define an object which will be initialized before any
+// other function in this file is called: this is necessary to allow log
+// functions to be used during static initialization (this is not advisable
+// anyhow but we should at least try to not crash) and to also ensure that they
+// are initialized by the time static initialization is done, i.e. before any
+// threads are created hopefully
+//
+// the net effect of all this is that you can use Get##name() function to
+// access the object without worrying about it being not initialized
+//
+// see also WX_DEFINE_GLOBAL_CONV2() in src/common/strconv.cpp
+#define WX_DEFINE_GLOBAL_VAR(type, name)                                      \
+    inline type& Get##name()                                                  \
+    {                                                                         \
+        static type s_##name;                                                 \
+        return s_##name;                                                      \
+    }                                                                         \
+                                                                              \
+    type *gs_##name##Ptr = &Get##name()
+
+namespace
 {
-    static wxCriticalSection s_csTrace;
 
-    return s_csTrace;
-}
+// contains messages logged by the other threads and waiting to be shown until
+// Flush() is called in the main one
+typedef wxVector<wxLogRecord> wxLogRecords;
+wxLogRecords gs_bufferedLogRecords;
 
-static inline wxCriticalSection& GetPreviousLogCS()
-{
-    static wxCriticalSection s_csPrev;
+#define WX_DEFINE_LOG_CS(name) WX_DEFINE_GLOBAL_VAR(wxCriticalSection, name##CS)
 
-    return s_csPrev;
-}
+// this critical section is used for buffering the messages from threads other
+// than main, i.e. it protects all accesses to gs_bufferedLogRecords above
+WX_DEFINE_LOG_CS(BackgroundLog);
+
+// this one is used for protecting ms_aTraceMasks from concurrent access
+WX_DEFINE_LOG_CS(TraceMask);
+
+// and this one is used for GetComponentLevels() 
+WX_DEFINE_LOG_CS(Levels);
+
+} // anonymous namespace
 
 #endif // wxUSE_THREADS
 
@@ -98,87 +127,72 @@ static inline wxCriticalSection& GetPreviousLogCS()
   static void wxLogWrap(FILE *f, const char *pszPrefix, const char *psz);
 #endif
 
+// ----------------------------------------------------------------------------
+// module globals
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// this struct is used to store information about the previous log message used
+// by OnLog() to (optionally) avoid logging multiple copies of the same message
+struct PreviousLogInfo
+{
+    PreviousLogInfo()
+    {
+        numRepeated = 0;
+    }
+
+
+    // previous message itself
+    wxString msg;
+
+    // its level
+    wxLogLevel level;
+
+    // other information about it
+    wxLogRecordInfo info;
+
+    // the number of times it was already repeated
+    unsigned numRepeated;
+};
+
+PreviousLogInfo gs_prevLog;
+
+
+// map containing all components for which log level was explicitly set
+//
+// NB: all accesses to it must be protected by GetLevelsCS() critical section
+WX_DEFINE_GLOBAL_VAR(wxStringToNumHashMap, ComponentLevels);
+
+// ----------------------------------------------------------------------------
+// wxLogOutputBest: wxLog wrapper around wxMessageOutputBest
+// ----------------------------------------------------------------------------
+
+class wxLogOutputBest : public wxLog
+{
+public:
+    wxLogOutputBest() { }
+
+protected:
+    virtual void DoLogText(const wxString& msg)
+    {
+        wxMessageOutputBest().Output(msg);
+    }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxLogOutputBest);
+};
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// implementation of Log functions
-//
-// NB: unfortunately we need all these distinct functions, we can't make them
-//     macros and not all compilers inline vararg functions.
+// helper global functions
 // ----------------------------------------------------------------------------
-
-// generic log function
-void wxVLogGeneric(wxLogLevel level, const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() ) {
-        wxLog::OnLog(level, wxString::FormatV(format, argptr), time(NULL));
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogGenericWchar(wxLogLevel level, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogGeneric(level, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogGenericUtf8(wxLogLevel level, const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogGeneric(level, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)                         \
-      void wxDoLog##level##Wchar(const wxChar *format, ...)             \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)
-#endif
-
-#if wxUSE_UNICODE_UTF8
-    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)                          \
-      void wxDoLog##level##Utf8(const char *format, ...)                \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)
-#endif
-
-#define IMPLEMENT_LOG_FUNCTION(level)                               \
-  void wxVLog##level(const wxString& format, va_list argptr)        \
-  {                                                                 \
-    if ( wxLog::IsEnabled() ) {                                     \
-      wxLog::OnLog(wxLOG_##level,                                   \
-                   wxString::FormatV(format, argptr), time(NULL));  \
-    }                                                               \
-  }                                                                 \
-  IMPLEMENT_LOG_FUNCTION_WCHAR(level)                               \
-  IMPLEMENT_LOG_FUNCTION_UTF8(level)
-
-IMPLEMENT_LOG_FUNCTION(Error)
-IMPLEMENT_LOG_FUNCTION(Warning)
-IMPLEMENT_LOG_FUNCTION(Message)
-IMPLEMENT_LOG_FUNCTION(Info)
-IMPLEMENT_LOG_FUNCTION(Status)
 
 void wxSafeShowMessage(const wxString& title, const wxString& text)
 {
@@ -190,324 +204,29 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 #endif
 }
 
-// fatal errors can't be suppressed nor handled by the custom log target and
-// always terminate the program
-void wxVLogFatalError(const wxString& format, va_list argptr)
-{
-    wxSafeShowMessage(wxS("Fatal Error"), wxString::FormatV(format, argptr));
-
-#ifdef __WXWINCE__
-    ExitThread(3);
-#else
-    abort();
-#endif
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogFatalErrorWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogFatalError(format, argptr);
-
-    // some compilers warn about unreachable code and it shouldn't matter
-    // for the others anyhow...
-    //va_end(argptr);
-}
-#endif // wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogFatalErrorUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogFatalError(format, argptr);
-
-    // some compilers warn about unreachable code and it shouldn't matter
-    // for the others anyhow...
-    //va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-// same as info, but only if 'verbose' mode is on
-void wxVLogVerbose(const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() ) {
-        if ( wxLog::GetActiveTarget() != NULL && wxLog::GetVerbose() ) {
-            wxLog::OnLog(wxLOG_Info,
-                         wxString::FormatV(format, argptr), time(NULL));
-        }
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogVerboseWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogVerbose(format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogVerboseUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogVerbose(format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-// ----------------------------------------------------------------------------
-// debug and trace functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_LOG_DEBUG
-    void wxVLogDebug(const wxString& format, va_list argptr)
-    {
-        if ( wxLog::IsEnabled() )
-        {
-            wxLog::OnLog(wxLOG_Debug,
-                         wxString::FormatV(format, argptr), time(NULL));
-        }
-    }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void wxDoLogDebugWchar(const wxChar *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        wxVLogDebug(format, argptr);
-        va_end(argptr);
-    }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-    void wxDoLogDebugUtf8(const char *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        wxVLogDebug(format, argptr);
-        va_end(argptr);
-    }
-#endif // wxUSE_UNICODE_UTF8
-#endif // wxUSE_LOG_DEBUG
-
-#if wxUSE_LOG_TRACE
-  void wxVLogTrace(const wxString& mask, const wxString& format, va_list argptr)
-  {
-    if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
-      wxString msg;
-      msg << wxS("(") << mask << wxS(") ") << wxString::FormatV(format, argptr);
-
-      wxLog::OnLog(wxLOG_Trace, msg, time(NULL));
-    }
-  }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-  void wxDoLogTraceWchar(const wxString& mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-  void wxDoLogTraceUtf8(const wxString& mask, const char *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // wxUSE_UNICODE_UTF8
-
-// deprecated (but not declared as such because we don't want to complicate
-// DECLARE_LOG_FUNCTION macros even more) overloads for wxTraceMask
-#if WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(wxTraceMask mask, const wxString& format, va_list argptr)
-  {
-    // we check that all of mask bits are set in the current mask, so
-    // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
-    // if both bits are set.
-    if ( wxLog::IsEnabled() && ((wxLog::GetTraceMask() & mask) == mask) ) {
-      wxLog::OnLog(wxLOG_Trace, wxString::FormatV(format, argptr), time(NULL));
-    }
-  }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-  void wxDoLogTraceWchar(wxTraceMask mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-  void wxDoLogTraceUtf8(wxTraceMask mask, const char *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // wxUSE_UNICODE_UTF8
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-#ifdef __WATCOMC__
-#if WXWIN_COMPATIBILITY_2_8
-  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  void wxDoLogTraceWchar(int mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // WXWIN_COMPATIBILITY_2_8
-
-  void wxDoLogTraceWchar(const char *mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-
-  void wxDoLogTraceWchar(const wchar_t *mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-
-#if WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(int mask, const wxString& format, va_list argptr)
-    { wxVLogTrace((wxTraceMask)mask, format, argptr); }
-#endif // WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(const char *mask, const wxString& format, va_list argptr)
-    { wxVLogTrace(wxString(mask), format, argptr); }
-  void wxVLogTrace(const wchar_t *mask, const wxString& format, va_list argptr)
-    { wxVLogTrace(wxString(mask), format, argptr); }
-#endif // __WATCOMC__
-#endif // wxUSE_LOG_TRACE
-
-
-// wxLogSysError: one uses the last error code, for other  you must give it
-// explicitly
-
-// return the system error message description
-static inline wxString wxLogSysErrorHelper(long err)
-{
-    return wxString::Format(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
-}
-
-void WXDLLIMPEXP_BASE wxVLogSysError(const wxString& format, va_list argptr)
-{
-    wxVLogSysError(wxSysErrorCode(), format, argptr);
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-void WXDLLIMPEXP_BASE wxVLogSysError(long err, const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() ) {
-        wxLog::OnLog(wxLOG_Error,
-                     wxString::FormatV(format, argptr) + wxLogSysErrorHelper(err),
-                     time(NULL));
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-#ifdef __WATCOMC__
-// workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-
-void WXDLLIMPEXP_BASE wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
-    { wxVLogSysError((long)err, format, argptr); }
-#endif // __WATCOMC__
-
 // ----------------------------------------------------------------------------
 // wxLog class implementation
 // ----------------------------------------------------------------------------
 
 unsigned wxLog::LogLastRepeatIfNeeded()
 {
-    wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
+    const unsigned count = gs_prevLog.numRepeated;
 
-    return LogLastRepeatIfNeededUnlocked();
-}
-
-unsigned wxLog::LogLastRepeatIfNeededUnlocked()
-{
-    const unsigned count = ms_prevCounter;
-
-    if ( ms_prevCounter )
+    if ( gs_prevLog.numRepeated )
     {
         wxString msg;
 #if wxUSE_INTL
         msg.Printf(wxPLURAL("The previous message repeated once.",
                             "The previous message repeated %lu times.",
-                            ms_prevCounter),
-                   ms_prevCounter);
+                            gs_prevLog.numRepeated),
+                   gs_prevLog.numRepeated);
 #else
         msg.Printf(wxS("The previous message was repeated %lu times."),
-                   ms_prevCounter);
+                   gs_prevLog.numRepeated);
 #endif
-        ms_prevCounter = 0;
-        ms_prevString.clear();
-        DoLog(ms_prevLevel, msg, ms_prevTimeStamp);
+        gs_prevLog.numRepeated = 0;
+        gs_prevLog.msg.clear();
+        DoLogRecord(gs_prevLog.level, msg, gs_prevLog.info);
     }
 
     return count;
@@ -517,78 +236,258 @@ wxLog::~wxLog()
 {
     // Flush() must be called before destroying the object as otherwise some
     // messages could be lost
-    if ( ms_prevCounter )
+    if ( gs_prevLog.numRepeated )
     {
         wxMessageOutputDebug().Printf
         (
             wxS("Last repeated message (\"%s\", %lu times) wasn't output"),
-            ms_prevString,
-            ms_prevCounter
+            gs_prevLog.msg,
+            gs_prevLog.numRepeated
         );
     }
 }
 
+// ----------------------------------------------------------------------------
+// wxLog logging functions
+// ----------------------------------------------------------------------------
+
 /* static */
-void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
+void
+wxLog::OnLog(wxLogLevel level, const wxString& msg, time_t t)
 {
-    if ( IsEnabled() && ms_logLevel >= level )
+    wxLogRecordInfo info;
+    info.timestamp = t;
+#if wxUSE_THREADS
+    info.threadId = wxThread::GetCurrentId();
+#endif // wxUSE_THREADS
+
+    OnLog(level, msg, info);
+}
+
+/* static */
+void
+wxLog::OnLog(wxLogLevel level,
+             const wxString& msg,
+             const wxLogRecordInfo& info)
+{
+    // fatal errors can't be suppressed nor handled by the custom log target
+    // and always terminate the program
+    if ( level == wxLOG_FatalError )
     {
-        wxLog *pLogger = GetActiveTarget();
-        if ( pLogger )
+        wxSafeShowMessage(wxS("Fatal Error"), msg);
+
+#ifdef __WXWINCE__
+        ExitThread(3);
+#else
+        abort();
+#endif
+    }
+
+    wxLog *logger;
+
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        logger = wxThreadInfo.logger;
+        if ( !logger )
         {
-            if ( GetRepetitionCounting() )
+            if ( ms_pLogger )
             {
-                wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
+                // buffer the messages until they can be shown from the main
+                // thread
+                wxCriticalSectionLocker lock(GetBackgroundLogCS());
 
-                if ( szString == ms_prevString )
-                {
-                    ms_prevCounter++;
+                gs_bufferedLogRecords.push_back(wxLogRecord(level, msg, info));
 
-                    // nothing else to do, in particular, don't log the
-                    // repeated message
-                    return;
-                }
-
-                pLogger->LogLastRepeatIfNeededUnlocked();
-
-                // reset repetition counter for a new message
-                ms_prevString = szString;
-                ms_prevLevel = level;
-                ms_prevTimeStamp = t;
+                // ensure that our Flush() will be called soon
+                wxWakeUpIdle();
             }
+            //else: we don't have any logger at all, there is no need to log
+            //      anything
 
-            pLogger->DoLog(level, szString, t);
+            return;
         }
+        //else: we have a thread-specific logger, we can send messages to it
+        //      directly
+    }
+    else
+#endif // wxUSE_THREADS
+    {
+        logger = GetMainThreadActiveTarget();
+        if ( !logger )
+            return;
+    }
+
+    logger->CallDoLogNow(level, msg, info);
+}
+
+void
+wxLog::CallDoLogNow(wxLogLevel level,
+                    const wxString& msg,
+                    const wxLogRecordInfo& info)
+{
+    if ( GetRepetitionCounting() )
+    {
+        if ( msg == gs_prevLog.msg )
+        {
+            gs_prevLog.numRepeated++;
+
+            // nothing else to do, in particular, don't log the
+            // repeated message
+            return;
+        }
+
+        LogLastRepeatIfNeeded();
+
+        // reset repetition counter for a new message
+        gs_prevLog.msg = msg;
+        gs_prevLog.level = level;
+        gs_prevLog.info = info;
+    }
+
+    // handle extra data which may be passed to us by wxLogXXX()
+    wxString prefix, suffix;
+    wxUIntPtr num = 0;
+    if ( info.GetNumValue(wxLOG_KEY_SYS_ERROR_CODE, &num) )
+    {
+        long err = static_cast<long>(num);
+        if ( !err )
+            err = wxSysErrorCode();
+
+        suffix.Printf(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
+    }
+
+#if wxUSE_LOG_TRACE
+    wxString str;
+    if ( level == wxLOG_Trace && info.GetStrValue(wxLOG_KEY_TRACE_MASK, &str) )
+    {
+        prefix = "(" + str + ") ";
+    }
+#endif // wxUSE_LOG_TRACE
+
+    DoLogRecord(level, prefix + msg + suffix, info);
+}
+
+void wxLog::DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info)
+{
+#if WXWIN_COMPATIBILITY_2_8
+    // call the old DoLog() to ensure that existing custom log classes still
+    // work
+    //
+    // as the user code could have defined it as either taking "const char *"
+    // (in ANSI build) or "const wxChar *" (in ANSI/Unicode), we have no choice
+    // but to call both of them
+    DoLog(level, (const char*)msg.mb_str(), info.timestamp);
+    DoLog(level, (const wchar_t*)msg.wc_str(), info.timestamp);
+#endif // WXWIN_COMPATIBILITY_2_8
+
+
+    // TODO: it would be better to extract message formatting in a separate
+    //       wxLogFormatter class but for now we hard code formatting here
+
+    wxString prefix;
+
+    // don't time stamp debug messages under MSW as debug viewers usually
+    // already have an option to do it
+#ifdef __WXMSW__
+    if ( level != wxLOG_Debug && level != wxLOG_Trace )
+#endif // __WXMSW__
+        TimeStamp(&prefix);
+
+    // TODO: use the other wxLogRecordInfo fields
+
+    switch ( level )
+    {
+        case wxLOG_Error:
+            prefix += _("Error: ");
+            break;
+
+        case wxLOG_Warning:
+            prefix += _("Warning: ");
+            break;
+
+        // don't prepend "debug/trace" prefix under MSW as it goes to the debug
+        // window anyhow and so can't be confused with something else
+#ifndef __WXMSW__
+        case wxLOG_Debug:
+            // this prefix (as well as the one below) is intentionally not
+            // translated as nobody translates debug messages anyhow
+            prefix += "Debug: ";
+            break;
+
+        case wxLOG_Trace:
+            prefix += "Trace: ";
+            break;
+#endif // !__WXMSW__
+    }
+
+    DoLogTextAtLevel(level, prefix + msg);
+}
+
+void wxLog::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
+{
+    // we know about debug messages (because using wxMessageOutputDebug is the
+    // right thing to do in 99% of all cases and also for compatibility) but
+    // anything else needs to be handled in the derived class
+    if ( level == wxLOG_Debug || level == wxLOG_Trace )
+    {
+        wxMessageOutputDebug().Output(msg + wxS('\n'));
+    }
+    else
+    {
+        DoLogText(msg);
     }
 }
 
-// deprecated function
-#if WXWIN_COMPATIBILITY_2_6
-
-wxChar *wxLog::SetLogBuffer(wxChar * WXUNUSED(buf), size_t WXUNUSED(size))
+void wxLog::DoLogText(const wxString& WXUNUSED(msg))
 {
-    return NULL;
+    // in 2.8-compatible build the derived class might override DoLog() or
+    // DoLogString() instead so we can't have this assert there
+#if !WXWIN_COMPATIBILITY_2_8
+    wxFAIL_MSG( "must be overridden if it is called" );
+#endif // WXWIN_COMPATIBILITY_2_8
 }
-
-#endif // WXWIN_COMPATIBILITY_2_6
 
 #if WXWIN_COMPATIBILITY_2_8
 
-void wxLog::DoLog(wxLogLevel WXUNUSED(level),
-                  const char *WXUNUSED(szString),
-                  time_t WXUNUSED(t))
+void wxLog::DoLog(wxLogLevel WXUNUSED(level), const char *szString, time_t t)
 {
+    DoLogString(szString, t);
 }
 
-void wxLog::DoLog(wxLogLevel WXUNUSED(level),
-                  const wchar_t *WXUNUSED(wzString),
-                  time_t WXUNUSED(t))
+void wxLog::DoLog(wxLogLevel WXUNUSED(level), const wchar_t *wzString, time_t t)
 {
+    DoLogString(wzString, t);
 }
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
+// ----------------------------------------------------------------------------
+// wxLog active target management
+// ----------------------------------------------------------------------------
+
 wxLog *wxLog::GetActiveTarget()
+{
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        // check if we have a thread-specific log target
+        wxLog * const logger = wxThreadInfo.logger;
+
+        // the code below should be only executed for the main thread as
+        // CreateLogTarget() is not meant for auto-creating log targets for
+        // worker threads so skip it in any case
+        return logger ? logger : ms_pLogger;
+    }
+#endif // wxUSE_THREADS
+
+    return GetMainThreadActiveTarget();
+}
+
+/* static */
+wxLog *wxLog::GetMainThreadActiveTarget()
 {
     if ( ms_bAutoCreate && ms_pLogger == NULL ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
@@ -601,7 +500,7 @@ wxLog *wxLog::GetActiveTarget()
             if ( wxTheApp != NULL )
                 ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
             else
-                ms_pLogger = new wxLogStderr;
+                ms_pLogger = new wxLogOutputBest;
 
             s_bInGetActiveTarget = false;
 
@@ -626,6 +525,22 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
     return pOldLogger;
 }
 
+#if wxUSE_THREADS
+/* static */
+wxLog *wxLog::SetThreadActiveTarget(wxLog *logger)
+{
+    wxASSERT_MSG( !wxThread::IsMain(), "use SetActiveTarget() for main thread" );
+
+    wxLog * const oldLogger = wxThreadInfo.logger;
+    if ( oldLogger )
+        oldLogger->Flush();
+
+    wxThreadInfo.logger = logger;
+
+    return oldLogger;
+}
+#endif // wxUSE_THREADS
+
 void wxLog::DontCreateOnDemand()
 {
     ms_bAutoCreate = false;
@@ -640,6 +555,48 @@ void wxLog::DoCreateOnDemand()
 {
     ms_bAutoCreate = true;
 }
+
+// ----------------------------------------------------------------------------
+// wxLog components levels
+// ----------------------------------------------------------------------------
+
+/* static */
+void wxLog::SetComponentLevel(const wxString& component, wxLogLevel level)
+{
+    if ( component.empty() )
+    {
+        SetLogLevel(level);
+    }
+    else
+    {
+        wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+        GetComponentLevels()[component] = level;
+    }
+}
+
+/* static */
+wxLogLevel wxLog::GetComponentLevel(wxString component)
+{
+    wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+    const wxStringToNumHashMap& componentLevels = GetComponentLevels();
+    while ( !component.empty() )
+    {
+        wxStringToNumHashMap::const_iterator
+            it = componentLevels.find(component);
+        if ( it != componentLevels.end() )
+            return static_cast<wxLogLevel>(it->second);
+
+        component = component.BeforeLast('/');
+    }
+
+    return GetLogLevel();
+}
+
+// ----------------------------------------------------------------------------
+// wxLog trace masks
+// ----------------------------------------------------------------------------
 
 void wxLog::AddTraceMask(const wxString& str)
 {
@@ -664,6 +621,25 @@ void wxLog::ClearTraceMasks()
     ms_aTraceMasks.Clear();
 }
 
+/*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
+{
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
+
+    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
+                                  en = ms_aTraceMasks.end();
+         it != en; ++it )
+    {
+        if ( *it == mask)
+            return true;
+    }
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// wxLog miscellaneous other methods
+// ----------------------------------------------------------------------------
+
 void wxLog::TimeStamp(wxString *str)
 {
 #if wxUSE_DATETIME
@@ -683,105 +659,69 @@ void wxLog::TimeStamp(wxString *str)
 #endif // wxUSE_DATETIME
 }
 
-void wxLog::DoLog(wxLogLevel level, const wxString& szString, time_t t)
+#if wxUSE_THREADS
+
+void wxLog::FlushThreadMessages()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // DoLog() signature changed since 2.8, so we call the old versions here
-    // so that existing custom log classes still work:
-    DoLog(level, (const char*)szString.mb_str(), t);
-    DoLog(level, (const wchar_t*)szString.wc_str(), t);
-#endif
+    // check if we have queued messages from other threads
+    wxLogRecords bufferedLogRecords;
 
-    switch ( level ) {
-        case wxLOG_FatalError:
-            LogString(_("Fatal error: ") + szString, t);
-            LogString(_("Program aborted."), t);
-            Flush();
-#ifdef __WXWINCE__
-            ExitThread(3);
-#else
-            abort();
-#endif
-            break;
+    {
+        wxCriticalSectionLocker lock(GetBackgroundLogCS());
+        bufferedLogRecords.swap(gs_bufferedLogRecords);
 
-        case wxLOG_Error:
-            LogString(_("Error: ") + szString, t);
-            break;
+        // release the lock now to not keep it while we are logging the
+        // messages below, allowing background threads to run
+    }
 
-        case wxLOG_Warning:
-            LogString(_("Warning: ") + szString, t);
-            break;
-
-        case wxLOG_Info:
-            if ( GetVerbose() )
-        case wxLOG_Message:
-        case wxLOG_Status:
-        default:    // log unknown log levels too
-                LogString(szString, t);
-            break;
-
-#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
-#if wxUSE_LOG_TRACE
-        case wxLOG_Trace:
-#endif
-#if wxUSE_LOG_DEBUG
-        case wxLOG_Debug:
-#endif
-            {
-                wxString str;
-
-                // don't prepend "debug/trace" prefix under MSW as it goes to
-                // the debug window anyhow and don't add time stamp neither as
-                // debug output viewers under Windows typically add it
-                // themselves anyhow
-                #ifndef __WXMSW__
-                    TimeStamp(&str);
-
-                    str += level == wxLOG_Trace ? wxT("Trace: ")
-                                                : wxT("Debug: ");
-                #endif // !__WXMSW__
-
-                str += szString;
-                wxMessageOutputDebug().Output(str);
-            }
-            break;
-#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
+    if ( !bufferedLogRecords.empty() )
+    {
+        for ( wxLogRecords::const_iterator it = bufferedLogRecords.begin();
+              it != bufferedLogRecords.end();
+              ++it )
+        {
+            CallDoLogNow(it->level, it->msg, it->info);
+        }
     }
 }
 
-void wxLog::DoLogString(const wxString& szString, time_t t)
+/* static */
+bool wxLog::IsThreadLoggingEnabled()
 {
-#if WXWIN_COMPATIBILITY_2_8
-    // DoLogString() signature changed since 2.8, so we call the old versions
-    // here so that existing custom log classes still work; unfortunately this
-    // also means that we can't have the wxFAIL_MSG below in compat mode
-    DoLogString((const char*)szString.mb_str(), t);
-    DoLogString((const wchar_t*)szString.wc_str(), t);
-#else
-    wxFAIL_MSG(wxS("DoLogString must be overriden if it's called."));
-    wxUnusedVar(szString);
-    wxUnusedVar(t);
-#endif
+    return !wxThreadInfo.loggingDisabled;
 }
+
+/* static */
+bool wxLog::EnableThreadLogging(bool enable)
+{
+    const bool wasEnabled = !wxThreadInfo.loggingDisabled;
+    wxThreadInfo.loggingDisabled = !enable;
+    return wasEnabled;
+}
+
+#endif // wxUSE_THREADS
 
 void wxLog::Flush()
 {
     LogLastRepeatIfNeeded();
 }
 
-/*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
+/* static */
+void wxLog::FlushActive()
 {
-    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
+    if ( ms_suspendCount )
+        return;
 
-    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
-                                  en = ms_aTraceMasks.end();
-         it != en; ++it )
+    wxLog * const log = GetActiveTarget();
+    if ( log )
     {
-        if ( *it == mask)
-            return true;
-    }
+#if wxUSE_THREADS
+        if ( wxThread::IsMain() )
+            log->FlushThreadMessages();
+#endif // wxUSE_THREADS
 
-    return false;
+        log->Flush();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -790,6 +730,8 @@ void wxLog::Flush()
 
 void wxLogBuffer::Flush()
 {
+    wxLog::Flush();
+
     if ( !m_str.empty() )
     {
         wxMessageOutputBest out;
@@ -798,42 +740,20 @@ void wxLogBuffer::Flush()
     }
 }
 
-#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
-
-void wxLogBuffer::DoLog(wxLogLevel level, const wxString& szString, time_t t)
+void wxLogBuffer::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 {
     // don't put debug messages in the buffer, we don't want to show
     // them to the user in a msg box, log them immediately
-    bool showImmediately = false;
-#if wxUSE_LOG_TRACE
-    if ( level == wxLOG_Trace )
-        showImmediately = true;
-#endif
-#if wxUSE_LOG_DEBUG
-    if ( level == wxLOG_Debug )
-        showImmediately = true;
-#endif
-
-    if ( showImmediately )
+    switch ( level )
     {
-        wxString str;
-        TimeStamp(&str);
-        str += szString;
+        case wxLOG_Debug:
+        case wxLOG_Trace:
+            wxLog::DoLogTextAtLevel(level, msg);
+            break;
 
-        wxMessageOutputDebug dbgout;
-        dbgout.Printf(wxS("%s\n"), str.c_str());
+        default:
+            m_str << msg << wxS("\n");
     }
-    else
-    {
-        wxLog::DoLog(level, szString, t);
-    }
-}
-
-#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
-
-void wxLogBuffer::DoLogString(const wxString& szString, time_t WXUNUSED(t))
-{
-    m_str << szString << wxS("\n");
 }
 
 // ----------------------------------------------------------------------------
@@ -848,14 +768,9 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-void wxLogStderr::DoLogString(const wxString& szString, time_t WXUNUSED(t))
+void wxLogStderr::DoLogText(const wxString& msg)
 {
-    wxString str;
-    TimeStamp(&str);
-    str << szString;
-
-    wxFputs(str, m_fp);
-    wxFputc(wxS('\n'), m_fp);
+    wxFputs(msg + '\n', m_fp);
     fflush(m_fp);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
@@ -867,8 +782,7 @@ void wxLogStderr::DoLogString(const wxString& szString, time_t WXUNUSED(t))
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
         if ( traits && !traits->HasStderr() )
         {
-            wxMessageOutputDebug dbgout;
-            dbgout.Printf(wxS("%s\n"), str.c_str());
+            wxMessageOutputDebug().Output(msg + wxS('\n'));
         }
     }
 }
@@ -887,11 +801,9 @@ wxLogStream::wxLogStream(wxSTD ostream *ostr)
         m_ostr = ostr;
 }
 
-void wxLogStream::DoLogString(const wxString& szString, time_t WXUNUSED(t))
+void wxLogStream::DoLogText(const wxString& msg)
 {
-    wxString stamp;
-    TimeStamp(&stamp);
-    (*m_ostr) << stamp << szString << wxSTD endl;
+    (*m_ostr) << msg << wxSTD endl;
 }
 #endif // wxUSE_STD_IOSTREAM
 
@@ -933,15 +845,17 @@ void wxLogChain::Flush()
         m_logNew->Flush();
 }
 
-void wxLogChain::DoLog(wxLogLevel level, const wxString& szString, time_t t)
+void wxLogChain::DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info)
 {
     // let the previous logger show it
     if ( m_logOld && IsPassingMessages() )
-        m_logOld->Log(level, szString, t);
+        m_logOld->LogRecord(level, msg, info);
 
     // and also send it to the new one
     if ( m_logNew && m_logNew != this )
-        m_logNew->Log(level, szString, t);
+        m_logNew->LogRecord(level, msg, info);
 }
 
 #ifdef __VISUALC__
@@ -981,10 +895,6 @@ wxLogInterposerTemp::wxLogInterposerTemp()
 // ----------------------------------------------------------------------------
 
 bool            wxLog::ms_bRepetCounting = false;
-wxString        wxLog::ms_prevString;
-unsigned int    wxLog::ms_prevCounter = 0;
-time_t          wxLog::ms_prevTimeStamp= 0;
-wxLogLevel      wxLog::ms_prevLevel;
 
 wxLog          *wxLog::ms_pLogger      = NULL;
 bool            wxLog::ms_doLog        = true;

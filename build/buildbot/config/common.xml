@@ -88,10 +88,20 @@
 
 <!--
     Map SVN user ids to email addresses.
+
+    The email address in wx-devs.xml can be overridden by adding a line like
+    this after the xi:include:
+
+        <email id="JMS">jaakko.salli -at- dnainternet.net</email>
+
+    or disabled using an empty tag:
+
+        <email id="JMS"/>
 -->
 
 <emaillookup name="wx-devs">
     <xi:include href="include/wx-devs.xml"/>
+    <!-- Overrides... -->
 </emaillookup>
 
 <!--

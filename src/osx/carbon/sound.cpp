@@ -52,7 +52,7 @@
 #endif
 #endif
 
-#if __WXOSX_COCOA__
+#if wxOSX_USE_COCOA
 #include "wx/osx/private.h"
 #endif
 
@@ -235,7 +235,9 @@ inline bool wxInitQT ()
         int nError;
         //-2093 no dll
             if ((nError = InitializeQTML(0)) != noErr)
+            {
                 wxLogSysError(wxString::Format(wxT("Couldn't Initialize Quicktime-%i"), nError));
+            }
         #endif
         EnterMovies();
         return true;

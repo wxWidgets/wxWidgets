@@ -154,7 +154,7 @@ wxWindowBase::wxWindowBase()
     m_exStyle =
     m_windowStyle = 0;
 
-    m_backgroundStyle = wxBG_STYLE_SYSTEM;
+    m_backgroundStyle = wxBG_STYLE_ERASE;
 
 #if wxUSE_CONSTRAINTS
     // no constraints whatsoever
@@ -474,7 +474,11 @@ static bool wxHasRealChildren(const wxWindowBase* win)
           node = node->GetNext() )
     {
         wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() && win->IsShown() && !win->IsKindOf(CLASSINFO(wxScrollBar)))
+        if ( !win->IsTopLevel() && win->IsShown() 
+#if wxUSE_SCROLLBAR
+            && !win->IsKindOf(CLASSINFO(wxScrollBar))
+#endif
+            )
             realChildCount ++;
     }
     return (realChildCount > 0);
@@ -705,8 +709,19 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
 
 wxSize wxWindowBase::GetBestSize() const
 {
-    if ((!m_windowSizer) && (m_bestSizeCache.IsFullySpecified()))
+    if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
         return m_bestSizeCache;
+
+    // call DoGetBestClientSize() first, if a derived class overrides it wants
+    // it to be used
+    wxSize size = DoGetBestClientSize();
+    if ( size != wxDefaultSize )
+    {
+        size += DoGetBorderSize();
+
+        CacheBestSize(size);
+        return size;
+    }
 
     return DoGetBestSize();
 }
@@ -1333,8 +1348,6 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
         return false;
 
     m_hasBgCol = colour.IsOk();
-    if ( m_backgroundStyle != wxBG_STYLE_CUSTOM )
-        m_backgroundStyle = m_hasBgCol ? wxBG_STYLE_COLOUR : wxBG_STYLE_SYSTEM;
 
     m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;

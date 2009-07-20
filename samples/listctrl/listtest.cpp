@@ -731,7 +731,9 @@ void MyFrame::OnSetColOrder(wxCommandEvent& WXUNUSED(event))
     order[1] = 0;
     order[2] = 1;
     if ( m_listCtrl->SetColumnsOrder(order) )
+    {
         wxLogMessage("Column order set to %s", DumpIntArray(order));
+    }
 }
 
 void MyFrame::OnGetColOrder(wxCommandEvent& WXUNUSED(event))

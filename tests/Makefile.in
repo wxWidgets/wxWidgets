@@ -46,7 +46,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -75,6 +75,7 @@ TEST_OBJECTS =  \
 	test_hashes.o \
 	test_intltest.o \
 	test_lists.o \
+	test_logtest.o \
 	test_longlongtest.o \
 	test_convautotest.o \
 	test_mbconvtest.o \
@@ -406,6 +407,9 @@ test_intltest.o: $(srcdir)/intl/intltest.cpp $(TEST_ODEP)
 
 test_lists.o: $(srcdir)/lists/lists.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/lists/lists.cpp
+
+test_logtest.o: $(srcdir)/log/logtest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/log/logtest.cpp
 
 test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/longlong/longlongtest.cpp

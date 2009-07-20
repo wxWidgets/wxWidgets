@@ -662,58 +662,6 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( pgman->GetPropertyValueAsLongLong(wxT("IntProperty")) != wxLL(-80000000000) )
             RT_FAILURE();
 
-        //
-        // Flexible wx(U)LongLong << operator safety conformance tests
-        wxPGProperty* prop;
-        wxLongLong ll;
-        wxULongLong ull;
-
-        prop = pgman->GetProperty(wxT("IntProperty"));
-        prop->SetValue(128);
-        ll << prop->GetValue();
-        if ( ll != 128 )
-            RT_FAILURE();
-
-        prop->SetValue(WXVARIANT(wxLL(68719476736)));
-        ll << prop->GetValue();
-        if ( ll.GetValue() != wxLL(68719476736) )
-            RT_FAILURE();
-
-#if wxUSE_LONGLONG_NATIVE
-        wxLongLong_t ll_t;
-        ll_t << prop->GetValue();
-        if ( ll_t != wxLL(68719476736) )
-            RT_FAILURE();
-#endif
-
-        prop->SetValue(256);
-        ll << prop->GetValue();
-        if ( ll != 256 )
-            RT_FAILURE();
-
-        prop = pgman->GetProperty(wxT("UIntProperty"));
-        prop->SetValue(128);
-        ull << prop->GetValue();
-        if ( ull != 128 )
-            RT_FAILURE();
-
-        prop->SetValue(WXVARIANT(wxULL(68719476739)));
-        ull << prop->GetValue();
-        if ( ull.GetValue() != wxULL(68719476739) )
-            RT_FAILURE();
-
-#if wxUSE_LONGLONG_NATIVE
-        wxULongLong_t ull_t;
-        ull_t << prop->GetValue();
-        if ( ull_t != wxLL(68719476739) )
-            RT_FAILURE();
-#endif
-
-        prop->SetValue(256);
-        ull << prop->GetValue();
-        if ( ull != 256 )
-            RT_FAILURE();
-
         // Make sure children of composite parent get updated as well
         // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000; Not Convertible"
 

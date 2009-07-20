@@ -479,9 +479,13 @@ void wxSplitPath(wxArrayString& aParts, const wxString& path)
       else if ( strCurrent == wxT("..") ) {
         // go up one level
         if ( aParts.size() == 0 )
+        {
           wxLogWarning(_("'%s' has extra '..', ignored."), path);
+        }
         else
+        {
           aParts.erase(aParts.end() - 1);
+        }
 
         strCurrent.Empty();
       }

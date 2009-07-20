@@ -265,7 +265,8 @@ bool wxConsoleEventLoop::Pending() const
 
 bool wxConsoleEventLoop::Dispatch()
 {
-    DispatchTimeout(wxFDIODispatcher::TIMEOUT_INFINITE);
+    DispatchTimeout(static_cast<unsigned long>(
+        wxFDIODispatcher::TIMEOUT_INFINITE));
 
     return true;
 }

@@ -61,6 +61,13 @@ WXGLContext WXGLGetCurrentContext()
     return [NSOpenGLContext currentContext];
 }
 
+bool WXGLSetCurrentContext(WXGLContext context)
+{
+    [context makeCurrentContext];
+
+    return true;
+}
+
 void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat )
 {
     if ( pixelFormat )

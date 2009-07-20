@@ -161,7 +161,7 @@ private:
 WX_DECLARE_LIST_WITH_DECL(wxDataViewModelNotifier, wxDataViewModelNotifiers,
                           class WXDLLIMPEXP_ADV);
 
-class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
+class WXDLLIMPEXP_ADV wxDataViewModel: public wxRefCounter
 {
 public:
     wxDataViewModel();
@@ -274,11 +274,11 @@ public:
 
     // internal
     virtual bool IsVirtualListModel() const { return false; }
-    unsigned int GetLastIndex() const { return m_lastIndex; }
+    unsigned int GetCount() const { return m_hash.GetCount(); }
 
 private:
     wxDataViewItemArray m_hash;
-    unsigned int m_lastIndex;
+    unsigned int m_nextFreeID;
     bool m_ordered;
 };
 
@@ -339,11 +339,10 @@ public:
 
     // internal
     virtual bool IsVirtualListModel() const { return true; }
-    unsigned int GetLastIndex() const { return m_lastIndex; }
+    unsigned int GetCount() const { return m_size; }
 
 private:
-    wxDataViewItemArray m_hash;
-    unsigned int m_lastIndex;
+    unsigned int m_size;
     bool m_ordered;
 };
 #endif
@@ -755,7 +754,9 @@ public:
         m_model(NULL),
         m_value(wxNullVariant),
         m_column(NULL),
-        m_pos(-1,-1)
+        m_pos(-1,-1),
+        m_cacheFrom(0),
+        m_cacheTo(0)
 #if wxUSE_DRAG_AND_DROP
         , m_dataObject(NULL),
         m_dataBuffer(NULL),
@@ -770,7 +771,9 @@ public:
         m_model(event.m_model),
         m_value(event.m_value),
         m_column(event.m_column),
-        m_pos(m_pos)
+        m_pos(m_pos),
+        m_cacheFrom(event.m_cacheFrom),
+        m_cacheTo(event.m_cacheTo)
 #if wxUSE_DRAG_AND_DROP
         , m_dataObject(event.m_dataObject),
         m_dataFormat(event.m_dataFormat),
@@ -799,6 +802,12 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
 
+    // For wxEVT_COMMAND_DATAVIEW_CACHE_HINT
+    int GetCacheFrom() const { return m_cacheFrom; }
+    int GetCacheTo() const { return m_cacheTo; }
+    void SetCache(int from, int to) { m_cacheFrom = from; m_cacheTo = to; }
+
+
 #if wxUSE_DRAG_AND_DROP
     // For drag operations
     void SetDataObject( wxDataObject *obj ) { m_dataObject = obj; }
@@ -822,6 +831,8 @@ protected:
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
+    int                 m_cacheFrom;
+    int                 m_cacheTo;
 
 #if wxUSE_DRAG_AND_DROP
     wxDataObject       *m_dataObject;
@@ -854,6 +865,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
 
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_CACHE_HINT, wxDataViewEvent );
+
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEvent );
@@ -884,6 +897,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
+#define EVT_DATAVIEW_CACHE_HINT(id, fn) wx__DECLARE_DATAVIEWEVT(CACHE_HINT, id, fn)
 
 #define EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_BEGIN_DRAG, id, fn)
 #define EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DROP_POSSIBLE, id, fn)

@@ -235,7 +235,9 @@ public :
 
     virtual wxInt32     GetValue() const = 0;
     virtual void        SetValue( wxInt32 v ) = 0;
+    virtual wxBitmap    GetBitmap() const = 0;
     virtual void        SetBitmap( const wxBitmap& bitmap ) = 0;
+    virtual void        SetBitmapPosition( wxDirection dir ) = 0;
     virtual void        SetupTabs( const wxNotebook &notebook ) =0;
     virtual void        GetBestRect( wxRect *r ) const = 0;
     virtual bool        IsEnabled() const = 0;
@@ -480,7 +482,9 @@ public :
    virtual void Set( CFStringRef value ) = 0;
     virtual void Set( const wxString& value ) = 0;
     virtual void Set( int value ) = 0;
+    virtual void Check( bool check );
     
+    virtual bool IsChecked() const;
     virtual int GetIntValue() const = 0;
     virtual wxString GetStringValue() const = 0;
 } ;

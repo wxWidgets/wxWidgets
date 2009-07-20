@@ -894,8 +894,9 @@ public:
     bool IsFrozen() const { return (m_frozen>0)?true:false; }
 
     /**
-        Call this any time your code causes wxPropertyGrid's top-level parent
-        to change.
+        It is recommended that you call this function any time your code causes
+        wxPropertyGrid's top-level parent to change. wxPropertyGrid's OnIdle()
+        handler should be able to detect most changes, but it is not perfect.
 
         @param newTLP
             New top-level parent that is about to be set. Old top-level parent
@@ -917,7 +918,14 @@ public:
         Pointer to the editor class instance that should be used.
     */
     static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
-                                            bool noDefCheck = false );
+                                            bool noDefCheck = false )
+    {
+        return DoRegisterEditorClass(editor, wxEmptyString, noDefCheck);
+    }
+
+    static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editorClass,
+                                              const wxString& editorName,
+                                              bool noDefCheck = false );
 #endif
 
     /** Resets all colours to the original system values.
@@ -1276,6 +1284,21 @@ public:
         m_iFlags |= wxPG_FL_VALUE_CHANGE_IN_EVENT;
     }
 
+    /**
+        You can use this member function, for instance, to detect in
+        wxPGProperty::OnEvent() if wxPGProperty::SetValueInEvent() was
+        already called in wxPGEditor::OnEvent(). It really only detects
+        if was value was changed using wxPGProperty::SetValueInEvent(), which
+        is usually used when a 'picker' dialog is displayed. If value was
+        written by "normal means" in wxPGProperty::StringToValue() or
+        IntToValue(), then this function will return false (on the other hand,
+        wxPGProperty::OnEvent() is not even called in those cases).
+    */
+    bool WasValueChangedInEvent() const
+    {
+        return (m_iFlags & wxPG_FL_VALUE_CHANGE_IN_EVENT) ? true : false;
+    }
+
     /** Returns true if given event is from first of an array of buttons
         (as can be in case when wxPGMultiButton is used).
     */
@@ -1622,6 +1645,12 @@ protected:
 
     // Last known top-level parent
     wxWindow*           m_tlp;
+
+    // Last closed top-level parent
+    wxWindow*           m_tlpClosed;
+
+    // Local time ms when tlp was closed.
+    wxLongLong          m_tlpClosedTime;
 
     // Sort function
     wxPGSortCallback    m_sortFunction;

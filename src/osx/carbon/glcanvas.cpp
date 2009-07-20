@@ -87,6 +87,17 @@ WXGLContext WXGLGetCurrentContext()
     return aglGetCurrentContext();
 }
 
+bool WXGLSetCurrentContext(WXGLContext context)
+{
+    if ( !aglSetCurrentContext(context) )
+    {
+        wxLogAGLError("aglSetCurrentContext");
+        return false;
+    }
+
+    return true;
+}
+
 void WXGLDestroyPixelFormat( WXGLPixelFormat pixelFormat )
 {
     if ( pixelFormat )
@@ -266,12 +277,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
         return false;
     }
 
-    if ( !aglSetCurrentContext(m_glContext) )
-    {
-        wxLogAGLError("aglSetCurrentContext");
-        return false;
-    }
-    return true;
+    return WXGLSetCurrentContext(m_glContext);
 }
 
 // ----------------------------------------------------------------------------

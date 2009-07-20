@@ -28,7 +28,9 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
     if (m_locked)
+    {
         wxLogDebug( "wxMutex warning: destroying a locked mutex (%d locks)", m_locked );
+    }
 }
 
 wxMutexError wxMutex::Lock()

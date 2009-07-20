@@ -213,7 +213,11 @@ public:
     {
         m_socket->m_reading = false;
 
-        m_socket->m_impl->ReenableEvents(wxSOCKET_INPUT_FLAG);
+        // connection could have been lost while reading, in this case calling
+        // ReenableEvents() would assert and is not necessary anyhow
+        wxSocketImpl * const impl = m_socket->m_impl;
+        if ( impl && impl->m_fd != INVALID_SOCKET )
+            impl->ReenableEvents(wxSOCKET_INPUT_FLAG);
     }
 
 private:
@@ -231,13 +235,15 @@ public:
         wxASSERT_MSG( !m_socket->m_writing, "write reentrancy?" );
 
         m_socket->m_writing = true;
-
-        m_socket->m_impl->ReenableEvents(wxSOCKET_OUTPUT_FLAG);
     }
 
     ~wxSocketWriteGuard()
     {
         m_socket->m_writing = false;
+
+        wxSocketImpl * const impl = m_socket->m_impl;
+        if ( impl && impl->m_fd != INVALID_SOCKET )
+            impl->ReenableEvents(wxSOCKET_OUTPUT_FLAG);
     }
 
 private:
@@ -813,7 +819,9 @@ void wxSocketBase::Init()
         // this Initialize() will be undone by wxSocketModule::OnExit(), all
         // the other calls to it should be matched by a call to Shutdown()
         if (!Initialize())
+        {
             wxLogError("Cannot initialize wxSocketBase");
+        }
     }
 }
 
@@ -1607,19 +1615,28 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 
         case wxSOCKET_CONNECTION:
             flag = wxSOCKET_CONNECTION_FLAG;
+
+            // we're now successfully connected
+            m_connected = true;
+            m_establishing = false;
+
+            // error was previously set to wxSOCKET_WOULDBLOCK, but this is not
+            // the case any longer
+            SetError(wxSOCKET_NOERROR);
             break;
 
         case wxSOCKET_LOST:
             flag = wxSOCKET_LOST_FLAG;
+
+            // if we lost the connection the socket is now closed and not
+            // connected any more
+            m_connected = false;
+            m_closed = true;
             break;
 
         default:
             wxFAIL_MSG( "unknown wxSocket notification" );
     }
-
-    // if we lost the connection the socket is now closed
-    if ( notification == wxSOCKET_LOST )
-        m_closed = true;
 
     // remember the events which were generated for this socket, we're going to
     // use this in DoWait()

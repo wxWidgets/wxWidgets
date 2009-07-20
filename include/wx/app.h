@@ -320,6 +320,8 @@ public:
     // wxEventLoop redirections
     // ------------------------
 
+    // all these functions are forwarded to the corresponding methods of the
+    // currently active event loop -- and do nothing if there is none
     virtual bool Pending();
     virtual bool Dispatch();
 
@@ -329,6 +331,13 @@ public:
     bool Yield(bool onlyIfNeeded = false);
 
     virtual void WakeUpIdle();
+
+    // this method is called by the active event loop when there are no events
+    // to process
+    //
+    // by default it generates the idle events and if you override it in your
+    // derived class you should call the base class version to ensure that idle
+    // events are still sent out
     virtual bool ProcessIdle();
 
 

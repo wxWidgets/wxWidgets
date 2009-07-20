@@ -537,23 +537,17 @@ public:
         return value.GetArrayString();
     }
 
-#if wxUSE_LONGLONG_NATIVE
+#ifdef wxLongLong_t
     wxLongLong_t GetPropertyValueAsLongLong( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK("wxLongLong",
-                                             (long) GetPropertyValueAsLong(id))
-        wxLongLong ll;
-        ll << value;
-        return ll.GetValue();
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
+        return p->GetValue().GetLongLong().GetValue();
     }
 
     wxULongLong_t GetPropertyValueAsULongLong( wxPGPropArg id ) const
     {
-        wxPG_PROP_ID_GETPROPVAL_CALL_PROLOG_RETVAL_WFALLBACK("wxULongLong",
-                                    (unsigned long) GetPropertyValueAsULong(id))
-        wxULongLong ull;
-        ull << value;
-        return ull.GetValue();
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(0)
+        return p->GetValue().GetULongLong().GetValue();
     }
 #endif
 
@@ -1036,9 +1030,8 @@ public:
     }
 
 #ifndef SWIG
-    /** Sets various property values from a list of wxVariants. If property with
-        name is missing from the grid, new property is created under given
-        default category (or root if omitted).
+    /**
+        Sets property values from a list of wxVariants.
     */
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
@@ -1049,6 +1042,9 @@ public:
         m_pState->DoSetPropertyValues(list, p);
     }
 
+    /**
+        Sets property values from a list of wxVariants.
+    */
     void SetPropertyValues( const wxVariant& list,
                             wxPGPropArg defaultCategory = wxNullProperty )
     {
@@ -1170,7 +1166,7 @@ public:
         SetPropVal( id, v );
     }
 
-#if wxUSE_LONGLONG_NATIVE
+#ifdef wxLongLong_t
     /** Sets value (wxLongLong&) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, wxLongLong_t value )

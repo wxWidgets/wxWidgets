@@ -49,7 +49,7 @@ enum wxThreadState
 // ----------------------------------------------------------------------------
 
 // the task ID of the main thread
-static wxThreadIdType gs_idMainThread = kInvalidID;
+wxThreadIdType wxThread::ms_idMainThread = kInvalidID;
 
 // this is the Per-Task Storage for the pointer to the appropriate wxThread
 TaskStorageIndex gs_tlsForWXThread = 0;
@@ -796,11 +796,6 @@ wxThread *wxThread::This()
     return thr;
 }
 
-bool wxThread::IsMain()
-{
-    return GetCurrentId() == gs_idMainThread || gs_idMainThread == kInvalidID ;
-}
-
 #ifdef Yield
 #undef Yield
 #endif
@@ -1214,7 +1209,7 @@ bool wxThreadModule::OnInit()
     verify_noerr( MPAllocateTaskStorageIndex( &gs_tlsForWXThread ) ) ;
     verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread, 0 ) ) ;
 
-    gs_idMainThread = wxThread::GetCurrentId();
+    wxThread::ms_idMainThread = wxThread::GetCurrentId();
     gs_critsectWaitingForGui = new wxCriticalSection();
 
     gs_critsectGui = new wxCriticalSection();

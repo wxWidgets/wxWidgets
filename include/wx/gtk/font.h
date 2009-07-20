@@ -95,7 +95,7 @@ public:
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
 
-    WXDECLARE_COMPAT_SETTERS
+    wxDECLARE_COMMON_FONT_METHODS();
 
     virtual void SetNoAntiAliasing( bool no = true );
     virtual bool GetNoAntiAliasing() const ;

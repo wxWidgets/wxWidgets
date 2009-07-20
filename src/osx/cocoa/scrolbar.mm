@@ -19,6 +19,7 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/math.h"
 #include "wx/osx/private.h"
 
 @interface wxNSScroller : NSScroller
@@ -67,7 +68,7 @@ public :
     
     virtual wxInt32 GetValue() const
     {
-        return [(wxNSScroller*) m_osxView floatValue] * m_maximum;
+        return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
     }
     
     virtual wxInt32 GetMaximum() const

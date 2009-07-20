@@ -1676,6 +1676,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxMin( (int)(  GetLineAt( wxMax(0,update.y+update.height) ) - item_start + 1),
             (int)(GetRowCount( ) - item_start));
     unsigned int item_last = item_start + item_count;
+    // Get the parent of DataViewCtrl
+    wxWindow *parent = GetParent()->GetParent();
+    wxDataViewEvent cache_event(wxEVT_COMMAND_DATAVIEW_CACHE_HINT, parent->GetId());
+    cache_event.SetEventObject(GetParent());
+    cache_event.SetCache(item_start, item_last - 1);
+    parent->ProcessWindowEvent(cache_event);
 
     // compute which columns needs to be redrawn
     unsigned int cols = GetOwner()->GetColumnCount();
@@ -2030,7 +2036,9 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 {
     if (IsVirtualList())
     {
-        m_count++;
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+        m_count = list_model->GetCount();
         UpdateDisplay();
         return true;
     }
@@ -2070,7 +2078,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 {
     if (IsVirtualList())
     {
-        m_count--;
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+        m_count = list_model->GetCount();
+        
         if( m_currentRow > GetRowCount() )
             m_currentRow = m_count - 1;
 
@@ -2786,9 +2797,7 @@ wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
     {
         RowToItemJob job( row, -2 );
         Walker( m_root , job );
-        wxDataViewItem res = job.GetResult();
-//        wxPrintf( "row %d, item %d\n", row, (int) res.GetID() );
-        return res;
+        return job.GetResult();
     }
 }
 
@@ -3204,13 +3213,10 @@ int wxDataViewMainWindow::RecalculateCount()
 {
     if (IsVirtualList())
     {
-        wxDataViewIndexListModel *list_model =
-            (wxDataViewIndexListModel*) GetOwner()->GetModel();
-#ifndef __WXMAC__
-        return list_model->GetLastIndex() + 1;
-#else
-        return list_model->GetLastIndex() - 1;
-#endif
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+            
+        return list_model->GetCount();
     }
     else
     {

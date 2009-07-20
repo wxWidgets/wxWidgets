@@ -334,69 +334,14 @@ void MyFrame::OpenConnection(wxSockAddress::Family family)
   addr->Hostname(hostname);
   addr->Service(3000);
 
-  // Mini-tutorial for Connect() :-)
-  // ---------------------------
+  // we connect asynchronously and will get a wxSOCKET_CONNECTION event when
+  // the connection is really established
   //
-  // There are two ways to use Connect(): blocking and non-blocking,
-  // depending on the value passed as the 'wait' (2nd) parameter.
-  //
-  // Connect(addr, true) will wait until the connection completes,
-  // returning true on success and false on failure. This call blocks
-  // the GUI (this might be changed in future releases to honour the
-  // wxSOCKET_BLOCK flag).
-  //
-  // Connect(addr, false) will issue a nonblocking connection request
-  // and return immediately. If the return value is true, then the
-  // connection has been already successfully established. If it is
-  // false, you must wait for the request to complete, either with
-  // WaitOnConnect() or by watching wxSOCKET_CONNECTION / LOST
-  // events (please read the documentation).
-  //
-  // WaitOnConnect() itself never blocks the GUI (this might change
-  // in the future to honour the wxSOCKET_BLOCK flag). This call will
-  // return false on timeout, or true if the connection request
-  // completes, which in turn might mean:
-  //
-  //   a) That the connection was successfully established
-  //   b) That the connection request failed (for example, because
-  //      it was refused by the peer.
-  //
-  // Use IsConnected() to distinguish between these two.
-  //
-  // So, in a brief, you should do one of the following things:
-  //
-  // For blocking Connect:
-  //
-  //   bool success = client->Connect(addr, true);
-  //
-  // For nonblocking Connect:
-  //
-  //   client->Connect(addr, false);
-  //
-  //   bool waitmore = true;
-  //   while (! client->WaitOnConnect(seconds, millis) && waitmore )
-  //   {
-  //     // possibly give some feedback to the user,
-  //     // update waitmore if needed.
-  //   }
-  //   bool success = client->IsConnected();
-  //
-  // And that's all :-)
+  // if you want to make sure that connection is established right here you
+  // could call WaitOnConnect(timeout) instead
+  wxLogMessage("Trying to connect to %s:%d", hostname, addr->Service());
 
-  m_text->AppendText(_("\nTrying to connect (timeout = 10 sec) ...\n"));
   m_sock->Connect(*addr, false);
-  m_sock->WaitOnConnect(10);
-
-  if (m_sock->IsConnected())
-    m_text->AppendText(_("Succeeded ! Connection established\n"));
-  else
-  {
-    m_sock->Close();
-    m_text->AppendText(_("Failed ! Unable to connect\n"));
-    wxMessageBox(_("Can't connect to the specified host"), _("Alert !"));
-  }
-
-  UpdateStatusBar();
 }
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
@@ -673,7 +618,9 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
     // Get the data
     wxStringOutputStream sout;
     if ( data->Read(sout).GetLastError() != wxSTREAM_EOF )
+    {
         wxLogError("Error reading the input stream.");
+    }
 
     wxLogMessage("Text retrieved from URL \"%s\" follows:\n%s",
                  urlname, sout.GetString());
@@ -683,29 +630,38 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
-  wxString s = _("OnSocketEvent: ");
+    switch ( event.GetSocketEvent() )
+    {
+        case wxSOCKET_INPUT:
+            wxLogMessage("Input available on the socket");
+            break;
 
-  switch(event.GetSocketEvent())
-  {
-    case wxSOCKET_INPUT      : s.Append(_("wxSOCKET_INPUT\n")); break;
-    case wxSOCKET_LOST       : s.Append(_("wxSOCKET_LOST\n")); break;
-    case wxSOCKET_CONNECTION : s.Append(_("wxSOCKET_CONNECTION\n")); break;
-    default                  : s.Append(_("Unexpected event !\n")); break;
-  }
+        case wxSOCKET_LOST:
+            wxLogMessage("Socket connection was unexpectedly lost.");
+            UpdateStatusBar();
+            break;
 
-  m_text->AppendText(s);
-  UpdateStatusBar();
+        case wxSOCKET_CONNECTION:
+            wxLogMessage("... socket is now connected.");
+            UpdateStatusBar();
+            break;
+
+        default:
+            wxLogMessage("Unknown socket event!!!");
+            break;
+    }
 }
 
 // convenience functions
 
 void MyFrame::UpdateStatusBar()
 {
+#if wxUSE_STATUSBAR
   wxString s;
 
   if (!m_sock->IsConnected())
   {
-    s.Printf(_("Not connected"));
+    s = "Not connected";
   }
   else
   {
@@ -716,10 +672,9 @@ void MyFrame::UpdateStatusBar()
 #endif
 
     m_sock->GetPeer(addr);
-    s.Printf(_("%s : %d"), (addr.Hostname()).c_str(), addr.Service());
+    s.Printf("%s : %d", addr.Hostname(), addr.Service());
   }
 
-#if wxUSE_STATUSBAR
   SetStatusText(s, 1);
 #endif // wxUSE_STATUSBAR
 

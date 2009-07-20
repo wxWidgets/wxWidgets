@@ -893,6 +893,12 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
 bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
 #if wxUSE_MENUS
+
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    if (GetToolBar() && GetToolBar()->FindById(id))
+        return GetToolBar()->MSWCommand(cmd, id);
+#endif
+
     // we only need to handle the menu and accelerator commands from the items
     // of our menu bar, base wxWindow class already handles the rest
     if ( !control && (cmd == 0 /* menu */ || cmd == 1 /* accel */) )

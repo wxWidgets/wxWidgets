@@ -229,13 +229,6 @@ static bool DoCommonPreInit()
 #if wxUSE_LOG
     // Reset logging in case we were cleaned up and are being reinitialized.
     wxLog::DoCreateOnDemand();
-
-    // install temporary log sink: we can't use wxLogGui before wxApp is
-    // constructed and if we use wxLogStderr, all messages during
-    // initialization simply disappear under Windows
-    //
-    // note that we will delete this log target below
-    delete wxLog::SetActiveTarget(new wxLogBuffer);
 #endif // wxUSE_LOG
 
     return true;
@@ -356,14 +349,15 @@ bool wxEntryStart(int& argc, char **argv)
 static void DoCommonPreCleanup()
 {
 #if wxUSE_LOG
-    // flush the logged messages if any and install a 'safer' log target: the
-    // default one (wxLogGui) can't be used after the resources are freed just
-    // below and the user supplied one might be even more unsafe (using any
-    // wxWidgets GUI function is unsafe starting from now)
-    wxLog::DontCreateOnDemand();
-
-    // this will flush the old messages if any
-    delete wxLog::SetActiveTarget(new wxLogStderr);
+    // flush the logged messages if any and don't use the current probably
+    // unsafe log target any more: the default one (wxLogGui) can't be used
+    // after the resources are freed which happens when we return and the user
+    // supplied one might be even more unsafe (using any wxWidgets GUI function
+    // is unsafe starting from now)
+    //
+    // notice that wxLog will still recreate a default log target if any
+    // messages are logged but that one will be safe to use until the very end
+    delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
 }
 
@@ -384,6 +378,12 @@ static void DoCommonPostCleanup()
 
 #if wxUSE_LOG
     // and now delete the last logger as well
+    //
+    // we still don't disable log target auto-vivification even if any log
+    // objects created now will result in memory leaks because it seems better
+    // to leak memory which doesn't matter much considering the application is
+    // exiting anyhow than to not show messages which could still be logged
+    // from the user code (e.g. static dtors and such)
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
 }

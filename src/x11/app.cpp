@@ -690,7 +690,9 @@ PangoContext* wxApp::GetPangoContext()
             s_pangoContext = pango_x_get_context(dpy);
 
         if (!PANGO_IS_CONTEXT(s_pangoContext))
+        {
             wxLogError( wxT("No pango context.") );
+        }
     }
 
     return s_pangoContext;

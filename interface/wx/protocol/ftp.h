@@ -47,14 +47,20 @@ enum TransferMode
         }
 
         ftp.ChDir("/pub/2.8.9");
-        wxInputStream *i = ftp.GetInputStream("wxWidgets-2.8.9.tar.bz2");
+        const char *filename = "wxWidgets-2.8.9.tar.bz2";
+        int size = ftp.GetFileSize(filename);
+        if ( size == -1 )
+        {
+            wxLogError("Couldn't get the file size for \"%s\"", filename);
+        }
+
+        wxInputStream *i = ftp.GetInputStream(filename);
         if ( !in )
         {
             wxLogError("Couldn't get the file");
         }
         else
         {
-            size_t size = in->GetSize();
             char *data = new char[size];
             if ( !in->Read(data, size) )
             {

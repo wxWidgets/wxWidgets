@@ -243,10 +243,10 @@ public:
         // (any of the pointers may be NULL)
     bool SetTimes(const wxDateTime *dtAccess,
                   const wxDateTime *dtMod,
-                  const wxDateTime *dtCreate);
+                  const wxDateTime *dtCreate) const;
 
         // set the access and modification times to the current moment
-    bool Touch();
+    bool Touch() const;
 
         // return the last access, last modification and create times
         // (any of the pointers may be NULL)
@@ -265,7 +265,7 @@ public:
 
 #if defined( __WXOSX_MAC__ ) && wxOSX_USE_CARBON
     bool MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) ;
-    bool MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) ;
+    bool MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) const;
     // gets the 'common' type and creator for a certain extension
     static bool MacFindDefaultTypeAndCreator( const wxString& ext , wxUint32 *type , wxUint32 *creator ) ;
     // registers application defined extensions and their default type and creator
@@ -281,7 +281,7 @@ public:
     static wxString GetCwd(const wxString& volume = wxEmptyString);
 
         // change the current working directory
-    bool SetCwd();
+    bool SetCwd() const;
     static bool SetCwd( const wxString &cwd );
 
         // get the value of user home (Unix only mainly)
@@ -358,7 +358,7 @@ public:
         // the arguments
     bool GetShortcutTarget(const wxString& shortcutPath,
                            wxString& targetFilename,
-                           wxString* arguments = NULL);
+                           wxString* arguments = NULL) const;
 #endif
 
 #ifndef __WXWINCE__

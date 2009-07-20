@@ -61,7 +61,7 @@ void AutoCaptureMechanism::Delay(int seconds)
 
     // Wait for 3 seconds
     clock_t start = clock();
-    while (clock() - start < CLOCKS_PER_SEC * seconds)
+    while ( clock() - start < (clock_t)CLOCKS_PER_SEC * seconds)
         wxYieldIfNeeded();
 }
 

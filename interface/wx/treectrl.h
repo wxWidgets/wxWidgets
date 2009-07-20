@@ -419,6 +419,15 @@ public:
     virtual wxTreeItemId GetFirstVisibleItem() const;
 
     /**
+        Returns the item last clicked or otherwise selected.
+        Unlike GetSelection(), it can be used whether or not
+        the control has the @c wxTR_MULTIPLE style.
+        
+        @since 2.9.1
+    */
+    virtual wxTreeItemId GetFocusedItem() const;
+
+    /**
         Returns the normal image list.
     */
     wxImageList* GetImageList() const;
@@ -566,7 +575,8 @@ public:
     /**
         Returns the selection, or an invalid item if there is no selection. This
         function only works with the controls without @c wxTR_MULTIPLE style,
-        use GetSelections() for the controls which do have this style.
+        use GetSelections() for the controls which do have this style 
+        or, if a single item is wanted, use GetFocusedItem().
     */
     virtual wxTreeItemId GetSelection() const;
 

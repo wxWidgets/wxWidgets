@@ -117,7 +117,9 @@ bool TestExec(const wxVector<wxFileName>& programs, long timeout)
 
         long pid = wxExecute(programs[i].GetFullPath(), wxEXEC_ASYNC, &dt->process);
         if (pid == 0)
+        {
             wxLogError("could not run the program '%s'", programs[i].GetFullPath());
+        }
         else
         {
             wxLogMessage("started program '%s' (pid %d)...",

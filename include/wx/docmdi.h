@@ -64,6 +64,7 @@ private:
     // for dll-interface class 'wxDocMDIChildFrame'" -- this is bogus as the
     // template will be DLL-exported but only once it is used as base class
     // here!
+    #pragma warning (push)
     #pragma warning (disable:4275)
 #endif
 
@@ -93,7 +94,7 @@ private:
 };
 
 #ifdef __VISUALC6__
-    #pragma warning (default:4275)
+    #pragma warning (pop)
 #endif
 
 #endif // wxUSE_MDI_ARCHITECTURE

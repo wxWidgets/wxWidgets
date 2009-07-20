@@ -792,13 +792,14 @@ public:
     void SetPropertyValueUnspecified( wxPGPropArg id );
 
     /**
-        Sets various property values from a list of wxVariants. If property with
-        name is missing from the grid, new property is created under given
-        default category (or root if omitted).
+        Sets property values from a list of wxVariants.
     */
     void SetPropertyValues( const wxVariantList& list,
                             wxPGPropArg defaultCategory = wxNullProperty );
 
+    /**
+        Sets property values from a list of wxVariants.
+    */
     void SetPropertyValues( const wxVariant& list,
                             wxPGPropArg defaultCategory = wxNullProperty );
 

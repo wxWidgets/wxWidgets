@@ -1635,7 +1635,9 @@ bool wxLocale::Init(const wxString& name,
         m_pszOldLocale = NULL;
 
     if ( m_pszOldLocale == NULL )
+    {
         wxLogError(_("locale '%s' can not be set."), szLocale);
+    }
 
     // the short name will be used to look for catalog files as well,
     // so we need something here
@@ -3787,7 +3789,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ESPERANTO,                  "eo"   , 0              , 0                                 , wxLayout_LeftToRight, "Esperanto")
    LNG(wxLANGUAGE_ESTONIAN,                   "et_EE", LANG_ESTONIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Estonian")
    LNG(wxLANGUAGE_FAEROESE,                   "fo_FO", LANG_FAEROESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Faeroese")
-   LNG(wxLANGUAGE_FARSI,                      "fa_IR", LANG_FARSI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Farsi")
+   LNG(wxLANGUAGE_FARSI,                      "fa_IR", LANG_FARSI     , SUBLANG_DEFAULT                   , wxLayout_RightToLeft, "Farsi")
    LNG(wxLANGUAGE_FIJI,                       "fj"   , 0              , 0                                 , wxLayout_LeftToRight, "Fiji")
    LNG(wxLANGUAGE_FINNISH,                    "fi_FI", LANG_FINNISH   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Finnish")
    LNG(wxLANGUAGE_FRENCH,                     "fr_FR", LANG_FRENCH    , SUBLANG_FRENCH                    , wxLayout_LeftToRight, "French")

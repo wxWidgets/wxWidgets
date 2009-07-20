@@ -341,23 +341,24 @@ public:
       { return wxStdString(c_str(), length()); }
 #endif
 
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
+    // disable warning about Unlock() below not being inlined (first, it
+    // seems to be inlined nevertheless and second, even if it isn't, there
+    // is nothing we can do about this
+    #pragma warning(push)
+    #pragma warning (disable:4714)
+#endif
 
     // dtor is not virtual, this class must not be inherited from!
   ~wxStringImpl()
   {
-#if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-      //RN - according to the above VC++ does indeed inline this,
-      //even though it spits out two warnings
-      #pragma warning (disable:4714)
-#endif
-
       GetStringData()->Unlock();
   }
 
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-    //re-enable inlining warning
-    #pragma warning (default:4714)
+    #pragma warning(pop)
 #endif
+
   // overloaded assignment
     // from another wxString
   wxStringImpl& operator=(const wxStringImpl& stringSrc);

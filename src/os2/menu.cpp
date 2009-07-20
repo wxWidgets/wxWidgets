@@ -1097,7 +1097,9 @@ void wxMenuBar::Attach(
                             ,m_vAccelTable.GetHACCEL()
                             ,(HWND)pFrame->GetFrame()
                            ))
+    {
         wxLogLastError(wxT("WinSetAccelTable"));
+    }
 #endif // wxUSE_ACCEL
 } // end of wxMenuBar::Attach
 

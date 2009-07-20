@@ -136,28 +136,54 @@ enum wxBorder
 
 
 /**
-    Background styles. See wxWindow::SetBackgroundStyle().
+    Background styles.
+
+    @see wxWindow::SetBackgroundStyle()
 */
 enum wxBackgroundStyle
 {
-    /// Use the default background, as determined by
-    /// the system or the current theme.
+    /**
+        Default background style value indicating that the background may be
+        erased in the user-defined EVT_ERASE_BACKGROUND handler.
+
+        If no such handler is defined (or if it skips the event), the effect of
+        this style is the same as wxBG_STYLE_SYSTEM. If an empty handler (@em
+        not skipping the event) is defined, the effect is the same as
+        wxBG_STYLE_PAINT, i.e. the background is not erased at all until
+        EVT_PAINT handler is executed.
+
+        This is the only background style value for which erase background
+        events are generated at all.
+     */
+    wxBG_STYLE_ERASE,
+
+    /**
+        Use the default background, as determined by the system or the current
+        theme.
+
+        If the window has been assigned a non-default background colour, it
+        will be used for erasing its background. Otherwise the default
+        background (which might be a gradient or a pattern) will be used.
+
+        EVT_ERASE_BACKGROUND event will not be generated at all for windows
+        with this style.
+     */
     wxBG_STYLE_SYSTEM,
 
-    /// Use a solid colour for the background, this style is set automatically if you call
-    /// SetBackgroundColour() so you only need to set it explicitly if you had
-    /// changed the background style to something else before.
-    wxBG_STYLE_COLOUR,
+    /**
+        Indicates that the background is only erased in the user-defined
+        EVT_PAINT handler.
 
-    /// Don't draw the background at all, it's supposed that it is drawn by
-    /// the user-defined erase background event handler.
-    /// This style should be used to avoid flicker when the background is entirely
-    /// custom-drawn.
-    wxBG_STYLE_CUSTOM,
+        Using this style avoids flicker which would result from redrawing the
+        background twice if the EVT_PAINT handler entirely overwrites it. It
+        must not be used however if the paint handler leaves any parts of the
+        window unpainted as their contents is then undetermined. Only use it if
+        you repaint the whole window in your handler.
 
-    /// The background is (partially) transparent,this style is automatically set if you call
-    /// SetTransparent() which is used to set the transparency level.
-    wxBG_STYLE_TRANSPARENT
+        EVT_ERASE_BACKGROUND event will not be generated at all for windows
+        with this style.
+     */
+    wxBG_STYLE_PAINT
 };
 
 
@@ -1118,6 +1144,29 @@ template <typename T> wxDELETEA(T*& array);
     @header{wx/defs.h}
 */
 #define wxDEPRECATED_INLINE(func, body)
+
+/**
+    A helper macro allowing to easily define a simple deprecated accessor.
+
+    Compared to wxDEPRECATED_INLINE() it saves a @c return statement and,
+    especially, a strangely looking semicolon inside a macro.
+
+    Example of use
+    @code
+    class wxFoo
+    {
+    public:
+        int GetValue() const { return m_value; }
+
+        // this one is deprecated because it was erroneously non-const
+        wxDEPRECATED_ACCESSOR( int GetValue(), m_value )
+
+    private:
+        int m_value;
+    };
+    @endcode
+ */
+#define wxDEPRECATED_ACCESSOR(func, what)
 
 /**
     Combination of wxDEPRECATED_BUT_USED_INTERNALLY() and wxDEPRECATED_INLINE().

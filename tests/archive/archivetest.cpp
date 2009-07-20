@@ -388,7 +388,9 @@ void TempDir::RemoveDir(wxString& path)
         wxRmdir(tmp + wxFileName(dirs[i], wxPATH_UNIX).GetFullPath());
 
     if (!wxRmdir(m_tmp))
+    {
         wxLogSysError(_T("can't remove temporary dir '%s'"), m_tmp.c_str());
+    }
 }
 
 
@@ -647,7 +649,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         TestEntry& entry = *i->second;
 
         if (fn.IsDir()) {
-            fn.Mkdir(0777, wxPATH_MKDIR_FULL);
+            wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
         } else {
             wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
             wxFFileOutputStream fileout(fn.GetFullPath());

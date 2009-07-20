@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.9.0], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.9.1], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -43,7 +43,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=9
-wx_release_number=0
+wx_release_number=1
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -2001,7 +2001,9 @@ SEARCH_INCLUDE="\
     /usr/local/include        \
     /usr/local/X11/include    \
     /usr/local/include/X11    \
+    /usr/local/X11R7/include  \
     /usr/local/X11R6/include  \
+    /usr/local/include/X11R7  \
     /usr/local/include/X11R6  \
                               \
     /usr/Motif-2.1/include    \
@@ -2013,9 +2015,11 @@ SEARCH_INCLUDE="\
                               \
     /usr/include/Xm           \
                               \
+    /usr/X11R7/include        \
     /usr/X11R6/include        \
     /usr/X11R6.4/include      \
                               \
+    /usr/include/X11R7        \
     /usr/include/X11R6        \
                               \
     /usr/X11/include          \
@@ -3672,13 +3676,17 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                 wxUSE_OPENGL=no
                 USE_OPENGL=0
             fi
-        else
-            dnl libraries are available... change 'auto' in 'yes'
-            wxUSE_OPENGL=yes
         fi
     else
         AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
         wxUSE_OPENGL="no"
+    fi
+
+    if test "$wxUSE_OPENGL" = "auto"; then
+        dnl if the OpenGL libraries were unavailable, this would have been
+        dnl changed to "no" above, if it wasn't, change it to "yes" as we've
+        dnl verified that we can indeed use OpenGL
+        wxUSE_OPENGL=yes
     fi
 
     if test "$wxUSE_OPENGL" = "yes"; then
@@ -7438,6 +7446,14 @@ if test "x$INTELCXX" = "xyes" ; then
 elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
+
+    dnl when building under Mac we currently get hundreds of deprecation
+    dnl warnings for Carbon symbols from the standard headers -- disable them
+    dnl as we already know that they're deprecated and nothing else can be seen
+    dnl with these warnings on
+    if test "$wxUSE_MAC" = 1 ; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
+    fi
 fi
 
 

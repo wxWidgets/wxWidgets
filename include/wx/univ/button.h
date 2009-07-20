@@ -87,8 +87,6 @@ public:
 
     virtual ~wxButton();
 
-    virtual void SetImageLabel(const wxBitmap& bitmap);
-    virtual void SetImageMargins(wxCoord x, wxCoord y);
     virtual wxWindow *SetDefault();
 
     virtual bool IsPressed() const { return m_isPressed; }
@@ -118,6 +116,9 @@ protected:
 
     virtual bool DoDrawBackground(wxDC& dc);
     virtual void DoDraw(wxControlRenderer *renderer);
+
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+    virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
 
     // common part of all ctors
     void Init();

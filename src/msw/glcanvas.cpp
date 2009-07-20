@@ -117,7 +117,9 @@ wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext* other)
     if ( other )
     {
         if ( !wglShareLists(other->m_glContext, m_glContext) )
+        {
             wxLogLastError(_T("wglShareLists"));
+        }
     }
 }
 

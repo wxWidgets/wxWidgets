@@ -543,7 +543,9 @@ void wxWindowMGL::Init()
     if ( !g_winMng )
     {
         if ( !wxTheApp->SetDisplayMode(wxGetDefaultDisplayMode()) )
+        {
             wxLogFatalError(_("Cannot initialize display."));
+        }
     }
 
     // mgl specific:

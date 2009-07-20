@@ -86,7 +86,9 @@ void wxMessageDialog::GTKCreateMsgDialog()
 
 #if wxUSE_LIBHILDON
     const char *stockIcon;
-    if ( m_dialogStyle & wxICON_ERROR )
+    if ( m_dialogStyle & wxICON_NONE )
+        stockIcon = "";
+    else if ( m_dialogStyle & wxICON_ERROR )
         stockIcon = "qgn_note_gene_syserror";
     else if ( m_dialogStyle & wxICON_EXCLAMATION )
         stockIcon = "qgn_note_gene_syswarning";
@@ -127,6 +129,11 @@ void wxMessageDialog::GTKCreateMsgDialog()
         }
     }
 
+#ifdef __WXGTK210__
+    if ( gtk_check_version(2, 10, 0) == NULL && (m_dialogStyle & wxICON_NONE))
+        type = GTK_MESSAGE_OTHER;
+    else
+#endif // __WXGTK210__
     if (m_dialogStyle & wxICON_EXCLAMATION)
         type = GTK_MESSAGE_WARNING;
     else if (m_dialogStyle & wxICON_ERROR)
@@ -137,7 +144,8 @@ void wxMessageDialog::GTKCreateMsgDialog()
         type = GTK_MESSAGE_QUESTION;
     else
     {
-        // GTK+ doesn't have a "typeless" msg box, so try to auto detect...
+        // if no style is explicitly specified, detect the suitable icon
+        // ourselves (this can be disabled by using wxICON_NONE)
         type = m_dialogStyle & wxYES ? GTK_MESSAGE_QUESTION : GTK_MESSAGE_INFO;
     }
 

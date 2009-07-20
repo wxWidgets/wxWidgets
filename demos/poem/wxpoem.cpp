@@ -67,8 +67,8 @@ static int      XPos;                           // Startup X position
 static int      YPos;                           // Startup Y position
 static int      pointSize = 12;                 // Font size
 
-static wxChar   *index_filename = NULL;            // Index filename
-static wxChar   *data_filename = NULL;             // Data filename
+static const wxChar   *index_filename = NULL;            // Index filename
+static const wxChar   *data_filename = NULL;             // Data filename
 static wxChar   error_buf[300];                 // Error message buffer
 static bool     loaded_ok = false;              // Poem loaded ok
 static bool     index_ok = false;               // Index loaded ok
@@ -82,9 +82,9 @@ wxBitmap        *backingBitmap = NULL;
 void            PoetryError(const wxChar *, const wxChar *caption=_T("wxPoem Error"));
 void            PoetryNotify(const wxChar *Msg, const wxChar *caption=_T("wxPoem"));
 void            TryLoadIndex();
-bool            LoadPoem(wxChar *, long);
+bool            LoadPoem(const wxChar *, long);
 int             GetIndex();
-int             LoadIndex(wxChar *);
+int             LoadIndex(const wxChar *);
 bool            Compile(void);
 void            FindMax(int *max_thing, int thing);
 
@@ -706,7 +706,7 @@ void MyCanvas::OnChar(wxKeyEvent& event)
 }
 
 // Load index file
-int LoadIndex(wxChar *file_name)
+int LoadIndex(const wxChar *file_name)
 {
     long data;
     FILE *index_file;
@@ -778,7 +778,7 @@ void MainWindow::WritePreferences()
 // Load a poem from given file, at given point in file.
 // If position is > -1, use this for the position in the
 // file, otherwise use index[index_ptr] to find the correct position.
-bool LoadPoem(wxChar *file_name, long position)
+bool LoadPoem(const wxChar *file_name, long position)
 {
 //    int j = 0;
 //    int indexn = 0;

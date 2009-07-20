@@ -91,12 +91,49 @@ public:
     void SetDC(wxDC* dc, double pixel_scale = 1.0);
 
     /**
-        Sets fonts. See wxHtmlWindow::SetFonts for detailed description.
+        This function sets font sizes and faces.
+
+        @param normal_face
+            This is face name for normal (i.e. non-fixed) font.
+            It can be either empty string (then the default face is chosen) or
+            platform-specific face name. Examples are "helvetica" under Unix or
+            "Times New Roman" under Windows.
+        @param fixed_face
+            The same thing for fixed face ( \<TT\>..\</TT\> )
+        @param sizes
+            This is an array of 7 items of int type.
+            The values represent size of font with HTML size from -2 to +4
+            ( \<FONT SIZE=-2\> to \<FONT SIZE=+4\> ).
+            Default sizes are used if sizes is @NULL.
+
+        Default font sizes are defined by constants wxHTML_FONT_SIZE_1,
+        wxHTML_FONT_SIZE_2, ..., wxHTML_FONT_SIZE_7.
+        Note that they differ among platforms. Default face names are empty strings.
 
         @see SetSize()
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);
+
+    /**
+        Sets font sizes to be relative to the given size or the system
+        default size; use either specified or default font
+
+        @param size 
+            Point size of the default HTML text
+        @param normal_face
+            This is face name for normal (i.e. non-fixed) font. It can be 
+            either empty string (then the default face is chosen) or 
+            platform-specific face name. Examples are "helvetica" under 
+            Unix or "Times New Roman" under Windows.
+        @param fixed_face
+            The same thing for fixed face ( \<TT\>..\</TT\> ) 
+
+        @see SetSize()
+    */
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxEmptyString,
+                          const wxString& fixed_face = wxEmptyString);
 
     /**
         Assign text to the renderer. Render() then draws the text onto DC.
@@ -116,7 +153,7 @@ public:
 
     /**
         Set size of output rectangle, in pixels. Note that you @b can't change
-        width of the rectangle between calls to wxHtmlDCRenderer::Render!
+        width of the rectangle between calls to Render() !
         (You can freely change height.)
     */
     void SetSize(int width, int height);
@@ -222,10 +259,19 @@ public:
                    const wxString& basepath = wxEmptyString);
 
     /**
-        Sets fonts. See wxHtmlWindow::SetFonts for detailed description.
+        Sets fonts. See wxHtmlDCRenderer::SetFonts for detailed description.
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);
+  
+    /**
+        Sets default font sizes and/or default font size. 
+        See wxHtmlDCRenderer::SetStandardFonts for detailed description.
+        @see SetFonts()
+    */
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxEmptyString,
+                          const wxString& fixed_face = wxEmptyString);
 
     /**
         Set page footer. The following macros can be used inside it:
@@ -311,7 +357,8 @@ public:
     static void AddFilter(wxHtmlFilter* filter);
 
     /**
-        Sets fonts. See wxHtmlWindow::SetFonts for detailed description.
+        This function sets font sizes and faces. See wxHtmlWindow::SetFonts
+        for detailed description.
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);

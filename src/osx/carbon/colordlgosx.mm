@@ -106,28 +106,16 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     if (data)
         m_colourData = *data;
 
-    //
-    //	This is the key call - this initializes
-    //	events and window stuff for cocoa for carbon
-    //	applications.
-    //
-    //	This is also the only call here that is
-    //	10.2+ specific (the rest is OSX only),
-    //	which, ironically, the carbon font
-    //	panel requires.
-    //
-    bool bOK = NSApplicationLoad();
-
     //autorelease pool - req'd for carbon
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
 
     if(m_colourData.GetColour().IsOk())
         [[NSColorPanel sharedColorPanel] setColor:
-            [NSColor colorWithCalibratedRed:m_colourData.GetColour().Red() / 255.0
-                                        green:m_colourData.GetColour().Green() / 255.0
-                                        blue:m_colourData.GetColour().Blue() / 255.0
-                                        alpha:1.0]
+            [NSColor colorWithCalibratedRed:(CGFloat) (m_colourData.GetColour().Red() / 255.0)
+                                        green:(CGFloat) (m_colourData.GetColour().Green() / 255.0)
+                                        blue:(CGFloat) (m_colourData.GetColour().Blue() / 255.0)
+                                        alpha:(CGFloat) 1.0]
         ];
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
@@ -135,7 +123,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     //We're done - free up the pool
     [thePool release];
 
-    return bOK;
+    return true;
 }
 int wxColourDialog::ShowModal()
 {
@@ -170,6 +158,7 @@ int wxColourDialog::ShowModal()
             [NSApp endModalSession:session];
 
     //free up the memory for the delegates - we don't need them anymore
+    [theColorPanel setDelegate:nil];
     [theCPDelegate release];
 
     //Get the shared color panel along with the chosen color and set the chosen color

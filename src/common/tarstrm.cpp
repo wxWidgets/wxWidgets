@@ -793,7 +793,9 @@ wxStreamError wxTarInputStream::ReadHeaders()
     while (!done) {
         m_hdr->Read(*m_parent_i_stream);
         if (m_parent_i_stream->Eof())
+        {
             wxLogError(_("incomplete header block in tar"));
+        }
         if (!*m_parent_i_stream)
             return wxSTREAM_READ_ERROR;
         m_offset += TAR_BLOCKSIZE;
@@ -1040,7 +1042,9 @@ size_t wxTarInputStream::OnSysRead(void *buffer, size_t size)
     } else if (!m_parent_i_stream->IsOk()) {
         // any other error will have been reported by the underlying stream
         if (m_parent_i_stream->Eof())
+        {
             wxLogError(_("unexpected end of file"));
+        }
         m_lasterror = wxSTREAM_READ_ERROR;
     }
 

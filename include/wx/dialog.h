@@ -65,12 +65,6 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 class WXDLLIMPEXP_CORE wxDialogBase : public wxTopLevelWindow
 {
 public:
-    enum
-    {
-        // all flags allowed in wxDialogBase::CreateButtonSizer()
-        ButtonSizerFlags = wxOK|wxCANCEL|wxYES|wxNO|wxHELP|wxNO_DEFAULT
-    };
-
     wxDialogBase() { Init(); }
     virtual ~wxDialogBase() { }
 

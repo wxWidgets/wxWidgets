@@ -220,10 +220,14 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
   IPaddress addrReal;
   if ( !m_server->GetLocal(addrReal) )
+  {
     wxLogMessage("ERROR: couldn't get the address we bound to");
+  }
   else
+  {
     wxLogMessage("Server listening at %s:%u",
                  addrReal.IPAddress(), addrReal.Service());
+  }
 
   // Setup the event handler and subscribe to connection events
   m_server->SetEventHandler(*this, SERVER_ID);
@@ -387,10 +391,14 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
   {
     IPaddress addr;
     if ( !sock->GetPeer(addr) )
+    {
       wxLogMessage("New connection from unknown client accepted.");
+    }
     else
+    {
       wxLogMessage("New client connection from %s:%u accepted",
                    addr.IPAddress(), addr.Service());
+    }
   }
   else
   {

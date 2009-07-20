@@ -446,8 +446,35 @@ void wxToolBarBase::ClearTools()
     }
 }
 
+void wxToolBarBase::AdjustToolBitmapSize()
+{
+    const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
+
+    wxSize sizeActual(sizeOrig);
+
+    for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
+          i != m_tools.end();
+          ++i )
+    {
+        const wxBitmap& bmp = (*i)->GetNormalBitmap();
+        if ( bmp.IsOk() )
+            sizeActual.IncTo(bmp.GetSize());
+    }
+
+    if ( sizeActual != sizeOrig )
+        SetToolBitmapSize(sizeActual);
+}
+
 bool wxToolBarBase::Realize()
 {
+    // check if we have anything to do
+    if ( m_tools.empty() )
+        return false;
+
+    // make sure tool size is larger enough for all all bitmaps to fit in
+    // (this is consistent with what other ports do):
+    AdjustToolBitmapSize();
+
     return true;
 }
 

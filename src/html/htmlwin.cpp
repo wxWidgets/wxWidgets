@@ -35,6 +35,9 @@
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
 
+// uncomment this line to visually show the extent of the selection
+//#define DEBUG_HTML_SELECTION
+
 // HTML events:
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlLinkEvent, wxCommandEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlCellEvent, wxCommandEvent)
@@ -312,8 +315,6 @@ void wxHtmlWindow::Init()
     m_timerAutoScroll = NULL;
     m_lastDoubleClick = 0;
 #endif // wxUSE_CLIPBOARD
-    m_backBuffer = NULL;
-    m_eraseBgInOnPaint = false;
     m_tmpSelFromCell = NULL;
 }
 
@@ -325,6 +326,18 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
                                   style | wxVSCROLL | wxHSCROLL,
                                   name))
         return false;
+
+    // We can't erase our background in EVT_ERASE_BACKGROUND handler and use
+    // double buffering in EVT_PAINT handler as this requires blitting back
+    // something already drawn on the window to the backing store bitmap when
+    // handling EVT_PAINT but blitting in this direction is simply not
+    // supported by OS X.
+    //
+    // So instead we use a hack with artificial EVT_ERASE_BACKGROUND generation
+    // from OnPaint() and this means that we never need the "real" erase event
+    // at all so disable it to avoid executing any user-defined handlers twice
+    // (and to avoid processing unnecessary event if no handlers are defined).
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     SetPage(wxT("<html><body></body></html>"));
     return true;
@@ -351,7 +364,6 @@ wxHtmlWindow::~wxHtmlWindow()
     delete m_FS;
     delete m_History;
     delete m_Processors;
-    delete m_backBuffer;
 }
 
 
@@ -979,90 +991,89 @@ void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
     }
 }
 
-void wxHtmlWindow::OnEraseBackground(wxEraseEvent& event)
+void wxHtmlWindow::DoEraseBackground(wxDC& dc)
 {
-    if ( !m_bmpBg.Ok() )
+    // if we don't have any background bitmap we just fill it with background
+    // colour and we also must do it if the background bitmap is not fully
+    // opaque as otherwise junk could be left there
+    if ( !m_bmpBg.IsOk() || m_bmpBg.GetMask() )
     {
-        // don't even skip the event, if we don't have a bg bitmap we're going
-        // to overwrite background in OnPaint() below anyhow, so letting the
-        // default handling take place would only result in flicker, just set a
-        // flag to erase the background below
-        m_eraseBgInOnPaint = true;
-        return;
-    }
-
-    wxDC& dc = *event.GetDC();
-
-    // if the image is not fully opaque, we have to erase the background before
-    // drawing it, however avoid doing it for opaque images as this would just
-    // result in extra flicker without any other effect as background is
-    // completely covered anyhow
-    if ( m_bmpBg.GetMask() )
-    {
-        dc.SetBackground(wxBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
+        dc.SetBackground(GetBackgroundColour());
         dc.Clear();
     }
 
-    const wxSize sizeWin(GetClientSize());
-    const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
-    for ( wxCoord x = 0; x < sizeWin.x; x += sizeBmp.x )
+    if ( m_bmpBg.IsOk() )
     {
-        for ( wxCoord y = 0; y < sizeWin.y; y += sizeBmp.y )
+        // draw the background bitmap tiling it over the entire window area
+        const wxSize sz = GetClientSize();
+        const wxSize sizeBmp(m_bmpBg.GetWidth(), m_bmpBg.GetHeight());
+        for ( wxCoord x = 0; x < sz.x; x += sizeBmp.x )
         {
-            dc.DrawBitmap(m_bmpBg, x, y, true /* use mask */);
+            for ( wxCoord y = 0; y < sz.y; y += sizeBmp.y )
+            {
+                dc.DrawBitmap(m_bmpBg, x, y, true /* use mask */);
+            }
         }
     }
 }
 
 void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-    wxPaintDC dc(this);
+    wxPaintDC dcPaint(this);
 
     if (m_tmpCanDrawLocks > 0 || m_Cell == NULL)
         return;
 
     int x, y;
     GetViewStart(&x, &y);
-    wxRect rect = GetUpdateRegion().GetBox();
-    wxSize sz = GetSize();
+    const wxRect rect = GetUpdateRegion().GetBox();
+    const wxSize sz = GetClientSize();
 
+    // set up the DC we're drawing on: if the window is already double buffered
+    // we do it directly on wxPaintDC, otherwise we allocate a backing store
+    // buffer and compose the drawing there and then blit it to screen all at
+    // once
+    wxDC *dc;
     wxMemoryDC dcm;
-    if ( !m_backBuffer )
-        m_backBuffer = new wxBitmap(sz.x, sz.y);
-    dcm.SelectObject(*m_backBuffer);
-
-    if ( m_eraseBgInOnPaint )
+    if ( IsDoubleBuffered() )
     {
-        dcm.SetBackground(wxBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID));
-        dcm.Clear();
-
-        m_eraseBgInOnPaint = false;
+        dc = &dcPaint;
     }
-    else // someone has already erased the background, keep it
+    else // window is not double buffered by the system, do it ourselves
     {
-        // preserve the existing background, otherwise we'd erase anything the
-        // user code had drawn in its EVT_ERASE_BACKGROUND handler when we do
-        // the Blit back below
-        dcm.Blit(0, rect.GetTop(),
-                 sz.x, rect.GetBottom() - rect.GetTop() + 1,
-                 &dc,
-                 0, rect.GetTop());
+        if ( !m_backBuffer.IsOk() )
+            m_backBuffer.Create(sz.x, sz.y);
+        dcm.SelectObject(m_backBuffer);
+        dc = &dcm;
     }
 
-    PrepareDC(dcm);
-    dcm.SetMapMode(wxMM_TEXT);
-    dcm.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    PrepareDC(*dc);
+
+    // erase the background: for compatibility, we must generate the event to
+    // allow the user-defined handlers to do it
+    wxEraseEvent eraseEvent(GetId(), dc);
+    eraseEvent.SetEventObject(this);
+    if ( !ProcessWindowEvent(eraseEvent) )
+    {
+        // erase background ourselves
+        DoEraseBackground(*dc);
+    }
+    //else: background erased by the user-defined handler
+
+
+    // draw the HTML window contents
+    dc->SetMapMode(wxMM_TEXT);
+    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     wxHtmlRenderingInfo rinfo;
     wxDefaultHtmlRenderingStyle rstyle;
     rinfo.SetSelection(m_selection);
     rinfo.SetStyle(&rstyle);
-    m_Cell->Draw(dcm, 0, 0,
+    m_Cell->Draw(*dc, 0, 0,
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
 
-//#define DEBUG_HTML_SELECTION
 #ifdef DEBUG_HTML_SELECTION
     {
     int xc, yc, x, y;
@@ -1075,27 +1086,30 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxHtmlCell *after =
         m_Cell->FindCellByPos(x, y, wxHTML_FIND_NEAREST_AFTER);
 
-    dcm.SetBrush(*wxTRANSPARENT_BRUSH);
-    dcm.SetPen(*wxBLACK_PEN);
+    dc->SetBrush(*wxTRANSPARENT_BRUSH);
+    dc->SetPen(*wxBLACK_PEN);
     if (at)
-        dcm.DrawRectangle(at->GetAbsPos(),
+        dc->DrawRectangle(at->GetAbsPos(),
                           wxSize(at->GetWidth(),at->GetHeight()));
-    dcm.SetPen(*wxGREEN_PEN);
+    dc->SetPen(*wxGREEN_PEN);
     if (before)
-        dcm.DrawRectangle(before->GetAbsPos().x+1, before->GetAbsPos().y+1,
+        dc->DrawRectangle(before->GetAbsPos().x+1, before->GetAbsPos().y+1,
                           before->GetWidth()-2,before->GetHeight()-2);
-    dcm.SetPen(*wxRED_PEN);
+    dc->SetPen(*wxRED_PEN);
     if (after)
-        dcm.DrawRectangle(after->GetAbsPos().x+2, after->GetAbsPos().y+2,
+        dc->DrawRectangle(after->GetAbsPos().x+2, after->GetAbsPos().y+2,
                           after->GetWidth()-4,after->GetHeight()-4);
     }
-#endif
+#endif // DEBUG_HTML_SELECTION
 
-    dcm.SetDeviceOrigin(0,0);
-    dc.Blit(0, rect.GetTop(),
-            sz.x, rect.GetBottom() - rect.GetTop() + 1,
-            &dcm,
-            0, rect.GetTop());
+    if ( dc != &dcPaint )
+    {
+        dc->SetDeviceOrigin(0,0);
+        dcPaint.Blit(0, rect.GetTop(),
+                     sz.x, rect.GetBottom() - rect.GetTop() + 1,
+                     dc,
+                     0, rect.GetTop());
+    }
 }
 
 
@@ -1105,7 +1119,7 @@ void wxHtmlWindow::OnSize(wxSizeEvent& event)
 {
     event.Skip();
 
-    wxDELETE(m_backBuffer);
+    m_backBuffer = wxNullBitmap;
 
     CreateLayout();
 
@@ -1567,7 +1581,6 @@ BEGIN_EVENT_TABLE(wxHtmlWindow, wxScrolledWindow)
     EVT_LEFT_UP(wxHtmlWindow::OnMouseUp)
     EVT_RIGHT_UP(wxHtmlWindow::OnMouseUp)
     EVT_MOTION(wxHtmlWindow::OnMouseMove)
-    EVT_ERASE_BACKGROUND(wxHtmlWindow::OnEraseBackground)
     EVT_PAINT(wxHtmlWindow::OnPaint)
 #if wxUSE_CLIPBOARD
     EVT_LEFT_DCLICK(wxHtmlWindow::OnDoubleClick)

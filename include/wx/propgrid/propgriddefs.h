@@ -517,6 +517,12 @@ template<> inline wxVariant WXVARIANT( const wxArrayString& value )
     { return wxVariant(value); }
 template<> inline wxVariant WXVARIANT( const wxString& value )
     { return wxVariant(value); }
+#if wxUSE_LONGLONG
+template<> inline wxVariant WXVARIANT( const wxLongLong& value )
+    { return wxVariant(value); }
+template<> inline wxVariant WXVARIANT( const wxULongLong& value )
+    { return wxVariant(value); }
+#endif
 #if wxUSE_DATETIME
 template<> inline wxVariant WXVARIANT( const wxDateTime& value )
     { return wxVariant(value); }
@@ -656,8 +662,6 @@ WX_PG_IMPLEMENT_VARIANT_DATA_EXPORTED_DUMMY_EQ(classname, wxEMPTY_PARAMETER_VALU
 WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxPoint, WXDLLIMPEXP_PROPGRID)
 WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxSize, WXDLLIMPEXP_PROPGRID)
 WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxArrayInt, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxLongLong, WXDLLIMPEXP_PROPGRID)
-WX_PG_DECLARE_VARIANT_DATA_EXPORTED(wxULongLong, WXDLLIMPEXP_PROPGRID)
 DECLARE_VARIANT_OBJECT_EXPORTED(wxFont, WXDLLIMPEXP_PROPGRID)
 template<> inline wxVariant WXVARIANT( const wxFont& value )
 {
@@ -673,27 +677,6 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
     return variant;
 }
 
-#if wxUSE_LONGLONG_NATIVE
-
-template<> inline wxVariant WXVARIANT( const wxLongLong_t& value )
-{
-    wxVariant variant;
-    variant << wxLongLong(value);
-    return variant;
-}
-
-template<> inline wxVariant WXVARIANT( const wxULongLong_t& value )
-{
-    wxVariant variant;
-    variant << wxULongLong(value);
-    return variant;
-}
-
-WXDLLIMPEXP_PROPGRID wxLongLong_t& operator << ( wxLongLong_t &value, const wxVariant &variant );
-WXDLLIMPEXP_PROPGRID wxULongLong_t& operator << ( wxULongLong_t &value, const wxVariant &variant );
-
-#endif  // wxUSE_LONGLONG_NATIVE
-
 // Define constants for common wxVariant type strings
 
 #define wxPG_VARIANT_TYPE_STRING        wxPGGlobalVars->m_strstring
@@ -703,24 +686,8 @@ WXDLLIMPEXP_PROPGRID wxULongLong_t& operator << ( wxULongLong_t &value, const wx
 #define wxPG_VARIANT_TYPE_DOUBLE        wxS("double")
 #define wxPG_VARIANT_TYPE_ARRSTRING     wxS("arrstring")
 #define wxPG_VARIANT_TYPE_DATETIME      wxS("datetime")
-
-// Safely converts a wxVariant to (long) int. Supports converting from string
-// and boolean as well.
-WXDLLIMPEXP_PROPGRID
-long wxPGVariantToInt( const wxVariant& variant, long defVal = 1 );
-
-// Safely converts a wxVariant to wxLongLong_t. Returns true on success.
-WXDLLIMPEXP_PROPGRID
-bool wxPGVariantToLongLong( const wxVariant& variant, wxLongLong_t* pResult );
-
-// Safely converts a wxVariant to wxULongLong_t. Returns true on success.
-WXDLLIMPEXP_PROPGRID
-bool wxPGVariantToULongLong( const wxVariant& variant, wxULongLong_t* pResult );
-
-// Safely converts a wxVariant to double. Supports converting from string and
-// wxLongLong as well.
-WXDLLIMPEXP_PROPGRID
-bool wxPGVariantToDouble( const wxVariant& variant, double* pResult );
+#define wxPG_VARIANT_TYPE_LONGLONG      wxS("longlong")
+#define wxPG_VARIANT_TYPE_ULONGLONG     wxS("ulonglong")
 
 #endif // !SWIG
 

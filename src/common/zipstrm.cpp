@@ -1269,7 +1269,9 @@ bool wxZipEndRec::Read(wxInputStream& stream, wxMBConv& conv)
 
     if (m_DiskNumber != 0 || m_StartDisk != 0 ||
             m_EntriesHere != m_TotalEntries)
+    {
         wxLogWarning(_("assuming this is a multi-part zip concatenated"));
+    }
 
     return true;
 }
@@ -1872,13 +1874,19 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
             m_lasterror = wxSTREAM_READ_ERROR;
 
             if (m_entry.GetSize() != TellI())
+            {
                 wxLogError(_("reading zip stream (entry %s): bad length"),
                            m_entry.GetName().c_str());
+            }
             else if (m_crcAccumulator != m_entry.GetCrc())
+            {
                 wxLogError(_("reading zip stream (entry %s): bad crc"),
                            m_entry.GetName().c_str());
+            }
             else
+            {
                 m_lasterror = wxSTREAM_EOF;
+            }
         }
     }
 

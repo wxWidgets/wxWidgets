@@ -113,7 +113,7 @@ static DWORD gs_tlsThisThread = 0xFFFFFFFF;
 
 // id of the main thread - the one which can call GUI functions without first
 // calling wxMutexGuiEnter()
-static DWORD gs_idMainThread = 0;
+wxThreadIdType wxThread::ms_idMainThread = 0;
 
 // if it's false, some secondary thread is holding the GUI lock
 static bool gs_bGuiOwnedByMainThread = true;
@@ -926,11 +926,6 @@ wxThread *wxThread::This()
     return thread;
 }
 
-bool wxThread::IsMain()
-{
-    return ::GetCurrentThreadId() == gs_idMainThread || gs_idMainThread == 0;
-}
-
 void wxThread::Yield()
 {
     // 0 argument to Sleep() is special and means to just give away the rest of
@@ -1278,8 +1273,7 @@ bool wxThreadModule::OnInit()
 
     gs_critsectThreadDelete = new wxCriticalSection;
 
-    // no error return for GetCurrentThreadId()
-    gs_idMainThread = ::GetCurrentThreadId();
+    wxThread::ms_idMainThread = wxThread::GetCurrentId();
 
     return true;
 }
@@ -1393,7 +1387,7 @@ bool WXDLLIMPEXP_BASE wxGuiOwnedByMainThread()
 void WXDLLIMPEXP_BASE wxWakeUpMainThread()
 {
     // sending any message would do - hopefully WM_NULL is harmless enough
-    if ( !::PostThreadMessage(gs_idMainThread, WM_NULL, 0, 0) )
+    if ( !::PostThreadMessage(wxThread::GetMainId(), WM_NULL, 0, 0) )
     {
         // should never happen
         wxLogLastError(wxT("PostThreadMessage(WM_NULL)"));

@@ -99,11 +99,12 @@ will result in an assert failure in debug builds.
 
 @section overview_refcount_object Making Your Own Reference Counted Class
 
-Reference counting can be implemented easily using wxObject and wxObjectRefData
-classes. Alternatively, you can also use the wxObjectDataPtr<T> template.
+Reference counting can be implemented easily using wxObject or using
+the intermediate wxRefCounter class directly. 
+Alternatively, you can also use the wxObjectDataPtr<T> template.
 
-First, derive a new class from wxObjectRefData and put there the
-memory-consuming data.
+First, derive a new class from wxRefCounter (or wxObjectRefData when
+using a wxObject derived class) and put the memory-consuming data in it.
 
 Then derive a new class from wxObject and implement there the public interface
 which will be seen by the user of your class. You'll probably want to add a

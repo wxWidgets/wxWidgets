@@ -204,7 +204,7 @@ public:
 private:
     // these functions map directly to XtAdd/RemoveInput() or
     // gdk_input_add/remove()
-    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d) = 0;
+    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d) = 0;
     virtual void RemoveInput(int fd) = 0;
 };
 

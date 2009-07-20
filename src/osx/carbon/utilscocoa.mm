@@ -166,18 +166,29 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 
 void wxNativeFontInfo::OSXValidateNSFontDescriptor()
 {
-    NSFontDescriptor* desc  = [NSFontDescriptor fontDescriptorWithName:wxCFStringRef(m_faceName).AsNSString() size:m_pointSize];
+    NSFontDescriptor* desc  = nil;
     NSFontSymbolicTraits traits = 0;
+    float weight = 0; 
 
     if (m_weight == wxFONTWEIGHT_BOLD)
+    {
         traits |= NSFontBoldTrait;
+        weight = 1.0;
+    }
+    else if (m_weight == wxFONTWEIGHT_LIGHT)
+        weight = -1;
+    
     if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
         traits |= NSFontItalicTrait;
 
-    if ( traits != 0 )
-    {
-        desc = [desc fontDescriptorWithSymbolicTraits:traits];
-    }
+    desc = [NSFontDescriptor fontDescriptorWithFontAttributes:
+        [[NSDictionary alloc] initWithObjectsAndKeys:
+            wxCFStringRef(m_faceName).AsNSString(), NSFontFamilyAttribute, 
+            [NSNumber numberWithFloat:m_pointSize], NSFontSizeAttribute, 
+            [NSNumber numberWithUnsignedInt:traits], NSFontSymbolicTrait, 
+            [NSNumber numberWithFloat:weight],NSFontWeightTrait,
+            nil]];
+
     wxMacCocoaRetain(desc);
     m_nsFontDescriptor = desc;
 }
@@ -238,7 +249,7 @@ WX_UIFont wxFont::OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info)
         if ( traits & NSFontItalicTrait )
             fontstyle = wxFONTSTYLE_ITALIC ;
         */
-        wxCFStringRef fontname( [uifont familyName] );
+        wxCFStringRef fontname( wxCFRetain([uifont familyName]) );
         info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
             fontname.AsString(), wxFONTENCODING_DEFAULT);
         
@@ -258,6 +269,17 @@ WX_UIFont wxFont::OSXCreateUIFont(const wxNativeFontInfo* info)
 // ----------------------------------------------------------------------------
 // NSImage Utils
 // ----------------------------------------------------------------------------
+
+#if wxOSX_USE_IPHONE
+
+WX_UIImage  wxOSXCreateUIImageFromCGImage( CGImageRef image )
+{
+    UIImage  *newImage = [UIImage imageWithCGImage:image]; 
+    [newImage autorelease];
+    return( newImage );
+}
+
+#endif
 
 #if wxOSX_USE_COCOA
 

@@ -122,7 +122,7 @@ void LargeFileTest::runTest()
     // write a large file
     {
         auto_ptr<wxOutputStream> out(MakeOutStream(tmpfile.m_name));
-        
+
         // write 'A's at [ 0x7fffffbf, 0x7fffffff [
         pos = 0x7fffffff - size;
         CPPUNIT_ASSERT(out->SeekO(pos) == pos);
@@ -317,7 +317,7 @@ CppUnit::Test *largeFile::suite()
 
 #ifndef FSCTL_SET_SPARSE
 
-#   ifndef FILE_SPECIAL_ACCESS 
+#   ifndef FILE_SPECIAL_ACCESS
 #       define FILE_SPECIAL_ACCESS FILE_ANY_ACCESS
 #   endif
 #   define FSCTL_SET_SPARSE CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 49, \
@@ -332,7 +332,7 @@ void GetVolumeInfo(const wxString& path)
 {
     // extract the volume 'C:\' or '\\tooter\share\' from the path
     wxString vol;
-    
+
     if (path.substr(1, 2) == _T(":\\")) {
         vol = path.substr(0, 3);
     } else {
@@ -353,10 +353,12 @@ void GetVolumeInfo(const wxString& path)
                                      : vol.c_str();
 
     if (!::GetVolumeInformation(pVol, NULL, 0, NULL, NULL,
-                                &volumeFlags, 
+                                &volumeFlags,
                                 volumeType,
                                 WXSIZEOF(volumeType)))
+    {
         wxLogSysError(_T("GetVolumeInformation() failed"));
+    }
 
     volumeInfoInit = true;
 }
@@ -374,7 +376,7 @@ void MakeSparse(const wxString& path, int fd)
 
     if (!volumeInfoInit)
         GetVolumeInfo(path);
-   
+
     if ((volumeFlags & FILE_SUPPORTS_SPARSE_FILES) != 0)
         if (!::DeviceIoControl((HANDLE)_get_osfhandle(fd),
                                FSCTL_SET_SPARSE,

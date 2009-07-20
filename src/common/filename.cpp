@@ -180,11 +180,15 @@ public:
         if ( m_hFile == INVALID_HANDLE_VALUE )
         {
             if ( mode == Read )
+            {
                 wxLogSysError(_("Failed to open '%s' for reading"),
                               filename.c_str());
+            }
             else
+            {
                 wxLogSysError(_("Failed to open '%s' for writing"),
                               filename.c_str());
+            }
         }
     }
 
@@ -412,8 +416,7 @@ void wxFileName::SetPath( const wxString& pathOrig, wxPathFormat format )
             // !! Fall through !!
 
         case wxPATH_UNIX:
-            // the paths of the form "~" or "~username" are absolute
-            m_relative = leadingChar != wxT('/') && leadingChar != _T('~');
+            m_relative = leadingChar != wxT('/');
             break;
 
         case wxPATH_DOS:
@@ -592,7 +595,7 @@ wxString wxFileName::GetCwd(const wxString& volume)
     return cwd;
 }
 
-bool wxFileName::SetCwd()
+bool wxFileName::SetCwd() const
 {
     return wxFileName::SetCwd( GetPath() );
 }
@@ -1237,7 +1240,7 @@ bool wxFileName::Normalize(int flags,
     }
 
     // handle ~ stuff under Unix only
-    if ( (format == wxPATH_UNIX) && (flags & wxPATH_NORM_TILDE) )
+    if ( (format == wxPATH_UNIX) && (flags & wxPATH_NORM_TILDE) && m_relative )
     {
         if ( !dirs.IsEmpty() )
         {
@@ -1246,16 +1249,6 @@ bool wxFileName::Normalize(int flags,
             {
                 // to make the path absolute use the home directory
                 curDir.AssignDir(wxGetUserHome(dir.c_str() + 1));
-
-                // if we are expanding the tilde, then this path
-                // *should* be already relative (since we checked for
-                // the tilde only in the first char of the first dir);
-                // if m_relative==false, it's because it was initialized
-                // from a string which started with /~; in that case
-                // we reach this point but then need m_relative=true
-                // for relative->absolute expansion later
-                m_relative = true;
-
                 dirs.RemoveAt(0u);
             }
         }
@@ -1284,7 +1277,7 @@ bool wxFileName::Normalize(int flags,
 
         // if we used e.g. tilde expansion previously and wxGetUserHome didn't
         // return for some reason an absolute path, then curDir maybe not be absolute!
-        if ( curDir.IsAbsolute(format) )
+        if ( !curDir.m_relative )
         {
             // we have prepended an absolute path and thus we are now an absolute
             // file name too
@@ -1433,7 +1426,7 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
-                                   wxString* arguments)
+                                   wxString* arguments) const
 {
     wxString path, file, ext;
     wxFileName::SplitPath(shortcutPath, & path, & file, & ext);
@@ -1499,6 +1492,18 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
 
 bool wxFileName::IsAbsolute(wxPathFormat format) const
 {
+    // unix paths beginning with ~ are reported as being absolute
+    if ( format == wxPATH_UNIX )
+    {
+        if ( !m_dirs.IsEmpty() )
+        {
+            wxString dir = m_dirs[0u];
+
+            if (!dir.empty() && dir[0u] == _T('~'))
+                return true;
+        }
+    }
+
     // if our path doesn't start with a path separator, it's not an absolute
     // path
     if ( m_relative )
@@ -1507,7 +1512,7 @@ bool wxFileName::IsAbsolute(wxPathFormat format) const
     if ( !GetVolumeSeparator(format).empty() )
     {
         // this format has volumes and an absolute path must have one, it's not
-        // enough to have the full path to bean absolute file under Windows
+        // enough to have the full path to be an absolute file under Windows
         if ( GetVolume().empty() )
             return false;
     }
@@ -1804,13 +1809,7 @@ wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
         case wxPATH_UNIX:
             if ( !m_relative )
             {
-                // normally the absolute file names start with a slash
-                // with one exception: the ones like "~/foo.bar" don't
-                // have it
-                if ( m_dirs.IsEmpty() || m_dirs[0u] != _T('~') )
-                {
-                    fullpath += wxFILE_SEP_PATH_UNIX;
-                }
+                fullpath += wxFILE_SEP_PATH_UNIX;
             }
             break;
 
@@ -2277,7 +2276,7 @@ wxString wxFileName::StripExtension(const wxString& fullpath)
 
 bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
-                          const wxDateTime *dtCreate)
+                          const wxDateTime *dtCreate) const
 {
 #if defined(__WIN32__)
     FILETIME ftAccess, ftCreate, ftWrite;
@@ -2350,7 +2349,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     return false;
 }
 
-bool wxFileName::Touch()
+bool wxFileName::Touch() const
 {
 #if defined(__UNIX_LIKE__)
     // under Unix touching file is simple: just pass NULL to utime()
@@ -2608,7 +2607,7 @@ bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
     return false ;
 }
 
-bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator )
+bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) const
 {
     FSRef fsRef ;
     FSCatalogInfo catInfo;

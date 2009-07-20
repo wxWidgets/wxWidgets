@@ -35,6 +35,7 @@ typedef wxScopedCharTypeBuffer<wxChar32> wxScopedU32CharBuffer;
     // "non dll-interface class 'std::basic_string<wxChar32>' used as base
     // interface for dll-interface class 'wxString'" -- this is OK in our case
     // (and warning is unavoidable anyhow)
+    #pragma warning(push)
     #pragma warning(disable:4275)
 #endif
 
@@ -596,7 +597,7 @@ public:
 };
 
 #ifdef __VISUALC__
-    #pragma warning(default:4275)
+    #pragma warning(pop)
 #endif
 
 inline wxUString operator+(const wxUString &s1, const wxUString &s2)

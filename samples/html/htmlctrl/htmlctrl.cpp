@@ -212,55 +212,69 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_STATUSBAR
 }
 
-void MyFrame::OnBackButton(wxCommandEvent& myEvent){
+void MyFrame::OnBackButton(wxCommandEvent& WXUNUSED(myEvent))
+{
     if (mySafari->CanGoBack())
         mySafari->GoBack();
 }
 
-void MyFrame::OnNextButton(wxCommandEvent& myEvent){
+void MyFrame::OnNextButton(wxCommandEvent& WXUNUSED(myEvent))
+{
     if (mySafari->CanGoForward())
         mySafari->GoForward();
 }
 
-void MyFrame::OnStopButton(wxCommandEvent& myEvent){
+void MyFrame::OnStopButton(wxCommandEvent& WXUNUSED(myEvent))
+{
         mySafari->Stop();
 }
 
-void MyFrame::OnReloadButton(wxCommandEvent& myEvent){
+void MyFrame::OnReloadButton(wxCommandEvent& WXUNUSED(myEvent))
+{
     mySafari->Reload();
 }
 
-void MyFrame::OnURLEnter(wxCommandEvent& myEvent){
+void MyFrame::OnURLEnter(wxCommandEvent& WXUNUSED(myEvent))
+{
     mySafari->LoadURL(urlText->GetValue());
 }
 
-void MyFrame::OnStateChanged(wxWebKitStateChangedEvent& myEvent){
-    if (GetStatusBar() != NULL){
-        if (myEvent.GetState() == wxWEBKIT_STATE_NEGOTIATING){
+void MyFrame::OnStateChanged(wxWebKitStateChangedEvent& myEvent)
+{
+    if (GetStatusBar() != NULL)
+    {
+        if (myEvent.GetState() == wxWEBKIT_STATE_NEGOTIATING)
+        {
             GetStatusBar()->SetStatusText(_("Contacting ") + myEvent.GetURL());
             urlText->SetValue(myEvent.GetURL());
         }
-        else if (myEvent.GetState() == wxWEBKIT_STATE_TRANSFERRING){
+        else if (myEvent.GetState() == wxWEBKIT_STATE_TRANSFERRING)
+        {
             GetStatusBar()->SetStatusText(_("Loading ") + myEvent.GetURL());
         }
-        else if (myEvent.GetState() == wxWEBKIT_STATE_STOP){
+        else if (myEvent.GetState() == wxWEBKIT_STATE_STOP)
+        {
             GetStatusBar()->SetStatusText(_("Load complete."));
             SetTitle(mySafari->GetTitle());
         }
-        else if (myEvent.GetState() == wxWEBKIT_STATE_FAILED){
+        else if (myEvent.GetState() == wxWEBKIT_STATE_FAILED)
+        {
             GetStatusBar()->SetStatusText(_("Failed to load ") + myEvent.GetURL());
         }
     }
 
 }
 
-void MyFrame::OnViewSource(wxCommandEvent& myEvent){
+void MyFrame::OnViewSource(wxCommandEvent& WXUNUSED(myEvent))
+{
     if (mySafari->CanGetPageSource())
         wxMessageBox(mySafari->GetPageSource());
 }
 
-void MyFrame::OnSetSource(wxCommandEvent& myEvent){
-    if (mySafari){
+void MyFrame::OnSetSource(wxCommandEvent& WXUNUSED(myEvent))
+{
+    if (mySafari)
+    {
         wxString myText = wxT("<HTML><HEAD></HEAD><BODY><P>Hello world!</P></BODY></HTML>");
         mySafari->SetPageSource(myText);
     }

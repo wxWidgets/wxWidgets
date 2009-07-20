@@ -125,17 +125,6 @@ public:
     virtual wxDateTime GetValue() const = 0;
 
     /**
-        Sets the display format for the date in the control. See wxDateTime for
-        the meaning of format strings.
-
-        @note This function is only available in the generic version of this
-              control. The native version always uses the current system locale.
-
-        @remarks If the format parameter is invalid, the behaviour is undefined.
-    */
-    bool SetFormat(const wxString& format);
-
-    /**
         Sets the valid range for the date selection. If @a dt1 is valid, it
         becomes the earliest date (inclusive) accepted by the control. If
         @a dt2 is valid, it becomes the latest possible date.
@@ -146,8 +135,11 @@ public:
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
 
     /**
-        Changes the current value of the control. The date should be valid and
-        included in the currently selected range, if any.
+        Changes the current value of the control.
+
+        The date should be valid unless the control was created with @c
+        wxDP_ALLOWNONE style and included in the currently selected range, if
+        any.
 
         Calling this method does not result in a date change event.
     */

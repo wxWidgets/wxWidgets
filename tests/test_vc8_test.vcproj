@@ -1012,6 +1012,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\log\logtest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\longlong\longlongtest.cpp"
 				>
 			</File>

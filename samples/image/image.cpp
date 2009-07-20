@@ -687,7 +687,7 @@ wxString MyFrame::LoadUserImage(wxImage& image)
     wxString filename;
 
 #if wxUSE_FILEDLG
-    filename = wxFileSelector(_T("Select image file"));
+    filename = wxLoadFileSelector(_T("image"), wxEmptyString);
     if ( !filename.empty() )
     {
         if ( !image.LoadFile(filename) )
@@ -796,7 +796,7 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
 {
 #if wxUSE_FILEDLG
-    wxString filename = wxFileSelector(_T("Select image file"));
+    wxString filename = wxLoadFileSelector(_T("image"), wxEmptyString, wxEmptyString, this);
     if ( filename.empty() )
         return;
 

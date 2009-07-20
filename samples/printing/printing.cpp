@@ -355,9 +355,13 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     if (!printer.Print(this, &printout, true /*prompt*/))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
+        {
             wxLogError(_T("There was a problem printing. Perhaps your current printer is not set correctly?"));
+        }
         else
+        {
             wxLogMessage(_T("You canceled printing"));
+        }
     }
     else
     {

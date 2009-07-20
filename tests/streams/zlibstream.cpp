@@ -400,16 +400,22 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
         break;
     case wxZLIB_ZLIB:
         if (!(data_size >= 1 && data[0] == 0x78))
+        {
             wxLogError(_T("zlib data seems to not be zlib data!"));
+        }
         break;
     case wxZLIB_GZIP:
         if (!(data_size >= 2 && data[0] == 0x1F && data[1] == 0x8B))
+        {
             wxLogError(_T("gzip data seems to not be gzip data!"));
+        }
         break;
     case wxZLIB_AUTO:
         if (!(data_size >= 1 && data[0] == 0x78) ||
             !(data_size >= 2 && data[0] == 0x1F && data[1] == 0x8B))
+        {
             wxLogError(_T("Data seems to not be zlib or gzip data!"));
+        }
     default:
         wxLogError(_T("Unknown flag, skipping quick test."));
     };

@@ -195,6 +195,13 @@ public:
         clear();
     }
 
+    void swap(wxVector& v)
+    {
+        wxSwap(m_size, v.m_size);
+        wxSwap(m_capacity, v.m_capacity);
+        wxSwap(m_values, v.m_values);
+    }
+
     void clear()
     {
         // call destructors of stored objects:

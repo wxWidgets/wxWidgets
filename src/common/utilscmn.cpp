@@ -1283,14 +1283,14 @@ wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt)
 int wxMessageBox(const wxString& message, const wxString& caption, long style,
                  wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
 {
-    long decorated_style = style;
-
-    if ( ( style & ( wxICON_EXCLAMATION | wxICON_HAND | wxICON_INFORMATION | wxICON_QUESTION ) ) == 0 )
+    // add the appropriate icon unless this was explicitly disabled by use of
+    // wxICON_NONE
+    if ( !(style & wxICON_NONE) && !(style & wxICON_MASK) )
     {
-        decorated_style |= ( style & wxYES ) ? wxICON_QUESTION : wxICON_INFORMATION ;
+        style |= style & wxYES ? wxICON_QUESTION : wxICON_INFORMATION;
     }
 
-    wxMessageDialog dialog(parent, message, caption, decorated_style);
+    wxMessageDialog dialog(parent, message, caption, style);
 
     int ans = dialog.ShowModal();
     switch ( ans )

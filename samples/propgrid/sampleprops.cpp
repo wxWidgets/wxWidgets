@@ -220,7 +220,7 @@ wxVariant wxSizeProperty::ChildChanged( wxVariant& thisValue,
                                         wxVariant& childValue ) const
 {
     wxSize& size = wxSizeRefFromVariant(thisValue);
-    int val = wxPGVariantToInt(childValue);
+    int val = childValue.GetLong();
     switch ( childIndex )
     {
         case 0: size.x = val; break;
@@ -261,7 +261,7 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
                                          wxVariant& childValue ) const
 {
     wxPoint& point = wxPointRefFromVariant(thisValue);
-    int val = wxPGVariantToInt(childValue);
+    int val = childValue.GetLong();
     switch ( childIndex )
     {
         case 0: point.x = val; break;

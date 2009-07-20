@@ -9,8 +9,7 @@
 
 /**
     Different standard log levels (you may also define your own) used with
-    wxLog::OnLog() by standard wxLog functions wxLogError(), wxLogWarning(),
-    etc...
+    by standard wxLog functions wxLogError(), wxLogWarning(), etc...
 */
 enum wxLogLevelValues
 {
@@ -35,6 +34,39 @@ enum wxLogLevelValues
 */
 typedef unsigned long wxLogLevel;
 
+/**
+    Information about a log record (unit of the log output).
+ */
+class wxLogRecordInfo
+{
+public:
+    /// The name of the file where this log message was generated.
+    const char *filename;
+
+    /// The line number at which this log message was generated.
+    int line;
+
+    /**
+        The name of the function where the log record was generated.
+
+        This field may be @NULL if the compiler doesn't support @c __FUNCTION__
+        (but most modern compilers do).
+     */
+    const char *func;
+
+    /// Time when the log message was generated.
+    time_t timestamp;
+
+    /**
+        Id of the thread in which the message was generated.
+
+        This field is only available if wxWidgets was built with threads
+        support (<code>wxUSE_THREADS == 1</code>).
+
+        @see wxThread::GetCurrentId()
+     */
+    wxThreadIdType threadId;
+};
 
 /**
     @class wxLogWindow
@@ -570,19 +602,23 @@ public:
 
     @section log_derivingyours Deriving your own log target
 
-    There are two functions which must be implemented by any derived class to
-    actually process the log messages: DoLog() and DoLogString().
-    The second function receives a string which just has to be output in some way
-    and the easiest way to write a new log target is to override just this function
-    in the derived class.
+    There are several methods which may be overridden in the derived class to
+    customize log messages handling: DoLogRecord(), DoLogTextAtLevel() and
+    DoLogText().
 
-    If more control over the output format is needed, then the first function must
-    be overridden which allows to construct custom messages depending on the log level
-    or even do completely different things depending on the message severity
-    (for example, throw away all messages except warnings and errors, show warnings
-    on the screen and forward the error messages to the user's (or programmer's) cell
-    phone - maybe depending on whether the timestamp tells us if it is day or
-    night in the current time zone).
+    The last method is the simplest one: you should override it if you simply
+    want to redirect the log output elsewhere, without taking into account the
+    level of the message. If you do want to handle messages of different levels
+    differently, then you should override DoLogTextAtLevel().
+
+    Finally, if more control over the output format is needed, then the first
+    function must be overridden as it allows to construct custom messages
+    depending on the log level or even do completely different things depending
+    on the message severity (for example, throw away all messages except
+    warnings and errors, show warnings on the screen and forward the error
+    messages to the user's (or programmer's) cell phone -- maybe depending on
+    whether the timestamp tells us if it is day or night in the current time
+    zone).
 
     There also functions to support message buffering. Why are they needed?
     Some of wxLog implementations, most notably the standard wxLogGui class,
@@ -592,9 +628,7 @@ public:
     Flush() shows them all and clears the buffer contents.
     This function doesn't do anything if the buffer is already empty.
 
-    See also:
-    @li Flush()
-    @li FlushActive()
+    @see FlushActive()
 
 
     @section log_tracemasks Using trace masks
@@ -660,8 +694,7 @@ public:
     @section log_target Manipulating the log target
 
     The functions in this section work with and manipulate the active log
-    target. The OnLog() is called by the @e wxLogXXX() functions
-    and invokes the DoLog() of the active log target if any.
+    target.
 
     Get/Set methods are used to install/query the current active target and,
     finally, DontCreateOnDemand() disables the automatic creation of a standard
@@ -670,7 +703,6 @@ public:
     easily lead to a loss of messages.
 
     See also:
-    @li OnLog()
     @li GetActiveTarget()
     @li SetActiveTarget()
     @li DontCreateOnDemand()
@@ -710,25 +742,64 @@ public:
     static void DontCreateOnDemand();
 
     /**
+        Globally enable or disable logging.
+
+        Calling this function with @false argument disables all log messages
+        for the current thread.
+
+        @see wxLogNull, IsEnabled()
+
+        @return
+            The old state, i.e. @true if logging was previously enabled and
+            @false if it was disabled.
+     */
+    static bool EnableLogging(bool enable = true);
+
+    /**
         Shows all the messages currently in buffer and clears it.
+
         If the buffer is already empty, nothing happens.
+
+        If you override this method in a derived class, call the base class
+        version first, before doing anything else.
     */
     virtual void Flush();
 
     /**
         Flushes the current log target if any, does nothing if there is none.
 
-        @see Flush()
+        When this method is called from the main thread context, it also
+        flushes any previously buffered messages logged by the other threads.
+        When it is called from the other threads it simply calls Flush() on the
+        currently active log target, so it mostly makes sense to do this if a
+        thread has its own logger set with SetThreadActiveTarget().
     */
     static void FlushActive();
 
     /**
         Returns the pointer to the active log target (may be @NULL).
+
+        Notice that if SetActiveTarget() hadn't been previously explicitly
+        called, this function will by default try to create a log target by
+        calling wxAppTraits::CreateLogTarget() which may be overridden in a
+        user-defined traits class to change the default behaviour. You may also
+        call DontCreateOnDemand() to disable this behaviour.
+
+        When this function is called from threads other than main one,
+        auto-creation doesn't happen. But if the thread has a thread-specific
+        log target previously set by SetThreadActiveTarget(), it is returned
+        instead of the global one. Otherwise, the global log target is
+        returned.
     */
     static wxLog* GetActiveTarget();
 
     /**
         Returns the current log level limit.
+
+        All messages at levels strictly greater than the value returned by this
+        function are not logged at all.
+
+        @see SetLogLevel(), IsLevelEnabled()
     */
     static wxLogLevel GetLogLevel();
 
@@ -768,10 +839,24 @@ public:
     static bool IsAllowedTraceMask(const wxString& mask);
 
     /**
-        Forwards the message at specified level to the @e DoLog() function of the
-        active log target if there is any, does nothing otherwise.
-    */
-    static void OnLog(wxLogLevel level, const wxString& msg, time_t t);
+        Returns true if logging is enabled at all now.
+
+        @see IsLevelEnabled(), EnableLogging()
+     */
+    static bool IsEnabled();
+
+    /**
+        Returns true if logging at this level is enabled for the current thread.
+
+        This function only returns @true if logging is globally enabled and if
+        @a level is less than or equal to the maximal log level enabled for the
+        given @a component.
+
+        @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
+
+        @since 2.9.1
+     */
+    static bool IsLevelEnabled(wxLogLevel level, wxString component);
 
     /**
         Remove the @a mask from the list of allowed masks for
@@ -794,12 +879,38 @@ public:
         To suppress logging use a new instance of wxLogNull not @NULL.  If the
         active log target is set to @NULL a new default log target will be
         created when logging occurs.
+
+        @see SetThreadActiveTarget()
     */
     static wxLog* SetActiveTarget(wxLog* logtarget);
 
     /**
+        Sets the log level for the given component.
+
+        For example, to disable all but error messages from wxWidgets network
+        classes you may use
+        @code
+            wxLog::SetComponentLevel("wx/net", wxLOG_Error);
+        @endcode
+
+        SetLogLevel() may be used to set the global log level.
+
+        @param component
+            Non-empty component name, possibly using slashes (@c /) to separate
+            it into several parts.
+        @param level
+            Maximal level of log messages from this component which will be
+            handled instead of being simply discarded.
+
+        @since 2.9.1
+     */
+    static void SetComponentLevel(const wxString& component, wxLogLevel level);
+
+    /**
         Specifies that log messages with level greater (numerically) than
         @a logLevel should be ignored and not sent to the active log target.
+
+        @see SetComponentLevel()
     */
     static void SetLogLevel(wxLogLevel logLevel);
 
@@ -809,6 +920,32 @@ public:
         repetitions is logged.
     */
     static void SetRepetitionCounting(bool repetCounting = true);
+
+    /**
+        Sets a thread-specific log target.
+
+        The log target passed to this function will be used for all messages
+        logged by the current thread using the usual wxLog functions. This
+        shouldn't be called from the main thread which never uses a thread-
+        specific log target but can be used for the other threads to handle
+        thread logging completely separately; instead of buffering thread log
+        messages in the main thread logger.
+
+        Notice that unlike for SetActiveTarget(), wxWidgets does not destroy
+        the thread-specific log targets when the thread terminates so doing
+        this is your responsibility.
+
+        This method is only available if @c wxUSE_THREADS is 1, i.e. wxWidgets
+        was compiled with threads support.
+
+        @param logger
+            The new thread-specific log target, possibly @NULL.
+        @return
+            The previous thread-specific log target, initially @NULL.
+
+        @since 2.9.1
+     */
+    static wxLog *SetThreadActiveTarget(wxLog *logger);
 
     /**
         Sets the timestamp format prepended by the default log targets to all
@@ -854,54 +991,88 @@ public:
     static void Suspend();
 
     /**
-        Log the given message.
+        Log the given record.
 
         This function should only be called from the DoLog() implementations in
-        the derived classes (which can't call wxLog::DoLog() directly as it is
-        protected), it should not be used for logging new messages which can be
-        only sent to the currently active logger using OnLog() which also
-        checks if the logging (for this level) is enabled while this method
-        just directly calls DoLog().
+        the derived classes if they need to call DoLogRecord() on another log
+        object (they can, of course, just use wxLog::DoLogRecord() call syntax
+        to call it on the object itself). It should not be used for logging new
+        messages which can be only sent to the currently active logger using
+        OnLog() which also checks if the logging (for this level) is enabled
+        while this method just directly calls DoLog().
 
         Example of use of this class from wxLogChain:
         @code
-        void wxLogChain::DoLog(wxLogLevel level, const wxString& msg, time_t t)
+        void wxLogChain::DoLogRecord(wxLogLevel level,
+                                     const wxString& msg,
+                                     const wxLogRecordInfo& info)
         {
             // let the previous logger show it
             if ( m_logOld && IsPassingMessages() )
-                m_logOld->Log(level, msg, t);
+                m_logOld->LogRecord(level, msg, info);
 
             // and also send it to the new one
             if ( m_logNew && m_logNew != this )
-                m_logNew->Log(level, msg, t);
+                m_logNew->LogRecord(level, msg, info);
         }
         @endcode
 
-        @since 2.9.0
+        @since 2.9.1
      */
-    void Log(wxLogLevel level, const wxString& msg, time_t timestamp);
+    void LogRecord(wxLogLevel level, const wxString& msg, time_t timestamp);
 
 protected:
+    /**
+        @name Logging callbacks.
+
+        The functions which should be overridden by custom log targets.
+
+        When defining a new log target, you have a choice between overriding
+        DoLogRecord(), which provides maximal flexibility, DoLogTextAtLevel()
+        which can be used if you don't intend to change the default log
+        messages formatting but want to handle log messages of different levels
+        differently or, in the simplest case, DoLogText().
+     */
+    //@{
 
     /**
-        Called to process the message of the specified severity. @a msg is the text
-        of the message as specified in the call of @e wxLogXXX() function which
-        generated it and @a timestamp is the moment when the message was generated.
+        Called to created log a new record.
 
-        The base class version prepends the timestamp to the message, adds a prefix
-        corresponding to the log level and then calls
-        DoLogString() with the resulting string.
-    */
-    virtual void DoLog(wxLogLevel level, const wxString& msg, time_t timestamp);
+        Any log message created by wxLogXXX() functions is passed to this
+        method of the active log target. The default implementation prepends
+        the timestamp and, for some log levels (e.g. error and warning), the
+        corresponding prefix to @a msg and passes it to DoLogTextAtLevel().
+
+        You may override this method to implement custom formatting of the
+        log messages or to implement custom filtering of log messages (e.g. you
+        could discard all log messages coming from the given source file).
+     */
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info);
 
     /**
-        Called to log the specified string. The timestamp is already included in the
-        string but still passed to this function.
+        Called to log the specified string at given level.
 
-        A simple implementation may just send the string to @c stdout or, better,
-        @c stderr.
+        The base class versions logs debug and trace messages on the system
+        default debug output channel and passes all the other messages to
+        DoLogText().
     */
-    virtual void DoLogString(const wxString& msg, time_t timestamp);
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
+
+    /**
+        Called to log the specified string.
+
+        A simple implementation might just send the string to @c stdout or
+        @c stderr or save it in a file (of course, the already existing
+        wxLogStderr can be used for this).
+
+        The base class version of this function asserts so it must be
+        overridden if you don't override DoLogRecord() or DoLogTextAtLevel().
+    */
+    virtual void DoLogText(const wxString& msg);
+
+    //@}
 };
 
 

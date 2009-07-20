@@ -145,7 +145,7 @@ public:
         {
             // separator size
             curSize = GetToolBar()->GetToolSize();
-            if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
+            if ( GetToolBar()->GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
                 curSize.y /= 4;
             else
                 curSize.x /= 4;
@@ -167,14 +167,14 @@ public:
     {
         if ( wxToolBarToolBase::Toggle( toggle ) == false )
             return false;
-            
+
         UpdateToggleImage(toggle);
         return true;
     }
-    
+
     void UpdateHelpStrings()
     {
-#if wxOSX_USE_NATIVE_TOOLBAR            
+#if wxOSX_USE_NATIVE_TOOLBAR
         if ( m_toolbarItemRef )
         {
             wxFontEncoding enc = GetToolBarFontEncoding();
@@ -186,16 +186,16 @@ public:
         }
 #endif
     }
-    
+
     virtual bool SetShortHelp(const wxString& help)
     {
         if ( wxToolBarToolBase::SetShortHelp( help ) == false )
             return false;
-            
-        UpdateHelpStrings();        
+
+        UpdateHelpStrings();
         return true;
     }
-    
+
     virtual bool SetLongHelp(const wxString& help)
     {
         if ( wxToolBarToolBase::SetLongHelp( help ) == false )
@@ -205,12 +205,12 @@ public:
         return true;
     }
 
-    virtual void SetNormalBitmap(const wxBitmap& bmp) 
+    virtual void SetNormalBitmap(const wxBitmap& bmp)
     {
         wxToolBarToolBase::SetNormalBitmap(bmp);
         UpdateToggleImage(CanBeToggled() && IsToggled());
     }
-        
+
     virtual void SetLabel(const wxString& label)
     {
         wxToolBarToolBase::SetLabel(label);
@@ -429,7 +429,7 @@ bool wxToolBarTool::Enable( bool enable )
 {
     if ( wxToolBarToolBase::Enable( enable ) == false )
         return false;
-    
+
     if ( IsControl() )
     {
         GetControl()->Enable( enable );
@@ -1085,7 +1085,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
     if (usesNative && (m_macToolbar == NULL))
         return bResult;
 
-    if (usesNative && ((GetWindowStyleFlag() & wxTB_VERTICAL) != 0))
+    if (usesNative && ((GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT|wxTB_BOTTOM)) != 0))
         return bResult;
 
     WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
@@ -1108,18 +1108,18 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             bResult = true;
 
             SetWindowToolbar( tlw, (HIToolbarRef) m_macToolbar );
-            
+
             // ShowHideWindowToolbar will make the wxFrame grow
             // which we don't want in this case
             wxSize sz = GetParent()->GetSize();
             ShowHideWindowToolbar( tlw, true, false );
             // Restore the orginal size
             GetParent()->SetSize( sz );
-            
+
             ChangeWindowAttributes( tlw, kWindowToolbarButtonAttribute, 0 );
-            
+
             SetAutomaticControlDragTrackingEnabledForWindow( tlw, true );
-    
+
             m_peer->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
             m_peer->SetVisibility( false );
@@ -1151,9 +1151,9 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
 bool wxToolBar::Realize()
 {
-    if (m_tools.GetCount() == 0)
+    if ( !wxToolBarBase::Realize() )
         return false;
-    
+
     wxSize tlw_sz = GetParent()->GetSize();
 
     int maxWidth = 0;
@@ -1222,7 +1222,7 @@ bool wxToolBar::Realize()
         if ( y + cursize.y > maxHeight )
             maxHeight = y + cursize.y;
 
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
         {
             int x1 = x + ( maxToolWidth - cursize.x ) / 2;
             tool->SetPosition( wxPoint(x1, y) );
@@ -1234,7 +1234,7 @@ bool wxToolBar::Realize()
         }
 
         // update the item positioning state
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
             y += cursize.y + kwxMacToolSpacing;
         else
             x += cursize.x + kwxMacToolSpacing;
@@ -1365,15 +1365,14 @@ bool wxToolBar::Realize()
 
     if (m_macUsesNativeToolbar)
         GetParent()->SetSize( tlw_sz );
-    
-    if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+
+    if ( GetWindowStyleFlag() &  (wxTB_TOP|wxTB_BOTTOM) )
     {
         // if not set yet, only one row
         if ( m_maxRows <= 0 )
             SetRows( 1 );
 
         m_minWidth = maxWidth;
-        maxWidth = tw;
         maxHeight += m_yMargin + kwxMacToolBarTopMargin;
         m_minHeight = m_maxHeight = maxHeight;
     }
@@ -1384,7 +1383,6 @@ bool wxToolBar::Realize()
             SetRows( GetToolsCount() );
 
         m_minHeight = maxHeight;
-        maxHeight = th;
         maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
         m_minWidth = m_maxWidth = maxWidth;
     }
@@ -1395,7 +1393,7 @@ bool wxToolBar::Realize()
         bool wantNativeToolbar, ownToolbarInstalled;
 
         // attempt to install the native toolbar
-        wantNativeToolbar = ((GetWindowStyleFlag() & wxTB_VERTICAL) == 0);
+        wantNativeToolbar = ((GetWindowStyleFlag() & (wxTB_LEFT|wxTB_BOTTOM|wxTB_RIGHT)) == 0);
         MacInstallNativeToolbar( wantNativeToolbar );
         (void)MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
         if (!ownToolbarInstalled)
@@ -1557,7 +1555,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 wxASSERT( tool->GetControlHandle() == NULL );
                 toolSize.x /= 4;
                 toolSize.y /= 4;
-                if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+                if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
                     toolrect.bottom = toolSize.y;
                 else
                     toolrect.right = toolSize.x;
@@ -1754,7 +1752,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         wxToolBarTool *tool2 = (wxToolBarTool*) node->GetData();
         wxPoint pt = tool2->GetPosition();
 
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
             pt.y -= sz.y;
         else
             pt.x -= sz.x;

@@ -523,6 +523,11 @@ typedef short int WXTYPE;
 #define wxDEPRECATED_INLINE(func, body) wxDEPRECATED(func) { body }
 
 /*
+    A macro to define a simple deprecated accessor.
+ */
+#define wxDEPRECATED_ACCESSOR(func, what) wxDEPRECATED_INLINE(func, return what;)
+
+/*
    Special variant of the macro above which should be used for the functions
    which are deprecated but called by wx itself: this often happens with
    deprecated virtual functions which are called by the library.
@@ -1704,9 +1709,10 @@ enum wxBorder
 #define wxLB_MULTIPLE       0x0040
 #define wxLB_EXTENDED       0x0080
 /*  wxLB_OWNERDRAW is Windows-only */
+#define wxLB_NEEDED_SB      0x0000
 #define wxLB_OWNERDRAW      0x0100
-#define wxLB_NEEDED_SB      0x0200
-#define wxLB_ALWAYS_SB      0x0400
+#define wxLB_ALWAYS_SB      0x0200
+#define wxLB_NO_SB          0x0400
 #define wxLB_HSCROLL        wxHSCROLL
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800
@@ -1819,7 +1825,7 @@ enum wxBorder
 #define wxICON_INFORMATION      0x00000800
 #define wxICON_STOP             wxICON_HAND
 #define wxICON_ASTERISK         wxICON_INFORMATION
-#define wxICON_MASK             (0x00000100|0x00000200|0x00000400|0x00000800)
+#define wxICON_MASK             (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION)
 
 #define  wxFORWARD              0x00001000
 #define  wxBACKWARD             0x00002000
@@ -1827,17 +1833,37 @@ enum wxBorder
 #define  wxHELP                 0x00008000
 #define  wxMORE                 0x00010000
 #define  wxSETUP                0x00020000
+#define wxICON_NONE             0x00040000
 
 /*
  * Background styles. See wxWindow::SetBackgroundStyle
  */
-
 enum wxBackgroundStyle
 {
-  wxBG_STYLE_SYSTEM,
-  wxBG_STYLE_COLOUR,
-  wxBG_STYLE_CUSTOM,
-  wxBG_STYLE_TRANSPARENT
+    // background is erased in the EVT_ERASE_BACKGROUND handler or using the
+    // system default background if no such handler is defined (this is the
+    // default style)
+    wxBG_STYLE_ERASE,
+
+    // background is erased by the system, no EVT_ERASE_BACKGROUND event is
+    // generated at all
+    wxBG_STYLE_SYSTEM,
+
+    // background is erased in EVT_PAINT handler and not erased at all before
+    // it, this should be used if the paint handler paints over the entire
+    // window to avoid flicker
+    wxBG_STYLE_PAINT,
+
+
+    // this is a Mac-only style, don't use in portable code
+    wxBG_STYLE_TRANSPARENT,
+
+    // this style is deprecated and doesn't do anything, don't use
+    wxBG_STYLE_COLOUR,
+
+    // this style is deprecated and is synonymous with wxBG_STYLE_PAINT, use
+    // the new name
+    wxBG_STYLE_CUSTOM = wxBG_STYLE_PAINT
 };
 
 /*
@@ -2809,6 +2835,9 @@ typedef WX_NSOpenGLContext WXGLContext;
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
 DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
+DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
+DECLARE_WXCOCOA_OBJC_CLASS(UIEvent);
+DECLARE_WXCOCOA_OBJC_CLASS(NSSet);
 
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
@@ -3138,9 +3167,11 @@ typedef const void* WXWidget;
 /*  This is required because of clashing macros in windows.h, which may be */
 /*  included before or after wxWidgets classes, and therefore must be */
 /*  disabled here before any significant wxWidgets headers are included. */
+#ifdef __cplusplus
 #ifdef __WXMSW__
 #include "wx/msw/winundef.h"
 #endif /* __WXMSW__ */
+#endif /* __cplusplus */
 
 
 /*  include the feature test macros */

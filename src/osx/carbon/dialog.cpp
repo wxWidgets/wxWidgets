@@ -34,8 +34,8 @@ void wxDialog::DoShowModal()
     SetFocus() ;
 
     WindowRef windowRef = (WindowRef) GetWXWindow();
-    WindowGroupRef windowGroup;
-    WindowGroupRef formerParentGroup;
+    WindowGroupRef windowGroup = NULL;
+    WindowGroupRef formerParentGroup = NULL;
     bool resetGroupParent = false;
 
     if ( GetParent() == NULL )
@@ -47,17 +47,10 @@ void wxDialog::DoShowModal()
     }
     BeginAppModalStateForWindow(windowRef) ;
 
-    wxEventLoop * const
-        loop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
-        
-    
-    wxASSERT_MSG( loop , wxT("No Event Loop in place") );
-        
-    if ( loop )
-    {
-        while ( IsModal() )
-            loop->Dispatch();
-    }
+    wxEventLoopGuarantor ensureHasLoop;
+    wxEventLoopBase * const loop = wxEventLoop::GetActive();
+    while ( IsModal() )
+        loop->Dispatch();
 
     EndAppModalStateForWindow(windowRef) ;
     if ( resetGroupParent )

@@ -335,7 +335,9 @@ public :
 
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
+    wxBitmap            GetBitmap() const;
     void                SetBitmap( const wxBitmap& bitmap );
+    void                SetBitmapPosition( wxDirection dir );
     void                SetupTabs( const wxNotebook &notebook );
 
     void                GetBestRect( wxRect *r ) const;
@@ -843,9 +845,10 @@ public :
     wxMacDataBrowserCellValue(DataBrowserItemDataRef data) : m_data(data) {}
     virtual ~wxMacDataBrowserCellValue() {}
     
-   virtual void Set( CFStringRef value );
+    virtual void Set( CFStringRef value );
     virtual void Set( const wxString& value );
     virtual void Set( int value ) ;
+    virtual void Check( bool check );
     
     virtual int GetIntValue() const ;
     virtual wxString GetStringValue() const ;

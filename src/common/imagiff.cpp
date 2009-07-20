@@ -777,7 +777,9 @@ bool wxIFFHandler::SaveFile(wxImage * WXUNUSED(image),
                             wxOutputStream& WXUNUSED(stream), bool verbose)
 {
     if (verbose)
+    {
         wxLogDebug(wxT("IFF: the handler is read-only!!"));
+    }
 
     return false;
 }

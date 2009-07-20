@@ -30,10 +30,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
+#if wxOSX_USE_COCOA_OR_CARBON
     CGRect cgbounds ;
     cgbounds = CGDisplayBounds(CGMainDisplayID());
     m_width = (wxCoord)cgbounds.size.width;
     m_height = (wxCoord)cgbounds.size.height;
+#else
+	wxDisplaySize( &m_width, &m_height );
+#endif
 #if wxOSX_USE_COCOA_OR_IPHONE
     SetGraphicsContext( wxGraphicsContext::Create() );
 #else
@@ -64,17 +68,13 @@ wxScreenDCImpl::~wxScreenDCImpl()
 
 wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
-    CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
-    if (subrect)
-    {
-        srcRect.origin.x = subrect->GetX();
-        srcRect.origin.y = subrect->GetY();
-        srcRect.size.width = subrect->GetWidth();
-        srcRect.size.height = subrect->GetHeight();
-    }
-    wxBitmap bmp = wxBitmap(srcRect.size.width, srcRect.size.height, 32);
-#if wxOSX_USE_IPHONE
-#else
+    wxRect rect = subrect ? *subrect : wxRect(0, 0, m_width, m_height);
+
+    wxBitmap bmp(rect.GetSize(), 32);
+
+#if !wxOSX_USE_IPHONE
+    CGRect srcRect = CGRectMake(rect.x, rect.y, rect.width, rect.height);
+
     CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
     
     CGContextSaveGState(context);

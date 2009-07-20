@@ -75,6 +75,10 @@ run_sed include/wx/version.h \
     "s/^\(#define wxRELEASE_NUMBER *\) $ver_release$/\1 $ver_release_new/" \
     "s/^\(#define wxSUBRELEASE_NUMBER *\) [0-9]\{1,\}$/\1 0/" \
     "/^#define wxVERSION_STRING/s/$ver_for_sed/$ver_string_new/"
+run_sed include/wx/osx/config_xcode.h \
+    "/^#define PACKAGE/s/$ver_for_sed/$ver_string_new/"
+run_sed src/wxWindows.xcodeproj/project.pbxproj \
+    "/DYLIB_.* = /s/$ver_for_sed/$ver_string_new/"
 
 run_sed configure.in \
     "/^AC_INIT/s/$ver_for_sed/$ver_string_new/" \
@@ -85,6 +89,11 @@ for f in *.spec; do
     run_sed $f "/^%define *ver/s/$ver_for_sed/$ver_string_new/"
 done
 
-run_sed docs/latex/wx/manual.tex \
-    "/^\\\\\\\\title/s/$ver_for_sed/$ver_string_new/"
+run_sed docs/doxygen/Doxyfile_inc \
+    "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
+run_sed docs/doxygen/latexdocstart.inc \
+    "/{\\\\large Version/s/$ver_for_sed/$ver_string_new/"
 run_sed build/script/win_docs.bat "/SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
+
+run_sed distrib/scripts/build-environ.cfg \
+    "/BUILD_VERSION=/s/$ver_for_sed/$ver_string_new/"

@@ -614,7 +614,9 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
             //wxLogMessage(wxT("EventWorker: got connection"));
             wxLogMessage(wxT("%s: starting writing message (2 bytes for signature and %d bytes of data to write)"),CreateIdent(m_localaddr).c_str(),m_outsize-2);
             if (!m_clientSocket->GetLocal(m_localaddr))
+            {
                 wxLogError(_("Cannot get peer data for socket %p"),m_clientSocket);
+            }
             m_currentType = WorkerEvent::SENDING;
             wxLogDebug(wxT("%s: CONNECTING"),CreateIdent(m_localaddr).c_str());
             SendEvent(false);

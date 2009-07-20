@@ -20,35 +20,66 @@
 
 #include "wx/gtk/private.h"
 
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// GTK callbacks
+// ----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
-
-//-----------------------------------------------------------------------------
-// "clicked"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
+extern "C"
 {
-    if (!button->m_hasVMT) return;
-    if (g_blockEventsOnDrag) return;
+
+static void
+wxgtk_button_clicked_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
+{
+    if ( button->GTKShouldIgnoreEvent() )
+        return;
 
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
     event.SetEventObject(button);
     button->HandleWindowEvent(event);
 }
+
+static void
+wxgtk_button_enter_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
+{
+    if ( button->GTKShouldIgnoreEvent() )
+        return;
+
+    button->GTKMouseEnters();
+}
+
+static void
+wxgtk_button_leave_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
+{
+    if ( button->GTKShouldIgnoreEvent() )
+        return;
+
+    button->GTKMouseLeaves();
+}
+
+static void
+wxgtk_button_press_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
+{
+    if ( button->GTKShouldIgnoreEvent() )
+        return;
+
+    button->GTKPressed();
+}
+
+static void
+wxgtk_button_released_callback(GtkWidget *WXUNUSED(widget), wxButton *button)
+{
+    if ( button->GTKShouldIgnoreEvent() )
+        return;
+
+    button->GTKReleased();
 }
 
 //-----------------------------------------------------------------------------
 // "style_set" from m_widget
 //-----------------------------------------------------------------------------
 
-extern "C" {
 static void
-gtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
+wxgtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 {
     /* the default button has a border around it */
     wxWindow* parent = win->GetParent();
@@ -67,21 +98,14 @@ gtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
         }
     }
 }
-}
+
+} // extern "C"
 
 //-----------------------------------------------------------------------------
 // wxButton
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
-
-wxButton::wxButton()
-{
-}
-
-wxButton::~wxButton()
-{
-}
 
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
@@ -99,7 +123,24 @@ bool wxButton::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_button_new_with_mnemonic("");
+    // create either a standard button with text label (which may still contain
+    // an image under GTK+ 2.6+) or a bitmap-only button if we don't have any
+    // label
+    const bool
+        useLabel = !(style & wxBU_NOTEXT) && (!label.empty() || wxIsStockID(id));
+    if ( useLabel )
+    {
+        m_widget = gtk_button_new_with_mnemonic("");
+    }
+    else // no label, suppose we will have a bitmap
+    {
+        m_widget = gtk_button_new();
+
+        GtkWidget *image = gtk_image_new();
+        gtk_widget_show(image);
+        gtk_container_add(GTK_CONTAINER(m_widget), image);
+    }
+
     g_object_ref(m_widget);
 
     float x_alignment = 0.5;
@@ -116,17 +157,18 @@ bool wxButton::Create(wxWindow *parent,
 
     gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, y_alignment);
 
-    SetLabel(label);
+    if ( useLabel )
+        SetLabel(label);
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
     g_signal_connect_after (m_widget, "clicked",
-                            G_CALLBACK (gtk_button_clicked_callback),
+                            G_CALLBACK (wxgtk_button_clicked_callback),
                             this);
 
     g_signal_connect_after (m_widget, "style_set",
-                            G_CALLBACK (gtk_button_style_set_callback),
+                            G_CALLBACK (wxgtk_button_style_set_callback),
                             this);
 
     m_parent->DoAddChild( this );
@@ -145,7 +187,7 @@ wxWindow *wxButton::SetDefault()
     gtk_widget_grab_default( m_widget );
 
     // resize for default border
-    gtk_button_style_set_callback( m_widget, NULL, this );
+    wxgtk_button_style_set_callback( m_widget, NULL, this );
 
     return oldDefault;
 }
@@ -196,6 +238,10 @@ void wxButton::SetLabel( const wxString &lbl )
 
     wxControl::SetLabel(label);
 
+    // don't use label if it was explicitly disabled
+    if ( HasFlag(wxBU_NOTEXT) )
+        return;
+
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
         const char *stock = wxGetStockGtkID(m_windowId);
@@ -207,6 +253,10 @@ void wxButton::SetLabel( const wxString &lbl )
         }
     }
 
+    // this call is necessary if the button had been initially created without
+    // a (text) label -- then we didn't use gtk_button_new_with_mnemonic() and
+    // so "use-underline" GtkButton property remained unset
+    gtk_button_set_use_underline(GTK_BUTTON(m_widget), TRUE);
     const wxString labelGTK = GTKConvertMnemonics(label);
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
@@ -227,6 +277,8 @@ bool wxButton::Enable( bool enable )
     {
         GTKFixSensitivity();
     }
+
+    GTKUpdateBitmap();
 
     return true;
 }
@@ -262,7 +314,7 @@ wxSize wxButton::DoGetBestSize() const
 {
     // the default button in wxGTK is bigger than the other ones because of an
     // extra border around it, but we don't want to take it into account in
-    // our size calculations (otherwsie the result is visually ugly), so
+    // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
     const bool isDefault = GTK_WIDGET_HAS_DEFAULT(m_widget);
     if ( isDefault )
@@ -282,8 +334,10 @@ wxSize wxButton::DoGetBestSize() const
     if (!HasFlag(wxBU_EXACTFIT))
     {
         wxSize defaultSize = GetDefaultSize();
-        if (ret.x < defaultSize.x) ret.x = defaultSize.x;
-        if (ret.y < defaultSize.y) ret.y = defaultSize.y;
+        if (ret.x < defaultSize.x)
+            ret.x = defaultSize.x;
+        if (ret.y < defaultSize.y)
+            ret.y = defaultSize.y;
     }
 
     CacheBestSize(ret);
@@ -295,6 +349,327 @@ wxVisualAttributes
 wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+}
+
+// ----------------------------------------------------------------------------
+// bitmaps support
+// ----------------------------------------------------------------------------
+
+void wxButton::GTKMouseEnters()
+{
+    m_isCurrent = true;
+
+    GTKUpdateBitmap();
+}
+
+void wxButton::GTKMouseLeaves()
+{
+    m_isCurrent = false;
+
+    GTKUpdateBitmap();
+}
+
+void wxButton::GTKPressed()
+{
+    m_isPressed = true;
+
+    GTKUpdateBitmap();
+}
+
+void wxButton::GTKReleased()
+{
+    m_isPressed = false;
+
+    GTKUpdateBitmap();
+}
+
+void wxButton::GTKOnFocus(wxFocusEvent& event)
+{
+    event.Skip();
+
+    GTKUpdateBitmap();
+}
+
+wxButton::State wxButton::GTKGetCurrentState() const
+{
+    if ( !IsThisEnabled() )
+        return m_bitmaps[State_Disabled].IsOk() ? State_Disabled : State_Normal;
+
+    if ( m_isPressed && m_bitmaps[State_Pressed].IsOk() )
+        return State_Pressed;
+
+    if ( m_isCurrent && m_bitmaps[State_Current].IsOk() )
+        return State_Current;
+
+    if ( HasFocus() && m_bitmaps[State_Focused].IsOk() )
+        return State_Focused;
+
+    return State_Normal;
+}
+
+void wxButton::GTKUpdateBitmap()
+{
+    // if we don't show bitmaps at all, there is nothing to update
+    if ( m_bitmaps[State_Normal].IsOk() )
+    {
+        // if we do show them, this will return a state for which we do have a
+        // valid bitmap
+        State state = GTKGetCurrentState();
+
+        GTKDoShowBitmap(m_bitmaps[state]);
+    }
+}
+
+void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
+{
+    wxASSERT_MSG( bitmap.IsOk(), "invalid bitmap" );
+
+    GtkWidget *image;
+    if ( DontShowLabel() )
+    {
+        image = GTK_BIN(m_widget)->child;
+    }
+    else // have both label and bitmap
+    {
+#ifdef __WXGTK26__
+        if ( !gtk_check_version(2,6,0) )
+        {
+            image = gtk_button_get_image(GTK_BUTTON(m_widget));
+        }
+        else
+#endif // __WXGTK26__
+        {
+            // buttons with both label and bitmap are only supported with GTK+
+            // 2.6 so far
+            //
+            // it shouldn't be difficult to implement them ourselves for the
+            // previous GTK+ versions by stuffing a container with a label and
+            // an image inside GtkButton but there doesn't seem to be much
+            // point in doing this for ancient GTK+ versions
+            return;
+        }
+    }
+
+    wxCHECK_RET( image && GTK_IS_IMAGE(image), "must have image widget" );
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+}
+
+wxBitmap wxButton::DoGetBitmap(State which) const
+{
+    return m_bitmaps[which];
+}
+
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+    switch ( which )
+    {
+        case State_Normal:
+            if ( DontShowLabel() )
+            {
+                // we only have the bitmap in this button, never remove it but
+                // do invalidate the best size when the bitmap (and presumably
+                // its size) changes
+                InvalidateBestSize();
+            }
+#ifdef __WXGTK26__
+            // normal image is special: setting it enables images for the button and
+            // resetting it to nothing disables all of them
+            else if ( !gtk_check_version(2,6,0) )
+            {
+                GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
+                if ( image && !bitmap.IsOk() )
+                {
+                    gtk_container_remove(GTK_CONTAINER(m_widget), image);
+                }
+                else if ( !image && bitmap.IsOk() )
+                {
+                    image = gtk_image_new();
+                    gtk_button_set_image(GTK_BUTTON(m_widget), image);
+                }
+                else // image presence or absence didn't change
+                {
+                    // don't invalidate best size below
+                    break;
+                }
+
+                InvalidateBestSize();
+            }
+#endif // GTK+ 2.6+
+            break;
+
+        case State_Pressed:
+            if ( bitmap.IsOk() )
+            {
+                if ( !m_bitmaps[which].IsOk() )
+                {
+                    // we need to install the callbacks to be notified about
+                    // the button pressed state change
+                    g_signal_connect
+                    (
+                        m_widget,
+                        "pressed",
+                        G_CALLBACK(wxgtk_button_press_callback),
+                        this
+                    );
+
+                    g_signal_connect
+                    (
+                        m_widget,
+                        "released",
+                        G_CALLBACK(wxgtk_button_released_callback),
+                        this
+                    );
+                }
+            }
+            else // no valid bitmap
+            {
+                if ( m_bitmaps[which].IsOk() )
+                {
+                    // we don't need to be notified about the button pressed
+                    // state changes any more
+                    g_signal_handlers_disconnect_by_func
+                    (
+                        m_widget,
+                        (gpointer)wxgtk_button_press_callback,
+                        this
+                    );
+
+                    g_signal_handlers_disconnect_by_func
+                    (
+                        m_widget,
+                        (gpointer)wxgtk_button_released_callback,
+                        this
+                    );
+
+                    // also make sure we don't remain stuck in pressed state
+                    if ( m_isPressed )
+                    {
+                        m_isPressed = false;
+                        GTKUpdateBitmap();
+                    }
+                }
+            }
+            break;
+
+        case State_Current:
+            // the logic here is the same as above for State_Pressed: we need
+            // to connect the handlers if we must be notified about the changes
+            // in the button current state and we disconnect them when/if we
+            // don't need them any more
+            if ( bitmap.IsOk() )
+            {
+                if ( !m_bitmaps[which].IsOk() )
+                {
+                    g_signal_connect
+                    (
+                        m_widget,
+                        "enter",
+                        G_CALLBACK(wxgtk_button_enter_callback),
+                        this
+                    );
+
+                    g_signal_connect
+                    (
+                        m_widget,
+                        "leave",
+                        G_CALLBACK(wxgtk_button_leave_callback),
+                        this
+                    );
+                }
+            }
+            else // no valid bitmap
+            {
+                if ( m_bitmaps[which].IsOk() )
+                {
+                    g_signal_handlers_disconnect_by_func
+                    (
+                        m_widget,
+                        (gpointer)wxgtk_button_enter_callback,
+                        this
+                    );
+
+                    g_signal_handlers_disconnect_by_func
+                    (
+                        m_widget,
+                        (gpointer)wxgtk_button_leave_callback,
+                        this
+                    );
+
+                    if ( m_isCurrent )
+                    {
+                        m_isCurrent = false;
+                        GTKUpdateBitmap();
+                    }
+                }
+            }
+            break;
+
+        case State_Focused:
+            if ( bitmap.IsOk() )
+            {
+                Connect(wxEVT_SET_FOCUS,
+                        wxFocusEventHandler(wxButton::GTKOnFocus));
+                Connect(wxEVT_KILL_FOCUS,
+                        wxFocusEventHandler(wxButton::GTKOnFocus));
+            }
+            else // no valid focused bitmap
+            {
+                Disconnect(wxEVT_SET_FOCUS,
+                           wxFocusEventHandler(wxButton::GTKOnFocus));
+                Disconnect(wxEVT_KILL_FOCUS,
+                           wxFocusEventHandler(wxButton::GTKOnFocus));
+            }
+            break;
+
+        default:
+            // no callbacks to connect/disconnect
+            ;
+    }
+
+    m_bitmaps[which] = bitmap;
+
+    // update the bitmap immediately if necessary, otherwise it will be done
+    // when the bitmap for the corresponding state is needed the next time by
+    // GTKUpdateBitmap()
+    if ( bitmap.IsOk() && which == GTKGetCurrentState() )
+    {
+        GTKDoShowBitmap(bitmap);
+    }
+}
+
+void wxButton::DoSetBitmapPosition(wxDirection dir)
+{
+#ifdef __WXGTK210__
+    if ( !gtk_check_version(2,10,0) )
+    {
+        GtkPositionType gtkpos;
+        switch ( dir )
+        {
+            default:
+                wxFAIL_MSG( "invalid position" );
+                // fall through
+
+            case wxLEFT:
+                gtkpos = GTK_POS_LEFT;
+                break;
+
+            case wxRIGHT:
+                gtkpos = GTK_POS_RIGHT;
+                break;
+
+            case wxTOP:
+                gtkpos = GTK_POS_TOP;
+                break;
+
+            case wxBOTTOM:
+                gtkpos = GTK_POS_BOTTOM;
+                break;
+        }
+
+        gtk_button_set_image_position(GTK_BUTTON(m_widget), gtkpos);
+    }
+#endif // GTK+ 2.10+
 }
 
 #endif // wxUSE_BUTTON

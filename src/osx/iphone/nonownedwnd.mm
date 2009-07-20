@@ -16,6 +16,39 @@
 #include "wx/nonownedwnd.h"
 #include "wx/frame.h"
 
+CGRect wxToNSRect(UIView* parent, const wxRect& r )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    int y = r.y;
+    int x = r.x ;
+    return CGRectMake(x, y, r.width , r.height);
+}
+
+wxRect wxFromNSRect( UIView* parent, const CGRect& rect )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    int y = rect.origin.y;
+    int x = rect.origin.x;
+    return wxRect( x, y, rect.size.width, rect.size.height );
+}
+
+CGPoint wxToNSPoint( UIView* parent, const wxPoint& p )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    int x = p.x ;
+    int y = p.y;
+    return CGPointMake(x, y);
+}
+
+wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
+{
+    CGRect frame = parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
+    int x = p.x;
+    int y = p.y;
+    return wxPoint( x, y);
+}
+
+
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl )
 
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) : 
@@ -141,7 +174,7 @@ bool wxNonOwnedWindowIPhoneImpl::CanSetTransparent()
 
 void wxNonOwnedWindowIPhoneImpl::MoveWindow(int x, int y, int width, int height)
 {
-    CGRect r = CGRectMake( 0,0,width,height) ;
+    CGRect r = CGRectMake( x,y,width,height) ;
     [m_macWindow setFrame:r];
 }
 
@@ -159,13 +192,13 @@ void wxNonOwnedWindowIPhoneImpl::GetSize( int &width, int &height ) const
     height = rect.size.height;
 }
 
-void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &right, int &width, int &height ) const
+void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
-    CGRect rect = [m_macWindow  frame];
+    CGRect rect = [m_macWindow frame];
     width = rect.size.width;
     height = rect.size.height;
-    left = 0;
-    right = 0;
+    left = rect.origin.x;
+    top = rect.origin.y;
 }
     
 bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)

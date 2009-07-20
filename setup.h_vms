@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 27 May 2009                                                        *
+ * Date : 19 June 2009                                                       *
  *                                                                           *
  *****************************************************************************/
 
@@ -322,8 +322,6 @@ typedef pid_t GPid;
 #define wxUSE_SOUND      1
 
 #define wxUSE_MEDIACTRL     1
-
-#define wxUSE_GSTREAMER     0
 
 #define wxUSE_XRC       1
 
@@ -795,7 +793,11 @@ typedef pid_t GPid;
  */
 #undef HAVE___THREAD_KEYWORD
 
-/* compatibility */
+/*
+ * Define if large (64 bit file offsets) files are supported.
+ */
+#undef HAVE_LARGEFILE_SUPPORT
+
 /*
  * Use OpenGL
  */

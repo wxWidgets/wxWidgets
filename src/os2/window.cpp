@@ -352,7 +352,9 @@ wxWindowOS2::~wxWindowOS2()
     if (m_hWnd)
     {
         if(!::WinDestroyWindow(GetHWND()))
+        {
             wxLogLastError(wxT("DestroyWindow"));
+        }
         //
         // remove hWnd <-> wxWindow association
         //

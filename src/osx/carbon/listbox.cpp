@@ -608,9 +608,13 @@ void wxMacDataBrowserCellValue::Set( const wxString& value )
 }
 
 void wxMacDataBrowserCellValue::Set( int value ) 
-{
+{  
     SetDataBrowserItemDataValue( m_data, value );
-    // SetDataBrowserItemDataButtonValue( m_data, value ? kThemeButtonOn : kThemeButtonOff);
+}
+
+void wxMacDataBrowserCellValue::Check( bool check )
+{
+    SetDataBrowserItemDataButtonValue( m_data, check ? kThemeButtonOn : kThemeButtonOff);
 }
     
 int wxMacDataBrowserCellValue::GetIntValue() const 

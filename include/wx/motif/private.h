@@ -141,7 +141,11 @@ class wxXmString
 {
     void Init(const char *str)
     {
-        m_string = XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);
+        m_string = XmStringCreateLtoR
+                   (
+                    const_cast<char *>(str),
+                    const_cast<char *>(XmSTRING_DEFAULT_CHARSET)
+                   );
     }
 
 public:

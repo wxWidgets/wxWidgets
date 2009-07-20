@@ -325,15 +325,20 @@ bool wxAppConsoleBase::Yield(bool onlyIfNeeded)
 
 void wxAppConsoleBase::WakeUpIdle()
 {
-    if ( m_mainLoop )
-        m_mainLoop->WakeUp();
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+
+    if ( loop )
+        loop->WakeUp();
 }
 
 bool wxAppConsoleBase::ProcessIdle()
 {
-    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    // synthesize an idle event and check if more of them are needed
+    wxIdleEvent event;
+    event.SetEventObject(this);
+    ProcessEvent(event);
 
-    return loop && loop->ProcessIdle();
+    return event.MoreRequested();
 }
 
 // ----------------------------------------------------------------------------

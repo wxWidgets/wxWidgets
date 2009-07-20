@@ -164,6 +164,19 @@ GdkWindow *wxBitmapComboBox::GTKGetWindow(wxArrayGdkWindows& windows) const
     return wxChoice::GTKGetWindow(windows);
 }
 
+wxSize wxBitmapComboBox::DoGetBestSize() const
+{
+    wxSize best = wxComboBox::DoGetBestSize();
+
+    int delta = GetBitmapSize().y - GetCharHeight();
+    if ( delta > 0 )
+    {
+        best.y += delta;
+        CacheBestSize(best);
+    }
+    return best;
+}
+
 // ----------------------------------------------------------------------------
 // Item manipulation
 // ----------------------------------------------------------------------------

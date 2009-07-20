@@ -229,30 +229,15 @@ public:
     }
 
 private:
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
-
     // implement sink functions
-    virtual void DoLog(wxLogLevel level, const wxString& str, time_t t)
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
     {
-        // don't put trace messages into listbox or we can get into infinite
-        // recursion
         if ( level == wxLOG_Trace )
         {
             if ( m_logOld )
-                m_logOld->Log(level, str, t);
+                m_logOld->LogTextAtLevel(level, msg);
+            return;
         }
-        else
-        {
-            wxLog::DoLog(level, str, t);
-        }
-    }
-
-    virtual void DoLogString(const wxString& str, time_t WXUNUSED(t))
-    {
-        wxString msg;
-        TimeStamp(&msg);
-        msg += str;
 
         #ifdef __WXUNIVERSAL__
             m_lbox->AppendAndEnsureVisible(msg);
@@ -919,9 +904,13 @@ void WidgetsFrame::OnDisableAutoComplete(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( entry, "menu item should be disabled" );
 
     if ( entry->AutoComplete(wxArrayString()) )
+    {
         wxLogMessage("Disabled auto completion.");
+    }
     else
+    {
         wxLogMessage("AutoComplete() failed.");
+    }
 }
 
 void WidgetsFrame::OnAutoCompleteFixed(wxCommandEvent& WXUNUSED(event))
@@ -941,9 +930,13 @@ void WidgetsFrame::OnAutoCompleteFixed(wxCommandEvent& WXUNUSED(event))
     completion_choices.push_back("this string is for test");
 
     if ( entry->AutoComplete(completion_choices) )
+    {
         wxLogMessage("Enabled auto completion of a set of fixed strings.");
+    }
     else
+    {
         wxLogMessage("AutoComplete() failed.");
+    }
 }
 
 void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
@@ -952,9 +945,13 @@ void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( entry, "menu item should be disabled" );
 
     if ( entry->AutoCompleteFileNames() )
+    {
         wxLogMessage("Enable auto completion of file names.");
+    }
     else
+    {
         wxLogMessage("AutoCompleteFileNames() failed.");
+    }
 }
 
 void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
@@ -971,9 +968,13 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
     s_hint = hint;
 
     if ( entry->SetHint(hint) )
+    {
         wxLogMessage("Set hint to \"%s\".", hint);
+    }
     else
+    {
         wxLogMessage("Text hints not supported.");
+    }
 }
 
 #endif // wxUSE_MENUS

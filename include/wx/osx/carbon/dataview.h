@@ -129,6 +129,7 @@ public:
   wxMacDataBrowserTableViewControl(void)
   {
   }
+  ~wxMacDataBrowserTableViewControl(void);
 
 //
 // callback handling
@@ -310,6 +311,11 @@ protected :
   virtual Boolean DataBrowserAddDragItemProc(DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef) = 0;
   virtual Boolean DataBrowserReceiveDragProc(DragReference dragRef, DataBrowserItemID itemID)                         = 0;
 
+//
+// event handler for hit testing
+///
+  void*  m_macDataViewCtrlEventHandler;
+  
 private:
 //
 // wxWidget internal stuff

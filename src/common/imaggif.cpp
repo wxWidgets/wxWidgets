@@ -89,7 +89,9 @@ bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
                              wxOutputStream& WXUNUSED(stream), bool verbose )
 {
     if (verbose)
+    {
         wxLogDebug(wxT("GIF: the handler is read-only!!"));
+    }
 
     return false;
 }

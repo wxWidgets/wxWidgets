@@ -627,9 +627,13 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
     if ( sig == 0 )
     {
         if ( wxProcess::Exists(pid) )
+        {
             wxLogStatus(_T("Process %ld is running."), pid);
+        }
         else
+        {
             wxLogStatus(_T("No process with pid = %ld."), pid);
+        }
     }
     else // not SIGNONE
     {
@@ -965,7 +969,9 @@ void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
     s_url = filename;
 
     if ( !wxLaunchDefaultBrowser(s_url) )
+    {
         wxLogError(_T("Failed to open URL \"%s\""), s_url.c_str());
+    }
 }
 
 // ----------------------------------------------------------------------------

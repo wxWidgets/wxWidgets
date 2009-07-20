@@ -1521,10 +1521,9 @@ void MyFrame::OnNotifMsgShow(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNotifMsgHide(wxCommandEvent& WXUNUSED(event))
 {
-    if ( m_notifMsg )
+    if ( m_notifMsg && !m_notifMsg->Close() )
     {
-        if ( !m_notifMsg->Close() )
-            wxLogStatus("Failed to hide manual notification message");
+        wxLogStatus("Failed to hide manual notification message");
     }
 }
 
@@ -2458,12 +2457,14 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
 
     // icon choice
     const wxString icons[] = {
-        "&Information", "&Question", "&Warning", "&Error"
+        "&None", "&Information", "&Question", "&Warning", "&Error"
     };
 
-    m_icons = new wxRadioBox(this, wxID_ANY, "&Icon:",
+    m_icons = new wxRadioBox(this, wxID_ANY, "&Icons",
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(icons), icons);
+    // Make the 'Information' icon the default one:
+    m_icons->SetSelection(1);
     sizerTop->Add(m_icons, wxSizerFlags().Expand().Border());
 
 
@@ -2524,10 +2525,11 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 
     switch ( m_icons->GetSelection() )
     {
-        case 0: style |= wxICON_INFORMATION; break;
-        case 1: style |= wxICON_QUESTION; break;
-        case 2: style |= wxICON_WARNING; break;
-        case 3: style |= wxICON_ERROR; break;
+        case 0: style |= wxICON_NONE; break;
+        case 1: style |= wxICON_INFORMATION; break;
+        case 2: style |= wxICON_QUESTION; break;
+        case 3: style |= wxICON_WARNING; break;
+        case 4: style |= wxICON_ERROR; break;
     }
 
     if ( m_chkCentre->IsChecked() )

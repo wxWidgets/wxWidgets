@@ -128,6 +128,8 @@ protected:
     void OnButtonAddMany(wxCommandEvent& event);
 
     void OnComboBox(wxCommandEvent& event);
+    void OnDropDown(wxCommandEvent& event);
+    void OnCloseUp(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -137,8 +139,6 @@ protected:
     void OnTextButtonAll(wxCommandEvent& event);
 
     void OnUpdateUIInsert(wxUpdateUIEvent& event);
-    void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
-    void OnUpdateUIAddSeveralWithImages(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIItemManipulator(wxUpdateUIEvent& event);
@@ -216,8 +216,6 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BitmapComboBoxPage_Reset, BitmapComboBoxWidgetsPage::OnUpdateUIResetButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_Insert, BitmapComboBoxWidgetsPage::OnUpdateUIInsert)
     EVT_UPDATE_UI(BitmapComboBoxPage_LoadFromFile, BitmapComboBoxWidgetsPage::OnUpdateUIInsert)
-    EVT_UPDATE_UI(BitmapComboBoxPage_AddSeveral, BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveral)
-    EVT_UPDATE_UI(BitmapComboBoxPage_AddSeveralWithImages, BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveralWithImages)
     EVT_UPDATE_UI(BitmapComboBoxPage_Clear, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_DeleteText, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_Delete, BitmapComboBoxWidgetsPage::OnUpdateUIDeleteButton)
@@ -225,6 +223,8 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BitmapComboBoxPage_SetFromFile, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
     EVT_UPDATE_UI(BitmapComboBoxPage_DeleteSel, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
 
+    EVT_COMBOBOX_DROPDOWN(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnDropDown)
+    EVT_COMBOBOX_CLOSEUP(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnCloseUp)
     EVT_COMBOBOX(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboBox)
     EVT_TEXT(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboText)
@@ -792,18 +792,6 @@ void BitmapComboBoxWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)
         event.Enable(m_combobox->GetCount() != 0);
 }
 
-void BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
-{
-    if (m_combobox)
-        event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
-}
-
-void BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveralWithImages(wxUpdateUIEvent& event)
-{
-    if (m_combobox)
-        event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
-}
-
 void BitmapComboBoxWidgetsPage::OnComboText(wxCommandEvent& event)
 {
     if (!m_combobox)
@@ -815,9 +803,13 @@ void BitmapComboBoxWidgetsPage::OnComboText(wxCommandEvent& event)
                   _T("event and combobox values should be the same") );
 
     if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    {
         wxLogMessage(_T("BitmapCombobox enter pressed (now '%s')"), s.c_str());
+    }
     else
+    {
         wxLogMessage(_T("BitmapCombobox text changed (now '%s')"), s.c_str());
+    }
 }
 
 void BitmapComboBoxWidgetsPage::OnComboBox(wxCommandEvent& event)
@@ -882,12 +874,9 @@ wxBitmap BitmapComboBoxWidgetsPage::LoadBitmap(const wxString& WXUNUSED(filepath
 
 wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 {
-    wxString filepath = wxFileSelector(wxT("Choose image file"),
+    wxString filepath = wxLoadFileSelector(wxT("image"),
                                        wxEmptyString,
                                        wxEmptyString,
-                                       wxEmptyString,
-                                       wxT("*.*"),
-                                       wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                        this);
 
     wxBitmap bitmap;
@@ -905,7 +894,9 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
     }
 
     if (bitmap.IsOk())
+    {
         wxLogDebug(wxT("%i, %i"),bitmap.GetWidth(), bitmap.GetHeight());
+    }
 
     ::wxSetCursor( *wxSTANDARD_CURSOR );
 
@@ -939,6 +930,16 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
     bmp.SetMask(mask);
 
     return bmp;
+}
+
+void BitmapComboBoxWidgetsPage::OnDropDown(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Combobox dropped down"));
+}
+
+void BitmapComboBoxWidgetsPage::OnCloseUp(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Combobox closed up"));
 }
 
 #endif // wxUSE_BITMAPCOMBOBOX

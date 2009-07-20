@@ -1,18 +1,22 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        object.h
-// Purpose:     interface of wxObjectRefData
+// Purpose:     interface of wxRefCounter
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxObjectRefData
+/** @class wxObjectRefData
 
-    This class is used to store reference-counted data.
+    This class is just a typedef to wxRefCounter and is used by wxObject.
 
-    Derive classes from this to store your own data. When retrieving information
-    from a wxObject's reference data, you will need to cast to your own derived class.
+    Derive classes from this to store your own data in wxObject derived 
+    classes. When retrieving information from a wxObject's reference data,
+    you will need to cast to your own derived class.
+    
+    Below is an example illustrating how to store reference counted
+    data in a class derived from wxObject including copy-on-write
+    semantics.
 
     @section objectrefdata_example Example
 
@@ -131,32 +135,51 @@
     }
     @endcode
 
-
+    
     @library{wxbase}
     @category{rtti}
 
     @see wxObject, wxObjectDataPtr<T>, @ref overview_refcount
 */
-class wxObjectRefData
+typedef wxRefCounter wxObjectRefData;
+
+
+/**
+    @class wxRefCounter
+
+    This class is used to manage reference-counting providing a simple
+    interface and a counter. wxRefCounter can be easily used together
+    with wxObjectDataPtr<T> to ensure that no calls to wxRefCounter::DecRef()
+    are missed - thus avoiding memory leaks.
+    
+    wxObjectRefData is a typedef to wxRefCounter and is used as the
+    built-in reference counted storage for wxObject derive classes.
+
+    @library{wxbase}
+    @category{rtti}
+
+    @see wxObject, wxObjectRefData, wxObjectDataPtr<T>, @ref overview_refcount
+*/
+class wxRefCounter
 {
 protected:
     /**
         Destructor.
 
-        It's declared @c protected so that wxObjectRefData instances
+        It's declared @c protected so that wxRefCounter instances
         will never be destroyed directly but only as result of a DecRef() call.
     */
-    virtual ~wxObjectRefData();
+    virtual ~wxRefCounter();
 
 public:
     /**
         Default constructor. Initialises the internal reference count to 1.
     */
-    wxObjectRefData();
+    wxRefCounter();
 
     /**
         Decrements the reference count associated with this shared data and, if
-        it reaches zero, destroys this instance of wxObjectRefData releasing its
+        it reaches zero, destroys this instance of wxRefCounter releasing its
         memory.
 
         Please note that after calling this function, the caller should
@@ -198,14 +221,14 @@ public:
     wxObject can be used to implement @ref overview_refcount "reference counted"
     objects, such as wxPen, wxBitmap and others
     (see @ref overview_refcount_list "this list").
-    See wxObjectRefData and @ref overview_refcount for more info about
+    See wxRefCounter and @ref overview_refcount for more info about
     reference counting.
 
     @library{wxbase}
     @category{rtti}
 
     @see wxClassInfo, @ref overview_debugging, @ref overview_refcount, 
-         wxObjectRefData, wxObjectDataPtr<T>
+         wxObjectDataRef, wxObjectDataPtr<T>
 */
 class wxObject
 {
@@ -459,8 +482,8 @@ public:
 
 /**
 
-    This is an helper template class primarily written to avoid memory leaks because of
-    missing calls to wxObjectRefData::DecRef().
+    This is an helper template class primarily written to avoid memory leaks because
+    of missing calls to wxRefCounter::DecRef() and wxObjectRefData::DecRef().
 
     Despite the name this template can actually be used as a smart pointer for any
     class implementing the reference counting interface which only consists of the two
@@ -470,27 +493,21 @@ public:
     counting to be in the class pointed to, where instead wxSharedPtr<T> implements the
     reference counting itself.
 
+    Below is an example illustrating how to implement reference counted
+    data using wxRefCounter and wxObjectDataPtr<T> with copy-on-write
+    semantics.
+
     @section objectdataptr_example Example
 
     @code
-    class MyCarRefData: public wxObjectRefData
+    class MyCarRefData: public wxRefCounter
     {
     public:
-        MyCarRefData()  { m_price = 0; }
-
-        MyCarRefData( const MyCarRefData& data )
-            : wxObjectRefData()
-        {
-            m_price = data.m_price;
-        }
-
+        MyCarRefData( int price = 0 ) : m_price(price) { }
+        MyCarRefData( const MyCarRefData& data ) : m_price(data.m_price) { }
+        
         void SetPrice( int price )  { m_price = price; }
         int GetPrice() const        { return m_price; }
-
-        bool operator == ( const MyCarRefData& other ) const
-        {
-            return m_price == other.m_price;
-        }
         
     protected:
         int m_price;
@@ -501,9 +518,8 @@ public:
     public:
         // initializes this MyCar assigning to the
         // internal data pointer a new instance of MyCarRefData
-        MyCar( int price ) : m_data( new MyCarRefData )
+        MyCar( int price = 0 ) : m_data( new MyCarRefData(price) )
         {
-            m_data->SetPrice( price );
         }
 
         MyCar& operator =( const MyCar& tocopy )
@@ -521,8 +537,7 @@ public:
                 return true; // this instance and the 'other' one share the
                              // same MyCarRefData data...
             
-            // rely on the MyCarRefData::operator==()
-            return (*m_data.get()) == (*other.m_data.get());
+            return (m_data.GetPrice() == other.m_data.GetPrice());
         }
 
         void SetPrice( int price )

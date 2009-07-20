@@ -223,25 +223,33 @@ public:
     void OnScrollLineDown(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->LineDown() )
+        {
             wxLogMessage(_T("Already at the bottom"));
+        }
     }
 
     void OnScrollLineUp(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->LineUp() )
+        {
             wxLogMessage(_T("Already at the top"));
+        }
     }
 
     void OnScrollPageDown(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->PageDown() )
+        {
             wxLogMessage(_T("Already at the bottom"));
+        }
     }
 
     void OnScrollPageUp(wxCommandEvent& WXUNUSED(event))
     {
         if ( !m_panel->m_textrich->PageUp() )
+        {
             wxLogMessage(_T("Already at the top"));
+        }
     }
 
     void OnGetLine(wxCommandEvent& WXUNUSED(event))
@@ -788,7 +796,9 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
 {
     if ( ms_logFocus )
+    {
         wxLogMessage( wxT("%p got focus."), this);
+    }
 
     event.Skip();
 }
@@ -796,7 +806,9 @@ void MyTextCtrl::OnSetFocus(wxFocusEvent& event)
 void MyTextCtrl::OnKillFocus(wxFocusEvent& event)
 {
     if ( ms_logFocus )
+    {
         wxLogMessage( wxT("%p lost focus"), this);
+    }
 
     event.Skip();
 }
@@ -1491,9 +1503,13 @@ void MyFrame::OnFileSave(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnFileLoad(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_panel->m_textrich->LoadFile(_T("dummy.txt")) )
+    {
         wxLogStatus(this, _T("Successfully loaded file"));
+    }
     else
+    {
         wxLogStatus(this, _T("Couldn't load the file"));
+    }
 }
 
 void MyFrame::OnRichTextTest(wxCommandEvent& WXUNUSED(event))

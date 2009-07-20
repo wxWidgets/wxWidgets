@@ -52,6 +52,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
+	$(OBJS)\test_logtest.obj \
 	$(OBJS)\test_longlongtest.obj \
 	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
@@ -529,6 +530,9 @@ $(OBJS)\test_intltest.obj: .\intl\intltest.cpp
 
 $(OBJS)\test_lists.obj: .\lists\lists.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\lists\lists.cpp
+
+$(OBJS)\test_logtest.obj: .\log\logtest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\log\logtest.cpp
 
 $(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\longlong\longlongtest.cpp

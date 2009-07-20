@@ -495,6 +495,7 @@ class WXDLLIMPEXP_PROPGRID wxPGMultiButton : public wxWindow
 {
 public:
     wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz );
+    virtual ~wxPGMultiButton() {}
 
     wxWindow* GetButton( unsigned int i ) { return (wxWindow*) m_buttons[i]; }
     const wxWindow* GetButton( unsigned int i ) const

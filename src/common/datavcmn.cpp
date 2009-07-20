@@ -309,7 +309,7 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
     unsigned int i;
     for (i = 1; i < initial_size+1; i++)
             m_hash.Add( wxUIntToPtr(i) );
-    m_lastIndex = initial_size + 1;
+    m_nextFreeID = initial_size + 1;
 }
 
 wxDataViewIndexListModel::~wxDataViewIndexListModel()
@@ -327,7 +327,8 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
     unsigned int i;
     for (i = 1; i < new_size+1; i++)
             m_hash.Add( wxUIntToPtr(i) );
-    m_lastIndex = new_size + 1;
+            
+    m_nextFreeID = new_size + 1;
 
     wxDataViewModel::Cleared();
 }
@@ -336,17 +337,22 @@ void wxDataViewIndexListModel::RowPrepended()
 {
     m_ordered = false;
 
-    unsigned int id = m_lastIndex++;
+    unsigned int id = m_nextFreeID;
+    m_nextFreeID++;
+    
     m_hash.Insert( wxUIntToPtr(id), 0 );
     wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
+    
 }
 
 void wxDataViewIndexListModel::RowInserted( unsigned int before )
 {
     m_ordered = false;
 
-    unsigned int id = m_lastIndex++;
+    unsigned int id = m_nextFreeID;
+    m_nextFreeID++;
+    
     m_hash.Insert( wxUIntToPtr(id), before );
     wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
@@ -354,7 +360,9 @@ void wxDataViewIndexListModel::RowInserted( unsigned int before )
 
 void wxDataViewIndexListModel::RowAppended()
 {
-    unsigned int id = m_lastIndex++;
+    unsigned int id = m_nextFreeID;
+    m_nextFreeID++;
+    
     m_hash.Add( wxUIntToPtr(id) );
     wxDataViewItem item( wxUIntToPtr(id) );
     ItemAdded( wxDataViewItem(0), item );
@@ -402,10 +410,7 @@ void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int c
 unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
 {
     if (m_ordered)
-    {
-            unsigned int pos = wxPtrToUInt( item.GetID() );
-            return pos-1;
-    }
+        return wxPtrToUInt(item.GetID())-1;
 
     // assert for not found
     return (unsigned int) m_hash.Index( item.GetID() );
@@ -429,8 +434,8 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
 {
     if (m_ordered)
     {
-        unsigned int pos1 = wxPtrToUInt(item1.GetID());
-        unsigned int pos2 = wxPtrToUInt(item2.GetID());
+        unsigned int pos1 = wxPtrToUInt(item1.GetID());  // -1 not needed here
+        unsigned int pos2 = wxPtrToUInt(item2.GetID());  // -1 not needed here
 
         if (ascending)
             return pos1 - pos2;
@@ -493,7 +498,7 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
 
 wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_size )
 {
-    m_lastIndex = initial_size-1;
+    m_size = initial_size;
 }
 
 wxDataViewVirtualListModel::~wxDataViewVirtualListModel()
@@ -502,41 +507,43 @@ wxDataViewVirtualListModel::~wxDataViewVirtualListModel()
 
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
-    m_lastIndex = new_size-1;
+    m_size = new_size;
 
     wxDataViewModel::Cleared();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()
 {
-    m_lastIndex++;
-    wxDataViewItem item( NULL );
+    m_size++;
+    wxDataViewItem item( wxUIntToPtr(1) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowInserted( unsigned int before )
 {
-    m_lastIndex++;
+    m_size++;
     wxDataViewItem item( wxUIntToPtr(before+1) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowAppended()
 {
-    m_lastIndex++;
-    wxDataViewItem item( wxUIntToPtr(m_lastIndex+1) );
+    m_size++;
+    wxDataViewItem item( wxUIntToPtr(m_size) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
+    m_size--;
     wxDataViewItem item( wxUIntToPtr(row+1) );
     wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
-    m_lastIndex++;
 }
 
 void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
 {
+    m_size -= rows.GetCount();
+    
     wxArrayInt sorted = rows;
     sorted.Sort( my_sort );
 
@@ -548,8 +555,6 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
             array.Add( item );
     }
     wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
-
-    m_lastIndex -= rows.GetCount();
 }
 
 void wxDataViewVirtualListModel::RowChanged( unsigned int row )
@@ -582,8 +587,8 @@ int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
                                       unsigned int WXUNUSED(column),
                                       bool ascending) const
 {
-    unsigned int pos1 = wxPtrToUInt(item1.GetID())-1;
-    unsigned int pos2 = wxPtrToUInt(item2.GetID())-1;
+    unsigned int pos1 = wxPtrToUInt(item1.GetID());  // -1 not needed here
+    unsigned int pos2 = wxPtrToUInt(item2.GetID());  // -1 not needed here
 
     if (ascending)
        return pos1 - pos2;
@@ -1245,9 +1250,13 @@ wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEven
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
 
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_CACHE_HINT, wxDataViewEvent );
+
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEvent );
+
+
 
 // -------------------------------------
 // wxDataViewSpinRenderer

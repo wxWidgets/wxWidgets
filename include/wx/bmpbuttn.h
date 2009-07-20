@@ -16,10 +16,14 @@
 
 #if wxUSE_BMPBUTTON
 
-#include "wx/bitmap.h"
 #include "wx/button.h"
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
+// FIXME: right now only wxMSW and wxGTK implement bitmap support in wxButton
+//        itself, this shouldn't be used for the other platforms neither
+//        when all of them do it
+#if (defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+    #define wxHAS_BUTTON_BITMAP
+#endif
 
 // ----------------------------------------------------------------------------
 // wxBitmapButton: a button which shows bitmaps instead of the usual string.
@@ -31,42 +35,48 @@ class WXDLLIMPEXP_CORE wxBitmapButtonBase : public wxButton
 public:
     wxBitmapButtonBase()
     {
+#ifndef wxHAS_BUTTON_BITMAP
         m_marginX =
         m_marginY = 0;
+#endif // wxHAS_BUTTON_BITMAP
     }
 
-    // set the bitmaps
-    virtual void SetBitmapLabel(const wxBitmap& bitmap)
-        { m_bmpNormal = bitmap; OnSetBitmap(); }
-    virtual void SetBitmapSelected(const wxBitmap& sel)
-        { m_bmpSelected = sel; OnSetBitmap(); }
-    virtual void SetBitmapFocus(const wxBitmap& focus)
-        { m_bmpFocus = focus; OnSetBitmap(); }
-    virtual void SetBitmapDisabled(const wxBitmap& disabled)
-        { m_bmpDisabled = disabled; OnSetBitmap(); }
-    virtual void SetBitmapHover(const wxBitmap& hover)
-        { m_bmpHover = hover; OnSetBitmap(); }
-
-    // retrieve the bitmaps
-    const wxBitmap& GetBitmapLabel() const { return m_bmpNormal; }
-    const wxBitmap& GetBitmapSelected() const { return m_bmpSelected; }
-    const wxBitmap& GetBitmapFocus() const { return m_bmpFocus; }
-    const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
-    const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
-    wxBitmap& GetBitmapLabel() { return m_bmpNormal; }
-    wxBitmap& GetBitmapSelected() { return m_bmpSelected; }
-    wxBitmap& GetBitmapFocus() { return m_bmpFocus; }
-    wxBitmap& GetBitmapDisabled() { return m_bmpDisabled; }
-    wxBitmap& GetBitmapHover() { return m_bmpHover; }
+    bool Create(wxWindow *parent,
+                wxWindowID winid,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxValidator& validator,
+                const wxString& name)
+    {
+        // We use wxBU_NOTEXT to let the base class Create() know that we are
+        // not going to show the label: this is a hack needed for wxGTK where
+        // we can show both label and bitmap only with GTK 2.6+ but we always
+        // can show just one of them and this style allows us to choose which
+        // one we need.
+        //
+        // And we also use wxBU_EXACTFIT to avoid being resized up to the
+        // standard button size as this doesn't make sense for bitmap buttons
+        // which are not standard anyhow and should fit their bitmap size.
+        return wxButton::Create(parent, winid, "",
+                                pos, size,
+                                style | wxBU_NOTEXT | wxBU_EXACTFIT,
+                                validator, name);
+    }
 
     // set/get the margins around the button
-    virtual void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
-    int GetMarginX() const { return m_marginX; }
-    int GetMarginY() const { return m_marginY; }
+    virtual void SetMargins(int x, int y)
+    {
+        DoSetBitmapMargins(x, y);
+    }
+
+    int GetMarginX() const { return DoGetBitmapMargins().x; }
+    int GetMarginY() const { return DoGetBitmapMargins().y; }
 
     // deprecated synonym for SetBitmapLabel()
 #if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED( void SetLabel(const wxBitmap& bitmap) );
+    wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
+       SetBitmapLabel(bitmap); )
 
     // prevent virtual function hiding
     virtual void SetLabel(const wxString& label)
@@ -74,30 +84,35 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
+#ifndef wxHAS_BUTTON_BITMAP
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { InvalidateBestSize(); Refresh(); }
 
+    virtual wxBitmap DoGetBitmap(State which) const { return m_bitmaps[which]; }
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which)
+        { m_bitmaps[which] = bitmap; OnSetBitmap(); }
+
+    virtual wxSize DoGetBitmapMargins() const
+    {
+        return wxSize(m_marginX, m_marginY);
+    }
+
+    virtual void DoSetBitmapMargins(int x, int y)
+    {
+        m_marginX = x;
+        m_marginY = y;
+    }
+
     // the bitmaps for various states
-    wxBitmap m_bmpNormal,
-             m_bmpSelected,
-             m_bmpFocus,
-             m_bmpDisabled,
-             m_bmpHover;
+    wxBitmap m_bitmaps[State_Max];
 
     // the margins around the bitmap
     int m_marginX,
         m_marginY;
-
+#endif // !wxHAS_BUTTON_BITMAP
 
     wxDECLARE_NO_COPY_CLASS(wxBitmapButtonBase);
 };
-
-#if WXWIN_COMPATIBILITY_2_6
-inline void wxBitmapButtonBase::SetLabel(const wxBitmap& bitmap)
-{
-    SetBitmapLabel(bitmap);
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/univ/bmpbuttn.h"

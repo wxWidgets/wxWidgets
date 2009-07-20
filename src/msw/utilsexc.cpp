@@ -923,7 +923,9 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 
     // close unneeded handle
     if ( !::CloseHandle(pi.hThread) )
+    {
         wxLogLastError(wxT("CloseHandle(hThread)"));
+    }
 
     if ( !hThread )
     {

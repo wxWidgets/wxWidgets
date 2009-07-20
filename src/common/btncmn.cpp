@@ -44,4 +44,16 @@ wxWindow *wxButtonBase::SetDefault()
     return tlw->SetDefaultItem(this);
 }
 
+void wxButtonBase::SetBitmapPosition(wxDirection dir)
+{
+    wxASSERT_MSG( !(dir & ~wxDIRECTION_MASK), "non-direction flag used" );
+    wxASSERT_MSG( !!(dir & wxLEFT) +
+                    !!(dir & wxRIGHT) +
+                      !!(dir & wxTOP) +
+                       !!(dir & wxBOTTOM) == 1,
+                   "exactly one direction flag must be set" );
+
+    DoSetBitmapPosition(dir);
+
+}
 #endif // wxUSE_BUTTON

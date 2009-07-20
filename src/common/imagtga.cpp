@@ -669,7 +669,9 @@ bool wxTGAHandler::LoadFile(wxImage* image,
     if ( !CanRead(stream) )
     {
         if ( verbose )
+        {
             wxLogError(wxT("TGA: this is not a TGA file."));
+        }
 
         return false;
     }

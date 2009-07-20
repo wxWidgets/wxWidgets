@@ -319,7 +319,9 @@ bool MyConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
     Log("Execute", wxEmptyString, wxEmptyString, data, size, format);
     bool retval = wxConnection::DoExecute(data, size, format);
     if (!retval)
+    {
         wxLogMessage("Execute failed!");
+    }
     return retval;
 }
 

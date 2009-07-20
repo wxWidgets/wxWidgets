@@ -152,6 +152,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_dirpicker.obj &
 	$(OBJS)\monodll_xh_dlg.obj &
 	$(OBJS)\monodll_xh_editlbox.obj &
+	$(OBJS)\monodll_xh_filectrl.obj &
 	$(OBJS)\monodll_xh_filepicker.obj &
 	$(OBJS)\monodll_xh_fontpicker.obj &
 	$(OBJS)\monodll_xh_frame.obj &
@@ -848,6 +849,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_dirpicker.obj &
 	$(OBJS)\monolib_xh_dlg.obj &
 	$(OBJS)\monolib_xh_editlbox.obj &
+	$(OBJS)\monolib_xh_filectrl.obj &
 	$(OBJS)\monolib_xh_filepicker.obj &
 	$(OBJS)\monolib_xh_fontpicker.obj &
 	$(OBJS)\monolib_xh_frame.obj &
@@ -3156,7 +3158,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 	CPPUNIT_CFLAGS="$(CPPUNIT_CFLAGS)" CPPUNIT_LIBS="$(CPPUNIT_LIBS)" &
 	RUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 COMPILER_PREFIX = wat
 OBJS = &
 	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -4219,6 +4221,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_dirpicker.obj &
 	$(OBJS)\xrcdll_xh_dlg.obj &
 	$(OBJS)\xrcdll_xh_editlbox.obj &
+	$(OBJS)\xrcdll_xh_filectrl.obj &
 	$(OBJS)\xrcdll_xh_filepicker.obj &
 	$(OBJS)\xrcdll_xh_fontpicker.obj &
 	$(OBJS)\xrcdll_xh_frame.obj &
@@ -4289,6 +4292,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_dirpicker.obj &
 	$(OBJS)\xrclib_xh_dlg.obj &
 	$(OBJS)\xrclib_xh_editlbox.obj &
+	$(OBJS)\xrclib_xh_filectrl.obj &
 	$(OBJS)\xrclib_xh_filepicker.obj &
 	$(OBJS)\xrclib_xh_fontpicker.obj &
 	$(OBJS)\xrclib_xh_frame.obj &
@@ -5168,7 +5172,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h :  $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcde
 build_cfg_file : .SYMBOLIC $(SETUPHDIR)
 	@echo WXVER_MAJOR=2 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=9 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=0 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=1 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -6470,6 +6474,9 @@ $(OBJS)\monodll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_filectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_filectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
@@ -8825,6 +8832,9 @@ $(OBJS)\monolib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_filectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_filectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
@@ -14768,6 +14778,9 @@ $(OBJS)\xrcdll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 $(OBJS)\xrcdll_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_filectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_filectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14949,6 +14962,9 @@ $(OBJS)\xrclib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_filectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_filectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp

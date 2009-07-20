@@ -77,6 +77,7 @@ wxBEGIN_FLAGS( wxListBoxStyle )
     wxFLAGS_MEMBER(wxLB_HSCROLL)
     wxFLAGS_MEMBER(wxLB_ALWAYS_SB)
     wxFLAGS_MEMBER(wxLB_NEEDED_SB)
+    wxFLAGS_MEMBER(wxLB_NO_SB)
     wxFLAGS_MEMBER(wxLB_SORT)
 
 wxEND_FLAGS( wxListBoxStyle )
@@ -207,10 +208,6 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    // always show the vertical scrollbar if necessary -- otherwise it is
-    // impossible to use the control with the mouse
-    msStyle |= WS_VSCROLL;
-
     // we always want to get the notifications
     msStyle |= LBS_NOTIFY;
 
@@ -226,8 +223,16 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxLB_EXTENDED )
         msStyle |= LBS_EXTENDEDSEL;
 
-    if ( m_windowStyle & wxLB_ALWAYS_SB )
-        msStyle |= LBS_DISABLENOSCROLL;
+    wxASSERT_MSG( !(style & wxLB_ALWAYS_SB) || !(style & wxLB_NO_SB),
+                  _T( "Conflicting styles wxLB_ALWAYS_SB and wxLB_NO_SB." ) );
+
+    if ( !(style & wxLB_NO_SB) )
+    {
+        msStyle |= WS_VSCROLL;
+        if ( style & wxLB_ALWAYS_SB )
+            msStyle |= LBS_DISABLENOSCROLL;
+    }
+
     if ( m_windowStyle & wxLB_HSCROLL )
         msStyle |= WS_HSCROLL;
     if ( m_windowStyle & wxLB_SORT )
@@ -357,7 +362,9 @@ void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
                  wxT("invalid index in wxListBox::SetClientData") );
 
     if ( ListBox_SetItemData(GetHwnd(), n, clientData) == LB_ERR )
+    {
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
+    }
 }
 
 // Return number of selections and an array of selected integers
@@ -590,7 +597,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     //else: it shouldn't change
 }
 
-wxSize wxListBox::DoGetBestSize() const
+wxSize wxListBox::DoGetBestClientSize() const
 {
     // find the widest string
     int wLine;
@@ -609,22 +616,17 @@ wxSize wxListBox::DoGetBestSize() const
         wListbox = 100;
 
     // the listbox should be slightly larger than the widest string
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
+    wListbox += 3*GetCharWidth();
 
-    wListbox += 3*cx;
-
-    // Add room for the scrollbar
+    // add room for the scrollbar
     wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
     // make it too small neither
-    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*
+    int hListbox = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0)*
                     wxMin(wxMax(m_noItems, 3), 10);
 
-    wxSize best(wListbox, hListbox);
-    CacheBestSize(best);
-    return best;
+    return wxSize(wListbox, hListbox);
 }
 
 // ----------------------------------------------------------------------------

@@ -50,6 +50,7 @@
             hashes/hashes.cpp
             intl/intltest.cpp
             lists/lists.cpp
+            log/logtest.cpp
             longlong/longlongtest.cpp
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp

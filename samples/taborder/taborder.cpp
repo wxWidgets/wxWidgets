@@ -100,9 +100,13 @@ private:
     void DoNavigate(int flags)
     {
         if ( m_panel->NavigateIn(flags) )
+        {
             wxLogStatus(this, _T("Navigation event processed"));
+        }
         else
+        {
             wxLogStatus(this, _T("Navigation event ignored"));
+        }
     }
 
     wxPanel *m_panel;

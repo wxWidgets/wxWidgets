@@ -122,6 +122,21 @@ Changes in behaviour not resulting in compilation errors, please read this!
   or equivalent function should now be done into wxApp::OnEventLoopEnter().
   See wxApp::OnEventLoopEnter() and wxApp::OnEventLoopExit() docs for more info.
 
+- wxLoadFileSelector() now allows the user to select existing files only.
+
+- Erase background events are now not generated at all when background style is
+  changed. See the updated wxWindow::SetBackgroundStyle() description in the
+  manual for more details.
+
+- wxTreeCtrl::GetSelection now asserts if the tree has the wxTR_MULTIPLE style.
+  Instead use GetSelections() for multiple items; or if you want only the
+  single item last touched, the new wxTreeCtrl::GetFocusedItem.
+
+- Custom log targets should be updated to override wxLog::DoLogRecord() method
+  instead of DoLog() or DoLogString() and must be updated if they call the base
+  class versions of these functions as this won't work any more; please see the
+  documentation of wxLog for more information.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
@@ -234,6 +249,16 @@ Changes in behaviour which may result in compilation errors
   You may use wxEventLoopBase::SuspendProcessingOfPendingEvents instead of
   locking wxPendingEventsLocker now.
 
+- wxBitmapButton::GetBitmapXXX() overloads returning non-const wxBitmap
+  references have been removed, modifying the returned bitmaps never worked and
+  now results in compile-time error.
+
+- wxLogXXX() are now macros, not functions. Because of this calling them with
+  an explicit scope resolution operator ("::wxLogError()") doesn't work any
+  longer, just remove it. Also notice that using them inside an "if" statement
+  without enclosing parentheses results in warnings from g++ with -Wparentheses,
+  add parentheses around the if statement body to work around it.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -331,11 +356,22 @@ All:
 - Added wxStd{Input,Output}Stream classes (Jonathan Liu).
 - Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
 - Added wxTempFile::Flush().
+- Added support for wxLongLong and wxULongLong in wxVariant.
+- Added wxVector::swap().
+- Many wxLog improvements:
+ * wxLogXXX() functions are now thread-safe.
+ * Log levels can now be set independently for different log components.
+ * wxLog::DoLogRecord() has access to the location of the log message
+   (file, line and function name) and id of the thread which generated it.
+ * SetThreadActiveTarget() allows to set up thread-specific log targets.
 
 All (GUI):
 
+- Added support for showing bitmaps in wxButton.
 - wxWindow::SetAutoLayout() now works for all windows, not just panels.
 - Support wxListCtrl columns, items and image lists in XRC (Kinaou Hervé).
+- Added support for wxFileCtrl to XRC (Kinaou Hervé).
+- Added ownfg, ownbg and ownfont tags to XRC.
 - Added wxEditableListBox XRC handler.
 - Added multiple selection support to wxDirCtrl (Steve Lamerton).
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
@@ -343,8 +379,11 @@ All (GUI):
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.
 - Improve wxTreeCtrl::ScrollTo() in generic version (Raanan Barzel).
+- Added wxFont::[Make]{Bold,Italic,Smaller,Larger} and Scale[d]() methods.
 - Added wxDC::CopyAttributes() and use it in wxBufferedDC.
 - Added wxTextWrapper helper class useful for wrapping lines of text.
+- Added EVT_DATAVIEW_CACHE_HINT() event (Trigve).
+- Added wxLB_NO_SB style (implemented for MSW only; Dario Senic).
 
 GTK:
 
@@ -352,6 +391,7 @@ GTK:
 
 MSW:
 
+- Translate wxMessageDialog labels to the language of the current locale.
 - Allow changing the height of wxChoice and wxComboBox.
 - Update CRT environment block in wxSetEnv() too.
 - Fix wxMDIChildFrame::SetSize() (Lars Rosenboom).

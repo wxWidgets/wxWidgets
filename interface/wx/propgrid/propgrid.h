@@ -452,24 +452,6 @@ public:
                 const wxChar* name = wxPropertyGridNameStr );
 
     /**
-        Call when editor widget's contents is modified. For example, this is
-        called when changes text in wxTextCtrl (used in wxStringProperty and
-        wxIntProperty).
-
-        @remarks This function should only be called by custom properties.
-
-        @see wxPGProperty::OnEvent()
-    */
-    void EditorsValueWasModified();
-
-    /**
-        Reverse of EditorsValueWasModified().
-
-        @remarks This function should only be called by custom properties.
-    */
-    void EditorsValueWasNotModified();
-
-    /**
         Enables or disables (shows/hides) categories according to parameter
         enable.
 
@@ -604,14 +586,6 @@ public:
     wxColour GetMarginColour() const;
 
     /**
-        Returns most up-to-date value of selected property. This will return
-        value different from GetSelectedProperty()->GetValue() only when text
-        editor is activate and string edited by user represents valid,
-        uncommitted property value.
-    */
-    wxVariant GetUncommittedPropertyValue();
-
-    /**
         Returns "root property". It does not have name, etc. and it is not
         visible. It is only useful for accessing its children.
     */
@@ -666,11 +640,6 @@ public:
     int GetVerticalSpacing() const;
 
     /**
-        Returns true if editor's value was marked modified.
-    */
-    bool IsEditorsValueModified() const;
-
-    /**
         Returns information about arbitrary position in the grid.
 
         @param pt
@@ -698,8 +667,9 @@ public:
     bool IsFrozen() const;
 
     /**
-        Call this any time your code causes wxPropertyGrid's top-level parent
-        to change.
+        It is recommended that you call this function any time your code causes
+        wxPropertyGrid's top-level parent to change. wxPropertyGrid's OnIdle()
+        handler should be able to detect most changes, but it is not perfect.
 
         @param newTLP
             New top-level parent that is about to be set. Old top-level parent
@@ -877,10 +847,64 @@ public:
     */
     void SetVerticalSpacing( int vspacing );
 
+
+    /**
+        @name Property development functions
+
+        These member functions are usually only called when creating custom
+        user properties.
+    */
+    //@{
+
+    /**
+        Call when editor widget's contents is modified. For example, this is
+        called when changes text in wxTextCtrl (used in wxStringProperty and
+        wxIntProperty).
+
+        @remarks This function should only be called by custom properties.
+
+        @see wxPGProperty::OnEvent()
+    */
+    void EditorsValueWasModified();
+
+    /**
+        Reverse of EditorsValueWasModified().
+
+        @remarks This function should only be called by custom properties.
+    */
+    void EditorsValueWasNotModified();
+
+    /**
+        Returns most up-to-date value of selected property. This will return
+        value different from GetSelectedProperty()->GetValue() only when text
+        editor is activate and string edited by user represents valid,
+        uncommitted property value.
+    */
+    wxVariant GetUncommittedPropertyValue();
+
+    /**
+        Returns true if editor's value was marked modified.
+    */
+    bool IsEditorsValueModified() const;
+
     /**
         Shows an brief error message that is related to a property.
     */
     void ShowPropertyError( wxPGPropArg id, const wxString& msg );
+
+    /**
+        You can use this member function, for instance, to detect in
+        wxPGProperty::OnEvent() if wxPGProperty::SetValueInEvent() was
+        already called in wxPGEditor::OnEvent(). It really only detects
+        if was value was changed using wxPGProperty::SetValueInEvent(), which
+        is usually used when a 'picker' dialog is displayed. If value was
+        written by "normal means" in wxPGProperty::StringToValue() or
+        IntToValue(), then this function will return false (on the other hand,
+        wxPGProperty::OnEvent() is not even called in those cases).
+    */
+    bool WasValueChangedInEvent() const;
+
+    //@}
 };
 
 

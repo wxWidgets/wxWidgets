@@ -106,10 +106,10 @@ public:
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSRect r = [slf contentRect];
-        left = r.origin.x;
-        top = r.origin.y;
-        width = r.size.width;
-        height = r.size.height;
+        left = (int)r.origin.x;
+        top = (int)r.origin.y;
+        width = (int)r.size.width;
+        height = (int)r.size.height;
     }
     
     void SetValue( wxInt32 value ) 

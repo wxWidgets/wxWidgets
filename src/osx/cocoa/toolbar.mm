@@ -136,7 +136,7 @@ public:
         {
             // separator size
             curSize = GetToolBar()->GetToolSize();
-            if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
+            if ( GetToolBar()->GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
                 curSize.y /= 4;
             else
                 curSize.x /= 4;
@@ -716,9 +716,9 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
         }
  
         if ( width != NULL )
-            *width = windowFrame.size.width;
+            *width = (int)windowFrame.size.width;
         if ( height != NULL )
-            *height = toolbarHeight;
+            *height = (int)toolbarHeight;
     }
     else
         wxToolBarBase::DoGetSize( width, height );
@@ -790,7 +790,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
     if (usesNative && (m_macToolbar == NULL))
         return bResult;
 
-    if (usesNative && ((GetWindowStyleFlag() & wxTB_VERTICAL) != 0))
+    if (usesNative && ((GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT|wxTB_BOTTOM)) != 0))
         return bResult;
 
     WXWindow tlw = MacGetTopLevelWindowRef();
@@ -839,7 +839,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
 bool wxToolBar::Realize()
 {
-    if (m_tools.GetCount() == 0)
+    if ( !wxToolBarBase::Realize() )
         return false;
 
     int maxWidth = 0;
@@ -908,7 +908,7 @@ bool wxToolBar::Realize()
         if ( y + cursize.y > maxHeight )
             maxHeight = y + cursize.y;
 
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
         {
             int x1 = x + ( maxToolWidth - cursize.x ) / 2;
             tool->SetPosition( wxPoint(x1, y) );
@@ -920,7 +920,7 @@ bool wxToolBar::Realize()
         }
 
         // update the item positioning state
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
             y += cursize.y + kwxMacToolSpacing;
         else
             x += cursize.x + kwxMacToolSpacing;
@@ -1013,14 +1013,14 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
-    if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+    if ( GetWindowStyleFlag() & (wxTB_TOP|wxTB_BOTTOM) )
     {
         // if not set yet, only one row
         if ( m_maxRows <= 0 )
             SetRows( 1 );
 
         m_minWidth = maxWidth;
-        maxWidth = tw;
+        // maxHeight = th;
         maxHeight += m_yMargin + kwxMacToolBarTopMargin;
         m_minHeight = m_maxHeight = maxHeight;
     }
@@ -1031,7 +1031,7 @@ bool wxToolBar::Realize()
             SetRows( GetToolsCount() );
 
         m_minHeight = maxHeight;
-        maxHeight = th;
+        // maxWidth = tw;
         maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
         m_minWidth = m_maxWidth = maxWidth;
     }
@@ -1042,7 +1042,7 @@ bool wxToolBar::Realize()
         bool wantNativeToolbar, ownToolbarInstalled;
 
         // attempt to install the native toolbar
-        wantNativeToolbar = ((GetWindowStyleFlag() & wxTB_VERTICAL) == 0);
+        wantNativeToolbar = ((GetWindowStyleFlag() & (wxTB_LEFT|wxTB_BOTTOM|wxTB_RIGHT)) == 0);
         MacInstallNativeToolbar( wantNativeToolbar );
         (void)MacTopLevelHasNativeToolbar( &ownToolbarInstalled );
         if (!ownToolbarInstalled)
@@ -1205,7 +1205,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 wxASSERT( tool->GetControlHandle() == NULL );
                 toolSize.x /= 4;
                 toolSize.y /= 4;
-                if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+                if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
                     toolrect.size.height = toolSize.y;
                 else
                     toolrect.size.width = toolSize.x;
@@ -1352,7 +1352,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         wxToolBarTool *tool2 = (wxToolBarTool*) node->GetData();
         wxPoint pt = tool2->GetPosition();
 
-        if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( GetWindowStyleFlag() & (wxTB_LEFT|wxTB_RIGHT) )
             pt.y -= sz.y;
         else
             pt.x -= sz.x;

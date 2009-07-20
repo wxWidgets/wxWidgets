@@ -158,7 +158,7 @@ public:
         wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || (style & wxCANCEL),
                       "wxCANCEL_DEFAULT is invalid without wxCANCEL" );
 
-        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || !(style & wxNO),
+        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || !(style & wxNO_DEFAULT),
                       "only one default button can be specified" );
 
         m_dialogStyle = style;

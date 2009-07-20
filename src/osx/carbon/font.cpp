@@ -252,6 +252,9 @@ void wxFontRefData::Free()
 #endif
     m_cgFont.reset();
 #if wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_CARBON
+    m_macThemeFontID = kThemeCurrentPortFont ;
+#endif
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -439,7 +442,7 @@ void wxFontRefData::MacFindFont()
             kATSUQDCondensedTag ,
             kATSUQDExtendedTag ,
         };
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
         {
             sizeof( ATSUFontID ) ,
             sizeof( Fixed ) ,
@@ -457,7 +460,7 @@ void wxFontRefData::MacFindFont()
         Fixed atsuSize = IntToFixed( m_info.m_pointSize );
         ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
         FMFontStyle addQDStyle = m_info.m_atsuAdditionalQDStyles;
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
         {
             &m_info.m_atsuFontID ,
             &atsuSize ,
@@ -471,7 +474,7 @@ void wxFontRefData::MacFindFont()
 
         status = ::ATSUSetAttributes(
                                      (ATSUStyle)m_macATSUStyle,
-                                     sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
+                                     WXSIZEOF(atsuTags),
                                      atsuTags, atsuSizes, atsuValues);
 
         wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
@@ -784,7 +787,7 @@ void * wxFont::MacGetATSUStyle() const
 #if WXWIN_COMPATIBILITY_2_8
 wxUint32 wxFont::MacGetATSUFontID() const 
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
@@ -794,7 +797,7 @@ wxUint32 wxFont::MacGetATSUFontID() const
 
 wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
@@ -1055,7 +1058,10 @@ void wxNativeFontInfo::EnsureValid()
         // ATSUFontID and FMFont are equivalent
         FMFontStyle intrinsicStyle = 0 ;
         OSStatus status = FMGetFontFromFontFamilyInstance( m_qdFontFamily , m_qdFontStyle , (FMFont*)&m_atsuFontID , &intrinsicStyle);
-        wxASSERT_MSG( status == noErr , wxT("couldn't get an ATSUFont from font family") );
+        if ( status != noErr )
+        {
+            wxFAIL_MSG( wxT("couldn't get an ATSUFont from font family") );
+        }
         m_atsuAdditionalQDStyles = m_qdFontStyle & (~intrinsicStyle );
         m_atsuFontValid = true;
     }

@@ -893,7 +893,7 @@ void wxMacMLTEControl::AdjustCreationAttributes(const wxColour &background,
     } ;
 
     err = TXNSetTypeAttributes(
-        m_txn, sizeof(typeAttr) / sizeof(TXNTypeAttributes),
+        m_txn, WXSIZEOF(typeAttr),
         typeAttr, kTXNStartOffset, kTXNEndOffset );
     verify_noerr( err );
 

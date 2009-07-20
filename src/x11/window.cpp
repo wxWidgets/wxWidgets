@@ -522,7 +522,9 @@ void wxWindowX11::DoCaptureMouse()
             msg.Printf(wxT("Failed to grab pointer for window %s"), this->GetClassInfo()->GetClassName());
             wxLogDebug(msg);
             if (res == GrabNotViewable)
+            {
                 wxLogDebug( wxT("This is not a viewable window - perhaps not shown yet?") );
+            }
 
             g_captureWindow = NULL;
             return;

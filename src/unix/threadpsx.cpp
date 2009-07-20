@@ -118,7 +118,11 @@ static wxArrayThread gs_allThreads;
 static wxMutex *gs_mutexAllThreads = NULL;
 
 // the id of the main thread
-static pthread_t gs_tidMain = (pthread_t)-1;
+//
+// we suppose that 0 is not a valid pthread_t value but in principle this might
+// be false (e.g. if it's a selector-like value), wxThread::IsMain() would need
+// to be updated in such case
+wxThreadIdType wxThread::ms_idMainThread = 0;
 
 // the key for the pointer to the associated wxThread object
 static pthread_key_t gs_keySelf;
@@ -1057,11 +1061,6 @@ wxThread *wxThread::This()
     return (wxThread *)pthread_getspecific(gs_keySelf);
 }
 
-bool wxThread::IsMain()
-{
-    return (bool)pthread_equal(pthread_self(), gs_tidMain) || gs_tidMain == (pthread_t)-1;
-}
-
 void wxThread::Yield()
 {
 #ifdef HAVE_SCHED_YIELD
@@ -1110,22 +1109,10 @@ int wxThread::GetCPUCount()
     return -1;
 }
 
-// VMS is a 64 bit system and threads have 64 bit pointers.
-// FIXME: also needed for other systems????
-#ifdef __VMS
-unsigned long long wxThread::GetCurrentId()
+wxThreadIdType wxThread::GetCurrentId()
 {
-    return (unsigned long long)pthread_self();
+    return (wxThreadIdType)pthread_self();
 }
-
-#else // !__VMS
-
-unsigned long wxThread::GetCurrentId()
-{
-    return (unsigned long)pthread_self();
-}
-
-#endif // __VMS/!__VMS
 
 
 bool wxThread::SetConcurrency(size_t level)
@@ -1705,7 +1692,7 @@ bool wxThreadModule::OnInit()
         return false;
     }
 
-    gs_tidMain = pthread_self();
+    wxThread::ms_idMainThread = wxThread::GetCurrentId();
 
     gs_mutexAllThreads = new wxMutex();
 

@@ -35,6 +35,8 @@
 
 #include "wx/osx/private.h"
 
+#include <AGL/agl.h>
+
 // ----------------------------------------------------------------------------
 // wxGLCanvas
 // ----------------------------------------------------------------------------
@@ -162,8 +164,12 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
     if ( !ctx )
         return false;
 
+    WXGLContext ctxOld = WXGLGetCurrentContext();
+    WXGLSetCurrentContext(ctx);
+
     wxString extensions = wxString::FromAscii(glGetString(GL_EXTENSIONS));
 
+    WXGLSetCurrentContext(ctxOld);
     WXGLDestroyPixelFormat(fmt);
     WXGLDestroyContext(ctx);
 

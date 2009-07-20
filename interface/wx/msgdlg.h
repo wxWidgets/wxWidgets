@@ -31,10 +31,16 @@
     @style{wxOK_DEFAULT}
         Makes the "OK" button default, this is the default behaviour and
         this flag exists solely for symmetry with @c wxCANCEL_DEFAULT.
+    @style{wxICON_NONE}
+        Displays no icon in the dialog if possible (an icon might still be
+        displayed if the current platform mandates its use). This style may be
+        used to prevent the dialog from using the default icon based on @c
+        wxYES_NO presence as explained in @c wxICON_QUESTION and @c
+        wxICON_INFORMATION documentation below.
     @style{wxICON_EXCLAMATION}
-        Displays an exclamation mark symbol.
+        Displays an exclamation, or warning, icon in the dialog.
     @style{wxICON_ERROR}
-        Displays an error symbol.
+        Displays an error icon in the dialog.
     @style{wxICON_HAND}
         Displays an error symbol, this is a MSW-inspired synonym for @c wxICON_ERROR.
     @style{wxICON_QUESTION}
@@ -144,9 +150,11 @@ public:
         Also notice that this function is not currently available on all
         platforms (although as of wxWidgets 2.9.0 it is implemented in all
         major ports), so it may return @false to indicate that the labels
-        couldn't be changed. If it returns @true (currently only under wxMac),
-        the labels were set successfully. Typically, if the function was used
-        successfully, the main dialog message may need to be changed, e.g.:
+        couldn't be changed. If it returns @true, the labels were set
+        successfully.
+
+        Typically, if the function was used successfully, the main dialog
+        message may need to be changed, e.g.:
         @code
         wxMessageDialog dlg(...);
         if ( dlg.SetYesNoLabels(_("&Quit"), _("&Don't quit")) )

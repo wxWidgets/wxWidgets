@@ -18,6 +18,7 @@
 #include "wx/string.h"
 #include "wx/gdicmn.h"
 #include "wx/hashmap.h"
+#include "wx/arrstr.h"
 
 #if wxUSE_STREAMS
 #  include "wx/stream.h"

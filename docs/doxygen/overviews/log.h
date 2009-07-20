@@ -71,10 +71,12 @@ argument list pointer. Here are all of them:
     as the first argument.
 @li wxLogDebug is @b the right function for debug output. It only does anything
     at all in the debug mode (when the preprocessor symbol __WXDEBUG__ is
-    defined) and expands to nothing in release mode (otherwise). @b Tip: under
-    Windows, you must either run the program under debugger or use a 3rd party
-    program such as DebugView to actually see the debug output.
-    - DebugView: http://www.microsoft.com/technet/sysinternals/Miscellaneous/DebugView.mspx
+    defined) and expands to nothing in release mode (otherwise).
+
+    @b Tip: under Windows, you must either run the program under debugger or
+    use a 3rd party program such as DebugView
+    (http://www.microsoft.com/technet/sysinternals/Miscellaneous/DebugView.mspx)
+    to actually see the debug output.
 @li wxLogTrace as wxLogDebug only does something in debug build. The reason for
     making it a separate function from it is that usually there are a lot of
     trace messages, so it might make sense to separate them from other debug
@@ -118,10 +120,58 @@ classes are. Some of advantages in using wxWidgets log functions are:
     about data file writing error.
 
 
+@section overview_log_enable Log Messages Selection
+
+By default, most log messages are enabled. In particular, this means that
+errors logged by wxWidgets code itself (e.g. when it fails to perform some
+operation, for instance wxFile::Open() logs an error when it fails to open a
+file) will be processed and shown to the user. To disable the logging entirely
+you can use wxLog::EnableLogging() method or, more usually, wxLogNull class
+which temporarily disables logging and restores it back to the original setting
+when it is destroyed.
+
+To limit logging to important messages only, you may use wxLog::SetLogLevel()
+with e.g. wxLOG_Warning value -- this will completely disable all logging
+messages with the severity less than warnings, so wxLogMessage() output won't
+be shown to the user any more.
+
+Moreover, the log level can be set separately for different log components.
+Before showing how this can be useful, let us explain what log components are:
+they are simply arbitrary strings identifying the component, or module, which
+generated the message. They are hierarchical in the sense that "foo/bar/baz"
+component is supposed to be a child of "foo". And all components are children
+of the unnamed root component.
+
+By default, all messages logged by wxWidgets originate from "wx" component or
+one of its subcomponents such as "wx/net/ftp", while the messages logged by
+your own code are assigned empty log component. To change this, you need to
+define @c wxLOG_COMPONENT to a string uniquely identifying each component, e.g.
+you could give it the value "MyProgram" by default and re-define it as
+"MyProgram/DB" in the module working with the database and "MyProgram/DB/Trans"
+in its part managing the transactions. Then you could use
+wxLog::SetComponentLevel() in the following ways:
+    @code
+        // disable all database error messages, everybody knows databases never
+        // fail anyhow
+        wxLog::SetComponentLevel("MyProgram/DB", wxLOG_FatalError);
+
+        // but enable tracing for the transactions as somehow our changes don't
+        // get committed sometimes
+        wxLog::SetComponentLevel("MyProgram/DB/Trans", wxLOG_Trace);
+
+        // also enable tracing messages from wxWidgets dynamic module loading
+        // mechanism
+        wxLog::SetComponentLevel("wx/base/module", wxLOG_Trace);
+    @endcode
+Notice that the log level set explicitly for the transactions code overrides
+the log level of the parent component but that all other database code
+subcomponents inherit its setting by default and so won't generate any log
+messages at all.
+
 @section overview_log_targets Log Targets
 
 After having enumerated all the functions which are normally used to log the
-messages, and why would you want to use them we now describe how all this
+messages, and why would you want to use them, we now describe how all this
 works.
 
 wxWidgets has the notion of a <em>log target</em>: it is just a class deriving
@@ -133,12 +183,16 @@ the active target with a call to @e SetActiveTarget() and it will be used
 automatically by all subsequent calls to @e wxLogXXX() functions.
 
 To create a new log target class you only need to derive it from wxLog and
-implement one (or both) of @e DoLog() and @e DoLogString() in it. The second
-one is enough if you're happy with the standard wxLog message formatting
-(prepending "Error:" or "Warning:", timestamping @&c) but just want to send
-the messages somewhere else. The first one may be overridden to do whatever
-you want but you have to distinguish between the different message types
-yourself.
+override one or several of wxLog::DoLogRecord(), wxLog::DoLogTextAtLevel() and
+wxLog::DoLogText() in it. The first one is the most flexible and allows you to
+change the formatting of the messages, dynamically filter and redirect them and
+so on -- all log messages, except for those generated by wxLogFatalError(),
+pass by this function. wxLog::DoLogTextAtLevel() should be overridden if you
+simply want to redirect the log messages somewhere else, without changing their
+formatting. Finally, it is enough to override wxLog::DoLogText() if you only
+want to redirect the log messages and the destination doesn't depend on the
+message log level.
+
 
 There are some predefined classes deriving from wxLog and which might be
 helpful to see how you can create a new log target class and, of course, may
@@ -203,6 +257,25 @@ automatically switches to using wxLogStderr if it isn't.
 
 The dialog sample illustrates this approach by defining a custom log target
 customizing the dialog used by wxLogGui for the single messages.
+
+
+@section overview_log_mt Logging in Multi-Threaded Applications
+
+Starting with wxWidgets 2.9.1, logging functions can be safely called from any
+thread. Messages logged from threads other than the main one will be buffered
+until wxLog::Flush() is called in the main thread (which usually happens during
+idle time, i.e. after processing all pending events) and will be really output
+only then. Notice that the default GUI logger already only output the messages
+when it is flushed, so by default messages from the other threads will be shown
+more or less at the same moment as usual. However if you define a custom log
+target, messages may be logged out of order, e.g. messages from the main thread
+with later timestamp may appear before messages with earlier timestamp logged
+from other threads. wxLog does however guarantee that messages logged by each
+thread will appear in order in which they were logged.
+
+Also notice that wxLog::EnableLogging() and wxLogNull class which uses it only
+affect the current thread, i.e. logging messages may still be generated by the
+other threads after a call to @c EnableLogging(false).
 
 */
 

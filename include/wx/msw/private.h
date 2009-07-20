@@ -368,7 +368,9 @@ inline RECT wxGetWindowRect(HWND hwnd)
     RECT rect;
 
     if ( !::GetWindowRect(hwnd, &rect) )
+    {
         wxLogLastError(_T("GetWindowRect"));
+    }
 
     return rect;
 }
@@ -378,7 +380,9 @@ inline RECT wxGetClientRect(HWND hwnd)
     RECT rect;
 
     if ( !::GetClientRect(hwnd, &rect) )
+    {
         wxLogLastError(_T("GetClientRect"));
+    }
 
     return rect;
 }
@@ -570,7 +574,9 @@ public:
         : m_hdc(hdc)
     {
         if ( !::SelectClipRgn(hdc, hrgn) )
+        {
             wxLogLastError(_T("SelectClipRgn"));
+        }
     }
 
     ~HDCClipper()
@@ -599,7 +605,9 @@ private:
         {
             m_modeOld = ::SetMapMode(hdc, mm);
             if ( !m_modeOld )
+            {
                 wxLogLastError(_T("SelectClipRgn"));
+            }
         }
 
         ~HDCMapModeChanger()
@@ -634,7 +642,9 @@ public:
     {
         m_hGlobal = ::GlobalAlloc(flags, size);
         if ( !m_hGlobal )
+        {
             wxLogLastError(_T("GlobalAlloc"));
+        }
     }
 
     GlobalPtr(size_t size, unsigned flags = GMEM_MOVEABLE)
@@ -645,7 +655,9 @@ public:
     ~GlobalPtr()
     {
         if ( m_hGlobal && ::GlobalFree(m_hGlobal) )
+        {
             wxLogLastError(_T("GlobalFree"));
+        }
     }
 
     // implicit conversion
@@ -681,7 +693,9 @@ public:
         //     global scope operator with it (and neither with GlobalUnlock())
         m_ptr = GlobalLock(hGlobal);
         if ( !m_ptr )
+        {
             wxLogLastError(_T("GlobalLock"));
+        }
     }
 
     // initialize the object, HGLOBAL must not be NULL
@@ -799,7 +813,7 @@ private:
 #define GetHbrushOf(brush)      ((HBRUSH)(brush).GetResourceHandle())
 
 #define GetHmenu()              ((HMENU)GetHMenu())
-#define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
+#define GetHmenuOf(menu)        ((HMENU)(menu)->GetHMenu())
 
 #define GetHcursor()            ((HCURSOR)GetHCURSOR())
 #define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
@@ -808,7 +822,7 @@ private:
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
 #define GetHimagelist()         ((HIMAGELIST)GetHIMAGELIST())
-#define GetHimagelistOf(imgl)   ((HIMAGELIST)imgl->GetHIMAGELIST())
+#define GetHimagelistOf(imgl)   ((HIMAGELIST)(imgl)->GetHIMAGELIST())
 
 #define GetHpalette()           ((HPALETTE)GetHPALETTE())
 #define GetHpaletteOf(pal)      ((HPALETTE)(pal).GetHPALETTE())

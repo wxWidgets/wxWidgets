@@ -9,16 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_BUTTON_H_
-#define _WX_BUTTON_H_
+#ifndef _WX_OSX_BUTTON_H_
+#define _WX_OSX_BUTTON_H_
 
 #include "wx/control.h"
 #include "wx/gdicmn.h"
 
-WXDLLIMPEXP_DATA_CORE(extern const char) wxButtonNameStr[];
-
 // Pushbutton
-class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
     wxButton() {}
@@ -45,20 +43,28 @@ public:
 
     static wxSize GetDefaultSize();
 
+    virtual void SetLabel(const wxString& label);
     virtual wxWindow *SetDefault();
     virtual void Command(wxCommandEvent& event);
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;
 
+#if wxOSX_USE_COCOA
+    virtual wxBitmap DoGetBitmap(State which) const;
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+    virtual void DoSetBitmapPosition(wxDirection dir);
+#endif // wxOSX_USE_COCOA
+
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
-class WXDLLIMPEXP_CORE wxDisclosureTriangle: public wxControl
+// OS X specific class, not part of public wx API
+class WXDLLIMPEXP_CORE wxDisclosureTriangle : public wxControl
 {
 public:
     wxDisclosureTriangle(wxWindow *parent,
@@ -86,13 +92,12 @@ public:
     bool IsOpen() const;
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;
-    
+
 };
 
-#endif
-    // _WX_BUTTON_H_
+#endif // _WX_OSX_BUTTON_H_

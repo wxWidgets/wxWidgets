@@ -38,7 +38,7 @@
 
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
-WX_DECLARE_HASH_MAP(unsigned long, wxMSWTimerImpl *, wxIntegerHash, wxIntegerEqual,
+WX_DECLARE_HASH_MAP(WPARAM, wxMSWTimerImpl *, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
 // instead of using a global here, wrap it in a static function as otherwise it
@@ -173,7 +173,7 @@ LRESULT APIENTRY _EXPORT wxTimerWndProc(HWND hWnd, UINT message,
 {
     if ( message == WM_TIMER )
     {
-        wxTimerMap::iterator node = TimerMap().find((unsigned long)wParam);
+        wxTimerMap::iterator node = TimerMap().find(wParam);
 
         wxCHECK_MSG( node != TimerMap().end(), 0, wxT("bogus timer id in wxTimerProc") );
 

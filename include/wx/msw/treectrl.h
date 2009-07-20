@@ -127,6 +127,7 @@ public:
     virtual wxTreeItemId GetRootItem() const;
     virtual wxTreeItemId GetSelection() const;
     virtual size_t GetSelections(wxArrayTreeItemIds& selections) const;
+    virtual wxTreeItemId GetFocusedItem() const;
 
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item,

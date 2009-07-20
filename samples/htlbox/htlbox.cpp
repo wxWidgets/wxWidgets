@@ -541,7 +541,9 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
         }
 
         if ( !s.empty() )
+        {
             wxLogMessage(_T("Selected items: %s"), s.c_str());
+        }
     }
 
 #if wxUSE_STATUSBAR

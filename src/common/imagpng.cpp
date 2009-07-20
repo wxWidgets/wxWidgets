@@ -165,7 +165,9 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
     if ( !info || info->verbose )
+    {
         wxLogWarning( wxString::FromAscii(message) );
+    }
 }
 
 // from pngerror.c
@@ -608,7 +610,9 @@ wxPNGHandler::LoadFile(wxImage *image,
 
 error:
     if (verbose)
+    {
        wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
+    }
 
     if ( image->Ok() )
     {
@@ -657,7 +661,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     if (!png_ptr)
     {
         if (verbose)
+        {
            wxLogError(_("Couldn't save PNG image."));
+        }
         return false;
     }
 
@@ -666,7 +672,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     {
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
         if (verbose)
+        {
            wxLogError(_("Couldn't save PNG image."));
+        }
         return false;
     }
 
@@ -674,7 +682,9 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     {
         png_destroy_write_struct( &png_ptr, (png_infopp)NULL );
         if (verbose)
+        {
            wxLogError(_("Couldn't save PNG image."));
+        }
         return false;
     }
 

@@ -74,7 +74,7 @@ public:
     return this->m_NativeDataPtr;
   }
 
-  virtual bool Render() = 0; // a call to the native data browser function to render the data;
+  virtual bool MacRender() = 0; // a call to the native data browser function to render the data;
                              // returns true if the data value could be rendered, false otherwise
 
   void SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr);
@@ -150,7 +150,7 @@ public:
 //
 // implementation
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
   void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
 
@@ -184,7 +184,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -222,7 +222,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -247,7 +247,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 //
 // implementation
@@ -283,7 +283,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -302,7 +302,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -322,7 +322,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -341,7 +341,7 @@ public:
 //
 // inherited functions from wxDataViewRenderer
 //
-  virtual bool Render();
+  virtual bool MacRender();
 
 protected:
 private:
@@ -405,6 +405,10 @@ public:
     void SetWidthVariable(int NewWidth)
     {
         m_width = NewWidth;
+    }
+    void SetSortOrderVariable(bool NewOrder)
+    {
+        m_ascending = NewOrder;
     }
 
 private:

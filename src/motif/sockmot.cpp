@@ -23,7 +23,7 @@ extern "C" {
 static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
                                  XtInputId *WXUNUSED(id))
 {
-    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
+    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
 
     handler->OnReadWaiting();
 }
@@ -31,7 +31,7 @@ static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
 static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *WXUNUSED(id))
 {
-    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
+    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
 
     handler->OnWriteWaiting();
 }
@@ -41,7 +41,7 @@ static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
 class MotifSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
+    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d)
     {
         return XtAppAddInput
                (

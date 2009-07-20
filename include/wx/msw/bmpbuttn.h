@@ -44,20 +44,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
-    // override some base class methods to automatically synthesize the
-    // disabled bitmap if it wasn't set by the user
-    virtual void SetBitmapLabel(const wxBitmap& bitmap);
-    virtual void SetBitmapFocus(const wxBitmap& focus);
-    virtual void SetBitmapDisabled(const wxBitmap& disabled);
-    virtual void SetBitmapHover(const wxBitmap& hover);
-
-    // Implementation
-    virtual bool SetBackgroundColour(const wxColour& colour);
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-    virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-
 protected:
     // common part of all ctors
     void Init()
@@ -67,25 +53,14 @@ protected:
     }
 
     // reimplement some base class virtuals
-    virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
 
-
-    // invalidate m_brushDisabled when system colours change
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // change the currently bitmap if we have a hover one
-    void OnMouseEnterOrLeave(wxMouseEvent& event);
-
-
-    // the brush we use to draw disabled buttons
-    wxBrush m_brushDisabled;
-
-    // true if m_bmpDisabled was set by user, false if we created it ourselves
-    // from m_bmpNormal
+    // true if disabled bitmap was set by user, false if we created it
+    // ourselves from the normal one
     bool m_disabledSetByUser;
 
-    // true if m_bmpHover was set by user, false if it was set from m_bmpFocus
+    // true if hover bitmap was set by user, false if it was set from focused
+    // one
     bool m_hoverSetByUser;
 
 
