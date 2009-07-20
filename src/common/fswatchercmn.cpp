@@ -55,12 +55,6 @@ wxFileSystemWatcherBase::wxFileSystemWatcherBase() :
 
 wxFileSystemWatcherBase::~wxFileSystemWatcherBase()
 {
-    wxFSWatchEntries::iterator it = m_watches.begin();
-    for ( ; it != m_watches.end(); ++it )
-    {
-       wxASSERT(it->second);
-       delete it->second;
-    }
 }
 
 bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
@@ -71,14 +65,18 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
     wxFileName path2 = path;
     if ( !path2.Normalize() )
     {
-        wxCHECK_MSG(0, false, wxString::Format("Unable to normalize path '%s'",
-                                                        path2.GetFullPath()));
+        wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
+                                                path2.GetFullPath()));
+        return false;
     }
 
     wxString canonical = path2.GetFullPath();
     wxCHECK_MSG(m_watches.find(canonical) == m_watches.end(), false,
                     wxString::Format("path %s is already watched", canonical));
 
+    // XXX now that I see it, it should be different structure
+    // than wxFSWatchEntry and then subclasses would delete wxFSWatchEntry
+    // and this class would own these other structures
     wxFSWatchEntry* watch = CreateWatch(path2, events);
     if (!DoAdd(*watch)) {
         delete watch;
@@ -110,10 +108,7 @@ bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
     // remove
     wxFSWatchEntry* watch = it->second;
     m_watches.erase(it);
-    bool ret = DoRemove(*watch);
-    delete watch;
-
-    return ret;
+    return DoRemove(*watch);
 }
 
 bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
@@ -159,13 +154,10 @@ bool wxFileSystemWatcherBase::RemoveAll()
     wxFSWatchEntries::iterator it = m_watches.begin();
     for ( ; it != m_watches.end(); ++it)
     {
-    	wxFSWatchEntry* watch = it->second;
-
     	// ignore return, we want to remove as much as possible
-    	DoRemove(*watch);
-
-    	delete watch;
+    	(void) DoRemove(*(it->second));
     }
+    m_watches.clear();
 
     return true;
 }

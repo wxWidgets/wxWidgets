@@ -168,6 +168,7 @@ public:
         {
             wxFAIL_MSG( wxString::Format("Path %s is already watched",
                                             watch->GetPath().GetFullPath()) );
+            return false;
         }
 
         return true;
@@ -192,12 +193,15 @@ public:
         }
         watch->SetWatchDescriptor(-1);
 
+        // now it is our responsibility
+        delete watch;
+
         return true;
     }
 
     int ReadEvents()
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( m_source.IsOk(), -1,
                     "Inotify not initialized or invalid inotify descriptor" );
 
         // read events
@@ -320,7 +324,7 @@ protected:
         int flags = Native2WatcherFlags(e.mask);
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
-            wxString errMsg = GetErrorDescription(flags);
+            wxString errMsg = GetErrorDescription(Watcher2NativeFlags(flags));
             wxFileSystemWatcherEvent event(flags, errMsg);
             SendEvent(event);
         }
@@ -522,6 +526,9 @@ bool wxInotifyFileSystemWatcher::Init()
 
 wxInotifyFileSystemWatcher::~wxInotifyFileSystemWatcher()
 {
+    // it is subclass resposibility to remove all paths - we own wxFSWatchEntry
+    // structures
+    RemoveAll();
     delete m_service;
 }
 
