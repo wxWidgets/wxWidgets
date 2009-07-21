@@ -19,7 +19,7 @@
 // wxEventLoopSource: source of i/o for wxEventLoop
 // ----------------------------------------------------------------------------
 
-#define wxTRACE_Event_Source "EventSource"
+#define wxTRACE_EVT_SOURCE "EventSource"
 
 #if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
 

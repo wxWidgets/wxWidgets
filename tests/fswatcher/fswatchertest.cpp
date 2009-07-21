@@ -164,13 +164,9 @@ public:
         static int ALFA_CNT = 'z' - 'a';
 
         wxString s;
-        int i = 0;
-        for ( ; i < length; ++i)
+        for (int i = 0 ; i < length; ++i)
         {
             char c = 'a' + (rand() % ALFA_CNT);
-
-            // XXX when done this way it doesn't work with wxFileName ctor!
-            // s[i] = c;
             s += c;
         }
 
@@ -200,32 +196,24 @@ public:
         eg(EventGenerator::Get()), m_loop(0), m_count(0), m_watcher(0)
     {
         m_loop = new wxEventLoop();
-        Bind(wxEVT_IDLE, &EventHandler::OnIdle, this);
-        Bind(wxEVT_FSWATCHER, &EventHandler::OnFileSystemEvent, this);
+        Connect(wxEVT_IDLE, wxIdleEventHandler(EventHandler::OnIdle));
+        Connect(wxEVT_FSWATCHER, wxFileSystemWatcherEventHandler(
+    										EventHandler::OnFileSystemEvent));
     }
 
     virtual ~EventHandler()
     {
-        if (m_watcher)
             delete m_watcher;
-        if (m_loop) {
+        if (m_loop)
+        {
             if (m_loop->IsRunning())
                 m_loop->Exit();
             delete m_loop;
         }
-
-        // XXX we need this hack, because it gets messy with every other loop
     }
 
     void Exit()
     {
-        // needed here to unregister source from loop before destroying it
-//        if (m_watcher)
-//        {
-//            delete m_watcher;
-//            m_watcher = 0;
-//        }
-
         m_loop->Exit();
     }
 
