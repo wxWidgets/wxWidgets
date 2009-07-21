@@ -115,6 +115,8 @@ wxAppInitializerFunction wxAppConsoleBase::ms_appInitFn = NULL;
 
 wxSocketManager *wxAppTraitsBase::ms_manager = NULL;
 
+WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
+
 // ----------------------------------------------------------------------------
 // wxEventLoopPtr
 // ----------------------------------------------------------------------------
@@ -341,6 +343,13 @@ bool wxAppConsoleBase::ProcessIdle()
     return event.MoreRequested();
 }
 
+bool wxAppConsoleBase::UsesEventLoop() const
+{
+    // in console applications we don't know whether we're going to have an
+    // event loop so assume we won't -- unless we already have one running
+    return wxEventLoopBase::GetActive() != NULL;
+}
+
 // ----------------------------------------------------------------------------
 // events
 // ----------------------------------------------------------------------------
@@ -433,43 +442,46 @@ void wxAppConsoleBase::ResumeProcessingOfPendingEvents()
 
 void wxAppConsoleBase::ProcessPendingEvents()
 {
-    if (!m_bDoPendingEventProcessing)
-        return;
-
-    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
-
-    wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
-                 "this helper list should be empty" );
-
-    // iterate until the list becomes empty: the handlers remove themselves
-    // from it when they don't have any more pending events
-    while (!m_handlersWithPendingEvents.IsEmpty())
+    if ( m_bDoPendingEventProcessing )
     {
-        // In ProcessPendingEvents(), new handlers might be added
-        // and we can safely leave the critical section here.
-        wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
-
-        // NOTE: we always call ProcessPendingEvents() on the first event handler
-        //       with pending events because handlers auto-remove themselves
-        //       from this list (see RemovePendingEventHandler) if they have no
-        //       more pending events.
-        m_handlersWithPendingEvents[0]->ProcessPendingEvents();
-
         wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+        wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
+                     "this helper list should be empty" );
+
+        // iterate until the list becomes empty: the handlers remove themselves
+        // from it when they don't have any more pending events
+        while (!m_handlersWithPendingEvents.IsEmpty())
+        {
+            // In ProcessPendingEvents(), new handlers might be added
+            // and we can safely leave the critical section here.
+            wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+            // NOTE: we always call ProcessPendingEvents() on the first event handler
+            //       with pending events because handlers auto-remove themselves
+            //       from this list (see RemovePendingEventHandler) if they have no
+            //       more pending events.
+            m_handlersWithPendingEvents[0]->ProcessPendingEvents();
+
+            wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+        }
+
+        // now the wxHandlersWithPendingEvents is surely empty; however some event
+        // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
+        // because of a selective wxYield call in progress.
+        // Now we need to move them back to wxHandlersWithPendingEvents so the next
+        // call to this function has the chance of processing them:
+        if (!m_handlersWithPendingDelayedEvents.IsEmpty())
+        {
+            WX_APPEND_ARRAY(m_handlersWithPendingEvents, m_handlersWithPendingDelayedEvents);
+            m_handlersWithPendingDelayedEvents.Clear();
+        }
+
+        wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
     }
 
-    // now the wxHandlersWithPendingEvents is surely empty; however some event
-    // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
-    // because of a selective wxYield call in progress.
-    // Now we need to move them back to wxHandlersWithPendingEvents so the next
-    // call to this function has the chance of processing them:
-    if (!m_handlersWithPendingDelayedEvents.IsEmpty())
-    {
-        WX_APPEND_ARRAY(m_handlersWithPendingEvents, m_handlersWithPendingDelayedEvents);
-        m_handlersWithPendingDelayedEvents.Clear();
-    }
-
-    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+    // Garbage collect all objects previously scheduled for destruction.
+    DeletePendingObjects();
 }
 
 void wxAppConsoleBase::DeletePendingEvents()
@@ -485,6 +497,50 @@ void wxAppConsoleBase::DeletePendingEvents()
     m_handlersWithPendingEvents.Clear();
 
     wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+// ----------------------------------------------------------------------------
+// delayed objects destruction
+// ----------------------------------------------------------------------------
+
+bool wxAppConsoleBase::IsScheduledForDestruction(wxObject *object) const
+{
+    return wxPendingDelete.Member(object);
+}
+
+void wxAppConsoleBase::ScheduleForDestruction(wxObject *object)
+{
+    if ( !UsesEventLoop() )
+    {
+        // we won't be able to delete it later so do it right now
+        delete object;
+        return;
+    }
+    //else: we either already have or will soon start an event loop
+
+    if ( !wxPendingDelete.Member(object) )
+        wxPendingDelete.Append(object);
+}
+
+void wxAppConsoleBase::DeletePendingObjects()
+{
+    wxList::compatibility_iterator node = wxPendingDelete.GetFirst();
+    while (node)
+    {
+        wxObject *obj = node->GetData();
+
+        // remove it from the list first so that if we get back here somehow
+        // during the object deletion (e.g. wxYield called from its dtor) we
+        // wouldn't try to delete it the second time
+        if ( wxPendingDelete.Member(obj) )
+            wxPendingDelete.Erase(node);
+
+        delete obj;
+
+        // Deleting one object may have deleted other pending
+        // objects, so start from beginning of list again.
+        node = wxPendingDelete.GetFirst();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -736,16 +792,6 @@ bool wxConsoleAppTraitsBase::HasStderr()
 {
     // console applications always have stderr, even under Mac/Windows
     return true;
-}
-
-void wxConsoleAppTraitsBase::ScheduleForDestroy(wxObject *object)
-{
-    delete object;
-}
-
-void wxConsoleAppTraitsBase::RemoveFromPendingDelete(wxObject * WXUNUSED(object))
-{
-    // nothing to do
 }
 
 // ----------------------------------------------------------------------------

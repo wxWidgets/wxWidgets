@@ -695,6 +695,11 @@ void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
     connection->m_sock->Notify(false);
     connection->m_sock->Close();
 
+    // don't leave references to this soon-to-be-dangling connection in the
+    // socket as it won't be destroyed immediately as its destruction will be
+    // delayed in case there are more events pending for it
+    connection->m_sock->SetClientData(NULL);
+
     connection->SetConnected(false);
     connection->OnDisconnect();
 }

@@ -53,6 +53,15 @@ enum
 };
 
 // ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// use of this list is strongly deprecated, use wxApp ScheduleForDestruction()
+// and IsScheduledForDestruction()  methods instead of this list directly, it
+// is here for compatibility purposes only
+extern WXDLLIMPEXP_DATA_BASE(wxList) wxPendingDelete;
+
+// ----------------------------------------------------------------------------
 // wxAppConsoleBase: wxApp for non-GUI applications
 // ----------------------------------------------------------------------------
 
@@ -317,8 +326,27 @@ public:
     void DeletePendingEvents();
 
 
-    // wxEventLoop redirections
-    // ------------------------
+    // delayed destruction
+    // -------------------
+
+    // If an object may have pending events for it, it shouldn't be deleted
+    // immediately as this would result in a crash when trying to handle these
+    // events: instead, it should be scheduled for destruction and really
+    // destroyed only after processing all pending events.
+    //
+    // Notice that this is only possible if we have a running event loop,
+    // otherwise the object is just deleted directly by ScheduleForDestruction()
+    // and IsScheduledForDestruction() always returns false.
+
+    // schedule the object for destruction in the near future
+    void ScheduleForDestruction(wxObject *object);
+
+    // return true if the object is scheduled for destruction
+    bool IsScheduledForDestruction(wxObject *object) const;
+
+
+    // wxEventLoop-related methods
+    // ---------------------------
 
     // all these functions are forwarded to the corresponding methods of the
     // currently active event loop -- and do nothing if there is none
@@ -339,6 +367,12 @@ public:
     // derived class you should call the base class version to ensure that idle
     // events are still sent out
     virtual bool ProcessIdle();
+
+    // this virtual function is overridden in GUI wxApp to always return true
+    // as GUI applications always have an event loop -- but console ones may
+    // have it or not, so it simply returns true if already have an event loop
+    // running but false otherwise
+    virtual bool UsesEventLoop() const;
 
 
     // debugging support
@@ -401,6 +435,11 @@ public:
 #endif
 
 protected:
+    // delete all objects in wxPendingDelete list
+    //
+    // called from ProcessPendingEvents()
+    void DeletePendingObjects();
+
     // the function which creates the traits object when GetTraits() needs it
     // for the first time
     virtual wxAppTraits *CreateTraits();
@@ -527,6 +566,9 @@ public:
         // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
+        // override base class version: GUI apps always use an event loop
+    virtual bool UsesEventLoop() const { return true; }
+
 
     // top level window functions
     // --------------------------
@@ -608,9 +650,6 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
-    // delete all objects in wxPendingDelete list
-    void DeletePendingObjects();
-
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits();
 

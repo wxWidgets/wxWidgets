@@ -841,12 +841,6 @@ wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
 
 wxSocketBase::~wxSocketBase()
 {
-    // Just in case the app called Destroy() *and* then deleted the socket
-    // immediately: don't leave dangling pointers.
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( traits )
-        traits->RemoveFromPendingDelete(this);
-
     // Shutdown and close the socket
     if (!m_beingDeleted)
         Close();
@@ -855,8 +849,7 @@ wxSocketBase::~wxSocketBase()
     delete m_impl;
 
     // Free the pushback buffer
-    if (m_unread)
-        free(m_unread);
+    free(m_unread);
 }
 
 bool wxSocketBase::Destroy()
@@ -872,14 +865,13 @@ bool wxSocketBase::Destroy()
     // Suppress events from now on
     Notify(false);
 
-    // schedule this object for deletion
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( traits )
+    // Schedule this object for deletion instead of destroying it right now if
+    // possible as we may have other events pending for it
+    if ( wxTheApp )
     {
-        // let the traits object decide what to do with us
-        traits->ScheduleForDestroy(this);
+        wxTheApp->ScheduleForDestruction(this);
     }
-    else // no app or no traits
+    else // no app
     {
         // in wxBase we might have no app object at all, don't leak memory
         delete this;

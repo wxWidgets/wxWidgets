@@ -111,6 +111,20 @@ public:
                              wxEventFunction func,
                              wxEvent& event) const;
 
+    /**
+        Returns @true if the application is using an event loop.
+
+        This function always returns @true for the GUI applications which
+        must use an event loop but by default only returns @true for the
+        console programs if an event loop is already running as it can't know
+        whether one will be created in the future.
+
+        Thus, it only makes sense to override it in console applications which
+        do use an event loop, to return @true instead of checking if there is a
+        currently active event loop.
+     */
+    virtual bool UsesEventLoop() const;
+
     //@}
 
 
@@ -129,19 +143,19 @@ public:
 
         This happens during each event loop iteration (see wxEventLoopBase) in GUI mode but
         it may be also called directly.
-        
+
         Note that this function does not only process the pending events for the wxApp object
         itself (which derives from wxEvtHandler) but also the pending events for @e any
         event handler of this application.
-        
+
         This function will immediately return and do nothing if SuspendProcessingOfPendingEvents()
         was called.
     */
     virtual void ProcessPendingEvents();
-    
+
     /**
         Deletes the pending events of all wxEvtHandlers of this application.
-        
+
         See wxEvtHandler::DeletePendingEvents() for warnings about deleting the pending
         events.
     */
@@ -149,9 +163,9 @@ public:
 
     /**
         Returns @true if there are pending events on the internal pending event list.
-        
+
         Whenever wxEvtHandler::QueueEvent or wxEvtHandler::AddPendingEvent() are
-        called (not only for wxApp itself, but for any event handler of the application!), 
+        called (not only for wxApp itself, but for any event handler of the application!),
         the internal wxApp's list of handlers with pending events is updated and this
         function will return true.
     */
@@ -169,6 +183,40 @@ public:
         call to SuspendProcessingOfPendingEvents().
     */
     void ResumeProcessingOfPendingEvents();
+
+    //@}
+
+    /**
+        Delayed objects destruction.
+
+        In applications using events it may be unsafe for an event handler to
+        delete the object which generated the event because more events may be
+        still pending for the same object. In this case the handler may call
+        ScheduleForDestruction() instead.
+     */
+    //@{
+
+    /**
+        Schedule the object for destruction in the near future.
+
+        Notice that if the application is not using an event loop, i.e. if
+        UsesEventLoop() returns @false, this method will simply delete the
+        object immediately.
+
+        Examples of using this function inside wxWidgets itself include
+        deleting the top level windows when they are closed and sockets when
+        they are disconnected.
+     */
+    void ScheduleForDestruction(wxObject *object);
+
+    /**
+        Check if the object had been scheduled for destruction with
+        ScheduleForDestruction().
+
+        This function may be useful as an optimization to avoid doing something
+        with an object which will be soon destroyed in any case.
+     */
+    bool IsScheduledForDestruction(wxObject *object) const;
 
     //@}
 
