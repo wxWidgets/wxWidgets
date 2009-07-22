@@ -1540,15 +1540,12 @@ wxString wxEmptyString;
 
     @code
         wxString theAnswer;
-        wxStringBuffer theAnswerBuffer(theAnswer, 1024);
+        wxStringBufferLength theAnswerBuffer(theAnswer, 1024);
         int nLength = GetMeaningOfLifeAsString(theAnswerBuffer);
         theAnswerBuffer.SetLength(nLength);
         if ( theAnswer != "42" )
             wxLogError("Something is very wrong!");
     @endcode
-
-    @todo
-        the example above does not make use of wxStringBufferLength??
 
     Note that the exact usage of this depends on whether or not wxUSE_STL is
     enabled. If wxUSE_STL is enabled, wxStringBuffer creates a separate empty
