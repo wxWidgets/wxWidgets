@@ -1085,6 +1085,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('d'):       // day of a month (01-31)
+            case 'e':           // day of a month (1-31) (GNU extension)
                 if ( !GetNumericToken(width, input, end, &num) ||
                         (num > 31) || (num < 1) )
                 {
