@@ -18,7 +18,12 @@
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
-    wxTextEntry() { }
+    wxTextEntry()
+    {
+#if wxUSE_OLE
+        m_enumStrings = NULL;
+#endif // wxUSE_OLE
+    }
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text);
@@ -74,6 +79,11 @@ protected:
 private:
     // implement this to return the HWND of the EDIT control
     virtual WXHWND GetEditHWND() const = 0;
+
+#if wxUSE_OLE
+    // enumerator for strings currently used for auto-completion or NULL
+    class wxIEnumString *m_enumStrings;
+#endif // wxUSE_OLE
 };
 
 #endif // _WX_MSW_TEXTENTRY_H_

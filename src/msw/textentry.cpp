@@ -79,6 +79,12 @@ public:
         m_index = 0;
     }
 
+    void ChangeStrings(const wxArrayString& strings)
+    {
+        m_strings = strings;
+        Reset();
+    }
+
     DECLARE_IUNKNOWN_METHODS;
 
     virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
@@ -156,7 +162,7 @@ private:
     virtual ~wxIEnumString() { }
 
 
-    const wxArrayString m_strings;
+    wxArrayString m_strings;
     unsigned m_index;
 
     wxDECLARE_NO_COPY_CLASS(wxIEnumString);
@@ -334,6 +340,14 @@ bool wxTextEntry::AutoCompleteFileNames()
 bool wxTextEntry::AutoComplete(const wxArrayString& choices)
 {
 #ifdef HAS_AUTOCOMPLETE
+    // if we had an old enumerator we must reuse it as IAutoComplete doesn't
+    // free it if we call Init() again (see #10968) -- and it's also simpler
+    if ( m_enumStrings )
+    {
+        m_enumStrings->ChangeStrings(choices);
+        return true;
+    }
+
     // create an object exposing IAutoComplete interface (don't go for
     // IAutoComplete2 immediately as, presumably, it might be not available on
     // older systems as otherwise why do we have both -- although in practice I
@@ -354,10 +368,10 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     }
 
     // associate it with our strings
-    wxIEnumString *pEnumString = new wxIEnumString(choices);
-    pEnumString->AddRef();
-    hr = pAutoComplete->Init(GetEditHwnd(), pEnumString, NULL, NULL);
-    pEnumString->Release();
+    m_enumStrings = new wxIEnumString(choices);
+    m_enumStrings->AddRef();
+    hr = pAutoComplete->Init(GetEditHwnd(), m_enumStrings, NULL, NULL);
+    m_enumStrings->Release();
     if ( FAILED(hr) )
     {
         wxLogApiError(_T("IAutoComplete::Init"), hr);
