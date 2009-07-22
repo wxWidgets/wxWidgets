@@ -786,6 +786,14 @@ void DateTimeTestCase::TestTimeFormat()
     CPPUNIT_ASSERT_EQUAL( 1856, dt.GetYear() );
 #endif
 
+    // also test %l separately
+    CPPUNIT_ASSERT( dt.ParseFormat("12:23:45.678", "%H:%M:%S.%l") );
+    CPPUNIT_ASSERT_EQUAL( 678, dt.GetMillisecond() );
+
+    // test special case of %l matching 0 milliseconds
+    CPPUNIT_ASSERT( dt.ParseFormat("12:23:45.000", "%H:%M:%S.%l") );
+    CPPUNIT_ASSERT_EQUAL( 0, dt.GetMillisecond() );
+
     // test partially specified dates too
     wxDateTime dtDef(26, wxDateTime::Sep, 2008);
     CPPUNIT_ASSERT( dt.ParseFormat("17", "%d") );
