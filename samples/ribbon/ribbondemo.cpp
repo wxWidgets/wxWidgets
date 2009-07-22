@@ -20,8 +20,10 @@
 #include "wx/textctrl.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
+#include "wx/ribbon/gallery.h"
 #include "wx/sizer.h"
 #include "wx/menu.h"
+#include "wx/dcbuffer.h"
 
 // -- application --
 
@@ -66,6 +68,8 @@ public:
 
 protected:
     void AddText(wxString msg);
+    void AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
+        wxMemoryDC& dc);
 
     wxRibbonBar* m_ribbon;
     wxTextCtrl* m_logwindow;
@@ -141,11 +145,16 @@ MyFrame::MyFrame()
         wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
         new wxRibbonPanel(insert, wxID_ANY, wxT("Pages"));
         new wxRibbonPanel(insert, wxID_ANY, wxT("Tables"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Illustrations"));
+        wxRibbonPanel *colours_panel = new wxRibbonPanel(insert, wxID_ANY, wxT("Colours"));
+        wxRibbonGallery *colours_gallery = new wxRibbonGallery(colours_panel, wxID_ANY);
+        wxMemoryDC tmp_dc;
+        AddColourToGallery(colours_gallery, "BLUE", tmp_dc);
+        AddColourToGallery(colours_gallery, "GOLDENROD", tmp_dc);
+        AddColourToGallery(colours_gallery, "MAROON", tmp_dc);
+        AddColourToGallery(colours_gallery, "TURQUOISE", tmp_dc);
+        AddColourToGallery(colours_gallery, "WHEAT", tmp_dc);
         new wxRibbonPanel(insert, wxID_ANY, wxT("Links"));
         new wxRibbonPanel(insert, wxID_ANY, wxT("Header & Footer"));
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Text"));
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Symbols"));
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Page Layout"));
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("References"));
@@ -230,4 +239,24 @@ void MyFrame::AddText(wxString msg)
     m_logwindow->AppendText(msg);
     m_logwindow->AppendText(wxT("\n"));
     m_logwindow->SetFocus();
+}
+
+void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
+                                 wxMemoryDC& dc)
+{
+    wxColour c(colour);
+    if(c.IsOk())
+    {
+        wxBitmap bitmap(64, 48);
+        dc.SelectObject(bitmap);
+        wxBrush b(c);
+        dc.SetPen(*wxBLACK_PEN);
+        dc.SetBrush(b);
+        dc.DrawRectangle(0, 0, 64, 48);
+        wxSize size = dc.GetTextExtent(colour);
+        dc.SetTextForeground(wxColour(~c.Red(), ~c.Green(), ~c.Blue()));
+        dc.DrawText(colour, (64 - size.GetWidth()) / 2, (48 - size.GetHeight()) / 2);
+
+        gallery->Append(bitmap, wxID_ANY);
+    }
 }

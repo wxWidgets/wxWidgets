@@ -1323,6 +1323,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_bar.obj \
 	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
+	$(OBJS)\ribbondll_gallery.obj \
 	$(OBJS)\ribbondll_page.obj \
 	$(OBJS)\ribbondll_panel.obj
 RIBBONLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1342,6 +1343,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_bar.obj \
 	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
+	$(OBJS)\ribbonlib_gallery.obj \
 	$(OBJS)\ribbonlib_page.obj \
 	$(OBJS)\ribbonlib_panel.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_424)$(__DEBUGRUNTIME) /DWIN32 \
@@ -14607,6 +14609,9 @@ $(OBJS)\ribbondll_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
 $(OBJS)\ribbondll_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\control.cpp
 
+$(OBJS)\ribbondll_gallery.obj: ..\..\src\ribbon\gallery.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
+
 $(OBJS)\ribbondll_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
@@ -14627,6 +14632,9 @@ $(OBJS)\ribbonlib_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
 
 $(OBJS)\ribbonlib_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\control.cpp
+
+$(OBJS)\ribbonlib_gallery.obj: ..\..\src\ribbon\gallery.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
 
 $(OBJS)\ribbonlib_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\page.cpp

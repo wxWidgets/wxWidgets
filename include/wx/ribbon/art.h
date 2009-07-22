@@ -25,6 +25,10 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE,
     wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE,
     wxRIBBON_ART_PANEL_LABEL_FONT,
     wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
@@ -34,6 +38,7 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BORDER_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -93,6 +98,7 @@ enum wxRibbonScrollButtonStyle
 
 class wxRibbonPage;
 class wxRibbonPanel;
+class wxRibbonGallery;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 enum wxRibbonButtonBarButtonKind;
@@ -147,6 +153,11 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect) = 0;
 
+    virtual void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect) = 0;
+
     virtual void DrawMinimisedPanel(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
@@ -199,6 +210,20 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) = 0;
+
+    virtual wxSize GetGallerySize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize client_size) = 0;
+
+    virtual wxSize GetGalleryClientSize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize size,
+                        wxPoint* client_offset,
+                        wxRect* scroll_up_button,
+                        wxRect* scroll_down_button,
+                        wxRect* extension_button) = 0;
 
     virtual wxRect GetPageBackgroundRedrawArea(
                         wxDC& dc,
@@ -273,6 +298,11 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect);
 
+    void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect);
+
     void DrawMinimisedPanel(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
@@ -325,6 +355,20 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset);
+
+    wxSize GetGallerySize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize client_size);
+
+    wxSize GetGalleryClientSize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize size,
+                        wxPoint* client_offset,
+                        wxRect* scroll_up_button,
+                        wxRect* scroll_down_button,
+                        wxRect* extension_button);
 
     wxRect GetPageBackgroundRedrawArea(
                         wxDC& dc,
@@ -404,6 +448,7 @@ protected:
     wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_tab_border_pen;
     wxPen m_button_bar_hover_border_pen;
+    wxPen m_gallery_border_pen;
     double m_cached_tab_separator_visibility;
     long m_flags;
     int m_tab_separation_size;
@@ -413,6 +458,10 @@ protected:
     int m_page_border_bottom;
     int m_panel_x_separation_size;
     int m_panel_y_separation_size;
+    int m_gallery_bitmap_padding_left_size;
+    int m_gallery_bitmap_padding_right_size;
+    int m_gallery_bitmap_padding_top_size;
+    int m_gallery_bitmap_padding_bottom_size;
 };
 
 #if defined(__WXMSW__)

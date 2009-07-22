@@ -21,6 +21,7 @@
 
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
+#include "wx/ribbon/gallery.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -77,6 +78,7 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_panel_minimised_border_pen = wxPen(wxColour(165, 191, 213));
     m_panel_minimised_border_gradient_pen = wxPen(wxColour(148, 185, 213));
     m_page_border_pen = wxPen(wxColour(141, 178, 227));
+    m_gallery_border_pen = wxPen(wxColour(185, 208, 237));
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
     m_tab_separation_size = 3;
@@ -86,6 +88,10 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_page_border_bottom = 3;
     m_panel_x_separation_size = 1;
     m_panel_y_separation_size = 1;
+    m_gallery_bitmap_padding_left_size = 4;
+    m_gallery_bitmap_padding_right_size = 4;
+    m_gallery_bitmap_padding_top_size = 4;
+    m_gallery_bitmap_padding_bottom_size = 4;
 }
 
 wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
@@ -137,6 +143,7 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_panel_minimised_border_pen = m_panel_minimised_border_pen;
     copy->m_panel_minimised_border_gradient_pen = m_panel_minimised_border_gradient_pen;
     copy->m_tab_border_pen = m_tab_border_pen;
+    copy->m_gallery_border_pen = m_gallery_border_pen;
     copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
     copy->m_flags = m_flags;
     copy->m_tab_separation_size = m_tab_separation_size;
@@ -146,6 +153,10 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_page_border_bottom = m_page_border_bottom;
     copy->m_panel_x_separation_size = m_panel_x_separation_size;
     copy->m_panel_y_separation_size = m_panel_y_separation_size;
+    copy->m_gallery_bitmap_padding_left_size = m_gallery_bitmap_padding_left_size;
+    copy->m_gallery_bitmap_padding_right_size = m_gallery_bitmap_padding_right_size;
+    copy->m_gallery_bitmap_padding_top_size = m_gallery_bitmap_padding_top_size;
+    copy->m_gallery_bitmap_padding_bottom_size = m_gallery_bitmap_padding_bottom_size;
 
     return copy;
 }
@@ -171,6 +182,10 @@ int wxRibbonMSWArtProvider::GetMetric(int id)
         case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: return m_page_border_bottom;
         case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: return m_panel_x_separation_size;
         case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: return m_panel_y_separation_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE: return m_gallery_bitmap_padding_left_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE: return m_gallery_bitmap_padding_right_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE: return m_gallery_bitmap_padding_top_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE: return m_gallery_bitmap_padding_bottom_size;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 
@@ -188,6 +203,10 @@ void wxRibbonMSWArtProvider::SetMetric(int id, int new_val)
         case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: m_page_border_bottom = new_val;
         case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: m_panel_x_separation_size = new_val;
         case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: m_panel_y_separation_size = new_val;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE: m_gallery_bitmap_padding_left_size = new_val;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE: m_gallery_bitmap_padding_right_size = new_val;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE: m_gallery_bitmap_padding_top_size = new_val;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE: m_gallery_bitmap_padding_bottom_size = new_val;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 }
@@ -226,6 +245,7 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id)
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: return m_button_bar_hover_background_top_gradient_colour;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: return m_button_bar_hover_background_colour;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_button_bar_hover_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BORDER_COLOUR: return m_gallery_border_pen.GetColour();
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: return m_tab_ctrl_background_brush.GetColour();
         case wxRIBBON_ART_TAB_LABEL_COLOUR: return m_tab_label_colour;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: return m_tab_separator_colour;
@@ -275,6 +295,7 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: m_button_bar_hover_background_top_gradient_colour = colour;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: m_button_bar_hover_background_colour = colour;
         case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: m_button_bar_hover_background_gradient_colour = colour;
+        case wxRIBBON_ART_GALLERY_BORDER_COLOUR: m_gallery_border_pen.SetColour(colour);
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: m_tab_ctrl_background_brush.SetColour(colour);
         case wxRIBBON_ART_TAB_LABEL_COLOUR: m_tab_label_colour = colour;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: m_tab_separator_colour = colour;
@@ -871,6 +892,25 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
     DrawPanelBorder(dc, true_rect, m_panel_border_pen, m_panel_border_gradient_pen);
 }
 
+void wxRibbonMSWArtProvider::DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect)
+{
+    DrawPartialPageBackground(dc, wnd, rect);
+
+    dc.SetPen(m_gallery_border_pen);
+    dc.DrawLine(rect.x + 1, rect.y, rect.x + rect.width - 1, rect.y);
+    dc.DrawLine(rect.x, rect.y + 1, rect.x, rect.y + rect.height - 1);
+    dc.DrawLine(rect.x + 1, rect.y + rect.height - 1, rect.x + rect.width - 1,
+        rect.y + rect.height - 1);
+    dc.DrawLine(rect.x + rect.width - 1, rect.y + 1, rect.x + rect.width - 1,
+        rect.y + rect.height - 1);
+
+    dc.DrawLine(rect.x + rect.width - 16, rect.y, rect.x + rect.width - 16,
+        rect.y + rect.height);
+}
+
 void wxRibbonMSWArtProvider::DrawPanelBorder(wxDC& dc, const wxRect& rect,
                                              wxPen& primary_colour,
                                              wxPen& secondary_colour)
@@ -1409,6 +1449,55 @@ wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
         *client_offset = wxPoint(3, 2);
     }
 
+    return size;
+}
+
+wxSize wxRibbonMSWArtProvider::GetGallerySize(
+                        wxDC& WXUNUSED(dc),
+                        const wxRibbonGallery* WXUNUSED(wnd),
+                        wxSize client_size)
+{
+    client_size.IncBy( 2, 2); // Left / top padding
+    client_size.IncBy(16, 2); // Right / bototm padding
+    return client_size;
+}
+
+wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
+                        wxDC& WXUNUSED(dc),
+                        const wxRibbonGallery* WXUNUSED(wnd),
+                        wxSize size,
+                        wxPoint* client_offset,
+                        wxRect* scroll_up_button,
+                        wxRect* scroll_down_button,
+                        wxRect* extension_button)
+{
+    wxRect scroll_up;
+    scroll_up.x = size.GetWidth() - 15;
+    scroll_up.width = 15;
+    scroll_up.y = 0;
+    scroll_up.height = (size.GetHeight() + 2) / 3;
+    wxRect scroll_down;
+    scroll_down.x = scroll_up.x;
+    scroll_down.width = scroll_up.width;
+    scroll_down.y = scroll_up.y + scroll_up.height;
+    scroll_down.height = scroll_up.height;
+    wxRect extension;
+    extension.x = scroll_down.x;
+    extension.width = scroll_down.width;
+    extension.y = scroll_down.y + scroll_down.height;
+    extension.height = size.GetHeight() - scroll_up.height - scroll_down.height;
+    
+    if(client_offset != NULL)
+        *client_offset = wxPoint(2, 2);
+    if(scroll_up_button != NULL)
+        *scroll_up_button = scroll_up;
+    if(scroll_down_button != NULL)
+        *scroll_down_button = scroll_down;
+    if(extension_button != NULL)
+        *extension_button = extension;
+
+    size.DecBy( 2, 2);
+    size.DecBy(16, 2);
     return size;
 }
 

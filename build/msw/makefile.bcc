@@ -1238,6 +1238,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_bar.obj \
 	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
+	$(OBJS)\ribbondll_gallery.obj \
 	$(OBJS)\ribbondll_page.obj \
 	$(OBJS)\ribbondll_panel.obj
 RIBBONLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
@@ -1254,6 +1255,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_bar.obj \
 	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
+	$(OBJS)\ribbonlib_gallery.obj \
 	$(OBJS)\ribbonlib_page.obj \
 	$(OBJS)\ribbonlib_panel.obj
 PROPGRIDDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
@@ -14245,6 +14247,9 @@ $(OBJS)\ribbondll_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
 $(OBJS)\ribbondll_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\control.cpp
 
+$(OBJS)\ribbondll_gallery.obj: ..\..\src\ribbon\gallery.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
+
 $(OBJS)\ribbondll_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
@@ -14265,6 +14270,9 @@ $(OBJS)\ribbonlib_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
 
 $(OBJS)\ribbonlib_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\control.cpp
+
+$(OBJS)\ribbonlib_gallery.obj: ..\..\src\ribbon\gallery.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
 
 $(OBJS)\ribbonlib_page.obj: ..\..\src\ribbon\page.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\page.cpp

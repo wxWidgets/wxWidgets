@@ -3406,6 +3406,7 @@ src/osx/iphone/window.mm
     src/ribbon/bar.cpp
     src/ribbon/buttonbar.cpp
     src/ribbon/control.cpp
+    src/ribbon/gallery.cpp
     src/ribbon/page.cpp
     src/ribbon/panel.cpp
 </set>
@@ -3414,6 +3415,7 @@ src/osx/iphone/window.mm
     wx/ribbon/bar.h
     wx/ribbon/buttonbar.h
     wx/ribbon/control.h
+    wx/ribbon/gallery.h
     wx/ribbon/page.h
     wx/ribbon/panel.h
 </set>

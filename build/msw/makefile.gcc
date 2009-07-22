@@ -1244,6 +1244,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_bar.o \
 	$(OBJS)\ribbondll_buttonbar.o \
 	$(OBJS)\ribbondll_control.o \
+	$(OBJS)\ribbondll_gallery.o \
 	$(OBJS)\ribbondll_page.o \
 	$(OBJS)\ribbondll_panel.o
 RIBBONLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
@@ -1260,6 +1261,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_bar.o \
 	$(OBJS)\ribbonlib_buttonbar.o \
 	$(OBJS)\ribbonlib_control.o \
+	$(OBJS)\ribbonlib_gallery.o \
 	$(OBJS)\ribbonlib_page.o \
 	$(OBJS)\ribbonlib_panel.o
 PROPGRIDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
@@ -14857,6 +14859,9 @@ $(OBJS)\ribbondll_buttonbar.o: ../../src/ribbon/buttonbar.cpp
 $(OBJS)\ribbondll_control.o: ../../src/ribbon/control.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\ribbondll_gallery.o: ../../src/ribbon/gallery.cpp
+	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\ribbondll_page.o: ../../src/ribbon/page.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14876,6 +14881,9 @@ $(OBJS)\ribbonlib_buttonbar.o: ../../src/ribbon/buttonbar.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_control.o: ../../src/ribbon/control.cpp
+	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbonlib_gallery.o: ../../src/ribbon/gallery.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_page.o: ../../src/ribbon/page.cpp

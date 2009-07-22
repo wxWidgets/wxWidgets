@@ -1059,6 +1059,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\gallery.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\page.h"
 				>
 			</File>
@@ -1086,6 +1090,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\ribbon\control.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\ribbon\gallery.cpp"
 				>
 			</File>
 			<File

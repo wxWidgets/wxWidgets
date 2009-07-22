@@ -1723,6 +1723,7 @@ RIBBONDLL_OBJECTS =  \
 	ribbondll_bar.o \
 	ribbondll_buttonbar.o \
 	ribbondll_control.o \
+	ribbondll_gallery.o \
 	ribbondll_page.o \
 	ribbondll_panel.o
 RIBBONDLL_ODEP =  $(_____pch_wxprec_ribbondll_wx_wxprec_h_gch___depname)
@@ -1736,6 +1737,7 @@ RIBBONLIB_OBJECTS =  \
 	ribbonlib_bar.o \
 	ribbonlib_buttonbar.o \
 	ribbonlib_control.o \
+	ribbonlib_gallery.o \
 	ribbonlib_page.o \
 	ribbonlib_panel.o
 RIBBONLIB_ODEP =  $(_____pch_wxprec_ribbonlib_wx_wxprec_h_gch___depname)
@@ -32845,6 +32847,9 @@ ribbondll_buttonbar.o: $(srcdir)/src/ribbon/buttonbar.cpp $(RIBBONDLL_ODEP)
 ribbondll_control.o: $(srcdir)/src/ribbon/control.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
 
+ribbondll_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/gallery.cpp
+
 ribbondll_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
 
@@ -32862,6 +32867,9 @@ ribbonlib_buttonbar.o: $(srcdir)/src/ribbon/buttonbar.cpp $(RIBBONLIB_ODEP)
 
 ribbonlib_control.o: $(srcdir)/src/ribbon/control.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
+
+ribbonlib_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/gallery.cpp
 
 ribbonlib_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
