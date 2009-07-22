@@ -20,8 +20,7 @@
     #include "wx/log.h"
 #endif
 
-#include <objc/objc-runtime.h>
-
+#include <objc/runtime.h>
 
 WXWidget wxWidgetImpl::FindFocus()
 {
