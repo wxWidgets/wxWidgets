@@ -121,6 +121,7 @@ All (GUI):
 
 wxMSW:
 
+- Fixed crash when copying Unicode URLs to the clipboard (Tim Kosse).
 - Fixed generation of wxEVT_CHAR_HOOK events.
 - Implement wxFileName::SetTimes() for directories (Steve Lamerton).
 - Correct wxTopLevelWindow::SetShape() for windows with menu bar (Peter Friis).
