@@ -127,13 +127,19 @@ static const wxChar eUSERNAME[]  = wxT("UserName");
 // ----------------------------------------------------------------------------
 
 // Get hostname only (without domain name)
-bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
-                   int WXUNUSED_IN_WINCE(maxSize))
+bool wxGetHostName(wxChar *buf, int maxSize)
 {
 #if defined(__WXWINCE__)
-    // TODO-CE
-    return false;
-#else
+    // GetComputerName() is not supported but the name seems to be stored in
+    // this location in the registry, at least for PPC2003 and WM5
+    wxString hostName;
+    wxRegKey regKey(wxRegKey::HKLM, wxT("Ident"));
+    if ( !regKey.HasValue(wxT("Name")) ||
+            !regKey.QueryValue(wxT("Name"), hostName) )
+        return false;
+
+    wxStrlcpy(buf, hostName.wx_str(), maxSize);
+#else // !__WXWINCE__
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -141,9 +147,9 @@ bool wxGetHostName(wxChar *WXUNUSED_IN_WINCE(buf),
 
         return false;
     }
+#endif // __WXWINCE__/!__WXWINCE__
 
     return true;
-#endif
 }
 
 // get full hostname (with domain name if possible)
