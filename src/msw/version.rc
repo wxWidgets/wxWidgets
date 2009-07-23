@@ -25,10 +25,14 @@
     #define DLL_FLAGS 0x0L
 #endif
 
+// 0x0409 is US English, 0x04b0 is Unicode and 0x0000 is 7 bit ASCII. see
+// http://msdn.microsoft.com/en-us/library/aa381049(VS.85).aspx for the full
+// list of languages and charsets
+#define LANG "0409"
 #ifdef _UNICODE
-    #define LANG "040904b0"
+    #define CHARSET "04b0"
 #else
-    #define LANG "04090000"
+    #define CHARSET "0000"
 #endif
 
 1 VERSIONINFO
@@ -42,7 +46,7 @@
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK LANG
+        BLOCK LANG CHARSET
         BEGIN
             VALUE "Comments", "wxWidgets cross-platform GUI framework\0"
             VALUE "CompanyName", "wxWidgets development team\0"
@@ -57,5 +61,9 @@ BEGIN
             VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"
             VALUE "SpecialBuild", "\0"
         END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+            VALUE "Translation", LANG, CHARSET
     END
 END
