@@ -959,15 +959,17 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
             m_imageData = new wxODButtonImageData(this, bitmap);
             MakeOwnerDrawn();
         }
-
-        // if a bitmap was assigned to the bitmap, its best size must be
-        // changed to account for it
-        InvalidateBestSize();
     }
     else
     {
         m_imageData->SetBitmap(bitmap, which);
     }
+
+    // it should be enough to only invalidate the best size when the normal
+    // bitmap changes as all bitmaps assigned to the button should be of the
+    // same size anyhow
+    if ( which == State_Normal )
+        InvalidateBestSize();
 
     Refresh();
 }
