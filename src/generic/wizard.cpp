@@ -369,8 +369,8 @@ void wxWizard::AddStaticLine(wxBoxSizer *mainColumn)
 void wxWizard::AddBackNextPair(wxBoxSizer *buttonRow)
 {
     wxASSERT_MSG( m_btnNext && m_btnPrev,
-                  _T("You must create the buttons before calling ")
-                  _T("wxWizard::AddBackNextPair") );
+                  wxT("You must create the buttons before calling ")
+                  wxT("wxWizard::AddBackNextPair") );
 
     // margin between Back and Next buttons
 #ifdef __WXMAC__
@@ -778,7 +778,7 @@ void wxWizard::OnBackOrNext(wxCommandEvent& event)
                   (event.GetEventObject() == m_btnPrev),
                   wxT("unknown button") );
 
-    wxCHECK_RET( m_page, _T("should have a valid current page") );
+    wxCHECK_RET( m_page, wxT("should have a valid current page") );
 
     // ask the current page first: notice that we do it before calling
     // GetNext/Prev() because the data transfered from the controls of the page

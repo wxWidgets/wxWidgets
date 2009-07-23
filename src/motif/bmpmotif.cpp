@@ -36,7 +36,7 @@ Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
 static inline wxCharBuffer GetCacheImageName(WXImage image)
 {
-    return wxString::Format(_T("wxBitmap_%p"), image).ToAscii();
+    return wxString::Format(wxT("wxBitmap_%p"), image).ToAscii();
 }
 
 wxBitmapCache::~wxBitmapCache()

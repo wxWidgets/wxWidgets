@@ -579,7 +579,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     /* should find it for normal (not popup) menu */
     wxASSERT_MSG( (id != -1) || (menu->GetInvokingWindow() != NULL),
-                  _T("menu item not found in gtk_menu_clicked_callback") );
+                  wxT("menu item not found in gtk_menu_clicked_callback") );
 
     if (!menu->IsEnabled(id))
         return;
@@ -902,7 +902,7 @@ void wxMenuItem::Check( bool check )
             break;
 
         default:
-            wxFAIL_MSG( _T("can't check this item") );
+            wxFAIL_MSG( wxT("can't check this item") );
     }
 }
 
@@ -1037,7 +1037,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             }
 
             default:
-                wxFAIL_MSG( _T("unexpected menu item kind") );
+                wxFAIL_MSG( wxT("unexpected menu item kind") );
                 // fall through
 
             case wxITEM_NORMAL:

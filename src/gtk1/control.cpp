@@ -134,7 +134,7 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
     {
         wxChar ch = label[i];
 
-        if ( ch == _T('&') )
+        if ( ch == wxT('&') )
         {
             if ( i == len - 1 )
             {
@@ -144,7 +144,7 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
             }
 
             ch = label[++i]; // skip '&' itself
-            if ( ch == _T('&') )
+            if ( ch == wxT('&') )
             {
                 // special case: "&&" is not a mnemonic at all but just an
                 // escaped "&"

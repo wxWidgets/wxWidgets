@@ -935,7 +935,7 @@ void wxToolBar::SetRows(
   int                               nRows
 )
 {
-    wxCHECK_RET( nRows != 0, _T("max number of rows must be > 0") );
+    wxCHECK_RET( nRows != 0, wxT("max number of rows must be > 0") );
 
     m_maxCols = (GetToolsCount() + nRows - 1) / nRows;
     Refresh();

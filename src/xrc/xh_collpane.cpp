@@ -73,11 +73,11 @@ wxObject *wxCollapsiblePaneXmlHandler::DoCreateResource()
                     GetID(),
                     label,
                     GetPosition(), GetSize(),
-                    GetStyle(_T("style"), wxCP_DEFAULT_STYLE),
+                    GetStyle(wxT("style"), wxCP_DEFAULT_STYLE),
                     wxDefaultValidator,
                     GetName());
 
-        ctrl->Collapse(GetBool(_T("collapsed")));
+        ctrl->Collapse(GetBool(wxT("collapsed")));
         SetupWindow(ctrl);
 
         wxCollapsiblePane *old_par = m_collpane;

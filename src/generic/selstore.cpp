@@ -84,7 +84,7 @@ bool wxSelectionStore::SelectRange(unsigned itemFrom, unsigned itemTo,
     // change state
     static const unsigned MANY_ITEMS = 100;
 
-    wxASSERT_MSG( itemFrom <= itemTo, _T("should be in order") );
+    wxASSERT_MSG( itemFrom <= itemTo, wxT("should be in order") );
 
     // are we going to have more [un]selected items than the other ones?
     if ( itemTo - itemFrom > m_count/2 )
@@ -208,7 +208,7 @@ void wxSelectionStore::OnItemDelete(unsigned item)
     while ( i < count )
     {
         // all following elements must be greater than the one we deleted
-        wxASSERT_MSG( m_itemsSel[i] > item, _T("logic error") );
+        wxASSERT_MSG( m_itemsSel[i] > item, wxT("logic error") );
 
         m_itemsSel[i++]--;
     }

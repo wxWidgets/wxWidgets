@@ -423,7 +423,7 @@ void wxMSWButton::UpdateMultilineStyle(HWND hwnd, const wxString& label)
     // the control unless it already has new lines in its label)
     long styleOld = ::GetWindowLong(hwnd, GWL_STYLE),
          styleNew;
-    if ( label.find(_T('\n')) != wxString::npos )
+    if ( label.find(wxT('\n')) != wxString::npos )
         styleNew = styleOld | BS_MULTILINE;
     else
         styleNew = styleOld & ~BS_MULTILINE;
@@ -509,7 +509,7 @@ bool wxButton::Create(wxWindow *parent,
     //     value and the label is not set yet when MSWGetStyle() is called
     msStyle |= wxMSWButton::GetMultilineStyle(label);
 
-    return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
+    return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, exstyle);
 }
 
 wxButton::~wxButton()
@@ -743,10 +743,10 @@ static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
         win = parent;
     }
 
-    wxASSERT_MSG( win, _T("button without top level parent?") );
+    wxASSERT_MSG( win, wxT("button without top level parent?") );
 
     wxTopLevelWindow * const tlw = wxDynamicCast(win, wxTopLevelWindow);
-    wxASSERT_MSG( tlw, _T("logic error in GetTLWParentIfNotBeingDeleted()") );
+    wxASSERT_MSG( tlw, wxT("logic error in GetTLWParentIfNotBeingDeleted()") );
 
     return tlw;
 }
@@ -798,7 +798,7 @@ wxButton::SetDefaultStyle(wxButton *btn, bool on)
             return;
 
         wxWindow * const tlw = wxGetTopLevelParent(btn);
-        wxCHECK_RET( tlw, _T("button without top level window?") );
+        wxCHECK_RET( tlw, wxT("button without top level window?") );
 
         ::SendMessage(GetHwndOf(tlw), DM_SETDEFID, btn->GetId(), 0L);
 
@@ -1030,7 +1030,7 @@ void DrawButtonText(HDC hdc,
     // center text horizontally in any case
     flags |= DT_CENTER;
 
-    if ( text.find(_T('\n')) != wxString::npos )
+    if ( text.find(wxT('\n')) != wxString::npos )
     {
         // draw multiline label
 

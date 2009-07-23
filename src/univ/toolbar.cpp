@@ -260,7 +260,7 @@ void wxToolBar::SetToolShortHelp(int id, const wxString& help)
 {
     wxToolBarToolBase *tool = FindById(id);
 
-    wxCHECK_RET( tool, _T("SetToolShortHelp: no such tool") );
+    wxCHECK_RET( tool, wxT("SetToolShortHelp: no such tool") );
 
     tool->SetShortHelp(help);
 }
@@ -344,7 +344,7 @@ wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
 
     wxRect rect;
 
-    wxCHECK_MSG( tool, rect, _T("GetToolRect: NULL tool") );
+    wxCHECK_MSG( tool, rect, wxT("GetToolRect: NULL tool") );
 
     // ensure that we always have the valid tool position
     if ( m_needsLayout )
@@ -463,7 +463,7 @@ void wxToolBar::SetWindowStyleFlag( long style )
 
 void wxToolBar::DoLayout()
 {
-    wxASSERT_MSG( m_needsLayout, _T("why are we called?") );
+    wxASSERT_MSG( m_needsLayout, wxT("why are we called?") );
 
     m_needsLayout = false;
 
@@ -604,7 +604,7 @@ void wxToolBar::GetRectLimits(const wxRect& rect,
                               wxCoord *start,
                               wxCoord *end) const
 {
-    wxCHECK_RET( start && end, _T("NULL pointer in GetRectLimits") );
+    wxCHECK_RET( start && end, wxT("NULL pointer in GetRectLimits") );
 
     if ( IsVertical() )
     {
@@ -744,7 +744,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_PRESS )
     {
-        wxLogTrace(_T("toolbar"), _T("Button '%s' pressed."), tool->GetShortHelp().c_str());
+        wxLogTrace(wxT("toolbar"), wxT("Button '%s' pressed."), tool->GetShortHelp().c_str());
 
         tool->Invert();
 
@@ -752,9 +752,9 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_RELEASE )
     {
-        wxLogTrace(_T("toolbar"), _T("Button '%s' released."), tool->GetShortHelp().c_str());
+        wxLogTrace(wxT("toolbar"), wxT("Button '%s' released."), tool->GetShortHelp().c_str());
 
-        wxASSERT_MSG( tool->IsInverted(), _T("release unpressed button?") );
+        wxASSERT_MSG( tool->IsInverted(), wxT("release unpressed button?") );
 
         if(tool->IsInverted())
         {
@@ -790,7 +790,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_ENTER )
     {
-        wxCHECK_MSG( tool, false, _T("no tool to enter?") );
+        wxCHECK_MSG( tool, false, wxT("no tool to enter?") );
 
         if ( HasFlag(wxTB_FLAT) && tool->IsEnabled() )
         {
@@ -802,7 +802,7 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
     }
     else if ( action == wxACTION_TOOLBAR_LEAVE )
     {
-        wxCHECK_MSG( tool, false, _T("no tool to leave?") );
+        wxCHECK_MSG( tool, false, wxT("no tool to leave?") );
 
         if ( HasFlag(wxTB_FLAT) && tool->IsEnabled() )
         {

@@ -250,7 +250,7 @@ public:
 
    virtual void Notify()
    {
-       wxLogTrace(_T("dialup"), wxT("Checking dial up network status."));
+       wxLogTrace(wxT("dialup"), wxT("Checking dial up network status."));
 
        m_dupman->CheckStatus();
    }
@@ -292,15 +292,15 @@ wxDialUpManagerImpl::wxDialUpManagerImpl()
    m_BeaconPort = 80;
 
 #ifdef __SGI__
-   m_ConnectCommand = _T("/usr/etc/ppp");
+   m_ConnectCommand = wxT("/usr/etc/ppp");
 #elif defined(__LINUX__)
    // default values for Debian/GNU linux
-   m_ConnectCommand = _T("pon");
-   m_HangUpCommand = _T("poff");
+   m_ConnectCommand = wxT("pon");
+   m_HangUpCommand = wxT("poff");
 #endif
 
-   wxChar * dial = wxGetenv(_T("WXDIALUP_DIALCMD"));
-   wxChar * hup = wxGetenv(_T("WXDIALUP_HUPCMD"));
+   wxChar * dial = wxGetenv(wxT("WXDIALUP_DIALCMD"));
+   wxChar * hup = wxGetenv(wxT("WXDIALUP_HUPCMD"));
    SetConnectCommand(dial ? wxString(dial) : m_ConnectCommand,
                      hup ? wxString(hup) : m_HangUpCommand);
 }
@@ -509,7 +509,7 @@ void wxDialUpManagerImpl::CheckStatusInternal()
             break;
 
         default:
-            wxFAIL_MSG(_T("Unexpected netDeviceType"));
+            wxFAIL_MSG(wxT("Unexpected netDeviceType"));
     }
 }
 
@@ -597,7 +597,7 @@ wxDialUpManagerImpl::CheckProcNet()
     int netDevice = NetDevice_Unknown;
 
 #ifdef __LINUX__
-    if (wxFileExists(_T("/proc/net/route")))
+    if (wxFileExists(wxT("/proc/net/route")))
     {
         // cannot use wxFile::Length because file doesn't support seeking, so
         // use stdio directly
@@ -647,16 +647,16 @@ wxDialUpManagerImpl::CheckIfconfig()
     {
         static const wxChar *ifconfigLocations[] =
         {
-            _T("/sbin"),         // Linux, FreeBSD, Darwin
-            _T("/usr/sbin"),     // SunOS, Solaris, AIX, HP-UX
-            _T("/usr/etc"),      // IRIX
-            _T("/etc"),          // AIX 5
+            wxT("/sbin"),         // Linux, FreeBSD, Darwin
+            wxT("/usr/sbin"),     // SunOS, Solaris, AIX, HP-UX
+            wxT("/usr/etc"),      // IRIX
+            wxT("/etc"),          // AIX 5
         };
 
         for ( size_t n = 0; n < WXSIZEOF(ifconfigLocations); n++ )
         {
             wxString path(ifconfigLocations[n]);
-            path << _T("/ifconfig");
+            path << wxT("/ifconfig");
 
             if ( wxFileExists(path) )
             {
@@ -671,7 +671,7 @@ wxDialUpManagerImpl::CheckIfconfig()
         wxLogNull ln; // suppress all error messages
 
         wxASSERT_MSG( m_IfconfigPath.length(),
-                      _T("can't use ifconfig if it wasn't found") );
+                      wxT("can't use ifconfig if it wasn't found") );
 
         wxString tmpfile = wxFileName::CreateTempFileName( wxT("_wxdialuptest") );
         wxString cmd = wxT("/bin/sh -c \'");
@@ -767,9 +767,9 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
         if (wxFileExists( wxT("SYS$SYSTEM:TCPIP$PING.EXE") ))
             m_PingPath = wxT("$SYS$SYSTEM:TCPIP$PING");
 #elif defined(__AIX__)
-        m_PingPath = _T("/etc/ping");
+        m_PingPath = wxT("/etc/ping");
 #elif defined(__SGI__)
-        m_PingPath = _T("/usr/etc/ping");
+        m_PingPath = wxT("/usr/etc/ping");
 #else
         if (wxFileExists( wxT("/bin/ping") ))
             m_PingPath = wxT("/bin/ping");

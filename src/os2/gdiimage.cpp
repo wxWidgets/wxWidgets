@@ -42,7 +42,7 @@ WX_DEFINE_LIST(wxGDIImageHandlerList)
 class WXDLLEXPORT wxBMPFileHandler : public wxBitmapHandler
 {
 public:
-    wxBMPFileHandler() : wxBitmapHandler(_T("Windows bitmap file"), _T("bmp"),
+    wxBMPFileHandler() : wxBitmapHandler(wxT("Windows bitmap file"), wxT("bmp"),
                                          wxBITMAP_TYPE_BMP)
     {
     }
@@ -81,7 +81,7 @@ private:
 class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
 {
 public:
-    wxBMPResourceHandler() : wxBitmapHandler(_T("Windows bitmap resource"),
+    wxBMPResourceHandler() : wxBitmapHandler(wxT("Windows bitmap resource"),
                                              wxEmptyString,
                                              wxBITMAP_TYPE_BMP_RESOURCE)
     {
@@ -139,7 +139,7 @@ public:
                      )
     {
         wxIcon*                     pIcon = wxDynamicCast(pImage, wxIcon);
-        wxCHECK_MSG(pIcon, false, _T("wxIconHandler only works with icons"));
+        wxCHECK_MSG(pIcon, false, wxT("wxIconHandler only works with icons"));
 
         return LoadIcon( pIcon
                         ,rName
@@ -172,8 +172,8 @@ private:
 class WXDLLEXPORT wxICOFileHandler : public wxIconHandler
 {
 public:
-    wxICOFileHandler() : wxIconHandler(_T("ICO icon file"),
-                                       _T("ico"),
+    wxICOFileHandler() : wxIconHandler(wxT("ICO icon file"),
+                                       wxT("ico"),
                                        wxBITMAP_TYPE_ICO)
     {
     }
@@ -193,8 +193,8 @@ private:
 class WXDLLEXPORT wxICOResourceHandler: public wxIconHandler
 {
 public:
-    wxICOResourceHandler() : wxIconHandler(_T("ICO resource"),
-                                           _T("ico"),
+    wxICOResourceHandler() : wxIconHandler(wxT("ICO resource"),
+                                           wxT("ico"),
                                            wxBITMAP_TYPE_ICO_RESOURCE)
     {
     }

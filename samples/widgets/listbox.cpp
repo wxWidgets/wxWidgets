@@ -225,7 +225,7 @@ END_EVENT_TABLE()
     #define FAMILY_CTRLS NATIVE_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, _T("Listbox"),
+IMPLEMENT_WIDGETS_PAGE(ListboxWidgetsPage, wxT("Listbox"),
                        FAMILY_CTRLS | WITH_ITEMS_CTRLS
                        );
 
@@ -259,17 +259,17 @@ void ListboxWidgetsPage::CreateContent()
 
     // left pane
     wxStaticBox *box = new wxStaticBox(this, wxID_ANY,
-        _T("&Set listbox parameters"));
+        wxT("&Set listbox parameters"));
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     static const wxString modes[] =
     {
-        _T("single"),
-        _T("extended"),
-        _T("multiple"),
+        wxT("single"),
+        wxT("extended"),
+        wxT("multiple"),
     };
 
-    m_radioSelMode = new wxRadioBox(this, wxID_ANY, _T("Selection &mode:"),
+    m_radioSelMode = new wxRadioBox(this, wxID_ANY, wxT("Selection &mode:"),
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(modes), modes,
                                     1, wxRA_SPECIFY_COLS);
@@ -277,69 +277,69 @@ void ListboxWidgetsPage::CreateContent()
     m_chkVScroll = CreateCheckBoxAndAddToSizer
                    (
                     sizerLeft,
-                    _T("Always show &vertical scrollbar")
+                    wxT("Always show &vertical scrollbar")
                    );
     m_chkHScroll = CreateCheckBoxAndAddToSizer
                    (
                     sizerLeft,
-                    _T("Show &horizontal scrollbar")
+                    wxT("Show &horizontal scrollbar")
                    );
-    m_chkCheck = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Check list box"));
-    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
-    m_chkOwnerDraw = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Owner drawn"));
+    m_chkCheck = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Check list box"));
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Sort items"));
+    m_chkOwnerDraw = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Owner drawn"));
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioSelMode, 0, wxGROW | wxALL, 5);
 
-    wxButton *btn = new wxButton(this, ListboxPage_Reset, _T("&Reset"));
+    wxButton *btn = new wxButton(this, ListboxPage_Reset, wxT("&Reset"));
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,
-        _T("&Change listbox contents"));
+        wxT("&Change listbox contents"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ListboxPage_Add, _T("&Add this string"));
-    m_textAdd = new wxTextCtrl(this, ListboxPage_AddText, _T("test item 0"));
+    btn = new wxButton(this, ListboxPage_Add, wxT("&Add this string"));
+    m_textAdd = new wxTextCtrl(this, ListboxPage_AddText, wxT("test item 0"));
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, ListboxPage_AddSeveral, _T("&Insert a few strings"));
+    btn = new wxButton(this, ListboxPage_AddSeveral, wxT("&Insert a few strings"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, ListboxPage_AddMany, _T("Add &many strings"));
+    btn = new wxButton(this, ListboxPage_AddMany, wxT("Add &many strings"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ListboxPage_Change, _T("C&hange current"));
+    btn = new wxButton(this, ListboxPage_Change, wxT("C&hange current"));
     m_textChange = new wxTextCtrl(this, ListboxPage_ChangeText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textChange, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ListboxPage_EnsureVisible, _T("Make item &visible"));
+    btn = new wxButton(this, ListboxPage_EnsureVisible, wxT("Make item &visible"));
     m_textEnsureVisible = new wxTextCtrl(this, ListboxPage_EnsureVisibleText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textEnsureVisible, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(this, ListboxPage_Delete, _T("&Delete this item"));
+    btn = new wxButton(this, ListboxPage_Delete, wxT("&Delete this item"));
     m_textDelete = new wxTextCtrl(this, ListboxPage_DeleteText, wxEmptyString);
     sizerRow->Add(btn, 0, wxRIGHT, 5);
     sizerRow->Add(m_textDelete, 1, wxLEFT, 5);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, ListboxPage_DeleteSel, _T("Delete &selection"));
+    btn = new wxButton(this, ListboxPage_DeleteSel, wxT("Delete &selection"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, ListboxPage_Clear, _T("&Clear"));
+    btn = new wxButton(this, ListboxPage_Clear, wxT("&Clear"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
-    btn = new wxButton(this, ListboxPage_ContainerTests, _T("Run &tests"));
+    btn = new wxButton(this, ListboxPage_ContainerTests, wxT("Run &tests"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
     // right pane
@@ -383,7 +383,7 @@ void ListboxWidgetsPage::CreateLbox()
     switch ( m_radioSelMode->GetSelection() )
     {
         default:
-            wxFAIL_MSG( _T("unexpected radio box selection") );
+            wxFAIL_MSG( wxT("unexpected radio box selection") );
 
         case LboxSel_Single:    flags |= wxLB_SINGLE; break;
         case LboxSel_Extended:  flags |= wxLB_EXTENDED; break;
@@ -528,7 +528,7 @@ void ListboxWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
     if ( !m_textAdd->IsModified() )
     {
         // update the default string
-        m_textAdd->SetValue(wxString::Format(_T("test item %u"), ++s_item));
+        m_textAdd->SetValue(wxString::Format(wxT("test item %u"), ++s_item));
     }
 
     m_lbox->Append(s);
@@ -539,16 +539,16 @@ void ListboxWidgetsPage::OnButtonAddMany(wxCommandEvent& WXUNUSED(event))
     // "many" means 1000 here
     for ( unsigned int n = 0; n < 1000; n++ )
     {
-        m_lbox->Append(wxString::Format(_T("item #%u"), n));
+        m_lbox->Append(wxString::Format(wxT("item #%u"), n));
     }
 }
 
 void ListboxWidgetsPage::OnButtonAddSeveral(wxCommandEvent& WXUNUSED(event))
 {
     wxArrayString items;
-    items.Add(_T("First"));
-    items.Add(_T("another one"));
-    items.Add(_T("and the last (very very very very very very very very very very long) one"));
+    items.Add(wxT("First"));
+    items.Add(wxT("another one"));
+    items.Add(wxT("and the last (very very very very very very very very very very long) one"));
     m_lbox->InsertItems(items, 0);
 }
 
@@ -590,26 +590,26 @@ void ListboxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
 {
     long sel = event.GetSelection();
-    m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
+    m_textDelete->SetValue(wxString::Format(wxT("%ld"), sel));
 
     if (event.IsSelection())
     {
-        wxLogMessage(_T("Listbox item %ld selected"), sel);
+        wxLogMessage(wxT("Listbox item %ld selected"), sel);
     }
     else
     {
-        wxLogMessage(_T("Listbox item %ld deselected"), sel);
+        wxLogMessage(wxT("Listbox item %ld deselected"), sel);
     }
 }
 
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)
 {
-    wxLogMessage( _T("Listbox item %d double clicked"), event.GetInt() );
+    wxLogMessage( wxT("Listbox item %d double clicked"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckListbox(wxCommandEvent& event)
 {
-    wxLogMessage( _T("Listbox item %d toggled"), event.GetInt() );
+    wxLogMessage( wxT("Listbox item %d toggled"), event.GetInt() );
 }
 
 void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

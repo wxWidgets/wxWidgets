@@ -1015,7 +1015,7 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     unsigned int i, n;
     for ( n = 1; ; n++ )
     {
-        s += (wxChar) (_T('A') + (wxChar)(col % 26));
+        s += (wxChar) (wxT('A') + (wxChar)(col % 26));
         col = col / 26 - 1;
         if ( col < 0 )
             break;
@@ -1146,7 +1146,7 @@ wxString wxGridStringTable::GetValue( int row, int col )
 {
     wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
                  wxEmptyString,
-                 _T("invalid row or column index in wxGridStringTable") );
+                 wxT("invalid row or column index in wxGridStringTable") );
 
     return m_data[row][col];
 }
@@ -1154,7 +1154,7 @@ wxString wxGridStringTable::GetValue( int row, int col )
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
     wxCHECK_RET( (row < GetNumberRows()) && (col < GetNumberCols()),
-                 _T("invalid row or column index in wxGridStringTable") );
+                 wxT("invalid row or column index in wxGridStringTable") );
 
     m_data[row][col] = value;
 }
@@ -1806,7 +1806,7 @@ wxGrid::~wxGrid()
 
 #ifdef DEBUG_ATTR_CACHE
     size_t total = gs_nAttrCacheHits + gs_nAttrCacheMisses;
-    wxPrintf(_T("wxGrid attribute cache statistics: "
+    wxPrintf(wxT("wxGrid attribute cache statistics: "
                 "total: %u, hits: %u (%u%%)\n"),
              total, gs_nAttrCacheHits,
              total ? (gs_nAttrCacheHits*100) / total : 0);
@@ -3456,19 +3456,19 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
 #if wxUSE_LOG_TRACE
     static const wxChar *cursorModes[] =
     {
-        _T("SELECT_CELL"),
-        _T("RESIZE_ROW"),
-        _T("RESIZE_COL"),
-        _T("SELECT_ROW"),
-        _T("SELECT_COL"),
-        _T("MOVE_COL"),
+        wxT("SELECT_CELL"),
+        wxT("RESIZE_ROW"),
+        wxT("RESIZE_COL"),
+        wxT("SELECT_ROW"),
+        wxT("SELECT_COL"),
+        wxT("MOVE_COL"),
     };
 
-    wxLogTrace(_T("grid"),
-               _T("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
-               win == m_colWindow ? _T("colLabelWin")
-                                  : win ? _T("rowLabelWin")
-                                        : _T("gridWin"),
+    wxLogTrace(wxT("grid"),
+               wxT("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
+               win == m_colWindow ? wxT("colLabelWin")
+                                  : win ? wxT("rowLabelWin")
+                                        : wxT("gridWin"),
                cursorModes[m_cursorMode], cursorModes[mode]);
 #endif // wxUSE_LOG_TRACE
 
@@ -5711,7 +5711,7 @@ void wxGrid::EnableCellEditControl( bool enable )
                 return;
 
             // this should be checked by the caller!
-            wxASSERT_MSG( CanEnableCellControl(), _T("can't enable editing for this cell!") );
+            wxASSERT_MSG( CanEnableCellControl(), wxT("can't enable editing for this cell!") );
 
             // do it before ShowCellEditControl()
             m_cellEditCtrlEnabled = enable;
@@ -6868,7 +6868,7 @@ int wxGrid::GetDefaultRowSize() const
 
 int wxGrid::GetRowSize( int row ) const
 {
-    wxCHECK_MSG( row >= 0 && row < m_numRows, 0, _T("invalid row index") );
+    wxCHECK_MSG( row >= 0 && row < m_numRows, 0, wxT("invalid row index") );
 
     return GetRowHeight(row);
 }
@@ -6880,7 +6880,7 @@ int wxGrid::GetDefaultColSize() const
 
 int wxGrid::GetColSize( int col ) const
 {
-    wxCHECK_MSG( col >= 0 && col < m_numCols, 0, _T("invalid column index") );
+    wxCHECK_MSG( col >= 0 && col < m_numCols, 0, wxT("invalid column index") );
 
     return GetColWidth(col);
 }
@@ -7160,8 +7160,8 @@ wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
     wxGridCellAttr *attr = NULL;
     bool canHave = ((wxGrid*)this)->CanHaveAttributes();
 
-    wxCHECK_MSG( canHave, attr, _T("Cell attributes not allowed"));
-    wxCHECK_MSG( m_table, attr, _T("must have a table") );
+    wxCHECK_MSG( canHave, attr, wxT("Cell attributes not allowed"));
+    wxCHECK_MSG( m_table, attr, wxT("must have a table") );
 
     attr = m_table->GetAttr(row, col, wxGridCellAttr::Cell);
     if ( !attr )
@@ -7195,7 +7195,7 @@ void wxGrid::SetColFormatFloat(int col, int width, int precision)
     wxString typeName = wxGRID_VALUE_FLOAT;
     if ( (width != -1) || (precision != -1) )
     {
-        typeName << _T(':') << width << _T(',') << precision;
+        typeName << wxT(':') << width << wxT(',') << precision;
     }
 
     SetColFormatCustom(col, typeName);
@@ -7506,7 +7506,7 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 
 void wxGrid::SetRowSize( int row, int height )
 {
-    wxCHECK_RET( row >= 0 && row < m_numRows, _T("invalid row index") );
+    wxCHECK_RET( row >= 0 && row < m_numRows, wxT("invalid row index") );
 
     // if < 0 then calculate new height from label
     if ( height < 0 )
@@ -7564,7 +7564,7 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 
 void wxGrid::SetColSize( int col, int width )
 {
-    wxCHECK_RET( col >= 0 && col < m_numCols, _T("invalid column index") );
+    wxCHECK_RET( col >= 0 && col < m_numCols, wxT("invalid column index") );
 
     // if < 0 then calculate new width from label
     if ( width < 0 )
@@ -8552,7 +8552,7 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
     {
         // the first part of the typename is the "real" type, anything after ':'
         // are the parameters for the renderer
-        index = FindDataType(typeName.BeforeFirst(_T(':')));
+        index = FindDataType(typeName.BeforeFirst(wxT(':')));
         if ( index == wxNOT_FOUND )
         {
             return wxNOT_FOUND;
@@ -8569,7 +8569,7 @@ int wxGridTypeRegistry::FindOrCloneDataType(const wxString& typeName)
         editorOld->DecRef();
 
         // do it even if there are no parameters to reset them to defaults
-        wxString params = typeName.AfterFirst(_T(':'));
+        wxString params = typeName.AfterFirst(wxT(':'));
         renderer->SetParameters(params);
         editor->SetParameters(params);
 

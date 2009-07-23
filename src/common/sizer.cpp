@@ -137,7 +137,7 @@ wxSizerItem::wxSizerItem()
 // window item
 void wxSizerItem::DoSetWindow(wxWindow *window)
 {
-    wxCHECK_RET( window, _T("NULL window in wxSizerItem::SetWindow()") );
+    wxCHECK_RET( window, wxT("NULL window in wxSizerItem::SetWindow()") );
 
     m_kind = Item_Window;
     m_window = window;
@@ -253,7 +253,7 @@ void wxSizerItem::Free()
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 
     m_kind = Item_None;
@@ -291,7 +291,7 @@ wxSize wxSizerItem::GetSize() const
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 
     if (m_flag & wxWEST)
@@ -350,7 +350,7 @@ bool wxSizerItem::InformFirstDirection(int direction, int size, int availableOth
         {
             if( !wxIsNullDouble(m_ratio) )
             {
-                wxCHECK_MSG( (m_proportion==0), false, _T("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
+                wxCHECK_MSG( (m_proportion==0), false, wxT("Shaped item, non-zero proportion in wxSizerItem::InformFirstDirection()") );
                 if( direction==wxHORIZONTAL && !wxIsNullDouble(m_ratio) )
                 {
                     // Clip size so that we don't take too much
@@ -476,7 +476,7 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
     switch ( m_kind )
     {
         case Item_None:
-            wxFAIL_MSG( _T("can't set size of uninitialized sizer item") );
+            wxFAIL_MSG( wxT("can't set size of uninitialized sizer item") );
             break;
 
         case Item_Window:
@@ -505,7 +505,7 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 }
 
@@ -534,7 +534,7 @@ void wxSizerItem::DeleteWindows()
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 
 }
@@ -544,7 +544,7 @@ void wxSizerItem::Show( bool show )
     switch ( m_kind )
     {
         case Item_None:
-            wxFAIL_MSG( _T("can't show uninitialized sizer item") );
+            wxFAIL_MSG( wxT("can't show uninitialized sizer item") );
             break;
 
         case Item_Window:
@@ -561,7 +561,7 @@ void wxSizerItem::Show( bool show )
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 }
 
@@ -606,7 +606,7 @@ bool wxSizerItem::IsShown() const
 
         case Item_Max:
         default:
-            wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
+            wxFAIL_MSG( wxT("unexpected wxSizerItem::m_kind") );
     }
 
     return false;
@@ -679,7 +679,7 @@ bool wxSizer::Remove( wxWindow *window )
 
 bool wxSizer::Remove( wxSizer *sizer )
 {
-    wxASSERT_MSG( sizer, _T("Removing NULL sizer") );
+    wxASSERT_MSG( sizer, wxT("Removing NULL sizer") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -703,11 +703,11 @@ bool wxSizer::Remove( int index )
 {
     wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
                  false,
-                 _T("Remove index is out of range") );
+                 wxT("Remove index is out of range") );
 
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
 
-    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
 
     delete node->GetData();
     m_children.Erase( node );
@@ -717,7 +717,7 @@ bool wxSizer::Remove( int index )
 
 bool wxSizer::Detach( wxSizer *sizer )
 {
-    wxASSERT_MSG( sizer, _T("Detaching NULL sizer") );
+    wxASSERT_MSG( sizer, wxT("Detaching NULL sizer") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -739,7 +739,7 @@ bool wxSizer::Detach( wxSizer *sizer )
 
 bool wxSizer::Detach( wxWindow *window )
 {
-    wxASSERT_MSG( window, _T("Detaching NULL window") );
+    wxASSERT_MSG( window, wxT("Detaching NULL window") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -762,11 +762,11 @@ bool wxSizer::Detach( int index )
 {
     wxCHECK_MSG( index >= 0 && (size_t)index < m_children.GetCount(),
                  false,
-                 _T("Detach index is out of range") );
+                 wxT("Detach index is out of range") );
 
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
 
-    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
 
     wxSizerItem *item = node->GetData();
 
@@ -780,8 +780,8 @@ bool wxSizer::Detach( int index )
 
 bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
 {
-    wxASSERT_MSG( oldwin, _T("Replacing NULL window") );
-    wxASSERT_MSG( newwin, _T("Replacing with NULL window") );
+    wxASSERT_MSG( oldwin, wxT("Replacing NULL window") );
+    wxASSERT_MSG( newwin, wxT("Replacing with NULL window") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -808,8 +808,8 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
 
 bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
 {
-    wxASSERT_MSG( oldsz, _T("Replacing NULL sizer") );
-    wxASSERT_MSG( newsz, _T("Replacing with NULL sizer") );
+    wxASSERT_MSG( oldsz, wxT("Replacing NULL sizer") );
+    wxASSERT_MSG( newsz, wxT("Replacing with NULL sizer") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -835,12 +835,12 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
 
 bool wxSizer::Replace( size_t old, wxSizerItem *newitem )
 {
-    wxCHECK_MSG( old < m_children.GetCount(), false, _T("Replace index is out of range") );
-    wxASSERT_MSG( newitem, _T("Replacing with NULL item") );
+    wxCHECK_MSG( old < m_children.GetCount(), false, wxT("Replace index is out of range") );
+    wxASSERT_MSG( newitem, wxT("Replacing with NULL item") );
 
     wxSizerItemList::compatibility_iterator node = m_children.Item( old );
 
-    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
 
     wxSizerItem *item = node->GetData();
     node->SetData(newitem);
@@ -1032,7 +1032,7 @@ void wxSizer::DoSetMinSize( int width, int height )
 
 bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
 {
-    wxASSERT_MSG( window, _T("SetMinSize for NULL window") );
+    wxASSERT_MSG( window, wxT("SetMinSize for NULL window") );
 
     // Is it our immediate child?
 
@@ -1070,7 +1070,7 @@ bool wxSizer::DoSetItemMinSize( wxWindow *window, int width, int height )
 
 bool wxSizer::DoSetItemMinSize( wxSizer *sizer, int width, int height )
 {
-    wxASSERT_MSG( sizer, _T("SetMinSize for NULL sizer") );
+    wxASSERT_MSG( sizer, wxT("SetMinSize for NULL sizer") );
 
     // Is it our immediate child?
 
@@ -1110,7 +1110,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
 {
     wxSizerItemList::compatibility_iterator node = m_children.Item( index );
 
-    wxCHECK_MSG( node, false, _T("Failed to find child node") );
+    wxCHECK_MSG( node, false, wxT("Failed to find child node") );
 
     wxSizerItem     *item = node->GetData();
 
@@ -1130,7 +1130,7 @@ bool wxSizer::DoSetItemMinSize( size_t index, int width, int height )
 
 wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
 {
-    wxASSERT_MSG( window, _T("GetItem for NULL window") );
+    wxASSERT_MSG( window, wxT("GetItem for NULL window") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -1156,7 +1156,7 @@ wxSizerItem* wxSizer::GetItem( wxWindow *window, bool recursive )
 
 wxSizerItem* wxSizer::GetItem( wxSizer *sizer, bool recursive )
 {
-    wxASSERT_MSG( sizer, _T("GetItem for NULL sizer") );
+    wxASSERT_MSG( sizer, wxT("GetItem for NULL sizer") );
 
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
@@ -1184,7 +1184,7 @@ wxSizerItem* wxSizer::GetItem( size_t index )
 {
     wxCHECK_MSG( index < m_children.GetCount(),
                  NULL,
-                 _T("GetItem index is out of range") );
+                 wxT("GetItem index is out of range") );
 
     return m_children.Item( index )->GetData();
 }
@@ -1279,7 +1279,7 @@ bool wxSizer::IsShown( wxWindow *window ) const
         node = node->GetNext();
     }
 
-    wxFAIL_MSG( _T("IsShown failed to find sizer item") );
+    wxFAIL_MSG( wxT("IsShown failed to find sizer item") );
 
     return false;
 }
@@ -1298,7 +1298,7 @@ bool wxSizer::IsShown( wxSizer *sizer ) const
         node = node->GetNext();
     }
 
-    wxFAIL_MSG( _T("IsShown failed to find sizer item") );
+    wxFAIL_MSG( wxT("IsShown failed to find sizer item") );
 
     return false;
 }
@@ -1307,7 +1307,7 @@ bool wxSizer::IsShown( size_t index ) const
 {
     wxCHECK_MSG( index < m_children.GetCount(),
                  false,
-                 _T("IsShown index is out of range") );
+                 wxT("IsShown index is out of range") );
 
     return m_children.Item( index )->GetData()->IsShown();
 }
@@ -1390,7 +1390,7 @@ int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
     }
     else // 0 columns, 0 rows?
     {
-        wxFAIL_MSG( _T("grid sizer must have either rows or columns fixed") );
+        wxFAIL_MSG( wxT("grid sizer must have either rows or columns fixed") );
 
         nrows =
         ncols = 0;
@@ -1422,7 +1422,7 @@ void wxGridSizer::RecalcSizes()
             {
                 wxSizerItemList::compatibility_iterator node = m_children.Item( i );
 
-                wxASSERT_MSG( node, _T("Failed to find SizerItemList node") );
+                wxASSERT_MSG( node, wxT("Failed to find SizerItemList node") );
 
                 SetItemBounds( node->GetData(), x, y, w, h);
             }
@@ -1959,7 +1959,7 @@ DoRemoveFromArrays(size_t idx, wxArrayInt& items, wxArrayInt& proportions)
         }
     }
 
-    wxFAIL_MSG( _T("column/row is already not growable") );
+    wxFAIL_MSG( wxT("column/row is already not growable") );
 }
 
 void wxFlexGridSizer::RemoveGrowableCol( size_t idx )

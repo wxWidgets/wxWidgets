@@ -514,7 +514,7 @@ void wxPrintfConvSpec<CharType>::ReplaceAsteriskWith(int width)
 
     // find the first * in our flag buffer
     char *pwidth = strchr(m_szFlags, '*');
-    wxCHECK_RET(pwidth, _T("field width must be specified"));
+    wxCHECK_RET(pwidth, wxT("field width must be specified"));
 
     // save what follows the * (the +1 is to skip the asterisk itself!)
     strcpy(temp, pwidth+1);
@@ -685,13 +685,13 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
 
                 if (!m_bAlignLeft)
                     for (i = 1; i < (size_t)m_nMinWidth; i++)
-                        APPEND_CH(_T(' '));
+                        APPEND_CH(wxT(' '));
 
                 APPEND_CH(val);
 
                 if (m_bAlignLeft)
                     for (i = 1; i < (size_t)m_nMinWidth; i++)
-                        APPEND_CH(_T(' '));
+                        APPEND_CH(wxT(' '));
             }
             break;
 
@@ -716,7 +716,7 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
                 if (!m_bAlignLeft)
                 {
                     for (i = len; i < m_nMinWidth; i++)
-                        APPEND_CH(_T(' '));
+                        APPEND_CH(wxT(' '));
                 }
 
                 len = wxMin((unsigned int)len, lenMax-lenCur);
@@ -726,7 +726,7 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
                 if (m_bAlignLeft)
                 {
                     for (i = len; i < m_nMinWidth; i++)
-                        APPEND_CH(_T(' '));
+                        APPEND_CH(wxT(' '));
                 }
             }
             break;

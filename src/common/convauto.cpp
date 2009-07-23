@@ -44,7 +44,7 @@ wxFontEncoding wxConvAuto::ms_defaultMBEncoding = wxFONTENCODING_ISO8859_1;
 void wxConvAuto::SetFallbackEncoding(wxFontEncoding enc)
 {
     wxASSERT_MSG( enc != wxFONTENCODING_DEFAULT,
-                  _T("wxFONTENCODING_DEFAULT doesn't make sense here") );
+                  wxT("wxFONTENCODING_DEFAULT doesn't make sense here") );
 
     ms_defaultMBEncoding = enc;
 }
@@ -137,7 +137,7 @@ void wxConvAuto::InitFromBOM(BOMType bomType)
             break;
 
         default:
-            wxFAIL_MSG( _T("unexpected BOM type") );
+            wxFAIL_MSG( wxT("unexpected BOM type") );
             // fall through: still need to create something
 
         case BOM_None:
@@ -166,7 +166,7 @@ void wxConvAuto::SkipBOM(const char **src, size_t *len) const
             break;
 
         default:
-            wxFAIL_MSG( _T("unexpected BOM type") );
+            wxFAIL_MSG( wxT("unexpected BOM type") );
             // fall through: still need to create something
 
         case BOM_None:

@@ -1343,7 +1343,7 @@ bool wxVariantDataArrayString::Write(wxString& str) const
     for ( size_t n = 0; n < count; n++ )
     {
         if ( n )
-            str += _T(';');
+            str += wxT(';');
 
         str += m_value[n];
     }
@@ -1363,7 +1363,7 @@ bool wxVariantDataArrayString::Read(wxSTD istream& WXUNUSED(str))
 
 bool wxVariantDataArrayString::Read(wxString& str)
 {
-    wxStringTokenizer tk(str, _T(";"));
+    wxStringTokenizer tk(str, wxT(";"));
     while ( tk.HasMoreTokens() )
     {
         m_value.Add(tk.GetNextToken());
@@ -1382,7 +1382,7 @@ wxVariant::wxVariant(const wxArrayString& val, const wxString& name) // Strings
 
 bool wxVariant::operator==(const wxArrayString& WXUNUSED(value)) const
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( wxT("TODO") );
 
     return false;
 }

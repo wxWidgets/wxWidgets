@@ -29,7 +29,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(_T(#id), (void*)id);
+    choice->Append(wxT(#id), (void*)id);
 #define ART_ICON(id) \
     { \
         int ind; \
@@ -38,7 +38,7 @@
             ind = images->Add(icon); \
         else \
             ind = 0; \
-        list->InsertItem(index, _T(#id), ind); \
+        list->InsertItem(index, wxT(#id), ind); \
         list->SetItemData(index, (long)id); \
         index++; \
     }
@@ -125,7 +125,7 @@ BEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
 END_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, _T("Art resources browser"),
+    : wxDialog(parent, wxID_ANY, wxT("Art resources browser"),
                wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
@@ -136,7 +136,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     FillClients(choice);
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(this, wxID_ANY, _T("Client:")), 0, wxALIGN_CENTER_VERTICAL);
+    subsizer->Add(new wxStaticText(this, wxID_ANY, wxT("Client:")), 0, wxALIGN_CENTER_VERTICAL);
     subsizer->Add(choice, 1, wxLEFT, 5);
     sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
 
@@ -144,7 +144,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
-    m_list->InsertColumn(0, _T("wxArtID"));
+    m_list->InsertColumn(0, wxT("wxArtID"));
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
@@ -158,7 +158,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 10);
 
-    wxButton *ok = new wxButton(this, wxID_OK, _T("Close"));
+    wxButton *ok = new wxButton(this, wxID_OK, wxT("Close"));
     ok->SetDefault();
     sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
 

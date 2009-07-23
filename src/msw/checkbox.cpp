@@ -460,7 +460,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
             break;
 
         default:
-            wxFAIL_MSG( _T("unexpected Get3StateValue() return value") );
+            wxFAIL_MSG( wxT("unexpected Get3StateValue() return value") );
             // fall through
 
         case wxCHK_UNCHECKED:
@@ -495,7 +495,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel,
                          fmt | DT_CALCRECT) )
         {
-            wxLogLastError(_T("DrawText(DT_CALCRECT)"));
+            wxLogLastError(wxT("DrawText(DT_CALCRECT)"));
         }
     }
 
@@ -506,7 +506,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     if ( !::DrawText(hdc, label.wx_str(), label.length(), &rectLabel, fmt) )
     {
-        wxLogLastError(_T("DrawText()"));
+        wxLogLastError(wxT("DrawText()"));
     }
 
     // finally draw the focus
@@ -516,7 +516,7 @@ bool wxCheckBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
         rectLabel.right++;
         if ( !::DrawFocusRect(hdc, &rectLabel) )
         {
-            wxLogLastError(_T("DrawFocusRect()"));
+            wxLogLastError(wxT("DrawFocusRect()"));
         }
     }
 

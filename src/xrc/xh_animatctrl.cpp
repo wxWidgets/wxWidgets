@@ -37,7 +37,7 @@ wxObject *wxAnimationCtrlXmlHandler::DoCreateResource()
                   GetID(),
                   GetAnimation(wxT("animation")),
                   GetPosition(), GetSize(),
-                  GetStyle(_T("style"), wxAC_DEFAULT_STYLE),
+                  GetStyle(wxT("style"), wxAC_DEFAULT_STYLE),
                   GetName());
 
     // if no inactive-bitmap has been provided, GetBitmap() will return wxNullBitmap

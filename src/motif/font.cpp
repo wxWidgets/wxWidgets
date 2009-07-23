@@ -311,7 +311,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
         wxString registry = tn.GetNextToken().MakeUpper(),
                  encoding = tn.GetNextToken().MakeUpper();
 
-        if ( registry == _T("ISO8859") )
+        if ( registry == wxT("ISO8859") )
         {
             int cp;
             if ( wxSscanf(encoding, wxT("%d"), &cp) == 1 )
@@ -320,7 +320,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
                     (wxFontEncoding)(wxFONTENCODING_ISO8859_1 + cp - 1);
             }
         }
-        else if ( registry == _T("MICROSOFT") )
+        else if ( registry == wxT("MICROSOFT") )
         {
             int cp;
             if ( wxSscanf(encoding, wxT("cp125%d"), &cp) == 1 )
@@ -329,7 +329,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
                     (wxFontEncoding)(wxFONTENCODING_CP1250 + cp);
             }
         }
-        else if ( registry == _T("KOI8") )
+        else if ( registry == wxT("KOI8") )
         {
             M_FONTDATA->m_encoding = wxFONTENCODING_KOI8;
         }

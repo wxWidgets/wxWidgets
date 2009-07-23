@@ -39,7 +39,7 @@ wxWindow *wxButtonBase::SetDefault()
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
 
-    wxCHECK_MSG( tlw, NULL, _T("button without top level window?") );
+    wxCHECK_MSG( tlw, NULL, wxT("button without top level window?") );
 
     return tlw->SetDefaultItem(this);
 }

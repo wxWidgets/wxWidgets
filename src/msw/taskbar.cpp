@@ -223,7 +223,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
                            int flags)
 {
     wxCHECK_MSG( m_iconAdded, false,
-                    _T("can't be used before the icon is created") );
+                    wxT("can't be used before the icon is created") );
 
     const HWND hwnd = GetHwndOf(m_win);
 
@@ -285,7 +285,7 @@ bool wxTaskBarIcon::RemoveIcon()
 #if wxUSE_MENUS
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
-    wxASSERT_MSG( m_win != NULL, _T("taskbar icon not initialized") );
+    wxASSERT_MSG( m_win != NULL, wxT("taskbar icon not initialized") );
 
     static bool s_inPopup = false;
 

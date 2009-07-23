@@ -119,12 +119,12 @@ void StringTestCase::String()
 
     for (int i = 0; i < 2; ++i)
     {
-        a = _T("Hello");
-        b = _T(" world");
-        c = _T("! How'ya doin'?");
+        a = wxT("Hello");
+        b = wxT(" world");
+        c = wxT("! How'ya doin'?");
         a += b;
         a += c;
-        c = _T("Hello world! What's up?");
+        c = wxT("Hello world! What's up?");
         CPPUNIT_ASSERT( c != a );
     }
 }
@@ -137,12 +137,12 @@ void StringTestCase::PChar()
 
     for (int i = 0; i < 2; ++i)
     {
-        wxStrcpy (a, _T("Hello"));
-        wxStrcpy (b, _T(" world"));
-        wxStrcpy (c, _T("! How'ya doin'?"));
+        wxStrcpy (a, wxT("Hello"));
+        wxStrcpy (b, wxT(" world"));
+        wxStrcpy (c, wxT("! How'ya doin'?"));
         wxStrcat (a, b);
         wxStrcat (a, c);
-        wxStrcpy (c, _T("Hello world! What's up?"));
+        wxStrcpy (c, wxT("Hello world! What's up?"));
         CPPUNIT_ASSERT( wxStrcmp (c, a) != 0 );
     }
 }
@@ -150,18 +150,18 @@ void StringTestCase::PChar()
 void StringTestCase::Format()
 {
     wxString s1,s2;
-    s1.Printf(_T("%03d"), 18);
-    CPPUNIT_ASSERT( s1 == wxString::Format(_T("%03d"), 18) );
-    s2.Printf(_T("Number 18: %s\n"), s1.c_str());
-    CPPUNIT_ASSERT( s2 == wxString::Format(_T("Number 18: %s\n"), s1.c_str()) );
+    s1.Printf(wxT("%03d"), 18);
+    CPPUNIT_ASSERT( s1 == wxString::Format(wxT("%03d"), 18) );
+    s2.Printf(wxT("Number 18: %s\n"), s1.c_str());
+    CPPUNIT_ASSERT( s2 == wxString::Format(wxT("Number 18: %s\n"), s1.c_str()) );
 
     static const size_t lengths[] = { 1, 512, 1024, 1025, 2048, 4096, 4097 };
     for ( size_t n = 0; n < WXSIZEOF(lengths); n++ )
     {
         const size_t len = lengths[n];
 
-        wxString s(_T('Z'), len);
-        CPPUNIT_ASSERT_EQUAL( len, wxString::Format(_T("%s"), s.c_str()).length());
+        wxString s(wxT('Z'), len);
+        CPPUNIT_ASSERT_EQUAL( len, wxString::Format(wxT("%s"), s.c_str()).length());
     }
 }
 
@@ -213,15 +213,15 @@ void StringTestCase::StaticConstructors()
 
 void StringTestCase::Extraction()
 {
-    wxString s(_T("Hello, world!"));
+    wxString s(wxT("Hello, world!"));
 
-    CPPUNIT_ASSERT( wxStrcmp( s.c_str() , _T("Hello, world!") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s.Left(5).c_str() , _T("Hello") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s.Right(6).c_str() , _T("world!") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s(3, 5).c_str() , _T("lo, w") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s.Mid(3).c_str() , _T("lo, world!") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s.substr(3, 5).c_str() , _T("lo, w") ) == 0 );
-    CPPUNIT_ASSERT( wxStrcmp( s.substr(3).c_str() , _T("lo, world!") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.c_str() , wxT("Hello, world!") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.Left(5).c_str() , wxT("Hello") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.Right(6).c_str() , wxT("world!") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s(3, 5).c_str() , wxT("lo, w") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.Mid(3).c_str() , wxT("lo, world!") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.substr(3, 5).c_str() , wxT("lo, w") ) == 0 );
+    CPPUNIT_ASSERT( wxStrcmp( s.substr(3).c_str() , wxT("lo, world!") ) == 0 );
 
 #if wxUSE_UNICODE
     static const char *germanUTF8 = "Oberfl\303\244che";
@@ -238,13 +238,13 @@ void StringTestCase::Extraction()
         if ( result )                                                         \
             CPPUNIT_ASSERT_EQUAL(correct_rest, rest)
 
-    TEST_STARTS_WITH( _T("Hello"),           _T(", world!"),      true  );
-    TEST_STARTS_WITH( _T("Hello, "),         _T("world!"),        true  );
-    TEST_STARTS_WITH( _T("Hello, world!"),   _T(""),              true  );
-    TEST_STARTS_WITH( _T("Hello, world!!!"), _T(""),              false );
-    TEST_STARTS_WITH( _T(""),                _T("Hello, world!"), true  );
-    TEST_STARTS_WITH( _T("Goodbye"),         _T(""),              false );
-    TEST_STARTS_WITH( _T("Hi"),              _T(""),              false );
+    TEST_STARTS_WITH( wxT("Hello"),           wxT(", world!"),      true  );
+    TEST_STARTS_WITH( wxT("Hello, "),         wxT("world!"),        true  );
+    TEST_STARTS_WITH( wxT("Hello, world!"),   wxT(""),              true  );
+    TEST_STARTS_WITH( wxT("Hello, world!!!"), wxT(""),              false );
+    TEST_STARTS_WITH( wxT(""),                wxT("Hello, world!"), true  );
+    TEST_STARTS_WITH( wxT("Goodbye"),         wxT(""),              false );
+    TEST_STARTS_WITH( wxT("Hi"),              wxT(""),              false );
 
     #undef TEST_STARTS_WITH
 
@@ -257,15 +257,15 @@ void StringTestCase::Extraction()
         if ( result )                                                         \
             CPPUNIT_ASSERT_EQUAL(correct_rest, rest)
 
-    TEST_ENDS_WITH( _T(""),                 _T("Hello, world!"), true  );
-    TEST_ENDS_WITH( _T("!"),                _T("Hello, world"),  true  );
-    TEST_ENDS_WITH( _T(", world!"),         _T("Hello"),         true  );
-    TEST_ENDS_WITH( _T("ello, world!"),     _T("H"),             true  );
-    TEST_ENDS_WITH( _T("Hello, world!"),    _T(""),              true  );
-    TEST_ENDS_WITH( _T("very long string"), _T(""),              false );
-    TEST_ENDS_WITH( _T("?"),                _T(""),              false );
-    TEST_ENDS_WITH( _T("Hello, world"),     _T(""),              false );
-    TEST_ENDS_WITH( _T("Gello, world!"),    _T(""),              false );
+    TEST_ENDS_WITH( wxT(""),                 wxT("Hello, world!"), true  );
+    TEST_ENDS_WITH( wxT("!"),                wxT("Hello, world"),  true  );
+    TEST_ENDS_WITH( wxT(", world!"),         wxT("Hello"),         true  );
+    TEST_ENDS_WITH( wxT("ello, world!"),     wxT("H"),             true  );
+    TEST_ENDS_WITH( wxT("Hello, world!"),    wxT(""),              true  );
+    TEST_ENDS_WITH( wxT("very long string"), wxT(""),              false );
+    TEST_ENDS_WITH( wxT("?"),                wxT(""),              false );
+    TEST_ENDS_WITH( wxT("Hello, world"),     wxT(""),              false );
+    TEST_ENDS_WITH( wxT("Gello, world!"),    wxT(""),              false );
 
     #undef TEST_ENDS_WITH
 }
@@ -275,15 +275,15 @@ void StringTestCase::Trim()
     #define TEST_TRIM( str , dir , result )  \
         CPPUNIT_ASSERT( wxString(str).Trim(dir) == result )
 
-    TEST_TRIM( _T("  Test  "),  true, _T("  Test") );
-    TEST_TRIM( _T("    "),      true, _T("")       );
-    TEST_TRIM( _T(" "),         true, _T("")       );
-    TEST_TRIM( _T(""),          true, _T("")       );
+    TEST_TRIM( wxT("  Test  "),  true, wxT("  Test") );
+    TEST_TRIM( wxT("    "),      true, wxT("")       );
+    TEST_TRIM( wxT(" "),         true, wxT("")       );
+    TEST_TRIM( wxT(""),          true, wxT("")       );
 
-    TEST_TRIM( _T("  Test  "),  false, _T("Test  ") );
-    TEST_TRIM( _T("    "),      false, _T("")       );
-    TEST_TRIM( _T(" "),         false, _T("")       );
-    TEST_TRIM( _T(""),          false, _T("")       );
+    TEST_TRIM( wxT("  Test  "),  false, wxT("Test  ") );
+    TEST_TRIM( wxT("    "),      false, wxT("")       );
+    TEST_TRIM( wxT(" "),         false, wxT("")       );
+    TEST_TRIM( wxT(""),          false, wxT("")       );
 
     #undef TEST_TRIM
 }
@@ -291,11 +291,11 @@ void StringTestCase::Trim()
 void StringTestCase::Find()
 {
     #define TEST_FIND( str , start , result )  \
-        CPPUNIT_ASSERT( wxString(str).find(_T("ell"), start) == result );
+        CPPUNIT_ASSERT( wxString(str).find(wxT("ell"), start) == result );
 
-    TEST_FIND( _T("Well, hello world"),  0, 1              );
-    TEST_FIND( _T("Well, hello world"),  6, 7              );
-    TEST_FIND( _T("Well, hello world"),  9, wxString::npos );
+    TEST_FIND( wxT("Well, hello world"),  0, 1              );
+    TEST_FIND( wxT("Well, hello world"),  6, 7              );
+    TEST_FIND( wxT("Well, hello world"),  9, wxString::npos );
 
     #undef TEST_FIND
 }
@@ -309,11 +309,11 @@ void StringTestCase::Replace()
             CPPUNIT_ASSERT_EQUAL( result, s ); \
         }
 
-    TEST_REPLACE( _T("012-AWORD-XYZ"), 4, 5, _T("BWORD"),  _T("012-BWORD-XYZ") );
-    TEST_REPLACE( _T("increase"),      0, 2, _T("de"),     _T("decrease")      );
-    TEST_REPLACE( _T("wxWindow"),      8, 0, _T("s"),      _T("wxWindows")     );
-    TEST_REPLACE( _T("foobar"),        3, 0, _T("-"),      _T("foo-bar")       );
-    TEST_REPLACE( _T("barfoo"),        0, 6, _T("foobar"), _T("foobar")        );
+    TEST_REPLACE( wxT("012-AWORD-XYZ"), 4, 5, wxT("BWORD"),  wxT("012-BWORD-XYZ") );
+    TEST_REPLACE( wxT("increase"),      0, 2, wxT("de"),     wxT("decrease")      );
+    TEST_REPLACE( wxT("wxWindow"),      8, 0, wxT("s"),      wxT("wxWindows")     );
+    TEST_REPLACE( wxT("foobar"),        3, 0, wxT("-"),      wxT("foo-bar")       );
+    TEST_REPLACE( wxT("barfoo"),        0, 6, wxT("foobar"), wxT("foobar")        );
 
 
     #define TEST_NULLCHARREPLACE( o , olen, pos , len , replacement , r, rlen ) \
@@ -323,8 +323,8 @@ void StringTestCase::Replace()
             CPPUNIT_ASSERT_EQUAL( wxString(r,rlen), s ); \
         }
 
-    TEST_NULLCHARREPLACE( _T("null\0char"), 9, 5, 1, _T("d"),
-                          _T("null\0dhar"), 9 );
+    TEST_NULLCHARREPLACE( wxT("null\0char"), 9, 5, 1, wxT("d"),
+                          wxT("null\0dhar"), 9 );
 
     #define TEST_WXREPLACE( o , olen, olds, news, all, r, rlen ) \
         { \
@@ -333,11 +333,11 @@ void StringTestCase::Replace()
             CPPUNIT_ASSERT_EQUAL( wxString(r,rlen), s ); \
         }
 
-    TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("de"), true,
-                          _T("null\0dehar"), 10 );
+    TEST_WXREPLACE( wxT("null\0char"), 9, wxT("c"), wxT("de"), true,
+                          wxT("null\0dehar"), 10 );
 
-    TEST_WXREPLACE( _T("null\0dehar"), 10, _T("de"), _T("c"), true,
-                          _T("null\0char"), 9 );
+    TEST_WXREPLACE( wxT("null\0dehar"), 10, wxT("de"), wxT("c"), true,
+                          wxT("null\0char"), 9 );
 
     TEST_WXREPLACE( "life", 4, "f", "", false, "lie", 3 );
     TEST_WXREPLACE( "life", 4, "f", "", true, "lie", 3 );
@@ -355,17 +355,17 @@ void StringTestCase::Match()
     #define TEST_MATCH( s1 , s2 , result ) \
         CPPUNIT_ASSERT( wxString(s1).Matches(s2) == result )
 
-    TEST_MATCH( _T("foobar"),    _T("foo*"),   true  );
-    TEST_MATCH( _T("foobar"),    _T("*oo*"),   true  );
-    TEST_MATCH( _T("foobar"),    _T("*bar"),   true  );
-    TEST_MATCH( _T("foobar"),    _T("??????"), true  );
-    TEST_MATCH( _T("foobar"),    _T("f??b*"),  true  );
-    TEST_MATCH( _T("foobar"),    _T("f?b*"),   false );
-    TEST_MATCH( _T("foobar"),    _T("*goo*"),  false );
-    TEST_MATCH( _T("foobar"),    _T("*foo"),   false );
-    TEST_MATCH( _T("foobarfoo"), _T("*foo"),   true  );
-    TEST_MATCH( _T(""),          _T("*"),      true  );
-    TEST_MATCH( _T(""),          _T("?"),      false );
+    TEST_MATCH( wxT("foobar"),    wxT("foo*"),   true  );
+    TEST_MATCH( wxT("foobar"),    wxT("*oo*"),   true  );
+    TEST_MATCH( wxT("foobar"),    wxT("*bar"),   true  );
+    TEST_MATCH( wxT("foobar"),    wxT("??????"), true  );
+    TEST_MATCH( wxT("foobar"),    wxT("f??b*"),  true  );
+    TEST_MATCH( wxT("foobar"),    wxT("f?b*"),   false );
+    TEST_MATCH( wxT("foobar"),    wxT("*goo*"),  false );
+    TEST_MATCH( wxT("foobar"),    wxT("*foo"),   false );
+    TEST_MATCH( wxT("foobarfoo"), wxT("*foo"),   true  );
+    TEST_MATCH( wxT(""),          wxT("*"),      true  );
+    TEST_MATCH( wxT(""),          wxT("?"),      false );
 
     #undef TEST_MATCH
 }
@@ -373,14 +373,14 @@ void StringTestCase::Match()
 
 void StringTestCase::CaseChanges()
 {
-    wxString s1(_T("Hello!"));
+    wxString s1(wxT("Hello!"));
     wxString s1u(s1);
     wxString s1l(s1);
     s1u.MakeUpper();
     s1l.MakeLower();
 
-    CPPUNIT_ASSERT_EQUAL( _T("HELLO!"), s1u );
-    CPPUNIT_ASSERT_EQUAL( _T("hello!"), s1l );
+    CPPUNIT_ASSERT_EQUAL( wxT("HELLO!"), s1u );
+    CPPUNIT_ASSERT_EQUAL( wxT("hello!"), s1l );
 
     wxString s2u, s2l;
     s2u.MakeUpper();
@@ -511,15 +511,15 @@ void StringTestCase::Contains()
         bool contains;
     } containsData[] =
     {
-        { _T(""),       _T(""),         true  },
-        { _T(""),       _T("foo"),      false },
-        { _T("foo"),    _T(""),         true  },
-        { _T("foo"),    _T("f"),        true  },
-        { _T("foo"),    _T("o"),        true  },
-        { _T("foo"),    _T("oo"),       true  },
-        { _T("foo"),    _T("ooo"),      false },
-        { _T("foo"),    _T("oooo"),     false },
-        { _T("foo"),    _T("fooo"),     false },
+        { wxT(""),       wxT(""),         true  },
+        { wxT(""),       wxT("foo"),      false },
+        { wxT("foo"),    wxT(""),         true  },
+        { wxT("foo"),    wxT("f"),        true  },
+        { wxT("foo"),    wxT("o"),        true  },
+        { wxT("foo"),    wxT("oo"),       true  },
+        { wxT("foo"),    wxT("ooo"),      false },
+        { wxT("foo"),    wxT("oooo"),     false },
+        { wxT("foo"),    wxT("fooo"),     false },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(containsData); n++ )
@@ -560,23 +560,23 @@ static const struct ToLongData
     bool IsOk() const { return !(flags & Number_Invalid); }
 } longData[] =
 {
-    { _T("1"), 1, Number_Ok },
-    { _T("0"), 0, Number_Ok },
-    { _T("a"), 0, Number_Invalid },
-    { _T("12345"), 12345, Number_Ok },
-    { _T("--1"), 0, Number_Invalid },
+    { wxT("1"), 1, Number_Ok },
+    { wxT("0"), 0, Number_Ok },
+    { wxT("a"), 0, Number_Invalid },
+    { wxT("12345"), 12345, Number_Ok },
+    { wxT("--1"), 0, Number_Invalid },
 
-    { _T("-1"), -1, Number_Signed | Number_Long },
+    { wxT("-1"), -1, Number_Signed | Number_Long },
     // this is surprizing but consistent with strtoul() behaviour
-    { _T("-1"), ULONG_MAX, Number_Unsigned | Number_Long },
+    { wxT("-1"), ULONG_MAX, Number_Unsigned | Number_Long },
 
     // this must overflow, even with 64 bit long
-    { _T("922337203685477580711"), 0, Number_Invalid },
+    { wxT("922337203685477580711"), 0, Number_Invalid },
 
 #ifdef wxLongLong_t
-    { _T("2147483648"), wxLL(2147483648), Number_LongLong },
-    { _T("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed },
-    { _T("9223372036854775808"), wxULL(9223372036854775808), Number_LongLong |
+    { wxT("2147483648"), wxLL(2147483648), Number_LongLong },
+    { wxT("-2147483648"), wxLL(-2147483648), Number_LongLong | Number_Signed },
+    { wxT("9223372036854775808"), wxULL(9223372036854775808), Number_LongLong |
                                                              Number_Unsigned },
 #endif // wxLongLong_t
 };
@@ -673,18 +673,18 @@ void StringTestCase::ToDouble()
         bool ok;
     } doubleData[] =
     {
-        { _T("1"), 1, true },
-        { _T("1.23"), 1.23, true },
-        { _T(".1"), .1, true },
-        { _T("1."), 1, true },
-        { _T("1.."), 0, false },
-        { _T("0"), 0, true },
-        { _T("a"), 0, false },
-        { _T("12345"), 12345, true },
-        { _T("-1"), -1, true },
-        { _T("--1"), 0, false },
-        { _T("-3E-5"), -3E-5, true },
-        { _T("-3E-abcde5"), 0, false },
+        { wxT("1"), 1, true },
+        { wxT("1.23"), 1.23, true },
+        { wxT(".1"), .1, true },
+        { wxT("1."), 1, true },
+        { wxT("1.."), 0, false },
+        { wxT("0"), 0, true },
+        { wxT("a"), 0, false },
+        { wxT("12345"), 12345, true },
+        { wxT("-1"), -1, true },
+        { wxT("--1"), 0, false },
+        { wxT("-3E-5"), -3E-5, true },
+        { wxT("-3E-abcde5"), 0, false },
     };
 
     // test ToCDouble() first:
@@ -713,18 +713,18 @@ void StringTestCase::ToDouble()
     
     static const struct ToDoubleData doubleData2[] =
     {
-        { _T("1"), 1, true },
-        { _T("1,23"), 1.23, true },
-        { _T(",1"), .1, true },
-        { _T("1,"), 1, true },
-        { _T("1,,"), 0, false },
-        { _T("0"), 0, true },
-        { _T("a"), 0, false },
-        { _T("12345"), 12345, true },
-        { _T("-1"), -1, true },
-        { _T("--1"), 0, false },
-        { _T("-3E-5"), -3E-5, true },
-        { _T("-3E-abcde5"), 0, false },
+        { wxT("1"), 1, true },
+        { wxT("1,23"), 1.23, true },
+        { wxT(",1"), .1, true },
+        { wxT("1,"), 1, true },
+        { wxT("1,,"), 0, false },
+        { wxT("0"), 0, true },
+        { wxT("a"), 0, false },
+        { wxT("12345"), 12345, true },
+        { wxT("-1"), -1, true },
+        { wxT("--1"), 0, false },
+        { wxT("-3E-5"), -3E-5, true },
+        { wxT("-3E-abcde5"), 0, false },
     };
 
     for ( n = 0; n < WXSIZEOF(doubleData2); n++ )
@@ -742,41 +742,41 @@ void StringTestCase::StringBuf()
 {
     // check that buffer can be used to write into the string
     wxString s;
-    wxStrcpy(wxStringBuffer(s, 10), _T("foo"));
+    wxStrcpy(wxStringBuffer(s, 10), wxT("foo"));
 
     CPPUNIT_ASSERT_EQUAL(3, s.length());
-    CPPUNIT_ASSERT(_T('f') == s[0u]);
-    CPPUNIT_ASSERT(_T('o') == s[1]);
-    CPPUNIT_ASSERT(_T('o') == s[2]);
+    CPPUNIT_ASSERT(wxT('f') == s[0u]);
+    CPPUNIT_ASSERT(wxT('o') == s[1]);
+    CPPUNIT_ASSERT(wxT('o') == s[2]);
 
     {
         // also check that the buffer initially contains the original string
         // contents
         wxStringBuffer buf(s, 10);
-        CPPUNIT_ASSERT_EQUAL( _T('f'), buf[0] );
-        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[1] );
-        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[2] );
-        CPPUNIT_ASSERT_EQUAL( _T('\0'), buf[3] );
+        CPPUNIT_ASSERT_EQUAL( wxT('f'), buf[0] );
+        CPPUNIT_ASSERT_EQUAL( wxT('o'), buf[1] );
+        CPPUNIT_ASSERT_EQUAL( wxT('o'), buf[2] );
+        CPPUNIT_ASSERT_EQUAL( wxT('\0'), buf[3] );
     }
 
     {
         wxStringBufferLength buf(s, 10);
-        CPPUNIT_ASSERT_EQUAL( _T('f'), buf[0] );
-        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[1] );
-        CPPUNIT_ASSERT_EQUAL( _T('o'), buf[2] );
-        CPPUNIT_ASSERT_EQUAL( _T('\0'), buf[3] );
+        CPPUNIT_ASSERT_EQUAL( wxT('f'), buf[0] );
+        CPPUNIT_ASSERT_EQUAL( wxT('o'), buf[1] );
+        CPPUNIT_ASSERT_EQUAL( wxT('o'), buf[2] );
+        CPPUNIT_ASSERT_EQUAL( wxT('\0'), buf[3] );
 
         // and check that it can be used to write only the specified number of
         // characters to the string
-        wxStrcpy(buf, _T("barrbaz"));
+        wxStrcpy(buf, wxT("barrbaz"));
         buf.SetLength(4);
     }
 
     CPPUNIT_ASSERT_EQUAL(4, s.length());
-    CPPUNIT_ASSERT(_T('b') == s[0u]);
-    CPPUNIT_ASSERT(_T('a') == s[1]);
-    CPPUNIT_ASSERT(_T('r') == s[2]);
-    CPPUNIT_ASSERT(_T('r') == s[3]);
+    CPPUNIT_ASSERT(wxT('b') == s[0u]);
+    CPPUNIT_ASSERT(wxT('a') == s[1]);
+    CPPUNIT_ASSERT(wxT('r') == s[2]);
+    CPPUNIT_ASSERT(wxT('r') == s[3]);
 
     // check that creating buffer of length smaller than string works, i.e. at
     // least doesn't crash (it would if we naively copied the entire original

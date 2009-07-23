@@ -309,7 +309,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-                    wxLogTrace(_T("Focus"), _T("focus lost(%p)"), static_cast<void*>(thisWindow));
+                    wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
 
                     // remove this as soon as posting the synthesized event works properly
                     static bool inKillFocusEvent = false ;
@@ -329,7 +329,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 {
                     // set focus
                     // panel wants to track the window which was the last to have focus in it
-                    wxLogTrace(_T("Focus"), _T("focus set(%p)"), static_cast<void*>(thisWindow));
+                    wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
                     wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->HandleWindowEvent(eventFocus);
 
@@ -357,12 +357,12 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 if ( controlPart != kControlFocusNoPart )
                 {
                     targetFocusWindow = thisWindow;
-                    wxLogTrace(_T("Focus"), _T("focus to be set(%p)"), static_cast<void*>(thisWindow));
+                    wxLogTrace(wxT("Focus"), wxT("focus to be set(%p)"), static_cast<void*>(thisWindow));
                 }
                 else
                 {
                     formerFocusWindow = thisWindow;
-                    wxLogTrace(_T("Focus"), _T("focus to be lost(%p)"), static_cast<void*>(thisWindow));
+                    wxLogTrace(wxT("Focus"), wxT("focus to be lost(%p)"), static_cast<void*>(thisWindow));
                 }
 
                 ControlPartCode previousControlPart = 0;
@@ -415,7 +415,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-                        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), static_cast<void*>(thisWindow));
+                        wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
 
                         static bool inKillFocusEvent = false ;
 
@@ -431,7 +431,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     else
                     {
                         // panel wants to track the window which was the last to have focus in it
-                        wxLogTrace(_T("Focus"), _T("focus set(%p)"), static_cast<void*>(thisWindow));
+                        wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
                         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                         thisWindow->HandleWindowEvent(eventFocus);
 
@@ -1007,7 +1007,7 @@ void wxMacControl::SetControlSize( wxWindowVariant variant )
             break ;
 
         default:
-            wxFAIL_MSG(_T("unexpected window variant"));
+            wxFAIL_MSG(wxT("unexpected window variant"));
             break ;
     }
 

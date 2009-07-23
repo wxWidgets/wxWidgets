@@ -73,9 +73,9 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *WXUNUSED(verb)) const
     wxLogNull nolog;
     wxString strKey;
 
-    if ( wxRegKey(wxRegKey::HKCR, m_ext + _T("\\shell")).Exists() )
+    if ( wxRegKey(wxRegKey::HKCR, m_ext + wxT("\\shell")).Exists() )
         strKey = m_ext;
-    if ( wxRegKey(wxRegKey::HKCR, m_strFileType + _T("\\shell")).Exists() )
+    if ( wxRegKey(wxRegKey::HKCR, m_strFileType + wxT("\\shell")).Exists() )
         strKey = m_strFileType;
 
     if ( !strKey )
@@ -85,7 +85,7 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *WXUNUSED(verb)) const
     }
 
     strKey << wxT("\\shell\\") << verb;
-    wxRegKey key(wxRegKey::HKCR, strKey + _T("\\command"));
+    wxRegKey key(wxRegKey::HKCR, strKey + wxT("\\command"));
     wxString command;
     if ( key.Open() ) {
         // it's the default value of the key
@@ -114,25 +114,25 @@ wxString wxFileTypeImpl::GetCommand(const wxChar *WXUNUSED(verb)) const
 #if wxUSE_DDE
             // look whether we must issue some DDE requests to the application
             // (and not just launch it)
-            strKey += _T("\\DDEExec");
+            strKey += wxT("\\DDEExec");
             wxRegKey keyDDE(wxRegKey::HKCR, strKey);
             if ( keyDDE.Open() ) {
                 wxString ddeCommand, ddeServer, ddeTopic;
-                keyDDE.QueryValue(_T(""), ddeCommand);
-                ddeCommand.Replace(_T("%1"), _T("%s"));
+                keyDDE.QueryValue(wxT(""), ddeCommand);
+                ddeCommand.Replace(wxT("%1"), wxT("%s"));
 
-                wxRegKey(wxRegKey::HKCR, strKey + _T("\\Application")).
-                    QueryValue(_T(""), ddeServer);
-                wxRegKey(wxRegKey::HKCR, strKey + _T("\\Topic")).
-                    QueryValue(_T(""), ddeTopic);
+                wxRegKey(wxRegKey::HKCR, strKey + wxT("\\Application")).
+                    QueryValue(wxT(""), ddeServer);
+                wxRegKey(wxRegKey::HKCR, strKey + wxT("\\Topic")).
+                    QueryValue(wxT(""), ddeTopic);
 
                 // HACK: we use a special feature of wxExecute which exists
                 //       just because we need it here: it will establish DDE
                 //       conversation with the program it just launched
-                command.Prepend(_T("WX_DDE#"));
-                command << _T('#') << ddeServer
-                        << _T('#') << ddeTopic
-                        << _T('#') << ddeCommand;
+                command.Prepend(wxT("WX_DDE#"));
+                command << wxT('#') << ddeServer
+                        << wxT('#') << ddeTopic
+                        << wxT('#') << ddeCommand;
             }
             else
 #endif // wxUSE_DDE

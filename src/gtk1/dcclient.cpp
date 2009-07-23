@@ -90,9 +90,9 @@ void gdk_wx_draw_bitmap(GdkDrawable  *drawable,
                         gint         width,
                         gint         height)
 {
-    wxCHECK_RET( drawable, _T("NULL drawable in gdk_wx_draw_bitmap") );
-    wxCHECK_RET( src, _T("NULL src in gdk_wx_draw_bitmap") );
-    wxCHECK_RET( gc, _T("NULL gc in gdk_wx_draw_bitmap") );
+    wxCHECK_RET( drawable, wxT("NULL drawable in gdk_wx_draw_bitmap") );
+    wxCHECK_RET( src, wxT("NULL src in gdk_wx_draw_bitmap") );
+    wxCHECK_RET( gc, wxT("NULL gc in gdk_wx_draw_bitmap") );
 
     GdkWindowPrivate *drawable_private;
     GdkWindowPrivate *src_private;
@@ -423,7 +423,7 @@ void wxWindowDCImpl::SetUpDC()
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
-    wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_owner, wxT("GetSize() doesn't work without window") );
 
     m_owner->GetSize(width, height);
 }
@@ -2189,7 +2189,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
 wxClientDCImpl::wxClientDCImpl(wxDC *owner, wxWindow *win)
               : wxWindowDCImpl(owner, win)
 {
-    wxCHECK_RET( win, _T("NULL window in wxClientDCImpl::wxClientDCImpl") );
+    wxCHECK_RET( win, wxT("NULL window in wxClientDCImpl::wxClientDCImpl") );
 
 #ifdef __WXUNIVERSAL__
     wxPoint ptOrigin = win->GetClientAreaOrigin();
@@ -2201,7 +2201,7 @@ wxClientDCImpl::wxClientDCImpl(wxDC *owner, wxWindow *win)
 
 void wxClientDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_owner, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_owner, wxT("GetSize() doesn't work without window") );
 
     m_owner->GetClientSize( width, height );
 }

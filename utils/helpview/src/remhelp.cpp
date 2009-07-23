@@ -252,7 +252,7 @@ bool wxRemoteHtmlHelpController::Quit()
                     switch ( sig )
                     {
                     default:
-                    wxFAIL_MSG( _T("unexpected return value") );
+                    wxFAIL_MSG( wxT("unexpected return value") );
                     // fall through
 
                       case -1:
@@ -283,11 +283,11 @@ bool wxRemoteHtmlHelpController::Quit()
     {
         if ( wxProcess::Exists(m_pid) )
         {
-            wxLogStatus(_T("Process %ld is running."), m_pid);
+            wxLogStatus(wxT("Process %ld is running."), m_pid);
         }
         else
         {
-            wxLogStatus(_T("No process with pid = %ld."), m_pid);
+            wxLogStatus(wxT("No process with pid = %ld."), m_pid);
         }
     }
     else // not SIGNONE
@@ -295,23 +295,23 @@ bool wxRemoteHtmlHelpController::Quit()
         wxKillError rc = wxProcess::Kill(m_pid, (wxSignal)sig);
         if ( rc == wxKILL_OK )
         {
-            wxLogStatus(_T("Process %ld killed with signal %d."), m_pid, sig);
+            wxLogStatus(wxT("Process %ld killed with signal %d."), m_pid, sig);
         }
         else
         {
             static const wxChar *errorText[] =
             {
-                _T(""), // no error
-                    _T("signal not supported"),
-                    _T("permission denied"),
-                    _T("no such process"),
-                    _T("unspecified error"),
+                wxT(""), // no error
+                    wxT("signal not supported"),
+                    wxT("permission denied"),
+                    wxT("no such process"),
+                    wxT("unspecified error"),
             };
 
             // sig = 3, 6, 9 or 12 all kill server with no apparent problem
             // but give error message on MSW - timout?
             //
-            //wxLogError(_T("Failed to kill process %ld with signal %d: %s"),
+            //wxLogError(wxT("Failed to kill process %ld with signal %d: %s"),
             //            m_pid, sig, errorText[rc]);
         }
     }

@@ -124,8 +124,8 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
 
 void wxBufferedDC::UnMask()
 {
-    wxCHECK_RET( m_dc, _T("no underlying wxDC?") );
-    wxASSERT_MSG( m_buffer && m_buffer->IsOk(), _T("invalid backing store") );
+    wxCHECK_RET( m_dc, wxT("no underlying wxDC?") );
+    wxASSERT_MSG( m_buffer && m_buffer->IsOk(), wxT("invalid backing store") );
 
     wxCoord x = 0,
             y = 0;

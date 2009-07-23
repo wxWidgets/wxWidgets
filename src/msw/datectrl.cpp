@@ -148,7 +148,7 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
         const DWORD rc = ::GetLastError();
         if ( rc != ERROR_INSUFFICIENT_BUFFER )
         {
-            wxLogApiError(_T("GetDateFormat"), rc);
+            wxLogApiError(wxT("GetDateFormat"), rc);
 
             // fall back on wxDateTime, what else to do?
             s = wxDateTime::Today().FormatDate();
@@ -160,7 +160,7 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
     // representation of todays date because the control must accommodate any
     // date and while the widths of all digits are usually about the same, the
     // width of the month string varies a lot, so try to account for it
-    s += _T("WW");
+    s += wxT("WW");
 
     int x, y;
     dc.GetTextExtent(s, &x, &y);
@@ -184,7 +184,7 @@ wxSize wxDatePickerCtrl::DoGetBestSize() const
 void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 {
     wxCHECK_RET( dt.IsValid() || HasFlag(wxDP_ALLOWNONE),
-                    _T("this control requires a valid date") );
+                    wxT("this control requires a valid date") );
 
     SYSTEMTIME st;
     if ( dt.IsValid() )
@@ -193,7 +193,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
                                  dt.IsValid() ? GDT_VALID : GDT_NONE,
                                  &st) )
     {
-        wxLogDebug(_T("DateTime_SetSystemtime() failed"));
+        wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
     }
 
     // we need to keep only the date part, times don't make sense for this
@@ -215,7 +215,7 @@ wxDateTime wxDatePickerCtrl::GetValue() const
 
     wxASSERT_MSG( m_date.IsValid() == dt.IsValid() &&
                     (!dt.IsValid() || dt == m_date),
-                  _T("bug in wxDatePickerCtrl: m_date not in sync") );
+                  wxT("bug in wxDatePickerCtrl: m_date not in sync") );
 #endif // wxDEBUG_LEVEL
 
     return m_date;
@@ -240,7 +240,7 @@ void wxDatePickerCtrl::SetRange(const wxDateTime& dt1, const wxDateTime& dt2)
 
     if ( !DateTime_SetRange(GetHwnd(), flags, st) )
     {
-        wxLogDebug(_T("DateTime_SetRange() failed"));
+        wxLogDebug(wxT("DateTime_SetRange() failed"));
     }
 }
 

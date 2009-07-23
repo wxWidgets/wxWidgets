@@ -51,7 +51,7 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
     tree->Create(m_parentAsWindow,
                 GetID(),
                 GetPosition(), GetSize(),
-                GetStyle(_T("style"), wxTR_DEFAULT_STYLE),
+                GetStyle(wxT("style"), wxTR_DEFAULT_STYLE),
                 wxDefaultValidator,
                 GetName());
 

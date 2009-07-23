@@ -1324,7 +1324,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
 
         case MAX:
         default:
-            wxFAIL_MSG(_T("invalid standard colour"));
+            wxFAIL_MSG(wxT("invalid standard colour"));
             return *wxBLACK;
     }
 }
@@ -1564,7 +1564,7 @@ void wxWin32Renderer::DrawFrameWithLabel(wxDC& dc,
                                          int indexAccel)
 {
     wxString label2;
-    label2 << _T(' ') << label << _T(' ');
+    label2 << wxT(' ') << label << wxT(' ');
     if ( indexAccel != -1 )
     {
         // adjust it as we prepended a space
@@ -1783,7 +1783,7 @@ void wxWin32Renderer::DrawTab(wxDC& dc,
         switch ( dir )
         {
             default:
-                wxFAIL_MSG(_T("invaild notebook tab orientation"));
+                wxFAIL_MSG(wxT("invaild notebook tab orientation"));
                 // fall through
 
             case wxTOP:
@@ -3502,7 +3502,7 @@ bool wxWin32StatusBarInputHandler::IsOnGrip(wxWindow *statbar,
             parentTLW = wxDynamicCast(statbar->GetParent(), wxTopLevelWindow);
 
         wxCHECK_MSG( parentTLW, false,
-                     _T("the status bar should be a child of a TLW") );
+                     wxT("the status bar should be a child of a TLW") );
 
         // a maximized window can't be resized anyhow
         if ( !parentTLW->IsMaximized() )
@@ -3610,7 +3610,7 @@ wxWin32SystemMenuEvtHandler(wxWin32FrameInputHandler *handler)
 
 void wxWin32SystemMenuEvtHandler::Attach(wxInputConsumer *consumer)
 {
-    wxASSERT_MSG( m_wnd == NULL, _T("can't attach the handler twice!") );
+    wxASSERT_MSG( m_wnd == NULL, wxT("can't attach the handler twice!") );
 
     m_wnd = wxStaticCast(consumer->GetInputWindow(), wxTopLevelWindow);
     m_wnd->PushEventHandler(this);

@@ -1506,7 +1506,7 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
             break ;
 
         default:
-            wxFAIL_MSG(_T("unexpected window variant"));
+            wxFAIL_MSG(wxT("unexpected window variant"));
             break ;
     }
     if ( [m_osxView respondsToSelector:@selector(setControlSize:)] )
@@ -1592,7 +1592,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
 
     if ( receivedFocus )
     {
-        wxLogTrace(_T("Focus"), _T("focus set(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
         thisWindow->HandleWindowEvent(eventFocus);
 
@@ -1614,7 +1614,7 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* oth
             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
                     
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);

@@ -620,7 +620,7 @@ int wxListBox::GtkGetIndexFor(GtkTreeIter& iter) const
 
     gint* pIntPath = gtk_tree_path_get_indices(path);
 
-    wxCHECK_MSG( pIntPath, wxNOT_FOUND, _T("failed to get iterator path") );
+    wxCHECK_MSG( pIntPath, wxNOT_FOUND, wxT("failed to get iterator path") );
 
     int idx = pIntPath[0];
 
@@ -707,7 +707,7 @@ void wxListBox::SetString(unsigned int n, const wxString& label)
 
     // and update the model which will refresh the tree too
     GtkTreeIter iter;
-    wxCHECK_RET( GtkGetIteratorFor(n, &iter), _T("failed to get iterator") );
+    wxCHECK_RET( GtkGetIteratorFor(n, &iter), wxT("failed to get iterator") );
 
     // FIXME: this resets the checked status of a wxCheckListBox item
 

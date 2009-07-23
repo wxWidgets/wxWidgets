@@ -79,7 +79,7 @@ const size_t wxStringImpl::npos = (size_t) -1;
 #if wxUSE_UNICODE_UTF8
 const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
 #endif
-const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
+const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 
 #else
 
@@ -96,7 +96,7 @@ static const struct
 #if wxUSE_UNICODE_UTF8
 // FIXME-UTF8: get rid of this, have only one wxEmptyString
 const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = &g_strEmpty.dummy;
-const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
+const wxChar WXDLLIMPEXP_BASE *wxEmptyString = wxT("");
 #else
 const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 #endif
@@ -166,7 +166,7 @@ void wxStringImpl::InitWith(const wxStringCharType *psz,
 
   // if the length is not given, assume the string to be NUL terminated
   if ( nLength == npos ) {
-    wxASSERT_MSG( nPos <= wxStrlen(psz), _T("index out of bounds") );
+    wxASSERT_MSG( nPos <= wxStrlen(psz), wxT("index out of bounds") );
 
     nLength = wxStrlen(psz + nPos);
   }
@@ -176,7 +176,7 @@ void wxStringImpl::InitWith(const wxStringCharType *psz,
   if ( nLength > 0 ) {
     // trailing '\0' is written in AllocBuffer()
     if ( !AllocBuffer(nLength) ) {
-      wxFAIL_MSG( _T("out of memory in wxStringImpl::InitWith") );
+      wxFAIL_MSG( wxT("out of memory in wxStringImpl::InitWith") );
       return;
     }
     wxStringMemcpy(m_pchData, psz + nPos, nLength);
@@ -191,7 +191,7 @@ wxStringImpl::wxStringImpl(const_iterator first, const_iterator last)
   }
   else
   {
-    wxFAIL_MSG( _T("first must be before last") );
+    wxFAIL_MSG( wxT("first must be before last") );
     Init();
   }
 }
@@ -311,7 +311,7 @@ wxStringImpl& wxStringImpl::append(size_t n, wxStringCharType ch)
     size_type len = length();
 
     if ( !Alloc(len + n) || !CopyBeforeWrite() ) {
-      wxFAIL_MSG( _T("out of memory in wxStringImpl::append") );
+      wxFAIL_MSG( wxT("out of memory in wxStringImpl::append") );
       return *this;
     }
     GetStringData()->nDataLength = len + n;
@@ -436,7 +436,7 @@ wxStringImpl& wxStringImpl::insert(size_t nPos,
     if ( n == 0 ) return *this;
 
     if ( !Alloc(length() + n) || !CopyBeforeWrite() ) {
-        wxFAIL_MSG( _T("out of memory in wxStringImpl::insert") );
+        wxFAIL_MSG( wxT("out of memory in wxStringImpl::insert") );
         return *this;
     }
 
@@ -587,7 +587,7 @@ wxStringImpl& wxStringImpl::replace(size_t nStart, size_t nLen,
     const size_t lenOld = length();
 
     wxASSERT_MSG( nStart <= lenOld,
-                  _T("index out of bounds in wxStringImpl::replace") );
+                  wxT("index out of bounds in wxStringImpl::replace") );
     size_t nEnd = nStart + nLen;
     if ( nLen > lenOld - nStart )
     {
@@ -655,7 +655,7 @@ wxStringImpl& wxStringImpl::operator=(wxStringCharType ch)
 {
   wxStringCharType c(ch);
   if ( !AssignCopy(1, &c) ) {
-    wxFAIL_MSG( _T("out of memory in wxStringImpl::operator=(wxStringCharType)") );
+    wxFAIL_MSG( wxT("out of memory in wxStringImpl::operator=(wxStringCharType)") );
   }
   return *this;
 }
@@ -664,7 +664,7 @@ wxStringImpl& wxStringImpl::operator=(wxStringCharType ch)
 wxStringImpl& wxStringImpl::operator=(const wxStringCharType *psz)
 {
   if ( !AssignCopy(wxStrlen(psz), psz) ) {
-    wxFAIL_MSG( _T("out of memory in wxStringImpl::operator=(const wxStringCharType *)") );
+    wxFAIL_MSG( wxT("out of memory in wxStringImpl::operator=(const wxStringCharType *)") );
   }
   return *this;
 }
@@ -784,10 +784,10 @@ void wxStringImpl::DoUngetWriteBuf(size_t nLen)
 {
   wxStringData * const pData = GetStringData();
 
-  wxASSERT_MSG( nLen < pData->nAllocLength, _T("buffer overrun") );
+  wxASSERT_MSG( nLen < pData->nAllocLength, wxT("buffer overrun") );
 
   // the strings we store are always NUL-terminated
-  pData->data()[nLen] = _T('\0');
+  pData->data()[nLen] = wxT('\0');
   pData->nDataLength = nLen;
   pData->Validate(true);
 }

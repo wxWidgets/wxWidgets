@@ -76,7 +76,7 @@
 #include "wx/datetime.h"
 
 // the suffix we add to the button to show that the dialog can be expanded
-#define EXPAND_SUFFIX _T(" >>")
+#define EXPAND_SUFFIX wxT(" >>")
 
 #define CAN_SAVE_FILES (wxUSE_FILE && wxUSE_FILEDLG)
 
@@ -96,7 +96,7 @@ static wxString TimeStamp(const wxString& format, time_t t)
     if ( !wxStrftime(buf, WXSIZEOF(buf), format, wxLocaltime_r(&t, &tm)) )
     {
         // buffer is too small?
-        wxFAIL_MSG(_T("strftime() failed"));
+        wxFAIL_MSG(wxT("strftime() failed"));
     }
     return wxString(buf);
 #else // !wxUSE_DATETIME
@@ -807,10 +807,10 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 
     // no need to translate these strings as they're not shown to the
     // user anyhow (we use wxLC_NO_HEADER style)
-    m_listctrl->InsertColumn(0, _T("Message"));
+    m_listctrl->InsertColumn(0, wxT("Message"));
 
     if (hasTimeStamp)
-        m_listctrl->InsertColumn(1, _T("Time"));
+        m_listctrl->InsertColumn(1, wxT("Time"));
 
     // prepare the imagelist
     static const int ICON_SIZE = 16;

@@ -144,9 +144,9 @@ wxBrush::wxBrush(const wxColour& col, int style)
 
 wxBrush::wxBrush(const wxBitmap &stippleBitmap)
 {
-    wxCHECK_RET( stippleBitmap.Ok(), _T("invalid bitmap") );
+    wxCHECK_RET( stippleBitmap.Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( stippleBitmap.GetWidth() == 8 && stippleBitmap.GetHeight() == 8,
-                  _T("stipple bitmap must be 8x8") );
+                  wxT("stipple bitmap must be 8x8") );
 
     m_refData = new wxBrushRefData();
     M_BRUSHDATA->m_colour = *wxBLACK;
@@ -177,21 +177,21 @@ bool wxBrush::operator != (const wxBrush& brush) const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_style;
 }
 
 wxColour wxBrush::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_colour;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( Ok(), NULL, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid brush") );
 
     return &M_BRUSHDATA->m_stipple;
 }
@@ -232,9 +232,9 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
 {
     AllocExclusive();
 
-    wxCHECK_RET( stipple.Ok(), _T("invalid bitmap") );
+    wxCHECK_RET( stipple.Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( stipple.GetWidth() == 8 && stipple.GetHeight() == 8,
-                  _T("stipple bitmap must be 8x8") );
+                  wxT("stipple bitmap must be 8x8") );
 
     M_BRUSHDATA->m_stipple = stipple;
     wxBitmapToPixPattern(stipple, &(M_BRUSHDATA->m_pixPattern),

@@ -63,8 +63,8 @@ class wxHtmlTagsCacheData : public wxVector<wxHtmlCacheItem>
 
 bool wxIsCDATAElement(const wxChar *tag)
 {
-    return (wxStrcmp(tag, _T("SCRIPT")) == 0) ||
-           (wxStrcmp(tag, _T("STYLE")) == 0);
+    return (wxStrcmp(tag, wxT("SCRIPT")) == 0) ||
+           (wxStrcmp(tag, wxT("STYLE")) == 0);
 }
 
 bool wxIsCDATAElement(const wxString& tag)
@@ -103,7 +103,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             {
                 tagBuffer[i] = (wxChar)wxToupper(*pos);
             }
-            tagBuffer[i] = _T('\0');
+            tagBuffer[i] = wxT('\0');
 
             Cache()[tg].Name = new wxChar[i+1];
             memcpy(Cache()[tg].Name, tagBuffer, (i+1)*sizeof(wxChar));
@@ -483,12 +483,12 @@ int wxHtmlTag::ScanParam(const wxString& par,
 
 bool wxHtmlTag::GetParamAsColour(const wxString& par, wxColour *clr) const
 {
-    wxCHECK_MSG( clr, false, _T("invalid colour argument") );
+    wxCHECK_MSG( clr, false, wxT("invalid colour argument") );
 
     wxString str = GetParam(par);
 
     // handle colours defined in HTML 4.0 first:
-    if (str.length() > 1 && str[0] != _T('#'))
+    if (str.length() > 1 && str[0] != wxT('#'))
     {
         #define HTML_COLOUR(name, r, g, b)              \
             if (str.IsSameAs(wxS(name), false))         \

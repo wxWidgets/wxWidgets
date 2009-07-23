@@ -189,7 +189,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
             const size_t count = translators.size();
             for ( size_t n = 0; n < count; n++ )
             {
-                transCredits << translators[n] << _T('\n');
+                transCredits << translators[n] << wxT('\n');
             }
         }
         else // no translators explicitely specified

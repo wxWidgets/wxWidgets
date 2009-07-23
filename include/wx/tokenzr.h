@@ -21,7 +21,7 @@
 // ----------------------------------------------------------------------------
 
 // default: delimiters are usual white space characters
-#define wxDEFAULT_DELIMITERS (_T(" \t\r\n"))
+#define wxDEFAULT_DELIMITERS (wxT(" \t\r\n"))
 
 // wxStringTokenizer mode flags which determine its behaviour
 enum wxStringTokenizerMode

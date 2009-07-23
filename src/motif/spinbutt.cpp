@@ -189,7 +189,7 @@ bool wxArrowButton::Create( wxSpinButton* parent,
                             ArrowDirection d,
                             const wxPoint& pos, const wxSize& size )
 {
-    wxCHECK_MSG( parent, false, _T("must have a valid parent") );
+    wxCHECK_MSG( parent, false, wxT("must have a valid parent") );
 
     int arrow_dir = XmARROW_UP;
 

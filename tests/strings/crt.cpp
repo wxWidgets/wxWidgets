@@ -69,15 +69,15 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( CrtTestCase, "CrtTestCase" );
 
 void CrtTestCase::SetGetEnv()
 {
-#define TESTVAR_NAME _T("WXTESTVAR")
+#define TESTVAR_NAME wxT("WXTESTVAR")
 
     wxString val;
-    wxSetEnv(TESTVAR_NAME, _T("value"));
+    wxSetEnv(TESTVAR_NAME, wxT("value"));
     CPPUNIT_ASSERT( wxGetEnv(TESTVAR_NAME, &val) );
     CPPUNIT_ASSERT_EQUAL( "value", val );
     CPPUNIT_ASSERT_EQUAL( "value", wxString(wxGetenv(TESTVAR_NAME)) );
 
-    wxSetEnv(TESTVAR_NAME, _T("something else"));
+    wxSetEnv(TESTVAR_NAME, wxT("something else"));
     CPPUNIT_ASSERT( wxGetEnv(TESTVAR_NAME, &val) );
     CPPUNIT_ASSERT_EQUAL( "something else", val );
     CPPUNIT_ASSERT_EQUAL( "something else", wxString(wxGetenv(TESTVAR_NAME)) );

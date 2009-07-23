@@ -79,7 +79,7 @@ bool FortyApp::OnInit()
 
     wxSize size(668,510);
 
-    if ((argc > 1) && (!wxStrcmp(argv[1],_T("-L"))))
+    if ((argc > 1) && (!wxStrcmp(argv[1],wxT("-L"))))
     {
         largecards = true;
         size = wxSize(1000,750);
@@ -87,7 +87,7 @@ bool FortyApp::OnInit()
 
     FortyFrame* frame = new FortyFrame(
             0,
-            _T("Forty Thieves"),
+            wxT("Forty Thieves"),
             wxDefaultPosition,
             size,
             largecards
@@ -140,35 +140,35 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
 #endif
     // set the icon
 #ifdef __WXMSW__
-    SetIcon(wxIcon(_T("CardsIcon")));
+    SetIcon(wxIcon(wxT("CardsIcon")));
 #else
     SetIcon(wxIcon(forty_xpm));
 #endif
 
     // Make a menu bar
     wxMenu* gameMenu = new wxMenu;
-    gameMenu->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), _T("Start a new game"));
-    gameMenu->Append(SCORES, _T("&Scores..."), _T("Displays scores"));
-    gameMenu->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT), _T("Exits Forty Thieves"));
+    gameMenu->Append(wxID_NEW, wxGetStockLabel(wxID_NEW), wxT("Start a new game"));
+    gameMenu->Append(SCORES, wxT("&Scores..."), wxT("Displays scores"));
+    gameMenu->Append(wxID_EXIT, wxGetStockLabel(wxID_EXIT), wxT("Exits Forty Thieves"));
 
     wxMenu* editMenu = new wxMenu;
-    editMenu->Append(wxID_UNDO, wxGetStockLabel(wxID_UNDO), _T("Undo the last move"));
-    editMenu->Append(wxID_REDO, wxGetStockLabel(wxID_REDO), _T("Redo a move that has been undone"));
+    editMenu->Append(wxID_UNDO, wxGetStockLabel(wxID_UNDO), wxT("Undo the last move"));
+    editMenu->Append(wxID_REDO, wxGetStockLabel(wxID_REDO), wxT("Redo a move that has been undone"));
 
     wxMenu* optionsMenu = new wxMenu;
     optionsMenu->Append(RIGHT_BUTTON_UNDO,
-            _T("&Right button undo"),
-            _T("Enables/disables right mouse button undo and redo"),
+            wxT("&Right button undo"),
+            wxT("Enables/disables right mouse button undo and redo"),
             true
             );
     optionsMenu->Append(HELPING_HAND,
-            _T("&Helping hand"),
-            _T("Enables/disables hand cursor when a card can be moved"),
+            wxT("&Helping hand"),
+            wxT("Enables/disables hand cursor when a card can be moved"),
             true
             );
     optionsMenu->Append(LARGE_CARDS,
-            _T("&Large cards"),
-            _T("Enables/disables large cards for high resolution displays"),
+            wxT("&Large cards"),
+            wxT("Enables/disables large cards for high resolution displays"),
             true
             );
     optionsMenu->Check(HELPING_HAND, true);
@@ -176,14 +176,14 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
     optionsMenu->Check(LARGE_CARDS, largecards ? true : false);
 
     wxMenu* helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP_CONTENTS, _T("&Help Contents"), _T("Displays information about playing the game"));
-    helpMenu->Append(wxID_ABOUT, _T("&About..."), _T("About Forty Thieves"));
+    helpMenu->Append(wxID_HELP_CONTENTS, wxT("&Help Contents"), wxT("Displays information about playing the game"));
+    helpMenu->Append(wxID_ABOUT, wxT("&About..."), wxT("About Forty Thieves"));
 
     m_menuBar = new wxMenuBar;
-    m_menuBar->Append(gameMenu,    _T("&Game"));
-    m_menuBar->Append(editMenu,    _T("&Edit"));
-    m_menuBar->Append(optionsMenu, _T("&Options"));
-    m_menuBar->Append(helpMenu,    _T("&Help"));
+    m_menuBar->Append(gameMenu,    wxT("&Game"));
+    m_menuBar->Append(editMenu,    wxT("&Edit"));
+    m_menuBar->Append(optionsMenu, wxT("&Options"));
+    m_menuBar->Append(helpMenu,    wxT("&Help"));
 
     SetMenuBar(m_menuBar);
 
@@ -247,11 +247,11 @@ void
 FortyFrame::About(wxCommandEvent&)
 {
         wxMessageBox(
-            _T("Forty Thieves\n\n")
-            _T("A free card game written with the wxWidgets toolkit\n")
-            _T("Author: Chris Breeze (c) 1992-2004\n")
-            _T("email: chris@breezesys.com"),
-            _T("About Forty Thieves"),
+            wxT("Forty Thieves\n\n")
+            wxT("A free card game written with the wxWidgets toolkit\n")
+            wxT("Author: Chris Breeze (c) 1992-2004\n")
+            wxT("email: chris@breezesys.com"),
+            wxT("About Forty Thieves"),
             wxOK|wxICON_INFORMATION, this
             );
 }
@@ -326,7 +326,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
             file.Open();
             for ( htmlText = file.GetFirstLine();
                   !file.Eof();
-                  htmlText << file.GetNextLine() << _T("\n") ) ;
+                  htmlText << file.GetNextLine() << wxT("\n") ) ;
         }
     }
 
@@ -336,7 +336,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     }
 
     // Customize the HTML
-    htmlText.Replace(wxT("$DATE$"), _T(__DATE__));
+    htmlText.Replace(wxT("$DATE$"), wxT(__DATE__));
 
     wxSize htmlSize(400, 290);
 

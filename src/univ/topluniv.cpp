@@ -163,7 +163,7 @@ void wxTopLevelWindow::UseNativeDecorationsByDefault(bool native)
 
 void wxTopLevelWindow::UseNativeDecorations(bool native)
 {
-    wxASSERT_MSG( !m_windowStyle, _T("must be called before Create()") );
+    wxASSERT_MSG( !m_windowStyle, wxT("must be called before Create()") );
 
     m_usingNativeDecorations = native;
 }

@@ -49,7 +49,7 @@ public:
 
     void SetContainerWindow(wxWindow *winParent)
     {
-        wxASSERT_MSG( !m_winParent, _T("shouldn't be called twice") );
+        wxASSERT_MSG( !m_winParent, wxT("shouldn't be called twice") );
 
         m_winParent = winParent;
     }

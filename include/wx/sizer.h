@@ -857,7 +857,7 @@ public:
         m_totalProportion = 0;
 
         wxASSERT_MSG( m_orient == wxHORIZONTAL || m_orient == wxVERTICAL,
-                      _T("invalid value for wxBoxSizer orientation") );
+                      wxT("invalid value for wxBoxSizer orientation") );
     }
 
     int GetOrientation() const { return m_orient; }

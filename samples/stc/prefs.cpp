@@ -219,159 +219,159 @@ const int g_LanguagePrefsSize = WXSIZEOF(g_LanguagePrefs);
 //! style types
 const StyleInfo g_StylePrefs [] = {
     // mySTC_TYPE_DEFAULT
-    {_T("Default"),
-     _T("BLACK"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Default"),
+     wxT("BLACK"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD1
-    {_T("Keyword1"),
-     _T("BLUE"), _T("WHITE"),
-     _T(""), 10, mySTC_STYLE_BOLD, 0},
+    {wxT("Keyword1"),
+     wxT("BLUE"), wxT("WHITE"),
+     wxT(""), 10, mySTC_STYLE_BOLD, 0},
 
     // mySTC_TYPE_WORD2
-    {_T("Keyword2"),
-     _T("DARK BLUE"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Keyword2"),
+     wxT("DARK BLUE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD3
-    {_T("Keyword3"),
-     _T("CORNFLOWER BLUE"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Keyword3"),
+     wxT("CORNFLOWER BLUE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD4
-    {_T("Keyword4"),
-     _T("CYAN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Keyword4"),
+     wxT("CYAN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD5
-    {_T("Keyword5"),
-     _T("DARK GREY"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Keyword5"),
+     wxT("DARK GREY"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD6
-    {_T("Keyword6"),
-     _T("GREY"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Keyword6"),
+     wxT("GREY"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_COMMENT
-    {_T("Comment"),
-     _T("FOREST GREEN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Comment"),
+     wxT("FOREST GREEN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_DOC
-    {_T("Comment (Doc)"),
-     _T("FOREST GREEN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Comment (Doc)"),
+     wxT("FOREST GREEN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_LINE
-    {_T("Comment line"),
-     _T("FOREST GREEN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Comment line"),
+     wxT("FOREST GREEN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_COMMENT_SPECIAL
-    {_T("Special comment"),
-     _T("FOREST GREEN"), _T("WHITE"),
-     _T(""), 10, mySTC_STYLE_ITALIC, 0},
+    {wxT("Special comment"),
+     wxT("FOREST GREEN"), wxT("WHITE"),
+     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_CHARACTER
-    {_T("Character"),
-     _T("KHAKI"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Character"),
+     wxT("KHAKI"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_CHARACTER_EOL
-    {_T("Character (EOL)"),
-     _T("KHAKI"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Character (EOL)"),
+     wxT("KHAKI"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_STRING
-    {_T("String"),
-     _T("BROWN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("String"),
+     wxT("BROWN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_STRING_EOL
-    {_T("String (EOL)"),
-     _T("BROWN"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("String (EOL)"),
+     wxT("BROWN"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_DELIMITER
-    {_T("Delimiter"),
-     _T("ORANGE"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Delimiter"),
+     wxT("ORANGE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_PUNCTUATION
-    {_T("Punctuation"),
-     _T("ORANGE"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Punctuation"),
+     wxT("ORANGE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_OPERATOR
-    {_T("Operator"),
-     _T("BLACK"), _T("WHITE"),
-     _T(""), 10, mySTC_STYLE_BOLD, 0},
+    {wxT("Operator"),
+     wxT("BLACK"), wxT("WHITE"),
+     wxT(""), 10, mySTC_STYLE_BOLD, 0},
 
     // mySTC_TYPE_BRACE
-    {_T("Label"),
-     _T("VIOLET"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Label"),
+     wxT("VIOLET"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_COMMAND
-    {_T("Command"),
-     _T("BLUE"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Command"),
+     wxT("BLUE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_IDENTIFIER
-    {_T("Identifier"),
-     _T("BLACK"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Identifier"),
+     wxT("BLACK"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_LABEL
-    {_T("Label"),
-     _T("VIOLET"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Label"),
+     wxT("VIOLET"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_NUMBER
-    {_T("Number"),
-     _T("SIENNA"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Number"),
+     wxT("SIENNA"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_PARAMETER
-    {_T("Parameter"),
-     _T("VIOLET"), _T("WHITE"),
-     _T(""), 10, mySTC_STYLE_ITALIC, 0},
+    {wxT("Parameter"),
+     wxT("VIOLET"), wxT("WHITE"),
+     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_REGEX
-    {_T("Regular expression"),
-     _T("ORCHID"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Regular expression"),
+     wxT("ORCHID"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_UUID
-    {_T("UUID"),
-     _T("ORCHID"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("UUID"),
+     wxT("ORCHID"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_VALUE
-    {_T("Value"),
-     _T("ORCHID"), _T("WHITE"),
-     _T(""), 10, mySTC_STYLE_ITALIC, 0},
+    {wxT("Value"),
+     wxT("ORCHID"), wxT("WHITE"),
+     wxT(""), 10, mySTC_STYLE_ITALIC, 0},
 
     // mySTC_TYPE_PREPROCESSOR
-    {_T("Preprocessor"),
-     _T("GREY"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Preprocessor"),
+     wxT("GREY"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_SCRIPT
-    {_T("Script"),
-     _T("DARK GREY"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Script"),
+     wxT("DARK GREY"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_ERROR
-    {_T("Error"),
-     _T("RED"), _T("WHITE"),
-     _T(""), 10, 0, 0},
+    {wxT("Error"),
+     wxT("RED"), wxT("WHITE"),
+     wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_UNDEFINED
-    {_T("Undefined"),
-     _T("ORANGE"), _T("WHITE"),
-     _T(""), 10, 0, 0}
+    {wxT("Undefined"),
+     wxT("ORANGE"), wxT("WHITE"),
+     wxT(""), 10, 0, 0}
 
     };
 

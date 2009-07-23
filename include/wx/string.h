@@ -288,7 +288,7 @@ public:
     wxCStrData operator-(ptrdiff_t n) const
     {
         wxASSERT_MSG( n <= (ptrdiff_t)m_offset,
-                      _T("attempt to construct address before the beginning of the string") );
+                      wxT("attempt to construct address before the beginning of the string") );
         return wxCStrData(m_str, m_offset - n, m_owned);
     }
 
@@ -1513,14 +1513,14 @@ public:
     // get last character
     wxUniChar Last() const
     {
-      wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+      wxASSERT_MSG( !empty(), wxT("wxString: index out of bounds") );
       return *rbegin();
     }
 
     // get writable last character
     wxUniCharRef Last()
     {
-      wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+      wxASSERT_MSG( !empty(), wxT("wxString: index out of bounds") );
       return *rbegin();
     }
 
@@ -1963,7 +1963,7 @@ public:
   {
 #if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
     wxASSERT_MSG( s.IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
 #endif
 
     append(s);
@@ -2057,36 +2057,36 @@ public:
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
-    { return (*this) << Format(_T("%d"), i); }
+    { return (*this) << Format(wxT("%d"), i); }
       // insert an unsigned int into string
   wxString& operator<<(unsigned int ui)
-    { return (*this) << Format(_T("%u"), ui); }
+    { return (*this) << Format(wxT("%u"), ui); }
       // insert a long into string
   wxString& operator<<(long l)
-    { return (*this) << Format(_T("%ld"), l); }
+    { return (*this) << Format(wxT("%ld"), l); }
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
-    { return (*this) << Format(_T("%lu"), ul); }
+    { return (*this) << Format(wxT("%lu"), ul); }
 #if defined wxLongLong_t && !defined wxLongLongIsLong
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
     {
-      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("d");
+      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("d");
       return (*this) << Format(fmt, ll);
     }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
     {
-      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("u");
+      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("u");
       return (*this) << Format(fmt , ull);
     }
 #endif // wxLongLong_t && !wxLongLongIsLong
       // insert a float into string
   wxString& operator<<(float f)
-    { return (*this) << Format(_T("%f"), f); }
+    { return (*this) << Format(wxT("%f"), f); }
       // insert a double into string
   wxString& operator<<(double d)
-    { return (*this) << Format(_T("%g"), d); }
+    { return (*this) << Format(wxT("%g"), d); }
 
   // string comparison
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)
@@ -2428,7 +2428,7 @@ public:
                CreateConstIterator(last).impl())
   {
       wxASSERT_MSG( first.m_str == last.m_str,
-                    _T("pointers must be into the same string") );
+                    wxT("pointers must be into the same string") );
   }
 #endif // WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
 
@@ -4165,7 +4165,7 @@ inline const wxStringCharType *wxCStrData::AsInternal() const
 inline wxUniChar wxCStrData::operator*() const
 {
     if ( m_str->empty() )
-        return wxUniChar(_T('\0'));
+        return wxUniChar(wxT('\0'));
     else
         return (*m_str)[m_offset];
 }

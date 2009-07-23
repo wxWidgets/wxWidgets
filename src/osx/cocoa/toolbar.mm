@@ -1271,7 +1271,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             if (m_macToolbar != NULL)
             {
                 WXWidget view = (WXWidget) tool->GetControl()->GetHandle() ;
-                wxCHECK_MSG( view, false, _T("control must be non-NULL") );
+                wxCHECK_MSG( view, false, wxT("control must be non-NULL") );
 
                 wxString identifier = wxString::Format(wxT("%ld"), (long) tool);
                 wxCFStringRef cfidentifier( identifier, wxFont::GetDefaultEncoding() );

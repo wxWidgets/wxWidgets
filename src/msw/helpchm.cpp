@@ -50,7 +50,7 @@ HTMLHELP GetHtmlHelpFunction()
 
     if ( !s_htmlHelp )
     {
-        static wxDynamicLibrary s_dllHtmlHelp(_T("HHCTRL.OCX"), wxDL_VERBATIM);
+        static wxDynamicLibrary s_dllHtmlHelp(wxT("HHCTRL.OCX"), wxDL_VERBATIM);
 
         if ( !s_dllHtmlHelp.IsLoaded() )
         {

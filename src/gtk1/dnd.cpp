@@ -49,7 +49,7 @@ static long gs_flagsForDrag = 0;
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_DND) to enable the trace messages from here
 // (there are quite a few of them, so don't enable this by default)
-#define TRACE_DND _T("dnd")
+#define TRACE_DND wxT("dnd")
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
@@ -358,7 +358,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
         GdkAtom format = drop_target->GetMatchingPair();
 
         // this does happen somehow, see bug 555111
-        wxCHECK_MSG( format, FALSE, _T("no matching GdkAtom for format?") );
+        wxCHECK_MSG( format, FALSE, wxT("no matching GdkAtom for format?") );
 
 /*
         GdkDragAction action = GDK_ACTION_MOVE;

@@ -168,7 +168,7 @@ wxMenuBase::~wxMenuBase()
 
 void wxMenuBase::AddSubMenu(wxMenu *submenu)
 {
-    wxCHECK_RET( submenu, _T("can't add a NULL submenu") );
+    wxCHECK_RET( submenu, wxT("can't add a NULL submenu") );
 
     submenu->SetParent((wxMenu *)this);
 }
@@ -384,7 +384,7 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
 wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
 {
     wxCHECK_MSG( position < m_items.GetCount(), NULL,
-                 _T("wxMenu::FindItemByPosition(): invalid menu index") );
+                 wxT("wxMenu::FindItemByPosition(): invalid menu index") );
 
     return m_items.Item( position )->GetData();
 }
@@ -496,10 +496,10 @@ wxMenuBar* wxMenuBase::GetMenuBar() const
 void wxMenuBase::Attach(wxMenuBarBase *menubar)
 {
     // use Detach() instead!
-    wxASSERT_MSG( menubar, _T("menu can't be attached to NULL menubar") );
+    wxASSERT_MSG( menubar, wxT("menu can't be attached to NULL menubar") );
 
     // use IsAttached() to prevent this from happening
-    wxASSERT_MSG( !m_menuBar, _T("attaching menu twice?") );
+    wxASSERT_MSG( !m_menuBar, wxT("attaching menu twice?") );
 
     m_menuBar = (wxMenuBar *)menubar;
 }
@@ -507,7 +507,7 @@ void wxMenuBase::Attach(wxMenuBarBase *menubar)
 void wxMenuBase::Detach()
 {
     // use IsAttached() to prevent this from happening
-    wxASSERT_MSG( m_menuBar, _T("detaching unattached menu?") );
+    wxASSERT_MSG( m_menuBar, wxT("detaching unattached menu?") );
 
     m_menuBar = NULL;
 }

@@ -26,8 +26,8 @@
 
 #define DATABUFFER_SIZE     1024
 
-static const wxString FILENAME_FFILEINSTREAM = _T("ffileinstream.test");
-static const wxString FILENAME_FFILEOUTSTREAM = _T("ffileoutstream.test");
+static const wxString FILENAME_FFILEINSTREAM = wxT("ffileinstream.test");
+static const wxString FILENAME_FFILEOUTSTREAM = wxT("ffileoutstream.test");
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case

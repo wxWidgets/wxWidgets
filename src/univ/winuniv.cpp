@@ -927,7 +927,7 @@ void wxWindow::SetScrollbar(int orient,
 {
 #if wxUSE_SCROLLBAR
     wxASSERT_MSG( pageSize <= range,
-                    _T("page size can't be greater than range") );
+                    wxT("page size can't be greater than range") );
 
     bool hasClientSizeChanged = false;
     wxScrollBar *scrollbar = GetScrollbar(orient);
@@ -1145,7 +1145,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 {
-    wxASSERT_MSG( !dx || !dy, _T("can't be used for diag scrolling") );
+    wxASSERT_MSG( !dx || !dy, wxT("can't be used for diag scrolling") );
 
     // the rect to refresh (which we will calculate)
     wxRect rect;
@@ -1160,7 +1160,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
     // location
     wxSize sizeTotal = rectTotal ? rectTotal->GetSize() : GetClientSize();
 
-    wxLogTrace(_T("scroll"), _T("rect is %dx%d, scroll by %d, %d"),
+    wxLogTrace(wxT("scroll"), wxT("rect is %dx%d, scroll by %d, %d"),
                sizeTotal.x, sizeTotal.y, dx, dy);
 
     // the initial and end point of the region we move in client coords
@@ -1178,7 +1178,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
     if ( size.x <= 0 || size.y <= 0 )
     {
         // just redraw everything as nothing of the displayed image will stay
-        wxLogTrace(_T("scroll"), _T("refreshing everything"));
+        wxLogTrace(wxT("scroll"), wxT("refreshing everything"));
 
         rect = rectTotal ? *rectTotal : wxRect(0, 0, sizeTotal.x, sizeTotal.y);
     }
@@ -1230,8 +1230,8 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
                   );
         dc.Blit(ptDest, size, &dcMem, wxPoint(0,0));
 
-        wxLogTrace(_T("scroll"),
-                   _T("Blit: (%d, %d) of size %dx%d -> (%d, %d)"),
+        wxLogTrace(wxT("scroll"),
+                   wxT("Blit: (%d, %d) of size %dx%d -> (%d, %d)"),
                    ptSource.x, ptSource.y,
                    size.x, size.y,
                    ptDest.x, ptDest.y);
@@ -1262,7 +1262,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 
             rect.height = sizeTotal.y;
 
-            wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
+            wxLogTrace(wxT("scroll"), wxT("refreshing (%d, %d)-(%d, %d)"),
                        rect.x, rect.y,
                        rect.GetRight() + 1, rect.GetBottom() + 1);
         }
@@ -1283,7 +1283,7 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
 
             rect.width = sizeTotal.x;
 
-            wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
+            wxLogTrace(wxT("scroll"), wxT("refreshing (%d, %d)-(%d, %d)"),
                        rect.x, rect.y,
                        rect.GetRight() + 1, rect.GetBottom() + 1);
         }

@@ -150,7 +150,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner )
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
-    wxCHECK_RET( window, _T("invalid window in wxClientDCImpl") );
+    wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     if ( !m_window->IsShownOnScreen() )
@@ -177,7 +177,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
-    wxASSERT_MSG( window->MacGetCGContextRef() != NULL, _T("using wxPaintDC without being in a native paint event") );
+    wxASSERT_MSG( window->MacGetCGContextRef() != NULL, wxT("using wxPaintDC without being in a native paint event") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );

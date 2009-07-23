@@ -702,7 +702,7 @@ void ConvertToOS2ListItem (
                     break;
 
                 default:
-                    wxFAIL_MSG( _T("wxOS2 does not support more than 10 columns in REPORT view") );
+                    wxFAIL_MSG( wxT("wxOS2 does not support more than 10 columns in REPORT view") );
                     break;
             }
         }
@@ -2220,7 +2220,7 @@ long wxListCtrl::InsertItem (
   wxListItem&                       rInfo
 )
 {
-    wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
+    wxASSERT_MSG( !IsVirtual(), wxT("can't be used with virtual controls") );
 
     PFIELDINFO                      pFieldInfo = FindOS2ListFieldByColNum ( GetHWND()
                                                                            ,rInfo.GetColumn()
@@ -2440,7 +2440,7 @@ bool wxListCtrl::SortItems ( wxListCtrlCompare fn, long lData )
                       ,(PVOID)&vInternalData
                      ))
     {
-        wxLogDebug(_T("CM_SORTRECORD failed"));
+        wxLogDebug(wxT("CM_SORTRECORD failed"));
         return false;
     }
     return true;
@@ -2573,7 +2573,7 @@ wxString wxListCtrl::OnGetItemText (
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( wxT("not supposed to be called") );
     return wxEmptyString;
 } // end of wxListCtrl::OnGetItemText
 
@@ -2582,7 +2582,7 @@ int wxListCtrl::OnGetItemImage (
 ) const
 {
     // same as above
-    wxFAIL_MSG( _T("not supposed to be called") );
+    wxFAIL_MSG( wxT("not supposed to be called") );
     return -1;
 } // end of wxListCtrl::OnGetItemImage
 
@@ -2602,7 +2602,7 @@ wxListItemAttr* wxListCtrl::OnGetItemAttr (
 ) const
 {
     wxASSERT_MSG( lItem >= 0 && lItem < GetItemCount(),
-                  _T("invalid item index in OnGetItemAttr()") );
+                  wxT("invalid item index in OnGetItemAttr()") );
 
     //
     // No attributes by default
@@ -2614,7 +2614,7 @@ void wxListCtrl::SetItemCount (
   long                              lCount
 )
 {
-    wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
+    wxASSERT_MSG( IsVirtual(), wxT("this is for virtual controls only") );
 
     //
     // Cannot explicitly set the record count in OS/2

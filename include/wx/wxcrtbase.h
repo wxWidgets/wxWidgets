@@ -72,7 +72,7 @@
 
 #ifdef _WIN32_WCE
     #if _WIN32_WCE <= 211
-        #define isspace(c) ((c) == _T(' ') || (c) == _T('\t'))
+        #define isspace(c) ((c) == wxT(' ') || (c) == wxT('\t'))
     #endif
 #endif /* _WIN32_WCE */
 

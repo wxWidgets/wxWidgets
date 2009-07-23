@@ -185,7 +185,7 @@ wxCursor::wxCursor(const wxImage& image)
 
     wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < image_w &&
                   hotSpotY >= 0 && hotSpotY < image_h,
-                  _T("invalid cursor hot spot coordinates") );
+                  wxT("invalid cursor hot spot coordinates") );
 
     wxImage imageSized(image); // final image of correct size
 
@@ -265,7 +265,7 @@ wxCursor::wxCursor(const wxString& filename,
             break;
 
         default:
-            wxLogError( _T("unknown cursor resource type '%d'"), kind );
+            wxLogError( wxT("unknown cursor resource type '%d'"), kind );
 
             hcursor = NULL;
     }
@@ -291,27 +291,27 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
     {
         {  true, NULL                        }, // wxCURSOR_NONE
         {  true, IDC_ARROW                   }, // wxCURSOR_ARROW
-        { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
-        { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
+        { false, wxT("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
+        { false, wxT("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
         {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
 
         // Displays as an I-beam on XP, so use a cursor file
 //        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
-        {  false, _T("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
+        {  false, wxT("WXCURSOR_CROSS")       }, // WXCURSOR_CROSS
 
         // See special handling below for wxCURSOR_HAND
-//        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+//        { false, wxT("WXCURSOR_HAND")         }, // wxCURSOR_HAND
         {  true, IDC_HAND                    }, // wxCURSOR_HAND
 
         {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
         {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
-        { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
+        { false, wxT("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
         {  true, IDC_ARROW                   }, // WXCURSOR_MIDDLE_BUTTON
         {  true, IDC_NO                      }, // WXCURSOR_NO_ENTRY
-        { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_PAINT_BRUSH
-        { false, _T("WXCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
-        { false, _T("WXCURSOR_PLEFT")        }, // wxCURSOR_POINT_LEFT
-        { false, _T("WXCURSOR_PRIGHT")       }, // wxCURSOR_POINT_RIGHT
+        { false, wxT("WXCURSOR_PBRUSH")       }, // wxCURSOR_PAINT_BRUSH
+        { false, wxT("WXCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
+        { false, wxT("WXCURSOR_PLEFT")        }, // wxCURSOR_POINT_LEFT
+        { false, wxT("WXCURSOR_PRIGHT")       }, // wxCURSOR_POINT_RIGHT
         {  true, IDC_HELP                    }, // WXCURSOR_QUESTION_ARROW
         {  true, IDC_ARROW                   }, // WXCURSOR_RIGHT_BUTTON
         {  true, IDC_SIZENESW                }, // WXCURSOR_SIZENESW
@@ -319,10 +319,10 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
         {  true, IDC_SIZENWSE                }, // WXCURSOR_SIZENWSE
         {  true, IDC_SIZEWE                  }, // WXCURSOR_SIZEWE
         {  true, IDC_SIZEALL                 }, // WXCURSOR_SIZING
-        { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_SPRAYCAN
+        { false, wxT("WXCURSOR_PBRUSH")       }, // wxCURSOR_SPRAYCAN
         {  true, IDC_WAIT                    }, // WXCURSOR_WAIT
         {  true, IDC_WAIT                    }, // WXCURSOR_WATCH
-        { false, _T("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
+        { false, wxT("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
         {  true, IDC_APPSTARTING             }, // wxCURSOR_ARROWWAIT
 
         // no entry for wxCURSOR_MAX
@@ -332,7 +332,7 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
                            CursorsIdArrayMismatch );
 
     wxCHECK_RET( idCursor > 0 && (size_t)idCursor < WXSIZEOF(stdCursors),
-                 _T("invalid cursor id in wxCursor() ctor") );
+                 wxT("invalid cursor id in wxCursor() ctor") );
 
     const StdCursor& stdCursor = stdCursors[idCursor];
     bool deleteLater = !stdCursor.isStd;
@@ -343,13 +343,13 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
     // IDC_HAND may not be available on some versions of Windows.
     if ( !hcursor && idCursor == wxCURSOR_HAND)
     {
-        hcursor = ::LoadCursor(wxGetInstance(), _T("WXCURSOR_HAND"));
+        hcursor = ::LoadCursor(wxGetInstance(), wxT("WXCURSOR_HAND"));
         deleteLater = true;
     }
 
     if ( !hcursor )
     {
-        wxLogLastError(_T("LoadCursor"));
+        wxLogLastError(wxT("LoadCursor"));
     }
     else
     {

@@ -44,7 +44,7 @@ wxObject *wxFilePickerCtrlXmlHandler::DoCreateResource()
                   GetText(wxT("message")),
                   GetParamValue(wxT("wildcard")),
                   GetPosition(), GetSize(),
-                  GetStyle(_T("style"), wxFLP_DEFAULT_STYLE),
+                  GetStyle(wxT("style"), wxFLP_DEFAULT_STYLE),
                   wxDefaultValidator,
                   GetName());
 

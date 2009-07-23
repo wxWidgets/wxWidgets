@@ -252,7 +252,7 @@ void wxComboCtrl::OnThemeChange()
             return;
         }
 
-        wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
+        wxLogApiError(wxT("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
     }
 #endif
 

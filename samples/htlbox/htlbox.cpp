@@ -129,7 +129,7 @@ public:
     void OnLboxSelect(wxCommandEvent& event);
     void OnLboxDClick(wxCommandEvent& event)
     {
-        wxLogMessage(_T("Listbox item %d double clicked."), event.GetInt());
+        wxLogMessage(wxT("Listbox item %d double clicked."), event.GetInt());
     }
 
     void OnHtmlLinkClicked(wxHtmlLinkEvent& event);
@@ -237,7 +237,7 @@ IMPLEMENT_APP(MyApp)
 
 // frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, _T("HtmlLbox wxWidgets Sample"),
+       : wxFrame(NULL, wxID_ANY, wxT("HtmlLbox wxWidgets Sample"),
                  wxDefaultPosition, wxSize(500, 500))
 {
     // set the frame icon
@@ -246,48 +246,48 @@ MyFrame::MyFrame()
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
-    menuFile->AppendRadioItem(HtmlLbox_CustomBox, _T("Use custom box"),
-                              _T("Use a wxHtmlListBox virtual class control"));
-    menuFile->AppendRadioItem(HtmlLbox_SimpleBox, _T("Use simple box"),
-                              _T("Use a wxSimpleHtmlListBox control"));
+    menuFile->AppendRadioItem(HtmlLbox_CustomBox, wxT("Use custom box"),
+                              wxT("Use a wxHtmlListBox virtual class control"));
+    menuFile->AppendRadioItem(HtmlLbox_SimpleBox, wxT("Use simple box"),
+                              wxT("Use a wxSimpleHtmlListBox control"));
     menuFile->AppendSeparator();
-    menuFile->Append(HtmlLbox_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(HtmlLbox_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // create our specific menu
     wxMenu *menuHLbox = new wxMenu;
     menuHLbox->Append(HtmlLbox_SetMargins,
-                      _T("Set &margins...\tCtrl-G"),
-                      _T("Change the margins around the items"));
+                      wxT("Set &margins...\tCtrl-G"),
+                      wxT("Change the margins around the items"));
     menuHLbox->AppendCheckItem(HtmlLbox_DrawSeparator,
-                               _T("&Draw separators\tCtrl-D"),
-                               _T("Toggle drawing separators between cells"));
+                               wxT("&Draw separators\tCtrl-D"),
+                               wxT("Toggle drawing separators between cells"));
     menuHLbox->AppendSeparator();
     menuHLbox->AppendCheckItem(HtmlLbox_ToggleMulti,
-                               _T("&Multiple selection\tCtrl-M"),
-                               _T("Toggle multiple selection on/off"));
+                               wxT("&Multiple selection\tCtrl-M"),
+                               wxT("Toggle multiple selection on/off"));
     menuHLbox->AppendSeparator();
-    menuHLbox->Append(HtmlLbox_SelectAll, _T("Select &all items\tCtrl-A"));
-    menuHLbox->Append(HtmlLbox_UpdateItem, _T("Update &first item\tCtrl-U"));
-    menuHLbox->Append(HtmlLbox_GetItemRect, _T("Show &rectangle of item #10\tCtrl-R"));
+    menuHLbox->Append(HtmlLbox_SelectAll, wxT("Select &all items\tCtrl-A"));
+    menuHLbox->Append(HtmlLbox_UpdateItem, wxT("Update &first item\tCtrl-U"));
+    menuHLbox->Append(HtmlLbox_GetItemRect, wxT("Show &rectangle of item #10\tCtrl-R"));
     menuHLbox->AppendSeparator();
-    menuHLbox->Append(HtmlLbox_SetBgCol, _T("Set &background...\tCtrl-B"));
+    menuHLbox->Append(HtmlLbox_SetBgCol, wxT("Set &background...\tCtrl-B"));
     menuHLbox->Append(HtmlLbox_SetSelBgCol,
-                      _T("Set &selection background...\tCtrl-S"));
+                      wxT("Set &selection background...\tCtrl-S"));
     menuHLbox->AppendCheckItem(HtmlLbox_SetSelFgCol,
-                               _T("Keep &foreground in selection\tCtrl-F"));
+                               wxT("Keep &foreground in selection\tCtrl-F"));
 
     menuHLbox->AppendSeparator();
-    menuHLbox->Append(HtmlLbox_Clear, _T("&Clear\tCtrl-L"));
+    menuHLbox->Append(HtmlLbox_Clear, wxT("&Clear\tCtrl-L"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(HtmlLbox_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(HtmlLbox_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(menuHLbox, _T("&Listbox"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuHLbox, wxT("&Listbox"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     menuBar->Check(HtmlLbox_DrawSeparator, true);
 
@@ -298,12 +298,12 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWidgets!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     // create the child controls
     CreateBox();
-    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, _T(""),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
     delete wxLog::SetActiveTarget(new wxLogTextCtrl(text));
@@ -345,9 +345,9 @@ void MyFrame::CreateBox()
                          (unsigned char)(abs((int)n - 128) % 256));
             int level = n % 6 + 1;
 
-            wxString label = wxString::Format(_T("<h%d><font color=%s>")
-                    _T("Item</font> <b>%lu</b>")
-                    _T("</h%d>"),
+            wxString label = wxString::Format(wxT("<h%d><font color=%s>")
+                    wxT("Item</font> <b>%lu</b>")
+                    wxT("</h%d>"),
                     level,
                     clr.GetAsString(wxC2S_HTML_SYNTAX).c_str(),
                     (unsigned long)n, level);
@@ -384,10 +384,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("This sample shows wxHtmlListBox class.\n")
-                 _T("\n")
-                 _T("(c) 2003 Vadim Zeitlin"),
-                 _T("About HtmlLbox"),
+    wxMessageBox(wxT("This sample shows wxHtmlListBox class.\n")
+                 wxT("\n")
+                 wxT("(c) 2003 Vadim Zeitlin"),
+                 wxT("About HtmlLbox"),
                  wxOK | wxICON_INFORMATION,
                  this);
 }
@@ -396,9 +396,9 @@ void MyFrame::OnSetMargins(wxCommandEvent& WXUNUSED(event))
 {
     long margin = wxGetNumberFromUser
                   (
-                    _T("Enter the margins to use for the listbox items."),
-                    _T("Margin: "),
-                    _T("HtmlLbox: Set the margins"),
+                    wxT("Enter the margins to use for the listbox items."),
+                    wxT("Margin: "),
+                    wxT("HtmlLbox: Set the margins"),
                     0, 0, 20,
                     this
                   );
@@ -455,7 +455,7 @@ void MyFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
         m_hlbox->Refresh();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(_T("Background colour changed."));
+        SetStatusText(wxT("Background colour changed."));
 #endif // wxUSE_STATUSBAR
     }
 }
@@ -469,7 +469,7 @@ void MyFrame::OnSetSelBgCol(wxCommandEvent& WXUNUSED(event))
         m_hlbox->Refresh();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(_T("Selection background colour changed."));
+        SetStatusText(wxT("Selection background colour changed."));
 #endif // wxUSE_STATUSBAR
     }
 }
@@ -520,7 +520,7 @@ void MyFrame::OnHtmlCellClicked(wxHtmlCellEvent &event)
 
 void MyFrame::OnLboxSelect(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Listbox selection is now %d."), event.GetInt());
+    wxLogMessage(wxT("Listbox selection is now %d."), event.GetInt());
 
     if ( m_hlbox->HasMultipleSelection() )
     {
@@ -535,20 +535,20 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
             if ( first )
                 first = false;
             else
-                s << _T(", ");
+                s << wxT(", ");
 
             s << item;
         }
 
         if ( !s.empty() )
         {
-            wxLogMessage(_T("Selected items: %s"), s.c_str());
+            wxLogMessage(wxT("Selected items: %s"), s.c_str());
         }
     }
 
 #if wxUSE_STATUSBAR
     SetStatusText(wxString::Format(
-                    _T("# items selected = %lu"),
+                    wxT("# items selected = %lu"),
                     (unsigned long)m_hlbox->GetSelectedCount()
                   ));
 #endif // wxUSE_STATUSBAR
@@ -572,9 +572,9 @@ MyHtmlListBox::MyHtmlListBox(wxWindow *parent, bool multi)
     SetMargins(5, 5);
 
 #ifdef USE_HTML_FILE
-    if ( !m_file.Open(_T("results")) )
+    if ( !m_file.Open(wxT("results")) )
     {
-        wxLogError(_T("Failed to open results file"));
+        wxLogError(wxT("Failed to open results file"));
     }
     else
     {
@@ -602,7 +602,7 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
 {
     if ( !n && m_firstItemUpdated )
     {
-        return _T("<h1><b>Just updated</b></h1>");
+        return wxT("<h1><b>Just updated</b></h1>");
     }
 
 #ifdef USE_HTML_FILE
@@ -618,18 +618,18 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
                  (unsigned char)(abs((int)n - 256) % 256),
                  (unsigned char)(abs((int)n - 128) % 256));
 
-    wxString label = wxString::Format(_T("<h%d><font color=%s>")
-                                      _T("Item</font> <b>%lu</b>")
-                                      _T("</h%d>"),
+    wxString label = wxString::Format(wxT("<h%d><font color=%s>")
+                                      wxT("Item</font> <b>%lu</b>")
+                                      wxT("</h%d>"),
                                       level,
                                       clr.GetAsString(wxC2S_HTML_SYNTAX).c_str(),
                                       (unsigned long)n, level);
     if ( n == 1 )
     {
         if ( !m_linkClicked )
-            label += _T("<a href='1'>Click here...</a>");
+            label += wxT("<a href='1'>Click here...</a>");
         else
-            label += _T("<font color='#9999ff'>Clicked here...</font>");
+            label += wxT("<font color='#9999ff'>Clicked here...</font>");
     }
 
     return label;

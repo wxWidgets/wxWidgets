@@ -744,11 +744,11 @@ wxString wxMacMLTEControl::GetStringValue() const
                 (((UniChar*)*theText)[actualSize]) = 0 ;
                 wxMBConvUTF16 converter ;
                 size_t noChars = converter.MB2WC( NULL , (const char*)*theText , 0 ) ;
-                wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
+                wxASSERT_MSG( noChars != wxCONV_FAILED, wxT("Unable to count the number of characters in this string!") );
                 ptr = new wxChar[noChars + 1] ;
 
                 noChars = converter.MB2WC( ptr , (const char*)*theText , noChars + 1 ) ;
-                wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
+                wxASSERT_MSG( noChars != wxCONV_FAILED, wxT("Conversion of string failed!") );
                 ptr[noChars] = 0 ;
                 HUnlock( theText ) ;
 #endif
@@ -1371,7 +1371,7 @@ void wxMacMLTEControl::ShowPosition( long pos )
 
     // there will be an error returned for classic MLTE implementation when the control is
     // invisible, but HITextView works correctly, so we don't assert that one
-    // wxASSERT_MSG( theErr == noErr, _T("TXNScroll returned an error!") );
+    // wxASSERT_MSG( theErr == noErr, wxT("TXNScroll returned an error!") );
 }
 
 void wxMacMLTEControl::SetTXNData( const wxString& st, TXNOffset start, TXNOffset end )
@@ -1384,7 +1384,7 @@ void wxMacMLTEControl::SetTXNData( const wxString& st, TXNOffset start, TXNOffse
     wxMBConvUTF16 converter ;
     ByteCount byteBufferLen = converter.WC2MB( NULL, st.wc_str(), 0 ) ;
     wxASSERT_MSG( byteBufferLen != wxCONV_FAILED,
-                  _T("Conversion to UTF-16 unexpectedly failed") );
+                  wxT("Conversion to UTF-16 unexpectedly failed") );
     UniChar *unibuf = (UniChar*)malloc( byteBufferLen + 2 ) ; // 2 for NUL in UTF-16
     converter.WC2MB( (char*)unibuf, st.wc_str(), byteBufferLen + 2 ) ;
     TXNSetData( m_txn, kTXNUnicodeTextData, (void*)unibuf, byteBufferLen, start, end ) ;

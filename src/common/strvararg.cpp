@@ -159,23 +159,23 @@ public:
 
         while ( *format )
         {
-            if ( CopyFmtChar(*format++) == _T('%') )
+            if ( CopyFmtChar(*format++) == wxT('%') )
             {
                 // skip any flags
                 while ( IsFlagChar(*format) )
                     CopyFmtChar(*format++);
 
                 // and possible width
-                if ( *format == _T('*') )
+                if ( *format == wxT('*') )
                     CopyFmtChar(*format++);
                 else
                     SkipDigits(&format);
 
                 // precision?
-                if ( *format == _T('.') )
+                if ( *format == wxT('.') )
                 {
                     CopyFmtChar(*format++);
-                    if ( *format == _T('*') )
+                    if ( *format == wxT('*') )
                         CopyFmtChar(*format++);
                     else
                         SkipDigits(&format);
@@ -211,16 +211,16 @@ public:
                 // and finally we should have the type
                 switch ( *format )
                 {
-                    case _T('S'):
-                    case _T('s'):
+                    case wxT('S'):
+                    case wxT('s'):
                         // all strings were converted into the same form by
                         // wxArgNormalizer<T>, this form depends on the context
                         // in which the value is used (scanf/printf/wprintf):
                         HandleString(*format, size, outConv, outSize);
                         break;
 
-                    case _T('C'):
-                    case _T('c'):
+                    case wxT('C'):
+                    case wxT('c'):
                         HandleChar(*format, size, outConv, outSize);
                         break;
 
@@ -240,11 +240,11 @@ public:
                     switch ( outSize )
                     {
                         case Size_Long:
-                            InsertFmtChar(_T('l'));
+                            InsertFmtChar(wxT('l'));
                             break;
 
                         case Size_Short:
-                            InsertFmtChar(_T('h'));
+                            InsertFmtChar(wxT('h'));
                             break;
 
                         case Size_Default:
@@ -353,13 +353,13 @@ private:
 
     static bool IsFlagChar(CharType ch)
     {
-        return ch == _T('-') || ch == _T('+') ||
-               ch == _T('0') || ch == _T(' ') || ch == _T('#');
+        return ch == wxT('-') || ch == wxT('+') ||
+               ch == wxT('0') || ch == wxT(' ') || ch == wxT('#');
     }
 
     void SkipDigits(const CharType **ptpc)
     {
-        while ( **ptpc >= _T('0') && **ptpc <= _T('9') )
+        while ( **ptpc >= wxT('0') && **ptpc <= wxT('9') )
             CopyFmtChar(*(*ptpc)++);
     }
 

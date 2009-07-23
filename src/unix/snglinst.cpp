@@ -348,10 +348,10 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
                                      const wxString& path)
 {
     wxASSERT_MSG( !m_impl,
-                  _T("calling wxSingleInstanceChecker::Create() twice?") );
+                  wxT("calling wxSingleInstanceChecker::Create() twice?") );
 
     // must have the file name to create a lock file
-    wxASSERT_MSG( !name.empty(), _T("lock file name can't be empty") );
+    wxASSERT_MSG( !name.empty(), wxT("lock file name can't be empty") );
 
     m_impl = new wxSingleInstanceCheckerImpl;
 
@@ -361,9 +361,9 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
         fullname = wxGetHomeDir();
     }
 
-    if ( fullname.Last() != _T('/') )
+    if ( fullname.Last() != wxT('/') )
     {
-        fullname += _T('/');
+        fullname += wxT('/');
     }
 
     fullname << name;
@@ -373,7 +373,7 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
 
 bool wxSingleInstanceChecker::IsAnotherRunning() const
 {
-    wxCHECK_MSG( m_impl, false, _T("must call Create() first") );
+    wxCHECK_MSG( m_impl, false, wxT("must call Create() first") );
 
     const pid_t lockerPid = m_impl->GetLockerPID();
 

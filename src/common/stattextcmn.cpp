@@ -69,7 +69,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
             lineStart = p;
         }
 
-        if ( p == text.end() || *p == _T('\n') )
+        if ( p == text.end() || *p == wxT('\n') )
         {
             DoOutputLine(line);
 
@@ -78,7 +78,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
         }
         else // not EOL
         {
-            if ( *p == _T(' ') )
+            if ( *p == wxT(' ') )
                 lastSpace = p;
 
             line += *p;
@@ -127,7 +127,7 @@ protected:
 
     virtual void OnNewLine()
     {
-        m_text += _T('\n');
+        m_text += wxT('\n');
     }
 
 private:

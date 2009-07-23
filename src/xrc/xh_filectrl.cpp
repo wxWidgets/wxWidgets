@@ -42,7 +42,7 @@ wxObject *wxFileCtrlXmlHandler::DoCreateResource()
                      GetText(wxT("defaultdirectory")),
                      GetText(wxT("defaultfilename")),
                      GetParamValue(wxT("wildcard")),
-                     GetStyle(_T("style"), wxFC_DEFAULT_STYLE),
+                     GetStyle(wxT("style"), wxFC_DEFAULT_STYLE),
                      GetPosition(),
                      GetSize(),
                      GetName());

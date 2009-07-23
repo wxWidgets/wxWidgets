@@ -318,7 +318,7 @@ END_EVENT_TABLE()
 MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
     : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
 {
-    SetBackgroundColour(wxColour(_T("WHITE")));
+    SetBackgroundColour(wxColour(wxT("WHITE")));
 
     m_child = parent;
     m_index = m_child->GetFrame()->GetCountOfChildren() % 7;
@@ -365,10 +365,10 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetBrush(*wxCYAN_BRUSH);
             dc.SetPen(*wxRED_PEN);
             dc.DrawRectangle(10, 10, 100, 70);
-            wB = wxBrush (_T("DARK ORCHID"), wxBRUSHSTYLE_TRANSPARENT);
+            wB = wxBrush (wxT("DARK ORCHID"), wxBRUSHSTYLE_TRANSPARENT);
             dc.SetBrush (wB);
             dc.DrawRoundedRectangle(50, 50, 100, 70, 20);
-            dc.SetBrush (wxBrush(_T("GOLDENROD")) );
+            dc.SetBrush (wxBrush(wxT("GOLDENROD")) );
             dc.DrawEllipse(100, 100, 100, 50);
 
             points[0].x = 100; points[0].y = 200;
@@ -391,10 +391,10 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawLine(45,30,55,30);
             dc.DrawText(wxT("This is a Swiss-style string"), 50, 30);
             wC = dc.GetTextForeground();
-            dc.SetTextForeground (_T("FIREBRICK"));
+            dc.SetTextForeground (wxT("FIREBRICK"));
 
             // no effect in msw ??
-            dc.SetTextBackground (_T("WHEAT"));
+            dc.SetTextBackground (wxT("WHEAT"));
             dc.DrawText(wxT("This is a Red string"), 50, 200);
             dc.DrawRotatedText(wxT("This is a 45 deg string"), 50, 200, 45);
             dc.DrawRotatedText(wxT("This is a 90 deg string"), 50, 200, 90);
@@ -417,11 +417,11 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270,270 );
             dc.SetDeviceOrigin(0,0);
 
-            wP.SetColour (_T("CADET BLUE"));
+            wP.SetColour (wxT("CADET BLUE"));
             dc.SetPen(wP);
             dc.DrawArc ( 75,125, 110, 40, 75, 75 );
 
-            wP.SetColour (_T("SALMON"));
+            wP.SetColour (wxT("SALMON"));
             dc.SetPen(wP);
             dc.SetBrush(*wxRED_BRUSH);
             //top left corner, width and height, start and end angle
@@ -432,7 +432,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             wP.SetWidth(3);
             dc.SetPen(wP);
                                  //wxTRANSPARENT));
-            dc.SetBrush (wxBrush (_T("SALMON")));
+            dc.SetBrush (wxBrush (wxT("SALMON")));
             dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0);
                                  //same end point
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0);
@@ -445,7 +445,7 @@ void MyCanvas::OnDraw(wxDC& dc)
 
         case 4:
             dc.DrawCheckMark ( 30,30,25,25);
-            dc.SetBrush (wxBrush (_T("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
+            dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
 #if wxUSE_STATUSBAR

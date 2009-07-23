@@ -192,7 +192,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
                 unsigned int n = index - wxSYS_COLOUR_BTNHIGHLIGHT;
 
                 wxASSERT_MSG( n < WXSIZEOF(s_defaultSysColors),
-                              _T("forgot tp update the default colours array") );
+                              wxT("forgot tp update the default colours array") );
 
                 colSys = s_defaultSysColors[n];
                 hasCol = true;
@@ -248,12 +248,12 @@ wxFont wxCreateFontFromStockObject(int index)
         }
         else
         {
-            wxFAIL_MSG( _T("failed to get LOGFONT") );
+            wxFAIL_MSG( wxT("failed to get LOGFONT") );
         }
     }
     else // GetStockObject() failed
     {
-        wxFAIL_MSG( _T("stock font not found") );
+        wxFAIL_MSG( wxT("stock font not found") );
     }
 
     return font;
@@ -406,7 +406,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
     return 0;
 #else // !__WXMICROWIN__
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
-                 _T("invalid metric") );
+                 wxT("invalid metric") );
 
     if ( index == wxSYS_DCLICK_MSEC )
     {
@@ -444,7 +444,7 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return ::GetSystemMetrics(SM_TABLETPC) != 0;
 
         default:
-            wxFAIL_MSG( _T("unknown system feature") );
+            wxFAIL_MSG( wxT("unknown system feature") );
 
             return false;
     }
@@ -496,7 +496,7 @@ extern wxFont wxGetCCDefaultFont()
         }
         else
         {
-            wxLogLastError(_T("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
+            wxLogLastError(wxT("SystemParametersInfo(SPI_GETICONTITLELOGFONT"));
         }
     }
 #endif // __WXWINCE__

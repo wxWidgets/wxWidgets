@@ -41,7 +41,7 @@
 #endif
 
 // used as title for several dialog boxes
-static const wxChar SAMPLE_TITLE[] = _T("wxWidgets Font Sample");
+static const wxChar SAMPLE_TITLE[] = wxT("wxWidgets Font Sample");
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -1041,7 +1041,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s"),
                     m_font.GetStyleString().c_str(),
                     m_font.GetWeightString().c_str(),
-                    m_font.IsFixedWidth() ? _T("yes") : _T("no"));
+                    m_font.IsFixedWidth() ? wxT("yes") : wxT("no"));
 
     dc.DrawText(fontInfo, x, y);
     y += hLine;
@@ -1091,7 +1091,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     }
 
     // draw the lines between them
-    dc.SetPen(wxPen(wxColour(_T("blue")), 1, wxSOLID));
+    dc.SetPen(wxPen(wxColour(wxT("blue")), 1, wxSOLID));
     int l;
 
     // horizontal

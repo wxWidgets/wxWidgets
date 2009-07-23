@@ -188,7 +188,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                     // longer, check for it to avoid bogus assert failures
                     if ( !win->IsBeingDeleted() )
                     {
-                        wxFAIL_MSG( _T("should have combo as parent") );
+                        wxFAIL_MSG( wxT("should have combo as parent") );
                     }
                 }
                 else if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
@@ -201,7 +201,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 
         case WM_GETDLGCODE:
             {
-                wxCHECK_MSG( win, 0, _T("should have a parent") );
+                wxCHECK_MSG( win, 0, wxT("should have a parent") );
 
                 if ( win->GetWindowStyle() & wxTE_PROCESS_ENTER )
                 {
@@ -452,10 +452,10 @@ WXHWND wxComboBox::GetEditHWND() const
     // this function should not be called for wxCB_READONLY controls, it is
     // the callers responsibility to check this
     wxASSERT_MSG( !HasFlag(wxCB_READONLY),
-                  _T("read-only combobox doesn't have any edit control") );
+                  wxT("read-only combobox doesn't have any edit control") );
 
     WXHWND hWndEdit = GetEditHWNDIfAvailable();
-    wxASSERT_MSG( hWndEdit, _T("combobox without edit control?") );
+    wxASSERT_MSG( hWndEdit, wxT("combobox without edit control?") );
 
     return hWndEdit;
 }
@@ -463,7 +463,7 @@ WXHWND wxComboBox::GetEditHWND() const
 wxWindow *wxComboBox::GetEditableWindow()
 {
     wxASSERT_MSG( !HasFlag(wxCB_READONLY),
-                  _T("read-only combobox doesn't have any edit control") );
+                  wxT("read-only combobox doesn't have any edit control") );
 
     return this;
 }

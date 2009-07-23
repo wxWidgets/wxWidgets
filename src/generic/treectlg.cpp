@@ -541,7 +541,7 @@ void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
         wxPoint myPos = GetPosition();
         wxSize mySize = GetSize();
         int sx, sy;
-        GetTextExtent(GetValue() + _T("M"), &sx, &sy);
+        GetTextExtent(GetValue() + wxT("M"), &sx, &sy);
         if (myPos.x + sx > parentSize.x)
             sx = parentSize.x - myPos.x;
         if (mySize.x > sx)
@@ -1854,9 +1854,9 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 {
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
-    wxCHECK_RET( item, _T("invalid item in wxGenericTreeCtrl::Expand") );
+    wxCHECK_RET( item, wxT("invalid item in wxGenericTreeCtrl::Expand") );
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
-                 _T("can't expand hidden root") );
+                 wxT("can't expand hidden root") );
 
     if ( !item->HasPlus() )
         return;
@@ -1891,7 +1891,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
 {
     wxCHECK_RET( !HasFlag(wxTR_HIDE_ROOT) || itemId != GetRootItem(),
-                 _T("can't collapse hidden root") );
+                 wxT("can't collapse hidden root") );
 
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
 
@@ -3356,7 +3356,7 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 wxTextCtrl *wxGenericTreeCtrl::EditLabel(const wxTreeItemId& item,
                                   wxClassInfo * WXUNUSED(textCtrlClass))
 {
-    wxCHECK_MSG( item.IsOk(), NULL, _T("can't edit an invalid item") );
+    wxCHECK_MSG( item.IsOk(), NULL, wxT("can't edit an invalid item") );
 
     wxGenericTreeItem *itemEdit = (wxGenericTreeItem *)item.m_pItem;
 
@@ -3396,7 +3396,7 @@ wxTextCtrl* wxGenericTreeCtrl::GetEditControl() const
 void wxGenericTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item),
                                      bool discardChanges)
 {
-    wxCHECK_RET( m_textCtrl, _T("not editing label") );
+    wxCHECK_RET( m_textCtrl, wxT("not editing label") );
 
     m_textCtrl->EndEdit(discardChanges);
 }

@@ -137,7 +137,7 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Font:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
+    m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, wxT(""), wxDefaultPosition, wxDefaultSize, 0 );
     m_faceTextCtrl->SetHelpText(_("Type a font name."));
     if (wxRichTextFontPage::ShowToolTips())
         m_faceTextCtrl->SetToolTip(_("Type a font name."));
@@ -155,7 +155,7 @@ void wxRichTextFontPage::CreateControls()
     wxStaticText* itemStaticText10 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, wxT(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_sizeTextCtrl->SetHelpText(_("Type a size in points."));
     if (wxRichTextFontPage::ShowToolTips())
         m_sizeTextCtrl->SetToolTip(_("Type a size in points."));
@@ -178,7 +178,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_styleCtrlStrings;
-    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, _T(""), wxDefaultPosition, wxSize(110, -1), m_styleCtrlStrings, wxCB_READONLY );
+    m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, wxT(""), wxDefaultPosition, wxSize(110, -1), m_styleCtrlStrings, wxCB_READONLY );
     m_styleCtrl->SetHelpText(_("Select regular or italic style."));
     if (wxRichTextFontPage::ShowToolTips())
         m_styleCtrl->SetToolTip(_("Select regular or italic style."));
@@ -191,7 +191,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_weightCtrlStrings;
-    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, _T(""), wxDefaultPosition, wxSize(110, -1), m_weightCtrlStrings, wxCB_READONLY );
+    m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, wxT(""), wxDefaultPosition, wxSize(110, -1), m_weightCtrlStrings, wxCB_READONLY );
     m_weightCtrl->SetHelpText(_("Select regular or bold."));
     if (wxRichTextFontPage::ShowToolTips())
         m_weightCtrl->SetToolTip(_("Select regular or bold."));
@@ -204,7 +204,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer20->Add(itemStaticText21, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_underliningCtrlStrings;
-    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, _T(""), wxDefaultPosition, wxSize(110, -1), m_underliningCtrlStrings, wxCB_READONLY );
+    m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, wxT(""), wxDefaultPosition, wxSize(110, -1), m_underliningCtrlStrings, wxCB_READONLY );
     m_underliningCtrl->SetHelpText(_("Select underlining or no underlining."));
     if (wxRichTextFontPage::ShowToolTips())
         m_underliningCtrl->SetToolTip(_("Select underlining or no underlining."));

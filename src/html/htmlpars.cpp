@@ -38,7 +38,7 @@
 // DLL options compatibility check:
 WX_CHECK_BUILD_OPTIONS("wxHTML")
 
-const wxChar *wxTRACE_HTML_DEBUG = _T("htmldebug");
+const wxChar *wxTRACE_HTML_DEBUG = wxT("htmldebug");
 
 //-----------------------------------------------------------------------------
 // wxHtmlParser helpers
@@ -915,18 +915,18 @@ private:
 
 bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
 {
-    if (tag.GetName() == _T("BODY"))
+    if (tag.GetName() == wxT("BODY"))
     {
         m_Parser->StopParsing();
         return false;
     }
 
-    if (tag.HasParam(_T("HTTP-EQUIV")) &&
-        tag.GetParam(_T("HTTP-EQUIV")).IsSameAs(_T("Content-Type"), false) &&
-        tag.HasParam(_T("CONTENT")))
+    if (tag.HasParam(wxT("HTTP-EQUIV")) &&
+        tag.GetParam(wxT("HTTP-EQUIV")).IsSameAs(wxT("Content-Type"), false) &&
+        tag.HasParam(wxT("CONTENT")))
     {
-        wxString content = tag.GetParam(_T("CONTENT")).Lower();
-        if (content.Left(19) == _T("text/html; charset="))
+        wxString content = tag.GetParam(wxT("CONTENT")).Lower();
+        if (content.Left(19) == wxT("text/html; charset="))
         {
             *m_retval = content.Mid(19);
             m_Parser->StopParsing();
@@ -955,7 +955,7 @@ bool
 wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
                              wxString::const_iterator end)
 {
-    wxASSERT_MSG( *start == '<', _T("should be called on the tag start") );
+    wxASSERT_MSG( *start == '<', wxT("should be called on the tag start") );
 
     wxString::const_iterator p = start;
 

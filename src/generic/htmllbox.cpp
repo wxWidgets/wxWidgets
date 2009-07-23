@@ -318,11 +318,11 @@ void wxHtmlListBox::CacheItem(size_t n) const
 
         wxHtmlContainerCell *cell = (wxHtmlContainerCell *)m_htmlParser->
                 Parse(OnGetItemMarkup(n));
-        wxCHECK_RET( cell, _T("wxHtmlParser::Parse() returned NULL?") );
+        wxCHECK_RET( cell, wxT("wxHtmlParser::Parse() returned NULL?") );
 
         // set the cell's ID to item's index so that CellCoordsToPhysical()
         // can quickly find the item:
-        cell->SetId(wxString::Format(_T("%lu"), (unsigned long)n));
+        cell->SetId(wxString::Format(wxT("%lu"), (unsigned long)n));
 
         cell->Layout(GetClientSize().x - 2*GetMargins().x);
 
@@ -397,7 +397,7 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     CacheItem(n);
 
     wxHtmlCell *cell = m_cache->Get(n);
-    wxCHECK_RET( cell, _T("this cell should be cached!") );
+    wxCHECK_RET( cell, wxT("this cell should be cached!") );
 
     wxHtmlRenderingInfo htmlRendInfo;
 
@@ -430,7 +430,7 @@ wxCoord wxHtmlListBox::OnMeasureItem(size_t n) const
     CacheItem(n);
 
     wxHtmlCell *cell = m_cache->Get(n);
-    wxCHECK_MSG( cell, 0, _T("this cell should be cached!") );
+    wxCHECK_MSG( cell, 0, wxT("this cell should be cached!") );
 
     return cell->GetHeight() + cell->GetDescent() + 4;
 }
@@ -531,17 +531,17 @@ bool wxHtmlListBox::PhysicalCoordsToCell(wxPoint& pos, wxHtmlCell*& cell) const
 
 size_t wxHtmlListBox::GetItemForCell(const wxHtmlCell *cell) const
 {
-    wxCHECK_MSG( cell, 0, _T("no cell") );
+    wxCHECK_MSG( cell, 0, wxT("no cell") );
 
     cell = cell->GetRootCell();
 
-    wxCHECK_MSG( cell, 0, _T("no root cell") );
+    wxCHECK_MSG( cell, 0, wxT("no root cell") );
 
     // the cell's ID contains item index, see CacheItem():
     unsigned long n;
     if ( !cell->GetId().ToULong(&n) )
     {
-        wxFAIL_MSG( _T("unexpected root cell's ID") );
+        wxFAIL_MSG( wxT("unexpected root cell's ID") );
         return 0;
     }
 

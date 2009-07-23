@@ -255,7 +255,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 
             default:
                 // this goes against Unix98 docs so log it
-                wxLogDebug(_T("unexpected kill(2) return value %d"), err);
+                wxLogDebug(wxT("unexpected kill(2) return value %d"), err);
 
                 // something else...
                 *rc = wxKILL_ERROR;
@@ -274,11 +274,11 @@ bool wxShutdown(int flags)
     switch ( flags )
     {
         case wxSHUTDOWN_POWEROFF:
-            level = _T('0');
+            level = wxT('0');
             break;
 
         case wxSHUTDOWN_REBOOT:
-            level = _T('6');
+            level = wxT('6');
             break;
 
         case wxSHUTDOWN_LOGOFF:
@@ -286,7 +286,7 @@ bool wxShutdown(int flags)
             return false;
 
         default:
-            wxFAIL_MSG( _T("unknown wxShutdown() flag") );
+            wxFAIL_MSG( wxT("unknown wxShutdown() flag") );
             return false;
     }
 
@@ -326,7 +326,7 @@ bool wxPipeInputStream::CanRead() const
             return false;
 
         default:
-            wxFAIL_MSG(_T("unexpected select() return value"));
+            wxFAIL_MSG(wxT("unexpected select() return value"));
             // still fall through
 
         case 1:
@@ -349,12 +349,12 @@ static wxString wxMakeShellCommand(const wxString& command)
     if ( !command )
     {
         // just an interactive shell
-        cmd = _T("xterm");
+        cmd = wxT("xterm");
     }
     else
     {
         // execute command in a shell
-        cmd << _T("/bin/sh -c '") << command << _T('\'');
+        cmd << wxT("/bin/sh -c '") << command << wxT('\'');
     }
 
     return cmd;
@@ -367,7 +367,7 @@ bool wxShell(const wxString& command)
 
 bool wxShell(const wxString& command, wxArrayString& output)
 {
-    wxCHECK_MSG( !command.empty(), false, _T("can't exec shell non interactively") );
+    wxCHECK_MSG( !command.empty(), false, wxT("can't exec shell non interactively") );
 
     return wxExecute(wxMakeShellCommand(command), output);
 }
@@ -480,7 +480,7 @@ long wxExecute(char **argv, int flags, wxProcess *process)
     // don't know what yet, so for now just warn the user (this is the least we
     // can do) about it
     wxASSERT_MSG( wxThread::IsMain(),
-                    _T("wxExecute() can be called only from the main thread") );
+                    wxT("wxExecute() can be called only from the main thread") );
 #endif // wxUSE_THREADS
 
 #if defined(__WXCOCOA__) || ( defined(__WXOSX_MAC__) && wxOSX_USE_COCOA_OR_CARBON )
@@ -722,7 +722,7 @@ static wxString wxGetCommandOutput(const wxString &cmd)
     FILE *f = popen(cmd.ToAscii(), "r");
     if ( !f )
     {
-        wxLogSysError(_T("Executing \"%s\" failed"), cmd.c_str());
+        wxLogSysError(wxT("Executing \"%s\" failed"), cmd.c_str());
         return wxEmptyString;
     }
 
@@ -738,7 +738,7 @@ static wxString wxGetCommandOutput(const wxString &cmd)
 
     pclose(f);
 
-    if ( !s.empty() && s.Last() == _T('\n') )
+    if ( !s.empty() && s.Last() == wxT('\n') )
         s.RemoveLast();
 
     return s;
@@ -1095,7 +1095,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
-        s << _T('=') << value;
+        s << wxT('=') << value;
 
     // transform to ANSI
     const wxWX2MBbuf p = s.mb_str();
@@ -1178,7 +1178,7 @@ bool wxHandleFatalExceptions(bool doit)
         ok &= sigaction(SIGSEGV, &act, &s_handlerSEGV) == 0;
         if ( !ok )
         {
-            wxLogDebug(_T("Failed to install our signal handler."));
+            wxLogDebug(wxT("Failed to install our signal handler."));
         }
 
         s_savedHandlers = true;
@@ -1192,7 +1192,7 @@ bool wxHandleFatalExceptions(bool doit)
         ok &= sigaction(SIGSEGV, &s_handlerSEGV, NULL) == 0;
         if ( !ok )
         {
-            wxLogDebug(_T("Failed to uninstall our signal handler."));
+            wxLogDebug(wxT("Failed to uninstall our signal handler."));
         }
 
         s_savedHandlers = false;

@@ -105,7 +105,7 @@ wxConfigBase *wxConfigBase::Create()
 {
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
     wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    wxCHECK_MSG( traits, NULL, _T("create wxApp before calling this") );
+    wxCHECK_MSG( traits, NULL, wxT("create wxApp before calling this") );
 
     ms_pConfig = traits->CreateConfig();
   }
@@ -121,7 +121,7 @@ wxConfigBase *wxConfigBase::Create()
 #define IMPLEMENT_READ_FOR_TYPE(name, type, deftype, extra)                 \
     bool wxConfigBase::Read(const wxString& key, type *val) const           \
     {                                                                       \
-        wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
                                                                             \
         if ( !DoRead##name(key, val) )                                      \
             return false;                                                   \
@@ -135,7 +135,7 @@ wxConfigBase *wxConfigBase::Create()
                             type *val,                                      \
                             deftype defVal) const                           \
     {                                                                       \
-        wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );  \
+        wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );  \
                                                                             \
         bool read = DoRead##name(key, val);                                 \
         if ( !read )                                                        \
@@ -166,7 +166,7 @@ bool wxConfigBase::Read(const wxString& key, int *pi) const
 {
     long l = *pi;
     bool r = Read(key, &l);
-    wxASSERT_MSG( l < INT_MAX, _T("int overflow in wxConfig::Read") );
+    wxASSERT_MSG( l < INT_MAX, wxT("int overflow in wxConfig::Read") );
     *pi = (int)l;
     return r;
 }
@@ -175,7 +175,7 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 {
     long l = *pi;
     bool r = Read(key, &l, defVal);
-    wxASSERT_MSG( l < INT_MAX, _T("int overflow in wxConfig::Read") );
+    wxASSERT_MSG( l < INT_MAX, wxT("int overflow in wxConfig::Read") );
     *pi = (int)l;
     return r;
 }
@@ -184,13 +184,13 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
 // but can be overridden in the derived ones
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
 {
-    wxCHECK_MSG( val, false, _T("wxConfig::Read(): NULL parameter") );
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
 
     long l;
     if ( !DoReadLong(key, &l) )
         return false;
 
-    wxASSERT_MSG( l == 0 || l == 1, _T("bad bool value in wxConfig::DoReadInt") );
+    wxASSERT_MSG( l == 0 || l == 1, wxT("bad bool value in wxConfig::DoReadInt") );
 
     *val = l != 0;
 
@@ -225,7 +225,7 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {
-    return DoWriteString(key, wxString::Format(_T("%g"), val));
+    return DoWriteString(key, wxString::Format(wxT("%g"), val));
 }
 
 bool wxConfigBase::DoWriteBool(const wxString& key, bool value)
@@ -269,7 +269,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
            pConfig->SetPath(wxT("MySettings"));
            pConfig->SetPath(wxT(".."));
            int value;
-           pConfig->Read(_T("MainWindowX"), & value);
+           pConfig->Read(wxT("MainWindowX"), & value);
         */
         m_strOldPath = m_pContainer->GetPath().wc_str();
         if ( *m_strOldPath.c_str() != wxCONFIG_PATH_SEPARATOR )

@@ -177,21 +177,21 @@ void FileCtrlWidgetsPage::CreateContent()
                     0, wxALL | wxEXPAND , 5 );
 
     wxSizer *sizerUseFlags =
-        new wxStaticBoxSizer( wxVERTICAL, this, _T( "&Flags" ) );
+        new wxStaticBoxSizer( wxVERTICAL, this, wxT( "&Flags" ) );
 
-    m_chkMultiple   = CreateCheckBoxAndAddToSizer( sizerUseFlags, _T( "wxFC_MULTIPLE" ) );
-    m_chkNoShowHidden   = CreateCheckBoxAndAddToSizer( sizerUseFlags, _T( "wxFC_NOSHOWHIDDEN" ) );
+    m_chkMultiple   = CreateCheckBoxAndAddToSizer( sizerUseFlags, wxT( "wxFC_MULTIPLE" ) );
+    m_chkNoShowHidden   = CreateCheckBoxAndAddToSizer( sizerUseFlags, wxT( "wxFC_NOSHOWHIDDEN" ) );
     sizerLeft->Add( sizerUseFlags, wxSizerFlags().Expand().Border() );
 
     wxSizer *sizerFilters =
-        new wxStaticBoxSizer( wxVERTICAL, this, _T( "&Filters" ) );
+        new wxStaticBoxSizer( wxVERTICAL, this, wxT( "&Filters" ) );
     m_fltr[0] = CreateCheckBoxAndAddToSizer( sizerFilters, wxString::Format( wxT( "all files (%s)|%s" ),
                 wxFileSelectorDefaultWildcardStr, wxFileSelectorDefaultWildcardStr ) );
     m_fltr[1] = CreateCheckBoxAndAddToSizer( sizerFilters, wxT( "C++ files (*.cpp; *.h)|*.cpp;*.h" ) );
     m_fltr[2] = CreateCheckBoxAndAddToSizer( sizerFilters, wxT( "PNG images (*.png)|*.png" ) );
     sizerLeft->Add( sizerFilters, wxSizerFlags().Expand().Border() );
 
-    wxButton *btn = new wxButton( this, FileCtrlPage_Reset, _T( "&Reset" ) );
+    wxButton *btn = new wxButton( this, FileCtrlPage_Reset, wxT( "&Reset" ) );
     sizerLeft->Add( btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15 );
 
     // right pane

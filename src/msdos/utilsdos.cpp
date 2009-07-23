@@ -100,7 +100,7 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
 {
     wxString s = variable;
     if ( value )
-        s << _T('=') << value;
+        s << wxT('=') << value;
 
     // transform to ANSI
     const char *p = s.mb_str();
@@ -179,7 +179,7 @@ const wxChar* wxGetHomeDir(wxString *home)
         {
             strDir = szHome;
             // when msys sets %HOME% it uses '/' (cygwin uses '\\')
-            strDir.Replace(_T("/"), _T("\\"));
+            strDir.Replace(wxT("/"), wxT("\\"));
         }
     }
 
@@ -196,15 +196,15 @@ const wxChar* wxGetHomeDir(wxString *home)
             wxString prog(wxTheApp->argv[0]);
 #ifdef __DJGPP__
             // djgpp startup code switches the slashes around, so restore them
-            prog.Replace(_T("/"), _T("\\"));
+            prog.Replace(wxT("/"), wxT("\\"));
 #endif
             // it needs to be a full path to be usable
-            if ( prog.compare(1, 2, _T(":\\")) == 0 )
+            if ( prog.compare(1, 2, wxT(":\\")) == 0 )
                 wxFileName::SplitPath(prog, &strDir, NULL, NULL);
         }
         if ( strDir.empty() )
         {
-            strDir = _T(".");
+            strDir = wxT(".");
         }
     }
 
@@ -225,13 +225,13 @@ wxString wxGetUserHome(const wxString& user)
 //
 bool wxGetUserId(wxChar *buf, int n)
 {
-    const wxChar *user = wxGetenv(_T("UserName"));
+    const wxChar *user = wxGetenv(wxT("UserName"));
 
     if (!user)
-        user = wxGetenv(_T("USER"));
+        user = wxGetenv(wxT("USER"));
 
     if (!user)
-        user = _T("user");
+        user = wxT("user");
 
     wxStrlcpy(buf, user, n);
     return true;
@@ -246,13 +246,13 @@ bool wxGetUserName(wxChar *buf, int n)
 //
 bool wxGetHostName(wxChar *buf, int n)
 {
-    const wxChar *host = wxGetenv(_T("ComputerName"));
+    const wxChar *host = wxGetenv(wxT("ComputerName"));
 
     if (!host)
-        host = wxGetenv(_T("HOSTNAME"));
+        host = wxGetenv(wxT("HOSTNAME"));
 
     if (!host)
-        host = _T("host");
+        host = wxT("host");
 
     wxStrlcpy(buf, host, n);
     return true;
@@ -264,10 +264,10 @@ bool wxGetFullHostName(wxChar *buf, int n)
 {
     wxGetHostName(buf, n);
 
-    const wxChar *domain = wxGetenv(_T("UserDnsDomain"));
+    const wxChar *domain = wxGetenv(wxT("UserDnsDomain"));
 
     if (domain)
-        wxStrncat(wxStrncat(buf, _T("."), n), domain, n);
+        wxStrncat(wxStrncat(buf, wxT("."), n), domain, n);
 
     return true;
 }
@@ -293,7 +293,7 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int WXUNUSED(flags))
     }
     else
     {
-        wxLogDebug(_T("wxKill can only send signals to the current process under MSDOS"));
+        wxLogDebug(wxT("wxKill can only send signals to the current process under MSDOS"));
         if (rc)
             *rc = wxKILL_NO_PROCESS;
     }
@@ -339,7 +339,7 @@ class wxTempFileInStream : public wxFFileInputStream
 {
 public:
     wxTempFileInStream(const wxString& name)
-        : wxFFileInputStream(name, _T("rt"))
+        : wxFFileInputStream(name, wxT("rt"))
     { }
 
     virtual ~wxTempFileInStream()
@@ -452,14 +452,14 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     if (redirect)
     {
         // close stdin/out/err and reopen them as files
-        if (!in.Reopen(_T("NUL"), O_RDONLY | O_TEXT))
+        if (!in.Reopen(wxT("NUL"), O_RDONLY | O_TEXT))
             return -1;
 
-        if (!out.Reopen(wxFileName::CreateTempFileName(_T("out")),
+        if (!out.Reopen(wxFileName::CreateTempFileName(wxT("out")),
                         O_CREAT | O_WRONLY | O_TRUNC | O_TEXT))
             return -1;
 
-        if (!err.Reopen(wxFileName::CreateTempFileName(_T("err")),
+        if (!err.Reopen(wxFileName::CreateTempFileName(wxT("err")),
                         O_CREAT | O_WRONLY | O_TRUNC | O_TEXT))
             return -1;
     }
@@ -477,7 +477,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 #if wxUSE_STREAMS
     if (redirect)
         process->SetPipeStreams(new wxTempFileInStream(out.Release()),
-                                new wxFFileOutputStream(_T("NUL"), _T("wt")),
+                                new wxFFileOutputStream(wxT("NUL"), wxT("wt")),
                                 new wxTempFileInStream(err.Release()));
 #endif // wxUSE_STREAMS
 
@@ -491,7 +491,7 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
 
 wxString wxGetOsDescription()
 {
-    wxString osname(_T("DOS"));
+    wxString osname(wxT("DOS"));
     return osname;
 }
 

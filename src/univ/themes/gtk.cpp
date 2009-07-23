@@ -716,7 +716,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 
         case MAX:
         default:
-            wxFAIL_MSG(_T("invalid standard colour"));
+            wxFAIL_MSG(wxT("invalid standard colour"));
             return *wxBLACK;
     }
 }
@@ -772,7 +772,7 @@ void wxGTKRenderer::DrawAntiShadedRectSide(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknown rectangle side"));
+            wxFAIL_MSG(wxT("unknown rectangle side"));
     }
 }
 
@@ -1155,7 +1155,7 @@ wxBitmap wxGTKRenderer::GetLineWrapBitmap() const
         wxBitmap bmpLineWrap(line_wrap_bits, line_wrap_width, line_wrap_height);
         if ( !bmpLineWrap.Ok() )
         {
-            wxFAIL_MSG( _T("Failed to create line wrap XBM") );
+            wxFAIL_MSG( wxT("Failed to create line wrap XBM") );
         }
         else
         {
@@ -1303,7 +1303,7 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
         switch ( dir )
         {
             default:
-                wxFAIL_MSG(_T("invaild notebook tab orientation"));
+                wxFAIL_MSG(wxT("invaild notebook tab orientation"));
                 // fall through
 
             case wxTOP:
@@ -1703,7 +1703,7 @@ void wxGTKRenderer::DoDrawMenuItem(wxDC& dc,
     if ( !accel.empty() )
     {
         // menubar items shouldn't have them
-        wxCHECK_RET( geometryInfo, _T("accel strings only valid for menus") );
+        wxCHECK_RET( geometryInfo, wxT("accel strings only valid for menus") );
 
         rect.x = geometryInfo->GetAccelOffset();
         rect.SetRight(geometryInfo->GetSize().x);
@@ -1715,7 +1715,7 @@ void wxGTKRenderer::DoDrawMenuItem(wxDC& dc,
     // draw the submenu indicator
     if ( flags & wxCONTROL_ISSUBMENU )
     {
-        wxCHECK_RET( geometryInfo, _T("wxCONTROL_ISSUBMENU only valid for menus") );
+        wxCHECK_RET( geometryInfo, wxT("wxCONTROL_ISSUBMENU only valid for menus") );
 
         rect.x = geometryInfo->GetSize().x - MENU_RIGHT_MARGIN;
         rect.width = MENU_RIGHT_MARGIN;
@@ -1950,7 +1950,7 @@ void wxGTKRenderer::DrawArrowBorder(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknown arrow direction"));
+            wxFAIL_MSG(wxT("unknown arrow direction"));
             return;
     }
 
@@ -2085,7 +2085,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknown arrow direction"));
+            wxFAIL_MSG(wxT("unknown arrow direction"));
     }
 
     dc.DrawPolygon(WXSIZEOF(ptArrow), ptArrow);
@@ -2162,7 +2162,7 @@ void wxGTKRenderer::DrawArrow(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknown arrow direction"));
+            wxFAIL_MSG(wxT("unknown arrow direction"));
             return;
     }
 }

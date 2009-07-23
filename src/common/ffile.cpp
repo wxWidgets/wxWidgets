@@ -239,7 +239,7 @@ bool wxFFile::Seek(wxFileOffset ofs, wxSeekMode mode)
 wxFileOffset wxFFile::Tell() const
 {
     wxCHECK_MSG( IsOpened(), wxInvalidOffset,
-                 _T("wxFFile::Tell(): file is closed!") );
+                 wxT("wxFFile::Tell(): file is closed!") );
 
     wxFileOffset rc = wxFtell(m_fp);
     if ( rc == wxInvalidOffset )
@@ -254,7 +254,7 @@ wxFileOffset wxFFile::Tell() const
 wxFileOffset wxFFile::Length() const
 {
     wxCHECK_MSG( IsOpened(), wxInvalidOffset,
-                 _T("wxFFile::Length(): file is closed!") );
+                 wxT("wxFFile::Length(): file is closed!") );
 
     wxFFile& self = *(wxFFile *)this;   // const_cast
 

@@ -329,7 +329,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
 
 bool wxDC::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
-    wxCHECK_MSG( col, false, _T("NULL colour parameter in wxDC::GetPixel"));
+    wxCHECK_MSG( col, false, wxT("NULL colour parameter in wxDC::GetPixel"));
 
     uchar r, g, b;
     m_MGLDC->unpackColorFast(m_MGLDC->getPixel(XLOG2DEV(x), YLOG2DEV(y)),
@@ -983,7 +983,7 @@ void wxDC::SelectMGLFatPen(int style, int flag)
                                                         pixPattern->p[x][y][2]);
                     break;
                 default:
-                    wxFAIL_MSG(_T("invalid DC depth"));
+                    wxFAIL_MSG(wxT("invalid DC depth"));
                     break;
             }
             m_MGLDC->setPenPixmapPattern(slot, &pix);

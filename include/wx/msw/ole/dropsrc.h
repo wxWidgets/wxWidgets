@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxWindow;
 // the cursor 'name' from the resources under MSW, but will expand to
 // something else under GTK. If you don't use it, you will have to use #ifdef
 // in the application code.
-#define wxDROP_ICON(name)   wxCursor(_T(#name))
+#define wxDROP_ICON(name)   wxCursor(wxT(#name))
 
 // ----------------------------------------------------------------------------
 // wxDropSource is used to start the drag-&-drop operation on associated

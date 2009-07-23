@@ -205,7 +205,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const int *attribList,
                         const wxPalette& WXUNUSED_UNLESS_DEBUG(palette))
 {
-    wxASSERT_MSG( !palette.IsOk(), _T("palettes not supported") );
+    wxASSERT_MSG( !palette.IsOk(), wxT("palettes not supported") );
 
     m_exposed = false;
     m_noExpose = true;

@@ -242,7 +242,7 @@ public:
         Please read the document of enum AdjustFlags, and notice that this flag could be enabled/
         disabled by global flag GlobalAdjustFlags.
     */
-    void RegisterControl(wxWindow * ctrl, wxString name = _T(""), int flag = AJ_Normal)
+    void RegisterControl(wxWindow * ctrl, wxString name = wxT(""), int flag = AJ_Normal)
     {
         m_controlList.push_back(Control(ctrl, name, flag));
     }
@@ -256,7 +256,7 @@ public:
     */
     void RegisterControl(wxWindow * ctrl, int flag)
     {
-        RegisterControl(ctrl, _T(""), flag);
+        RegisterControl(ctrl, wxT(""), flag);
     }
 
     /**
@@ -267,7 +267,7 @@ public:
     */
     void RegisterPageTurn()
     {
-        m_controlList.push_back(Control(0, _T(""), AJ_TurnPage));
+        m_controlList.push_back(Control(0, wxT(""), AJ_TurnPage));
     }
 
     /**

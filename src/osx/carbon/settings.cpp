@@ -143,7 +143,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         // case wxSYS_COLOUR_MAX:
         default:
             resultColor = *wxWHITE;
-            // wxCHECK_MSG( index >= wxSYS_COLOUR_MAX, false, _T("unknown system colour index") );
+            // wxCHECK_MSG( index >= wxSYS_COLOUR_MAX, false, wxT("unknown system colour index") );
             break ;
     }
 

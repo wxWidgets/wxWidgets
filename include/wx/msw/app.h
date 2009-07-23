@@ -52,7 +52,7 @@ public:
 
     // this suffix should be appended to all our Win32 class names to obtain a
     // variant registered without CS_[HV]REDRAW styles
-    static const wxChar *GetNoRedrawClassSuffix() { return _T("NR"); }
+    static const wxChar *GetNoRedrawClassSuffix() { return wxT("NR"); }
 
     // get the name of the registered Win32 class with the given (unique) base
     // name: this function constructs the unique class name using this name as

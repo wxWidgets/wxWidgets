@@ -60,7 +60,7 @@ void wxTimer::Init()
     m_impl = traits ? traits->CreateTimerImpl(this) : NULL;
     if ( !m_impl )
     {
-        wxFAIL_MSG( _T("No timer implementation for this platform") );
+        wxFAIL_MSG( wxT("No timer implementation for this platform") );
 
     }
 }
@@ -71,28 +71,28 @@ void wxTimer::Init()
 
 void wxTimer::SetOwner(wxEvtHandler *owner, int timerid)
 {
-    wxCHECK_RET( m_impl, _T("uninitialized timer") );
+    wxCHECK_RET( m_impl, wxT("uninitialized timer") );
 
     m_impl->SetOwner(owner, timerid);
 }
 
 wxEvtHandler *wxTimer::GetOwner() const
 {
-    wxCHECK_MSG( m_impl, NULL, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, NULL, wxT("uninitialized timer") );
 
     return m_impl->GetOwner();
 }
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
 {
-    wxCHECK_MSG( m_impl, false, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, false, wxT("uninitialized timer") );
 
     return m_impl->Start(milliseconds, oneShot);
 }
 
 void wxTimer::Stop()
 {
-    wxCHECK_RET( m_impl, _T("uninitialized timer") );
+    wxCHECK_RET( m_impl, wxT("uninitialized timer") );
 
     if ( m_impl->IsRunning() )
         m_impl->Stop();
@@ -102,35 +102,35 @@ void wxTimer::Notify()
 {
     // the base class version generates an event if it has owner - which it
     // should because otherwise nobody can process timer events
-    wxCHECK_RET( GetOwner(), _T("wxTimer::Notify() should be overridden.") );
+    wxCHECK_RET( GetOwner(), wxT("wxTimer::Notify() should be overridden.") );
 
     m_impl->SendEvent();
 }
 
 bool wxTimer::IsRunning() const
 {
-    wxCHECK_MSG( m_impl, false, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, false, wxT("uninitialized timer") );
 
     return m_impl->IsRunning();
 }
 
 int wxTimer::GetId() const
 {
-    wxCHECK_MSG( m_impl, wxID_ANY, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, wxID_ANY, wxT("uninitialized timer") );
 
     return m_impl->GetId();
 }
 
 int wxTimer::GetInterval() const
 {
-    wxCHECK_MSG( m_impl, -1, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, -1, wxT("uninitialized timer") );
 
     return m_impl->GetInterval();
 }
 
 bool wxTimer::IsOneShot() const
 {
-    wxCHECK_MSG( m_impl, false, _T("uninitialized timer") );
+    wxCHECK_MSG( m_impl, false, wxT("uninitialized timer") );
 
     return m_impl->IsOneShot();
 }

@@ -166,7 +166,7 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, _T("wxCollapsiblePane sample"),
+       : wxFrame(NULL, wxID_ANY, wxT("wxCollapsiblePane sample"),
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
@@ -178,12 +178,12 @@ MyFrame::MyFrame()
 
     // Make a menubar
     wxMenu *paneMenu = new wxMenu;
-    paneMenu->Append(PANE_COLLAPSE, _T("Collapse\tCtrl-C"));
-    paneMenu->Append(PANE_EXPAND, _T("Expand\tCtrl-E"));
+    paneMenu->Append(PANE_COLLAPSE, wxT("Collapse\tCtrl-C"));
+    paneMenu->Append(PANE_EXPAND, wxT("Expand\tCtrl-E"));
     paneMenu->AppendSeparator();
-    paneMenu->Append(PANE_SETLABEL, _T("Set label...\tCtrl-L"));
+    paneMenu->Append(PANE_SETLABEL, wxT("Set label...\tCtrl-L"));
     paneMenu->AppendSeparator();
-    paneMenu->Append(PANE_SHOWDLG, _T("Show dialog...\tCtrl-S"));
+    paneMenu->Append(PANE_SHOWDLG, wxT("Show dialog...\tCtrl-S"));
     paneMenu->AppendSeparator();
     paneMenu->Append(PANE_QUIT);
 
@@ -191,8 +191,8 @@ MyFrame::MyFrame()
     helpMenu->Append(PANE_ABOUT);
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(paneMenu, _T("&Pane"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(paneMenu, wxT("&Pane"));
+    menuBar->Append(helpMenu, wxT("&Help"));
     SetMenuBar(menuBar);
 
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
@@ -249,7 +249,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     wxAboutDialogInfo info;
     info.SetName(_("wxCollapsiblePane sample"));
     info.SetDescription(_("This sample program demonstrates usage of wxCollapsiblePane"));
-    info.SetCopyright(_T("(C) 2006 Francesco Montorsi <frm@users.sourceforge.net>"));
+    info.SetCopyright(wxT("(C) 2006 Francesco Montorsi <frm@users.sourceforge.net>"));
 
     wxAboutBox(info);
 }

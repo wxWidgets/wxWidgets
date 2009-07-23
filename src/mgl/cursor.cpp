@@ -72,7 +72,7 @@ void wxCursor::InitFromStock(wxStockCursor cursorId)
 
     if ( gs_cursorsHash->find(cursorId) != gs_cursorsHash->end() )
     {
-        wxLogTrace(_T("mglcursor"), _T("cursor id %i fetched from cache"), cursorId);
+        wxLogTrace(wxT("mglcursor"), wxT("cursor id %i fetched from cache"), cursorId);
         *this = (*gs_cursorsHash)[cursorId];
         return;
     }
@@ -135,7 +135,7 @@ void wxCursor::InitFromStock(wxStockCursor cursorId)
     else
     {
         (*gs_cursorsHash)[cursorId] = *this;
-        wxLogTrace(_T("mglcursor"), _T("cursor id %i added to cache (%s)"),
+        wxLogTrace(wxT("mglcursor"), wxT("cursor id %i added to cache (%s)"),
                    cursorId, cursorname);
     }
 }

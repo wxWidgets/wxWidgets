@@ -180,7 +180,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
         wxWindowIDRef subid = NewControlId();
 
-        HWND hwndBtn = ::CreateWindow(_T("BUTTON"),
+        HWND hwndBtn = ::CreateWindow(wxT("BUTTON"),
                                       choices[i].wx_str(),
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
@@ -208,7 +208,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     // Create a dummy radio control to end the group.
     m_dummyId = NewControlId();
 
-    m_dummyHwnd = (WXHWND)::CreateWindow(_T("BUTTON"),
+    m_dummyHwnd = (WXHWND)::CreateWindow(wxT("BUTTON"),
                          wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, GetHwndOf(parent),

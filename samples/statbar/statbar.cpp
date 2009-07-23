@@ -303,7 +303,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxStatusBar sample"),
+    MyFrame *frame = new MyFrame(wxT("wxStatusBar sample"),
                                 wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -340,57 +340,57 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(StatusBar_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(StatusBar_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *statbarMenu = new wxMenu;
     
     wxMenu *statbarStyleMenu = new wxMenu;
-    statbarStyleMenu->Append(StatusBar_SetStyleSizeGrip, _T("wxSTB_SIZE_GRIP"), _T("Toggles the wxSTB_SIZE_GRIP style"), true);
-    statbarStyleMenu->Append(StatusBar_SetStyleShowTips, _T("wxSTB_SHOW_TIPS"), _T("Toggles the wxSTB_SHOW_TIPS style"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleSizeGrip, wxT("wxSTB_SIZE_GRIP"), wxT("Toggles the wxSTB_SIZE_GRIP style"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleShowTips, wxT("wxSTB_SHOW_TIPS"), wxT("Toggles the wxSTB_SHOW_TIPS style"), true);
     statbarStyleMenu->AppendSeparator();
-    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeStart, _T("wxSTB_ELLIPSIZE_START"), _T("Toggles the wxSTB_ELLIPSIZE_START style"), true);
-    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeMiddle, _T("wxSTB_ELLIPSIZE_MIDDLE"), _T("Toggles the wxSTB_ELLIPSIZE_MIDDLE style"), true);
-    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeEnd, _T("wxSTB_ELLIPSIZE_END"), _T("Toggles the wxSTB_ELLIPSIZE_END style"), true);
-    statbarMenu->Append(StatusBar_SetPaneStyle, _T("Status bar style"), statbarStyleMenu);
+    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeStart, wxT("wxSTB_ELLIPSIZE_START"), wxT("Toggles the wxSTB_ELLIPSIZE_START style"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeMiddle, wxT("wxSTB_ELLIPSIZE_MIDDLE"), wxT("Toggles the wxSTB_ELLIPSIZE_MIDDLE style"), true);
+    statbarStyleMenu->Append(StatusBar_SetStyleEllipsizeEnd, wxT("wxSTB_ELLIPSIZE_END"), wxT("Toggles the wxSTB_ELLIPSIZE_END style"), true);
+    statbarMenu->Append(StatusBar_SetPaneStyle, wxT("Status bar style"), statbarStyleMenu);
     statbarMenu->AppendSeparator();
 
-    statbarMenu->Append(StatusBar_SetFields, _T("&Set field count\tCtrl-C"),
-                        _T("Set the number of status bar fields"));
-    statbarMenu->Append(StatusBar_SetTexts, _T("&Set field text\tCtrl-T"),
-                        _T("Set the text to display for each status bar field"));
-    statbarMenu->Append(StatusBar_SetFont, _T("&Set field font\tCtrl-F"),
-                        _T("Set the font to use for rendering status bar fields"));
+    statbarMenu->Append(StatusBar_SetFields, wxT("&Set field count\tCtrl-C"),
+                        wxT("Set the number of status bar fields"));
+    statbarMenu->Append(StatusBar_SetTexts, wxT("&Set field text\tCtrl-T"),
+                        wxT("Set the text to display for each status bar field"));
+    statbarMenu->Append(StatusBar_SetFont, wxT("&Set field font\tCtrl-F"),
+                        wxT("Set the font to use for rendering status bar fields"));
 
     wxMenu *statbarPaneStyleMenu = new wxMenu;
-    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleNormal, _T("&Normal"), _T("Sets the style of the first field to normal (sunken) look"), true);
-    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleFlat, _T("&Flat"), _T("Sets the style of the first field to flat look"), true);
-    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleRaised, _T("&Raised"), _T("Sets the style of the first field to raised look"), true);
-    statbarMenu->Append(StatusBar_SetPaneStyle, _T("Field style"), statbarPaneStyleMenu);
+    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleNormal, wxT("&Normal"), wxT("Sets the style of the first field to normal (sunken) look"), true);
+    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleFlat, wxT("&Flat"), wxT("Sets the style of the first field to flat look"), true);
+    statbarPaneStyleMenu->Append(StatusBar_SetPaneStyleRaised, wxT("&Raised"), wxT("Sets the style of the first field to raised look"), true);
+    statbarMenu->Append(StatusBar_SetPaneStyle, wxT("Field style"), statbarPaneStyleMenu);
 
-    statbarMenu->Append(StatusBar_ResetFieldsWidth, _T("Reset field widths"),
-                        _T("Sets all fields to the same width"));
+    statbarMenu->Append(StatusBar_ResetFieldsWidth, wxT("Reset field widths"),
+                        wxT("Sets all fields to the same width"));
     statbarMenu->AppendSeparator();
 
-    statbarMenu->Append(StatusBar_Toggle, _T("&Toggle Status Bar"),
-                        _T("Toggle the status bar display"), true);
-    statbarMenu->Append(StatusBar_Recreate, _T("&Recreate\tCtrl-R"),
-                        _T("Toggle status bar format"));
+    statbarMenu->Append(StatusBar_Toggle, wxT("&Toggle Status Bar"),
+                        wxT("Toggle the status bar display"), true);
+    statbarMenu->Append(StatusBar_Recreate, wxT("&Recreate\tCtrl-R"),
+                        wxT("Toggle status bar format"));
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(StatusBar_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+    helpMenu->Append(StatusBar_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(statbarMenu, _T("&Status bar"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(statbarMenu, wxT("&Status bar"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
     // create default status bar to start with
     DoCreateStatusBar(StatBar_Default, wxSTB_DEFAULT_STYLE);
-    SetStatusText(_T("Welcome to wxWidgets!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 }
 
 MyFrame::~MyFrame()
@@ -483,9 +483,9 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
 
     long nFields = wxGetNumberFromUser
                 (
-                    _T("Select the number of fields in the status bar"),
-                    _T("Fields:"),
-                    _T("wxWidgets statusbar sample"),
+                    wxT("Select the number of fields in the status bar"),
+                    wxT("Fields:"),
+                    wxT("wxWidgets statusbar sample"),
                     sb->GetFieldsCount(),
                     1, 5,
                     this
@@ -517,13 +517,13 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
             if ( widths )
             {
                 if ( widths[n] > 0 )
-                    s.Printf(_T("fixed (%d)"), widths[n]);
+                    s.Printf(wxT("fixed (%d)"), widths[n]);
                 else
-                    s.Printf(_T("variable (*%d)"), -widths[n]);
+                    s.Printf(wxT("variable (*%d)"), -widths[n]);
             }
             else
             {
-                s = _T("default");
+                s = wxT("default");
             }
 
             SetStatusText(s, n);
@@ -712,28 +712,28 @@ void MyFrame::OnSetStyle(wxCommandEvent& event)
 // ----------------------------------------------------------------------------
 
 MyAboutDialog::MyAboutDialog(wxWindow *parent)
-            : wxDialog(parent, wxID_ANY, wxString(_T("About statbar")),
+            : wxDialog(parent, wxID_ANY, wxString(wxT("About statbar")),
                         wxDefaultPosition, wxDefaultSize,
                         wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
     wxStaticText *text = new wxStaticText(this, wxID_ANY,
-                                        _T("wxStatusBar sample\n")
-                                        _T("(c) 2000 Vadim Zeitlin"));
+                                        wxT("wxStatusBar sample\n")
+                                        wxT("(c) 2000 Vadim Zeitlin"));
 
-    wxButton *btn = new wxButton(this, wxID_OK, _T("&Close"));
+    wxButton *btn = new wxButton(this, wxID_OK, wxT("&Close"));
 
     // create the top status bar without the size grip (default style),
     // otherwise it looks weird
     wxStatusBar *statbarTop = new wxStatusBar(this, wxID_ANY, 0);
     statbarTop->SetFieldsCount(3);
-    statbarTop->SetStatusText(_T("This is a top status bar"), 0);
-    statbarTop->SetStatusText(_T("in a dialog"), 1);
-    statbarTop->SetStatusText(_T("Great, isn't it?"), 2);
+    statbarTop->SetStatusText(wxT("This is a top status bar"), 0);
+    statbarTop->SetStatusText(wxT("in a dialog"), 1);
+    statbarTop->SetStatusText(wxT("Great, isn't it?"), 2);
 
     wxStatusBar *statbarBottom = new wxStatusBar(this, wxID_ANY);
     statbarBottom->SetFieldsCount(2);
-    statbarBottom->SetStatusText(_T("This is a bottom status bar"), 0);
-    statbarBottom->SetStatusText(_T("in a dialog"), 1);
+    statbarBottom->SetStatusText(wxT("This is a bottom status bar"), 0);
+    statbarBottom->SetStatusText(wxT("in a dialog"), 1);
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(statbarTop, 0, wxGROW);
@@ -771,7 +771,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
     SetStatusWidths(Field_Max, widths);
 
 #if wxUSE_CHECKBOX
-    m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, _T("&Toggle clock"));
+    m_checkbox = new wxCheckBox(this, StatusBar_Checkbox, wxT("&Toggle clock"));
     m_checkbox->SetValue(true);
 #endif
 

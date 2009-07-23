@@ -82,7 +82,7 @@ void wxBeginBusyCursor(const wxCursor* pCursor)
 void wxEndBusyCursor()
 {
     wxCHECK_RET( gs_wxBusyCursorCount > 0
-                ,_T("no matching wxBeginBusyCursor() for wxEndBusyCursor()")
+                ,wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()")
                );
 
     if (--gs_wxBusyCursorCount == 0)
@@ -116,7 +116,7 @@ bool wxCheckForInterrupt( wxWindow* pWnd )
     }
     else
     {
-        wxFAIL_MSG(_T("pWnd==NULL !!!"));
+        wxFAIL_MSG(wxT("pWnd==NULL !!!"));
         return false;//*** temporary?
     }
 }

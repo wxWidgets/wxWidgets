@@ -1553,7 +1553,7 @@ HBITMAP wxInvertMask(
 {
     HBITMAP                         hBmpInvMask = 0;
 
-    wxCHECK_MSG( hBmpMask, 0, _T("invalid bitmap in wxInvertMask") );
+    wxCHECK_MSG( hBmpMask, 0, wxT("invalid bitmap in wxInvertMask") );
 
     //
     // Get width/height from the bitmap if not given
@@ -1615,7 +1615,7 @@ HBITMAP wxInvertMask(
 
 HBITMAP wxCopyBmp( HBITMAP hBmp, bool flip, int nWidth, int nHeight )
 {
-    wxCHECK_MSG( hBmp, 0, _T("invalid bitmap in wxCopyBmp") );
+    wxCHECK_MSG( hBmp, 0, wxT("invalid bitmap in wxCopyBmp") );
 
     //
     // Get width/height from the bitmap if not given

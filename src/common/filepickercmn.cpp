@@ -74,13 +74,13 @@ bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !(HasFlag(wxFLP_SAVE) && HasFlag(wxFLP_OPEN)),
-                  _T("can't specify both wxFLP_SAVE and wxFLP_OPEN at once") );
+                  wxT("can't specify both wxFLP_SAVE and wxFLP_OPEN at once") );
 
     wxASSERT_MSG( !HasFlag(wxFLP_SAVE) || !HasFlag(wxFLP_FILE_MUST_EXIST),
-                   _T("wxFLP_FILE_MUST_EXIST can't be used with wxFLP_SAVE" ) );
+                   wxT("wxFLP_FILE_MUST_EXIST can't be used with wxFLP_SAVE" ) );
 
     wxASSERT_MSG( !HasFlag(wxFLP_OPEN) || !HasFlag(wxFLP_OVERWRITE_PROMPT),
-                  _T("wxFLP_OVERWRITE_PROMPT can't be used with wxFLP_OPEN") );
+                  wxT("wxFLP_OVERWRITE_PROMPT can't be used with wxFLP_OPEN") );
 
     // create a wxFilePickerWidget or a wxDirPickerWidget...
     m_pickerIface = CreatePicker(this, path, message, wildcard);

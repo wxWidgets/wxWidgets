@@ -156,17 +156,17 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
             average = (2 * score + games) / (2 * games);
         }
         list->SetCellValue(i,0,players[i]);
-        string_value.Printf( _T("%u"), wins );
+        string_value.Printf( wxT("%u"), wins );
         list->SetCellValue(i,1,string_value);
-        string_value.Printf( _T("%u"), games );
+        string_value.Printf( wxT("%u"), games );
         list->SetCellValue(i,2,string_value);
-        string_value.Printf( _T("%u"), average );
+        string_value.Printf( wxT("%u"), average );
         list->SetCellValue(i,3,string_value);
     }
-    list->SetColLabelValue(0, _T("Players"));
-    list->SetColLabelValue(1, _T("Wins"));
-    list->SetColLabelValue(2, _T("Games"));
-    list->SetColLabelValue(3, _T("Score"));
+    list->SetColLabelValue(0, wxT("Players"));
+    list->SetColLabelValue(1, wxT("Wins"));
+    list->SetColLabelValue(2, wxT("Games"));
+    list->SetColLabelValue(3, wxT("Score"));
     list->SetEditable(false);
     list->AutoSizeColumns();
     list->AutoSizeRows();

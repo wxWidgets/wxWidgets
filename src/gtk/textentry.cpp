@@ -52,7 +52,7 @@ wx_gtk_insert_text_callback(GtkEditable *editable,
     // we should only be called if we have a max len limit at all
     GtkEntry *entry = GTK_ENTRY (editable);
 
-    wxCHECK_RET( entry->text_max_length, _T("shouldn't be called") );
+    wxCHECK_RET( entry->text_max_length, wxT("shouldn't be called") );
 
     // check that we don't overflow the max length limit
     //

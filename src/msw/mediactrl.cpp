@@ -2214,7 +2214,7 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     // First get the AMGetErrorText procedure in
     // debug mode for more meaningful messages
 #if wxDEBUG_LEVEL
-    if ( m_dllQuartz.Load(_T("quartz.dll"), wxDL_VERBATIM) )
+    if ( m_dllQuartz.Load(wxT("quartz.dll"), wxDL_VERBATIM) )
     {
         m_lpAMGetErrorText = (LPAMGETERRORTEXT)
                                 m_dllQuartz.GetSymbolAorW(wxT("AMGetErrorText"));
@@ -2786,7 +2786,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMCIMediaBackend, wxMediaBackend)
     { \
         TCHAR sz[5000]; \
         mciGetErrorString(nRet, sz, 5000); \
-        wxFAIL_MSG(wxString::Format(_T("MCI Error:%s"), sz)); \
+        wxFAIL_MSG(wxString::Format(wxT("MCI Error:%s"), sz)); \
     } \
 }
 #else

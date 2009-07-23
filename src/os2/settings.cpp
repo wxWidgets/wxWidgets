@@ -248,7 +248,7 @@ wxFont wxSystemSettingsNative::GetFont(
                               wxFONTWEIGHT_NORMAL   );
                 break;
         default:
-                wxFAIL_MSG( _T("stock font not found") );
+                wxFAIL_MSG( wxT("stock font not found") );
                 return GetFont(wxSYS_ANSI_VAR_FONT);
     }
 

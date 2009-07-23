@@ -100,7 +100,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxArtProvider sample"),
+    MyFrame *frame = new MyFrame(wxT("wxArtProvider sample"),
                                  wxPoint(50, 50), wxSize(450, 340));
     frame->Show(true);
     return true;
@@ -157,23 +157,23 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_ABOUT, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(wxID_ABOUT, wxT("&About...\tF1"), wxT("Show about dialog"));
 
-    menuFile->AppendCheckItem(ID_PlugProvider, _T("&Plug-in art provider"), _T("Enable custom art provider"));
+    menuFile->AppendCheckItem(ID_PlugProvider, wxT("&Plug-in art provider"), wxT("Enable custom art provider"));
     menuFile->AppendSeparator();
 
 #if wxUSE_LOG
-    menuFile->Append(ID_Logs, _T("&Logging test"), _T("Show some logging output"));
+    menuFile->Append(ID_Logs, wxT("&Logging test"), wxT("Show some logging output"));
 #endif // wxUSE_LOG
-    menuFile->Append(ID_Browser, _T("&Resources browser"), _T("Browse all available icons"));
+    menuFile->Append(ID_Browser, wxT("&Resources browser"), wxT("Browse all available icons"));
     menuFile->AppendSeparator();
 
-    menuFile->Append(ID_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(ID_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -191,22 +191,22 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_LOG
 void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage(_T("Some information."));
-    wxLogError(_T("This is an error."));
-    wxLogWarning(_T("A warning."));
-    wxLogError(_T("Yet another error."));
+    wxLogMessage(wxT("Some information."));
+    wxLogError(wxT("This is an error."));
+    wxLogWarning(wxT("A warning."));
+    wxLogError(wxT("Yet another error."));
     wxLog::GetActiveTarget()->Flush();
-    wxLogMessage(_T("Check/uncheck 'File/Plug-in art provider' and try again."));
+    wxLogMessage(wxT("Check/uncheck 'File/Plug-in art provider' and try again."));
 }
 #endif // wxUSE_LOG
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of wxArtProvider sample.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( wxT("This is the about dialog of wxArtProvider sample.\n")
+                wxT("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, _T("About wxArtProvider sample"),
+    wxMessageBox(msg, wxT("About wxArtProvider sample"),
         wxOK | wxICON_INFORMATION, this);
 }
 

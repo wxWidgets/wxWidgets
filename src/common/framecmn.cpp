@@ -415,7 +415,7 @@ void wxFrameBase::DoGiveHelp(const wxString& help, bool show)
             if ( m_oldStatusText.empty() )
             {
                 // use special value to prevent us from doing this the next time
-                m_oldStatusText += _T('\0');
+                m_oldStatusText += wxT('\0');
             }
         }
 

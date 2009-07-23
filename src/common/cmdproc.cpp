@@ -86,7 +86,7 @@ bool wxCommandProcessor::UndoCommand(wxCommand& cmd)
 // storeIt is false.
 bool wxCommandProcessor::Submit(wxCommand *command, bool storeIt)
 {
-    wxCHECK_MSG( command, false, _T("no command in wxCommandProcessor::Submit") );
+    wxCHECK_MSG( command, false, wxT("no command in wxCommandProcessor::Submit") );
 
     if ( !DoCommand(*command) )
     {
@@ -106,7 +106,7 @@ bool wxCommandProcessor::Submit(wxCommand *command, bool storeIt)
 
 void wxCommandProcessor::Store(wxCommand *command)
 {
-    wxCHECK_RET( command, _T("no command in wxCommandProcessor::Store") );
+    wxCHECK_RET( command, wxT("no command in wxCommandProcessor::Store") );
 
     if ( (int)m_commands.GetCount() == m_maxNoCommands )
     {

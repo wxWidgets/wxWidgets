@@ -296,7 +296,7 @@ wxSpinCtrl* wxSpinCtrl::GetSpinForTextCtrl(
 
     // sanity check
     wxASSERT_MSG( pSpin->m_hWndBuddy == hWndBuddy,
-                  _T("wxSpinCtrl has incorrect buddy HWND!") );
+                  wxT("wxSpinCtrl has incorrect buddy HWND!") );
 
     return pSpin;
 } // end of wxSpinCtrl::GetSpinForTextCtrl

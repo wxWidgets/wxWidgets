@@ -79,7 +79,7 @@ bool wxToolBarToolBase::Enable(bool enable)
 
 bool wxToolBarToolBase::Toggle(bool toggle)
 {
-    wxASSERT_MSG( CanBeToggled(), _T("can't toggle this tool") );
+    wxASSERT_MSG( CanBeToggled(), wxT("can't toggle this tool") );
 
     if ( m_toggled == toggle )
         return false;
@@ -178,7 +178,7 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              wxObject *clientData)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 _T("invalid position in wxToolBar::InsertTool()") );
+                 wxT("invalid position in wxToolBar::InsertTool()") );
 
     wxToolBarToolBase *tool = CreateTool(id, label, bitmap, bmpDisabled, kind,
                                          clientData, shortHelp, longHelp);
@@ -202,7 +202,7 @@ wxToolBarToolBase *
 wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 _T("invalid position in wxToolBar::InsertTool()") );
+                 wxT("invalid position in wxToolBar::InsertTool()") );
 
     if ( !tool || !DoInsertTool(pos, tool) )
     {
@@ -227,13 +227,13 @@ wxToolBarBase::InsertControl(size_t pos,
                              const wxString& label)
 {
     wxCHECK_MSG( control, NULL,
-                 _T("toolbar: can't insert NULL control") );
+                 wxT("toolbar: can't insert NULL control") );
 
     wxCHECK_MSG( control->GetParent() == this, NULL,
-                 _T("control must have toolbar as parent") );
+                 wxT("control must have toolbar as parent") );
 
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 _T("invalid position in wxToolBar::InsertControl()") );
+                 wxT("invalid position in wxToolBar::InsertControl()") );
 
     wxToolBarToolBase *tool = CreateTool(control, label);
 
@@ -260,7 +260,7 @@ wxControl *wxToolBarBase::FindControl( int id )
 
             if ( !control )
             {
-                wxFAIL_MSG( _T("NULL control in toolbar?") );
+                wxFAIL_MSG( wxT("NULL control in toolbar?") );
             }
             else if ( control->GetId() == id )
             {
@@ -281,7 +281,7 @@ wxToolBarToolBase *wxToolBarBase::AddSeparator()
 wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 _T("invalid position in wxToolBar::InsertSeparator()") );
+                 wxT("invalid position in wxToolBar::InsertSeparator()") );
 
     wxToolBarToolBase *tool = CreateTool(wxID_SEPARATOR,
                                          wxEmptyString,
@@ -336,7 +336,7 @@ wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)
 bool wxToolBarBase::DeleteToolByPos(size_t pos)
 {
     wxCHECK_MSG( pos < GetToolsCount(), false,
-                 _T("invalid position in wxToolBar::DeleteToolByPos()") );
+                 wxT("invalid position in wxToolBar::DeleteToolByPos()") );
 
     wxToolBarToolsList::compatibility_iterator node = m_tools.Item(pos);
 
@@ -397,13 +397,13 @@ wxToolBarToolBase *wxToolBarBase::FindById(int id) const
 
 void wxToolBarBase::UnToggleRadioGroup(wxToolBarToolBase *tool)
 {
-    wxCHECK_RET( tool, _T("NULL tool in wxToolBarTool::UnToggleRadioGroup") );
+    wxCHECK_RET( tool, wxT("NULL tool in wxToolBarTool::UnToggleRadioGroup") );
 
     if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
         return;
 
     wxToolBarToolsList::compatibility_iterator node = m_tools.Find(tool);
-    wxCHECK_RET( node, _T("invalid tool in wxToolBarTool::UnToggleRadioGroup") );
+    wxCHECK_RET( node, wxT("invalid tool in wxToolBarTool::UnToggleRadioGroup") );
 
     wxToolBarToolsList::compatibility_iterator nodeNext = node->GetNext();
     while ( nodeNext )
@@ -561,7 +561,7 @@ void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)
 {
     wxToolBarToolBase *tool = FindById(id);
 
-    wxCHECK_RET( tool, _T("no such tool in wxToolBar::SetToolClientData") );
+    wxCHECK_RET( tool, wxT("no such tool in wxToolBar::SetToolClientData") );
 
     tool->SetClientData(clientData);
 }
@@ -585,7 +585,7 @@ int wxToolBarBase::GetToolPos(int id) const
 bool wxToolBarBase::GetToolState(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, false, _T("no such tool") );
+    wxCHECK_MSG( tool, false, wxT("no such tool") );
 
     return tool->IsToggled();
 }
@@ -593,7 +593,7 @@ bool wxToolBarBase::GetToolState(int id) const
 bool wxToolBarBase::GetToolEnabled(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, false, _T("no such tool") );
+    wxCHECK_MSG( tool, false, wxT("no such tool") );
 
     return tool->IsEnabled();
 }
@@ -601,7 +601,7 @@ bool wxToolBarBase::GetToolEnabled(int id) const
 wxString wxToolBarBase::GetToolShortHelp(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, wxEmptyString, _T("no such tool") );
+    wxCHECK_MSG( tool, wxEmptyString, wxT("no such tool") );
 
     return tool->GetShortHelp();
 }
@@ -609,7 +609,7 @@ wxString wxToolBarBase::GetToolShortHelp(int id) const
 wxString wxToolBarBase::GetToolLongHelp(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
-    wxCHECK_MSG( tool, wxEmptyString, _T("no such tool") );
+    wxCHECK_MSG( tool, wxEmptyString, wxT("no such tool") );
 
     return tool->GetLongHelp();
 }
@@ -750,10 +750,10 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 {
     wxToolBarToolBase * const tool = FindById(toolid);
-    wxCHECK_MSG( tool, false, _T("invalid tool id") );
+    wxCHECK_MSG( tool, false, wxT("invalid tool id") );
 
     wxCHECK_MSG( tool->GetKind() == wxITEM_DROPDOWN, false,
-                    _T("menu can be only associated with drop down tools") );
+                    wxT("menu can be only associated with drop down tools") );
 
     tool->SetDropdownMenu(menu);
 

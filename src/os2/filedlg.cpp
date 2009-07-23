@@ -93,8 +93,8 @@ void wxFileDialog::GetPaths (
     size_t                          nCount = m_fileNames.GetCount();
 
     rasPaths.Empty();
-    if (m_dir.Last() != _T('\\'))
-        sDir += _T('\\');
+    if (m_dir.Last() != wxT('\\'))
+        sDir += wxT('\\');
 
     for ( size_t n = 0; n < nCount; n++ )
     {
@@ -153,21 +153,21 @@ int wxFileDialog::ShowModal()
 
         switch (ch)
         {
-            case _T('/'):
+            case wxT('/'):
                 //
                 // Convert to backslash
                 //
-                ch = _T('\\');
+                ch = wxT('\\');
 
                 //
                 // Fall through
                 //
-            case _T('\\'):
+            case wxT('\\'):
                 while (i < nLen - 1)
                 {
                     wxChar          chNext = m_dir[i + 1];
 
-                    if (chNext != _T('\\') && chNext != _T('/'))
+                    if (chNext != wxT('\\') && chNext != wxT('/'))
                         break;
 
                     //

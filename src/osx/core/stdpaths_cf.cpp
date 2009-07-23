@@ -192,7 +192,7 @@ wxString wxStandardPathsCF::GetUserDataDir() const
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
     return AppendAppInfo(wxMacFindFolder((short)kUserDomain, kApplicationSupportFolderType, kCreateFolder));
 #else
-    return AppendAppInfo(wxFileName::GetHomeDir() + _T("/Library/Application Support"));
+    return AppendAppInfo(wxFileName::GetHomeDir() + wxT("/Library/Application Support"));
 #endif
 }
 
@@ -211,7 +211,7 @@ wxStandardPathsCF::GetLocalizedResourcesDir(const wxString& lang,
                                             ResourceCat category) const
 {
     return wxStandardPathsBase::
-            GetLocalizedResourcesDir(lang, category) + _T(".lproj");
+            GetLocalizedResourcesDir(lang, category) + wxT(".lproj");
 }
 
 #endif // wxUSE_STDPATHS

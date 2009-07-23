@@ -1582,14 +1582,14 @@ void wxFileIconsTable::Create()
                                                    wxART_CMN_DIALOG,
                                                    wxSize(16, 16)));
     // executable
-    if (GetIconID(wxEmptyString, _T("application/x-executable")) == file)
+    if (GetIconID(wxEmptyString, wxT("application/x-executable")) == file)
     {
         m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE,
                                                        wxART_CMN_DIALOG,
                                                        wxSize(16, 16)));
-        delete m_HashTable->Get(_T("exe"));
-        m_HashTable->Delete(_T("exe"));
-        m_HashTable->Put(_T("exe"), new wxFileIconEntry(executable));
+        delete m_HashTable->Get(wxT("exe"));
+        m_HashTable->Delete(wxT("exe"));
+        m_HashTable->Put(wxT("exe"), new wxFileIconEntry(executable));
     }
     /* else put into list by GetIconID
        (KDE defines application/x-executable for *.exe and has nice icon)

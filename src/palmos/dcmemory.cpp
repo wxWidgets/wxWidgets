@@ -56,7 +56,7 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
         : wxPalmDCImpl( owner ) 
 {
-    wxCHECK_RET( dc, _T("NULL dc in wxMemoryDC ctor") );
+    wxCHECK_RET( dc, wxT("NULL dc in wxMemoryDC ctor") );
 
     CreateCompatible(dc);
 

@@ -356,9 +356,9 @@ bool wxGenericPrintDialog::TransferDataToWindow()
              m_fromText->Enable(true);
              m_toText->Enable(true);
              if (m_printDialogData.GetFromPage() > 0)
-                m_fromText->SetValue(wxString::Format(_T("%d"), m_printDialogData.GetFromPage()));
+                m_fromText->SetValue(wxString::Format(wxT("%d"), m_printDialogData.GetFromPage()));
              if (m_printDialogData.GetToPage() > 0)
-                m_toText->SetValue(wxString::Format(_T("%d"), m_printDialogData.GetToPage()));
+                m_toText->SetValue(wxString::Format(wxT("%d"), m_printDialogData.GetToPage()));
              if(m_rangeRadioBox)
              {
                 if (m_printDialogData.GetAllPages() || m_printDialogData.GetFromPage() == 0)
@@ -380,7 +380,7 @@ bool wxGenericPrintDialog::TransferDataToWindow()
        }
     }
     m_noCopiesText->SetValue(
-        wxString::Format(_T("%d"), m_printDialogData.GetNoCopies()));
+        wxString::Format(wxT("%d"), m_printDialogData.GetNoCopies()));
 
     m_printToFileCheckBox->SetValue(m_printDialogData.GetPrintToFile());
     m_printToFileCheckBox->Enable(m_printDialogData.GetEnablePrintToFile());
@@ -708,7 +708,7 @@ void wxGenericPrintSetupDialog::OnPrinter(wxListEvent& event)
         li.SetMask( wxLIST_MASK_TEXT );
         li.SetId( event.GetIndex() );
         m_printerListCtrl->GetItem( li );
-        m_printerCommandText->SetValue( _T("lpr -P") + li.GetText() );
+        m_printerCommandText->SetValue( wxT("lpr -P") + li.GetText() );
     }
 }
 

@@ -254,22 +254,22 @@ wxString CByteArrayFormat( const void* data, size_t len, const wxChar* name )
     const unsigned char* bytes = (unsigned char*)data;
     wxString result;
 
-    result.Printf( _T("static const unsigned char %s[%i] = \n{"), name, (int)len );
+    result.Printf( wxT("static const unsigned char %s[%i] = \n{"), name, (int)len );
 
     for ( size_t i = 0; i < len; i++ )
     {
         if ( i != 0 )
         {
-            result.append( _T(",") );
+            result.append( wxT(",") );
         }
         if ((i%16)==0)
         {
-            result.append( _T("\n    ") );
+            result.append( wxT("\n    ") );
         }
-        wxString byte = wxString::Format( _T("0x%02x"), bytes[i] );
+        wxString byte = wxString::Format( wxT("0x%02x"), bytes[i] );
         result.append(byte);
     }
-    result.append( _T("\n};\n") );
+    result.append( wxT("\n};\n") );
     return result;
 }
 
@@ -815,7 +815,7 @@ void MBConvTestCase::FontmapTests()
 
 void MBConvTestCase::BufSize()
 {
-    wxCSConv conv1251(_T("CP1251"));
+    wxCSConv conv1251(wxT("CP1251"));
     CPPUNIT_ASSERT( conv1251.IsOk() );
     const char *cp1251text =
         "\313\301\326\305\324\323\321 \325\304\301\336\316\331\315";
@@ -842,7 +842,7 @@ void MBConvTestCase::BufSize()
 
 
     // test in the other direction too, using an encoding with multibyte NUL
-    wxCSConv convUTF16(_T("UTF-16LE"));
+    wxCSConv convUTF16(wxT("UTF-16LE"));
     CPPUNIT_ASSERT( convUTF16.IsOk() );
     const wchar_t *utf16text = L"Hello";
 

@@ -180,7 +180,7 @@ protected:
     virtual wxGDIRefData *
     CloneGDIRefData(const wxGDIRefData *WXUNUSED(data)) const
     {
-        wxFAIL_MSG( _T("must be implemented if used") );
+        wxFAIL_MSG( wxT("must be implemented if used") );
 
         return NULL;
     }

@@ -692,7 +692,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     wxAboutDialogInfo info;
     info.SetName(_("DataView sample"));
     info.SetDescription(_("This sample demonstrates wxDataViewCtrl"));
-    info.SetCopyright(_T("(C) 2007-2009 Robert Roebling"));
+    info.SetCopyright(wxT("(C) 2007-2009 Robert Roebling"));
     info.AddDeveloper("Robert Roebling");
     info.AddDeveloper("Francesco Montorsi");
 

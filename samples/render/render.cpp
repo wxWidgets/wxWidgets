@@ -69,7 +69,7 @@ public:
         dc.SetBrush(*wxBLUE_BRUSH);
         dc.SetTextForeground(*wxWHITE);
         dc.DrawRoundedRectangle(rect, 5);
-        dc.DrawLabel(_T("MyRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
+        dc.DrawLabel(wxT("MyRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
         return rect.width;
     }
 };
@@ -130,8 +130,8 @@ public:
     {
         wxPaintDC dc(this);
 
-        dc.DrawText(_T("Below is the standard header button drawn"), 10, 10);
-        dc.DrawText(_T("using the current renderer:"), 10, 40);
+        dc.DrawText(wxT("Below is the standard header button drawn"), 10, 10);
+        dc.DrawText(wxT("using the current renderer:"), 10, 40);
 
         wxRendererNative& renderer = wxRendererNative::Get();
         const wxCoord height = renderer.GetHeaderButtonHeight(this);
@@ -220,7 +220,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame(NULL,
                  wxID_ANY,
-                 _T("Render wxWidgets Sample"),
+                 wxT("Render wxWidgets Sample"),
                  wxPoint(50, 50),
                  wxSize(450, 340))
 {
@@ -231,19 +231,19 @@ MyFrame::MyFrame()
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_DYNLIB_CLASS
-    menuFile->Append(Render_Load, _T("&Load renderer...\tCtrl-L"));
-    menuFile->Append(Render_Unload, _T("&Unload renderer\tCtrl-U"));
+    menuFile->Append(Render_Load, wxT("&Load renderer...\tCtrl-L"));
+    menuFile->Append(Render_Unload, wxT("&Unload renderer\tCtrl-U"));
 #endif // wxUSE_DYNLIB_CLASS
-    menuFile->Append(Render_Quit, _T("E&xit\tCtrl-Q"), _T("Quit this program"));
+    menuFile->Append(Render_Quit, wxT("E&xit\tCtrl-Q"), wxT("Quit this program"));
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Render_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(Render_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -254,7 +254,7 @@ MyFrame::MyFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(_T("Welcome to wxWidgets!"));
+    SetStatusText(wxT("Welcome to wxWidgets!"));
 #endif // wxUSE_STATUSBAR
 
     Show();
@@ -272,12 +272,12 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_name = _T("renddll");
+    static wxString s_name = wxT("renddll");
 
     wxString name = wxGetTextFromUser
                     (
-                        _T("Name of the renderer to load:"),
-                        _T("Render wxWidgets Sample"),
+                        wxT("Name of the renderer to load:"),
+                        wxT("Render wxWidgets Sample"),
                         s_name,
                         this
                     );
@@ -292,7 +292,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     wxRendererNative *renderer = wxRendererNative::Load(name);
     if ( !renderer )
     {
-        wxLogError(_T("Failed to load renderer \"%s\"."), name.c_str());
+        wxLogError(wxT("Failed to load renderer \"%s\"."), name.c_str());
     }
     else // loaded ok
     {
@@ -300,7 +300,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 
         m_panel->Refresh();
 
-        wxLogStatus(this, _T("Successfully loaded the renderer \"%s\"."),
+        wxLogStatus(this, wxT("Successfully loaded the renderer \"%s\"."),
                     name.c_str());
     }
 }
@@ -314,11 +314,11 @@ void MyFrame::OnUnload(wxCommandEvent& WXUNUSED(event))
 
         m_panel->Refresh();
 
-        wxLogStatus(this, _T("Unloaded the previously loaded renderer."));
+        wxLogStatus(this, wxT("Unloaded the previously loaded renderer."));
     }
     else
     {
-        wxLogWarning(_T("No renderer to unload."));
+        wxLogWarning(wxT("No renderer to unload."));
     }
 }
 
@@ -332,10 +332,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Render sample shows how to use custom renderers.\n")
-                 _T("\n")
-                 _T("(c) 2003 Vadim Zeitlin"),
-                 _T("About Render wxWidgets Sample"),
+    wxMessageBox(wxT("Render sample shows how to use custom renderers.\n")
+                 wxT("\n")
+                 wxT("(c) 2003 Vadim Zeitlin"),
+                 wxT("About Render wxWidgets Sample"),
                  wxOK | wxICON_INFORMATION, this);
 }
 

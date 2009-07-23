@@ -50,7 +50,7 @@ wxObject *wxSimpleHtmlListBoxXmlHandler::DoCreateResource()
                         GetID(),
                         GetPosition(), GetSize(),
                         strList,
-                        GetStyle(_T("style"), wxHLB_DEFAULT_STYLE),
+                        GetStyle(wxT("style"), wxHLB_DEFAULT_STYLE),
                         wxDefaultValidator,
                         GetName());
 

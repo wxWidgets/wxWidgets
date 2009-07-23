@@ -465,7 +465,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 void wxSplitterWindow::SetSashGravity(double gravity)
 {
     wxCHECK_RET( gravity >= 0. && gravity <= 1.,
-                    _T("invalid gravity value") );
+                    wxT("invalid gravity value") );
 
     m_sashGravity = gravity;
 }
@@ -732,7 +732,7 @@ void wxSplitterWindow::SizeWindows()
 void wxSplitterWindow::Initialize(wxWindow *window)
 {
     wxASSERT_MSG( (!window || window->GetParent() == this),
-                  _T("windows in the splitter should have it as parent!") );
+                  wxT("windows in the splitter should have it as parent!") );
 
     if (window && !window->IsShown())
         window->Show();
@@ -753,10 +753,10 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
         return false;
 
     wxCHECK_MSG( window1 && window2, false,
-                 _T("can not split with NULL window(s)") );
+                 wxT("can not split with NULL window(s)") );
 
     wxCHECK_MSG( window1->GetParent() == this && window2->GetParent() == this, false,
-                  _T("windows in the splitter should have it as parent!") );
+                  wxT("windows in the splitter should have it as parent!") );
 
     if (! window1->IsShown())
         window1->Show();

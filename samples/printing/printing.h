@@ -84,7 +84,7 @@ private:
 class MyPrintout: public wxPrintout
 {
 public:
-    MyPrintout(MyFrame* frame, const wxString &title = _T("My printout"))
+    MyPrintout(MyFrame* frame, const wxString &title = wxT("My printout"))
         : wxPrintout(title) { m_frame=frame; }
 
     bool OnPrintPage(int page);

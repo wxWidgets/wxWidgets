@@ -247,7 +247,7 @@ bool wxHtmlWindowMouseHelper::OnCellClicked(wxHtmlCell *cell,
     {
         // if the event wasn't handled, do the default processing here:
 
-        wxASSERT_MSG( cell, _T("can't be called with NULL cell") );
+        wxASSERT_MSG( cell, wxT("can't be called with NULL cell") );
 
         cell->ProcessMouseClick(m_interface, ev.GetPoint(), ev.GetMouseEvent());
     }
@@ -964,7 +964,7 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
             const wxString txt(SelectionToText());
             wxTheClipboard->SetData(new wxTextDataObject(txt));
             wxTheClipboard->Close();
-            wxLogTrace(_T("wxhtmlselection"),
+            wxLogTrace(wxT("wxhtmlselection"),
                        _("Copied to clipboard:\"%s\""), txt.c_str());
 
             return true;
@@ -1403,7 +1403,7 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
                 // but seems to happen sometimes under wxMSW - maybe it's a bug
                 // there but for now just ignore it
 
-                //wxFAIL_MSG( _T("can't understand where has mouse gone") );
+                //wxFAIL_MSG( wxT("can't understand where has mouse gone") );
 
                 return;
             }

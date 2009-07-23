@@ -69,7 +69,7 @@ public:
     {
         wxString s = GetText();
         if ( s.empty() )
-            s = _T('H');
+            s = wxT('H');
 
         return s;
     }
@@ -188,7 +188,7 @@ public:
         void ExtendWidth(wxCoord w)
         {
             wxASSERT_MSG( m_rectAll.width <= w,
-                            _T("width can only be increased") );
+                            wxT("width can only be increased") );
 
             m_rectAll.width = w;
             m_rectLabel.x = m_rectAll.x + (w - m_rectLabel.width) / 2;
@@ -254,7 +254,7 @@ public:
 
     bool IsHighlighted() const
     {
-        wxASSERT_MSG( !IsVirtual(), _T("unexpected call to IsHighlighted") );
+        wxASSERT_MSG( !IsVirtual(), wxT("unexpected call to IsHighlighted") );
 
         return m_highlighted;
     }
@@ -420,7 +420,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
-                      const wxString &name = _T("listctrlmainwindow") );
+                      const wxString &name = wxT("listctrlmainwindow") );
 
     virtual ~wxListMainWindow();
 
@@ -719,7 +719,7 @@ protected:
     // get the line data for the given index
     wxListLineData *GetLine(size_t n) const
     {
-        wxASSERT_MSG( n != (size_t)-1, _T("invalid line index") );
+        wxASSERT_MSG( n != (size_t)-1, wxT("invalid line index") );
 
         if ( IsVirtual() )
         {

@@ -160,7 +160,7 @@ public:
 
     void CreateColumns()
     {
-        InsertColumn(0, _T("item"));
+        InsertColumn(0, wxT("item"));
         SizeColumns();
     }
 

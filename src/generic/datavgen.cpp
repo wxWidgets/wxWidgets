@@ -2498,7 +2498,7 @@ void wxDataViewMainWindow::RefreshRowsAfter( unsigned int firstRow )
 void wxDataViewMainWindow::OnArrowChar(unsigned int newCurrent, const wxKeyEvent& event)
 {
     wxCHECK_RET( newCurrent < GetRowCount(),
-                _T("invalid item index in OnArrowChar()") );
+                wxT("invalid item index in OnArrowChar()") );
 
     // if there is no selection, we cannot move it anywhere
     if (!HasCurrentRow())
@@ -3398,7 +3398,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 
     // don't use m_linesPerPage directly as it might not be computed yet
     const int pageSize = GetCountPerPage();
-    wxCHECK_RET( pageSize, _T("should have non zero page size") );
+    wxCHECK_RET( pageSize, wxT("should have non zero page size") );
 
     switch ( event.GetKeyCode() )
     {
@@ -3845,7 +3845,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             else // !ctrl, !shift
             {
                 // test in the enclosing if should make it impossible
-                wxFAIL_MSG( _T("how did we get here?") );
+                wxFAIL_MSG( wxT("how did we get here?") );
             }
         }
 

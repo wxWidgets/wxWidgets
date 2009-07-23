@@ -113,7 +113,7 @@ void FileKindTestCase::File()
 {
     TempFile tmp; // put first
     wxFile file;
-    tmp.m_name = wxFileName::CreateTempFileName(_T("wxft"), &file);
+    tmp.m_name = wxFileName::CreateTempFileName(wxT("wxft"), &file);
     TestFd(file, true);
     file.Close();
 

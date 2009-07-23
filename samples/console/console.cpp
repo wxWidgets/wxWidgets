@@ -41,7 +41,7 @@
         switch ( parser.Parse() )
         {
             case -1:
-                wxLogMessage(_T("Help was given, terminating."));
+                wxLogMessage(wxT("Help was given, terminating."));
                 break;
 
             case 0:
@@ -49,7 +49,7 @@
                 break;
 
             default:
-                wxLogMessage(_T("Syntax error detected, aborting."));
+                wxLogMessage(wxT("Syntax error detected, aborting."));
                 break;
         }
 
@@ -164,9 +164,9 @@
 static wxString MakePrintable(const wxChar *s)
 {
     wxString str(s);
-    (void)str.Replace(_T("\t"), _T("\\t"));
-    (void)str.Replace(_T("\n"), _T("\\n"));
-    (void)str.Replace(_T("\r"), _T("\\r"));
+    (void)str.Replace(wxT("\t"), wxT("\\t"));
+    (void)str.Replace(wxT("\n"), wxT("\\n"));
+    (void)str.Replace(wxT("\r"), wxT("\\r"));
 
     return str;
 }
@@ -186,7 +186,7 @@ static wxString MakePrintable(const wxChar *s)
 
 static void ShowCmdLine(const wxCmdLineParser& parser)
 {
-    wxString s = _T("Command line parsed successfully:\nInput files: ");
+    wxString s = wxT("Command line parsed successfully:\nInput files: ");
 
     size_t count = parser.GetParamCount();
     for ( size_t param = 0; param < count; param++ )
@@ -195,25 +195,25 @@ static void ShowCmdLine(const wxCmdLineParser& parser)
     }
 
     s << '\n'
-      << _T("Verbose:\t") << (parser.Found(_T("v")) ? _T("yes") : _T("no")) << '\n'
-      << _T("Quiet:\t") << (parser.Found(_T("q")) ? _T("yes") : _T("no")) << '\n';
+      << wxT("Verbose:\t") << (parser.Found(wxT("v")) ? wxT("yes") : wxT("no")) << '\n'
+      << wxT("Quiet:\t") << (parser.Found(wxT("q")) ? wxT("yes") : wxT("no")) << '\n';
 
     wxString strVal;
     long lVal;
     double dVal;
     wxDateTime dt;
-    if ( parser.Found(_T("o"), &strVal) )
-        s << _T("Output file:\t") << strVal << '\n';
-    if ( parser.Found(_T("i"), &strVal) )
-        s << _T("Input dir:\t") << strVal << '\n';
-    if ( parser.Found(_T("s"), &lVal) )
-        s << _T("Size:\t") << lVal << '\n';
-    if ( parser.Found(_T("f"), &dVal) )
-        s << _T("Double:\t") << dVal << '\n';
-    if ( parser.Found(_T("d"), &dt) )
-        s << _T("Date:\t") << dt.FormatISODate() << '\n';
-    if ( parser.Found(_T("project_name"), &strVal) )
-        s << _T("Project:\t") << strVal << '\n';
+    if ( parser.Found(wxT("o"), &strVal) )
+        s << wxT("Output file:\t") << strVal << '\n';
+    if ( parser.Found(wxT("i"), &strVal) )
+        s << wxT("Input dir:\t") << strVal << '\n';
+    if ( parser.Found(wxT("s"), &lVal) )
+        s << wxT("Size:\t") << lVal << '\n';
+    if ( parser.Found(wxT("f"), &dVal) )
+        s << wxT("Double:\t") << dVal << '\n';
+    if ( parser.Found(wxT("d"), &dt) )
+        s << wxT("Date:\t") << dt.FormatISODate() << '\n';
+    if ( parser.Found(wxT("project_name"), &strVal) )
+        s << wxT("Project:\t") << strVal << '\n';
 
     wxLogMessage(s);
 }
@@ -224,22 +224,22 @@ static void TestCmdLineConvert()
 {
     static const wxChar *cmdlines[] =
     {
-        _T("arg1 arg2"),
-        _T("-a \"-bstring 1\" -c\"string 2\" \"string 3\""),
-        _T("literal \\\" and \"\""),
+        wxT("arg1 arg2"),
+        wxT("-a \"-bstring 1\" -c\"string 2\" \"string 3\""),
+        wxT("literal \\\" and \"\""),
     };
 
     for ( size_t n = 0; n < WXSIZEOF(cmdlines); n++ )
     {
         const wxChar *cmdline = cmdlines[n];
-        wxPrintf(_T("Parsing: %s\n"), cmdline);
+        wxPrintf(wxT("Parsing: %s\n"), cmdline);
         wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdline);
 
         size_t count = args.GetCount();
-        wxPrintf(_T("\targc = %u\n"), count);
+        wxPrintf(wxT("\targc = %u\n"), count);
         for ( size_t arg = 0; arg < count; arg++ )
         {
-            wxPrintf(_T("\targv[%u] = %s\n"), arg, args[arg].c_str());
+            wxPrintf(wxT("\targv[%u] = %s\n"), arg, args[arg].c_str());
         }
     }
 }
@@ -255,11 +255,11 @@ static void TestCmdLineConvert()
 #include "wx/dir.h"
 
 #ifdef __UNIX__
-    static const wxChar *ROOTDIR = _T("/");
-    static const wxChar *TESTDIR = _T("/usr/local/share");
+    static const wxChar *ROOTDIR = wxT("/");
+    static const wxChar *TESTDIR = wxT("/usr/local/share");
 #elif defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
-    static const wxChar *ROOTDIR = _T("c:\\");
-    static const wxChar *TESTDIR = _T("d:\\");
+    static const wxChar *ROOTDIR = wxT("c:\\");
+    static const wxChar *TESTDIR = wxT("d:\\");
 #else
     #error "don't know where the root directory is"
 #endif
@@ -276,7 +276,7 @@ static void TestDirEnumHelper(wxDir& dir,
     bool cont = dir.GetFirst(&filename, filespec, flags);
     while ( cont )
     {
-        wxPrintf(_T("\t%s\n"), filename.c_str());
+        wxPrintf(wxT("\t%s\n"), filename.c_str());
 
         cont = dir.GetNext(&filename);
     }
@@ -288,56 +288,56 @@ static void TestDirEnumHelper(wxDir& dir,
 
 static void TestDirEnum()
 {
-    wxPuts(_T("*** Testing wxDir::GetFirst/GetNext ***"));
+    wxPuts(wxT("*** Testing wxDir::GetFirst/GetNext ***"));
 
     wxString cwd = wxGetCwd();
     if ( !wxDir::Exists(cwd) )
     {
-        wxPrintf(_T("ERROR: current directory '%s' doesn't exist?\n"), cwd.c_str());
+        wxPrintf(wxT("ERROR: current directory '%s' doesn't exist?\n"), cwd.c_str());
         return;
     }
 
     wxDir dir(cwd);
     if ( !dir.IsOpened() )
     {
-        wxPrintf(_T("ERROR: failed to open current directory '%s'.\n"), cwd.c_str());
+        wxPrintf(wxT("ERROR: failed to open current directory '%s'.\n"), cwd.c_str());
         return;
     }
 
-    wxPuts(_T("Enumerating everything in current directory:"));
+    wxPuts(wxT("Enumerating everything in current directory:"));
     TestDirEnumHelper(dir);
 
-    wxPuts(_T("Enumerating really everything in current directory:"));
+    wxPuts(wxT("Enumerating really everything in current directory:"));
     TestDirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT);
 
-    wxPuts(_T("Enumerating object files in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT, _T("*.o*"));
+    wxPuts(wxT("Enumerating object files in current directory:"));
+    TestDirEnumHelper(dir, wxDIR_DEFAULT, wxT("*.o*"));
 
-    wxPuts(_T("Enumerating directories in current directory:"));
+    wxPuts(wxT("Enumerating directories in current directory:"));
     TestDirEnumHelper(dir, wxDIR_DIRS);
 
-    wxPuts(_T("Enumerating files in current directory:"));
+    wxPuts(wxT("Enumerating files in current directory:"));
     TestDirEnumHelper(dir, wxDIR_FILES);
 
-    wxPuts(_T("Enumerating files including hidden in current directory:"));
+    wxPuts(wxT("Enumerating files including hidden in current directory:"));
     TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
 
     dir.Open(ROOTDIR);
 
-    wxPuts(_T("Enumerating everything in root directory:"));
+    wxPuts(wxT("Enumerating everything in root directory:"));
     TestDirEnumHelper(dir, wxDIR_DEFAULT);
 
-    wxPuts(_T("Enumerating directories in root directory:"));
+    wxPuts(wxT("Enumerating directories in root directory:"));
     TestDirEnumHelper(dir, wxDIR_DIRS);
 
-    wxPuts(_T("Enumerating files in root directory:"));
+    wxPuts(wxT("Enumerating files in root directory:"));
     TestDirEnumHelper(dir, wxDIR_FILES);
 
-    wxPuts(_T("Enumerating files including hidden in root directory:"));
+    wxPuts(wxT("Enumerating files including hidden in root directory:"));
     TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
 
-    wxPuts(_T("Enumerating files in non existing directory:"));
-    wxDir dirNo(_T("nosuchdir"));
+    wxPuts(wxT("Enumerating files in non existing directory:"));
+    wxDir dirNo(wxT("nosuchdir"));
     TestDirEnumHelper(dirNo);
 }
 
@@ -357,16 +357,16 @@ public:
         wxFileName::SplitPath(dirname, &path, &name, &ext);
 
         if ( !ext.empty() )
-            name << _T('.') << ext;
+            name << wxT('.') << ext;
 
         wxString indent;
         for ( const wxChar *p = path.c_str(); *p; p++ )
         {
             if ( wxIsPathSeparator(*p) )
-                indent += _T("    ");
+                indent += wxT("    ");
         }
 
-        wxPrintf(_T("%s%s\n"), indent.c_str(), name.c_str());
+        wxPrintf(wxT("%s%s\n"), indent.c_str(), name.c_str());
 
         return wxDIR_CONTINUE;
     }
@@ -374,20 +374,20 @@ public:
 
 static void TestDirTraverse()
 {
-    wxPuts(_T("*** Testing wxDir::Traverse() ***"));
+    wxPuts(wxT("*** Testing wxDir::Traverse() ***"));
 
     // enum all files
     wxArrayString files;
     size_t n = wxDir::GetAllFiles(TESTDIR, &files);
-    wxPrintf(_T("There are %u files under '%s'\n"), n, TESTDIR);
+    wxPrintf(wxT("There are %u files under '%s'\n"), n, TESTDIR);
     if ( n > 1 )
     {
-        wxPrintf(_T("First one is '%s'\n"), files[0u].c_str());
-        wxPrintf(_T(" last one is '%s'\n"), files[n - 1].c_str());
+        wxPrintf(wxT("First one is '%s'\n"), files[0u].c_str());
+        wxPrintf(wxT(" last one is '%s'\n"), files[n - 1].c_str());
     }
 
     // enum again with custom traverser
-    wxPuts(_T("Now enumerating directories:"));
+    wxPuts(wxT("Now enumerating directories:"));
     wxDir dir(TESTDIR);
     DirPrintTraverser traverser;
     dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
@@ -397,34 +397,34 @@ static void TestDirTraverse()
 
 static void TestDirExists()
 {
-    wxPuts(_T("*** Testing wxDir::Exists() ***"));
+    wxPuts(wxT("*** Testing wxDir::Exists() ***"));
 
     static const wxChar *dirnames[] =
     {
-        _T("."),
+        wxT("."),
 #if defined(__WXMSW__)
-        _T("c:"),
-        _T("c:\\"),
-        _T("\\\\share\\file"),
-        _T("c:\\dos"),
-        _T("c:\\dos\\"),
-        _T("c:\\dos\\\\"),
-        _T("c:\\autoexec.bat"),
+        wxT("c:"),
+        wxT("c:\\"),
+        wxT("\\\\share\\file"),
+        wxT("c:\\dos"),
+        wxT("c:\\dos\\"),
+        wxT("c:\\dos\\\\"),
+        wxT("c:\\autoexec.bat"),
 #elif defined(__UNIX__)
-        _T("/"),
-        _T("//"),
-        _T("/usr/bin"),
-        _T("/usr//bin"),
-        _T("/usr///bin"),
+        wxT("/"),
+        wxT("//"),
+        wxT("/usr/bin"),
+        wxT("/usr//bin"),
+        wxT("/usr///bin"),
 #endif
     };
 
     for ( size_t n = 0; n < WXSIZEOF(dirnames); n++ )
     {
-        wxPrintf(_T("%-40s: %s\n"),
+        wxPrintf(wxT("%-40s: %s\n"),
                  dirnames[n],
-                 wxDir::Exists(dirnames[n]) ? _T("exists")
-                                            : _T("doesn't exist"));
+                 wxDir::Exists(dirnames[n]) ? wxT("exists")
+                                            : wxT("doesn't exist"));
     }
 }
 
@@ -443,22 +443,22 @@ static void TestDirExists()
 static void TestDllLoad()
 {
 #if defined(__WXMSW__)
-    static const wxChar *LIB_NAME = _T("kernel32.dll");
-    static const wxChar *FUNC_NAME = _T("lstrlenA");
+    static const wxChar *LIB_NAME = wxT("kernel32.dll");
+    static const wxChar *FUNC_NAME = wxT("lstrlenA");
 #elif defined(__UNIX__)
     // weird: using just libc.so does *not* work!
-    static const wxChar *LIB_NAME = _T("/lib/libc.so.6");
-    static const wxChar *FUNC_NAME = _T("strlen");
+    static const wxChar *LIB_NAME = wxT("/lib/libc.so.6");
+    static const wxChar *FUNC_NAME = wxT("strlen");
 #else
     #error "don't know how to test wxDllLoader on this platform"
 #endif
 
-    wxPuts(_T("*** testing basic wxDynamicLibrary functions ***\n"));
+    wxPuts(wxT("*** testing basic wxDynamicLibrary functions ***\n"));
 
     wxDynamicLibrary lib(LIB_NAME);
     if ( !lib.IsLoaded() )
     {
-        wxPrintf(_T("ERROR: failed to load '%s'.\n"), LIB_NAME);
+        wxPrintf(wxT("ERROR: failed to load '%s'.\n"), LIB_NAME);
     }
     else
     {
@@ -466,40 +466,40 @@ static void TestDllLoad()
         wxStrlenType pfnStrlen = (wxStrlenType)lib.GetSymbol(FUNC_NAME);
         if ( !pfnStrlen )
         {
-            wxPrintf(_T("ERROR: function '%s' wasn't found in '%s'.\n"),
+            wxPrintf(wxT("ERROR: function '%s' wasn't found in '%s'.\n"),
                      FUNC_NAME, LIB_NAME);
         }
         else
         {
-            wxPrintf(_T("Calling %s dynamically loaded from %s "),
+            wxPrintf(wxT("Calling %s dynamically loaded from %s "),
                      FUNC_NAME, LIB_NAME);
 
             if ( pfnStrlen("foo") != 3 )
             {
-                wxPrintf(_T("ERROR: loaded function is not wxStrlen()!\n"));
+                wxPrintf(wxT("ERROR: loaded function is not wxStrlen()!\n"));
             }
             else
             {
-                wxPuts(_T("... ok"));
+                wxPuts(wxT("... ok"));
             }
         }
 
 #ifdef __WXMSW__
-        static const wxChar *FUNC_NAME_AW = _T("lstrlen");
+        static const wxChar *FUNC_NAME_AW = wxT("lstrlen");
 
         typedef int (wxSTDCALL *wxStrlenTypeAorW)(const wxChar *);
         wxStrlenTypeAorW
             pfnStrlenAorW = (wxStrlenTypeAorW)lib.GetSymbolAorW(FUNC_NAME_AW);
         if ( !pfnStrlenAorW )
         {
-            wxPrintf(_T("ERROR: function '%s' wasn't found in '%s'.\n"),
+            wxPrintf(wxT("ERROR: function '%s' wasn't found in '%s'.\n"),
                      FUNC_NAME_AW, LIB_NAME);
         }
         else
         {
-            if ( pfnStrlenAorW(_T("foobar")) != 6 )
+            if ( pfnStrlenAorW(wxT("foobar")) != 6 )
             {
-                wxPrintf(_T("ERROR: loaded function is not wxStrlen()!\n"));
+                wxPrintf(wxT("ERROR: loaded function is not wxStrlen()!\n"));
             }
         }
 #endif // __WXMSW__
@@ -510,7 +510,7 @@ static void TestDllLoad()
 
 static void TestDllListLoaded()
 {
-    wxPuts(_T("*** testing wxDynamicLibrary::ListLoaded() ***\n"));
+    wxPuts(wxT("*** testing wxDynamicLibrary::ListLoaded() ***\n"));
 
     puts("\nLoaded modules:");
     wxDynamicLibraryDetailsArray dlls = wxDynamicLibrary::ListLoaded();
@@ -548,27 +548,27 @@ static wxString MyGetEnv(const wxString& var)
 {
     wxString val;
     if ( !wxGetEnv(var, &val) )
-        val = _T("<empty>");
+        val = wxT("<empty>");
     else
-        val = wxString(_T('\'')) + val + _T('\'');
+        val = wxString(wxT('\'')) + val + wxT('\'');
 
     return val;
 }
 
 static void TestEnvironment()
 {
-    const wxChar *var = _T("wxTestVar");
+    const wxChar *var = wxT("wxTestVar");
 
-    wxPuts(_T("*** testing environment access functions ***"));
+    wxPuts(wxT("*** testing environment access functions ***"));
 
-    wxPrintf(_T("Initially getenv(%s) = %s\n"), var, MyGetEnv(var).c_str());
-    wxSetEnv(var, _T("value for wxTestVar"));
-    wxPrintf(_T("After wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
-    wxSetEnv(var, _T("another value"));
-    wxPrintf(_T("After 2nd wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
+    wxPrintf(wxT("Initially getenv(%s) = %s\n"), var, MyGetEnv(var).c_str());
+    wxSetEnv(var, wxT("value for wxTestVar"));
+    wxPrintf(wxT("After wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
+    wxSetEnv(var, wxT("another value"));
+    wxPrintf(wxT("After 2nd wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
     wxUnsetEnv(var);
-    wxPrintf(_T("After wxUnsetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
-    wxPrintf(_T("PATH = %s\n"),  MyGetEnv(_T("PATH")).c_str());
+    wxPrintf(wxT("After wxUnsetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
+    wxPrintf(wxT("PATH = %s\n"),  MyGetEnv(wxT("PATH")).c_str());
 }
 
 #endif // TEST_ENVIRON
@@ -585,14 +585,14 @@ static void TestEnvironment()
 
 static void TestFileRead()
 {
-    wxPuts(_T("*** wxFile read test ***"));
+    wxPuts(wxT("*** wxFile read test ***"));
 
-    wxFile file(_T("testdata.fc"));
+    wxFile file(wxT("testdata.fc"));
     if ( file.IsOpened() )
     {
-        wxPrintf(_T("File length: %lu\n"), file.Length());
+        wxPrintf(wxT("File length: %lu\n"), file.Length());
 
-        wxPuts(_T("File dump:\n----------"));
+        wxPuts(wxT("File dump:\n----------"));
 
         static const size_t len = 1024;
         wxChar buf[len];
@@ -601,7 +601,7 @@ static void TestFileRead()
             size_t nRead = file.Read(buf, len);
             if ( nRead == (size_t)wxInvalidOffset )
             {
-                wxPrintf(_T("Failed to read the file."));
+                wxPrintf(wxT("Failed to read the file."));
                 break;
             }
 
@@ -611,11 +611,11 @@ static void TestFileRead()
                 break;
         }
 
-        wxPuts(_T("----------"));
+        wxPuts(wxT("----------"));
     }
     else
     {
-        wxPrintf(_T("ERROR: can't open test file.\n"));
+        wxPrintf(wxT("ERROR: can't open test file.\n"));
     }
 
     wxPuts(wxEmptyString);
@@ -623,35 +623,35 @@ static void TestFileRead()
 
 static void TestTextFileRead()
 {
-    wxPuts(_T("*** wxTextFile read test ***"));
+    wxPuts(wxT("*** wxTextFile read test ***"));
 
-    wxTextFile file(_T("testdata.fc"));
+    wxTextFile file(wxT("testdata.fc"));
     if ( file.Open() )
     {
-        wxPrintf(_T("Number of lines: %u\n"), file.GetLineCount());
-        wxPrintf(_T("Last line: '%s'\n"), file.GetLastLine().c_str());
+        wxPrintf(wxT("Number of lines: %u\n"), file.GetLineCount());
+        wxPrintf(wxT("Last line: '%s'\n"), file.GetLastLine().c_str());
 
         wxString s;
 
-        wxPuts(_T("\nDumping the entire file:"));
+        wxPuts(wxT("\nDumping the entire file:"));
         for ( s = file.GetFirstLine(); !file.Eof(); s = file.GetNextLine() )
         {
-            wxPrintf(_T("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
+            wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
         }
-        wxPrintf(_T("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
+        wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
 
-        wxPuts(_T("\nAnd now backwards:"));
+        wxPuts(wxT("\nAnd now backwards:"));
         for ( s = file.GetLastLine();
               file.GetCurrentLine() != 0;
               s = file.GetPrevLine() )
         {
-            wxPrintf(_T("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
+            wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
         }
-        wxPrintf(_T("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
+        wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
     }
     else
     {
-        wxPrintf(_T("ERROR: can't open '%s'\n"), file.GetName());
+        wxPrintf(wxT("ERROR: can't open '%s'\n"), file.GetName());
     }
 
     wxPuts(wxEmptyString);
@@ -659,40 +659,40 @@ static void TestTextFileRead()
 
 static void TestFileCopy()
 {
-    wxPuts(_T("*** Testing wxCopyFile ***"));
+    wxPuts(wxT("*** Testing wxCopyFile ***"));
 
-    static const wxChar *filename1 = _T("testdata.fc");
-    static const wxChar *filename2 = _T("test2");
+    static const wxChar *filename1 = wxT("testdata.fc");
+    static const wxChar *filename2 = wxT("test2");
     if ( !wxCopyFile(filename1, filename2) )
     {
-        wxPuts(_T("ERROR: failed to copy file"));
+        wxPuts(wxT("ERROR: failed to copy file"));
     }
     else
     {
-        wxFFile f1(filename1, _T("rb")),
-                f2(filename2, _T("rb"));
+        wxFFile f1(filename1, wxT("rb")),
+                f2(filename2, wxT("rb"));
 
         if ( !f1.IsOpened() || !f2.IsOpened() )
         {
-            wxPuts(_T("ERROR: failed to open file(s)"));
+            wxPuts(wxT("ERROR: failed to open file(s)"));
         }
         else
         {
             wxString s1, s2;
             if ( !f1.ReadAll(&s1) || !f2.ReadAll(&s2) )
             {
-                wxPuts(_T("ERROR: failed to read file(s)"));
+                wxPuts(wxT("ERROR: failed to read file(s)"));
             }
             else
             {
                 if ( (s1.length() != s2.length()) ||
                      (memcmp(s1.c_str(), s2.c_str(), s1.length()) != 0) )
                 {
-                    wxPuts(_T("ERROR: copy error!"));
+                    wxPuts(wxT("ERROR: copy error!"));
                 }
                 else
                 {
-                    wxPuts(_T("File was copied ok."));
+                    wxPuts(wxT("File was copied ok."));
                 }
             }
         }
@@ -700,7 +700,7 @@ static void TestFileCopy()
 
     if ( !wxRemoveFile(filename2) )
     {
-        wxPuts(_T("ERROR: failed to remove the file"));
+        wxPuts(wxT("ERROR: failed to remove the file"));
     }
 
     wxPuts(wxEmptyString);
@@ -708,17 +708,17 @@ static void TestFileCopy()
 
 static void TestTempFile()
 {
-    wxPuts(_T("*** wxTempFile test ***"));
+    wxPuts(wxT("*** wxTempFile test ***"));
 
     wxTempFile tmpFile;
-    if ( tmpFile.Open(_T("test2")) && tmpFile.Write(_T("the answer is 42")) )
+    if ( tmpFile.Open(wxT("test2")) && tmpFile.Write(wxT("the answer is 42")) )
     {
         if ( tmpFile.Commit() )
-            wxPuts(_T("File committed."));
+            wxPuts(wxT("File committed."));
         else
-            wxPuts(_T("ERROR: could't commit temp file."));
+            wxPuts(wxT("ERROR: could't commit temp file."));
 
-        wxRemoveFile(_T("test2"));
+        wxRemoveFile(wxT("test2"));
     }
 
     wxPuts(wxEmptyString);
@@ -741,56 +741,56 @@ static const struct FileConfTestData
     const wxChar *value;     // the value from the file
 } fcTestData[] =
 {
-    { _T("value1"),                       _T("one") },
-    { _T("value2"),                       _T("two") },
-    { _T("novalue"),                      _T("default") },
+    { wxT("value1"),                       wxT("one") },
+    { wxT("value2"),                       wxT("two") },
+    { wxT("novalue"),                      wxT("default") },
 };
 
 static void TestFileConfRead()
 {
-    wxPuts(_T("*** testing wxFileConfig loading/reading ***"));
+    wxPuts(wxT("*** testing wxFileConfig loading/reading ***"));
 
-    wxFileConfig fileconf(_T("test"), wxEmptyString,
-                          _T("testdata.fc"), wxEmptyString,
+    wxFileConfig fileconf(wxT("test"), wxEmptyString,
+                          wxT("testdata.fc"), wxEmptyString,
                           wxCONFIG_USE_RELATIVE_PATH);
 
     // test simple reading
-    wxPuts(_T("\nReading config file:"));
-    wxString defValue(_T("default")), value;
+    wxPuts(wxT("\nReading config file:"));
+    wxString defValue(wxT("default")), value;
     for ( size_t n = 0; n < WXSIZEOF(fcTestData); n++ )
     {
         const FileConfTestData& data = fcTestData[n];
         value = fileconf.Read(data.name, defValue);
-        wxPrintf(_T("\t%s = %s "), data.name, value.c_str());
+        wxPrintf(wxT("\t%s = %s "), data.name, value.c_str());
         if ( value == data.value )
         {
-            wxPuts(_T("(ok)"));
+            wxPuts(wxT("(ok)"));
         }
         else
         {
-            wxPrintf(_T("(ERROR: should be %s)\n"), data.value);
+            wxPrintf(wxT("(ERROR: should be %s)\n"), data.value);
         }
     }
 
     // test enumerating the entries
-    wxPuts(_T("\nEnumerating all root entries:"));
+    wxPuts(wxT("\nEnumerating all root entries:"));
     long dummy;
     wxString name;
     bool cont = fileconf.GetFirstEntry(name, dummy);
     while ( cont )
     {
-        wxPrintf(_T("\t%s = %s\n"),
+        wxPrintf(wxT("\t%s = %s\n"),
                name.c_str(),
-               fileconf.Read(name.c_str(), _T("ERROR")).c_str());
+               fileconf.Read(name.c_str(), wxT("ERROR")).c_str());
 
         cont = fileconf.GetNextEntry(name, dummy);
     }
 
-    static const wxChar *testEntry = _T("TestEntry");
-    wxPrintf(_T("\nTesting deletion of newly created \"Test\" entry: "));
-    fileconf.Write(testEntry, _T("A value"));
+    static const wxChar *testEntry = wxT("TestEntry");
+    wxPrintf(wxT("\nTesting deletion of newly created \"Test\" entry: "));
+    fileconf.Write(testEntry, wxT("A value"));
     fileconf.DeleteEntry(testEntry);
-    wxPrintf(fileconf.HasEntry(testEntry) ? _T("ERROR\n") : _T("ok\n"));
+    wxPrintf(fileconf.HasEntry(testEntry) ? wxT("ERROR\n") : wxT("ok\n"));
 }
 
 #endif // TEST_FILECONF
@@ -813,44 +813,44 @@ static void DumpFileName(const wxChar *desc, const wxFileName& fn)
     wxString vol, path, name, ext;
     wxFileName::SplitPath(full, &vol, &path, &name, &ext);
 
-    wxPrintf(_T("'%s'-> vol '%s', path '%s', name '%s', ext '%s'\n"),
+    wxPrintf(wxT("'%s'-> vol '%s', path '%s', name '%s', ext '%s'\n"),
              full.c_str(), vol.c_str(), path.c_str(), name.c_str(), ext.c_str());
 
     wxFileName::SplitPath(full, &path, &name, &ext);
-    wxPrintf(_T("or\t\t-> path '%s', name '%s', ext '%s'\n"),
+    wxPrintf(wxT("or\t\t-> path '%s', name '%s', ext '%s'\n"),
              path.c_str(), name.c_str(), ext.c_str());
 
-    wxPrintf(_T("path is also:\t'%s'\n"), fn.GetPath().c_str());
-    wxPrintf(_T("with volume: \t'%s'\n"),
+    wxPrintf(wxT("path is also:\t'%s'\n"), fn.GetPath().c_str());
+    wxPrintf(wxT("with volume: \t'%s'\n"),
              fn.GetPath(wxPATH_GET_VOLUME).c_str());
-    wxPrintf(_T("with separator:\t'%s'\n"),
+    wxPrintf(wxT("with separator:\t'%s'\n"),
              fn.GetPath(wxPATH_GET_SEPARATOR).c_str());
-    wxPrintf(_T("with both:   \t'%s'\n"),
+    wxPrintf(wxT("with both:   \t'%s'\n"),
              fn.GetPath(wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME).c_str());
 
-    wxPuts(_T("The directories in the path are:"));
+    wxPuts(wxT("The directories in the path are:"));
     wxArrayString dirs = fn.GetDirs();
     size_t count = dirs.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        wxPrintf(_T("\t%u: %s\n"), n, dirs[n].c_str());
+        wxPrintf(wxT("\t%u: %s\n"), n, dirs[n].c_str());
     }
 }
 #endif
 
 static void TestFileNameTemp()
 {
-    wxPuts(_T("*** testing wxFileName temp file creation ***"));
+    wxPuts(wxT("*** testing wxFileName temp file creation ***"));
 
     static const wxChar *tmpprefixes[] =
     {
-        _T(""),
-        _T("foo"),
-        _T(".."),
-        _T("../bar"),
+        wxT(""),
+        wxT("foo"),
+        wxT(".."),
+        wxT("../bar"),
 #ifdef __UNIX__
-        _T("/tmp/foo"),
-        _T("/tmp/foo/bar"), // this one must be an error
+        wxT("/tmp/foo"),
+        wxT("/tmp/foo/bar"), // this one must be an error
 #endif // __UNIX__
     };
 
@@ -860,16 +860,16 @@ static void TestFileNameTemp()
         if ( path.empty() )
         {
             // "error" is not in upper case because it may be ok
-            wxPrintf(_T("Prefix '%s'\t-> error\n"), tmpprefixes[n]);
+            wxPrintf(wxT("Prefix '%s'\t-> error\n"), tmpprefixes[n]);
         }
         else
         {
-            wxPrintf(_T("Prefix '%s'\t-> temp file '%s'\n"),
+            wxPrintf(wxT("Prefix '%s'\t-> temp file '%s'\n"),
                    tmpprefixes[n], path.c_str());
 
             if ( !wxRemoveFile(path) )
             {
-                wxLogWarning(_T("Failed to remove temp file '%s'"),
+                wxLogWarning(wxT("Failed to remove temp file '%s'"),
                              path.c_str());
             }
         }
@@ -909,32 +909,32 @@ static void TestFileNameCwd()
 
 static void TestFileGetTimes()
 {
-    wxFileName fn(_T("testdata.fc"));
+    wxFileName fn(wxT("testdata.fc"));
 
     wxDateTime dtAccess, dtMod, dtCreate;
     if ( !fn.GetTimes(&dtAccess, &dtMod, &dtCreate) )
     {
-        wxPrintf(_T("ERROR: GetTimes() failed.\n"));
+        wxPrintf(wxT("ERROR: GetTimes() failed.\n"));
     }
     else
     {
-        static const wxChar *fmt = _T("%Y-%b-%d %H:%M:%S");
+        static const wxChar *fmt = wxT("%Y-%b-%d %H:%M:%S");
 
-        wxPrintf(_T("File times for '%s':\n"), fn.GetFullPath().c_str());
-        wxPrintf(_T("Creation:    \t%s\n"), dtCreate.Format(fmt).c_str());
-        wxPrintf(_T("Last read:   \t%s\n"), dtAccess.Format(fmt).c_str());
-        wxPrintf(_T("Last write:  \t%s\n"), dtMod.Format(fmt).c_str());
+        wxPrintf(wxT("File times for '%s':\n"), fn.GetFullPath().c_str());
+        wxPrintf(wxT("Creation:    \t%s\n"), dtCreate.Format(fmt).c_str());
+        wxPrintf(wxT("Last read:   \t%s\n"), dtAccess.Format(fmt).c_str());
+        wxPrintf(wxT("Last write:  \t%s\n"), dtMod.Format(fmt).c_str());
     }
 }
 
 #if 0
 static void TestFileSetTimes()
 {
-    wxFileName fn(_T("testdata.fc"));
+    wxFileName fn(wxT("testdata.fc"));
 
     if ( !fn.Touch() )
     {
-        wxPrintf(_T("ERROR: Touch() failed.\n"));
+        wxPrintf(wxT("ERROR: Touch() failed.\n"));
     }
 }
 #endif
@@ -960,266 +960,266 @@ static const wxChar *GetLangName(int lang)
 {
     static const wxChar *languageNames[] =
     {
-        _T("DEFAULT"),
-        _T("UNKNOWN"),
-        _T("ABKHAZIAN"),
-        _T("AFAR"),
-        _T("AFRIKAANS"),
-        _T("ALBANIAN"),
-        _T("AMHARIC"),
-        _T("ARABIC"),
-        _T("ARABIC_ALGERIA"),
-        _T("ARABIC_BAHRAIN"),
-        _T("ARABIC_EGYPT"),
-        _T("ARABIC_IRAQ"),
-        _T("ARABIC_JORDAN"),
-        _T("ARABIC_KUWAIT"),
-        _T("ARABIC_LEBANON"),
-        _T("ARABIC_LIBYA"),
-        _T("ARABIC_MOROCCO"),
-        _T("ARABIC_OMAN"),
-        _T("ARABIC_QATAR"),
-        _T("ARABIC_SAUDI_ARABIA"),
-        _T("ARABIC_SUDAN"),
-        _T("ARABIC_SYRIA"),
-        _T("ARABIC_TUNISIA"),
-        _T("ARABIC_UAE"),
-        _T("ARABIC_YEMEN"),
-        _T("ARMENIAN"),
-        _T("ASSAMESE"),
-        _T("AYMARA"),
-        _T("AZERI"),
-        _T("AZERI_CYRILLIC"),
-        _T("AZERI_LATIN"),
-        _T("BASHKIR"),
-        _T("BASQUE"),
-        _T("BELARUSIAN"),
-        _T("BENGALI"),
-        _T("BHUTANI"),
-        _T("BIHARI"),
-        _T("BISLAMA"),
-        _T("BRETON"),
-        _T("BULGARIAN"),
-        _T("BURMESE"),
-        _T("CAMBODIAN"),
-        _T("CATALAN"),
-        _T("CHINESE"),
-        _T("CHINESE_SIMPLIFIED"),
-        _T("CHINESE_TRADITIONAL"),
-        _T("CHINESE_HONGKONG"),
-        _T("CHINESE_MACAU"),
-        _T("CHINESE_SINGAPORE"),
-        _T("CHINESE_TAIWAN"),
-        _T("CORSICAN"),
-        _T("CROATIAN"),
-        _T("CZECH"),
-        _T("DANISH"),
-        _T("DUTCH"),
-        _T("DUTCH_BELGIAN"),
-        _T("ENGLISH"),
-        _T("ENGLISH_UK"),
-        _T("ENGLISH_US"),
-        _T("ENGLISH_AUSTRALIA"),
-        _T("ENGLISH_BELIZE"),
-        _T("ENGLISH_BOTSWANA"),
-        _T("ENGLISH_CANADA"),
-        _T("ENGLISH_CARIBBEAN"),
-        _T("ENGLISH_DENMARK"),
-        _T("ENGLISH_EIRE"),
-        _T("ENGLISH_JAMAICA"),
-        _T("ENGLISH_NEW_ZEALAND"),
-        _T("ENGLISH_PHILIPPINES"),
-        _T("ENGLISH_SOUTH_AFRICA"),
-        _T("ENGLISH_TRINIDAD"),
-        _T("ENGLISH_ZIMBABWE"),
-        _T("ESPERANTO"),
-        _T("ESTONIAN"),
-        _T("FAEROESE"),
-        _T("FARSI"),
-        _T("FIJI"),
-        _T("FINNISH"),
-        _T("FRENCH"),
-        _T("FRENCH_BELGIAN"),
-        _T("FRENCH_CANADIAN"),
-        _T("FRENCH_LUXEMBOURG"),
-        _T("FRENCH_MONACO"),
-        _T("FRENCH_SWISS"),
-        _T("FRISIAN"),
-        _T("GALICIAN"),
-        _T("GEORGIAN"),
-        _T("GERMAN"),
-        _T("GERMAN_AUSTRIAN"),
-        _T("GERMAN_BELGIUM"),
-        _T("GERMAN_LIECHTENSTEIN"),
-        _T("GERMAN_LUXEMBOURG"),
-        _T("GERMAN_SWISS"),
-        _T("GREEK"),
-        _T("GREENLANDIC"),
-        _T("GUARANI"),
-        _T("GUJARATI"),
-        _T("HAUSA"),
-        _T("HEBREW"),
-        _T("HINDI"),
-        _T("HUNGARIAN"),
-        _T("ICELANDIC"),
-        _T("INDONESIAN"),
-        _T("INTERLINGUA"),
-        _T("INTERLINGUE"),
-        _T("INUKTITUT"),
-        _T("INUPIAK"),
-        _T("IRISH"),
-        _T("ITALIAN"),
-        _T("ITALIAN_SWISS"),
-        _T("JAPANESE"),
-        _T("JAVANESE"),
-        _T("KANNADA"),
-        _T("KASHMIRI"),
-        _T("KASHMIRI_INDIA"),
-        _T("KAZAKH"),
-        _T("KERNEWEK"),
-        _T("KINYARWANDA"),
-        _T("KIRGHIZ"),
-        _T("KIRUNDI"),
-        _T("KONKANI"),
-        _T("KOREAN"),
-        _T("KURDISH"),
-        _T("LAOTHIAN"),
-        _T("LATIN"),
-        _T("LATVIAN"),
-        _T("LINGALA"),
-        _T("LITHUANIAN"),
-        _T("MACEDONIAN"),
-        _T("MALAGASY"),
-        _T("MALAY"),
-        _T("MALAYALAM"),
-        _T("MALAY_BRUNEI_DARUSSALAM"),
-        _T("MALAY_MALAYSIA"),
-        _T("MALTESE"),
-        _T("MANIPURI"),
-        _T("MAORI"),
-        _T("MARATHI"),
-        _T("MOLDAVIAN"),
-        _T("MONGOLIAN"),
-        _T("NAURU"),
-        _T("NEPALI"),
-        _T("NEPALI_INDIA"),
-        _T("NORWEGIAN_BOKMAL"),
-        _T("NORWEGIAN_NYNORSK"),
-        _T("OCCITAN"),
-        _T("ORIYA"),
-        _T("OROMO"),
-        _T("PASHTO"),
-        _T("POLISH"),
-        _T("PORTUGUESE"),
-        _T("PORTUGUESE_BRAZILIAN"),
-        _T("PUNJABI"),
-        _T("QUECHUA"),
-        _T("RHAETO_ROMANCE"),
-        _T("ROMANIAN"),
-        _T("RUSSIAN"),
-        _T("RUSSIAN_UKRAINE"),
-        _T("SAMOAN"),
-        _T("SANGHO"),
-        _T("SANSKRIT"),
-        _T("SCOTS_GAELIC"),
-        _T("SERBIAN"),
-        _T("SERBIAN_CYRILLIC"),
-        _T("SERBIAN_LATIN"),
-        _T("SERBO_CROATIAN"),
-        _T("SESOTHO"),
-        _T("SETSWANA"),
-        _T("SHONA"),
-        _T("SINDHI"),
-        _T("SINHALESE"),
-        _T("SISWATI"),
-        _T("SLOVAK"),
-        _T("SLOVENIAN"),
-        _T("SOMALI"),
-        _T("SPANISH"),
-        _T("SPANISH_ARGENTINA"),
-        _T("SPANISH_BOLIVIA"),
-        _T("SPANISH_CHILE"),
-        _T("SPANISH_COLOMBIA"),
-        _T("SPANISH_COSTA_RICA"),
-        _T("SPANISH_DOMINICAN_REPUBLIC"),
-        _T("SPANISH_ECUADOR"),
-        _T("SPANISH_EL_SALVADOR"),
-        _T("SPANISH_GUATEMALA"),
-        _T("SPANISH_HONDURAS"),
-        _T("SPANISH_MEXICAN"),
-        _T("SPANISH_MODERN"),
-        _T("SPANISH_NICARAGUA"),
-        _T("SPANISH_PANAMA"),
-        _T("SPANISH_PARAGUAY"),
-        _T("SPANISH_PERU"),
-        _T("SPANISH_PUERTO_RICO"),
-        _T("SPANISH_URUGUAY"),
-        _T("SPANISH_US"),
-        _T("SPANISH_VENEZUELA"),
-        _T("SUNDANESE"),
-        _T("SWAHILI"),
-        _T("SWEDISH"),
-        _T("SWEDISH_FINLAND"),
-        _T("TAGALOG"),
-        _T("TAJIK"),
-        _T("TAMIL"),
-        _T("TATAR"),
-        _T("TELUGU"),
-        _T("THAI"),
-        _T("TIBETAN"),
-        _T("TIGRINYA"),
-        _T("TONGA"),
-        _T("TSONGA"),
-        _T("TURKISH"),
-        _T("TURKMEN"),
-        _T("TWI"),
-        _T("UIGHUR"),
-        _T("UKRAINIAN"),
-        _T("URDU"),
-        _T("URDU_INDIA"),
-        _T("URDU_PAKISTAN"),
-        _T("UZBEK"),
-        _T("UZBEK_CYRILLIC"),
-        _T("UZBEK_LATIN"),
-        _T("VIETNAMESE"),
-        _T("VOLAPUK"),
-        _T("WELSH"),
-        _T("WOLOF"),
-        _T("XHOSA"),
-        _T("YIDDISH"),
-        _T("YORUBA"),
-        _T("ZHUANG"),
-        _T("ZULU"),
+        wxT("DEFAULT"),
+        wxT("UNKNOWN"),
+        wxT("ABKHAZIAN"),
+        wxT("AFAR"),
+        wxT("AFRIKAANS"),
+        wxT("ALBANIAN"),
+        wxT("AMHARIC"),
+        wxT("ARABIC"),
+        wxT("ARABIC_ALGERIA"),
+        wxT("ARABIC_BAHRAIN"),
+        wxT("ARABIC_EGYPT"),
+        wxT("ARABIC_IRAQ"),
+        wxT("ARABIC_JORDAN"),
+        wxT("ARABIC_KUWAIT"),
+        wxT("ARABIC_LEBANON"),
+        wxT("ARABIC_LIBYA"),
+        wxT("ARABIC_MOROCCO"),
+        wxT("ARABIC_OMAN"),
+        wxT("ARABIC_QATAR"),
+        wxT("ARABIC_SAUDI_ARABIA"),
+        wxT("ARABIC_SUDAN"),
+        wxT("ARABIC_SYRIA"),
+        wxT("ARABIC_TUNISIA"),
+        wxT("ARABIC_UAE"),
+        wxT("ARABIC_YEMEN"),
+        wxT("ARMENIAN"),
+        wxT("ASSAMESE"),
+        wxT("AYMARA"),
+        wxT("AZERI"),
+        wxT("AZERI_CYRILLIC"),
+        wxT("AZERI_LATIN"),
+        wxT("BASHKIR"),
+        wxT("BASQUE"),
+        wxT("BELARUSIAN"),
+        wxT("BENGALI"),
+        wxT("BHUTANI"),
+        wxT("BIHARI"),
+        wxT("BISLAMA"),
+        wxT("BRETON"),
+        wxT("BULGARIAN"),
+        wxT("BURMESE"),
+        wxT("CAMBODIAN"),
+        wxT("CATALAN"),
+        wxT("CHINESE"),
+        wxT("CHINESE_SIMPLIFIED"),
+        wxT("CHINESE_TRADITIONAL"),
+        wxT("CHINESE_HONGKONG"),
+        wxT("CHINESE_MACAU"),
+        wxT("CHINESE_SINGAPORE"),
+        wxT("CHINESE_TAIWAN"),
+        wxT("CORSICAN"),
+        wxT("CROATIAN"),
+        wxT("CZECH"),
+        wxT("DANISH"),
+        wxT("DUTCH"),
+        wxT("DUTCH_BELGIAN"),
+        wxT("ENGLISH"),
+        wxT("ENGLISH_UK"),
+        wxT("ENGLISH_US"),
+        wxT("ENGLISH_AUSTRALIA"),
+        wxT("ENGLISH_BELIZE"),
+        wxT("ENGLISH_BOTSWANA"),
+        wxT("ENGLISH_CANADA"),
+        wxT("ENGLISH_CARIBBEAN"),
+        wxT("ENGLISH_DENMARK"),
+        wxT("ENGLISH_EIRE"),
+        wxT("ENGLISH_JAMAICA"),
+        wxT("ENGLISH_NEW_ZEALAND"),
+        wxT("ENGLISH_PHILIPPINES"),
+        wxT("ENGLISH_SOUTH_AFRICA"),
+        wxT("ENGLISH_TRINIDAD"),
+        wxT("ENGLISH_ZIMBABWE"),
+        wxT("ESPERANTO"),
+        wxT("ESTONIAN"),
+        wxT("FAEROESE"),
+        wxT("FARSI"),
+        wxT("FIJI"),
+        wxT("FINNISH"),
+        wxT("FRENCH"),
+        wxT("FRENCH_BELGIAN"),
+        wxT("FRENCH_CANADIAN"),
+        wxT("FRENCH_LUXEMBOURG"),
+        wxT("FRENCH_MONACO"),
+        wxT("FRENCH_SWISS"),
+        wxT("FRISIAN"),
+        wxT("GALICIAN"),
+        wxT("GEORGIAN"),
+        wxT("GERMAN"),
+        wxT("GERMAN_AUSTRIAN"),
+        wxT("GERMAN_BELGIUM"),
+        wxT("GERMAN_LIECHTENSTEIN"),
+        wxT("GERMAN_LUXEMBOURG"),
+        wxT("GERMAN_SWISS"),
+        wxT("GREEK"),
+        wxT("GREENLANDIC"),
+        wxT("GUARANI"),
+        wxT("GUJARATI"),
+        wxT("HAUSA"),
+        wxT("HEBREW"),
+        wxT("HINDI"),
+        wxT("HUNGARIAN"),
+        wxT("ICELANDIC"),
+        wxT("INDONESIAN"),
+        wxT("INTERLINGUA"),
+        wxT("INTERLINGUE"),
+        wxT("INUKTITUT"),
+        wxT("INUPIAK"),
+        wxT("IRISH"),
+        wxT("ITALIAN"),
+        wxT("ITALIAN_SWISS"),
+        wxT("JAPANESE"),
+        wxT("JAVANESE"),
+        wxT("KANNADA"),
+        wxT("KASHMIRI"),
+        wxT("KASHMIRI_INDIA"),
+        wxT("KAZAKH"),
+        wxT("KERNEWEK"),
+        wxT("KINYARWANDA"),
+        wxT("KIRGHIZ"),
+        wxT("KIRUNDI"),
+        wxT("KONKANI"),
+        wxT("KOREAN"),
+        wxT("KURDISH"),
+        wxT("LAOTHIAN"),
+        wxT("LATIN"),
+        wxT("LATVIAN"),
+        wxT("LINGALA"),
+        wxT("LITHUANIAN"),
+        wxT("MACEDONIAN"),
+        wxT("MALAGASY"),
+        wxT("MALAY"),
+        wxT("MALAYALAM"),
+        wxT("MALAY_BRUNEI_DARUSSALAM"),
+        wxT("MALAY_MALAYSIA"),
+        wxT("MALTESE"),
+        wxT("MANIPURI"),
+        wxT("MAORI"),
+        wxT("MARATHI"),
+        wxT("MOLDAVIAN"),
+        wxT("MONGOLIAN"),
+        wxT("NAURU"),
+        wxT("NEPALI"),
+        wxT("NEPALI_INDIA"),
+        wxT("NORWEGIAN_BOKMAL"),
+        wxT("NORWEGIAN_NYNORSK"),
+        wxT("OCCITAN"),
+        wxT("ORIYA"),
+        wxT("OROMO"),
+        wxT("PASHTO"),
+        wxT("POLISH"),
+        wxT("PORTUGUESE"),
+        wxT("PORTUGUESE_BRAZILIAN"),
+        wxT("PUNJABI"),
+        wxT("QUECHUA"),
+        wxT("RHAETO_ROMANCE"),
+        wxT("ROMANIAN"),
+        wxT("RUSSIAN"),
+        wxT("RUSSIAN_UKRAINE"),
+        wxT("SAMOAN"),
+        wxT("SANGHO"),
+        wxT("SANSKRIT"),
+        wxT("SCOTS_GAELIC"),
+        wxT("SERBIAN"),
+        wxT("SERBIAN_CYRILLIC"),
+        wxT("SERBIAN_LATIN"),
+        wxT("SERBO_CROATIAN"),
+        wxT("SESOTHO"),
+        wxT("SETSWANA"),
+        wxT("SHONA"),
+        wxT("SINDHI"),
+        wxT("SINHALESE"),
+        wxT("SISWATI"),
+        wxT("SLOVAK"),
+        wxT("SLOVENIAN"),
+        wxT("SOMALI"),
+        wxT("SPANISH"),
+        wxT("SPANISH_ARGENTINA"),
+        wxT("SPANISH_BOLIVIA"),
+        wxT("SPANISH_CHILE"),
+        wxT("SPANISH_COLOMBIA"),
+        wxT("SPANISH_COSTA_RICA"),
+        wxT("SPANISH_DOMINICAN_REPUBLIC"),
+        wxT("SPANISH_ECUADOR"),
+        wxT("SPANISH_EL_SALVADOR"),
+        wxT("SPANISH_GUATEMALA"),
+        wxT("SPANISH_HONDURAS"),
+        wxT("SPANISH_MEXICAN"),
+        wxT("SPANISH_MODERN"),
+        wxT("SPANISH_NICARAGUA"),
+        wxT("SPANISH_PANAMA"),
+        wxT("SPANISH_PARAGUAY"),
+        wxT("SPANISH_PERU"),
+        wxT("SPANISH_PUERTO_RICO"),
+        wxT("SPANISH_URUGUAY"),
+        wxT("SPANISH_US"),
+        wxT("SPANISH_VENEZUELA"),
+        wxT("SUNDANESE"),
+        wxT("SWAHILI"),
+        wxT("SWEDISH"),
+        wxT("SWEDISH_FINLAND"),
+        wxT("TAGALOG"),
+        wxT("TAJIK"),
+        wxT("TAMIL"),
+        wxT("TATAR"),
+        wxT("TELUGU"),
+        wxT("THAI"),
+        wxT("TIBETAN"),
+        wxT("TIGRINYA"),
+        wxT("TONGA"),
+        wxT("TSONGA"),
+        wxT("TURKISH"),
+        wxT("TURKMEN"),
+        wxT("TWI"),
+        wxT("UIGHUR"),
+        wxT("UKRAINIAN"),
+        wxT("URDU"),
+        wxT("URDU_INDIA"),
+        wxT("URDU_PAKISTAN"),
+        wxT("UZBEK"),
+        wxT("UZBEK_CYRILLIC"),
+        wxT("UZBEK_LATIN"),
+        wxT("VIETNAMESE"),
+        wxT("VOLAPUK"),
+        wxT("WELSH"),
+        wxT("WOLOF"),
+        wxT("XHOSA"),
+        wxT("YIDDISH"),
+        wxT("YORUBA"),
+        wxT("ZHUANG"),
+        wxT("ZULU"),
     };
 
     if ( (size_t)lang < WXSIZEOF(languageNames) )
         return languageNames[lang];
     else
-        return _T("INVALID");
+        return wxT("INVALID");
 }
 
 static void TestDefaultLang()
 {
-    wxPuts(_T("*** Testing wxLocale::GetSystemLanguage ***"));
+    wxPuts(wxT("*** Testing wxLocale::GetSystemLanguage ***"));
 
     gs_localeDefault.Init(wxLANGUAGE_ENGLISH);
 
     static const wxChar *langStrings[] =
     {
         NULL,               // system default
-        _T("C"),
-        _T("fr"),
-        _T("fr_FR"),
-        _T("en"),
-        _T("en_GB"),
-        _T("en_US"),
-        _T("de_DE.iso88591"),
-        _T("german"),
-        _T("?"),            // invalid lang spec
-        _T("klingonese"),   // I bet on some systems it does exist...
+        wxT("C"),
+        wxT("fr"),
+        wxT("fr_FR"),
+        wxT("en"),
+        wxT("en_GB"),
+        wxT("en_US"),
+        wxT("de_DE.iso88591"),
+        wxT("german"),
+        wxT("?"),            // invalid lang spec
+        wxT("klingonese"),   // I bet on some systems it does exist...
     };
 
-    wxPrintf(_T("The default system encoding is %s (%d)\n"),
+    wxPrintf(wxT("The default system encoding is %s (%d)\n"),
              wxLocale::GetSystemEncodingName().c_str(),
              wxLocale::GetSystemEncoding());
 
@@ -1230,12 +1230,12 @@ static void TestDefaultLang()
         {
             // FIXME: this doesn't do anything at all under Windows, we need
             //        to create a new wxLocale!
-            wxSetEnv(_T("LC_ALL"), langStr);
+            wxSetEnv(wxT("LC_ALL"), langStr);
         }
 
         int lang = gs_localeDefault.GetSystemLanguage();
-        wxPrintf(_T("Locale for '%s' is %s.\n"),
-                 langStr ? langStr : _T("system default"), GetLangName(lang));
+        wxPrintf(wxT("Locale for '%s' is %s.\n"),
+                 langStr ? langStr : wxT("system default"), GetLangName(lang));
     }
 }
 
@@ -1251,13 +1251,13 @@ static void TestDefaultLang()
 
 static void TestMimeEnum()
 {
-    wxPuts(_T("*** Testing wxMimeTypesManager::EnumAllFileTypes() ***\n"));
+    wxPuts(wxT("*** Testing wxMimeTypesManager::EnumAllFileTypes() ***\n"));
 
     wxArrayString mimetypes;
 
     size_t count = wxTheMimeTypesManager->EnumAllFileTypes(mimetypes);
 
-    wxPrintf(_T("*** All %u known filetypes: ***\n"), count);
+    wxPrintf(wxT("*** All %u known filetypes: ***\n"), count);
 
     wxArrayString exts;
     wxString desc;
@@ -1268,7 +1268,7 @@ static void TestMimeEnum()
             wxTheMimeTypesManager->GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
-            wxPrintf(_T("nothing known about the filetype '%s'!\n"),
+            wxPrintf(wxT("nothing known about the filetype '%s'!\n"),
                    mimetypes[n].c_str());
             continue;
         }
@@ -1282,11 +1282,11 @@ static void TestMimeEnum()
         for ( size_t e = 0; e < exts.GetCount(); e++ )
         {
             if ( e > 0 )
-                extsAll << _T(", ");
+                extsAll << wxT(", ");
             extsAll += exts[e];
         }
 
-        wxPrintf(_T("\t%s: %s (%s)\n"),
+        wxPrintf(wxT("\t%s: %s (%s)\n"),
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
     }
 
@@ -1295,39 +1295,39 @@ static void TestMimeEnum()
 
 static void TestMimeFilename()
 {
-    wxPuts(_T("*** Testing MIME type from filename query ***\n"));
+    wxPuts(wxT("*** Testing MIME type from filename query ***\n"));
 
     static const wxChar *filenames[] =
     {
-        _T("readme.txt"),
-        _T("document.pdf"),
-        _T("image.gif"),
-        _T("picture.jpeg"),
+        wxT("readme.txt"),
+        wxT("document.pdf"),
+        wxT("image.gif"),
+        wxT("picture.jpeg"),
     };
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
         const wxString fname = filenames[n];
-        wxString ext = fname.AfterLast(_T('.'));
+        wxString ext = fname.AfterLast(wxT('.'));
         wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
         if ( !ft )
         {
-            wxPrintf(_T("WARNING: extension '%s' is unknown.\n"), ext.c_str());
+            wxPrintf(wxT("WARNING: extension '%s' is unknown.\n"), ext.c_str());
         }
         else
         {
             wxString desc;
             if ( !ft->GetDescription(&desc) )
-                desc = _T("<no description>");
+                desc = wxT("<no description>");
 
             wxString cmd;
             if ( !ft->GetOpenCommand(&cmd,
                                      wxFileType::MessageParameters(fname, wxEmptyString)) )
-                cmd = _T("<no command available>");
+                cmd = wxT("<no command available>");
             else
-                cmd = wxString(_T('"')) + cmd + _T('"');
+                cmd = wxString(wxT('"')) + cmd + wxT('"');
 
-            wxPrintf(_T("To open %s (%s) do %s.\n"),
+            wxPrintf(wxT("To open %s (%s) do %s.\n"),
                      fname.c_str(), desc.c_str(), cmd.c_str());
 
             delete ft;
@@ -1342,25 +1342,25 @@ static void TestMimeFilename()
 
 static void TestMimeOverride()
 {
-    wxPuts(_T("*** Testing wxMimeTypesManager additional files loading ***\n"));
+    wxPuts(wxT("*** Testing wxMimeTypesManager additional files loading ***\n"));
 
-    static const wxChar *mailcap = _T("/tmp/mailcap");
-    static const wxChar *mimetypes = _T("/tmp/mime.types");
+    static const wxChar *mailcap = wxT("/tmp/mailcap");
+    static const wxChar *mimetypes = wxT("/tmp/mime.types");
 
     if ( wxFile::Exists(mailcap) )
-        wxPrintf(_T("Loading mailcap from '%s': %s\n"),
+        wxPrintf(wxT("Loading mailcap from '%s': %s\n"),
                  mailcap,
-                 wxTheMimeTypesManager->ReadMailcap(mailcap) ? _T("ok") : _T("ERROR"));
+                 wxTheMimeTypesManager->ReadMailcap(mailcap) ? wxT("ok") : wxT("ERROR"));
     else
-        wxPrintf(_T("WARN: mailcap file '%s' doesn't exist, not loaded.\n"),
+        wxPrintf(wxT("WARN: mailcap file '%s' doesn't exist, not loaded.\n"),
                  mailcap);
 
     if ( wxFile::Exists(mimetypes) )
-        wxPrintf(_T("Loading mime.types from '%s': %s\n"),
+        wxPrintf(wxT("Loading mime.types from '%s': %s\n"),
                  mimetypes,
-                 wxTheMimeTypesManager->ReadMimeTypes(mimetypes) ? _T("ok") : _T("ERROR"));
+                 wxTheMimeTypesManager->ReadMimeTypes(mimetypes) ? wxT("ok") : wxT("ERROR"));
     else
-        wxPrintf(_T("WARN: mime.types file '%s' doesn't exist, not loaded.\n"),
+        wxPrintf(wxT("WARN: mime.types file '%s' doesn't exist, not loaded.\n"),
                  mimetypes);
 
     wxPuts(wxEmptyString);
@@ -1368,22 +1368,22 @@ static void TestMimeOverride()
 
 static void TestMimeAssociate()
 {
-    wxPuts(_T("*** Testing creation of filetype association ***\n"));
+    wxPuts(wxT("*** Testing creation of filetype association ***\n"));
 
     wxFileTypeInfo ftInfo(
-                            _T("application/x-xyz"),
-                            _T("xyzview '%s'"), // open cmd
-                            _T(""),             // print cmd
-                            _T("XYZ File"),     // description
-                            _T(".xyz"),         // extensions
+                            wxT("application/x-xyz"),
+                            wxT("xyzview '%s'"), // open cmd
+                            wxT(""),             // print cmd
+                            wxT("XYZ File"),     // description
+                            wxT(".xyz"),         // extensions
                             wxNullPtr           // end of extensions
                          );
-    ftInfo.SetShortDesc(_T("XYZFile")); // used under Win32 only
+    ftInfo.SetShortDesc(wxT("XYZFile")); // used under Win32 only
 
     wxFileType *ft = wxTheMimeTypesManager->Associate(ftInfo);
     if ( !ft )
     {
-        wxPuts(_T("ERROR: failed to create association!"));
+        wxPuts(wxT("ERROR: failed to create association!"));
     }
     else
     {
@@ -1409,8 +1409,8 @@ static void TestMimeAssociate()
 class wxTestModule : public wxModule
 {
 protected:
-    virtual bool OnInit() { wxPrintf(_T("Load module: %s\n"), GetClassInfo()->GetClassName()); return true; }
-    virtual void OnExit() { wxPrintf(_T("Unload module: %s\n"), GetClassInfo()->GetClassName()); }
+    virtual bool OnInit() { wxPrintf(wxT("Load module: %s\n"), GetClassInfo()->GetClassName()); return true; }
+    virtual void OnExit() { wxPrintf(wxT("Unload module: %s\n"), GetClassInfo()->GetClassName()); }
 };
 
 class wxTestModuleA : public wxTestModule
@@ -1483,12 +1483,12 @@ wxTestModuleB::wxTestModuleB()
 #if TEST_INTERACTIVE
 static void TestDiskInfo()
 {
-    wxPuts(_T("*** Testing wxGetDiskSpace() ***"));
+    wxPuts(wxT("*** Testing wxGetDiskSpace() ***"));
 
     for ( ;; )
     {
         wxChar pathname[128];
-        wxPrintf(_T("\nEnter a directory name: "));
+        wxPrintf(wxT("\nEnter a directory name: "));
         if ( !wxFgets(pathname, WXSIZEOF(pathname), stdin) )
             break;
 
@@ -1498,11 +1498,11 @@ static void TestDiskInfo()
         wxLongLong total, free;
         if ( !wxGetDiskSpace(pathname, &total, &free) )
         {
-            wxPuts(_T("ERROR: wxGetDiskSpace failed."));
+            wxPuts(wxT("ERROR: wxGetDiskSpace failed."));
         }
         else
         {
-            wxPrintf(_T("%sKb total, %sKb free on '%s'.\n"),
+            wxPrintf(wxT("%sKb total, %sKb free on '%s'.\n"),
                     (total / 1024).ToString().c_str(),
                     (free / 1024).ToString().c_str(),
                     pathname);
@@ -1513,16 +1513,16 @@ static void TestDiskInfo()
 
 static void TestOsInfo()
 {
-    wxPuts(_T("*** Testing OS info functions ***\n"));
+    wxPuts(wxT("*** Testing OS info functions ***\n"));
 
     int major, minor;
     wxGetOsVersion(&major, &minor);
-    wxPrintf(_T("Running under: %s, version %d.%d\n"),
+    wxPrintf(wxT("Running under: %s, version %d.%d\n"),
             wxGetOsDescription().c_str(), major, minor);
 
-    wxPrintf(_T("%ld free bytes of memory left.\n"), wxGetFreeMemory().ToLong());
+    wxPrintf(wxT("%ld free bytes of memory left.\n"), wxGetFreeMemory().ToLong());
 
-    wxPrintf(_T("Host name is %s (%s).\n"),
+    wxPrintf(wxT("Host name is %s (%s).\n"),
            wxGetHostName().c_str(), wxGetFullHostName().c_str());
 
     wxPuts(wxEmptyString);
@@ -1530,29 +1530,29 @@ static void TestOsInfo()
 
 static void TestPlatformInfo()
 {
-    wxPuts(_T("*** Testing wxPlatformInfo functions ***\n"));
+    wxPuts(wxT("*** Testing wxPlatformInfo functions ***\n"));
 
     // get this platform
     wxPlatformInfo plat;
 
-    wxPrintf(_T("Operating system family name is: %s\n"), plat.GetOperatingSystemFamilyName().c_str());
-    wxPrintf(_T("Operating system name is: %s\n"), plat.GetOperatingSystemIdName().c_str());
-    wxPrintf(_T("Port ID name is: %s\n"), plat.GetPortIdName().c_str());
-    wxPrintf(_T("Port ID short name is: %s\n"), plat.GetPortIdShortName().c_str());
-    wxPrintf(_T("Architecture is: %s\n"), plat.GetArchName().c_str());
-    wxPrintf(_T("Endianness is: %s\n"), plat.GetEndiannessName().c_str());
+    wxPrintf(wxT("Operating system family name is: %s\n"), plat.GetOperatingSystemFamilyName().c_str());
+    wxPrintf(wxT("Operating system name is: %s\n"), plat.GetOperatingSystemIdName().c_str());
+    wxPrintf(wxT("Port ID name is: %s\n"), plat.GetPortIdName().c_str());
+    wxPrintf(wxT("Port ID short name is: %s\n"), plat.GetPortIdShortName().c_str());
+    wxPrintf(wxT("Architecture is: %s\n"), plat.GetArchName().c_str());
+    wxPrintf(wxT("Endianness is: %s\n"), plat.GetEndiannessName().c_str());
 
     wxPuts(wxEmptyString);
 }
 
 static void TestUserInfo()
 {
-    wxPuts(_T("*** Testing user info functions ***\n"));
+    wxPuts(wxT("*** Testing user info functions ***\n"));
 
-    wxPrintf(_T("User id is:\t%s\n"), wxGetUserId().c_str());
-    wxPrintf(_T("User name is:\t%s\n"), wxGetUserName().c_str());
-    wxPrintf(_T("Home dir is:\t%s\n"), wxGetHomeDir().c_str());
-    wxPrintf(_T("Email address:\t%s\n"), wxGetEmailAddress().c_str());
+    wxPrintf(wxT("User id is:\t%s\n"), wxGetUserId().c_str());
+    wxPrintf(wxT("User name is:\t%s\n"), wxGetUserName().c_str());
+    wxPrintf(wxT("Home dir is:\t%s\n"), wxGetHomeDir().c_str());
+    wxPrintf(wxT("Email address:\t%s\n"), wxGetEmailAddress().c_str());
 
     wxPuts(wxEmptyString);
 }
@@ -1566,25 +1566,25 @@ static void TestUserInfo()
 #ifdef TEST_PATHLIST
 
 #ifdef __UNIX__
-    #define CMD_IN_PATH _T("ls")
+    #define CMD_IN_PATH wxT("ls")
 #else
-    #define CMD_IN_PATH _T("command.com")
+    #define CMD_IN_PATH wxT("command.com")
 #endif
 
 static void TestPathList()
 {
-    wxPuts(_T("*** Testing wxPathList ***\n"));
+    wxPuts(wxT("*** Testing wxPathList ***\n"));
 
     wxPathList pathlist;
-    pathlist.AddEnvList(_T("PATH"));
+    pathlist.AddEnvList(wxT("PATH"));
     wxString path = pathlist.FindValidPath(CMD_IN_PATH);
     if ( path.empty() )
     {
-        wxPrintf(_T("ERROR: command not found in the path.\n"));
+        wxPrintf(wxT("ERROR: command not found in the path.\n"));
     }
     else
     {
-        wxPrintf(_T("Command found in the path as '%s'.\n"), path.c_str());
+        wxPrintf(wxT("Command found in the path as '%s'.\n"), path.c_str());
     }
 }
 
@@ -1600,12 +1600,12 @@ static void TestPathList()
 
 static void TestRegExInteractive()
 {
-    wxPuts(_T("*** Testing RE interactively ***"));
+    wxPuts(wxT("*** Testing RE interactively ***"));
 
     for ( ;; )
     {
         wxChar pattern[128];
-        wxPrintf(_T("\nEnter a pattern: "));
+        wxPrintf(wxT("\nEnter a pattern: "));
         if ( !wxFgets(pattern, WXSIZEOF(pattern), stdin) )
             break;
 
@@ -1621,7 +1621,7 @@ static void TestRegExInteractive()
         wxChar text[128];
         for ( ;; )
         {
-            wxPrintf(_T("Enter text to match: "));
+            wxPrintf(wxT("Enter text to match: "));
             if ( !wxFgets(text, WXSIZEOF(text), stdin) )
                 break;
 
@@ -1630,11 +1630,11 @@ static void TestRegExInteractive()
 
             if ( !re.Matches(text) )
             {
-                wxPrintf(_T("No match.\n"));
+                wxPrintf(wxT("No match.\n"));
             }
             else
             {
-                wxPrintf(_T("Pattern matches at '%s'\n"), re.GetMatch(text).c_str());
+                wxPrintf(wxT("Pattern matches at '%s'\n"), re.GetMatch(text).c_str());
 
                 size_t start, len;
                 for ( size_t n = 1; ; n++ )
@@ -1644,7 +1644,7 @@ static void TestRegExInteractive()
                         break;
                     }
 
-                    wxPrintf(_T("Subexpr %u matched '%s'\n"),
+                    wxPrintf(wxT("Subexpr %u matched '%s'\n"),
                              n, wxString(text + start, len).c_str());
                 }
             }
@@ -1688,25 +1688,25 @@ static void rfg2 (void);
 static void
 fmtchk (const wxChar *fmt)
 {
-  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(wxT("%s:\t`"), fmt);
   (void) wxPrintf(fmt, 0x12);
-  (void) wxPrintf(_T("'\n"));
+  (void) wxPrintf(wxT("'\n"));
 }
 
 static void
 fmtst1chk (const wxChar *fmt)
 {
-  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(wxT("%s:\t`"), fmt);
   (void) wxPrintf(fmt, 4, 0x12);
-  (void) wxPrintf(_T("'\n"));
+  (void) wxPrintf(wxT("'\n"));
 }
 
 static void
 fmtst2chk (const wxChar *fmt)
 {
-  (void) wxPrintf(_T("%s:\t`"), fmt);
+  (void) wxPrintf(wxT("%s:\t`"), fmt);
   (void) wxPrintf(fmt, 4, 4, 0x12);
-  (void) wxPrintf(_T("'\n"));
+  (void) wxPrintf(wxT("'\n"));
 }
 
 /* This page is covered by the following copyright: */
@@ -1742,125 +1742,125 @@ fp_test (void)
   wxChar *prefix = buf;
   wxChar tp[20];
 
-  wxPuts(_T("\nFormatted output test"));
-  wxPrintf(_T("prefix  6d      6o      6x      6X      6u\n"));
-  wxStrcpy(prefix, _T("%"));
+  wxPuts(wxT("\nFormatted output test"));
+  wxPrintf(wxT("prefix  6d      6o      6x      6X      6u\n"));
+  wxStrcpy(prefix, wxT("%"));
   for (i = 0; i < 2; i++) {
     for (j = 0; j < 2; j++) {
       for (k = 0; k < 2; k++) {
         for (l = 0; l < 2; l++) {
-          wxStrcpy(prefix, _T("%"));
-          if (i == 0) wxStrcat(prefix, _T("-"));
-          if (j == 0) wxStrcat(prefix, _T("+"));
-          if (k == 0) wxStrcat(prefix, _T("#"));
-          if (l == 0) wxStrcat(prefix, _T("0"));
-          wxPrintf(_T("%5s |"), prefix);
+          wxStrcpy(prefix, wxT("%"));
+          if (i == 0) wxStrcat(prefix, wxT("-"));
+          if (j == 0) wxStrcat(prefix, wxT("+"));
+          if (k == 0) wxStrcat(prefix, wxT("#"));
+          if (l == 0) wxStrcat(prefix, wxT("0"));
+          wxPrintf(wxT("%5s |"), prefix);
           wxStrcpy(tp, prefix);
-          wxStrcat(tp, _T("6d |"));
+          wxStrcat(tp, wxT("6d |"));
           wxPrintf(tp, DEC);
           wxStrcpy(tp, prefix);
-          wxStrcat(tp, _T("6o |"));
+          wxStrcat(tp, wxT("6o |"));
           wxPrintf(tp, INT);
           wxStrcpy(tp, prefix);
-          wxStrcat(tp, _T("6x |"));
+          wxStrcat(tp, wxT("6x |"));
           wxPrintf(tp, INT);
           wxStrcpy(tp, prefix);
-          wxStrcat(tp, _T("6X |"));
+          wxStrcat(tp, wxT("6X |"));
           wxPrintf(tp, INT);
           wxStrcpy(tp, prefix);
-          wxStrcat(tp, _T("6u |"));
+          wxStrcat(tp, wxT("6u |"));
           wxPrintf(tp, UNS);
-          wxPrintf(_T("\n"));
+          wxPrintf(wxT("\n"));
         }
       }
     }
   }
-  wxPrintf(_T("%10s\n"), PointerNull);
-  wxPrintf(_T("%-10s\n"), PointerNull);
+  wxPrintf(wxT("%10s\n"), PointerNull);
+  wxPrintf(wxT("%-10s\n"), PointerNull);
 }
 
 static void TestPrintf()
 {
-  static wxChar shortstr[] = _T("Hi, Z.");
-  static wxChar longstr[] = _T("Good morning, Doctor Chandra.  This is Hal.  \
+  static wxChar shortstr[] = wxT("Hi, Z.");
+  static wxChar longstr[] = wxT("Good morning, Doctor Chandra.  This is Hal.  \
 I am ready for my first lesson today.");
   int result = 0;
   wxString test_format;
 
-  fmtchk(_T("%.4x"));
-  fmtchk(_T("%04x"));
-  fmtchk(_T("%4.4x"));
-  fmtchk(_T("%04.4x"));
-  fmtchk(_T("%4.3x"));
-  fmtchk(_T("%04.3x"));
+  fmtchk(wxT("%.4x"));
+  fmtchk(wxT("%04x"));
+  fmtchk(wxT("%4.4x"));
+  fmtchk(wxT("%04.4x"));
+  fmtchk(wxT("%4.3x"));
+  fmtchk(wxT("%04.3x"));
 
-  fmtst1chk(_T("%.*x"));
-  fmtst1chk(_T("%0*x"));
-  fmtst2chk(_T("%*.*x"));
-  fmtst2chk(_T("%0*.*x"));
+  fmtst1chk(wxT("%.*x"));
+  fmtst1chk(wxT("%0*x"));
+  fmtst2chk(wxT("%*.*x"));
+  fmtst2chk(wxT("%0*.*x"));
 
-  wxString bad_format = _T("bad format:\t\"%b\"\n");
+  wxString bad_format = wxT("bad format:\t\"%b\"\n");
   wxPrintf(bad_format.c_str());
-  wxPrintf(_T("nil pointer (padded):\t\"%10p\"\n"), (void *) NULL);
+  wxPrintf(wxT("nil pointer (padded):\t\"%10p\"\n"), (void *) NULL);
 
-  wxPrintf(_T("decimal negative:\t\"%d\"\n"), -2345);
-  wxPrintf(_T("octal negative:\t\"%o\"\n"), -2345);
-  wxPrintf(_T("hex negative:\t\"%x\"\n"), -2345);
-  wxPrintf(_T("long decimal number:\t\"%ld\"\n"), -123456L);
-  wxPrintf(_T("long octal negative:\t\"%lo\"\n"), -2345L);
-  wxPrintf(_T("long unsigned decimal number:\t\"%lu\"\n"), -123456L);
-  wxPrintf(_T("zero-padded LDN:\t\"%010ld\"\n"), -123456L);
-  test_format = _T("left-adjusted ZLDN:\t\"%-010ld\"\n");
+  wxPrintf(wxT("decimal negative:\t\"%d\"\n"), -2345);
+  wxPrintf(wxT("octal negative:\t\"%o\"\n"), -2345);
+  wxPrintf(wxT("hex negative:\t\"%x\"\n"), -2345);
+  wxPrintf(wxT("long decimal number:\t\"%ld\"\n"), -123456L);
+  wxPrintf(wxT("long octal negative:\t\"%lo\"\n"), -2345L);
+  wxPrintf(wxT("long unsigned decimal number:\t\"%lu\"\n"), -123456L);
+  wxPrintf(wxT("zero-padded LDN:\t\"%010ld\"\n"), -123456L);
+  test_format = wxT("left-adjusted ZLDN:\t\"%-010ld\"\n");
   wxPrintf(test_format.c_str(), -123456);
-  wxPrintf(_T("space-padded LDN:\t\"%10ld\"\n"), -123456L);
-  wxPrintf(_T("left-adjusted SLDN:\t\"%-10ld\"\n"), -123456L);
+  wxPrintf(wxT("space-padded LDN:\t\"%10ld\"\n"), -123456L);
+  wxPrintf(wxT("left-adjusted SLDN:\t\"%-10ld\"\n"), -123456L);
 
-  test_format = _T("zero-padded string:\t\"%010s\"\n");
+  test_format = wxT("zero-padded string:\t\"%010s\"\n");
   wxPrintf(test_format.c_str(), shortstr);
-  test_format = _T("left-adjusted Z string:\t\"%-010s\"\n");
+  test_format = wxT("left-adjusted Z string:\t\"%-010s\"\n");
   wxPrintf(test_format.c_str(), shortstr);
-  wxPrintf(_T("space-padded string:\t\"%10s\"\n"), shortstr);
-  wxPrintf(_T("left-adjusted S string:\t\"%-10s\"\n"), shortstr);
-  wxPrintf(_T("null string:\t\"%s\"\n"), PointerNull);
-  wxPrintf(_T("limited string:\t\"%.22s\"\n"), longstr);
+  wxPrintf(wxT("space-padded string:\t\"%10s\"\n"), shortstr);
+  wxPrintf(wxT("left-adjusted S string:\t\"%-10s\"\n"), shortstr);
+  wxPrintf(wxT("null string:\t\"%s\"\n"), PointerNull);
+  wxPrintf(wxT("limited string:\t\"%.22s\"\n"), longstr);
 
-  wxPrintf(_T("e-style >= 1:\t\"%e\"\n"), 12.34);
-  wxPrintf(_T("e-style >= .1:\t\"%e\"\n"), 0.1234);
-  wxPrintf(_T("e-style < .1:\t\"%e\"\n"), 0.001234);
-  wxPrintf(_T("e-style big:\t\"%.60e\"\n"), 1e20);
-  wxPrintf(_T("e-style == .1:\t\"%e\"\n"), 0.1);
-  wxPrintf(_T("f-style >= 1:\t\"%f\"\n"), 12.34);
-  wxPrintf(_T("f-style >= .1:\t\"%f\"\n"), 0.1234);
-  wxPrintf(_T("f-style < .1:\t\"%f\"\n"), 0.001234);
-  wxPrintf(_T("g-style >= 1:\t\"%g\"\n"), 12.34);
-  wxPrintf(_T("g-style >= .1:\t\"%g\"\n"), 0.1234);
-  wxPrintf(_T("g-style < .1:\t\"%g\"\n"), 0.001234);
-  wxPrintf(_T("g-style big:\t\"%.60g\"\n"), 1e20);
+  wxPrintf(wxT("e-style >= 1:\t\"%e\"\n"), 12.34);
+  wxPrintf(wxT("e-style >= .1:\t\"%e\"\n"), 0.1234);
+  wxPrintf(wxT("e-style < .1:\t\"%e\"\n"), 0.001234);
+  wxPrintf(wxT("e-style big:\t\"%.60e\"\n"), 1e20);
+  wxPrintf(wxT("e-style == .1:\t\"%e\"\n"), 0.1);
+  wxPrintf(wxT("f-style >= 1:\t\"%f\"\n"), 12.34);
+  wxPrintf(wxT("f-style >= .1:\t\"%f\"\n"), 0.1234);
+  wxPrintf(wxT("f-style < .1:\t\"%f\"\n"), 0.001234);
+  wxPrintf(wxT("g-style >= 1:\t\"%g\"\n"), 12.34);
+  wxPrintf(wxT("g-style >= .1:\t\"%g\"\n"), 0.1234);
+  wxPrintf(wxT("g-style < .1:\t\"%g\"\n"), 0.001234);
+  wxPrintf(wxT("g-style big:\t\"%.60g\"\n"), 1e20);
 
-  wxPrintf (_T(" %6.5f\n"), .099999999860301614);
-  wxPrintf (_T(" %6.5f\n"), .1);
-  wxPrintf (_T("x%5.4fx\n"), .5);
+  wxPrintf (wxT(" %6.5f\n"), .099999999860301614);
+  wxPrintf (wxT(" %6.5f\n"), .1);
+  wxPrintf (wxT("x%5.4fx\n"), .5);
 
-  wxPrintf (_T("%#03x\n"), 1);
+  wxPrintf (wxT("%#03x\n"), 1);
 
-  //wxPrintf (_T("something really insane: %.10000f\n"), 1.0);
+  //wxPrintf (wxT("something really insane: %.10000f\n"), 1.0);
 
   {
     double d = FLT_MIN;
     int niter = 17;
 
     while (niter-- != 0)
-      wxPrintf (_T("%.17e\n"), d / 2);
+      wxPrintf (wxT("%.17e\n"), d / 2);
     fflush (stdout);
   }
 
 #ifndef __WATCOMC__
   // Open Watcom cause compiler error here
   // Error! E173: col(24) floating-point constant too small to represent
-  wxPrintf (_T("%15.5e\n"), 4.9406564584124654e-324);
+  wxPrintf (wxT("%15.5e\n"), 4.9406564584124654e-324);
 #endif
 
-#define FORMAT _T("|%12.4f|%12.4e|%12.4g|\n")
+#define FORMAT wxT("|%12.4f|%12.4e|%12.4g|\n")
   wxPrintf (FORMAT, 0.0, 0.0, 0.0);
   wxPrintf (FORMAT, 1.0, 1.0, 1.0);
   wxPrintf (FORMAT, -1.0, -1.0, -1.0);
@@ -1874,9 +1874,9 @@ I am ready for my first lesson today.");
 
   {
     wxChar buf[20];
-    int rc = wxSnprintf (buf, WXSIZEOF(buf), _T("%30s"), _T("foo"));
+    int rc = wxSnprintf (buf, WXSIZEOF(buf), wxT("%30s"), wxT("foo"));
 
-    wxPrintf(_T("snprintf (\"%%30s\", \"foo\") == %d, \"%.*s\"\n"),
+    wxPrintf(wxT("snprintf (\"%%30s\", \"foo\") == %d, \"%.*s\"\n"),
              rc, WXSIZEOF(buf), buf);
 #if 0
     wxChar buf2[512];
@@ -1887,54 +1887,54 @@ I am ready for my first lesson today.");
 
   fp_test ();
 
-  wxPrintf (_T("%e should be 1.234568e+06\n"), 1234567.8);
-  wxPrintf (_T("%f should be 1234567.800000\n"), 1234567.8);
-  wxPrintf (_T("%g should be 1.23457e+06\n"), 1234567.8);
-  wxPrintf (_T("%g should be 123.456\n"), 123.456);
-  wxPrintf (_T("%g should be 1e+06\n"), 1000000.0);
-  wxPrintf (_T("%g should be 10\n"), 10.0);
-  wxPrintf (_T("%g should be 0.02\n"), 0.02);
+  wxPrintf (wxT("%e should be 1.234568e+06\n"), 1234567.8);
+  wxPrintf (wxT("%f should be 1234567.800000\n"), 1234567.8);
+  wxPrintf (wxT("%g should be 1.23457e+06\n"), 1234567.8);
+  wxPrintf (wxT("%g should be 123.456\n"), 123.456);
+  wxPrintf (wxT("%g should be 1e+06\n"), 1000000.0);
+  wxPrintf (wxT("%g should be 10\n"), 10.0);
+  wxPrintf (wxT("%g should be 0.02\n"), 0.02);
 
   {
     double x=1.0;
-    wxPrintf(_T("%.17f\n"),(1.0/x/10.0+1.0)*x-x);
+    wxPrintf(wxT("%.17f\n"),(1.0/x/10.0+1.0)*x-x);
   }
 
   {
     wxChar buf[200];
 
-    wxSprintf(buf,_T("%*s%*s%*s"),-1,_T("one"),-20,_T("two"),-30,_T("three"));
+    wxSprintf(buf,wxT("%*s%*s%*s"),-1,wxT("one"),-20,wxT("two"),-30,wxT("three"));
 
     result |= wxStrcmp (buf,
-                      _T("onetwo                 three                         "));
+                      wxT("onetwo                 three                         "));
 
-    wxPuts (result != 0 ? _T("Test failed!") : _T("Test ok."));
+    wxPuts (result != 0 ? wxT("Test failed!") : wxT("Test ok."));
   }
 
 #ifdef wxLongLong_t
   {
       wxChar buf[200];
 
-      wxSprintf(buf, _T("%07") wxLongLongFmtSpec _T("o"), wxLL(040000000000));
+      wxSprintf(buf, wxT("%07") wxLongLongFmtSpec wxT("o"), wxLL(040000000000));
       #if 0
         // for some reason below line fails under Borland
-      wxPrintf (_T("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
+      wxPrintf (wxT("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);
       #endif
 
-      if (wxStrcmp (buf, _T("40000000000")) != 0)
+      if (wxStrcmp (buf, wxT("40000000000")) != 0)
       {
           result = 1;
-          wxPuts (_T("\tFAILED"));
+          wxPuts (wxT("\tFAILED"));
       }
       wxUnusedVar(result);
       wxPuts (wxEmptyString);
   }
 #endif // wxLongLong_t
 
-  wxPrintf (_T("printf (\"%%hhu\", %u) = %hhu\n"), UCHAR_MAX + 2, UCHAR_MAX + 2);
-  wxPrintf (_T("printf (\"%%hu\", %u) = %hu\n"), USHRT_MAX + 2, USHRT_MAX + 2);
+  wxPrintf (wxT("printf (\"%%hhu\", %u) = %hhu\n"), UCHAR_MAX + 2, UCHAR_MAX + 2);
+  wxPrintf (wxT("printf (\"%%hu\", %u) = %hu\n"), USHRT_MAX + 2, USHRT_MAX + 2);
 
-  wxPuts (_T("--- Should be no further output. ---"));
+  wxPuts (wxT("--- Should be no further output. ---"));
   rfg1 ();
   rfg2 ();
 
@@ -1944,16 +1944,16 @@ I am ready for my first lesson today.");
     wxChar buf[20];
 
     memset (bytes, '\xff', sizeof bytes);
-    wxSprintf (buf, _T("foo%hhn\n"), &bytes[3]);
+    wxSprintf (buf, wxT("foo%hhn\n"), &bytes[3]);
     if (bytes[0] != '\xff' || bytes[1] != '\xff' || bytes[2] != '\xff'
         || bytes[4] != '\xff' || bytes[5] != '\xff' || bytes[6] != '\xff')
       {
-        wxPuts (_T("%hhn overwrite more bytes"));
+        wxPuts (wxT("%hhn overwrite more bytes"));
         result = 1;
       }
     if (bytes[3] != 3)
       {
-        wxPuts (_T("%hhn wrote incorrect value"));
+        wxPuts (wxT("%hhn wrote incorrect value"));
         result = 1;
       }
   }
@@ -1965,24 +1965,24 @@ rfg1 (void)
 {
   wxChar buf[100];
 
-  wxSprintf (buf, _T("%5.s"), _T("xyz"));
-  if (wxStrcmp (buf, _T("     ")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("     "));
-  wxSprintf (buf, _T("%5.f"), 33.3);
-  if (wxStrcmp (buf, _T("   33")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   33"));
-  wxSprintf (buf, _T("%8.e"), 33.3e7);
-  if (wxStrcmp (buf, _T("   3e+08")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   3e+08"));
-  wxSprintf (buf, _T("%8.E"), 33.3e7);
-  if (wxStrcmp (buf, _T("   3E+08")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("   3E+08"));
-  wxSprintf (buf, _T("%.g"), 33.3);
-  if (wxStrcmp (buf, _T("3e+01")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3e+01"));
-  wxSprintf (buf, _T("%.G"), 33.3);
-  if (wxStrcmp (buf, _T("3E+01")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3E+01"));
+  wxSprintf (buf, wxT("%5.s"), wxT("xyz"));
+  if (wxStrcmp (buf, wxT("     ")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("     "));
+  wxSprintf (buf, wxT("%5.f"), 33.3);
+  if (wxStrcmp (buf, wxT("   33")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("   33"));
+  wxSprintf (buf, wxT("%8.e"), 33.3e7);
+  if (wxStrcmp (buf, wxT("   3e+08")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("   3e+08"));
+  wxSprintf (buf, wxT("%8.E"), 33.3e7);
+  if (wxStrcmp (buf, wxT("   3E+08")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("   3E+08"));
+  wxSprintf (buf, wxT("%.g"), 33.3);
+  if (wxStrcmp (buf, wxT("3e+01")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("3e+01"));
+  wxSprintf (buf, wxT("%.G"), 33.3);
+  if (wxStrcmp (buf, wxT("3E+01")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("3E+01"));
 }
 
 static void
@@ -1993,37 +1993,37 @@ rfg2 (void)
   wxString test_format;
 
   prec = 0;
-  wxSprintf (buf, _T("%.*g"), prec, 3.3);
-  if (wxStrcmp (buf, _T("3")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3"));
+  wxSprintf (buf, wxT("%.*g"), prec, 3.3);
+  if (wxStrcmp (buf, wxT("3")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("3"));
   prec = 0;
-  wxSprintf (buf, _T("%.*G"), prec, 3.3);
-  if (wxStrcmp (buf, _T("3")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("3"));
+  wxSprintf (buf, wxT("%.*G"), prec, 3.3);
+  if (wxStrcmp (buf, wxT("3")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("3"));
   prec = 0;
-  wxSprintf (buf, _T("%7.*G"), prec, 3.33);
-  if (wxStrcmp (buf, _T("      3")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("      3"));
+  wxSprintf (buf, wxT("%7.*G"), prec, 3.33);
+  if (wxStrcmp (buf, wxT("      3")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("      3"));
   prec = 3;
-  test_format = _T("%04.*o");
+  test_format = wxT("%04.*o");
   wxSprintf (buf, test_format.c_str(), prec, 33);
-  if (wxStrcmp (buf, _T(" 041")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 041"));
+  if (wxStrcmp (buf, wxT(" 041")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT(" 041"));
   prec = 7;
-  test_format = _T("%09.*u");
+  test_format = wxT("%09.*u");
   wxSprintf (buf, test_format.c_str(), prec, 33);
-  if (wxStrcmp (buf, _T("  0000033")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T("  0000033"));
+  if (wxStrcmp (buf, wxT("  0000033")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT("  0000033"));
   prec = 3;
-  test_format = _T("%04.*x");
+  test_format = wxT("%04.*x");
   wxSprintf (buf, test_format.c_str(), prec, 33);
-  if (wxStrcmp (buf, _T(" 021")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
+  if (wxStrcmp (buf, wxT(" 021")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT(" 021"));
   prec = 3;
-  test_format = _T("%04.*X");
+  test_format = wxT("%04.*X");
   wxSprintf (buf, test_format.c_str(), prec, 33);
-  if (wxStrcmp (buf, _T(" 021")) != 0)
-    wxPrintf (_T("got: '%s', expected: '%s'\n"), buf, _T(" 021"));
+  if (wxStrcmp (buf, wxT(" 021")) != 0)
+    wxPrintf (wxT("got: '%s', expected: '%s'\n"), buf, wxT(" 021"));
 }
 
 #endif // TEST_PRINTF
@@ -2046,22 +2046,22 @@ rfg2 (void)
 #if 0
 static void TestRegConfWrite()
 {
-    wxConfig *config = new wxConfig(_T("myapp"));
-    config->SetPath(_T("/group1"));
-    config->Write(_T("entry1"), _T("foo"));
-    config->SetPath(_T("/group2"));
-    config->Write(_T("entry1"), _T("bar"));
+    wxConfig *config = new wxConfig(wxT("myapp"));
+    config->SetPath(wxT("/group1"));
+    config->Write(wxT("entry1"), wxT("foo"));
+    config->SetPath(wxT("/group2"));
+    config->Write(wxT("entry1"), wxT("bar"));
 }
 #endif
 
 static void TestRegConfRead()
 {
-    wxRegConfig *config = new wxRegConfig(_T("myapp"));
+    wxRegConfig *config = new wxRegConfig(wxT("myapp"));
 
     wxString str;
     long dummy;
-    config->SetPath(_T("/"));
-    wxPuts(_T("Enumerating / subgroups:"));
+    config->SetPath(wxT("/"));
+    wxPuts(wxT("Enumerating / subgroups:"));
     bool bCont = config->GetFirstGroup(str, dummy);
     while(bCont)
     {
@@ -2079,17 +2079,17 @@ static void TestRegConfRead()
 // I chose this one because I liked its name, but it probably only exists under
 // NT
 static const wxChar *TESTKEY =
-    _T("HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\CrashControl");
+    wxT("HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\CrashControl");
 
 static void TestRegistryRead()
 {
-    wxPuts(_T("*** testing registry reading ***"));
+    wxPuts(wxT("*** testing registry reading ***"));
 
     wxRegKey key(TESTKEY);
-    wxPrintf(_T("The test key name is '%s'.\n"), key.GetName().c_str());
+    wxPrintf(wxT("The test key name is '%s'.\n"), key.GetName().c_str());
     if ( !key.Open() )
     {
-        wxPuts(_T("ERROR: test key can't be opened, aborting test."));
+        wxPuts(wxT("ERROR: test key can't be opened, aborting test."));
 
         return;
     }
@@ -2097,43 +2097,43 @@ static void TestRegistryRead()
     size_t nSubKeys, nValues;
     if ( key.GetKeyInfo(&nSubKeys, NULL, &nValues, NULL) )
     {
-        wxPrintf(_T("It has %u subkeys and %u values.\n"), nSubKeys, nValues);
+        wxPrintf(wxT("It has %u subkeys and %u values.\n"), nSubKeys, nValues);
     }
 
-    wxPrintf(_T("Enumerating values:\n"));
+    wxPrintf(wxT("Enumerating values:\n"));
 
     long dummy;
     wxString value;
     bool cont = key.GetFirstValue(value, dummy);
     while ( cont )
     {
-        wxPrintf(_T("Value '%s': type "), value.c_str());
+        wxPrintf(wxT("Value '%s': type "), value.c_str());
         switch ( key.GetValueType(value) )
         {
-            case wxRegKey::Type_None:   wxPrintf(_T("ERROR (none)")); break;
-            case wxRegKey::Type_String: wxPrintf(_T("SZ")); break;
-            case wxRegKey::Type_Expand_String: wxPrintf(_T("EXPAND_SZ")); break;
-            case wxRegKey::Type_Binary: wxPrintf(_T("BINARY")); break;
-            case wxRegKey::Type_Dword: wxPrintf(_T("DWORD")); break;
-            case wxRegKey::Type_Multi_String: wxPrintf(_T("MULTI_SZ")); break;
-            default: wxPrintf(_T("other (unknown)")); break;
+            case wxRegKey::Type_None:   wxPrintf(wxT("ERROR (none)")); break;
+            case wxRegKey::Type_String: wxPrintf(wxT("SZ")); break;
+            case wxRegKey::Type_Expand_String: wxPrintf(wxT("EXPAND_SZ")); break;
+            case wxRegKey::Type_Binary: wxPrintf(wxT("BINARY")); break;
+            case wxRegKey::Type_Dword: wxPrintf(wxT("DWORD")); break;
+            case wxRegKey::Type_Multi_String: wxPrintf(wxT("MULTI_SZ")); break;
+            default: wxPrintf(wxT("other (unknown)")); break;
         }
 
-        wxPrintf(_T(", value = "));
+        wxPrintf(wxT(", value = "));
         if ( key.IsNumericValue(value) )
         {
             long val;
             key.QueryValue(value, &val);
-            wxPrintf(_T("%ld"), val);
+            wxPrintf(wxT("%ld"), val);
         }
         else // string
         {
             wxString val;
             key.QueryValue(value, val);
-            wxPrintf(_T("'%s'"), val.c_str());
+            wxPrintf(wxT("'%s'"), val.c_str());
 
             key.QueryRawValue(value, val);
-            wxPrintf(_T(" (raw value '%s')"), val.c_str());
+            wxPrintf(wxT(" (raw value '%s')"), val.c_str());
         }
 
         wxPutchar('\n');
@@ -2152,26 +2152,26 @@ static void TestRegistryAssociation()
 
     wxRegKey key;
 
-    key.SetName(_T("HKEY_CLASSES_ROOT\\.ddf") );
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\.ddf") );
     key.Create();
-    key = _T("ddxf_auto_file") ;
-    key.SetName(_T("HKEY_CLASSES_ROOT\\.flo") );
+    key = wxT("ddxf_auto_file") ;
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\.flo") );
     key.Create();
-    key = _T("ddxf_auto_file") ;
-    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
+    key = wxT("ddxf_auto_file") ;
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
     key.Create();
-    key = _T("program,0") ;
-    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
+    key = wxT("program,0") ;
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
     key.Create();
-    key = _T("program \"%1\"") ;
+    key = wxT("program \"%1\"") ;
 
-    key.SetName(_T("HKEY_CLASSES_ROOT\\.ddf") );
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\.ddf") );
     key.DeleteSelf();
-    key.SetName(_T("HKEY_CLASSES_ROOT\\.flo") );
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\.flo") );
     key.DeleteSelf();
-    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
     key.DeleteSelf();
-    key.SetName(_T("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
+    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
     key.DeleteSelf();
 }
 
@@ -2225,7 +2225,7 @@ static void TestScopeGuard()
 
 static void TestSocketServer()
 {
-    wxPuts(_T("*** Testing wxSocketServer ***\n"));
+    wxPuts(wxT("*** Testing wxSocketServer ***\n"));
 
     static const int PORT = 3000;
 
@@ -2235,7 +2235,7 @@ static void TestSocketServer()
     wxSocketServer *server = new wxSocketServer(addr);
     if ( !server->Ok() )
     {
-        wxPuts(_T("ERROR: failed to bind"));
+        wxPuts(wxT("ERROR: failed to bind"));
 
         return;
     }
@@ -2243,16 +2243,16 @@ static void TestSocketServer()
     bool quit = false;
     while ( !quit )
     {
-        wxPrintf(_T("Server: waiting for connection on port %d...\n"), PORT);
+        wxPrintf(wxT("Server: waiting for connection on port %d...\n"), PORT);
 
         wxSocketBase *socket = server->Accept();
         if ( !socket )
         {
-            wxPuts(_T("ERROR: wxSocketServer::Accept() failed."));
+            wxPuts(wxT("ERROR: wxSocketServer::Accept() failed."));
             break;
         }
 
-        wxPuts(_T("Server: got a client."));
+        wxPuts(wxT("Server: got a client."));
 
         server->SetTimeout(60); // 1 min
 
@@ -2260,7 +2260,7 @@ static void TestSocketServer()
         while ( !close && socket->IsConnected() )
         {
             wxString s;
-            wxChar ch = _T('\0');
+            wxChar ch = wxT('\0');
             for ( ;; )
             {
                 if ( socket->Read(&ch, sizeof(ch)).Error() )
@@ -2268,7 +2268,7 @@ static void TestSocketServer()
                     // don't log error if the client just close the connection
                     if ( socket->IsConnected() )
                     {
-                        wxPuts(_T("ERROR: in wxSocket::Read."));
+                        wxPuts(wxT("ERROR: in wxSocket::Read."));
                     }
 
                     break;
@@ -2288,31 +2288,31 @@ static void TestSocketServer()
                 break;
             }
 
-            wxPrintf(_T("Server: got '%s'.\n"), s.c_str());
-            if ( s == _T("close") )
+            wxPrintf(wxT("Server: got '%s'.\n"), s.c_str());
+            if ( s == wxT("close") )
             {
-                wxPuts(_T("Closing connection"));
+                wxPuts(wxT("Closing connection"));
 
                 close = true;
             }
-            else if ( s == _T("quit") )
+            else if ( s == wxT("quit") )
             {
                 close =
                 quit = true;
 
-                wxPuts(_T("Shutting down the server"));
+                wxPuts(wxT("Shutting down the server"));
             }
             else // not a special command
             {
                 socket->Write(s.MakeUpper().c_str(), s.length());
                 socket->Write("\r\n", 2);
-                wxPrintf(_T("Server: wrote '%s'.\n"), s.c_str());
+                wxPrintf(wxT("Server: wrote '%s'.\n"), s.c_str());
             }
         }
 
         if ( !close )
         {
-            wxPuts(_T("Server: lost a client unexpectedly."));
+            wxPuts(wxT("Server: lost a client unexpectedly."));
         }
 
         socket->Destroy();
@@ -2324,36 +2324,36 @@ static void TestSocketServer()
 
 static void TestSocketClient()
 {
-    wxPuts(_T("*** Testing wxSocketClient ***\n"));
+    wxPuts(wxT("*** Testing wxSocketClient ***\n"));
 
-    static const wxChar *hostname = _T("www.wxwidgets.org");
+    static const wxChar *hostname = wxT("www.wxwidgets.org");
 
     wxIPV4address addr;
     addr.Hostname(hostname);
     addr.Service(80);
 
-    wxPrintf(_T("--- Attempting to connect to %s:80...\n"), hostname);
+    wxPrintf(wxT("--- Attempting to connect to %s:80...\n"), hostname);
 
     wxSocketClient client;
     if ( !client.Connect(addr) )
     {
-        wxPrintf(_T("ERROR: failed to connect to %s\n"), hostname);
+        wxPrintf(wxT("ERROR: failed to connect to %s\n"), hostname);
     }
     else
     {
-        wxPrintf(_T("--- Connected to %s:%u...\n"),
+        wxPrintf(wxT("--- Connected to %s:%u...\n"),
                addr.Hostname().c_str(), addr.Service());
 
         wxChar buf[8192];
 
         // could use simply "GET" here I suppose
         wxString cmdGet =
-            wxString::Format(_T("GET http://%s/\r\n"), hostname);
+            wxString::Format(wxT("GET http://%s/\r\n"), hostname);
         client.Write(cmdGet, cmdGet.length());
-        wxPrintf(_T("--- Sent command '%s' to the server\n"),
+        wxPrintf(wxT("--- Sent command '%s' to the server\n"),
                MakePrintable(cmdGet).c_str());
         client.Read(buf, WXSIZEOF(buf));
-        wxPrintf(_T("--- Server replied:\n%s"), buf);
+        wxPrintf(wxT("--- Server replied:\n%s"), buf);
     }
 }
 
@@ -2373,21 +2373,21 @@ static void TestSocketClient()
 static wxFTP *ftp;
 
 #ifdef FTP_ANONYMOUS
-    static const wxChar *directory = _T("/pub");
-    static const wxChar *filename = _T("welcome.msg");
+    static const wxChar *directory = wxT("/pub");
+    static const wxChar *filename = wxT("welcome.msg");
 #else
-    static const wxChar *directory = _T("/etc");
-    static const wxChar *filename = _T("issue");
+    static const wxChar *directory = wxT("/etc");
+    static const wxChar *filename = wxT("issue");
 #endif
 
 static bool TestFtpConnect()
 {
-    wxPuts(_T("*** Testing FTP connect ***"));
+    wxPuts(wxT("*** Testing FTP connect ***"));
 
 #ifdef FTP_ANONYMOUS
-    static const wxChar *hostname = _T("ftp.wxwidgets.org");
+    static const wxChar *hostname = wxT("ftp.wxwidgets.org");
 
-    wxPrintf(_T("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
+    wxPrintf(wxT("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
 #else // !FTP_ANONYMOUS
     static const wxChar *hostname = "localhost";
 
@@ -2397,23 +2397,23 @@ static bool TestFtpConnect()
     ftp->SetUser(user);
 
     wxChar password[256];
-    wxPrintf(_T("Password for %s: "), password);
+    wxPrintf(wxT("Password for %s: "), password);
     wxFgets(password, WXSIZEOF(password), stdin);
     password[wxStrlen(password) - 1] = '\0'; // chop off '\n'
     ftp->SetPassword(password);
 
-    wxPrintf(_T("--- Attempting to connect to %s:21 as %s...\n"), hostname, user);
+    wxPrintf(wxT("--- Attempting to connect to %s:21 as %s...\n"), hostname, user);
 #endif // FTP_ANONYMOUS/!FTP_ANONYMOUS
 
     if ( !ftp->Connect(hostname) )
     {
-        wxPrintf(_T("ERROR: failed to connect to %s\n"), hostname);
+        wxPrintf(wxT("ERROR: failed to connect to %s\n"), hostname);
 
         return false;
     }
     else
     {
-        wxPrintf(_T("--- Connected to %s, current directory is '%s'\n"),
+        wxPrintf(wxT("--- Connected to %s, current directory is '%s'\n"),
                  hostname, ftp->Pwd().c_str());
         ftp->Close();
     }
@@ -2423,80 +2423,80 @@ static bool TestFtpConnect()
 
 static void TestFtpList()
 {
-    wxPuts(_T("*** Testing wxFTP file listing ***\n"));
+    wxPuts(wxT("*** Testing wxFTP file listing ***\n"));
 
     // test CWD
     if ( !ftp->ChDir(directory) )
     {
-        wxPrintf(_T("ERROR: failed to cd to %s\n"), directory);
+        wxPrintf(wxT("ERROR: failed to cd to %s\n"), directory);
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
+    wxPrintf(wxT("Current directory is '%s'\n"), ftp->Pwd().c_str());
 
     // test NLIST and LIST
     wxArrayString files;
     if ( !ftp->GetFilesList(files) )
     {
-        wxPuts(_T("ERROR: failed to get NLIST of files"));
+        wxPuts(wxT("ERROR: failed to get NLIST of files"));
     }
     else
     {
-        wxPrintf(_T("Brief list of files under '%s':\n"), ftp->Pwd().c_str());
+        wxPrintf(wxT("Brief list of files under '%s':\n"), ftp->Pwd().c_str());
         size_t count = files.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            wxPrintf(_T("\t%s\n"), files[n].c_str());
+            wxPrintf(wxT("\t%s\n"), files[n].c_str());
         }
-        wxPuts(_T("End of the file list"));
+        wxPuts(wxT("End of the file list"));
     }
 
     if ( !ftp->GetDirList(files) )
     {
-        wxPuts(_T("ERROR: failed to get LIST of files"));
+        wxPuts(wxT("ERROR: failed to get LIST of files"));
     }
     else
     {
-        wxPrintf(_T("Detailed list of files under '%s':\n"), ftp->Pwd().c_str());
+        wxPrintf(wxT("Detailed list of files under '%s':\n"), ftp->Pwd().c_str());
         size_t count = files.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            wxPrintf(_T("\t%s\n"), files[n].c_str());
+            wxPrintf(wxT("\t%s\n"), files[n].c_str());
         }
-        wxPuts(_T("End of the file list"));
+        wxPuts(wxT("End of the file list"));
     }
 
-    if ( !ftp->ChDir(_T("..")) )
+    if ( !ftp->ChDir(wxT("..")) )
     {
-        wxPuts(_T("ERROR: failed to cd to .."));
+        wxPuts(wxT("ERROR: failed to cd to .."));
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
+    wxPrintf(wxT("Current directory is '%s'\n"), ftp->Pwd().c_str());
 }
 
 static void TestFtpDownload()
 {
-    wxPuts(_T("*** Testing wxFTP download ***\n"));
+    wxPuts(wxT("*** Testing wxFTP download ***\n"));
 
     // test RETR
     wxInputStream *in = ftp->GetInputStream(filename);
     if ( !in )
     {
-        wxPrintf(_T("ERROR: couldn't get input stream for %s\n"), filename);
+        wxPrintf(wxT("ERROR: couldn't get input stream for %s\n"), filename);
     }
     else
     {
         size_t size = in->GetSize();
-        wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
+        wxPrintf(wxT("Reading file %s (%u bytes)..."), filename, size);
         fflush(stdout);
 
         wxChar *data = new wxChar[size];
         if ( !in->Read(data, size) )
         {
-            wxPuts(_T("ERROR: read error"));
+            wxPuts(wxT("ERROR: read error"));
         }
         else
         {
-            wxPrintf(_T("\nContents of %s:\n%s\n"), filename, data);
+            wxPrintf(wxT("\nContents of %s:\n%s\n"), filename, data);
         }
 
         delete [] data;
@@ -2506,49 +2506,49 @@ static void TestFtpDownload()
 
 static void TestFtpFileSize()
 {
-    wxPuts(_T("*** Testing FTP SIZE command ***"));
+    wxPuts(wxT("*** Testing FTP SIZE command ***"));
 
     if ( !ftp->ChDir(directory) )
     {
-        wxPrintf(_T("ERROR: failed to cd to %s\n"), directory);
+        wxPrintf(wxT("ERROR: failed to cd to %s\n"), directory);
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
+    wxPrintf(wxT("Current directory is '%s'\n"), ftp->Pwd().c_str());
 
     if ( ftp->FileExists(filename) )
     {
         int size = ftp->GetFileSize(filename);
         if ( size == -1 )
-            wxPrintf(_T("ERROR: couldn't get size of '%s'\n"), filename);
+            wxPrintf(wxT("ERROR: couldn't get size of '%s'\n"), filename);
         else
-            wxPrintf(_T("Size of '%s' is %d bytes.\n"), filename, size);
+            wxPrintf(wxT("Size of '%s' is %d bytes.\n"), filename, size);
     }
     else
     {
-        wxPrintf(_T("ERROR: '%s' doesn't exist\n"), filename);
+        wxPrintf(wxT("ERROR: '%s' doesn't exist\n"), filename);
     }
 }
 
 static void TestFtpMisc()
 {
-    wxPuts(_T("*** Testing miscellaneous wxFTP functions ***"));
+    wxPuts(wxT("*** Testing miscellaneous wxFTP functions ***"));
 
-    if ( ftp->SendCommand(_T("STAT")) != '2' )
+    if ( ftp->SendCommand(wxT("STAT")) != '2' )
     {
-        wxPuts(_T("ERROR: STAT failed"));
+        wxPuts(wxT("ERROR: STAT failed"));
     }
     else
     {
-        wxPrintf(_T("STAT returned:\n\n%s\n"), ftp->GetLastResult().c_str());
+        wxPrintf(wxT("STAT returned:\n\n%s\n"), ftp->GetLastResult().c_str());
     }
 
-    if ( ftp->SendCommand(_T("HELP SITE")) != '2' )
+    if ( ftp->SendCommand(wxT("HELP SITE")) != '2' )
     {
-        wxPuts(_T("ERROR: HELP SITE failed"));
+        wxPuts(wxT("ERROR: HELP SITE failed"));
     }
     else
     {
-        wxPrintf(_T("The list of site-specific commands:\n\n%s\n"),
+        wxPrintf(wxT("The list of site-specific commands:\n\n%s\n"),
                ftp->GetLastResult().c_str());
     }
 }
@@ -2557,13 +2557,13 @@ static void TestFtpMisc()
 
 static void TestFtpInteractive()
 {
-    wxPuts(_T("\n*** Interactive wxFTP test ***"));
+    wxPuts(wxT("\n*** Interactive wxFTP test ***"));
 
     wxChar buf[128];
 
     for ( ;; )
     {
-        wxPrintf(_T("Enter FTP command: "));
+        wxPrintf(wxT("Enter FTP command: "));
         if ( !wxFgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
@@ -2573,77 +2573,77 @@ static void TestFtpInteractive()
         // special handling of LIST and NLST as they require data connection
         wxString start(buf, 4);
         start.MakeUpper();
-        if ( start == _T("LIST") || start == _T("NLST") )
+        if ( start == wxT("LIST") || start == wxT("NLST") )
         {
             wxString wildcard;
             if ( wxStrlen(buf) > 4 )
                 wildcard = buf + 5;
 
             wxArrayString files;
-            if ( !ftp->GetList(files, wildcard, start == _T("LIST")) )
+            if ( !ftp->GetList(files, wildcard, start == wxT("LIST")) )
             {
-                wxPrintf(_T("ERROR: failed to get %s of files\n"), start.c_str());
+                wxPrintf(wxT("ERROR: failed to get %s of files\n"), start.c_str());
             }
             else
             {
-                wxPrintf(_T("--- %s of '%s' under '%s':\n"),
+                wxPrintf(wxT("--- %s of '%s' under '%s':\n"),
                        start.c_str(), wildcard.c_str(), ftp->Pwd().c_str());
                 size_t count = files.GetCount();
                 for ( size_t n = 0; n < count; n++ )
                 {
-                    wxPrintf(_T("\t%s\n"), files[n].c_str());
+                    wxPrintf(wxT("\t%s\n"), files[n].c_str());
                 }
-                wxPuts(_T("--- End of the file list"));
+                wxPuts(wxT("--- End of the file list"));
             }
         }
         else // !list
         {
             wxChar ch = ftp->SendCommand(buf);
-            wxPrintf(_T("Command %s"), ch ? _T("succeeded") : _T("failed"));
+            wxPrintf(wxT("Command %s"), ch ? wxT("succeeded") : wxT("failed"));
             if ( ch )
             {
-                wxPrintf(_T(" (return code %c)"), ch);
+                wxPrintf(wxT(" (return code %c)"), ch);
             }
 
-            wxPrintf(_T(", server reply:\n%s\n\n"), ftp->GetLastResult().c_str());
+            wxPrintf(wxT(", server reply:\n%s\n\n"), ftp->GetLastResult().c_str());
         }
     }
 
-    wxPuts(_T("\n*** done ***"));
+    wxPuts(wxT("\n*** done ***"));
 }
 
 #endif // TEST_INTERACTIVE
 
 static void TestFtpUpload()
 {
-    wxPuts(_T("*** Testing wxFTP uploading ***\n"));
+    wxPuts(wxT("*** Testing wxFTP uploading ***\n"));
 
     // upload a file
-    static const wxChar *file1 = _T("test1");
-    static const wxChar *file2 = _T("test2");
+    static const wxChar *file1 = wxT("test1");
+    static const wxChar *file2 = wxT("test2");
     wxOutputStream *out = ftp->GetOutputStream(file1);
     if ( out )
     {
-        wxPrintf(_T("--- Uploading to %s ---\n"), file1);
+        wxPrintf(wxT("--- Uploading to %s ---\n"), file1);
         out->Write("First hello", 11);
         delete out;
     }
 
     // send a command to check the remote file
-    if ( ftp->SendCommand(wxString(_T("STAT ")) + file1) != '2' )
+    if ( ftp->SendCommand(wxString(wxT("STAT ")) + file1) != '2' )
     {
-        wxPrintf(_T("ERROR: STAT %s failed\n"), file1);
+        wxPrintf(wxT("ERROR: STAT %s failed\n"), file1);
     }
     else
     {
-        wxPrintf(_T("STAT %s returned:\n\n%s\n"),
+        wxPrintf(wxT("STAT %s returned:\n\n%s\n"),
                file1, ftp->GetLastResult().c_str());
     }
 
     out = ftp->GetOutputStream(file2);
     if ( out )
     {
-        wxPrintf(_T("--- Uploading to %s ---\n"), file1);
+        wxPrintf(wxT("--- Uploading to %s ---\n"), file1);
         out->Write("Second hello", 12);
         delete out;
     }
@@ -2671,7 +2671,7 @@ public:
 
     virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH)
     {
-        wxPuts(_T("Stack dump:"));
+        wxPuts(wxT("Stack dump:"));
 
         wxStackWalker::Walk(skip, maxdepth);
     }
@@ -2712,7 +2712,7 @@ protected:
 
 static void TestStackWalk(const char *argv0)
 {
-    wxPuts(_T("*** Testing wxStackWalker ***\n"));
+    wxPuts(wxT("*** Testing wxStackWalker ***\n"));
 
     StackDump dump(argv0);
     dump.Walk();
@@ -2733,27 +2733,27 @@ static void TestStackWalk(const char *argv0)
 
 static void TestStandardPaths()
 {
-    wxPuts(_T("*** Testing wxStandardPaths ***\n"));
+    wxPuts(wxT("*** Testing wxStandardPaths ***\n"));
 
-    wxTheApp->SetAppName(_T("console"));
+    wxTheApp->SetAppName(wxT("console"));
 
     wxStandardPathsBase& stdp = wxStandardPaths::Get();
-    wxPrintf(_T("Config dir (sys):\t%s\n"), stdp.GetConfigDir().c_str());
-    wxPrintf(_T("Config dir (user):\t%s\n"), stdp.GetUserConfigDir().c_str());
-    wxPrintf(_T("Data dir (sys):\t\t%s\n"), stdp.GetDataDir().c_str());
-    wxPrintf(_T("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir().c_str());
-    wxPrintf(_T("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
-    wxPrintf(_T("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
-    wxPrintf(_T("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir().c_str());
-    wxPrintf(_T("Executable path:\t%s\n"), stdp.GetExecutablePath().c_str());
-    wxPrintf(_T("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
-    wxPrintf(_T("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
-    wxPrintf(_T("Localized res. dir:\t%s\n"),
-             stdp.GetLocalizedResourcesDir(_T("fr")).c_str());
-    wxPrintf(_T("Message catalogs dir:\t%s\n"),
+    wxPrintf(wxT("Config dir (sys):\t%s\n"), stdp.GetConfigDir().c_str());
+    wxPrintf(wxT("Config dir (user):\t%s\n"), stdp.GetUserConfigDir().c_str());
+    wxPrintf(wxT("Data dir (sys):\t\t%s\n"), stdp.GetDataDir().c_str());
+    wxPrintf(wxT("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir().c_str());
+    wxPrintf(wxT("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
+    wxPrintf(wxT("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
+    wxPrintf(wxT("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir().c_str());
+    wxPrintf(wxT("Executable path:\t%s\n"), stdp.GetExecutablePath().c_str());
+    wxPrintf(wxT("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
+    wxPrintf(wxT("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
+    wxPrintf(wxT("Localized res. dir:\t%s\n"),
+             stdp.GetLocalizedResourcesDir(wxT("fr")).c_str());
+    wxPrintf(wxT("Message catalogs dir:\t%s\n"),
              stdp.GetLocalizedResourcesDir
                   (
-                    _T("fr"),
+                    wxT("fr"),
                     wxStandardPaths::ResourceCat_Messages
                   ).c_str());
 }
@@ -2771,9 +2771,9 @@ static void TestStandardPaths()
 
 static void TestFileStream()
 {
-    wxPuts(_T("*** Testing wxFileInputStream ***"));
+    wxPuts(wxT("*** Testing wxFileInputStream ***"));
 
-    static const wxString filename = _T("testdata.fs");
+    static const wxString filename = wxT("testdata.fs");
     {
         wxFileOutputStream fsOut(filename);
         fsOut.Write("foo", 3);
@@ -2781,7 +2781,7 @@ static void TestFileStream()
 
     {
         wxFileInputStream fsIn(filename);
-        wxPrintf(_T("File stream size: %u\n"), fsIn.GetSize());
+        wxPrintf(wxT("File stream size: %u\n"), fsIn.GetSize());
         int c;
         while ( (c=fsIn.GetC()) != wxEOF  )
         {
@@ -2791,42 +2791,42 @@ static void TestFileStream()
 
     if ( !wxRemoveFile(filename) )
     {
-        wxPrintf(_T("ERROR: failed to remove the file '%s'.\n"), filename.c_str());
+        wxPrintf(wxT("ERROR: failed to remove the file '%s'.\n"), filename.c_str());
     }
 
-    wxPuts(_T("\n*** wxFileInputStream test done ***"));
+    wxPuts(wxT("\n*** wxFileInputStream test done ***"));
 }
 
 static void TestMemoryStream()
 {
-    wxPuts(_T("*** Testing wxMemoryOutputStream ***"));
+    wxPuts(wxT("*** Testing wxMemoryOutputStream ***"));
 
     wxMemoryOutputStream memOutStream;
-    wxPrintf(_T("Initially out stream offset: %lu\n"),
+    wxPrintf(wxT("Initially out stream offset: %lu\n"),
              (unsigned long)memOutStream.TellO());
 
-    for ( const wxChar *p = _T("Hello, stream!"); *p; p++ )
+    for ( const wxChar *p = wxT("Hello, stream!"); *p; p++ )
     {
         memOutStream.PutC(*p);
     }
 
-    wxPrintf(_T("Final out stream offset: %lu\n"),
+    wxPrintf(wxT("Final out stream offset: %lu\n"),
              (unsigned long)memOutStream.TellO());
 
-    wxPuts(_T("*** Testing wxMemoryInputStream ***"));
+    wxPuts(wxT("*** Testing wxMemoryInputStream ***"));
 
     wxChar buf[1024];
     size_t len = memOutStream.CopyTo(buf, WXSIZEOF(buf));
 
     wxMemoryInputStream memInpStream(buf, len);
-    wxPrintf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
+    wxPrintf(wxT("Memory stream size: %u\n"), memInpStream.GetSize());
     int c;
     while ( (c=memInpStream.GetC()) != wxEOF )
     {
         wxPutchar(c);
     }
 
-    wxPuts(_T("\n*** wxMemoryInputStream test done ***"));
+    wxPuts(wxT("\n*** wxMemoryInputStream test done ***"));
 }
 
 #endif // TEST_STREAMS
@@ -2842,35 +2842,35 @@ static void TestMemoryStream()
 
 static void TestStopWatch()
 {
-    wxPuts(_T("*** Testing wxStopWatch ***\n"));
+    wxPuts(wxT("*** Testing wxStopWatch ***\n"));
 
     wxStopWatch sw;
     sw.Pause();
-    wxPrintf(_T("Initially paused, after 2 seconds time is..."));
+    wxPrintf(wxT("Initially paused, after 2 seconds time is..."));
     fflush(stdout);
     wxSleep(2);
-    wxPrintf(_T("\t%ldms\n"), sw.Time());
+    wxPrintf(wxT("\t%ldms\n"), sw.Time());
 
-    wxPrintf(_T("Resuming stopwatch and sleeping 3 seconds..."));
+    wxPrintf(wxT("Resuming stopwatch and sleeping 3 seconds..."));
     fflush(stdout);
     sw.Resume();
     wxSleep(3);
-    wxPrintf(_T("\telapsed time: %ldms\n"), sw.Time());
+    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
 
     sw.Pause();
-    wxPrintf(_T("Pausing agan and sleeping 2 more seconds..."));
+    wxPrintf(wxT("Pausing agan and sleeping 2 more seconds..."));
     fflush(stdout);
     wxSleep(2);
-    wxPrintf(_T("\telapsed time: %ldms\n"), sw.Time());
+    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
 
     sw.Resume();
-    wxPrintf(_T("Finally resuming and sleeping 2 more seconds..."));
+    wxPrintf(wxT("Finally resuming and sleeping 2 more seconds..."));
     fflush(stdout);
     wxSleep(2);
-    wxPrintf(_T("\telapsed time: %ldms\n"), sw.Time());
+    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
 
     wxStopWatch sw2;
-    wxPuts(_T("\nChecking for 'backwards clock' bug..."));
+    wxPuts(wxT("\nChecking for 'backwards clock' bug..."));
     for ( size_t n = 0; n < 70; n++ )
     {
         sw2.Start();
@@ -2879,7 +2879,7 @@ static void TestStopWatch()
         {
             if ( sw.Time() < 0 || sw2.Time() < 0 )
             {
-                wxPuts(_T("\ntime is negative - ERROR!"));
+                wxPuts(wxT("\ntime is negative - ERROR!"));
             }
         }
 
@@ -2887,7 +2887,7 @@ static void TestStopWatch()
         fflush(stdout);
     }
 
-    wxPuts(_T(", ok."));
+    wxPuts(wxT(", ok."));
 }
 
 #include "wx/timer.h"
@@ -2895,7 +2895,7 @@ static void TestStopWatch()
 
 void TestTimer()
 {
-    wxPuts(_T("*** Testing wxTimer ***\n"));
+    wxPuts(wxT("*** Testing wxTimer ***\n"));
 
     class MyTimer : public wxTimer
     {
@@ -2904,16 +2904,16 @@ void TestTimer()
 
         virtual void Notify()
         {
-            wxPrintf(_T("%d"), m_num++);
+            wxPrintf(wxT("%d"), m_num++);
             fflush(stdout);
 
             if ( m_num == 10 )
             {
-                wxPrintf(_T("... exiting the event loop"));
+                wxPrintf(wxT("... exiting the event loop"));
                 Stop();
 
                 wxEventLoop::GetActive()->Exit(0);
-                wxPuts(_T(", ok."));
+                wxPuts(wxT(", ok."));
             }
 
             fflush(stdout);
@@ -2952,46 +2952,46 @@ void TestTimer()
 
 static const wxChar *volumeKinds[] =
 {
-    _T("floppy"),
-    _T("hard disk"),
-    _T("CD-ROM"),
-    _T("DVD-ROM"),
-    _T("network volume"),
-    _T("other volume"),
+    wxT("floppy"),
+    wxT("hard disk"),
+    wxT("CD-ROM"),
+    wxT("DVD-ROM"),
+    wxT("network volume"),
+    wxT("other volume"),
 };
 
 static void TestFSVolume()
 {
-    wxPuts(_T("*** Testing wxFSVolume class ***"));
+    wxPuts(wxT("*** Testing wxFSVolume class ***"));
 
     wxArrayString volumes = wxFSVolume::GetVolumes();
     size_t count = volumes.GetCount();
 
     if ( !count )
     {
-        wxPuts(_T("ERROR: no mounted volumes?"));
+        wxPuts(wxT("ERROR: no mounted volumes?"));
         return;
     }
 
-    wxPrintf(_T("%u mounted volumes found:\n"), count);
+    wxPrintf(wxT("%u mounted volumes found:\n"), count);
 
     for ( size_t n = 0; n < count; n++ )
     {
         wxFSVolume vol(volumes[n]);
         if ( !vol.IsOk() )
         {
-            wxPuts(_T("ERROR: couldn't create volume"));
+            wxPuts(wxT("ERROR: couldn't create volume"));
             continue;
         }
 
-        wxPrintf(_T("%u: %s (%s), %s, %s, %s\n"),
+        wxPrintf(wxT("%u: %s (%s), %s, %s, %s\n"),
                  n + 1,
                  vol.GetDisplayName().c_str(),
                  vol.GetName().c_str(),
                  volumeKinds[vol.GetKind()],
-                 vol.IsWritable() ? _T("rw") : _T("ro"),
-                 vol.GetFlags() & wxFS_VOL_REMOVABLE ? _T("removable")
-                                                     : _T("fixed"));
+                 vol.IsWritable() ? wxT("rw") : wxT("ro"),
+                 vol.GetFlags() & wxFS_VOL_REMOVABLE ? wxT("removable")
+                                                     : wxT("fixed"));
     }
 }
 
@@ -3045,14 +3045,14 @@ static const struct Utf8Data
     wxFontEncoding encoding;
 } utf8data[] =
 {
-    { utf8Invalid, WXSIZEOF(utf8Invalid), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
-    { utf8koi8r, WXSIZEOF(utf8koi8r), _T("koi8-r"), wxFONTENCODING_KOI8 },
-    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), _T("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+    { utf8Invalid, WXSIZEOF(utf8Invalid), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+    { utf8koi8r, WXSIZEOF(utf8koi8r), wxT("koi8-r"), wxFONTENCODING_KOI8 },
+    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
 };
 
 static void TestUtf8()
 {
-    wxPuts(_T("*** Testing UTF8 support ***\n"));
+    wxPuts(wxT("*** Testing UTF8 support ***\n"));
 
     char buf[1024];
     wchar_t wbuf[1024];
@@ -3063,25 +3063,25 @@ static void TestUtf8()
         if ( wxConvUTF8.MB2WC(wbuf, (const char *)u8d.text,
                               WXSIZEOF(wbuf)) == (size_t)-1 )
         {
-            wxPuts(_T("ERROR: UTF-8 decoding failed."));
+            wxPuts(wxT("ERROR: UTF-8 decoding failed."));
         }
         else
         {
             wxCSConv conv(u8d.charset);
             if ( conv.WC2MB(buf, wbuf, WXSIZEOF(buf)) == (size_t)-1 )
             {
-                wxPrintf(_T("ERROR: conversion to %s failed.\n"), u8d.charset);
+                wxPrintf(wxT("ERROR: conversion to %s failed.\n"), u8d.charset);
             }
             else
             {
-                wxPrintf(_T("String in %s: %s\n"), u8d.charset, buf);
+                wxPrintf(wxT("String in %s: %s\n"), u8d.charset, buf);
             }
         }
 
         wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text));
         if ( s.empty() )
-            s = _T("<< conversion failed >>");
-        wxPrintf(_T("String in current cset: %s\n"), s.c_str());
+            s = wxT("<< conversion failed >>");
+        wxPrintf(wxT("String in current cset: %s\n"), s.c_str());
 
     }
 
@@ -3090,7 +3090,7 @@ static void TestUtf8()
 
 static void TestEncodingConverter()
 {
-    wxPuts(_T("*** Testing wxEncodingConverter ***\n"));
+    wxPuts(wxT("*** Testing wxEncodingConverter ***\n"));
 
     // using wxEncodingConverter should give the same result as above
     char buf[1024];
@@ -3098,14 +3098,14 @@ static void TestEncodingConverter()
     if ( wxConvUTF8.MB2WC(wbuf, (const char *)utf8koi8r,
                           WXSIZEOF(utf8koi8r)) == (size_t)-1 )
     {
-        wxPuts(_T("ERROR: UTF-8 decoding failed."));
+        wxPuts(wxT("ERROR: UTF-8 decoding failed."));
     }
     else
     {
         wxEncodingConverter ec;
         ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
         ec.Convert(wbuf, buf);
-        wxPrintf(_T("The same KOI8-R string using wxEC: %s\n"), buf);
+        wxPrintf(wxT("The same KOI8-R string using wxEC: %s\n"), buf);
     }
 
     wxPuts(wxEmptyString);
@@ -3123,21 +3123,21 @@ static void TestEncodingConverter()
 #include "wx/fs_zip.h"
 #include "wx/zipstrm.h"
 
-static const wxChar *TESTFILE_ZIP = _T("testdata.zip");
+static const wxChar *TESTFILE_ZIP = wxT("testdata.zip");
 
 static void TestZipStreamRead()
 {
-    wxPuts(_T("*** Testing ZIP reading ***\n"));
+    wxPuts(wxT("*** Testing ZIP reading ***\n"));
 
-    static const wxString filename = _T("foo");
+    static const wxString filename = wxT("foo");
     wxFFileInputStream in(TESTFILE_ZIP);
     wxZipInputStream istr(in);
     wxZipEntry entry(filename);
     istr.OpenEntry(entry);
 
-    wxPrintf(_T("Archive size: %u\n"), istr.GetSize());
+    wxPrintf(wxT("Archive size: %u\n"), istr.GetSize());
 
-    wxPrintf(_T("Dumping the file '%s':\n"), filename.c_str());
+    wxPrintf(wxT("Dumping the file '%s':\n"), filename.c_str());
     int c;
     while ( (c=istr.GetC()) != wxEOF )
     {
@@ -3145,31 +3145,31 @@ static void TestZipStreamRead()
         fflush(stdout);
     }
 
-    wxPuts(_T("\n----- done ------"));
+    wxPuts(wxT("\n----- done ------"));
 }
 
 static void DumpZipDirectory(wxFileSystem& fs,
                              const wxString& dir,
                              const wxString& indent)
 {
-    wxString prefix = wxString::Format(_T("%s#zip:%s"),
+    wxString prefix = wxString::Format(wxT("%s#zip:%s"),
                                          TESTFILE_ZIP, dir.c_str());
-    wxString wildcard = prefix + _T("/*");
+    wxString wildcard = prefix + wxT("/*");
 
     wxString dirname = fs.FindFirst(wildcard, wxDIR);
     while ( !dirname.empty() )
     {
-        if ( !dirname.StartsWith(prefix + _T('/'), &dirname) )
+        if ( !dirname.StartsWith(prefix + wxT('/'), &dirname) )
         {
-            wxPrintf(_T("ERROR: unexpected wxFileSystem::FindNext result\n"));
+            wxPrintf(wxT("ERROR: unexpected wxFileSystem::FindNext result\n"));
 
             break;
         }
 
-        wxPrintf(_T("%s%s\n"), indent.c_str(), dirname.c_str());
+        wxPrintf(wxT("%s%s\n"), indent.c_str(), dirname.c_str());
 
         DumpZipDirectory(fs, dirname,
-                         indent + wxString(_T(' '), 4));
+                         indent + wxString(wxT(' '), 4));
 
         dirname = fs.FindNext();
     }
@@ -3179,12 +3179,12 @@ static void DumpZipDirectory(wxFileSystem& fs,
     {
         if ( !filename.StartsWith(prefix, &filename) )
         {
-            wxPrintf(_T("ERROR: unexpected wxFileSystem::FindNext result\n"));
+            wxPrintf(wxT("ERROR: unexpected wxFileSystem::FindNext result\n"));
 
             break;
         }
 
-        wxPrintf(_T("%s%s\n"), indent.c_str(), filename.c_str());
+        wxPrintf(wxT("%s%s\n"), indent.c_str(), filename.c_str());
 
         filename = fs.FindNext();
     }
@@ -3192,13 +3192,13 @@ static void DumpZipDirectory(wxFileSystem& fs,
 
 static void TestZipFileSystem()
 {
-    wxPuts(_T("*** Testing ZIP file system ***\n"));
+    wxPuts(wxT("*** Testing ZIP file system ***\n"));
 
     wxFileSystem::AddHandler(new wxZipFSHandler);
     wxFileSystem fs;
-    wxPrintf(_T("Dumping all files in the archive %s:\n"), TESTFILE_ZIP);
+    wxPrintf(wxT("Dumping all files in the archive %s:\n"), TESTFILE_ZIP);
 
-    DumpZipDirectory(fs, _T(""), wxString(_T(' '), 4));
+    DumpZipDirectory(fs, wxT(""), wxString(wxT(' '), 4));
 }
 
 #endif // TEST_ZIP
@@ -3218,17 +3218,17 @@ static void TestZipFileSystem()
 
 static void TestTimeStatic()
 {
-    wxPuts(_T("\n*** wxDateTime static methods test ***"));
+    wxPuts(wxT("\n*** wxDateTime static methods test ***"));
 
     // some info about the current date
     int year = wxDateTime::GetCurrentYear();
-    wxPrintf(_T("Current year %d is %sa leap one and has %d days.\n"),
+    wxPrintf(wxT("Current year %d is %sa leap one and has %d days.\n"),
            year,
            wxDateTime::IsLeapYear(year) ? "" : "not ",
            wxDateTime::GetNumberOfDays(year));
 
     wxDateTime::Month month = wxDateTime::GetCurrentMonth();
-    wxPrintf(_T("Current month is '%s' ('%s') and it has %d days\n"),
+    wxPrintf(wxT("Current month is '%s' ('%s') and it has %d days\n"),
            wxDateTime::GetMonthName(month, wxDateTime::Name_Abbr).c_str(),
            wxDateTime::GetMonthName(month).c_str(),
            wxDateTime::GetNumberOfDays(month));
@@ -3237,23 +3237,23 @@ static void TestTimeStatic()
 // test time zones stuff
 static void TestTimeZones()
 {
-    wxPuts(_T("\n*** wxDateTime timezone test ***"));
+    wxPuts(wxT("\n*** wxDateTime timezone test ***"));
 
     wxDateTime now = wxDateTime::Now();
 
-    wxPrintf(_T("Current GMT time:\t%s\n"), now.Format(_T("%c"), wxDateTime::GMT0).c_str());
-    wxPrintf(_T("Unix epoch (GMT):\t%s\n"), wxDateTime((time_t)0).Format(_T("%c"), wxDateTime::GMT0).c_str());
-    wxPrintf(_T("Unix epoch (EST):\t%s\n"), wxDateTime((time_t)0).Format(_T("%c"), wxDateTime::EST).c_str());
-    wxPrintf(_T("Current time in Paris:\t%s\n"), now.Format(_T("%c"), wxDateTime::CET).c_str());
-    wxPrintf(_T("               Moscow:\t%s\n"), now.Format(_T("%c"), wxDateTime::MSK).c_str());
-    wxPrintf(_T("             New York:\t%s\n"), now.Format(_T("%c"), wxDateTime::EST).c_str());
+    wxPrintf(wxT("Current GMT time:\t%s\n"), now.Format(wxT("%c"), wxDateTime::GMT0).c_str());
+    wxPrintf(wxT("Unix epoch (GMT):\t%s\n"), wxDateTime((time_t)0).Format(wxT("%c"), wxDateTime::GMT0).c_str());
+    wxPrintf(wxT("Unix epoch (EST):\t%s\n"), wxDateTime((time_t)0).Format(wxT("%c"), wxDateTime::EST).c_str());
+    wxPrintf(wxT("Current time in Paris:\t%s\n"), now.Format(wxT("%c"), wxDateTime::CET).c_str());
+    wxPrintf(wxT("               Moscow:\t%s\n"), now.Format(wxT("%c"), wxDateTime::MSK).c_str());
+    wxPrintf(wxT("             New York:\t%s\n"), now.Format(wxT("%c"), wxDateTime::EST).c_str());
 
-    wxPrintf(_T("%s\n"), wxDateTime::Now().Format(_T("Our timezone is %Z")).c_str());
+    wxPrintf(wxT("%s\n"), wxDateTime::Now().Format(wxT("Our timezone is %Z")).c_str());
 
     wxDateTime::Tm tm = now.GetTm();
     if ( wxDateTime(tm) != now )
     {
-        wxPrintf(_T("ERROR: got %s instead of %s\n"),
+        wxPrintf(wxT("ERROR: got %s instead of %s\n"),
                  wxDateTime(tm).Format().c_str(), now.Format().c_str());
     }
 }
@@ -3261,33 +3261,33 @@ static void TestTimeZones()
 // test some minimal support for the dates outside the standard range
 static void TestTimeRange()
 {
-    wxPuts(_T("\n*** wxDateTime out-of-standard-range dates test ***"));
+    wxPuts(wxT("\n*** wxDateTime out-of-standard-range dates test ***"));
 
-    static const wxChar *fmt = _T("%d-%b-%Y %H:%M:%S");
+    static const wxChar *fmt = wxT("%d-%b-%Y %H:%M:%S");
 
-    wxPrintf(_T("Unix epoch:\t%s\n"),
+    wxPrintf(wxT("Unix epoch:\t%s\n"),
              wxDateTime(2440587.5).Format(fmt).c_str());
-    wxPrintf(_T("Feb 29, 0: \t%s\n"),
+    wxPrintf(wxT("Feb 29, 0: \t%s\n"),
              wxDateTime(29, wxDateTime::Feb, 0).Format(fmt).c_str());
-    wxPrintf(_T("JDN 0:     \t%s\n"),
+    wxPrintf(wxT("JDN 0:     \t%s\n"),
              wxDateTime(0.0).Format(fmt).c_str());
-    wxPrintf(_T("Jan 1, 1AD:\t%s\n"),
+    wxPrintf(wxT("Jan 1, 1AD:\t%s\n"),
              wxDateTime(1, wxDateTime::Jan, 1).Format(fmt).c_str());
-    wxPrintf(_T("May 29, 2099:\t%s\n"),
+    wxPrintf(wxT("May 29, 2099:\t%s\n"),
              wxDateTime(29, wxDateTime::May, 2099).Format(fmt).c_str());
 }
 
 // test DST calculations
 static void TestTimeDST()
 {
-    wxPuts(_T("\n*** wxDateTime DST test ***"));
+    wxPuts(wxT("\n*** wxDateTime DST test ***"));
 
-    wxPrintf(_T("DST is%s in effect now.\n\n"),
-             wxDateTime::Now().IsDST() ? wxEmptyString : _T(" not"));
+    wxPrintf(wxT("DST is%s in effect now.\n\n"),
+             wxDateTime::Now().IsDST() ? wxEmptyString : wxT(" not"));
 
     for ( int year = 1990; year < 2005; year++ )
     {
-        wxPrintf(_T("DST period in Europe for year %d: from %s to %s\n"),
+        wxPrintf(wxT("DST period in Europe for year %d: from %s to %s\n"),
                  year,
                  wxDateTime::GetBeginDST(year, wxDateTime::Country_EEC).Format().c_str(),
                  wxDateTime::GetEndDST(year, wxDateTime::Country_EEC).Format().c_str());
@@ -3300,13 +3300,13 @@ static void TestTimeDST()
 
 static void TestDateTimeInteractive()
 {
-    wxPuts(_T("\n*** interactive wxDateTime tests ***"));
+    wxPuts(wxT("\n*** interactive wxDateTime tests ***"));
 
     wxChar buf[128];
 
     for ( ;; )
     {
-        wxPrintf(_T("Enter a date: "));
+        wxPrintf(wxT("Enter a date: "));
         if ( !wxFgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
@@ -3317,24 +3317,24 @@ static void TestDateTimeInteractive()
         const wxChar *p = dt.ParseDate(buf);
         if ( !p )
         {
-            wxPrintf(_T("ERROR: failed to parse the date '%s'.\n"), buf);
+            wxPrintf(wxT("ERROR: failed to parse the date '%s'.\n"), buf);
 
             continue;
         }
         else if ( *p )
         {
-            wxPrintf(_T("WARNING: parsed only first %u characters.\n"), p - buf);
+            wxPrintf(wxT("WARNING: parsed only first %u characters.\n"), p - buf);
         }
 
-        wxPrintf(_T("%s: day %u, week of month %u/%u, week of year %u\n"),
-                 dt.Format(_T("%b %d, %Y")).c_str(),
+        wxPrintf(wxT("%s: day %u, week of month %u/%u, week of year %u\n"),
+                 dt.Format(wxT("%b %d, %Y")).c_str(),
                  dt.GetDayOfYear(),
                  dt.GetWeekOfMonth(wxDateTime::Monday_First),
                  dt.GetWeekOfMonth(wxDateTime::Sunday_First),
                  dt.GetWeekOfYear(wxDateTime::Monday_First));
     }
 
-    wxPuts(_T("\n*** done ***"));
+    wxPuts(wxT("\n*** done ***"));
 }
 
 #endif // TEST_INTERACTIVE
@@ -3343,39 +3343,39 @@ static void TestDateTimeInteractive()
 
 static void TestTimeMS()
 {
-    wxPuts(_T("*** testing millisecond-resolution support in wxDateTime ***"));
+    wxPuts(wxT("*** testing millisecond-resolution support in wxDateTime ***"));
 
     wxDateTime dt1 = wxDateTime::Now(),
                dt2 = wxDateTime::UNow();
 
-    wxPrintf(_T("Now = %s\n"), dt1.Format(_T("%H:%M:%S:%l")).c_str());
-    wxPrintf(_T("UNow = %s\n"), dt2.Format(_T("%H:%M:%S:%l")).c_str());
-    wxPrintf(_T("Dummy loop: "));
+    wxPrintf(wxT("Now = %s\n"), dt1.Format(wxT("%H:%M:%S:%l")).c_str());
+    wxPrintf(wxT("UNow = %s\n"), dt2.Format(wxT("%H:%M:%S:%l")).c_str());
+    wxPrintf(wxT("Dummy loop: "));
     for ( int i = 0; i < 6000; i++ )
     {
         //for ( int j = 0; j < 10; j++ )
         {
             wxString s;
-            s.Printf(_T("%g"), sqrt((float)i));
+            s.Printf(wxT("%g"), sqrt((float)i));
         }
 
         if ( !(i % 100) )
             wxPutchar('.');
     }
-    wxPuts(_T(", done"));
+    wxPuts(wxT(", done"));
 
     dt1 = dt2;
     dt2 = wxDateTime::UNow();
-    wxPrintf(_T("UNow = %s\n"), dt2.Format(_T("%H:%M:%S:%l")).c_str());
+    wxPrintf(wxT("UNow = %s\n"), dt2.Format(wxT("%H:%M:%S:%l")).c_str());
 
-    wxPrintf(_T("Loop executed in %s ms\n"), (dt2 - dt1).Format(_T("%l")).c_str());
+    wxPrintf(wxT("Loop executed in %s ms\n"), (dt2 - dt1).Format(wxT("%l")).c_str());
 
-    wxPuts(_T("\n*** done ***"));
+    wxPuts(wxT("\n*** done ***"));
 }
 
 static void TestTimeHolidays()
 {
-    wxPuts(_T("\n*** testing wxDateTimeHolidayAuthority ***\n"));
+    wxPuts(wxT("\n*** testing wxDateTimeHolidayAuthority ***\n"));
 
     wxDateTime::Tm tm = wxDateTime(29, wxDateTime::May, 2000).GetTm();
     wxDateTime dtStart(1, tm.mon, tm.year),
@@ -3384,15 +3384,15 @@ static void TestTimeHolidays()
     wxDateTimeArray hol;
     wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
 
-    const wxChar *format = _T("%d-%b-%Y (%a)");
+    const wxChar *format = wxT("%d-%b-%Y (%a)");
 
-    wxPrintf(_T("All holidays between %s and %s:\n"),
+    wxPrintf(wxT("All holidays between %s and %s:\n"),
            dtStart.Format(format).c_str(), dtEnd.Format(format).c_str());
 
     size_t count = hol.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        wxPrintf(_T("\t%s\n"), hol[n].Format(format).c_str());
+        wxPrintf(wxT("\t%s\n"), hol[n].Format(format).c_str());
     }
 
     wxPuts(wxEmptyString);
@@ -3400,13 +3400,13 @@ static void TestTimeHolidays()
 
 static void TestTimeZoneBug()
 {
-    wxPuts(_T("\n*** testing for DST/timezone bug ***\n"));
+    wxPuts(wxT("\n*** testing for DST/timezone bug ***\n"));
 
     wxDateTime date = wxDateTime(1, wxDateTime::Mar, 2000);
     for ( int i = 0; i < 31; i++ )
     {
-        wxPrintf(_T("Date %s: week day %s.\n"),
-               date.Format(_T("%d-%m-%Y")).c_str(),
+        wxPrintf(wxT("Date %s: week day %s.\n"),
+               date.Format(wxT("%d-%m-%Y")).c_str(),
                date.GetWeekDayName(date.GetWeekDay()).c_str());
 
         date += wxDateSpan::Day();
@@ -3417,24 +3417,24 @@ static void TestTimeZoneBug()
 
 static void TestTimeSpanFormat()
 {
-    wxPuts(_T("\n*** wxTimeSpan tests ***"));
+    wxPuts(wxT("\n*** wxTimeSpan tests ***"));
 
     static const wxChar *formats[] =
     {
-        _T("(default) %H:%M:%S"),
-        _T("%E weeks and %D days"),
-        _T("%l milliseconds"),
-        _T("(with ms) %H:%M:%S:%l"),
-        _T("100%% of minutes is %M"),       // test "%%"
-        _T("%D days and %H hours"),
-        _T("or also %S seconds"),
+        wxT("(default) %H:%M:%S"),
+        wxT("%E weeks and %D days"),
+        wxT("%l milliseconds"),
+        wxT("(with ms) %H:%M:%S:%l"),
+        wxT("100%% of minutes is %M"),       // test "%%"
+        wxT("%D days and %H hours"),
+        wxT("or also %S seconds"),
     };
 
     wxTimeSpan ts1(1, 2, 3, 4),
                 ts2(111, 222, 333);
     for ( size_t n = 0; n < WXSIZEOF(formats); n++ )
     {
-        wxPrintf(_T("ts1 = %s\tts2 = %s\n"),
+        wxPrintf(wxT("ts1 = %s\tts2 = %s\n"),
                ts1.Format(formats[n]).c_str(),
                ts2.Format(formats[n]).c_str());
     }
@@ -3457,13 +3457,13 @@ static void TestTimeSpanFormat()
 
 static void TestTextInputStream()
 {
-    wxPuts(_T("\n*** wxTextInputStream test ***"));
+    wxPuts(wxT("\n*** wxTextInputStream test ***"));
 
-    wxString filename = _T("testdata.fc");
+    wxString filename = wxT("testdata.fc");
     wxFileInputStream fsIn(filename);
     if ( !fsIn.Ok() )
     {
-        wxPuts(_T("ERROR: couldn't open file."));
+        wxPuts(wxT("ERROR: couldn't open file."));
     }
     else
     {
@@ -3479,7 +3479,7 @@ static void TestTextInputStream()
             if ( fsIn.Eof() && s.empty() )
                 break;
 
-            wxPrintf(_T("Line %d: %s\n"), line++, s.c_str());
+            wxPrintf(wxT("Line %d: %s\n"), line++, s.c_str());
         }
     }
 }
@@ -3580,7 +3580,7 @@ wxThread::ExitCode MyDetachedThread::Entry()
 
 void MyDetachedThread::OnExit()
 {
-    wxLogTrace(_T("thread"), _T("Thread %ld is in OnExit"), GetId());
+    wxLogTrace(wxT("thread"), wxT("Thread %ld is in OnExit"), GetId());
 
     wxCriticalSectionLocker lock(gs_critsect);
     if ( !--gs_counter && !m_cancelled )
@@ -3589,7 +3589,7 @@ void MyDetachedThread::OnExit()
 
 static void TestDetachedThreads()
 {
-    wxPuts(_T("\n*** Testing detached threads ***"));
+    wxPuts(wxT("\n*** Testing detached threads ***"));
 
     static const size_t nThreads = 3;
     MyDetachedThread *threads[nThreads];
@@ -3615,19 +3615,19 @@ static void TestDetachedThreads()
 
 static void TestJoinableThreads()
 {
-    wxPuts(_T("\n*** Testing a joinable thread (a loooong calculation...) ***"));
+    wxPuts(wxT("\n*** Testing a joinable thread (a loooong calculation...) ***"));
 
     // calc 10! in the background
     MyJoinableThread thread(10);
     thread.Run();
 
-    wxPrintf(_T("\nThread terminated with exit code %lu.\n"),
+    wxPrintf(wxT("\nThread terminated with exit code %lu.\n"),
              (unsigned long)thread.Wait());
 }
 
 static void TestThreadSuspend()
 {
-    wxPuts(_T("\n*** Testing thread suspend/resume functions ***"));
+    wxPuts(wxT("\n*** Testing thread suspend/resume functions ***"));
 
     MyDetachedThread *thread = new MyDetachedThread(15, 'X');
 
@@ -3645,18 +3645,18 @@ static void TestThreadSuspend()
     {
         thread->Pause();
 
-        wxPuts(_T("\nThread suspended"));
+        wxPuts(wxT("\nThread suspended"));
         if ( n > 0 )
         {
             // don't sleep but resume immediately the first time
             wxThread::Sleep(300);
         }
-        wxPuts(_T("Going to resume the thread"));
+        wxPuts(wxT("Going to resume the thread"));
 
         thread->Resume();
     }
 
-    wxPuts(_T("Waiting until it terminates now"));
+    wxPuts(wxT("Waiting until it terminates now"));
 
     // wait until the thread terminates
     gs_cond.Wait();
@@ -3671,13 +3671,13 @@ static void TestThreadDelete()
     // running when we delete it - deleting a detached thread which already
     // terminated will lead to a crash!
 
-    wxPuts(_T("\n*** Testing thread delete function ***"));
+    wxPuts(wxT("\n*** Testing thread delete function ***"));
 
     MyDetachedThread *thread0 = new MyDetachedThread(30, 'W');
 
     thread0->Delete();
 
-    wxPuts(_T("\nDeleted a thread which didn't start to run yet."));
+    wxPuts(wxT("\nDeleted a thread which didn't start to run yet."));
 
     MyDetachedThread *thread1 = new MyDetachedThread(30, 'Y');
 
@@ -3687,7 +3687,7 @@ static void TestThreadDelete()
 
     thread1->Delete();
 
-    wxPuts(_T("\nDeleted a running thread."));
+    wxPuts(wxT("\nDeleted a running thread."));
 
     MyDetachedThread *thread2 = new MyDetachedThread(30, 'Z');
 
@@ -3699,14 +3699,14 @@ static void TestThreadDelete()
 
     thread2->Delete();
 
-    wxPuts(_T("\nDeleted a sleeping thread."));
+    wxPuts(wxT("\nDeleted a sleeping thread."));
 
     MyJoinableThread thread3(20);
     thread3.Run();
 
     thread3.Delete();
 
-    wxPuts(_T("\nDeleted a joinable thread."));
+    wxPuts(wxT("\nDeleted a joinable thread."));
 
     MyJoinableThread thread4(2);
     thread4.Run();
@@ -3715,7 +3715,7 @@ static void TestThreadDelete()
 
     thread4.Delete();
 
-    wxPuts(_T("\nDeleted a joinable thread which already terminated."));
+    wxPuts(wxT("\nDeleted a joinable thread which already terminated."));
 
     wxPuts(wxEmptyString);
 }
@@ -3733,19 +3733,19 @@ public:
 
     virtual ExitCode Entry()
     {
-        wxPrintf(_T("Thread %lu has started running.\n"), GetId());
+        wxPrintf(wxT("Thread %lu has started running.\n"), GetId());
         fflush(stdout);
 
         gs_cond.Post();
 
-        wxPrintf(_T("Thread %lu starts to wait...\n"), GetId());
+        wxPrintf(wxT("Thread %lu starts to wait...\n"), GetId());
         fflush(stdout);
 
         m_mutex->Lock();
         m_condition->Wait();
         m_mutex->Unlock();
 
-        wxPrintf(_T("Thread %lu finished to wait, exiting.\n"), GetId());
+        wxPrintf(wxT("Thread %lu finished to wait, exiting.\n"), GetId());
         fflush(stdout);
 
         return 0;
@@ -3763,7 +3763,7 @@ static void TestThreadConditions()
 
     // otherwise its difficult to understand which log messages pertain to
     // which condition
-    //wxLogTrace(_T("thread"), _T("Local condition var is %08x, gs_cond = %08x"),
+    //wxLogTrace(wxT("thread"), wxT("Local condition var is %08x, gs_cond = %08x"),
     //           condition.GetId(), gs_cond.GetId());
 
     // create and launch threads
@@ -3781,7 +3781,7 @@ static void TestThreadConditions()
     }
 
     // wait until all threads run
-    wxPuts(_T("Main thread is waiting for the other threads to start"));
+    wxPuts(wxT("Main thread is waiting for the other threads to start"));
     fflush(stdout);
 
     size_t nRunning = 0;
@@ -3791,18 +3791,18 @@ static void TestThreadConditions()
 
         nRunning++;
 
-        wxPrintf(_T("Main thread: %u already running\n"), nRunning);
+        wxPrintf(wxT("Main thread: %u already running\n"), nRunning);
         fflush(stdout);
     }
 
-    wxPuts(_T("Main thread: all threads started up."));
+    wxPuts(wxT("Main thread: all threads started up."));
     fflush(stdout);
 
     wxThread::Sleep(500);
 
 #if 1
     // now wake one of them up
-    wxPrintf(_T("Main thread: about to signal the condition.\n"));
+    wxPrintf(wxT("Main thread: about to signal the condition.\n"));
     fflush(stdout);
     condition.Signal();
 #endif
@@ -3810,7 +3810,7 @@ static void TestThreadConditions()
     wxThread::Sleep(200);
 
     // wake all the (remaining) threads up, so that they can exit
-    wxPrintf(_T("Main thread: about to broadcast the condition.\n"));
+    wxPrintf(wxT("Main thread: about to broadcast the condition.\n"));
     fflush(stdout);
     condition.Broadcast();
 
@@ -3834,17 +3834,17 @@ public:
 
     virtual ExitCode Entry()
     {
-        wxPrintf(_T("%s: Thread #%d (%ld) starting to wait for semaphore...\n"),
+        wxPrintf(wxT("%s: Thread #%d (%ld) starting to wait for semaphore...\n"),
                  wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         m_sem->Wait();
 
-        wxPrintf(_T("%s: Thread #%d (%ld) acquired the semaphore.\n"),
+        wxPrintf(wxT("%s: Thread #%d (%ld) acquired the semaphore.\n"),
                  wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         Sleep(1000);
 
-        wxPrintf(_T("%s: Thread #%d (%ld) releasing the semaphore.\n"),
+        wxPrintf(wxT("%s: Thread #%d (%ld) releasing the semaphore.\n"),
                  wxDateTime::Now().FormatTime().c_str(), m_i, (long)GetId());
 
         m_sem->Post();
@@ -3861,7 +3861,7 @@ WX_DEFINE_ARRAY_PTR(wxThread *, ArrayThreads);
 
 static void TestSemaphore()
 {
-    wxPuts(_T("*** Testing wxSemaphore class. ***"));
+    wxPuts(wxT("*** Testing wxSemaphore class. ***"));
 
     static const int SEM_LIMIT = 3;
 
@@ -3923,22 +3923,22 @@ int main(int argc, char **argv)
 
 #ifdef TEST_SNGLINST
     wxSingleInstanceChecker checker;
-    if ( checker.Create(_T(".wxconsole.lock")) )
+    if ( checker.Create(wxT(".wxconsole.lock")) )
     {
         if ( checker.IsAnotherRunning() )
         {
-            wxPrintf(_T("Another instance of the program is running, exiting.\n"));
+            wxPrintf(wxT("Another instance of the program is running, exiting.\n"));
 
             return 1;
         }
 
         // wait some time to give time to launch another instance
-        wxPrintf(_T("Press \"Enter\" to continue..."));
+        wxPrintf(wxT("Press \"Enter\" to continue..."));
         wxFgetc(stdin);
     }
     else // failed to create
     {
-        wxPrintf(_T("Failed to init wxSingleInstanceChecker.\n"));
+        wxPrintf(wxT("Failed to init wxSingleInstanceChecker.\n"));
     }
 #endif // TEST_SNGLINST
 
@@ -3970,14 +3970,14 @@ int main(int argc, char **argv)
 
     wxCmdLineParser parser(cmdLineDesc, argc, wxArgv);
 
-    parser.AddOption(_T("project_name"), _T(""), _T("full path to project file"),
+    parser.AddOption(wxT("project_name"), wxT(""), wxT("full path to project file"),
                      wxCMD_LINE_VAL_STRING,
                      wxCMD_LINE_OPTION_MANDATORY | wxCMD_LINE_NEEDS_SEPARATOR);
 
     switch ( parser.Parse() )
     {
         case -1:
-            wxLogMessage(_T("Help was given, terminating."));
+            wxLogMessage(wxT("Help was given, terminating."));
             break;
 
         case 0:
@@ -3985,7 +3985,7 @@ int main(int argc, char **argv)
             break;
 
         default:
-            wxLogMessage(_T("Syntax error detected, aborting."));
+            wxLogMessage(wxT("Syntax error detected, aborting."));
             break;
     }
 #endif // wxUSE_CMDLINE_PARSER
@@ -4018,19 +4018,19 @@ int main(int argc, char **argv)
 #endif // TEST_LOCALE
 
 #ifdef TEST_LOG
-    wxPuts(_T("*** Testing wxLog ***"));
+    wxPuts(wxT("*** Testing wxLog ***"));
 
     wxString s;
     for ( size_t n = 0; n < 8000; n++ )
     {
-        s << (wxChar)(_T('A') + (n % 26));
+        s << (wxChar)(wxT('A') + (n % 26));
     }
 
-    wxLogWarning(_T("The length of the string is %lu"),
+    wxLogWarning(wxT("The length of the string is %lu"),
                  (unsigned long)s.length());
 
     wxString msg;
-    msg.Printf(_T("A very very long message: '%s', the end!\n"), s.c_str());
+    msg.Printf(wxT("A very very long message: '%s', the end!\n"), s.c_str());
 
     // this one shouldn't be truncated
     wxPrintf(msg);
@@ -4038,7 +4038,7 @@ int main(int argc, char **argv)
     // but this one will because log functions use fixed size buffer
     // (note that it doesn't need '\n' at the end neither - will be added
     //  by wxLog anyhow)
-    wxLogMessage(_T("A very very long message 2: '%s', the end!"), s.c_str());
+    wxLogMessage(wxT("A very very long message 2: '%s', the end!"), s.c_str());
 #endif // TEST_LOG
 
 #ifdef TEST_FILE
@@ -4091,7 +4091,7 @@ int main(int argc, char **argv)
 #endif // TEST_FTP
 
 #ifdef TEST_MIME
-    //wxLog::AddTraceMask(_T("mime"));
+    //wxLog::AddTraceMask(wxT("mime"));
     TestMimeEnum();
 #if 0
     TestMimeOverride();
@@ -4152,7 +4152,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();
-    wxPrintf(_T("This system has %d CPUs\n"), nCPUs);
+    wxPrintf(wxT("This system has %d CPUs\n"), nCPUs);
     if ( nCPUs != -1 )
         wxThread::SetConcurrency(nCPUs);
 
@@ -4206,7 +4206,7 @@ int main(int argc, char **argv)
 #endif
 
 #ifdef TEST_USLEEP
-    wxPuts(_T("Sleeping for 3 seconds... z-z-z-z-z..."));
+    wxPuts(wxT("Sleeping for 3 seconds... z-z-z-z-z..."));
     wxUsleep(3000);
 #endif // TEST_USLEEP
 

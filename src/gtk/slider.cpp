@@ -100,7 +100,7 @@ static inline wxEventType GtkScrollTypeToWx(int scrollType)
         eventType = wxEVT_SCROLL_THUMBTRACK;
         break;
     default:
-        wxFAIL_MSG(_T("Unknown GtkScrollType"));
+        wxFAIL_MSG(wxT("Unknown GtkScrollType"));
         eventType = wxEVT_NULL;
         break;
     }

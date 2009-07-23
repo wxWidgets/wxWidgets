@@ -158,7 +158,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     // Create a listbox to display the validated data.
     m_listbox = new wxListBox(this, wxID_ANY);
-    m_listbox->Append(wxString(_T("Try 'File|Test' to see how validators work.")));
+    m_listbox->Append(wxString(wxT("Try 'File|Test' to see how validators work.")));
 
     wxMenu *file_menu = new wxMenu;
 
@@ -202,19 +202,19 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         // automatically transferred to the variables we specified
         // when we created the validators.
         m_listbox->Clear();
-        m_listbox->Append(wxString(_T("string: ")) + g_data.m_string);
-        m_listbox->Append(wxString(_T("string #2: ")) + g_data.m_string2);
+        m_listbox->Append(wxString(wxT("string: ")) + g_data.m_string);
+        m_listbox->Append(wxString(wxT("string #2: ")) + g_data.m_string2);
 
         for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
         {
             int j = g_data.m_listbox_choices[i];
-            m_listbox->Append(wxString(_T("listbox choice(s): ")) + g_listbox_choices[j]);
+            m_listbox->Append(wxString(wxT("listbox choice(s): ")) + g_listbox_choices[j]);
         }
 
-        wxString checkbox_state(g_data.m_checkbox_state ? _T("checked") : _T("unchecked"));
-        m_listbox->Append(wxString(_T("checkbox: ")) + checkbox_state);
-        m_listbox->Append(wxString(_T("combobox: ")) + g_data.m_combobox_choice);
-        m_listbox->Append(wxString(_T("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
+        wxString checkbox_state(g_data.m_checkbox_state ? wxT("checked") : wxT("unchecked"));
+        m_listbox->Append(wxString(wxT("checkbox: ")) + checkbox_state);
+        m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
+        m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
     }
 }
 

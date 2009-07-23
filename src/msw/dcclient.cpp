@@ -93,7 +93,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner ) :
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
    wxMSWDCImpl( owner )
 {
-    wxCHECK_RET( window, _T("invalid window in wxWindowDCImpl") );
+    wxCHECK_RET( window, wxT("invalid window in wxWindowDCImpl") );
 
     m_window = window;
     m_hDC = (WXHDC) ::GetWindowDC(GetHwndOf(m_window));
@@ -117,7 +117,7 @@ void wxWindowDCImpl::InitDC()
 
 void wxWindowDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_window, _T("wxWindowDCImpl without a window?") );
+    wxCHECK_RET( m_window, wxT("wxWindowDCImpl without a window?") );
 
     m_window->GetSize(width, height);
 }
@@ -136,7 +136,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner ) :
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
    wxWindowDCImpl( owner )
 {
-    wxCHECK_RET( window, _T("invalid window in wxClientDCImpl") );
+    wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
 
     m_window = window;
     m_hDC = (WXHDC)::GetDC(GetHwndOf(window));
@@ -177,7 +177,7 @@ wxClientDCImpl::~wxClientDCImpl()
 
 void wxClientDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_window, _T("wxClientDCImpl without a window?") );
+    wxCHECK_RET( m_window, wxT("wxClientDCImpl without a window?") );
 
     m_window->GetClientSize(width, height);
 }

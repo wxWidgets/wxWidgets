@@ -62,51 +62,51 @@ void UniCharTestCase::CharCompare()
 
     CPPUNIT_ASSERT( a == a );
     CPPUNIT_ASSERT( a == 'a' );
-    CPPUNIT_ASSERT( a == _T('a') );
+    CPPUNIT_ASSERT( a == wxT('a') );
     CPPUNIT_ASSERT( a == wxUniChar('a') );
-    CPPUNIT_ASSERT( a == wxUniChar(_T('a')) );
+    CPPUNIT_ASSERT( a == wxUniChar(wxT('a')) );
 
     CPPUNIT_ASSERT( a != b );
     CPPUNIT_ASSERT( a != 'b' );
-    CPPUNIT_ASSERT( a != _T('b') );
+    CPPUNIT_ASSERT( a != wxT('b') );
     CPPUNIT_ASSERT( a != wxUniChar('b') );
-    CPPUNIT_ASSERT( a != wxUniChar(_T('b')) );
+    CPPUNIT_ASSERT( a != wxUniChar(wxT('b')) );
 
     CPPUNIT_ASSERT( a < b );
     CPPUNIT_ASSERT( a < 'b' );
-    CPPUNIT_ASSERT( a < _T('b') );
+    CPPUNIT_ASSERT( a < wxT('b') );
     CPPUNIT_ASSERT( a < wxUniChar('b') );
-    CPPUNIT_ASSERT( a < wxUniChar(_T('b')) );
+    CPPUNIT_ASSERT( a < wxUniChar(wxT('b')) );
 
     CPPUNIT_ASSERT( a <= b );
     CPPUNIT_ASSERT( a <= 'b' );
-    CPPUNIT_ASSERT( a <= _T('b') );
+    CPPUNIT_ASSERT( a <= wxT('b') );
     CPPUNIT_ASSERT( a <= wxUniChar('b') );
-    CPPUNIT_ASSERT( a <= wxUniChar(_T('b')) );
+    CPPUNIT_ASSERT( a <= wxUniChar(wxT('b')) );
 
     CPPUNIT_ASSERT( a <= a );
     CPPUNIT_ASSERT( a <= 'a' );
-    CPPUNIT_ASSERT( a <= _T('a') );
+    CPPUNIT_ASSERT( a <= wxT('a') );
     CPPUNIT_ASSERT( a <= wxUniChar('a') );
-    CPPUNIT_ASSERT( a <= wxUniChar(_T('a')) );
+    CPPUNIT_ASSERT( a <= wxUniChar(wxT('a')) );
 
     CPPUNIT_ASSERT( b > a );
     CPPUNIT_ASSERT( b > 'a' );
-    CPPUNIT_ASSERT( b > _T('a') );
+    CPPUNIT_ASSERT( b > wxT('a') );
     CPPUNIT_ASSERT( b > wxUniChar('a') );
-    CPPUNIT_ASSERT( b > wxUniChar(_T('a')) );
+    CPPUNIT_ASSERT( b > wxUniChar(wxT('a')) );
 
     CPPUNIT_ASSERT( b >= a );
     CPPUNIT_ASSERT( b >= 'a' );
-    CPPUNIT_ASSERT( b >= _T('a') );
+    CPPUNIT_ASSERT( b >= wxT('a') );
     CPPUNIT_ASSERT( b >= wxUniChar('a') );
-    CPPUNIT_ASSERT( b >= wxUniChar(_T('a')) );
+    CPPUNIT_ASSERT( b >= wxUniChar(wxT('a')) );
 
     CPPUNIT_ASSERT( b >= b );
     CPPUNIT_ASSERT( b >= 'b' );
-    CPPUNIT_ASSERT( b >= _T('b') );
+    CPPUNIT_ASSERT( b >= wxT('b') );
     CPPUNIT_ASSERT( b >= wxUniChar('b') );
-    CPPUNIT_ASSERT( b >= wxUniChar(_T('b')) );
+    CPPUNIT_ASSERT( b >= wxUniChar(wxT('b')) );
 
     CPPUNIT_ASSERT( b - a == 1 );
     CPPUNIT_ASSERT( a - b == -1 );
@@ -163,7 +163,7 @@ void UniCharTestCase::StringCompare()
     wxString sa = "a";
     const wxString sb = "b";
     char c1 = 'a';
-    wchar_t c2 = _T('a');
+    wchar_t c2 = wxT('a');
     wxUniChar c3 = 'a';
 
     CPPUNIT_ASSERT( sa == 'a');

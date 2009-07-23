@@ -97,7 +97,7 @@ wxDirData::wxDirData(const wxString& dirname)
 
     // throw away the trailing slashes
     size_t n = m_dirname.length();
-    wxCHECK_RET( n, _T("empty dir name in wxDir") );
+    wxCHECK_RET( n, wxT("empty dir name in wxDir") );
 
     while ( n > 0 && m_dirname[--n] == '/' )
         ;
@@ -119,7 +119,7 @@ void wxDirData::Close()
     {
         if ( svfs_dir_endfind (m_dir) != 0 )
         {
-            wxLogLastError(_T("svfs_dir_endfind"));
+            wxLogLastError(wxT("svfs_dir_endfind"));
         }
         m_dir = NULL;
     }
@@ -135,7 +135,7 @@ bool wxDirData::Read(wxString *filename)
 
     // speed up string concatenation in the loop a bit
     wxString path = m_dirname;
-    path += _T('/');
+    path += wxT('/');
     path.reserve(path.length() + 255);
 
     wxString de_d_name;
@@ -237,7 +237,7 @@ wxString wxDir::GetName() const
     if ( m_data )
     {
         name = M_DIR->GetName();
-        if ( !name.empty() && (name.Last() == _T('/')) )
+        if ( !name.empty() && (name.Last() == wxT('/')) )
         {
             // chop off the last (back)slash
             name.Truncate(name.length() - 1);
@@ -260,7 +260,7 @@ bool wxDir::GetFirst(wxString *filename,
                      const wxString& filespec,
                      int flags) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
     M_DIR->Close();
     M_DIR->SetFileSpec(filespec);
     M_DIR->SetFlags(flags);
@@ -269,8 +269,8 @@ bool wxDir::GetFirst(wxString *filename,
 
 bool wxDir::GetNext(wxString *filename) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
-    wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
+    wxCHECK_MSG( filename, false, wxT("bad pointer in wxDir::GetNext()") );
     return M_DIR->Read(filename);
 }
 

@@ -122,9 +122,9 @@ wxPen::wxPen(const wxColour& colour, int width, int style)
 
 wxPen::wxPen(const wxBitmap& stipple, int width)
 {
-    wxCHECK_RET( stipple.Ok(), _T("invalid bitmap") );
+    wxCHECK_RET( stipple.Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( stipple.GetWidth() == 8 && stipple.GetHeight() == 8,
-                  _T("stipple bitmap must be 8x8") );
+                  wxT("stipple bitmap must be 8x8") );
 
     m_refData = new wxPenRefData();
     M_PENDATA->m_width = width;
@@ -186,9 +186,9 @@ void wxPen::SetStyle(wxPenStyle style)
 
 void wxPen::SetStipple(const wxBitmap& stipple)
 {
-    wxCHECK_RET( stipple.Ok(), _T("invalid bitmap") );
+    wxCHECK_RET( stipple.Ok(), wxT("invalid bitmap") );
     wxCHECK_RET( stipple.GetWidth() == 8 && stipple.GetHeight() == 8,
-                  _T("stipple bitmap must be 8x8") );
+                  wxT("stipple bitmap must be 8x8") );
 
     AllocExclusive();
     M_PENDATA->m_stipple = stipple;

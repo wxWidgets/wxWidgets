@@ -51,12 +51,12 @@ public:
 #if 0 // just for debugging
     MyDllRenderer()
     {
-        wxMessageBox(_T("Creating MyDllRenderer"), _T("Renderer Sample"));
+        wxMessageBox(wxT("Creating MyDllRenderer"), wxT("Renderer Sample"));
     }
 
     virtual ~MyDllRenderer()
     {
-        wxMessageBox(_T("Deleting MyDllRenderer"), _T("Renderer Sample"));
+        wxMessageBox(wxT("Deleting MyDllRenderer"), wxT("Renderer Sample"));
     }
 #endif // 0
 };

@@ -44,11 +44,11 @@ extern WXDLLIMPEXP_DATA_ADV(const char) wxGridNameStr[];
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
 // type names for grid table values
-#define wxGRID_VALUE_STRING     _T("string")
-#define wxGRID_VALUE_BOOL       _T("bool")
-#define wxGRID_VALUE_NUMBER     _T("long")
-#define wxGRID_VALUE_FLOAT      _T("double")
-#define wxGRID_VALUE_CHOICE     _T("choice")
+#define wxGRID_VALUE_STRING     wxT("string")
+#define wxGRID_VALUE_BOOL       wxT("bool")
+#define wxGRID_VALUE_NUMBER     wxT("long")
+#define wxGRID_VALUE_FLOAT      wxT("double")
+#define wxGRID_VALUE_CHOICE     wxT("choice")
 
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
@@ -2144,7 +2144,7 @@ public:
     // more than once
     void Create(wxGrid *grid)
     {
-        wxASSERT_MSG( !m_grid, _T("shouldn't be called more than once") );
+        wxASSERT_MSG( !m_grid, wxT("shouldn't be called more than once") );
 
         Init(grid);
     }

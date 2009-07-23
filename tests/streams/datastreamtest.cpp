@@ -75,7 +75,7 @@ DataStreamTestCase::DataStreamTestCase()
 static
 wxFloat64 TestFloatRW(wxFloat64 fValue)
 {
-    wxFileOutputStream* pFileOutput = new wxFileOutputStream( _T("mytext.dat") );
+    wxFileOutputStream* pFileOutput = new wxFileOutputStream( wxT("mytext.dat") );
     wxDataOutputStream* pDataOutput = new wxDataOutputStream( *pFileOutput );
 
     *pDataOutput << fValue;
@@ -83,7 +83,7 @@ wxFloat64 TestFloatRW(wxFloat64 fValue)
     delete pDataOutput;
     delete pFileOutput;
 
-    wxFileInputStream* pFileInput = new wxFileInputStream( _T("mytext.dat") );
+    wxFileInputStream* pFileInput = new wxFileInputStream( wxT("mytext.dat") );
     wxDataInputStream* pDataInput = new wxDataInputStream( *pFileInput );
 
     wxFloat64 fInFloat;
@@ -115,14 +115,14 @@ private:
         ValueArray InValues(Size);
 
         {
-            wxFileOutputStream FileOutput( _T("mytext.dat") );
+            wxFileOutputStream FileOutput( wxT("mytext.dat") );
             wxDataOutputStream DataOutput( FileOutput );
 
             (DataOutput.*pfnWriter)(Values, Size);
         }
 
         {
-            wxFileInputStream FileInput( _T("mytext.dat") );
+            wxFileInputStream FileInput( wxT("mytext.dat") );
             wxDataInputStream DataInput( FileInput );
 
             (DataInput.*pfnReader)(&*InValues.begin(), InValues.size());
@@ -165,14 +165,14 @@ T TestRW(const T &Value)
     T InValue;
 
     {
-        wxFileOutputStream FileOutput( _T("mytext.dat") );
+        wxFileOutputStream FileOutput( wxT("mytext.dat") );
         wxDataOutputStream DataOutput( FileOutput );
 
         DataOutput << Value;
     }
 
     {
-        wxFileInputStream FileInput( _T("mytext.dat") );
+        wxFileInputStream FileInput( wxT("mytext.dat") );
         wxDataInputStream DataInput( FileInput );
 
         DataInput >> InValue;

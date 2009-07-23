@@ -145,7 +145,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     //     tag if we used Content-Type header).
 #if wxUSE_UNICODE
     int charsetPos;
-    if ((charsetPos = file.GetMimeType().Find(_T("; charset="))) != wxNOT_FOUND)
+    if ((charsetPos = file.GetMimeType().Find(wxT("; charset="))) != wxNOT_FOUND)
     {
         wxString charset = file.GetMimeType().Mid(charsetPos + 10);
         wxCSConv conv(charset);
@@ -175,7 +175,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     {
         wxString hdr;
         wxString mime = file.GetMimeType();
-        hdr.Printf(_T("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime.c_str());
+        hdr.Printf(wxT("<meta http-equiv=\"Content-Type\" content=\"%s\">"), mime.c_str());
         return hdr+doc;
     }
 #endif

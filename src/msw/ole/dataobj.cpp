@@ -54,7 +54,7 @@
 #include "wx/msw/dib.h"
 
 #ifndef CFSTR_SHELLURL
-#define CFSTR_SHELLURL _T("UniformResourceLocator")
+#define CFSTR_SHELLURL wxT("UniformResourceLocator")
 #endif
 
 // ----------------------------------------------------------------------------
@@ -1154,7 +1154,7 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
 // Work around bug in Wine headers
 #if defined(__WINE__) && defined(CFSTR_SHELLURL) && wxUSE_UNICODE
 #undef CFSTR_SHELLURL
-#define CFSTR_SHELLURL _T("CFSTR_SHELLURL")
+#define CFSTR_SHELLURL wxT("CFSTR_SHELLURL")
 #endif
 
 class CFSTR_SHELLURLDataObject : public wxCustomDataObject
@@ -1234,7 +1234,7 @@ bool wxURLDataObject::SetData(const wxDataFormat& format,
 wxString wxURLDataObject::GetURL() const
 {
     wxString url;
-    wxCHECK_MSG( m_dataObjectLast, url, _T("no data in wxURLDataObject") );
+    wxCHECK_MSG( m_dataObjectLast, url, wxT("no data in wxURLDataObject") );
 
     size_t len = m_dataObjectLast->GetDataSize();
 

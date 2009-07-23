@@ -201,9 +201,9 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // find the static control to replace: normally there are two of them, the
     // icon and the text itself so search for all of them and ignore the icon
     // ones
-    HWND hwndStatic = ::FindWindowEx(GetHwnd(), NULL, _T("STATIC"), NULL);
+    HWND hwndStatic = ::FindWindowEx(GetHwnd(), NULL, wxT("STATIC"), NULL);
     if ( ::GetWindowLong(hwndStatic, GWL_STYLE) & SS_ICON )
-        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, _T("STATIC"), NULL);
+        hwndStatic = ::FindWindowEx(GetHwnd(), hwndStatic, wxT("STATIC"), NULL);
 
     if ( !hwndStatic )
     {
@@ -258,7 +258,7 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // do create the new control
     HWND hwndEdit = ::CreateWindow
                       (
-                        _T("EDIT"),
+                        wxT("EDIT"),
                         wxTextBuffer::Translate(text).wx_str(),
                         WS_CHILD | WS_VSCROLL | WS_VISIBLE |
                         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL,
@@ -557,7 +557,7 @@ int wxMessageDialog::ShowModal()
     switch (msAns)
     {
         default:
-            wxFAIL_MSG(_T("unexpected ::MessageBox() return code"));
+            wxFAIL_MSG(wxT("unexpected ::MessageBox() return code"));
             // fall through
 
         case IDCANCEL:

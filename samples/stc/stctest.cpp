@@ -56,19 +56,19 @@
 // declarations
 //============================================================================
 
-#define APP_NAME _T("STC-Test")
+#define APP_NAME wxT("STC-Test")
 #define APP_DESCR _("See http://wxguide.sourceforge.net/")
 
-#define APP_MAINT _T("Otto Wyss")
-#define APP_VENDOR _T("wxWidgets")
-#define APP_COPYRIGTH _T("(C) 2003 Otto Wyss")
-#define APP_LICENCE _T("wxWidgets")
+#define APP_MAINT wxT("Otto Wyss")
+#define APP_VENDOR wxT("wxWidgets")
+#define APP_COPYRIGTH wxT("(C) 2003 Otto Wyss")
+#define APP_LICENCE wxT("wxWidgets")
 
-#define APP_VERSION _T("0.1.alpha")
+#define APP_VERSION wxT("0.1.alpha")
 #define APP_BUILD __DATE__
 
-#define APP_WEBSITE _T("http://www.wxWidgets.org")
-#define APP_MAIL _T("mailto://???")
+#define APP_WEBSITE wxT("http://www.wxWidgets.org")
+#define APP_MAIL wxT("mailto://???")
 
 #define NONAME _("<untitled>")
 
@@ -206,7 +206,7 @@ bool App::OnInit () {
     SetVendorName (APP_VENDOR);
     g_appname = new wxString ();
     g_appname->Append (APP_VENDOR);
-    g_appname->Append (_T("-"));
+    g_appname->Append (wxT("-"));
     g_appname->Append (APP_NAME);
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -313,7 +313,7 @@ AppFrame::AppFrame (const wxString &title)
     // set icon and background
     SetTitle (*g_appname);
     SetIcon (wxICON (mondrian));
-    SetBackgroundColour (_T("WHITE"));
+    SetBackgroundColour (wxT("WHITE"));
 
     // about box shown for 1 seconds
     AppAbout dlg(this, 1000);
@@ -326,7 +326,7 @@ AppFrame::AppFrame (const wxString &title)
     m_edit = new Edit (this, wxID_ANY);
     m_edit->SetFocus();
 
-    FileOpen (_T("stctest.cpp"));
+    FileOpen (wxT("stctest.cpp"));
 }
 
 AppFrame::~AppFrame () {
@@ -356,7 +356,7 @@ void AppFrame::OnFileOpen (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
 #if wxUSE_FILEDLG
     wxString fname;
-    wxFileDialog dlg (this, _T("Open file"), wxEmptyString, wxEmptyString, _T("Any file (*)|*"),
+    wxFileDialog dlg (this, wxT("Open file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
     if (dlg.ShowModal() != wxID_OK) return;
     fname = dlg.GetPath ();
@@ -378,7 +378,7 @@ void AppFrame::OnFileSaveAs (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
 #if wxUSE_FILEDLG
     wxString filename = wxEmptyString;
-    wxFileDialog dlg (this, _T("Save file"), wxEmptyString, wxEmptyString, _T("Any file (*)|*"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    wxFileDialog dlg (this, wxT("Save file"), wxEmptyString, wxEmptyString, wxT("Any file (*)|*"), wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() != wxID_OK) return;
     filename = dlg.GetPath();
     m_edit->SaveFile (filename);

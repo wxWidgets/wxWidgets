@@ -45,10 +45,10 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame()
-        : wxFrame(NULL, wxID_ANY, _T("wxWidgets Power Management Sample"),
+        : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Power Management Sample"),
                   wxDefaultPosition, wxSize(500, 200))
     {
-        wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, _T(""),
+        wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                           wxDefaultPosition, wxDefaultSize,
                                           wxTE_MULTILINE | wxTE_READONLY);
         m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(text));
@@ -81,28 +81,28 @@ private:
 #ifdef wxHAS_POWER_EVENTS
     void OnSuspending(wxPowerEvent& event)
     {
-        wxLogMessage(_T("System suspend starting..."));
-        if ( wxMessageBox(_T("Veto suspend?"), _T("Please answer"),
+        wxLogMessage(wxT("System suspend starting..."));
+        if ( wxMessageBox(wxT("Veto suspend?"), wxT("Please answer"),
                           wxYES_NO, this) == wxYES )
         {
             event.Veto();
-            wxLogMessage(_T("Vetoed suspend."));
+            wxLogMessage(wxT("Vetoed suspend."));
         }
     }
 
     void OnSuspended(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(_T("System is going to suspend."));
+        wxLogMessage(wxT("System is going to suspend."));
     }
 
     void OnSuspendCancel(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(_T("System suspend was cancelled."));
+        wxLogMessage(wxT("System suspend was cancelled."));
     }
 
     void OnResume(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(_T("System resumed from suspend."));
+        wxLogMessage(wxT("System resumed from suspend."));
     }
 #endif // wxHAS_POWER_EVENTS
 
@@ -113,19 +113,19 @@ private:
         switch ( m_powerType = powerType )
         {
             case wxPOWER_SOCKET:
-                powerStr = _T("wall");
+                powerStr = wxT("wall");
                 break;
 
             case wxPOWER_BATTERY:
-                powerStr = _T("battery");
+                powerStr = wxT("battery");
                 break;
 
             default:
-                wxFAIL_MSG(_T("unknown wxPowerType value"));
+                wxFAIL_MSG(wxT("unknown wxPowerType value"));
                 // fall through
 
             case wxPOWER_UNKNOWN:
-                powerStr = _T("psychic");
+                powerStr = wxT("psychic");
                 break;
         }
 
@@ -133,32 +133,32 @@ private:
         switch ( m_batteryState = batteryState )
         {
             case wxBATTERY_NORMAL_STATE:
-                batteryStr = _T("charged");
+                batteryStr = wxT("charged");
                 break;
 
             case wxBATTERY_LOW_STATE:
-                batteryStr = _T("low");
+                batteryStr = wxT("low");
                 break;
 
             case wxBATTERY_CRITICAL_STATE:
-                batteryStr = _T("critical");
+                batteryStr = wxT("critical");
                 break;
 
             case wxBATTERY_SHUTDOWN_STATE:
-                batteryStr = _T("empty");
+                batteryStr = wxT("empty");
                 break;
 
             default:
-                wxFAIL_MSG(_T("unknown wxBatteryState value"));
+                wxFAIL_MSG(wxT("unknown wxBatteryState value"));
                 // fall through
 
             case wxBATTERY_UNKNOWN_STATE:
-                batteryStr = _T("unknown");
+                batteryStr = wxT("unknown");
                 break;
         }
 
         SetStatusText(wxString::Format(
-                        _T("System is on %s power, battery state is %s"),
+                        wxT("System is on %s power, battery state is %s"),
                         powerStr.c_str(),
                         batteryStr.c_str()));
     }

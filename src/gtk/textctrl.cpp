@@ -243,10 +243,10 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 
         const wxArrayInt& tabs = attr.GetTabs();
 
-        wxString tagname = _T("WXTABS");
+        wxString tagname = wxT("WXTABS");
         g_snprintf(buf, sizeof(buf), "WXTABS");
         for (size_t i = 0; i < tabs.GetCount(); i++)
-            tagname += wxString::Format(_T(" %d"), tabs[i]);
+            tagname += wxString::Format(wxT(" %d"), tabs[i]);
 
         const wxWX2MBbuf buftag = tagname.utf8_str();
 
@@ -1613,7 +1613,7 @@ void wxTextCtrl::ChangeFontGlobally()
     //
     // TODO: it can be implemented much more efficiently for GTK2
     wxASSERT_MSG( IsMultiLine(),
-                  _T("shouldn't be called for single line controls") );
+                  wxT("shouldn't be called for single line controls") );
 
     wxString value = GetValue();
     if ( !value.empty() )
@@ -1665,7 +1665,7 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         gint l = gtk_text_buffer_get_char_count( m_buffer );
 
         wxCHECK_MSG( start >= 0 && end <= l, false,
-                     _T("invalid range in wxTextCtrl::SetStyle") );
+                     wxT("invalid range in wxTextCtrl::SetStyle") );
 
         GtkTextIter starti, endi;
         gtk_text_buffer_get_iter_at_offset( m_buffer, &starti, start );

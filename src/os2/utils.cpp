@@ -50,8 +50,8 @@ extern "C"
     #include <netbios.h>
 #endif
 
-static const wxChar WX_SECTION[] = _T("wxWidgets");
-static const wxChar eHOSTNAME[]  = _T("HostName");
+static const wxChar WX_SECTION[] = wxT("wxWidgets");
+static const wxChar eHOSTNAME[]  = wxT("HostName");
 
 // For the following functions we SHOULD fill in support
 // for Windows-NT (which I don't know) as I assume it begin
@@ -81,10 +81,10 @@ bool wxGetHostName( wxChar* zBuf, int nMaxSize )
     strcpy(zBuf, zServer);
 #else
     wxChar*        zSysname;
-    const wxChar*  zDefaultHost = _T("noname");
+    const wxChar*  zDefaultHost = wxT("noname");
 
-    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL &&
-	(zSysname = wxGetenv(_T("HOSTNAME"))) == NULL)
+    if ((zSysname = wxGetenv(wxT("SYSTEM_NAME"))) == NULL &&
+	(zSysname = wxGetenv(wxT("HOSTNAME"))) == NULL)
     {
         ::PrfQueryProfileString( HINI_PROFILE
                                 ,(PSZ)WX_SECTION
@@ -93,7 +93,7 @@ bool wxGetHostName( wxChar* zBuf, int nMaxSize )
                                 ,(void*)zBuf
                                 ,(ULONG)nMaxSize - 1
                                );
-        zBuf[nMaxSize] = _T('\0');
+        zBuf[nMaxSize] = wxT('\0');
     }
     else
     {
@@ -120,7 +120,7 @@ bool wxGetUserName( wxChar* zBuf, int nMaxSize )
 #ifdef USE_NET_API
     wxGetUserId( zBuf, nMaxSize );
 #else
-    wxStrlcpy(zBuf, _T("Unknown User"), nMaxSize);
+    wxStrlcpy(zBuf, wxT("Unknown User"), nMaxSize);
 #endif
     return true;
 }
@@ -138,7 +138,7 @@ int wxKill(long         lPid,
 //
 bool wxShell( const wxString& rCommand )
 {
-    wxChar*     zShell = _T("CMD.EXE");
+    wxChar*     zShell = wxT("CMD.EXE");
     wxString    sInputs;
     STARTDATA   SData = {0};
     PSZ         PgmTitle = "Command Shell";
@@ -155,7 +155,7 @@ bool wxShell( const wxString& rCommand )
     SData.PgmTitle = PgmTitle;
     SData.PgmName  = (char*)zShell;
 
-    sInputs = _T("/C ") + rCommand;
+    sInputs = wxT("/C ") + rCommand;
     SData.PgmInputs     = (BYTE*)sInputs.wx_str();
     SData.TermQ         = 0;
     SData.Environment   = 0;
@@ -245,14 +245,14 @@ static bool wxDoSetEnv(const wxString& variable, const char *value)
 #ifdef HAVE_UNSETENV 
         return unsetenv(variable.mb_str()) == 0; 
 #else 
-        value = _T(""); // mustn't pass NULL to setenv() 
+        value = wxT(""); // mustn't pass NULL to setenv() 
 #endif 
     } 
     return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
-        s << _T('=') << value;
+        s << wxT('=') << value;
 
     // transform to ANSI
     const char *p = s.mb_str();
@@ -314,7 +314,7 @@ void wxBell()
 
 wxString wxGetOsDescription()
 {
-    wxString strVer(_T("OS/2"));
+    wxString strVer(wxT("OS/2"));
     ULONG ulSysInfo = 0;
 
     if (::DosQuerySysInfo( QSV_VERSION_MINOR,
@@ -324,7 +324,7 @@ wxString wxGetOsDescription()
                          ) == 0L )
     {
         wxString ver;
-        ver.Printf( _T(" ver. %d.%d"),
+        ver.Printf( wxT(" ver. %d.%d"),
                     int(ulSysInfo / 10),
                     int(ulSysInfo % 10)
                   );
@@ -416,11 +416,11 @@ wxString wxGetUserHome ( const wxString &rUser )
         // Guests belong in the temp dir
         if ( currentUser == "annonymous" )
         {
-            zHome = wxGetenv(_T("TMP"));
+            zHome = wxGetenv(wxT("TMP"));
             if ( !zHome )
-                zHome = wxGetenv(_T("TMPDIR"));
+                zHome = wxGetenv(wxT("TMPDIR"));
             if ( !zHome )
-                zHome = wxGetenv(_T("TEMP"));
+                zHome = wxGetenv(wxT("TEMP"));
 
             if ( zHome && *zHome )
                 return zHome;
@@ -432,7 +432,7 @@ wxString wxGetUserHome ( const wxString &rUser )
 #endif
     if (sUser.empty())
     {
-        if ((zHome = wxGetenv(_T("HOME"))) != NULL)
+        if ((zHome = wxGetenv(wxT("HOME"))) != NULL)
         {
             home = zHome;
             home.Replace("/", "\\");
@@ -459,7 +459,7 @@ bool wxGetDiskSpace(const wxString& path,
     if (wxDirExists(fn.GetFullPath()) == false)
         return false;
 
-    disknum = wxToupper(fn.GetVolume().GetChar(0)) - _T('A') + 1;
+    disknum = wxToupper(fn.GetVolume().GetChar(0)) - wxT('A') + 1;
 
     rc = ::DosQueryFSInfo(disknum,             // 1 = A, 2 = B, 3 = C, ...
                           FSIL_ALLOC,          // allocation info

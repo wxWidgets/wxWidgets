@@ -103,22 +103,22 @@ MyDialog::MyDialog(const wxString& title)
                       (
                         this,
                         wxID_ANY,
-                        _T("Press 'Hide me' to hide this window, Exit to quit.")
+                        wxT("Press 'Hide me' to hide this window, Exit to quit.")
                       ), flags);
 
     sizerTop->Add(new wxStaticText
                       (
                         this,
                         wxID_ANY,
-                        _T("Double-click on the taskbar icon to show me again.")
+                        wxT("Double-click on the taskbar icon to show me again.")
                       ), flags);
 
     sizerTop->AddStretchSpacer()->SetMinSize(200, 50);
 
     wxSizer * const sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxButton(this, wxID_ABOUT, _T("&About")), flags);
-    sizerBtns->Add(new wxButton(this, wxID_OK, _T("&Hide")), flags);
-    sizerBtns->Add(new wxButton(this, wxID_EXIT, _T("E&xit")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_ABOUT, wxT("&About")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_OK, wxT("&Hide")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_EXIT, wxT("E&xit")), flags);
 
     sizerTop->Add(sizerBtns, flags.Align(wxALIGN_CENTER_HORIZONTAL));
     SetSizerAndFit(sizerTop);
@@ -247,20 +247,20 @@ void MyTaskBarIcon::OnMenuSub(wxCommandEvent&)
 wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(PU_RESTORE, _T("&Restore main window"));
+    menu->Append(PU_RESTORE, wxT("&Restore main window"));
     menu->AppendSeparator();
-    menu->Append(PU_NEW_ICON, _T("&Set New Icon"));
+    menu->Append(PU_NEW_ICON, wxT("&Set New Icon"));
     menu->AppendSeparator();
-    menu->AppendCheckItem(PU_CHECKMARK, _T("Test &check mark"));
+    menu->AppendCheckItem(PU_CHECKMARK, wxT("Test &check mark"));
     menu->AppendSeparator();
     wxMenu *submenu = new wxMenu;
-    submenu->Append(PU_SUB1, _T("One submenu"));
+    submenu->Append(PU_SUB1, wxT("One submenu"));
     submenu->AppendSeparator();
-    submenu->Append(PU_SUB2, _T("Another submenu"));
-    menu->Append(PU_SUBMAIN, _T("Submenu"), submenu);
+    submenu->Append(PU_SUB2, wxT("Another submenu"));
+    menu->Append(PU_SUBMAIN, wxT("Submenu"), submenu);
 #ifndef __WXMAC_OSX__ /*Mac has built-in quit menu*/
     menu->AppendSeparator();
-    menu->Append(PU_EXIT,    _T("E&xit"));
+    menu->Append(PU_EXIT,    wxT("E&xit"));
 #endif
     return menu;
 }

@@ -73,7 +73,7 @@ public:
           m_data(NULL), m_evtHandler(NULL) {}
     virtual ~wxSoundBackendSDL();
 
-    wxString GetName() const { return _T("Simple DirectMedia Layer"); }
+    wxString GetName() const { return wxT("Simple DirectMedia Layer"); }
     int GetPriority() const { return 9; }
     bool IsAvailable() const;
     bool HasNativeAsyncPlayback() const { return true; }
@@ -109,8 +109,8 @@ public:
 private:
     void OnNotify(wxSoundBackendSDLNotification& WXUNUSED(event))
     {
-        wxLogTrace(_T("sound"),
-                   _T("received playback status change notification"));
+        wxLogTrace(wxT("sound"),
+                   wxT("received playback status change notification"));
         m_backend->FinishedPlayback();
     }
     wxSoundBackendSDL *m_backend;
@@ -139,7 +139,7 @@ bool wxSoundBackendSDL::IsAvailable() const
             return false;
     }
     wxConstCast(this, wxSoundBackendSDL)->m_initialized = true;
-    wxLogTrace(_T("sound"), _T("initialized SDL audio subsystem"));
+    wxLogTrace(wxT("sound"), wxT("initialized SDL audio subsystem"));
     return true;
 }
 
@@ -208,13 +208,13 @@ bool wxSoundBackendSDL::OpenAudio()
         m_spec.callback = wx_sdl_audio_callback;
         m_spec.userdata = (void*)this;
 
-        wxLogTrace(_T("sound"), _T("opening SDL audio..."));
+        wxLogTrace(wxT("sound"), wxT("opening SDL audio..."));
         if (SDL_OpenAudio(&m_spec, NULL) >= 0)
         {
 #if wxUSE_LOG_DEBUG
             char driver[256];
             SDL_AudioDriverName(driver, 256);
-            wxLogTrace(_T("sound"), _T("opened audio, driver '%s'"),
+            wxLogTrace(wxT("sound"), wxT("opened audio, driver '%s'"),
                        wxString(driver, wxConvLocal).c_str());
 #endif
             m_audioOpen = true;
@@ -235,7 +235,7 @@ void wxSoundBackendSDL::CloseAudio()
     if (m_audioOpen)
     {
         SDL_CloseAudio();
-        wxLogTrace(_T("sound"), _T("closed audio"));
+        wxLogTrace(wxT("sound"), wxT("closed audio"));
         m_audioOpen = false;
     }
 }
@@ -278,7 +278,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
     }
 
     SDL_LockAudio();
-    wxLogTrace(_T("sound"), _T("playing new sound"));
+    wxLogTrace(wxT("sound"), wxT("playing new sound"));
     m_playing = true;
     m_pos = 0;
     m_loop = (flags & wxSOUND_LOOP);
@@ -291,7 +291,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
     // wait until playback finishes if called in sync mode:
     if (!(flags & wxSOUND_ASYNC))
     {
-        wxLogTrace(_T("sound"), _T("waiting for sample to finish"));
+        wxLogTrace(wxT("sound"), wxT("waiting for sample to finish"));
         while (m_playing && m_data == data)
         {
 #if wxUSE_THREADS
@@ -306,7 +306,7 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags,
                 wxMutexGuiEnter();
 #endif
         }
-        wxLogTrace(_T("sound"), _T("sample finished"));
+        wxLogTrace(wxT("sound"), wxT("sample finished"));
     }
 
     return true;

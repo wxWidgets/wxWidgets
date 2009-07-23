@@ -49,7 +49,7 @@ protected:
 
 #define CREATE_STD_ICON(iconId, xpmRc) \
     { \
-        wxIconBundle icon(_T(iconId), wxBITMAP_TYPE_ICON_RESOURCE); \
+        wxIconBundle icon(wxT(iconId), wxBITMAP_TYPE_ICON_RESOURCE); \
         return icon; \
     }
 

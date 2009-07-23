@@ -1147,7 +1147,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
 
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString token = tokenizer.GetNextToken();
     //
@@ -1198,7 +1198,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(_T("%d;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%s;%d"),
              0,                                 // version
              m_pointSize,
              m_family,

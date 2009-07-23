@@ -405,7 +405,7 @@ void wxColourDatabase::AddColour(const wxString& name, const wxColour& colour)
 
     // ... and we also allow both grey/gray
     wxString colNameAlt = colName;
-    if ( !colNameAlt.Replace(_T("GRAY"), _T("GREY")) )
+    if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
     {
         // but in this case it is not necessary so avoid extra search below
         colNameAlt.clear();
@@ -433,7 +433,7 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     wxString colName = colour;
     colName.MakeUpper();
     wxString colNameAlt = colName;
-    if ( !colNameAlt.Replace(_T("GRAY"), _T("GREY")) )
+    if ( !colNameAlt.Replace(wxT("GRAY"), wxT("GREY")) )
         colNameAlt.clear();
 
     wxStringToColourHashMap::iterator it = m_map->find(colName);

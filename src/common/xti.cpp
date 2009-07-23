@@ -114,13 +114,13 @@ const wxChar * wxEnumData::GetEnumMemberNameByIndex( int idx ) const
 template<> void wxStringReadValue(const wxString &s , bool &data )
 {
     int intdata ;
-    wxSscanf(s, _T("%d"), &intdata ) ;
+    wxSscanf(s, wxT("%d"), &intdata ) ;
     data = (bool)intdata ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const bool &data )
 {
-    s = wxString::Format(_T("%d"), data ) ;
+    s = wxString::Format(wxT("%d"), data ) ;
 }
 
 // char
@@ -128,13 +128,13 @@ template<> void wxStringWriteValue(wxString &s , const bool &data )
 template<> void wxStringReadValue(const wxString &s , char &data )
 {
     int intdata ;
-    wxSscanf(s, _T("%d"), &intdata ) ;
+    wxSscanf(s, wxT("%d"), &intdata ) ;
     data = char(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const char &data )
 {
-    s = wxString::Format(_T("%d"), data ) ;
+    s = wxString::Format(wxT("%d"), data ) ;
 }
 
 // unsigned char
@@ -142,85 +142,85 @@ template<> void wxStringWriteValue(wxString &s , const char &data )
 template<> void wxStringReadValue(const wxString &s , unsigned char &data )
 {
     int intdata ;
-    wxSscanf(s, _T("%d"), &intdata ) ;
+    wxSscanf(s, wxT("%d"), &intdata ) ;
     data = (unsigned char)(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned char &data )
 {
-    s = wxString::Format(_T("%d"), data ) ;
+    s = wxString::Format(wxT("%d"), data ) ;
 }
 
 // int
 
 template<> void wxStringReadValue(const wxString &s , int &data )
 {
-    wxSscanf(s, _T("%d"), &data ) ;
+    wxSscanf(s, wxT("%d"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const int &data )
 {
-    s = wxString::Format(_T("%d"), data ) ;
+    s = wxString::Format(wxT("%d"), data ) ;
 }
 
 // unsigned int
 
 template<> void wxStringReadValue(const wxString &s , unsigned int &data )
 {
-    wxSscanf(s, _T("%d"), &data ) ;
+    wxSscanf(s, wxT("%d"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned int &data )
 {
-    s = wxString::Format(_T("%d"), data ) ;
+    s = wxString::Format(wxT("%d"), data ) ;
 }
 
 // long
 
 template<> void wxStringReadValue(const wxString &s , long &data )
 {
-    wxSscanf(s, _T("%ld"), &data ) ;
+    wxSscanf(s, wxT("%ld"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const long &data )
 {
-    s = wxString::Format(_T("%ld"), data ) ;
+    s = wxString::Format(wxT("%ld"), data ) ;
 }
 
 // unsigned long
 
 template<> void wxStringReadValue(const wxString &s , unsigned long &data )
 {
-    wxSscanf(s, _T("%ld"), &data ) ;
+    wxSscanf(s, wxT("%ld"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned long &data )
 {
-    s = wxString::Format(_T("%ld"), data ) ;
+    s = wxString::Format(wxT("%ld"), data ) ;
 }
 
 // float
 
 template<> void wxStringReadValue(const wxString &s , float &data )
 {
-    wxSscanf(s, _T("%f"), &data ) ;
+    wxSscanf(s, wxT("%f"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const float &data )
 {
-    s = wxString::Format(_T("%f"), data ) ;
+    s = wxString::Format(wxT("%f"), data ) ;
 }
 
 // double
 
 template<> void wxStringReadValue(const wxString &s , double &data )
 {
-    wxSscanf(s, _T("%lf"), &data ) ;
+    wxSscanf(s, wxT("%lf"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const double &data )
 {
-    s = wxString::Format(_T("%lf"), data ) ;
+    s = wxString::Format(wxT("%lf"), data ) ;
 }
 
 // wxString

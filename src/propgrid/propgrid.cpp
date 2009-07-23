@@ -2599,7 +2599,7 @@ void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), cons
     }
 #endif
 
-    ::wxMessageBox(msg, _T("Property Error"));
+    ::wxMessageBox(msg, wxT("Property Error"));
 }
 
 // -----------------------------------------------------------------------
@@ -2674,7 +2674,7 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
         wxString msg = m_validationInfo.m_failureMessage;
 
         if ( !msg.length() )
-            msg = _T("You have entered invalid value. Press ESC to cancel editing.");
+            msg = wxT("You have entered invalid value. Press ESC to cancel editing.");
 
         DoShowPropertyError(property, msg);
     }

@@ -512,11 +512,11 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
         int windowStyle = [ m_macWindow styleMask];
         if ( metal && !(windowStyle & NSTexturedBackgroundWindowMask) )
         {
-            wxFAIL_MSG( _T("Metal Style cannot be changed after creation") );
+            wxFAIL_MSG( wxT("Metal Style cannot be changed after creation") );
         }
         else if ( !metal && (windowStyle & NSTexturedBackgroundWindowMask ) )
         {
-            wxFAIL_MSG( _T("Metal Style cannot be changed after creation") );
+            wxFAIL_MSG( wxT("Metal Style cannot be changed after creation") );
         }        
     }
 }

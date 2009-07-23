@@ -16,7 +16,7 @@
 // actions
 // ----------------------------------------------------------------------------
 
-#define wxACTION_CHECKLISTBOX_TOGGLE _T("toggle")
+#define wxACTION_CHECKLISTBOX_TOGGLE wxT("toggle")
 
 // ----------------------------------------------------------------------------
 // wxCheckListBox

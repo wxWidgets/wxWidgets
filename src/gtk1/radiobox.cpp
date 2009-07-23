@@ -145,10 +145,10 @@ static gint gtk_radiobutton_focus_out( GtkWidget *WXUNUSED(widget),
                                        GdkEvent *WXUNUSED(event),
                                        wxRadioBox *win )
 {
-  //    wxASSERT_MSG( win->m_hasFocus, _T("got focus out without any focus in?") );
+  //    wxASSERT_MSG( win->m_hasFocus, wxT("got focus out without any focus in?") );
   // Replace with a warning, else we dump core a lot!
   //  if (!win->m_hasFocus)
-  //      wxLogWarning(_T("Radiobox got focus out without any focus in.") );
+  //      wxLogWarning(wxT("Radiobox got focus out without any focus in.") );
 
     // we might have lost the focus, but may be not - it may have just gone to
     // another button in the same radiobox, so we'll check for it in the next

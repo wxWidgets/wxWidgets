@@ -419,13 +419,13 @@ void MyFrame::OnIdle(wxIdleEvent& event)
         {
             wxTreeItemId idLast = m_treeCtrl->GetLastChild(idRoot);
             status = wxString::Format(
-                _T("Root/last item is %svisible/%svisible"),
-                m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
+                wxT("Root/last item is %svisible/%svisible"),
+                m_treeCtrl->IsVisible(idRoot) ? wxT("") : wxT("not "),
                 idLast.IsOk() && m_treeCtrl->IsVisible(idLast)
-                    ? _T("") : _T("not "));
+                    ? wxT("") : wxT("not "));
         }
         else
-            status = _T("No root item");
+            status = wxT("No root item");
 
         SetStatusText(status, 1);
     }
@@ -538,7 +538,7 @@ void MyFrame::OnHighlight(wxCommandEvent& WXUNUSED(event))
     wxRect r;
     if ( !m_treeCtrl->GetBoundingRect(id, r, true /* text, not full row */) )
     {
-        wxLogMessage(_T("Failed to get bounding item rect"));
+        wxLogMessage(wxT("Failed to get bounding item rect"));
         return;
     }
 
@@ -1228,9 +1228,9 @@ void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
     wxTreeItemId item = event.GetItem();
     wxString text;
     if ( item.IsOk() )
-        text << _T('"') << GetItemText(item).c_str() << _T('"');
+        text << wxT('"') << GetItemText(item).c_str() << wxT('"');
     else
-        text = _T("invalid item");
+        text = wxT("invalid item");
     wxLogMessage(wxT("%s(%s)"), name, text.c_str());
 }
 
@@ -1238,7 +1238,7 @@ void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
 #define TREE_EVENT_HANDLER(name)                                 \
 void MyTreeCtrl::name(wxTreeEvent& event)                        \
 {                                                                \
-    LogEvent(_T(#name), event);                                  \
+    LogEvent(wxT(#name), event);                                  \
     SetLastItem(wxTreeItemId());                                 \
     event.Skip();                                                \
 }
@@ -1464,7 +1464,7 @@ void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
     else if ( itemId == GetRootItem() )
     {
         // test that it is possible to change the text of the item being edited
-        SetItemText(itemId, _T("Editing root item"));
+        SetItemText(itemId, wxT("Editing root item"));
     }
 }
 
@@ -1528,7 +1528,7 @@ void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
     wxPoint screenpt = ClientToScreen(clientpt);
 
     wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
-                 item ? item->GetDesc() : _T(""), screenpt.x, screenpt.y);
+                 item ? item->GetDesc() : wxT(""), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);
     event.Skip();
@@ -1573,7 +1573,7 @@ void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
                                          : NULL;
 
     wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc()
-                                                        : _T(""));
+                                                        : wxT(""));
 
     event.Skip();
 }

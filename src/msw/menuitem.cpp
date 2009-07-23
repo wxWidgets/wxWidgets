@@ -176,7 +176,7 @@ void wxMenuItem::Init()
         SetMarginWidth(GetMarginWidth());
 
     // tell the owner drawing code to show the accel string as well
-    SetAccelString(m_text.AfterFirst(_T('\t')));
+    SetAccelString(m_text.AfterFirst(wxT('\t')));
 #endif // wxUSE_OWNER_DRAWN
 }
 
@@ -232,7 +232,7 @@ void wxMenuItem::SetAsRadioGroupStart()
 void wxMenuItem::SetRadioGroupStart(int start)
 {
     wxASSERT_MSG( !m_isRadioGroupStart,
-                  _T("should only be called for the next radio items") );
+                  wxT("should only be called for the next radio items") );
 
     m_radioGroup.start = start;
 }
@@ -240,7 +240,7 @@ void wxMenuItem::SetRadioGroupStart(int start)
 void wxMenuItem::SetRadioGroupEnd(int end)
 {
     wxASSERT_MSG( m_isRadioGroupStart,
-                  _T("should only be called for the first radio item") );
+                  wxT("should only be called for the first radio item") );
 
     m_radioGroup.end = end;
 }
@@ -292,7 +292,7 @@ void wxMenuItem::Check(bool check)
             const wxMenuItemList& items = m_parentMenu->GetMenuItems();
             int pos = items.IndexOf(this);
             wxCHECK_RET( pos != wxNOT_FOUND,
-                         _T("menuitem not found in the menu items list?") );
+                         wxT("menuitem not found in the menu items list?") );
 
             // get the radio group range
             int start,
@@ -316,7 +316,7 @@ void wxMenuItem::Check(bool check)
             // (NT4 SP6) and I suspect this could happen to the others as well,
             // so don't do it!
             wxCHECK_RET( start != -1 && end != -1,
-                         _T("invalid ::CheckMenuRadioItem() parameter(s)") );
+                         wxT("invalid ::CheckMenuRadioItem() parameter(s)") );
 
             if ( !::CheckMenuRadioItem(hmenu,
                                        start,   // the first radio group item
@@ -324,7 +324,7 @@ void wxMenuItem::Check(bool check)
                                        pos,     // the one to check
                                        MF_BYPOSITION) )
             {
-                wxLogLastError(_T("CheckMenuRadioItem"));
+                wxLogLastError(wxT("CheckMenuRadioItem"));
             }
 #endif // __WIN32__
 
@@ -346,7 +346,7 @@ void wxMenuItem::Check(bool check)
                                  GetMSWId(),
                                  MF_BYCOMMAND | flags) == (DWORD)-1 )
             {
-                wxFAIL_MSG(_T("CheckMenuItem() failed, item not in the menu?"));
+                wxFAIL_MSG(wxT("CheckMenuItem() failed, item not in the menu?"));
             }
         }
     }
@@ -371,7 +371,7 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(m_text) );
 #if wxUSE_OWNER_DRAWN
     // tell the owner drawing code to to show the accel string as well
-    SetAccelString(m_text.AfterFirst(_T('\t')));
+    SetAccelString(m_text.AfterFirst(wxT('\t')));
 #endif
 
     // the item can be not attached to any menu yet and SetItemLabel() is still

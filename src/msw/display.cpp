@@ -88,9 +88,9 @@
 
 // display functions are found in different DLLs under WinCE and normal Win32
 #ifdef __WXWINCE__
-static const wxChar displayDllName[] = _T("coredll.dll");
+static const wxChar displayDllName[] = wxT("coredll.dll");
 #else
-static const wxChar displayDllName[] = _T("user32.dll");
+static const wxChar displayDllName[] = wxT("user32.dll");
 #endif
 
 // ----------------------------------------------------------------------------
@@ -401,7 +401,7 @@ private:
     // system option
 
 #if wxUSE_DIRECTDRAW
-    if ( wxSystemOptions::GetOptionInt(_T("msw.display.directdraw")) )
+    if ( wxSystemOptions::GetOptionInt(wxT("msw.display.directdraw")) )
     {
         wxDisplayFactoryDirectDraw *factoryDD = new wxDisplayFactoryDirectDraw;
         if ( factoryDD->IsOk() )
@@ -433,7 +433,7 @@ void wxDisplayInfo::Initialize()
         WinStruct<MONITORINFOEX> monInfo;
         if ( !gs_GetMonitorInfo(m_hmon, (LPMONITORINFO)&monInfo) )
         {
-            wxLogLastError(_T("GetMonitorInfo"));
+            wxLogLastError(wxT("GetMonitorInfo"));
             m_flags = 0;
             return;
         }
@@ -498,7 +498,7 @@ wxVideoMode wxDisplayImplWin32Base::GetCurrentMode() const
     dm.dmDriverExtra = 0;
     if ( !::EnumDisplaySettings(deviceName, ENUM_CURRENT_SETTINGS, &dm) )
     {
-        wxLogLastError(_T("EnumDisplaySettings(ENUM_CURRENT_SETTINGS)"));
+        wxLogLastError(wxT("EnumDisplaySettings(ENUM_CURRENT_SETTINGS)"));
     }
     else
     {
@@ -644,7 +644,7 @@ void wxDisplayFactoryMultimon::AddDisplay(HMONITOR hMonitor, LPRECT lprcMonitor)
 
 wxDisplayImpl *wxDisplayFactoryMultimon::CreateDisplay(unsigned n)
 {
-    wxCHECK_MSG( n < m_displays.size(), NULL, _T("invalid display index") );
+    wxCHECK_MSG( n < m_displays.size(), NULL, wxT("invalid display index") );
 
     return new wxDisplayImplMultimon(n, *(m_displays[n]));
 }
@@ -700,7 +700,7 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
     else // change to the given mode
     {
         wxCHECK_MSG( mode.GetWidth() && mode.GetHeight(), false,
-                        _T("at least the width and height must be specified") );
+                        wxT("at least the width and height must be specified") );
 
         wxZeroMemory(dm);
         dm.dmSize = sizeof(dm);
@@ -786,7 +786,7 @@ bool wxDisplayImplMultimon::ChangeMode(const wxVideoMode& mode)
             break;
 
         default:
-            wxFAIL_MSG( _T("unexpected ChangeDisplaySettingsEx() return value") );
+            wxFAIL_MSG( wxT("unexpected ChangeDisplaySettingsEx() return value") );
     }
 
     return false;
@@ -808,7 +808,7 @@ wxDisplayFactoryDirectDraw::wxDisplayFactoryDirectDraw()
     if ( !ms_supportsMultimon )
         return;
 
-    m_dllDDraw.Load(_T("ddraw.dll"), wxDL_VERBATIM | wxDL_QUIET);
+    m_dllDDraw.Load(wxT("ddraw.dll"), wxDL_VERBATIM | wxDL_QUIET);
 
     if ( !m_dllDDraw.IsLoaded() )
         return;
@@ -827,7 +827,7 @@ wxDisplayFactoryDirectDraw::wxDisplayFactoryDirectDraw()
                                      this,
                                      DDENUM_ATTACHEDSECONDARYDEVICES) != DD_OK )
     {
-        wxLogLastError(_T("DirectDrawEnumerateEx"));
+        wxLogLastError(wxT("DirectDrawEnumerateEx"));
     }
 }
 
@@ -878,7 +878,7 @@ void wxDisplayFactoryDirectDraw::AddDisplay(const GUID& guid,
 
 wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(unsigned n)
 {
-    wxCHECK_MSG( n < m_displays.size(), NULL, _T("invalid display index") );
+    wxCHECK_MSG( n < m_displays.size(), NULL, wxT("invalid display index") );
 
     wxDisplayInfoDirectDraw *
         info = static_cast<wxDisplayInfoDirectDraw *>(m_displays[n]);
@@ -892,7 +892,7 @@ wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(unsigned n)
         if ( FAILED(hr) || !pDD )
         {
             // what to do??
-            wxLogApiError(_T("DirectDrawCreate"), hr);
+            wxLogApiError(wxT("DirectDrawCreate"), hr);
             return NULL;
         }
 
@@ -902,7 +902,7 @@ wxDisplayImpl *wxDisplayFactoryDirectDraw::CreateDisplay(unsigned n)
 
         if ( FAILED(hr) || !info->m_pDD2 )
         {
-            wxLogApiError(_T("IDirectDraw::QueryInterface(IDD2)"), hr);
+            wxLogApiError(wxT("IDirectDraw::QueryInterface(IDD2)"), hr);
             return NULL;
         }
 
@@ -983,7 +983,7 @@ wxDisplayImplDirectDraw::GetModes(const wxVideoMode& modeMatch) const
 
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("IDirectDraw::EnumDisplayModes"), hr);
+        wxLogApiError(wxT("IDirectDraw::EnumDisplayModes"), hr);
     }
 
     return modes;
@@ -996,7 +996,7 @@ wxDisplayImplDirectDraw::GetModes(const wxVideoMode& modeMatch) const
 bool wxDisplayImplDirectDraw::ChangeMode(const wxVideoMode& mode)
 {
     wxWindow *winTop = wxTheApp->GetTopWindow();
-    wxCHECK_MSG( winTop, false, _T("top level window required for DirectX") );
+    wxCHECK_MSG( winTop, false, wxT("top level window required for DirectX") );
 
     HRESULT hr = m_pDD2->SetCooperativeLevel
                          (
@@ -1005,7 +1005,7 @@ bool wxDisplayImplDirectDraw::ChangeMode(const wxVideoMode& mode)
                          );
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("IDirectDraw2::SetCooperativeLevel"), hr);
+        wxLogApiError(wxT("IDirectDraw2::SetCooperativeLevel"), hr);
 
         return false;
     }
@@ -1013,7 +1013,7 @@ bool wxDisplayImplDirectDraw::ChangeMode(const wxVideoMode& mode)
     hr = m_pDD2->SetDisplayMode(mode.w, mode.h, mode.bpp, mode.refresh, 0);
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("IDirectDraw2::SetDisplayMode"), hr);
+        wxLogApiError(wxT("IDirectDraw2::SetDisplayMode"), hr);
 
         return false;
     }

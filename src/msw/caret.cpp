@@ -41,7 +41,7 @@
 
 #define CALL_CARET_API(api, args)   \
         if ( !api args )                \
-            wxLogLastError(_T(#api))
+            wxLogLastError(wxT(#api))
 
 // ===========================================================================
 // implementation

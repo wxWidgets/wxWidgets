@@ -88,7 +88,7 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     wxString nameDefTheme;
 
     // use the environment variable first
-    const wxChar *p = wxGetenv(_T("WXTHEME"));
+    const wxChar *p = wxGetenv(wxT("WXTHEME"));
     if ( p )
     {
         nameDefTheme = p;

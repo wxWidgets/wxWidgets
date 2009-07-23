@@ -217,7 +217,7 @@ bool wxTreebook::DoAddSubPage(wxWindow *page, const wxString& text, bool bSelect
     wxTreeItemId lastNodeId = tree->GetLastChild(rootId);
 
     wxCHECK_MSG( lastNodeId.IsOk(), false,
-                        _T("Can't insert sub page when there are no pages") );
+                        wxT("Can't insert sub page when there are no pages") );
 
     // now calculate its position (should we save/update it too?)
     size_t newPos = tree->GetCount() -

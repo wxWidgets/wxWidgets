@@ -283,7 +283,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
 void wxListBox::SetString(unsigned int n, const wxString& s)
 {
-    wxCHECK_RET( !IsSorted(), _T("can't set string in sorted listbox") );
+    wxCHECK_RET( !IsSorted(), wxT("can't set string in sorted listbox") );
 
     if ( IsSorted() )
         (*m_strings.sorted)[n] = s;
@@ -341,7 +341,7 @@ void wxListBox::DoClear()
 void wxListBox::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( IsValid(n),
-                 _T("invalid index in wxListBox::Delete") );
+                 wxT("invalid index in wxListBox::Delete") );
 
     // do it before removing the index as otherwise the last item will not be
     // refreshed (as GetCount() will be decremented)
@@ -460,7 +460,7 @@ void wxListBox::DoSetSelection(int n, bool select)
     // sanity check: a single selection listbox can't have more than one item
     // selected
     wxASSERT_MSG( HasMultipleSelection() || (m_selections.GetCount() < 2),
-                  _T("multiple selected items in single selection lbox?") );
+                  wxT("multiple selected items in single selection lbox?") );
 
     if ( select )
     {
@@ -472,7 +472,7 @@ void wxListBox::DoSetSelection(int n, bool select)
 int wxListBox::GetSelection() const
 {
     wxCHECK_MSG( !HasMultipleSelection(), wxNOT_FOUND,
-                 _T("use wxListBox::GetSelections for ths listbox") );
+                 wxT("use wxListBox::GetSelections for ths listbox") );
 
     return m_selections.IsEmpty() ? wxNOT_FOUND : m_selections[0];
 }
@@ -639,7 +639,7 @@ void wxListBox::UpdateItems()
     if ( m_updateCount == -1 )
     {
         // refresh all
-        wxLogTrace(_T("listbox"), _T("Refreshing all"));
+        wxLogTrace(wxT("listbox"), wxT("Refreshing all"));
 
         Refresh();
     }
@@ -656,7 +656,7 @@ void wxListBox::UpdateItems()
         // entire line(s)
         CalcScrolledPosition(0, rect.y, NULL, &rect.y);
 
-        wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
+        wxLogTrace(wxT("listbox"), wxT("Refreshing items %d..%d (%d-%d)"),
                    m_updateFrom, m_updateFrom + m_updateCount - 1,
                    rect.GetTop(), rect.GetBottom());
 
@@ -726,7 +726,7 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
         itemLast = itemMax;
 
     // do draw them
-    wxLogTrace(_T("listbox"), _T("Repainting items %d..%d"),
+    wxLogTrace(wxT("listbox"), wxT("Repainting items %d..%d"),
                itemFirst, itemLast);
 
     DoDrawRange(renderer, itemFirst, itemLast);
@@ -947,7 +947,7 @@ bool wxListBox::FindItem(const wxString& prefix, bool strictlyAfter)
     int last = first == 0 ? count - 1 : first - 1;
 
     // if this is not true we'd never exit from the loop below!
-    wxASSERT_MSG( first < (int)count && last < (int)count, _T("logic error") );
+    wxASSERT_MSG( first < (int)count && last < (int)count, wxT("logic error") );
 
     // precompute it outside the loop
     size_t len = prefix.length();
@@ -1193,7 +1193,7 @@ bool wxListBox::PerformAction(const wxControlAction& action,
         AnchorSelection(item == -1 ? m_current : item);
     else if ( action == wxACTION_LISTBOX_SELECTALL ||
               action == wxACTION_LISTBOX_SELTOGGLE )
-        wxFAIL_MSG(_T("unimplemented yet"));
+        wxFAIL_MSG(wxT("unimplemented yet"));
     else
         return wxControl::PerformAction(action, numArg, strArg);
 
@@ -1504,7 +1504,7 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxInputConsumer *consumer,
         {
             // pass something into strArg to tell the listbox that it shouldn't
             // send the notification message: see PerformAction() above
-            lbox->PerformAction(m_actionMouse, item, _T("no"));
+            lbox->PerformAction(m_actionMouse, item, wxT("no"));
         }
         // else: don't pass invalid index to the listbox
     }

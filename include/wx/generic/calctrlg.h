@@ -125,14 +125,14 @@ public:
 
     virtual wxCalendarDateAttr *GetAttr(size_t day) const
     {
-        wxCHECK_MSG( day > 0 && day < 32, NULL, _T("invalid day") );
+        wxCHECK_MSG( day > 0 && day < 32, NULL, wxT("invalid day") );
 
         return m_attrs[day - 1];
     }
 
     virtual void SetAttr(size_t day, wxCalendarDateAttr *attr)
     {
-        wxCHECK_RET( day > 0 && day < 32, _T("invalid day") );
+        wxCHECK_RET( day > 0 && day < 32, wxT("invalid day") );
 
         delete m_attrs[day - 1];
         m_attrs[day - 1] = attr;

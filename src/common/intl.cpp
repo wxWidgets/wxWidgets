@@ -1005,7 +1005,7 @@ static wxString wxGetANSICodePageForLocale(LCID lcid)
     if ( ::GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE,
                         buffer, WXSIZEOF(buffer)) > 0 )
     {
-        if ( buffer[0] != _T('0') || buffer[1] != _T('\0') )
+        if ( buffer[0] != wxT('0') || buffer[1] != wxT('\0') )
             cp = buffer;
         //else: this locale doesn't use ANSI code page
     }
@@ -1025,10 +1025,10 @@ wxString wxLanguageInfo::GetLocaleName() const
     const LCID lcid = GetLCID();
 
     wxChar buffer[256];
-    buffer[0] = _T('\0');
+    buffer[0] = wxT('\0');
     if ( !::GetLocaleInfo(lcid, LOCALE_SENGLANGUAGE, buffer, WXSIZEOF(buffer)) )
     {
-        wxLogLastError(_T("GetLocaleInfo(LOCALE_SENGLANGUAGE)"));
+        wxLogLastError(wxT("GetLocaleInfo(LOCALE_SENGLANGUAGE)"));
         return locale;
     }
 
@@ -1036,13 +1036,13 @@ wxString wxLanguageInfo::GetLocaleName() const
     if ( ::GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY,
                         buffer, WXSIZEOF(buffer)) > 0 )
     {
-        locale << _T('_') << buffer;
+        locale << wxT('_') << buffer;
     }
 
     const wxString cp = wxGetANSICodePageForLocale(lcid);
     if ( !cp.empty() )
     {
-        locale << _T('.') << cp;
+        locale << wxT('.') << cp;
     }
 
     return locale;
@@ -2844,10 +2844,10 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
             break;
 
         // not a special character so must be just a separator, treat as is
-        if ( *p == _T('%') )
+        if ( *p == wxT('%') )
         {
             // this one needs to be escaped
-            fmtWX += _T('%');
+            fmtWX += wxT('%');
         }
 
         fmtWX += *p;

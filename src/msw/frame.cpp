@@ -477,7 +477,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 
             if ( !m_hMenu )
             {
-                wxFAIL_MSG( _T("failed to create menu bar") );
+                wxFAIL_MSG( wxT("failed to create menu bar") );
                 return;
             }
         }

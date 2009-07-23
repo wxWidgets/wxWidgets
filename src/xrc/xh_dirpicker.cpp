@@ -40,7 +40,7 @@ wxObject *wxDirPickerCtrlXmlHandler::DoCreateResource()
                   GetParamValue(wxT("value")),
                   GetText(wxT("message")),
                   GetPosition(), GetSize(),
-                  GetStyle(_T("style"), wxDIRP_DEFAULT_STYLE),
+                  GetStyle(wxT("style"), wxDIRP_DEFAULT_STYLE),
                   wxDefaultValidator,
                   GetName());
 

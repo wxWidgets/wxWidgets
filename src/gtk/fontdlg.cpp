@@ -129,7 +129,7 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
         else
         {
             // this is not supposed to happen!
-            wxFAIL_MSG(_T("font is ok but no native font info?"));
+            wxFAIL_MSG(wxT("font is ok but no native font info?"));
         }
     }
 

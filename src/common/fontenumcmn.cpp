@@ -107,7 +107,7 @@ bool wxFontEnumerator::EnumerateEncodingsUTF8(const wxString& facename)
 {
     // name of UTF-8 encoding: no need to use wxFontMapper for it as it's
     // unlikely to change
-    const wxString utf8(_T("UTF-8"));
+    const wxString utf8(wxT("UTF-8"));
 
     // all fonts are in UTF-8 only if this code is used
     if ( !facename.empty() )

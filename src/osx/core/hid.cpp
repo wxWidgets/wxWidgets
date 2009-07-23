@@ -78,7 +78,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
     if(pDictionary == NULL)
     {
-        wxLogSysError( _T("IOServiceMatching(kIOHIDDeviceKey) failed") );
+        wxLogSysError( wxT("IOServiceMatching(kIOHIDDeviceKey) failed") );
         return false;
     }
 
@@ -103,7 +103,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     if( IOServiceGetMatchingServices(m_pPort,
                         pDictionary, &pIterator) != kIOReturnSuccess )
     {
-        wxLogSysError(_T("No Matching HID Services"));
+        wxLogSysError(wxT("No Matching HID Services"));
         return false;
     }
 
@@ -129,7 +129,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
                 kNilOptions
              ) != KERN_SUCCESS )
         {
-            wxLogDebug(_T("IORegistryEntryCreateCFProperties failed"));
+            wxLogDebug(wxT("IORegistryEntryCreateCFProperties failed"));
         }
 
         //
@@ -194,7 +194,7 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
         //open the HID interface...
         if ( (*m_ppDevice)->open(m_ppDevice, 0) != S_OK )
         {
-            wxLogDebug(_T("HID device: open failed"));
+            wxLogDebug(wxT("HID device: open failed"));
         }
 
         //
@@ -242,7 +242,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
     CFMutableDictionaryRef pDictionary = IOServiceMatching(kIOHIDDeviceKey);
     if(pDictionary == NULL)
     {
-        wxLogSysError( _T("IOServiceMatching(kIOHIDDeviceKey) failed") );
+        wxLogSysError( wxT("IOServiceMatching(kIOHIDDeviceKey) failed") );
         return false;
     }
 
@@ -267,7 +267,7 @@ size_t wxHIDDevice::GetCount (int nClass, int nType)
     if( IOServiceGetMatchingServices(pPort,
                                      pDictionary, &pIterator) != kIOReturnSuccess )
     {
-        wxLogSysError(_T("No Matching HID Services"));
+        wxLogSysError(wxT("No Matching HID Services"));
         return false;
     }
 
@@ -319,7 +319,7 @@ void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, int i)
     AddCookie(Data, i);
     if ( (*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) != S_OK )
     {
-        wxLogDebug(_T("HID device: adding element failed"));
+        wxLogDebug(wxT("HID device: adding element failed"));
     }
 }
 
@@ -337,14 +337,14 @@ void wxHIDDevice::InitCookies(size_t dwSize, bool bQueue)
         m_ppQueue = (*m_ppDevice)->allocQueue(m_ppDevice);
         if ( !m_ppQueue )
         {
-            wxLogDebug(_T("HID device: allocQueue failed"));
+            wxLogDebug(wxT("HID device: allocQueue failed"));
             return;
         }
 
         //Param 2, flags, none yet
         if ( (*m_ppQueue)->create(m_ppQueue, 0, 512) != S_OK )
         {
-            wxLogDebug(_T("HID device: create failed"));
+            wxLogDebug(wxT("HID device: create failed"));
         }
     }
 

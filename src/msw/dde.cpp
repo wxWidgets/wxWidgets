@@ -160,7 +160,7 @@ extern void wxDDEInitialize()
         UINT rc = DdeInitialize(&DDEIdInst, callback, APPCLASS_STANDARD, 0L);
         if ( rc != DMLERR_NO_ERROR )
         {
-            DDELogError(_T("Failed to initialize DDE"), rc);
+            DDELogError(wxT("Failed to initialize DDE"), rc);
         }
         else
         {
@@ -174,7 +174,7 @@ void wxDDECleanUp()
     // deleting them later won't work as DDE won't be initialized any more
     wxASSERT_MSG( wxDDEServerObjects.empty() &&
                     wxDDEClientObjects.empty(),
-                    _T("all DDE objects should be deleted by now") );
+                    wxT("all DDE objects should be deleted by now") );
 
     wxAtomTable.clear();
 
@@ -539,7 +539,7 @@ bool wxDDEConnection::Disconnect()
     bool ok = DdeDisconnect(GetHConv()) != 0;
     if ( !ok )
     {
-        DDELogError(_T("Failed to disconnect from DDE server gracefully"));
+        DDELogError(wxT("Failed to disconnect from DDE server gracefully"));
     }
 
     SetConnected( false );  // so we don't try and disconnect again
@@ -554,7 +554,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
                  format == wxIPC_UTF8TEXT ||
                  format == wxIPC_UNICODETEXT,
                  false,
-                 _T("wxDDEServer::Execute() supports only text data") );
+                 wxT("wxDDEServer::Execute() supports only text data") );
 
     wxMemoryBuffer buffer;
     LPBYTE realData = NULL;
@@ -605,7 +605,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
         // we could implement this in theory but it's not obvious how to pass
         // the format information and, basically, why bother -- just use
         // Unicode build
-        wxFAIL_MSG( _T("UTF-8 text not supported in ANSI build") );
+        wxFAIL_MSG( wxT("UTF-8 text not supported in ANSI build") );
 
         return false;
     }
@@ -649,7 +649,7 @@ wxDDEConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 
     if ( !ok )
     {
-        DDELogError(_T("DDE execute request failed"));
+        DDELogError(wxT("DDE execute request failed"));
     }
 
     return ok;
@@ -669,7 +669,7 @@ const void *wxDDEConnection::Request(const wxString& item, size_t *size, wxIPCFo
                                                   &result);
     if ( !returned_data )
     {
-        DDELogError(_T("DDE data request failed"));
+        DDELogError(wxT("DDE data request failed"));
 
         return NULL;
     }
@@ -678,7 +678,7 @@ const void *wxDDEConnection::Request(const wxString& item, size_t *size, wxIPCFo
 
     void *data = GetBufferAtLeast(len);
     wxASSERT_MSG(data != NULL,
-                 _T("Buffer too small in wxDDEConnection::Request") );
+                 wxT("Buffer too small in wxDDEConnection::Request") );
     (void) DdeGetData(returned_data, (LPBYTE)data, len, 0);
 
     (void) DdeFreeDataHandle(returned_data);
@@ -845,7 +845,7 @@ _DDECallback(WORD wType,
 
                     void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
-                                 _T("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
+                                 wxT("Buffer too small in _DDECallback (XTYP_EXECUTE)") );
 
                     DdeGetData(hData, (LPBYTE)data, len, 0);
 
@@ -926,7 +926,7 @@ _DDECallback(WORD wType,
 
                     void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
-                                 _T("Buffer too small in _DDECallback (XTYP_POKE)") );
+                                 wxT("Buffer too small in _DDECallback (XTYP_POKE)") );
 
                     DdeGetData(hData, (LPBYTE)data, len, 0);
 
@@ -1013,7 +1013,7 @@ _DDECallback(WORD wType,
 
                     void *data = connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
-                                 _T("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
+                                 wxT("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 
                     DdeGetData(hData, (LPBYTE)data, len, 0);
 
@@ -1063,7 +1063,7 @@ The returned handle has to be freed by the caller (using
 */
 static HSZ DDEAtomFromString(const wxString& s)
 {
-    wxASSERT_MSG( DDEIdInst, _T("DDE not initialized") );
+    wxASSERT_MSG( DDEIdInst, wxT("DDE not initialized") );
 
     HSZ hsz = DdeCreateStringHandle(DDEIdInst, (wxChar*)s.wx_str(), DDE_CP);
     if ( !hsz )
@@ -1105,7 +1105,7 @@ static void DDELogError(const wxString& s, UINT error)
         error = DdeGetLastError(DDEIdInst);
     }
 
-    wxLogError(s + _T(": ") + DDEGetErrorMsg(error));
+    wxLogError(s + wxT(": ") + DDEGetErrorMsg(error));
 }
 
 static wxString DDEGetErrorMsg(UINT error)

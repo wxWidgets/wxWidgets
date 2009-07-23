@@ -158,7 +158,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
     {
         if (src == dest)
         {
-            wxMessageBox(_T("Game::DoMove() src == dest"), _T("Debug message"),
+            wxMessageBox(wxT("Game::DoMove() src == dest"), wxT("Debug message"),
                    wxOK | wxICON_EXCLAMATION);
         }
         m_moves[m_moveIndex].src = src;
@@ -170,7 +170,7 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
     }
     else
     {
-        wxMessageBox(_T("Game::DoMove() Undo buffer full"), _T("Debug message"),
+        wxMessageBox(wxT("Game::DoMove() Undo buffer full"), wxT("Debug message"),
                wxOK | wxICON_EXCLAMATION);
     }
 
@@ -198,8 +198,8 @@ void Game::DoMove(wxDC& dc, Pile* src, Pile* dest)
         // Redraw the score box to update games won
         DisplayScore(dc);
 
-        if (wxMessageBox(_T("Do you wish to play again?"),
-            _T("Well Done, You have won!"), wxYES_NO | wxICON_QUESTION) == wxYES)
+        if (wxMessageBox(wxT("Do you wish to play again?"),
+            wxT("Well Done, You have won!"), wxYES_NO | wxICON_QUESTION) == wxYES)
         {
             Deal();
             canvas->Refresh();
@@ -236,25 +236,25 @@ void Game::DisplayScore(wxDC& dc)
     wxCoord w, h;
     {
         wxCoord width, height;
-        dc.GetTextExtent(_T("Average score:m_x"), &width, &height);
+        dc.GetTextExtent(wxT("Average score:m_x"), &width, &height);
         w = width;
         h = height;
     }
     dc.DrawRectangle(x + w, y, 20, 4 * h);
 
     wxString str;
-    str.Printf(_T("%d"), m_currentScore);
-    dc.DrawText(_T("Score:"), x, y);
+    str.Printf(wxT("%d"), m_currentScore);
+    dc.DrawText(wxT("Score:"), x, y);
     dc.DrawText(str, x + w, y);
     y += h;
 
-    str.Printf(_T("%d"), m_numGames);
-    dc.DrawText(_T("Games played:"), x, y);
+    str.Printf(wxT("%d"), m_numGames);
+    dc.DrawText(wxT("Games played:"), x, y);
     dc.DrawText(str, x + w, y);
     y += h;
 
-    str.Printf(_T("%d"), m_numWins);
-    dc.DrawText(_T("Games won:"), x, y);
+    str.Printf(wxT("%d"), m_numWins);
+    dc.DrawText(wxT("Games won:"), x, y);
     dc.DrawText(str, x + w, y);
     y += h;
 
@@ -263,8 +263,8 @@ void Game::DisplayScore(wxDC& dc)
     {
         average = (2 * (m_currentScore + m_totalScore) + m_numGames ) / (2 * m_numGames);
     }
-    str.Printf(_T("%d"), average);
-    dc.DrawText(_T("Average score:"), x, y);
+    str.Printf(wxT("%d"), average);
+    dc.DrawText(wxT("Average score:"), x, y);
     dc.DrawText(str, x + w, y);
 }
 
@@ -794,7 +794,7 @@ void Pack::Redraw(wxDC& dc)
     Pile::Redraw(dc);
 
     wxString str;
-    str.Printf(_T("%d  "), m_topCard + 1);
+    str.Printf(wxT("%d  "), m_topCard + 1);
 
     dc.SetBackgroundMode( wxSOLID );
     dc.SetTextBackground(FortyApp::BackgroundColour());
@@ -811,7 +811,7 @@ void Pack::AddCard(Card* card)
     }
     else
     {
-        wxMessageBox(_T("Pack::AddCard() Undo error"), _T("Forty Thieves: Warning"),
+        wxMessageBox(wxT("Pack::AddCard() Undo error"), wxT("Forty Thieves: Warning"),
            wxOK | wxICON_EXCLAMATION);
     }
     card->TurnCard(facedown);

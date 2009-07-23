@@ -143,7 +143,7 @@ void wxFontsManager::AddAllFonts()
 {
     wxString path;
     if ( !wxGetEnv("WXDFB_FONTPATH", &path) )
-        path = _T(wxINSTALL_PREFIX "/share/wx/fonts");
+        path = wxT(wxINSTALL_PREFIX "/share/wx/fonts");
 
     wxStringTokenizer tkn(path, wxPATH_SEP);
     while ( tkn.HasMoreTokens() )

@@ -381,7 +381,7 @@ bool MyApp::OnInit()
 #endif
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(700, 600));
+    MyFrame *frame = new MyFrame(wxT("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, wxSize(700, 600));
 
     m_printing->SetParentWindow(frame);
 
@@ -569,21 +569,21 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(ID_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
-    fileMenu->Append(wxID_OPEN, _T("&Open\tCtrl+O"), _T("Open a file"));
-    fileMenu->Append(wxID_SAVE, _T("&Save\tCtrl+S"), _T("Save a file"));
-    fileMenu->Append(wxID_SAVEAS, _T("&Save As...\tF12"), _T("Save to a new file"));
+    fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"), wxT("Open a file"));
+    fileMenu->Append(wxID_SAVE, wxT("&Save\tCtrl+S"), wxT("Save a file"));
+    fileMenu->Append(wxID_SAVEAS, wxT("&Save As...\tF12"), wxT("Save to a new file"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_RELOAD, _T("&Reload Text\tF2"), _T("Reload the initial text"));
+    fileMenu->Append(ID_RELOAD, wxT("&Reload Text\tF2"), wxT("Reload the initial text"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_PAGE_SETUP, _T("Page Set&up..."), _T("Page setup"));
-    fileMenu->Append(ID_PRINT, _T("&Print...\tCtrl+P"), _T("Print"));
-    fileMenu->Append(ID_PREVIEW, _T("Print Pre&view"), _T("Print preview"));
+    fileMenu->Append(ID_PAGE_SETUP, wxT("Page Set&up..."), wxT("Page setup"));
+    fileMenu->Append(ID_PRINT, wxT("&Print...\tCtrl+P"), wxT("Print"));
+    fileMenu->Append(ID_PREVIEW, wxT("Print Pre&view"), wxT("Print preview"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_VIEW_HTML, _T("&View as HTML"), _T("View HTML"));
+    fileMenu->Append(ID_VIEW_HTML, wxT("&View as HTML"), wxT("View HTML"));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_Quit, _T("E&xit\tAlt+X"), _T("Quit this program"));
+    fileMenu->Append(ID_Quit, wxT("E&xit\tAlt+X"), wxT("Quit this program"));
 
     wxMenu* editMenu = new wxMenu;
     editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
@@ -643,12 +643,12 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, _T("&File"));
-    menuBar->Append(editMenu, _T("&Edit"));
-    menuBar->Append(formatMenu, _T("F&ormat"));
-    menuBar->Append(listsMenu, _T("&Lists"));
-    menuBar->Append(insertMenu, _T("&Insert"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(fileMenu, wxT("&File"));
+    menuBar->Append(editMenu, wxT("&Edit"));
+    menuBar->Append(formatMenu, wxT("F&ormat"));
+    menuBar->Append(listsMenu, wxT("&Lists"));
+    menuBar->Append(insertMenu, wxT("&Insert"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -661,7 +661,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     if ( !is_pda )
     {
         CreateStatusBar(2);
-        SetStatusText(_T("Welcome to wxRichTextCtrl!"));
+        SetStatusText(wxT("Welcome to wxRichTextCtrl!"));
     }
 #endif
 
@@ -937,8 +937,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is a demo for wxRichTextCtrl, a control for editing styled text.\n(c) Julian Smart, 2005"));
-    wxMessageBox(msg, _T("About wxRichTextCtrl Sample"), wxOK | wxICON_INFORMATION, this);
+    msg.Printf( wxT("This is a demo for wxRichTextCtrl, a control for editing styled text.\n(c) Julian Smart, 2005"));
+    wxMessageBox(msg, wxT("About wxRichTextCtrl Sample"), wxOK | wxICON_INFORMATION, this);
 }
 
 // Forward command events to the current rich text control, if any

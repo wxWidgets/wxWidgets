@@ -400,7 +400,7 @@ protected:
     {
         if (m_pCurrentIn)
         {
-            wxFAIL_MSG(_T("Error in test case, the previouse input stream needs to be delete first!"));
+            wxFAIL_MSG(wxT("Error in test case, the previouse input stream needs to be delete first!"));
         }
 
         m_pCurrentIn = DoCreateInStream();
@@ -411,7 +411,7 @@ protected:
     {
         if (m_pCurrentOut)
         {
-            wxFAIL_MSG(_T("Error in test case, the previouse output stream needs to be delete first!"));
+            wxFAIL_MSG(wxT("Error in test case, the previouse output stream needs to be delete first!"));
         }
 
         m_pCurrentOut = DoCreateOutStream();

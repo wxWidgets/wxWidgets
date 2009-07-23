@@ -333,7 +333,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
             break ;
 
         default:
-            wxFAIL_MSG(_T("unexpected window variant"));
+            wxFAIL_MSG(wxT("unexpected window variant"));
             break ;
     }
     m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
@@ -362,7 +362,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
             break ;
 
         default:
-            wxFAIL_MSG(_T("unexpected window variant"));
+            wxFAIL_MSG(wxT("unexpected window variant"));
             break ;
     }
 

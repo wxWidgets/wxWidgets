@@ -169,7 +169,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     wxLogTrace(wxTRACE_OleCalls, wxT("IDropTarget::DragEnter"));
 
     wxASSERT_MSG( m_pIDataObject == NULL,
-                  _T("drop target must have data object") );
+                  wxT("drop target must have data object") );
 
     // show the list of formats supported by the source data object for the
     // debugging purposes, this is quite useful sometimes - please don't remove
@@ -180,7 +180,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
         FORMATETC fmt;
         while ( penumFmt->Next(1, &fmt, NULL) == S_OK )
         {
-            wxLogDebug(_T("Drop source supports format %s"),
+            wxLogDebug(wxT("Drop source supports format %s"),
                        wxDataObject::GetFormatName(fmt.cfFormat));
         }
 
@@ -188,7 +188,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     }
     else
     {
-        wxLogLastError(_T("IDataObject::EnumFormatEtc"));
+        wxLogLastError(wxT("IDataObject::EnumFormatEtc"));
     }
 #endif // 0
 

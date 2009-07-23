@@ -831,16 +831,16 @@ void wxDebugContext::OutputDumpLine(const wxChar *szFormat, ...)
     int count;
     va_list argptr;
     va_start(argptr, szFormat);
-    buf[WXSIZEOF(buf)-1] = _T('\0');
+    buf[WXSIZEOF(buf)-1] = wxT('\0');
 
     // keep 3 bytes for a \r\n\0
     count = wxVsnprintf(buf, WXSIZEOF(buf)-3, szFormat, argptr);
 
     if ( count < 0 )
         count = WXSIZEOF(buf)-3;
-    buf[count]=_T('\r');
-    buf[count+1]=_T('\n');
-    buf[count+2]=_T('\0');
+    buf[count]=wxT('\r');
+    buf[count+1]=wxT('\n');
+    buf[count+2]=wxT('\0');
 
     wxMessageOutputDebug dbgout;
     dbgout.Printf(buf);

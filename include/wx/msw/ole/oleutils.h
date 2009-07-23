@@ -143,7 +143,7 @@ private:
 #define   IMPLEMENT_IUNKNOWN_METHODS(classname)                               \
   STDMETHODIMP classname::QueryInterface(REFIID riid, void **ppv)             \
   {                                                                           \
-    wxLogQueryInterface(_T(#classname), riid);                                \
+    wxLogQueryInterface(wxT(#classname), riid);                               \
                                                                               \
     if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                \
       *ppv = this;                                                            \
@@ -160,14 +160,14 @@ private:
                                                                               \
   STDMETHODIMP_(ULONG) classname::AddRef()                                    \
   {                                                                           \
-    wxLogAddRef(_T(#classname), m_cRef);                                      \
+    wxLogAddRef(wxT(#classname), m_cRef);                                     \
                                                                               \
     return ++m_cRef;                                                          \
   }                                                                           \
                                                                               \
   STDMETHODIMP_(ULONG) classname::Release()                                   \
   {                                                                           \
-    wxLogRelease(_T(#classname), m_cRef);                                     \
+    wxLogRelease(wxT(#classname), m_cRef);                                    \
                                                                               \
     if ( --m_cRef == wxAutoULong(0) ) {                                                    \
       delete this;                                                            \

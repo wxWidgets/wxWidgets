@@ -178,8 +178,8 @@ void ListsTestCase::wxListCtorTest()
 {
     {
         wxListBazs list1;
-        list1.Append(new Baz(_T("first")));
-        list1.Append(new Baz(_T("second")));
+        list1.Append(new Baz(wxT("first")));
+        list1.Append(new Baz(wxT("second")));
 
         CPPUNIT_ASSERT( list1.GetCount() == 2 );
         CPPUNIT_ASSERT( Baz::GetNumber() == 2 );

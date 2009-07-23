@@ -126,7 +126,7 @@ static toff_t wxFileOffsetToTIFF(wxFileOffset ofs)
 
     toff_t tofs = wx_truncate_cast(toff_t, ofs);
     wxCHECK_MSG( (wxFileOffset)tofs == ofs, (toff_t)-1,
-                    _T("TIFF library doesn't support large files") );
+                    wxT("TIFF library doesn't support large files") );
 
     return tofs;
 }
@@ -482,7 +482,7 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     switch ( res )
     {
         default:
-            wxFAIL_MSG( _T("unknown image resolution units") );
+            wxFAIL_MSG( wxT("unknown image resolution units") );
             // fall through
 
         case wxIMAGE_RESOLUTION_NONE:

@@ -91,7 +91,7 @@ public:
     void SetSplitMode(int mode)
     {
         wxASSERT_MSG( mode == wxSPLIT_VERTICAL || mode == wxSPLIT_HORIZONTAL,
-                      _T("invalid split mode") );
+                      wxT("invalid split mode") );
 
         m_splitMode = (wxSplitMode)mode;
     }

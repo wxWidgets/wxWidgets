@@ -175,23 +175,23 @@ struct Date
     wxString Format() const
     {
         wxString s;
-        s.Printf(_T("%02d:%02d:%02d %10s %02d, %4d%s"),
+        s.Printf(wxT("%02d:%02d:%02d %10s %02d, %4d%s"),
                  hour, min, sec,
                  wxDateTime::GetMonthName(month).c_str(),
                  day,
                  abs(wxDateTime::ConvertYearToBC(year)),
-                 year > 0 ? _T("AD") : _T("BC"));
+                 year > 0 ? wxT("AD") : wxT("BC"));
         return s;
     }
 
     wxString FormatDate() const
     {
         wxString s;
-        s.Printf(_T("%02d-%s-%4d%s"),
+        s.Printf(wxT("%02d-%s-%4d%s"),
                  day,
                  wxDateTime::GetMonthName(month, wxDateTime::Name_Abbr).c_str(),
                  abs(wxDateTime::ConvertYearToBC(year)),
-                 year > 0 ? _T("AD") : _T("BC"));
+                 year > 0 ? wxT("AD") : wxT("BC"));
         return s;
     }
 };
@@ -374,21 +374,21 @@ void DateTimeTestCase::TestTimeWDays()
             wxString s, which;
             switch ( nWeek < -1 ? -nWeek : nWeek )
             {
-                case 1: which = _T("first"); break;
-                case 2: which = _T("second"); break;
-                case 3: which = _T("third"); break;
-                case 4: which = _T("fourth"); break;
-                case 5: which = _T("fifth"); break;
+                case 1: which = wxT("first"); break;
+                case 2: which = wxT("second"); break;
+                case 3: which = wxT("third"); break;
+                case 4: which = wxT("fourth"); break;
+                case 5: which = wxT("fifth"); break;
 
-                case -1: which = _T("last"); break;
+                case -1: which = wxT("last"); break;
             }
 
             if ( nWeek < -1 )
             {
-                which += _T(" from end");
+                which += wxT(" from end");
             }
 
-            s.Printf(_T("The %s %s of %s in %d"),
+            s.Printf(wxT("The %s %s of %s in %d"),
                      which.c_str(),
                      wxDateTime::GetWeekDayName(wday).c_str(),
                      wxDateTime::GetMonthName(month).c_str(),
@@ -771,7 +771,7 @@ void DateTimeTestCase::TestTimeFormat()
                         break;
 
                     case CompareNone:
-                        wxFAIL_MSG( _T("unexpected") );
+                        wxFAIL_MSG( wxT("unexpected") );
                         break;
                 }
             }
@@ -983,7 +983,7 @@ void DateTimeTestCase::TestDateParse()
 
     // special cases
     wxDateTime dt;
-    CPPUNIT_ASSERT( dt.ParseDate(_T("today")) );
+    CPPUNIT_ASSERT( dt.ParseDate(wxT("today")) );
     CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), dt );
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )

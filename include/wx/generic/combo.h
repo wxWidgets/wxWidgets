@@ -26,8 +26,8 @@
 // all actions of single line text controls are supported
 
 // popup/dismiss the choice window
-#define wxACTION_COMBOBOX_POPUP     _T("popup")
-#define wxACTION_COMBOBOX_DISMISS   _T("dismiss")
+#define wxACTION_COMBOBOX_POPUP     wxT("popup")
+#define wxACTION_COMBOBOX_DISMISS   wxT("dismiss")
 
 #endif
 

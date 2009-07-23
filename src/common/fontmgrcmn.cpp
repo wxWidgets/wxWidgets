@@ -69,7 +69,7 @@ void wxFontFaceBase::Release()
 
 wxFontInstance *wxFontFaceBase::GetFontInstance(float ptSize, bool aa)
 {
-    wxASSERT_MSG( m_refCnt > 0, _T("font library not loaded!") );
+    wxASSERT_MSG( m_refCnt > 0, wxT("font library not loaded!") );
 
     for ( wxFontInstanceList::const_iterator i = m_instances->begin();
           i != m_instances->end(); ++i )
@@ -103,7 +103,7 @@ wxFontFace *wxFontBundleBase::GetFace(FaceType type) const
 {
     wxFontFace *f = m_faces[type];
 
-    wxCHECK_MSG( f, NULL, _T("no such face in font bundle") );
+    wxCHECK_MSG( f, NULL, wxT("no such face in font bundle") );
 
     f->Acquire();
 
@@ -115,7 +115,7 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
 {
     wxASSERT_MSG( font.GetFaceName().empty() ||
                   GetName().CmpNoCase(font.GetFaceName()) == 0,
-                  _T("calling GetFaceForFont for incompatible font") );
+                  wxT("calling GetFaceForFont for incompatible font") );
 
     int type = FaceType_Regular;
 
@@ -141,7 +141,7 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
                 return GetFace((FaceType)i);
         }
 
-        wxFAIL_MSG( _T("no face") );
+        wxFAIL_MSG( wxT("no face") );
         return NULL;
     }
 

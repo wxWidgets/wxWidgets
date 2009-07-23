@@ -104,7 +104,7 @@ public:
 class wxSoundBackendOSS : public wxSoundBackend
 {
 public:
-    wxString GetName() const { return _T("Open Sound System"); }
+    wxString GetName() const { return wxT("Open Sound System"); }
     int GetPriority() const { return 10; }
     bool IsAvailable() const;
     bool HasNativeAsyncPlayback() const { return false; }
@@ -152,7 +152,7 @@ bool wxSoundBackendOSS::Play(wxSoundData *data, unsigned flags,
         {
             if (status->m_stopRequested)
             {
-                wxLogTrace(_T("sound"), _T("playback stopped"));
+                wxLogTrace(wxT("sound"), wxT("playback stopped"));
                 close(dev);
                 return true;
             }
@@ -195,7 +195,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     // Reset the dsp
     if (ioctl(dev, SNDCTL_DSP_RESET, 0) < 0)
     {
-        wxLogTrace(_T("sound"), _T("unable to reset dsp"));
+        wxLogTrace(wxT("sound"), wxT("unable to reset dsp"));
         return false;
     }
 
@@ -204,13 +204,13 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     tmp = data->m_bitsPerSample;
     if (ioctl(dev, SNDCTL_DSP_SAMPLESIZE, &tmp) < 0)
     {
-        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_SAMPLESIZE)"));
+        wxLogTrace(wxT("sound"), wxT("IOCTL failure (SNDCTL_DSP_SAMPLESIZE)"));
         return false;
     }
     if (tmp != data->m_bitsPerSample)
     {
-        wxLogTrace(_T("sound"),
-                   _T("Unable to set DSP sample size to %d (wants %d)"),
+        wxLogTrace(wxT("sound"),
+                   wxT("Unable to set DSP sample size to %d (wants %d)"),
                    data->m_bitsPerSample, tmp);
         m_needConversion = true;
     }
@@ -219,19 +219,19 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     tmp = stereo;
     if (ioctl(dev, SNDCTL_DSP_STEREO, &tmp) < 0)
     {
-        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_STEREO)"));
+        wxLogTrace(wxT("sound"), wxT("IOCTL failure (SNDCTL_DSP_STEREO)"));
         return false;
     }
     if (tmp != stereo)
     {
-        wxLogTrace(_T("sound"), _T("Unable to set DSP to %s."), stereo?  _T("stereo"):_T("mono"));
+        wxLogTrace(wxT("sound"), wxT("Unable to set DSP to %s."), stereo?  wxT("stereo"):wxT("mono"));
         m_needConversion = true;
     }
 
     tmp = data->m_samplingRate;
     if (ioctl(dev, SNDCTL_DSP_SPEED, &tmp) < 0)
     {
-        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_SPEED)"));
+        wxLogTrace(wxT("sound"), wxT("IOCTL failure (SNDCTL_DSP_SPEED)"));
        return false;
     }
     if (tmp != data->m_samplingRate)
@@ -244,8 +244,8 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
         // file rates for something that we can't hear anyways.
         if (data->m_samplingRate - tmp > (tmp * .01) ||
             tmp - data->m_samplingRate > (tmp * .01)) {
-            wxLogTrace(_T("sound"),
-                       _T("Unable to set DSP sampling rate to %d (wants %d)"),
+            wxLogTrace(wxT("sound"),
+                       wxT("Unable to set DSP sampling rate to %d (wants %d)"),
                        data->m_samplingRate, tmp);
             m_needConversion = true;
         }
@@ -255,7 +255,7 @@ bool wxSoundBackendOSS::InitDSP(int dev, const wxSoundData *data)
     // the sampling rate, etc.
     if (ioctl(dev, SNDCTL_DSP_GETBLKSIZE, &m_DSPblkSize) < 0)
     {
-        wxLogTrace(_T("sound"), _T("IOCTL failure (SNDCTL_DSP_GETBLKSIZE)"));
+        wxLogTrace(wxT("sound"), wxT("IOCTL failure (SNDCTL_DSP_GETBLKSIZE)"));
         return false;
     }
     return true;
@@ -344,7 +344,7 @@ wxThread::ExitCode wxSoundAsyncPlaybackThread::Entry()
     m_data->DecRef();
     m_adapt->m_playing = false;
     m_adapt->m_mutexRightToPlay.Unlock();
-    wxLogTrace(_T("sound"), _T("terminated async playback thread"));
+    wxLogTrace(wxT("sound"), wxT("terminated async playback thread"));
     return 0;
 }
 #endif
@@ -363,7 +363,7 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
         wxThread *th = new wxSoundAsyncPlaybackThread(this, data, flags);
         th->Create();
         th->Run();
-        wxLogTrace(_T("sound"), _T("launched async playback thread"));
+        wxLogTrace(wxT("sound"), wxT("launched async playback thread"));
         return true;
 #else
         wxLogError(_("Unable to play sound asynchronously."));
@@ -385,7 +385,7 @@ bool wxSoundSyncOnlyAdaptor::Play(wxSoundData *data, unsigned flags,
 
 void wxSoundSyncOnlyAdaptor::Stop()
 {
-    wxLogTrace(_T("sound"), _T("asking audio to stop"));
+    wxLogTrace(wxT("sound"), wxT("asking audio to stop"));
 
 #if wxUSE_THREADS
     // tell the player thread (if running) to stop playback ASAP:
@@ -397,7 +397,7 @@ void wxSoundSyncOnlyAdaptor::Stop()
     // our request to interrupt playback):
     m_mutexRightToPlay.Lock();
     m_mutexRightToPlay.Unlock();
-    wxLogTrace(_T("sound"), _T("audio was stopped"));
+    wxLogTrace(wxT("sound"), wxT("audio was stopped"));
 #endif
 }
 
@@ -449,7 +449,7 @@ bool wxSound::Create(const wxString& fileName,
                      bool WXUNUSED_UNLESS_DEBUG(isResource))
 {
     wxASSERT_MSG( !isResource,
-             _T("Loading sound from resources is only supported on Windows") );
+             wxT("Loading sound from resources is only supported on Windows") );
 
     Free();
 
@@ -509,12 +509,12 @@ bool wxSound::Create(int size, const wxByte* data)
             ms_backend = wxCreateSoundBackendSDL();
 #else
             wxString dllname;
-            dllname.Printf(_T("%s/%s"),
+            dllname.Printf(wxT("%s/%s"),
                 wxDynamicLibrary::GetPluginsDirectory().c_str(),
                 wxDynamicLibrary::CanonicalizePluginName(
-                    _T("sound_sdl"), wxDL_PLUGIN_BASE).c_str());
-            wxLogTrace(_T("sound"),
-                       _T("trying to load SDL plugin from '%s'..."),
+                    wxT("sound_sdl"), wxDL_PLUGIN_BASE).c_str());
+            wxLogTrace(wxT("sound"),
+                       wxT("trying to load SDL plugin from '%s'..."),
                        dllname.c_str());
             wxLogNull null;
             ms_backendSDL = new wxDynamicLibrary(dllname, wxDL_NOW);
@@ -557,8 +557,8 @@ bool wxSound::Create(int size, const wxByte* data)
         if (!ms_backend->HasNativeAsyncPlayback())
             ms_backend = new wxSoundSyncOnlyAdaptor(ms_backend);
 
-        wxLogTrace(_T("sound"),
-                   _T("using backend '%s'"), ms_backend->GetName().c_str());
+        wxLogTrace(wxT("sound"),
+                   wxT("using backend '%s'"), ms_backend->GetName().c_str());
     }
 }
 
@@ -566,7 +566,7 @@ bool wxSound::Create(int size, const wxByte* data)
 {
     if (ms_backend)
     {
-        wxLogTrace(_T("sound"), _T("unloading backend"));
+        wxLogTrace(wxT("sound"), wxT("unloading backend"));
 
         Stop();
 
@@ -580,7 +580,7 @@ bool wxSound::Create(int size, const wxByte* data)
 
 bool wxSound::DoPlay(unsigned flags) const
 {
-    wxCHECK_MSG( IsOk(), false, _T("Attempt to play invalid wave data") );
+    wxCHECK_MSG( IsOk(), false, wxT("Attempt to play invalid wave data") );
 
     EnsureBackend();
     wxSoundPlaybackStatus status;

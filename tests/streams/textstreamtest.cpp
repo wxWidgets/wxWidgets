@@ -104,15 +104,15 @@ TextStreamTestCase::TextStreamTestCase()
 
 void TextStreamTestCase::Endline()
 {
-    wxFileOutputStream* pOutFile = new wxFileOutputStream(_T("test.txt"));
+    wxFileOutputStream* pOutFile = new wxFileOutputStream(wxT("test.txt"));
     wxTextOutputStream* pOutText = new wxTextOutputStream(*pOutFile);
-    *pOutText   << _T("Test text") << endl
-                << _T("More Testing Text (There should be newline before this)");
+    *pOutText   << wxT("Test text") << endl
+                << wxT("More Testing Text (There should be newline before this)");
 
     delete pOutText;
     delete pOutFile;
 
-    wxFileInputStream* pInFile = new wxFileInputStream(_T("test.txt"));
+    wxFileInputStream* pInFile = new wxFileInputStream(wxT("test.txt"));
 
     char szIn[9 + NEWLINELEN];
 
@@ -129,7 +129,7 @@ template <typename T>
 static void DoTestRoundTrip(const T *values, size_t numValues)
 {
     {
-        wxFileOutputStream fileOut(_T("test.txt"));
+        wxFileOutputStream fileOut(wxT("test.txt"));
         wxTextOutputStream textOut(fileOut);
 
         for ( size_t n = 0; n < numValues; n++ )
@@ -139,7 +139,7 @@ static void DoTestRoundTrip(const T *values, size_t numValues)
     }
 
     {
-        wxFileInputStream fileIn(_T("test.txt"));
+        wxFileInputStream fileIn(wxT("test.txt"));
         wxTextInputStream textIn(fileIn);
 
         T value;

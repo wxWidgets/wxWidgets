@@ -157,7 +157,7 @@ void wxStatusBarUniv::RefreshField(int i)
 void wxStatusBarUniv::SetStatusText(const wxString& text, int number)
 {
     wxCHECK_RET( number >= 0 && (size_t)number < m_panes.GetCount(),
-                 _T("invalid status bar field index in SetStatusText()") );
+                 wxT("invalid status bar field index in SetStatusText()") );
 
     if ( text == GetStatusText(number) )
     {
@@ -237,7 +237,7 @@ void wxStatusBarUniv::OnSize(wxSizeEvent& event)
 bool wxStatusBarUniv::GetFieldRect(int n, wxRect& rect) const
 {
     wxCHECK_MSG( n >= 0 && (size_t)n < m_panes.GetCount(), false,
-                 _T("invalid field index in GetFieldRect()") );
+                 wxT("invalid field index in GetFieldRect()") );
 
     // this is a fix for a bug exhibited by the statbar sample: if
     // GetFieldRect() is called from the derived class OnSize() handler, then
@@ -260,7 +260,7 @@ wxRect wxStatusBarUniv::DoGetFieldRect(int n) const
     // it's the caller responsability to check this, if unsure - call
     // GetFieldRect() instead
     wxCHECK_MSG( !m_widthsAbs.IsEmpty(), rect,
-                 _T("can't be called if we don't have the widths") );
+                 wxT("can't be called if we don't have the widths") );
 
     for ( int i = 0; i <= n; i++ )
     {

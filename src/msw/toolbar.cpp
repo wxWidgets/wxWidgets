@@ -200,7 +200,7 @@ public:
     wxStaticText* GetStaticText()
     {
         wxASSERT_MSG( IsControl(),
-                      _T("only makes sense for embedded control tools") );
+                      wxT("only makes sense for embedded control tools") );
 
         return m_staticText;
     }
@@ -361,7 +361,7 @@ void wxToolBar::Recreate()
     if ( !MSWCreateToolbar(pos, size) )
     {
         // what can we do?
-        wxFAIL_MSG( _T("recreating the toolbar failed") );
+        wxFAIL_MSG( wxT("recreating the toolbar failed") );
 
         return;
     }
@@ -752,7 +752,7 @@ bool wxToolBar::Realize()
                 }
                 else
                 {
-                    wxFAIL_MSG( _T("invalid tool button bitmap") );
+                    wxFAIL_MSG( wxT("invalid tool button bitmap") );
                 }
 
                 // also deal with disabled bitmap if we want to use them
@@ -997,7 +997,7 @@ bool wxToolBar::Realize()
                         break;
 
                     default:
-                        wxFAIL_MSG( _T("unexpected toolbar button kind") );
+                        wxFAIL_MSG( wxT("unexpected toolbar button kind") );
                         button.fsStyle = TBSTYLE_BUTTON;
                         break;
                 }
@@ -1277,7 +1277,7 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
         }
 
         const wxToolBarToolBase * const tool = FindById(tbhdr->iItem);
-        wxCHECK_MSG( tool, false, _T("drop down message for unknown tool") );
+        wxCHECK_MSG( tool, false, wxT("drop down message for unknown tool") );
 
         wxMenu * const menu = tool->GetDropdownMenu();
         if ( !menu )
@@ -1490,7 +1490,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
 {
     // VZ: AFAIK, the button has to be created either with TBSTYLE_CHECK or
     //     without, so we really need to delete the button and recreate it here
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 }
 
 void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
@@ -1601,7 +1601,7 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
             {
-                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+                wxLogApiError(wxT("DrawThemeParentBackground(toolbar)"), hr);
             }
         }
     }
@@ -1626,7 +1626,7 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
             {
-                wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+                wxLogApiError(wxT("DrawThemeParentBackground(toolbar)"), hr);
             }
         }
     }
@@ -1773,7 +1773,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 if ( !::SendMessage(GetHwnd(), TB_GETBUTTON,
                                     n, (LPARAM)&tbb) )
                 {
-                    wxLogDebug(_T("TB_GETBUTTON failed?"));
+                    wxLogDebug(wxT("TB_GETBUTTON failed?"));
 
                     continue;
                 }
@@ -1905,7 +1905,7 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 
     if ( !hdcMem )
     {
-        wxLogLastError(_T("CreateCompatibleDC"));
+        wxLogLastError(wxT("CreateCompatibleDC"));
 
         return bitmap;
     }
@@ -1914,7 +1914,7 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 
     if ( !bmpInHDC )
     {
-        wxLogLastError(_T("SelectObject"));
+        wxLogLastError(wxT("SelectObject"));
 
         return bitmap;
     }

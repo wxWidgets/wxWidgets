@@ -28,17 +28,17 @@
 // which breaks the compilation below
 #undef index
 
-#define wxIMAGE_OPTION_QUALITY  wxString(_T("quality"))
-#define wxIMAGE_OPTION_FILENAME wxString(_T("FileName"))
+#define wxIMAGE_OPTION_QUALITY  wxString(wxT("quality"))
+#define wxIMAGE_OPTION_FILENAME wxString(wxT("FileName"))
 
-#define wxIMAGE_OPTION_RESOLUTION            wxString(_T("Resolution"))
-#define wxIMAGE_OPTION_RESOLUTIONX           wxString(_T("ResolutionX"))
-#define wxIMAGE_OPTION_RESOLUTIONY           wxString(_T("ResolutionY"))
+#define wxIMAGE_OPTION_RESOLUTION            wxString(wxT("Resolution"))
+#define wxIMAGE_OPTION_RESOLUTIONX           wxString(wxT("ResolutionX"))
+#define wxIMAGE_OPTION_RESOLUTIONY           wxString(wxT("ResolutionY"))
 
-#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(_T("ResolutionUnit"))
+#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(wxT("ResolutionUnit"))
 
-#define wxIMAGE_OPTION_MAX_WIDTH             wxString(_T("MaxWidth"))
-#define wxIMAGE_OPTION_MAX_HEIGHT            wxString(_T("MaxHeight"))
+#define wxIMAGE_OPTION_MAX_WIDTH             wxString(wxT("MaxWidth"))
+#define wxIMAGE_OPTION_MAX_HEIGHT            wxString(wxT("MaxHeight"))
 
 // constants used with wxIMAGE_OPTION_RESOLUTIONUNIT
 //

@@ -386,7 +386,7 @@ bool wxWindowOS2::Create( wxWindow*       pParent,
     // static box
     //
     wxASSERT_MSG( !wxDynamicCast(pParent, wxStaticBox),
-                  _T("wxStaticBox can't be used as a window parent!") );
+                  wxT("wxStaticBox can't be used as a window parent!") );
 #endif // wxUSE_STATBOX
 
      // Ensure groupbox backgrounds are painted
@@ -456,7 +456,7 @@ bool wxWindowOS2::Create( wxWindow*       pParent,
 void wxWindowOS2::SetFocus()
 {
     HWND                            hWnd = GetHwnd();
-    wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
+    wxCHECK_RET( hWnd, wxT("can't set focus to invalid window") );
 
     if (hWnd)
         ::WinSetFocus(HWND_DESKTOP, hWnd);
@@ -2855,7 +2855,7 @@ void wxAssociateWinWithHandle(
     {
         wxString  Newstr(pWin->GetClassInfo()->GetClassName());
         wxString Oldstr(pOldWin->GetClassInfo()->GetClassName());
-        wxLogError( _T("Bug! New window of class %s has same HWND %X as old window of class %s"),
+        wxLogError( wxT("Bug! New window of class %s has same HWND %X as old window of class %s"),
                     Newstr.c_str(),
                     (int)hWnd,
                     Oldstr.c_str()
@@ -3001,7 +3001,7 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Error creating frame. Error: %s\n"), sError.c_str());
         return false;
     }
     SetSize( nX
@@ -3240,7 +3240,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table (1). Error: %s\n"), sError.c_str());
+            wxLogError(wxT("Unable to set current color table (1). Error: %s\n"), sError.c_str());
         }
         //
         // Set the color table to RGB mode
@@ -3255,7 +3255,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table (2). Error: %s\n"), sError.c_str());
+            wxLogError(wxT("Unable to set current color table (2). Error: %s\n"), sError.c_str());
         }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );

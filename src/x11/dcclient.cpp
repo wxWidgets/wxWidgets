@@ -345,7 +345,7 @@ void wxWindowDCImpl::SetUpDC()
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
-    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
 
     m_window->GetSize(width, height);
 }
@@ -2351,7 +2351,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxClientDCImpl, wxWindowDCImpl)
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window )
           : wxWindowDCImpl( owner, window )
 {
-    wxCHECK_RET( window, _T("NULL window in wxClientDC::wxClientDC") );
+    wxCHECK_RET( window, wxT("NULL window in wxClientDC::wxClientDC") );
 
     m_x11window = (WXWindow*) window->GetClientAreaWindow();
 
@@ -2367,7 +2367,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window )
 
 void wxClientDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
 
     m_window->GetClientSize( width, height );
 }
@@ -2410,7 +2410,7 @@ public:
     // display
     wxDCModule()
     {
-        AddDependency(wxClassInfo::FindClass(_T("wxX11DisplayModule")));
+        AddDependency(wxClassInfo::FindClass(wxT("wxX11DisplayModule")));
     }
 
     bool OnInit() { wxInitGCPool(); return true; }

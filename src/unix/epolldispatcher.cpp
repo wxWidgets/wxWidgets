@@ -52,21 +52,21 @@ static uint32_t GetEpollMask(int flags, int fd)
     {
         ep |= EPOLLIN;
         wxLogTrace(wxEpollDispatcher_Trace,
-                   _T("Registered fd %d for input events"), fd);
+                   wxT("Registered fd %d for input events"), fd);
     }
 
     if ( flags & wxFDIO_OUTPUT )
     {
         ep |= EPOLLOUT;
         wxLogTrace(wxEpollDispatcher_Trace,
-                   _T("Registered fd %d for output events"), fd);
+                   wxT("Registered fd %d for output events"), fd);
     }
 
     if ( flags & wxFDIO_EXCEPTION )
     {
         ep |= EPOLLERR | EPOLLHUP;
         wxLogTrace(wxEpollDispatcher_Trace,
-                   _T("Registered fd %d for exceptional events"), fd);
+                   wxT("Registered fd %d for exceptional events"), fd);
     }
 
     return ep;
@@ -86,13 +86,13 @@ wxEpollDispatcher *wxEpollDispatcher::Create()
         return NULL;
     }
     wxLogTrace(wxEpollDispatcher_Trace,
-                   _T("Epoll fd %d created"), epollDescriptor);
+                   wxT("Epoll fd %d created"), epollDescriptor);
     return new wxEpollDispatcher(epollDescriptor);
 }
 
 wxEpollDispatcher::wxEpollDispatcher(int epollDescriptor)
 {
-    wxASSERT_MSG( epollDescriptor != -1, _T("invalid descriptor") );
+    wxASSERT_MSG( epollDescriptor != -1, wxT("invalid descriptor") );
 
     m_epollDescriptor = epollDescriptor;
 }
@@ -120,7 +120,7 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
         return false;
     }
     wxLogTrace(wxEpollDispatcher_Trace,
-               _T("Added fd %d (handler %p) to epoll %d"), fd, handler, m_epollDescriptor);
+               wxT("Added fd %d (handler %p) to epoll %d"), fd, handler, m_epollDescriptor);
 
     return true;
 }
@@ -141,7 +141,7 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
     }
 
     wxLogTrace(wxEpollDispatcher_Trace,
-                _T("Modified fd %d (handler: %p) on epoll %d"), fd, handler, m_epollDescriptor);
+                wxT("Modified fd %d (handler: %p) on epoll %d"), fd, handler, m_epollDescriptor);
     return true;
 }
 
@@ -157,7 +157,7 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
                       fd, m_epollDescriptor);
     }
     wxLogTrace(wxEpollDispatcher_Trace,
-                _T("removed fd %d from %d"), fd, m_epollDescriptor);
+                wxT("removed fd %d from %d"), fd, m_epollDescriptor);
     return true;
 }
 
@@ -222,7 +222,7 @@ int wxEpollDispatcher::Dispatch(int timeout)
         wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
         if ( !handler )
         {
-            wxFAIL_MSG( _T("NULL handler in epoll_event?") );
+            wxFAIL_MSG( wxT("NULL handler in epoll_event?") );
             continue;
         }
 

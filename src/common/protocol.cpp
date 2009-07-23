@@ -137,7 +137,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             if ( eol == pBuf )
             {
                 // check for case of "\r\n" being split
-                if ( result.empty() || result.Last() != _T('\r') )
+                if ( result.empty() || result.Last() != wxT('\r') )
                 {
                     // ignore the stray '\n'
                     eol = NULL;

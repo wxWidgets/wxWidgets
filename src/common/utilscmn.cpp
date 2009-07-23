@@ -545,7 +545,7 @@ wxString wxGetCurrentDir()
         {
             if ( errno != ERANGE )
             {
-                wxLogSysError(_T("Failed to get current directory"));
+                wxLogSysError(wxT("Failed to get current directory"));
 
                 return wxEmptyString;
             }
@@ -573,7 +573,7 @@ wxString wxGetCurrentDir()
 #if wxUSE_STREAMS
 static bool ReadAll(wxInputStream *is, wxArrayString& output)
 {
-    wxCHECK_MSG( is, false, _T("NULL stream in wxExecute()?") );
+    wxCHECK_MSG( is, false, wxT("NULL stream in wxExecute()?") );
 
     // the stream could be already at EOF or in wxSTREAM_BROKEN_PIPE state
     is->Reset();
@@ -959,7 +959,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
     wxString cmd;
 
 #if wxUSE_MIMETYPE
-    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(_T("html"));
+    wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(wxT("html"));
     if ( ft )
     {
         wxString mt;
@@ -974,7 +974,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
     {
         // fallback to checking for the BROWSER environment variable
         if ( !wxGetEnv(wxT("BROWSER"), &cmd) || cmd.empty() )
-            cmd << _T(' ') << url;
+            cmd << wxT(' ') << url;
     }
 
     ok = ( !cmd.empty() && wxExecute(cmd) );
@@ -1116,7 +1116,7 @@ wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 
 wxString wxStripMenuCodes(const wxString& in, int flags)
 {
-    wxASSERT_MSG( flags, _T("this is useless to call without any flags") );
+    wxASSERT_MSG( flags, wxT("this is useless to call without any flags") );
 
     wxString out;
 
@@ -1126,14 +1126,14 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
     for ( size_t n = 0; n < len; n++ )
     {
         wxChar ch = in[n];
-        if ( (flags & wxStrip_Mnemonics) && ch == _T('&') )
+        if ( (flags & wxStrip_Mnemonics) && ch == wxT('&') )
         {
             // skip it, it is used to introduce the accel char (or to quote
             // itself in which case it should still be skipped): note that it
             // can't be the last character of the string
             if ( ++n == len )
             {
-                wxLogDebug(_T("Invalid menu string '%s'"), in.c_str());
+                wxLogDebug(wxT("Invalid menu string '%s'"), in.c_str());
             }
             else
             {
@@ -1141,7 +1141,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
                 ch = in[n];
             }
         }
-        else if ( (flags & wxStrip_Accel) && ch == _T('\t') )
+        else if ( (flags & wxStrip_Accel) && ch == wxT('\t') )
         {
             // everything after TAB is accel string, exit the loop
             break;
@@ -1305,7 +1305,7 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
             return wxCANCEL;
     }
 
-    wxFAIL_MSG( _T("unexpected return code from wxMessageDialog") );
+    wxFAIL_MSG( wxT("unexpected return code from wxMessageDialog") );
 
     return wxCANCEL;
 }
@@ -1314,10 +1314,10 @@ void wxInfoMessageBox(wxWindow* parent)
 {
     // don't translate these strings, they're for diagnostics purposes only
     wxString msg;
-    msg.Printf(_T("wxWidgets Library (%s port)\n")
-               _T("Version %d.%d.%d%s%s, compiled at %s %s\n")
-               _T("Runtime version of toolkit used is %d.%d.%s\n")
-               _T("Copyright (c) 1995-2009 wxWidgets team"),
+    msg.Printf(wxT("wxWidgets Library (%s port)\n")
+               wxT("Version %d.%d.%d%s%s, compiled at %s %s\n")
+               wxT("Runtime version of toolkit used is %d.%d.%s\n")
+               wxT("Copyright (c) 1995-2009 wxWidgets team"),
                wxPlatformInfo::Get().GetPortIdName().c_str(),
                wxMAJOR_VERSION,
                wxMINOR_VERSION,
@@ -1328,7 +1328,7 @@ void wxInfoMessageBox(wxWindow* parent)
                wxEmptyString,
 #endif
 #ifdef __WXDEBUG__
-               _T(" Debug build"),
+               wxT(" Debug build"),
 #else
                wxEmptyString,
 #endif
@@ -1345,7 +1345,7 @@ void wxInfoMessageBox(wxWindow* parent)
                wxEmptyString
 #endif
                );
-    wxMessageBox(msg, _T("wxWidgets information"),
+    wxMessageBox(msg, wxT("wxWidgets information"),
                  wxICON_INFORMATION | wxOK,
                  parent);
 }

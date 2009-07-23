@@ -144,7 +144,7 @@ END_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, _T("FilePicker"),
+IMPLEMENT_WIDGETS_PAGE(FilePickerWidgetsPage, wxT("FilePicker"),
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 FilePickerWidgetsPage::FilePickerWidgetsPage(WidgetsBookCtrl *book,
@@ -158,20 +158,20 @@ void FilePickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    static const wxString mode[] = { _T("open"), _T("save") };
-    m_radioFilePickerMode = new wxRadioBox(this, wxID_ANY, _T("wxFilePicker mode"),
+    static const wxString mode[] = { wxT("open"), wxT("save") };
+    m_radioFilePickerMode = new wxRadioBox(this, wxID_ANY, wxT("wxFilePicker mode"),
                                            wxDefaultPosition, wxDefaultSize,
                                            WXSIZEOF(mode), mode);
     boxleft->Add(m_radioFilePickerMode, 0, wxALL|wxGROW, 5);
 
-    wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, _T("&FilePicker style"));
-    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, _T("With textctrl"), false);
-    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, _T("Overwrite prompt"), false);
-    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, _T("File must exist"), false);
-    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, _T("Change working dir"), false);
+    wxStaticBoxSizer *filebox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&FilePicker style"));
+    m_chkFileTextCtrl = CreateCheckBoxAndAddToSizer(filebox, wxT("With textctrl"), false);
+    m_chkFileOverwritePrompt = CreateCheckBoxAndAddToSizer(filebox, wxT("Overwrite prompt"), false);
+    m_chkFileMustExist = CreateCheckBoxAndAddToSizer(filebox, wxT("File must exist"), false);
+    m_chkFileChangeDir = CreateCheckBoxAndAddToSizer(filebox, wxT("Change working dir"), false);
     boxleft->Add(filebox, 0, wxALL|wxGROW, 5);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, _T("&Reset")),
+    boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state

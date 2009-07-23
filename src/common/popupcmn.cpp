@@ -552,7 +552,7 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 
         default:
             // forgot to update the switch after adding a new hit test code?
-            wxFAIL_MSG( _T("unexpected HitTest() return value") );
+            wxFAIL_MSG( wxT("unexpected HitTest() return value") );
             // fall through
 
         case wxHT_WINDOW_CORNER:

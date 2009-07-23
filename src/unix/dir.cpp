@@ -91,7 +91,7 @@ wxDirData::wxDirData(const wxString& dirname)
 
     // throw away the trailing slashes
     size_t n = m_dirname.length();
-    wxCHECK_RET( n, _T("empty dir name in wxDir") );
+    wxCHECK_RET( n, wxT("empty dir name in wxDir") );
 
     while ( n > 0 && m_dirname[--n] == '/' )
         ;
@@ -108,7 +108,7 @@ wxDirData::~wxDirData()
     {
         if ( closedir(m_dir) != 0 )
         {
-            wxLogLastError(_T("closedir"));
+            wxLogLastError(wxT("closedir"));
         }
     }
 }
@@ -120,7 +120,7 @@ bool wxDirData::Read(wxString *filename)
 
     // speed up string concatenation in the loop a bit
     wxString path = m_dirname;
-    path += _T('/');
+    path += wxT('/');
     path.reserve(path.length() + 255);
 
     wxString de_d_name;
@@ -183,7 +183,7 @@ bool wxDirData::Read(wxString *filename)
 
 wxDirData::wxDirData(const wxString& WXUNUSED(dirname))
 {
-    wxFAIL_MSG(_T("not implemented"));
+    wxFAIL_MSG(wxT("not implemented"));
 }
 
 wxDirData::~wxDirData()
@@ -245,7 +245,7 @@ wxString wxDir::GetName() const
     if ( m_data )
     {
         name = M_DIR->GetName();
-        if ( !name.empty() && (name.Last() == _T('/')) )
+        if ( !name.empty() && (name.Last() == wxT('/')) )
         {
             // chop off the last (back)slash
             name.Truncate(name.length() - 1);
@@ -268,7 +268,7 @@ bool wxDir::GetFirst(wxString *filename,
                      const wxString& filespec,
                      int flags) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
 
     M_DIR->Rewind();
 
@@ -280,16 +280,16 @@ bool wxDir::GetFirst(wxString *filename,
 
 bool wxDir::GetNext(wxString *filename) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
 
-    wxCHECK_MSG( filename, false, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( filename, false, wxT("bad pointer in wxDir::GetNext()") );
 
     return M_DIR->Read(filename);
 }
 
 bool wxDir::HasSubDirs(const wxString& spec) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
 
     if ( spec.empty() )
     {

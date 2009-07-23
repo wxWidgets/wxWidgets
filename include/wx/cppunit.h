@@ -81,7 +81,7 @@
     if (Condition) \
         { anyTest; } \
     else \
-        wxLogInfo(wxString::Format(_T("skipping: %s.%s\n  reason: %s equals false\n"), \
+        wxLogInfo(wxString::Format(wxT("skipping: %s.%s\n  reason: %s equals false\n"), \
                                     wxString(suiteName, wxConvUTF8).c_str(), \
                                     wxString(#testMethod, wxConvUTF8).c_str(), \
                                     wxString(#Condition, wxConvUTF8).c_str()))

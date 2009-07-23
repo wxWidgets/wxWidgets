@@ -652,7 +652,7 @@ void wxMenuItem::Check( bool check )
             break;
 
         default:
-            wxFAIL_MSG( _T("can't check this item") );
+            wxFAIL_MSG( wxT("can't check this item") );
     }
 }
 

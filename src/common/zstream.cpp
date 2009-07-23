@@ -60,8 +60,8 @@ wxZlibClassFactory::wxZlibClassFactory()
 const wxChar * const *
 wxZlibClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *mimes[] = { _T("application/x-deflate"), NULL };
-    static const wxChar *encs[] =  { _T("deflate"), NULL };
+    static const wxChar *mimes[] = { wxT("application/x-deflate"), NULL };
+    static const wxChar *encs[] =  { wxT("deflate"), NULL };
     static const wxChar *empty[] = { NULL };
 
     switch (type) {
@@ -89,13 +89,13 @@ const wxChar * const *
 wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
     static const wxChar *protos[] =     
-        { _T("gzip"), NULL };
+        { wxT("gzip"), NULL };
     static const wxChar *mimes[] =     
-        { _T("application/gzip"), _T("application/x-gzip"), NULL };
+        { wxT("application/gzip"), wxT("application/x-gzip"), NULL };
     static const wxChar *encs[] = 
-        { _T("gzip"), NULL };
+        { wxT("gzip"), NULL };
     static const wxChar *exts[] =    
-        { _T(".gz"), _T(".gzip"), NULL };
+        { wxT(".gz"), wxT(".gzip"), NULL };
     static const wxChar *empty[] =
         { NULL };
 

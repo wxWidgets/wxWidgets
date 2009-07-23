@@ -656,7 +656,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
     if (m_grabbed)
     {
-        wxASSERT_MSG( false, _T("Window still grabbed"));
+        wxASSERT_MSG( false, wxT("Window still grabbed"));
         RemoveGrab();
     }
 
@@ -1043,8 +1043,8 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         if ( g_delayedFocus &&
              wxGetTopLevelParent((wxWindow*)g_delayedFocus) == this )
         {
-            wxLogTrace(_T("focus"),
-                       _T("Setting focus from wxTLW::OnIdle() to %s(%s)"),
+            wxLogTrace(wxT("focus"),
+                       wxT("Setting focus from wxTLW::OnIdle() to %s(%s)"),
                        g_delayedFocus->GetClassInfo()->GetClassName(),
                        g_delayedFocus->GetLabel().c_str());
 
@@ -1119,12 +1119,12 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 
 void wxTopLevelWindowGTK::Maximize(bool WXUNUSED(maximize))
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 }
 
 bool wxTopLevelWindowGTK::IsMaximized() const
 {
-  //    wxFAIL_MSG( _T("not implemented") );
+  //    wxFAIL_MSG( wxT("not implemented") );
 
     // This is an approximation
     return false;
@@ -1132,7 +1132,7 @@ bool wxTopLevelWindowGTK::IsMaximized() const
 
 void wxTopLevelWindowGTK::Restore()
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 }
 
 void wxTopLevelWindowGTK::Iconize( bool iconize )
@@ -1142,7 +1142,7 @@ void wxTopLevelWindowGTK::Iconize( bool iconize )
        GdkWindow *window = m_widget->window;
 
        // you should do it later, for example from OnCreate() handler
-       wxCHECK_RET( window, _T("frame not created yet - can't iconize") );
+       wxCHECK_RET( window, wxT("frame not created yet - can't iconize") );
 
        XIconifyWindow( GDK_WINDOW_XDISPLAY( window ),
                        GDK_WINDOW_XWINDOW( window ),
@@ -1210,7 +1210,7 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
 bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 {
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
-                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+                 wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
     GdkWindow *window = NULL;
     if (m_wxwindow)

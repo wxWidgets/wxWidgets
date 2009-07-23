@@ -135,7 +135,7 @@ bool wxRadioButton::Create(wxWindow *parent,
     if ( HasFlag(wxALIGN_RIGHT) )
         msStyle |= BS_LEFTTEXT | BS_RIGHT;
 
-    if ( !MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, 0) )
+    if ( !MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0) )
         return false;
 
     // for compatibility with wxGTK, the first radio button in a group is
@@ -172,12 +172,12 @@ void wxRadioButton::SetValue(bool value)
     wxWindow * const focus = FindFocus();
     wxTopLevelWindow * const
         tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    wxCHECK_RET( tlw, _T("radio button outside of TLW?") );
+    wxCHECK_RET( tlw, wxT("radio button outside of TLW?") );
     wxWindow * const focusInTLW = tlw->GetLastFocus();
 
     const wxWindowList& siblings = GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
-    wxCHECK_RET( nodeThis, _T("radio button not a child of its parent?") );
+    wxCHECK_RET( nodeThis, wxT("radio button not a child of its parent?") );
 
     // this will be set to true in the code below if the focus is in our TLW
     // and belongs to one of the other buttons in the same group
@@ -262,7 +262,7 @@ bool wxRadioButton::GetValue() const
 {
     wxASSERT_MSG( m_isChecked ==
                     (::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0L) != 0),
-                  _T("wxRadioButton::m_isChecked is out of sync?") );
+                  wxT("wxRadioButton::m_isChecked is out of sync?") );
 
     return m_isChecked;
 }

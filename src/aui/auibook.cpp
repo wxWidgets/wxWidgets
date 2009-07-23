@@ -3438,7 +3438,7 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
 void wxAuiNotebook::SetSelectionToWindow(wxWindow *win)
 {
     const int idx = m_tabs.GetIdxFromWindow(win);
-    wxCHECK_RET( idx != wxNOT_FOUND, _T("invalid notebook page") );
+    wxCHECK_RET( idx != wxNOT_FOUND, wxT("invalid notebook page") );
 
 
     // since a tab was clicked, let the parent know that we received
@@ -3844,7 +3844,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
-    wxCHECK_RET( src_tabs, _T("no source object?") );
+    wxCHECK_RET( src_tabs, wxT("no source object?") );
 
     src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
 
@@ -3907,7 +3907,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
 
                 // get main index of the page
                 int main_idx = m_tabs.GetIdxFromWindow(src_page);
-                wxCHECK_RET( main_idx != wxNOT_FOUND, _T("no source page?") );
+                wxCHECK_RET( main_idx != wxNOT_FOUND, wxT("no source page?") );
 
 
                 // make a copy of the page info
@@ -4305,7 +4305,7 @@ void wxAuiNotebook::OnTabButton(wxAuiNotebookEvent& evt)
 #endif
             {
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
-                wxCHECK_RET( main_idx != wxNOT_FOUND, _T("no page to delete?") );
+                wxCHECK_RET( main_idx != wxNOT_FOUND, wxT("no page to delete?") );
 
                 DeletePage(main_idx);
             }

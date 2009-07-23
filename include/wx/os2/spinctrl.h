@@ -36,7 +36,7 @@ public:
                ,int             nMin = 0
                ,int             nMax = 100
                ,int             nInitial = 0
-               ,const wxString& rsName = _T("wxSpinCtrl")
+               ,const wxString& rsName = wxT("wxSpinCtrl")
               )
     {
         Create(pParent, vId, rsValue, rPos, rSize, lStyle, nMin, nMax, nInitial, rsName);
@@ -52,7 +52,7 @@ public:
                ,int             nMin = 0
                ,int             nMax = 100
                ,int             nInitial = 0
-               ,const wxString& rsName = _T("wxSpinCtrl")
+               ,const wxString& rsName = wxT("wxSpinCtrl")
               );
 
     //

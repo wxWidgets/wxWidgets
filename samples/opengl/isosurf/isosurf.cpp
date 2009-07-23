@@ -103,9 +103,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
 
-    fileMenu->Append(wxID_EXIT, _T("E&xit"));
+    fileMenu->Append(wxID_EXIT, wxT("E&xit"));
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, _T("&File"));
+    menuBar->Append(fileMenu, wxT("&File"));
     SetMenuBar(menuBar);
 
 
@@ -230,7 +230,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
 
     delete stream;
 
-    wxLogMessage(_T("Loaded %d vertices, %d triangles from '%s'"),
+    wxLogMessage(wxT("Loaded %d vertices, %d triangles from '%s'"),
                  m_numverts, m_numverts-2, filename.c_str());
                  
     // NOTE: for some reason under wxGTK the following is required to avoid that

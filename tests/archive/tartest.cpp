@@ -44,8 +44,8 @@ protected:
 tartest::tartest()
   : ArchiveTestSuite("tar")
 {
-    AddArchiver(_T("tar cf %s *"));
-    AddUnArchiver(_T("tar xf %s"));
+    AddArchiver(wxT("tar cf %s *"));
+    AddUnArchiver(wxT("tar xf %s"));
 }
 
 CppUnit::Test *tartest::makeTest(

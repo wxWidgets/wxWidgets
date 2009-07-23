@@ -431,7 +431,7 @@ public:
                     break;
 
                 default:
-                    wxFAIL_MSG( _T("unsupported wxTreeItemIcon value") );
+                    wxFAIL_MSG( wxT("unsupported wxTreeItemIcon value") );
             }
         }
 
@@ -866,7 +866,7 @@ wxTreeCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 bool wxTreeCtrl::DoGetItem(wxTreeViewItem *tvItem) const
 {
     wxCHECK_MSG( tvItem->hItem != TVI_ROOT, false,
-                 _T("can't retrieve virtual root item") );
+                 wxT("can't retrieve virtual root item") );
 
     if ( !TreeView_GetItem(GetHwnd(), tvItem) )
     {
@@ -1503,7 +1503,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
 {
     wxCHECK_MSG( parent.IsOk() || !TreeView_GetRoot(GetHwnd()),
                  wxTreeItemId(),
-                 _T("can't have more than one root in the tree") );
+                 wxT("can't have more than one root in the tree") );
 
     TV_INSERTSTRUCT tvIns;
     tvIns.hParent = HITEM(parent);
@@ -1584,7 +1584,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
 {
     if ( HasFlag(wxTR_HIDE_ROOT) )
     {
-        wxASSERT_MSG( !m_pVirtualRoot, _T("tree can have only a single root") );
+        wxASSERT_MSG( !m_pVirtualRoot, wxT("tree can have only a single root") );
 
         // create a virtual root item, the parent for all the others
         wxTreeItemParam *param = new wxTreeItemParam;
@@ -1625,7 +1625,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
         // assert, not check: if the index is invalid, we will append the item
         // to the end
-        wxASSERT_MSG( index == 0, _T("bad index in wxTreeCtrl::InsertItem") );
+        wxASSERT_MSG( index == 0, wxT("bad index in wxTreeCtrl::InsertItem") );
     }
 
     return DoInsertAfter(parent, idPrev, text, image, selectedImage, data);
@@ -1881,7 +1881,7 @@ void wxTreeCtrl::DoSelectItem(const wxTreeItemId& item, bool select)
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
-    wxCHECK_RET( !IsHiddenRoot(item), _T("can't select hidden root item") );
+    wxCHECK_RET( !IsHiddenRoot(item), wxT("can't select hidden root item") );
 
     if ( select == IsSelected(item) )
     {
@@ -1952,7 +1952,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
-    wxCHECK_RET( !IsHiddenRoot(item), _T("can't show hidden root item") );
+    wxCHECK_RET( !IsHiddenRoot(item), wxT("can't show hidden root item") );
 
     // no error return
     TreeView_EnsureVisible(GetHwnd(), HITEM(item));
@@ -3499,7 +3499,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                             if ( !loaded )
                             {
-                                wxLoadedDLL dllComCtl32(_T("comctl32.dll"));
+                                wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
                                 if ( dllComCtl32.IsLoaded() )
                                     wxDL_INIT_FUNC(s_pfn, ImageList_Copy, dllComCtl32);
                             }
@@ -3701,7 +3701,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 // normally this is impossible because the m_dragImage is
                 // deleted once the drag operation is over
-                wxASSERT_MSG( !m_dragImage, _T("starting to drag once again?") );
+                wxASSERT_MSG( !m_dragImage, wxT("starting to drag once again?") );
 
                 m_dragImage = new wxDragImage(*this, event.m_item);
                 m_dragImage->BeginDrag(wxPoint(0,0), this);

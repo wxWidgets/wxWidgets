@@ -90,7 +90,7 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
     // are you trying to call SetSelection() from a notebook event handler?
     // you shouldn't!
     wxCHECK_RET( !notebook->m_inSwitchPage,
-                 _T("gtk_notebook_page_change_callback reentered") );
+                 wxT("gtk_notebook_page_change_callback reentered") );
 
     notebook->m_inSwitchPage = true;
     if (g_isIdle)
@@ -230,7 +230,7 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
         if (sel == -1)
             return TRUE;
         wxGtkNotebookPage *nb_page = notebook->GetNotebookPage(sel);
-        wxCHECK_MSG( nb_page, FALSE, _T("invalid selection in wxNotebook") );
+        wxCHECK_MSG( nb_page, FALSE, wxT("invalid selection in wxNotebook") );
 
         wxNavigationKeyEvent event;
         event.SetEventObject( notebook );
@@ -589,7 +589,7 @@ bool wxNotebook::DeleteAllPages()
     while (m_pagesData.GetCount() > 0)
         DeletePage( m_pagesData.GetCount()-1 );
 
-    wxASSERT_MSG( GetPageCount() == 0, _T("all pages must have been deleted") );
+    wxASSERT_MSG( GetPageCount() == 0, wxT("all pages must have been deleted") );
 
     InvalidateBestSize();
     return wxNotebookBase::DeleteAllPages();
@@ -641,7 +641,7 @@ bool wxNotebook::InsertPage( size_t position,
                wxT("Can't add a page whose parent is not the notebook!") );
 
     wxCHECK_MSG( position <= GetPageCount(), FALSE,
-                 _T("invalid page index in wxNotebookPage::InsertPage()") );
+                 wxT("invalid page index in wxNotebookPage::InsertPage()") );
 
     // Hack Alert! (Part II): See above in wxInsertChildInNotebook callback
     // why this has to be done.  NOTE: using gtk_widget_unparent here does not

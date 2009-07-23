@@ -183,7 +183,7 @@ void wxRegion::Clear()
 // Move the region
 bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 {
-    wxCHECK_MSG( M_REGION, false, _T("invalid wxRegion") );
+    wxCHECK_MSG( M_REGION, false, wxT("invalid wxRegion") );
 
     if ( !x && !y )
         // nothing to do
@@ -198,7 +198,7 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 //! Union /e region with this.
 bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 {
-    wxCHECK_MSG( region.Ok(), false, _T("invalid wxRegion") );
+    wxCHECK_MSG( region.Ok(), false, wxT("invalid wxRegion") );
 
     // Don't change shared data
     if (!m_refData)
@@ -250,7 +250,7 @@ bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 
 bool wxRegion::DoIsEqual(const wxRegion& WXUNUSED(region)) const
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 
     return false;
 }

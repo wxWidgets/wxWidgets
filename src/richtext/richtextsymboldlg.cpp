@@ -394,7 +394,7 @@ void wxSymbolPickerDialog::CreateControls()
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_fontCtrlStrings;
-    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, _T(""), wxDefaultPosition, wxSize(240, -1), m_fontCtrlStrings, wxCB_READONLY );
+    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, wxT(""), wxDefaultPosition, wxSize(240, -1), m_fontCtrlStrings, wxCB_READONLY );
     m_fontCtrl->SetHelpText(_("The font from which to take the symbol."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_fontCtrl->SetToolTip(_("The font from which to take the symbol."));
@@ -410,7 +410,7 @@ void wxSymbolPickerDialog::CreateControls()
 
 #if defined(__UNICODE__)
     wxArrayString m_subsetCtrlStrings;
-    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, _T(""), wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
+    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, wxT(""), wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
     m_subsetCtrl->SetHelpText(_("Shows a Unicode subset."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_subsetCtrl->SetToolTip(_("Shows a Unicode subset."));
@@ -432,7 +432,7 @@ void wxSymbolPickerDialog::CreateControls()
     wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Character code:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, _T(""), wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
+    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, wxT(""), wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
     m_characterCodeCtrl->SetHelpText(_("The character code."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_characterCodeCtrl->SetToolTip(_("The character code."));
@@ -801,7 +801,7 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
 {
     wxASSERT_MSG( current == wxNOT_FOUND ||
                     (current >= m_minSymbolValue && current <= m_maxSymbolValue),
-                  _T("wxSymbolListCtrl::DoSetCurrent(): invalid symbol value") );
+                  wxT("wxSymbolListCtrl::DoSetCurrent(): invalid symbol value") );
 
     if ( current == m_current )
     {
@@ -854,7 +854,7 @@ void wxSymbolListCtrl::SetSelection(int selection)
 {
     wxCHECK_RET( selection == wxNOT_FOUND ||
                   (selection >= m_minSymbolValue && selection < m_maxSymbolValue),
-                  _T("wxSymbolListCtrl::SetSelection(): invalid symbol value") );
+                  wxT("wxSymbolListCtrl::SetSelection(): invalid symbol value") );
 
     DoSetCurrent(selection);
 }

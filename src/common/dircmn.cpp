@@ -81,7 +81,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
                        int flags) const
 {
     wxCHECK_MSG( IsOpened(), (size_t)-1,
-                 _T("dir must be opened before traversing it") );
+                 wxT("dir must be opened before traversing it") );
 
     // the total number of files found
     size_t nFiles = 0;
@@ -103,7 +103,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
             switch ( sink.OnDir(fulldirname) )
             {
                 default:
-                    wxFAIL_MSG(_T("unexpected OnDir() return value") );
+                    wxFAIL_MSG(wxT("unexpected OnDir() return value") );
                     // fall through
 
                 case wxDIR_STOP:
@@ -131,7 +131,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
                                 switch ( sink.OnOpenError(fulldirname) )
                                 {
                                     default:
-                                        wxFAIL_MSG(_T("unexpected OnOpenError() return value") );
+                                        wxFAIL_MSG(wxT("unexpected OnOpenError() return value") );
                                         // fall through
 
                                     case wxDIR_STOP:
@@ -180,7 +180,7 @@ size_t wxDir::Traverse(wxDirTraverser& sink,
                 break;
 
             wxASSERT_MSG( res == wxDIR_CONTINUE,
-                          _T("unexpected OnFile() return value") );
+                          wxT("unexpected OnFile() return value") );
 
             nFiles++;
 
@@ -223,7 +223,7 @@ size_t wxDir::GetAllFiles(const wxString& dirname,
                           const wxString& filespec,
                           int flags)
 {
-    wxCHECK_MSG( files, (size_t)-1, _T("NULL pointer in wxDir::GetAllFiles") );
+    wxCHECK_MSG( files, (size_t)-1, wxT("NULL pointer in wxDir::GetAllFiles") );
 
     size_t nFiles = 0;
 

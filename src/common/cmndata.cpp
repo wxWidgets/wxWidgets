@@ -87,7 +87,7 @@ wxColourData::~wxColourData()
 
 void wxColourData::SetCustomColour(int i, const wxColour& colour)
 {
-    wxCHECK_RET( i >= 0 && i < NUM_CUSTOM, _T("custom colour index out of range") );
+    wxCHECK_RET( i >= 0 && i < NUM_CUSTOM, wxT("custom colour index out of range") );
 
     m_custColours[i] = colour;
 }
@@ -95,7 +95,7 @@ void wxColourData::SetCustomColour(int i, const wxColour& colour)
 wxColour wxColourData::GetCustomColour(int i) const
 {
     wxCHECK_MSG( i >= 0 && i < NUM_CUSTOM, wxColour(0,0,0),
-                 _T("custom colour index out of range") );
+                 wxT("custom colour index out of range") );
 
     return m_custColours[i];
 }

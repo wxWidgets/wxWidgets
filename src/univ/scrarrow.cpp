@@ -123,7 +123,7 @@ wxScrollArrows::wxScrollArrows(wxControlWithArrows *control)
 wxScrollArrows::~wxScrollArrows()
 {
     // it should have been destroyed
-    wxASSERT_MSG( !m_captureData, _T("memory leak in wxScrollArrows") );
+    wxASSERT_MSG( !m_captureData, wxT("memory leak in wxScrollArrows") );
 }
 
 // ----------------------------------------------------------------------------

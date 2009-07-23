@@ -373,7 +373,7 @@ bool wxNotebook::InsertPage( size_t position,
                wxT("Can't add a page whose parent is not the notebook!") );
 
     wxCHECK_MSG( position <= GetPageCount(), false,
-                 _T("invalid page index in wxNotebookPage::InsertPage()") );
+                 wxT("invalid page index in wxNotebookPage::InsertPage()") );
 
     // Hack Alert! (Part II): See above in wxNotebook::AddChildGTK
     // why this has to be done.

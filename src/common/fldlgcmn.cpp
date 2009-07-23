@@ -65,14 +65,14 @@ bool wxFileDialogBase::Create(wxWindow *parent,
 
     // check that the styles are not contradictory
     wxASSERT_MSG( !(HasFdFlag(wxFD_SAVE) && HasFdFlag(wxFD_OPEN)),
-                  _T("can't specify both wxFD_SAVE and wxFD_OPEN at once") );
+                  wxT("can't specify both wxFD_SAVE and wxFD_OPEN at once") );
 
     wxASSERT_MSG( !HasFdFlag(wxFD_SAVE) ||
                     (!HasFdFlag(wxFD_MULTIPLE) && !HasFdFlag(wxFD_FILE_MUST_EXIST)),
-                   _T("wxFD_MULTIPLE or wxFD_FILE_MUST_EXIST can't be used with wxFD_SAVE" ) );
+                   wxT("wxFD_MULTIPLE or wxFD_FILE_MUST_EXIST can't be used with wxFD_SAVE" ) );
 
     wxASSERT_MSG( !HasFdFlag(wxFD_OPEN) || !HasFdFlag(wxFD_OVERWRITE_PROMPT),
-                  _T("wxFD_OVERWRITE_PROMPT can't be used with wxFD_OPEN") );
+                  wxT("wxFD_OVERWRITE_PROMPT can't be used with wxFD_OPEN") );
 
     if ( wildCard.empty() || wildCard == wxFileSelectorDefaultWildcardStr )
     {
@@ -85,7 +85,7 @@ bool wxFileDialogBase::Create(wxWindow *parent,
         // convert m_wildCard from "*.bar" to "bar files (*.bar)|*.bar"
         if ( m_wildCard.Find(wxT('|')) == wxNOT_FOUND )
         {
-            wxString::size_type nDot = m_wildCard.find(_T("*."));
+            wxString::size_type nDot = m_wildCard.find(wxT("*."));
             if ( nDot != wxString::npos )
                 nDot++;
             else
@@ -300,7 +300,7 @@ static wxString wxDefaultFileSelector(bool load,
     wxString ext;
     if ( !extension.empty() )
     {
-        if ( extension[0u] == _T('.') )
+        if ( extension[0u] == wxT('.') )
             ext = extension.substr(1);
         else
             ext = extension;

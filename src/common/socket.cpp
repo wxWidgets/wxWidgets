@@ -115,7 +115,7 @@ wxDEFINE_EVENT(wxEVT_SOCKET, wxSocketEvent);
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
 
-#define wxTRACE_Socket _T("wxSocket")
+#define wxTRACE_Socket wxT("wxSocket")
 
 // --------------------------------------------------------------------------
 // wxWin macros
@@ -771,7 +771,7 @@ bool wxSocketBase::Initialize()
 void wxSocketBase::Shutdown()
 {
     // we should be initialized
-    wxASSERT_MSG( m_countInit > 0, _T("extra call to Shutdown()") );
+    wxASSERT_MSG( m_countInit > 0, wxT("extra call to Shutdown()") );
     if ( --m_countInit == 0 )
     {
         wxSocketManager * const manager = wxSocketManager::Get();
@@ -1737,13 +1737,13 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
                                wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_SERVER)
 {
-    wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
+    wxLogTrace( wxTRACE_Socket, wxT("Opening wxSocketServer") );
 
     m_impl = wxSocketImpl::Create(*this);
 
     if (!m_impl)
     {
-        wxLogTrace( wxTRACE_Socket, _T("*** Failed to create m_impl") );
+        wxLogTrace( wxTRACE_Socket, wxT("*** Failed to create m_impl") );
         return;
     }
 
@@ -1765,11 +1765,11 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
         delete m_impl;
         m_impl = NULL;
 
-        wxLogTrace( wxTRACE_Socket, _T("*** CreateServer() failed") );
+        wxLogTrace( wxTRACE_Socket, wxT("*** CreateServer() failed") );
         return;
     }
 
-    wxLogTrace( wxTRACE_Socket, _T("wxSocketServer on fd %d"), m_impl->m_fd );
+    wxLogTrace( wxTRACE_Socket, wxT("wxSocketServer on fd %d"), m_impl->m_fd );
 }
 
 // --------------------------------------------------------------------------
@@ -1835,7 +1835,7 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 {
-    wxASSERT_MSG( m_impl, _T("Socket not initialised") );
+    wxASSERT_MSG( m_impl, wxT("Socket not initialised") );
 
     SOCKOPTLEN_T lenreal = *optlen;
     if ( getsockopt(m_impl->m_fd, level, optname,
@@ -1850,7 +1850,7 @@ bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 bool
 wxSocketBase::SetOption(int level, int optname, const void *optval, int optlen)
 {
-    wxASSERT_MSG( m_impl, _T("Socket not initialised") );
+    wxASSERT_MSG( m_impl, wxT("Socket not initialised") );
 
     return setsockopt(m_impl->m_fd, level, optname,
                       static_cast<const char *>(optval), optlen) == 0;
@@ -2024,7 +2024,7 @@ wxDatagramSocket& wxDatagramSocket::SendTo( const wxSockAddress& addr,
                                             const void* buf,
                                             wxUint32 nBytes )
 {
-    wxASSERT_MSG( m_impl, _T("Socket not initialised") );
+    wxASSERT_MSG( m_impl, wxT("Socket not initialised") );
 
     m_impl->SetPeer(addr.GetAddress());
     Write(buf, nBytes);

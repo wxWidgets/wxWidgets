@@ -251,7 +251,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
                 // note that we don't have to check for src < end here as
                 // *end == 0 so can't be '.'
-                if ( src[1] == _T('.') && src[2] == _T('.') &&
+                if ( src[1] == wxT('.') && src[2] == wxT('.') &&
                      (src + 3 == end || src[3] == wxCONFIG_PATH_SEPARATOR) )
                 {
                     if ( !totalSlashes )
@@ -286,7 +286,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
 
                         // we must have found a slash one way or another!
                         wxASSERT_MSG( *dst == wxCONFIG_PATH_SEPARATOR,
-                                      _T("error in wxRegConfig::SetPath") );
+                                      wxT("error in wxRegConfig::SetPath") );
 
                         // stay at the same position
                         dst--;
@@ -331,7 +331,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
             dst--;
         }
 
-        *dst = _T('\0');
+        *dst = wxT('\0');
         buf.SetLength(dst - start);
     }
 
@@ -356,7 +356,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
         for ( ; src < end; src++, dst++ )
         {
             if ( *src == wxCONFIG_PATH_SEPARATOR )
-                *dst = _T('\\');
+                *dst = wxT('\\');
             else
                 *dst = *src;
         }
@@ -556,7 +556,7 @@ wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
 
 bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
 {
-    wxCHECK_MSG( pStr, false, _T("wxRegConfig::Read(): NULL param") );
+    wxCHECK_MSG( pStr, false, wxT("wxRegConfig::Read(): NULL param") );
 
   wxConfigPathChanger path(this, key);
 
@@ -593,7 +593,7 @@ bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
 
 bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
 {
-    wxCHECK_MSG( plResult, false, _T("wxRegConfig::Read(): NULL param") );
+    wxCHECK_MSG( plResult, false, wxT("wxRegConfig::Read(): NULL param") );
 
   wxConfigPathChanger path(this, key);
 
@@ -627,7 +627,7 @@ bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
 
 bool wxRegConfig::DoReadBinary(const wxString& key, wxMemoryBuffer *buf) const
 {
-    wxCHECK_MSG( buf, false, _T("wxRegConfig::Read(): NULL param") );
+    wxCHECK_MSG( buf, false, wxT("wxRegConfig::Read(): NULL param") );
 
   wxConfigPathChanger path(this, key);
 
@@ -739,7 +739,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
 
     if ( bGroupIfEmptyAlso && m_keyLocal.IsEmpty() ) {
       wxString strKey = GetPath().AfterLast(wxCONFIG_PATH_SEPARATOR);
-      SetPath(_T(".."));  // changes m_keyLocal
+      SetPath(wxT(".."));  // changes m_keyLocal
       return LocalKey().DeleteKey(strKey);
     }
   }

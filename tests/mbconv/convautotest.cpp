@@ -78,37 +78,37 @@ void ConvAutoTestCase::TestFirstChar(const char *src, wchar_t wch)
 
 void ConvAutoTestCase::Empty()
 {
-    TestFirstChar("", _T('\0'));
+    TestFirstChar("", wxT('\0'));
 }
 
 void ConvAutoTestCase::Short()
 {
-    TestFirstChar("1", _T('1'));
+    TestFirstChar("1", wxT('1'));
 }
 
 void ConvAutoTestCase::None()
 {
-    TestFirstChar("Hello world", _T('H'));
+    TestFirstChar("Hello world", wxT('H'));
 }
 
 void ConvAutoTestCase::UTF32LE()
 {
-    TestFirstChar("\xff\xfe\0\0A\0\0\0", _T('A'));
+    TestFirstChar("\xff\xfe\0\0A\0\0\0", wxT('A'));
 }
 
 void ConvAutoTestCase::UTF32BE()
 {
-    TestFirstChar("\0\0\xfe\xff\0\0\0B", _T('B'));
+    TestFirstChar("\0\0\xfe\xff\0\0\0B", wxT('B'));
 }
 
 void ConvAutoTestCase::UTF16LE()
 {
-    TestFirstChar("\xff\xfeZ\0", _T('Z'));
+    TestFirstChar("\xff\xfeZ\0", wxT('Z'));
 }
 
 void ConvAutoTestCase::UTF16BE()
 {
-    TestFirstChar("\xfe\xff\0Y", _T('Y'));
+    TestFirstChar("\xfe\xff\0Y", wxT('Y'));
 }
 
 void ConvAutoTestCase::UTF8()

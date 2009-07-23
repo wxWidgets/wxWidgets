@@ -228,7 +228,7 @@ int          g_lastButtonNumber = 0;
 //-----------------------------------------------------------------------------
 
 // the trace mask used for the focus debugging messages
-#define TRACE_FOCUS _T("focus")
+#define TRACE_FOCUS wxT("focus")
 
 //-----------------------------------------------------------------------------
 // missing gdk functions
@@ -383,7 +383,7 @@ inline bool wxIsUpperChar(int code)
 
 
 // set WXTRACE to this to see the key event codes on the console
-#define TRACE_KEYS  _T("keyevent")
+#define TRACE_KEYS  wxT("keyevent")
 
 // translates an X key symbol to WXK_XXX value
 //
@@ -714,9 +714,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     KeySym keysym = gdk_event->keyval;
 
-    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %ld"),
-               event.GetEventType() == wxEVT_KEY_UP ? _T("release")
-                                                    : _T("press"),
+    wxLogTrace(TRACE_KEYS, wxT("Key %s event: keysym = %ld"),
+               event.GetEventType() == wxEVT_KEY_UP ? wxT("release")
+                                                    : wxT("press"),
                keysym);
 
     long key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
@@ -745,7 +745,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             Display *dpy = (Display *)wxGetDisplay();
             KeyCode keycode = XKeysymToKeycode(dpy, keysym);
 
-            wxLogTrace(TRACE_KEYS, _T("\t-> keycode %d"), keycode);
+            wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
             KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
 
@@ -784,7 +784,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         }
     }
 
-    wxLogTrace(TRACE_KEYS, _T("\t-> wxKeyCode %ld"), key_code);
+    wxLogTrace(TRACE_KEYS, wxT("\t-> wxKeyCode %ld"), key_code);
 
     // sending unknown key events doesn't really make sense
     if ( !key_code )
@@ -857,7 +857,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
         win->m_imData->lastKeyEvent = NULL;
         if (intercepted_by_IM)
         {
-            wxLogTrace(TRACE_KEYS, _T("Key event intercepted by IM"));
+            wxLogTrace(TRACE_KEYS, wxT("Key event intercepted by IM"));
             return TRUE;
         }
     }
@@ -919,7 +919,7 @@ gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget),
 
         if ( key_code )
         {
-            wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
+            wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
             event.m_keyCode = key_code;
 
@@ -996,7 +996,7 @@ gtk_wxwindow_commit_cb (GtkIMContext * WXUNUSED(context),
         event.m_uniChar = *pstr;
         // Backward compatible for ISO-8859-1
         event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
-        wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
+        wxLogTrace(TRACE_KEYS, wxT("IM sent character '%c'"), event.m_uniChar);
 #else
         event.m_keyCode = (char)*pstr;
 #endif  // wxUSE_UNICODE
@@ -3170,14 +3170,14 @@ void wxWindowGTK::SetFocus()
          !GTK_WIDGET_CAN_FOCUS(widget) )
     {
         wxLogTrace(TRACE_FOCUS,
-                   _T("Setting focus to a child of %s(%p, %s)"),
+                   wxT("Setting focus to a child of %s(%p, %s)"),
                    GetClassInfo()->GetClassName(), this, GetLabel().c_str());
         gtk_widget_child_focus(widget, GTK_DIR_TAB_FORWARD);
     }
     else
     {
         wxLogTrace(TRACE_FOCUS,
-                   _T("Setting focus to %s(%p, %s)"),
+                   wxT("Setting focus to %s(%p, %s)"),
                    GetClassInfo()->GetClassName(), this, GetLabel().c_str());
         gtk_widget_grab_focus(widget);
     }
@@ -3271,7 +3271,7 @@ wxLayoutDirection wxWindowGTK::GTKGetLayout(GtkWidget *widget)
 /* static */
 void wxWindowGTK::GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir)
 {
-    wxASSERT_MSG( dir != wxLayout_Default, _T("invalid layout direction") );
+    wxASSERT_MSG( dir != wxLayout_Default, wxT("invalid layout direction") );
 
     gtk_widget_set_direction(widget,
                              dir == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL
@@ -3328,14 +3328,14 @@ bool wxWindowGTK::DoNavigateIn(int flags)
 {
     if ( flags & wxNavigationKeyEvent::WinChange )
     {
-        wxFAIL_MSG( _T("not implemented") );
+        wxFAIL_MSG( wxT("not implemented") );
 
         return false;
     }
     else // navigate inside the container
     {
         wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
-        wxCHECK_MSG( parent, false, _T("every window must have a TLW parent") );
+        wxCHECK_MSG( parent, false, wxT("every window must have a TLW parent") );
 
         GtkDirectionType dir;
         dir = flags & wxNavigationKeyEvent::IsForward ? GTK_DIR_TAB_FORWARD
@@ -3477,7 +3477,7 @@ void wxWindowGTK::GTKUpdateCursor()
                 GdkWindow *win = windowsThis[n];
                 if ( !win )
                 {
-                    wxFAIL_MSG(_T("NULL window returned by GTKGetWindow()?"));
+                    wxFAIL_MSG(wxT("NULL window returned by GTKGetWindow()?"));
                     continue;
                 }
 
@@ -3513,7 +3513,7 @@ wxWindowGTK::ScrollDir wxWindowGTK::ScrollDirFromRange(GtkRange *range) const
             return (ScrollDir)dir;
     }
 
-    wxFAIL_MSG( _T("event from unknown scrollbar received") );
+    wxFAIL_MSG( wxT("event from unknown scrollbar received") );
 
     return ScrollDir_Max;
 }
@@ -4113,7 +4113,7 @@ void wxWindowGTK::DoCaptureMouse()
     else
         window = GetConnectWidget()->window;
 
-    wxCHECK_RET( window, _T("CaptureMouse() failed") );
+    wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
     const wxCursor* cursor = &m_cursor;
     if (!cursor->Ok())
@@ -4179,7 +4179,7 @@ void wxWindowGTK::SetScrollbar(int orient,
 {
     const int dir = ScrollDirFromOrient(orient);
     GtkRange* const sb = m_scrollBar[dir];
-    wxCHECK_RET( sb, _T("this window is not scrollable") );
+    wxCHECK_RET( sb, wxT("this window is not scrollable") );
 
     if (range <= 0)
     {
@@ -4208,7 +4208,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     const int dir = ScrollDirFromOrient(orient);
     GtkRange * const sb = m_scrollBar[dir];
-    wxCHECK_RET( sb, _T("this window is not scrollable") );
+    wxCHECK_RET( sb, wxT("this window is not scrollable") );
 
     // This check is more than an optimization. Without it, the slider
     //   will not move smoothly while tracking when using wxScrollHelper.
@@ -4228,7 +4228,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 int wxWindowGTK::GetScrollThumb(int orient) const
 {
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
-    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
+    wxCHECK_MSG( sb, 0, wxT("this window is not scrollable") );
 
     return wxRound(sb->adjustment->page_size);
 }
@@ -4236,7 +4236,7 @@ int wxWindowGTK::GetScrollThumb(int orient) const
 int wxWindowGTK::GetScrollPos( int orient ) const
 {
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
-    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
+    wxCHECK_MSG( sb, 0, wxT("this window is not scrollable") );
 
     return wxRound(sb->adjustment->value);
 }
@@ -4244,7 +4244,7 @@ int wxWindowGTK::GetScrollPos( int orient ) const
 int wxWindowGTK::GetScrollRange( int orient ) const
 {
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
-    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
+    wxCHECK_MSG( sb, 0, wxT("this window is not scrollable") );
 
     return wxRound(sb->adjustment->upper);
 }

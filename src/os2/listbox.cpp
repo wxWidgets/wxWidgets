@@ -294,7 +294,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
         n = (int)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)items[i].wx_str());
         if (n < 0)
         {
-            wxLogLastError(_T("WinSendMsg(LM_INSERTITEM)"));
+            wxLogLastError(wxT("WinSendMsg(LM_INSERTITEM)"));
             n = wxNOT_FOUND;
             break;
         }

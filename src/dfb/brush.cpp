@@ -91,14 +91,14 @@ bool wxBrush::operator==(const wxBrush& brush) const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_style;
 }
 
 wxColour wxBrush::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_colour;
 }

@@ -622,7 +622,7 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase * WXUNUSED(tool),
                             bool WXUNUSED(toggle))
 {
     // VZ: absolutely no idea about how to do it
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 }
 
 // ----------------------------------------------------------------------------
@@ -646,7 +646,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
                                                   wxCoord WXUNUSED(y)) const
 {
     // VZ: GTK+ doesn't seem to have such thing
-    wxFAIL_MSG( _T("wxToolBar::FindToolForPosition() not implemented") );
+    wxFAIL_MSG( wxT("wxToolBar::FindToolForPosition() not implemented") );
 
     return NULL;
 }

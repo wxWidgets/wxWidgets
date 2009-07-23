@@ -569,7 +569,7 @@ void wxDCImpl::GetMultiLineTextExtent(const wxString& text,
     wxString curLine;
     for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( pc == text.end() || *pc == _T('\n') )
+        if ( pc == text.end() || *pc == wxT('\n') )
         {
             if ( curLine.empty() )
             {
@@ -585,7 +585,7 @@ void wxDCImpl::GetMultiLineTextExtent(const wxString& text,
                 if ( !heightLineDefault )
                 {
                     // but we don't know it yet - choose something reasonable
-                    DoGetTextExtent(_T("W"), NULL, &heightLineDefault,
+                    DoGetTextExtent(wxT("W"), NULL, &heightLineDefault,
                                   NULL, NULL, font);
                 }
 
@@ -656,7 +656,7 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord ysrcMask)
 {
     wxCHECK_MSG( srcWidth && srcHeight && dstWidth && dstHeight, false,
-                 _T("invalid blit size") );
+                 wxT("invalid blit size") );
 
     // emulate the stretching by modifying the DC scale
     double xscale = (double)srcWidth/dstWidth,

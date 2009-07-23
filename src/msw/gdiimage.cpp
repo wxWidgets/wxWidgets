@@ -61,7 +61,7 @@ WX_DEFINE_LIST(wxGDIImageHandlerList)
 class WXDLLEXPORT wxBMPFileHandler : public wxBitmapHandler
 {
 public:
-    wxBMPFileHandler() : wxBitmapHandler(_T("Windows bitmap file"), _T("bmp"),
+    wxBMPFileHandler() : wxBitmapHandler(wxT("Windows bitmap file"), wxT("bmp"),
                                          wxBITMAP_TYPE_BMP)
     {
     }
@@ -80,7 +80,7 @@ private:
 class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
 {
 public:
-    wxBMPResourceHandler() : wxBitmapHandler(_T("Windows bitmap resource"),
+    wxBMPResourceHandler() : wxBitmapHandler(wxT("Windows bitmap resource"),
                                              wxEmptyString,
                                              wxBITMAP_TYPE_BMP_RESOURCE)
     {
@@ -126,7 +126,7 @@ public:
                       int desiredWidth, int desiredHeight)
     {
         wxIcon *icon = wxDynamicCast(image, wxIcon);
-        wxCHECK_MSG( icon, false, _T("wxIconHandler only works with icons") );
+        wxCHECK_MSG( icon, false, wxT("wxIconHandler only works with icons") );
 
         return LoadIcon(icon, name, flags, desiredWidth, desiredHeight);
     }
@@ -140,8 +140,8 @@ protected:
 class WXDLLEXPORT wxICOFileHandler : public wxIconHandler
 {
 public:
-    wxICOFileHandler() : wxIconHandler(_T("ICO icon file"),
-                                       _T("ico"),
+    wxICOFileHandler() : wxIconHandler(wxT("ICO icon file"),
+                                       wxT("ico"),
                                        wxBITMAP_TYPE_ICO)
     {
     }
@@ -158,8 +158,8 @@ private:
 class WXDLLEXPORT wxICOResourceHandler: public wxIconHandler
 {
 public:
-    wxICOResourceHandler() : wxIconHandler(_T("ICO resource"),
-                                           _T("ico"),
+    wxICOResourceHandler() : wxIconHandler(wxT("ICO resource"),
+                                           wxT("ico"),
                                            wxBITMAP_TYPE_ICO_RESOURCE)
     {
     }
@@ -356,7 +356,7 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
                                 int WXUNUSED(desiredHeight))
 {
 #if wxUSE_WXDIB
-    wxCHECK_MSG( bitmap, false, _T("NULL bitmap in LoadFile") );
+    wxCHECK_MSG( bitmap, false, wxT("NULL bitmap in LoadFile") );
 
     wxDIB dib(name);
 
@@ -372,7 +372,7 @@ bool wxBMPFileHandler::SaveFile(const wxBitmap *bitmap,
                                 const wxPalette * WXUNUSED(pal)) const
 {
 #if wxUSE_WXDIB
-    wxCHECK_MSG( bitmap, false, _T("NULL bitmap in SaveFile") );
+    wxCHECK_MSG( bitmap, false, wxT("NULL bitmap in SaveFile") );
 
     wxDIB dib(*bitmap);
 
@@ -442,8 +442,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         {
             // it is not an error, but it might still be useful to be informed
             // about it optionally
-            wxLogTrace(_T("iconload"),
-                       _T("No large icons found in the file '%s'."),
+            wxLogTrace(wxT("iconload"),
+                       wxT("No large icons found in the file '%s'."),
                        name.c_str());
         }
     }
@@ -453,8 +453,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
         // get the specified small icon from file
         if ( !::ExtractIconEx(nameReal.wx_str(), iconIndex, NULL, &hicon, 1) )
         {
-            wxLogTrace(_T("iconload"),
-                       _T("No small icons found in the file '%s'."),
+            wxLogTrace(wxT("iconload"),
+                       wxT("No small icons found in the file '%s'."),
                        name.c_str());
         }
     }
@@ -470,7 +470,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
 
     if ( !hicon )
     {
-        wxLogSysError(_T("Failed to load icon from the file '%s'"),
+        wxLogSysError(wxT("Failed to load icon from the file '%s'"),
                       name.c_str());
 
         return false;
@@ -481,8 +481,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     if ( (desiredWidth != -1 && desiredWidth != size.x) ||
          (desiredHeight != -1 && desiredHeight != size.y) )
     {
-        wxLogTrace(_T("iconload"),
-                   _T("Returning false from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
+        wxLogTrace(wxT("iconload"),
+                   wxT("Returning false from wxICOFileHandler::Load because of the size mismatch: actual (%d, %d), requested (%d, %d)"),
                    size.x, size.y,
                    desiredWidth, desiredHeight);
 
@@ -508,7 +508,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
     bool hasSize = desiredWidth != -1 || desiredHeight != -1;
 
     wxASSERT_MSG( !hasSize || (desiredWidth != -1 && desiredHeight != -1),
-                  _T("width and height should be either both -1 or not") );
+                  wxT("width and height should be either both -1 or not") );
 
     // try to load the icon from this program first to allow overriding the
     // standard icons (although why one would want to do it considering that

@@ -125,7 +125,7 @@ wxMutexInternal::~wxMutexInternal()
     {
         if (::DosCloseMutexSem(m_vMutex))
         {
-            wxLogLastError(_T("DosCloseMutexSem(mutex)"));
+            wxLogLastError(wxT("DosCloseMutexSem(mutex)"));
         }
     }
 }
@@ -221,7 +221,7 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
     ulrc = ::DosCreateMutexSem(NULL, &m_vMutex, 0L, FALSE);
     if (ulrc != 0)
     {
-        wxLogLastError(_T("DosCreateMutexSem()"));
+        wxLogLastError(wxT("DosCreateMutexSem()"));
         m_vMutex = NULL;
         m_vEvent = NULL;
         return;
@@ -229,7 +229,7 @@ wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
     ulrc = ::DosCreateEventSem(NULL, &m_vEvent, 0L, FALSE);
     if ( ulrc != 0)
     {
-        wxLogLastError(_T("DosCreateEventSem()"));
+        wxLogLastError(wxT("DosCreateEventSem()"));
         ::DosCloseMutexSem(m_vMutex);
         m_vMutex = NULL;
         m_vEvent = NULL;
@@ -244,11 +244,11 @@ wxSemaphoreInternal::~wxSemaphoreInternal()
     {
         if ( ::DosCloseEventSem(m_vEvent) )
         {
-            wxLogLastError(_T("DosCloseEventSem(semaphore)"));
+            wxLogLastError(wxT("DosCloseEventSem(semaphore)"));
         }
         if ( ::DosCloseMutexSem(m_vMutex) )
         {
-            wxLogLastError(_T("DosCloseMutexSem(semaphore)"));
+            wxLogLastError(wxT("DosCloseMutexSem(semaphore)"));
         }
         else
             m_vEvent = NULL;
@@ -272,7 +272,7 @@ wxSemaError wxSemaphoreInternal::WaitTimeout(unsigned long ulMilliseconds)
                     return wxSEMA_TIMEOUT;
 
             default:
-                wxLogLastError(_T("DosWaitEventSem(semaphore)"));
+                wxLogLastError(wxT("DosWaitEventSem(semaphore)"));
                 return wxSEMA_MISC_ERROR;
         }
         ulrc = :: DosRequestMutexSem(m_vMutex, ulMilliseconds);
@@ -332,7 +332,7 @@ wxSemaError wxSemaphoreInternal::Post()
         return wxSEMA_OVERFLOW;
     if ( ulrc != NO_ERROR && ulrc != ERROR_ALREADY_POSTED )
     {
-        wxLogLastError(_T("DosPostEventSem(semaphore)"));
+        wxLogLastError(wxT("DosPostEventSem(semaphore)"));
 
         return wxSEMA_MISC_ERROR;
     }
@@ -582,7 +582,7 @@ wxThreadIdType wxThread::GetCurrentId()
 
 bool wxThread::SetConcurrency(size_t level)
 {
-    wxASSERT_MSG( IsMain(), _T("should only be called from the main thread") );
+    wxASSERT_MSG( IsMain(), wxT("should only be called from the main thread") );
 
     // ok only for the default one
     if ( level == 0 )
@@ -666,7 +666,7 @@ wxThread::ExitCode wxThread::Wait()
     // although under Windows we can wait for any thread, it's an error to
     // wait for a detached one in wxWin API
     wxCHECK_MSG( !IsDetached(), (ExitCode)-1,
-                 _T("can't wait for detached thread") );
+                 wxT("can't wait for detached thread") );
     ExitCode rc = (ExitCode)-1;
     (void)Delete(&rc);
     return(rc);

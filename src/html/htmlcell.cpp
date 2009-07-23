@@ -150,7 +150,7 @@ bool wxHtmlCell::ProcessMouseClick(wxHtmlWindowInterface *window,
                                    const wxPoint& pos,
                                    const wxMouseEvent& event)
 {
-    wxCHECK_MSG( window, false, _T("window interface must be provided") );
+    wxCHECK_MSG( window, false, wxT("window interface must be provided") );
 
 #if WXWIN_COMPATIBILITY_2_6
     // NB: this hack puts the body of ProcessMouseClick() into OnMouseClick()
@@ -164,7 +164,7 @@ bool wxHtmlCell::ProcessMouseClick(wxHtmlWindowInterface *window,
 
 void wxHtmlCell::OnMouseClick(wxWindow *, int, int, const wxMouseEvent& event)
 {
-    wxCHECK_RET( gs_helperOnMouseClick, _T("unexpected call to OnMouseClick") );
+    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
     wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
     const wxPoint& pos = gs_helperOnMouseClick->pos;
 #endif // WXWIN_COMPATIBILITY_2_6
@@ -342,7 +342,7 @@ bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
         }
     }
 
-    wxFAIL_MSG(_T("Cells are in different trees"));
+    wxFAIL_MSG(wxT("Cells are in different trees"));
     return false;
 }
 
@@ -1392,7 +1392,7 @@ bool wxHtmlContainerCell::ProcessMouseClick(wxHtmlWindowInterface *window,
 void wxHtmlContainerCell::OnMouseClick(wxWindow*,
                                        int, int, const wxMouseEvent& event)
 {
-    wxCHECK_RET( gs_helperOnMouseClick, _T("unexpected call to OnMouseClick") );
+    wxCHECK_RET( gs_helperOnMouseClick, wxT("unexpected call to OnMouseClick") );
     wxHtmlWindowInterface *window = gs_helperOnMouseClick->window;
     const wxPoint& pos = gs_helperOnMouseClick->pos;
 #endif // WXWIN_COMPATIBILITY_2_6
@@ -1639,7 +1639,7 @@ void wxHtmlWidgetCell::Draw(wxDC& WXUNUSED(dc),
     wxScrolledWindow *scrolwin =
         wxDynamicCast(m_Wnd->GetParent(), wxScrolledWindow);
     wxCHECK_RET( scrolwin,
-                 _T("widget cells can only be placed in wxHtmlWindow") );
+                 wxT("widget cells can only be placed in wxHtmlWindow") );
 
     scrolwin->GetViewStart(&stx, &sty);
     m_Wnd->SetSize(absx - wxHTML_SCROLL_STEP * stx,

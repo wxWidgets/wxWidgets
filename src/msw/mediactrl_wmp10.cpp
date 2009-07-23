@@ -830,7 +830,7 @@ bool wxWMP10MediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
     ::GetClientRect((HWND)ctrl->GetHandle(), &rcClient);
     m_wndView.Create((HWND)ctrl->GetHandle(), rcClient, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
     hr = m_wndView.QueryHost(&spHost);
-    hr = spHost->CreateControl(CComBSTR(_T("{6BF52A52-394A-11d3-B153-00C04F79FAA6}")), m_wndView, 0);
+    hr = spHost->CreateControl(CComBSTR(wxT("{6BF52A52-394A-11d3-B153-00C04F79FAA6}")), m_wndView, 0);
     hr = m_wndView.QueryControl(&m_pWMPPlayer);
 
     if( m_pWMPPlayer->get_settings(&m_pWMPSettings) != 0)
@@ -1477,7 +1477,7 @@ bool wxWinCEExecute(const wxString& path, int nShowStyle = SW_SHOWNORMAL)
 {
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = path.c_str();
-    sei.lpVerb = _T("open");
+    sei.lpVerb = wxT("open");
     sei.nShow = nShowStyle;
 
     ::ShellExecuteEx(&sei);

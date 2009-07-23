@@ -166,7 +166,7 @@ wxVideoMode wxGetDefaultDisplayMode()
     unsigned w, h, bpp;
 
     if ( !wxGetEnv(wxT("WXMODE"), &mode) ||
-         (wxSscanf(mode.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3) )
+         (wxSscanf(mode.c_str(), wxT("%ux%u-%u"), &w, &h, &bpp) != 3) )
     {
         w = 640, h = 480, bpp = 16;
     }

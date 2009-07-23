@@ -161,7 +161,7 @@ public:
     wxDebugReportUpload(const wxString& url,
                         const wxString& input,
                         const wxString& action,
-                        const wxString& curl = _T("curl"));
+                        const wxString& curl = wxT("curl"));
 
 protected:
     virtual bool DoProcess();

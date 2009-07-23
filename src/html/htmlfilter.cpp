@@ -61,9 +61,9 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
     doc = src;
     delete [] src;
 
-    doc.Replace(_T("<"), _T("&lt;"), TRUE);
-    doc.Replace(_T(">"), _T("&gt;"), TRUE);
-    doc2 = _T("<HTML><BODY><PRE>\n") + doc + _T("\n</PRE></BODY></HTML>");
+    doc.Replace(wxT("<"), wxT("&lt;"), TRUE);
+    doc.Replace(wxT(">"), wxT("&gt;"), TRUE);
+    doc2 = wxT("<HTML><BODY><PRE>\n") + doc + wxT("\n</PRE></BODY></HTML>");
     return doc2;
 }
 
@@ -127,7 +127,7 @@ bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 // This is true in most case but some page can return:
 // "text/html; char-encoding=...."
 // So we use Find instead
-  return (file.GetMimeType().Find(_T("text/html")) == 0);
+  return (file.GetMimeType().Find(wxT("text/html")) == 0);
 }
 
 

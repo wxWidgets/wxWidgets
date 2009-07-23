@@ -173,7 +173,7 @@ wxString wxToString(const wxColourBase& col)
 
 bool wxFromString(const wxString& str, wxColourBase *col)
 {
-    wxCHECK_MSG( col, false, _T("NULL output parameter") );
+    wxCHECK_MSG( col, false, wxT("NULL output parameter") );
 
     if ( str.empty() )
     {

@@ -718,7 +718,7 @@ void wxTextCtrl::MarkDirty()
         ::WinSendMsg(GetHwnd(), MLM_SETCHANGED, MPFROMLONG(TRUE), 0);
     else
         // EM controls do not have a SETCHANGED, what can we do??
-        wxFAIL_MSG( _T("not implemented") );
+        wxFAIL_MSG( wxT("not implemented") );
 }
 
 //

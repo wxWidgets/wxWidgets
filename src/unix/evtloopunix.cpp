@@ -37,7 +37,7 @@
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
 
-#define TRACE_EVENTS _T("events")
+#define TRACE_EVENTS wxT("events")
 
 // ===========================================================================
 // wxEventLoop::PipeIOHandler implementation

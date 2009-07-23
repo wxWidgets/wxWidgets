@@ -117,8 +117,8 @@ bool wxChoice::Create(wxWindow *parent,
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&
                   !(style & wxCB_READONLY) &&
                   !(style & wxCB_SIMPLE),
-                  _T("this style flag is ignored by wxChoice, you ")
-                  _T("probably want to use a wxComboBox") );
+                  wxT("this style flag is ignored by wxChoice, you ")
+                  wxT("probably want to use a wxComboBox") );
 
     return CreateAndInit(parent, id, pos, size, n, choices, style,
                          validator, name);

@@ -138,7 +138,7 @@ bool wxMetafile::Play(wxDC *dc)
         if ( !::PlayMetaFile(GetHdcOf(*dc), (HMETAFILE)
                              M_METAFILEDATA->m_metafile) )
         {
-            wxLogLastError(_T("PlayMetaFile"));
+            wxLogLastError(wxT("PlayMetaFile"));
         }
     }
 
@@ -252,7 +252,7 @@ void wxMetafileDCImpl::DoGetTextExtent(const wxString& string,
 
 void wxMetafileDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_refData, _T("invalid wxMetafileDC") );
+    wxCHECK_RET( m_refData, wxT("invalid wxMetafileDC") );
 
     if ( width )
         *width = M_METAFILEDATA->m_width;
@@ -390,14 +390,14 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
             p < (WORD *)&pMFHead ->checksum; ++p)
         pMFHead ->checksum ^= *p;
 
-    FILE *fd = wxFopen(filename.fn_str(), _T("rb"));
+    FILE *fd = wxFopen(filename.fn_str(), wxT("rb"));
     if (!fd) return false;
 
     wxString tempFileBuf = wxFileName::CreateTempFileName(wxT("mf"));
     if (tempFileBuf.empty())
         return false;
 
-    FILE *fHandle = wxFopen(tempFileBuf.fn_str(), _T("wb"));
+    FILE *fHandle = wxFopen(tempFileBuf.fn_str(), wxT("wb"));
     if (!fHandle)
         return false;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
@@ -484,7 +484,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
     METAFILEPICT *mfpict = (METAFILEPICT *)buf;
     const wxMetafile& mf = GetMetafile();
 
-    wxCHECK_MSG( mf.GetHMETAFILE(), false, _T("copying invalid metafile") );
+    wxCHECK_MSG( mf.GetHMETAFILE(), false, wxT("copying invalid metafile") );
 
     // doesn't seem to work with any other mapping mode...
     mfpict->mm   = MM_ANISOTROPIC; //mf.GetWindowsMappingMode();
@@ -520,7 +520,7 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     mf.SetHeight(h);
     mf.SetHMETAFILE((WXHANDLE)mfpict->hMF);
 
-    wxCHECK_MSG( mfpict->hMF, false, _T("pasting invalid metafile") );
+    wxCHECK_MSG( mfpict->hMF, false, wxT("pasting invalid metafile") );
 
     SetMetafile(mf);
 

@@ -228,7 +228,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
 
-    wxCHECK_RET( IsValid(n), _T("invalid index in wxChoice::Delete") );
+    wxCHECK_RET( IsValid(n), wxT("invalid index in wxChoice::Delete") );
 
     // if the item to delete is before the selection, and the selection is valid
     if (((int)n < m_selection_hack) && (m_selection_hack != wxNOT_FOUND))

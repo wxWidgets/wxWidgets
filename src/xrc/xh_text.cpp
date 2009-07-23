@@ -51,7 +51,7 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
     // this style doesn't exist since wx 2.9.0 but we still support it (by
     // ignoring it silently) in XRC files to avoid unimportant warnings when
     // using XRC produced by old tools
-    AddStyle(_T("wxTE_AUTO_SCROLL"), 0);
+    AddStyle(wxT("wxTE_AUTO_SCROLL"), 0);
 
     AddWindowStyles();
 }

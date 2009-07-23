@@ -71,7 +71,7 @@ public:
     void  RefObj() { ++m_objcount; }
     void  UnrefObj()
     {
-        wxASSERT_MSG( m_objcount > 0, _T("Too many objects deleted??") );
+        wxASSERT_MSG( m_objcount > 0, wxT("Too many objects deleted??") );
         --m_objcount;
     }
 

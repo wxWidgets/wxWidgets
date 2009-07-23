@@ -132,14 +132,14 @@ void ToggleWidgetsPage::CreateContent()
 //    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, _T("&Operations"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, wxT("&Operations"));
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = CreateSizerWithTextAndButton(TogglePage_ChangeLabel,
-                                                     _T("Change label"),
+                                                     wxT("Change label"),
                                                      wxID_ANY,
                                                      &m_textLabel);
-    m_textLabel->SetValue(_T("&Toggle me!"));
+    m_textLabel->SetValue(wxT("&Toggle me!"));
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 

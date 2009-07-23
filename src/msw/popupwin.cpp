@@ -100,7 +100,7 @@ bool wxPopupWindow::Show(bool show)
         // raise to top of z order
         if (!::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
         {
-            wxLogLastError(_T("SetWindowPos"));
+            wxLogLastError(wxT("SetWindowPos"));
         }
 
         // and set it as the foreground window so the mouse can be captured

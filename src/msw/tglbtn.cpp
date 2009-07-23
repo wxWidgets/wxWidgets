@@ -273,7 +273,7 @@ bool wxToggleButton::Create(wxWindow *parent,
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
     msStyle |= wxMSWButton::GetMultilineStyle(label);
 
-    return MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, exstyle);
+    return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, exstyle);
 }
 
 WXDWORD wxToggleButton::MSWGetStyle(long style, WXDWORD *exstyle) const

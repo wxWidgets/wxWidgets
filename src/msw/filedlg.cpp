@@ -156,8 +156,8 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
     paths.Empty();
 
     wxString dir(m_dir);
-    if ( m_dir.Last() != _T('\\') )
-        dir += _T('\\');
+    if ( m_dir.Last() != wxT('\\') )
+        dir += wxT('\\');
 
     size_t count = m_fileNames.GetCount();
     for ( size_t n = 0; n < count; n++ )
@@ -179,7 +179,7 @@ void wxFileDialog::SetPath(const wxString& path)
     wxString ext;
     wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
     if ( !ext.empty() )
-        m_fileName << _T('.') << ext;
+        m_fileName << wxT('.') << ext;
 }
 
 void wxFileDialog::DoGetPosition(int *x, int *y) const
@@ -351,7 +351,7 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
     {
         // this can happen if the default file name is invalid, try without it
         // now
-        of->lpstrFile[0] = _T('\0');
+        of->lpstrFile[0] = wxT('\0');
         success = DoShowCommFileDialog(of, style, &errCode);
     }
 
@@ -484,17 +484,17 @@ int wxFileDialog::ShowModal()
         wxChar ch = m_dir[i];
         switch ( ch )
         {
-            case _T('/'):
+            case wxT('/'):
                 // convert to backslash
-                ch = _T('\\');
+                ch = wxT('\\');
 
                 // fall through
 
-            case _T('\\'):
+            case wxT('\\'):
                 while ( i < len - 1 )
                 {
                     wxChar chNext = m_dir[i + 1];
-                    if ( chNext != _T('\\') && chNext != _T('/') )
+                    if ( chNext != wxT('\\') && chNext != wxT('/') )
                         break;
 
                     // ignore the next one, unless it is at the start of a UNC path
@@ -521,7 +521,7 @@ int wxFileDialog::ShowModal()
 
     size_t items = wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters);
 
-    wxASSERT_MSG( items > 0 , _T("empty wildcard list") );
+    wxASSERT_MSG( items > 0 , wxT("empty wildcard list") );
 
     wxString filterBuffer;
 
@@ -613,7 +613,7 @@ int wxFileDialog::ShowModal()
             i += wxStrlen(&fileNameBuffer[i]) + 1;
         }
 #else
-        wxStringTokenizer toke(fileNameBuffer, _T(" \t\r\n"));
+        wxStringTokenizer toke(fileNameBuffer, wxT(" \t\r\n"));
         m_dir = toke.GetNextToken();
         m_fileName = toke.GetNextToken();
         m_fileNames.Add(m_fileName);
@@ -623,8 +623,8 @@ int wxFileDialog::ShowModal()
 #endif // OFN_EXPLORER
 
         wxString dir(m_dir);
-        if ( m_dir.Last() != _T('\\') )
-            dir += _T('\\');
+        if ( m_dir.Last() != wxT('\\') )
+            dir += wxT('\\');
 
         m_path = dir + m_fileName;
         m_filterIndex = (int)of.nFilterIndex - 1;

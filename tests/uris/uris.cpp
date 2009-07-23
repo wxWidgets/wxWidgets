@@ -409,7 +409,7 @@ void URITestCase::URLCompat()
         wxInputStream* is = urlProblem.GetInputStream();
         CPPUNIT_ASSERT(is != NULL);
 
-        wxFile fOut(_T("test.html"), wxFile::write);
+        wxFile fOut(wxT("test.html"), wxFile::write);
         wxASSERT(fOut.IsOpened());
 
         char buf[1001];

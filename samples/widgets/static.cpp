@@ -167,7 +167,7 @@ END_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, _T("Static"),
+IMPLEMENT_WIDGETS_PAGE(StaticWidgetsPage, wxT("Static"),
                        (int)wxPlatform(GENERIC_CTRLS).If(wxOS_WINDOWS,NATIVE_CTRLS)
                        );
 
@@ -211,22 +211,22 @@ void StaticWidgetsPage::CreateContent()
 
     static const wxString halign[] =
     {
-        _T("left"),
-        _T("centre"),
-        _T("right"),
+        wxT("left"),
+        wxT("centre"),
+        wxT("right"),
     };
 
     static const wxString valign[] =
     {
-        _T("top"),
-        _T("centre"),
-        _T("bottom"),
+        wxT("top"),
+        wxT("centre"),
+        wxT("bottom"),
     };
 
-    m_radioHAlign = new wxRadioBox(this, wxID_ANY, _T("&Horz alignment"),
+    m_radioHAlign = new wxRadioBox(this, wxID_ANY, wxT("&Horz alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign, 3);
-    m_radioVAlign = new wxRadioBox(this, wxID_ANY, _T("&Vert alignment"),
+    m_radioVAlign = new wxRadioBox(this, wxID_ANY, wxT("&Vert alignment"),
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign, 3);
 
@@ -236,23 +236,23 @@ void StaticWidgetsPage::CreateContent()
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
-    m_chkEllipsize = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Ellipsize"));
+    m_chkEllipsize = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Ellipsize"));
 
     static const wxString ellipsizeMode[] =
     {
-        _T("&start"),
-        _T("&middle"),
-        _T("&end"),
+        wxT("&start"),
+        wxT("&middle"),
+        wxT("&end"),
     };
 
-    m_radioEllipsize = new wxRadioBox(this, wxID_ANY, _T("&Ellipsize mode"),
+    m_radioEllipsize = new wxRadioBox(this, wxID_ANY, wxT("&Ellipsize mode"),
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(ellipsizeMode), ellipsizeMode,
                                       3);
 
     sizerLeft->Add(m_radioEllipsize, 0, wxGROW | wxALL, 5);
 
-    wxButton *btn = new wxButton(this, StaticPage_Reset, _T("&Reset"));
+    wxButton *btn = new wxButton(this, StaticPage_Reset, wxT("&Reset"));
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
@@ -296,13 +296,13 @@ void StaticWidgetsPage::CreateContent()
     // NB: must be done _before_ calling CreateStatic()
     Reset();
 
-    m_textBox->SetValue(_T("This is a box"));
-    m_textLabel->SetValue(_T("And this is a\n\tlabel inside the box with a &mnemonic.\n")
-                          _T("Only this text is affected by the ellipsize settings."));
-    m_textLabelWithMarkup->SetValue(_T("Another label, this time <b>decorated</b> ")
-                                    _T("with <u>markup</u>; here you need entities ")
-                                    _T("for the symbols: &lt; &gt; &amp; &apos; &quot; ")
-                                    _T(" but you can still place &mnemonics..."));
+    m_textBox->SetValue(wxT("This is a box"));
+    m_textLabel->SetValue(wxT("And this is a\n\tlabel inside the box with a &mnemonic.\n")
+                          wxT("Only this text is affected by the ellipsize settings."));
+    m_textLabelWithMarkup->SetValue(wxT("Another label, this time <b>decorated</b> ")
+                                    wxT("with <u>markup</u>; here you need entities ")
+                                    wxT("for the symbols: &lt; &gt; &amp; &apos; &quot; ")
+                                    wxT(" but you can still place &mnemonics..."));
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
@@ -370,7 +370,7 @@ void StaticWidgetsPage::CreateStatic()
     switch ( m_radioHAlign->GetSelection() )
     {
         default:
-            wxFAIL_MSG(_T("unexpected radiobox selection"));
+            wxFAIL_MSG(wxT("unexpected radiobox selection"));
             // fall through
 
         case StaticHAlign_Left:
@@ -389,7 +389,7 @@ void StaticWidgetsPage::CreateStatic()
     switch ( m_radioVAlign->GetSelection() )
     {
         default:
-            wxFAIL_MSG(_T("unexpected radiobox selection"));
+            wxFAIL_MSG(wxT("unexpected radiobox selection"));
             // fall through
 
         case StaticVAlign_Top:
@@ -410,7 +410,7 @@ void StaticWidgetsPage::CreateStatic()
         switch ( m_radioEllipsize->GetSelection() )
         {
             default:
-                wxFAIL_MSG(_T("unexpected radiobox selection"));
+                wxFAIL_MSG(wxT("unexpected radiobox selection"));
                 // fall through
 
             case StaticEllipsize_Start:

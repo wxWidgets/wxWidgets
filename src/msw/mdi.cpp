@@ -186,7 +186,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   msflags &= ~WS_VSCROLL;
   msflags &= ~WS_HSCROLL;
 
-  if ( !wxWindow::MSWCreate(wxApp::GetRegisteredClassName(_T("wxMDIFrame")),
+  if ( !wxWindow::MSWCreate(wxApp::GetRegisteredClassName(wxT("wxMDIFrame")),
                             title.wx_str(),
                             pos, size,
                             msflags,
@@ -495,7 +495,7 @@ void wxMDIParentFrame::Cascade()
 void wxMDIParentFrame::Tile(wxOrientation orient)
 {
     wxASSERT_MSG( orient == wxHORIZONTAL || orient == wxVERTICAL,
-                  _T("invalid orientation value") );
+                  wxT("invalid orientation value") );
 
     ::SendMessage(GetWinHwnd(GetClientWindow()), WM_MDITILE,
                   orient == wxHORIZONTAL ? MDITILE_HORIZONTAL
@@ -792,7 +792,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   MDICREATESTRUCT mcs;
 
   wxString className =
-      wxApp::GetRegisteredClassName(_T("wxMDIChildFrame"), COLOR_WINDOW);
+      wxApp::GetRegisteredClassName(wxT("wxMDIChildFrame"), COLOR_WINDOW);
   if ( !(style & wxFULL_REPAINT_ON_RESIZE) )
       className += wxApp::GetNoRedrawClassSuffix();
 
@@ -846,7 +846,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   if ( !m_hWnd )
   {
-      wxLogLastError(_T("WM_MDICREATE"));
+      wxLogLastError(wxT("WM_MDICREATE"));
       return false;
   }
 
@@ -1435,7 +1435,7 @@ void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
             DWORD err = ::GetLastError();
             if ( err )
             {
-                wxLogApiError(_T("SendMessage(WM_MDISETMENU)"), err);
+                wxLogApiError(wxT("SendMessage(WM_MDISETMENU)"), err);
             }
         }
     }

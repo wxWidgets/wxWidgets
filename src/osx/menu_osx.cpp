@@ -165,7 +165,7 @@ void wxMenu::EndRadioGroup()
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, NULL, _T("NULL item in wxMenu::DoAppend") );
+    wxCHECK_MSG( item, NULL, wxT("NULL item in wxMenu::DoAppend") );
 
     bool check = false;
 
@@ -197,7 +197,7 @@ wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
             }
             else
             {
-                wxFAIL_MSG( _T("where is the radio group start item?") );
+                wxFAIL_MSG( wxT("where is the radio group start item?") );
             }
         }
     }
@@ -331,7 +331,7 @@ void wxMenu::DoRearrange()
                 {
                     // next (i.e. second as we must be first) item is
                     // the separator to hide
-                    wxASSERT_MSG( pos == 0, _T("should be the menu start") );
+                    wxASSERT_MSG( pos == 0, wxT("should be the menu start") );
                     sepToHide = next;
                 }
                 else if ( GetMenuItems().GetCount() == pos + 1 &&

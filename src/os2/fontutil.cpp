@@ -55,7 +55,7 @@
 
 bool wxNativeEncodingInfo::FromString( const wxString& rsStr )
 {
-    wxStringTokenizer               vTokenizer(rsStr, _T(";"));
+    wxStringTokenizer               vTokenizer(rsStr, wxT(";"));
     wxString                        sEncid = vTokenizer.GetNextToken();
     long                            lEnc;
 
@@ -74,7 +74,7 @@ bool wxNativeEncodingInfo::FromString( const wxString& rsStr )
     }
     else
     {
-        if ( wxSscanf(sTmp, _T("%u"), &charset) != 1 )
+        if ( wxSscanf(sTmp, wxT("%u"), &charset) != 1 )
         {
             // should be a number!
             return FALSE;
@@ -87,11 +87,11 @@ wxString wxNativeEncodingInfo::ToString() const
 {
     wxString                        sStr;
 
-    sStr << (long)encoding << _T(';') << facename;
+    sStr << (long)encoding << wxT(';') << facename;
 
     if (charset != 850)
     {
-        sStr << _T(';') << charset;
+        sStr << wxT(';') << charset;
     }
     return sStr;
 } // end of wxNativeEncodingInfo::ToString
@@ -103,7 +103,7 @@ wxString wxNativeEncodingInfo::ToString() const
 bool wxGetNativeFontEncoding( wxFontEncoding vEncoding,
                               wxNativeEncodingInfo* pInfo )
 {
-    wxCHECK_MSG(pInfo, FALSE, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG(pInfo, FALSE, wxT("bad pointer in wxGetNativeFontEncoding") );
     if (vEncoding == wxFONTENCODING_DEFAULT)
     {
         vEncoding = wxFont::GetDefaultEncoding();
@@ -509,7 +509,7 @@ void wxOS2SelectMatchingFontByName(
     switch (pFont->GetWeight())
     {
         default:
-            wxFAIL_MSG(_T("unknown font weight"));
+            wxFAIL_MSG(wxT("unknown font weight"));
             // fall through
             usWeightClass = FWEIGHT_DONT_CARE;
             break;

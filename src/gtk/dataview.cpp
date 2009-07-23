@@ -540,7 +540,7 @@ wxgtk_tree_model_get_column_type (GtkTreeModel *tree_model,
     else
     {
         gtype = G_TYPE_STRING;
-        // wxFAIL_MSG( _T("non-string columns not supported yet") );
+        // wxFAIL_MSG( wxT("non-string columns not supported yet") );
     }
 
     return gtype;
@@ -591,7 +591,7 @@ wxgtk_tree_model_get_value (GtkTreeModel *tree_model,
     }
     else
     {
-        wxFAIL_MSG( _T("non-string columns not supported yet") );
+        wxFAIL_MSG( wxT("non-string columns not supported yet") );
     }
 }
 

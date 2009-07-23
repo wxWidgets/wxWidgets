@@ -52,7 +52,7 @@
     {
     public:
         wxTaskBarIconAreaBase()
-            : wxFrame(NULL, wxID_ANY, _T("systray icon"),
+            : wxFrame(NULL, wxID_ANY, wxT("systray icon"),
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR |
                       wxSIMPLE_BORDER | wxFRAME_SHAPED) {}
@@ -122,8 +122,8 @@ wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
 
     if (!IsProtocolSupported())
     {
-        wxLogTrace(_T("systray"),
-                   _T("using legacy KDE1,2 and GNOME 1.2 methods"));
+        wxLogTrace(wxT("systray"),
+                   wxT("using legacy KDE1,2 and GNOME 1.2 methods"));
         SetLegacyWMProperties();
     }
 }
@@ -190,7 +190,7 @@ void wxTaskBarIconArea::SetLegacyWMProperties()
 
 void wxTaskBarIconArea::OnSizeChange(wxSizeEvent& WXUNUSED(event))
 {
-    wxLogTrace(_T("systray"), _T("icon size changed to %i x %i"),
+    wxLogTrace(wxT("systray"), wxT("icon size changed to %i x %i"),
                GetSize().x, GetSize().y);
     // rescale or reposition the icon as needed:
     wxBitmap bmp(m_bmp);

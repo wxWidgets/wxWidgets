@@ -83,7 +83,7 @@ void LargeFileTest::runTest()
 {
     // self deleting temp file
     struct TmpFile {
-        TmpFile() : m_name(wxFileName::CreateTempFileName(_T("wxlfs-"))) { }
+        TmpFile() : m_name(wxFileName::CreateTempFileName(wxT("wxlfs-"))) { }
         ~TmpFile() { if (!m_name.empty()) wxRemoveFile(m_name); }
         wxString m_name;
     } tmpfile;
@@ -96,12 +96,12 @@ void LargeFileTest::runTest()
     if (!HasLFS()) {
         haveLFS = false;
         wxString n(getName().c_str(), *wxConvCurrent);
-        wxLogInfo(n + _T(": No large file support, testing up to 2GB only"));
+        wxLogInfo(n + wxT(": No large file support, testing up to 2GB only"));
     }
     else if (IsFAT(tmpfile.m_name)) {
         fourGigLimit = true;
         wxString n(getName().c_str(), *wxConvCurrent);
-        wxLogInfo(n + _T(": FAT volumes are limited to 4GB files"));
+        wxLogInfo(n + wxT(": FAT volumes are limited to 4GB files"));
     }
 
     // size of the test blocks
@@ -258,7 +258,7 @@ wxInputStream *LargeFileTest_wxFFile::MakeInStream(const wxString& name) const
 
 wxOutputStream *LargeFileTest_wxFFile::MakeOutStream(const wxString& name) const
 {
-    wxFFile file(name, _T("w"));
+    wxFFile file(name, wxT("w"));
     CPPUNIT_ASSERT(file.IsOpened());
     FILE *fp = file.fp();
     file.Detach();
@@ -333,17 +333,17 @@ void GetVolumeInfo(const wxString& path)
     // extract the volume 'C:\' or '\\tooter\share\' from the path
     wxString vol;
 
-    if (path.substr(1, 2) == _T(":\\")) {
+    if (path.substr(1, 2) == wxT(":\\")) {
         vol = path.substr(0, 3);
     } else {
-        if (path.substr(0, 2) == _T("\\\\")) {
-            size_t i = path.find(_T('\\'), 2);
+        if (path.substr(0, 2) == wxT("\\\\")) {
+            size_t i = path.find(wxT('\\'), 2);
 
             if (i != wxString::npos && i > 2) {
-                size_t j = path.find(_T('\\'), ++i);
+                size_t j = path.find(wxT('\\'), ++i);
 
                 if (j != i)
-                    vol = path.substr(0, j) + _T("\\");
+                    vol = path.substr(0, j) + wxT("\\");
             }
         }
     }
@@ -357,7 +357,7 @@ void GetVolumeInfo(const wxString& path)
                                 volumeType,
                                 WXSIZEOF(volumeType)))
     {
-        wxLogSysError(_T("GetVolumeInformation() failed"));
+        wxLogSysError(wxT("GetVolumeInformation() failed"));
     }
 
     volumeInfoInit = true;
@@ -367,7 +367,7 @@ bool IsFAT(const wxString& path)
 {
     if (!volumeInfoInit)
         GetVolumeInfo(path);
-    return wxString(volumeType).Upper().find(_T("FAT")) != wxString::npos;
+    return wxString(volumeType).Upper().find(wxT("FAT")) != wxString::npos;
 }
 
 void MakeSparse(const wxString& path, int fd)
@@ -388,7 +388,7 @@ CppUnit::Test* GetlargeFileSuite()
 {
     if (!volumeInfoInit) {
         wxFile file;
-        wxString path = wxFileName::CreateTempFileName(_T("wxlfs-"), &file);
+        wxString path = wxFileName::CreateTempFileName(wxT("wxlfs-"), &file);
         MakeSparse(path, file.fd());
         wxRemoveFile(path);
     }

@@ -317,43 +317,43 @@ private:
 //-----------------------------------------------------------------------------
 
 // cursor movement and also selection and delete operations
-#define wxACTION_TEXT_GOTO          _T("goto")  // to pos in numArg
-#define wxACTION_TEXT_FIRST         _T("first") // go to pos 0
-#define wxACTION_TEXT_LAST          _T("last")  // go to last pos
-#define wxACTION_TEXT_HOME          _T("home")
-#define wxACTION_TEXT_END           _T("end")
-#define wxACTION_TEXT_LEFT          _T("left")
-#define wxACTION_TEXT_RIGHT         _T("right")
-#define wxACTION_TEXT_UP            _T("up")
-#define wxACTION_TEXT_DOWN          _T("down")
-#define wxACTION_TEXT_WORD_LEFT     _T("wordleft")
-#define wxACTION_TEXT_WORD_RIGHT    _T("wordright")
-#define wxACTION_TEXT_PAGE_UP       _T("pageup")
-#define wxACTION_TEXT_PAGE_DOWN     _T("pagedown")
+#define wxACTION_TEXT_GOTO          wxT("goto")  // to pos in numArg
+#define wxACTION_TEXT_FIRST         wxT("first") // go to pos 0
+#define wxACTION_TEXT_LAST          wxT("last")  // go to last pos
+#define wxACTION_TEXT_HOME          wxT("home")
+#define wxACTION_TEXT_END           wxT("end")
+#define wxACTION_TEXT_LEFT          wxT("left")
+#define wxACTION_TEXT_RIGHT         wxT("right")
+#define wxACTION_TEXT_UP            wxT("up")
+#define wxACTION_TEXT_DOWN          wxT("down")
+#define wxACTION_TEXT_WORD_LEFT     wxT("wordleft")
+#define wxACTION_TEXT_WORD_RIGHT    wxT("wordright")
+#define wxACTION_TEXT_PAGE_UP       wxT("pageup")
+#define wxACTION_TEXT_PAGE_DOWN     wxT("pagedown")
 
 // clipboard operations
-#define wxACTION_TEXT_COPY          _T("copy")
-#define wxACTION_TEXT_CUT           _T("cut")
-#define wxACTION_TEXT_PASTE         _T("paste")
+#define wxACTION_TEXT_COPY          wxT("copy")
+#define wxACTION_TEXT_CUT           wxT("cut")
+#define wxACTION_TEXT_PASTE         wxT("paste")
 
 // insert text at the cursor position: the text is in strArg of PerformAction
-#define wxACTION_TEXT_INSERT        _T("insert")
+#define wxACTION_TEXT_INSERT        wxT("insert")
 
 // if the action starts with either of these prefixes and the rest of the
 // string is one of the movement commands, it means to select/delete text from
 // the current cursor position to the new one
-#define wxACTION_TEXT_PREFIX_SEL    _T("sel")
-#define wxACTION_TEXT_PREFIX_DEL    _T("del")
+#define wxACTION_TEXT_PREFIX_SEL    wxT("sel")
+#define wxACTION_TEXT_PREFIX_DEL    wxT("del")
 
 // mouse selection
-#define wxACTION_TEXT_ANCHOR_SEL    _T("anchorsel")
-#define wxACTION_TEXT_EXTEND_SEL    _T("extendsel")
-#define wxACTION_TEXT_SEL_WORD      _T("wordsel")
-#define wxACTION_TEXT_SEL_LINE      _T("linesel")
+#define wxACTION_TEXT_ANCHOR_SEL    wxT("anchorsel")
+#define wxACTION_TEXT_EXTEND_SEL    wxT("extendsel")
+#define wxACTION_TEXT_SEL_WORD      wxT("wordsel")
+#define wxACTION_TEXT_SEL_LINE      wxT("linesel")
 
 // undo or redo
-#define wxACTION_TEXT_UNDO          _T("undo")
-#define wxACTION_TEXT_REDO          _T("redo")
+#define wxACTION_TEXT_UNDO          wxT("undo")
+#define wxACTION_TEXT_REDO          wxT("redo")
 
 // ----------------------------------------------------------------------------
 // wxTextCtrl types

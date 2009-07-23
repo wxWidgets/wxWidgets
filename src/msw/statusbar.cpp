@@ -108,7 +108,7 @@ bool wxStatusBar::Create(wxWindow *parent,
     m_hWnd = CreateWindow
              (
                 STATUSCLASSNAME,
-                _T(""),
+                wxT(""),
                 wstyle,
                 0, 0, 0, 0,
                 GetHwndOf(parent),

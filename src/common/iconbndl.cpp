@@ -235,7 +235,7 @@ wxIcon wxIconBundle::GetIconOfExactSize(const wxSize& size) const
 
 void wxIconBundle::AddIcon(const wxIcon& icon)
 {
-    wxCHECK_RET( icon.IsOk(), _T("invalid icon") );
+    wxCHECK_RET( icon.IsOk(), wxT("invalid icon") );
 
     AllocExclusive();
 
@@ -266,7 +266,7 @@ size_t wxIconBundle::GetIconCount() const
 
 wxIcon wxIconBundle::GetIconByIndex(size_t n) const
 {
-    wxCHECK_MSG( n < GetIconCount(), wxNullIcon, _T("invalid index") );
+    wxCHECK_MSG( n < GetIconCount(), wxNullIcon, wxT("invalid index") );
 
     return M_ICONBUNDLEDATA->m_icons[n];
 }

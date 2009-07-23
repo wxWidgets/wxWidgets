@@ -55,7 +55,7 @@ bool wxGTKTimerImpl::Start(int millisecs, bool oneShot)
     if ( !wxTimerImpl::Start(millisecs, oneShot) )
         return false;
 
-    wxASSERT_MSG( !m_sourceId, _T("shouldn't be still running") );
+    wxASSERT_MSG( !m_sourceId, wxT("shouldn't be still running") );
 
     m_sourceId = g_timeout_add(m_milli, timeout_callback, this);
 
@@ -64,7 +64,7 @@ bool wxGTKTimerImpl::Start(int millisecs, bool oneShot)
 
 void wxGTKTimerImpl::Stop()
 {
-    wxASSERT_MSG( m_sourceId, _T("should be running") );
+    wxASSERT_MSG( m_sourceId, wxT("should be running") );
 
     g_source_remove(m_sourceId);
     m_sourceId = 0;

@@ -255,14 +255,14 @@ int /* not wint_t */ wxCRT_FputcW(wchar_t wc, FILE *stream)
 // TODO: implement the scanf() functions
 static int vwscanf(const wchar_t *format, va_list argptr)
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( wxT("TODO") );
 
     return -1;
 }
 
 static int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
 {
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( wxT("TODO") );
 
     return -1;
 }
@@ -299,10 +299,10 @@ static int vswscanf(const wchar_t *ws, const wchar_t *format, va_list argptr)
     // of the function. This doesn't work with %c and %s because of difference
     // in size of char and wchar_t, though.
 
-    wxCHECK_MSG( wxStrstr(format, _T("%s")) == NULL, -1,
-                 _T("incomplete vswscanf implementation doesn't allow %s") );
-    wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
-                 _T("incomplete vswscanf implementation doesn't allow %c") );
+    wxCHECK_MSG( wxStrstr(format, wxT("%s")) == NULL, -1,
+                 wxT("incomplete vswscanf implementation doesn't allow %s") );
+    wxCHECK_MSG( wxStrstr(format, wxT("%c")) == NULL, -1,
+                 wxT("incomplete vswscanf implementation doesn't allow %c") );
 
     return vsscanf(static_cast<const char*>(wxConvLibc.cWX2MB(ws)),
         wxConvLibc.cWX2MB(format), argptr);
@@ -649,7 +649,7 @@ in DMC 8.49 and 8.50
 I don't see it being used in the wxWidgets sources at present (oct 2007) CE
 */
 #pragma message ( "warning ::::: wxVsprintf(wchar_t *str, const wxString& format, va_list argptr) not yet implemented" )
-    wxFAIL_MSG( _T("TODO") );
+    wxFAIL_MSG( wxT("TODO") );
 
     return -1;
 #else
@@ -1222,7 +1222,7 @@ void wxUpdateLocaleIsUtf8()
 #if wxUSE_UTF8_LOCALE_ONLY
     if ( !wxIsLocaleUtf8() )
     {
-        wxLogFatalError(_T("This program requires UTF-8 locale to run."));
+        wxLogFatalError(wxT("This program requires UTF-8 locale to run."));
     }
 #else // !wxUSE_UTF8_LOCALE_ONLY
     wxLocaleIsUtf8 = wxIsLocaleUtf8();

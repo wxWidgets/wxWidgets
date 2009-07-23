@@ -28,10 +28,10 @@ class wxArtProviderModule;
 typedef wxString wxArtClient;
 typedef wxString wxArtID;
 
-#define wxART_MAKE_CLIENT_ID_FROM_STR(id)  (id + _T("_C"))
-#define wxART_MAKE_CLIENT_ID(id)           _T(#id) _T("_C")
+#define wxART_MAKE_CLIENT_ID_FROM_STR(id)  (id + wxT("_C"))
+#define wxART_MAKE_CLIENT_ID(id)           wxT(#id) wxT("_C")
 #define wxART_MAKE_ART_ID_FROM_STR(id)     (id)
-#define wxART_MAKE_ART_ID(id)              _T(#id)
+#define wxART_MAKE_ART_ID(id)              wxT(#id)
 
 // ----------------------------------------------------------------------------
 // Art clients

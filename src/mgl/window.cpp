@@ -106,9 +106,9 @@ static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
 static void wxCaptureScreenshot(bool activeWindowOnly)
 {
 #ifdef __DOS__
-    #define SCREENSHOT_FILENAME _T("sshot%03i.png")
+    #define SCREENSHOT_FILENAME wxT("sshot%03i.png")
 #else
-    #define SCREENSHOT_FILENAME _T("screenshot-%03i.png")
+    #define SCREENSHOT_FILENAME wxT("screenshot-%03i.png")
 #endif
     static int screenshot_num = 0;
     wxString screenshot;
@@ -128,7 +128,7 @@ static void wxCaptureScreenshot(bool activeWindowOnly)
     g_displayDC->savePNGFromDC(screenshot.mb_str(),
                                r.x, r. y, r.x+r.width, r.y+r.height);
 
-    wxMessageBox(wxString::Format(_T("Screenshot captured: %s"),
+    wxMessageBox(wxString::Format(wxT("Screenshot captured: %s"),
                                   screenshot.c_str()));
 }
 
@@ -288,8 +288,8 @@ static long wxScanToKeyCode(event_t *event, bool translate)
     #ifdef __WXDEBUG__
       #define KEY(mgl_key,wx_key) \
         case mgl_key: \
-          wxLogTrace(_T("keyevents"), \
-                     _T("key " #mgl_key ", mapped to " #wx_key)); \
+          wxLogTrace(wxT("keyevents"), \
+                     wxT("key " #mgl_key ", mapped to " #wx_key)); \
           key = wx_key; \
           break;
     #else

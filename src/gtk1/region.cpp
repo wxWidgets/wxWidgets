@@ -219,7 +219,7 @@ bool wxRegion::DoUnionWithRegion( const wxRegion& region )
 
 bool wxRegion::DoIntersect( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
+    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -238,7 +238,7 @@ bool wxRegion::DoIntersect( const wxRegion& region )
 
 bool wxRegion::DoSubtract( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
+    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -257,7 +257,7 @@ bool wxRegion::DoSubtract( const wxRegion& region )
 
 bool wxRegion::DoXor( const wxRegion& region )
 {
-    wxCHECK_MSG( region.Ok(), false, _T("invalid region") );
+    wxCHECK_MSG( region.Ok(), false, wxT("invalid region") );
 
     if (!m_refData)
     {
@@ -474,28 +474,28 @@ wxRegionIterator wxRegionIterator::operator ++ (int)
 
 wxCoord wxRegionIterator::GetX() const
 {
-    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+    wxCHECK_MSG( HaveRects(), 0, wxT("invalid wxRegionIterator") );
 
     return ((wxRIRefData*)m_refData)->m_rects[m_current].x;
 }
 
 wxCoord wxRegionIterator::GetY() const
 {
-    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+    wxCHECK_MSG( HaveRects(), 0, wxT("invalid wxRegionIterator") );
 
     return ((wxRIRefData*)m_refData)->m_rects[m_current].y;
 }
 
 wxCoord wxRegionIterator::GetW() const
 {
-    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+    wxCHECK_MSG( HaveRects(), 0, wxT("invalid wxRegionIterator") );
 
     return ((wxRIRefData*)m_refData)->m_rects[m_current].width;
 }
 
 wxCoord wxRegionIterator::GetH() const
 {
-    wxCHECK_MSG( HaveRects(), 0, _T("invalid wxRegionIterator") );
+    wxCHECK_MSG( HaveRects(), 0, wxT("invalid wxRegionIterator") );
 
     return ((wxRIRefData*)m_refData)->m_rects[m_current].height;
 }

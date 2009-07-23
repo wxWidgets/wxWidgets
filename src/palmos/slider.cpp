@@ -117,7 +117,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     // wxSL_TOP is ignored - always off
     // wxSL_SELRANGE is ignored - always off
     // wxSL_VERTICAL is impossible in native form
-    wxCHECK_MSG(!(style & wxSL_VERTICAL), false, _T("non vertical slider on PalmOS"));
+    wxCHECK_MSG(!(style & wxSL_VERTICAL), false, wxT("non vertical slider on PalmOS"));
 
     if(!wxControl::Create(parent, id, pos, size, style, validator, name))
         return false;

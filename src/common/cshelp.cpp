@@ -232,7 +232,7 @@ bool wxContextHelpEvtHandler::ProcessEvent(wxEvent& event)
 // Dispatch the help event to the relevant window
 bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
 {
-    wxCHECK_MSG( win, false, _T("win parameter can't be NULL") );
+    wxCHECK_MSG( win, false, wxT("win parameter can't be NULL") );
 
     wxHelpEvent helpEvent(wxEVT_HELP, win->GetId(), pt,
                           wxHelpEvent::Origin_HelpButton);
@@ -332,7 +332,7 @@ wxString wxHelpProvider::GetHelpTextMaybeAtPoint(wxWindowBase *window)
     if ( m_helptextAtPoint != wxDefaultPosition ||
             m_helptextOrigin != wxHelpEvent::Origin_Unknown )
     {
-        wxCHECK_MSG( window, wxEmptyString, _T("window must not be NULL") );
+        wxCHECK_MSG( window, wxEmptyString, wxT("window must not be NULL") );
 
         wxPoint pt = m_helptextAtPoint;
         wxHelpEvent::Origin origin = m_helptextOrigin;
@@ -472,7 +472,7 @@ bool wxHelpControllerHelpProvider::ShowHelp(wxWindowBase *window)
 // Convenience function for turning context id into wxString
 wxString wxContextId(int id)
 {
-    return wxString::Format(_T("%d"), id);
+    return wxString::Format(wxT("%d"), id);
 }
 
 // ----------------------------------------------------------------------------

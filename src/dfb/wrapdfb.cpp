@@ -36,7 +36,7 @@ bool wxDfbCheckReturn(DFBResult code)
         // these are programming errors, assert:
         #define DFB_ASSERT(code)                                        \
             case code:                                                  \
-                wxFAIL_MSG( "DirectFB error: " _T(#code) );         \
+                wxFAIL_MSG( "DirectFB error: " wxT(#code) );         \
                 return false                                            \
 
         DFB_ASSERT(DFB_DEAD);

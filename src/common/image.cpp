@@ -175,7 +175,7 @@ bool wxImage::Create( int width, int height, unsigned char* data, bool static_da
 {
     UnRef();
 
-    wxCHECK_MSG( data, false, _T("NULL data in wxImage::Create") );
+    wxCHECK_MSG( data, false, wxT("NULL data in wxImage::Create") );
 
     m_refData = new wxImageRefData();
 
@@ -192,7 +192,7 @@ bool wxImage::Create( int width, int height, unsigned char* data, unsigned char*
 {
     UnRef();
 
-    wxCHECK_MSG( data, false, _T("NULL data in wxImage::Create") );
+    wxCHECK_MSG( data, false, wxT("NULL data in wxImage::Create") );
 
     m_refData = new wxImageRefData();
 
@@ -2348,7 +2348,7 @@ void wxImage::AddHandler( wxImageHandler *handler )
         // may) we should probably refcount the duplicates.
         //   also an issue in InsertHandler below.
 
-        wxLogDebug( _T("Adding duplicate image handler for '%s'"),
+        wxLogDebug( wxT("Adding duplicate image handler for '%s'"),
                     handler->GetName().c_str() );
         delete handler;
     }
@@ -2364,7 +2364,7 @@ void wxImage::InsertHandler( wxImageHandler *handler )
     else
     {
         // see AddHandler for additional comments.
-        wxLogDebug( _T("Inserting duplicate image handler for '%s'"),
+        wxLogDebug( wxT("Inserting duplicate image handler for '%s'"),
                     handler->GetName().c_str() );
         delete handler;
     }
@@ -2672,7 +2672,7 @@ int wxImageHandler::GetImageCount( wxInputStream& stream )
     // restore the old position to be able to test other formats and so on
     if ( stream.SeekI(posOld) == wxInvalidOffset )
     {
-        wxLogDebug(_T("Failed to rewind the stream in wxImageHandler!"));
+        wxLogDebug(wxT("Failed to rewind the stream in wxImageHandler!"));
 
         // reading would fail anyhow as we're not at the right position
         return false;
@@ -2708,7 +2708,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
     // restore the old position to be able to test other formats and so on
     if ( stream.SeekI(posOld) == wxInvalidOffset )
     {
-        wxLogDebug(_T("Failed to rewind the stream in wxImageHandler!"));
+        wxLogDebug(wxT("Failed to rewind the stream in wxImageHandler!"));
 
         // reading would fail anyhow as we're not at the right position
         return false;
@@ -2723,7 +2723,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 wxImageResolution
 wxImageHandler::GetResolutionFromOptions(const wxImage& image, int *x, int *y)
 {
-    wxCHECK_MSG( x && y, wxIMAGE_RESOLUTION_NONE, _T("NULL pointer") );
+    wxCHECK_MSG( x && y, wxIMAGE_RESOLUTION_NONE, wxT("NULL pointer") );
 
     if ( image.HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
          image.HasOption(wxIMAGE_OPTION_RESOLUTIONY) )

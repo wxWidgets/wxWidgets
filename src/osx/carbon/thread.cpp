@@ -893,7 +893,7 @@ wxThreadError wxThread::Run()
 wxThreadError wxThread::Pause()
 {
     wxCHECK_MSG( This() != this, wxTHREAD_MISC_ERROR,
-                 _T("a thread can't pause itself") );
+                 wxT("a thread can't pause itself") );
 
     wxCriticalSectionLocker lock(m_critsect);
 

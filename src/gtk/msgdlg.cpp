@@ -255,7 +255,7 @@ int wxMessageDialog::ShowModal()
     {
         GTKCreateMsgDialog();
         wxCHECK_MSG( m_widget, wxID_CANCEL,
-                     _T("failed to create GtkMessageDialog") );
+                     wxT("failed to create GtkMessageDialog") );
     }
 
     // This should be necessary, but otherwise the
@@ -271,7 +271,7 @@ int wxMessageDialog::ShowModal()
     switch (result)
     {
         default:
-            wxFAIL_MSG(_T("unexpected GtkMessageDialog return code"));
+            wxFAIL_MSG(wxT("unexpected GtkMessageDialog return code"));
             // fall through
 
         case GTK_RESPONSE_CANCEL:

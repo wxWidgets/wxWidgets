@@ -801,7 +801,7 @@ void wxWindowDFB::RemoveOverlay(wxOverlayImpl *overlay)
 #define KEY(dfb, wx)                                                \
     case dfb:                                                       \
           wxLogTrace(TRACE_EVENTS,                                  \
-                     _T("key " #dfb " mapped to " #wx));            \
+                     wxT("key " #dfb " mapped to " #wx));            \
           return wx
 
 // returns translated keycode, i.e. the one for KEYUP/KEYDOWN where 'a'..'z' is

@@ -35,7 +35,7 @@ using std::string;
 
 #define DATABUFFER_SIZE 1024
 
-static const wxString FILENAME_GZ = _T("zlibtest.gz");
+static const wxString FILENAME_GZ = wxT("zlibtest.gz");
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
@@ -161,7 +161,7 @@ zlibStream::zlibStream()
 
 /* Example code on how to produce test data...
     {
-        wxFFileOutputStream fstream_out(_T("gentest.cpp"));
+        wxFFileOutputStream fstream_out(wxT("gentest.cpp"));
         wxTextOutputStream out( fstream_out );
 
         genExtTestData(out, "zlib data created with wxWidgets 2.5.x [March 27], wxZLIB_NO_HEADER, zlib 1.1.4", wxZLIB_NO_HEADER);
@@ -377,10 +377,10 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
     if (fail_pos != DATABUFFER_SIZE || !bWasEOF)
     {
         wxString msg;
-        msg << _T("Wrong data item at pos ") << fail_pos
-            << _T(" (Org_val ") << GetDataBuffer()[fail_pos]
-            << _T(" != Zlib_val ") << last_value
-            << _T("), with compression level ") << compress_level;
+        msg << wxT("Wrong data item at pos ") << fail_pos
+            << wxT(" (Org_val ") << GetDataBuffer()[fail_pos]
+            << wxT(" != Zlib_val ") << last_value
+            << wxT("), with compression level ") << compress_level;
         CPPUNIT_FAIL(string(msg.mb_str()));
     }
 }
@@ -401,23 +401,23 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
     case wxZLIB_ZLIB:
         if (!(data_size >= 1 && data[0] == 0x78))
         {
-            wxLogError(_T("zlib data seems to not be zlib data!"));
+            wxLogError(wxT("zlib data seems to not be zlib data!"));
         }
         break;
     case wxZLIB_GZIP:
         if (!(data_size >= 2 && data[0] == 0x1F && data[1] == 0x8B))
         {
-            wxLogError(_T("gzip data seems to not be gzip data!"));
+            wxLogError(wxT("gzip data seems to not be gzip data!"));
         }
         break;
     case wxZLIB_AUTO:
         if (!(data_size >= 1 && data[0] == 0x78) ||
             !(data_size >= 2 && data[0] == 0x1F && data[1] == 0x8B))
         {
-            wxLogError(_T("Data seems to not be zlib or gzip data!"));
+            wxLogError(wxT("Data seems to not be zlib or gzip data!"));
         }
     default:
-        wxLogError(_T("Unknown flag, skipping quick test."));
+        wxLogError(wxT("Unknown flag, skipping quick test."));
     };
 
     // Creat the needed streams.
@@ -528,25 +528,25 @@ void zlibStream::genExtTestData(wxTextOutputStream &out, const char *buf, int fl
         memstream_out.CopyTo(data, size);
     }
 
-    out << _T("void zlibStream::Decompress_wxXXXData()") << _T("\n");
-    out << _T("{") << _T("\n") << _T("    const unsigned char data[] = {");
+    out << wxT("void zlibStream::Decompress_wxXXXData()") << wxT("\n");
+    out << wxT("{") << wxT("\n") << wxT("    const unsigned char data[] = {");
 
     size_t i;
     for (i = 0; i < size; i++)
     {
         if (i+1 != size)
-            out << wxString::Format(_T("%d,"), data[i]);
+            out << wxString::Format(wxT("%d,"), data[i]);
         else
-            out << wxString::Format(_T("%d"), data[i]);
+            out << wxString::Format(wxT("%d"), data[i]);
     }
     delete [] data;
 
-    out << _T("};") << _T("\n");
-    out << _T("    const char *value = \"") << wxString(buf, wxConvUTF8) << _T("\";") << _T("\n");
-    out << _T("    const size_t data_size = sizeof(data);") << _T("\n");
-    out << _T("    const size_t value_size = strlen(value);") << _T("\n");
-    out << _T("    doDecompress_ExternalData(data, value, data_size, value_size);") << _T("\n");
-    out << _T("}") << _T("\n");
+    out << wxT("};") << wxT("\n");
+    out << wxT("    const char *value = \"") << wxString(buf, wxConvUTF8) << wxT("\";") << wxT("\n");
+    out << wxT("    const size_t data_size = sizeof(data);") << wxT("\n");
+    out << wxT("    const size_t value_size = strlen(value);") << wxT("\n");
+    out << wxT("    doDecompress_ExternalData(data, value, data_size, value_size);") << wxT("\n");
+    out << wxT("}") << wxT("\n");
 }
 
 

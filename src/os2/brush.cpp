@@ -171,7 +171,7 @@ bool wxBrush::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
+            wxLogError(wxT("Unable to set current color table to RGB mode. Error: %s\n"), sError.c_str());
             return false;
         }
 
@@ -253,7 +253,7 @@ bool wxBrush::RealizeResource()
         {
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
-            wxLogError(_T("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n"), sError.c_str());
+            wxLogError(wxT("Can't set Gpi attributes for an AREABUNDLE. Error: %s\n"), sError.c_str());
         }
         return bOk;
     }
@@ -266,35 +266,35 @@ bool wxBrush::RealizeResource()
 
 wxColour wxBrush::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_vColour;
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_nStyle;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( Ok(), NULL, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid brush") );
 
     return &(M_BRUSHDATA->m_vStipple);
 }
 
 int wxBrush::GetPS() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid brush") );
 
     return M_BRUSHDATA->m_hBrush;
 }
 
 WXHANDLE wxBrush::GetResourceHandle() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid brush") );
 
     return (WXHANDLE)M_BRUSHDATA->m_hBrush;
 } // end of wxBrush::GetResourceHandle

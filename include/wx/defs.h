@@ -978,28 +978,28 @@ typedef wxUint32 wxDword;
 #if (defined(__VISUALC__) && defined(__WIN32__))
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
-    #define wxLongLongFmtSpec _T("I64")
+    #define wxLongLongFmtSpec wxT("I64")
 #elif defined(__BORLANDC__) && defined(__WIN32__) && (__BORLANDC__ >= 0x520)
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
-    #define wxLongLongFmtSpec _T("L")
+    #define wxLongLongFmtSpec wxT("L")
 #elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__) || defined(__OS2__)))
       #define wxLongLong_t __int64
       #define wxLongLongSuffix i64
-      #define wxLongLongFmtSpec _T("L")
+      #define wxLongLongFmtSpec wxT("L")
 #elif defined(__DIGITALMARS__)
       #define wxLongLong_t __int64
       #define wxLongLongSuffix LL
-      #define wxLongLongFmtSpec _T("ll")
+      #define wxLongLongFmtSpec wxT("ll")
 #elif defined(__MINGW32__)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec _T("I64")
+    #define wxLongLongFmtSpec wxT("I64")
 #elif defined(__MWERKS__)
     #if __option(longlong)
         #define wxLongLong_t long long
         #define wxLongLongSuffix ll
-        #define wxLongLongFmtSpec _T("ll")
+        #define wxLongLongFmtSpec wxT("ll")
     #else
         #error "The 64 bit integer support in CodeWarrior has been disabled."
         #error "See the documentation on the 'longlong' pragma."
@@ -1011,7 +1011,7 @@ typedef wxUint32 wxDword;
         #define wxLongLong_t long long
     #endif /* __WXPALMOS6__ */
     #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec _T("ll")
+    #define wxLongLongFmtSpec wxT("ll")
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
     #define wxLongLong_t long long
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
@@ -1021,11 +1021,11 @@ typedef wxUint32 wxDword;
         (defined(__DJGPP__) && __DJGPP__ >= 2)
     #define wxLongLong_t long long
     #define wxLongLongSuffix ll
-    #define wxLongLongFmtSpec _T("ll")
+    #define wxLongLongFmtSpec wxT("ll")
 #elif defined(SIZEOF_LONG) && (SIZEOF_LONG == 8)
     #define wxLongLong_t long
     #define wxLongLongSuffix l
-    #define wxLongLongFmtSpec _T("l")
+    #define wxLongLongFmtSpec wxT("l")
     #define wxLongLongIsLong
 #endif
 

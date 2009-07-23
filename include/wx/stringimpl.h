@@ -34,7 +34,7 @@
 
 // implementation only
 #define   wxASSERT_VALID_INDEX(i) \
-    wxASSERT_MSG( (size_t)(i) <= length(), _T("invalid index in wxString") )
+    wxASSERT_MSG( (size_t)(i) <= length(), wxT("invalid index in wxString") )
 
 
 // ----------------------------------------------------------------------------
@@ -300,7 +300,7 @@ public:
   wxStringImpl(const wxStringImpl& stringSrc)
   {
     wxASSERT_MSG( stringSrc.GetStringData()->IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
 
     if ( stringSrc.empty() ) {
       // nothing to do for an empty string
@@ -323,7 +323,7 @@ public:
   wxStringImpl(const wxStringImpl& str, size_t nPos, size_t nLen)
   {
     wxASSERT_MSG( str.GetStringData()->IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
     Init();
     size_t strLen = str.length() - nPos; nLen = strLen < nLen ? strLen : nLen;
     InitWith(str.c_str(), nPos, nLen);

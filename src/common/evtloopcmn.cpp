@@ -112,7 +112,7 @@ bool wxEventLoopManual::ProcessEvents()
 int wxEventLoopManual::Run()
 {
     // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
+    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
 
     // ProcessIdle() and ProcessEvents() below may throw so the code here should
     // be exception-safe, hence we must use local objects for all actions we
@@ -195,7 +195,7 @@ int wxEventLoopManual::Run()
 
 void wxEventLoopManual::Exit(int rc)
 {
-    wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
+    wxCHECK_RET( IsRunning(), wxT("can't call Exit() if not running") );
 
     m_exitcode = rc;
     m_shouldExit = true;

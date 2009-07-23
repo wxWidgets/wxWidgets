@@ -25,7 +25,7 @@
 // Not needed, included in defs.h
 // #include "wx/windowid.h"
 
-#define wxTRACE_WINDOWID _T("windowid")
+#define wxTRACE_WINDOWID wxT("windowid")
 
 namespace
 {

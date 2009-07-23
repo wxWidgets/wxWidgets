@@ -102,7 +102,7 @@ gtk_insert_text_callback(GtkEditable *editable,
     // we should only be called if we have a max len limit at all
     GtkEntry *entry = GTK_ENTRY (editable);
 
-    wxCHECK_RET( entry->text_max_length, _T("shouldn't be called") );
+    wxCHECK_RET( entry->text_max_length, wxT("shouldn't be called") );
 
     // check that we don't overflow the max length limit
     //
@@ -190,7 +190,7 @@ static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
     if ( loop && !loop->IsYielding() )
     {
         wxCHECK_RET( gs_gtk_text_draw != wxgtk_text_draw,
-                     _T("infinite recursion in wxgtk_text_draw aborted") );
+                     wxT("infinite recursion in wxgtk_text_draw aborted") );
 
         gs_gtk_text_draw(widget, rect);
     }
@@ -818,7 +818,7 @@ void wxTextCtrl::SetSelection( long from, long to )
          !GTK_TEXT(m_text)->line_start_cache )
     {
         // tell the programmer that it didn't work
-        wxLogDebug(_T("Can't call SetSelection() before realizing the control"));
+        wxLogDebug(wxT("Can't call SetSelection() before realizing the control"));
         return;
     }
 
@@ -1073,7 +1073,7 @@ void wxTextCtrl::ChangeFontGlobally()
     // possible!
     wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE) && m_updateFont,
 
-                  _T("shouldn't be called for single line controls") );
+                  wxT("shouldn't be called for single line controls") );
 
     wxString value = GetValue();
     if ( !value.empty() )
@@ -1147,7 +1147,7 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
         gint l = gtk_text_get_length( GTK_TEXT(m_text) );
 
         wxCHECK_MSG( start >= 0 && end <= l, false,
-                     _T("invalid range in wxTextCtrl::SetStyle") );
+                     wxT("invalid range in wxTextCtrl::SetStyle") );
 
         gint old_pos = gtk_editable_get_position( GTK_EDITABLE(m_text) );
         char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), start, end );

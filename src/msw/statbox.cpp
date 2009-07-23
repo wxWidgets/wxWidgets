@@ -259,7 +259,7 @@ SubtractRectFromRgn(HRGN hrgn, int left, int top, int right, int bottom)
     AutoHRGN hrgnRect(::CreateRectRgn(left, top, right, bottom));
     if ( !hrgnRect )
     {
-        wxLogLastError(_T("CreateRectRgn()"));
+        wxLogLastError(wxT("CreateRectRgn()"));
         return;
     }
 

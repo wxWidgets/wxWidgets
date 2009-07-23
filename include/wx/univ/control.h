@@ -32,7 +32,7 @@ typedef wxString wxControlAction;
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
 
-#define wxACTION_NONE    _T("")           // no action to perform
+#define wxACTION_NONE    wxT("")           // no action to perform
 
 // ----------------------------------------------------------------------------
 // wxControl: the base class for all GUI controls
@@ -77,7 +77,7 @@ public:
     // return the accel char itself or 0 if none
     wxChar GetAccelChar() const
     {
-        return m_indexAccel == -1 ? _T('\0') : (wxChar)m_label[m_indexAccel];
+        return m_indexAccel == -1 ? wxT('\0') : (wxChar)m_label[m_indexAccel];
     }
 
     virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }

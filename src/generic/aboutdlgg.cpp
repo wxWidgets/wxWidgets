@@ -51,7 +51,7 @@ static wxString AllAsString(const wxArrayString& a)
     s.reserve(20*count);
     for ( size_t n = 0; n < count; n++ )
     {
-        s << a[n] << (n == count - 1 ? _T("\n") : _T(", "));
+        s << a[n] << (n == count - 1 ? wxT("\n") : wxT(", "));
     }
 
     return s;
@@ -65,19 +65,19 @@ wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
 {
     wxString s = GetDescription();
     if ( !s.empty() )
-        s << _T('\n');
+        s << wxT('\n');
 
     if ( HasDevelopers() )
-        s << _T('\n') << _("Developed by ") << AllAsString(GetDevelopers());
+        s << wxT('\n') << _("Developed by ") << AllAsString(GetDevelopers());
 
     if ( HasDocWriters() )
-        s << _T('\n') << _("Documentation by ") << AllAsString(GetDocWriters());
+        s << wxT('\n') << _("Documentation by ") << AllAsString(GetDocWriters());
 
     if ( HasArtists() )
-        s << _T('\n') << _("Graphics art by ") << AllAsString(GetArtists());
+        s << wxT('\n') << _("Graphics art by ") << AllAsString(GetArtists());
 
     if ( HasTranslators() )
-        s << _T('\n') << _("Translations by ") << AllAsString(GetTranslators());
+        s << wxT('\n') << _("Translations by ") << AllAsString(GetTranslators());
 
     return s;
 }
@@ -122,7 +122,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     m_sizerText = new wxBoxSizer(wxVERTICAL);
     wxString nameAndVersion = info.GetName();
     if ( info.HasVersion() )
-        nameAndVersion << _T(' ') << info.GetVersion();
+        nameAndVersion << wxT(' ') << info.GetVersion();
     wxStaticText *label = new wxStaticText(this, wxID_ANY, nameAndVersion);
     wxFont fontBig(*wxNORMAL_FONT);
     fontBig.SetPointSize(fontBig.GetPointSize() + 2);
@@ -202,8 +202,8 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
 
 void wxGenericAboutDialog::AddControl(wxWindow *win, const wxSizerFlags& flags)
 {
-    wxCHECK_RET( m_sizerText, _T("can only be called after Create()") );
-    wxASSERT_MSG( win, _T("can't add NULL window to about dialog") );
+    wxCHECK_RET( m_sizerText, wxT("can only be called after Create()") );
+    wxASSERT_MSG( win, wxT("can't add NULL window to about dialog") );
 
     m_sizerText->Add(win, flags);
 }

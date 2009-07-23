@@ -114,7 +114,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow* pTheCanvas) :
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to create presentation space. Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Unable to create presentation space. Error: %s\n"), sError.c_str());
     }
     ::GpiAssociate(m_hPS, NULLHANDLE);
     ::GpiAssociate(m_hPS, m_hDC);
@@ -132,7 +132,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow* pTheCanvas) :
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table (3). Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Unable to set current color table (3). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -182,7 +182,7 @@ void wxWindowDCImpl::DoGetSize(
 , int*                              pnHeight
 ) const
 {
-    wxCHECK_RET( m_pCanvas, _T("wxWindowDC without a window?") );
+    wxCHECK_RET( m_pCanvas, wxT("wxWindowDC without a window?") );
     m_pCanvas->GetSize( pnWidth
                        ,pnHeight
                       );
@@ -236,7 +236,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *pTheCanvas) :
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Unable to set current color table (4). Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Unable to set current color table (4). Error: %s\n"), sError.c_str());
     }
     ::GpiCreateLogColorTable( m_hPS
                              ,0L
@@ -282,7 +282,7 @@ void wxClientDCImpl::DoGetSize(
 , int*                              pnHeight
 ) const
 {
-    wxCHECK_RET( m_pCanvas, _T("wxWindowDC without a window?") );
+    wxCHECK_RET( m_pCanvas, wxT("wxWindowDC without a window?") );
     m_pCanvas->GetClientSize( pnWidth
                              ,pnHeight
                             );

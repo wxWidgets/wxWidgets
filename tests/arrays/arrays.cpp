@@ -199,121 +199,121 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ArraysTestCase, "ArraysTestCase" );
 void ArraysTestCase::wxStringArrayTest()
 {
     wxArrayString a1;
-    a1.Add(_T("thermit"));
-    a1.Add(_T("condor"));
-    a1.Add(_T("lion"), 3);
-    a1.Add(_T("dog"));
-    a1.Add(_T("human"));
-    a1.Add(_T("alligator"));
+    a1.Add(wxT("thermit"));
+    a1.Add(wxT("condor"));
+    a1.Add(wxT("lion"), 3);
+    a1.Add(wxT("dog"));
+    a1.Add(wxT("human"));
+    a1.Add(wxT("alligator"));
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a1 , _T("thermit") ,
-                                           _T("condor") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a1 , wxT("thermit") ,
+                                           wxT("condor") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 8 ) );
 
     wxArrayString a2(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a2 , _T("thermit") ,
-                                           _T("condor") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a2 , wxT("thermit") ,
+                                           wxT("condor") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a2 , 8 ) );
 
     wxSortedArrayString a3(a1);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a3 , _T("alligator") ,
-                                           _T("condor") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("thermit") ) );
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a3 , wxT("alligator") ,
+                                           wxT("condor") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("thermit") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a3 , 8 ) );
 
     wxSortedArrayString a4;
     for (wxArrayString::iterator it = a1.begin(), en = a1.end(); it != en; ++it)
         a4.Add(*it);
 
-    CPPUNIT_ASSERT( COMPARE_8_VALUES( a4 , _T("alligator") ,
-                                           _T("condor") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("lion") ,
-                                           _T("thermit") ) );
+    CPPUNIT_ASSERT( COMPARE_8_VALUES( a4 , wxT("alligator") ,
+                                           wxT("condor") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("lion") ,
+                                           wxT("thermit") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a4 , 8 ) );
 
     a1.RemoveAt(2,3);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , _T("thermit") ,
-                                           _T("condor") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("thermit") ,
+                                           wxT("condor") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a2 = a1;
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a2 , _T("thermit") ,
-                                           _T("condor") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_5_VALUES( a2 , wxT("thermit") ,
+                                           wxT("condor") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a2 , 5 ) );
 
     a1.Sort(false);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , _T("alligator") ,
-                                           _T("condor") ,
-                                           _T("dog") ,
-                                           _T("human") ,
-                                           _T("thermit") ) );
+    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("alligator") ,
+                                           wxT("condor") ,
+                                           wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("thermit") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a1.Sort(true);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , _T("thermit") ,
-                                           _T("human") ,
-                                           _T("dog") ,
-                                           _T("condor") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("thermit") ,
+                                           wxT("human") ,
+                                           wxT("dog") ,
+                                           wxT("condor") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
 
     a1.Sort(&StringLenCompare);
 
-    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , _T("dog") ,
-                                           _T("human") ,
-                                           _T("condor") ,
-                                           _T("thermit") ,
-                                           _T("alligator") ) );
+    CPPUNIT_ASSERT( COMPARE_5_VALUES( a1 , wxT("dog") ,
+                                           wxT("human") ,
+                                           wxT("condor") ,
+                                           wxT("thermit") ,
+                                           wxT("alligator") ) );
     CPPUNIT_ASSERT( COMPARE_COUNT( a1 , 5 ) );
-    CPPUNIT_ASSERT( a1.Index( _T("dog") ) == 0 );
-    CPPUNIT_ASSERT( a1.Index( _T("human") ) == 1 );
-    CPPUNIT_ASSERT( a1.Index( _T("humann") ) == wxNOT_FOUND );
-    CPPUNIT_ASSERT( a1.Index( _T("condor") ) == 2 );
-    CPPUNIT_ASSERT( a1.Index( _T("thermit") ) == 3 );
-    CPPUNIT_ASSERT( a1.Index( _T("alligator") ) == 4 );
+    CPPUNIT_ASSERT( a1.Index( wxT("dog") ) == 0 );
+    CPPUNIT_ASSERT( a1.Index( wxT("human") ) == 1 );
+    CPPUNIT_ASSERT( a1.Index( wxT("humann") ) == wxNOT_FOUND );
+    CPPUNIT_ASSERT( a1.Index( wxT("condor") ) == 2 );
+    CPPUNIT_ASSERT( a1.Index( wxT("thermit") ) == 3 );
+    CPPUNIT_ASSERT( a1.Index( wxT("alligator") ) == 4 );
 
     wxArrayString a5;
 
-    CPPUNIT_ASSERT( a5.Add( _T("x"), 1 ) == 0 );
-    CPPUNIT_ASSERT( a5.Add( _T("a"), 3 ) == 1 );
+    CPPUNIT_ASSERT( a5.Add( wxT("x"), 1 ) == 0 );
+    CPPUNIT_ASSERT( a5.Add( wxT("a"), 3 ) == 1 );
 
-    CPPUNIT_ASSERT( COMPARE_4_VALUES( a5, _T("x") ,
-                                          _T("a") ,
-                                          _T("a") ,
-                                          _T("a") ) );
+    CPPUNIT_ASSERT( COMPARE_4_VALUES( a5, wxT("x") ,
+                                          wxT("a") ,
+                                          wxT("a") ,
+                                          wxT("a") ) );
 
     a5.assign(a1.end(), a1.end());
     CPPUNIT_ASSERT( a5.empty() );
@@ -475,24 +475,24 @@ void ArraysTestCase::wxStringArraySplitJoinTest()
     }
 
     wxArrayString emptyArray;
-    wxString string = wxJoin(emptyArray, _T(';'));
+    wxString string = wxJoin(emptyArray, wxT(';'));
     CPPUNIT_ASSERT( string.empty() );
 
-    CPPUNIT_ASSERT( wxSplit(string, _T(';')).empty() );
+    CPPUNIT_ASSERT( wxSplit(string, wxT(';')).empty() );
 
-    CPPUNIT_ASSERT_EQUAL( 2, wxSplit(_T(";"), _T(';')).size() );
+    CPPUNIT_ASSERT_EQUAL( 2, wxSplit(wxT(";"), wxT(';')).size() );
 }
 
 void ArraysTestCase::wxObjArrayTest()
 {
     {
         ArrayBars bars;
-        Bar bar(_T("first bar in general, second bar in array (two copies!)"));
+        Bar bar(wxT("first bar in general, second bar in array (two copies!)"));
 
         CPPUNIT_ASSERT_EQUAL( 0, bars.GetCount() );
         CPPUNIT_ASSERT_EQUAL( 1, Bar::GetNumber() );
 
-        bars.Add(new Bar(_T("first bar in array")));
+        bars.Add(new Bar(wxT("first bar in array")));
         bars.Add(bar, 2);
 
         CPPUNIT_ASSERT_EQUAL( 3, bars.GetCount() );

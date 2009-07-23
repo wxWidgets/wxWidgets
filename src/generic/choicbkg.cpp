@@ -176,14 +176,14 @@ wxString wxChoicebook::GetPageText(size_t n) const
 
 int wxChoicebook::GetPageImage(size_t WXUNUSED(n)) const
 {
-    wxFAIL_MSG( _T("wxChoicebook::GetPageImage() not implemented") );
+    wxFAIL_MSG( wxT("wxChoicebook::GetPageImage() not implemented") );
 
     return wxNOT_FOUND;
 }
 
 bool wxChoicebook::SetPageImage(size_t WXUNUSED(n), int WXUNUSED(imageId))
 {
-    wxFAIL_MSG( _T("wxChoicebook::SetPageImage() not implemented") );
+    wxFAIL_MSG( wxT("wxChoicebook::SetPageImage() not implemented") );
 
     return false;
 }

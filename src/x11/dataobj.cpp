@@ -243,12 +243,12 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
         if ( (*p == '\r' && *(p+1) == '\n') || !*p )
         {
             size_t lenPrefix = 5; // strlen("file:")
-            if ( filename.Left(lenPrefix).MakeLower() == _T("file:") )
+            if ( filename.Left(lenPrefix).MakeLower() == wxT("file:") )
             {
                 // sometimes the syntax is "file:filename", sometimes it's
                 // URL-like: "file://filename" - deal with both
-                if ( filename[lenPrefix] == _T('/') &&
-                     filename[lenPrefix + 1] == _T('/') )
+                if ( filename[lenPrefix] == wxT('/') &&
+                     filename[lenPrefix + 1] == wxT('/') )
                 {
                     // skip the slashes
                     lenPrefix += 2;
@@ -259,7 +259,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
             }
             else
             {
-                wxLogDebug(_T("Unsupported URI '%s' in wxFileDataObject"),
+                wxLogDebug(wxT("Unsupported URI '%s' in wxFileDataObject"),
                            filename.c_str());
             }
 

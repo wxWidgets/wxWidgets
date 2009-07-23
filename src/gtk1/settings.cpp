@@ -82,7 +82,7 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
     switch ( type )
     {
         default:
-            wxFAIL_MSG( _T("unexpected GTK widget type") );
+            wxFAIL_MSG( wxT("unexpected GTK widget type") );
             // fall through
 
         case wxGTK_BUTTON:
@@ -108,7 +108,7 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
         switch ( colour )
         {
             default:
-                wxFAIL_MSG( _T("unexpected GTK colour type") );
+                wxFAIL_MSG( wxT("unexpected GTK colour type") );
                 // fall through
 
             case wxGTK_FG:
@@ -325,7 +325,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
 
         case wxSYS_COLOUR_MAX:
         default:
-            wxFAIL_MSG( _T("unknown system colour index") );
+            wxFAIL_MSG( wxT("unknown system colour index") );
     }
 
     return *wxWHITE;

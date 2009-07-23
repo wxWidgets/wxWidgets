@@ -491,7 +491,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
     // use ";", not "-" because it may be part of encoding name
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString encid = tokenizer.GetNextToken();
     long enc;
@@ -516,10 +516,10 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
 wxString wxNativeEncodingInfo::ToString() const
 {
     wxString s;
-    s << (long)encoding << _T(';') << xregistry << _T(';') << xencoding;
+    s << (long)encoding << wxT(';') << xregistry << wxT(';') << xencoding;
     if ( !facename.empty() )
     {
-        s << _T(';') << facename;
+        s << wxT(';') << facename;
     }
 
     return s;
@@ -536,11 +536,11 @@ void wxNativeFontInfo::Init()
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer tokenizer(s, wxT(";"));
 
     // check the version
     wxString token = tokenizer.GetNextToken();
-    if ( token != _T('0') )
+    if ( token != wxT('0') )
         return false;
 
     xFontName = tokenizer.GetNextToken();
@@ -555,7 +555,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 wxString wxNativeFontInfo::ToString() const
 {
     // 0 is the version
-    return wxString::Format(_T("%d;%s"), 0, GetXFontName().c_str());
+    return wxString::Format(wxT("%d;%s"), 0, GetXFontName().c_str());
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)
@@ -577,7 +577,7 @@ bool wxNativeFontInfo::HasElements() const
 
 wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 {
-    wxCHECK_MSG( field < wxXLFD_MAX, wxEmptyString, _T("invalid XLFD field") );
+    wxCHECK_MSG( field < wxXLFD_MAX, wxEmptyString, wxT("invalid XLFD field") );
 
     if ( !HasElements() )
     {
@@ -592,7 +592,7 @@ wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
 bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
 {
     // TODO: we should be able to handle the font aliases here, but how?
-    wxStringTokenizer tokenizer(fontname, _T("-"));
+    wxStringTokenizer tokenizer(fontname, wxT("-"));
 
     // skip the leading, usually empty field (font name registry)
     if ( !tokenizer.HasMoreTokens() )
@@ -609,7 +609,7 @@ bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
         }
 
         wxString field = tokenizer.GetNextToken();
-        if ( !field.empty() && field != _T('*') )
+        if ( !field.empty() && field != wxT('*') )
         {
             // we're really initialized now
             m_isDefault = false;
@@ -636,11 +636,11 @@ wxString wxNativeFontInfo::GetXFontName() const
             wxString elt = fontElements[n];
             if ( elt.empty() && n != wxXLFD_ADDSTYLE )
             {
-                elt = _T('*');
+                elt = wxT('*');
             }
 
             // const_cast
-            ((wxNativeFontInfo *)this)->xFontName << _T('-') << elt;
+            ((wxNativeFontInfo *)this)->xFontName << wxT('-') << elt;
         }
     }
 
@@ -650,18 +650,18 @@ wxString wxNativeFontInfo::GetXFontName() const
 void
 wxNativeFontInfo::SetXFontComponent(wxXLFDField field, const wxString& value)
 {
-    wxCHECK_RET( field < wxXLFD_MAX, _T("invalid XLFD field") );
+    wxCHECK_RET( field < wxXLFD_MAX, wxT("invalid XLFD field") );
 
     // this class should be initialized with a valid font spec first and only
     // then the fields may be modified!
-    wxASSERT_MSG( !IsDefault(), _T("can't modify an uninitialized XLFD") );
+    wxASSERT_MSG( !IsDefault(), wxT("can't modify an uninitialized XLFD") );
 
     if ( !HasElements() )
     {
         // const_cast
         if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
         {
-            wxFAIL_MSG( _T("can't set font element for invalid XLFD") );
+            wxFAIL_MSG( wxT("can't set font element for invalid XLFD") );
 
             return;
         }
@@ -708,13 +708,13 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
         default:
             // again, unknown but consider normal by default
 
-        case _T('r'):
+        case wxT('r'):
             return wxFONTSTYLE_NORMAL;
 
-        case _T('i'):
+        case wxT('i'):
             return wxFONTSTYLE_ITALIC;
 
-        case _T('o'):
+        case wxT('o'):
             return wxFONTSTYLE_SLANT;
     }
 }
@@ -722,9 +722,9 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
     const wxString s = GetXFontComponent(wxXLFD_WEIGHT).MakeLower();
-    if ( s.find(_T("bold")) != wxString::npos || s == _T("black") )
+    if ( s.find(wxT("bold")) != wxString::npos || s == wxT("black") )
         return wxFONTWEIGHT_BOLD;
-    else if ( s == _T("light") )
+    else if ( s == wxT("light") )
         return wxFONTWEIGHT_LIGHT;
 
     return wxFONTWEIGHT_NORMAL;
@@ -746,7 +746,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 {
     // and wxWidgets family -- to X foundry, but we have to translate it to
     // wxFontFamily somehow...
-    wxFAIL_MSG(_T("not implemented")); // GetXFontComponent(wxXLFD_FOUNDRY);
+    wxFAIL_MSG(wxT("not implemented")); // GetXFontComponent(wxXLFD_FOUNDRY);
 
     return wxFONTFAMILY_DEFAULT;
 }
@@ -754,14 +754,14 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
     // we already have the code for this but need to refactor it first
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 
     return wxFONTENCODING_MAX;
 }
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    SetXFontComponent(wxXLFD_POINTSIZE, wxString::Format(_T("%d"), pointsize));
+    SetXFontComponent(wxXLFD_POINTSIZE, wxString::Format(wxT("%d"), pointsize));
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -770,18 +770,18 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     switch ( style )
     {
         case wxFONTSTYLE_ITALIC:
-            s = _T('i');
+            s = wxT('i');
             break;
 
         case wxFONTSTYLE_SLANT:
-            s = _T('o');
+            s = wxT('o');
             break;
 
         case wxFONTSTYLE_NORMAL:
-            s = _T('r');
+            s = wxT('r');
 
         default:
-            wxFAIL_MSG( _T("unknown wxFontStyle in wxNativeFontInfo::SetStyle") );
+            wxFAIL_MSG( wxT("unknown wxFontStyle in wxNativeFontInfo::SetStyle") );
             return;
     }
 
@@ -794,19 +794,19 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
     switch ( weight )
     {
         case wxFONTWEIGHT_BOLD:
-            s = _T("bold");
+            s = wxT("bold");
             break;
 
         case wxFONTWEIGHT_LIGHT:
-            s = _T("light");
+            s = wxT("light");
             break;
 
         case wxFONTWEIGHT_NORMAL:
-            s = _T("medium");
+            s = wxT("medium");
             break;
 
         default:
-            wxFAIL_MSG( _T("unknown wxFontWeight in wxNativeFontInfo::SetWeight") );
+            wxFAIL_MSG( wxT("unknown wxFontWeight in wxNativeFontInfo::SetWeight") );
             return;
     }
 
@@ -827,7 +827,7 @@ bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
 {
     // wxFontFamily -> X foundry, anyone?
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 
     // SetXFontComponent(wxXLFD_FOUNDRY, ...);
 }
@@ -849,7 +849,7 @@ void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    wxCHECK_MSG( info, false, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG( info, false, wxT("bad pointer in wxGetNativeFontEncoding") );
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -937,8 +937,8 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
 {
     wxString fontspec;
-    fontspec.Printf(_T("-*-%s-*-*-*-*-*-*-*-*-*-*-%s-%s"),
-                    !info.facename ? _T("*") : info.facename.c_str(),
+    fontspec.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-%s-%s"),
+                    !info.facename ? wxT("*") : info.facename.c_str(),
                     info.xregistry.c_str(),
                     info.xencoding.c_str());
 
@@ -1000,7 +1000,7 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
         //
         //  Make sure point size is correct for scale factor.
         //
-        wxStringTokenizer tokenizer(*xFontName, _T("-"), wxTOKEN_RET_DELIMS);
+        wxStringTokenizer tokenizer(*xFontName, wxT("-"), wxTOKEN_RET_DELIMS);
         wxString newFontName;
 
         for(int i = 0; i < 8; i++)
@@ -1118,12 +1118,12 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
                     // NULL or we'd crash in wxFont code
                     if ( !font )
                     {
-                        wxFAIL_MSG( _T("this encoding should be available!") );
+                        wxFAIL_MSG( wxT("this encoding should be available!") );
 
                         font = wxLoadQueryFont(-1,
                                                wxDEFAULT, wxNORMAL, wxNORMAL,
                                                false, wxEmptyString,
-                                               _T("*"), _T("*"),
+                                               wxT("*"), wxT("*"),
                                                xFontName);
                     }
                 }
@@ -1143,7 +1143,7 @@ static bool wxTestFontSpec(const wxString& fontspec)
 {
     // some X servers will fail to load this font because there are too many
     // matches so we must test explicitly for this
-    if ( fontspec == _T("-*-*-*-*-*-*-*-*-*-*-*-*-*-*") )
+    if ( fontspec == wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*") )
     {
         return true;
     }
@@ -1312,7 +1312,7 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknown font style"));
+            wxFAIL_MSG(wxT("unknown font style"));
             // fall back to normal
 
         case wxNORMAL:
@@ -1420,11 +1420,11 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     wxString sizeSpec;
     if ( pointSize == -1 )
     {
-        sizeSpec = _T('*');
+        sizeSpec = wxT('*');
     }
     else
     {
-        sizeSpec.Printf(_T("%d"), pointSize);
+        sizeSpec.Printf(wxT("%d"), pointSize);
     }
 
     // construct the X font spec from our data

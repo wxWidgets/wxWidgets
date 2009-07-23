@@ -611,7 +611,7 @@ void wxWidgetIPhoneImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* ot
 
     if ( receivedFocus )
     {
-        wxLogTrace(_T("Focus"), _T("focus set(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(wxT("Focus"), wxT("focus set(%p)"), static_cast<void*>(thisWindow));
         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
         thisWindow->HandleWindowEvent(eventFocus);
 
@@ -633,7 +633,7 @@ void wxWidgetIPhoneImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* ot
             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), static_cast<void*>(thisWindow));
+        wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
                     
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);

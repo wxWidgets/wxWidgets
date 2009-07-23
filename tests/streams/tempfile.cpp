@@ -43,7 +43,7 @@ private:
 TestFile::TestFile()
 {
     wxFile file;
-    m_name = wxFileName::CreateTempFileName(_T("wxtest"), &file);
+    m_name = wxFileName::CreateTempFileName(wxT("wxtest"), &file);
     file.Write("Before", 6);
 }
 

@@ -2160,7 +2160,7 @@ void wxPMDCImpl::DoGetTextExtent(
     //
     if (!m_hPS)
     {
-	(void)wxMessageBox( _T("wxWidgets core library")
+	(void)wxMessageBox( wxT("wxWidgets core library")
 			    ,"Using uninitialized DC for measuring text!\n"
 			    ,wxICON_INFORMATION
 			    );
@@ -2177,8 +2177,8 @@ void wxPMDCImpl::DoGetTextExtent(
        vErrorCode = ::WinGetLastError(wxGetInstance());
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
-       wxSprintf(zMsg, _T("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
-       (void)wxMessageBox( _T("wxWidgets core library")
+       wxSprintf(zMsg, wxT("GpiQueryTextBox for %s: failed with Error: %lx - %s"), rsString.c_str(), vErrorCode, sError.c_str());
+       (void)wxMessageBox( wxT("wxWidgets core library")
                           ,zMsg
                           ,wxICON_INFORMATION
                          );

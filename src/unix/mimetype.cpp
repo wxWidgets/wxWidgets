@@ -161,7 +161,7 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
 #if wxUSE_INTL // try "Name[locale name]" first
     wxLocale *locale = wxGetLocale();
     if ( locale )
-        nIndex = file.pIndexOf(_T("Name[")+locale->GetName()+_T("]="));
+        nIndex = file.pIndexOf(wxT("Name[")+locale->GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Name=") );
@@ -173,7 +173,7 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Icon[locale name]" first
     if ( locale )
-        nIndex = file.pIndexOf(_T("Icon[")+locale->GetName()+_T("]="));
+        nIndex = file.pIndexOf(wxT("Icon[")+locale->GetName()+wxT("]="));
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
         nIndex = file.pIndexOf( wxT("Icon=") );
@@ -198,7 +198,7 @@ void wxMimeTypesManagerImpl::LoadXDGApp(const wxString& filename)
     sCmd.Replace(wxT("%i"), nameicon);
     sCmd.Replace(wxT("%m"), namemini);
 
-    wxStringTokenizer tokenizer(mimetypes, _T(";"));
+    wxStringTokenizer tokenizer(mimetypes, wxT(";"));
     while(tokenizer.HasMoreTokens()) {
         wxString mimetype = tokenizer.GetNextToken().Lower();
         nIndex = m_aTypes.Index(mimetype);
@@ -222,7 +222,7 @@ void wxMimeTypesManagerImpl::LoadXDGAppsFilesFromDir(const wxString& dirname)
 
     wxString filename;
     // Look into .desktop files
-    bool cont = dir.GetFirst(&filename, _T("*.desktop"), wxDIR_FILES);
+    bool cont = dir.GetFirst(&filename, wxT("*.desktop"), wxDIR_FILES);
     while (cont)
     {
         wxFileName p(dirname, filename);

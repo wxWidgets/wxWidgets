@@ -260,7 +260,7 @@ void wxDialog::Raise()
 // show dialog modally
 int wxDialog::ShowModal()
 {
-    wxASSERT_MSG( !IsModal(), _T("ShowModal() can't be called twice") );
+    wxASSERT_MSG( !IsModal(), wxT("ShowModal() can't be called twice") );
 
     Show();
 
@@ -279,7 +279,7 @@ int wxDialog::ShowModal()
 
 void wxDialog::EndModal(int retCode)
 {
-    wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
+    wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
 
     SetReturnCode(retCode);
 
@@ -336,7 +336,7 @@ void wxDialog::DestroyGripper()
         // have been called yet)
         wxASSERT_MSG( !IsShown() ||
                       ::GetWindow((HWND)m_hGripper, GW_HWNDNEXT) == 0,
-            _T("Bug in wxWidgets: gripper should be at the bottom of Z-order") );
+            wxT("Bug in wxWidgets: gripper should be at the bottom of Z-order") );
         ::DestroyWindow((HWND) m_hGripper);
         m_hGripper = 0;
     }
@@ -344,7 +344,7 @@ void wxDialog::DestroyGripper()
 
 void wxDialog::ShowGripper(bool show)
 {
-    wxASSERT_MSG( m_hGripper, _T("shouldn't be called if we have no gripper") );
+    wxASSERT_MSG( m_hGripper, wxT("shouldn't be called if we have no gripper") );
 
     if ( show )
         ResizeGripper();
@@ -354,7 +354,7 @@ void wxDialog::ShowGripper(bool show)
 
 void wxDialog::ResizeGripper()
 {
-    wxASSERT_MSG( m_hGripper, _T("shouldn't be called if we have no gripper") );
+    wxASSERT_MSG( m_hGripper, wxT("shouldn't be called if we have no gripper") );
 
     HWND hwndGripper = (HWND)m_hGripper;
 

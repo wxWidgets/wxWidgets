@@ -46,7 +46,7 @@ static wxStandardPaths gs_stdPaths;
 wxStandardPaths& wxStandardPathsBase::Get()
 {
     wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    wxCHECK_MSG( traits, gs_stdPaths, _T("create wxApp before calling this") );
+    wxCHECK_MSG( traits, gs_stdPaths, wxT("create wxApp before calling this") );
 
     return traits->GetStandardPaths();
 }
@@ -133,7 +133,7 @@ wxStandardPathsBase::AppendPathComponent(const wxString& dir,
         if ( !component.empty() )
         {
             const wxChar ch = *(subdir.end() - 1);
-            if ( !wxFileName::IsPathSeparator(ch) && ch != _T('.') )
+            if ( !wxFileName::IsPathSeparator(ch) && ch != wxT('.') )
                 subdir += wxFileName::GetPathSeparator();
 
             subdir += component;

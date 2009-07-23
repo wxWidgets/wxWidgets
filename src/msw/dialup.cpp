@@ -111,7 +111,7 @@ static const wxChar *gs_classForDialUpWindow = NULL;
     typedef DWORD (APIENTRY * RASVALIDATEENTRYNAME)( LPCSTR, LPCSTR );
     typedef DWORD (APIENTRY * RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
 
-    static const wxChar gs_funcSuffix = _T('A');
+    static const wxChar gs_funcSuffix = wxT('A');
 #else // Unicode
     typedef DWORD (APIENTRY * RASDIAL)( LPRASDIALEXTENSIONS, LPCWSTR, LPRASDIALPARAMSW, DWORD, LPVOID, LPHRASCONN );
     typedef DWORD (APIENTRY * RASENUMCONNECTIONS)( LPRASCONNW, LPDWORD, LPDWORD );
@@ -133,7 +133,7 @@ static const wxChar *gs_classForDialUpWindow = NULL;
     typedef DWORD (APIENTRY * RASVALIDATEENTRYNAME)( LPCWSTR, LPCWSTR );
     typedef DWORD (APIENTRY * RASCONNECTIONNOTIFICATION)( HRASCONN, HANDLE, DWORD );
 
-    static const wxChar gs_funcSuffix = _T('W');
+    static const wxChar gs_funcSuffix = wxT('W');
 #endif // ASCII/Unicode
 
 // structure passed to the secondary thread
@@ -384,7 +384,7 @@ wxDialUpManager *wxDialUpManager::Create()
 
 wxDialUpManagerMSW::wxDialUpManagerMSW()
                   : m_timerStatusPolling(this),
-                    m_dllRas(_T("RASAPI32"))
+                    m_dllRas(wxT("RASAPI32"))
 {
     // initialize our data
     m_autoCheckLevel = 0;
@@ -405,7 +405,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
 
         // get the function from rasapi32.dll and abort if it's not found
         #define RESOLVE_RAS_FUNCTION(type, name)                          \
-            ms_pfn##name = (type)m_dllRas.GetSymbol( wxString(_T(#name))  \
+            ms_pfn##name = (type)m_dllRas.GetSymbol( wxString(wxT(#name))  \
                                                      + gs_funcSuffix);    \
             if ( !ms_pfn##name )                                          \
             {                                                             \
@@ -416,7 +416,7 @@ wxDialUpManagerMSW::wxDialUpManagerMSW()
         // a variant of above macro which doesn't abort if the function is
         // not found in the DLL
         #define RESOLVE_OPTIONAL_RAS_FUNCTION(type, name)                 \
-            ms_pfn##name = (type)m_dllRas.GetSymbol( wxString(_T(#name))  \
+            ms_pfn##name = (type)m_dllRas.GetSymbol( wxString(wxT(#name))  \
                                                      + gs_funcSuffix);
 
         RESOLVE_RAS_FUNCTION(RASDIAL, RasDial);
@@ -582,7 +582,7 @@ void wxDialUpManagerMSW::CleanUpThreadData()
     {
         if ( !SetEvent(m_data->hEventQuit) )
         {
-            wxLogLastError(_T("SetEvent(RasThreadQuit)"));
+            wxLogLastError(wxT("SetEvent(RasThreadQuit)"));
         }
         else // sent quit request to the background thread
         {
@@ -984,14 +984,14 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
     //     but we allow multiple instances of wxDialUpManagerMSW so
     //     we might as well use the ref counted version here too.
 
-    wxDynamicLibrary hDll(_T("WININET"));
+    wxDynamicLibrary hDll(wxT("WININET"));
     if ( hDll.IsLoaded() )
     {
         typedef BOOL (WINAPI *INTERNETGETCONNECTEDSTATE)(LPDWORD, DWORD);
         INTERNETGETCONNECTEDSTATE pfnInternetGetConnectedState;
 
         #define RESOLVE_FUNCTION(type, name) \
-            pfn##name = (type)hDll.GetSymbol(_T(#name))
+            pfn##name = (type)hDll.GetSymbol(wxT(#name))
 
         RESOLVE_FUNCTION(INTERNETGETCONNECTEDSTATE, InternetGetConnectedState);
 
@@ -1269,7 +1269,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                 break;
 
             default:
-                wxFAIL_MSG( _T("unexpected return of WaitForMultipleObjects()") );
+                wxFAIL_MSG( wxT("unexpected return of WaitForMultipleObjects()") );
                 // fall through
 
             case WAIT_FAILED:

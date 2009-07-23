@@ -53,7 +53,7 @@
 // ----------------------------------------------------------------------------
 
 // Name for map file.
-#define WXEXTHELP_MAPFILE                   _T("wxhelp.map")
+#define WXEXTHELP_MAPFILE                   wxT("wxhelp.map")
 
 // Character introducing comments/documentation field in map file.
 #define WXEXTHELP_COMMENTCHAR               ';'
@@ -107,7 +107,7 @@ void wxExtHelpController::SetViewer(const wxString& viewer, long flags)
 bool wxExtHelpController::DisplayHelp(const wxString &relativeURL)
 {
     // construct hte URL to open -- it's just a file
-    wxString url(_T("file://") + m_helpDir);
+    wxString url(wxT("file://") + m_helpDir);
     url << wxFILE_SEP_PATH << relativeURL;
 
     // use the explicit browser program if specified
@@ -122,7 +122,7 @@ bool wxExtHelpController::DisplayHelp(const wxString &relativeURL)
                 return true;
         }
 
-        if ( wxExecute(m_BrowserName + _T(' ') + url, wxEXEC_SYNC) != -1 )
+        if ( wxExecute(m_BrowserName + wxT(' ') + url, wxEXEC_SYNC) != -1 )
             return true;
     }
     //else: either no browser explicitly specified or we failed to open it
@@ -176,7 +176,7 @@ bool wxExtHelpController::ParseMapFileLine(const wxString& line)
         p++;
 
     // skip empty lines and comments
-    if ( *p == _T('\0') || *p == WXEXTHELP_COMMENTCHAR )
+    if ( *p == wxT('\0') || *p == WXEXTHELP_COMMENTCHAR )
         return true;
 
     // the line is of the form "num url" so we must have an integer now
@@ -242,7 +242,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
         if ( ! dirExists )
         {
             // try without encoding
-            const wxString locNameWithoutEncoding = locName.BeforeLast(_T('.'));
+            const wxString locNameWithoutEncoding = locName.BeforeLast(wxT('.'));
             if ( !locNameWithoutEncoding.empty() )
             {
                 helpDirLoc = helpDir;
@@ -254,7 +254,7 @@ bool wxExtHelpController::LoadFile(const wxString& file)
         if ( !dirExists )
         {
             // try without country part
-            wxString locNameWithoutCountry = locName.BeforeLast(_T('_'));
+            wxString locNameWithoutCountry = locName.BeforeLast(wxT('_'));
             if ( !locNameWithoutCountry.empty() )
             {
                 helpDirLoc = helpDir;

@@ -217,7 +217,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
     {
         case wxCHK_UNCHECKED:    status = Status_Unchecked;   break;
         case wxCHK_CHECKED:      status = Status_Checked; break;
-        default:                 wxFAIL_MSG(_T("Unknown checkbox state"));
+        default:                 wxFAIL_MSG(wxT("Unknown checkbox state"));
         case wxCHK_UNDETERMINED: status = Status_3rdState;  break;
     }
     if ( status != m_status )

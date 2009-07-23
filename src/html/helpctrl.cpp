@@ -184,7 +184,7 @@ wxWindow* wxHtmlHelpController::CreateHelpWindow()
     {
         m_Config = wxConfigBase::Get(false);
         if (m_Config != NULL)
-            m_ConfigRoot = _T("wxWindows/wxHtmlHelpController");
+            m_ConfigRoot = wxT("wxWindows/wxHtmlHelpController");
     }
 
     if (m_FrameStyle & wxHF_DIALOG)

@@ -419,7 +419,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 {
-    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
 
     m_window->GetSize(width, height);
 }
@@ -1778,7 +1778,7 @@ wxCoord wxWindowDCImpl::GetCharWidth() const
 wxCoord wxWindowDCImpl::GetCharHeight() const
 {
     PangoFontMetrics *metrics = pango_context_get_metrics (m_context, m_fontdesc, pango_context_get_language(m_context));
-    wxCHECK_MSG( metrics, -1, _T("failed to get pango font metrics") );
+    wxCHECK_MSG( metrics, -1, wxT("failed to get pango font metrics") );
 
     wxCoord h = PANGO_PIXELS (pango_font_metrics_get_descent (metrics) +
                               pango_font_metrics_get_ascent (metrics));
@@ -2299,7 +2299,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner )
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
           : wxWindowDCImpl( owner, win )
 {
-    wxCHECK_RET( win, _T("NULL window in wxClientDCImpl::wxClientDC") );
+    wxCHECK_RET( win, wxT("NULL window in wxClientDCImpl::wxClientDC") );
 
 #ifdef __WXUNIVERSAL__
     wxPoint ptOrigin = win->GetClientAreaOrigin();
@@ -2312,7 +2312,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 
 void wxClientDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_window, _T("GetSize() doesn't work without window") );
+    wxCHECK_RET( m_window, wxT("GetSize() doesn't work without window") );
 
     m_window->GetClientSize( width, height );
 }

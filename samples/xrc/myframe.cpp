@@ -137,12 +137,12 @@ void MyFrame::OnUnloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxXmlResource::Get()->Unload(wxT("rc/basicdlg.xrc")) )
     {
-        wxLogMessage(_T("Basic dialog resource has now been unloaded, you ")
-                     _T("won't be able to use it before loading it again"));
+        wxLogMessage(wxT("Basic dialog resource has now been unloaded, you ")
+                     wxT("won't be able to use it before loading it again"));
     }
     else
     {
-        wxLogWarning(_T("Failed to unload basic dialog resource"));
+        wxLogWarning(wxT("Failed to unload basic dialog resource"));
     }
 }
 
@@ -150,11 +150,11 @@ void MyFrame::OnReloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxXmlResource::Get()->Load(wxT("rc/basicdlg.xrc")) )
     {
-        wxLogStatus(_T("Basic dialog resource has been loaded."));
+        wxLogStatus(wxT("Basic dialog resource has been loaded."));
     }
     else
     {
-        wxLogError(_T("Failed to load basic dialog resource"));
+        wxLogError(wxT("Failed to load basic dialog resource"));
     }
 }
 
@@ -315,8 +315,8 @@ void MyFrame::OnVariableExpansionToolOrMenuCommand(wxCommandEvent& WXUNUSED(even
 void MyFrame::OnAboutToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of XML resources demo.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( wxT("This is the about dialog of XML resources demo.\n")
+                wxT("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, _("About XML resources demo"), wxOK | wxICON_INFORMATION, this);
 }

@@ -211,9 +211,9 @@ bool wxSocketMSWManager::OnInit()
   // dependencies on it for all the application using wx even if they don't use
   // sockets
 #ifdef __WXWINCE__
-    #define WINSOCK_DLL_NAME _T("ws2.dll")
+    #define WINSOCK_DLL_NAME wxT("ws2.dll")
 #else
-    #define WINSOCK_DLL_NAME _T("wsock32.dll")
+    #define WINSOCK_DLL_NAME wxT("wsock32.dll")
 #endif
 
     gs_wsock32dll.Load(WINSOCK_DLL_NAME, wxDL_VERBATIM | wxDL_QUIET);

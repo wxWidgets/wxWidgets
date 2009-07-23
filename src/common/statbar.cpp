@@ -69,7 +69,7 @@ wxStatusBarBase::~wxStatusBarBase()
 
 void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 {
-    wxCHECK_RET( number > 0, _T("invalid field number in SetFieldsCount") );
+    wxCHECK_RET( number > 0, wxT("invalid field number in SetFieldsCount") );
 
     if ( (size_t)number > m_panes.GetCount() )
     {
@@ -93,7 +93,7 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
                                     const int widths[])
 {
-    wxASSERT_MSG( (size_t)n == m_panes.GetCount(), _T("field number mismatch") );
+    wxASSERT_MSG( (size_t)n == m_panes.GetCount(), wxT("field number mismatch") );
 
     if (widths == NULL)
     {
@@ -116,9 +116,9 @@ void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
 void wxStatusBarBase::SetStatusStyles(int WXUNUSED_UNLESS_DEBUG(n),
                                     const int styles[])
 {
-    wxCHECK_RET( styles, _T("NULL pointer in SetStatusStyles") );
+    wxCHECK_RET( styles, wxT("NULL pointer in SetStatusStyles") );
 
-    wxASSERT_MSG( (size_t)n == m_panes.GetCount(), _T("field number mismatch") );
+    wxASSERT_MSG( (size_t)n == m_panes.GetCount(), wxT("field number mismatch") );
 
     for ( size_t i = 0; i < m_panes.GetCount(); i++ )
         m_panes[i].m_nStyle = styles[i];

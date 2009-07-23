@@ -113,7 +113,7 @@ wxChoice *wxChoice::GetChoiceForListBox(WXHWND hwndBuddy)
 
     // sanity check
     wxASSERT_MSG( choice->m_hwndBuddy == hwndBuddy,
-                  _T("wxChoice has incorrect buddy HWND!") );
+                  wxT("wxChoice has incorrect buddy HWND!") );
 
     return choice;
 }
@@ -169,7 +169,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
     if ( sizeText.x <= 0 )
     {
-        wxLogDebug(_T("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
     }
 
     wxPoint posBtn(pos);
@@ -186,7 +186,7 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (
                      exStyle,                // sunken border
-                     _T("LISTBOX"),          // window class
+                     wxT("LISTBOX"),         // window class
                      NULL,                   // no window title
                      msStyle,                // style (will be shown later)
                      pos.x, pos.y,           // position
@@ -517,7 +517,7 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
     int widthText = width - widthBtn - MARGIN_BETWEEN;
     if ( widthText <= 0 )
     {
-        wxLogDebug(_T("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
     }
 
     if ( !::MoveWindow(GetBuddyHwnd(), x, y, widthText, height, TRUE) )

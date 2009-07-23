@@ -257,7 +257,7 @@ void VsnprintfTestCase::N()
 {
     int nchar;
 
-    wxSnprintf(buf, MAX_TEST_LEN, _T("%d %s%n\n"), 3, _T("bears"), &nchar);
+    wxSnprintf(buf, MAX_TEST_LEN, wxT("%d %s%n\n"), 3, wxT("bears"), &nchar);
     CPPUNIT_ASSERT_EQUAL( 7, nchar );
 }
 
@@ -497,7 +497,7 @@ void VsnprintfTestCase::DoBigToSmallBuffer(T *buffer, int size)
     //     format and gcc would warn about this otherwise
 
     r = wxUnsafeSnprintf(buffer, size,
-                         _T("unicode string/char: %ls/%lc -- ansi string/char: %hs/%hc"),
+                         wxT("unicode string/char: %ls/%lc -- ansi string/char: %hs/%hc"),
                          L"unicode", L'U', "ansi", 'A');
     wxString expected =
         wxString(wxT("unicode string/char: unicode/U -- ansi string/char: ansi/A")).Left(size - 1);
@@ -556,10 +556,10 @@ void VsnprintfTestCase::DoMisc(
     // Prepare messages so that it is possible to see from the error which
     // test was running.
     wxString errStr, overflowStr;
-    errStr << _T("No.: ") << ++count << _T(", expected: ") << expectedLen
-           << _T(" '") << expectedString << _T("', result: ");
-    overflowStr << errStr << _T("buffer overflow");
-    errStr << n << _T(" '") << buf << _T("'");
+    errStr << wxT("No.: ") << ++count << wxT(", expected: ") << expectedLen
+           << wxT(" '") << expectedString << wxT("', result: ");
+    overflowStr << errStr << wxT("buffer overflow");
+    errStr << n << wxT(" '") << buf << wxT("'");
 
     // turn them into std::strings
     std::string errMsg(errStr.mb_str());

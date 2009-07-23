@@ -86,7 +86,7 @@ wxString wxGetOsDescription()
 {
     struct utsname name;
     uname(&name);
-    return wxString::Format(_T("Mac OS X (%s %s %s)"),
+    return wxString::Format(wxT("Mac OS X (%s %s %s)"),
             wxString::FromAscii(name.sysname).c_str(),
             wxString::FromAscii(name.release).c_str(),
             wxString::FromAscii(name.machine).c_str());

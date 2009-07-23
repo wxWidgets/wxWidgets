@@ -107,7 +107,7 @@ bool wxStatusBarPalm::Show( bool show )
 void wxStatusBarPalm::SetFieldsCount(int nFields, const int *widths)
 {
     // this is a Windows limitation
-    wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
+    wxASSERT_MSG( (nFields > 0) && (nFields < 255), wxT("too many fields") );
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
 
@@ -130,7 +130,7 @@ void wxStatusBarPalm::SetFieldsWidth()
 void wxStatusBarPalm::SetStatusText(const wxString& strText, int nField)
 {
     wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
-                 _T("invalid statusbar field index") );
+                 wxT("invalid statusbar field index") );
 
     SetStatusBufferText(strText,nField);
     DrawStatusBar();
@@ -139,7 +139,7 @@ void wxStatusBarPalm::SetStatusText(const wxString& strText, int nField)
 wxString wxStatusBarPalm::GetStatusText(int nField) const
 {
     wxCHECK_MSG( (nField >= 0) && (nField < m_nFields), wxEmptyString,
-                 _T("invalid statusbar field index") );
+                 wxT("invalid statusbar field index") );
 
     wxString text;
     return text;

@@ -166,7 +166,7 @@ bool wxListBox::Create(wxWindow *parent,
         return false;
 
     // create the native control
-    if ( !MSWCreateControl(_T("LISTBOX"), wxEmptyString, pos, size) )
+    if ( !MSWCreateControl(wxT("LISTBOX"), wxEmptyString, pos, size) )
     {
         // control creation failed
         return false;
@@ -216,7 +216,7 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     msStyle |= LBS_NOINTEGRALHEIGHT;
 
     wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
-                  _T("only one of listbox selection modes can be specified") );
+                  wxT("only one of listbox selection modes can be specified") );
 
     if ( style & wxLB_MULTIPLE )
         msStyle |= LBS_MULTIPLESEL;
@@ -224,7 +224,7 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= LBS_EXTENDEDSEL;
 
     wxASSERT_MSG( !(style & wxLB_ALWAYS_SB) || !(style & wxLB_NO_SB),
-                  _T( "Conflicting styles wxLB_ALWAYS_SB and wxLB_NO_SB." ) );
+                  wxT( "Conflicting styles wxLB_ALWAYS_SB and wxLB_NO_SB." ) );
 
     if ( !(style & wxLB_NO_SB) )
     {
@@ -377,7 +377,7 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
         int countSel = ListBox_GetSelCount(GetHwnd());
         if ( countSel == LB_ERR )
         {
-            wxLogDebug(_T("ListBox_GetSelCount failed"));
+            wxLogDebug(wxT("ListBox_GetSelCount failed"));
         }
         else if ( countSel != 0 )
         {

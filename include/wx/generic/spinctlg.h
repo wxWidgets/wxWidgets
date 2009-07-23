@@ -53,7 +53,7 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = _T("wxSpinCtrl"));
+                const wxString& name = wxT("wxSpinCtrl"));
 
     virtual ~wxSpinCtrlGenericBase();
 
@@ -161,7 +161,7 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = _T("wxSpinCtrl"))
+                const wxString& name = wxT("wxSpinCtrl"))
     {
         m_min = min;
         m_max = max;
@@ -245,7 +245,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100, int initial = 0,
-               const wxString& name = _T("wxSpinCtrl"))
+               const wxString& name = wxT("wxSpinCtrl"))
     {
         Create(parent, id, value, pos, size, style, min, max, initial, name);
     }
@@ -257,7 +257,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
-                const wxString& name = _T("wxSpinCtrl"))
+                const wxString& name = wxT("wxSpinCtrl"))
     {
         return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
                                              style, min, max, initial, 1, name);
@@ -302,7 +302,7 @@ public:
                      long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                      double min = 0, double max = 100, double initial = 0,
                      double inc = 1,
-                     const wxString& name = _T("wxSpinCtrlDouble"))
+                     const wxString& name = wxT("wxSpinCtrlDouble"))
     {
         m_digits = 0;
         Create(parent, id, value, pos, size, style,
@@ -317,7 +317,7 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = _T("wxSpinCtrlDouble"))
+                const wxString& name = wxT("wxSpinCtrlDouble"))
     {
         return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
                                              style, min, max, initial,

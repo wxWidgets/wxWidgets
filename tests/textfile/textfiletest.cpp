@@ -117,8 +117,8 @@ void TextFileTestCase::ReadDOS()
     CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("baz")), f.GetLastLine() );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
 void TextFileTestCase::ReadUnix()
@@ -131,8 +131,8 @@ void TextFileTestCase::ReadUnix()
     CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("baz")), f.GetLastLine() );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
 void TextFileTestCase::ReadMac()
@@ -145,8 +145,8 @@ void TextFileTestCase::ReadMac()
     CPPUNIT_ASSERT_EQUAL( (size_t)3, f.GetLineCount() );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_None, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("baz")), f.GetLastLine() );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
 void TextFileTestCase::ReadMixed()
@@ -160,9 +160,9 @@ void TextFileTestCase::ReadMixed()
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Mac, f.GetLineType(0) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Dos, f.GetLineType(1) );
     CPPUNIT_ASSERT_EQUAL( wxTextFileType_Unix, f.GetLineType(2) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("foo")), f.GetFirstLine() );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("bar")), f.GetLine(1) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("baz")), f.GetLastLine() );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("foo")), f.GetFirstLine() );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("bar")), f.GetLine(1) );
+    CPPUNIT_ASSERT_EQUAL( wxString(wxT("baz")), f.GetLastLine() );
 }
 
 #if wxUSE_UNICODE

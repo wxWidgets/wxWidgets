@@ -30,7 +30,7 @@
 #define wxMINOR_VERSION      9
 #define wxRELEASE_NUMBER     1
 #define wxSUBRELEASE_NUMBER  0
-#define wxVERSION_STRING   _T("wxWidgets 2.9.1")
+#define wxVERSION_STRING   wxT("wxWidgets 2.9.1")
 
 /*  nothing to update below this line when updating the version */
 /*  ---------------------------------------------------------------------------- */
@@ -54,7 +54,7 @@
 #define wxMAKE_VERSION_STRING_T(x, y, z) \
     wxSTRINGIZE_T(x) wxSTRINGIZE_T(y) wxSTRINGIZE_T(z)
 #define wxMAKE_VERSION_DOT_STRING_T(x, y, z) \
-    wxSTRINGIZE_T(x) _T(".") wxSTRINGIZE_T(y) _T(".") wxSTRINGIZE_T(z)
+    wxSTRINGIZE_T(x) wxT(".") wxSTRINGIZE_T(y) wxT(".") wxSTRINGIZE_T(z)
 
 /*  these are used by src/msw/version.rc and should always be ASCII, not Unicode */
 #define wxVERSION_NUM_STRING \

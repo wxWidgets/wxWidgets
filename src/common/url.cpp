@@ -427,7 +427,7 @@ wxURLModule::wxURLModule()
 {
     // we must be cleaned up before wxSocketModule as otherwise deleting
     // ms_proxyDefault from our OnExit() won't work (and can actually crash)
-    AddDependency(wxClassInfo::FindClass(_T("wxSocketModule")));
+    AddDependency(wxClassInfo::FindClass(wxT("wxSocketModule")));
 }
 
 bool wxURLModule::OnInit()
@@ -438,7 +438,7 @@ bool wxURLModule::OnInit()
     // down the program startup (especially if there is no DNS server
     // available, in which case it may take up to 1 minute)
 
-    if ( wxGetenv(_T("HTTP_PROXY")) )
+    if ( wxGetenv(wxT("HTTP_PROXY")) )
     {
         wxURL::ms_useDefaultProxy = true;
     }

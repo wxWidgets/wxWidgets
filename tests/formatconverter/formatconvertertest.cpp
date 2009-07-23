@@ -32,7 +32,7 @@
 // I've put in some checks, such as this which will flag up any platforms
 // where this is not the case:
 //
-//  CPPUNIT_ASSERT(wxString::Format(_T("%hs"), "test") == _T("test"));
+//  CPPUNIT_ASSERT(wxString::Format(wxT("%hs"), "test") == wxT("test"));
 //
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -110,81 +110,81 @@ class FormatConverterTestCase : public TestCase
 void FormatConverterTestCase::format_d()
 {
     doTest("d", "d", "d", "d", "d");
-    CPPUNIT_ASSERT(wxString::Format(_T("%d"), 255) == _T("255"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%05d"), 255) == _T("00255"));
-    CPPUNIT_ASSERT(wxString::Format(_T("% 5d"), 255) == _T("  255"));
-    CPPUNIT_ASSERT(wxString::Format(_T("% 5d"), -255) == _T(" -255"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%-5d"), -255) == _T("-255 "));
-    CPPUNIT_ASSERT(wxString::Format(_T("%+5d"), 255) == _T(" +255"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%*d"), 5, 255) == _T("  255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%d"), 255) == wxT("255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%05d"), 255) == wxT("00255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("% 5d"), 255) == wxT("  255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("% 5d"), -255) == wxT(" -255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%-5d"), -255) == wxT("-255 "));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%+5d"), 255) == wxT(" +255"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%*d"), 5, 255) == wxT("  255"));
 }
 
 void FormatConverterTestCase::format_hd()
 {
     doTest("hd", "hd", "hd", "hd", "hd");
     short s = 32767;
-    CPPUNIT_ASSERT(wxString::Format(_T("%hd"), s) == _T("32767"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%hd"), s) == wxT("32767"));
 }
 
 void FormatConverterTestCase::format_ld()
 {
     doTest("ld", "ld", "ld", "ld", "ld");
     long l = 2147483647L;
-    CPPUNIT_ASSERT(wxString::Format(_T("%ld"), l) == _T("2147483647"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%ld"), l) == wxT("2147483647"));
 }
 
 void FormatConverterTestCase::format_s()
 {
     doTest("s", "ls", "s", "ls", "s");
-    CPPUNIT_ASSERT(wxString::Format(_T("%s!"), _T("test")) == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%6s!"), _T("test")) == _T("  test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%-6s!"), _T("test")) == _T("test  !"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%.6s!"), _T("test")) == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%6.4s!"), _T("testing")) == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%s!"), wxT("test")) == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%6s!"), wxT("test")) == wxT("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%-6s!"), wxT("test")) == wxT("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%.6s!"), wxT("test")) == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%6.4s!"), wxT("testing")) == wxT("  test!"));
 }
 
 void FormatConverterTestCase::format_hs()
 {
     doTest("hs", "hs", "s", "ls", "s");
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%hs!")), "test") == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%6hs!")), "test") == _T("  test!"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%-6hs!")), "test") == _T("test  !"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%.6hs!")), "test") == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%6.4hs!")), "testing") == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%hs!")), "test") == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%6hs!")), "test") == wxT("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%-6hs!")), "test") == wxT("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%.6hs!")), "test") == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%6.4hs!")), "testing") == wxT("  test!"));
 }
 
 void FormatConverterTestCase::format_ls()
 {
     doTest("ls", "ls", "s", "ls", "s");
-    CPPUNIT_ASSERT(wxString::Format(_T("%ls!"), L"test") == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%6ls!"), L"test") == _T("  test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%-6ls!"), L"test") == _T("test  !"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%.6ls!"), L"test") == _T("test!"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%6.4ls!"), L"testing") == _T("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%ls!"), L"test") == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%6ls!"), L"test") == wxT("  test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%-6ls!"), L"test") == wxT("test  !"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%.6ls!"), L"test") == wxT("test!"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%6.4ls!"), L"testing") == wxT("  test!"));
 }
 
 void FormatConverterTestCase::format_c()
 {
     doTest("c", "lc", "lc", "lc", "c");
-    CPPUNIT_ASSERT(wxString::Format(_T("%c"), _T('x')) == _T("x"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%2c"), _T('x')) == _T(" x"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%-2c"), _T('x')) == _T("x "));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%c"), wxT('x')) == wxT("x"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%2c"), wxT('x')) == wxT(" x"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%-2c"), wxT('x')) == wxT("x "));
 }
 
 void FormatConverterTestCase::format_hc()
 {
     doTest("hc", "hc", "lc", "lc", "c");
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%hc")), 'x') == _T("x"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%2hc")), 'x') == _T(" x"));
-    CPPUNIT_ASSERT(wxString::Format(wxString(_T("%-2hc")), 'x') == _T("x "));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%hc")), 'x') == wxT("x"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%2hc")), 'x') == wxT(" x"));
+    CPPUNIT_ASSERT(wxString::Format(wxString(wxT("%-2hc")), 'x') == wxT("x "));
 }
 
 void FormatConverterTestCase::format_lc()
 {
     doTest("lc", "lc", "lc", "lc", "c");
-    CPPUNIT_ASSERT(wxString::Format(_T("%lc"), L'x') == _T("x"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%2lc"), L'x') == _T(" x"));
-    CPPUNIT_ASSERT(wxString::Format(_T("%-2lc"), L'x') == _T("x "));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%lc"), L'x') == wxT("x"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%2lc"), L'x') == wxT(" x"));
+    CPPUNIT_ASSERT(wxString::Format(wxT("%-2lc"), L'x') == wxT("x "));
 }
 
 
@@ -254,17 +254,17 @@ void FormatConverterTestCase::doTest(const char *input,
                                      const char *expectedWcharWindows)
 {
     static const wxChar *flag_width[] =
-        { _T(""), _T("*"), _T("10"), _T("-*"), _T("-10"), NULL };
+        { wxT(""), wxT("*"), wxT("10"), wxT("-*"), wxT("-10"), NULL };
     static const wxChar *precision[] =
-        { _T(""), _T(".*"), _T(".10"), NULL };
+        { wxT(""), wxT(".*"), wxT(".10"), NULL };
     static const wxChar *empty[] =
-        { _T(""), NULL };
+        { wxT(""), NULL };
 
     // no precision for %c or %C
-    const wxChar **precs = wxTolower(input[wxStrlen(input)-1]) == _T('c') ?
+    const wxChar **precs = wxTolower(input[wxStrlen(input)-1]) == wxT('c') ?
         empty : precision;
 
-    wxString fmt(_T("%"));
+    wxString fmt(wxT("%"));
 
     // try the test for a variety of combinations of flag, width and precision
     for (const wxChar **prec = precs; *prec; prec++)
@@ -294,18 +294,18 @@ void FormatConverterTestCase::check(const wxString& input,
     // on windows, wxScanf() string needs no modifications
     result = wxScanfConvertFormatW(input.wc_str());
 
-    msg = _T("input: '") + input +
-          _T("', result (scanf): '") + result +
-          _T("', expected: '") + expectedScanf + _T("'");
+    msg = wxT("input: '") + input +
+          wxT("', result (scanf): '") + result +
+          wxT("', expected: '") + expectedScanf + wxT("'");
     CPPUNIT_ASSERT_MESSAGE(string(msg.mb_str()), result == expectedScanf);
 #endif // !__WINDOWS__
 
 #if wxUSE_UNICODE_UTF8
     result = (const char*)wxFormatString(input);
 
-    msg = _T("input: '") + input +
-          _T("', result (UTF-8): '") + result +
-          _T("', expected: '") + expectedUtf8 + _T("'");
+    msg = wxT("input: '") + input +
+          wxT("', result (UTF-8): '") + result +
+          wxT("', expected: '") + expectedUtf8 + wxT("'");
     CPPUNIT_ASSERT_MESSAGE(string(msg.mb_str()), result == expectedUtf8);
 #endif // wxUSE_UNICODE_UTF8
 
@@ -318,9 +318,9 @@ void FormatConverterTestCase::check(const wxString& input,
     wxString expectedWchar(expectedWcharUnix);
 #endif
 
-    msg = _T("input: '") + input +
-          _T("', result (wchar_t): '") + result +
-          _T("', expected: '") + expectedWchar + _T("'");
+    msg = wxT("input: '") + input +
+          wxT("', result (wchar_t): '") + result +
+          wxT("', expected: '") + expectedWchar + wxT("'");
     CPPUNIT_ASSERT_MESSAGE(string(msg.mb_str()), result == expectedWchar);
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 }

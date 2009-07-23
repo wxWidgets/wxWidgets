@@ -72,7 +72,7 @@ public:
         wxString path;
         if ( !SHGetPathFromIDList(m_pidl, wxStringBuffer(path, MAX_PATH)) )
         {
-            wxLogLastError(_T("SHGetPathFromIDList"));
+            wxLogLastError(wxT("SHGetPathFromIDList"));
         }
 
         return path;

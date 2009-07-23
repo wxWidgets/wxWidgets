@@ -135,7 +135,7 @@ void wxNumberEntryDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
 #if !wxUSE_SPINCTRL
     wxString tmp = m_spinctrl->GetValue();
-    if ( wxSscanf(tmp, _T("%ld"), &m_value) != 1 )
+    if ( wxSscanf(tmp, wxT("%ld"), &m_value) != 1 )
         EndModal(wxID_CANCEL);
     else
 #else

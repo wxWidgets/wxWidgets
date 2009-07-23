@@ -140,7 +140,7 @@ bool wxComboBox::Create(
         lSstyle |= CBS_DROPDOWN;
 
 
-    if (!OS2CreateControl( _T("COMBOBOX")
+    if (!OS2CreateControl( wxT("COMBOBOX")
                           ,lSstyle
                          ))
         return false;

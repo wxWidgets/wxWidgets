@@ -267,7 +267,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
     {
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
 
-        wxASSERT_MSG( child_frame, _T("child is not a wxMDIChildFrame") );
+        wxASSERT_MSG( child_frame, wxT("child is not a wxMDIChildFrame") );
 
         if (child_frame->m_page == page)
             return child_frame;

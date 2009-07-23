@@ -359,7 +359,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
 void wxListBox::SetString(unsigned int n, const wxString& s)
 {
-    wxCHECK_RET( !IsSorted(), _T("can't set string in sorted listbox") );
+    wxCHECK_RET( !IsSorted(), wxT("can't set string in sorted listbox") );
 
     if ( IsSorted() )
         (*m_strings.sorted)[n] = s;

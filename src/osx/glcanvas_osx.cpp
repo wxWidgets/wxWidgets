@@ -150,7 +150,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
 bool wxGLCanvas::SwapBuffers()
 {
     WXGLContext context = WXGLGetCurrentContext();
-    wxCHECK_MSG(context, false, _T("should have current context"));
+    wxCHECK_MSG(context, false, wxT("should have current context"));
 
     WXGLSwapBuffers(context);
     return true;

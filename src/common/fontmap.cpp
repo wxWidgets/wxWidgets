@@ -329,7 +329,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
              encName = GetEncodingName(encoding);
     if ( !facename.empty() )
     {
-        configEntry = facename + _T("_");
+        configEntry = facename + wxT("_");
     }
     configEntry += encName;
 
@@ -494,7 +494,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                                      bool interactive)
 {
     wxCHECK_MSG( encodingAlt, false,
-                    _T("wxFontEncoding::GetAltForEncoding(): NULL pointer") );
+                    wxT("wxFontEncoding::GetAltForEncoding(): NULL pointer") );
 
     wxNativeEncodingInfo info;
     if ( !GetAltForEncoding(encoding, &info, facename, interactive) )

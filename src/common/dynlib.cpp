@@ -55,7 +55,7 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray)
 // ---------------------------------------------------------------------------
 
 #if defined(__WXPM__) || defined(__EMX__)
-    const wxString wxDynamicLibrary::ms_dllext(_T(".dll"));
+    const wxString wxDynamicLibrary::ms_dllext(wxT(".dll"));
 #endif
 
 // for MSW/Unix it is defined in platform-specific file
@@ -72,7 +72,7 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 
 bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 {
-    wxASSERT_MSG(m_handle == 0, _T("Library already loaded."));
+    wxASSERT_MSG(m_handle == 0, wxT("Library already loaded."));
 
     // add the proper extension for the DLL ourselves unless told not to
     wxString libname = libnameOrig;
@@ -129,7 +129,7 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
 {
     wxCHECK_MSG( IsLoaded(), NULL,
-                 _T("Can't load symbol from unloaded library") );
+                 wxT("Can't load symbol from unloaded library") );
 
     void    *symbol = 0;
 
@@ -178,7 +178,7 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
     switch ( cat )
     {
         default:
-            wxFAIL_MSG( _T("unknown wxDynamicLibraryCategory value") );
+            wxFAIL_MSG( wxT("unknown wxDynamicLibraryCategory value") );
             // fall through
 
         case wxDL_MODULE:
@@ -187,7 +187,7 @@ wxDynamicLibrary::CanonicalizeName(const wxString& name,
 
         case wxDL_LIBRARY:
             // library names should start with "lib" under Unix
-            nameCanonic = _T("lib");
+            nameCanonic = wxT("lib");
             break;
     }
 #else // !__UNIX__
@@ -208,14 +208,14 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
         suffix = wxPlatformInfo::Get().GetPortIdShortName();
     }
 #if wxUSE_UNICODE
-    suffix << _T('u');
+    suffix << wxT('u');
 #endif
 #ifdef __WXDEBUG__
-    suffix << _T('d');
+    suffix << wxT('d');
 #endif
 
     if ( !suffix.empty() )
-        suffix = wxString(_T("_")) + suffix;
+        suffix = wxString(wxT("_")) + suffix;
 
 #define WXSTRINGIZE(x)  #x
 #if defined(__UNIX__) && !defined(__EMX__)
@@ -240,13 +240,13 @@ wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
 #ifdef __WINDOWS__
     // Add compiler identification:
     #if defined(__GNUG__)
-        suffix << _T("_gcc");
+        suffix << wxT("_gcc");
     #elif defined(__VISUALC__)
-        suffix << _T("_vc");
+        suffix << wxT("_vc");
     #elif defined(__WATCOMC__)
-        suffix << _T("_wat");
+        suffix << wxT("_wat");
     #elif defined(__BORLANDC__)
-        suffix << _T("_bcc");
+        suffix << wxT("_bcc");
     #endif
 #endif
 

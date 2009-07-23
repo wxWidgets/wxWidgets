@@ -55,7 +55,7 @@ public:
         m_hMutex = ::CreateMutex(NULL, FALSE, name.t_str());
         if ( !m_hMutex )
         {
-            wxLogLastError(_T("CreateMutex"));
+            wxLogLastError(wxT("CreateMutex"));
 
             return false;
         }
@@ -69,7 +69,7 @@ public:
     bool WasOpened() const
     {
         wxCHECK_MSG( m_hMutex, false,
-                     _T("can't be called if mutex creation failed") );
+                     wxT("can't be called if mutex creation failed") );
 
         return m_wasOpened;
     }
@@ -80,7 +80,7 @@ public:
         {
             if ( !::CloseHandle(m_hMutex) )
             {
-                wxLogLastError(_T("CloseHandle(mutex)"));
+                wxLogLastError(wxT("CloseHandle(mutex)"));
             }
         }
     }
@@ -103,10 +103,10 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
                                      const wxString& WXUNUSED(path))
 {
     wxASSERT_MSG( !m_impl,
-                  _T("calling wxSingleInstanceChecker::Create() twice?") );
+                  wxT("calling wxSingleInstanceChecker::Create() twice?") );
 
     // creating unnamed mutex doesn't have the same semantics!
-    wxASSERT_MSG( !name.empty(), _T("mutex name can't be empty") );
+    wxASSERT_MSG( !name.empty(), wxT("mutex name can't be empty") );
 
     m_impl = new wxSingleInstanceCheckerImpl;
 
@@ -115,7 +115,7 @@ bool wxSingleInstanceChecker::Create(const wxString& name,
 
 bool wxSingleInstanceChecker::IsAnotherRunning() const
 {
-    wxCHECK_MSG( m_impl, false, _T("must call Create() first") );
+    wxCHECK_MSG( m_impl, false, wxT("must call Create() first") );
 
     // if the mutex had been opened, another instance is running - otherwise we
     // would have created it

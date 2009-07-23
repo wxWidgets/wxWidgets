@@ -334,7 +334,7 @@ bool wxNotebook::Create(wxWindow *parent,
             }
             else
             {
-                wxLogLastError(_T("GetClassInfoEx(SysTabCtl32)"));
+                wxLogLastError(wxT("GetClassInfoEx(SysTabCtl32)"));
             }
         }
 
@@ -665,7 +665,7 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 
 void wxNotebook::AdjustPageSize(wxNotebookPage *page)
 {
-    wxCHECK_RET( page, _T("NULL page in wxNotebook::AdjustPageSize") );
+    wxCHECK_RET( page, wxT("NULL page in wxNotebook::AdjustPageSize") );
 
     const wxRect r = GetPageSize();
     if ( !r.IsEmpty() )
@@ -753,12 +753,12 @@ bool wxNotebook::InsertPage(size_t nPage,
                             bool bSelect,
                             int imageId)
 {
-    wxCHECK_MSG( pPage != NULL, false, _T("NULL page in wxNotebook::InsertPage") );
+    wxCHECK_MSG( pPage != NULL, false, wxT("NULL page in wxNotebook::InsertPage") );
     wxCHECK_MSG( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), false,
-                 _T("invalid index in wxNotebook::InsertPage") );
+                 wxT("invalid index in wxNotebook::InsertPage") );
 
     wxASSERT_MSG( pPage->GetParent() == this,
-                    _T("notebook pages must have notebook as parent") );
+                    wxT("notebook pages must have notebook as parent") );
 
     // add a new tab to the control
     // ----------------------------
@@ -1261,7 +1261,7 @@ WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd)
 
         if ( !::SetBrushOrgEx((HDC)hDC, -rc.left, -rc.top, NULL) )
         {
-            wxLogLastError(_T("SetBrushOrgEx(notebook bg brush)"));
+            wxLogLastError(wxT("SetBrushOrgEx(notebook bg brush)"));
         }
 
         return m_hbrBackground;

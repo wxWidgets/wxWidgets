@@ -45,7 +45,7 @@ filemap(const TCHAR *name,
     return 0;
   }
   if (sizeHi) {
-    _ftprintf(stderr, _T("%s: bigger than 2Gb\n"), name);
+    _ftprintf(stderr, wxT("%s: bigger than 2Gb\n"), name);
     return 0;
   }
   /* CreateFileMapping barfs on zero length files */
@@ -87,10 +87,10 @@ win32perror(const TCHAR *s)
                     (LPTSTR) &buf,
                     0,
                     NULL)) {
-    _ftprintf(stderr, _T("%s: %s"), s, buf);
+    _ftprintf(stderr, wxT("%s: %s"), s, buf);
     fflush(stderr);
     LocalFree(buf);
   }
   else
-    _ftprintf(stderr, _T("%s: unknown Windows error\n"), s);
+    _ftprintf(stderr, wxT("%s: unknown Windows error\n"), s);
 }

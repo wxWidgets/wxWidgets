@@ -142,7 +142,7 @@ public:
     // init without conversion
     void Init(LV_ITEM_NATIVE& item)
     {
-        wxASSERT_MSG( !m_pItem, _T("Init() called twice?") );
+        wxASSERT_MSG( !m_pItem, wxT("Init() called twice?") );
 
         m_pItem = &item;
     }
@@ -404,7 +404,7 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     MAP_MODE_STYLE(wxLC_REPORT, LVS_REPORT)
 
     wxASSERT_MSG( nModes == 1,
-                  _T("wxListCtrl style should have exactly one mode bit set") );
+                  wxT("wxListCtrl style should have exactly one mode bit set") );
 
 #undef MAP_MODE_STYLE
 
@@ -434,7 +434,7 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
         wstyle |= LVS_SORTASCENDING;
 
         wxASSERT_MSG( !(style & wxLC_SORT_DESCENDING),
-                      _T("can't sort in ascending and descending orders at once") );
+                      wxT("can't sort in ascending and descending orders at once") );
     }
     else if ( style & wxLC_SORT_DESCENDING )
         wstyle |= LVS_SORTDESCENDING;
@@ -708,7 +708,7 @@ int wxListCtrl::GetColumnIndexFromOrder(int order) const
 {
     const int numCols = GetColumnCount();
     wxCHECK_MSG( order >= 0 && order < numCols, -1,
-                _T("Column position out of bounds") );
+                wxT("Column position out of bounds") );
 
     wxArrayInt indexArray(numCols);
     if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
@@ -720,7 +720,7 @@ int wxListCtrl::GetColumnIndexFromOrder(int order) const
 int wxListCtrl::GetColumnOrder(int col) const
 {
     const int numCols = GetColumnCount();
-    wxASSERT_MSG( col >= 0 && col < numCols, _T("Column index out of bounds") );
+    wxASSERT_MSG( col >= 0 && col < numCols, wxT("Column index out of bounds") );
 
     wxArrayInt indexArray(numCols);
     if ( !ListView_GetColumnOrderArray(GetHwnd(), numCols, &indexArray[0]) )
@@ -732,7 +732,7 @@ int wxListCtrl::GetColumnOrder(int col) const
             return pos;
     }
 
-    wxFAIL_MSG( _T("no column with with given order?") );
+    wxFAIL_MSG( wxT("no column with with given order?") );
 
     return -1;
 }
@@ -755,7 +755,7 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& orders)
     const int numCols = GetColumnCount();
 
     wxCHECK_MSG( orders.size() == (size_t)numCols, false,
-                    _T("wrong number of elements in column orders array") );
+                    wxT("wrong number of elements in column orders array") );
 
     return ListView_SetColumnOrderArray(GetHwnd(), numCols, &orders[0]) != 0;
 }
@@ -850,7 +850,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
 {
     const long id = info.GetId();
     wxCHECK_MSG( id >= 0 && id < GetItemCount(), false,
-                 _T("invalid item index in SetItem") );
+                 wxT("invalid item index in SetItem") );
 
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
@@ -899,7 +899,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
     {
         if ( !ListView_SetItem(GetHwnd(), &item) )
         {
-            wxLogDebug(_T("ListView_SetItem() failed"));
+            wxLogDebug(wxT("ListView_SetItem() failed"));
 
             return false;
         }
@@ -987,7 +987,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     if ( !::SendMessage(GetHwnd(), LVM_SETITEMSTATE,
                         (WPARAM)item, (LPARAM)&lvItem) )
     {
-        wxLogLastError(_T("ListView_SetItemState"));
+        wxLogLastError(wxT("ListView_SetItemState"));
 
         return false;
     }
@@ -1110,7 +1110,7 @@ wxRect wxListCtrl::GetViewRect() const
         RECT rc;
         if ( !ListView_GetViewRect(GetHwnd(), &rc) )
         {
-            wxLogDebug(_T("ListView_GetViewRect() failed."));
+            wxLogDebug(wxT("ListView_GetViewRect() failed."));
 
             wxZeroMemory(rc);
         }
@@ -1132,7 +1132,7 @@ wxRect wxListCtrl::GetViewRect() const
     }
     else
     {
-        wxFAIL_MSG( _T("not implemented in this mode") );
+        wxFAIL_MSG( wxT("not implemented in this mode") );
     }
 
     return rect;
@@ -1151,11 +1151,11 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     // completely bogus in this case), so we check item validity ourselves
     wxCHECK_MSG( subItem == wxLIST_GETSUBITEMRECT_WHOLEITEM ||
                     (subItem >= 0 && subItem < GetColumnCount()),
-                 false, _T("invalid sub item index") );
+                 false, wxT("invalid sub item index") );
 
     // use wxCHECK_MSG against "item" too, for coherency with the generic implementation:
     wxCHECK_MSG( item >= 0 && item < GetItemCount(), false,
-                 _T("invalid item in GetSubItemRect") );
+                 wxT("invalid item in GetSubItemRect") );
 
     int codeWin;
     if ( code == wxLIST_RECT_BOUNDS )
@@ -1166,7 +1166,7 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
         codeWin = LVIR_LABEL;
     else
     {
-        wxFAIL_MSG( _T("incorrect code in GetItemRect() / GetSubItemRect()") );
+        wxFAIL_MSG( wxT("incorrect code in GetItemRect() / GetSubItemRect()") );
         codeWin = LVIR_BOUNDS;
     }
 
@@ -1433,7 +1433,7 @@ bool wxListCtrl::DeleteItem(long item)
 {
     if ( !ListView_DeleteItem(GetHwnd(), (int) item) )
     {
-        wxLogLastError(_T("ListView_DeleteItem"));
+        wxLogLastError(wxT("ListView_DeleteItem"));
         return false;
     }
 
@@ -1727,7 +1727,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 // -1 otherwise.
 long wxListCtrl::InsertItem(const wxListItem& info)
 {
-    wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
+    wxASSERT_MSG( !IsVirtual(), wxT("can't be used with virtual controls") );
 
     LV_ITEM item;
     wxConvertToMSWListItem(this, info, item);
@@ -1849,7 +1849,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 {
     if ( !ListView_Scroll(GetHwnd(), dx, dy) )
     {
-        wxLogDebug(_T("ListView_Scroll(%d, %d) failed"), dx, dy);
+        wxLogDebug(wxT("ListView_Scroll(%d, %d) failed"), dx, dy);
 
         return false;
     }
@@ -1904,7 +1904,7 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
                              wxInternalDataCompareFunc,
                              (WPARAM) &internalData) )
     {
-        wxLogDebug(_T("ListView_SortItems() failed"));
+        wxLogDebug(wxT("ListView_SortItems() failed"));
 
         return false;
     }
@@ -1970,7 +1970,7 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
 #endif //__WXWINCE__
     if ( !::GetCursorPos(ptClick) )
     {
-        wxLogLastError(_T("GetCursorPos"));
+        wxLogLastError(wxT("GetCursorPos"));
     }
 
     // we need to use listctrl coordinates for the event point so this is what
@@ -1979,12 +1979,12 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
     POINT ptClickHeader = *ptClick;
     if ( !::ScreenToClient(nmhdr->hwndFrom, &ptClickHeader) )
     {
-        wxLogLastError(_T("ScreenToClient(listctrl header)"));
+        wxLogLastError(wxT("ScreenToClient(listctrl header)"));
     }
 
     if ( !::ScreenToClient(::GetParent(nmhdr->hwndFrom), ptClick) )
     {
-        wxLogLastError(_T("ScreenToClient(listctrl)"));
+        wxLogLastError(wxT("ScreenToClient(listctrl)"));
     }
 
     const int colCount = Header_GetItemCount(nmhdr->hwndFrom);
@@ -2448,7 +2448,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     const int startPos = pFindInfo->iStart;
                     const int maxPos = GetItemCount();
                     wxCHECK_MSG( startPos <= maxPos, false,
-                                 _T("bad starting position in LVN_ODFINDITEM") );
+                                 wxT("bad starting position in LVN_ODFINDITEM") );
 
                     int currentPos = startPos;
                     do
@@ -2953,7 +2953,7 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                                                numCols,
                                                &indexArray[0]) )
             {
-                wxFAIL_MSG( _T("invalid column index array in OnPaint()") );
+                wxFAIL_MSG( wxT("invalid column index array in OnPaint()") );
                 return;
             }
 
@@ -3003,7 +3003,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
+    wxFAIL_MSG( wxT("wxListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
@@ -3027,7 +3027,7 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
 wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
 {
     wxASSERT_MSG( item >= 0 && item < GetItemCount(),
-                  _T("invalid item index in OnGetItemAttr()") );
+                  wxT("invalid item index in OnGetItemAttr()") );
 
     // no attributes by default
     return NULL;
@@ -3044,12 +3044,12 @@ wxListItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
 
 void wxListCtrl::SetItemCount(long count)
 {
-    wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
+    wxASSERT_MSG( IsVirtual(), wxT("this is for virtual controls only") );
 
     if ( !::SendMessage(GetHwnd(), LVM_SETITEMCOUNT, (WPARAM)count,
                         LVSICF_NOSCROLL | LVSICF_NOINVALIDATEALL) )
     {
-        wxLogLastError(_T("ListView_SetItemCount"));
+        wxLogLastError(wxT("ListView_SetItemCount"));
     }
     m_count = count;
     wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),

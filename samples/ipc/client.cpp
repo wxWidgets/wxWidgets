@@ -80,7 +80,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    m_frame = new MyFrame(NULL, _T("Client"));
+    m_frame = new MyFrame(NULL, wxT("Client"));
     m_frame->Show(true);
 
     return true;
@@ -102,11 +102,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(wxID_EXIT, _T("&Quit\tCtrl-Q"));
+    file_menu->Append(wxID_EXIT, wxT("&Quit\tCtrl-Q"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(file_menu, wxT("&File"));
 
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
@@ -117,15 +117,15 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // add the controls to the frame
     wxString strs4[] =
     {
-        IPC_SERVICE, _T("...")
+        IPC_SERVICE, wxT("...")
     };
     wxString strs5[] =
     {
-        IPC_HOST, _T("...")
+        IPC_HOST, wxT("...")
     };
     wxString strs6[] =
     {
-        IPC_TOPIC, _T("...")
+        IPC_TOPIC, wxT("...")
     };
 
     wxBoxSizer *item0 = new wxBoxSizer( wxVERTICAL );
@@ -210,7 +210,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     GetTopic()->SetSelection(0);
     wxLogTextCtrl *logWindow = new wxLogTextCtrl(GetLog());
     delete wxLog::SetActiveTarget(logWindow);
-    wxLogMessage(_T("Click on Connect to connect to the server"));
+    wxLogMessage(wxT("Click on Connect to connect to the server"));
     EnableControls();
 }
 
@@ -255,9 +255,9 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
     m_client = new MyClient;
     bool retval = m_client->Connect(hostname, servername, topic);
 
-    wxLogMessage(_T("Client host=\"%s\" port=\"%s\" topic=\"%s\" %s"),
+    wxLogMessage(wxT("Client host=\"%s\" port=\"%s\" topic=\"%s\" %s"),
         hostname.c_str(), servername.c_str(), topic.c_str(),
-        retval ? _T("connected") : _T("failed to connect"));
+        retval ? wxT("connected") : wxT("failed to connect"));
 
     if (!retval)
     {
@@ -269,10 +269,10 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnServername( wxCommandEvent& WXUNUSED(event) )
 {
-    if (GetServername()->GetStringSelection() == _T("..."))
+    if (GetServername()->GetStringSelection() == wxT("..."))
     {
-        wxString s = wxGetTextFromUser(_T("Specify the name of the server"),
-            _T("Server Name"), wxEmptyString, this);
+        wxString s = wxGetTextFromUser(wxT("Specify the name of the server"),
+            wxT("Server Name"), wxEmptyString, this);
         if (!s.IsEmpty() && s != IPC_SERVICE)
         {
             GetServername()->Insert(s, 0);
@@ -283,10 +283,10 @@ void MyFrame::OnServername( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnHostname( wxCommandEvent& WXUNUSED(event) )
 {
-    if (GetHostname()->GetStringSelection() == _T("..."))
+    if (GetHostname()->GetStringSelection() == wxT("..."))
     {
-        wxString s = wxGetTextFromUser(_T("Specify the name of the host (ignored under DDE)"),
-            _T("Host Name"), wxEmptyString, this);
+        wxString s = wxGetTextFromUser(wxT("Specify the name of the host (ignored under DDE)"),
+            wxT("Host Name"), wxEmptyString, this);
         if (!s.IsEmpty() && s != IPC_HOST)
         {
             GetHostname()->Insert(s, 0);
@@ -297,10 +297,10 @@ void MyFrame::OnHostname( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnTopic( wxCommandEvent& WXUNUSED(event) )
 {
-    if (GetTopic()->GetStringSelection() == _T("..."))
+    if (GetTopic()->GetStringSelection() == wxT("..."))
     {
-        wxString s = wxGetTextFromUser(_T("Specify the name of the topic"),
-            _T("Topic Name"), wxEmptyString, this);
+        wxString s = wxGetTextFromUser(wxT("Specify the name of the topic"),
+            wxT("Topic Name"), wxEmptyString, this);
         if (!s.IsEmpty() && s != IPC_TOPIC)
         {
             GetTopic()->Insert(s, 0);
@@ -323,19 +323,19 @@ void MyFrame::Disconnect()
 
 void MyFrame::OnStartAdvise(wxCommandEvent& WXUNUSED(event))
 {
-    m_client->GetConnection()->StartAdvise(_T("something"));
+    m_client->GetConnection()->StartAdvise(wxT("something"));
 }
 
 void MyFrame::OnStopAdvise(wxCommandEvent& WXUNUSED(event))
 {
-    m_client->GetConnection()->StopAdvise(_T("something"));
+    m_client->GetConnection()->StopAdvise(wxT("something"));
 }
 
 void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
 {
     if (m_client->IsConnected())
     {
-        wxString s = _T("Date");
+        wxString s = wxT("Date");
 
         m_client->GetConnection()->Execute(s);
         m_client->GetConnection()->Execute((const char *)s.c_str(), s.length() + 1);
@@ -352,12 +352,12 @@ void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
     if (m_client->IsConnected())
     {
         wxString s = wxDateTime::Now().Format();
-        m_client->GetConnection()->Poke(_T("Date"), s);
-        s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        m_client->GetConnection()->Poke(_T("Date"), (const char *)s.c_str(), s.length() + 1);
+        m_client->GetConnection()->Poke(wxT("Date"), s);
+        s = wxDateTime::Now().FormatTime() + wxT(" ") + wxDateTime::Now().FormatDate();
+        m_client->GetConnection()->Poke(wxT("Date"), (const char *)s.c_str(), s.length() + 1);
         char bytes[3];
         bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
-        m_client->GetConnection()->Poke(_T("bytes[3]"), bytes, 3, wxIPC_PRIVATE);
+        m_client->GetConnection()->Poke(wxT("bytes[3]"), bytes, 3, wxIPC_PRIVATE);
     }
 }
 
@@ -366,9 +366,9 @@ void MyFrame::OnRequest(wxCommandEvent& WXUNUSED(event))
     if (m_client->IsConnected())
     {
         size_t size;
-        m_client->GetConnection()->Request(_T("Date"));
-        m_client->GetConnection()->Request(_T("Date+len"), &size);
-        m_client->GetConnection()->Request(_T("bytes[3]"), &size, wxIPC_PRIVATE);
+        m_client->GetConnection()->Request(wxT("Date"));
+        m_client->GetConnection()->Request(wxT("Date+len"), &size);
+        m_client->GetConnection()->Request(wxT("bytes[3]"), &size, wxIPC_PRIVATE);
     }
 }
 
@@ -402,7 +402,7 @@ void MyClient::Disconnect()
         delete m_connection;
         m_connection = NULL;
         wxGetApp().GetFrame()->EnableControls();
-        wxLogMessage(_T("Client disconnected from server"));
+        wxLogMessage(wxT("Client disconnected from server"));
     }
 }
 
@@ -418,24 +418,24 @@ MyClient::~MyClient()
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, const void *data,
     size_t size, wxIPCFormat format)
 {
-    Log(_T("OnAdvise"), topic, item, data, size, format);
+    Log(wxT("OnAdvise"), topic, item, data, size, format);
     return true;
 }
 
 bool MyConnection::OnDisconnect()
 {
-    wxLogMessage(_T("OnDisconnect()"));
+    wxLogMessage(wxT("OnDisconnect()"));
     wxGetApp().GetFrame()->Disconnect();
     return true;
 }
 
 bool MyConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Execute"), wxEmptyString, wxEmptyString, data, size, format);
+    Log(wxT("Execute"), wxEmptyString, wxEmptyString, data, size, format);
     bool retval = wxConnection::DoExecute(data, size, format);
     if (!retval)
     {
-        wxLogMessage(_T("Execute failed!"));
+        wxLogMessage(wxT("Execute failed!"));
     }
     return retval;
 }
@@ -443,12 +443,12 @@ bool MyConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 const void *MyConnection::Request(const wxString& item, size_t *size, wxIPCFormat format)
 {
     const void *data =  wxConnection::Request(item, size, format);
-    Log(_T("Request"), wxEmptyString, item, data, size ? *size : wxNO_LEN, format);
+    Log(wxT("Request"), wxEmptyString, item, data, size ? *size : wxNO_LEN, format);
     return data;
 }
 
 bool MyConnection::DoPoke(const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Poke"), wxEmptyString, item, data, size, format);
+    Log(wxT("Poke"), wxEmptyString, item, data, size, format);
     return wxConnection::DoPoke(item, data, size, format);
 }

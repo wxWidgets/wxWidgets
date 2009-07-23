@@ -206,7 +206,7 @@ bool wxEventLoopImpl::SendIdleMessage()
 
 wxGUIEventLoop::~wxGUIEventLoop()
 {
-    wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
+    wxASSERT_MSG( !m_impl, wxT("should have been deleted in Run()") );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -241,7 +241,7 @@ private:
 int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
+    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
 
     // SendIdleMessage() and Dispatch() below may throw so the code here should
     // be exception-safe, hence we must use local objects for all actions we
@@ -285,7 +285,7 @@ int wxGUIEventLoop::Run()
 
 void wxGUIEventLoop::Exit(int rc)
 {
-    wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
+    wxCHECK_RET( IsRunning(), wxT("can't call Exit() if not running") );
 
     m_impl->SetExitCode(rc);
 
@@ -304,7 +304,7 @@ bool wxGUIEventLoop::Pending() const
 
 bool wxGUIEventLoop::Dispatch()
 {
-    wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
+    wxCHECK_MSG( IsRunning(), false, wxT("can't call Dispatch() if not running") );
 
     QMSG msg;
     BOOL bRc = ::WinGetMsg(vHabmain, &msg, (HWND) NULL, 0, 0);

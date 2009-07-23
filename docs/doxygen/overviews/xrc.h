@@ -259,8 +259,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of XML resources demo.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( wxT("This is the about dialog of XML resources demo.\n")
+                wxT("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, "About XML resources demo",
                  wxOK | wxICON_INFORMATION, this);

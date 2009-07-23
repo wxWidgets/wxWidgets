@@ -242,7 +242,7 @@ wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const
     }
     else
     {
-        wxFAIL_MSG( _T("trying to encode undefined Unicode character") );
+        wxFAIL_MSG( wxT("trying to encode undefined Unicode character") );
         out[0] = 0;
     }
 
@@ -256,7 +256,7 @@ wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
 
     wxUniChar::value_type code = 0;
     size_t len = GetUtf8CharLength(*i);
-    wxASSERT_MSG( len <= 4, _T("invalid UTF-8 sequence length") );
+    wxASSERT_MSG( len <= 4, wxT("invalid UTF-8 sequence length") );
 
     //    Char. number range   |        UTF-8 octet sequence
     //       (hexadecimal)     |              (binary)
@@ -281,7 +281,7 @@ wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
     // extract the lead byte's value bits:
     wxASSERT_MSG( ((unsigned char)*i & s_leadMarkerMask[len-1]) ==
                   s_leadMarkerVal[len-1],
-                  _T("invalid UTF-8 lead byte") );
+                  wxT("invalid UTF-8 lead byte") );
     code = (unsigned char)*i & s_leadValueMask[len-1];
 
     // all remaining bytes, if any, are handled in the same way regardless of
@@ -289,7 +289,7 @@ wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
     for ( ++i ; len > 1; --len, ++i )
     {
         wxASSERT_MSG( ((unsigned char)*i & 0xC0) == 0x80,
-                      _T("invalid UTF-8 byte") );
+                      wxT("invalid UTF-8 byte") );
 
         code <<= 6;
         code |= (unsigned char)*i & 0x3F;

@@ -46,7 +46,7 @@ public:
         // causes a crash due to conversion objects not being available
         // during initialisation.
 #ifndef __WXMAC__
-        m_shape.Add( wxString::Format(_T("%i %i"), -width/2, -height/2) );
+        m_shape.Add( wxString::Format(wxT("%i %i"), -width/2, -height/2) );
 #endif
         for(int j = 0; j < height; j++)
         {

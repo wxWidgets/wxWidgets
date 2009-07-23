@@ -147,7 +147,7 @@ public:
         : m_count(count)
     {
         wxASSERT_MSG( m_count == -1 || m_count == -2,
-                      _T("wrong initial m_updatesCount value") );
+                      wxT("wrong initial m_updatesCount value") );
 
         if (m_count != -2)
             m_count = 0;
@@ -433,15 +433,15 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
                 if ( wxRichEditModule::Load(wxRichEditModule::Version_41) )
                 {
                     // yes, class name for version 4.1 really is 5.0
-                    windowClass = _T("RICHEDIT50W");
+                    windowClass = wxT("RICHEDIT50W");
                 }
                 else if ( wxRichEditModule::Load(wxRichEditModule::Version_2or3) )
                 {
-                    windowClass = _T("RichEdit20")
+                    windowClass = wxT("RichEdit20")
 #if wxUSE_UNICODE
-                                _T("W");
+                                wxT("W");
 #else // ANSI
-                                _T("A");
+                                wxT("A");
 #endif // Unicode/ANSI
                 }
                 else // failed to load msftedit.dll and riched20.dll
@@ -454,7 +454,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
             {
                 if ( wxRichEditModule::Load(wxRichEditModule::Version_1) )
                 {
-                    windowClass = _T("RICHEDIT");
+                    windowClass = wxT("RICHEDIT");
                 }
                 else // failed to load any richedit control DLL
                 {
@@ -569,16 +569,16 @@ void wxTextCtrl::AdoptAttributesFromHWND()
 #if wxUSE_RICHEDIT
     wxString classname = wxGetWindowClass(GetHWND());
 
-    if ( classname.IsSameAs(_T("EDIT"), false /* no case */) )
+    if ( classname.IsSameAs(wxT("EDIT"), false /* no case */) )
     {
         m_verRichEdit = 0;
     }
     else // rich edit?
     {
         wxChar c;
-        if ( wxSscanf(classname, _T("RichEdit%d0%c"), &m_verRichEdit, &c) != 2 )
+        if ( wxSscanf(classname, wxT("RichEdit%d0%c"), &m_verRichEdit, &c) != 2 )
         {
-            wxLogDebug(_T("Unknown edit control '%s'."), classname.c_str());
+            wxLogDebug(wxT("Unknown edit control '%s'."), classname.c_str());
 
             m_verRichEdit = 0;
         }
@@ -843,8 +843,8 @@ wxString wxTextCtrl::GetRange(long from, long to) const
                     // style - convert it to something reasonable
                     for ( ; *p; p++ )
                     {
-                        if ( *p == _T('\r') )
-                            *p = _T('\n');
+                        if ( *p == wxT('\r') )
+                            *p = wxT('\n');
                     }
                 }
             }
@@ -1018,11 +1018,11 @@ wxTextCtrl::StreamIn(const wxString& value,
     // It's okay for EN_UPDATE to not be sent if the selection is empty and
     // the text is empty, otherwise warn the programmer about it.
     wxASSERT_MSG( ucf.GotUpdate() || ( !HasSelection() && value.empty() ),
-                  _T("EM_STREAMIN didn't send EN_UPDATE?") );
+                  wxT("EM_STREAMIN didn't send EN_UPDATE?") );
 
     if ( eds.dwError )
     {
-        wxLogLastError(_T("EM_STREAMIN"));
+        wxLogLastError(wxT("EM_STREAMIN"));
     }
 
 #if !wxUSE_WCHAR_T
@@ -1068,7 +1068,7 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
 
     if ( eds.dwError )
     {
-        wxLogLastError(_T("EM_STREAMOUT"));
+        wxLogLastError(wxT("EM_STREAMOUT"));
     }
     else // streamed out ok
     {
@@ -1621,24 +1621,24 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
         {
             // remove the '\r' returned by the rich edit control, the user code
             // should never see it
-            if ( buf[len - 2] == _T('\r') && buf[len - 1] == _T('\n') )
+            if ( buf[len - 2] == wxT('\r') && buf[len - 1] == wxT('\n') )
             {
                 // richedit 1.0 uses "\r\n" as line terminator, so remove "\r"
                 // here and "\n" below
-                buf[len - 2] = _T('\n');
+                buf[len - 2] = wxT('\n');
                 len--;
             }
-            else if ( buf[len - 1] == _T('\r') )
+            else if ( buf[len - 1] == wxT('\r') )
             {
                 // richedit 2.0+ uses only "\r", replace it with "\n"
-                buf[len - 1] = _T('\n');
+                buf[len - 1] = wxT('\n');
             }
         }
 #endif // wxUSE_RICHEDIT
 
         // remove the '\n' at the end, if any (this is how this function is
         // supposed to work according to the docs)
-        if ( buf[len - 1] == _T('\n') )
+        if ( buf[len - 1] == wxT('\n') )
         {
             len--;
         }
@@ -1759,7 +1759,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
             switch ( ctrl + shift )
             {
                 default:
-                    wxFAIL_MSG( _T("how many modifiers have we got?") );
+                    wxFAIL_MSG( wxT("how many modifiers have we got?") );
                     // fall through
 
                 case 0:
@@ -1951,7 +1951,7 @@ bool wxTextCtrl::SendUpdateEvent()
             return false;
 
         default:
-            wxFAIL_MSG( _T("unexpected wxTextCtrl::m_updatesCount value") );
+            wxFAIL_MSG( wxT("unexpected wxTextCtrl::m_updatesCount value") );
             // fall through
 
         case -1:
@@ -2492,7 +2492,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
                             SCF_SELECTION, (LPARAM)&cf) != 0;
     if ( !ok )
     {
-        wxLogDebug(_T("SendMessage(EM_SETCHARFORMAT, SCF_SELECTION) failed"));
+        wxLogDebug(wxT("SendMessage(EM_SETCHARFORMAT, SCF_SELECTION) failed"));
     }
 
     // now do the paragraph formatting
@@ -2577,7 +2577,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
                                 0, (LPARAM) &pf) != 0;
         if ( !ok )
         {
-            wxLogDebug(_T("SendMessage(EM_SETPARAFORMAT, 0) failed"));
+            wxLogDebug(wxT("SendMessage(EM_SETPARAFORMAT, 0) failed"));
         }
     }
 
@@ -2798,9 +2798,9 @@ bool wxRichEditModule::Load(Version version)
 
     static const wxChar *dllnames[] =
     {
-        _T("riched32"),
-        _T("riched20"),
-        _T("msftedit"),
+        wxT("riched32"),
+        wxT("riched20"),
+        wxT("msftedit"),
     };
 
     wxCOMPILE_TIME_ASSERT( WXSIZEOF(dllnames) == Version_Max,

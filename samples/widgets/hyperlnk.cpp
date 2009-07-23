@@ -167,14 +167,14 @@ void HyperlinkWidgetsPage::CreateContent()
 
     static const wxString alignments[] =
     {
-        _T("&left"),
-        _T("&centre"),
-        _T("&right")
+        wxT("&left"),
+        wxT("&centre"),
+        wxT("&right")
     };
     wxCOMPILE_TIME_ASSERT( WXSIZEOF(alignments) == Align_Max,
                            AlignMismatch );
 
-    m_radioAlignMode = new wxRadioBox(this, wxID_ANY, _T("alignment"),
+    m_radioAlignMode = new wxRadioBox(this, wxID_ANY, wxT("alignment"),
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(alignments), alignments);
     m_radioAlignMode->SetSelection(1);  // start with "centre" selected since
@@ -304,7 +304,7 @@ void HyperlinkWidgetsPage::OnAlignment(wxCommandEvent& WXUNUSED(event))
     {
         default:
         case Align_Max:
-            wxFAIL_MSG( _T("unknown alignment") );
+            wxFAIL_MSG( wxT("unknown alignment") );
             // fall through
 
         case Align_Left:

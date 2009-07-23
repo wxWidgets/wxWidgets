@@ -397,7 +397,7 @@ void wxWindowX11::SetFocus()
 
     if (wxWindowIsVisible(xwindow))
     {
-        wxLogTrace( _T("focus"), _T("wxWindowX11::SetFocus: %s"), GetClassInfo()->GetClassName());
+        wxLogTrace( wxT("focus"), wxT("wxWindowX11::SetFocus: %s"), GetClassInfo()->GetClassName());
         //        XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
         XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToNone, CurrentTime );
         m_needsInputFocus = false;
@@ -1732,7 +1732,7 @@ public:
     wxWinModule()
     {
         // we must be cleaned up before the display is closed
-        AddDependency(wxClassInfo::FindClass(_T("wxX11DisplayModule")));
+        AddDependency(wxClassInfo::FindClass(wxT("wxX11DisplayModule")));
     }
 
     virtual bool OnInit();

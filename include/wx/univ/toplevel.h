@@ -77,12 +77,12 @@ enum
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
-#define wxACTION_TOPLEVEL_ACTIVATE       _T("activate")   // (de)activate the frame
-#define wxACTION_TOPLEVEL_BUTTON_PRESS   _T("pressbtn")   // press titlebar btn
-#define wxACTION_TOPLEVEL_BUTTON_RELEASE _T("releasebtn") // press titlebar btn
-#define wxACTION_TOPLEVEL_BUTTON_CLICK   _T("clickbtn")   // press titlebar btn
-#define wxACTION_TOPLEVEL_MOVE           _T("move")       // move the frame
-#define wxACTION_TOPLEVEL_RESIZE         _T("resize")     // resize the frame
+#define wxACTION_TOPLEVEL_ACTIVATE       wxT("activate")   // (de)activate the frame
+#define wxACTION_TOPLEVEL_BUTTON_PRESS   wxT("pressbtn")   // press titlebar btn
+#define wxACTION_TOPLEVEL_BUTTON_RELEASE wxT("releasebtn") // press titlebar btn
+#define wxACTION_TOPLEVEL_BUTTON_CLICK   wxT("clickbtn")   // press titlebar btn
+#define wxACTION_TOPLEVEL_MOVE           wxT("move")       // move the frame
+#define wxACTION_TOPLEVEL_RESIZE         wxT("resize")     // resize the frame
 
 //-----------------------------------------------------------------------------
 // wxTopLevelWindow

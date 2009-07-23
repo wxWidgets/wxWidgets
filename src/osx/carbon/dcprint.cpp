@@ -391,7 +391,7 @@ void wxPrinterDCImpl::EndPage()
 
 void wxPrinterDCImpl::DoGetSize(int *width, int *height) const
 {
-    wxCHECK_RET( m_ok , _T("GetSize() doesn't work without a valid wxPrinterDC") );
+    wxCHECK_RET( m_ok , wxT("GetSize() doesn't work without a valid wxPrinterDC") );
     m_nativePrinterDC->GetSize(width,  height ) ;
 }
 

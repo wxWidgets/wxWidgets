@@ -44,7 +44,7 @@
 
     typedef ulong wxTimerTick_t;
 
-    #define wxTimerTickFmtSpec _T("lu")
+    #define wxTimerTickFmtSpec wxT("lu")
     #define wxTimerTickPrintfArg(tt) (tt)
 
     #ifdef __DOS__
@@ -74,10 +74,10 @@
     typedef wxLongLong wxTimerTick_t;
 
     #if wxUSE_LONGLONG_WX
-        #define wxTimerTickFmtSpec wxLongLongFmtSpec _T("d")
+        #define wxTimerTickFmtSpec wxLongLongFmtSpec wxT("d")
         #define wxTimerTickPrintfArg(tt) (tt.GetValue())
     #else // using native wxLongLong
-        #define wxTimerTickFmtSpec _T("s")
+        #define wxTimerTickFmtSpec wxT("s")
         #define wxTimerTickPrintfArg(tt) (tt.ToString().c_str())
     #endif // wx/native long long
 

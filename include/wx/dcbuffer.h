@@ -112,7 +112,7 @@ private:
     // common part of Init()s
     void InitCommon(wxDC *dc, int style)
     {
-        wxASSERT_MSG( !m_dc, _T("wxBufferedDC already initialised") );
+        wxASSERT_MSG( !m_dc, wxT("wxBufferedDC already initialised") );
 
         m_dc = dc;
         m_style = style;

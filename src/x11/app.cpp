@@ -98,7 +98,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
     int argCOrig = argC;
     for ( int i = 0; i < argCOrig; i++ )
     {
-        if (wxStrcmp( argV[i], _T("-display") ) == 0)
+        if (wxStrcmp( argV[i], wxT("-display") ) == 0)
         {
             if (i < (argC - 1))
             {
@@ -110,14 +110,14 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
                 argC -= 2;
             }
         }
-        else if (wxStrcmp( argV[i], _T("-geometry") ) == 0)
+        else if (wxStrcmp( argV[i], wxT("-geometry") ) == 0)
         {
             if (i < (argC - 1))
             {
                 argV[i++] = NULL;
 
                 int w, h;
-                if (wxSscanf(argV[i], _T("%dx%d"), &w, &h) != 2)
+                if (wxSscanf(argV[i], wxT("%dx%d"), &w, &h) != 2)
                 {
                     wxLogError( _("Invalid geometry specification '%s'"),
                                 wxString(argV[i]).c_str() );
@@ -131,14 +131,14 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
                 argC -= 2;
             }
         }
-        else if (wxStrcmp( argV[i], _T("-sync") ) == 0)
+        else if (wxStrcmp( argV[i], wxT("-sync") ) == 0)
         {
             syncDisplay = true;
 
             argV[i] = NULL;
             argC--;
         }
-        else if (wxStrcmp( argV[i], _T("-iconic") ) == 0)
+        else if (wxStrcmp( argV[i], wxT("-iconic") ) == 0)
         {
             g_showIconic = true;
 
@@ -354,7 +354,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 #if !wxUSE_NANOX
         case GraphicsExpose:
         {
-            wxLogTrace( _T("expose"), _T("GraphicsExpose from %s"), win->GetName().c_str());
+            wxLogTrace( wxT("expose"), wxT("GraphicsExpose from %s"), win->GetName().c_str());
 
             win->GetUpdateRegion().Union( event->xgraphicsexpose.x, event->xgraphicsexpose.y,
                                           event->xgraphicsexpose.width, event->xgraphicsexpose.height);
@@ -541,7 +541,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     g_prevFocus = wxWindow::FindFocus();
                     g_nextFocus = win;
 
-                    wxLogTrace( _T("focus"), _T("About to call SetFocus on %s of type %s due to button press"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    wxLogTrace( wxT("focus"), wxT("About to call SetFocus on %s of type %s due to button press"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
 
                     // Record the fact that this window is
                     // getting the focus, because we'll need to
@@ -572,7 +572,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 (event->xfocus.mode == NotifyNormal))
 #endif
             {
-                wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
 
                 extern wxWindow* g_GettingFocus;
                 if (g_GettingFocus && g_GettingFocus->GetParent() == win)
@@ -580,7 +580,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     // Ignore this, this can be a spurious FocusIn
                     // caused by a child having its focus set.
                     g_GettingFocus = NULL;
-                    wxLogTrace( _T("focus"), _T("FocusIn from %s of type %s being deliberately ignored"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                    wxLogTrace( wxT("focus"), wxT("FocusIn from %s of type %s being deliberately ignored"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
                     return true;
                 }
                 else
@@ -601,7 +601,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 (event->xfocus.mode == NotifyNormal))
 #endif
             {
-                wxLogTrace( _T("focus"), _T("FocusOut from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
+                wxLogTrace( wxT("focus"), wxT("FocusOut from %s of type %s"), win->GetName().c_str(), win->GetClassInfo()->GetClassName() );
 
                 wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                 focusEvent.SetEventObject(win);
@@ -718,7 +718,7 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
 
 Window wxGetWindowParent(Window window)
 {
-    wxASSERT_MSG( window, _T("invalid window") );
+    wxASSERT_MSG( window, wxT("invalid window") );
 
     return (Window) 0;
 

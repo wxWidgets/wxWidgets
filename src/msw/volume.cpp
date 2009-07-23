@@ -158,7 +158,7 @@ static unsigned GetBasicFlags(const wxChar* filename)
         // this error is not fatal, so don't show a message to the user about
         // it, otherwise it would appear every time a generic directory picker
         // dialog is used and there is a connected network drive
-        wxLogLastError(_T("SHGetFileInfo"));
+        wxLogLastError(wxT("SHGetFileInfo"));
     }
     else
     {
@@ -395,16 +395,16 @@ wxArrayString wxFSVolumeBase::GetVolumes(int flagsSet, int flagsUnset)
     ::InterlockedExchange(&s_cancelSearch, FALSE);     // reset
 
 #if wxUSE_DYNLIB_CLASS
-    if (!s_mprLib.IsLoaded() && s_mprLib.Load(_T("mpr.dll")))
+    if (!s_mprLib.IsLoaded() && s_mprLib.Load(wxT("mpr.dll")))
     {
 #ifdef UNICODE
-        s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(_T("WNetOpenEnumW"));
-        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(_T("WNetEnumResourceW"));
+        s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(wxT("WNetOpenEnumW"));
+        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(wxT("WNetEnumResourceW"));
 #else
-        s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(_T("WNetOpenEnumA"));
-        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(_T("WNetEnumResourceA"));
+        s_pWNetOpenEnum = (WNetOpenEnumPtr)s_mprLib.GetSymbol(wxT("WNetOpenEnumA"));
+        s_pWNetEnumResource = (WNetEnumResourcePtr)s_mprLib.GetSymbol(wxT("WNetEnumResourceA"));
 #endif
-        s_pWNetCloseEnum = (WNetCloseEnumPtr)s_mprLib.GetSymbol(_T("WNetCloseEnum"));
+        s_pWNetCloseEnum = (WNetCloseEnumPtr)s_mprLib.GetSymbol(wxT("WNetCloseEnum"));
     }
 #endif
 
@@ -578,7 +578,7 @@ void wxFSVolume::InitIcons()
 wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
 {
     wxCHECK_MSG( type >= 0 && (size_t)type < m_icons.GetCount(), wxNullIcon,
-                 _T("wxFSIconType::GetIcon(): invalid icon index") );
+                 wxT("wxFSIconType::GetIcon(): invalid icon index") );
 
     // Load on demand.
     if (m_icons[type].IsNull())
@@ -603,7 +603,7 @@ wxIcon wxFSVolume::GetIcon(wxFSIconType type) const
             break;
 
         case wxFS_VOL_ICO_MAX:
-            wxFAIL_MSG(_T("wxFS_VOL_ICO_MAX is not valid icon type"));
+            wxFAIL_MSG(wxT("wxFS_VOL_ICO_MAX is not valid icon type"));
             break;
         }
 

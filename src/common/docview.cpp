@@ -2235,7 +2235,7 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 
 bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 {
-    wxFFile file(filename, _T("rb"));
+    wxFFile file(filename, wxT("rb"));
     if ( !file.IsOpened() )
         return false;
 
@@ -2259,7 +2259,7 @@ bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 
 bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 {
-    wxFFile file(filename, _T("wb"));
+    wxFFile file(filename, wxT("wb"));
     if ( !file.IsOpened() )
         return false;
 
@@ -2282,7 +2282,7 @@ bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 
 bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 {
-    wxFFile file(filename, _T("rb"));
+    wxFFile file(filename, wxT("rb"));
     if ( !file.IsOpened() )
         return false;
 
@@ -2306,7 +2306,7 @@ bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 
 bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 {
-    wxFFile file(filename, _T("wb"));
+    wxFFile file(filename, wxT("wb"));
     if ( !file.IsOpened() )
         return false;
 

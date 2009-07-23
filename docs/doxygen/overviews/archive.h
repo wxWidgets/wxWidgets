@@ -50,16 +50,16 @@ archive, then write the entry's data. Another call to PutNextEntry() closes the
 current entry and begins the next. For example:
 
 @code
-wxFFileOutputStream out(_T("test.zip"));
+wxFFileOutputStream out(wxT("test.zip"));
 wxZipOutputStream zip(out);
 wxTextOutputStream txt(zip);
 wxString sep(wxFileName::GetPathSeparator());
 
-zip.PutNextEntry(_T("entry1.txt"));
-txt << _T("Some text for entry1.txt\n");
+zip.PutNextEntry(wxT("entry1.txt"));
+txt << wxT("Some text for entry1.txt\n");
 
-zip.PutNextEntry(_T("subdir") + sep + _T("entry2.txt"));
-txt << _T("Some text for subdir/entry2.txt\n");
+zip.PutNextEntry(wxT("subdir") + sep + wxT("entry2.txt"));
+txt << wxT("Some text for subdir/entry2.txt\n");
 @endcode
 
 The name of each entry can be a full path, which makes it possible to store
@@ -80,7 +80,7 @@ When there are no more entries, GetNextEntry() returns @NULL and sets Eof().
 @code
 auto_ptr<wxZipEntry> entry;
 
-wxFFileInputStream in(_T("test.zip"));
+wxFFileInputStream in(wxT("test.zip"));
 wxZipInputStream zip(in);
 
 while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
@@ -111,8 +111,8 @@ archive. wxTempFileOutputStream can be helpful to do this.
 For example to delete all entries matching the pattern "*.txt":
 
 @code
-auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(_T("test.zip")));
-wxTempFileOutputStream out(_T("test.zip"));
+auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(wxT("test.zip")));
+wxTempFileOutputStream out(wxT("test.zip"));
 
 wxZipInputStream inzip(*in);
 wxZipOutputStream outzip(out);
@@ -125,7 +125,7 @@ outzip.CopyArchiveMetaData(inzip);
 
 // call CopyEntry for each entry except those matching the pattern
 while (entry.reset(inzip.GetNextEntry()), entry.get() != NULL)
-    if (!entry->GetName().Matches(_T("*.txt")))
+    if (!entry->GetName().Matches(wxT("*.txt")))
         if (!outzip.CopyEntry(entry.release(), inzip))
             break;
 
@@ -167,7 +167,7 @@ auto_ptr<wxZipEntry> entry;
 wxString name = wxZipEntry::GetInternalName(localname);
 
 // open the zip
-wxFFileInputStream in(_T("test.zip"));
+wxFFileInputStream in(wxT("test.zip"));
 wxZipInputStream zip(in);
 
 // call GetNextEntry() until the required internal name is found
@@ -195,7 +195,7 @@ wxZipEntry *entry;
 ZipCatalog cat;
 
 // open the zip
-wxFFileInputStream in(_T("test.zip"));
+wxFFileInputStream in(wxT("test.zip"));
 wxZipInputStream zip(in);
 
 // load the zip catalog
@@ -222,7 +222,7 @@ stream on the same archive:
 @code
 // opening another entry without closing the first requires another
 // input stream for the same file
-wxFFileInputStream in2(_T("test.zip"));
+wxFFileInputStream in2(wxT("test.zip"));
 wxZipInputStream zip2(in2);
 if ((it = cat.find(wxZipEntry::GetInternalName(local2))) != cat.end())
     zip2.OpenEntry(*it->second);
@@ -311,7 +311,7 @@ if (in->IsOk())
     }
     else
     {
-        wxLogError(_T("can't handle '%s'"), filename.c_str());
+        wxLogError(wxT("can't handle '%s'"), filename.c_str());
     }
 }
 @endcode

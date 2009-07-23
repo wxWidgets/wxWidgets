@@ -125,8 +125,8 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
                 if ( bestPaper == kPMNoData )
                 {
                     const PMPaperMargins margins = { 0.0, 0.0, 0.0, 0.0 };
-                    wxString id, name(_T("Custom paper"));                    
-                    id.Printf(_T("wxPaperCustom%dx%d"), papersize.x, papersize.y);
+                    wxString id, name(wxT("Custom paper"));                    
+                    id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
                     if ( PMPaperCreateCustom != NULL)

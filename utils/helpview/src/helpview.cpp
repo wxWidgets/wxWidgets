@@ -265,7 +265,7 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
     if ( !s.empty() )
     {
         wxString ext = s.Right(4).Lower();
-        if (ext == _T(".zip") || ext == _T(".htb") || ext == _T(".hhp"))
+        if (ext == wxT(".zip") || ext == wxT(".htb") || ext == wxT(".hhp"))
         {
             wxBusyCursor bcur;
             wxFileName fileName(s);
@@ -312,7 +312,7 @@ if ( id == artId ) return wxBitmap(xpmRc##_xpm);
 #else
 #define CREATE_STD_ICON(iconId, xpmRc) \
 { \
-    wxIcon icon(_T(iconId)); \
+    wxIcon icon(wxT(iconId)); \
     wxBitmap bmp; \
     bmp.CopyFromIcon(icon); \
     return bmp; \

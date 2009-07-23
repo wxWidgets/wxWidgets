@@ -50,14 +50,14 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         msg << name;
         if ( info.HasVersion() )
         {
-            msg << _T('\n');
+            msg << wxT('\n');
             msg << wxString::Format(_("Version %s"), info.GetVersion());
         }
 
-        msg << _T("\n\n");
+        msg << wxT("\n\n");
 
         if ( info.HasCopyright() )
-            msg << info.GetCopyrightToDisplay() << _T('\n');
+            msg << info.GetCopyrightToDisplay() << wxT('\n');
 
         // add everything remaining
         msg << info.GetDescriptionAndCredits();

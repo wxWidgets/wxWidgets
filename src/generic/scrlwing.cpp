@@ -314,7 +314,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 
 wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
 {
-    wxASSERT_MSG( win, _T("associated window can't be NULL in wxScrollHelper") );
+    wxASSERT_MSG( win, wxT("associated window can't be NULL in wxScrollHelper") );
 
     m_xScrollPixelsPerLine =
     m_yScrollPixelsPerLine =
@@ -990,7 +990,7 @@ void wxScrollHelperBase::HandleOnMouseLeave(wxMouseEvent& event)
                 // but seems to happen sometimes under wxMSW - maybe it's a bug
                 // there but for now just ignore it
 
-                //wxFAIL_MSG( _T("can't understand where has mouse gone") );
+                //wxFAIL_MSG( wxT("can't understand where has mouse gone") );
 
                 return;
             }

@@ -57,7 +57,7 @@
 
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString encid = tokenizer.GetNextToken();
 
@@ -96,7 +96,7 @@ bool wxNativeEncodingInfo::FromString(const wxString& s)
     }
     else
     {
-        if ( wxSscanf(tmp, _T("%u"), &charset) != 1 )
+        if ( wxSscanf(tmp, wxT("%u"), &charset) != 1 )
         {
             // should be a number!
             return false;
@@ -120,12 +120,12 @@ wxString wxNativeEncodingInfo::ToString() const
       // we don't have any choice but to use the raw value
       << (long)encoding
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
-      << _T(';') << facename;
+      << wxT(';') << facename;
 
     // ANSI_CHARSET is assumed anyhow
     if ( charset != ANSI_CHARSET )
     {
-         s << _T(';') << charset;
+         s << wxT(';') << charset;
     }
 
     return s;
@@ -138,7 +138,7 @@ wxString wxNativeEncodingInfo::ToString() const
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    wxCHECK_MSG( info, false, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG( info, false, wxT("bad pointer in wxGetNativeFontEncoding") );
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {
@@ -187,7 +187,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
     switch ( cs )
     {
         default:
-            wxFAIL_MSG( _T("unexpected Win32 charset") );
+            wxFAIL_MSG( wxT("unexpected Win32 charset") );
             // fall through and assume the system charset
 
         case DEFAULT_CHARSET:

@@ -85,7 +85,7 @@ wxCalendarCtrl::Create(wxWindow *parent,
         }
         else
         {
-            wxLogLastError(_T("GetClassInfoEx(SysMonthCal32)"));
+            wxLogLastError(wxT("GetClassInfoEx(SysMonthCal32)"));
         }
     }
 
@@ -218,7 +218,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
     dt.GetAsMSWSysTime(&st);
     if ( !MonthCal_SetCurSel(GetHwnd(), &st) )
     {
-        wxLogDebug(_T("DateTime_SetSystemtime() failed"));
+        wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
 
         return false;
     }
@@ -266,7 +266,7 @@ bool wxCalendarCtrl::SetDateRange(const wxDateTime& dt1, const wxDateTime& dt2)
 
     if ( !MonthCal_SetRange(GetHwnd(), flags, st) )
     {
-        wxLogDebug(_T("MonthCal_SetRange() failed"));
+        wxLogDebug(wxT("MonthCal_SetRange() failed"));
     }
 
     return flags != 0;
@@ -361,7 +361,7 @@ void wxCalendarCtrl::UpdateMarks()
 
     if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
     {
-        wxLogLastError(_T("MonthCal_SetDayState"));
+        wxLogLastError(wxT("MonthCal_SetDayState"));
     }
 }
 

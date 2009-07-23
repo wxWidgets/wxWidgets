@@ -292,13 +292,13 @@ bool wxXmlResource::Load(const wxString& filemask_)
 bool wxXmlResource::Unload(const wxString& filename)
 {
     wxASSERT_MSG( !wxIsWild(filename),
-                    _T("wildcards not supported by wxXmlResource::Unload()") );
+                    wxT("wildcards not supported by wxXmlResource::Unload()") );
 
     wxString fnd = ConvertFileNameToURL(filename);
 #if wxUSE_FILESYSTEM
     const bool isArchive = IsArchive(fnd);
     if ( isArchive )
-        fnd += _T("#zip:");
+        fnd += wxT("#zip:");
 #endif // wxUSE_FILESYSTEM
 
     bool unloaded = false;
@@ -564,7 +564,7 @@ bool wxXmlResource::UpdateResources()
 
         if (modif)
         {
-            wxLogTrace(_T("xrc"), _T("opening file '%s'"), rec->File);
+            wxLogTrace(wxT("xrc"), wxT("opening file '%s'"), rec->File);
 
             wxInputStream *stream = NULL;
 
@@ -1226,7 +1226,7 @@ static wxColour GetSystemColour(const wxString& name)
     if (!name.empty())
     {
         #define SYSCLR(clr) \
-            if (name == _T(#clr)) return wxSystemSettings::GetColour(clr);
+            if (name == wxT(#clr)) return wxSystemSettings::GetColour(clr);
         SYSCLR(wxSYS_COLOUR_SCROLLBAR)
         SYSCLR(wxSYS_COLOUR_BACKGROUND)
         SYSCLR(wxSYS_COLOUR_DESKTOP)
@@ -1688,7 +1688,7 @@ static wxFont GetSystemFont(const wxString& name)
     if (!name.empty())
     {
         #define SYSFNT(fnt) \
-            if (name == _T(#fnt)) return wxSystemSettings::GetFont(fnt);
+            if (name == wxT(#fnt)) return wxSystemSettings::GetFont(fnt);
         SYSFNT(wxSYS_OEM_FIXED_FONT)
         SYSFNT(wxSYS_ANSI_FIXED_FONT)
         SYSFNT(wxSYS_ANSI_VAR_FONT)

@@ -92,7 +92,7 @@ GetAddressFromName(const wxString& serverName,
 #if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__)
     // under Unix, if the server name looks like a path, create a AF_UNIX
     // socket instead of AF_INET one
-    if ( serverName.Find(_T('/')) != wxNOT_FOUND )
+    if ( serverName.Find(wxT('/')) != wxNOT_FOUND )
     {
         wxUNIXaddress *addr = new wxUNIXaddress;
         addr->Filename(serverName);
@@ -528,7 +528,7 @@ wxTCPServer::~wxTCPServer()
     {
         if ( remove(m_filename.fn_str()) != 0 )
         {
-            wxLogDebug(_T("Stale AF_UNIX file '%s' left."), m_filename.c_str());
+            wxLogDebug(wxT("Stale AF_UNIX file '%s' left."), m_filename.c_str());
         }
     }
 #endif // __UNIX_LIKE__

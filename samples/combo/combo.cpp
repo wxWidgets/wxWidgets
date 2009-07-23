@@ -158,7 +158,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("wxComboCtrl and wxOwnerDrawnComboBox Sample"));
+    MyFrame *frame = new MyFrame(wxT("wxComboCtrl and wxOwnerDrawnComboBox Sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -724,17 +724,17 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ComboControl_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(ComboControl_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
-    fileMenu->Append(ComboControl_Compare, _T("&Compare against wxComboBox..."),
-        _T("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));
+    fileMenu->Append(ComboControl_Compare, wxT("&Compare against wxComboBox..."),
+        wxT("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ComboControl_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    fileMenu->Append(ComboControl_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, _T("&File"));
-    menuBar->Append(helpMenu, _T("&Help"));
+    menuBar->Append(fileMenu, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -1206,14 +1206,14 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxString::Format(
-                    _T("Welcome to %s!\n")
-                    _T("\n")
-                    _T("This is the wxWidgets wxComboCtrl and wxOwnerDrawnComboBox sample\n")
-                    _T("running under %s."),
+                    wxT("Welcome to %s!\n")
+                    wxT("\n")
+                    wxT("This is the wxWidgets wxComboCtrl and wxOwnerDrawnComboBox sample\n")
+                    wxT("running under %s."),
                     wxVERSION_STRING,
                     wxGetOsDescription().c_str()
                  ),
-                 _T("About wxComboCtrl sample"),
+                 wxT("About wxComboCtrl sample"),
                  wxOK | wxICON_INFORMATION,
                  this);
 }

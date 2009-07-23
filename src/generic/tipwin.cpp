@@ -267,7 +267,7 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
     bool breakLine = false;
     for ( const wxChar *p = text.c_str(); ; p++ )
     {
-        if ( *p == _T('\n') || *p == _T('\0') )
+        if ( *p == wxT('\n') || *p == wxT('\0') )
         {
             dc.GetTextExtent(current, &width, &height);
             if ( width > widthMax )
@@ -287,7 +287,7 @@ void wxTipWindowView::Adjust(const wxString& text, wxCoord maxLength)
             current.clear();
             breakLine = false;
         }
-        else if ( breakLine && (*p == _T(' ') || *p == _T('\t')) )
+        else if ( breakLine && (*p == wxT(' ') || *p == wxT('\t')) )
         {
             // word boundary - break the line here
             m_parent->m_textLines.Add(current);

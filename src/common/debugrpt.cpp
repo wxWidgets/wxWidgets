@@ -87,13 +87,13 @@ protected:
 static inline void
 HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    node->AddAttribute(name, wxString::Format(_T("%08lx"), value));
+    node->AddAttribute(name, wxString::Format(wxT("%08lx"), value));
 }
 
 static inline void
 NumProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    node->AddAttribute(name, wxString::Format(_T("%lu"), value));
+    node->AddAttribute(name, wxString::Format(wxT("%lu"), value));
 }
 
 static inline void
@@ -109,7 +109,7 @@ TextElement(wxXmlNode *node, const wxChar *name, const wxString& value)
 static inline void
 HexElement(wxXmlNode *node, const wxChar *name, unsigned long value)
 {
-    TextElement(node, name, wxString::Format(_T("%08lx"), value));
+    TextElement(node, name, wxString::Format(wxT("%08lx"), value));
 }
 
 #endif // wxUSE_CRASHREPORT
@@ -122,49 +122,49 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
 {
     m_isOk = true;
 
-    wxXmlNode *nodeFrame = new wxXmlNode(wxXML_ELEMENT_NODE, _T("frame"));
+    wxXmlNode *nodeFrame = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("frame"));
     m_nodeStack->AddChild(nodeFrame);
 
-    NumProperty(nodeFrame, _T("level"), frame.GetLevel());
+    NumProperty(nodeFrame, wxT("level"), frame.GetLevel());
     wxString func = frame.GetName();
     if ( !func.empty() )
     {
-        nodeFrame->AddAttribute(_T("function"), func);
-        HexProperty(nodeFrame, _T("offset"), frame.GetOffset());
+        nodeFrame->AddAttribute(wxT("function"), func);
+        HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
     }
 
     if ( frame.HasSourceLocation() )
     {
-        nodeFrame->AddAttribute(_T("file"), frame.GetFileName());
-        NumProperty(nodeFrame, _T("line"), frame.GetLine());
+        nodeFrame->AddAttribute(wxT("file"), frame.GetFileName());
+        NumProperty(nodeFrame, wxT("line"), frame.GetLine());
     }
 
     const size_t nParams = frame.GetParamCount();
     if ( nParams )
     {
-        wxXmlNode *nodeParams = new wxXmlNode(wxXML_ELEMENT_NODE, _T("parameters"));
+        wxXmlNode *nodeParams = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("parameters"));
         nodeFrame->AddChild(nodeParams);
 
         for ( size_t n = 0; n < nParams; n++ )
         {
             wxXmlNode *
-                nodeParam = new wxXmlNode(wxXML_ELEMENT_NODE, _T("parameter"));
+                nodeParam = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("parameter"));
             nodeParams->AddChild(nodeParam);
 
-            NumProperty(nodeParam, _T("number"), n);
+            NumProperty(nodeParam, wxT("number"), n);
 
             wxString type, name, value;
             if ( !frame.GetParam(n, &type, &name, &value) )
                 continue;
 
             if ( !type.empty() )
-                TextElement(nodeParam, _T("type"), type);
+                TextElement(nodeParam, wxT("type"), type);
 
             if ( !name.empty() )
-                TextElement(nodeParam, _T("name"), name);
+                TextElement(nodeParam, wxT("name"), name);
 
             if ( !value.empty() )
-                TextElement(nodeParam, _T("value"), value);
+                TextElement(nodeParam, wxT("value"), value);
         }
     }
 }
@@ -191,12 +191,12 @@ wxDebugReport::wxDebugReport()
     wxFileName fn;
     fn.AssignTempFileName(appname);
 #if wxUSE_DATETIME
-    m_dir.Printf(_T("%s%c%s_dbgrpt-%lu-%s"),
+    m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu-%s"),
                  fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
                  wxGetProcessId(),
-                 wxDateTime::Now().Format(_T("%Y%m%dT%H%M%S")).c_str());
+                 wxDateTime::Now().Format(wxT("%Y%m%dT%H%M%S")).c_str());
 #else
-    m_dir.Printf(_T("%s%c%s_dbgrpt-%lu"),
+    m_dir.Printf(wxT("%s%c%s_dbgrpt-%lu"),
                  fn.GetPath().c_str(), wxFILE_SEP_PATH, appname.c_str(),
                  wxGetProcessId());
 #endif
@@ -255,7 +255,7 @@ wxString wxDebugReport::GetReportName() const
     if(wxTheApp)
         return wxTheApp->GetAppDisplayName();
 
-    return _T("wx");
+    return wxT("wx");
 }
 
 void
@@ -276,7 +276,7 @@ wxDebugReport::AddFile(const wxString& filename, const wxString& description)
         name = filename;
 
         wxASSERT_MSG( wxFileName(GetDirectory(), name).FileExists(),
-                      _T("file should exist in debug report directory") );
+                      wxT("file should exist in debug report directory") );
     }
 
     m_files.Add(name);
@@ -289,10 +289,10 @@ wxDebugReport::AddText(const wxString& filename,
                        const wxString& description)
 {
     wxASSERT_MSG( !wxFileName(filename).IsAbsolute(),
-                  _T("filename should be relative to debug report directory") );
+                  wxT("filename should be relative to debug report directory") );
 
     wxFileName fn(GetDirectory(), filename);
-    wxFFile file(fn.GetFullPath(), _T("w"));
+    wxFFile file(fn.GetFullPath(), wxT("w"));
     if ( !file.IsOpened() || !file.Write(text) )
         return false;
 
@@ -304,7 +304,7 @@ wxDebugReport::AddText(const wxString& filename,
 void wxDebugReport::RemoveFile(const wxString& name)
 {
     const int n = m_files.Index(name);
-    wxCHECK_RET( n != wxNOT_FOUND, _T("No such file in wxDebugReport") );
+    wxCHECK_RET( n != wxNOT_FOUND, wxT("No such file in wxDebugReport") );
 
     m_files.RemoveAt(n);
     m_descriptions.RemoveAt(n);
@@ -348,7 +348,7 @@ void wxDebugReport::AddAll(Context context)
 
 bool wxDebugReport::DoAddSystemInfo(wxXmlNode *nodeSystemInfo)
 {
-    nodeSystemInfo->AddAttribute(_T("description"), wxGetOsDescription());
+    nodeSystemInfo->AddAttribute(wxT("description"), wxGetOsDescription());
 
     return true;
 }
@@ -364,27 +364,27 @@ bool wxDebugReport::DoAddLoadedModules(wxXmlNode *nodeModules)
     {
         const wxDynamicLibraryDetails& info = modules[n];
 
-        wxXmlNode *nodeModule = new wxXmlNode(wxXML_ELEMENT_NODE, _T("module"));
+        wxXmlNode *nodeModule = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("module"));
         nodeModules->AddChild(nodeModule);
 
         wxString path = info.GetPath();
         if ( path.empty() )
             path = info.GetName();
         if ( !path.empty() )
-            nodeModule->AddAttribute(_T("path"), path);
+            nodeModule->AddAttribute(wxT("path"), path);
 
         void *addr = NULL;
         size_t len = 0;
         if ( info.GetAddress(&addr, &len) )
         {
-            HexProperty(nodeModule, _T("address"), wxPtrToUInt(addr));
-            HexProperty(nodeModule, _T("size"), len);
+            HexProperty(nodeModule, wxT("address"), wxPtrToUInt(addr));
+            HexProperty(nodeModule, wxT("size"), len);
         }
 
         wxString ver = info.GetVersion();
         if ( !ver.empty() )
         {
-            nodeModule->AddAttribute(_T("version"), ver);
+            nodeModule->AddAttribute(wxT("version"), ver);
         }
     }
 
@@ -398,35 +398,35 @@ bool wxDebugReport::DoAddExceptionInfo(wxXmlNode *nodeContext)
     if ( !c.code )
         return false;
 
-    wxXmlNode *nodeExc = new wxXmlNode(wxXML_ELEMENT_NODE, _T("exception"));
+    wxXmlNode *nodeExc = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("exception"));
     nodeContext->AddChild(nodeExc);
 
-    HexProperty(nodeExc, _T("code"), c.code);
-    nodeExc->AddAttribute(_T("name"), c.GetExceptionString());
-    HexProperty(nodeExc, _T("address"), wxPtrToUInt(c.addr));
+    HexProperty(nodeExc, wxT("code"), c.code);
+    nodeExc->AddAttribute(wxT("name"), c.GetExceptionString());
+    HexProperty(nodeExc, wxT("address"), wxPtrToUInt(c.addr));
 
 #ifdef __INTEL__
-    wxXmlNode *nodeRegs = new wxXmlNode(wxXML_ELEMENT_NODE, _T("registers"));
+    wxXmlNode *nodeRegs = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("registers"));
     nodeContext->AddChild(nodeRegs);
-    HexElement(nodeRegs, _T("eax"), c.regs.eax);
-    HexElement(nodeRegs, _T("ebx"), c.regs.ebx);
-    HexElement(nodeRegs, _T("ecx"), c.regs.edx);
-    HexElement(nodeRegs, _T("edx"), c.regs.edx);
-    HexElement(nodeRegs, _T("esi"), c.regs.esi);
-    HexElement(nodeRegs, _T("edi"), c.regs.edi);
+    HexElement(nodeRegs, wxT("eax"), c.regs.eax);
+    HexElement(nodeRegs, wxT("ebx"), c.regs.ebx);
+    HexElement(nodeRegs, wxT("ecx"), c.regs.edx);
+    HexElement(nodeRegs, wxT("edx"), c.regs.edx);
+    HexElement(nodeRegs, wxT("esi"), c.regs.esi);
+    HexElement(nodeRegs, wxT("edi"), c.regs.edi);
 
-    HexElement(nodeRegs, _T("ebp"), c.regs.ebp);
-    HexElement(nodeRegs, _T("esp"), c.regs.esp);
-    HexElement(nodeRegs, _T("eip"), c.regs.eip);
+    HexElement(nodeRegs, wxT("ebp"), c.regs.ebp);
+    HexElement(nodeRegs, wxT("esp"), c.regs.esp);
+    HexElement(nodeRegs, wxT("eip"), c.regs.eip);
 
-    HexElement(nodeRegs, _T("cs"), c.regs.cs);
-    HexElement(nodeRegs, _T("ds"), c.regs.ds);
-    HexElement(nodeRegs, _T("es"), c.regs.es);
-    HexElement(nodeRegs, _T("fs"), c.regs.fs);
-    HexElement(nodeRegs, _T("gs"), c.regs.gs);
-    HexElement(nodeRegs, _T("ss"), c.regs.ss);
+    HexElement(nodeRegs, wxT("cs"), c.regs.cs);
+    HexElement(nodeRegs, wxT("ds"), c.regs.ds);
+    HexElement(nodeRegs, wxT("es"), c.regs.es);
+    HexElement(nodeRegs, wxT("fs"), c.regs.fs);
+    HexElement(nodeRegs, wxT("gs"), c.regs.gs);
+    HexElement(nodeRegs, wxT("ss"), c.regs.ss);
 
-    HexElement(nodeRegs, _T("flags"), c.regs.flags);
+    HexElement(nodeRegs, wxT("flags"), c.regs.flags);
 #endif // __INTEL__
 
     return true;
@@ -439,25 +439,25 @@ bool wxDebugReport::DoAddExceptionInfo(wxXmlNode *nodeContext)
 
 bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
 {
-    wxCHECK_MSG( IsOk(), false, _T("use IsOk() first") );
+    wxCHECK_MSG( IsOk(), false, wxT("use IsOk() first") );
 
     // create XML dump of current context
     wxXmlDocument xmldoc;
-    wxXmlNode *nodeRoot = new wxXmlNode(wxXML_ELEMENT_NODE, _T("report"));
+    wxXmlNode *nodeRoot = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("report"));
     xmldoc.SetRoot(nodeRoot);
-    nodeRoot->AddAttribute(_T("version"), _T("1.0"));
-    nodeRoot->AddAttribute(_T("kind"), ctx == Context_Current ? _T("user")
-                                                             : _T("exception"));
+    nodeRoot->AddAttribute(wxT("version"), wxT("1.0"));
+    nodeRoot->AddAttribute(wxT("kind"), ctx == Context_Current ? wxT("user")
+                                                             : wxT("exception"));
 
     // add system information
-    wxXmlNode *nodeSystemInfo = new wxXmlNode(wxXML_ELEMENT_NODE, _T("system"));
+    wxXmlNode *nodeSystemInfo = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("system"));
     if ( DoAddSystemInfo(nodeSystemInfo) )
         nodeRoot->AddChild(nodeSystemInfo);
     else
         delete nodeSystemInfo;
 
     // add information about the loaded modules
-    wxXmlNode *nodeModules = new wxXmlNode(wxXML_ELEMENT_NODE, _T("modules"));
+    wxXmlNode *nodeModules = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("modules"));
     if ( DoAddLoadedModules(nodeModules) )
         nodeRoot->AddChild(nodeModules);
     else
@@ -467,7 +467,7 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
     // current context is not very interesting otherwise
     if ( ctx == Context_Exception )
     {
-        wxXmlNode *nodeContext = new wxXmlNode(wxXML_ELEMENT_NODE, _T("context"));
+        wxXmlNode *nodeContext = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("context"));
         if ( DoAddExceptionInfo(nodeContext) )
             nodeRoot->AddChild(nodeContext);
         else
@@ -476,7 +476,7 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
 
     // add stack traceback
 #if wxUSE_STACKWALKER
-    wxXmlNode *nodeStack = new wxXmlNode(wxXML_ELEMENT_NODE, _T("stack"));
+    wxXmlNode *nodeStack = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("stack"));
     XmlStackWalker sw(nodeStack);
 #if wxUSE_ON_FATAL_EXCEPTION
     if ( ctx == Context_Exception )
@@ -500,7 +500,7 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
 
 
     // save the entire context dump in a file
-    wxFileName fn(m_dir, GetReportName(), _T("xml"));
+    wxFileName fn(m_dir, GetReportName(), wxT("xml"));
 
     if ( !xmldoc.Save(fn.GetFullPath()) )
         return false;
@@ -520,9 +520,9 @@ bool wxDebugReport::AddContext(wxDebugReport::Context ctx)
 
 bool wxDebugReport::AddDump(Context ctx)
 {
-    wxCHECK_MSG( IsOk(), false, _T("use IsOk() first") );
+    wxCHECK_MSG( IsOk(), false, wxT("use IsOk() first") );
 
-    wxFileName fn(m_dir, GetReportName(), _T("dmp"));
+    wxFileName fn(m_dir, GetReportName(), wxT("dmp"));
     wxCrashReport::SetFileName(fn.GetFullPath());
 
     if ( !(ctx == Context_Exception ? wxCrashReport::Generate()
@@ -565,8 +565,8 @@ bool wxDebugReport::Process()
 bool wxDebugReport::DoProcess()
 {
     wxString msg(_("A debug report has been generated. It can be found in"));
-    msg << _T("\n")
-           _T("\t") << GetDirectory() << _T("\n\n")
+    msg << wxT("\n")
+           wxT("\t") << GetDirectory() << wxT("\n\n")
         << _("And includes the following files:\n");
 
     wxString name, desc;
@@ -579,7 +579,7 @@ bool wxDebugReport::DoProcess()
 
     msg += _("\nPlease send this report to the program maintainer, thank you!\n");
 
-    wxLogMessage(_T("%s"), msg.c_str());
+    wxLogMessage(wxT("%s"), msg.c_str());
 
     // we have to do this or the report would be deleted, and we don't even
     // have any way to ask the user if he wants to keep it from here
@@ -605,8 +605,8 @@ bool wxDebugReportCompress::DoProcess()
         return false;
 
     // create the streams
-    wxFileName fn(GetDirectory(), GetReportName(), _T("zip"));
-    wxFFileOutputStream os(fn.GetFullPath(), _T("wb"));
+    wxFileName fn(GetDirectory(), GetReportName(), wxT("zip"));
+    wxFFileOutputStream os(fn.GetFullPath(), wxT("wb"));
     wxZipOutputStream zos(os, 9);
 
     // add all files to the ZIP one
@@ -647,8 +647,8 @@ wxDebugReportUpload::wxDebugReportUpload(const wxString& url,
                      m_inputField(input),
                      m_curlCmd(curl)
 {
-    if ( m_uploadURL.Last() != _T('/') )
-        m_uploadURL += _T('/');
+    if ( m_uploadURL.Last() != wxT('/') )
+        m_uploadURL += wxT('/');
     m_uploadURL += action;
 }
 
@@ -661,7 +661,7 @@ bool wxDebugReportUpload::DoProcess()
     wxArrayString output, errors;
     int rc = wxExecute(wxString::Format
                        (
-                            _T("%s -F %s=@\"%s\" %s"),
+                            wxT("%s -F %s=@\"%s\" %s"),
                             m_curlCmd.c_str(),
                             m_inputField.c_str(),
                             GetCompressedFileName().c_str(),
@@ -680,7 +680,7 @@ bool wxDebugReportUpload::DoProcess()
         {
             for ( size_t n = 0; n < count; n++ )
             {
-                wxLogWarning(_T("%s"), errors[n].c_str());
+                wxLogWarning(wxT("%s"), errors[n].c_str());
             }
         }
 

@@ -125,7 +125,7 @@ bool wxTextInputStream::EatEOL(const wxChar &c)
 
 wxUint32 wxTextInputStream::Read32(int base)
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
     if(!m_input) return 0;
 
     wxString word = ReadWord();
@@ -146,7 +146,7 @@ wxUint8 wxTextInputStream::Read8(int base)
 
 wxInt32 wxTextInputStream::Read32S(int base)
 {
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), wxT("invalid base") );
     if(!m_input) return 0;
 
     wxString word = ReadWord();
@@ -387,15 +387,15 @@ void wxTextOutputStream::WriteString(const wxString& string)
             switch ( m_mode )
             {
                 case wxEOL_DOS:
-                    out << _T("\r\n");
+                    out << wxT("\r\n");
                     continue;
 
                 case wxEOL_MAC:
-                    out << _T('\r');
+                    out << wxT('\r');
                     continue;
 
                 default:
-                    wxFAIL_MSG( _T("unknown EOL mode in wxTextOutputStream") );
+                    wxFAIL_MSG( wxT("unknown EOL mode in wxTextOutputStream") );
                     // fall through
 
                 case wxEOL_UNIX:

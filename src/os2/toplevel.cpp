@@ -162,7 +162,7 @@ void wxTopLevelWindowOS2::OnActivate(
         //
         // Restore focus to the child which was last focused
         //
-        wxLogTrace(_T("focus"), _T("wxTLW %08lx activated."), m_hWnd);
+        wxLogTrace(wxT("focus"), wxT("wxTLW %08lx activated."), m_hWnd);
 
         wxWindow*                   pParent = m_pWinLastFocused ? m_pWinLastFocused->GetParent()
                                                                 : NULL;
@@ -200,8 +200,8 @@ void wxTopLevelWindowOS2::OnActivate(
             pWin = pWin->GetParent();
         }
 
-        wxLogTrace(_T("focus"),
-                   _T("wxTLW %08lx deactivated, last focused: %08lx."),
+        wxLogTrace(wxT("focus"),
+                   wxT("wxTLW %08lx deactivated, last focused: %08lx."),
                    m_hWnd,
                    m_pWinLastFocused ? GetHwndOf(m_pWinLastFocused)
                                      : NULL);
@@ -281,7 +281,7 @@ WXHWND wxTopLevelWindowOS2::OS2GetParent() const
             //
             // This flag doesn't make sense then and will be ignored
             //
-            wxFAIL_MSG( _T("wxFRAME_FLOAT_ON_PARENT but no parent?") );
+            wxFAIL_MSG( wxT("wxFRAME_FLOAT_ON_PARENT but no parent?") );
         }
         else
         {
@@ -495,7 +495,7 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Error creating frame. Error: %s\n"), sError.c_str());
         return false;
     }
 
@@ -519,7 +519,7 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Error creating frame. Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Error creating frame. Error: %s\n"), sError.c_str());
         return false;
     }
 
@@ -588,7 +588,7 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
-        wxLogError(_T("Error sizing frame. Error: %s\n"), sError.c_str());
+        wxLogError(wxT("Error sizing frame. Error: %s\n"), sError.c_str());
         return false;
     }
     lStyle =  ::WinQueryWindowULong( m_hWnd
@@ -1041,7 +1041,7 @@ bool wxTopLevelWindowOS2::EnableCloseButton( bool bEnable )
 
     if (!hMenu)
     {
-        wxLogLastError(_T("GetSystemMenu"));
+        wxLogLastError(wxT("GetSystemMenu"));
         return false;
     }
 
@@ -1093,7 +1093,7 @@ void wxTLWHiddenParentModule::OnExit()
     {
         if (!::WinDestroyWindow(m_shWnd))
         {
-            wxLogLastError(_T("DestroyWindow(hidden TLW parent)"));
+            wxLogLastError(wxT("DestroyWindow(hidden TLW parent)"));
         }
         m_shWnd = NULL;
     }
@@ -1108,7 +1108,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
     {
         if (!m_szClassName)
         {
-            static const wxChar*    zHIDDEN_PARENT_CLASS = _T("wxTLWHiddenParent");
+            static const wxChar*    zHIDDEN_PARENT_CLASS = wxT("wxTLWHiddenParent");
 
             if (!::WinRegisterClass( wxGetInstance()
                                     ,(PSZ)zHIDDEN_PARENT_CLASS
@@ -1117,7 +1117,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
                                     ,sizeof(ULONG)
                                    ))
             {
-                wxLogLastError(_T("RegisterClass(\"wxTLWHiddenParent\")"));
+                wxLogLastError(wxT("RegisterClass(\"wxTLWHiddenParent\")"));
             }
             else
             {
@@ -1139,7 +1139,7 @@ HWND wxTLWHiddenParentModule::GetHWND()
                                      NULL );
         if (!m_shWnd)
         {
-            wxLogLastError(_T("CreateWindow(hidden TLW parent)"));
+            wxLogLastError(wxT("CreateWindow(hidden TLW parent)"));
         }
     }
     return m_shWnd;

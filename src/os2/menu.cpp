@@ -387,7 +387,7 @@ void wxMenu::EndRadioGroup()
 
 wxMenuItem* wxMenu::DoAppend( wxMenuItem* pItem )
 {
-    wxCHECK_MSG( pItem, NULL, _T("NULL item in wxMenu::DoAppend") );
+    wxCHECK_MSG( pItem, NULL, wxT("NULL item in wxMenu::DoAppend") );
 
     bool bCheck = false;
 
@@ -428,7 +428,7 @@ wxMenuItem* wxMenu::DoAppend( wxMenuItem* pItem )
             }
             else
             {
-                wxFAIL_MSG( _T("where is the radio group start item?") );
+                wxFAIL_MSG( wxT("where is the radio group start item?") );
             }
         }
     }

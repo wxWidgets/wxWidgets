@@ -43,7 +43,7 @@ static wxGDIImage* ConvertImage(
     if(!bIsIcon )
     {
         wxASSERT_MSG( wxDynamicCast(&rBitmap, wxBitmap),
-                      _T("not an icon and not a bitmap?") );
+                      wxT("not an icon and not a bitmap?") );
 
         const wxBitmap&             rBmp = (const wxBitmap&)rBitmap;
         wxMask*                     pMask = rBmp.GetMask();

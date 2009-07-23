@@ -134,7 +134,7 @@ public:
 
     void OnTest(wxCommandEvent& event)
     {
-        wxLogMessage(_T("This is the pushed test event handler #%u"), m_level);
+        wxLogMessage(wxT("This is the pushed test event handler #%u"), m_level);
 
         // if we don't skip the event, the other event handlers won't get it:
         // try commenting out this line and see what changes
@@ -222,7 +222,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Event wxWidgets Sample"),
+    MyFrame *frame = new MyFrame(wxT("Event wxWidgets Sample"),
                                  wxPoint(50, 50), wxSize(600, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -252,43 +252,43 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(Event_About, _T("&About...\tCtrl-A"), _T("Show about dialog"));
+    menuFile->Append(Event_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
     menuFile->AppendSeparator();
-    menuFile->Append(Event_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    menuFile->Append(Event_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *menuEvent = new wxMenu;
 #ifdef wxHAS_EVENT_BIND
     menuEvent->AppendCheckItem(Event_Bind, "&Bind\tCtrl-B",
                                "Bind or unbind a dynamic event handler");
 #endif // wxHAS_EVENT_BIND
-    menuEvent->AppendCheckItem(Event_Connect, _T("&Connect\tCtrl-C"),
-                     _T("Connect or disconnect the dynamic event handler"));
-    menuEvent->Append(Event_Dynamic, _T("&Dynamic event\tCtrl-D"),
-                      _T("Dynamic event sample - only works after Connect"));
+    menuEvent->AppendCheckItem(Event_Connect, wxT("&Connect\tCtrl-C"),
+                     wxT("Connect or disconnect the dynamic event handler"));
+    menuEvent->Append(Event_Dynamic, wxT("&Dynamic event\tCtrl-D"),
+                      wxT("Dynamic event sample - only works after Connect"));
     menuEvent->AppendSeparator();
-    menuEvent->Append(Event_Push, _T("&Push event handler\tCtrl-P"),
-                      _T("Push event handler for test event"));
-    menuEvent->Append(Event_Pop, _T("P&op event handler\tCtrl-O"),
-                      _T("Pop event handler for test event"));
-    menuEvent->Append(Event_Test, _T("Test event\tCtrl-T"),
-                      _T("Test event processed by pushed event handler"));
+    menuEvent->Append(Event_Push, wxT("&Push event handler\tCtrl-P"),
+                      wxT("Push event handler for test event"));
+    menuEvent->Append(Event_Pop, wxT("P&op event handler\tCtrl-O"),
+                      wxT("Pop event handler for test event"));
+    menuEvent->Append(Event_Test, wxT("Test event\tCtrl-T"),
+                      wxT("Test event processed by pushed event handler"));
     menuEvent->AppendSeparator();
-    menuEvent->Append(Event_Custom, _T("Fire c&ustom event\tCtrl-U"),
-                      _T("Generate a custom event"));
+    menuEvent->Append(Event_Custom, wxT("Fire c&ustom event\tCtrl-U"),
+                      wxT("Generate a custom event"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
-    menuBar->Append(menuEvent, _T("&Event"));
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuEvent, wxT("&Event"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(3);
-    SetStatusText(_T("Welcome to wxWidgets event sample"));
-    SetStatusText(_T("Dynamic: off"), Status_Dynamic);
-    SetStatusText(_T("Push count: 0"), Status_Push);
+    SetStatusText(wxT("Welcome to wxWidgets event sample"));
+    SetStatusText(wxT("Dynamic: off"), Status_Dynamic);
+    SetStatusText(wxT("Push count: 0"), Status_Push);
 #endif // wxUSE_STATUSBAR
 
     wxPanel * const panel = new wxPanel(this);
@@ -412,25 +412,25 @@ void MyFrame::OnPushEventHandler(wxCommandEvent& WXUNUSED(event))
     PushEventHandler(new MyEvtHandler(++m_nPush));
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);
+    SetStatusText(wxString::Format(wxT("Push count: %u"), m_nPush), Status_Push);
 #endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnPopEventHandler(wxCommandEvent& WXUNUSED(event))
 {
-    wxCHECK_RET( m_nPush, _T("this command should be disabled!") );
+    wxCHECK_RET( m_nPush, wxT("this command should be disabled!") );
 
     PopEventHandler(true /* delete handler */);
     m_nPush--;
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxString::Format(_T("Push count: %u"), m_nPush), Status_Push);
+    SetStatusText(wxString::Format(wxT("Push count: %u"), m_nPush), Status_Push);
 #endif // wxUSE_STATUSBAR
 }
 
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage(_T("This is the test event handler in the main frame"));
+    wxLogMessage(wxT("This is the test event handler in the main frame"));
 }
 
 void MyFrame::OnUpdateUIPop(wxUpdateUIEvent& event)
@@ -451,6 +451,6 @@ void MyFrame::OnFireCustom(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnProcessCustom(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogMessage(_T("Got a custom event!"));
+    wxLogMessage(wxT("Got a custom event!"));
 }
 

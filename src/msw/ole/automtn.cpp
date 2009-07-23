@@ -731,7 +731,7 @@ wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant)
                 break;
 
             default:
-                wxLogDebug(_T("unhandled VT_ARRAY type %x in wxConvertOleToVariant"),
+                wxLogDebug(wxT("unhandled VT_ARRAY type %x in wxConvertOleToVariant"),
                            oleVariant.vt & VT_TYPEMASK);
                 variant = wxVariant();
                 ok = false;

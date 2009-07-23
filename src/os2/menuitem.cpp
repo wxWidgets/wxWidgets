@@ -146,7 +146,7 @@ void wxMenuItem::Init()
     //
     // Tell the owner drawing code to to show the accel string as well
     //
-    SetAccelString(m_text.AfterFirst(_T('\t')));
+    SetAccelString(m_text.AfterFirst(wxT('\t')));
 #endif // wxUSE_OWNER_DRAWN
 } // end of wxMenuItem::Init
 
@@ -215,7 +215,7 @@ void wxMenuItem::SetRadioGroupStart(
 )
 {
     wxASSERT_MSG( !m_bIsRadioGroupStart
-                 ,_T("should only be called for the next radio items")
+                 ,wxT("should only be called for the next radio items")
                 );
 
     m_vRadioGroup.m_nStart = nStart;
@@ -226,7 +226,7 @@ void wxMenuItem::SetRadioGroupEnd(
 )
 {
     wxASSERT_MSG( m_bIsRadioGroupStart
-                 ,_T("should only be called for the first radio item")
+                 ,wxT("should only be called for the first radio item")
                 );
     m_vRadioGroup.m_nEnd = nEnd;
 } // end of wxMenuItem::SetRadioGroupEnd
@@ -288,7 +288,7 @@ void wxMenuItem::Check(
         int                         nPos = rItems.IndexOf(this);
 
         wxCHECK_RET( nPos != wxNOT_FOUND
-                    ,_T("menuitem not found in the menu items list?")
+                    ,wxT("menuitem not found in the menu items list?")
                    );
 
         //
@@ -382,9 +382,9 @@ void wxMenuItem::SetItemLabel( const wxString& rText )
     OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(m_text));
 #if  wxUSE_OWNER_DRAWN
     if (rText.IsEmpty())
-        SetAccelString(m_text.AfterFirst(_T('\t')));
+        SetAccelString(m_text.AfterFirst(wxT('\t')));
     else
-        SetAccelString(rText.AfterFirst(_T('\t')));
+        SetAccelString(rText.AfterFirst(wxT('\t')));
 #endif // wxUSE_OWNER_DRAWN
 
     HWND                            hMenu = GetHmenuOf(m_parentMenu);

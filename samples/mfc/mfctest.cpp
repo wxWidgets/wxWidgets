@@ -130,14 +130,14 @@ IMPLEMENT_APP_NO_MAIN(MyApp)
 
 CMainWindow::CMainWindow()
 {
-    LoadAccelTable( _T("MainAccelTable") );
-    Create( NULL, _T("Hello Foundation Application"),
-        WS_OVERLAPPEDWINDOW, rectDefault, NULL, _T("MainMenu") );
+    LoadAccelTable( wxT("MainAccelTable") );
+    Create( NULL, wxT("Hello Foundation Application"),
+        WS_OVERLAPPEDWINDOW, rectDefault, NULL, wxT("MainMenu") );
 }
 
 void CMainWindow::OnPaint()
 {
-    CString s = _T("Hello, Windows!");
+    CString s = wxT("Hello, Windows!");
     CPaintDC dc( this );
     CRect rect;
 
@@ -151,13 +151,13 @@ void CMainWindow::OnPaint()
 
 void CMainWindow::OnAbout()
 {
-    CDialog about( _T("AboutBox"), this );
+    CDialog about( wxT("AboutBox"), this );
     about.DoModal();
 }
 
 void CMainWindow::OnTest()
 {
-    wxMessageBox(_T("This is a wxWidgets message box.\nWe're about to create a new wxWidgets frame."), _T("wxWidgets"), wxOK);
+    wxMessageBox(wxT("This is a wxWidgets message box.\nWe're about to create a new wxWidgets frame."), wxT("wxWidgets"), wxOK);
     wxGetApp().CreateFrame();
 }
 
@@ -268,10 +268,10 @@ void MyApp::ExitMainLoop()
 
 wxFrame *MyApp::CreateFrame()
 {
-    MyChild *subframe = new MyChild(NULL, _T("Canvas Frame"), wxPoint(10, 10), wxSize(300, 300),
+    MyChild *subframe = new MyChild(NULL, wxT("Canvas Frame"), wxPoint(10, 10), wxSize(300, 300),
         wxDEFAULT_FRAME_STYLE);
 
-    subframe->SetTitle(_T("wxWidgets canvas frame"));
+    subframe->SetTitle(wxT("wxWidgets canvas frame"));
 
     // Give it a status line
     subframe->CreateStatusBar();
@@ -279,12 +279,12 @@ wxFrame *MyApp::CreateFrame()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(HELLO_NEW, _T("&New MFC Window"));
-    file_menu->Append(HELLO_QUIT, _T("&Close"));
+    file_menu->Append(HELLO_NEW, wxT("&New MFC Window"));
+    file_menu->Append(HELLO_QUIT, wxT("&Close"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(file_menu, wxT("&File"));
 
     // Associate the menu bar with the frame
     subframe->SetMenuBar(menu_bar);
@@ -329,7 +329,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     dc.DrawEllipse(250, 250, 100, 50);
     dc.DrawLine(50, 230, 200, 230);
-    dc.DrawText(_T("This is a test string"), 50, 230);
+    dc.DrawText(wxT("This is a test string"), 50, 230);
 }
 
 // This implements a tiny doodling program! Drag the mouse using

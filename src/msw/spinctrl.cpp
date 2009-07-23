@@ -207,7 +207,7 @@ wxSpinCtrl *wxSpinCtrl::GetSpinForTextCtrl(WXHWND hwndBuddy)
 
     // sanity check
     wxASSERT_MSG( spin->m_hwndBuddy == hwndBuddy,
-                  _T("wxSpinCtrl has incorrect buddy HWND!") );
+                  wxT("wxSpinCtrl has incorrect buddy HWND!") );
 
     return spin;
 }
@@ -359,7 +359,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
     if ( sizeText.x <= 0 )
     {
-        wxLogDebug(_T("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
     }
 
     wxPoint posBtn(pos);
@@ -376,7 +376,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (
                      exStyle,                // sunken border
-                     _T("EDIT"),             // window class
+                     wxT("EDIT"),             // window class
                      NULL,                   // no window title
                      msStyle,                // style (will be shown later)
                      pos.x, pos.y,           // position
@@ -493,7 +493,7 @@ void  wxSpinCtrl::SetValue(int val)
         // to leave it like this, while we really want to always show the
         // current value in the control, so do it manually
         ::SetWindowText(GetBuddyHwnd(),
-                        wxString::Format(_T("%d"), val).wx_str());
+                        wxString::Format(wxT("%d"), val).wx_str());
     }
 
     m_oldValue = GetValue();
@@ -709,7 +709,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
     int widthText = width - widthBtn - MARGIN_BETWEEN;
     if ( widthText <= 0 )
     {
-        wxLogDebug(_T("not enough space for wxSpinCtrl!"));
+        wxLogDebug(wxT("not enough space for wxSpinCtrl!"));
     }
 
     // 1) The buddy window

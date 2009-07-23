@@ -123,7 +123,7 @@ void wxMenuItem::Check(bool bDoCheck)
                 const wxMenuItemList& items = m_parentMenu->GetMenuItems();
                 int pos = items.IndexOf(this);
                 wxCHECK_RET( pos != wxNOT_FOUND,
-                             _T("menuitem not found in the menu items list?") );
+                             wxT("menuitem not found in the menu items list?") );
 
                 // get the radio group range
                 int start, end;

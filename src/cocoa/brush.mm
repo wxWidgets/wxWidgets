@@ -202,19 +202,19 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
 
 wxColour wxBrush::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxNullColour, wxT("invalid brush") );
     return M_BRUSHDATA->GetColour();
 }
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), wxBRUSHSTYLE_INVALID, wxT("invalid brush") );
     return M_BRUSHDATA->GetStyle();
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxCHECK_MSG( Ok(), 0, _T("invalid brush") );
+    wxCHECK_MSG( Ok(), 0, wxT("invalid brush") );
     return M_BRUSHDATA->GetStipple();
 }
 

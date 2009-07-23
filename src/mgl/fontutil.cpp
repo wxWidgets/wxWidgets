@@ -44,7 +44,7 @@
 //      encoding[;facename]
 bool wxNativeEncodingInfo::FromString(const wxString& s)
 {
-    wxStringTokenizer tokenizer(s, _T(";"));
+    wxStringTokenizer tokenizer(s, wxT(";"));
 
     wxString encid = tokenizer.GetNextToken();
     long enc;
@@ -64,7 +64,7 @@ wxString wxNativeEncodingInfo::ToString() const
     s << (long)encoding;
     if ( !facename.empty() )
     {
-        s << _T(';') << facename;
+        s << wxT(';') << facename;
     }
 
     return s;
@@ -77,7 +77,7 @@ wxString wxNativeEncodingInfo::ToString() const
 bool wxGetNativeFontEncoding(wxFontEncoding encoding,
                              wxNativeEncodingInfo *info)
 {
-    wxCHECK_MSG( info, false, _T("bad pointer in wxGetNativeFontEncoding") );
+    wxCHECK_MSG( info, false, wxT("bad pointer in wxGetNativeFontEncoding") );
 
     if ( encoding == wxFONTENCODING_DEFAULT )
     {

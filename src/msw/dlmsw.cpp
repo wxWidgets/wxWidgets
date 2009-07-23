@@ -28,7 +28,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/debughlp.h"
 
-const wxString wxDynamicLibrary::ms_dllext(_T(".dll"));
+const wxString wxDynamicLibrary::ms_dllext(wxT(".dll"));
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -121,9 +121,9 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
     static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
     if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
     {
-        wxDynamicLibrary dll(_T("kernel32.dll"), wxDL_VERBATIM);
+        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
         s_pfnGetModuleHandleEx =
-            (GetModuleHandleEx_t)dll.RawGetSymbol(_T("GetModuleHandleExA"));
+            (GetModuleHandleEx_t)dll.RawGetSymbol(wxT("GetModuleHandleExA"));
 
         // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
     }
@@ -161,7 +161,7 @@ wxVersionDLL::wxVersionDLL()
     // handle it
     wxLogNull noLog;
 
-    if ( m_dll.Load(_T("version.dll"), wxDL_VERBATIM) )
+    if ( m_dll.Load(wxT("version.dll"), wxDL_VERBATIM) )
     {
         // the functions we load have either 'A' or 'W' suffix depending on
         // whether we're in ANSI or Unicode build
@@ -172,7 +172,7 @@ wxVersionDLL::wxVersionDLL()
         #endif // UNICODE/ANSI
 
         #define LOAD_VER_FUNCTION(name)                                       \
-            m_pfn ## name = (name ## _t)m_dll.GetSymbol(_T(#name SUFFIX));    \
+            m_pfn ## name = (name ## _t)m_dll.GetSymbol(wxT(#name SUFFIX));    \
         if ( !m_pfn ## name )                                                 \
         {                                                                     \
             m_dll.Unload();                                                   \
@@ -206,12 +206,12 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
                 void *pVer;
                 UINT sizeInfo;
                 if ( m_pfnVerQueryValue(buf.data(),
-                                        const_cast<wxChar *>(_T("\\")),
+                                        const_cast<wxChar *>(wxT("\\")),
                                         &pVer,
                                         &sizeInfo) )
                 {
                     VS_FIXEDFILEINFO *info = (VS_FIXEDFILEINFO *)pVer;
-                    ver.Printf(_T("%d.%d.%d.%d"),
+                    ver.Printf(wxT("%d.%d.%d.%d"),
                                HIWORD(info->dwFileVersionMS),
                                LOWORD(info->dwFileVersionMS),
                                HIWORD(info->dwFileVersionLS),
@@ -333,7 +333,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
                                 &params
                             ) )
         {
-            wxLogLastError(_T("EnumerateLoadedModules"));
+            wxLogLastError(wxT("EnumerateLoadedModules"));
         }
     }
 #endif // wxUSE_DBGHELP

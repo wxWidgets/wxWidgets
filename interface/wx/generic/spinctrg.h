@@ -70,7 +70,7 @@ public:
                long style = wxSP_ARROW_KEYS,
                double min = 0, double max = 100,
                double initial = 0, double inc = 1,
-               const wxString& name = _T("wxSpinCtrlDouble"));
+               const wxString& name = wxT("wxSpinCtrlDouble"));
 
     /**
         Creation function called by the spin control constructor.

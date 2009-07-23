@@ -19,8 +19,8 @@
 // ----------------------------------------------------------------------------
 
 // actions supported by this control
-#define wxACTION_SPIN_INC    _T("inc")
-#define wxACTION_SPIN_DEC    _T("dec")
+#define wxACTION_SPIN_INC    wxT("inc")
+#define wxACTION_SPIN_DEC    wxT("dec")
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase,
                                  public wxControlWithArrows

@@ -71,12 +71,12 @@ ItemContainerWidgetsPage::ItemContainerWidgetsPage(WidgetsBookCtrl *book,
                                                    const char *const icon[])
 : WidgetsPage(book, image_list, icon), m_trackedDataObjects(0)
 {
-    m_items.Add(_T("This"));
-    m_items.Add(_T("is"));
-    m_items.Add(_T("a"));
-    m_items.Add(_T("List"));
-    m_items.Add(_T("of"));
-    m_items.Add(_T("strings"));
+    m_items.Add(wxT("This"));
+    m_items.Add(wxT("is"));
+    m_items.Add(wxT("a"));
+    m_items.Add(wxT("List"));
+    m_items.Add(wxT("of"));
+    m_items.Add(wxT("strings"));
     m_itemsSorted = m_items;
 }
 
@@ -103,11 +103,11 @@ bool ItemContainerWidgetsPage::VerifyAllClientDataDestroyed()
 {
     if ( m_trackedDataObjects )
     {
-        wxString message = _T("Bug in managing wxClientData: ");
+        wxString message = wxT("Bug in managing wxClientData: ");
         if ( m_trackedDataObjects > 0 )
-            message << m_trackedDataObjects << _T(" lost objects");
+            message << m_trackedDataObjects << wxT(" lost objects");
         else
-            message << (-m_trackedDataObjects) << _T(" extra deletes");
+            message << (-m_trackedDataObjects) << wxT(" extra deletes");
         wxFAIL_MSG(message);
         return false;
     }
@@ -118,7 +118,7 @@ bool ItemContainerWidgetsPage::VerifyAllClientDataDestroyed()
 void ItemContainerWidgetsPage::StartTest(const wxString& label)
 {
     m_container->Clear();
-    wxLogMessage(_T("Test - %s:"), label.c_str());
+    wxLogMessage(wxT("Test - %s:"), label.c_str());
 }
 
 void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
@@ -128,7 +128,7 @@ void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
     bool ok = count == items.GetCount();
     if ( !ok )
     {
-        wxFAIL_MSG(_T("Item count does not match."));
+        wxFAIL_MSG(wxT("Item count does not match."));
     }
     else
     {
@@ -138,7 +138,7 @@ void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
             if ( str != items[i] )
             {
                 wxFAIL_MSG(wxString::Format(
-                            _T("Wrong string \"%s\" at position %d (expected \"%s\")"),
+                            wxT("Wrong string \"%s\" at position %d (expected \"%s\")"),
                            str.c_str(), i, items[i].c_str()));
                 ok = false;
                 break;
@@ -173,19 +173,19 @@ void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
     m_container->Clear();
     ok &= VerifyAllClientDataDestroyed();
 
-    wxLogMessage(_T("...%s"), ok ? _T("passed") : _T("failed"));
+    wxLogMessage(wxT("...%s"), ok ? wxT("passed") : wxT("failed"));
 }
 
 wxString
 ItemContainerWidgetsPage::DumpContainerData(const wxArrayString& expected) const
 {
     wxString str;
-    str << _T("Current content:\n");
+    str << wxT("Current content:\n");
 
     unsigned i;
     for ( i = 0; i < m_container->GetCount(); ++i )
     {
-        str << _T(" - ") << m_container->GetString(i) << _T(" [");
+        str << wxT(" - ") << m_container->GetString(i) << wxT(" [");
         if ( m_container->HasClientObjectData() )
         {
             TrackedClientData *
@@ -199,20 +199,20 @@ ItemContainerWidgetsPage::DumpContainerData(const wxArrayString& expected) const
             if ( data )
                 str << (wxUIntPtr)data;
         }
-        str << _T("]\n");
+        str << wxT("]\n");
     }
 
-    str << _T("Expected content:\n");
+    str << wxT("Expected content:\n");
     for ( i = 0; i < expected.GetCount(); ++i )
     {
         const wxString& item = expected[i];
-        str << _T(" - ") << item << _T("[");
+        str << wxT(" - ") << item << wxT("[");
         for( unsigned j = 0; j < m_items.GetCount(); ++j )
         {
             if ( m_items[j] == item )
                 str << j;
         }
-        str << _T("]\n");
+        str << wxT("]\n");
     }
 
     return str;
@@ -222,7 +222,7 @@ bool ItemContainerWidgetsPage::VerifyClientData(wxUIntPtr i, const wxString& str
 {
     if ( i > m_items.GetCount() || m_items[i] != str )
     {
-        wxLogMessage(_T("Client data for '%s' does not match."), str.c_str());
+        wxLogMessage(wxT("Client data for '%s' does not match."), str.c_str());
         return false;
     }
 
@@ -246,9 +246,9 @@ ItemContainerWidgetsPage::MakeArray(const wxSortedArrayString& sorted)
 void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
 {
     m_container = GetContainer();
-    wxASSERT_MSG(m_container, _T("Widget must have a test widget"));
+    wxASSERT_MSG(m_container, wxT("Widget must have a test widget"));
 
-    wxLogMessage(_T("wxItemContainer test for %s, %s:"),
+    wxLogMessage(wxT("wxItemContainer test for %s, %s:"),
                  GetWidget()->GetClassInfo()->GetClassName(),
                  (m_container->IsSorted() ? "Sorted" : "Unsorted"));
 
@@ -256,16 +256,16 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
         expected_result = m_container->IsSorted() ? MakeArray(m_itemsSorted)
                                                   : m_items;
 
-    StartTest(_T("Append one item"));
+    StartTest(wxT("Append one item"));
     wxString item = m_items[0];
     m_container->Append(item);
     EndTest(wxArrayString(1, &item));
 
-    StartTest(_T("Append some items"));
+    StartTest(wxT("Append some items"));
     m_container->Append(m_items);
     EndTest(expected_result);
 
-    StartTest(_T("Append some items with data objects"));
+    StartTest(wxT("Append some items with data objects"));
     wxClientData **objects = new wxClientData *[m_items.GetCount()];
     unsigned i;
     for ( i = 0; i < m_items.GetCount(); ++i )
@@ -274,7 +274,7 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
     EndTest(expected_result);
     delete[] objects;
 
-    StartTest(_T("Append some items with data"));
+    StartTest(wxT("Append some items with data"));
     void **data = new void *[m_items.GetCount()];
     for ( i = 0; i < m_items.GetCount(); ++i )
         data[i] = wxUIntToPtr(i);
@@ -282,19 +282,19 @@ void ItemContainerWidgetsPage::OnButtonTestItemContainer(wxCommandEvent&)
     EndTest(expected_result);
     delete[] data;
 
-    StartTest(_T("Append some items with data, one by one"));
+    StartTest(wxT("Append some items with data, one by one"));
     for ( i = 0; i < m_items.GetCount(); ++i )
         m_container->Append(m_items[i], wxUIntToPtr(i));
     EndTest(expected_result);
 
-    StartTest(_T("Append some items with data objects, one by one"));
+    StartTest(wxT("Append some items with data objects, one by one"));
     for ( i = 0; i < m_items.GetCount(); ++i )
         m_container->Append(m_items[i], CreateClientData(i));
     EndTest(expected_result);
 
     if ( !m_container->IsSorted() )
     {
-        StartTest(_T("Insert in reverse order with data, one by one"));
+        StartTest(wxT("Insert in reverse order with data, one by one"));
         for ( unsigned i = m_items.GetCount(); i; --i )
             m_container->Insert(m_items[i - 1], 0, wxUIntToPtr(i - 1));
         EndTest(expected_result);

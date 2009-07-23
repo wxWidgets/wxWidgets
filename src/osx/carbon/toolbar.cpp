@@ -1653,7 +1653,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
             if (m_macToolbar != NULL)
             {
-                wxCHECK_MSG( tool->GetControl(), false, _T("control must be non-NULL") );
+                wxCHECK_MSG( tool->GetControl(), false, wxT("control must be non-NULL") );
                 HIToolbarItemRef    item;
                 HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
                 CFDataRef data = CFDataCreate( kCFAllocatorDefault , (UInt8*) &viewRef , sizeof(viewRef) ) ;

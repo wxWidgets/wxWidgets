@@ -54,14 +54,14 @@ public:
     // vice versa
     wxIcon GetIcon() const
     {
-        wxASSERT_MSG( m_isIcon, _T("no icon in this wxStaticBitmap") );
+        wxASSERT_MSG( m_isIcon, wxT("no icon in this wxStaticBitmap") );
 
         return *(wxIcon *)m_image;
     }
 
     wxBitmap GetBitmap() const
     {
-        wxASSERT_MSG( !m_isIcon, _T("no bitmap in this wxStaticBitmap") );
+        wxASSERT_MSG( !m_isIcon, wxT("no bitmap in this wxStaticBitmap") );
 
         return *(wxBitmap *)m_image;
     }

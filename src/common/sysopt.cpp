@@ -82,17 +82,17 @@ wxString wxSystemOptions::GetOption(const wxString& name)
         // which can be set to affect the behaviour or just this application
         // and then for "wx_name" which can be set to change the option globally
         wxString var(name);
-        var.Replace(_T("."), _T("_"));  // '.'s not allowed in env var names
+        var.Replace(wxT("."), wxT("_"));  // '.'s not allowed in env var names
 
         wxString appname;
         if ( wxTheApp )
             appname = wxTheApp->GetAppName();
 
         if ( !appname.empty() )
-            val = wxGetenv(_T("wx_") + appname + _T('_') + var);
+            val = wxGetenv(wxT("wx_") + appname + wxT('_') + var);
 
         if ( val.empty() )
-            val = wxGetenv(_T("wx_") + var);
+            val = wxGetenv(wxT("wx_") + var);
     }
 
     return val;

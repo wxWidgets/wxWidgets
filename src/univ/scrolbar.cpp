@@ -241,7 +241,7 @@ int wxScrollBar::GetRange() const
 
 void wxScrollBar::SetThumbPosition(int pos)
 {
-    wxCHECK_RET( pos >= 0 && pos <= m_range, _T("thumb position out of range") );
+    wxCHECK_RET( pos >= 0 && pos <= m_range, wxT("thumb position out of range") );
 
     DoSetThumb(pos);
 }
@@ -511,7 +511,7 @@ wxRect wxScrollBar::GetScrollbarRect(wxScrollBar::Element elem,
 
         case wxScrollBar::Element_Max:
         default:
-            wxFAIL_MSG( _T("unknown scrollbar element") );
+            wxFAIL_MSG( wxT("unknown scrollbar element") );
     }
 
     return rect;
@@ -1088,7 +1088,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                 // this is not supposed to happen as the button can't go up
                 // without going down previously and then we'd have
                 // m_winCapture by now
-                wxFAIL_MSG( _T("logic error in mouse capturing code") );
+                wxFAIL_MSG( wxT("logic error in mouse capturing code") );
             }
         }
     }

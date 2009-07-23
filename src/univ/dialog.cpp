@@ -192,7 +192,7 @@ int wxDialog::ShowModal()
 
     m_isShowingModal = true;
 
-    wxASSERT_MSG( !m_windowDisabler, _T("disabling windows twice?") );
+    wxASSERT_MSG( !m_windowDisabler, wxT("disabling windows twice?") );
 
 #if defined(__WXGTK__) || defined(__WXMGL__)
     wxBusyCursorSuspender suspender;
@@ -210,7 +210,7 @@ int wxDialog::ShowModal()
 
 void wxDialog::EndModal(int retCode)
 {
-    wxASSERT_MSG( m_eventLoop, _T("wxDialog is not modal") );
+    wxASSERT_MSG( m_eventLoop, wxT("wxDialog is not modal") );
 
     SetReturnCode(retCode);
 

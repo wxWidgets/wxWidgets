@@ -67,7 +67,7 @@ static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
             }
             else
             {
-                wxFAIL_MSG(_T("3state wxCheckBox in unexpected state!"));
+                wxFAIL_MSG(wxT("3state wxCheckBox in unexpected state!"));
             }
 
             cb->GTKEnableEvents();

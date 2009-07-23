@@ -225,7 +225,7 @@ void wxTopLevelWindowMSW::ReloadAllButtons()
 
     if (!SHCreateMenuBar(&menu_bar))
     {
-        wxFAIL_MSG( _T("SHCreateMenuBar failed") );
+        wxFAIL_MSG( wxT("SHCreateMenuBar failed") );
         return;
     }
 

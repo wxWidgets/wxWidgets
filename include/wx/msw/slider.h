@@ -101,7 +101,7 @@ protected:
     void Init();
 
     // format an integer value as string
-    static wxString Format(int n) { return wxString::Format(_T("%d"), n); }
+    static wxString Format(int n) { return wxString::Format(wxT("%d"), n); }
 
     // get the boundig box for the slider and possible labels
     wxRect GetBoundingBox() const;

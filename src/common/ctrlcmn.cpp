@@ -173,7 +173,7 @@ int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
     // the character following MNEMONIC_PREFIX is the accelerator for this
     // control unless it is MNEMONIC_PREFIX too - this allows to insert
     // literal MNEMONIC_PREFIX chars into the label
-    static const wxChar MNEMONIC_PREFIX = _T('&');
+    static const wxChar MNEMONIC_PREFIX = wxT('&');
 
     if ( labelOnly )
     {
@@ -198,7 +198,7 @@ int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
                 }
                 else
                 {
-                    wxFAIL_MSG(_T("duplicate accel char in control label"));
+                    wxFAIL_MSG(wxT("duplicate accel char in control label"));
                 }
             }
         }

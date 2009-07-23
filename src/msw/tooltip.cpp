@@ -244,7 +244,7 @@ void wxToolTip::SetReshow(long milliseconds)
 
 void wxToolTip::SetMaxWidth(int width)
 {
-    wxASSERT_MSG( width == -1 || width >= 0, _T("invalid width value") );
+    wxASSERT_MSG( width == -1 || width >= 0, wxT("invalid width value") );
 
     ms_maxWidth = width;
 }
@@ -370,7 +370,7 @@ void wxToolTip::Add(WXHWND hWnd)
 
     if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
     {
-        wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
+        wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
 
         return;
     }
@@ -405,7 +405,7 @@ void wxToolTip::Add(WXHWND hWnd)
 
         // find the width of the widest line
         int maxWidth = 0;
-        wxStringTokenizer tokenizer(m_text, _T("\n"));
+        wxStringTokenizer tokenizer(m_text, wxT("\n"));
         while ( tokenizer.HasMoreTokens() )
         {
             const wxString token = tokenizer.GetNextToken();
@@ -452,12 +452,12 @@ void wxToolTip::Add(WXHWND hWnd)
     {
         // replace the '\n's with spaces because otherwise they appear as
         // unprintable characters in the tooltip string
-        m_text.Replace(_T("\n"), _T(" "));
+        m_text.Replace(wxT("\n"), wxT(" "));
         ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
 
         if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
         {
-            wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
+            wxLogDebug(wxT("Failed to create the tooltip '%s'"), m_text.c_str());
         }
     }
 }
@@ -493,7 +493,7 @@ void wxToolTip::SetWindow(wxWindow *win)
             }
 
             // must have it by now!
-            wxASSERT_MSG( hwnd, _T("no hwnd for subcontrol?") );
+            wxASSERT_MSG( hwnd, wxT("no hwnd for subcontrol?") );
 
             Add((WXHWND)hwnd);
         }
@@ -524,7 +524,7 @@ void wxToolTip::SetTip(const wxString& tip)
         // for some reason, changing the tooltip text directly results in
         // repaint of the controls under it, see #10520 -- but this doesn't
         // happen if we reset it first
-        ti.lpszText = const_cast<wxChar *>(_T(""));
+        ti.lpszText = const_cast<wxChar *>(wxT(""));
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
 
         ti.lpszText = const_cast<wxChar *>(m_text.wx_str());

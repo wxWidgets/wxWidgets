@@ -145,7 +145,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     {
         wxLogLastError(wxString::Format
                        (
-                        _T("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
+                        wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
                         classname, style, exstyle
                        ));
 

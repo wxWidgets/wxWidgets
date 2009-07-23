@@ -258,7 +258,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Html->LoadFile(wxFileName(wxT("test.htm")));
     m_Html->AddProcessor(m_Processor);
 
-    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, _T(""),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
 
@@ -374,7 +374,7 @@ wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                                const wxString& url,
                                                wxString *WXUNUSED(redirect)) const
 {
-    GetRelatedFrame()->SetStatusText(url + _T(" lately opened"),1);
+    GetRelatedFrame()->SetStatusText(url + wxT(" lately opened"),1);
     return wxHTML_OPEN;
 }
 
@@ -398,17 +398,17 @@ void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
             const wxString text = data.GetText();
             const size_t maxTextLength = 100;
 
-            wxLogStatus(wxString::Format(_T("Clipboard: '%s%s'"),
+            wxLogStatus(wxString::Format(wxT("Clipboard: '%s%s'"),
                         wxString(text, maxTextLength).c_str(),
-                        (text.length() > maxTextLength) ? _T("...")
-                                                        : _T("")));
+                        (text.length() > maxTextLength) ? wxT("...")
+                                                        : wxT("")));
             wxTheClipboard->Close();
 
             return;
         }
     }
 
-    wxLogStatus(_T("Clipboard: nothing"));
+    wxLogStatus(wxT("Clipboard: nothing"));
 }
 #endif // wxUSE_CLIPBOARD
 

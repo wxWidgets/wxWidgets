@@ -266,7 +266,7 @@ wxAppTraits *wxAppConsoleBase::GetTraits()
     {
         m_traits = CreateTraits();
 
-        wxASSERT_MSG( m_traits, _T("wxApp::CreateTraits() failed?") );
+        wxASSERT_MSG( m_traits, wxT("wxApp::CreateTraits() failed?") );
     }
 
     return m_traits;
@@ -706,7 +706,7 @@ bool wxAppConsoleBase::CheckBuildOptions(const char *optionsSignature,
         wxString progName = wxString::FromAscii(componentName);
         wxString msg;
 
-        msg.Printf(_T("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
+        msg.Printf(wxT("Mismatch between the program and library build versions detected.\nThe library used %s,\nand %s used %s."),
                    lib.c_str(), progName.c_str(), prog.c_str());
 
         wxLogFatalError(msg.c_str());
@@ -850,7 +850,7 @@ bool wxAppTraitsBase::ShowAssertDialog(const wxString& msgOriginal)
 
     const wxString stackTrace = GetAssertStackTrace();
     if ( !stackTrace.empty() )
-        msg << _T("\n\nCall stack:\n") << stackTrace;
+        msg << wxT("\n\nCall stack:\n") << stackTrace;
 #endif // wxUSE_STACKWALKER
 
     return DoShowAssertDialog(msg);
@@ -879,29 +879,29 @@ wxString wxAppTraitsBase::GetAssertStackTrace()
         {
             m_stackTrace << wxString::Format
                             (
-                              _T("[%02d] "),
+                              wxT("[%02d] "),
                               wx_truncate_cast(int, frame.GetLevel())
                             );
 
             wxString name = frame.GetName();
             if ( !name.empty() )
             {
-                m_stackTrace << wxString::Format(_T("%-40s"), name.c_str());
+                m_stackTrace << wxString::Format(wxT("%-40s"), name.c_str());
             }
             else
             {
-                m_stackTrace << wxString::Format(_T("%p"), frame.GetAddress());
+                m_stackTrace << wxString::Format(wxT("%p"), frame.GetAddress());
             }
 
             if ( frame.HasSourceLocation() )
             {
-                m_stackTrace << _T('\t')
+                m_stackTrace << wxT('\t')
                              << frame.GetFileName()
-                             << _T(':')
+                             << wxT(':')
                              << frame.GetLine();
             }
 
-            m_stackTrace << _T('\n');
+            m_stackTrace << wxT('\n');
         }
 
     private:
@@ -1133,7 +1133,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
-    switch ( ::MessageBox(NULL, msgDlg.wx_str(), _T("wxWidgets Debug Alert"),
+    switch ( ::MessageBox(NULL, msgDlg.wx_str(), wxT("wxWidgets Debug Alert"),
                           MB_YESNOCANCEL | MB_ICONSTOP ) )
     {
         case IDYES:
@@ -1180,16 +1180,16 @@ void ShowAssertDialog(const wxString& file,
 
     // add the function name, if any
     if ( !func.empty() )
-        msg << _T(" in ") << func << _T("()");
+        msg << wxT(" in ") << func << wxT("()");
 
     // and the message itself
     if ( !msgUser.empty() )
     {
-        msg << _T(": ") << msgUser;
+        msg << wxT(": ") << msgUser;
     }
     else // no message given
     {
-        msg << _T('.');
+        msg << wxT('.');
     }
 
 #if wxUSE_THREADS
@@ -1216,7 +1216,7 @@ void ShowAssertDialog(const wxString& file,
     if ( !s_bNoAsserts )
     {
         // send it to the normal log destination
-        wxLogDebug(_T("%s"), msg.c_str());
+        wxLogDebug(wxT("%s"), msg.c_str());
 
         if ( traits )
         {

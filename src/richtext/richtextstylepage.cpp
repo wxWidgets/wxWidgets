@@ -103,7 +103,7 @@ void wxRichTextStylePage::CreateControls()
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
-    m_styleName = new wxTextCtrl( itemPanel1, ID_RICHTEXTSTYLEPAGE_STYLE_NAME, _T(""), wxDefaultPosition, wxSize(300, -1), wxTE_READONLY );
+    m_styleName = new wxTextCtrl( itemPanel1, ID_RICHTEXTSTYLEPAGE_STYLE_NAME, wxT(""), wxDefaultPosition, wxSize(300, -1), wxTE_READONLY );
     m_styleName->SetHelpText(_("The style name."));
     if (wxRichTextStylePage::ShowToolTips())
         m_styleName->SetToolTip(_("The style name."));
@@ -113,7 +113,7 @@ void wxRichTextStylePage::CreateControls()
     itemBoxSizer5->Add(itemStaticText8, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_basedOnStrings;
-    m_basedOn = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_BASED_ON, _T(""), wxDefaultPosition, wxDefaultSize, m_basedOnStrings, wxCB_DROPDOWN );
+    m_basedOn = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_BASED_ON, wxT(""), wxDefaultPosition, wxDefaultSize, m_basedOnStrings, wxCB_DROPDOWN );
     m_basedOn->SetHelpText(_("The style on which this style is based."));
     if (wxRichTextStylePage::ShowToolTips())
         m_basedOn->SetToolTip(_("The style on which this style is based."));
@@ -123,7 +123,7 @@ void wxRichTextStylePage::CreateControls()
     itemBoxSizer5->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxArrayString m_nextStyleStrings;
-    m_nextStyle = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, _T(""), wxDefaultPosition, wxDefaultSize, m_nextStyleStrings, wxCB_DROPDOWN );
+    m_nextStyle = new wxComboBox( itemPanel1, ID_RICHTEXTSTYLEPAGE_NEXT_STYLE, wxT(""), wxDefaultPosition, wxDefaultSize, m_nextStyleStrings, wxCB_DROPDOWN );
     m_nextStyle->SetHelpText(_("The default style for the next paragraph."));
     if (wxRichTextStylePage::ShowToolTips())
         m_nextStyle->SetToolTip(_("The default style for the next paragraph."));

@@ -33,7 +33,7 @@
 int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
+    wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
 
     wxEventLoopActivator activate(this);
 
@@ -46,7 +46,7 @@ int wxGUIEventLoop::Run()
 
 void wxGUIEventLoop::Exit(int rc)
 {
-    wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
+    wxCHECK_RET( IsRunning(), wxT("can't call Exit() if not running") );
 
     m_exitcode = rc;
 
@@ -86,7 +86,7 @@ bool wxGUIEventLoop::Dispatch()
 {
     // This check is required by wxGTK but probably not really for wxCocoa
     // Keep it here to encourage developers to write cross-platform code
-    wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
+    wxCHECK_MSG( IsRunning(), false, wxT("can't call Dispatch() if not running") );
     NSApplication *cocoaApp = [NSApplication sharedApplication];
     // Block to retrieve an event then send it
     if(NSEvent *event = [cocoaApp

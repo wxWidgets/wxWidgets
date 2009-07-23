@@ -256,7 +256,7 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 {
     wxASSERT_MSG( !(flags & wxDL_NOW) || !(flags & wxDL_LAZY),
-                  _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
+                  wxT("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
 
 #ifdef USE_POSIX_DL_FUNCS
     // we need to use either RTLD_NOW or RTLD_LAZY because if we call dlopen()
@@ -354,22 +354,22 @@ public:
     {
         wxDynamicLibraryDetails *details = new wxDynamicLibraryDetails;
         details->m_path = path;
-        details->m_name = path.AfterLast(_T('/'));
+        details->m_name = path.AfterLast(wxT('/'));
         details->m_address = start;
         details->m_length = (char *)end - (char *)start;
 
         // try to extract the library version from its name
-        const size_t posExt = path.rfind(_T(".so"));
+        const size_t posExt = path.rfind(wxT(".so"));
         if ( posExt != wxString::npos )
         {
-            if ( path.c_str()[posExt + 3] == _T('.') )
+            if ( path.c_str()[posExt + 3] == wxT('.') )
             {
                 // assume "libfoo.so.x.y.z" case
                 details->m_version.assign(path, posExt + 4, wxString::npos);
             }
             else
             {
-                size_t posDash = path.find_last_of(_T('-'), posExt);
+                size_t posDash = path.find_last_of(wxT('-'), posExt);
                 if ( posDash != wxString::npos )
                 {
                     // assume "libbar-x.y.z.so" case
@@ -390,7 +390,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 
 #ifdef __LINUX__
     // examine /proc/self/maps to find out what is loaded in our address space
-    wxFFile file(_T("/proc/self/maps"));
+    wxFFile file(wxT("/proc/self/maps"));
     if ( file.IsOpened() )
     {
         // details of the module currently being parsed
@@ -420,13 +420,13 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
                 default:
                     // chop '\n'
                     buf[strlen(buf) - 1] = '\0';
-                    wxLogDebug(_T("Failed to parse line \"%s\" in /proc/self/maps."),
+                    wxLogDebug(wxT("Failed to parse line \"%s\" in /proc/self/maps."),
                                buf);
                     continue;
             }
 
             wxASSERT_MSG( start >= endCur,
-                          _T("overlapping regions in /proc/self/maps?") );
+                          wxT("overlapping regions in /proc/self/maps?") );
 
             wxString pathNew = wxString::FromAscii(path);
             if ( pathCur.empty() )

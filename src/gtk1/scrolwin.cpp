@@ -171,7 +171,7 @@ void wxScrollHelper::DoScrollOneDir(int orient,
 
 void wxScrollHelper::DoScroll( int x_pos, int y_pos )
 {
-    wxCHECK_RET( m_targetWindow != 0, _T("No target window") );
+    wxCHECK_RET( m_targetWindow != 0, wxT("No target window") );
 
     DoScrollOneDir(wxHORIZONTAL, m_win->m_hAdjust, x_pos, m_xScrollPixelsPerLine,
                 &m_xScrollPosition);

@@ -421,7 +421,7 @@ enum wxFileKind
         #define wxHAS_LARGE_FFILES
     #endif
 #else
-    #define wxFileOffsetFmtSpec _T("")
+    #define wxFileOffsetFmtSpec wxT("")
 #endif
     #define   wxClose      close
     #define   wxRead       ::read
@@ -459,7 +459,7 @@ enum wxFileKind
             #define wxHAS_LARGE_FFILES
         #endif
     #else
-        #define wxFileOffsetFmtSpec _T("")
+        #define wxFileOffsetFmtSpec wxT("")
     #endif
     // functions
     #define   wxClose      close

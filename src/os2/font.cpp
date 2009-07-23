@@ -648,7 +648,7 @@ void wxNativeFontInfo::SetStyle(
     switch (eStyle)
     {
         default:
-            wxFAIL_MSG( _T("unknown font style") );
+            wxFAIL_MSG( wxT("unknown font style") );
             // fall through
 
         case wxFONTSTYLE_NORMAL:
@@ -668,7 +668,7 @@ void wxNativeFontInfo::SetWeight(
     switch (eWeight)
     {
         default:
-            wxFAIL_MSG( _T("unknown font weight") );
+            wxFAIL_MSG( wxT("unknown font weight") );
             // fall through
 
         case wxFONTWEIGHT_NORMAL:
@@ -779,14 +779,14 @@ bool wxNativeFontInfo::FromString( const wxString& rsStr )
 {
     long                            lVal;
 
-    wxStringTokenizer               vTokenizer(rsStr, _T(";"));
+    wxStringTokenizer               vTokenizer(rsStr, wxT(";"));
 
     //
     // First the version
     //
     wxString                        sToken = vTokenizer.GetNextToken();
 
-    if (sToken != _T('0'))
+    if (sToken != wxT('0'))
         return false;
 
     sToken = vTokenizer.GetNextToken();
@@ -845,7 +845,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString sStr;
 
-    sStr.Printf(_T("%d;%ld;%ld;%ld;%d;%d;%d;%d;%d;%ld;%d;%s"),
+    sStr.Printf(wxT("%d;%ld;%ld;%ld;%d;%d;%d;%d;%d;%ld;%d;%s"),
                 0, // version, in case we want to change the format later
                 fm.lEmHeight,
                 fa.lAveCharWidth,

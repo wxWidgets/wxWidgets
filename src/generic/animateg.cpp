@@ -186,7 +186,7 @@ void wxAnimation::AddHandler( wxAnimationDecoder *handler )
         // a good reason to add and remove duplicate handlers (and they
         // may) we should probably refcount the duplicates.
 
-        wxLogDebug( _T("Adding duplicate animation handler for '%d' type"),
+        wxLogDebug( wxT("Adding duplicate animation handler for '%d' type"),
                     handler->GetType() );
         delete handler;
     }
@@ -202,7 +202,7 @@ void wxAnimation::InsertHandler( wxAnimationDecoder *handler )
     else
     {
         // see AddHandler for additional comments.
-        wxLogDebug( _T("Inserting duplicate animation handler for '%d' type"),
+        wxLogDebug( wxT("Inserting duplicate animation handler for '%d' type"),
                     handler->GetType() );
         delete handler;
     }

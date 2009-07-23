@@ -202,7 +202,7 @@ bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos),
         m_menuBar->SetToolBar(this);
 
     HWND hwndParent = GetHwndOf(GetParent());
-    wxCHECK_MSG( hwndParent, false, _T("should have valid parent HWND") );
+    wxCHECK_MSG( hwndParent, false, wxT("should have valid parent HWND") );
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
     // create the menubar.
@@ -214,7 +214,7 @@ bool wxToolMenuBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos),
 
     if ( !SHCreateMenuBar(&mbi) )
     {
-        wxFAIL_MSG( _T("SHCreateMenuBar failed") );
+        wxFAIL_MSG( wxT("SHCreateMenuBar failed") );
         return false;
     }
 
@@ -308,7 +308,7 @@ bool wxToolMenuBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     RECT r;
     if ( !::SendMessage(GetHwnd(), TB_GETITEMRECT, pos, (LPARAM)&r) )
     {
-        wxLogLastError(_T("TB_GETITEMRECT"));
+        wxLogLastError(wxT("TB_GETITEMRECT"));
     }
 
     int width = r.right - r.left;
@@ -466,7 +466,7 @@ bool wxToolMenuBar::Realize()
                         break;
 
                     default:
-                        wxFAIL_MSG( _T("unexpected toolbar button kind") );
+                        wxFAIL_MSG( wxT("unexpected toolbar button kind") );
                         // fall through
 
                     case wxITEM_NORMAL:
@@ -644,7 +644,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(to
 
 void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(toggle))
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( wxT("not implemented") );
 }
 
 #endif

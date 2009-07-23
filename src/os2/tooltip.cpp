@@ -72,7 +72,7 @@ void wxToolTip::Create(
                               );
     if (!m_hWnd)
     {
-        wxLogError(_T("Unable to create tooltip window"));
+        wxLogError(wxT("Unable to create tooltip window"));
     }
 
     wxColour                        vColor( wxT("YELLOW") );

@@ -662,7 +662,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 
     if (m_grabbed)
     {
-        wxFAIL_MSG(_T("Window still grabbed"));
+        wxFAIL_MSG(wxT("Window still grabbed"));
         RemoveGrab();
     }
 
@@ -1230,7 +1230,7 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
 bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 {
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
-                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+                 wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
     if ( GTK_WIDGET_REALIZED(m_widget) )
     {

@@ -217,7 +217,7 @@ void wxMenu::EndRadioGroup()
 
 wxMenuItem* wxMenu::DoAppend(wxMenuItem *item)
 {
-    wxCHECK_MSG( item, NULL, _T("NULL item in wxMenu::DoAppend") );
+    wxCHECK_MSG( item, NULL, wxT("NULL item in wxMenu::DoAppend") );
 
     if(!wxMenuBase::DoAppend(item) || !DoInsertOrAppend(item))
     {

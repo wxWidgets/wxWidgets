@@ -195,7 +195,7 @@ wxSizer *wxDialogBase::CreateTextSizer(const wxString& message)
     // the static messages created by CreateTextSizer() (used by wxMessageBox,
     // for example), we don't want this special meaning, so we need to quote it
     wxString text(message);
-    text.Replace(_T("&"), _T("&&"));
+    text.Replace(wxT("&"), wxT("&&"));
 
     wxTextSizerWrapper wrapper(this);
 

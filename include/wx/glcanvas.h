@@ -52,7 +52,7 @@ enum
     WX_GL_SAMPLES          // 4 for 2x2 antialising supersampling on most graphics cards
 };
 
-#define wxGLCanvasName _T("GLCanvas")
+#define wxGLCanvasName wxT("GLCanvas")
 
 // ----------------------------------------------------------------------------
 // wxGLContextBase: OpenGL rendering context

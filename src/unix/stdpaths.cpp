@@ -74,17 +74,17 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
 wxString wxStandardPaths::GetConfigDir() const
 {
-   return _T("/sys$manager");
+   return wxT("/sys$manager");
 }
 
 wxString wxStandardPaths::GetDataDir() const
 {
-   return AppendAppInfo(GetInstallPrefix() + _T("/sys$share"));
+   return AppendAppInfo(GetInstallPrefix() + wxT("/sys$share"));
 }
 
 wxString wxStandardPaths::GetLocalDataDir() const
 {
-   return AppendAppInfo(_T("/sys$manager"));
+   return AppendAppInfo(wxT("/sys$manager"));
 }
 
 wxString wxStandardPaths::GetUserDataDir() const
@@ -186,27 +186,27 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
 wxString wxStandardPaths::GetConfigDir() const
 {
-   return _T("/etc");
+   return wxT("/etc");
 }
 
 wxString wxStandardPaths::GetDataDir() const
 {
-   return AppendAppInfo(GetInstallPrefix() + _T("/share"));
+   return AppendAppInfo(GetInstallPrefix() + wxT("/share"));
 }
 
 wxString wxStandardPaths::GetLocalDataDir() const
 {
-   return AppendAppInfo(_T("/etc"));
+   return AppendAppInfo(wxT("/etc"));
 }
 
 wxString wxStandardPaths::GetUserDataDir() const
 {
-   return AppendAppInfo(wxFileName::GetHomeDir() + _T("/."));
+   return AppendAppInfo(wxFileName::GetHomeDir() + wxT("/."));
 }
 
 wxString wxStandardPaths::GetPluginsDir() const
 {
-    return AppendAppInfo(GetInstallPrefix() + _T("/lib"));
+    return AppendAppInfo(GetInstallPrefix() + wxT("/lib"));
 }
 
 wxString
@@ -216,7 +216,7 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxString& lang,
     if ( category != ResourceCat_Messages )
         return wxStandardPathsBase::GetLocalizedResourcesDir(lang, category);
 
-    return GetInstallPrefix() + _T("/share/locale/") + lang + _T("/LC_MESSAGES");
+    return GetInstallPrefix() + wxT("/share/locale/") + lang + wxT("/LC_MESSAGES");
 }
 
 wxString wxStandardPaths::GetDocumentsDir() const

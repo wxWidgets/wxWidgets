@@ -113,11 +113,11 @@ bool wxUxThemeEngine::Initialize()
     // we're prepared to handle the errors
     wxLogNull noLog;
 
-    if ( !m_dllUxTheme.Load(_T("uxtheme.dll")) )
+    if ( !m_dllUxTheme.Load(wxT("uxtheme.dll")) )
         return false;
 
 #define RESOLVE_UXTHEME_FUNCTION(type, funcname)                              \
-    funcname = (type)m_dllUxTheme.GetSymbol(_T(#funcname));                   \
+    funcname = (type)m_dllUxTheme.GetSymbol(wxT(#funcname));                   \
     if ( !funcname )                                                          \
         return false
 

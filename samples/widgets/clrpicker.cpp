@@ -129,7 +129,7 @@ END_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, _T("ColourPicker"),
+IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, wxT("ColourPicker"),
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 ColourPickerWidgetsPage::ColourPickerWidgetsPage(WidgetsBookCtrl *book,
@@ -143,12 +143,12 @@ void ColourPickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, _T("&ColourPicker style"));
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, _T("With textctrl"), false);
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, _T("With label"), false);
+    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&ColourPicker style"));
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"), false);
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"), false);
     boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, _T("&Reset")),
+    boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state

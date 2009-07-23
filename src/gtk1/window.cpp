@@ -245,7 +245,7 @@ extern bool g_mainThreadLocked;
 #endif
 
 // the trace mask used for the focus debugging messages
-#define TRACE_FOCUS _T("focus")
+#define TRACE_FOCUS wxT("focus")
 
 //-----------------------------------------------------------------------------
 // missing gdk functions
@@ -620,7 +620,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 // set WXTRACE to this to see the key event codes on the console
-#define TRACE_KEYS  _T("keyevent")
+#define TRACE_KEYS  wxT("keyevent")
 
 // translates an X key symbol to WXK_XXX value
 //
@@ -954,9 +954,9 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     KeySym keysym = gdk_event->keyval;
 
-    wxLogTrace(TRACE_KEYS, _T("Key %s event: keysym = %ld"),
-               event.GetEventType() == wxEVT_KEY_UP ? _T("release")
-                                                    : _T("press"),
+    wxLogTrace(TRACE_KEYS, wxT("Key %s event: keysym = %ld"),
+               event.GetEventType() == wxEVT_KEY_UP ? wxT("release")
+                                                    : wxT("press"),
                keysym);
 
     long key_code = wxTranslateKeySymToWXKey(keysym, false /* !isChar */);
@@ -985,7 +985,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
             Display *dpy = (Display *)wxGetDisplay();
             KeyCode keycode = XKeysymToKeycode(dpy, keysym);
 
-            wxLogTrace(TRACE_KEYS, _T("\t-> keycode %d"), keycode);
+            wxLogTrace(TRACE_KEYS, wxT("\t-> keycode %d"), keycode);
 
             KeySym keysymNormalized = XKeycodeToKeysym(dpy, keycode, 0);
 
@@ -1024,7 +1024,7 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         }
     }
 
-    wxLogTrace(TRACE_KEYS, _T("\t-> wxKeyCode %ld"), key_code);
+    wxLogTrace(TRACE_KEYS, wxT("\t-> wxKeyCode %ld"), key_code);
 
     // sending unknown key events doesn't really make sense
     if ( !key_code )
@@ -1176,7 +1176,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
         if ( key_code )
         {
-            wxLogTrace(TRACE_KEYS, _T("Char event: %ld"), key_code);
+            wxLogTrace(TRACE_KEYS, wxT("Char event: %ld"), key_code);
 
             event.m_keyCode = key_code;
 
@@ -1820,7 +1820,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     g_focusWindow = win;
 
     wxLogTrace(TRACE_FOCUS,
-               _T("%s: focus in"), win->GetName().c_str());
+               wxT("%s: focus in"), win->GetName().c_str());
 
 #ifdef HAVE_XIM
     if (win->m_ic)
@@ -1868,7 +1868,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget),
         wxapp_install_idle_handler();
 
     wxLogTrace( TRACE_FOCUS,
-                _T("%s: focus out"), win->GetName().c_str() );
+                wxT("%s: focus out"), win->GetName().c_str() );
 
 
     wxWindowGTK *winFocus = wxFindFocusedChild(win);
@@ -3292,7 +3292,7 @@ void wxWindowGTK::SetFocus()
                 // it should be focused and will do it later, during the idle
                 // time, as soon as we can
                 wxLogTrace(TRACE_FOCUS,
-                           _T("Delaying setting focus to %s(%s)"),
+                           wxT("Delaying setting focus to %s(%s)"),
                            GetClassInfo()->GetClassName(), GetLabel().c_str());
 
                 g_delayedFocus = this;
@@ -3300,7 +3300,7 @@ void wxWindowGTK::SetFocus()
             else
             {
                 wxLogTrace(TRACE_FOCUS,
-                           _T("Setting focus to %s(%s)"),
+                           wxT("Setting focus to %s(%s)"),
                            GetClassInfo()->GetClassName(), GetLabel().c_str());
 
                 gtk_widget_grab_focus (m_widget);
@@ -3314,7 +3314,7 @@ void wxWindowGTK::SetFocus()
         else
         {
            wxLogTrace(TRACE_FOCUS,
-                      _T("Can't set focus to %s(%s)"),
+                      wxT("Can't set focus to %s(%s)"),
                       GetClassInfo()->GetClassName(), GetLabel().c_str());
         }
     }
@@ -3913,7 +3913,7 @@ void wxWindowGTK::DoCaptureMouse()
     else
         window = GetConnectWidget()->window;
 
-    wxCHECK_RET( window, _T("CaptureMouse() failed") );
+    wxCHECK_RET( window, wxT("CaptureMouse() failed") );
 
     const wxCursor* cursor = &m_cursor;
     if (!cursor->Ok())

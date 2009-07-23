@@ -162,16 +162,16 @@ void HashesTestCase::wxHashTableTest()
         for ( i = 0; i < COUNT/2; ++i )
             CPPUNIT_ASSERT( hash.Get(i) == NULL);
 
-        hash2.Put(_T("foo"), &o + 1);
-        hash2.Put(_T("bar"), &o + 2);
-        hash2.Put(_T("baz"), &o + 3);
+        hash2.Put(wxT("foo"), &o + 1);
+        hash2.Put(wxT("bar"), &o + 2);
+        hash2.Put(wxT("baz"), &o + 3);
 
-        CPPUNIT_ASSERT(hash2.Get(_T("moo")) == NULL);
-        CPPUNIT_ASSERT(hash2.Get(_T("bar")) == &o + 2);
+        CPPUNIT_ASSERT(hash2.Get(wxT("moo")) == NULL);
+        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == &o + 2);
 
-        hash2.Put(_T("bar"), &o + 0);
+        hash2.Put(wxT("bar"), &o + 0);
 
-        CPPUNIT_ASSERT(hash2.Get(_T("bar")) == &o + 2);
+        CPPUNIT_ASSERT(hash2.Get(wxT("bar")) == &o + 2);
     }
 
     // and now some corner-case testing; 3 and 13 hash to the same bucket
@@ -523,16 +523,16 @@ void HashesTestCase::wxHashSetTest()
 {
     wxStringHashSet set1;
 
-    set1.insert( _T("abc") );
+    set1.insert( wxT("abc") );
 
     CPPUNIT_ASSERT( set1.size() == 1 );
 
-    set1.insert( _T("bbc") );
-    set1.insert( _T("cbc") );
+    set1.insert( wxT("bbc") );
+    set1.insert( wxT("cbc") );
 
     CPPUNIT_ASSERT( set1.size() == 3 );
 
-    set1.insert( _T("abc") );
+    set1.insert( wxT("abc") );
 
     CPPUNIT_ASSERT( set1.size() == 3 );
 
@@ -540,11 +540,11 @@ void HashesTestCase::wxHashSetTest()
     int dummy;
     MyStruct tmp;
 
-    tmp.ptr = &dummy; tmp.str = _T("ABC");
+    tmp.ptr = &dummy; tmp.str = wxT("ABC");
     set2.insert( tmp );
     tmp.ptr = &dummy + 1;
     set2.insert( tmp );
-    tmp.ptr = &dummy; tmp.str = _T("CDE");
+    tmp.ptr = &dummy; tmp.str = wxT("CDE");
     set2.insert( tmp );
 
     CPPUNIT_ASSERT( set2.size() == 2 );
@@ -553,5 +553,5 @@ void HashesTestCase::wxHashSetTest()
 
     CPPUNIT_ASSERT( it != set2.end() );
     CPPUNIT_ASSERT( it->ptr == &dummy );
-    CPPUNIT_ASSERT( it->str == _T("ABC") );
+    CPPUNIT_ASSERT( it->str == wxT("ABC") );
 }

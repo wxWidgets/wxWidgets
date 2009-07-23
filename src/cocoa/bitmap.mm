@@ -520,7 +520,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 
     if([bitmapRep bitsPerPixel]!=bpp)
     {
-        wxFAIL_MSG( _T("incorrect bitmap type in wxBitmap::GetRawData()") );
+        wxFAIL_MSG( wxT("incorrect bitmap type in wxBitmap::GetRawData()") );
         return NULL;
     }
     data.m_width = [bitmapRep pixelsWide];

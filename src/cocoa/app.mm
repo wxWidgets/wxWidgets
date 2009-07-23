@@ -116,7 +116,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // application (otherwise applications would need to handle it)
     if ( argc > 1 )
     {
-        static const wxChar *ARG_PSN = _T("-psn_");
+        static const wxChar *ARG_PSN = wxT("-psn_");
         if ( wxStrncmp(argv[1], ARG_PSN, wxStrlen(ARG_PSN)) == 0 )
         {
             // remove this argument

@@ -235,7 +235,7 @@ void wxClassInfo::Register()
     else
     {
         // guard againt reentrance once the global has been created
-        wxASSERT_MSG(++entry == 1, _T("wxClassInfo::Register() reentrance"));
+        wxASSERT_MSG(++entry == 1, wxT("wxClassInfo::Register() reentrance"));
         classTable = sm_classTable;
     }
 
@@ -247,7 +247,7 @@ void wxClassInfo::Register()
     wxASSERT_MSG( classTable->Get(m_className) == NULL,
         wxString::Format
         (
-            _T("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
+            wxT("Class \"%s\" already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() multiple times or linked some object file twice)?"),
             m_className
         )
     );
@@ -411,13 +411,13 @@ void wxObject::AllocExclusive()
     //else: ref count is 1, we are exclusive owners of m_refData anyhow
 
     wxASSERT_MSG( m_refData && m_refData->GetRefCount() == 1,
-                  _T("wxObject::AllocExclusive() failed.") );
+                  wxT("wxObject::AllocExclusive() failed.") );
 }
 
 wxObjectRefData *wxObject::CreateRefData() const
 {
     // if you use AllocExclusive() you must override this method
-    wxFAIL_MSG( _T("CreateRefData() must be overridden if called!") );
+    wxFAIL_MSG( wxT("CreateRefData() must be overridden if called!") );
 
     return NULL;
 }
@@ -426,7 +426,7 @@ wxObjectRefData *
 wxObject::CloneRefData(const wxObjectRefData * WXUNUSED(data)) const
 {
     // if you use AllocExclusive() you must override this method
-    wxFAIL_MSG( _T("CloneRefData() must be overridden if called!") );
+    wxFAIL_MSG( wxT("CloneRefData() must be overridden if called!") );
 
     return NULL;
 }

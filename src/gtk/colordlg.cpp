@@ -77,7 +77,7 @@ int wxColourDialog::ShowModal()
     switch (result)
     {
         default:
-            wxFAIL_MSG(_T("unexpected GtkColorSelectionDialog return code"));
+            wxFAIL_MSG(wxT("unexpected GtkColorSelectionDialog return code"));
             // fall through
 
         case GTK_RESPONSE_CANCEL:

@@ -28,7 +28,7 @@ typedef wxString wxControlAction;
 // the list of actions which apply to all controls (other actions are defined
 // in the controls headers)
 
-#define wxACTION_NONE    _T("")           // no action to perform
+#define wxACTION_NONE    wxT("")           // no action to perform
 
 // ----------------------------------------------------------------------------
 // wxInputConsumer: mix-in class for handling wxControlActions (used by

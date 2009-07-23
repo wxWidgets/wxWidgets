@@ -103,7 +103,7 @@ wxChmTools::wxChmTools(const wxFileName &archive)
 {
     m_chmFileName = archive.GetFullPath();
 
-    wxASSERT_MSG( !m_chmFileName.empty(), _T("empty archive name") );
+    wxASSERT_MSG( !m_chmFileName.empty(), wxT("empty archive name") );
 
     m_archive = NULL;
     m_decompressor = NULL;
@@ -435,7 +435,7 @@ wxChmInputStream::wxChmInputStream(const wxString& archive,
         // if the file could not be located, but was *.hhp, than we create
         // the content of the hhp-file on the fly and store it for reading
         // by the application
-        if ( m_fileName.Find(_T(".hhp")) != wxNOT_FOUND && m_simulateHHP )
+        if ( m_fileName.Find(wxT(".hhp")) != wxNOT_FOUND && m_simulateHHP )
         {
             // now we open an hhp-file
             CreateHHPStream();
@@ -572,7 +572,7 @@ wxChmInputStream::CreateHHPStream()
 
     // Try to open the #SYSTEM-File and create the HHP File out of it
     // see http://bonedaddy.net/pabs3/chmspec/0.1.2/Internal.html#SYSTEM
-    if ( ! m_chm->Contains(_T("/#SYSTEM")) )
+    if ( ! m_chm->Contains(wxT("/#SYSTEM")) )
     {
 #ifdef DEBUG
         wxLogDebug("Archive doesn't contain #SYSTEM file");
@@ -581,10 +581,10 @@ wxChmInputStream::CreateHHPStream()
     }
     else
     {
-        file = wxFileName(_T("/#SYSTEM"));
+        file = wxFileName(wxT("/#SYSTEM"));
     }
 
-    if ( CreateFileStream(_T("/#SYSTEM")) )
+    if ( CreateFileStream(wxT("/#SYSTEM")) )
     {
         // New stream for writing a memory area to simulate the
         // .hhp-file
@@ -650,7 +650,7 @@ wxChmInputStream::CreateHHPStream()
                         wxUint32 dummy = *((wxUint32 *)(structptr+0)) ;
                         wxUint32 lcid = wxUINT32_SWAP_ON_BE( dummy ) ;
                         wxString msg ;
-                        msg.Printf(_T("Language=0x%X\r\n"),lcid) ;
+                        msg.Printf(wxT("Language=0x%X\r\n"),lcid) ;
                         out->Write(msg.c_str() , msg.length() ) ;
                     }
                     break ;
@@ -676,13 +676,13 @@ wxChmInputStream::CreateHHPStream()
             free (m_content);
 
         // Now add entries which are missing
-        if ( !hhc && m_chm->Contains(_T("*.hhc")) )
+        if ( !hhc && m_chm->Contains(wxT("*.hhc")) )
         {
             tmp = "Contents File=*.hhc\r\n";
             out->Write((const void *) tmp, strlen(tmp));
         }
 
-        if ( !hhk && m_chm->Contains(_T("*.hhk")) )
+        if ( !hhk && m_chm->Contains(wxT("*.hhk")) )
         {
             tmp = "Index File=*.hhk\r\n";
             out->Write((const void *) tmp, strlen(tmp));
@@ -710,7 +710,7 @@ wxChmInputStream::CreateHHPStream()
 bool wxChmInputStream::CreateFileStream(const wxString& pattern)
 {
     wxFileInputStream * fin;
-    wxString tmpfile = wxFileName::CreateTempFileName(_T("chmstrm"));
+    wxString tmpfile = wxFileName::CreateTempFileName(wxT("chmstrm"));
 
     if ( tmpfile.empty() )
     {
@@ -795,8 +795,8 @@ wxChmFSHandler::~wxChmFSHandler()
 bool wxChmFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == _T("chm")) &&
-           (GetProtocol(GetLeftLocation(location)) == _T("file"));
+    return (p == wxT("chm")) &&
+           (GetProtocol(GetLeftLocation(location)) == wxT("file"));
 }
 
 wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
@@ -809,7 +809,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 
     int index;
 
-    if ( GetProtocol(left) != _T("file") )
+    if ( GetProtocol(left) != wxT("file") )
     {
         wxLogError(_("CHM handler currently supports only local files!"));
         return NULL;
@@ -817,21 +817,21 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
 
     // Work around javascript
     wxString tmp = wxString(right);
-    if ( tmp.MakeLower().Contains(_T("javascipt")) && tmp.Contains(_T("\'")) )
+    if ( tmp.MakeLower().Contains(wxT("javascipt")) && tmp.Contains(wxT("\'")) )
     {
-        right = right.AfterFirst(_T('\'')).BeforeLast(_T('\''));
+        right = right.AfterFirst(wxT('\'')).BeforeLast(wxT('\''));
     }
 
     // now work on the right location
-    if (right.Contains(_T("..")))
+    if (right.Contains(wxT("..")))
     {
         wxFileName abs(right);
-        abs.MakeAbsolute(_T("/"));
+        abs.MakeAbsolute(wxT("/"));
         right = abs.GetFullPath();
     }
 
     // a workaround for absolute links to root
-    if ( (index=right.Index(_T("//"))) != wxNOT_FOUND )
+    if ( (index=right.Index(wxT("//"))) != wxNOT_FOUND )
     {
         right=wxString(right.Mid(index+1));
         wxLogWarning(_("Link contained '//', converted to absolute link."));
@@ -845,7 +845,7 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     if ( s )
     {
         return new wxFSFile(s,
-                            left + _T("#chm:") + right,
+                            left + wxT("#chm:") + right,
                             wxEmptyString,
                             GetAnchor(location),
                             wxDateTime(wxFileModificationTime(left)));
@@ -866,24 +866,24 @@ wxString wxChmFSHandler::FindFirst(const wxString& spec, int flags)
     wxString left = GetLeftLocation(spec);
     wxString nativename = wxFileSystem::URLToFileName(left).GetFullPath();
 
-    if ( GetProtocol(left) != _T("file") )
+    if ( GetProtocol(left) != wxT("file") )
     {
         wxLogError(_("CHM handler currently supports only local files!"));
         return wxEmptyString;
     }
 
     m_chm = new wxChmTools(wxFileName(nativename));
-    m_pattern = right.AfterLast(_T('/'));
+    m_pattern = right.AfterLast(wxT('/'));
 
     wxString m_found = m_chm->Find(m_pattern);
 
     // now fake around hhp-files which are not existing in projects...
     if (m_found.empty() &&
-        m_pattern.Contains(_T(".hhp")) &&
-        !m_pattern.Contains(_T(".hhp.cached")))
+        m_pattern.Contains(wxT(".hhp")) &&
+        !m_pattern.Contains(wxT(".hhp.cached")))
     {
-        m_found.Printf(_T("%s#chm:%s.hhp"),
-                       left.c_str(), m_pattern.BeforeLast(_T('.')).c_str());
+        m_found.Printf(wxT("%s#chm:%s.hhp"),
+                       left.c_str(), m_pattern.BeforeLast(wxT('.')).c_str());
     }
 
     return m_found;

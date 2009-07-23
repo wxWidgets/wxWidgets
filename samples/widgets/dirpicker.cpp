@@ -130,7 +130,7 @@ END_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(DirPickerWidgetsPage, _T("DirPicker"),
+IMPLEMENT_WIDGETS_PAGE(DirPickerWidgetsPage, wxT("DirPicker"),
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 DirPickerWidgetsPage::DirPickerWidgetsPage(WidgetsBookCtrl *book,
@@ -144,13 +144,13 @@ void DirPickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer *dirbox = new wxStaticBoxSizer(wxVERTICAL, this, _T("&DirPicker style"));
-    m_chkDirTextCtrl = CreateCheckBoxAndAddToSizer(dirbox, _T("With textctrl"), false);
-    m_chkDirMustExist = CreateCheckBoxAndAddToSizer(dirbox, _T("Dir must exist"), false);
-    m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, _T("Change working dir"), false);
+    wxStaticBoxSizer *dirbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&DirPicker style"));
+    m_chkDirTextCtrl = CreateCheckBoxAndAddToSizer(dirbox, wxT("With textctrl"), false);
+    m_chkDirMustExist = CreateCheckBoxAndAddToSizer(dirbox, wxT("Dir must exist"), false);
+    m_chkDirChangeDir = CreateCheckBoxAndAddToSizer(dirbox, wxT("Change working dir"), false);
     boxleft->Add(dirbox, 0, wxALL|wxGROW, 5);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, _T("&Reset")),
+    boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state

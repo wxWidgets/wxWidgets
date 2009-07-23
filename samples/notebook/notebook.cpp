@@ -213,7 +213,7 @@ wxPanel *CreatePage(wxBookCtrlBase *parent, const wxString&pageName)
     if ( pageName == MAXIMIZED_BUTTON_PAGE_NAME )
         return CreateBigButtonPage(parent);
 
-    wxFAIL_MSG( _T("unknown page name") );
+    wxFAIL_MSG( wxT("unknown page name") );
 
     return NULL;
 }
@@ -461,7 +461,7 @@ MyFrame::~MyFrame()
         CASE_TOOLBOOK(before toolb after)                                     \
                                                                               \
         default:                                                              \
-            wxFAIL_MSG( _T("unknown book control type") );                    \
+            wxFAIL_MSG( wxT("unknown book control type") );                    \
     }
 
 int MyFrame::TranslateBookFlag(int nb, int lb, int chb, int tbk, int toolbk) const
@@ -584,7 +584,7 @@ void MyFrame::AddFlagStrIfFlagPresent(wxString & flagStr, long flags, long flag,
     if( (flags & flag) == flag )
     {
         if( !flagStr.empty() )
-            flagStr += _T(" | ");
+            flagStr += wxT(" | ");
         flagStr += flagName;
     }
 }
@@ -628,10 +628,10 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
 
     wxString flagsStr;
 
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_NOWHERE, _T("wxBK_HITTEST_NOWHERE") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONICON,  _T("wxBK_HITTEST_ONICON") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONLABEL, _T("wxBK_HITTEST_ONLABEL") );
-    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONPAGE,  _T("wxBK_HITTEST_ONPAGE") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_NOWHERE, wxT("wxBK_HITTEST_NOWHERE") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONICON,  wxT("wxBK_HITTEST_ONICON") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONLABEL, wxT("wxBK_HITTEST_ONLABEL") );
+    AddFlagStrIfFlagPresent( flagsStr, flags, wxBK_HITTEST_ONPAGE,  wxT("wxBK_HITTEST_ONPAGE") );
 
     wxLogMessage(wxT("HitTest at (%d,%d): %d: %s"),
                  pt.x,
@@ -678,7 +678,7 @@ void MyFrame::OnMulti(wxCommandEvent& event)
     m_multi = event.IsChecked();
     RecreateBook();
     m_sizerFrame->Layout();
-    wxLogMessage(_T("Multiline setting works only in wxNotebook."));
+    wxLogMessage(wxT("Multiline setting works only in wxNotebook."));
 }
 
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
@@ -731,7 +731,7 @@ void MyFrame::OnAddSubPage(wxCommandEvent& WXUNUSED(event))
         const int selPos = currBook->GetSelection();
         if ( selPos == wxNOT_FOUND )
         {
-            wxLogError(_T("Select the parent page first!"));
+            wxLogError(wxT("Select the parent page first!"));
             return;
         }
 
@@ -759,7 +759,7 @@ void MyFrame::OnAddPageBefore(wxCommandEvent& WXUNUSED(event))
         const int selPos = currBook->GetSelection();
         if ( selPos == wxNOT_FOUND )
         {
-            wxLogError(_T("Select the parent page first!"));
+            wxLogError(wxT("Select the parent page first!"));
             return;
         }
 
@@ -890,35 +890,35 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
         {
             wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
             wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
-            _T("wxNotebook")
+            wxT("wxNotebook")
         },
 #endif // wxUSE_NOTEBOOK
 #if wxUSE_LISTBOOK
         {
             wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED,
             wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING,
-            _T("wxListbook")
+            wxT("wxListbook")
         },
 #endif // wxUSE_LISTBOOK
 #if wxUSE_CHOICEBOOK
         {
             wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,
             wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,
-            _T("wxChoicebook")
+            wxT("wxChoicebook")
         },
 #endif // wxUSE_CHOICEBOOK
 #if wxUSE_TREEBOOK
         {
             wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,
             wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING,
-            _T("wxTreebook")
+            wxT("wxTreebook")
         },
 #endif // wxUSE_TREEBOOK
 #if wxUSE_TOOLBOOK
         {
             wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,
             wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING,
-            _T("wxToolbook")
+            wxT("wxToolbook")
         },
 #endif // wxUSE_TOOLBOOK
     };
@@ -956,7 +956,7 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
                      ) != wxYES )
                 {
                     event.Veto();
-                    veto = _T(" (vetoed)");
+                    veto = wxT(" (vetoed)");
                 }
             }
 

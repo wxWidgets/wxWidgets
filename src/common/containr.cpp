@@ -37,7 +37,7 @@
 #endif //WX_PRECOMP
 
 // trace mask for focus messages
-#define TRACE_FOCUS _T("focus")
+#define TRACE_FOCUS wxT("focus")
 
 // ============================================================================
 // implementation
@@ -79,7 +79,7 @@ bool wxControlContainerBase::HasAnyFocusableChildren() const
 
 bool wxControlContainerBase::DoSetFocus()
 {
-    wxLogTrace(TRACE_FOCUS, _T("SetFocus on wxPanel 0x%p."),
+    wxLogTrace(TRACE_FOCUS, wxT("SetFocus on wxPanel 0x%p."),
                m_winParent->GetHandle());
 
     if (m_inSetFocus)
@@ -157,7 +157,7 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
                 // (under wxGTK)
 
                 wxASSERT_MSG( winParent,
-                              _T("Setting last focus for a window that is not our child?") );
+                              wxT("Setting last focus for a window that is not our child?") );
             }
         }
 
@@ -165,13 +165,13 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 
         if ( win )
         {
-            wxLogTrace(TRACE_FOCUS, _T("Set last focus to %s(%s)"),
+            wxLogTrace(TRACE_FOCUS, wxT("Set last focus to %s(%s)"),
                        win->GetClassInfo()->GetClassName(),
                        win->GetLabel().c_str());
         }
         else
         {
-            wxLogTrace(TRACE_FOCUS, _T("No more last focus"));
+            wxLogTrace(TRACE_FOCUS, wxT("No more last focus"));
         }
     }
 
@@ -203,7 +203,7 @@ wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
 
     const wxWindowList& siblings = btn->GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, _T("radio button not a child of its parent?") );
+    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
 
     // Iterate over all previous siblings until we find the next radio button
     wxWindowList::compatibility_iterator nodeBefore = nodeThis->GetPrevious();
@@ -233,7 +233,7 @@ wxRadioButton* wxGetNextButtonInGroup(wxRadioButton *btn)
 
     const wxWindowList& siblings = btn->GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(btn);
-    wxCHECK_MSG( nodeThis, NULL, _T("radio button not a child of its parent?") );
+    wxCHECK_MSG( nodeThis, NULL, wxT("radio button not a child of its parent?") );
 
     // Iterate over all previous siblings until we find the next radio button
     wxWindowList::compatibility_iterator nodeNext = nodeThis->GetNext();
@@ -613,7 +613,7 @@ void wxControlContainer::HandleOnWindowDestroy(wxWindowBase *child)
 
 void wxControlContainer::HandleOnFocus(wxFocusEvent& event)
 {
-    wxLogTrace(TRACE_FOCUS, _T("OnFocus on wxPanel 0x%p, name: %s"),
+    wxLogTrace(TRACE_FOCUS, wxT("OnFocus on wxPanel 0x%p, name: %s"),
                m_winParent->GetHandle(),
                m_winParent->GetName().c_str() );
 
@@ -641,9 +641,9 @@ bool wxControlContainer::SetFocusToChild()
 
 bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 {
-    wxCHECK_MSG( win, false, _T("wxSetFocusToChild(): invalid window") );
+    wxCHECK_MSG( win, false, wxT("wxSetFocusToChild(): invalid window") );
     //    wxCHECK_MSG( childLastFocused, false,
-    //             _T("wxSetFocusToChild(): NULL child poonter") );
+    //             wxT("wxSetFocusToChild(): NULL child poonter") );
 
     if ( childLastFocused && *childLastFocused )
     {
@@ -651,7 +651,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         if ( (*childLastFocused)->GetParent() == win )
         {
             wxLogTrace(TRACE_FOCUS,
-                       _T("SetFocusToChild() => last child (0x%p)."),
+                       wxT("SetFocusToChild() => last child (0x%p)."),
                        (*childLastFocused)->GetHandle());
 
             // not SetFocusFromKbd(): we're restoring focus back to the old
@@ -692,7 +692,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
 #endif // __WXMSW__
 
             wxLogTrace(TRACE_FOCUS,
-                       _T("SetFocusToChild() => first child (0x%p)."),
+                       wxT("SetFocusToChild() => first child (0x%p)."),
                        child->GetHandle());
 
             if (childLastFocused)

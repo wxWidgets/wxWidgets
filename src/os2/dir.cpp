@@ -62,7 +62,7 @@ static inline void FreeFindData(
 {
     if (!::DosFindClose(vFd))
     {
-        wxLogLastError(_T("DosFindClose"));
+        wxLogLastError(wxT("DosFindClose"));
     }
 }
 
@@ -223,9 +223,9 @@ bool wxDirData::Read(
 
         if ( !wxEndsWithPathSeparator(sFilespec) )
         {
-            sFilespec += _T('\\');
+            sFilespec += wxT('\\');
         }
-        sFilespec += (!m_sFilespec ? _T("*.*") : m_sFilespec.c_str());
+        sFilespec += (!m_sFilespec ? wxT("*.*") : m_sFilespec.c_str());
 
         m_vFinddata = FindFirst( sFilespec
                                 ,PTR_TO_FINDDATA
@@ -263,9 +263,9 @@ bool wxDirData::Read(
         //
         // Don't return "." and ".." unless asked for
         //
-        if ( zName[0] == _T('.') &&
-             ((zName[1] == _T('.') && zName[2] == _T('\0')) ||
-              (zName[1] == _T('\0'))) )
+        if ( zName[0] == wxT('.') &&
+             ((zName[1] == wxT('.') && zName[2] == wxT('\0')) ||
+              (zName[1] == wxT('\0'))) )
         {
             if (!(m_nFlags & wxDIR_DOTDOT))
                 continue;
@@ -356,9 +356,9 @@ wxString wxDir::GetName() const
         if ( !name.empty() )
         {
             // bring to canonical Windows form
-            name.Replace(_T("/"), _T("\\"));
+            name.Replace(wxT("/"), wxT("\\"));
 
-            if ( name.Last() == _T('\\') )
+            if ( name.Last() == wxT('\\') )
             {
                 // chop off the last (back)slash
                 name.Truncate(name.length() - 1);
@@ -384,7 +384,7 @@ bool wxDir::GetFirst(
 , int                               nFlags
 ) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
     M_DIR->Rewind();
     M_DIR->SetFileSpec(rsFilespec);
     M_DIR->SetFlags(nFlags);
@@ -395,8 +395,8 @@ bool wxDir::GetNext(
   wxString*                         psFilename
 ) const
 {
-    wxCHECK_MSG( IsOpened(), false, _T("must wxDir::Open() first") );
-    wxCHECK_MSG( psFilename, false, _T("bad pointer in wxDir::GetNext()") );
+    wxCHECK_MSG( IsOpened(), false, wxT("must wxDir::Open() first") );
+    wxCHECK_MSG( psFilename, false, wxT("bad pointer in wxDir::GetNext()") );
     return M_DIR->Read(psFilename);
 } // end of wxDir::GetNext
 

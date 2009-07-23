@@ -162,7 +162,7 @@ wxSize wxStatusBarGeneric::DoGetBestSize() const
 
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
-    wxASSERT_MSG( number >= 0, _T("negative number of fields in wxStatusBar?") );
+    wxASSERT_MSG( number >= 0, wxT("negative number of fields in wxStatusBar?") );
 
     // this will result in a call to SetStatusWidths() and thus an update to our
     // m_widthsAbs cache
@@ -172,7 +172,7 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 {
     wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
-                 _T("invalid status bar field index") );
+                 wxT("invalid status bar field index") );
 
     wxString oldText = GetStatusText(number);
     if (oldText != text)
@@ -194,7 +194,7 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 {
     // only set status widths when n == number of statuswindows
-    wxCHECK_RET( (size_t)n == m_panes.GetCount(), _T("status bar field count mismatch") );
+    wxCHECK_RET( (size_t)n == m_panes.GetCount(), wxT("status bar field count mismatch") );
 
     wxStatusBarBase::SetStatusWidths(n, widths_field);
 
@@ -341,7 +341,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
 bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
     wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
-                 _T("invalid status bar field index") );
+                 wxT("invalid status bar field index") );
 
     if (m_widthsAbs.IsEmpty())
         return false;

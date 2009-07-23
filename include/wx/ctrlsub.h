@@ -122,7 +122,7 @@ private:
     int AppendItems(const wxArrayStringsAdapter& items, void **clientData)
     {
         wxASSERT_MSG( GetClientDataType() != wxClientData_Object,
-                      _T("can't mix different types of client data") );
+                      wxT("can't mix different types of client data") );
 
         return AppendItems(items, clientData, wxClientData_Void);
     }
@@ -131,7 +131,7 @@ private:
                     wxClientData **clientData)
     {
         wxASSERT_MSG( GetClientDataType() != wxClientData_Void,
-                      _T("can't mix different types of client data") );
+                      wxT("can't mix different types of client data") );
 
         return AppendItems(items, reinterpret_cast<void **>(clientData),
                            wxClientData_Object);
@@ -142,17 +142,17 @@ private:
                     void **clientData,
                     wxClientDataType type)
     {
-        wxASSERT_MSG( !IsSorted(), _T("can't insert items in sorted control") );
+        wxASSERT_MSG( !IsSorted(), wxT("can't insert items in sorted control") );
 
         wxCHECK_MSG( pos <= GetCount(), wxNOT_FOUND,
-                     _T("position out of range") );
+                     wxT("position out of range") );
 
         // not all derived classes handle empty arrays correctly in
         // DoInsertItems() and besides it really doesn't make much sense to do
         // this (for append it could correspond to creating an initially empty
         // control but why would anybody need to insert 0 items?)
         wxCHECK_MSG( !items.IsEmpty(), wxNOT_FOUND,
-                     _T("need something to insert") );
+                     wxT("need something to insert") );
 
         return DoInsertItems(items, pos, clientData, type);
     }
@@ -167,7 +167,7 @@ private:
                      void **clientData)
     {
         wxASSERT_MSG( GetClientDataType() != wxClientData_Object,
-                      _T("can't mix different types of client data") );
+                      wxT("can't mix different types of client data") );
 
         return InsertItems(items, pos, clientData, wxClientData_Void);
     }
@@ -177,7 +177,7 @@ private:
                      wxClientData **clientData)
     {
         wxASSERT_MSG( GetClientDataType() != wxClientData_Void,
-                      _T("can't mix different types of client data") );
+                      wxT("can't mix different types of client data") );
 
         return InsertItems(items, pos,
                            reinterpret_cast<void **>(clientData),

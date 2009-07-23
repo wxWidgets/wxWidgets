@@ -62,7 +62,7 @@ Card::Card(int value, WayUp way_up) :
         m_symbolBmap = new wxBitmap(symbols_xpm);
         if (!m_symbolBmap->Ok())
         {
-            ::wxMessageBox(_T("Failed to load bitmap CardSymbols"), _T("Error"));
+            ::wxMessageBox(wxT("Failed to load bitmap CardSymbols"), wxT("Error"));
         }
     }
     if (!m_pictureBmap)
@@ -70,7 +70,7 @@ Card::Card(int value, WayUp way_up) :
         m_pictureBmap = new wxBitmap(Pictures);
         if (!m_pictureBmap->Ok())
         {
-            ::wxMessageBox(_T("Failed to load bitmap CardPictures"), _T("Error"));
+            ::wxMessageBox(wxT("Failed to load bitmap CardPictures"), wxT("Error"));
         }
     }
 

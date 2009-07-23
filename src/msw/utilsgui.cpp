@@ -372,11 +372,11 @@ extern bool wxEnableFileNameAutoComplete(HWND hwnd)
         s_initialized = true;
 
         wxLogNull nolog;
-        wxDynamicLibrary dll(_T("shlwapi.dll"));
+        wxDynamicLibrary dll(wxT("shlwapi.dll"));
         if ( dll.IsLoaded() )
         {
             s_pfnSHAutoComplete =
-                (SHAutoComplete_t)dll.GetSymbol(_T("SHAutoComplete"));
+                (SHAutoComplete_t)dll.GetSymbol(wxT("SHAutoComplete"));
             if ( s_pfnSHAutoComplete )
             {
                 // won't be unloaded until the process termination, no big deal
@@ -391,7 +391,7 @@ extern bool wxEnableFileNameAutoComplete(HWND hwnd)
     HRESULT hr = s_pfnSHAutoComplete(hwnd, 0x10 /* SHACF_FILESYS_ONLY */);
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("SHAutoComplete"), hr);
+        wxLogApiError(wxT("SHAutoComplete"), hr);
         return false;
     }
 
@@ -412,7 +412,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = document.wx_str();
-    sei.lpVerb = _T("open");
+    sei.lpVerb = wxT("open");
 #ifdef __WXWINCE__
     sei.nShow = SW_SHOWNORMAL; // SW_SHOWDEFAULT not defined under CE (#10216)
 #else
@@ -443,11 +443,11 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int f
     {
         // ShellExecuteEx() opens the URL in an existing window by default so
         // we can't use it if we need a new window
-        wxRegKey key(wxRegKey::HKCR, scheme + _T("\\shell\\open"));
+        wxRegKey key(wxRegKey::HKCR, scheme + wxT("\\shell\\open"));
         if ( !key.Exists() )
         {
             // try the default browser, it must be registered at least for http URLs
-            key.SetName(wxRegKey::HKCR, _T("http\\shell\\open"));
+            key.SetName(wxRegKey::HKCR, wxT("http\\shell\\open"));
         }
 
         if ( key.Exists() )
@@ -507,7 +507,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int f
 
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = url.c_str();
-    sei.lpVerb = _T("open");
+    sei.lpVerb = wxT("open");
     sei.nShow = SW_SHOWNORMAL;
     sei.fMask = SEE_MASK_FLAG_NO_UI; // we give error message ourselves
 

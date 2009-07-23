@@ -311,7 +311,7 @@ bool wxTextEntry::AutoCompleteFileNames()
     static wxDynamicLibrary s_dllShlwapi;
     if ( s_pfnSHAutoComplete == (SHAutoComplete_t)-1 )
     {
-        if ( !s_dllShlwapi.Load(_T("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
+        if ( !s_dllShlwapi.Load(wxT("shlwapi.dll"), wxDL_VERBATIM | wxDL_QUIET) )
         {
             s_pfnSHAutoComplete = NULL;
         }
@@ -327,7 +327,7 @@ bool wxTextEntry::AutoCompleteFileNames()
     HRESULT hr = (*s_pfnSHAutoComplete)(GetEditHwnd(), SHACF_FILESYS_ONLY);
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("SHAutoComplete()"), hr);
+        wxLogApiError(wxT("SHAutoComplete()"), hr);
 
         return false;
     }
@@ -363,7 +363,7 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
                  );
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("CoCreateInstance(CLSID_AutoComplete)"), hr);
+        wxLogApiError(wxT("CoCreateInstance(CLSID_AutoComplete)"), hr);
         return false;
     }
 
@@ -374,7 +374,7 @@ bool wxTextEntry::AutoComplete(const wxArrayString& choices)
     m_enumStrings->Release();
     if ( FAILED(hr) )
     {
-        wxLogApiError(_T("IAutoComplete::Init"), hr);
+        wxLogApiError(wxT("IAutoComplete::Init"), hr);
         return false;
     }
 

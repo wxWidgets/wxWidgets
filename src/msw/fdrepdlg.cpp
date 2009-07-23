@@ -114,7 +114,7 @@ wxFindReplaceDialogImpl::wxFindReplaceDialogImpl(wxFindReplaceDialog *dialog,
 
         if ( !ms_msgFindDialog )
         {
-            wxLogLastError(_T("RegisterWindowMessage(FINDMSGSTRING)"));
+            wxLogLastError(wxT("RegisterWindowMessage(FINDMSGSTRING)"));
         }
 
         wxWindow::MSWRegisterMessageHandler
@@ -210,7 +210,7 @@ wxFindReplaceDialogImpl::FindMessageHandler(wxWindow * WXUNUSED(win),
     static bool s_blockMsg = false;
 #endif // wxUSE_UNICODE_MSLU
 
-    wxASSERT_MSG( nMsg == ms_msgFindDialog, _T("unexpected message received") );
+    wxASSERT_MSG( nMsg == ms_msgFindDialog, wxT("unexpected message received") );
 
     FINDREPLACE *pFR = (FINDREPLACE *)lParam;
 
@@ -260,7 +260,7 @@ wxFindReplaceDialogImpl::FindMessageHandler(wxWindow * WXUNUSED(win),
     }
     else
     {
-        wxFAIL_MSG( _T("unknown find dialog event") );
+        wxFAIL_MSG( wxT("unknown find dialog event") );
 
         return 0;
     }
@@ -359,7 +359,7 @@ wxFindReplaceDialog::~wxFindReplaceDialog()
             // if it wasn't, delete the dialog ourselves
             if ( !::DestroyWindow(GetHwnd()) )
             {
-                wxLogLastError(_T("DestroyWindow(find dialog)"));
+                wxLogLastError(wxT("DestroyWindow(find dialog)"));
             }
         }
 
@@ -416,9 +416,9 @@ bool wxFindReplaceDialog::Show(bool show)
         return true;
     }
 
-    wxCHECK_MSG( m_FindReplaceData, false, _T("call Create() first!") );
+    wxCHECK_MSG( m_FindReplaceData, false, wxT("call Create() first!") );
 
-    wxASSERT_MSG( !m_impl, _T("why don't we have the window then?") );
+    wxASSERT_MSG( !m_impl, wxT("why don't we have the window then?") );
 
     m_impl = new wxFindReplaceDialogImpl(this, m_FindReplaceData->GetFlags());
 
@@ -451,7 +451,7 @@ bool wxFindReplaceDialog::Show(bool show)
 
     if ( !::ShowWindow(hwnd, SW_SHOW) )
     {
-        wxLogLastError(_T("ShowWindow(find dialog)"));
+        wxLogLastError(wxT("ShowWindow(find dialog)"));
     }
 
     m_hWnd = (WXHWND)hwnd;

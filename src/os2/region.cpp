@@ -260,7 +260,7 @@ bool wxRegion::DoOffset( wxCoord x, wxCoord y )
 #if 0
     if ( ::OffsetRgn(GetHrgn(), x, y) == ERROR )
     {
-        wxLogLastError(_T("OffsetRgn"));
+        wxLogLastError(wxT("OffsetRgn"));
 
         return false;
     }
@@ -297,7 +297,7 @@ bool wxRegion::DoCombine( const wxRegion& rRegion, wxRegionOp eOp )
                 break;
 
             default:
-                wxFAIL_MSG( _T("unknown region operation") );
+                wxFAIL_MSG( wxT("unknown region operation") );
                 // fall through
 
             case wxRGN_AND:

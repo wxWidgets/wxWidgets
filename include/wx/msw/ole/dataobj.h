@@ -59,7 +59,7 @@ public:
 
     #define wxGetFormatName(format) wxDataObject::GetFormatName(format)
 #else // !Debug
-    #define wxGetFormatName(format) _T("")
+    #define wxGetFormatName(format) wxT("")
 #endif // Debug/!Debug
     // they need to be accessed from wxIDataObject, so made them public,
     // or wxIDataObject friend

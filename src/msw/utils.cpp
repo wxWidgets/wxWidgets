@@ -163,7 +163,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
     // missing, we handle this)
     wxLogNull noLog;
 
-    wxDynamicLibrary dllWinsock(_T("ws2_32.dll"), wxDL_VERBATIM);
+    wxDynamicLibrary dllWinsock(wxT("ws2_32.dll"), wxDL_VERBATIM);
     if ( dllWinsock.IsLoaded() )
     {
         typedef int (PASCAL *WSAStartup_t)(WORD, WSADATA *);
@@ -174,7 +174,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 
         #define LOAD_WINSOCK_FUNC(func)                                       \
             func ## _t                                                        \
-                pfn ## func = (func ## _t)dllWinsock.GetSymbol(_T(#func))
+                pfn ## func = (func ## _t)dllWinsock.GetSymbol(wxT(#func))
 
         LOAD_WINSOCK_FUNC(WSAStartup);
 
@@ -264,7 +264,7 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
     wxCHECK_MSG( buf && ( maxSize > 0 ), false,
-                    _T("empty buffer in wxGetUserName") );
+                    wxT("empty buffer in wxGetUserName") );
 #if defined(__WXWINCE__) && wxUSE_REGKEY
     wxLogNull noLog;
     wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
@@ -479,7 +479,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
     GetDiskFreeSpaceEx_t
         pGetDiskFreeSpaceEx = (GetDiskFreeSpaceEx_t)::GetProcAddress
                               (
-                                ::GetModuleHandle(_T("kernel32.dll")),
+                                ::GetModuleHandle(wxT("kernel32.dll")),
 #if wxUSE_UNICODE
                                 "GetDiskFreeSpaceExW"
 #else
@@ -497,7 +497,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
                                   &bytesTotal,
                                   NULL) )
         {
-            wxLogLastError(_T("GetDiskFreeSpaceEx"));
+            wxLogLastError(wxT("GetDiskFreeSpaceEx"));
 
             return false;
         }
@@ -548,7 +548,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
                                  &lNumberOfFreeClusters,
                                  &lTotalNumberOfClusters) )
         {
-            wxLogLastError(_T("GetDiskFreeSpace"));
+            wxLogLastError(wxT("GetDiskFreeSpace"));
 
             return false;
         }
@@ -633,7 +633,7 @@ bool wxDoSetEnv(const wxString& var, const wxChar *value)
 #else // other compiler
     if ( !::SetEnvironmentVariable(var.t_str(), value) )
     {
-        wxLogLastError(_T("SetEnvironmentVariable"));
+        wxLogLastError(wxT("SetEnvironmentVariable"));
 
         return false;
     }
@@ -770,12 +770,12 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                         //     can also use SendMesageTimeout(WM_CLOSE)
                         if ( !::PostMessage(params.hwnd, WM_QUIT, 0, 0) )
                         {
-                            wxLogLastError(_T("PostMessage(WM_QUIT)"));
+                            wxLogLastError(wxT("PostMessage(WM_QUIT)"));
                         }
                     }
                     else // it was an error then
                     {
-                        wxLogLastError(_T("EnumWindows"));
+                        wxLogLastError(wxT("EnumWindows"));
 
                         ok = false;
                     }
@@ -802,16 +802,16 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
                 // process terminated
                 if ( !::GetExitCodeProcess(hProcess, &rc) )
                 {
-                    wxLogLastError(_T("GetExitCodeProcess"));
+                    wxLogLastError(wxT("GetExitCodeProcess"));
                 }
                 break;
 
             default:
-                wxFAIL_MSG( _T("unexpected WaitForSingleObject() return") );
+                wxFAIL_MSG( wxT("unexpected WaitForSingleObject() return") );
                 // fall through
 
             case WAIT_FAILED:
-                wxLogLastError(_T("WaitForSingleObject"));
+                wxLogLastError(wxT("WaitForSingleObject"));
                 // fall through
 
             case WAIT_TIMEOUT:
@@ -856,7 +856,7 @@ static void InitToolHelp32()
 
 #if wxUSE_DYNLIB_CLASS
 
-    wxDynamicLibrary dllKernel(_T("kernel32.dll"), wxDL_VERBATIM);
+    wxDynamicLibrary dllKernel(wxT("kernel32.dll"), wxDL_VERBATIM);
 
     // Get procedure addresses.
     // We are linking to these functions of Kernel32
@@ -865,13 +865,13 @@ static void InitToolHelp32()
     // which does not have the Toolhelp32
     // functions in the Kernel 32.
     lpfCreateToolhelp32Snapshot =
-        (CreateToolhelp32Snapshot_t)dllKernel.RawGetSymbol(_T("CreateToolhelp32Snapshot"));
+        (CreateToolhelp32Snapshot_t)dllKernel.RawGetSymbol(wxT("CreateToolhelp32Snapshot"));
 
     lpfProcess32First =
-        (Process32_t)dllKernel.RawGetSymbol(_T("Process32First"));
+        (Process32_t)dllKernel.RawGetSymbol(wxT("Process32First"));
 
     lpfProcess32Next =
-        (Process32_t)dllKernel.RawGetSymbol(_T("Process32Next"));
+        (Process32_t)dllKernel.RawGetSymbol(wxT("Process32Next"));
 
 #endif // wxUSE_DYNLIB_CLASS
 }
@@ -1014,7 +1014,7 @@ bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
                 break;
 
             default:
-                wxFAIL_MSG( _T("unknown wxShutdown() flag") );
+                wxFAIL_MSG( wxT("unknown wxShutdown() flag") );
                 return false;
         }
 
@@ -1060,16 +1060,16 @@ bool wxIsDebuggerRunning()
 {
 #if wxUSE_DYNLIB_CLASS
     // IsDebuggerPresent() is not available under Win95, so load it dynamically
-    wxDynamicLibrary dll(_T("kernel32.dll"), wxDL_VERBATIM);
+    wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
 
     typedef BOOL (WINAPI *IsDebuggerPresent_t)();
-    if ( !dll.HasSymbol(_T("IsDebuggerPresent")) )
+    if ( !dll.HasSymbol(wxT("IsDebuggerPresent")) )
     {
         // no way to know, assume no
         return false;
     }
 
-    return (*(IsDebuggerPresent_t)dll.GetSymbol(_T("IsDebuggerPresent")))() != 0;
+    return (*(IsDebuggerPresent_t)dll.GetSymbol(wxT("IsDebuggerPresent")))() != 0;
 #else
     return false;
 #endif
@@ -1173,7 +1173,7 @@ wxString wxGetOsDescription()
                 }
                 if ( !wxIsEmpty(info.szCSDVersion) )
                 {
-                    str << _T(" (") << info.szCSDVersion << _T(')');
+                    str << wxT(" (") << info.szCSDVersion << wxT(')');
                 }
                 break;
 
@@ -1226,9 +1226,9 @@ wxString wxGetOsDescription()
 
                 if ( !wxIsEmpty(info.szCSDVersion) )
                 {
-                    str << _T(", ") << info.szCSDVersion;
+                    str << wxT(", ") << info.szCSDVersion;
                 }
-                str << _T(')');
+                str << wxT(')');
 
                 if ( wxIsPlatform64Bit() )
                     str << _(", 64-bit edition");
@@ -1237,7 +1237,7 @@ wxString wxGetOsDescription()
     }
     else
     {
-        wxFAIL_MSG( _T("GetVersionEx() failed") ); // should never happen
+        wxFAIL_MSG( wxT("GetVersionEx() failed") ); // should never happen
     }
 
     return str;
@@ -1251,9 +1251,9 @@ bool wxIsPlatform64Bit()
     // 32-bit programs run on both 32-bit and 64-bit Windows so check
     typedef BOOL (WINAPI *IsWow64Process_t)(HANDLE, BOOL *);
 
-    wxDynamicLibrary dllKernel32(_T("kernel32.dll"));
+    wxDynamicLibrary dllKernel32(wxT("kernel32.dll"));
     IsWow64Process_t pfnIsWow64Process =
-        (IsWow64Process_t)dllKernel32.RawGetSymbol(_T("IsWow64Process"));
+        (IsWow64Process_t)dllKernel32.RawGetSymbol(wxT("IsWow64Process"));
 
     BOOL wow64 = FALSE;
     if ( pfnIsWow64Process )
@@ -1643,7 +1643,7 @@ extern "C" WXDLLIMPEXP_BASE HWND
 wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc)
 {
     wxCHECK_MSG( classname && pclassname && wndproc, NULL,
-                    _T("NULL parameter in wxCreateHiddenWindow") );
+                    wxT("NULL parameter in wxCreateHiddenWindow") );
 
     // register the class fi we need to first
     if ( *pclassname == NULL )

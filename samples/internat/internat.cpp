@@ -376,9 +376,9 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else if ( num == 9 )
     {
-        // this message is not translated (not in catalog) because we used _T()
+        // this message is not translated (not in catalog) because we used wxT()
         // and not _() around it
-        str = _T("You've found a bug in this program!");
+        str = wxT("You've found a bug in this program!");
     }
     else if ( num == 17 )
     {

@@ -104,7 +104,7 @@ void RegExMatchTestCase::runTest()
         CPPUNIT_ASSERT_MESSAGE("match failed", ok);
 
         wxStringTokenizer tkz(wxString(m_expected, *wxConvCurrent),
-                              _T("\t"), wxTOKEN_RET_EMPTY);
+                              wxT("\t"), wxTOKEN_RET_EMPTY);
         size_t i;
 
         for (i = 0; i < re.GetMatchCount() && tkz.HasMoreTokens(); i++) {
@@ -112,7 +112,7 @@ void RegExMatchTestCase::runTest()
             wxString result = re.GetMatch(m_text, i);
 
             wxString msgstr;
-            msgstr.Printf(_T("\\%d == '%s' (expected '%s')"),
+            msgstr.Printf(wxT("\\%d == '%s' (expected '%s')"),
                           (int)i, result.c_str(), expected.c_str());
 
             CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(),
@@ -166,10 +166,10 @@ void RegExReplaceTestCase::runTest()
     size_t nRepl = re.Replace(&text, m_repl);
 
     wxString msgstr;
-    msgstr.Printf(_T("returns '%s' (expected '%s')"), text.c_str(), m_expected.c_str());
+    msgstr.Printf(wxT("returns '%s' (expected '%s')"), text.c_str(), m_expected.c_str());
     CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), text == m_expected);
 
-    msgstr.Printf(_T("matches %d times (expected %d)"), (int)nRepl, (int)m_count);
+    msgstr.Printf(wxT("matches %d times (expected %d)"), (int)nRepl, (int)m_count);
     CPPUNIT_ASSERT_MESSAGE((const char*)msgstr.mb_str(), nRepl == m_count);
 }
 
@@ -258,7 +258,7 @@ void wxRegExTestSuite::add(
     int flags /*=wxRE_DEFAULT*/)
 {
     addTest(new RegExCompileTestCase(
-                (_T("/") + Conv(pattern) + _T("/") + FlagStr(flags)).mb_str(),
+                (wxT("/") + Conv(pattern) + wxT("/") + FlagStr(flags)).mb_str(),
                 Conv(pattern), correct, flags));
 }
 
@@ -272,9 +272,9 @@ void wxRegExTestSuite::add(
 {
     wxString name;
 
-    name << _T("'") << Conv(text) << _T("' =~ /") << Conv(pattern) << _T("/")
+    name << wxT("'") << Conv(text) << wxT("' =~ /") << Conv(pattern) << wxT("/")
          << FlagStr(flags);
-    name.Replace(_T("\n"), _T("\\n"));
+    name.Replace(wxT("\n"), wxT("\\n"));
 
     addTest(new RegExMatchTestCase(name.mb_str(), Conv(pattern),
                                    Conv(text), expected, flags));
@@ -292,9 +292,9 @@ void wxRegExTestSuite::add(
 {
     wxString name;
 
-    name << _T("'") << Conv(text) << _T("' =~ s/") << Conv(pattern) << _T("/")
-         << Conv(replacement) << _T("/g") << FlagStr(flags);
-    name.Replace(_T("\n"), _T("\\n"));
+    name << wxT("'") << Conv(text) << wxT("' =~ s/") << Conv(pattern) << wxT("/")
+         << Conv(replacement) << wxT("/g") << FlagStr(flags);
+    name.Replace(wxT("\n"), wxT("\\n"));
 
     addTest(new RegExReplaceTestCase(
                     name.mb_str(), Conv(pattern), Conv(text),
@@ -314,19 +314,19 @@ wxString wxRegExTestSuite::FlagStr(int flags)
         switch (flags & (1 << i)) {
             case 0: break;
 #ifdef wxHAS_REGEX_ADVANCED
-            case wxRE_ADVANCED: str += _T(" | wxRE_ADVANCED"); break;
+            case wxRE_ADVANCED: str += wxT(" | wxRE_ADVANCED"); break;
 #endif
-            case wxRE_BASIC:    str += _T(" | wxRE_BASIC"); break;
-            case wxRE_ICASE:    str += _T(" | wxRE_ICASE"); break;
-            case wxRE_NOSUB:    str += _T(" | wxRE_NOSUB"); break;
-            case wxRE_NEWLINE:  str += _T(" | wxRE_NEWLINE"); break;
-            case wxRE_NOTBOL:   str += _T(" | wxRE_NOTBOL"); break;
-            case wxRE_NOTEOL:   str += _T(" | wxRE_NOTEOL"); break;
+            case wxRE_BASIC:    str += wxT(" | wxRE_BASIC"); break;
+            case wxRE_ICASE:    str += wxT(" | wxRE_ICASE"); break;
+            case wxRE_NOSUB:    str += wxT(" | wxRE_NOSUB"); break;
+            case wxRE_NEWLINE:  str += wxT(" | wxRE_NEWLINE"); break;
+            case wxRE_NOTBOL:   str += wxT(" | wxRE_NOTBOL"); break;
+            case wxRE_NOTEOL:   str += wxT(" | wxRE_NOTEOL"); break;
             default: wxFAIL; break;
         }
     }
 
-    return _T(" (") + str.Mid(3) + _T(")");
+    return wxT(" (") + str.Mid(3) + wxT(")");
 }
 
 // register in the unnamed registry so that these tests are run by default

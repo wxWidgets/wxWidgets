@@ -38,7 +38,7 @@ wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
     if ( wxGLCanvas::GetGLXVersion() >= 13 )
     {
         GLXFBConfig *fbc = gc->GetGLXFBConfig();
-        wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGL") );
+        wxCHECK_RET( fbc, wxT("invalid GLXFBConfig for OpenGL") );
 
         m_glContext = glXCreateNewContext( wxGetX11Display(), fbc[0], GLX_RGBA_TYPE,
                                            other ? other->m_glContext : None,
@@ -47,14 +47,14 @@ wxGLContext::wxGLContext(wxGLCanvas *gc, const wxGLContext *other)
     else // GLX <= 1.2
     {
         XVisualInfo *vi = gc->GetXVisualInfo();
-        wxCHECK_RET( vi, _T("invalid visual for OpenGL") );
+        wxCHECK_RET( vi, wxT("invalid visual for OpenGL") );
 
         m_glContext = glXCreateContext( wxGetX11Display(), vi,
                                         other ? other->m_glContext : None,
                                         GL_TRUE );
     }
 
-    wxASSERT_MSG( m_glContext, _T("Couldn't create OpenGL context") );
+    wxASSERT_MSG( m_glContext, wxT("Couldn't create OpenGL context") );
 }
 
 wxGLContext::~wxGLContext()
@@ -74,7 +74,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
         return false;
 
     const Window xid = win.GetXWindow();
-    wxCHECK2_MSG( xid, return false, _T("window must be shown") );
+    wxCHECK2_MSG( xid, return false, wxT("window must be shown") );
 
     return MakeCurrent(xid, m_glContext);
 }
@@ -145,7 +145,7 @@ bool wxGLCanvasX11::IsGLXMultiSampleAvailable()
 bool
 wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 {
-    wxCHECK_MSG( n >= 16, false, _T("GL attributes buffer too small") );
+    wxCHECK_MSG( n >= 16, false, wxT("GL attributes buffer too small") );
 
     /*
        Different versions of GLX API use rather different attributes lists, see
@@ -186,7 +186,7 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
         glattrs[i] = None;
 
-        wxASSERT_MSG( i < n, _T("GL attributes buffer too small") );
+        wxASSERT_MSG( i < n, wxT("GL attributes buffer too small") );
     }
     else // have non-default attributes
     {
@@ -304,7 +304,7 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     break;
 
                 default:
-                    wxLogDebug(_T("Unsupported OpenGL attribute %d"),
+                    wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
                                wxattrs[arg - 1]);
                     continue;
             }
@@ -427,7 +427,7 @@ int wxGLCanvasX11::GetGLXVersion()
         // check the GLX version
         int glxMajorVer, glxMinorVer;
         bool ok = glXQueryVersion(wxGetX11Display(), &glxMajorVer, &glxMinorVer);
-        wxASSERT_MSG( ok, _T("GLX version not found") );
+        wxASSERT_MSG( ok, wxT("GLX version not found") );
         if (!ok)
             s_glxVersion = 10; // 1.0 by default
         else
@@ -440,7 +440,7 @@ int wxGLCanvasX11::GetGLXVersion()
 bool wxGLCanvasX11::SwapBuffers()
 {
     const Window xid = GetXWindow();
-    wxCHECK2_MSG( xid, return false, _T("window must be shown") );
+    wxCHECK2_MSG( xid, return false, wxT("window must be shown") );
 
     glXSwapBuffers(wxGetX11Display(), xid);
     return true;

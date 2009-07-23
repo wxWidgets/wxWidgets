@@ -224,7 +224,7 @@ bool wxDialog::Show( bool bShow )
 //
 int wxDialog::ShowModal()
 {
-    wxASSERT_MSG( !IsModal(), _T("wxDialog::ShowModal() reentered?") );
+    wxASSERT_MSG( !IsModal(), wxT("wxDialog::ShowModal() reentered?") );
 
     m_endModalCalled = false;
 
@@ -288,7 +288,7 @@ void wxDialog::EndModal(
   int                               nRetCode
 )
 {
-    wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
+    wxASSERT_MSG( IsModal(), wxT("EndModal() called for non modal dialog") );
 
     m_endModalCalled = true;
     SetReturnCode(nRetCode);

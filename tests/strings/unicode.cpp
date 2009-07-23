@@ -333,7 +333,7 @@ void UnicodeTestCase::ConversionUTF8()
         StringConversionData("\xc2", NULL),
     };
 
-    wxCSConv conv(_T("utf-8"));
+    wxCSConv conv(wxT("utf-8"));
     for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
     {
         const StringConversionData& d = utf8data[n];

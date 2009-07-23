@@ -241,7 +241,7 @@ static inline void wxBringWindowToTop(HWND hwnd)
     // raise top level parent to top of z order
     if (!::SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
     {
-        wxLogLastError(_T("SetWindowPos"));
+        wxLogLastError(wxT("SetWindowPos"));
     }
 }
 
@@ -578,7 +578,7 @@ wxWindowMSW::~wxWindowMSW()
 /* static */
 const wxChar *wxWindowMSW::MSWGetRegisteredClassName()
 {
-    return wxApp::GetRegisteredClassName(_T("wxWindow"), COLOR_BTNFACE);
+    return wxApp::GetRegisteredClassName(wxT("wxWindow"), COLOR_BTNFACE);
 }
 
 // real construction (Init() must have been called before!)
@@ -629,7 +629,7 @@ bool wxWindowMSW::Create(wxWindow *parent,
 void wxWindowMSW::SetFocus()
 {
     HWND hWnd = GetHwnd();
-    wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
+    wxCHECK_RET( hWnd, wxT("can't set focus to invalid window") );
 
 #if !defined(__WXWINCE__)
     ::SetLastError(0);
@@ -644,7 +644,7 @@ void wxWindowMSW::SetFocus()
             HWND hwndFocus = ::GetFocus();
             if ( hwndFocus != hWnd )
             {
-                wxLogApiError(_T("SetFocus"), dwRes);
+                wxLogApiError(wxT("SetFocus"), dwRes);
             }
         }
     }
@@ -733,7 +733,7 @@ wxWindowMSW::MSWShowWithEffect(bool show,
     static bool s_initDone = false;
     if ( !s_initDone )
     {
-        wxDynamicLibrary dllUser32(_T("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
+        wxDynamicLibrary dllUser32(wxT("user32.dll"), wxDL_VERBATIM | wxDL_QUIET);
         wxDL_INIT_FUNC(s_pfn, AnimateWindow, dllUser32);
 
         s_initDone = true;
@@ -801,17 +801,17 @@ wxWindowMSW::MSWShowWithEffect(bool show,
 
 
         case wxSHOW_EFFECT_MAX:
-            wxFAIL_MSG( _T("invalid window show effect") );
+            wxFAIL_MSG( wxT("invalid window show effect") );
             return false;
 
         default:
-            wxFAIL_MSG( _T("unknown window show effect") );
+            wxFAIL_MSG( wxT("unknown window show effect") );
             return false;
     }
 
     if ( !(*s_pfnAnimateWindow)(GetHwnd(), timeout, dwFlags) )
     {
-        wxLogLastError(_T("AnimateWindow"));
+        wxLogLastError(wxT("AnimateWindow"));
 
         return false;
     }
@@ -845,7 +845,7 @@ void wxWindowMSW::DoReleaseMouse()
 {
     if ( !::ReleaseCapture() )
     {
-        wxLogLastError(_T("ReleaseCapture"));
+        wxLogLastError(wxT("ReleaseCapture"));
     }
 }
 
@@ -925,7 +925,7 @@ void wxWindowMSW::WarpPointer(int x, int y)
 
     if ( !::SetCursorPos(x, y) )
     {
-        wxLogLastError(_T("SetCursorPos"));
+        wxLogLastError(wxT("SetCursorPos"));
     }
 }
 
@@ -981,7 +981,7 @@ inline UINT WXOrientToSB(int orient)
 int wxWindowMSW::GetScrollPos(int orient) const
 {
     HWND hWnd = GetHwnd();
-    wxCHECK_MSG( hWnd, 0, _T("no HWND in GetScrollPos") );
+    wxCHECK_MSG( hWnd, 0, wxT("no HWND in GetScrollPos") );
 
     return GetScrollPosition(hWnd, WXOrientToSB(orient));
 }
@@ -1000,7 +1000,7 @@ int wxWindowMSW::GetScrollRange(int orient) const
     {
         // Most of the time this is not really an error, since the return
         // value can also be zero when there is no scrollbar yet.
-        // wxLogLastError(_T("GetScrollInfo"));
+        // wxLogLastError(wxT("GetScrollInfo"));
     }
     maxPos = scrollInfo.nMax;
 
@@ -1016,7 +1016,7 @@ int wxWindowMSW::GetScrollThumb(int orient) const
 void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
 {
     HWND hWnd = GetHwnd();
-    wxCHECK_RET( hWnd, _T("SetScrollPos: no HWND") );
+    wxCHECK_RET( hWnd, wxT("SetScrollPos: no HWND") );
 
     WinStruct<SCROLLINFO> info;
     info.nPage = 0;
@@ -1145,7 +1145,7 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
     wxUnusedVar(dir);
 #else
     wxCHECK_RET( GetHwnd(),
-                 _T("layout direction must be set after window creation") );
+                 wxT("layout direction must be set after window creation") );
 
     LONG styleOld = wxGetWindowExStyle(this);
 
@@ -1161,7 +1161,7 @@ void wxWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
             break;
 
         default:
-            wxFAIL_MSG(_T("unsupported layout direction"));
+            wxFAIL_MSG(wxT("unsupported layout direction"));
             break;
     }
 
@@ -1177,7 +1177,7 @@ wxLayoutDirection wxWindowMSW::GetLayoutDirection() const
 #ifdef __WXWINCE__
     return wxLayout_Default;
 #else
-    wxCHECK_MSG( GetHwnd(), wxLayout_Default, _T("invalid window") );
+    wxCHECK_MSG( GetHwnd(), wxLayout_Default, wxT("invalid window") );
 
     return wxHasWindowExStyle(this, WS_EX_LAYOUTRTL) ? wxLayout_RightToLeft
                                                      : wxLayout_LeftToRight;
@@ -1286,7 +1286,7 @@ bool wxCheckWindowWndProc(WXHWND hWnd,
     // TODO: get rid of wxTLWHiddenParent special case (currently it's not
     //       registered by wxApp but using ad hoc code in msw/toplevel.cpp);
     //       there is also a hidden window class used by sockets &c
-    return wxApp::IsRegisteredClassName(str) || str == _T("wxTLWHiddenParent");
+    return wxApp::IsRegisteredClassName(str) || str == wxT("wxTLWHiddenParent");
 }
 
 // ----------------------------------------------------------------------------
@@ -1393,7 +1393,7 @@ void wxWindowMSW::MSWUpdateStyle(long flagsOld, long exflagsOld)
                              0, 0, 0, 0,
                              SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED) )
         {
-            wxLogLastError(_T("SetWindowPos"));
+            wxLogLastError(wxT("SetWindowPos"));
         }
     }
 }
@@ -1487,7 +1487,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         {
             default:
             case wxBORDER_DEFAULT:
-                wxFAIL_MSG( _T("unknown border style") );
+                wxFAIL_MSG( wxT("unknown border style") );
                 // fall through
 
             case wxBORDER_NONE:
@@ -1654,7 +1654,7 @@ void wxWindowMSW::Update()
 {
     if ( !::UpdateWindow(GetHwnd()) )
     {
-        wxLogLastError(_T("UpdateWindow"));
+        wxLogLastError(wxT("UpdateWindow"));
     }
 
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
@@ -1925,7 +1925,7 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
                                 SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
         if ( !hdwp )
         {
-            wxLogLastError(_T("DeferWindowPos"));
+            wxLogLastError(wxT("DeferWindowPos"));
         }
     }
 
@@ -2111,7 +2111,7 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
                            height + heightWin - rectClient.bottom,
                            TRUE) )
         {
-            wxLogLastError(_T("MoveWindow"));
+            wxLogLastError(wxT("MoveWindow"));
         }
     }
 }
@@ -2136,7 +2136,7 @@ wxSize wxWindowMSW::DoGetBorderSize() const
             break;
 
         default:
-            wxFAIL_MSG( _T("unknown border style") );
+            wxFAIL_MSG( wxT("unknown border style") );
             // fall through
 
         case wxBORDER_NONE:
@@ -2173,7 +2173,7 @@ void wxWindowMSW::DoGetTextExtent(const wxString& string,
                                   const wxFont *fontToUse) const
 {
     wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
-                    _T("invalid font in GetTextExtent()") );
+                    wxT("invalid font in GetTextExtent()") );
 
     HFONT hfontToUse;
     if ( fontToUse )
@@ -2949,7 +2949,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
                     // this should never happen
                     wxCHECK_MSG( win, 0,
-                                 _T("FindWindowForMouseEvent() returned NULL") );
+                                 wxT("FindWindowForMouseEvent() returned NULL") );
                 }
 #ifdef __POCKETPC__
                 if (IsContextMenuEnabled() && message == WM_LBUTTONDOWN)
@@ -3865,7 +3865,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
 
         if ( !len )
         {
-            wxLogLastError(_T("MultiByteToWideChar()"));
+            wxLogLastError(wxT("MultiByteToWideChar()"));
         }
 
         buf[len] = L'\0';
@@ -4256,7 +4256,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM WXUNUSED_IN_WINCE(wParam),
             break;
 
         default:
-            wxLogDebug(_T("Unknown WM_POWERBROADCAST(%d) event"), wParam);
+            wxLogDebug(wxT("Unknown WM_POWERBROADCAST(%d) event"), wParam);
             // fall through
 
         // these messages are currently not mapped to wx events
@@ -4349,7 +4349,7 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
             return false;
 
         wxCHECK_MSG( wxDynamicCast(pMenuItem, wxMenuItem),
-                         false, _T("MSWOnDrawItem: bad wxMenuItem pointer") );
+                         false, wxT("MSWOnDrawItem: bad wxMenuItem pointer") );
 
         // prepare to call OnDrawItem(): notice using of wxDCTemp to prevent
         // the DC from being released
@@ -4415,7 +4415,7 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
             return false;
 
         wxCHECK_MSG( wxDynamicCast(pMenuItem, wxMenuItem),
-                        false, _T("MSWOnMeasureItem: bad wxMenuItem pointer") );
+                        false, wxT("MSWOnMeasureItem: bad wxMenuItem pointer") );
 
         size_t w, h;
         bool rc = pMenuItem->OnMeasureItem(&w, &h);
@@ -4642,12 +4642,12 @@ extern wxCOLORMAP *wxGetStdColourMap()
             // reference bitmap which can tell us what the RGB values change
             // to.
             wxLogNull logNo; // suppress error if we couldn't load the bitmap
-            wxBitmap stdColourBitmap(_T("wxBITMAP_STD_COLOURS"));
+            wxBitmap stdColourBitmap(wxT("wxBITMAP_STD_COLOURS"));
             if ( stdColourBitmap.Ok() )
             {
                 // the pixels in the bitmap must correspond to wxSTD_COL_XXX!
                 wxASSERT_MSG( stdColourBitmap.GetWidth() == wxSTD_COL_MAX,
-                              _T("forgot to update wxBITMAP_STD_COLOURS!") );
+                              wxT("forgot to update wxBITMAP_STD_COLOURS!") );
 
                 wxMemoryDC memDC;
                 memDC.SelectObject(stdColourBitmap);
@@ -4972,7 +4972,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             m_hDWP = (WXHANDLE)::BeginDeferWindowPos(numChildren);
             if ( !m_hDWP )
             {
-                wxLogLastError(_T("BeginDeferWindowPos"));
+                wxLogLastError(wxT("BeginDeferWindowPos"));
             }
             if (m_hDWP)
                 useDefer = true;
@@ -4985,7 +4985,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
     switch ( wParam )
     {
         default:
-            wxFAIL_MSG( _T("unexpected WM_SIZE parameter") );
+            wxFAIL_MSG( wxT("unexpected WM_SIZE parameter") );
             // fall through nevertheless
 
         case SIZE_MAXHIDE:
@@ -5025,7 +5025,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
         // do put all child controls in place at once
         if ( !::EndDeferWindowPos(hDWP) )
         {
-            wxLogLastError(_T("EndDeferWindowPos"));
+            wxLogLastError(wxT("EndDeferWindowPos"));
         }
 
         // Reset our children's pending pos/size values.
@@ -5220,7 +5220,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
 // still don't get move, enter nor leave events.
 static wxWindowMSW *FindWindowForMouseEvent(wxWindowMSW *win, int *x, int *y)
 {
-    wxCHECK_MSG( x && y, win, _T("NULL pointer in FindWindowForMouseEvent") );
+    wxCHECK_MSG( x && y, win, wxT("NULL pointer in FindWindowForMouseEvent") );
 
     // first try to find a non transparent child: this allows us to send events
     // to a static text which is inside a static box, for example
@@ -5344,11 +5344,11 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             {
                 // see comment in wxApp::GetComCtl32Version() explaining the
                 // use of wxLoadedDLL
-                wxLoadedDLL dllComCtl32(_T("comctl32.dll"));
+                wxLoadedDLL dllComCtl32(wxT("comctl32.dll"));
                 if ( dllComCtl32.IsLoaded() )
                 {
                     s_pfn_TrackMouseEvent = (_TrackMouseEvent_t)
-                        dllComCtl32.RawGetSymbol(_T("_TrackMouseEvent"));
+                        dllComCtl32.RawGetSymbol(wxT("_TrackMouseEvent"));
                 }
 
                 s_initDone = true;
@@ -5430,7 +5430,7 @@ bool wxWindowMSW::HandleMouseWheel(WXWPARAM wParam, WXLPARAM lParam)
                                      &s_linesPerRotation, 0))
         {
             // this is not supposed to happen
-            wxLogLastError(_T("SystemParametersInfo(GETWHEELSCROLLLINES)"));
+            wxLogLastError(wxT("SystemParametersInfo(GETWHEELSCROLLLINES)"));
 
             // the default is 3, so use it if SystemParametersInfo() failed
             s_linesPerRotation = 3;
@@ -5473,7 +5473,7 @@ void wxWindowMSW::GenerateMouseLeave()
     if ( !::GetCursorPos(&pt) )
 #endif
     {
-        wxLogLastError(_T("GetCursorPos"));
+        wxLogLastError(wxT("GetCursorPos"));
     }
 
     // we need to have client coordinates here for symmetry with
@@ -5638,13 +5638,13 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), _T('&'));
+                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), wxT('&'));
                 while ( p++ )
                 {
-                    if ( *p == _T('&') )
+                    if ( *p == wxT('&') )
                     {
                         // this is not the accel char, find the real one
-                        p = wxStrchr(p + 1, _T('&'));
+                        p = wxStrchr(p + 1, wxT('&'));
                     }
                     else // got the accel char
                     {
@@ -5667,7 +5667,7 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
         else // failed to get the menu text?
         {
             // it's not fatal, so don't show error, but still log it
-            wxLogLastError(_T("GetMenuItemInfo"));
+            wxLogLastError(wxT("GetMenuItemInfo"));
         }
     }
 #endif
@@ -5841,7 +5841,7 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
                                   &scrollInfo) )
             {
                 // Not necessarily an error, if there are no scrollbars yet.
-                // wxLogLastError(_T("GetScrollInfo"));
+                // wxLogLastError(wxT("GetScrollInfo"));
             }
 
             event.SetPosition(scrollInfo.nTrackPos);
@@ -5867,7 +5867,7 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
 wxWindowMSW::MSWRegisterMessageHandler(int msg, MSWMessageHandler handler)
 {
     wxCHECK_MSG( gs_messageHandlers.find(msg) == gs_messageHandlers.end(),
-                 false, _T("registering handler for the same message twice") );
+                 false, wxT("registering handler for the same message twice") );
 
     gs_messageHandlers[msg] = handler;
     return true;
@@ -5878,7 +5878,7 @@ wxWindowMSW::MSWUnregisterMessageHandler(int msg, MSWMessageHandler handler)
 {
     const MSWMessageHandlers::iterator i = gs_messageHandlers.find(msg);
     wxCHECK_RET( i != gs_messageHandlers.end() && i->second == handler,
-                 _T("unregistering non-registered handler?") );
+                 wxT("unregistering non-registered handler?") );
 
     gs_messageHandlers.erase(i);
 }
@@ -6384,7 +6384,7 @@ void wxSetKeyboardHook(bool doIt)
                               );
         if ( !wxTheKeyboardHook )
         {
-            wxLogLastError(_T("SetWindowsHookEx(wxKeyboardHook)"));
+            wxLogLastError(wxT("SetWindowsHookEx(wxKeyboardHook)"));
         }
     }
     else // uninstall
@@ -6945,10 +6945,10 @@ static void WinCEUnregisterHotKey(int modifiers, int id)
     typedef BOOL (WINAPI *UnregisterFunc1Proc)(UINT, UINT);
 
     UnregisterFunc1Proc procUnregisterFunc;
-    hCoreDll = LoadLibrary(_T("coredll.dll"));
+    hCoreDll = LoadLibrary(wxT("coredll.dll"));
     if (hCoreDll)
     {
-        procUnregisterFunc = (UnregisterFunc1Proc)GetProcAddress(hCoreDll, _T("UnregisterFunc1"));
+        procUnregisterFunc = (UnregisterFunc1Proc)GetProcAddress(hCoreDll, wxT("UnregisterFunc1"));
         if (procUnregisterFunc)
             procUnregisterFunc(modifiers, id);
         FreeLibrary(hCoreDll);
@@ -6976,7 +6976,7 @@ bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
 
     if ( !::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, keycode) )
     {
-        wxLogLastError(_T("RegisterHotKey"));
+        wxLogLastError(wxT("RegisterHotKey"));
 
         return false;
     }
@@ -6992,7 +6992,7 @@ bool wxWindowMSW::UnregisterHotKey(int hotkeyId)
 
     if ( !::UnregisterHotKey(GetHwnd(), hotkeyId) )
     {
-        wxLogLastError(_T("UnregisterHotKey"));
+        wxLogLastError(wxT("UnregisterHotKey"));
 
         return false;
     }
@@ -7045,7 +7045,7 @@ public:
 
         if ( !ms_hMsgHookProc )
         {
-            wxLogLastError(_T("SetWindowsHookEx(WH_GETMESSAGE)"));
+            wxLogLastError(wxT("SetWindowsHookEx(WH_GETMESSAGE)"));
 
             return false;
         }

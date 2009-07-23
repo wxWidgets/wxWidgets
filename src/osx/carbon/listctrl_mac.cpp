@@ -495,7 +495,7 @@ void wxListCtrlTextCtrlWrapper::OnKeyUp( wxKeyEvent &event )
     wxPoint myPos = m_text->GetPosition();
     wxSize mySize = m_text->GetSize();
     int sx, sy;
-    m_text->GetTextExtent(m_text->GetValue() + _T("MM"), &sx, &sy);
+    m_text->GetTextExtent(m_text->GetValue() + wxT("MM"), &sx, &sy);
     if (myPos.x + sx > parentSize.x)
         sx = parentSize.x - myPos.x;
     if (mySize.x > sx)
@@ -933,7 +933,7 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
     if (m_dbImpl)
     {
         wxColumnList::compatibility_iterator node = m_colsInfo.Item( col );
-        wxASSERT_MSG( node, _T("invalid column index in wxMacListCtrlItem") );
+        wxASSERT_MSG( node, wxT("invalid column index in wxMacListCtrlItem") );
         wxListItem* column = node->GetData();
 
         long mask = column->GetMask();
@@ -962,7 +962,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
 
     if (m_dbImpl)
     {
-        wxASSERT_MSG( col < (int)m_colsInfo.GetCount(), _T("invalid column index in wxMacListCtrlItem") );
+        wxASSERT_MSG( col < (int)m_colsInfo.GetCount(), wxT("invalid column index in wxMacListCtrlItem") );
         
         long mask = item.GetMask();
         {
@@ -1392,7 +1392,7 @@ bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 wxRect wxListCtrl::GetViewRect() const
 {
     wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
-                    _T("wxListCtrl::GetViewRect() only works in icon mode") );
+                    wxT("wxListCtrl::GetViewRect() only works in icon mode") );
 
     if (m_genericImpl)
         return m_genericImpl->GetViewRect();
@@ -2076,7 +2076,7 @@ int wxListCtrl::GetScrollPos(int orient) const
 // -1 otherwise.
 long wxListCtrl::InsertItem(wxListItem& info)
 {
-    wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual controls") );
+    wxASSERT_MSG( !IsVirtual(), wxT("can't be used with virtual controls") );
 
     if (m_genericImpl)
         return m_genericImpl->InsertItem(info);
@@ -2289,7 +2289,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( _T("wxListCtrl::OnGetItemText not supposed to be called") );
+    wxFAIL_MSG( wxT("wxListCtrl::OnGetItemText not supposed to be called") );
 
     return wxEmptyString;
 }
@@ -2313,7 +2313,7 @@ int wxListCtrl::OnGetItemColumnImage(long item, long column) const
 wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) const
 {
     wxASSERT_MSG( item >= 0 && item < GetItemCount(),
-                  _T("invalid item index in OnGetItemAttr()") );
+                  wxT("invalid item index in OnGetItemAttr()") );
 
     // no attributes by default
     return NULL;
@@ -2321,7 +2321,7 @@ wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) cons
 
 void wxListCtrl::SetItemCount(long count)
 {
-    wxASSERT_MSG( IsVirtual(), _T("this is for virtual controls only") );
+    wxASSERT_MSG( IsVirtual(), wxT("this is for virtual controls only") );
 
     if (m_genericImpl)
     {
@@ -3210,7 +3210,7 @@ wxMacDataBrowserListCtrlControl::~wxMacDataBrowserListCtrlControl()
 void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item )
 {
     wxMacDataItem* dataItem = GetItemFromLine(row);
-    wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
+    wxASSERT_MSG( dataItem, wxT("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
     if (item)
     {
         wxMacListCtrlItem* listItem = static_cast<wxMacListCtrlItem *>(dataItem);
@@ -3256,7 +3256,7 @@ void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxLis
 void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item )
 {
     wxMacDataItem* dataItem = GetItemFromLine(row);
-    wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem in MacGetColumnInfo. Is row a valid wxListCtrl row?") );
+    wxASSERT_MSG( dataItem, wxT("could not obtain wxMacDataItem in MacGetColumnInfo. Is row a valid wxListCtrl row?") );
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
     //if (item)
     {
@@ -3346,7 +3346,7 @@ void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString&
 
 wxListItem* wxMacListCtrlItem::GetColumnInfo( unsigned int column )
 {
-    wxASSERT_MSG( HasColumnInfo(column), _T("invalid column index in wxMacListCtrlItem") );
+    wxASSERT_MSG( HasColumnInfo(column), wxT("invalid column index in wxMacListCtrlItem") );
     return m_rowItems[column];
 }
 

@@ -145,7 +145,7 @@ static int IsNumberedAccelKey(const wxString& str,
     {
         // this must be a mistake, chances that this is a valid name of another
         // key are vanishingly small
-        wxLogDebug(_T("Invalid key string \"%s\""), str.c_str());
+        wxLogDebug(wxT("Invalid key string \"%s\""), str.c_str());
         return 0;
     }
 
@@ -259,7 +259,7 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
     }
 
 
-    wxASSERT_MSG( keyCode, _T("logic error: should have key code here") );
+    wxASSERT_MSG( keyCode, wxT("logic error: should have key code here") );
 
     if ( flagsOut )
         *flagsOut = accelFlags;

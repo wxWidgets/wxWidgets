@@ -1602,7 +1602,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if ( wxOSXLockFocus(m_view) )
         {
             m_cgContext = wxOSXGetContextFromCurrentContext();
-            wxASSERT_MSG( m_cgContext != NULL, _T("Unable to retrieve drawing context from View"));
+            wxASSERT_MSG( m_cgContext != NULL, wxT("Unable to retrieve drawing context from View"));
         }
         else
         {

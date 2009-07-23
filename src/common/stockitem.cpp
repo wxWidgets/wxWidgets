@@ -199,7 +199,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         STOCKITEM(wxID_ZOOM_OUT,            _("Zoom &Out"))
 
         default:
-            wxFAIL_MSG( _T("invalid stock item ID") );
+            wxFAIL_MSG( wxT("invalid stock item ID") );
             break;
     };
 
@@ -215,7 +215,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
     {
         wxAcceleratorEntry accel = wxGetStockAccelerator(id);
         if (accel.IsOk())
-            stockLabel << _T('\t') << accel.ToString();
+            stockLabel << wxT('\t') << accel.ToString();
     }
 #endif // wxUSE_ACCEL
 
@@ -308,7 +308,7 @@ bool wxIsStockLabel(wxWindowID id, const wxString& label)
     if (label == stock)
         return true;
 
-    stock.Replace(_T("&"), wxEmptyString);
+    stock.Replace(wxT("&"), wxEmptyString);
     if (label == stock)
         return true;
 

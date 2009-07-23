@@ -45,30 +45,30 @@ bool MyApp::OnInit(void)
 
   // Create the main frame window
 
-  frame = new MyFrame(NULL, wxID_ANY, _T("Sash Demo"), wxPoint(0, 0), wxSize(500, 400),
+  frame = new MyFrame(NULL, wxID_ANY, wxT("Sash Demo"), wxPoint(0, 0), wxSize(500, 400),
                       wxDEFAULT_FRAME_STYLE |
                       wxNO_FULL_REPAINT_ON_RESIZE |
                       wxHSCROLL | wxVSCROLL);
 
   // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon(_T("sashtest_icn")));
+  frame->SetIcon(wxIcon(wxT("sashtest_icn")));
 #endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(SASHTEST_NEW_WINDOW, _T("&New window"));
-  file_menu->Append(SASHTEST_TOGGLE_WINDOW, _T("&Toggle window"));
-  file_menu->Append(SASHTEST_QUIT, _T("&Exit"));
+  file_menu->Append(SASHTEST_NEW_WINDOW, wxT("&New window"));
+  file_menu->Append(SASHTEST_TOGGLE_WINDOW, wxT("&Toggle window"));
+  file_menu->Append(SASHTEST_QUIT, wxT("&Exit"));
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(SASHTEST_ABOUT, _T("&About"));
+  help_menu->Append(SASHTEST_ABOUT, wxT("&About"));
 
   wxMenuBar *menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, _T("&File"));
-  menu_bar->Append(help_menu, _T("&Help"));
+  menu_bar->Append(file_menu, wxT("&File"));
+  menu_bar->Append(help_menu, wxT("&Help"));
 
   // Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
@@ -141,7 +141,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   wxTextCtrl* textWindow = new wxTextCtrl(win, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
         wxTE_MULTILINE|wxSUNKEN_BORDER);
 //        wxTE_MULTILINE|wxNO_BORDER);
-  textWindow->SetValue(_T("A help window"));
+  textWindow->SetValue(wxT("A help window"));
 
   m_leftWindow1 = win;
 
@@ -165,7 +165,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-      (void)wxMessageBox(_T("wxWidgets 2.0 Sash Demo\nAuthor: Julian Smart (c) 1998"), _T("About Sash Demo"));
+      (void)wxMessageBox(wxT("wxWidgets 2.0 Sash Demo\nAuthor: Julian Smart (c) 1998"), wxT("About Sash Demo"));
 }
 
 void MyFrame::OnToggleWindow(wxCommandEvent& WXUNUSED(event))
@@ -225,17 +225,17 @@ void MyFrame::OnSashDrag(wxSashEvent& event)
 void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
 {
       // Make another frame, containing a canvas
-      MyChild *subframe = new MyChild(frame, _T("Canvas Frame"),
+      MyChild *subframe = new MyChild(frame, wxT("Canvas Frame"),
                                       wxPoint(10, 10), wxSize(300, 300),
                                       wxDEFAULT_FRAME_STYLE |
                                       wxNO_FULL_REPAINT_ON_RESIZE);
 
-      subframe->SetTitle(wxString::Format(_T("Canvas Frame %d"), winNumber));
+      subframe->SetTitle(wxString::Format(wxT("Canvas Frame %d"), winNumber));
       winNumber ++;
 
       // Give it an icon (this is ignored in MDI mode: uses resources)
 #ifdef __WXMSW__
-      subframe->SetIcon(wxIcon(_T("sashtest_icn")));
+      subframe->SetIcon(wxIcon(wxT("sashtest_icn")));
 #endif
 
 #if wxUSE_STATUSBAR
@@ -246,23 +246,23 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
       // Make a menubar
       wxMenu *file_menu = new wxMenu;
 
-      file_menu->Append(SASHTEST_NEW_WINDOW, _T("&New window"));
-      file_menu->Append(SASHTEST_CHILD_QUIT, _T("&Close child"));
-      file_menu->Append(SASHTEST_QUIT, _T("&Exit"));
+      file_menu->Append(SASHTEST_NEW_WINDOW, wxT("&New window"));
+      file_menu->Append(SASHTEST_CHILD_QUIT, wxT("&Close child"));
+      file_menu->Append(SASHTEST_QUIT, wxT("&Exit"));
 
       wxMenu *option_menu = new wxMenu;
 
       // Dummy option
-      option_menu->Append(SASHTEST_REFRESH, _T("&Refresh picture"));
+      option_menu->Append(SASHTEST_REFRESH, wxT("&Refresh picture"));
 
       wxMenu *help_menu = new wxMenu;
-      help_menu->Append(SASHTEST_ABOUT, _T("&About"));
+      help_menu->Append(SASHTEST_ABOUT, wxT("&About"));
 
       wxMenuBar *menu_bar = new wxMenuBar;
 
-      menu_bar->Append(file_menu, _T("&File"));
-      menu_bar->Append(option_menu, _T("&Options"));
-      menu_bar->Append(help_menu, _T("&Help"));
+      menu_bar->Append(file_menu, wxT("&File"));
+      menu_bar->Append(option_menu, wxT("&Options"));
+      menu_bar->Append(help_menu, wxT("&Help"));
 
       // Associate the menu bar with the frame
       subframe->SetMenuBar(menu_bar);
@@ -309,7 +309,7 @@ void MyCanvas::OnDraw(wxDC& dc)
     dc.DrawSpline(50, 200, 50, 100, 200, 10);
 #endif // wxUSE_SPLINES
     dc.DrawLine(50, 230, 200, 230);
-    dc.DrawText(_T("This is a test string"), 50, 230);
+    dc.DrawText(wxT("This is a test string"), 50, 230);
 
     wxPoint points[3];
     points[0].x = 200; points[0].y = 300;

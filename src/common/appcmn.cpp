@@ -242,7 +242,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
     if ( parser.Found(OPTION_MODE, &modeDesc) )
     {
         unsigned w, h, bpp;
-        if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
+        if ( wxSscanf(modeDesc.c_str(), wxT("%ux%u-%u"), &w, &h, &bpp) != 3 )
         {
             wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
             return false;
@@ -474,7 +474,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 
     const wxString stackTrace = GetAssertStackTrace();
     if ( !stackTrace.empty() )
-        msgDlg << _T("\n\nCall stack:\n") << stackTrace;
+        msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
 #endif // wxUSE_STACKWALKER
 
     // this message is intentionally not translated -- it is for

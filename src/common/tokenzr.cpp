@@ -47,7 +47,7 @@ find_first_of(const wxChar *delims, size_t len,
               const wxString::const_iterator& from,
               const wxString::const_iterator& end)
 {
-    wxASSERT_MSG( from <= end,  _T("invalid index") );
+    wxASSERT_MSG( from <= end,  wxT("invalid index") );
 
     for ( wxString::const_iterator i = from; i != end; ++i )
     {
@@ -63,7 +63,7 @@ find_first_not_of(const wxChar *delims, size_t len,
                   const wxString::const_iterator& from,
                   const wxString::const_iterator& end)
 {
-    wxASSERT_MSG( from <= end,  _T("invalid index") );
+    wxASSERT_MSG( from <= end,  wxT("invalid index") );
 
     for ( wxString::const_iterator i = from; i != end; ++i )
     {
@@ -128,12 +128,12 @@ void wxStringTokenizer::SetString(const wxString& str,
 
 void wxStringTokenizer::Reinit(const wxString& str)
 {
-    wxASSERT_MSG( IsOk(), _T("you should call SetString() first") );
+    wxASSERT_MSG( IsOk(), wxT("you should call SetString() first") );
 
     m_string = str;
     m_stringEnd = m_string.end();
     m_pos = m_string.begin();
-    m_lastDelim = _T('\0');
+    m_lastDelim = wxT('\0');
     m_hasMoreTokens = MoreTokens_Unknown;
 }
 
@@ -162,7 +162,7 @@ bool wxStringTokenizer::HasMoreTokens() const
 
 bool wxStringTokenizer::DoHasMoreTokens() const
 {
-    wxCHECK_MSG( IsOk(), false, _T("you should call SetString() first") );
+    wxCHECK_MSG( IsOk(), false, wxT("you should call SetString() first") );
 
     if ( find_first_not_of(m_delims, m_delimsLen, m_pos, m_stringEnd)
          != m_stringEnd )
@@ -186,11 +186,11 @@ bool wxStringTokenizer::DoHasMoreTokens() const
             // up to the end of the string in GetNextToken(), but if it is not
             // NUL yet we still have this last token to return even if m_pos is
             // already at m_string.length()
-            return m_pos < m_stringEnd || m_lastDelim != _T('\0');
+            return m_pos < m_stringEnd || m_lastDelim != wxT('\0');
 
         case wxTOKEN_INVALID:
         case wxTOKEN_DEFAULT:
-            wxFAIL_MSG( _T("unexpected tokenizer mode") );
+            wxFAIL_MSG( wxT("unexpected tokenizer mode") );
             // fall through
 
         case wxTOKEN_STRTOK:
@@ -204,7 +204,7 @@ bool wxStringTokenizer::DoHasMoreTokens() const
 // count the number of (remaining) tokens in the string
 size_t wxStringTokenizer::CountTokens() const
 {
-    wxCHECK_MSG( IsOk(), 0, _T("you should call SetString() first") );
+    wxCHECK_MSG( IsOk(), 0, wxT("you should call SetString() first") );
 
     // VZ: this function is IMHO not very useful, so it's probably not very
     //     important if its implementation here is not as efficient as it
@@ -254,7 +254,7 @@ wxString wxStringTokenizer::GetNextToken()
             m_pos = m_stringEnd;
 
             // it wasn't terminated
-            m_lastDelim = _T('\0');
+            m_lastDelim = wxT('\0');
         }
         else // we found a delimiter at pos
         {
@@ -269,7 +269,7 @@ wxString wxStringTokenizer::GetNextToken()
             // skip the token and the trailing delimiter
             m_pos = pos + 1;
 
-            m_lastDelim = (pos == m_stringEnd) ? _T('\0') : (wxChar)*pos;
+            m_lastDelim = (pos == m_stringEnd) ? wxT('\0') : (wxChar)*pos;
         }
     }
     while ( !AllowEmpty() && token.empty() );

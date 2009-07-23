@@ -50,7 +50,7 @@ typedef HRESULT (WINAPI *SHGetSpecialFolderPath_t)(HWND, LPTSTR, int, BOOL);
 // ----------------------------------------------------------------------------
 
 // used in our wxLogTrace messages
-#define TRACE_MASK _T("stdpaths")
+#define TRACE_MASK wxT("stdpaths")
 
 #ifndef CSIDL_APPDATA
     #define CSIDL_APPDATA         0x001a
@@ -117,16 +117,16 @@ void ResolveShellFunctions()
 
     // start with the newest functions, fall back to the oldest ones
 #ifdef __WXWINCE__
-    wxString shellDllName(_T("coredll"));
+    wxString shellDllName(wxT("coredll"));
 #else
     // first check for SHGetFolderPath (shell32.dll 5.0)
-    wxString shellDllName(_T("shell32"));
+    wxString shellDllName(wxT("shell32"));
 #endif
 
     wxDynamicLibrary dllShellFunctions( shellDllName );
     if ( !dllShellFunctions.IsLoaded() )
     {
-        wxLogTrace(TRACE_MASK, _T("Failed to load %s.dll"), shellDllName.c_str() );
+        wxLogTrace(TRACE_MASK, wxT("Failed to load %s.dll"), shellDllName.c_str() );
     }
 
     // don't give errors if the functions are unavailable, we're ready to deal
@@ -143,14 +143,14 @@ void ResolveShellFunctions()
     static const char UNICODE_SUFFIX = 'A';
 #endif // Unicode/!Unicode
 
-    wxString funcname(_T("SHGetFolderPath"));
+    wxString funcname(wxT("SHGetFolderPath"));
     gs_shellFuncs.pSHGetFolderPath =
         (SHGetFolderPath_t)dllShellFunctions.GetSymbol(funcname + UNICODE_SUFFIX);
 
     // then for SHGetSpecialFolderPath (shell32.dll 4.71)
     if ( !gs_shellFuncs.pSHGetFolderPath )
     {
-        funcname = _T("SHGetSpecialFolderPath");
+        funcname = wxT("SHGetSpecialFolderPath");
         gs_shellFuncs.pSHGetSpecialFolderPath = (SHGetSpecialFolderPath_t)
             dllShellFunctions.GetSymbol(funcname + UNICODE_SUFFIX);
     }
@@ -385,7 +385,7 @@ wxString wxStandardPathsWin16::GetConfigDir() const
 #ifndef __WXWINCE__
     if ( !::GetWindowsDirectory(wxStringBuffer(dir, MAX_PATH), MAX_PATH) )
     {
-        wxLogLastError(_T("GetWindowsDirectory"));
+        wxLogLastError(wxT("GetWindowsDirectory"));
     }
 #else
     // TODO: use CSIDL_WINDOWS (eVC4, possibly not eVC3)

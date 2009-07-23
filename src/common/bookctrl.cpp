@@ -183,7 +183,7 @@ wxRect wxBookCtrlBase::GetPageRect() const
     switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
     {
         default:
-            wxFAIL_MSG( _T("unexpected alignment") );
+            wxFAIL_MSG( wxT("unexpected alignment") );
             // fall through
 
         case wxBK_TOP:
@@ -242,7 +242,7 @@ void wxBookCtrlBase::DoSize()
         switch ( GetWindowStyle() & wxBK_ALIGN_MASK )
         {
             default:
-                wxFAIL_MSG( _T("unexpected alignment") );
+                wxFAIL_MSG( wxT("unexpected alignment") );
                 // fall through
 
             case wxBK_TOP:
@@ -272,7 +272,7 @@ void wxBookCtrlBase::DoSize()
         if ( !page )
         {
             wxASSERT_MSG( AllowNullPage(),
-                _T("Null page in a control that does not allow null pages?") );
+                wxT("Null page in a control that does not allow null pages?") );
             continue;
         }
 
@@ -386,9 +386,9 @@ wxBookCtrlBase::InsertPage(size_t nPage,
                            int WXUNUSED(imageId))
 {
     wxCHECK_MSG( page || AllowNullPage(), false,
-                 _T("NULL page in wxBookCtrlBase::InsertPage()") );
+                 wxT("NULL page in wxBookCtrlBase::InsertPage()") );
     wxCHECK_MSG( nPage <= m_pages.size(), false,
-                 _T("invalid page index in wxBookCtrlBase::InsertPage()") );
+                 wxT("invalid page index in wxBookCtrlBase::InsertPage()") );
 
     m_pages.Insert(page, nPage);
     if ( page )
@@ -414,7 +414,7 @@ bool wxBookCtrlBase::DeletePage(size_t nPage)
 wxWindow *wxBookCtrlBase::DoRemovePage(size_t nPage)
 {
     wxCHECK_MSG( nPage < m_pages.size(), NULL,
-                 _T("invalid page index in wxBookCtrlBase::DoRemovePage()") );
+                 wxT("invalid page index in wxBookCtrlBase::DoRemovePage()") );
 
     wxWindow *pageRemoved = m_pages[nPage];
     m_pages.RemoveAt(nPage);

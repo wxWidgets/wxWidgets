@@ -109,7 +109,7 @@ bool wxSystemSettingsNative::HasFeature(wxSystemFeature index)
             return false;
 
         default:
-            wxFAIL_MSG( _T("unknown feature") );
+            wxFAIL_MSG( wxT("unknown feature") );
     }
 
     return false;
