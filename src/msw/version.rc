@@ -26,9 +26,9 @@
 #endif
 
 #ifdef _UNICODE
-    #define LANG "04090000"
-#else
     #define LANG "040904b0"
+#else
+    #define LANG "04090000"
 #endif
 
 1 VERSIONINFO
@@ -42,7 +42,6 @@
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        // US English Ascii; see http://msdn.microsoft.com/library/psdk/winui/rc_3rxn.htm for codes
         BLOCK LANG
         BEGIN
             VALUE "Comments", "wxWidgets cross-platform GUI framework\0"
