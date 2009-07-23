@@ -901,6 +901,16 @@ public:
         LogV(format, argptr);
     }
 
+    void LogVTrace(const wxString& mask, const wxString& format, va_list argptr)
+    {
+        if ( !wxLog::IsAllowedTraceMask(mask) )
+            return;
+
+        Store(wxLOG_KEY_TRACE_MASK, mask);
+
+        LogV(format, argptr);
+    }
+
 
     // vararg functions used by wxLogXXX():
 
@@ -1488,6 +1498,11 @@ public:
         {}                                                                    \
         else                                                                  \
             wxMAKE_LOGGER(Trace).LogTrace
+    #define wxVLogTrace                                                       \
+        if ( !wxLog::IsLevelEnabled(wxLOG_Trace, wxLOG_COMPONENT) )           \
+        {}                                                                    \
+        else                                                                  \
+            wxMAKE_LOGGER(Trace).LogVTrace
 #else  // !wxUSE_LOG_TRACE
     #define wxVLogTrace(mask, fmt, valist) wxLogNop()
 

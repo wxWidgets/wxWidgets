@@ -273,22 +273,40 @@ void LogTestCase::Component()
 
 #if wxDEBUG_LEVEL
 
+namespace
+{
+
+const char *TEST_MASK = "test";
+
+// this is a test vararg function (a real one, not a variadic-template-like as
+// wxVLogTrace(), so care should be taken with its arguments)
+void TraceTest(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(TEST_MASK, format, argptr);
+    va_end(argptr);
+}
+
+} // anonymous namespace
+
 void LogTestCase::Trace()
 {
-    static const char *TEST_MASK = "test";
+    // we use wxLogTrace() or wxVLogTrace() from inside TraceTest()
+    // interchangeably here, it shouldn't make any difference
 
     wxLogTrace(TEST_MASK, "Not shown");
     CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Trace) );
 
     wxLog::AddTraceMask(TEST_MASK);
-    wxLogTrace(TEST_MASK, "Shown");
+    TraceTest("Shown");
     CPPUNIT_ASSERT_EQUAL( wxString::Format("(%s) Shown", TEST_MASK),
                           m_log->GetLog(wxLOG_Trace) );
 
     wxLog::RemoveTraceMask(TEST_MASK);
     m_log->Clear();
 
-    wxLogTrace(TEST_MASK, "Not shown again");
+    TraceTest("Not shown again");
     CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Trace) );
 }
 
