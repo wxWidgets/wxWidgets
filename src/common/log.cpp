@@ -381,7 +381,9 @@ void wxLog::DoLogRecord(wxLogLevel level,
     // but to call both of them
     DoLog(level, (const char*)msg.mb_str(), info.timestamp);
     DoLog(level, (const wchar_t*)msg.wc_str(), info.timestamp);
-#endif // WXWIN_COMPATIBILITY_2_8
+#else // !WXWIN_COMPATIBILITY_2_8
+    wxUnusedVar(info);
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
 
 
     // TODO: it would be better to extract message formatting in a separate
