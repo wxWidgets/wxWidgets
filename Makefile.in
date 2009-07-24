@@ -3296,7 +3296,6 @@ COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 	wx/osx/taskbarosx.h \
 	wx/osx/carbon/drawer.h \
 	wx/osx/carbon/dataview.h \
-	wx/osx/carbon/databrow.h \
 	wx/osx/core/joystick.h
 @COND_TOOLKIT_OSX_CARBON@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \

@@ -2933,7 +2933,6 @@ src/osx/iphone/window.mm
     wx/osx/taskbarosx.h
     wx/osx/carbon/drawer.h
     wx/osx/carbon/dataview.h
-    wx/osx/carbon/databrow.h
     wx/osx/core/joystick.h
 </set>
 
