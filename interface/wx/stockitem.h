@@ -6,6 +6,37 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+    Possible values for flags parameter of wxGetStockLabel().
+
+    The elements of this enum are bit masks and may be combined with each other
+    (except when specified otherwise).
+ */
+enum wxStockLabelQueryFlag
+{
+    /**
+        Indicates absence of wxSTOCK_WITH_MNEMONIC and wxSTOCK_WITH_ACCELERATOR.
+
+        Requests just the label (e.g. "Print...").
+     */
+    wxSTOCK_NOFLAGS = 0,
+
+    /**
+        Request the label with mnemonics character.
+       
+        E.g. "&amp;Print...".
+     */
+    wxSTOCK_WITH_MNEMONIC = 1,
+
+    /**
+        Return the label with accelerator following it after TAB.
+
+        E.g. "Print...\tCtrl-P". This can be combined with
+        wxSTOCK_WITH_MNEMONIC to get "&Print...\tCtrl-P".
+     */
+    wxSTOCK_WITH_ACCELERATOR = 2
+};
+
 /** @addtogroup group_funcmacro_misc */
 //@{
 
@@ -14,18 +45,12 @@
 
     @param id
         Given id of the wxMenuItem, wxButton, wxToolBar tool, etc.
-    @param withCodes
-        If @false then strip accelerator code from the label; useful for
-        getting labels without accelerator char code like for toolbar tooltip
-        or on platforms without traditional keyboard like smartphones.
-    @param accelerator
-        Optional accelerator string automatically added to label; useful for
-        building labels for wxMenuItem.
+    @param flags
+        Combination of the elements of wxStockLabelQueryFlag.
 
     @header{wx/stockitem.h}
 */
-wxString wxGetStockLabel(wxWindowID id, bool withCodes = true,
-                         const wxString& accelerator = wxEmptyString);
+wxString wxGetStockLabel(wxWindowID id, long flags = wxSTOCK_WITH_MNEMONIC);
 
 //@}
 
