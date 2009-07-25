@@ -130,6 +130,10 @@
         #if wxUSE_MEDIACTRL && !defined(wxNO_MEDIA_LIB)
             #pragma comment(lib, wxMSW_LIB_NAME("media"))
         #endif
+        #if wxUSE_STC && !defined(wxNO_STC_LIB)
+            #pragma comment(lib, wxMSW_LIB_NAME("stc"))
+            #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
+        #endif
     #endif // wxUSE_GUI
 #else
     #error "This file should only be included when using Microsoft Visual C++"
