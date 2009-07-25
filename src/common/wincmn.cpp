@@ -1878,6 +1878,11 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
 
 #if wxUSE_TOOLTIPS
 
+wxString wxWindowBase::GetToolTipText() const
+{
+    return m_tooltip ? m_tooltip->GetTip() : wxString();
+}
+
 void wxWindowBase::SetToolTip( const wxString &tip )
 {
     // don't create the new tooltip if we already have one

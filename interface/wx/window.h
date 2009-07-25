@@ -2217,6 +2217,11 @@ public:
     wxToolTip* GetToolTip() const;
 
     /**
+        Get the text of the associated tooltip or empty string if none.
+     */
+    wxString GetToolTipText() const;
+
+    /**
         Attach a tooltip to the window.
 
         wxToolTip pointer can be @NULL in the overload taking the pointer,
