@@ -68,8 +68,9 @@ public:
         // stock items id support
         wxString GetAsString() const
         {
-            return m_stockId == wxID_NONE ? m_label
-                                          : wxGetStockLabel(m_stockId);
+            return m_stockId == wxID_NONE
+                    ? m_label
+                    : wxGetStockLabel(m_stockId, wxSTOCK_FOR_BUTTON);
         }
 
         // return the stock id or wxID_NONE if this is not a stock label
