@@ -564,6 +564,8 @@ bool wxClipboard::DoIsSupported(const wxDataFormat& format)
 
 void wxClipboard::Clear()
 {
+    gtk_selection_clear_targets( m_clipboardWidget, GTKGetClipboardAtom() );
+
     if ( gdk_selection_owner_get(GTKGetClipboardAtom()) ==
             m_clipboardWidget->window )
     {
