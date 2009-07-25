@@ -148,10 +148,19 @@ public:
     void SetTranslators(const wxArrayString& translators);
 
     /**
-        Set the version of the program. The version is in free format, i.e. not
-        necessarily in the @c x.y.z form but it shouldn't contain the "version" word.
+        Set the version of the program. The word "version" shouldn't be included
+        in @a version. Example @a version values: "1.2" and "RC2". In about dialogs
+        with more space set aside for version information, @a longVersion is used.
+        Example @a longVersion values: "Version 1.2" and "Release Candidate 2".
+        If @a version is non-empty but @a longVersion is empty, a long version
+        is constructed automatically, using @a version (by simply prepending
+        "Version " to @a version).
+
+        The generic about dialog and native GTK+ dialog use @a version only,
+        as a suffix to the program name. The native MSW and OS X about dialogs
+        use the long version.
     */
-    void SetVersion(const wxString& version);
+    void SetVersion(const wxString& version, const wxString& longVersion = wxString());
 
     /**
         Set the web site for the program and its description (which defaults to @a url

@@ -87,8 +87,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow *parent)
         if ( info.HasVersion() )
         {
             opts.Set(CFSTR("Version"),info.GetVersion());
-            opts.Set(CFSTR("ApplicationVersion"),
-                     wxString::Format(_("Version %s"), info.GetVersion()));
+            opts.Set(CFSTR("ApplicationVersion"),info.GetLongVersion());
         }
 
         if ( info.HasCopyright() )

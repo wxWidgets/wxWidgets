@@ -384,6 +384,7 @@ All (GUI):
 - Added wxTextWrapper helper class useful for wrapping lines of text.
 - Added EVT_DATAVIEW_CACHE_HINT() event (Trigve).
 - Added wxLB_NO_SB style (implemented for MSW only; Dario Senic).
+- Added long version field to wxAboutDialogInfo (Jeff Tupper).
 
 GTK:
 

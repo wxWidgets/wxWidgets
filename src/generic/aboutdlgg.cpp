@@ -109,6 +109,29 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
     return ret;
 }
 
+void wxAboutDialogInfo::SetVersion(const wxString& version,
+                                   const wxString& longVersion)
+{
+    if ( version.empty() )
+    {
+        m_version.clear();
+
+        wxASSERT_MSG( longVersion.empty(),
+                      "long version should be empty if version is");
+
+        m_longVersion.clear();
+    }
+    else // setting valid version
+    {
+        m_version = version;
+
+        if ( longVersion.empty() )
+            m_longVersion = _("Version ") + m_version;
+        else
+            m_longVersion = longVersion;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxGenericAboutDialog
 // ----------------------------------------------------------------------------

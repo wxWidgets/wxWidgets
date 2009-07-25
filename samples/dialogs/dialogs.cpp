@@ -1689,7 +1689,13 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 static void InitAboutInfoMinimal(wxAboutDialogInfo& info)
 {
     info.SetName(wxT("Dialogs Sample"));
-    info.SetVersion(wxVERSION_NUM_DOT_STRING_T);
+    info.SetVersion(wxVERSION_NUM_DOT_STRING,
+                    wxString::Format
+                    (
+                        "%s version %s",
+                        wxMINOR_VERSION % 2 ? "Development" : "Stable",
+                        wxVERSION_NUM_DOT_STRING
+                    ));
     info.SetDescription(wxT("This sample shows different wxWidgets dialogs"));
     info.SetCopyright(wxT("(C) 1998-2006 wxWidgets dev team"));
     info.AddDeveloper(wxT("Vadim Zeitlin"));

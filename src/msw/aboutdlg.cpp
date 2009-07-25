@@ -51,7 +51,7 @@ void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
         if ( info.HasVersion() )
         {
             msg << wxT('\n');
-            msg << wxString::Format(_("Version %s"), info.GetVersion());
+            msg << info.GetLongVersion();
         }
 
         msg << wxT("\n\n");
