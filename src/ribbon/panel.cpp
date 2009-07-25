@@ -91,6 +91,7 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     SetLabel(label);
 
     m_minimised_size = wxDefaultSize; // Unknown / none
+    m_smallest_unminimised_size = wxSize(INT_MAX, INT_MAX); // Unknown / none
     m_preferred_expand_direction = wxSOUTH;
     m_expanded_dummy = NULL;
     m_expanded_panel = NULL;
@@ -189,7 +190,7 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
     // IsMinimised() returns true. This would then affect layout, as the panel
     // will refuse to grow any larger while in limbo between minimised and non.
 
-    bool minimised = width <= m_minimised_size.GetX() && height <= m_minimised_size.GetY();
+    bool minimised = IsMinimised(wxSize(width, height));
     if(minimised != m_minimised)
     {
         m_minimised = minimised;
@@ -209,8 +210,10 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
 
 bool wxRibbonPanel::IsMinimised(wxSize at_size) const
 {
-    return at_size.GetX() <= m_minimised_size.GetX() &&
-        at_size.GetY() <= m_minimised_size.GetY();
+    return (at_size.GetX() <= m_minimised_size.GetX() &&
+        at_size.GetY() <= m_minimised_size.GetY()) || 
+        at_size.GetX() < m_smallest_unminimised_size.GetX() ||
+        at_size.GetY() < m_smallest_unminimised_size.GetY();
 }
 
 void wxRibbonPanel::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -268,7 +271,19 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
             {
                 if(CanAutoMinimise())
                 {
-                    return m_minimised_size;
+                    wxSize minimised = m_minimised_size;
+                    switch(direction)
+                    {
+                    case wxHORIZONTAL:
+                        minimised.SetHeight(relative_to.GetHeight());
+                        break;
+                    case wxVERTICAL:
+                        minimised.SetWidth(relative_to.GetWidth());
+                        break;
+                    default:
+                        break;
+                    }
+                    return minimised;
                 }
                 else
                 {
@@ -453,9 +468,20 @@ bool wxRibbonPanel::Realize()
         }
     }
 
+    wxSize minimum_children_size(0, 0);
+    // TODO: Ask sizer if there is one
+    if(GetChildren().GetCount() == 1)
+    {
+        minimum_children_size = GetChildren().GetFirst()->GetData()->GetMinSize();
+    }
+
     if(m_art != NULL)
     {
         wxMemoryDC temp_dc;
+
+        m_smallest_unminimised_size =
+            m_art->GetPanelSize(temp_dc, this, minimum_children_size, NULL);
+
         wxSize bitmap_size;
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,

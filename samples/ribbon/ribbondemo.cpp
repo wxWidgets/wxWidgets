@@ -143,18 +143,18 @@ MyFrame::MyFrame()
     }
     {
         wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Pages"));
         new wxRibbonPanel(insert, wxID_ANY, wxT("Tables"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         wxRibbonPanel *colours_panel = new wxRibbonPanel(insert, wxID_ANY, wxT("Colours"));
         wxRibbonGallery *colours_gallery = new wxRibbonGallery(colours_panel, wxID_ANY);
         wxMemoryDC tmp_dc;
+        wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
+        tmp_dc.SetFont(label_font);
         AddColourToGallery(colours_gallery, "BLUE", tmp_dc);
         AddColourToGallery(colours_gallery, "GOLDENROD", tmp_dc);
         AddColourToGallery(colours_gallery, "MAROON", tmp_dc);
         AddColourToGallery(colours_gallery, "TURQUOISE", tmp_dc);
         AddColourToGallery(colours_gallery, "WHEAT", tmp_dc);
         new wxRibbonPanel(insert, wxID_ANY, wxT("Links"));
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Header & Footer"));
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Page Layout"));
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("References"));
@@ -247,15 +247,21 @@ void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
     wxColour c(colour);
     if(c.IsOk())
     {
-        wxBitmap bitmap(64, 48);
+        const int iWidth = 64;
+        const int iHeight = 48;
+
+        wxBitmap bitmap(iWidth, iHeight);
         dc.SelectObject(bitmap);
         wxBrush b(c);
         dc.SetPen(*wxBLACK_PEN);
         dc.SetBrush(b);
-        dc.DrawRectangle(0, 0, 64, 48);
+        dc.DrawRectangle(0, 0, iWidth, iHeight);
+
+        colour = colour.Mid(0, 1) + colour.Mid(1).Lower();
         wxSize size = dc.GetTextExtent(colour);
         dc.SetTextForeground(wxColour(~c.Red(), ~c.Green(), ~c.Blue()));
-        dc.DrawText(colour, (64 - size.GetWidth()) / 2, (48 - size.GetHeight()) / 2);
+        dc.DrawText(colour, (iWidth - size.GetWidth() + 1) / 2,
+            (iHeight - size.GetHeight()) / 2);
 
         gallery->Append(bitmap, wxID_ANY);
     }

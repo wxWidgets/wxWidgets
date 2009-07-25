@@ -106,6 +106,7 @@ protected:
 
     wxBitmap m_minimised_icon;
     wxBitmap m_minimised_icon_resized;
+    wxSize m_smallest_unminimised_size;
     wxSize m_minimised_size;
     wxDirection m_preferred_expand_direction;
     wxRibbonPanel* m_expanded_dummy;

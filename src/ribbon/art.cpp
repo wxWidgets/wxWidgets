@@ -65,12 +65,32 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_button_bar_hover_background_gradient_colour = wxColour(255, 231, 153);
     m_button_bar_hover_background_top_colour = wxColour(255, 252, 217);
     m_button_bar_hover_background_top_gradient_colour = wxColour(255, 231, 147);
+    m_gallery_button_background_colour = wxColour(202, 221, 246);
+    m_gallery_button_background_gradient_colour = wxColour(207, 224, 247);
+    m_gallery_button_hover_background_colour = wxColour(255, 216, 93);
+    m_gallery_button_hover_background_gradient_colour = wxColour(253, 230, 150);
+    m_gallery_button_active_background_colour = wxColour(240, 122, 33);
+    m_gallery_button_active_background_gradient_colour = wxColour(253, 159, 77);
+    m_gallery_button_disabled_background_colour = wxColour(224, 228, 232);
+    m_gallery_button_disabled_background_gradient_colour = wxColour(232, 235, 239);
+    m_gallery_button_face_colour = wxColour(103, 140, 189);
+    m_gallery_button_hover_face_colour = wxColour(86, 125, 177);
+    m_gallery_button_active_face_colour = m_gallery_button_hover_face_colour;
+    m_gallery_button_disabled_face_colour = wxColour(183, 183, 183);
+
     m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
     m_panel_label_background_brush = wxBrush(wxColour(193, 216, 241));
     m_panel_hover_label_background_brush = wxBrush(wxColour(200, 224, 255));
+    m_gallery_hover_background_brush = wxBrush(wxColour(236, 243, 251));
+    m_gallery_button_background_top_brush = wxBrush(wxColour(220, 235, 254));
+    m_gallery_button_hover_background_top_brush = wxBrush(wxColour(255, 249, 216));    
+    m_gallery_button_active_background_top_brush = wxBrush(wxColour(254, 169, 90));
+    m_gallery_button_disabled_background_top_brush = wxBrush(wxColour(240, 243, 246));
+
     m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
+
     m_tab_border_pen = wxPen(wxColour(153, 187, 232));
     m_button_bar_hover_border_pen = wxPen(wxColour(194, 170, 121));
     m_panel_border_pen = wxPen(wxColour(197, 210, 223));
@@ -131,12 +151,32 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_button_bar_hover_background_gradient_colour = m_button_bar_hover_background_gradient_colour;
     copy->m_button_bar_hover_background_top_colour = m_button_bar_hover_background_top_colour;
     copy->m_button_bar_hover_background_top_gradient_colour = m_button_bar_hover_background_top_gradient_colour;
+    copy->m_gallery_button_background_colour = m_gallery_button_background_colour;
+    copy->m_gallery_button_background_gradient_colour = m_gallery_button_background_gradient_colour;    
+    copy->m_gallery_button_hover_background_colour = m_gallery_button_hover_background_colour;
+    copy->m_gallery_button_hover_background_gradient_colour = m_gallery_button_hover_background_gradient_colour;
+    copy->m_gallery_button_active_background_colour = m_gallery_button_active_background_colour;
+    copy->m_gallery_button_active_background_gradient_colour = m_gallery_button_active_background_gradient_colour;
+    copy->m_gallery_button_disabled_background_colour = m_gallery_button_disabled_background_colour;
+    copy->m_gallery_button_disabled_background_gradient_colour = m_gallery_button_disabled_background_gradient_colour;
+    copy->m_gallery_button_face_colour = m_gallery_button_face_colour;
+    copy->m_gallery_button_hover_face_colour = m_gallery_button_hover_face_colour;
+    copy->m_gallery_button_active_face_colour = m_gallery_button_active_face_colour;
+    copy->m_gallery_button_disabled_face_colour = m_gallery_button_disabled_face_colour;
+
     copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
     copy->m_panel_label_background_brush = m_panel_label_background_brush;
     copy->m_panel_hover_label_background_brush = m_panel_hover_label_background_brush;
+    copy->m_gallery_hover_background_brush = m_gallery_hover_background_brush;
+    copy->m_gallery_button_background_top_brush = m_gallery_button_background_top_brush;
+    copy->m_gallery_button_hover_background_top_brush = m_gallery_button_hover_background_top_brush;
+    copy->m_gallery_button_active_background_top_brush = m_gallery_button_active_background_top_brush;
+    copy->m_gallery_button_disabled_background_top_brush = m_gallery_button_disabled_background_top_brush;
+
     copy->m_tab_label_font = m_tab_label_font;
     copy->m_button_bar_label_font = m_button_bar_label_font;
     copy->m_panel_label_font = m_panel_label_font;
+
     copy->m_page_border_pen = m_page_border_pen;
     copy->m_panel_border_pen = m_panel_border_pen;
     copy->m_panel_border_gradient_pen = m_panel_border_gradient_pen;
@@ -145,6 +185,7 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_tab_border_pen = m_tab_border_pen;
     copy->m_gallery_border_pen = m_gallery_border_pen;
     copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
+
     copy->m_flags = m_flags;
     copy->m_tab_separation_size = m_tab_separation_size;
     copy->m_page_border_left = m_page_border_left;
@@ -175,18 +216,31 @@ int wxRibbonMSWArtProvider::GetMetric(int id)
 {
     switch(id)
     {
-        case wxRIBBON_ART_TAB_SEPARATION_SIZE: return m_tab_separation_size;
-        case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE: return m_page_border_left;
-        case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE: return m_page_border_top;
-        case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE: return m_page_border_right;
-        case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: return m_page_border_bottom;
-        case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: return m_panel_x_separation_size;
-        case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: return m_panel_y_separation_size;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE: return m_gallery_bitmap_padding_left_size;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE: return m_gallery_bitmap_padding_right_size;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE: return m_gallery_bitmap_padding_top_size;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE: return m_gallery_bitmap_padding_bottom_size;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_TAB_SEPARATION_SIZE:
+            return m_tab_separation_size;
+        case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE:
+            return m_page_border_left;
+        case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE:
+            return m_page_border_top;
+        case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE:
+            return m_page_border_right;
+        case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE:
+            return m_page_border_bottom;
+        case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE:
+            return m_panel_x_separation_size;
+        case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE:
+            return m_panel_y_separation_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE:
+            return m_gallery_bitmap_padding_left_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE:
+            return m_gallery_bitmap_padding_right_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE:
+            return m_gallery_bitmap_padding_top_size;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE:
+            return m_gallery_bitmap_padding_bottom_size;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 
     return 0;
@@ -196,18 +250,42 @@ void wxRibbonMSWArtProvider::SetMetric(int id, int new_val)
 {
     switch(id)
     {
-        case wxRIBBON_ART_TAB_SEPARATION_SIZE: m_tab_separation_size = new_val;
-        case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE: m_page_border_left = new_val;
-        case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE: m_page_border_top = new_val;
-        case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE: m_page_border_right = new_val;
-        case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: m_page_border_bottom = new_val;
-        case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: m_panel_x_separation_size = new_val;
-        case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: m_panel_y_separation_size = new_val;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE: m_gallery_bitmap_padding_left_size = new_val;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE: m_gallery_bitmap_padding_right_size = new_val;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE: m_gallery_bitmap_padding_top_size = new_val;
-        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE: m_gallery_bitmap_padding_bottom_size = new_val;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_TAB_SEPARATION_SIZE:
+            m_tab_separation_size = new_val;
+            break;
+        case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE:
+            m_page_border_left = new_val;
+            break;
+        case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE:
+            m_page_border_top = new_val;
+            break;
+        case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE:
+            m_page_border_right = new_val;
+            break;
+        case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE:
+            m_page_border_bottom = new_val;
+            break;
+        case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE:
+            m_panel_x_separation_size = new_val;
+            break;
+        case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE:
+            m_panel_y_separation_size = new_val;
+            break;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE:
+            m_gallery_bitmap_padding_left_size = new_val;
+            break;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE:
+            m_gallery_bitmap_padding_right_size = new_val;
+            break;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE:
+            m_gallery_bitmap_padding_top_size = new_val;
+            break;
+        case wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE:
+            m_gallery_bitmap_padding_bottom_size = new_val;
+            break;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 }
 
@@ -215,10 +293,18 @@ void wxRibbonMSWArtProvider::SetFont(int id, const wxFont& font)
 {
     switch(id)
     {
-        case wxRIBBON_ART_TAB_LABEL_FONT: m_tab_label_font = font;
-        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT: m_button_bar_label_font = font;
-        case wxRIBBON_ART_PANEL_LABEL_FONT: m_panel_label_font = font;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_TAB_LABEL_FONT:
+            m_tab_label_font = font;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT:
+            m_button_bar_label_font = font;
+            break;
+        case wxRIBBON_ART_PANEL_LABEL_FONT:
+            m_panel_label_font = font;
+            break;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 }
 
@@ -226,10 +312,15 @@ wxFont wxRibbonMSWArtProvider::GetFont(int id)
 {
     switch(id)
     {
-        case wxRIBBON_ART_TAB_LABEL_FONT: return m_tab_label_font;
-        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT: return m_button_bar_label_font;
-        case wxRIBBON_ART_PANEL_LABEL_FONT: return m_panel_label_font;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_TAB_LABEL_FONT:
+            return m_tab_label_font;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT:
+            return m_button_bar_label_font;
+        case wxRIBBON_ART_PANEL_LABEL_FONT:
+            return m_panel_label_font;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 
     return wxNullFont;
@@ -239,47 +330,123 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id)
 {
     switch(id)
     {
-        case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR: return m_button_bar_label_colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR: return m_button_bar_hover_border_pen.GetColour();
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR: return m_button_bar_hover_background_top_colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: return m_button_bar_hover_background_top_gradient_colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: return m_button_bar_hover_background_colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_button_bar_hover_background_gradient_colour;
-        case wxRIBBON_ART_GALLERY_BORDER_COLOUR: return m_gallery_border_pen.GetColour();
-        case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: return m_tab_ctrl_background_brush.GetColour();
-        case wxRIBBON_ART_TAB_LABEL_COLOUR: return m_tab_label_colour;
-        case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: return m_tab_separator_colour;
-        case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR: return m_tab_separator_gradient_colour;
-        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR: return m_tab_active_background_colour;
-        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR: return m_tab_active_background_gradient_colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR: return m_tab_hover_background_top_colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: return m_tab_hover_background_top_gradient_colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR: return m_tab_hover_background_colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_tab_hover_background_gradient_colour;
-        case wxRIBBON_ART_TAB_BORDER_COLOUR: return m_tab_border_pen.GetColour();
-        case wxRIBBON_ART_PANEL_BORDER_COLOUR: return m_panel_border_pen.GetColour();
-        case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR: return m_panel_border_gradient_pen.GetColour();
-        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR: return m_panel_minimised_border_pen.GetColour();
-        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR: return m_panel_minimised_border_gradient_pen.GetColour();
-        case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR: return m_panel_label_background_brush.GetColour();
-        case wxRIBBON_ART_PANEL_LABEL_COLOUR: return m_panel_label_colour;
-        case wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR: return m_panel_minimised_label_colour;
-        case wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR: return m_panel_hover_label_background_brush.GetColour();
-        case wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR: return m_panel_hover_label_colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR: return m_panel_active_background_top_colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR: return m_panel_active_background_top_gradient_colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR: return m_panel_active_background_colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR: return m_panel_active_background_gradient_colour;
-        case wxRIBBON_ART_PAGE_BORDER_COLOUR: return m_page_border_pen.GetColour();
-        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: return m_page_background_top_colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: return m_page_background_top_gradient_colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR: return  m_page_background_colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR: return m_page_background_gradient_colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR: return m_page_hover_background_top_colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: return m_page_hover_background_top_gradient_colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR: return  m_page_hover_background_colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_page_hover_background_gradient_colour;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR:
+            return m_button_bar_label_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR:
+            return m_button_bar_hover_border_pen.GetColour();
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR:
+            return m_button_bar_hover_background_top_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            return m_button_bar_hover_background_top_gradient_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR:
+            return m_button_bar_hover_background_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            return m_button_bar_hover_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BORDER_COLOUR:
+            return m_gallery_border_pen.GetColour();
+        case wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR:
+            return m_gallery_hover_background_brush.GetColour();
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_COLOUR:
+            return m_gallery_button_background_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_GRADIENT_COLOUR:
+            return m_gallery_button_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_TOP_COLOUR:
+            return m_gallery_button_background_top_brush.GetColour();
+        case wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR:
+            return m_gallery_button_face_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR:
+            return m_gallery_button_hover_background_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            return m_gallery_button_hover_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_TOP_COLOUR:
+            return m_gallery_button_hover_background_top_brush.GetColour();
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR:
+            return m_gallery_button_face_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
+            return m_gallery_button_active_background_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            return m_gallery_button_active_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_TOP_COLOUR:
+            return m_gallery_button_background_top_brush.GetColour();
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR:
+            return m_gallery_button_active_face_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
+            return m_gallery_button_disabled_background_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR:
+            return m_gallery_button_disabled_background_gradient_colour;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_TOP_COLOUR:
+            return m_gallery_button_disabled_background_top_brush.GetColour();
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR:
+            return m_gallery_button_disabled_face_colour;
+        case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR:
+            return m_tab_ctrl_background_brush.GetColour();
+        case wxRIBBON_ART_TAB_LABEL_COLOUR:
+            return m_tab_label_colour;
+        case wxRIBBON_ART_TAB_SEPARATOR_COLOUR:
+            return m_tab_separator_colour;
+        case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR:
+            return m_tab_separator_gradient_colour;
+        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR:
+            return m_tab_active_background_colour;
+        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            return m_tab_active_background_gradient_colour;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR:
+            return m_tab_hover_background_top_colour;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            return m_tab_hover_background_top_gradient_colour;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR:
+            return m_tab_hover_background_colour;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            return m_tab_hover_background_gradient_colour;
+        case wxRIBBON_ART_TAB_BORDER_COLOUR:
+            return m_tab_border_pen.GetColour();
+        case wxRIBBON_ART_PANEL_BORDER_COLOUR:
+            return m_panel_border_pen.GetColour();
+        case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR:
+            return m_panel_border_gradient_pen.GetColour();
+        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR:
+            return m_panel_minimised_border_pen.GetColour();
+        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR:
+            return m_panel_minimised_border_gradient_pen.GetColour();
+        case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR:
+            return m_panel_label_background_brush.GetColour();
+        case wxRIBBON_ART_PANEL_LABEL_COLOUR:
+            return m_panel_label_colour;
+        case wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR:
+            return m_panel_minimised_label_colour;
+        case wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR:
+            return m_panel_hover_label_background_brush.GetColour();
+        case wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR:
+            return m_panel_hover_label_colour;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR:
+            return m_panel_active_background_top_colour;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR:
+            return m_panel_active_background_top_gradient_colour;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR:
+            return m_panel_active_background_colour;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            return m_panel_active_background_gradient_colour;
+        case wxRIBBON_ART_PAGE_BORDER_COLOUR:
+            return m_page_border_pen.GetColour();
+        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR:
+            return m_page_background_top_colour;
+        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR:
+            return m_page_background_top_gradient_colour;
+        case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR:
+            return m_page_background_colour;
+        case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR:
+            return m_page_background_gradient_colour;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR:
+            return m_page_hover_background_top_colour;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            return m_page_hover_background_top_gradient_colour;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR:
+            return m_page_hover_background_colour;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            return m_page_hover_background_gradient_colour;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 
     return wxColour();
@@ -289,47 +456,180 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
 {
     switch(id)
     {
-        case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR: m_button_bar_label_colour = colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR: m_button_bar_hover_border_pen.SetColour(colour);
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR: m_button_bar_hover_background_top_colour = colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: m_button_bar_hover_background_top_gradient_colour = colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: m_button_bar_hover_background_colour = colour;
-        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: m_button_bar_hover_background_gradient_colour = colour;
-        case wxRIBBON_ART_GALLERY_BORDER_COLOUR: m_gallery_border_pen.SetColour(colour);
-        case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: m_tab_ctrl_background_brush.SetColour(colour);
-        case wxRIBBON_ART_TAB_LABEL_COLOUR: m_tab_label_colour = colour;
-        case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: m_tab_separator_colour = colour;
-        case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR: m_tab_separator_gradient_colour = colour;
-        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR: m_tab_active_background_colour = colour;
-        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR: m_tab_active_background_gradient_colour = colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR: m_tab_hover_background_top_colour = colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: m_tab_hover_background_top_gradient_colour = colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR: m_tab_hover_background_colour = colour;
-        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR: m_tab_hover_background_gradient_colour = colour;
-        case wxRIBBON_ART_TAB_BORDER_COLOUR: m_tab_border_pen.SetColour(colour);
-        case wxRIBBON_ART_PANEL_BORDER_COLOUR: m_panel_border_pen.SetColour(colour);
-        case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR: m_panel_border_gradient_pen.SetColour(colour);
-        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR: m_panel_minimised_border_pen.SetColour(colour);
-        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR: m_panel_minimised_border_gradient_pen.SetColour(colour);
-        case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR: m_panel_label_background_brush.SetColour(colour);
-        case wxRIBBON_ART_PANEL_LABEL_COLOUR: m_panel_label_colour = colour;
-        case wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR: m_panel_hover_label_background_brush.SetColour(colour);
-        case wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR: m_panel_hover_label_colour = colour;
-        case wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR: m_panel_minimised_label_colour = colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR: m_panel_active_background_top_colour = colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR: m_panel_active_background_top_gradient_colour = colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR: m_panel_active_background_colour = colour;
-        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR: m_panel_active_background_gradient_colour = colour;
-        case wxRIBBON_ART_PAGE_BORDER_COLOUR: m_page_border_pen.SetColour(colour);
-        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: m_page_background_top_colour = colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: m_page_background_top_gradient_colour = colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR:  m_page_background_colour = colour;
-        case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR: m_page_background_gradient_colour = colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR: m_page_hover_background_top_colour = colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: m_page_hover_background_top_gradient_colour = colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR:  m_page_hover_background_colour = colour;
-        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR: m_page_hover_background_gradient_colour = colour;
-        default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR:
+            m_button_bar_label_colour = colour;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR:
+            m_button_bar_hover_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR:
+            m_button_bar_hover_background_top_colour = colour;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            m_button_bar_hover_background_top_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR:
+            m_button_bar_hover_background_colour = colour;
+            break;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            m_button_bar_hover_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BORDER_COLOUR:
+            m_gallery_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR:
+            m_gallery_hover_background_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_COLOUR:
+            m_gallery_button_background_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_GRADIENT_COLOUR:
+            m_gallery_button_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_TOP_COLOUR:
+            m_gallery_button_background_top_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR:
+            m_gallery_button_face_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR:
+            m_gallery_button_hover_background_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            m_gallery_button_hover_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_TOP_COLOUR:
+            m_gallery_button_hover_background_top_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR:
+            m_gallery_button_hover_face_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
+            m_gallery_button_active_background_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            m_gallery_button_active_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_TOP_COLOUR:
+            m_gallery_button_background_top_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR:
+            m_gallery_button_active_face_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
+            m_gallery_button_disabled_background_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR:
+            m_gallery_button_disabled_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_TOP_COLOUR:
+            m_gallery_button_disabled_background_top_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR:
+            m_gallery_button_disabled_face_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR:
+            m_tab_ctrl_background_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_TAB_LABEL_COLOUR:
+            m_tab_label_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_SEPARATOR_COLOUR:
+            m_tab_separator_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR:
+            m_tab_separator_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR:
+            m_tab_active_background_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            m_tab_active_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR:
+            m_tab_hover_background_top_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            m_tab_hover_background_top_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR:
+            m_tab_hover_background_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            m_tab_hover_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_BORDER_COLOUR:
+            m_tab_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_BORDER_COLOUR:
+            m_panel_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR:
+            m_panel_border_gradient_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR:
+            m_panel_minimised_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR:
+            m_panel_minimised_border_gradient_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR:
+            m_panel_label_background_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_LABEL_COLOUR:
+            m_panel_label_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR:
+            m_panel_hover_label_background_brush.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR:
+            m_panel_hover_label_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR:
+            m_panel_minimised_label_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR:
+            m_panel_active_background_top_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR:
+            m_panel_active_background_top_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR:
+            m_panel_active_background_colour = colour;
+            break;
+        case wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR:
+            m_panel_active_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_BORDER_COLOUR:
+            m_page_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR:
+            m_page_background_top_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR:
+            m_page_background_top_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR:
+            m_page_background_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR:
+            m_page_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR:
+            m_page_hover_background_top_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR:
+            m_page_hover_background_top_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR:
+            m_page_hover_background_colour = colour;
+            break;
+        case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR:
+            m_page_hover_background_gradient_colour = colour;
+            break;
+        default:
+            wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
+            break;
     }
 }
 
@@ -899,7 +1199,15 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
 {
     DrawPartialPageBackground(dc, wnd, rect);
 
+    if(wnd->IsHovered())
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_gallery_hover_background_brush);
+        dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 16, rect.height - 2);
+    }
+
     dc.SetPen(m_gallery_border_pen);
+    // Outline
     dc.DrawLine(rect.x + 1, rect.y, rect.x + rect.width - 1, rect.y);
     dc.DrawLine(rect.x, rect.y + 1, rect.x, rect.y + rect.height - 1);
     dc.DrawLine(rect.x + 1, rect.y + rect.height - 1, rect.x + rect.width - 1,
@@ -907,8 +1215,85 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
     dc.DrawLine(rect.x + rect.width - 1, rect.y + 1, rect.x + rect.width - 1,
         rect.y + rect.height - 1);
 
+    // Divider between items and buttons
     dc.DrawLine(rect.x + rect.width - 16, rect.y, rect.x + rect.width - 16,
         rect.y + rect.height);
+
+    wxRect up_btn(rect.x + rect.width - 16, rect.y, 16, rect.height / 3);
+
+    wxRect down_btn(up_btn.GetLeft(), up_btn.GetBottom() + 1, up_btn.GetWidth(),
+        up_btn.GetHeight());
+    dc.DrawLine(down_btn.GetLeft(), down_btn.GetTop(), down_btn.GetRight(),
+        down_btn.GetTop());
+
+    wxRect ext_btn(up_btn.GetLeft(), down_btn.GetBottom() + 1, up_btn.GetWidth(),
+        rect.height - up_btn.GetHeight() - down_btn.GetHeight() - 1);
+    dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetRight(),
+        ext_btn.GetTop());
+
+    DrawGalleryButton(dc, up_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
+    DrawGalleryButton(dc, down_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
+    DrawGalleryButton(dc, ext_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
+}
+
+void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
+                                            wxRect rect,
+                                            wxRibbonGalleryButtonState state)
+{
+    wxBrush btn_top_brush;
+    wxColour btn_face_colour;
+    wxColour btn_colour;
+    wxColour btn_grad_colour;
+    switch(state)
+    {
+    case wxRIBBON_GALLERY_BUTTON_NORMAL:
+        btn_top_brush = m_gallery_button_background_top_brush;
+        btn_face_colour = m_gallery_button_face_colour;
+        btn_colour = m_gallery_button_background_colour;
+        btn_grad_colour = m_gallery_button_background_gradient_colour;
+        break;
+    case wxRIBBON_GALLERY_BUTTON_HOVERED:
+        btn_top_brush = m_gallery_button_hover_background_top_brush;
+        btn_face_colour = m_gallery_button_hover_face_colour;
+        btn_colour = m_gallery_button_hover_background_colour;
+        btn_grad_colour = m_gallery_button_hover_background_gradient_colour;
+        break;
+    case wxRIBBON_GALLERY_BUTTON_ACTIVE:
+        btn_top_brush = m_gallery_button_active_background_top_brush;
+        btn_face_colour = m_gallery_button_active_face_colour;
+        btn_colour = m_gallery_button_active_background_colour;
+        btn_grad_colour = m_gallery_button_active_background_gradient_colour;
+        break;
+    case wxRIBBON_GALLERY_BUTTON_DISABLED:
+        btn_top_brush = m_gallery_button_disabled_background_top_brush;
+        btn_face_colour = m_gallery_button_disabled_face_colour;
+        btn_colour = m_gallery_button_disabled_background_colour;
+        btn_grad_colour = m_gallery_button_disabled_background_gradient_colour;
+        break;
+    }
+
+    rect.x++;
+    rect.width -= 2;
+    rect.y++;
+    rect.height--;
+
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(btn_top_brush);
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height / 2);
+
+    wxRect lower(rect);
+    lower.height = (lower.height + 1) / 2;
+    lower.y += rect.height - lower.height;
+    DrawVerticalGradientRectangle(dc, lower, btn_colour, btn_grad_colour);
+}
+
+void wxRibbonMSWArtProvider::DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item)
+{
+    // TODO
 }
 
 void wxRibbonMSWArtProvider::DrawPanelBorder(wxDC& dc, const wxRect& rect,

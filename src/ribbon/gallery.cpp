@@ -38,6 +38,7 @@ public:
     wxRibbonGalleryItem()
     {
         m_id = 0;
+        m_is_visible = false;
     }
 
     void SetId(int id) {m_id = id;}
@@ -52,11 +53,15 @@ public:
 protected:
     wxBitmap m_bitmap;
     wxClientDataContainer m_client_data;
+    wxRect m_position;
     int m_id;
+    bool m_is_visible;
 };
 
 BEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
+    EVT_ENTER_WINDOW(wxRibbonGallery::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonGallery::OnEraseBackground)
+    EVT_LEAVE_WINDOW(wxRibbonGallery::OnMouseLeave)
     EVT_PAINT(wxRibbonGallery::OnPaint)
     EVT_SIZE(wxRibbonGallery::OnSize)
 END_EVENT_TABLE()
@@ -97,6 +102,8 @@ bool wxRibbonGallery::Create(wxWindow* parent,
 
 void wxRibbonGallery::CommonInit(long WXUNUSED(style))
 {
+    m_selected_item = NULL;
+    m_hovered_item = NULL;
     m_scroll_up_button_rect = wxRect(0, 0, 0, 0);
     m_scroll_down_button_rect = wxRect(0, 0, 0, 0);
     m_extension_button_rect = wxRect(0, 0, 0, 0);
@@ -104,8 +111,26 @@ void wxRibbonGallery::CommonInit(long WXUNUSED(style))
     m_bitmap_padded_size = m_bitmap_size;
     m_item_separation_x = 0;
     m_item_separation_y = 0;
+    m_hovered = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+}
+
+void wxRibbonGallery::OnMouseEnter(wxMouseEvent& WXUNUSED(evt))
+{
+    m_hovered = true;
+    Refresh(false);
+}
+
+void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+{
+    m_hovered = false;
+    Refresh(false);
+}
+
+bool wxRibbonGallery::IsHovered() const
+{
+    return m_hovered;
 }
 
 void wxRibbonGallery::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -119,6 +144,9 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
     if(m_art == NULL)
         return;
 
+    wxSize cur_size = GetSize();
+    wxSize min_size = GetMinSize();
+
     m_art->DrawGalleryBackground(dc, this, GetSize());
 
     wxPoint origin;
@@ -126,8 +154,6 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
         &origin, NULL, NULL, NULL);
     int padding_top = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE);
     int padding_left = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE);
-    int padding_right = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE);
-    int padding_bottom = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE);
     int x_cursor = 0;
     int y_cursor = 0;
 
@@ -227,14 +253,35 @@ void wxRibbonGallery::CalculateMinSize()
     {
         m_bitmap_padded_size = m_bitmap_size;
         m_bitmap_padded_size.IncBy(
-            m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE) +
-            m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE),
-            m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE) +
-            m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE));
+            m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE) +
+            m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE),
+            m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE) +
+            m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE));
 
         wxMemoryDC dc;
         SetMinSize(m_art->GetGallerySize(dc, this, m_bitmap_padded_size));
+
+        // The best size is displaying several items
+        m_best_size = m_bitmap_padded_size;
+        m_best_size.x *= 3;
+        m_best_size = m_art->GetGallerySize(dc, this, m_best_size);
     }
+}
+
+bool wxRibbonGallery::Realize()
+{
+    CalculateMinSize();
+    return true;
+}
+
+bool wxRibbonGallery::Layout()
+{
+    return true;
+}
+
+wxSize wxRibbonGallery::DoGetBestSize() const
+{
+    return m_best_size;
 }
 
 wxSize wxRibbonGallery::DoGetNextSmallerSize(wxOrientation direction,

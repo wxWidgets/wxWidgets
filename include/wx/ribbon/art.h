@@ -39,6 +39,23 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_GALLERY_BORDER_COLOUR,
+    wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -96,9 +113,18 @@ enum wxRibbonScrollButtonStyle
     wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
 };
 
+enum wxRibbonGalleryButtonState
+{
+    wxRIBBON_GALLERY_BUTTON_NORMAL,
+    wxRIBBON_GALLERY_BUTTON_HOVERED,
+    wxRIBBON_GALLERY_BUTTON_ACTIVE,
+    wxRIBBON_GALLERY_BUTTON_DISABLED,
+};
+
 class wxRibbonPage;
 class wxRibbonPanel;
 class wxRibbonGallery;
+class wxRibbonGalleryItem;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 enum wxRibbonButtonBarButtonKind;
@@ -157,6 +183,12 @@ public:
                         wxDC& dc,
                         wxRibbonGallery* wnd,
                         const wxRect& rect) = 0;
+
+    virtual void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item) = 0;
 
     virtual void DrawMinimisedPanel(
                         wxDC& dc,
@@ -303,6 +335,12 @@ public:
                         wxRibbonGallery* wnd,
                         const wxRect& rect);
 
+    void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item);
+
     void DrawMinimisedPanel(
                         wxDC& dc,
                         wxRibbonPanel* wnd,
@@ -404,6 +442,8 @@ protected:
         wxPen& secondary_colour);
     void RemovePanelPadding(wxRect* rect);
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
+    void DrawGalleryButton(wxDC& dc, wxRect rect,
+        wxRibbonGalleryButtonState state);
 
     wxBitmap m_cached_tab_separator;
     wxColour m_button_bar_label_colour;
@@ -435,9 +475,29 @@ protected:
     wxColour m_button_bar_hover_background_gradient_colour;
     wxColour m_button_bar_hover_background_top_colour;
     wxColour m_button_bar_hover_background_top_gradient_colour;
+
+    wxColour m_gallery_button_background_colour;
+    wxColour m_gallery_button_background_gradient_colour;    
+    wxColour m_gallery_button_hover_background_colour;
+    wxColour m_gallery_button_hover_background_gradient_colour;
+    wxColour m_gallery_button_active_background_colour;
+    wxColour m_gallery_button_active_background_gradient_colour;
+    wxColour m_gallery_button_disabled_background_colour;
+    wxColour m_gallery_button_disabled_background_gradient_colour;
+    wxColour m_gallery_button_face_colour;
+    wxColour m_gallery_button_hover_face_colour;
+    wxColour m_gallery_button_active_face_colour;
+    wxColour m_gallery_button_disabled_face_colour;
+
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
     wxBrush m_panel_hover_label_background_brush;
+    wxBrush m_gallery_hover_background_brush;
+    wxBrush m_gallery_button_background_top_brush;
+    wxBrush m_gallery_button_hover_background_top_brush;
+    wxBrush m_gallery_button_active_background_top_brush;
+    wxBrush m_gallery_button_disabled_background_top_brush;
+
     wxFont m_tab_label_font;
     wxFont m_panel_label_font;
     wxFont m_button_bar_label_font;
