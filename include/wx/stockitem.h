@@ -33,7 +33,11 @@ enum wxStockLabelQueryFlag
     wxSTOCK_NOFLAGS = 0,
 
     wxSTOCK_WITH_MNEMONIC = 1,
-    wxSTOCK_WITH_ACCELERATOR = 2
+    wxSTOCK_WITH_ACCELERATOR = 2,
+
+    // return label for button, not menu item: notice that this always included
+    // wxSTOCK_WITH_MNEMONIC as buttons should use mnemonics
+    wxSTOCK_FOR_BUTTON = 5
 };
 
 // Returns label that should be used for given stock UI element (e.g. "&OK"

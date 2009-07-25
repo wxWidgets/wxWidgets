@@ -34,7 +34,19 @@ enum wxStockLabelQueryFlag
         E.g. "Print...\tCtrl-P". This can be combined with
         wxSTOCK_WITH_MNEMONIC to get "&Print...\tCtrl-P".
      */
-    wxSTOCK_WITH_ACCELERATOR = 2
+    wxSTOCK_WITH_ACCELERATOR = 2,
+
+    /**
+        Return the label appropriate for a button and not a menu item.
+
+        Currently the main difference is that the trailing ellipsis used in
+        some stock labels is never included in the returned label. Also, the
+        mnemonics is included if this flag is used. So the returned value for
+        wxID_PRINT when this flag is used is "&Print".
+
+        This flag can't be combined with wxSTOCK_WITH_ACCELERATOR.
+     */
+    wxSTOCK_FOR_BUTTON = 5
 };
 
 /** @addtogroup group_funcmacro_misc */

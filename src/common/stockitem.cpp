@@ -205,6 +205,18 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     #undef STOCKITEM
 
+    // we assume that buttons use the same labels as menu items but unlike them
+    // they should never use ellipsis
+    if ( flags & wxSTOCK_FOR_BUTTON )
+    {
+        wxString baseLabel;
+        if ( stockLabel.EndsWith("...", &baseLabel) )
+            stockLabel = baseLabel;
+
+        wxASSERT_MSG( !(flags & wxSTOCK_WITH_ACCELERATOR),
+                        "button labels never use accelerators" );
+    }
+
     if ( !(flags & wxSTOCK_WITH_MNEMONIC) )
     {
         stockLabel = wxStripMenuCodes(stockLabel);
