@@ -217,6 +217,14 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
                         "button labels never use accelerators" );
     }
 
+#ifdef __WXMSW__
+    // special case: the "Cancel" button shouldn't have a mnemonic under MSW
+    // for consistency with the native dialogs (which don't use any mnemonic
+    // for it because it is already bound to Esc implicitly)
+    if ( id == wxID_CANCEL )
+        flags &= ~wxSTOCK_WITH_MNEMONIC;
+#endif // __WXMSW__
+
     if ( !(flags & wxSTOCK_WITH_MNEMONIC) )
     {
         stockLabel = wxStripMenuCodes(stockLabel);
