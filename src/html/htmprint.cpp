@@ -223,7 +223,7 @@ wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
         dlg.SetExtendedMessage
             (
                 _("If possible, try changing the layout parameters to "
-                  "make the printout more narrow")
+                  "make the printout more narrow.")
             );
         dlg.SetYesNoLabels(_("&Print"), _("&Cancel"));
 
