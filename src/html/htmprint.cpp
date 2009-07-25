@@ -225,7 +225,7 @@ wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
                 _("If possible, try changing the layout parameters to "
                   "make the printout more narrow.")
             );
-        dlg.SetOKLabel(_("&Print"));
+        dlg.SetOKLabel(wxID_PRINT);
 
         if ( dlg.ShowModal() == wxID_CANCEL )
             return false;
