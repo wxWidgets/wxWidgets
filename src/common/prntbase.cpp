@@ -1271,7 +1271,7 @@ wxFrame(parent, wxID_ANY, title, pos, size, style, name)
 #ifdef __WXMSW__
     wxFrame* topFrame = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
     if (topFrame)
-        SetIcon(topFrame->GetIcon());
+        SetIcons(topFrame->GetIcons());
 #endif
 }
 
