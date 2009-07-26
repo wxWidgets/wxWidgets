@@ -223,7 +223,7 @@ bool wxConsoleEventLoop::DoAddSource(const wxEventLoopSource& source,
                                     wxEventLoopSourceHandler* handler,
                                     int flags)
 {
-    wxLogTrace(wxTRACE_Event_Source,
+    wxLogTrace(wxTRACE_EVT_SOURCE,
                 "wxConsoleEventLoop::AddSource() source=%d",
                 source.GetResource());
 
@@ -237,7 +237,7 @@ bool wxConsoleEventLoop::DoAddSource(const wxEventLoopSource& source,
 
 bool wxConsoleEventLoop::DoRemoveSource(const wxEventLoopSource& source)
 {
-    wxLogTrace(wxTRACE_Event_Source,
+    wxLogTrace(wxTRACE_EVT_SOURCE,
                 "wxConsoleEventLoop::RemoveSource() source=%d",
                 source.GetResource());
 
