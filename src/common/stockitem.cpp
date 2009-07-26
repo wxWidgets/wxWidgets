@@ -207,7 +207,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     // we assume that buttons use the same labels as menu items but unlike them
     // they should never use ellipsis
-    if ( flags & wxSTOCK_FOR_BUTTON )
+    if ( (flags & wxSTOCK_FOR_BUTTON) == wxSTOCK_FOR_BUTTON )
     {
         wxString baseLabel;
         if ( stockLabel.EndsWith("...", &baseLabel) )
