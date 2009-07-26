@@ -294,6 +294,18 @@ void wxRegKey::SetHkey(WXHKEY hKey)
   Close();
 
   m_hKey = hKey;
+
+  // we don't know the parent of this key, assume HKLM by default
+  m_hRootKey = HKEY_LOCAL_MACHINE;
+
+  // we don't know in which mode was this key opened but we can't reopen it
+  // anyhow because we don't know its name, so the only thing we can is to hope
+  // that it allows all the operations which we're going to perform on it
+  m_mode = Write;
+
+  // reset old data
+  m_strKey.empty();
+  m_dwLastError = 0;
 }
 
 // ----------------------------------------------------------------------------
