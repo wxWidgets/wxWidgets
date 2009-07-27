@@ -91,7 +91,7 @@ static gboolean wx_on_channel_event(GIOChannel *channel,
                                     GIOCondition condition, gpointer data)
 {
     ;
-    wxLogTrace(wxTRACE_Event_Source, "wx_on_channel_event, gtk_source_id=%d",
+    wxLogTrace(wxTRACE_EVT_SOURCE, "wx_on_channel_event, gtk_source_id=%d",
                 g_io_channel_unix_get_fd(channel));
 
     wxEventLoopSourceHandler* handler =
@@ -118,7 +118,7 @@ static gboolean wx_on_channel_event(GIOChannel *channel,
 bool wxGUIEventLoop::DoAddSource(const wxEventLoopSource& source,
                                  wxEventLoopSourceHandler* handler, int flags)
 {
-    wxLogTrace(wxTRACE_Event_Source,
+    wxLogTrace(wxTRACE_EVT_SOURCE,
                "wxGUIEventLoop::DoAddSource() source=%d",
                source.GetResource());
 
@@ -141,7 +141,7 @@ bool wxGUIEventLoop::DoAddSource(const wxEventLoopSource& source,
 
 bool wxGUIEventLoop::DoRemoveSource(const wxEventLoopSource& source)
 {
-    wxLogTrace(wxTRACE_Event_Source,
+    wxLogTrace(wxTRACE_EVT_SOURCE,
                "wxGUIEventLoop::DoRemoveSource() source=%d",
                source.GetResource());
 
