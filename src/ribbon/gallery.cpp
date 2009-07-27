@@ -30,6 +30,10 @@
 #include "wx/msw/private.h"
 #endif
 
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, wxRibbonGalleryEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, wxRibbonGalleryEvent);
+
+IMPLEMENT_DYNAMIC_CLASS(wxRibbonGalleryEvent, wxCommandEvent)
 IMPLEMENT_CLASS(wxRibbonGallery, wxRibbonControl)
 
 class wxRibbonGalleryItem
@@ -44,6 +48,13 @@ public:
     void SetId(int id) {m_id = id;}
     void SetBitmap(const wxBitmap& bitmap) {m_bitmap = bitmap;}
     const wxBitmap& GetBitmap() const {return m_bitmap;}
+    void SetIsVisible(bool visible) {m_is_visible = visible;}
+    void SetPosition(int x, int y, const wxSize& size)
+    {
+        m_position = wxRect(wxPoint(x, y), size);
+    }
+    bool IsVisible() const {return m_is_visible;}
+    const wxRect& GetPosition() const {return m_position;}
 
     void SetClientObject(wxClientData *data) {m_client_data.SetClientObject(data);}
     wxClientData *GetClientObject() const {return m_client_data.GetClientObject();}
@@ -62,6 +73,9 @@ BEGIN_EVENT_TABLE(wxRibbonGallery, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonGallery::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonGallery::OnEraseBackground)
     EVT_LEAVE_WINDOW(wxRibbonGallery::OnMouseLeave)
+    EVT_LEFT_DOWN(wxRibbonGallery::OnMouseDown)
+    EVT_LEFT_UP(wxRibbonGallery::OnMouseUp)
+    EVT_MOTION(wxRibbonGallery::OnMouseMove)
     EVT_PAINT(wxRibbonGallery::OnPaint)
     EVT_SIZE(wxRibbonGallery::OnSize)
 END_EVENT_TABLE()
@@ -104,28 +118,298 @@ void wxRibbonGallery::CommonInit(long WXUNUSED(style))
 {
     m_selected_item = NULL;
     m_hovered_item = NULL;
+    m_active_item = NULL;
     m_scroll_up_button_rect = wxRect(0, 0, 0, 0);
     m_scroll_down_button_rect = wxRect(0, 0, 0, 0);
     m_extension_button_rect = wxRect(0, 0, 0, 0);
+    m_mouse_active_rect = NULL;
     m_bitmap_size = wxSize(64, 32);
     m_bitmap_padded_size = m_bitmap_size;
     m_item_separation_x = 0;
     m_item_separation_y = 0;
+    m_scroll_amount = 0;
+    m_scroll_limit = 0;
+    m_up_button_state = wxRIBBON_GALLERY_BUTTON_DISABLED;
+    m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+    m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     m_hovered = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 }
 
-void wxRibbonGallery::OnMouseEnter(wxMouseEvent& WXUNUSED(evt))
+void wxRibbonGallery::OnMouseEnter(wxMouseEvent& evt)
 {
     m_hovered = true;
+    if(m_mouse_active_rect != NULL && !evt.LeftIsDown())
+    {
+        m_mouse_active_rect = NULL;
+        m_active_item = NULL;
+    }
     Refresh(false);
+}
+
+void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
+{
+    bool refresh = false;
+    wxPoint pos = evt.GetPosition();
+
+    if(TestButtonHover(m_scroll_up_button_rect, pos, &m_up_button_state))
+        refresh = true;
+    if(TestButtonHover(m_scroll_down_button_rect, pos, &m_down_button_state))
+        refresh = true;
+    if(TestButtonHover(m_extension_button_rect, pos, &m_extension_button_state))
+        refresh = true;
+
+    wxRibbonGalleryItem *hovered_item = NULL;
+    wxRibbonGalleryItem *active_item = NULL;
+    if(m_client_rect.Contains(pos))
+    {
+        pos.y += m_scroll_amount;
+
+        size_t item_count = m_items.Count();
+        size_t item_i;
+        for(item_i = 0; item_i < item_count; ++item_i)
+        {
+            wxRibbonGalleryItem *item = m_items.Item(item_i);
+            if(!item->IsVisible())
+                continue;
+
+            if(item->GetPosition().Contains(pos))
+            {
+                if(m_mouse_active_rect == &item->GetPosition())
+                    active_item = item;
+                hovered_item = item;
+                break;
+            }
+        }
+    }
+    if(active_item != m_active_item)
+    {
+        m_active_item = active_item;
+        refresh = true;
+    }
+    if(hovered_item != m_hovered_item)
+    {
+        m_hovered_item = hovered_item;
+        wxRibbonGalleryEvent notification(
+            wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, GetId());
+        notification.SetEventObject(this);
+        notification.SetGallery(this);
+        notification.SetGalleryItem(hovered_item);
+        ProcessWindowEvent(notification);
+        refresh = true;
+    }
+
+    if(refresh)
+        Refresh(false);
+}
+
+bool wxRibbonGallery::TestButtonHover(const wxRect& rect, wxPoint pos,
+        wxRibbonGalleryButtonState* state)
+{
+    if(*state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+        return false;
+
+    wxRibbonGalleryButtonState new_state;
+    if(rect.Contains(pos))
+    {
+        if(m_mouse_active_rect == &rect)
+            new_state = wxRIBBON_GALLERY_BUTTON_ACTIVE;
+        else
+            new_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
+    }
+    else
+        new_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+
+    if(new_state != *state)
+    {
+        *state = new_state;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void wxRibbonGallery::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
     m_hovered = false;
+    m_active_item = NULL;
+    if(m_up_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        m_up_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+    if(m_down_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+    if(m_extension_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+    if(m_hovered_item != NULL)
+    {
+        m_hovered_item = NULL;
+        wxRibbonGalleryEvent notification(
+            wxEVT_COMMAND_RIBBONGALLERY_HOVER_CHANGED, GetId());
+        notification.SetEventObject(this);
+        notification.SetGallery(this);
+        ProcessWindowEvent(notification);
+    }
     Refresh(false);
+}
+
+void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
+{
+    wxPoint pos = evt.GetPosition();
+    m_mouse_active_rect = NULL;
+    if(m_client_rect.Contains(pos))
+    {
+        pos.y += m_scroll_amount;
+        size_t item_count = m_items.Count();
+        size_t item_i;
+        for(item_i = 0; item_i < item_count; ++item_i)
+        {
+            wxRibbonGalleryItem *item = m_items.Item(item_i);
+            if(!item->IsVisible())
+                continue;
+
+            const wxRect& rect = item->GetPosition();
+            if(rect.Contains(pos))
+            {
+                m_active_item = item;
+                m_mouse_active_rect = &rect;
+                break;
+            }
+        }
+    }
+    else if(m_scroll_up_button_rect.Contains(pos))
+    {
+        if(m_up_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        {
+            m_mouse_active_rect = &m_scroll_up_button_rect;
+            m_up_button_state = wxRIBBON_GALLERY_BUTTON_ACTIVE;
+        }
+    }
+    else if(m_scroll_down_button_rect.Contains(pos))
+    {
+        if(m_down_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        {
+            m_mouse_active_rect = &m_scroll_down_button_rect;
+            m_down_button_state = wxRIBBON_GALLERY_BUTTON_ACTIVE;
+        }
+    }
+    else if(m_extension_button_rect.Contains(pos))
+    {
+        if(m_extension_button_state != wxRIBBON_GALLERY_BUTTON_DISABLED)
+        {
+            m_mouse_active_rect = &m_extension_button_rect;
+            m_extension_button_state = wxRIBBON_GALLERY_BUTTON_ACTIVE;
+        }
+    }
+    if(m_mouse_active_rect != NULL)
+        Refresh(false);
+}
+
+void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
+{
+    if(m_mouse_active_rect != NULL)
+    {
+        wxPoint pos = evt.GetPosition();
+        if(m_active_item)
+            pos.y += m_scroll_amount;
+        if(m_mouse_active_rect->Contains(pos))
+        {
+            if(m_mouse_active_rect == &m_scroll_up_button_rect)
+            {
+                m_up_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
+                ScrollLines(-1);
+            }
+            else if(m_mouse_active_rect == &m_scroll_down_button_rect)
+            {
+                m_down_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
+                ScrollLines(1);
+            }
+            else if(m_mouse_active_rect == &m_extension_button_rect)
+            {
+                m_extension_button_state = wxRIBBON_GALLERY_BUTTON_HOVERED;
+            }
+            else if(m_active_item != NULL)
+            {
+                if(m_selected_item != m_active_item)
+                {
+                    m_selected_item = m_active_item;
+                    wxRibbonGalleryEvent notification(
+                        wxEVT_COMMAND_RIBBONGALLERY_SELECTED, GetId());
+                    notification.SetEventObject(this);
+                    notification.SetGallery(this);
+                    notification.SetGalleryItem(m_selected_item);
+                    ProcessWindowEvent(notification);
+                }
+            }
+        }
+        m_mouse_active_rect = NULL;
+        m_active_item = NULL;
+        Refresh(false);
+    }
+}
+
+void wxRibbonGallery::SetItemClientObject(wxRibbonGalleryItem* itm,
+                                          wxClientData* data)
+{
+    itm->SetClientObject(data);
+}
+
+wxClientData* wxRibbonGallery::GetItemClientObject(const wxRibbonGalleryItem* itm) const
+{
+    return itm->GetClientObject();
+}
+
+void wxRibbonGallery::SetItemClientData(wxRibbonGalleryItem* itm, void* data)
+{
+    itm->SetClientData(data);
+}
+
+void* wxRibbonGallery::GetItemClientData(const wxRibbonGalleryItem* itm) const
+{
+    return itm->GetClientData();
+}
+
+bool wxRibbonGallery::ScrollLines(int lines)
+{
+    if(m_scroll_limit == 0)
+        return false;
+
+    if(lines < 0)
+    {
+        if(m_scroll_amount > 0)
+        {
+            m_scroll_amount += lines * m_bitmap_padded_size.GetHeight();
+            if(m_scroll_amount <= 0)
+            {
+                m_scroll_amount = 0;
+                m_up_button_state = wxRIBBON_GALLERY_BUTTON_DISABLED;
+            }
+            else if(m_up_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+                m_up_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+            if(m_down_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+                m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+            return true;
+        }
+    }
+    else if(lines > 0)
+    {
+        if(m_scroll_amount < m_scroll_limit)
+        {
+            m_scroll_amount += lines * m_bitmap_padded_size.GetHeight();
+            if(m_scroll_amount >= m_scroll_limit)
+            {
+                m_scroll_amount = m_scroll_limit;
+                m_down_button_state = wxRIBBON_GALLERY_BUTTON_DISABLED;
+            }
+            else if(m_down_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+                m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+            if(m_up_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+                m_up_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool wxRibbonGallery::IsHovered() const
@@ -149,45 +433,31 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     m_art->DrawGalleryBackground(dc, this, GetSize());
 
-    wxPoint origin;
-    wxSize client_size = m_art->GetGalleryClientSize(dc, this, GetSize(),
-        &origin, NULL, NULL, NULL);
     int padding_top = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE);
     int padding_left = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE);
-    int x_cursor = 0;
-    int y_cursor = 0;
 
-    dc.SetClippingRegion(origin.x, origin.y, client_size.x, client_size.y);
+    dc.SetClippingRegion(m_client_rect);
 
     size_t item_count = m_items.Count();
     size_t item_i;
     for(item_i = 0; item_i < item_count; ++item_i)
     {
         wxRibbonGalleryItem *item = m_items.Item(item_i);
-        if(x_cursor + m_bitmap_padded_size.x > client_size.GetWidth())
-        {
-            if(x_cursor == 0)
-                break;
-            x_cursor = 0;
-            y_cursor += m_bitmap_padded_size.y;
-            if(y_cursor >= client_size.GetHeight())
-                break;
-        }
-        dc.DrawBitmap(item->GetBitmap(), origin.x + x_cursor + padding_left,
-            origin.y + y_cursor + padding_top);
-        x_cursor += m_bitmap_padded_size.x;
+        if(!item->IsVisible())
+            continue;
+
+        const wxRect& pos = item->GetPosition();
+        wxRect offset_pos(pos);
+        offset_pos.SetTop(offset_pos.GetTop() - m_scroll_amount);
+        m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
+        dc.DrawBitmap(item->GetBitmap(), offset_pos.GetLeft() + padding_left,
+            offset_pos.GetTop() + padding_top);
     }
 }
 
-void wxRibbonGallery::OnSize(wxSizeEvent& evt)
+void wxRibbonGallery::OnSize(wxSizeEvent& WXUNUSED(evt))
 {
-    if(m_art == NULL)
-        return;
-
-    wxMemoryDC dc;
-    wxSize client = m_art->GetGalleryClientSize(dc, this, evt.GetSize(), NULL,
-        &m_scroll_up_button_rect, &m_scroll_down_button_rect,
-        &m_extension_button_rect);
+    Layout();
 }
 
 wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
@@ -276,6 +546,58 @@ bool wxRibbonGallery::Realize()
 
 bool wxRibbonGallery::Layout()
 {
+    if(m_art == NULL)
+        return false;
+
+    wxMemoryDC dc;
+    wxPoint origin;
+    wxSize client_size = m_art->GetGalleryClientSize(dc, this, GetSize(),
+        &origin, &m_scroll_up_button_rect, &m_scroll_down_button_rect,
+        &m_extension_button_rect);
+    m_client_rect = wxRect(origin, client_size);
+
+    int x_cursor = 0;
+    int y_cursor = 0;
+
+    size_t item_count = m_items.Count();
+    size_t item_i;
+    for(item_i = 0; item_i < item_count; ++item_i)
+    {
+        wxRibbonGalleryItem *item = m_items.Item(item_i);
+        if(x_cursor + m_bitmap_padded_size.x > client_size.GetWidth())
+        {
+            if(x_cursor == 0)
+                break;
+            x_cursor = 0;
+            y_cursor += m_bitmap_padded_size.y;
+        }
+        item->SetPosition(origin.x + x_cursor, origin.y + y_cursor,
+            m_bitmap_padded_size);
+        item->SetIsVisible(true);
+        x_cursor += m_bitmap_padded_size.x;
+    }
+    for(; item_i < item_count; ++item_i)
+    {
+        wxRibbonGalleryItem *item = m_items.Item(item_i);
+        item->SetIsVisible(false);
+    }
+    m_scroll_limit = y_cursor;
+    if(m_scroll_amount >= m_scroll_limit)
+    {
+        m_scroll_amount = m_scroll_limit;
+        m_down_button_state = wxRIBBON_GALLERY_BUTTON_DISABLED;
+    }
+    else if(m_down_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+        m_down_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+
+    if(m_scroll_amount <= 0)
+    {
+        m_scroll_amount = 0;
+        m_up_button_state = wxRIBBON_GALLERY_BUTTON_DISABLED;
+    }
+    else if(m_up_button_state == wxRIBBON_GALLERY_BUTTON_DISABLED)
+        m_up_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
+
     return true;
 }
 
@@ -346,6 +668,13 @@ wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
 
     wxSize client = m_art->GetGalleryClientSize(dc, this, relative_to, NULL,
         NULL, NULL, NULL);
+
+    // No need to grow if the given size can already display every item
+    int nitems = (client.GetWidth() / m_bitmap_padded_size.x) *
+        (client.GetHeight() / m_bitmap_padded_size.y);
+    if(nitems >= (int)m_items.GetCount())
+        return relative_to;
+
     switch(direction)
     {
     case wxHORIZONTAL:
@@ -386,5 +715,34 @@ wxSize wxRibbonGallery::DoGetNextLargerSize(wxOrientation direction,
     return size;
 }
 
+wxRibbonGalleryItem* wxRibbonGallery::GetSelection() const
+{
+    return m_selected_item;
+}
+
+wxRibbonGalleryItem* wxRibbonGallery::GetHoveredItem() const
+{
+    return m_hovered_item;
+}
+
+wxRibbonGalleryItem* wxRibbonGallery::GetActiveItem() const
+{
+    return m_active_item;
+}
+
+wxRibbonGalleryButtonState wxRibbonGallery::GetUpButtonState() const
+{
+    return m_up_button_state;
+}
+
+wxRibbonGalleryButtonState wxRibbonGallery::GetDownButtonState() const
+{
+    return m_down_button_state;
+}
+
+wxRibbonGalleryButtonState wxRibbonGallery::GetExtensionButtonState() const
+{
+    return m_extension_button_state;
+}
 
 #endif // wxUSE_RIBBON

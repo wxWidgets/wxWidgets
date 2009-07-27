@@ -9,4 +9,5 @@ lua fix_xpm.lua triangle.xpm transparent=(0,0) name=triangle_xpm
 lua fix_xpm.lua square.xpm transparent=(16,16) name=square_xpm
 lua fix_xpm.lua selection_panel.xpm transparent=(0,0) name=selection_panel_xpm
 lua fix_xpm.lua hexagon.xpm transparent=(0,0) name=hexagon_xpm
+lua fix_xpm.lua colours.xpm name=colours_xpm
 pause

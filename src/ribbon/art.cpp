@@ -33,6 +33,53 @@
 wxRibbonArtProvider::wxRibbonArtProvider() {}
 wxRibbonArtProvider::~wxRibbonArtProvider() {}
 
+static const char* const gallery_up_xpm[] = {
+  "5 5 2 1",
+  "  c None",
+  "x c #000000",
+  "     ",
+  "  x  ",
+  " xxx ",
+  "xxxxx",
+  "     "};
+
+static const char* const gallery_down_xpm[] = {
+  "5 5 2 1",
+  "  c None",
+  "x c #000000",
+  "     ",
+  "xxxxx",
+  " xxx ",
+  "  x  ",
+  "     "};
+
+static const char* const gallery_extension_xpm[] = {
+  "5 5 2 1",
+  "  c None",
+  "x c #000000",
+  "xxxxx",
+  "     ",
+  "xxxxx",
+  " xxx ",
+  "  x  "};
+
+static wxBitmap wxRibbonLoadPixmap(const char* const* bits, wxColour fore)
+{
+    char color[12];
+    sprintf(color, "x c #%02x%02x%02x", fore.Red(), fore.Green(), fore.Blue());
+    const char* const xpm[] = {
+        bits[0],
+        bits[1],
+        color,
+        bits[3],
+        bits[4],
+        bits[5],
+        bits[6],
+        bits[7],
+    };
+    return wxBitmap(xpm);
+}
+
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
 {
     // TODO: 'Intelligent' colour picking rather than hardcoded defaults
@@ -73,10 +120,10 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_gallery_button_active_background_gradient_colour = wxColour(253, 159, 77);
     m_gallery_button_disabled_background_colour = wxColour(224, 228, 232);
     m_gallery_button_disabled_background_gradient_colour = wxColour(232, 235, 239);
-    m_gallery_button_face_colour = wxColour(103, 140, 189);
-    m_gallery_button_hover_face_colour = wxColour(86, 125, 177);
-    m_gallery_button_active_face_colour = m_gallery_button_hover_face_colour;
-    m_gallery_button_disabled_face_colour = wxColour(183, 183, 183);
+    SetColour(wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR, wxColour(103, 140, 189));
+    SetColour(wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR, wxColour(86, 125, 177));
+    SetColour(wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR, wxColour(86, 125, 177));
+    SetColour(wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR, wxColour(183, 183, 183));
 
     m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
     m_panel_label_background_brush = wxBrush(wxColour(193, 216, 241));
@@ -99,6 +146,7 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_panel_minimised_border_gradient_pen = wxPen(wxColour(148, 185, 213));
     m_page_border_pen = wxPen(wxColour(141, 178, 227));
     m_gallery_border_pen = wxPen(wxColour(185, 208, 237));
+    m_gallery_item_border_pen = wxPen(wxColour(214, 181, 100));
 
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
     m_tab_separation_size = 3;
@@ -121,6 +169,13 @@ wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
 wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
 {
     wxRibbonMSWArtProvider *copy = new wxRibbonMSWArtProvider;
+
+    for(int i = 0; i < 4; ++i)
+    {
+        copy->m_gallery_up_bitmap[i] = m_gallery_up_bitmap[i];
+        copy->m_gallery_down_bitmap[i] = m_gallery_down_bitmap[i];
+        copy->m_gallery_extension_bitmap[i] = m_gallery_extension_bitmap[i];
+    }
 
     copy->m_button_bar_label_colour = m_button_bar_label_colour;
     copy->m_tab_label_colour = m_tab_label_colour;
@@ -185,6 +240,7 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_tab_border_pen = m_tab_border_pen;
     copy->m_gallery_border_pen = m_gallery_border_pen;
     copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
+    copy->m_gallery_item_border_pen = m_gallery_item_border_pen;
 
     copy->m_flags = m_flags;
     copy->m_tab_separation_size = m_tab_separation_size;
@@ -378,6 +434,8 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id)
             return m_gallery_button_disabled_background_top_brush.GetColour();
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR:
             return m_gallery_button_disabled_face_colour;
+        case wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR:
+            return m_gallery_item_border_pen.GetColour();
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR:
             return m_tab_ctrl_background_brush.GetColour();
         case wxRIBBON_ART_TAB_LABEL_COLOUR:
@@ -491,6 +549,9 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR:
             m_gallery_button_face_colour = colour;
+            m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+            m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            m_gallery_extension_bitmap[0] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR:
             m_gallery_button_hover_background_colour = colour;
@@ -503,6 +564,9 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR:
             m_gallery_button_hover_face_colour = colour;
+            m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+            m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            m_gallery_extension_bitmap[1] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
             m_gallery_button_active_background_colour = colour;
@@ -515,6 +579,9 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR:
             m_gallery_button_active_face_colour = colour;
+            m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+            m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            m_gallery_extension_bitmap[2] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
             m_gallery_button_disabled_background_colour = colour;
@@ -527,6 +594,12 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR:
             m_gallery_button_disabled_face_colour = colour;
+            m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+            m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            m_gallery_extension_bitmap[3] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
+            break;
+        case wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR:
+            m_gallery_item_border_pen.SetColour(colour);
             break;
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR:
             m_tab_ctrl_background_brush.SetColour(colour);
@@ -1216,10 +1289,10 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
         rect.y + rect.height - 1);
 
     // Divider between items and buttons
-    dc.DrawLine(rect.x + rect.width - 16, rect.y, rect.x + rect.width - 16,
+    dc.DrawLine(rect.x + rect.width - 15, rect.y, rect.x + rect.width - 15,
         rect.y + rect.height);
 
-    wxRect up_btn(rect.x + rect.width - 16, rect.y, 16, rect.height / 3);
+    wxRect up_btn(rect.x + rect.width - 15, rect.y, 15, rect.height / 3);
 
     wxRect down_btn(up_btn.GetLeft(), up_btn.GetBottom() + 1, up_btn.GetWidth(),
         up_btn.GetHeight());
@@ -1231,44 +1304,48 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
     dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetRight(),
         ext_btn.GetTop());
 
-    DrawGalleryButton(dc, up_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
-    DrawGalleryButton(dc, down_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
-    DrawGalleryButton(dc, ext_btn, wxRIBBON_GALLERY_BUTTON_NORMAL);
+    DrawGalleryButton(dc, up_btn, wnd->GetUpButtonState(),
+        m_gallery_up_bitmap);
+    DrawGalleryButton(dc, down_btn, wnd->GetDownButtonState(),
+        m_gallery_down_bitmap);
+    DrawGalleryButton(dc, ext_btn, wnd->GetExtensionButtonState(),
+        m_gallery_extension_bitmap);
 }
 
 void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
                                             wxRect rect,
-                                            wxRibbonGalleryButtonState state)
+                                            wxRibbonGalleryButtonState state,
+                                            wxBitmap* bitmaps)
 {
+    wxBitmap btn_bitmap;
     wxBrush btn_top_brush;
-    wxColour btn_face_colour;
     wxColour btn_colour;
     wxColour btn_grad_colour;
     switch(state)
     {
     case wxRIBBON_GALLERY_BUTTON_NORMAL:
         btn_top_brush = m_gallery_button_background_top_brush;
-        btn_face_colour = m_gallery_button_face_colour;
         btn_colour = m_gallery_button_background_colour;
         btn_grad_colour = m_gallery_button_background_gradient_colour;
+        btn_bitmap = bitmaps[0];
         break;
     case wxRIBBON_GALLERY_BUTTON_HOVERED:
         btn_top_brush = m_gallery_button_hover_background_top_brush;
-        btn_face_colour = m_gallery_button_hover_face_colour;
         btn_colour = m_gallery_button_hover_background_colour;
         btn_grad_colour = m_gallery_button_hover_background_gradient_colour;
+        btn_bitmap = bitmaps[1];
         break;
     case wxRIBBON_GALLERY_BUTTON_ACTIVE:
         btn_top_brush = m_gallery_button_active_background_top_brush;
-        btn_face_colour = m_gallery_button_active_face_colour;
         btn_colour = m_gallery_button_active_background_colour;
         btn_grad_colour = m_gallery_button_active_background_gradient_colour;
+        btn_bitmap = bitmaps[2];
         break;
     case wxRIBBON_GALLERY_BUTTON_DISABLED:
         btn_top_brush = m_gallery_button_disabled_background_top_brush;
-        btn_face_colour = m_gallery_button_disabled_face_colour;
         btn_colour = m_gallery_button_disabled_background_colour;
         btn_grad_colour = m_gallery_button_disabled_background_gradient_colour;
+        btn_bitmap = bitmaps[3];
         break;
     }
 
@@ -1285,6 +1362,8 @@ void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
     lower.height = (lower.height + 1) / 2;
     lower.y += rect.height - lower.height;
     DrawVerticalGradientRectangle(dc, lower, btn_colour, btn_grad_colour);
+
+    dc.DrawBitmap(btn_bitmap, rect.x + rect.width / 2 - 2, lower.y - 2, true);
 }
 
 void wxRibbonMSWArtProvider::DrawGalleryItemBackground(
@@ -1293,7 +1372,48 @@ void wxRibbonMSWArtProvider::DrawGalleryItemBackground(
                         const wxRect& rect,
                         wxRibbonGalleryItem* item)
 {
-    // TODO
+    if(wnd->GetHoveredItem() != item && wnd->GetActiveItem() != item &&
+        wnd->GetSelection() != item)
+        return;
+
+    dc.SetPen(m_gallery_item_border_pen);
+    dc.DrawLine(rect.x + 1, rect.y, rect.x + rect.width - 1, rect.y);
+    dc.DrawLine(rect.x, rect.y + 1, rect.x, rect.y + rect.height - 1);
+    dc.DrawLine(rect.x + 1, rect.y + rect.height - 1, rect.x + rect.width - 1,
+        rect.y + rect.height - 1);
+    dc.DrawLine(rect.x + rect.width - 1, rect.y + 1, rect.x + rect.width - 1,
+        rect.y + rect.height - 1);
+
+    wxBrush top_brush;
+    wxColour bg_colour;
+    wxColour bg_gradient_colour;
+
+    if(wnd->GetActiveItem() == item || wnd->GetSelection() == item)
+    {
+        top_brush = m_gallery_button_active_background_top_brush;
+        bg_colour = m_gallery_button_active_background_colour;
+        bg_gradient_colour = m_gallery_button_active_background_gradient_colour;
+    }
+    else
+    {
+        top_brush = m_gallery_button_hover_background_top_brush;
+        bg_colour = m_gallery_button_hover_background_colour;
+        bg_gradient_colour = m_gallery_button_hover_background_gradient_colour;
+    }
+
+    wxRect upper(rect);
+    upper.x += 1;
+    upper.width -= 2;
+    upper.y += 1;
+    upper.height /= 3;
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(top_brush);
+    dc.DrawRectangle(upper.x, upper.y, upper.width, upper.height);
+
+    wxRect lower(upper);
+    lower.y += lower.height;
+    lower.height = rect.height - 2 - lower.height;
+    DrawVerticalGradientRectangle(dc, lower, bg_colour, bg_gradient_colour);
 }
 
 void wxRibbonMSWArtProvider::DrawPanelBorder(wxDC& dc, const wxRect& rect,
@@ -1842,8 +1962,8 @@ wxSize wxRibbonMSWArtProvider::GetGallerySize(
                         const wxRibbonGallery* WXUNUSED(wnd),
                         wxSize client_size)
 {
-    client_size.IncBy( 2, 2); // Left / top padding
-    client_size.IncBy(16, 2); // Right / bototm padding
+    client_size.IncBy( 2, 1); // Left / top padding
+    client_size.IncBy(16, 1); // Right / bottom padding
     return client_size;
 }
 
@@ -1873,7 +1993,7 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
     extension.height = size.GetHeight() - scroll_up.height - scroll_down.height;
     
     if(client_offset != NULL)
-        *client_offset = wxPoint(2, 2);
+        *client_offset = wxPoint(2, 1);
     if(scroll_up_button != NULL)
         *scroll_up_button = scroll_up;
     if(scroll_down_button != NULL)
@@ -1881,8 +2001,8 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
     if(extension_button != NULL)
         *extension_button = extension;
 
-    size.DecBy( 2, 2);
-    size.DecBy(16, 2);
+    size.DecBy( 2, 1);
+    size.DecBy(16, 1);
     return size;
 }
 

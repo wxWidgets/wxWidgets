@@ -54,6 +54,7 @@ public:
         ID_SELECTION_EXPAND_H,
         ID_SELECTION_EXPAND_V,
         ID_SELECTION_CONTRACT,
+        ID_COLOURS,
     };
 
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -65,6 +66,8 @@ public:
     void OnSelectionExpandVButton(wxRibbonButtonBarEvent& evt);
     void OnSelectionExpandHButton(wxRibbonButtonBarEvent& evt);
     void OnSelectionContractButton(wxRibbonButtonBarEvent& evt);
+    void OnHoveredColourChange(wxRibbonGalleryEvent& evt);
+    void OnColourSelect(wxRibbonGalleryEvent& evt);
 
 protected:
     void AddText(wxString msg);
@@ -73,6 +76,7 @@ protected:
 
     wxRibbonBar* m_ribbon;
     wxTextCtrl* m_logwindow;
+    wxColour m_gallery_bg_colour;
 
     DECLARE_EVENT_TABLE()
 };
@@ -101,12 +105,15 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SQUARE, MyFrame::OnSquareButton)
 EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleDropdown)
 EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_POLYGON, MyFrame::OnPolygonDropdown)
+EVT_RIBBONGALLERY_HOVER_CHANGED(ID_COLOURS, MyFrame::OnHoveredColourChange)
+EVT_RIBBONGALLERY_SELECTED(ID_COLOURS, MyFrame::OnColourSelect)
 END_EVENT_TABLE()
 
 #include "auto_crop_selection.xpm"
 #include "auto_crop_selection_small.xpm"
 #include "circle.xpm"
 #include "circle_small.xpm"
+#include "colours.xpm"
 #include "cross.xpm"
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
@@ -144,16 +151,23 @@ MyFrame::MyFrame()
     {
         wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
         new wxRibbonPanel(insert, wxID_ANY, wxT("Tables"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        wxRibbonPanel *colours_panel = new wxRibbonPanel(insert, wxID_ANY, wxT("Colours"));
-        wxRibbonGallery *colours_gallery = new wxRibbonGallery(colours_panel, wxID_ANY);
+
+        wxRibbonPanel *colours_panel = new wxRibbonPanel(insert, wxID_ANY, wxT("Colours"), colours_xpm);
+        wxRibbonGallery *colours_gallery = new wxRibbonGallery(colours_panel, ID_COLOURS);
         wxMemoryDC tmp_dc;
         wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
         tmp_dc.SetFont(label_font);
         AddColourToGallery(colours_gallery, "BLUE", tmp_dc);
+        AddColourToGallery(colours_gallery, "FIREBRICK", tmp_dc);
         AddColourToGallery(colours_gallery, "GOLDENROD", tmp_dc);
+        AddColourToGallery(colours_gallery, "GREEN", tmp_dc);
+        AddColourToGallery(colours_gallery, "KHAKI", tmp_dc);
         AddColourToGallery(colours_gallery, "MAROON", tmp_dc);
+        AddColourToGallery(colours_gallery, "ORCHID", tmp_dc);
+        AddColourToGallery(colours_gallery, "RED", tmp_dc);
         AddColourToGallery(colours_gallery, "TURQUOISE", tmp_dc);
-        AddColourToGallery(colours_gallery, "WHEAT", tmp_dc);
+        AddColourToGallery(colours_gallery, "WHEAT", tmp_dc);        
+
         new wxRibbonPanel(insert, wxID_ANY, wxT("Links"));
     }
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Page Layout"));
@@ -164,6 +178,8 @@ MyFrame::MyFrame()
     new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Developer"));
 
     m_ribbon->Realize();
+    m_gallery_bg_colour = m_ribbon->GetArtProvider()->GetColour(
+        wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR);
 
     m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_LEFT | wxTE_BESTWRAP);
 
@@ -177,6 +193,29 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
+}
+
+void MyFrame::OnHoveredColourChange(wxRibbonGalleryEvent& evt)
+{
+    // Set the background of the gallery to the hovered colour, or back to the
+    // default if there is no longer a hovered item.
+
+    wxColour clr = m_gallery_bg_colour;
+    if(evt.GetGalleryItem() != NULL)
+    {
+        wxClientData *data = evt.GetGallery()->GetItemClientObject(
+            evt.GetGalleryItem());
+        clr = ((wxStringClientData*)data)->GetData();
+    }
+    evt.GetGallery()->GetArtProvider()->SetColour(
+        wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR, clr);
+}
+
+void MyFrame::OnColourSelect(wxRibbonGalleryEvent& evt)
+{
+    wxStringClientData *data = (wxStringClientData*)
+        evt.GetGallery()->GetItemClientObject(evt.GetGalleryItem());
+    AddText(wxT("Colour \"") + data->GetData() + wxT("\" selected."));
 }
 
 void MyFrame::OnSelectionExpandHButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -212,9 +251,9 @@ void MyFrame::OnTriangleButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 void MyFrame::OnTriangleDropdown(wxRibbonButtonBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Item 1"));
-    menu.Append(wxID_ANY, wxT("Item 2"));
-    menu.Append(wxID_ANY, wxT("Item 3"));
+    menu.Append(wxID_ANY, wxT("Equilateral"));
+    menu.Append(wxID_ANY, wxT("Isosceles"));
+    menu.Append(wxID_ANY, wxT("Scalene"));
 
     evt.PopupMenu(&menu);
 }
@@ -227,9 +266,12 @@ void MyFrame::OnSquareButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 void MyFrame::OnPolygonDropdown(wxRibbonButtonBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Item 1"));
-    menu.Append(wxID_ANY, wxT("Item 2"));
-    menu.Append(wxID_ANY, wxT("Item 3"));
+    menu.Append(wxID_ANY, wxT("Pentagon (5 sided)"));
+    menu.Append(wxID_ANY, wxT("Hexagon (6 sided)"));
+    menu.Append(wxID_ANY, wxT("Heptagon (7 sided)"));
+    menu.Append(wxID_ANY, wxT("Octogon (8 sided)"));
+    menu.Append(wxID_ANY, wxT("Nonagon (9 sided)"));
+    menu.Append(wxID_ANY, wxT("Decagon (10 sided)"));
 
     evt.PopupMenu(&menu);
 }
@@ -248,7 +290,7 @@ void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
     if(c.IsOk())
     {
         const int iWidth = 64;
-        const int iHeight = 48;
+        const int iHeight = 40;
 
         wxBitmap bitmap(iWidth, iHeight);
         dc.SelectObject(bitmap);
@@ -263,6 +305,7 @@ void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
         dc.DrawText(colour, (iWidth - size.GetWidth() + 1) / 2,
             (iHeight - size.GetHeight()) / 2);
 
-        gallery->Append(bitmap, wxID_ANY);
+        wxRibbonGalleryItem* item = gallery->Append(bitmap, wxID_ANY);
+        gallery->SetItemClientObject(item, new wxStringClientData(colour));
     }
 }

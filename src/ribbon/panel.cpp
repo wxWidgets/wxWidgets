@@ -16,7 +16,6 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
-#include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/panel.h"
 #include "wx/dcbuffer.h"
 #include "wx/display.h"
@@ -496,9 +495,11 @@ bool wxRibbonPanel::Realize()
         {
             m_minimised_icon_resized = m_minimised_icon;
         }
-        if(m_minimised_size.x > panel_min_size.x ||
+        if(m_minimised_size.x > panel_min_size.x &&
             m_minimised_size.y > panel_min_size.y)
         {
+            // No point in having a minimised size which is larger than the
+            // minimum size which the children can go to.
             m_minimised_size = wxSize(-1, -1);
         }
         else
@@ -637,9 +638,10 @@ bool wxRibbonPanel::ShouldSendEventToDummy(wxEvent& evt)
     // floating top level window or to the dummy panel sitting in the ribbon
     // bar.
 
-    // TODO: Make this less hacky, more versitile, etc.
-    return evt.GetEventType() == wxEVT_COMMAND_RIBBONBUTTON_CLICKED
-        || evt.GetEventType() == wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
+    // Child focus events should not be redirected, as the child would not be a
+    // child of the window the event is redirected to. All other command events
+    // seem to be suitable for redirecting.
+    return evt.IsCommandEvent() && evt.GetEventType() != wxEVT_CHILD_FOCUS;
 }
 
 bool wxRibbonPanel::TryAfter(wxEvent& evt)

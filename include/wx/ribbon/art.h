@@ -16,6 +16,9 @@
 
 #if wxUSE_RIBBON
 
+#include <wx/brush.h>
+#include <wx/pen.h>
+
 enum wxRibbonArtSetting
 {
     wxRIBBON_ART_TAB_SEPARATION_SIZE,
@@ -56,6 +59,7 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -443,9 +447,13 @@ protected:
     void RemovePanelPadding(wxRect* rect);
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryButton(wxDC& dc, wxRect rect,
-        wxRibbonGalleryButtonState state);
+        wxRibbonGalleryButtonState state, wxBitmap* bitmaps);
 
     wxBitmap m_cached_tab_separator;
+    wxBitmap m_gallery_up_bitmap[4];
+    wxBitmap m_gallery_down_bitmap[4];
+    wxBitmap m_gallery_extension_bitmap[4];
+
     wxColour m_button_bar_label_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_separator_colour;
@@ -475,7 +483,6 @@ protected:
     wxColour m_button_bar_hover_background_gradient_colour;
     wxColour m_button_bar_hover_background_top_colour;
     wxColour m_button_bar_hover_background_top_gradient_colour;
-
     wxColour m_gallery_button_background_colour;
     wxColour m_gallery_button_background_gradient_colour;    
     wxColour m_gallery_button_hover_background_colour;
@@ -509,8 +516,11 @@ protected:
     wxPen m_tab_border_pen;
     wxPen m_button_bar_hover_border_pen;
     wxPen m_gallery_border_pen;
+    wxPen m_gallery_item_border_pen;
+
     double m_cached_tab_separator_visibility;
     long m_flags;
+
     int m_tab_separation_size;
     int m_page_border_left;
     int m_page_border_top;
