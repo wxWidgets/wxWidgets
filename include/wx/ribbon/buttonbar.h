@@ -118,6 +118,7 @@ protected:
     void OnSize(wxSizeEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,

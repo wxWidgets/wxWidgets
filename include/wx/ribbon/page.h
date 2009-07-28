@@ -50,6 +50,8 @@ public:
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
 
+    bool DismissExpandedPanel();
+
     virtual bool Realize();
     virtual bool Show(bool show = true);
     virtual bool Layout();

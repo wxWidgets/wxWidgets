@@ -67,9 +67,13 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     // info.rect not set (intentional)
 
     wxMemoryDC dcTemp;
-    m_art->GetBarTabWidth(dcTemp, this,
-                          m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS ? page->GetLabel() : wxEmptyString,
-                          m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS ? page->GetIcon() : wxNullBitmap,
+    wxString label = wxEmptyString;
+    if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
+        label = page->GetLabel();
+    wxBitmap icon = wxNullBitmap;
+    if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+        icon = page->GetIcon();
+    m_art->GetBarTabWidth(dcTemp, this, label, icon,
                           &info.ideal_width,
                           &info.small_begin_need_separator_width,
                           &info.small_must_have_separator_width,
@@ -97,6 +101,13 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     }
 }
 
+bool wxRibbonBar::DismissExpandedPanel()
+{
+    if(m_current_page == -1)
+        return false;
+    return m_pages.Item(m_current_page).page->DismissExpandedPanel();
+}
+
 bool wxRibbonBar::Realize()
 {
     bool status = true;
@@ -105,6 +116,7 @@ bool wxRibbonBar::Realize()
     for(i = 0; i < numtabs; ++i)
     {
         wxRibbonPageTabInfo& info = m_pages.Item(i);
+        RepositionPage(info.page);
         if(!info.page->Realize())
         {
             status = false;
@@ -488,7 +500,8 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
                          wxWindowID id,
                          const wxPoint& pos,
                          const wxSize& size,
-                         long style) : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
+                         long style)
+    : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(style);
 }

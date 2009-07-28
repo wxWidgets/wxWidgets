@@ -1072,14 +1072,14 @@ void wxRibbonMSWArtProvider::DrawPageBackground(
 
     {
         wxPoint border_points[8];
-        border_points[0] = wxPoint(3, -1);
+        border_points[0] = wxPoint(2, 0);
         border_points[1] = wxPoint(1, 1);
         border_points[2] = wxPoint(1, rect.height - 4);
         border_points[3] = wxPoint(3, rect.height - 2);
         border_points[4] = wxPoint(rect.width - 4, rect.height - 2);
         border_points[5] = wxPoint(rect.width - 2, rect.height - 4);
         border_points[6] = wxPoint(rect.width - 2, 1);
-        border_points[7] = wxPoint(rect.width - 3, -1);
+        border_points[7] = wxPoint(rect.width - 4, -1);
 
         dc.SetPen(m_page_border_pen);
         dc.DrawLines(sizeof(border_points)/sizeof(wxPoint), border_points, rect.x, rect.y);
@@ -1244,6 +1244,8 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         wxRect label_rect(true_rect);
         wxSize label_size(dc.GetTextExtent(wnd->GetLabel()));
 
+        label_rect.SetX(label_rect.GetX() + 1);
+        label_rect.SetWidth(label_rect.GetWidth() - 2);
         label_rect.SetHeight(label_size.GetHeight() + 2);
         label_rect.SetY(true_rect.GetBottom() - label_rect.GetHeight());
         label_height = label_rect.GetHeight();
@@ -2072,7 +2074,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
     const int drop_button_width = 8;
 
     dc.SetFont(m_button_bar_label_font);
-    switch(size)
+    switch(size & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
     {
     case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
         // Small bitmap, no label

@@ -41,6 +41,7 @@ BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_MOTION(wxRibbonButtonBar::OnMouseMove)
     EVT_PAINT(wxRibbonButtonBar::OnPaint)
     EVT_SIZE(wxRibbonButtonBar::OnSize)
+    EVT_LEFT_DOWN(wxRibbonButtonBar::OnMouseDown)
     EVT_LEFT_UP(wxRibbonButtonBar::OnMouseUp)
 END_EVENT_TABLE()
 
@@ -829,6 +830,13 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         }
         Refresh();
     }
+}
+
+void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& WXUNUSED(evt))
+{
+    // Nothing happens here yet, but:
+    // 1) Something will in the future
+    // 2) wxGTK needs a mouse down handler to keep expanded panels open
 }
 
 void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)

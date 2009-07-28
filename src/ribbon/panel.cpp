@@ -59,6 +59,11 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
 
 wxRibbonPanel::~wxRibbonPanel()
 {
+    if(m_expanded_panel)
+    {
+        m_expanded_panel->m_expanded_dummy = NULL;
+        m_expanded_panel->GetParent()->Destroy();
+    }
 }
 
 bool wxRibbonPanel::Create(wxWindow* parent,
@@ -97,8 +102,7 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     m_flags = style;
     m_minimised_icon = icon;
     m_minimised = false;
-    m_hovered_count = 0;
-    m_mouse_hovered_self = false;
+    m_hovered = false;
 
     if(m_art == NULL)
     {
@@ -121,35 +125,59 @@ bool wxRibbonPanel::IsMinimised() const
 
 bool wxRibbonPanel::IsHovered() const
 {
-    return m_hovered_count > 0;
+    return m_hovered;
 }
 
-void wxRibbonPanel::OnMouseEnter(wxMouseEvent& WXUNUSED(evt))
+void wxRibbonPanel::OnMouseEnter(wxMouseEvent& evt)
 {
-    ++m_hovered_count;
-    m_mouse_hovered_self = true;
-    Refresh();
+    TestPositionForHover(evt.GetPosition());
 }
 
 void wxRibbonPanel::OnMouseEnterChild(wxMouseEvent& evt)
 {
-    ++m_hovered_count;
-    Refresh();
+    wxPoint pos = evt.GetPosition();
+    wxWindow *child = wxDynamicCast(evt.GetEventObject(), wxWindow);
+    if(child)
+    {
+        pos += child->GetPosition();
+        TestPositionForHover(pos);
+    }
     evt.Skip();
 }
 
-void wxRibbonPanel::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+void wxRibbonPanel::OnMouseLeave(wxMouseEvent& evt)
 {
-    --m_hovered_count;
-    m_mouse_hovered_self = false;
-    Refresh();
+    TestPositionForHover(evt.GetPosition());
 }
 
 void wxRibbonPanel::OnMouseLeaveChild(wxMouseEvent& evt)
 {
-    --m_hovered_count;
-    Refresh();
+    wxPoint pos = evt.GetPosition();
+    wxWindow *child = wxDynamicCast(evt.GetEventObject(), wxWindow);
+    if(child)
+    {
+        pos += child->GetPosition();
+        TestPositionForHover(pos);
+    }
     evt.Skip();
+}
+
+void wxRibbonPanel::TestPositionForHover(const wxPoint& pos)
+{
+    bool hovered = false;
+    if(pos.x >= 0 && pos.y >= 0)
+    {
+        wxSize size = GetSize();
+        if(pos.x < size.GetWidth() && pos.y < size.GetHeight())
+        {
+            hovered = true;
+        }
+    }
+    if(hovered != m_hovered)
+    {
+        m_hovered = hovered;
+        Refresh(false);
+    }
 }
 
 void wxRibbonPanel::AddChild(wxWindowBase *child)
@@ -609,19 +637,6 @@ bool wxRibbonPanel::ShowExpanded()
         child->Show();
     }
 
-    // Mouse enter / leave events for children will now be sent to the new
-    // panel, so transfer ownership of their hover counts to it.
-    if(m_mouse_hovered_self)
-    {
-        m_expanded_panel->m_hovered_count += (m_hovered_count - 1);
-        m_hovered_count = 1;
-    }
-    else
-    {
-        m_expanded_panel->m_hovered_count += m_hovered_count;
-        m_hovered_count = 0;
-    }
-
     // TODO: Move sizer to new panel
 
     m_expanded_panel->Realize();
@@ -741,19 +756,6 @@ bool wxRibbonPanel::HideExpanded()
         wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_dummy);
         child->Hide();
-    }
-
-    // Mouse enter / leave events for children will now be sent to the dummy,
-    // so transfer ownership of their hover counts to it.
-    if(m_mouse_hovered_self)
-    {
-        m_expanded_dummy->m_hovered_count += (m_hovered_count - 1);
-        m_hovered_count = 1;
-    }
-    else
-    {
-        m_expanded_dummy->m_hovered_count += m_hovered_count;
-        m_hovered_count = 0;
     }
 
     // TODO: Move sizer back

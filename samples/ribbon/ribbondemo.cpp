@@ -280,7 +280,7 @@ void MyFrame::AddText(wxString msg)
 {
     m_logwindow->AppendText(msg);
     m_logwindow->AppendText(wxT("\n"));
-    m_logwindow->SetFocus();
+    m_ribbon->DismissExpandedPanel();
 }
 
 void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,

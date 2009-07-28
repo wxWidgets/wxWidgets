@@ -111,6 +111,7 @@ public:
     bool SetActivePage(size_t page);
     bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
+    bool DismissExpandedPanel();
 
     virtual wxSize DoGetBestSize() const;
     virtual bool HasMultiplePages() const { return true; }

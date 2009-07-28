@@ -783,6 +783,7 @@ WX_ARG_FEATURE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], w
 WX_ARG_FEATURE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
 WX_ARG_FEATURE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
 WX_ARG_FEATURE(propgrid,    [  --enable-propgrid       use wxPropertyGrid library], wxUSE_PROPGRID)
+WX_ARG_FEATURE(ribbon,      [  --enable-ribbon         use wxRibbon library], wxUSE_RIBBON)
 WX_ARG_FEATURE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
 WX_ARG_FEATURE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_FEATURE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
@@ -6917,6 +6918,13 @@ if test "$wxUSE_PROPGRID" = "yes"; then
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS propgrid"
 fi
 
+USE_RIBBON=0
+if test "$wxUSE_RIBBON" = "yes"; then
+   AC_DEFINE(wxUSE_RIBBON)
+   USE_RIBBON=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ribbon"
+fi
+
 USE_STC=0
 if test "$wxUSE_STC" = "yes"; then
    AC_DEFINE(wxUSE_STC)
@@ -7299,6 +7307,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_PROPGRID" = "yes" ; then
         BUILT_WX_LIBS="propgrid $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_RIBBON" = "yes" ; then
+        BUILT_WX_LIBS="ribbon $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_RICHTEXT" = "yes" ; then
         BUILT_WX_LIBS="richtext $BUILT_WX_LIBS"

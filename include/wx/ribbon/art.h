@@ -18,6 +18,7 @@
 
 #include <wx/brush.h>
 #include <wx/pen.h>
+#include <wx/ribbon/buttonbar.h>
 
 enum wxRibbonArtSetting
 {
@@ -131,8 +132,6 @@ class wxRibbonGallery;
 class wxRibbonGalleryItem;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
-enum wxRibbonButtonBarButtonKind;
-enum wxRibbonButtonBarButtonState;
 
 class WXDLLIMPEXP_RIBBON wxRibbonArtProvider
 {

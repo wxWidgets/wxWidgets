@@ -168,7 +168,8 @@ wxRibbonPage::wxRibbonPage(wxRibbonBar* parent,
                    wxWindowID id,
                    const wxString& label,
                    const wxBitmap& icon,
-                   long style) : wxRibbonControl(parent, id, wxDefaultPosition, wxDefaultSize, style)
+                   long WXUNUSED(style))
+    : wxRibbonControl(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE)
 {
     CommonInit(label, icon);
 }
@@ -181,9 +182,9 @@ bool wxRibbonPage::Create(wxRibbonBar* parent,
                 wxWindowID id,
                 const wxString& label,
                 const wxBitmap& icon,
-                long style)
+                long WXUNUSED(style))
 {
-    if(!wxRibbonControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style))
+    if(!wxRibbonControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE))
         return false;
 
     CommonInit(label, icon);
@@ -889,6 +890,25 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
     {
         return false;
     }
+}
+
+bool wxRibbonPage::DismissExpandedPanel()
+{
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+              node;
+              node = node->GetNext() )
+    {
+        wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+        if(panel == NULL)
+        {
+            continue;
+        }
+        if(panel->GetExpandedPanel() != NULL)
+        {
+            return panel->HideExpanded();
+        }
+    }
+    return false;
 }
 
 wxSize wxRibbonPage::GetMinSize() const

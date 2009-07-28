@@ -96,6 +96,7 @@ protected:
     void OnKillFocus(wxFocusEvent& evt);
     void OnChildKillFocus(wxFocusEvent& evt);
 
+    void TestPositionForHover(const wxPoint& pos);
     bool ShouldSendEventToDummy(wxEvent& evt);
     virtual bool TryAfter(wxEvent& evt);
 
@@ -113,9 +114,8 @@ protected:
     wxRibbonPanel* m_expanded_panel;
     wxWindow* m_child_with_focus;
     long m_flags;
-    long m_hovered_count;
     bool m_minimised;
-    bool m_mouse_hovered_self;
+    bool m_hovered;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonPanel)

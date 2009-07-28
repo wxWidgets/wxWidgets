@@ -541,7 +541,7 @@ void wxRibbonGallery::CalculateMinSize()
 bool wxRibbonGallery::Realize()
 {
     CalculateMinSize();
-    return true;
+    return Layout();
 }
 
 bool wxRibbonGallery::Layout()
