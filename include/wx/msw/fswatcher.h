@@ -15,31 +15,16 @@
 
 #if wxUSE_FSWATCHER
 
-class wxFSWatcherService;
-
 class WXDLLIMPEXP_BASE wxMSWFileSystemWatcher : public wxFileSystemWatcherBase
 {
 public:
     wxMSWFileSystemWatcher();
 
     wxMSWFileSystemWatcher(const wxFileName& path,
-                                    int events = wxFSW_EVENT_ALL);
-
-    virtual ~wxMSWFileSystemWatcher();
-
-    virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                         const wxString& filter = wxEmptyString);
+                           int events = wxFSW_EVENT_ALL);
 
 protected:
     bool Init();
-
-    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
-
-    virtual bool DoAdd(wxFSWatchEntry& watch);
-
-    virtual bool DoRemove(wxFSWatchEntry& watch);
-
-    wxFSWatcherService* m_service;
 };
 
 #endif // wxUSE_FSWATCHER

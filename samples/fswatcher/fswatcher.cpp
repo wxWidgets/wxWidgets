@@ -56,7 +56,7 @@ private:
     const static wxString LOG_FORMAT; // how to format events
 };
 
-const wxString MyFrame::LOG_FORMAT = " %-12s %-36s\t%-36s";
+const wxString MyFrame::LOG_FORMAT = " %-12s %-36s    %-36s";
 
 // Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
@@ -76,7 +76,7 @@ public:
         return true;
     }
 
-    // create the file system watcher here, because it need an active loop
+    // create the file system watcher here, because it needs an active loop
     virtual void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop))
     {
         m_frame->OnEventLoopEnter();
@@ -99,8 +99,9 @@ IMPLEMENT_APP(MyApp)
 // ============================================================================
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+MyFrame::MyFrame(const wxString& title) :
+       wxFrame(NULL, wxID_ANY, title),
+       m_watcher(NULL)
 {
     SetIcon(wxICON(sample));
 
@@ -241,6 +242,7 @@ void MyFrame::OnEventLoopEnter()
 
 void MyFrame::CreateWatcher()
 {
+    wxCHECK_RET(!m_watcher, "Watcher already initialized");
     m_watcher = new wxFileSystemWatcher();
     m_watcher->SetOwner(this);
 }
@@ -265,10 +267,12 @@ void MyFrame::OnWatch(wxCommandEvent& event)
 
     if (event.IsChecked())
     {
+        wxCHECK_RET(!m_watcher, "Watcher already initialized");
         CreateWatcher();
     }
     else
     {
+        wxCHECK_RET(m_watcher, "Watcher not initialized");
         m_filesList->DeleteAllItems();
         delete m_watcher;
         m_watcher = NULL;
@@ -277,6 +281,8 @@ void MyFrame::OnWatch(wxCommandEvent& event)
 
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
+    wxCHECK_RET(m_watcher, "Watcher not initialized");
+
     // TODO account for adding the files as well
     const wxString& dir = wxDirSelector("Choose a folder to watch", "",
                                     wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST);
@@ -297,6 +303,7 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
 {
+    wxCHECK_RET(m_watcher, "Watcher not initialized");
     long idx = m_filesList->GetFirstSelected();
     if (idx == -1)
         return;

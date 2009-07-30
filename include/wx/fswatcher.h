@@ -148,7 +148,7 @@ public:
      */
     bool IsError() const
     {
-        return m_changeType & (wxFSW_EVENT_ERROR | wxFSW_EVENT_WARNING);
+        return (m_changeType & (wxFSW_EVENT_ERROR | wxFSW_EVENT_WARNING)) != 0;
     }
 
     wxString GetErrorDescription() const
@@ -182,14 +182,40 @@ typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
 /**
  * Simple container to store information about one watched file
  */
-class wxFSWatchEntry;
+class wxFSWatchInfo
+{
+public:
+	wxFSWatchInfo() :
+	    m_path(wxEmptyString), m_events(-1)
+	{
+	}
 
-WX_DECLARE_STRING_HASH_MAP(wxFSWatchEntry*, wxFSWatchEntries);
+    wxFSWatchInfo(const wxString& path, int events) :
+        m_path(path), m_events(events)
+    {
+    }
+
+    const wxString& GetPath() const
+    {
+        return m_path;
+    }
+
+    int GetFlags() const
+    {
+        return m_events;
+    }
+
+protected:
+    wxString m_path;
+    int m_events;
+};
+
+WX_DECLARE_STRING_HASH_MAP(wxFSWatchInfo, wxFSWatchInfoMap);
 
 /**
  * Encapsulation of platform-specific file system event mechanism
  */
-class wxFSWatcherService;
+class wxFSWatcherImpl;
 
 /**
  * Main entry point for clients interested in file system events.
@@ -218,7 +244,7 @@ public:
      * of particular type.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                        const wxString& filter = wxEmptyString) = 0;
+                         const wxString& filter = wxEmptyString);
 
     /**
      * Removes path from the list of watched paths.
@@ -265,28 +291,24 @@ public:
 
 protected:
 
-    /**
-     * Function resposible for creating platform specific wxFSWatchEntry. This
-     * is supposed to be simple factory function so it should never fail
-     * (i.e. never return a NULL pointer )
-     */
-    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events) = 0;
+    static wxString GetCanonicalPath(const wxFileName& path)
+    {
+		wxFileName path_copy = wxFileName(path);
+        if ( !path_copy.Normalize() )
+        {
+            wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
+                                         path.GetFullPath()));
+            return wxEmptyString;
+        }
 
-    /**
-     * Actual adding of wxFSWatchEntry to be watched for file system events
-     */
-    virtual bool DoAdd(wxFSWatchEntry& watch) = 0;
+        return path_copy.GetFullPath();
+    }
 
-    /**
-     * Actual removing of wxFSWatchEntry from list of watched paths.
-     */
-    virtual bool DoRemove(wxFSWatchEntry& watch) = 0;
-
-    wxFSWatchEntries m_watches;        // path=>wxFSWatchEntry* map
-    wxFSWatcherService* m_service;     // file system events service
+    wxFSWatchInfoMap m_watches;        // path=>wxFSWatchInfo map
+    wxFSWatcherImpl* m_service;     // file system events service
     wxEvtHandler* m_owner;             // handler for file system events
 
-    friend class wxFSWatcherService;
+    friend class wxFSWatcherImpl;
 };
 
 // include the platform specific file defining wxFileSystemWatcher

@@ -15,8 +15,6 @@
 
 #if wxUSE_FSWATCHER
 
-#include "wx/evtloop.h"
-
 class WXDLLIMPEXP_BASE wxInotifyFileSystemWatcher :
         public wxFileSystemWatcherBase
 {
@@ -24,21 +22,12 @@ public:
     wxInotifyFileSystemWatcher();
 
     wxInotifyFileSystemWatcher(const wxFileName& path,
-                                int events = wxFSW_EVENT_ALL);
+                               int events = wxFSW_EVENT_ALL);
 
     virtual ~wxInotifyFileSystemWatcher();
 
-    virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                         const wxString& filter = wxEmptyString);
-
 protected:
     bool Init();
-
-    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
-
-    virtual bool DoAdd(wxFSWatchEntry& watch);
-
-    virtual bool DoRemove(wxFSWatchEntry& watch);
 };
 
 #endif

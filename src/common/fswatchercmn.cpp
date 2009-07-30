@@ -18,6 +18,11 @@
 #if wxUSE_FSWATCHER
 
 #include "wx/fswatcher.h"
+#include "wx/private/fswatcher.h"
+
+// ============================================================================
+// helpers
+// ============================================================================
 
 wxDEFINE_EVENT(wxEVT_FSWATCHER, wxFileSystemWatcherEvent);
 
@@ -42,11 +47,21 @@ static wxString GetFSWEventChangeTypeName(int type)
     return "INVALID_TYPE";
 }
 
+
+// ============================================================================
+// wxFileSystemWatcherEvent implementation
+// ============================================================================
+
 wxString wxFileSystemWatcherEvent::ToString() const
 {
     return wxString::Format("FSW_EVT type=%d (%s) path='%s'", m_changeType,
             GetFSWEventChangeTypeName(m_changeType), GetPath().GetFullPath());
 }
+
+
+// ============================================================================
+// wxFileSystemWatcherEvent implementation
+// ============================================================================
 
 wxFileSystemWatcherBase::wxFileSystemWatcherBase() :
     m_service(0), m_owner(this)
@@ -55,60 +70,97 @@ wxFileSystemWatcherBase::wxFileSystemWatcherBase() :
 
 wxFileSystemWatcherBase::~wxFileSystemWatcherBase()
 {
+    RemoveAll();
+    delete m_service;
 }
 
 bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
 {
+    // args validation & consistency checks
     if (!path.FileExists() && !path.DirExists())
         return false;
 
-	wxFileName path2(path);
-	if ( !path2.Normalize() )
-    {
-        wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-                                     path2.GetFullPath()));
+    wxString canonical = GetCanonicalPath(path);
+    if (canonical.IsEmpty())
         return false;
-    }
 
-    wxString canonical = path2.GetFullPath();
     wxCHECK_MSG(m_watches.find(canonical) == m_watches.end(), false,
-                wxString::Format("path %s is already watched", canonical));
+                wxString::Format("Path '%s' is already watched", canonical));
 
-    // XXX now that I see it, it should be different structure
-    // than wxFSWatchEntry and then subclasses would delete wxFSWatchEntry
-    // and this class would own these other structures
-    wxFSWatchEntry* watch = CreateWatch(path2, events);
-    if (!DoAdd(*watch)) {
-        delete watch;
+    // adding a path in a platform specific way
+    wxFSWatchInfo watch(canonical, events);
+    if ( !m_service->Add(watch) )
         return false;
-    }
 
-    // always succeeds, checked above
-    wxFSWatchEntries::value_type val(canonical, watch);
+    // on success, add path to our 'watch-list'
+    wxFSWatchInfoMap::value_type val(canonical, watch);
     return m_watches.insert(val).second;
 }
 
 bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
 {
-    // normalize
-    wxFileName path2(path);
-    if ( !path2.Normalize() )
-    {
-    	wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-                                     path2.GetFullPath()));
-    	return false;
-    }
+    // args validation & consistency checks
+    wxString canonical = GetCanonicalPath(path);
+    if (canonical.IsEmpty())
+        return false;
 
-    // get watch entry
-    wxString canonical = path2.GetFullPath();
-    wxFSWatchEntries::iterator it = m_watches.find(canonical);
+    wxFSWatchInfoMap::iterator it = m_watches.find(canonical);
     wxCHECK_MSG(it != m_watches.end(), false,
-                wxString::Format("path %s is not watched", canonical));
+                wxString::Format("Path '%s' is not watched", canonical));
 
-    // remove
-    wxFSWatchEntry* watch = it->second;
+    // remove from watch-list
+    wxFSWatchInfo watch = it->second;
     m_watches.erase(it);
-    return DoRemove(*watch);
+
+    // remove in a platform specific way
+    return m_service->Remove(watch);
+}
+
+bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
+                                      const wxString& filter)
+{
+    if (!path.DirExists())
+        return false;
+
+    // OPT could be optimised if we stored information about relationships
+    // between paths
+    class AddTraverser : public wxDirTraverser
+    {
+    public:
+        AddTraverser(wxFileSystemWatcherBase* watcher, int events) :
+            m_watcher(watcher), m_events(events)
+        {
+        }
+
+        // CHECK we choose which files to delegate to Add(), maybe we should pass
+        // all of them to Add() and let it choose? this is useful when adding a
+        // file to a dir that is already watched, then not only should we know
+        // about that, but Add() should also behave well then
+        virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
+        {
+            return wxDIR_CONTINUE;
+        }
+
+        virtual wxDirTraverseResult OnDir(const wxString& dirname)
+        {
+            wxLogTrace(wxTRACE_FSWATCHER, "--- AddTree adding '%s' ---",
+                                                                    dirname);
+            // we add as much as possible and ignore errors
+            m_watcher->Add(wxFileName(dirname), m_events);
+            return wxDIR_CONTINUE;
+        }
+
+    private:
+        wxFileSystemWatcherBase* m_watcher;
+        int m_events;
+        wxString m_filter;
+    };
+
+    wxDir dir(path.GetFullPath());
+    AddTraverser traverser(this, events);
+    dir.Traverse(traverser, filter);
+
+    return true;
 }
 
 bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
@@ -151,14 +203,8 @@ bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
 
 bool wxFileSystemWatcherBase::RemoveAll()
 {
-    wxFSWatchEntries::iterator it = m_watches.begin();
-    for ( ; it != m_watches.end(); ++it)
-    {
-    	// ignore return, we want to remove as much as possible
-    	(void) DoRemove(*(it->second));
-    }
+    m_service->RemoveAll();
     m_watches.clear();
-
     return true;
 }
 
@@ -171,7 +217,7 @@ int wxFileSystemWatcherBase::GetWatchedPaths(wxArrayString* paths) const
 {
     wxCHECK_MSG( paths != NULL, -1, "Null array passed to retrieve paths");
 
-    wxFSWatchEntries::const_iterator it = m_watches.begin();
+    wxFSWatchInfoMap::const_iterator it = m_watches.begin();
     for ( ; it != m_watches.end(); ++it)
     {
         paths->push_back(it->first);

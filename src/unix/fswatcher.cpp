@@ -20,90 +20,30 @@
 #include <sys/inotify.h>
 #include <unistd.h>
 #include "wx/fswatcher.h"
-
-
-// ============================================================================
-// wxFSWatcherEntry implementation
-// ============================================================================
-
-class WXDLLIMPEXP_BASE wxFSWatchEntry
-{
-public:
-    wxFSWatchEntry(const wxFileName& path, int events) :
-        m_path(path), m_events(events), m_wd(-1)
-    { }
-
-    // default copy ctor, assignment operator and dtor are ok
-
-    const wxFileName& GetPath() const
-    {
-        return m_path;
-    }
-
-    int GetFlags() const
-    {
-        return m_events;
-    }
-
-    int GetWatchDescriptor() const
-    {
-        return m_wd;
-    }
-
-    void SetWatchDescriptor(int wd)
-    {
-        m_wd = wd;
-    }
-
-private:
-    wxFileName m_path;
-    int m_events;
-    int m_wd;
-};
+#include "wx/private/fswatcher.h"
 
 // ============================================================================
-// wxFSWatcherService implementation & helper wxFSWSourceHandler class
+// wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
 // ============================================================================
-
-class wxFSWatcherService;
-
-/**
- * Handler for reading from inotify descriptor
- */
-class wxFSWSourceHandler : public wxEventLoopSourceHandler
-{
-public:
-    wxFSWSourceHandler(wxFSWatcherService* service) :
-        m_service(service)
-    {  }
-
-    virtual void OnReadWaiting();
-    virtual void OnWriteWaiting();
-    virtual void OnExceptionWaiting();
-
-protected:
-    wxFSWatcherService* m_service;
-};
-
 
 // inotify watch descriptor=>wxFSWatchEntry* map
 WX_DECLARE_HASH_MAP(int, wxFSWatchEntry*, wxIntegerHash, wxIntegerEqual,
-                                                   wxFSWatchEntryDescriptors);
+                                             wxFSWatchEntryDescriptors);
 
 /**
  * Helper class encapsulating inotify mechanism
  */
-class wxFSWatcherService
+class wxFSWatcherImplUnix : public wxFSWatcherImpl
 {
 public:
-    wxFSWatcherService(wxFileSystemWatcherBase* watcher) :
-        m_watcher(watcher), m_loop(NULL),
-        m_source(wxEventLoopSource::INVALID_RESOURCE)
+    wxFSWatcherImplUnix(wxFileSystemWatcherBase* watcher) :
+        wxFSWatcherImpl(watcher),
+        m_loop(NULL), m_source(wxEventLoopSource::INVALID_RESOURCE)
     {
         m_handler = new wxFSWSourceHandler(this);
     }
 
-    ~wxFSWatcherService()
+    ~wxFSWatcherImplUnix()
     {
         // we close inotify only if initialized before
         if (IsOk())
@@ -151,35 +91,35 @@ public:
         return ret != -1;
     }
 
-    bool Add(wxFSWatchEntry* watch)
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
     {
         wxCHECK_MSG( m_source.IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
 
-        int wd = DoAddInotify(watch);
+        int wd = DoAddInotify(watch.get());
         if (wd == -1)
         {
             wxLogSysError(_("Unable to add inotify watch"));
             return false;
         }
 
-        wxFSWatchEntryDescriptors::value_type val(wd, watch);
+        wxFSWatchEntryDescriptors::value_type val(wd, watch.get());
         if (!m_watchMap.insert(val).second)
         {
             wxFAIL_MSG( wxString::Format("Path %s is already watched",
-                                            watch->GetPath().GetFullPath()) );
+                                          watch->GetPath()) );
             return false;
         }
 
         return true;
     }
 
-    bool Remove(wxFSWatchEntry* watch)
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch)
     {
         wxCHECK_MSG( m_source.IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
 
-        int ret = DoRemoveInotify(watch);
+        int ret = DoRemoveInotify(watch.get());
         if (ret == -1)
         {
             wxLogSysError(_("Unable to remove inotify watch"));
@@ -189,13 +129,20 @@ public:
         if (m_watchMap.erase(watch->GetWatchDescriptor()) != 1)
         {
             wxFAIL_MSG( wxString::Format("Path %s is not watched",
-                                            watch->GetPath().GetFullPath()) );
+                                          watch->GetPath()) );
         }
         watch->SetWatchDescriptor(-1);
+        return true;
+    }
 
-        // now it is our responsibility
-        delete watch;
-
+    virtual bool RemoveAll()
+    {
+        wxFSWatchEntries::iterator it = m_watches.begin();
+        for ( ; it != m_watches.end(); ++it )
+        {
+            (void) DoRemove(it->second);
+        }
+        m_watches.clear();
         return true;
     }
 
@@ -242,18 +189,6 @@ public:
     }
 
 protected:
-#if 0
-    void DumpMap()
-    {
-        wxLogTrace(wxTRACE_FSWATCHER, "Watch map:");
-        wxFSWatchEntryDescriptors::iterator it = m_watchMap.begin();
-        for ( ; it != m_watchMap.end(); ++it) {
-            wxLogTrace(wxTRACE_FSWATCHER, "%d => %s", it->first,
-                    it->second->GetPath().GetFullPath());
-        }
-    }
-#endif
-
     bool RegisterSource()
     {
         wxCHECK_MSG( m_source.IsOk(), false,
@@ -285,7 +220,7 @@ protected:
     {
         int flags = Watcher2NativeFlags(watch->GetFlags());
         int wd = inotify_add_watch(m_source.GetResource(),
-                                   watch->GetPath().GetFullPath().fn_str(),
+                                   watch->GetPath().fn_str(),
                                    flags);
         // finally we can set watch descriptor
         watch->SetWatchDescriptor(wd);
@@ -462,7 +397,6 @@ protected:
         return wxEmptyString;
     }
 
-    wxFileSystemWatcherBase* m_watcher;   // watcher we communicate with
     wxFSWSourceHandler* m_handler;        // handler for inotify event source
     wxFSWatchEntryDescriptors m_watchMap; // inotify wd=>wxFSWatchEntry* map
     wxEventLoopBase* m_loop;              // event loop we have registered with
@@ -502,88 +436,24 @@ wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher(const wxFileName& path,
     	                                               int events) :
     wxFileSystemWatcherBase()
 {
-    Init();
-    Add(path, events);
-}
+    if (!Init())
+    {
+        if (m_service)
+            delete m_service;
+        return;
+    }
 
-bool wxInotifyFileSystemWatcher::Init()
-{
-    m_service = new wxFSWatcherService(this);
-    return m_service->Init();
+    Add(path, events);
 }
 
 wxInotifyFileSystemWatcher::~wxInotifyFileSystemWatcher()
 {
-    // it is subclass resposibility to remove all paths - we own wxFSWatchEntry
-    // structures
-    RemoveAll();
-    delete m_service;
 }
 
-// actuall adding: just delegate to wxFSWatcherService
-bool wxInotifyFileSystemWatcher::DoAdd(wxFSWatchEntry& watch)
+bool wxInotifyFileSystemWatcher::Init()
 {
-    return m_service->Add(&watch);
-}
-
-bool wxInotifyFileSystemWatcher::DoRemove(wxFSWatchEntry& watch)
-{
-    return m_service->Remove(&watch);
-}
-
-wxFSWatchEntry* wxInotifyFileSystemWatcher::CreateWatch(const wxFileName& path,
-    													int events)
-{
-    return new wxFSWatchEntry(path, events);
-}
-
-bool wxInotifyFileSystemWatcher::AddTree(const wxFileName& path, int events,
-    									 const wxString& filter)
-{
-    if (!path.DirExists())
-    	return false;
-
-    // OPT could be optimised if we stored information about relationships
-    // between paths
-    // TODO apply filter
-    class AddTraverser : public wxDirTraverser
-    {
-    public:
-    	AddTraverser(wxFileSystemWatcherBase* watcher, int events,
-    					const wxString& filter) :
-    		m_watcher(watcher), m_events(events), m_filter(filter)
-    	{
-    	}
-
-    	// CHECK we choose which files to delegate to Add(), maybe we should pass
-    	// all of them to Add() and let it choose? this is useful when adding a
-    	// file to a dir that is already watched, then not only should we know
-    	// about that, but Add() should also behave well then
-    	virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
-    	{
-    		return wxDIR_CONTINUE;
-    	}
-
-    	virtual wxDirTraverseResult OnDir(const wxString& dirname)
-    	{
-        	wxLogTrace(wxTRACE_FSWATCHER, "--- AddTree adding '%s' ---",
-    																dirname);
-        	// we add as much as possible and ignore errors
-    		m_watcher->Add(wxFileName(dirname), m_events);
-    		return wxDIR_CONTINUE;
-    	}
-
-    private:
-    	wxFileSystemWatcherBase* m_watcher;
-    	int m_events;
-    	wxString m_filter;
-    };
-
-    wxDir dir(path.GetFullPath());
-    AddTraverser traverser(this, events, filter);
-    dir.Traverse(traverser);
-
-    return true;
+    m_service = new wxFSWatcherImplUnix(this);
+    return m_service->Init();
 }
 
 #endif // wxUSE_FSWATCHER
