@@ -82,7 +82,7 @@ public:
     }
 
 #if wxUSE_UNICODE && wxABI_VERSION >= 20811
-    wxInitializer(int argc = 0, char **argv = NULL)
+    wxInitializer(int argc, char **argv)
     {
         m_ok = wxInitialize(argc, argv);
     }
