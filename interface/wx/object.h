@@ -10,7 +10,7 @@
 
     This class is just a typedef to wxRefCounter and is used by wxObject.
 
-    Derive classes from this to store your own data in wxObject derived
+    Derive classes from this to store your own data in wxObject-derived
     classes. When retrieving information from a wxObject's reference data,
     you will need to cast to your own derived class.
 
