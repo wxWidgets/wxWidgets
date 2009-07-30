@@ -63,7 +63,7 @@ extern int WXDLLIMPEXP_BASE wxEntry(int& argc, char **argv);
 // call to wxInitialize() must be matched by wxUninitialize())
 extern bool WXDLLIMPEXP_BASE wxInitialize(int argc = 0, wxChar **argv = NULL);
 #if wxUSE_UNICODE && wxABI_VERSION >= 20811
-extern bool WXDLLIMPEXP_BASE wxInitialize(int argc = 0, char **argv = NULL);
+extern bool WXDLLIMPEXP_BASE wxInitialize(int argc, char **argv);
 #endif
 
 // clean up -- the library can't be used any more after the last call to
