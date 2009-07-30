@@ -110,14 +110,6 @@ private:
     wxAppConsole *m_app;
 };
 
-// another tiny class which simply exists to ensure that wxEntryCleanup is
-// always called
-class wxCleanupOnExit
-{
-public:
-    ~wxCleanupOnExit() { wxEntryCleanup(); }
-};
-
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -422,7 +414,9 @@ void wxEntryCleanup()
 int wxEntryReal(int& argc, wxChar **argv)
 {
     // library initialization
-    if ( !wxEntryStart(argc, argv) )
+    wxInitializer initializer(argc, argv);
+
+    if ( !initializer.IsOk() )
     {
 #if wxUSE_LOG
         // flush any log messages explaining why we failed
@@ -430,12 +424,6 @@ int wxEntryReal(int& argc, wxChar **argv)
 #endif
         return -1;
     }
-
-    // if wxEntryStart succeeded, we must call wxEntryCleanup even if the code
-    // below returns or throws
-    wxCleanupOnExit cleanupOnExit;
-
-    WX_SUPPRESS_UNUSED_WARN(cleanupOnExit);
 
     wxTRY
     {
