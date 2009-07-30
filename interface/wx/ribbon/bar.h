@@ -158,6 +158,14 @@ public:
         Set the art provider to be used be the ribbon bar. Also sets the art
         provider on all current wxRibbonPage children, and any wxRibbonPage
         children added in the future.
+        
+        Note that unlike most other ribbon controls, the ribbon bar creates a
+        default art provider when initialised, so an explicit call to
+        SetArtProvider() is not required if the default art provider is
+        sufficient. Alos unlike other ribbon controls, the ribbon bar takes
+        ownership of the given pointer, and will delete it when the art
+        provider is changed or the bar is destroyed. If this behaviour is not
+        desired, then clone the art provider before setting it.
     */
     void SetArtProvider(wxRibbonArtProvider* art);
 

@@ -43,6 +43,9 @@ public:
 
     void Clear();
 
+    bool IsEmpty() const;
+    unsigned int GetCount() const;
+    wxRibbonGalleryItem* GetItem(unsigned int n);
     wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id);
     wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, void* clientData);
     wxRibbonGalleryItem* Append(const wxBitmap& bitmap, int id, wxClientData* clientData);
@@ -52,6 +55,7 @@ public:
     void SetItemClientData(wxRibbonGalleryItem* item, void* data);
     void* GetItemClientData(const wxRibbonGalleryItem* item) const;
 
+    void SetSelection(wxRibbonGalleryItem* item);
     wxRibbonGalleryItem* GetSelection() const;
     wxRibbonGalleryItem* GetHoveredItem() const;
     wxRibbonGalleryItem* GetActiveItem() const;
@@ -65,6 +69,7 @@ public:
     virtual bool Layout();
 
     virtual bool ScrollLines(int lines);
+    void EnsureVisible(const wxRibbonGalleryItem* item);
 
 protected:
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }

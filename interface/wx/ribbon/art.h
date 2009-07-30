@@ -140,7 +140,7 @@ public:
     /**
         Create a new art provider which is a clone of this one.
     */
-    virtual wxRibbonArtProvider* Clone() = 0;
+    virtual wxRibbonArtProvider* Clone() const = 0;
     
     /**
         Set the style flags.
@@ -154,13 +154,13 @@ public:
     /**
         Get the previously set style flags.
     */
-    virtual long GetFlags() = 0;
+    virtual long GetFlags() const = 0;
 
     /**
         Get the value of a certain integer setting.
         @a id can be one of the size values of @ref wxRibbonArtSetting.
     */
-    virtual int GetMetric(int id) = 0;
+    virtual int GetMetric(int id) const = 0;
     
     /**
         Set the value of a certain integer setting to the value @e new_val.
@@ -178,30 +178,78 @@ public:
         Get the value of a certain font setting.
         @a id can be one of the font values of @ref wxRibbonArtSetting.
     */
-    virtual wxFont GetFont(int id) = 0;
+    virtual wxFont GetFont(int id) const = 0;
     
     /**
         Get the value of a certain colour setting.
         @a id can be one of the colour values of @ref wxRibbonArtSetting.
     */
-    virtual wxColour GetColour(int id) = 0;
+    virtual wxColour GetColour(int id) const = 0;
     
     /**
         Set the value of a certain colour setting to the value @e colour.
         @a id can be one of the colour values of @ref wxRibbonArtSetting, though
         not all colour settings will have an affect on every art provider.
+        
+        \see SetColourScheme()
     */
     virtual void SetColour(int id, const wxColor& colour) = 0;
     
     /**
         \see wxRibbonArtProvider::GetColour()
     */
-    wxColour GetColor(int id);
+    wxColour GetColor(int id) const;
     
     /**
         \see wxRibbonArtProvider::SetColour()
     */
     void SetColor(int id, const wxColour& color);
+    
+    /**
+        Get the current colour scheme.
+        
+        Returns three colours such that if SetColourScheme() were called with
+        them, the colour scheme would be restored to what it was when
+        SetColourScheme() was last called. In practice, this usually means that
+        the returned values are the three colours given in the last call to
+        SetColourScheme(), however if SetColourScheme() performs an idempotent
+        operation upon the colours it is given (like clamping a component of
+        the colour), then the returned values may not be the three colours
+        given in the last call to SetColourScheme().
+        If SetColourScheme() has not been called, then the returned values
+        should result in a colour scheme similar to, if not identical to, the
+        default colours of the art provider.
+        Note that if SetColour() is called, then GetColourScheme() does not try
+        and return a colour scheme similar to colours being used - it's return
+        values are dependant upon the last values given to SetColourScheme(),
+        as described above.
+        
+        \param[out] primary
+            Pointer to a location to store the primary colour, or NULL.
+        \param[out] secondary
+            Pointer to a location to store the secondary colour, or NULL.
+        \param[out] tertiary
+            Pointer to a location to store the tertiary colour, or NULL.
+    */
+    virtual void GetColourScheme(wxColour* primary,
+                        wxColour* secondary,
+                        wxColour* tertiary) const = 0;
+    
+    /**
+        Set all applicable colour settings from a few base colours.
+        
+        Uses any or all of the three given colours to create a colour scheme,
+        and then sets all colour settings which are relevant to the art
+        provider using that scheme.
+        Note that some art providers may not use the tertiary colour for
+        anything, and some may not use the secondary colour either.
+        
+        \see SetColour()
+        \see GetColourScheme()
+    */    
+    virtual void SetColourScheme(const wxColour& primary,
+                        const wxColour& secondary,
+                        const wxColour& tertiary) = 0;
 
     /**
         Draw the background of the tab region of a ribbon bar.

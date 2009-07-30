@@ -139,18 +139,24 @@ public:
     wxRibbonArtProvider();
     virtual ~wxRibbonArtProvider();
 
-    virtual wxRibbonArtProvider* Clone() = 0;
+    virtual wxRibbonArtProvider* Clone() const = 0;
     virtual void SetFlags(long flags) = 0;
-    virtual long GetFlags() = 0;
+    virtual long GetFlags() const = 0;
 
-    virtual int GetMetric(int id) = 0;
+    virtual int GetMetric(int id)  const = 0;
     virtual void SetMetric(int id, int new_val) = 0;
     virtual void SetFont(int id, const wxFont& font) = 0;
-    virtual wxFont GetFont(int id) = 0;
-    virtual wxColour GetColour(int id) = 0;
+    virtual wxFont GetFont(int id)  const = 0;
+    virtual wxColour GetColour(int id)  const = 0;
     virtual void SetColour(int id, const wxColor& colour) = 0;
-    wxColour GetColor(int id) { return GetColour(id); }
+    wxColour GetColor(int id) const { return GetColour(id); }
     void SetColor(int id, const wxColour& color) { SetColour(id, color); }
+    virtual void GetColourScheme(wxColour* primary,
+                        wxColour* secondary,
+                        wxColour* tertiary) const = 0;
+    virtual void SetColourScheme(const wxColour& primary,
+                        const wxColour& secondary,
+                        const wxColour& tertiary) = 0;
 
     virtual void DrawTabCtrlBackground(
                         wxDC& dc,
@@ -291,16 +297,22 @@ public:
     wxRibbonMSWArtProvider();
     virtual ~wxRibbonMSWArtProvider();
 
-    wxRibbonArtProvider* Clone();
+    wxRibbonArtProvider* Clone()  const;
     void SetFlags(long flags);
-    long GetFlags();
+    long GetFlags() const;
 
-    int GetMetric(int id);
+    int GetMetric(int id) const;
     void SetMetric(int id, int new_val);
     void SetFont(int id, const wxFont& font);
-    wxFont GetFont(int id);
-    wxColour GetColour(int id);
+    wxFont GetFont(int id) const;
+    wxColour GetColour(int id) const;
     void SetColour(int id, const wxColor& colour);
+    void GetColourScheme(wxColour* primary,
+                         wxColour* secondary,
+                         wxColour* tertiary) const;
+    void SetColourScheme(const wxColour& primary,
+                         const wxColour& secondary,
+                         const wxColour& tertiary);
 
     void DrawTabCtrlBackground(
                         wxDC& dc,
@@ -453,6 +465,10 @@ protected:
     wxBitmap m_gallery_down_bitmap[4];
     wxBitmap m_gallery_extension_bitmap[4];
 
+    wxColour m_primary_scheme_colour;
+    wxColour m_secondary_scheme_colour;
+    wxColour m_tertiary_scheme_colour;
+
     wxColour m_button_bar_label_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_separator_colour;
@@ -531,6 +547,36 @@ protected:
     int m_gallery_bitmap_padding_right_size;
     int m_gallery_bitmap_padding_top_size;
     int m_gallery_bitmap_padding_bottom_size;
+};
+
+/*
+   HSL colour class, using interface as discussed in wx-dev. Provided mainly
+   for art providers to perform colour scheme calculations in the HSL colour
+   space. If such a class makes it into base / core, then this class should be
+   removed and users switched over to the one in base / core.
+
+   0.0 <= Hue < 360.0
+   0.0 <= Saturation <= 1.0
+   0.0 <= Luminance <= 1.0
+*/
+class WXDLLIMPEXP_RIBBON wxRibbonHSLColour
+{
+public:
+   wxRibbonHSLColour()
+       : hue(0.0), saturation(0.0), luminance(0.0) {}
+   wxRibbonHSLColour(float H, float S, float L)
+       : hue(H), saturation(S), luminance(L) { }
+   wxRibbonHSLColour(const wxColour& C);
+
+   wxColour    ToRGB() const;
+
+   wxRibbonHSLColour Darker(float delta) const;
+   wxRibbonHSLColour Lighter(float delta) const;
+   wxRibbonHSLColour Saturated(float delta) const;
+   wxRibbonHSLColour Desaturated(float delta) const;
+   wxRibbonHSLColour ShiftHue(float delta) const;
+
+   float       hue, saturation, luminance;
 };
 
 #if defined(__WXMSW__)

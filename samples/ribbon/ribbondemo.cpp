@@ -24,6 +24,7 @@
 #include "wx/sizer.h"
 #include "wx/menu.h"
 #include "wx/dcbuffer.h"
+#include "wx/colordlg.h"
 
 // -- application --
 
@@ -54,7 +55,8 @@ public:
         ID_SELECTION_EXPAND_H,
         ID_SELECTION_EXPAND_V,
         ID_SELECTION_CONTRACT,
-        ID_COLOURS,
+        ID_PRIMARY_COLOUR,
+        ID_SECONDARY_COLOUR,
     };
 
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -67,16 +69,29 @@ public:
     void OnSelectionExpandHButton(wxRibbonButtonBarEvent& evt);
     void OnSelectionContractButton(wxRibbonButtonBarEvent& evt);
     void OnHoveredColourChange(wxRibbonGalleryEvent& evt);
-    void OnColourSelect(wxRibbonGalleryEvent& evt);
+    void OnPrimaryColourSelect(wxRibbonGalleryEvent& evt);
+    void OnSecondaryColourSelect(wxRibbonGalleryEvent& evt);
+    void OnColourGalleryButton(wxCommandEvent& evt);
 
 protected:
+    wxRibbonGallery* PopulateColoursPanel(wxRibbonPanel* panel, wxColour def,
+        int gallery_id);
     void AddText(wxString msg);
-    void AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
-        wxMemoryDC& dc);
+    wxRibbonGalleryItem* AddColourToGallery(wxRibbonGallery *gallery,
+        wxString name, wxMemoryDC& dc, wxColour* value = NULL);
+    wxColour GetGalleryColour(wxRibbonGallery *gallery,
+        wxRibbonGalleryItem* item, wxString* name);
+    void ResetGalleryArtProviders();
 
     wxRibbonBar* m_ribbon;
+    wxRibbonGallery* m_primary_gallery;
+    wxRibbonGallery* m_secondary_gallery;
     wxTextCtrl* m_logwindow;
-    wxColour m_gallery_bg_colour;
+    wxColourData m_colour_data;
+    wxColour m_default_primary;
+    wxColour m_default_secondary;
+    wxColour m_default_tertiary;
+    wxMemoryDC m_bitmap_creation_dc;
 
     DECLARE_EVENT_TABLE()
 };
@@ -105,8 +120,12 @@ EVT_RIBBONBUTTONBAR_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SQUARE, MyFrame::OnSquareButton)
 EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleDropdown)
 EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_POLYGON, MyFrame::OnPolygonDropdown)
-EVT_RIBBONGALLERY_HOVER_CHANGED(ID_COLOURS, MyFrame::OnHoveredColourChange)
-EVT_RIBBONGALLERY_SELECTED(ID_COLOURS, MyFrame::OnColourSelect)
+EVT_RIBBONGALLERY_HOVER_CHANGED(ID_PRIMARY_COLOUR, MyFrame::OnHoveredColourChange)
+EVT_RIBBONGALLERY_HOVER_CHANGED(ID_SECONDARY_COLOUR, MyFrame::OnHoveredColourChange)
+EVT_RIBBONGALLERY_SELECTED(ID_PRIMARY_COLOUR, MyFrame::OnPrimaryColourSelect)
+EVT_RIBBONGALLERY_SELECTED(ID_SECONDARY_COLOUR, MyFrame::OnSecondaryColourSelect)
+EVT_BUTTON(ID_PRIMARY_COLOUR, MyFrame::OnColourGalleryButton)
+EVT_BUTTON(ID_SECONDARY_COLOUR, MyFrame::OnColourGalleryButton)
 END_EVENT_TABLE()
 
 #include "auto_crop_selection.xpm"
@@ -127,10 +146,9 @@ MyFrame::MyFrame()
 {
     m_ribbon = new wxRibbonBar(this);
 
-    // Page names are from MS Word 2007, will be changed later
     {
-        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Home"));
-        new wxRibbonPanel(home, wxID_ANY, wxT("Clipboard"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON | wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"));
+        new wxRibbonPanel(home, wxID_ANY, wxT("Empty Panel"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON | wxRIBBON_PANEL_NO_AUTO_MINIMISE);
 
         wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
@@ -146,40 +164,28 @@ MyFrame::MyFrame()
         shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
         shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
 
-        new wxRibbonPanel(home, wxID_ANY, wxT("Font"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+        new wxRibbonPanel(home, wxID_ANY, wxT("Another Panel"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
     }
     {
-        wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Tables"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-
-        wxRibbonPanel *colours_panel = new wxRibbonPanel(insert, wxID_ANY, wxT("Colours"), colours_xpm);
-        wxRibbonGallery *colours_gallery = new wxRibbonGallery(colours_panel, ID_COLOURS);
-        wxMemoryDC tmp_dc;
         wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
-        tmp_dc.SetFont(label_font);
-        AddColourToGallery(colours_gallery, "BLUE", tmp_dc);
-        AddColourToGallery(colours_gallery, "FIREBRICK", tmp_dc);
-        AddColourToGallery(colours_gallery, "GOLDENROD", tmp_dc);
-        AddColourToGallery(colours_gallery, "GREEN", tmp_dc);
-        AddColourToGallery(colours_gallery, "KHAKI", tmp_dc);
-        AddColourToGallery(colours_gallery, "MAROON", tmp_dc);
-        AddColourToGallery(colours_gallery, "ORCHID", tmp_dc);
-        AddColourToGallery(colours_gallery, "RED", tmp_dc);
-        AddColourToGallery(colours_gallery, "TURQUOISE", tmp_dc);
-        AddColourToGallery(colours_gallery, "WHEAT", tmp_dc);        
+        m_bitmap_creation_dc.SetFont(label_font);
 
-        new wxRibbonPanel(insert, wxID_ANY, wxT("Links"));
+        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"));
+        m_ribbon->GetArtProvider()->GetColourScheme(&m_default_primary,
+            &m_default_secondary, &m_default_tertiary);
+        wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
+            wxT("Primary Colour"), colours_xpm);
+        m_primary_gallery = PopulateColoursPanel(primary_panel,
+            m_default_primary, ID_PRIMARY_COLOUR);
+        wxRibbonPanel *secondary_panel = new wxRibbonPanel(scheme, wxID_ANY,
+            wxT("Secondary Colour"), colours_xpm);
+        m_secondary_gallery = PopulateColoursPanel(secondary_panel,
+            m_default_secondary, ID_SECONDARY_COLOUR);
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Page Layout"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("References"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Mailings"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Review"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("View"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Developer"));
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"));
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"));
 
     m_ribbon->Realize();
-    m_gallery_bg_colour = m_ribbon->GetArtProvider()->GetColour(
-        wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR);
 
     m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_LEFT | wxTE_BESTWRAP);
 
@@ -195,27 +201,142 @@ MyFrame::~MyFrame()
 {
 }
 
+class ColourClientData : public wxClientData
+{
+public:
+    ColourClientData(const wxString& name, const wxColour& colour)
+        : m_name(name), m_colour(colour) {}
+
+    const wxString& GetName()   const {return m_name;}
+    const wxColour& GetColour() const {return m_colour;}
+
+private:
+    wxString m_name;
+    wxColour m_colour;
+};
+
+wxRibbonGallery* MyFrame::PopulateColoursPanel(wxRibbonPanel* panel,
+                                               wxColour def, int gallery_id)
+{
+    wxRibbonGallery *gallery = new wxRibbonGallery(panel, gallery_id);
+    wxMemoryDC& dc = m_bitmap_creation_dc;
+    wxRibbonGalleryItem *def_item = 
+        AddColourToGallery(gallery, wxT("Default"), dc, &def);
+    gallery->SetSelection(def_item);
+    AddColourToGallery(gallery, wxT("BLUE"), dc);
+    AddColourToGallery(gallery, wxT("BLUE VIOLET"), dc);
+    AddColourToGallery(gallery, wxT("BROWN"), dc);
+    AddColourToGallery(gallery, wxT("CADET BLUE"), dc);
+    AddColourToGallery(gallery, wxT("CORAL"), dc);
+    AddColourToGallery(gallery, wxT("CYAN"), dc);
+    AddColourToGallery(gallery, wxT("DARK GREEN"), dc);
+    AddColourToGallery(gallery, wxT("DARK ORCHID"), dc);
+    AddColourToGallery(gallery, wxT("FIREBRICK"), dc);
+    AddColourToGallery(gallery, wxT("GOLD"), dc);
+    AddColourToGallery(gallery, wxT("GOLDENROD"), dc);
+    AddColourToGallery(gallery, wxT("GREEN"), dc);
+    AddColourToGallery(gallery, wxT("INDIAN RED"), dc);
+    AddColourToGallery(gallery, wxT("KHAKI"), dc);
+    AddColourToGallery(gallery, wxT("LIGHT BLUE"), dc);
+    AddColourToGallery(gallery, wxT("LIME GREEN"), dc);
+    AddColourToGallery(gallery, wxT("MAGENTA"), dc);
+    AddColourToGallery(gallery, wxT("MAROON"), dc);
+    AddColourToGallery(gallery, wxT("NAVY"), dc);
+    AddColourToGallery(gallery, wxT("ORANGE"), dc);
+    AddColourToGallery(gallery, wxT("ORCHID"), dc);
+    AddColourToGallery(gallery, wxT("PINK"), dc);
+    AddColourToGallery(gallery, wxT("PLUM"), dc);
+    AddColourToGallery(gallery, wxT("PURPLE"), dc);
+    AddColourToGallery(gallery, wxT("RED"), dc);
+    AddColourToGallery(gallery, wxT("SALMON"), dc);
+    AddColourToGallery(gallery, wxT("SEA GREEN"), dc);
+    AddColourToGallery(gallery, wxT("SIENNA"), dc);
+    AddColourToGallery(gallery, wxT("SKY BLUE"), dc);
+    AddColourToGallery(gallery, wxT("TAN"), dc);
+    AddColourToGallery(gallery, wxT("THISTLE"), dc);
+    AddColourToGallery(gallery, wxT("TURQUOISE"), dc);
+    AddColourToGallery(gallery, wxT("VIOLET"), dc);
+    AddColourToGallery(gallery, wxT("VIOLET RED"), dc);
+    AddColourToGallery(gallery, wxT("WHEAT"), dc);
+    AddColourToGallery(gallery, wxT("WHITE"), dc);
+    AddColourToGallery(gallery, wxT("YELLOW"), dc);
+
+    return gallery;
+}
+
+wxColour MyFrame::GetGalleryColour(wxRibbonGallery *gallery,
+                                   wxRibbonGalleryItem* item, wxString* name)
+{
+    ColourClientData *data = (ColourClientData*)gallery->GetItemClientObject(item);
+    if(name != NULL)
+        *name = data->GetName();
+    return data->GetColour();
+}
+
 void MyFrame::OnHoveredColourChange(wxRibbonGalleryEvent& evt)
 {
     // Set the background of the gallery to the hovered colour, or back to the
     // default if there is no longer a hovered item.
 
-    wxColour clr = m_gallery_bg_colour;
+    wxRibbonGallery *gallery = evt.GetGallery();
+    wxRibbonArtProvider *provider = gallery->GetArtProvider();
+
     if(evt.GetGalleryItem() != NULL)
     {
-        wxClientData *data = evt.GetGallery()->GetItemClientObject(
-            evt.GetGalleryItem());
-        clr = ((wxStringClientData*)data)->GetData();
+        if(provider == m_ribbon->GetArtProvider())
+        {
+            provider = provider->Clone();
+            gallery->SetArtProvider(provider);
+        }
+        provider->SetColour(wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR,
+            GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), NULL));
     }
-    evt.GetGallery()->GetArtProvider()->SetColour(
-        wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR, clr);
+    else
+    {
+        if(provider != m_ribbon->GetArtProvider())
+        {
+            gallery->SetArtProvider(m_ribbon->GetArtProvider());
+            delete provider;
+        }
+    }
 }
 
-void MyFrame::OnColourSelect(wxRibbonGalleryEvent& evt)
+void MyFrame::OnPrimaryColourSelect(wxRibbonGalleryEvent& evt)
 {
-    wxStringClientData *data = (wxStringClientData*)
-        evt.GetGallery()->GetItemClientObject(evt.GetGalleryItem());
-    AddText(wxT("Colour \"") + data->GetData() + wxT("\" selected."));
+    wxString name;
+    wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
+    AddText(wxT("Colour \"") + name + wxT("\" selected as primary."));
+    wxColour secondary, tertiary;
+    m_ribbon->GetArtProvider()->GetColourScheme(NULL, &secondary, &tertiary);
+    m_ribbon->GetArtProvider()->SetColourScheme(colour, secondary, tertiary);
+    ResetGalleryArtProviders();
+    m_ribbon->Refresh();
+}
+
+void MyFrame::OnSecondaryColourSelect(wxRibbonGalleryEvent& evt)
+{
+    wxString name;
+    wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
+    AddText(wxT("Colour \"") + name + wxT("\" selected as secondary."));
+    wxColour primary, tertiary;
+    m_ribbon->GetArtProvider()->GetColourScheme(&primary, NULL, &tertiary);
+    m_ribbon->GetArtProvider()->SetColourScheme(primary, colour, tertiary);
+    ResetGalleryArtProviders();
+    m_ribbon->Refresh();
+}
+
+void MyFrame::ResetGalleryArtProviders()
+{
+    if(m_primary_gallery->GetArtProvider() != m_ribbon->GetArtProvider())
+    {
+        delete m_primary_gallery->GetArtProvider();
+        m_primary_gallery->SetArtProvider(m_ribbon->GetArtProvider());
+    }
+    if(m_secondary_gallery->GetArtProvider() != m_ribbon->GetArtProvider())
+    {
+        delete m_secondary_gallery->GetArtProvider();
+        m_secondary_gallery->SetArtProvider(m_ribbon->GetArtProvider());
+    }
 }
 
 void MyFrame::OnSelectionExpandHButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -283,10 +404,14 @@ void MyFrame::AddText(wxString msg)
     m_ribbon->DismissExpandedPanel();
 }
 
-void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
-                                 wxMemoryDC& dc)
+wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
+                                 wxString colour, wxMemoryDC& dc,
+                                 wxColour* value)
 {
+    wxRibbonGalleryItem* item = NULL;
     wxColour c(colour);
+    if(value != NULL)
+        c = *value;
     if(c.IsOk())
     {
         const int iWidth = 64;
@@ -301,11 +426,70 @@ void MyFrame::AddColourToGallery(wxRibbonGallery *gallery, wxString colour,
 
         colour = colour.Mid(0, 1) + colour.Mid(1).Lower();
         wxSize size = dc.GetTextExtent(colour);
-        dc.SetTextForeground(wxColour(~c.Red(), ~c.Green(), ~c.Blue()));
+        wxColour foreground = wxColour(~c.Red(), ~c.Green(), ~c.Blue());
+        if(abs(foreground.Red() - c.Red()) + abs(foreground.Blue() - c.Blue())
+            + abs(foreground.Green() - c.Green()) < 64)
+        {
+            // Foreground too similar to background - use a different
+            // strategy to find a contrasting colour
+            foreground = wxColour((c.Red() + 64) % 256, 255 - c.Green(),
+                (c.Blue() + 192) % 256);
+        }
+        dc.SetTextForeground(foreground);
         dc.DrawText(colour, (iWidth - size.GetWidth() + 1) / 2,
             (iHeight - size.GetHeight()) / 2);
+        dc.SelectObjectAsSource(wxNullBitmap);
 
-        wxRibbonGalleryItem* item = gallery->Append(bitmap, wxID_ANY);
-        gallery->SetItemClientObject(item, new wxStringClientData(colour));
+        item = gallery->Append(bitmap, wxID_ANY);
+        gallery->SetItemClientObject(item, new ColourClientData(colour, c));
+    }
+    return item;
+}
+
+void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
+{
+    wxRibbonGallery *gallery = wxDynamicCast(evt.GetEventObject(), wxRibbonGallery);
+    if(gallery == NULL)
+        return;
+
+    m_ribbon->DismissExpandedPanel();
+    if(gallery->GetSelection())
+        m_colour_data.SetColour(GetGalleryColour(gallery, gallery->GetSelection(), NULL));
+    wxColourDialog dlg(this, &m_colour_data);
+    if(dlg.ShowModal() == wxID_OK)
+    {
+        m_colour_data = dlg.GetColourData();
+        wxColour clr = m_colour_data.GetColour();
+
+        // Try to find colour in gallery
+        wxRibbonGalleryItem *item = NULL;
+        for(unsigned int i = 0; i < gallery->GetCount(); ++i)
+        {
+            item = gallery->GetItem(i);
+            if(GetGalleryColour(gallery, item, NULL) == clr)
+                break;
+            else
+                item = NULL;
+        }
+
+        // Colour not in gallery - add it
+        if(item == NULL)
+        {
+            item = AddColourToGallery(gallery,
+                clr.GetAsString(wxC2S_HTML_SYNTAX), m_bitmap_creation_dc,
+                &clr);
+            gallery->Realise();
+        }
+
+        // Set selection
+        gallery->EnsureVisible(item);
+        gallery->SetSelection(item);
+
+        // Send an event to respond to the selection change
+        wxRibbonGalleryEvent dummy(wxEVT_COMMAND_RIBBONGALLERY_SELECTED, gallery->GetId());
+        dummy.SetEventObject(gallery);
+        dummy.SetGallery(gallery);
+        dummy.SetGalleryItem(item);
+        ProcessWindowEvent(dummy);
     }
 }
