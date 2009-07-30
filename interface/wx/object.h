@@ -10,10 +10,10 @@
 
     This class is just a typedef to wxRefCounter and is used by wxObject.
 
-    Derive classes from this to store your own data in wxObject derived 
+    Derive classes from this to store your own data in wxObject derived
     classes. When retrieving information from a wxObject's reference data,
     you will need to cast to your own derived class.
-    
+
     Below is an example illustrating how to store reference counted
     data in a class derived from wxObject including copy-on-write
     semantics.
@@ -91,7 +91,7 @@
         m_refData = new MyCarRefData();
         M_CARDATA->m_price = price;
     }
-    
+
     wxObjectRefData *MyCar::CreateRefData() const
     {
         return new MyCarRefData;
@@ -106,7 +106,7 @@
     {
         if (m_refData == car.m_refData)
             return true;
-        if (!m_refData || !car.m_refData) 
+        if (!m_refData || !car.m_refData)
             return false;
 
         // here we use the MyCarRefData::operator==() function.
@@ -135,7 +135,7 @@
     }
     @endcode
 
-    
+
     @library{wxbase}
     @category{rtti}
 
@@ -151,9 +151,9 @@ typedef wxRefCounter wxObjectRefData;
     interface and a counter. wxRefCounter can be easily used together
     with wxObjectDataPtr<T> to ensure that no calls to wxRefCounter::DecRef()
     are missed - thus avoiding memory leaks.
-    
+
     wxObjectRefData is a typedef to wxRefCounter and is used as the
-    built-in reference counted storage for wxObject derive classes.
+    built-in reference counted storage for wxObject-derived classes.
 
     @library{wxbase}
     @category{rtti}
@@ -227,7 +227,7 @@ public:
     @library{wxbase}
     @category{rtti}
 
-    @see wxClassInfo, @ref overview_debugging, @ref overview_refcount, 
+    @see wxClassInfo, @ref overview_debugging, @ref overview_refcount,
          wxObjectDataRef, wxObjectDataPtr<T>
 */
 class wxObject
@@ -357,10 +357,10 @@ protected:
         Ensure that this object's data is not shared with any other object.
 
         If we have no data, it is created using CreateRefData();
-        if we have shared data (i.e. data with a reference count greater than 1), 
+        if we have shared data (i.e. data with a reference count greater than 1),
         it is copied using CloneRefData(); otherwise nothing is done (the data
         is already present and is not shared by other object instances).
-        
+
         If you use this function you should make sure that you override the
         CreateRefData() and CloneRefData() functions in your class otherwise
         an assertion will fail at runtime.
@@ -370,7 +370,7 @@ protected:
     /**
         Creates a new instance of the wxObjectRefData-derived class specific to
         this object and returns it.
-        
+
         This is usually implemented as a one-line call:
         @code
         wxObjectRefData *MyObject::CreateRefData() const
@@ -384,7 +384,7 @@ protected:
     /**
         Creates a new instance of the wxObjectRefData-derived class specific to
         this object and initializes it copying @a data.
-        
+
         This is usually implemented as a one-line call:
         @code
         wxObjectRefData *MyObject::CloneRefData(const wxObjectRefData *data) const
@@ -505,10 +505,10 @@ public:
     public:
         MyCarRefData( int price = 0 ) : m_price(price) { }
         MyCarRefData( const MyCarRefData& data ) : m_price(data.m_price) { }
-        
+
         void SetPrice( int price )  { m_price = price; }
         int GetPrice() const        { return m_price; }
-        
+
     protected:
         int m_price;
     };
@@ -536,7 +536,7 @@ public:
             if (m_data.get() == other.m_data.get())
                 return true; // this instance and the 'other' one share the
                              // same MyCarRefData data...
-            
+
             return (m_data.GetPrice() == other.m_data.GetPrice());
         }
 
@@ -545,7 +545,7 @@ public:
             // make sure changes to this class do not affect other instances
             // currently sharing our same refcounted data:
             UnShare();
-           
+
             m_data->SetPrice( price );
         }
 
