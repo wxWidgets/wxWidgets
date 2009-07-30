@@ -479,6 +479,21 @@ bool wxInitialize(int argc, wxChar **argv)
     return wxEntryStart(argc, argv);
 }
 
+#if wxUSE_UNICODE
+bool wxInitialize(int argc, char **argv)
+{
+    wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
+
+    if ( gs_initData.nInitCount++ )
+    {
+        // already initialized
+        return true;
+    }
+
+    return wxEntryStart(argc, argv);
+}
+#endif // wxUSE_UNICODE
+
 void wxUninitialize()
 {
     wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
