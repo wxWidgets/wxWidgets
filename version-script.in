@@ -23,7 +23,7 @@
 # released with the generic branch version due to the final wildcard below,
 # and once released its version cannot be changed.
 
-# public symbols added in 2.8.10 (please keep in alphabetical order):
+# public symbols added in 2.8.11 (please keep in alphabetical order):
 @WX_VERSION_TAG@.11 {
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
