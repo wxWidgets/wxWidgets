@@ -96,7 +96,7 @@ Changes in behaviour not resulting in compilation errors, please read this!
   proportions to return to the old behaviour.
 
 - wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
-  your code you need to override DoFreeze/Thaw() instead now.
+  your code you need to override DoFreeze/DoThaw() instead now.
 
 - wxCalendarCtrl has native implementation in wxGTK, but it has less features
   than the generic one. The native implementation is used by default, but you
