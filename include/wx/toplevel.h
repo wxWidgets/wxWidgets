@@ -349,7 +349,7 @@ protected:
         {
         public:
             // construction
-            wxTopLevelWindow() { Init(); }
+            wxTopLevelWindow() { }
             wxTopLevelWindow(wxWindow *parent,
                        wxWindowID winid,
                        const wxString& title,
@@ -357,9 +357,9 @@ protected:
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_FRAME_STYLE,
                        const wxString& name = wxFrameNameStr)
+                : wxTopLevelWindowNative(parent, winid, title,
+                                         pos, size, style, name)
             {
-                Init();
-                Create(parent, winid, title, pos, size, style, name);
             }
 
             DECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow)
