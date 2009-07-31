@@ -344,28 +344,25 @@ protected:
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/toplevel.h"
 #else // !__WXUNIVERSAL__
-    #ifdef wxTopLevelWindowNative
-        class WXDLLIMPEXP_CORE wxTopLevelWindow : public wxTopLevelWindowNative
+    class WXDLLIMPEXP_CORE wxTopLevelWindow : public wxTopLevelWindowNative
+    {
+    public:
+        // construction
+        wxTopLevelWindow() { }
+        wxTopLevelWindow(wxWindow *parent,
+                   wxWindowID winid,
+                   const wxString& title,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxDEFAULT_FRAME_STYLE,
+                   const wxString& name = wxFrameNameStr)
+            : wxTopLevelWindowNative(parent, winid, title,
+                                     pos, size, style, name)
         {
-        public:
-            // construction
-            wxTopLevelWindow() { }
-            wxTopLevelWindow(wxWindow *parent,
-                       wxWindowID winid,
-                       const wxString& title,
-                       const wxPoint& pos = wxDefaultPosition,
-                       const wxSize& size = wxDefaultSize,
-                       long style = wxDEFAULT_FRAME_STYLE,
-                       const wxString& name = wxFrameNameStr)
-                : wxTopLevelWindowNative(parent, winid, title,
-                                         pos, size, style, name)
-            {
-            }
+        }
 
-            DECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow)
-        };
-    #endif // wxTopLevelWindowNative
+        DECLARE_DYNAMIC_CLASS_NO_COPY(wxTopLevelWindow)
+    };
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
-
 
 #endif // _WX_TOPLEVEL_BASE_H_

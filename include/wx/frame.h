@@ -169,17 +169,6 @@ public:
     // Implement internal behaviour (menu updating on some platforms)
     virtual void OnInternalIdle();
 
-    // if there is no real wxTopLevelWindow on this platform we have to define
-    // some wxTopLevelWindowBase pure virtual functions here to avoid breaking
-    // old ports (wxMotif) which don't define them in wxFrame
-#ifndef wxTopLevelWindowNative
-    virtual bool ShowFullScreen(bool WXUNUSED(show),
-                                long WXUNUSED(style) = wxFULLSCREEN_ALL)
-        { return false; }
-    virtual bool IsFullScreen() const
-        { return false; }
-#endif // no wxTopLevelWindowNative
-
 #if wxUSE_MENUS || wxUSE_TOOLBAR
     // show help text for the currently selected menu or toolbar item
     // (typically in the status bar) or hide it and restore the status bar text
