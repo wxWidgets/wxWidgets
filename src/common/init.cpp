@@ -465,6 +465,11 @@ int wxEntry(int& argc, char **argv)
 // wxInitialize/wxUninitialize
 // ----------------------------------------------------------------------------
 
+bool wxInitialize()
+{
+    return wxInitialize(0, (wxChar**)NULL);
+}
+
 bool wxInitialize(int argc, wxChar **argv)
 {
     wxCRIT_SECT_LOCKER(lockInit, gs_initData.csInit);
