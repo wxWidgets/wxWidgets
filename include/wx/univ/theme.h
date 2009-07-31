@@ -83,7 +83,7 @@ private:
 // will be left to the original theme
 // ----------------------------------------------------------------------------
 
-class wxDelegateTheme : public wxTheme
+class WXDLLIMPEXP_CORE wxDelegateTheme : public wxTheme
 {
 public:
     wxDelegateTheme(const wxString& theme);
