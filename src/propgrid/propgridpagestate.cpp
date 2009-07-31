@@ -1780,6 +1780,12 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
          (parent->IsCategory() || parent->IsRoot()) )
         m_dictName.erase(item->GetBaseName());
 
+	wxPropertyGrid* pg = GetGrid();
+
+	// We need to clear parent grid's m_propHover, if it matches item
+	if ( pg && pg->m_propHover == item )
+		pg->m_propHover = NULL;
+
     // We can actually delete it now
     if ( doDelete )
         delete item;
