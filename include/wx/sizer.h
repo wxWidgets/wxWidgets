@@ -724,8 +724,14 @@ private:
 class WXDLLIMPEXP_CORE wxGridSizer: public wxSizer
 {
 public:
+    // ctors specifying the number of columns only: number of rows will be
+    // deduced automatically depending on the number of sizer elements
+    wxGridSizer( int cols, int vgap, int hgap );
+    wxGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
+
+    // ctors specifying the number of rows and columns
+    wxGridSizer( int rows, int cols, const wxSize& gap );
     wxGridSizer( int rows, int cols, int vgap, int hgap );
-    wxGridSizer( int cols, int vgap = 0, int hgap = 0 );
 
     virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
 

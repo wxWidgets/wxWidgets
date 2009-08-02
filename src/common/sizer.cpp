@@ -1318,18 +1318,34 @@ bool wxSizer::IsShown( size_t index ) const
 //---------------------------------------------------------------------------
 
 wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
-    : m_rows( ( cols == 0 && rows == 0 ) ? 1 : rows )
-    , m_cols( cols )
-    , m_vgap( vgap )
-    , m_hgap( hgap )
+    : m_rows( rows || cols ? rows : 1 ),
+      m_cols( cols ),
+      m_vgap( vgap ),
+      m_hgap( hgap )
+{
+}
+
+wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
+    : m_rows( rows || cols ? rows : 1 ),
+      m_cols( cols ),
+      m_vgap( gap.GetHeight() ),
+      m_hgap( gap.GetWidth() )
 {
 }
 
 wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
-    : m_rows( cols == 0 ? 1 : 0 )
-    , m_cols( cols )
-    , m_vgap( vgap )
-    , m_hgap( hgap )
+    : m_rows( cols == 0 ? 1 : 0 ),
+      m_cols( cols ),
+      m_vgap( vgap ),
+      m_hgap( hgap )
+{
+}
+
+wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
+    : m_rows( cols == 0 ? 1 : 0 ),
+      m_cols( cols ),
+      m_vgap( gap.GetHeight() ),
+      m_hgap( gap.GetWidth() )
 {
 }
 

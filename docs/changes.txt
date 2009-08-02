@@ -137,6 +137,12 @@ Changes in behaviour not resulting in compilation errors, please read this!
   class versions of these functions as this won't work any more; please see the
   documentation of wxLog for more information.
 
+- Confusing wxGridSizer(int cols, int vgap = 0, int hgap = 0) ctor which was
+  easy to mistake for wxGridSizer(int rows, int cols) overload was removed, you
+  will need to specify both vertical and horizontal gap if you want to use this
+  overload or specify both rows and columns and the gap otherwise. Use of the
+  new constructors taking wxSize for the gap argument is preferred.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
