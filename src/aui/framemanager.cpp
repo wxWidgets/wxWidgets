@@ -5911,8 +5911,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
             wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, GetManagedWindow()->GetId());
             e.SetSelection(GetAllPanes().Index(*closepane));
             e.SetEventObject(GetManagedWindow());
-            if (GetManagedWindow()->GetEventHandler()->ProcessEvent(e))
-                return;
+            GetManagedWindow()->GetEventHandler()->ProcessEvent(e);
             if (!e.IsAllowed())
                 return;
         }
