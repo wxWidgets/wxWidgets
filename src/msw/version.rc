@@ -62,8 +62,11 @@ BEGIN
             VALUE "SpecialBuild", "\0"
         END
     END
+    // windres can't handle the syntax below for some reason (see #11055)
+#ifndef __GNUC__
     BLOCK "VarFileInfo"
     BEGIN
             VALUE "Translation", LANG, CHARSET
     END
+#endif // !__GNUC__
 END
