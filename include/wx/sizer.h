@@ -732,8 +732,18 @@ public:
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 
-    void SetCols( int cols )    { m_cols = cols; }
-    void SetRows( int rows )    { m_rows = rows; }
+    void SetCols( int cols )
+    {
+        wxASSERT_MSG( cols >= 0, "Number of columns must be positive");
+        m_cols = cols;
+    }
+
+    void SetRows( int rows )
+    {
+        wxASSERT_MSG( rows >= 0, "Number of rows must be positive");
+        m_rows = rows;
+    }
+
     void SetVGap( int gap )     { m_vgap = gap; }
     void SetHGap( int gap )     { m_hgap = gap; }
     int GetCols() const         { return m_cols; }
