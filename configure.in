@@ -6908,6 +6908,9 @@ if test "$wxUSE_AUI" = "yes"; then
    AC_DEFINE(wxUSE_AUI)
    USE_AUI=1
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui auinew"
+   if test "$wxUSE_MDI" = "yes"; then
+      SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS auimdi"
+   fi
 fi
 
 USE_PROPGRID=0

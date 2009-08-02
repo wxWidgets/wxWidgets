@@ -35,7 +35,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui auinew calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui auinew auimdi calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -45,6 +45,7 @@ clean:
 	$(MAKE) -C artprov -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C aui -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C auinew -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C auimdi -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C caret -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C clipboard -f makefile.gcc $(MAKEARGS) clean
@@ -128,6 +129,9 @@ aui:
 
 auinew: 
 	$(MAKE) -C auinew -f makefile.gcc $(MAKEARGS) all
+
+auimdi: 
+	$(MAKE) -C auimdi -f makefile.gcc $(MAKEARGS) all
 
 calendar: 
 	$(MAKE) -C calendar -f makefile.gcc $(MAKEARGS) all
@@ -333,13 +337,14 @@ wrapsizer:
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui auinew calendar caret clipboard collpane \
-	config combo console controls dataview dialogs dialup display dnd docview dragimag \
-	drawing erase event exec except font grid help htlbox html image internat ipc joytest \
-	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
-	opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll \
-	shaped sockets sound splash splitter statbar stc taskbar text thread toolbar \
-	treectrl typetest validate vscroll widgets wizard wrapsizer memcheck
+.PHONY: all clean access animate artprov aui auinew auimdi calendar caret clipboard \
+	collpane config combo console controls dataview dialogs dialup display dnd docview \
+	dragimag drawing erase event exec except font grid help htlbox html image internat \
+	ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg \
+	notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext \
+	sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text \
+	thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer \
+	memcheck
 
 
 SHELL := $(COMSPEC)

@@ -46180,6 +46180,9 @@ _ACEOF
 
    USE_AUI=1
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui auinew"
+   if test "$wxUSE_MDI" = "yes"; then
+      SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS auimdi"
+   fi
 fi
 
 USE_PROPGRID=0

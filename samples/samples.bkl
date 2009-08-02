@@ -18,6 +18,7 @@
     <subproject id="artprov" template="sub"/>
     <subproject id="aui" template="sub"/>
     <subproject id="auinew" template="sub"/>
+    <subproject id="auimdi" template="sub"/>
     <subproject id="calendar" template="sub"/>
     <subproject id="caret" template="sub"/>
     <subproject id="clipboard" template="sub"/>
