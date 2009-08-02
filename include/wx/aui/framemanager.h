@@ -625,9 +625,13 @@ public:
     void SetTabArtProvider(wxAuiTabArt* art_provider);
     wxAuiTabArt* GetTabArtProvider() const;
 
-    wxAuiPaneInfo& GetPane(wxWindow* window);
-    wxAuiPaneInfo& GetPane(const wxString& name);
+    wxAuiPaneInfo& GetPane(wxWindow* window) const;
+    wxAuiPaneInfo& GetPane(const wxString& name) const;
+    wxAuiPaneInfo& GetPane(size_t pane_index) const;
     wxAuiPaneInfoArray& GetAllPanes();
+    size_t GetPaneCount() const;
+
+    bool FindTab(wxWindow* page, wxAuiTabContainer** ctrl, int* idx);
 
     bool AddPane(wxWindow* window,
                  const wxAuiPaneInfo& pane_info);
@@ -744,7 +748,7 @@ protected:
 
     /// Ends a resize action, or for live update, resizes the sash
     bool DoEndResizeAction(wxMouseEvent& event);
-    
+
     int GetNotebookFlags();
 
 public:

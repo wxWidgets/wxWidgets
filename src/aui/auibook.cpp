@@ -52,6 +52,13 @@ wxDEFINE_EVENT(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent);
 IMPLEMENT_CLASS(wxAuiNotebook, wxFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
+// extern functions from framemanager.cpp
+extern void Aui_DoInsertDockLayer(wxAuiPaneInfoArray&,int,int);
+extern void Aui_DoInsertDockRow(wxAuiPaneInfoArray&,int,int,int);
+extern void Aui_DoInsertPane(wxAuiPaneInfoArray&,int,int,int,int);
+extern void Aui_DoInsertPage(wxAuiPaneInfoArray&,int,int,int,int,int);
+extern int Aui_SetActivePane(wxAuiManager*,wxAuiPaneInfoArray&, wxWindow*);
+extern size_t Aui_GetActivePane(wxAuiPaneInfoArray&, wxWindow*);
 
 // -- wxAuiNotebook class implementation --
 wxAuiNotebook::wxAuiNotebook()
@@ -189,8 +196,7 @@ int wxAuiNotebook::CalculateTabCtrlHeight()
 
 wxAuiTabArt* wxAuiNotebook::GetArtProvider() const
 {
-    //temp: (MJM)
-    return NULL;
+    return m_mgr.GetTabArtProvider();
 }
 
 void wxAuiNotebook::SetWindowStyleFlag(long style)
@@ -209,9 +215,11 @@ bool wxAuiNotebook::AddPage(wxWindow* page,
                             bool select,
                             const wxBitmap& bitmap)
 {
-    //temp: (MJM)
-    m_mgr.AddPane(page, wxAuiPaneInfo().SetDirectionCentre().SetLayer(1).SetPosition(1).SetCaption(caption).SetFloatable(false).SetMovable(true).SetPage(m_mgr.GetAllPanes().size()));
-    m_mgr.Update();
+    wxASSERT_MSG(page, wxT("page pointer must be non-NULL"));
+    if (!page)
+        return false;
+
+    return InsertPage(m_mgr.GetAllPanes().size(),page,caption,select,bitmap);
 }
 
 bool wxAuiNotebook::InsertPage(size_t page_idx,
@@ -224,8 +232,12 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     if (!page)
         return false;
 
-    //temp: (MJM)
+    // Shift other panes so that this one can go in between them if necessary
+    Aui_DoInsertPage(m_mgr.GetAllPanes(),1,0,1,0,page_idx);
 
+    m_mgr.AddPane(page, wxAuiPaneInfo().SetDirectionCentre().SetLayer(1).SetPosition(1).SetCaption(caption)
+                .SetFloatable(false).SetMovable(true).SetPage(page_idx).SetBitmap(bitmap));
+    m_mgr.Update();
     return true;
 }
 
@@ -360,12 +372,11 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     return true;
 }
 
-// GetPageIndex() returns the index of the page, or -1 if the
+// GetPageIndex() returns the index of the page, or wxNOT_FOUND if the
 // page could not be located in the notebook
-int wxAuiNotebook::GetPageIndex(wxWindow* page_wnd) const
+int wxAuiNotebook::GetPageIndex(wxWindow* page_wnd)
 {
-    //temp: (MJM)
-    return -1;
+    return m_mgr.GetAllPanes().Index(m_mgr.GetPane(page_wnd));
 }
 
 
@@ -373,42 +384,65 @@ int wxAuiNotebook::GetPageIndex(wxWindow* page_wnd) const
 // SetPageText() changes the tab caption of the specified page
 bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
 {
-    //temp: (MJM)
+    if(page_idx>m_mgr.GetPaneCount())
+    {
+        wxASSERT_MSG(0, wxT("Invalid page index passed to wxAuiNotebook::SetPageText"));
+        return false;
+    }
+
+    m_mgr.GetPane(page_idx).SetCaption(text);
     return true;
 }
 
 // returns the page caption
 wxString wxAuiNotebook::GetPageText(size_t page_idx) const
 {
-    //temp: (MJM)
-    return wxT("");
+    if(page_idx>m_mgr.GetPaneCount())
+    {
+        wxASSERT_MSG(0, wxT("Invalid page index passed to wxAuiNotebook::GetPageText"));
+        return wxEmptyString;
+    }
+
+    return m_mgr.GetPane(page_idx).GetCaption();
 }
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
 {
-    //temp: (MJM)
+    if(page_idx>m_mgr.GetPaneCount())
+    {
+        wxASSERT_MSG(0, wxT("Invalid page index passed to wxAuiNotebook::SetPageBitmap"));
+        return false;
+    }
+
+    m_mgr.GetPane(page_idx).SetBitmap(bitmap);
     return true;
 }
 
 // returns the page bitmap
 wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
 {
-    //temp: (MJM)
-    return wxBitmap();
+    if(page_idx>m_mgr.GetPaneCount())
+    {
+        wxASSERT_MSG(0, wxT("Invalid page index passed to wxAuiNotebook::GetPageBitmap"));
+        return wxNullBitmap;
+    }
+
+    return m_mgr.GetPane(page_idx).GetBitmap();
 }
 
 // GetSelection() returns the index of the currently active page
-int wxAuiNotebook::GetSelection() const
+int wxAuiNotebook::GetSelection()
 {
-    //temp: (MJM)
-    return -1;
+    return Aui_GetActivePane(m_mgr.GetAllPanes(),FindFocus());
 }
 
 // SetSelection() sets the currently active page
 size_t wxAuiNotebook::SetSelection(size_t new_page)
 {
-    //temp: (MJM)
-    return -1;
+    wxWindow* wnd = m_mgr.GetPane(new_page).GetWindow();
+    int selection = Aui_SetActivePane(&m_mgr,m_mgr.GetAllPanes(),wnd);
+    m_mgr.Update();
+    return selection;
 }
 
 
@@ -416,16 +450,14 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
 // pages managed by the multi-notebook
 size_t wxAuiNotebook::GetPageCount() const
 {
-    //temp: (MJM)
-    return -1;
+    return m_mgr.GetPaneCount();
 }
 
 // GetPage() returns the wxWindow pointer of the
 // specified page
 wxWindow* wxAuiNotebook::GetPage(size_t page_idx) const
 {
-    //temp: (MJM)
-    return NULL;
+    return m_mgr.GetPane(page_idx).GetWindow();
 }
 
 // GetActiveTabCtrl() returns the active tab control.  It is
@@ -436,9 +468,32 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
     return NULL;
 }
 
-void wxAuiNotebook::Split(size_t page, int direction)
+void wxAuiNotebook::Split(size_t page_index, int direction)
 {
-    //temp: (MJM) - we should be able to implement by setting a few simple pane properties now
+    wxAuiPaneInfoArray& panes = m_mgr.GetAllPanes();
+    int page_count = panes.size();
+
+    if(page_count>page_index)
+    {
+        switch(direction)
+        {
+            case wxTOP: direction = wxAUI_DOCK_TOP; break;
+            case wxBOTTOM: direction = wxAUI_DOCK_BOTTOM; break;
+            case wxLEFT: direction = wxAUI_DOCK_LEFT; break;
+            case wxRIGHT: direction = wxAUI_DOCK_RIGHT; break;
+            default: wxASSERT_MSG(0, wxT("Invalid direction passed to wxAuiNotebook::Split")); return;
+        }
+
+        panes[page_index].SetDirection(direction);
+
+        Aui_DoInsertDockLayer(panes,direction,panes[page_index].GetLayer());
+
+        Aui_SetActivePane(&m_mgr,panes,panes[page_index].GetWindow());
+
+        m_mgr.Update();
+        return;
+    }
+    wxASSERT_MSG(0, wxT("Invalid page index passed to wxAuiNotebook::Split"));
 }
 
 // Sets the normal font

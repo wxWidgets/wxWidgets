@@ -166,7 +166,7 @@ public:
 
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
-    int GetPageIndex(wxWindow* page_wnd) const;
+    int GetPageIndex(wxWindow* page_wnd);
 
     bool SetPageText(size_t page, const wxString& text);
     wxString GetPageText(size_t page_idx) const;
@@ -175,7 +175,7 @@ public:
     wxBitmap GetPageBitmap(size_t page_idx) const;
 
     size_t SetSelection(size_t new_page);
-    int GetSelection() const;
+    int GetSelection();
 
     virtual void Split(size_t page, int direction);
 

@@ -30,6 +30,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/aui/auibook.h"
 #include "wx/mdi.h"
 
 #ifndef WX_PRECOMP
@@ -486,9 +487,9 @@ static int GetMaxRow(const wxAuiPaneInfoArray& panes, int direction, int layer)
 
 
 
-// DoInsertDockLayer() is an internal function that inserts a new dock
+// Aui_DoInsertDockLayer() is an internal function that inserts a new dock
 // layer by incrementing all existing dock layer values by one
-static void DoInsertDockLayer(wxAuiPaneInfoArray& panes,
+void Aui_DoInsertDockLayer(wxAuiPaneInfoArray& panes,
                               int dock_direction,
                               int dock_layer)
 {
@@ -503,9 +504,9 @@ static void DoInsertDockLayer(wxAuiPaneInfoArray& panes,
     }
 }
 
-// DoInsertDockLayer() is an internal function that inserts a new dock
+// Aui_DoInsertDockRow() is an internal function that inserts a new dock
 // row by incrementing all existing dock row values by one
-static void DoInsertDockRow(wxAuiPaneInfoArray& panes,
+void Aui_DoInsertDockRow(wxAuiPaneInfoArray& panes,
                             int dock_direction,
                             int dock_layer,
                             int dock_row)
@@ -522,9 +523,9 @@ static void DoInsertDockRow(wxAuiPaneInfoArray& panes,
     }
 }
 
-// DoInsertDockLayer() is an internal function that inserts a space for
-// another dock pane by incrementing all existing dock row values by one
-static void DoInsertPane(wxAuiPaneInfoArray& panes,
+// Aui_DoInsertPane() is an internal function that inserts a space for
+// another dock pane by incrementing all existing dock position values by one
+void Aui_DoInsertPane(wxAuiPaneInfoArray& panes,
                          int dock_direction,
                          int dock_layer,
                          int dock_row,
@@ -543,7 +544,9 @@ static void DoInsertPane(wxAuiPaneInfoArray& panes,
     }
 }
 
-static void DoInsertPage(wxAuiPaneInfoArray& panes,
+// Aui_DoInsertPane() is an internal function that inserts a space for
+// another notebook page by incrementing all existing page values by one
+void Aui_DoInsertPage(wxAuiPaneInfoArray& panes,
                          int dock_direction,
                          int dock_layer,
                          int dock_row,
@@ -670,11 +673,28 @@ static void RenumberDockRows(wxAuiDockInfoPtrArray& docks)
 }
 */
 
+// IsNotebookPane() determines if the pane in array panes at position pane_index is currently forming part of a notebook.
+static bool IsNotebookPane(wxAuiPaneInfoArray& panes, int pane_index)
+{
+    int pane_count = panes.GetCount();
+    wxAuiPaneInfo& p = panes[pane_index];
+    if( ((pane_index<pane_count-1 && p.GetPosition() == panes.Item(pane_index+1).GetPosition() && !panes.Item(pane_index+1).IsFloating()) || (pane_index > 0 && p.GetPosition() == panes.Item(pane_index-1).GetPosition() && !panes.Item(pane_index-1).IsFloating()))
+        && ((pane_index<pane_count-1 && p.GetLayer() == panes.Item(pane_index+1).GetLayer() && !panes.Item(pane_index+1).IsFloating()) || (pane_index > 0 && p.GetLayer() == panes.Item(pane_index-1).GetLayer() && !panes.Item(pane_index-1).IsFloating()))
+        && ((pane_index<pane_count-1 && p.GetRow() == panes.Item(pane_index+1).GetRow() && !panes.Item(pane_index+1).IsFloating()) || (pane_index > 0 && p.GetRow() == panes.Item(pane_index-1).GetRow() && !panes.Item(pane_index-1).IsFloating())) 
+      )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
-// SetActivePane() sets the active pane, as well as cycles through
+// Aui_SetActivePane() sets the active pane, as well as cycles through
 // every other pane and makes sure that all others' active flags
 // are turned off
-static void SetActivePane(wxAuiPaneInfoArray& panes, wxWindow* active_pane)
+int Aui_SetActivePane(wxAuiManager* mgr, wxAuiPaneInfoArray& panes, wxWindow* active_pane)
 {
     int i, pane_count;
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
@@ -682,8 +702,104 @@ static void SetActivePane(wxAuiPaneInfoArray& panes, wxWindow* active_pane)
         wxAuiPaneInfo& pane = panes.Item(i);
         pane.SetFlag(wxAuiPaneInfo::optionActive,false);
         if (pane.GetWindow() == active_pane)
-            pane.SetFlag(wxAuiPaneInfo::optionActive,true);
+        {
+            if(IsNotebookPane(panes,i))
+            {
+                wxAuiTabContainer* ctrl;
+                int ctrl_idx;
+                mgr->FindTab(pane.GetWindow(), &ctrl, &ctrl_idx);
+                ctrl->SetActivePage(pane.GetWindow());
+            }
+            //else
+            {
+                pane.SetFlag(wxAuiPaneInfo::optionActive,true);
+            }
+        }
     }
+    
+    /*int curpage = GetSelection();
+    
+
+    if (!wnd)
+        return GetSelection();
+
+    // don't change the page unless necessary;
+    // however, clicking again on a tab should give it the focus.
+    if (m_mgr.GetPane(new_page).HasFlag(wxAuiPaneInfo::optionActive))
+    {
+        wxAuiTabContainer* ctrl;
+        int ctrl_idx;
+        if (m_mgr.FindTab(wnd, &ctrl, &ctrl_idx))
+        {
+            //temp: (MJM)
+            //if (FindFocus() != ctrl)
+                //ctrl->SetFocus();
+        }
+        return GetSelection();
+    }
+
+    wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, GetId());
+    evt.SetSelection(new_page);
+    evt.SetOldSelection(GetSelection());
+    evt.SetEventObject(this);
+    if (!GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
+    {
+        int old_curpage = GetSelection();
+
+        // program allows the page change
+        evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
+        (void)GetEventHandler()->ProcessEvent(evt);
+
+        wxAuiTabContainer* ctrl;
+        int ctrl_idx;
+        if (m_mgr.FindTab(wnd, &ctrl, &ctrl_idx))
+        {
+            Aui_SetActivePane(m_mgr,m_mgr.GetAllPanes(),wnd);
+            ctrl->SetActivePage(ctrl_idx);
+
+            //temp: (MJM)
+            //DoSizing();
+            ctrl->DoShowHide();
+
+            ctrl->MakeTabVisible(ctrl_idx);
+
+            // Set the focus to the page if we're not currently focused on the tab.
+            // This is Firefox-like behaviour.
+            //temp: (MJM)
+            //if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
+                //wnd->SetFocus();
+
+            m_mgr.Update();
+            return old_curpage;
+        }
+    }
+
+    return GetSelection();*/
+}
+
+size_t Aui_GetActivePane(wxAuiPaneInfoArray& panes,wxWindow* focus)
+{
+    int i, pane_count;
+
+    // First try to find a pane that has the focus flag and whose window has actual focus.
+    // This allows us to pick the right pane in the event that multiple panes have the focus flag set.
+    for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = panes[i];
+        if(pane.HasFlag(wxAuiPaneInfo::optionActive))
+        {
+            if(!focus || pane.GetWindow()==focus)
+            {
+                return i;
+            }
+        }
+    }
+    // If no panes had the focus flag and actual focus then fall back to returning the first pane with focus flag.
+    for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
+    {
+        return i;
+    }
+    return 0;
 }
 
 
@@ -924,7 +1040,7 @@ bool wxAuiManager::CanDockPanel(const wxAuiPaneInfo & WXUNUSED(p))
 // info is modified, wxAuiManager::Update() must be called to
 // realize the changes in the UI.
 
-wxAuiPaneInfo& wxAuiManager::GetPane(wxWindow* window)
+wxAuiPaneInfo& wxAuiManager::GetPane(wxWindow* window) const
 {
     int i, pane_count;
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
@@ -938,7 +1054,7 @@ wxAuiPaneInfo& wxAuiManager::GetPane(wxWindow* window)
 
 // this version of GetPane() looks up a pane based on a
 // 'pane name', see above comment for more info
-wxAuiPaneInfo& wxAuiManager::GetPane(const wxString& name)
+wxAuiPaneInfo& wxAuiManager::GetPane(const wxString& name) const
 {
     int i, pane_count;
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
@@ -950,10 +1066,53 @@ wxAuiPaneInfo& wxAuiManager::GetPane(const wxString& name)
     return wxAuiNullPaneInfo;
 }
 
+// This version of GetPane() looks up a pane based on its index position.
+wxAuiPaneInfo& wxAuiManager::GetPane(size_t pane_index) const
+{
+    size_t pane_count = m_panes.GetCount();
+    if(pane_count>pane_index)
+    {
+        return m_panes[pane_index];
+    }
+
+    wxASSERT_MSG(0, wxT("Invalid pane index passed to wxAuiManager::GetPane"));
+    return wxAuiNullPaneInfo;
+}
+
 // GetAllPanes() returns a reference to all the pane info structures
 wxAuiPaneInfoArray& wxAuiManager::GetAllPanes()
 {
     return m_panes;
+}
+
+// GetPaneCount() returns the total number of pages managed by the multi-notebook.
+size_t wxAuiManager::GetPaneCount() const
+{
+    return m_panes.GetCount();
+}
+
+// FindTab() finds the tab control that currently contains the window as well
+// as the index of the window in the tab control.  It returns true if the
+// window was found, otherwise false.
+bool wxAuiManager::FindTab(wxWindow* page, wxAuiTabContainer** ctrl, int* idx)
+{
+    int uiparts_count = m_uiparts.GetCount();
+    int i;
+    for (i = 0; i < uiparts_count; i++)
+    {
+        wxAuiDockUIPart& part = m_uiparts.Item(i);
+        if(part.m_tab_container)
+        {
+            int page_idx = part.m_tab_container->GetIdxFromWindow(page);
+            if(page_idx != wxNOT_FOUND)
+            {
+                *ctrl = part.m_tab_container;
+                *idx = page_idx;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // HitTest() is an internal function which determines
@@ -1415,20 +1574,20 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
     switch (insert_level)
     {
         case wxAUI_INSERT_PANE:
-            DoInsertPane(m_panes,
+            Aui_DoInsertPane(m_panes,
                  pane_info.GetDirection(),
                  pane_info.GetLayer(),
                  pane_info.GetRow(),
                  pane_info.GetPosition());
             break;
         case wxAUI_INSERT_ROW:
-            DoInsertDockRow(m_panes,
+            Aui_DoInsertDockRow(m_panes,
                  pane_info.GetDirection(),
                  pane_info.GetLayer(),
                  pane_info.GetRow());
             break;
         case wxAUI_INSERT_DOCK:
-            DoInsertDockLayer(m_panes,
+            Aui_DoInsertDockLayer(m_panes,
                  pane_info.GetDirection(),
                  pane_info.GetLayer());
             break;
@@ -1568,6 +1727,9 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& pane_info)
     {
         pane_info.Hide();
     }
+    
+    //temp: (MJM)
+    //wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED???
 }
 
 void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
@@ -3172,8 +3334,7 @@ void wxAuiManager::Update()
                 // All windows must be hidden here though, even notebook ones.
                 if(!p.IsShown())
                     p.GetWindow()->Show(false);
-                else if(!( (i<pane_count-1 && p.GetPosition() == m_panes.Item(i+1).GetPosition() && !m_panes.Item(i+1).IsFloating())
-                        || (i > 0 && p.GetPosition() == m_panes.Item(i-1).GetPosition() && !m_panes.Item(i-1).IsFloating()) ))
+                else if(!IsNotebookPane(m_panes,i))
                 {
                     p.GetWindow()->Show(true);
                 }
@@ -3631,14 +3792,14 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                 (part->dock->dock_direction == wxAUI_DOCK_LEFT))
             {
                 int row = drop.GetRow();
-                DoInsertDockRow(panes, part->dock->dock_direction,
+                Aui_DoInsertDockRow(panes, part->dock->dock_direction,
                                 part->dock->dock_layer,
                                 part->dock->dock_row);
                 drop.SetRow(row);
             }
             else
             {
-                DoInsertDockRow(panes, part->dock->dock_direction,
+                Aui_DoInsertDockRow(panes, part->dock->dock_direction,
                                 part->dock->dock_layer,
                                 part->dock->dock_row+1);
                 drop.SetRow(part->dock->dock_row+1);
@@ -3653,7 +3814,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
             if ((part->dock->dock_direction == wxAUI_DOCK_TOP) ||
                 (part->dock->dock_direction == wxAUI_DOCK_LEFT))
             {
-                DoInsertDockRow(panes, part->dock->dock_direction,
+                Aui_DoInsertDockRow(panes, part->dock->dock_direction,
                                 part->dock->dock_layer,
                                 part->dock->dock_row+1);
                 drop.SetRow(part->dock->dock_row+1);
@@ -3661,7 +3822,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
             else
             {
                 int row = drop.GetRow();
-                DoInsertDockRow(panes, part->dock->dock_direction,
+                Aui_DoInsertDockRow(panes, part->dock->dock_direction,
                                 part->dock->dock_layer,
                                 part->dock->dock_row);
                 drop.SetRow(row);
@@ -3706,7 +3867,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         }
 
         
-        DoInsertPage(panes,
+        Aui_DoInsertPage(panes,
                          hitpane->GetDirection(),
                          hitpane->GetLayer(),
                          hitpane->GetRow(),
@@ -3781,7 +3942,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                     break;
             }
 
-            DoInsertDockRow(panes, part->dock->dock_direction,
+            Aui_DoInsertDockRow(panes, part->dock->dock_direction,
                             layer, 0);
             drop.Dock().
                  SetDirection(part->dock->dock_direction).
@@ -3864,7 +4025,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
         if (insert_dock_row)
         {
-            DoInsertDockRow(panes, insert_dir, insert_layer, insert_row);
+            Aui_DoInsertDockRow(panes, insert_dir, insert_layer, insert_row);
             drop.Dock().SetDirection(insert_dir).
                         SetLayer(insert_layer).
                         SetRow(insert_row).
@@ -3895,7 +4056,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (offset <= size/2)
         {
             drop_position = part->pane->GetPosition();
-            DoInsertPane(panes,
+            Aui_DoInsertPane(panes,
                          part->pane->GetDirection(),
                          part->pane->GetLayer(),
                          part->pane->GetRow(),
@@ -3907,7 +4068,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (offset > size/2)
         {
             drop_position = part->pane->GetPosition()+1;
-            DoInsertPane(panes,
+            Aui_DoInsertPane(panes,
                          part->pane->GetDirection(),
                          part->pane->GetLayer(),
                          part->pane->GetRow(),
@@ -4463,7 +4624,7 @@ void wxAuiManager::OnFloatingPaneActivated(wxWindow* wnd)
 {
     if ((GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE) && GetPane(wnd).IsOk())
     {
-        SetActivePane(m_panes, wnd);
+        Aui_SetActivePane(this, m_panes, wnd);
         Repaint();
     }
 }
@@ -4787,7 +4948,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             if (GetFlags() & wxAUI_MGR_ALLOW_ACTIVE_PANE)
             {
                 // set the caption as active
-                SetActivePane(m_panes, part->pane->GetWindow());
+                Aui_SetActivePane(this, m_panes, part->pane->GetWindow());
                 Repaint();
             }
 
@@ -4818,7 +4979,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             else if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
             {
                 part->m_tab_container->SetActivePage(hitpane->GetWindow());
-                SetActivePane(m_panes, hitpane->GetWindow());
+                Aui_SetActivePane(this, m_panes, hitpane->GetWindow());
 
                 m_action_offset = wxPoint(event.m_x-hitpane->rect.x,event.m_y-part->rect.y);
                 
@@ -5347,19 +5508,23 @@ void wxAuiManager::OnMiddleUp(wxMouseEvent& evt)
         }
     }
 
-    /*temp (MJM)  - The below veto stuff will have to be reimplemented for new wxAuiNotebook to maintain backwards compatibility
-    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
-    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
-    e.SetEventObject(this);
-    if (GetEventHandler()->ProcessEvent(e))
-        return;
-    if (!e.IsAllowed())
-        return;
-    */
-
+    //temp: (MJM)
     // check if we are supposed to close on middle-up
     /*if ((m_flags & wxAUI_MIDDLE_CLICK_CLOSE) == 0)
-        return;*/
+    return;*/
+
+
+    // If we are a wxAuiNotebook then we must fire off a wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP event and give the user an opportunity to veto it.
+    if(GetManagedWindow()->IsKindOf(CLASSINFO(wxAuiNotebook)))
+    {
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, GetManagedWindow()->GetId());
+        e.SetSelection(GetAllPanes().Index(*part->pane));
+        e.SetEventObject(GetManagedWindow());
+        if (GetManagedWindow()->GetEventHandler()->ProcessEvent(e))
+            return;
+        if (!e.IsAllowed())
+            return;
+    }
 
     // simulate the user pressing the close button on the tab
     wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
@@ -5707,7 +5872,7 @@ void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
         wxAuiPaneInfo& pane = GetPane(event.GetWindow());
         if (pane.IsOk() && !pane.HasFlag(wxAuiPaneInfo::optionActive))
         {
-            SetActivePane(m_panes, event.GetWindow());
+            Aui_SetActivePane(this, m_panes, event.GetWindow());
             m_frame->Refresh();
         }
     }
@@ -5739,7 +5904,19 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
                 closepane = hitpane;
             }
         }
-        
+
+        // If we are a wxAuiNotebook then we must fire off a EVT_AUINOTEBOOK_PAGE_CLOSE event and give the user an opportunity to veto it.
+        if(GetManagedWindow()->IsKindOf(CLASSINFO(wxAuiNotebook)))
+        {
+            wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, GetManagedWindow()->GetId());
+            e.SetSelection(GetAllPanes().Index(*closepane));
+            e.SetEventObject(GetManagedWindow());
+            if (GetManagedWindow()->GetEventHandler()->ProcessEvent(e))
+                return;
+            if (!e.IsAllowed())
+                return;
+        }
+
         // fire pane close event
         wxAuiManagerEvent e(wxEVT_AUI_PANE_CLOSE);
         e.SetManager(this);
