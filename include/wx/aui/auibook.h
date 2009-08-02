@@ -31,9 +31,7 @@ class wxAuiNotebook;
 
 
 //temp (MJM)
-class wxAuiTabCtrl : public wxAuiTabContainer
-{
-};
+typedef wxAuiTabContainer wxAuiTabCtrl;
 
 
 enum wxAuiNotebookOption

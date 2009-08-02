@@ -464,7 +464,38 @@ wxWindow* wxAuiNotebook::GetPage(size_t page_idx) const
 // called to determine which control gets new windows being added
 wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
 {
-    //temp: (MJM)
+    int sel_pane_index = GetSelection();
+    if (sel_pane_index >= 0 && sel_pane_index < m_mgr.GetPaneCount())
+    {
+        wxAuiTabCtrl* ctrl;
+        int idx;
+
+        // find the tab ctrl with the current page
+        if (m_mgr.FindTab(m_mgr.GetPane(sel_pane_index).GetWindow(), &ctrl, &idx))
+        {
+            return ctrl;
+        }
+    }
+
+    // no current page, just find the first tab ctrl
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.GetName() == wxT("dummy"))
+            continue;
+
+        wxAuiTabContainer* ctrl;
+        int idx;
+
+        // Return the tab ctrl for this pane, if one exists.
+        if (m_mgr.FindTab(pane.GetWindow(), &ctrl, &idx))
+        {
+            return ctrl;
+        }
+    }
+
     return NULL;
 }
 
@@ -580,18 +611,22 @@ void wxAuiNotebook::AdvanceSelection(bool forward)
 // Shows the window menu
 bool wxAuiNotebook::ShowWindowMenu()
 {
-    // Get the currently active pane.
-    int sel_pane_index = GetSelection();
-    wxAuiPaneInfo& sel_pane = m_mgr.GetPane(sel_pane_index);
+    wxAuiTabCtrl* tabCtrl = GetActiveTabCtrl();
 
-    // Find the tab ctrl that the active pane is in (if any).
-    wxAuiTabContainer* ctrl;
-    int ctrl_idx;
-    if (m_mgr.FindTab(sel_pane.GetWindow(), &ctrl, &ctrl_idx))
+    int idx = tabCtrl->GetArtProvider()->ShowDropDown(this, tabCtrl->GetPages(), tabCtrl->GetActivePage());
+
+    if (idx != -1)
     {
-        // Show the drop down window menu.
-        ctrl->GetArtProvider()->ShowDropDown(this, ctrl->GetPages(), sel_pane_index);
+        wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, GetId());
+        e.SetSelection(idx);
+        e.SetOldSelection(tabCtrl->GetActivePage());
+        e.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(e);
+
+        return true;
     }
+    else
+        return false;
 }
 
 #endif // wxUSE_AUI
