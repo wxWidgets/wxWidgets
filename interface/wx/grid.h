@@ -3546,7 +3546,8 @@ public:
         The user double-clicked a label with the right mouse button. Processes
         a @c wxEVT_GRID_LABEL_RIGHT_DCLICK event type.
     @event{EVT_GRID_SELECT_CELL(func)}
-        The user moved to, and selected a cell. Processes a
+        The given cell was made current, either by user or by the program via a
+        call to SetGridCursor() or GoToCell(). Processes a
         @c wxEVT_GRID_SELECT_CELL event type.
     @event{EVT_GRID_COL_MOVE(func)}
         The user tries to change the order of the columns in the grid by
