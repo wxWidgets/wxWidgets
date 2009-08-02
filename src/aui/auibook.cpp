@@ -580,7 +580,18 @@ void wxAuiNotebook::AdvanceSelection(bool forward)
 // Shows the window menu
 bool wxAuiNotebook::ShowWindowMenu()
 {
-   //temp: (MJM)
+    // Get the currently active pane.
+    int sel_pane_index = GetSelection();
+    wxAuiPaneInfo& sel_pane = m_mgr.GetPane(sel_pane_index);
+
+    // Find the tab ctrl that the active pane is in (if any).
+    wxAuiTabContainer* ctrl;
+    int ctrl_idx;
+    if (m_mgr.FindTab(sel_pane.GetWindow(), &ctrl, &ctrl_idx))
+    {
+        // Show the drop down window menu.
+        ctrl->GetArtProvider()->ShowDropDown(this, ctrl->GetPages(), sel_pane_index);
+    }
 }
 
 #endif // wxUSE_AUI
