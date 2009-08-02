@@ -42,7 +42,7 @@ enum wxPathNormalize
     //! and in addition under Windows @c "%var%" is also.
     wxPATH_NORM_ENV_VARS = 0x0001,
 
-    wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c "." and prepend the current working directory.
+    wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c ".".
     wxPATH_NORM_TILDE    = 0x0004,  //!< Replace @c "~" and @c "~user" (Unix only).
     wxPATH_NORM_CASE     = 0x0008,  //!< If the platform is case insensitive, make lowercase the path.
     wxPATH_NORM_ABSOLUTE = 0x0010,  //!< Make the path absolute.

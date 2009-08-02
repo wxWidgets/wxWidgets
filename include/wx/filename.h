@@ -70,7 +70,7 @@ enum wxPathFormat
 enum wxPathNormalize
 {
     wxPATH_NORM_ENV_VARS = 0x0001,  // replace env vars with their values
-    wxPATH_NORM_DOTS     = 0x0002,  // squeeze all .. and . and prepend cwd
+    wxPATH_NORM_DOTS     = 0x0002,  // squeeze all .. and .
     wxPATH_NORM_TILDE    = 0x0004,  // Unix only: replace ~ and ~user
     wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
