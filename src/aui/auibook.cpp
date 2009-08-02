@@ -85,12 +85,7 @@ bool wxAuiNotebook::Create(wxWindow* parent,
                            const wxSize& size,
                            long style)
 {
-    //temp: (MJM)
-    //if (!wxControl::Create(parent, id, pos, size, style))
-        //return false;
-
     InitNotebook(style);
-
     return true;
 }
 
@@ -117,22 +112,18 @@ void wxAuiNotebook::InitNotebook(long style)
 wxAuiNotebook::~wxAuiNotebook()
 {
     // Indicate we're deleting pages
-    //temp: (MJM)
-    //SendDestroyEvent();
+    SendDestroyEvent();
 
     while ( GetPageCount() > 0 )
         DeletePage(0);
 
-    //temp: (MJM)
-    //m_mgr.UnInit();
+    m_mgr.UnInit();
 }
 
 void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_mgr.SetTabArtProvider(art);
-
-    //temp: (MJM)
-    //UpdateTabCtrlHeight();
+    UpdateTabCtrlHeight();
 }
 
 // SetTabCtrlHeight() is the highest-level override of the
