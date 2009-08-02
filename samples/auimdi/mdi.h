@@ -10,6 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/toolbar.h"
+#include "wx/aui/tabmdi.h"
 
 // Define a new application
 class MyApp : public wxApp
@@ -39,7 +40,7 @@ private:
 };
 
 // Define a new frame
-class MyFrame : public wxMDIParentFrame
+class MyFrame : public wxAuiMDIParentFrame
 {
 public:
     MyFrame();
@@ -64,10 +65,10 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-class MyChild : public wxMDIChildFrame
+class MyChild : public wxAuiMDIChildFrame
 {
 public:
-    MyChild(wxMDIParentFrame *parent);
+    MyChild(wxAuiMDIParentFrame *parent);
     virtual ~MyChild();
 
     static unsigned GetChildrenCount() { return ms_numChildren; }

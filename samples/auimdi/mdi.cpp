@@ -46,15 +46,6 @@
 #include "bitmaps/print.xpm"
 #include "bitmaps/help.xpm"
 
-// replace this 0 with 1 to build the sample using the generic MDI classes (you
-// may also need to add src/generic/mdig.cpp to the build)
-#if 0
-    #include "wx/generic/mdig.h"
-    #define wxMDIParentFrame wxGenericMDIParentFrame
-    #define wxMDIChildFrame wxGenericMDIChildFrame
-    #define wxMDIClientWindow wxGenericMDIClientWindow
-#endif
-
 #include "mdi.h"
 
 IMPLEMENT_APP(MyApp)
@@ -63,7 +54,7 @@ IMPLEMENT_APP(MyApp)
 // event tables
 // ---------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
+BEGIN_EVENT_TABLE(MyFrame, wxAuiMDIParentFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(MDI_FULLSCREEN, MyFrame::OnFullScreen)
@@ -77,7 +68,7 @@ END_EVENT_TABLE()
 // Note that wxID_NEW and wxID_ABOUT commands get passed
 // to the parent window for processing, so no need to
 // duplicate event handlers here.
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+BEGIN_EVENT_TABLE(MyChild, wxAuiMDIChildFrame)
     EVT_MENU(wxID_CLOSE, MyChild::OnClose)
     EVT_MENU(MDI_REFRESH, MyChild::OnRefresh)
     EVT_MENU(MDI_CHANGE_TITLE, MyChild::OnChangeTitle)
@@ -128,7 +119,7 @@ bool MyApp::OnInit()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxMDIParentFrame(NULL, wxID_ANY, "wxWidgets MDI Sample",
+       : wxAuiMDIParentFrame(NULL, wxID_ANY, "wxWidgets MDI Sample",
                           wxDefaultPosition, wxSize(500, 400))
 {
     SetIcon(wxICON(sample));
@@ -136,7 +127,7 @@ MyFrame::MyFrame()
     // Make a menubar
 #if wxUSE_MENUS
     // Associate the menu bar with the frame
-    SetMenuBar(CreateMainMenubar());
+/*    SetMenuBar(CreateMainMenubar());
 
 
     // This shows that the standard window menu may be customized:
@@ -164,7 +155,7 @@ MyFrame::MyFrame()
                            "Close all open windows");
 
         SetWindowMenu(windowMenu);
-    }
+    }*/
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -258,7 +249,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
     // create and show another child frame
     MyChild *subframe = new MyChild(this);
-    subframe->Show(true);
+    subframe->DoShow(true);
 }
 
 void MyFrame::OnFullScreen(wxCommandEvent& event)
@@ -272,7 +263,7 @@ void MyFrame::OnCloseAll(wxCommandEvent& WXUNUSED(event))
           i != GetChildren().end();
           ++i )
     {
-        if ( wxDynamicCast(*i, wxMDIChildFrame) )
+        if ( wxDynamicCast(*i, wxAuiMDIChildFrame) )
             (*i)->Close();
     }
 }
@@ -405,8 +396,8 @@ void MyCanvas::OnEvent(wxMouseEvent& event)
 
 unsigned MyChild::ms_numChildren = 0;
 
-MyChild::MyChild(wxMDIParentFrame *parent)
-       : wxMDIChildFrame
+MyChild::MyChild(wxAuiMDIParentFrame *parent)
+       : wxAuiMDIChildFrame
          (
             parent,
             wxID_ANY,
@@ -417,7 +408,7 @@ MyChild::MyChild(wxMDIParentFrame *parent)
 
     SetIcon(wxICON(chart));
 
-    const bool canBeResized = !IsAlwaysMaximized();
+    const bool canBeResized =  true;
 
     // create our menu bar: it will be shown instead of the main frame one when
     // we're active
