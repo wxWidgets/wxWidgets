@@ -1144,7 +1144,8 @@ wxGridStringTable::wxGridStringTable( int numRows, int numCols )
 
 wxString wxGridStringTable::GetValue( int row, int col )
 {
-    wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
+    wxCHECK_MSG( (row >= 0 && row < GetNumberRows()) &&
+                 (col >= 0 && col < GetNumberCols()),
                  wxEmptyString,
                  wxT("invalid row or column index in wxGridStringTable") );
 
@@ -1153,7 +1154,8 @@ wxString wxGridStringTable::GetValue( int row, int col )
 
 void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 {
-    wxCHECK_RET( (row < GetNumberRows()) && (col < GetNumberCols()),
+    wxCHECK_RET( (row >= 0 && row < GetNumberRows()) &&
+                 (col >= 0 && col < GetNumberCols()),
                  wxT("invalid row or column index in wxGridStringTable") );
 
     m_data[row][col] = value;
