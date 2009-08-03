@@ -36,6 +36,27 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// values of week days used by the native control
+enum
+{
+    MonthCal_Monday,
+    MonthCal_Tuesday,
+    MonthCal_Wednesday,
+    MonthCal_Thursday,
+    MonthCal_Friday,
+    MonthCal_Saturday,
+    MonthCal_Sunday
+};
+
+} // anonymous namespace
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -376,7 +397,9 @@ void wxCalendarCtrl::UpdateMarks()
 
 void wxCalendarCtrl::UpdateFirstDayOfWeek()
 {
-    MonthCal_SetFirstDayOfWeek(GetHwnd(), HasFlag(wxCAL_MONDAY_FIRST) ? 0 : 6);
+    MonthCal_SetFirstDayOfWeek(GetHwnd(),
+                               HasFlag(wxCAL_MONDAY_FIRST) ? MonthCal_Monday
+                                                           : MonthCal_Sunday);
 }
 
 // ----------------------------------------------------------------------------
