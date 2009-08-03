@@ -28,11 +28,13 @@
 // 0x0409 is US English, 0x04b0 is Unicode and 0x0000 is 7 bit ASCII. see
 // http://msdn.microsoft.com/en-us/library/aa381049(VS.85).aspx for the full
 // list of languages and charsets
-#define LANG "0409"
+#define LANG 0x0409
 #ifdef _UNICODE
-    #define CHARSET "04b0"
+    #define CHARSET 0x4b0
+    #define LANG_WITH_CHARSET "040904b0"
 #else
-    #define CHARSET "0000"
+    #define CHARSET 0
+    #define LANG_WITH_CHARSET "04090000"
 #endif
 
 1 VERSIONINFO
@@ -46,7 +48,7 @@
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK LANG CHARSET
+        BLOCK LANG_WITH_CHARSET
         BEGIN
             VALUE "Comments", "wxWidgets cross-platform GUI framework\0"
             VALUE "CompanyName", "wxWidgets development team\0"
@@ -62,11 +64,8 @@ BEGIN
             VALUE "SpecialBuild", "\0"
         END
     END
-    // windres can't handle the syntax below for some reason (see #11055)
-#ifndef __GNUC__
     BLOCK "VarFileInfo"
     BEGIN
             VALUE "Translation", LANG, CHARSET
     END
-#endif // !__GNUC__
 END
