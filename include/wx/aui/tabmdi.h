@@ -9,7 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#if 0//temp: (MJM)
 #ifndef _WX_AUITABMDI_H_
 #define _WX_AUITABMDI_H_
 
@@ -266,4 +265,3 @@ private:
 #endif // wxUSE_AUI
 
 #endif // _WX_AUITABMDI_H_
-#endif // 0

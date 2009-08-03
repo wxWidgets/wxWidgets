@@ -55,6 +55,8 @@ private:
     void OnAbout(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnFullScreen(wxCommandEvent& event);
+    void OnTile(wxCommandEvent& event);
+    void OnCascade(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnCloseAll(wxCommandEvent& event);
 
@@ -102,6 +104,8 @@ private:
 enum
 {
     MDI_FULLSCREEN = 100,
+    MDI_TILE,
+    MDI_CASCADE,
     MDI_REFRESH,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,

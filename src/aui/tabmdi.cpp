@@ -21,7 +21,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if 0
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -838,4 +837,3 @@ void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
 
 #endif //wxUSE_AUI
 #endif // wxUSE_MDI
-#endif // 0

@@ -58,6 +58,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxAuiMDIParentFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
     EVT_MENU(MDI_FULLSCREEN, MyFrame::OnFullScreen)
+    EVT_MENU(MDI_TILE, MyFrame::OnTile)
+    EVT_MENU(MDI_CASCADE, MyFrame::OnCascade)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 
     EVT_MENU(wxID_CLOSE_ALL, MyFrame::OnCloseAll)
@@ -201,6 +203,8 @@ wxMenuBar *MyFrame::CreateMainMenubar()
 
     menuFile->Append(wxID_NEW, "&New window\tCtrl-N", "Create a new child window");
     menuFile->AppendCheckItem(MDI_FULLSCREEN, "Show &full screen\tCtrl-F");
+    menuFile->Append(MDI_TILE, "&Tile windows");
+    menuFile->Append(MDI_CASCADE, "&Cascade windows");
     menuFile->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
 
     wxMenu *menuHelp = new wxMenu;
@@ -255,6 +259,16 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnFullScreen(wxCommandEvent& event)
 {
     ShowFullScreen(event.IsChecked());
+}
+
+void MyFrame::OnTile(wxCommandEvent& event)
+{
+    Tile();
+}
+
+void MyFrame::OnCascade(wxCommandEvent& event)
+{
+    Cascade();
 }
 
 void MyFrame::OnCloseAll(wxCommandEvent& WXUNUSED(event))
