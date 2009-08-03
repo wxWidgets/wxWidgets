@@ -166,6 +166,15 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
                         wxDateTime::WeekDay *wd)
 {
     WinStruct<MCHITTESTINFO> hti;
+
+    // Vista and later SDKs add a few extra fields to MCHITTESTINFO which are
+    // not supported by the previous versions, as we don't use them anyhow we
+    // should pretend that we always use the old struct format to make the call
+    // below work on pre-Vista systems (see #11057)
+#ifdef MCHITTESTINFO_V1_SIZE
+    hti.cbSize = MCHITTESTINFO_V1_SIZE;
+#endif
+
     hti.pt.x = pos.x;
     hti.pt.y = pos.y;
     switch ( MonthCal_HitTest(GetHwnd(), &hti) )
