@@ -15,10 +15,6 @@
 #ifndef _WX_DIRCTRL_H_
 #define _WX_DIRCTRL_H_
 
-#if wxUSE_DIRDLG || wxUSE_FILEDLG
-    #include "wx/imaglist.h"
-#endif
-
 #if wxUSE_DIRDLG
 
 #include "wx/treectrl.h"
@@ -31,7 +27,6 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
-class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_BASE wxHashTable;
 
 //-----------------------------------------------------------------------------
@@ -264,7 +259,9 @@ protected:
 // wxFileIconsTable - use wxTheFileIconsTable which is created as necessary
 //-------------------------------------------------------------------------
 
-#if wxUSE_DIRDLG || wxUSE_FILEDLG
+#if wxUSE_DIRDLG || wxUSE_FILEDLG || wxUSE_FILECTRL
+
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 class WXDLLIMPEXP_CORE wxFileIconsTable
 {
@@ -298,7 +295,7 @@ protected:
 // The global fileicons table
 extern WXDLLIMPEXP_DATA_CORE(wxFileIconsTable *) wxTheFileIconsTable;
 
-#endif // wxUSE_DIRDLG || wxUSE_FILEDLG
+#endif // wxUSE_DIRDLG || wxUSE_FILEDLG || wxUSE_FILECTRL
 
 #endif
     // _WX_DIRCTRLG_H_
