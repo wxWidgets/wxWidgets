@@ -1587,10 +1587,10 @@ public:
         the sizer will check that it no more than @code cols*rows @endcode
         elements are added to it.
 
-        The @a gap (or @a vgap and @a hgap which correspond to y and x fields
-        of the wxSize object) argument defines the size of the padding between
-        the grid rows (its vertical component, or @a vgap) and columns (its
-        horizontal component, or @a hgap) in pixels.
+        The @a gap (or @a vgap and @a hgap, which correspond to @c y and @c x
+        fields of the wxSize object) argument defines the size of the padding
+        between the grid rows (its vertical component, or @a vgap) and columns
+        (its horizontal component, or @a hgap), in pixels.
 
         @since 2.9.1 (except for the four argument overload)
     */
