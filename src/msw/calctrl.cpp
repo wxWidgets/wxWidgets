@@ -220,7 +220,26 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
         case MCHT_CALENDARDAY:
             if ( wd )
             {
-                *wd = static_cast<wxDateTime::WeekDay>(hti.st.wDayOfWeek);
+                int day = hti.st.wDayOfWeek;
+
+                // the native control returns incorrect day of the week when
+                // the first day isn't Monday, i.e. the first column is always
+                // "Monday" even if its label is "Sunday", compensate for it
+                const int first = LOWORD(MonthCal_GetFirstDayOfWeek(GetHwnd()));
+                if ( first == MonthCal_Monday )
+                {
+                    // as MonthCal_Monday is 0 while wxDateTime::Mon is 1,
+                    // normally we need to do this to transform from MSW
+                    // convention to wx one
+                    day++;
+                    day %= 7;
+                }
+                //else: but when the first day is MonthCal_Sunday, the native
+                //      control still returns 0 (i.e. MonthCal_Monday) for the
+                //      first column which looks like a bug in it but to work
+                //      around it it's enough to not apply the correction above
+
+                *wd = static_cast<wxDateTime::WeekDay>(day);
             }
             return wxCAL_HITTEST_HEADER;
 
