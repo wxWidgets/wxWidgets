@@ -223,6 +223,13 @@ void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
     }
 }
 
+wxRibbonPage* wxRibbonBar::GetPage(int n)
+{
+    if(n < 0 || (size_t)n >= m_pages.GetCount())
+        return 0;
+    return m_pages.Item(n).page;
+}
+
 bool wxRibbonBar::SetActivePage(size_t page)
 {
     if(m_current_page == (int)page)

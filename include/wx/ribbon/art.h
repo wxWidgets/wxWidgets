@@ -65,10 +65,13 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TAB_CTRL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
     wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_BORDER_COLOUR,
@@ -77,8 +80,10 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_LABEL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR,
@@ -294,10 +299,10 @@ public:
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
-    wxRibbonMSWArtProvider();
+    wxRibbonMSWArtProvider(bool set_colour_scheme = true);
     virtual ~wxRibbonMSWArtProvider();
 
-    wxRibbonArtProvider* Clone()  const;
+    wxRibbonArtProvider* Clone() const;
     void SetFlags(long flags);
     long GetFlags() const;
 
@@ -459,6 +464,20 @@ protected:
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
     void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmap* bitmaps);
+    void DrawButtonBarButtonForeground(
+                        wxDC& dc,
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small);
+    void DrawMinimisedPanelCommon(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxRect* preview_rect);
+    void CloneTo(wxRibbonMSWArtProvider* copy) const;
 
     wxBitmap m_cached_tab_separator;
     wxBitmap m_gallery_up_bitmap[4];
@@ -523,6 +542,7 @@ protected:
     wxFont m_tab_label_font;
     wxFont m_panel_label_font;
     wxFont m_button_bar_label_font;
+
     wxPen m_page_border_pen;
     wxPen m_panel_border_pen;
     wxPen m_panel_border_gradient_pen;
@@ -549,6 +569,135 @@ protected:
     int m_gallery_bitmap_padding_bottom_size;
 };
 
+class WXDLLIMPEXP_RIBBON wxRibbonAUIArtProvider : public wxRibbonMSWArtProvider
+{
+public:
+    wxRibbonAUIArtProvider();
+    virtual ~wxRibbonAUIArtProvider();
+
+    wxRibbonArtProvider* Clone() const;
+
+    wxColour GetColour(int id) const;
+    void SetColour(int id, const wxColor& colour);
+    void SetColourScheme(const wxColour& primary,
+                         const wxColour& secondary,
+                         const wxColour& tertiary);
+    void SetFont(int id, const wxFont& font);
+
+    wxSize GetScrollButtonMinimumSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        long style);
+
+    void DrawScrollButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        long style);
+
+    wxSize GetPanelSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize client_size,
+                        wxPoint* client_offset);
+
+    wxSize GetPanelClientSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset);
+
+    void DrawTabCtrlBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect);
+
+    void GetBarTabWidth(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxString& label,
+                        const wxBitmap& bitmap,
+                        int* ideal,
+                        int* small_begin_need_separator,
+                        int* small_must_have_separator,
+                        int* minimum);
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRibbonPageTabInfo& tab);
+
+    void DrawTabSeparator(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        double visibility);
+
+    void DrawPageBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect);
+
+    void DrawPanelBackground(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect);
+
+    void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap);
+
+    void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect);
+
+    void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item);
+
+    void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect);
+
+    void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small);
+
+protected:
+    void DrawPartialPanelBackground(wxDC& dc, wxWindow* wnd,
+        const wxRect& rect);
+    void DrawGalleryButton(wxDC& dc, wxRect rect,
+        wxRibbonGalleryButtonState state, wxBitmap* bitmaps);
+
+    wxColour m_tab_ctrl_background_colour;
+    wxColour m_tab_ctrl_background_gradient_colour;
+    wxColour m_panel_label_background_colour;
+    wxColour m_panel_label_background_gradient_colour;
+    wxColour m_panel_hover_label_background_colour;
+    wxColour m_panel_hover_label_background_gradient_colour;
+
+    wxBrush m_background_brush;
+    wxBrush m_tab_active_top_background_brush;
+    wxBrush m_tab_hover_background_brush;
+    wxBrush m_button_bar_hover_background_brush;
+    wxBrush m_gallery_button_active_background_brush;
+    wxBrush m_gallery_button_hover_background_brush;
+    wxBrush m_gallery_button_disabled_background_brush;
+
+    wxFont m_tab_active_label_font;
+};
+
 /*
    HSL colour class, using interface as discussed in wx-dev. Provided mainly
    for art providers to perform colour scheme calculations in the HSL colour
@@ -570,6 +719,7 @@ public:
 
    wxColour    ToRGB() const;
 
+   wxRibbonHSLColour& MakeDarker(float delta);
    wxRibbonHSLColour Darker(float delta) const;
    wxRibbonHSLColour Lighter(float delta) const;
    wxRibbonHSLColour Saturated(float delta) const;
@@ -587,11 +737,10 @@ typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
       defined(__WXCOCOA__)
 // TODO: Once implemented, change typedef to OSX
 // typedef wxRibbonOSXArtProvider wxRibbonDefaultArtProvider;
-typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
+typedef wxRibbonAUIArtProvider wxRibbonDefaultArtProvider;
 #else
 // TODO: Once implemented, change typedef to AUI
-// typedef wxRibbonAUIArtProvider wxRibbonDefaultArtProvider;
-typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
+typedef wxRibbonAUIArtProvider wxRibbonDefaultArtProvider;
 #endif
 
 #endif // wxUSE_RIBBON
