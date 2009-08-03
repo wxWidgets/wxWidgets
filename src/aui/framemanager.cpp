@@ -79,7 +79,24 @@ wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
 IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
-
+// the utility function ShowWnd() is the same as show,
+// except it handles wxAuiMDIChildFrame windows as well,
+// as the Show() method on this class is "unplugged"
+static void ShowWnd(wxWindow* wnd, bool show)
+{
+#if wxUSE_MDI
+    if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
+    {
+        wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
+        cf->DoShow(show);
+        cf->ApplyMDIChildFrameRect();
+    }
+    else
+#endif
+    {
+        wnd->Show(show);
+    }
+}
 
 const int auiToolBarLayer = 10;
 
@@ -775,6 +792,7 @@ int Aui_SetActivePane(wxAuiManager* mgr, wxAuiPaneInfoArray& panes, wxWindow* ac
     }
 
     return GetSelection();*/
+    return 0;
 }
 
 size_t Aui_GetActivePane(wxAuiPaneInfoArray& panes,wxWindow* focus)
@@ -1329,7 +1347,6 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().SetName(wxT("mdiclient")).
                 SetCenterPane().SetBorder(false));
     }
-#if 0//temp: (MJM)
     else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
     {
         wxAuiMDIParentFrame* mdi_frame = (wxAuiMDIParentFrame*)m_frame;
@@ -1340,8 +1357,6 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().SetName(wxT("mdiclient")).
                 SetCenterPane().SetBorder(false));
     }
-#endif //0
-
 #endif
 
     UpdateHintWindowConfig();
@@ -1647,7 +1662,7 @@ bool wxAuiManager::DetachPane(wxWindow* window)
                 p.GetWindow()->SetSize(1,1);
 
                 if (p.GetFrame()->IsShown())
-                    p.GetFrame()->Show(false);
+                   ShowWnd(p.GetFrame(),false);
 
                 // reparent to m_frame and destroy the pane
                 if (m_action_window == p.GetFrame())
@@ -1697,7 +1712,7 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& pane_info)
     // first, hide the window
     if (pane_info.GetWindow() && pane_info.GetWindow()->IsShown())
     {
-        pane_info.GetWindow()->Show(false);
+        ShowWnd(pane_info.GetWindow(),false);
     }
 
     // make sure that we are the parent of this window
@@ -1762,7 +1777,7 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
     // last, show the window
     if (pane_info.GetWindow() && !pane_info.GetWindow()->IsShown())
     {
-        pane_info.GetWindow()->Show(true);
+        ShowWnd(pane_info.GetWindow(),true);
     }
 }
 
@@ -1788,7 +1803,7 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
     // last, show the window
     if (pane_info.GetWindow() && !pane_info.GetWindow()->IsShown())
     {
-        pane_info.GetWindow()->Show(true);
+        ShowWnd(pane_info.GetWindow(),true);
     }
 }
 
@@ -2455,7 +2470,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(!activenotebookpagefound)
                     {
-                        pane.GetWindow()->Show(true);
+                        ShowWnd(pane.GetWindow(),true);
                         activenotebookpagefound = true;
                     }
                     //else
@@ -2468,7 +2483,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     // a floating frame, hiding it in this case would make the floating frame blank.
                     if(pane.GetWindow()->GetParent()==m_frame)
                     {
-                        pane.GetWindow()->Show(false);
+                        ShowWnd(pane.GetWindow(),false);
                     }
                 }
                 // If we are only doing a drop calculation then we only want the first
@@ -2491,7 +2506,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                         // The previous page was a notebook that did not have an active page and we are not part of,
                         // set the first page in that notebook to be the active page.
                         firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                        firstpaneinnotebook->GetWindow()->Show(true);
+                        ShowWnd(firstpaneinnotebook->GetWindow(),true);
                         activenotebookpagefound=true;
                     }
                 }
@@ -2515,7 +2530,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
                     {
-                        pane.GetWindow()->Show(true);
+                        ShowWnd(pane.GetWindow(),true);
                         activenotebookpagefound = true;
                     }
                     else
@@ -2526,7 +2541,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                         // a floating frame, hiding it in this case would make the floating frame blank.
                         if(pane.GetWindow()->GetParent()==m_frame)
                         {
-                            pane.GetWindow()->Show(false);
+                            ShowWnd(pane.GetWindow(),false);
                         }
                     }
                 }
@@ -2575,7 +2590,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
             if(!activenotebookpagefound && firstpaneinnotebook)
             {
                 firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                firstpaneinnotebook->GetWindow()->Show(true);
+                ShowWnd(firstpaneinnotebook->GetWindow(),true);
                 activenotebookpagefound=true;
             }
         }
@@ -2620,7 +2635,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(!activenotebookpagefound)
                     {
-                        pane.GetWindow()->Show(true);
+                        ShowWnd(pane.GetWindow(),true);
                         activenotebookpagefound = true;
                     }
                     //else
@@ -2633,7 +2648,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     // a floating frame, hiding it in this case would make the floating frame blank.
                     if(pane.GetWindow()->GetParent()==m_frame)
                     {
-                        pane.GetWindow()->Show(false);
+                        ShowWnd(pane.GetWindow(),false);
                     }
                 }
                 // If we are only doing a drop calculation then we only want the first
@@ -2656,7 +2671,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                         // The previous page was a notebook that did not have an active page and we are not part of,
                         // set the first page in that notebook to be the active page.
                         firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                        firstpaneinnotebook->GetWindow()->Show(true);
+                        ShowWnd(firstpaneinnotebook->GetWindow(),true);
                         activenotebookpagefound=true;
                     }
                 }
@@ -2697,7 +2712,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
                     {
-                        pane.GetWindow()->Show(true);
+                        ShowWnd(pane.GetWindow(),true);
                         activenotebookpagefound = true;
                     }
                     else
@@ -2708,7 +2723,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                         // a floating frame, hiding it in this case would make the floating frame blank.
                         if(pane.GetWindow()->GetParent()==m_frame)
                         {
-                            pane.GetWindow()->Show(false);
+                            ShowWnd(pane.GetWindow(),false);
                         }
                     }
                 }
@@ -2737,7 +2752,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 // The previous page was a notebook that did not have an active page and we are not part of,
                 // set the first page in that notebook to be the active page.
                 firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                firstpaneinnotebook->GetWindow()->Show(true);
+                ShowWnd(firstpaneinnotebook->GetWindow(),true);
                 activenotebookpagefound=true;
             }
         }
@@ -3256,7 +3271,7 @@ void wxAuiManager::Update()
 
             // hide the frame
             if (p.GetFrame()->IsShown())
-                p.GetFrame()->Show(false);
+                ShowWnd(p.GetFrame(),false);
 
             // reparent to m_frame and destroy the pane
             if (m_action_window == p.GetFrame())
@@ -3301,7 +3316,7 @@ void wxAuiManager::Update()
                 p.SetFrame(frame);
 
                 if (p.IsShown() && !frame->IsShown())
-                    frame->Show();
+                    ShowWnd(frame,true);
             }
             else
             {
@@ -3322,7 +3337,7 @@ void wxAuiManager::Update()
                 }
 
                 if (p.GetFrame()->IsShown() != p.IsShown())
-                    p.GetFrame()->Show(p.IsShown());
+                    ShowWnd(p.GetFrame(),p.IsShown());
             }
         }
         else
@@ -3333,10 +3348,10 @@ void wxAuiManager::Update()
                 // Doing so here as well can cause flicker(especially under MSW) due to windows being shown here and then hidden inside LayoutAll()
                 // All windows must be hidden here though, even notebook ones.
                 if(!p.IsShown())
-                    p.GetWindow()->Show(false);
+                    ShowWnd(p.GetWindow(),false);
                 else if(!IsNotebookPane(m_panes,i))
                 {
-                    p.GetWindow()->Show(true);
+                    ShowWnd(p.GetWindow(),true);
                 }
             }
         }
@@ -4120,7 +4135,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         m_hint_wnd->SetTransparent(m_hint_fadeamt);
 
         if (!m_hint_wnd->IsShown())
-            m_hint_wnd->Show();
+            ShowWnd(m_hint_wnd,true);
 
         // if we are dragging a floating pane, set the focus
         // back to that floating pane (otherwise it becomes unfocused)
@@ -4199,7 +4214,7 @@ void wxAuiManager::HideHint()
     if (m_hint_wnd)
     {
         if (m_hint_wnd->IsShown())
-            m_hint_wnd->Show(false);
+            ShowWnd(m_hint_wnd,false);
         m_hint_wnd->SetTransparent(0);
         m_hint_fadetimer.Stop();
         m_last_hint = wxRect();

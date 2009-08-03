@@ -449,7 +449,6 @@ public:
     void SetNormalFont(const wxFont& normal_font);
     void SetSelectedFont(const wxFont& selected_font);
     void SetMeasuringFont(const wxFont& measuring_font);
-    void DoShowHide();
     void SetRect(const wxRect& rect);
 
     void RemoveButton(int id);

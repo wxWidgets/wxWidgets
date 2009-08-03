@@ -27,6 +27,7 @@
 
 #include "wx/aui/framemanager.h"
 #include "wx/aui/dockart.h"
+#include "wx/aui/tabmdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
@@ -2823,55 +2824,4 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
 
     return false;
 }
-
-
-
-// the utility function ShowWnd() is the same as show,
-// except it handles wxAuiMDIChildFrame windows as well,
-// as the Show() method on this class is "unplugged"
-static void ShowWnd(wxWindow* wnd, bool show)
-{
-#if 0//temp (MJM)
-#if wxUSE_MDI
-    if (wnd->IsKindOf(CLASSINFO(wxAuiMDIChildFrame)))
-    {
-        wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
-        cf->DoShow(show);
-    }
-    else
-#endif
-#endif//0
-    {
-        wnd->Show(show);
-    }
-}
-
-
-// DoShowHide() this function shows the active window, then
-// hides all of the other windows (in that order)
-void wxAuiTabContainer::DoShowHide()
-{
-    wxAuiPaneInfoPtrArray& pages = GetPages();
-    size_t i, page_count = pages.GetCount();
-
-    // show new active page first
-    for (i = 0; i < page_count; ++i)
-    {
-        wxAuiPaneInfo& page = *pages.Item(i);
-        if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
-        {
-            ShowWnd(page.window, true);
-            break;
-        }
-    }
-
-    // hide all other pages
-    for (i = 0; i < page_count; ++i)
-    {
-        wxAuiPaneInfo& page = *pages.Item(i);
-        if (!page.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
-            ShowWnd(page.window, false);
-    }
-}
-
 #endif // wxUSE_AUI

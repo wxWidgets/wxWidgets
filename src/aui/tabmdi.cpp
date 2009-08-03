@@ -733,13 +733,6 @@ wxAuiMDIClientWindow::~wxAuiMDIClientWindow()
 
 bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 {
-    SetWindowStyleFlag(style);
-
-    wxSize caption_icon_size =
-            wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
-                   wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
-    SetUniformBitmapSize(caption_icon_size);
-
     if (!wxAuiNotebook::Create(parent,
                                wxID_ANY,
                                wxPoint(0,0),
@@ -748,6 +741,13 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     {
         return false;
     }
+    
+    SetWindowStyleFlag(style);
+
+    wxSize caption_icon_size =
+            wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
+                   wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
+    SetUniformBitmapSize(caption_icon_size);
 
     wxColour bkcolour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     SetOwnBackgroundColour(bkcolour);

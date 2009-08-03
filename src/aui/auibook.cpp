@@ -62,8 +62,8 @@ extern size_t Aui_GetActivePane(wxAuiPaneInfoArray&, wxWindow*);
 
 // -- wxAuiNotebook class implementation --
 wxAuiNotebook::wxAuiNotebook()
+: wxPanel()
 {
-    m_tab_ctrl_height = 20;
     m_requested_bmp_size = wxDefaultSize;
     m_requested_tabctrl_height = -1;
 }
@@ -72,7 +72,8 @@ wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
                              wxWindowID id,
                              const wxPoint& pos,
                              const wxSize& size,
-                             long style) : wxPanel(parent , id, pos, size, style)
+                             long style)
+: wxPanel(parent , id, pos, size, style)
 {
     m_requested_bmp_size = wxDefaultSize;
     m_requested_tabctrl_height = -1;
@@ -85,6 +86,8 @@ bool wxAuiNotebook::Create(wxWindow* parent,
                            const wxSize& size,
                            long style)
 {
+    wxPanel::Create(parent, id, pos, size, style);
+
     InitNotebook(style);
     return true;
 }
