@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
-#ifdef wxUSE_TASKBARICON
+#if wxUSE_TASKBARICON
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
