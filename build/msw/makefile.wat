@@ -4366,7 +4366,9 @@ RIBBONDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 RIBBONDLL_OBJECTS =  &
 	$(OBJS)\ribbondll_dummy.obj &
-	$(OBJS)\ribbondll_art.obj &
+	$(OBJS)\ribbondll_art_internal.obj &
+	$(OBJS)\ribbondll_art_msw.obj &
+	$(OBJS)\ribbondll_art_aui.obj &
 	$(OBJS)\ribbondll_bar.obj &
 	$(OBJS)\ribbondll_buttonbar.obj &
 	$(OBJS)\ribbondll_control.obj &
@@ -4383,7 +4385,9 @@ RIBBONLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 RIBBONLIB_OBJECTS =  &
 	$(OBJS)\ribbonlib_dummy.obj &
-	$(OBJS)\ribbonlib_art.obj &
+	$(OBJS)\ribbonlib_art_internal.obj &
+	$(OBJS)\ribbonlib_art_msw.obj &
+	$(OBJS)\ribbonlib_art_aui.obj &
 	$(OBJS)\ribbonlib_bar.obj &
 	$(OBJS)\ribbonlib_buttonbar.obj &
 	$(OBJS)\ribbonlib_control.obj &
@@ -15105,7 +15109,13 @@ $(OBJS)\ribbondll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\ribbondll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RIBBON $<
 
-$(OBJS)\ribbondll_art.obj :  .AUTODEPEND ..\..\src\ribbon\art.cpp
+$(OBJS)\ribbondll_art_internal.obj :  .AUTODEPEND ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
+
+$(OBJS)\ribbondll_art_msw.obj :  .AUTODEPEND ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
+
+$(OBJS)\ribbondll_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
 
 $(OBJS)\ribbondll_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
@@ -15129,7 +15139,13 @@ $(OBJS)\ribbondll_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
 $(OBJS)\ribbonlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
-$(OBJS)\ribbonlib_art.obj :  .AUTODEPEND ..\..\src\ribbon\art.cpp
+$(OBJS)\ribbonlib_art_internal.obj :  .AUTODEPEND ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
+
+$(OBJS)\ribbonlib_art_msw.obj :  .AUTODEPEND ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
+
+$(OBJS)\ribbonlib_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
 $(OBJS)\ribbonlib_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp

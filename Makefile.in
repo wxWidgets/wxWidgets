@@ -1719,7 +1719,9 @@ RIBBONDLL_CXXFLAGS = $(__ribbondll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 RIBBONDLL_OBJECTS =  \
 	$(__ribbondll___win32rc) \
-	ribbondll_art.o \
+	ribbondll_art_internal.o \
+	ribbondll_art_msw.o \
+	ribbondll_art_aui.o \
 	ribbondll_bar.o \
 	ribbondll_buttonbar.o \
 	ribbondll_control.o \
@@ -1733,7 +1735,9 @@ RIBBONLIB_CXXFLAGS = $(__ribbonlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 RIBBONLIB_OBJECTS =  \
-	ribbonlib_art.o \
+	ribbonlib_art_internal.o \
+	ribbonlib_art_msw.o \
+	ribbonlib_art_aui.o \
 	ribbonlib_bar.o \
 	ribbonlib_buttonbar.o \
 	ribbonlib_control.o \
@@ -32835,8 +32839,14 @@ auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 ribbondll_version_rc.o: $(srcdir)/src/msw/version.rc $(RIBBONDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_RIBBON
 
-ribbondll_art.o: $(srcdir)/src/ribbon/art.cpp $(RIBBONDLL_ODEP)
-	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art.cpp
+ribbondll_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
+
+ribbondll_art_msw.o: $(srcdir)/src/ribbon/art_msw.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw.cpp
+
+ribbondll_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/art_aui.cpp
 
 ribbondll_bar.o: $(srcdir)/src/ribbon/bar.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp
@@ -32856,8 +32866,14 @@ ribbondll_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONDLL_ODEP)
 ribbondll_panel.o: $(srcdir)/src/ribbon/panel.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
 
-ribbonlib_art.o: $(srcdir)/src/ribbon/art.cpp $(RIBBONLIB_ODEP)
-	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art.cpp
+ribbonlib_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
+
+ribbonlib_art_msw.o: $(srcdir)/src/ribbon/art_msw.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw.cpp
+
+ribbonlib_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_aui.cpp
 
 ribbonlib_bar.o: $(srcdir)/src/ribbon/bar.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp

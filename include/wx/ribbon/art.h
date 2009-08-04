@@ -42,6 +42,11 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BORDER_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_GALLERY_BORDER_COLOUR,
     wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_COLOUR,
@@ -319,6 +324,11 @@ public:
                          const wxColour& secondary,
                          const wxColour& tertiary);
 
+    int GetTabCtrlHeight(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRibbonPageTabInfoArray& pages);
+
     void DrawTabCtrlBackground(
                         wxDC& dc,
                         wxWindow* wnd,
@@ -391,11 +401,6 @@ public:
                         int* small_begin_need_separator,
                         int* small_must_have_separator,
                         int* minimum);
-
-    int GetTabCtrlHeight(
-                        wxDC& dc,
-                        wxWindow* wnd,
-                        const wxRibbonPageTabInfoArray& pages);
 
     wxSize GetScrollButtonMinimumSize(
                         wxDC& dc,
@@ -517,6 +522,10 @@ protected:
     wxColour m_button_bar_hover_background_gradient_colour;
     wxColour m_button_bar_hover_background_top_colour;
     wxColour m_button_bar_hover_background_top_gradient_colour;
+    wxColour m_button_bar_active_background_colour;
+    wxColour m_button_bar_active_background_gradient_colour;
+    wxColour m_button_bar_active_background_top_colour;
+    wxColour m_button_bar_active_background_top_gradient_colour;
     wxColour m_gallery_button_background_colour;
     wxColour m_gallery_button_background_gradient_colour;    
     wxColour m_gallery_button_hover_background_colour;
@@ -550,6 +559,7 @@ protected:
     wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_tab_border_pen;
     wxPen m_button_bar_hover_border_pen;
+    wxPen m_button_bar_active_border_pen;
     wxPen m_gallery_border_pen;
     wxPen m_gallery_item_border_pen;
 
@@ -611,6 +621,11 @@ public:
                         wxDC& dc,
                         wxWindow* wnd,
                         const wxRect& rect);
+
+    int GetTabCtrlHeight(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRibbonPageTabInfoArray& pages);
 
     void GetBarTabWidth(
                         wxDC& dc,
@@ -691,42 +706,12 @@ protected:
     wxBrush m_tab_active_top_background_brush;
     wxBrush m_tab_hover_background_brush;
     wxBrush m_button_bar_hover_background_brush;
+    wxBrush m_button_bar_active_background_brush;
     wxBrush m_gallery_button_active_background_brush;
     wxBrush m_gallery_button_hover_background_brush;
     wxBrush m_gallery_button_disabled_background_brush;
 
     wxFont m_tab_active_label_font;
-};
-
-/*
-   HSL colour class, using interface as discussed in wx-dev. Provided mainly
-   for art providers to perform colour scheme calculations in the HSL colour
-   space. If such a class makes it into base / core, then this class should be
-   removed and users switched over to the one in base / core.
-
-   0.0 <= Hue < 360.0
-   0.0 <= Saturation <= 1.0
-   0.0 <= Luminance <= 1.0
-*/
-class WXDLLIMPEXP_RIBBON wxRibbonHSLColour
-{
-public:
-   wxRibbonHSLColour()
-       : hue(0.0), saturation(0.0), luminance(0.0) {}
-   wxRibbonHSLColour(float H, float S, float L)
-       : hue(H), saturation(S), luminance(L) { }
-   wxRibbonHSLColour(const wxColour& C);
-
-   wxColour    ToRGB() const;
-
-   wxRibbonHSLColour& MakeDarker(float delta);
-   wxRibbonHSLColour Darker(float delta) const;
-   wxRibbonHSLColour Lighter(float delta) const;
-   wxRibbonHSLColour Saturated(float delta) const;
-   wxRibbonHSLColour Desaturated(float delta) const;
-   wxRibbonHSLColour ShiftHue(float delta) const;
-
-   float       hue, saturation, luminance;
 };
 
 #if defined(__WXMSW__)

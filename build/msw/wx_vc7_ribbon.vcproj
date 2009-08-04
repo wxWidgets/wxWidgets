@@ -771,6 +771,9 @@
 				RelativePath="..\..\include\wx\ribbon\art.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\art_internal.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\bar.h">
 			</File>
 			<File
@@ -794,7 +797,13 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\..\src\ribbon\art.cpp">
+				RelativePath="..\..\src\ribbon\art_aui.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\ribbon\art_internal.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\ribbon\art_msw.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\ribbon\bar.cpp">

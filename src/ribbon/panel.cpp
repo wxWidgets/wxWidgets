@@ -87,6 +87,19 @@ bool wxRibbonPanel::Create(wxWindow* parent,
 void wxRibbonPanel::SetArtProvider(wxRibbonArtProvider* art)
 {
     m_art = art;
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow* child = node->GetData();
+        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
+        if(ribbon_child)
+        {
+            ribbon_child->SetArtProvider(art);
+        }
+    }
+    if(m_expanded_panel)
+        m_expanded_panel->SetArtProvider(art);
 }
 
 void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long style)

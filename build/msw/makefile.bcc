@@ -1234,7 +1234,9 @@ RIBBONDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-Hu -H=$(OBJS)\wxprec_ribbondll.csm $(CPPFLAGS) $(CXXFLAGS)
 RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_dummy.obj \
-	$(OBJS)\ribbondll_art.obj \
+	$(OBJS)\ribbondll_art_internal.obj \
+	$(OBJS)\ribbondll_art_msw.obj \
+	$(OBJS)\ribbondll_art_aui.obj \
 	$(OBJS)\ribbondll_bar.obj \
 	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
@@ -1251,7 +1253,9 @@ RIBBONLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CPPFLAGS) $(CXXFLAGS)
 RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_dummy.obj \
-	$(OBJS)\ribbonlib_art.obj \
+	$(OBJS)\ribbonlib_art_internal.obj \
+	$(OBJS)\ribbonlib_art_msw.obj \
+	$(OBJS)\ribbonlib_art_aui.obj \
 	$(OBJS)\ribbonlib_bar.obj \
 	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
@@ -14235,8 +14239,14 @@ $(OBJS)\ribbondll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\ribbondll_version.res: ..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) -i$(SETUPHDIR) -i..\..\include -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_bcc$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_RIBBON ..\..\src\msw\version.rc
 
-$(OBJS)\ribbondll_art.obj: ..\..\src\ribbon\art.cpp
-	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art.cpp
+$(OBJS)\ribbondll_art_internal.obj: ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_internal.cpp
+
+$(OBJS)\ribbondll_art_msw.obj: ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_msw.cpp
+
+$(OBJS)\ribbondll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbondll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
@@ -14259,8 +14269,14 @@ $(OBJS)\ribbondll_panel.obj: ..\..\src\ribbon\panel.cpp
 $(OBJS)\ribbonlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
-$(OBJS)\ribbonlib_art.obj: ..\..\src\ribbon\art.cpp
-	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art.cpp
+$(OBJS)\ribbonlib_art_internal.obj: ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_internal.cpp
+
+$(OBJS)\ribbonlib_art_msw.obj: ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_msw.cpp
+
+$(OBJS)\ribbonlib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
+	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art_aui.cpp
 
 $(OBJS)\ribbonlib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) -q -c -P -o$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp

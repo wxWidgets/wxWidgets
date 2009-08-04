@@ -37,6 +37,7 @@ enum wxRibbonButtonBarButtonState
     wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK        = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED,
     wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE     = 1 << 5,
     wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE   = 1 << 6,
+    wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK       = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE,
     wxRIBBON_BUTTONBAR_BUTTON_DISABLED          = 1 << 7,
     wxRIBBON_BUTTONBAR_BUTTON_STATE_MASK        = 0xF8,
 };
@@ -111,12 +112,14 @@ public:
     virtual wxSize GetMinSize() const;
     virtual wxSize DoGetBestSize() const;
 protected:
+    friend class wxRibbonButtonBarEvent;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
     void OnMouseMove(wxMouseEvent& evt);
+    void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
     void OnMouseDown(wxMouseEvent& evt);
     void OnMouseUp(wxMouseEvent& evt);
@@ -137,12 +140,14 @@ protected:
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
     wxRibbonButtonBarButtonInstance* m_hovered_button;
+    wxRibbonButtonBarButtonInstance* m_active_button;
 
     wxPoint m_layout_offset;
     wxSize m_bitmap_size_large;
     wxSize m_bitmap_size_small;
     int m_current_layout;
     bool m_layouts_valid;
+    bool m_lock_active_state;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonButtonBar)

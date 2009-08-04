@@ -111,6 +111,9 @@ bool wxRibbonBar::DismissExpandedPanel()
 bool wxRibbonBar::Realize()
 {
     bool status = true;
+
+    wxMemoryDC dcTemp;
+    int sep = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
     size_t numtabs = m_pages.GetCount();
     size_t i;
     for(i = 0; i < numtabs; ++i)
@@ -121,10 +124,31 @@ bool wxRibbonBar::Realize()
         {
             status = false;
         }
-    }
+        wxString label = wxEmptyString;
+        if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
+            label = info.page->GetLabel();
+        wxBitmap icon = wxNullBitmap;
+        if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+            icon = info.page->GetIcon();
+        m_art->GetBarTabWidth(dcTemp, this, label, icon,
+                              &info.ideal_width,
+                              &info.small_begin_need_separator_width,
+                              &info.small_must_have_separator_width,
+                              &info.minimum_width);
 
-    wxMemoryDC dcTemp;
+        if(i == 0)
+        {
+            m_tabs_total_width_ideal = info.ideal_width;
+            m_tabs_total_width_minimum = info.minimum_width;
+        }
+        else
+        {
+            m_tabs_total_width_ideal += sep + info.ideal_width;
+            m_tabs_total_width_minimum += sep + info.minimum_width;
+        }
+    }
     m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+
     RecalculateMinSize();
     RecalculateTabSizes();
     Refresh();
@@ -558,7 +582,7 @@ void wxRibbonBar::CommonInit(long style)
 
 void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 {
-    delete m_art;
+    wxRibbonArtProvider *old = m_art;
     m_art = art;
 
     if(art)
@@ -575,6 +599,8 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
             page->SetArtProvider(art);
         }
     }
+
+    delete old;
 }
 
 void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))

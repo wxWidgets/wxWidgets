@@ -534,6 +534,10 @@ SOURCE=..\..\include\wx\ribbon\art.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\ribbon\art_internal.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\ribbon\bar.h
 # End Source File
 # Begin Source File
@@ -562,7 +566,15 @@ SOURCE=..\..\include\wx\ribbon\panel.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\ribbon\art.cpp
+SOURCE=..\..\src\ribbon\art_aui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ribbon\art_internal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ribbon\art_msw.cpp
 # End Source File
 # Begin Source File
 

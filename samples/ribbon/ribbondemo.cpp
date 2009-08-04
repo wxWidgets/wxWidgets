@@ -25,6 +25,7 @@
 #include "wx/menu.h"
 #include "wx/dcbuffer.h"
 #include "wx/colordlg.h"
+#include "wx/artprov.h"
 
 // -- application --
 
@@ -57,6 +58,9 @@ public:
         ID_SELECTION_CONTRACT,
         ID_PRIMARY_COLOUR,
         ID_SECONDARY_COLOUR,
+        ID_DEFAULT_PROVIDER,
+        ID_AUI_PROVIDER,
+        ID_MSW_PROVIDER,
     };
 
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -72,9 +76,12 @@ public:
     void OnPrimaryColourSelect(wxRibbonGalleryEvent& evt);
     void OnSecondaryColourSelect(wxRibbonGalleryEvent& evt);
     void OnColourGalleryButton(wxCommandEvent& evt);
+    void OnDefaultProvider(wxRibbonButtonBarEvent& evt);
+    void OnAUIProvider(wxRibbonButtonBarEvent& evt);
+    void OnMSWProvider(wxRibbonButtonBarEvent& evt);
 
 protected:
-    wxRibbonGallery* PopulateColoursPanel(wxRibbonPanel* panel, wxColour def,
+    wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
         int gallery_id);
     void AddText(wxString msg);
     wxRibbonGalleryItem* AddColourToGallery(wxRibbonGallery *gallery,
@@ -82,6 +89,7 @@ protected:
     wxColour GetGalleryColour(wxRibbonGallery *gallery,
         wxRibbonGalleryItem* item, wxString* name);
     void ResetGalleryArtProviders();
+    void SetArtProvider(wxRibbonArtProvider* prov);
 
     wxRibbonBar* m_ribbon;
     wxRibbonGallery* m_primary_gallery;
@@ -111,6 +119,9 @@ bool MyApp::OnInit()
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_DEFAULT_PROVIDER, MyFrame::OnDefaultProvider)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_AUI_PROVIDER, MyFrame::OnAUIProvider)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_MSW_PROVIDER, MyFrame::OnMSWProvider)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_H, MyFrame::OnSelectionExpandHButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_V, MyFrame::OnSelectionExpandVButton)
 EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_CONTRACT, MyFrame::OnSelectionContractButton)
@@ -128,6 +139,7 @@ EVT_BUTTON(ID_PRIMARY_COLOUR, MyFrame::OnColourGalleryButton)
 EVT_BUTTON(ID_SECONDARY_COLOUR, MyFrame::OnColourGalleryButton)
 END_EVENT_TABLE()
 
+#include "aui_style.xpm"
 #include "auto_crop_selection.xpm"
 #include "auto_crop_selection_small.xpm"
 #include "circle.xpm"
@@ -137,6 +149,7 @@ END_EVENT_TABLE()
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
 #include "hexagon.xpm"
+#include "msw_style.xpm"
 #include "selection_panel.xpm"
 #include "square.xpm"
 #include "triangle.xpm"
@@ -173,6 +186,13 @@ MyFrame::MyFrame()
         wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"));
         m_ribbon->GetArtProvider()->GetColourScheme(&m_default_primary,
             &m_default_secondary, &m_default_tertiary);
+        wxRibbonPanel *provider_panel = new wxRibbonPanel(scheme, wxID_ANY,
+            wxT("Art"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        wxRibbonButtonBar *provider_bar = new wxRibbonButtonBar(provider_panel, wxID_ANY);
+        provider_bar->AddButton(ID_DEFAULT_PROVIDER, wxT("Default Provider"),
+            wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(32, 32)));
+        provider_bar->AddButton(ID_AUI_PROVIDER, wxT("AUI Provider"), aui_style_xpm);
+        provider_bar->AddButton(ID_MSW_PROVIDER, wxT("MSW Provider"), msw_style_xpm);
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
             wxT("Primary Colour"), colours_xpm);
         m_primary_gallery = PopulateColoursPanel(primary_panel,
@@ -215,10 +235,14 @@ private:
     wxColour m_colour;
 };
 
-wxRibbonGallery* MyFrame::PopulateColoursPanel(wxRibbonPanel* panel,
+wxRibbonGallery* MyFrame::PopulateColoursPanel(wxWindow* panel,
                                                wxColour def, int gallery_id)
 {
-    wxRibbonGallery *gallery = new wxRibbonGallery(panel, gallery_id);
+    wxRibbonGallery *gallery = wxDynamicCast(panel->FindWindow(gallery_id), wxRibbonGallery);
+    if(gallery)
+        gallery->Clear();
+    else
+        gallery = new wxRibbonGallery(panel, gallery_id);
     wxMemoryDC& dc = m_bitmap_creation_dc;
     wxRibbonGalleryItem *def_item = 
         AddColourToGallery(gallery, wxT("Default"), dc, &def);
@@ -492,4 +516,39 @@ void MyFrame::OnColourGalleryButton(wxCommandEvent& evt)
         dummy.SetGalleryItem(item);
         ProcessWindowEvent(dummy);
     }
+}
+
+void MyFrame::OnDefaultProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->DismissExpandedPanel();
+    SetArtProvider(new wxRibbonDefaultArtProvider);
+}
+
+void MyFrame::OnAUIProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->DismissExpandedPanel();
+    SetArtProvider(new wxRibbonAUIArtProvider);
+}
+
+void MyFrame::OnMSWProvider(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    m_ribbon->DismissExpandedPanel();
+    SetArtProvider(new wxRibbonMSWArtProvider);
+}
+
+void MyFrame::SetArtProvider(wxRibbonArtProvider *prov)
+{
+    m_ribbon->Freeze();
+    m_ribbon->SetArtProvider(prov);
+
+    prov->GetColourScheme(&m_default_primary, &m_default_secondary,
+        &m_default_tertiary);
+    PopulateColoursPanel(m_primary_gallery->GetParent(), m_default_primary,
+        ID_PRIMARY_COLOUR);
+    PopulateColoursPanel(m_secondary_gallery->GetParent(), m_default_secondary,
+        ID_SECONDARY_COLOUR);
+
+    m_ribbon->Realize();
+    m_ribbon->Thaw();
+    GetSizer()->Layout();
 }

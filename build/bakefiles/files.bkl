@@ -3402,7 +3402,9 @@ src/osx/iphone/window.mm
 <!-- ====================================================================== -->
 
 <set var="RIBBON_SRC" hints="files">
-    src/ribbon/art.cpp
+    src/ribbon/art_internal.cpp
+    src/ribbon/art_msw.cpp
+    src/ribbon/art_aui.cpp
     src/ribbon/bar.cpp
     src/ribbon/buttonbar.cpp
     src/ribbon/control.cpp
@@ -3412,6 +3414,7 @@ src/osx/iphone/window.mm
 </set>
 <set var="RIBBON_HDR" hints="files">
     wx/ribbon/art.h
+    wx/ribbon/art_internal.h
     wx/ribbon/bar.h
     wx/ribbon/buttonbar.h
     wx/ribbon/control.h

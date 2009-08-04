@@ -37,6 +37,7 @@ IMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl)
 
 BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonButtonBar::OnEraseBackground)
+    EVT_ENTER_WINDOW(wxRibbonButtonBar::OnMouseEnter)
     EVT_LEAVE_WINDOW(wxRibbonButtonBar::OnMouseLeave)
     EVT_MOTION(wxRibbonButtonBar::OnMouseMove)
     EVT_PAINT(wxRibbonButtonBar::OnPaint)
@@ -347,10 +348,15 @@ void wxRibbonButtonBar::FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
         wxRibbonButtonBarButtonState size, wxDC& dc)
 {
     wxRibbonButtonBarButtonSizeInfo& info = button->sizes[size];
-    info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
-        button->kind, size, button->label, m_bitmap_size_large,
-        m_bitmap_size_small, &info.size, &info.normal_region,
-        &info.dropdown_region);
+    if(m_art)
+    {
+        info.is_supported = m_art->GetButtonBarButtonSize(dc, this,
+            button->kind, size, button->label, m_bitmap_size_large,
+            m_bitmap_size_small, &info.size, &info.normal_region,
+            &info.dropdown_region);
+    }
+    else
+        info.is_supported = false;
 }
 
 wxBitmap wxRibbonButtonBar::MakeResizedBitmap(const wxBitmap& original, wxSize size)
@@ -617,6 +623,8 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     m_current_layout = 0;
     m_layout_offset = wxPoint(0, 0);
     m_hovered_button = NULL;
+    m_active_button = NULL;
+    m_lock_active_state = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 };
@@ -633,12 +641,22 @@ wxSize wxRibbonButtonBar::DoGetBestSize() const
 
 void wxRibbonButtonBar::MakeLayouts()
 {
-    if(m_layouts_valid)
+    if(m_layouts_valid || m_art == NULL)
     {
         return;
     }
     {
         // Clear existing layouts
+        if(m_hovered_button)
+        {
+            m_hovered_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
+            m_hovered_button = NULL;
+        }
+        if(m_active_button)
+        {
+            m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+            m_active_button = NULL;
+        }
         size_t count = m_layouts.GetCount();
         size_t i;
         for(i = 0; i < count; ++i)
@@ -803,12 +821,13 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
             new_hovered = &instance;
             new_hovered_state = instance.base->state;
             new_hovered_state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
-            cursor -= btn_rect.GetTopLeft();
-            if(size.normal_region.Contains(cursor))
+            wxPoint offset(cursor);
+            offset -= btn_rect.GetTopLeft();
+            if(size.normal_region.Contains(offset))
             {
                 new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED;
             }
-            if(size.dropdown_region.Contains(cursor))
+            if(size.dropdown_region.Contains(offset))
             {
                 new_hovered_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED;
             }
@@ -828,20 +847,43 @@ void wxRibbonButtonBar::OnMouseMove(wxMouseEvent& evt)
         {
             m_hovered_button->base->state = new_hovered_state;
         }
-        Refresh();
+        Refresh(false);
+    }
+
+    if(m_active_button && !m_lock_active_state)
+    {
+        long new_active_state = m_active_button->base->state;
+        new_active_state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+        wxRibbonButtonBarButtonSizeInfo& size =
+            m_active_button->base->sizes[m_active_button->size];
+        wxRect btn_rect;
+        btn_rect.SetTopLeft(m_layout_offset + m_active_button->position);
+        btn_rect.SetSize(size.size);
+        if(btn_rect.Contains(cursor))
+        {
+            wxPoint offset(cursor);
+            offset -= btn_rect.GetTopLeft();
+            if(size.normal_region.Contains(offset))
+            {
+                new_active_state |= wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
+            }
+            if(size.dropdown_region.Contains(offset))
+            {
+                new_active_state |= wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+            }
+        }
+        if(new_active_state != m_active_button->base->state)
+        {
+            m_active_button->base->state = new_active_state;
+            Refresh(false);
+        }
     }
 }
 
-void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& WXUNUSED(evt))
-{
-    // Nothing happens here yet, but:
-    // 1) Something will in the future
-    // 2) wxGTK needs a mouse down handler to keep expanded panels open
-}
-
-void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
+void wxRibbonButtonBar::OnMouseDown(wxMouseEvent& evt)
 {
     wxPoint cursor(evt.GetPosition());
+    m_active_button = NULL;
 
     wxRibbonButtonBarLayout* layout = m_layouts.Item(m_current_layout);
     size_t btn_count = layout->buttons.Count();
@@ -855,39 +897,102 @@ void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
         btn_rect.SetSize(size.size);
         if(btn_rect.Contains(cursor))
         {
-            int id = instance.base->id;
+            m_active_button = &instance;
             cursor -= btn_rect.GetTopLeft();
-            wxEventType event_type;
+            long state = 0;
             if(size.normal_region.Contains(cursor))
-                event_type = wxEVT_COMMAND_RIBBONBUTTON_CLICKED;
+                state = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE;
             else if(size.dropdown_region.Contains(cursor))
-                event_type = wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
-            else
-                break;
-            wxRibbonButtonBarEvent notification(event_type, id);
-            notification.SetEventObject(this);
-            notification.SetBar(this);
-            ProcessWindowEvent(notification);
+                state = wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE;
+            instance.base->state |= state;
+            Refresh(false);
             break;
         }
     }
 }
 
+void wxRibbonButtonBar::OnMouseUp(wxMouseEvent& evt)
+{
+    wxPoint cursor(evt.GetPosition());
+
+    if(m_active_button)
+    {
+        wxRibbonButtonBarButtonSizeInfo& size =
+            m_active_button->base->sizes[m_active_button->size];
+        wxRect btn_rect;
+        btn_rect.SetTopLeft(m_layout_offset + m_active_button->position);
+        btn_rect.SetSize(size.size);
+        if(btn_rect.Contains(cursor))
+        {
+            int id = m_active_button->base->id;
+            cursor -= btn_rect.GetTopLeft();
+            wxEventType event_type;
+            do
+            {
+                if(size.normal_region.Contains(cursor))
+                    event_type = wxEVT_COMMAND_RIBBONBUTTON_CLICKED;
+                else if(size.dropdown_region.Contains(cursor))
+                    event_type = wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
+                else
+                    break;
+                wxRibbonButtonBarEvent notification(event_type, id);
+                notification.SetEventObject(this);
+                notification.SetBar(this);
+                m_lock_active_state = true;
+                ProcessWindowEvent(notification);
+                m_lock_active_state = false;
+            } while(false);
+            if(m_active_button) // may have been NULLed by event handler
+            {
+                m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+                m_active_button = NULL;
+            }
+            Refresh(false);
+        }
+    }
+}
+
+void wxRibbonButtonBar::OnMouseEnter(wxMouseEvent& evt)
+{
+    if(m_active_button && !evt.LeftIsDown())
+    {
+        m_active_button = NULL;
+    }
+}
+
 void wxRibbonButtonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
+    bool repaint = false;
     if(m_hovered_button != NULL)
     {
         m_hovered_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK;
         m_hovered_button = NULL;
-        Refresh();
+        repaint = true;
     }
+    if(m_active_button != NULL && !m_lock_active_state)
+    {
+        m_active_button->base->state &= ~wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK;
+        repaint = true;
+    }
+    if(repaint)
+        Refresh(false);
 }
 
 bool wxRibbonButtonBarEvent::PopupMenu(wxMenu* menu)
 {
-    // TODO: Perform some trickery so that the button bar retains the
-    // mouse hover effect while the menu is popped up
-    return m_bar->PopupMenu(menu);
+    wxPoint pos = wxDefaultPosition;
+    if(m_bar->m_active_button)
+    {
+        wxRibbonButtonBarButtonSizeInfo& size =
+            m_bar->m_active_button->base->sizes[m_bar->m_active_button->size];
+        wxRect btn_rect;
+        btn_rect.SetTopLeft(m_bar->m_layout_offset +
+            m_bar->m_active_button->position);
+        btn_rect.SetSize(size.size);
+        pos = btn_rect.GetBottomLeft();
+        pos.y++;
+    }
+    return m_bar->PopupMenu(menu, pos);
 }
 
 #endif // wxUSE_RIBBON
