@@ -1180,6 +1180,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     {
         pinfo.best_size = pinfo.window->GetClientSize();
 
+#if wxUSE_TOOLBAR
         if (pinfo.window->IsKindOf(CLASSINFO(wxToolBar)))
         {
             // GetClientSize() doesn't get the best size for
@@ -1195,6 +1196,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
             // commented out by JACS 2007-9-08 after having added a pixel in wxMSW's wxToolBar::DoGetBestSize()
             // pinfo.best_size.y++;
         }
+#endif // wxUSE_TOOLBAR
 
         if (pinfo.min_size != wxDefaultSize)
         {
