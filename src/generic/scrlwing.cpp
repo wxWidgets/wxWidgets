@@ -829,93 +829,70 @@ void wxScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 // this they always have the priority
 void wxScrollHelperBase::HandleOnChar(wxKeyEvent& event)
 {
-    int stx = 0, sty = 0,       // view origin
-        szx = 0, szy = 0,       // view size (total)
-        clix = 0, cliy = 0;     // view size (on screen)
+    // prepare the event this key press maps to
+    wxScrollWinEvent newEvent;
 
-    GetViewStart(&stx, &sty);
-    GetTargetSize(&clix, &cliy);
-    m_targetWindow->GetVirtualSize(&szx, &szy);
+    newEvent.SetPosition(0);
+    newEvent.SetEventObject(m_win);
 
-    if( m_xScrollPixelsPerLine )
-    {
-        clix /= m_xScrollPixelsPerLine;
-        szx /= m_xScrollPixelsPerLine;
-    }
-    else
-    {
-        clix = 0;
-        szx = -1;
-    }
-    if( m_yScrollPixelsPerLine )
-    {
-        cliy /= m_yScrollPixelsPerLine;
-        szy /= m_yScrollPixelsPerLine;
-    }
-    else
-    {
-        cliy = 0;
-        szy = -1;
-    }
+    // this is the default, it's changed to wxHORIZONTAL below if needed
+    newEvent.SetOrientation(wxVERTICAL);
 
-    int xScrollOld = m_xScrollPosition,
-        yScrollOld = m_yScrollPosition;
+    // some key events result in scrolling in both horizontal and vertical
+    // direction, e.g. Ctrl-{Home,End}, if this flag is true we should generate
+    // a second event in horizontal direction in addition to the primary one
+    bool sendHorizontalToo = false;
 
-    int dsty;
     switch ( event.GetKeyCode() )
     {
         case WXK_PAGEUP:
-            dsty = sty - (5 * cliy / 6);
-            Scroll(-1, (dsty == -1) ? 0 : dsty);
+            newEvent.SetEventType(wxEVT_SCROLLWIN_PAGEUP);
             break;
 
         case WXK_PAGEDOWN:
-            Scroll(-1, sty + (5 * cliy / 6));
+            newEvent.SetEventType(wxEVT_SCROLLWIN_PAGEDOWN);
             break;
 
         case WXK_HOME:
-            Scroll(0, event.ControlDown() ? 0 : -1);
+            newEvent.SetEventType(wxEVT_SCROLLWIN_TOP);
+
+            sendHorizontalToo = event.ControlDown();
             break;
 
         case WXK_END:
-            Scroll(szx - clix, event.ControlDown() ? szy - cliy : -1);
-            break;
+            newEvent.SetEventType(wxEVT_SCROLLWIN_BOTTOM);
 
-        case WXK_UP:
-            Scroll(-1, sty - 1);
-            break;
-
-        case WXK_DOWN:
-            Scroll(-1, sty + 1);
+            sendHorizontalToo = event.ControlDown();
             break;
 
         case WXK_LEFT:
-            Scroll(stx - 1, -1);
+            newEvent.SetOrientation(wxHORIZONTAL);
+            // fall through
+
+        case WXK_UP:
+            newEvent.SetEventType(wxEVT_SCROLLWIN_LINEUP);
             break;
 
         case WXK_RIGHT:
-            Scroll(stx + 1, -1);
+            newEvent.SetOrientation(wxHORIZONTAL);
+            // fall through
+
+        case WXK_DOWN:
+            newEvent.SetEventType(wxEVT_SCROLLWIN_LINEDOWN);
             break;
 
         default:
-            // not for us
+            // not a scrolling key
             event.Skip();
+            return;
     }
 
-    if ( m_xScrollPosition != xScrollOld )
-    {
-        wxScrollWinEvent evt(wxEVT_SCROLLWIN_THUMBTRACK, m_xScrollPosition,
-                               wxHORIZONTAL);
-        evt.SetEventObject(m_win);
-        m_win->GetEventHandler()->ProcessEvent(evt);
-    }
+    m_win->ProcessWindowEvent(newEvent);
 
-    if ( m_yScrollPosition != yScrollOld )
+    if ( sendHorizontalToo )
     {
-        wxScrollWinEvent evt(wxEVT_SCROLLWIN_THUMBTRACK, m_yScrollPosition,
-                               wxVERTICAL);
-        evt.SetEventObject(m_win);
-        m_win->GetEventHandler()->ProcessEvent(evt);
+        newEvent.SetOrientation(wxHORIZONTAL);
+        m_win->ProcessWindowEvent(newEvent);
     }
 }
 
