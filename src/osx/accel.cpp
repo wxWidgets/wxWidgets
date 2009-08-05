@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_ACCEL
+
 #include "wx/accel.h"
 
 #ifndef WX_PRECOMP
@@ -107,3 +109,5 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 }
 
 #endif
+
+#endif // wxUSE_ACCEL
