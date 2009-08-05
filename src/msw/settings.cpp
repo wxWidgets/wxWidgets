@@ -291,7 +291,12 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         gs_fontDefault = new wxFont(font);
     }
 
-    wxASSERT(font.IsOk() && wxFontEnumerator::IsValidFacename(font.GetFaceName()));
+    wxASSERT(font.IsOk());
+
+#if wxUSE_FONTENUM
+    wxASSERT(wxFontEnumerator::IsValidFacename(font.GetFaceName()));
+#endif // wxUSE_FONTENUM
+
     return font;
 #endif // __WXWINCE__/!__WXWINCE__
 }
