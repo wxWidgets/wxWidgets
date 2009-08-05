@@ -228,7 +228,8 @@ public:
     /**
         If an element with the given key is present, the functions returns an
         iterator pointing at that element, otherwise an invalid iterator is
-        returned; i.e.
+        returned.
+
         @code
             hashmap.find( non_existent_key ) == hashmap.end()
         @endcode
