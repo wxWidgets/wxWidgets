@@ -2021,58 +2021,13 @@ static int XRCID_Lookup(const char *str_id, int value_if_not_found = wxID_NONE)
     return (*rec_var)->id;
 }
 
-static void AddStdXRCID_Records();
-
-/*static*/
-int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
+namespace
 {
-    static bool s_stdIDsAdded = false;
 
-    if ( !s_stdIDsAdded )
-    {
-        s_stdIDsAdded = true;
-        AddStdXRCID_Records();
-    }
+// flag indicating whether standard XRC ids were already initialized
+static bool gs_stdIDsAdded = false;
 
-    return XRCID_Lookup(str_id, value_if_not_found);
-}
-
-/* static */
-wxString wxXmlResource::FindXRCIDById(int numId)
-{
-    for ( int i = 0; i < XRCID_TABLE_SIZE; i++ )
-    {
-        for ( XRCID_record *rec = XRCID_Records[i]; rec; rec = rec->next )
-        {
-            if ( rec->id == numId )
-                return wxString(rec->key);
-        }
-    }
-
-    return wxString();
-}
-
-static void CleanXRCID_Record(XRCID_record *rec)
-{
-    if (rec)
-    {
-        CleanXRCID_Record(rec->next);
-
-        free(rec->key);
-        delete rec;
-    }
-}
-
-static void CleanXRCID_Records()
-{
-    for (int i = 0; i < XRCID_TABLE_SIZE; i++)
-    {
-        CleanXRCID_Record(XRCID_Records[i]);
-        XRCID_Records[i] = NULL;
-    }
-}
-
-static void AddStdXRCID_Records()
+void AddStdXRCID_Records()
 {
 #define stdID(id) XRCID_Lookup(#id, id)
     stdID(-1);
@@ -2200,8 +2155,57 @@ static void AddStdXRCID_Records()
 #undef stdID
 }
 
+} // anonymous namespace
 
 
+/*static*/
+int wxXmlResource::DoGetXRCID(const char *str_id, int value_if_not_found)
+{
+    if ( !gs_stdIDsAdded )
+    {
+        gs_stdIDsAdded = true;
+        AddStdXRCID_Records();
+    }
+
+    return XRCID_Lookup(str_id, value_if_not_found);
+}
+
+/* static */
+wxString wxXmlResource::FindXRCIDById(int numId)
+{
+    for ( int i = 0; i < XRCID_TABLE_SIZE; i++ )
+    {
+        for ( XRCID_record *rec = XRCID_Records[i]; rec; rec = rec->next )
+        {
+            if ( rec->id == numId )
+                return wxString(rec->key);
+        }
+    }
+
+    return wxString();
+}
+
+static void CleanXRCID_Record(XRCID_record *rec)
+{
+    if (rec)
+    {
+        CleanXRCID_Record(rec->next);
+
+        free(rec->key);
+        delete rec;
+    }
+}
+
+static void CleanXRCID_Records()
+{
+    for (int i = 0; i < XRCID_TABLE_SIZE; i++)
+    {
+        CleanXRCID_Record(XRCID_Records[i]);
+        XRCID_Records[i] = NULL;
+    }
+
+    gs_stdIDsAdded = false;
+}
 
 
 //-----------------------------------------------------------------------------
