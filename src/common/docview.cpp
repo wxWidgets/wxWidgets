@@ -2235,7 +2235,11 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 
 bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 {
+#if wxUSE_FFILE
     wxFFile file(filename, wxT("rb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::read);
+#endif
     if ( !file.IsOpened() )
         return false;
 
@@ -2259,7 +2263,11 @@ bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
 
 bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 {
+#if wxUSE_FFILE
     wxFFile file(filename, wxT("wb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::write);
+#endif
     if ( !file.IsOpened() )
         return false;
 
@@ -2282,7 +2290,11 @@ bool wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename)
 
 bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 {
+#if wxUSE_FFILE
     wxFFile file(filename, wxT("rb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::read);
+#endif
     if ( !file.IsOpened() )
         return false;
 
@@ -2306,7 +2318,11 @@ bool wxTransferFileToStream(const wxString& filename, wxOutputStream& stream)
 
 bool wxTransferStreamToFile(wxInputStream& stream, const wxString& filename)
 {
+#if wxUSE_FFILE
     wxFFile file(filename, wxT("wb"));
+#elif wxUSE_FILE
+    wxFile file(filename, wxFile::write);
+#endif
     if ( !file.IsOpened() )
         return false;
 
