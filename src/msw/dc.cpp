@@ -1543,15 +1543,22 @@ void wxMSWDCImpl::SetBrush(const wxBrush& brush)
     if ( brush.IsOk() )
     {
         // we must make sure the brush is aligned with the logical coordinates
-        // before selecting it
+        // before selecting it or using the same brush for the background of
+        // different windows would result in discontinuities
+        wxSize sizeBrushBitmap = wxDefaultSize;
         wxBitmap *stipple = brush.GetStipple();
         if ( stipple && stipple->IsOk() )
+            sizeBrushBitmap = stipple->GetSize();
+        else if ( brush.IsHatch() )
+            sizeBrushBitmap = wxSize(8, 8);
+
+        if ( sizeBrushBitmap.IsFullySpecified() )
         {
             if ( !::SetBrushOrgEx
                     (
                         GetHdc(),
-                        m_deviceOriginX % stipple->GetWidth(),
-                        m_deviceOriginY % stipple->GetHeight(),
+                        m_deviceOriginX % sizeBrushBitmap.x,
+                        m_deviceOriginY % sizeBrushBitmap.y,
                         NULL                    // [out] previous brush origin
                     ) )
             {
