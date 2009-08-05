@@ -156,7 +156,11 @@ void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
     }
 #endif // __WXMAC__
 
+#if wxUSE_FFILE
     wxFFileInputStream stream(file);
+#elif wxUSE_FILE
+    wxFileInputStream stream(file);
+#endif
     DoAddIcon
     (
         *this,
