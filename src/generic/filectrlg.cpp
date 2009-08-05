@@ -33,6 +33,7 @@
 #include "wx/generic/dirctrlg.h" // for wxFileIconsTable
 #include "wx/dir.h"
 #include "wx/tokenzr.h"
+#include "wx/imaglist.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
