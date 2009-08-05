@@ -98,6 +98,7 @@ public:
     }
 
     void HighlightSpecial(bool on);
+    void LimitDateRange(bool on);
 
     wxDateTime GetDate() const { return m_calendar->GetDate(); }
     void SetDate(const wxDateTime& dt) { m_calendar->SetDate(dt); }
@@ -147,7 +148,7 @@ public:
     void OnCalSpecial(wxCommandEvent& event);
 
     void OnCalAllowMonth(wxCommandEvent& event);
-
+    void OnCalLimitDates(wxCommandEvent& event);
     void OnCalSeqMonth(wxCommandEvent& event);
     void OnCalShowSurroundingWeeks(wxCommandEvent& event);
     void OnCalShowWeekNumbers(wxCommandEvent& event);
@@ -212,6 +213,7 @@ enum
     Calendar_Cal_Holidays,
     Calendar_Cal_Special,
     Calendar_Cal_Month,
+    Calendar_Cal_LimitDates,
     Calendar_Cal_SeqMonth,
     Calendar_Cal_SurroundWeeks,
     Calendar_Cal_WeekNumbers,
@@ -261,6 +263,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Calendar_Cal_Month, MyFrame::OnCalAllowMonth)
 
+    EVT_MENU(Calendar_Cal_LimitDates, MyFrame::OnCalLimitDates)
+
     EVT_MENU(Calendar_Cal_SeqMonth, MyFrame::OnCalSeqMonth)
     EVT_MENU(Calendar_Cal_SurroundWeeks, MyFrame::OnCalShowSurroundingWeeks)
     EVT_MENU(Calendar_Cal_WeekNumbers, MyFrame::OnCalShowWeekNumbers)
@@ -276,6 +280,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #ifdef __WXGTK20__
     EVT_UPDATE_UI(Calendar_Cal_Monday, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_Holidays, MyFrame::OnUpdateUIGenericOnly)
+    EVT_UPDATE_UI(Calendar_Cal_LimitDates, MyFrame::OnUpdateUIGenericOnly)
 #endif
     EVT_UPDATE_UI(Calendar_Cal_Special, MyFrame::OnUpdateUIGenericOnly)
     EVT_UPDATE_UI(Calendar_Cal_SurroundWeeks, MyFrame::OnUpdateUIGenericOnly)
@@ -384,6 +389,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuCal->Append(Calendar_Cal_Month, wxT("&Month can be changed\tCtrl-M"),
                     wxT("Allow changing the month in the calendar"),
                     true);
+    menuCal->AppendCheckItem(Calendar_Cal_LimitDates, wxT("Toggle date ra&nge\tCtrl-N"),
+                    wxT("Limit the valid dates"));
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SetDate, wxT("Call &SetDate(2005-12-24)"), wxT("Set date to 2005-12-24."));
     menuCal->Append(Calendar_Cal_Today, wxT("Call &Today()"), wxT("Set to the current date."));
@@ -420,6 +427,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuBar->Check(Calendar_Cal_Monday, true);
     menuBar->Check(Calendar_Cal_Holidays, true);
     menuBar->Check(Calendar_Cal_Month, true);
+    menuBar->Check(Calendar_Cal_LimitDates, false);
 
 #if wxUSE_DATEPICKCTRL
     menuBar->Check(Calendar_DatePicker_ShowCentury, true);
@@ -470,6 +478,11 @@ void MyFrame::OnCalHolidays(wxCommandEvent& event)
 void MyFrame::OnCalSpecial(wxCommandEvent& event)
 {
     m_panel->HighlightSpecial(GetMenuBar()->IsChecked(event.GetId()));
+}
+
+void MyFrame::OnCalLimitDates(wxCommandEvent& event)
+{
+    m_panel->LimitDateRange(GetMenuBar()->IsChecked(event.GetId()));
 }
 
 void MyFrame::OnCalAllowMonth(wxCommandEvent& event)
@@ -773,6 +786,40 @@ void MyPanel::HighlightSpecial(bool on)
     m_calendar->Refresh();
 }
 
+// Toggle a restricted date range to the six months centered on today's date.
+void MyPanel::LimitDateRange(bool on)
+{
+    if ( on )
+    {
+        // limit the choice of date to 3 months around today
+        const wxDateSpan diff = wxDateSpan::Months(3);
+        const wxDateTime today = wxDateTime::Today();
+
+        // Set the restricted date range.
+        if ( m_calendar->SetDateRange(today - diff, today + diff) )
+        {
+            wxLogStatus("Date range limited to 3 months around today.");
+        }
+        else
+        {
+            wxLogWarning("Date range not supported.");
+        }
+    }
+    else // off
+    {
+        // Remove the date restrictions.
+        if ( m_calendar->SetDateRange() )
+        {
+            wxLogStatus("Date choice is unlimited now.");
+        }
+        else
+        {
+            wxLogWarning("Date range not supported.");
+        }
+    }
+
+    m_calendar->Refresh();
+}
 
 // ----------------------------------------------------------------------------
 // MyDialog
