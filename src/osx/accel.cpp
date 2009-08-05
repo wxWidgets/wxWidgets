@@ -19,8 +19,6 @@
     #include "wx/string.h"
 #endif
 
-#ifndef __WXUNIVERSAL__
-
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 
 // ----------------------------------------------------------------------------
@@ -107,7 +105,5 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 
     return -1;
 }
-
-#endif
 
 #endif // wxUSE_ACCEL

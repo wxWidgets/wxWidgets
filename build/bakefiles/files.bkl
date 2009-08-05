@@ -2168,40 +2168,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_LOWLEVEL_SRC" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
     <if cond="PLATFORM_MACOSX=='1'">
-    src/osx/accel.cpp
     src/osx/artmac.cpp
-    src/osx/bmpbuttn_osx.cpp
     src/osx/brush.cpp
-    src/osx/button_osx.cpp
-    src/osx/checkbox_osx.cpp
-    src/osx/checklst_osx.cpp
-    src/osx/choice_osx.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/gauge_osx.cpp
     src/osx/imaglist.cpp
-    src/osx/listbox_osx.cpp
-    src/osx/menu_osx.cpp
-    src/osx/menuitem_osx.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
-    src/osx/notebook_osx.cpp
     src/osx/palette.cpp
     src/osx/pen.cpp
-    src/osx/printdlg_osx.cpp
-    src/osx/radiobox_osx.cpp
-    src/osx/radiobut_osx.cpp
-    src/osx/scrolbar_osx.cpp
-    src/osx/slider_osx.cpp
-    src/osx/spinbutt_osx.cpp
-    src/osx/spinctrl_osx.cpp
-    src/osx/srchctrl_osx.cpp
-    src/osx/statbox_osx.cpp
-    src/osx/statline_osx.cpp
-    src/osx/stattext_osx.cpp
-    src/osx/textctrl_osx.cpp
-    src/osx/tglbtn_osx.cpp
-    src/osx/toolbar_osx.cpp
     src/osx/toplevel_osx.cpp
     src/osx/utils_osx.cpp
     <!-- src/osx/treectrl.cpp -->
@@ -2233,12 +2208,38 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
+    <!-- Common controls implementation -->
+    src/osx/bmpbuttn_osx.cpp
+    src/osx/button_osx.cpp
+    src/osx/checkbox_osx.cpp
+    src/osx/checklst_osx.cpp
+    src/osx/choice_osx.cpp
+    src/osx/gauge_osx.cpp
+    src/osx/listbox_osx.cpp
+    src/osx/menu_osx.cpp
+    src/osx/menuitem_osx.cpp
+    src/osx/notebook_osx.cpp
+    src/osx/printdlg_osx.cpp
+    src/osx/radiobox_osx.cpp
+    src/osx/radiobut_osx.cpp
+    src/osx/scrolbar_osx.cpp
+    src/osx/slider_osx.cpp
+    src/osx/spinbutt_osx.cpp
+    src/osx/spinctrl_osx.cpp
+    src/osx/srchctrl_osx.cpp
+    src/osx/statbox_osx.cpp
+    src/osx/statline_osx.cpp
+    src/osx/stattext_osx.cpp
+    src/osx/textctrl_osx.cpp
+    src/osx/tglbtn_osx.cpp
+    src/osx/toolbar_osx.cpp
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
     <!-- other shared files -->
+    src/osx/accel.cpp
     src/osx/carbon/clipbrd.cpp
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
