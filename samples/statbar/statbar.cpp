@@ -161,6 +161,8 @@ class MyFrame : public wxMDIParentFrame
 
     void OnSetStatusField(wxCommandEvent& event);
     void OnSetStatusText(wxCommandEvent& event);
+    void OnPushStatusText(wxCommandEvent& event);
+    void OnPopStatusText(wxCommandEvent& event);
 
     void OnResetFieldsWidth(wxCommandEvent& event);
     void OnSetStatusFields(wxCommandEvent& event);
@@ -217,6 +219,8 @@ enum
     StatusBar_SetFields = wxID_HIGHEST+1,
     StatusBar_SetField,
     StatusBar_SetText,
+    StatusBar_PushText,
+    StatusBar_PopText,
     StatusBar_SetFont,
     StatusBar_ResetFieldsWidth,
 
@@ -254,6 +258,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
     EVT_MENU(StatusBar_SetField, MyFrame::OnSetStatusField)
     EVT_MENU(StatusBar_SetText, MyFrame::OnSetStatusText)
+    EVT_MENU(StatusBar_PushText, MyFrame::OnPushStatusText)
+    EVT_MENU(StatusBar_PopText, MyFrame::OnPopStatusText)
     EVT_MENU(StatusBar_SetFont, MyFrame::OnSetStatusFont)
     EVT_MENU(StatusBar_ResetFieldsWidth, MyFrame::OnResetFieldsWidth)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
@@ -367,6 +373,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                         "Set the number of field used by the next commands.");
     statbarMenu->Append(StatusBar_SetText, wxT("Set field &text\tCtrl-T"),
                         wxT("Set the text of the selected field."));
+    statbarMenu->Append(StatusBar_PushText, "P&ush field text\tCtrl-P",
+                        "Push a message on top the selected field.");
+    statbarMenu->Append(StatusBar_PopText, "&Pop field text\tShift-Ctrl-P",
+                        "Restore the previous contents of the selected field.");
     statbarMenu->AppendSeparator();
 
     statbarMenu->Append(StatusBar_SetFields, wxT("&Set field count\tCtrl-C"),
@@ -508,6 +518,39 @@ void MyFrame::OnSetStatusText(wxCommandEvent& WXUNUSED(event))
         return;
 
     sb->SetStatusText(txt, m_field);
+}
+
+// the current depth of the stack used by Push/PopStatusText()
+static int gs_depth = 0;
+
+void MyFrame::OnPushStatusText(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+    if (!sb)
+        return;
+
+    static int s_countPush = 0;
+    sb->PushStatusText(wxString::Format
+                       (
+                            "Pushed message #%d (depth = %d)",
+                            ++s_countPush, ++gs_depth
+                       ), m_field);
+}
+
+void MyFrame::OnPopStatusText(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+    if (!sb)
+        return;
+
+    if ( !gs_depth )
+    {
+        wxLogStatus("No message to pop.");
+        return;
+    }
+
+    gs_depth--;
+    sb->PopStatusText(m_field);
 }
 
 void MyFrame::OnSetStatusFont(wxCommandEvent& WXUNUSED(event))
