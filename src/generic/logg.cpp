@@ -371,7 +371,7 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
                 wxFrame *pFrame = NULL;
 
                 // check if the frame was passed to us explicitly
-                wxUIntPtr ptr = NULL;
+                wxUIntPtr ptr = 0;
                 if ( info.GetNumValue(wxLOG_KEY_FRAME, &ptr) )
                 {
                     pFrame = static_cast<wxFrame *>(wxUIntToPtr(ptr));
