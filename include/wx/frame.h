@@ -210,6 +210,9 @@ protected:
 #if wxUSE_STATUSBAR && (wxUSE_MENUS || wxUSE_TOOLBAR)
     // the saved status bar text overwritten by DoGiveHelp()
     wxString m_oldStatusText;
+
+    // the last help string we have shown in the status bar
+    wxString m_lastHelpShown;
 #endif
 
 #if wxUSE_STATUSBAR
