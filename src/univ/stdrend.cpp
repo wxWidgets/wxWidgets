@@ -892,6 +892,8 @@ void wxStdRenderer::DrawStatusField(wxDC& dc,
         DrawBorder(dc, wxBORDER_RAISED, rect, flags, &rectIn);
     else if ( style != wxSB_FLAT )
         DrawBorder(dc, wxBORDER_STATIC, rect, flags, &rectIn);
+    else
+        rectIn = rect;
 
     rectIn.Deflate(GetStatusBarFieldMargins());
 
