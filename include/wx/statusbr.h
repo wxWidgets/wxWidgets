@@ -57,14 +57,14 @@ class WXDLLIMPEXP_CORE wxStatusBarPane
 
 public:
     wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0)
-        : m_nStyle(style), m_nWidth(width) 
+        : m_nStyle(style), m_nWidth(width)
         { m_arrStack.Add(wxEmptyString); m_bEllipsized=false; }
-        
+
     int GetWidth() const
         { return m_nWidth; }
     int GetStyle() const
         { return m_nStyle; }
-        
+
     const wxArrayString& GetStack() const
         { return m_arrStack; }
 
@@ -72,7 +72,7 @@ public:
     bool IsEllipsized() const
         { return m_bEllipsized; }
 
-    // NOTE: there are no setters in wxStatusBarPane; 
+    // NOTE: there are no setters in wxStatusBarPane;
     //       use wxStatusBar functions to modify a wxStatusBarPane
 
 protected:
@@ -114,7 +114,7 @@ public:
     // field text
     // ----------
 
-    // NOTE: even if it is not pure virtual, SetStatusText() must be overloaded by 
+    // NOTE: even if it is not pure virtual, SetStatusText() must be overloaded by
     //       the derived classes to update the given text in the native control
     virtual void SetStatusText(const wxString& text, int number = 0)
         { m_panes[number].GetStack().Last() = text; }
@@ -136,7 +136,7 @@ public:
     // negative width according to the abs value of the width (field with width
     // -2 grows twice as much as one with width -1 &c)
     virtual void SetStatusWidths(int n, const int widths[]);
-    
+
     int GetStatusWidth(int n) const
         { return m_panes[n].GetWidth(); }
 
@@ -148,7 +148,7 @@ public:
     // appears flat or wxSB_POPOUT to make the field appear raised.
     // Setting field styles only works on wxMSW
     virtual void SetStatusStyles(int n, const int styles[]);
-    
+
     int GetStatusStyle(int n) const
         { return m_panes[n].GetStyle(); }
 
@@ -164,18 +164,18 @@ public:
     // get the dimensions of the horizontal and vertical borders
     virtual int GetBorderX() const = 0;
     virtual int GetBorderY() const = 0;
-    
+
     wxSize GetBorders() const
         { return wxSize(GetBorderX(), GetBorderY()); }
 
     // miscellaneous
     // -------------
-    
+
     const wxStatusBarPane& GetField(int n) const
         { return m_panes[n]; }
-    
+
     // wxWindow overrides:
-    
+
     // don't want status bars to accept the focus at all
     virtual bool AcceptsFocus() const { return false; }
 
@@ -194,7 +194,7 @@ protected:
             wxWindow::DoSetToolTip(tip);
         }
 #endif
-   
+
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
 
@@ -202,7 +202,7 @@ protected:
 
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
-    
+
     // an internal utility used to keep track of which panes have labels
     // which were last rendered as ellipsized...
     void SetEllipsizedFlag(int n, bool ellipsized)

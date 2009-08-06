@@ -8,7 +8,7 @@
 
 /**
     @class wxStatusBarPane
-    
+
     A status bar pane data container used by wxStatusBar.
 
     @library{wxcore}
@@ -33,14 +33,14 @@ public:
         Returns the pane style.
     */
     int GetStyle() const;
-    
+
     /**
         Returns the stack of strings pushed on this pane.
-        
+
         Note that this stack does include also the string currently displayed in this pane
         as the version stored in the native status bar control is possibly ellipsized.
-        
-        Also note that GetStack().Last() is the top of the stack (i.e. the string shown 
+
+        Also note that GetStack().Last() is the top of the stack (i.e. the string shown
         in the status bar).
     */
     const wxArrayString& GetStack() const;
@@ -52,7 +52,7 @@ public:
     A status bar is a narrow window that can be placed along the bottom of a frame
     to give small amounts of status information. It can contain one or more fields,
     one or more of which can be variable length according to the size of the window.
-    
+
     wxStatusBar also maintains an independent stack of status texts for each field
     (see PushStatusText() and PopStatusText()).
 
@@ -76,8 +76,8 @@ public:
         Replace the end of the status texts with an ellipsis when the status text
         widths exceed the status bar pane's widths (uses wxControl::Ellipsize).
     @style{wxSTB_DEFAULT_STYLE}
-        The default style: includes 
-        @c wxSTB_SIZEGRIP|wxSTB_SHOW_TIPS|wxSTB_ELLIPSIZE_END|wxFULL_REPAINT_ON_RESIZE. 
+        The default style: includes
+        @c wxSTB_SIZEGRIP|wxSTB_SHOW_TIPS|wxSTB_ELLIPSIZE_END|wxFULL_REPAINT_ON_RESIZE.
     @endStyleTable
 
     @remarks
@@ -144,26 +144,26 @@ public:
         @see wxRect
     */
     virtual bool GetFieldRect(int i, wxRect& rect) const;
-    
+
     /**
-        Returns the number of fields in the status bar. 
+        Returns the number of fields in the status bar.
     */
     int GetFieldsCount() const;
-    
+
     /**
         Returns the wxStatusBarPane representing the @a n-th field.
     */
     const wxStatusBarPane& GetField(int n) const;
-    
+
     /**
         Returns the horizontal and vertical borders used when rendering the field
         text inside the field area.
-        
+
         Note that the rect returned by GetFieldRect() already accounts for the
         presence of horizontal and vertical border returned by this function.
     */
     wxSize GetBorders() const;
-    
+
     /**
         Returns the string associated with a status bar field.
 
@@ -180,25 +180,25 @@ public:
     /**
         Returns the stack of strings pushed (see PushStatusText()) on the
         @a n-th field.
-        
+
         See wxStatusBarPane::GetStack() for more info.
     */
     const wxArrayString& GetStatusStack(int n) const;
 
     /**
         Returns the width of the @a n-th field.
-        
+
         See wxStatusBarPane::GetWidth() for more info.
     */
     int GetStatusWidth(int n) const;
 
     /**
         Returns the style of the @a n-th field.
-        
+
         See wxStatusBarPane::GetStyle() for more info.
     */
     int GetStatusStyle(int n) const;
-        
+
     /**
         Sets the field text to the top of the stack, and pops the stack of saved
         strings.
@@ -243,7 +243,7 @@ public:
             The number of fields in the status bar. Must be equal to the
             number passed to SetFieldsCount() the last time it was called.
         @param styles
-            Contains an array of @a n integers with the styles for each field. 
+            Contains an array of @a n integers with the styles for each field.
             There are three possible styles:
             - @c wxSB_NORMAL (default): The field appears sunken with a standard 3D border.
             - @c wxSB_FLAT: No border is painted around the field so that it appears flat.
@@ -253,7 +253,7 @@ public:
 
     /**
         Sets the status text for the @a i-th field.
-        
+
         The given text will replace the current text. Note that unlike PushStatusText()
         this function won't save the current text (and calling PopStatusText() won't
         restore it!).

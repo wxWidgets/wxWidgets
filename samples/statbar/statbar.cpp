@@ -163,7 +163,7 @@ class MyFrame : public wxMDIParentFrame
     void OnSetStatusTexts(wxCommandEvent& event);
     void OnSetStatusFont(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
-    
+
     void OnSetPaneStyle(wxCommandEvent& event);
     void OnSetStyle(wxCommandEvent& event);
 
@@ -207,7 +207,7 @@ enum
     // menu items
     StatusBar_Quit = wxID_EXIT,
     StatusBar_About = wxID_ABOUT,
-    
+
     StatusBar_SetFields = wxID_HIGHEST+1,
     StatusBar_SetTexts,
     StatusBar_SetFont,
@@ -220,7 +220,7 @@ enum
     StatusBar_SetPaneStyleNormal,
     StatusBar_SetPaneStyleFlat,
     StatusBar_SetPaneStyleRaised,
-    
+
     StatusBar_SetStyleSizeGrip,
     StatusBar_SetStyleEllipsizeStart,
     StatusBar_SetStyleEllipsizeMiddle,
@@ -254,7 +254,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_SetPaneStyleNormal, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleFlat, MyFrame::OnSetPaneStyle)
     EVT_MENU(StatusBar_SetPaneStyleRaised, MyFrame::OnSetPaneStyle)
-    
+
     EVT_MENU(StatusBar_SetStyleSizeGrip, MyFrame::OnSetStyle)
     EVT_MENU(StatusBar_SetStyleEllipsizeStart, MyFrame::OnSetStyle)
     EVT_MENU(StatusBar_SetStyleEllipsizeMiddle, MyFrame::OnSetStyle)
@@ -343,7 +343,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(StatusBar_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     wxMenu *statbarMenu = new wxMenu;
-    
+
     wxMenu *statbarStyleMenu = new wxMenu;
     statbarStyleMenu->Append(StatusBar_SetStyleSizeGrip, wxT("wxSTB_SIZE_GRIP"), wxT("Toggles the wxSTB_SIZE_GRIP style"), true);
     statbarStyleMenu->Append(StatusBar_SetStyleShowTips, wxT("wxSTB_SHOW_TIPS"), wxT("Toggles the wxSTB_SHOW_TIPS style"), true);
@@ -413,7 +413,7 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatusBarKind kind, long style)
             statbarNew = new wxStatusBar(this, wxID_ANY, style, "wxStatusBar");
             statbarNew->SetFieldsCount(2);
             break;
-        
+
         case StatBar_Custom:
             statbarNew = new MyStatusBar(this, style);
             break;
@@ -440,7 +440,7 @@ void MyFrame::OnUpdateForDefaultStatusbar(wxUpdateUIEvent& event)
     wxStatusBar *sb = GetStatusBar();
     if (!sb)
         return;
-    
+
     event.Enable(sb->GetName() == "wxStatusBar");
 }
 
@@ -540,7 +540,7 @@ void MyFrame::OnResetFieldsWidth(wxCommandEvent& WXUNUSED(event))
     wxStatusBar *pStat = GetStatusBar();
     if (!pStat)
         return;
-    
+
     int n = pStat->GetFieldsCount();
     pStat->SetStatusWidths(n, NULL);
     for (int i=0; i<n; i++)
@@ -615,7 +615,7 @@ void MyFrame::OnSetPaneStyle(wxCommandEvent& event)
             m_statbarPaneStyle = wxSB_RAISED;
             break;
     }
-    
+
     ApplyPaneStyle();
 }
 
@@ -624,7 +624,7 @@ void MyFrame::ApplyPaneStyle()
     wxStatusBar *sb = GetStatusBar();
     if (!sb)
         return;
-    
+
     int fields = sb->GetFieldsCount();
     int *styles = new int[fields];
 
@@ -672,7 +672,7 @@ void MyFrame::OnSetStyle(wxCommandEvent& event)
         oldStyle = GetStatusBar()->GetWindowStyle();
 
 #define STB_ELLIPSIZE_MASK  (wxSTB_ELLIPSIZE_START|wxSTB_ELLIPSIZE_MIDDLE|wxSTB_ELLIPSIZE_END)
-    
+
     long newStyle = oldStyle;
     long newStyleBit = 0;
     switch (event.GetId())
@@ -697,7 +697,7 @@ void MyFrame::OnSetStyle(wxCommandEvent& event)
             newStyle &= ~STB_ELLIPSIZE_MASK;
             break;
     }
-    
+
     newStyle = event.IsChecked() ? (newStyle | newStyleBit) :
                                    (newStyle & ~newStyleBit);
     if (newStyle != oldStyle)

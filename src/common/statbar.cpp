@@ -195,7 +195,7 @@ void wxStatusBarBase::PushStatusText(const wxString& text, int number)
     m_panes[number].m_arrStack.push_back(text);
 
     SetStatusText(text, number);
-        // update current status text (which will possibly be ellipsized) 
+        // update current status text (which will possibly be ellipsized)
         // also in the native control
 
     // SetStatusText() typically has an optimization built-in to avoid flickering
