@@ -141,7 +141,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
     }
 }
 
-void wxStatusBarUniv::RefreshField(int i)
+void wxStatusBarUniv::DoUpdateStatusText(int i)
 {
     wxRect rect;
     if ( GetFieldRect(i, rect) )
@@ -149,27 +149,6 @@ void wxStatusBarUniv::RefreshField(int i)
         RefreshRect(rect);
     }
 }
-
-// ----------------------------------------------------------------------------
-// fields text
-// ----------------------------------------------------------------------------
-
-void wxStatusBarUniv::SetStatusText(const wxString& text, int number)
-{
-    wxCHECK_RET( number >= 0 && (size_t)number < m_panes.GetCount(),
-                 wxT("invalid status bar field index in SetStatusText()") );
-
-    if ( text == GetStatusText(number) )
-    {
-        // nothing changed
-        return;
-    }
-
-    wxStatusBarBase::SetStatusText(text, number);
-
-    RefreshField(number);
-}
-
 
 // ----------------------------------------------------------------------------
 // fields count/widths

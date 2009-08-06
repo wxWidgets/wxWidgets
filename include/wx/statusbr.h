@@ -52,41 +52,51 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 
 class WXDLLIMPEXP_CORE wxStatusBarPane
 {
-    // only wxStatusBarBase can access our internal members and modify them:
-    friend class WXDLLIMPEXP_FWD_CORE wxStatusBarBase;
-
 public:
     wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0)
         : m_nStyle(style), m_nWidth(width)
-        { m_arrStack.Add(wxEmptyString); m_bEllipsized=false; }
+        { m_bEllipsized = false; }
 
-    int GetWidth() const
-        { return m_nWidth; }
-    int GetStyle() const
-        { return m_nStyle; }
+    int GetWidth() const { return m_nWidth; }
+    int GetStyle() const { return m_nStyle; }
+    wxString GetText() const { return m_text; }
 
-    const wxArrayString& GetStack() const
-        { return m_arrStack; }
 
-    // implementation-only getter:
+    // implementation-only from now on
+    // -------------------------------
+
     bool IsEllipsized() const
         { return m_bEllipsized; }
+    void SetIsEllipsized(bool isEllipsized) { m_bEllipsized = isEllipsized; }
 
-    // NOTE: there are no setters in wxStatusBarPane;
-    //       use wxStatusBar functions to modify a wxStatusBarPane
+    void SetWidth(int width) { m_nWidth = width; }
+    void SetStyle(int style) { m_nStyle = style; }
 
-protected:
+    // set text, return true if it changed or false if it was already set to
+    // this value
+    bool SetText(const wxString& text);
+
+    // save the existing text on top of our stack and make the new text
+    // current; return true if the text really changed
+    bool PushText(const wxString& text);
+
+    // restore the message saved by the last call to Push() (unless it was
+    // changed by an intervening call to SetText()) and return true if we
+    // really restored anything
+    bool PopText();
+
+private:
     int m_nStyle;
-    int m_nWidth;     // the width maybe negative, indicating a variable-width field
+    int m_nWidth;     // may be negative, indicating a variable-width field
+    wxString m_text;
 
-    // this is the array of the stacked strings of this pane; note that this
-    // stack does include also the string currently displayed in this pane
-    // as the version stored in the native status bar control is possibly
-    // ellipsized; note that m_arrStack.Last() is the top of the stack
-    // (i.e. the string shown in the status bar)
+    // the array used to keep the previous values of this pane after a
+    // PushStatusText() call, its top element is the value to restore after the
+    // next PopStatusText() call while the currently shown value is always in
+    // m_text
     wxArrayString m_arrStack;
 
-    // was the m_arrStack.Last() string shown in the status bar control ellipsized?
+    // is the currently shown value shown with ellipsis in the status bar?
     bool m_bEllipsized;
 };
 
@@ -114,15 +124,12 @@ public:
     // field text
     // ----------
 
-    // NOTE: even if it is not pure virtual, SetStatusText() must be overloaded by
-    //       the derived classes to update the given text in the native control
-    virtual void SetStatusText(const wxString& text, int number = 0)
-        { m_panes[number].GetStack().Last() = text; }
-    virtual wxString GetStatusText(int number = 0) const
-        { return m_panes[number].GetStack().Last(); }
-    const wxArrayString& GetStatusStack(int n) const
-        { return m_panes[n].GetStack(); }
+    // just change or get the currently shown text
+    void SetStatusText(const wxString& text, int number = 0);
+    wxString GetStatusText(int number = 0) const;
 
+    // change the currently shown text to the new one and save the current
+    // value to be restored by the next call to PopStatusText()
     void PushStatusText(const wxString& text, int number = 0);
     void PopStatusText(int number = 0);
 
@@ -183,6 +190,10 @@ public:
     virtual bool CanBeOutsideClientArea() const { return true; }
 
 protected:
+    // called after the status bar pane text changed and should update its
+    // display
+    virtual void DoUpdateStatusText(int number) = 0;
+
 
     // wxWindow overrides:
 
@@ -193,8 +204,7 @@ protected:
                          "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
             wxWindow::DoSetToolTip(tip);
         }
-#endif
-
+#endif // wxUSE_TOOLTIPS
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
 
@@ -203,10 +213,10 @@ protected:
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
 
-    // an internal utility used to keep track of which panes have labels
-    // which were last rendered as ellipsized...
-    void SetEllipsizedFlag(int n, bool ellipsized)
-        { m_panes[n].m_bEllipsized = ellipsized; }
+    // should be called to remember if the pane text is currently being show
+    // ellipsized or not
+    void SetEllipsizedFlag(int n, bool isEllipsized);
+
 
     // the array with the pane infos:
     wxStatusBarPaneArray m_panes;

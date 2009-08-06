@@ -31,13 +31,13 @@ class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
     virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
     virtual void DrawField(wxDC& dc, int i, int textHeight);
 
-    virtual void SetStatusText(const wxString& text, int number = 0);
-
     // Implementation
     virtual void MacHiliteChanged();
     void OnPaint(wxPaintEvent& event);
 
 protected:
+    virtual void DoUpdateStatusText(int number = 0);
+
     DECLARE_EVENT_TABLE()
 };
 

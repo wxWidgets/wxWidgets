@@ -160,35 +160,17 @@ wxSize wxStatusBarGeneric::DoGetBestSize() const
     return wxSize(width, height);
 }
 
-void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
+void wxStatusBarGeneric::DoUpdateStatusText(int number)
 {
-    wxASSERT_MSG( number >= 0, wxT("negative number of fields in wxStatusBar?") );
+    wxRect rect;
+    GetFieldRect(number, rect);
 
-    // this will result in a call to SetStatusWidths() and thus an update to our
-    // m_widthsAbs cache
-    wxStatusBarBase::SetFieldsCount(number, widths);
-}
+    Refresh(true, &rect);
 
-void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
-{
-    wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
-                 wxT("invalid status bar field index") );
-
-    wxString oldText = GetStatusText(number);
-    if (oldText != text)
-    {
-        wxStatusBarBase::SetStatusText(text, number);
-
-        wxRect rect;
-        GetFieldRect(number, rect);
-
-        Refresh(true, &rect);
-
-        // it's common to show some text in the status bar before starting a
-        // relatively lengthy operation, ensure that the text is shown to the
-        // user immediately and not after the lengthy operation end
-        Update();
-    }
+    // it's common to show some text in the status bar before starting a
+    // relatively lengthy operation, ensure that the text is shown to the
+    // user immediately and not after the lengthy operation end
+    Update();
 }
 
 void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])

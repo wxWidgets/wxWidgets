@@ -40,28 +40,17 @@ public:
 
     virtual ~wxStatusBar();
 
-    // a status line can have several (<256) fields numbered from 0
+    // implement base class methods
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
-
-    // each field of status line has it's own text
-    virtual void SetStatusText(const wxString& text, int number = 0);
-
-    // set status line fields' widths
     virtual void SetStatusWidths(int n, const int widths_field[]);
-
-    // set status line fields' styles
     virtual void SetStatusStyles(int n, const int styles[]);
-
-    // sets the minimal vertical size of the status bar
     virtual void SetMinHeight(int height);
-
-    // get the position and size of the field's internal bounding rectangle
     virtual bool GetFieldRect(int i, wxRect& rect) const;
 
-    // get the border size
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
 
+    // override some wxWindow virtual methods too
     virtual bool SetFont(const wxFont& font);
 
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
@@ -69,9 +58,8 @@ public:
                                     WXLPARAM lParam);
 
 protected:
-    void CopyFieldsWidth(const int widths[]);
-    void SetFieldsWidth();
-    void UpdateFieldText(int nField);
+    // implement base class pure virtual method
+    virtual void DoUpdateStatusText(int number);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
@@ -81,7 +69,10 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result);
 #endif
 
-    // used by UpdateFieldText
+    // implementation of the public SetStatusWidths()
+    void MSWUpdateFieldsWidths();
+
+    // used by DoUpdateStatusText()
     wxClientDC *m_pDC;
 
     // the tooltips used when wxSTB_SHOW_TIPS is given

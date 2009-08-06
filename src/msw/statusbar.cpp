@@ -126,7 +126,7 @@ bool wxStatusBar::Create(wxWindow *parent,
     SetFieldsCount(1);
     SubclassWin(m_hWnd);
 
-    // cache the DC instance used by UpdateFieldText:
+    // cache the DC instance used by DoUpdateStatusText:
     // NOTE: create the DC before calling InheritAttributes() since
     //       it may result in a call to our SetFont()
     m_pDC = new wxClientDC(this);
@@ -182,7 +182,7 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
 
     wxStatusBarBase::SetFieldsCount(nFields, widths);
 
-    SetFieldsWidth();
+    MSWUpdateFieldsWidths();
 
     // keep in synch also our m_tooltips array
 
@@ -204,10 +204,10 @@ void wxStatusBar::SetStatusWidths(int n, const int widths[])
 {
     wxStatusBarBase::SetStatusWidths(n, widths);
 
-    SetFieldsWidth();
+    MSWUpdateFieldsWidths();
 }
 
-void wxStatusBar::SetFieldsWidth()
+void wxStatusBar::MSWUpdateFieldsWidths()
 {
     if ( m_panes.IsEmpty() )
         return;
@@ -243,26 +243,10 @@ void wxStatusBar::SetFieldsWidth()
     delete [] pWidths;
 
 
-    // FIXME: we may want to call UpdateFieldText() here since we may need to (de)ellipsize status texts
+    // FIXME: we may want to call DoUpdateStatusText() here since we may need to (de)ellipsize status texts
 }
 
-void wxStatusBar::SetStatusText(const wxString& strText, int nField)
-{
-    wxCHECK_RET( (nField >= 0) && ((size_t)nField < m_panes.GetCount()),
-                 "invalid statusbar field index" );
-
-    if ( strText == GetStatusText(nField) )
-    {
-        // don't call StatusBar_SetText() to avoid flicker
-        return;
-    }
-
-    wxStatusBarBase::SetStatusText(strText, nField);
-
-    UpdateFieldText(nField);
-}
-
-void wxStatusBar::UpdateFieldText(int nField)
+void wxStatusBar::DoUpdateStatusText(int nField)
 {
     if (!m_pDC)
         return;
@@ -482,7 +466,7 @@ void wxStatusBar::DoMoveWindow(int x, int y, int width, int height)
     }
 
     // adjust fields widths to the new size
-    SetFieldsWidth();
+    MSWUpdateFieldsWidths();
 
     // we have to trigger wxSizeEvent if there are children window in status
     // bar because GetFieldRect returned incorrect (not updated) values up to
@@ -580,7 +564,7 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     if ( nMsg == WM_SIZE && needsEllipsization )
     {
         for (int i=0; i<GetFieldsCount(); i++)
-            UpdateFieldText(i);
+            DoUpdateStatusText(i);
             // re-set the field text, in case we need to ellipsize
             // (or de-ellipsize) some parts of it
     }

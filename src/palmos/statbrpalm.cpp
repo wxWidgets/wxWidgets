@@ -127,22 +127,10 @@ void wxStatusBarPalm::SetFieldsWidth()
     DeleteStatusBuffer();
 }
 
-void wxStatusBarPalm::SetStatusText(const wxString& strText, int nField)
+void wxStatusBarPalm::DoUpdateStatusText(int nField)
 {
-    wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
-                 wxT("invalid statusbar field index") );
-
     SetStatusBufferText(strText,nField);
     DrawStatusBar();
-}
-
-wxString wxStatusBarPalm::GetStatusText(int nField) const
-{
-    wxCHECK_MSG( (nField >= 0) && (nField < m_nFields), wxEmptyString,
-                 wxT("invalid statusbar field index") );
-
-    wxString text;
-    return text;
 }
 
 void wxStatusBarPalm::DrawStatusBar()

@@ -35,15 +35,9 @@ public:
     int GetStyle() const;
 
     /**
-        Returns the stack of strings pushed on this pane.
-
-        Note that this stack does include also the string currently displayed in this pane
-        as the version stored in the native status bar control is possibly ellipsized.
-
-        Also note that GetStack().Last() is the top of the stack (i.e. the string shown
-        in the status bar).
-    */
-    const wxArrayString& GetStack() const;
+        Returns the text currently shown in this pane.
+     */
+    wxString GetText() const;
 };
 
 /**
@@ -178,14 +172,6 @@ public:
     virtual wxString GetStatusText(int i = 0) const;
 
     /**
-        Returns the stack of strings pushed (see PushStatusText()) on the
-        @a n-th field.
-
-        See wxStatusBarPane::GetStack() for more info.
-    */
-    const wxArrayString& GetStatusStack(int n) const;
-
-    /**
         Returns the width of the @a n-th field.
 
         See wxStatusBarPane::GetWidth() for more info.
@@ -200,16 +186,21 @@ public:
     int GetStatusStyle(int n) const;
 
     /**
-        Sets the field text to the top of the stack, and pops the stack of saved
-        strings.
+        Restores the text to the value it had before the last call to
+        PushStatusText().
+
+        Notice that if SetStatusText() had been called in the meanwhile,
+        PopStatusText() will not change the text, i.e. it does not override
+        explicit changes to status text but only restores the saved text if it
+        hadn't been changed since.
 
         @see PushStatusText()
     */
     void PopStatusText(int field = 0);
 
     /**
-        Saves the current field text in a per-field stack, and sets the field text
-        to the string passed as argument.
+        Saves the current field text in a per-field stack, and sets the field
+        text to the string passed as argument.
 
         @see PopStatusText()
     */
@@ -254,9 +245,12 @@ public:
     /**
         Sets the status text for the @a i-th field.
 
-        The given text will replace the current text. Note that unlike PushStatusText()
-        this function won't save the current text (and calling PopStatusText() won't
-        restore it!).
+        The given text will replace the current text.
+
+        Note that if PushStatusText() had been called before the new text will
+        also replace the last saved value to make sure that the next call to
+        PopStatusText() doesn't restore the old value, which was overwritten by
+        the call to this function.
 
         @param text
             The text to be set. Use an empty string ("") to clear the field.

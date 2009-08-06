@@ -44,20 +44,9 @@ public:
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
-    // Create status line
-    virtual void SetFieldsCount(int number = 1,
-                                const int *widths = (const int *) NULL);
-
-    // Set status line text
-    virtual void SetStatusText(const wxString& text, int number = 0);
-
-    // Set status line widths
+    // implement base class methods
     virtual void SetStatusWidths(int n, const int widths_field[]);
-
-    // Get the position and size of the field's internal bounding rectangle
     virtual bool GetFieldRect(int i, wxRect& rect) const;
-
-    // sets the minimal vertical size of the status bar
     virtual void SetMinHeight(int height);
 
     virtual int GetBorderX() const { return m_borderX; }
@@ -68,8 +57,10 @@ public:
 
     int GetFieldFromPoint(const wxPoint& point) const;
 
-protected:      // event handlers
+protected:
+    virtual void DoUpdateStatusText(int number);
 
+    // event handlers
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
 
