@@ -67,6 +67,7 @@
     #include "wx/mdi.h"
 #endif // USE_MDI_PARENT_FRAME
 
+static const char *SAMPLE_DIALOGS_TITLE = "wxWidgets statbar sample";
 
 // ----------------------------------------------------------------------------
 // resources
@@ -158,9 +159,11 @@ class MyFrame : public wxMDIParentFrame
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnSetStatusField(wxCommandEvent& event);
+    void OnSetStatusText(wxCommandEvent& event);
+
     void OnResetFieldsWidth(wxCommandEvent& event);
     void OnSetStatusFields(wxCommandEvent& event);
-    void OnSetStatusTexts(wxCommandEvent& event);
     void OnSetStatusFont(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
 
@@ -186,6 +189,9 @@ private:
 
     int m_statbarPaneStyle;
 
+    // the index of the field used by some commands
+    int m_field;
+
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -209,7 +215,8 @@ enum
     StatusBar_About = wxID_ABOUT,
 
     StatusBar_SetFields = wxID_HIGHEST+1,
-    StatusBar_SetTexts,
+    StatusBar_SetField,
+    StatusBar_SetText,
     StatusBar_SetFont,
     StatusBar_ResetFieldsWidth,
 
@@ -245,7 +252,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
-    EVT_MENU(StatusBar_SetTexts, MyFrame::OnSetStatusTexts)
+    EVT_MENU(StatusBar_SetField, MyFrame::OnSetStatusField)
+    EVT_MENU(StatusBar_SetText, MyFrame::OnSetStatusText)
     EVT_MENU(StatusBar_SetFont, MyFrame::OnSetStatusFont)
     EVT_MENU(StatusBar_ResetFieldsWidth, MyFrame::OnResetFieldsWidth)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
@@ -331,6 +339,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(sample));
 
     m_statbarPaneStyle = wxSB_NORMAL;
+    m_field = 1;
 
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
@@ -354,10 +363,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     statbarMenu->Append(StatusBar_SetPaneStyle, wxT("Status bar style"), statbarStyleMenu);
     statbarMenu->AppendSeparator();
 
+    statbarMenu->Append(StatusBar_SetField, "Set active field &number\tCtrl-N",
+                        "Set the number of field used by the next commands.");
+    statbarMenu->Append(StatusBar_SetText, wxT("Set field &text\tCtrl-T"),
+                        wxT("Set the text of the selected field."));
+    statbarMenu->AppendSeparator();
+
     statbarMenu->Append(StatusBar_SetFields, wxT("&Set field count\tCtrl-C"),
                         wxT("Set the number of status bar fields"));
-    statbarMenu->Append(StatusBar_SetTexts, wxT("&Set field text\tCtrl-T"),
-                        wxT("Set the text to display for each status bar field"));
     statbarMenu->Append(StatusBar_SetFont, wxT("&Set field font\tCtrl-F"),
                         wxT("Set the font to use for rendering status bar fields"));
 
@@ -444,21 +457,57 @@ void MyFrame::OnUpdateForDefaultStatusbar(wxUpdateUIEvent& event)
     event.Enable(sb->GetName() == "wxStatusBar");
 }
 
-void MyFrame::OnSetStatusTexts(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnSetStatusField(wxCommandEvent& WXUNUSED(event))
 {
     wxStatusBar *sb = GetStatusBar();
     if (!sb)
         return;
 
-    wxString txt;
-    for (int i=0; i<sb->GetFieldsCount(); i++)
-    {
-        txt =
-            wxGetTextFromUser(wxString::Format("Enter the text for the %d-th field:", i+1),
-                              "Input field text", "A dummy test string", this);
+    long rc = wxGetNumberFromUser
+              (
+                "Configure the field index to be used by the set, push "
+                "and pop text commands in the menu.\n"
+                "\n"
+                "0 corresponds to the first field, 1 to the second one "
+                "and so on.",
+                "Field &index:",
+                SAMPLE_DIALOGS_TITLE,
+                m_field,
+                0,
+                sb->GetFieldsCount() - 1,
+                NULL
+              );
 
-        sb->SetStatusText(txt, i);
-    }
+    if ( rc == -1 )
+        return;
+
+    m_field = rc;
+
+    wxLogStatus("Status bar text will be set for field #%d", m_field);
+}
+
+void MyFrame::OnSetStatusText(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+    if (!sb)
+        return;
+
+    wxString txt = wxGetTextFromUser
+                   (
+                        wxString::Format
+                        (
+                            "Enter the text from for the field #%d",
+                            m_field
+                        ),
+                        SAMPLE_DIALOGS_TITLE,
+                        sb->GetStatusText(m_field),
+                        this
+                   );
+
+    if ( txt.empty() )
+        return;
+
+    sb->SetStatusText(txt, m_field);
 }
 
 void MyFrame::OnSetStatusFont(wxCommandEvent& WXUNUSED(event))
@@ -485,7 +534,7 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
                 (
                     wxT("Select the number of fields in the status bar"),
                     wxT("Fields:"),
-                    wxT("wxWidgets statusbar sample"),
+                    SAMPLE_DIALOGS_TITLE,
                     sb->GetFieldsCount(),
                     1, 5,
                     this
@@ -528,6 +577,9 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
 
             SetStatusText(s, n);
         }
+
+        if ( m_field >= nFields )
+            m_field = nFields - 1;
     }
     else
     {
