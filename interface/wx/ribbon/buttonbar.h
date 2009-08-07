@@ -7,28 +7,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
-    Buttons on a ribbon button bar can each be one of three different kinds.
-*/
-enum wxRibbonButtonBarButtonKind
-{
-    /**
-        Normal button with a clickable area which causes some generic action.
-    */
-    wxRIBBON_BUTTONBAR_BUTTON_NORMAL    = 1 << 0,
-    
-    /**
-        Dropdown button with a clickable area which causes a dropdown menu.
-    */
-    wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN  = 1 << 1,
-    
-    /**
-        Button with two clickable areas - one which causes a dropdown menu, and
-        one which causes a generic action.
-    */
-    wxRIBBON_BUTTONBAR_BUTTON_HYBRID    = wxRIBBON_BUTTONBAR_BUTTON_NORMAL | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN,
-};
-
-/**
     Flags for button bar button size and state.
     
     Buttons on a ribbon button bar can each come in three sizes: small, medium,
@@ -111,7 +89,14 @@ enum wxRibbonButtonBarButtonState
     
     A ribbon button bar is similar to a traditional toolbar. It contains one or
     more buttons (button bar buttons, not wxButtons), each of which has a label
-    and an icon.
+    and an icon. It differs from a wxRibbonToolBar in several ways:
+      @li Individual buttons can grow and contract.
+      @li Buttons have labels as well as bitmaps.
+      @li Bitmaps are typically larger (at least 32x32 pixels) on a button bar
+        compared to a tool bar (which typically has 16x15).
+      @li There is no grouping of buttons on a button bar
+      @li A button bar typically has a border around each individual button,
+        whereas a tool bar typically has a border around each group of buttons.
     
     @beginEventEmissionTable{wxRibbonButtonBarEvent}
     @event{EVT_RIBBONBUTTONBAR_CLICKED(id, func)}

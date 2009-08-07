@@ -198,6 +198,21 @@ public:
     int GetActivePage() const;
     
     /**
+        Get a page by index.
+        
+        NULL will be returned if the given index is out of range.
+    */
+    wxRibbonPage* GetPage(int n);
+    
+    /**
+        Dismiss the expanded panel of the currently active page.
+        
+        Calls and returns the value fromwxRibbonPage::DismissExpandedPanel()
+        for the currently active page, or @false if there is no active page.
+    */
+    bool DismissExpandedPanel();
+    
+    /**
         Perform initial layout and size calculations of the bar and its
         children. This must be called after all of the bar's children have been
         created (and their children created, etc.) - if it is not, then windows

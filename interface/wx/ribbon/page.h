@@ -110,6 +110,19 @@ public:
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
     
     /**
+        Dismiss the current externally expanded panel, if there is one.
+        
+        When a ribbon panel automatically minimises, it can be externally
+        expanded into a floating window. When the user clicks a button in such
+        a panel, the panel should generally re-minimise. Event handlers for
+        buttons on ribbon panels should call this method to achieve this
+        behaviour.
+        
+        @return @true if a panel was minimised, @false otherwise.
+    */
+    bool DismissExpandedPanel();
+    
+    /**
         Perform a full re-layout of all panels on the page.
         
         Should be called after panels are added to the page, or the sizing

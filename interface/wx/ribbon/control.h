@@ -13,6 +13,15 @@
     ribbon charactertics of having a ribbon art provider, and (optionally)
     non-continous resizing. Despite what the name may imply, it is not the
     top-level control for creating a ribbon interface - that is wxRibbonBar.
+  
+    Ribbon controls often have a region which is "transparent", and shows the
+    contents of the ribbon page or panel behind it. If implementing a new
+    ribbon control, then it may be useful to realise that this effect is done
+    by the art provider when painting the background of the control, and hence
+    in the paint handler for the new control, you should call a draw background
+    method on the art provider (wxRibbonArtProvider::DrawButtonBarBackground()
+    and wxRibbonArtProvider::DrawToolBarBackground() typically just redraw what
+    is behind the rectangle being painted) if you want transparent regions.
 
     @library{wxribbon}
     @category{ribbon}
@@ -29,7 +38,7 @@ public:
         Constructor.
         
         If @a parent is a wxRibbonControl with a non-NULL art provider, then
-        the art provider of this control is set to that.
+        the art provider of new control is set to that of @a parent.
     */
     wxRibbonControl(wxWindow *parent, wxWindowID id,
                     const wxPoint& pos = wxDefaultPosition,
@@ -41,6 +50,9 @@ public:
         Set the art provider to be used. In many cases, setting the art provider
         will also set the art provider on all child windows which extend
         wxRibbonControl.
+        
+        In most cases, controls will not take ownership of the given pointer,
+        with the notable exception being wxRibbonBar::SetArtProvider().
     */
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     

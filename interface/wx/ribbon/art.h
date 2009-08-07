@@ -26,6 +26,11 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE,
     wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
+    wxRIBBON_ART_TOOL_GROUP_SEPARATION_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE,
+    wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE,
     wxRIBBON_ART_PANEL_LABEL_FONT,
     wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
@@ -35,14 +40,41 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BORDER_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BORDER_COLOUR,
+    wxRIBBON_ART_GALLERY_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR,
+    wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TAB_CTRL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
     wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_BORDER_COLOUR,
@@ -51,8 +83,10 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_LABEL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR,
@@ -68,6 +102,21 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR,
     wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOLBAR_BORDER_COLOUR,
+    wxRIBBON_ART_TOOLBAR_HOVER_BORDER_COLOUR,
+    wxRIBBON_ART_TOOLBAR_FACE_COLOUR,
+    wxRIBBON_ART_TOOL_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TOOL_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TOOL_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TOOL_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOL_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TOOL_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TOOL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
 };
 
 /**
@@ -100,6 +149,31 @@ enum wxRibbonScrollButtonStyle
 
   /** A mask to extract purpose from a combination of flags. */
     wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
+};
+
+/**
+    Buttons on a ribbon button bar and tools on a ribbon tool bar can each be
+    one of three different kinds.
+*/
+enum wxRibbonButtonKind
+{
+    /**
+        Normal button or tool with a clickable area which causes some generic
+        action.
+    */
+    wxRIBBON_BUTTON_NORMAL    = 1 << 0,
+    
+    /**
+        Dropdown button or tool with a clickable area which typically causes a
+        dropdown menu.
+    */
+    wxRIBBON_BUTTON_DROPDOWN  = 1 << 1,
+    
+    /**
+        Button or tool with two clickable areas - one which causes a dropdown
+        menu, and one which causes a generic action.
+    */
+    wxRIBBON_BUTTON_HYBRID    = wxRIBBON_BUTTON_NORMAL | wxRIBBON_BUTTON_DROPDOWN,
 };
 
 /**
@@ -374,6 +448,64 @@ public:
                         const wxRect& rect) = 0;
     
     /**
+        Draw the background and chrome for a wxRibbonGallery control. This
+        should draw the border, brackground, scroll buttons, extension button,
+        and any other UI elements which are not attached to a specific gallery
+        item.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is always the gallery
+            whose background and chrome is being drawn. Attributes used during
+            drawing like the gallery hover state and individual button states
+            can be queried from this parameter by wxRibbonGallery::IsHovered(),
+            wxRibbonGallery::GetExtensionButtonState(),
+            wxRibbonGallery::GetUpButtonState(), and
+            wxRibbonGallery::GetDownButtonState().
+        @param rect
+            The rectangle within which to draw. This rectangle is the entire
+            area of the gallery control, not just the client rectangle.
+    */
+    virtual void DrawGalleryBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect) = 0;
+
+    /**
+        Draw the background of a single item in a wxRibbonGallery control. This
+        is painted on top of a gallery background, and behind the items bitmap.
+        Unlike DrawButtonBarButton() and DrawTool(), it is not expected to draw
+        the item bitmap - that is done by the gallery control itself.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is always the gallery
+            which contains the item being drawn.
+        @param rect
+            The rectangle within which to draw. The size of this rectangle will
+            be the size of the item's bitmap, expanded by gallery item padding
+            values (wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE,
+            wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE,
+            wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE, and
+            wxRIBBON_ART_GALLERY_BITMAP_PADDING_BOTTOM_SIZE). The drawing
+            rectangle will be entirely within a rectangle on the same device
+            context previously painted with DrawGalleryBackground().
+        @param item
+            The item whose background is being painted. Typically the
+            background will vary if the item is hovered, active, or selected;
+            wxRibbonGallery::GetSelection(), wxRibbonGallery::GetActiveItem(),
+            and wxRibbonGallery::GetHoveredItem() can be called to test if the
+            given item is in one of these states.
+    */
+    virtual void DrawGalleryItemBackground(
+                        wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect,
+                        wxRibbonGalleryItem* item) = 0;
+    
+    /**
         Draw a minimised ribbon panel.
         
         @param dc
@@ -448,6 +580,80 @@ public:
                         const wxString& label,
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small) = 0;
+    
+    /**
+        Draw the background for a wxRibbonToolBar control.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The which is being drawn onto. In most cases this will be a
+            wxRibbonToolBar, but it doesn't have to be.
+        @param rect
+            The rectangle within which to draw. Some of this rectangle will
+            later be drawn over using DrawToolGroupBackground() and DrawTool(),
+            but not all of it will (unless there is only a single group of
+            tools).
+    */
+    virtual void DrawToolBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
+
+    /**
+        Draw the background for a group of tools on a wxRibbonToolBar control.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto. In most cases this will be a
+            wxRibbonToolBar, but it doesn't have to be.
+        @param rect
+            The rectangle within which to draw. This rectangle is a union of
+            the individual tools' rectangles. As there are no gaps between
+            tools, this rectangle will be painted over exactly once by calls to
+            DrawTool(). The group background could therefore be painted by
+            DrawTool(), though it can be conceptually easier and more efficient
+            to draw it all at once here. The rectangle will be entirely within
+            a rectangle on the same device context previously painted with
+            DrawToolBarBackground().
+    */
+    virtual void DrawToolGroupBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
+
+    /**
+        Draw a single tool (for a wxRibbonToolBar control).
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto. In most cases this will be a
+            wxRibbonToolBar, but it doesn't have to be.
+        @param rect
+            The rectangle within which to draw. The size of this rectangle will
+            at least the size returned by GetToolSize(), and the height of it
+            will be equal for all tools within the same group. The rectangle
+            will be entirely within a rectangle on the same device context
+            previously painted with DrawToolGroupBackground().
+        @param bitmap
+            The bitmap to use as the tool's foreground. If the tool is a hybrid
+            or dropdown tool, then the foreground should also contain a
+            standard dropdown button.
+        @param kind
+            The kind of tool to draw (normal, dropdown, or hybrid).
+        @param state
+            A combination of wxRibbonToolBarToolState flags giving the state of
+            the tool and it's relative position within a tool group.
+    */
+    virtual void DrawTool(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        const wxBitmap& bitmap,
+                        wxRibbonButtonKind kind,
+                        long state) = 0;
 
     /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon
@@ -564,6 +770,59 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize size,
                         wxPoint* client_offset) = 0;
+    
+    /**
+        Calculate the size of a wxRibbonGallery control for a given client
+        size. This should increment the given size by enough to fit the gallery
+        border, buttons, and any other chrome.
+        
+        @param dc
+            A device context to use if one is required for size calculations.
+        @param wnd
+            The gallery in question.
+        @param client_size
+            The client size.
+            
+        @sa GetGalleryClientSize()
+    */
+    virtual wxSize GetGallerySize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize client_size) = 0;
+
+    /**
+        Calculate the client size of a wxRibbonGallery control for a given
+        size. This should act as the inverse to GetGallerySize(), and decrement
+        the given size by enough to fir the gallery border, buttons, and other
+        chrome.
+        
+        @param dc
+            A device context to use if one is required for size calculations.
+        @param wnd
+            The gallery in question.
+        @param size
+            The overall size to calculate the client size for.
+        @param[out] client_offset
+            The position within the given size at which the returned client
+            size begins.
+        @param[out] scroll_up_button
+            The rectangle within the given size which the scroll up button
+            occupies.
+        @param[out] scroll_down_button
+            The rectangle within the given size which the scroll down button
+            occupies.
+        @param[out] extension_button
+            The rectangle within the given size which the extension button
+            occupies.
+    */
+    virtual wxSize GetGalleryClientSize(
+                        wxDC& dc,
+                        const wxRibbonGallery* wnd,
+                        wxSize size,
+                        wxPoint* client_offset,
+                        wxRect* scroll_up_button,
+                        wxRect* scroll_down_button,
+                        wxRect* extension_button) = 0;
 
     /**
         Calculate the portion of a page background which needs to be redrawn
@@ -647,4 +906,32 @@ public:
                         const wxRibbonPanel* wnd,
                         wxSize* desired_bitmap_size,
                         wxDirection* expanded_panel_direction) = 0;
+    
+    /**
+        Calculate the size of a tool within a wxRibbonToolBar.
+        
+        @param dc
+            A device context to use when one is required for size calculations.
+        @param wnd
+            The window onto which the tool will eventually be drawn.
+        @param bitmap_size
+            The size of the tool's foreground bitmap.
+        @param kind
+            The kind of tool (normal, dropdown, or hybrid).
+        @param is_first
+            @true if the tool is the first within its group. @false otherwise.
+        @param is_last
+            @true if the tool is the last within its group. @false otherwise.
+        @param[out] dropdown_region
+            For dropdown and hybrid tools, the region within the returned
+            size which counts as the dropdown part.
+    */
+    virtual wxSize GetToolSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        wxSize bitmap_size,
+                        wxRibbonButtonKind kind,
+                        bool is_first,
+                        bool is_last,
+                        wxRect* dropdown_region) = 0;
 };
