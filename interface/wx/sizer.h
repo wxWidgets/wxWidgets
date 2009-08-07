@@ -1647,25 +1647,29 @@ public:
 /**
     @class wxStaticBoxSizer
 
-    wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static box around 
+    wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static box around
     the sizer.
 
-    The static box may be either created independently or the sizer may create it 
+    The static box may be either created independently or the sizer may create it
     itself as a convenience. In any case, the sizer owns the wxStaticBox control
     and will delete it in the wxStaticBoxSizer destructor.
-    
-    Note that since wxWidgets 2.9.0 you are encouraged to build the windows which are
-    placed inside wxStaticBoxes as children of the wxStaticBox itself:
+
+    Note that since wxWidgets 2.9.1 you are encouraged to create the windows
+    which are added to wxStaticBoxSizer as children of wxStaticBox itself, see
+    this class documentation for more details.
+
+    Example of use of this class:
     @code
-        ...
-        wxStaticBoxSizer *sz = new wxStaticBoxSizer(wxVERTICAL, parentWindow, "StaticBox");
-        sz->Add(new wxStaticText(sz->GetStaticBox(), "This window is a child of the staticbox"));
-        ...
+        void MyFrame::CreateControls()
+        {
+            wxPanel *panel = new wxPanel(this);
+            ...
+            wxStaticBoxSizer *sz = new wxStaticBoxSizer(wxVERTICAL, panel, "Box");
+            sz->Add(new wxStaticText(sz->GetStaticBox(), wxID_ANY,
+                                     "This window is a child of the staticbox"));
+            ...
+        }
     @endcode
-    
-    Creating the windows which are placed inside wxStaticBoxes as siblings of the
-    wxStaticBox is still allowed but it's deprecated as it gives some problems
-    (e.g. relative to tooltips) on some ports.
 
     @library{wxcore}
     @category{winlayout}

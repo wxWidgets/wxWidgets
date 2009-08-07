@@ -12,20 +12,33 @@
     A static box is a rectangle drawn around other windows to denote
     a logical grouping of items.
 
-    Note that since wxWidgets 2.9.0 you are encouraged to build the windows which are
-    placed inside wxStaticBoxes as children of the wxStaticBox itself:
-    @code
-        ...
-        wxStaticBox *stbox = new wxStaticBox(parentWindow, wxID_ANY, "StaticBox");
+    Note that while the previous versions required that windows appearing
+    inside a static box be created as its siblings (i.e. use the same parent as
+    the static box itself), since wxWidgets 2.9.1 it is also possible to create
+    them as children of wxStaticBox itself and you are actually encouraged to
+    do it like this if compatibility with the previous versions is not
+    important.
 
-        new wxStaticText(stbox, "This window is a child of the staticbox");
-        ...
+    So the new recommended way to create static box is:
+    @code
+        void MyFrame::CreateControls()
+        {
+            wxPanel *panel = new wxPanel(this);
+            wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
+
+            new wxStaticText(box, wxID_ANY "This window is a child of the staticbox");
+            ...
+        }
     @endcode
-    
-    Creating the windows which are placed inside wxStaticBoxes as siblings of the
-    wxStaticBox is still allowed but it's deprecated as it gives some problems
-    (e.g. relative to tooltips) on some ports.
-    
+
+    While the compatible -- and now deprecated -- way is
+    @code
+            wxStaticBox *box = new wxStaticBox(panel, wxID_ANY, "StaticBox");
+
+            new wxStaticText(panel, wxID_ANY "This window is a child of the panel");
+            ...
+    @endcode
+
     Also note that there is a specialized wxSizer class (wxStaticBoxSizer) which can
     be used as an easier way to pack items into a static box.
 
