@@ -1074,6 +1074,10 @@
 				RelativePath="..\..\include\wx\ribbon\panel.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\toolbar.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -1114,6 +1118,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\ribbon\panel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\ribbon\toolbar.cpp"
 				>
 			</File>
 		</Filter>

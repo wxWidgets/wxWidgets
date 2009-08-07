@@ -21,6 +21,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/gallery.h"
+#include "wx/ribbon/toolbar.h"
 #include "wx/sizer.h"
 #include "wx/menu.h"
 #include "wx/dcbuffer.h"
@@ -79,6 +80,12 @@ public:
     void OnDefaultProvider(wxRibbonButtonBarEvent& evt);
     void OnAUIProvider(wxRibbonButtonBarEvent& evt);
     void OnMSWProvider(wxRibbonButtonBarEvent& evt);
+    void OnNew(wxRibbonToolBarEvent& evt);
+    void OnNewDropdown(wxRibbonToolBarEvent& evt);
+    void OnPrint(wxRibbonToolBarEvent& evt);
+    void OnPrintDropdown(wxRibbonToolBarEvent& evt);
+    void OnRedoDropdown(wxRibbonToolBarEvent& evt);
+    void OnUndoDropdown(wxRibbonToolBarEvent& evt);
 
 protected:
     wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
@@ -135,10 +142,19 @@ EVT_RIBBONGALLERY_HOVER_CHANGED(ID_PRIMARY_COLOUR, MyFrame::OnHoveredColourChang
 EVT_RIBBONGALLERY_HOVER_CHANGED(ID_SECONDARY_COLOUR, MyFrame::OnHoveredColourChange)
 EVT_RIBBONGALLERY_SELECTED(ID_PRIMARY_COLOUR, MyFrame::OnPrimaryColourSelect)
 EVT_RIBBONGALLERY_SELECTED(ID_SECONDARY_COLOUR, MyFrame::OnSecondaryColourSelect)
+EVT_RIBBONTOOLBAR_CLICKED(wxID_NEW, MyFrame::OnNew)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_NEW, MyFrame::OnNewDropdown)
+EVT_RIBBONTOOLBAR_CLICKED(wxID_PRINT, MyFrame::OnPrint)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_PRINT, MyFrame::OnPrintDropdown)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_REDO, MyFrame::OnRedoDropdown)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_UNDO, MyFrame::OnUndoDropdown)
 EVT_BUTTON(ID_PRIMARY_COLOUR, MyFrame::OnColourGalleryButton)
 EVT_BUTTON(ID_SECONDARY_COLOUR, MyFrame::OnColourGalleryButton)
 END_EVENT_TABLE()
 
+#include "align_center.xpm"
+#include "align_left.xpm"
+#include "align_right.xpm"
 #include "aui_style.xpm"
 #include "auto_crop_selection.xpm"
 #include "auto_crop_selection_small.xpm"
@@ -161,7 +177,25 @@ MyFrame::MyFrame()
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"));
-        new wxRibbonPanel(home, wxID_ANY, wxT("Empty Panel"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON | wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+        wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, wxID_ANY);
+        toolbar->AddTool(wxID_ANY, align_left_xpm);
+        toolbar->AddTool(wxID_ANY, align_center_xpm);
+        toolbar->AddTool(wxID_ANY, align_right_xpm);
+        toolbar->AddSeparator();
+        toolbar->AddHybridTool(wxID_NEW, wxArtProvider::GetBitmap(wxART_NEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_OPEN, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_SAVE, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_FILE_SAVE_AS, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddSeparator();
+        toolbar->AddDropdownTool(wxID_UNDO, wxArtProvider::GetBitmap(wxART_UNDO, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddDropdownTool(wxID_REDO, wxArtProvider::GetBitmap(wxART_REDO, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddSeparator();
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddSeparator();
+        toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)));
+        toolbar->SetRows(2, 3);
 
         wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
@@ -417,6 +451,56 @@ void MyFrame::OnPolygonDropdown(wxRibbonButtonBarEvent& evt)
     menu.Append(wxID_ANY, wxT("Octogon (8 sided)"));
     menu.Append(wxID_ANY, wxT("Nonagon (9 sided)"));
     menu.Append(wxID_ANY, wxT("Decagon (10 sided)"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnNew(wxRibbonToolBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("New button clicked."));
+}
+
+void MyFrame::OnNewDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("New Document"));
+    menu.Append(wxID_ANY, wxT("New Template"));
+    menu.Append(wxID_ANY, wxT("New Mail"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnPrint(wxRibbonToolBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Print button clicked."));
+}
+
+void MyFrame::OnPrintDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("Print"));
+    menu.Append(wxID_ANY, wxT("Preview"));
+    menu.Append(wxID_ANY, wxT("Options"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnRedoDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("Redo E"));
+    menu.Append(wxID_ANY, wxT("Redo F"));
+    menu.Append(wxID_ANY, wxT("Redo G"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnUndoDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("Undo C"));
+    menu.Append(wxID_ANY, wxT("Undo B"));
+    menu.Append(wxID_ANY, wxT("Undo A"));
 
     evt.PopupMenu(&menu);
 }

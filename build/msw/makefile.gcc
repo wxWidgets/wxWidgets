@@ -1248,7 +1248,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_control.o \
 	$(OBJS)\ribbondll_gallery.o \
 	$(OBJS)\ribbondll_page.o \
-	$(OBJS)\ribbondll_panel.o
+	$(OBJS)\ribbondll_panel.o \
+	$(OBJS)\ribbondll_toolbar.o
 RIBBONLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1267,7 +1268,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_control.o \
 	$(OBJS)\ribbonlib_gallery.o \
 	$(OBJS)\ribbonlib_page.o \
-	$(OBJS)\ribbonlib_panel.o
+	$(OBJS)\ribbonlib_panel.o \
+	$(OBJS)\ribbonlib_toolbar.o
 PROPGRIDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -14878,6 +14880,9 @@ $(OBJS)\ribbondll_page.o: ../../src/ribbon/page.cpp
 $(OBJS)\ribbondll_panel.o: ../../src/ribbon/panel.cpp
 	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\ribbondll_toolbar.o: ../../src/ribbon/toolbar.cpp
+	$(CXX) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\ribbonlib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14906,6 +14911,9 @@ $(OBJS)\ribbonlib_page.o: ../../src/ribbon/page.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ribbonlib_panel.o: ../../src/ribbon/panel.cpp
+	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\ribbonlib_toolbar.o: ../../src/ribbon/toolbar.cpp
 	$(CXX) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\propgriddll_dummy.o: ../../src/common/dummy.cpp

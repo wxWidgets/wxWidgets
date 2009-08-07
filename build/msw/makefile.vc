@@ -1327,7 +1327,8 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_control.obj \
 	$(OBJS)\ribbondll_gallery.obj \
 	$(OBJS)\ribbondll_page.obj \
-	$(OBJS)\ribbondll_panel.obj
+	$(OBJS)\ribbondll_panel.obj \
+	$(OBJS)\ribbondll_toolbar.obj
 RIBBONLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.pdb \
@@ -1349,7 +1350,8 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_control.obj \
 	$(OBJS)\ribbonlib_gallery.obj \
 	$(OBJS)\ribbonlib_page.obj \
-	$(OBJS)\ribbonlib_panel.obj
+	$(OBJS)\ribbonlib_panel.obj \
+	$(OBJS)\ribbonlib_toolbar.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_424)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).pdb \
@@ -14628,6 +14630,9 @@ $(OBJS)\ribbondll_page.obj: ..\..\src\ribbon\page.cpp
 $(OBJS)\ribbondll_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\panel.cpp
 
+$(OBJS)\ribbondll_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
+
 $(OBJS)\ribbonlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -14657,6 +14662,9 @@ $(OBJS)\ribbonlib_page.obj: ..\..\src\ribbon\page.cpp
 
 $(OBJS)\ribbonlib_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\panel.cpp
+
+$(OBJS)\ribbonlib_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
 $(OBJS)\propgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

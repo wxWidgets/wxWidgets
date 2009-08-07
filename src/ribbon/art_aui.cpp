@@ -23,6 +23,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/gallery.h"
+#include "wx/ribbon/toolbar.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -83,6 +84,10 @@ wxRibbonArtProvider* wxRibbonAUIArtProvider::Clone() const
     copy->m_gallery_button_active_background_brush = m_gallery_button_active_background_brush;
     copy->m_gallery_button_hover_background_brush = m_gallery_button_hover_background_brush;
     copy->m_gallery_button_disabled_background_brush = m_gallery_button_disabled_background_brush;
+
+    copy->m_toolbar_hover_borden_pen = m_toolbar_hover_borden_pen;
+    copy->m_tool_hover_background_brush = m_tool_hover_background_brush;
+    copy->m_tool_active_background_brush = m_tool_active_background_brush;
 
     return copy;
 }
@@ -248,6 +253,13 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     SetColour(wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR, wxColour(128, 128, 128));
     SetColour(wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR, LikeSecondary(0.1));
     SetColour(wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR, LikeSecondary(0.1));
+    m_toolbar_border_pen = m_tab_border_pen;
+    SetColour(wxRIBBON_ART_TOOLBAR_FACE_COLOUR, LikePrimary(0.1));
+    m_tool_background_colour = m_page_hover_background_colour;
+    m_tool_background_gradient_colour = m_page_hover_background_gradient_colour;
+    m_toolbar_hover_borden_pen = m_button_bar_hover_border_pen;
+    m_tool_hover_background_brush = m_button_bar_hover_background_brush;
+    m_tool_active_background_brush = m_button_bar_active_background_brush;
 
 #undef LikeSecondary
 #undef LikePrimary
@@ -871,7 +883,7 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxRect& rect,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
                         const wxBitmap& bitmap_large,
@@ -885,7 +897,7 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
         wxRect bg_rect(rect);
         bg_rect.Deflate(1);
 
-        if(kind == wxRIBBON_BUTTONBAR_BUTTON_HYBRID)
+        if(kind == wxRIBBON_BUTTON_HYBRID)
         {
             switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
             {
@@ -946,6 +958,108 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
     dc.SetTextForeground(m_button_bar_label_colour);
     DrawButtonBarButtonForeground(dc, rect, kind, state, label, bitmap_large,
         bitmap_small);
+}
+
+void wxRibbonAUIArtProvider::DrawToolBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect)
+{
+    DrawPartialPanelBackground(dc, wnd, rect);
+}
+
+void wxRibbonAUIArtProvider::DrawToolGroupBackground(
+                    wxDC& dc,
+                    wxWindow* WXUNUSED(wnd),
+                    const wxRect& rect)
+{
+    dc.SetPen(m_toolbar_border_pen);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+    wxRect bg_rect(rect);
+    bg_rect.Deflate(1);
+    dc.GradientFillLinear(bg_rect, m_tool_background_colour,
+        m_tool_background_gradient_colour, wxSOUTH);
+}
+
+void wxRibbonAUIArtProvider::DrawTool(
+            wxDC& dc,
+            wxWindow* WXUNUSED(wnd),
+            const wxRect& rect,
+            const wxBitmap& bitmap,
+            wxRibbonButtonKind kind,
+            long state)
+{
+    wxRect bg_rect(rect);
+    bg_rect.Deflate(1);
+    if((state & wxRIBBON_TOOLBAR_TOOL_LAST) == 0)
+        bg_rect.width++;
+    bool is_custom_bg = (state & (wxRIBBON_TOOLBAR_TOOL_HOVER_MASK |
+        wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)) != 0;
+    bool is_split_hybrid = kind == wxRIBBON_BUTTON_HYBRID && is_custom_bg;
+
+    // Background
+    if(is_custom_bg)
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(m_tool_hover_background_brush);
+        dc.DrawRectangle(bg_rect.x, bg_rect.y, bg_rect.width, bg_rect.height);
+        if(state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)
+        {
+            wxRect active_rect(bg_rect);
+            if(kind == wxRIBBON_BUTTON_HYBRID)
+            {
+                active_rect.width -= 8;
+                if(state & wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE)
+                {
+                    active_rect.x += active_rect.width;
+                    active_rect.width = 8;
+                }
+            }
+            dc.SetBrush(m_tool_active_background_brush);
+            dc.DrawRectangle(active_rect.x, active_rect.y, active_rect.width,
+                active_rect.height);
+        }
+    }
+
+    // Border
+    if(is_custom_bg)
+        dc.SetPen(m_toolbar_hover_borden_pen);
+    else
+        dc.SetPen(m_toolbar_border_pen);
+    if((state & wxRIBBON_TOOLBAR_TOOL_FIRST) == 0)
+    {
+        wxColour existing;
+        if(!dc.GetPixel(rect.x, rect.y + 1, &existing) ||
+            existing != m_toolbar_hover_borden_pen.GetColour())
+        {
+            dc.DrawLine(rect.x, rect.y + 1, rect.x, rect.y + rect.height - 1);
+        }
+    }
+    if(is_custom_bg)
+    {
+        wxRect border_rect(bg_rect);
+        border_rect.Inflate(1);
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(border_rect.x, border_rect.y, border_rect.width,
+            border_rect.height);
+    }
+
+    // Foreground
+    int avail_width = bg_rect.GetWidth();
+    if(kind != wxRIBBON_BUTTON_NORMAL)
+    {
+        avail_width -= 8;
+        if(is_split_hybrid)
+        {
+            dc.DrawLine(rect.x + avail_width + 1, rect.y, 
+                rect.x + avail_width + 1, rect.y + rect.height);
+        }
+        dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
+            bg_rect.y + (bg_rect.height / 2) - 2, true);
+    }
+    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetWidth()) / 2,
+        bg_rect.y + (bg_rect.height - bitmap.GetHeight()) / 2, true);
 }
 
 #endif // wxUSE_RIBBON

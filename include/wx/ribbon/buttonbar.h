@@ -15,32 +15,9 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/art.h"
 #include "wx/ribbon/control.h"
 #include "wx/dynarray.h"
-
-enum wxRibbonButtonBarButtonKind
-{
-    wxRIBBON_BUTTONBAR_BUTTON_NORMAL    = 1 << 0,
-    wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN  = 1 << 1,
-    wxRIBBON_BUTTONBAR_BUTTON_HYBRID    = wxRIBBON_BUTTONBAR_BUTTON_NORMAL | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN,
-};
-
-enum wxRibbonButtonBarButtonState
-{
-    wxRIBBON_BUTTONBAR_BUTTON_SMALL     = 0 << 0,
-    wxRIBBON_BUTTONBAR_BUTTON_MEDIUM    = 1 << 0,
-    wxRIBBON_BUTTONBAR_BUTTON_LARGE     = 2 << 0,
-    wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK = 3 << 0,
-
-    wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED    = 1 << 3,
-    wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED  = 1 << 4,
-    wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK        = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED,
-    wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE     = 1 << 5,
-    wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE   = 1 << 6,
-    wxRIBBON_BUTTONBAR_BUTTON_ACTIVE_MASK       = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE,
-    wxRIBBON_BUTTONBAR_BUTTON_DISABLED          = 1 << 7,
-    wxRIBBON_BUTTONBAR_BUTTON_STATE_MASK        = 0xF8,
-};
 
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
@@ -73,7 +50,7 @@ public:
                 const wxString& label,
                 const wxBitmap& bitmap,
                 const wxString& help_string,
-                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL);
     // NB: help_string cannot be optional as that would cause the signature
     // to be identical to the full version of AddButton when 3 arguments are
     // given.
@@ -97,7 +74,7 @@ public:
                 const wxBitmap& bitmap_small = wxNullBitmap,
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxBitmap& bitmap_small_disabled = wxNullBitmap,
-                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL,
+                wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
                 const wxString& help_string = wxEmptyString,
                 wxObject* client_data = NULL);
 

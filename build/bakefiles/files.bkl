@@ -3411,6 +3411,7 @@ src/osx/iphone/window.mm
     src/ribbon/gallery.cpp
     src/ribbon/page.cpp
     src/ribbon/panel.cpp
+    src/ribbon/toolbar.cpp
 </set>
 <set var="RIBBON_HDR" hints="files">
     wx/ribbon/art.h
@@ -3421,6 +3422,7 @@ src/osx/iphone/window.mm
     wx/ribbon/gallery.h
     wx/ribbon/page.h
     wx/ribbon/panel.h
+    wx/ribbon/toolbar.h
 </set>
 
 <!-- ====================================================================== -->

@@ -119,7 +119,7 @@ public:
     wxRibbonButtonBarButtonSizeInfo sizes[3];
     wxObject* client_data;
     int id;
-    wxRibbonButtonBarButtonKind kind;
+    wxRibbonButtonKind kind;
     long state;
 };
 
@@ -233,7 +233,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 const wxString& label,
                 const wxBitmap& bitmap,
                 const wxString& help_string,
-                wxRibbonButtonBarButtonKind kind)
+                wxRibbonButtonKind kind)
 {
     return AddButton(button_id, label, bitmap, wxNullBitmap, wxNullBitmap,
         wxNullBitmap, kind, help_string);
@@ -246,7 +246,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddDropdownButton(
                 const wxString& help_string)
 {
     return AddButton(button_id, label, bitmap, help_string,
-        wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN);
+        wxRIBBON_BUTTON_DROPDOWN);
 }
 
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddHybridButton(
@@ -256,7 +256,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddHybridButton(
                 const wxString& help_string)
 {
     return AddButton(button_id, label, bitmap, help_string,
-        wxRIBBON_BUTTONBAR_BUTTON_HYBRID);
+        wxRIBBON_BUTTON_HYBRID);
 }
     
 wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
@@ -266,7 +266,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
                 const wxBitmap& bitmap_small,
                 const wxBitmap& bitmap_disabled,
                 const wxBitmap& bitmap_small_disabled,
-                wxRibbonButtonBarButtonKind kind,
+                wxRibbonButtonKind kind,
                 const wxString& help_string,
                 wxObject* client_data)
 {

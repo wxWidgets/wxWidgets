@@ -23,6 +23,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/gallery.h"
+#include "wx/ribbon/toolbar.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -83,6 +84,7 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
     m_page_border_bottom = 3;
     m_panel_x_separation_size = 1;
     m_panel_y_separation_size = 1;
+    m_tool_group_separation_size = 3;
     m_gallery_bitmap_padding_left_size = 4;
     m_gallery_bitmap_padding_right_size = 4;
     m_gallery_bitmap_padding_top_size = 4;
@@ -207,6 +209,21 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_button_bar_active_background_colour = LikeSecondary(-9.9, 0.14, -0.14);
     m_button_bar_active_background_gradient_colour = LikeSecondary(-8.7, 0.17, -0.03);
 
+    m_toolbar_border_pen = LikePrimary(1.4, -0.21, -0.16);
+    SetColour(wxRIBBON_ART_TOOLBAR_FACE_COLOUR, LikePrimary(1.4, -0.17, -0.22));
+    m_tool_background_top_colour = LikePrimary(-1.9, -0.07, 0.06);
+    m_tool_background_top_gradient_colour = LikePrimary(1.4, 0.12, 0.08);
+    m_tool_background_colour = LikePrimary(1.4, -0.09, 0.03);
+    m_tool_background_gradient_colour = LikePrimary(1.9, 0.11, 0.09);
+    m_tool_hover_background_top_colour = LikeSecondary(3.4, 0.11, 0.16);
+    m_tool_hover_background_top_gradient_colour = LikeSecondary(-1.4, 0.04, 0.08);
+    m_tool_hover_background_colour = LikeSecondary(-1.8, 0.16, -0.12);
+    m_tool_hover_background_gradient_colour = LikeSecondary(-2.6, 0.16, 0.05);
+    m_tool_active_background_top_colour = LikeSecondary(-9.9, -0.12, -0.09);
+    m_tool_active_background_top_gradient_colour = LikeSecondary(-8.5, 0.16, -0.12);
+    m_tool_active_background_colour = LikeSecondary(-7.9, 0.16, -0.20);
+    m_tool_active_background_gradient_colour = LikeSecondary(-6.6, 0.16, -0.10);
+
 #undef LikePrimary
 #undef LikeSecondary
 
@@ -229,6 +246,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
         copy->m_gallery_down_bitmap[i] = m_gallery_down_bitmap[i];
         copy->m_gallery_extension_bitmap[i] = m_gallery_extension_bitmap[i];
     }
+    copy->m_toolbar_drop_bitmap = m_toolbar_drop_bitmap;
 
     copy->m_primary_scheme_colour = m_primary_scheme_colour;
     copy->m_secondary_scheme_colour = m_secondary_scheme_colour;
@@ -303,6 +321,7 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
     copy->m_button_bar_active_border_pen = m_button_bar_active_border_pen;
     copy->m_gallery_item_border_pen = m_gallery_item_border_pen;
+    copy->m_toolbar_border_pen = m_toolbar_border_pen;
 
     copy->m_flags = m_flags;
     copy->m_tab_separation_size = m_tab_separation_size;
@@ -346,6 +365,8 @@ int wxRibbonMSWArtProvider::GetMetric(int id) const
             return m_panel_x_separation_size;
         case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE:
             return m_panel_y_separation_size;
+        case wxRIBBON_ART_TOOL_GROUP_SEPARATION_SIZE:
+            return m_tool_group_separation_size;
         case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE:
             return m_gallery_bitmap_padding_left_size;
         case wxRIBBON_ART_GALLERY_BITMAP_PADDING_RIGHT_SIZE:
@@ -386,6 +407,9 @@ void wxRibbonMSWArtProvider::SetMetric(int id, int new_val)
             break;
         case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE:
             m_panel_y_separation_size = new_val;
+            break;
+        case wxRIBBON_ART_TOOL_GROUP_SEPARATION_SIZE:
+            m_tool_group_separation_size = new_val;
             break;
         case wxRIBBON_ART_GALLERY_BITMAP_PADDING_LEFT_SIZE:
             m_gallery_bitmap_padding_left_size = new_val;
@@ -578,6 +602,11 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
             return m_page_hover_background_colour;
         case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR:
             return m_page_hover_background_gradient_colour;
+        case wxRIBBON_ART_TOOLBAR_BORDER_COLOUR:
+        case wxRIBBON_ART_TOOLBAR_HOVER_BORDER_COLOUR:
+            return m_toolbar_border_pen.GetColour();
+        case wxRIBBON_ART_TOOLBAR_FACE_COLOUR:
+            return m_tool_face_colour;
         default:
             wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
             break;
@@ -799,6 +828,14 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR:
             m_page_hover_background_gradient_colour = colour;
+            break;
+        case wxRIBBON_ART_TOOLBAR_BORDER_COLOUR:
+        case wxRIBBON_ART_TOOLBAR_HOVER_BORDER_COLOUR:
+            m_toolbar_border_pen.SetColour(colour);
+            break;
+        case wxRIBBON_ART_TOOLBAR_FACE_COLOUR:
+            m_tool_face_colour = colour;
+            m_toolbar_drop_bitmap = wxRibbonLoadPixmap(gallery_down_xpm, colour);
             break;
         default:
             wxFAIL_MSG(wxT("Invalid Metric Ordinal"));
@@ -1697,7 +1734,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
                         const wxRect& rect,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
                         const wxBitmap& bitmap_large,
@@ -1722,7 +1759,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
         bg_rect.y += bg_rect_top.height;
         bg_rect.height -= bg_rect_top.height;
 
-        if(kind == wxRIBBON_BUTTONBAR_BUTTON_HYBRID)
+        if(kind == wxRIBBON_BUTTON_HYBRID)
         {
             switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
             {
@@ -1815,7 +1852,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
 void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                         wxDC& dc,
                         const wxRect& rect,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         long state,
                         const wxString& label,
                         const wxBitmap& bitmap_large,
@@ -1830,7 +1867,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
                 rect.x + (rect.width - bitmap_large.GetWidth()) / 2,
                 rect.y + padding, true);
             int ypos = rect.y + padding + bitmap_large.GetHeight() + padding;
-            int arrow_width = kind == wxRIBBON_BUTTONBAR_BUTTON_NORMAL ? 0 : 8;
+            int arrow_width = kind == wxRIBBON_BUTTON_NORMAL ? 0 : 8;
             wxCoord label_w, label_h;
             dc.GetTextExtent(label, &label_w, &label_h);
             if(label_w + 2 * padding <= rect.width)
@@ -1888,7 +1925,7 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
             dc.DrawText(label, x_cursor,
                 rect.y + (rect.height - label_h) / 2);
             x_cursor += label_w + 3;
-            if(kind != wxRIBBON_BUTTONBAR_BUTTON_NORMAL)
+            if(kind != wxRIBBON_BUTTON_NORMAL)
             {
                 DrawDropdownArrow(dc, x_cursor, rect.y + rect.height / 2,
                     m_button_bar_label_colour);
@@ -1899,6 +1936,127 @@ void wxRibbonMSWArtProvider::DrawButtonBarButtonForeground(
         // TODO
         break;
     }
+}
+
+void wxRibbonMSWArtProvider::DrawToolBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect)
+{
+    DrawPartialPageBackground(dc, wnd, rect);
+}
+
+void wxRibbonMSWArtProvider::DrawToolGroupBackground(
+                        wxDC& dc,
+                        wxWindow* WXUNUSED(wnd),
+                        const wxRect& rect)
+{
+    dc.SetPen(m_toolbar_border_pen);
+    wxPoint outline[9];
+    outline[0] = wxPoint(2, 0);
+    outline[1] = wxPoint(rect.width - 3, 0);
+    outline[2] = wxPoint(rect.width - 1, 2);
+    outline[3] = wxPoint(rect.width - 1, rect.height - 3);
+    outline[4] = wxPoint(rect.width - 3, rect.height - 1);
+    outline[5] = wxPoint(2, rect.height - 1);
+    outline[6] = wxPoint(0, rect.height - 3);
+    outline[7] = wxPoint(0, 2);
+    outline[8] = outline[0];
+
+    dc.DrawLines(sizeof(outline)/sizeof(wxPoint), outline, rect.x, rect.y);
+}
+
+void wxRibbonMSWArtProvider::DrawTool(
+                wxDC& dc,
+                wxWindow* WXUNUSED(wnd),
+                const wxRect& rect,
+                const wxBitmap& bitmap,
+                wxRibbonButtonKind kind,
+                long state)
+{
+    wxRect bg_rect(rect);
+    bg_rect.Deflate(1);
+    if((state & wxRIBBON_TOOLBAR_TOOL_LAST) == 0)
+        bg_rect.width++;
+    bool is_split_hybrid = (kind == wxRIBBON_BUTTON_HYBRID && (state &
+        (wxRIBBON_TOOLBAR_TOOL_HOVER_MASK | wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)));
+
+    // Background
+    wxRect bg_rect_top(bg_rect);
+    bg_rect_top.height = (bg_rect_top.height * 2) / 5;
+    wxRect bg_rect_btm(bg_rect);
+    bg_rect_btm.y += bg_rect_top.height;
+    bg_rect_btm.height -= bg_rect_top.height;
+    wxColour bg_top_colour = m_tool_background_top_colour;
+    wxColour bg_top_grad_colour = m_tool_background_top_gradient_colour;
+    wxColour bg_colour = m_tool_background_colour;
+    wxColour bg_grad_colour = m_tool_background_gradient_colour;
+    if(state & wxRIBBON_TOOLBAR_TOOL_ACTIVE_MASK)
+    {
+        bg_top_colour = m_tool_active_background_top_colour;
+        bg_top_grad_colour = m_tool_active_background_top_gradient_colour;
+        bg_colour = m_tool_active_background_colour;
+        bg_grad_colour = m_tool_active_background_gradient_colour;
+    }
+    else if(state & wxRIBBON_TOOLBAR_TOOL_HOVER_MASK)
+    {
+        bg_top_colour = m_tool_hover_background_top_colour;
+        bg_top_grad_colour = m_tool_hover_background_top_gradient_colour;
+        bg_colour = m_tool_hover_background_colour;
+        bg_grad_colour = m_tool_hover_background_gradient_colour;
+    }
+    dc.GradientFillLinear(bg_rect_top, bg_top_colour, bg_top_grad_colour, wxSOUTH);
+    dc.GradientFillLinear(bg_rect_btm, bg_colour, bg_grad_colour, wxSOUTH);
+    if(is_split_hybrid)
+    {
+        wxRect nonrect(bg_rect);
+        if(state & (wxRIBBON_TOOLBAR_TOOL_DROPDOWN_HOVERED |
+            wxRIBBON_TOOLBAR_TOOL_DROPDOWN_ACTIVE))
+        {
+            nonrect.width -= 8;
+        }
+        else
+        {
+            nonrect.x += nonrect.width - 8;
+            nonrect.width = 8;
+        }
+        wxBrush B(m_tool_hover_background_top_colour);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(B);
+        dc.DrawRectangle(nonrect.x, nonrect.y, nonrect.width, nonrect.height);
+    }
+    
+    // Border
+    dc.SetPen(m_toolbar_border_pen);
+    if(state & wxRIBBON_TOOLBAR_TOOL_FIRST)
+    {
+        dc.DrawPoint(rect.x + 1, rect.y + 1);
+        dc.DrawPoint(rect.x + 1, rect.y + rect.height - 2);
+    }
+    else
+        dc.DrawLine(rect.x, rect.y + 1, rect.x, rect.y + rect.height - 1);   
+
+    if(state & wxRIBBON_TOOLBAR_TOOL_LAST)
+    {
+        dc.DrawPoint(rect.x + rect.width - 2, rect.y + 1);
+        dc.DrawPoint(rect.x + rect.width - 2, rect.y + rect.height - 2);
+    }
+
+    // Foreground
+    int avail_width = bg_rect.GetWidth();
+    if(kind != wxRIBBON_BUTTON_NORMAL)
+    {
+        avail_width -= 8;
+        if(is_split_hybrid)
+        {
+            dc.DrawLine(rect.x + avail_width + 1, rect.y, 
+                rect.x + avail_width + 1, rect.y + rect.height);
+        }
+        dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
+            bg_rect.y + (bg_rect.height / 2) - 2, true);
+    }
+    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetWidth()) / 2,
+        bg_rect.y + (bg_rect.height - bitmap.GetHeight()) / 2, true);
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(
@@ -2124,7 +2282,7 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
 bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                         wxDC& dc,
                         wxWindow* wnd,
-                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonKind kind,
                         wxRibbonButtonBarButtonState size,
                         const wxString& label,
                         wxSize bitmap_size_large,
@@ -2143,16 +2301,16 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
         *button_size = bitmap_size_small + wxSize(6, 4);
         switch(kind)
         {
-        case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+        case wxRIBBON_BUTTON_NORMAL:
             *normal_region = wxRect(*button_size);
             *dropdown_region = wxRect(0, 0, 0, 0);
             break;
-        case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+        case wxRIBBON_BUTTON_DROPDOWN:
             *button_size += wxSize(drop_button_width, 0);
             *dropdown_region = wxRect(*button_size);
             *normal_region = wxRect(0, 0, 0, 0);
             break;
-        case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+        case wxRIBBON_BUTTON_HYBRID:
             *normal_region = wxRect(*button_size);
             *dropdown_region = wxRect(button_size->GetWidth(), 0,
                 drop_button_width, button_size->GetHeight());
@@ -2170,13 +2328,13 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             button_size->SetWidth(button_size->GetWidth() + text_size);
             switch(kind)
             {
-            case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+            case wxRIBBON_BUTTON_DROPDOWN:
                 dropdown_region->SetWidth(dropdown_region->GetWidth() + text_size);
                 break;
-            case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+            case wxRIBBON_BUTTON_HYBRID:
                 dropdown_region->SetX(dropdown_region->GetX() + text_size);
                 // no break
-            case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+            case wxRIBBON_BUTTON_NORMAL:
                 normal_region->SetWidth(normal_region->GetWidth() + text_size);
                 break;
             }
@@ -2192,7 +2350,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             dc.GetTextExtent(label, &best_width, &label_height);
             int best_num_lines = 1;
             int last_line_extra_width = 0;
-            if(kind != wxRIBBON_BUTTONBAR_BUTTON_NORMAL)
+            if(kind != wxRIBBON_BUTTON_NORMAL)
             {
                 last_line_extra_width += 8;
                 best_num_lines = 2; // label on top line, button below
@@ -2219,10 +2377,10 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             *button_size = icon_size;
             switch(kind)
             {
-            case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+            case wxRIBBON_BUTTON_DROPDOWN:
                 *dropdown_region = wxRect(icon_size);
                 break;
-            case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+            case wxRIBBON_BUTTON_HYBRID:
                 *normal_region = wxRect(icon_size);
                 normal_region->height -= 2 + label_height;
                 dropdown_region->x = 0;
@@ -2230,7 +2388,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                 dropdown_region->width = icon_size.GetWidth();
                 dropdown_region->height = icon_size.GetHeight() - normal_region->height;
                 break;
-            case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+            case wxRIBBON_BUTTON_NORMAL:
                 *normal_region = wxRect(icon_size);
                 break;
             }
@@ -2263,6 +2421,38 @@ wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
     label_size.y *= 2; // Second line for dropdown button
 
     return wxSize(wxMax(base_size.x, label_size.x), base_size.y + label_size.y);
+}
+
+wxSize wxRibbonMSWArtProvider::GetToolSize(
+                        wxDC& WXUNUSED(dc),
+                        wxWindow* WXUNUSED(wnd),
+                        wxSize bitmap_size,
+                        wxRibbonButtonKind kind,
+                        bool WXUNUSED(is_first),
+                        bool is_last,
+                        wxRect* dropdown_region)
+{
+    wxSize size(bitmap_size);
+    size.IncBy(7, 6);
+    if(is_last)
+        size.IncBy(1, 0);
+    if(kind != wxRIBBON_BUTTON_NORMAL)
+    {
+        size.IncBy(8, 0);
+        if(dropdown_region)
+        {
+            if(kind == wxRIBBON_BUTTON_DROPDOWN)
+                *dropdown_region = size;
+            else
+                *dropdown_region = wxRect(size.GetWidth() - 8, 0, 8, size.GetHeight());
+        }
+    }
+    else
+    {
+        if(dropdown_region)
+            *dropdown_region = wxRect(0, 0, 0, 0);
+    }
+    return size;
 }
 
 #endif // wxUSE_RIBBON

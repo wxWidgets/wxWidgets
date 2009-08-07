@@ -1727,7 +1727,8 @@ RIBBONDLL_OBJECTS =  \
 	ribbondll_control.o \
 	ribbondll_gallery.o \
 	ribbondll_page.o \
-	ribbondll_panel.o
+	ribbondll_panel.o \
+	ribbondll_toolbar.o
 RIBBONDLL_ODEP =  $(_____pch_wxprec_ribbondll_wx_wxprec_h_gch___depname)
 RIBBONLIB_CXXFLAGS = $(__ribbonlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1743,7 +1744,8 @@ RIBBONLIB_OBJECTS =  \
 	ribbonlib_control.o \
 	ribbonlib_gallery.o \
 	ribbonlib_page.o \
-	ribbonlib_panel.o
+	ribbonlib_panel.o \
+	ribbonlib_toolbar.o
 RIBBONLIB_ODEP =  $(_____pch_wxprec_ribbonlib_wx_wxprec_h_gch___depname)
 PROPGRIDDLL_CXXFLAGS = $(__propgriddll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -32866,6 +32868,9 @@ ribbondll_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONDLL_ODEP)
 ribbondll_panel.o: $(srcdir)/src/ribbon/panel.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
 
+ribbondll_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
+
 ribbonlib_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
 
@@ -32892,6 +32897,9 @@ ribbonlib_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONLIB_ODEP)
 
 ribbonlib_panel.o: $(srcdir)/src/ribbon/panel.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
+
+ribbonlib_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
 propgriddll_version_rc.o: $(srcdir)/src/msw/version.rc $(PROPGRIDDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_PROPGRID
