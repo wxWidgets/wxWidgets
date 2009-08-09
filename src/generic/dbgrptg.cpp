@@ -333,9 +333,9 @@ wxDebugReportDialog::wxDebugReportDialog(wxDebugReport& dbgrpt)
     // ... and the list of files in this debug report with buttons to view them
     wxSizer *sizerFileBtns = new wxBoxSizer(wxVERTICAL);
     sizerFileBtns->AddStretchSpacer(1);
-    sizerFileBtns->Add(new wxButton(this, wxID_VIEW_DETAILS, _T("&View...")),
+    sizerFileBtns->Add(new wxButton(this, wxID_VIEW_DETAILS, _("&View...")),
                         wxSizerFlags().Border(wxBOTTOM));
-    sizerFileBtns->Add(new wxButton(this, wxID_OPEN, _T("&Open...")),
+    sizerFileBtns->Add(new wxButton(this, wxID_OPEN, _("&Open...")),
                         wxSizerFlags().Border(wxTOP));
     sizerFileBtns->AddStretchSpacer(1);
 
