@@ -428,11 +428,15 @@
         class MyProperty : public wxPGProperty
         {
         public:
-            // All arguments of ctor must have a default value -
+            // Default constructor
+            MyProperty() { }
+
+            // All arguments of this ctor must have a default value -
             // use wxPG_LABEL for label and name
             MyProperty( const wxString& label = wxPG_LABEL,
                         const wxString& name = wxPG_LABEL,
                         const wxString& value = wxEmptyString )
+                : wxPGProperty(label, name)
             {
                 // m_value is wxVariant
                 m_value = value;
@@ -509,7 +513,7 @@ public:
         @code
 
         MyProperty( const wxString& label, const wxString& name, const T& value )
-            : wxPGProperty()
+            : wxPGProperty(label, name)
         {
             // Generally recommended way to set the initial value
             // (as it should work in pretty much 100% of cases).

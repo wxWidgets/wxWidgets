@@ -1038,35 +1038,16 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
 public:
     typedef wxUint32 FlagType;
 
-    /** Basic constructor.
+    /**
+        Default constructor.
     */
     wxPGProperty();
 
-    /** Constructor.
-        Non-abstract property classes should have constructor of this style:
+    /**
+        Constructor.
 
-        @code
-
-        // If T is a class, then it should be a constant reference
-        // (e.g. const T& ) instead.
-        MyProperty( const wxString& label, const wxString& name, T value )
-            : wxPGProperty()
-        {
-            // Generally recommended way to set the initial value
-            // (as it should work in pretty much 100% of cases).
-            wxVariant variant;
-            variant << value;
-            SetValue(variant);
-
-            // If has private child properties then create them here. Also
-            // set flag that indicates presence of private children. E.g.:
-            //
-            //     AddPrivateChild( new wxStringProperty("Subprop 1",
-            //                                           wxPG_LABEL,
-            //                                           value.GetSubProp1() ) );
-        }
-
-        @endcode
+        All non-abstract property classes should have a constructor with
+        the same first two arguments as this one.
     */
     wxPGProperty( const wxString& label, const wxString& name );
 
