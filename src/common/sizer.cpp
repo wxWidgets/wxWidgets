@@ -1317,22 +1317,6 @@ bool wxSizer::IsShown( size_t index ) const
 // wxGridSizer
 //---------------------------------------------------------------------------
 
-wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
-    : m_rows( rows || cols ? rows : 1 ),
-      m_cols( cols ),
-      m_vgap( vgap ),
-      m_hgap( hgap )
-{
-}
-
-wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
-    : m_rows( rows || cols ? rows : 1 ),
-      m_cols( cols ),
-      m_vgap( gap.GetHeight() ),
-      m_hgap( gap.GetWidth() )
-{
-}
-
 wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
     : m_rows( cols == 0 ? 1 : 0 ),
       m_cols( cols ),
@@ -1343,6 +1327,22 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
 
 wxGridSizer::wxGridSizer( int cols, const wxSize& gap )
     : m_rows( cols == 0 ? 1 : 0 ),
+      m_cols( cols ),
+      m_vgap( gap.GetHeight() ),
+      m_hgap( gap.GetWidth() )
+{
+}
+
+wxGridSizer::wxGridSizer( int rows, int cols, int vgap, int hgap )
+    : m_rows( rows || cols ? rows : 1 ),
+      m_cols( cols ),
+      m_vgap( vgap ),
+      m_hgap( hgap )
+{
+}
+
+wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
+    : m_rows( rows || cols ? rows : 1 ),
       m_cols( cols ),
       m_vgap( gap.GetHeight() ),
       m_hgap( gap.GetWidth() )
@@ -1541,6 +1541,20 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 // wxFlexGridSizer
 //---------------------------------------------------------------------------
 
+wxFlexGridSizer::wxFlexGridSizer( int cols, int vgap, int hgap )
+               : wxGridSizer( cols, vgap, hgap ),
+                 m_flexDirection(wxBOTH),
+                 m_growMode(wxFLEX_GROWMODE_SPECIFIED)
+{
+}
+
+wxFlexGridSizer::wxFlexGridSizer( int cols, const wxSize& gap )
+               : wxGridSizer( cols, gap ),
+                 m_flexDirection(wxBOTH),
+                 m_growMode(wxFLEX_GROWMODE_SPECIFIED)
+{
+}
+
 wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, int vgap, int hgap )
                : wxGridSizer( rows, cols, vgap, hgap ),
                  m_flexDirection(wxBOTH),
@@ -1548,8 +1562,8 @@ wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, int vgap, int hgap )
 {
 }
 
-wxFlexGridSizer::wxFlexGridSizer( int cols, int vgap, int hgap )
-               : wxGridSizer( cols, vgap, hgap ),
+wxFlexGridSizer::wxFlexGridSizer( int rows, int cols, const wxSize& gap )
+               : wxGridSizer( rows, cols, gap ),
                  m_flexDirection(wxBOTH),
                  m_growMode(wxFLEX_GROWMODE_SPECIFIED)
 {

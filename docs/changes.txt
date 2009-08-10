@@ -141,7 +141,8 @@ Changes in behaviour not resulting in compilation errors, please read this!
   easy to mistake for wxGridSizer(int rows, int cols) overload was removed, you
   will need to specify both vertical and horizontal gap if you want to use this
   overload or specify both rows and columns and the gap otherwise. Use of the
-  new constructors taking wxSize for the gap argument is preferred.
+  new constructors taking wxSize for the gap argument is preferred. The same
+  applies to wxFlexGridSizer as well.
 
 
 Changes in behaviour which may result in compilation errors

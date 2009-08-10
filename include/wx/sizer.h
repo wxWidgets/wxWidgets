@@ -730,8 +730,8 @@ public:
     wxGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
 
     // ctors specifying the number of rows and columns
-    wxGridSizer( int rows, int cols, const wxSize& gap );
     wxGridSizer( int rows, int cols, int vgap, int hgap );
+    wxGridSizer( int rows, int cols, const wxSize& gap );
 
     virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
 
@@ -794,11 +794,17 @@ enum wxFlexSizerGrowMode
 class WXDLLIMPEXP_CORE wxFlexGridSizer: public wxGridSizer
 {
 public:
-    // ctors/dtor
-    wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
-    wxFlexGridSizer( int cols, int vgap = 0, int hgap = 0 );
-    virtual ~wxFlexGridSizer();
+    // ctors specifying the number of columns only: number of rows will be
+    // deduced automatically depending on the number of sizer elements
+    wxFlexGridSizer( int cols, int vgap, int hgap );
+    wxFlexGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
 
+    // ctors specifying the number of rows and columns
+    wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
+    wxFlexGridSizer( int rows, int cols, const wxSize& gap );
+
+    // dtor
+    virtual ~wxFlexGridSizer();
 
     // set the rows/columns which will grow (the others will remain of the
     // constant initial size)

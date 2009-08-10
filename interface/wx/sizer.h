@@ -1435,17 +1435,27 @@ class wxFlexGridSizer : public wxGridSizer
 public:
     //@{
     /**
-        Constructor for a wxFlexGridSizer.
+        wxFlexGridSizer constructors.
 
-        @a rows and @a cols determine the number of columns and rows in the sizer -
-        if either of the parameters is zero, it will be calculated to form the
-        total number of children in the sizer, thus making the sizer grow
-        dynamically.
+        Usually only the number of columns in the flex grid sizer needs to be
+        specified using @a cols argument. The number of rows will be deduced
+        automatically depending on the number of the elements added to the
+        sizer. If the number of @a rows is explicitly specified (and not zero),
+        the sizer will check that it no more than @code cols*rows @endcode
+        elements are added to it.
 
-        @a vgap and @a hgap define extra space between all children.
+        The @a gap (or @a vgap and @a hgap, which correspond to the height and
+        width of the wxSize object) argument defines the size of the padding
+        between the rows (its vertical component, or @a vgap) and columns
+        (its horizontal component, or @a hgap), in pixels.
+
+        @since 2.9.1 (except for the four argument overload)
     */
-    wxFlexGridSizer(int rows, int cols, int vgap, int hgap);
-    wxFlexGridSizer(int cols, int vgap = 0, int hgap = 0);
+    wxFlexGridSizer( int cols, int vgap, int hgap );
+    wxFlexGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
+
+    wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
+    wxFlexGridSizer( int rows, int cols, const wxSize& gap );
     //@}
 
     /**
