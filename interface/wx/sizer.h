@@ -568,7 +568,7 @@ public:
 
     /**
         Inserts non-stretchable space to the sizer.
-        More readable way of calling wxSizer::Insert(size, size, 0).
+        More readable way of calling wxSizer::Insert(index, size, size).
     */
     wxSizerItem* InsertSpacer(size_t index, int size);
 
