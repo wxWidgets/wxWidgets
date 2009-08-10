@@ -391,6 +391,8 @@ All (GUI):
 - Added EVT_DATAVIEW_CACHE_HINT() event (Trigve).
 - Added wxLB_NO_SB style (implemented for MSW only; Dario Senic).
 - Added long version field to wxAboutDialogInfo (Jeff Tupper).
+- Added wxWindow::CanScroll() behaving like the old HasScrollbar() and made
+  HasScrollbar() really check for the scrollbar existence.
 
 GTK:
 

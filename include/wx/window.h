@@ -377,7 +377,7 @@ public:
         // acceptable size using which it will still look "nice" in
         // most situations)
     wxSize GetBestSize() const;
-    
+
     void GetBestSize(int *w, int *h) const
     {
         wxSize s = GetBestSize();
@@ -1160,12 +1160,15 @@ public:
     // scrollbars
     // ----------
 
-        // does the window have the scrollbar for this orientation?
-    bool HasScrollbar(int orient) const
+        // can the window have the scrollbar in this orientation?
+    bool CanScroll(int orient) const
     {
         return (m_windowStyle &
                 (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
     }
+
+        // does the window have the scrollbar in this orientation?
+    bool HasScrollbar(int orient) const;
 
         // configure the window scrollbars
     virtual void SetScrollbar( int orient,

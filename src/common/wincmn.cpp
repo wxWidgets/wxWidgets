@@ -474,7 +474,7 @@ static bool wxHasRealChildren(const wxWindowBase* win)
           node = node->GetNext() )
     {
         wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() && win->IsShown() 
+        if ( !win->IsTopLevel() && win->IsShown()
 #if wxUSE_SCROLLBAR
             && !win->IsKindOf(CLASSINFO(wxScrollBar))
 #endif
@@ -894,6 +894,20 @@ void wxWindowBase::SendSizeEventToParent(int flags)
     wxWindow * const parent = GetParent();
     if ( parent && !parent->IsBeingDeleted() )
         parent->SendSizeEvent(flags);
+}
+
+bool wxWindowBase::HasScrollbar(int orient) const
+{
+    // if scrolling in the given direction is disabled, we can't have the
+    // corresponding scrollbar no matter what
+    if ( !CanScroll(orient) )
+        return false;
+
+    const wxSize sizeVirt = GetVirtualSize();
+    const wxSize sizeClient = GetClientSize();
+
+    return orient == wxHORIZONTAL ? sizeVirt.x > sizeClient.x
+                                  : sizeVirt.y > sizeClient.y;
 }
 
 // ----------------------------------------------------------------------------

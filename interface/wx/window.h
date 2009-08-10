@@ -513,7 +513,23 @@ public:
     virtual int GetScrollThumb(int orientation) const;
 
     /**
-        Returns @true if this window has a scroll bar for this orientation.
+        Returns @true if this window can have a scroll bar in this orientation.
+
+        @param orient
+            Orientation to check, either wxHORIZONTAL or wxVERTICAL.
+
+        @since 2.9.1
+    */
+    bool CanScroll(int orient) const;
+
+    /**
+        Returns @true if this window currently has a scroll bar for this
+        orientation.
+
+        This method may return @false even when CanScroll() for the same
+        orientation returns @true, but if CanScroll() returns @false, i.e.
+        scrolling in this direction is not enabled at all, HasScrollbar()
+        always returns @false as well.
 
         @param orient
             Orientation to check, either wxHORIZONTAL or wxVERTICAL.
