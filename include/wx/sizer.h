@@ -740,13 +740,13 @@ public:
 
     void SetCols( int cols )
     {
-        wxASSERT_MSG( cols >= 0, "Number of columns must be positive");
+        wxASSERT_MSG( cols >= 0, "Number of columns must be non-negative");
         m_cols = cols;
     }
 
     void SetRows( int rows )
     {
-        wxASSERT_MSG( rows >= 0, "Number of rows must be positive");
+        wxASSERT_MSG( rows >= 0, "Number of rows must be non-negative");
         m_rows = rows;
     }
 
