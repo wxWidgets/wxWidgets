@@ -783,35 +783,28 @@ public:
     /**
         Set an item's minimum size by window, sizer, or position.
 
-        The item will be found recursively in the sizer's descendants.
         This function enables an application to set the size of an item after
         initial creation.
 
+        The @a window or @a sizer will be found recursively in the sizer's
+        descendants.
+
         @see wxSizerItem::SetMinSize()
+
+        @return
+            @true if the minimal size was successfully set or @false if the
+            item was not found.
     */
+    //@{
     bool SetItemMinSize(wxWindow* window, int width, int height);
+    bool SetItemMinSize(wxWindow* window, const wxSize& size);
 
-    /**
-        Set an item's minimum size by window, sizer, or position.
-
-        The item will be found recursively in the sizer's descendants.
-        This function enables an application to set the size of an item after
-        initial creation.
-
-        @see wxSizerItem::SetMinSize()
-    */
     bool SetItemMinSize(wxSizer* sizer, int width, int height);
+    bool SetItemMinSize(wxSizer* sizer, const wxSize& size);
 
-    /**
-        Set an item's minimum size by window, sizer, or position.
-
-        The item will be found recursively in the sizer's descendants.
-        This function enables an application to set the size of an item after
-        initial creation.
-
-        @see wxSizerItem::SetMinSize()
-    */
     bool SetItemMinSize(size_t index, int width, int height);
+    bool SetItemMinSize(size_t index, const wxSize& size);
+    //@}
 
     /**
         Call this to give the sizer a minimal size.
