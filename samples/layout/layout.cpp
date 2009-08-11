@@ -337,24 +337,24 @@ MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
     // consttuct the first column
     wxSizer *sizerCol1 = new wxBoxSizer(wxVERTICAL);
     sizerCol1->Add(new wxStaticText(p, wxID_ANY, wxT("Ungrowable:")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol1->Add(new wxStaticText(p, wxID_ANY, wxT("Growable middle column:")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol1->Add(new wxStaticText(p, wxID_ANY, wxT("Growable middle row:")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableRow(1);
     sizerCol1->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol1->Add(new wxStaticText(p, wxID_ANY, wxT("All growable columns:")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(0, 1);
     sizerFlex->AddGrowableCol(1, 2);
@@ -364,14 +364,14 @@ MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
     // the second one
     wxSizer *sizerCol2 = new wxBoxSizer(wxVERTICAL);
     sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Growable middle row and column:")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with horz flex direction")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
@@ -379,7 +379,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"none\"")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
@@ -388,7 +388,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(const wxString &title, int x, int y )
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
     sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"all\"")), 0, wxCENTER | wxTOP, 20);
-    sizerFlex = new wxFlexGridSizer(3, 3);
+    sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
     sizerFlex->AddGrowableRow(1);
