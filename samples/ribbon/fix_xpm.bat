@@ -15,4 +15,9 @@ lua fix_xpm.lua msw_style.xpm transparent=(0,0) name=msw_style_xpm
 lua fix_xpm.lua align_left.xpm transparent=(0,0) name=align_left_xpm
 lua fix_xpm.lua align_center.xpm transparent=(0,0) name=align_center_xpm
 lua fix_xpm.lua align_right.xpm transparent=(0,0) name=align_right_xpm
+lua fix_xpm.lua ribbon.xpm transparent=(0,0) name=ribbon_xpm
+lua fix_xpm.lua eye.xpm transparent=(0,0) name=eye_xpm
+lua fix_xpm.lua empty.xpm name=empty_xpm
+lua fix_xpm.lua position_left_small.xpm transparent=(0,0) name=position_left_xpm
+lua fix_xpm.lua position_top_small.xpm transparent=(0,0) name=position_top_xpm
 pause

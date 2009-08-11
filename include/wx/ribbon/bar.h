@@ -117,6 +117,8 @@ public:
     virtual wxSize DoGetBestSize() const;
     virtual bool HasMultiplePages() const { return true; }
 
+    void SetWindowStyleFlag(long style);
+    long GetWindowStyleFlag() const;
     virtual bool Realize();
 
 protected:

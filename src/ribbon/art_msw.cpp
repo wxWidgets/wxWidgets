@@ -52,6 +52,26 @@ static const char* const gallery_down_xpm[] = {
   "  x  ",
   "     "};
 
+static const char* const gallery_left_xpm[] = {
+  "5 5 2 1",
+  "  c None",
+  "x c #FF00FF",
+  "   x ",
+  "  xx ",
+  " xxx ",
+  "  xx ",
+  "   x "};
+
+static const char* const gallery_right_xpm[] = {
+  "5 5 2 1",
+  "  c None",
+  "x c #FF00FF",
+  " x   ",
+  " xx  ",
+  " xxx ",
+  " xx  ",
+  " x   "};
+
 static const char* const gallery_extension_xpm[] = {
   "5 5 2 1",
   "  c None",
@@ -64,6 +84,7 @@ static const char* const gallery_extension_xpm[] = {
 
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider(bool set_colour_scheme)
 {
+    m_flags = 0;
     m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
@@ -344,7 +365,32 @@ long wxRibbonMSWArtProvider::GetFlags() const
 
 void wxRibbonMSWArtProvider::SetFlags(long flags)
 {
+    if((flags ^ m_flags) & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        if(flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        {
+            m_page_border_left++;
+            m_page_border_right++;
+            m_page_border_top--;
+            m_page_border_bottom--;
+        }
+        else
+        {
+            m_page_border_left--;
+            m_page_border_right--;
+            m_page_border_top++;
+            m_page_border_bottom++;
+        }
+    }
     m_flags = flags;
+
+    // Need to reload some bitmaps when flags change
+#define Reload(setting) SetColour(setting, GetColour(setting))
+    Reload(wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR);
+    Reload(wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR);
+    Reload(wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR);
+    Reload(wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR);
+#undef Reload
 }
 
 int wxRibbonMSWArtProvider::GetMetric(int id) const
@@ -669,8 +715,16 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_FACE_COLOUR:
             m_gallery_button_face_colour = colour;
-            m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-            m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            {
+                m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
+                m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+            }
+            else
+            {
+                m_gallery_up_bitmap[0] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+                m_gallery_down_bitmap[0] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            }
             m_gallery_extension_bitmap[0] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_BACKGROUND_COLOUR:
@@ -684,8 +738,16 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_HOVER_FACE_COLOUR:
             m_gallery_button_hover_face_colour = colour;
-            m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-            m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            {
+                m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
+                m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+            }
+            else
+            {
+                m_gallery_up_bitmap[1] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+                m_gallery_down_bitmap[1] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            }
             m_gallery_extension_bitmap[1] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_BACKGROUND_COLOUR:
@@ -699,8 +761,16 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_ACTIVE_FACE_COLOUR:
             m_gallery_button_active_face_colour = colour;
-            m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-            m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            {
+                m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
+                m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+            }
+            else
+            {
+                m_gallery_up_bitmap[2] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+                m_gallery_down_bitmap[2] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            }
             m_gallery_extension_bitmap[2] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_BACKGROUND_COLOUR:
@@ -714,8 +784,16 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR:
             m_gallery_button_disabled_face_colour = colour;
-            m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
-            m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            {
+                m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_left_xpm, colour);
+                m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_right_xpm, colour);
+            }
+            else
+            {
+                m_gallery_up_bitmap[3] = wxRibbonLoadPixmap(gallery_up_xpm, colour);
+                m_gallery_down_bitmap[3] = wxRibbonLoadPixmap(gallery_down_xpm, colour);
+            }
             m_gallery_extension_bitmap[3] = wxRibbonLoadPixmap(gallery_extension_xpm, colour);
             break;
         case wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR:
@@ -934,6 +1012,15 @@ void wxRibbonMSWArtProvider::DrawTab(
         }
     }
 
+    if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+    {
+        wxBitmap icon = tab.page->GetIcon();
+        int x = tab.rect.x + 4;
+        if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) == 0)
+            x = tab.rect.x + (tab.rect.width - icon.GetWidth()) / 2;
+        dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
+            icon.GetHeight()) / 2, true);
+    }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
         wxString label = tab.page->GetLabel();
@@ -948,6 +1035,11 @@ void wxRibbonMSWArtProvider::DrawTab(
             dc.GetTextExtent(label, &text_width, &text_height);
             int width = tab.rect.width - 5;
             int x = tab.rect.x + 3;
+            if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+            {
+                x += 3 + tab.page->GetIcon().GetWidth();
+                width -= 3 + tab.page->GetIcon().GetWidth();
+            }
             int y = tab.rect.y + (tab.rect.height - text_height) / 2;
 
             if(width <= text_width)
@@ -1349,7 +1441,16 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(m_gallery_hover_background_brush);
-        dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 16, rect.height - 2);
+        if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        {
+            dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
+                rect.height - 16);
+        }
+        else
+        {
+            dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 16,
+                rect.height - 2);
+        }
     }
 
     dc.SetPen(m_gallery_border_pen);
@@ -1361,21 +1462,51 @@ void wxRibbonMSWArtProvider::DrawGalleryBackground(
     dc.DrawLine(rect.x + rect.width - 1, rect.y + 1, rect.x + rect.width - 1,
         rect.y + rect.height - 1);
 
-    // Divider between items and buttons
-    dc.DrawLine(rect.x + rect.width - 15, rect.y, rect.x + rect.width - 15,
-        rect.y + rect.height);
+    DrawGalleryBackgroundCommon(dc, wnd, rect);
+}
 
-    wxRect up_btn(rect.x + rect.width - 15, rect.y, 15, rect.height / 3);
+void wxRibbonMSWArtProvider::DrawGalleryBackgroundCommon(wxDC& dc,
+                        wxRibbonGallery* wnd,
+                        const wxRect& rect)
+{
+    wxRect up_btn, down_btn, ext_btn;
 
-    wxRect down_btn(up_btn.GetLeft(), up_btn.GetBottom() + 1, up_btn.GetWidth(),
-        up_btn.GetHeight());
-    dc.DrawLine(down_btn.GetLeft(), down_btn.GetTop(), down_btn.GetRight(),
-        down_btn.GetTop());
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        // Divider between items and buttons
+        dc.DrawLine(rect.x, rect.y + rect.height - 15, rect.x + rect.width,
+            rect.y + rect.height - 15);
 
-    wxRect ext_btn(up_btn.GetLeft(), down_btn.GetBottom() + 1, up_btn.GetWidth(),
-        rect.height - up_btn.GetHeight() - down_btn.GetHeight() - 1);
-    dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetRight(),
-        ext_btn.GetTop());
+        up_btn = wxRect(rect.x, rect.y + rect.height - 15, rect.width / 3, 15);
+
+        down_btn = wxRect(up_btn.GetRight() + 1, up_btn.GetTop(),
+            up_btn.GetWidth(), up_btn.GetHeight());
+        dc.DrawLine(down_btn.GetLeft(), down_btn.GetTop(), down_btn.GetLeft(),
+            down_btn.GetBottom());
+
+        ext_btn = wxRect(down_btn.GetRight() + 1, up_btn.GetTop(), rect.width -
+            up_btn.GetWidth() - down_btn.GetWidth() - 1, up_btn.GetHeight());
+        dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetLeft(),
+            ext_btn.GetBottom());
+    }
+    else
+    {
+        // Divider between items and buttons
+        dc.DrawLine(rect.x + rect.width - 15, rect.y, rect.x + rect.width - 15,
+            rect.y + rect.height);
+
+        up_btn = wxRect(rect.x + rect.width - 15, rect.y, 15, rect.height / 3);
+
+        down_btn = wxRect(up_btn.GetLeft(), up_btn.GetBottom() + 1,
+            up_btn.GetWidth(), up_btn.GetHeight());
+        dc.DrawLine(down_btn.GetLeft(), down_btn.GetTop(), down_btn.GetRight(),
+            down_btn.GetTop());
+
+        ext_btn = wxRect(up_btn.GetLeft(), down_btn.GetBottom() + 1, up_btn.GetWidth(),
+            rect.height - up_btn.GetHeight() - down_btn.GetHeight() - 1);
+        dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetRight(),
+            ext_btn.GetTop());
+    }
 
     DrawGalleryButton(dc, up_btn, wnd->GetUpButtonState(),
         m_gallery_up_bitmap);
@@ -1423,9 +1554,17 @@ void wxRibbonMSWArtProvider::DrawGalleryButton(wxDC& dc,
     }
 
     rect.x++;
-    rect.width -= 2;
     rect.y++;
-    rect.height--;
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        rect.width--;;
+        rect.height -= 2;
+    }
+    else
+    {
+        rect.width -= 2;
+        rect.height--;
+    }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
     dc.SetBrush(btn_top_brush);
@@ -1636,26 +1775,51 @@ void wxRibbonMSWArtProvider::DrawMinimisedPanelCommon(
                         wxRect* preview_rect)
 {
     wxRect preview(0, 0, 32, 32);
-    preview.x = true_rect.x + (true_rect.width - preview.width) / 2;
-    preview.y = true_rect.y + 4;
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        preview.x = true_rect.x + 4;
+        preview.y = true_rect.y + (true_rect.height - preview.height) / 2;
+    }
+    else
+    {
+        preview.x = true_rect.x + (true_rect.width - preview.width) / 2;
+        preview.y = true_rect.y + 4;
+    }
     if(preview_rect)
         *preview_rect = preview;
-
-    int ypos = preview.y + preview.height + 5;
 
     wxCoord label_width, label_height;
     dc.SetFont(m_panel_label_font);
     dc.GetTextExtent(wnd->GetLabel(), &label_width, &label_height);
+
+    int xpos = true_rect.x + (true_rect.width - label_width + 1) / 2;
+    int ypos = preview.y + preview.height + 5;
+
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        xpos = preview.x + preview.width + 5;
+        ypos = true_rect.y + (true_rect.height - label_height) / 2;
+    }
+
     dc.SetTextForeground(m_panel_minimised_label_colour);
-    dc.DrawText(wnd->GetLabel(),
-                true_rect.x + (true_rect.width - label_width + 1) / 2,
-                ypos);
-    ypos += label_height;
+    dc.DrawText(wnd->GetLabel(), xpos, ypos);
+    
 
     wxPoint arrow_points[3];
-    arrow_points[0] = wxPoint(true_rect.width / 2, ypos + 5);
-    arrow_points[1] = arrow_points[0] + wxPoint(-3, -3);
-    arrow_points[2] = arrow_points[0] + wxPoint( 3, -3);
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        xpos += label_width;
+        arrow_points[0] = wxPoint(xpos + 5, ypos + label_height / 2);
+        arrow_points[1] = arrow_points[0] + wxPoint(-3,  3);
+        arrow_points[2] = arrow_points[0] + wxPoint(-3, -3);
+    }
+    else
+    {
+        ypos += label_height;
+        arrow_points[0] = wxPoint(true_rect.width / 2, ypos + 5);
+        arrow_points[1] = arrow_points[0] + wxPoint(-3, -3);
+        arrow_points[2] = arrow_points[0] + wxPoint( 3, -3);
+    }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
     wxBrush B(m_panel_minimised_label_colour);
@@ -2158,7 +2322,10 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
 
     if(client_offset != NULL)
     {
-        *client_offset = wxPoint(3, 2);
+        if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            *client_offset = wxPoint(2, 3);
+        else
+            *client_offset = wxPoint(3, 2);
     }
 
     return client_size;
@@ -2190,7 +2357,10 @@ wxSize wxRibbonMSWArtProvider::GetGallerySize(
                         wxSize client_size)
 {
     client_size.IncBy( 2, 1); // Left / top padding
-    client_size.IncBy(16, 1); // Right / bottom padding
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        client_size.IncBy(1, 16); // Right / bottom padding
+    else
+        client_size.IncBy(16, 1); // Right / bottom padding
     return client_size;
 }
 
@@ -2204,20 +2374,44 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
                         wxRect* extension_button)
 {
     wxRect scroll_up;
-    scroll_up.x = size.GetWidth() - 15;
-    scroll_up.width = 15;
-    scroll_up.y = 0;
-    scroll_up.height = (size.GetHeight() + 2) / 3;
     wxRect scroll_down;
-    scroll_down.x = scroll_up.x;
-    scroll_down.width = scroll_up.width;
-    scroll_down.y = scroll_up.y + scroll_up.height;
-    scroll_down.height = scroll_up.height;
     wxRect extension;
-    extension.x = scroll_down.x;
-    extension.width = scroll_down.width;
-    extension.y = scroll_down.y + scroll_down.height;
-    extension.height = size.GetHeight() - scroll_up.height - scroll_down.height;
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        // Flow is vertical - put buttons on bottom
+        scroll_up.y = size.GetHeight() - 15;
+        scroll_up.height = 15;
+        scroll_up.x = 0;
+        scroll_up.width = (size.GetWidth() + 2) / 3;
+        scroll_down.y = scroll_up.y;
+        scroll_down.height = scroll_up.height;
+        scroll_down.x = scroll_up.x + scroll_up.width;
+        scroll_down.width = scroll_up.width;        
+        extension.y = scroll_down.y;
+        extension.height = scroll_down.height;
+        extension.x = scroll_down.x + scroll_down.width;
+        extension.width = size.GetWidth() - scroll_up.width - scroll_down.width;
+        size.DecBy(1, 16);
+        size.DecBy( 2, 1);
+    }
+    else
+    {
+        // Flow is horizontal - put buttons on right
+        scroll_up.x = size.GetWidth() - 15;
+        scroll_up.width = 15;
+        scroll_up.y = 0;
+        scroll_up.height = (size.GetHeight() + 2) / 3;
+        scroll_down.x = scroll_up.x;
+        scroll_down.width = scroll_up.width;
+        scroll_down.y = scroll_up.y + scroll_up.height;
+        scroll_down.height = scroll_up.height;        
+        extension.x = scroll_down.x;
+        extension.width = scroll_down.width;
+        extension.y = scroll_down.y + scroll_down.height;
+        extension.height = size.GetHeight() - scroll_up.height - scroll_down.height;
+        size.DecBy(16, 1);
+        size.DecBy( 2, 1);
+    }
     
     if(client_offset != NULL)
         *client_offset = wxPoint(2, 1);
@@ -2228,8 +2422,6 @@ wxSize wxRibbonMSWArtProvider::GetGalleryClientSize(
     if(extension_button != NULL)
         *extension_button = extension;
 
-    size.DecBy( 2, 1);
-    size.DecBy(16, 1);
     return size;
 }
 
@@ -2266,11 +2458,9 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
         }
         else
         {
-            // Only height changed - redraw bottom
-            const int bottom_edge_height = 4;
-
-            new_rect = wxRect(0, page_new_size.GetHeight() - bottom_edge_height, page_new_size.GetWidth(), bottom_edge_height);
-            old_rect = wxRect(0, page_old_size.GetHeight() - bottom_edge_height, page_old_size.GetWidth(), bottom_edge_height);
+            // Height changed - need to redraw everything (as the background
+            // gradient is done vertically).
+            return page_new_size;
         }
     }
 
@@ -2410,7 +2600,10 @@ wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
     }
     if(expanded_panel_direction != NULL)
     {
-        *expanded_panel_direction = wxSOUTH;
+        if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            *expanded_panel_direction = wxEAST;
+        else
+            *expanded_panel_direction = wxSOUTH;
     }
     wxSize base_size(42, 42);
 
@@ -2420,7 +2613,18 @@ wxSize wxRibbonMSWArtProvider::GetMinimisedPanelMinimumSize(
     label_size.IncBy(6, 0); // Padding
     label_size.y *= 2; // Second line for dropdown button
 
-    return wxSize(wxMax(base_size.x, label_size.x), base_size.y + label_size.y);
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        // Label alongside icon
+        return wxSize(base_size.x + label_size.x,
+            wxMax(base_size.y, label_size.y));
+    }
+    else
+    {
+        // Label beneath icon
+        return wxSize(wxMax(base_size.x, label_size.x),
+            base_size.y + label_size.y);
+    }
 }
 
 wxSize wxRibbonMSWArtProvider::GetToolSize(

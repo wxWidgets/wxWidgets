@@ -1,0 +1,23 @@
+/* XPM */
+static const char *const empty_xpm[] = {
+"16 16 3 1",
+"  c black",
+"a c #C8C8C8",
+". c Gray100",
+"                ",
+" ....aaaaaaaaaa ",
+" ....aaaaaaaaaa ",
+" ....aaaaaaaaaa ",
+" ....aaaaaaaaaa ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+" aaaa.......... ",
+"                "
+};

@@ -20,6 +20,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/art.h"
+#include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"
 #include "wx/clntdata.h"
 
@@ -164,7 +165,10 @@ void wxRibbonGallery::OnMouseMove(wxMouseEvent& evt)
     wxRibbonGalleryItem *active_item = NULL;
     if(m_client_rect.Contains(pos))
     {
-        pos.y += m_scroll_amount;
+        if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+            pos.x += m_scroll_amount;
+        else
+            pos.y += m_scroll_amount;
 
         size_t item_count = m_items.Count();
         size_t item_i;
@@ -260,7 +264,10 @@ void wxRibbonGallery::OnMouseDown(wxMouseEvent& evt)
     m_mouse_active_rect = NULL;
     if(m_client_rect.Contains(pos))
     {
-        pos.y += m_scroll_amount;
+        if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+            pos.x += m_scroll_amount;
+        else
+            pos.y += m_scroll_amount;
         size_t item_count = m_items.Count();
         size_t item_i;
         for(item_i = 0; item_i < item_count; ++item_i)
@@ -312,7 +319,12 @@ void wxRibbonGallery::OnMouseUp(wxMouseEvent& evt)
     {
         wxPoint pos = evt.GetPosition();
         if(m_active_item)
-            pos.y += m_scroll_amount;
+        {
+            if(m_art && m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+                pos.x += m_scroll_amount;
+            else
+                pos.y += m_scroll_amount;
+        }
         if(m_mouse_active_rect->Contains(pos))
         {
             if(m_mouse_active_rect == &m_scroll_up_button_rect)
@@ -376,14 +388,17 @@ void* wxRibbonGallery::GetItemClientData(const wxRibbonGalleryItem* itm) const
 
 bool wxRibbonGallery::ScrollLines(int lines)
 {
-    if(m_scroll_limit == 0)
+    if(m_scroll_limit == 0 || m_art == NULL)
         return false;
 
+    int line_size = m_bitmap_padded_size.GetHeight();
+    if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+        line_size = m_bitmap_padded_size.GetWidth();
     if(lines < 0)
     {
         if(m_scroll_amount > 0)
         {
-            m_scroll_amount += lines * m_bitmap_padded_size.GetHeight();
+            m_scroll_amount += lines * line_size;
             if(m_scroll_amount <= 0)
             {
                 m_scroll_amount = 0;
@@ -400,7 +415,7 @@ bool wxRibbonGallery::ScrollLines(int lines)
     {
         if(m_scroll_amount < m_scroll_limit)
         {
-            m_scroll_amount += lines * m_bitmap_padded_size.GetHeight();
+            m_scroll_amount += lines * line_size;
             if(m_scroll_amount >= m_scroll_limit)
             {
                 m_scroll_amount = m_scroll_limit;
@@ -453,6 +468,9 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     dc.SetClippingRegion(m_client_rect);
 
+    bool offset_vertical = true;
+    if(m_art->GetFlags() & wxRIBBON_BAR_FLOW_VERTICAL)
+        offset_vertical = false;
     size_t item_count = m_items.Count();
     size_t item_i;
     for(item_i = 0; item_i < item_count; ++item_i)
@@ -463,7 +481,10 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
         const wxRect& pos = item->GetPosition();
         wxRect offset_pos(pos);
-        offset_pos.SetTop(offset_pos.GetTop() - m_scroll_amount);
+        if(offset_vertical)
+            offset_pos.SetTop(offset_pos.GetTop() - m_scroll_amount);
+        else
+            offset_pos.SetLeft(offset_pos.GetLeft() - m_scroll_amount);
         m_art->DrawGalleryItemBackground(dc, this, offset_pos, item);
         dc.DrawBitmap(item->GetBitmap(), offset_pos.GetLeft() + padding_left,
             offset_pos.GetTop() + padding_top);
@@ -576,27 +597,47 @@ bool wxRibbonGallery::Layout()
 
     size_t item_count = m_items.Count();
     size_t item_i;
+    long art_flags = m_art->GetFlags();
     for(item_i = 0; item_i < item_count; ++item_i)
     {
         wxRibbonGalleryItem *item = m_items.Item(item_i);
-        if(x_cursor + m_bitmap_padded_size.x > client_size.GetWidth())
+        item->SetIsVisible(true);
+        if(art_flags & wxRIBBON_BAR_FLOW_VERTICAL)
         {
-            if(x_cursor == 0)
-                break;
-            x_cursor = 0;
+            if(y_cursor + m_bitmap_padded_size.y > client_size.GetHeight())
+            {
+                if(y_cursor == 0)
+                    break;
+                y_cursor = 0;
+                x_cursor += m_bitmap_padded_size.x;
+            }
+            item->SetPosition(origin.x + x_cursor, origin.y + y_cursor,
+                m_bitmap_padded_size);
             y_cursor += m_bitmap_padded_size.y;
         }
-        item->SetPosition(origin.x + x_cursor, origin.y + y_cursor,
-            m_bitmap_padded_size);
-        item->SetIsVisible(true);
-        x_cursor += m_bitmap_padded_size.x;
+        else
+        {
+            if(x_cursor + m_bitmap_padded_size.x > client_size.GetWidth())
+            {
+                if(x_cursor == 0)
+                    break;
+                x_cursor = 0;
+                y_cursor += m_bitmap_padded_size.y;
+            }
+            item->SetPosition(origin.x + x_cursor, origin.y + y_cursor,
+                m_bitmap_padded_size);
+            x_cursor += m_bitmap_padded_size.x;
+        }
     }
     for(; item_i < item_count; ++item_i)
     {
         wxRibbonGalleryItem *item = m_items.Item(item_i);
         item->SetIsVisible(false);
     }
-    m_scroll_limit = y_cursor;
+    if(art_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        m_scroll_limit = x_cursor;
+    else
+        m_scroll_limit = y_cursor;
     if(m_scroll_amount >= m_scroll_limit)
     {
         m_scroll_amount = m_scroll_limit;

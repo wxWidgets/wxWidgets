@@ -62,6 +62,13 @@ public:
         ID_DEFAULT_PROVIDER,
         ID_AUI_PROVIDER,
         ID_MSW_PROVIDER,
+        ID_MAIN_TOOLBAR,
+        ID_POSITION_TOP,
+        ID_POSITION_TOP_ICONS,
+        ID_POSITION_TOP_BOTH,
+        ID_POSITION_LEFT,
+        ID_POSITION_LEFT_LABELS,
+        ID_POSITION_LEFT_BOTH,
     };
 
     void OnCircleButton(wxRibbonButtonBarEvent& evt);
@@ -86,6 +93,16 @@ public:
     void OnPrintDropdown(wxRibbonToolBarEvent& evt);
     void OnRedoDropdown(wxRibbonToolBarEvent& evt);
     void OnUndoDropdown(wxRibbonToolBarEvent& evt);
+    void OnPositionTop(wxRibbonToolBarEvent& evt);
+    void OnPositionTopLabels(wxCommandEvent& evt);
+    void OnPositionTopIcons(wxCommandEvent& evt);
+    void OnPositionTopBoth(wxCommandEvent& evt);
+    void OnPositionTopDropdown(wxRibbonToolBarEvent& evt);
+    void OnPositionLeft(wxRibbonToolBarEvent& evt);
+    void OnPositionLeftLabels(wxCommandEvent& evt);
+    void OnPositionLeftIcons(wxCommandEvent& evt);
+    void OnPositionLeftBoth(wxCommandEvent& evt);
+    void OnPositionLeftDropdown(wxRibbonToolBarEvent& evt);
 
 protected:
     wxRibbonGallery* PopulateColoursPanel(wxWindow* panel, wxColour def,
@@ -97,6 +114,7 @@ protected:
         wxRibbonGalleryItem* item, wxString* name);
     void ResetGalleryArtProviders();
     void SetArtProvider(wxRibbonArtProvider* prov);
+    void SetBarStyle(long style);
 
     wxRibbonBar* m_ribbon;
     wxRibbonGallery* m_primary_gallery;
@@ -148,8 +166,18 @@ EVT_RIBBONTOOLBAR_CLICKED(wxID_PRINT, MyFrame::OnPrint)
 EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_PRINT, MyFrame::OnPrintDropdown)
 EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_REDO, MyFrame::OnRedoDropdown)
 EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(wxID_UNDO, MyFrame::OnUndoDropdown)
+EVT_RIBBONTOOLBAR_CLICKED(ID_POSITION_LEFT, MyFrame::OnPositionLeft)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(ID_POSITION_LEFT, MyFrame::OnPositionLeftDropdown)
+EVT_RIBBONTOOLBAR_CLICKED(ID_POSITION_TOP, MyFrame::OnPositionTop)
+EVT_RIBBONTOOLBAR_DROPDOWN_CLICKED(ID_POSITION_TOP, MyFrame::OnPositionTopDropdown)
 EVT_BUTTON(ID_PRIMARY_COLOUR, MyFrame::OnColourGalleryButton)
 EVT_BUTTON(ID_SECONDARY_COLOUR, MyFrame::OnColourGalleryButton)
+EVT_MENU(ID_POSITION_LEFT, MyFrame::OnPositionLeftIcons)
+EVT_MENU(ID_POSITION_LEFT_LABELS, MyFrame::OnPositionLeftLabels)
+EVT_MENU(ID_POSITION_LEFT_BOTH, MyFrame::OnPositionLeftBoth)
+EVT_MENU(ID_POSITION_TOP, MyFrame::OnPositionTopLabels)
+EVT_MENU(ID_POSITION_TOP_ICONS, MyFrame::OnPositionTopIcons)
+EVT_MENU(ID_POSITION_TOP_BOTH, MyFrame::OnPositionTopBoth)
 END_EVENT_TABLE()
 
 #include "align_center.xpm"
@@ -162,10 +190,15 @@ END_EVENT_TABLE()
 #include "circle_small.xpm"
 #include "colours.xpm"
 #include "cross.xpm"
+#include "empty.xpm"
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
+#include "eye.xpm"
 #include "hexagon.xpm"
 #include "msw_style.xpm"
+#include "position_left_small.xpm"
+#include "position_top_small.xpm"
+#include "ribbon.xpm"
 #include "selection_panel.xpm"
 #include "square.xpm"
 #include "triangle.xpm"
@@ -173,12 +206,12 @@ END_EVENT_TABLE()
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
-    m_ribbon = new wxRibbonBar(this);
+    m_ribbon = new wxRibbonBar(this, wxID_ANY);
 
     {
-        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"));
+        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
         wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, wxID_ANY);
+        wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
         toolbar->AddTool(wxID_ANY, align_left_xpm);
         toolbar->AddTool(wxID_ANY, align_center_xpm);
         toolbar->AddTool(wxID_ANY, align_right_xpm);
@@ -193,6 +226,9 @@ MyFrame::MyFrame()
         toolbar->AddSeparator();
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
+        toolbar->AddSeparator();
+        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm);
+        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm);
         toolbar->AddSeparator();
         toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)));
         toolbar->SetRows(2, 3);
@@ -217,7 +253,7 @@ MyFrame::MyFrame()
         wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
         m_bitmap_creation_dc.SetFont(label_font);
 
-        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"));
+        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"), eye_xpm);
         m_ribbon->GetArtProvider()->GetColourScheme(&m_default_primary,
             &m_default_secondary, &m_default_tertiary);
         wxRibbonPanel *provider_panel = new wxRibbonPanel(scheme, wxID_ANY,
@@ -236,12 +272,14 @@ MyFrame::MyFrame()
         m_secondary_gallery = PopulateColoursPanel(secondary_panel,
             m_default_secondary, ID_SECONDARY_COLOUR);
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"));
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"));
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"), empty_xpm);
+    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"), empty_xpm);
 
     m_ribbon->Realize();
 
-    m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxTE_LEFT | wxTE_BESTWRAP);
+    m_logwindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
+        wxTE_LEFT | wxTE_BESTWRAP | wxBORDER_NONE);
 
     wxSizer *s = new wxBoxSizer(wxVERTICAL);
 
@@ -249,6 +287,29 @@ MyFrame::MyFrame()
     s->Add(m_logwindow, 1, wxEXPAND);
 
     SetSizer(s);
+}
+
+void MyFrame::SetBarStyle(long style)
+{
+    m_ribbon->SetWindowStyleFlag(style);
+    wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(GetSizer());
+    wxRibbonToolBar *pToolbar = wxDynamicCast(FindWindow(ID_MAIN_TOOLBAR), wxRibbonToolBar);
+    if(style & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        m_ribbon->SetTabCtrlMargins(10, 10);
+        pTopSize->SetOrientation(wxHORIZONTAL);
+        if(pToolbar)
+            pToolbar->SetRows(3, 5);
+    }
+    else
+    {
+        m_ribbon->SetTabCtrlMargins(50, 20);
+        pTopSize->SetOrientation(wxVERTICAL);
+        if(pToolbar)
+            pToolbar->SetRows(2, 3);
+    }
+    m_ribbon->Realise();
+    Layout();
 }
 
 MyFrame::~MyFrame()
@@ -502,6 +563,67 @@ void MyFrame::OnUndoDropdown(wxRibbonToolBarEvent& evt)
     menu.Append(wxID_ANY, wxT("Undo B"));
     menu.Append(wxID_ANY, wxT("Undo A"));
 
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnPositionTopLabels(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle(wxRIBBON_BAR_DEFAULT_STYLE);
+}
+
+void MyFrame::OnPositionTopIcons(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle((wxRIBBON_BAR_DEFAULT_STYLE &~wxRIBBON_BAR_SHOW_PAGE_LABELS)
+        | wxRIBBON_BAR_SHOW_PAGE_ICONS);
+}
+
+void MyFrame::OnPositionTopBoth(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle(wxRIBBON_BAR_DEFAULT_STYLE | wxRIBBON_BAR_SHOW_PAGE_ICONS);
+}
+
+void MyFrame::OnPositionLeftLabels(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle(wxRIBBON_BAR_DEFAULT_STYLE | wxRIBBON_BAR_FLOW_VERTICAL);
+}
+
+void MyFrame::OnPositionLeftIcons(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle((wxRIBBON_BAR_DEFAULT_STYLE &~wxRIBBON_BAR_SHOW_PAGE_LABELS) |
+        wxRIBBON_BAR_SHOW_PAGE_ICONS | wxRIBBON_BAR_FLOW_VERTICAL);
+}
+
+void MyFrame::OnPositionLeftBoth(wxCommandEvent& WXUNUSED(evt))
+{
+    SetBarStyle(wxRIBBON_BAR_DEFAULT_STYLE | wxRIBBON_BAR_SHOW_PAGE_ICONS |
+        wxRIBBON_BAR_FLOW_VERTICAL);
+}
+
+void MyFrame::OnPositionTop(wxRibbonToolBarEvent& evt)
+{
+    OnPositionTopLabels(evt);
+}
+
+void MyFrame::OnPositionTopDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(ID_POSITION_TOP, wxT("Top with Labels"));
+    menu.Append(ID_POSITION_TOP_ICONS, wxT("Top with Icons"));
+    menu.Append(ID_POSITION_TOP_BOTH, wxT("Top with Both"));
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnPositionLeft(wxRibbonToolBarEvent& evt)
+{
+    OnPositionLeftIcons(evt);
+}
+
+void MyFrame::OnPositionLeftDropdown(wxRibbonToolBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(ID_POSITION_LEFT, wxT("Left with Icons"));
+    menu.Append(ID_POSITION_LEFT_LABELS, wxT("Left with Labels"));
+    menu.Append(ID_POSITION_LEFT_BOTH, wxT("Left with Both"));
     evt.PopupMenu(&menu);
 }
 

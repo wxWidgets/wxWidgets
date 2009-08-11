@@ -66,7 +66,7 @@ wxRibbonAUIArtProvider::~wxRibbonAUIArtProvider()
 
 wxRibbonArtProvider* wxRibbonAUIArtProvider::Clone() const
 {
-    wxRibbonAUIArtProvider *copy = new wxRibbonAUIArtProvider;
+    wxRibbonAUIArtProvider *copy = new wxRibbonAUIArtProvider();
     CloneTo(copy);
 
     copy->m_tab_ctrl_background_colour = m_tab_ctrl_background_colour;
@@ -368,6 +368,17 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
     if(bar && bar->GetPage(0) == tab.page)
         is_first_tab = true;
 
+    wxBitmap icon;
+    if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+    {
+        icon = tab.page->GetIcon();
+        if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) == 0)
+        {
+            int x = tab.rect.x + (tab.rect.width - icon.GetWidth()) / 2;
+            dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
+                icon.GetHeight()) / 2, true);
+        }
+    }
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
         wxString label = tab.page->GetLabel();
@@ -376,18 +387,25 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
             dc.SetTextForeground(m_tab_label_colour);
             dc.SetBackgroundMode(wxTRANSPARENT);
 
+            int offset = 0;
+            if(icon.IsOk())
+                offset += icon.GetWidth() + 2;
             int text_height;
             int text_width;
             dc.GetTextExtent(label, &text_width, &text_height);
-            int x = (tab.rect.width - 2 - text_width) / 2;
+            int x = (tab.rect.width - 2 - text_width - offset) / 2;
             if(x > 8)
                 x = 8;
             else if(x < 1)
                 x = 1;
             int width = tab.rect.width - x - 2;
-            x += tab.rect.x;
+            x += tab.rect.x + offset;
             int y = tab.rect.y + (tab.rect.height - text_height) / 2;
-
+            if(icon.IsOk())
+            {
+                dc.DrawBitmap(icon, x - offset, tab.rect.y + (tab.rect.height -
+                    icon.GetHeight()) / 2, true);
+            }
             dc.SetClippingRegion(x, tab.rect.y, width, tab.rect.height);
             dc.DrawText(label, x, y);
         }
@@ -526,8 +544,21 @@ void wxRibbonAUIArtProvider::DrawScrollButton(
         arrow_points[1] = arrow_points[0] - wxPoint(5, -5);
         arrow_points[2] = arrow_points[0] - wxPoint(5,  5);
         break;
+    case wxRIBBON_SCROLL_BTN_DOWN:
+        dc.DrawLine(true_rect.x, true_rect.y, true_rect.x + true_rect.width,
+            true_rect.y);
+        arrow_points[0] = wxPoint(rect.width / 2, rect.height / 2 + 3);
+        arrow_points[1] = arrow_points[0] - wxPoint( 5, 5);
+        arrow_points[2] = arrow_points[0] - wxPoint(-5, 5);
+        break;
+    case wxRIBBON_SCROLL_BTN_UP:
+        dc.DrawLine(true_rect.x, true_rect.GetBottom(),
+            true_rect.x + true_rect.width, true_rect.GetBottom());
+        arrow_points[0] = wxPoint(rect.width / 2, rect.height / 2 - 2);
+        arrow_points[1] = arrow_points[0] + wxPoint( 5, 5);
+        arrow_points[2] = arrow_points[0] + wxPoint(-5, 5);
+        break;
     default:
-        // TODO
         return;
     }
 
@@ -554,9 +585,18 @@ wxSize wxRibbonAUIArtProvider::GetPanelSize(
     dc.SetFont(m_panel_label_font);
     wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
     int label_height = label_size.GetHeight() + 5;
-    client_size.IncBy(6, label_height + 4);
-    if(client_offset)
-        *client_offset = wxPoint(3, label_height + 2);
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        client_size.IncBy(4, label_height + 6);
+        if(client_offset)
+            *client_offset = wxPoint(2, label_height + 3);
+    }
+    else
+    {
+        client_size.IncBy(6, label_height + 4);
+        if(client_offset)
+            *client_offset = wxPoint(3, label_height + 2);
+    }
     return client_size;
 }
 
@@ -569,9 +609,18 @@ wxSize wxRibbonAUIArtProvider::GetPanelClientSize(
     dc.SetFont(m_panel_label_font);
     wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
     int label_height = label_size.GetHeight() + 5;
-    size.DecBy(6, label_height + 4);
-    if(client_offset)
-        *client_offset = wxPoint(3, label_height + 2);
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        size.DecBy(4, label_height + 6);
+        if(client_offset)
+            *client_offset = wxPoint(2, label_height + 3);
+    }
+    else
+    {
+        size.DecBy(6, label_height + 4);
+        if(client_offset)
+            *client_offset = wxPoint(3, label_height + 2);
+    }
     return size;
 }
 
@@ -782,41 +831,42 @@ void wxRibbonAUIArtProvider::DrawGalleryBackground(
     {
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.SetBrush(m_gallery_hover_background_brush);
-        dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 16, rect.height - 2);
+        if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        {
+            dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
+                rect.height - 16);
+        }
+        else
+        {
+            dc.DrawRectangle(rect.x + 1, rect.y + 1, rect.width - 16,
+                rect.height - 2);
+        }
     }
 
     dc.SetPen(m_gallery_border_pen);
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-    dc.DrawLine(rect.x + rect.width - 15, rect.y, rect.x + rect.width - 15,
-        rect.y + rect.height);
-
-    wxRect up_btn(rect.x + rect.width - 15, rect.y, 15, rect.height / 3);
-
-    wxRect down_btn(up_btn.GetLeft(), up_btn.GetBottom() + 1, up_btn.GetWidth(),
-        up_btn.GetHeight());
-    dc.DrawLine(down_btn.GetLeft(), down_btn.GetTop(), down_btn.GetRight(),
-        down_btn.GetTop());
-
-    wxRect ext_btn(up_btn.GetLeft(), down_btn.GetBottom() + 1, up_btn.GetWidth(),
-        rect.height - up_btn.GetHeight() - down_btn.GetHeight() - 1);
-    dc.DrawLine(ext_btn.GetLeft(), ext_btn.GetTop(), ext_btn.GetRight(),
-        ext_btn.GetTop());
-
-    DrawGalleryButton(dc, up_btn, wnd->GetUpButtonState(),
-        m_gallery_up_bitmap);
-    DrawGalleryButton(dc, down_btn, wnd->GetDownButtonState(),
-        m_gallery_down_bitmap);
-    DrawGalleryButton(dc, ext_btn, wnd->GetExtensionButtonState(),
-        m_gallery_extension_bitmap);
+    
+    DrawGalleryBackgroundCommon(dc, wnd, rect);
 }
 
 void wxRibbonAUIArtProvider::DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmap* bitmaps)
 {
+    int extra_height = 0;
+    int extra_width = 0;
     wxRect reduced_rect(rect);
     reduced_rect.Deflate(1);
-    reduced_rect.height++;
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+    {
+        reduced_rect.width++;
+        extra_width = 1;
+    }
+    else
+    {
+        reduced_rect.height++;
+        extra_height = 1;
+    }
 
     wxBitmap btn_bitmap;
     switch(state)
@@ -830,13 +880,15 @@ void wxRibbonAUIArtProvider::DrawGalleryButton(wxDC& dc, wxRect rect,
     case wxRIBBON_GALLERY_BUTTON_HOVERED:
         dc.SetPen(m_gallery_item_border_pen);
         dc.SetBrush(m_gallery_button_hover_background_brush);
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height + 1);
+        dc.DrawRectangle(rect.x, rect.y, rect.width + extra_width,
+            rect.height + extra_height);
         btn_bitmap = bitmaps[1];
         break;
     case wxRIBBON_GALLERY_BUTTON_ACTIVE:
         dc.SetPen(m_gallery_item_border_pen);
         dc.SetBrush(m_gallery_button_active_background_brush);
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height + 1);
+        dc.DrawRectangle(rect.x, rect.y, rect.width + extra_width,
+            rect.height + extra_height);
         btn_bitmap = bitmaps[2];
         break;
     case wxRIBBON_GALLERY_BUTTON_DISABLED:

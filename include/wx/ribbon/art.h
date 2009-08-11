@@ -560,7 +560,9 @@ protected:
         wxPen& secondary_colour);
     void RemovePanelPadding(wxRect* rect);
     void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
-    void DrawGalleryButton(wxDC& dc, wxRect rect,
+    void DrawGalleryBackgroundCommon(wxDC& dc, wxRibbonGallery* wnd,
+                        const wxRect& rect);
+    virtual void DrawGalleryButton(wxDC& dc, wxRect rect,
         wxRibbonGalleryButtonState state, wxBitmap* bitmaps);
     void DrawButtonBarButtonForeground(
                         wxDC& dc,

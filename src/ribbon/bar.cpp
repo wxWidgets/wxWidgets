@@ -108,6 +108,18 @@ bool wxRibbonBar::DismissExpandedPanel()
     return m_pages.Item(m_current_page).page->DismissExpandedPanel();
 }
 
+void wxRibbonBar::SetWindowStyleFlag(long style)
+{
+    m_flags = style;
+    if(m_art)
+        m_art->SetFlags(style);
+}
+
+long wxRibbonBar::GetWindowStyleFlag() const
+{
+    return m_flags;
+}
+
 bool wxRibbonBar::Realize()
 {
     bool status = true;
