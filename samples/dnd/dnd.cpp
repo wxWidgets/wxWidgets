@@ -1596,7 +1596,7 @@ DnDShapeDialog::DnDShapeDialog(wxFrame *parent, DnDShape *shape)
     // attributes
     wxStaticBox* box = new wxStaticBox( this, wxID_ANY, wxT("&Attributes") );
     wxStaticBoxSizer* attrSizer = new wxStaticBoxSizer( box, wxHORIZONTAL );
-    wxFlexGridSizer* xywhSizer = new wxFlexGridSizer( 4, 2 );
+    wxFlexGridSizer* xywhSizer = new wxFlexGridSizer( 2 );
 
     wxStaticText* st;
 
