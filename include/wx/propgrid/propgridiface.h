@@ -210,8 +210,12 @@ public:
         @return Returns @true if successful or if there was no selection. May
                 fail if validation was enabled and active editor had invalid
                 value.
+
+        @remarks In wxPropertyGrid 1.4, this member function used to send
+                 wxPG_EVT_SELECTED. In wxWidgets 2.9 and later, it no longer
+                 does that.
     */
-    bool ClearSelection( bool validation = false);
+    bool ClearSelection( bool validation = false );
 
     /** Resets modified status of all properties.
     */

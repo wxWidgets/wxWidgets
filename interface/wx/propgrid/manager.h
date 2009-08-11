@@ -411,7 +411,12 @@ public:
     /** Select and displays a given page. */
     void SelectPage( wxPropertyGridPage* page );
 
-    /** Select a property. */
+    /**
+        Select a property.
+
+        @see wxPropertyGrid::SelectProperty(),
+             wxPropertyGridInterface::ClearSelection()
+    */
     bool SelectProperty( wxPGPropArg id, bool focus = false );
 
     /**

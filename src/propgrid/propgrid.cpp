@@ -849,7 +849,7 @@ void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
 void wxPropertyGrid::OnTLPClose( wxCloseEvent& event )
 {
     // ClearSelection forces value validation/commit.
-    if ( event.CanVeto() && !ClearSelection() )
+    if ( event.CanVeto() && !DoClearSelection() )
     {
         event.Veto();
         return;
@@ -1071,7 +1071,7 @@ void wxPropertyGrid::ResetColours()
 bool wxPropertyGrid::SetFont( const wxFont& font )
 {
     // Must disable active editor.
-    ClearSelection(false);
+    DoClearSelection();
 
     bool res = wxScrolledWindow::SetFont( font );
     if ( res && GetParent()) // may not have been Create()ed yet
@@ -2168,7 +2168,7 @@ void wxPropertyGrid::Clear()
 
 bool wxPropertyGrid::EnableCategories( bool enable )
 {
-    ClearSelection(false);
+    DoClearSelection();
 
     if ( enable )
     {
@@ -2220,7 +2220,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
     wxPGProperty* oldSelection = m_selected;
 
-    ClearSelection(false);
+    DoClearSelection();
 
     m_pState->m_selected = oldSelection;
 
@@ -3608,7 +3608,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     m_inDoSelectProperty = 0;
 
     // call wx event handler (here so that it also occurs on deselection)
-    SendEvent( wxEVT_PG_SELECTED, m_selected, NULL, flags );
+    if ( !(flags & wxPG_SEL_DONT_SEND_EVENT) )
+        SendEvent( wxEVT_PG_SELECTED, m_selected, NULL, flags );
 
     return true;
 }
@@ -3661,11 +3662,23 @@ void wxPropertyGrid::RefreshEditor()
 
 // -----------------------------------------------------------------------
 
-// This method is not inline because it called dozens of times
-// (i.e. two-arg function calls create smaller code size).
+bool wxPropertyGrid::SelectProperty( wxPGPropArg id, bool focus )
+{
+    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+
+    int flags = wxPG_SEL_DONT_SEND_EVENT;
+    if ( focus )
+        flags |= wxPG_SEL_FOCUS;
+
+    return DoSelectProperty(p, flags);
+}
+
+// -----------------------------------------------------------------------
+
 bool wxPropertyGrid::DoClearSelection()
 {
-    return DoSelectProperty(NULL);
+    // Unlike ClearSelection(), here we send the wxEVT_PG_SELECTED event.
+    return DoSelectProperty(NULL, 0);
 }
 
 // -----------------------------------------------------------------------
@@ -3679,7 +3692,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
     // If active editor was inside collapsed section, then disable it
     if ( m_selected && m_selected->IsSomeParent(p) )
     {
-        ClearSelection(false);
+        DoClearSelection();
     }
 
     // Store dont-center-splitter flag 'cause we need to temporarily set it
@@ -3764,7 +3777,7 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
          ( m_selected == p || m_selected->IsSomeParent(p) )
        )
         {
-            ClearSelection(false);
+            DoClearSelection();
         }
 
     m_pState->DoHideProperty(p, hide, flags);

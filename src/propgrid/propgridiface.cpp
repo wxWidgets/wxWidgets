@@ -220,7 +220,7 @@ wxPGProperty* wxPropertyGridInterface::ReplaceProperty( wxPGPropArg id, wxPGProp
 
 bool wxPropertyGridInterface::ClearSelection( bool validation )
 {
-    int flags = 0;
+    int flags = wxPG_SEL_DONT_SEND_EVENT;
     if ( !validation )
         flags |= wxPG_SEL_NOVALIDATE;
 
@@ -297,7 +297,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
     if ( GetSelection() && GetSelection() != state->DoGetRoot() &&
          !doExpand )
     {
-        pg->ClearSelection(false);
+        pg->DoClearSelection();
     }
 
     wxPGVIterator it;
@@ -579,7 +579,7 @@ void wxPropertyGridInterface::Sort( int flags )
 {
     wxPropertyGrid* pg = GetPropertyGrid();
 
-    pg->ClearSelection(false);
+    pg->DoClearSelection();
 
     unsigned int pageIndex = 0;
 
@@ -1091,9 +1091,9 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
     if ( pgSelectionSet )
     {
         if ( newSelection )
-            pg->SelectProperty(newSelection);
+            pg->DoSelectProperty(newSelection);
         else
-            pg->ClearSelection();
+            pg->DoClearSelection();
     }
 
     if ( selectedPage != -1 )

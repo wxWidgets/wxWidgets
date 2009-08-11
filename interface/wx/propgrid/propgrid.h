@@ -320,8 +320,11 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
     @beginEventEmissionTable{wxPropertyGridEvent}
     @event{EVT_PG_SELECTED (id, func)}
-        Respond to wxEVT_PG_SELECTED event, generated when property value
-        has been changed by user.
+        Respond to wxEVT_PG_SELECTED event, generated when a property selection
+        has been changed, either by user action or by indirect program
+        function. For instance, collapsing a parent property programmatically
+        causes any selected child property to become unselected, and may
+        therefore cause this event to be generated.
     @event{EVT_PG_CHANGING(id, func)}
         Respond to wxEVT_PG_CHANGING event, generated when property value
         is about to be changed by user. Use wxPropertyGridEvent::GetValue()
@@ -707,8 +710,7 @@ public:
 
     /**
         Selects a property. Editor widget is automatically created, but
-        not focused unless focus is true. This will generate wxEVT_PG_SELECT
-        event.
+        not focused unless focus is true.
 
         @param id
             Property to select (name or pointer).
@@ -719,7 +721,11 @@ public:
         @return returns @true if selection finished successfully. Usually only
         fails if current value in editor is not valid.
 
-        @see wxPropertyGrid::ClearSelection()
+        @remarks In wxPropertyGrid 1.4, this member function used to generate
+                 wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
+                 does that.
+
+        @see wxPropertyGridInterface::ClearSelection()
     */
     bool SelectProperty( wxPGPropArg id, bool focus = false );
 
