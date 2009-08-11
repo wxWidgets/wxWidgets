@@ -604,8 +604,14 @@ bool wxDebugReportCompress::DoProcess()
     if ( !count )
         return false;
 
+    // create the compressed report file outside of the directory with the
+    // report files as it will be deleted by wxDebugReport dtor but we want to
+    // keep this one: for this we simply treat the directory name as the name
+    // of the file so that its last component becomes our base name
+    wxFileName fn(GetDirectory());
+    fn.SetExt("zip");
+
     // create the streams
-    wxFileName fn(GetDirectory(), GetReportName(), wxT("zip"));
     wxFFileOutputStream os(fn.GetFullPath(), wxT("wb"));
     wxZipOutputStream zos(os, 9);
 
@@ -621,7 +627,7 @@ bool wxDebugReportCompress::DoProcess()
         if ( !zos.PutNextEntry(ze) )
             return false;
 
-        wxFileName filename(fn.GetPath(), name);
+        const wxFileName filename(GetDirectory(), name);
         wxFFileInputStream is(filename.GetFullPath());
         if ( !is.IsOk() || !zos.Write(is).IsOk() )
             return false;
