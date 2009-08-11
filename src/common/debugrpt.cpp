@@ -252,8 +252,8 @@ wxDebugReport::~wxDebugReport()
 
 wxString wxDebugReport::GetReportName() const
 {
-    if(wxTheApp)
-        return wxTheApp->GetAppDisplayName();
+    if ( wxTheApp )
+        return wxTheApp->GetAppName();
 
     return wxT("wx");
 }
