@@ -176,7 +176,11 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 
 wxConsoleEventLoop::~wxConsoleEventLoop()
 {
-    delete m_wakeupPipe;
+	if (m_wakeupPipe)
+	{
+		m_dispatcher->UnregisterFD(m_wakeupPipe->GetReadFd());
+		delete m_wakeupPipe;
+	}
 
     // CHECK maybe this should be done from Exit() and not here
     wxEventLoopSourceHashMap::iterator it = m_sourceMap.begin();
