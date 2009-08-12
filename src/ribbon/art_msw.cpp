@@ -1367,6 +1367,7 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
                 arrow_points[0].y += 1;
             arrow_points[1] = arrow_points[0] - wxPoint(3,  3);
             arrow_points[2] = arrow_points[0] - wxPoint(3, -3);
+            break;
         case wxRIBBON_SCROLL_BTN_UP:
             arrow_points[0] = wxPoint(rect.width / 2, rect.height / 2 - 2);
             if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
