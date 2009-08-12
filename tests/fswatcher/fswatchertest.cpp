@@ -350,7 +350,7 @@ public:
                 break;
             }
         }
-        CPPUNIT_ASSERT(e);
+        CPPUNIT_ASSERT_MESSAGE("Event of wrong change type received!", e);
 
         // ok, lets check that event is correct
         CPPUNIT_ASSERT_EQUAL((int)wxEVT_FSWATCHER, e->GetEventType());
@@ -406,7 +406,10 @@ private:
         CPPUNIT_TEST( TestEventDelete );
         CPPUNIT_TEST( TestEventRename );
         CPPUNIT_TEST( TestEventModify );
+// there is no close approximate of access, so skip to for now
+#ifndef wxUSE_FSWATCHER_KQUEUE
         CPPUNIT_TEST( TestEventAccess );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void TestEventCreate();
