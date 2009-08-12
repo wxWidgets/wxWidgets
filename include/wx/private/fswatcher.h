@@ -13,18 +13,21 @@
 
 #include "wx/sharedptr.h"
 
-#if HAVE_INOTIFY_H
+#if wxUSE_FSWATCHER_INOTIFY
     class wxFSWatchEntryUnix;
     #define wxFSWatchEntry wxFSWatchEntryUnix
     WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntries);
-    #include "wx/unix/private/fswatcher.h"
+    #include "wx/unix/private/fswatcher_inotify.h"
+#elif wxUSE_FSWATCHER_KQUEUE
+    class wxFSWatchEntryKq;
+    #define wxFSWatchEntry wxFSWatchEntryKq
+    WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntries);
+    #include "wx/unix/private/fswatcher_kqueue.h"
 #elif defined(__WXMSW__)
     class wxFSWatchEntryMSW;
     #define wxFSWatchEntry wxFSWatchEntryMSW
     WX_DECLARE_STRING_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntries);
     #include "wx/msw/private/fswatcher.h"
-#elif defined(__WXCOCOA__)
-    #define wxFSWatchEntry wxFSWatchEntryKq
 #else
     #define wxFSWatchEntry wxFSWatchEntryPolling
 #endif

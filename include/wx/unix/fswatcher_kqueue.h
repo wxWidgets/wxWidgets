@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/unix/fswatcher.h
-// Purpose:     wxInotifyFileSystemWatcher
+// Name:        wx/unix/fswatcher_kqueue.h
+// Purpose:     wxKqueueFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26
 // RCS-ID:      $Id$
@@ -8,23 +8,23 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_FSWATCHER_UNIX_H_
-#define _WX_FSWATCHER_UNIX_H_
+#ifndef _WX_FSWATCHER_KQUEUE_H_
+#define _WX_FSWATCHER_KQUEUE_H_
 
 #include "wx/defs.h"
 
 #if wxUSE_FSWATCHER
 
-class WXDLLIMPEXP_BASE wxInotifyFileSystemWatcher :
+class WXDLLIMPEXP_BASE wxKqueueFileSystemWatcher :
         public wxFileSystemWatcherBase
 {
 public:
-    wxInotifyFileSystemWatcher();
+    wxKqueueFileSystemWatcher();
 
-    wxInotifyFileSystemWatcher(const wxFileName& path,
-                               int events = wxFSW_EVENT_ALL);
+    wxKqueueFileSystemWatcher(const wxFileName& path,
+                              int events = wxFSW_EVENT_ALL);
 
-    virtual ~wxInotifyFileSystemWatcher();
+    virtual ~wxKqueueFileSystemWatcher();
 
 protected:
     bool Init();
@@ -32,4 +32,4 @@ protected:
 
 #endif
 
-#endif /* _WX_FSWATCHER_UNIX_H_ */
+#endif /* _WX_FSWATCHER_OSX_H_ */

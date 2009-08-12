@@ -23,10 +23,21 @@
 #include "wx/hashmap.h"
 
 // ----------------------------------------------------------------------------
-// wxFileSystemWatcherEventType & wxFileSystemWatcherEvent
+// conditional defines & helpers
 // ----------------------------------------------------------------------------
 
+#if HAVE_SYS_INOTIFY_H
+    #define wxUSE_FSWATCHER_INOTIFY 1
+#elif HAVE_SYS_EVENT_H
+    #define wxUSE_FSWATCHER_KQUEUE  1
+#endif // possibly could warn here too
+
 #define wxTRACE_FSWATCHER "fswatcher"
+
+
+// ----------------------------------------------------------------------------
+// wxFileSystemWatcherEventType & wxFileSystemWatcherEvent
+// ----------------------------------------------------------------------------
 
 /**
  * Possible types of file system events.
@@ -72,9 +83,9 @@ public:
     }
 
     wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
-    						 int watchid = wxID_ANY) :
-    	wxEvent(watchid, wxEVT_FSWATCHER),
-    	m_changeType(changeType), m_errorMsg(errorMsg)
+                             int watchid = wxID_ANY) :
+        wxEvent(watchid, wxEVT_FSWATCHER),
+        m_changeType(changeType), m_errorMsg(errorMsg)
     {
     }
 
@@ -134,7 +145,7 @@ public:
         evt->m_errorMsg = m_errorMsg.Clone();
         evt->m_path = wxFileName(m_path.GetFullPath().Clone());
         evt->m_newPath = wxFileName(m_newPath.GetFullPath().Clone());
-		return evt;
+        return evt;
     }
 
     virtual wxEventCategory GetEventCategory() const
@@ -169,7 +180,7 @@ protected:
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
-    											(wxFileSystemWatcherEvent&);
+                                                (wxFileSystemWatcherEvent&);
 
 #define wxFileSystemWatcherEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFileSystemWatcherEventFunction, func)
@@ -185,10 +196,10 @@ typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
 class wxFSWatchInfo
 {
 public:
-	wxFSWatchInfo() :
-	    m_path(wxEmptyString), m_events(-1)
-	{
-	}
+    wxFSWatchInfo() :
+        m_path(wxEmptyString), m_events(-1)
+    {
+    }
 
     wxFSWatchInfo(const wxString& path, int events) :
         m_path(path), m_events(events)
@@ -293,7 +304,7 @@ protected:
 
     static wxString GetCanonicalPath(const wxFileName& path)
     {
-		wxFileName path_copy = wxFileName(path);
+        wxFileName path_copy = wxFileName(path);
         if ( !path_copy.Normalize() )
         {
             wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
@@ -314,15 +325,15 @@ protected:
 // include the platform specific file defining wxFileSystemWatcher
 // inheriting from wxFileSystemWatcherBase
 
-#if HAVE_INOTIFY_H
-    #include "wx/unix/fswatcher.h"
+#if wxUSE_FSWATCHER_INOTIFY
+    #include "wx/unix/fswatcher_inotify.h"
     #define wxFileSystemWatcher wxInotifyFileSystemWatcher
+#elif wxUSE_FSWATCHER_KQUEUE
+    #include "wx/unix/fswatcher_kqueue.h"
+    #define wxFileSystemWatcher wxKqueueFileSystemWatcher
 #elif defined(__WXMSW__)
     #include "wx/msw/fswatcher.h"
     #define wxFileSystemWatcher wxMSWFileSystemWatcher
-#elif defined(__WXCOCOA__)
-    #include "wx/msw/fswatcher.h"
-    #define wxFileSystemWatcher wxKqueueFileSystemWatcher
 #else
     #include "wx/generic/fswatcher.h"
     #define wxFileSystemWatcher wxPollingFileSystemWatcher

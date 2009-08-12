@@ -45,11 +45,7 @@
 // Default path style
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
 
-extern bool WXDLLEXPORT wxIsDebuggerRunning()
-{
-    // TODO : try to find out ...
-    return false;
-}
+extern bool WXDLLEXPORT wxIsDebuggerRunning();
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
