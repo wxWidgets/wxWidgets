@@ -23,8 +23,8 @@
 
 #include <sys/types.h>
 #include <sys/event.h>
-#include <wx/dynarray.h>
-#include <wx/private/fswatcher.h>
+#include "wx/dynarray.h"
+#include "wx/private/fswatcher.h"
 
 // ============================================================================
 // wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
@@ -63,7 +63,6 @@ public:
         if (fd == -1)
         {
             wxLogSysError(_("Unable to create kqueue instance"));
-            m_source.SetResource(wxEventLoopSource::INVALID_RESOURCE);
             return false;
         }
 

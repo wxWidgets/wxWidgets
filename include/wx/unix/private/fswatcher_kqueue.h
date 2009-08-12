@@ -13,9 +13,9 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <wx/dir.h>
-#include <wx/debug.h>
-#include <wx/arrstr.h>
+#include "wx/dir.h"
+#include "wx/debug.h"
+#include "wx/arrstr.h"
 
 // ============================================================================
 // wxFSWatcherEntry implementation & helper declarations
@@ -94,7 +94,7 @@ public:
         m_lastState = wxDirState(*this);
     }
 
-    wxDirState GetLastState() const
+    const wxDirState& GetLastState() const
     {
         return m_lastState;
     }
