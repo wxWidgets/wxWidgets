@@ -69,6 +69,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/threadpsx.cpp
     src/unix/stackwalk.cpp
     src/unix/utilsunx.cpp
+    src/unix/fswatcher_kqueue.cpp
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_HDR" hints="files">
@@ -81,6 +82,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/stdpaths.h
     wx/unix/stackwalk.h
     wx/unix/tls.h
+    wx/unix/fswatcher_kqueue.h
 </set>
 
 <!--
@@ -107,11 +109,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
  -->
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
-    src/unix/fswatcher.cpp
+    src/unix/fswatcher_inotify.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
-    wx/unix/fswatcher.h
+    wx/unix/fswatcher_inotify.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -186,7 +188,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
-    src/osx/fswatcher.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -196,7 +197,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/private.h
     wx/osx/core/stdpaths.h
     wx/osx/core/private/strconv_cf.h
-    wx/osx/fswatcher.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->

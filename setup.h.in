@@ -1131,7 +1131,10 @@
 #undef HAVE_SYS_SELECT_H
 
 /* Define if you have the <sys/inotify.h> header file.  */
-#undef HAVE_INOTIFY_H
+#undef HAVE_SYS_INOTIFY_H
+
+/* Define if you have the <sys/event.h> header file.  */
+#undef HAVE_SYS_EVENT_H
 
 /* Define if fdopen is available.  */
 #undef HAVE_FDOPEN

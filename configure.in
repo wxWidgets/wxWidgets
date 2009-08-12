@@ -5416,14 +5416,15 @@ if test "$wxUSE_FSWATCHER" = "yes"; then
 	AC_DEFINE(wxUSE_FSWATCHER)
 	SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
 
-	if test "$wxUSE_UNIX" = "yes" ; then
-	    AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
-		if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-	        AC_DEFINE(HAVE_INOTIFY_H)
-	    else
-	        AC_MSG_WARN([sys/inotify.h not available, \
-	        				wxInotifyFileSystemWatcher disabled])
-	    fi
+    if test "$wxUSE_UNIX" = "yes"; then
+        AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
+        AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
+    
+	    if test "$ac_cv_header_sys_inotify_h" = "no" -a \
+                "$ac_cv_header_sys_event_h" = "no" ; then
+            AC_MSG_WARN([sys/inotify.h and sys/event.h not available, \
+no native implementation for wxFileSystemWatcher on this platform!])
+        fi
     fi
 fi
 
