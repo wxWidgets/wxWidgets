@@ -1253,17 +1253,6 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
                         const wxRect& rect_,
                         long style)
 {
-    switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
-    {
-    case wxRIBBON_SCROLL_BTN_LEFT:
-    case wxRIBBON_SCROLL_BTN_RIGHT:
-        break;
-    case wxRIBBON_SCROLL_BTN_UP:
-    case wxRIBBON_SCROLL_BTN_DOWN:
-        // TODO
-        return;
-    }
-
     wxRect rect(rect_);
 
     if((style & wxRIBBON_SCROLL_BTN_FOR_MASK) == wxRIBBON_SCROLL_BTN_FOR_PAGE)
@@ -1275,11 +1264,25 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
         dc.SetBrush(m_tab_ctrl_background_brush);
         dc.DrawRectangle(rect);
         dc.SetClippingRegion(rect);
-        rect.y--;
-        rect.width--;
-        if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+        switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
         {
+        case wxRIBBON_SCROLL_BTN_LEFT:
             rect.x++;
+        case wxRIBBON_SCROLL_BTN_RIGHT:
+            rect.y--;
+            rect.width--;
+            break;
+        case wxRIBBON_SCROLL_BTN_UP:
+            rect.x++;
+            rect.y--;
+            rect.width -= 2;
+            rect.height++;
+            break;
+        case wxRIBBON_SCROLL_BTN_DOWN:
+            rect.x++;
+            rect.width -= 2;
+            rect.height--;
+            break;
         }
     }
 
@@ -1290,7 +1293,10 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
         background.width -= 2;
         background.height -= 2;
 
-        background.height /= 5;
+        if(style & wxRIBBON_SCROLL_BTN_UP)
+            background.height /= 2;
+        else
+            background.height /= 5;
         dc.GradientFillLinear(background, m_page_background_top_colour,
             m_page_background_top_gradient_colour, wxSOUTH);
 
@@ -1302,23 +1308,40 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
 
     {
         wxPoint border_points[7];
-        if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+        switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
         {
+        case wxRIBBON_SCROLL_BTN_LEFT:
             border_points[0] = wxPoint(2, 0);
             border_points[1] = wxPoint(rect.width - 1, 0);
             border_points[2] = wxPoint(rect.width - 1, rect.height - 1);
             border_points[3] = wxPoint(2, rect.height - 1);
             border_points[4] = wxPoint(0, rect.height - 3);
             border_points[5] = wxPoint(0, 2);
-        }
-        else
-        {
+            break;
+        case wxRIBBON_SCROLL_BTN_RIGHT:
             border_points[0] = wxPoint(0, 0);
             border_points[1] = wxPoint(rect.width - 3, 0);
             border_points[2] = wxPoint(rect.width - 1, 2);
             border_points[3] = wxPoint(rect.width - 1, rect.height - 3);
             border_points[4] = wxPoint(rect.width - 3, rect.height - 1);
             border_points[5] = wxPoint(0, rect.height - 1);
+            break;
+        case wxRIBBON_SCROLL_BTN_UP:
+            border_points[0] = wxPoint(2, 0);
+            border_points[1] = wxPoint(rect.width - 3, 0);
+            border_points[2] = wxPoint(rect.width - 1, 2);
+            border_points[3] = wxPoint(rect.width - 1, rect.height - 1);
+            border_points[4] = wxPoint(0, rect.height - 1);
+            border_points[5] = wxPoint(0, 2);
+            break;
+        case wxRIBBON_SCROLL_BTN_DOWN:
+            border_points[0] = wxPoint(0, 0);
+            border_points[1] = wxPoint(rect.width - 1, 0);
+            border_points[2] = wxPoint(rect.width - 1, rect.height - 3);
+            border_points[3] = wxPoint(rect.width - 3, rect.height - 1);
+            border_points[4] = wxPoint(2, rect.height - 1);
+            border_points[5] = wxPoint(0, rect.height - 3);
+            break;
         }
         border_points[6] = border_points[0];
 
@@ -1329,21 +1352,35 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
     {
         // NB: Code for handling hovered/active state is temporary
         wxPoint arrow_points[3];
-        if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+        switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
         {
+        case wxRIBBON_SCROLL_BTN_LEFT:
             arrow_points[0] = wxPoint(rect.width / 2 - 2, rect.height / 2);
             if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
                 arrow_points[0].y += 1;
             arrow_points[1] = arrow_points[0] + wxPoint(3, -3);
             arrow_points[2] = arrow_points[0] + wxPoint(3,  3);
-        }
-        else
-        {
+            break;
+        case wxRIBBON_SCROLL_BTN_RIGHT:
             arrow_points[0] = wxPoint(rect.width / 2 + 2, rect.height / 2);
             if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
                 arrow_points[0].y += 1;
             arrow_points[1] = arrow_points[0] - wxPoint(3,  3);
             arrow_points[2] = arrow_points[0] - wxPoint(3, -3);
+        case wxRIBBON_SCROLL_BTN_UP:
+            arrow_points[0] = wxPoint(rect.width / 2, rect.height / 2 - 2);
+            if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
+                arrow_points[0].y += 1;
+            arrow_points[1] = arrow_points[0] + wxPoint( 3, 3);
+            arrow_points[2] = arrow_points[0] + wxPoint(-3, 3);
+            break;
+        case wxRIBBON_SCROLL_BTN_DOWN:
+            arrow_points[0] = wxPoint(rect.width / 2, rect.height / 2 + 2);
+            if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
+                arrow_points[0].y += 1;
+            arrow_points[1] = arrow_points[0] - wxPoint( 3, 3);
+            arrow_points[2] = arrow_points[0] - wxPoint(-3, 3);
+            break;
         }
 
         dc.SetPen(*wxTRANSPARENT_PEN);
@@ -1405,7 +1442,9 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         }
 
         wxRect label_rect(true_rect);
-        wxSize label_size(dc.GetTextExtent(wnd->GetLabel()));
+        wxString label = wnd->GetLabel();
+        bool clip_label = false;
+        wxSize label_size(dc.GetTextExtent(label));
 
         label_rect.SetX(label_rect.GetX() + 1);
         label_rect.SetWidth(label_rect.GetWidth() - 2);
@@ -1413,8 +1452,48 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
         label_rect.SetY(true_rect.GetBottom() - label_rect.GetHeight());
         label_height = label_rect.GetHeight();
 
+        if(label_size.GetWidth() > label_rect.GetWidth())
+        {
+            // Test if there is enough length for 3 letters and ...
+            wxString new_label = label.Mid(0, 3) + wxT("...");
+            label_size = dc.GetTextExtent(new_label);
+            if(label_size.GetWidth() > label_rect.GetWidth())
+            {
+                // Not enough room for three characters and ...
+                // Display the entire label and just crop it
+                clip_label = true;
+            }
+            else
+            {
+                // Room for some characters and ...
+                // Display as many characters as possible and append ...
+                for(size_t len = label.Len() - 1; len >= 3; --len)
+                {
+                    new_label = label.Mid(0, len) + wxT("...");
+                    label_size = dc.GetTextExtent(new_label);
+                    if(label_size.GetWidth() <= label_rect.GetWidth())
+                    {
+                        label = new_label;
+                        break;
+                    }
+                }
+            }
+        }
+
         dc.DrawRectangle(label_rect.GetX(), label_rect.GetY(), label_rect.GetWidth(), label_rect.GetHeight());
-        dc.DrawText(wnd->GetLabel(), label_rect.x + (label_rect.GetWidth() - label_size.GetWidth()) / 2, label_rect.y + (label_rect.GetHeight() - label_size.GetHeight()) / 2);
+        if(clip_label)
+        {
+            wxDCClipper clip(dc, label_rect);
+            dc.DrawText(label, label_rect.x, label_rect.y +
+                (label_rect.GetHeight() - label_size.GetHeight()) / 2);
+        }
+        else
+        {
+            dc.DrawText(label, label_rect.x +
+                (label_rect.GetWidth() - label_size.GetWidth()) / 2,
+                label_rect.y +
+                (label_rect.GetHeight() - label_size.GetHeight()) / 2);
+        }
     }
 
     if(wnd->IsHovered())
@@ -2318,7 +2397,10 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
     wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
 
     client_size.IncBy(0, label_size.GetHeight());
-    client_size.IncBy(6, 8); // Guesswork at the moment
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        client_size.IncBy(4, 8);
+    else
+        client_size.IncBy(6, 6);
 
     if(client_offset != NULL)
     {
@@ -2341,11 +2423,17 @@ wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
     wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
 
     size.DecBy(0, label_size.GetHeight());
-    size.DecBy(6, 8); // Guesswork at the moment
+    if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+        size.DecBy(4, 8);
+    else
+        size.DecBy(6, 6);
 
     if(client_offset != NULL)
     {
-        *client_offset = wxPoint(3, 2);
+        if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+            *client_offset = wxPoint(2, 3);
+        else
+            *client_offset = wxPoint(3, 2);
     }
 
     return size;

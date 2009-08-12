@@ -229,14 +229,35 @@ void wxRibbonPage::AdjustRectToIncludeScrollButtons(wxRect* rect) const
 {
     if(m_scroll_buttons_visible)
     {
-        if(m_scroll_left_btn)
+        if(GetMajorAxis() == wxVERTICAL)
         {
-            rect->SetX(rect->GetX() - m_scroll_left_btn->GetSize().GetWidth());
-            rect->SetWidth(rect->GetWidth() + m_scroll_left_btn->GetSize().GetWidth());
+            if(m_scroll_left_btn)
+            {
+                rect->SetY(rect->GetY() -
+                    m_scroll_left_btn->GetSize().GetHeight());
+                rect->SetHeight(rect->GetHeight() +
+                    m_scroll_left_btn->GetSize().GetHeight());
+            }
+            if(m_scroll_right_btn)
+            {
+                rect->SetHeight(rect->GetHeight() +
+                    m_scroll_right_btn->GetSize().GetHeight());
+            }
         }
-        if(m_scroll_right_btn)
+        else
         {
-            rect->SetWidth(rect->GetWidth() + m_scroll_right_btn->GetSize().GetWidth());
+            if(m_scroll_left_btn)
+            {
+                rect->SetX(rect->GetX() -
+                    m_scroll_left_btn->GetSize().GetWidth());
+                rect->SetWidth(rect->GetWidth() +
+                    m_scroll_left_btn->GetSize().GetWidth());
+            }
+            if(m_scroll_right_btn)
+            {
+                rect->SetWidth(rect->GetWidth() +
+                    m_scroll_right_btn->GetSize().GetWidth());
+            }
         }
     }
 }

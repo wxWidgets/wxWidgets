@@ -291,6 +291,7 @@ MyFrame::MyFrame()
 
 void MyFrame::SetBarStyle(long style)
 {
+    m_ribbon->Freeze();
     m_ribbon->SetWindowStyleFlag(style);
     wxBoxSizer *pTopSize = reinterpret_cast<wxBoxSizer*>(GetSizer());
     wxRibbonToolBar *pToolbar = wxDynamicCast(FindWindow(ID_MAIN_TOOLBAR), wxRibbonToolBar);
@@ -310,6 +311,7 @@ void MyFrame::SetBarStyle(long style)
     }
     m_ribbon->Realise();
     Layout();
+    m_ribbon->Thaw();
 }
 
 MyFrame::~MyFrame()

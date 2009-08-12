@@ -230,7 +230,8 @@ void wxRibbonPanel::DoSetSize(int x, int y, int width, int height, int sizeFlags
     // IsMinimised() returns true. This would then affect layout, as the panel
     // will refuse to grow any larger while in limbo between minimised and non.
 
-    bool minimised = IsMinimised(wxSize(width, height));
+    bool minimised = (m_flags & wxRIBBON_PANEL_NO_AUTO_MINIMISE) == 0 &&
+        IsMinimised(wxSize(width, height));
     if(minimised != m_minimised)
     {
         m_minimised = minimised;
