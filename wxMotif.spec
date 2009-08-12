@@ -263,9 +263,10 @@ wx/unix/pipe.h
 wx/unix/stdpaths.h
 wx/unix/stackwalk.h
 wx/unix/tls.h
+wx/unix/fswatcher_kqueue.h
 wx/unix/execute.h
 wx/unix/mimetype.h
-wx/unix/fswatcher.h
+wx/unix/fswatcher_inotify.h
 wx/fs_inet.h
 wx/protocol/file.h
 wx/protocol/ftp.h
