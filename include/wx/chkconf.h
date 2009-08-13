@@ -116,6 +116,14 @@
 #   endif
 #endif /* !defined(wxUSE_FSVOLUME) */
 
+#ifndef wxUSE_FSWATCHER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FSWATCHER must be defined."
+#   else
+#       define wxUSE_FSWATCHER 0
+#   endif
+#endif /* !defined(wxUSE_FSWATCHER) */
+
 #ifndef wxUSE_DYNAMIC_LOADER
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DYNAMIC_LOADER must be defined."
