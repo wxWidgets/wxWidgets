@@ -3,10 +3,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.8.9\n"
+"Project-Id-Version: wxstd-2.8.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:31+0200\n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2009-08-13 09:24+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +36,7 @@ msgid "              Thank you and we're sorry for the inconvenience!\n"
 msgstr "              Xin cảm ơn và chúng tôi lấy làm tiếc về sự bất tiện này!\n"
 
 #: ../src/common/log.cpp:411
+#, c-format
 msgid " (error %ld: %s)"
 msgstr " (lỗi %ld: %s)"
 
@@ -81,18 +82,22 @@ msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 Envelope, 3 7/8 x 8 7/8 in"
 
 #: ../src/common/filename.cpp:2368
+#, c-format
 msgid "%.*f GB"
 msgstr "%.*f GB"
 
 #: ../src/common/filename.cpp:2366
+#, c-format
 msgid "%.*f MB"
 msgstr "%.*f MB"
 
 #: ../src/common/filename.cpp:2370
+#, c-format
 msgid "%.*f TB"
 msgstr "%.*f TB"
 
 #: ../src/common/filename.cpp:2364
+#, c-format
 msgid "%.*f kB"
 msgstr "%.*f kB"
 
@@ -100,6 +105,7 @@ msgstr "%.*f kB"
 #: ../src/html/helpwnd.cpp:1049
 #: ../src/html/helpwnd.cpp:1681
 #: ../src/html/helpwnd.cpp:1719
+#, c-format
 msgid "%i of %i"
 msgstr "%i của %i"
 
@@ -111,38 +117,47 @@ msgstr[0] "%ld byte"
 msgstr[1] "%ld bytes"
 
 #: ../src/gtk/print.cpp:677
+#, c-format
 msgid "%s"
 msgstr "%s"
 
 #: ../src/common/cmdline.cpp:922
+#, c-format
 msgid "%s (or %s)"
 msgstr "%s (hoặc %s)"
 
 #: ../src/common/filename.cpp:2362
+#, c-format
 msgid "%s B"
 msgstr "%s B"
 
 #: ../src/generic/logg.cpp:285
+#, c-format
 msgid "%s Error"
 msgstr "%s Lỗi"
 
 #: ../src/generic/logg.cpp:293
+#, c-format
 msgid "%s Information"
 msgstr "%s Thông tin"
 
 #: ../src/generic/logg.cpp:289
+#, c-format
 msgid "%s Warning"
 msgstr "%s Cảnh báo"
 
 #: ../src/common/tarstrm.cpp:1311
+#, c-format
 msgid "%s did not fit the tar header for entry '%s'"
 msgstr "%s không vừa khớp với phần đầu tar cho mục vào '%s'"
 
 #: ../src/common/fldlgcmn.cpp:96
+#, c-format
 msgid "%s files (%s)|%s"
 msgstr "%s tệp tin (%s)|%s"
 
 #: ../src/common/msgout.cpp:209
+#, c-format
 msgid "%s message"
 msgstr "%s thông điệp"
 
@@ -524,7 +539,7 @@ msgstr "Giữ &nguyên"
 #: ../src/richtext/richtextliststylepage.cpp:422
 #: ../src/richtext/richtextindentspage.cpp:272
 msgid "&Spacing (tenths of a mm)"
-msgstr "&Khoảng cách chữ (mỗi10mm)"
+msgstr "&Khoảng cách chữ (mỗi 10mm)"
 
 #: ../src/common/stockitem.cpp:154
 msgid "&Stop"
@@ -603,41 +618,50 @@ msgstr "Đồn&g ý"
 
 #: ../src/common/config.cpp:482
 #: ../src/msw/regconf.cpp:259
+#, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' có thêm '..', bỏ qua."
 
 #: ../src/common/valtext.cpp:147
 #: ../src/common/valtext.cpp:177
 #: ../src/common/valtext.cpp:183
+#, c-format
 msgid "'%s' is invalid"
 msgstr "'%s' không hợp lệ"
 
 #: ../src/common/cmdline.cpp:820
 #: ../src/common/cmdline.cpp:838
+#, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' không phải là một giá trị bằng số đúng cho tùy chọn '%s'."
 
 #: ../src/common/intl.cpp:1283
+#, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' không phải là catalog thông điệp hợp lệ."
 
 #: ../src/common/textbuf.cpp:245
+#, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s' chắc chắn là một bộ đệm nhị phân."
 
 #: ../src/common/valtext.cpp:172
+#, c-format
 msgid "'%s' should be numeric."
 msgstr "'%s' có thể thuộc kiểu số."
 
 #: ../src/common/valtext.cpp:154
+#, c-format
 msgid "'%s' should only contain ASCII characters."
 msgstr "'%s' chỉ nên chứa chữ cái trong bảng mã ASCII."
 
 #: ../src/common/valtext.cpp:160
+#, c-format
 msgid "'%s' should only contain alphabetic characters."
 msgstr "'%s' chỉ nên chứa ký tự trong bảng chữ cái."
 
 #: ../src/common/valtext.cpp:166
+#, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' chỉ nên chứa ký tự trong bảng chữ cái hay chữ số."
 
@@ -785,7 +809,7 @@ msgstr "<<"
 #: ../src/mac/carbon/fontdlg.cpp:791
 #: ../src/mac/carbon/fontdlg.cpp:811
 msgid "<Any Decorative>"
-msgstr "<Dạng Decorative bất kỳ>"
+msgstr "<Dạng Chữ Trang Trí bất kỳ>"
 
 #: ../src/mac/carbon/fontdlg.cpp:585
 #: ../src/mac/carbon/fontdlg.cpp:793
@@ -978,6 +1002,7 @@ msgid "About "
 msgstr "Thông tin thêm"
 
 #: ../src/msw/aboutdlg.cpp:65
+#, c-format
 msgid "About %s"
 msgstr "Giới thiệu %s"
 
@@ -998,6 +1023,7 @@ msgid "Added item is invalid."
 msgstr "Thêm mục tin là không hợp lệ."
 
 #: ../src/html/helpctrl.cpp:139
+#, c-format
 msgid "Adding book %s"
 msgstr "Thêm sách %s"
 
@@ -1019,6 +1045,7 @@ msgstr "Tất cả"
 
 #: ../src/common/fldlgcmn.cpp:79
 #: ../src/generic/filectrlg.cpp:1198
+#, c-format
 msgid "All files (%s)|%s"
 msgstr "Mọi tập tin (%s)|%s"
 
@@ -1055,10 +1082,12 @@ msgid "And includes the following files:\n"
 msgstr "Và bao gồm các tệp tin sau đây:\n"
 
 #: ../src/generic/animateg.cpp:164
+#, c-format
 msgid "Animation file is not of type %ld."
 msgstr "Tệp tin hoạt hình thì không phải thuộc kiểu %ld."
 
 #: ../src/generic/logg.cpp:1087
+#, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Nối thêm nhật ký vào tệp tin '%s' (chọn [No] sẽ ghi đè lên nó)?"
 
@@ -1291,19 +1320,23 @@ msgid "Can not create mutex."
 msgstr "Không thể tạo mutex."
 
 #: ../src/common/filefn.cpp:1421
+#, c-format
 msgid "Can not enumerate files '%s'"
 msgstr "Không thể liệt kê các tệp tin '%s'"
 
 #: ../src/unix/dir.cpp:228
 #: ../src/msw/dir.cpp:204
+#, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Không thể đếm các tệp tin trong thư mục '%s'"
 
 #: ../src/os2/thread.cpp:526
+#, c-format
 msgid "Can not resume thread %lu"
 msgstr "Không thể phục hồi tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:873
+#, c-format
 msgid "Can not resume thread %x"
 msgstr "Không thể phục hồi tuyến trình %x"
 
@@ -1312,10 +1345,12 @@ msgid "Can not start thread: error writing TLS."
 msgstr "Không thể bắt đầu tuyến trình: lỗi ghi TLS."
 
 #: ../src/os2/thread.cpp:512
+#, c-format
 msgid "Can not suspend thread %lu"
 msgstr "Không thể đình chỉ tuyến trình %lu"
 
 #: ../src/msw/thread.cpp:858
+#, c-format
 msgid "Can not suspend thread %x"
 msgstr "Không thể đình chỉ tuyến trình %x"
 
@@ -1328,18 +1363,22 @@ msgid "Can't &Undo "
 msgstr "Không thể &Undo"
 
 #: ../src/common/image.cpp:2648
+#, c-format
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "Không thể kiểm tra định dạng tệp tin ảnh '%s': tệp tin không tồn tại."
 
 #: ../src/msw/registry.cpp:451
+#, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Không thể đóng khóa đăng ký '%s'"
 
 #: ../src/msw/registry.cpp:529
+#, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Không thể sao chép giá trị của kiểu không được hỗ trợ %d."
 
 #: ../src/msw/registry.cpp:432
+#, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Không thể tạo một khóa đăng ký '%s'"
 
@@ -1350,39 +1389,48 @@ msgid "Can't create thread"
 msgstr "Không thể tạo tuyến trình"
 
 #: ../src/msw/window.cpp:3717
+#, c-format
 msgid "Can't create window of class %s"
 msgstr "Không thể tạo cửa sổ của lớp %s"
 
 #: ../src/msw/registry.cpp:705
+#, c-format
 msgid "Can't delete key '%s'"
 msgstr "Không thể xóa khóa '%s'"
 
 #: ../src/os2/iniconf.cpp:466
 #: ../src/msw/iniconf.cpp:453
+#, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "Không thể xóa tệp tin INI '%s'"
 
 #: ../src/msw/registry.cpp:733
+#, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Không thể xóa giá trị '%s' từ khóa '%s'"
 
 #: ../src/msw/registry.cpp:1090
+#, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Không thể liệt kê khóa phụ từ khóa '%s'"
 
 #: ../src/msw/registry.cpp:1045
+#, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Không thể liệt kê các giá trị của khóa '%s'"
 
 #: ../src/msw/registry.cpp:1308
+#, c-format
 msgid "Can't export value of unsupported type %d."
 msgstr "Không thể xuất ra giá trị của kiểu không được hỗ trợ %d."
 
 #: ../src/common/ffile.cpp:247
+#, c-format
 msgid "Can't find current position in file '%s'"
 msgstr "Không thể tìm được vị trí hiện hành trong tệp tin '%s'"
 
 #: ../src/msw/registry.cpp:360
+#, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Không thể nhận được thông tin về khóa đăng ký '%s'"
 
@@ -1396,14 +1444,17 @@ msgstr "Không thể khởi tạo zlib inflate stream."
 
 #: ../src/common/image.cpp:2029
 #: ../src/common/image.cpp:2051
+#, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Không thể tải ảnh từ tệp tin '%s': tệp tin không tồn tại."
 
 #: ../src/msw/registry.cpp:396
+#, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Không thể mở khóa đăng ký '%s'"
 
 #: ../src/common/zstream.cpp:234
+#, c-format
 msgid "Can't read from inflate stream: %s"
 msgstr "Không thể đọc từ inflate stream: %s"
 
@@ -1412,16 +1463,19 @@ msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr "Không thể đọc inflate stream: không mong chờ kết thúc tập tin EOF nằm ở dưới dòng dữ liệu."
 
 #: ../src/msw/registry.cpp:977
+#, c-format
 msgid "Can't read value of '%s'"
 msgstr "Không thể đọc giá trị của '%s'"
 
 #: ../src/msw/registry.cpp:806
 #: ../src/msw/registry.cpp:838
 #: ../src/msw/registry.cpp:900
+#, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Không thể đọc giá trị của khóa '%s'"
 
 #: ../src/common/image.cpp:2072
+#, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "Không thể ghi ảnh ra tệp tin '%s': không hiểu phần mở rộng."
 
@@ -1438,10 +1492,12 @@ msgstr "Không thể đặt mức ưu tiên tuyến trình"
 #: ../src/msw/registry.cpp:824
 #: ../src/msw/registry.cpp:868
 #: ../src/msw/registry.cpp:994
+#, c-format
 msgid "Can't set value of '%s'"
 msgstr "Không thể đặt giá trị của '%s'"
 
 #: ../src/common/zstream.cpp:402
+#, c-format
 msgid "Can't write to deflate stream: %s"
 msgstr "Không thể ghi vào deflate stream: %s"
 
@@ -1460,6 +1516,7 @@ msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Không thể chuyển đổi đơn vị hộp thoại: hộp thoại chưa được biết."
 
 #: ../src/common/strconv.cpp:2975
+#, c-format
 msgid "Cannot convert from the charset '%s'!"
 msgstr "Không thể chuyển đổi từ bộ ký tự '%s'!"
 
@@ -1469,14 +1526,17 @@ msgid "Cannot create new column's ID. Probably max. number of columns reached."
 msgstr "Không thể tạo mới chỉ số ID của cột. Hầu như chắc chắn trị số lớn nhất của cột đã được dùng. "
 
 #: ../src/msw/dialup.cpp:545
+#, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Không thể tìm thấy kết nối quay số đang hoạt động: %s"
 
 #: ../src/xrc/xmlres.cpp:371
+#, c-format
 msgid "Cannot find container for unknown control '%s'."
 msgstr "Không tìm thấy container cho điều khiển không rõ '%s'."
 
 #: ../src/xrc/xmlres.cpp:1380
+#, c-format
 msgid "Cannot find font node '%s'."
 msgstr "Không thể tìm thấy nút phông chữ '%s'."
 
@@ -1485,6 +1545,7 @@ msgid "Cannot find the location of address book file"
 msgstr "Không tìm thấy vị trí trong tệp tin sổ địa chỉ"
 
 #: ../src/unix/threadpsx.cpp:1192
+#, c-format
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Không thể nhận vùng ưu tiên cho việc tạo lập chính sách %d."
 
@@ -1513,26 +1574,32 @@ msgid "Cannot initialize display."
 msgstr "Không thể khỏi tạo bộ hiển thị."
 
 #: ../src/msw/volume.cpp:614
+#, c-format
 msgid "Cannot load icon from '%s'."
 msgstr "Không thể tải biểu tượng từ '%s'."
 
 #: ../src/xrc/xmlres.cpp:504
+#, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "Không thể tải tài nguyên từ tệp tin '%s'."
 
 #: ../src/html/htmlfilt.cpp:138
+#, c-format
 msgid "Cannot open HTML document: %s"
 msgstr "Không thể mở tài liệu HTML: %s"
 
 #: ../src/html/helpdata.cpp:658
+#, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "Không thể mở sách trợ giúp dạng HTML: %s"
 
 #: ../src/html/helpdata.cpp:298
+#, c-format
 msgid "Cannot open contents file: %s"
 msgstr "Không thể mở tập tin nội dung: %s"
 
 #: ../src/xrc/xmlres.cpp:469
+#, c-format
 msgid "Cannot open file '%s'."
 msgstr "Không thể mở tập tin %s."
 
@@ -1541,18 +1608,22 @@ msgid "Cannot open file for PostScript printing!"
 msgstr "Không thể mở tập tin cho việc in dạng PostScript!"
 
 #: ../src/html/helpdata.cpp:312
+#, c-format
 msgid "Cannot open index file: %s"
 msgstr "Không thể mở tập tin chỉ mục: %s"
 
 #: ../src/common/intl.cpp:1337
+#, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
 msgstr "Không thể phân tách Dạng-Số-Nhiều: '%s'"
 
 #: ../src/xrc/xmlres.cpp:1281
+#, c-format
 msgid "Cannot parse coordinates from '%s'."
 msgstr "Không thể phân tách hệ tọa độ từ '%s'."
 
 #: ../src/xrc/xmlres.cpp:1329
+#, c-format
 msgid "Cannot parse dimension from '%s'."
 msgstr "Không thể phân tách kích thước từ '%s'."
 
@@ -1561,6 +1632,7 @@ msgid "Cannot print empty page."
 msgstr "Không thể in một trang rỗng."
 
 #: ../src/msw/volume.cpp:504
+#, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "Không thể đọc kiểu tên từ '%s'!"
 
@@ -1569,6 +1641,7 @@ msgid "Cannot retrieve thread scheduling policy."
 msgstr "Không thể khôi phục chính sách tạo lập tác vụ tuyến trình."
 
 #: ../src/common/intl.cpp:1907
+#, c-format
 msgid "Cannot set locale to language \"%s\"."
 msgstr "Không thể đặt ngôn ngữ  \"%s\"."
 
@@ -1635,6 +1708,7 @@ msgid "Changed item is invalid."
 msgstr "Thay đổi mục tin không hợp lệ."
 
 #: ../src/common/fileconf.cpp:378
+#, c-format
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr "Các thay đổi không thể ghi lại mà không ghi đè lên tệp tin đã tồn tại \"%s\""
 
@@ -1719,6 +1793,7 @@ msgid "Choose font"
 msgstr "Chọn phông chữ"
 
 #: ../src/common/module.cpp:75
+#, c-format
 msgid "Circular dependency involving module \"%s\" detected."
 msgstr "Circular dependency đòi hỏi phải tìm được mô đun \"%s\"."
 
@@ -1871,6 +1946,7 @@ msgid "Colour"
 msgstr "Màu sắc"
 
 #: ../src/msw/colordlg.cpp:155
+#, c-format
 msgid "Colour selection dialog failed with error %0lx."
 msgstr "Hộp thoại chọn màu gặp lỗi %0lx."
 
@@ -1918,6 +1994,7 @@ msgid "Column's model column has no equivalent in the associated model."
 msgstr "Mô hình của cột phải không tương đương với mô hình liên quan."
 
 #: ../src/common/init.cpp:189
+#, c-format
 msgid "Command line argument %d couldn't be converted to Unicode and will be ignored."
 msgstr "Tham số dòng lệnh %d không thể chuyển đổi sang Unicode và sẽ bị bỏ qua."
 
@@ -1930,6 +2007,7 @@ msgid "Computer"
 msgstr "Thư mục Computer"
 
 #: ../src/common/fileconf.cpp:959
+#, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Tên mục tin cấu hình không thể bắt đầu bằng '%c'. "
 
@@ -1955,10 +2033,12 @@ msgid "Control is wrongly initialized."
 msgstr "Điều khiển khởi tạo sai."
 
 #: ../src/common/strconv.cpp:2003
+#, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "Việc chuyển đổi bộ ký tự thành '%s' không làm việc."
 
 #: ../src/html/htmlwin.cpp:941
+#, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "Đã sao chép vào clipboard:\"%s\""
 
@@ -1980,6 +2060,7 @@ msgid "Could not add column to internal structures."
 msgstr "Không thể thêm cột vào cấu trúc nội tại."
 
 #: ../src/html/chm.cpp:703
+#, c-format
 msgid "Could not create temporary file '%s'"
 msgstr "Không thể tạo tập tin tạm thời  '%s'"
 
@@ -1997,6 +2078,7 @@ msgid "Could not determine number of items"
 msgstr "Không thể định rõ số các mục tin"
 
 #: ../src/html/chm.cpp:274
+#, c-format
 msgid "Could not extract %s into %s: %s"
 msgstr "Không thể rút trích %s vào trong %s: %s "
 
@@ -2027,6 +2109,7 @@ msgid "Could not get selected items."
 msgstr "Không thể lấy mục tin đã chọn."
 
 #: ../src/html/chm.cpp:445
+#, c-format
 msgid "Could not locate file '%s'."
 msgstr "Không thể cấp phát tệp tin '%s'."
 
@@ -2114,6 +2197,7 @@ msgid "Couldn't create the overlay window"
 msgstr "Không tạo được cửa sổ overlay"
 
 #: ../src/common/dynlib.cpp:157
+#, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Không thể tìm thấy ký tự đặc biệt '%s' trong thư viện liên kết động"
 
@@ -2134,14 +2218,17 @@ msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
 msgstr "Không thể tải ảnh PNG- tệp tin bị hỏng hay không đủ bộ nhớ."
 
 #: ../src/unix/sound.cpp:471
+#, c-format
 msgid "Couldn't load sound data from '%s'."
 msgstr "Không thể tải dữ liệu âm thanh từ '%s'."
 
 #: ../src/unix/sound_sdl.cpp:228
+#, c-format
 msgid "Couldn't open audio: %s"
 msgstr "Không mở âm thanh: %s"
 
 #: ../src/msw/ole/dataobj.cpp:145
+#, c-format
 msgid "Couldn't register clipboard format '%s'."
 msgstr "Không thể đăng ký định dạng clipboard '%s'."
 
@@ -2150,6 +2237,7 @@ msgid "Couldn't release a mutex"
 msgstr "Không thể giải phóng mutex"
 
 #: ../src/msw/listctrl.cpp:802
+#, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Không thể phục hồi thông tin về điều khiển danh sách mục tin %d."
 
@@ -2268,6 +2356,7 @@ msgid "Date renderer cannot render value; value type: "
 msgstr "Bộ đáp ứng Ngày tháng không trả về giá trị; giá trị kiểu:"
 
 #: ../src/generic/dbgrptg.cpp:296
+#, c-format
 msgid "Debug report \"%s\""
 msgstr "Báo cáo lỗi  \"%s\""
 
@@ -2322,14 +2411,17 @@ msgid "Delete selection"
 msgstr "Xóa bỏ vùng chọn"
 
 #: ../src/richtext/richtextstyledlg.cpp:734
+#, c-format
 msgid "Delete style %s?"
 msgstr "Xóa kiểu dáng %s?"
 
 #: ../src/unix/snglinst.cpp:296
+#, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "Xóa tệp tin khóa cũ '%s'."
 
 #: ../src/common/module.cpp:125
+#, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
 msgstr "Phần phụ thuộc \"%s\" của mô đun \"%s\" chưa tồn tại."
 
@@ -2354,6 +2446,7 @@ msgid "Did you know..."
 msgstr "Bạn có biết..."
 
 #: ../src/dfb/wrapdfb.cpp:64
+#, c-format
 msgid "DirectFB error %d occured."
 msgstr "Lỗi DirectFB %d xảy ra."
 
@@ -2362,10 +2455,12 @@ msgid "Directories"
 msgstr "Thư mục"
 
 #: ../src/common/filefn.cpp:1290
+#, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Thư mục '%s' không thể được tạo"
 
 #: ../src/mgl/dirmgl.cpp:211
+#, c-format
 msgid "Directory '%s' doesn't exist!"
 msgstr "Thư mục  '%s' chưa tồn tại!"
 
@@ -2404,6 +2499,7 @@ msgstr ""
 "%s %1"
 
 #: ../src/common/docview.cpp:481
+#, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Bạn có muốn ghi lại các thay đổi với tài liệu %s không?"
 
@@ -2433,6 +2529,7 @@ msgid "Double Japanese Postcard Rotated 148 x 200 mm"
 msgstr "Double Japanese Postcard Rotated 148 x 200 mm"
 
 #: ../src/common/xtixml.cpp:268
+#, c-format
 msgid "Doubly used id : %d"
 msgstr "Chỉ số id người dùng kép: %d"
 
@@ -2485,6 +2582,7 @@ msgid "Enter a new style name"
 msgstr "Nhập vào tên kiểu dáng danh sách mới"
 
 #: ../src/common/prntbase.cpp:1086
+#, c-format
 msgid "Enter a page number between %d and %d:"
 msgstr "Nhập vào số trang nằm giữa %d và %d: "
 
@@ -2493,6 +2591,7 @@ msgid "Enter a paragraph style name"
 msgstr "Nhập vào tên kiểu dáng đoạn văn"
 
 #: ../src/generic/dbgrptg.cpp:170
+#, c-format
 msgid "Enter command to open file \"%s\":"
 msgstr "Nhập vào lệnh mở tệp tin \"%s\":"
 
@@ -2505,6 +2604,7 @@ msgid "Envelope Invite 220 x 220 mm"
 msgstr "Envelope Invite 220 x 220 mm"
 
 #: ../src/common/config.cpp:433
+#, c-format
 msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr "Sự mở rộng các biến môi trường gặp lỗi: mất '%c' tại vị trí %u trong '%s'."
 
@@ -2568,10 +2668,12 @@ msgid "Executable files (*.exe)|*.exe|All files (*.*)|*.*||"
 msgstr "Tệp tin thực thi (*.exe)|*.exe|All files (*.*)|*.*||"
 
 #: ../src/msw/utilsexc.cpp:838
+#, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Thi hành lệnh '%s' gặp lỗi"
 
 #: ../src/os2/utilsexc.cpp:163
+#, c-format
 msgid "Execution of command '%s' failed with error: %ul"
 msgstr "Thi hành lệnh '%s' gặp lỗi với lỗi: %ul"
 
@@ -2580,6 +2682,7 @@ msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "Executive, 7 1/4 x 10 1/2 in"
 
 #: ../src/msw/registry.cpp:1159
+#, c-format
 msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
 msgstr "Sự xuất khóa đăng ký: tệp tin \"%s\" đã tồn tại và không thể ghi đè lên."
 
@@ -2588,6 +2691,7 @@ msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Extended Unix Codepage for Japanese (EUC-JP)"
 
 #: ../src/html/chm.cpp:710
+#, c-format
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "Rút trích '%s' vào '%s' gặp lỗi."
 
@@ -2601,6 +2705,7 @@ msgid "Failed to access lock file."
 msgstr "Truy cập tệp tin khóa gặp lỗi."
 
 #: ../src/unix/epolldispatcher.cpp:114
+#, c-format
 msgid "Failed to add descriptor %d to epoll descriptor %d"
 msgstr "Khi thêm phần mô tả %d vào phần mô tả epoll %d gặp lỗi"
 
@@ -2609,6 +2714,7 @@ msgid "Failed to allocate colour for OpenGL"
 msgstr "Cấp phát màu cho OpenGL gặp lỗi"
 
 #: ../src/msw/dib.cpp:567
+#, c-format
 msgid "Failed to allocated %luKb of memory for bitmap data."
 msgstr "Việc cấp phát %luKb bộ nhớ cho dữ liệu ảnh bitmap gặp lỗi."
 
@@ -2617,6 +2723,7 @@ msgid "Failed to change video mode"
 msgstr "Thay đổi chế độ video gặp lỗi"
 
 #: ../src/common/debugrpt.cpp:243
+#, c-format
 msgid "Failed to clean up debug report directory \"%s\""
 msgstr "Việc xóa sạch thư mục báo cáo lỗi \"%s\" gặp lỗi"
 
@@ -2625,6 +2732,7 @@ msgid "Failed to close file handle"
 msgstr "Đóng handle tệp tin gặp lỗi"
 
 #: ../src/unix/snglinst.cpp:335
+#, c-format
 msgid "Failed to close lock file '%s'"
 msgstr "Đóng tập tin khóa '%s' gặp lỗi"
 
@@ -2633,10 +2741,12 @@ msgid "Failed to close the clipboard."
 msgstr "Đóng clipboard gặp lỗi."
 
 #: ../src/x11/utils.cpp:207
+#, c-format
 msgid "Failed to close the display \"%s\""
 msgstr "Đóng bộ hiển thị \"%s\" gặp lỗi"
 
 #: ../src/gtk/utilsgtk.cpp:293
+#, c-format
 msgid "Failed to connect to session manager: %s"
 msgstr "Kết nối tới quản lý session gặp lỗi: %s"
 
@@ -2649,22 +2759,27 @@ msgid "Failed to connect: no ISP to dial."
 msgstr "Kết nối lỗi: không có nhà cung cấp dịch vụ Internet ISP để quay số."
 
 #: ../src/common/textfile.cpp:177
+#, c-format
 msgid "Failed to convert file \"%s\" to Unicode."
 msgstr "Chuyển đổi tệp tin \"%s\" sang Unicode gặp lỗi."
 
 #: ../src/msw/registry.cpp:637
+#, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Sao chép giá trị đăng ký '%s' gặp lỗi"
 
 #: ../src/msw/registry.cpp:646
+#, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Sao chép nội dung khóa đăng ký '%s' tới '%s' gặp lỗi."
 
 #: ../src/common/filefn.cpp:1095
+#, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "Sao chép tệp tin từ '%s' sang '%s' gặp lỗi"
 
 #: ../src/msw/registry.cpp:624
+#, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
 msgstr "Sao chép khóa đăng ký phụ '%s' tới '%s' gặp lỗi."
 
@@ -2689,6 +2804,7 @@ msgid "Failed to create an anonymous pipe"
 msgstr "Tạo anonymous pipe gặp lỗi"
 
 #: ../src/msw/dde.cpp:444
+#, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr "Tạo kết nối tới máy chủ '%s' với chủ đề '%s' gặp lỗi"
 
@@ -2697,10 +2813,12 @@ msgid "Failed to create cursor."
 msgstr "Tạo con trỏ chuột gặp lỗi."
 
 #: ../src/common/debugrpt.cpp:208
+#, c-format
 msgid "Failed to create directory \"%s\""
 msgstr "Tạo thư mục \"%s\" gặp lỗi"
 
 #: ../src/generic/dirdlgg.cpp:250
+#, c-format
 msgid ""
 "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
@@ -2713,10 +2831,12 @@ msgid "Failed to create epoll descriptor"
 msgstr "Tạo phần mô tả epoll gặp lỗi"
 
 #: ../src/msw/mimetype.cpp:190
+#, c-format
 msgid "Failed to create registry entry for '%s' files."
 msgstr "Tạo mục đăng ký cho '%s' tệp tin gặp lỗi."
 
 #: ../src/msw/fdrepdlg.cpp:443
+#, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "Tạo hộp thoại tìm/thay thế tiêu chuẩn gặp lỗi (mã lỗi %d)"
 
@@ -2725,6 +2845,7 @@ msgid "Failed to create wake up pipe used by event loop."
 msgstr "Tạo wake up pipe sử dụng cho vòng lặp sự kiện gặp lỗi."
 
 #: ../src/html/winpars.cpp:704
+#, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Hiển thị tài liệu HTML trong bộ mã %s gặp lỗi"
 
@@ -2742,11 +2863,13 @@ msgstr "Thiết lập một vòng lặp advise máy chủ DDE gặp lỗi"
 
 #: ../src/msw/dialup.cpp:657
 #: ../src/msw/dialup.cpp:889
+#, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "Thiết lập kết nối quay số gặp lỗi: %s"
 
 #: ../src/unix/utilsunx.cpp:549
 #: ../src/unix/utilsunx.cpp:563
+#, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Thực thi '%s' gặp lỗi\n"
 
@@ -2756,10 +2879,12 @@ msgstr "Thực thi curl gặp lỗi, xin thiết đặt nó trong ĐƯỜNG DẪ
 
 #: ../src/common/regex.cpp:433
 #: ../src/common/regex.cpp:481
+#, c-format
 msgid "Failed to find match for regular expression: %s"
 msgstr "Việc tìm khớp với biểu thức thông thường gặp lỗi: %s"
 
 #: ../src/msw/dialup.cpp:723
+#, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "Lấy tên của nhà cung cấp dịch vụ Internet ISP gặp lỗi: %s"
 
@@ -2788,6 +2913,7 @@ msgid "Failed to initialize OpenGL"
 msgstr "Khởi tạo OpenGL gặp lỗi."
 
 #: ../src/msw/dialup.cpp:886
+#, c-format
 msgid "Failed to initiate dialup connection: %s"
 msgstr "Khởi tạo kết nối quay số gặp lỗi: %s"
 
@@ -2796,6 +2922,7 @@ msgid "Failed to insert text in the control."
 msgstr "Chèn chữ vào điều khiển gặp lỗi."
 
 #: ../src/unix/snglinst.cpp:242
+#, c-format
 msgid "Failed to inspect the lock file '%s'"
 msgstr "Kiểm tra tệp tin khóa '%s' gặp lỗi"
 
@@ -2808,14 +2935,17 @@ msgid "Failed to join a thread, potential memory leak detected - please restart 
 msgstr "Gia nhập tuyến trình gặp lỗi, đã phát hiện lỗ thủng bộ nhớ tiềm tàng - xin hãy khởi động lại chương trình"
 
 #: ../src/msw/utils.cpp:735
+#, c-format
 msgid "Failed to kill process %d"
 msgstr "Loại bỏ quá trình %d gặp lỗi"
 
 #: ../src/common/iconbndl.cpp:127
+#, c-format
 msgid "Failed to load image %d from file '%s'."
 msgstr "Tải ảnh %d từ tệp tin '%s' gặp lỗi."
 
 #: ../src/msw/enhmeta.cpp:97
+#, c-format
 msgid "Failed to load metafile from file \"%s\"."
 msgstr "Tải metafile từ tệp tin \"%s\" gặp lỗi."
 
@@ -2824,18 +2954,22 @@ msgid "Failed to load mpr.dll."
 msgstr "Tải thư viện mpr.dll gặp lỗi."
 
 #: ../src/common/dynlib.cpp:105
+#, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Tải thư viện chia sẻ %s gặp lỗi"
 
 #: ../src/unix/snglinst.cpp:199
+#, c-format
 msgid "Failed to lock the lock file '%s'"
 msgstr "Khóa tập tin khóa %s gặp lỗi"
 
 #: ../src/unix/epolldispatcher.cpp:134
+#, c-format
 msgid "Failed to modify descriptor %d in epoll descriptor %d"
 msgstr "Chỉnh sửa phần mô tả %d trong phần mô tả epoll %d gặp lỗi"
 
 #: ../src/common/filename.cpp:2206
+#, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "Chỉnh sửa thời gian tệp tin '%s' gặp lỗi"
 
@@ -2844,22 +2978,27 @@ msgid "Failed to monitor I/O channels"
 msgstr "Kênh vào ra màn hình gặp lỗi"
 
 #: ../src/common/filename.cpp:182
+#, c-format
 msgid "Failed to open '%s' for reading"
 msgstr "Mở '%s' để đọc gặp lỗi"
 
 #: ../src/common/filename.cpp:185
+#, c-format
 msgid "Failed to open '%s' for writing"
 msgstr "Mở '%s' để ghi gặp lỗi"
 
 #: ../src/html/chm.cpp:142
+#, c-format
 msgid "Failed to open CHM archive '%s'."
 msgstr "Mở CHM để lưu giữ '%s' gặp lỗi."
 
 #: ../src/common/utilscmn.cpp:1150
+#, c-format
 msgid "Failed to open URL \"%s\" in default browser."
 msgstr "Mở URL \"%s\" trong trình duyệt mặc định gặp lỗi."
 
 #: ../src/x11/utils.cpp:226
+#, c-format
 msgid "Failed to open display \"%s\"."
 msgstr "Mở bộ hiển thị \"%s\" gặp lỗi."
 
@@ -2896,6 +3035,7 @@ msgid "Failed to redirect the child process IO"
 msgstr "Chuyển hướng vào xử lý IO con gặp lỗi"
 
 #: ../src/msw/dde.cpp:294
+#, c-format
 msgid "Failed to register DDE server '%s'"
 msgstr "Đăng ký máy chủ DDE '%s' gặp lỗi."
 
@@ -2904,30 +3044,37 @@ msgid "Failed to register OpenGL window class."
 msgstr "Đăng ký một lớp cửa sổ OpenGL gặp lỗi."
 
 #: ../src/common/fontmap.cpp:243
+#, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Ghi nhớ bộ mã của bộ ký tự '%s' gặp lỗi."
 
 #: ../src/common/debugrpt.cpp:226
+#, c-format
 msgid "Failed to remove debug report file \"%s\""
 msgstr "Gỡ bỏ tệp tin báo cáo gỡ lỗi \"%s\" gặp lỗi"
 
 #: ../src/unix/snglinst.cpp:323
+#, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr "Gỡ bỏ tệp tin khóa '%s' gặp lỗi"
 
 #: ../src/unix/snglinst.cpp:289
+#, c-format
 msgid "Failed to remove stale lock file '%s'."
 msgstr "Gỡ bỏ tệp tin khóa cũ '%s' gặp lỗi."
 
 #: ../src/msw/registry.cpp:474
+#, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Đổi tên giá trị đăng ký '%s' thành '%s' gặp lỗi."
 
 #: ../src/common/filefn.cpp:1208
+#, c-format
 msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
 msgstr "Đổi tên tệp tin '%s' thành '%s' gặp lỗi bởi vì tệp tin đích đã tồn tại rồi."
 
 #: ../src/msw/registry.cpp:579
+#, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Đổi tên khóa đăng ký '%s' thành '%s' gặp lỗi."
 
@@ -2936,6 +3083,7 @@ msgid "Failed to retrieve data from the clipboard."
 msgstr "Khôi phục dữ liệu từ clipboard gặp lỗi."
 
 #: ../src/common/filename.cpp:2300
+#, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "Khôi phục thời gian tệp tin cho '%s' gặp lỗi"
 
@@ -2948,6 +3096,7 @@ msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Khôi phục định dạng clipboard được hỗ trợ gặp lỗi"
 
 #: ../src/msw/dib.cpp:345
+#, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "Ghi ảnh bitmap thành tệp tin \"%s\" gặp lỗi."
 
@@ -2956,6 +3105,7 @@ msgid "Failed to send DDE advise notification"
 msgstr "Gửi thông báo DDE advise gặp lỗi"
 
 #: ../src/common/ftp.cpp:381
+#, c-format
 msgid "Failed to set FTP transfer mode to %s."
 msgstr "Đặt chế độ truyền FTP thành %s gặp lỗi."
 
@@ -2964,6 +3114,7 @@ msgid "Failed to set clipboard data."
 msgstr "Đặt dữ liệu clipboard gặp lỗi."
 
 #: ../src/unix/snglinst.cpp:182
+#, c-format
 msgid "Failed to set permissions on lock file '%s'"
 msgstr "Đặt quyền trên tệp tin khóa '%s' gặp lỗi"
 
@@ -2977,10 +3128,12 @@ msgstr "Gán văn bản vào điều khiển văn bản gặp lỗi."
 
 #: ../src/unix/threadpsx.cpp:1317
 #: ../src/unix/threadpsx.cpp:1327
+#, c-format
 msgid "Failed to set thread priority %d."
 msgstr "Đặt mức ưu tiên tuyến trình %d gặp lỗi."
 
 #: ../src/common/fs_mem.cpp:256
+#, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "Lưu trữ ảnh '%s' vào bộ nhớ VFS gặp lỗi!"
 
@@ -2998,22 +3151,27 @@ msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Chấm dứt vòng lặp advise với máy chủ DDE gặp lỗi"
 
 #: ../src/msw/dialup.cpp:963
+#, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "Chấm dứt kết nối quay số gặp lỗi: %s"
 
 #: ../src/common/filename.cpp:2221
+#, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "Mở tệp tin '%s' gặp lỗi"
 
 #: ../src/unix/snglinst.cpp:329
+#, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr "Không khóa tệp tin khóa '%s' gặp lỗi"
 
 #: ../src/msw/dde.cpp:315
+#, c-format
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Việc bỏ đăng ký máy chủ DDE '%s' gặp lỗi"
 
 #: ../src/unix/epolldispatcher.cpp:153
+#, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
 msgstr "Bỏ đăng ký phần mô tả %d từ phần mô tả epoll %d gặp lỗi."
 
@@ -3022,10 +3180,12 @@ msgid "Failed to update user configuration file."
 msgstr "Cập nhật tệp tin cấu hình gặp lỗi."
 
 #: ../src/common/debugrpt.cpp:685
+#, c-format
 msgid "Failed to upload the debug report (error code %d)."
 msgstr "Tải lên báo cáo lỗi gặp lỗi (mã lỗi %d)."
 
 #: ../src/unix/snglinst.cpp:169
+#, c-format
 msgid "Failed to write to lock file '%s'"
 msgstr "Ghi vào tệp tin khóa '%s' gặp lỗi"
 
@@ -3042,14 +3202,17 @@ msgid "File"
 msgstr "Tệp tin"
 
 #: ../src/mgl/bitmap.cpp:409
+#, c-format
 msgid "File %s does not exist."
 msgstr "Tệp tin %s chưa tồn tại."
 
 #: ../src/gtk/filedlg.cpp:52
+#, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Tệp tin '%s' đã tồn tại. Bạn có muốn ghi đè lên nó không?"
 
 #: ../src/os2/filedlg.cpp:307
+#, c-format
 msgid ""
 "File '%s' already exists.\n"
 "Do you want to replace it?"
@@ -3077,6 +3240,7 @@ msgid "Files"
 msgstr "Tập tin"
 
 #: ../src/common/filefn.cpp:1835
+#, c-format
 msgid "Files (%s)"
 msgstr "Tập tin (%s)"
 
@@ -3122,6 +3286,7 @@ msgid "Font:"
 msgstr "Phông chữ :"
 
 #: ../src/dfb/fontmgr.cpp:202
+#, c-format
 msgid "Fonts index file %s disappeared while loading fonts."
 msgstr "Tệp tin chỉ số phông chữ %s bị mất khi đang tải lên."
 
@@ -3135,6 +3300,7 @@ msgstr "Liên kết tiến tới chưa được hỗ trợ"
 
 #: ../src/html/htmlhelp.cpp:460
 #: ../src/html/helpwnd.cpp:893
+#, c-format
 msgid "Found %i matches"
 msgstr "Tìm thấy %i cái khớp"
 
@@ -3241,6 +3407,7 @@ msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML Đề án Trợ giúp (*.hhp)|*.hhp|"
 
 #: ../src/html/htmlwin.cpp:630
+#, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "Điểm neo HTML %s không tồn tại."
 
@@ -3262,6 +3429,7 @@ msgid "Help"
 msgstr "Trợ giúp"
 
 #: ../src/html/htmlhelp.cpp:87
+#, c-format
 msgid "Help : %s"
 msgstr "Trợ giúp : %s"
 
@@ -3287,14 +3455,17 @@ msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "Sách trợ giúp (*.htb)|*.htb|Sách trợ giúp (*.zip)|*.zip|"
 
 #: ../src/generic/helpext.cpp:273
+#, c-format
 msgid "Help directory \"%s\" not found."
 msgstr "Không tìm thấy thư mục trợ giúp \"%s\"."
 
 #: ../src/generic/helpext.cpp:281
+#, c-format
 msgid "Help file \"%s\" not found."
 msgstr "Tệp tin trợ giúp \"%s\" không tìm thấy."
 
 #: ../src/html/helpctrl.cpp:51
+#, c-format
 msgid "Help: %s"
 msgstr "Trợ giúp: %s"
 
@@ -3387,6 +3558,7 @@ msgstr ""
 "nếu có thể xin hãy tiếp tục việc báo cáo với chúng tôi.\n"
 
 #: ../src/msw/registry.cpp:1324
+#, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
 msgstr "Bỏ qua giá trị \"%s\" của khóa \"%s\"."
 
@@ -3409,10 +3581,12 @@ msgstr "Ảnh và  mặt nạ có sự khác biệt kích thước."
 
 #: ../src/common/image.cpp:2195
 #: ../src/common/image.cpp:2240
+#, c-format
 msgid "Image file is not of type %ld."
 msgstr "Tệp tin ảnh không thuộc kiểu %ld."
 
 #: ../src/common/image.cpp:2264
+#, c-format
 msgid "Image file is not of type %s."
 msgstr "Tệp tin ảnh không thuộc kiểu %s."
 
@@ -3425,14 +3599,17 @@ msgid "Impossible to get child process input"
 msgstr "Không thể lấy đầu vào của tiến trình con"
 
 #: ../src/common/filefn.cpp:1114
+#, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "Không thể nào lấy được quyền cho tệp tin '%s'"
 
 #: ../src/common/filefn.cpp:1128
+#, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "Không thể xảy ra việc ghi đè lên tệp tin '%s'"
 
 #: ../src/common/filefn.cpp:1182
+#, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "Không thể nào đặt được quyền cho tệp tin '%s'"
 
@@ -3479,6 +3656,7 @@ msgid "Internal error, illegal wxCustomTypeInfo"
 msgstr "Lỗi nội bộ, wxCustomTypeInfo không hợp lệ"
 
 #: ../src/gtk/app.cpp:484
+#, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
 msgstr "Tùy chọn dòng lệnh GTK+ không hợp lệ, sử dụng  \"%s --help\""
 
@@ -3487,6 +3665,7 @@ msgid "Invalid TIFF image index."
 msgstr "Chỉ mục ảnh TIFF không hợp lệ."
 
 #: ../src/xrc/xmlres.cpp:511
+#, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
 msgstr "Tài nguyên XRC '%s' không hợp lệ: không có nút gốc 'resource'."
 
@@ -3495,14 +3674,17 @@ msgid "Invalid data view item"
 msgstr "Dữ liệu hiển thị mục tin không hợp lệ"
 
 #: ../src/common/appcmn.cpp:254
+#, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "Chi tiết chế độ hiển thị '%s' không hợp lệ."
 
 #: ../src/x11/app.cpp:124
+#, c-format
 msgid "Invalid geometry specification '%s'"
 msgstr "Chi tiết hình học '%s' không hợp lệ"
 
 #: ../src/unix/snglinst.cpp:307
+#, c-format
 msgid "Invalid lock file '%s'."
 msgstr "Tệp tin khóa '%s' không hợp lệ."
 
@@ -3516,6 +3698,7 @@ msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
 msgstr "Không hợp lệ hay Null Object ID được chuyển tới HasObjectClassInfo"
 
 #: ../src/common/regex.cpp:312
+#, c-format
 msgid "Invalid regular expression '%s': %s"
 msgstr "Biểu thức thông thường '%s' không hợp lệ: %s"
 
@@ -3794,6 +3977,7 @@ msgid "Light"
 msgstr "Ánh sáng"
 
 #: ../src/generic/helpext.cpp:300
+#, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
 msgstr "Dòng %lu của tệp tin ánh xạ \"%s\" có cú pháp không hợp lệ, đã bỏ qua."
 
@@ -3824,6 +4008,7 @@ msgid "Lists the available fonts."
 msgstr "Danh sách phông chữ sẵn có."
 
 #: ../src/common/fldlgcmn.cpp:282
+#, c-format
 msgid "Load %s file"
 msgstr "Tải %s tập tin"
 
@@ -3832,14 +4017,17 @@ msgid "Loading : "
 msgstr "Đang tải :"
 
 #: ../src/unix/snglinst.cpp:247
+#, c-format
 msgid "Lock file '%s' has incorrect owner."
 msgstr "Tập tin khóa '%s' có chủ sở hữu không đúng."
 
 #: ../src/unix/snglinst.cpp:252
+#, c-format
 msgid "Lock file '%s' has incorrect permissions."
 msgstr "Tập tin khóa '%s' có quyền không đúng."
 
 #: ../src/generic/logg.cpp:602
+#, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Ghi nhật ký thông tin vào tập tin '%s'."
 
@@ -3875,6 +4063,7 @@ msgid "Match case"
 msgstr "Phân biệt chữ hoa/thường"
 
 #: ../src/common/fs_mem.cpp:168
+#, c-format
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Bộ nhớ VFS đã chứa tệp tin '%s' rồi!"
 
@@ -3891,6 +4080,7 @@ msgid "Mi&nimize"
 msgstr "&Nhỏ nhất"
 
 #: ../src/mgl/app.cpp:163
+#, c-format
 msgid "Mode %ix%i-%i not available."
 msgstr "Chế độ %ix%i-%i không sẵn sàng."
 
@@ -3907,6 +4097,7 @@ msgid "Modified"
 msgstr "Đã chỉnh sửa"
 
 #: ../src/common/module.cpp:134
+#, c-format
 msgid "Module \"%s\" initialization failed"
 msgstr "Sự khởi tạo mô-đun \"%s\" gặp lỗi"
 
@@ -3982,11 +4173,13 @@ msgid "No"
 msgstr "Không"
 
 #: ../src/generic/animateg.cpp:152
+#, c-format
 msgid "No animation handler for type %ld defined."
 msgstr "Không có bộ điều khiển hoạt hình cho kiểu %ld đã định nghĩa."
 
 #: ../src/dfb/bitmap.cpp:540
 #: ../src/dfb/bitmap.cpp:574
+#, c-format
 msgid "No bitmap handler for type %d defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %d được định nghĩa."
 
@@ -4011,6 +4204,7 @@ msgid "No entries found."
 msgstr "Không tìm thấy đề mục nào."
 
 #: ../src/common/fontmap.cpp:419
+#, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
@@ -4021,6 +4215,7 @@ msgstr ""
 "Bạn có muốn sử dụng bộ mã này không (nếu không bạn sẽ phải chọn một cái khác)?"
 
 #: ../src/common/fontmap.cpp:424
+#, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
 "Would you like to select a font to be used for this encoding\n"
@@ -4031,6 +4226,7 @@ msgstr ""
 "(nếu không chữ với bộ mã này sẽ hiện lên không chính xác)?"
 
 #: ../src/xrc/xmlres.cpp:739
+#, c-format
 msgid "No handler found for XML node '%s', class '%s'!"
 msgstr "Không tìm thấy handler XML cho nút '%s', lớp '%s'!"
 
@@ -4044,16 +4240,19 @@ msgid "No handler found for image type."
 msgstr "Không có phần điều khiển cho kiểu ảnh này."
 
 #: ../src/common/image.cpp:2278
+#, c-format
 msgid "No image handler for type %d defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %d được định nghĩa."
 
 #: ../src/common/image.cpp:2185
 #: ../src/common/image.cpp:2233
+#, c-format
 msgid "No image handler for type %ld defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %ld đã định nghĩa."
 
 #: ../src/common/image.cpp:2257
 #: ../src/common/image.cpp:2293
+#, c-format
 msgid "No image handler for type %s defined."
 msgstr "Không có bộ điều khiển ảnh cho kiểu %s được định nghĩa."
 
@@ -4091,6 +4290,7 @@ msgid "No unused colour in image."
 msgstr "Không có màu không dùng trong ảnh."
 
 #: ../src/generic/helpext.cpp:308
+#, c-format
 msgid "No valid mappings found in the file \"%s\"."
 msgstr "Không có ánh xạ hợp lệ nào được tìm thấy trong tệp tin \"%s\"."
 
@@ -4154,10 +4354,12 @@ msgid "Open HTML document"
 msgstr "Mở tài liệu định dạng HTML"
 
 #: ../src/generic/dbgrptg.cpp:159
+#, c-format
 msgid "Open file \"%s\""
 msgstr "Mở tệp tin \"%s\""
 
 #: ../src/mac/carbon/glcanvas.cpp:48
+#, c-format
 msgid "OpenGL function \"%s\" failed: %s (error %d)"
 msgstr "Hàm \"%s\" của OpenGL bị lỗi: %s (lỗi %d)"
 
@@ -4169,10 +4371,12 @@ msgid "Operation not permitted."
 msgstr "Thao tác không được phép."
 
 #: ../src/common/cmdline.cpp:771
+#, c-format
 msgid "Option '%s' requires a value."
 msgstr "Tùy chọn '%s' yêu cầu một giá trị."
 
 #: ../src/common/cmdline.cpp:854
+#, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "Tùy chọn '%s': '%s' không thể chuyển thành dạng ngày tháng."
 
@@ -4363,10 +4567,12 @@ msgid "PRINT"
 msgstr "IN"
 
 #: ../src/common/prntbase.cpp:1569
+#, c-format
 msgid "Page %d"
 msgstr "Trang %d"
 
 #: ../src/common/prntbase.cpp:1567
+#, c-format
 msgid "Page %d of %d"
 msgstr "Trang %d của %d"
 
@@ -4455,6 +4661,7 @@ msgid "Please choose which ISP do you want to connect to"
 msgstr "Xin hãy chọn nhà cung cấp dịch vụ Internet ISP mà bạn muốn kết nối tới"
 
 #: ../src/msw/listctrl.cpp:434
+#, c-format
 msgid ""
 "Please install a newer version of comctl32.dll\n"
 "(at least version 4.70 is required but you have %d.%02d)\n"
@@ -4595,6 +4802,7 @@ msgid "Printing Error"
 msgstr "Lỗi In"
 
 #: ../src/generic/printps.cpp:204
+#, c-format
 msgid "Printing page %d..."
 msgstr "Đang in trang %d..."
 
@@ -4603,6 +4811,7 @@ msgid "Printing..."
 msgstr "Đang in..."
 
 #: ../src/common/debugrpt.cpp:552
+#, c-format
 msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr "Sự tạo báo cáo gỡ lỗi bị lỗi, tệp tin xuất ra trong thư mục \"%s\"."
 
@@ -4636,6 +4845,7 @@ msgstr "RIGHT"
 
 #: ../src/common/ffile.cpp:126
 #: ../src/common/ffile.cpp:145
+#, c-format
 msgid "Read error on file '%s'"
 msgstr "Lỗi đọc trong tập tin '%s'"
 
@@ -4652,6 +4862,7 @@ msgid "Redo last action"
 msgstr "Redo bước cuối cùng"
 
 #: ../src/xrc/xmlres.cpp:710
+#, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
 msgstr "Nốt đối tượng có liên quan đến ref=\"%s\" không tìm thấy!"
 
@@ -4660,14 +4871,17 @@ msgid "Refresh"
 msgstr "Làm tươi lại"
 
 #: ../src/msw/registry.cpp:571
+#, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Khóa đăng ký '%s' đã tồn tại rồi."
 
 #: ../src/msw/registry.cpp:540
+#, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Khóa đăng ký '%s' chưa tồn tại, không thể đổi tên được."
 
 #: ../src/msw/registry.cpp:672
+#, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
 "deleting it will leave your system in unusable state:\n"
@@ -4678,6 +4892,7 @@ msgstr ""
 "thao tác đã bị hủy bỏ."
 
 #: ../src/msw/registry.cpp:466
+#, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Giá trị đăng ký '%s' đã tồn tại rồi."
 
@@ -4703,6 +4918,7 @@ msgid "Remove current page from bookmarks"
 msgstr "Gỡ bỏ trang hiện hành từ dấu sách"
 
 #: ../src/common/rendcmn.cpp:195
+#, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
 msgstr "Renderer \"% s\" đã không tương thích với phiên bản% d.% d và không thể được nạp."
 
@@ -4805,6 +5021,7 @@ msgid "Save"
 msgstr "Ghi lại"
 
 #: ../src/common/fldlgcmn.cpp:284
+#, c-format
 msgid "Save %s file"
 msgstr "Ghi lại %s tệp tin"
 
@@ -4870,10 +5087,12 @@ msgid "Sections"
 msgstr "Vùng chọn"
 
 #: ../src/common/ffile.cpp:231
+#, c-format
 msgid "Seek error on file '%s'"
 msgstr "Tìm kiếm lỗi trong tập tin '%s'"
 
 #: ../src/common/ffile.cpp:221
+#, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
 msgstr "Tìm kiếm trên tệp tin '%s' gặp lỗi (tệp tin có kích thước lớn không được hỗ trợ bởi stdio)"
 
@@ -4921,6 +5140,7 @@ msgid "Selects the list level to edit."
 msgstr "Chọn mức danh sách muốn chỉnh sửa."
 
 #: ../src/common/cmdline.cpp:790
+#, c-format
 msgid "Separator expected after the option '%s'."
 msgstr "Mong đợi dấu phân cách sau tùy chọn '%s'."
 
@@ -5065,6 +5285,7 @@ msgid "Sound data are in unsupported format."
 msgstr "Có vẻ như dữ liệu có định dạng không được hỗ trợ."
 
 #: ../src/unix/sound.cpp:478
+#, c-format
 msgid "Sound file '%s' is in unsupported format."
 msgstr "Có vẻ như tệp tin '%s' không được hỗ trợ định dạng."
 
@@ -5094,6 +5315,7 @@ msgid "Streaming delegates for not already streamed objects not yet supported"
 msgstr "Đại diện Streaming cho đối tượng streamed vẫn chưa được hỗ trợ"
 
 #: ../src/msw/colour.cpp:35
+#, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "Màu từ Xâu chữ : Đặc tả màu không chính xác : %s"
 
@@ -5110,6 +5332,7 @@ msgid "Style:"
 msgstr "Kiểu dáng"
 
 #: ../src/xrc/xmlres.cpp:813
+#, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
 msgstr "Lớp con '%s' không được tìm thấy cho tài nguyên '%s', không có lớp con!"
 
@@ -5246,6 +5469,7 @@ msgid "The character code."
 msgstr "Mã ký tự."
 
 #: ../src/common/fontmap.cpp:201
+#, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
 "another charset to replace it with or choose\n"
@@ -5256,6 +5480,7 @@ msgstr ""
 "[Hủy] nếu nó không thể thay thế được"
 
 #: ../src/msw/ole/dataobj.cpp:162
+#, c-format
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "Định dạng clipboard '%d' chưa tồn tại."
 
@@ -5265,6 +5490,7 @@ msgid "The default style for the next paragraph."
 msgstr "Kiểu dáng mặc định cho đoạn tiếp theo."
 
 #: ../src/generic/dirdlgg.cpp:232
+#, c-format
 msgid ""
 "The directory '%s' does not exist\n"
 "Create it now?"
@@ -5273,6 +5499,7 @@ msgstr ""
 "Có tạo bây giờ không?"
 
 #: ../src/common/docview.cpp:2012
+#, c-format
 msgid ""
 "The file '%s' couldn't be opened.\n"
 "It has been removed from the most recently used files list."
@@ -5281,6 +5508,7 @@ msgstr ""
 "Nó đã bị gỡ bỏ từ người dùng gần đây nhất."
 
 #: ../src/common/docview.cpp:2022
+#, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
@@ -5361,10 +5589,12 @@ msgid "The outline level."
 msgstr "Mức đường bao."
 
 #: ../src/common/filename.cpp:1254
+#, c-format
 msgid "The path '%s' contains too many \"..\"!"
 msgstr "Đường dẫn '%s' chứa quá nhiều \"..\"!"
 
 #: ../src/common/log.cpp:501
+#, c-format
 msgid "The previous message repeated once."
 msgid_plural "The previous message repeated %lu times."
 msgstr[0] "Thông điệp liền trước lặp một lần."
@@ -5389,6 +5619,7 @@ msgstr ""
 "xin hãy bỏ dấu kiểm và chúng sẽ được gỡ bỏ khỏi báo cáo.\n"
 
 #: ../src/common/cmdline.cpp:955
+#, c-format
 msgid "The required parameter '%s' was not specified."
 msgstr "Tham số yêu cầu '%s' đã không được định rõ."
 
@@ -5442,10 +5673,12 @@ msgid "The text couldn't be saved."
 msgstr "Dữ liệu dạng chữ không thể được ghi lại."
 
 #: ../src/common/cmdline.cpp:933
+#, c-format
 msgid "The value for the option '%s' must be specified."
 msgstr "Giá trị cho tùy chọn '%s' phải được định rõ."
 
 #: ../src/msw/dialup.cpp:455
+#, c-format
 msgid "The version of remote access service (RAS) installed on this machine is too old, please upgrade (the following required function is missing: %s)."
 msgstr "Phiên bản của chương trình truy cập dữ liệu từ xa (RAS) được cài đặt trong máy này đã quá cũ, xin hãy cập nhật (hàm yêu cầu sau đây bị thiếu: %s)."
 
@@ -5536,6 +5769,7 @@ msgid "Translators"
 msgstr "Người dịch"
 
 #: ../src/common/fs_mem.cpp:220
+#, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Cố gắng gỡ bỏ tệp tin '%s' từ bộ nhớ VFS, nhưng nó chưa được tải lên!"
 
@@ -5589,6 +5823,7 @@ msgid "Unable to initialize Hildon program"
 msgstr "Không thể khởi tạo chương trình Hildon"
 
 #: ../src/html/htmlwin.cpp:534
+#, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Không thể mở tài liệu HTML đã yêu cầu: %s"
 
@@ -5616,10 +5851,12 @@ msgid "Undo last action"
 msgstr "Undo thao tác cuối cùng"
 
 #: ../src/common/cmdline.cpp:738
+#, c-format
 msgid "Unexpected characters following option '%s'."
 msgstr "Không mong đợi ký tự đi sau tùy chọn '%s'."
 
 #: ../src/common/cmdline.cpp:896
+#, c-format
 msgid "Unexpected parameter '%s'"
 msgstr "Tham số không mong đợi '%s'"
 
@@ -5666,6 +5903,7 @@ msgid "Unknown"
 msgstr "Không hiểu"
 
 #: ../src/msw/dde.cpp:1175
+#, c-format
 msgid "Unknown DDE error %08x"
 msgstr "Không hiểu lỗi DDE %08x"
 
@@ -5674,10 +5912,12 @@ msgid "Unknown Object passed to GetObjectClassInfo"
 msgstr "Đối Tượng không rõ được truyền tới GetObjectClassInfo"
 
 #: ../src/common/xtixml.cpp:321
+#, c-format
 msgid "Unknown Property %s"
 msgstr "Không Rõ Thuộc Tính %s"
 
 #: ../src/common/imagtiff.cpp:379
+#, c-format
 msgid "Unknown TIFF resolution unit %d ignored"
 msgstr "Không hiểu đơn vị độ phân giải TIFF %d bỏ qua"
 
@@ -5686,15 +5926,18 @@ msgid "Unknown dynamic library error"
 msgstr "Không rõ lỗi thư viện liên kết động"
 
 #: ../src/common/fmapbase.cpp:675
+#, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Không rõ bộ giải mã (%d)"
 
 #: ../src/common/cmdline.cpp:643
+#, c-format
 msgid "Unknown long option '%s'"
 msgstr "Không rõ tùy chọn dài '%s'"
 
 #: ../src/common/cmdline.cpp:653
 #: ../src/common/cmdline.cpp:675
+#, c-format
 msgid "Unknown option '%s'"
 msgstr "Không biết tùy chọn %s"
 
@@ -5703,6 +5946,7 @@ msgid "Unknown style flag "
 msgstr "Không rõ kiểu cờ"
 
 #: ../src/common/mimecmn.cpp:225
+#, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Không khớp '{' trong một mục từ cho kiểu diễn tả %s."
 
@@ -5718,6 +5962,7 @@ msgid "Unsupported clipboard format."
 msgstr "Dạng thức clipboard không được hỗ trợ."
 
 #: ../src/common/appcmn.cpp:237
+#, c-format
 msgid "Unsupported theme '%s'."
 msgstr "Theme '%s' không được hỗ trợ."
 
@@ -5736,6 +5981,7 @@ msgid "Upper case roman numerals"
 msgstr "Đổi thành chữ số La Mã in hoa"
 
 #: ../src/common/cmdline.cpp:1027
+#, c-format
 msgid "Usage: %s"
 msgstr "Cách sử dụng: %s"
 
@@ -5757,6 +6003,7 @@ msgstr "Bộ xác định tính hợp lệ bị xung đột"
 
 #: ../src/msw/aboutdlg.cpp:54
 #: ../src/mac/carbon/aboutdlg.cpp:74
+#, c-format
 msgid "Version %s"
 msgstr "Phiên bản %s"
 
@@ -5785,8 +6032,9 @@ msgid "WINDOWS_RIGHT"
 msgstr "WINDOWS_RIGHT"
 
 #: ../src/unix/epolldispatcher.cpp:177
+#, c-format
 msgid "Waiting for IO on epoll descriptor %d failed"
-msgstr "Đợi IO trên phần mô tả epoll %d gặp lỗi."
+msgstr "Đợi IO trên phần mô tả epoll %d gặp lỗi"
 
 #: ../src/common/docview.cpp:478
 #: ../src/html/htmprint.cpp:380
@@ -5820,13 +6068,14 @@ msgstr "Toàn bộ các từ"
 
 #: ../src/univ/themes/win32.cpp:1059
 msgid "Win32 theme"
-msgstr "Win32 theme"
+msgstr "kiểu Win32"
 
 #: ../src/msw/utils.cpp:1090
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s trên Windows 3.1"
 
 #: ../src/msw/utils.cpp:1139
+#, c-format
 msgid "Windows 2000 (build %lu"
 msgstr "Windows 2000 (build %lu"
 
@@ -5847,6 +6096,7 @@ msgid "Windows 98 SE"
 msgstr "Windows 98 SE"
 
 #: ../src/msw/utils.cpp:1122
+#, c-format
 msgid "Windows 9x (%d.%d)"
 msgstr "Windows 9x (%d.%d)"
 
@@ -5859,6 +6109,7 @@ msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltic (CP 1257)"
 
 #: ../src/msw/utils.cpp:1084
+#, c-format
 msgid "Windows CE (%d.%d)"
 msgstr "Windows CE (%d.%d)"
 
@@ -5899,10 +6150,12 @@ msgid "Windows ME"
 msgstr "Windows ME"
 
 #: ../src/msw/utils.cpp:1154
+#, c-format
 msgid "Windows NT %lu.%lu (build %lu"
 msgstr "Windows NT %lu.%lu (build %lu"
 
 #: ../src/msw/utils.cpp:1147
+#, c-format
 msgid "Windows Server 2003 (build %lu"
 msgstr "Windows Server 2003 (build %lu"
 
@@ -5919,6 +6172,7 @@ msgid "Windows Western European (CP 1252)"
 msgstr "Windows Trung Âu (CP 1252)"
 
 #: ../src/msw/utils.cpp:1143
+#, c-format
 msgid "Windows XP (build %lu"
 msgstr "Windows XP (build %lu"
 
@@ -5927,10 +6181,12 @@ msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
 #: ../src/common/ffile.cpp:159
+#, c-format
 msgid "Write error on file '%s'"
 msgstr "Lỗi ghi trên tập tin '%s'"
 
 #: ../src/xml/xml.cpp:733
+#, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "Gặp lỗi khi phân tách XML: '%s' trên dòng %d"
 
@@ -5939,6 +6195,7 @@ msgid "XPM: Malformed pixel data!"
 msgstr "XPM: Dữ liệu điểm ảnh của ảnh bị hỏng!"
 
 #: ../src/common/xpmdecod.cpp:707
+#, c-format
 msgid "XPM: incorrect colour description in line %d"
 msgstr "XPM: phần mô tả màu sắc không đúng tại dòng %d"
 
@@ -5948,6 +6205,7 @@ msgstr "XPM: định dạng phần đầu không đúng!"
 
 #: ../src/common/xpmdecod.cpp:718
 #: ../src/common/xpmdecod.cpp:727
+#, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
 msgstr "XPM: định nghĩa màu sắc dị hình '%s' tại dòng %d!"
 
@@ -5956,24 +6214,29 @@ msgid "XPM: no colors left to use for mask!"
 msgstr "XPM: không tìm thấy màu sử dụng cho mặt nạ!"
 
 #: ../src/common/xpmdecod.cpp:784
+#, c-format
 msgid "XPM: truncated image data at line %d!"
 msgstr "XPM: dữ liệu bị cắt xén ảnh tại dòng %d!"
 
 #: ../src/xrc/xmlres.cpp:634
+#, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "Tài nguyên XRC '%s' (lớp '%s') không tìm thấy!"
 
 #: ../src/xrc/xmlres.cpp:1181
 #: ../src/xrc/xmlres.cpp:1193
+#, c-format
 msgid "XRC resource: Cannot create animation from '%s'."
 msgstr "Tài nguyên XRC: Không thể tạo hoạt hình từ '%s'."
 
 #: ../src/xrc/xmlres.cpp:1149
 #: ../src/xrc/xmlres.cpp:1161
+#, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "Tài nguyên XRC: Không thể tạo ảnh bitmap từ '%s'."
 
 #: ../src/xrc/xmlres.cpp:1107
+#, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for attribute '%s'."
 msgstr "Tài nguyên XRC: Sự định màu '%s' không chính xác cho thuộc tính '%s'."
 
@@ -6110,6 +6373,7 @@ msgid "assuming this is a multi-part zip concatenated"
 msgstr "xác nhận rằng đây là các phần móc nối của tệp tin zip "
 
 #: ../src/common/fileconf.cpp:1871
+#, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "cố gắng đổi khóa bất biến '%s' bị bỏ qua."
 
@@ -6138,31 +6402,38 @@ msgid "buffer is too small for Windows directory."
 msgstr "bộ đệm quá nhỏ cho thư mục Windows."
 
 #: ../src/common/ffile.cpp:92
+#, c-format
 msgid "can't close file '%s'"
 msgstr "không thể đóng tập tin '%s'"
 
 #: ../src/common/file.cpp:261
+#, c-format
 msgid "can't close file descriptor %d"
 msgstr "không thể đóng phần mô tả tệp tin %d"
 
 #: ../src/common/file.cpp:537
+#, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "không thể chuyển các thay đổi tới tệp tin '%s'"
 
 #: ../src/common/file.cpp:195
+#, c-format
 msgid "can't create file '%s'"
 msgstr "không thể tạo tập tin '%s'"
 
 #: ../src/common/fileconf.cpp:1170
+#, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "không thể xóa tệp tin cấu hình '%s' của người dùng"
 
 #: ../src/common/file.cpp:443
+#, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "không thể kết thúc nếu kết thúc tệp tin nằm trên phần mô tả %d"
 
 #: ../src/msdos/utilsdos.cpp:310
 #: ../src/msdos/utilsdos.cpp:469
+#, c-format
 msgid "can't execute '%s'"
 msgstr "không thể thực hiện '%s'"
 
@@ -6171,6 +6442,7 @@ msgid "can't find central directory in zip"
 msgstr "không thể tìm thấy thư mục trung tâm trong zip"
 
 #: ../src/common/file.cpp:413
+#, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "không thể tìm thấy độ dài của tệp tin trên phần mô tả tệp tin %d"
 
@@ -6179,11 +6451,13 @@ msgid "can't find user's HOME, using current directory."
 msgstr "không thể tìm thấy thư mục HOME của người dùng, sử dụng thư mục hiện hành."
 
 #: ../src/common/file.cpp:329
+#, c-format
 msgid "can't flush file descriptor %d"
 msgstr "không thể vào thẳng phần mô tả tệp tin %d"
 
 #: ../src/common/file.cpp:385
 #: ../src/msw/wince/filefnwce.cpp:199
+#, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "không thể tìm thấy vị trí trên phần mô tả tệp tin %d"
 
@@ -6193,14 +6467,17 @@ msgstr "không tải được phông chữ nào, bãi bỏ"
 
 #: ../src/common/file.cpp:247
 #: ../src/common/ffile.cpp:76
+#, c-format
 msgid "can't open file '%s'"
 msgstr "không thể mở tập tin '%s'"
 
 #: ../src/common/fileconf.cpp:357
+#, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "không thể mở tập tin cấu hình chung '%s'."
 
 #: ../src/common/fileconf.cpp:373
+#, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "không thể mở tệp tin '%s' cấu hình của người dùng."
 
@@ -6217,27 +6494,33 @@ msgid "can't re-initialize zlib inflate stream"
 msgstr "không thể khởi tạo lại zlib inflate stream"
 
 #: ../src/common/file.cpp:285
+#, c-format
 msgid "can't read from file descriptor %d"
 msgstr "không thể đọc từ phần mô tả tệp tin %d"
 
 #: ../src/common/file.cpp:532
+#, c-format
 msgid "can't remove file '%s'"
 msgstr "không thể gỡ bỏ tệp tin '%s'"
 
 #: ../src/common/file.cpp:548
+#, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "không thể gỡ bỏ tập tin tạm thời '%s'"
 
 #: ../src/common/file.cpp:371
 #: ../src/msw/wince/filefnwce.cpp:185
+#, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "không thể tìm kiếm trên phần mô tả tệp tin %d"
 
 #: ../src/common/textfile.cpp:275
+#, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "không thể ghi dữ liệu đệm '%s' vào đĩa."
 
 #: ../src/common/file.cpp:301
+#, c-format
 msgid "can't write to file descriptor %d"
 msgstr "không thể ghi dữ liệu vào phần mô tả tệp tin %d"
 
@@ -6246,6 +6529,7 @@ msgid "can't write user configuration file."
 msgstr "không thể ghi tệp tin cấu hình của người dùng."
 
 #: ../src/common/intl.cpp:1226
+#, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "tệp tin catalog cho tên miền '%s' không tìm thấy."
 
@@ -6306,10 +6590,12 @@ msgid "eleventh"
 msgstr "thứ mười một"
 
 #: ../src/common/strconv.cpp:2981
+#, c-format
 msgid "encoding %i"
 msgstr "bộ mã %i"
 
 #: ../src/common/fileconf.cpp:1857
+#, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "mục từ '%s' xuất hiện nhiều hơn một lần trong nhóm '%s'"
 
@@ -6318,6 +6604,7 @@ msgid "error in data format"
 msgstr "lỗi định dạng dữ liệu"
 
 #: ../src/msdos/utilsdos.cpp:410
+#, c-format
 msgid "error opening '%s'"
 msgstr "lỗi khi mở '%s'"
 
@@ -6334,10 +6621,12 @@ msgid "error reading zip local header"
 msgstr "lỗi đọc phần đầu nội bộ của zip"
 
 #: ../src/common/zipstrm.cpp:2389
+#, c-format
 msgid "error writing zip entry '%s': bad crc or length"
 msgstr "lỗi ghi mục tin zip '%s': kiểm tra crc hay độ dài hỏng"
 
 #: ../src/common/ffile.cpp:181
+#, c-format
 msgid "failed to flush the file '%s'"
 msgstr "làm phẳng tệp tin '%s' gặp lỗi"
 
@@ -6350,22 +6639,27 @@ msgid "fifth"
 msgstr "thứ năm"
 
 #: ../src/common/fileconf.cpp:613
+#, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "tệp tin  '%s', dòng %d: '%s' được bỏ qua trước phần đầu nhóm."
 
 #: ../src/common/fileconf.cpp:642
+#, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "tệp tin '%s', dòng %d: '=' mong đợi."
 
 #: ../src/common/fileconf.cpp:665
+#, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "tệp tin '%s', dòng %d: khóa '%s' được tìm thấy đầu tiên tại dòng %d."
 
 #: ../src/common/fileconf.cpp:655
+#, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "tệp tin '%s', dòng %d: giá trị khóa bất biến '%s' bị bỏ qua."
 
 #: ../src/common/fileconf.cpp:577
+#, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "tệp tin '%s': không mong ký tự %c tại dòng %d."
 
@@ -6432,10 +6726,12 @@ msgid "light"
 msgstr "ánh sáng"
 
 #: ../src/common/intl.cpp:1645
+#, c-format
 msgid "locale '%s' can not be set."
 msgstr "vị trí '%s' không thể đặt được."
 
 #: ../src/common/intl.cpp:1210
+#, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "tìm catalog '%s' trong đường dẫn '%s'."
 
@@ -6465,6 +6761,7 @@ msgid "no error"
 msgstr "không lỗi"
 
 #: ../src/dfb/fontmgr.cpp:178
+#, c-format
 msgid "no fonts found in %s, using builtin font"
 msgstr "không phông chữ nào được tìm thấy trong %s, sử dụng phông dựng sẵn"
 
@@ -6503,10 +6800,12 @@ msgid "read error"
 msgstr "lỗi đọc"
 
 #: ../src/common/zipstrm.cpp:1878
+#, c-format
 msgid "reading zip stream (entry %s): bad crc"
 msgstr "đang đọc dòng dữ liệu zip (mục vào %s): kiểm tra độ dư vòng(crc) hỏng"
 
 #: ../src/common/zipstrm.cpp:1875
+#, c-format
 msgid "reading zip stream (entry %s): bad length"
 msgstr "đang đọc dòng dữ liệu zip (mục vào %s): chiều dài lỗi"
 
@@ -6587,6 +6886,7 @@ msgstr "thứ mười ba"
 
 #: ../src/common/imagtiff.cpp:73
 #: ../src/common/imagtiff.cpp:89
+#, c-format
 msgid "tiff module: %s"
 msgstr "mô-đun tiff: %s"
 
@@ -6599,6 +6899,7 @@ msgid "tomorrow"
 msgstr "ngày mai"
 
 #: ../src/common/fileconf.cpp:1968
+#, c-format
 msgid "trailing backslash ignored in '%s'"
 msgstr "dấu gạch ngược bị bỏ qua trong '%s'"
 
@@ -6620,6 +6921,7 @@ msgid "underlined"
 msgstr "gạch chân"
 
 #: ../src/common/fileconf.cpp:2003
+#, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "không mong đợi \" tại vị trí %d trong '%s' ."
 
@@ -6635,6 +6937,7 @@ msgid "unknown"
 msgstr "không rõ"
 
 #: ../src/common/xtixml.cpp:249
+#, c-format
 msgid "unknown class %s"
 msgstr "chưa biết lớp %s"
 
@@ -6644,6 +6947,7 @@ msgid "unknown error"
 msgstr "lỗi lạ"
 
 #: ../src/msw/dialup.cpp:493
+#, c-format
 msgid "unknown error (error code %08x)."
 msgstr "chưa biết lỗi (mã sai %08x)."
 
@@ -6652,6 +6956,7 @@ msgid "unknown seek origin"
 msgstr "không hiểu tìm kiếm nguồn gốc"
 
 #: ../src/common/fmapbase.cpp:699
+#, c-format
 msgid "unknown-%d"
 msgstr "không hiểu-%d"
 
@@ -6660,6 +6965,7 @@ msgid "unnamed"
 msgstr "không tên"
 
 #: ../src/common/docview.cpp:1446
+#, c-format
 msgid "unnamed%d"
 msgstr "Không tên%d"
 
@@ -6669,6 +6975,7 @@ msgid "unsupported Zip compression method"
 msgstr "không hỗ trợ phương thức nén Zip"
 
 #: ../src/common/intl.cpp:1232
+#, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "sử dụng catalog '%s' từ '%s'."
 
@@ -6706,6 +7013,7 @@ msgid "wxWidget control pointer is not a data view pointer"
 msgstr "Con trỏ điều khiển wxWidget không phải là kiểu con trỏ hiển thị dữ liệu"
 
 #: ../src/motif/app.cpp:248
+#, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
 msgstr "wxWidgets không thể mở' %s' ra, đang thoát ra."
 
@@ -6723,6 +7031,7 @@ msgstr "hôm qua"
 
 #: ../src/common/zstream.cpp:233
 #: ../src/common/zstream.cpp:401
+#, c-format
 msgid "zlib error %d"
 msgstr "lỗi zlib %d"
 
