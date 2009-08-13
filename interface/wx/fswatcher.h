@@ -66,6 +66,8 @@
 
     @library{wxbase}
     @category{file}
+
+    @since 2.9.1
  */
 class wxFileSystemWatcherBase: public wxEvtHandler
 {
@@ -184,6 +186,8 @@ protected:
 
     @see wxFileSystemWatcherBase
     @see @ref overview_events
+
+    @since 2.9.1
 */
 class wxFileSystemWatcherEvent : public wxEvent
 {
@@ -231,6 +235,8 @@ public:
 /**
     These are the possible types of file system change events.
     All of these events are reported on all supported platforms.
+
+    @since 2.9.1
  */
 enum wxFSWFlags
 {
