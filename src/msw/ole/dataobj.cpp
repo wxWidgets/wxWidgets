@@ -1264,7 +1264,7 @@ void wxURLDataObject::SetURL(const wxString& url)
 
     // CFSTR_SHELLURL is always supposed to be ANSI...
     wxWX2MBbuf urlA = (wxWX2MBbuf)url.mbc_str();
-    if ( url )
+    if ( urlA )
     {
         size_t len = strlen(urlA);
         SetData(wxDataFormat(CFSTR_SHELLURL), len+1, (const char*)urlA);
