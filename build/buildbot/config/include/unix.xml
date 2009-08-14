@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Name:       include/ravnsgaard.xml
-    Purpose:    Declarations for Brian Ravnsgaard Riis' slave
-    Author:     Michael Wetherel
+    Name:       include/unix.xml
+    Purpose:    Declarations for unix slaves
+    Author:     Michael Wetherell
     RCS-ID:     $Id$
     Copyright:  (c) Michael Wetherell
     Licence:    wxWidgets licence
