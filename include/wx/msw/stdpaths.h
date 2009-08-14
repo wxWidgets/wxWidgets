@@ -62,6 +62,10 @@ public:
     // Undo the effects of all preceding IgnoreAppSubDir() calls.
     void DontIgnoreAppSubDir();
 
+
+    // Returns the directory corresponding to the specified Windows shell CSIDL
+    static wxString MSWGetShellDir(int csidl);
+
 protected:
     // get the path corresponding to the given standard CSIDL_XXX constant
     static wxString DoGetDirectory(int csidl);

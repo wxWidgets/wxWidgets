@@ -321,6 +321,12 @@ void wxStandardPaths::DontIgnoreAppSubDir()
     m_appDir.clear();
 }
 
+/* static */
+wxString wxStandardPaths::MSWGetShellDir(int csidl)
+{
+    return DoGetDirectory(csidl);
+}
+
 // ----------------------------------------------------------------------------
 // public functions
 // ----------------------------------------------------------------------------

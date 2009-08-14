@@ -276,6 +276,26 @@ public:
     void IgnoreAppBuildSubDirs();
 
     /**
+        Returns location of Windows shell special folder.
+
+        This function is, by definition, MSW-specific. It can be used to access
+        pre-defined shell directories not covered by the existing methods of
+        this class, e.g.:
+        @code
+        #ifdef __WXMSW__
+            // get the location of files waiting to be burned on a CD
+            wxString cdburnArea =
+                wxStandardPaths::MSWGetShellDir(CSIDL_CDBURN_AREA);
+        #endif // __WXMSW__
+        @endcode
+
+        @param csidl
+
+        @since 2.9.1
+     */
+    static wxString MSWGetShellDir(int csidl);
+
+    /**
         Lets wxStandardPaths know about the real program installation prefix on a Unix
         system. By default, the value returned by GetInstallPrefix() is used.
 
