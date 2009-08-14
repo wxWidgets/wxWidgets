@@ -598,6 +598,20 @@ bool wxDebugReport::DoProcess()
 // wxDebugReportCompress
 // ----------------------------------------------------------------------------
 
+void wxDebugReportCompress::SetCompressedFileDirectory(const wxString& dir)
+{
+    wxASSERT_MSG( m_zipfile.empty(), "Too late: call this before Process()" );
+
+    m_zipDir = dir;
+}
+
+void wxDebugReportCompress::SetCompressedFileBaseName(const wxString& name)
+{
+    wxASSERT_MSG( m_zipfile.empty(), "Too late: call this before Process()" );
+
+    m_zipName = name;
+}
+
 bool wxDebugReportCompress::DoProcess()
 {
     const size_t count = GetFilesCount();
@@ -609,6 +623,10 @@ bool wxDebugReportCompress::DoProcess()
     // keep this one: for this we simply treat the directory name as the name
     // of the file so that its last component becomes our base name
     wxFileName fn(GetDirectory());
+    if ( !m_zipDir.empty() )
+        fn.SetPath(m_zipDir);
+    if ( !m_zipName.empty() )
+        fn.SetName(m_zipName);
     fn.SetExt("zip");
 
     // create the streams

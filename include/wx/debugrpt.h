@@ -134,6 +134,15 @@ class WXDLLIMPEXP_QA wxDebugReportCompress : public wxDebugReport
 public:
     wxDebugReportCompress() { }
 
+    // you can optionally specify the directory and/or name of the file where
+    // the debug report should be generated, a default location under the
+    // directory containing temporary files will be used if you don't
+    //
+    // both of these functions should be called before Process()ing the report
+    // if they're called at all
+    void SetCompressedFileDirectory(const wxString& dir);
+    void SetCompressedFileBaseName(const wxString& name);
+
     // returns the full path of the compressed file (empty if creation failed)
     const wxString& GetCompressedFileName() const { return m_zipfile; }
 
@@ -141,6 +150,10 @@ protected:
     virtual bool DoProcess();
 
 private:
+    // user-specified file directory/base name, use defaults if empty
+    wxString m_zipDir,
+             m_zipName;
+
     // full path to the ZIP file we created
     wxString m_zipfile;
 };

@@ -68,6 +68,44 @@ public:
     wxDebugReportCompress();
 
     /**
+        Set the directory where the debug report should be generated.
+
+        By default, the debug report is generated under user temporary files
+        directory. This is usually fine if it is meant to be processed in some
+        way (e.g. automatically uploaded to a remote server) but if the user is
+        asked to manually upload or send the report, it may be more convenient
+        to generate it in e.g. the users home directory and this function
+        allows to do this.
+
+        Notice that it should be called before wxDebugReport::Process() or it
+        has no effect.
+
+        @param dir
+            The full path to an existing directory where the debug report file
+            should be generated.
+
+        @since 2.9.1
+     */
+    void SetCompressedFileDirectory(const wxString& dir);
+
+    /**
+        Set the base name of the generated debug report file.
+
+        This function is similar to SetCompressedFileDirectory() but allows to
+        change the base name of the file. Notice that the file extension will
+        always be @c .zip.
+
+        By default, a unique name constructed from wxApp::GetAppName(), the
+        current process id and the current date and time is used.
+
+        @param dir
+            The base name (i.e. without extension) of the file.
+
+        @since 2.9.1
+     */
+    void SetCompressedFileBaseName(const wxString& name);
+
+    /**
         Returns the full path of the compressed file (empty if creation
         failed).
     */
