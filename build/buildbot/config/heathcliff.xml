@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       heathcliff.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86_64 wxGTK trunk</name>
+    <builddir>heathcliff_gtk</builddir>
+    <!--scheduler>trunk_quick</scheduler-->
+    <steps>
+        <checkout/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

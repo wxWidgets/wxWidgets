@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       brandt64.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86_64 wxGTK trunk static</name>
+    <builddir>brandt64_gtk</builddir>
+    <!--scheduler>daily_0800</scheduler-->
+    <steps>
+        <checkout/>
+        <configure options="--disable-shared --enable-opengl --enable-svg
+                            --enable-aui --with-gtk=2 --enable-graphics_ctx"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>

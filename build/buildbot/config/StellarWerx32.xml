@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Name:       StellarWerx32.xml
+    RCS-ID:     $Id$
+-->
+
+<bot xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<xi:include href="include/unix.xml"/>
+
+<build>
+    <name>Linux x86 wxGTK trunk STL debug</name>
+    <builddir>stellarwerx32_wxgtk_debug</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk STL release</name>
+    <builddir>stellarwerx32_wxgtk_release</builddir>
+    <scheduler>trunk_quick</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK stable STL debug</name>
+    <builddir>stellarwerx32_wxgtk_stable_debug</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK stable STL release</name>
+    <builddir>stellarwerx32_wxgtk_stable_release</builddir>
+    <scheduler>stable_quick</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
+        <compile-all utils="false"/>
+        <run-tests/>
+    </steps>
+</build>
+
+</bot>
