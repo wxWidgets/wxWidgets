@@ -46,6 +46,8 @@ protected:
     // adds watch to be monitored for file system changes
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch);
 
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch);
+
 private:
     bool DoSetUpWatch(wxFSWatchEntryMSW& watch);
 
@@ -104,6 +106,11 @@ bool wxFSWatcherImplMSW::DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch)
 
     // associating handle with completion port
     return m_iocp.Add(watch);
+}
+
+bool wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch)
+{
+    return true;
 }
 
 // TODO ensuring that we have not already set watch for this handle/dir?
