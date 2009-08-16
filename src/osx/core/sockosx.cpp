@@ -17,6 +17,8 @@
 #include "wx/unix/private/sockunix.h"
 #include "wx/apptrait.h"
 
+#include "wx/osx/core/cfstring.h"           // for wxMacWakeUp() only
+
 #include <CoreFoundation/CoreFoundation.h>
 
 namespace
@@ -156,6 +158,13 @@ private:
             default:
                 wxFAIL_MSG( "unexpected socket callback" );
         }
+
+        // receiving a socket event does _not_ make ReceiveNextEvent() (or the
+        // equivalent NSApp:nextEventMatchingMask:untilDate:inMode:dequeue)
+        // return control, i.e. apparently it doesn't count as a real event, so
+        // we need to generate a wake up to return control to the code waiting
+        // for something to happen and process this socket event
+        wxMacWakeUp();
     }
 
     CFSocketRef m_socket;
