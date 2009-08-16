@@ -75,7 +75,10 @@ private:
         CFSocketInvalidate(m_socket);
 
         CFRelease(m_source);
+        m_source = NULL;
+
         CFRelease(m_socket);
+        m_socket = NULL;
     }
 
     // initialize the data associated with the given socket
@@ -110,6 +113,8 @@ private:
         if ( !m_source )
         {
             CFRelease(m_socket);
+            m_socket = NULL;
+
             return false;
         }
 
