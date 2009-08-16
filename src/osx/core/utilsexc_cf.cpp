@@ -116,3 +116,19 @@ wxStandardPaths& wxGUIAppTraits::GetStandardPaths()
 }
 #endif
 
+#if wxUSE_SOCKETS
+
+// we need to implement this method in a file of the core library as it should
+// only be used for the GUI applications but we can't use socket stuff from it
+// directly as this would create unwanted dependencies of core on net library
+//
+// so we have this global pointer which is set from sockosx.cpp when it is
+// linked in and we simply return it from here
+extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
+wxSocketManager *wxGUIAppTraits::GetSocketManager()
+{
+    return wxOSXSocketManagerCF ? wxOSXSocketManagerCF
+                                : wxGUIAppTraitsBase::GetSocketManager();
+}
+
+#endif // wxUSE_SOCKETS

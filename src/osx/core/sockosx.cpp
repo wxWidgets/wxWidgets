@@ -254,17 +254,21 @@ void wxSocketManagerMac::Uninstall_Callback(wxSocketImpl *socket_,
     CFSocketDisableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
-// set the wxBase variable to point to our wxSocketManager implementation
+// set the wxBase variable to point to CF wxSocketManager implementation so
+// that the GUI code in utilsexc_cf.cpp could return it from its traits method
 //
-// see comments in wx/apptrait.h for the explanation of why do we do it
-// like this
-static struct ManagerSetter
+// this is very roundabout but necessary to allow us to have different
+// behaviours in console and GUI applications while avoiding dependencies of
+// GUI library on the network one
+extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
+
+static struct OSXManagerSetter
 {
-    ManagerSetter()
+    OSXManagerSetter()
     {
         static wxSocketManagerMac s_manager;
-        wxAppTraits::SetDefaultSocketManager(&s_manager);
+        wxOSXSocketManagerCF = &s_manager;
     }
-} gs_managerSetter;
+} gs_OSXManagerSetter;
 
 #endif // wxUSE_SOCKETS
