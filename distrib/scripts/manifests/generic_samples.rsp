@@ -123,6 +123,7 @@ samples/controls/icons/text.bmp
 samples/controls/icons/text.xpm
 samples/dataview/dataview.bkl
 samples/dataview/null.xpm
+samples/dataview/wx_small.xpm
 samples/dataview/dataview.dsp
 samples/dataview/Makefile.in
 samples/dataview/makefile.bcc
@@ -130,6 +131,7 @@ samples/dataview/makefile.gcc
 samples/dataview/makefile.wat
 samples/dataview/makefile.vc
 samples/dataview/dataview.cpp
+samples/dataview/mymodels.h
 samples/db/db.xpm
 samples/db/dbM5.xml
 samples/db/dbtest.h
@@ -1257,6 +1259,13 @@ samples/treectrl/icon2.xpm
 samples/treectrl/icon3.xpm
 samples/treectrl/icon4.xpm
 samples/treectrl/icon5.xpm
+samples/treectrl/state1.xpm
+samples/treectrl/state2.xpm
+samples/treectrl/state3.xpm
+samples/treectrl/state4.xpm
+samples/treectrl/state5.xpm
+samples/treectrl/checked.xpm
+samples/treectrl/unchecked.xpm
 samples/treectrl/treetest.dsp
 samples/treectrl/treetestM5.xml
 samples/treectrl/treectrl.bkl
