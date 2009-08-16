@@ -613,6 +613,15 @@ bool wxPGProperty::IsSomeParent( wxPGProperty* candidate ) const
     return false;
 }
 
+void wxPGProperty::SetName( const wxString& newName )
+{
+    wxPropertyGrid* pg = GetGrid();
+
+    if ( pg )
+        pg->SetPropertyName(this, newName);
+    else
+        DoSetName(newName);
+}
 
 wxString wxPGProperty::GetName() const
 {

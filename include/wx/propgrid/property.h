@@ -1957,7 +1957,7 @@ public:
 
     void SetLabel( const wxString& label ) { m_label = label; }
 
-    inline void SetName( const wxString& newName );
+    void SetName( const wxString& newName );
 
     /**
         Changes what sort of parent this property is for its children.

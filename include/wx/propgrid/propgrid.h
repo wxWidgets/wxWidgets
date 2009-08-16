@@ -1914,11 +1914,6 @@ inline void wxPGProperty::SetEditor( const wxString& editorName )
     m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
 }
 
-inline void wxPGProperty::SetName( const wxString& newName )
-{
-    GetGrid()->SetPropertyName(this, newName);
-}
-
 inline bool wxPGProperty::Hide( bool hide, int flags )
 {
     return GetGrid()->HideProperty(this, hide, flags);
