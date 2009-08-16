@@ -139,6 +139,9 @@ public:
     virtual void OnExit() = 0;
 
 
+    // create the socket implementation object matching this manager
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket) = 0;
+
     // these functions enable or disable monitoring of the given socket for the
     // specified events inside the currently running event loop (but notice
     // that both BSD and Winsock implementations actually use socket->m_server
@@ -167,16 +170,12 @@ private:
     Base class for all socket implementations providing functionality common to
     BSD and Winsock sockets.
 
-    Objects of this class are not created directly but only via its static
-    Create() method which is implemented in port-specific code.
+    Objects of this class are not created directly but only via the factory
+    function wxSocketManager::CreateSocket().
  */
 class wxSocketImpl
 {
 public:
-    // static factory function: creates the low-level socket associated with
-    // the given wxSocket (and inherits its attributes such as timeout)
-    static wxSocketImpl *Create(wxSocketBase& wxsocket);
-
     virtual ~wxSocketImpl();
 
     // set various socket properties: all of those can only be called before

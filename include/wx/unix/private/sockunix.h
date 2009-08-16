@@ -117,6 +117,11 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit() { }
 
+    virtual wxSocketImpl *CreateSocket(wxSocketBase& wxsocket)
+    {
+        return new wxSocketImplUnix(wxsocket);
+    }
+
 protected:
     // identifies either input or output direction
     //

@@ -66,13 +66,6 @@
 // wxSocketImpl implementation
 // ============================================================================
 
-/* static */
-wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
-{
-    return new wxSocketImplUnix(wxsocket);
-}
-
-
 wxSocketError wxSocketImplUnix::GetLastError() const
 {
     switch ( errno )
