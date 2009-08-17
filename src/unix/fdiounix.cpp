@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/apptrait.h"
+#include "wx/log.h"
 #include "wx/private/fdiodispatcher.h"
 #include "wx/unix/private/fdiounix.h"
 
