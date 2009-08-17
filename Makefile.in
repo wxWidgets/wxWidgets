@@ -746,16 +746,17 @@ ALL_BASE_SOURCES =  \
 	src/common/zstream.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/msw/basemsw.cpp \
@@ -1965,16 +1966,17 @@ COND_USE_STC_1___wxscintilla___depname = \
 COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -1985,16 +1987,17 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2005,16 +2008,17 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2025,16 +2029,17 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -2050,16 +2055,17 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/osx/core/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
@@ -2070,31 +2076,33 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/utilsexc_base.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
-	src/unix/epolldispatcher.cpp \
 	src/unix/appunix.cpp \
-	src/unix/evtloopunix.cpp \
 	src/unix/dir.cpp \
 	src/unix/dlunix.cpp \
+	src/unix/epolldispatcher.cpp \
+	src/unix/evtloopunix.cpp \
+	src/unix/fdiounix.cpp \
 	src/unix/snglinst.cpp \
+	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/stackwalk.cpp \
 	src/unix/utilsunx.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
@@ -3854,16 +3862,17 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_utilsexc_base.o \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
-	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_evtloopunix.o \
 	monodll_unix_dir.o \
 	monodll_dlunix.o \
+	monodll_epolldispatcher.o \
+	monodll_evtloopunix.o \
+	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
+	monodll_unix_stackwalk.o \
 	monodll_unix_stdpaths.o \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
-	monodll_unix_stackwalk.o \
 	monodll_utilsunx.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
@@ -3886,16 +3895,17 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_fdiodispatcher.o \
 	monodll_selectdispatcher.o \
-	monodll_epolldispatcher.o \
 	monodll_appunix.o \
-	monodll_evtloopunix.o \
 	monodll_unix_dir.o \
 	monodll_dlunix.o \
+	monodll_epolldispatcher.o \
+	monodll_evtloopunix.o \
+	monodll_fdiounix.o \
 	monodll_unix_snglinst.o \
+	monodll_unix_stackwalk.o \
 	monodll_unix_stdpaths.o \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
-	monodll_unix_stackwalk.o \
 	monodll_utilsunx.o \
 	monodll_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
@@ -5652,16 +5662,17 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_utilsexc_base.o \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
-	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_evtloopunix.o \
 	monolib_unix_dir.o \
 	monolib_dlunix.o \
+	monolib_epolldispatcher.o \
+	monolib_evtloopunix.o \
+	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
+	monolib_unix_stackwalk.o \
 	monolib_unix_stdpaths.o \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
-	monolib_unix_stackwalk.o \
 	monolib_utilsunx.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
@@ -5684,16 +5695,17 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_fdiodispatcher.o \
 	monolib_selectdispatcher.o \
-	monolib_epolldispatcher.o \
 	monolib_appunix.o \
-	monolib_evtloopunix.o \
 	monolib_unix_dir.o \
 	monolib_dlunix.o \
+	monolib_epolldispatcher.o \
+	monolib_evtloopunix.o \
+	monolib_fdiounix.o \
 	monolib_unix_snglinst.o \
+	monolib_unix_stackwalk.o \
 	monolib_unix_stdpaths.o \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
-	monolib_unix_stackwalk.o \
 	monolib_utilsunx.o \
 	monolib_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
@@ -7487,16 +7499,17 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_utilsexc_base.o \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
-	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_evtloopunix.o \
 	basedll_unix_dir.o \
 	basedll_dlunix.o \
+	basedll_epolldispatcher.o \
+	basedll_evtloopunix.o \
+	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
+	basedll_unix_stackwalk.o \
 	basedll_unix_stdpaths.o \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
-	basedll_unix_stackwalk.o \
 	basedll_utilsunx.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
@@ -7519,16 +7532,17 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_fdiodispatcher.o \
 	basedll_selectdispatcher.o \
-	basedll_epolldispatcher.o \
 	basedll_appunix.o \
-	basedll_evtloopunix.o \
 	basedll_unix_dir.o \
 	basedll_dlunix.o \
+	basedll_epolldispatcher.o \
+	basedll_evtloopunix.o \
+	basedll_fdiounix.o \
 	basedll_unix_snglinst.o \
+	basedll_unix_stackwalk.o \
 	basedll_unix_stdpaths.o \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
-	basedll_unix_stackwalk.o \
 	basedll_utilsunx.o \
 	basedll_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
@@ -7580,16 +7594,17 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_utilsexc_base.o \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
-	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_evtloopunix.o \
 	baselib_unix_dir.o \
 	baselib_dlunix.o \
+	baselib_epolldispatcher.o \
+	baselib_evtloopunix.o \
+	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
+	baselib_unix_stackwalk.o \
 	baselib_unix_stdpaths.o \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
-	baselib_unix_stackwalk.o \
 	baselib_utilsunx.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
@@ -7612,16 +7627,17 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_fdiodispatcher.o \
 	baselib_selectdispatcher.o \
-	baselib_epolldispatcher.o \
 	baselib_appunix.o \
-	baselib_evtloopunix.o \
 	baselib_unix_dir.o \
 	baselib_dlunix.o \
+	baselib_epolldispatcher.o \
+	baselib_evtloopunix.o \
+	baselib_fdiounix.o \
 	baselib_unix_snglinst.o \
+	baselib_unix_stackwalk.o \
 	baselib_unix_stdpaths.o \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
-	baselib_unix_stackwalk.o \
 	baselib_utilsunx.o \
 	baselib_unix_mimetype.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
@@ -16007,12 +16023,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@monodll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
-@COND_PLATFORM_UNIX_1@monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
 @COND_PLATFORM_UNIX_1@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -16021,15 +16031,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_OS2_1@monodll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
-
-@COND_PLATFORM_UNIX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_OS2_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_unix_dir.o: $(srcdir)/src/unix/dir.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dir.cpp
@@ -16043,11 +16044,38 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_dlunix.o: $(srcdir)/src/unix/dlunix.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/dlunix.cpp
 
+@COND_PLATFORM_UNIX_1@monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monodll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
 @COND_PLATFORM_UNIX_1@monodll_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_MACOSX_1@monodll_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
@@ -16069,12 +16097,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monodll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
-
-@COND_PLATFORM_UNIX_1@monodll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
@@ -20729,12 +20751,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@monolib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
-@COND_PLATFORM_UNIX_1@monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
 @COND_PLATFORM_UNIX_1@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -20743,15 +20759,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_OS2_1@monolib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
-
-@COND_PLATFORM_UNIX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_OS2_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_unix_dir.o: $(srcdir)/src/unix/dir.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dir.cpp
@@ -20765,11 +20772,38 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_dlunix.o: $(srcdir)/src/unix/dlunix.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/dlunix.cpp
 
+@COND_PLATFORM_UNIX_1@monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@monolib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
 @COND_PLATFORM_UNIX_1@monolib_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_MACOSX_1@monolib_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
@@ -20791,12 +20825,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monolib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
-
-@COND_PLATFORM_UNIX_1@monolib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
@@ -23861,12 +23889,6 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@basedll_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
-@COND_PLATFORM_UNIX_1@basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
-@COND_PLATFORM_MACOSX_1@basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
 @COND_PLATFORM_UNIX_1@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -23875,15 +23897,6 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_OS2_1@basedll_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
-
-@COND_PLATFORM_UNIX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_MACOSX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_OS2_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_unix_dir.o: $(srcdir)/src/unix/dir.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/dir.cpp
@@ -23897,11 +23910,38 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@basedll_dlunix.o: $(srcdir)/src/unix/dlunix.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/dlunix.cpp
 
+@COND_PLATFORM_UNIX_1@basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@basedll_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
 @COND_PLATFORM_UNIX_1@basedll_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_MACOSX_1@basedll_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
@@ -23923,12 +23963,6 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@basedll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
-
-@COND_PLATFORM_UNIX_1@basedll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
-
-@COND_PLATFORM_MACOSX_1@basedll_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASEDLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@basedll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
@@ -24326,12 +24360,6 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 @COND_PLATFORM_OS2_1@baselib_selectdispatcher.o: $(srcdir)/src/common/selectdispatcher.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/selectdispatcher.cpp
 
-@COND_PLATFORM_UNIX_1@baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
-@COND_PLATFORM_MACOSX_1@baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
-
 @COND_PLATFORM_UNIX_1@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
 
@@ -24340,15 +24368,6 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_OS2_1@baselib_appunix.o: $(srcdir)/src/unix/appunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/appunix.cpp
-
-@COND_PLATFORM_UNIX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_MACOSX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
-
-@COND_PLATFORM_OS2_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_unix_dir.o: $(srcdir)/src/unix/dir.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/dir.cpp
@@ -24362,11 +24381,38 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@baselib_dlunix.o: $(srcdir)/src/unix/dlunix.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/dlunix.cpp
 
+@COND_PLATFORM_UNIX_1@baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_epolldispatcher.o: $(srcdir)/src/unix/epolldispatcher.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/epolldispatcher.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_OS2_1@baselib_evtloopunix.o: $(srcdir)/src/unix/evtloopunix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/evtloopunix.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_fdiounix.o: $(srcdir)/src/unix/fdiounix.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fdiounix.cpp
+
 @COND_PLATFORM_UNIX_1@baselib_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
 
 @COND_PLATFORM_MACOSX_1@baselib_unix_snglinst.o: $(srcdir)/src/unix/snglinst.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/snglinst.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_unix_stdpaths.o: $(srcdir)/src/unix/stdpaths.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stdpaths.cpp
@@ -24388,12 +24434,6 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@baselib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
-
-@COND_PLATFORM_UNIX_1@baselib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
-
-@COND_PLATFORM_MACOSX_1@baselib_unix_stackwalk.o: $(srcdir)/src/unix/stackwalk.cpp $(BASELIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/stackwalk.cpp
 
 @COND_PLATFORM_UNIX_1@baselib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp

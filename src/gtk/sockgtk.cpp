@@ -5,6 +5,7 @@
 // Created:     1999
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999, 2007 wxWidgets dev team
+//              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -13,14 +14,11 @@
 
 #if wxUSE_SOCKETS
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #include <gdk/gdk.h>
 #include <glib.h>
 
-#include "wx/private/socket.h"
 #include "wx/apptrait.h"
+#include "wx/private/fdiomanager.h"
 
 extern "C" {
 static
@@ -28,7 +26,7 @@ void wxSocket_GDK_Input(gpointer data,
                         gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
-    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
     if ( condition & GDK_INPUT_READ )
     {
@@ -46,29 +44,30 @@ void wxSocket_GDK_Input(gpointer data,
 }
 }
 
-class GTKSocketManager : public wxSocketInputBasedManager
+class GTKFDIOManager : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d)
     {
         return gdk_input_add
                (
                     fd,
-                    d == FD_OUTPUT ? GDK_INPUT_WRITE : GDK_INPUT_READ,
+                    d == OUTPUT ? GDK_INPUT_WRITE : GDK_INPUT_READ,
                     wxSocket_GDK_Input,
                     handler
                );
     }
 
-    virtual void RemoveInput(int fd)
+    virtual void
+    RemoveInput(wxFDIOHandler* WXUNUSED(handler), int fd, Direction WXUNUSED(d))
     {
         gdk_input_remove(fd);
     }
 };
 
-wxSocketManager *wxGUIAppTraits::GetSocketManager()
+wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
 {
-    static GTKSocketManager s_manager;
+    static GTKFDIOManager s_manager;
     return &s_manager;
 }
 

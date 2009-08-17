@@ -63,6 +63,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dlunix.cpp
     src/unix/epolldispatcher.cpp
     src/unix/evtloopunix.cpp
+    src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
     src/unix/stdpaths.cpp

@@ -15,7 +15,7 @@
 
 #include <X11/Intrinsic.h>      // XtAppAdd/RemoveInput()
 #include "wx/motif/private.h"   // wxGetAppContext()
-#include "wx/private/socket.h"
+#include "wx/private/fdiomanager.h"
 #include "wx/apptrait.h"
 
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
                                  XtInputId *WXUNUSED(id))
 {
-    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
     handler->OnReadWaiting();
 }
@@ -31,39 +31,40 @@ static void wxSocket_Motif_Input(XtPointer data, int *WXUNUSED(fid),
 static void wxSocket_Motif_Output(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *WXUNUSED(id))
 {
-    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
+    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
 
     handler->OnWriteWaiting();
 }
 
 }
 
-class MotifSocketManager : public wxSocketInputBasedManager
+class MotifFDIOManager : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d)
     {
         return XtAppAddInput
                (
                     wxGetAppContext(),
                     fd,
-                    (XtPointer)(d == FD_OUTPUT ? XtInputWriteMask
-                                               : XtInputReadMask),
-                    d == FD_OUTPUT ? wxSocket_Motif_Output
-                                   : wxSocket_Motif_Input,
+                    (XtPointer)(d == OUTPUT ? XtInputWriteMask
+                                            : XtInputReadMask),
+                    d == OUTPUT ? wxSocket_Motif_Output
+                                : wxSocket_Motif_Input,
                     handler
                );
     }
 
-    virtual void RemoveInput(int fd)
+    virtual void
+    RemoveInput(wxFDIOHandler* WXUNUSED(handler), int fd, Direction WXUNUSED(d))
     {
         XtRemoveInput(fd);
     }
 };
 
-wxSocketManager *wxGUIAppTraits::GetSocketManager()
+wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
 {
-    static MotifSocketManager s_manager;
+    static MotifFDIOManager s_manager;
     return &s_manager;
 }
 

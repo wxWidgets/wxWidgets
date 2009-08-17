@@ -36,7 +36,12 @@ public:
 // TODO: Should we use XtAddInput() for wxX11 too? Or, vice versa, if there is
 //       no advantage in doing this compared to the generic way currently used
 //       by wxX11, should we continue to use GTK/Motif-specific stuff?
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    #define wxHAS_GUI_FDIOMANAGER
+    #define wxHAS_GUI_PROCESS_CALLBACKS
+#endif // ports using wxFDIOManager
+
+#if defined(__WXMAC__)
     #define wxHAS_GUI_PROCESS_CALLBACKS
     #define wxHAS_GUI_SOCKET_MANAGER
 #endif
@@ -76,9 +81,17 @@ public:
     virtual bool ShowAssertDialog(const wxString& msg);
 #endif
 
-#if wxUSE_SOCKETS && defined(wxHAS_GUI_SOCKET_MANAGER)
+#if wxUSE_SOCKETS
+
+#ifdef wxHAS_GUI_SOCKET_MANAGER
     virtual wxSocketManager *GetSocketManager();
 #endif
+
+#ifdef wxHAS_GUI_FDIOMANAGER
+    virtual wxFDIOManager *GetFDIOManager();
+#endif
+
+#endif // wxUSE_SOCKETS
 };
 
 #endif // wxUSE_GUI

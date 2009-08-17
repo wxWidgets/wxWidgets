@@ -50,7 +50,7 @@ public:
     virtual wxString GetDesktopEnvironment() const;
 #endif
 #if wxUSE_SOCKETS
-    virtual wxSocketManager *GetSocketManager();
+    virtual wxFDIOManager *GetFDIOManager();
 #endif
 };
 

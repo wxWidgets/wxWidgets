@@ -24,83 +24,91 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS && wxUSE_SELECT_DISPATCHER
+#if wxUSE_SOCKETS
 
+#include "wx/app.h"
 #include "wx/apptrait.h"
 #include "wx/private/socket.h"
 #include "wx/link.h"
 
 // ============================================================================
-// implementation
+// wxSocketFDBasedManager implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// wxSocketFDIOManager: socket manager using wxFDIODispatcher
-// ----------------------------------------------------------------------------
-
-class wxSocketFDIOManager : public wxSocketFDBasedManager
+bool wxSocketFDBasedManager::OnInit()
 {
-public:
-    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
-    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
-};
+    wxAppTraits * const traits = wxApp::GetTraitsIfExists();
+    if ( !traits )
+        return false;
 
-void wxSocketFDIOManager::Install_Callback(wxSocketImpl *socket_,
-                                             wxSocketNotify event)
-{
-    wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
-
-    const int fd = socket->m_fd;
-
-    if ( fd == -1 )
-        return;
-
-    const SocketDir d = GetDirForEvent(socket, event);
-
-    wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
-    if ( !dispatcher )
-        return;
-
-    FD(socket, d) = fd;
-
-    // register it when it's used for the first time, update it if it had been
-    // previously registered
-    const bool alreadyRegistered = socket->HasAnyEnabledCallbacks();
-
-    socket->EnableCallback(d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT);
-
-    if ( alreadyRegistered )
-        dispatcher->ModifyFD(fd, socket, socket->GetEnabledCallbacks());
-    else
-        dispatcher->RegisterFD(fd, socket, socket->GetEnabledCallbacks());
+    m_fdioManager = traits->GetFDIOManager();
+    return m_fdioManager != NULL;
 }
 
-void wxSocketFDIOManager::Uninstall_Callback(wxSocketImpl *socket_,
-                                               wxSocketNotify event)
+void wxSocketFDBasedManager::Install_Callback(wxSocketImpl *socket_,
+                                              wxSocketNotify event)
 {
-    wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
+    wxSocketImplUnix * const
+        socket = static_cast<wxSocketImplUnix *>(socket_);
 
-    const SocketDir d = GetDirForEvent(socket, event);
+    wxCHECK_RET( socket->m_fd != -1,
+                    "shouldn't be called on invalid socket" );
 
-    const int fd = FD(socket, d);
-    if ( fd == -1 )
-        return;
+    const wxFDIOManager::Direction d = GetDirForEvent(socket, event);
 
-    FD(socket, d) = -1;
+    int& fd = FD(socket, d);
+    if ( fd != -1 )
+        m_fdioManager->RemoveInput(socket, fd, d);
 
-    const wxFDIODispatcherEntryFlags
-        flag = d == FD_INPUT ? wxFDIO_INPUT : wxFDIO_OUTPUT;
+    fd = m_fdioManager->AddInput(socket, socket->m_fd, d);
+}
 
-    wxFDIODispatcher * const dispatcher = wxFDIODispatcher::Get();
-    if ( !dispatcher )
-        return;
+void wxSocketFDBasedManager::Uninstall_Callback(wxSocketImpl *socket_,
+                                                wxSocketNotify event)
+{
+    wxSocketImplUnix * const
+        socket = static_cast<wxSocketImplUnix *>(socket_);
 
-    socket->DisableCallback(flag);
+    const wxFDIOManager::Direction d = GetDirForEvent(socket, event);
 
-    if ( !socket->HasAnyEnabledCallbacks() )
-        dispatcher->UnregisterFD(fd);
-    else
-        dispatcher->ModifyFD(fd, socket, socket->GetEnabledCallbacks());
+    int& fd = FD(socket, d);
+    if ( fd != -1 )
+    {
+        m_fdioManager->RemoveInput(socket, fd, d);
+        fd = -1;
+    }
+}
+
+wxFDIOManager::Direction
+wxSocketFDBasedManager::GetDirForEvent(wxSocketImpl *socket,
+                                       wxSocketNotify event)
+{
+    switch ( event )
+    {
+        default:
+            wxFAIL_MSG( "unknown socket event" );
+            return wxFDIOManager::INPUT; // we must return something
+
+        case wxSOCKET_LOST:
+            wxFAIL_MSG( "unexpected socket event" );
+            return wxFDIOManager::INPUT; // as above
+
+        case wxSOCKET_INPUT:
+            return wxFDIOManager::INPUT;
+
+        case wxSOCKET_OUTPUT:
+            return wxFDIOManager::OUTPUT;
+
+        case wxSOCKET_CONNECTION:
+            // for server sockets we're interested in events indicating
+            // that a new connection is pending, i.e. that accept() will
+            // succeed and this is indicated by socket becoming ready for
+            // reading, while for the other ones we're interested in the
+            // completion of non-blocking connect() which is indicated by
+            // the socket becoming ready for writing
+            return socket->IsServer() ? wxFDIOManager::INPUT
+                                      : wxFDIOManager::OUTPUT;
+    }
 }
 
 // set the wxBase variable to point to our wxSocketManager implementation
@@ -111,7 +119,7 @@ static struct ManagerSetter
 {
     ManagerSetter()
     {
-        static wxSocketFDIOManager s_manager;
+        static wxSocketFDBasedManager s_manager;
         wxAppTraits::SetDefaultSocketManager(&s_manager);
     }
 } gs_managerSetter;
