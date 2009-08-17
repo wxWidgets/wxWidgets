@@ -286,6 +286,13 @@ int wxRibbonAUIArtProvider::GetTabCtrlHeight(
     int text_height = 0;
     int icon_height = 0;
 
+    if(pages.GetCount() <= 1 && (m_flags & wxRIBBON_BAR_ALWAYS_SHOW_TABS) == 0)
+    {
+        // To preserve space, a single tab need not be displayed. We still need
+        // one pixel of border though.
+        return 1;
+    }
+
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
         dc.SetFont(m_tab_active_label_font);
@@ -311,6 +318,9 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
                  wxWindow* WXUNUSED(wnd),
                  const wxRibbonPageTabInfo& tab)
 {
+    if(tab.rect.height <= 1)
+        return;
+
     dc.SetFont(m_tab_label_font);
     dc.SetPen(*wxTRANSPARENT_PEN);
     if(tab.active || tab.hovered)

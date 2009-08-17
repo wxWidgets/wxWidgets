@@ -946,6 +946,9 @@ void wxRibbonMSWArtProvider::DrawTab(
                  wxWindow* WXUNUSED(wnd),
                  const wxRibbonPageTabInfo& tab)
 {
+    if(tab.rect.height <= 2)
+        return;
+
     if(tab.active || tab.hovered)
     {
         if(tab.active)
@@ -2358,6 +2361,13 @@ int wxRibbonMSWArtProvider::GetTabCtrlHeight(
 {
     int text_height = 0;
     int icon_height = 0;
+
+    if(pages.GetCount() <= 1 && (m_flags & wxRIBBON_BAR_ALWAYS_SHOW_TABS) == 0)
+    {
+        // To preserve space, a single tab need not be displayed. We still need
+        // two pixels of border / padding though.
+        return 2;
+    }
 
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
     {
