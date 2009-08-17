@@ -591,10 +591,23 @@ public:
     }
 #endif
 
-    /** Returns currently selected property. */
-    wxPGProperty* GetSelection() const
+    /**
+        Returns currently selected property. NULL if none.
+
+        @remarks When wxPG_EX_MULTIPLE_SELECTION extra style is used, this
+                 member function returns the focused property, that is the
+                 one which can have active editor.
+    */
+    wxPGProperty* GetSelection() const;
+
+    /**
+        Returns list of currently selected properties.
+
+        @remarks wxArrayPGProperty should be compatible with std::vector API.
+    */
+    const wxArrayPGProperty& GetSelectedProperties() const
     {
-        return m_pState->GetSelection();
+        return m_pState->m_selection;
     }
 
 #ifndef SWIG
@@ -725,9 +738,18 @@ public:
     }
 
     /**
+        Returns true if property is selected.
+    */
+    bool IsPropertySelected( wxPGPropArg id ) const
+    {
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+        return m_pState->DoIsPropertySelected(p);
+    }
+
+    /**
         Returns true if property is shown (ie hideproperty with true not
         called for it).
-     */
+    */
     bool IsPropertyShown( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
@@ -1268,6 +1290,9 @@ public:
     virtual void RefreshProperty( wxPGProperty* p ) = 0;
 
 protected:
+
+    bool DoClearSelection( bool validation = false,
+                           int selFlags = 0 );
 
     /**
         In derived class, implement to set editable state component with

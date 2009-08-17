@@ -423,8 +423,9 @@ wxPropertyGridManager::~wxPropertyGridManager()
 {
     END_MOUSE_CAPTURE
 
-    m_pPropGrid->DoSelectProperty(NULL);
-    m_pPropGrid->m_pState = NULL;
+    //m_pPropGrid->ClearSelection();
+    delete m_pPropGrid;
+    m_pPropGrid = NULL;
 
     size_t i;
     for ( i=0; i<m_arrPages.size(); i++ )
@@ -553,7 +554,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
     if ( m_selPage == index )
         return true;
 
-    if ( m_pPropGrid->m_selected )
+    if ( m_pPropGrid->GetSelection() )
     {
         if ( !m_pPropGrid->ClearSelection() )
             return false;
@@ -878,6 +879,19 @@ bool wxPropertyGridManager::IsPageModified( size_t index ) const
 {
     if ( m_arrPages[index]->GetStatePtr()->m_anyModified )
         return true;
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool wxPropertyGridManager::IsPropertySelected( wxPGPropArg id ) const
+{
+    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+    for ( unsigned int i=0; i<GetPageCount(); i++ )
+    {
+        if ( GetPageState(i)->DoIsPropertySelected(p) )
+            return true;
+    }
     return false;
 }
 

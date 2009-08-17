@@ -435,7 +435,11 @@ wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
 
 /** Indicates the bit useable by derived properties.
 */
-wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
+wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
+
+/** Indicates that the property is being deleted and should be ignored.
+*/
+wxPG_PROP_BEING_DELETED             = 0x00200000
 
 };
 

@@ -2045,7 +2045,8 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     if ( extraStyle == -1 )
         // default extra style
-        extraStyle = wxPG_EX_MODE_BUTTONS;
+        extraStyle = wxPG_EX_MODE_BUTTONS |
+                     wxPG_EX_MULTIPLE_SELECTION;
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
                 //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
@@ -2140,7 +2141,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                 wxPG_TOOLBAR |
                 wxPG_DESCRIPTION,
                 // extra style
-                wxPG_EX_MODE_BUTTONS
+                wxPG_EX_MODE_BUTTONS |
+                wxPG_EX_MULTIPLE_SELECTION
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
                 //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
@@ -2928,6 +2930,8 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_NATIVE_DOUBLE_BUFFERING)
         ADD_FLAG(wxPG_EX_AUTO_UNSPECIFIED_VALUES)
         ADD_FLAG(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES)
+        ADD_FLAG(wxPG_EX_HIDE_PAGE_BUTTONS)
+        ADD_FLAG(wxPG_EX_MULTIPLE_SELECTION)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);

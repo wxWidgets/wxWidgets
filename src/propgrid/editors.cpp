@@ -608,7 +608,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     // Sanity check
     wxASSERT( IsKindOf(CLASSINFO(wxPropertyGrid)) );
 
-    wxPGProperty* p = m_selected;
+    wxPGProperty* p = GetSelection();
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
@@ -1576,9 +1576,9 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
     if ( m_selColumn == -1 )
         return;
 
-    if ( m_selected && (m_wndEditor || m_wndEditor2) ) 
+    if ( GetSelection() && (m_wndEditor || m_wndEditor2) ) 
     {
-        wxRect r = GetEditorWidgetRect(m_selected, m_selColumn);
+        wxRect r = GetEditorWidgetRect(GetSelection(), m_selColumn);
 
         if ( m_wndEditor )
         {
@@ -1637,7 +1637,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
                                                   int maxLen )
 {
     wxWindowID id = wxPG_SUBID1;
-    wxPGProperty* prop = m_selected;
+    wxPGProperty* prop = GetSelection();
     wxASSERT(prop);
 
     int tcFlags = wxTE_PROCESS_ENTER | extraStyle;
@@ -1708,7 +1708,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize& sz )
 {
     wxWindowID id = wxPG_SUBID2;
-    wxPGProperty* selected = m_selected;
+    wxPGProperty* selected = GetSelection();
     wxASSERT(selected);
 
 #ifdef __WXMAC__

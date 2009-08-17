@@ -389,6 +389,12 @@ public:
     bool IsPageModified( size_t index ) const;
 
     /**
+        Returns true if property is selected. Since selection is page
+        based, this function checks every page in the manager.
+    */
+    virtual bool IsPropertySelected( wxPGPropArg id ) const;
+
+    /**
         Removes a page.
 
         @return Returns @false if it was not possible to remove page in question.

@@ -152,7 +152,20 @@ wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 /**
     Hides page selection buttons from tool bar.
 */
-wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000
+wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
+
+/** Allows multiple properties to be selected by user (by pressing SHIFT
+    when clicking on a property, or by dragging with left mouse button
+    down).
+
+    You can get array of selected properties with
+    wxPropertyGridInterface::GetSelectedProperties(). In multiple selection
+    mode wxPropertyGridInterface::GetSelection() returns
+    property which has editor active (usually the first one
+    selected). Other useful member functions are ClearSelection(),
+    AddToSelection() and RemoveFromSelection().
+*/
+wxPG_EX_MULTIPLE_SELECTION              = 0x02000000
 
 };
 
@@ -393,6 +406,20 @@ public:
             trigger the action.
     */
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+
+    /**
+        Adds given property into selection. If wxPG_EX_MULTIPLE_SELECTION
+        extra style is not used, then this has same effect as
+        calling SelectProperty().
+
+        @remarks Multiple selection is not supported for categories. This
+                 means that if you have properties selected, you cannot
+                 add category to selection, and also if you have category
+                 selected, you cannot add other properties to selection.
+                 This member function will fail silently in these cases,
+                 even returning true.
+    */
+    bool AddToSelection( wxPGPropArg id );
 
     /**
         This static function enables or disables automatic use of
@@ -709,6 +736,12 @@ public:
     void ResetColours();
 
     /**
+        Removes given property from selection. If property is not selected,
+        an assertion failure will occur.
+    */
+    bool RemoveFromSelection( wxPGPropArg id );
+
+    /**
         Selects a property. Editor widget is automatically created, but
         not focused unless focus is true.
 
@@ -724,6 +757,8 @@ public:
         @remarks In wxPropertyGrid 1.4, this member function used to generate
                  wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
                  does that.
+
+        @remarks This clears any previous selection.
 
         @see wxPropertyGridInterface::ClearSelection()
     */
@@ -789,6 +824,11 @@ public:
         Sets background colour of margin.
     */
     void SetMarginColour(const wxColour& col);
+
+    /**
+        Set entire new selection from given list of properties.
+    */
+    void SetSelection( const wxArrayPGProperty& newSelection );
 
     /**
         Sets selection background colour - applies to selected property name

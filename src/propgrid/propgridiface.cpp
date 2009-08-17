@@ -147,10 +147,6 @@ void wxPropertyGridInterface::DeleteProperty( wxPGPropArg id )
     wxPG_PROP_ARG_CALL_PROLOG()
 
     wxPropertyGridPageState* state = p->GetParentState();
-    wxPropertyGrid* grid = state->GetGrid();
-
-    if ( grid->GetState() == state )
-        grid->DoSelectProperty(NULL, wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
 
     state->DoDelete( p, true );
 
@@ -167,13 +163,6 @@ wxPGProperty* wxPropertyGridInterface::RemoveProperty( wxPGPropArg id )
              wxNullProperty);
 
     wxPropertyGridPageState* state = p->GetParentState();
-    wxPropertyGrid* grid = state->GetGrid();
-
-    if ( grid->GetState() == state )
-    {
-        grid->DoSelectProperty(NULL,
-            wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
-    }
 
     state->DoDelete( p, false );
 
@@ -218,11 +207,25 @@ wxPGProperty* wxPropertyGridInterface::ReplaceProperty( wxPGPropArg id, wxPGProp
 // wxPropertyGridInterface property operations
 // -----------------------------------------------------------------------
 
+wxPGProperty* wxPropertyGridInterface::GetSelection() const
+{
+    return m_pState->GetSelection();
+}
+
+// -----------------------------------------------------------------------
+
 bool wxPropertyGridInterface::ClearSelection( bool validation )
 {
-    int flags = wxPG_SEL_DONT_SEND_EVENT;
+    return DoClearSelection(validation, wxPG_SEL_DONT_SEND_EVENT);
+}
+
+// -----------------------------------------------------------------------
+
+bool wxPropertyGridInterface::DoClearSelection( bool validation,
+                                                int selFlags )
+{
     if ( !validation )
-        flags |= wxPG_SEL_NOVALIDATE;
+        selFlags |= wxPG_SEL_NOVALIDATE;
 
     wxPropertyGridPageState* state = m_pState;
 
@@ -230,9 +233,9 @@ bool wxPropertyGridInterface::ClearSelection( bool validation )
     {
         wxPropertyGrid* pg = state->GetGrid();
         if ( pg->GetState() == state )
-            return pg->DoSelectProperty(NULL, flags);
+            return pg->DoSelectProperty(NULL, selFlags);
         else
-            state->SetSelection(NULL);
+            state->DoSetSelection(NULL);
     }
 
     return true;
@@ -1026,7 +1029,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                             else
                             {
                                 if ( values[0].length() )
-                                    pageState->SetSelection(GetPropertyByName(value));
+                                    pageState->DoSetSelection(GetPropertyByName(value));
                                 else
                                     pageState->DoClearSelection();
                             }

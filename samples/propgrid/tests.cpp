@@ -249,6 +249,10 @@ protected:
         failures++; \
     }
 
+#define RT_ASSERT(COND) \
+    if (!(COND)) \
+        RT_FAILURE()
+
 #define RT_FAILURE_MSG(MSG) \
     { \
         wxString s1 = wxString::Format(wxT("Test failure in tests.cpp, line %i."),__LINE__-1); \
@@ -715,6 +719,63 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        //
+        // Test multiple selection
+        RT_START_TEST(MULTIPLE_SELECTION)
+        if ( !(pgman->GetExtraStyle() & wxPG_EX_MULTIPLE_SELECTION) )
+            CreateGrid( -1, wxPG_EX_MULTIPLE_SELECTION);
+        pgman = m_pPropGridManager;
+
+        wxPropertyGrid* pg = pgman->GetGrid();
+
+        wxPGProperty* prop1 = pg->GetProperty(wxT("Label"));
+        wxPGProperty* prop2 = pg->GetProperty(wxT("Cell Text Colour"));
+        wxPGProperty* prop3 = pg->GetProperty(wxT("Height"));
+        wxPGProperty* catProp = pg->GetProperty(wxT("Appearance"));
+
+        RT_ASSERT( prop1 && prop2 && prop3 );
+
+        pg->ClearSelection();
+        pg->AddToSelection(prop1);
+        pg->AddToSelection(prop2);
+        pg->AddToSelection(prop3);
+
+        // Adding category to selection should fail silently
+        pg->AddToSelection(catProp);
+
+        wxArrayPGProperty selectedProperties = pg->GetSelectedProperties();
+
+        RT_ASSERT( selectedProperties.size() == 3 )
+        RT_ASSERT( pg->IsPropertySelected(prop1) )
+        RT_ASSERT( pg->IsPropertySelected(prop2) )
+        RT_ASSERT( pg->IsPropertySelected(prop3) )
+        RT_ASSERT( !pg->IsPropertySelected(catProp) )
+
+        pg->RemoveFromSelection(prop1);
+        wxArrayPGProperty selectedProperties2 = pg->GetSelectedProperties();
+
+        RT_ASSERT( selectedProperties2.size() == 2 )
+        RT_ASSERT( !pg->IsPropertySelected(prop1) )
+        RT_ASSERT( pg->IsPropertySelected(prop2) )
+        RT_ASSERT( pg->IsPropertySelected(prop3) )
+
+        pg->ClearSelection();
+
+        wxArrayPGProperty selectedProperties3 = pg->GetSelectedProperties();
+
+        RT_ASSERT( selectedProperties3.size() == 0 )
+        RT_ASSERT( !pg->IsPropertySelected(prop1) )
+        RT_ASSERT( !pg->IsPropertySelected(prop2) )
+        RT_ASSERT( !pg->IsPropertySelected(prop3) )
+
+        pg->SelectProperty(prop2);
+
+        RT_ASSERT( !pg->IsPropertySelected(prop1) )
+        RT_ASSERT( pg->IsPropertySelected(prop2) )
+        RT_ASSERT( !pg->IsPropertySelected(prop3) )
+    }
+
+    {
         RT_START_TEST(Attributes)
 
         wxPGProperty* prop = pgman->GetProperty(wxT("StringProperty"));
@@ -985,8 +1046,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman = m_pPropGridManager;
     }
 
-    /*
-    {
+    /*{
         // TODO: This test fails.
         RT_START_TEST(SetSplitterPosition)
 
@@ -1023,8 +1083,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         // Recreate the original grid
         CreateGrid( -1, -1 );
         pgman = m_pPropGridManager;
-    }
-    */
+    }*/
 
     {
         RT_START_TEST(HideProperty)
@@ -1034,7 +1093,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         srand(0x1234);
 
         wxArrayPGProperty arr1;
-        
+
         arr1 = GetPropertiesInRandomOrder(page);
 
         if ( !_failed_ )
@@ -1178,7 +1237,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         wxASSERT(wxPG_EX_INIT_NOCAT == 0x00001000);
 
-        for ( i=12; i<24; i++ )
+        for ( i=12; i<26; i++ )
         {
             int flag = 1<<i;
             RT_MSG(wxString::Format(wxT("ExStyle: 0x%X"),flag));

@@ -247,7 +247,20 @@ wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 
 /** Hides page selection buttons from toolbar.
 */
-wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000
+wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
+ 
+/** Allows multiple properties to be selected by user (by pressing SHIFT
+    when clicking on a property, or by dragging with left mouse button
+    down).
+
+    You can get array of selected properties with
+    wxPropertyGridInterface::GetSelectedProperties(). In multiple selection
+    mode wxPropertyGridInterface::GetSelection() returns
+    property which has editor active (usually the first one
+    selected). Other useful member functions are ClearSelection(),
+    AddToSelection() and RemoveFromSelection().
+*/
+wxPG_EX_MULTIPLE_SELECTION              = 0x02000000
 
 };
 
@@ -839,12 +852,6 @@ public:
     /** Returns currently selected property. */
     wxPGProperty* GetSelectedProperty() const { return GetSelection(); }
 
-    /** Returns currently selected property. */
-    wxPGProperty* GetSelection() const
-    {
-        return m_selected;
-    }
-
     /** Returns current selection background colour. */
     wxColour GetSelectionBackgroundColour() const { return m_colSelBack; }
 
@@ -953,9 +960,45 @@ public:
                  wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
                  does that.
 
-        @see wxPropertyGrid::Unselect
+        @remarks This clears any previous selection.
     */
     bool SelectProperty( wxPGPropArg id, bool focus = false );
+
+    /**
+        Set entire new selection from given list of properties.
+    */
+    void SetSelection( const wxArrayPGProperty& newSelection )
+    {
+        DoSetSelection( newSelection, wxPG_SEL_DONT_SEND_EVENT );
+    }
+
+    /**
+        Adds given property into selection. If wxPG_EX_MULTIPLE_SELECTION
+        extra style is not used, then this has same effect as
+        calling SelectProperty().
+
+        @remarks Multiple selection is not supported for categories. This
+                 means that if you have properties selected, you cannot
+                 add category to selection, and also if you have category
+                 selected, you cannot add other properties to selection.
+                 This member function will fail silently in these cases,
+                 even returning true.
+    */
+    bool AddToSelection( wxPGPropArg id )
+    {
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+        return DoAddToSelection(p, wxPG_SEL_DONT_SEND_EVENT);
+    }
+
+    /**
+        Removes given property from selection. If property is not selected,
+        an assertion failure will occur.
+    */
+    bool RemoveFromSelection( wxPGPropArg id )
+    {
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
+        return DoRemoveFromSelection(p, wxPG_SEL_DONT_SEND_EVENT);
+    }
 
     /** Sets category caption background colour. */
     void SetCaptionBackgroundColour(const wxColour& col);
@@ -1443,7 +1486,6 @@ public:
 
     //
     // Public methods for semi-public use
-    // (not protected for optimization)
     //
     bool DoSelectProperty( wxPGProperty* p, unsigned int flags = 0 );
 
@@ -1635,12 +1677,6 @@ protected:
     /** When drawing next time, clear this many item slots at the end. */
     int                 m_clearThisMany;
 
-    /** Pointer to selected property. Note that this is duplicated in
-        m_state for better transiency between pages so that the selected
-        item can be retained.
-    */
-    wxPGProperty*       m_selected;
-
     // pointer to property that has mouse hovering
     wxPGProperty*       m_propHover;
 
@@ -1767,6 +1803,10 @@ protected:
 
 protected:
 
+    bool AddToSelectionFromInputEvent( wxPGProperty* prop,
+                                       wxMouseEvent* event = NULL,
+                                       int selFlags = 0 );
+
     /**
         Adjust the centering of the bitmap icons (collapse / expand) when the
         caption font changes.
@@ -1785,14 +1825,6 @@ protected:
         on virtual height changes.
     */
     void CorrectEditorWidgetPosY();
-
-    /** Deselect current selection, if any. Returns true if success
-        (ie. validator did not intercept).
-
-        Unlike ClearSelection(), DoClearSelection() sends the
-        wxEVT_PG_SELECTED event.
-    */
-    bool DoClearSelection();
 
     int DoDrawItems( wxDC& dc,
                      const wxRect* clipRect,
@@ -1825,6 +1857,15 @@ protected:
     void RegainColours();
 
     bool DoEditorValidate();
+
+    void DoSetSelection( const wxArrayPGProperty& newSelection,
+                         int selFlags = 0 );
+
+    bool DoAddToSelection( wxPGProperty* prop,
+                           int selFlags = 0 );
+
+    bool DoRemoveFromSelection( wxPGProperty* prop,
+                                int selFlags = 0 );
 
     wxPGProperty* DoGetItemAtY( int y ) const;
 

@@ -475,11 +475,6 @@ public:
         return (unsigned int) m_colWidths.size();
     }
 
-    wxPGProperty* GetSelection() const
-    {
-        return m_selected;
-    }
-
     int GetColumnMinWidth( int column ) const;
 
     int GetColumnWidth( unsigned int column ) const
@@ -498,6 +493,28 @@ public:
     const wxPGProperty* GetLastItem( int flags = wxPG_ITERATE_DEFAULT ) const
     {
         return ((wxPropertyGridPageState*)this)->GetLastItem(flags);
+    }
+
+    /**
+        Returns currently selected property.
+    */
+    wxPGProperty* GetSelection() const
+    {
+        if ( m_selection.size() == 0 )
+            return NULL;
+        return m_selection[0];
+    }
+
+    void DoSetSelection( wxPGProperty* prop )
+    {
+        m_selection.clear();
+        if ( prop )
+            m_selection.push_back(prop);
+    }
+
+    bool DoClearSelection()
+    {
+        return DoSelectProperty(NULL);
     }
 
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
@@ -590,8 +607,6 @@ public:
 
     bool PrepareAfterItemsAdded();
 
-    void SetSelection( wxPGProperty* p ) { m_selected = p; }
-
     /** Called after virtual height needs to be recalculated.
     */
     void VirtualHeightChanged()
@@ -605,13 +620,10 @@ public:
     /** Returns property by its name. */
     wxPGProperty* BaseGetPropertyByName( const wxString& name ) const;
 
-    void DoClearSelection()
-    {
-        m_selected = NULL;
-    }
-
     /** Called in, for example, wxPropertyGrid::Clear. */
     void DoClear();
+
+    bool DoIsPropertySelected( wxPGProperty* prop ) const;
 
     bool DoCollapse( wxPGProperty* p );
 
@@ -659,8 +671,8 @@ protected:
     /** Most recently added category. */
     wxPropertyCategory*         m_currentCategory;
 
-    /** Pointer to selected property. */
-    wxPGProperty*               m_selected;
+    /** Array of selected property. */
+    wxArrayPGProperty           m_selection;
 
     /** Virtual width. */
     int                         m_width;

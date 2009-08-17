@@ -206,7 +206,6 @@ wxPropertyGridPageState::wxPropertyGridPageState()
     m_properties = &m_regularArray;
     m_abcArray = NULL;
     m_currentCategory = NULL;
-    m_selected = NULL;
     m_width = 0;
     m_virtualHeight = 0;
     m_lastCaptionBottomnest = 1;
@@ -274,7 +273,7 @@ void wxPropertyGridPageState::DoClear()
     }
     else
     {
-        m_selected = NULL;
+        m_selection.clear();
     }
 
     m_regularArray.Empty();
@@ -1150,7 +1149,8 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
         if ( res )
         {
             p->SetValue(variant);
-            if ( m_selected==p && this==m_pPropGrid->GetState() )
+            if ( p == m_pPropGrid->GetSelection() &&
+                 this == m_pPropGrid->GetState() )
                 m_pPropGrid->RefreshEditor();
         }
 
@@ -1166,7 +1166,8 @@ bool wxPropertyGridPageState::DoSetPropertyValue( wxPGProperty* p, wxVariant& va
     if ( p )
     {
         p->SetValue(value);
-        if ( m_selected==p && this==m_pPropGrid->GetState() )
+        if ( p == m_pPropGrid->GetSelection() &&
+             this == m_pPropGrid->GetState() )
             m_pPropGrid->RefreshEditor();
 
         return true;
@@ -1190,6 +1191,21 @@ bool wxPropertyGridPageState::DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wx
 
 // -----------------------------------------------------------------------
 // wxPropertyGridPageState property operations
+// -----------------------------------------------------------------------
+
+bool wxPropertyGridPageState::DoIsPropertySelected( wxPGProperty* prop ) const
+{
+    const wxArrayPGProperty& selection = m_selection;
+
+    for ( unsigned int i=0; i<selection.size(); i++ )
+    {
+        if ( selection[i] == prop )
+            return true;
+    }
+
+    return false;
+}
+
 // -----------------------------------------------------------------------
 
 bool wxPropertyGridPageState::DoCollapse( wxPGProperty* p )
@@ -1231,7 +1247,7 @@ bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, unsigned int fl
     if ( this == m_pPropGrid->GetState() )
         return m_pPropGrid->DoSelectProperty( p, flags );
 
-    m_selected = p;
+    DoSetSelection(p);
     return true;
 }
 
@@ -1711,6 +1727,25 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     wxCHECK_RET( !parent->HasFlag(wxPG_PROP_AGGREGATE),
         wxT("wxPropertyGrid: Do not attempt to remove sub-properties.") );
 
+    wxASSERT( item->GetParentState() == this );
+
+	wxPropertyGrid* pg = GetGrid();
+
+    if ( DoIsPropertySelected(item) )
+    {
+        if ( pg && pg->GetState() == this )
+        {
+            pg->DoRemoveFromSelection(item,
+                wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+        }
+        else
+        {
+            m_selection.Remove(item);
+        }
+    }
+
+    item->SetFlag(wxPG_PROP_BEING_DELETED);
+
     // Delete children
     if ( item->GetChildCount() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
     {
@@ -1779,8 +1814,6 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     if ( item->GetBaseName().length() && 
          (parent->IsCategory() || parent->IsRoot()) )
         m_dictName.erase(item->GetBaseName());
-
-	wxPropertyGrid* pg = GetGrid();
 
 	// We need to clear parent grid's m_propHover, if it matches item
 	if ( pg && pg->m_propHover == item )
