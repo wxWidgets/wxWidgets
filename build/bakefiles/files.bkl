@@ -58,16 +58,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_UNIX_AND_DARWIN_SRC" hints="files">
     src/common/fdiodispatcher.cpp
     src/common/selectdispatcher.cpp
-    src/unix/epolldispatcher.cpp
     src/unix/appunix.cpp
-    src/unix/evtloopunix.cpp
     src/unix/dir.cpp
     src/unix/dlunix.cpp
+    src/unix/epolldispatcher.cpp
+    src/unix/evtloopunix.cpp
     src/unix/snglinst.cpp
+    src/unix/stackwalk.cpp
     src/unix/stdpaths.cpp
     src/unix/timerunx.cpp
     src/unix/threadpsx.cpp
-    src/unix/stackwalk.cpp
     src/unix/utilsunx.cpp
 </set>
 
