@@ -52,6 +52,7 @@ public:
     virtual void OnReadWaiting();
     virtual void OnWriteWaiting();
     virtual void OnExceptionWaiting();
+    virtual bool IsOk() const { return m_fd != INVALID_SOCKET; }
 
     // Unix-specific functions used by wxSocketFDIOManager only
     bool HasAnyEnabledCallbacks() const { return m_enabledCallbacks != 0; }

@@ -37,7 +37,7 @@ void wxSocket_GDK_Input(gpointer data,
         // we could have lost connection while reading in which case we
         // shouldn't call OnWriteWaiting() as the socket is now closed and it
         // would assert
-        if ( handler->m_fd == INVALID_SOCKET )
+        if ( !handler->IsOk() )
             return;
     }
 

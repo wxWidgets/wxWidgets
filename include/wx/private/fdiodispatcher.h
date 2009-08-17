@@ -26,6 +26,10 @@ public:
     // called when there is exception on descriptor
     virtual void OnExceptionWaiting() = 0;
 
+    // called to check if the handler is still valid, only used by
+    // wxSocketImplUnix currently
+    virtual bool IsOk() const { return true; }
+
     // virtual dtor for the base class
     virtual ~wxFDIOHandler() { }
 };
