@@ -2079,4 +2079,9 @@ wxFORCE_LINK_MODULE( socketiohandler )
     wxFORCE_LINK_MODULE( mswsocket )
 #endif
 
+// and for OSXManagerSetter in the OS X one
+#ifdef __WXMAC__
+    wxFORCE_LINK_MODULE( osxsocket )
+#endif
+
 #endif // wxUSE_SOCKETS

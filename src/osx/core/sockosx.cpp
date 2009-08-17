@@ -16,6 +16,7 @@
 #include "wx/private/socket.h"
 #include "wx/unix/private/sockunix.h"
 #include "wx/apptrait.h"
+#include "wx/link.h"
 
 #include "wx/osx/core/cfstring.h"           // for wxMacWakeUp() only
 
@@ -284,5 +285,8 @@ static struct OSXManagerSetter
         wxOSXSocketManagerCF = &s_manager;
     }
 } gs_OSXManagerSetter;
+
+// see the relative linker macro in socket.cpp
+wxFORCE_LINK_THIS_MODULE( osxsocket );
 
 #endif // wxUSE_SOCKETS
