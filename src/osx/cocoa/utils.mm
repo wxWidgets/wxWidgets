@@ -52,7 +52,9 @@ void wxBell()
 
 void wxMacWakeUp()
 {
-    // TODO
+	NSEvent* wakeupEvent = [NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint 
+										 modifierFlags:NSAnyEventMask timestamp:0 windowNumber:0 context:nil subtype:0 data1:0 data2:0];
+	[NSApp postEvent:wakeupEvent atStart:NO];
 }
 
 #endif // wxUSE_BASE
