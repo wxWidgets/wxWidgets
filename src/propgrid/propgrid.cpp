@@ -784,7 +784,7 @@ bool wxPropertyGrid::DoRemoveFromSelection( wxPGProperty* prop, int selFlags )
     }
     else
     {
-        selection.Remove(prop);
+        m_pState->DoRemoveFromSelection(prop);
         RefreshProperty(prop);
         res = true;
     }

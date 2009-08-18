@@ -605,23 +605,6 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
 // -----------------------------------------------------------------------
 
-#if wxUSE_STL
-#include <algorithm>
-
-static bool wxPG_SortFunc_ByFunction(wxPGProperty *p1, wxPGProperty *p2)
-{
-    wxPropertyGrid* pg = p1->GetGrid();
-    wxPGSortCallback sortFunction = pg->GetSortFunction();
-    return sortFunction(pg, p1, p2) < 0;
-}
-
-static bool wxPG_SortFunc_ByLabel(wxPGProperty *p1, wxPGProperty *p2)
-{
-    return p1->GetLabel().CmpNoCase( p2->GetLabel() ) < 0;
-}
-
-#else
-
 static int wxPG_SortFunc_ByFunction(wxPGProperty **pp1, wxPGProperty **pp2)
 {
     wxPGProperty *p1 = *pp1;
@@ -638,6 +621,24 @@ static int wxPG_SortFunc_ByLabel(wxPGProperty **pp1, wxPGProperty **pp2)
     return p1->GetLabel().CmpNoCase( p2->GetLabel() );
 }
 
+#if 0
+//
+// For wxVector w/ wxUSE_STL=1, you would use code like this instead:
+//
+
+#include <algorithm>
+
+static bool wxPG_SortFunc_ByFunction(wxPGProperty *p1, wxPGProperty *p2)
+{
+    wxPropertyGrid* pg = p1->GetGrid();
+    wxPGSortCallback sortFunction = pg->GetSortFunction();
+    return sortFunction(pg, p1, p2) < 0;
+}
+
+static bool wxPG_SortFunc_ByLabel(wxPGProperty *p1, wxPGProperty *p2)
+{
+    return p1->GetLabel().CmpNoCase( p2->GetLabel() ) < 0;
+}
 #endif
 
 void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
@@ -658,18 +659,21 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
          && !p->IsCategory() && !p->IsRoot() )
         return;
 
-#if wxUSE_STL
+    if ( GetGrid()->GetSortFunction() )
+        p->m_children.Sort( wxPG_SortFunc_ByFunction );
+    else
+        p->m_children.Sort( wxPG_SortFunc_ByLabel );
+
+#if 0
+    //
+    // For wxVector w/ wxUSE_STL=1, you would use code like this instead:
+    //
     if ( GetGrid()->GetSortFunction() )
         std::sort(p->m_children.begin(), p->m_children.end(),
                   wxPG_SortFunc_ByFunction);
     else
         std::sort(p->m_children.begin(), p->m_children.end(),
                   wxPG_SortFunc_ByLabel);
-#else
-    if ( GetGrid()->GetSortFunction() )
-        p->m_children.Sort( wxPG_SortFunc_ByFunction );
-    else
-        p->m_children.Sort( wxPG_SortFunc_ByLabel );
 #endif
 
     // Fix indices
@@ -1208,6 +1212,20 @@ bool wxPropertyGridPageState::DoIsPropertySelected( wxPGProperty* prop ) const
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
+{
+    for ( unsigned int i=0; i<m_selection.size(); i++ )
+    {
+        if ( m_selection[i] == prop )
+        {
+            m_selection.erase( m_selection.begin() + i );
+            return;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 bool wxPropertyGridPageState::DoCollapse( wxPGProperty* p )
 {
     wxCHECK_MSG( p, false, wxT("invalid property id") );
@@ -1740,7 +1758,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         }
         else
         {
-            m_selection.Remove(item);
+            DoRemoveFromSelection(item);
         }
     }
 

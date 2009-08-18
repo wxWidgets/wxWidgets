@@ -517,6 +517,8 @@ public:
         return DoSelectProperty(NULL);
     }
 
+    void DoRemoveFromSelection( wxPGProperty* prop );
+
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
     wxPGProperty* GetPropertyByLabel( const wxString& name,
