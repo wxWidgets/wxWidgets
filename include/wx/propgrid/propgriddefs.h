@@ -342,13 +342,9 @@ typedef wxString wxPGCachedString;
 
 #ifndef SWIG
 
-#if wxUSE_STL
-typedef std::vector<wxPGProperty*> wxArrayPGProperty;
-#else
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxPGProperty*, wxArrayPGProperty,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
-#endif
 
 // Always use wxString based hashmap with unicode, stl, swig and GCC 4.0+
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(void*,
@@ -358,7 +354,7 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL(void*,
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(wxString,
                                      wxPGHashMapS2S,
                                      class WXDLLIMPEXP_PROPGRID);
- 
+
 WX_DECLARE_VOIDPTR_HASH_MAP_WITH_DECL(void*,
                                       wxPGHashMapP2P,
                                       class WXDLLIMPEXP_PROPGRID);
