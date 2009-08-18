@@ -1509,6 +1509,12 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
     }
     if ( [m_osxView respondsToSelector:@selector(setControlSize:)] )
         [m_osxView setControlSize:size];
+    else if ([m_osxView respondsToSelector:@selector(cell)]) 
+	{ 
+		id cell = [(id)m_osxView cell]; 
+		if ([cell respondsToSelector:@selector(setControlSize:)]) 
+			[cell setControlSize:size]; 
+	} 
 }
 
 void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
