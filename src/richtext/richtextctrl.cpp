@@ -784,7 +784,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             case WXK_NUMPAD_END:
             case WXK_NUMPAD_BEGIN:
             case WXK_NUMPAD_INSERT:
-            case WXK_NUMPAD_DELETE:
             case WXK_WINDOWS_LEFT:
             {
                 return;
@@ -3512,7 +3511,7 @@ wxRichTextCaret::~wxRichTextCaret()
 void wxRichTextCaret::DoShow()
 {
     m_flashOn = true;
-    
+
     if (!m_timer.IsRunning())
         m_timer.Start(GetBlinkTime());
 
