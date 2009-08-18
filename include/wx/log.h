@@ -43,6 +43,16 @@ typedef unsigned long wxLogLevel;
 #include "wx/string.h"
 #include "wx/strvararg.h"
 
+// ----------------------------------------------------------------------------
+// forward declarations
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_FWD_BASE wxObject;
+
+#if wxUSE_GUI
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
+#endif // wxUSE_GUI
+
 #if wxUSE_LOG
 
 #include "wx/arrstr.h"
@@ -90,16 +100,6 @@ typedef unsigned long wxLogLevel;
         #define wxLOG_COMPONENT "wx"
     #endif
 #endif
-
-// ----------------------------------------------------------------------------
-// forward declarations
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_FWD_BASE wxObject;
-
-#if wxUSE_GUI
-    class WXDLLIMPEXP_FWD_CORE wxFrame;
-#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // constants
@@ -1415,24 +1415,24 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // WX_WATCOM_ONLY_CODE is needed to work around
 // http://bugzilla.openwatcom.org/show_bug.cgi?id=351
 #define wxDEFINE_EMPTY_LOG_FUNCTION(level)                                  \
-    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxString&))           \
+    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxFormatString&))     \
     WX_WATCOM_ONLY_CODE(                                                    \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const char*))           \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wchar_t*))        \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxCStrData&))     \
     )                                                                       \
-    inline void wxVLog##level(const wxString& WXUNUSED(format),             \
+    inline void wxVLog##level(const wxFormatString& WXUNUSED(format),       \
                               va_list WXUNUSED(argptr)) { }                 \
 
 #define wxDEFINE_EMPTY_LOG_FUNCTION2(level, argclass)                       \
-    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxString&)) \
+    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxFormatString&)) \
     WX_WATCOM_OR_MINGW_ONLY_CODE(                                           \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const char*)) \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wchar_t*)) \
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxCStrData&)) \
     )                                                                       \
     inline void wxVLog##level(argclass WXUNUSED(arg),                       \
-                              const wxString& WXUNUSED(format),             \
+                              const wxFormatString& WXUNUSED(format),       \
                               va_list WXUNUSED(argptr)) {}
 
 wxDEFINE_EMPTY_LOG_FUNCTION(FatalError);
@@ -1499,7 +1499,7 @@ public:
     #ifdef HAVE_VARIADIC_MACROS
         #define wxLogDebug(fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxString&))
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxFormatString&))
     #endif
 #endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
@@ -1521,9 +1521,9 @@ public:
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
         #if WXWIN_COMPATIBILITY_2_8
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (wxTraceMask, const wxString&))
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (wxTraceMask, const wxFormatString&))
         #endif
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxString&))
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxFormatString&))
         #ifdef __WATCOMC__
         // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const char*, const char*))
