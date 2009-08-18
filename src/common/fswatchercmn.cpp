@@ -71,7 +71,10 @@ wxFileSystemWatcherBase::wxFileSystemWatcherBase() :
 wxFileSystemWatcherBase::~wxFileSystemWatcherBase()
 {
     RemoveAll();
-    delete m_service;
+    if (m_service)
+    {
+        delete m_service;
+    }
 }
 
 bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
@@ -166,32 +169,32 @@ bool wxFileSystemWatcherBase::AddTree(const wxFileName& path, int events,
 bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
 {
     if (!path.DirExists())
-    	return false;
+        return false;
 
     // OPT could be optimised if we stored information about relationships
     // between paths
     class RemoveTraverser : public wxDirTraverser
     {
     public:
-    	RemoveTraverser(wxFileSystemWatcherBase* watcher) :
-    		m_watcher(watcher)
-    	{
-    	}
+        RemoveTraverser(wxFileSystemWatcherBase* watcher) :
+            m_watcher(watcher)
+        {
+        }
 
-    	virtual wxDirTraverseResult OnFile(const wxString& filename)
-    	{
-    		m_watcher->Remove(wxFileName(filename));
-    		return wxDIR_CONTINUE;
-    	}
+        virtual wxDirTraverseResult OnFile(const wxString& filename)
+        {
+            m_watcher->Remove(wxFileName(filename));
+            return wxDIR_CONTINUE;
+        }
 
-    	virtual wxDirTraverseResult OnDir(const wxString& dirname)
-    	{
-    		m_watcher->RemoveTree(wxFileName(dirname));
-    		return wxDIR_CONTINUE;
-    	}
+        virtual wxDirTraverseResult OnDir(const wxString& dirname)
+        {
+            m_watcher->RemoveTree(wxFileName(dirname));
+            return wxDIR_CONTINUE;
+        }
 
     private:
-    	wxFileSystemWatcherBase* m_watcher;
+        wxFileSystemWatcherBase* m_watcher;
     };
 
     wxDir dir(path.GetFullPath());
