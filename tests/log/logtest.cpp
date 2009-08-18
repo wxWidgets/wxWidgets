@@ -19,6 +19,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
+    #include "wx/filefn.h"
 #endif // WX_PRECOMP
 
 #include "wx/scopeguard.h"
