@@ -168,6 +168,7 @@ private:
         CPPUNIT_TEST( CompatLogger );
         CPPUNIT_TEST( CompatLogger2 );
 #endif // WXWIN_COMPATIBILITY_2_8
+        CPPUNIT_TEST( SysError );
     CPPUNIT_TEST_SUITE_END();
 
     void Functions();
@@ -180,6 +181,7 @@ private:
     void CompatLogger();
     void CompatLogger2();
 #endif // WXWIN_COMPATIBILITY_2_8
+    void SysError();
 
     TestLog *m_log;
     wxLog *m_logOld;
@@ -335,3 +337,21 @@ void LogTestCase::CompatLogger2()
 }
 
 #endif // WXWIN_COMPATIBILITY_2_8
+
+void LogTestCase::SysError()
+{
+    wxString s;
+    wxLogSysError("Success");
+    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Success (", &s) );
+    CPPUNIT_ASSERT( s.StartsWith("error 0") );
+
+    wxLogSysError(17, "Error");
+    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Error (", &s) );
+    CPPUNIT_ASSERT( s.StartsWith("error 17") );
+
+    wxOpen("no-such-file", 0, 0);
+    wxLogSysError("Not found");
+    CPPUNIT_ASSERT( m_log->GetLog(wxLOG_Error).StartsWith("Not found (", &s) );
+    WX_ASSERT_MESSAGE( ("Error message is \"(%s\"", s), s.StartsWith("error 2") );
+}
+

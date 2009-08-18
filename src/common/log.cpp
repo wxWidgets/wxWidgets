@@ -350,9 +350,7 @@ wxLog::CallDoLogNow(wxLogLevel level,
     wxUIntPtr num = 0;
     if ( info.GetNumValue(wxLOG_KEY_SYS_ERROR_CODE, &num) )
     {
-        long err = static_cast<long>(num);
-        if ( !err )
-            err = wxSysErrorCode();
+        const long err = static_cast<long>(num);
 
         suffix.Printf(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
     }

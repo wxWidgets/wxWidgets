@@ -863,12 +863,12 @@ public:
     // indicates that we may have an extra first argument preceding the format
     // string and that if we do have it, we should store it in m_info using the
     // given key (while by default 0 value will be used)
-    wxLogger& MaybeStore(const wxString& key)
+    wxLogger& MaybeStore(const wxString& key, wxUIntPtr value = 0)
     {
         wxASSERT_MSG( m_optKey.empty(), "can only have one optional value" );
         m_optKey = key;
 
-        m_info.StoreValue(key, 0);
+        m_info.StoreValue(key, value);
         return *this;
     }
 
@@ -1207,7 +1207,7 @@ private:
 
     void DoCallOnLog(const wxString& format, va_list argptr)
     {
-        wxLog::OnLog(m_level, wxString::FormatV(format, argptr), m_info);
+        DoCallOnLog(m_level, format, argptr);
     }
 
 
@@ -1354,19 +1354,30 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // wxLogSysError() needs to stash the error code value in the log record info
 // so it needs special handling too; additional complications arise because the
 // error code may or not be present as the first argument
+//
+// notice that we unfortunately can't avoid the call to wxSysErrorCode() even
+// though it may be unneeded if an explicit error code is passed to us because
+// the message might not be logged immediately (e.g. it could be queued for
+// logging from the main thread later) and so we can't to wait until it is
+// logged to determine whether we have last error or not as it will be too late
+// and it will have changed already by then (in fact it even changes when
+// wxString::Format() is called because of vsnprintf() inside it so it can
+// change even much sooner)
 #define wxLOG_KEY_SYS_ERROR_CODE "wx.sys_error"
 
 #define wxLogSysError                                                         \
     if ( !wxLog::IsLevelEnabled(wxLOG_Error, wxLOG_COMPONENT) )               \
     {}                                                                        \
     else                                                                      \
-        wxMAKE_LOGGER(Error).MaybeStore(wxLOG_KEY_SYS_ERROR_CODE).Log
+        wxMAKE_LOGGER(Error).MaybeStore(wxLOG_KEY_SYS_ERROR_CODE,             \
+                                        wxSysErrorCode()).Log
 
 // unfortunately we can't have overloaded macros so we can't define versions
 // both with and without error code argument and have to rely on LogV()
 // overloads in wxLogger to select between them
 #define wxVLogSysError \
-    wxMAKE_LOGGER(Error).MaybeStore(wxLOG_KEY_SYS_ERROR_CODE).LogV
+    wxMAKE_LOGGER(Error).MaybeStore(wxLOG_KEY_SYS_ERROR_CODE, \
+                                    wxSysErrorCode()).LogV
 
 #if wxUSE_GUI
     // wxLogStatus() is similar to wxLogSysError() as it allows to optionally
