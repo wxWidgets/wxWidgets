@@ -391,119 +391,121 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 break;
 
             GetDragMouse( theDrag, &mouse, 0L );
-            int x = mouse.h ;
-            int y = mouse.v ;
-            toplevel->GetNonOwnedPeer()->ScreenToWindow( &x, &y );
-            localMouse.h = x;
-            localMouse.v = y;
+			{
+				int x = mouse.h ;
+				int y = mouse.v ;
+				toplevel->GetNonOwnedPeer()->ScreenToWindow( &x, &y );
+				localMouse.h = x;
+				localMouse.v = y;
 
-            {
-                wxWindow *win = NULL;
-                ControlPartCode controlPart;
-                ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
-                if ( control )
-                    win = wxFindWindowFromWXWidget( (WXWidget) control );
-                else
-                    win = toplevel;
+				{
+					wxWindow *win = NULL;
+					ControlPartCode controlPart;
+					ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
+					if ( control )
+						win = wxFindWindowFromWXWidget( (WXWidget) control );
+					else
+						win = toplevel;
 
-                int localx, localy;
-                localx = localMouse.h;
-                localy = localMouse.v;
+					int localx, localy;
+					localx = localMouse.h;
+					localy = localMouse.v;
 
-                if ( win )
-                    win->MacRootWindowToWindow( &localx, &localy );
-                if ( win != trackingGlobals->m_currentTargetWindow )
-                {
-                    if ( trackingGlobals->m_currentTargetWindow )
-                    {
-                        // this window is left
-                        if ( trackingGlobals->m_currentTarget )
-                        {
-#ifndef __LP64__
-                            HideDragHilite( theDrag );
-#endif
-                            trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
-                            trackingGlobals->m_currentTarget->OnLeave();
-                            trackingGlobals->m_currentTarget = NULL;
-                            trackingGlobals->m_currentTargetWindow = NULL;
-                        }
-                    }
+					if ( win )
+						win->MacRootWindowToWindow( &localx, &localy );
+					if ( win != trackingGlobals->m_currentTargetWindow )
+					{
+						if ( trackingGlobals->m_currentTargetWindow )
+						{
+							// this window is left
+							if ( trackingGlobals->m_currentTarget )
+							{
+	#ifndef __LP64__
+								HideDragHilite( theDrag );
+	#endif
+								trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
+								trackingGlobals->m_currentTarget->OnLeave();
+								trackingGlobals->m_currentTarget = NULL;
+								trackingGlobals->m_currentTargetWindow = NULL;
+							}
+						}
 
-                    if ( win )
-                    {
-                        // this window is entered
-                        trackingGlobals->m_currentTargetWindow = win;
-                        trackingGlobals->m_currentTarget = win->GetDropTarget();
-                        {
-                            if ( trackingGlobals->m_currentTarget )
-                            {
-                                trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
-                                result = trackingGlobals->m_currentTarget->OnEnter( localx, localy, result );
-                            }
+						if ( win )
+						{
+							// this window is entered
+							trackingGlobals->m_currentTargetWindow = win;
+							trackingGlobals->m_currentTarget = win->GetDropTarget();
+							{
+								if ( trackingGlobals->m_currentTarget )
+								{
+									trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
+									result = trackingGlobals->m_currentTarget->OnEnter( localx, localy, result );
+								}
 
-                            if ( result != wxDragNone )
-                            {
-                                int x, y;
+								if ( result != wxDragNone )
+								{
+									int x, y;
 
-                                x = y = 0;
-                                win->MacWindowToRootWindow( &x, &y );
-                                RgnHandle hiliteRgn = NewRgn();
-                                Rect r = { y, x, y + win->GetSize().y, x + win->GetSize().x };
-                                RectRgn( hiliteRgn, &r );
-#ifndef __LP64__
-                                ShowDragHilite( theDrag, hiliteRgn, true );
-#endif
-                                DisposeRgn( hiliteRgn );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if ( trackingGlobals->m_currentTarget )
-                    {
-                        trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
-                        result = trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
-                    }
-                }
+									x = y = 0;
+									win->MacWindowToRootWindow( &x, &y );
+									RgnHandle hiliteRgn = NewRgn();
+									Rect r = { y, x, y + win->GetSize().y, x + win->GetSize().x };
+									RectRgn( hiliteRgn, &r );
+	#ifndef __LP64__
+									ShowDragHilite( theDrag, hiliteRgn, true );
+	#endif
+									DisposeRgn( hiliteRgn );
+								}
+							}
+						}
+					}
+					else
+					{
+						if ( trackingGlobals->m_currentTarget )
+						{
+							trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
+							result = trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
+						}
+					}
 
-                // set cursor for OnEnter and OnDragOver
-                if ( trackingGlobals->m_currentSource && !trackingGlobals->m_currentSource->GiveFeedback( result ) )
-                {
-                  if ( !trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) )
-                  {
-                      wxStockCursor cursorID = wxCURSOR_NONE;
+					// set cursor for OnEnter and OnDragOver
+					if ( trackingGlobals->m_currentSource && !trackingGlobals->m_currentSource->GiveFeedback( result ) )
+					{
+					  if ( !trackingGlobals->m_currentSource->MacInstallDefaultCursor( result ) )
+					  {
+						  wxStockCursor cursorID = wxCURSOR_NONE;
 
-                      switch (result)
-                      {
-                          case wxDragCopy:
-                              cursorID = wxCURSOR_COPY_ARROW;
-                              break;
+						  switch (result)
+						  {
+							  case wxDragCopy:
+								  cursorID = wxCURSOR_COPY_ARROW;
+								  break;
 
-                          case wxDragMove:
-                              cursorID = wxCURSOR_ARROW;
-                              break;
+							  case wxDragMove:
+								  cursorID = wxCURSOR_ARROW;
+								  break;
 
-                          case wxDragNone:
-                              cursorID = wxCURSOR_NO_ENTRY;
-                              break;
+							  case wxDragNone:
+								  cursorID = wxCURSOR_NO_ENTRY;
+								  break;
 
-                          case wxDragError:
-                          case wxDragLink:
-                          case wxDragCancel:
-                          default:
-                              // put these here to make gcc happy
-                              ;
-                      }
+							  case wxDragError:
+							  case wxDragLink:
+							  case wxDragCancel:
+							  default:
+								  // put these here to make gcc happy
+								  ;
+						  }
 
-                      if (cursorID != wxCURSOR_NONE)
-                      {
-                          wxCursor cursor( cursorID );
-                          cursor.MacInstall();
-                      }
-                   }
-                }
-            }
+						  if (cursorID != wxCURSOR_NONE)
+						  {
+							  wxCursor cursor( cursorID );
+							  cursor.MacInstall();
+						  }
+					   }
+					}
+				}
+			}
             break;
 
         case kDragTrackingLeaveWindow:
