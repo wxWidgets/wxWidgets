@@ -294,13 +294,11 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
         {
             // if charString is set, it did not come from key up / key down
             wxevent.SetEventType( wxEVT_CHAR );
-            wxCFStringRef cfchars((CFStringRef)[charString retain]);
-            chars = cfchars.AsString();
+            chars = wxCFStringRef::AsString(charString);
         }
         else if ( nschars )
         {
-            wxCFStringRef cfchars((CFStringRef)[nschars retain]);
-            chars = cfchars.AsString();
+            chars = wxCFStringRef::AsString(nschars);
         }
     }
     

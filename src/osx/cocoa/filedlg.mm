@@ -201,9 +201,7 @@ int wxFileDialog::ShowModal()
             panel = sPanel;
             result = wxID_OK;
 
-            wxCFStringRef filename( [[sPanel filename] retain] );
-
-            m_path = filename.AsString();
+            m_path = wxCFStringRef::AsString([sPanel filename]);
             m_fileName = wxFileNameFromPath(m_path);
             m_dir = wxPathOnly( m_path );
         }
@@ -245,8 +243,7 @@ int wxFileDialog::ShowModal()
             NSArray* filenames = [oPanel filenames];
             for ( size_t i = 0 ; i < [filenames count] ; ++ i )
             {
-                wxCFStringRef filename( [(NSString*) [filenames objectAtIndex:i] retain] );
-                wxString fnstr = filename.AsString();
+                wxString fnstr = wxCFStringRef::AsString([filenames objectAtIndex:i]);
                 m_paths.Add( fnstr );
                 m_fileNames.Add( wxFileNameFromPath(fnstr) );
                 if ( i == 0 )

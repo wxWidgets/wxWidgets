@@ -99,9 +99,7 @@ int wxDirDialog::ShowModal()
     }
     if (returnCode == NSOKButton )
     {
-        wxCFStringRef resultpath( [[[oPanel filenames] objectAtIndex:0] retain] );
-        
-        SetPath( resultpath.AsString() );
+        SetPath( wxCFStringRef::AsString([[oPanel filenames] objectAtIndex:0]));
         result = wxID_OK;
     }
     return result;

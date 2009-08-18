@@ -333,8 +333,7 @@ wxString wxNSTextViewControl::GetStringValue() const
 {
     if (m_textView) 
     {
-        wxCFStringRef cf( (CFStringRef) [[m_textView string] retain] );
-        wxString result = cf.AsString(m_wxPeer->GetFont().GetEncoding());
+        wxString result = wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding());
         wxMacConvertNewlines13To10( &result ) ;
         return result;
     }
@@ -446,8 +445,7 @@ wxNSTextFieldControl::~wxNSTextFieldControl()
 
 wxString wxNSTextFieldControl::GetStringValue() const 
 {
-    wxCFStringRef cf( (CFStringRef) [[m_textField stringValue] retain] );
-    return cf.AsString(m_wxPeer->GetFont().GetEncoding());
+    return wxCFStringRef::AsString([m_textField stringValue], m_wxPeer->GetFont().GetEncoding());
 }
 
 void wxNSTextFieldControl::SetStringValue( const wxString &str) 

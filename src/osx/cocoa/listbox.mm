@@ -209,7 +209,7 @@ public :
     virtual wxString GetStringValue() const 
     {
         if ( [value isKindOfClass:[NSString class]] )
-            return wxCFStringRef( (CFStringRef) [value retain] ).AsString();
+            return wxCFStringRef::AsString( (NSString*) value );
             
         return wxEmptyString;
     }
