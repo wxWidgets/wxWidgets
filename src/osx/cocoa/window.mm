@@ -1127,6 +1127,10 @@ wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRoo
 {
     Init();
     m_osxView = w;
+    // gc aware handling
+    if ( m_osxView )
+        CFRetain(m_osxView);
+    [m_osxView release];
 }
 
 wxWidgetCocoaImpl::wxWidgetCocoaImpl() 
@@ -1152,7 +1156,9 @@ wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
         if ( sv != nil )
             [m_osxView removeFromSuperview];
     }
-    [m_osxView release];
+    // gc aware handling
+    if ( m_osxView )
+        CFRelease(m_osxView);
 }
     
 bool wxWidgetCocoaImpl::IsVisible() const 
