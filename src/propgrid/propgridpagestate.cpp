@@ -1218,7 +1218,31 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
     {
         if ( m_selection[i] == prop )
         {
-            m_selection.erase( m_selection.begin() + i );
+            wxPropertyGrid* pg = m_pPropGrid;
+            if ( i == 0 && pg->GetState() == this )
+            {
+                // If first item (ie. one with the active editor) was
+                // deselected, then we need to take some extra measures.
+                wxArrayPGProperty sel = m_selection;
+                sel.erase( sel.begin() + i );
+
+                wxPGProperty* newFirst;
+                if ( sel.size() )
+                    newFirst = sel[0];
+                else
+                    newFirst = NULL;
+
+                pg->DoSelectProperty(newFirst,
+                                     wxPG_SEL_DONT_SEND_EVENT);
+
+                m_selection = sel;
+
+                pg->Refresh();
+            }
+            else
+            {
+                m_selection.erase( m_selection.begin() + i );
+            }
             return;
         }
     }
