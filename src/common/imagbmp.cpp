@@ -599,7 +599,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     {
         if ( comp == BI_BITFIELDS )
         {
-            int bit = 0;
+            int bit;
             stream.Read(dbuf, 4 * 3);
             rmask = wxINT32_SWAP_ON_BE(dbuf[0]);
             gmask = wxINT32_SWAP_ON_BE(dbuf[1]);
@@ -661,8 +661,10 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     {
         // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
         //       load even non-seekable streams (see wxInputStream::SeekI docs)!
-        if (stream.SeekI(bmpOffset, wxFromCurrent) == wxInvalidOffset)
-            return false;
+        const wxFileOffset pos = stream.TellI();
+        if (pos != wxInvalidOffset && bmpOffset > pos)
+            if (stream.SeekI(bmpOffset - pos, wxFromCurrent) == wxInvalidOffset)
+                return false;
         //else: icon, just carry on
     }
 
@@ -776,7 +778,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                     {
                         for (int nibble = 0; nibble < 2 && column < width; nibble++)
                         {
-                            int index = ((aByte & (0xF0 >> nibble * 4)) >> (!nibble * 4));
+                            int index = ((aByte & (0xF0 >> (nibble * 4))) >> (!nibble * 4));
                             if ( index >= 16 )
                                 index = 15;
                             ptr[poffset] = cmap[index].r;
@@ -865,15 +867,15 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 stream.Read(&aWord, 2);
                 aWord = wxUINT16_SWAP_ON_BE(aWord);
                 linepos += 2;
-                /* use the masks and calculated amonut of shift
+                /* Use the masks and calculated amount of shift
                    to retrieve the color data out of the word.  Then
                    shift it left by (8 - number of bits) such that
                    the image has the proper dynamic range */
-                temp = (unsigned char)((aWord & rmask) >> rshift << (8-rbits));
+                temp = (unsigned char)(((aWord & rmask) >> rshift) << (8-rbits));
                 ptr[poffset] = temp;
-                temp = (unsigned char)((aWord & gmask) >> gshift << (8-gbits));
+                temp = (unsigned char)(((aWord & gmask) >> gshift) << (8-gbits));
                 ptr[poffset + 1] = temp;
-                temp = (unsigned char)((aWord & bmask) >> bshift << (8-bbits));
+                temp = (unsigned char)(((aWord & bmask) >> bshift) << (8-bbits));
                 ptr[poffset + 2] = temp;
                 column++;
             }
