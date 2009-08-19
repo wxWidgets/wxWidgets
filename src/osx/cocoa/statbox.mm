@@ -30,6 +30,37 @@
 
 @end
 
+namespace 
+{
+    class wxStaticBoxCocoaImpl : public wxWidgetCocoaImpl
+    {
+    public:
+        wxStaticBoxCocoaImpl(wxWindowMac *wxpeer, wxNSBox *v)
+        : wxWidgetCocoaImpl(wxpeer, v)
+        {
+        }
+        
+        virtual void SetLabel( const wxString& title, wxFontEncoding encoding )
+        {
+            if (title.empty())
+                [GetNSBox() setTitlePosition:NSNoTitle];
+            else
+                [GetNSBox() setTitlePosition:NSAtTop];
+            
+            wxWidgetCocoaImpl::SetLabel(title, encoding);
+        }
+        
+    private:
+        NSBox *GetNSBox() const
+        {
+            wxASSERT( [m_osxView isKindOfClass:[NSBox class]] );
+            
+            return static_cast<NSBox*>(m_osxView);
+        }
+    };
+} // anonymous namespace
+
+
 wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
@@ -41,7 +72,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxStaticBoxCocoaImpl* c = new wxStaticBoxCocoaImpl( wxpeer, v );
     c->SetFlipped(false);
     return c;
 }
