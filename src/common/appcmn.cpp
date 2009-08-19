@@ -355,11 +355,6 @@ bool wxAppBase::ProcessIdle()
         node = node->GetNext();
     }
 
-#if wxUSE_LOG
-    // flush the logged messages if any
-    wxLog::FlushActive();
-#endif
-
     wxUpdateUIEvent::ResetUpdateTime();
 
     return needMore;

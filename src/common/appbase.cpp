@@ -340,6 +340,12 @@ bool wxAppConsoleBase::ProcessIdle()
     event.SetEventObject(this);
     ProcessEvent(event);
 
+#if wxUSE_LOG
+    // flush the logged messages if any (do this after processing the events
+    // which could have logged new messages)
+    wxLog::FlushActive();
+#endif
+
     return event.MoreRequested();
 }
 
