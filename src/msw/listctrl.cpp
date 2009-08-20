@@ -224,11 +224,6 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
-// Get the internal data structure
-static wxMSWListItemData *wxGetInternalData(HWND hwnd, long itemId);
-static wxMSWListItemData *wxGetInternalData(const wxListCtrl *ctl, long itemId);
-
-
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxListCtrlStyle )
 
