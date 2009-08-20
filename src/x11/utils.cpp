@@ -377,7 +377,7 @@ wxString wxGetXEventName(XEvent& event)
     return str;
 #else
     int type = event.xany.type;
-    static char* event_name[] = {
+    static const char* event_name[] = {
         "", "unknown(-)",                                         // 0-1
         "KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
         "MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
