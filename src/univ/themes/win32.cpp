@@ -308,6 +308,52 @@ protected:
 
     virtual wxBitmap GetFrameButtonBitmap(FrameButtonType type);
 
+#if wxUSE_SLIDER
+    // Fill the arguments with true or false if this slider has labels on
+    // left/right side (or top/bottom for horizontal sliders) respectively
+    static
+    void GetSliderLabelsSides(wxOrientation orient, long style,
+                              bool *left, bool *right)
+    {
+        // should we draw ticks at all?
+        if ( !(style & wxSL_AUTOTICKS) )
+        {
+            *left =
+            *right = false;
+            return;
+        }
+
+        // should we draw them on both sides?
+        if ( style & wxSL_BOTH )
+        {
+            *left =
+            *right = true;
+            return;
+        }
+
+        // we draw them on one side only, determine which one
+        if ( ((style & wxSL_TOP) && (orient == wxHORIZONTAL)) ||
+                ((style & wxSL_LEFT) && (orient == wxVERTICAL)) )
+        {
+            *left = true;
+            *right = false;
+        }
+        else if ( ((style & wxSL_BOTTOM) && (orient == wxHORIZONTAL)) ||
+                    ((style & wxSL_RIGHT) && (orient == wxVERTICAL)) )
+        {
+            *left = false;
+            *right = true;
+        }
+        else
+        {
+            wxFAIL_MSG( "inconsistent wxSlider flags" );
+
+            *left =
+            *right = false;
+        }
+    }
+#endif // wxUSE_SLIDER
+
 private:
     // the sizing parameters (TODO make them changeable)
     wxSize m_sizeScrollbarArrow;
@@ -1973,21 +2019,15 @@ wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
                                            wxOrientation orient,
                                            long style) const
 {
-    bool transpose = (orient == wxVERTICAL);
-    bool left  = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_TOP) != 0) & !transpose |
-                  ((style & wxSL_LEFT) != 0) & transpose |
-                  ((style & wxSL_BOTH) != 0));
-    bool right = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_BOTTOM) != 0) & !transpose |
-                  ((style & wxSL_RIGHT) != 0) & transpose |
-                  ((style & wxSL_BOTH) != 0));
+    bool left, right;
+    GetSliderLabelsSides(orient, style, &left, &right);
 
     wxRect rect = rectOrig;
 
     wxSize sizeThumb = GetSliderThumbSize (rect, lenThumb, orient);
 
-    if (orient == wxHORIZONTAL) {
+    if (orient == wxHORIZONTAL)
+    {
         rect.x += SLIDER_MARGIN;
         if (left & right)
         {
@@ -2004,8 +2044,8 @@ wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
         rect.width -= 2*SLIDER_MARGIN;
         rect.height = 2*BORDER_THICKNESS;
     }
-    else
-    { // == wxVERTICAL
+    else // == wxVERTICAL
+    {
         rect.y += SLIDER_MARGIN;
         if (left & right)
         {
@@ -2052,9 +2092,8 @@ void wxWin32Renderer::DrawSliderShaft(wxDC& dc,
              y1 y2
     */
 
-    if (flags & wxCONTROL_FOCUSED) {
+    if (flags & wxCONTROL_FOCUSED)
         DrawFocusRect(NULL, dc, rectOrig);
-    }
 
     wxRect rect = GetSliderShaftRect(rectOrig, lenThumb, orient, style);
 
@@ -2098,72 +2137,70 @@ void wxWin32Renderer::DrawSliderThumb(wxDC& dc,
 
     DrawBackground(dc, wxNullColour, rect, flags);
 
-    bool transpose = (orient == wxVERTICAL);
-    bool left  = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_TOP) != 0) & !transpose |
-                  ((style & wxSL_LEFT) != 0) & transpose) &
-                 ((style & wxSL_BOTH) == 0);
-    bool right = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_BOTTOM) != 0) & !transpose |
-                  ((style & wxSL_RIGHT) != 0) & transpose) &
-                 ((style & wxSL_BOTH) == 0);
+    bool left, right;
+    GetSliderLabelsSides(orient, style, &left, &right);
 
-    wxCoord sizeArrow = (transpose ? rect.height : rect.width) / 2;
-    wxCoord c = ((transpose ? rect.height : rect.width) - 2*sizeArrow);
+    bool isVertical = orient == wxVERTICAL;
+
+    wxCoord sizeArrow = (isVertical ? rect.height : rect.width) / 2;
+    wxCoord c = ((isVertical ? rect.height : rect.width) - 2*sizeArrow);
 
     wxCoord x1, x2, x3, y1, y2, y3, y4;
-    x1 = (transpose ? rect.y : rect.x);
-    x2 = (transpose ? rect.GetBottom() : rect.GetRight());
+    x1 = (isVertical ? rect.y : rect.x);
+    x2 = (isVertical ? rect.GetBottom() : rect.GetRight());
     x3 = (x1-1+c) + sizeArrow;
-    y1 = (transpose ? rect.x : rect.y);
-    y2 = (transpose ? rect.GetRight() : rect.GetBottom());
+    y1 = (isVertical ? rect.x : rect.y);
+    y2 = (isVertical ? rect.GetRight() : rect.GetBottom());
     y3 = (left  ? (y1-1+c) + sizeArrow : y1);
     y4 = (right ? (y2+1-c) - sizeArrow : y2);
 
     dc.SetPen(m_penBlack);
-    if (left) {
-        DrawLine(dc, x3+1-c, y1, x2, y3, transpose);
+    if (left)
+    {
+        DrawLine(dc, x3+1-c, y1, x2, y3, isVertical);
     }
-    DrawLine(dc, x2, y3, x2, y4, transpose);
+    DrawLine(dc, x2, y3, x2, y4, isVertical);
     if (right)
     {
-        DrawLine(dc, x3+1-c, y2, x2, y4, transpose);
+        DrawLine(dc, x3+1-c, y2, x2, y4, isVertical);
     }
     else
     {
-        DrawLine(dc, x1, y2, x2, y2, transpose);
+        DrawLine(dc, x1, y2, x2, y2, isVertical);
     }
 
     dc.SetPen(m_penDarkGrey);
-    DrawLine(dc, x2-1, y3+1, x2-1, y4-1, transpose);
-    if (right) {
-        DrawLine(dc, x3+1-c, y2-1, x2-1, y4, transpose);
+    DrawLine(dc, x2-1, y3+1, x2-1, y4-1, isVertical);
+    if (right)
+    {
+        DrawLine(dc, x3+1-c, y2-1, x2-1, y4, isVertical);
     }
     else
     {
-        DrawLine(dc, x1+1, y2-1, x2-1, y2-1, transpose);
+        DrawLine(dc, x1+1, y2-1, x2-1, y2-1, isVertical);
     }
 
     dc.SetPen(m_penHighlight);
     if (left)
     {
-        DrawLine(dc, x1, y3, x3, y1, transpose);
-        DrawLine(dc, x3+1-c, y1+1, x2-1, y3, transpose);
+        DrawLine(dc, x1, y3, x3, y1, isVertical);
+        DrawLine(dc, x3+1-c, y1+1, x2-1, y3, isVertical);
     }
     else
     {
-        DrawLine(dc, x1, y1, x2, y1, transpose);
+        DrawLine(dc, x1, y1, x2, y1, isVertical);
     }
-    DrawLine(dc, x1, y3, x1, y4, transpose);
+    DrawLine(dc, x1, y3, x1, y4, isVertical);
     if (right)
     {
-        DrawLine(dc, x1, y4, x3+c, y2+c, transpose);
+        DrawLine(dc, x1, y4, x3+c, y2+c, isVertical);
     }
 
-    if (flags & wxCONTROL_PRESSED) {
+    if (flags & wxCONTROL_PRESSED)
+    {
         // TODO: MSW fills the entire area inside, not just the rect
         wxRect rectInt = rect;
-        if ( transpose )
+        if ( isVertical )
         {
             rectInt.SetLeft(y3);
             rectInt.SetRight(y4);
@@ -2237,55 +2274,56 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
     */
 
     // empty slider?
-    if (end == start) return;
+    if ( end == start )
+        return;
 
-    bool transpose = (orient == wxVERTICAL);
-    bool left  = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_TOP) != 0) & !transpose |
-                  ((style & wxSL_LEFT) != 0) & transpose |
-                  ((style & wxSL_BOTH) != 0));
-    bool right = ((style & wxSL_AUTOTICKS) != 0) &
-                 (((style & wxSL_BOTTOM) != 0) & !transpose |
-                  ((style & wxSL_RIGHT) != 0) & transpose |
-                  ((style & wxSL_BOTH) != 0));
+    bool left, right;
+    GetSliderLabelsSides(orient, style, &left, &right);
+
+    bool isVertical = orient == wxVERTICAL;
 
     // default thumb size
     wxSize sizeThumb = GetSliderThumbSize (rect, 0, orient);
-    wxCoord defaultLen = (transpose ? sizeThumb.x : sizeThumb.y);
+    wxCoord defaultLen = (isVertical ? sizeThumb.x : sizeThumb.y);
 
     // normal thumb size
     sizeThumb = GetSliderThumbSize (rect, lenThumb, orient);
-    wxCoord widthThumb  = (transpose ? sizeThumb.y : sizeThumb.x);
+    wxCoord widthThumb  = (isVertical ? sizeThumb.y : sizeThumb.x);
 
     wxRect rectShaft = GetSliderShaftRect (rect, lenThumb, orient, style);
 
     wxCoord x1, x2, y1, y2, y3, y4 , len;
-    x1 = (transpose ? rectShaft.y : rectShaft.x) + widthThumb/2;
-    x2 = (transpose ? rectShaft.GetBottom() : rectShaft.GetRight()) - widthThumb/2;
-    y1 = (transpose ? rectShaft.x : rectShaft.y) - defaultLen/2;
-    y2 = (transpose ? rectShaft.GetRight() : rectShaft.GetBottom()) + defaultLen/2;
-    y3 = (transpose ? rect.x : rect.y);
-    y4 = (transpose ? rect.GetRight() : rect.GetBottom());
+    x1 = (isVertical ? rectShaft.y : rectShaft.x) + widthThumb/2;
+    x2 = (isVertical ? rectShaft.GetBottom() : rectShaft.GetRight()) - widthThumb/2;
+    y1 = (isVertical ? rectShaft.x : rectShaft.y) - defaultLen/2;
+    y2 = (isVertical ? rectShaft.GetRight() : rectShaft.GetBottom()) + defaultLen/2;
+    y3 = (isVertical ? rect.x : rect.y);
+    y4 = (isVertical ? rect.GetRight() : rect.GetBottom());
     len = x2 - x1;
 
     dc.SetPen(m_penBlack);
 
     int range = end - start;
-    for ( int n = 0; n < range; n += step ) {
+    for ( int n = 0; n < range; n += step )
+    {
         wxCoord x = x1 + (len*n) / range;
 
-        if (left & (y1 > y3)) {
+        if (left & (y1 > y3))
+        {
             DrawLine(dc, x, y1, x, y3, orient == wxVERTICAL);
         }
-        if (right & (y4 > y2)) {
+        if (right & (y4 > y2))
+        {
             DrawLine(dc, x, y2, x, y4, orient == wxVERTICAL);
         }
     }
     // always draw the line at the end position
-    if (left & (y1 > y3)) {
+    if (left & (y1 > y3))
+    {
         DrawLine(dc, x2, y1, x2, y3, orient == wxVERTICAL);
     }
-    if (right & (y4 > y2)) {
+    if (right & (y4 > y2))
+    {
         DrawLine(dc, x2, y2, x2, y4, orient == wxVERTICAL);
     }
 }
