@@ -328,7 +328,7 @@ protected:
                      wxCoord y1, wxCoord y2);
 
     // draw the radio button bitmap for the given state
-    void DrawRadioBitmap(wxDC& dc, const wxRect& rect, int flags);
+    void DrawRadioButtonBitmap(wxDC& dc, const wxRect& rect, int flags);
 
     // common part of DrawMenuItem() and DrawMenuBarItem()
     void DoDrawMenuItem(wxDC& dc,
@@ -997,9 +997,9 @@ void wxGTKRenderer::DrawCheckBitmap(wxDC& dc, const wxRect& rectTotal)
     dc.DrawRectangle(rect);
 }
 
-void wxGTKRenderer::DrawRadioBitmap(wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags)
+void wxGTKRenderer::DrawRadioButtonBitmap(wxDC& dc,
+                                          const wxRect& rect,
+                                          int flags)
 {
     wxCoord x = rect.x,
             y = rect.y,
@@ -1134,7 +1134,7 @@ wxBitmap wxGTKRenderer::GetRadioBitmap(int flags)
         bmp.Create(size.x, size.y);
         dc.SelectObject(bmp);
 
-        DrawRadioBitmap(dc, size, flags);
+        DrawRadioButtonBitmap(dc, size, flags);
     }
 
     return bmp;

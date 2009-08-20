@@ -118,7 +118,7 @@ public:
 
     virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
-    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -739,10 +739,10 @@ void wxRendererGeneric::DrawComboBox(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc)
     wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawComboBox");
 }
 
-void wxRendererGeneric::DrawRadioButton(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+void wxRendererGeneric::DrawRadioBitmap(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
-    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawRadioButton");
+    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawRadioBitmap");
 }
 
 void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),

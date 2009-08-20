@@ -277,11 +277,11 @@ public:
                               const wxRect& rect,
                               int flags = 0) = 0;
 
-    // Draw a native wxRadioButton (just the graphical portion)
-    virtual void DrawRadioButton(wxWindow* win,
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int flags = 0) = 0;
+    // Draw a native wxRadioButton bitmap
+    virtual void DrawRadioBitmap(wxWindow* win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0) = 0;
 
     // geometry functions
     // ------------------
@@ -443,11 +443,11 @@ public:
                               int flags = 0)
         { m_rendererNative.DrawTextCtrl( win, dc, rect, flags); }
 
-    virtual void DrawRadioButton(wxWindow* win,
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int flags = 0)
-        { m_rendererNative.DrawRadioButton( win, dc, rect, flags); }
+    virtual void DrawRadioBitmap(wxWindow* win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0)
+        { m_rendererNative.DrawRadioBitmap(win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
