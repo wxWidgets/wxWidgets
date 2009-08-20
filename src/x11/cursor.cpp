@@ -124,9 +124,9 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 #endif
 }
 
-wxCursor::wxCursor(const wxString& name,
-                    wxBitmapType type,
-                    int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(const wxString& WXUNUSED(name),
+                    wxBitmapType WXUNUSED(type),
+                    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY))
 {
    wxFAIL_MSG( wxT("wxCursor creation from file not yet implemented") );
 }
