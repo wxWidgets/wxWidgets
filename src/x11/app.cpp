@@ -100,7 +100,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
     {
         if (wxStrcmp( argV[i], wxT("-display") ) == 0)
         {
-            if (i < (argC - 1))
+            if (i < (argCOrig - 1))
             {
                 argV[i++] = NULL;
 
@@ -112,7 +112,7 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
         }
         else if (wxStrcmp( argV[i], wxT("-geometry") ) == 0)
         {
-            if (i < (argC - 1))
+            if (i < (argCOrig - 1))
             {
                 argV[i++] = NULL;
 
@@ -149,12 +149,12 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
 
     if ( argC != argCOrig )
     {
-        // remove the argumens we consumed
+        // remove the arguments we consumed
         for ( int i = 0; i < argC; i++ )
         {
             while ( !argV[i] )
             {
-                memmove(argV + i, argV + i + 1, argCOrig - i);
+                memmove(argV + i, argV + i + 1, (argCOrig - i)*sizeof(wxChar *));
             }
         }
     }
