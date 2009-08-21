@@ -117,7 +117,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 #endif
                 NULL);
     }
-    
+
     PostCreation();
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
 

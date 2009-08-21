@@ -448,7 +448,7 @@ int wxTIFFHandler::DoGetImageCount( wxInputStream& stream )
     } while (TIFFReadDirectory(tif));
 
     TIFFClose( tif );
-    
+
     // NOTE: this function modifies the current stream position but it's ok
     //       (see wxImageHandler::GetImageCount)
 

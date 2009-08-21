@@ -1320,7 +1320,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
-    
+
     // nType is 1 for Icons, 2 for Cursors:
     wxUint16 nType = wxUINT16_SWAP_ON_BE(IconDir.idType);
 
@@ -1333,11 +1333,11 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
     // remember how many bytes we read from the stream:
     wxFileOffset alreadySeeked = sizeof(IconDir);
-    
+
     for (unsigned int i = 0; i < nIcons; i++ )
     {
         alreadySeeked += stream.Read(pCurrentEntry, sizeof(ICONDIRENTRY)).LastRead();
-        
+
         // bHeight and bColorCount are wxUint8
         if ( pCurrentEntry->bWidth >= wMax )
         {
@@ -1351,7 +1351,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
                 colmax = pCurrentEntry->bColorCount;
             }
         }
-        
+
         pCurrentEntry++;
     }
 
@@ -1371,13 +1371,13 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     {
         // seek to selected icon:
         pCurrentEntry = pIconDirEntry + iSel;
-        
+
         // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
         //       load even non-seekable streams (see wxInputStream::SeekI docs)!
         wxFileOffset offset = wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset) - alreadySeeked;
         if (offset != 0 && stream.SeekI(offset, wxFromCurrent) == wxInvalidOffset)
             return false;
-        
+
         bResult = LoadDib(image, stream, true, IsBmp);
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
@@ -1387,9 +1387,9 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
             image->SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, wxUINT16_SWAP_ON_BE(pCurrentEntry->wBitCount));
         }
     }
-    
+
     delete [] pIconDirEntry;
-    
+
     return bResult;
 }
 
@@ -1400,7 +1400,7 @@ int wxICOHandler::DoGetImageCount(wxInputStream& stream)
     if (stream.Read(&IconDir, sizeof(IconDir)).LastRead() != sizeof(IconDir))
              // it's ok to modify the stream position here
         return 0;
-    
+
     return (int)wxUINT16_SWAP_ON_BE(IconDir.idCount);
 }
 

@@ -568,7 +568,7 @@ class wxAuiProportionalBoxSizer : public wxBoxSizer
 {
 public:
     wxAuiProportionalBoxSizer(int orientation) : wxBoxSizer(orientation) { }
-    
+
     void RecalcSizes()
     {
         if (m_children.GetCount() == 0)
@@ -578,18 +578,18 @@ public:
         int fixed_width = 0;
         int stretchable = 0;
         wxSizerItemList::compatibility_iterator node;
-        
+
         // find fixed width and height, as well
         // as the total stretchable proportions
         node = m_children.GetFirst();
         while (node)
         {
             wxSizerItem *item = node->GetData();
-            
+
             if (item->IsShown())
             {
                 stretchable += item->GetProportion();
-                
+
                 wxSize size(item->GetMinSizeWithBorder());
                 if (item->GetProportion() == 0)
                 {
@@ -605,7 +605,7 @@ public:
                     }
                 }
             }
-            
+
             node = node->GetNext();
         }
 
@@ -676,7 +676,7 @@ public:
                         child_pos.y += (m_size.y - size.y) / 2;
 
                     item->SetDimension(child_pos, child_size);
-                    
+
                     pt.x += width;
                 }
             }
@@ -4181,7 +4181,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         int used_width = 0, used_height = 0;
 
         wxSize client_size = m_frame->GetClientSize();
-        
+
         size_t dock_i, dock_count = m_docks.GetCount();
         for (dock_i = 0; dock_i < dock_count; ++dock_i)
         {
@@ -4199,12 +4199,12 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             if (dock.resizable)
                 used_width += sash_size;
         }
-        
-        
+
+
         int available_width = client_size.GetWidth() - used_width;
         int available_height = client_size.GetHeight() - used_height;
-        
-        
+
+
 #if wxUSE_STATUSBAR
         // if there's a status control, the available
         // height decreases accordingly
@@ -4219,13 +4219,13 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             }
         }
 #endif
-    
+
         wxRect& rect = m_action_part->dock->rect;
 
         wxPoint new_pos(event.m_x - m_action_offset.x,
             event.m_y - m_action_offset.y);
         int new_size, old_size = m_action_part->dock->size;
-        
+
         switch (m_action_part->dock->dock_direction)
         {
         case wxAUI_DOCK_LEFT:
@@ -4358,7 +4358,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             m_action = actionNone;
             return false;
         }
-        
+
         // calculate the new proportion of the pane
         int new_proportion = (new_pixsize*total_proportion)/dock_pixels;
 
@@ -4421,7 +4421,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             prop_borrow -= prop_diff;
         }
 
-        
+
         dock.panes.Item(borrow_pane)->dock_proportion = prop_borrow;
         pane.dock_proportion = new_proportion;
 
@@ -4568,7 +4568,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     DrawResizeHint(dc, m_action_hintrect);
                     m_action_hintrect = wxRect();
                 }
-                
+
                 // draw new resize hint, if it's inside the managed frame
                 wxRect frame_screen_rect = m_frame->GetScreenRect();
                 if (frame_screen_rect.Contains(rect))

@@ -3819,7 +3819,7 @@ bool wxPropertyGrid::UnfocusEditor()
 void wxPropertyGrid::RefreshEditor()
 {
     wxPGProperty* p = GetSelection();
-    if ( !p ) 
+    if ( !p )
         return;
 
     wxWindow* wnd = GetEditorControl();

@@ -2,7 +2,7 @@
 // Name:        wx/mac/nonownedwnd.h
 // Purpose:     declares wxNonOwnedWindow class
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     2008-03-24
 // RCS-ID:      $Id: nonownedwnd.h 46993 2007-06-28 08:46:04Z VS $
 // Copyright:   (c) 2008 Stefan Csomor
@@ -65,7 +65,7 @@ public:
     virtual bool CanSetTransparent();
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
-    
+
     virtual void Update();
 
     WXWindow GetWXWindow() const ;
@@ -94,16 +94,16 @@ public:
     virtual void SetExtraStyle(long exStyle) ;
 
     virtual bool SetBackgroundColour( const wxColour &colour );
-    
+
     wxNonOwnedWindowImpl* GetNonOwnedPeer() const { return m_nowpeer; }
-    
+
     // osx specific event handling common for all osx-ports
-    
+
     virtual void HandleActivated( double timestampsec, bool didActivate );
     virtual void HandleResized( double timestampsec );
     virtual void HandleMoved( double timestampsec );
     virtual void HandleResizing( double timestampsec, wxRect* rect );
-        
+
 protected:
     // common part of all ctors
     void Init();

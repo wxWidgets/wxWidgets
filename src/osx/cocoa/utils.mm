@@ -52,7 +52,7 @@ void wxBell()
 
 void wxMacWakeUp()
 {
-	NSEvent* wakeupEvent = [NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint 
+	NSEvent* wakeupEvent = [NSEvent otherEventWithType:NSApplicationDefined location:NSZeroPoint
 										 modifierFlags:NSAnyEventMask timestamp:0 windowNumber:0 context:nil subtype:0 data1:0 data2:0];
 	[NSApp postEvent:wakeupEvent atStart:NO];
 }
@@ -148,9 +148,9 @@ void wxMacWakeUp()
 }
 @end
 
-/* 
+/*
     allows ShowModal to work when using sheets.
-    see include/wx/osx/cocoa/private.h for more info 
+    see include/wx/osx/cocoa/private.h for more info
 */
 @implementation ModalDialogDelegate
 - (id)init
@@ -161,7 +161,7 @@ void wxMacWakeUp()
     return self;
 }
 
-- (BOOL)finished 
+- (BOOL)finished
 {
     return sheetFinished;
 }
@@ -300,7 +300,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
     NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
     [view unlockFocus];
-    
+
     wxBitmap bitmap(width, height);
     if ( [rep respondsToSelector:@selector(CGImage)] )
     {

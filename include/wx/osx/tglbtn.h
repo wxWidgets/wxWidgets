@@ -53,7 +53,7 @@ private:
 
     int m_marginX,
         m_marginY;
-        
+
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     virtual wxSize DoGetBestSize() const;

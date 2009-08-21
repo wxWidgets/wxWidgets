@@ -123,7 +123,7 @@ protected:
     WXHWND     m_hwndBuddy;
     WXFARPROC  m_wndProcBuddy;
 
-    // Block text update event after SetValue()    
+    // Block text update event after SetValue()
     bool m_blockEvent;
 
     // all existing wxSpinCtrls - this allows to find the one corresponding to

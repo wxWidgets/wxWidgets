@@ -38,7 +38,7 @@
 #define __WXOSX_CARBON__ 1
 #endif
 
-#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) 
+#if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
 #   define __WXOSX__ 1
 #endif
 
@@ -49,7 +49,7 @@
 #   endif
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
-#   if defined(__WXOSX_IPHONE__) 
+#   if defined(__WXOSX_IPHONE__)
 #       if !( defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE )
 #           error "incorrect SDK for an iPhone build"
 #       endif
@@ -678,21 +678,21 @@
 #endif
 /* also the 32/64 bit universal builds must be handled accordingly */
 #ifdef __DARWIN__
-#	ifdef __LP64__
-#		undef SIZEOF_VOID_P 
-#		undef SIZEOF_LONG 
-#		undef SIZEOF_SIZE_T 
-#		define SIZEOF_VOID_P 8
-#		define SIZEOF_LONG 8
-#		define SIZEOF_SIZE_T 8
-#	else
-#		undef SIZEOF_VOID_P 
-#		undef SIZEOF_LONG 
-#		undef SIZEOF_SIZE_T 
-#		define SIZEOF_VOID_P 4
-#		define SIZEOF_LONG 4
-#		define SIZEOF_SIZE_T 4
-#	endif
+#    ifdef __LP64__
+#        undef SIZEOF_VOID_P
+#        undef SIZEOF_LONG
+#        undef SIZEOF_SIZE_T
+#        define SIZEOF_VOID_P 8
+#        define SIZEOF_LONG 8
+#        define SIZEOF_SIZE_T 8
+#    else
+#        undef SIZEOF_VOID_P
+#        undef SIZEOF_LONG
+#        undef SIZEOF_SIZE_T
+#        define SIZEOF_VOID_P 4
+#        define SIZEOF_LONG 4
+#        define SIZEOF_SIZE_T 4
+#    endif
 #endif
 /*
    check the consistency of the settings in setup.h: note that this must be

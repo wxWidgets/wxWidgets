@@ -55,9 +55,9 @@ enum wxDialogLayoutAdaptationMode
 
 enum wxDialogModality
 {
-    wxDIALOG_MODALITY_NONE = 0,             
-    wxDIALOG_MODALITY_WINDOW_MODAL = 1,      
-    wxDIALOG_MODALITY_APP_MODAL = 2         
+    wxDIALOG_MODALITY_NONE = 0,
+    wxDIALOG_MODALITY_WINDOW_MODAL = 1,
+    wxDIALOG_MODALITY_APP_MODAL = 2
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
@@ -342,8 +342,8 @@ public:
 
     wxDialog *GetDialog() const
         { return wxStaticCast(GetEventObject(), wxDialog); }
-        
-    int GetReturnCode() const 
+
+    int GetReturnCode() const
         { return GetDialog()->GetReturnCode(); }
 
     virtual wxEvent *Clone() const { return new wxWindowModalDialogEvent (*this); }

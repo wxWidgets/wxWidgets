@@ -81,7 +81,7 @@ protected:
 
     // the array containing the checked status of the items
     wxArrayInt m_checks;
-    
+
     wxListWidgetColumn* m_checkColumn ;
 
     void Init();

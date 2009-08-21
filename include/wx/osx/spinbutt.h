@@ -57,11 +57,11 @@ public:
     virtual void SetValue(int val);
 
     // implementation
-    
+
     virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool OSXHandleClicked( double timestampsec );
 
 protected:

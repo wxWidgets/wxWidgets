@@ -1,6 +1,6 @@
 /**
- * This file gets included from dcclient.cpp and implements 
- * the X11 interface to Pango. 
+ * This file gets included from dcclient.cpp and implements
+ * the X11 interface to Pango.
  * Copyright (C) Owen Taylor and Robert Roebling.
  * Licence: The wxWindows licence
  */
@@ -14,32 +14,32 @@ x11_draw_glyphs( Drawable       drawable,
 		         int            x,
 		         int            y,
 		         PangoGlyphString *glyphs);
-                 
-void 
+
+void
 x11_draw_layout_line_with_colors( Drawable         drawable,
                                   GC               gc,
-                                  int              x, 
+                                  int              x,
                                   int              y,
                                   PangoLayoutLine  *line,
                                   XColor           *foreground,
                                   XColor           *background);
-                                  
-void 
+
+void
 x11_draw_layout_with_colors( Drawable      drawable,
                              GC            gc,
-                             int           x, 
+                             int           x,
                              int           y,
                              PangoLayout  *layout,
                              XColor       *foreground,
                              XColor       *background);
-                             
-void 
+
+void
 x11_draw_layout( Drawable     drawable,
                  GC           gc,
-                 int          x, 
+                 int          x,
                  int          y,
                  PangoLayout *layout);
-                 
+
 void
 x11_pango_get_item_properties( PangoItem      *item,
                                PangoUnderline *uline,
@@ -73,10 +73,10 @@ x11_draw_glyphs( Drawable       drawable,
     }
 }
 
-void 
+void
 x11_draw_layout_line_with_colors( Drawable         drawable,
                                   GC               gc,
-                                  int              x, 
+                                  int              x,
                                   int              y,
                                   PangoLayoutLine  *line,
                                   XColor           *foreground,
@@ -90,9 +90,9 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
     gint rise = 0;
 
     context = pango_layout_get_context (line->layout);
-  
+
     pango_layout_line_get_extents (line,NULL, &overall_rect);
-  
+
     GSList *tmp_list = line->runs;
     while (tmp_list)
     {
@@ -101,16 +101,16 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
         PangoColor fg_color, bg_color;
         gboolean strike, fg_set, bg_set, shape_set;
         gint risen_y;
-      
+
         tmp_list = tmp_list->next;
-      
-        x11_pango_get_item_properties (run->item, &uline, 
-            &strike, &rise,  &fg_color, &fg_set, &bg_color, &bg_set, 
+
+        x11_pango_get_item_properties (run->item, &uline,
+            &strike, &rise,  &fg_color, &fg_set, &bg_color, &bg_set,
             &shape_set, &ink_rect, &logical_rect);
 
         /* we subtract the rise because X coordinates are upside down */
         risen_y = y - rise / PANGO_SCALE;
-      
+
         if (!shape_set)
         {
             if (uline == PANGO_UNDERLINE_NONE)
@@ -131,12 +131,12 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
         {
             int gx = x + x_off / PANGO_SCALE;
             int gy = risen_y;
-          
+
             x11_draw_glyphs( drawable, gc, run->item->analysis.font, gx, gy, run->glyphs);
         }
-      
+
         if (uline ==  PANGO_UNDERLINE_SINGLE)
-        {  
+        {
             XDrawLine( wxGlobalDisplay(), drawable, gc,
 			  x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
                           risen_y + 1,
@@ -148,42 +148,42 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
     }
 }
 
-void 
+void
 x11_draw_layout_with_colors( Drawable      drawable,
                              GC            gc,
-                             int           x, 
+                             int           x,
                              int           y,
                              PangoLayout  *layout,
                              XColor       *foreground,
                              XColor       *background)
 {
     PangoLayoutIter *iter = pango_layout_get_iter (layout);
-  
+
     do
     {
         PangoLayoutLine *line = pango_layout_iter_get_line (iter);
-      
+
         PangoRectangle logical_rect;
         pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
-        
+
         int baseline = pango_layout_iter_get_baseline (iter);
-      
+
         x11_draw_layout_line_with_colors( drawable, gc,
                                           x + logical_rect.x / PANGO_SCALE,
                                           y + baseline / PANGO_SCALE,
                                           line,
                                           foreground,
                                           background);
-                                          
+
     } while (pango_layout_iter_next_line (iter));
 
     pango_layout_iter_free (iter);
 }
 
-void 
+void
 x11_draw_layout( Drawable     drawable,
                  GC           gc,
-                 int          x, 
+                 int          x,
                  int          y,
                  PangoLayout *layout)
 {
@@ -209,10 +209,10 @@ x11_pango_get_item_properties( PangoItem      *item,
 
   if (strikethrough)
       *strikethrough = FALSE;
-  
+
   if (fg_set)
     *fg_set = FALSE;
-  
+
   if (bg_set)
     *bg_set = FALSE;
 
@@ -237,21 +237,21 @@ x11_pango_get_item_properties( PangoItem      *item,
 	    if (strikethrough)
 		*strikethrough = ((PangoAttrInt *)attr)->value;
 	    break;
-	    
+	
 	case PANGO_ATTR_FOREGROUND:
 	  if (fg_color)
 	    *fg_color = ((PangoAttrColor *)attr)->color;
 	  if (fg_set)
 	    *fg_set = TRUE;
-	  
+	
 	  break;
-	  
+	
 	case PANGO_ATTR_BACKGROUND:
 	  if (bg_color)
 	    *bg_color = ((PangoAttrColor *)attr)->color;
 	  if (bg_set)
 	    *bg_set = TRUE;
-	  
+	
 	  break;
 
 	case PANGO_ATTR_SHAPE:
@@ -267,7 +267,7 @@ x11_pango_get_item_properties( PangoItem      *item,
           if (rise)
             *rise = ((PangoAttrInt *)attr)->value;
           break;
-          
+
 	default:
 	  break;
 	}

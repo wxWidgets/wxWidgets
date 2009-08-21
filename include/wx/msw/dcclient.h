@@ -106,7 +106,7 @@ class WXDLLIMPEXP_CORE wxPaintDCEx : public wxPaintDC
 {
 public:
     wxPaintDCEx(wxWindow *canvas, WXHDC dc);
-    
+
     DECLARE_CLASS(wxPaintDCEx)
     wxDECLARE_NO_COPY_CLASS(wxPaintDCEx);
 };

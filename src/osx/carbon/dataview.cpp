@@ -353,9 +353,9 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   callbacks.u.v1.itemDataCallback          = gDataBrowserTableViewItemDataUPP;
   callbacks.u.v1.itemCompareCallback       = gDataBrowserTableViewItemCompareUPP;
   callbacks.u.v1.itemNotificationCallback  = gDataBrowserTableViewItemNotificationUPP;
- 	callbacks.u.v1.acceptDragCallback        = gDataBrowserTableViewAcceptDragUPP;
-	callbacks.u.v1.addDragItemCallback       = gDataBrowserTableViewAddDragItemUPP;
-	callbacks.u.v1.receiveDragCallback       = gDataBrowserTableViewReceiveDragUPP;
+  callbacks.u.v1.acceptDragCallback        = gDataBrowserTableViewAcceptDragUPP;
+  callbacks.u.v1.addDragItemCallback       = gDataBrowserTableViewAddDragItemUPP;
+  callbacks.u.v1.receiveDragCallback       = gDataBrowserTableViewReceiveDragUPP;
   this->SetCallbacks(&callbacks);
 
  // setup callbacks for customized items:

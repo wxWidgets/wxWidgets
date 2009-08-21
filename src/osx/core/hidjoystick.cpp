@@ -901,4 +901,4 @@ void* wxJoystickThread::Entry()
     }
 }
 
-#endif // wxUSE_JOYSTICK 
+#endif // wxUSE_JOYSTICK

@@ -714,9 +714,9 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
             break;
         }
     }
-    
+
     int cnt = m_bookRecords.GetCount();
-    
+
     if (!has_non_ascii)
     {
       wxFileSystem fsys;

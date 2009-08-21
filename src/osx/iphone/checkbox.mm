@@ -27,7 +27,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXIPhoneClassAddWXMethods( self );
@@ -46,21 +46,21 @@
 
 @end
 
-wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
-                                    long WXUNUSED(extraStyle)) 
+                                    long style,
+                                    long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxUISwitch* v = [[wxUISwitch alloc] initWithFrame:r];
 
 //    if (style & wxCHK_3STATE)
 //        [v setAllowsMixedState:YES];
-        
+
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
 }

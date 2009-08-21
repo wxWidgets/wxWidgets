@@ -100,7 +100,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
     m_HtmlHelpWin->SetController(m_helpController);
     if ( config)
         m_HtmlHelpWin->UseConfig(config, rootpath);
-    
+
     wxFrame::Create(parent, id, _("Help"),
                     wxPoint(m_HtmlHelpWin->GetCfgData().x, m_HtmlHelpWin->GetCfgData().y),
                     wxSize(m_HtmlHelpWin->GetCfgData().w, m_HtmlHelpWin->GetCfgData().h),

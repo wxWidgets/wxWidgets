@@ -26,7 +26,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods(self);
@@ -43,7 +43,7 @@ public :
     {
         m_formerValue = 0;
     }
-    
+
     ~wxSpinButtonCocoaImpl()
     {
     }
@@ -56,7 +56,7 @@ private:
 
 void wxSpinButtonCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    
+
     // send a release event in case we've been tracking the thumb
     if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
     {
@@ -71,19 +71,19 @@ void wxSpinButtonCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSE
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
     {
-        // because wx expects to be able to veto 
+        // because wx expects to be able to veto
         // a change we must revert the value change
         // and expose it
         int currentValue = [(NSStepper*)m_osxView intValue];
         [(NSStepper*)m_osxView setIntValue:m_formerValue];
         int inc = currentValue-m_formerValue;
-        
+
         // adjust for wrap arounds
         if ( inc > 1 )
             inc = -1;
         else if (inc < -1 )
             inc = 1;
-            
+
         if ( inc == 1 )
             wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEUP);
         else if ( inc == -1 )
@@ -93,15 +93,15 @@ void wxSpinButtonCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSE
     }
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
@@ -110,10 +110,10 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
     [v setMinValue: minimum];
     [v setMaxValue: maximum];
     [v setIntValue: value];
-    
+
     if ( style & wxSP_WRAP )
         [v setValueWraps:YES];
-    
+
     wxWidgetCocoaImpl* c = new wxSpinButtonCocoaImpl( wxpeer, v );
     return c;
 }

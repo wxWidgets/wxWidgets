@@ -246,12 +246,12 @@ static OSStatus UMAGetHelpMenu(
                                bool             allowHelpMenuCreation)
 {
     static bool s_createdHelpMenu = false ;
-    
+
     if ( !s_createdHelpMenu && !allowHelpMenuCreation )
     {
         return paramErr ;
     }
-    
+
     OSStatus status = HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
     s_createdHelpMenu = ( status == noErr ) ;
     return status ;

@@ -187,7 +187,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
         g_free(families);
 
-        // Some gtk+ systems might query for a non-existing font from 
+        // Some gtk+ systems might query for a non-existing font from
         // wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) on initialization,
         // don't assert until wxSystemSettings::GetFont is checked for this - MR
         // wxASSERT_MSG( family, "No appropriate PangoFontFamily found for ::description" );
@@ -1027,7 +1027,7 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
 
         int i, round; // counters
 
-        // first round: search for equal, then for smaller and for larger size 
+        // first round: search for equal, then for smaller and for larger size
         // with the given weight and style
         int testweight = weight;
         int teststyle = style;

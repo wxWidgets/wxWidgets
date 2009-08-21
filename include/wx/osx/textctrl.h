@@ -185,10 +185,10 @@ protected:
     unsigned long  m_maxLength;
 
     virtual void EnableTextChangedEvents(bool enable)
-    { 
+    {
         m_triggerUpdateEvents = enable;
     }
-    
+
     bool m_triggerUpdateEvents ;
 
 private :

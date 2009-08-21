@@ -16,14 +16,14 @@
 #include "wx/radiobut.h"
 #include "wx/osx/private.h"
 
-wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     wxMacControl* peer = new wxMacControl(wxpeer) ;

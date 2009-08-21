@@ -44,7 +44,7 @@ typedef struct {
 #define   CWStackMode                 (1<<6)
 
 /* Values */
- 
+
 typedef struct {
         int x, y;
         int width, height;

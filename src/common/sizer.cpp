@@ -2198,12 +2198,12 @@ void wxStaticBoxSizer::RecalcSizes()
 #if defined( __WXGTK20__ )
         // if the wxStaticBox has created a wxPizza to contain its children
         // (see wxStaticBox::AddChild) then we need to place the items it contains
-        // in the wxBoxSizer::RecalcSizes() call below using coordinates relative 
+        // in the wxBoxSizer::RecalcSizes() call below using coordinates relative
         // to the top-left corner of the staticbox:
         m_position.x = m_position.y = 0;
 #else
         // if the wxStaticBox has childrens, then these windows must be placed
-        // by the wxBoxSizer::RecalcSizes() call below using coordinates relative 
+        // by the wxBoxSizer::RecalcSizes() call below using coordinates relative
         // to the top-left corner of the staticbox (but unlike wxGTK, we need
         // to keep in count the static borders here!):
         m_position.x = other_border;

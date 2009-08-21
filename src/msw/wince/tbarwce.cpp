@@ -275,7 +275,7 @@ bool wxToolMenuBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
     // Skip over the menus
     if (GetMenuBar())
         pos += GetMenuBar()->GetMenuCount();
-        
+
     // the main difficulty we have here is with the controls in the toolbars:
     // as we (sometimes) use several separators to cover up the space used by
     // them, the indices are not the same for us and the toolbar

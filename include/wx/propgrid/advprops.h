@@ -432,7 +432,7 @@ protected:
     <b>Supported special attributes:</b>
     - "DateFormat": Determines displayed date format.
     - "PickerStyle": Determines window style used with wxDatePickerCtrl.
-       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE 
+       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
        enables additional support for unspecified property value.
 */
 class WXDLLIMPEXP_PROPGRID wxDateProperty : public wxPGProperty

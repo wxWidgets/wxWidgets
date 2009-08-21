@@ -48,6 +48,6 @@ public:
 };
 
 #endif
-  // wxUSE_MIMETYPE 
+  // wxUSE_MIMETYPE
 
 #endif

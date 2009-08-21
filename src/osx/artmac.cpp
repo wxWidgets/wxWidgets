@@ -72,20 +72,20 @@ static wxIconBundle wxMacArtProvider_CreateIconBundle(const wxArtID& id)
     ART_MSGBOX(wxART_NORMAL_FILE, wxICON_NORMAL_FILE, deffile)
     ART_MSGBOX(wxART_EXECUTABLE_FILE, wxICON_EXECUTABLE_FILE, exefile)
 
-    ART_MSGBOX(wxART_CDROM,       wxICON_CDROM,       cdrom) 
-    ART_MSGBOX(wxART_FLOPPY,      wxICON_FLOPPY,      floppy) 
-    ART_MSGBOX(wxART_HARDDISK,    wxICON_HARDDISK,    harddisk) 
-    ART_MSGBOX(wxART_REMOVABLE,   wxICON_REMOVABLE,   removable) 
- 
-    ART_MSGBOX(wxART_DELETE,      wxICON_DELETE,      delete) 
- 
-    ART_MSGBOX(wxART_GO_BACK,     wxICON_GO_BACK,     back) 
-    ART_MSGBOX(wxART_GO_FORWARD,  wxICON_GO_FORWARD,  forward) 
-    ART_MSGBOX(wxART_GO_HOME,     wxICON_GO_HOME,     home) 
+    ART_MSGBOX(wxART_CDROM,       wxICON_CDROM,       cdrom)
+    ART_MSGBOX(wxART_FLOPPY,      wxICON_FLOPPY,      floppy)
+    ART_MSGBOX(wxART_HARDDISK,    wxICON_HARDDISK,    harddisk)
+    ART_MSGBOX(wxART_REMOVABLE,   wxICON_REMOVABLE,   removable)
 
-    ART_MSGBOX(wxART_HELP_SETTINGS, wxICON_HELP_SETTINGS, htmoptns) 
-    ART_MSGBOX(wxART_HELP_PAGE,   wxICON_HELP_PAGE,   htmpage) 
- 	
+    ART_MSGBOX(wxART_DELETE,      wxICON_DELETE,      delete)
+
+    ART_MSGBOX(wxART_GO_BACK,     wxICON_GO_BACK,     back)
+    ART_MSGBOX(wxART_GO_FORWARD,  wxICON_GO_FORWARD,  forward)
+    ART_MSGBOX(wxART_GO_HOME,     wxICON_GO_HOME,     home)
+
+    ART_MSGBOX(wxART_HELP_SETTINGS, wxICON_HELP_SETTINGS, htmoptns)
+    ART_MSGBOX(wxART_HELP_PAGE,   wxICON_HELP_PAGE,   htmpage)
+
     return wxNullIconBundle;
 }
 

@@ -202,7 +202,7 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord w, wxCoord h,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        wxRasterOperationMode rop = wxCOPY, 
+                        wxRasterOperationMode rop = wxCOPY,
                         bool useMask = false,
                         wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {

@@ -65,7 +65,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         m_wildcard = wildcard;
         if ((m_dialog = CreateDialog()) == NULL)
             return false;
-            
+
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
         // GtkFileChooserDialog won't be responsive to user events if there is another
         // window which called gtk_grab_add (and this happens if e.g. a wxDialog is running
@@ -80,7 +80,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
 
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
-        
+
         g_object_ref(m_widget);
         gtk_widget_show(m_widget);
 
@@ -124,7 +124,7 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
 void wxFileButton::SetPath(const wxString &str)
 {
     m_path = str;
-    
+
     if (m_dialog)
         UpdateDialogPath(m_dialog);
 }
@@ -227,7 +227,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
         g_object_ref(m_widget);
 
-        
+
         gtk_widget_show(m_widget);
 
         // GtkFileChooserButton signals
@@ -250,7 +250,7 @@ wxDirButton::~wxDirButton()
 }
 
 void wxDirButton::GTKUpdatePath(const char *gtkpath)
-{ 
+{
     m_path = wxString::FromUTF8(gtkpath);
 }
 void wxDirButton::SetPath(const wxString& str)

@@ -706,7 +706,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl = CreateEditorCtrl( dv_ctrl->GetMainWindow(), labelRect, value );
 
-	// there might be no editor control for the given item
+    // there might be no editor control for the given item
     if(!m_editorCtrl)
         return false;
 

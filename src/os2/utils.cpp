@@ -84,7 +84,7 @@ bool wxGetHostName( wxChar* zBuf, int nMaxSize )
     const wxChar*  zDefaultHost = wxT("noname");
 
     if ((zSysname = wxGetenv(wxT("SYSTEM_NAME"))) == NULL &&
-	(zSysname = wxGetenv(wxT("HOSTNAME"))) == NULL)
+            (zSysname = wxGetenv(wxT("HOSTNAME"))) == NULL)
     {
         ::PrfQueryProfileString( HINI_PROFILE
                                 ,(PSZ)WX_SECTION
@@ -240,14 +240,14 @@ bool wxGetEnv(const wxString& var, wxString *value)
 static bool wxDoSetEnv(const wxString& variable, const char *value)
 {
 #if defined(HAVE_SETENV)
-    if ( !value ) 
-    { 
-#ifdef HAVE_UNSETENV 
-        return unsetenv(variable.mb_str()) == 0; 
-#else 
-        value = wxT(""); // mustn't pass NULL to setenv() 
-#endif 
-    } 
+    if ( !value )
+    {
+#ifdef HAVE_UNSETENV
+        return unsetenv(variable.mb_str()) == 0;
+#else
+        value = wxT(""); // mustn't pass NULL to setenv()
+#endif
+    }
     return setenv(variable.mb_str(), value, 1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
@@ -474,7 +474,7 @@ bool wxGetDiskSpace(const wxString& path,
         {
            // to try to avoid 32-bit overflow, let's not multiply right away
             // (num of alloc units)
-            *pTotal = fsaBuf.cUnit;  
+            *pTotal = fsaBuf.cUnit;
             // * (num of sectors per alloc unit) * (num of bytes per sector)
             (*pTotal) *= fsaBuf.cSectorUnit * fsaBuf.cbSector;
         }
@@ -486,7 +486,7 @@ bool wxGetDiskSpace(const wxString& path,
         return true;
     }
 }
- 
+
 wxString wxPMErrorToStr(ERRORID vError)
 {
     wxString sError;

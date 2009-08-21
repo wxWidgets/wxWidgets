@@ -2,7 +2,7 @@
 // Name:        wx/mac/corefoundation/cfdata.h
 // Purpose:     wxCFDataRef class
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     2007/05/10
 // RCS-ID:      $Id: cfdataref.h 46095 2007-05-18 07:29:49Z SC $
 // Copyright:   (c) 2007 Stefan Csomor
@@ -33,7 +33,7 @@ public:
     {}
 
     typedef wxCFRef<CFDataRef> super_type;
-    
+
     /*! @method     wxCFDataRef
         @abstract   Assumes ownership of p and creates a reference to it.
         @templatefield otherType    Any type.
@@ -65,7 +65,7 @@ public:
         @param data The raw data.
         @param length The data length.
     */
-    wxCFDataRef(const UInt8* data, CFIndex length) 
+    wxCFDataRef(const UInt8* data, CFIndex length)
     : super_type(CFDataCreate(kCFAllocatorDefault, data, length))
     {
     }
@@ -80,7 +80,7 @@ public:
         else
             return 0;
     }
-    
+
     /*! @method     GetBytes
         @abstract   Copies the data into an external buffer
         @param range The desired range.

@@ -167,7 +167,7 @@ public:
     int                   m_visualRedPrec;
     int                   m_visualGreenPrec;
     int                   m_visualBluePrec;
-    
+
     unsigned char        *m_colorCube;
 };
 

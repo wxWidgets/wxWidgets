@@ -24,7 +24,7 @@
 
 #include "wx/tglbtn.h"
 #include "wx/osx/private.h"
-#include "wx/bmpbuttn.h"	// for wxDEFAULT_BUTTON_MARGIN
+#include "wx/bmpbuttn.h"    // for wxDEFAULT_BUTTON_MARGIN
 
 // ----------------------------------------------------------------------------
 // macros
@@ -48,26 +48,26 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     m_macIsUserPane = FALSE ;
-    
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-    
+
     m_labelOrig = m_label = label ;
 
     m_peer = wxWidgetImpl::CreateToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
 
     MacPostControlCreate(pos,size) ;
-    
+
   return TRUE;
 }
 
 wxSize wxToggleButton::DoGetBestSize() const
 {
-    int wBtn = 70 ; 
+    int wBtn = 70 ;
     int hBtn = 20 ;
 
     int lBtn = m_label.Length() * 8 + 12 ;
-    if (lBtn > wBtn) 
+    if (lBtn > wBtn)
         wBtn = lBtn;
 
     return wxSize ( wBtn , hBtn ) ;
@@ -89,7 +89,7 @@ void wxToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-bool wxToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) ) 
+bool wxToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());
@@ -112,19 +112,19 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString& name)
 {
     m_macIsUserPane = FALSE ;
-    
+
     m_bitmap = label;
-    
+
     m_marginX =
     m_marginY = wxDEFAULT_BUTTON_MARGIN;
-    
+
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-        
+
     m_peer = wxWidgetImpl::CreateBitmapToggleButton( this, parent, id, label, pos, size, style, GetExtraStyle() ) ;
 
     MacPostControlCreate(pos,size) ;
-    
+
     return TRUE;
 }
 
@@ -156,7 +156,7 @@ void wxBitmapToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-bool wxBitmapToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) ) 
+bool wxBitmapToggleButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());

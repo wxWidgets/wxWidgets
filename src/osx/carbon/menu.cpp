@@ -37,10 +37,10 @@
 
 // under carbon there's no such thing as a MenuItemRef, everything is done
 // on the 'parent' menu via index APIs (first line having index 1 !)
-// so to make things still work, we store the wxMenuItemImpl instance as a 
+// so to make things still work, we store the wxMenuItemImpl instance as a
 // RefCon at the respective menu line
 
-class wxMenuItemCarbonImpl : public wxMenuItemImpl 
+class wxMenuItemCarbonImpl : public wxMenuItemImpl
 {
 public :
     wxMenuItemCarbonImpl( wxMenuItem* peer ) : wxMenuItemImpl(peer)
@@ -48,9 +48,9 @@ public :
         // the parent menu ref is only set, once the item has been attached
         m_parentMenuRef = NULL;
     }
-    
+
     ~wxMenuItemCarbonImpl();
-        
+
     void SetBitmap( const wxBitmap& bitmap )
     {
         MenuItemIndex i = FindMenuItemIndex() ;
@@ -74,21 +74,21 @@ public :
 #endif
             }
         }
-    }   
-    
-    void Enable( bool enable ) 
+    }
+
+    void Enable( bool enable )
     {
         MenuItemIndex i = FindMenuItemIndex() ;
         if ( i > 0 )
         {
-        
+
             if ( GetWXPeer()->GetId() == wxApp::s_macPreferencesMenuItemId)
             {
                 if ( enable )
                     EnableMenuCommand( NULL , kHICommandPreferences ) ;
                 else
                     DisableMenuCommand( NULL , kHICommandPreferences ) ;
-            } 
+            }
             else if ( GetWXPeer()->GetId() == wxApp::s_macExitMenuItemId)
             {
                 if ( enable )
@@ -96,20 +96,20 @@ public :
                 else
                     DisableMenuCommand( NULL , kHICommandQuit ) ;
             }
-        
+
             if ( enable )
                 EnableMenuItem(m_parentMenuRef , i);
             else
                 DisableMenuItem(m_parentMenuRef , i);
-                
+
             if ( GetWXPeer()->IsSubMenu() )
             {
                 UMAEnableMenuItem( GetWXPeer()->GetSubMenu()->GetHMenu() , 0 , enable ) ;
             }
         }
-    }   
-    
-    void Check( bool check ) 
+    }
+
+    void Check( bool check )
     {
         MenuItemIndex i = FindMenuItemIndex() ;
         if ( i > 0 )
@@ -119,9 +119,9 @@ public :
             else
                 ::SetItemMark( m_parentMenuRef, i, 0 ) ; // no mark
         }
-    }   
+    }
 
-    void Hide( bool hide ) 
+    void Hide( bool hide )
     {
         MenuItemIndex i = FindMenuItemIndex() ;
         if ( i > 0 )
@@ -131,9 +131,9 @@ public :
             else
                 ChangeMenuItemAttributes( m_parentMenuRef, i, 0 , kMenuItemAttrHidden );
         }
-    }   
-    
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) 
+    }
+
+    void SetLabel( const wxString& text, wxAcceleratorEntry *entry )
     {
         MenuItemIndex i = FindMenuItemIndex() ;
         if ( i > 0 )
@@ -142,12 +142,12 @@ public :
             UMASetMenuItemShortcut( m_parentMenuRef, i , entry ) ;
          }
     }
-        
+
     void * GetHMenuItem() { return NULL; }
-    
+
     // Carbon Only
-    
-    void AttachToParent( MenuRef parentMenuRef, MenuItemIndex index ) 
+
+    void AttachToParent( MenuRef parentMenuRef, MenuItemIndex index )
     {
         m_parentMenuRef = parentMenuRef;
         if ( m_parentMenuRef && index > 0 )
@@ -180,7 +180,7 @@ protected :
 // wxMenuImpl
 //
 
-class wxMenuCarbonImpl : public wxMenuImpl 
+class wxMenuCarbonImpl : public wxMenuImpl
 {
 public :
     wxMenuCarbonImpl( wxMenu* peer , MenuRef menu) : wxMenuImpl(peer), m_osxMenu(menu)
@@ -188,8 +188,8 @@ public :
     }
 
     virtual ~wxMenuCarbonImpl();
-        
-    virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos) 
+
+    virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
         // MacOS counts menu items from 1 and inserts after, therefore having the
         // same effect as wx 0 based and inserting before, we must correct pos
@@ -198,14 +198,14 @@ public :
         MenuItemIndex index = pos;
         if ( pos == (size_t) -1 )
             index = CountMenuItems(m_osxMenu);
-            
+
         if ( pItem->IsSeparator() )
         {
             InsertMenuItemTextWithCFString( m_osxMenu, CFSTR(""), index, kMenuItemAttrSeparator, 0);
             // now switch to the Carbon 1 based counting
             index += 1 ;
         }
-        else 
+        else
         {
             InsertMenuItemTextWithCFString( m_osxMenu, CFSTR("placeholder"), index, 0, 0 );
 
@@ -223,7 +223,7 @@ public :
                 SetMenuItemCommandID( m_osxMenu, index , wxIdToMacCommand(pItem->GetId()) ) ;
             }
         }
-        
+
         wxMenuItemCarbonImpl* impl = (wxMenuItemCarbonImpl*) pItem->GetPeer();
         impl->AttachToParent( m_osxMenu, index );
         // only now can all settings be updated correctly
@@ -231,8 +231,8 @@ public :
         pItem->UpdateItemStatus();
         pItem->UpdateItemBitmap();
     }
-        
-    virtual void Remove( wxMenuItem *pItem ) 
+
+    virtual void Remove( wxMenuItem *pItem )
     {
         wxMenuItemCarbonImpl* impl = (wxMenuItemCarbonImpl*) pItem->GetPeer();
         if ( impl )
@@ -245,7 +245,7 @@ public :
             }
         }
     }
-    
+
     virtual void MakeRoot()
     {
         SetRootMenu( m_osxMenu );
@@ -354,7 +354,7 @@ wxMenuItemCarbonImpl::~wxMenuItemCarbonImpl()
 }
 
 
-wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, 
+wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer,
                         wxMenu * WXUNUSED(pParentMenu),
                        int WXUNUSED(id),
                        const wxString& WXUNUSED(text),

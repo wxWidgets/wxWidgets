@@ -48,7 +48,7 @@ private:
 
     wxString  m_text;           // tooltip text
     wxWindow *m_window;         // window we're associated with
-    
+
     DECLARE_ABSTRACT_CLASS(wxToolTip)
 };
 

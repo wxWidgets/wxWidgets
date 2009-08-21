@@ -30,10 +30,10 @@ enum wxCompositionMode
 {
     // R = Result, S = Source, D = Destination, premultiplied with alpha
     // Ra, Sa, Da their alpha components
-    
+
     // classic Porter-Duff compositions
     // http://keithp.com/~keithp/porterduff/p253-porter.pdf
-    
+
     wxCOMPOSITION_CLEAR, /* R = 0 */
     wxCOMPOSITION_SOURCE, /* R = S */
     wxCOMPOSITION_OVER, /* R = S + D*(1 - Sa) */
@@ -47,7 +47,7 @@ enum wxCompositionMode
     wxCOMPOSITION_DEST_OUT, /* R = D*(1 - Sa) */
     wxCOMPOSITION_DEST_ATOP, /* R = S*(1 - Da) + D*Sa */
     wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
-    
+
     // mathematical compositions
     wxCOMPOSITION_ADD, /* R = S + D */
 };
@@ -390,13 +390,13 @@ public:
 
     // returns the current shape antialiasing mode
     virtual wxAntialiasMode GetAntialiasMode() const { return m_antialias; }
-    
+
     // sets the antialiasing mode, returns true if it supported
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
-    
+
     // sets the compositing operator, returns true if it supported
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
@@ -417,7 +417,7 @@ public:
     // all rendering is done into a fully transparent temporary context
     virtual void BeginLayer(wxDouble opacity) = 0;
 
-    // composites back the drawings into the context with the opacity given at 
+    // composites back the drawings into the context with the opacity given at
     // the BeginLayer call
     virtual void EndLayer() = 0;
 

@@ -171,8 +171,8 @@ wxString wxIntProperty::ValueToString( wxVariant& value,
     }
     else if ( value.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
     {
-	    wxLongLong ll = value.GetLongLong();
-	    return ll.ToString();
+        wxLongLong ll = value.GetLongLong();
+        return ll.ToString();
     }
 
     return wxEmptyString;

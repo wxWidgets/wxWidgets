@@ -2,7 +2,7 @@
 // Name:        config_xcode.pch
 // Purpose:     configurations for xcode builds
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     29.04.04
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
@@ -135,7 +135,7 @@
 #define HAVE_STDLIB_H 1
 
 // OBSOLETE ?
- 
+
 #define HAVE_COS 1
 #define HAVE_FLOOR 1
 #define HAVE_INTTYPES_H 1

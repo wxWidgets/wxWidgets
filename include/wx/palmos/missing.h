@@ -3,7 +3,7 @@
  * Purpose:     the missing declarations for wxPalm
  * Author:      Yunhui Fu
  * Created:     2007-10-18
- * Modified by: 
+ * Modified by:
  * RCS-ID:      $Id$
  * Copyright:   (c) 2007 Yunhui Fu
  * Licence:     wxWindows licence
@@ -305,13 +305,13 @@ union __dmath
   unsigned long i[2];
   double d;
 };
- 
+
 union __fmath
 {
   unsigned long i[1];
   float f;
 };
- 
+
 union __ldmath
 {
   unsigned long i[4];
@@ -337,9 +337,9 @@ union __ldmath
 
 #else /* !gcc >= 3.3  */
 
- /* No builtins.  Use floating-point unions instead.  Declare as an array 
-    without bounds so no matter what small data support a port and/or 
-    library has, the reference will be via the general method for accessing 
+ /* No builtins.  Use floating-point unions instead.  Declare as an array
+    without bounds so no matter what small data support a port and/or
+    library has, the reference will be via the general method for accessing
     globals. */
 
  #ifndef HUGE_VAL
@@ -417,9 +417,9 @@ extern int eof(int fd);
 extern int access(const char *path, int amode);
 extern off_t lseek(int fildes, off_t offset, int whence);
 
-//TxtCharIsAlNum 
+//TxtCharIsAlNum
 //#define isalpha(a) TxtCharIsAlpha(a)
-//TxtCharIsCntrl TxtCharIsDelim TxtCharIsDigit TxtCharIsGraph TxtCharIsHardKey TxtCharIsHex TxtCharIsLower TxtCharIsPrint TxtCharIsPunct TxtCharIsSpace TxtCharIsUpper 
+//TxtCharIsCntrl TxtCharIsDelim TxtCharIsDigit TxtCharIsGraph TxtCharIsHardKey TxtCharIsHex TxtCharIsLower TxtCharIsPrint TxtCharIsPunct TxtCharIsSpace TxtCharIsUpper
 
 #include "pfall.h"
 

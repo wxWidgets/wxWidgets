@@ -195,7 +195,7 @@ void wxGenericHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
 void wxGenericHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
 {
     // the click must be started and ended in the hyperlink rect
-    if (!m_clicking || !GetLabelRect().Contains(event.GetPosition())) 
+    if (!m_clicking || !GetLabelRect().Contains(event.GetPosition()))
         return;
 
     SetForegroundColour(m_visitedColour);

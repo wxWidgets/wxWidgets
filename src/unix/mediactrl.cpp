@@ -304,7 +304,7 @@ static gint gtk_window_realize_callback(GtkWidget* widget,
                                         wxGStreamerMediaBackend* be)
 {
     gdk_flush();
-    
+
     GdkWindow *window = widget->window;
     wxASSERT(window);
 
@@ -709,7 +709,7 @@ void wxGStreamerMediaBackend::SetupXOverlay()
     else
     {
         gdk_flush();
-    
+
         GdkWindow *window = m_ctrl->m_wxwindow->window;
         wxASSERT(window);
 #endif

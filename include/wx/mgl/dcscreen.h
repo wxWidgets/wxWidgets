@@ -31,7 +31,7 @@ public:
     static bool StartDrawingOnTop(wxWindow *WXUNUSED(window)) { return TRUE; }
     static bool StartDrawingOnTop(wxRect *WXUNUSED(rect) = NULL) { return TRUE; }
     static bool EndDrawingOnTop() { return TRUE; }
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxScreenDC)
 };

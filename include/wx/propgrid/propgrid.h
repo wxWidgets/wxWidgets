@@ -248,7 +248,7 @@ wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES    = 0x00400000,
 /** Hides page selection buttons from toolbar.
 */
 wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
- 
+
 /** Allows multiple properties to be selected by user (by pressing SHIFT
     when clicking on a property, or by dragging with left mouse button
     down).

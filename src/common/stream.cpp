@@ -943,17 +943,17 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
             bytes_read = Read(buf, WXSIZEOF(buf)).LastRead();
             if ( m_lasterror != wxSTREAM_NO_ERROR )
                 return wxInvalidOffset;
-            
+
             wxASSERT(bytes_read == WXSIZEOF(buf));
         }
-        
+
         // read the last 'pos' bytes
         bytes_read = Read(buf, (size_t)pos).LastRead();
         if ( m_lasterror != wxSTREAM_NO_ERROR )
             return wxInvalidOffset;
-        
+
         wxASSERT(bytes_read == (size_t)pos);
-        
+
         // we should now have seeked to the right position...
         return TellI();
     }

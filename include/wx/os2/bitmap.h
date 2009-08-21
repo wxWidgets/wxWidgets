@@ -165,7 +165,7 @@ public:
                        );
     virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
-        
+
     virtual bool Create( const void* pData
                         ,wxBitmapType lType
                         ,int   nWidth

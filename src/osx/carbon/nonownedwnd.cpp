@@ -132,7 +132,7 @@ void wxNonOwnedWindowCarbonImpl::SetExtraStyle( long exStyle )
 }
 
 bool wxNonOwnedWindowCarbonImpl::SetBackgroundStyle(wxBackgroundStyle style)
-{            
+{
     if ( style == wxBG_STYLE_TRANSPARENT )
     {
         OSStatus err = HIWindowChangeFeatures( m_macWindow, 0, kWindowIsOpaque );
@@ -232,7 +232,7 @@ void wxNonOwnedWindowCarbonImpl::MacSetUnifiedAppearance( bool set )
     // for wx.
     // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
     // though)
-    // since when creating the peering is not yet completely set-up we call both setters 
+    // since when creating the peering is not yet completely set-up we call both setters
     // explicitely
     m_wxPeer->SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ) ;
     SetBackgroundColour( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ) ;
@@ -680,7 +680,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             ::HiliteMenu(0);
             result = noErr ;
         }
-    } 
+    }
     else if ( window && windowPart == inProxyIcon )
     {
         // special case proxy icon bar, as we are having a low-level runloop we must do it ourselves
@@ -739,7 +739,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
         wxWindow* cursorTarget = currentMouseWindow ;
         wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
-        
+
         extern wxCursor gGlobalCursor;
 
         if (!gGlobalCursor.IsOk())
@@ -764,7 +764,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
                 wxSTANDARD_CURSOR->MacInstall() ;
            }
         }
-    
+
         // don't mess with controls we don't know about
         // for some reason returning eventNotHandledErr does not lead to the correct behaviour
         // so we try sending them the correct control directly
@@ -868,8 +868,8 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
                     newRect.bottom - newRect.top + deltaheight ) ;
 
                 toplevelWindow->HandleResizing( cEvent.GetTicks(), &adjustR );
-                
-                const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + top + adjustR.height - deltaheight , 
+
+                const Rect adjustedRect = { adjustR.y + top  , adjustR.x + left , adjustR.y + top + adjustR.height - deltaheight ,
                     adjustR.x + left + adjustR.width - deltawidth } ;
                 if ( !EqualRect( &newRect , &adjustedRect ) )
                     cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
@@ -1136,7 +1136,7 @@ wxNonOwnedWindowCarbonImpl::~wxNonOwnedWindowCarbonImpl()
 }
 
 void wxNonOwnedWindowCarbonImpl::Destroy()
-{    
+{
     if ( m_macEventHandler )
     {
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
@@ -1186,7 +1186,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
     wxWindow* parent,
     const wxPoint& pos,
     const wxSize& size,
-    long style, long extraStyle, 
+    long style, long extraStyle,
     const wxString& WXUNUSED(name) )
 {
 
@@ -1483,27 +1483,27 @@ bool wxNonOwnedWindowCarbonImpl::ShowWithEffect(bool show,
     return true;
 }
 
-void wxNonOwnedWindowCarbonImpl::SetTitle( const wxString& title, wxFontEncoding encoding ) 
+void wxNonOwnedWindowCarbonImpl::SetTitle( const wxString& title, wxFontEncoding encoding )
 {
     SetWindowTitleWithCFString( m_macWindow , wxCFStringRef( title , encoding ) ) ;
 }
-    
+
 bool wxNonOwnedWindowCarbonImpl::IsMaximized() const
 {
     return IsWindowInStandardState( m_macWindow , NULL , NULL ) ;
 }
-    
+
 bool wxNonOwnedWindowCarbonImpl::IsIconized() const
 {
     return IsWindowCollapsed((WindowRef)GetWXWindow() ) ;
 }
-    
+
 void wxNonOwnedWindowCarbonImpl::Iconize( bool iconize )
 {
     if ( IsWindowCollapsable( m_macWindow ) )
         CollapseWindow( m_macWindow , iconize ) ;
 }
-    
+
 void wxNonOwnedWindowCarbonImpl::Maximize(bool maximize)
 {
     Point idealSize = { 0 , 0 } ;
@@ -1524,12 +1524,12 @@ void wxNonOwnedWindowCarbonImpl::Maximize(bool maximize)
     }
     ZoomWindowIdeal( (WindowRef)GetWXWindow() , maximize ? inZoomOut : inZoomIn , &idealSize ) ;
 }
-    
+
 bool wxNonOwnedWindowCarbonImpl::IsFullScreen() const
 {
     return m_macFullScreenData != NULL ;
 }
-    
+
 bool wxNonOwnedWindowCarbonImpl::ShowFullScreen(bool show, long style)
 {
     if ( show )
@@ -1568,7 +1568,7 @@ bool wxNonOwnedWindowCarbonImpl::ShowFullScreen(bool show, long style)
             y -= top ;
             h += top ;
             // avoid adding the caption twice to the height
-            outerheight -= top; 
+            outerheight -= top;
         }
 
         if ( style & wxFULLSCREEN_NOBORDER )

@@ -27,10 +27,10 @@ public:
     virtual ~wxImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
     bool Create();
-    
+
     virtual int GetImageCount() const;
     virtual bool GetSize( int index, int &width, int &height ) const;
-    
+
     int Add( const wxIcon& bitmap );
     int Add( const wxBitmap& bitmap );
     int Add( const wxBitmap& bitmap, const wxBitmap& mask );
@@ -42,17 +42,17 @@ public:
     bool Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask );
     bool Remove( int index );
     bool RemoveAll();
-    
+
     virtual bool Draw(int index, wxDC& dc, int x, int y,
                       int flags = wxIMAGELIST_DRAW_NORMAL,
                       bool solidBackground = false);
-    
+
 private:
     wxList  m_images;
-    
+
     int     m_width;
     int     m_height;
-    
+
     DECLARE_DYNAMIC_CLASS(wxImageList)
 };
 

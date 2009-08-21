@@ -32,7 +32,7 @@ public:
     virtual bool CanGetTextExtent() const { return true; }
 
     virtual void DoGetSize(int *width, int *height) const;
-    virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, 
+    virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col,
                               wxFloodFillStyle style=wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const;
 
@@ -58,11 +58,11 @@ public:
     virtual void DoDrawBitmap( const wxBitmap &bitmap, wxCoord x, wxCoord y,
                                bool useMask = false );
 
-    virtual bool DoBlit( wxCoord xdest, wxCoord ydest, 
+    virtual bool DoBlit( wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         wxRasterOperationMode logical_func = wxCOPY, 
-                         bool useMask = false, 
+                         wxRasterOperationMode logical_func = wxCOPY,
+                         bool useMask = false,
                          wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
 
     virtual void DoDrawText( const wxString &text, wxCoord x, wxCoord y );

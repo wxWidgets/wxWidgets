@@ -142,17 +142,17 @@ bool wxGtkCalendarCtrl::SetDate(const wxDateTime& date)
 {
     g_signal_handlers_block_by_func(m_widget,
         (gpointer) gtk_day_selected_callback, this);
-        
+
     m_selectedDate = date;
     int year = date.GetYear();
     int month = date.GetMonth();
     int day = date.GetDay();
     gtk_calendar_select_month(GTK_CALENDAR(m_widget), month, year);
     gtk_calendar_select_day(GTK_CALENDAR(m_widget), day);
-    
+
     g_signal_handlers_unblock_by_func( m_widget,
         (gpointer) gtk_day_selected_callback, this);
-    
+
     return true;
 }
 

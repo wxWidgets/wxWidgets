@@ -1291,7 +1291,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
   // wxUSE_NANOX/!wxUSE_NANOX
 
 bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
                          wxRasterOperationMode logical_func, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {

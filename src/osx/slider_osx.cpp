@@ -186,9 +186,9 @@ void wxSlider::SetRange(int minValue, int maxValue)
         m_macMaximumStatic->SetLabel( value );
     }
 
-    // If the range is out of bounds, set it to a 
+    // If the range is out of bounds, set it to a
     // value that is within bounds
-    // RN: Testing reveals OSX does its own 
+    // RN: Testing reveals OSX does its own
     // bounding, perhaps this isn't needed?
     int currentValue = GetValue();
 
@@ -299,7 +299,7 @@ void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
 bool wxSlider::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     TriggerScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
- 
+
     return true;
 }
 

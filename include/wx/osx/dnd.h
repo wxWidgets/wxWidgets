@@ -55,7 +55,7 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
-    // NOTE: This is needed by the generic wxDataViewCtrl, not sure how to implement. 
+    // NOTE: This is needed by the generic wxDataViewCtrl, not sure how to implement.
     virtual wxDataFormat GetMatchingPair();
 
     bool CurrentDragHasSupportedFormat() ;

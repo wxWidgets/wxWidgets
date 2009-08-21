@@ -65,9 +65,9 @@ using namespace std ;
 #endif
 
 #if defined(__DARWIN__)
-	#include "wx/osx/core/cfref.h"
-	#include <CoreFoundation/CFLocale.h>
-	#include "wx/osx/core/cfstring.h"
+    #include "wx/osx/core/cfref.h"
+    #include <CoreFoundation/CFLocale.h>
+    #include "wx/osx/core/cfstring.h"
     #include <xlocale.h>
 #endif
 
@@ -643,7 +643,7 @@ int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 #if wxUSE_UNICODE_WCHAR
 #ifdef __DMC__
 /*
-This fails with a bug similar to 
+This fails with a bug similar to
 http://www.digitalmars.com/pnews/read.php?server=news.digitalmars.com&group=c++.beta&artnum=680
 in DMC 8.49 and 8.50
 I don't see it being used in the wxWidgets sources at present (oct 2007) CE
@@ -797,17 +797,17 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_StrdupW(const wchar_t *pwz)
 #endif // wxCRT_StrdupW
 
 #ifndef wxWCHAR_T_IS_WXCHAR16
-size_t wxStrlen(const wxChar16 *s ) 
-{ 
-    if (!s) return 0; 
-    size_t i=0; 
-    while (*s!=0) { ++i; ++s; }; 
+size_t wxStrlen(const wxChar16 *s )
+{
+    if (!s) return 0;
+    size_t i=0;
+    while (*s!=0) { ++i; ++s; };
     return i;
 }
 
 wxChar16* wxStrdup(const wxChar16* s)
-{ 
-  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar16); 
+{
+  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar16);
   wxChar16 *ret = (wxChar16*) malloc(size);
   memcpy(ret, s, size);
   return ret;
@@ -815,17 +815,17 @@ wxChar16* wxStrdup(const wxChar16* s)
 #endif
 
 #ifndef wxWCHAR_T_IS_WXCHAR32
-size_t wxStrlen(const wxChar32 *s ) 
-{ 
-    if (!s) return 0; 
-    size_t i=0; 
-    while (*s!=0) { ++i; ++s; }; 
+size_t wxStrlen(const wxChar32 *s )
+{
+    if (!s) return 0;
+    size_t i=0;
+    while (*s!=0) { ++i; ++s; };
     return i;
 }
 
 wxChar32* wxStrdup(const wxChar32* s)
-{ 
-  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar32); 
+{
+  size_t size = (wxStrlen(s) + 1) * sizeof(wxChar32);
   wxChar32 *ret = (wxChar32*) malloc(size);
   memcpy(ret, s, size);
   return ret;

@@ -16,22 +16,22 @@
 #include "wx/checkbox.h"
 #include "wx/osx/private.h"
 
-wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
-                                    long WXUNUSED(extraStyle)) 
+                                    long style,
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    [v setButtonType:NSSwitchButton];    
+    [v setButtonType:NSSwitchButton];
     if (style & wxCHK_3STATE)
         [v setAllowsMixedState:YES];
-        
+
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
 }

@@ -202,7 +202,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
     m_FontSize = 3; //default one
     CreateCurrentFont();           // we're selecting default font into
-    
+
     // we're not using GetCharWidth/Height() because of
     // differences under X and win
     wxCoord w,h;

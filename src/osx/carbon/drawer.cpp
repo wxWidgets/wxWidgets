@@ -140,7 +140,7 @@ bool wxDrawerWindow::SetPreferredEdge(wxDirection edge)
 {
     const OSStatus status = ::SetDrawerPreferredEdge((WindowRef)GetWXWindow(),
      DirectionToWindowEdge(edge));
-	return (noErr == status);
+    return (noErr == status);
 }
 
 

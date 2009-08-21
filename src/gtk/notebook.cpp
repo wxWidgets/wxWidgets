@@ -357,7 +357,7 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
     wxGtkNotebookPage* p = GetNotebookPage(page);
     m_pagesData.DeleteObject(p);
     delete p;
-    
+
     return client;
 }
 

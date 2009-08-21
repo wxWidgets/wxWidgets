@@ -28,7 +28,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 
 BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
 END_EVENT_TABLE()
- 
+
 void wxCheckListBox::Init()
 {
 }
@@ -118,7 +118,7 @@ void wxCheckListBox::SetValueCallback( unsigned int n, wxListWidgetColumn* col ,
     if ( col == m_checkColumn )
     {
         Check( n, value.IsChecked() );
-        
+
         wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId() );
         event.SetInt( n );
         event.SetString( GetString( n ) );

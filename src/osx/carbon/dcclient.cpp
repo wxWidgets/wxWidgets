@@ -45,7 +45,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
    : wxGCDCImpl( owner )
 {
     m_window = window;
-    
+
     m_ok = true ;
 
     m_window->GetSize( &m_width , &m_height);
@@ -107,7 +107,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
-    
+
     HIRect rect;
     CGImageRef image;
     CGContextRef context;
@@ -119,11 +119,11 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     int height = subrect !=  NULL ? subrect->height : (int)rect.size.height ;
 
     wxBitmap bmp = wxBitmap(width, height, 32);
-    
+
     context = (CGContextRef)bmp.GetHBITMAP();
-    
+
     CGContextSaveGState(context);
-    
+
     CGContextTranslateCTM( context, 0,  height );
     CGContextScaleCTM( context, 1, -1 );
 

@@ -64,14 +64,14 @@ extern bool WXDLLEXPORT wxIsDebuggerRunning()
 
 // have a fast version for mac code that returns the version as a return value
 
-long UMAGetSystemVersion() 
-{ 
+long UMAGetSystemVersion()
+{
     static SInt32 sUMASystemVersion = 0 ;
     if ( sUMASystemVersion == 0 )
     {
         verify_noerr(Gestalt(gestaltSystemVersion, &sUMASystemVersion));
     }
-    return sUMASystemVersion ; 
+    return sUMASystemVersion ;
 }
 
 // our OS version is the same in non GUI and GUI cases

@@ -520,7 +520,7 @@ int wxRegExImpl::Replace(wxString *text,
                     textstr + matchStart,
 #else
                     textstr.data() + matchStart,
-#endif 
+#endif
                     countRepl ? wxRE_NOTBOL : 0
                     WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
     {
@@ -566,13 +566,14 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
+                        textNew += wxString(
 #ifndef WXREGEX_CONVERT_TO_MB
-                        textNew += wxString(textstr + matchStart + start,
+                                textstr
 #else
-                        textNew += wxString(textstr.data() + matchStart +
-					    start,
+                                textstr.data()
 #endif
-                                            *wxConvCurrent, len);
+                                + matchStart + start,
+                                *wxConvCurrent, len);
 
                         mayHaveBackrefs = true;
                     }
@@ -601,8 +602,7 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
         result.append(*text, matchStart, start);
 #else
-        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, 
-			       start));
+        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, start));
 #endif
         matchStart += start;
         result.append(textNew);

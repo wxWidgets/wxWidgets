@@ -1031,7 +1031,7 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n, wxMacDataItem* item
 {
     if ( m_sortOrder == SortOrder_None )
     {
-        
+
         // increase the order of the lines to be shifted
         unsigned int lines = MacGetCount();
         for ( unsigned int i = n; i < lines; ++i)
@@ -1039,7 +1039,7 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n, wxMacDataItem* item
             wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(i);
             iter->SetOrder( iter->GetOrder() + 1 );
         }
-     
+
 #if 0
         // I don't understand what this code is supposed to do, RR.
         SInt32 frontLineOrder = 0;
@@ -1048,7 +1048,7 @@ void wxMacDataItemBrowserControl::MacInsert( unsigned int n, wxMacDataItem* item
             wxMacDataItem* iter = (wxMacDataItem*) GetItemFromLine(n-1);
             frontLineOrder = iter->GetOrder()+1;
         }
-#else   
+#else
         item->SetOrder( n );
 #endif
     }

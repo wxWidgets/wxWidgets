@@ -109,7 +109,7 @@ WX_DEFINE_LOG_CS(BackgroundLog);
 // this one is used for protecting ms_aTraceMasks from concurrent access
 WX_DEFINE_LOG_CS(TraceMask);
 
-// and this one is used for GetComponentLevels() 
+// and this one is used for GetComponentLevels()
 WX_DEFINE_LOG_CS(Levels);
 
 } // anonymous namespace

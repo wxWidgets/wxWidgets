@@ -44,12 +44,12 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual ~wxTopLevelWindowMac();
-    
+
     virtual bool Destroy();
 
     virtual wxPoint GetClientAreaOrigin() const;
 
-    virtual bool SetShape(const wxRegion& region) 
+    virtual bool SetShape(const wxRegion& region)
         { return DoSetShape(region); }
 
     // Attracts the users attention to this window if the application is
@@ -71,7 +71,7 @@ public:
 
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
-     
+
 protected:
     // common part of all ctors
     void Init();

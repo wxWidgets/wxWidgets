@@ -39,18 +39,18 @@ public:
     virtual void SetValue(bool val);
     virtual bool GetValue() const ;
 
-    // implementation 
-    
+    // implementation
+
     void Command(wxCommandEvent& event);
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     void RemoveFromCycle();
     inline wxRadioButton *NextInCycle() {return m_cycle;}
-    
+
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
   protected:
-  
+
     wxRadioButton *m_cycle;
 };
 

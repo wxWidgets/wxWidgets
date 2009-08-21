@@ -1126,7 +1126,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
 
     if (m_Border == 1)
     {
-        // draw thin border using lines 
+        // draw thin border using lines
         wxPen mypen1(m_BorderColour1, 1, wxPENSTYLE_SOLID);
         wxPen mypen2(m_BorderColour2, 1, wxPENSTYLE_SOLID);
 
@@ -1138,10 +1138,10 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         dc.DrawLine(xlocal, ylocal + m_Height - 1, xlocal + m_Width, ylocal + m_Height - 1);
     }
     else if (m_Border> 0)
-    {     
+    {
         wxBrush mybrush1(m_BorderColour1, wxBRUSHSTYLE_SOLID);
         wxBrush mybrush2(m_BorderColour2, wxBRUSHSTYLE_SOLID);
-        
+
         // draw upper left corner
         // 0---------------5
         // |              /
@@ -1149,7 +1149,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         // | |
         // | 2
         // |/
-        // 1 
+        // 1
 
         wxPoint poly[6];
         poly[0].x =m_PosX; poly[0].y = m_PosY ;
@@ -1162,7 +1162,7 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         dc.SetBrush(mybrush1);
         dc.SetPen(*wxTRANSPARENT_PEN);
         dc.DrawPolygon(6, poly, x, y);
-        
+
         // draw lower right corner reusing point 1,2,4 and 5
         //                 5
         //                /|
@@ -1176,11 +1176,11 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         poly[3].x = poly[4].x; poly[3].y = poly[2].y;
         dc.DrawPolygon(6, poly, x, y);
 
-        // smooth color transition like firefox 
+        // smooth color transition like firefox
         wxColour borderMediumColour(
             (m_BorderColour1.Red() + m_BorderColour2.Red()) /2 ,
             (m_BorderColour1.Green() + m_BorderColour2.Green()) /2 ,
-            (m_BorderColour1.Blue() + m_BorderColour2.Blue()) /2 
+            (m_BorderColour1.Blue() + m_BorderColour2.Blue()) /2
             );
         wxPen mypen3(borderMediumColour, 1, wxPENSTYLE_SOLID);
         dc.SetPen(mypen3);

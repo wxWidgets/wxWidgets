@@ -58,20 +58,20 @@ public:
     void HandleMenuClosed();
 
     wxMenuImpl* GetPeer() { return m_peer; }
-    
+
     // make sure we can veto
     void SetAllowRearrange( bool allow );
     bool AllowRearrange() const { return m_allowRearrange; }
-    
+
     // if a menu is used purely for internal implementation reasons (eg wxChoice)
     // we don't want native menu events being triggered
     void SetNoEventsMode( bool noEvents );
     bool GetNoEventsMode() const { return m_noEventsMode; }
 protected:
     // hide special menu items like exit, preferences etc
-    // that are expected in the app menu  
+    // that are expected in the app menu
     void DoRearrange() ;
-    
+
     bool DoHandleMenuEvent( wxEvent& evt );
     virtual wxMenuItem* DoAppend(wxMenuItem *item);
     virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
@@ -92,13 +92,13 @@ private:
 
     // in this menu rearranging of menu items (esp hiding) is allowed
     bool m_allowRearrange;
-    
+
     // don't trigger native events
     bool m_noEventsMode;
-    
+
     // the position of the first item in the current radio group or -1
     int m_startRadioGroup;
-    
+
     wxMenuImpl* m_peer;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
@@ -187,7 +187,7 @@ protected:
 private:
     static wxMenuBar*            s_macInstalledMenuBar ;
     static wxMenuBar*            s_macCommonMenuBar ;
-  
+
     wxMenu* m_rootMenu;
     wxMenu* m_appleMenu;
 

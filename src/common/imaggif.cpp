@@ -109,7 +109,7 @@ int wxGIFHandler::DoGetImageCount( wxInputStream& stream )
     wxGIFErrorCode error = decod.LoadGIF(stream);
     if ( (error != wxGIF_OK) && (error != wxGIF_TRUNCATED) )
         return -1;
-    
+
     // NOTE: this function modifies the current stream position but it's ok
     //       (see wxImageHandler::GetImageCount)
 

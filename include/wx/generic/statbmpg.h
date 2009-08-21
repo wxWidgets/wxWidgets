@@ -45,9 +45,9 @@ public:
 
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
-    virtual void SetIcon(const wxIcon& icon) 
-    { 
-        m_bitmap.CopyFromIcon(icon); 
+    virtual void SetIcon(const wxIcon& icon)
+    {
+        m_bitmap.CopyFromIcon(icon);
         SetInitialSize(GetBitmapSize());
         Refresh();
     }
@@ -59,7 +59,7 @@ public:
 
 
 private:
-    wxSize GetBitmapSize() 
+    wxSize GetBitmapSize()
     {
         return m_bitmap.Ok() ? wxSize(m_bitmap.GetWidth(), m_bitmap.GetHeight())
                              : wxSize(16, 16); // this is completely arbitrary

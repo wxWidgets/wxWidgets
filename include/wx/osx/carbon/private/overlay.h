@@ -21,34 +21,34 @@ class wxOverlayImpl
 public:
     wxOverlayImpl() ;
     ~wxOverlayImpl() ;
-    
-    
+
+
     // clears the overlay without restoring the former state
     // to be done eg when the window content has been changed and repainted
     void Reset();
-    
+
     // returns true if it has been setup
     bool IsOk();
-    
+
     void Init( wxDC* dc, int x , int y , int width , int height );
-    
+
     void BeginDrawing( wxDC* dc);
-    
+
     void EndDrawing( wxDC* dc);
-    
+
     void Clear( wxDC* dc);
 
 private:
     OSStatus CreateOverlayWindow();
-    
+
     void MacGetBounds( Rect *bounds );
-    
+
     WindowRef m_overlayWindow;
     WindowRef m_overlayParentWindow;
     CGContextRef m_overlayContext ;
     // we store the window in case we would have to issue a Refresh()
     wxWindow* m_window ;
-    
+
     int m_x ;
     int m_y ;
     int m_width ;

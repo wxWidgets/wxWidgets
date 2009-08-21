@@ -30,7 +30,7 @@ WXWidget wxWidgetImpl::FindFocus()
     {
     /*
         NSResponder* responder = [keyWindow firstResponder];
-        if ( [responder isKindOfClass:[NSTextView class]] && 
+        if ( [responder isKindOfClass:[NSTextView class]] &&
             [keyWindow fieldEditor:NO forObject:nil] != nil )
         {
             focusedView = [(NSTextView*)responder delegate];
@@ -98,7 +98,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
     UITouch *touch = [touches anyObject];
 
     // these parameters are not given for all events
-    UInt32 button = 0; // no secondary button 
+    UInt32 button = 0; // no secondary button
     UInt32 clickCount = [touch tapCount];
     UInt32 mouseChord = 0; // TODO does this exist for cocoa
 
@@ -196,7 +196,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXIPhoneClassAddWXMethods( self );
@@ -214,13 +214,13 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
         CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
         CGContextSaveGState( context );
         // draw background
-        
+
         CGContextSetFillColorWithColor( context, impl->GetWXPeer()->GetBackgroundColour().GetCGColor());
         CGContextFillRect(context, rect );
 
         impl->GetWXPeer()->MacSetCGContextRef( context );
 
-        impl->GetWXPeer()->GetUpdateRegion() = 
+        impl->GetWXPeer()->GetUpdateRegion() =
             wxRegion(rect.origin.x,rect.origin.y,rect.size.width,rect.size.height) ;
 
         wxPaintEvent event;
@@ -233,25 +233,25 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self handleTouchEvent:touches withEvent:event];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self handleTouchEvent:touches withEvent:event];
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self handleTouchEvent:touches withEvent:event];
 }
 
--(void)handleTouchEvent:(NSSet *)touches withEvent:(UIEvent *)event 
-{ 
+-(void)handleTouchEvent:(NSSet *)touches withEvent:(UIEvent *)event
+{
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    CGPoint clickLocation; 
+    CGPoint clickLocation;
     UITouch *touch = [touches anyObject];
     clickLocation = [touch locationInView:self];
 
@@ -266,12 +266,12 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
 
 */
 
-void wxOSX_touchEvent(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event ) 
+void wxOSX_touchEvent(UIView* self, SEL _cmd, NSSet* touches, UIEvent *event )
 {
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return;
-        
+
     impl->touchEvent(touches, event, self, _cmd);
 }
 
@@ -280,7 +280,7 @@ BOOL wxOSX_becomeFirstResponder(UIView* self, SEL _cmd)
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return NO;
-        
+
     return impl->becomeFirstResponder(self, _cmd);
 }
 
@@ -289,7 +289,7 @@ BOOL wxOSX_resignFirstResponder(UIView* self, SEL _cmd)
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return NO;
-        
+
     return impl->resignFirstResponder(self, _cmd);
 }
 
@@ -298,7 +298,7 @@ void wxOSX_drawRect(UIView* self, SEL _cmd, CGRect rect)
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return;
-        
+
     return impl->drawRect(&rect, self, _cmd);
 }
 
@@ -344,7 +344,7 @@ wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isR
 {
 }
 
-wxWidgetIPhoneImpl::wxWidgetIPhoneImpl() 
+wxWidgetIPhoneImpl::wxWidgetIPhoneImpl()
 {
 }
 
@@ -365,8 +365,8 @@ wxWidgetIPhoneImpl::~wxWidgetIPhoneImpl()
     }
     [m_osxView release];
 }
-    
-bool wxWidgetIPhoneImpl::IsVisible() const 
+
+bool wxWidgetIPhoneImpl::IsVisible() const
 {
     // TODO reflect Superviews state
     return [m_osxView isHidden] == NO;
@@ -381,7 +381,7 @@ void wxWidgetIPhoneImpl::Raise()
 {
     [[m_osxView superview] bringSubviewToFront:m_osxView];
 }
-    
+
 void wxWidgetIPhoneImpl::Lower()
 {
     [[m_osxView superview] sendSubviewToBack:m_osxView];
@@ -446,7 +446,7 @@ bool wxWidgetIPhoneImpl::HasFocus() const
     return [m_osxView isFirstResponder] == YES;
 }
 
-bool wxWidgetIPhoneImpl::SetFocus() 
+bool wxWidgetIPhoneImpl::SetFocus()
 {
 //    [m_osxView makeKeyWindow] ;
 //  TODO
@@ -469,7 +469,7 @@ void wxWidgetIPhoneImpl::Embed( wxWidgetImpl *parent )
 void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to )
 {
     CGPoint p = CGPointMake( pt->x , pt->y );
-    p = [from->GetWXWidget() convertPoint:p toView:to->GetWXWidget() ]; 
+    p = [from->GetWXWidget() convertPoint:p toView:to->GetWXWidget() ];
     pt->x = (int)p.x;
     pt->y = (int)p.y;
 }
@@ -579,7 +579,7 @@ void wxWidgetIPhoneImpl::SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
 {
 }
 
-void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant ) 
+void wxWidgetIPhoneImpl::SetControlSize( wxWindowVariant variant )
 {
 }
 
@@ -634,7 +634,7 @@ void wxWidgetIPhoneImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* ot
 #endif
 
         wxLogTrace(wxT("Focus"), wxT("focus lost(%p)"), static_cast<void*>(thisWindow));
-                    
+
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);
         if (otherWindow)
@@ -650,7 +650,7 @@ bool wxWidgetIPhoneImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     // get the current focus before running becomeFirstResponder
-    UIView* otherView = FindFocus(); 
+    UIView* otherView = FindFocus();
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
@@ -665,7 +665,7 @@ bool wxWidgetIPhoneImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     // get the current focus after running resignFirstResponder
-    UIView* otherView = FindFocus(); 
+    UIView* otherView = FindFocus();
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     // NSTextViews have an editor as true responder, therefore the might get the
     // resign notification if their editor takes over, don't trigger any event hen
@@ -681,13 +681,13 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
     CGContextRef context = (CGContextRef) UIGraphicsGetCurrentContext();
     CGContextSaveGState( context );
     // draw background
-    
+
     CGContextSetFillColorWithColor( context, GetWXPeer()->GetBackgroundColour().GetCGColor());
     CGContextFillRect(context, *rect );
 
     GetWXPeer()->MacSetCGContextRef( context );
 
-    GetWXPeer()->GetUpdateRegion() = 
+    GetWXPeer()->GetUpdateRegion() =
         wxRegion(rect->origin.x,rect->origin.y,rect->size.width,rect->size.height) ;
 
     wxRegion updateRgn( wxFromNSRect( slf, *rect ) );
@@ -695,9 +695,9 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
     wxWindow* wxpeer = GetWXPeer();
     wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
-    
+
     bool handled = wxpeer->MacDoRedraw( 0 );
-            
+
     CGContextRestoreGState( context );
 
     CGContextSaveGState( context );
@@ -718,7 +718,7 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
 
 void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf, void *WXUNUSED(_cmd))
 {
-    CGPoint clickLocation; 
+    CGPoint clickLocation;
     UITouch *touch = [touches anyObject];
     clickLocation = [touch locationInView:slf];
     wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
@@ -741,12 +741,12 @@ void wxWidgetIPhoneImpl::touchUpInsideAction(void* sender, WX_UIEvent evt, WXWid
 // Factory methods
 //
 
-wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent), 
+wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent),
     wxWindowID WXUNUSED(id), const wxPoint& pos, const wxSize& size,
     long WXUNUSED(style), long WXUNUSED(extraStyle))
 {
     UIView* sv = (wxpeer->GetParent()->GetHandle() );
-    
+
     CGRect r = CGRectMake( pos.x, pos.y, size.x, size.y) ;
     // Rect bounds = wxMacGetBoundsForControl( wxpeer, pos , size ) ;
     wxUIView* v = [[wxUIView alloc] initWithFrame:r];
@@ -757,7 +757,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     return c;
 }
 
-wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now ) 
+wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
     UIWindow* toplevelwindow = now->GetWXWindow();
 
@@ -768,18 +768,18 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     /*
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     // left orientation not yet implemented !
-    if (orientation == UIInterfaceOrientationLandscapeRight ) 
+    if (orientation == UIInterfaceOrientationLandscapeRight )
     {
         CGAffineTransform transform = v.transform;
- 
+
         // Use the status bar frame to determine the center point of the window's content area.
         CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
         CGRect bounds = CGRectMake(0, 0, statusBarFrame.size.height, statusBarFrame.origin.x);
         CGPoint center = CGPointMake(bounds.size.height / 2.0, bounds.size.width / 2.0);
- 
+
         // Set the center point of the view to the center point of the window's content area.
         v.center = center;
- 
+
         // Rotate the view 90 degrees around its new center point.
         transform = CGAffineTransformRotate(transform, ( M_PI / 2.0));
         v.transform = transform;

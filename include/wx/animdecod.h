@@ -95,11 +95,11 @@ public:
     }
 
     virtual bool Load( wxInputStream& stream ) = 0;
-    
+
     bool CanRead( wxInputStream& stream ) const
     {
         // NOTE: this code is the same of wxImageHandler::CallDoCanRead
-        
+
         if ( !stream.IsSeekable() )
             return false;        // can't test unseekable stream
 
@@ -157,7 +157,7 @@ protected:
     // this function should modify the stream current position without taking care
     // of restoring it since CanRead() will do it.
     virtual bool DoCanRead(wxInputStream& stream) const = 0;
-    
+
     wxSize m_szAnimation;
     unsigned int m_nFrames;
 

@@ -40,7 +40,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -102,7 +102,7 @@ public :
             [m_searchFieldCell setSearchButtonCell:nil];
         [m_searchField setNeedsDisplay:YES];
     }
-    
+
     virtual bool IsSearchButtonVisible() const
     {
         return [m_searchFieldCell searchButtonCell] != nil;
@@ -116,7 +116,7 @@ public :
             [m_searchFieldCell setCancelButtonCell:nil];
         [m_searchField setNeedsDisplay:YES];
     }
-    
+
     virtual bool IsCancelButtonVisible() const
     {
         return [m_searchFieldCell cancelButtonCell] != nil;
@@ -136,7 +136,7 @@ public :
         [m_searchFieldCell setPlaceholderString:
             wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
     }
-        
+
     virtual bool SetFocus()
     {
        return  wxNSTextFieldControl::SetFocus();
@@ -151,13 +151,13 @@ wxNSSearchFieldControl::~wxNSSearchFieldControl()
 {
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& str,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long WXUNUSED(style),
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;

@@ -66,13 +66,13 @@ wxSize wxButton::DoGetBestSize() const
         OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
 
-        // GetThemeTextDimensions will cache strings and the documentation 
-        // says not to use the NoCopy string creation calls. 
-        // This also means that we can't use CFSTR without 
-        // -fno-constant-cfstrings if the library might be unloaded, 
-        // as GetThemeTextDimensions may cache a pointer to our 
-        // unloaded segment. 
-        wxCFStringRef str( !m_label.empty() ? m_label : wxString(" "), 
+        // GetThemeTextDimensions will cache strings and the documentation
+        // says not to use the NoCopy string creation calls.
+        // This also means that we can't use CFSTR without
+        // -fno-constant-cfstrings if the library might be unloaded,
+        // as GetThemeTextDimensions may cache a pointer to our
+        // unloaded segment.
+        wxCFStringRef str( !m_label.empty() ? m_label : wxString(" "),
                           GetFont().GetEncoding() );
 
 #if wxOSX_USE_ATSU_TEXT

@@ -619,7 +619,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     int size = 3;
 #endif
 
-	// Guess a standard font size
+    // Guess a standard font size
     int stdFontSize = 0;
 
     // First see if we have a default/normal style to base the size on
@@ -628,22 +628,22 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     size_t i;
     for (i = 0; i < m_styleNames.GetCount(); i++)
     {
-		wxString name = m_styleNames[i].Lower();
-		if (name.Find(wxT("normal")) != wxNOT_FOUND || name.Find(normalTranslated) != wxNOT_FOUND ||
-		    name.Find(wxT("default")) != wxNOT_FOUND || name.Find(defaultTranslated) != wxNOT_FOUND)
-		{
-    		wxRichTextStyleDefinition* d = GetStyleSheet()->FindStyle(m_styleNames[i]);
-    		if (d)
-    		{
-    			wxRichTextAttr attr2(d->GetStyleMergedWithBase(GetStyleSheet()));
-    			if (attr2.HasFontSize())
-    			{
-					stdFontSize = attr2.GetFontSize();
-					break;
-				}
-			}
-		}
-	}
+        wxString name = m_styleNames[i].Lower();
+        if (name.Find(wxT("normal")) != wxNOT_FOUND || name.Find(normalTranslated) != wxNOT_FOUND ||
+                name.Find(wxT("default")) != wxNOT_FOUND || name.Find(defaultTranslated) != wxNOT_FOUND)
+        {
+            wxRichTextStyleDefinition* d = GetStyleSheet()->FindStyle(m_styleNames[i]);
+            if (d)
+            {
+                wxRichTextAttr attr2(d->GetStyleMergedWithBase(GetStyleSheet()));
+                if (attr2.HasFontSize())
+                {
+                    stdFontSize = attr2.GetFontSize();
+                    break;
+                }
+            }
+        }
+    }
 
     if (stdFontSize == 0)
     {
@@ -670,13 +670,13 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
         {
             if (sizes[i] > mostCommonSize)
                 mostCommonSize = i;
-		}
+        }
         if (mostCommonSize > 0)
             stdFontSize = mostCommonSize;
     }
 
     if (stdFontSize == 0)
-    	stdFontSize = 12;
+        stdFontSize = 12;
 
     int thisFontSize = ((attr.GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0) ? attr.GetFontSize() : stdFontSize;
 

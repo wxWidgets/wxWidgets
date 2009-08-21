@@ -255,7 +255,7 @@ public:
     virtual wxRect GetPaperRect() const;
 
 protected:
-    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, 
+    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
                      wxFloodFillStyle style=wxFLOOD_SURFACE );
     void DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter);
     void DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection = wxEAST);
@@ -275,7 +275,7 @@ protected:
     void DoDrawSpline(const wxPointList *points);
 #endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+            wxDC *source, wxCoord xsrc, wxCoord ysrc,
             wxRasterOperationMode rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );

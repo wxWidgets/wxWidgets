@@ -29,23 +29,23 @@ IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxPMDCImpl)
 // Memory DC
 /////////////////////////////////////////////////////////////////////////////
 
-wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner ) 
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
         : wxPMDCImpl( owner )
 {
-    CreateCompatible(NULL); 
-    Init(); 
+    CreateCompatible(NULL);
+    Init();
 }
 
-wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap ) 
-        : wxPMDCImpl( owner ) 
-{ 
-    CreateCompatible(NULL); 
-    Init(); 
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
+        : wxPMDCImpl( owner )
+{
+    CreateCompatible(NULL);
+    Init();
     DoSelect(bitmap);
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *pOldDC)
-        : wxPMDCImpl( owner ) 
+        : wxPMDCImpl( owner )
 {
     wxCHECK_RET( pOldDC, wxT("NULL dc in wxMemoryDC ctor") );
 

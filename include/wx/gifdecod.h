@@ -95,7 +95,7 @@ private:
     wxGIFErrorCode dgif(wxInputStream& stream,
                         GIFImage *img, int interl, int bits);
 
-    
+
     // array of all frames
     wxArrayPtrVoid m_frames;
 

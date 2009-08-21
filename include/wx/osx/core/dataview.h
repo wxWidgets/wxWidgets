@@ -22,7 +22,7 @@ typedef wxWidgetImpl wxWidgetImplType;
 // ---------------------------------------------------------
 // Helper functions for dataview implementation on OSX
 // ---------------------------------------------------------
-wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* parent,  wxWindowID id, 
+wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* parent,  wxWindowID id,
                                  wxPoint const& pos, wxSize const& size,
                                  long style, long extraStyle);
 wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wxDataViewItem const& dataViewItem); // concatenates all data of the visible columns of the passed control

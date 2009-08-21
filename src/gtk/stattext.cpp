@@ -131,7 +131,7 @@ void wxStaticText::SetLabel( const wxString& str )
         GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
 
     // adjust the label size to the new label unless disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) && 
+    if ( !HasFlag(wxST_NO_AUTORESIZE) &&
          !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
         SetSize( GetBestSize() );
 }

@@ -41,7 +41,7 @@ public:
   {
     return this->m_PropertyID;
   }
-  
+
   void SetPropertyID(DataBrowserPropertyID newPropertyID)
   {
     this->m_PropertyID = newPropertyID;
@@ -189,7 +189,7 @@ public:
   OSStatus GetPropertyFlags (DataBrowserPropertyID propertyID, DataBrowserPropertyFlags *flags ) const;
   OSStatus GetPropertyID    (DataBrowserItemDataRef itemData, DataBrowserPropertyID* propertyID) const; // returns for the passed item data reference the corresponding property ID
   OSStatus GetPropertyID    (DataBrowserTableViewColumnIndex index, DataBrowserPropertyID* propertyID) const; // returns for the passed column index the corresponding property ID
-  
+
   OSStatus IsUsedPropertyID(DataBrowserPropertyID propertyID) const; // checks if passed property id is used by the control; no error is returned if the id exists
 
   OSStatus RemoveColumnByProperty(DataBrowserTableViewColumnID propertyID);
@@ -270,7 +270,7 @@ public:
 // container handling
 //
   OSStatus CloseContainer(DataBrowserItemID containerID);
-  
+
   OSStatus OpenContainer(DataBrowserItemID containerID);
 
 protected :
@@ -315,7 +315,7 @@ protected :
 // event handler for hit testing
 ///
   void*  m_macDataViewCtrlEventHandler;
-  
+
 private:
 //
 // wxWidget internal stuff

@@ -21,7 +21,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSSlider);
 WX_DECLARE_OBJC_HASHMAP(NSSlider);
 
 // For when we're not in Objective-C mode:
-typedef struct objc_selector    *SEL;    
+typedef struct objc_selector    *SEL;
 
 class wxCocoaNSSliderLastSelectorChanger;
 

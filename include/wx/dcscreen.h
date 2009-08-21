@@ -24,7 +24,7 @@ public:
         { return true; }
     static bool StartDrawingOnTop(wxRect * WXUNUSED(rect) =  NULL)
         { return true; }
-    static bool EndDrawingOnTop() 
+    static bool EndDrawingOnTop()
         { return true; }
 
 private:

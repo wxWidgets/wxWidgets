@@ -1307,7 +1307,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
         wxDO_LOG(level)
 
 // wxLogFatalError() is special as it can't be disabled
-#define wxLogFatalError wxDO_LOG(FatalError) 
+#define wxLogFatalError wxDO_LOG(FatalError)
 #define wxVLogFatalError(format, argptr) wxDO_LOGV(FatalError, format, argptr)
 
 #define wxLogError wxDO_LOG_IF_ENABLED(Error)

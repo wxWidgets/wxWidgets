@@ -337,7 +337,7 @@ void wxBitmapComboBox::OnDrawItem(wxDC& dc,
     {
         text = GetString(item);
     }
-    
+
     wxBitmapComboBoxBase::DrawItem(dc, rect, item, text, flags);
 }
 

@@ -1191,8 +1191,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxThreadModule, wxModule)
 
 bool wxThreadModule::OnInit()
 {
-    bool hasThreadManager = 
-#ifdef __LP64__ 
+    bool hasThreadManager =
+#ifdef __LP64__
         true ; // TODO VERIFY IN NEXT BUILD
 #else
         MPLibraryIsLoaded();

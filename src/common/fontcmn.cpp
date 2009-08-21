@@ -214,7 +214,7 @@ void wxFontBase::SetPixelSize( const wxSize& pixelSize )
     // NOTE: this algorithm for adjusting the font size is used by all
     //       implementations of wxFont except under wxMSW and wxGTK where
     //       native support to font creation using pixel-size is provided.
-    
+
     int largestGood = 0;
     int smallestBad = 0;
 
@@ -804,7 +804,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         token.Trim(true).Trim(false).MakeLower();
         if (insideQuotes)
         {
-            if (token.StartsWith("'") || 
+            if (token.StartsWith("'") ||
                 token.EndsWith("'"))
             {
                 insideQuotes = false;
@@ -910,7 +910,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
                     family = wxFONTFAMILY_TELETYPE;
                 else
                     return false;
-                
+
                 SetFamily(family);
             }
             // NB: the check on the facename is implemented in wxFontBase::SetFaceName

@@ -250,7 +250,7 @@ public:
     void SetPalette(const wxPalette& WXUNUSED(palette)) { }
 
 protected:
-    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, 
+    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col,
                     wxFloodFillStyle style=wxFLOOD_SURFACE );
     bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
     void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
@@ -268,7 +268,7 @@ protected:
     void DoDrawSpline(const wxPointList *points);
 #endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+            wxDC *source, wxCoord xsrc, wxCoord ysrc,
             wxRasterOperationMode = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );

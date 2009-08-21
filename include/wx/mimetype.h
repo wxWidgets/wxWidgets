@@ -410,7 +410,7 @@ public:
 
     static void Set( wxMimeTypesManagerFactory *factory );
     static wxMimeTypesManagerFactory *Get();
-    
+
 private:
     static wxMimeTypesManagerFactory *m_factory;
 };

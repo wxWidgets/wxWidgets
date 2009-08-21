@@ -1833,7 +1833,7 @@ gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
         gtk_im_context_set_client_window( win->m_imData->context,
                                           widget->window);
     }
-    
+
     // We cannot set colours and fonts before the widget
     // been realized, so we do this directly after realization
     // or otherwise in idle time
@@ -1964,7 +1964,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
 {
     wxASSERT_MSG(m_wxwindow, "Cannot add a child to a window without a client area");
-    
+
     // the window might have been scrolled already, we
     // have to adapt the position
     wxPizza* pizza = WX_PIZZA(m_wxwindow);
@@ -2443,9 +2443,9 @@ bool wxWindowGTK::Destroy()
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     gtk_widget_set_size_request(m_widget, width, height);
-    
+
     // inform the parent to perform the move
-    wxASSERT_MSG(m_parent && m_parent->m_wxwindow, 
+    wxASSERT_MSG(m_parent && m_parent->m_wxwindow,
                  "the parent window has no client area?");
     WX_PIZZA(m_parent->m_wxwindow)->move(m_widget, x, y);
 }
@@ -2542,7 +2542,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             event.SetEventObject( this );
             HandleWindowEvent( event );
         }
-    } else 
+    } else
     if (sizeFlags & wxSIZE_FORCE_EVENT)
     {
         wxSizeEvent event( wxSize(m_width,m_height), GetId() );
@@ -3599,7 +3599,7 @@ void wxWindowGTK::Update()
         gdk_display_sync(display);
 
         gdk_window_process_updates(m_widget->window, TRUE);
-        
+
         // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
     }

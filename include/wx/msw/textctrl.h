@@ -108,7 +108,7 @@ public:
 
     // Implementation from now on
     // --------------------------
- 
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
     virtual void SetDropTarget(wxDropTarget *dropTarget);
 #endif // wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT

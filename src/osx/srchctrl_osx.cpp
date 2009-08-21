@@ -70,7 +70,7 @@ wxSearchWidgetImpl* wxSearchCtrl::GetSearchPeer() const
 {
     return dynamic_cast<wxSearchWidgetImpl*> (m_peer);
 }
- 
+
 wxSearchCtrl::~wxSearchCtrl()
 {
     delete m_menu;

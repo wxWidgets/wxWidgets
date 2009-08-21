@@ -121,15 +121,15 @@ struct wxLinuxDistributionInfo
     wxString Release;
     wxString CodeName;
     wxString Description;
-    
+
     bool operator==(const wxLinuxDistributionInfo& ldi) const
-    { 
+    {
         return Id == ldi.Id &&
                Release == ldi.Release &&
                CodeName == ldi.CodeName &&
                Description == ldi.Description;
     }
-    
+
     bool operator!=(const wxLinuxDistributionInfo& ldi) const
     { return !(*this == ldi); }
 };
@@ -186,7 +186,7 @@ public:
     static wxString GetArchName(wxArchitecture arch);
     static wxString GetEndiannessName(wxEndianness end);
 
-    
+
     // getters
     // -----------------
 
@@ -251,11 +251,11 @@ public:
         { return m_osDesc; }
     wxString GetDesktopEnvironment() const
         { return m_desktopEnv; }
-        
+
     static wxString GetOperatingSystemDirectory();
         // doesn't make sense to store inside wxPlatformInfo the OS directory,
         // thus this function is static; note that this function simply calls
-        // wxGetOSDirectory() and is here just to make it easier for the user to 
+        // wxGetOSDirectory() and is here just to make it easier for the user to
         // find it that feature (global functions can be difficult to find in the docs)
 
     // setters
@@ -276,7 +276,7 @@ public:
         { m_arch = n; }
     void SetEndianness(wxEndianness n)
         { m_endian = n; }
-        
+
     void SetDesktopEnvironment(const wxString& de)
         { m_desktopEnv = de; }
     void SetLinuxDistributionInfo(const wxLinuxDistributionInfo& di)
@@ -293,9 +293,9 @@ public:
                !m_osDesc.IsEmpty() &&
                m_tkVersionMajor != -1 && m_tkVersionMinor != -1 &&
                m_port != wxPORT_UNKNOWN &&
-               m_arch != wxARCH_INVALID && 
+               m_arch != wxARCH_INVALID &&
                m_endian != wxENDIAN_INVALID;
-               
+
                // do not check linux-specific info; it's ok to have them empty
     }
 
@@ -319,14 +319,14 @@ protected:
 
     // Operating system ID.
     wxOperatingSystemId m_os;
-    
+
     // Operating system description.
     wxString m_osDesc;
-    
-    
+
+
     // linux-specific
     // -----------------
-    
+
     wxString m_desktopEnv;
     wxLinuxDistributionInfo m_ldi;
 

@@ -31,10 +31,10 @@ public:
 #endif
     wxGCDC();
     virtual ~wxGCDC();
- 
+
     wxGraphicsContext* GetGraphicsContext();
     void SetGraphicsContext( wxGraphicsContext* ctx );
-    
+
     DECLARE_DYNAMIC_CLASS(wxGCDC)
     wxDECLARE_NO_COPY_CLASS(wxGCDC);
 };
@@ -49,7 +49,7 @@ public:
     wxGCDCImpl( wxDC *owner, const wxPrinterDC& dc );
 #endif
     wxGCDCImpl( wxDC *owner );
-    
+
     virtual ~wxGCDCImpl();
 
     void Init();
@@ -65,7 +65,7 @@ public:
 
     virtual void StartPage();
     virtual void EndPage();
-    
+
     // flushing the content of this dc immediately onto screen
     virtual void Flush();
 
@@ -97,7 +97,7 @@ public:
 
     wxGraphicsContext* GetGraphicsContext() { return m_graphicContext; }
     virtual void SetGraphicsContext( wxGraphicsContext* ctx );
-    
+
     // the true implementations
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE);
@@ -150,7 +150,7 @@ public:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+                        wxRasterOperationMode rop = wxCOPY, bool useMask = false,
                         wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
@@ -195,7 +195,7 @@ protected:
     double m_formerScaleX, m_formerScaleY;
 
     wxGraphicsContext* m_graphicContext;
-    
+
     DECLARE_CLASS(wxGCDCImpl)
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);
 };

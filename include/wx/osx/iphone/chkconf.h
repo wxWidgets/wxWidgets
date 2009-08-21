@@ -22,7 +22,7 @@
 
 #define wxOSX_USE_CORE_TEXT 0
 #define wxOSX_USE_ATSU_TEXT 0
-#define wxHAS_OPENGL_ES 
+#define wxHAS_OPENGL_ES
 
 /*
  * turning off capabilities that don't work under iphone yet
@@ -85,21 +85,21 @@
 #define wxUSE_COMBOBOX 0
 #endif
 
-#undef wxUSE_SCROLLBAR 
+#undef wxUSE_SCROLLBAR
 #define wxUSE_SCROLLBAR 0
 
-#undef wxUSE_STATUSBAR 
-#undef wxUSE_NATIVE_STATUSBAR 
-#undef wxUSE_TEXTCTRL 
-#undef wxUSE_ABOUTDLG 
-#undef wxUSE_STATTEXT 
-#undef wxUSE_STATLINE 
-#undef wxUSE_COLLPANE 
-#undef wxUSE_STATBMP 
-#undef wxUSE_STATBOX 
+#undef wxUSE_STATUSBAR
+#undef wxUSE_NATIVE_STATUSBAR
+#undef wxUSE_TEXTCTRL
+#undef wxUSE_ABOUTDLG
+#undef wxUSE_STATTEXT
+#undef wxUSE_STATLINE
+#undef wxUSE_COLLPANE
+#undef wxUSE_STATBMP
+#undef wxUSE_STATBOX
 #undef wxUSE_CHECKBOX
-#undef wxUSE_RADIOBTN 
-#undef wxUSE_RADIOBOX 
+#undef wxUSE_RADIOBTN
+#undef wxUSE_RADIOBOX
 #undef wxUSE_TOGGLEBTN
 
 
@@ -117,45 +117,45 @@
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
 
-#undef wxUSE_TOOLBAR 
-#undef wxUSE_HTML 
+#undef wxUSE_TOOLBAR
+#undef wxUSE_HTML
 
 #define wxUSE_TOOLBAR 0
 #define wxUSE_HTML 0
 
-#undef wxUSE_RICHTEXT 
+#undef wxUSE_RICHTEXT
 #define wxUSE_RICHTEXT 0
 
-#undef wxUSE_ANIMATIONCTRL 
-#undef wxUSE_CALENDARCTRL 
-#undef wxUSE_COMBOCTRL 
-#undef wxUSE_ODCOMBOBOX 
-#undef wxUSE_BITMAPCOMBOBOX 
-#undef wxUSE_BMPBUTTON 
-#undef wxUSE_CHECKLISTBOX 
-#undef wxUSE_GAUGE 
-#undef wxUSE_GRID 
-#undef wxUSE_LISTBOX 
-#undef wxUSE_LISTCTRL 
-#undef wxUSE_NOTEBOOK 
-#undef wxUSE_SLIDER 
-#undef wxUSE_SPINBTN 
-#undef wxUSE_SPINCTRL 
-#undef wxUSE_TREECTRL 
-#undef wxUSE_DATEPICKCTRL 
-#undef wxUSE_DATAVIEWCTRL 
-#undef wxUSE_EDITABLELISTBOX 
-#undef wxUSE_FILEPICKERCTRL 
-#undef wxUSE_DIRPICKERCTRL 
-#undef wxUSE_FILECTRL 
-#undef wxUSE_COLOURPICKERCTRL 
-#undef wxUSE_FONTPICKERCTRL 
-#undef wxUSE_DEBUGREPORT 
-#undef wxUSE_HYPERLINKCTRL 
-#undef wxUSE_STC 
+#undef wxUSE_ANIMATIONCTRL
+#undef wxUSE_CALENDARCTRL
+#undef wxUSE_COMBOCTRL
+#undef wxUSE_ODCOMBOBOX
+#undef wxUSE_BITMAPCOMBOBOX
+#undef wxUSE_BMPBUTTON
+#undef wxUSE_CHECKLISTBOX
+#undef wxUSE_GAUGE
+#undef wxUSE_GRID
+#undef wxUSE_LISTBOX
+#undef wxUSE_LISTCTRL
+#undef wxUSE_NOTEBOOK
+#undef wxUSE_SLIDER
+#undef wxUSE_SPINBTN
+#undef wxUSE_SPINCTRL
+#undef wxUSE_TREECTRL
+#undef wxUSE_DATEPICKCTRL
+#undef wxUSE_DATAVIEWCTRL
+#undef wxUSE_EDITABLELISTBOX
+#undef wxUSE_FILEPICKERCTRL
+#undef wxUSE_DIRPICKERCTRL
+#undef wxUSE_FILECTRL
+#undef wxUSE_COLOURPICKERCTRL
+#undef wxUSE_FONTPICKERCTRL
+#undef wxUSE_DEBUGREPORT
+#undef wxUSE_HYPERLINKCTRL
+#undef wxUSE_STC
 #undef wxUSE_AUI
-#undef wxUSE_BUSYINFO 
-#undef wxUSE_SEARCHCTRL 
+#undef wxUSE_BUSYINFO
+#undef wxUSE_SEARCHCTRL
 
 #define wxUSE_ANIMATIONCTRL 0
 #define wxUSE_CALENDARCTRL 0
@@ -188,27 +188,27 @@
 #define wxUSE_BUSYINFO 0
 #define wxUSE_SEARCHCTRL 0
 
-#undef wxUSE_LOGWINDOW 
-#undef wxUSE_LOG_DIALOG 
-#undef wxUSE_LISTBOOK 
-#undef wxUSE_CHOICEBOOK 
-#undef wxUSE_TREEBOOK 
-#undef wxUSE_TOOLBOOK 
-#undef wxUSE_CHOICEDLG 
-#undef wxUSE_HELP 
-#undef wxUSE_PROGRESSDLG 
-#undef  wxUSE_FONTDLG 
-#undef wxUSE_FILEDLG 
-#undef wxUSE_CHOICEDLG 
-#undef wxUSE_NUMBERDLG 
-#undef wxUSE_TEXTDLG 
-#undef wxUSE_DIRDLG 
-#undef wxUSE_STARTUP_TIPS 
-#undef wxUSE_WIZARDDLG 
-#undef wxUSE_TOOLBAR_NATIVE 
-#undef wxUSE_FINDREPLDLG 
-#undef wxUSE_TASKBARICON 
-#undef wxUSE_REARRANGECTRL 
+#undef wxUSE_LOGWINDOW
+#undef wxUSE_LOG_DIALOG
+#undef wxUSE_LISTBOOK
+#undef wxUSE_CHOICEBOOK
+#undef wxUSE_TREEBOOK
+#undef wxUSE_TOOLBOOK
+#undef wxUSE_CHOICEDLG
+#undef wxUSE_HELP
+#undef wxUSE_PROGRESSDLG
+#undef  wxUSE_FONTDLG
+#undef wxUSE_FILEDLG
+#undef wxUSE_CHOICEDLG
+#undef wxUSE_NUMBERDLG
+#undef wxUSE_TEXTDLG
+#undef wxUSE_DIRDLG
+#undef wxUSE_STARTUP_TIPS
+#undef wxUSE_WIZARDDLG
+#undef wxUSE_TOOLBAR_NATIVE
+#undef wxUSE_FINDREPLDLG
+#undef wxUSE_TASKBARICON
+#undef wxUSE_REARRANGECTRL
 
 #define wxUSE_LOGWINDOW 0
 #define wxUSE_LOG_DIALOG 0

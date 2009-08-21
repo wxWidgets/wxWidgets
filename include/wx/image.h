@@ -100,10 +100,10 @@ public:
 #if wxUSE_STREAMS
     // NOTE: LoadFile and SaveFile are not pure virtuals to allow derived classes
     //       to implement only one of the two
-    virtual bool LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), 
+    virtual bool LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream),
                            bool WXUNUSED(verbose)=true, int WXUNUSED(index)=-1 )
         { return false; }
-    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), 
+    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream),
                            bool WXUNUSED(verbose)=true )
         { return false; }
 
@@ -135,9 +135,9 @@ protected:
 #if wxUSE_STREAMS
     // NOTE: this function is allowed to change the current stream position
     //       since GetImageCount() will take care of restoring it later
-    virtual int DoGetImageCount( wxInputStream& WXUNUSED(stream) ) 
+    virtual int DoGetImageCount( wxInputStream& WXUNUSED(stream) )
         { return 1; }       // default return value is 1 image
-    
+
     // NOTE: this function is allowed to change the current stream position
     //       since CallDoCanRead() will take care of restoring it later
     virtual bool DoCanRead( wxInputStream& stream ) = 0;
@@ -275,7 +275,7 @@ public:
     bool Create( int width, int height, bool clear = true );
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    
+
     // Create() variants using wxSize:
     bool Create( const wxSize& sz, bool clear = true )
         { return Create(sz.GetWidth(), sz.GetHeight(), clear); }
@@ -285,7 +285,7 @@ public:
         { return Create(sz.GetWidth(), sz.GetHeight(), data, alpha, static_data); }
 
     void Destroy();
-   
+
     // initialize the image data with zeroes
     void Clear(unsigned char value = 0);
 

@@ -26,8 +26,8 @@ public:
 #if wxOSX_USE_COCOA
         ,   CUSTOM_STATUSITEM
 #endif
-//    ,   STATUSITEM 
-//    ,   MENUEXTRA 
+//    ,   STATUSITEM
+//    ,   MENUEXTRA
         ,   DEFAULT_TYPE = DOCK
         };
 
@@ -42,7 +42,7 @@ public:
     bool PopupMenu(wxMenu *menu);
 
 protected:
-    class wxTaskBarIconImpl* m_impl;    
+    class wxTaskBarIconImpl* m_impl;
     friend class wxTaskBarIconImpl;
 };
 #endif

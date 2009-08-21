@@ -27,8 +27,8 @@ public :
     wxOSXScrollBarCarbonImpl( wxWindowMac* peer) : wxMacControl( peer )
     {
     }
-    
-    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) 
+
+    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
     {
         SetValue( value );
         SetControlViewSize(m_controlRef , thumbSize );
@@ -36,12 +36,12 @@ public :
 protected:
 };
 
-wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
-                                    const wxPoint& pos, 
+wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long WXUNUSED(style),
                                     long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );

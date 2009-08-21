@@ -203,9 +203,9 @@ void wxBitmapButton::OnSetBitmap()
 
    if (!the_one.IsOk())
      {
-	the_one = GetBitmapLabel();
-	if (!the_one.IsOk())
-	  return;
+         the_one = GetBitmapLabel();
+         if (!the_one.IsOk())
+             return;
      }
 
     GdkBitmap *mask = NULL;

@@ -171,7 +171,7 @@ void wxCheckBox::SetValue( bool state )
 
     if (state == GetValue())
         return;
- 
+
     GTKDisableEvents();
 
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );

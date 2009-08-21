@@ -1171,7 +1171,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
     int height = image.GetHeight();
 
     wxBitmapRefData* bitmapRefData;
-    
+
     m_refData = bitmapRefData = new wxBitmapRefData( width , height , depth ) ;
 
     if ( bitmapRefData->IsOk())
@@ -1654,7 +1654,7 @@ WXHBITMAP wxMask::GetHBITMAP() const
 // Standard Handlers
 // ----------------------------------------------------------------------------
 
-#if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__) 
+#if !defined( __LP64__ ) && !defined(__WXOSX_IPHONE__)
 
 class WXDLLEXPORT wxPICTResourceHandler: public wxBitmapHandler
 {

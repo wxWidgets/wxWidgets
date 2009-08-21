@@ -501,7 +501,7 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 IMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject)
 
 
-wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) : 
+wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
     wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
       m_composition(wxCOMPOSITION_OVER)

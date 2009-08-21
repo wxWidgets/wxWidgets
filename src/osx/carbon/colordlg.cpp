@@ -48,13 +48,13 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
 int wxColourDialog::ShowModal()
 {
     RGBColor currentColor ;
-    
+
     m_colourData.m_dataColour.GetRGBColor( &currentColor );
     NColorPickerInfo info;
     OSStatus err ;
     memset(&info, 0, sizeof(info)) ;
     // TODO : use parent to determine better position and then kAtSpecifiedOrigin
-    info.placeWhere = kCenterOnMainScreen ; 
+    info.placeWhere = kCenterOnMainScreen ;
     info.flags = kColorPickerDialogIsMoveable | kColorPickerDialogIsModal ;
     info.theColor.color.rgb.red =  currentColor.red ;
     info.theColor.color.rgb.green =  currentColor.green ;

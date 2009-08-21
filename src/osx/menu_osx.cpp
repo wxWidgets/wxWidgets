@@ -76,7 +76,7 @@ void wxMenu::Init()
     m_startRadioGroup = -1;
     m_allowRearrange = true;
     m_noEventsMode = false;
-    
+
     m_peer = wxMenuImpl::Create( this, wxStripMenuCodes(m_title) );
 
 
@@ -144,7 +144,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             pSubMenu->DoRearrange();
         }
         else
-        { 
+        {
             if ( pItem->GetId() == idMenuTitle )
                 pItem->GetMenu()->Enable( idMenuTitle, false );
         }
@@ -293,7 +293,7 @@ void wxMenu::DoRearrange()
 {
     if ( !AllowRearrange() )
         return;
-        
+
     wxMenuItem* previousItem = NULL ;
     size_t pos ;
     wxMenuItemList::compatibility_iterator node;
@@ -564,7 +564,7 @@ void wxMenuBar::MacInstallMenuBar()
 {
     if ( s_macInstalledMenuBar == this )
         return ;
-        
+
     m_rootMenu->GetPeer()->MakeRoot();
     // DisableMenuCommand( NULL , kHICommandPreferences ) ;
 #if 0
@@ -765,7 +765,7 @@ void wxMenuBar::MacInstallMenuBar()
 void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     wxCHECK_RET( IsAttached(), wxT("doesn't work with unattached menubars") );
-    
+
     m_rootMenu->FindItemByPosition( pos )->Enable(enable);
 
     Refresh();
@@ -847,7 +847,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         return false;
 
     m_titles.Insert(title, pos);
-    
+
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
 
     if (m_invokingWindow)
@@ -942,7 +942,7 @@ void wxMenuBar::SetInvokingWindow(wxFrame *frame)
 {
     m_invokingWindow = frame;
     wxMenubarSetInvokingWindow(m_appleMenu, frame);
-    
+
     wxMenu *menu;
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
 

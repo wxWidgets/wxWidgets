@@ -377,7 +377,7 @@ protected:
     virtual wxString OnGetItemText(long item, long column) const;
 
     // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
+    // only be called for the first column. See OnGetItemColumnImage for
     // details.
     virtual int OnGetItemImage(long item) const;
 

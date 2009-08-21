@@ -95,7 +95,7 @@ public:
 
    /// Hang up the currently active dial up connection.
    virtual bool HangUp();
-   
+
    // returns TRUE if the computer is connected to the network: under Windows,
    // this just means that a RAS connection exists, under Unix we check that
    // the "well-known host" (as specified by SetWellKnownHost) is reachable
@@ -145,7 +145,7 @@ public:
 private:
    /// -1: don´t know, 0 = no, 1 = yes
    int m_IsOnline;
-   
+
    ///  Can we use ifconfig to list active devices?
    int m_CanUseIfconfig;
    /// The path to ifconfig
@@ -299,7 +299,7 @@ wxDialUpManagerImpl::CheckStatus(void) const
   3. check /proc/net/dev on linux??
      This method should be preferred, if possible. Need to do more
      testing.
-    
+
 */
 
 void
@@ -322,13 +322,13 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
       wxASSERT(m_IfconfigPath.length());
-      
+
       wxString tmpfile = wxFileName::CreateTempFileName("_wxdialuptest");
       wxString cmd = "/bin/sh -c \'";
       cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
       /* I tried to add an option to wxExecute() to not close stdout,
          so we could let ifconfig write directly to the tmpfile, but
-         this does not work. That should be faster, as it doesn´t call 
+         this does not work. That should be faster, as it doesn´t call
          the shell first. I have no idea why. :-(  (KB) */
 #if 0
       // temporarily redirect stdout/stderr:
@@ -388,22 +388,22 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
-   int	sockfd;
+   int sockfd;
 
    m_IsOnline = 0; // assume false
    if((hp = gethostbyname(m_BeaconHost)) == NULL)
       return; // no DNS no net
-   
-   serv_addr.sin_family		= hp->h_addrtype;
+
+   serv_addr.sin_family = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port		= htons(m_BeaconPort);
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
-   {	
+   serv_addr.sin_port = htons(m_BeaconPort);
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
+   {
       //  sys_error("cannot create socket for gw");
       return;
    }
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-   {	
+   {
       //sys_error("cannot connect to server");
       return;
    }

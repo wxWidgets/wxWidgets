@@ -82,9 +82,9 @@ bool wxBitmapToggleButton::Create( wxWindow *parent, wxWindowID id,
 
     if (!wxToggleButtonBase::Create( parent, id, pos, size, style, validator, name ))
         return false;
-        
+
     m_bitmap = label;
-    
+
     if (size.x == -1 || size.y == -1)
     {
         wxSize new_size = GetBestSize();
@@ -94,7 +94,7 @@ bool wxBitmapToggleButton::Create( wxWindow *parent, wxWindowID id,
             new_size.y = size.y;
         SetSize( new_size );
     }
-        
+
     return true;
 }
 
@@ -103,7 +103,7 @@ void wxBitmapToggleButton::SetValue(bool state)
     if (m_capturing) return;
 
     if (state == m_depressed) return;
-    
+
     m_depressed = state;
     Refresh();
 }
@@ -117,7 +117,7 @@ void wxBitmapToggleButton::SetLabel(const wxBitmap& label)
 {
     m_bitmap = label;
     m_disabledBitmap = wxBitmap();
-    
+
     Refresh();
 }
 
@@ -127,18 +127,18 @@ bool wxBitmapToggleButton::Enable(bool enable)
 
     if (!wxToggleButtonBase::Enable( enable ))
       return false;
-      
+
     Refresh();
-    
+
     return true;
 }
 
 void wxBitmapToggleButton::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxSize size = GetSize();
-    
+
     wxBitmap bitmap = m_bitmap;
-    
+
     wxPaintDC dc(this);
     wxRendererNative &renderer = wxRendererNative::Get();
     int flags = 0;
@@ -146,7 +146,7 @@ void wxBitmapToggleButton::OnPaint(wxPaintEvent &WXUNUSED(event))
         flags |= wxCONTROL_PRESSED;
     wxRect rect(0,0,size.x,size.y);
     renderer.DrawPushButton( this, dc, rect, flags );
-    
+
     if (bitmap.IsOk())
     {
         if (!IsEnabled())
@@ -156,27 +156,27 @@ void wxBitmapToggleButton::OnPaint(wxPaintEvent &WXUNUSED(event))
                 wxImage image = m_bitmap.ConvertToImage();
                 m_disabledBitmap = wxBitmap( image.ConvertToGreyscale() );
             }
-            
+
             bitmap = m_disabledBitmap;
         }
-    
+
         wxSize bsize = bitmap.GetSize();
         int offset = 0;
         if (m_depressed) offset = 1;
         dc.DrawBitmap( bitmap, (size.x-bsize.x) / 2 + offset, (size.y-bsize.y) / 2 + offset, true );
     }
-    
+
 }
 
 void wxBitmapToggleButton::OnMouse(wxMouseEvent &event)
 {
     if (!IsEnabled())
         return;
-      
+
     wxSize size = GetSize();
-    bool mouse_in = ((event.GetX() > 0) && (event.GetX() < size.x) && 
+    bool mouse_in = ((event.GetX() > 0) && (event.GetX() < size.x) &&
                      (event.GetY() > 0) && (event.GetY() < size.y));
-    
+
     if (m_capturing)
     {
         bool old_depressed = m_depressed;
@@ -184,7 +184,7 @@ void wxBitmapToggleButton::OnMouse(wxMouseEvent &event)
             m_depressed = !m_oldValue;
         else
             m_depressed = m_oldValue;
-            
+
         if (event.LeftUp())
         {
             ReleaseCapture();
@@ -197,7 +197,7 @@ void wxBitmapToggleButton::OnMouse(wxMouseEvent &event)
                 ProcessCommand(event);
             }
         }
-            
+
         if (old_depressed != m_depressed)
            Refresh();
     }
@@ -220,7 +220,7 @@ void wxBitmapToggleButton::OnChar(wxKeyEvent &event)
    {
        m_depressed = !m_depressed;
        Refresh();
-       
+
        wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
        event.SetInt(GetValue());
        event.SetEventObject(this);
@@ -237,7 +237,7 @@ wxSize wxBitmapToggleButton::DoGetBestSize() const
 {
     if (!m_bitmap.IsOk())
         return wxSize(16,16);
-      
+
     wxSize ret = m_bitmap.GetSize();
     ret.x += 8;
     ret.y += 8;

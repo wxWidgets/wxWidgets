@@ -64,7 +64,7 @@ int wxMacPrintDialog::ShowModal()
     m_printDialogData.GetPrintData().ConvertToNative();
 
     int result = wxID_CANCEL;
-    
+
     NSPrintPanel* panel = [NSPrintPanel printPanel];
     NSPrintInfo* printInfo = ((wxOSXCocoaPrintData*)m_printDialogData.GetPrintData().GetNativeData())->GetNSPrintInfo();
     if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
@@ -92,7 +92,7 @@ int wxMacPageSetupDialog::ShowModal()
         m_pageSetupData.GetPrintData().ConvertFromNative();
         m_pageSetupData.SetPaperSize( m_pageSetupData.GetPrintData().GetPaperSize() );
     }
-    
+
     return result;
 }
 

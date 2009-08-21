@@ -36,7 +36,7 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
     m_width = (wxCoord)cgbounds.size.width;
     m_height = (wxCoord)cgbounds.size.height;
 #else
-	wxDisplaySize( &m_width, &m_height );
+    wxDisplaySize( &m_width, &m_height );
 #endif
 #if wxOSX_USE_COCOA_OR_IPHONE
     SetGraphicsContext( wxGraphicsContext::Create() );
@@ -76,21 +76,21 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     CGRect srcRect = CGRectMake(rect.x, rect.y, rect.width, rect.height);
 
     CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
-    
+
     CGContextSaveGState(context);
-    
+
     CGContextTranslateCTM( context, 0,  m_height );
     CGContextScaleCTM( context, 1, -1 );
-    
+
     if ( subrect )
         srcRect = CGRectOffset( srcRect, -subrect->x, -subrect->y ) ;
-    
+
     CGImageRef image = grabViaOpenGL(kCGNullDirectDisplay, srcRect);
-    
+
     wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
-    
+
     CGContextDrawImage(context, srcRect, image);
-    
+
     CGContextRestoreGState(context);
 #endif
     return bmp;

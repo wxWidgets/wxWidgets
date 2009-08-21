@@ -254,7 +254,7 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 void wxListBox::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
-    
+
     if (m_updateHorizontalExtent)
     {
         SetHorizontalExtent(wxEmptyString);

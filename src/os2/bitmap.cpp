@@ -917,7 +917,7 @@ wxImage wxBitmap::ConvertToImage() const
     // May already be selected into a PS
     //
     pDC = GetSelectedInto();
-    const wxPMDCImpl *impl; 
+    const wxPMDCImpl *impl;
     if (pDC != NULL &&
         (impl = wxDynamicCast( pDC->GetImpl(), wxPMDCImpl )) != NULL)
     {

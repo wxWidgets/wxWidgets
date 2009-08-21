@@ -437,7 +437,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags)
 {
     wxUnusedVar(flags);
-    
+
 #if wxUSE_IPC
     if ( flags & wxBROWSER_NEW_WINDOW )
     {

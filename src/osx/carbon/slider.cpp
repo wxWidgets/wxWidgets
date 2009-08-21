@@ -16,15 +16,15 @@
 #include "wx/slider.h"
 #include "wx/osx/private.h"
 
-wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );

@@ -237,7 +237,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     else if (drop_target->GetDefaultAction() == wxDragMove &&
                 (context->actions & GDK_ACTION_MOVE))
     {
-        
+
        result = wxDragMove;
     }
     else

@@ -37,7 +37,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
 // empty bitmap, so that we can create GtkPixmap widget:
 static char * bogus_xpm[] = {
 "2 2 1 1",
-" 	c None",
+"  c None",
 "  ",
 "  "};
 

@@ -30,25 +30,25 @@ public :
     wxMacChoiceCarbonControl( wxWindowMac* peer ) : wxMacControl( peer )
     {
     }
-    
+
     void SetValue(wxInt32 v)
     {
         wxMacControl::SetValue( v + 1 );
     }
-    
+
     wxInt32 GetValue() const
     {
         return wxMacControl::GetValue() - 1;
     }
  };
 
-wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
                                     wxMenu* menu,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long WXUNUSED(style),
                                     long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size );

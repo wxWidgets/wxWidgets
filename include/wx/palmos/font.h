@@ -47,7 +47,7 @@ public:
     {
         Create(size, family, style, weight, underlined, face, encoding);
     }
-    
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

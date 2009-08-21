@@ -156,7 +156,7 @@ bool wxOwnerDrawn::OnMeasureItem( size_t* pWidth,
     // Make sure that this item is at least as
     // tall as the user's system settings specify
     //
-    const size_t heightStd = 6;		 // FIXME: get value from the system
+    const size_t heightStd = 6; // FIXME: get value from the system
     if ( *pHeight < heightStd )
       *pHeight = heightStd;
     m_nHeight = *pHeight;                // remember height for use in OnDrawItem

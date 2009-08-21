@@ -130,11 +130,11 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         else
         {
             // NOTE: Includes NULL iff source did
-            /* NOTE: This is an approximation.  The eventual UTF-32 will    
+            /* NOTE: This is an approximation.  The eventual UTF-32 will
              * possibly have less elements but certainly not more.
              */
             size_t returnSize = CFStringGetLength(theString);
-    
+
             if (dstSize == 0 || dst == NULL)
             {
                 return returnSize;
@@ -144,13 +144,13 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
             // for an undersized UTF-32 destination buffer.
             CFRange fullStringRange = CFRangeMake(0, CFStringGetLength(theString));
             UniChar *szUniCharBuffer = new UniChar[fullStringRange.length];
-    
+
             CFStringGetCharacters(theString, fullStringRange, szUniCharBuffer);
-    
+
             wxMBConvUTF16 converter;
             returnSize = converter.ToWChar( dst, dstSize, (const char*)szUniCharBuffer, fullStringRange.length );
             delete [] szUniCharBuffer;
-    
+
             return returnSize;
         }
         // NOTREACHED
@@ -205,7 +205,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
         CFIndex usedBufLen;
 
         CFIndex charsConverted = CFStringGetBytes(
-                theString, 
+                theString,
                 CFRangeMake(0, CFStringGetLength(theString)),
                 m_encoding,
                 0, // FAIL on unconvertible characters

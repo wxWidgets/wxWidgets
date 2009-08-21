@@ -152,7 +152,7 @@ public:
 
     void Free();
     void EnsureValid();
-    
+
     bool m_descriptorValid;
 #if wxOSX_USE_CORE_TEXT
     CTFontDescriptorRef m_ctFontDescriptor;

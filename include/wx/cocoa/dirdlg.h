@@ -34,7 +34,7 @@ public:
     virtual ~wxDirDialog();
 
     virtual int ShowModal();
-    
+
     inline WX_NSSavePanel GetNSSavePanel()
     {   return (WX_NSSavePanel)m_cocoaNSWindow; }
 

@@ -32,17 +32,17 @@ WX_UIImage WXDLLIMPEXP_CORE wxOSXCreateUIImageFromCGImage( CGImageRef image );
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;    
-    wxWidgetIPhoneImpl() ;    
-    ~wxWidgetIPhoneImpl();    
-    
+    wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;
+    wxWidgetIPhoneImpl() ;
+    ~wxWidgetIPhoneImpl();
+
     void Init();
-    
+
     virtual bool        IsVisible() const ;
     virtual void        SetVisibility( bool visible );
-    
+
     virtual void        Raise();
-    
+
     virtual void        Lower();
 
     virtual void        ScrollRect( const wxRect *rect, int dx, int dy );
@@ -67,7 +67,7 @@ public :
 
     void                RemoveFromParent();
     void                Embed( wxWidgetImpl *parent );
-    
+
     void                SetDefaultButton( bool isDefault );
     void                PerformClick();
     virtual void        SetLabel(const wxString& title, wxFontEncoding encoding);
@@ -82,7 +82,7 @@ public :
     virtual wxBitmap    GetBitmap() const;
     virtual void        SetBitmap( const wxBitmap& bitmap );
     virtual void        SetBitmapPosition( wxDirection dir );
-	
+
     void                SetupTabs( const wxNotebook &notebook );
     void                GetBestRect( wxRect *r ) const;
     bool                IsEnabled() const;
@@ -98,18 +98,18 @@ public :
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
     void                InstallEventHandler( WXWidget control = NULL );
-    
-    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow); 
+
+    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     // thunk connected calls
- 
+
     virtual void        drawRect(CGRect* rect, WXWidget slf, void* _cmd);
     virtual void        touchEvent(WX_NSSet touches, WX_UIEvent event, WXWidget slf, void* _cmd);
     virtual bool        becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool        resignFirstResponder(WXWidget slf, void* _cmd);
 
     // action
-    
+
     virtual void        touchUpInsideAction(void* sender, WX_UIEvent evt, WXWidget slf, void* _cmd);
 
 protected:
@@ -122,59 +122,59 @@ class wxNonOwnedWindowIPhoneImpl : public wxNonOwnedWindowImpl
 public :
     wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) ;
     wxNonOwnedWindowIPhoneImpl();
-    
+
     virtual ~wxNonOwnedWindowIPhoneImpl();
-    
+
     virtual void Destroy() ;
     void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name ) ;
-    
+
     WXWindow GetWXWindow() const;
-    void Raise();    
+    void Raise();
     void Lower();
-    bool Show(bool show);    
+    bool Show(bool show);
     bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
-        
+
     void Update();
     bool SetTransparent(wxByte alpha);
     bool SetBackgroundColour(const wxColour& col );
-    void SetExtraStyle( long exStyle );    
-    bool SetBackgroundStyle(wxBackgroundStyle style);    
+    void SetExtraStyle( long exStyle );
+    bool SetBackgroundStyle(wxBackgroundStyle style);
     bool CanSetTransparent();
 
     void MoveWindow(int x, int y, int width, int height);
     void GetPosition( int &x, int &y ) const;
     void GetSize( int &width, int &height ) const;
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const;    
+    void GetContentArea( int &left , int &top , int &width , int &height ) const;
     bool SetShape(const wxRegion& region);
-    
+
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
-    
+
     virtual bool IsMaximized() const;
-    
+
     virtual bool IsIconized() const;
-    
+
     virtual void Iconize( bool iconize );
-    
+
     virtual void Maximize(bool maximize);
-    
+
     virtual bool IsFullScreen() const;
-    
+
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);
-    
+
     virtual void ScreenToWindow( int *x, int *y );
-    
+
     virtual void WindowToScreen( int *x, int *y );
-    
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
     WX_UIWindow          m_macWindow;
     void *              m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowIPhoneImpl)
-};    
+};
 
 #ifdef __OBJC__
 
@@ -182,14 +182,14 @@ protected :
     WXDLLIMPEXP_CORE wxRect wxFromNSRect( UIView* parent, const CGRect& rect );
     WXDLLIMPEXP_CORE CGPoint wxToNSPoint( UIView* parent, const wxPoint& p );
     WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p );
-    
-    CGRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
+
+    CGRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );
 
     @interface wxUIButton : UIButton
     {
     }
-    
+
     @end
 
     void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);

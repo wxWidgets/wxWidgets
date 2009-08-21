@@ -27,7 +27,7 @@ public:
 
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
         { (void)Create(parent, flags); }
-        
+
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
     virtual bool Show( bool show = TRUE );
@@ -37,7 +37,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-                           
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupWindow)

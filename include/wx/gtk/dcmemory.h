@@ -23,7 +23,7 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner );
     wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc );
-    
+
     virtual ~wxMemoryDCImpl();
 
     // these get reimplemented for mono-bitmaps to behave
@@ -48,12 +48,12 @@ public:
 
 private:
     wxBitmap  m_selected;
-    
+
     void Init();
 
     DECLARE_ABSTRACT_CLASS(wxMemoryDCImpl)
 };
 
-#endif 
+#endif
     // _WX_GTK_DCMEMORY_H_
 

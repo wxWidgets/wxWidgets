@@ -41,7 +41,7 @@ bool wxScrollBar::Create( wxWindow *parent,
 
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
-        
+
     m_peer = wxWidgetImpl::CreateScrollBar( this, parent, id, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
@@ -74,7 +74,7 @@ void wxScrollBar::SetScrollbar( int position,
     m_objectSize = range;
 
    int range1 = wxMax( (m_objectSize - m_viewSize), 0 );
-   
+
    m_peer->SetMaximum( range1 );
    m_peer->SetScrollThumb( position, m_viewSize );
 }

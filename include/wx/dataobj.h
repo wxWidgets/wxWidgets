@@ -515,7 +515,7 @@ private:
     #include "wx/gtk/dataobj2.h"
     // wxURLDataObject defined in msw/ole/dataobj2.h
 
-#else 
+#else
     #if defined(__WXGTK__)
         #include "wx/gtk1/dataobj2.h"
     #elif defined(__WXX11__)

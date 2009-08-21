@@ -51,9 +51,9 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap() { }
-    wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH ) 
+    wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH )
         { Create(width, height, depth); }
-    wxBitmap( const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH ) 
+    wxBitmap( const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH )
         { Create(sz, depth); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );

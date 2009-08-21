@@ -780,7 +780,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long)
 void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect *WXUNUSED(rect) )
 {
     wxCHECK_RET( m_widget, wxT("invalid frame") );
-    
+
     gtk_widget_queue_draw( m_widget );
 
     if (m_wxwindow && m_wxwindow->window)

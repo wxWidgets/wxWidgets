@@ -3,7 +3,7 @@
 // Purpose:     wxPopupWindow class for wxMac
 // Author:      Stefan Csomor
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Stefan Csomor
 // Licence:     wxWindows licence

@@ -37,7 +37,7 @@
 // ----------------------------------------------------------------------------
 
 // TODO:  Do we want to include the null char in the stream?  If so then
-// just add +1 to m_len in the ctor 
+// just add +1 to m_len in the ctor
 wxStringInputStream::wxStringInputStream(const wxString& s)
 #if wxUSE_UNICODE
     // FIXME-UTF8: use wxCharBufferWithLength if we have it
@@ -56,9 +56,9 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 // getlength
 // ----------------------------------------------------------------------------
 
-wxFileOffset wxStringInputStream::GetLength() const 
-{ 
-    return m_len; 
+wxFileOffset wxStringInputStream::GetLength() const
+{
+    return m_len;
 }
 
 // ----------------------------------------------------------------------------

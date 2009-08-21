@@ -3,7 +3,7 @@
 // Purpose:     implements wxPopupWindow for wxMac
 // Author:      Stefan Csomor
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Stefan Csomor
 // License:     wxWindows licence
@@ -34,7 +34,7 @@
 #include "wx/popupwin.h"
 #include "wx/tooltip.h"
 
-#include "wx/osx/private.h"    
+#include "wx/osx/private.h"
 
 // ============================================================================
 // implementation

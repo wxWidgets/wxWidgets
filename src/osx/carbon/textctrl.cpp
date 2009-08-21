@@ -223,7 +223,7 @@ class wxMacMLTEControl : public wxMacControl, public wxTextWidgetImpl
 public :
     wxMacMLTEControl( wxTextCtrl *peer ) ;
     ~wxMacMLTEControl() {}
-    
+
     virtual bool        CanFocus() const
                         { return true; }
 
@@ -332,7 +332,7 @@ public :
         return true;
     }
 
-    virtual void            Move(int x, int y, int width, int height); 
+    virtual void            Move(int x, int y, int width, int height);
 
 protected :
     OSStatus                 DoCreate();
@@ -361,13 +361,13 @@ private :
     SInt32                  m_lastVerticalValue ;
 };
 
-wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& str,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     bool forceMLTE = false ;
@@ -1732,7 +1732,7 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
     }
 }
 
-void wxMacMLTEClassicControl::Move(int x, int y, int width, int height) 
+void wxMacMLTEClassicControl::Move(int x, int y, int width, int height)
 {
     wxMacControl::Move(x,y,width,height) ;
     MacUpdatePosition() ;

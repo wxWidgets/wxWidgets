@@ -32,7 +32,7 @@ public:
 // constructors / destructor
 //
   wxDataViewRenderer(wxString const& varianttype, wxDataViewCellMode mode=wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
-  
+
   virtual ~wxDataViewRenderer(void);
 
 //
@@ -400,7 +400,7 @@ public:
     {
       return this->m_NativeDataPtr;
     }
-    
+
     void SetNativeData(wxDataViewColumnNativeData* newNativeDataPtr); // class takes ownership of pointer
     void SetWidthVariable(int NewWidth)
     {

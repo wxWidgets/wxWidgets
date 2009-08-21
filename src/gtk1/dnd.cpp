@@ -848,7 +848,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     // don't start dragging if no button is down
     if (g_lastButtonNumber == 0)
         return wxDragNone;
-        
+
     // we can only start a drag after a mouse event
     if (g_lastMouseEvent == NULL)
         return wxDragNone;

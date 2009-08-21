@@ -327,7 +327,7 @@ wxQTMediaBackend::~wxQTMediaBackend()
         // Dispose of the movie controller
         ::DisposeMovieController(m_mc);
         m_mc = NULL;
-        
+
         // Dispose of offscreen GWorld
         ::DisposeGWorld(m_movieWorld);
     }
@@ -435,7 +435,7 @@ bool wxQTMediaBackend::Load(const wxString& fileName)
         NULL); // wasChanged
 
     // Do not use ::GetMoviesStickyError() here because it returns -2009
-    // a.k.a. invalid track on valid mpegs	     
+    // a.k.a. invalid track on valid mpegs
     if (err == noErr && ::GetMoviesError() == noErr)
     {
         ::CloseMovieFile(movieResFile);

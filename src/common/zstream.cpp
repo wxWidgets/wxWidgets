@@ -88,13 +88,13 @@ wxGzipClassFactory::wxGzipClassFactory()
 const wxChar * const *
 wxGzipClassFactory::GetProtocols(wxStreamProtocolType type) const
 {
-    static const wxChar *protos[] =     
+    static const wxChar *protos[] =
         { wxT("gzip"), NULL };
-    static const wxChar *mimes[] =     
+    static const wxChar *mimes[] =
         { wxT("application/gzip"), wxT("application/x-gzip"), NULL };
-    static const wxChar *encs[] = 
+    static const wxChar *encs[] =
         { wxT("gzip"), NULL };
-    static const wxChar *exts[] =    
+    static const wxChar *exts[] =
         { wxT(".gz"), wxT(".gzip"), NULL };
     static const wxChar *empty[] =
         { NULL };

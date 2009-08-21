@@ -40,7 +40,7 @@ public:
 
     // Mac-specific
     WXGLContext GetWXGLContext() const { return m_glContext; }
-    
+
 private:
     WXGLContext m_glContext;
 
@@ -139,7 +139,7 @@ public:
     virtual void MacVisibilityChanged();
 
     void MacUpdateView();
-    
+
     GLint GetAglBufferName() const { return m_bufferName; }
 #endif
 

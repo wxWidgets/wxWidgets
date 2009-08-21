@@ -35,7 +35,7 @@ int wxMacPrintDialog::ShowModal()
     ((wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData );
 
     int result = wxID_CANCEL;
-    
+
     OSErr err = noErr;
     Boolean accepted;
     wxOSXPrintData* nativeData = (wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData();

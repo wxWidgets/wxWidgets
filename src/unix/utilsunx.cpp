@@ -880,9 +880,9 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
     const wxString desc = wxGetCommandOutput(wxT("lsb_release --description"));
     const wxString rel = wxGetCommandOutput(wxT("lsb_release --release"));
     const wxString codename = wxGetCommandOutput(wxT("lsb_release --codename"));
-    
+
     wxLinuxDistributionInfo ret;
-    
+
     id.StartsWith("Distributor ID:\t", &ret.Id);
     desc.StartsWith("Description:\t", &ret.Description);
     rel.StartsWith("Release:\t", &ret.Release);

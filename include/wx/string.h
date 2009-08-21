@@ -2273,7 +2273,7 @@ public:
       // convert to a double
   bool ToCDouble(double *val) const;
 #endif
-  
+
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error

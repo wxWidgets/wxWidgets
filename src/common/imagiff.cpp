@@ -98,10 +98,10 @@ public:
     // constructor, destructor, etc.
     wxIFFDecoder(wxInputStream *s);
     ~wxIFFDecoder() { Destroy(); }
-    
+
     // NOTE: this function modifies the current stream position
     bool CanRead();
-    
+
     int ReadIFF();
     bool ConvertToImage(wxImage *image) const;
 };

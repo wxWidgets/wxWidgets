@@ -76,7 +76,7 @@ public:
 
     void Command(wxCommandEvent& event);
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool OSXHandleClicked( double timestampsec );
     virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
 

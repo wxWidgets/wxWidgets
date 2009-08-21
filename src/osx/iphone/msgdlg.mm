@@ -57,7 +57,7 @@ int wxMessageDialog::ShowModal()
         msgtitle = m_message;
         msgtext  = m_extendedMessage;
     }
-    
+
     wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
     wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
     wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
@@ -67,7 +67,7 @@ int wxMessageDialog::ShowModal()
     wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
 
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:cfTitle.AsNSString() message:cfText.AsNSString() delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
-    
+
     int buttonId[3] = { 0, 0, 0 };
     int buttonCount = 0;
 
@@ -109,8 +109,8 @@ int wxMessageDialog::ShowModal()
 
     wxNonOwnedWindow* parentWindow = NULL;
     int button = -1;
-            
-    if (GetParent()) 
+
+    if (GetParent())
     {
         parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
     }
@@ -119,9 +119,9 @@ int wxMessageDialog::ShowModal()
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();
-        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
-        [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate 
-            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
+        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
+        [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate
+            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
             contextInfo: nil];
         [sheetDelegate waitForSheetToFinish];
         button = [sheetDelegate code];
@@ -133,6 +133,6 @@ int wxMessageDialog::ShowModal()
         [alert show];
     }
     // [alert release];
-    
+
     return wxID_CANCEL;
 }

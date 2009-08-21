@@ -271,7 +271,7 @@ wxRegionGeneric::wxRegionGeneric(const wxPoint& topLeft, const wxPoint& bottomRi
     m_refData = new wxRegionRefData(topLeft, bottomRight);
 }
 
-wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp) 
+wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp)
 {
     wxFAIL_MSG("NOT IMPLEMENTED: wxRegionGeneric::wxRegionGeneric(const wxBitmap& bmp)");
 }

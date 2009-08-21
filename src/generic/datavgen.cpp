@@ -2081,7 +2081,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
         m_count = list_model->GetCount();
-        
+
         if( m_currentRow > GetRowCount() )
             m_currentRow = m_count - 1;
 
@@ -3192,7 +3192,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
     {
         wxDataViewTreeNode* node = GetTreeNodeByRow(row);
         indent = GetOwner()->GetIndent() * node->GetIndentLevel();
-        indent = indent + m_lineHeight;	// use m_lineHeight as the width of the expander
+        indent = indent + m_lineHeight; // use m_lineHeight as the width of the expander
 
         if(!node->HasChildren())
             delete node;
@@ -3215,7 +3215,7 @@ int wxDataViewMainWindow::RecalculateCount()
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
-            
+
         return list_model->GetCount();
     }
     else

@@ -295,7 +295,7 @@ bool wxBitmapRefData::Create(int width, int height, int depth)
 #else // !wxUSE_NANOX
     Window xroot = RootWindow(m_display, xscreen);
 
-    *(depth == 1 ? &m_bitmap : &m_pixmap) = 
+    *(depth == 1 ? &m_bitmap : &m_pixmap) =
         XCreatePixmap(m_display, xroot, width, height, depth);
 #endif // wxUSE_NANOX/!wxUSE_NANOX
 

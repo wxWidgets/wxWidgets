@@ -96,8 +96,8 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
         wxBrush brush( LightContrastColour( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT) ) );
         dc.SetBrush( brush );
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle( win->m_miniEdge-1, 
-                          win->m_miniEdge-1, 
+        dc.DrawRectangle( win->m_miniEdge-1,
+                          win->m_miniEdge-1,
                           win->m_width - (2*(win->m_miniEdge-1)),
                           15  );
 
@@ -107,7 +107,7 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
         if (style & wxCLOSE_BOX)
             dc.DrawBitmap( win->m_closeButton, win->m_width-18, 3, true );
     }
-    
+
     return false;
 }
 }

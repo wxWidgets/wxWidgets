@@ -26,7 +26,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods(self);
@@ -42,7 +42,7 @@ public :
         wxWidgetCocoaImpl(peer, w)
     {
     }
-    
+
     ~wxSliderCocoaImpl()
     {
     }
@@ -51,10 +51,10 @@ public :
     virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
 };
 
-// we will have a mouseDown, then in the native 
+// we will have a mouseDown, then in the native
 // implementation of mouseDown the tracking code
 // is calling clickedAction, therefore we wire this
-// to thumbtrack and only after super mouseDown 
+// to thumbtrack and only after super mouseDown
 // returns we will call the thumbrelease
 
 void wxSliderCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
@@ -67,7 +67,7 @@ void wxSliderCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_c
 void wxSliderCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
-    
+
     if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
     {
         wxWindow* wxpeer = (wxWindow*) GetWXPeer();
@@ -78,15 +78,15 @@ void wxSliderCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 
 
-wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
@@ -101,7 +101,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
         // it to a UInt16
         while (tickMarks > 20)
             tickMarks /= 5;
-            
+
         [v setNumberOfTickMarks:tickMarks];
         [v setTickMarkPosition:NSTickMarkBelow];
     }

@@ -57,7 +57,7 @@ struct wxIfImpl<false>
 
 } // namespace wxPrivate
 
-// wxIf<> template defines nested type "value" which is the same as 
+// wxIf<> template defines nested type "value" which is the same as
 // TTrue if the condition Cond (boolean compile-time constant) was met and
 // TFalse if it wasn't.
 //

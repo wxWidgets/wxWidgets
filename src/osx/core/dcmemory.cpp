@@ -78,8 +78,8 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         if ( m_selected.GetDepth() != 1 )
             m_selected.UseAlpha() ;
         m_selected.BeginRawAccess() ;
-		m_width = bitmap.GetWidth();
-		m_height = bitmap.GetHeight();
+        m_width = bitmap.GetWidth();
+        m_height = bitmap.GetHeight();
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
         CGContextRef bmCtx = (CGContextRef) m_selected.GetHBITMAP();
 
@@ -87,7 +87,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         {
             CGContextSetFillColorSpace( bmCtx, genericColorSpace );
             CGContextSetStrokeColorSpace( bmCtx, genericColorSpace );
-			SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
+            SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
         }
         m_ok = (m_graphicContext != NULL) ;
     }

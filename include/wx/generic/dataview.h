@@ -135,7 +135,7 @@ public:
 
     // in-place editing
     virtual bool HasEditorCtrl() const;
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, 
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
                                          const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
 
@@ -260,7 +260,7 @@ public:
     virtual wxSize GetSize() const;
 
     virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, 
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect,
                                          const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
 
@@ -288,8 +288,8 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool Activate( wxRect cell,
-                           wxDataViewModel *model, 
-                           const wxDataViewItem& item, 
+                           wxDataViewModel *model,
+                           const wxDataViewItem& item,
                            unsigned int col );
 
 private:
@@ -445,9 +445,9 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL );
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, 
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item,
                           wxDataViewColumn* &column ) const;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, 
+    virtual wxRect GetItemRect( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL ) const;
 
     virtual void Expand( const wxDataViewItem & item );

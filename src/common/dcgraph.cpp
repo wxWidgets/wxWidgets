@@ -72,7 +72,7 @@ static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode 
         case wxXOR:        // src XOR dst
             *op = wxCOMPOSITION_XOR;
             break;
-            
+
         case wxAND:        // src AND dst
         case wxAND_INVERT: // (NOT src) AND dst
         case wxAND_REVERSE:// src AND (NOT dst)
@@ -451,7 +451,7 @@ void wxGCDCImpl::SetFont( const wxFont &font )
             f.SetPointSize( /*LogicalToDeviceYRel*/(font.GetPointSize()));
         m_graphicContext->SetFont( f, m_textForegroundColour );
 #if defined(__WXGTK__) || defined(__WXOSX__)
-        if ( m_font.IsOk() && m_font.GetNoAntiAliasing() ) 
+        if ( m_font.IsOk() && m_font.GetNoAntiAliasing() )
         {
             m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
         }
@@ -499,12 +499,12 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
         return;
 
     m_logicalFunction = function;
-    
+
     wxCompositionMode mode;
     m_logicalFunctionSupported = TranslateRasterOp( function, &mode);
     if (m_logicalFunctionSupported)
         m_logicalFunctionSupported = m_graphicContext->SetCompositionMode(mode);
-        
+
     if (mode == wxCOMPOSITION_XOR)
         m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
     else
@@ -512,7 +512,7 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 }
 
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                             const wxColour& WXUNUSED(col), 
+                             const wxColour& WXUNUSED(col),
                              wxFloodFillStyle WXUNUSED(style))
 {
     return false;
@@ -851,7 +851,7 @@ bool wxGCDCImpl::CanDrawBitmap() const
 
 bool wxGCDCImpl::DoBlit(
     wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-    wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+    wxDC *source, wxCoord xsrc, wxCoord ysrc,
     wxRasterOperationMode logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
@@ -871,7 +871,7 @@ bool wxGCDCImpl::DoStretchBlit(
 
     if ( logical_func == wxNO_OP )
         return true;
-        
+
     wxCompositionMode mode;
     if ( !TranslateRasterOp(logical_func, &mode) )
     {
@@ -880,7 +880,7 @@ bool wxGCDCImpl::DoStretchBlit(
     }
 
     bool retval = true;
-    
+
     wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
     if (m_graphicContext->SetCompositionMode(mode))
     {
@@ -889,7 +889,7 @@ bool wxGCDCImpl::DoStretchBlit(
         {
             m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
         }
-            
+
         if (xsrcMask == -1 && ysrcMask == -1)
         {
             xsrcMask = xsrc;
@@ -926,7 +926,7 @@ bool wxGCDCImpl::DoStretchBlit(
             wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
             retval = false;
         }
-        
+
         if (mode == wxCOMPOSITION_XOR)
         {
             m_graphicContext->SetAntialiasMode(formerAa);

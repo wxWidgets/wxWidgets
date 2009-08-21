@@ -82,7 +82,7 @@ bool wxNotebook::Create( wxWindow *parent,
         return false;
 
     m_peer = wxWidgetImpl::CreateTabView(this,parent, id, pos, size, style, GetExtraStyle() );
-    
+
     MacPostControlCreate( pos, size );
 
     return true ;

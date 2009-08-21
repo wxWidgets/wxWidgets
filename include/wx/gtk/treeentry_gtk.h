@@ -65,7 +65,7 @@ WXDLLIMPEXP_CORE
 void   gtk_tree_entry_set_userdata      (GtkTreeEntry* entry, gpointer userdata);
 
 WXDLLIMPEXP_CORE
-void   gtk_tree_entry_set_destroy_func (GtkTreeEntry* entry, 
+void   gtk_tree_entry_set_destroy_func (GtkTreeEntry* entry,
                                         GtkTreeEntryDestroy destroy_func,
                                         gpointer destroy_func_data);
 

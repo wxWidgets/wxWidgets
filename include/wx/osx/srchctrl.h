@@ -69,7 +69,7 @@ protected:
     void Init();
 
     wxMenu *m_menu;
-    
+
     wxString m_descriptiveText;
 
 private:

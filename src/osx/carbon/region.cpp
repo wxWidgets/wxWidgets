@@ -101,7 +101,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(f
     wxUnusedVar(n);
     wxUnusedVar(points);
 
-#if 0 
+#if 0
     // no non-QD APIs available
     // TODO : remove ?
     // OS X somehow does not collect the region invisibly as before, so sometimes things
@@ -139,7 +139,7 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(f
 
         RgnHandle tempRgn = NewRgn();
         CloseRgn( tempRgn ) ;
- 
+
         ::SetGWorld( oldWorld, oldGDHandle );
         wxCFRef<HIShapeRef> tempShape( HIShapeCreateWithQDRgn(tempRgn ) );
         m_refData = new wxRegionRefData(tempShape);
@@ -504,7 +504,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
         if ( HIShapeEnumerate != NULL )
         {
-            OSStatus err = HIShapeEnumerate (OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsCounterCallback, 
+            OSStatus err = HIShapeEnumerate (OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsCounterCallback,
                 (void*)&m_numRects);
             if (err == noErr)
             {
@@ -512,7 +512,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
                 RegionToRectsCallbackData data ;
                 data.m_rects = m_rects ;
                 data.m_current = 0 ;
-                HIShapeEnumerate( OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsSetterCallback, 
+                HIShapeEnumerate( OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsSetterCallback,
                     (void*)&data );
             }
             else
@@ -536,7 +536,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
                 RegionToRectsCallbackData data ;
                 data.m_rects = m_rects ;
                 data.m_current = 0 ;
-                QDRegionToRects( rgn , kQDParseRegionFromTopLeft, wxMacRegionToRectsSetterCallback, 
+                QDRegionToRects( rgn , kQDParseRegionFromTopLeft, wxMacRegionToRectsSetterCallback,
                     (void*)&data );
             }
             else

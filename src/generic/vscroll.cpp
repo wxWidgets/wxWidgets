@@ -936,7 +936,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxHVScrolledWindow, wxPanel)
 // wxVarVScrollLegacyAdaptor
 // ===========================================================================
 
-size_t wxVarVScrollLegacyAdaptor::GetFirstVisibleLine() const 
+size_t wxVarVScrollLegacyAdaptor::GetFirstVisibleLine() const
 { return GetVisibleRowsBegin(); }
 
 size_t wxVarVScrollLegacyAdaptor::GetLastVisibleLine() const
@@ -953,13 +953,13 @@ void wxVarVScrollLegacyAdaptor::RefreshLine(size_t line)
 
 void wxVarVScrollLegacyAdaptor::RefreshLines(size_t from, size_t to)
 { RefreshRows(from, to); }
-        
+
 bool wxVarVScrollLegacyAdaptor::ScrollToLine(size_t line)
 { return ScrollToRow(line); }
 
 bool wxVarVScrollLegacyAdaptor::ScrollLines(int lines)
 { return ScrollRows(lines); }
-        
+
 bool wxVarVScrollLegacyAdaptor::ScrollPages(int pages)
 { return ScrollRowPages(pages); }
 

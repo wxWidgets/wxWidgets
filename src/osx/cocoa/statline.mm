@@ -33,13 +33,13 @@
 
 #include "wx/osx/private.h"
 
-wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
-                                    const wxPoint& pos, 
+wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];

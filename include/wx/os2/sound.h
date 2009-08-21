@@ -33,7 +33,7 @@ public:
 
 protected:
   bool  Free();
-  
+
   bool  DoPlay(unsigned flags) const;
 
 private:

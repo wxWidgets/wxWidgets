@@ -113,7 +113,7 @@ class WXDLLIMPEXP_CORE wxFontBase : public wxGDIObject
 public:
     /*
         derived classes should provide the following ctors:
-    
+
     wxFont();
     wxFont(const wxString& nativeFontInfoString);
     wxFont(const wxNativeFontInfo& info);
@@ -132,7 +132,7 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     */
-    
+
     // creator function
     virtual ~wxFontBase();
 

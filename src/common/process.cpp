@@ -104,7 +104,7 @@ void wxProcess::Detach()
 {
     // we just detach from the next handler of the chain (i.e. our "parent" -- see ctor)
     // not also from the previous handler like wxEvtHandler::Unlink() would do:
-    
+
     if (m_nextHandler)
         m_nextHandler->SetPreviousHandler(m_previousHandler);
 

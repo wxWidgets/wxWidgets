@@ -194,12 +194,12 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 
     NSModalSession session = [NSApp beginModalSessionForWindow:fontPanel];
 
-    for (;;) 
+    for (;;)
     {
         if ([NSApp runModalSession:session] != NSRunContinuesResponse)
             break;
     }
-    
+
     [NSApp endModalSession:session];
 
     // if we don't reenable it, FPShowHideFontPanel does not work

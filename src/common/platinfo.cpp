@@ -192,7 +192,7 @@ void wxPlatformInfo::InitForCurrentPlatform()
     m_osDesc = wxGetOsDescription();
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
     m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
-    
+
 #ifdef __LINUX__
     m_ldi = wxGetLinuxDistributionInfo();
 #endif

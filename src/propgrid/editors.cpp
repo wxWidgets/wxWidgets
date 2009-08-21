@@ -71,7 +71,7 @@
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        4
 #else
     #define wxPG_TEXTCTRL_AND_BUTTON_SPACING        2
-#endif 
+#endif
 
 #define wxPG_BUTTON_SIZEDEC                         0
 
@@ -144,7 +144,7 @@
 // for odcombo
 #ifdef __WXMAC__
 #define wxPG_CHOICEXADJUST           -3 // required because wxComboCtrl reserves 3pixels for wxTextCtrl's focus ring
-#define wxPG_CHOICEYADJUST           -3 
+#define wxPG_CHOICEYADJUST           -3
 #else
 #define wxPG_CHOICEXADJUST           0
 #define wxPG_CHOICEYADJUST           0
@@ -966,7 +966,7 @@ bool wxPGChoiceEditor::OnEvent( wxPropertyGrid* propGrid, wxPGProperty* property
                 return false;
             }
         }
-        return wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb, cmnValIndex );        
+        return wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb, cmnValIndex );
     }
     return false;
 }
@@ -1413,7 +1413,7 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
                     cb->m_state |= wxSCB_STATE_CHECKED;
 
                 // Makes sure wxPG_EVT_CHANGING etc. is sent for this initial
-                // click 
+                // click
                 propGrid->ChangePropertyValue(property,
                                               wxPGVariant_Bool(cb->m_state));
             }
@@ -1576,7 +1576,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
     if ( m_selColumn == -1 )
         return;
 
-    if ( GetSelection() && (m_wndEditor || m_wndEditor2) ) 
+    if ( GetSelection() && (m_wndEditor || m_wndEditor2) )
     {
         wxRect r = GetEditorWidgetRect(GetSelection(), m_selColumn);
 
@@ -1678,7 +1678,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 #endif
     SetupTextCtrlValue(value);
     tc->Create(ctrlParent,id,value, p, s,tcFlags);
-    
+
     // Center the control vertically
     if ( !hasSpecialSize )
         FixPosForTextCtrl(tc);
@@ -1726,7 +1726,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
    p.x = pos.x + sz.x - but->GetSize().x - 2;
    but->Move(p);
 
-#else 
+#else
     wxSize s(sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2),
         sz.y-(wxPG_BUTTON_SIZEDEC*2)+(wxPG_NAT_BUTTON_BORDER_Y*2));
 

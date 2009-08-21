@@ -42,7 +42,7 @@ public:
 
     // implementation
     wxBitmap  m_selected;
-    
+
     wxBitmap GetSelectedObject() const { return m_selected; }
 
 protected:

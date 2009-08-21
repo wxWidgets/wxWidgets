@@ -208,7 +208,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         colSys = ::GetSysColor(index);
 #endif
     }
-    
+
     wxColour ret = wxRGBToColour(colSys);
     wxASSERT(ret.IsOk());
     return ret;
@@ -270,7 +270,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         gs_fontDefault = new wxFont(wxCreateFontFromStockObject(SYSTEM_FONT));
     }
 
-    wxASSERT(gs_fontDefault->IsOk() && 
+    wxASSERT(gs_fontDefault->IsOk() &&
              wxFontEnumerator::IsValidFacename(gs_fontDefault->GetFaceName()));
     return *gs_fontDefault;
 #else // !__WXWINCE__

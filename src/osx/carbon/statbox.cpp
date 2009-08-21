@@ -16,13 +16,13 @@
 #include "wx/statbox.h"
 #include "wx/osx/private.h"
 
-wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long WXUNUSED(style),
                                     long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );

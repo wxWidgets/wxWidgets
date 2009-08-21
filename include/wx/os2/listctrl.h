@@ -1,9 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/os2/listctrl.h
 // Purpose:     wxListCtrl class
-// Author:      
+// Author:
 // Modified by:
-// Created:     
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
@@ -507,7 +507,7 @@ protected:
 
     //
     // Return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for 
+    // only be called for the first column. See OnGetItemColumnImage for
     // details.
     //
     virtual int OnGetItemImage(long lItem) const;

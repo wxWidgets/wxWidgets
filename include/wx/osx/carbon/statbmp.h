@@ -58,7 +58,7 @@ class WXDLLIMPEXP_CORE wxStaticBitmap: public wxStaticBitmapBase
     virtual wxSize DoGetBestSize() const;
 
     wxBitmap m_bitmap;
-    DECLARE_EVENT_TABLE() 
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

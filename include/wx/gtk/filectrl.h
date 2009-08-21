@@ -55,7 +55,7 @@ private:
     GtkFileChooser *m_widget;
     // First wildcard in filter, to be used when the user
     // saves a file without giving an extension.
-    wxArrayString   m_wildcards; 
+    wxArrayString   m_wildcards;
 };
 
 #if wxUSE_FILECTRL

@@ -34,10 +34,10 @@ public:
 
     virtual void            TransferFrom( wxPrintDialogData * );
     virtual void            TransferTo( wxPrintDialogData * );
-    
-    PMPrintSession          GetPrintSession() { return m_macPrintSession; } 
-    PMPageFormat            GetPageFormat() { return m_macPageFormat; } 
-    PMPrintSettings         GetPrintSettings() { return m_macPrintSettings; } 
+
+    PMPrintSession          GetPrintSession() { return m_macPrintSession; }
+    PMPageFormat            GetPageFormat() { return m_macPageFormat; }
+    PMPrintSettings         GetPrintSettings() { return m_macPrintSettings; }
 protected :
     virtual void            UpdateFromPMState();
     virtual void            UpdateToPMState();

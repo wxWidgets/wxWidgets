@@ -31,7 +31,7 @@ public:
                                 (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
     }
 
-protected:    
+protected:
     DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };
 

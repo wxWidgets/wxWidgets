@@ -20,8 +20,8 @@
     #define wxOSX_USE_NATIVE_TOOLBAR 1
 #endif
 
-/* 
- * text rendering system 
+/*
+ * text rendering system
  */
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5

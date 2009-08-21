@@ -62,7 +62,7 @@ public:
         Create(10, family, style, weight, underlined, face, encoding);
         SetPixelSize(pixelSize);
     }
-    
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

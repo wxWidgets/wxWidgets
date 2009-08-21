@@ -40,10 +40,10 @@ bool wxSpinButton::Create( wxWindow *parent,
 
     if (!parent)
         return false;
-    
+
     m_peer = wxWidgetImpl::CreateSpinButton( this , parent, id, 0, m_min, m_max, pos, size,
         style, GetExtraStyle() );
-        
+
     MacPostControlCreate( pos, size );
 
     return true;
@@ -69,9 +69,9 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     m_max = maxVal;
     m_peer->SetMaximum( maxVal );
     m_peer->SetMinimum( minVal );
-}   
-    
-void wxSpinButton::SendThumbTrackEvent() 
+}
+
+void wxSpinButton::SendThumbTrackEvent()
 {
     wxSpinEvent event( wxEVT_SCROLL_THUMBTRACK, GetId() );
     event.SetPosition( GetValue() );
@@ -94,7 +94,7 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
 {
     int inc = 0;
 
-    if ( scrollEvent == wxEVT_SCROLL_LINEUP )    
+    if ( scrollEvent == wxEVT_SCROLL_LINEUP )
     {
         inc = 1;
     }
@@ -102,9 +102,9 @@ void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
     {
         inc = -1;
     }
-    
+
     // trigger scroll events
-    
+
     int oldValue = GetValue() ;
 
     int newValue = oldValue + inc;

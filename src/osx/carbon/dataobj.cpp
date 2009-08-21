@@ -158,27 +158,27 @@ void wxDataFormat::SetId( NativeFormat format )
         m_format = 0;
     }
     m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)format);
-    if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  ) 
+    if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  )
     {
         m_type = wxDF_UNICODETEXT;
-    } 
+    }
     else if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
     {
         m_type = wxDF_TEXT;
     }
-    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.tiff") )  ) 
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.tiff") )  )
     {
         m_type = wxDF_BITMAP;
     }
-    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("com.adobe.pdf") )  ) 
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("com.adobe.pdf") )  )
     {
         m_type = wxDF_METAFILE;
     }
-    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.file-url") )  ) 
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.file-url") )  )
     {
         m_type = wxDF_FILENAME;
     }
-    else 
+    else
     {
         m_type = wxDF_PRIVATE;
         m_id = wxCFStringRef( (CFStringRef) CFRetain((CFStringRef) format )).AsString();
@@ -253,11 +253,11 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
     for (size_t i = 0; i < GetFormatCount(); i++)
     {
         wxDataFormat thisFormat = array[ i ];
-    
-        // add four bytes at the end for data objs like text that 
+
+        // add four bytes at the end for data objs like text that
         // have a datasize = strlen but still need a buffer for the
         // string including trailing zero
-        
+
         size_t datasize = GetDataSize( thisFormat );
         size_t sz = datasize + 4;
         void* buf = malloc( sz );
@@ -286,7 +286,7 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
                         counter++;
                         fname = strtok (NULL,"\n");
                     }
-                    
+
                 }
                 else
                 {
@@ -325,24 +325,24 @@ bool wxDataObject::IsFormatInPasteboard( void * pb, const wxDataFormat &dataForm
             PasteboardItemID    itemID;
             CFArrayRef          flavorTypeArray;
             CFIndex             flavorCount;
-     
+
             err = PasteboardGetItemIdentifier( pasteboard, itemIndex, &itemID );
             if ( err != noErr )
                 continue;
-     
+
             err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
             if ( err != noErr )
                 continue;
-     
+
             flavorCount = CFArrayGetCount( flavorTypeArray );
-     
+
             for( CFIndex flavorIndex = 0; flavorIndex < flavorCount && hasData == false ; flavorIndex++ )
             {
                 CFStringRef             flavorType;
-     
+
                 flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
                                                                      flavorIndex );
-                     
+
                 wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
                 if ( dataFormat == flavorFormat )
                     hasData = true;
@@ -391,7 +391,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                 err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
                 if ( err != noErr )
                     continue;
-                    
+
                 flavorCount = CFArrayGetCount( flavorTypeArray );
 
                 for( CFIndex flavorIndex = 0; !transferred && flavorIndex < flavorCount ; flavorIndex++ )
@@ -399,7 +399,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                     CFStringRef             flavorType;
                     CFDataRef               flavorData;
                     CFIndex                 flavorDataSize;
-         
+
                     flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
                                                                          flavorIndex );
 
@@ -409,7 +409,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                         flavorType = CFSTR("public.utf16-plain-text");
                     }
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
- 
+
                     if ( dataFormat == flavorFormat )
                     {
                         err = PasteboardCopyItemFlavorData( pasteboard, itemID, flavorType , &flavorData );
@@ -437,7 +437,7 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                                 {
                                     memset( buf, 0, flavorDataSize + 4 );
                                     memcpy( buf, CFDataGetBytePtr( flavorData ), flavorDataSize );
- 
+
                                     if (dataFormat.GetType() == wxDF_TEXT)
                                         wxMacConvertNewlines10To13( (char*) buf );
                                     SetData( flavorFormat, flavorDataSize, buf );
@@ -517,19 +517,19 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
                 err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
                 if ( err != noErr )
                     continue;
-                    
+
                 flavorCount = CFArrayGetCount( flavorTypeArray );
 
                 for( CFIndex flavorIndex = 0; !hasData && flavorIndex < flavorCount ; flavorIndex++ )
                 {
                     CFStringRef             flavorType;
-          
+
                     flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
                                                                          flavorIndex );
 
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
- 
-                    if ( dataFormat == flavorFormat || 
+
+                    if ( dataFormat == flavorFormat ||
                         dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
                     {
                         hasData = true;
@@ -634,7 +634,7 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& rBitmap )
 
     if (m_bitmap.Ok())
     {
-		SetBitmap( rBitmap );
+        SetBitmap( rBitmap );
     }
 }
 

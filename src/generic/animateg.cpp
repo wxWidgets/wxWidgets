@@ -595,7 +595,7 @@ void wxAnimationCtrl::DisposeToBackground()
 }
 
 void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
-{ 
+{
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
                     : m_animation.GetBackgroundColour();
@@ -628,7 +628,7 @@ void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( m_backingStore.IsOk() )
     {
         // NOTE: we draw the bitmap explicitely ignoring the mask (if any);
-        //       i.e. we don't want to combine the backing store with the 
+        //       i.e. we don't want to combine the backing store with the
         //       possibly wrong preexisting contents of the window!
         dc.DrawBitmap(m_backingStore, 0, 0, false /* no mask */);
     }
@@ -681,9 +681,9 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
     //     when using them inside sizers.
     if (m_animation.IsOk())
     {
-        // be careful to change the backing store *only* if we are 
-        // playing the animation as otherwise we may be displaying 
-        // the inactive bitmap and overwriting the backing store 
+        // be careful to change the backing store *only* if we are
+        // playing the animation as otherwise we may be displaying
+        // the inactive bitmap and overwriting the backing store
         // with the last played frame is wrong in this case
         if (IsPlaying())
         {

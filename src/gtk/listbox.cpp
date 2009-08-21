@@ -174,7 +174,7 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                                 GdkEventKey *gdk_event,
                                 wxListBox *listbox )
 {
-    if ((gdk_event->keyval == GDK_Return) || 
+    if ((gdk_event->keyval == GDK_Return) ||
         (gdk_event->keyval == GDK_ISO_Enter) ||
         (gdk_event->keyval == GDK_KP_Enter))
     {
@@ -188,12 +188,12 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                 return FALSE;
             index = sels[0];
         }
-        
+
         if (index != wxNOT_FOUND)
         {
             wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
             event.SetEventObject( listbox );
-            
+
             GtkTreeEntry* entry = listbox->GtkGetEntry( index );
 
             // indicate that this is a selection
@@ -212,7 +212,7 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
             /* bool ret = */ listbox->HandleWindowEvent( event );
 
             g_object_unref (entry);
-            
+
 //          wxMac and wxMSW always invoke default action
 //          if (!ret)
             {
@@ -225,13 +225,13 @@ gtk_listbox_key_press_callback( GtkWidget *WXUNUSED(widget),
                         gtk_window_activate_default( gtk_window );
                 }
             }
-            
+
             // Always intercept, otherwise we'd get another dclick
             // event from row_activated
             return TRUE;
         }
     }
-    
+
     return FALSE;
 }
 }
@@ -476,7 +476,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     g_signal_connect_after (selection, "changed",
                             G_CALLBACK (gtk_listitem_changed_callback), this);
- 
+
     return true;
 }
 
@@ -501,7 +501,7 @@ void wxListBox::GtkEnableEvents()
 
     g_signal_handlers_unblock_by_func(selection,
                                 (gpointer) gtk_listitem_changed_callback, this);
-                                
+
     UpdateOldSelections();
 }
 
@@ -509,7 +509,7 @@ void wxListBox::GtkEnableEvents()
 void wxListBox::Update()
 {
     wxWindow::Update();
-    
+
     if (m_treeview)
         gdk_window_process_updates(GTK_WIDGET(m_treeview)->window, TRUE);
 }
@@ -575,7 +575,7 @@ void wxListBox::DoClear()
     InvalidateBestSize();
 
     gtk_list_store_clear( m_liststore ); /* well, THAT was easy :) */
-                                
+
     GtkEnableEvents();
 }
 
@@ -593,7 +593,7 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     // this returns false if iter is invalid (e.g. deleting item at end) but
     // since we don't use iter, we ignore the return value
     gtk_list_store_remove(m_liststore, &iter);
-                                
+
     GtkEnableEvents();
 }
 
@@ -813,7 +813,7 @@ void wxListBox::DoSetSelection( int n, bool select )
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
 
     GtkDisableEvents();
-    
+
     GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
     // passing -1 to SetSelection() is documented to deselect all items
@@ -826,7 +826,7 @@ void wxListBox::DoSetSelection( int n, bool select )
 
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetSelection") );
 
-    
+
     GtkTreeIter iter;
     wxCHECK_RET( GtkGetIteratorFor(n, &iter), wxT("Invalid index") );
 

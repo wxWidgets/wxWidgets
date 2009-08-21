@@ -163,7 +163,7 @@ static wxAcceleratorTable wxCreateAcceleratorTableForMenuBar(wxMenuBar* menuBar)
         wxAcceleratorEntry* entry = (wxAcceleratorEntry*) accelEntries.Item(i)->GetData();
         entries[i] = (*entry);
         delete entry;
-        
+
     }
 
     wxAcceleratorTable table(n, entries);

@@ -19,12 +19,12 @@ class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxPaintDCImpl
 public:
     wxMemoryDCImpl( wxMemoryDC *owner );
     wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
-    wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc ); 
-    
+    wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc );
+
     virtual ~wxMemoryDCImpl();
 
     virtual void DoGetSize( int *width, int *height ) const;
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
        { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
     virtual void DoSelect(const wxBitmap& bitmap);
 
@@ -32,12 +32,12 @@ public:
         { return m_selected; }
     virtual wxBitmap& GetSelectedBitmap()
         { return m_selected; }
-    
+
 private:
     void Init();
 
     wxBitmap  m_selected;
-    
+
     DECLARE_CLASS(wxMemoryDCImpl)
     wxDECLARE_NO_COPY_CLASS(wxMemoryDCImpl);
 };

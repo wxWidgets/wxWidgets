@@ -123,7 +123,7 @@ void wxItemContainer::Delete(unsigned int pos)
 }
 
 // ----------------------------------------------------------------------------
-// 
+//
 // ----------------------------------------------------------------------------
 
 int wxItemContainer::DoInsertItemsInLoop(const wxArrayStringsAdapter& items,

@@ -160,7 +160,7 @@ wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
 }
 
 void wxRadioButton::RemoveFromCycle()
-{        
+{
     if ((m_cycle == NULL) || (m_cycle == this))
         return;
 

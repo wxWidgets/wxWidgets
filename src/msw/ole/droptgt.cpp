@@ -102,7 +102,7 @@ static DWORD ConvertDragResultToEffect(wxDragResult result);
 // Params  : [in] DWORD flags                 kbd & mouse flags as passed to
 //                                            IDropTarget methods
 //           [in] wxDragResult defaultAction  the default action of the drop target
-//           [in] DWORD pdwEffect             the supported actions of the drop 
+//           [in] DWORD pdwEffect             the supported actions of the drop
 //                                            source passed to IDropTarget methods
 // Notes   : We do "move" normally and "copy" if <Ctrl> is pressed,
 //           which is the standard behaviour (currently there is no
@@ -201,7 +201,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 
     // for use in OnEnter and OnDrag calls
     m_pTarget->MSWSetDataSource(pIDataSource);
-    
+
     // get hold of the data object
     m_pIDataObject = pIDataSource;
     m_pIDataObject->AddRef();

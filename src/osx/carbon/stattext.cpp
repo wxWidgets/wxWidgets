@@ -69,15 +69,15 @@ wxSize wxStaticText::DoGetBestSize() const
         SInt16 baseline;
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
         {
-            // GetThemeTextDimensions will cache strings and the documentation 
-            // says not to use the NoCopy string creation calls. 
-            // This also means that we can't use CFSTR without 
-            // -fno-constant-cfstrings if the library might be unloaded, 
-            // as GetThemeTextDimensions may cache a pointer to our 
-            // unloaded segment. 
-            wxCFStringRef str( !m_label.empty() ? m_label : wxString(" "), 
+            // GetThemeTextDimensions will cache strings and the documentation
+            // says not to use the NoCopy string creation calls.
+            // This also means that we can't use CFSTR without
+            // -fno-constant-cfstrings if the library might be unloaded,
+            // as GetThemeTextDimensions may cache a pointer to our
+            // unloaded segment.
+            wxCFStringRef str( !m_label.empty() ? m_label : wxString(" "),
                               GetFont().GetEncoding() );
-            
+
             err = GetThemeTextDimensions(
                 (CFStringRef)str,
                 m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );

@@ -102,7 +102,7 @@ void wxPropertyGridInterface::RefreshGrid( wxPropertyGridPageState* state )
 wxPGProperty* wxPropertyGridInterface::Append( wxPGProperty* property )
 {
     wxPGProperty* retp = m_pState->DoAppend(property);
-    
+
     wxPropertyGrid* grid = m_pState->GetGrid();
     if ( grid )
         grid->RefreshGrid();
@@ -860,7 +860,7 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
         if ( includedStates & ExpandedState )
         {
             wxArrayPGProperty ptrs;
-            wxPropertyGridConstIterator it = 
+            wxPropertyGridConstIterator it =
                 wxPropertyGridConstIterator( pageState,
                                              wxPG_ITERATE_ALL_PARENTS_RECURSIVELY|wxPG_ITERATE_HIDDEN,
                                              wxNullProperty );
@@ -964,7 +964,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & ExpandedState )
                     {
-                        wxPropertyGridIterator it = 
+                        wxPropertyGridIterator it =
                             wxPropertyGridIterator( pageState,
                                                     wxPG_ITERATE_ALL,
                                                     wxNullProperty );

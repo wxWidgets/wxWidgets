@@ -1427,8 +1427,8 @@ void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, w
     cairo_stroke ( m_cairo);
 }
 
-void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], 
-                                       wxCoord xoffset, wxCoord yoffset, 
+void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
+                                       wxCoord xoffset, wxCoord yoffset,
                                        wxPolygonFillMode fillStyle)
 {
     if (n==0) return;
@@ -1464,7 +1464,7 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
 }
 
 void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[],
-                                           wxCoord xoffset, wxCoord yoffset, 
+                                           wxCoord xoffset, wxCoord yoffset,
                                            wxPolygonFillMode fillStyle)
 {
     wxDCImpl::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );

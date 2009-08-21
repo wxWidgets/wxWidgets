@@ -17,8 +17,8 @@
 template <class D, class B>
 struct wxConvertibleTo_SizeHelper
 {
-	static char Match(B* pb);
-	static int  Match(...);
+    static char Match(B* pb);
+    static int  Match(...);
 };
 
 // Helper to decide if an object of type D is convertible to type B (the test
@@ -26,8 +26,13 @@ struct wxConvertibleTo_SizeHelper
 template <class D, class B>
 struct wxConvertibleTo
 {
-    enum { value = sizeof(wxConvertibleTo_SizeHelper<D,B>::Match(static_cast<D*>(NULL)))==sizeof(char)
-	};
+    enum
+    {
+        value =
+            sizeof(wxConvertibleTo_SizeHelper<D,B>::Match(static_cast<D*>(NULL)))
+            ==
+            sizeof(char)
+    };
 };
 
 #endif // _WX_META_CONVERTIBLE_H_

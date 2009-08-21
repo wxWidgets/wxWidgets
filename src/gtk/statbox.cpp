@@ -32,7 +32,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
     GtkWidget* label_widget = gtk_frame_get_label_widget(GTK_FRAME(widget));
     int w = alloc->width -
         2 * widget->style->xthickness - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD;
-    if (w < 0) 
+    if (w < 0)
         w = 0;
 
     if (label_widget->allocation.width > w)

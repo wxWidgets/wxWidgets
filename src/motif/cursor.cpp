@@ -246,8 +246,8 @@ wxCursor::wxCursor(const char bits[], int width, int height,
     Create(bits, width, height, hotSpotX, hotSpotY, maskBits);
 }
 
-wxCursor::wxCursor(const wxString& name, wxBitmapType type, int hotSpotX,
-		   int hotSpotY )
+wxCursor::wxCursor(const wxString& name, wxBitmapType type,
+                   int hotSpotX, int hotSpotY)
 {
     // Must be an XBM file
     if (type != wxBITMAP_TYPE_XBM) {

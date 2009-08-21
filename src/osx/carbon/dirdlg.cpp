@@ -132,8 +132,8 @@ int wxDirDialog::ShowModal()
     if ( err != noErr && err != userCanceledErr )
         m_path = wxEmptyString ;
 
-	if ( dialog )
-    	::NavDialogDispose(dialog);
+    if ( dialog )
+        ::NavDialogDispose(dialog);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL ;
 }

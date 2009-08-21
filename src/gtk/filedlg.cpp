@@ -10,7 +10,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_FILEDLG 
+#if wxUSE_FILEDLG
 
 #include "wx/filedlg.h"
 
@@ -320,8 +320,8 @@ int wxFileDialog::ShowModal()
     return wxDialog::ShowModal();
 }
 
-void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y), 
-                             int WXUNUSED(width), int WXUNUSED(height), 
+void wxFileDialog::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+                             int WXUNUSED(width), int WXUNUSED(height),
                              int WXUNUSED(sizeFlags))
 {
 }
@@ -335,7 +335,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 wxString wxFileDialog::GetPath() const
 {
     wxFileName fn = m_fc.GetPath();
-    
+
     if (HasFdFlag(wxFD_SAVE))
     {
         // add extension
@@ -411,4 +411,4 @@ int wxFileDialog::GetFilterIndex() const
     return m_fc.GetFilterIndex();
 }
 
-#endif // wxUSE_FILEDLG 
+#endif // wxUSE_FILEDLG

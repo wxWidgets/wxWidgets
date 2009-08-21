@@ -401,7 +401,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
             if ((eventsToProcess & wxEVT_CATEGORY_UI) == 0)
             {
                 // this msg is not going to be dispatched...
-                // however WM_PAINT is special: until there are damaged 
+                // however WM_PAINT is special: until there are damaged
                 // windows, Windows will keep sending it forever!
                 if (nPaintsReceived > 10)
                 {
@@ -430,9 +430,9 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
         switch (msg.message)
         {
 #if !defined(__WXWINCE__)
-		    case WM_NCMOUSEMOVE:
+            case WM_NCMOUSEMOVE:
 
-			case WM_NCLBUTTONDOWN:
+            case WM_NCLBUTTONDOWN:
             case WM_NCLBUTTONUP:
             case WM_NCLBUTTONDBLCLK:
             case WM_NCRBUTTONDOWN:

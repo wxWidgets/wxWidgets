@@ -21,5 +21,5 @@
 
 #include "wx/osx/private.h"
 
-// because on mac carbon everything is done through MenuRef APIs both implementation 
+// because on mac carbon everything is done through MenuRef APIs both implementation
 // classes are in menu.cpp

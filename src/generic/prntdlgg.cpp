@@ -145,7 +145,7 @@ END_EVENT_TABLE()
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintDialogData* data)
-                    : wxPrintDialogBase(GetParentForModalDialog(parent), 
+                    : wxPrintDialogBase(GetParentForModalDialog(parent),
                                wxID_ANY, _("Print"),
                                wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
@@ -159,7 +159,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintData* data)
-                    : wxPrintDialogBase(GetParentForModalDialog(parent), 
+                    : wxPrintDialogBase(GetParentForModalDialog(parent),
                                 wxID_ANY, _("Print"),
                                wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
@@ -462,9 +462,9 @@ static const char * check_xpm[] = {
 /* width height ncolors chars_per_pixel */
 "16 16 3 1",
 /* colors */
-" 	s None	c None",
-"X	c #000000",
-".	c #808080",
+"  s None c None",
+"X c #000000",
+". c #808080",
 /* pixels */
 "                ",
 "                ",

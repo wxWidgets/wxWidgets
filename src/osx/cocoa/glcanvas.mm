@@ -224,13 +224,13 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
     if ( !m_glContext )
-        return false;  
+        return false;
 
     [m_glContext setView: win.GetHandle() ];
     [m_glContext update];
-    
+
     [m_glContext makeCurrentContext];
-    
+
     return true;
 }
 
@@ -246,7 +246,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );

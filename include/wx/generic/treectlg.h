@@ -258,12 +258,12 @@ protected:
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
     wxGenericTreeItem   *m_underMouse; // for visual effects
-    
+
     enum { NoEffect, BorderEffect, AboveEffect, BelowEffect } m_dndEffect;
-    wxGenericTreeItem   *m_dndEffectItem; 
-    
+    wxGenericTreeItem   *m_dndEffectItem;
+
     wxTreeTextCtrl      *m_textCtrl;
-    
+
 
     wxTimer             *m_renameTimer;
 
@@ -276,7 +276,7 @@ protected:
     // the common part of all ctors
     void Init();
 
-    // overridden wxWindow methods 
+    // overridden wxWindow methods
     virtual void DoThaw();
 
     // misc helpers

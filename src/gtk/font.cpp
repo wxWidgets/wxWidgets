@@ -221,7 +221,7 @@ bool wxFontRefData::SetPixelSize(const wxSize& pixelSize)
         return false;
     }
 
-    pango_font_description_set_absolute_size( m_nativeFontInfo.description, 
+    pango_font_description_set_absolute_size( m_nativeFontInfo.description,
                                               pixelSize.GetHeight() * PANGO_SCALE );
 
     return true;

@@ -31,7 +31,7 @@ wxSize wxButton::DoGetBestSize() const
     wxSize sz = GetDefaultSize() ;
 
     wxRect r ;
-        
+
     m_peer->GetBestRect(&r);
 
     if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
@@ -41,7 +41,7 @@ wxSize wxButton::DoGetBestSize() const
     sz.y = r.GetHeight();
 
     int wBtn = 72;
-    
+
     if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
         sz.x = wBtn;
 
@@ -61,7 +61,7 @@ wxSize wxButton::GetDefaultSize()
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXIPhoneClassAddWXMethods( self );
@@ -80,14 +80,14 @@ wxSize wxButton::GetDefaultSize()
 @end
 
 
-wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID id, 
+wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID id,
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     UIButtonType buttonType = UIButtonTypeRoundedRect;
@@ -119,7 +119,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     {
         // Button height is static in Mac, can't be changed, so we need to force it here
         int maxHeight;
-        switch (wxpeer->GetWindowVariant() ) 
+        switch (wxpeer->GetWindowVariant() )
         {
             case wxWINDOW_VARIANT_NORMAL:
             case wxWINDOW_VARIANT_LARGE:
@@ -153,21 +153,21 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 }
 
 void wxWidgetIPhoneImpl::SetDefaultButton( bool isDefault )
-{ 
-}
-
-void wxWidgetIPhoneImpl::PerformClick() 
 {
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+void wxWidgetIPhoneImpl::PerformClick()
+{
+}
+
+wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& label,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     CGRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxUIButton* v = [[wxUIButton alloc] initWithFrame:r];

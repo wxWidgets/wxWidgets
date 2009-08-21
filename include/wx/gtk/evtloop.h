@@ -32,7 +32,7 @@ public:
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
-    
+
 protected:
 
     // the exit code of this event loop

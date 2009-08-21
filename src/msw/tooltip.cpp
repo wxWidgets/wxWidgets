@@ -105,10 +105,10 @@ public:
         {
             // this tooltip must be shown only if the mouse hovers a specific rect
             // of the hwnd parameter!
-		    rect.left = rc.GetLeft();
-		    rect.right = rc.GetRight();
-		    rect.top = rc.GetTop();
-		    rect.bottom = rc.GetBottom();
+            rect.left = rc.GetLeft();
+            rect.right = rc.GetRight();
+            rect.top = rc.GetTop();
+            rect.bottom = rc.GetBottom();
 
             // note that not setting TTF_IDISHWND from the uFlags member means that the
             // ti.uId field should not contain the HWND but rather as MSDN says an

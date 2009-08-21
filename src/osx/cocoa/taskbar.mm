@@ -48,9 +48,9 @@ public:
     inline wxTaskBarIcon* GetTaskBarIcon() { return m_taskBarIcon; }
     wxMenu * CreatePopupMenu()
     { return m_taskBarIcon->CreatePopupMenu(); }
-    
+
     wxDECLARE_NO_COPY_CLASS(wxTaskBarIconImpl);
-    
+
 protected:
     wxTaskBarIcon *m_taskBarIcon;
     wxTaskBarIconWindow *m_iconWindow;
@@ -162,7 +162,7 @@ wxTaskBarIcon::~wxTaskBarIcon()
 // Operations
 
 bool wxTaskBarIcon::IsIconInstalled() const
-{ 
+{
     return false;
 }
 

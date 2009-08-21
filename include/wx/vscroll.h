@@ -840,7 +840,7 @@ public:
                        long style = 0,
                        const wxString& name = wxPanelNameStr)
         : wxPanel(),
-          wxVarHVScrollHelper(this) 
+          wxVarHVScrollHelper(this)
     {
         (void)Create(parent, id, pos, size, style, name);
     }

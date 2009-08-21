@@ -29,9 +29,9 @@ protected:
     size_t OnSysWrite(const void *buffer, size_t bufsize);
 
     // socket streams are both un-seekable and size-less streams:
-    wxFileOffset OnSysTell() const 
+    wxFileOffset OnSysTell() const
         { return wxInvalidOffset; }
-    wxFileOffset OnSysSeek(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) 
+    wxFileOffset OnSysSeek(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode))
         { return wxInvalidOffset; }
 
     wxDECLARE_NO_COPY_CLASS(wxSocketOutputStream);
@@ -50,9 +50,9 @@ protected:
 
     // socket streams are both un-seekable and size-less streams:
 
-    wxFileOffset OnSysTell() const 
+    wxFileOffset OnSysTell() const
         { return wxInvalidOffset; }
-    wxFileOffset OnSysSeek(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode)) 
+    wxFileOffset OnSysSeek(wxFileOffset WXUNUSED(pos), wxSeekMode WXUNUSED(mode))
         { return wxInvalidOffset; }
 
     wxDECLARE_NO_COPY_CLASS(wxSocketInputStream);

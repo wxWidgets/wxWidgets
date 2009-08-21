@@ -49,7 +49,7 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
-@interface NSView(EditableView) 
+@interface NSView(EditableView)
 - (BOOL)isEditable;
 - (void)setEditable:(BOOL)flag;
 @end
@@ -78,12 +78,12 @@ protected :
     NSView* m_textView;
 } ;
 
-@implementation wxNSSecureTextField 
+@implementation wxNSSecureTextField
 
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -128,8 +128,8 @@ protected :
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
-    {    
+    if (!initialized)
+    {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
     }
@@ -184,7 +184,7 @@ protected :
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -198,7 +198,7 @@ protected :
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -273,7 +273,7 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
         if ( impl  )
         {
             wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER ) 
+            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
                 event.SetEventObject( wxpeer );
@@ -282,7 +282,7 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
             }
         }
     }
-    
+
     return NO;
 }
 
@@ -303,24 +303,24 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxW
 {
     wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
     m_scrollView = sv;
-    
+
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
     [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
-    
+
     wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
             contentSize.width, contentSize.height)];
     m_textView = tv;
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:NO];
     [tv setAutoresizingMask:NSViewWidthSizable];
-    
+
     [m_scrollView setDocumentView: tv];
 
     [tv setDelegate: w];
-    
-    InstallEventHandler(tv);    
+
+    InstallEventHandler(tv);
 }
 
 wxNSTextViewControl::~wxNSTextViewControl()
@@ -329,9 +329,9 @@ wxNSTextViewControl::~wxNSTextViewControl()
         [m_textView setDelegate: nil];
 }
 
-wxString wxNSTextViewControl::GetStringValue() const 
+wxString wxNSTextViewControl::GetStringValue() const
 {
-    if (m_textView) 
+    if (m_textView)
     {
         wxString result = wxCFStringRef::AsString([m_textView string], m_wxPeer->GetFont().GetEncoding());
         wxMacConvertNewlines13To10( &result ) ;
@@ -339,7 +339,7 @@ wxString wxNSTextViewControl::GetStringValue() const
     }
     return wxEmptyString;
 }
-void wxNSTextViewControl::SetStringValue( const wxString &str) 
+void wxNSTextViewControl::SetStringValue( const wxString &str)
 {
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
@@ -349,37 +349,37 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
-void wxNSTextViewControl::Copy() 
+void wxNSTextViewControl::Copy()
 {
     if (m_textView)
         [m_textView copy:nil];
 
 }
 
-void wxNSTextViewControl::Cut() 
+void wxNSTextViewControl::Cut()
 {
     if (m_textView)
         [m_textView cut:nil];
 }
 
-void wxNSTextViewControl::Paste() 
+void wxNSTextViewControl::Paste()
 {
     if (m_textView)
         [m_textView paste:nil];
 }
 
-bool wxNSTextViewControl::CanPaste() const 
-{ 
+bool wxNSTextViewControl::CanPaste() const
+{
     return true;
 }
 
-void wxNSTextViewControl::SetEditable(bool editable) 
+void wxNSTextViewControl::SetEditable(bool editable)
 {
     if (m_textView)
         [m_textView setEditable: editable];
 }
 
-void wxNSTextViewControl::GetSelection( long* from, long* to) const 
+void wxNSTextViewControl::GetSelection( long* from, long* to) const
 {
     if (m_textView)
     {
@@ -411,12 +411,12 @@ void wxNSTextViewControl::SetSelection( long from , long to )
     [m_textView scrollRangeToVisible:selrange];
 }
 
-void wxNSTextViewControl::WriteText(const wxString& str) 
+void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
-    
+
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
@@ -443,18 +443,18 @@ wxNSTextFieldControl::~wxNSTextFieldControl()
         [m_textField setDelegate: nil];
 }
 
-wxString wxNSTextFieldControl::GetStringValue() const 
+wxString wxNSTextFieldControl::GetStringValue() const
 {
     return wxCFStringRef::AsString([m_textField stringValue], m_wxPeer->GetFont().GetEncoding());
 }
 
-void wxNSTextFieldControl::SetStringValue( const wxString &str) 
+void wxNSTextFieldControl::SetStringValue( const wxString &str)
 {
     wxMacEditHelper helper(m_textField);
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
-void wxNSTextFieldControl::Copy() 
+void wxNSTextFieldControl::Copy()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -463,7 +463,7 @@ void wxNSTextFieldControl::Copy()
     }
 }
 
-void wxNSTextFieldControl::Cut() 
+void wxNSTextFieldControl::Cut()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -472,7 +472,7 @@ void wxNSTextFieldControl::Cut()
     }
 }
 
-void wxNSTextFieldControl::Paste() 
+void wxNSTextFieldControl::Paste()
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -481,17 +481,17 @@ void wxNSTextFieldControl::Paste()
     }
 }
 
-bool wxNSTextFieldControl::CanPaste() const 
-{ 
+bool wxNSTextFieldControl::CanPaste() const
+{
     return true;
 }
 
-void wxNSTextFieldControl::SetEditable(bool editable) 
+void wxNSTextFieldControl::SetEditable(bool editable)
 {
     [m_textField setEditable:editable];
 }
 
-void wxNSTextFieldControl::GetSelection( long* from, long* to) const 
+void wxNSTextFieldControl::GetSelection( long* from, long* to) const
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -536,7 +536,7 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
     }
 }
 
-void wxNSTextFieldControl::WriteText(const wxString& str) 
+void wxNSTextFieldControl::WriteText(const wxString& str)
 {
     NSText* editor = [m_textField currentEditor];
     if ( editor )
@@ -556,11 +556,11 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     }
 }
 
-void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf), 
+void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
     void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
-    if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) ) 
+    if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) )
     {
         wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
         event.SetEventObject( wxpeer );
@@ -573,18 +573,18 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
 //
 //
 
-wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& str,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxWidgetCocoaImpl* c = NULL;
-    
+
     if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
     {
         wxNSTextScrollView* v = nil;
@@ -592,27 +592,27 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         c = new wxNSTextViewControl( wxpeer, v );
         static_cast<wxNSTextViewControl*>(c)->SetStringValue(str);
     }
-    else 
+    else
     {
         NSTextField* v = nil;
         if ( style & wxTE_PASSWORD )
             v = [[wxNSSecureTextField alloc] initWithFrame:r];
         else
             v = [[wxNSTextField alloc] initWithFrame:r];
-        
+
         if ( style & wxNO_BORDER )
         {
             // FIXME: How can we remove the native control's border?
             // setBordered is separate from the text ctrl's border.
         }
-        
+
         [v setBezeled:NO];
         [v setBordered:NO];
-        
+
         c = new wxNSTextFieldControl( wxpeer, v );
         static_cast<wxNSTextFieldControl*>(c)->SetStringValue(str);
     }
-    
+
     return c;
 }
 

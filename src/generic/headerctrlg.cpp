@@ -482,7 +482,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     int w, h;
     GetClientSize(&w, &h);
-    
+
 #ifdef __WXGTK__
 //    int vw;
 //    GetVirtualSize(&vw, NULL);
@@ -528,7 +528,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         {
             state = wxCONTROL_DISABLED;
         }
-        
+
         if (i == 0)
            state |= wxCONTROL_SPECIAL;
 
@@ -536,7 +536,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         params.m_labelText = col.GetTitle();
         params.m_labelBitmap = col.GetBitmap();
         params.m_labelAlignment = col.GetAlignment();
-        
+
 #ifdef __WXGTK__
         if (i == count-1)
         {

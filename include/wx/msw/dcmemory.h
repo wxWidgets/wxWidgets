@@ -27,7 +27,7 @@ public:
     virtual void DoGetSize(int* width, int* height) const;
     virtual void DoSelect(const wxBitmap& bitmap);
 
-    virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const 
+    virtual wxBitmap DoGetAsBitmap(const wxRect* subrect) const
     { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmapOfHDC(*subrect, GetHDC() );}
 
 protected:

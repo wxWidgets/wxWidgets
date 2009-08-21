@@ -37,7 +37,7 @@ public:
     virtual void Command(wxCommandEvent& event);
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 protected:
     void DoSet3StateValue(wxCheckBoxState val);

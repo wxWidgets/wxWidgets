@@ -72,10 +72,10 @@ bool wxChoice::Create(wxWindow *parent,
 
     if ( !wxChoiceBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
-        
+
     m_popUpMenu = new wxMenu();
     m_popUpMenu->SetNoEventsMode(true);
-    
+
     m_peer = wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
@@ -142,7 +142,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
     if ( HasClientObjectData() )
         delete GetClientObject( n );
-    
+
     m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( n ) );
 
     m_strings.RemoveAt( n ) ;
@@ -241,7 +241,7 @@ bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
         event.SetInt( n );
         event.SetString( GetStringSelection() );
         event.SetEventObject( this );
-        
+
         if ( HasClientObjectData() )
             event.SetClientObject( GetClientObject( n ) );
         else if ( HasClientUntypedData() )

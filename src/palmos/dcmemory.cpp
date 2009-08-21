@@ -38,23 +38,23 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl, wxPalmDCImpl)
 
-wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner ) 
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
         : wxPalmDCImpl( owner )
 {
-    CreateCompatible(NULL); 
-    Init(); 
+    CreateCompatible(NULL);
+    Init();
 }
 
-wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap ) 
-        : wxPalmDCImpl( owner ) 
-{ 
-    CreateCompatible(NULL); 
-    Init(); 
+wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
+        : wxPalmDCImpl( owner )
+{
+    CreateCompatible(NULL);
+    Init();
     DoSelect(bitmap);
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc )
-        : wxPalmDCImpl( owner ) 
+        : wxPalmDCImpl( owner )
 {
     wxCHECK_RET( dc, wxT("NULL dc in wxMemoryDC ctor") );
 

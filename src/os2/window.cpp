@@ -3224,7 +3224,7 @@ bool wxWindowOS2::OS2OnDrawItem( int vId,
                                           ,pMeasureStruct->rclItem.yTop - pMeasureStruct->rclItem.yBottom
                                          );
 
-	wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();
+        wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();
         impl->SetHDC( hDC, false );
         impl->SetHPS( pMeasureStruct->hps );
         //

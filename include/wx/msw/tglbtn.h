@@ -59,12 +59,12 @@ public:
 
 protected:
     void Init();
-    
+
     wxBitmap  m_bitmap;
     wxBitmap  m_disabledBitmap;
     bool      m_capturing;
     bool      m_depressed,m_oldValue;
-    
+
     void OnPaint(wxPaintEvent &event);
     void OnMouse(wxMouseEvent &event);
     void OnChar(wxKeyEvent &event);

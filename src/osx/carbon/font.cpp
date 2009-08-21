@@ -50,14 +50,14 @@ public:
     }
 
     wxFontRefData(const wxFontRefData& data);
-    
+
     wxFontRefData( const wxNativeFontInfo& info ) : m_info(info)
     {
         Init();
     }
 
     wxFontRefData(wxOSXSystemFont font, int size);
-    
+
 #if wxOSX_USE_CORE_TEXT
     wxFontRefData( wxUint32 coreTextFontType );
     wxFontRefData( CTFontRef font );
@@ -196,7 +196,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 #endif
 #if wxOSX_USE_CORE_TEXT
     m_ctFont = data.m_ctFont;
-#endif 
+#endif
     m_cgFont = data.m_cgFont;
 #if wxOSX_USE_ATSU_TEXT
     if ( data.m_macATSUStyle != NULL )
@@ -211,7 +211,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 #if wxOSX_USE_IPHONE
     m_uiFont = (UIFont*) wxMacCocoaRetain(data.m_uiFont);
 #endif
-    
+
 }
 
 // ============================================================================
@@ -282,7 +282,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
 {
     wxASSERT( font != wxOSX_SYSTEM_FONT_NONE );
     Init();
-    
+
 #if wxOSX_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
     {
@@ -356,14 +356,14 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
                 m_macThemeFontID = kThemeViewsFont;
                 break;
             default:
-                break;                
+                break;
         }
         if ( m_info.m_faceName.empty() )
         {
             Style style ;
             FMFontSize fontSize;
             Str255 qdFontName ;
-            
+
             GetThemeFont( m_macThemeFontID, GetApplicationScript(), qdFontName, &fontSize, &style );
             if ( size != 0 )
                 fontSize = size;
@@ -371,7 +371,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
             wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
             wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
             bool underlined = false;
-            
+
             if ( style & bold )
                 fontweight = wxFONTWEIGHT_BOLD ;
             else
@@ -380,7 +380,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
                 fontstyle = wxFONTSTYLE_ITALIC ;
             if ( style & underline )
                 underlined = true ;
-                
+
             m_info.Init(fontSize,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
                 wxMacMakeStringFromPascal( qdFontName ), wxFONTENCODING_DEFAULT);
          }
@@ -398,9 +398,9 @@ void wxFontRefData::MacFindFont()
 {
     if ( m_fontValid )
         return;
-        
+
     m_info.EnsureValid();
-    
+
 #if wxOSX_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
     {
@@ -501,10 +501,10 @@ void wxFontRefData::MacFindFont()
 bool wxFont::Create(const wxNativeFontInfo& info)
 {
     UnRef();
-    
+
     m_refData = new wxFontRefData( info );
     RealizeResource();
-    
+
     return true;
 }
 
@@ -524,7 +524,7 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
-    
+
     wxString faceName = faceNameParam;
 
     if ( faceName.empty() )
@@ -534,7 +534,7 @@ bool wxFont::Create(int pointSize,
             case wxFONTFAMILY_DEFAULT :
                 faceName = wxT("Lucida Grande");
                 break;
-                
+
             case wxFONTFAMILY_SCRIPT :
             case wxFONTFAMILY_ROMAN :
             case wxFONTFAMILY_DECORATIVE :
@@ -555,9 +555,9 @@ bool wxFont::Create(int pointSize,
                 break ;
         }
     }
-    
+
     wxNativeFontInfo info;
-    
+
     info.Init(pointSize, family, style, weight,
         underlined, faceName, encoding);
 
@@ -569,9 +569,9 @@ bool wxFont::Create(int pointSize,
 bool wxFont::CreateSystemFont(wxOSXSystemFont font)
 {
     UnRef();
-    
+
     m_refData = new wxFontRefData( font, 0 );
-    
+
     return true;
 }
 
@@ -582,7 +582,7 @@ wxFont::~wxFont()
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
     UnRef();
-    
+
     m_refData = new wxFontRefData( info);
 }
 
@@ -750,7 +750,7 @@ short wxFont::MacGetFontNum() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return M_FONTDATA->m_info.m_qdFontFamily;
 }
 
@@ -760,7 +760,7 @@ wxByte wxFont::MacGetFontStyle() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return M_FONTDATA->m_info.m_qdFontStyle;
 }
 
@@ -780,18 +780,18 @@ void * wxFont::MacGetATSUStyle() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return M_FONTDATA->m_macATSUStyle;
 }
 
 #if WXWIN_COMPATIBILITY_2_8
-wxUint32 wxFont::MacGetATSUFontID() const 
+wxUint32 wxFont::MacGetATSUFontID() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return M_FONTDATA->m_info.m_atsuFontID;
 }
 
@@ -801,7 +801,7 @@ wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return M_FONTDATA->m_info.m_atsuAdditionalQDStyles;
 }
 #endif
@@ -816,7 +816,7 @@ CTFontRef wxFont::OSXGetCTFont() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return (CTFontRef)(M_FONTDATA->m_ctFont);
 }
 
@@ -830,7 +830,7 @@ CGFontRef wxFont::OSXGetCGFont() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return (M_FONTDATA->m_cgFont);
 }
 
@@ -845,7 +845,7 @@ NSFont* wxFont::OSXGetNSFont() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     return (M_FONTDATA->m_nsFont);
 }
 
@@ -858,7 +858,7 @@ const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
-    
+
     // M_FONTDATA->m_info.InitFromFont(*this);
 
     return &(M_FONTDATA->m_info);
@@ -958,7 +958,7 @@ void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
 {
     Init();
     m_ctFontDescriptor = wxCFRetain(descr);
-    
+
     wxCFRef< CFNumberRef > sizevalue( (CFNumberRef) CTFontDescriptorCopyAttribute( m_ctFontDescriptor, kCTFontSizeAttribute ) );
     float fsize;
     if ( CFNumberGetValue( sizevalue , kCFNumberFloatType , &fsize ) )
@@ -975,7 +975,7 @@ void wxNativeFontInfo::Init(CTFontDescriptorRef descr)
     }
 
     wxCFStringRef familyName( (CFStringRef) CTFontDescriptorCopyAttribute(m_ctFontDescriptor, kCTFontFamilyNameAttribute));
-    m_faceName = familyName.AsString(); 
+    m_faceName = familyName.AsString();
 }
 #endif
 
@@ -983,7 +983,7 @@ void wxNativeFontInfo::EnsureValid()
 {
     if ( m_descriptorValid )
         return;
-        
+
 #if wxOSX_USE_CORE_TEXT
     if ( m_ctFontDescriptor == NULL && UMAGetSystemVersion() >= 0x1050 )
     {

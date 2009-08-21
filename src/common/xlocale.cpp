@@ -153,7 +153,7 @@ void wxXLocale::Init(const char *loc)
             m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
         }
     }
-    
+
     // TODO: wxLocale performs many more manipulations of the given locale
     //       string in the attempt to set a valid locale; reusing that code
     //       (changing it to take a generic wxTryLocale callback) would be nice
@@ -313,7 +313,7 @@ double wxStrtod_l(const char* str, char **endptr, const wxXLocale& loc)
 }
 
 long wxStrtol_l(const wchar_t* str, wchar_t **endptr, int base, const wxXLocale& loc)
-{ 
+{
     IMPLEMENT_STRTOX_L_START
     long ret = wxStrtol(str, endptr, base);
     IMPLEMENT_STRTOX_L_END

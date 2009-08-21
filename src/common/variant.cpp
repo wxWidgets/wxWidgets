@@ -1455,7 +1455,7 @@ protected:
 
 bool wxVariantDataLongLong::Eq(wxVariantData& data) const
 {
-    wxASSERT_MSG( (data.GetType() == wxS("longlong")), 
+    wxASSERT_MSG( (data.GetType() == wxS("longlong")),
                   "wxVariantDataLongLong::Eq: argument mismatch" );
 
     wxVariantDataLongLong& otherData = (wxVariantDataLongLong&) data;
@@ -1616,7 +1616,7 @@ protected:
 
 bool wxVariantDataULongLong::Eq(wxVariantData& data) const
 {
-    wxASSERT_MSG( (data.GetType() == wxS("ulonglong")), 
+    wxASSERT_MSG( (data.GetType() == wxS("ulonglong")),
                   "wxVariantDataULongLong::Eq: argument mismatch" );
 
     wxVariantDataULongLong& otherData = (wxVariantDataULongLong&) data;

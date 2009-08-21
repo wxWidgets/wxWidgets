@@ -33,11 +33,11 @@ class WXDLLIMPEXP_FWD_CORE wxSVGFileDC;
 class WXDLLIMPEXP_CORE wxSVGFileDCImpl : public wxDCImpl
 {
 public:
-    wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename, 
+    wxSVGFileDCImpl( wxSVGFileDC *owner, const wxString &filename,
                      int width=320, int height=240, double dpi=72.0 );
 
     virtual ~wxSVGFileDCImpl();
-    
+
     bool IsOk() const { return m_OK; }
 
     virtual bool CanDrawBitmap() const { return true; }
@@ -132,7 +132,7 @@ private:
 
    virtual void DoDrawPoint(wxCoord, wxCoord);
 
-   virtual void DoDrawPolygon(int n, wxPoint points[], 
+   virtual void DoDrawPolygon(int n, wxPoint points[],
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle);
 
@@ -179,7 +179,7 @@ private:
    }
 
    virtual void DoGetSizeMM( int *width, int *height ) const;
-   
+
    virtual wxSize GetPPI() const;
 
    void Init (const wxString &filename, int width, int height, double dpi);
@@ -205,12 +205,12 @@ private:
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 public:
-    wxSVGFileDC(const wxString& filename, 
+    wxSVGFileDC(const wxString& filename,
                 int width = 320,
                 int height = 240,
                 double dpi = 72.0)
         : wxDC(new wxSVGFileDCImpl(this, filename, width, height, dpi))
-    { 
+    {
     }
 };
 

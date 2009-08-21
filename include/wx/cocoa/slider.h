@@ -92,7 +92,7 @@ public:
     // these methods get/set the length of the slider pointer in pixels
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
-    
+
     // copied from (wxSliderCocoa.h)
     virtual void SetTickFreq(int n, int pos);
     virtual int GetTickFreq() const;

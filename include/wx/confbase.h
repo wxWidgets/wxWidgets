@@ -217,7 +217,7 @@ public:
   }
 #endif // wxHAS_CONFIG_TEMPLATE_RW
 
-  // convenience functions returning directly the value 
+  // convenience functions returning directly the value
   wxString Read(const wxString& key,
                 const wxString& defVal = wxEmptyString) const
     { wxString s; (void)Read(key, &s, defVal); return s; }

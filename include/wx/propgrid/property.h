@@ -731,7 +731,7 @@ private:
     Helper class for managing choices of wxPropertyGrid properties.
     Each entry can have label, value, bitmap, text colour, and background
     colour.
- 
+
     wxPGChoices uses reference counting, similar to other wxWidgets classes.
     This means that assignment operator and copy constructor only copy the
     reference and not the actual data. Use Copy() member function to create a

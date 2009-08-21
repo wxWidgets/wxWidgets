@@ -311,7 +311,7 @@ wxDir::wxDir(const wxString& dirname)
 bool wxDir::Open(const wxString& dirname)
 {
     delete M_DIR;
-    
+
     // The Unix code does a similar test
     if (wxDirExists(dirname))
     {
@@ -322,7 +322,7 @@ bool wxDir::Open(const wxString& dirname)
     else
     {
         m_data = NULL;
-    
+
         return false;
     }
 }

@@ -407,7 +407,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     wxSize bestSizeRadio ;
     if ( m_radioButtonCycle )
         bestSizeRadio = m_radioButtonCycle->GetBestSize();
-        
+
     for (unsigned int i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent(GetString(i), &eachWidth[i], &eachHeight[i] );
@@ -421,10 +421,10 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     }
 
     // according to HIG (official space - 3 Pixels Diff between Frame and Layout size)
-    int space = 3; 
+    int space = 3;
     if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
         space = 2;
-        
+
     totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * space;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
@@ -480,7 +480,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         current = current->NextInCycle();
 
         if (m_windowStyle & wxRA_SPECIFY_ROWS)
-            y_offset += maxHeight + space; 
+            y_offset += maxHeight + space;
         else
             x_offset += maxWidth + charWidth;
     }
@@ -519,10 +519,10 @@ wxSize wxRadioBox::DoGetBestSize() const
     }
 
     // according to HIG (official space - 3 Pixels Diff between Frame and Layout size)
-    int space = 3; 
+    int space = 3;
     if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
         space = 2;
-        
+
     totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * space;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
@@ -548,7 +548,7 @@ bool wxRadioBox::SetFont(const wxFont& font)
     bool retval = wxWindowBase::SetFont( font );
 
     // dont' update the native control, it has its own small font
-    
+
     // should we iterate over the children ?
 
     return retval;

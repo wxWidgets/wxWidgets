@@ -23,10 +23,10 @@ public:
     // ctor & dtor
     wxToolTip(const wxString &tip);
     virtual ~wxToolTip();
-    
+
     // ctor used by wxStatusBar to associate a tooltip to a portion of
     // the status bar window:
-    wxToolTip(wxWindow* win, unsigned int id, 
+    wxToolTip(wxWindow* win, unsigned int id,
               const wxString &tip, const wxRect& rc);
 
     // accessors

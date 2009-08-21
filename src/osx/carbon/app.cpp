@@ -835,8 +835,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     event_posted_context.perform = macPostedEventCallback;
     m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
     CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
-	// run loop takes ownership
-	CFRelease(m_macEventPosted);
+    // run loop takes ownership
+    CFRelease(m_macEventPosted);
         */
     return true;
 }
@@ -944,10 +944,10 @@ void wxApp::CleanUp()
 #endif
 
     if (m_macEventPosted)
-	{
-		CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
-		m_macEventPosted = NULL;
-	}
+    {
+        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
+        m_macEventPosted = NULL;
+    }
 
     DoCleanUp();
 
@@ -1445,7 +1445,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
 #ifdef __LP64__
-		// TODO new implementation using TextInputSources
+        // TODO new implementation using TextInputSources
 #else
         UInt32 state = 0;
         UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);

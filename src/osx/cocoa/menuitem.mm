@@ -168,7 +168,7 @@ void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry*
     }
 }
 
-class wxMenuItemCocoaImpl : public wxMenuItemImpl 
+class wxMenuItemCocoaImpl : public wxMenuItemImpl
 {
 public :
     wxMenuItemCocoaImpl( wxMenuItem* peer, NSMenuItem* item ) : wxMenuItemImpl(peer), m_osxMenuItem(item)
@@ -176,24 +176,24 @@ public :
         if ( ![m_osxMenuItem isSeparatorItem] )
             [(wxNSMenuItem*)m_osxMenuItem setImplementation:this];
     }
-    
+
     ~wxMenuItemCocoaImpl();
-        
-    void SetBitmap( const wxBitmap& bitmap ) 
+
+    void SetBitmap( const wxBitmap& bitmap )
     {
         [m_osxMenuItem setImage:bitmap.GetNSImage()];
     }
-    
-    void Enable( bool enable ) 
+
+    void Enable( bool enable )
     {
         [m_osxMenuItem setEnabled:enable];
     }
-    
-    void Check( bool check ) 
+
+    void Check( bool check )
     {
         [m_osxMenuItem setState:( check ?  NSOnState :  NSOffState) ];
     }
-    
+
     void Hide( bool hide )
     {
         // NB: setHidden is new as of 10.5 so we should not call it below there
@@ -202,17 +202,17 @@ public :
         else
             wxLogDebug("wxMenuItemCocoaImpl::Hide not yet supported under OS X < 10.5");
     }
-    
-    void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) 
+
+    void SetLabel( const wxString& text, wxAcceleratorEntry *entry )
     {
         wxCFStringRef cfText(text);
         [m_osxMenuItem setTitle:cfText.AsNSString()];
-        
+
         if ( entry )
             wxMacCocoaMenuItemSetAccelerator( m_osxMenuItem, entry );
 
     }
-    
+
     void * GetHMenuItem() { return m_osxMenuItem; }
 
 protected :
@@ -236,7 +236,7 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
 {
     wxMenuItemImpl* c = NULL;
     NSMenuItem* item = nil;
-    
+
     if ( kind == wxITEM_SEPARATOR )
     {
         item = [[NSMenuItem separatorItem] retain];

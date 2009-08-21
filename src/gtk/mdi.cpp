@@ -385,7 +385,7 @@ wxMDIClientWindow::~wxMDIClientWindow()
     // a call to gtk_mdi_page_change_callback with an invalid parent
     // (because gtk_mdi_page_change_callback expects a wxMDIClientWindow but
     //  at that point of the dtor chain we are a simple wxWindow!)
-    g_signal_handlers_disconnect_by_func(m_widget, 
+    g_signal_handlers_disconnect_by_func(m_widget,
                                          (gpointer)gtk_mdi_page_change_callback,
                                          GetParent());
 }

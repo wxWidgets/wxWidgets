@@ -37,13 +37,13 @@
 // implementation
 // ============================================================================
 
-wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
-                                    const wxPoint& pos, 
+wxWidgetImplType* wxWidgetImpl::CreateStaticLine( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     wxMacControl* peer = new wxMacControl(wxpeer) ;

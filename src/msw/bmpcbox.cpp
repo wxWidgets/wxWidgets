@@ -308,7 +308,7 @@ bool wxBitmapComboBox::OnAddBitmap(const wxBitmap& bitmap)
 
         return true;
     }
-    
+
     return false;
 }
 
@@ -365,7 +365,7 @@ bool wxBitmapComboBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     if ( pos == -1 )
         return FALSE;
 
-    int flags = 0;                
+    int flags = 0;
     if ( lpDrawItem->itemState & ODS_COMBOBOXEDIT )
         flags |= wxODCB_PAINTING_CONTROL;
     if ( lpDrawItem->itemState & ODS_SELECTED )

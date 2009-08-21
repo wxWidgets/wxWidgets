@@ -24,7 +24,7 @@ public:
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
 private:
     void* m_overlayWindow;
-        
+
 private:
     DECLARE_CLASS(wxScreenDCImpl)
     wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);

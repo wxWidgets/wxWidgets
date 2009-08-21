@@ -2698,7 +2698,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 {
     // NOTE: this code is the same of wxAnimationDecoder::CanRead and
     //       wxImageHandler::GetImageCount
-    
+
     if ( !stream.IsSeekable() )
         return false;        // can't test unseekable stream
 

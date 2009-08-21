@@ -39,7 +39,7 @@ protected:
 
     bool ProcessXEvent(WXEvent* event);
     WXWindow FindAClientWindow(WXWindow window, const wxString& name);
-    
+
     static bool sm_done;
     static wxAdoptedWindow* sm_toReparent;
     static wxWindow* sm_newParent;

@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxStatusBar;
 class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
 
-class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase 
+class WXDLLIMPEXP_CORE wxFrame: public wxFrameBase
 {
 public:
     // construction

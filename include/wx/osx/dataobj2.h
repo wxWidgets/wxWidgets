@@ -68,7 +68,7 @@ public:
     // ----------------------------------
 
     void AddFile( const wxString &filename );
-    
+
     virtual size_t GetDataSize() const;
     virtual bool GetDataHere(void *buf) const;
     virtual bool SetData(size_t len, const void *buf);

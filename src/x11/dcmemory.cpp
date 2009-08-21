@@ -26,14 +26,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxMemoryDCImpl,wxWindowDCImpl)
 
 wxMemoryDCImpl::wxMemoryDCImpl( wxDC *owner )
   : wxWindowDCImpl( owner )
-{ 
+{
     Init();
 }
 
 wxMemoryDCImpl::wxMemoryDCImpl(  wxDC *owner, wxBitmap& bitmap )
   : wxWindowDCImpl( owner )
-{ 
-    Init(); 
+{
+    Init();
     DoSelect(bitmap);
 }
 

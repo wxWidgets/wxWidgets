@@ -247,7 +247,7 @@ bool wxImageList::Draw(int index,
     wxMSWDCImpl *msw_impl = wxDynamicCast( impl, wxMSWDCImpl );
     if (!msw_impl)
        return false;
-    
+
     HDC hDC = GetHdcOf(*msw_impl);
     wxCHECK_MSG( hDC, false, wxT("invalid wxDC in wxImageList::Draw") );
 

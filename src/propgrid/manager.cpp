@@ -726,10 +726,10 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
 
 size_t wxPropertyGridManager::GetPageCount() const
 {
-	if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
-		return 0;
+    if ( !(m_iFlags & wxPG_MAN_FL_PAGE_INSERTED) )
+        return 0;
 
-	return m_arrPages.size();
+    return m_arrPages.size();
 }
 
 // -----------------------------------------------------------------------

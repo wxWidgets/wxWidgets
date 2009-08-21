@@ -837,7 +837,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
         return false;
 
     const bool hasAlpha = image.HasAlpha();
-    
+
     if (depth == -1)
       depth = dib.GetDepth();
 

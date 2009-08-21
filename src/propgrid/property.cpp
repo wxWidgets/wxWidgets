@@ -108,7 +108,7 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
 
     if ( editor )
     {
-        wxRect rect2(rect); 
+        wxRect rect2(rect);
         rect2.x += xOffset;
         rect2.y += yOffset;
         rect2.height -= yOffset;
@@ -721,7 +721,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 /*
 wxString wxPGProperty::GetColumnText( unsigned int col, int choiceIndex ) const
 {
-    
+
     if ( col != 1 || choiceIndex == wxNOT_FOUND )
     {
         const wxPGCell& cell = GetCell(col);
@@ -827,7 +827,7 @@ void wxPGProperty::DoGenerateComposedValue( wxString& text,
                                             argFlags|wxPG_COMPOSITE_FRAGMENT);
             }
         }
- 
+
         if ( childResults && curChild->GetChildCount() )
             (*childResults)[curChild->GetName()] = s;
 
@@ -2578,14 +2578,14 @@ int wxPropertyCategory::GetTextExtent( const wxWindow* wnd, const wxFont& font )
     if ( m_textExtent > 0 )
         return m_textExtent;
     int x = 0, y = 0;
-	((wxWindow*)wnd)->GetTextExtent( m_label, &x, &y, 0, 0, &font );
+    ((wxWindow*)wnd)->GetTextExtent( m_label, &x, &y, 0, 0, &font );
     return x;
 }
 
 void wxPropertyCategory::CalculateTextExtent( wxWindow* wnd, const wxFont& font )
 {
     int x = 0, y = 0;
-	wnd->GetTextExtent( m_label, &x, &y, 0, 0, &font );
+    wnd->GetTextExtent( m_label, &x, &y, 0, 0, &font );
     m_textExtent = x;
 }
 

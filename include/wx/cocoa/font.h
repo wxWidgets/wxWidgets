@@ -62,7 +62,7 @@ public:
     {
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
-    
+
     wxFont(const wxSize& pixelSize,
            wxFontFamily family,
            wxFontStyle style,
@@ -74,7 +74,7 @@ public:
         Create(10, family, style, weight, underlined, face, encoding);
         SetPixelSize(pixelSize);
     }
-    
+
     /*! @abstract   Construction with opaque wxNativeFontInfo
      */
     wxFont(const wxNativeFontInfo& info)

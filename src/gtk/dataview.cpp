@@ -853,7 +853,7 @@ typedef struct _GtkWxCellRendererTextClass GtkWxCellRendererTextClass;
 struct _GtkWxCellRendererText
 {
   GtkCellRendererText parent;
-  
+
   wxDataViewRenderer *wx_renderer;
 };
 
@@ -969,7 +969,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
     event.SetColumn( wx_renderer->GetOwner()->GetModelColumn() );
     event.SetItem( item );
     dv->HandleWindowEvent( event );
-    
+
     if (event.IsAllowed())
         return GTK_CELL_RENDERER_CLASS(text_cell_parent_class)->
            start_editing( gtk_renderer, gdk_event, widget, path, background_area, cell_area, flags );
@@ -1489,7 +1489,7 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 bool wxGtkDataViewModelNotifier::Cleared()
 {
     m_owner->GtkGetInternal()->Cleared();
-    
+
     return true;
 }
 
@@ -1562,8 +1562,8 @@ void wxDataViewRenderer::GtkInitHandlers()
     if (!gtk_check_version(2,6,0))
     {
         g_signal_connect (GTK_CELL_RENDERER(m_renderer), "editing_started",
-		    G_CALLBACK (wxgtk_renderer_editing_started),
-		    this);
+            G_CALLBACK (wxgtk_renderer_editing_started),
+            this);
     }
 }
 
@@ -3025,10 +3025,10 @@ void wxGtkTreeModelNode::Resort()
     // Sort the ptrs
     gs_internal = m_internal;
     ptrs.Sort( &wxGtkTreeModelChildPtrCmp );
- 
+
     wxGtkTreeModelChildren temp;
     void** base_ptr = &(m_children[0]);
-    // Transfer positions to new_order array and 
+    // Transfer positions to new_order array and
     // IDs to temp
     for (i = 0; i < child_count; i++)
     {
@@ -3068,13 +3068,13 @@ void wxGtkTreeModelNode::Resort()
 
 #if 0
     // Too slow
-    
+
     wxGtkTreeModelChildren temp;
     WX_APPEND_ARRAY( temp, m_children );
 
     gs_internal = m_internal;
     m_children.Sort( &wxGtkTreeModelChildCmp );
-    
+
     unsigned int pos;
     for (pos = 0; pos < child_count; pos++)
     {
@@ -3097,7 +3097,7 @@ void wxGtkTreeModelNode::Resort()
     gtk_tree_path_free (path);
 
     delete [] new_order;
-    
+
     unsigned int pos;
     for (pos = 0; pos < node_count; pos++)
     {
@@ -3317,13 +3317,13 @@ bool wxDataViewCtrlInternal::Cleared()
     GtkWidget* tree_widget = GetOwner()->GtkGetTreeView();
     gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), NULL );
     gtk_tree_view_set_model( GTK_TREE_VIEW(tree_widget), GTK_TREE_MODEL(m_gtk_model) );
-    
+
     if (m_root)
     {
         delete m_root;
         InitTree();
     }
-    
+
     return true;
 }
 
@@ -3404,9 +3404,9 @@ gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path 
     if (m_wx_model->IsVirtualListModel())
     {
         wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
-    
+
         unsigned int i = (unsigned int)gtk_tree_path_get_indices (path)[0];
-        
+
         if (i >= wx_model->GetCount())
             return FALSE;
 
@@ -3506,7 +3506,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
             iter->user_data = NULL;
             return FALSE;
         }
-        
+
         // user_data is just the index +1 (+2 because we need the next)
         iter->user_data = (gpointer) (n+2);
     }
@@ -3555,7 +3555,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             iter->user_data = (gpointer) m_root->GetChildren().Item( 0 );
             return TRUE;
         }
-        
+
         wxDataViewItem item( (void*) parent->user_data );
 
         if (!m_wx_model->IsContainer( item ))
@@ -3585,7 +3585,7 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 
         if (iter == NULL)
             return (wx_model->GetCount() > 0);
-        
+
         // this is a list, nodes have no children
         return FALSE;
     }
@@ -3593,7 +3593,7 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
     {
         if (iter == NULL)
             return (m_root->GetChildCount() > 0);
-    
+
         wxDataViewItem item( (void*) iter->user_data );
 
         bool is_container = m_wx_model->IsContainer( item );

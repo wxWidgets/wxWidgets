@@ -60,17 +60,17 @@ WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname
 class WXDLLIMPEXP_CORE wxWidgetCocoaImpl : public wxWidgetImpl
 {
 public :
-    wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;    
-    wxWidgetCocoaImpl() ;    
-    ~wxWidgetCocoaImpl();    
-    
+    wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl = false ) ;
+    wxWidgetCocoaImpl() ;
+    ~wxWidgetCocoaImpl();
+
     void Init();
-    
+
     virtual bool        IsVisible() const ;
     virtual void        SetVisibility(bool);
 
     virtual void        Raise();
-    
+
     virtual void        Lower();
 
     virtual void        ScrollRect( const wxRect *rect, int dx, int dy );
@@ -124,11 +124,11 @@ public :
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
     void                InstallEventHandler( WXWidget control = NULL );
-    
-    virtual bool        DoHandleMouseEvent(NSEvent *event); 
+
+    virtual bool        DoHandleMouseEvent(NSEvent *event);
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
-    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow); 
+    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
 
     void                SetFlipped(bool flipped);
     virtual bool        IsFlipped() const { return m_isFlipped; }
@@ -149,7 +149,7 @@ public :
     virtual void                resetCursorRects(WXWidget slf, void* _cmd);
     virtual bool                isFlipped(WXWidget slf, void* _cmd);
     virtual void                drawRect(void* rect, WXWidget slf, void* _cmd);
-    
+
     virtual void                controlAction(WXWidget slf, void* _cmd, void* sender);
     virtual void                controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
 
@@ -158,9 +158,9 @@ protected:
     NSEvent* m_lastKeyDownEvent;
     bool m_isFlipped;
     // if it the control has an editor, that editor will already send some
-    // events, don't resend them 
+    // events, don't resend them
     bool m_hasEditor;
-    
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
 };
 
@@ -171,59 +171,59 @@ class wxNonOwnedWindowCocoaImpl : public wxNonOwnedWindowImpl
 public :
     wxNonOwnedWindowCocoaImpl( wxNonOwnedWindow* nonownedwnd) ;
     wxNonOwnedWindowCocoaImpl();
-    
+
     virtual ~wxNonOwnedWindowCocoaImpl();
-    
+
     virtual void Destroy() ;
     void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name ) ;
-    
+
     WXWindow GetWXWindow() const;
-    void Raise();    
+    void Raise();
     void Lower();
-    bool Show(bool show);    
+    bool Show(bool show);
     bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
-        
+
     void Update();
     bool SetTransparent(wxByte alpha);
     bool SetBackgroundColour(const wxColour& col );
-    void SetExtraStyle( long exStyle );    
-    bool SetBackgroundStyle(wxBackgroundStyle style);    
+    void SetExtraStyle( long exStyle );
+    bool SetBackgroundStyle(wxBackgroundStyle style);
     bool CanSetTransparent();
 
     void MoveWindow(int x, int y, int width, int height);
     void GetPosition( int &x, int &y ) const;
     void GetSize( int &width, int &height ) const;
 
-    void GetContentArea( int &left , int &top , int &width , int &height ) const;    
+    void GetContentArea( int &left , int &top , int &width , int &height ) const;
     bool SetShape(const wxRegion& region);
-    
+
     virtual void SetTitle( const wxString& title, wxFontEncoding encoding ) ;
-    
+
     virtual bool IsMaximized() const;
-    
+
     virtual bool IsIconized() const;
-    
+
     virtual void Iconize( bool iconize );
-    
+
     virtual void Maximize(bool maximize);
-    
+
     virtual bool IsFullScreen() const;
-    
+
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);
-    
+
     virtual void ScreenToWindow( int *x, int *y );
-    
+
     virtual void WindowToScreen( int *x, int *y );
-    
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
     WX_wxNSWindow         m_macWindow;
     void *              m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
-};    
+};
 
 #ifdef __OBJC__
 
@@ -231,16 +231,16 @@ protected :
     WXDLLIMPEXP_CORE wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
     WXDLLIMPEXP_CORE NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
     WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
-    
-    NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
+
+    NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size ,
         bool adjustForOrigin = true );
-        
+
     // used for many wxControls
-    
+
     @interface wxNSButton : NSButton
     {
     }
-    
+
     @end
 
     @interface wxNSBox : NSBox
@@ -276,7 +276,7 @@ protected :
     @interface wxNSTextView : NSTextView
     {
     }
-    
+
     @end
 
     @interface wxNSMenu : NSMenu
@@ -287,7 +287,7 @@ protected :
     - (void) setImplementation:(wxMenuImpl*) item;
     - (wxMenuImpl*) implementation;
 
-    @end 
+    @end
 
     @interface wxNSMenuItem : NSMenuItem
     {
@@ -300,8 +300,8 @@ protected :
     - (void)clickedAction:(id)sender;
     - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
-    @end 
-    
+    @end
+
     void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
 
     /*

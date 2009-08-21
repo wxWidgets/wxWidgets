@@ -117,7 +117,7 @@ wxCalendarCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(clsname, wxEmptyString, pos, size) )
         return false;
 
-    // initialize the control 
+    // initialize the control
     UpdateFirstDayOfWeek();
 
     SetDate(dt.IsValid() ? dt : wxDateTime::Today());

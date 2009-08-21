@@ -298,7 +298,7 @@ public:
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
-	// stroke lines connecting each of the points
+    // stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
 
     // draws a polygon
@@ -311,7 +311,7 @@ public:
     virtual void BeginLayer(wxDouble opacity);
 
     virtual void EndLayer();
-    
+
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
     virtual void Rotate( wxDouble angle );
@@ -1121,19 +1121,19 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
    if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-	if ( !m_pen.IsNull() )
-	{
-        wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
-		Point *cpoints = new Point[n];
-		for (size_t i = 0; i < n; i++)
-		{
-			cpoints[i].X = (int)(points[i].m_x );
-			cpoints[i].Y = (int)(points[i].m_y );
+   if ( !m_pen.IsNull() )
+   {
+       wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
+       Point *cpoints = new Point[n];
+       for (size_t i = 0; i < n; i++)
+       {
+           cpoints[i].X = (int)(points[i].m_x );
+           cpoints[i].Y = (int)(points[i].m_y );
 
-		} // for (size_t i = 0; i < n; i++)
-		m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
-		delete[] cpoints;
-	}
+       } // for (size_t i = 0; i < n; i++)
+       m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+       delete[] cpoints;
+   }
 }
 
 void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode WXUNUSED(fillStyle) )
@@ -1142,18 +1142,18 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
         return;
 
     wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
-	Point *cpoints = new Point[n];
-	for (size_t i = 0; i < n; i++)
-	{
-		cpoints[i].X = (int)(points[i].m_x );
-		cpoints[i].Y = (int)(points[i].m_y );
+    Point *cpoints = new Point[n];
+    for (size_t i = 0; i < n; i++)
+    {
+        cpoints[i].X = (int)(points[i].m_x );
+        cpoints[i].Y = (int)(points[i].m_y );
 
-	} // for (int i = 0; i < n; i++)
-	if ( !m_brush.IsNull() )
-		m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ) ;
-	if ( !m_pen.IsNull() )
-		m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
-	delete[] cpoints;
+    } // for (int i = 0; i < n; i++)
+    if ( !m_brush.IsNull() )
+        m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ) ;
+    if ( !m_pen.IsNull() )
+        m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
+    delete[] cpoints;
 }
 
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
@@ -1186,9 +1186,9 @@ bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
 {
     if (m_antialias == antialias)
         return true;
-    
+
     m_antialias = antialias;
-    
+
     SmoothingMode antialiasMode;
     switch (antialias)
     {
@@ -1209,9 +1209,9 @@ bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
         return true;
-        
+
     m_composition = op;
-    
+
     if (m_composition == wxCOMPOSITION_DEST)
         return true;
 
@@ -1240,7 +1240,7 @@ void wxGDIPlusContext::BeginLayer(wxDouble /* opacity */)
 void wxGDIPlusContext::EndLayer()
 {
     // TODO
-}    
+}
 
 void wxGDIPlusContext::Rotate( wxDouble angle )
 {

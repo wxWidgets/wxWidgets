@@ -2,7 +2,7 @@
 // Name:        pnghand.h
 // Purpose:     PNG bitmap handler
 // Author:      Julian Smart
-// Modified by: 
+// Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart

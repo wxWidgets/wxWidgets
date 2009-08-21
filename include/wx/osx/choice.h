@@ -77,7 +77,7 @@ public:
     virtual wxString GetString(unsigned int n) const ;
     virtual void SetString(unsigned int pos, const wxString& s);
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:

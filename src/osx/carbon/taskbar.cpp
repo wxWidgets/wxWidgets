@@ -141,7 +141,7 @@ wxDockEventHandler(EventHandlerCallRef WXUNUSED(inHandlerCallRef),
     wxDockTaskBarIcon* pTB = (wxDockTaskBarIcon*) pData;
     const UInt32 eventClass = GetEventClass(inEvent);
     const UInt32 eventKind = GetEventKind(inEvent);
-    
+
     OSStatus err = eventNotHandledErr;
 
     // Handle wxTaskBar menu events (note that this is a global event handler

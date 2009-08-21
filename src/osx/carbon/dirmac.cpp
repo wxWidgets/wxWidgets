@@ -135,9 +135,9 @@ bool wxDirData::Read(wxString *filename)
         ItemCount fetched = 0;
 
         err = FSGetCatalogInfoBulk( m_iterator, 1, &fetched, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo , &catalogInfo , &fileRef, NULL, &uniname );
-        
-        // expected error codes 
-        
+
+        // expected error codes
+
         if ( errFSNoMoreItems == err )
             return false ;
         if ( afpAccessDenied == err )

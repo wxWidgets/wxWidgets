@@ -26,7 +26,7 @@ public:
 
     virtual const wxBitmap& GetSelectedBitmap() const;
     virtual wxBitmap& GetSelectedBitmap();
-    
+
     // implementation
     wxBitmap  m_selected;
 

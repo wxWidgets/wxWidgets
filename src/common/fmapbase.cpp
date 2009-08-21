@@ -101,7 +101,7 @@ static wxFontEncoding gs_encodings[] =
     wxFONTENCODING_GB2312,
     wxFONTENCODING_ISO2022_JP,
 
-    wxFONTENCODING_MACROMAN, 
+    wxFONTENCODING_MACROMAN,
     wxFONTENCODING_MACJAPANESE,
     wxFONTENCODING_MACCHINESETRAD,
     wxFONTENCODING_MACKOREAN,
@@ -306,7 +306,7 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
     { wxT( "GB2312" ), NULL },
     { wxT( "ISO-2022-JP" ), NULL },
 
- 
+
     { wxT( "MacRoman" ), NULL },
     { wxT( "MacJapanese" ), NULL },
     { wxT( "MacChineseTrad" ), NULL },

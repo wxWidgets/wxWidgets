@@ -27,10 +27,10 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
-wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) 
+wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner )
   : wxWindowDCImpl( owner )
-{ 
-    Init(); 
+{
+    Init();
 }
 
 void wxScreenDCImpl::Init()

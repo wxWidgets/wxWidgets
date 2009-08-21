@@ -153,11 +153,11 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
     SendDestroyEvent();
-    
+
     wxRemoveWXWindowAssociation( this ) ;
-    
+
     DestroyChildren();
-    
+
     delete m_nowpeer;
 
     // avoid dangling refs
@@ -171,7 +171,7 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 
 bool wxNonOwnedWindow::ShowWithEffect(wxShowEffect effect,
                                 unsigned timeout )
-{ 
+{
     if ( !wxWindow::Show(true) )
         return false;
 
@@ -181,16 +181,16 @@ bool wxNonOwnedWindow::ShowWithEffect(wxShowEffect effect,
     HandleWindowEvent(event);
 
 
-    return m_nowpeer->ShowWithEffect(true, effect, timeout); 
+    return m_nowpeer->ShowWithEffect(true, effect, timeout);
 }
 
 bool wxNonOwnedWindow::HideWithEffect(wxShowEffect effect,
                                 unsigned timeout )
-{ 
+{
     if ( !wxWindow::Show(false) )
         return false;
 
-    return m_nowpeer->ShowWithEffect(false, effect, timeout); 
+    return m_nowpeer->ShowWithEffect(false, effect, timeout);
 }
 
 wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
@@ -201,17 +201,17 @@ wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
 }
 
 bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
-{        
+{
     if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
         return false ;
-    
+
     if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
     {
         if ( m_nowpeer )
             return m_nowpeer->SetBackgroundColour(c);
     }
     return true;
-}    
+}
 
 // Raise the window to the top of the Z order
 void wxNonOwnedWindow::Raise()
@@ -306,7 +306,7 @@ bool wxNonOwnedWindow::Show(bool show)
 
     if ( m_nowpeer )
         m_nowpeer->Show(show);
-    
+
     if ( show )
     {
         // because apps expect a size event to occur at this moment
@@ -314,7 +314,7 @@ bool wxNonOwnedWindow::Show(bool show)
         event.SetEventObject(this);
         HandleWindowEvent(event);
     }
-    
+
     return true ;
 }
 
@@ -345,7 +345,7 @@ bool wxNonOwnedWindow::SetBackgroundStyle(wxBackgroundStyle style)
 {
     if ( !wxWindow::SetBackgroundStyle(style) )
         return false ;
-        
+
     return m_nowpeer ? m_nowpeer->SetBackgroundStyle(style) : true;
 }
 
@@ -378,9 +378,9 @@ void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
 {
     if ( m_nowpeer == NULL )
         return;
-        
+
     int w,h;
-    
+
     m_nowpeer->GetSize(w, h);
 
     if (width)

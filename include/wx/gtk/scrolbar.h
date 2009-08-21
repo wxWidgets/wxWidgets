@@ -56,7 +56,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 

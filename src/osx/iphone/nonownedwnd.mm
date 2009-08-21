@@ -51,19 +51,19 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
 
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl )
 
-wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) : 
+wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonownedwnd) :
     wxNonOwnedWindowImpl(nonownedwnd)
 {
     m_macWindow = NULL;
     m_macFullScreenData = NULL;
 }
-    
-wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl() 
+
+wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl()
 {
     m_macWindow = NULL;
     m_macFullScreenData = NULL;
 }
-    
+
 wxNonOwnedWindowIPhoneImpl::~wxNonOwnedWindowIPhoneImpl()
 {
     [m_macWindow release];
@@ -78,11 +78,11 @@ void wxNonOwnedWindowIPhoneImpl::Create( wxWindow* parent, const wxPoint& pos, c
 long style, long extraStyle, const wxString& name )
 {
     m_macWindow = [UIWindow alloc];
-    
+
     UIWindowLevel level = UIWindowLevelNormal;
-    
+
     // most styles are not supported on the iphone
-    
+
     if ( style & wxFRAME_TOOL_WINDOW )
     {
         level = UIWindowLevelAlert; ;
@@ -102,11 +102,11 @@ long style, long extraStyle, const wxString& name )
     }
 
     if ( ( style & wxSTAY_ON_TOP ) )
-        level = UIWindowLevelAlert;    
+        level = UIWindowLevelAlert;
     CGRect r = CGRectMake( 0, 0, size.x, size.y) ;
-    
+
     [m_macWindow initWithFrame:r ];
-        
+
     [m_macWindow setWindowLevel:level];
     // [m_macWindow makeKeyAndOrderFront:nil];
 }
@@ -120,7 +120,7 @@ WXWindow wxNonOwnedWindowIPhoneImpl::GetWXWindow() const
 void wxNonOwnedWindowIPhoneImpl::Raise()
 {
 }
-    
+
 void wxNonOwnedWindowIPhoneImpl::Lower()
 {
 }
@@ -135,7 +135,7 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
     }
     return true;
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout)
 {
     return Show(show);
@@ -161,12 +161,12 @@ void wxNonOwnedWindowIPhoneImpl::SetExtraStyle( long exStyle )
 {
     // no special styles supported
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style)
 {
     return true;
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::CanSetTransparent()
 {
     return true;
@@ -200,31 +200,31 @@ void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width
     left = rect.origin.x;
     top = rect.origin.y;
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)
 {
     return false;
 }
 
-void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& title, wxFontEncoding encoding ) 
+void wxNonOwnedWindowIPhoneImpl::SetTitle( const wxString& title, wxFontEncoding encoding )
 {
 // TODO change title of app ?
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::IsMaximized() const
 {
     return false;
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::IsIconized() const
 {
     return false;
 }
-    
+
 void wxNonOwnedWindowIPhoneImpl::Iconize( bool iconize )
 {
 }
-    
+
 void wxNonOwnedWindowIPhoneImpl::Maximize(bool maximize)
 {
 }
@@ -233,9 +233,9 @@ bool wxNonOwnedWindowIPhoneImpl::IsFullScreen() const
 {
     return m_macFullScreenData != NULL ;
 }
-    
+
 bool wxNonOwnedWindowIPhoneImpl::ShowFullScreen(bool show, long style)
-{    
+{
     return true;
 }
 

@@ -104,7 +104,7 @@ public:
   {
     return this->m_NativeColumnPtr;
   }
-  
+
   void SetNativeColumnPtr(NSTableColumn* newNativeColumnPtr)
   {
     this->m_NativeColumnPtr = newNativeColumnPtr;
@@ -235,11 +235,11 @@ private:
   NSMutableArray* children; // buffered children
 
   NSMutableSet* items; // stores all items that are in use by the control
-  
+
   wxCocoaDataViewControl* implementation;
-  
+
   wxDataViewModel* model;
-  
+
   wxPointerObject* currentParentItem; // parent of the buffered children; the object is owned
 }
 
@@ -338,11 +338,11 @@ private:
 @private
   CGFloat xImageShift;    // shift for the image in x-direction from border
   CGFloat spaceImageText; // space between image and text ("belongs" to the image)
-  
+
   NSImage* image; // the image itself
-  
+
   NSSize imageSize; // largest size of the image; default size is (16, 16)
-  
+
   NSTextAlignment cellAlignment; // the text alignment is used to align the whole
                                  // cell (image and text)
 }

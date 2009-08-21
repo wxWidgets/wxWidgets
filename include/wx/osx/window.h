@@ -156,7 +156,7 @@ public:
     // this should not be overriden in classes above wxWindowMac
     // because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
-    
+
     virtual bool        MacDoRedraw( long time ) ;
     virtual void        MacPaintChildrenBorders();
     virtual void        MacPaintBorders( int left , int top ) ;
@@ -235,12 +235,12 @@ public:
 
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
- 
+
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
 protected:

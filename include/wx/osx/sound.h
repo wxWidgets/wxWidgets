@@ -32,7 +32,7 @@ public:
   static bool IsPlaying();
 
   void* GetHandle();
-protected:  
+protected:
   bool  DoPlay(unsigned flags) const;
 
 private:

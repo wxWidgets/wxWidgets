@@ -44,7 +44,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     virtual bool Enable( bool enable = true );
 
     // implementation
@@ -55,7 +55,7 @@ public:
 protected:
     void GtkDisableEvents() const;
     void GtkEnableEvents() const;
-    
+
     virtual wxSize DoGetBestSize() const;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 

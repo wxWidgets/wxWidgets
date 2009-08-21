@@ -18,7 +18,7 @@
 #include "wx/cmndata.h"
 #include "wx/printdlg.h"
 #include "wx/prntbase.h"
-    
+
 /*
  * wxMacPrintDialog
  * The Mac dialog for printing
@@ -45,7 +45,7 @@ private:
     wxDC*               m_printerDC;
     bool                m_destroyDC;
     wxWindow*           m_dialogParent;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPrintDialog)
 };
@@ -62,14 +62,14 @@ public:
     virtual ~wxMacPageSetupDialog();
 
     virtual wxPageSetupData& GetPageSetupDialogData();
-    
+
     bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
     virtual int ShowModal();
-  
+
 private:
     wxPageSetupData   m_pageSetupData;
     wxWindow*               m_dialogParent;
-  
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacPageSetupDialog)
 };
@@ -93,17 +93,17 @@ public:
 
 private:
     wxPageSetupData* m_pageSetupDialogData;
-    
+
     wxPoint m_MinMarginTopLeft;
     wxPoint m_MinMarginBottomRight;
     wxTextCtrl *m_LeftMargin;
     wxTextCtrl *m_TopMargin;
     wxTextCtrl *m_RightMargin;
     wxTextCtrl *m_BottomMargin;
-    
+
     void GetMinMargins();
     bool CheckValue(wxTextCtrl* textCtrl, int *value, int minValue, const wxString& name);
-    
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacPageMarginsDialog)
 };

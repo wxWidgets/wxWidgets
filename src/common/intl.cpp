@@ -2614,8 +2614,8 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 
     char chLast = '\0';
     size_t lastCount = 0;
-    
-    const char* formatchars = 
+
+    const char* formatchars =
         "dghHmMsSy"
 #ifdef __WXMSW__
         "t"
@@ -2811,7 +2811,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                     // strftime() doesn't have era string,
                     // ignore this format
                     wxASSERT_MSG( lastCount <= 2, "too many 'g's" );
-         
+
                     break;
 #ifndef __WXMSW__
                 case 'a':

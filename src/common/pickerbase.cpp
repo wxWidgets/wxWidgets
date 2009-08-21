@@ -66,13 +66,13 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
     // remove any border style from our style as wxPickerBase's window must be
     // invisible (user styles must be set on the textctrl or the platform-dependent picker)
     style &= ~wxBORDER_MASK;
-    
+
     if (!wxControl::Create(parent, id, pos, size, style | wxNO_BORDER | wxTAB_TRAVERSAL,
                            validator, name))
         return false;
-        
+
     SetMinSize( size );
-        
+
     m_sizer = new wxBoxSizer(wxHORIZONTAL);
 
     if (HasFlag(wxPB_USE_TEXTCTRL))
@@ -113,7 +113,7 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         // the text control's proportion values defaults to 2
         m_sizer->Add(m_text, 2, GetDefaultTextCtrlFlag(), 5);
     }
-    
+
     return true;
 }
 
@@ -124,7 +124,7 @@ void wxPickerBase::PostCreation()
     m_sizer->Add(m_picker, HasTextCtrl() ? 0 : 1, GetDefaultPickerCtrlFlag(), 5);
 
     SetSizer(m_sizer);
-    
+
     SetInitialSize( GetMinSize() );
 }
 

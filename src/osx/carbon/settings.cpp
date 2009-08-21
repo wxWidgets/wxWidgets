@@ -159,7 +159,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
     wxFont font;
-    
+
     switch (index)
     {
         case wxSYS_ANSI_VAR_FONT :
@@ -252,7 +252,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
 #if wxOSX_USE_CARBON
             return (int)(GetDblTime() * 1000. / 60.);
 #else
-            // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway 
+            // default on mac is 30 ticks, we shouldn't really use wxSYS_DCLICK_MSEC anyway
             // but rather rely on the 'click-count' by the system delivered in a mouse event
             return 500;
 #endif

@@ -3446,7 +3446,7 @@ void wxAuiNotebook::SetSelectionToWindow(wxWindow *win)
     // to the child tab in the SetSelection call below
     // (the child focus event will also let wxAuiManager, if any,
     // know that the notebook control has been activated)
-    
+
     wxWindow* parent = GetParent();
     if (parent)
     {

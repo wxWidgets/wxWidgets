@@ -21,7 +21,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -30,7 +30,7 @@
 
 @end
 
-namespace 
+namespace
 {
     class wxStaticBoxCocoaImpl : public wxWidgetCocoaImpl
     {
@@ -39,35 +39,35 @@ namespace
         : wxWidgetCocoaImpl(wxpeer, v)
         {
         }
-        
+
         virtual void SetLabel( const wxString& title, wxFontEncoding encoding )
         {
             if (title.empty())
                 [GetNSBox() setTitlePosition:NSNoTitle];
             else
                 [GetNSBox() setTitlePosition:NSAtTop];
-            
+
             wxWidgetCocoaImpl::SetLabel(title, encoding);
         }
-        
+
     private:
         NSBox *GetNSBox() const
         {
             wxASSERT( [m_osxView isKindOfClass:[NSBox class]] );
-            
+
             return static_cast<NSBox*>(m_osxView);
         }
     };
 } // anonymous namespace
 
 
-wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long WXUNUSED(style),
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;

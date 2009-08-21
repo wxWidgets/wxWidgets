@@ -154,7 +154,7 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 #else
     FSSpec fsSpec;
 #endif
-    
+
     procno.highLongOfPSN = 0 ;
     procno.lowLongOfPSN = kCurrentProcess ;
     processinfo.processInfoLength = sizeof(ProcessInfoRec);
@@ -164,7 +164,7 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 #else
     processinfo.processAppSpec = &fsSpec;
 #endif
-    
+
     GetProcessInformation( &procno , &processinfo ) ;
 #ifdef __LP64__
     return wxMacFSRefToPath(&fsRef);
@@ -172,7 +172,7 @@ wxString wxStandardPathsCF::GetExecutablePath() const
     return wxMacFSSpec2MacFilename(&fsSpec);
 #endif
 #endif
-    
+
 #else
     return wxStandardPathsBase::GetExecutablePath();
 #endif

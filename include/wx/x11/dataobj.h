@@ -18,7 +18,7 @@ class WXDLLIMPEXP_CORE wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
-    
+
 #ifdef __DARWIN__
     virtual ~wxDataObject() { }
 #endif

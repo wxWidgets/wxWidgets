@@ -35,7 +35,7 @@ wxCairoLibrary *wxCairoLibrary::ms_lib = NULL;
 wxCairoLibrary::wxCairoLibrary()
 {
     wxLogNull log;
-    
+
     m_libCairo.Load("libcairo.so.2");
     m_ok = m_libCairo.IsLoaded();
     if ( !m_ok )
@@ -67,7 +67,7 @@ wxCairoLibrary::~wxCairoLibrary()
             ms_lib = NULL;
         }
     }
-    
+
     return ms_lib;
 }
 

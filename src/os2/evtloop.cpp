@@ -404,7 +404,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     if (wxTheApp)
     {
         wxTheApp->ProcessPendingEvents();
-	wxTheApp->HandleSockets();
+        wxTheApp->HandleSockets();
     }
 
     //

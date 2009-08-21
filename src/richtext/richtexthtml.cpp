@@ -256,7 +256,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
             str << wxString::Format(wxT("<p align=\"%s\""), align.c_str());
 
             if (thisStyle.HasParagraphSpacingAfter() && thisStyle.GetParagraphSpacingAfter() == 0)
-            	str << wxT(" style=\"line-height: 0px\"");
+                str << wxT(" style=\"line-height: 0px\"");
 
             str << wxT(">");
 

@@ -51,7 +51,7 @@ protected:
     virtual void GTKWidgetDoSetMnemonic(GtkWidget* w);
 
     void DoApplyWidgetStyle(GtkRcStyle *style);
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };

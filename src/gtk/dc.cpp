@@ -18,7 +18,7 @@
 
 IMPLEMENT_ABSTRACT_CLASS(wxGTKDCImpl, wxDCImpl)
 
-wxGTKDCImpl::wxGTKDCImpl( wxDC *owner ) 
+wxGTKDCImpl::wxGTKDCImpl( wxDC *owner )
    : wxDCImpl( owner )
 {
     m_ok = FALSE;

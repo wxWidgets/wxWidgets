@@ -40,7 +40,7 @@ public:
     virtual void GetFilenames(wxArrayString& files) const;
 
     virtual int ShowModal();
-    
+
     inline WX_NSSavePanel GetNSSavePanel()
     {   return (WX_NSSavePanel)m_cocoaNSWindow; }
 

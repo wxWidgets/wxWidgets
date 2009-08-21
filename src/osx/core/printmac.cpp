@@ -89,17 +89,17 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     {
         papersize = data.GetPaperSize();
     }
-    
+
     if ( papersize != wxDefaultSize )
     {
         papersize.x = (wxInt32) (papersize.x * mm2pt);
         papersize.y = (wxInt32) (papersize.y * mm2pt);
-        
+
         double height, width;
         PMPaperGetHeight(m_macPaper, &height);
         PMPaperGetWidth(m_macPaper, &width);
-        
-        if ( fabs( width - papersize.x ) >= 5 || 
+
+        if ( fabs( width - papersize.x ) >= 5 ||
             fabs( height - papersize.y ) >= 5 )
         {
             // we have to change the current paper
@@ -113,7 +113,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
                     PMPaper paper = (PMPaper) CFArrayGetValueAtIndex( paperlist, i );
                     PMPaperGetHeight(paper, &height);
                     PMPaperGetWidth(paper, &width);
-                    if ( fabs( width - papersize.x ) < 5 && 
+                    if ( fabs( width - papersize.x ) < 5 &&
                         fabs( height - papersize.y ) < 5 )
                     {
                         // TODO test for duplicate hits and use additional
@@ -125,7 +125,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
                 if ( bestPaper == kPMNoData )
                 {
                     const PMPaperMargins margins = { 0.0, 0.0, 0.0, 0.0 };
-                    wxString id, name(wxT("Custom paper"));                    
+                    wxString id, name(wxT("Custom paper"));
                     id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -135,10 +135,10 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
                             papersize.x, papersize.y, &margins, &paper);
                     }
 #endif
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
                     if ( paper == kPMNoData )
                     {
-                        PMPaperCreate(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ), 
+                        PMPaperCreate(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ),
                             papersize.x, papersize.y, &margins, &paper);
                     }
 #endif
@@ -159,7 +159,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     CFArrayRef printerList;
     CFIndex index, count;
     CFStringRef name;
-    
+
     if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr)
     {
         count = CFArrayGetCount(printerList);
@@ -180,7 +180,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             PMSessionSetCurrentPMPrinter(m_macPrintSession, printer);
         CFRelease(printerList);
     }
-    
+
     PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
     PMSetCollate(m_macPrintSettings, data.GetCollate());
     if ( data.IsOrientationReversed() )
@@ -189,7 +189,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     else
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMLandscape : kPMPortrait , false ) ;
-    
+
     PMDuplexMode mode = 0 ;
     switch( data.GetDuplex() )
     {
@@ -207,15 +207,15 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     PMSetDuplex(  m_macPrintSettings, mode ) ;
 
     // PMQualityMode not yet accessible via API
-    
-    
+
+
     if ( data.IsOrientationReversed() )
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMReverseLandscape : kPMReversePortrait , false ) ;
     else
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMLandscape : kPMPortrait , false ) ;
-    
+
 #ifndef __LP64__
     // PMQualityMode not accessible via API
     // TODO: use our quality property to determine optimal resolution
@@ -225,9 +225,9 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     PMSetResolution( m_macPageFormat, &res);
 #endif
 
-    // after setting the new resolution the format has to be updated, otherwise the page rect remains 
+    // after setting the new resolution the format has to be updated, otherwise the page rect remains
     // at the 'old' scaling
-    
+
     PMSessionValidatePageFormat(m_macPrintSession,
         m_macPageFormat, kPMDontWantBoolean);
     PMSessionValidatePrintSettings(m_macPrintSession,
@@ -269,7 +269,7 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
     Boolean collate;
     if (PMGetCollate(m_macPrintSettings, &collate) == noErr)
         data.SetCollate(collate);
-    
+
     CFStringRef name;
     PMPrinter printer ;
     PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
@@ -281,7 +281,7 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
         CFRetain(name);
         data.SetPrinterName(wxCFStringRef(name).AsString());
     }
-    
+
     PMDuplexMode mode = 0 ;
     PMGetDuplex(  m_macPrintSettings, &mode ) ;
     switch( mode )
@@ -298,7 +298,7 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
             break ;
     }
     // PMQualityMode not yet accessible via API
-    
+
     double height, width;
     PMPaperGetHeight(m_macPaper, &height);
     PMPaperGetWidth(m_macPaper, &width);
@@ -636,10 +636,10 @@ void wxMacPrintPreview::DetermineScaling(void)
 
     wxSize ppiScreen( 72 , 72 ) ;
     wxSize ppiPrinter( 72 , 72 ) ;
-    
+
     // Note that with Leopard, screen dpi=72 is no longer a given
     m_previewPrintout->SetPPIScreen( ppiScreen.x , ppiScreen.y ) ;
-    
+
     wxCoord w , h ;
     wxCoord ww, hh;
     wxRect paperRect;
@@ -666,7 +666,7 @@ void wxMacPrintPreview::DetermineScaling(void)
     }
     m_pageWidth = w;
     m_pageHeight = h;
-    
+
     m_previewPrintout->SetPageSizePixels(w , h) ;
     m_previewPrintout->SetPageSizeMM(ww, hh);
     m_previewPrintout->SetPaperRectPixels(paperRect);
@@ -694,7 +694,7 @@ wxOSXCarbonPrintData::wxOSXCarbonPrintData()
                     m_macPageFormat);
             PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
         }
-        
+
         if ( PMCreatePrintSettings(&m_macPrintSettings) == noErr )
         {
             PMSessionDefaultPrintSettings(m_macPrintSession,

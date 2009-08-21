@@ -215,7 +215,7 @@ public:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+                        wxRasterOperationMode rop = wxCOPY, bool useMask = false,
                         wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,

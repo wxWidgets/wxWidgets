@@ -361,7 +361,7 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
                 wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
                 if (sel < (int) standardBulletNames.GetCount() && m_bulletNameCtrl->GetValue() == selName)
                     attr->SetBulletName(standardBulletNames[sel]);
-                else            
+                else
                     attr->SetBulletName(m_bulletNameCtrl->GetValue());
             }
             else

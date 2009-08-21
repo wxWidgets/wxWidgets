@@ -90,7 +90,7 @@ public:
         const wxString& name = wxListBoxNameStr);
 
     virtual ~wxListBox();
-    
+
     // implement base class pure virtuals
     virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL);
 
@@ -102,7 +102,7 @@ public:
     // data callbacks
     virtual void GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
     virtual void SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value );
-    
+
     virtual bool IsSelected(int n) const;
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
@@ -119,7 +119,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     wxListWidgetImpl* GetListPeer() const;
-    
+
     bool MacGetBlockEvents() const { return m_blockEvents; }
 
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
@@ -151,11 +151,11 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     bool m_blockEvents;
-    
+
     wxListWidgetColumn* m_textColumn;
-    
+
     // data storage (copied from univ)
-    
+
     // the array containing all items (it is sorted if the listbox has
     // wxLB_SORT style)
     union
@@ -166,7 +166,7 @@ protected:
 
     // and this one the client data (either void or wxClientData)
     wxArrayPtrVoid m_itemsClientData;
-    
+
 private:
     DECLARE_DYNAMIC_CLASS(wxListBox)
     DECLARE_EVENT_TABLE()

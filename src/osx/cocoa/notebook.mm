@@ -86,7 +86,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -101,8 +101,8 @@ public:
     wxCocoaTabView( wxWindowMac* peer , WXWidget w ) : wxWidgetCocoaImpl(peer, w)
     {
     }
-    
-    void GetContentArea( int &left , int &top , int &width , int &height ) const 
+
+    void GetContentArea( int &left , int &top , int &width , int &height ) const
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         NSRect r = [slf contentRect];
@@ -111,8 +111,8 @@ public:
         width = (int)r.size.width;
         height = (int)r.size.height;
     }
-    
-    void SetValue( wxInt32 value ) 
+
+    void SetValue( wxInt32 value )
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
         // avoid 'changed' events when setting the tab programmatically
@@ -121,7 +121,7 @@ public:
         [slf selectTabViewItemAtIndex:(value-1)];
         [slf setDelegate:controller];
     }
-    
+
     wxInt32 GetValue() const
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
@@ -131,7 +131,7 @@ public:
         else
             return [slf indexOfTabViewItem:selectedItem]+1;
     }
-    
+
     void SetMaximum( wxInt32 maximum )
     {
         wxNSTabView* slf = (wxNSTabView*) m_osxView;
@@ -139,7 +139,7 @@ public:
         // avoid 'changed' events when setting the tab programmatically
         wxTabViewController* controller = [slf delegate];
         [slf setDelegate:nil];
-        
+
         if ( maximum > cocoacount )
         {
             for ( int i = cocoacount ; i < maximum ; ++i )
@@ -163,9 +163,9 @@ public:
     void SetupTabs( const wxNotebook& notebook)
     {
         int pcount = notebook.GetPageCount();
-        
+
         SetMaximum( pcount );
-        
+
         for ( int i = 0 ; i < pcount ; ++i )
         {
             wxNotebookPage* page = notebook.GetPage(i);
@@ -226,12 +226,12 @@ public:
     verify_noerr( err );
 #endif
 */
-wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
-                                    const wxPoint& pos, 
+wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     static wxTabViewController* controller = NULL;
@@ -240,7 +240,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
         controller =[[wxTabViewController alloc] init];
 
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    
+
     NSTabViewType tabstyle = NSTopTabsBezelBorder;
     if ( style & wxBK_LEFT )
         tabstyle = NSLeftTabsBezelBorder;
@@ -248,7 +248,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
         tabstyle = NSRightTabsBezelBorder;
     else if ( style & wxBK_BOTTOM )
         tabstyle = NSBottomTabsBezelBorder;
-    
+
     wxNSTabView* v = [[wxNSTabView alloc] initWithFrame:r];
     [v setTabViewType:tabstyle];
     wxWidgetCocoaImpl* c = new wxCocoaTabView( wxpeer, v );

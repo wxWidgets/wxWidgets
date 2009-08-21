@@ -32,7 +32,7 @@
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods(self);
@@ -48,13 +48,13 @@ public :
     {
         m_maximum = 1;
     }
-    
+
     void SetMaximum(wxInt32 v)
     {
         m_maximum = (v == 0) ? 1 : v;
     }
-    
-    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) 
+
+    void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize )
     {
         double v = ((double) value)/m_maximum;
         double t = ((double) thumbSize)/(m_maximum+thumbSize);
@@ -65,12 +65,12 @@ public :
         [(wxNSScroller*) m_osxView setKnobProportion:t];
 #endif
     }
-    
+
     virtual wxInt32 GetValue() const
     {
         return wxRound([(wxNSScroller*) m_osxView floatValue] * m_maximum);
     }
-    
+
     virtual wxInt32 GetMaximum() const
     {
         return m_maximum;
@@ -82,16 +82,16 @@ protected:
     wxInt32 m_maximum;
 };
 
-// we will have a mouseDown, then in the native 
+// we will have a mouseDown, then in the native
 // implementation of mouseDown the tracking code
 // is calling clickedAction, therefore we wire this
-// to thumbtrack and only after super mouseDown 
+// to thumbtrack and only after super mouseDown
 // returns we will call the thumbrelease
 
 void wxOSXScrollBarCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxEventType scrollEvent = wxEVT_NULL;
-    switch ([(NSScroller*)m_osxView hitPart]) 
+    switch ([(NSScroller*)m_osxView hitPart])
     {
     case NSScrollerIncrementLine:
         scrollEvent = wxEVT_SCROLL_LINEDOWN;
@@ -122,7 +122,7 @@ void wxOSXScrollBarCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNU
 void wxOSXScrollBarCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
-    
+
     // send a release event in case we've been tracking the thumb
     if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
     {
@@ -136,16 +136,16 @@ void wxOSXScrollBarCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_
     }
 }
 
-wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
-                                    const wxPoint& pos, 
+wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    // the creation rect defines the orientation 
+    // the creation rect defines the orientation
     NSRect createRect = ( style & wxSB_HORIZONTAL ) ? NSMakeRect(r.origin.x, r.origin.y , 17, 16) :
         NSMakeRect(r.origin.x, r.origin.y , 16, 17);
     wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:createRect];

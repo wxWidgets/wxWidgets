@@ -82,7 +82,7 @@ public:
 
   // hit test
   virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
-  
+
   // calculate size for wxNotebookSizer
   wxSize CalcSizeFromPage(const wxSize& sizePage) const;
   wxRect GetPageRect() const ;
@@ -118,7 +118,7 @@ public:
   // -------------------
   virtual void Command(wxCommandEvent& event);
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:

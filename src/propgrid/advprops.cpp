@@ -1258,19 +1258,19 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
     }
     else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
-		// Must override index detection since at this point GetIndex()
-		// will return old value.
-		wxOwnerDrawnComboBox* cb =
-			static_cast<wxOwnerDrawnComboBox*>(propgrid->GetEditorControl());
+        // Must override index detection since at this point GetIndex()
+        // will return old value.
+        wxOwnerDrawnComboBox* cb =
+            static_cast<wxOwnerDrawnComboBox*>(propgrid->GetEditorControl());
 
-		if ( cb )
-		{
-			int index = cb->GetSelection();
+        if ( cb )
+        {
+            int index = cb->GetSelection();
 
-			if ( index == GetCustomColourIndex() &&
-				 !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
-				askColour = true;
-		}
+            if ( index == GetCustomColourIndex() &&
+                    !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+                askColour = true;
+        }
     }
 
     if ( askColour && !propgrid->WasValueChangedInEvent() )

@@ -23,7 +23,7 @@ public:
         {
             SetMargins(wxDEFAULT_BUTTON_MARGIN, wxDEFAULT_BUTTON_MARGIN);
         }
-    
+
     wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
@@ -40,7 +40,7 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 protected:
-    virtual wxSize DoGetBestSize() const;    
+    virtual wxSize DoGetBestSize() const;
 
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
 

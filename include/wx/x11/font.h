@@ -44,7 +44,7 @@ public:
     {
         Create(size, family, style, weight, underlined, face, encoding);
     }
-    
+
     wxFont(const wxSize& pixelSize,
            wxFontFamily family,
            wxFontStyle style,
@@ -56,7 +56,7 @@ public:
         Create(10, family, style, weight, underlined, face, encoding);
         SetPixelSize(pixelSize);
     }
-    
+
     bool Create(int size,
                 wxFontFamily family,
                 wxFontStyle style,

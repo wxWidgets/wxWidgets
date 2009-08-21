@@ -244,7 +244,7 @@ bool wxWindowMac::Create(wxWindowMac *parent,
 
 #ifndef __WXUNIVERSAL__
     // Don't give scrollbars to wxControls unless they ask for them
-    if ( (! IsKindOf(CLASSINFO(wxControl)) 
+    if ( (! IsKindOf(CLASSINFO(wxControl))
 #if wxUSE_STATUSBAR
         && ! IsKindOf(CLASSINFO(wxStatusBar))
 #endif
@@ -898,7 +898,7 @@ wxSize wxWindowMac::DoGetBestSize() const
             r.width =
             r.height = 16 ;
 
-            if ( 0 ) 
+            if ( 0 )
             {
             }
 #if wxUSE_SCROLLBAR

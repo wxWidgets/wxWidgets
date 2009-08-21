@@ -75,7 +75,7 @@ gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
     const wxString& str = statbar->GetStatusText(n);
     if (str.empty())
         return FALSE;
-    
+
     gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(str));
     return TRUE;
 }
@@ -129,14 +129,14 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
 
     SetFieldsCount(1);
-    
+
 #if defined( __WXGTK20__ )
 #if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxSTB_SHOW_TIPS) && !gtk_check_version(2,12,0))
     {
-        g_object_set(m_widget, "has-tooltip", TRUE, NULL); 
-        g_signal_connect(m_widget, "query-tooltip",  
-                         G_CALLBACK(statusbar_query_tooltip), this); 
+        g_object_set(m_widget, "has-tooltip", TRUE, NULL);
+        g_signal_connect(m_widget, "query-tooltip",
+                         G_CALLBACK(statusbar_query_tooltip), this);
     }
 #endif
 #endif
@@ -228,7 +228,7 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
     }
 
     // eventually ellipsize the text so that it fits the field width
-    
+
     wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
@@ -251,8 +251,8 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
                                     wxELLIPSIZE_EXPAND_TAB);
             // Ellipsize() will do something only if necessary
 
-        // update the ellipsization status for this pane; this is used later to 
-        // decide whether a tooltip should be shown or not for this pane 
+        // update the ellipsization status for this pane; this is used later to
+        // decide whether a tooltip should be shown or not for this pane
         // (if we have wxSTB_SHOW_TIPS)
         SetEllipsizedFlag(i, text != GetStatusText(i));
     }
@@ -264,7 +264,7 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
 
     // draw the text
     dc.DrawText(text, xpos, ypos);
-    
+
     if (ellmode == (wxEllipsizeMode)-1)
         dc.DestroyClippingRegion();
 }
@@ -347,7 +347,7 @@ int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
 
     // NOTE: we explicitely don't take in count the borders since they are only
     //       useful when rendering the status text, not for hit-test computations
-    
+
     if (pt.y <= 0 || pt.y >= m_lastClientHeight)
         return wxNOT_FOUND;
 
@@ -356,7 +356,7 @@ int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
     {
         if (pt.x > x && pt.x < x+m_widthsAbs[i])
             return i;
-        
+
         x += m_widthsAbs[i];
     }
 

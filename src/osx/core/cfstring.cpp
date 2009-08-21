@@ -641,7 +641,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
     char* buf = NULL ;
 
     CFStringEncoding cfencoding = 0;
-    wxString result;    
+    wxString result;
 #if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
     cfencoding = kCFStringEncodingUTF32Native;
@@ -660,7 +660,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
     buf = new char[ cStrLen ] ;
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
-    
+
 #if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
     result = wxString( (const wchar_t*) buf , cStrLen/4);
@@ -672,7 +672,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
 #else
     result = wxString(buf, cStrLen) ;
 #endif
-    
+
     delete[] buf ;
     wxMacConvertNewlines10To13( &result);
     return result ;
@@ -684,7 +684,7 @@ wxString wxCFStringRef::AsString(wxFontEncoding encoding) const
 }
 
 #if wxOSX_USE_COCOA_OR_IPHONE
-wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding ) 
+wxString wxCFStringRef::AsString( NSString* ref, wxFontEncoding encoding )
 {
     return AsString( (CFStringRef) ref, encoding );
 }
@@ -731,11 +731,11 @@ wxMacUniCharBuffer::~wxMacUniCharBuffer()
     free( m_ubuf ) ;
 }
 
-UniCharPtr wxMacUniCharBuffer::GetBuffer() 
+UniCharPtr wxMacUniCharBuffer::GetBuffer()
 {
     return m_ubuf ;
 }
-   
+
 UniCharCount wxMacUniCharBuffer::GetChars()
 {
     return m_chars ;

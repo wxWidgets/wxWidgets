@@ -267,7 +267,7 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        ext.Remove( 0, 2 );
        wxArrayString exts;
        exts.Add( ext );
-       
+
        AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
 }
@@ -844,7 +844,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ex
                 // found
                 wxFileType *fileType = new wxFileType;
                 fileType->m_impl->Init(this, n);
-                
+
                 return fileType;
             }
         }

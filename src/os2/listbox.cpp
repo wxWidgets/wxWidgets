@@ -305,7 +305,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
         {
             wxOwnerDrawn*               pNewItem = CreateItem(n); // dummy argument
             wxScreenDC                  vDc; // FIXME: is it really needed here?
-    
+
             pNewItem->SetName(items[i]);
             m_aItems.Insert(pNewItem, n);
             pNewItem->SetFont(GetFont());

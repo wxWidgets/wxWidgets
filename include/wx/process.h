@@ -106,7 +106,7 @@ public:
 
     // implementation only - don't use!
     // --------------------------------
-    
+
     // needs to be public since it needs to be used from wxExecute() global func
     void SetPid(long pid) { m_pid = pid; }
 

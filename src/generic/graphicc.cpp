@@ -346,7 +346,7 @@ public:
     virtual void BeginLayer(wxDouble opacity);
 
     virtual void EndLayer();
-    
+
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE );
 
@@ -380,7 +380,7 @@ private:
     void Init(cairo_t *context);
 
     cairo_t* m_context;
-    
+
     wxVector<float> m_layerOpacities;
 
     wxDECLARE_NO_COPY_CLASS(wxCairoContext);
@@ -1437,8 +1437,8 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     wxCairoFontData* font_data = (wxCairoFontData*) m_font.GetRefData();
     pango_layout_set_font_description( layout, font_data->GetFont());
     pango_layout_set_text(layout, data, datalen);
-    
-    if (font_data->GetUnderlined()) 
+
+    if (font_data->GetUnderlined())
     {
         PangoAttrList *attrs = pango_attr_list_new();
         PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
@@ -1564,7 +1564,7 @@ bool wxCairoContext::SetAntialiasMode(wxAntialiasMode antialias)
         return true;
 
     m_antialias = antialias;
-    
+
     cairo_antialias_t antialiasMode;
     switch (antialias)
     {
@@ -1585,7 +1585,7 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
 {
     if ( m_composition == op )
         return true;
-        
+
     m_composition = op;
     cairo_operator_t cop;
     switch (op)
@@ -1649,7 +1649,7 @@ void wxCairoContext::EndLayer()
     cairo_pop_group_to_source(m_context);
     cairo_paint_with_alpha(m_context,opacity);
 }
-    
+
 //-----------------------------------------------------------------------------
 // wxCairoRenderer declaration
 //-----------------------------------------------------------------------------

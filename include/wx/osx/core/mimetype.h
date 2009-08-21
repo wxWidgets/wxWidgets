@@ -79,7 +79,7 @@ protected:
 
     wxString GetCommand(const wxString &verb, size_t nIndex) const;
 
-    // Read XDG *.desktop file 
+    // Read XDG *.desktop file
     void LoadXDGApp(const wxString& filename);
     // Scan XDG directory
     void LoadXDGAppsFilesFromDir(const wxString& dirname);
