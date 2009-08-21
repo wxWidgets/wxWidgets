@@ -1048,11 +1048,12 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     wxDateTime dt;
 
+#if wxUSE_INTL
                     const wxString
                         fmtDateTime = wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT);
                     if ( !fmtDateTime.empty() )
                         dt = ParseFormatAt(input, end, fmtDateTime);
-
+#endif // wxUSE_INTL
                     if ( !dt.IsValid() )
                     {
                         // also try the format which corresponds to ctime()
@@ -1269,10 +1270,13 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case wxT('x'):       // locale default date representation
                 {
+#if wxUSE_INTL
                     wxString
                         fmtDate = wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT),
                         fmtDateAlt = wxLocale::GetInfo(wxLOCALE_LONG_DATE_FMT);
-
+#else // !wxUSE_INTL
+                    wxString fmtDate, fmtDateAlt;
+#endif // wxUSE_INTL/!wxUSE_INTL
                     if ( fmtDate.empty() )
                     {
                         if ( IsWestEuropeanCountry(GetCountry()) ||
@@ -1317,9 +1321,12 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case wxT('X'):       // locale default time representation
                 {
+#if wxUSE_INTL
                     wxString fmtTime = wxLocale::GetInfo(wxLOCALE_TIME_FMT),
                              fmtTimeAlt;
-
+#else // !wxUSE_INTL
+                    wxString fmtTime, fmtTimeAlt;
+#endif // wxUSE_INTL/!wxUSE_INTL
                     if ( fmtTime.empty() )
                     {
                         // try to parse what follows as "%H:%M:%S" and, if this
