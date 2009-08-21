@@ -1355,8 +1355,10 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
 {
     wxCHECK_MSG( m_impl, -1, "can't wait on invalid socket" );
 
-    // we're never going to become ready if we're not connected (any more)
-    if ( !m_connected && !m_establishing )
+    // we're never going to become ready in a client if we're not connected any
+    // more (OTOH a server can call this to precisely wait for a connection so
+    // do wait for it in this case)
+    if ( !m_impl->IsServer() && !m_connected && !m_establishing )
         return -1;
 
     // This can be set to true from Interrupt() to exit this function a.s.a.p.

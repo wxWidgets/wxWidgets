@@ -2,10 +2,10 @@
 // Name:        server.cpp
 // Purpose:     Server for wxSocket demo
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Modified by:
 // Created:     1999/09/19
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
+//              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,6 +29,7 @@
 #  include "wx/wx.h"
 #endif
 
+#include "wx/busyinfo.h"
 #include "wx/socket.h"
 
 // this example is currently written to use only IP or only IPv6 sockets, it
@@ -66,6 +67,7 @@ public:
 
   // event handlers (these functions should _not_ be virtual)
   void OnUDPTest(wxCommandEvent& event);
+  void OnWaitForAccept(wxCommandEvent& event);
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnServerEvent(wxSocketEvent& event);
@@ -117,6 +119,7 @@ enum
 {
   // menu items
   SERVER_UDPTEST = 10,
+  SERVER_WAITFORACCEPT,
   SERVER_QUIT = wxID_EXIT,
   SERVER_ABOUT = wxID_ABOUT,
 
@@ -133,6 +136,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SERVER_QUIT,  MyFrame::OnQuit)
   EVT_MENU(SERVER_ABOUT, MyFrame::OnAbout)
   EVT_MENU(SERVER_UDPTEST, MyFrame::OnUDPTest)
+  EVT_MENU(SERVER_WAITFORACCEPT, MyFrame::OnWaitForAccept)
   EVT_SOCKET(SERVER_ID,  MyFrame::OnServerEvent)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
@@ -179,6 +183,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
   // Make menus
   m_menuFile = new wxMenu();
+  m_menuFile->Append(SERVER_WAITFORACCEPT, "&Wait for connection\tCtrl-W");
   m_menuFile->Append(SERVER_UDPTEST, "&UDP test\tCtrl-U");
   m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
@@ -294,6 +299,17 @@ void MyFrame::OnUDPTest(wxCommandEvent& WXUNUSED(event))
         wxLogMessage("ERROR: failed to send data");
         return;
     }
+}
+
+void MyFrame::OnWaitForAccept(wxCommandEvent& WXUNUSED(event))
+{
+    TestLogger logtest("WaitForAccept() test");
+
+    wxBusyInfo("Waiting for connection for 10 seconds...", this);
+    if ( m_server->WaitForAccept(10) )
+        wxLogMessage("Accepted client connection.");
+    else
+        wxLogMessage("Connection error or timeout expired.");
 }
 
 void MyFrame::Test1(wxSocketBase *sock)
