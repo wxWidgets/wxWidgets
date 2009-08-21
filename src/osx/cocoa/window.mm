@@ -1127,6 +1127,11 @@ wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRoo
 {
     Init();
     m_osxView = w;
+
+    // check if the user wants to create the control initially hidden
+    if ( !peer->IsShown() )
+        SetVisibility(false);
+
     // gc aware handling
     if ( m_osxView )
         CFRetain(m_osxView);
