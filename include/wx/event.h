@@ -560,7 +560,7 @@ private:
 
 // Create functors for the templatized events, either allocated on the heap for
 // wxNewXXX() variants (this is needed in wxEvtHandler::Bind<>() to store them
-// in dynamic event table) or just by returning them as a temporary objects (this
+// in dynamic event table) or just by returning them as temporary objects (this
 // is enough for Unbind<>() and we avoid unnecessary heap allocation like this).
 
 
