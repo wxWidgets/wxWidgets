@@ -22,18 +22,24 @@ class wxGraphicsPath : public wxGraphicsObject
 {
 public:
     /**
-        Adds an arc of a circle centering at (@a x,@a y) with radius (@a r)
-        from @a startAngle to @a endAngle.
+        Adds an arc of a circle.
+
+        The circle is defined by the coordinates of its centre (@a x, @a y) or
+        @a c and its radius @a r. The arc goes from the starting angle @a
+        startAngle to @a endAngle either clockwise or counter-clockwise
+        depending on the value of @a clockwise argument.
+
+        The angles are measured in radians but, contrary to the usual
+        mathematical convention, are always @e clockwise from the horizontal
+        axis.
     */
+    //@{
     virtual void AddArc(wxDouble x, wxDouble y, wxDouble r,
                         wxDouble startAngle, wxDouble endAngle,
                         bool clockwise);
-    /**
-        Adds an arc of a circle centering at @a c with radius (@a r)
-        from @a startAngle to @a endAngle.
-    */
     void AddArc(const wxPoint2DDouble& c, wxDouble r,
                 wxDouble startAngle, wxDouble endAngle, bool clockwise);
+    //@}
 
     /**
         Appends a an arc to two tangents connecting (current) to (@a x1,@a y1)
