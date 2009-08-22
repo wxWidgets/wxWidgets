@@ -63,6 +63,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/evtloopunix.cpp
     src/unix/dir.cpp
     src/unix/dlunix.cpp
+    src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
     src/unix/timerunx.cpp

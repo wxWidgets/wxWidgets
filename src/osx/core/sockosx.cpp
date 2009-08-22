@@ -16,6 +16,9 @@
 #include "wx/private/socket.h"
 #include "wx/unix/private/sockunix.h"
 #include "wx/apptrait.h"
+#include "wx/link.h"
+
+#include "wx/osx/core/cfstring.h"           // for wxMacWakeUp() only
 
 #include <CoreFoundation/CoreFoundation.h>
 
@@ -75,7 +78,10 @@ private:
         CFSocketInvalidate(m_socket);
 
         CFRelease(m_source);
+        m_source = NULL;
+
         CFRelease(m_socket);
+        m_socket = NULL;
     }
 
     // initialize the data associated with the given socket
@@ -110,6 +116,8 @@ private:
         if ( !m_source )
         {
             CFRelease(m_socket);
+            m_socket = NULL;
+
             return false;
         }
 
@@ -151,6 +159,13 @@ private:
             default:
                 wxFAIL_MSG( "unexpected socket callback" );
         }
+
+        // receiving a socket event does _not_ make ReceiveNextEvent() (or the
+        // equivalent NSApp:nextEventMatchingMask:untilDate:inMode:dequeue)
+        // return control, i.e. apparently it doesn't count as a real event, so
+        // we need to generate a wake up to return control to the code waiting
+        // for something to happen and process this socket event
+        wxMacWakeUp();
     }
 
     CFSocketRef m_socket;
@@ -254,17 +269,24 @@ void wxSocketManagerMac::Uninstall_Callback(wxSocketImpl *socket_,
     CFSocketDisableCallBacks(socket->GetSocket(), GetCFCallback(socket, event));
 }
 
-// set the wxBase variable to point to our wxSocketManager implementation
+// set the wxBase variable to point to CF wxSocketManager implementation so
+// that the GUI code in utilsexc_cf.cpp could return it from its traits method
 //
-// see comments in wx/apptrait.h for the explanation of why do we do it
-// like this
-static struct ManagerSetter
+// this is very roundabout but necessary to allow us to have different
+// behaviours in console and GUI applications while avoiding dependencies of
+// GUI library on the network one
+extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
+
+static struct OSXManagerSetter
 {
-    ManagerSetter()
+    OSXManagerSetter()
     {
         static wxSocketManagerMac s_manager;
-        wxAppTraits::SetDefaultSocketManager(&s_manager);
+        wxOSXSocketManagerCF = &s_manager;
     }
-} gs_managerSetter;
+} gs_OSXManagerSetter;
+
+// see the relative linker macro in socket.cpp
+wxFORCE_LINK_THIS_MODULE( osxsocket );
 
 #endif // wxUSE_SOCKETS

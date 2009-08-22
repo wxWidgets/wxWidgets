@@ -35,10 +35,12 @@ static void wxSocket_PM_Output(void *data)
     handler->OnWriteWaiting();
 }
 
-class PMSocketManager : public wxSocketInputBasedManager
+class PMFDIOManager : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
+    virtual int AddInput(wxFDIOHandler *handler,
+                         int fd,
+                         wxFDIOManager::Direction d)
     {
       if (d == FD_OUTPUT)
           return wxTheApp->AddSocketHandler(fd, wxSockWriteMask,
@@ -48,15 +50,18 @@ public:
                                             wxSocket_PM_Input, handler);
     }
 
-    virtual void RemoveInput(int fd)
+    virtual void
+    RemoveInput(wxFDIOHandler * WXUNUSED(handler),
+                int fd,
+                wxFDIOManager::Direction WXUNUSED(dir))
     {
         wxTheApp->RemoveSocketHandler(fd);
     }
 };
 
-wxSocketManager *wxGUIAppTraits::GetSocketManager()
+wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
 {
-    static PMSocketManager s_manager;
+    static PMFDIOManager s_manager;
     return &s_manager;
 }
 

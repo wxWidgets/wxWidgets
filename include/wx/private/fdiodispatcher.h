@@ -12,23 +12,7 @@
 #define _WX_PRIVATE_FDIODISPATCHER_H_
 
 #include "wx/hashmap.h"
-
-// handler used to process events on descriptors
-class wxFDIOHandler
-{
-public:
-    // called when descriptor is available for non-blocking read
-    virtual void OnReadWaiting() = 0;
-
-    // called when descriptor is available  for non-blocking write
-    virtual void OnWriteWaiting() = 0;
-
-    // called when there is exception on descriptor
-    virtual void OnExceptionWaiting() = 0;
-
-    // virtual dtor for the base class
-    virtual ~wxFDIOHandler() { }
-};
+#include "wx/private/fdiohandler.h"
 
 // those flags describes sets where descriptor should be added
 enum wxFDIODispatcherEntryFlags

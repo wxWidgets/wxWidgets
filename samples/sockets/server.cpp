@@ -2,10 +2,10 @@
 // Name:        server.cpp
 // Purpose:     Server for wxSocket demo
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Modified by:
 // Created:     1999/09/19
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 Guillermo Rodriguez Garcia
+//              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -29,6 +29,7 @@
 #  include "wx/wx.h"
 #endif
 
+#include "wx/busyinfo.h"
 #include "wx/socket.h"
 
 // --------------------------------------------------------------------------
@@ -57,6 +58,8 @@ public:
   ~MyFrame();
 
   // event handlers (these functions should _not_ be virtual)
+  void OnUDPTest(wxCommandEvent& event);
+  void OnWaitForAccept(wxCommandEvent& event);
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnServerEvent(wxSocketEvent& event);
@@ -107,6 +110,8 @@ private:
 enum
 {
   // menu items
+  SERVER_UDPTEST = 10,
+  SERVER_WAITFORACCEPT,
   SERVER_QUIT = wxID_EXIT,
   SERVER_ABOUT = wxID_ABOUT,
 
@@ -122,6 +127,8 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SERVER_QUIT,  MyFrame::OnQuit)
   EVT_MENU(SERVER_ABOUT, MyFrame::OnAbout)
+  EVT_MENU(SERVER_UDPTEST, MyFrame::OnUDPTest)
+  EVT_MENU(SERVER_WAITFORACCEPT, MyFrame::OnWaitForAccept)
   EVT_SOCKET(SERVER_ID,  MyFrame::OnServerEvent)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
@@ -168,6 +175,9 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
   // Make menus
   m_menuFile = new wxMenu();
+  m_menuFile->Append(SERVER_WAITFORACCEPT, "&Wait for connection\tCtrl-W");
+  m_menuFile->Append(SERVER_UDPTEST, "&UDP test\tCtrl-U");
+  m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_QUIT, _("E&xit\tAlt-X"), _("Quit server"));
@@ -240,6 +250,57 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
   wxMessageBox(_("wxSocket demo: Server\n(c) 1999 Guillermo Rodriguez Garcia\n"),
                _("About Server"),
                wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnUDPTest(wxCommandEvent& WXUNUSED(event))
+{
+    TestLogger logtest("UDP test");
+
+#if wxUSE_IPV6
+    wxIPV6address addr;
+#else
+    wxIPV4address addr;
+#endif
+    addr.Service(3000);
+    wxDatagramSocket sock(addr);
+
+    char buf[1024];
+    size_t n = sock.RecvFrom(addr, buf, sizeof(buf)).LastCount();
+    if ( !n )
+    {
+        wxLogMessage("ERROR: failed to receive data");
+        return;
+    }
+
+    wxLogMessage("Received \"%s\" from %s:%u.",
+                 wxString::From8BitData(buf, n),
+                 addr.IPAddress(), addr.Service());
+
+    for ( size_t i = 0; i < n; i++ )
+    {
+        char& c = buf[i];
+        if ( (c >= 'A' && c <= 'M') || (c >= 'a' && c <= 'm') )
+            c += 13;
+        else if ( (c >= 'N' && c <= 'Z') || (c >= 'n' && c <= 'z') )
+            c -= 13;
+    }
+
+    if ( sock.SendTo(addr, buf, n).LastCount() != n )
+    {
+        wxLogMessage("ERROR: failed to send data");
+        return;
+    }
+}
+
+void MyFrame::OnWaitForAccept(wxCommandEvent& WXUNUSED(event))
+{
+    TestLogger logtest("WaitForAccept() test");
+
+    wxBusyInfo("Waiting for connection for 10 seconds...", this);
+    if ( m_server->WaitForAccept(10) )
+        wxLogMessage("Accepted client connection.");
+    else
+        wxLogMessage("Connection error or timeout expired.");
 }
 
 void MyFrame::Test1(wxSocketBase *sock)

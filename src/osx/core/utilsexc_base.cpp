@@ -45,6 +45,15 @@
 // Default path style
 #define kDefaultPathStyle kCFURLPOSIXPathStyle
 
+#if wxUSE_SOCKETS
+// global pointer which lives in the base library, set from the net one (see
+// sockosx.cpp) and used from the GUI code (see utilsexc_cf.cpp) -- ugly but
+// needed hack, see the above-mentioned files for more information
+class wxSocketManager;
+extern WXDLLIMPEXP_BASE wxSocketManager *wxOSXSocketManagerCF;
+wxSocketManager *wxOSXSocketManagerCF = NULL;
+#endif // wxUSE_SOCKETS
+
 extern bool WXDLLEXPORT wxIsDebuggerRunning()
 {
     // TODO : try to find out ...

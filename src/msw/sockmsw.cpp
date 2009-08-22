@@ -33,6 +33,7 @@
 #include "wx/apptrait.h"
 #include "wx/thread.h"
 #include "wx/dynlib.h"
+#include "wx/link.h"
 
 #ifdef __WXWINCE__
 /*
@@ -437,15 +438,12 @@ static struct ManagerSetter
     }
 } gs_managerSetter;
 
+// see the relative linker macro in socket.cpp
+wxFORCE_LINK_THIS_MODULE( mswsocket );
+
 // ============================================================================
 // wxSocketImpl implementation
 // ============================================================================
-
-/* static */
-wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
-{
-    return new wxSocketImplMSW(wxsocket);
-}
 
 void wxSocketImplMSW::DoClose()
 {

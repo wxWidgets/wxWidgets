@@ -527,7 +527,14 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     if ( fd == INVALID_SOCKET )
         return NULL;
 
-    wxSocketImpl * const sock = Create(wxsocket);
+    wxSocketManager * const manager = wxSocketManager::Get();
+    if ( !manager )
+        return NULL;
+
+    wxSocketImpl * const sock = manager->CreateSocket(wxsocket);
+    if ( !sock )
+        return NULL;
+
     sock->m_fd = fd;
     sock->m_peer = wxSockAddressImpl(from.addr, fromlen);
 
@@ -1348,8 +1355,10 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
 {
     wxCHECK_MSG( m_impl, -1, "can't wait on invalid socket" );
 
-    // we're never going to become ready if we're not connected (any more)
-    if ( !m_connected && !m_establishing )
+    // we're never going to become ready in a client if we're not connected any
+    // more (OTOH a server can call this to precisely wait for a connection so
+    // do wait for it in this case)
+    if ( !m_impl->IsServer() && !m_connected && !m_establishing )
         return -1;
 
     // This can be set to true from Interrupt() to exit this function a.s.a.p.
@@ -1730,7 +1739,8 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
 {
     wxLogTrace( wxTRACE_Socket, _T("Opening wxSocketServer") );
 
-    m_impl = wxSocketImpl::Create(*this);
+    wxSocketManager * const manager = wxSocketManager::Get();
+    m_impl = manager ? manager->CreateSocket(*this) : NULL;
 
     if (!m_impl)
     {
@@ -1888,7 +1898,8 @@ bool wxSocketClient::DoConnect(const wxSockAddress& remote,
     m_establishing = false;
 
     // Create and set up the new one
-    m_impl = wxSocketImpl::Create(*this);
+    wxSocketManager * const manager = wxSocketManager::Get();
+    m_impl = manager ? manager->CreateSocket(*this) : NULL;
     if ( !m_impl )
         return false;
 
@@ -1970,7 +1981,8 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
                 : wxSocketBase( flags, wxSOCKET_DATAGRAM )
 {
     // Create the socket
-    m_impl = wxSocketImpl::Create(*this);
+    wxSocketManager * const manager = wxSocketManager::Get();
+    m_impl = manager ? manager->CreateSocket(*this) : NULL;
 
     if (!m_impl)
         return;
@@ -2053,6 +2065,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 //       static builds of wxWidgets the ManagerSetter::ManagerSetter ctor
 //       contained there wouldn't be ever called
 wxFORCE_LINK_MODULE( socketiohandler )
+#endif
+
+// same for ManagerSetter in the MSW file
+#ifdef __WXMSW__
+    wxFORCE_LINK_MODULE( mswsocket )
+#endif
+
+// and for OSXManagerSetter in the OS X one
+#ifdef __WXMAC__
+    wxFORCE_LINK_MODULE( osxsocket )
 #endif
 
 #endif // wxUSE_SOCKETS
