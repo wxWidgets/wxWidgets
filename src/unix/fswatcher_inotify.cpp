@@ -29,9 +29,13 @@
 // wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
 // ============================================================================
 
-// inotify watch descriptor=>wxFSWatchEntry* map
+// inotify watch descriptor => wxFSWatchEntry* map
 WX_DECLARE_HASH_MAP(int, wxFSWatchEntry*, wxIntegerHash, wxIntegerEqual,
-                                             wxFSWatchEntryDescriptors);
+                                              wxFSWatchEntryDescriptors);
+
+// inotify event cookie => inotify_event* map
+WX_DECLARE_HASH_MAP(int, inotify_event*, wxIntegerHash, wxIntegerEqual,
+                                                      wxInotifyCookies);
 
 /**
  * Helper class encapsulating inotify mechanism
@@ -41,9 +45,12 @@ class wxFSWatcherImplUnix : public wxFSWatcherImpl
 public:
     wxFSWatcherImplUnix(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_loop(NULL), m_source(wxEventLoopSource::INVALID_RESOURCE)
+        m_loop(NULL),
+        m_source(wxEventLoop::GetActive()->CreateSource())
     {
         m_handler = new wxFSWSourceHandler(this);
+        m_source.SetHandler(m_handler);
+        m_source.SetFlags(wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION);
     }
 
     ~wxFSWatcherImplUnix()
@@ -66,7 +73,6 @@ public:
         if (fd == -1)
         {
             wxLogSysError(_("Unable to create inotify instance"));
-            m_source.SetResource(wxEventLoopSource::INVALID_RESOURCE);
             return false;
         }
 
@@ -89,7 +95,7 @@ public:
         {
             wxLogSysError(_("Unable to close inotify instance"));
         }
-        m_source.SetResource(wxEventLoopSource::INVALID_RESOURCE);
+        m_source.Invalidate();
 
         return ret != -1;
     }
@@ -161,7 +167,7 @@ public:
         if (left == -1)
             return -1;
 
-        // len > 0, we have events
+        // left > 0, we have events
         char* memory = buf;
         int event_count = 0;
         while (left > 0) // OPT checking 'memory' would suffice
@@ -177,7 +183,10 @@ public:
             memory += offset;
         }
 
-        wxLogTrace(wxTRACE_FSWATCHER, "We had %d events", event_count);
+        // take care of unmatched renames
+        ProcessRenames();
+
+        wxLogTrace(wxTRACE_FSWATCHER, "We had %d native events", event_count);
         return event_count;
     }
 
@@ -202,8 +211,7 @@ protected:
         wxCHECK_MSG( m_loop, false,
                     "wxFileSystemWatcher requires an active event loop" );
 
-        bool ret = m_loop->AddSource(m_source, m_handler,
-                            wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION);
+        bool ret = m_loop->AddSource(m_source);
         return ret;
     }
 
@@ -232,34 +240,31 @@ protected:
 
     int DoRemoveInotify(wxFSWatchEntry* watch)
     {
-        return inotify_rm_watch(m_source.GetResource(), watch->GetWatchDescriptor());
+        return inotify_rm_watch(m_source.GetResource(),
+                                watch->GetWatchDescriptor());
     }
 
-    void ProcessNativeEvent(const inotify_event& e)
+    void ProcessNativeEvent(const inotify_event& inevt)
     {
-        wxLogTrace(wxTRACE_FSWATCHER, "Event: wd=%d, mask=%u, len=%u, name=%s",
-    											e.wd, e.mask, e.len, e.name);
+        wxLogTrace(wxTRACE_FSWATCHER, InotifyEventToString(inevt));
 
         // after removing inotify watch we get IN_IGNORED for it, but the watch
         // will be already removed from our list at that time
-        // TODO maybe we want like to report that? this wouldn't be portable...
-        if (e.mask & IN_IGNORED)
+        if (inevt.mask & IN_IGNORED)
         {
-            wxLogTrace(wxTRACE_FSWATCHER, "Event IN_IGNORED for removed path, "
-                       "wd=%d", e.wd);
             return;
         }
 
         // get watch entry for this event
-        wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(e.wd);
+        wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(inevt.wd);
+        wxCHECK_RET(it != m_watchMap.end(),
+                             "Watch descriptor not present in the watch map!");
 
-        wxASSERT_MSG(it != m_watchMap.end(),
-    								  "Event for wd not on the watch list!");
-        wxFSWatchEntry& w = *(it->second);
+        wxFSWatchEntry& watch = *(it->second);
+        int nativeFlags = inevt.mask;
+        int flags = Native2WatcherFlags(nativeFlags);
 
-        // TODO we can have multiple flags set, possibly resulting in
-        // multiple events to send
-        int flags = Native2WatcherFlags(e.mask);
+        // check out for error/warning condition
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
             wxString errMsg = GetErrorDescription(Watcher2NativeFlags(flags));
@@ -268,20 +273,77 @@ protected:
         }
         // filter out ignored events and those not asked for.
         // we never filter out warnings or exceptions
-        else if ((flags == 0) || !(flags & w.GetFlags()))
+        else if ((flags == 0) || !(flags & watch.GetFlags()))
         {
-    		return;
+            return;
         }
+        // renames
+        else if (nativeFlags & IN_MOVE)
+        {
+            wxInotifyCookies::iterator it = m_cookies.find(inevt.cookie);
+            if ( it == m_cookies.end() )
+            {
+                int size = sizeof(inevt) + inevt.len;
+                inotify_event* e = (inotify_event*) operator new (size);
+                memcpy(e, &inevt, size);
+
+                wxInotifyCookies::value_type val(e->cookie, e);
+                m_cookies.insert(val);
+            }
+            else
+            {
+                inotify_event& oldinevt = *(it->second);
+
+                wxFileSystemWatcherEvent event(flags);
+                if ( inevt.mask & IN_MOVED_FROM )
+                {
+                    event.SetPath(GetEventPath(watch, inevt));
+                    event.SetNewPath(GetEventPath(watch, oldinevt));
+                }
+                else
+                {
+                    event.SetPath(GetEventPath(watch, oldinevt));
+                    event.SetNewPath(GetEventPath(watch, inevt));
+                }
+                SendEvent(event);
+
+                m_cookies.erase(it);
+                delete &oldinevt;
+            }
+        }
+        // every other kind of event
         else
         {
-            // only when dir is watched, we have non-empty e.name
-    		wxFileName path = w.GetPath();
-    		if (path.IsDir())
-    			path = wxFileName(path.GetPath(), e.name);
+            wxFileName path = GetEventPath(watch, inevt);
+            wxFileSystemWatcherEvent event(flags, path, path);
+            SendEvent(event);
+        }
+    }
 
-    		// TODO figure out renames: proper paths!
-    		wxFileSystemWatcherEvent event(flags, path, path);
-    		SendEvent(event);
+    void ProcessRenames()
+    {
+        wxInotifyCookies::iterator it = m_cookies.begin();
+        while ( it != m_cookies.end() )
+        {
+            inotify_event& inevt = *(it->second);
+
+            wxLogTrace(wxTRACE_FSWATCHER, "Processing pending rename events");
+            wxLogTrace(wxTRACE_FSWATCHER, InotifyEventToString(inevt));
+
+            // get watch entry for this event
+            wxFSWatchEntryDescriptors::iterator wit = m_watchMap.find(inevt.wd);
+            wxCHECK_RET(wit != m_watchMap.end(),
+                             "Watch descriptor not present in the watch map!");
+
+            wxFSWatchEntry& watch = *(wit->second);
+            int flags = Native2WatcherFlags(inevt.mask);
+            wxFileName path = GetEventPath(watch, inevt);
+            wxFileSystemWatcherEvent event(flags, path, path);
+            SendEvent(event);
+
+            m_cookies.erase(it);
+            delete &inevt;
+            it = m_cookies.begin();
         }
     }
 
@@ -292,12 +354,10 @@ protected:
 
     int ReadEventsToBuf(char* buf, int size)
     {
-       wxCHECK_MSG( m_source.IsOk(), false,
-    				"Inotify not initialized or invalid inotify descriptor" );
+        wxCHECK_MSG( m_source.IsOk(), false,
+                    "Inotify not initialized or invalid inotify descriptor" );
 
-        // TODO remove memset after making sure this code works reliably
         memset(buf, 0, size);
-
         ssize_t left = read(m_source.GetResource(), buf, size);
         if (left == -1)
         {
@@ -313,6 +373,25 @@ protected:
         return left;
     }
 
+    static wxString InotifyEventToString(const inotify_event& inevt)
+    {
+        return wxString::Format("Event: wd=%d, mask=%u, cookie=%d, len=%u, "
+                                "name=%s", inevt.wd, inevt.mask, inevt.cookie,
+                                inevt.len, inevt.name);
+    }
+
+    static wxFileName GetEventPath(const wxFSWatchEntry& watch,
+                                          const inotify_event& inevt)
+    {
+        // only when dir is watched, we have non-empty e.name
+        wxFileName path = watch.GetPath();
+        if (path.IsDir())
+        {
+            path = wxFileName(path.GetPath(), inevt.name);
+        }
+        return path;
+    }
+
     static int Watcher2NativeFlags(int flags)
     {
         // FIXME this needs a bit of thinking, quick impl for now
@@ -321,43 +400,19 @@ protected:
 
     static int Native2WatcherFlags(int flags)
     {
-        // FIXME remove in the future. just for reference
-#if 0
-    #define IN_ACCESS    0x00000001 /* File was accessed.  */
-    #define IN_MODIFY    0x00000002 /* File was modified.  */
-    #define IN_ATTRIB    0x00000004 /* Metadata changed.  */
-    #define IN_CLOSE_WRITE   0x00000008 /* Writtable file was closed.  */
-    #define IN_CLOSE_NOWRITE 0x00000010 /* Unwrittable file closed.  */
-    #define IN_CLOSE     (IN_CLOSE_WRITE | IN_CLOSE_NOWRITE) /* Close.  */
-    #define IN_OPEN      0x00000020 /* File was opened.  */
-    #define IN_MOVED_FROM    0x00000040 /* File was moved from X.  */
-    #define IN_MOVED_TO      0x00000080 /* File was moved to Y.  */
-    #define IN_MOVE      (IN_MOVED_FROM | IN_MOVED_TO) /* Moves.  */
-    #define IN_CREATE    0x00000100 /* Subfile was created.  */
-    #define IN_DELETE    0x00000200 /* Subfile was deleted.  */
-    #define IN_DELETE_SELF   0x00000400 /* Self was deleted.  */
-    #define IN_MOVE_SELF     0x00000800 /* Self was moved.  */
-
-    /* Events sent by the kernel.  */
-    #define IN_UNMOUNT	 0x00002000	/* Backing fs was unmounted.  */
-    #define IN_Q_OVERFLOW	 0x00004000	/* Event queued overflowed.  */
-    #define IN_IGNORED	 0x00008000	/* File was ignored.  */
-#endif
-
-        // TODO this needs more thinking
         static const int flag_mapping[][2] = {
             { IN_ACCESS,        wxFSW_EVENT_ACCESS }, // generated during read!
             { IN_MODIFY,        wxFSW_EVENT_MODIFY },
-            { IN_ATTRIB,        0 }, // ignored for now
-            { IN_CLOSE_WRITE,   0 }, // ignored for now
-            { IN_CLOSE_NOWRITE, 0 }, // ignored for now
-            { IN_OPEN,          0 }, // ignored for now
-            { IN_MOVED_FROM,    wxFSW_EVENT_RENAME }, // coercion. rename?
-            { IN_MOVED_TO,      wxFSW_EVENT_RENAME }, // coercion. rename?
+            { IN_ATTRIB,        0 },
+            { IN_CLOSE_WRITE,   0 },
+            { IN_CLOSE_NOWRITE, 0 },
+            { IN_OPEN,          0 },
+            { IN_MOVED_FROM,    wxFSW_EVENT_RENAME },
+            { IN_MOVED_TO,      wxFSW_EVENT_RENAME },
             { IN_CREATE,        wxFSW_EVENT_CREATE },
             { IN_DELETE,        wxFSW_EVENT_DELETE },
-            { IN_DELETE_SELF,   wxFSW_EVENT_DELETE }, // hm...
-            { IN_MOVE_SELF,     wxFSW_EVENT_RENAME }, // better named "move"
+            { IN_DELETE_SELF,   wxFSW_EVENT_DELETE },
+            { IN_MOVE_SELF,     wxFSW_EVENT_DELETE },
 
             { IN_UNMOUNT,       wxFSW_EVENT_ERROR  },
             { IN_Q_OVERFLOW,    wxFSW_EVENT_WARNING},
@@ -368,11 +423,7 @@ protected:
 
         unsigned int i=0;
         for ( ; i < WXSIZEOF(flag_mapping); ++i) {
-#if 0
-            wxLogDebug("mapping: %d=%d", flag_mapping[i][0],
-                                            flag_mapping[i][1]);
-#endif
-            // TODO account for more flags set at once
+            // in this mapping multiple flags at once don't happen
             if (flags & flag_mapping[i][0])
                 return flag_mapping[i][1];
         }
@@ -390,9 +441,9 @@ protected:
         switch ( flag )
         {
         case IN_UNMOUNT:
-        	return _("File system containing watched object was unmounted");
+            return _("File system containing watched object was unmounted");
         case IN_Q_OVERFLOW:
-    		return _("Event queue overflowed");
+            return _("Event queue overflowed");
         }
 
         // never reached
@@ -402,10 +453,15 @@ protected:
 
     wxFSWSourceHandler* m_handler;        // handler for inotify event source
     wxFSWatchEntryDescriptors m_watchMap; // inotify wd=>wxFSWatchEntry* map
+    wxInotifyCookies m_cookies;           // map to track renames
     wxEventLoopBase* m_loop;              // event loop we have registered with
     wxEventLoopSource m_source;           // our event loop source
 };
 
+
+// ============================================================================
+// wxFSWSourceHandler implementation
+// ============================================================================
 
 // once we get signaled to read, actuall event reading occurs
 void wxFSWSourceHandler::OnReadWaiting()
@@ -436,7 +492,7 @@ wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher() :
 }
 
 wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher(const wxFileName& path,
-    	                                               int events) :
+                                                       int events) :
     wxFileSystemWatcherBase()
 {
     if (!Init())
