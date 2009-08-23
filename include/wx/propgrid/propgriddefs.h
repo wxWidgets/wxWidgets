@@ -54,10 +54,6 @@
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
 
-    // 1 to create controls out of sight, hide them, and then move them into
-    // correct position
-    #define wxPG_CREATE_CONTROLS_HIDDEN 0
-
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    0
 
@@ -94,10 +90,6 @@
 
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
-
-    // 1 to create controls out of sight, hide them, and then move them into
-    // correct position
-    #define wxPG_CREATE_CONTROLS_HIDDEN 0
 
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    1
@@ -136,10 +128,6 @@
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
 
-    // 1 to create controls out of sight, hide them, and then move them into
-    // correct position
-    #define wxPG_CREATE_CONTROLS_HIDDEN 0
-
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    0
 
@@ -176,10 +164,6 @@
 
     // width of optional bitmap/image in front of property
     #define wxPG_CUSTOM_IMAGE_WIDTH     20
-
-    // 1 to create controls out of sight, hide them, and then move them into
-    // correct position
-    #define wxPG_CREATE_CONTROLS_HIDDEN 0
 
     // 1 if splitter drag detect margin and control cannot overlap
     #define wxPG_NO_CHILD_EVT_MOTION    1

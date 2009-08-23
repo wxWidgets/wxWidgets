@@ -3780,10 +3780,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 wxRect grect = GetEditorWidgetRect(p, m_selColumn);
                 wxPoint goodPos = grect.GetPosition();
-            #if wxPG_CREATE_CONTROLS_HIDDEN
-                int coord_adjust = m_height - goodPos.y;
-                goodPos.y += coord_adjust;
-            #endif
 
                 const wxPGEditor* editor = p->GetEditorClass();
                 wxCHECK_MSG(editor, false,
@@ -3853,15 +3849,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     m_wndEditor->SetSizeHints(3, 3);
 
-                #if wxPG_CREATE_CONTROLS_HIDDEN
-                    m_wndEditor->Show(false);
-                    m_wndEditor->Freeze();
-
-                    goodPos = m_wndEditor->GetPosition();
-                    goodPos.y -= coord_adjust;
-                    m_wndEditor->Move( goodPos );
-                #endif
-
                     SetupChildEventHandling(primaryCtrl);
 
                     // Focus and select all (wxTextCtrl, wxComboBox etc)
@@ -3887,19 +3874,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     m_wndEditor2->SetSizeHints(3,3);
 
-                #if wxPG_CREATE_CONTROLS_HIDDEN
-                    wxRect sec_rect = m_wndEditor2->GetRect();
-                    sec_rect.y -= coord_adjust;
-
-                    // Fine tuning required to fix "oversized"
-                    // button disappearance bug.
-                    if ( sec_rect.y < 0 )
-                    {
-                        sec_rect.height += sec_rect.y;
-                        sec_rect.y = 0;
-                    }
-                    m_wndEditor2->SetSize( sec_rect );
-                #endif
                     m_wndEditor2->Show();
 
                     SetupChildEventHandling(m_wndEditor2);
@@ -3933,9 +3907,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
             if ( m_wndEditor )
             {
-            #if wxPG_CREATE_CONTROLS_HIDDEN
-                m_wndEditor->Thaw();
-            #endif
                 m_wndEditor->Show(true);
             }
 
