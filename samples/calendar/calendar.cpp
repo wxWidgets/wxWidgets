@@ -799,6 +799,18 @@ void MyPanel::LimitDateRange(bool on)
         if ( m_calendar->SetDateRange(today - diff, today + diff) )
         {
             wxLogStatus("Date range limited to 3 months around today.");
+            wxDateTime firstValidDate;
+            wxDateTime lastValidDate;
+            if ( m_calendar->GetDateRange(&firstValidDate, &lastValidDate) )
+            {
+                wxLogMessage("First valid date: %s, last valid date: %s",
+                             firstValidDate.FormatISODate(),
+                             lastValidDate.FormatISODate());
+            }
+            else
+            {
+                wxLogWarning("Failed to get back the valid dates range.");
+            }
         }
         else
         {
