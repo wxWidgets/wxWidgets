@@ -371,6 +371,7 @@ All:
  * wxLog::DoLogRecord() has access to the location of the log message
    (file, line and function name) and id of the thread which generated it.
  * SetThreadActiveTarget() allows to set up thread-specific log targets.
+- Fix output buffer overflow in wxBase64Decode() (Eric W. Savage).
 
 All (GUI):
 

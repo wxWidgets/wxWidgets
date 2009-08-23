@@ -106,7 +106,8 @@ size_t wxBase64EncodedSize(size_t len);
     This overload is a raw decoding function and decodes the data into the
     provided buffer @a dst of the given size @e dstLen. An error is returned if
     the buffer is not large enough -- that is not at least
-    wxBase64DecodedSize(srcLen) bytes.
+    wxBase64DecodedSize(srcLen) bytes. Notice that the buffer will @e not be
+    @NULL-terminated.
 
     This overload returns the number of bytes written to the buffer or the
     necessary buffer size if @a dst was @NULL or @c wxCONV_FAILED on error,

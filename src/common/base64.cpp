@@ -187,8 +187,15 @@ wxBase64Decode(void *dst_, size_t dstLen,
 
                 // undo the bit shifting done during encoding
                 *dst++ = in[0] << 2 | in[1] >> 4;
-                *dst++ = in[1] << 4 | in[2] >> 2;
-                *dst++ = in[2] << 6 | in[3];
+
+                // be careful to not overwrite the output buffer with NUL pad
+                // bytes
+                if ( padLen != 2 )
+                {
+                    *dst++ = in[1] << 4 | in[2] >> 2;
+                    if ( !padLen )
+                        *dst++ = in[2] << 6 | in[3];
+                }
             }
 
             n = 0;

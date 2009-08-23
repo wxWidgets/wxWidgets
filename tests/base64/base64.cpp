@@ -142,6 +142,13 @@ void Base64TestCase::EncodeDecodeA()
     wxMemoryBuffer buf = wxBase64Decode(str);
     CPPUNIT_ASSERT_EQUAL(1, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', *(char *)buf.GetData());
+
+    char cbuf[10];
+    memset(cbuf, (char)-1, sizeof(cbuf));
+    CPPUNIT_ASSERT_EQUAL( 1, wxBase64Decode(cbuf, 1, str) );
+    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[1] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[2] );
 }
 
 void Base64TestCase::EncodeDecodeAB()
@@ -153,6 +160,15 @@ void Base64TestCase::EncodeDecodeAB()
     CPPUNIT_ASSERT_EQUAL(2, buf.GetDataLen());
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
+
+    char cbuf[10];
+    memset(cbuf, (char)-1, sizeof(cbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 1, str) );
+    CPPUNIT_ASSERT_EQUAL( 2, wxBase64Decode(cbuf, 2, str) );
+    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
+    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[2] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[3] );
 }
 
 void Base64TestCase::EncodeDecodeABC()
@@ -165,6 +181,16 @@ void Base64TestCase::EncodeDecodeABC()
     CPPUNIT_ASSERT_EQUAL('A', buf[0]);
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);
+
+    char cbuf[10];
+    memset(cbuf, (char)-1, sizeof(cbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 2, str) );
+    CPPUNIT_ASSERT_EQUAL( 3, wxBase64Decode(cbuf, 3, str) );
+    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
+    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
+    CPPUNIT_ASSERT_EQUAL( 'C', cbuf[2] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[3] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[4] );
 }
 
 void Base64TestCase::EncodeDecodeABCD()
@@ -178,6 +204,17 @@ void Base64TestCase::EncodeDecodeABCD()
     CPPUNIT_ASSERT_EQUAL('B', buf[1]);
     CPPUNIT_ASSERT_EQUAL('C', buf[2]);
     CPPUNIT_ASSERT_EQUAL('D', buf[3]);
+
+    char cbuf[10];
+    memset(cbuf, (char)-1, sizeof(cbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, wxBase64Decode(cbuf, 3, str) );
+    CPPUNIT_ASSERT_EQUAL( 4, wxBase64Decode(cbuf, 4, str) );
+    CPPUNIT_ASSERT_EQUAL( 'A', cbuf[0] );
+    CPPUNIT_ASSERT_EQUAL( 'B', cbuf[1] );
+    CPPUNIT_ASSERT_EQUAL( 'C', cbuf[2] );
+    CPPUNIT_ASSERT_EQUAL( 'D', cbuf[3] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[4] );
+    CPPUNIT_ASSERT_EQUAL( (char)-1, cbuf[5] );
 }
 
 void Base64TestCase::EncodeDecode0to255()
