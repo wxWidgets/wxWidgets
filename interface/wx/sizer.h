@@ -1604,20 +1604,37 @@ public:
     wxGridSizer( int rows, int cols, const wxSize& gap );
     //@}
 
+    //@{
     /**
-        Returns the number of columns in the sizer.
+        Returns the number of columns or rows that has been specified for the
+        sizer.
+
+        Returns zero if the sizer is automatically adjusting the number of
+        columns/rows depending on number of its children. To get the effective
+        number of columns or rows being currently used, see
+        GetEffectiveColsCount() and GetEffectiveRowsCount().
     */
     int GetCols() const;
+    int GetRows() const;
+    //@}
+
+    //@{
+    /**
+        Returns the number of columns or rows currently used by the sizer.
+
+        This will depend on the number of children the sizer has if
+        the sizer is automatically adjusting the number of columns/rows.
+
+        @since 2.9.1
+    */
+    int GetEffectiveColsCount() const;
+    int GetEffectiveRowsCount() const;
+    //@}
 
     /**
         Returns the horizontal gap (in pixels) between cells in the sizer.
     */
     int GetHGap() const;
-
-    /**
-        Returns the number of rows in the sizer.
-    */
-    int GetRows() const;
 
     /**
         Returns the vertical gap (in pixels) between the cells in the sizer.

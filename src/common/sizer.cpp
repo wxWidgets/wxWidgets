@@ -1369,7 +1369,7 @@ wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
 
             // additionally, continuing to use the specified number of columns
             // and rows is not a good idea as callers of CalcRowsCols() expect
-            // that all sizer items can fit into m_cols/m_rows-sized arrays
+            // that all sizer items can fit into m_cols-/m_rows-sized arrays
             // which is not the case if there are too many items and results in
             // crashes, so let it compute the number of rows automatically by
             // forgetting the (wrong) number of rows specified (this also has a
@@ -1385,32 +1385,13 @@ wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
 {
     const int nitems = m_children.GetCount();
-    if ( m_cols && m_rows )
-    {
-        ncols = m_cols;
-        nrows = m_rows;
 
-        // this should be impossible because the too high number of items
-        // should have been detected by Insert() above
-        wxASSERT_MSG( nitems <= ncols*nrows, "logic error in wxGridSizer" );
-    }
-    else if ( m_cols )
-    {
-        ncols = m_cols;
-        nrows = (nitems + m_cols - 1) / m_cols;
-    }
-    else if ( m_rows )
-    {
-        ncols = (nitems + m_rows - 1) / m_rows;
-        nrows = m_rows;
-    }
-    else // 0 columns, 0 rows?
-    {
-        wxFAIL_MSG( wxT("grid sizer must have either rows or columns fixed") );
+    ncols = GetEffectiveColsCount();
+    nrows = GetEffectiveRowsCount();
 
-        nrows =
-        ncols = 0;
-    }
+    // Since Insert() checks for overpopulation, the following
+    // should only assert if the grid was shrunk via SetRows() / SetCols()
+    wxASSERT_MSG( nitems <= ncols*nrows, "logic error in wxGridSizer" );
 
     return nitems;
 }
@@ -1850,11 +1831,10 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
     // comments in AddGrowableCol/Row())
     if ( !m_rows || !m_cols )
     {
-        int nrows, ncols;
-        CalcRowsCols(nrows, ncols);
-
         if ( !m_rows )
         {
+            int nrows = CalcRows();
+
             for ( size_t n = 0; n < m_growableRows.size(); n++ )
             {
                 wxASSERT_MSG( m_growableRows[n] < nrows,
@@ -1864,6 +1844,8 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
 
         if ( !m_cols )
         {
+            int ncols = CalcCols();
+
             for ( size_t n = 0; n < m_growableCols.size(); n++ )
             {
                 wxASSERT_MSG( m_growableCols[n] < ncols,
@@ -1888,17 +1870,17 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
         // This gives nested objects that benefit from knowing one size
         // component in advance the chance to use that.
         bool didAdjustMinSize = false;
-        int nrows, ncols;
-        CalcRowsCols(nrows, ncols);
 
         // Iterate over all items and inform about column width
-        size_t n = 0;
+        const int ncols = GetEffectiveColsCount();
+        int col = 0;
         for ( wxSizerItemList::iterator i = m_children.begin();
               i != m_children.end();
-              ++i, ++n )
+              ++i )
         {
-            const int col = n % ncols;
             didAdjustMinSize |= (*i)->InformFirstDirection(wxHORIZONTAL, m_colWidths[col], sz.y - m_calculatedMinSize.y);
+            if ( ++col == ncols )
+                col = 0;
         }
 
         // Only redo if info was actually used
@@ -1942,9 +1924,6 @@ bool wxFlexGridSizer::IsColGrowable( size_t idx )
 
 void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 {
-    int nrows, ncols;
-    CalcRowsCols(nrows, ncols);
-
     wxASSERT_MSG( !IsRowGrowable( idx ),
                   "AddGrowableRow() called for growable row" );
 
@@ -1960,15 +1939,12 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 
 void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
-    int nrows, ncols;
-    CalcRowsCols(nrows, ncols);
-
     wxASSERT_MSG( !IsColGrowable( idx ),
                   "AddGrowableCol() called for growable column" );
 
     // see comment in AddGrowableRow(): although it's less common to omit the
     // specification of the number of columns, it still can also happen
-    wxCHECK_RET( !m_cols || idx < (size_t)ncols, "invalid column index" );
+    wxCHECK_RET( !m_cols || idx < (size_t)m_cols, "invalid column index" );
 
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );

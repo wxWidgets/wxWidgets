@@ -757,17 +757,48 @@ public:
     int GetVGap() const         { return m_vgap; }
     int GetHGap() const         { return m_hgap; }
 
+    int GetEffectiveColsCount() const   { return m_cols ? m_cols : CalcCols(); }
+    int GetEffectiveRowsCount() const   { return m_rows ? m_rows : CalcRows(); }
+
     // return the number of total items and the number of columns and rows
     // (for internal use only)
     int CalcRowsCols(int& rows, int& cols) const;
 
 protected:
+    // the number of rows/columns in the sizer, if 0 then it is determined
+    // dynamically depending on the total number of items
     int    m_rows;
     int    m_cols;
+
+    // gaps between rows and columns
     int    m_vgap;
     int    m_hgap;
 
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
+
+    // returns the number of columns/rows needed for the current total number
+    // of children (and the fixed number of rows/columns)
+    int CalcCols() const
+    {
+        wxCHECK_MSG
+        (
+            m_rows, 0,
+            "Can't calculate number of cols if number of rows is not specified"
+        );
+
+        return (m_children.GetCount() + m_rows - 1) / m_rows;
+    }
+
+    int CalcRows() const
+    {
+        wxCHECK_MSG
+        (
+            m_cols, 0,
+            "Can't calculate number of cols if number of rows is not specified"
+        );
+
+        return (m_children.GetCount() + m_cols - 1) / m_cols;
+    }
 
 private:
     DECLARE_CLASS(wxGridSizer)
