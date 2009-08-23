@@ -176,24 +176,18 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 
 wxConsoleEventLoop::~wxConsoleEventLoop()
 {
-	if (m_wakeupPipe)
-	{
-		m_dispatcher->UnregisterFD(m_wakeupPipe->GetReadFd());
-		delete m_wakeupPipe;
-	}
-
-    // CHECK maybe this should be done from Exit() and not here
-    wxEventLoopSourceHashMap::iterator it = m_sourceMap.begin();
-    for ( ; it != m_sourceMap.end(); ++it)
+    if (m_wakeupPipe)
     {
-        wxEventLoopSource src = it->first;
-        m_dispatcher->UnregisterFD(src.GetResource());
+        m_dispatcher->UnregisterFD(m_wakeupPipe->GetReadFd());
+        delete m_wakeupPipe;
     }
 }
 
 //-----------------------------------------------------------------------------
 // adding & removing sources
 //-----------------------------------------------------------------------------
+
+#if wxUSE_EVENTLOOP_SOURCE
 
 // This class is a temporary bridge between event loop sources and
 // FDIODispatcher. It is going to be removed soon, when all subject interfaces
@@ -222,31 +216,36 @@ protected:
     wxEventLoopSourceHandler* m_impl;
 };
 
-
-bool wxConsoleEventLoop::DoAddSource(const wxEventLoopSource& source,
-                                    wxEventLoopSourceHandler* handler,
-                                    int flags)
+bool wxConsoleEventLoop::DoAddSource(wxAbstractEventLoopSource* src)
 {
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
+
     wxLogTrace(wxTRACE_EVT_SOURCE,
                 "wxConsoleEventLoop::AddSource() source=%d",
-                source.GetResource());
+                source->GetResource());
 
     // translating into wxFDIOHandler
     // XXX this is a memory leak of course, but this is really temporary, so
     // we are not creating another map of handlers
-    wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(handler);
+    wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(source->GetHandler());
 
-    return m_dispatcher->RegisterFD(source.GetResource(), h, flags);
+    return m_dispatcher->RegisterFD(source->GetResource(), h,
+                                    source->GetFlags());
 }
 
-bool wxConsoleEventLoop::DoRemoveSource(const wxEventLoopSource& source)
+bool wxConsoleEventLoop::DoRemoveSource(wxAbstractEventLoopSource* src)
 {
-    wxLogTrace(wxTRACE_EVT_SOURCE,
-                "wxConsoleEventLoop::RemoveSource() source=%d",
-                source.GetResource());
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
 
-    return m_dispatcher->UnregisterFD(source.GetResource());
+    wxLogTrace(wxTRACE_EVT_SOURCE,
+               "wxConsoleEventLoop::RemoveSource() source=%d",
+               source->GetResource());
+
+    return m_dispatcher->UnregisterFD(source->GetResource());
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling

@@ -38,7 +38,9 @@ class wxFSWatcherImplKqueue : public wxFSWatcherImpl
 public:
     wxFSWatcherImplKqueue(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_loop(NULL), m_source(wxEventLoopSource::INVALID_RESOURCE)
+        m_loop(NULL),
+        m_source(NULL),
+        m_kfd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
     }
@@ -56,23 +58,33 @@ public:
 
     bool Init()
     {
-        wxCHECK_MSG( !m_source.IsOk(), false,
-                    "Kqueue appears to be already initialized" );
+        wxCHECK_MSG( !IsOk(), false,
+                     "Kqueue appears to be already initialized" );
+        wxCHECK_MSG( m_loop == NULL, false, "Event loop != NULL");
 
-        int fd = kqueue();
-        if (fd == -1)
+        m_loop = (wxEventLoopBase::GetActive());
+        wxCHECK_MSG( m_loop, false, "File system watcher needs an active loop" );
+
+        // create kqueue
+        m_kfd = kqueue();
+        if (m_kfd == -1)
         {
             wxLogSysError(_("Unable to create kqueue instance"));
             return false;
         }
 
-        m_source.SetResource(fd);
+        // create source
+        int flags = wxEVENT_SOURCE_INPUT;
+        m_source = m_loop->CreateSource(m_kfd, m_handler, flags);
+        wxCHECK_MSG( m_source, false,
+                     "Active loop has no support for fd-based sources" );
+
         return RegisterSource();
     }
 
     bool Close()
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
         wxCHECK_MSG( m_loop, false,
                     "m_loop shouldn't be null if kqueue is initialized" );
@@ -80,19 +92,19 @@ public:
         // ignore errors
         (void) UnregisterSource();
 
-        int ret = close(m_source.GetResource());
+        int ret = close(m_kfd);
         if (ret == -1)
         {
             wxLogSysError(_("Unable to close kqueue instance"));
         }
-        m_source.SetResource(wxEventLoopSource::INVALID_RESOURCE);
+        m_source->Invalidate();
 
         return ret != -1;
     }
 
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryKq> watch)
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
 
         struct kevent event;
@@ -103,7 +115,7 @@ public:
 
         // TODO more error conditions according to man
         // TODO best deal with the error here
-        int ret = kevent(m_source.GetResource(), &event, 1, NULL, 0, NULL);
+        int ret = kevent(m_kfd, &event, 1, NULL, 0, NULL);
         if (ret == -1)
         {
             wxLogSysError(_("Unable to add kqueue watch"));
@@ -115,7 +127,7 @@ public:
 
     virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryKq> watch)
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
 
         // TODO more error conditions according to man
@@ -145,7 +157,7 @@ public:
     // return true if there was no error, false on error
     bool ReadEvents()
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
 
         // read events
@@ -153,8 +165,7 @@ public:
         {
             struct kevent event;
             struct timespec timeout = {0, 0};
-            int ret = kevent(m_source.GetResource(), NULL, 0, &event, 1,
-                             &timeout);
+            int ret = kevent(m_kfd, NULL, 0, &event, 1, &timeout);
             if (ret == -1)
             {
                 wxLogSysError(_("Unable to get events from kqueue"));
@@ -177,31 +188,27 @@ public:
 
     bool IsOk()
     {
-        return m_source.IsOk();
+        return m_source && m_source->IsOk();
     }
 
-    wxEventLoopSource GetSource() const
+/*
+    wxAbstractEventLoopSource* GetSource() const
     {
         return m_source;
-    }
+    }*/
 
 protected:
     bool RegisterSource()
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
-        wxCHECK_MSG( m_loop == NULL, false, "Event loop should be NULL");
 
-        m_loop = wxEventLoopBase::GetActive();
-        wxCHECK_MSG( m_loop, false,
-                    "wxFileSystemWatcher requires an active event loop" );
-
-        return m_loop->AddSource(m_source, m_handler, wxEVENT_SOURCE_INPUT);
+        return m_loop->AddSource(m_source);
     }
 
     bool UnregisterSource()
     {
-        wxCHECK_MSG( m_source.IsOk(), false,
+        wxCHECK_MSG( IsOk(), false,
                     "Kqueue not initialized or invalid kqueue descriptor" );
         wxCHECK_MSG( m_loop, false,
                     "m_loop shouldn't be null if kqueue is initialized" );
@@ -380,7 +387,8 @@ protected:
 
     wxFSWSourceHandler* m_handler;        // handler for kqueue event source
     wxEventLoopBase* m_loop;              // event loop we have registered with
-    wxEventLoopSource m_source;           // our event loop source
+    wxAbstractEventLoopSource* m_source;  // our event loop source
+    int m_kfd;
 };
 
 

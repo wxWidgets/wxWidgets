@@ -201,7 +201,7 @@ public:
 
     virtual ~EventHandler()
     {
-            delete m_watcher;
+    	delete m_watcher;
         if (m_loop)
         {
             if (m_loop->IsRunning())
@@ -433,6 +433,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileSystemWatcherTestCase,
 void FileSystemWatcherTestCase::setUp()
 {
     wxLog::AddTraceMask(wxTRACE_FSWATCHER);
+//    wxLog::AddTraceMask(wxTRACE_EVT_SOURCE);
     EventGenerator::Get().GetWatchDir();
 }
 

@@ -17,17 +17,17 @@
 
 typedef union  _GdkEvent        GdkEvent;
 
+#if wxUSE_EVENTLOOP_SOURCE
 // maps event loop sources to gtk source ids
-//
-// TODO maybe there should be only one map for sources, storing different
-// information for different implementations
-WX_DECLARE_HASH_MAP(wxEventLoopSource, int,
-              wxEventLoopSource::Hash, wxEventLoopSource::Equal,
-              wxEventLoopSourceIdMap);
+WX_DECLARE_HASH_MAP(wxUnixEventLoopSource*, int, wxPointerHash, wxPointerEqual,
+                    wxEventLoopSourceIdMap);
+#endif
 
-class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
+class WXDLLIMPEXP_BASE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
+    typedef wxUnixEventLoopSource Source;
+
     wxGUIEventLoop();
 
     virtual int Run();
@@ -41,20 +41,35 @@ public:
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
 
+#if wxUSE_EVENTLOOP_SOURCE
+    virtual wxUnixEventLoopSource* CreateSource() const
+    {
+        return new wxUnixEventLoopSource();
+    }
+
+    virtual wxUnixEventLoopSource* CreateSource(int res,
+                                           wxEventLoopSourceHandler* handler,
+                                           int flags) const
+    {
+        return new wxUnixEventLoopSource(res, handler, flags);
+    }
+#endif
+
 protected:
+#if wxUSE_EVENTLOOP_SOURCE
     // adding/removing sources
-    virtual bool DoAddSource(const wxEventLoopSource& source,
-                                wxEventLoopSourceHandler* handler, int flags);
-    virtual bool DoRemoveSource(const wxEventLoopSource& source);
+    virtual bool DoAddSource(wxAbstractEventLoopSource* source);
+    virtual bool DoRemoveSource(wxAbstractEventLoopSource* source);
+
+    // map of event loop sources gtk ids
+    wxEventLoopSourceIdMap m_sourceIdMap;
+#endif
 
     // the exit code of this event loop
     int m_exitcode;
 
     // used to temporarily store events in DoYield()
     wxArrayPtrVoid m_arrGdkEvents;
-
-    // map of event loop sources gtk ids
-    wxEventLoopSourceIdMap m_sourceIdMap;
 
     wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };
