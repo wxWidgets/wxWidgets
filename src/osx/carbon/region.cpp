@@ -301,7 +301,7 @@ wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
     if (!m_refData)
         return wxOutRegion;
 
-    CGPoint p = { y , x } ;
+    CGPoint p = { x, y } ;
     if (HIShapeContainsPoint( M_REGION , &p ) )
         return wxInRegion;
 
