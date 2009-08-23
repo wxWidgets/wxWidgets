@@ -184,6 +184,7 @@ public:
     void OnSetBackgroundColour( wxCommandEvent& event );
     void OnClearModifyStatusClick( wxCommandEvent& event );
     void OnFreezeClick( wxCommandEvent& event );
+    void OnEnableLabelEditing( wxCommandEvent& event );
     void OnDumpList( wxCommandEvent& event );
     void OnCatColours( wxCommandEvent& event );
     void OnSetColumns( wxCommandEvent& event );
@@ -230,6 +231,8 @@ public:
     void OnPropertyGridKeyEvent( wxKeyEvent& event );
     void OnPropertyGridItemCollapse( wxPropertyGridEvent& event );
     void OnPropertyGridItemExpand( wxPropertyGridEvent& event );
+    void OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event );
+    void OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event );
 
     void OnAbout( wxCommandEvent& event );
 

@@ -215,6 +215,9 @@ wxPropertyGridPageState::wxPropertyGridPageState()
     m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
     m_colWidths.push_back( wxPG_DEFAULT_SPLITTERX );
     m_fSplitterX = wxPG_DEFAULT_SPLITTERX;
+
+    // By default, we only have the 'value' column editable
+    m_editableColumns.push_back(1);
 }
 
 // -----------------------------------------------------------------------

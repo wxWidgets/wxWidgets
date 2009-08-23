@@ -668,6 +668,9 @@ protected:
     /** List of column widths (first column does not include margin). */
     wxArrayInt                  m_colWidths;
 
+    /** List of indices of columns the user can edit by clicking it. */
+    wxArrayInt                  m_editableColumns;
+
     double                      m_fSplitterX;
 
     /** Most recently added category. */

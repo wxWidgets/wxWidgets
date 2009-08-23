@@ -687,7 +687,8 @@ enum
     ID_SELECTSTYLE,
     ID_SAVESTATE,
     ID_RESTORESTATE,
-    ID_RUNMINIMAL
+    ID_RUNMINIMAL,
+    ID_ENABLELABELEDITING
 };
 
 // -----------------------------------------------------------------------
@@ -713,6 +714,12 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_PG_DOUBLE_CLICK( PGID, FormMain::OnPropertyGridItemDoubleClick )
     // This occurs when propgridmanager's page changes.
     EVT_PG_PAGE_CHANGED( PGID, FormMain::OnPropertyGridPageChange )
+    // This occurs when user starts editing a property label
+    EVT_PG_LABEL_EDIT_BEGIN( PGID,
+        FormMain::OnPropertyGridLabelEditBegin )
+    // This occurs when user stops editing a property label
+    EVT_PG_LABEL_EDIT_ENDING( PGID,
+        FormMain::OnPropertyGridLabelEditEnding )
     // This occurs when property's editor button (if any) is clicked.
     EVT_BUTTON( PGID, FormMain::OnPropertyGridButtonClick )
 
@@ -745,6 +752,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_SETBGCOLOURRECUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_CLEARMODIF, FormMain::OnClearModifyStatusClick )
     EVT_MENU( ID_FREEZE, FormMain::OnFreezeClick )
+    EVT_MENU( ID_ENABLELABELEDITING, FormMain::OnEnableLabelEditing )
     EVT_MENU( ID_DUMPLIST, FormMain::OnDumpList )
 
     EVT_MENU( ID_COLOURSCHEME1, FormMain::OnColourScheme )
@@ -1014,6 +1022,22 @@ void FormMain::OnPropertyGridPageChange( wxPropertyGridEvent& WXUNUSED(event) )
     text += m_pPropGridManager->GetPageName(m_pPropGridManager->GetSelectedPage());
     sb->SetStatusText( text );
 #endif
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
+{
+    wxLogDebug("wxPG_EVT_LABEL_EDIT_BEGIN(%s)",
+               event.GetProperty()->GetLabel().c_str());
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event )
+{
+    wxLogDebug("wxPG_EVT_LABEL_EDIT_ENDING(%s)",
+               event.GetProperty()->GetLabel().c_str());
 }
 
 // -----------------------------------------------------------------------
@@ -2219,6 +2243,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     menuTry->Append(ID_SELECTSTYLE, wxT("Set Window Style"),
         wxT("Select window style flags used by the grid."));
+    menuTry->Append(ID_ENABLELABELEDITING, "Enable label editing",
+        "This calls wxPropertyGrid::MakeColumnEditable(0)");
     menuTry->AppendSeparator();
     menuTry->AppendRadioItem( ID_COLOURSCHEME1, wxT("Standard Colour Scheme") );
     menuTry->AppendRadioItem( ID_COLOURSCHEME2, wxT("White Colour Scheme") );
@@ -2758,6 +2784,13 @@ void FormMain::OnFreezeClick( wxCommandEvent& event )
             m_pPropGridManager->Refresh();
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnEnableLabelEditing( wxCommandEvent& WXUNUSED(event) )
+{
+    m_propGrid->MakeColumnEditable(0);
 }
 
 // -----------------------------------------------------------------------

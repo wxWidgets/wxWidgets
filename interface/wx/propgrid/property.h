@@ -1028,8 +1028,22 @@ public:
 
     /**
         Returns wxPGCell of given column.
+
+        @remarks const version of this member function returns 'default'
+                 wxPGCell object if the property itself didn't hold
+                 cell data.
     */
     const wxPGCell& GetCell( unsigned int column ) const;
+
+    /**
+        Returns wxPGCell of given column, creating one if necessary.
+    */
+    wxPGCell& GetCell( unsigned int column );
+
+    /**
+        Returns wxPGCell of given column, creating one if necessary.
+    */
+    wxPGCell& GetOrCreateCell( unsigned int column );
 
     /**
         Returns number of child properties.

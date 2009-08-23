@@ -1603,7 +1603,9 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 
 // Fixes position of wxTextCtrl-like control (wxSpinCtrl usually
 // fits into that category as well).
-void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl, const wxPoint& offset )
+void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
+                                        unsigned int forColumn,
+                                        const wxPoint& offset )
 {
     // Center the control vertically
     wxRect finalPos = ctrl->GetRect();
@@ -1616,7 +1618,10 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl, const wxPoint& offset )
     finalPos.y += y_adj;
     finalPos.height -= (y_adj+sz_dec);
 
-    const int textCtrlXAdjust = wxPG_TEXTCTRLXADJUST;
+    int textCtrlXAdjust = wxPG_TEXTCTRLXADJUST;
+
+    if ( forColumn != 1 )
+        textCtrlXAdjust -= 3;  // magic number!
 
     finalPos.x += textCtrlXAdjust;
     finalPos.width -= textCtrlXAdjust;
@@ -1634,7 +1639,8 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
                                                   const wxString& value,
                                                   wxWindow* secondary,
                                                   int extraStyle,
-                                                  int maxLen )
+                                                  int maxLen,
+                                                  unsigned int forColumn )
 {
     wxWindowID id = wxPG_SUBID1;
     wxPGProperty* prop = GetSelection();
@@ -1653,7 +1659,11 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     s.x -= 8;
 #endif
 
-     // Take button into acccount
+    // For label editors, trim the size to allow better splitter grabbing
+    if ( forColumn != 1 )
+        s.x -= 2;
+
+    // Take button into acccount
     if ( secondary )
     {
         s.x -= (secondary->GetSize().x + wxPG_TEXTCTRL_AND_BUTTON_SPACING);
@@ -1681,7 +1691,13 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
     // Center the control vertically
     if ( !hasSpecialSize )
-        FixPosForTextCtrl(tc);
+        FixPosForTextCtrl(tc, forColumn);
+
+    if ( forColumn != 1 )
+    {
+        tc->SetBackgroundColour(m_colSelBack);
+        tc->SetForegroundColour(m_colSelFore);
+    }
 
 #ifdef __WXMSW__
     tc->Show();

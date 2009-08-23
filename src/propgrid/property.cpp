@@ -1511,7 +1511,7 @@ const wxPGCell& wxPGProperty::GetCell( unsigned int column ) const
     return pg->GetPropertyDefaultCell();
 }
 
-wxPGCell& wxPGProperty::GetCell( unsigned int column )
+wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
 {
     EnsureCells(column);
     return m_cells[column];

@@ -1561,10 +1561,25 @@ public:
 
     /**
         Returns wxPGCell of given column.
+
+        @remarks const version of this member function returns 'default'
+                 wxPGCell object if the property itself didn't hold
+                 cell data.
     */
     const wxPGCell& GetCell( unsigned int column ) const;
 
-    wxPGCell& GetCell( unsigned int column );
+    /**
+        Returns wxPGCell of given column, creating one if necessary.
+    */
+    wxPGCell& GetCell( unsigned int column )
+    {
+        return GetOrCreateCell(column);
+    }
+
+    /**
+        Returns wxPGCell of given column, creating one if necessary.
+    */
+    wxPGCell& GetOrCreateCell( unsigned int column );
 
     /** Return number of displayed common values for this property.
     */
@@ -2241,6 +2256,13 @@ protected:
 
     /** Deletes all sub-properties. */
     void Empty();
+
+    bool HasCell( unsigned int column ) const
+    {
+        if ( m_cells.size() > column )
+            return true;
+        return false;
+    }
 
     void InitAfterAdded( wxPropertyGridPageState* pageState,
                          wxPropertyGrid* propgrid );

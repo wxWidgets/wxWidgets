@@ -359,6 +359,14 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
     @event{EVT_PG_ITEM_EXPANDED(id, func)}
         Respond to wxEVT_PG_ITEM_EXPANDED event, generated when user expands
         a property or category.
+    @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
+        Respond to wxEVT_PG_LABEL_EDIT_BEGIN event, generated when is about to
+        begin editing a property label. You can veto this event to prevent the
+        action.
+    @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
+        Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when is about to
+        end editing of a property label. You can veto this event to prevent the
+        action.
     @endEventTable
 
     @remarks
@@ -431,6 +439,21 @@ public:
     static void AutoGetTranslation( bool enable );
 
     /**
+        Creates label editor wxTextCtrl for given column, for property
+        that is currently selected. When multiple selection is
+        enabled, this applies to whatever property GetSelection()
+        returns.
+
+        @param colIndex
+            Which column's label to edit. Note that you should not
+            use value 1, which is reserved for property value
+            column.
+
+        @see EndLabelEdit(), MakeColumnEditable()
+    */
+    void BeginLabelEdit( unsigned int column = 0 );
+
+    /**
         Changes value of a property, as if from an editor. Use this instead of
         SetPropertyValue() if you need the value to run through validation
         process, and also send the property change event.
@@ -492,6 +515,17 @@ public:
     bool EnableCategories( bool enable );
 
     /**
+        Destroys label editor wxTextCtrl, if any.
+
+        @param commit
+            Use @true (default) to store edited label text in
+            property cell data.
+
+        @see BeginLabelEdit(), MakeColumnEditable()
+    */
+    void EndLabelEdit( bool commit = true );
+
+    /**
         Scrolls and/or expands items to ensure that the given item is visible.
 
         @return Returns @true if something was actually done.
@@ -514,6 +548,11 @@ public:
                 returns.
     */
     wxSize FitColumns();
+
+    /**
+        Returns currently active label editor, NULL if none.
+    */
+    wxTextCtrl* GetLabelEditor() const;
 
     /**
         Returns wxWindow that the properties are painted on, and which should be
@@ -695,6 +734,13 @@ public:
         yet Thaw() ).
     */
     bool IsFrozen() const;
+
+    /**
+        Makes given column editable by user.
+
+        @see BeginLabelEdit(), EndLabelEdit()
+    */
+    void MakeColumnEditable( unsigned int column );
 
     /**
         It is recommended that you call this function any time your code causes

@@ -1287,6 +1287,9 @@ public:
 
     static wxPGEditor* GetEditorByName( const wxString& editorName );
 
+    // NOTE: This function reselects the property and may cause
+    //       excess flicker, so to just call Refresh() on a rect
+    //       of single property, call DrawItem() instead.
     virtual void RefreshProperty( wxPGProperty* p ) = 0;
 
 protected:

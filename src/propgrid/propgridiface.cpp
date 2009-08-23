@@ -216,7 +216,9 @@ wxPGProperty* wxPropertyGridInterface::GetSelection() const
 
 bool wxPropertyGridInterface::ClearSelection( bool validation )
 {
-    return DoClearSelection(validation, wxPG_SEL_DONT_SEND_EVENT);
+    bool res = DoClearSelection(validation, wxPG_SEL_DONT_SEND_EVENT);
+    GetPropertyGrid()->Refresh();
+    return res;
 }
 
 // -----------------------------------------------------------------------
