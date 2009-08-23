@@ -341,11 +341,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     else if ( style & wxALIGN_CENTER )
         msStyle |= ES_CENTER;
 
-    // this control is used for numeric entry so normally using these flags by
-    // default shouldn't be a problem, if it is we can always add a style such
-    // as wxSP_NON_NUMERIC later
-    msStyle |= ES_NUMBER;
-
     // calculate the sizes: the size given is the total size for both controls
     // and we need to fit them both in the given width (height is the same)
     wxSize sizeText(size), sizeBtn(size);
@@ -527,6 +522,28 @@ void wxSpinCtrl::SetSelection(long from, long to)
     }
 
     ::SendMessage(GetBuddyHwnd(), EM_SETSEL, (WPARAM)from, (LPARAM)to);
+}
+
+// ----------------------------------------------------------------------------
+// wxSpinButton methods
+// ----------------------------------------------------------------------------
+
+void wxSpinCtrl::SetRange(int minVal, int maxVal)
+{
+    wxSpinButton::SetRange(minVal, maxVal);
+
+    // this control is used for numeric entry so restrict the input to numeric
+    // keys only -- but only if we don't need to be able to enter "-" in it as
+    // otherwise this would become impossible
+    const DWORD styleOld = ::GetWindowLong(GetBuddyHwnd(), GWL_STYLE);
+    DWORD styleNew;
+    if ( minVal < 0 )
+        styleNew = styleOld & ~ES_NUMBER;
+    else
+        styleNew = styleOld | ES_NUMBER;
+
+    if ( styleNew != styleOld )
+        ::SetWindowLong(GetBuddyHwnd(), GWL_STYLE, styleNew);
 }
 
 // ----------------------------------------------------------------------------

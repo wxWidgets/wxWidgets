@@ -67,6 +67,7 @@ public:
 
     virtual void SetValue(int val);
     virtual int  GetValue() const;
+    virtual void SetRange(int minVal, int maxVal);
     virtual bool SetFont(const wxFont &font);
     virtual void SetFocus();
 
