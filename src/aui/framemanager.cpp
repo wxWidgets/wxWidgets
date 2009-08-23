@@ -2366,11 +2366,17 @@ int wxAuiManager::GetNotebookFlags()
     {
         flags |= wxAUI_MGR_NB_WINDOWLIST_BUTTON;
     }
-        
+    
+    if(HasFlag(wxAUI_MGR_NB_SCROLL_BUTTONS))
+    {
+        flags |= wxAUI_MGR_NB_SCROLL_BUTTONS;
+    }
+    
     if(HasFlag(wxAUI_MGR_NB_TAB_FIXED_WIDTH))
     {
         flags |= wxAUI_MGR_NB_TAB_FIXED_WIDTH;
     }
+    
         
     if(HasFlag(wxAUI_MGR_NB_CLOSE_BUTTON))
     {

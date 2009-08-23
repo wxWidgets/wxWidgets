@@ -97,7 +97,6 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 void wxAuiNotebook::InitNotebook(long style)
 {
     SetName(wxT("wxAuiNotebook"));
-    m_flags = (unsigned int)style;
     m_tab_ctrl_height = 20;
 
     m_normal_font = *wxNORMAL_FONT;
@@ -107,9 +106,8 @@ void wxAuiNotebook::InitNotebook(long style)
     SetArtProvider(new wxAuiDefaultTabArt);
 
     m_mgr.SetManagedWindow(this);
-    m_mgr.SetFlags(wxAUI_MGR_DEFAULT);
     m_mgr.SetDockSizeConstraint(1.0, 1.0); // no dock size constraint
-    m_mgr.Update();
+    SetWindowStyleFlag(style);
 }
 
 wxAuiNotebook::~wxAuiNotebook()
@@ -195,11 +193,9 @@ wxAuiTabArt* wxAuiNotebook::GetArtProvider() const
 
 void wxAuiNotebook::SetWindowStyleFlag(long style)
 {
-    //temp: (MJM)
-    //wxControl::SetWindowStyleFlag(style);
+    wxPanel::SetWindowStyleFlag(style);
 
-    m_flags = (unsigned int)style;
-
+    m_mgr.SetFlags(style);
     m_mgr.Update();
 }
 
