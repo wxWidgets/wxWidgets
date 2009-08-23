@@ -470,21 +470,9 @@ doesn't count as having handled the event and the search continues):
 
     <li value="5">
     The event is passed to the next event handler, if any, in the event handler
-    chain, i.e., the steps (1) to (4) are done for it. This chain can be formed
-    using wxEvtHandler::SetNextHandler():
-        @image html overview_events_chain.png
-    (referring to the image, if @c A->ProcessEvent is called and it doesn't handle
-     the event, @c B->ProcessEvent will be called and so on...).
-    In the case of wxWindow you can build a stack (implemented using wxEvtHandler
-    double-linked list) using wxWindow::PushEventHandler():
-        @image html overview_events_winstack.png
-    (referring to the image, if @c W->ProcessEvent is called, it immediately calls
-     @c A->ProcessEvent; if nor @c A nor @c B handle the event, then the wxWindow
-     itself is used - i.e. the dynamically bind event handlers and static
-     event table entries of wxWindow are looked as the last possibility, after
-     all pushed event handlers were tested).
-    Note however that usually there are no wxEvtHandler chains nor wxWindows stacks
-    so this step will usually do anything.
+    chain, i.e., the steps (1) to (4) are done for it. Usually there is no next
+    event handler so the control passes to the next step but see @ref
+    overview_events_nexthandler for how the next handler may be defined.
     </li>
 
     <li value="6">
@@ -561,6 +549,27 @@ of system events in a parent window, for example all key events sent to, but not
 used by, the native controls in a dialog. In this case, a special event handler
 will have to be written that will override ProcessEvent() in order to pass
 all events (or any selection of them) to the parent window.
+
+
+@subsection overview_events_nexthandler Event Handlers Chain
+
+The step 4 of the event propagation algorithm checks for the next handler in
+the event handler chain. This chain can be formed using
+wxEvtHandler::SetNextHandler():
+        @image html overview_events_chain.png
+(referring to the image, if @c A->ProcessEvent is called and it doesn't handle
+ the event, @c B->ProcessEvent will be called and so on...).
+
+Additionally, in the case of wxWindow you can build a stack (implemented using
+wxEvtHandler double-linked list) using wxWindow::PushEventHandler():
+        @image html overview_events_winstack.png
+(referring to the image, if @c W->ProcessEvent is called, it immediately calls
+ @c A->ProcessEvent; if nor @c A nor @c B handle the event, then the wxWindow
+itself is used -- i.e. the dynamically bind event handlers and static event
+table entries of wxWindow are looked as the last possibility, after all pushed
+event handlers were tested).
+
+By default the chain is empty, i.e. there is no next handler.
 
 
 @section overview_events_custom Custom Event Summary
