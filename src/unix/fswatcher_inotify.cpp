@@ -374,7 +374,7 @@ protected:
     }
 
     static wxFileName GetEventPath(const wxFSWatchEntry& watch,
-                                          const inotify_event& inevt)
+                                   const inotify_event& inevt)
     {
         // only when dir is watched, we have non-empty e.name
         wxFileName path = watch.GetPath();
