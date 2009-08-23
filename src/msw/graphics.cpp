@@ -1400,13 +1400,13 @@ class WXDLLIMPEXP_CORE wxGDIPlusRenderer : public wxGraphicsRenderer
 public :
     wxGDIPlusRenderer()
     {
-        m_loaded = false;
+        m_loaded = -1;
         m_gditoken = 0;
     }
 
     virtual ~wxGDIPlusRenderer()
     {
-        if (m_loaded)
+        if ( m_loaded == 1 )
         {
             Unload();
         }
@@ -1454,12 +1454,13 @@ public :
     
     wxGraphicsBitmap CreateBitmap( const wxBitmap &bmp ) ;
 protected :
-    void EnsureIsLoaded();
+    bool EnsureIsLoaded();
     void Load();
     void Unload();
+    friend class wxGDIPlusRendererModule;
 
 private :
-    bool m_loaded;
+    int m_loaded;
     ULONG_PTR m_gditoken;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusRenderer)
@@ -1478,62 +1479,86 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return &gs_GDIPlusRenderer;
 }
 
-void wxGDIPlusRenderer::EnsureIsLoaded()
+bool wxGDIPlusRenderer::EnsureIsLoaded()
 {
-    if (!m_loaded)
+    // load gdiplus.dll if not yet loaded, but don't bother doing it again
+    // if we already tried and failed (we don't want to spend lot of time
+    // returning NULL from wxGraphicsContext::Create(), which may be called
+    // relatively frequently):
+    if ( m_loaded == -1 )
     {
         Load();
     }
+
+    return m_loaded == 1;
 }
+
+// call EnsureIsLoaded() and return returnOnFail value if it fails
+#define ENSURE_LOADED_OR_RETURN(returnOnFail)  \
+    if ( !EnsureIsLoaded() )                   \
+        return (returnOnFail)
+
 
 void wxGDIPlusRenderer::Load()
 {
     GdiplusStartupInput input;
     GdiplusStartupOutput output;
-    GdiplusStartup(&m_gditoken,&input,&output);
-    m_loaded = true;
+    if ( GdiplusStartup(&m_gditoken,&input,&output) == Gdiplus::Ok )
+    {
+        wxLogTrace(wxT("gdiplus"), wxT("successfully initialized GDI+"));
+        m_loaded = 1;
+    }
+    else
+    {
+        wxLogTrace(wxT("gdiplus"), wxT("failed to initialize GDI+, missing gdiplus.dll?"));
+        m_loaded = 0;
+    }
 }
 
 void wxGDIPlusRenderer::Unload()
 {
     if ( m_gditoken )
+    {
         GdiplusShutdown(m_gditoken);
+        m_gditoken = NULL;
+    }
+    m_loaded = -1; // next Load() will try again
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxMemoryDC& dc)
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this,(HDC) dc.GetHDC());
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateMeasuringContext()
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusMeasuringContext(this);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeContext( void * context )
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this,(Graphics*) context);
 }
 
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeWindow( void * window )
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this,(HWND) window);
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(NULL);
     return new wxGDIPlusContext(this, (HWND) window->GetHWND() );
 }
 
@@ -1541,7 +1566,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )
 
 wxGraphicsPath wxGDIPlusRenderer::CreatePath()
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsPath);
     wxGraphicsPath m;
     m.SetRefData( new wxGDIPlusPathData(this));
     return m;
@@ -1554,7 +1579,7 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
                                                            wxDouble tx, wxDouble ty)
 
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsMatrix);
     wxGraphicsMatrix m;
     wxGDIPlusMatrixData* data = new wxGDIPlusMatrixData( this );
     data->Set( a,b,c,d,tx,ty ) ;
@@ -1564,7 +1589,7 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
 
 wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsPen);
     if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsPen;
     else
@@ -1577,7 +1602,7 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
         return wxNullGraphicsBrush;
     else
@@ -1592,7 +1617,7 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                                                                       const wxColour&c1, const wxColour&c2)
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
     d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
@@ -1605,7 +1630,7 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDou
 wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
                                                                       const wxColour &oColor, const wxColour &cColor)
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
     d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
@@ -1616,7 +1641,7 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDou
 // sets the font
 wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
-    EnsureIsLoaded();
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
     if ( font.Ok() )
     {
         wxGraphicsFont p;
@@ -1638,5 +1663,18 @@ wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
     else
         return wxNullGraphicsBitmap;
 }
+
+// Shutdown GDI+ at app exit, before possible dll unload
+class wxGDIPlusRendererModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { gs_GDIPlusRenderer.Unload(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGDIPlusRendererModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusRendererModule, wxModule)
 
 #endif  // wxUSE_GRAPHICS_CONTEXT
