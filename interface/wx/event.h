@@ -1102,7 +1102,7 @@ enum wxKeyCategoryFlags
     /// home and end keys, on and off numeric keypads
     WXK_CATEGORY_JUMP,
 
-    /// tab key
+    /// tab key, on and off numeric keypads
     WXK_CATEGORY_TAB,
 
     /// backspace and delete keys, on and off numeric keypads

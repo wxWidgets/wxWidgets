@@ -779,6 +779,7 @@ bool wxKeyEvent::IsKeyInCategory(int category) const
             return (category & WXK_CATEGORY_JUMP) != 0;
 
         case WXK_TAB:
+        case WXK_NUMPAD_TAB:
             return (category & WXK_CATEGORY_TAB) != 0;
 
         case WXK_BACK:
