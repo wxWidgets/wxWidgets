@@ -35,7 +35,6 @@ public:
 
     virtual ~wxFSWatcherImplMSW();
 
-    // TODO ensuring that we have not already set watch for this handle/dir?
     bool SetUpWatch(wxFSWatchEntryMSW& watch);
 
     void SendEvent(wxFileSystemWatcherEvent& evt);
@@ -151,6 +150,7 @@ bool wxFSWatcherImplMSW::DoSetUpWatch(wxFSWatchEntryMSW& watch)
 }
 
 // TODO we should only specify those flags, which interest us
+// this needs a bit of thinking, quick impl for now
 int wxFSWatcherImplMSW::Watcher2NativeFlags(int flags)
 {
     static DWORD all_events = FILE_NOTIFY_CHANGE_FILE_NAME |
@@ -159,7 +159,6 @@ int wxFSWatcherImplMSW::Watcher2NativeFlags(int flags)
             FILE_NOTIFY_CHANGE_LAST_ACCESS | FILE_NOTIFY_CHANGE_CREATION |
             FILE_NOTIFY_CHANGE_SECURITY;
 
-    // FIXME this needs a bit of thinking, quick impl for now
     return all_events;
 }
 
@@ -199,35 +198,41 @@ wxThread::ExitCode wxIOCPThread::Entry()
 //         true otherwise
 bool wxIOCPThread::ReadEvents()
 {
-    unsigned long count = 0;
+	unsigned long count = 0;
     wxFSWatchEntryMSW* watch = NULL;
     OVERLAPPED* overlapped = NULL;
     if (!m_iocp->GetStatus(&count, &watch, &overlapped))
         return true; // error was logged already, we don't want to exit
 
-    // this is our exit condition, so we return false
+	// this is our exit condition, so we return false
+	if (!count && !watch && !overlapped)
+		return false;
+
+	// in case of spurious wakeup
     if (!count || !watch)
-        return false;
+        return true;
 
-    wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Read entry: path='%s'", watch->GetPath());
+    wxLogTrace( wxTRACE_FSWATCHER, "[iocp] Read entry: path='%s'",
+                watch->GetPath());
 
-    // extract events from buffer
+    // extract events from buffer info our vector container
+    wxVector<wxEventProcessingData> events;
     const char* memory = static_cast<const char*>(watch->GetBuffer());
     int offset = 0;
-    int event_count = 0;
     do
     {
-        event_count++;
         const FILE_NOTIFY_INFORMATION* e =
               static_cast<const FILE_NOTIFY_INFORMATION*>((const void*)memory);
-
-        // process one native event
-        ProcessNativeEvent(*e, watch);
+		
+		events.push_back(wxEventProcessingData(e, watch));
 
         offset = e->NextEntryOffset;
         memory += offset;
     }
     while (offset);
+	
+	// process events
+	ProcessNativeEvents(events);
 
     // reissue the watch. ignore possible errors, we will return true anyway
     (void) m_service->SetUpWatch(*watch);
@@ -235,40 +240,57 @@ bool wxIOCPThread::ReadEvents()
     return true;
 }
 
-void wxIOCPThread::ProcessNativeEvent(const FILE_NOTIFY_INFORMATION& e,
-                        wxFSWatchEntryMSW* watch)
+void wxIOCPThread::ProcessNativeEvents(wxVector<wxEventProcessingData>& events)
 {
-    wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Event: off=%d, action=%d,"
-               " len=%d, name='%s'",
-               e.NextEntryOffset, e.Action, e.FileNameLength, e.FileName);
+	wxVector<wxEventProcessingData>::iterator it = events.begin();
+	for ( ; it != events.end(); ++it )
+	{
+		const FILE_NOTIFY_INFORMATION& e = *(it->nativeEvent);
+		const wxFSWatchEntryMSW* watch = it->watch;
 
-    int flags = Native2WatcherFlags(e.Action);
-    if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
-    {
-        // TODO think about this...do we ever have any errors to report?
-        wxString errMsg = "Error occurred";
-        wxFileSystemWatcherEvent event(flags, errMsg);
-        SendEvent(event);
-    }
-    // filter out ignored events and those not asked for.
-    // we never filter out warnings or exceptions
-    else if ((flags == 0) || !(flags & watch->GetFlags()))
-    {
-        return;
-    }
-    else
-    {
-        // FIXME actually now only adding dirs work
-        // CHECK I heard that returned path can be either in short on long
-        // form...need to account for that!
-        wxFileName path = watch->GetPath();
-        if (path.IsDir())
-            path = wxFileName(path.GetPath(), e.FileName);
+        wxLogTrace( wxTRACE_FSWATCHER, "[iocp] %s",
+                    FileNotifyInformationToString(e));
 
-        // TODO figure out renames: proper paths!
-        wxFileSystemWatcherEvent event(flags, path, path);
-        SendEvent(event);
-    }
+        int nativeFlags = e.Action;
+        int flags = Native2WatcherFlags(nativeFlags);
+        if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
+        {
+            // TODO think about this...do we ever have any errors to report?
+            wxString errMsg = "Error occurred";
+            wxFileSystemWatcherEvent event(flags, errMsg);
+            SendEvent(event);
+        }
+        // filter out ignored events and those not asked for.
+        // we never filter out warnings or exceptions
+        else if ((flags == 0) || !(flags & watch->GetFlags()))
+        {
+            return;
+        }
+        // rename case
+        else if (nativeFlags == FILE_ACTION_RENAMED_OLD_NAME)
+        {
+            wxFileName oldpath = GetEventPath(*watch, e);
+            wxFileName newpath;
+
+            // newpath should be in the next entry. what if there isn't?
+            ++it;
+            if ( it != events.end() )
+            {
+                newpath = GetEventPath(*(it->watch), *(it->nativeEvent));
+            }
+            wxFileSystemWatcherEvent event(flags, oldpath, newpath);
+            SendEvent(event);
+        }
+        // all other events
+        else
+        {
+            // CHECK I heard that returned path can be either in short on long
+            // form...need to account for that!
+            wxFileName path = GetEventPath(*watch, e);
+            wxFileSystemWatcherEvent event(flags, path, path);
+            SendEvent(event);
+        }
+	}
 }
 
 void wxIOCPThread::SendEvent(wxFileSystemWatcherEvent& evt)
@@ -279,48 +301,20 @@ void wxIOCPThread::SendEvent(wxFileSystemWatcherEvent& evt)
 
 int wxIOCPThread::Native2WatcherFlags(int flags)
 {
-    // FIXME remove in the future. just for reference
-#if 0
-    FILE_ACTION_ADDED
-    0x00000001
-    The file was added to the directory.
-
-    FILE_ACTION_REMOVED
-    0x00000002
-    The file was removed from the directory.
-
-    FILE_ACTION_MODIFIED
-    0x00000003
-    The file was modified. Can be a change in the time stamp or attributes.
-
-    FILE_ACTION_RENAMED_OLD_NAME
-    0x00000004
-    The file was renamed and this is the old name.
-
-    FILE_ACTION_RENAMED_NEW_NAME
-    0x00000005
-    The file was renamed and this is the new name.
-#endif
-
-    // TODO this needs more thinking
-    // XXX from what can be seen now, we don't have notification
-    // to match wxFSW_EVENT_ACCESS
     static const int flag_mapping[][2] = {
         { FILE_ACTION_ADDED,            wxFSW_EVENT_CREATE },
         { FILE_ACTION_REMOVED,          wxFSW_EVENT_DELETE },
+
+        // TODO take attributes into account to see what happened
         { FILE_ACTION_MODIFIED,         wxFSW_EVENT_MODIFY },
 
-        // XXX temporary to pass the test
         { FILE_ACTION_RENAMED_OLD_NAME, wxFSW_EVENT_RENAME },
 
-        { FILE_ACTION_RENAMED_NEW_NAME, 0 }, // ignored for now
+        // ignored as it should always be matched with ***_OLD_NAME
+        { FILE_ACTION_RENAMED_NEW_NAME, 0 },
     };
 
     for (unsigned int i=0; i < WXSIZEOF(flag_mapping); ++i) {
-#if 0
-        wxLogDebug("mapping: %d=%d", flag_mapping[i][0],
-                                        flag_mapping[i][1]);
-#endif
         if (flags == flag_mapping[i][0])
             return flag_mapping[i][1];
     }
@@ -328,6 +322,28 @@ int wxIOCPThread::Native2WatcherFlags(int flags)
     // never reached
     wxFAIL_MSG(wxString::Format("Unknown file notify change %u", flags));
     return -1;
+}
+
+wxString wxIOCPThread::FileNotifyInformationToString(
+                                              const FILE_NOTIFY_INFORMATION& e)
+{
+    wxString fname(e.FileName, e.FileNameLength / sizeof(e.FileName[0]));
+    return wxString::Format("Event: offset=%d, action=%d, len=%d, "
+                            "name(approx)='%s'", e.NextEntryOffset, e.Action,
+                            e.FileNameLength, fname);
+}
+
+wxFileName wxIOCPThread::GetEventPath(const wxFSWatchEntryMSW& watch,
+                                      const FILE_NOTIFY_INFORMATION& e)
+{
+    wxFileName path = watch.GetPath();
+    if (path.IsDir())
+    {
+        wxString rel(e.FileName, e.FileNameLength / sizeof(e.FileName[0]));
+        int pathFlags = wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR;
+        path = wxFileName(path.GetPath(pathFlags) + rel);
+    }
+    return path;
 }
 
 

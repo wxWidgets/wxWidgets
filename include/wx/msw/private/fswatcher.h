@@ -12,6 +12,7 @@
 #define WX_MSW_PRIVATE_FSWATCHER_H_
 
 #include "wx/filename.h"
+#include "wx/vector.h"
 #include "wx/msw/private.h"
 
 // ============================================================================
@@ -212,6 +213,19 @@ public:
     bool Finish();
 
 protected:
+    // structure to hold information needed to process one native event
+    // this is just a dummy holder, so it doesn't take ownership of it's data
+	struct wxEventProcessingData
+	{
+	    wxEventProcessingData(const FILE_NOTIFY_INFORMATION* ne,
+                              const wxFSWatchEntryMSW* watch) :
+            nativeEvent(ne), watch(watch)
+        {}
+
+		const FILE_NOTIFY_INFORMATION* nativeEvent;
+		const wxFSWatchEntryMSW* watch;
+	};
+
     virtual ExitCode Entry();
 
     // wait for events to occur, read them and send to interested parties
@@ -219,12 +233,17 @@ protected:
     //         true otherwise
     bool ReadEvents();
 
-    void ProcessNativeEvent(const FILE_NOTIFY_INFORMATION& e,
-                            wxFSWatchEntryMSW* watch);
+	void ProcessNativeEvents(wxVector<wxEventProcessingData>& events);
 
     void SendEvent(wxFileSystemWatcherEvent& evt);
 
     static int Native2WatcherFlags(int flags);
+
+    static wxString FileNotifyInformationToString(
+                                            const FILE_NOTIFY_INFORMATION& e);
+
+    static wxFileName GetEventPath(const wxFSWatchEntryMSW& watch,
+                                   const FILE_NOTIFY_INFORMATION& e);
 
     wxFSWatcherImplMSW* m_service;
     wxIOCPService* m_iocp;
