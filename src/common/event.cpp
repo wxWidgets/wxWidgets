@@ -752,6 +752,45 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
 #endif
 }
 
+bool wxKeyEvent::IsKeyInCategory(int category) const
+{
+    switch ( GetKeyCode() )
+    {
+        case WXK_LEFT:
+        case WXK_RIGHT:
+        case WXK_UP:
+        case WXK_DOWN:
+        case WXK_NUMPAD_LEFT:
+        case WXK_NUMPAD_RIGHT:
+        case WXK_NUMPAD_UP:
+        case WXK_NUMPAD_DOWN:
+            return (category & WXK_CATEGORY_ARROW) != 0;
+
+        case WXK_PAGEDOWN:
+        case WXK_END:
+        case WXK_NUMPAD_PAGEUP:
+        case WXK_NUMPAD_PAGEDOWN:
+            return (category & WXK_CATEGORY_PAGING) != 0;
+
+        case WXK_HOME:
+        case WXK_PAGEUP:
+        case WXK_NUMPAD_HOME:
+        case WXK_NUMPAD_END:
+            return (category & WXK_CATEGORY_JUMP) != 0;
+
+        case WXK_TAB:
+            return (category & WXK_CATEGORY_TAB) != 0;
+
+        case WXK_BACK:
+        case WXK_DELETE:
+        case WXK_NUMPAD_DELETE:
+            return (category & WXK_CATEGORY_CUT) != 0;
+
+        default:
+            return false;
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxWindowCreateEvent
 // ----------------------------------------------------------------------------

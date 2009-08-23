@@ -473,7 +473,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         return ;
     }
 
-    if ( !IsEditable() && key != WXK_LEFT && key != WXK_RIGHT && key != WXK_DOWN && key != WXK_UP && key != WXK_TAB &&
+    if ( !IsEditable() && !event.IsKeyInCategory(WXK_CATEGORY_ARROW | WXK_CATEGORY_TAB) &&
         !( key == WXK_RETURN && ( (m_windowStyle & wxTE_PROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
 //        && key != WXK_PAGEUP && key != WXK_PAGEDOWN && key != WXK_HOME && key != WXK_END
         )
@@ -486,8 +486,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // allow navigation and deletion
     GetSelection( &from, &to );
     if ( !IsMultiLine() && m_maxLength && GetValue().length() >= m_maxLength &&
-        key != WXK_LEFT && key != WXK_RIGHT && key != WXK_TAB && key != WXK_UP && key != WXK_DOWN &&
-        key != WXK_BACK && key != WXK_DELETE && !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
+        !event.IsKeyInCategory(WXK_CATEGORY_ARROW | WXK_CATEGORY_TAB | WXK_CATEGORY_CUT) &&
+        !( key == WXK_RETURN && (m_windowStyle & wxTE_PROCESS_ENTER) ) &&
         from == to )
     {
         // eat it, we don't want to add more than allowed # of characters

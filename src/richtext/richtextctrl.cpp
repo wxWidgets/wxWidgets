@@ -692,23 +692,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
     if (event.GetEventType() == wxEVT_KEY_DOWN)
     {
-        if (event.GetKeyCode() == WXK_LEFT ||
-            event.GetKeyCode() == WXK_RIGHT ||
-            event.GetKeyCode() == WXK_UP ||
-            event.GetKeyCode() == WXK_DOWN ||
-            event.GetKeyCode() == WXK_HOME ||
-            event.GetKeyCode() == WXK_PAGEUP ||
-            event.GetKeyCode() == WXK_PAGEDOWN ||
-            event.GetKeyCode() == WXK_END ||
-
-            event.GetKeyCode() == WXK_NUMPAD_LEFT ||
-            event.GetKeyCode() == WXK_NUMPAD_RIGHT ||
-            event.GetKeyCode() == WXK_NUMPAD_UP ||
-            event.GetKeyCode() == WXK_NUMPAD_DOWN ||
-            event.GetKeyCode() == WXK_NUMPAD_HOME ||
-            event.GetKeyCode() == WXK_NUMPAD_PAGEUP ||
-            event.GetKeyCode() == WXK_NUMPAD_PAGEDOWN ||
-            event.GetKeyCode() == WXK_NUMPAD_END)
+        if (event.IsKeyInCategory(WXK_CATEGORY_NAVIGATION))
         {
             KeyboardNavigate(event.GetKeyCode(), flags);
             return;

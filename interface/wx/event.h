@@ -1084,6 +1084,36 @@ protected:
 
 
 /**
+    Flags for categories of keys.
+
+    These values are used by wxKeyEvent::IsKeyInCategory(). They may be
+    combined via the bitwise operators |, &, and ~.
+
+    @since 2.9.1
+*/
+enum wxKeyCategoryFlags
+{
+    /// arrow keys, on and off numeric keypads
+    WXK_CATEGORY_ARROW,
+
+    /// page up and page down keys, on and off numeric keypads
+    WXK_CATEGORY_PAGING,
+
+    /// home and end keys, on and off numeric keypads
+    WXK_CATEGORY_JUMP,
+
+    /// tab key
+    WXK_CATEGORY_TAB,
+
+    /// backspace and delete keys, on and off numeric keypads
+    WXK_CATEGORY_CUT,
+
+    /// union of WXK_CATEGORY_ARROW, WXK_CATEGORY_PAGING, and WXK_CATEGORY_JUMP categories
+    WXK_CATEGORY_NAVIGATION
+};
+
+
+/**
     @class wxKeyEvent
 
     This event class contains information about keypress (character) events.
@@ -1176,6 +1206,16 @@ public:
         charset. You can obtain the corresponding Unicode character using GetUnicodeKey().
     */
     int GetKeyCode() const;
+
+    /**
+        Returns true if the key is in the given key category.
+
+        @param category
+            A bitwise combination of named ::wxKeyCategoryFlags constants.
+
+        @since 2.9.1
+    */
+    bool IsKeyInCategory(int category) const;
 
     //@{
     /**

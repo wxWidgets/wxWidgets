@@ -1504,6 +1504,33 @@ private:
  wxEVT_HOTKEY
  */
 
+// key categories: the bit flags for IsKeyInCategory() function
+//
+// the enum values used may change in future version of wx
+// use the named constants only, or bitwise combinations thereof
+enum wxKeyCategoryFlags
+{
+    // arrow keys, on and off numeric keypads
+    WXK_CATEGORY_ARROW  = 1,
+
+    // page up and page down keys, on and off numeric keypads
+    WXK_CATEGORY_PAGING = 2,
+
+    // home and end keys, on and off numeric keypads
+    WXK_CATEGORY_JUMP   = 4,
+
+    // tab key
+    WXK_CATEGORY_TAB    = 8,
+
+    // backspace and delete keys, on and off numeric keypads
+    WXK_CATEGORY_CUT    = 16,
+
+    // all keys usually used for navigation
+    WXK_CATEGORY_NAVIGATION = WXK_CATEGORY_ARROW |
+                              WXK_CATEGORY_PAGING |
+                              WXK_CATEGORY_JUMP
+};
+
 class WXDLLIMPEXP_CORE wxKeyEvent : public wxEvent,
                                     public wxKeyboardState
 {
@@ -1513,6 +1540,9 @@ public:
 
     // get the key code: an ASCII7 char or an element of wxKeyCode enum
     int GetKeyCode() const { return (int)m_keyCode; }
+
+    // returns true iff this event's key code is of a certain type
+    bool IsKeyInCategory(int category) const;
 
 #if wxUSE_UNICODE
     // get the Unicode character corresponding to this key
