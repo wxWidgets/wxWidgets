@@ -815,7 +815,11 @@ size_t Aui_GetActivePane(wxAuiPaneInfoArray& panes,wxWindow* focus)
     // If no panes had the focus flag and actual focus then fall back to returning the first pane with focus flag.
     for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
     {
-        return i;
+        wxAuiPaneInfo& pane = panes[i];
+        if(pane.HasFlag(wxAuiPaneInfo::optionActive))
+        {
+            return i;
+        }
     }
     return 0;
 }
@@ -2516,7 +2520,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 if(pane_i<pane_count-1 && pane.GetPosition()==dock.panes.Item(pane_i+1)->GetPosition())
                 {
                     firstpaneinnotebook = &pane;
-                    notebookcontainer =  new wxAuiTabContainer(m_tab_art);
+                    notebookcontainer =  new wxAuiTabContainer(m_tab_art,this);
                     notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
                     dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags = GetNotebookFlags();
@@ -2698,7 +2702,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 if(pane_i<pane_count-1 && pane.GetPosition()==dock.panes.Item(pane_i+1)->GetPosition())
                 {
                     firstpaneinnotebook = &pane;
-                    notebookcontainer =  new wxAuiTabContainer(m_tab_art);
+                    notebookcontainer =  new wxAuiTabContainer(m_tab_art,this);
                     notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
                     dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags= GetNotebookFlags();
@@ -3369,6 +3373,8 @@ void wxAuiManager::Update()
 
     // cache the offset positions for any notebooks we have, so that if we are just resizing a dock for example our notebook tabs don't jump around.
     NotebookOffsetHash cachednotebookoffsets;
+    // cache the notebook that has the current focus so that it can keep the focus when doing a resize for example.
+    wxString focusnotebook = wxT("");
     int uiparts_count = m_uiparts.GetCount();
     for (i = 0; i < uiparts_count; i++)
     {
@@ -3382,8 +3388,13 @@ void wxAuiManager::Update()
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetRow());
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetLayer());
             cachednotebookoffsets[notebookpositionhash] = part.m_tab_container->GetTabOffset();
+            if(part.m_tab_container->HasFocus())
+            {
+                focusnotebook = notebookpositionhash;
+            }
         }
     }
+    
 
     // create a layout for all of the panes
     sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
@@ -3406,19 +3417,25 @@ void wxAuiManager::Update()
                 int oldtaboffset = cachednotebookoffsets[notebookpositionhash];
                 int numtabs = part.m_tab_container->GetPageCount();
                 int newtaboffset;
-                
+
                 // If we have removed tabs then the offset might be greater then the number of tabs in which case we set it to the number of tabs
                 // Otherwise we set it to the old offset
                 if(oldtaboffset>numtabs)
                     newtaboffset = numtabs;
                 else
                     newtaboffset = oldtaboffset;
-                
+
                 part.m_tab_container->SetTabOffset(newtaboffset);
+
+                // restore the focus to the focused notebook, if there was one
+                if(focusnotebook==notebookpositionhash)
+                {
+                    part.m_tab_container->SetFocus(true);
+                }
             }
         }
     }
-    
+
     // keep track of the old window rectangles so we can
     // refresh those windows whose rect has changed
     wxAuiRectArray old_pane_rects;
@@ -3459,7 +3476,6 @@ void wxAuiManager::Update()
             }
         }
     }
-
 
     Repaint();
 
@@ -4816,6 +4832,7 @@ void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
     evt.SetManager(this);
 }
 
+
 void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
     // determine cursor
@@ -4993,7 +5010,6 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             }
             else if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
             {
-                part->m_tab_container->SetActivePage(hitpane->GetWindow());
                 Aui_SetActivePane(this, m_panes, hitpane->GetWindow());
 
                 m_action_offset = wxPoint(event.m_x-hitpane->rect.x,event.m_y-part->rect.y);
@@ -5858,6 +5874,22 @@ void wxAuiManager::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 
 void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
 {
+    bool refresh = false;
+    // Ensure none of the notebook controls have focus set
+    int i;
+    for (i = 0; i < m_uiparts.GetCount(); i++)
+    {
+        wxAuiDockUIPart& part = m_uiparts.Item(i);
+        if(part.m_tab_container)
+        {
+            if(part.m_tab_container->HasFocus())
+            {
+                part.m_tab_container->SetFocus(false);
+                refresh = true;
+            }
+        }
+    }
+
     //temp: (MJM) -> Look if implementing the below fixes some of the strange things we are seeing when dragging notebook panes
     // This used to be part of the wxAuiNotebook OnChildFocus handler
     /*
@@ -5888,8 +5920,13 @@ void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
         if (pane.IsOk() && !pane.HasFlag(wxAuiPaneInfo::optionActive))
         {
             Aui_SetActivePane(this, m_panes, event.GetWindow());
-            m_frame->Refresh();
+            refresh = true;
         }
+    }
+
+    if(refresh)
+    {
+        m_frame->Refresh();
     }
 
     event.Skip();

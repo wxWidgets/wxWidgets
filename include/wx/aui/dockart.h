@@ -24,6 +24,7 @@
 #include "wx/brush.h"
 #include "wx/bitmap.h"
 #include "wx/colour.h"
+#include "wx/event.h"
 
 // dock art provider code - a dock provider provides all drawing
 // functionality to the wxAui dock manager.  This allows the dock
@@ -198,6 +199,7 @@ public:
                          const wxAuiPaneInfo& pane,
                          const wxRect& in_rect,
                          int close_button_state,
+                         bool have_focus,
                          wxRect* out_tab_rect,
                          wxRect* out_button_rect,
                          int* x_extent) = 0;
@@ -260,6 +262,7 @@ public:
                  const wxAuiPaneInfo& pane,
                  const wxRect& in_rect,
                  int close_button_state,
+                 bool have_focus,
                  wxRect* out_tab_rect,
                  wxRect* out_button_rect,
                  int* x_extent);
@@ -344,6 +347,7 @@ public:
                  const wxAuiPaneInfo& pane,
                  const wxRect& in_rect,
                  int close_button_state,
+                 bool have_focus,
                  wxRect* out_tab_rect,
                  wxRect* out_button_rect,
                  int* x_extent);
@@ -417,11 +421,12 @@ public:
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiTabContainerButton, wxAuiTabContainerButtonArray, WXDLLIMPEXP_AUI);
 #endif
 
-class WXDLLIMPEXP_AUI wxAuiTabContainer
+
+class WXDLLIMPEXP_AUI wxAuiTabContainer : public wxEvtHandler
 {
 public:
 
-    wxAuiTabContainer(wxAuiTabArt* art_provider);
+    wxAuiTabContainer(wxAuiTabArt* art_provider,wxAuiManager* mgr);
     virtual ~wxAuiTabContainer();
 
     void SetArtProvider(wxAuiTabArt* art);
@@ -460,6 +465,9 @@ public:
     size_t GetTabOffset() const;
     void SetTabOffset(size_t offset);
 
+    bool HasFocus(){ return m_focus; };
+    void SetFocus(bool focus){ m_focus = focus; };
+
     // Is the tab visible?
     bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
 
@@ -473,8 +481,11 @@ protected:
     
     void CalculateRequiredWidth(wxDC& dc,wxWindow* wnd,int& total_width,int& visible_width) const;
 
-protected:
+    void OnChildKeyDown(wxKeyEvent& evt);
 
+protected:
+    bool m_focus;
+    wxAuiManager* m_mgr;
     wxAuiTabArt* m_tab_art;
     wxAuiPaneInfoPtrArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;

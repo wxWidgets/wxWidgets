@@ -1011,6 +1011,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                                  const wxAuiPaneInfo& page,
                                  const wxRect& in_rect,
                                  int close_button_state,
+                                 bool have_focus,
                                  wxRect* out_tab_rect,
                                  wxRect* out_button_rect,
                                  int* x_extent)
@@ -1236,7 +1237,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                 drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1);
 
     // draw focus rectangle
-    if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook) && (wnd->FindFocus() == wnd))
+    if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook) && have_focus)
     {
         wxRect focusRectText(text_offset, (drawn_tab_yoff + (drawn_tab_height)/2 - (texty/2) - 1),
             selected_textx, selected_texty);
@@ -1626,6 +1627,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                                 const wxAuiPaneInfo& page,
                                 const wxRect& in_rect,
                                 int close_button_state,
+                                bool have_focus,
                                 wxRect* out_tab_rect,
                                 wxRect* out_button_rect,
                                 int* x_extent)
@@ -1737,7 +1739,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
 
 
     // draw focus rectangle
-    if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook) && (wnd->FindFocus() == wnd))
+    if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook) && have_focus)
     {
         wxRect focusRect(text_offset, ((tab_y + tab_height)/2 - (texty/2) + 1),
             selected_textx, selected_texty);
@@ -1962,8 +1964,10 @@ void wxAuiSimpleTabArt::SetMeasuringFont(const wxFont& font)
 // which can be used as a tab control in the normal sense.
 
 
-wxAuiTabContainer::wxAuiTabContainer(wxAuiTabArt* art_provider)
+wxAuiTabContainer::wxAuiTabContainer(wxAuiTabArt* art_provider,wxAuiManager* mgr)
 : m_tab_art(art_provider)
+, m_mgr(mgr)
+, m_focus(false)
 {
     m_tab_offset = 0;
     m_flags = 0;
@@ -1976,6 +1980,11 @@ wxAuiTabContainer::wxAuiTabContainer(wxAuiTabArt* art_provider)
 
 wxAuiTabContainer::~wxAuiTabContainer()
 {
+    int i;
+    for(i=0;i<m_pages.GetCount();i++)
+    {
+        m_pages[i]->GetWindow()->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler(wxAuiTabContainer::OnChildKeyDown) );
+    }
 }
 
 void wxAuiTabContainer::SetArtProvider(wxAuiTabArt* art)
@@ -2063,6 +2072,8 @@ void wxAuiTabContainer::SetRect(const wxRect& rect)
 
 bool wxAuiTabContainer::AddPage(wxAuiPaneInfo& info)
 {
+    info.GetWindow()->Connect( wxEVT_KEY_DOWN, wxCharEventHandler(wxAuiTabContainer::OnChildKeyDown) ,NULL,this);
+
     m_pages.Add(&info);
 
     return true;
@@ -2072,6 +2083,8 @@ bool wxAuiTabContainer::InsertPage(wxWindow* page,
                                    wxAuiPaneInfo& info,
                                    size_t idx)
 {
+    info.GetWindow()->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler(wxAuiTabContainer::OnChildKeyDown)  ,NULL,this);
+
     info.window = page;
 
     if (idx >= m_pages.GetCount())
@@ -2123,6 +2136,7 @@ bool wxAuiTabContainer::RemovePage(wxWindow* wnd)
                 m_tab_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount());
             }
 
+            wnd->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler(wxAuiTabContainer::OnChildKeyDown) );
             return true;
         }
     }
@@ -2140,14 +2154,24 @@ bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
         wxAuiPaneInfo& page = *m_pages.Item(i);
         if (page.window == wnd)
         {
-            page.GetWindow()->Show(true);
-            page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-            found = true;
-            MakeTabVisible(i);
+            if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook) && page.GetWindow()->IsShown())
+            {
+                SetFocus(true);
+            }
+            else
+            {
+                page.GetWindow()->SetFocus();
+                page.GetWindow()->Show(true);
+                page.SetFlag(wxAuiPaneInfo::optionActive,true);
+                page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
+                found = true;
+                MakeTabVisible(i);
+            }
         }
         else
         {
             page.GetWindow()->Show(false);
+            page.SetFlag(wxAuiPaneInfo::optionActive,false);
             page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,false);
         }
     }
@@ -2544,6 +2568,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                        page,
                        rect,
                        tab_button.cur_state,
+                       HasFocus(),
                        &page.rect,
                        &tab_button.rect,
                        &x_extent);
@@ -2579,6 +2604,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                        page,
                        active_rect,
                        tab_button.cur_state,
+                       HasFocus(),
                        &page.rect,
                        &tab_button.rect,
                        &x_extent);
@@ -2823,5 +2849,30 @@ bool wxAuiTabContainer::ButtonHitTest(int x, int y,
     }
 
     return false;
+}
+
+void wxAuiTabContainer::OnChildKeyDown(wxKeyEvent& evt)
+{
+    evt.Skip();
+    if (HasFocus())
+    {
+        if (evt.GetKeyCode() == WXK_LEFT)
+        {
+            SetActivePage(GetActivePage()-1);
+            SetFocus(true);
+            evt.Skip(false);
+
+            m_mgr->Update();
+        }
+        else if (evt.GetKeyCode() == WXK_RIGHT)
+        {
+            SetActivePage(GetActivePage()+1);
+            SetFocus(true);
+            evt.Skip(false);
+
+            m_mgr->Update();
+        }
+    }
+    return;
 }
 #endif // wxUSE_AUI
