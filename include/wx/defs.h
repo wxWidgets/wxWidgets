@@ -2251,12 +2251,12 @@ enum wxKeyCode
     WXK_DELETE  =    127,
 
     /* values from 128 to 255 are reserved for ASCII extended characters
-       (note that there isn't a real widely used standard for the meaning
+       (note that there isn't a single fixed standard for the meaning
        of these values; avoid them in portable apps!) */
 
-    /* These are, by design, not compatible with unicode characters.
+    /* These are not compatible with unicode characters.
        If you want to get a unicode character from a key event, use
-       wxKeyEvent::GetUnicodeKey instead.                           */
+       wxKeyEvent::GetUnicodeKey                                    */
     WXK_START   = 300,
     WXK_LBUTTON,
     WXK_RBUTTON,
