@@ -733,11 +733,13 @@ wxPGProperty* wxPropertyGridPageState::DoGetItemAtY( int y ) const
 
 // -----------------------------------------------------------------------
 
-wxPropertyGridHitTestResult wxPropertyGridPageState::HitTest( const wxPoint&pt ) const
+wxPropertyGridHitTestResult
+wxPropertyGridPageState::HitTest( const wxPoint&pt ) const
 {
     wxPropertyGridHitTestResult result;
-    result.column = HitTestH( pt.x, &result.splitter, &result.splitterHitOffset );
-    result.property = DoGetItemAtY( pt.y );
+    result.m_column = HitTestH( pt.x, &result.m_splitter,
+                                &result.m_splitterHitOffset );
+    result.m_property = DoGetItemAtY( pt.y );
     return result;
 }
 

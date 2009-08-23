@@ -23,25 +23,59 @@
     A return value from wxPropertyGrid::HitTest(),
     contains all you need to know about an arbitrary location on the grid.
 */
-struct WXDLLIMPEXP_PROPGRID wxPropertyGridHitTestResult
+class WXDLLIMPEXP_PROPGRID wxPropertyGridHitTestResult
 {
     friend class wxPropertyGridPageState;
 public:
+    wxPropertyGridHitTestResult()
+    {
+        m_property = NULL;
+        m_column = -1;
+        m_splitter = -1;
+        m_splitterHitOffset = 0;
+    }
 
-    wxPGProperty* GetProperty() const { return property; }
+    ~wxPropertyGridHitTestResult()
+    {
+    }
 
-    /** Column. -1 for margin. */
-    int             column;
+    /**
+        Returns column hit. -1 for margin.
+    */
+    int GetColumn() const { return m_column; }
 
-    /** Index of splitter hit, -1 for none. */
-    int             splitter;
+    /**
+        Returns property hit. NULL if empty space below
+        properties was hit instead.
+    */
+    wxPGProperty* GetProperty() const
+    {
+        return m_property;
+    }
 
-    /** If splitter hit, offset to that */
-    int             splitterHitOffset;
+    /**
+        Returns index of splitter hit, -1 for none.
+    */
+    int GetSplitter() const { return m_splitter; }
+
+    /**
+        If splitter hit, then this member function
+        returns offset to the exact splitter position.
+    */
+    int GetSplitterHitOffset() const { return m_splitterHitOffset; }
 
 private:
     /** Property. NULL if empty space below properties was hit */
-    wxPGProperty*   property;
+    wxPGProperty*   m_property;
+
+    /** Column. -1 for margin. */
+    int             m_column;
+
+    /** Index of splitter hit, -1 for none. */
+    int             m_splitter;
+
+    /** If splitter hit, offset to that */
+    int             m_splitterHitOffset;
 };
 
 // -----------------------------------------------------------------------
