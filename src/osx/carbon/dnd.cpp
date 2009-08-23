@@ -390,14 +390,14 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             if (toplevel == NULL)
                 break;
 
-            GetDragMouse( theDrag, &mouse, 0L );
-            int x = mouse.h ;
-            int y = mouse.v ;
-            toplevel->GetNonOwnedPeer()->ScreenToWindow( &x, &y );
-            localMouse.h = x;
-            localMouse.v = y;
-
             {
+                GetDragMouse( theDrag, &mouse, 0L );
+                int x = mouse.h ;
+                int y = mouse.v ;
+                toplevel->GetNonOwnedPeer()->ScreenToWindow( &x, &y );
+                localMouse.h = x;
+                localMouse.v = y;
+
                 wxWindow *win = NULL;
                 ControlPartCode controlPart;
                 ControlRef control = FindControlUnderMouse( localMouse, theWindow, &controlPart );
