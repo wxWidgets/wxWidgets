@@ -342,6 +342,7 @@ protected:
 
     void SendEvent(wxFileSystemWatcherEvent& evt)
     {
+        wxLogTrace(wxTRACE_FSWATCHER, evt.ToString());
         m_watcher->GetOwner()->ProcessEvent(evt);
     }
 
@@ -368,8 +369,11 @@ protected:
 
     static wxString InotifyEventToString(const inotify_event& inevt)
     {
-        return wxString::Format("Event: wd=%d, mask=%u, cookie=%d, len=%u, "
-                                "name=%s", inevt.wd, inevt.mask, inevt.cookie,
+        wxString mask = (inevt.mask & IN_ISDIR) ?
+                        wxString::Format("IS_DIR | %u", inevt.mask & ~IN_ISDIR) :
+                        wxString::Format("%u", inevt.mask);
+        return wxString::Format("Event: wd=%d, mask=%s, cookie=%u, len=%u, "
+                                "name=%s", inevt.wd, mask, inevt.cookie,
                                 inevt.len, inevt.name);
     }
 
