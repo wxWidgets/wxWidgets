@@ -210,7 +210,8 @@ void XmlTestCase::CDATA()
     n = n->GetChildren();
     CPPUNIT_ASSERT( n );
 
-    // currently leading white space is stripped by trailing is preserved (see
-    // #10552)
-    CPPUNIT_ASSERT_EQUAL( "Giovanni Mittone\n", n->GetContent() );
+    // check that both leading ("  ") and trailing white space is not part of
+    // the node contents when CDATA is used and wxXMLDOC_KEEP_WHITESPACE_NODES
+    // is not
+    CPPUNIT_ASSERT_EQUAL( "Giovanni Mittone", n->GetContent() );
 }

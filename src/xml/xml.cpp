@@ -618,6 +618,17 @@ static void StartCdataHnd(void *userData)
     ctx->lastChild= ctx->lastAsText = textnode;
 }
 
+static void EndCdataHnd(void *userData)
+{
+    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
+
+    // we need to reset this pointer so that subsequent text nodes don't append
+    // their contents to this one but create new wxXML_TEXT_NODE objects (or
+    // not create anything at all if only white space follows the CDATA section
+    // and wxXMLDOC_KEEP_WHITESPACE_NODES is not used as is commonly the case)
+    ctx->lastAsText = NULL;
+}
+
 static void CommentHnd(void *userData, const char *data)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -717,7 +728,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
-    XML_SetStartCdataSectionHandler(parser, StartCdataHnd);
+    XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd);;
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
     XML_SetUnknownEncodingHandler(parser, UnknownEncodingHnd, NULL);
