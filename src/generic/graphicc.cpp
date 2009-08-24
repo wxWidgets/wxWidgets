@@ -1084,12 +1084,17 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
             p.OffsetY(pixData, 1);
         }
     }
+    m_pattern = cairo_pattern_create_for_surface(m_surface);
 }
 
 wxCairoBitmapData::~wxCairoBitmapData()
 {
-    cairo_pattern_destroy(m_pattern);
-    cairo_surface_destroy(m_surface);
+    if (m_pattern)
+        cairo_pattern_destroy(m_pattern);
+    
+    if (m_surface)
+        cairo_surface_destroy(m_surface);
+    
     delete [] m_buffer;
 }
 
