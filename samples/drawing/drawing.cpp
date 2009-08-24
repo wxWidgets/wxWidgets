@@ -894,7 +894,7 @@ void MyCanvas::DrawWithLogicalOps(wxDC& dc)
 
 #if wxUSE_GRAPHICS_CONTEXT
 #ifdef __WXGTK20__
-void MyCanvas::DrawAlpha(wxDC& no_dc)
+void MyCanvas::DrawAlpha(wxDC& WXUNUSED(dummyDC))
 #else
 void MyCanvas::DrawAlpha(wxDC& dc)
 #endif

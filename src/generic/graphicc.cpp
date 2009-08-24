@@ -1018,7 +1018,6 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 {
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
-    cairo_surface_t* surface;
     int bw = bmp.GetWidth();
     int bh = bmp.GetHeight();
     wxBitmap bmpSource = bmp;  // we need a non-const instance
@@ -1875,7 +1874,12 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
         return wxNullGraphicsBitmap;
 }
 
-wxGraphicsBitmap wxCairoRenderer::CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
+wxGraphicsBitmap
+wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
+                                 wxDouble WXUNUSED(x),
+                                 wxDouble WXUNUSED(y),
+                                 wxDouble WXUNUSED(w),
+                                 wxDouble WXUNUSED(h))
 {
     wxFAIL_MSG("wxCairoRenderer::CreateSubBitmap is not implemented.");
     return wxNullGraphicsBitmap;
