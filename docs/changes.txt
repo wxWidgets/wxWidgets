@@ -396,6 +396,7 @@ All (GUI):
 - Added wxWindow::CanScroll() behaving like the old HasScrollbar() and made
   HasScrollbar() really check for the scrollbar existence.
 - Added wxKeyEvent::IsKeyInCategory() (Jeff Tupper).
+- Add A0 and A1 paper formats support (Martin Perktold).
 
 GTK:
 

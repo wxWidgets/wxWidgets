@@ -212,6 +212,12 @@ void wxPrintPaperDatabase::CreateDatabase()
     WXADDPAPER(wxPAPER_PENV_8_ROTATED,      116,                        wxTRANSLATE("PRC Envelope #8 Rotated 309 x 120 mm"), 3090, 1200);
     WXADDPAPER(wxPAPER_PENV_9_ROTATED,      117,                        wxTRANSLATE("PRC Envelope #9 Rotated 324 x 229 mm"), 3240, 2290);
     WXADDPAPER(wxPAPER_PENV_10_ROTATED,     118,                        wxTRANSLATE("PRC Envelope #10 Rotated 458 x 324 mm"), 4580, 3240);
+
+    // notice that the values 135 and 136 for Windows paper size ids of A0 and
+    // A1 formats are not documented anywhere but seem to work for at least
+    // some printers so we use them until we find a better way (see #11083)
+    WXADDPAPER(wxPAPER_A0,                  136,                        wxTRANSLATE("A0 sheet, 841 x 1189 mm"), 8410, 11888);
+    WXADDPAPER(wxPAPER_A1,                  135,                        wxTRANSLATE("A1 sheet, 594 x 841 mm"), 5940, 8410);
 }
 
 void wxPrintPaperDatabase::ClearDatabase()
