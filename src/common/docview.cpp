@@ -991,9 +991,9 @@ wxString wxDocManager::GetLastDirectory() const
         // this ensures that if the user opens a file, closes the program and
         // runs it again the "Open file" dialog will open in the directory of
         // the last file he used
-        wxString lastOpened = GetHistoryFile(0);
-        if ( !lastOpened.empty() )
+        if ( m_fileHistory && m_fileHistory->GetCount() )
         {
+            const wxString lastOpened = m_fileHistory->GetHistoryFile(0);
             const wxFileName fn(lastOpened);
             if ( fn.DirExists() )
             {
@@ -1001,6 +1001,7 @@ wxString wxDocManager::GetLastDirectory() const
             }
             //else: should we try the next one?
         }
+        //else: no history yet
 
         // if we don't have any files in the history (yet?), use the
         // system-dependent default location for the document files
