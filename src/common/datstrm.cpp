@@ -551,7 +551,11 @@ void wxDataOutputStream::WriteDouble(double d)
 #else
   wxUnusedVar(d);
 #if !defined(__VMS__) && !defined(__GNUG__)
+#ifdef _MSC_VER
+# pragma message("wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!")
+#else
 # pragma warning "wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!"
+#endif
 #endif
    buf[0] = '\0';
 #endif
