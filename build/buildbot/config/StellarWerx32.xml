@@ -33,28 +33,4 @@
     </steps>
 </build>
 
-<build>
-    <name>Linux x86 wxGTK stable STL debug</name>
-    <builddir>stellarwerx32_wxgtk_stable_debug</builddir>
-    <scheduler>daily_0600</scheduler>
-    <steps>
-        <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-        <compile-all utils="false"/>
-        <run-tests/>
-    </steps>
-</build>
-
-<build>
-    <name>Linux x86 wxGTK stable STL release</name>
-    <builddir>stellarwerx32_wxgtk_stable_release</builddir>
-    <scheduler>stable_quick</scheduler>
-    <steps>
-        <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-        <compile-all utils="false"/>
-        <run-tests/>
-    </steps>
-</build>
-
 </bot>
