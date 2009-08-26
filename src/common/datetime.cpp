@@ -875,7 +875,7 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
 {
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
 
-    static const char *weekdayNames[2][DAYS_PER_400_YEARS] =
+    static const char *weekdayNames[2][DAYS_PER_WEEK] =
     {
         { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
           "Saturday" },
