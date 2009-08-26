@@ -1474,7 +1474,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
                 inserted = true;
                 ::InsertMenu(hmenu, i, MF_BYPOSITION | MF_POPUP | MF_STRING,
                              (UINT_PTR)menuWin,
-                             wxGetTranslation(WINDOW_MENU_LABEL).wx_str());
+                             wxString(wxGetTranslation(WINDOW_MENU_LABEL)).wx_str());
                 break;
             }
         }
@@ -1483,7 +1483,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
         {
             ::AppendMenu(hmenu, MF_POPUP,
                          (UINT_PTR)menuWin,
-                         wxGetTranslation(WINDOW_MENU_LABEL).wx_str());
+                         wxString(wxGetTranslation(WINDOW_MENU_LABEL)).wx_str());
         }
     }
 
