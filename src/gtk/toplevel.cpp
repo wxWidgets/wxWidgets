@@ -790,10 +790,10 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    bool deferShow = show && !m_isShown && m_deferShow && m_deferShowAllowed;
+    bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
-        deferShow = !GTK_WIDGET_REALIZED(m_widget);
+        deferShow = m_deferShowAllowed && !GTK_WIDGET_REALIZED(m_widget);
         if (deferShow)
         {
             deferShow = g_signal_handler_find(m_widget,
@@ -807,19 +807,21 @@ bool wxTopLevelWindowGTK::Show( bool show )
             screen = gtk_widget_get_screen(m_widget);
             GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
             deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
+            // If _NET_REQUEST_FRAME_EXTENTS not supported, don't allow changes
+            // to m_decorSize, it breaks saving/restoring window size with
+            // GetSize()/SetSize() because it makes window bigger between each
+            // restore and save.
+            m_updateDecorSize = deferShow;
         }
         if (deferShow)
         {
             // Fluxbox support for _NET_REQUEST_FRAME_EXTENTS is broken
             const char* name = gdk_x11_screen_get_window_manager_name(screen);
             deferShow = strcmp(name, "Fluxbox") != 0;
+            m_updateDecorSize = deferShow;
         }
 
         m_deferShow = deferShow;
-        // If not deferring, don't allow changes to m_decorSize, it breaks
-        // saving/restoring window size with GetSize()/SetSize() because it
-        // makes window bigger between each restore and save.
-        m_updateDecorSize = !deferShow;
     }
     if (deferShow)
     {
