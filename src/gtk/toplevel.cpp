@@ -416,13 +416,12 @@ static gboolean property_notify_event(
     static GdkAtom property = gdk_atom_intern("_NET_FRAME_EXTENTS", false);
     if (event->state == GDK_PROPERTY_NEW_VALUE && event->atom == property)
     {
+        wxSize decorSize = win->m_decorSize;
         int left, right, top, bottom;
         if (wxGetFrameExtents(event->window, &left, &right, &top, &bottom))
-        {
-            const wxSize decorSize =
-                wxSize(left + right, top + bottom);
-            win->GTKUpdateDecorSize(decorSize);
-        }
+            decorSize.Set(left + right, top + bottom);
+
+        win->GTKUpdateDecorSize(decorSize);
     }
     return false;
 }
@@ -794,28 +793,33 @@ bool wxTopLevelWindowGTK::Show( bool show )
     bool deferShow = show && !m_isShown && m_deferShow && m_deferShowAllowed;
     if (deferShow)
     {
-        deferShow = false;
-        if (!GTK_WIDGET_REALIZED(m_widget) &&
-            g_signal_handler_find(m_widget,
+        deferShow = !GTK_WIDGET_REALIZED(m_widget);
+        if (deferShow)
+        {
+            deferShow = g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
-                0, NULL, NULL, this))
-        {
-            if (gdk_x11_screen_supports_net_wm_hint(
-                gtk_widget_get_screen(m_widget),
-                gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false)))
-            {
-                deferShow = true;
-            }
-            else
-            {
-                // Don't allow changes to m_decorSize, it breaks saving/restoring
-                // window size with GetSize()/SetSize() because it makes window
-                // bigger between each restore and save.
-                m_updateDecorSize = false;
-            }
+                0, NULL, NULL, this) != 0;
         }
+        GdkScreen* screen = NULL;
+        if (deferShow)
+        {
+            screen = gtk_widget_get_screen(m_widget);
+            GdkAtom atom = gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false);
+            deferShow = gdk_x11_screen_supports_net_wm_hint(screen, atom) != 0;
+        }
+        if (deferShow)
+        {
+            // Fluxbox support for _NET_REQUEST_FRAME_EXTENTS is broken
+            const char* name = gdk_x11_screen_get_window_manager_name(screen);
+            deferShow = strcmp(name, "Fluxbox") != 0;
+        }
+
         m_deferShow = deferShow;
+        // If not deferring, don't allow changes to m_decorSize, it breaks
+        // saving/restoring window size with GetSize()/SetSize() because it
+        // makes window bigger between each restore and save.
+        m_updateDecorSize = !deferShow;
     }
     if (deferShow)
     {
