@@ -467,11 +467,8 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     SetBackgroundImage(wxNullBitmap);
 
     m_Parser->SetDC(dc);
-    if (m_Cell)
-    {
-        delete m_Cell;
-        m_Cell = NULL;
-    }
+
+    delete m_Cell;
     m_Cell = (wxHtmlContainerCell*) m_Parser->Parse(newsrc);
     delete dc;
     m_Cell->SetIndent(m_Borders, wxHTML_INDENT_ALL, wxHTML_UNITS_PIXELS);
