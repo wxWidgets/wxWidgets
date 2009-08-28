@@ -30,7 +30,6 @@
 #include <string.h>
 #include <ctype.h>
 
-IMPLEMENT_CLASS(wxProtoInfo, wxObject)
 IMPLEMENT_CLASS(wxURL, wxURI)
 
 // Protocols list

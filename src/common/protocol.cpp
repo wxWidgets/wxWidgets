@@ -34,6 +34,8 @@
 // wxProtoInfo
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxProtoInfo, wxObject)
+
 wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
            : m_protoname(name),
