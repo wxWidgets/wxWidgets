@@ -1793,6 +1793,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     // encoding
     wxFontEncoding enc = wxFONTENCODING_DEFAULT;
     bool hasEncoding = HasParam(wxT("encoding"));
+#if wxUSE_FONTMAP
     if (hasEncoding)
     {
         wxString encoding = GetParamValue(wxT("encoding"));
@@ -1802,6 +1803,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         if (enc == wxFONTENCODING_SYSTEM)
             enc = wxFONTENCODING_DEFAULT;
     }
+#endif // wxUSE_FONTMAP
 
     // is this font based on a system font?
     wxFont font = GetSystemFont(GetParamValue(wxT("sysfont")));

@@ -33,6 +33,7 @@
  * assume ABI compatibility even within a given wxWidgets release.
  */
 
+#if wxUSE_FONTMAP
 WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf( const char* name)
 {
     wxMBConv_cf *result = new wxMBConv_cf(name);
@@ -44,6 +45,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf( const char* name)
     else
         return result;
 }
+#endif // wxUSE_FONTMAP
 
 WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
 {
