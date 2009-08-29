@@ -555,7 +555,6 @@ void wxPropertyGrid::Init2()
     m_tlp = NULL;
     m_tlpClosed = NULL;
     m_tlpClosedTime = 0;
-    OnTLPChanging(::wxGetTopLevelParent(this));
 
     // set virtual size to this window size
     wxSize wndsize = GetSize();
@@ -593,12 +592,16 @@ wxPropertyGrid::~wxPropertyGrid()
         m_canvas->ReleaseMouse();
 
     // Call with NULL to disconnect event handling
-    OnTLPChanging(NULL);
+    if ( GetExtraStyle() & wxPG_EX_ENABLE_TLP_TRACKING )
+    {
+        OnTLPChanging(NULL);
 
-    wxASSERT_MSG( !IsEditorsValueModified(),
-                  wxS("Most recent change in property editor was lost!!! ")
-                  wxS("(if you don't want this to happen, close your frames ")
-                  wxS("and dialogs using Close(false).)") );
+        wxASSERT_MSG( !IsEditorsValueModified(),
+                      wxS("Most recent change in property editor was ")
+                      wxS("lost!!! (if you don't want this to happen, ")
+                      wxS("close your frames and dialogs using ")
+                      wxS("Close(false).)") );
+    }
 
 #if wxPG_DOUBLE_BUFFER
     if ( m_doubleBuffer )
@@ -1061,6 +1064,11 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
 
 void wxPropertyGrid::SetExtraStyle( long exStyle )
 {
+    if ( exStyle & wxPG_EX_ENABLE_TLP_TRACKING )
+        OnTLPChanging(::wxGetTopLevelParent(this));
+    else
+        OnTLPChanging(NULL);
+
     if ( exStyle & wxPG_EX_NATIVE_DOUBLE_BUFFERING )
     {
 #if defined(__WXMSW__)
@@ -1131,6 +1139,9 @@ wxSize wxPropertyGrid::DoGetBestSize() const
 
 void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
 {
+    if ( newTLP == m_tlp )
+        return;
+
     wxLongLong currentTime = ::wxGetLocalTimeMillis();
 
     //
@@ -5383,10 +5394,11 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
     //
     // Check if top-level parent has changed
-    wxWindow* tlp = ::wxGetTopLevelParent(this);
-    if ( tlp != m_tlp )
+    if ( GetExtraStyle() & wxPG_EX_ENABLE_TLP_TRACKING )
     {
-        OnTLPChanging(tlp);
+        wxWindow* tlp = ::wxGetTopLevelParent(this);
+        if ( tlp != m_tlp )
+            OnTLPChanging(tlp);
     }
 }
 

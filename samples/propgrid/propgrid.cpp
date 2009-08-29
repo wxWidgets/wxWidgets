@@ -2965,6 +2965,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES)
         ADD_FLAG(wxPG_EX_HIDE_PAGE_BUTTONS)
         ADD_FLAG(wxPG_EX_MULTIPLE_SELECTION)
+        ADD_FLAG(wxPG_EX_ENABLE_TLP_TRACKING)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);
@@ -3175,8 +3176,8 @@ bool cxApplication::OnInit()
     //wxLocale Locale;
     //Locale.Init(wxLANGUAGE_FINNISH);
 
-	FormMain* frame = Form1 = new FormMain( wxT("wxPropertyGrid Sample"), wxPoint(0,0), wxSize(300,500) );
-	frame->Show(true);
+    FormMain* frame = Form1 = new FormMain( wxT("wxPropertyGrid Sample"), wxPoint(0,0), wxSize(300,500) );
+    frame->Show(true);
 
     //
     // Parse command-line
@@ -3195,7 +3196,7 @@ bool cxApplication::OnInit()
         }
     }
 
-	return true;
+    return true;
 }
 
 // -----------------------------------------------------------------------

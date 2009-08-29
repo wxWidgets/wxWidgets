@@ -165,17 +165,30 @@ wxPG_EX_HIDE_PAGE_BUTTONS               = 0x01000000,
     selected). Other useful member functions are ClearSelection(),
     AddToSelection() and RemoveFromSelection().
 */
-wxPG_EX_MULTIPLE_SELECTION              = 0x02000000
+wxPG_EX_MULTIPLE_SELECTION              = 0x02000000,
+
+/**
+    This enables top-level window tracking which allows wxPropertyGrid to
+    notify the application of last-minute property value changes by user.
+
+    This style is not enabled by default because it may cause crashes when
+    wxPropertyGrid is used in with wxAUI or similar system.
+
+    @remarks If you are not in fact using any system that may change
+             wxPropertyGrid's top-level parent window on its own, then you
+             are recommended to enable this style.
+*/
+wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000
 
 };
 
 /** Combines various styles.
 */
-#define wxPG_DEFAULT_STYLE	        (0)
+#define wxPG_DEFAULT_STYLE          (0)
 
 /** Combines various styles.
 */
-#define wxPGMAN_DEFAULT_STYLE	    (0)
+#define wxPGMAN_DEFAULT_STYLE       (0)
 
 /** @}
 */

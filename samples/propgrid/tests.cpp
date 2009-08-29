@@ -1237,7 +1237,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         wxASSERT(wxPG_EX_INIT_NOCAT == 0x00001000);
 
-        for ( i=12; i<26; i++ )
+        for ( i=12; i<27; i++ )
         {
             int flag = 1<<i;
             RT_MSG(wxString::Format(wxT("ExStyle: 0x%X"),flag));
