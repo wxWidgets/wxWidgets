@@ -2717,9 +2717,17 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
                 if ( !(tvht.flags & TVHT_ONITEM) )
                 {
-                    if ( !HandleMouseEvent(nMsg, x, y, wParam) )
+                    if ( tvht.flags & TVHT_ONITEMBUTTON )
                     {
-                        if ( tvht.flags & TVHT_ONITEMBUTTON )
+                        // either it's going to be handled by user code or
+                        // we're going to use it ourselves to toggle the
+                        // branch, in either case don't pass it to the base
+                        // class which would generate another mouse click event
+                        // for it even though it's already handled here
+                        processed = true;
+                        SetFocus();
+
+                        if ( !HandleMouseEvent(nMsg, x, y, wParam) )
                         {
                             if ( !IsExpanded(htItem) )
                             {
@@ -2730,8 +2738,6 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                                 Collapse(htItem);
                             }
                         }
-
-                        processed = true;
                     }
 
                     m_focusLost = false;
