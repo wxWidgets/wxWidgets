@@ -1248,16 +1248,22 @@ void wxURLDataObject::SetURL(const wxString& url)
     wxCharBuffer urlMB(url.mb_str());
     if ( urlMB )
     {
-        const size_t len = strlen(urlMB) + 1; // size with trailing NUL
+        const size_t len = strlen(urlMB);
+
 #if !wxUSE_UNICODE
+        // wxTextDataObject takes the number of characters in the string, not
+        // the size of the buffer (which would be len+1)
         SetData(wxDF_TEXT, len, urlMB);
-#endif
-        SetData(wxDataFormat(CFSTR_SHELLURL), len, urlMB);
+#endif // !wxUSE_UNICODE
+
+        // however CFSTR_SHELLURLDataObject doesn't append NUL automatically
+        // but we probably still want to have it on the clipboard (just to be
+        // safe), so do append it
+        SetData(wxDataFormat(CFSTR_SHELLURL), len + 1, urlMB);
     }
 
 #if wxUSE_UNICODE
-    // notice that SetData() takes size in bytes
-    SetData(wxDF_UNICODETEXT, (url.length() + 1)*sizeof(wxChar), url.wc_str());
+    SetData(wxDF_UNICODETEXT, url.length()*sizeof(wxChar), url.wc_str());
 #endif
 }
 
