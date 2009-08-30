@@ -1279,21 +1279,30 @@ wxImage wxImage::Size( const wxSize& size, const wxPoint& pos,
 
     image.SetRGB(wxRect(), r, g, b);
 
-    wxRect subRect(pos.x, pos.y, width, height);
-    wxRect finalRect(0, 0, size.GetWidth(), size.GetHeight());
-    if (pos.x < 0)
-        finalRect.width -= pos.x;
-    if (pos.y < 0)
-        finalRect.height -= pos.y;
+    // we have two coordinate systems:
+    // source:     starting at 0,0 of source image
+    // destination starting at 0,0 of destination image
+    // Documentation says:
+    // "The image is pasted into a new image [...] at the position pos relative
+    // to the upper left of the new image." this means the transition rule is:
+    // "dest coord" = "source coord" + pos;
 
-    subRect.Intersect(finalRect);
+    // calculate the intersection using source coordinates:
+    wxRect srcRect(0, 0, width, height);
+    wxRect dstRect(-pos, size);
 
-    if (!subRect.IsEmpty())
+    srcRect.Intersect(dstRect);
+
+    if (!srcRect.IsEmpty())
     {
-        if ((subRect.GetWidth() == width) && (subRect.GetHeight() == height))
-            image.Paste(*this, pos.x, pos.y);
+        // insertion point is needed in destination coordinates.
+        // NB: it is not always "pos"!
+        wxPoint ptInsert = srcRect.GetTopLeft() + pos;
+
+        if ((srcRect.GetWidth() == width) && (srcRect.GetHeight() == height))
+            image.Paste(*this, ptInsert.x, ptInsert.y);
         else
-            image.Paste(GetSubImage(subRect), pos.x, pos.y);
+            image.Paste(GetSubImage(srcRect), ptInsert.x, ptInsert.y);
     }
 
     return image;
