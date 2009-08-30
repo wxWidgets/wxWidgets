@@ -2021,7 +2021,7 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     {
         if ( sizeFlags & wxSIZE_AUTO_WIDTH )
         {
-            size = DoGetBestSize();
+            size = GetBestSize();
             width = size.x;
         }
         else
@@ -2037,9 +2037,9 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         {
             if ( size.x == wxDefaultCoord )
             {
-                size = DoGetBestSize();
+                size = GetBestSize();
             }
-            //else: already called DoGetBestSize() above
+            //else: already called GetBestSize() above
 
             height = size.y;
         }
