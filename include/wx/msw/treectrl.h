@@ -318,6 +318,9 @@ private:
     // whether we need to trigger a state image click event
     bool m_triggerStateImageClick;
 
+    // whether we need to deselect other items on mouse up
+    bool m_mouseUpDeselect;
+
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
 

@@ -750,6 +750,7 @@ void wxTreeCtrl::Init()
     m_focusLost = true;
     m_changingSelection = false;
     m_triggerStateImageClick = false;
+    m_mouseUpDeselect = false;
 
     // initialize the global array of events now as it can't be done statically
     // with the wxEVT_XXX values being allocated during run-time only
@@ -2876,6 +2877,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         else
                         {
                             SetFocusedItem(wxTreeItemId(htItem));
+                            m_mouseUpDeselect = true;
                         }
                     }
                     else // click on a single selected item
@@ -3025,16 +3027,13 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case WM_LBUTTONUP:
                 if ( isMultiple )
                 {
-                    // deselect other items if multiple items selected
+                    // deselect other items if needed
                     if ( htItem )
                     {
-                        wxArrayTreeItemIds selections;
-                        size_t count = GetSelections(selections);
-
-                        if ( count > 1 &&
-                             !(wParam & MK_CONTROL) &&
-                             !(wParam & MK_SHIFT) )
+                        if ( m_mouseUpDeselect )
                         {
+                            m_mouseUpDeselect = false;
+
                             wxTreeEvent changingEvent(wxEVT_COMMAND_TREE_SEL_CHANGING,
                                                       this, htItem);
                             changingEvent.m_itemOld = htOldItem;
