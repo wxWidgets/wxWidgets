@@ -602,6 +602,17 @@ void StringTestCase::ToLong()
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.LValue(), l );
     }
+
+    // special case: check that the output is not modified if the parsing
+    // failed completely
+    l = 17;
+    CPPUNIT_ASSERT( !wxString("foo").ToLong(&l) );
+    CPPUNIT_ASSERT_EQUAL( 17, l );
+
+    // also check that it is modified if we did parse something successfully in
+    // the beginning of the string
+    CPPUNIT_ASSERT( !wxString("9 cats").ToLong(&l) );
+    CPPUNIT_ASSERT_EQUAL( 9, l );
 }
 
 void StringTestCase::ToULong()

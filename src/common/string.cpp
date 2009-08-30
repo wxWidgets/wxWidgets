@@ -1632,14 +1632,14 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
     const wxStringCharType *start = wx_str();                               \
     wxStringCharType *end;
 
+// notice that we return false without modifying the output parameter at all if
+// nothing could be parsed but we do modify it and return false then if we did
+// parse something successfully but not the entire string
 #define WX_STRING_TO_X_TYPE_END                                             \
-    /* return true only if scan was stopped by the terminating NUL and */   \
-    /* if the string was not empty to start with and no under/overflow */   \
-    /* occurred: */                                                         \
-    if ( *end || end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )         \
+    if ( end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )                 \
         return false;                                                       \
     *pVal = val;                                                            \
-    return true;
+    return !*end;
 
 bool wxString::ToLong(long *pVal, int base) const
 {

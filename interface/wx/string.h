@@ -884,10 +884,14 @@ public:
         @member_group_name{numconv, Conversion to numbers}
 
         The string provides functions for conversion to signed and unsigned integer and
-        floating point numbers. All functions take a pointer to the variable to
-        put the numeric value in and return @true if the @b entire string could be
-        converted to a number.
-    */
+        floating point numbers.
+
+        All functions take a pointer to the variable to put the numeric value
+        in and return @true if the @b entire string could be converted to a
+        number. Notice if there is a valid number in the beginning of the
+        string, it is returned in the output parameter even if the function
+        returns @false because there is more text following it.
+     */
     //@{
 
     /**
@@ -895,7 +899,7 @@ public:
 
         Returns @true on success (the number is stored in the location pointed to by
         @a val) or @false if the string does not represent such number (the value of
-        @a val is not modified in this case).
+        @a val may still be modified in this case).
 
         Note that unlike ToCDouble() this function uses a localized version of
         @c wxStrtod() and thus needs as decimal point (and thousands separator) the
@@ -911,6 +915,8 @@ public:
     bool ToDouble(double* val) const;
 
     /**
+        Variant of ToDouble() always working in "C" locale.
+
         Works like ToDouble() but unlike it this function expects the floating point
         number to be formatted always with the rules dictated by the "C" locale
         (in particular, the decimal point must be a dot), independently from the
@@ -925,8 +931,8 @@ public:
 
         Returns @true on success in which case the number is stored in the location
         pointed to by @a val or @false if the string does not represent a
-        valid number in the given base (the value of @a val is not modified
-        in this case).
+        valid number in the given base (the value of @a val may still be
+        modified in this case).
 
         The value of @a base must be comprised between 2 and 36, inclusive, or
         be a special value 0 which means that the usual rules of @c C numbers are
@@ -949,6 +955,8 @@ public:
     bool ToLong(long* val, int base = 10) const;
 
     /**
+        Variant of ToLong() always working in "C" locale.
+
         Works like ToLong() but unlike it this function expects the integer
         number to be formatted always with the rules dictated by the "C" locale,
         independently from the current application-wide locale (see wxLocale).
@@ -973,8 +981,8 @@ public:
 
         Returns @true on success in which case the number is stored in the
         location pointed to by @a val or @false if the string does not
-        represent a valid number in the given base (the value of @a val is not
-        modified in this case).
+        represent a valid number in the given base (the value of @a val may
+        still be modified in this case).
 
         Please notice that this function  behaves in the same way as the standard
         @c strtoul() and so it simply converts negative numbers to unsigned
@@ -988,6 +996,8 @@ public:
     bool ToULong(unsigned long* val, int base = 10) const;
 
     /**
+        Variant of ToULong() always working in "C" locale.
+
         Works like ToULong() but unlike it this function expects the integer
         number to be formatted always with the rules dictated by the "C" locale,
         independently from the current application-wide locale (see wxLocale).
@@ -997,8 +1007,9 @@ public:
     bool ToCULong(unsigned long* val, int base = 10) const;
 
     /**
-        This is exactly the same as ToULong() but works with 64
-        bit integer numbers.
+        This is exactly the same as ToULong() but works with 64 bit integer
+        numbers.
+
         Please see ToLongLong() for additional remarks.
     */
     bool ToULongLong(wxULongLong_t* val, int base = 10) const;
