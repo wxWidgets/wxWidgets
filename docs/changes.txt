@@ -372,6 +372,7 @@ All:
    (file, line and function name) and id of the thread which generated it.
  * SetThreadActiveTarget() allows to set up thread-specific log targets.
 - Fix output buffer overflow in wxBase64Decode() (Eric W. Savage).
+- Added bilinear image resizing algorithm to wxImage (bishop).
 
 All (GUI):
 

@@ -24,6 +24,29 @@ enum wxImageResolution
 };
 
 /**
+    Image resize algorithm.
+
+    This is used with wxImage::Scale() and wxImage::Rescale().
+ */
+enum wxImageResizeQuality
+{
+    /// Simplest and fastest algorithm.
+    wxIMAGE_QUALITY_NEAREST,
+
+    /// Compromise between wxIMAGE_QUALITY_NEAREST and wxIMAGE_QUALITY_BICUBIC.
+    wxIMAGE_QUALITY_BILINEAR,
+
+    /// Highest quality but slowest execution time.
+    wxIMAGE_QUALITY_BICUBIC,
+
+    /// Default image resizing algorithm used by wxImage::Scale().
+    wxIMAGE_QUALITY_NORMAL,
+
+    /// Best image resizing algorithm, currently same as wxIMAGE_QUALITY_BICUBIC.
+    wxIMAGE_QUALITY_HIGH
+};
+
+/**
     Possible values for PNG image type option.
 
     @see wxImage::GetOptionInt().
@@ -661,7 +684,7 @@ public:
         @see Scale()
     */
     wxImage& Rescale(int width, int height,
-                    int quality = wxIMAGE_QUALITY_NORMAL);
+                     wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL);
 
     /**
         Changes the size of the image in-place without scaling it by adding either a
@@ -714,12 +737,8 @@ public:
         This is also useful for scaling bitmaps in general as the only other way
         to scale bitmaps is to blit a wxMemoryDC into another wxMemoryDC.
 
-        The parameter @a quality determines what method to use for resampling the image.
-        Can be one of the following:
-        - wxIMAGE_QUALITY_NORMAL: Uses the normal default scaling method of pixel
-                                  replication
-        - wxIMAGE_QUALITY_HIGH: Uses bicubic and box averaging resampling methods
-                                for upsampling and downsampling respectively
+        The parameter @a quality determines what method to use for resampling
+        the image, see wxImageResizeQuality documentation.
 
         It should be noted that although using @c wxIMAGE_QUALITY_HIGH produces much nicer
         looking results it is a slower method. Downsampling will use the box averaging
@@ -753,7 +772,7 @@ public:
         @see Rescale()
     */
     wxImage Scale(int width, int height,
-                  int quality = wxIMAGE_QUALITY_NORMAL) const;
+                   wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL) const;
     
     /**
         Returns a resized version of this image without scaling it by adding either a

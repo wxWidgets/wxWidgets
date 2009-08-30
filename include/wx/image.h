@@ -56,10 +56,18 @@ enum wxImageResolution
 };
 
 // Constants for wxImage::Scale() for determining the level of quality
-enum
+enum wxImageResizeQuality
 {
-    wxIMAGE_QUALITY_NORMAL = 0,
-    wxIMAGE_QUALITY_HIGH = 1
+    // different image resizing algorithms used by Scale() and Rescale()
+    wxIMAGE_QUALITY_NEAREST = 0,
+    wxIMAGE_QUALITY_BILINEAR = 1,
+    wxIMAGE_QUALITY_BICUBIC = 2,
+
+    // default quality is low (but fast)
+    wxIMAGE_QUALITY_NORMAL = wxIMAGE_QUALITY_NEAREST,
+
+    // highest (but best) quality
+    wxIMAGE_QUALITY_HIGH = wxIMAGE_QUALITY_BICUBIC
 };
 
 // alpha channel values: fully transparent, default threshold separating
@@ -308,10 +316,13 @@ public:
     void Paste( const wxImage &image, int x, int y );
 
     // return the new image with size width*height
-    wxImage Scale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL ) const;
+    wxImage Scale( int width, int height,
+                   wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL ) const;
 
     // box averager and bicubic filters for up/down sampling
+    wxImage ResampleNearest(int width, int height) const;
     wxImage ResampleBox(int width, int height) const;
+    wxImage ResampleBilinear(int width, int height) const;
     wxImage ResampleBicubic(int width, int height) const;
 
     // blur the image according to the specified pixel radius
@@ -322,7 +333,9 @@ public:
     wxImage ShrinkBy( int xFactor , int yFactor ) const ;
 
     // rescales the image in place
-    wxImage& Rescale( int width, int height, int quality = wxIMAGE_QUALITY_NORMAL ) { return *this = Scale(width, height, quality); }
+    wxImage& Rescale( int width, int height,
+                      wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL )
+        { return *this = Scale(width, height, quality); }
 
     // resizes the image in place
     wxImage& Resize( const wxSize& size, const wxPoint& pos,
