@@ -1182,23 +1182,6 @@ public:
         return buffer;
     }
 
-#if wxUSE_UNICODE
-    virtual bool GetDataHere( void* buffer ) const
-    {
-        // CFSTR_SHELLURL is _always_ ANSI!
-        wxCharBuffer char_buffer( GetDataSize() );
-        wxCustomDataObject::GetDataHere( (void*)char_buffer.data() );
-        wxString unicode_buffer( char_buffer, wxConvLibc );
-        memcpy( buffer, unicode_buffer.c_str(),
-                ( unicode_buffer.length() + 1 ) * sizeof(wxChar) );
-
-        return true;
-    }
-    virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const
-        { return GetDataHere(buf); }
-#endif
-
     wxDECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject);
 };
 
@@ -1236,9 +1219,28 @@ wxString wxURLDataObject::GetURL() const
     wxString url;
     wxCHECK_MSG( m_dataObjectLast, url, wxT("no data in wxURLDataObject") );
 
-    size_t len = m_dataObjectLast->GetDataSize();
+    if ( m_dataObjectLast->GetPreferredFormat() == CFSTR_SHELLURL )
+    {
+        const size_t len = m_dataObjectLast->GetDataSize();
+        if ( !len )
+            return wxString();
 
-    m_dataObjectLast->GetDataHere(wxStringBuffer(url, len));
+        // CFSTR_SHELLURL is always ANSI so we need to convert it from it in
+        // Unicode build
+#if wxUSE_UNICODE
+        wxCharBuffer buf(len);
+
+        if ( m_dataObjectLast->GetDataHere(buf.data()) )
+            url = buf;
+#else // !wxUSE_UNICODE
+        // in ANSI build no conversion is necessary
+        m_dataObjectLast->GetDataHere(wxStringBuffer(url, len));
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+    }
+    else // must be wxTextDataObject
+    {
+        url = static_cast<wxTextDataObject *>(m_dataObjectLast)->GetText();
+    }
 
     return url;
 }

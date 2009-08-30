@@ -22,6 +22,8 @@
 #endif // !PCH
 
 #include "wx/defs.h"
+#include "wx/clipbrd.h"
+#include "wx/dataobj.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -35,9 +37,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MiscGUIFuncsTestCase );
         CPPUNIT_TEST( DisplaySize );
+        CPPUNIT_TEST( URLDataObject );
     CPPUNIT_TEST_SUITE_END();
 
     void DisplaySize();
+    void URLDataObject();
 
     DECLARE_NO_COPY_CLASS(MiscGUIFuncsTestCase)
 };
@@ -69,5 +73,18 @@ void MiscGUIFuncsTestCase::DisplaySize()
     // test that display PPI is something reasonable
     sz = wxGetDisplayPPI();
     CPPUNIT_ASSERT( sz.x < 1000 && sz.y < 1000 );
+}
+
+void MiscGUIFuncsTestCase::URLDataObject()
+{
+    // this tests for buffer overflow, see #11102
+    const char * const
+        url = "http://something.long.to.overwrite.plenty.memory.example.com";
+    wxURLDataObject * const dobj = new wxURLDataObject(url);
+    CPPUNIT_ASSERT_EQUAL( url, dobj->GetURL() );
+
+    wxClipboardLocker lockClip;
+    CPPUNIT_ASSERT( wxTheClipboard->SetData(dobj) );
+    wxTheClipboard->Flush();
 }
 
