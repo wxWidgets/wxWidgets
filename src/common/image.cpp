@@ -616,8 +616,11 @@ wxImage wxImage::ResampleBilinear(int width, int height) const
 
     double srcpixy, srcpixy1, srcpixy2, dy, dy1;
     double srcpixx, srcpixx1, srcpixx2, dx, dx1;
-    double r1, g1, b1, a1;
-    double r2, g2, b2, a2;
+
+    // initialize alpha values to avoid g++ warnings about possibly
+    // uninitialized variables
+    double r1, g1, b1, a1 = 0;
+    double r2, g2, b2, a2 = 0;
 
     for ( int dsty = 0; dsty < height; dsty++ )
     {
