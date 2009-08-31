@@ -768,8 +768,10 @@ int wxPropertyGridPageState::GetColumnFitWidth(wxClientDC& dc,
             if ( col == 0 )
                 w += ( ((int)p->m_depth-1) * pg->m_subgroup_extramargin );
 
-            //
-            // TODO: Add bitmap support.
+            // account for the bitmap
+            if ( col == 1 )
+                w += p->GetImageOffset(pg->GetImageRect(p, -1).GetWidth());
+
 
             w += (wxPG_XBEFORETEXT*2);
 
