@@ -1691,6 +1691,13 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     {
         tc->SetBackgroundColour(m_colSelBack);
         tc->SetForegroundColour(m_colSelFore);
+
+        // Normalize margins
+    #ifdef __WXMSW__
+        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS,
+                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                      MAKELONG(3, 0));
+    #endif
     }
 
 #ifdef __WXMSW__
