@@ -1642,7 +1642,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
 
     int tcFlags = wxTE_PROCESS_ENTER | extraStyle;
 
-    if ( prop->HasFlag(wxPG_PROP_READONLY) )
+    if ( prop->HasFlag(wxPG_PROP_READONLY) && forColumn == 1 )
         tcFlags |= wxTE_READONLY;
 
     wxPoint p(pos.x,pos.y);
