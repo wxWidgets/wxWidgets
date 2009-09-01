@@ -1528,9 +1528,6 @@ wxWindow* wxPropertyGrid::GetEditorControl() const
 
 void wxPropertyGrid::CorrectEditorWidgetSizeX()
 {
-    if ( m_selColumn == -1 )
-        return;
-
     int secWid = 0;
     int newSplitterx = m_pState->DoGetSplitterPosition(m_selColumn-1);
     int newWidth = newSplitterx + m_pState->m_colWidths[m_selColumn];
@@ -1573,9 +1570,6 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 
 void wxPropertyGrid::CorrectEditorWidgetPosY()
 {
-    if ( m_selColumn == -1 )
-        return;
-
     if ( GetSelection() && (m_wndEditor || m_wndEditor2) )
     {
         wxRect r = GetEditorWidgetRect(GetSelection(), m_selColumn);
