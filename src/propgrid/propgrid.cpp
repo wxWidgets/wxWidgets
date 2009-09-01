@@ -925,6 +925,29 @@ void wxPropertyGrid::DoSetSelection( const wxArrayPGProperty& newSelection,
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGrid::MakeColumnEditable( unsigned int column,
+                                         bool editable )
+{
+    wxASSERT( column != 1 );
+
+    wxArrayInt& cols = m_pState->m_editableColumns;
+
+    if ( editable )
+    {
+        cols.push_back(column);
+    }
+    else
+    {
+        for ( int i = cols.size() - 1; i > 0; i-- )
+        {
+            if ( cols[i] == (int)column )
+                cols.erase( cols.begin() + i );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGrid::DoBeginLabelEdit( unsigned int colIndex,
                                        int selFlags )
 {

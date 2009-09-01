@@ -751,9 +751,12 @@ public:
     /**
         Makes given column editable by user.
 
+        @param editable
+            Using @false here will disable column from being editable.
+
         @see BeginLabelEdit(), EndLabelEdit()
     */
-    void MakeColumnEditable( unsigned int column );
+    void MakeColumnEditable( unsigned int column, bool editable = true );
 
     /**
         It is recommended that you call this function any time your code causes

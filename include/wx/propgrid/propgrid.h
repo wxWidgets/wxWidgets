@@ -1029,13 +1029,10 @@ public:
     /**
         Makes given column editable by user.
 
-        @see BeginLabelEdit(), EndLabelEdit()
+        @param editable
+            Using @false here will disable column from being editable.
     */
-    void MakeColumnEditable( unsigned int column )
-    {
-        wxASSERT( column != 1 );
-        m_pState->m_editableColumns.push_back(column);
-    }
+    void MakeColumnEditable( unsigned int column, bool editable = true );
 
     /**
         Creates label editor wxTextCtrl for given column, for property

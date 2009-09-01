@@ -776,6 +776,29 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        //
+        // Test label editing
+        RT_START_TEST(LABEL_EDITING)
+
+        wxPropertyGrid* pg = pgman->GetGrid();
+
+        // Just mostly test that these won't crash
+        pg->MakeColumnEditable(0, true);
+        pg->MakeColumnEditable(2, true);
+        pg->MakeColumnEditable(0, false);
+        pg->MakeColumnEditable(2, false);
+        pg->SelectProperty(wxT("Height"));
+        pg->BeginLabelEdit(0);
+        pg->BeginLabelEdit(0);
+        pg->EndLabelEdit(0);
+        pg->EndLabelEdit(0);
+
+        // Recreate grid
+        CreateGrid( -1, -1 );
+        pgman = m_pPropGridManager;
+    }
+
+    {
         RT_START_TEST(Attributes)
 
         wxPGProperty* prop = pgman->GetProperty(wxT("StringProperty"));
