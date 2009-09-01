@@ -169,7 +169,11 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 
     NSModalSession session = [NSApp beginModalSessionForWindow:fontPanel];
 
-    [NSApp runModalSession:session];
+    for (;;)
+    {
+        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+            break;
+    }
 
     [NSApp endModalSession:session];
 
