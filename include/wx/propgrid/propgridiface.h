@@ -1349,13 +1349,17 @@ private:
     // Cannot be GetGrid() due to ambiguity issues.
     wxPropertyGrid* GetPropertyGrid()
     {
+        if ( !m_pState )
+            return NULL;
         return m_pState->GetGrid();
     }
 
     // Cannot be GetGrid() due to ambiguity issues.
     const wxPropertyGrid* GetPropertyGrid() const
     {
-        return (const wxPropertyGrid*) m_pState->GetGrid();
+        if ( !m_pState )
+            return NULL;
+        return static_cast<const wxPropertyGrid*>(m_pState->GetGrid());
     }
 #endif // #ifndef SWIG
 
