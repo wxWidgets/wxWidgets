@@ -136,22 +136,17 @@ public:
     //     be argv[0]
 
         // set/get the application name
-    wxString GetAppName() const
-    {
-        return m_appName.empty() ? m_className : m_appName;
-    }
+    wxString GetAppName() const;
     void SetAppName(const wxString& name) { m_appName = name; }
 
         // set/get the application display name: the display name is the name
         // shown to the user in titles, reports, etc while the app name is
         // used for paths, config, and other places the user doesn't see
         //
-        // so the app name could be myapp while display name could be "My App"
-    wxString GetAppDisplayName() const
-    {
-        return m_appDisplayName.empty() ? GetAppName().Capitalize()
-                                        : m_appDisplayName;
-    }
+        // by default the display name is the same as app name or a capitalized
+        // version of the program if app name was not set neither but it's
+        // usually better to set it explicitly to something nicer
+    wxString GetAppDisplayName() const;
 
     void SetAppDisplayName(const wxString& name) { m_appDisplayName = name; }
 

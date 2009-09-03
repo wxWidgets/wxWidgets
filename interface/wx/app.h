@@ -495,8 +495,13 @@ public:
         is that this one is meant to be shown to the user and so should be used
         for the window titles, page headers and so on while the other one
         should be only used internally, e.g. for the file names or
-        configuration file keys. By default, returns the application name as
-        returned by GetAppName() capitalized using wxString::Capitalize().
+        configuration file keys.
+
+        If the application name for display had been previously set by
+        SetAppDisplayName(), it will be returned by this function. Otherwise,
+        if SetAppName() had been called its value will be returned; also as is.
+        Finally if none was called, this function returns the program name
+        capitalized using wxString::Capitalize().
 
         @since 2.9.0
     */
@@ -505,8 +510,9 @@ public:
     /**
         Returns the application name.
 
-        @remarks wxWidgets sets this to a reasonable default before calling
-                 OnInit(), but the application can reset it at will.
+        If SetAppName() had been called, returns the string passed to it.
+        Otherwise returns the program name, i.e. the value of @c argv[0] passed
+        to the @c main() function.
 
         @see GetAppDisplayName()
     */

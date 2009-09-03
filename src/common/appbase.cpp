@@ -161,21 +161,45 @@ wxAppConsoleBase::~wxAppConsoleBase()
 // initialization/cleanup
 // ----------------------------------------------------------------------------
 
-bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
+bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **WXUNUSED(argv))
 {
 #if wxUSE_INTL
     GetTraits()->SetLocale();
 #endif // wxUSE_INTL
 
+    return true;
+}
+
+wxString wxAppConsoleBase::GetAppName() const
+{
+    wxString name = m_appName;
 #ifndef __WXPALMOS__
-    if ( m_appName.empty() && argv && argv[0] )
+    if ( name.empty() )
     {
-        // the application name is, by default, the name of its executable file
-        wxFileName::SplitPath(argv[0], NULL, &m_appName, NULL);
+        if ( argv )
+        {
+            // the application name is, by default, the name of its executable file
+            wxFileName::SplitPath(argv[0], NULL, &name, NULL);
+        }
     }
 #endif // !__WXPALMOS__
+    return name;
+}
 
-    return true;
+wxString wxAppConsoleBase::GetAppDisplayName() const
+{
+    // use the explicitly provided display name, if any
+    if ( !m_appDisplayName.empty() )
+        return m_appDisplayName;
+
+    // if the application name was explicitly set, use it as is as capitalizing
+    // it won't always produce good results
+    if ( !m_appName.empty() )
+        return m_appName;
+
+    // if neither is set, use the capitalized version of the program file as
+    // it's the most reasonable default
+    return GetAppName().Capitalize();
 }
 
 wxEventLoopBase *wxAppConsoleBase::CreateMainLoop()
