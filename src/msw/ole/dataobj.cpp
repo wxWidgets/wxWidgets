@@ -1263,7 +1263,7 @@ void wxURLDataObject::SetURL(const wxString& url)
 {
     // CFSTR_SHELLURL is always supposed to be ANSI...
     wxWX2MBbuf urlMB = (wxWX2MBbuf)url.mbc_str();
-    if ( urlA )
+    if ( urlMB )
     {
         const size_t len = strlen(urlMB);
 
