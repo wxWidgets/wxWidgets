@@ -3907,7 +3907,21 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
     wxWindowBase::DoSetToolTip(tip);
 
     if (m_tooltip)
+    {
         m_tooltip->Apply( (wxWindow *)this );
+    }
+    else
+    {
+        GtkWidget *w = GetConnectWidget();
+        wxToolTip::Apply(w, wxCharBuffer());
+#if GTK_CHECK_VERSION(2, 12, 0)
+        // Just applying NULL doesn't work on 2.12.0, so also use
+        // gtk_widget_set_has_tooltip. It is part of the new GtkTooltip API
+        // but seems also to work with the old GtkTooltips.
+        if (gtk_check_version(2, 12, 0) == NULL)
+            gtk_widget_set_has_tooltip(w, FALSE);
+#endif
+    }
 }
 
 void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
