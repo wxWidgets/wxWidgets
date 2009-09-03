@@ -458,7 +458,7 @@ doesn't count as having handled the event and the search continues):
     Bind<>() was called, is consulted. Notice that this is done before
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
-    used.
+    used unless wxEvent::Skip() is called in the dynamic one.
     </li>
 
     <li value="4">
