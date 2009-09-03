@@ -230,7 +230,15 @@ void wxSocketImplUnix::OnWriteWaiting()
 
 void wxSocketImplUnix::OnExceptionWaiting()
 {
-    wxFAIL_MSG( "not supposed to be called" );
+    // when using epoll() this is called when an error occurred on the socket
+    // so close it if it hadn't been done yet -- what else can we do?
+    //
+    // notice that we shouldn't be called at all when using select() as we
+    // don't use wxFDIO_EXCEPTION when registering the socket for monitoring
+    // and this is good because select() would call this for any OOB data which
+    // is not necessarily an error
+    if ( m_fd != INVALID_SOCKET )
+        OnStateChange(wxSOCKET_LOST);
 }
 
 #endif  /* wxUSE_SOCKETS */
