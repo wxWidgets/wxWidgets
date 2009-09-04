@@ -1196,7 +1196,7 @@ public:
         return buffer;
     }
 
-    wxDECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject);
+    DECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject)
 };
 
 
