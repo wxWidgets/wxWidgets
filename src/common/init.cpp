@@ -221,6 +221,21 @@ static bool DoCommonPreInit()
 #if wxUSE_LOG
     // Reset logging in case we were cleaned up and are being reinitialized.
     wxLog::DoCreateOnDemand();
+
+    // force wxLog to create a log target now: we do it because wxTheApp
+    // doesn't exist yet so wxLog will create a special log target which is
+    // safe to use even when the GUI is not available while without this call
+    // we could create wxApp in wxEntryStart() below, then log an error about
+    // e.g. failure to establish connection to the X server and wxLog would
+    // send it to wxLogGui (because wxTheApp does exist already) which, of
+    // course, can't be used in this case
+    //
+    // notice also that this does nothing if the user had set up a custom log
+    // target before -- which is fine as we want to give him this possibility
+    // (as it's impossible to override logging by overriding wxAppTraits::
+    // CreateLogTarget() before wxApp is created) and we just assume he knows
+    // what he is doing
+    wxLog::GetActiveTarget();
 #endif // wxUSE_LOG
 
     return true;
