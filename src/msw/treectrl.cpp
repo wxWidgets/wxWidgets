@@ -1269,6 +1269,12 @@ bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), false, wxT("invalid tree item") );
 
+    if ( IS_VIRTUAL_ROOT(item) )
+    {
+        wxTreeItemIdValue cookie;
+        return GetFirstChild(item, cookie).IsOk();
+    }
+
     wxTreeViewItem tvItem(item, TVIF_CHILDREN);
     DoGetItem(&tvItem);
 
