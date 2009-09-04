@@ -1075,6 +1075,16 @@ public:
     void SetName(const wxString& name);
 
     /**
+        Sets the full path.
+
+        The @a path argument includes both the path (and the volume, if
+        supported by @a format) and the name and extension.
+
+        @see GetPath()
+     */
+    void SetPath(const wxString& path, wxPathFormat format = wxPATH_NATIVE);
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
     */
