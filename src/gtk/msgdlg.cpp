@@ -190,6 +190,11 @@ void wxMessageDialog::GTKCreateMsgDialog()
 
     GtkDialog * const dlg = GTK_DIALOG(m_widget);
 
+    if ( m_dialogStyle & wxSTAY_ON_TOP )
+    {
+        gtk_window_set_keep_above(GTK_WINDOW(m_widget), TRUE);
+    }
+
     // we need to add buttons manually if we use custom labels or always for
     // Yes/No/Cancel dialog as GTK+ doesn't support it natively and when using
     // Hildon we add all the buttons manually as it doesn't support too many of

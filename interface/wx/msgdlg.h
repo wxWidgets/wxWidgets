@@ -51,8 +51,8 @@
         @c wxYES_NO is not given so it is usually unnecessary to specify it
         explicitly.
     @style{wxSTAY_ON_TOP}
-        Makes the message box stay on top of all other windows (currently
-        implemented only under MSW).
+        Makes the message box stay on top of all other windows and not only
+        just its parent (currently implemented only under MSW and GTK).
     @endStyleTable
 
     @library{wxcore}
