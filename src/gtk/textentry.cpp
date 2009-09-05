@@ -350,7 +350,7 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
     #if GTK_CHECK_VERSION(2,14,0)
         newBorder = gtk_border_new();
     #else
-        newBorder = new GtkBorder;
+        newBorder = g_slice_new0(GtkBorder);
     #endif
         // Use some reasonable defaults for initial margins
         newBorder->left = 2;
@@ -369,6 +369,12 @@ bool wxTextEntry::DoSetMargins(const wxPoint& margins)
         newBorder->top = (gint) margins.y;
 
     gtk_entry_set_inner_border(entry, newBorder);
+
+#if GTK_CHECK_VERSION(2,14,0)
+    gtk_border_free(newBorder);
+#else
+    g_slice_free(GtkBorder, newBorder);
+#endif
 
     return true;
 #else
