@@ -1245,7 +1245,7 @@ wxString wxURLDataObject::GetURL() const
         wxCharBuffer buf(len);
 
         if ( m_dataObjectLast->GetDataHere(buf.data()) )
-            url = buf;
+            url = wxString(buf, wxConvLibc);
 #else // !wxUSE_UNICODE
         // in ANSI build no conversion is necessary
         m_dataObjectLast->GetDataHere(wxStringBuffer(url, len));
