@@ -1042,10 +1042,15 @@ if test "x$SUNCXX" != xyes; then
     fi
 fi
 
+dnl ---------------------------------------------------------------------------
+dnl Mac-specific SDK/architectures checks
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_MAC" = 1; then
+
 retest_macosx_linking=no
 
 dnl Support the old --enable-universal_binary in case anyone was using it.
-#if test "$wxUSE_MAC" = 1; then
     if test "x$wxUSE_UNIVERSAL_BINARY" != xno ; then
         dnl --enable-universal_binary uses a default SDK (currently 10.4u)
         dnl --enable-universal_binary=SDK names a path to an SDK
@@ -1102,7 +1107,6 @@ dnl Support the old --enable-universal_binary in case anyone was using it.
         AC_MSG_WARN([Disabling precompiled headers due to universal binary build.])
         bk_use_pch=no
     fi
-#fi
 
 dnl Set up the Mac OS X SDK.  We do this early so configure tests will occur
 dnl with the SDK in place.
@@ -1225,6 +1229,7 @@ if test "x$retest_macosx_linking" = "xyes"; then
     AC_LANG_POP()
 fi
 
+fi dnl wxUSE_MAC
 
 case "${host}" in
 
