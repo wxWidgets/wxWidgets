@@ -381,6 +381,35 @@ public:
      */
     virtual wxString GetHint() const;
 
+    //@{
+    /**
+        Attempts to set the control margins. When margins are given as wxPoint,
+        x indicates the left and y the top margin. Use -1 to indicate that
+        an existing value should be used.
+
+        @return
+            @true if setting of all requested margins was successful.
+
+        @since 2.9.1
+    */
+    bool SetMargins(const wxPoint& pt);
+    bool SetMargins(wxCoord left, wxCoord top = -1);
+    //@}
+
+    /**
+        Returns the margins used by the control. The @c x field of the returned
+        point is the horizontal margin and the @c y field is the vertical one.
+
+        @remarks If given margin cannot be accurately determined, its value
+                will be set to -1. On some platforms you cannot obtain valid
+                margin values until you have called SetMargins().
+
+        @see SetMargins()
+
+        @since 2.9.1
+    */
+    wxPoint GetMargins() const;
+
     /**
         Sets the new text control value.
 

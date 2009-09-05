@@ -142,6 +142,20 @@ public:
     virtual wxString GetHint() const;
 
 
+    // margins
+    // -------
+
+    // margins are the empty space between borders of control and the text
+    // itself. When setting margin, use value -1 to indicate that specific
+    // margin should not be changed.
+
+    bool SetMargins(const wxPoint& pt)
+        { return DoSetMargins(pt); }
+    bool SetMargins(wxCoord left, wxCoord top = -1)
+        { return DoSetMargins(wxPoint(left, top)); }
+    wxPoint GetMargins() const
+        { return DoGetMargins(); }
+
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
     // also used to implement WriteText() in wxMSW
@@ -158,6 +172,10 @@ protected:
     // override this to return the associated window, it will be used for event
     // generation and also by generic hints implementation
     virtual wxWindow *GetEditableWindow() = 0;
+
+    // margins functions
+    virtual bool DoSetMargins(const wxPoint& pt);
+    virtual wxPoint DoGetMargins() const;
 
 
     // class which should be used to temporarily disable text change events

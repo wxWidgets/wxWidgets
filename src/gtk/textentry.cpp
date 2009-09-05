@@ -326,4 +326,74 @@ void wxTextEntry::SendMaxLenEvent()
     win->HandleWindowEvent(event);
 }
 
+// ----------------------------------------------------------------------------
+// margins support
+// ----------------------------------------------------------------------------
+
+bool wxTextEntry::DoSetMargins(const wxPoint& margins)
+{
+#if GTK_CHECK_VERSION(2,10,0)
+    GtkEntry* entry = GetEntry();
+
+    if ( !entry )
+        return false;
+
+    const GtkBorder* oldBorder = gtk_entry_get_inner_border(entry);
+    GtkBorder* newBorder;
+
+    if ( oldBorder )
+    {
+        newBorder = gtk_border_copy(oldBorder);
+    }
+    else
+    {
+    #if GTK_CHECK_VERSION(2,14,0)
+        newBorder = gtk_border_new();
+    #else
+        newBorder = new GtkBorder;
+    #endif
+        // Use some reasonable defaults for initial margins
+        newBorder->left = 2;
+        newBorder->right = 2;
+
+        // These numbers seem to let the text remain vertically centered
+        // in common use scenarios when margins.y == -1.
+        newBorder->top = 3;
+        newBorder->bottom = 3;
+    }
+
+    if ( margins.x != -1 )
+        newBorder->left = (gint) margins.x;
+
+    if ( margins.y != -1 )
+        newBorder->top = (gint) margins.y;
+
+    gtk_entry_set_inner_border(entry, newBorder);
+
+    return true;
+#else
+    wxUnusedVar(margins);
+    return false;
+#endif
+}
+
+wxPoint wxTextEntry::DoGetMargins() const
+{
+#if GTK_CHECK_VERSION(2,10,0)
+    GtkEntry* entry = GetEntry();
+
+    if ( !entry )
+        return wxPoint(-1, -1);
+
+    const GtkBorder* border = gtk_entry_get_inner_border(entry);
+
+    if ( !border )
+        return wxPoint(-1, -1);
+
+    return wxPoint((wxCoord) border->left, (wxCoord) border->top);
+#else
+    return wxPoint(-1, -1);
+#endif
+}
+
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

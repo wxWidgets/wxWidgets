@@ -1085,7 +1085,7 @@ void wxOwnerDrawnComboBox::OnDrawItem( wxDC& dc,
     if ( flags & wxODCB_PAINTING_CONTROL )
     {
         dc.DrawText( GetValue(),
-                     rect.x + GetTextIndent(),
+                     rect.x + GetMargins().x,
                      (rect.height-dc.GetCharHeight())/2 + rect.y );
     }
     else

@@ -474,4 +474,44 @@ wxString wxTextEntry::GetHint() const
 
 #endif // wxUSE_UXTHEME
 
+// ----------------------------------------------------------------------------
+// margins support
+// ----------------------------------------------------------------------------
+
+bool wxTextEntry::DoSetMargins(const wxPoint& margins)
+{
+#if !defined(__WXWINCE__)
+    bool res = true;
+
+    if ( margins.x != -1 )
+    {
+        // left margin
+        ::SendMessage(GetEditHwnd(), EM_SETMARGINS,
+                      EC_LEFTMARGIN, MAKELONG(margins.x, 0));
+    }
+
+    if ( margins.y != -1 )
+    {
+        res = false;
+    }
+
+    return res;
+#else
+    return false;
+#endif
+}
+
+wxPoint wxTextEntry::DoGetMargins() const
+{
+#if !defined(__WXWINCE__)
+    LRESULT lResult = ::SendMessage(GetEditHwnd(), EM_GETMARGINS,
+                                    0, 0);
+    int left = LOWORD(lResult);
+    int top = -1;
+    return wxPoint(left, top);
+#else
+    return wxPoint(-1, -1);
+#endif
+}
+
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

@@ -117,9 +117,7 @@
 #define NATIVE_TEXT_INDENT_XP       4
 #define NATIVE_TEXT_INDENT_CLASSIC  2
 
-#define TEXTCTRLXADJUST_XP          1
 #define TEXTCTRLYADJUST_XP          3
-#define TEXTCTRLXADJUST_CLASSIC     1
 #define TEXTCTRLYADJUST_CLASSIC     3
 
 #define COMBOBOX_ANIMATION_RESOLUTION   10
@@ -264,19 +262,16 @@ void wxComboCtrl::OnResize()
     //
     // Recalculates button and textctrl areas
 
-    int textCtrlXAdjust;
     int textCtrlYAdjust;
 
 #if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
     {
-        textCtrlXAdjust = TEXTCTRLXADJUST_XP;
         textCtrlYAdjust = TEXTCTRLYADJUST_XP;
     }
     else
 #endif
     {
-        textCtrlXAdjust = TEXTCTRLXADJUST_CLASSIC;
         textCtrlYAdjust = TEXTCTRLYADJUST_CLASSIC;
     }
 
@@ -286,7 +281,7 @@ void wxComboCtrl::OnResize()
     CalculateAreas(btnWidth);
 
     // Position textctrl using standard routine
-    PositionTextCtrl(textCtrlXAdjust,textCtrlYAdjust);
+    PositionTextCtrl(0, textCtrlYAdjust);
 }
 
 // Draws non-XP GUI dotted line around the focus area

@@ -783,6 +783,7 @@ protected:
 #ifdef __WXGTK20__
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const { return NULL; }
+    virtual GtkEntry *GetEntry() const { return NULL; }
 #endif
 
 // Overrides

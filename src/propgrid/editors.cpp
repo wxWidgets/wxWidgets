@@ -77,10 +77,6 @@
 
 #include "wx/odcombo.h"
 
-#ifdef __WXMSW__
-    #include "wx/msw/private.h"
-#endif
-
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)
@@ -150,7 +146,8 @@
 #define wxPG_CHOICEYADJUST           0
 #endif
 
-#define ODCB_CUST_PAINT_MARGIN               6  // Number added to image width for SetCustomPaintWidth
+// Number added to image width for SetCustomPaintWidth
+#define ODCB_CUST_PAINT_MARGIN               9
 
 // Milliseconds to wait for two mouse-ups after focus inorder
 // to trigger a double-click.
@@ -288,12 +285,7 @@ void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
     //
     // Fix indentation, just in case (change in font boldness is one good
     // reason).
-#if defined(__WXMSW__) && !defined(__WXWINCE__)
-    ::SendMessage(GetHwndOf(tc),
-                  EM_SETMARGINS,
-                  EC_LEFTMARGIN | EC_RIGHTMARGIN,
-                  MAKELONG(0, 0));
-#endif
+    tc->SetMargins(0);
 }
 
 // Provided so that, for example, ComboBox editor can use the same code
@@ -582,13 +574,16 @@ public:
         return rect.width;
     }
 
-    virtual void PositionTextCtrl( int WXUNUSED(textCtrlXAdjust),
+    virtual void PositionTextCtrl( int textCtrlXAdjust,
                                    int WXUNUSED(textCtrlYAdjust) )
     {
         wxPropertyGrid* pg = GetGrid();
+    #ifdef wxPG_TEXTCTRLXADJUST
+        textCtrlXAdjust = wxPG_TEXTCTRLXADJUST -
+                          (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
+    #endif
         wxOwnerDrawnComboBox::PositionTextCtrl(
-            wxPG_TEXTCTRLXADJUST -
-            (wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1) - 1,
+            textCtrlXAdjust,
             pg->GetSpacingY() + 2
         );
     }
@@ -877,7 +872,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                odcbFlags);
 
     cb->SetButtonPosition(si.y,0,wxRIGHT);
-    cb->SetTextIndent(wxPG_XBEFORETEXT-1);
+    cb->SetMargins(wxPG_XBEFORETEXT-1);
 
     wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb, property->GetCommonValue() );
 
@@ -1598,7 +1593,7 @@ void wxPropertyGrid::CorrectEditorWidgetPosY()
 // Fixes position of wxTextCtrl-like control (wxSpinCtrl usually
 // fits into that category as well).
 void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
-                                        unsigned int forColumn,
+                                        unsigned int WXUNUSED(forColumn),
                                         const wxPoint& offset )
 {
     // Center the control vertically
@@ -1612,10 +1607,14 @@ void wxPropertyGrid::FixPosForTextCtrl( wxWindow* ctrl,
     finalPos.y += y_adj;
     finalPos.height -= (y_adj+sz_dec);
 
-    int textCtrlXAdjust = wxPG_TEXTCTRLXADJUST;
+#ifndef wxPG_TEXTCTRLXADJUST
+    int textCtrlXAdjust = wxPG_XBEFORETEXT - 1;
 
-    if ( forColumn != 1 )
-        textCtrlXAdjust -= 3;  // magic number!
+    wxTextCtrl* tc = static_cast<wxTextCtrl*>(ctrl);
+    tc->SetMargins(0);
+#else
+    int textCtrlXAdjust = wxPG_TEXTCTRLXADJUST;
+#endif
 
     finalPos.x += textCtrlXAdjust;
     finalPos.width -= textCtrlXAdjust;
@@ -1691,13 +1690,6 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     {
         tc->SetBackgroundColour(m_colSelBack);
         tc->SetForegroundColour(m_colSelFore);
-
-        // Normalize margins
-    #ifdef __WXMSW__
-        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS,
-                      EC_LEFTMARGIN | EC_RIGHTMARGIN,
-                      MAKELONG(3, 0));
-    #endif
     }
 
 #ifdef __WXMSW__

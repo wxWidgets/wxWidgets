@@ -159,7 +159,7 @@ struct wxComboCtrlFeatures
         BitmapButton    = 0x0002, ///< Button may be replaced with bitmap.
         ButtonSpacing   = 0x0004, ///< Button can have spacing from the edge
                                   ///< of the control.
-        TextIndent      = 0x0008, ///< wxComboCtrl::SetTextIndent() can be used.
+        TextIndent      = 0x0008, ///< wxComboCtrl::SetMargins() can be used.
         PaintControl    = 0x0010, ///< Combo control itself can be custom painted.
         PaintWritable   = 0x0020, ///< A variable-width area in front of writable
                                   ///< combo control's textctrl can be custom
@@ -455,6 +455,19 @@ public:
     virtual long GetLastPosition() const;
 
     /**
+        Returns the margins used by the control. The @c x field of the returned
+        point is the horizontal margin and the @c y field is the vertical one.
+
+        @remarks If given margin cannot be accurately determined, its value
+                will be set to -1.
+
+        @see SetMargins()
+
+        @since 2.9.1
+    */
+    wxPoint GetMargins() const;
+
+    /**
         Returns current popup interface that has been set with
         SetPopupControl().
     */
@@ -472,6 +485,8 @@ public:
 
     /**
         Returns actual indentation in pixels.
+
+        @deprecated Use GetMargins() instead.
     */
     wxCoord GetTextIndent() const;
 
@@ -607,6 +622,21 @@ public:
     */
     virtual void SetInsertionPointEnd();
 
+    //@{
+    /**
+        Attempts to set the control margins. When margins are given as wxPoint,
+        x indicates the left and y the top margin. Use -1 to indicate that
+        an existing value should be used.
+
+        @return
+            @true if setting of all requested margins was successful.
+
+        @since 2.9.1
+    */
+    bool SetMargins(const wxPoint& pt);
+    bool SetMargins(wxCoord left, wxCoord top = -1);
+    //@}
+
     /**
         Set side of the control to which the popup will align itself. Valid
         values are @c wxLEFT, @c wxRIGHT and 0. The default value 0 means that
@@ -676,6 +706,8 @@ public:
         This will set the space in pixels between left edge of the control and
         the text, regardless whether control is read-only or not. Value -1 can
         be given to indicate platform default.
+
+        @deprecated Use SetMargins() instead.
     */
     void SetTextIndent(int indent);
 

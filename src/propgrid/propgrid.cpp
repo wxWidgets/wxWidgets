@@ -64,10 +64,6 @@
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
 
-#ifdef __WXMSW__
-    #include "wx/msw/private.h"
-#endif
-
 // Two pics for the expand / collapse buttons.
 // Files are not supplied with this project (since it is
 // recommended to use either custom or native rendering).
@@ -3866,18 +3862,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     // (must be done before capturing m_ctrlXAdjust)
                     if ( (p->m_flags & wxPG_PROP_MODIFIED) && (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
-
-                    //
-                    // Fix TextCtrl indentation
-                #if defined(__WXMSW__) && !defined(__WXWINCE__)
-                    wxTextCtrl* tc = NULL;
-                    if ( primaryCtrl->IsKindOf(CLASSINFO(wxOwnerDrawnComboBox)) )
-                        tc = ((wxOwnerDrawnComboBox*)primaryCtrl)->GetTextCtrl();
-                    else
-                        tc = wxDynamicCast(primaryCtrl, wxTextCtrl);
-                    if ( tc )
-                        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
-                #endif
 
                     // Store x relative to splitter (we'll need it).
                     m_ctrlXAdjust = m_wndEditor->GetPosition().x - splitterX;

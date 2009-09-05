@@ -178,6 +178,7 @@ protected:
 private:
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const;
+    virtual GtkEntry *GetEntry() const;
     virtual void EnableTextChangedEvents(bool enable);
 
     // change the font for everything in this control

@@ -66,10 +66,19 @@
 #define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxMSW
 
+#if !defined(__WXWINCE__)
+    // 1 if wxTextEntry::SetMargins() can be used to set the left margin
+    #define LEFT_MARGIN_CAN_BE_SET        1
+#else
+    #define LEFT_MARGIN_CAN_BE_SET        0
+#endif
+
 //#undef wxUSE_POPUPWIN
 //#define wxUSE_POPUPWIN 0
 
 #elif defined(__WXGTK__)
+
+#include "wx/gtk/private.h"
 
 // NB: It is not recommended to use wxDialog as popup on wxGTK, because of
 //     this bug: If wxDialog is hidden, its position becomes corrupt
@@ -88,6 +97,13 @@
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxGTK
 
+#if GTK_CHECK_VERSION(2,10,0)
+    // 1 if wxTextEntry::SetMargins() can be used to set the left margin
+    #define LEFT_MARGIN_CAN_BE_SET    1
+#else
+    #define LEFT_MARGIN_CAN_BE_SET    0
+#endif
+
 #elif defined(__WXMAC__)
 
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
@@ -102,6 +118,9 @@
 #undef COMBO_MARGIN
 #define COMBO_MARGIN                  FOCUS_RING
 
+// 1 if wxTextEntry::SetMargins() can be used to set the left margin
+#define LEFT_MARGIN_CAN_BE_SET        0
+
 #else
 
 #define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
@@ -110,6 +129,9 @@
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0
+
+// 1 if wxTextEntry::SetMargins() can be used to set the left margin
+#define LEFT_MARGIN_CAN_BE_SET        0
 
 #endif
 
@@ -519,7 +541,7 @@ void wxComboPopup::DefaultPaintComboControl( wxComboCtrlBase* combo,
         combo->PrepareBackground(dc,rect,0);
 
         dc.DrawText( combo->GetValue(),
-                     rect.x + combo->GetTextIndent(),
+                     rect.x + combo->m_marginLeft,
                      (rect.height-dc.GetCharHeight())/2 + rect.y );
     }
 }
@@ -804,7 +826,7 @@ void wxComboCtrlBase::Init()
 
     m_extLeft = 0;
     m_extRight = 0;
-    m_absIndent = -1;
+    m_marginLeft = -1;
     m_iFlags = 0;
     m_timeCanAcceptClick = 0;
 
@@ -833,7 +855,7 @@ bool wxComboCtrlBase::Create(wxWindow *parent,
 
     // Get colours
     OnThemeChange();
-    m_absIndent = GetNativeTextIndent();
+    m_marginLeft = GetNativeTextIndent();
 
     m_iFlags |= wxCC_IFLAG_CREATED;
 
@@ -953,8 +975,8 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     }
 
     // Defaul indentation
-    if ( m_absIndent < 0 )
-        m_absIndent = GetNativeTextIndent();
+    if ( m_marginLeft < 0 )
+        m_marginLeft = GetNativeTextIndent();
 
     int butWidth = btnWidth;
 
@@ -1058,43 +1080,54 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     if ( !m_text )
         return;
 
-#if !TEXTCTRL_TEXT_CENTERED
-
     wxSize sz = GetClientSize();
 
     int customBorder = m_widthCustomBorder;
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
+#if LEFT_MARGIN_CAN_BE_SET
+        // Call SetMargins() on textctrl if LEFT_MARGIN_CAN_BE_SET == 1
+        wxUnusedVar(textCtrlXAdjust);
+        m_text->SetMargins(0);
+        textCtrlXAdjust = 0;
+#endif
+
         // Centre textctrl
+#if !TEXTCTRL_TEXT_CENTERED
         int tcSizeY = m_text->GetBestSize().y;
-        int diff = sz.y - tcSizeY;
-        int y = textCtrlYAdjust + (diff/2);
+        int diff0 = sz.y - tcSizeY;
+        int y = textCtrlYAdjust + (diff0/2);
+#else
+        wxUnusedVar(textCtrlYAdjust);
+        int y = 0;
+#endif
 
         if ( y < customBorder )
             y = customBorder;
 
-        m_text->SetSize( m_tcArea.x + m_widthCustomPaint + m_absIndent + textCtrlXAdjust,
-                         y,
-                         m_tcArea.width - COMBO_MARGIN -
-                         (textCtrlXAdjust + m_widthCustomPaint + m_absIndent),
-                         -1 );
+        int x = m_tcArea.x + m_widthCustomPaint + 
+                m_marginLeft + textCtrlXAdjust;
+
+        m_text->SetSize(x,
+                        y,
+                        m_tcArea.width - m_tcArea.x - x,
+                        /*m_tcArea.width - COMBO_MARGIN -
+                        (textCtrlXAdjust + m_widthCustomPaint +
+                         m_marginLeft),*/
+                        -1 );
 
         // Make sure textctrl doesn't exceed the bottom custom border
         wxSize tsz = m_text->GetSize();
-        diff = (y + tsz.y) - (sz.y - customBorder);
-        if ( diff >= 0 )
+        int diff1 = (y + tsz.y) - (sz.y - customBorder);
+        if ( diff1 >= 0 )
         {
-            tsz.y = tsz.y - diff - 1;
+            tsz.y = tsz.y - diff1 - 1;
             m_text->SetSize(tsz);
         }
     }
     else
-#else // TEXTCTRL_TEXT_CENTERED
-    wxUnusedVar(textCtrlXAdjust);
-    wxUnusedVar(textCtrlYAdjust);
-#endif // !TEXTCTRL_TEXT_CENTERED/TEXTCTRL_TEXT_CENTERED
     {
-        // If it has border, have textctrl will the entire text field.
+        // If it has border, have textctrl fill the entire text field.
         m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
                          m_tcArea.y,
                          m_tcArea.width - m_widthCustomPaint,
@@ -1729,9 +1762,9 @@ void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
 void wxComboCtrlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     OnThemeChange();
-    // indentation may also have changed
-    if ( !(m_iFlags & wxCC_IFLAG_INDENT_SET) )
-        m_absIndent = GetNativeTextIndent();
+    // left margin may also have changed
+    if ( !(m_iFlags & wxCC_IFLAG_LEFT_MARGIN_SET) )
+        m_marginLeft = GetNativeTextIndent();
     RecalcAndRefresh();
 }
 
@@ -2217,21 +2250,60 @@ void wxComboCtrlBase::SetCustomPaintWidth( int width )
     RecalcAndRefresh();
 }
 
+bool wxComboCtrlBase::DoSetMargins(const wxPoint& margins)
+{
+    // For general sanity's sake, we ignore top margin. Instead
+    // we will always try to center the text vertically.
+    bool res = true;
+
+    if ( margins.x != -1 )
+    {
+        m_marginLeft = margins.x;
+        m_iFlags |= wxCC_IFLAG_LEFT_MARGIN_SET;
+    }
+    else
+    {
+        m_marginLeft = GetNativeTextIndent();
+        m_iFlags &= ~(wxCC_IFLAG_LEFT_MARGIN_SET);
+    }
+
+    if ( margins.y != -1 )
+    {
+        res = false;
+    }
+
+    RecalcAndRefresh();
+
+    return res;
+}
+
+wxPoint wxComboCtrlBase::DoGetMargins() const
+{
+    return wxPoint(m_marginLeft, -1);
+}
+
+#if WXWIN_COMPATIBILITY_2_6
 void wxComboCtrlBase::SetTextIndent( int indent )
 {
     if ( indent < 0 )
     {
-        m_absIndent = GetNativeTextIndent();
-        m_iFlags &= ~(wxCC_IFLAG_INDENT_SET);
+        m_marginLeft = GetNativeTextIndent();
+        m_iFlags &= ~(wxCC_IFLAG_LEFT_MARGIN_SET);
     }
     else
     {
-        m_absIndent = indent;
-        m_iFlags |= wxCC_IFLAG_INDENT_SET;
+        m_marginLeft = indent;
+        m_iFlags |= wxCC_IFLAG_LEFT_MARGIN_SET;
     }
 
     RecalcAndRefresh();
 }
+
+wxCoord wxComboCtrlBase::GetTextIndent() const;
+{
+    return m_marginLeft;
+}
+#endif
 
 wxCoord wxComboCtrlBase::GetNativeTextIndent() const
 {

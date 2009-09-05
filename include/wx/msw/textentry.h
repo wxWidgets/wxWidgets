@@ -76,6 +76,10 @@ protected:
     };
     virtual void DoSetSelection(long from, long to, int flags = SetSel_Scroll);
 
+    // margins functions
+    virtual bool DoSetMargins(const wxPoint& pt);
+    virtual wxPoint DoGetMargins() const;
+
 private:
     // implement this to return the HWND of the EDIT control
     virtual WXHWND GetEditHWND() const = 0;

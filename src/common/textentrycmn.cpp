@@ -265,4 +265,18 @@ wxString wxTextEntryBase::GetHint() const
     return m_hintData ? m_hintData->GetHintString() : wxString();
 }
 
+// ----------------------------------------------------------------------------
+// margins support
+// ----------------------------------------------------------------------------
+
+bool wxTextEntryBase::DoSetMargins(const wxPoint& WXUNUSED(pt))
+{
+    return false;
+}
+
+wxPoint wxTextEntryBase::DoGetMargins() const
+{
+    return wxPoint(-1, -1);
+}
+
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

@@ -37,9 +37,6 @@
     // space between vertical line and value editor control
     #define wxPG_XBEFOREWIDGET          1
 
-    // x position adjustment for wxTextCtrl (and like)
-    #define wxPG_TEXTCTRLXADJUST        3
-
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             9
     // 1 if wxRendererNative should be employed
@@ -75,7 +72,9 @@
     #define wxPG_XBEFOREWIDGET          1
 
     // x position adjustment for wxTextCtrl (and like)
-    #define wxPG_TEXTCTRLXADJUST        3
+    // NB: Only define wxPG_TEXTCTRLXADJUST for platforms that do not
+    //     (yet) support wxTextEntry::SetMargins() for the left margin.
+    //#define wxPG_TEXTCTRLXADJUST        3
 
     // comment to use bitmap buttons
     #define wxPG_ICON_WIDTH             9

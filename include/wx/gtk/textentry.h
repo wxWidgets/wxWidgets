@@ -12,6 +12,7 @@
 #define _WX_GTK_TEXTENTRY_H_
 
 typedef struct _GtkEditable GtkEditable;
+typedef struct _GtkEntry GtkEntry;
 
 // ----------------------------------------------------------------------------
 // wxTextEntry: roughly corresponds to GtkEditable
@@ -55,10 +56,17 @@ public:
 protected:
     virtual wxString DoGetValue() const;
 
+    // margins functions
+    virtual bool DoSetMargins(const wxPoint& pt);
+    virtual wxPoint DoGetMargins() const;
+
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable
     virtual GtkEditable *GetEditable() const = 0;
+
+    // implement this to return the associated GtkEntry
+    virtual GtkEntry *GetEntry() const = 0;
 };
 
 #endif // _WX_GTK_TEXTENTRY_H_

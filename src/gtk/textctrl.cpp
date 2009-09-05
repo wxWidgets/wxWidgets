@@ -818,6 +818,11 @@ GtkEditable *wxTextCtrl::GetEditable() const
     return GTK_EDITABLE(m_text);
 }
 
+GtkEntry *wxTextCtrl::GetEntry() const
+{
+    return GTK_ENTRY(m_text);
+}
+
 // ----------------------------------------------------------------------------
 // flags handling
 // ----------------------------------------------------------------------------
