@@ -1163,9 +1163,42 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    if test "$wxUSE_MAC" = 1; then
+    OSX_VERSION=`sw_vers -productVersion | grep 10.[[0-9]]`
+    if test "$wxUSE_OSX_CARBON" = 1 -o "x$OSX_VERSION" = "x10.4"; then
         # otherwise configure stops on leopard for universal_binary
         wxUSE_MACOSX_VERSION_MIN=10.4
+    else
+        # for OS X Cocoa, use 10.5 so we can get 64-bit compile on Snow Leopard
+        wxUSE_MACOSX_VERSION_MIN=10.5
+    fi
+fi
+
+NEEDS_GCC40="no"
+if test "x$wxUSE_MACOSX_VERSION_MIN" == "x10.4"; then
+    NEEDS_GCC40="yes"
+fi
+
+if test "$wxUSE_OSX_CARBON" = 1; then
+    NEEDS_GCC40="yes"
+fi
+
+if test "x$NEEDS_GCC40" == "xyes"; then
+    # gcc 4.2 cannot compile 10.4 compatible code, so if the user is using it
+    # and wants 10.4 compatible code, then 'downgrade' to 4.0
+    # This is also the simplest way to get 32-bit binaries on Snow Leopard.
+    if test "x$CC" = "xgcc"; then
+        CCVERSION=`$CC --version | grep 4.[[2-9]].`
+        if test "x$CCVERSION" != "x"; then
+            echo "$as_me:$LINENO: WARNING: gcc >= 4.2 cannot compile 10.4 compatible code. Using gcc 4.0 instead."
+            CC="/usr/bin/gcc-4.0"
+        fi
+    fi
+
+    if test "x$CXX" = "xg++"; then
+        CCVERSION=`$CXX --version | grep 4.[[2-9]].`
+        if test "x$CCVERSION" != "x"; then
+            CXX="/usr/bin/g++-4.0"
+        fi
     fi
 fi
 
