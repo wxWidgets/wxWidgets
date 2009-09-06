@@ -19,6 +19,8 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
+#include "wx/gdicmn.h"              // for wxPoint
+
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
 // ----------------------------------------------------------------------------
