@@ -606,11 +606,31 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         wxDateTime date( variant.GetDateTime() );
         oleVariant.vt = VT_DATE;
 
+        // we ought to use SystemTimeToVariantTime() here but this code is
+        // untested and hence currently disabled, please let us know if it
+        // works for you and we'll enable it
+#if 0
+        const wxDateTime::Tm tm(date.GetTm());
+
+        SYSTEMTIME st;
+        st.wYear = (WXWORD)tm.year;
+        st.wMonth = (WXWORD)(tm.mon - wxDateTime::Jan + 1);
+        st.wDay = tm.mday;
+
+        st.wDayOfWeek = 0;
+        st.wHour = tm.hour;
+        st.wMinute = tm.min;
+        st.wSecond = tm.sec;
+        st.wMilliseconds = tm.msec;
+
+        SystemTimeToVariantTime(&st, &oleVariant.date);
+#else
         long dosDateTime = date.GetAsDOS();
         short dosDate = short((dosDateTime & 0xFFFF0000) >> 16);
         short dosTime = short(dosDateTime & 0xFFFF);
 
         DosDateTimeToVariantTime(dosDate, dosTime, & oleVariant.date);
+#endif
     }
 #endif
     else if (type == wxT("void*"))
@@ -689,14 +709,17 @@ WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& 
     case VT_DATE:
         {
 #if wxUSE_DATETIME
-            unsigned short dosDate = 0;
-            unsigned short dosTime = 0;
-            VariantTimeToDosDateTime(oleVariant.date, & dosDate, & dosTime);
+            SYSTEMTIME st;
+            VariantTimeToSystemTime(oleVariant.date, &st);
 
-            long dosDateTime = (dosDate << 16) | dosTime;
             wxDateTime date;
-            date.SetFromDOS(dosDateTime);
             variant = date;
+            date.Set(st.wDay,
+                     (wxDateTime::Month)(wxDateTime::Jan + st.wMonth - 1),
+                     st.wYear,
+                     st.wHour,
+                     st.wMinute,
+                     st.wSecond);
 #endif
             break;
         }
