@@ -107,7 +107,8 @@ void wxPropertyGridIteratorBase::Assign( const wxPropertyGridIteratorBase& it )
 void wxPropertyGridIteratorBase::Prev()
 {
     wxPGProperty* property = m_property;
-    wxASSERT( property );
+    if ( !property )
+        return;
 
     wxPGProperty* parent = property->GetParent();
     wxASSERT( parent );
@@ -152,7 +153,8 @@ void wxPropertyGridIteratorBase::Prev()
 void wxPropertyGridIteratorBase::Next( bool iterateChildren )
 {
     wxPGProperty* property = m_property;
-    wxASSERT( property );
+    if ( !property )
+        return;
 
     if ( property->GetChildCount() &&
          wxPG_ITERATOR_PARENTEXMASK_TEST(property, m_parentExMask) &&
