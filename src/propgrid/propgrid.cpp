@@ -4802,6 +4802,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
              event.LeftIsDown() &&
              m_propHover &&
              GetSelection() &&
+             columnHit != 1 &&
              !state->DoIsPropertySelected(m_propHover) )
         {
             // Additional requirement is that the hovered property
