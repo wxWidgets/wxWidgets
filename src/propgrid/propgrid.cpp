@@ -4798,13 +4798,32 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
         //
         // Multi select by dragging
         //
-        if ( GetExtraStyle() & wxPG_EX_MULTIPLE_SELECTION &&
+        if ( (GetExtraStyle() & wxPG_EX_MULTIPLE_SELECTION) &&
              event.LeftIsDown() &&
              m_propHover &&
              GetSelection() &&
              !state->DoIsPropertySelected(m_propHover) )
         {
-            DoAddToSelection(m_propHover);
+            // Additional requirement is that the hovered property
+            // is adjacent to edges of selection.
+            const wxArrayPGProperty& selection = GetSelectedProperties();
+
+            // Since categories cannot be selected along with 'other'
+            // properties, exclude them from iterator flags.
+            int iterFlags = wxPG_ITERATE_VISIBLE & (~wxPG_PROP_CATEGORY);
+
+            for ( int i=(selection.size()-1); i>=0; i-- )
+            {
+                // TODO: This could be optimized by keeping track of
+                //       which properties are at the edges of selection.
+                wxPGProperty* selProp = selection[i];
+                if ( state->ArePropertiesAdjacent(m_propHover, selProp,
+                                                  iterFlags) )
+                {
+                    DoAddToSelection(m_propHover);
+                    break;
+                }
+            }
         }
     }
     return true;

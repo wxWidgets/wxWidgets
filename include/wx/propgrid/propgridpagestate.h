@@ -669,6 +669,11 @@ public:
 
 protected:
 
+    // Utility to check if two properties are visibly next to each other
+    bool ArePropertiesAdjacent( wxPGProperty* prop1,
+                                wxPGProperty* prop2,
+                                int iterFlags = wxPG_ITERATE_VISIBLE ) const;
+
     int DoGetSplitterPosition( int splitterIndex = 0 ) const;
 
     /** Returns column at x coordinate (in GetGrid()->GetPanel()).

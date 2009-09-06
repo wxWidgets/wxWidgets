@@ -1139,6 +1139,29 @@ int wxPropertyGridPageState::HitTestH( int x, int* pSplitterHit, int* pSplitterH
     return col;
 }
 
+bool wxPropertyGridPageState::ArePropertiesAdjacent( wxPGProperty* prop1,
+                                                     wxPGProperty* prop2,
+                                                     int iterFlags ) const
+{
+    const wxPGProperty* ap1 =
+        wxPropertyGridConstIterator::OneStep(this,
+                                             iterFlags,
+                                             prop1,
+                                             1);
+    if ( ap1 && ap1 == prop2 )
+        return true;
+
+    const wxPGProperty* ap2 =
+        wxPropertyGridConstIterator::OneStep(this,
+                                             iterFlags,
+                                             prop1,
+                                             -1);
+    if ( ap2 && ap2 == prop2 )
+        return true;
+
+    return false;
+}
+
 // -----------------------------------------------------------------------
 // wxPropertyGridPageState property value setting and getting
 // -----------------------------------------------------------------------
