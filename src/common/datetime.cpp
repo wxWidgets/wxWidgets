@@ -2356,7 +2356,7 @@ wxDateTime& wxDateTime::SetFromMSWSysTime(const SYSTEMTIME& st)
     return Set(st.wDay,
             static_cast<wxDateTime::Month>(wxDateTime::Jan + st.wMonth - 1),
             st.wYear,
-            0, 0, 0);
+            st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 }
 
 void wxDateTime::GetAsMSWSysTime(SYSTEMTIME* st) const
@@ -2367,11 +2367,11 @@ void wxDateTime::GetAsMSWSysTime(SYSTEMTIME* st) const
     st->wMonth = (WXWORD)(tm.mon - wxDateTime::Jan + 1);
     st->wDay = tm.mday;
 
-    st->wDayOfWeek =
-    st->wHour =
-    st->wMinute =
-    st->wSecond =
-    st->wMilliseconds = 0;
+    st->wDayOfWeek = 0;
+    st->wHour = tm.hour;
+    st->wMinute = tm.min;
+    st->wSecond = tm.sec;
+    st->wMilliseconds = tm.msec;
 }
 #endif // __WXMSW__
 

@@ -412,6 +412,7 @@ MSW:
 - Fix wxMDIChildFrame::SetSize() (Lars Rosenboom).
 - Fix wxTreeCtrl::UnselectItem() in single selection controls.
 - Allow customizing wxStandardPaths logic for program directory determination.
+- Use time in wxDateTime <-> SYSTEMTIME conversion (troelsk).
 
 i18n:
 
