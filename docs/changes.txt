@@ -413,6 +413,7 @@ MSW:
 - Fix wxTreeCtrl::UnselectItem() in single selection controls.
 - Allow customizing wxStandardPaths logic for program directory determination.
 - Use time in wxDateTime <-> SYSTEMTIME conversion (troelsk).
+- Setting colours for wxSpinCtrl now works.
 
 i18n:
 
