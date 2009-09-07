@@ -310,10 +310,10 @@ public:
     // Platform-specific default can be set with value-1.
     // Remarks
     // * This method may do nothing on some native implementations.
-    wxDEPRECTED( void SetTextIndent( int indent ) );
+    wxDEPRECATED( void SetTextIndent( int indent ) );
 
     // Returns actual indentation in pixels.
-    wxDEPRECTED( wxCoord GetTextIndent() const );
+    wxDEPRECATED( wxCoord GetTextIndent() const );
 #endif
 
     // Returns area covered by the text field.
