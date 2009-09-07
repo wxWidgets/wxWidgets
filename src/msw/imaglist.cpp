@@ -76,17 +76,15 @@ bool wxImageList::Create(int width, int height, bool mask, int initial)
 {
     UINT flags = 0;
 
-    // set appropriate color depth
+    // as we want to be able to use 32bpp bitmaps in the image lists, we always
+    // use ILC_COLOR32, even if the display resolution is less -- the system
+    // will make the best effort to show the bitmap if we do this resulting in
+    // quite acceptable display while using a lower depth ILC_COLOR constant
+    // (e.g. ILC_COLOR16) shows completely broken bitmaps
 #ifdef __WXWINCE__
     flags |= ILC_COLOR;
 #else
-    int dd = wxDisplayDepth();
-
-    if (dd <= 4)       flags |= ILC_COLOR;   // 16 color
-    else if (dd <= 8)  flags |= ILC_COLOR8;  // 256 color
-    else if (dd <= 16) flags |= ILC_COLOR16; // 64k hi-color
-    else if (dd <= 24) flags |= ILC_COLOR24; // 16m truecolor
-    else if (dd <= 32) flags |= ILC_COLOR32; // 16m truecolor
+    flags |= ILC_COLOR32;
 #endif
 
     if ( mask )
