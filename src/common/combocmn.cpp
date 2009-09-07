@@ -2299,7 +2299,7 @@ void wxComboCtrlBase::SetTextIndent( int indent )
     RecalcAndRefresh();
 }
 
-wxCoord wxComboCtrlBase::GetTextIndent() const;
+wxCoord wxComboCtrlBase::GetTextIndent() const
 {
     return m_marginLeft;
 }
