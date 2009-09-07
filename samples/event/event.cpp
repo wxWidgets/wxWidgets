@@ -34,6 +34,9 @@
     #include "../sample.xpm"
 #endif
 
+#include <wx/statline.h>
+#include <wx/log.h>
+
 // ----------------------------------------------------------------------------
 // event constants
 // ----------------------------------------------------------------------------
@@ -65,7 +68,55 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+
+    // these are regular event handlers used to highlight the events handling
+    // order
+    void OnClickDynamicHandlerApp(wxCommandEvent& event);
+    void OnClickStaticHandlerApp(wxCommandEvent& event);
+
+    // we override wxConsoleApp::FilterEvent used to highlight the events
+    // handling order
+    virtual int FilterEvent(wxEvent& event);
+
+private:
+    DECLARE_EVENT_TABLE()
 };
+
+// Define a custom button used to highlight the events handling order
+class MyEvtTestButton : public wxButton
+{
+public:
+    static long BUTTON_ID;
+
+    MyEvtTestButton(wxWindow *parent, const wxString& label)
+        : wxButton(parent, BUTTON_ID, label)
+    {
+        // Add a dynamic handler for this button event to button itself
+        Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+                wxCommandEventHandler(MyEvtTestButton::OnClickDynamicHandler));
+    }
+
+private:
+    void OnClickDynamicHandler(wxCommandEvent& event)
+    {
+        wxLogMessage("Step 3 in \"How Events are Processed\":\n"
+                     "Button::ownDynamicHandler");
+
+        event.Skip();
+    }
+
+    void OnClickStaticHandler(wxCommandEvent& event)
+    {
+        wxLogMessage("Step 4 in \"How Events are Processed\":\n"
+                     "Button::ownStaticHandler");
+
+        event.Skip();
+    }
+
+    DECLARE_EVENT_TABLE()
+};
+
+long MyEvtTestButton::BUTTON_ID = wxNewId();
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -90,6 +141,11 @@ public:
     void OnProcessCustom(wxCommandEvent& event);
 
     void OnUpdateUIPop(wxUpdateUIEvent& event);
+
+    // regular event handlers used to highlight the events handling order
+    void OnClickDynamicHandlerFrame(wxCommandEvent& event);
+    void OnClickDynamicHandlerButton(wxCommandEvent& event);
+    void OnClickStaticHandlerFrame(wxCommandEvent& event);
 
 private:
     // symbolic names for the status bar fields
@@ -121,6 +177,10 @@ private:
 
     // the button to whose event we connect dynamically
     wxButton *m_btnDynamic;
+
+    // the button used to highlight the event handlers execution order
+    MyEvtTestButton *m_testBtn;
+
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -170,8 +230,19 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWidgets events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
+// The event tables connect the wxWidgets events with the functions (event
+// handlers) which process them.
+BEGIN_EVENT_TABLE(MyApp, wxApp)
+    // Add a static handler for button Click event in the app
+    EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyApp::OnClickStaticHandlerApp)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyEvtTestButton, wxButton)
+    // Add a static handler to this button itself for its own event
+    EVT_BUTTON(BUTTON_ID, MyEvtTestButton::OnClickStaticHandler)
+END_EVENT_TABLE()
+
+// This can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Quit,  MyFrame::OnQuit)
@@ -194,6 +265,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     // the line below would also work if OnProcessCustom() were defined as
     // taking a wxEvent (as required by EVT_CUSTOM) and not wxCommandEvent
     //EVT_CUSTOM(wxEVT_MY_CUSTOM_COMMAND, wxID_ANY, MyFrame::OnProcessCustom)
+
+    // Add a static handler in the parent frame for button event
+    EVT_BUTTON(MyEvtTestButton::BUTTON_ID, MyFrame::OnClickStaticHandlerFrame)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
@@ -229,10 +303,49 @@ bool MyApp::OnInit()
     // created initially)
     frame->Show(true);
 
+    // Add a dynamic handler at the application level for the test button
+    Connect(MyEvtTestButton::BUTTON_ID, wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler(MyApp::OnClickDynamicHandlerApp));
+
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the
     // application would exit immediately.
     return true;
+}
+
+// This is always the first to handle an event !
+int MyApp::FilterEvent(wxEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED &&
+            event.GetId() == MyEvtTestButton::BUTTON_ID )
+    {
+        wxLogMessage("Step 0 in \"How Events are Processed\":\n"
+                     "App::FilterEvent");
+    }
+
+    return wxApp::FilterEvent(event);
+}
+
+void MyApp::OnClickDynamicHandlerApp(wxCommandEvent& event)
+{
+    wxLogMessage("Step 7, 3 in \"How Events are Processed\":\n"
+                 "App::DynamicHandler_InAppTable");
+
+    event.Skip();
+}
+
+void MyApp::OnClickStaticHandlerApp(wxCommandEvent& event)
+{
+    wxLogMessage("Step 7, 4 in \"How Events are Processed\":\n"
+                 "App::StaticHandler_InAppTable");
+
+    wxLogMessage("Button click processed, there should be no more messages "
+                 "about handling events from the button.\n\n"
+                 "The log below shows the order in which the handlers "
+                 "were executed.");
+    wxLog::FlushActive();
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -292,6 +405,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // wxUSE_STATUSBAR
 
     wxPanel * const panel = new wxPanel(this);
+    wxSizer * const mainSizer = new wxBoxSizer(wxVERTICAL);
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     const wxSizerFlags centreY(wxSizerFlags().Centre().Border());
     sizer->Add(new wxStaticText(panel, wxID_ANY,
@@ -299,7 +413,29 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
         centreY);
     m_btnDynamic = new wxButton(panel, Event_Dynamic, "&Dynamic button");
     sizer->Add(m_btnDynamic, centreY);
-    panel->SetSizer(sizer);
+
+    mainSizer->Add(sizer, 1, wxEXPAND);
+    mainSizer->Add(new wxStaticLine(panel), 0, wxEXPAND);
+    mainSizer->Add(new wxStaticLine(panel), 0, wxEXPAND);
+
+    m_testBtn = new MyEvtTestButton(panel, "Test Event Handlers Execution Order");
+
+    // After being created, an instance of MyEvtTestButton already has its own
+    // event handlers (see class definition);
+
+    // Add a dynamic handler for this button event in the parent frame
+    Connect(m_testBtn->GetId(), wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler(MyFrame::OnClickDynamicHandlerFrame));
+
+    // Bind a method of this frame (notice "this" argument!) to the button
+    // itself
+    m_testBtn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
+                       wxCommandEventHandler(MyFrame::OnClickDynamicHandlerButton),
+                       NULL,
+                       this);
+
+    mainSizer->Add(m_testBtn);
+    panel->SetSizer(mainSizer);
 }
 
 MyFrame::~MyFrame()
@@ -330,9 +466,33 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::OnClickStaticHandlerFrame(wxCommandEvent& event)
+{
+    wxLogMessage("Step 6, 4 in \"How Events are Processed\":\n"
+                 "parentWin::StaticHandler_InFrameTable");
+
+    event.Skip();
+}
+
 // ----------------------------------------------------------------------------
 // dynamic event handling stuff
 // ----------------------------------------------------------------------------
+
+void MyFrame::OnClickDynamicHandlerFrame(wxCommandEvent& event)
+{
+    wxLogMessage("Step 6, 3 in \"How Events are Processed\":\n"
+                 "parentWin::DynamicHandler_InFrameTable");
+
+    event.Skip();
+}
+
+void MyFrame::OnClickDynamicHandlerButton(wxCommandEvent& event)
+{
+    wxLogMessage("Step 3 in \"How Events are Processed\":\n"
+                 "parentWin::DynamicHandler_InButtonTable");
+
+    event.Skip();
+}
 
 void MyFrame::OnDynamic(wxCommandEvent& event)
 {

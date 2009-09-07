@@ -428,7 +428,10 @@ in simple situations where this extra flexibility is not needed.
 
 The previous sections explain how to define event handlers but don't address
 the question of how exactly wxWidgets finds the handler to call for the
-given event. This section describes the algorithm used in detail.
+given event. This section describes the algorithm used in detail. Notice that
+you may want to run the @ref page_samples_event while reading this section and
+look at its code and the output when the button which can be used to test the
+event handlers execution order is clicked to understand it better.
 
 When an event is received from the windowing system, wxWidgets calls
 wxEvtHandler::ProcessEvent() on the first event handler object belonging to the
@@ -454,7 +457,7 @@ doesn't count as having handled the event and the search continues):
     </li>
 
     <li value="3">
-    The list of dynamically bind event handlers, i.e., those for which
+    The list of dynamically bound event handlers, i.e., those for which
     Bind<>() was called, is consulted. Notice that this is done before
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
