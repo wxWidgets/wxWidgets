@@ -729,6 +729,10 @@ int wxCmdLineParser::Parse(bool showUsage)
                         m_data->m_arguments.insert
                             (m_data->m_arguments.begin() + n + 1, arg2);
                         count++;
+
+                        // only leave the part which wasn't extracted into the
+                        // next argument in this one
+                        arg = arg.Left(len + 1);
                     }
                     //else: it's our value, we'll deal with it below
                 }

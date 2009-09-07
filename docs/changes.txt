@@ -374,6 +374,7 @@ All:
 - Fix output buffer overflow in wxBase64Decode() (Eric W. Savage).
 - Added bilinear image resizing algorithm to wxImage (bishop).
 - Fix bug with position argument in wxImage::Size() (Byron Sorgdrager).
+- Fix bug with parsing concatenated switches in wxCmdLineParser (Mike Funduc).
 
 All (GUI):
 

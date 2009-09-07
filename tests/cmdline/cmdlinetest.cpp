@@ -21,6 +21,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/cmdline.h"
+#include "wx/msgout.h"
+#include "wx/scopeguard.h"
 
 // --------------------------------------------------------------------------
 // test class
@@ -34,10 +36,12 @@ public:
 private:
     CPPUNIT_TEST_SUITE( CmdLineTestCase );
         CPPUNIT_TEST( ConvertStringTestCase );
+        CPPUNIT_TEST( ParseSwitches );
         CPPUNIT_TEST( Usage );
     CPPUNIT_TEST_SUITE_END();
 
     void ConvertStringTestCase();
+    void ParseSwitches();
     void Usage();
 
     DECLARE_NO_COPY_CLASS(CmdLineTestCase)
@@ -115,6 +119,69 @@ void CmdLineTestCase::ConvertStringTestCase()
     #undef WX_ASSERT_DOS_ARGS_EQUAL
     #undef WX_ASSERT_UNIX_ARGS_EQUAL
     #undef WX_ASSERT_ARGS_EQUAL
+}
+
+void CmdLineTestCase::ParseSwitches()
+{
+    // install a dummy message output object just suppress error messages from
+    // wxCmdLineParser::Parse()
+    class NoMessageOutput : public wxMessageOutput
+    {
+    public:
+        virtual void Output(const wxString& WXUNUSED(str)) { }
+    } noMessages;
+
+    wxMessageOutput * const old = wxMessageOutput::Set(&noMessages);
+    wxON_BLOCK_EXIT1( wxMessageOutput::Set, old );
+
+    wxCmdLineParser p;
+    p.AddSwitch("a");
+    p.AddSwitch("b");
+    p.AddSwitch("c");
+    p.AddSwitch("d");
+
+    p.SetCmdLine("");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( !p.Found("a") );
+
+    p.SetCmdLine("-z");
+    CPPUNIT_ASSERT( p.Parse(false) != 0 );
+
+    p.SetCmdLine("-a");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( p.Found("a") );
+    CPPUNIT_ASSERT( !p.Found("b") );
+
+    p.SetCmdLine("-a -d");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( p.Found("a") );
+    CPPUNIT_ASSERT( !p.Found("b") );
+    CPPUNIT_ASSERT( !p.Found("c") );
+    CPPUNIT_ASSERT( p.Found("d") );
+
+    p.SetCmdLine("-abd");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( p.Found("a") );
+    CPPUNIT_ASSERT( p.Found("b") );
+    CPPUNIT_ASSERT( !p.Found("c") );
+    CPPUNIT_ASSERT( p.Found("d") );
+
+    p.SetCmdLine("-abdz");
+    CPPUNIT_ASSERT( p.Parse(false) != 0 );
+
+    p.SetCmdLine("-ab -cd");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( p.Found("a") );
+    CPPUNIT_ASSERT( p.Found("b") );
+    CPPUNIT_ASSERT( p.Found("c") );
+    CPPUNIT_ASSERT( p.Found("d") );
+
+    p.SetCmdLine("-da");
+    CPPUNIT_ASSERT_EQUAL(0, p.Parse(false) );
+    CPPUNIT_ASSERT( p.Found("a") );
+    CPPUNIT_ASSERT( !p.Found("b") );
+    CPPUNIT_ASSERT( !p.Found("c") );
+    CPPUNIT_ASSERT( p.Found("d") );
 }
 
 void CmdLineTestCase::Usage()
