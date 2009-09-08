@@ -79,6 +79,18 @@ public:
     // wxSpinButton doesn't accept focus, but we do
     virtual bool AcceptsFocus() const { return wxWindow::AcceptsFocus(); }
 
+    // we're like wxTextCtrl and not (default) wxButton
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL)
+    {
+        return GetCompositeControlsDefaultAttributes(variant);
+    }
+
     // for internal use only
 
     // get the subclassed window proc of the buddy text
