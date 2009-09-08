@@ -375,10 +375,6 @@ bool wxControl::MSWOnNotify(int idCtrl,
 WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 {
     HDC hdc = (HDC)pDC;
-    if ( m_hasFgCol )
-    {
-        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-    }
 
     WXHBRUSH hbr = 0;
     if ( !colBg.Ok() )
@@ -402,12 +398,14 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         hbr = (WXHBRUSH)brush->GetResourceHandle();
     }
 
-    // if we use custom background, we should set foreground ourselves too
-    if ( hbr && !m_hasFgCol )
+    // always set the foreground colour if we changed the background, whether
+    // m_hasFgCol is true or not: if it true, we must do it, of course, but
+    // even if it isn't, we must set the default foreground explicitly as by
+    // default just the simple black is used
+    if ( hbr )
     {
-        ::SetTextColor(hdc, ::GetSysColor(COLOR_WINDOWTEXT));
+        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
     }
-    //else: already set above
 
     return hbr;
 }
