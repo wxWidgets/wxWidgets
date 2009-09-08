@@ -68,10 +68,6 @@
 #undef wxLOG_COMPONENT
 const char *wxLOG_COMPONENT = "";
 
-#if wxUSE_THREADS
-
-wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
-
 // this macro allows to define an object which will be initialized before any
 // other function in this file is called: this is necessary to allow log
 // functions to be used during static initialization (this is not advisable
@@ -91,6 +87,10 @@ wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
     }                                                                         \
                                                                               \
     type *gs_##name##Ptr = &Get##name()
+
+#if wxUSE_THREADS
+
+wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
 
 namespace
 {
