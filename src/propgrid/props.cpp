@@ -958,11 +958,17 @@ void wxEnumProperty::OnSetValue()
     wxString variantType = m_value.GetType();
 
     if ( variantType == wxPG_VARIANT_TYPE_LONG )
+    {
         ValueFromInt_( m_value, m_value.GetLong(), wxPG_FULL_VALUE );
+    }
     else if ( variantType == wxPG_VARIANT_TYPE_STRING )
+    {
         ValueFromString_( m_value, m_value.GetString(), 0 );
+    }
     else
+    {
         wxFAIL;
+    }
 
     if ( ms_nextIndex != -2 )
     {
