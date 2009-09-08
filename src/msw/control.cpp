@@ -398,8 +398,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
         ::SetBkColor(hdc, wxColourToRGB(colBg));
 
         // draw children with the same colour as the parent
-        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg,
-                                                           wxBRUSHSTYLE_SOLID);
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg);
         hbr = (WXHBRUSH)brush->GetResourceHandle();
     }
 
@@ -415,14 +414,13 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
 
 WXHBRUSH wxControl::MSWControlColor(WXHDC pDC, WXHWND hWnd)
 {
-    wxColour colBg;
-
     if ( HasTransparentBackground() )
         ::SetBkMode((HDC)pDC, TRANSPARENT);
-    else // if the control is opaque it shouldn't use the parents background
-        colBg = GetBackgroundColour();
 
-    return DoMSWControlColor(pDC, colBg, hWnd);
+    // don't pass any background colour to DoMSWControlColor(), our own
+    // background colour will be used by it only if it is set, otherwise the
+    // defaults will be used
+    return DoMSWControlColor(pDC, wxColour(), hWnd);
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
