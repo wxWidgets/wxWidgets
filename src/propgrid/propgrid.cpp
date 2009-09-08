@@ -559,7 +559,7 @@ void wxPropertyGrid::Init2()
     m_timeCreated = ::wxGetLocalTimeMillis();
 
     m_canvas = new wxPGCanvas();
-    m_canvas->Create(this, 1, wxPoint(0, 0), GetClientSize(),
+    m_canvas->Create(this, wxID_ANY, wxPoint(0, 0), GetClientSize(),
                      wxWANTS_CHARS | wxCLIP_CHILDREN);
     m_canvas->SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
