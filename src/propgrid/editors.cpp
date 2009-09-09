@@ -147,7 +147,7 @@
 #endif
 
 // Number added to image width for SetCustomPaintWidth
-#define ODCB_CUST_PAINT_MARGIN               9
+#define ODCB_CUST_PAINT_MARGIN               6
 
 // Milliseconds to wait for two mouse-ups after focus inorder
 // to trigger a double-click.
@@ -786,23 +786,28 @@ bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBo
     wxPGProperty* property = propGrid->GetSelectedProperty();
     wxASSERT( property );
 
+    wxSize imageSize;
+    bool res;
+
     if ( cmnVal >= 0 )
     {
         // Yes, a common value is being selected
         property->SetCommonValue( cmnVal );
-        wxSize imageSize = propGrid->GetCommonValue(cmnVal)->
+        imageSize = propGrid->GetCommonValue(cmnVal)->
                             GetRenderer()->GetImageSize(property, 1, cmnVal);
-        if ( imageSize.x ) imageSize.x += ODCB_CUST_PAINT_MARGIN;
-        cb->SetCustomPaintWidth( imageSize.x );
-        return false;
+        res = false;
     }
     else
     {
-        wxSize imageSize = propGrid->GetImageSize(property, -1);
-        if ( imageSize.x ) imageSize.x += ODCB_CUST_PAINT_MARGIN;
-        cb->SetCustomPaintWidth( imageSize.x );
-        return true;
+        imageSize = propGrid->GetImageSize(property, -1);
+        res = true;
     }
+
+    if ( imageSize.x )
+        imageSize.x += ODCB_CUST_PAINT_MARGIN;
+    cb->SetCustomPaintWidth( imageSize.x );
+
+    return res;
 }
 
 // CreateControls calls this with CB_READONLY in extraStyle
