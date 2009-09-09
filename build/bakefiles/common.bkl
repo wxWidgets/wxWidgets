@@ -603,6 +603,8 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <libname>$(WXLIBNAME)</libname>
 
+        <define>WXBUILDING</define>
+
         <if cond="WX_DISABLE_PRECOMP_HEADERS=='0'">
             <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL','PM','WINCE']">
                 <sources>$(WXTOPDIR)src/common/dummy.cpp</sources>
