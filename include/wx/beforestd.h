@@ -63,3 +63,13 @@
     #pragma warning(disable:4786)
 #endif // VC++ < 7
 
+/*
+    Recent versions of Sun C++ compiler use _T in their standard headers and
+    our definition of it in wx/wxchar.h conflicts with them and breaks
+    compilation, so undefine _T before including them and redefine it back in
+    wx/afterstd.h if needed.
+ */
+#if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
+    #undef _T
+#endif /* SUNCC */
+

@@ -46,3 +46,26 @@
     #endif
 #endif
 
+/*
+    Redefine _T if we undefined it in wx/beforestd.h (see comment there about
+    why do we do it) and if we need it (we always do when building wx itself
+    and might also need when compiling the user code but this must be indicated
+    by the special wxNEEDS__T macro)
+ */
+#if defined(__SUNPRO_CC) || defined(__SUNPRO_C)
+    #if defined(WXBUILDING) || defined(wxNEEDS_T)
+        /*
+            Undefine _T in case it was defined in the standard header.
+         */
+        #undef _T
+
+        /*
+            And define it again in the same way as it's done in wx/wxchar.h.
+         */
+        #if wxUSE_UNICODE
+            #define _T(x) wxCONCAT_HELPER(L, x)
+        #else /* !Unicode */
+            #define _T(x) x
+        #endif /* Unicode/!Unicode */
+    #endif /* we need _T() to be defined */
+#endif /* defined(__SUNPRO_CC) || defined(__SUNPRO_C) */
