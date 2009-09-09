@@ -227,29 +227,41 @@
 #endif /* ASCII/Unicode */
 
 /* ---------------------------------------------------------------------------- */
-/* define _T() and related macros */
+/* define wxT() and related macros */
 /* ---------------------------------------------------------------------------- */
 
-/* BSD systems define _T() to be something different in ctype.h, override it */
-#if defined(__FreeBSD__) || defined(__DARWIN__)
-    #include <ctype.h>
-    #undef _T
+#if wxUSE_UNICODE
+    /* use wxCONCAT_HELPER so that x could be expanded if it's a macro */
+    #define wxT(x) wxCONCAT_HELPER(L, x)
+#else /* !Unicode */
+    #define wxT(x) x
+#endif /* Unicode/!Unicode */
+
+/*
+    We define _T() as a synonym of wxT() for backwards compatibility and also
+    for the benefit of Windows programmers used to it. But this identifier is a
+    reserved one and this does create problems in practice, notably with Sun CC
+    which uses it in the recent versions of its standard headers. So avoid
+    defining it for this compiler at all, unless it was explicitly requested by
+    predefining wxNEEDS__T macro before including this header or if we're
+    building wx itself which does need and compiles fine thanks to the special
+    workarounds for Sun CC in wx/{before,after}std.h.
+ */
+#ifndef wxNEEDS__T
+    #if defined(WXBUILDING) || !(defined (__SUNPRO_C) || defined(__SUNPRO_CC))
+        #define wxNEEDS__T
+    #endif
 #endif
 
-/* could already be defined by tchar.h (it's quasi standard) */
-#ifndef _T
-    #if !wxUSE_UNICODE
-        #define _T(x) x
-    #else /* Unicode */
-        /* use wxCONCAT_HELPER so that x could be expanded if it's a macro */
-        #define _T(x) wxCONCAT_HELPER(L, x)
-    #endif /* ASCII/Unicode */
-#endif /* !defined(_T) */
+#ifdef wxNEEDS__T
+    /* BSDs define _T() to be something different in ctype.h, override it */
+    #if defined(__FreeBSD__) || defined(__DARWIN__)
+        #include <ctype.h>
+    #endif
+    #undef _T
 
-/* although global macros with such names are normally bad, we want to have */
-/* another name for _T() which should be used to avoid confusion between _T() */
-/* and _() in wxWidgets sources */
-#define wxT(x)       _T(x)
+    #define _T(x) wxT(x)
+#endif /* wxNEEDS__T */
 
 /* this macro exists only for forward compatibility with wx 3.0 */
 #define wxS(x)       _T(x)
