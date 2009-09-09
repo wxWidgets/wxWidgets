@@ -8,6 +8,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// To fix compilation when using Sun CC we must define _T() for this file.
+#define wxNEEDS_T
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
