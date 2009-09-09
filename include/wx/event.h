@@ -451,7 +451,7 @@ public:
     wxPropagateOnce(wxEvent& event) : m_event(event)
     {
         wxASSERT_MSG( m_event.m_propagationLevel > 0,
-                        _T("shouldn't be used unless ShouldPropagate()!") );
+                        wxT("shouldn't be used unless ShouldPropagate()!") );
 
         m_event.m_propagationLevel--;
     }
@@ -1398,7 +1398,7 @@ public:
         // m_loggingOff flag is only used by wxEVT_[QUERY_]END_SESSION, it
         // doesn't make sense for wxEVT_CLOSE_WINDOW
         wxASSERT_MSG( m_eventType != wxEVT_CLOSE_WINDOW,
-                      _T("this flag is for end session events only") );
+                      wxT("this flag is for end session events only") );
 
         return m_loggingOff;
     }

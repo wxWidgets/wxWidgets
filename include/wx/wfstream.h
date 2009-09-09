@@ -132,7 +132,7 @@ private:
 class WXDLLIMPEXP_BASE wxFFileInputStream : public wxInputStream
 {
 public:
-    wxFFileInputStream(const wxString& fileName, const wxChar *mode = _T("rb"));
+    wxFFileInputStream(const wxString& fileName, const wxChar *mode = wxT("rb"));
     wxFFileInputStream(wxFFile& file);
     wxFFileInputStream(FILE *file);
     virtual ~wxFFileInputStream();
@@ -160,7 +160,7 @@ protected:
 class WXDLLIMPEXP_BASE wxFFileOutputStream : public wxOutputStream
 {
 public:
-    wxFFileOutputStream(const wxString& fileName, const wxChar *mode = _T("w+b"));
+    wxFFileOutputStream(const wxString& fileName, const wxChar *mode = wxT("w+b"));
     wxFFileOutputStream(wxFFile& file);
     wxFFileOutputStream(FILE *file);
     virtual ~wxFFileOutputStream();

@@ -116,7 +116,7 @@ enum wxPluginCategory
 // type only once, as the first parameter, and creating a variable of this type
 // called "pfn<name>" initialized with the "name" from the "dynlib"
 #define wxDYNLIB_FUNCTION(type, name, dynlib) \
-    type pfn ## name = (type)(dynlib).GetSymbol(_T(#name))
+    type pfn ## name = (type)(dynlib).GetSymbol(wxT(#name))
 
 // ----------------------------------------------------------------------------
 // wxDynamicLibraryDetails: contains details about a loaded wxDynamicLibrary

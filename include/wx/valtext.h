@@ -99,9 +99,9 @@ protected:
     bool CheckValidator() const
     {
         wxCHECK_MSG( m_validatorWindow, false,
-                     _T("No window associated with validator") );
+                     wxT("No window associated with validator") );
         wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
-                     _T("wxTextValidator is only for wxTextCtrl's") );
+                     wxT("wxTextValidator is only for wxTextCtrl's") );
 
         return true;
     }

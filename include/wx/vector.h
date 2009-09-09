@@ -105,7 +105,7 @@ public:
     {
         if ( !Alloc(n) )
         {
-            wxFAIL_MSG( _T("out of memory in wxVector::reserve()") );
+            wxFAIL_MSG( wxT("out of memory in wxVector::reserve()") );
         }
     }
 

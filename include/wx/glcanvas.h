@@ -44,7 +44,7 @@ enum
     WX_GL_MIN_ACCUM_ALPHA  /* use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits) */
 };
 
-#define wxGLCanvasName _T("GLCanvas")
+#define wxGLCanvasName wxT("GLCanvas")
 
 #if defined(__WXMSW__)
 #include "wx/msw/glcanvas.h"

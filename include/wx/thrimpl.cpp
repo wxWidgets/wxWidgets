@@ -39,7 +39,7 @@ bool wxMutex::IsOk() const
 wxMutexError wxMutex::Lock()
 {
     wxCHECK_MSG( m_internal, wxMUTEX_INVALID,
-                 _T("wxMutex::Lock(): not initialized") );
+                 wxT("wxMutex::Lock(): not initialized") );
 
     return m_internal->Lock();
 }
@@ -47,7 +47,7 @@ wxMutexError wxMutex::Lock()
 wxMutexError wxMutex::TryLock()
 {
     wxCHECK_MSG( m_internal, wxMUTEX_INVALID,
-                 _T("wxMutex::TryLock(): not initialized") );
+                 wxT("wxMutex::TryLock(): not initialized") );
 
     return m_internal->TryLock();
 }
@@ -55,7 +55,7 @@ wxMutexError wxMutex::TryLock()
 wxMutexError wxMutex::Unlock()
 {
     wxCHECK_MSG( m_internal, wxMUTEX_INVALID,
-                 _T("wxMutex::Unlock(): not initialized") );
+                 wxT("wxMutex::Unlock(): not initialized") );
 
     return m_internal->Unlock();
 }
@@ -243,7 +243,7 @@ bool wxCondition::IsOk() const
 wxCondError wxCondition::Wait()
 {
     wxCHECK_MSG( m_internal, wxCOND_INVALID,
-                 _T("wxCondition::Wait(): not initialized") );
+                 wxT("wxCondition::Wait(): not initialized") );
 
     return m_internal->Wait();
 }
@@ -251,7 +251,7 @@ wxCondError wxCondition::Wait()
 wxCondError wxCondition::WaitTimeout(unsigned long milliseconds)
 {
     wxCHECK_MSG( m_internal, wxCOND_INVALID,
-                 _T("wxCondition::Wait(): not initialized") );
+                 wxT("wxCondition::Wait(): not initialized") );
 
     return m_internal->WaitTimeout(milliseconds);
 }
@@ -259,7 +259,7 @@ wxCondError wxCondition::WaitTimeout(unsigned long milliseconds)
 wxCondError wxCondition::Signal()
 {
     wxCHECK_MSG( m_internal, wxCOND_INVALID,
-                 _T("wxCondition::Signal(): not initialized") );
+                 wxT("wxCondition::Signal(): not initialized") );
 
     return m_internal->Signal();
 }
@@ -267,7 +267,7 @@ wxCondError wxCondition::Signal()
 wxCondError wxCondition::Broadcast()
 {
     wxCHECK_MSG( m_internal, wxCOND_INVALID,
-                 _T("wxCondition::Broadcast(): not initialized") );
+                 wxT("wxCondition::Broadcast(): not initialized") );
 
     return m_internal->Broadcast();
 }
@@ -299,7 +299,7 @@ bool wxSemaphore::IsOk() const
 wxSemaError wxSemaphore::Wait()
 {
     wxCHECK_MSG( m_internal, wxSEMA_INVALID,
-                 _T("wxSemaphore::Wait(): not initialized") );
+                 wxT("wxSemaphore::Wait(): not initialized") );
 
     return m_internal->Wait();
 }
@@ -307,7 +307,7 @@ wxSemaError wxSemaphore::Wait()
 wxSemaError wxSemaphore::TryWait()
 {
     wxCHECK_MSG( m_internal, wxSEMA_INVALID,
-                 _T("wxSemaphore::TryWait(): not initialized") );
+                 wxT("wxSemaphore::TryWait(): not initialized") );
 
     return m_internal->TryWait();
 }
@@ -315,7 +315,7 @@ wxSemaError wxSemaphore::TryWait()
 wxSemaError wxSemaphore::WaitTimeout(unsigned long milliseconds)
 {
     wxCHECK_MSG( m_internal, wxSEMA_INVALID,
-                 _T("wxSemaphore::WaitTimeout(): not initialized") );
+                 wxT("wxSemaphore::WaitTimeout(): not initialized") );
 
     return m_internal->WaitTimeout(milliseconds);
 }
@@ -323,7 +323,7 @@ wxSemaError wxSemaphore::WaitTimeout(unsigned long milliseconds)
 wxSemaError wxSemaphore::Post()
 {
     wxCHECK_MSG( m_internal, wxSEMA_INVALID,
-                 _T("wxSemaphore::Post(): not initialized") );
+                 wxT("wxSemaphore::Post(): not initialized") );
 
     return m_internal->Post();
 }

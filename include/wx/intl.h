@@ -45,13 +45,13 @@ enum wxLayoutDirection
 // --keyword="_" --keyword="wxPLURAL:1,2" options
 // to extract the strings from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define _(s)                     wxGetTranslation(_T(s))
-    #define wxPLURAL(sing, plur, n)  wxGetTranslation(_T(sing), _T(plur), n)
+    #define _(s)                     wxGetTranslation(wxT(s))
+    #define wxPLURAL(sing, plur, n)  wxGetTranslation(wxT(sing), wxT(plur), n)
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
-#define wxTRANSLATE(str) _T(str)
+#define wxTRANSLATE(str) wxT(str)
 
 // ----------------------------------------------------------------------------
 // forward decls
@@ -603,12 +603,12 @@ wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
 
 #if !defined(WXINTL_NO_GETTEXT_MACRO)
     #if !defined(_)
-        #define _(s)                 (_T(s))
+        #define _(s)                 (wxT(s))
     #endif
-    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? _T(sing) : _T(plur))
+    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? wxT(sing) : wxT(plur))
 #endif
 
-#define wxTRANSLATE(str) _T(str)
+#define wxTRANSLATE(str) wxT(str)
 
 inline const wxChar *
 wxGetTranslation(const wxChar *sz, const wxChar * WXUNUSED(domain) = NULL)
@@ -622,10 +622,10 @@ wxGetTranslation(const wxChar *sz, const wxChar * WXUNUSED(domain) = NULL)
 // wxTRANSLATE) too
 #if !defined(WXINTL_NO_GETTEXT_MACRO)
     #if !defined(gettext_noop)
-        #define gettext_noop(str) _T(str)
+        #define gettext_noop(str) wxT(str)
     #endif
     #if !defined(N_)
-        #define N_(s)             _T(s)
+        #define N_(s)             wxT(s)
     #endif
 #endif
 

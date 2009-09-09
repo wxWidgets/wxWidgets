@@ -177,7 +177,7 @@ public:
     long ToLong() const
     {
         wxASSERT_MSG( (m_ll >= LONG_MIN) && (m_ll <= LONG_MAX),
-                      _T("wxLongLong to long conversion loss of precision") );
+                      wxT("wxLongLong to long conversion loss of precision") );
 
         return wx_truncate_cast(long, m_ll);
     }
@@ -405,7 +405,7 @@ public:
     unsigned long ToULong() const
     {
         wxASSERT_MSG( m_ll <= LONG_MAX,
-                      _T("wxULongLong to long conversion loss of precision") );
+                      wxT("wxULongLong to long conversion loss of precision") );
 
         return wx_truncate_cast(unsigned long, m_ll);
     }
@@ -683,7 +683,7 @@ public:
     long ToLong() const
     {
         wxASSERT_MSG( (m_hi == 0l) || (m_hi == -1l),
-                      _T("wxLongLong to long conversion loss of precision") );
+                      wxT("wxLongLong to long conversion loss of precision") );
 
         return (long)m_lo;
     }
@@ -908,7 +908,7 @@ public:
     unsigned long ToULong() const
     {
         wxASSERT_MSG( m_hi == 0ul,
-                      _T("wxULongLong to long conversion loss of precision") );
+                      wxT("wxULongLong to long conversion loss of precision") );
 
         return (unsigned long)m_lo;
     }

@@ -42,11 +42,11 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
 // type names for grid table values
-#define wxGRID_VALUE_STRING     _T("string")
-#define wxGRID_VALUE_BOOL       _T("bool")
-#define wxGRID_VALUE_NUMBER     _T("long")
-#define wxGRID_VALUE_FLOAT      _T("double")
-#define wxGRID_VALUE_CHOICE     _T("choice")
+#define wxGRID_VALUE_STRING     wxT("string")
+#define wxGRID_VALUE_BOOL       wxT("bool")
+#define wxGRID_VALUE_NUMBER     wxT("long")
+#define wxGRID_VALUE_FLOAT      wxT("double")
+#define wxGRID_VALUE_CHOICE     wxT("choice")
 
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
@@ -472,7 +472,7 @@ protected:
 
     // string representation of m_valueOld
     wxString GetString() const
-        { return wxString::Format(_T("%ld"), m_valueOld); }
+        { return wxString::Format(wxT("%ld"), m_valueOld); }
 
 private:
     int m_min,
@@ -552,7 +552,7 @@ public:
 
     // set the string values returned by GetValue() for the true and false
     // states, respectively
-    static void UseStringValues(const wxString& valueTrue = _T("1"),
+    static void UseStringValues(const wxString& valueTrue = wxT("1"),
                                 const wxString& valueFalse = wxEmptyString);
 
     // return true if the given string is equal to the string representation of

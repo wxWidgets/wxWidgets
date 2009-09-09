@@ -27,14 +27,14 @@
 // which breaks the compilation below
 #undef index
 
-#define wxIMAGE_OPTION_QUALITY  wxString(_T("quality"))
-#define wxIMAGE_OPTION_FILENAME wxString(_T("FileName"))
+#define wxIMAGE_OPTION_QUALITY  wxString(wxT("quality"))
+#define wxIMAGE_OPTION_FILENAME wxString(wxT("FileName"))
 
-#define wxIMAGE_OPTION_RESOLUTION            wxString(_T("Resolution"))
-#define wxIMAGE_OPTION_RESOLUTIONX           wxString(_T("ResolutionX"))
-#define wxIMAGE_OPTION_RESOLUTIONY           wxString(_T("ResolutionY"))
+#define wxIMAGE_OPTION_RESOLUTION            wxString(wxT("Resolution"))
+#define wxIMAGE_OPTION_RESOLUTIONX           wxString(wxT("ResolutionX"))
+#define wxIMAGE_OPTION_RESOLUTIONY           wxString(wxT("ResolutionY"))
 
-#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(_T("ResolutionUnit"))
+#define wxIMAGE_OPTION_RESOLUTIONUNIT        wxString(wxT("ResolutionUnit"))
 
 // constants used with wxIMAGE_OPTION_RESOLUTIONUNIT
 enum

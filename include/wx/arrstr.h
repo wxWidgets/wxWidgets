@@ -152,7 +152,7 @@ public:
   wxString& Item(size_t nIndex) const
     {
         wxASSERT_MSG( nIndex < m_nCount,
-                      _T("wxArrayString: index out of bounds") );
+                      wxT("wxArrayString: index out of bounds") );
 
         return *(wxString *)&(m_pItems[nIndex]);
     }
@@ -163,7 +163,7 @@ public:
   wxString& Last() const
   {
       wxASSERT_MSG( !IsEmpty(),
-                    _T("wxArrayString: index out of bounds") );
+                    wxT("wxArrayString: index out of bounds") );
       return Item(Count() - 1);
   }
 

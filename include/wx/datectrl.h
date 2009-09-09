@@ -19,7 +19,7 @@
 #include "wx/control.h"         // the base class
 #include "wx/datetime.h"
 
-#define wxDatePickerCtrlNameStr _T("datectrl")
+#define wxDatePickerCtrlNameStr wxT("datectrl")
 
 // wxDatePickerCtrl styles
 enum

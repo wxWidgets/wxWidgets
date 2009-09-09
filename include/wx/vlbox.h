@@ -17,7 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxSelectionStore;
 
-#define wxVListBoxNameStr _T("wxVListBox")
+#define wxVListBoxNameStr wxT("wxVListBox")
 
 // ----------------------------------------------------------------------------
 // wxVListBox
@@ -86,7 +86,7 @@ public:
     int GetSelection() const
     {
         wxASSERT_MSG( !HasMultipleSelection(),
-                        _T("GetSelection() can't be used with wxLB_MULTIPLE") );
+                        wxT("GetSelection() can't be used with wxLB_MULTIPLE") );
 
         return m_current;
     }

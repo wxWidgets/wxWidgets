@@ -68,7 +68,7 @@ protected:
     // after that
     void AddDependency(wxClassInfo *dep)
     {
-        wxCHECK_RET( dep, _T("NULL module dependency") );
+        wxCHECK_RET( dep, wxT("NULL module dependency") );
 
         m_dependencies.Add(dep);
     }

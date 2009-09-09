@@ -207,7 +207,7 @@ private:
             bool operator==(const compatibility_iterator& i) const            \
             {                                                                 \
                 wxASSERT_MSG( m_list && i.m_list,                             \
-                              _T("comparing invalid iterators is illegal") ); \
+                              wxT("comparing invalid iterators is illegal") ); \
                 return (m_list == i.m_list) && (m_iter == i.m_iter);          \
             }                                                                 \
             bool operator!=(const compatibility_iterator& i) const            \

@@ -103,6 +103,10 @@ handler if you do wish to allow the item to be toggled.
 All:
 
 - Fixed crashes due to invalid input in PNG and TIFF image loaders (Tielei Wang).
+- Fix compilation of wxWidgets headers with recent Sun CC (Brian Cameron).
+  NB: If your code uses _T() macro you must either replace it with wxT() to
+      use Sun CC or define wxNEEDS__T before including wx headers and avoid
+      including many standard headers (again, only with this compiler).
 - Added several functions forward compatible with wxWidgets 3.0 (troelsk):
   wxDC::SetDeviceClippingRegion(), wxShowEvent::IsShown(),
   wxIconizeEvent::IsIconized(), wxFileName::StripExtension(),

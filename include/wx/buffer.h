@@ -286,7 +286,7 @@ public:
     // Other ways to append to the buffer
     void  AppendByte(char data)
     {
-        wxCHECK_RET( m_bufdata->m_data, _T("invalid wxMemoryBuffer") );
+        wxCHECK_RET( m_bufdata->m_data, wxT("invalid wxMemoryBuffer") );
 
         m_bufdata->ResizeIfNeeded(m_bufdata->m_len + 1);
         *(((char*)m_bufdata->m_data) + m_bufdata->m_len) = data;

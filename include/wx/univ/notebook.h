@@ -21,9 +21,9 @@ class WXDLLEXPORT wxSpinButton;
 // ----------------------------------------------------------------------------
 
 // change the page: to the next/previous/given one
-#define wxACTION_NOTEBOOK_NEXT      _T("nexttab")
-#define wxACTION_NOTEBOOK_PREV      _T("prevtab")
-#define wxACTION_NOTEBOOK_GOTO      _T("gototab")
+#define wxACTION_NOTEBOOK_NEXT      wxT("nexttab")
+#define wxACTION_NOTEBOOK_PREV      wxT("prevtab")
+#define wxACTION_NOTEBOOK_GOTO      wxT("gototab")
 
 // ----------------------------------------------------------------------------
 // wxNotebook

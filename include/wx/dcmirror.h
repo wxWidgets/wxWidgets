@@ -135,7 +135,7 @@ protected:
                            wxCoord x2, wxCoord y2,
                            wxCoord xc, wxCoord yc)
     {
-        wxFAIL_MSG( _T("this is probably wrong") );
+        wxFAIL_MSG( wxT("this is probably wrong") );
 
         m_dc.DoDrawArc(GetX(x1, y1), GetY(x1, y1),
                        GetX(x2, y2), GetY(x2, y2),
@@ -152,7 +152,7 @@ protected:
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea)
     {
-        wxFAIL_MSG( _T("this is probably wrong") );
+        wxFAIL_MSG( wxT("this is probably wrong") );
 
         m_dc.DoDrawEllipticArc(GetX(x, y), GetY(x, y),
                                GetX(w, h), GetY(w, h),
@@ -256,7 +256,7 @@ protected:
 
     virtual void DoSetClippingRegionAsRegion(const wxRegion& WXUNUSED(region))
     {
-        wxFAIL_MSG( _T("not implemented") );
+        wxFAIL_MSG( wxT("not implemented") );
     }
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,

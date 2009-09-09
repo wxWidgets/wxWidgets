@@ -18,9 +18,9 @@
 // the actions supported by wxCheckBox
 // ----------------------------------------------------------------------------
 
-#define wxACTION_CHECKBOX_CHECK   _T("check")   // SetValue(true)
-#define wxACTION_CHECKBOX_CLEAR   _T("clear")   // SetValue(false)
-#define wxACTION_CHECKBOX_TOGGLE  _T("toggle")  // toggle the check state
+#define wxACTION_CHECKBOX_CHECK   wxT("check")   // SetValue(true)
+#define wxACTION_CHECKBOX_CLEAR   wxT("clear")   // SetValue(false)
+#define wxACTION_CHECKBOX_TOGGLE  wxT("toggle")  // toggle the check state
 
 // additionally it accepts wxACTION_BUTTON_PRESS and RELEASE
 

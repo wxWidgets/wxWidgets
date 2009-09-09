@@ -26,7 +26,7 @@ class WXDLLEXPORT wxDirDialog: public wxDirDialogBase
 public:
     wxDirDialog(wxWindow *parent,
                 const wxString& message = wxDirSelectorPromptStr,
-                const wxString& defaultPath = _T(""),
+                const wxString& defaultPath = wxT(""),
                 long style = wxDD_DEFAULT_STYLE,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,

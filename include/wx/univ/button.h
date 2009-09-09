@@ -20,10 +20,10 @@ class WXDLLEXPORT wxInputHandler;
 // the actions supported by this control
 // ----------------------------------------------------------------------------
 
-#define wxACTION_BUTTON_TOGGLE  _T("toggle")    // press/release the button
-#define wxACTION_BUTTON_PRESS   _T("press")     // press the button
-#define wxACTION_BUTTON_RELEASE _T("release")   // release the button
-#define wxACTION_BUTTON_CLICK   _T("click")     // generate button click event
+#define wxACTION_BUTTON_TOGGLE  wxT("toggle")    // press/release the button
+#define wxACTION_BUTTON_PRESS   wxT("press")     // press the button
+#define wxACTION_BUTTON_RELEASE wxT("release")   // release the button
+#define wxACTION_BUTTON_CLICK   wxT("click")     // generate button click event
 
 // ----------------------------------------------------------------------------
 // wxButton: a push button

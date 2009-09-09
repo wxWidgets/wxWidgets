@@ -100,8 +100,8 @@ public:
     // blitting to) is destroyed.
     void UnMask()
     {
-        wxCHECK_RET( m_dc, _T("no underlying wxDC?") );
-        wxASSERT_MSG( m_buffer && m_buffer->IsOk(), _T("invalid backing store") );
+        wxCHECK_RET( m_dc, wxT("no underlying wxDC?") );
+        wxASSERT_MSG( m_buffer && m_buffer->IsOk(), wxT("invalid backing store") );
 
         wxCoord x = 0,
                 y = 0;
@@ -122,7 +122,7 @@ private:
     // common part of Init()s
     void InitCommon(wxDC *dc, int style)
     {
-        wxASSERT_MSG( !m_dc, _T("wxBufferedDC already initialised") );
+        wxASSERT_MSG( !m_dc, wxT("wxBufferedDC already initialised") );
 
         m_dc = dc;
         m_style = style;

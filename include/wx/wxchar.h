@@ -264,10 +264,10 @@
 #endif /* wxNEEDS__T */
 
 /* this macro exists only for forward compatibility with wx 3.0 */
-#define wxS(x)       _T(x)
+#define wxS(x)       wxT(x)
 
 /* a helper macro allowing to make another macro Unicode-friendly, see below */
-#define wxAPPLY_T(x) _T(x)
+#define wxAPPLY_T(x) wxT(x)
 
 /* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
 #ifndef __TFILE__
@@ -1126,7 +1126,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 
 #ifdef _WIN32_WCE
     #if _WIN32_WCE <= 211
-        #define isspace(c) ((c) == _T(' ') || (c) == _T('\t'))
+        #define isspace(c) ((c) == wxT(' ') || (c) == wxT('\t'))
     #endif
 #endif /* _WIN32_WCE */
 

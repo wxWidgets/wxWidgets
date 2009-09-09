@@ -134,7 +134,7 @@ public:
                                  const wxPoint& pt,
                                  wxHelpEvent::Origin origin)
     {
-        wxCHECK_MSG( window, false, _T("window must not be NULL") );
+        wxCHECK_MSG( window, false, wxT("window must not be NULL") );
 
         m_helptextAtPoint = pt;
         m_helptextOrigin = origin;

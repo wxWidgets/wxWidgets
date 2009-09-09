@@ -30,13 +30,13 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 /// separates group and entry names (probably shouldn't be changed)
 #ifndef wxCONFIG_PATH_SEPARATOR
-  #define   wxCONFIG_PATH_SEPARATOR     _T('/')
+  #define   wxCONFIG_PATH_SEPARATOR     wxT('/')
 #endif
 
 /// introduces immutable entries
 // (i.e. the ones which can't be changed from the local config file)
 #ifndef wxCONFIG_IMMUTABLE_PREFIX
-  #define   wxCONFIG_IMMUTABLE_PREFIX   _T('!')
+  #define   wxCONFIG_IMMUTABLE_PREFIX   wxT('!')
 #endif
 
 #if wxUSE_CONFIG

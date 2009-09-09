@@ -70,7 +70,7 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 
 // implementation only
 #define   wxASSERT_VALID_INDEX(i) \
-    wxASSERT_MSG( (size_t)(i) <= length(), _T("invalid index in wxString") )
+    wxASSERT_MSG( (size_t)(i) <= length(), wxT("invalid index in wxString") )
 
 // ----------------------------------------------------------------------------
 // constants
@@ -349,7 +349,7 @@ public:
   wxStringBase(const wxStringBase& stringSrc)
   {
     wxASSERT_MSG( stringSrc.GetStringData()->IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
 
     if ( stringSrc.empty() ) {
       // nothing to do for an empty string
@@ -376,7 +376,7 @@ public:
   wxStringBase(const wxStringBase& str, size_t nPos, size_t nLen)
   {
     wxASSERT_MSG( str.GetStringData()->IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
     Init();
     size_t strLen = str.length() - nPos; nLen = strLen < nLen ? strLen : nLen;
     InitWith(str.c_str(), nPos, nLen);
@@ -754,7 +754,7 @@ public:
   {
     Truncate(0);
 
-    wxASSERT_MSG( empty(), _T("string not empty after call to Empty()?") );
+    wxASSERT_MSG( empty(), wxT("string not empty after call to Empty()?") );
   }
     // empty the string and free memory
   void Clear()
@@ -785,7 +785,7 @@ public:
     // get last character
     wxChar  Last() const
       {
-          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+          wxASSERT_MSG( !empty(), wxT("wxString: index out of bounds") );
 
           return at(length() - 1);
       }
@@ -793,7 +793,7 @@ public:
     // get writable last character
     wxChar& Last()
       {
-          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+          wxASSERT_MSG( !empty(), wxT("wxString: index out of bounds") );
           return at(length() - 1);
       }
 
@@ -993,7 +993,7 @@ public:
   {
 #if !wxUSE_STL
     wxASSERT_MSG( s.GetStringData()->IsValid(),
-                  _T("did you forget to call UngetWriteBuf()?") );
+                  wxT("did you forget to call UngetWriteBuf()?") );
 #endif
 
     append(s);
@@ -1058,36 +1058,36 @@ public:
   // stream-like functions
       // insert an int into string
   wxString& operator<<(int i)
-    { return (*this) << Format(_T("%d"), i); }
+    { return (*this) << Format(wxT("%d"), i); }
       // insert an unsigned int into string
   wxString& operator<<(unsigned int ui)
-    { return (*this) << Format(_T("%u"), ui); }
+    { return (*this) << Format(wxT("%u"), ui); }
       // insert a long into string
   wxString& operator<<(long l)
-    { return (*this) << Format(_T("%ld"), l); }
+    { return (*this) << Format(wxT("%ld"), l); }
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
-    { return (*this) << Format(_T("%lu"), ul); }
+    { return (*this) << Format(wxT("%lu"), ul); }
 #if defined wxLongLong_t && !defined wxLongLongIsLong
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
     {
-      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("d");
+      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("d");
       return (*this) << Format(fmt, ll);
     }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
     {
-      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("u");
+      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("u");
       return (*this) << Format(fmt , ull);
     }
 #endif
       // insert a float into string
   wxString& operator<<(float f)
-    { return (*this) << Format(_T("%f"), f); }
+    { return (*this) << Format(wxT("%f"), f); }
       // insert a double into string
   wxString& operator<<(double d)
-    { return (*this) << Format(_T("%g"), d); }
+    { return (*this) << Format(wxT("%g"), d); }
 
   // string comparison
     // case-sensitive comparison (returns a value < 0, = 0 or > 0)

@@ -16,8 +16,8 @@
 
 #if wxUSE_GRID
 
-#define wxGRID_VALUE_CHOICEINT    _T("choiceint")
-#define wxGRID_VALUE_DATETIME     _T("datetime")
+#define wxGRID_VALUE_CHOICEINT    wxT("choiceint")
+#define wxGRID_VALUE_DATETIME     wxT("datetime")
 
 #if wxUSE_DATETIME
 
