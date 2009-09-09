@@ -66,13 +66,6 @@
 #define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxMSW
 
-#if !defined(__WXWINCE__)
-    // 1 if wxTextEntry::SetMargins() can be used to set the left margin
-    #define LEFT_MARGIN_CAN_BE_SET        1
-#else
-    #define LEFT_MARGIN_CAN_BE_SET        0
-#endif
-
 //#undef wxUSE_POPUPWIN
 //#define wxUSE_POPUPWIN 0
 
@@ -97,13 +90,6 @@
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxGTK
 
-#if GTK_CHECK_VERSION(2,10,0)
-    // 1 if wxTextEntry::SetMargins() can be used to set the left margin
-    #define LEFT_MARGIN_CAN_BE_SET    1
-#else
-    #define LEFT_MARGIN_CAN_BE_SET    0
-#endif
-
 #elif defined(__WXMAC__)
 
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
@@ -118,9 +104,6 @@
 #undef COMBO_MARGIN
 #define COMBO_MARGIN                  FOCUS_RING
 
-// 1 if wxTextEntry::SetMargins() can be used to set the left margin
-#define LEFT_MARGIN_CAN_BE_SET        0
-
 #else
 
 #define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
@@ -129,9 +112,6 @@
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0
-
-// 1 if wxTextEntry::SetMargins() can be used to set the left margin
-#define LEFT_MARGIN_CAN_BE_SET        0
 
 #endif
 
@@ -1085,14 +1065,26 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     int customBorder = m_widthCustomBorder;
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
-#if LEFT_MARGIN_CAN_BE_SET
-        // Call SetMargins() on textctrl if LEFT_MARGIN_CAN_BE_SET == 1
-        wxUnusedVar(textCtrlXAdjust);
-        m_text->SetMargins(0);
-        textCtrlXAdjust = 0;
-#endif
+        int x;
 
-        // Centre textctrl
+        if ( !m_widthCustomPaint )
+        {
+            // No special custom paint area - we can use 0 left margin
+            // with wxTextCtrl.
+            if ( m_text->SetMargins(0) )
+                textCtrlXAdjust = 0;
+            x = m_tcArea.x + m_marginLeft + textCtrlXAdjust;
+        }
+        else
+        {
+            // There is special custom paint area - it is better to
+            // use some margin with the wxTextCtrl.
+            m_text->SetMargins(m_marginLeft);
+            x = m_tcArea.x + m_widthCustomPaint + 
+                m_marginLeft + textCtrlXAdjust;
+        }
+
+        // Centre textctrl vertically, if needed
 #if !TEXTCTRL_TEXT_CENTERED
         int tcSizeY = m_text->GetBestSize().y;
         int diff0 = sz.y - tcSizeY;
@@ -1105,15 +1097,9 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         if ( y < customBorder )
             y = customBorder;
 
-        int x = m_tcArea.x + m_widthCustomPaint + 
-                m_marginLeft + textCtrlXAdjust;
-
         m_text->SetSize(x,
                         y,
                         m_tcArea.width - m_tcArea.x - x,
-                        /*m_tcArea.width - COMBO_MARGIN -
-                        (textCtrlXAdjust + m_widthCustomPaint +
-                         m_marginLeft),*/
                         -1 );
 
         // Make sure textctrl doesn't exceed the bottom custom border
@@ -1249,8 +1235,15 @@ bool wxComboCtrlBase::SetFont ( const wxFont& font )
     if ( !wxControl::SetFont(font) )
         return false;
 
-    if (m_text)
+    if ( m_text )
+    {
+        // Without hiding the wxTextCtrl there would be some
+        // visible 'flicker' (at least on Windows XP).
+        m_text->Hide();
         m_text->SetFont(font);
+        OnResize();
+        m_text->Show();
+    }
 
     return true;
 }
