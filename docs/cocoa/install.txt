@@ -1,3 +1,8 @@
+----------------------------------------------------------------------------
+NB: This is the old wxCocoa port, you almost certainly want to read
+    docs/osx/install.txt for instructions about building wxOSX/Cocoa instead.
+----------------------------------------------------------------------------
+
 wxCocoa is still a work in progress.
 
 To compile it, you will need Apple's Developer Tools.  However, please

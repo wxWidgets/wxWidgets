@@ -1,3 +1,8 @@
+----------------------------------------------------------------------------
+NB: This is the old wxCocoa port, you almost certainly want to read
+    docs/osx/readme.txt for information about wxOSX/Cocoa instead.
+----------------------------------------------------------------------------
+
 Welcome to wxCocoa
 
 wxCocoa is still very much a work in progress.  At this point quite a bit
