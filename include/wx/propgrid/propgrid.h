@@ -1772,6 +1772,9 @@ protected:
     // handling mess).
     wxWindow*           m_curFocused;
 
+    // Event currently being sent - NULL if none at the moment
+    wxPropertyGridEvent*    m_processedEvent;
+
     // Last known top-level parent
     wxWindow*           m_tlp;
 
