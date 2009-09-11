@@ -960,10 +960,16 @@ bool wxToolBar::Realize()
                             }
                         }
                     }
-                    wxString identifier = wxString::Format( wxT("%ld"), (long) tool );
-                    wxCFStringRef cfidentifier(identifier);
+                    if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
+                        [refTB insertItemWithItemIdentifier:NSToolbarSeparatorItemIdentifier atIndex:currentPosition];
+                    else
+                    {
+                            
+                        wxString identifier = wxString::Format( wxT("%ld"), (long) tool );
+                        wxCFStringRef cfidentifier(identifier);
 
-                    [refTB insertItemWithItemIdentifier:cfidentifier.AsNSString() atIndex:currentPosition];
+                        [refTB insertItemWithItemIdentifier:cfidentifier.AsNSString() atIndex:currentPosition];
+                    }
                     tool->SetIndex( currentPosition );
                 }
 
