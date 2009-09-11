@@ -280,11 +280,11 @@ wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000,
 
 /** Don't show divider above toolbar, on Windows.
 */
-wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
+wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x08000000,
 
 /** Show a separator below the toolbar.
 */
-wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000
+wxPG_EX_TOOLBAR_SEPARATOR               = 0x10000000
 
 };
 
