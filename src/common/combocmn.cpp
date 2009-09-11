@@ -1729,13 +1729,9 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
     {
         wxWindow* tc = GetTextCtrl();
         if ( tc && tc != DoFindFocus() )
-#ifdef __WXMAC__
-            m_resetFocus = true;
-#else
         {
             tc->SetFocus();
         }
-#endif
     }
 
     Refresh();
