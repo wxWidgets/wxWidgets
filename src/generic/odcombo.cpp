@@ -758,6 +758,11 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
             height = maxHeight;
 
         int totalHeight = GetTotalHeight(); // + 3;
+
+#if defined(__WXMAC__)
+        // Take borders into account, or there will be scrollbars even for one or two items.
+        totalHeight += 2;
+#endif
         if ( height >= totalHeight )
         {
             height = totalHeight;
