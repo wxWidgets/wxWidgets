@@ -1430,10 +1430,14 @@ void wxPGProperty::EnsureCells( unsigned int column )
         wxPropertyGrid* pg = GetGrid();
         wxPGCell defaultCell;
 
+        // Work around possible VC6 bug by using intermediate variables
+        const wxPGCell& propDefCell = pg->GetPropertyDefaultCell();
+        const wxPGCell& catDefCell = pg->GetCategoryDefaultCell();
+
         if ( !HasFlag(wxPG_PROP_CATEGORY) )
-            defaultCell = pg->GetPropertyDefaultCell();
+            defaultCell = propDefCell;
         else
-            defaultCell = pg->GetCategoryDefaultCell();
+            defaultCell = catDefCell;
 
         // TODO: Replace with resize() call
         unsigned int cellCountMax = column+1;

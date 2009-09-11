@@ -394,8 +394,10 @@ bool wxPropertyGrid::Create( wxWindow *parent,
                              const wxString& name )
 {
 
-    if ( !(style&wxBORDER_MASK) )
-        style |= wxSIMPLE_BORDER;
+    if (!(style&wxBORDER_MASK))
+    {
+        style |= wxBORDER_THEME;
+    }
 
     style |= wxVSCROLL;
 
@@ -635,7 +637,9 @@ wxPropertyGrid::~wxPropertyGrid()
     // Delete common value records
     for ( i=0; i<m_commonValues.size(); i++ )
     {
-        delete GetCommonValue(i);
+        // Use temporary variable to work around possible strange VC6 (asserts because m_size is zero)
+        wxPGCommonValue* value = m_commonValues[i];
+        delete value;
     }
 }
 
@@ -1451,7 +1455,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     DoClearSelection();
 
     bool res = wxScrolledWindow::SetFont( font );
-    if ( res && GetParent()) // may not have been Create()ed yet
+    if ( res && GetParent()) // may not have been Create()ed yet if SetFont called from SetWindowVariant
     {
         CalculateFontAndBitmapStuff( m_vspacing );
         Refresh();
@@ -2165,8 +2169,28 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         int y2 = y + lh;
 
+#ifdef __WXMSW__
         // Margin Edge
-        dc.DrawLine( greyDepthX, y, greyDepthX, y2 );
+        // Modified by JACS to not draw a margin if wxPG_HIDE_MARGIN is specified, since it
+        // looks better, at least under Windows when we have a themed border (the themed-window-specific
+        // whitespace between the real border and the propgrid margin exacerbates the double-border look).
+
+        // Is this or its parent themed?
+        bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
+            (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
+            (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
+#else
+        bool suppressMarginEdge = false;
+#endif
+        if (!suppressMarginEdge)
+            dc.DrawLine( greyDepthX, y, greyDepthX, y2 );
+        else
+        {
+            // Blank out the margin edge
+            dc.SetPen(wxPen(GetBackgroundColour()));
+            dc.DrawLine( greyDepthX, y, greyDepthX, y2 );
+            dc.SetPen( linepen );
+        }
 
         // Splitters
         unsigned int si;
@@ -4263,7 +4287,10 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     m_width = width;
     m_height = height;
 
-    m_canvas->SetSize( x, y );
+    // Explicitly pass the position - works around a bug in wxWidgets when the property grid
+    // has a native XP border and a contained window creeps up-and-left when size is set without
+    // the position.
+    m_canvas->SetSize( 0, 0, x, y );
 
     m_pState->CheckColumnWidths();
 

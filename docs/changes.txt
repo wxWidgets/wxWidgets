@@ -403,6 +403,9 @@ All (GUI):
 - Fixed wxOwnerDrawComboCtrl popup size on Mac (scrollbars were always shown).
 - Fixed wxOwnerDrawComboCtrl focus problem on Mac (first-time popup
   dismissed immediately as text control grabbed the focus).
+- wxPropertyGrid: added wxPG_NO_INTERNAL_BORDER, wxPG_EX_NO_TOOLBAR_DIVIDER
+  and wxPG_EX_TOOLBAR_SEPARATOR styles for finer control over borders.
+  Borders around property grid are now native for consistency.
 
 GTK:
 

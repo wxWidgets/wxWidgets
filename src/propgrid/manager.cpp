@@ -289,6 +289,11 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
                                 name );
     Init2(style);
 
+    // FIXME: this changes call ordering so wxPropertyGrid is created
+    // immediately, before SetExtraStyle has a chance to be called. However,
+    // without it, we may get assertions if size is wxDefaultSize.
+    //SetInitialSize(size);
+
     return res;
 }
 
@@ -329,15 +334,9 @@ void wxPropertyGridManager::Init1()
 // -----------------------------------------------------------------------
 
 // These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
-#ifndef __WXMAC__
-  #define wxPG_MAN_PROPGRID_FORCED_FLAGS (wxSIMPLE_BORDER| \
+#define wxPG_MAN_PROPGRID_FORCED_FLAGS (  wxBORDER_THEME | \
                                           wxNO_FULL_REPAINT_ON_RESIZE| \
                                           wxCLIP_CHILDREN)
-#else
-  #define wxPG_MAN_PROPGRID_FORCED_FLAGS (wxNO_BORDER| \
-                                          wxNO_FULL_REPAINT_ON_RESIZE| \
-                                          wxCLIP_CHILDREN)
-#endif
 
 // Which flags can be passed to underlying wxPropertyGrid.
 #define wxPG_MAN_PASS_FLAGS_MASK       (0xFFF0|wxTAB_TRAVERSAL)
@@ -380,10 +379,23 @@ void wxPropertyGridManager::Init2( int style )
    SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
 
+   long propGridFlags = (m_windowStyle&wxPG_MAN_PASS_FLAGS_MASK)
+                        |wxPG_MAN_PROPGRID_FORCED_FLAGS;
+
+   propGridFlags &= ~wxBORDER_MASK;
+
+   if ((style & wxPG_NO_INTERNAL_BORDER) == 0)
+   {
+       propGridFlags |= wxBORDER_THEME;
+   }
+   else
+   {
+       propGridFlags |= wxBORDER_NONE;
+       wxWindow::SetExtraStyle(wxPG_EX_TOOLBAR_SEPARATOR);
+   }
+
     // Create propertygrid.
-    m_pPropGrid->Create(this,baseId,wxPoint(0,0),csz,
-                        (m_windowStyle&wxPG_MAN_PASS_FLAGS_MASK)
-                            |wxPG_MAN_PROPGRID_FORCED_FLAGS);
+    m_pPropGrid->Create(this,baseId,wxPoint(0,0),csz, propGridFlags);
 
     m_pPropGrid->m_eventObject = this;
 
@@ -1089,6 +1101,9 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     {
         m_pToolbar->SetSize(0, 0, width, -1);
         propgridY += m_pToolbar->GetSize().y;
+
+        if (GetExtraStyle() & wxPG_EX_TOOLBAR_SEPARATOR)
+            propgridY += 1;
     }
 #endif
 
@@ -1169,8 +1184,20 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
 
+    if (GetExtraStyle() & wxPG_EX_TOOLBAR_SEPARATOR)
+    {
+        if (m_pToolbar && m_pPropGrid)
+        {
+            wxPen marginPen(m_pPropGrid->GetMarginColour());
+            dc.SetPen(marginPen);
+
+            int y = m_pPropGrid->GetPosition().y-1;
+            dc.DrawLine(0, y, GetClientSize().x, y);
+        }
+    }
+
     // Repaint splitter and any other description box decorations
-    if ( (r.y + r.height) >= m_splitterY )
+    if ( (r.y + r.height) >= m_splitterY && m_splitterY != -1)
         RepaintDescBoxDecorations( dc, m_splitterY, m_width, m_height );
 }
 
@@ -1211,10 +1238,13 @@ void wxPropertyGridManager::RecreateControls()
         // Has toolbar.
         if ( !m_pToolbar )
         {
+            long toolBarFlags = ((GetExtraStyle()&wxPG_EX_NO_FLAT_TOOLBAR)?0:wxTB_FLAT);
+            if (GetExtraStyle() & wxPG_EX_NO_TOOLBAR_DIVIDER)
+                toolBarFlags |= wxTB_NODIVIDER;
+
             m_pToolbar = new wxToolBar(this,baseId+ID_ADVTOOLBAR_OFFSET,
                                        wxDefaultPosition,wxDefaultSize,
-                                       ((GetExtraStyle()&wxPG_EX_NO_FLAT_TOOLBAR)?0:wxTB_FLAT)
-                                        /*| wxTB_HORIZONTAL | wxNO_BORDER*/ );
+                                       toolBarFlags);
             m_pToolbar->SetToolBitmapSize(wxSize(16, 15));
 
         #if defined(__WXMSW__)

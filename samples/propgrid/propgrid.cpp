@@ -2091,7 +2091,10 @@ void FormMain::CreateGrid( int style, int extraStyle )
                                   // event handling will obviously be broken.
                                   PGID, /*wxID_ANY*/
                                   wxDefaultPosition,
-                                  wxDefaultSize,
+                                  wxSize(100, 100), // FIXME: wxDefaultSize gives assertion in propgrid.
+                                                    // But calling SetInitialSize in manager changes the code
+                                                    // order to the grid gets created immediately, before SetExtraStyle
+                                                    // is called.
                                   style );
 
     m_propGrid = pgman->GetGrid();
@@ -2936,6 +2939,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_LIMITED_EDITING)
         ADD_FLAG(wxPG_TOOLBAR)
         ADD_FLAG(wxPG_DESCRIPTION)
+        ADD_FLAG(wxPG_NO_INTERNAL_BORDER)
         wxMultiChoiceDialog dlg( this, wxT("Select window styles to use"),
                                  wxT("wxPropertyGrid Window Style"), chs );
         dlg.SetSelections(sel);
@@ -2966,6 +2970,8 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_HIDE_PAGE_BUTTONS)
         ADD_FLAG(wxPG_EX_MULTIPLE_SELECTION)
         ADD_FLAG(wxPG_EX_ENABLE_TLP_TRACKING)
+        ADD_FLAG(wxPG_EX_NO_TOOLBAR_DIVIDER)
+        ADD_FLAG(wxPG_EX_TOOLBAR_SEPARATOR)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);

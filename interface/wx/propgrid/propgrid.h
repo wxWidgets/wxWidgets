@@ -89,7 +89,11 @@ wxPG_TOOLBAR                        = 0x00001000,
     wxPropertyGridManager only: Show adjustable text box showing description
     or help text, if available, for currently selected property.
 */
-wxPG_DESCRIPTION                    = 0x00002000
+wxPG_DESCRIPTION                    = 0x00002000,
+
+/** wxPropertyGridManager only: don't show an internal border around the property grid
+*/
+wxPG_NO_INTERNAL_BORDER             = 0x00004000
 
 };
 
@@ -178,7 +182,15 @@ wxPG_EX_MULTIPLE_SELECTION              = 0x02000000,
              wxPropertyGrid's top-level parent window on its own, then you
              are recommended to enable this style.
 */
-wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000
+wxPG_EX_ENABLE_TLP_TRACKING             = 0x04000000,
+
+/** Don't show divider above toolbar, on Windows.
+*/
+wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
+
+/** Show a separator below the toolbar.
+*/
+wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000
 
 };
 
