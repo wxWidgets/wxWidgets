@@ -400,6 +400,9 @@ All (GUI):
   HasScrollbar() really check for the scrollbar existence.
 - Added wxKeyEvent::IsKeyInCategory() (Jeff Tupper).
 - Add A0 and A1 paper formats support (Martin Perktold).
+- Fixed wxOwnerDrawComboCtrl popup size on Mac (scrollbars were always shown).
+- Fixed wxOwnerDrawComboCtrl focus problem on Mac (first-time popup
+  dismissed immediately as text control grabbed the focus).
 
 GTK:
 
