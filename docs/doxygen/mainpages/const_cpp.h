@@ -250,7 +250,10 @@ for the GUI applications (i.e. those which don't define @c wxUSE_GUI as 0).
 @beginDefList
 @itemdef{__WXWINDOWS__,
         always defined in wxWidgets applications, see also wxCHECK_VERSION}
-@itemdef{__WXDEBUG__, defined in debug mode, undefined in release mode}
+@itemdef{wxDEBUG_LEVEL, defined as 1 by default, may be pre-defined as 0 before
+        including wxWidgets headers to disable generation of any code at all
+        for the assertion macros, see @ref overview_debugging}
+@itemdef{__WXDEBUG__, defined if wxDEBUG_LEVEL is 1 or more, undefined otherwise}
 @itemdef{wxUSE_XXX,
         if defined as 1, feature XXX is active, see the
         @ref page_wxusedef (the symbols of this form are always defined,

@@ -156,6 +156,14 @@
 
 
 
+#define wxUSE_ON_FATAL_EXCEPTION 0
+
+#define wxUSE_STACKWALKER 0
+
+#define wxUSE_DEBUGREPORT 0
+
+
+
 #define wxUSE_DEBUG_CONTEXT 0
 
 #define wxUSE_MEMORY_TRACING 0
@@ -164,11 +172,6 @@
 
 #define wxUSE_DEBUG_NEW_ALWAYS 0
 
-#define wxUSE_ON_FATAL_EXCEPTION 0
-
-#define wxUSE_STACKWALKER 0
-
-#define wxUSE_DEBUGREPORT 0
 
 
 #ifndef wxUSE_UNICODE
