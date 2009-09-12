@@ -490,6 +490,42 @@ wxMBConv::cWC2MB(const wchar_t *inBuff, size_t inLen, size_t *outLen) const
     return wxCharBuffer();
 }
 
+const wxWCharBuffer wxMBConv::cMB2WC(const wxScopedCharBuffer& buf) const
+{
+    const size_t srcLen = buf.length();
+    if ( srcLen )
+    {
+        const size_t dstLen = ToWChar(NULL, 0, buf, srcLen);
+        if ( dstLen != wxCONV_FAILED )
+        {
+            wxWCharBuffer wbuf(dstLen);
+            wbuf.data()[dstLen] = L'\0';
+            if ( ToWChar(wbuf.data(), dstLen, buf, srcLen) != wxCONV_FAILED )
+                return wbuf;
+        }
+    }
+
+    return wxWCharBuffer();
+}
+
+const wxCharBuffer wxMBConv::cWC2MB(const wxScopedWCharBuffer& wbuf) const
+{
+    const size_t srcLen = wbuf.length();
+    if ( srcLen )
+    {
+        const size_t dstLen = FromWChar(NULL, 0, wbuf, srcLen);
+        if ( dstLen != wxCONV_FAILED )
+        {
+            wxCharBuffer buf(dstLen);
+            buf.data()[dstLen] = '\0';
+            if ( FromWChar(buf.data(), dstLen, wbuf, srcLen) != wxCONV_FAILED )
+                return buf;
+        }
+    }
+
+    return wxCharBuffer();
+}
+
 // ----------------------------------------------------------------------------
 // wxMBConvLibc
 // ----------------------------------------------------------------------------

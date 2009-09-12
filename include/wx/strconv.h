@@ -108,6 +108,12 @@ public:
     const wxCharBuffer
         cWC2MB(const wchar_t *in, size_t inLen, size_t *outLen) const;
 
+    // And yet more convenience functions for converting the entire buffers:
+    // these are the simplest and least error-prone as you never need to bother
+    // with lengths/sizes directly.
+    const wxWCharBuffer cMB2WC(const wxScopedCharBuffer& in) const;
+    const wxCharBuffer cWC2MB(const wxScopedWCharBuffer& in) const;
+
     // convenience functions for converting MB or WC to/from wxWin default
 #if wxUSE_UNICODE
     const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }

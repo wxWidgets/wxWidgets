@@ -177,6 +177,23 @@ public:
                                size_t inLen,
                                size_t *outLen) const;
 
+    /**
+        Converts a char buffer to wide char one.
+
+        This is the most convenient and safest conversion function as you
+        don't have to deal with the buffer lengths directly. Use it if the
+        input buffer is known not to be empty or if you are sure that the
+        conversion is going to succeed -- otherwise, use the overload above to
+        be able to distinguish between empty input and conversion failure.
+
+        @return
+            The buffer containing the converted text, empty if the input was
+            empty or if the conversion failed.
+
+        @since 2.9.1
+     */
+    const wxWCharBuffer cMB2WC(const wxCharBuffer& buf) const;
+
     //@{
     /**
         Converts from multibyte encoding to the current wxChar type (which
@@ -203,6 +220,23 @@ public:
     const wxCharBuffer cWC2MB(const wchar_t* in,
                               size_t inLen,
                               size_t *outLen) const;
+
+    /**
+        Converts a wide char buffer to char one.
+
+        This is the most convenient and safest conversion function as you
+        don't have to deal with the buffer lengths directly. Use it if the
+        input buffer is known not to be empty or if you are sure that the
+        conversion is going to succeed -- otherwise, use the overload above to
+        be able to distinguish between empty input and conversion failure.
+
+        @return
+            The buffer containing the converted text, empty if the input was
+            empty or if the conversion failed.
+
+        @since 2.9.1
+     */
+    const wxCharBuffer cWC2MB(const wxWCharBuffer& buf) const;
 
     //@{
     /**
