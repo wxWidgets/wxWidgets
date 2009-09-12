@@ -44,7 +44,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples"
 			/>
 			<Tool
@@ -52,7 +52,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;.\..\samples"
 			/>
@@ -234,7 +234,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivud;.\..\include;.;.\..\samples"
 			/>
 			<Tool
@@ -242,7 +242,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -262,7 +262,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivud;.\..\include;.;.\..\samples"
 			/>
@@ -424,7 +424,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples"
 			/>
 			<Tool
@@ -432,7 +432,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -452,7 +452,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;.;.\..\samples"
 			/>
@@ -614,7 +614,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivud;.\..\include;.;.\..\samples"
 			/>
 			<Tool
@@ -622,7 +622,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivud;.\..\include;.;.\..\samples"
-				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -642,7 +642,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;NOPCH;_CONSOLE"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivud;.\..\include;.;.\..\samples"
 			/>

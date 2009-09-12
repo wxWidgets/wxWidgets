@@ -14,7 +14,7 @@ include ../../build/msw/config.gcc
 
 CPPDEPS = -MT$@ -MF$@.d -MD -MP
 WX_RELEASE_NODOT = 29
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 COMPILER_PREFIX = gcc
 OBJS = \
 	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -53,11 +53,6 @@ ifeq ($(USE_GUI),1)
 PORTNAME = msw
 endif
 ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-WXDEBUGFLAG = d
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
 WXDEBUGFLAG = d
 endif
 ifeq ($(UNICODE),1)
@@ -81,36 +76,11 @@ endif
 ifeq ($(MONOLITHIC),1)
 EXTRALIBS_FOR_BASE =  
 endif
-ifeq ($(BUILD),debug)
-ifeq ($(UNICODE),0)
-PLUGINSUFFIX = d
-endif
-endif
-ifeq ($(BUILD),debug)
-ifeq ($(UNICODE),1)
-PLUGINSUFFIX = ud
-endif
-endif
-ifeq ($(BUILD),release)
-ifeq ($(UNICODE),0)
-PLUGINSUFFIX = 
-endif
-endif
-ifeq ($(BUILD),release)
-ifeq ($(UNICODE),1)
-PLUGINSUFFIX = u
-endif
-endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
 endif
-ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-__DEBUG_DEFINE_p_1 = --define __WXDEBUG__
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
-__DEBUG_DEFINE_p_1 = --define __WXDEBUG__
+ifeq ($(DEBUG_FLAG),0)
+__DEBUG_DEFINE_p_1 = --define wxDEBUG_LEVEL=0
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_1 = --define wxNO_EXCEPTIONS
@@ -141,7 +111,7 @@ __DLLFLAG_p_1 = --define WXUSINGDLL
 endif
 ifeq ($(SHARED),1)
 __renddll___depname = \
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)_gcc.dll
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -164,13 +134,8 @@ endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
-ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-__DEBUG_DEFINE_p = -D__WXDEBUG__
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
-__DEBUG_DEFINE_p = -D__WXDEBUG__
+ifeq ($(DEBUG_FLAG),0)
+__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -256,13 +221,13 @@ clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll
+	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)_gcc.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)_gcc.dll
 
 $(OBJS)\render.exe: $(RENDER_OBJECTS) $(OBJS)\render_sample_rc.o
 	$(CXX) -o $@ $(RENDER_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 ifeq ($(SHARED),1)
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_VERSION_NODOT)_gcc.dll: $(RENDDLL_OBJECTS)
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSION_NODOT)_gcc.dll: $(RENDDLL_OBJECTS)
 	$(CXX) $(LINK_MODULE_FLAGS) -fPIC -o $@ $(RENDDLL_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 endif
 

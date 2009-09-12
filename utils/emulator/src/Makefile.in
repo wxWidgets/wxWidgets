@@ -41,9 +41,9 @@ DESTDIR =
 WX_RELEASE = 2.9
 LIBDIRNAME = $(wx_top_builddir)/lib
 WXEMULATOR_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../../samples $(CXXWARNINGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
+	-I$(srcdir)/../../../samples $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 WXEMULATOR_OBJECTS =  \
 	$(__wxemulator___win32rc) \
 	$(__wxemulator_os2_lib_res) \
@@ -56,8 +56,7 @@ WXEMULATOR_OBJECTS =  \
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
-@COND_BUILD_debug_DEBUG_FLAG_default@WXDEBUGFLAG = d
-@COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
+@COND_BUILD_debug@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
@@ -69,6 +68,8 @@ WXEMULATOR_OBJECTS =  \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL wxemulator$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_2 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_2 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
@@ -148,7 +149,7 @@ data:
 	done
 
 wxemulator_sample_rc.o: $(srcdir)/../../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2) $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 wxemulator_emulator.o: $(srcdir)/emulator.cpp
 	$(CXXC) -c -o $@ $(WXEMULATOR_CXXFLAGS) $(srcdir)/emulator.cpp

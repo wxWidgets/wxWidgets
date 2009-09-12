@@ -40,9 +40,9 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(wx_top_builddir)/lib
-CLIENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+CLIENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -50,7 +50,7 @@ CLIENT_OBJECTS =  \
 	$(os2_lib_res) \
 	client_client.o \
 	$(__client___win32rc)
-SERVER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+SERVER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -59,15 +59,15 @@ SERVER_OBJECTS =  \
 	server_server.o \
 	$(__server___win32rc)
 BASECLIENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXWARNINGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXWARNINGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 BASECLIENT_OBJECTS =  \
 	baseclient_baseclient.o
 BASESERVER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXWARNINGS) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CXXWARNINGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 BASESERVER_OBJECTS =  \
 	baseserver_baseserver.o
 
@@ -78,8 +78,7 @@ BASESERVER_OBJECTS =  \
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
-@COND_BUILD_debug_DEBUG_FLAG_default@WXDEBUGFLAG = d
-@COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
+@COND_BUILD_debug@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
@@ -135,6 +134,7 @@ COND_PLATFORM_OS2_1___server___os2_emxbindcmd = $(NM) server$(EXEEXT) | if grep 
 @COND_PLATFORM_MAC_1@__baseserver___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL baseserver$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_0 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_0 = --define wxNO_THREADS
@@ -155,6 +155,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	-lwxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
@@ -269,13 +270,13 @@ client_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $(srcdir)/client.cpp
 
 client_client_rc.o: $(srcdir)/client.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 server_server.o: $(srcdir)/server.cpp
 	$(CXXC) -c -o $@ $(SERVER_CXXFLAGS) $(srcdir)/server.cpp
 
 server_server_rc.o: $(srcdir)/server.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 baseclient_baseclient.o: $(srcdir)/baseclient.cpp
 	$(CXXC) -c -o $@ $(BASECLIENT_CXXFLAGS) $(srcdir)/baseclient.cpp

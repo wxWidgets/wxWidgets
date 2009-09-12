@@ -40,11 +40,6 @@ PORTNAME = msw
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
-!ifeq DEBUG_FLAG default
-WXDEBUGFLAG = d
-!endif
-!endif
-!ifeq DEBUG_FLAG 1
 WXDEBUGFLAG = d
 !endif
 WXUNICODEFLAG =
@@ -178,13 +173,8 @@ __WXUNIV_DEFINE_p =
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 !endif
 __DEBUG_DEFINE_p =
-!ifeq BUILD debug
-!ifeq DEBUG_FLAG default
-__DEBUG_DEFINE_p = -d__WXDEBUG__
-!endif
-!endif
-!ifeq DEBUG_FLAG 1
-__DEBUG_DEFINE_p = -d__WXDEBUG__
+!ifeq DEBUG_FLAG 0
+__DEBUG_DEFINE_p = -dwxDEBUG_LEVEL=0
 !endif
 __EXCEPTIONS_DEFINE_p =
 !ifeq USE_EXCEPTIONS 0

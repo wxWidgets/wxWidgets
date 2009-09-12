@@ -141,11 +141,6 @@ ifeq ($(USE_GUI),1)
 PORTNAME = msw
 endif
 ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-WXDEBUGFLAG = d
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
 WXDEBUGFLAG = d
 endif
 ifeq ($(UNICODE),1)
@@ -175,13 +170,8 @@ endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_3 = --define __WXUNIVERSAL__
 endif
-ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-__DEBUG_DEFINE_p_3 = --define __WXDEBUG__
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
-__DEBUG_DEFINE_p_3 = --define __WXDEBUG__
+ifeq ($(DEBUG_FLAG),0)
+__DEBUG_DEFINE_p_3 = --define wxDEBUG_LEVEL=0
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_3 = --define wxNO_EXCEPTIONS
@@ -259,13 +249,8 @@ endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
-ifeq ($(BUILD),debug)
-ifeq ($(DEBUG_FLAG),default)
-__DEBUG_DEFINE_p = -D__WXDEBUG__
-endif
-endif
-ifeq ($(DEBUG_FLAG),1)
-__DEBUG_DEFINE_p = -D__WXDEBUG__
+ifeq ($(DEBUG_FLAG),0)
+__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS

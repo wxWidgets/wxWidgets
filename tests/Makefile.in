@@ -49,9 +49,9 @@ WX_RELEASE = 2.9
 WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(wx_top_builddir)/lib
 TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(CXXWARNINGS) \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
+	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
 	test_archivetest.o \
@@ -119,9 +119,10 @@ TEST_OBJECTS =  \
 	test_xmltest.o
 TEST_ODEP =  $(_____pch_testprec_test_testprec_h_gch___depname)
 TEST_GUI_CXXFLAGS = $(__test_gui_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../samples \
-	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) \
+	-I$(srcdir)/../samples $(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) \
+	$(CXXFLAGS)
 TEST_GUI_OBJECTS =  \
 	$(__test_gui___win32rc) \
 	$(__test_gui_os2_lib_res) \
@@ -160,8 +161,7 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
-@COND_BUILD_debug_DEBUG_FLAG_default@WXDEBUGFLAG = d
-@COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
+@COND_BUILD_debug@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
@@ -181,6 +181,7 @@ TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
 @COND_PLATFORM_MAC_1@__test_gui___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test_gui$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_5 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_5 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_5 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_5 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_5 = --define wxNO_THREADS
@@ -234,6 +235,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	-lwxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
@@ -533,7 +535,7 @@ test_xmltest.o: $(srcdir)/xml/xmltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/xml/xmltest.cpp
 
 test_gui_sample_rc.o: $(srcdir)/../samples/sample.rc $(TEST_GUI_ODEP)
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5)  $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_5) $(__DEBUG_DEFINE_p_5) $(__EXCEPTIONS_DEFINE_p_5) $(__RTTI_DEFINE_p_5) $(__THREAD_DEFINE_p_5)   --include-dir $(srcdir) $(__DLLFLAG_p_5) --include-dir $(srcdir)/../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 test_gui_test.o: $(srcdir)/test.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/test.cpp

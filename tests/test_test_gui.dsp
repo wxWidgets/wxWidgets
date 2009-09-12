@@ -69,10 +69,10 @@ LINK32=link.exe
 # PROP Output_Dir "vc_mswunivuddll"
 # PROP Intermediate_Dir "vc_mswunivuddll\test_gui"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswunivuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
-# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswunivuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswunivud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswunivud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswunivuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
+# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswunivuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswunivud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswunivud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -115,10 +115,10 @@ LINK32=link.exe
 # PROP Output_Dir "vc_mswuddll"
 # PROP Intermediate_Dir "vc_mswuddll\test_gui"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
-# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
+# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswuddll\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_dll\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswuddll\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "NOPCH" /D "_CONSOLE" /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "_UNICODE" /i ".\..\lib\vc_dll\mswud" /i ".\..\include" /i "." /d "WXUSINGDLL" /i ".\..\samples" /d "NOPCH" /d _CONSOLE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -161,10 +161,10 @@ LINK32=link.exe
 # PROP Output_Dir "vc_mswunivud"
 # PROP Intermediate_Dir "vc_mswunivud\test_gui"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswunivud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
-# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswunivud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswunivud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswunivud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswunivud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
+# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswunivud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswunivud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswunivud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswunivud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswunivud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -207,10 +207,10 @@ LINK32=link.exe
 # PROP Output_Dir "vc_mswud"
 # PROP Intermediate_Dir "vc_mswud\test_gui"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
-# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD BASE CPP /nologo /FD /MDd /Zi /Fdvc_mswud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
+# ADD CPP /nologo /FD /MDd /Zi /Fdvc_mswud\test_gui.pdb /Od /Gm /GR /EHsc /I ".\..\lib\vc_lib\mswud" /I ".\..\include" /W4 /I "." /I ".\..\samples" /Yu"testprec.h" /Fp"vc_mswud\testprec_test_gui.pch" /D "WIN32" /D "_DEBUG" /D "__WXMSW__" /D "_UNICODE" /D "NOPCH" /D "_CONSOLE" /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "_UNICODE" /i ".\..\lib\vc_lib\mswud" /i ".\..\include" /i "." /i ".\..\samples" /d "NOPCH" /d _CONSOLE
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo

@@ -40,9 +40,9 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 2.9
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).1
 LIBDIRNAME = $(wx_top_builddir)/lib
-IMAGE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+IMAGE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
@@ -59,8 +59,7 @@ IMAGE_OBJECTS =  \
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
-@COND_BUILD_debug_DEBUG_FLAG_default@WXDEBUGFLAG = d
-@COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
+@COND_BUILD_debug@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
@@ -72,6 +71,8 @@ IMAGE_OBJECTS =  \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL image$(EXEEXT)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_2 = --define __WXUNIVERSAL__
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+@COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p_2 = --define wxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_2 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
@@ -193,7 +194,7 @@ image_canvas.o: $(srcdir)/canvas.cpp
 	$(CXXC) -c -o $@ $(IMAGE_CXXFLAGS) $(srcdir)/canvas.cpp
 
 image_image_rc.o: $(srcdir)/image.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2) $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

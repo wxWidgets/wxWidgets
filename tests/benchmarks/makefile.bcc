@@ -52,10 +52,7 @@ PORTNAME = base
 !if "$(USE_GUI)" == "1"
 PORTNAME = msw
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
-WXDEBUGFLAG = d
-!endif
-!if "$(DEBUG_FLAG)" == "1"
+!if "$(BUILD)" == "debug"
 WXDEBUGFLAG = d
 !endif
 !if "$(UNICODE)" == "1"
@@ -112,11 +109,8 @@ __RUNTIME_LIBS_8 =
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
-__DEBUG_DEFINE_p = -D__WXDEBUG__
-!endif
-!if "$(DEBUG_FLAG)" == "1"
-__DEBUG_DEFINE_p = -D__WXDEBUG__
+!if "$(DEBUG_FLAG)" == "0"
+__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
