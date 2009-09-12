@@ -19,10 +19,16 @@
     the Windows directory may be named @c "W:\Win2003" instead of
     the default @c "C:\Windows".
 
-    The strings @c appname and @c username should be replaced with the value
-    returned by wxApp::GetAppName() and the name of the currently logged in user,
-    respectively. The string @c prefix is only used under Unix and is @c /usr/local by
-    default but may be changed using wxStandardPaths::SetInstallPrefix.
+    Notice that in the examples below the string @c appname may be either just
+    the application name (as returned by wxApp::GetAppName()) or a combination
+    of the vendor name (wxApp::GetVendorName()) and the application name, with
+    a path separator between them. By default, the vendor name is used under
+    Windows and OS X but not under other Unix systems, see UseAppInfo().
+
+    The other placeholders should be self-explanatory: the string @c username
+    should be replaced with the value the name of the currently logged in user.
+    and @c prefix is only used under Unix and is @c /usr/local by default but
+    may be changed using wxStandardPaths::SetInstallPrefix().
 
     The directories returned by the methods of this class may or may not exist.
     If they don't exist, it's up to the caller to create them, wxStandardPaths doesn't
@@ -319,6 +325,8 @@ public:
 
         By default, only the application name is used under Unix systems but both
         application and vendor names are used under Windows and Mac.
+
+        @since 2.9.0
     */
     void UseAppInfo(int info);
 };
