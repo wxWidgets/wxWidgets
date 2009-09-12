@@ -60,12 +60,13 @@ TARGET_CPU = $(CPU)
 # and not included if BUILD=release. [0,1,default]
 DEBUG_INFO = 1
 
-# Should __WXDEBUG__ be defined? The default value "default" means that it will
-# be defined if BUILD=debug and not defined if BUILD=release. [0,1,default]
-DEBUG_FLAG = default
+# Value of wxDEBUG_LEVEL. The default value is the same as 1 and means that all
+# but expensive assert checks are enabled, use 0 to completely remove debugging
+# code. [0,1,default]
+DEBUG_FLAG = 1
 
-# Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
-# Acts according to BUILD by default. [0,1,default]
+# Link against debug (e.g. msvcrtd.dll) or release (msvcrt.dll) RTL?
+# Default is to use debug CRT if and only if BUILD==debug. [0,1,default]
 DEBUG_RUNTIME_LIBS = default
 
 # Multiple libraries or single huge monolithic one? [0,1]

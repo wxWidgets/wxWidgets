@@ -51,9 +51,10 @@ BUILD = debug
 # and not included if BUILD=release. [0,1,default]
 DEBUG_INFO = default
 
-# Should __WXDEBUG__ be defined? The default value "default" means that it will
-# be defined if BUILD=debug and not defined if BUILD=release. [0,1,default]
-DEBUG_FLAG = default
+# Value of wxDEBUG_LEVEL. The default value is the same as 1 and means that all
+# but expensive assert checks are enabled, use 0 to completely remove debugging
+# code. [0,1,default]
+DEBUG_FLAG = 1
 
 # Multiple libraries or single huge monolithic one? [0,1]
 #   0 - Multilib

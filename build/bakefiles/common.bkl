@@ -61,16 +61,20 @@
         <if cond="PLATFORM_WIN32=='1' and OFFICIAL_BUILD=='0'">_$(VENDOR)</if>
     </set>
 
+    <!-- debug suffix used for Windows libraries which use debug CRT -->
     <set var="WXDEBUGFLAG">
-        <if cond="BUILD=='debug' and DEBUG_FLAG=='default'">d</if>
-        <if cond="DEBUG_FLAG=='1'">d</if>
+        <if cond="BUILD=='debug' and DEBUG_RUNTIME_LIBS=='default'">d</if>
+        <if cond="DEBUG_RUNTIME_LIBS=='1'">d</if>
     </set>
     <set var="WXUNICODEFLAG">
         <!-- WinCE is Unicode-only platform: -->
         <if cond="UNICODE=='1' and FORMAT!='msevc4prj'">u</if>
     </set>
+    <set var="WX_U_D_SUFFIX">
+        $(WXUNICODEFLAG)$(WXDEBUGFLAG)
+    </set>
     <set var="WXNAMESUFFIX">
-        $(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
+        $(WX_U_D_SUFFIX)$(WX_LIB_FLAVOUR)
     </set>
 
     <set var="WXUNIVNAME">
@@ -177,7 +181,7 @@
             <if cond="SHARED=='1'">dll</if>
         </set>
         <set var="CFG_NAME_PART">
-            $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+            $(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)$(WXDLLFLAG)$(CFG)
         </set>
 
         <!-- NB: this is make_var so that it can be overriden on command line
@@ -207,7 +211,7 @@
 
     <if cond="FORMAT!='autoconf'">
         <set var="SETUPHDIR" make_var="1">
-            $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
+            $(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)
         </set>
     </if>
 
@@ -257,8 +261,7 @@
     </set>
 
     <set var="DEBUG_DEFINE">
-        <if cond="FORMAT!='autoconf' and BUILD=='debug' and DEBUG_FLAG=='default'">__WXDEBUG__</if>
-        <if cond="FORMAT!='autoconf' and DEBUG_FLAG=='1'">__WXDEBUG__</if>
+        <if cond="DEBUG_FLAG=='0'">wxDEBUG_LEVEL=0</if>
     </set>
     <!-- does not cover all cases, but better than nothing -->
     <set var="NO_VC_CRTDBG">
@@ -324,7 +327,7 @@
 
     <template id="3rdparty_lib" template="common_settings,anylib">
         <if cond="FORMAT=='autoconf'">
-            <libname>$(id)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
+            <libname>$(id)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)</libname>
         </if>
         <if cond="FORMAT!='autoconf'">
             <libname>$(id)$(WXDEBUGFLAG)$(HOST_SUFFIX)</libname>
@@ -712,13 +715,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     </set>
     <set var="PLUGIN_VERSION">$(PLUGVERDELIM)$(PLUGIN_VERSION0)</set>
 
-    <set var="PLUGINSUFFIX">
-        <if cond="UNICODE=='0' and BUILD=='release'"></if>
-        <if cond="UNICODE=='0' and BUILD=='debug'">d</if>
-        <if cond="UNICODE=='1' and BUILD=='release'">u</if>
-        <if cond="UNICODE=='1' and BUILD=='debug'">ud</if>
-    </set>
-
     <set var="PLUGINS_INST_DIR" make_var="1">
         $(LIBDIR)/wx/$(PLUGIN_VERSION0)
     </set>
@@ -726,7 +722,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <define-rule name="wx-base-plugin" extends="module">
         <template>
             <dllname>
-                $(id)$(PLUGINSUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
+                $(id)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
             <define>wxUSE_GUI=0</define>
@@ -737,7 +733,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <define-rule name="wx-gui-plugin" extends="module">
         <template template="wx">
             <dllname>
-                $(id)_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
+                $(id)_$(PORTNAME)$(WXUNIVNAME)$(WX_U_D_SUFFIX)$(PLUGIN_VERSION)$(WXCOMPILER)
             </dllname>
             <define>WXUSINGDLL</define>
             <install-to>$(PLUGINS_INST_DIR)</install-to>

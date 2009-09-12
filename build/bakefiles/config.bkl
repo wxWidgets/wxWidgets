@@ -134,10 +134,11 @@ and not included if BUILD=release.
 
     <option name="DEBUG_FLAG">
         <values>0,1,default</values>
-        <default-value>default</default-value>
+        <default-value>1</default-value>
         <description>
-Should __WXDEBUG__ be defined? The default value "default" means that it will
-be defined if BUILD=debug and not defined if BUILD=release.
+Value of wxDEBUG_LEVEL. The default value is the same as 1 and means that all
+but expensive assert checks are enabled, use 0 to completely remove debugging
+code.
         </description>
     </option>
 
@@ -146,8 +147,8 @@ be defined if BUILD=debug and not defined if BUILD=release.
             <values>0,1,default</values>
             <default-value>default</default-value>
             <description>
-Should link against debug RTL (msvcrtd.dll) or release (msvcrt.dll)?
-Acts according to BUILD by default.
+Link against debug (e.g. msvcrtd.dll) or release (msvcrt.dll) RTL?
+Default is to use debug CRT if and only if BUILD==debug.
             </description>
         </option>
     </if>
@@ -299,7 +300,7 @@ Acts according to BUILD by default.
             <description>
                 Link with gdiplus.lib? (Needed for wxGraphicsContext, will also set wxUSE_GRAPHICS_CONTEXT)
             </description>
-	</option>
+        </option>
     </if>
 
     <option name="OFFICIAL_BUILD">
