@@ -10,7 +10,7 @@
 
     - WX_* : used to let the user of the generated makefile choose a wxWidgets
              build among those available; you can use them in your project to
-             e.g. build a target only if WX_DEBUG is 0 or if WX_PORT is "msw".
+             e.g. build a target only if WX_SHARED is 0 or if WX_PORT is "msw".
 
 
     VARIABLES:
@@ -24,7 +24,8 @@
 
     - wx, wx-lib: templates to be used respectively for <dll>/<exe> and <lib>
                   targets; they add all the wxWidgets-related settings (e.g. the
-                  include and library search paths, the __WXDEBUG__ symbol, etc).
+                  include and library search paths, the necessary preprocessor
+                  symbols, etc).
 
     - wxgui: to be used when building GUI-mode applications.
 
@@ -33,7 +34,7 @@
                  need it when compiling wxBase-only code).
 
     - wxlike: this template should be combined with "wx" or "wx-lib" and will
-              make your project build with the same Unicode, debug & shared
+              make your project build with the same Unicode & shared
               config as the wxWidgets build selected using the WX_* options.
 
 
@@ -176,7 +177,6 @@
     <!-- 'gnu' format needs to redefine the following options later in wx_unix.bkl -->
     <if cond="FORMAT=='gnu'">
         <set var="WX_UNICODE"/>
-        <set var="WX_DEBUG"/>
         <set var="WX_SHARED"/>
         <set var="WX_PORT"/>
         <set var="WX_VERSION"/>
@@ -219,7 +219,7 @@
             <values-description>Release,Debug</values-description>
             <default-value>$(WX_DEBUG_DEFAULT)</default-value>
             <description>
-                Use debug build of wxWidgets (define __WXDEBUG__)?
+                Use debug build of wxWidgets (linked with debug CRT)?
             </description>
         </option>
     </if>

@@ -67,7 +67,6 @@ Format-specific notes:
              of the WX_* options in wx.bkl -->
         <unset var="WX_SHARED"/>
         <unset var="WX_UNICODE"/>
-        <unset var="WX_DEBUG"/>
         <unset var="WX_PORT"/>
         <unset var="WX_VERSION"/>
 
@@ -112,18 +111,6 @@ Format-specific notes:
             </description>
         </option>
 
-        <set var="WX_DEBUG_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell $(WX_CONFIG) --query-debugtype | sed 's/debug/1/;s/release/0/')
-        </set>
-        <option name="WX_DEBUG">
-            <values>0,1</values>
-            <values-description>Release,Debug</values-description>
-            <default-value force="1">$(WX_DEBUG_DEFAULT)</default-value>
-            <description>
-                Use debug build of wxWidgets (define __WXDEBUG__)?
-            </description>
-        </option>
-
         <set var="WX_VERSION_DEFAULT" overwrite="0">
             $(DOLLAR)(shell $(WX_CONFIG) --query-version | sed -e 's/\([0-9]*\)\.\([0-9]*\)/\1\2/')
         </set>
@@ -148,14 +135,10 @@ Format-specific notes:
             a win32 makefile: i.e. a makefile where you can select the wanted
             wxWidgets build using the WX_* options.
 
-            The difference with win32 makefiles is that WX_DEBUG, WX_UNICODE and
+            The difference with win32 makefiles is that WX_PORT, WX_UNICODE and
             WX_SHARED options have a smart default value which is created using
             the installed wx-config or the wx-config given using WX_CONFIG option
         -->
-        <set var="WX_CONFIG_DEBUG_FLAG">
-            <if cond="WX_DEBUG=='0'">--debug=no</if>
-            <if cond="WX_DEBUG=='1'">--debug=yes</if>
-        </set>
         <set var="WX_CONFIG_UNICODE_FLAG">
             <if cond="WX_UNICODE=='0'">--unicode=no</if>
             <if cond="WX_UNICODE=='1'">--unicode=yes</if>
@@ -172,7 +155,7 @@ Format-specific notes:
         </set>
 
         <set var="WX_CONFIG_FLAGS" make_var="1">
-            $(WX_CONFIG_DEBUG_FLAG) $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG) 
+            $(WX_CONFIG_UNICODE_FLAG) $(WX_CONFIG_SHARED_FLAG)
             $(WX_CONFIG_PORT_FLAG) $(WX_CONFIG_VERSION_FLAG)
         </set>
 
