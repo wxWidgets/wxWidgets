@@ -1046,6 +1046,11 @@ wxDefaultAssertHandler(const wxString& file,
 
 wxAssertHandler_t wxTheAssertHandler = wxDefaultAssertHandler;
 
+void wxSetDefaultAssertHandler()
+{
+    wxTheAssertHandler = wxDefaultAssertHandler;
+}
+
 void wxOnAssert(const wxString& file,
                 int line,
                 const wxString& func,

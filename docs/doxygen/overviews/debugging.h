@@ -1,7 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        debugging.h
 // Purpose:     topic overview
-// Author:      wxWidgets team
+// Author:      Vadim Zeitlin
+// Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -10,89 +11,93 @@
 
 @page overview_debugging Debugging
 
-Classes, functions and macros: wxDebugContext, wxObject, wxLog,
-                                @ref group_funcmacro_log, @ref group_funcmacro_debug
+Classes, functions and macros: wxLog, @ref group_funcmacro_log, @ref group_funcmacro_debug
 
 Various classes, functions and macros are provided in wxWidgets to help you debug
-your application. Most of these are only available if you compile both wxWidgets,
-your application and @e all libraries that use wxWidgets with the __WXDEBUG__ symbol
-defined. You can also test the __WXDEBUG__ symbol in your own applications to execute
-code that should be active only in debug mode.
-
-@li @ref overview_debugging_dbgctx
-@li @ref overview_debugging_dbgmacros
-@li @ref overview_debugging_logging
-@li @ref overview_debugging_dbgctx2
+your application: @ref overview_debugging_dbgmacros allow you to insert various
+checks in your application which can be compiled out or disabled in release
+builds but are extremely useful while developing and @ref
+overview_debugging_logging which are not limited to debugging but are also
+useful for inserting traces into your application code. Both assertions and
+debug logging are also used by wxWidgets itself so you may encounter them even
+if you don't use either of these features yourself.
 
 
-<hr>
+@section overview_debugging_config Configuring debugging support
+
+Starting with wxWidgets 2.9.1 debugging features are always available by
+default (and not only in a special "debug" build of the library) and you need
+to predefine wxDEBUG_LEVEL symbol as 0 when building both the library and your
+application to remove them completely from the generated object code. However
+the debugging features are disabled by default when the application itself is
+built with @c NDEBUG defined (i.e. in "release" or "production" mode) so there
+is no need to do this, unless the resources of the system your application will
+be running on are unusually constrained (notice that when asserts are disabled
+their condition is not even evaluated so the only run-time cost is a single
+condition check and the extra space taken by the asserts in the code).
+
+This automatic deactivation of debugging code is done by IMPLEMENT_APP() macro
+so if you don't use you may need to explicitly call wxDISABLE_DEBUG_SUPPORT()
+yourself.
+
+Also notice that it is possible to build your own application with a different
+value of wxDEBUG_LEVEL than the one which was used for wxWidgets itself. E.g.
+you may be using an official binary version of the library which will have
+been compiled with default @code wxDEBUG_LEVEL == 1 @endcode but still predefine
+wxDEBUG_LEVEL as 0 for your own code.
+
+On the other hand, if you do want to keep the asserts even in production
+builds, you will probably want to override the handling of assertion failures
+as the default behaviour which pops up a message box notifying the user about
+the problem is usually inappropriate. Use wxSetAssertHandler() to set up your
+own custom function which should be called instead of the standard assertion
+failure handler. Such function could log an appropriate message in the
+application log file or maybe notify the user about the problem in some more
+user-friendly way.
 
 
-@section overview_debugging_dbgctx wxDebugContext
+@section overview_debugging_dbgmacros Assertion macros
 
-wxDebugContext is a class that never gets instantiated, but ties together
-various static functions and variables. It allows you to dump all objects to that stream,
-write statistics about object allocation, and check memory for errors.
+wxASSERT(), wxFAIL(), wxCHECK() as well as their other variants (see @ref
+group_funcmacro_debug) are similar to the standard assert() macro but are more
+flexible and powerful. The first of them is equivalent to assert() itself, i.e.
+it simply checks a condition and does nothing if it is true. The second one is
+equivalent to checking an always false condition and is supposed to be used for
+code paths which are supposed to be inaccessible (e.g. @c default branch of a
+@c switch statement which should never be executed). Finally, the wxCHECK()
+family of macros verifies the condition just as wxASSERT() does and performs
+some action such returning from the function if it fails -- thus, it is useful
+for checking the functions preconditions.
 
-It is good practice to define a wxObject::Dump member function for each class you derive
-from a wxWidgets class, so that wxDebugContext::Dump can call it and
-give valuable information about the state of the application.
+All of the above functions exist in @c _MSG variants which allow you to provide
+a custom message which will be shown (or, more generally, passed to the assert
+handler) if the assertion fails, in addition to the usual file and line number
+information and the condition itself.
 
-If you have difficulty tracking down a memory leak, recompile
-in debugging mode and call wxDebugContext::Dump and wxDebugContext::PrintStatistics at
-appropriate places. They will tell you what objects have not yet been
-deleted, and what kinds of object they are. In fact, in debug mode wxWidgets will automatically
-detect memory leaks when your application is about to exit, and if there are any leaks,
-will give you information about the problem. (How much information depends on the operating system
-and compiler -- some systems don't allow all memory logging to be enabled). See the
-memcheck sample for example of usage.
-
-For wxDebugContext to do its work, the @e new and @e delete operators for wxObject
-have been redefined to store extra information about dynamically allocated objects
-(but not statically declared objects).
-
-This slows down a debugging version of an application, but can
-find difficult-to-detect memory leaks (objects are not
-deallocated), overwrites (writing past the end of your object) and
-underwrites (writing to memory in front of the object).
-
-If debugging mode is on and the symbols wxUSE_GLOBAL_MEMORY_OPERATORS and
-wxUSE_DEBUG_NEW_ALWAYS are set to 1 in setup.h, 'new' is defined to be:
-
+Example of using an assertion macro:
 @code
-#define new new(__FILE__,__LINE__)
-@endcode
-
-All occurrences of 'new' in wxWidgets and your own application will use
-the overridden form of the operator with two extra arguments. This means that
-the debugging output (and error messages reporting memory problems) will tell you what
-file and on what line you allocated the object. Unfortunately not all
-compilers allow this definition to work properly, but most do.
-
-
-
-@section overview_debugging_dbgmacros Debug macros
-
-You should also use @ref group_funcmacro_debug as part of a 'defensive programming'
-strategy, scattering wxASSERTs liberally to test for problems in your code as early as
-possible.
-Forward thinking will save a surprising amount of time in the long run.
-
-#wxASSERT is used to pop up an error message box when a condition
-is not @true. You can also use #wxASSERT_MSG to supply your
-own helpful error message. For example:
-
-@code
-void MyClass::MyFunction(wxObject* object)
+void GetTheAnswer(int *p)
 {
-    wxASSERT_MSG( (object != NULL), "object should not be NULL in MyFunction!" );
+    wxCHECK_RET( p, "pointer can't be NULL in GetTheAnswer()" );
 
-    ...
+    *p = 42;
 };
 @endcode
 
-The message box allows you to continue execution or abort the program. If you are running
-the application inside a debugger, you will be able to see exactly where the problem was.
+If the condition is false, i.e. @c p is @NULL, the assertion handler is called
+and, in any case (even when wxDEBUG_LEVEL is 0), the function returns without
+dereferencing the NULL pointer on the next line thus avoiding a crash.
+
+The default assertion handler behaviour depends on whether the application
+using wxWidgets was compiled in release build (with @c NDEBUG defined) or debug
+one (without) but may be changed in either case as explained above. If it
+wasn't changed, then nothing will happen in the release build and a message box
+showing the information about the assert as well as allowing to stop the
+program, ignore future asserts or break into the debugger is shown. On the
+platforms where wxStackWalker is supported the message box will also show the
+stack trace at the moment when the assert failed often allowing you to diagnose
+the problem without using the debugger at all. You can see an example of such
+message box in the @ref page_samples_except.
 
 
 
@@ -102,43 +107,6 @@ You can use the wxLogDebug and wxLogTrace functions to output debugging informat
 debug mode; it will do nothing for non-debugging code.
 
 
-
-@section overview_debugging_dbgctx2 wxDebugContext overview
-
-Class: wxDebugContext
-
-wxDebugContext is a class for performing various debugging and memory tracing operations.
-
-This class has only static data and function members, and there should be
-no instances. Probably the most useful members are SetFile (for directing output
-to a file, instead of the default standard error or debugger output);
-Dump (for dumping the dynamically allocated objects) and PrintStatistics
-(for dumping information about allocation of objects). You can also call
-Check to check memory blocks for integrity.
-
-Here's an example of use. The SetCheckpoint ensures that only the
-allocations done after the checkpoint will be dumped.
-
-@code
-wxDebugContext::SetCheckpoint();
-
-wxDebugContext::SetFile("c:\\temp\\debug.log");
-
-wxString *thing = new wxString;
-
-char *ordinaryNonObject = new char[1000];
-
-wxDebugContext::Dump();
-wxDebugContext::PrintStatistics();
-@endcode
-
-You can use wxDebugContext if __WXDEBUG__ is defined, or you can use it
-at any other time (if wxUSE_DEBUG_CONTEXT is set to 1 in setup.h). It is not disabled
-in non-debug mode because you may not wish to recompile wxWidgets and your entire application
-just to make use of the error logging facility.
-
-@note wxDebugContext::SetFile has a problem at present, so use the default stream instead.
-      Eventually the logging will be done through the wxLog facilities instead.
 
 */
 

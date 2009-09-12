@@ -15,7 +15,7 @@
 #include "wx/version.h"
 
 // NB: This file contains macros for checking binary compatibility of libraries
-//     in multilib buildm, plugins and user components.
+//     in multilib builds, plugins and user components.
 //     The WX_BUILD_OPTIONS_SIGNATURE macro expands into string that should
 //     uniquely identify binary compatible builds: i.e. if two builds of the
 //     library are binary compatible, their signature string should be the
@@ -40,12 +40,6 @@
 #else
     #define __WX_BO_VERSION(x,y,z) \
         __WX_BO_STRINGIZE(x) "." __WX_BO_STRINGIZE(y) "." __WX_BO_STRINGIZE(z)
-#endif
-
-#ifdef __WXDEBUG__
-    #define __WX_BO_DEBUG "debug"
-#else
-    #define __WX_BO_DEBUG "no debug"
 #endif
 
 #if wxUSE_UNICODE_UTF8
@@ -100,7 +94,7 @@
 // This macro is passed as argument to wxConsoleApp::CheckBuildOptions()
 #define WX_BUILD_OPTIONS_SIGNATURE \
     __WX_BO_VERSION(wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER) \
-    " (" __WX_BO_DEBUG "," __WX_BO_UNICODE \
+    " (" __WX_BO_UNICODE \
      __WX_BO_COMPILER \
      __WX_BO_STL \
      __WX_BO_WXWIN_COMPAT_2_6 __WX_BO_WXWIN_COMPAT_2_8 \

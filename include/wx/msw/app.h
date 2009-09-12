@@ -174,6 +174,8 @@ extern WXDLLIMPEXP_CORE int
                                       wchar_t * WXUNUSED(lpCmdLine),        \
                                       int nCmdShow)                         \
         {                                                                   \
+            wxDISABLE_DEBUG_SUPPORT();                                      \
+                                                                            \
             /* NB: wxEntry expects lpCmdLine argument to be char*, not */   \
             /*     wchar_t*, but fortunately it's not used anywhere    */   \
             /*     and we can simply pass NULL in:                     */   \
@@ -189,6 +191,8 @@ extern WXDLLIMPEXP_CORE int
                                   wxCmdLineArgType WXUNUSED(lpCmdLine),     \
                                   int nCmdShow)                             \
     {                                                                       \
+        wxDISABLE_DEBUG_SUPPORT();                                          \
+                                                                            \
         /* NB: We pass NULL in place of lpCmdLine to behave the same as  */ \
         /*     Borland-specific wWinMain() above. If it becomes needed   */ \
         /*     to pass lpCmdLine to wxEntry() here, you'll have to fix   */ \

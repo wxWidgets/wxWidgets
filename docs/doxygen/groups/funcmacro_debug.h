@@ -8,7 +8,7 @@
 
 /**
 
-@defgroup group_funcmacro_debug Debugging
+@defgroup group_funcmacro_debug Debugging macros
 @ingroup group_funcmacro
 
 Useful macros and functions for error checking and defensive programming.

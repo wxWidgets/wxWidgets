@@ -22,18 +22,23 @@
 #include "wx/cmdargs.h"     // for wxCmdLineArgsArray used by wxApp::argv
 #include "wx/init.h"        // we must declare wxEntry()
 #include "wx/intl.h"        // for wxLayoutDirection
+#include "wx/log.h"         // for wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
 class WXDLLIMPEXP_FWD_BASE wxAppConsole;
 class WXDLLIMPEXP_FWD_BASE wxAppTraits;
 class WXDLLIMPEXP_FWD_BASE wxCmdLineParser;
 class WXDLLIMPEXP_FWD_BASE wxEventLoopBase;
-class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
     struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
     class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif
+
+// this macro should be used in any main() or equivalent functions defined in wx
+#define wxDISABLE_DEBUG_SUPPORT() \
+    wxDISABLE_ASSERTS_IN_RELEASE_BUILD(); \
+    wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
 // ----------------------------------------------------------------------------
 // typedefs
@@ -772,8 +777,13 @@ public:
 // your compiler really, really wants main() to be in your main program (e.g.
 // hello.cpp). Now IMPLEMENT_APP should add this code if required.
 
-#define IMPLEMENT_WXWIN_MAIN_CONSOLE \
-        int main(int argc, char **argv) { return wxEntry(argc, argv); }
+#define IMPLEMENT_WXWIN_MAIN_CONSOLE                                          \
+    int main(int argc, char **argv)                                           \
+    {                                                                         \
+        wxDISABLE_DEBUG_SUPPORT();                                            \
+                                                                              \
+        return wxEntry(argc, argv);                                           \
+    }
 
 // port-specific header could have defined it already in some special way
 #ifndef IMPLEMENT_WXWIN_MAIN

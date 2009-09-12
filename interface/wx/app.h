@@ -1053,3 +1053,37 @@ void wxExit();
 
 //@}
 
+/** @addtogroup group_funcmacro_debug */
+//@{
+
+/**
+    @def wxDISABLE_DEBUG_SUPPORT()
+
+    Use this macro to disable all debugging code in release build when not
+    using IMPLEMENT_APP().
+
+    Currently this macro disables assert checking and debug and trace level
+    logging messages in release build (i.e. when @c NDEBUG is defined). It is
+    used by IMPLEMENT_APP() macro so you only need to use it explicitly if you
+    don't use this macro but initialize wxWidgets directly (e.g. calls
+    wxEntry() or wxEntryStart() itself).
+
+    If you do not want to disable debugging code even in release build of your
+    application, you can use wxSetDefaultAssertHandler() and
+    wxLog::SetLogLevel() with @c wxLOG_Max parameter to enable assertions and
+    debug logging respectively.
+
+    @see wxDISABLE_ASSERTS_IN_RELEASE_BUILD(),
+         wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD(),
+         @ref overview_debugging
+
+    @since 2.9.1
+
+    @header{wx/app.h}
+ */
+#define wxDISABLE_DEBUG_SUPPORT() \
+    wxDISABLE_ASSERTS_IN_RELEASE_BUILD(); \
+    wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
+
+//@}
+

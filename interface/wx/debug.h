@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        debug.h
+// Name:        wx/debug.h
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -14,14 +14,34 @@
 
     Preprocessor symbol defining the level of debug support available.
 
-    Currently wxDEBUG_LEVEL is 0 in release builds (__WXDEBUG__ not defined)
-    and 1 in debug builds (it is). In the immediate future this will change
-    however and this symbol will be defined directly as 0, 1 or 2 while
-    __WXDEBUG__ won't be used by wxWidgets any longer.
+    This symbol is defined to 1 by default meaning that asserts are compiled in
+    (although they may be disabled by a call to wxDisableAsserts()). You may
+    predefine it as 0 prior to including any wxWidgets headers to omit the
+    calls to wxASSERT() and related macros entirely in your own code and you
+    may also predefine it as 0 when building wxWidgets to also avoid including
+    any asserts in wxWidgets itself.
+
+    Alternatively, you may predefine it as 2 to include wxASSERT_LEVEL_2() and
+    similar macros which are used for asserts which have non-trivial run-time
+    costs and so are disabled by default.
+
+    @since 2.9.1
 
     @header{wx/debug.h}
  */
 #define wxDEBUG_LEVEL
+
+/**
+    @def __WXDEBUG__
+
+    Compatibility macro indicating presence of debug support.
+
+    This symbol is defined if wxDEBUG_LEVEL is greater than 0 and undefined
+    otherwise.
+
+    @header{wx/debug.h}
+ */
+#define __WXDEBUG__
 
 /**
     Type for the function called in case of assert failure.
@@ -218,8 +238,32 @@ typedef void (*wxAssertHandler_t)(const wxString& file,
     Disable the condition checks in the assertions.
 
     This is the same as calling wxSetAssertHandler() with @NULL handler.
+
+    @since 2.9.0
+
+    @header{wx/debug.h}
  */
 void wxDisableAsserts();
+
+/**
+    @def wxDISABLE_ASSERTS_IN_RELEASE_BUILD
+
+    Use this macro to disable asserts in release build when not using
+    IMPLEMENT_APP().
+
+    By default, assert message boxes are suppressed in release build by
+    IMPLEMENT_APP() which uses this macro. If you don't use IMPLEMENT_APP()
+    because your application initializes wxWidgets directly (e.g. calls
+    wxEntry() or wxEntryStart() itself) but still want to suppress assert
+    notifications in release build you need to use this macro directly.
+
+    @see wxDISABLE_DEBUG_SUPPORT()
+
+    @since 2.9.1
+
+    @header{wx/debug.h}
+ */
+#define wxDISABLE_ASSERTS_IN_RELEASE_BUILD() wxDisableAsserts()
 
 /**
     Will always generate an assert error if this code is reached (in debug mode).
@@ -298,9 +342,25 @@ bool wxIsDebuggerRunning();
         The previous assert handler which is not @NULL by default but could be
         @NULL if it had been previously set to this value using this function.
 
+    @since 2.9.0
+
     @header{wx/debug.h}
  */
 wxAssertHandler_t wxSetAssertHandler(wxAssertHandler_t handler);
+
+/**
+    Reset the assert handler to default function which shows a message box when
+    an assert happens.
+
+    This can be useful for the applications compiled in release build (with @c
+    NDEBUG defined) for which the asserts are by default disabled: if you wish
+    to enable them even in this case you need to call this function.
+
+    @since 2.9.1
+
+    @header{wx/debug.h}
+ */
+void wxSetDefaultAssertHandler();
 
 /**
     In debug mode (when @c __WXDEBUG__ is defined) this function generates a
