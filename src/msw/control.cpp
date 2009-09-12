@@ -388,12 +388,11 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
             colBg = GetBackgroundColour();
     }
 
-    // use the background colour override if a valid colour is given
+    // use the background colour override if a valid colour is given: this is
+    // used when the control is disabled to grey it out and also if colBg was
+    // set just above
     if ( colBg.Ok() )
     {
-        ::SetBkColor(hdc, wxColourToRGB(colBg));
-
-        // draw children with the same colour as the parent
         wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg);
         hbr = (WXHBRUSH)brush->GetResourceHandle();
     }
@@ -405,6 +404,17 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     if ( hbr )
     {
         ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+    }
+
+    // finally also set the background colour for text drawing: without this,
+    // the text in an edit control is drawn using the default background even
+    // if we return a valid brush
+    if ( colBg.IsOk() || m_hasBgCol )
+    {
+        if ( !colBg.IsOk() )
+            colBg = GetBackgroundColour();
+
+        ::SetBkColor(hdc, wxColourToRGB(colBg));
     }
 
     return hbr;
