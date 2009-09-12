@@ -293,21 +293,25 @@ public:
 
     /**
         Retrieves the raw string value. Returns @true if successful.
+        An empty @a szValue queries the default/unnamed key value.
     */
     bool QueryRawValue(const wxString& szValue, wxString& strValue) const;
 
     /**
         Retrieves the raw or expanded string value. Returns @true if successful.
+        An empty @a szValue queries the default/unnamed key value.
     */
     bool QueryValue(const wxString& szValue, wxString& strValue, bool raw) const;
 
     /**
         Retrieves the numeric value. Returns @true if successful.
+        An empty @a szValue queries the default/unnamed key value.
     */
     bool QueryValue(const wxString& szValue, long* plValue) const;
 
     /**
         Retrieves the binary structure. Returns @true if successful.
+        An empty @a szValue queries the default/unnamed key value.
     */
     bool QueryValue(const wxString& szValue, wxMemoryBuffer& buf) const;
 
@@ -349,16 +353,19 @@ public:
     /**
         Sets the given @a szValue which must be numeric. If the value doesn't
         exist, it is created. Returns @true if successful.
+        An empty @a szValue sets the default/unnamed key value.
     */
     bool SetValue(const wxString& szValue, long lValue);
     /**
         Sets the given @a szValue which must be string. If the value doesn't
         exist, it is created. Returns @true if successful.
+        An empty @a szValue sets the default/unnamed key value.
     */
     bool SetValue(const wxString& szValue, const wxString& strValue);
     /**
         Sets the given @a szValue which must be binary. If the value doesn't
         exist, it is created. Returns @true if successful.
+        An empty @a szValue sets the default/unnamed key value.
     */
     bool SetValue(const wxString& szValue, const wxMemoryBuffer& buf);
 };
