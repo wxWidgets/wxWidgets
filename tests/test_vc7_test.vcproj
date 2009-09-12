@@ -669,6 +669,9 @@
 				RelativePath=".\filesys\filesystest.cpp">
 			</File>
 			<File
+				RelativePath=".\file\filetest.cpp">
+			</File>
+			<File
 				RelativePath=".\fontmap\fontmaptest.cpp">
 			</File>
 			<File

@@ -312,7 +312,7 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
   if ( !buf )
       return false;
 
-  const size_t size = strlen(buf); // FIXME: use buf.length() when available
+  const size_t size = buf.length();
   return Write(buf, size) == size;
 }
 

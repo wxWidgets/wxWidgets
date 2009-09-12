@@ -40,6 +40,7 @@
             events/evthandler.cpp
             events/timertest.cpp
             exec/exec.cpp
+            file/filetest.cpp
             filekind/filekind.cpp
             filename/filenametest.cpp
             filesys/filesystest.cpp

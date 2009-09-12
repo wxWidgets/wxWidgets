@@ -270,6 +270,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_evthandler.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
+	$(OBJS)\test_filetest.obj &
 	$(OBJS)\test_filekind.obj &
 	$(OBJS)\test_filenametest.obj &
 	$(OBJS)\test_filesystest.obj &
@@ -446,6 +447,9 @@ $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_exec.obj :  .AUTODEPEND .\exec\exec.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filetest.obj :  .AUTODEPEND .\file\filetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filekind.obj :  .AUTODEPEND .\filekind\filekind.cpp

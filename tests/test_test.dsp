@@ -321,6 +321,10 @@ SOURCE=.\filesys\filesystest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\file\filetest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\fontmap\fontmaptest.cpp
 # End Source File
 # Begin Source File

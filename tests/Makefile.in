@@ -65,6 +65,7 @@ TEST_OBJECTS =  \
 	test_evthandler.o \
 	test_timertest.o \
 	test_exec.o \
+	test_filetest.o \
 	test_filekind.o \
 	test_filenametest.o \
 	test_filesystest.o \
@@ -377,6 +378,9 @@ test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 
 test_exec.o: $(srcdir)/exec/exec.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/exec/exec.cpp
+
+test_filetest.o: $(srcdir)/file/filetest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/file/filetest.cpp
 
 test_filekind.o: $(srcdir)/filekind/filekind.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filekind/filekind.cpp

@@ -42,6 +42,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_evthandler.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
+	$(OBJS)\test_filetest.obj \
 	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
 	$(OBJS)\test_filesystest.obj \
@@ -492,6 +493,9 @@ $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 
 $(OBJS)\test_exec.obj: .\exec\exec.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\exec\exec.cpp
+
+$(OBJS)\test_filetest.obj: .\file\filetest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\file\filetest.cpp
 
 $(OBJS)\test_filekind.obj: .\filekind\filekind.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\filekind\filekind.cpp
