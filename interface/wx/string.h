@@ -112,6 +112,26 @@ public:
     */
     wxString(const wxString& stringSrc);
 
+    /**
+       Construct a string consisting of @a nRepeat copies of ch.
+    */
+    wxString(wxUniChar ch, size_t nRepeat = 1);
+
+    /**
+       Construct a string consisting of @a nRepeat copies of ch.
+    */
+    wxString(wxUniCharRef ch, size_t nRepeat = 1);
+
+    /**
+       Construct a string consisting of @a nRepeat copies of ch
+       converted to Unicode using the current locale encoding.
+    */
+    wxString(char ch, size_t nRepeat = 1);
+
+    /**
+       Construct a string consisting of @a nRepeat copies of ch.
+    */
+    wxString(wchar_t ch, size_t nRepeat = 1);
 
     /**
        Constructs a string from the string literal @a psz using

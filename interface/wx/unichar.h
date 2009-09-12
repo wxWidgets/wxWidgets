@@ -19,9 +19,9 @@ class wxUniChar
 {
 public:
     /**
-        This is not wchar_t on purpose, it needs to represent the entire
-        Unicode code points range and wchar_t may be too small for that
-        (e.g. on Win32 where wchar_t* is encoded in UTF-16).
+        A type capable of holding any Unicode code point.
+        We do not use wchar_t as it cannot do the job on Win32,
+        where wchar_t is a 16-bit type (wchar_t* is encoded using UTF-16 on Win32).
     */
     typedef wxUint32 value_type;
 
@@ -32,8 +32,8 @@ public:
 
     //@{
     /**
-        Create the character from 8bit character value encoded in the current
-        locale's charset.
+        Create a character from the 8-bit character value @a c using the
+        current locale’s encoding.
     */
     wxUniChar(char c);
     wxUniChar(unsigned char c);
