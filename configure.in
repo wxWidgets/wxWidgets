@@ -606,11 +606,71 @@ AC_ARG_WITH(macosx-version-min,    [  --with-macosx-version-min=VER   build bina
 AC_MSG_RESULT([$wxUSE_MACOSX_VERSION_MIN])
 
 dnl ---------------------------------------------------------------------------
+dnl debugging options
+dnl ---------------------------------------------------------------------------
+
+dnl don't use WX_ARG_ENABLE as it just gets in the way instead of helping with
+dnl this rather unusual option
+AC_MSG_CHECKING([for --enable-debug])
+AC_ARG_ENABLE(debug,       [  --enable-debug          build library for debugging],
+    [
+        if test "$enableval" = yes; then
+            wxUSE_DEBUG=yes
+        elif test "$enableval" = no; then
+            wxUSE_DEBUG=no
+        elif test "$enableval" = max; then
+            wxUSE_DEBUG=yes
+            WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=2"
+        else
+            AC_MSG_ERROR([Invalid --enable-debug value, must be yes, no or max])
+        fi
+    ],
+    wxUSE_DEBUG=default
+)
+
+case "$wxUSE_DEBUG" in
+    yes)
+        dnl build the library for debugging: enable debugging code and generate
+        dnl the debug information for the library itself
+        DEFAULT_wxUSE_DEBUG_FLAG=yes
+        DEFAULT_wxUSE_DEBUG_INFO=yes
+
+        dnl also disable optimizations by default if --enable-debug was used
+        dnl (this can still be overridden by an explicit --enable-optimise)
+        DEFAULT_wxUSE_OPTIMISE=no
+        ;;
+
+    no)
+        dnl --disable-debug is equivalent to both --disable-debug_flag and
+        dnl --disable-debug_info
+        DEFAULT_wxUSE_DEBUG_FLAG=no
+        DEFAULT_wxUSE_DEBUG_INFO=no
+        ;;
+
+    default)
+        dnl the library is built with debugging support by default but without
+        dnl debug information as this requires much, much more disk space
+        DEFAULT_wxUSE_DEBUG_FLAG=yes
+        DEFAULT_wxUSE_DEBUG_INFO=no
+        ;;
+esac
+
+WX_ARG_DISABLE(debug_flag,   [  --disable-debug_flag    disable all debugging support], wxUSE_DEBUG_FLAG)
+WX_ARG_ENABLE(debug_info,    [  --enable-debug_info     generate debug information], wxUSE_DEBUG_INFO)
+
+dnl enabled if just --enable-debug_{flag,info} was
+dnl
+dnl in any case, only set the default value and allow overriding it with an
+
+WX_ARG_ENABLE(debug_gdb,     [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
+WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    obsolete, don't use: use wxDebugContext], wxUSE_DEBUG_CONTEXT)
+WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    obsolete, don't use: create code with memory tracing], wxUSE_MEM_TRACING)
+
+dnl ---------------------------------------------------------------------------
 dnl global compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_DISABLE(shared,     [  --disable-shared        create static library instead of shared], wxUSE_SHARED)
-WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
@@ -624,42 +684,8 @@ if test "$USE_OS2" = 1; then
     WX_ARG_ENABLE(omf,     [  --enable-omf            use OMF object format], wxUSE_OMF)
 fi
 
-dnl --enable-debug is equivalent to both --enable-debug_flag and
-dnl --enable-debug_info
-if test "$wxUSE_DEBUG" = "yes"; then
-    DEFAULT_wxUSE_DEBUG_FLAG=yes
-    DEFAULT_wxUSE_DEBUG_INFO=yes
-    BUILD=debug
-elif test "$wxUSE_DEBUG" = "no"; then
-    DEFAULT_wxUSE_DEBUG_FLAG=no
-    DEFAULT_wxUSE_DEBUG_INFO=no
-    BUILD=release
-fi
-
-WX_ARG_ENABLE(debug_flag,    [  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)], wxUSE_DEBUG_FLAG)
-WX_ARG_ENABLE(debug_info,    [  --enable-debug_info     create code with debugging information], wxUSE_DEBUG_INFO)
-
-dnl it's important to also do it in the other direction to get the correct
-dnl output in the configure summary (which uses wxUSE_DEBUG)
-if test "$wxUSE_DEBUG_FLAG" = "yes" -a "$wxUSE_DEBUG_INFO" = "yes"; then
-    wxUSE_DEBUG=yes
-    BUILD=debug
-fi
-
-dnl disable optimizations by default if --enable-debug was used but leave them
-dnl enabled if just --enable-debug_{flag,info} was
-dnl
-dnl in any case, only set the default value and allow overriding it with an
-dnl explicit --enable-optimise
-if test "$wxUSE_DEBUG" = "yes"; then
-    DEFAULT_wxUSE_OPTIMISE=no
-fi
-
 WX_ARG_DISABLE(optimise,   [  --disable-optimise      compile without optimisations], wxUSE_OPTIMISE)
 
-WX_ARG_ENABLE(debug_gdb,     [  --enable-debug_gdb      create code with extra GDB debugging information], wxUSE_DEBUG_GDB)
-WX_ARG_ENABLE(debug_cntxt,   [  --enable-debug_cntxt    use wxDebugContext], wxUSE_DEBUG_CONTEXT)
-WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    create code with memory tracing], wxUSE_MEM_TRACING)
 WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
@@ -3876,15 +3902,6 @@ if test "$wxUSE_UNICODE" = "yes"; then
     UNICODE=1
 fi
 
-lib_debug_suffix=
-WX_DEBUGTYPE="release"
-DEBUG_FLAG=0
-if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-    lib_debug_suffix=d
-    WX_DEBUGTYPE="debug"
-    DEBUG_FLAG=1
-fi
-
 WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
 WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
 
@@ -3893,25 +3910,25 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 dnl library link name
-dnl These just save us from exporting lib_{unicode,debug,flavour}_suffix.
+dnl These just save us from exporting lib_{unicode,flavour}_suffix.
 dnl If we ever need to do that, we won't need to keep these.
 
 if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
 if test "${TOOLKIT_DIR}" = "os2"; then
-    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
 
 
@@ -5203,10 +5220,7 @@ if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     fi
 fi
 
-if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
-    AC_DEFINE(WXDEBUG)
-    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
-else
+if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
@@ -7522,7 +7536,7 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
-EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
 fi
@@ -7555,7 +7569,7 @@ if test "$wxUSE_ZLIB" = "builtin" ; then
 fi
 
 for i in $wxconfig_3rdparty ; do
-    WXCONFIG_LIBS="-lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
+    WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
 done
 
 
@@ -7631,7 +7645,6 @@ AC_SUBST(EXTRALIBS_GNOMEPRINT)
 AC_SUBST(EXTRALIBS_GNOMEVFS)
 AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
-AC_SUBST(BUILD)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
 TOOLKIT_LOWERCASE=xxx
@@ -7942,7 +7955,6 @@ AC_SUBST(WX_RELEASE)
 AC_SUBST(WX_VERSION)
 AC_SUBST(WX_SUBVERSION)
 AC_SUBST(WX_CHARTYPE)
-AC_SUBST(WX_DEBUGTYPE)
 
 dnl note that in addition to the usual CPP/C/CXXFLAGS which are used for
 dnl building the library itself, we also have WXCONFIG_-prefixed variants which
@@ -8126,8 +8138,6 @@ echo "Configured wxWidgets ${WX_VERSION} for \`${host}'"
 echo ""
 echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_DESC}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
-
-echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
 echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
 if test "$wxUSE_UNICODE" = "yes"; then

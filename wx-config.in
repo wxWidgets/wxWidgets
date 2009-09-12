@@ -45,9 +45,9 @@ usage()
 
  wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--release] [--version-full]
            [--list] [--selected-config] [--host=HOST] [--toolkit=TOOLKIT]
-           [--universal[=yes|no]] [--unicode[=yes|no]] [--debug[=yes|no]]
-           [--static[=yes|no]] [--version[=VERSION]] [--basename]
-           [--cc] [--cxx] [--cppflags [base]] [--cxxflags [base]] [--cflags]
+           [--universal[=yes|no]] [--unicode[=yes|no]] [--static[=yes|no]]
+           [--version[=VERSION]] [--basename] [--cc] [--cxx]
+           [--cppflags [base]] [--cxxflags [base]] [--cflags]
            [--rescomp] [--linkdeps] [--ld] [--utility=UTIL]
            [--libs [LIBS...]] [--optional-libs [LIBS...]]
 
@@ -55,14 +55,14 @@ usage()
   your system.  It may be used to retrieve the information required to build
   applications using these libraries using --cppflags, --cxxflags, --cflags,
   and --libs options. And you may query the properties of this configuration
-  using --query-{host,toolkit,widgetset,chartype,debugtype,version,linkage}.
+  using --query-{host,toolkit,widgetset,chartype,version,linkage}.
 
     If multiple builds of wxWidgets  are available,  you can use the options
-  --prefix, --host, --toolkit, --unicode, --debug, --static, --universal and
-  --version to select from them. The --selected-config option shows the name
-  of the current configuration and --list shows available alternatives which
-  match specified criteria. The --utility option returns the correct version
-  of UTIL to use with the selected build. The --linkdeps option returns only
+  --prefix, --host, --toolkit, --unicode, --static, --universal or --version
+  to select from them.  The  --selected-config  option shows the name of the
+  current configuration and --list  shows available alternatives which match
+  specified criteria.  The  --utility  option returns the correct version of
+  UTIL to use with the selected build.  The  --linkdeps  option returns only
   static libraries for your makefile link rule dependencies.
 
     The LIBS arguments (comma or space separated) may be used to specify the
@@ -114,7 +114,7 @@ EGREP="@EGREP@"
 # configs to this one.  Options earlier in the list should be more crucial
 # to match well than those that follow.  Options specified by the user will
 # always take precedence and are not subject to any partial ordering here.
-wxconfig_schema="host toolkit widgetset chartype debugtype flavour version linkage"
+wxconfig_schema="host toolkit widgetset chartype flavour version linkage"
 
 # Options that are expected to generate some output.
 wxconfig_output_options="prefix exec_prefix
@@ -135,6 +135,10 @@ wxconfig_output_options="prefix exec_prefix
 wxconfig_input_options="prefix exec_prefix utility $wxconfig_schema"
 
 # Input options that accept only a yes or no argument.
+#
+# Notice that this includes "debug" but it is done only for compatibility, this
+# options (i.e. --debug[=yes] or --debug=no) is completely ignored as there is
+# no distinction between debug and release builds in wx any more
 wxconfig_yesno_options="universal unicode debug static"
 
 # Boolean options that do something or not.
@@ -317,7 +321,6 @@ done
 
 check_yesno_option universal widgetset univ
 check_yesno_option unicode chartype unicode ansi
-check_yesno_option debug debugtype debug release
 check_yesno_option static linkage static
 
 # Dump everything we just read in debug mode.
@@ -361,7 +364,7 @@ fi
 get_mask()
 {
     [ $# -gt 0 ] || set m
-    eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+    eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
 }
 
 # Returns true if this script is for a cross compiled config.
@@ -383,7 +386,6 @@ this_host="${target:+${target}}"
 this_toolkit="@TOOLKIT_DIR@@TOOLKIT_VERSION@"
 this_widgetset="@WIDGET_SET@"
 this_chartype="@WX_CHARTYPE@"
-this_debugtype="@WX_DEBUGTYPE@"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
 this_linkage=`[ "x@SHARED@" = "x1" ] || echo 'static'`
@@ -397,7 +399,6 @@ m_host=${m_host:-$this_host}
 m_toolkit=${input_option_toolkit:-'[^-]+'}
 m_widgetset=${input_option_widgetset-'(univ)?'}
 m_chartype=${input_option_chartype:-'(unicode|ansi)'}
-m_debugtype=${input_option_debugtype:-'(debug|release)'}
 m_flavour=${input_option_flavour:+-$input_option_flavour}
 m_flavour=${m_flavour:-${input_option_flavour-'(-[^-]+)?'}}
 m_version=${input_option_version:-'[0-9]+\.[0-9]+'}
@@ -418,7 +419,6 @@ if [ -n "$WXDEBUG" ]; then
     decho "  m_toolkit    = '$m_toolkit'"
     decho "  m_widgetset  = '$m_widgetset'"
     decho "  m_chartype   = '$m_chartype'"
-    decho "  m_debugtype  = '$m_debugtype'"
     decho "  m_flavour    = '$m_flavour'"
     decho "  m_version    = '$m_version'"
     decho "  m_linkage    = '$m_linkage'"
@@ -604,8 +604,7 @@ get_legacy_mask()
 {
     [ $# -gt 0 ] || set m
     eval [ "x\${$1_chartype}" != "xunicode" ] || _unicode_flag=u
-    eval [ "x\${$1_debugtype}" != "xdebug" ] || _debug_flag=d
-    eval echo "wx\${$1_toolkit}${_unicode_flag}${_debug_flag}-\${$1_version}\${$1_host}-config"
+    eval echo "wx\${$1_toolkit}${_unicode_flag}-\${$1_version}\${$1_host}-config"
 }
 
 # find_legacy_configs

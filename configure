@@ -747,7 +747,6 @@ EXTRALIBS_GNOMEPRINT
 EXTRALIBS_GNOMEVFS
 EXTRALIBS_HILDON
 UNICODE
-BUILD
 DEBUG_INFO
 DEBUG_FLAG
 TOOLKIT_LOWERCASE
@@ -831,6 +830,7 @@ COND_BUILD_release
 COND_BUILD_release_DEBUG_INFO_default
 COND_BUILD_release_UNICODE_0
 COND_BUILD_release_UNICODE_1
+COND_DEBUG_FLAG_0
 COND_DEBUG_FLAG_1
 COND_DEBUG_INFO_0
 COND_DEBUG_INFO_1
@@ -1012,7 +1012,6 @@ WX_RELEASE
 WX_VERSION
 WX_SUBVERSION
 WX_CHARTYPE
-WX_DEBUGTYPE
 WXCONFIG_CPPFLAGS
 WXCONFIG_CFLAGS
 WXCONFIG_CXXFLAGS
@@ -1664,8 +1663,13 @@ Optional Features:
   --enable-nanox          use NanoX
   --disable-gtk2          use GTK+ 1.2 instead of 2.0
   --enable-gpe            use GNOME PDA Environment features if possible
+  --enable-debug          build library for debugging
+  --disable-debug_flag    disable all debugging support
+  --enable-debug_info     generate debug information
+  --enable-debug_gdb      create code with extra GDB debugging information
+  --enable-debug_cntxt    obsolete, don't use: use wxDebugContext
+  --enable-mem_tracing    obsolete, don't use: create code with memory tracing
   --disable-shared        create static library instead of shared
-  --enable-debug          same as debug_flag and debug_info
   --enable-stl            use STL for containers
   --enable-std_iostreams  use standard C++ stream classes
   --enable-std_string     use standard C++ string classes
@@ -1675,12 +1679,7 @@ Optional Features:
   --enable-utf8only       only support UTF-8 locales in UTF-8 build (Unix only)
   --enable-extended_rtti  use extended RTTI (XTI)
   --enable-omf            use OMF object format
-  --enable-debug_flag     set __WXDEBUG__ flag (recommended for developers!)
-  --enable-debug_info     create code with debugging information
   --disable-optimise      compile without optimisations
-  --enable-debug_gdb      create code with extra GDB debugging information
-  --enable-debug_cntxt    use wxDebugContext
-  --enable-mem_tracing    create code with memory tracing
   --enable-profile        create code with profiling information
   --enable-no_rtti        create code without RTTI information
   --enable-no_exceptions  create code without C++ exceptions handling
@@ -4318,6 +4317,274 @@ fi
 echo "${ECHO_T}$wxUSE_MACOSX_VERSION_MIN" >&6; }
 
 
+{ echo "$as_me:$LINENO: checking for --enable-debug" >&5
+echo $ECHO_N "checking for --enable-debug... $ECHO_C" >&6; }
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval=$enable_debug;
+        if test "$enableval" = yes; then
+            wxUSE_DEBUG=yes
+        elif test "$enableval" = no; then
+            wxUSE_DEBUG=no
+        elif test "$enableval" = max; then
+            wxUSE_DEBUG=yes
+            WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -DwxDEBUG_LEVEL=2"
+        else
+            { { echo "$as_me:$LINENO: error: Invalid --enable-debug value, must be yes, no or max" >&5
+echo "$as_me: error: Invalid --enable-debug value, must be yes, no or max" >&2;}
+   { (exit 1); exit 1; }; }
+        fi
+
+
+else
+  wxUSE_DEBUG=default
+
+fi
+
+
+case "$wxUSE_DEBUG" in
+    yes)
+                        DEFAULT_wxUSE_DEBUG_FLAG=yes
+        DEFAULT_wxUSE_DEBUG_INFO=yes
+
+                        DEFAULT_wxUSE_OPTIMISE=no
+        ;;
+
+    no)
+                        DEFAULT_wxUSE_DEBUG_FLAG=no
+        DEFAULT_wxUSE_DEBUG_INFO=no
+        ;;
+
+    default)
+                        DEFAULT_wxUSE_DEBUG_FLAG=yes
+        DEFAULT_wxUSE_DEBUG_INFO=no
+        ;;
+esac
+
+
+          enablestring=disable
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_flag" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-debug_flag... $ECHO_C" >&6; }
+          # Check whether --enable-debug_flag was given.
+if test "${enable_debug_flag+set}" = set; then
+  enableval=$enable_debug_flag;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=yes'
+                          else
+                            wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=no'
+                          fi
+
+else
+
+                          wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=${'DEFAULT_wxUSE_DEBUG_FLAG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_debug_flag"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DEBUG_FLAG = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_DEBUG_FLAG
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_info" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-debug_info... $ECHO_C" >&6; }
+          # Check whether --enable-debug_info was given.
+if test "${enable_debug_info+set}" = set; then
+  enableval=$enable_debug_info;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_debug_info='wxUSE_DEBUG_INFO=yes'
+                          else
+                            wx_cv_use_debug_info='wxUSE_DEBUG_INFO=no'
+                          fi
+
+else
+
+                          wx_cv_use_debug_info='wxUSE_DEBUG_INFO=${'DEFAULT_wxUSE_DEBUG_INFO":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_debug_info"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DEBUG_INFO = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_DEBUG_INFO
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_gdb" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-debug_gdb... $ECHO_C" >&6; }
+          # Check whether --enable-debug_gdb was given.
+if test "${enable_debug_gdb+set}" = set; then
+  enableval=$enable_debug_gdb;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=yes'
+                          else
+                            wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=no'
+                          fi
+
+else
+
+                          wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=${'DEFAULT_wxUSE_DEBUG_GDB":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_debug_gdb"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DEBUG_GDB = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_DEBUG_GDB
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_cntxt" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-debug_cntxt... $ECHO_C" >&6; }
+          # Check whether --enable-debug_cntxt was given.
+if test "${enable_debug_cntxt+set}" = set; then
+  enableval=$enable_debug_cntxt;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=yes'
+                          else
+                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=no'
+                          fi
+
+else
+
+                          wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=${'DEFAULT_wxUSE_DEBUG_CONTEXT":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_debug_cntxt"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DEBUG_CONTEXT = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_DEBUG_CONTEXT
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mem_tracing" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-mem_tracing... $ECHO_C" >&6; }
+          # Check whether --enable-mem_tracing was given.
+if test "${enable_mem_tracing+set}" = set; then
+  enableval=$enable_mem_tracing;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=yes'
+                          else
+                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=no'
+                          fi
+
+else
+
+                          wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=${'DEFAULT_wxUSE_MEM_TRACING":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_mem_tracing"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_MEM_TRACING = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_MEM_TRACING
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+
 
           enablestring=disable
           defaultval=
@@ -4357,50 +4624,6 @@ fi
             fi
           else
             result=$wxUSE_SHARED
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-debug... $ECHO_C" >&6; }
-          # Check whether --enable-debug was given.
-if test "${enable_debug+set}" = set; then
-  enableval=$enable_debug;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug='wxUSE_DEBUG=yes'
-                          else
-                            wx_cv_use_debug='wxUSE_DEBUG=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug='wxUSE_DEBUG=${'DEFAULT_wxUSE_DEBUG":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DEBUG = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_DEBUG
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -4783,114 +5006,6 @@ echo "${ECHO_T}$result" >&6; }
 
 fi
 
-if test "$wxUSE_DEBUG" = "yes"; then
-    DEFAULT_wxUSE_DEBUG_FLAG=yes
-    DEFAULT_wxUSE_DEBUG_INFO=yes
-    BUILD=debug
-elif test "$wxUSE_DEBUG" = "no"; then
-    DEFAULT_wxUSE_DEBUG_FLAG=no
-    DEFAULT_wxUSE_DEBUG_INFO=no
-    BUILD=release
-fi
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_flag" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-debug_flag... $ECHO_C" >&6; }
-          # Check whether --enable-debug_flag was given.
-if test "${enable_debug_flag+set}" = set; then
-  enableval=$enable_debug_flag;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=yes'
-                          else
-                            wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug_flag='wxUSE_DEBUG_FLAG=${'DEFAULT_wxUSE_DEBUG_FLAG":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug_flag"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DEBUG_FLAG = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_DEBUG_FLAG
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_info" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-debug_info... $ECHO_C" >&6; }
-          # Check whether --enable-debug_info was given.
-if test "${enable_debug_info+set}" = set; then
-  enableval=$enable_debug_info;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug_info='wxUSE_DEBUG_INFO=yes'
-                          else
-                            wx_cv_use_debug_info='wxUSE_DEBUG_INFO=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug_info='wxUSE_DEBUG_INFO=${'DEFAULT_wxUSE_DEBUG_INFO":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug_info"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DEBUG_INFO = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_DEBUG_INFO
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-if test "$wxUSE_DEBUG_FLAG" = "yes" -a "$wxUSE_DEBUG_INFO" = "yes"; then
-    wxUSE_DEBUG=yes
-    BUILD=debug
-fi
-
-if test "$wxUSE_DEBUG" = "yes"; then
-    DEFAULT_wxUSE_OPTIMISE=no
-fi
-
 
           enablestring=disable
           defaultval=
@@ -4935,138 +5050,6 @@ fi
           { echo "$as_me:$LINENO: result: $result" >&5
 echo "${ECHO_T}$result" >&6; }
 
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_gdb" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-debug_gdb... $ECHO_C" >&6; }
-          # Check whether --enable-debug_gdb was given.
-if test "${enable_debug_gdb+set}" = set; then
-  enableval=$enable_debug_gdb;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=yes'
-                          else
-                            wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug_gdb='wxUSE_DEBUG_GDB=${'DEFAULT_wxUSE_DEBUG_GDB":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug_gdb"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DEBUG_GDB = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_DEBUG_GDB
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-debug_cntxt" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-debug_cntxt... $ECHO_C" >&6; }
-          # Check whether --enable-debug_cntxt was given.
-if test "${enable_debug_cntxt+set}" = set; then
-  enableval=$enable_debug_cntxt;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=yes'
-                          else
-                            wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=no'
-                          fi
-
-else
-
-                          wx_cv_use_debug_cntxt='wxUSE_DEBUG_CONTEXT=${'DEFAULT_wxUSE_DEBUG_CONTEXT":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_debug_cntxt"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DEBUG_CONTEXT = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_DEBUG_CONTEXT
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-mem_tracing" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-mem_tracing... $ECHO_C" >&6; }
-          # Check whether --enable-mem_tracing was given.
-if test "${enable_mem_tracing+set}" = set; then
-  enableval=$enable_mem_tracing;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=yes'
-                          else
-                            wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=no'
-                          fi
-
-else
-
-                          wx_cv_use_mem_tracing='wxUSE_MEM_TRACING=${'DEFAULT_wxUSE_MEM_TRACING":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_mem_tracing"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_MEM_TRACING = no; then
-              result=yes
-            else
-              result=no
-            fi
-          else
-            result=$wxUSE_MEM_TRACING
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
 
 
           enablestring=
@@ -34024,15 +34007,6 @@ if test "$wxUSE_UNICODE" = "yes"; then
     UNICODE=1
 fi
 
-lib_debug_suffix=
-WX_DEBUGTYPE="release"
-DEBUG_FLAG=0
-if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-    lib_debug_suffix=d
-    WX_DEBUGTYPE="debug"
-    DEBUG_FLAG=1
-fi
-
 WX_FLAVOUR=${WX_FLAVOUR:+-$WX_FLAVOUR}
 WX_LIB_FLAVOUR=`echo $WX_FLAVOUR | tr '-' '_'`
 
@@ -34041,22 +34015,22 @@ if test "$wxUSE_DEBUG_INFO" = "yes"; then
     DEBUG_INFO=1
 fi
 
-WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[a-z]' '[A-Z]'`
+WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[a-z]' '[A-Z]'`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 
 if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
 if test "${TOOLKIT_DIR}" = "os2"; then
-    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_GUI="wx_pm${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
-    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+    WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 fi
 
 
@@ -41520,13 +41494,7 @@ if test "$wxUSE_DEBUG_GDB" = "yes" ; then
     fi
 fi
 
-if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
-    cat >>confdefs.h <<\_ACEOF
-#define WXDEBUG 1
-_ACEOF
-
-    WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS -D__WXDEBUG__"
-else
+if test "$wxUSE_DEBUG_FLAG" = "no" ; then
     if test "$wxUSE_GTK" = 1 ; then
         if test "x$wxGTK_VERSION" = "x1" ; then
             CPPFLAGS="-DGTK_NO_CHECK_CASTS $CPPFLAGS"
@@ -47221,7 +47189,7 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
-EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
+EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
 fi
@@ -47253,7 +47221,7 @@ if test "$wxUSE_ZLIB" = "builtin" ; then
 fi
 
 for i in $wxconfig_3rdparty ; do
-    WXCONFIG_LIBS="-lwx${i}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
+    WXCONFIG_LIBS="-lwx${i}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX} $WXCONFIG_LIBS"
 done
 
 
@@ -47310,7 +47278,6 @@ if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
 else
     OFFICIAL_BUILD=0
 fi
-
 
 
 
@@ -49746,6 +49713,11 @@ EOF
         COND_BUILD_release_UNICODE_1=""
     fi
 
+    COND_DEBUG_FLAG_0="#"
+    if test "x$DEBUG_FLAG" = "x0" ; then
+        COND_DEBUG_FLAG_0=""
+    fi
+
     COND_DEBUG_FLAG_1="#"
     if test "x$DEBUG_FLAG" = "x1" ; then
         COND_DEBUG_FLAG_1=""
@@ -50749,7 +50721,6 @@ OBJCFLAGS="$OBJCFLAGS $CFLAGS_VISIBILITY"
 OBJCXXFLAGS="$OBJCXXFLAGS $CXXFLAGS_VISIBILITY"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
-
 
 
 
@@ -51866,7 +51837,6 @@ EXTRALIBS_GNOMEPRINT!$EXTRALIBS_GNOMEPRINT$ac_delim
 EXTRALIBS_GNOMEVFS!$EXTRALIBS_GNOMEVFS$ac_delim
 EXTRALIBS_HILDON!$EXTRALIBS_HILDON$ac_delim
 UNICODE!$UNICODE$ac_delim
-BUILD!$BUILD$ac_delim
 DEBUG_INFO!$DEBUG_INFO$ac_delim
 DEBUG_FLAG!$DEBUG_FLAG$ac_delim
 TOOLKIT_LOWERCASE!$TOOLKIT_LOWERCASE$ac_delim
@@ -51929,6 +51899,7 @@ SETFILE!$SETFILE$ac_delim
 OBJCXXFLAGS!$OBJCXXFLAGS$ac_delim
 GCC_PCH!$GCC_PCH$ac_delim
 ICC_PCH!$ICC_PCH$ac_delim
+ICC_PCH_CREATE_SWITCH!$ICC_PCH_CREATE_SWITCH$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -51970,7 +51941,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-ICC_PCH_CREATE_SWITCH!$ICC_PCH_CREATE_SWITCH$ac_delim
 ICC_PCH_USE_SWITCH!$ICC_PCH_USE_SWITCH$ac_delim
 BK_MAKE_PCH!$BK_MAKE_PCH$ac_delim
 COND_BUILD_DEBUG!$COND_BUILD_DEBUG$ac_delim
@@ -51991,6 +51961,7 @@ COND_BUILD_release!$COND_BUILD_release$ac_delim
 COND_BUILD_release_DEBUG_INFO_default!$COND_BUILD_release_DEBUG_INFO_default$ac_delim
 COND_BUILD_release_UNICODE_0!$COND_BUILD_release_UNICODE_0$ac_delim
 COND_BUILD_release_UNICODE_1!$COND_BUILD_release_UNICODE_1$ac_delim
+COND_DEBUG_FLAG_0!$COND_DEBUG_FLAG_0$ac_delim
 COND_DEBUG_FLAG_1!$COND_DEBUG_FLAG_1$ac_delim
 COND_DEBUG_INFO_0!$COND_DEBUG_INFO_0$ac_delim
 COND_DEBUG_INFO_1!$COND_DEBUG_INFO_1$ac_delim
@@ -52254,7 +52225,6 @@ WX_RELEASE!$WX_RELEASE$ac_delim
 WX_VERSION!$WX_VERSION$ac_delim
 WX_SUBVERSION!$WX_SUBVERSION$ac_delim
 WX_CHARTYPE!$WX_CHARTYPE$ac_delim
-WX_DEBUGTYPE!$WX_DEBUGTYPE$ac_delim
 WXCONFIG_CPPFLAGS!$WXCONFIG_CPPFLAGS$ac_delim
 WXCONFIG_CFLAGS!$WXCONFIG_CFLAGS$ac_delim
 WXCONFIG_CXXFLAGS!$WXCONFIG_CXXFLAGS$ac_delim
@@ -52284,7 +52254,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 36; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 35; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -52915,8 +52885,6 @@ echo "Configured wxWidgets ${WX_VERSION} for \`${host}'"
 echo ""
 echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_DESC}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
-
-echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
 echo $ECHO_N "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}$ECHO_C"
 if test "$wxUSE_UNICODE" = "yes"; then
