@@ -35,13 +35,12 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: emulator execmon helpview hhp2cached ifacecheck screenshotgen wxrc
+all: emulator helpview hhp2cached ifacecheck screenshotgen wxrc
 
 clean: 
 	-if exist .\*.o del .\*.o
 	-if exist .\*.d del .\*.d
 	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C execmon -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C hhp2cached -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C ifacecheck\src -f makefile.gcc $(MAKEARGS) clean
@@ -50,9 +49,6 @@ clean:
 
 emulator: 
 	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) all
-
-execmon: 
-	$(MAKE) -C execmon -f makefile.gcc $(MAKEARGS) all
 
 helpview: 
 	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) all
@@ -69,8 +65,7 @@ screenshotgen:
 wxrc: 
 	$(MAKE) -C wxrc -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean emulator execmon helpview hhp2cached ifacecheck screenshotgen \
-	wxrc
+.PHONY: all clean emulator helpview hhp2cached ifacecheck screenshotgen wxrc
 
 
 SHELL := $(COMSPEC)
