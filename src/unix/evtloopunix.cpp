@@ -176,7 +176,15 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 
 wxConsoleEventLoop::~wxConsoleEventLoop()
 {
-    delete m_wakeupPipe;
+    if ( m_wakeupPipe )
+    {
+        if ( m_dispatcher )
+        {
+            m_dispatcher->UnregisterFD(m_wakeupPipe->GetReadFd());
+        }
+
+        delete m_wakeupPipe;
+    }
 }
 
 //-----------------------------------------------------------------------------
