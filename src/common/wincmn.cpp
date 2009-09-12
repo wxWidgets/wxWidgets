@@ -2558,8 +2558,11 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 
 #endif // wxUSE_MENUS
 
-// methods for drawing the sizers in a visible way
-#ifdef __WXDEBUG__
+// methods for drawing the sizers in a visible way: this is currently only
+// enabled for "full debug" builds with wxDEBUG_LEVEL==2 as it doesn't work
+// that well and also because we don't want to leave it enabled in default
+// builds used for production
+#if wxDEBUG_LEVEL > 1
 
 static void DrawSizers(wxWindowBase *win);
 
@@ -2641,22 +2644,25 @@ static void DrawSizers(wxWindowBase *win)
     }
 }
 
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 // process special middle clicks
 void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
 {
     if ( event.ControlDown() && event.AltDown() )
     {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL > 1
         // Ctrl-Alt-Shift-mclick makes the sizers visible in debug builds
         if ( event.ShiftDown() )
         {
             DrawSizers(this);
-            return;
         }
+        else
 #endif // __WXDEBUG__
-        ::wxInfoMessageBox((wxWindow*)this);
+        {
+            // just Ctrl-Alt-middle click shows information about wx version
+            ::wxInfoMessageBox((wxWindow*)this);
+        }
     }
     else
     {

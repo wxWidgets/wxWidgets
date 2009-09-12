@@ -1314,37 +1314,37 @@ void wxInfoMessageBox(wxWindow* parent)
 {
     // don't translate these strings, they're for diagnostics purposes only
     wxString msg;
-    msg.Printf(wxT("wxWidgets Library (%s port)\n")
-               wxT("Version %d.%d.%d%s%s, compiled at %s %s\n")
-               wxT("Runtime version of toolkit used is %d.%d.%s\n")
-               wxT("Copyright (c) 1995-2009 wxWidgets team"),
-               wxPlatformInfo::Get().GetPortIdName().c_str(),
+    msg.Printf(wxS("wxWidgets Library (%s port)\n")
+               wxS("Version %d.%d.%d (Unicode: %s, debug level: %d),\n")
+               wxS("compiled at %s %s\n\n")
+               wxS("Runtime version of toolkit used is %d.%d.\n"),
+               wxPlatformInfo::Get().GetPortIdName(),
                wxMAJOR_VERSION,
                wxMINOR_VERSION,
                wxRELEASE_NUMBER,
-#if wxUSE_UNICODE
-               L" (Unicode)",
+#if wxUSE_UNICODE_UTF8
+               "UTF-8",
+#elif wxUSE_UNICODE
+               "wchar_t",
 #else
-               wxEmptyString,
+               "none",
 #endif
-#ifdef __WXDEBUG__
-               wxT(" Debug build"),
-#else
-               wxEmptyString,
-#endif
+               wxDEBUG_LEVEL,
                __TDATE__,
                __TTIME__,
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
-               wxPlatformInfo::Get().GetToolkitMinorVersion(),
+               wxPlatformInfo::Get().GetToolkitMinorVersion()
+              );
+
 #ifdef __WXGTK__
-               wxString::Format("\nThe compile-time GTK+ version is %d.%d.%d.",
-                                GTK_MAJOR_VERSION,
-                                GTK_MINOR_VERSION,
-                                GTK_MICRO_VERSION).c_str()
-#else
-               wxEmptyString
-#endif
-               );
+    msg += wxString::Format("Compile-time GTK+ version is %d.%d.%d.\n",
+                            GTK_MAJOR_VERSION,
+                            GTK_MINOR_VERSION,
+                            GTK_MICRO_VERSION);
+#endif // __WXGTK__
+
+    msg += wxS("\nCopyright (c) 1995-2009 wxWidgets team");
+
     wxMessageBox(msg, wxT("wxWidgets information"),
                  wxICON_INFORMATION | wxOK,
                  parent);
