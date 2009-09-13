@@ -63,8 +63,11 @@ bool wxSpinButton::Create(
         m_windowId = NewControlId();
     else
         m_windowId = vId;
-    m_backgroundColour = pParent->GetBackgroundColour();
-    m_foregroundColour = pParent->GetForegroundColour();
+    if (pParent)
+    {
+        m_backgroundColour = pParent->GetBackgroundColour();
+        m_foregroundColour = pParent->GetForegroundColour();
+    }
     SetName(rsName);
     SetParent(pParent);
     m_windowStyle      = lStyle;
