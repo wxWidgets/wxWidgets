@@ -77,8 +77,8 @@ bool wxApp::CallOnInit()
 int wxApp::OnRun()
 {
     wxMacAutoreleasePool pool;
-    char* appname = "test";
-    UIApplicationMain( 1, &appname, nil, @"wxAppDelegate" );
+    const char* appname = "app";
+    UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
     return 1;
 }
 
@@ -137,15 +137,31 @@ extern CGSize MeasureTextInContext( UIFont *font, NSString* text )
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
     CGRect r = [[UIScreen mainScreen] applicationFrame];
-    if ( x )
-        *x = r.origin.x;
-    if ( y )
-        *y = r.origin.y;
-    if ( width )
-        *width = r.size.width;
-    if ( height )
-        *height = r.size.height;
-
+    CGRect bounds = [[UIScreen mainScreen] bounds];
+    if ( bounds.size.height > r.size.height )
+    {
+        // portrait
+        if ( x )
+            *x = r.origin.x;
+        if ( y )
+            *y = r.origin.y;
+        if ( width )
+            *width = r.size.width;
+        if ( height )
+            *height = r.size.height;
+    }
+    else
+    {
+        // landscape
+        if ( x )
+            *x = r.origin.y;
+        if ( y )
+            *y = r.origin.x;
+        if ( width )
+            *width = r.size.height;
+        if ( height )
+            *height = r.size.width;
+    }
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -162,12 +178,25 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
+    CGRect r = [[UIScreen mainScreen] applicationFrame];
     CGRect bounds = [[UIScreen mainScreen] bounds];
 
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
+    if ( bounds.size.height > r.size.height )
+    {
+        // portrait
+        if ( width )
+            *width = (int)bounds.size.width ;
+        if ( height )
+            *height = (int)bounds.size.height;
+    }
+    else
+    {
+        // landscape
+        if ( width )
+            *width = (int)bounds.size.height ;
+        if ( height )
+            *height = (int)bounds.size.width;
+    }
 }
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
