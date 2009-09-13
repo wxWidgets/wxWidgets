@@ -2129,7 +2129,7 @@ void wxPGProperty::RemoveChild( wxPGProperty* p )
     {
         if ( *it == p )
         {
-            m_children.erase(it);
+            children.erase(it);
             break;
         }
     }
