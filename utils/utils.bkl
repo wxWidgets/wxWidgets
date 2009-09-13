@@ -12,13 +12,10 @@
         <installable>no</installable>
     </subproject>
 
-    <!--
-        Disabled for now as bakefile is unavailable.
     <subproject id="execmon" template="sub">
         <dir>execmon</dir>
         <installable>yes</installable>
     </subproject>
-     -->
 
     <subproject id="helpview" template="sub">
         <dir>helpview/src</dir>

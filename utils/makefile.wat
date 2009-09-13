@@ -52,7 +52,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" &
 
 ### Targets: ###
 
-all : .SYMBOLIC emulator helpview hhp2cached ifacecheck screenshotgen wxrc
+all : .SYMBOLIC emulator execmon helpview hhp2cached ifacecheck screenshotgen wxrc
 
 clean : .SYMBOLIC 
 	-if exist .\*.obj del .\*.obj
@@ -61,6 +61,9 @@ clean : .SYMBOLIC
 	-if exist .\*.ilk del .\*.ilk
 	-if exist .\*.pch del .\*.pch
 	cd emulator\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd execmon
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
 	cd helpview\src
@@ -81,6 +84,11 @@ clean : .SYMBOLIC
 
 emulator : .SYMBOLIC 
 	cd emulator\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
+	cd $(WATCOM_CWD)
+
+execmon : .SYMBOLIC 
+	cd execmon
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 

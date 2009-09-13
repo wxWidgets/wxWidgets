@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: emulator helpview hhp2cached ifacecheck screenshotgen wxrc
+all: emulator execmon helpview hhp2cached ifacecheck screenshotgen wxrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -54,6 +54,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>emulator.bat
 	call emulator.bat
 	@del emulator.bat
+	@echo cd execmon >execmon.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>execmon.bat
+	call execmon.bat
+	@del execmon.bat
 	@echo cd helpview\src >helpview.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>helpview.bat
 	call helpview.bat
@@ -80,6 +84,12 @@ emulator:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>emulator.bat
 	call emulator.bat
 	@del emulator.bat
+
+execmon: 
+	@echo cd execmon >execmon.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>execmon.bat
+	call execmon.bat
+	@del execmon.bat
 
 helpview: 
 	@echo cd helpview\src >helpview.bat
