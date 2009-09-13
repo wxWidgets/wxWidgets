@@ -215,6 +215,31 @@ private:
 
 #endif // !wxGL_APP_DEFINED
 
+// ----------------------------------------------------------------------------
+// wxGLAPI: an API wrapper that allows the use of 'old' APIs even on OpenGL
+// platforms that don't support it natively anymore, if the APIs are available
+// it's a mere redirect
+// ----------------------------------------------------------------------------
+
+#ifndef wxUSE_OPENGL_EMULATION
+    #define wxUSE_OPENGL_EMULATION 0
+#endif
+
+class WXDLLIMPEXP_GL wxGLAPI : public wxObject
+{
+public:
+    wxGLAPI();
+    ~wxGLAPI();
+
+    static void glBegin(GLenum mode);
+    static void glTexCoord2f(GLfloat s, GLfloat t);
+    static void glVertex3f(GLfloat x, GLfloat y, GLfloat z);
+    static void glNormal3f(GLfloat nx, GLfloat ny, GLfloat nz);
+    static void glColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    static void glColor3f(GLfloat r, GLfloat g, GLfloat b);
+    static void glEnd();
+};
+
 #endif // wxUSE_GLCANVAS
 
 #endif // _WX_GLCANVAS_H_BASE_
