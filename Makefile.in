@@ -11921,6 +11921,7 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_carbon_drawer.o \
 	monodll_dataview_osx.o \
 	monodll_carbon_dataview.o \
+	monodll_sound_osx.o \
 	monodll_carbon_sound.o \
 	monodll_carbon_taskbar.o \
 	monodll_hidjoystick.o
@@ -11928,7 +11929,9 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_animateg.o \
+	monodll_sound_osx.o \
 	monodll_carbon_sound.o \
+	monodll_core_sound.o \
 	monodll_cocoa_aboutdlg.o \
 	monodll_dataview_osx.o \
 	monodll_cocoa_dataview.o \
@@ -12097,6 +12100,7 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_carbon_drawer.o \
 	monolib_dataview_osx.o \
 	monolib_carbon_dataview.o \
+	monolib_sound_osx.o \
 	monolib_carbon_sound.o \
 	monolib_carbon_taskbar.o \
 	monolib_hidjoystick.o
@@ -12104,7 +12108,9 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_taskbarcmn.o \
 	monolib_animateg.o \
+	monolib_sound_osx.o \
 	monolib_carbon_sound.o \
+	monolib_core_sound.o \
 	monolib_cocoa_aboutdlg.o \
 	monolib_dataview_osx.o \
 	monolib_cocoa_dataview.o \
@@ -12367,6 +12373,7 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_drawer.o \
 	advdll_dataview_osx.o \
 	advdll_carbon_dataview.o \
+	advdll_sound_osx.o \
 	advdll_carbon_sound.o \
 	advdll_carbon_taskbar.o \
 	advdll_hidjoystick.o
@@ -12374,7 +12381,9 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_taskbarcmn.o \
 	advdll_animateg.o \
+	advdll_sound_osx.o \
 	advdll_carbon_sound.o \
+	advdll_core_sound.o \
 	advdll_cocoa_aboutdlg.o \
 	advdll_dataview_osx.o \
 	advdll_cocoa_dataview.o \
@@ -12449,6 +12458,7 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_drawer.o \
 	advlib_dataview_osx.o \
 	advlib_carbon_dataview.o \
+	advlib_sound_osx.o \
 	advlib_carbon_sound.o \
 	advlib_carbon_taskbar.o \
 	advlib_hidjoystick.o
@@ -12456,7 +12466,9 @@ COND_TOOLKIT_OSX_CARBON___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_taskbarcmn.o \
 	advlib_animateg.o \
+	advlib_sound_osx.o \
 	advlib_carbon_sound.o \
+	advlib_core_sound.o \
 	advlib_cocoa_aboutdlg.o \
 	advlib_dataview_osx.o \
 	advlib_cocoa_dataview.o \
@@ -18619,6 +18631,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_carbon_dataview.o: $(srcdir)/src/osx/carbon/dataview.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dataview.cpp
 
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_carbon_sound.o: $(srcdir)/src/osx/carbon/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/sound.cpp
 
@@ -18636,6 +18654,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monodll_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
@@ -23347,6 +23368,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_carbon_dataview.o: $(srcdir)/src/osx/carbon/dataview.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dataview.cpp
 
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_carbon_sound.o: $(srcdir)/src/osx/carbon/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/sound.cpp
 
@@ -23364,6 +23391,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_COCOA_USE_GUI_1@monolib_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
@@ -31819,6 +31849,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@advdll_carbon_dataview.o: $(srcdir)/src/osx/carbon/dataview.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dataview.cpp
 
+@COND_TOOLKIT_OSX_CARBON@advdll_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advdll_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
 @COND_TOOLKIT_OSX_CARBON@advdll_carbon_sound.o: $(srcdir)/src/osx/carbon/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/sound.cpp
 
@@ -31836,6 +31872,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_COCOA@advdll_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advdll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
 @COND_TOOLKIT_OSX_COCOA@advdll_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
@@ -32134,6 +32173,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@advlib_carbon_dataview.o: $(srcdir)/src/osx/carbon/dataview.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dataview.cpp
 
+@COND_TOOLKIT_OSX_CARBON@advlib_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advlib_sound_osx.o: $(srcdir)/src/osx/sound_osx.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/sound_osx.cpp
+
 @COND_TOOLKIT_OSX_CARBON@advlib_carbon_sound.o: $(srcdir)/src/osx/carbon/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_CARBON@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/sound.cpp
 
@@ -32151,6 +32196,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_COCOA@advlib_hidjoystick.o: $(srcdir)/src/osx/core/hidjoystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/core/hidjoystick.cpp
+
+@COND_TOOLKIT_OSX_COCOA@advlib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
 
 @COND_TOOLKIT_OSX_COCOA@advlib_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm

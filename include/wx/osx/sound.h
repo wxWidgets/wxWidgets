@@ -17,37 +17,62 @@
 
 #include "wx/object.h"
 
+class WXDLLIMPEXP_ADV wxSoundTimer;
+
+class WXDLLIMPEXP_ADV wxSoundData
+{
+public :
+    wxSoundData();
+    virtual ~wxSoundData();
+    
+    virtual bool Play(unsigned int flags) = 0;
+    // stops the sound and deletes the optional timer
+    virtual void Stop();
+    // can be called by a timer for repeated tasks during playback
+    virtual void SoundTask();
+    
+    // does the true work of stopping and cleaning up
+    virtual void DoStop() = 0;
+protected :
+    void CreateAndStartTimer();
+    
+    unsigned int m_flags;
+    wxSoundTimer* m_pTimer;
+} ;
+
 class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
 {
 public:
-  wxSound();
-  wxSound(const wxString& fileName, bool isResource = FALSE);
-  wxSound(int size, const wxByte* data);
-  virtual ~wxSound();
+    wxSound();
+    wxSound(const wxString& fileName, bool isResource = FALSE);
+    wxSound(int size, const wxByte* data);
+    virtual ~wxSound();
 
-public:
-  bool  Create(const wxString& fileName, bool isResource = FALSE);
-  bool  IsOk() const { return !m_sndname.IsEmpty(); }
-  static void  Stop();
-  static bool IsPlaying();
+    // Create from resource or file
+    bool  Create(const wxString& fileName, bool isResource = FALSE);
+    // Create from data
+    bool Create(int size, const wxByte* data);
 
-  void* GetHandle();
+    bool IsOk() const { return m_data != NULL; }
+    
+    // Stop playing any sound
+    static void Stop();
+    
+    // Returns true if a sound is being played
+    static bool IsPlaying();
+    
+    // Notification when a sound has stopped
+    static void SoundStopped(const wxSoundData* data);
+    
 protected:
-  bool  DoPlay(unsigned flags) const;
+    bool    DoPlay(unsigned flags) const;
+    void    Init();
 
 private:
-    wxString m_sndname; //file path
-    char* m_hSnd; //pointer to resource or memory location
-    int m_waveLength; //size of file in memory mode
-    void* m_pTimer; //timer
-
-    enum wxSoundType
-    {
-        wxSound_MEMORY,
-        wxSound_FILE,
-        wxSound_RESOURCE,
-        wxSound_NONE
-    } m_type; //mode
+    // data of this object
+    class wxSoundData *m_data;
+    
+    wxDECLARE_NO_COPY_CLASS(wxSound);
 };
 
 #endif
