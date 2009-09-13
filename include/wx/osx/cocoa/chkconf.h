@@ -41,6 +41,18 @@
 #endif
 
 /*
+ * Audio System
+ */
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+    #define wxOSX_USE_QUICKTIME 0
+    #define wXOSX_USE_AUDIOTOOLBOX 1
+#else // platform < 10.5
+    #define wxOSX_USE_QUICKTIME 1
+    #define wXOSX_USE_AUDIOTOOLBOX 0
+#endif
+
+/*
  * turning off capabilities that don't work under cocoa yet
  */
 

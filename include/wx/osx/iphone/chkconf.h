@@ -24,6 +24,9 @@
 #define wxOSX_USE_ATSU_TEXT 0
 #define wxHAS_OPENGL_ES
 
+#define wxOSX_USE_QUICKTIME 0
+#define wXOSX_USE_AUDIOTOOLBOX 1
+
 /*
  * turning off capabilities that don't work under iphone yet
  */
@@ -85,8 +88,10 @@
 #define wxUSE_COMBOBOX 0
 #endif
 
-#undef wxUSE_SCROLLBAR
+#ifndef __WXUNIVERSAL__
+#undef wxUSE_SCROLLBAR 
 #define wxUSE_SCROLLBAR 0
+#endif
 
 #undef wxUSE_STATUSBAR
 #undef wxUSE_NATIVE_STATUSBAR
@@ -97,7 +102,6 @@
 #undef wxUSE_COLLPANE
 #undef wxUSE_STATBMP
 #undef wxUSE_STATBOX
-#undef wxUSE_CHECKBOX
 #undef wxUSE_RADIOBTN
 #undef wxUSE_RADIOBOX
 #undef wxUSE_TOGGLEBTN
@@ -112,7 +116,6 @@
 #define wxUSE_COLLPANE 0
 #define wxUSE_STATBMP 0
 #define wxUSE_STATBOX 0
-#define wxUSE_CHECKBOX 0
 #define wxUSE_RADIOBTN 0
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
@@ -277,11 +280,12 @@
 #define wxUSE_CLIPBOARD 0
 #endif // wxUSE_CLIPBOARD
 
+/*
 #if wxUSE_GLCANVAS
 #undef wxUSE_GLCANVAS
 #define wxUSE_GLCANVAS 0
 #endif // wxUSE_GLCANVAS
-
+*/
 
 #if wxUSE_COLOURDLG
 #undef wxUSE_COLOURDLG
