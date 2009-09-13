@@ -221,19 +221,6 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
     return [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute*) attribs];
 }
 
-bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
-{
-    if ( !m_glContext )
-        return false;
-
-    [m_glContext setView: win.GetHandle() ];
-    [m_glContext update];
-
-    [m_glContext makeCurrentContext];
-
-    return true;
-}
-
 @interface wxNSCustomOpenGLView : NSView
 {
     NSOpenGLContext* context;
@@ -294,5 +281,27 @@ wxGLCanvas::~wxGLCanvas()
         WXGLDestroyPixelFormat(m_glFormat);
 }
 
+bool wxGLCanvas::SwapBuffers()
+{
+    WXGLContext context = WXGLGetCurrentContext();
+    wxCHECK_MSG(context, false, wxT("should have current context"));
+
+    [context flushBuffer];
+
+    return true;
+}
+
+bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
+{
+    if ( !m_glContext )
+        return false;  
+
+    [m_glContext setView: win.GetHandle() ];
+    [m_glContext update];
+    
+    [m_glContext makeCurrentContext];
+    
+    return true;
+}
 
 #endif // wxUSE_GLCANVAS

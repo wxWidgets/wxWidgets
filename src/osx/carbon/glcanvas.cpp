@@ -77,11 +77,6 @@ void WXGLDestroyContext( WXGLContext context )
     }
 }
 
-void WXGLSwapBuffers( WXGLContext context )
-{
-    aglSwapBuffers(context);
-}
-
 WXGLContext WXGLGetCurrentContext()
 {
     return aglGetCurrentContext();
@@ -365,6 +360,15 @@ wxGLCanvas::~wxGLCanvas()
 
     if ( m_dummyContext )
         WXGLDestroyContext(m_dummyContext);
+}
+
+bool wxGLCanvas::SwapBuffers()
+{
+    WXGLContext context = WXGLGetCurrentContext();
+    wxCHECK_MSG(context, false, wxT("should have current context"));
+
+    aglSwapBuffers(context);
+    return true;
 }
 
 void wxGLCanvas::SetViewport()
