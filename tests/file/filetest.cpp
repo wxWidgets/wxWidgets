@@ -76,7 +76,7 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
         wxFile fin(tf.GetName(), wxFile::read);
         CPPUNIT_ASSERT( fin.IsOpened() );
 
-        const wxFileOffset len = fin.Length();
+        const ssize_t len = fin.Length();
         wxCharBuffer buf(len);
         CPPUNIT_ASSERT_EQUAL( len, fin.Read(buf.data(), len) );
 
