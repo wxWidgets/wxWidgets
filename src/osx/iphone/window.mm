@@ -368,8 +368,14 @@ wxWidgetIPhoneImpl::~wxWidgetIPhoneImpl()
 
 bool wxWidgetIPhoneImpl::IsVisible() const
 {
-    // TODO reflect Superviews state
-    return [m_osxView isHidden] == NO;
+    UIView* view = m_osxView;
+    while ( view != nil && [view isHidden] == NO )
+    {
+        view = [view superview];
+        if (view != nil && [view isHidden])
+            NSLog(@"visible test failed for %@",view); 
+    }
+    return view == nil;
 }
 
 void wxWidgetIPhoneImpl::SetVisibility( bool visible )
@@ -706,9 +712,12 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
         // call super
         SEL _cmd = @selector(drawRect:);
         wxOSX_DrawRectHandlerPtr superimpl = (wxOSX_DrawRectHandlerPtr) [[slf superclass] instanceMethodForSelector:_cmd];
-        superimpl(slf, _cmd, *rect);
-        CGContextRestoreGState( context );
-        CGContextSaveGState( context );
+        if ( superimpl != wxOSX_drawRect )
+        {
+            superimpl(slf, _cmd, *rect);
+            CGContextRestoreGState( context );
+            CGContextSaveGState( context );
+        }
     }
     wxpeer->MacPaintChildrenBorders();
     wxpeer->MacSetCGContextRef( NULL );
