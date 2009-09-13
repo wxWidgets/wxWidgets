@@ -2922,6 +2922,7 @@ src/osx/iphone/window.mm
     src/osx/carbon/drawer.cpp
     src/osx/dataview_osx.cpp
     src/osx/carbon/dataview.cpp
+    src/osx/sound_osx.cpp
     src/osx/carbon/sound.cpp
     src/osx/carbon/taskbar.cpp
     src/osx/core/hidjoystick.cpp
@@ -2941,7 +2942,9 @@ src/osx/iphone/window.mm
 <set var="ADVANCED_OSX_COCOA_SRC" hints="files">
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
+    src/osx/sound_osx.cpp
     src/osx/carbon/sound.cpp
+    src/osx/core/sound.cpp
     src/osx/cocoa/aboutdlg.mm
     src/osx/dataview_osx.cpp
     src/osx/cocoa/dataview.mm
