@@ -39,10 +39,10 @@ PORTNAME = base
 !if "$(USE_GUI)" == "1"
 PORTNAME = msw
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
 WXDEBUGFLAG = d
 !endif
-!if "$(DEBUG_FLAG)" == "1"
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
 WXDEBUGFLAG = d
 !endif
 !if "$(UNICODE)" == "1"
@@ -180,11 +180,8 @@ __NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_FLAG)" == "default"
-__DEBUG_DEFINE_p = /D__WXDEBUG__
-!endif
-!if "$(DEBUG_FLAG)" == "1"
-__DEBUG_DEFINE_p = /D__WXDEBUG__
+!if "$(DEBUG_FLAG)" == "0"
+__DEBUG_DEFINE_p = /DwxDEBUG_LEVEL=0
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p = /DwxNO_EXCEPTIONS
@@ -245,7 +242,7 @@ clean:
 !if "$(USE_XRC)" == "1"
 $(OBJS)\execmon.exe: $(EXECMON_OBJECTS)
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\execmon.pdb"  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(LDFLAGS) @<<
-	$(EXECMON_OBJECTS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
+	$(EXECMON_OBJECTS)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
 !endif
 
