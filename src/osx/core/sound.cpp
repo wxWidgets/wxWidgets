@@ -56,6 +56,11 @@ wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(const wxString& fileName)
     m_sndname = fileName;
 }
 
+wxOSXAudioToolboxSoundData::~wxOSXAudioToolboxSoundData()
+{
+    DoStop();
+}
+
 void wxOSXAudioToolboxSoundData::CompletionCallback(SystemSoundID  mySSID, void * soundRef)
 {
     wxOSXAudioToolboxSoundData* data = (wxOSXAudioToolboxSoundData*) soundRef;
