@@ -71,9 +71,9 @@
 #endif
 
 // Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a
-// cursor reliably without using wxClientDC in case there
+// caret reliably without using wxClientDC in case there
 // are platform-specific problems with the generic caret.
-#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#if defined(__WXGTK__) || (defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS)
 #define wxRICHTEXT_USE_OWN_CARET 1
 #else
 #define wxRICHTEXT_USE_OWN_CARET 0
