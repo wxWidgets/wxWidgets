@@ -295,6 +295,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const = 0;
+
+    // make the dtor of a class with virtual functions virtual to avoid g++
+    // warnings, even though this class is not supposed to be used
+    // polymorphically
+    virtual ~wxGridCornerHeaderRenderer() { }
 };
 
 
