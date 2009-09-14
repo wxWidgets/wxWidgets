@@ -43,6 +43,85 @@
     #include "../sample.xpm"
 #endif
 
+// Custom renderer that renders column header cells without borders and in
+// italic
+class CustomColumnHeaderRenderer : public wxGridColumnHeaderRenderer
+{
+public:
+    CustomColumnHeaderRenderer(const wxColour& colFg, const wxColour& colBg)
+        : m_colFg(colFg),
+          m_colBg(colBg)
+    {
+    }
+
+    virtual void DrawLabel(const wxGrid& WXUNUSED(grid),
+                           wxDC& dc,
+                           const wxString& value,
+                           const wxRect& rect,
+                           int horizAlign,
+                           int vertAlign,
+                           int WXUNUSED(textOrientation)) const
+    {
+        dc.SetTextForeground(m_colFg);
+        dc.SetFont(wxITALIC_FONT->Bold());
+        dc.DrawLabel(value, rect, horizAlign | vertAlign);
+    }
+
+    virtual void DrawBorder(const wxGrid& WXUNUSED(grid),
+                            wxDC& dc,
+                            wxRect& rect) const
+    {
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.SetBrush(wxBrush(m_colBg));
+        dc.DrawRectangle(rect);
+    }
+
+private:
+    const wxColour m_colFg, m_colBg;
+
+    wxDECLARE_NO_COPY_CLASS(CustomColumnHeaderRenderer);
+};
+
+// And a custom attributes provider which uses custom column header renderer
+// defined above
+class CustomColumnHeadersProvider : public wxGridCellAttrProvider
+{
+public:
+    // by default custom column renderer is not used, call
+    // UseCustomColHeaders() to enable it
+    CustomColumnHeadersProvider()
+        : m_customOddRenderer(*wxYELLOW, *wxBLUE),
+          m_customEvenRenderer(*wxWHITE, *wxBLACK),
+          m_useCustom(false)
+    {
+    }
+
+    // enable or disable the use of custom renderer for column headers
+    void UseCustomColHeaders(bool use = true) { m_useCustom = use; }
+
+protected:
+    virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col)
+    {
+        // if enabled, use custom renderers
+        if ( m_useCustom )
+        {
+            // and use different ones for odd and even columns -- just to show
+            // that we can
+            return col % 2 ? m_customOddRenderer : m_customEvenRenderer;
+        }
+
+        return wxGridCellAttrProvider::GetColumnHeaderRenderer(col);
+    }
+
+private:
+    CustomColumnHeaderRenderer m_customOddRenderer,
+                               m_customEvenRenderer;
+
+    bool m_useCustom;
+
+    wxDECLARE_NO_COPY_CLASS(CustomColumnHeadersProvider);
+};
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -78,7 +157,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
-    EVT_MENU( ID_TOGGLENATIVEHEADER, GridFrame::ToggleNativeHeader )
+    EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
+    EVT_MENU( ID_COLDEFAULTHEADER, GridFrame::SetDefaultColHeader )
+    EVT_MENU( ID_COLCUSTOMHEADER, GridFrame::SetCustomColHeader )
     EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_CELLOVERFLOW, GridFrame::CellOverflow )
@@ -170,7 +251,6 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDDRAGCELL, "&Grid drag-cell");
-    viewMenu->AppendCheckItem(ID_TOGGLENATIVEHEADER, "&Native column headers");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDLINES, "&Grid Lines");
     viewMenu->AppendCheckItem(ID_SET_HIGHLIGHT_WIDTH, "&Set Cell Highlight Width...");
     viewMenu->AppendCheckItem(ID_SET_RO_HIGHLIGHT_WIDTH, "&Set Cell RO Highlight Width...");
@@ -184,8 +264,8 @@ GridFrame::GridFrame()
                       rowLabelMenu,
                       wxT("Change alignment of row labels") );
 
-    rowLabelMenu->Append( ID_ROWLABELHORIZALIGN, wxT("&Horizontal") );
-    rowLabelMenu->Append( ID_ROWLABELVERTALIGN, wxT("&Vertical") );
+    rowLabelMenu->AppendRadioItem( ID_ROWLABELHORIZALIGN, wxT("&Horizontal") );
+    rowLabelMenu->AppendRadioItem( ID_ROWLABELVERTALIGN, wxT("&Vertical") );
 
     wxMenu *colLabelMenu = new wxMenu;
 
@@ -193,8 +273,19 @@ GridFrame::GridFrame()
                       colLabelMenu,
                       wxT("Change alignment of col labels") );
 
-    colLabelMenu->Append( ID_COLLABELHORIZALIGN, wxT("&Horizontal") );
-    colLabelMenu->Append( ID_COLLABELVERTALIGN, wxT("&Vertical") );
+    colLabelMenu->AppendRadioItem( ID_COLLABELHORIZALIGN, wxT("&Horizontal") );
+    colLabelMenu->AppendRadioItem( ID_COLLABELVERTALIGN, wxT("&Vertical") );
+
+    wxMenu *colHeaderMenu = new wxMenu;
+
+    viewMenu->Append( ID_ROWLABELALIGN, wxT("Col header style"),
+                      colHeaderMenu,
+                      wxT("Change style of col header") );
+
+    colHeaderMenu->AppendRadioItem( ID_COLDEFAULTHEADER, wxT("&Default") );
+    colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, wxT("&Native") );
+    colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, wxT("&Custom") );
+
 
     wxMenu *colMenu = new wxMenu;
     colMenu->Append( ID_SETLABELCOLOUR, wxT("Set &label colour...") );
@@ -267,6 +358,7 @@ GridFrame::GridFrame()
                        wxPoint( 0, 0 ),
                        wxSize( 400, 300 ) );
 
+
 #if wxUSE_LOG
     int gridW = 600, gridH = 300;
     int logW = gridW, logH = 100;
@@ -286,6 +378,9 @@ GridFrame::GridFrame()
     // this will create a grid and, by default, an associated grid
     // table for strings
     grid->CreateGrid( 0, 0 );
+
+    grid->GetTable()->SetAttrProvider(new CustomColumnHeadersProvider());
+
     grid->AppendRows(100);
     grid->AppendCols(100);
 
@@ -427,7 +522,6 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
-    GetMenuBar()->Check( ID_TOGGLENATIVEHEADER, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
     GetMenuBar()->Check( ID_CELLOVERFLOW, true );
 }
@@ -497,11 +591,30 @@ void GridFrame::ToggleGridDragCell( wxCommandEvent& WXUNUSED(ev) )
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDDRAGCELL ) );
 }
 
-void GridFrame::ToggleNativeHeader( wxCommandEvent& WXUNUSED(ev) )
+void GridFrame::SetNativeColHeader( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->SetUseNativeColLabels(
-        GetMenuBar()->IsChecked( ID_TOGGLENATIVEHEADER ) );
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(false);
+    grid->SetUseNativeColLabels(true);
 }
+
+void GridFrame::SetCustomColHeader( wxCommandEvent& WXUNUSED(ev) )
+{
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(true);
+    grid->SetUseNativeColLabels(false);
+}
+
+void GridFrame::SetDefaultColHeader( wxCommandEvent& WXUNUSED(ev) )
+{
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(false);
+    grid->SetUseNativeColLabels(false);
+}
+
 
 void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
 {

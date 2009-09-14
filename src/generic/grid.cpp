@@ -192,6 +192,90 @@ wxGridCellWorker::~wxGridCellWorker()
 }
 
 // ----------------------------------------------------------------------------
+// wxGridHeaderLabelsRenderer and related classes
+// ----------------------------------------------------------------------------
+
+void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
+                                           wxDC& dc,
+                                           const wxString& value,
+                                           const wxRect& rect,
+                                           int horizAlign,
+                                           int vertAlign,
+                                           int textOrientation) const
+{
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    dc.SetTextForeground(grid.GetLabelTextColour());
+    dc.SetFont(grid.GetLabelFont());
+    grid.DrawTextRectangle(dc, value, rect, horizAlign, vertAlign, textOrientation);
+}
+
+
+void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+                                                wxDC& dc,
+                                                wxRect& rect) const
+{
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+    dc.DrawLine(rect.GetRight(), rect.GetTop(),
+                rect.GetRight(), rect.GetBottom());
+    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                rect.GetLeft(), rect.GetBottom());
+    dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
+                rect.GetRight() + 1, rect.GetBottom());
+
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(),
+                rect.GetLeft() + 1, rect.GetBottom());
+    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(),
+                rect.GetRight(), rect.GetTop());
+
+    rect.Deflate(2);
+}
+
+void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+                                                   wxDC& dc,
+                                                   wxRect& rect) const
+{
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+    dc.DrawLine(rect.GetRight(), rect.GetTop(),
+                rect.GetRight(), rect.GetBottom());
+    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                rect.GetRight(), rect.GetTop());
+    dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
+                rect.GetRight() + 1, rect.GetBottom());
+
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(rect.GetLeft(), rect.GetTop() + 1,
+                rect.GetLeft(), rect.GetBottom());
+    dc.DrawLine(rect.GetLeft(), rect.GetTop() + 1,
+                rect.GetRight(), rect.GetTop() + 1);
+
+    rect.Deflate(2);
+}
+
+void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+                                                   wxDC& dc,
+                                                   wxRect& rect) const
+{
+    dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
+    dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
+                rect.GetRight() - 1, rect.GetTop());
+    dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
+                rect.GetLeft(), rect.GetBottom() - 1);
+    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                rect.GetRight(), rect.GetTop());
+    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                rect.GetLeft(), rect.GetBottom());
+
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop() + 1,
+                rect.GetRight() - 1, rect.GetTop() + 1);
+    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop() + 1,
+                rect.GetLeft() + 1, rect.GetBottom() - 1);
+
+    rect.Deflate(2);
+}
+
+// ----------------------------------------------------------------------------
 // wxGridCellAttr
 // ----------------------------------------------------------------------------
 
@@ -5324,32 +5408,16 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     if ( GetRowHeight(row) <= 0 || m_rowLabelWidth <= 0 )
         return;
 
-    wxRect rect;
-
-    int rowTop = GetRowTop(row),
-        rowBottom = GetRowBottom(row) - 1;
-
-    dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
-    dc.DrawLine( m_rowLabelWidth - 1, rowTop, m_rowLabelWidth - 1, rowBottom );
-    dc.DrawLine( 0, rowTop, 0, rowBottom );
-    dc.DrawLine( 0, rowBottom, m_rowLabelWidth, rowBottom );
-
-    dc.SetPen( *wxWHITE_PEN );
-    dc.DrawLine( 1, rowTop, 1, rowBottom );
-    dc.DrawLine( 1, rowTop, m_rowLabelWidth - 1, rowTop );
-
-    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
-    dc.SetTextForeground( GetLabelTextColour() );
-    dc.SetFont( GetLabelFont() );
+    const wxGridRowHeaderRenderer&
+        rend = m_table->GetAttrProvider()->GetRowHeaderRenderer(row);
+    wxRect rect(0, GetRowTop(row), m_rowLabelWidth, GetRowHeight(row));
+    rend.DrawBorder(*this, dc, rect);
 
     int hAlign, vAlign;
-    GetRowLabelAlignment( &hAlign, &vAlign );
+    GetRowLabelAlignment(&hAlign, &vAlign);
 
-    rect.SetX( 2 );
-    rect.SetY( GetRowTop(row) + 2 );
-    rect.SetWidth( m_rowLabelWidth - 4 );
-    rect.SetHeight( GetRowHeight(row) - 4 );
-    DrawTextRectangle( dc, GetRowLabelValue( row ), rect, hAlign, vAlign );
+    rend.DrawLabel(*this, dc, GetRowLabelValue(row),
+                   rect, hAlign, vAlign, wxHORIZONTAL);
 }
 
 void wxGrid::UseNativeColHeader(bool native)
@@ -5397,26 +5465,23 @@ void wxGrid::DrawColLabels( wxDC& dc,const wxArrayInt& cols )
 
 void wxGrid::DrawCornerLabel(wxDC& dc)
 {
+    wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
+
     if ( m_nativeColumnLabels )
     {
-        wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
         rect.Deflate(1);
 
         wxRendererNative::Get().DrawHeaderButton(m_cornerLabelWin, dc, rect, 0);
     }
     else
     {
-        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
-        dc.DrawLine( m_rowLabelWidth - 1, m_colLabelHeight - 1,
-                     m_rowLabelWidth - 1, 0 );
-        dc.DrawLine( m_rowLabelWidth - 1, m_colLabelHeight - 1,
-                     0, m_colLabelHeight - 1 );
-        dc.DrawLine( 0, 0, m_rowLabelWidth, 0 );
-        dc.DrawLine( 0, 0, 0, m_colLabelHeight );
+        rect.width++;
+        rect.height++;
 
-        dc.SetPen( *wxWHITE_PEN );
-        dc.DrawLine( 1, 1, m_rowLabelWidth - 1, 1 );
-        dc.DrawLine( 1, 1, 1, m_colLabelHeight - 1 );
+        const wxGridCornerHeaderRenderer&
+            rend = m_table->GetAttrProvider()->GetCornerRenderer();
+
+        rend.DrawBorder(*this, dc, rect);
     }
 }
 
@@ -5428,6 +5493,8 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     int colLeft = GetColLeft(col);
 
     wxRect rect(colLeft, 0, GetColWidth(col), m_colLabelHeight);
+    const wxGridColumnHeaderRenderer&
+        rend = m_table->GetAttrProvider()->GetColumnHeaderRenderer(col);
 
     if ( m_nativeColumnLabels )
     {
@@ -5443,34 +5510,18 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
                                             : wxHDR_SORT_ICON_DOWN
                                         : wxHDR_SORT_ICON_NONE
                                 );
+        rect.Deflate(2);
     }
     else
     {
-        int colRight = GetColRight(col) - 1;
-
-        dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
-        dc.DrawLine( colRight, 0,
-                     colRight, m_colLabelHeight - 1 );
-        dc.DrawLine( colLeft, 0,
-                     colRight, 0 );
-        dc.DrawLine( colLeft, m_colLabelHeight - 1,
-                     colRight + 1, m_colLabelHeight - 1 );
-
-        dc.SetPen( *wxWHITE_PEN );
-        dc.DrawLine( colLeft, 1, colLeft, m_colLabelHeight - 1 );
-        dc.DrawLine( colLeft, 1, colRight, 1 );
+        rend.DrawBorder(*this, dc, rect);
     }
 
-    dc.SetBackgroundMode( wxBRUSHSTYLE_TRANSPARENT );
-    dc.SetTextForeground( GetLabelTextColour() );
-    dc.SetFont( GetLabelFont() );
-
     int hAlign, vAlign;
-    GetColLabelAlignment( &hAlign, &vAlign );
+    GetColLabelAlignment(&hAlign, &vAlign);
     const int orient = GetColLabelTextOrientation();
 
-    rect.Deflate(2);
-    DrawTextRectangle(dc, GetColLabelValue(col), rect, hAlign, vAlign, orient);
+    rend.DrawLabel(*this, dc, GetColLabelValue(col), rect, hAlign, vAlign, orient);
 }
 
 // TODO: these 2 functions should be replaced with wxDC::DrawLabel() to which
@@ -5480,7 +5531,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                 const wxRect& rect,
                                 int horizAlign,
                                 int vertAlign,
-                                int textOrientation )
+                                int textOrientation ) const
 {
     wxArrayString lines;
 
@@ -5494,7 +5545,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
                                const wxRect& rect,
                                int horizAlign,
                                int vertAlign,
-                               int textOrientation)
+                               int textOrientation) const
 {
     if ( lines.empty() )
         return;

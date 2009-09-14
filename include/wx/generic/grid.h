@@ -282,6 +282,82 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxGridCellEditor);
 };
 
+// ----------------------------------------------------------------------------
+// wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
+// ----------------------------------------------------------------------------
+
+// Base class for corner window renderer: it is the simplest of all renderers
+// and only has a single function
+class WXDLLIMPEXP_ADV wxGridCornerHeaderRenderer
+{
+public:
+    // Draw the border around the corner window.
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const = 0;
+};
+
+
+// Base class for the row/column header cells renderers
+class WXDLLIMPEXP_ADV wxGridHeaderLabelsRenderer
+    : public wxGridCornerHeaderRenderer
+{
+public:
+    // Draw header cell label
+    virtual void DrawLabel(const wxGrid& grid,
+                           wxDC& dc,
+                           const wxString& value,
+                           const wxRect& rect,
+                           int horizAlign,
+                           int vertAlign,
+                           int textOrientation) const;
+};
+
+// Currently the row/column/corner renders don't need any methods other than
+// those already in wxGridHeaderLabelsRenderer but still define separate classes
+// for them for future extensions and also for better type safety (i.e. to
+// avoid inadvertently using a column header renderer for the row headers)
+class WXDLLIMPEXP_ADV wxGridRowHeaderRenderer
+    : public wxGridHeaderLabelsRenderer
+{
+};
+
+class WXDLLIMPEXP_ADV wxGridColumnHeaderRenderer
+    : public wxGridHeaderLabelsRenderer
+{
+};
+
+// Also define the default renderers which are used by wxGridCellAttrProvider
+// by default
+class WXDLLIMPEXP_ADV wxGridRowHeaderRendererDefault
+    : public wxGridRowHeaderRenderer
+{
+public:
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
+// Column header cells renderers
+class WXDLLIMPEXP_ADV wxGridColumnHeaderRendererDefault
+    : public wxGridColumnHeaderRenderer
+{
+public:
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
+// Header corner renderer
+class WXDLLIMPEXP_ADV wxGridCornerHeaderRendererDefault
+    : public wxGridCornerHeaderRenderer
+{
+public:
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
 
 // ----------------------------------------------------------------------------
 // wxGridCellAttr: this class can be used to alter the cells appearance in
@@ -464,10 +540,39 @@ public:
     void UpdateAttrRows( size_t pos, int numRows );
     void UpdateAttrCols( size_t pos, int numCols );
 
+
+    // get renderers for the given row/column header label and the corner
+    // window: unlike cell renderers, these objects are not reference counted
+    // and are never NULL so they are returned by reference
+    virtual const wxGridColumnHeaderRenderer&
+        GetColumnHeaderRenderer(int WXUNUSED(col))
+    {
+        return m_defaultHeaderRenderers.colRenderer;
+    }
+
+    virtual const wxGridRowHeaderRenderer&
+        GetRowHeaderRenderer(int WXUNUSED(row))
+    {
+        return m_defaultHeaderRenderers.rowRenderer;
+    }
+
+    virtual const wxGridCornerHeaderRenderer& GetCornerRenderer()
+    {
+        return m_defaultHeaderRenderers.cornerRenderer;
+    }
+
 private:
     void InitData();
 
     wxGridCellAttrProviderData *m_data;
+
+    // this struct simply combines together the default header renderers
+    struct
+    {
+        wxGridColumnHeaderRendererDefault colRenderer;
+        wxGridRowHeaderRendererDefault rowRenderer;
+        wxGridCornerHeaderRendererDefault cornerRenderer;
+    } m_defaultHeaderRenderers;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellAttrProvider);
 };
@@ -923,12 +1028,12 @@ public:
     void DrawTextRectangle( wxDC& dc, const wxString&, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP,
-                            int textOrientation = wxHORIZONTAL );
+                            int textOrientation = wxHORIZONTAL ) const;
 
     void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
                             int verticalAlignment = wxALIGN_TOP,
-                            int textOrientation = wxHORIZONTAL );
+                            int textOrientation = wxHORIZONTAL ) const;
 
 
     // Split a string containing newline characters into an array of
@@ -2001,10 +2106,12 @@ protected:
     friend class wxGridColLabelWindow;
     friend class wxGridRowLabelWindow;
     friend class wxGridWindow;
+    friend class wxGridHeaderRenderer;
 
     friend class wxGridHeaderCtrl;
 
 private:
+
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
 

@@ -643,6 +643,152 @@ public:
 };
 
 /**
+    Base class for corner window renderer.
+
+    This is the simplest of all header renderers and only has a single
+    function.
+
+    @see wxGridCellAttrProvider::GetCornerRenderer()
+
+    @since 2.9.1
+ */
+class wxGridCornerHeaderRenderer
+{
+public:
+    /**
+        Called by the grid to draw the corner window border.
+
+        This method is responsible for drawing the border inside the given @a
+        rect and adjusting the rectangle size to correspond to the area inside
+        the border, i.e. usually call wxRect::Deflate() to account for the
+        border width.
+
+        @param grid
+            The grid whose corner window is being drawn.
+        @param dc
+            The device context to use for drawing.
+        @param rect
+            Input/output parameter which contains the border rectangle on input
+            and should be updated to contain the area inside the border on
+            function return.
+     */
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const = 0;
+};
+/**
+    Common base class for row and column headers renderers.
+
+    @see wxGridColumnHeaderRenderer, wxGridRowHeaderRenderer
+
+    @since 2.9.1
+ */
+class wxGridHeaderLabelsRenderer : public wxGridCornerHeaderRenderer
+{
+public:
+    /**
+        Called by the grid to draw the specified label.
+
+        Notice that the base class DrawBorder() method is called before this
+        one.
+
+        The default implementation uses wxGrid::GetLabelTextColour() and
+        wxGrid::GetLabelFont() to draw the label.
+     */
+    virtual void DrawLabel(const wxGrid& grid,
+                           wxDC& dc,
+                           const wxString& value,
+                           const wxRect& rect,
+                           int horizAlign,
+                           int vertAlign,
+                           int textOrientation) const;
+};
+
+/**
+    Base class for row headers renderer.
+
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
+    separate class for it to distinguish it from wxGridColumnHeaderRenderer.
+
+    @see wxGridRowHeaderRendererDefault
+
+    @see wxGridCellAttrProvider::GetRowHeaderRenderer()
+
+    @since 2.9.1
+ */
+class wxGridRowHeaderRenderer : public wxGridHeaderLabelsRenderer
+{
+};
+
+/**
+    Base class for column headers renderer.
+
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
+    separate class for it to distinguish it from wxGridRowHeaderRenderer.
+
+    @see wxGridColumnHeaderRendererDefault
+
+    @see wxGridCellAttrProvider::GetColumnHeaderRenderer()
+
+    @since 2.9.1
+ */
+class wxGridColumnHeaderRenderer : public wxGridHeaderLabelsRenderer
+{
+};
+
+/**
+    Default row header renderer.
+
+    You may derive from this class if you need to only override one of its
+    methods (i.e. either DrawLabel() or DrawBorder()) but continue to use the
+    default implementation for the other one.
+
+    @see wxGridColumnHeaderRendererDefault
+
+    @since 2.9.1
+ */
+class wxGridRowHeaderRendererDefault : public wxGridRowHeaderRendererDefault
+{
+public:
+    /// Implement border drawing for the row labels.
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
+/**
+    Default column header renderer.
+
+    @see wxGridRowHeaderRendererDefault
+
+    @since 2.9.1
+ */
+class wxGridColumnHeaderRendererDefault : public wxGridColumnHeaderRenderer
+{
+public:
+    /// Implement border drawing for the column labels.
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
+/**
+    Default corner window renderer.
+
+    @see wxGridColumnHeaderRendererDefault, wxGridRowHeaderRendererDefault
+
+    @since 2.9.1
+ */
+class wxGridCornerHeaderRendererDefault : public wxGridCornerHeaderRenderer
+{
+public:
+    /// Implement border drawing for the corner window.
+    virtual void DrawBorder(const wxGrid& grid,
+                            wxDC& dc,
+                            wxRect& rect) const;
+};
+
+/**
     Class providing attributes to be used for the grid cells.
 
     This class both defines an interface which grid cell attributes providers
@@ -725,6 +871,50 @@ public:
 
     /// Set attribute for the specified column.
     virtual void SetColAttr(wxGridCellAttr *attr, int col);
+
+    //@}
+
+    /**
+        Getting header renderers.
+
+        These functions return the renderers for the given row or column header
+        label and the corner window. Unlike cell attributes, these objects are
+        not reference counted and are never @NULL so they are returned by
+        reference and not pointer and DecRef() shouldn't (and can't) be called
+        for them.
+
+        All these functions were added in wxWidgets 2.9.1.
+     */
+    //@{
+
+    /**
+        Return the renderer used for drawing column headers.
+
+        By default wxGridColumnHeaderRendererDefault is returned.
+
+        @see wxGrid::SetUseNativeColLabels(), wxGrid::UseNativeColHeader()
+
+        @since 2.9.1
+     */
+    virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col);
+
+    /**
+        Return the renderer used for drawing row headers.
+
+        By default wxGridRowHeaderRendererDefault is returned.
+
+        @since 2.9.1
+     */
+    virtual const wxGridRowHeaderRenderer& GetRowHeaderRenderer(int row);
+
+    /**
+        Return the renderer used for drawing the corner window.
+
+        By default wxGridCornerHeaderRendererDefault is returned.
+
+        @since 2.9.1
+     */
+    virtual const wxGridCornerHeaderRenderer& GetCornerRenderer();
 
     //@}
 };

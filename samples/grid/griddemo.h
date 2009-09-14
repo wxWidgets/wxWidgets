@@ -39,7 +39,9 @@ class GridFrame : public wxFrame
     void ToggleColMoving( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
-    void ToggleNativeHeader ( wxCommandEvent& );
+    void SetNativeColHeader ( wxCommandEvent& );
+    void SetCustomColHeader( wxCommandEvent& );
+    void SetDefaultColHeader( wxCommandEvent& );
     void ToggleGridLines( wxCommandEvent& );
     void AutoSizeCols( wxCommandEvent& );
     void CellOverflow( wxCommandEvent& );
@@ -121,7 +123,6 @@ public:
         ID_TOGGLECOLMOVING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
-        ID_TOGGLENATIVEHEADER,
         ID_TOGGLEGRIDLINES,
         ID_AUTOSIZECOLS,
         ID_CELLOVERFLOW,
@@ -135,6 +136,9 @@ public:
         ID_COLLABELALIGN,
         ID_COLLABELHORIZALIGN,
         ID_COLLABELVERTALIGN,
+        ID_COLDEFAULTHEADER,
+        ID_COLNATIVEHEADER,
+        ID_COLCUSTOMHEADER,
         ID_GRIDLINECOLOUR,
         ID_INSERTROW,
         ID_INSERTCOL,
