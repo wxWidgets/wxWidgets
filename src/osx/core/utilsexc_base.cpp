@@ -101,8 +101,6 @@ wxString wxGetOsDescription()
             wxString::FromAscii(name.machine).c_str());
 }
 
-#endif // wxOSX_USE_COCOA_OR_CARBON
-
 //===========================================================================
 //  IMPLEMENTATION
 //===========================================================================
@@ -286,3 +284,4 @@ bool wxMacLaunch(char **argv)
     return true ;
 }
 
+#endif // wxOSX_USE_COCOA_OR_CARBON
