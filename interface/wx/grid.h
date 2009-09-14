@@ -485,6 +485,26 @@ class wxGridCellAttr
 {
 public:
     /**
+        Kind of the attribute to retrieve.
+
+        @see wxGridCellAttrProvider::GetAttr(), wxGridTableBase::GetAttr()
+     */
+    enum wxAttrKind
+    {
+        /// Return the combined effective attribute for the cell.
+        Any,
+
+        /// Return the attribute explicitly set for this cell.
+        Cell,
+
+        /// Return the attribute set for this cells row.
+        Row,
+
+        /// Return the attribute set for this cells column.
+        Col
+    };
+
+    /**
         Default constructor.
     */
     wxGridCellAttr(wxGridCellAttr* attrDefault = NULL);
@@ -622,6 +642,92 @@ public:
     void SetTextColour(const wxColour& colText);
 };
 
+/**
+    Class providing attributes to be used for the grid cells.
+
+    This class both defines an interface which grid cell attributes providers
+    should implement -- and which can be implemented differently in derived
+    classes -- and a default implementation of this interface which is often
+    good enough to be used without modification, especially with not very large
+    grids for which the efficiency of attributes storage hardly matters (see
+    the discussion below).
+
+    An object of this class can be associated with a wxGrid using
+    wxGridTableBase::SetAttrProvider() but it's not necessary to call it if you
+    intend to use the default provider as it is used by wxGridTableBase by
+    default anyhow.
+
+    Notice that while attributes provided by this class can be set for
+    individual cells using SetAttr() or the entire rows or columns using
+    SetRowAttr() and SetColAttr() they are always retrieved using GetAttr()
+    function.
+
+
+    The default implementation of this class stores the attributes passed to
+    its SetAttr(), SetRowAttr() and SetColAttr() in a straightforward way. A
+    derived class may use its knowledge about how the attributes are used in
+    your program to implement it much more efficiently: for example, using a
+    special background colour for all even-numbered rows can be implemented by
+    simply returning the same attribute from GetAttr() if the row number is
+    even instead of having to store N/2 row attributes where N is the total
+    number of rows in the grid.
+
+    Notice that objects of this class can't be copied.
+ */
+class wxGridCellAttrProvider : public wxClientDataContainer
+{
+public:
+    /// Trivial default constructor.
+    wxGridCellAttrProvider();
+
+    /// Destructor releases any attributes held by this class.
+    virtual ~wxGridCellAttrProvider();
+
+    /**
+        Get the attribute to use for the specified cell.
+
+        If wxGridCellAttr::Any is used as @a kind value, this function combines
+        the attributes set for this cell using SetAttr() and those for its row
+        or column (set with SetRowAttr() or SetColAttr() respectively), with
+        the cell attribute having the highest precedence.
+
+        Notice that the caller must call DecRef() on the returned pointer if it
+        is non-@NULL.
+
+        @param row
+            The row of the cell.
+        @param col
+            The column of the cell.
+        @param kind
+            The kind of the attribute to return.
+        @return
+            The attribute to use which should be DecRef()'d by caller or @NULL
+            if no attributes are defined for this cell.
+     */
+    virtual wxGridCellAttr *GetAttr(int row, int col,
+                                    wxGridCellAttr::wxAttrKind kind) const;
+
+    /**
+        Setting attributes.
+
+        All these functions take ownership of the attribute passed to them,
+        i.e. will call DecRef() on it themselves later and so it should not be
+        destroyed by the caller. And the attribute can be @NULL to reset a
+        previously set value.
+     */
+    //@{
+
+    /// Set attribute for the specified cell.
+    virtual void SetAttr(wxGridCellAttr *attr, int row, int col);
+
+    /// Set attribute for the specified row.
+    virtual void SetRowAttr(wxGridCellAttr *attr, int row);
+
+    /// Set attribute for the specified column.
+    virtual void SetColAttr(wxGridCellAttr *attr, int col);
+
+    //@}
+};
 
 
 /**
