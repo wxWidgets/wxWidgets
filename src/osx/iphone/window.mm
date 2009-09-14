@@ -372,8 +372,6 @@ bool wxWidgetIPhoneImpl::IsVisible() const
     while ( view != nil && [view isHidden] == NO )
     {
         view = [view superview];
-        if (view != nil && [view isHidden])
-            NSLog(@"visible test failed for %@",view); 
     }
     return view == nil;
 }
