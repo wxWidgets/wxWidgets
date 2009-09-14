@@ -87,6 +87,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(XRCID("platform_property_tool_or_menuitem"), MyFrame::OnPlatformPropertyToolOrMenuCommand)
     EVT_MENU(XRCID("art_provider_tool_or_menuitem"), MyFrame::OnArtProviderToolOrMenuCommand)
     EVT_MENU(XRCID("variable_expansion_tool_or_menuitem"), MyFrame::OnVariableExpansionToolOrMenuCommand)
+    EVT_MENU(XRCID("recursive_load"), MyFrame::OnRecursiveLoad)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAboutToolOrMenuCommand)
 END_EVENT_TABLE()
 
@@ -311,6 +312,47 @@ void MyFrame::OnVariableExpansionToolOrMenuCommand(wxCommandEvent& WXUNUSED(even
     dlg.ShowModal();
 }
 
+void MyFrame::OnRecursiveLoad(wxCommandEvent& WXUNUSED(event))
+{
+    // this dialog is created manually to show how you can inject a single
+    // control from XRC into an existing dialog
+    //
+    // this is a slightly contrived example, please keep in mind that it's done
+    // only to demonstrate LoadObjectRecursively() in action and is not the
+    // recommended to do this
+    wxDialog dlg(NULL, wxID_ANY, "Recursive Load Example",
+                 wxDefaultPosition, wxDefaultSize,
+                 wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
+    wxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add
+    (
+        new wxStaticText
+        (
+            &dlg,
+            wxID_ANY,
+            "The entire tree book control below is loaded from XRC"
+        ),
+        wxSizerFlags().Expand().Border()
+    );
+
+    sizer->Add
+    (
+        static_cast<wxWindow *>
+        (
+            // notice that controls_treebook is defined inside a notebook page
+            // inside a dialog defined in controls.xrc and so LoadObject()
+            // wouldn't find it -- but LoadObjectRecursively() does
+            wxXmlResource::Get()->
+                LoadObjectRecursively(&dlg, "controls_treebook", "wxTreebook")
+        ),
+        wxSizerFlags(1).Expand().Border()
+    );
+
+    dlg.SetSizer(sizer);
+    dlg.SetClientSize(400, 200);
+
+    dlg.ShowModal();
+}
 
 void MyFrame::OnAboutToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {

@@ -69,6 +69,10 @@
             <bitmap>variable.xpm</bitmap>
             <help>Replace variables in the XRC file at runtime</help>
         </object>        
+        <object class="wxMenuItem" name="recursive_load">
+            <label>_Recursive Load</label>
+            <help>Show how an individual control can be loaded</help>
+        </object>
     </object>    
     <object class="wxMenu" name="help_menu">
         <label>_Help</label>

@@ -286,10 +286,35 @@ public:
         The first overload lets you load nonstandard container windows and returns
         @NULL on failure. The second one lets you finish the creation of an existing
         instance and returns @false on failure.
+
+        In either case, only the resources defined at the top level of XRC
+        files can be loaded by this function, use LoadObjectRecursively() if
+        you need to load an object defined deeper in the hierarchy.
     */
     wxObject* LoadObject(wxWindow* parent, const wxString& name,
                          const wxString& classname);
     bool LoadObject(wxObject* instance, wxWindow* parent,
+                    const wxString& name,
+                    const wxString& classname);
+    //@}
+
+    //@{
+    /**
+        Load an object from anywhere in the resource tree.
+
+        These methods are similar to LoadObject() but may be used to load an
+        object from anywhere in the resource tree and not only the top level.
+        Note that you will very rarely need to do this as in normal use the
+        entire container window (defined at the top level) is loaded and not
+        its individual children but this method can be useful in some
+        particular situations.
+
+        @since 2.9.1
+    */
+    wxObject* LoadObjectRecursively(wxWindow* parent,
+                                    const wxString& name,
+                                    const wxString& classname);
+    bool LoadObjectRecursively(wxObject* instance, wxWindow* parent,
                     const wxString& name,
                     const wxString& classname);
     //@}

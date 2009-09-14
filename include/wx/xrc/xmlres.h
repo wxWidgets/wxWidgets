@@ -188,13 +188,40 @@ public:
     // Load an object from the resource specifying both the resource name and
     // the classname.  This lets you load nonstandard container windows.
     wxObject *LoadObject(wxWindow *parent, const wxString& name,
-                         const wxString& classname);
+                         const wxString& classname)
+    {
+        return DoLoadObject(parent, name, classname, false /* !recursive */);
+    }
 
     // Load an object from the resource specifying both the resource name and
     // the classname.  This form lets you finish the creation of an existing
     // instance.
-    bool LoadObject(wxObject *instance, wxWindow *parent, const wxString& name,
-                    const wxString& classname);
+    bool LoadObject(wxObject *instance,
+                    wxWindow *parent,
+                    const wxString& name,
+                    const wxString& classname)
+    {
+        return DoLoadObject(instance, parent, name, classname, false);
+    }
+
+    // These versions of LoadObject() look for the object with the given name
+    // recursively (breadth first) and can be used to instantiate an individual
+    // control defined anywhere in an XRC file. No check is done that the name
+    // is unique, it's up to the caller to ensure this.
+    wxObject *LoadObjectRecursively(wxWindow *parent,
+                                    const wxString& name,
+                                    const wxString& classname)
+    {
+        return DoLoadObject(parent, name, classname, true /* recursive */);
+    }
+
+    bool LoadObjectRecursively(wxObject *instance,
+                               wxWindow *parent,
+                               const wxString& name,
+                               const wxString& classname)
+    {
+        return DoLoadObject(instance, parent, name, classname, true);
+    }
 
     // Loads a bitmap resource from a file.
     wxBitmap LoadBitmap(const wxString& name);
@@ -309,7 +336,11 @@ protected:
     // (Uses only 'handlerToUse' if != NULL)
     wxObject *CreateResFromNode(wxXmlNode *node, wxObject *parent,
                                 wxObject *instance = NULL,
-                                wxXmlResourceHandler *handlerToUse = NULL);
+                                wxXmlResourceHandler *handlerToUse = NULL)
+    {
+        return node ? DoCreateResFromNode(*node, parent, instance, handlerToUse)
+                    : NULL;
+    }
 
     // Helper of Load() and Unload(): returns the URL corresponding to the
     // given file if it's indeed a file, otherwise returns the original string
@@ -325,6 +356,24 @@ protected:
 private:
     wxXmlResourceDataRecords& Data() { return *m_data; }
     const wxXmlResourceDataRecords& Data() const { return *m_data; }
+
+    // the real implementation of CreateResFromNode(): this should be only
+    // called if node is non-NULL
+    wxObject *DoCreateResFromNode(wxXmlNode& node,
+                                  wxObject *parent,
+                                  wxObject *instance,
+                                  wxXmlResourceHandler *handlerToUse = NULL);
+
+    // common part of LoadObject() and LoadObjectRecursively()
+    wxObject *DoLoadObject(wxWindow *parent,
+                           const wxString& name,
+                           const wxString& classname,
+                           bool recursive);
+    bool DoLoadObject(wxObject *instance,
+                      wxWindow *parent,
+                      const wxString& name,
+                      const wxString& classname,
+                      bool recursive);
 
 private:
     long m_version;

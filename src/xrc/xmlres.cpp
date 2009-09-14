@@ -431,14 +431,27 @@ wxIcon wxXmlResource::LoadIcon(const wxString& name)
 }
 
 
-wxObject *wxXmlResource::LoadObject(wxWindow *parent, const wxString& name, const wxString& classname)
+wxObject *
+wxXmlResource::DoLoadObject(wxWindow *parent,
+                            const wxString& name,
+                            const wxString& classname,
+                            bool recursive)
 {
-    return CreateResFromNode(FindResource(name, classname), parent, NULL);
+    wxXmlNode * const node = FindResource(name, classname, recursive);
+
+    return node ? DoCreateResFromNode(*node, parent, NULL) : NULL;
 }
 
-bool wxXmlResource::LoadObject(wxObject *instance, wxWindow *parent, const wxString& name, const wxString& classname)
+bool
+wxXmlResource::DoLoadObject(wxObject *instance,
+                            wxWindow *parent,
+                            const wxString& name,
+                            const wxString& classname,
+                            bool recursive)
 {
-    return CreateResFromNode(FindResource(name, classname), parent, instance) != NULL;
+    wxXmlNode * const node = FindResource(name, classname, recursive);
+
+    return node && DoCreateResFromNode(*node, parent, instance) != NULL;
 }
 
 
@@ -819,23 +832,23 @@ static void MergeNodesOver(wxXmlNode& dest, wxXmlNode& overwriteWith,
          dest.SetContent(overwriteWith.GetContent());
 }
 
-wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
-                                           wxObject *instance,
-                                           wxXmlResourceHandler *handlerToUse)
+wxObject *
+wxXmlResource::DoCreateResFromNode(wxXmlNode& node,
+                                   wxObject *parent,
+                                   wxObject *instance,
+                                   wxXmlResourceHandler *handlerToUse)
 {
-    if (node == NULL) return NULL;
-
     // handling of referenced resource
-    if ( node->GetName() == wxT("object_ref") )
+    if ( node.GetName() == wxT("object_ref") )
     {
-        wxString refName = node->GetAttribute(wxT("ref"), wxEmptyString);
+        wxString refName = node.GetAttribute(wxT("ref"), wxEmptyString);
         wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
 
         if ( !refNode )
         {
             ReportError
             (
-                node,
+                &node,
                 wxString::Format
                 (
                     "referenced object node with ref=\"%s\" not found",
@@ -845,14 +858,14 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
             return NULL;
         }
 
-        if ( !node->GetChildren() )
+        if ( !node.GetChildren() )
         {
             // In the typical, simple case, <object_ref> is used to link
             // to another node and doesn't have any content of its own that
             // would overwrite linked object's properties. In this case,
             // we can simply create the resource from linked node.
 
-            return CreateResFromNode(refNode, parent, instance);
+            return DoCreateResFromNode(*refNode, parent, instance);
         }
         else
         {
@@ -862,42 +875,42 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
             // load the resource from result of the merge.
 
             wxXmlNode copy(*refNode);
-            MergeNodesOver(copy, *node, GetFileNameFromNode(node, Data()));
+            MergeNodesOver(copy, node, GetFileNameFromNode(&node, Data()));
 
             // remember referenced object's file, see GetFileNameFromNode()
             copy.AddAttribute(ATTR_INPUT_FILENAME,
                               GetFileNameFromNode(refNode, Data()));
 
-            return CreateResFromNode(&copy, parent, instance);
+            return DoCreateResFromNode(copy, parent, instance);
         }
     }
 
     if (handlerToUse)
     {
-        if (handlerToUse->CanHandle(node))
+        if (handlerToUse->CanHandle(&node))
         {
-            return handlerToUse->CreateResource(node, parent, instance);
+            return handlerToUse->CreateResource(&node, parent, instance);
         }
     }
-    else if (node->GetName() == wxT("object"))
+    else if (node.GetName() == wxT("object"))
     {
         for ( wxVector<wxXmlResourceHandler*>::iterator h = m_handlers.begin();
               h != m_handlers.end(); ++h )
         {
             wxXmlResourceHandler *handler = *h;
-            if (handler->CanHandle(node))
-                return handler->CreateResource(node, parent, instance);
+            if (handler->CanHandle(&node))
+                return handler->CreateResource(&node, parent, instance);
         }
     }
 
     ReportError
     (
-        node,
+        &node,
         wxString::Format
         (
             "no handler found for XML node \"%s\" (class \"%s\")",
-            node->GetName(),
-            node->GetAttribute("class", wxEmptyString)
+            node.GetName(),
+            node.GetAttribute("class", wxEmptyString)
         )
     );
     return NULL;
@@ -1883,8 +1896,8 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
     {
         if ( IsObjectNode(n) )
         {
-            m_resource->CreateResFromNode(n, parent, NULL,
-                                          this_hnd_only ? this : NULL);
+            m_resource->DoCreateResFromNode(*n, parent, NULL,
+                                            this_hnd_only ? this : NULL);
         }
     }
 }
