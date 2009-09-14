@@ -183,10 +183,18 @@ wxPG_TOOLBAR                        = 0x00001000,
 */
 wxPG_DESCRIPTION                    = 0x00002000,
 
-/** wxPropertyGridManager only: don't show an internal border around the property grid
+/** wxPropertyGridManager only: don't show an internal border around
+    the property grid.
 */
 wxPG_NO_INTERNAL_BORDER             = 0x00004000
 };
+
+#if wxPG_COMPATIBILITY_1_4
+    // In wxPG 1.4 this was used to enable now-default theme border support
+    // in wxPropertyGridManager.
+    #define wxPG_THEME_BORDER           0x00000000
+#endif
+
 
 enum wxPG_EX_WINDOW_STYLES
 {
