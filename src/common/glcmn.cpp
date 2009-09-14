@@ -63,13 +63,15 @@ bool wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
     return context.SetCurrent(*static_cast<const wxGLCanvas *>(this));
 }
 
-#ifndef wxHAS_OPENGL_ES
 bool wxGLCanvasBase::SetColour(const wxString& colour)
 {
     wxColour col = wxTheColourDatabase->Find(colour);
     if ( !col.Ok() )
         return false;
 
+#ifdef wxHAS_OPENGL_ES
+    wxGLAPI::glColor3f(col.Red() / 256., col.Green() / 256., col.Blue() / 256.);
+#else
     GLboolean isRGBA;
     glGetBooleanv(GL_RGBA_MODE, &isRGBA);
     if ( isRGBA )
@@ -87,10 +89,9 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
 
         glIndexi(pix);
     }
-
+#endif
     return true;
 }
-#endif
 
 wxGLCanvasBase::~wxGLCanvasBase()
 {
@@ -205,6 +206,17 @@ wxGLAPI::wxGLAPI()
 wxGLAPI::~wxGLAPI()
 {
 }
+
+void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom, 
+                            GLfloat top, GLfloat zNear, GLfloat zFar)
+{
+#if wxUSE_OPENGL_EMULATION
+    ::glFrustumf(left, right, bottom, top, zNear, zFar);
+#else
+    ::glFrustum(left, right, bottom, top, zNear, zFar);
+#endif
+}
+
 
 void wxGLAPI::glBegin(GLenum mode)
 {

@@ -118,11 +118,9 @@ public:
     // miscellaneous helper functions
     // ------------------------------
 
-#ifndef wxHAS_OPENGL_ES
     // call glcolor() for the colour with the given name, return false if
     // colour not found
     bool SetColour(const wxString& colour);
-#endif
 
     // return true if the extension with given name is supported
     //
@@ -231,6 +229,8 @@ public:
     wxGLAPI();
     ~wxGLAPI();
 
+    static void glFrustum(GLfloat left, GLfloat right, GLfloat bottom, 
+                            GLfloat top, GLfloat zNear, GLfloat zFar);
     static void glBegin(GLenum mode);
     static void glTexCoord2f(GLfloat s, GLfloat t);
     static void glVertex3f(GLfloat x, GLfloat y, GLfloat z);
