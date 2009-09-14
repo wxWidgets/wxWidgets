@@ -1429,78 +1429,75 @@ void wxMediaPlayerTimer::Notify()
         (wxMediaPlayerNotebookPage*) m_frame->m_notebook->GetCurrentPage();
     wxMediaCtrl* currentMediaCtrl = currentpage->m_mediactrl;
 
-    if(currentpage)
+    // Number of minutes/seconds total
+    wxLongLong llLength = currentpage->m_mediactrl->Length();
+    int nMinutes = (int) (llLength / 60000).GetValue();
+    int nSeconds = (int) ((llLength % 60000)/1000).GetValue();
+
+    // Duration string (i.e. MM:SS)
+    wxString sDuration;
+    sDuration.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
+
+
+    // Number of minutes/seconds total
+    wxLongLong llTell = currentpage->m_mediactrl->Tell();
+    nMinutes = (int) (llTell / 60000).GetValue();
+    nSeconds = (int) ((llTell % 60000)/1000).GetValue();
+
+    // Position string (i.e. MM:SS)
+    wxString sPosition;
+    sPosition.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
+
+
+    // Set the third item in the listctrl entry to the duration string
+    if(currentpage->m_nLastFileId >= 0)
+        currentpage->m_playlist->SetItem(
+                currentpage->m_nLastFileId, 2, sDuration);
+
+    // Setup the slider and gauge min/max values
+    currentpage->m_slider->SetRange(0, (int)(llLength / 1000).GetValue());
+    currentpage->m_gauge->SetRange(100);
+
+
+    // if the slider is not being dragged then update it with the song position
+    if(currentpage->IsBeingDragged() == false)
+        currentpage->m_slider->SetValue((long)(llTell / 1000).GetValue());
+
+
+    // Update the gauge with the download progress
+    wxLongLong llDownloadProgress =
+        currentpage->m_mediactrl->GetDownloadProgress();
+    wxLongLong llDownloadTotal =
+        currentpage->m_mediactrl->GetDownloadTotal();
+
+    if(llDownloadTotal.GetValue() != 0)
     {
-        // Number of minutes/seconds total
-        wxLongLong llLength = currentpage->m_mediactrl->Length();
-        int nMinutes = (int) (llLength / 60000).GetValue();
-        int nSeconds = (int) ((llLength % 60000)/1000).GetValue();
-
-        // Duration string (i.e. MM:SS)
-        wxString sDuration;
-        sDuration.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
-
-
-        // Number of minutes/seconds total
-        wxLongLong llTell = currentpage->m_mediactrl->Tell();
-        nMinutes = (int) (llTell / 60000).GetValue();
-        nSeconds = (int) ((llTell % 60000)/1000).GetValue();
-
-        // Position string (i.e. MM:SS)
-        wxString sPosition;
-        sPosition.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
-
-
-        // Set the third item in the listctrl entry to the duration string
-        if(currentpage->m_nLastFileId >= 0)
-            currentpage->m_playlist->SetItem(
-                    currentpage->m_nLastFileId, 2, sDuration);
-
-        // Setup the slider and gauge min/max values
-        currentpage->m_slider->SetRange(0, (int)(llLength / 1000).GetValue());
-        currentpage->m_gauge->SetRange(100);
-
-
-        // if the slider is not being dragged then update it with the song position
-        if(currentpage->IsBeingDragged() == false)
-            currentpage->m_slider->SetValue((long)(llTell / 1000).GetValue());
-
-
-        // Update the gauge with the download progress
-        wxLongLong llDownloadProgress =
-            currentpage->m_mediactrl->GetDownloadProgress();
-        wxLongLong llDownloadTotal =
-            currentpage->m_mediactrl->GetDownloadTotal();
-
-        if(llDownloadTotal.GetValue() != 0)
-        {
-            currentpage->m_gauge->SetValue(
-                (int) ((llDownloadProgress * 100) / llDownloadTotal).GetValue()
-                                          );
-        }
-
-        // GetBestSize holds the original video size
-        wxSize videoSize = currentMediaCtrl->GetBestSize();
-
-        // Now the big part - set the status bar text to
-        // hold various metadata about the media
-#if wxUSE_STATUSBAR
-        m_frame->SetStatusText(wxString::Format(
-                        wxT("Size(x,y):%i,%i ")
-                        wxT("Position:%s/%s Speed:%1.1fx ")
-                        wxT("State:%s Loops:%i D/T:[%i]/[%i] V:%i%%"),
-                        videoSize.x,
-                        videoSize.y,
-                        sPosition.c_str(),
-                        sDuration.c_str(),
-                        currentMediaCtrl->GetPlaybackRate(),
-                        wxGetMediaStateText(currentpage->m_mediactrl->GetState()),
-                        currentpage->m_nLoops,
-                        (int)llDownloadProgress.GetValue(),
-                        (int)llDownloadTotal.GetValue(),
-                        (int)(currentpage->m_mediactrl->GetVolume() * 100)));
-#endif // wxUSE_STATUSBAR
+        currentpage->m_gauge->SetValue(
+            (int) ((llDownloadProgress * 100) / llDownloadTotal).GetValue()
+                                      );
     }
+
+    // GetBestSize holds the original video size
+    wxSize videoSize = currentMediaCtrl->GetBestSize();
+
+    // Now the big part - set the status bar text to
+    // hold various metadata about the media
+#if wxUSE_STATUSBAR
+    m_frame->SetStatusText(wxString::Format(
+                    wxT("Size(x,y):%i,%i ")
+                    wxT("Position:%s/%s Speed:%1.1fx ")
+                    wxT("State:%s Loops:%i D/T:[%i]/[%i] V:%i%%"),
+                    videoSize.x,
+                    videoSize.y,
+                    sPosition.c_str(),
+                    sDuration.c_str(),
+                    currentMediaCtrl->GetPlaybackRate(),
+                    wxGetMediaStateText(currentpage->m_mediactrl->GetState()),
+                    currentpage->m_nLoops,
+                    (int)llDownloadProgress.GetValue(),
+                    (int)llDownloadTotal.GetValue(),
+                    (int)(currentpage->m_mediactrl->GetVolume() * 100)));
+#endif // wxUSE_STATUSBAR
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
