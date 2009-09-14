@@ -567,6 +567,9 @@ private:
     wxGridCellAttrProviderData *m_data;
 
     // this struct simply combines together the default header renderers
+    //
+    // FIXME-VC6: this struct must be named because of VC6 bug, it fails
+    //            with error C2639 on this struct declaration without it
     struct
     {
         wxGridColumnHeaderRendererDefault colRenderer;
