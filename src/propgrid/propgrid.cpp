@@ -5232,14 +5232,25 @@ void wxPropertyGrid::AddActionTrigger( int action, int keycode, int modifiers )
 void wxPropertyGrid::ClearActionTriggers( int action )
 {
     wxPGHashMapI2I::iterator it;
+    bool didSomething;
 
-    for ( it = m_actionTriggers.begin(); it != m_actionTriggers.end(); ++it )
+    do
     {
-        if ( it->second == action )
+        didSomething = false;
+
+        for ( it = m_actionTriggers.begin();
+              it != m_actionTriggers.end();
+              it++ )
         {
-            m_actionTriggers.erase(it);
+            if ( it->second == action )
+            {
+                m_actionTriggers.erase(it);
+                didSomething = true;
+                break;
+            }
         }
     }
+    while ( didSomething );
 }
 
 void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
