@@ -53,7 +53,7 @@
  */
 
 #define wxOSX_USE_QUICKTIME 1
-#define wXOSX_USE_AUDIOTOOLBOX 0
+#define wxOSX_USE_AUDIOTOOLBOX 0
 
 #endif
     /* _WX_OSX_CARBON_CHKCONF_H_ */

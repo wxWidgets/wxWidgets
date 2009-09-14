@@ -25,7 +25,7 @@
 #define wxHAS_OPENGL_ES
 
 #define wxOSX_USE_QUICKTIME 0
-#define wXOSX_USE_AUDIOTOOLBOX 1
+#define wxOSX_USE_AUDIOTOOLBOX 1
 
 /*
  * turning off capabilities that don't work under iphone yet

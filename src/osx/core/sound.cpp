@@ -14,9 +14,9 @@
 
 #if wxUSE_SOUND
 
-#if wxOSX_USE_AUDIOTOOLBOX
-
 #include "wx/sound.h"
+
+#if wxOSX_USE_AUDIOTOOLBOX
 
 #ifndef WX_PRECOMP
     #include "wx/object.h"
@@ -27,6 +27,10 @@
 #endif
 
 #include "wx/file.h"
+
+#include "wx/osx/private.h"
+
+#include <AudioToolbox/AudioToolbox.h>
 
 class wxOSXAudioToolboxSoundData : public wxSoundData
 {
@@ -87,7 +91,7 @@ void wxOSXAudioToolboxSoundData::DoStop()
     }
 }
 
-bool wxOSXAudioToolboxSoundData::DoPlay(unsigned flags) const
+bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
 {
     Stop();
 
@@ -112,6 +116,21 @@ bool wxOSXAudioToolboxSoundData::DoPlay(unsigned flags) const
         }
     }
             
+    return true;
+}
+
+bool wxSound::Create(int size, const wxByte* data)
+{
+    return false;
+}
+
+bool wxSound::Create(const wxString& fileName, bool isResource)
+{
+    if ( isResource )
+        return false;
+    
+    
+    m_data = new wxOSXAudioToolboxSoundData(fileName);
     return true;
 }
 
