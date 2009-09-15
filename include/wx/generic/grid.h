@@ -575,7 +575,7 @@ private:
     //
     // FIXME-VC6: this struct must be named because of VC6 bug, it fails
     //            with error C2639 on this struct declaration without it
-    struct
+    struct DefaultHeaderRenderers
     {
         wxGridColumnHeaderRendererDefault colRenderer;
         wxGridRowHeaderRendererDefault rowRenderer;
