@@ -149,6 +149,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
   new constructors taking wxSize for the gap argument is preferred. The same
   applies to wxFlexGridSizer as well.
 
+- wxBoxSizer::AddSpacer(x) now adds space in the direction of the sizer only
+  and not in both this and the orthogonal directions. This behaviour is what
+  most of the people expect but if you really relied on this overload adding
+  space in both directions you should change your code to use AddSpacer(x, x).
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

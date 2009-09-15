@@ -1982,6 +1982,11 @@ void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
 // wxBoxSizer
 //---------------------------------------------------------------------------
 
+wxSizerItem *wxBoxSizer::AddSpacer(int size)
+{
+    return IsVertical() ? Add(0, size) : Add(size, 0);
+}
+
 void wxBoxSizer::RecalcSizes()
 {
     if ( m_children.empty() )

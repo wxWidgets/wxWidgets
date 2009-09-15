@@ -510,7 +510,7 @@ public:
     wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
     wxSizerItem* Add( wxSizerItem *item);
 
-    wxSizerItem* AddSpacer(int size);
+    virtual wxSizerItem *AddSpacer(int size);
     wxSizerItem* AddStretchSpacer(int prop = 1);
 
     wxSizerItem* Insert(size_t index,
@@ -912,6 +912,8 @@ public:
         wxASSERT_MSG( m_orient == wxHORIZONTAL || m_orient == wxVERTICAL,
                       wxT("invalid value for wxBoxSizer orientation") );
     }
+
+    virtual wxSizerItem *AddSpacer(int size);
 
     int GetOrientation() const { return m_orient; }
 

@@ -291,13 +291,15 @@ public:
                      wxObject* userData = NULL);
 
     /**
-        Adds non-stretchable space to the sizer.
+        This base function adds non-stretchable space to both the horizontal
+        and vertical orientation of the sizer.
         More readable way of calling:
         @code
         wxSizer::Add(size, size, 0).
         @endcode
+        @see wxBoxSizer::AddSpacer()
     */
-    wxSizerItem* AddSpacer(int size);
+    virtual wxSizerItem *AddSpacer(int size);
 
     /**
         Adds stretchable space to the sizer.
@@ -1746,6 +1748,22 @@ public:
         or wxHORIZONTAL for creating either a column sizer or a row sizer.
     */
     wxBoxSizer(int orient);
+
+    /**
+        Adds non-stretchable space to the main orientation of the sizer only.
+        More readable way of calling:
+        @code
+        if ( wxBoxSizer::IsVertical() )
+        {
+            wxBoxSizer::Add(0, size, 0).
+        }
+        else
+        {
+            wxBoxSizer::Add(size, 0, 0).
+        }
+        @endcode
+    */
+    virtual wxSizerItem *AddSpacer(int size);
 
     /**
         Implements the calculation of a box sizer's minimal.
