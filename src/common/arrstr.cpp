@@ -345,6 +345,14 @@ wxArrayString::insert(iterator it, const_iterator first, const_iterator last)
     }
 }
 
+void wxArrayString::resize(size_type n, value_type v)
+{
+  if ( n < m_nCount )
+      m_nCount = n;
+  else if ( n > m_nCount )
+      Add(v, n - m_nCount);
+}
+
 // expand the array
 void wxArrayString::SetCount(size_t count)
 {

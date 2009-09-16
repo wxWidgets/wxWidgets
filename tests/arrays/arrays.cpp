@@ -327,6 +327,17 @@ void ArraysTestCase::wxStringArrayTest()
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(months), a5.size() );
     CPPUNIT_ASSERT( COMPARE_3_VALUES(a5, "Jan", "Feb", "Mar") );
 #endif // wxHAS_VECTOR_TEMPLATE_ASSIGN
+
+    a5.clear();
+    CPPUNIT_ASSERT_EQUAL( 0, a5.size() );
+
+    a5.resize(7, "Foo");
+    CPPUNIT_ASSERT_EQUAL( 7, a5.size() );
+    CPPUNIT_ASSERT_EQUAL( "Foo", a5[3] );
+
+    a5.resize(3);
+    CPPUNIT_ASSERT_EQUAL( 3, a5.size() );
+    CPPUNIT_ASSERT_EQUAL( "Foo", a5[2] );
 }
 
 void ArraysTestCase::wxStringArraySplitTest()
