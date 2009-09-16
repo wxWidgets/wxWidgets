@@ -64,6 +64,7 @@
     <subproject id="propgrid" template="sub"/>
     <subproject id="regtest" template="sub"/>
     <subproject id="render" template="sub"/>
+    <subproject id="ribbon" template="sub"/>
     <subproject id="richtext" template="sub"/>
     <subproject id="sashtest" template="sub"/>
     <subproject id="scroll" template="sub"/>

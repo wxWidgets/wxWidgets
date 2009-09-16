@@ -36,7 +36,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -92,6 +92,7 @@ clean:
 	$(MAKE) -C propgrid -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C ribbon -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C sashtest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C scroll -f makefile.gcc $(MAKEARGS) clean
@@ -271,6 +272,9 @@ regtest:
 render: 
 	$(MAKE) -C render -f makefile.gcc $(MAKEARGS) all
 
+ribbon: 
+	$(MAKE) -C ribbon -f makefile.gcc $(MAKEARGS) all
+
 richtext: 
 	$(MAKE) -C richtext -f makefile.gcc $(MAKEARGS) all
 
@@ -350,10 +354,10 @@ memcheck:
 	config console controls dataview dialogs dialup display dnd docview dragimag \
 	drawing erase event except exec font grid help htlbox html image internat ipc joytest \
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
-	opengl ownerdrw popup power printing propgrid regtest render richtext sashtest \
-	scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text \
-	thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc \
-	memcheck
+	opengl ownerdrw popup power printing propgrid regtest render ribbon richtext \
+	sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder \
+	taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard \
+	wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)
