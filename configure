@@ -846,6 +846,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1
+COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_0_USE_STC_1
 COND_MONOLITHIC_0_SHARED_0_USE_XRC_1
@@ -856,6 +857,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1
+COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_1_USE_STC_1
 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1
@@ -866,6 +868,7 @@ COND_MONOLITHIC_0_USE_HTML_1
 COND_MONOLITHIC_0_USE_MEDIA_1
 COND_MONOLITHIC_0_USE_PROPGRID_1
 COND_MONOLITHIC_0_USE_QA_1
+COND_MONOLITHIC_0_USE_RIBBON_1
 COND_MONOLITHIC_0_USE_RICHTEXT_1
 COND_MONOLITHIC_0_USE_STC_1
 COND_MONOLITHIC_0_USE_XRC_1
@@ -1761,6 +1764,7 @@ Optional Features:
   --enable-xrc            use XRC resources sub-library
   --enable-aui            use AUI docking library
   --enable-propgrid       use wxPropertyGrid library
+  --enable-ribbon         use wxRibbon library
   --enable-stc            use wxStyledTextCtrl library
   --enable-constraints    use layout-constraints system
   --enable-loggui         use standard GUI logger
@@ -4334,7 +4338,6 @@ if test "${enable_debug+set}" = set; then
 echo "$as_me: error: Invalid --enable-debug value, must be yes, no or max" >&2;}
    { (exit 1); exit 1; }; }
         fi
-
 
 else
   wxUSE_DEBUG=default
@@ -8604,6 +8607,50 @@ fi
             fi
           else
             result=$wxUSE_PROPGRID
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-ribbon" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-ribbon... $ECHO_C" >&6; }
+          # Check whether --enable-ribbon was given.
+if test "${enable_ribbon+set}" = set; then
+  enableval=$enable_ribbon;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_ribbon='wxUSE_RIBBON=yes'
+                          else
+                            wx_cv_use_ribbon='wxUSE_RIBBON=no'
+                          fi
+
+else
+
+                          wx_cv_use_ribbon='wxUSE_RIBBON=${'DEFAULT_wxUSE_RIBBON":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_ribbon"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_RIBBON = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_RIBBON
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -46246,6 +46293,16 @@ _ACEOF
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS propgrid"
 fi
 
+USE_RIBBON=0
+if test "$wxUSE_RIBBON" = "yes"; then
+   cat >>confdefs.h <<\_ACEOF
+#define wxUSE_RIBBON 1
+_ACEOF
+
+   USE_RIBBON=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ribbon"
+fi
+
 USE_STC=0
 if test "$wxUSE_STC" = "yes"; then
    cat >>confdefs.h <<\_ACEOF
@@ -46981,6 +47038,9 @@ if test "$wxUSE_GUI" = "yes"; then
     fi
     if test "$wxUSE_PROPGRID" = "yes" ; then
         BUILT_WX_LIBS="propgrid $BUILT_WX_LIBS"
+    fi
+    if test "$wxUSE_RIBBON" = "yes" ; then
+        BUILT_WX_LIBS="ribbon $BUILT_WX_LIBS"
     fi
     if test "$wxUSE_RICHTEXT" = "yes" ; then
         BUILT_WX_LIBS="richtext $BUILT_WX_LIBS"
@@ -49793,6 +49853,11 @@ EOF
         COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_RIBBON" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1=""
+    fi
+
     COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_RICHTEXT" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1=""
@@ -49843,6 +49908,11 @@ EOF
         COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RIBBON" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1=""
+    fi
+
     COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_RICHTEXT" = "x1" ; then
         COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1=""
@@ -49891,6 +49961,11 @@ EOF
     COND_MONOLITHIC_0_USE_QA_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_QA" = "x1" ; then
         COND_MONOLITHIC_0_USE_QA_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_RIBBON_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_RIBBON" = "x1" ; then
+        COND_MONOLITHIC_0_USE_RIBBON_1=""
     fi
 
     COND_MONOLITHIC_0_USE_RICHTEXT_1="#"
@@ -51977,6 +52052,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_HTML_1!$COND_MONOLITHIC_0_SHARED_0_USE_
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1!$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_QA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1!$COND_MONOLITHIC_0_SHARED_0_USE_PROPGRID_1$ac_delim
+COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1!$COND_MONOLITHIC_0_SHARED_0_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1!$COND_MONOLITHIC_0_SHARED_0_USE_RICHTEXT_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_STC_1!$COND_MONOLITHIC_0_SHARED_0_USE_STC_1$ac_delim
 COND_MONOLITHIC_0_SHARED_0_USE_XRC_1!$COND_MONOLITHIC_0_SHARED_0_USE_XRC_1$ac_delim
@@ -51987,6 +52063,7 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_HTML_1!$COND_MONOLITHIC_0_SHARED_1_USE_
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1!$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1!$COND_MONOLITHIC_0_SHARED_1_USE_PROPGRID_1$ac_delim
+COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1!$COND_MONOLITHIC_0_SHARED_1_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1!$COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_STC_1!$COND_MONOLITHIC_0_SHARED_1_USE_STC_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1!$COND_MONOLITHIC_0_SHARED_1_USE_XRC_1$ac_delim
@@ -51997,6 +52074,7 @@ COND_MONOLITHIC_0_USE_HTML_1!$COND_MONOLITHIC_0_USE_HTML_1$ac_delim
 COND_MONOLITHIC_0_USE_MEDIA_1!$COND_MONOLITHIC_0_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_USE_PROPGRID_1!$COND_MONOLITHIC_0_USE_PROPGRID_1$ac_delim
 COND_MONOLITHIC_0_USE_QA_1!$COND_MONOLITHIC_0_USE_QA_1$ac_delim
+COND_MONOLITHIC_0_USE_RIBBON_1!$COND_MONOLITHIC_0_USE_RIBBON_1$ac_delim
 COND_MONOLITHIC_0_USE_RICHTEXT_1!$COND_MONOLITHIC_0_USE_RICHTEXT_1$ac_delim
 COND_MONOLITHIC_0_USE_STC_1!$COND_MONOLITHIC_0_USE_STC_1$ac_delim
 COND_MONOLITHIC_0_USE_XRC_1!$COND_MONOLITHIC_0_USE_XRC_1$ac_delim
@@ -52035,9 +52113,6 @@ COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0$ac_delim
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0$ac_delim
 COND_SHARED_0_TOOLKIT_PM_WXUNIV_0!$COND_SHARED_0_TOOLKIT_PM_WXUNIV_0$ac_delim
 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1!$COND_SHARED_0_USE_GUI_1_USE_OPENGL_1$ac_delim
-COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin$ac_delim
-COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin$ac_delim
-COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52079,6 +52154,9 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin$ac_delim
+COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin$ac_delim
+COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin!$COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin$ac_delim
 COND_SHARED_0_USE_STC_1!$COND_SHARED_0_USE_STC_1$ac_delim
 COND_SHARED_0_wxUSE_EXPAT_builtin!$COND_SHARED_0_wxUSE_EXPAT_builtin$ac_delim
 COND_SHARED_0_wxUSE_REGEX_builtin!$COND_SHARED_0_wxUSE_REGEX_builtin$ac_delim
@@ -52173,9 +52251,6 @@ WX_LIBRARY_BASENAME_NOGUI!$WX_LIBRARY_BASENAME_NOGUI$ac_delim
 WX_LIBRARY_BASENAME_GUI!$WX_LIBRARY_BASENAME_GUI$ac_delim
 USE_GUI!$USE_GUI$ac_delim
 AFMINSTALL!$AFMINSTALL$ac_delim
-WIN32INSTALL!$WIN32INSTALL$ac_delim
-TOOLKIT!$TOOLKIT$ac_delim
-TOOLKIT_DIR!$TOOLKIT_DIR$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52217,6 +52292,9 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+WIN32INSTALL!$WIN32INSTALL$ac_delim
+TOOLKIT!$TOOLKIT$ac_delim
+TOOLKIT_DIR!$TOOLKIT_DIR$ac_delim
 TOOLCHAIN_NAME!$TOOLCHAIN_NAME$ac_delim
 TOOLCHAIN_FULLNAME!$TOOLCHAIN_FULLNAME$ac_delim
 cross_compiling!$cross_compiling$ac_delim
@@ -52254,7 +52332,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 35; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 38; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

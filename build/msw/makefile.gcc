@@ -4335,7 +4335,7 @@ ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_62 = --define __WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
-__DEBUG_DEFINE_p_57 = --define wxDEBUG_LEVEL=0
+__DEBUG_DEFINE_p_61 = --define wxDEBUG_LEVEL=0
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_61 = --define wxNO_EXCEPTIONS
