@@ -305,6 +305,9 @@ static bool IsUNCPath(const wxString& path, wxPathFormat format)
 
 void wxFileName::Assign( const wxFileName &filepath )
 {
+    if ( &filepath == this )
+        return;
+
     m_volume = filepath.GetVolume();
     m_dirs = filepath.GetDirs();
     m_name = filepath.GetName();
