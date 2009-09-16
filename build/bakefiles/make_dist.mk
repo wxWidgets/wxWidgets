@@ -15,6 +15,7 @@ COMMDIR  = $(WXDIR)/src/common
 HTMLDIR  = $(WXDIR)/src/html
 RICHTEXTDIR = $(WXDIR)/src/richtext
 AUIDIR =   $(WXDIR)/src/aui
+RIBBONDIR = $(WXDIR)/src/ribbon
 PROPGRIDDIR = $(WXDIR)/src/propgrid
 STCDIR =   $(WXDIR)/src/stc
 UNIXDIR  = $(WXDIR)/src/unix
@@ -165,6 +166,7 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
+	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/protocol
@@ -179,6 +181,7 @@ ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	$(CP_P) $(INCDIR)/wx/richtext/*.h $(DISTDIR)/include/wx/richtext
 	$(CP_P) $(INCDIR)/wx/aui/*.h $(DISTDIR)/include/wx/aui
+	$(CP_P) $(INCDIR)/wx/ribbon/*.h $(DISTDIR)/include/wx/ribbon
 	$(CP_P) $(INCDIR)/wx/propgrid/*.h $(DISTDIR)/include/wx/propgrid
 	$(CP_P) $(INCDIR)/wx/stc/*.h $(DISTDIR)/include/wx/stc
 	$(CP_P) $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
@@ -219,6 +222,9 @@ ALL_GUI_DIST: ALL_DIST
 
 	mkdir $(DISTDIR)/src/aui
 	$(CP_P) $(AUIDIR)/*.cpp $(DISTDIR)/src/aui
+	
+	mkdir $(DISTDIR)/src/ribbon
+	$(CP_P) $(RIBBONDIR)/*.cpp $(DISTDIR)/src/ribbon
 
 	mkdir $(DISTDIR)/src/propgrid
 	$(CP_P) $(PROPGRIDDIR)/*.cpp $(DISTDIR)/src/propgrid
@@ -284,6 +290,7 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/include/wx/html
 	mkdir $(DISTDIR)/include/wx/richtext
 	mkdir $(DISTDIR)/include/wx/aui
+	mkdir $(DISTDIR)/include/wx/ribbon
 	mkdir $(DISTDIR)/include/wx/propgrid
 	mkdir $(DISTDIR)/include/wx/stc
 	mkdir $(DISTDIR)/include/wx/osx
@@ -735,6 +742,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/interface
 	mkdir $(DISTDIR)/interface/wx
 	mkdir $(DISTDIR)/interface/wx/aui
+	mkdir $(DISTDIR)/interface/wx/ribbon
 	mkdir $(DISTDIR)/interface/wx/generic
 	mkdir $(DISTDIR)/interface/wx/html
 	mkdir $(DISTDIR)/interface/wx/msw
@@ -747,6 +755,7 @@ MANUAL_DIST:
 	mkdir $(DISTDIR)/interface/wx/xrc
 	$(CP_P) $(IFACEDIR)/wx/*.h $(DISTDIR)/interface/wx
 	$(CP_P) $(IFACEDIR)/wx/aui/*.h $(DISTDIR)/interface/wx/aui
+	$(CP_P) $(IFACEDIR)/wx/ribbon/*.h $(DISTDIR)/interface/wx/ribbon
 	$(CP_P) $(IFACEDIR)/wx/generic/*.h $(DISTDIR)/interface/wx/generic
 	$(CP_P) $(IFACEDIR)/wx/html/*.h $(DISTDIR)/interface/wx/html
 	$(CP_P) $(IFACEDIR)/wx/msw/*.h $(DISTDIR)/interface/wx/msw

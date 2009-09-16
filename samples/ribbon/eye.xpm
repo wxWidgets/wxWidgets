@@ -1,0 +1,26 @@
+/* XPM */
+static const char *const eye_xpm[] = {
+"16 16 6 1",
+". c black",
+"d c #000010",
+"b c #0018FA",
+"c c #2F43FF",
+"a c #E4E4E4",
+"  c None",
+"                ",
+"                ",
+"                ",
+"                ",
+"    ........    ",
+"  ..aa.bb.aa..  ",
+" .aaa.bccb.aaa. ",
+".aaa.bcddcb.aaa.",
+".aaa.bcddcb.aaa.",
+" .aaa.bccb.aaa. ",
+"  ..aa.bb.aa..  ",
+"    ........    ",
+"                ",
+"                ",
+"                ",
+"                "
+};

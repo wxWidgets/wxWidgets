@@ -282,6 +282,31 @@
     <wxshortcut id="wxaui" cond="MONOLITHIC=='0' and USE_AUI=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
+    
+    <!-- ================================================================ -->
+    <!--                            RIBBON                                -->
+    <!-- ================================================================ -->
+
+    <dll id="ribbondll" template="wx_dll"
+         cond="SHARED=='1' and USE_RIBBON=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_RIBBON</define>
+        <sources>$(RIBBON_SRC)</sources>
+        <library>advdll</library>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="ribbonlib" template="wx_lib"
+         cond="SHARED=='0' and USE_RIBBON=='1' and MONOLITHIC=='0'">
+        <sources>$(RIBBON_SRC)</sources>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxribbon" cond="MONOLITHIC=='0' and USE_RIBBON=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">ribbon=ribbonlib+ribbondll</set>
 
     <!-- ================================================================ -->
     <!--                            PROPGRID                              -->

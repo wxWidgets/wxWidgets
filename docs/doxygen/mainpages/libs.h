@@ -35,6 +35,7 @@ digraph Dependancies
     wxMedia    [fillcolor = green, URL = "\ref page_libs_wxmedia"];
     wxPropertyGrid [fillcolor = green, URL = "\ref page_libs_wxpropgrid"];
     wxQA       [fillcolor = green, URL = "\ref page_libs_wxqa"];
+    wxRibbon   [fillcolor = green, URL = "\ref page_libs_wxribbon"];
     wxRichText [fillcolor = green, URL = "\ref page_libs_wxrichtext"];
     wxSTC      [fillcolor = green, URL = "\ref page_libs_wxstc"];
     wxXRC      [fillcolor = green, URL = "\ref page_libs_wxxrc"];
@@ -50,6 +51,7 @@ digraph Dependancies
     wxMedia -> wxCore;
     wxPropertyGrid -> wxAdvanced;
     wxQA -> wxCore; wxQA -> wxXML;
+    wxRibbon -> wxCore;
     wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
     wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
@@ -106,6 +108,13 @@ Requires @ref page_libs_wxbase.
 This contains the wxPropertyGrid control.
 
 Requires @ref page_libs_wxadv, @ref page_libs_wxcore, @ref page_libs_wxbase.
+
+
+@section page_libs_wxribbon wxRibbon
+
+This contains the Ribbon User Interface components library.
+
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxrichtext wxRichText

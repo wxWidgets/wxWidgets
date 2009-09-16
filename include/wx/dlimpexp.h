@@ -86,6 +86,7 @@
 #    define WXMAKINGDLL_XML
 #    define WXMAKINGDLL_XRC
 #    define WXMAKINGDLL_AUI
+#    define WXMAKINGDLL_RIBBON
 #    define WXMAKINGDLL_PROPGRID
 #    define WXMAKINGDLL_RICHTEXT
 #    define WXMAKINGDLL_MEDIA
@@ -214,6 +215,14 @@
 #    define WXDLLIMPEXP_AUI WXIMPORT
 #else /* not making nor using DLL */
 #    define WXDLLIMPEXP_AUI
+#endif
+
+#ifdef WXMAKINGDLL_RIBBON
+#    define WXDLLIMPEXP_RIBBON WXEXPORT
+#elif defined(WXUSINGDLL)
+#    define WXDLLIMPEXP_RIBBON WXIMPORT
+#else /* not making nor using DLL */
+#    define WXDLLIMPEXP_RIBBON
 #endif
 
 #ifdef WXMAKINGDLL_PROPGRID
