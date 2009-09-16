@@ -19,6 +19,9 @@
 #include <wx/brush.h>
 #include <wx/pen.h>
 
+class WXDLLIMPEXP_FWD_CORE wxDC;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 enum wxRibbonArtSetting
 {
     wxRIBBON_ART_TAB_SEPARATION_SIZE,

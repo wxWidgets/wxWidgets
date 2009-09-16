@@ -30,6 +30,8 @@
 
 #ifdef __WXMSW__
 #include "wx/msw/private.h"
+#elif defined(__WXMAC__)
+#include "wx/osx/private.h"
 #endif
 
 wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
