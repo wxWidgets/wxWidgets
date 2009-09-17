@@ -312,7 +312,12 @@ bool wxFile::Write(const wxString& s, const wxMBConv& conv)
   if ( !buf )
       return false;
 
+#if wxUSE_UNICODE
   const size_t size = buf.length();
+#else
+  const size_t size = s.length();
+#endif
+
   return Write(buf, size) == size;
 }
 
