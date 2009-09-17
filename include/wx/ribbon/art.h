@@ -17,6 +17,8 @@
 #if wxUSE_RIBBON
 
 #include <wx/brush.h>
+#include <wx/colour.h>
+#include <wx/font.h>
 #include <wx/pen.h>
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
