@@ -20,6 +20,7 @@
 #include <wx/colour.h>
 #include <wx/font.h>
 #include <wx/pen.h>
+#include <wx/bitmap.h>
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindow;

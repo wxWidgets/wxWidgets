@@ -15,6 +15,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/dcmemory.h"
 #include "wx/ribbon/art.h"
 
 #if wxUSE_RIBBON

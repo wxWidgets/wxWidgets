@@ -19,6 +19,7 @@
 #include "wx/ribbon/panel.h"
 #include "wx/dcbuffer.h"
 #include "wx/display.h"
+#include "wx/frame.h"
 
 #if wxUSE_RIBBON
 
