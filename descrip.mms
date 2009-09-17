@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 July 2009                                                        *
+# Date : 17 September 2009                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -32,7 +32,6 @@ all :
 gtk : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
-	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
@@ -98,7 +97,6 @@ gtk2 : [.include.wx]setup.h
 	@gnome$root:[000000]glib2
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
-	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
@@ -156,7 +154,6 @@ gtk2 : [.include.wx]setup.h
 x11 : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
@@ -215,7 +212,6 @@ x11 : [.include.wx]setup.h
 motif : [.include.wx]setup.h
 	set default [.src.generic]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.common]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
