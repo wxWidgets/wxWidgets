@@ -1,0 +1,24 @@
+#!/bin/sh
+
+REPOS="$1"
+TXN="$2"
+
+SVNLOOK=/usr/bin/svnlook
+
+changed_cpp_files=`$SVNLOOK changed "$REPOS" -t "$TXN" | \
+                    grep "^[AU]" | \
+                    sed 's/^....//' | \
+                    egrep "\.(cpp|h|py)$" | \
+                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" `
+
+rc=0
+
+set -e
+for f in $changed_cpp_files; do
+     if $SVNLOOK cat "$REPOS" -t "$TXN" $f | fgrep -q '	'; then
+         echo "Please remove TABs from $f before committing." >&2
+         rc=1
+     fi
+done
+
+exit $rc
