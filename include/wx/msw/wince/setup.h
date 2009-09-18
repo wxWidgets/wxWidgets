@@ -615,6 +615,13 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+// Use wxWidget's Ribbon classes for interfaces
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_RIBBON    1
+
 // Use wxPropertyGrid.
 //
 // Default is 1
