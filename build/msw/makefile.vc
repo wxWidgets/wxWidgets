@@ -39,9 +39,9 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I..\..\include \
-	/I$(SETUPHDIR) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	$(CPPFLAGS) $(CFLAGS)
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG \
+	/I..\..\include /I$(SETUPHDIR) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regcomp.obj \
 	$(OBJS)\wxregex_regexec.obj \
@@ -49,7 +49,7 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regfree.obj
 WXZLIB_CFLAGS = /M$(__RUNTIME_LIBS_21)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
-	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.obj \
 	$(OBJS)\wxzlib_compress.obj \
@@ -65,7 +65,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_inffast.obj
 WXPNG_CFLAGS = /M$(__RUNTIME_LIBS_34)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxpng$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
-	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I..\..\src\zlib $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG /I..\..\src\zlib $(CPPFLAGS) \
+	$(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \
@@ -86,7 +87,8 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwutil.obj
 WXJPEG_CFLAGS = /M$(__RUNTIME_LIBS_47)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxjpeg$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
-	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I$(SETUPHDIR) $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG /I$(SETUPHDIR) $(CPPFLAGS) \
+	$(CFLAGS)
 WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jcomapi.obj \
 	$(OBJS)\wxjpeg_jutils.obj \
@@ -136,8 +138,8 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = /M$(__RUNTIME_LIBS_60)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
-	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I..\..\src\zlib /I..\..\src\jpeg \
-	/I..\..\src\tiff\libtiff $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG /I..\..\src\zlib \
+	/I..\..\src\jpeg /I..\..\src\tiff\libtiff $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \
@@ -177,15 +179,15 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = /M$(__RUNTIME_LIBS_73)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I$(LIBDIRNAME) \
-	/DCOMPILED_FROM_DSP $(CPPFLAGS) $(CFLAGS)
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG \
+	/I$(LIBDIRNAME) /DCOMPILED_FROM_DSP $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
 WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_86)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).pdb \
-	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) \
+	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG \
 	/I..\..\src\stc\scintilla\include /I..\..\src\stc\scintilla\src /D__WX__ \
 	/DSCI_LEXER /DLINK_LEXERS $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)

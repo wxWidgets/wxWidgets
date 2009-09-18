@@ -43,14 +43,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswud"
 			/>
@@ -124,14 +124,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -147,7 +147,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswu"
 			/>
@@ -202,14 +202,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -228,7 +228,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivud"
 			/>
@@ -283,14 +283,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -306,7 +306,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib\mswunivu"
 			/>
@@ -361,14 +361,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -387,7 +387,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud"
 			/>
@@ -442,14 +442,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -465,7 +465,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu"
 			/>
@@ -520,14 +520,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -546,7 +546,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud"
 			/>
@@ -601,14 +601,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -624,7 +624,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu"
 			/>

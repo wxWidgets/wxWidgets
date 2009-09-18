@@ -46,7 +46,7 @@ LIBDIRNAME = ..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I..\..\include -I$(SETUPHDIR) \
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\include -I$(SETUPHDIR) \
 	-D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__UNICODE_DEFINE_p) -w-8008 -w-8012 \
 	-w-8057 -w-8064 -w-8066 -w-8070 $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
@@ -55,8 +55,8 @@ WXREGEX_OBJECTS =  \
 	$(OBJS)\wxregex_regerror.obj \
 	$(OBJS)\wxregex_regfree.obj
 WXZLIB_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -w-8004 -w-8008 -w-8012 -w-8057 -w-8066 \
-	$(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -w-8004 -w-8008 -w-8012 -w-8057 \
+	-w-8066 $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_adler32.obj \
 	$(OBJS)\wxzlib_compress.obj \
@@ -71,8 +71,8 @@ WXZLIB_OBJECTS =  \
 	$(OBJS)\wxzlib_inftrees.obj \
 	$(OBJS)\wxzlib_inffast.obj
 WXPNG_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I..\..\src\zlib -w-8004 $(CPPFLAGS) \
-	$(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\src\zlib -w-8004 \
+	$(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_png.obj \
 	$(OBJS)\wxpng_pngerror.obj \
@@ -92,8 +92,8 @@ WXPNG_OBJECTS =  \
 	$(OBJS)\wxpng_pngwtran.obj \
 	$(OBJS)\wxpng_pngwutil.obj
 WXJPEG_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I$(SETUPHDIR) -w-8004 -w-8008 -w-8057 \
-	-w-8066 $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(SETUPHDIR) -w-8004 -w-8008 \
+	-w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jcomapi.obj \
 	$(OBJS)\wxjpeg_jutils.obj \
@@ -142,9 +142,9 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jquant2.obj \
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I..\..\src\zlib -I..\..\src\jpeg \
-	-I..\..\src\tiff\libtiff -w-8004 -w-8012 -w-8057 -w-8060 -w-8066 $(CPPFLAGS) \
-	$(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I..\..\src\zlib \
+	-I..\..\src\jpeg -I..\..\src\tiff\libtiff -w-8004 -w-8012 -w-8057 -w-8060 \
+	-w-8066 $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \
@@ -183,16 +183,17 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_write.obj \
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I$(LIBDIRNAME) -DCOMPILED_FROM_DSP \
-	-w-8004 -w-8008 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(LIBDIRNAME) \
+	-DCOMPILED_FROM_DSP -w-8004 -w-8008 -w-8012 -w-8057 -w-8066 $(CPPFLAGS) \
+	$(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	$(OBJS)\wxexpat_xmlparse.obj \
 	$(OBJS)\wxexpat_xmlrole.obj \
 	$(OBJS)\wxexpat_xmltok.obj
 WXSCINTILLA_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -I..\..\src\stc\scintilla\include \
-	-I..\..\src\stc\scintilla\src -D__WX__ -DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG \
+	-I..\..\src\stc\scintilla\include -I..\..\src\stc\scintilla\src -D__WX__ \
+	-DSCI_LEXER -DLINK_LEXERS $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.obj \
 	$(OBJS)\wxscintilla_CallTip.obj \

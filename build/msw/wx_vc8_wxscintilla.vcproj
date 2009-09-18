@@ -43,14 +43,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -124,14 +124,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -147,7 +147,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -202,14 +202,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -228,7 +228,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -283,14 +283,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -306,7 +306,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -361,14 +361,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -387,7 +387,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -442,14 +442,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -465,7 +465,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -520,14 +520,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -546,7 +546,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -601,14 +601,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -624,7 +624,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>

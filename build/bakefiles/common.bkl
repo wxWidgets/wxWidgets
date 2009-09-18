@@ -341,6 +341,12 @@
         -->
         <install-if>SHARED=='0'</install-if>
         <pic>$(substituteFromDict(SHARED, {'0':'off', '1':'on'}))</pic>
+
+        <!--
+            we don't want to have asserts in the 3rd party libraries code,
+            neither we nor wx users are interested in debugging them anyhow
+         -->
+        <define>NDEBUG</define>
     </template>
 
 

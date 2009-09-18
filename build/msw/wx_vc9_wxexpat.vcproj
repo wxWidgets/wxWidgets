@@ -43,7 +43,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
 			<Tool
@@ -51,7 +51,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -123,7 +123,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
 			<Tool
@@ -131,7 +131,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -146,7 +146,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -201,7 +201,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
 			<Tool
@@ -209,7 +209,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -226,7 +226,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -281,7 +281,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
 			<Tool
@@ -289,7 +289,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -304,7 +304,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -359,7 +359,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
 			<Tool
@@ -367,7 +367,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -384,7 +384,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -439,7 +439,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
 			<Tool
@@ -447,7 +447,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -462,7 +462,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -517,7 +517,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
 			<Tool
@@ -525,7 +525,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -542,7 +542,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -597,7 +597,7 @@
 			/>
 			<Tool
 				Name="VCIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
 			<Tool
@@ -605,7 +605,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
-				PreprocessorDefinitions="WIN32;_LIB;COMPILED_FROM_DSP"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -620,7 +620,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="COMPILED_FROM_DSP"
+				PreprocessorDefinitions="NDEBUG;COMPILED_FROM_DSP"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>

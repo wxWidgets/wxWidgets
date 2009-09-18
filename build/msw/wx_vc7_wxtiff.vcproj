@@ -27,7 +27,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -48,7 +48,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -58,7 +58,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -83,7 +83,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -101,7 +101,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -111,7 +111,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -136,7 +136,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -157,7 +157,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -167,7 +167,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -192,7 +192,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -210,7 +210,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -220,7 +220,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -245,7 +245,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -266,7 +266,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -276,7 +276,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -301,7 +301,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -319,7 +319,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -329,7 +329,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -354,7 +354,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -375,7 +375,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -385,7 +385,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="_DEBUG;NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
@@ -410,7 +410,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -428,7 +428,7 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -438,7 +438,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions=""
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\src\zlib;..\..\src\jpeg;..\..\src\tiff\libtiff"/>
 			<Tool

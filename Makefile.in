@@ -79,14 +79,14 @@ WX_RELEASE_NODOT = 29
 WX_VERSION = $(WX_RELEASE).1
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)1
 LIBDIRNAME = $(wx_top_builddir)/lib
-WXREGEX_CFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(____SHARED) \
+WXREGEX_CFLAGS = -DNDEBUG -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(____SHARED) \
 	$(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  \
 	wxregex_regcomp.o \
 	wxregex_regexec.o \
 	wxregex_regerror.o \
 	wxregex_regfree.o
-WXZLIB_CFLAGS =        $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXZLIB_CFLAGS =       -DNDEBUG  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  \
 	wxzlib_adler32.o \
 	wxzlib_compress.o \
@@ -100,7 +100,7 @@ WXZLIB_OBJECTS =  \
 	wxzlib_infback.o \
 	wxzlib_inftrees.o \
 	wxzlib_inffast.o
-WXPNG_CFLAGS =       $(__INC_ZLIB_p)  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXPNG_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
 	wxpng_png.o \
 	wxpng_pngerror.o \
@@ -119,7 +119,7 @@ WXPNG_OBJECTS =  \
 	wxpng_pngwrite.o \
 	wxpng_pngwtran.o \
 	wxpng_pngwutil.o
-WXJPEG_CFLAGS =        $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXJPEG_CFLAGS =       -DNDEBUG  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  \
 	wxjpeg_jcomapi.o \
 	wxjpeg_jutils.o \
@@ -167,7 +167,7 @@ WXJPEG_OBJECTS =  \
 	wxjpeg_jquant1.o \
 	wxjpeg_jquant2.o \
 	wxjpeg_jdmerge.o
-WXTIFF_CFLAGS = $(__INC_ZLIB_p) $(__INC_JPEG_p) $(__INC_TIFF_BUILD_p) \
+WXTIFF_CFLAGS = -DNDEBUG $(__INC_ZLIB_p) $(__INC_JPEG_p) $(__INC_TIFF_BUILD_p) \
 	$(__INC_TIFF_p) $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(__TIFF_PLATFORM_SRC_OBJECTS) \
@@ -206,12 +206,12 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_warning.o \
 	wxtiff_tif_write.o \
 	wxtiff_tif_zip.o
-WXEXPAT_CFLAGS =       -I./src/expat  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
+WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
 	wxexpat_xmltok.o
-WXSCINTILLA_CXXFLAGS = -I$(top_srcdir)/src/stc/scintilla/include \
+WXSCINTILLA_CXXFLAGS = -DNDEBUG -I$(top_srcdir)/src/stc/scintilla/include \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
 	$(____SHARED) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \

@@ -3183,7 +3183,7 @@ LIBDIRNAME = ..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=..\..\include -i=$(SETUPHDIR) -d__WXMSW__ &
+	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\include -i=$(SETUPHDIR) -d__WXMSW__ &
 	$(__WXUNIV_DEFINE_p) $(__UNICODE_DEFINE_p) $(CPPFLAGS) $(CFLAGS)
 WXREGEX_OBJECTS =  &
 	$(OBJS)\wxregex_regcomp.obj &
@@ -3191,7 +3191,7 @@ WXREGEX_OBJECTS =  &
 	$(OBJS)\wxregex_regerror.obj &
 	$(OBJS)\wxregex_regfree.obj
 WXZLIB_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) $(CPPFLAGS) $(CFLAGS)
+	$(__RUNTIME_LIBS) -dNDEBUG $(CPPFLAGS) $(CFLAGS)
 WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_adler32.obj &
 	$(OBJS)\wxzlib_compress.obj &
@@ -3206,7 +3206,7 @@ WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_inftrees.obj &
 	$(OBJS)\wxzlib_inffast.obj
 WXPNG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=..\..\src\zlib -wcd=124 $(CPPFLAGS) $(CFLAGS)
+	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\zlib -wcd=124 $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_png.obj &
 	$(OBJS)\wxpng_pngerror.obj &
@@ -3226,7 +3226,7 @@ WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_pngwtran.obj &
 	$(OBJS)\wxpng_pngwutil.obj
 WXJPEG_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=$(SETUPHDIR) -wcd=136 $(CPPFLAGS) $(CFLAGS)
+	$(__RUNTIME_LIBS) -dNDEBUG -i=$(SETUPHDIR) -wcd=136 $(CPPFLAGS) $(CFLAGS)
 WXJPEG_OBJECTS =  &
 	$(OBJS)\wxjpeg_jcomapi.obj &
 	$(OBJS)\wxjpeg_jutils.obj &
@@ -3275,7 +3275,7 @@ WXJPEG_OBJECTS =  &
 	$(OBJS)\wxjpeg_jquant2.obj &
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=..\..\src\zlib -i=..\..\src\jpeg &
+	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\zlib -i=..\..\src\jpeg &
 	-i=..\..\src\tiff\libtiff -wcd=124 $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_win32.obj &
@@ -3315,13 +3315,14 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_write.obj &
 	$(OBJS)\wxtiff_tif_zip.obj
 WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP $(CPPFLAGS) $(CFLAGS)
+	$(__RUNTIME_LIBS) -dNDEBUG -i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP $(CPPFLAGS) &
+	$(CFLAGS)
 WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmlparse.obj &
 	$(OBJS)\wxexpat_xmlrole.obj &
 	$(OBJS)\wxexpat_xmltok.obj
 WXSCINTILLA_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -i=..\..\src\stc\scintilla\include &
+	$(__RUNTIME_LIBS) -dNDEBUG -i=..\..\src\stc\scintilla\include &
 	-i=..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dLINK_LEXERS &
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  &
