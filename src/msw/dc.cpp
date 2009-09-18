@@ -1214,13 +1214,20 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 #ifdef __WIN32__
         // use MaskBlt() with ROP which doesn't do anything to dst in the mask
         // points
+        bool ok = false;
+
+#if wxUSE_SYSTEM_OPTIONS
         // On some systems, MaskBlt succeeds yet is much much slower
         // than the wxWidgets fall-back implementation. So we need
         // to be able to switch this on and off at runtime.
-        bool ok = false;
-#if wxUSE_SYSTEM_OPTIONS
-        if (wxSystemOptions::GetOptionInt(wxT("no-maskblt")) == 0)
-#endif
+        //
+        // NB: don't query the value of the option every time but do it only
+        //     once as otherwise it can have real (and bad) performance
+        //     implications (see #11172)
+        static bool
+            s_maskBltAllowed = wxSystemOptions::GetOptionInt("no-maskblt") == 0;
+        if ( s_maskBltAllowed )
+#endif // wxUSE_SYSTEM_OPTIONS
         {
             HDC cdc = GetHdc();
             HDC hdcMem = ::CreateCompatibleDC(GetHdc());
