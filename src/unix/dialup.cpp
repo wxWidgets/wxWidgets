@@ -1,11 +1,11 @@
 // -*- c++ -*- ////////////////////////////////////////////////////////////////
 // Name:        src/unix/dialup.cpp
 // Purpose:     Network related wxWidgets classes and functions
-// Author:      Karsten Ballüder
+// Author:      Karsten BallÃ¼der
 // Modified by:
 // Created:     03.10.99
 // RCS-ID:      $Id$
-// Copyright:   (c) Karsten Ballüder
+// Copyright:   (c) Karsten BallÃ¼der
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -703,7 +703,7 @@ wxDialUpManagerImpl::CheckIfconfig()
        cmd << wxT(" >") << tmpfile <<  wxT('\'');
         /* I tried to add an option to wxExecute() to not close stdout,
            so we could let ifconfig write directly to the tmpfile, but
-           this does not work. That should be faster, as it doesn´t call
+           this does not work. That should be faster, as it doesn't call
            the shell first. I have no idea why. :-(  (KB) */
         if ( wxExecute(cmd,true /* sync */) == 0 )
         {
@@ -747,7 +747,7 @@ wxDialUpManagerImpl::CheckIfconfig()
         }
         else // could not run ifconfig correctly
         {
-            m_CanUseIfconfig = 0; // don´t try again
+            m_CanUseIfconfig = 0; // don't try again
         }
 
         (void) wxRemoveFile(tmpfile);

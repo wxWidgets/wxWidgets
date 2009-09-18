@@ -29,14 +29,8 @@
 
 #include "wx/osx/private.h"
 
-/*
-@"Credits": An NSAttributedString displayed in the info area of the panel. If not specified, this method then looks for a file named “Credits.html”, “Credits.rtf”, and “Credits.rtfd”, in that order, in the bundle returned by the NSBundle class method mainBundle. The first file found is used. If none is found, the info area is left blank.
-@"ApplicationName": An NSString object displayed as the application’s name. If not specified, this method then uses the value of CFBundleName (localizable). If neither is found, this method uses [[NSProcessInfo processInfo] processName].
-@"ApplicationIcon": An NSImage object displayed as the application’s icon. If not specified, this method then looks for an image named “NSApplicationIcon”, using [NSImage imageNamed:@"NSApplicationIcon"]. If neither is available, this method uses the generic application icon.
-@"Version": An NSString object with the build version number of the application (“58.4”), displayed as “(v58.4)”. If not specified, obtain from the CFBundleVersion key in infoDictionary; if not specified, leave blank (the “(v)” is not displayed).
-@"Copyright": An NSString object with a line of copyright information. If not specified, this method then looks for the value of NSHumanReadableCopyright in the localized version infoDictionary. If neither is available, this method leaves the space blank.
-@"ApplicationVersion": An NSString object with the application version (“Mac OS X”, “3”, “WebObjects 4.5”, “AppleWorks 6”,...). If not specified, obtain from the CFBundleShortVersionString key in infoDictionary. If neither is available, the build version, if available, is printed alone, as “Version x.x”.
-*/
+// see http://developer.apple.com/mac/library/technotes/tn2006/tn2179.html for
+// information about the various keys used here
 
 // helper class for HIAboutBox options
 class AboutBoxOptions : public wxCFRef<CFMutableDictionaryRef>

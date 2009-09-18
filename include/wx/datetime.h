@@ -247,7 +247,7 @@ public:
         // adoption of the Gregorian calendar (see IsGregorian())
         //
         // All data and comments taken verbatim from "The Calendar FAQ (v 2.0)"
-        // by Claus T�ndering, http://www.pip.dknet.dk/~c-t/calendar.html
+        // by Claus Tøndering, http://www.pip.dknet.dk/~c-t/calendar.html
         // except for the comments "we take".
         //
         // Symbol "->" should be read as "was followed by" in the comments

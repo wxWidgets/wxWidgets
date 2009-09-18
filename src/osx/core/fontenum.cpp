@@ -92,7 +92,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
             wxCFStringRef cfName(theName) ;
             fontFamilies.Add(cfName.AsString(wxLocale::GetSystemEncoding()));
         }
-        else if (status == kATSIterationScopeModified) // Make sure the font database hasn’t changed.
+        else if (status == kATSIterationScopeModified) // Make sure the font database hasn't changed.
         {
             // reset the iterator
             status = ATSFontFamilyIteratorReset (kATSFontContextLocal, nil, nil,

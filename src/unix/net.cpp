@@ -1,11 +1,11 @@
 // -*- c++ -*- ///////////////////////////////////////////////////////////////
 // Name:        unix/net.cpp
 // Purpose:     Network related wxWindows classes and functions
-// Author:      Karsten Ballüder
+// Author:      Karsten BallÃ¼der
 // Modified by:
 // Created:     03.10.99
 // RCS-ID:      $Id$
-// Copyright:   (c) Karsten Ballüder
+// Copyright:   (c) Karsten BallÃ¼der
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -143,7 +143,7 @@ public:
       { m_ConnectCommand = command; m_HangUpCommand = hupcmd; }
 
 private:
-   /// -1: don´t know, 0 = no, 1 = yes
+   /// -1: don't know, 0 = no, 1 = yes
    int m_IsOnline;
 
    ///  Can we use ifconfig to list active devices?
@@ -318,7 +318,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    }
 
    wxLogNull ln; // suppress all error messages
-   // Let´s try the ifconfig method first, should be fastest:
+   // Let's try the ifconfig method first, should be fastest:
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
       wxASSERT(m_IfconfigPath.length());
@@ -328,7 +328,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
       cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
       /* I tried to add an option to wxExecute() to not close stdout,
          so we could let ifconfig write directly to the tmpfile, but
-         this does not work. That should be faster, as it doesn´t call
+         this does not work. That should be faster, as it doesn't call
          the shell first. I have no idea why. :-(  (KB) */
 #if 0
       // temporarily redirect stdout/stderr:
@@ -378,7 +378,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
          // else m_IsOnline remains -1 as we don't know for sure
       }
       else // could not run ifconfig correctly
-         m_CanUseIfconfig = 0; // don´t try again
+         m_CanUseIfconfig = 0; // don't try again
       (void) wxRemoveFile(tmpfile);
       if(m_IsOnline != -1) // we are done
          return;

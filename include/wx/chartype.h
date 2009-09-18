@@ -1,7 +1,7 @@
 /*
  * Name:        wx/chartype.h
  * Purpose:     Declarations of wxChar and related types
- * Author:      Joel Farley, Ove Kåven
+ * Author:      Joel Farley, Ove KÃ¥ven
  * Modified by: Vadim Zeitlin, Robert Roebling, Ron Lee
  * Created:     1998/06/12
  * RCS-ID:      $Id$

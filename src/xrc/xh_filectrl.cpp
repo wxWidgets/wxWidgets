@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_filectrl.cpp
 // Purpose:     XML resource handler for wxFileCtrl
-// Author:      Kinaou Hervé
+// Author:      Kinaou HervÃ©
 // Created:     2009-05-11
 // RCS-ID:      $Id$
 // Copyright:   (c) 2009 wxWidgets development team
