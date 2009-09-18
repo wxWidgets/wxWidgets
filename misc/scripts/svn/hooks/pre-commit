@@ -5,20 +5,34 @@ TXN="$2"
 
 SVNLOOK=/usr/bin/svnlook
 
-changed_cpp_files=`$SVNLOOK changed "$REPOS" -t "$TXN" | \
+svn_cat() {
+    $SVNLOOK cat "$REPOS" -t "$TXN" $1
+}
+
+all_changed_files=`$SVNLOOK changed "$REPOS" -t "$TXN" | \
                     grep "^[AU]" | \
-                    sed 's/^....//' | \
+                    sed 's/^....//'`
+
+changed_sources=`echo $all_changed_files | \
                     egrep "\.(cpp|h|py)$" | \
-                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" `
+                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)"`
 
 rc=0
 
 set -e
-for f in $changed_cpp_files; do
-     if $SVNLOOK cat "$REPOS" -t "$TXN" $f | fgrep -q '	'; then
+
+for f in $changed_sources; do
+     if  svn_cat $f | fgrep -q '	'; then
          echo "Please remove TABs from $f before committing." >&2
          rc=1
      fi
+done
+
+for f in $all_changed_files; do
+    if ! svn_cat $f | iconv -f utf8 -t WCHAR_T > /dev/null; then
+        echo "File $f doesn't use UTF-8, please convert it before committing." >&2
+        rc=1
+    fi
 done
 
 exit $rc
