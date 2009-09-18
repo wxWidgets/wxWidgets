@@ -309,7 +309,7 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
         wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
         if(m_art != NULL && ribbon_child != NULL)
         {
-            wxMemoryDC dc;
+            wxClientDC dc((wxRibbonPanel*) this);
             wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
             wxSize smaller = ribbon_child->GetNextSmallerSize(direction, child_relative);
             if(smaller == child_relative)
@@ -406,7 +406,7 @@ wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
         wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
         if(ribbon_child != NULL)
         {
-            wxMemoryDC dc;
+            wxClientDC dc((wxRibbonPanel*) this);
             wxSize child_relative = m_art->GetPanelClientSize(dc, this, relative_to, NULL);
             wxSize larger = ribbon_child->GetNextLargerSize(direction, child_relative);
             if(larger == child_relative)
@@ -415,7 +415,7 @@ wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
             }
             else
             {
-                wxMemoryDC dc;
+                wxClientDC dc((wxRibbonPanel*) this);
                 return m_art->GetPanelSize(dc, this, larger, NULL);
             }
         }
@@ -472,7 +472,7 @@ wxSize wxRibbonPanel::GetMinNotMinimisedSize() const
     if(GetChildren().GetCount() == 1)
     {
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxMemoryDC dc;
+        wxClientDC dc((wxRibbonPanel*) this);
         return m_art->GetPanelSize(dc, this, child->GetMinSize(), NULL);
     }
 
@@ -487,7 +487,7 @@ wxSize wxRibbonPanel::DoGetBestSize() const
     if(GetChildren().GetCount() == 1)
     {
         wxWindow* child = GetChildren().Item(0)->GetData();
-        wxMemoryDC dc;
+        wxClientDC dc((wxRibbonPanel*) this);
         return m_art->GetPanelSize(dc, this, child->GetBestSize(), NULL);
     }
 
@@ -522,7 +522,7 @@ bool wxRibbonPanel::Realize()
 
     if(m_art != NULL)
     {
-        wxMemoryDC temp_dc;
+        wxClientDC temp_dc(this);
 
         m_smallest_unminimised_size =
             m_art->GetPanelSize(temp_dc, this, minimum_children_size, NULL);
@@ -583,7 +583,7 @@ bool wxRibbonPanel::Layout()
     {
         wxWindow* child = GetChildren().Item(0)->GetData();
         wxPoint position;
-        wxMemoryDC dc;
+        wxClientDC dc(this);
         wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
         child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
     }

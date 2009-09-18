@@ -333,7 +333,7 @@ wxRibbonButtonBarButtonBase* wxRibbonButtonBar::AddButton(
     base->client_data = client_data;
     base->state = 0;
 
-    wxMemoryDC temp_dc;
+    wxClientDC temp_dc(this);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_SMALL, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, temp_dc);
     FetchButtonSizeInfo(base, wxRIBBON_BUTTONBAR_BUTTON_LARGE, temp_dc);
@@ -454,7 +454,7 @@ void wxRibbonButtonBar::SetArtProvider(wxRibbonArtProvider* art)
 
     wxRibbonControl::SetArtProvider(art);
 
-    wxMemoryDC temp_dc;
+    wxClientDC temp_dc(this);
     size_t btn_count = m_buttons.Count();
     size_t btn_i;
     for(btn_i = 0; btn_i < btn_count; ++btn_i)
