@@ -34,6 +34,8 @@
 #include "wx/msw/private.h"
 #elif defined(__WXMAC__)
 #include "wx/osx/private.h"
+// only for kThemeBrushToolbarBackground
+#include <Carbon/Carbon.h>
 #endif
 
 wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
