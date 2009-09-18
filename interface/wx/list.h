@@ -209,9 +209,11 @@ public:
     wxList<T>::compatibility_iterator Item(size_t index) const;
 
     /**
-        @deprecated This function is deprecated, use Find() instead.
+        Check if the object is present in the list.
+
+        @see Find()
     */
-    wxList<T>::compatibility_iterator Member(T* object) const;
+    bool Member(T* object) const;
 
     /**
         @deprecated This function is deprecated, use Item() instead.

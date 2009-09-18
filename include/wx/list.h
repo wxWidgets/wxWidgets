@@ -258,7 +258,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
             iterator i = const_cast< liT* >(this)->end();                     \
             return compatibility_iterator( this, !empty() ? --i : i );        \
         }                                                                     \
-        compatibility_iterator Member( elT e ) const                          \
+        bool Member( elT e ) const                                            \
             { return Find( e ); }                                             \
         compatibility_iterator Nth( int n ) const                             \
             { return Item( n ); }                                             \
@@ -1179,12 +1179,8 @@ public:
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
-#endif
-
-#if wxUSE_STL
-#else
-    wxNode *Member(wxObject *object) const { return (wxNode *)Find(object); }
-#endif
+    bool Member(wxObject *object) const { return Find(object) != NULL; }
+#endif // !wxUSE_STL
 };
 
 #if !wxUSE_STL

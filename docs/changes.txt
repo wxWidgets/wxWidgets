@@ -276,6 +276,11 @@ Changes in behaviour which may result in compilation errors
   without enclosing parentheses results in warnings from g++ with -Wparentheses,
   add parentheses around the if statement body to work around it.
 
+- wxList::Member() now returns book and not a pointer/iterator. This shouldn't
+  require any changes as it was always meant to be used for checking for the
+  presence of an element in the list only. If you used it as Find(), simple do
+  use Find() instead.
+
 
 Deprecated methods and their replacements
 -----------------------------------------

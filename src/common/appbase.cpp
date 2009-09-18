@@ -535,7 +535,7 @@ void wxAppConsoleBase::DeletePendingEvents()
 
 bool wxAppConsoleBase::IsScheduledForDestruction(wxObject *object) const
 {
-    return wxPendingDelete.Member(object) != NULL;
+    return wxPendingDelete.Member(object);
 }
 
 void wxAppConsoleBase::ScheduleForDestruction(wxObject *object)
