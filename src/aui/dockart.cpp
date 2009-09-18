@@ -38,7 +38,7 @@
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
-// for themeing support
+// for theming support
 #include <Carbon/Carbon.h>
 #endif
 

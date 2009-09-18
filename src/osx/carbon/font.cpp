@@ -29,7 +29,7 @@
 #include "wx/osx/private.h"
 
 #if wxOSX_USE_ATSU_TEXT && !wxOSX_USE_CARBON
-// include themeing support
+// include theming support
 #include <Carbon/Carbon.h>
 #endif
 
@@ -163,7 +163,7 @@ protected:
 public:
     bool            m_fontValid;
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
-    // for true themeing support we must store the correct font
+    // for true theming support we must store the correct font
     // information here, as this speeds up and optimizes rendering
     ThemeFontID     m_macThemeFontID ;
 #endif
@@ -346,7 +346,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
                 m_macThemeFontID = kThemeMiniSystemFont;
                 break;
            case wxOSX_SYSTEM_FONT_MINI_BOLD:
-                // bold not available under themeing
+                // bold not available under theming
                 m_macThemeFontID = kThemeMiniSystemFont;
                 break;
             case wxOSX_SYSTEM_FONT_LABELS:

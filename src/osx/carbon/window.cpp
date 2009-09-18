@@ -65,7 +65,7 @@
 #include "wx/osx/uma.h"
 #else
 #include "wx/osx/private.h"
-// bring in themeing
+// bring in theming
 #include <Carbon/Carbon.h>
 #endif
 

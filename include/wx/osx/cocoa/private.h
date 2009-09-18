@@ -33,7 +33,7 @@
 // shared between Cocoa and Carbon
 //
 
-// bring in themeing types without pulling in the headers
+// bring in theming types without pulling in the headers
 
 #if wxUSE_GUI
 typedef SInt16 ThemeBrush;

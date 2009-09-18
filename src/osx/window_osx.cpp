@@ -68,7 +68,7 @@
 #else
 #include "wx/osx/private.h"
 #if wxOSX_USE_COCOA
-// bring in themeing
+// bring in theming
 #include <Carbon/Carbon.h>
 #endif
 #endif
