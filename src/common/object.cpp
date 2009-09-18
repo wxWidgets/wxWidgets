@@ -55,10 +55,10 @@ const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
             (wxObjectConstructorFn) 0   ,
             NULL,NULL,0 , 0 ,
             0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);
- template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
- template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
- template<> void wxStringReadValue(const wxString & , wxObject & ){assert(0) ;}
- template<> void wxStringWriteValue(wxString & , wxObject const & ){assert(0) ;}
+ template<> void wxStringReadValue(const wxString & , wxObject * & ){ wxFAIL_MSG("unreachable"); }
+ template<> void wxStringWriteValue(wxString & , wxObject* const & ){ wxFAIL_MSG("unreachable"); }
+ template<> void wxStringReadValue(const wxString & , wxObject & ){ wxFAIL_MSG("unreachable"); }
+ template<> void wxStringWriteValue(wxString & , wxObject const & ){ wxFAIL_MSG("unreachable"); }
  wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject*).name() ) ;
  wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject).name() ) ;
 #else

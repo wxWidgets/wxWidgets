@@ -877,11 +877,11 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
     CTFontDescriptorRef descriptor = NULL;
     CFMutableDictionaryRef attributes;
 
-    assert(iFamilyName != NULL);
+    wxASSERT(iFamilyName != NULL);
     // Create a mutable dictionary to hold our attributes.
     attributes = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
                                            &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    check(attributes != NULL);
+    wxASSERT(attributes != NULL);
 
     if (attributes != NULL) {
         // Add a family name to our attributes.
@@ -895,13 +895,13 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
             // Create the traits dictionary.
             symTraits = CFNumberCreate(kCFAllocatorDefault, kCFNumberSInt32Type,
                                        &iTraits);
-            check(symTraits != NULL);
+            wxASSERT(symTraits != NULL);
 
             if (symTraits != NULL) {
                 // Create a dictionary to hold our traits values.
                 traits = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
                                                    &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-                check(traits != NULL);
+                wxASSERT(traits != NULL);
 
                 if (traits != NULL) {
                     // Add the symbolic traits value to the traits dictionary.
@@ -916,7 +916,7 @@ static CTFontDescriptorRef wxMacCreateCTFontDescriptor(CFStringRef iFamilyName, 
         }
         // Create the font descriptor with our attributes
         descriptor = CTFontDescriptorCreateWithAttributes(attributes);
-        check(descriptor != NULL);
+        wxASSERT(descriptor != NULL);
 
         CFRelease(attributes);
     }

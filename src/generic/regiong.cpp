@@ -685,7 +685,7 @@ miSetExtents (Region pReg)
     pExtents->x2 = pBoxEnd->x2;
     pExtents->y2 = pBoxEnd->y2;
 
-    assert(pExtents->y1 < pExtents->y2);
+    wxASSERT_LEVEL_2(pExtents->y1 < pExtents->y2);
     while (pBox <= pBoxEnd)
     {
         if (pBox->x1 < pExtents->x1)
@@ -698,7 +698,7 @@ miSetExtents (Region pReg)
         }
         pBox++;
     }
-    assert(pExtents->x1 < pExtents->x2);
+    wxASSERT_LEVEL_2(pExtents->x1 < pExtents->x2);
 }
 
 bool REGION::
@@ -789,7 +789,7 @@ miIntersectO (
          */
         if (x1 < x2)
         {
-            assert(y1<y2);
+            wxASSERT_LEVEL_2(y1<y2);
 
             MEMCHECK(pReg, pNextRect, pReg->rects);
             pNextRect->x1 = x1;
@@ -798,7 +798,7 @@ miIntersectO (
             pNextRect->y2 = y2;
             pReg->numRects += 1;
             pNextRect++;
-            assert(pReg->numRects <= pReg->size);
+            wxASSERT_LEVEL_2(pReg->numRects <= pReg->size);
         }
 
         /*
@@ -1379,11 +1379,11 @@ miUnionNonO (
 
     pNextRect = &pReg->rects[pReg->numRects];
 
-    assert(y1 < y2);
+    wxASSERT_LEVEL_2(y1 < y2);
 
     while (r != rEnd)
     {
-        assert(r->x1 < r->x2);
+        wxASSERT_LEVEL_2(r->x1 < r->x2);
         MEMCHECK(pReg, pNextRect, pReg->rects);
         pNextRect->x1 = r->x1;
         pNextRect->y1 = y1;
@@ -1392,7 +1392,7 @@ miUnionNonO (
         pReg->numRects += 1;
         pNextRect++;
 
-        assert(pReg->numRects<=pReg->size);
+        wxASSERT_LEVEL_2(pReg->numRects<=pReg->size);
         r++;
     }
     return 0;        /* lint */
@@ -1439,7 +1439,7 @@ miUnionO (
         if (pNextRect[-1].x2 < r->x2)  \
         {  \
             pNextRect[-1].x2 = r->x2;  \
-            assert(pNextRect[-1].x1<pNextRect[-1].x2); \
+            wxASSERT_LEVEL_2(pNextRect[-1].x1<pNextRect[-1].x2); \
         }  \
     }  \
     else  \
@@ -1452,10 +1452,10 @@ miUnionO (
         pReg->numRects += 1;  \
         pNextRect += 1;  \
     }  \
-    assert(pReg->numRects<=pReg->size);\
+    wxASSERT_LEVEL_2(pReg->numRects<=pReg->size);\
     r++;
 
-    assert (y1<y2);
+    wxASSERT_LEVEL_2 (y1<y2);
     while ((r1 != r1End) && (r2 != r2End))
     {
         if (r1->x1 < r2->x1)
@@ -1580,11 +1580,11 @@ miSubtractNonO1 (
 
     pNextRect = &pReg->rects[pReg->numRects];
 
-    assert(y1<y2);
+    wxASSERT_LEVEL_2(y1<y2);
 
     while (r != rEnd)
     {
-        assert(r->x1<r->x2);
+        wxASSERT_LEVEL_2(r->x1<r->x2);
         MEMCHECK(pReg, pNextRect, pReg->rects);
         pNextRect->x1 = r->x1;
         pNextRect->y1 = y1;
@@ -1593,7 +1593,7 @@ miSubtractNonO1 (
         pReg->numRects += 1;
         pNextRect++;
 
-        assert(pReg->numRects <= pReg->size);
+        wxASSERT_LEVEL_2(pReg->numRects <= pReg->size);
 
         r++;
     }
@@ -1630,7 +1630,7 @@ miSubtractO (
 
     x1 = r1->x1;
 
-    assert(y1<y2);
+    wxASSERT_LEVEL_2(y1<y2);
     pNextRect = &pReg->rects[pReg->numRects];
 
     while ((r1 != r1End) && (r2 != r2End))
@@ -1673,7 +1673,7 @@ miSubtractO (
              * Left part of subtrahend covers part of minuend: add uncovered
              * part of minuend to region and skip to next subtrahend.
              */
-            assert(x1<r2->x1);
+            wxASSERT_LEVEL_2(x1<r2->x1);
             MEMCHECK(pReg, pNextRect, pReg->rects);
             pNextRect->x1 = x1;
             pNextRect->y1 = y1;
@@ -1682,7 +1682,7 @@ miSubtractO (
             pReg->numRects += 1;
             pNextRect++;
 
-            assert(pReg->numRects<=pReg->size);
+            wxASSERT_LEVEL_2(pReg->numRects<=pReg->size);
 
             x1 = r2->x2;
             if (x1 >= r1->x2)
@@ -1716,7 +1716,7 @@ miSubtractO (
                 pNextRect->y2 = y2;
                 pReg->numRects += 1;
                 pNextRect++;
-                assert(pReg->numRects<=pReg->size);
+                wxASSERT_LEVEL_2(pReg->numRects<=pReg->size);
             }
             r1++;
             if (r1 != r1End)
@@ -1729,7 +1729,7 @@ miSubtractO (
      */
     while (r1 != r1End)
     {
-        assert(x1<r1->x2);
+        wxASSERT_LEVEL_2(x1<r1->x2);
         MEMCHECK(pReg, pNextRect, pReg->rects);
         pNextRect->x1 = x1;
         pNextRect->y1 = y1;
@@ -1738,7 +1738,7 @@ miSubtractO (
         pReg->numRects += 1;
         pNextRect++;
 
-        assert(pReg->numRects<=pReg->size);
+        wxASSERT_LEVEL_2(pReg->numRects<=pReg->size);
 
         r1++;
         if (r1 != r1End)
