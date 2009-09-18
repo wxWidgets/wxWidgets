@@ -392,8 +392,8 @@ All (GUI):
 - Added support for showing bitmaps in wxButton.
 - Added support for corner, row and column headers renderers to wxGrid.
 - wxWindow::SetAutoLayout() now works for all windows, not just panels.
-- Support wxListCtrl columns, items and image lists in XRC (Kinaou Hervé).
-- Added support for wxFileCtrl to XRC (Kinaou Hervé).
+- Support wxListCtrl columns, items and image lists in XRC (Kinaou HervÃ©).
+- Added support for wxFileCtrl to XRC (Kinaou HervÃ©).
 - Added ownfg, ownbg and ownfont tags to XRC.
 - Added wxEditableListBox XRC handler.
 - Added multiple selection support to wxDirCtrl (Steve Lamerton).
@@ -540,7 +540,7 @@ All (GUI):
 - Allow copying text in the log dialogs.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
 - Added wxEVT_COMMAND_COMBOBOX_DROPDOWN/CLOSEUP events (Igor Korot).
-- Added wxCAL_SHOW_WEEK_NUMBERS wxCalendarCtrl style (Sören Meyer-Eppler).
+- Added wxCAL_SHOW_WEEK_NUMBERS wxCalendarCtrl style (SÃ¶ren Meyer-Eppler).
 - Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.
 - Added wxNativeContainerWindow to allow embedding wx into native windows.
 - Added custom controls support to wxFileDialog (Diaa Sami and Marcin Wojdyr).
@@ -693,7 +693,7 @@ wxMSW:
   preview inaccuracies on Windows; on other platforms, native preview
   should be used.
 - Implement wxFileName::SetTimes() for directories (Steve Lamerton).
-- Added wxToolTip::SetMaxWidth() and improved default wrapping (Joachim Hönig).
+- Added wxToolTip::SetMaxWidth() and improved default wrapping (Joachim HÃ¶nig).
 - Changed default toolbar bitmaps size from obsolete 16x15 to 24x24 used
   by modern apps.
 - Ellipsize long strings in wxStatusBar (Francesco Montorsi)
@@ -712,7 +712,7 @@ wxDFB:
 i18n:
 -----
 
-- Slovak translations added (Ivan Masár).
+- Slovak translations added (Ivan MasÃ¡r).
 
 
 2.8.10:
@@ -1477,7 +1477,7 @@ All (GUI):
 - wxNB_HITTEST_* flags renamed to wxBK_HITTEST_* to serve all book controls.
 - Added wxTopLevelWindow::SetTransparent and CanSetTransparent, with
   implementations (so far) for wxMSW and wxMac.
-- Allow customizing individual grid lines appearance (Søren Lassen).
+- Allow customizing individual grid lines appearance (SÃ¸ren Lassen).
 - Fixed middle click events generation in generic wxTreeCtrl (Olly Betts).
 - Added wxEVT_MOUSE_CAPTURE_LOST event that must be handled by all windows
   that CaptureMouse() is called on.
@@ -1640,7 +1640,7 @@ wxX11:
 - Invisible text problem fixed.
 - Bitmap clipping with masks and scaling improved.
 - Fixed a crash bug in the generic timer.
-- Implemented child process termination notifications (David Björkevik)
+- Implemented child process termination notifications (David BjÃ¶rkevik)
 
 Unix:
 
@@ -1678,7 +1678,7 @@ All (GUI):
 - Added wxXmlResource::Unload().
 - Possibility of modeless wxWizard dialog (with presentation in sample).
 - Fixed a rare crash due to malformed HTML in wxHTML (Xavier Nodet).
-- Ctrl+mouse wheel changes zoom factor in print preview (Zbigniew Zagórski).
+- Ctrl+mouse wheel changes zoom factor in print preview (Zbigniew ZagÃ³rski).
 - Cross-compile now supported for wxGTK, wxX11 and wxMotif.
 - Cygwin compilation of wxX11, wxGTK and wxMotif now supported.
 - Now reads "help" parameter for all windows (context help text).
@@ -1693,7 +1693,7 @@ wxMSW:
 - Fixed wxSlider::GetSelEnd() (Atilim Cetin).
 - Fixed accelerators of menu items added to already attached submenus.
 - Position of wxEVT_MOUSEWHEEL events is now in client, not screen, coordinates.
-- Handle absence of wxListCtrl column image better (Zbigniew Zagórski).
+- Handle absence of wxListCtrl column image better (Zbigniew ZagÃ³rski).
 - Fixed asynchronous playback of large sound files in wxSound.
 - Added wxDynamicLibrary::GetSymbolAorW().
 - Fixed default size of wxStaticText controls with border being too small.
@@ -1976,8 +1976,8 @@ All:
   use accessors methods now (Mart Raudsepp)
 - new classes for reading and writing ZIP files (M.J.Wetherell)
 - large files support for wxFFile (M.J.Wetherell)
-- classes in the manual are now cross-referenced (Zbigniew Zagórski)
-- Norwegian (Bokmål) translation added (Hans F. Nordhaug)
+- classes in the manual are now cross-referenced (Zbigniew ZagÃ³rski)
+- Norwegian (BokmÃ¥l) translation added (Hans F. Nordhaug)
 - wxDynamicLibrary::HasSymbol() added
 - added wxEXEC_NODISABLE flag to be used with wxExecute(wxEXEC_SYNC)
 - added wxTextInputStream::operator>>(wchar_t) for compilers which support this
@@ -2026,7 +2026,7 @@ All (GUI):
 - added wxMediaCtrl
 - added wxDatePickerCtrl
 - wxHtmlWindow now supports background images given in <body> tag
-- wxSplitterWindow now supports gravity parameter (Zbigniew Zagórski)
+- wxSplitterWindow now supports gravity parameter (Zbigniew ZagÃ³rski)
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 - wxLayoutConstraints now use best size, not current size, for AsIs() condition
 - wxSizer::Add/Insert etc. now returns pointer to wxSizerItem just added and this
@@ -2334,7 +2334,7 @@ wxODBC:
 
 All:
 
-- event table macros now do some minimal type safety checks (Michael Sögtrop)
+- event table macros now do some minimal type safety checks (Michael SÃ¶gtrop)
 - added wxGzipInput/OutputStream, bug fixes in wxZlibStreams (M.J.Wetherell)
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
 - wxHTTP::GetResponse() added (David Nock)
@@ -2367,7 +2367,7 @@ All (GUI):
 - added some support for C++ exceptions in the library (do read the manual!)
 - added wxListCtrl::GetViewRect()
 - added wxTextCtrl::MarkDirty()
-- wxToolBar::ToggleTool() now works for radio buttons (Dag Ågren)
+- wxToolBar::ToggleTool() now works for radio buttons (Dag Ã…gren)
 - wxListCtrl now sends an END_LABEL event if editing was cancelled, too
 - bug in wxRect ctor from two [out of order] wxPoints fixed (Steve Cornett)
 - status text is now restored after wxMenu help is shown in it
@@ -2498,7 +2498,7 @@ All:
 wxBase:
 
 - added Watcom makefiles
-- fixed bug with searching in sorted arrays (Jürgen Palm)
+- fixed bug with searching in sorted arrays (JÃ¼rgen Palm)
 
 All GUI ports:
 
@@ -3059,7 +3059,7 @@ All (GUI):
 - polygon support in wxRegion (Klaas Holwerda)
 - wxStreamToTextRedirector to allow easily redirect cout to wxTextCtrl added
 - fixed bug with using wxExecute() to capture huge amounts of output
-- new wxCalendarCtrl styles added (Søren Erland Vestø)
+- new wxCalendarCtrl styles added (SÃ¸ren Erland VestÃ¸)
 - wxWizard changes: loading from WXR support, help button (Robert Cavanaugh)
 - wxDirSelector() added (Paul A. Thiessen)
 - wxGrid cell editing veto support (Roger Gammans)
@@ -3167,7 +3167,7 @@ wxBase:
 - wxZipFSHandler::FindFirst() and FindNext() now correctly list directories
 - wxMimeTypesManager now can create file associations too (Chris Elliott)
 - wxCopyFile() respects the file permissions (Roland Scholz)
-- wxFTP::GetFileSize() added (Søren Erland Vestø)
+- wxFTP::GetFileSize() added (SÃ¸ren Erland VestÃ¸)
 - wxDateTime::IsSameDate() bug fixed
 - wxTimeSpan::Format() now behaves more as expected, see docs
 - wxLocale now provides much more convenient API for setting language and
