@@ -635,7 +635,7 @@ wxFileOffset wxStreamBuffer::Seek(wxFileOffset pos, wxSeekMode mode)
                 size_t int_diff = wx_truncate_cast(size_t, diff);
                 wxCHECK_MSG( (wxFileOffset)int_diff == diff, wxInvalidOffset, wxT("huge file not supported") );
                 SetIntPosition(int_diff);
-                return pos;
+                return diff;
             }
 
         case wxFromEnd:
