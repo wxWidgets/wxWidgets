@@ -181,8 +181,9 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble1, double),
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT(m_anyWxObjectPtr1.As<wxObject*>() == dummyWxObjectPointer);
-    CPPUNIT_ASSERT(m_anyVoidPtr1.As<void*>() == dummyVoidPointer);
+    CPPUNIT_ASSERT(wxANY_AS(m_anyWxObjectPtr1, wxObject*)
+                        == dummyWxObjectPointer);
+    CPPUNIT_ASSERT(wxANY_AS(m_anyVoidPtr1, void*) == dummyVoidPointer);
 
     CPPUNIT_ASSERT(m_anySignedLong2 == 15);
     CPPUNIT_ASSERT(m_anyStringString2 == wxString("abc"));
@@ -195,8 +196,9 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(wxANY_AS(m_anyFloatDouble2, double),
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
-    CPPUNIT_ASSERT(m_anyWxObjectPtr2.As<wxObject*>() == dummyWxObjectPointer);
-    CPPUNIT_ASSERT(m_anyVoidPtr2.As<void*>() == dummyVoidPointer);
+    CPPUNIT_ASSERT(wxANY_AS(m_anyWxObjectPtr2, wxObject*)
+                        == dummyWxObjectPointer);
+    CPPUNIT_ASSERT(wxANY_AS(m_anyVoidPtr2, void*) == dummyVoidPointer);
 }
 
 void wxAnyTestCase::As()
