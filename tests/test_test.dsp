@@ -235,6 +235,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\any\anytest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\archive\archivetest.cpp
 # End Source File
 # Begin Source File

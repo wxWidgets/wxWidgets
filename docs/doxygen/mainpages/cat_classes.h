@@ -624,6 +624,7 @@ Related overview: @ref overview_log
 
 These are the data structure classes supported by wxWidgets.
 
+@li wxAny: A class for storing arbitrary types that may change at run-time
 @li wxCmdLineParser: Command line parser class
 @li wxDateSpan: A logical time interval.
 @li wxDateTime: A class for date/time manipulations

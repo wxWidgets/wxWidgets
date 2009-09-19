@@ -311,6 +311,7 @@ MONODLL_CXXFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	/Fp"$(OBJS)\wxprec_monodll.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
+	$(OBJS)\monodll_any.obj \
 	$(OBJS)\monodll_appbase.obj \
 	$(OBJS)\monodll_arcall.obj \
 	$(OBJS)\monodll_arcfind.obj \
@@ -456,6 +457,7 @@ MONOLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_113)$(__DEBUGRUNTIME) /DWIN32 \
 	/Fp"$(OBJS)\wxprec_monolib.pch" $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
+	$(OBJS)\monolib_any.obj \
 	$(OBJS)\monolib_appbase.obj \
 	$(OBJS)\monolib_arcall.obj \
 	$(OBJS)\monolib_arcfind.obj \
@@ -599,6 +601,7 @@ BASEDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_127)$(__DEBUGRUNTIME) /DWIN32 \
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
 	$(OBJS)\basedll_version.res \
+	$(OBJS)\basedll_any.obj \
 	$(OBJS)\basedll_appbase.obj \
 	$(OBJS)\basedll_arcall.obj \
 	$(OBJS)\basedll_arcfind.obj \
@@ -726,6 +729,7 @@ BASELIB_CXXFLAGS = /M$(__RUNTIME_LIBS_140)$(__DEBUGRUNTIME) /DWIN32 \
 	/Fp"$(OBJS)\wxprec_baselib.pch" $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
+	$(OBJS)\baselib_any.obj \
 	$(OBJS)\baselib_appbase.obj \
 	$(OBJS)\baselib_arcall.obj \
 	$(OBJS)\baselib_arcfind.obj \
@@ -5861,6 +5865,9 @@ $(OBJS)\wxscintilla_XPM.obj: ..\..\src\stc\scintilla\src\XPM.cxx
 $(OBJS)\monodll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
+$(OBJS)\monodll_any.obj: ..\..\src\common\any.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\any.cpp
+
 $(OBJS)\monodll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\appbase.cpp
 
@@ -8097,6 +8104,9 @@ $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 
 $(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
+
+$(OBJS)\monolib_any.obj: ..\..\src\common\any.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\any.cpp
 
 $(OBJS)\monolib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\appbase.cpp
@@ -10335,6 +10345,9 @@ $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\basedll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include /d WXBUILDING /d WXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_vc$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /d wxUSE_GUI=0 /d WXMAKINGDLL_BASE /d wxUSE_BASE=1 ..\..\src\msw\version.rc
 
+$(OBJS)\basedll_any.obj: ..\..\src\common\any.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\any.cpp
+
 $(OBJS)\basedll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\appbase.cpp
 
@@ -10649,6 +10662,9 @@ $(OBJS)\basedll_volume.obj: ..\..\src\msw\volume.cpp
 
 $(OBJS)\baselib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
+
+$(OBJS)\baselib_any.obj: ..\..\src\common\any.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\any.cpp
 
 $(OBJS)\baselib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\appbase.cpp

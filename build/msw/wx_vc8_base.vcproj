@@ -735,6 +735,10 @@
 			UniqueIdentifier="{A6A5C30D-BDB6-5050-906D-10A96065136C}"
 			>
 			<File
+				RelativePath="..\..\src\common\any.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\appbase.cpp"
 				>
 			</File>
@@ -1625,6 +1629,10 @@
 			>
 			<File
 				RelativePath="..\..\include\wx\afterstd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\any.h"
 				>
 			</File>
 			<File

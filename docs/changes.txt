@@ -1,4 +1,4 @@
--------------------------------------------------------------------------------
+﻿-------------------------------------------------------------------------------
                              wxWidgets Change Log
 -------------------------------------------------------------------------------
 
@@ -391,6 +391,8 @@ All:
 - Fix bug with position argument in wxImage::Size() (Byron Sorgdrager).
 - Fix bug with parsing concatenated switches in wxCmdLineParser (Mike Funduc).
 - Added wxMBConv::cMB2WC(wxCharBuffer) and cWC2MB(wxWCharBuffer) overloads.
+- Added wxAny class; a modern, backwards-incompatible replacement for
+  wxVariant.
 
 All (GUI):
 

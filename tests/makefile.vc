@@ -31,6 +31,7 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
+	$(OBJS)\test_anytest.obj \
 	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_ziptest.obj \
 	$(OBJS)\test_tartest.obj \
@@ -460,6 +461,9 @@ $(OBJS)\test_dummy.obj: .\dummy.cpp
 
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\test.cpp
+
+$(OBJS)\test_anytest.obj: .\any\anytest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\any\anytest.cpp
 
 $(OBJS)\test_archivetest.obj: .\archive\archivetest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\archive\archivetest.cpp

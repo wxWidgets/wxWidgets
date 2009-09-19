@@ -7,6 +7,8 @@ ignored_methods = {
 # these classes are either replaced by different data types in bindings, or have equivalent / better
 # functionality provided by the target language.
 excluded_classes = [
+        "wxAny",
+        "wxAnyValueType",
         "wxArchiveClassFactory",
         "wxArchiveEntry",
         "wxArchiveInputStream",

@@ -68,6 +68,14 @@
    please keep the options in alphabetical order!
  */
 
+#ifndef wxUSE_ANY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_ANY must be defined."
+#   else
+#       define wxUSE_ANY 0
+#   endif
+#endif /* wxUSE_ANY */
+
 #ifndef wxUSE_CONSOLE_EVENTLOOP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_CONSOLE_EVENTLOOP must be defined."

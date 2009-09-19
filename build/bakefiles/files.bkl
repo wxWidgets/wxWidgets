@@ -304,6 +304,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                              Common                                    -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_CMN_SRC" hints="files">
+    src/common/any.cpp
     src/common/appbase.cpp
     src/common/arcall.cpp
     src/common/arcfind.cpp
@@ -392,6 +393,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_CMN_HDR" hints="files">
     wx/afterstd.h
+    wx/any.h
     wx/anystr.h
     wx/app.h
     wx/apptrait.h

@@ -30,6 +30,7 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.o \
 	$(OBJS)\test_test.o \
+	$(OBJS)\test_anytest.o \
 	$(OBJS)\test_archivetest.o \
 	$(OBJS)\test_ziptest.o \
 	$(OBJS)\test_tartest.o \
@@ -357,6 +358,9 @@ $(OBJS)\test_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_test.o: ./test.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_anytest.o: ./any/anytest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_archivetest.o: ./archive/archivetest.cpp

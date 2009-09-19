@@ -212,7 +212,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
-		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj
+		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
+		any.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -229,6 +230,7 @@ SOURCES = \
 		accelcmn.cpp,\
 		anidecod.cpp,\
 		animatecmn.cpp,\
+		any.cpp,\
 		appbase.cpp,\
 		appcmn.cpp,\
 		arrstr.cpp,\
@@ -459,6 +461,7 @@ $(OBJECTS_MOTIF) : [--.include.wx]setup.h
 accelcmn.obj : accelcmn.cpp
 anidecod.obj : anidecod.cpp
 animatecmn.obj : animatecmn.cpp
+any.obj : any.cpp
 appbase.obj : appbase.cpp
 appcmn.obj : appcmn.cpp
 arrstr.obj : arrstr.cpp

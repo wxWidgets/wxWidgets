@@ -111,6 +111,7 @@ rm -rf $RPM_BUILD_ROOT
 # --- wxBase headers list begins here ---
 cat <<EOF >wxbase-headers.files
 wx/afterstd.h
+wx/any.h
 wx/anystr.h
 wx/app.h
 wx/apptrait.h

@@ -295,6 +295,7 @@ MONODLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.o \
+	$(OBJS)\monodll_any.o \
 	$(OBJS)\monodll_appbase.o \
 	$(OBJS)\monodll_arcall.o \
 	$(OBJS)\monodll_arcfind.o \
@@ -436,6 +437,7 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.o \
+	$(OBJS)\monolib_any.o \
 	$(OBJS)\monolib_appbase.o \
 	$(OBJS)\monolib_arcall.o \
 	$(OBJS)\monolib_arcfind.o \
@@ -575,6 +577,7 @@ BASEDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.o \
 	$(OBJS)\basedll_version_rc.o \
+	$(OBJS)\basedll_any.o \
 	$(OBJS)\basedll_appbase.o \
 	$(OBJS)\basedll_arcall.o \
 	$(OBJS)\basedll_arcfind.o \
@@ -697,6 +700,7 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.o \
+	$(OBJS)\baselib_any.o \
 	$(OBJS)\baselib_appbase.o \
 	$(OBJS)\baselib_arcall.o \
 	$(OBJS)\baselib_arcfind.o \
@@ -5653,6 +5657,9 @@ $(OBJS)\wxscintilla_XPM.o: ../../src/stc/scintilla/src/XPM.cxx
 $(OBJS)\monodll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_any.o: ../../src/common/any.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_appbase.o: ../../src/common/appbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8000,6 +8007,9 @@ $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ../../include --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gcc$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --define wxUSE_BASE=1 --define WXMAKINGDLL --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS
 
 $(OBJS)\monolib_dummy.o: ../../src/common/dummy.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_any.o: ../../src/common/any.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_appbase.o: ../../src/common/appbase.cpp
@@ -10351,6 +10361,9 @@ $(OBJS)\basedll_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\basedll_version_rc.o: ../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ../../include --define WXBUILDING --define WXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gcc$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --define wxUSE_GUI=0 --define WXMAKINGDLL_BASE --define wxUSE_BASE=1
 
+$(OBJS)\basedll_any.o: ../../src/common/any.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_appbase.o: ../../src/common/appbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10664,6 +10677,9 @@ $(OBJS)\basedll_volume.o: ../../src/msw/volume.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_dummy.o: ../../src/common/dummy.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_any.o: ../../src/common/any.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_appbase.o: ../../src/common/appbase.cpp

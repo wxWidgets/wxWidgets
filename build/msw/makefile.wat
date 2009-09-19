@@ -3439,6 +3439,7 @@ MONODLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dummy.obj &
+	$(OBJS)\monodll_any.obj &
 	$(OBJS)\monodll_appbase.obj &
 	$(OBJS)\monodll_arcall.obj &
 	$(OBJS)\monodll_arcfind.obj &
@@ -3579,6 +3580,7 @@ MONOLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dummy.obj &
+	$(OBJS)\monolib_any.obj &
 	$(OBJS)\monolib_appbase.obj &
 	$(OBJS)\monolib_arcall.obj &
 	$(OBJS)\monolib_arcfind.obj &
@@ -3717,6 +3719,7 @@ BASEDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dummy.obj &
+	$(OBJS)\basedll_any.obj &
 	$(OBJS)\basedll_appbase.obj &
 	$(OBJS)\basedll_arcall.obj &
 	$(OBJS)\basedll_arcfind.obj &
@@ -3839,6 +3842,7 @@ BASELIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dummy.obj &
+	$(OBJS)\baselib_any.obj &
 	$(OBJS)\baselib_appbase.obj &
 	$(OBJS)\baselib_arcall.obj &
 	$(OBJS)\baselib_arcfind.obj &
@@ -5918,6 +5922,9 @@ $(OBJS)\wxscintilla_XPM.obj :  .AUTODEPEND ..\..\src\stc\scintilla\src\XPM.cxx
 	$(CXX) -bt=nt -zq -fo=$^@ $(WXSCINTILLA_CXXFLAGS) $<
 
 $(OBJS)\monodll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_any.obj :  .AUTODEPEND ..\..\src\common\any.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
@@ -8269,6 +8276,9 @@ $(OBJS)\monodll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 $(OBJS)\monolib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_any.obj :  .AUTODEPEND ..\..\src\common\any.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10618,6 +10628,9 @@ $(OBJS)\basedll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\basedll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 $<
 
+$(OBJS)\basedll_any.obj :  .AUTODEPEND ..\..\src\common\any.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10931,6 +10944,9 @@ $(OBJS)\basedll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\baselib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_any.obj :  .AUTODEPEND ..\..\src\common\any.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_appbase.obj :  .AUTODEPEND ..\..\src\common\appbase.cpp

@@ -29,6 +29,7 @@
                    template_append="wx_append_base">
         <sources>
             test.cpp
+            any/anytest.cpp
             archive/archivetest.cpp
             archive/ziptest.cpp
             archive/tartest.cpp

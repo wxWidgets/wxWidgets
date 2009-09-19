@@ -54,6 +54,7 @@ TEST_CXXFLAGS = $(__test_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	test_test.o \
+	test_anytest.o \
 	test_archivetest.o \
 	test_ziptest.o \
 	test_tartest.o \
@@ -345,6 +346,9 @@ fr:
 
 test_test.o: $(srcdir)/test.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/test.cpp
+
+test_anytest.o: $(srcdir)/any/anytest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/any/anytest.cpp
 
 test_archivetest.o: $(srcdir)/archive/archivetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/archive/archivetest.cpp

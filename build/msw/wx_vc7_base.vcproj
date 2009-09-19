@@ -525,6 +525,9 @@
 			Name="Common Sources"
 			UniqueIdentifier="{A6A5C30D-BDB6-5050-906D-10A96065136C}">
 			<File
+				RelativePath="..\..\src\common\any.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\appbase.cpp">
 			</File>
 			<File
@@ -1204,6 +1207,9 @@
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}">
 			<File
 				RelativePath="..\..\include\wx\afterstd.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\any.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\anystr.h">

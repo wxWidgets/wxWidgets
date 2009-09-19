@@ -38,6 +38,7 @@ TEST_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
+	$(OBJS)\test_anytest.obj \
 	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_ziptest.obj \
 	$(OBJS)\test_tartest.obj \
@@ -377,6 +378,9 @@ $(OBJS)\test_dummy.obj: .\dummy.cpp
 
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\test.cpp
+
+$(OBJS)\test_anytest.obj: .\any\anytest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\any\anytest.cpp
 
 $(OBJS)\test_archivetest.obj: .\archive\archivetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\archive\archivetest.cpp

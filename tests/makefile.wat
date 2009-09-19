@@ -259,6 +259,7 @@ TEST_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 TEST_OBJECTS =  &
 	$(OBJS)\test_dummy.obj &
 	$(OBJS)\test_test.obj &
+	$(OBJS)\test_anytest.obj &
 	$(OBJS)\test_archivetest.obj &
 	$(OBJS)\test_ziptest.obj &
 	$(OBJS)\test_tartest.obj &
@@ -414,6 +415,9 @@ $(OBJS)\test_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_test.obj :  .AUTODEPEND .\test.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_anytest.obj :  .AUTODEPEND .\any\anytest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_archivetest.obj :  .AUTODEPEND .\archive\archivetest.cpp

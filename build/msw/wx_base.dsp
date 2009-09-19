@@ -244,6 +244,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\common\any.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\appbase.cpp
 # End Source File
 # Begin Source File
@@ -1036,6 +1040,10 @@ SOURCE=..\..\include\wx\html\forcelnk.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\afterstd.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\any.h
 # End Source File
 # Begin Source File
 

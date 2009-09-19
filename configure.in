@@ -728,6 +728,7 @@ WX_ARG_FEATURE(epollloop,     [  --enable-epollloop      use wxEpollDispatcher c
 WX_ARG_FEATURE(selectloop,    [  --enable-selectloop     use wxSelectDispatcher class], wxUSE_SELECT_DISPATCHER)
 
 dnl please keep the settings below in alphabetical order
+WX_ARG_FEATURE(any,           [  --enable-any            use wxAny class], wxUSE_ANY)
 WX_ARG_FEATURE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
 WX_ARG_FEATURE(arcstream,     [  --enable-arcstream      use wxArchive streams], wxUSE_ARCHIVE_STREAMS)
 WX_ARG_FEATURE(base64,        [  --enable-base64         use base64 encoding/decoding functions], wxUSE_BASE64)
@@ -5471,6 +5472,10 @@ fi
 
 if test "$wxUSE_EXTENDED_RTTI" = "yes"; then
   AC_DEFINE(wxUSE_EXTENDED_RTTI)
+fi
+
+if test "$wxUSE_ANY" = "yes"; then
+    AC_DEFINE(wxUSE_ANY)
 fi
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then

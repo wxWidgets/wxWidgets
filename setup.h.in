@@ -294,6 +294,8 @@
 
 #define wxUSE_VARIANT 0
 
+#define wxUSE_ANY 0
+
 #define wxUSE_REGEX       0
 
 #define wxUSE_SYSTEM_OPTIONS 0

@@ -310,6 +310,7 @@ WXSCINTILLA_OBJECTS =  \
 PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
 ALL_BASE_HEADERS =  \
 	wx/afterstd.h \
+	wx/any.h \
 	wx/anystr.h \
 	wx/app.h \
 	wx/apptrait.h \
@@ -470,6 +471,7 @@ ALL_HEADERS =  \
 	$(ALL_GUI_HEADERS)
 ALL_PORTS_BASE_HEADERS =  \
 	wx/afterstd.h \
+	wx/any.h \
 	wx/anystr.h \
 	wx/app.h \
 	wx/apptrait.h \
@@ -665,6 +667,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_BASE_SOURCES =  \
+	src/common/any.cpp \
 	src/common/appbase.cpp \
 	src/common/arcall.cpp \
 	src/common/arcfind.cpp \
@@ -855,6 +858,7 @@ MONODLL_OBJCXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
 	$(PIC_FLAG) $(CPPFLAGS) $(OBJCXXFLAGS)
 MONODLL_OBJECTS =  \
+	monodll_any.o \
 	monodll_appbase.o \
 	monodll_arcall.o \
 	monodll_arcfind.o \
@@ -982,6 +986,7 @@ MONOLIB_OBJCXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DLINK_LEXERS \
 	$(CPPFLAGS) $(OBJCXXFLAGS)
 MONOLIB_OBJECTS =  \
+	monolib_any.o \
 	monolib_appbase.o \
 	monolib_arcall.o \
 	monolib_arcfind.o \
@@ -1104,6 +1109,7 @@ BASEDLL_OBJCXXFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_BASE=1 $(PIC_FLAG) $(CPPFLAGS) $(OBJCXXFLAGS)
 BASEDLL_OBJECTS =  \
 	$(__basedll___win32rc) \
+	basedll_any.o \
 	basedll_appbase.o \
 	basedll_arcall.o \
 	basedll_arcfind.o \
@@ -1209,6 +1215,7 @@ BASELIB_OBJCXXFLAGS = $(__baselib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) \
 	$(OBJCXXFLAGS)
 BASELIB_OBJECTS =  \
+	baselib_any.o \
 	baselib_appbase.o \
 	baselib_arcall.o \
 	baselib_arcfind.o \
@@ -14203,6 +14210,9 @@ wxscintilla_WindowAccessor.o: $(srcdir)/src/stc/scintilla/src/WindowAccessor.cxx
 wxscintilla_XPM.o: $(srcdir)/src/stc/scintilla/src/XPM.cxx
 	$(CXXC) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(srcdir)/src/stc/scintilla/src/XPM.cxx
 
+monodll_any.o: $(srcdir)/src/common/any.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/any.cpp
+
 monodll_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
@@ -18939,6 +18949,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 monodll_version_rc.o: $(srcdir)/src/msw/version.rc $(MONODLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_BASE=1 --define WXMAKINGDLL --include-dir $(top_srcdir)/src/stc/scintilla/include --include-dir $(top_srcdir)/src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define LINK_LEXERS
+
+monolib_any.o: $(srcdir)/src/common/any.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/any.cpp
 
 monolib_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
@@ -23677,6 +23690,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 basedll_version_rc.o: $(srcdir)/src/msw/version.rc $(BASEDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_GUI=0 --define WXMAKINGDLL_BASE --define wxUSE_BASE=1
 
+basedll_any.o: $(srcdir)/src/common/any.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/any.cpp
+
 basedll_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/appbase.cpp
 
@@ -24147,6 +24163,9 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@basedll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+baselib_any.o: $(srcdir)/src/common/any.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/any.cpp
 
 baselib_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/appbase.cpp

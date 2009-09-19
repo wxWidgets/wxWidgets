@@ -308,6 +308,7 @@ MONODLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_dummy.obj \
+	$(OBJS)\monodll_any.obj \
 	$(OBJS)\monodll_appbase.obj \
 	$(OBJS)\monodll_arcall.obj \
 	$(OBJS)\monodll_arcfind.obj \
@@ -448,6 +449,7 @@ MONOLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_dummy.obj \
+	$(OBJS)\monolib_any.obj \
 	$(OBJS)\monolib_appbase.obj \
 	$(OBJS)\monolib_arcall.obj \
 	$(OBJS)\monolib_arcfind.obj \
@@ -585,6 +587,7 @@ BASEDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-DwxUSE_BASE=1 -Hu -H=$(OBJS)\wxprec_basedll.csm $(CPPFLAGS) $(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_dummy.obj \
+	$(OBJS)\basedll_any.obj \
 	$(OBJS)\basedll_appbase.obj \
 	$(OBJS)\basedll_arcall.obj \
 	$(OBJS)\basedll_arcfind.obj \
@@ -707,6 +710,7 @@ BASELIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-H=$(OBJS)\wxprec_baselib.csm $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_dummy.obj \
+	$(OBJS)\baselib_any.obj \
 	$(OBJS)\baselib_appbase.obj \
 	$(OBJS)\baselib_arcall.obj \
 	$(OBJS)\baselib_arcfind.obj \
@@ -5495,6 +5499,9 @@ $(OBJS)\wxscintilla_XPM.obj: ..\..\src\stc\scintilla\src\XPM.cxx
 $(OBJS)\monodll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
+$(OBJS)\monodll_any.obj: ..\..\src\common\any.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\any.cpp
+
 $(OBJS)\monodll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\appbase.cpp
 
@@ -7731,6 +7738,9 @@ $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 
 $(OBJS)\monolib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
+
+$(OBJS)\monolib_any.obj: ..\..\src\common\any.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\any.cpp
 
 $(OBJS)\monolib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\appbase.cpp
@@ -9969,6 +9979,9 @@ $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\basedll_version.res: ..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) -i$(SETUPHDIR) -i..\..\include -dWXBUILDING -dWXDLLNAME=wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_bcc$(VENDORTAG)  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\lib -dwxUSE_GUI=0 -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 ..\..\src\msw\version.rc
 
+$(OBJS)\basedll_any.obj: ..\..\src\common\any.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\any.cpp
+
 $(OBJS)\basedll_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\appbase.cpp
 
@@ -10283,6 +10296,9 @@ $(OBJS)\basedll_volume.obj: ..\..\src\msw\volume.cpp
 
 $(OBJS)\baselib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
+
+$(OBJS)\baselib_any.obj: ..\..\src\common\any.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\any.cpp
 
 $(OBJS)\baselib_appbase.obj: ..\..\src\common\appbase.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) ..\..\src\common\appbase.cpp
