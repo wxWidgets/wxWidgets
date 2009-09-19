@@ -679,7 +679,7 @@ void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
     extern WXDLLIMPEXP_CORE const wxChar* wxUserResourceStr;
-    WXDLLIMPEXP_CORE wxChar* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr);
+    WXDLLIMPEXP_CORE char* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr, int* pLen = NULL);
 #endif // MSW
 
 // ----------------------------------------------------------------------------

@@ -108,7 +108,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 // Returns NULL or newly-allocated memory, so use delete[] to clean up.
 
 #ifndef __WXMICROWIN__
-wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType)
+char *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType, int* pLen /* = NULL */)
 {
     HRSRC hResource = ::FindResource(wxGetInstance(),
                                      resourceName.wx_str(),
@@ -120,15 +120,16 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
     if ( hData == 0 )
         return NULL;
 
-    wxChar *theText = (wxChar *)::LockResource(hData);
+    void *theText = ::LockResource(hData);
     if ( !theText )
         return NULL;
 
     // Not all compilers put a zero at the end of the resource (e.g. BC++ doesn't).
     // so we need to find the length of the resource.
-    int len = ::SizeofResource(wxGetInstance(), hResource) + 1;
-    wxChar *s = new wxChar[len];
-    wxStrlcpy(s, theText, len);
+    int len = ::SizeofResource(wxGetInstance(), hResource);
+    char *s = new char[len + 1];
+    memcpy(s, theText, len);
+    s[len] = '\0'; // NUL-terminate in case the resource itself wasn't
 
     // Obsolete in WIN32
 #ifndef __WIN32__
@@ -137,6 +138,9 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
 
     // No need??
     //  GlobalFree(hData);
+
+    if (pLen)
+      *pLen = len;
 
     return s;
 }
