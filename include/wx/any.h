@@ -718,7 +718,10 @@ public:
     T As(T* = NULL) const
     {
         if ( !wxAnyValueTypeImpl<T>::IsSameClass(m_type) )
+        {
             wxFAIL_MSG("Incorrect or non-convertible data type");
+        }
+
         return static_cast<T>(wxAnyValueTypeImpl<T>::GetValue(m_buffer));
     }
 
