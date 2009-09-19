@@ -112,6 +112,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rect.obj \
 	$(OBJS)\test_gui_size.obj \
 	$(OBJS)\test_gui_point.obj \
+	$(OBJS)\test_gui_colour.obj \
 	$(OBJS)\test_gui_measuring.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_comboboxtest.obj \
@@ -674,6 +675,9 @@ $(OBJS)\test_gui_size.obj: .\geometry\size.cpp
 
 $(OBJS)\test_gui_point.obj: .\geometry\point.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\geometry\point.cpp
+
+$(OBJS)\test_gui_colour.obj: .\graphics\colour.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\colour.cpp
 
 $(OBJS)\test_gui_measuring.obj: .\graphics\measuring.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\measuring.cpp

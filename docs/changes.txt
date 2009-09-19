@@ -426,6 +426,7 @@ All (GUI):
   and wxPG_EX_TOOLBAR_SEPARATOR styles for finer control over borders.
   Borders around property grid are now native for consistency.
 - Added wxXmlResource::LoadObjectRecursively().
+- Added wxColour::Set/GetRGB() and Set/GetRGBA() methods (Marcel Haß).
 
 GTK:
 

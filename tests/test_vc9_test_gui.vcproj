@@ -800,6 +800,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\graphics\colour.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\comboboxtest.cpp"
 				>
 			</File>

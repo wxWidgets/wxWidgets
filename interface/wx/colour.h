@@ -112,6 +112,42 @@ public:
     */
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;
 
+    //@{
+    /**
+        Sets the RGB or RGBA colour values from a single 32 bit value.
+
+        The arguments @a colRGB and @a colRGBA should be of the form 0x00BBGGRR
+        and 0xAABBGGRR respectively where @c 0xRR, @c 0xGG, @c 0xBB and @c 0xAA
+        are the values of the red, blue, green and alpha components.
+
+        Notice the right-to-left order of components!
+
+        @see GetRGB(), GetRGBA()
+
+        @since 2.9.1
+    */
+    void SetRGB(wxUint32 colRGB);
+    void SetRGBA(wxUint32 colRGBA);
+    //@}
+
+    //@{
+    /**
+        Gets the RGB or RGBA colour values as a single 32 bit value.
+
+        The returned value is of the same form as expected by SetRGB() and
+        SetRGBA().
+
+        Notice that GetRGB() returns the value with 0 as its highest byte
+        independently of the value actually returned by Alpha(). So for a fully
+        opaque colour, the return value of GetRGBA() is @c 0xFFBBGGRR while
+        that of GetRGB() is @c 0x00BBGGRR.
+
+        @since 2.9.1
+    */
+    wxUint32 GetRGB() const;
+    wxUint32 GetRGBA() const;
+    //@}
+
     /**
         Returns a pixel value which is platform-dependent.
         On Windows, a COLORREF is returned.

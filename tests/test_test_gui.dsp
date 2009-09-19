@@ -243,6 +243,10 @@ SOURCE=.\events\clone.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\colour.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\comboboxtest.cpp
 # End Source File
 # Begin Source File
