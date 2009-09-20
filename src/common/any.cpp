@@ -106,20 +106,6 @@ wxAnyValueType::wxAnyValueType()
 }
 
 //-------------------------------------------------------------------------
-// wxAny
-//-------------------------------------------------------------------------
-
-void wxAny::AssignAny(const wxAny &any)
-{
-    if ( !any.m_type->IsSameType(m_type) )
-    {
-        m_type->DeleteValue(m_buffer);
-        m_type = any.m_type;
-    }
-    m_type->CopyBuffer(any.m_buffer, m_buffer);
-}
-
-//-------------------------------------------------------------------------
 // Dynamic conversion member functions
 //-------------------------------------------------------------------------
 

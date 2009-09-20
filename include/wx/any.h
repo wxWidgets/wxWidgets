@@ -514,7 +514,7 @@ bool operator==(TUS value) const \
 // As standard, wxAny can store value of almost any type, in a fairly
 // optimal manner even.
 //
-class WXDLLIMPEXP_BASE wxAny
+class wxAny
 {
 public:
     /**
@@ -755,7 +755,15 @@ public:
 
 private:
     // Assignment functions
-    void AssignAny(const wxAny &any);
+    void AssignAny(const wxAny& any)
+    {
+        if ( !any.m_type->IsSameType(m_type) )
+        {
+            m_type->DeleteValue(m_buffer);
+            m_type = any.m_type;
+        }
+        m_type->CopyBuffer(any.m_buffer, m_buffer);
+    }
 
     template<typename T>
     void Assign(const T &value)
