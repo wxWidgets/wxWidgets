@@ -1182,17 +1182,21 @@ void wxEvtHandler::ProcessPendingEvents()
           node;
           node = m_pendingEvents->GetFirst() )
     {
-        wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
+        {
+            wxEventPtr event(wx_static_cast(wxEvent *, node->GetData()));
 
-        // It's important we remove event from list before processing it.
-        // Else a nested event loop, for example from a modal dialog, might
-        // process the same event again.
+            // It's important we remove event from list before processing it.
+            // Else a nested event loop, for example from a modal dialog, might
+            // process the same event again.
 
-        m_pendingEvents->Erase(node);
+            m_pendingEvents->Erase(node);
 
-        wxLEAVE_CRIT_SECT( Lock() );
+            wxLEAVE_CRIT_SECT( Lock() );
 
-        ProcessEvent(*event);
+            ProcessEvent(*event);
+        } // delete the event at this block exit, before re-locking our
+          // critical section, to avoid deadlocks if the event dtor locks
+          // something else itself (see #10790)
 
         wxENTER_CRIT_SECT( Lock() );
 
