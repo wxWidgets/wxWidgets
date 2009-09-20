@@ -3021,6 +3021,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     case VK_SUBTRACT:
                     case VK_MULTIPLY:
                     case VK_DIVIDE:
+                    case VK_DECIMAL:
                     case VK_NUMPAD0:
                     case VK_NUMPAD1:
                     case VK_NUMPAD2:
