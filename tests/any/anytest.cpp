@@ -17,6 +17,7 @@
 
 #include "wx/any.h"
 #include "wx/datetime.h"
+#include "wx/object.h"
 
 #include <math.h>
 
