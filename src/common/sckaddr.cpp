@@ -31,6 +31,7 @@
     #include "wx/object.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/thread.h"
 
     #include <stdio.h>
     #include <stdlib.h>
@@ -734,7 +735,7 @@ int wxSockAddress::GetAddressDataLen() const
 
 void wxSockAddress::Init()
 {
-    if ( !wxSocketBase::IsInitialized() )
+    if ( wxIsMainThread() && !wxSocketBase::IsInitialized() )
     {
         // we must do it before using any socket functions
         (void)wxSocketBase::Initialize();
