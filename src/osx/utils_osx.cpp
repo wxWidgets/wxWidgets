@@ -40,12 +40,6 @@
 #endif
 
 #include "wx/osx/private.h"
-
-#if wxOSX_USE_COCOA
-// to get the theming APIs
-#include <Carbon/Carbon.h>
-#endif
-
 #include "wx/osx/private/timer.h"
 
 #include "wx/evtloop.h"

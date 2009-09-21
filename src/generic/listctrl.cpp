@@ -52,8 +52,6 @@
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
-    // for theming support
-    #include <Carbon/Carbon.h>
 #endif
 
 #if defined(__WXMSW__) && !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)

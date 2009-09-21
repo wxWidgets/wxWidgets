@@ -23,6 +23,9 @@
 #if wxOSX_USE_ATSU_TEXT
     // we need theming and atsu
     #include <Carbon/Carbon.h>
+#else
+    // we only need theming, if we find a better include replace the following
+    #include <Carbon/Carbon.h>
 #endif
 
 #ifdef __OBJC__

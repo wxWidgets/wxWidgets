@@ -28,11 +28,6 @@
 
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_ATSU_TEXT && !wxOSX_USE_CARBON
-// include theming support
-#include <Carbon/Carbon.h>
-#endif
-
 #include <map>
 #include <string>
 

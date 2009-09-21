@@ -38,8 +38,6 @@
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
 #include "wx/dcgraph.h"
-// for theming support
-#include <Carbon/Carbon.h>
 #endif
 
 #ifdef __WXGTK__

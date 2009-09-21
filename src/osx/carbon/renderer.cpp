@@ -30,11 +30,6 @@
 #include "wx/dcgraph.h"
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_COCOA
-// bring in the theme headers
-#include <Carbon/Carbon.h>
-#endif
-
 // check if we're currently in a paint event
 inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
