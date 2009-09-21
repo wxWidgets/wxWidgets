@@ -138,6 +138,14 @@ END_EVENT_TABLE()
 // the children
 // ===========================================================================
 
+void wxMDIParentFrame::Init()
+{
+#if wxUSE_MENUS && wxUSE_ACCEL
+  // the default menu doesn't have any accelerators (even if we have it)
+  m_accelWindowMenu = NULL;
+#endif // wxUSE_MENUS && wxUSE_ACCEL
+}
+
 bool wxMDIParentFrame::Create(wxWindow *parent,
                               wxWindowID id,
                               const wxString& title,
@@ -161,11 +169,6 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
       m_windowMenu->Append(wxID_MDI_WINDOW_NEXT, _("&Next"));
       m_windowMenu->Append(wxID_MDI_WINDOW_PREV, _("&Previous"));
   }
-
-#if wxUSE_MENUS && wxUSE_ACCEL
-  // the default menu doesn't have any accelerators (even if we have it)
-  m_accelWindowMenu = NULL;
-#endif // wxUSE_MENUS && wxUSE_ACCEL
 
   if (!parent)
     wxTopLevelWindows.Append(this);

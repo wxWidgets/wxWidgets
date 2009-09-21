@@ -24,7 +24,7 @@ class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
-    wxMDIParentFrame() { }
+    wxMDIParentFrame() { Init(); }
     wxMDIParentFrame(wxWindow *parent,
                      wxWindowID id,
                      const wxString& title,
@@ -33,6 +33,8 @@ public:
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const wxString& name = wxFrameNameStr)
     {
+        Init();
+
         Create(parent, id, title, pos, size, style, name);
     }
 
@@ -121,6 +123,9 @@ protected:
     void UpdateClientSize();
 
 private:
+    // common part of all ctors
+    void Init();
+
 #if wxUSE_MENUS
     // "Window" menu commands event handlers
     void OnMDICommand(wxCommandEvent& event);
