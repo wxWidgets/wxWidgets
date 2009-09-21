@@ -40,13 +40,11 @@ wxChoicebookXmlHandler::wxChoicebookXmlHandler()
     XRC_ADD_STYLE(wxBK_TOP);
     XRC_ADD_STYLE(wxBK_BOTTOM);
 
-#if WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxCHB_DEFAULT);
     XRC_ADD_STYLE(wxCHB_LEFT);
     XRC_ADD_STYLE(wxCHB_RIGHT);
     XRC_ADD_STYLE(wxCHB_TOP);
     XRC_ADD_STYLE(wxCHB_BOTTOM);
-#endif
 
     AddWindowStyles();
 }

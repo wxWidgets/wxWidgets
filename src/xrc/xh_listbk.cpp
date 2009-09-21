@@ -40,13 +40,11 @@ wxListbookXmlHandler::wxListbookXmlHandler()
     XRC_ADD_STYLE(wxBK_TOP);
     XRC_ADD_STYLE(wxBK_BOTTOM);
 
-#if WXWIN_COMPATIBILITY_2_6
     XRC_ADD_STYLE(wxLB_DEFAULT);
     XRC_ADD_STYLE(wxLB_LEFT);
     XRC_ADD_STYLE(wxLB_RIGHT);
     XRC_ADD_STYLE(wxLB_TOP);
     XRC_ADD_STYLE(wxLB_BOTTOM);
-#endif
 
     AddWindowStyles();
 }
