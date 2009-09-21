@@ -70,13 +70,15 @@ bool wxGLCanvasBase::SetColour(const wxString& colour)
         return false;
 
 #ifdef wxHAS_OPENGL_ES
-    wxGLAPI::glColor3f(col.Red() / 256., col.Green() / 256., col.Blue() / 256.);
+    wxGLAPI::glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.), 
+                (GLfloat) (col.Blue() / 256.));
 #else
     GLboolean isRGBA;
     glGetBooleanv(GL_RGBA_MODE, &isRGBA);
     if ( isRGBA )
     {
-        glColor3f(col.Red() / 256., col.Green() / 256., col.Blue() / 256.);
+        glColor3f((GLfloat) (col.Red() / 256.), (GLfloat) (col.Green() / 256.), 
+                (GLfloat) (col.Blue() / 256.));
     }
     else // indexed colour
     {
@@ -216,7 +218,6 @@ void wxGLAPI::glFrustum(GLfloat left, GLfloat right, GLfloat bottom,
     ::glFrustum(left, right, bottom, top, zNear, zFar);
 #endif
 }
-
 
 void wxGLAPI::glBegin(GLenum mode)
 {
