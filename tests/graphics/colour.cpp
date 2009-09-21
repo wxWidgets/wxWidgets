@@ -55,7 +55,7 @@ std::ostream& operator<<(std::ostream& os, const wxColour& c)
 
     if ( const unsigned char a = c.Alpha() )
     {
-        os << ", " << ColourChannel(c.Alpha());
+        os << ", " << ColourChannel(a);
     }
 
     os << ")";
