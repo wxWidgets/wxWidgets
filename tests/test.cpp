@@ -78,6 +78,41 @@ struct CrtAssertFailure
 
 #endif // wxUSE_VC_CRTDBG
 
+#if wxDEBUG_LEVEL
+
+static wxString FormatAssertMessage(const wxString& file,
+                                    int line,
+                                    const wxString& func,
+                                    const wxString& cond,
+                                    const wxString& msg)
+{
+    wxString str;
+    str << "wxWidgets assert: " << cond << " failed "
+           "at " << file << ":" << line << " in " << func
+        << " with message '" << msg << "'";
+    return str;
+}
+
+static void TestAssertHandler(const wxString& file,
+                              int line,
+                              const wxString& func,
+                              const wxString& cond,
+                              const wxString& msg)
+{
+    // can't throw from other threads, die immediately
+    if ( !wxIsMainThread() )
+    {
+        wxPrintf("%s in a worker thread -- aborting.",
+                 FormatAssertMessage(file, line, func, cond, msg));
+        fflush(stdout);
+        _exit(-1);
+    }
+
+    throw TestAssertFailure(file, line, func, cond, msg);
+}
+
+#endif // wxDEBUG_LEVEL
+
 // this function should only be called from a catch clause
 static string GetExceptionMessage()
 {
@@ -90,9 +125,8 @@ static string GetExceptionMessage()
 #if wxDEBUG_LEVEL
     catch ( TestAssertFailure& e )
     {
-        msg << "wxWidgets assert: " << e.m_cond << " failed "
-               "at " << e.m_file << ":" << e.m_line << " in " << e.m_func
-            << " with message '" << e.m_msg << "'";
+        msg << FormatAssertMessage(e.m_file, e.m_line, e.m_func,
+                                   e.m_cond, e.m_msg);
     }
 #endif // wxDEBUG_LEVEL
 #ifdef wxUSE_VC_CRTDBG
@@ -273,19 +307,6 @@ static int TestCrtReportHook(int reportType, char *message, int *)
 }
 
 #endif // wxUSE_VC_CRTDBG
-
-#if wxDEBUG_LEVEL
-
-static void TestAssertHandler(const wxString& file,
-                              int line,
-                              const wxString& func,
-                              const wxString& cond,
-                              const wxString& msg)
-{
-    throw TestAssertFailure(file, line, func, cond, msg);
-}
-
-#endif // wxDEBUG_LEVEL
 
 int main(int argc, char **argv)
 {
