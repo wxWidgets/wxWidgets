@@ -753,8 +753,11 @@ int wxSocketImpl::Write(const void *buffer, int size)
 namespace
 {
 
-// flag indicating whether wxSocketManager was already initialized
-bool gs_socketInitDone = false;
+// counts the number of calls to Initialize() minus the number of calls to
+// Shutdown(): we don't really need it any more but it was documented that
+// Shutdown() must be called the same number of times as Initialize() and using
+// a counter helps us to check it
+int gs_socketInitCount = 0;
 
 } // anonymous namespace
 
@@ -762,7 +765,7 @@ bool wxSocketBase::IsInitialized()
 {
     wxASSERT_MSG( wxIsMainThread(), "unsafe to call from other threads" );
 
-    return gs_socketInitDone;
+    return gs_socketInitCount != 0;
 }
 
 bool wxSocketBase::Initialize()
@@ -770,14 +773,14 @@ bool wxSocketBase::Initialize()
     wxCHECK_MSG( wxIsMainThread(), false,
                  "must be called from the main thread" );
 
-    if ( !gs_socketInitDone )
+    if ( !gs_socketInitCount )
     {
         wxSocketManager * const manager = wxSocketManager::Get();
         if ( !manager || !manager->OnInit() )
             return false;
-
-        gs_socketInitDone = true;
     }
+
+    gs_socketInitCount++;
 
     return true;
 }
@@ -786,14 +789,15 @@ void wxSocketBase::Shutdown()
 {
     wxCHECK_RET( wxIsMainThread(), "must be called from the main thread" );
 
-    wxCHECK_RET( gs_socketInitDone, "unnecessary call to Shutdown()" );
+    wxCHECK_RET( gs_socketInitCount > 0, "too many calls to Shutdown()" );
 
-    gs_socketInitDone = false;
+    if ( !--gs_socketInitCount )
+    {
+        wxSocketManager * const manager = wxSocketManager::Get();
+        wxCHECK_RET( manager, "should have a socket manager" );
 
-    wxSocketManager * const manager = wxSocketManager::Get();
-    wxCHECK_RET( manager, "should have a socket manager" );
-
-    manager->OnExit();
+        manager->OnExit();
+    }
 }
 
 // --------------------------------------------------------------------------
