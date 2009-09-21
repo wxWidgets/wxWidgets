@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -38,8 +46,17 @@
     #include "wx/msw/uxtheme.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
 // no idea for a default width, just choose something
-#define DEFAULT_FIELD_WIDTH 25
+static const int DEFAULT_FIELD_WIDTH = 25;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // macros
@@ -212,30 +229,35 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     if ( m_panes.IsEmpty() )
         return;
 
-    int aBorders[3];
-    SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)aBorders);
+    const int count = m_panes.GetCount();
 
-    int extraWidth = aBorders[2]; // space between fields
+    const int extraWidth = MSWGetBorderWidth() + MSWGetMetrics().textMargin;
 
+    // compute the effectively available amount of space:
+    int widthAvailable = GetClientSize().x;     // start with the entire width
+    widthAvailable -= extraWidth*(count - 1);   // extra space between fields
+    widthAvailable -= MSWGetMetrics().textMargin;   // and for the last field
+
+    if ( HasFlag(wxSTB_SIZEGRIP) )
+        widthAvailable -= MSWGetMetrics().gripWidth;
 
     // distribute the available space (client width) among the various fields:
 
-    wxArrayInt widthsAbs =
-        CalculateAbsWidths(GetClientSize().x - extraWidth*(m_panes.GetCount() - 1));
+    wxArrayInt widthsAbs = CalculateAbsWidths(widthAvailable);
 
 
     // update the field widths in the native control:
 
-    int *pWidths = new int[m_panes.GetCount()];
+    int *pWidths = new int[count];
 
     int nCurPos = 0;
-    for ( size_t i = 0; i < m_panes.GetCount(); i++ )
+    for ( int i = 0; i < count; i++ )
     {
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
     }
 
-    if ( !StatusBar_SetParts(GetHwnd(), m_panes.GetCount(), pWidths) )
+    if ( !StatusBar_SetParts(GetHwnd(), count, pWidths) )
     {
         wxLogLastError("StatusBar_SetParts");
     }
@@ -271,13 +293,8 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     wxRect rc;
     GetFieldRect(nField, rc);
 
-    int margin;
-    if (nField == GetFieldsCount()-1)
-        margin = -6;        // windows reports a smaller rect for the last field; enlarge it
-    else
-        margin = 4;
+    const int maxWidth = rc.GetWidth() - MSWGetMetrics().textMargin;
 
-    int maxWidth = rc.GetWidth() - margin;    // leave a small margin
     wxString text = GetStatusText(nField);
 
     // do we need to ellipsize this string?
@@ -345,20 +362,59 @@ void wxStatusBar::DoUpdateStatusText(int nField)
     }
 }
 
-int wxStatusBar::GetBorderX() const
+wxStatusBar::MSWBorders wxStatusBar::MSWGetBorders() const
 {
     int aBorders[3];
     SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)aBorders);
 
-    return aBorders[0];
+    MSWBorders borders;
+    borders.horz = aBorders[0];
+    borders.vert = aBorders[1];
+    borders.between = aBorders[2];
+    return borders;
+}
+
+int wxStatusBar::GetBorderX() const
+{
+    return MSWGetBorders().horz;
 }
 
 int wxStatusBar::GetBorderY() const
 {
-    int aBorders[3];
-    SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)aBorders);
+    return MSWGetBorders().vert;
+}
 
-    return aBorders[1];
+int wxStatusBar::MSWGetBorderWidth() const
+{
+    return MSWGetBorders().between;
+}
+
+/* static */
+const wxStatusBar::MSWMetrics& wxStatusBar::MSWGetMetrics()
+{
+    static MSWMetrics s_metrics = { 0 };
+    if ( !s_metrics.textMargin )
+    {
+        // Grip size should be self explanatory (the only problem with it is
+        // that it's hard coded as we don't know how to find its size using
+        // API) but the margin might merit an explanation: Windows offsets the
+        // text drawn in status bar panes so we need to take this extra margin
+        // into account to make sure the text drawn by user fits inside the
+        // pane. Notice that it's not the value returned by SB_GETBORDERS
+        // which, at least on this Windows 2003 system, returns {0, 2, 2}
+        if ( wxUxThemeEngine::GetIfActive() )
+        {
+            s_metrics.gripWidth = 20;
+            s_metrics.textMargin = 8;
+        }
+        else // classic/unthemed look
+        {
+            s_metrics.gripWidth = 18;
+            s_metrics.textMargin = 4;
+        }
+    }
+
+    return s_metrics;
 }
 
 void wxStatusBar::SetMinHeight(int height)
@@ -399,13 +455,20 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 
     wxCopyRECTToRect(r, rect);
 
+    // Windows seems to under-report the size of the last field rectangle,
+    // presumably in order to prevent the buggy applications from overflowing
+    // onto the size grip but we want to return the real size to wx users
+    if ( HasFlag(wxSTB_SIZEGRIP) && i == (int)m_panes.GetCount() - 1 )
+    {
+        rect.width += MSWGetMetrics().gripWidth - MSWGetBorderWidth();
+    }
+
     return true;
 }
 
 wxSize wxStatusBar::DoGetBestSize() const
 {
-    int borders[3];
-    SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)borders);
+    const MSWBorders borders = MSWGetBorders();
 
     // calculate width
     int width = 0;
@@ -425,7 +488,7 @@ wxSize wxStatusBar::DoGetBestSize() const
         }
 
         // add the space between fields
-        width += borders[2];
+        width += borders.between;
     }
 
     if ( !width )
@@ -438,7 +501,7 @@ wxSize wxStatusBar::DoGetBestSize() const
     int height;
     wxGetCharSize(GetHWND(), NULL, &height, GetFont());
     height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(height);
-    height += borders[1];
+    height += borders.vert;
 
     wxSize best(width, height);
     CacheBestSize(best);

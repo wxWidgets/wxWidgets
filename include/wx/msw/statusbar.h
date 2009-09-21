@@ -79,6 +79,28 @@ protected:
     wxVector<wxToolTip*> m_tooltips;
 
 private:
+    struct MSWBorders
+    {
+        int horz,
+            vert,
+            between;
+    };
+
+    // retrieve all status bar borders using SB_GETBORDERS
+    MSWBorders MSWGetBorders() const;
+
+    // return the size of the border between the fields
+    int MSWGetBorderWidth() const;
+
+    struct MSWMetrics
+    {
+        int gripWidth,
+            textMargin;
+    };
+
+    // return the various status bar metrics
+    static const MSWMetrics& MSWGetMetrics();
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar)
 };
 
