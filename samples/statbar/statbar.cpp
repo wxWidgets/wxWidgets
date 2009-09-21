@@ -100,6 +100,7 @@ public:
 #endif
     void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
+    void OnIdle(wxIdleEvent& event);
 
 private:
     // toggle the state of the status bar controls
@@ -110,7 +111,9 @@ private:
         Field_Text,
         Field_Checkbox,
         Field_Bitmap,
+        Field_NumLockIndicator,
         Field_Clock,
+        Field_CapsLockIndicator,
         Field_Max
     };
 
@@ -278,6 +281,7 @@ BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
 #if wxUSE_TIMER
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
 #endif
+    EVT_IDLE(MyStatusBar::OnIdle)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -877,6 +881,9 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     #pragma warning(disable: 4355)
 #endif
 
+static const char *numlockIndicators[] = { "OFF", "NUM" };
+static const char *capslockIndicators[] = { "", "CAPS" };
+
 MyStatusBar::MyStatusBar(wxWindow *parent, long style)
         : wxStatusBar(parent, wxID_ANY, style, "MyStatusBar")
 #if wxUSE_TIMER
@@ -886,7 +893,18 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
             , m_checkbox(NULL)
 #endif
 {
-    static const int widths[Field_Max] = { -1, 150, BITMAP_SIZE_X, 100 };
+    // compute the size needed for num lock indicator pane
+    wxClientDC dc(this);
+    wxSize sizeNumLock = dc.GetTextExtent(numlockIndicators[0]);
+    sizeNumLock.IncTo(dc.GetTextExtent(numlockIndicators[1]));
+
+    int widths[Field_Max];
+    widths[Field_Text] = -1; // growable
+    widths[Field_Checkbox] = 150;
+    widths[Field_Bitmap] = BITMAP_SIZE_X;
+    widths[Field_NumLockIndicator] = sizeNumLock.x;
+    widths[Field_Clock] = 100;
+    widths[Field_CapsLockIndicator] = dc.GetTextExtent(capslockIndicators[1]).x;
 
     SetFieldsCount(Field_Max);
     SetStatusWidths(Field_Max, widths);
@@ -959,6 +977,16 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
 void MyStatusBar::OnToggleClock(wxCommandEvent& WXUNUSED(event))
 {
     DoToggle();
+}
+
+void MyStatusBar::OnIdle(wxIdleEvent& event)
+{
+    SetStatusText(numlockIndicators[wxGetKeyState(WXK_NUMLOCK)],
+                  Field_NumLockIndicator);
+    SetStatusText(capslockIndicators[wxGetKeyState(WXK_CAPITAL)],
+                  Field_CapsLockIndicator);
+
+    event.Skip();
 }
 
 void MyStatusBar::DoToggle()
