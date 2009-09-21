@@ -124,7 +124,7 @@ public:
 };
 
 WX_DECLARE_OBJARRAY(wxRibbonButtonBarButtonInstance, wxArrayRibbonButtonBarButtonInstance);
-#include <wx/arrimpl.cpp>
+#include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxArrayRibbonButtonBarButtonInstance);
 
 class wxRibbonButtonBarLayout
