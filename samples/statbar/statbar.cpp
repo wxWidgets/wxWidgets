@@ -54,15 +54,7 @@
     #include "../sample.xpm"
 #endif
 
-
-// define this for the platforms which don't support wxBitmapButton (such as
-// Motif), else a wxBitmapButton will be used
-#ifdef __WXMOTIF__
-    #define USE_STATIC_BITMAP
-#endif
-
 //#define USE_MDI_PARENT_FRAME 1
-
 #ifdef USE_MDI_PARENT_FRAME
     #include "wx/mdi.h"
 #endif // USE_MDI_PARENT_FRAME
@@ -73,10 +65,8 @@ static const char *SAMPLE_DIALOGS_TITLE = "wxWidgets statbar sample";
 // resources
 // ----------------------------------------------------------------------------
 
-#ifdef USE_STATIC_BITMAP
-    #include "green.xpm"
-    #include "red.xpm"
-#endif // USE_STATIC_BITMAP
+#include "green.xpm"
+#include "red.xpm"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -110,13 +100,10 @@ public:
 #endif
     void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
-    void OnButton(wxCommandEvent& event);
 
 private:
     // toggle the state of the status bar controls
     void DoToggle();
-
-    wxBitmap CreateBitmapForButton(bool on = false);
 
     enum
     {
@@ -134,11 +121,7 @@ private:
 #if wxUSE_CHECKBOX
     wxCheckBox *m_checkbox;
 #endif
-#ifdef USE_STATIC_BITMAP
     wxStaticBitmap *m_statbmp;
-#else
-    wxBitmapButton *m_statbmp;
-#endif
 
     DECLARE_EVENT_TABLE()
 };
@@ -292,7 +275,6 @@ BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
 #if wxUSE_CHECKBOX
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
 #endif
-    EVT_BUTTON(wxID_ANY, MyStatusBar::OnButton)
 #if wxUSE_TIMER
     EVT_TIMER(wxID_ANY, MyStatusBar::OnTimer)
 #endif
@@ -914,13 +896,7 @@ MyStatusBar::MyStatusBar(wxWindow *parent, long style)
     m_checkbox->SetValue(true);
 #endif
 
-#ifdef USE_STATIC_BITMAP
     m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxIcon(green_xpm));
-#else
-    m_statbmp = new wxBitmapButton(this, wxID_ANY, CreateBitmapForButton(),
-                                wxDefaultPosition, wxDefaultSize,
-                                wxBU_EXACTFIT);
-#endif
 
 #if wxUSE_TIMER
     m_timer.Start(1000);
@@ -944,23 +920,6 @@ MyStatusBar::~MyStatusBar()
         m_timer.Stop();
     }
 #endif
-}
-
-#define BMP_BUTTON_SIZE_X  10
-#define BMP_BUTTON_SIZE_Y  10
-
-wxBitmap MyStatusBar::CreateBitmapForButton(bool on)
-{
-    wxBitmap bitmap(BMP_BUTTON_SIZE_X+1, BMP_BUTTON_SIZE_Y+1);
-    wxMemoryDC dc;
-    dc.SelectObject(bitmap);
-    dc.SetBrush(on ? *wxGREEN_BRUSH : *wxRED_BRUSH);
-    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.Clear();
-    dc.DrawEllipse(0, 0, BMP_BUTTON_SIZE_X, BMP_BUTTON_SIZE_Y);
-    dc.SelectObject(wxNullBitmap);
-
-    return bitmap;
 }
 
 void MyStatusBar::OnSize(wxSizeEvent& event)
@@ -997,15 +956,6 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void MyStatusBar::OnButton(wxCommandEvent& WXUNUSED(event))
-{
-#if wxUSE_CHECKBOX
-    m_checkbox->SetValue(!m_checkbox->GetValue());
-#endif
-
-    DoToggle();
-}
-
 void MyStatusBar::OnToggleClock(wxCommandEvent& WXUNUSED(event))
 {
     DoToggle();
@@ -1020,12 +970,7 @@ void MyStatusBar::DoToggle()
         m_timer.Start(1000);
 #endif
 
-#ifdef USE_STATIC_BITMAP
         m_statbmp->SetIcon(wxIcon(green_xpm));
-#else
-        m_statbmp->SetBitmapLabel(CreateBitmapForButton(false));
-        m_statbmp->Refresh();
-#endif
 
         UpdateClock();
     }
@@ -1035,16 +980,11 @@ void MyStatusBar::DoToggle()
         m_timer.Stop();
 #endif
 
-#ifdef USE_STATIC_BITMAP
         m_statbmp->SetIcon(wxIcon(red_xpm));
-#else
-        m_statbmp->SetBitmapLabel(CreateBitmapForButton(true));
-        m_statbmp->Refresh();
-#endif
 
         SetStatusText(wxEmptyString, Field_Clock);
     }
-#endif
+#endif // wxUSE_CHECKBOX
 }
 
 void MyStatusBar::UpdateClock()
