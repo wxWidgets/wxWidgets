@@ -202,7 +202,7 @@ void wxTopLevelWindowBase::GetRectForTopLevelChildren(int *x, int *y, int *w, in
 wxSize wxTopLevelWindowBase::GetDefaultSize()
 {
     wxSize size = wxGetClientDisplayRect().GetSize();
-
+#ifndef __WXOSX_IPHONE__
     // create proportionally bigger windows on small screens
     if ( size.x >= 1024 )
         size.x = 400;
@@ -218,7 +218,7 @@ wxSize wxTopLevelWindowBase::GetDefaultSize()
         size.y *= 2;
         size.y /= 3;
     }
-
+#endif
     return size;
 }
 
