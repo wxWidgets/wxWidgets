@@ -179,11 +179,21 @@ public:
     void SetNotify(wxSocketEventFlags flags);
     void Notify(bool notify);
 
-    // initialize/shutdown the sockets (usually called automatically)
-    static bool IsInitialized();
+    // initialize/shutdown the sockets (done automatically so there is no need
+    // to call these functions usually)
+    //
+    // should always be called from the main thread only so one of the cases
+    // where they should indeed be called explicitly is when the first wxSocket
+    // object in the application is created in a different thread
     static bool Initialize();
     static void Shutdown();
 
+    // check if wxSocket had been already initialized
+    //
+    // notice that this function should be only called from the main thread as
+    // otherwise it is inherently unsafe because Initialize/Shutdown() may be
+    // called concurrently with it in the main thread
+    static bool IsInitialized();
 
     // Implementation from now on
     // --------------------------
@@ -263,9 +273,6 @@ private:
     bool          m_notify;           // notify events to users?
     wxSocketEventFlags  m_eventmask;  // which events to notify?
     wxSocketEventFlags  m_eventsgot;  // collects events received in OnRequest()
-
-    // the initialization count, wxSocket is initialized if > 0
-    static size_t m_countInit;
 
 
     friend class wxSocketReadGuard;

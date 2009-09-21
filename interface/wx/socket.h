@@ -710,6 +710,8 @@ public:
         does anything) but you must call Shutdown() exactly once for every call
         to Initialize().
 
+        This function should only be called from the main thread.
+
         @return
             @true if the sockets can be used, @false if the initialization
             failed and sockets are not available at all.
@@ -721,6 +723,9 @@ public:
 
         This function undoes the call to Initialize() and must be called after
         every successful call to Initialize().
+
+        This function should only be called from the main thread, just as
+        Initialize().
      */
     static void Shutdown();
 
