@@ -30,6 +30,7 @@
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dcclient.h"
     #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/statusbr.h"
@@ -163,6 +164,7 @@ public:
     void OnPopStatusText(wxCommandEvent& event);
 
     void OnResetFieldsWidth(wxCommandEvent& event);
+    void OnShowFieldsRect(wxCommandEvent& event);
     void OnSetStatusFields(wxCommandEvent& event);
     void OnSetStatusFont(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
@@ -221,6 +223,7 @@ enum
     StatusBar_PopText,
     StatusBar_SetFont,
     StatusBar_ResetFieldsWidth,
+    StatusBar_ShowFieldsRect,
 
     StatusBar_Recreate,
     StatusBar_Toggle,
@@ -260,6 +263,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_PopText, MyFrame::OnPopStatusText)
     EVT_MENU(StatusBar_SetFont, MyFrame::OnSetStatusFont)
     EVT_MENU(StatusBar_ResetFieldsWidth, MyFrame::OnResetFieldsWidth)
+    EVT_MENU(StatusBar_ShowFieldsRect, MyFrame::OnShowFieldsRect)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
     EVT_MENU(StatusBar_Toggle, MyFrame::OnStatusBarToggle)
@@ -411,6 +415,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     statbarMenu->Append(StatusBar_ResetFieldsWidth, wxT("Reset field widths"),
                         wxT("Sets all fields to the same width"));
+    statbarMenu->Append(StatusBar_ShowFieldsRect,
+                        wxT("Sho&w field rectangles\tCtrl-W"),
+                        wxT("Visually show field rectangles"));
     statbarMenu->AppendSeparator();
 
     statbarMenu->AppendCheckItem(StatusBar_Toggle, wxT("&Toggle Status Bar"),
@@ -657,6 +664,25 @@ void MyFrame::OnResetFieldsWidth(wxCommandEvent& WXUNUSED(event))
     pStat->SetStatusWidths(n, NULL);
     for ( int i = 0; i < n; i++ )
         pStat->SetStatusText("same size", i);
+}
+
+void MyFrame::OnShowFieldsRect(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *pStat = GetStatusBar();
+    if ( !pStat )
+        return;
+
+    wxClientDC dc(pStat);
+    dc.SetPen(*wxRED_PEN);
+    dc.SetBrush(*wxTRANSPARENT_BRUSH);
+
+    const int n = pStat->GetFieldsCount();
+    for ( int i = 0; i < n; i++ )
+    {
+        wxRect r;
+        if ( pStat->GetFieldRect(i, r) )
+            dc.DrawRectangle(r);
+    }
 }
 
 void MyFrame::OnUpdateStatusBarToggle(wxUpdateUIEvent& event)
