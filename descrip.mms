@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 17 September 2009                                                   *
+# Date : 21 September 2009                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -174,7 +174,6 @@ x11 : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.univ]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
-	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 	set default [--.demos.bombs]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [--.samples.calendar]
