@@ -2517,6 +2517,8 @@ void wxRichTextCtrl::SetInsertionPoint(long pos)
     m_caretPosition = pos - 1;
 
     PositionCaret();
+
+    SetDefaultStyleToCursorStyle();
 }
 
 void wxRichTextCtrl::SetInsertionPointEnd()
