@@ -54,6 +54,13 @@ class wxMonoRenderer : public wxStdRenderer
 public:
     wxMonoRenderer(const wxColourScheme *scheme);
 
+    virtual void DrawLabel(wxDC& dc,
+                           const wxString& label,
+                           const wxRect& rect,
+                           int flags = 0,
+                           int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                           int indexAccel = -1,
+                           wxRect *rectBounds = NULL);
     virtual void DrawButtonLabel(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& image,
@@ -719,6 +726,17 @@ void wxMonoRenderer::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRe
 // ----------------------------------------------------------------------------
 // label
 // ----------------------------------------------------------------------------
+
+void wxMonoRenderer::DrawLabel(wxDC& dc,
+                               const wxString& label,
+                               const wxRect& rect,
+                               int WXUNUSED(flags),
+                               int alignment,
+                               int indexAccel,
+                               wxRect *rectBounds)
+{
+    dc.DrawLabel(label, wxNullBitmap, rect, alignment, indexAccel, rectBounds);
+}
 
 void wxMonoRenderer::DrawButtonLabel(wxDC& dc,
                                      const wxString& label,
