@@ -4364,7 +4364,7 @@ void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
 
         if(wxstyle & wxBORDER_RAISED)
             gtkstyle = GTK_SHADOW_OUT;
-        else if (wxstyle & wxBORDER_SUNKEN)
+        else if ((wxstyle & wxBORDER_SUNKEN) || (wxstyle & wxBORDER_THEME))
             gtkstyle = GTK_SHADOW_IN;
 #if 0
         // Now obsolete

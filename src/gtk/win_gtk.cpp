@@ -381,7 +381,7 @@ void wxPizza::get_border_widths(int& x, int& y)
 #ifndef __WXUNIVERSAL__
     if (m_border_style & wxBORDER_SIMPLE)
         x = y = 1;
-    else if (m_is_scrollable || (m_border_style & wxBORDER_THEME))
+    else if (m_is_scrollable /* || (m_border_style & wxBORDER_THEME) */)
     {
         GtkWidget *style_widget = wxGTKPrivate::GetTreeWidget();
 
