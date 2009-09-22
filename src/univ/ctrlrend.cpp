@@ -67,8 +67,28 @@ wxControlRenderer::wxControlRenderer(wxWindow *window,
     m_rect.height = size.y;
 }
 
-void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
-                                  wxCoord marginX, wxCoord marginY)
+void wxControlRenderer::DrawLabel()
+{
+    m_dc.SetBackgroundMode(wxTRANSPARENT);
+    m_dc.SetFont(m_window->GetFont());
+    m_dc.SetTextForeground(m_window->GetForegroundColour());
+
+    wxString label = m_window->GetLabel();
+    if ( !label.empty() )
+    {
+        wxControl *ctrl = wxStaticCast(m_window, wxControl);
+
+        m_renderer->DrawLabel(m_dc,
+                              label,
+                              m_rect,
+                              m_window->GetStateFlags(),
+                              ctrl->GetAlignment(),
+                              ctrl->GetAccelIndex());
+    }
+}
+
+void wxControlRenderer::DrawButtonLabel(const wxBitmap& bitmap,
+                                        wxCoord marginX, wxCoord marginY)
 {
     m_dc.SetBackgroundMode(wxTRANSPARENT);
     m_dc.SetFont(m_window->GetFont());

@@ -870,8 +870,9 @@ public:
     wxControlRenderer(wxWindow *control, wxDC& dc, wxRenderer *renderer);
 
     // operations
-    void DrawLabel(const wxBitmap& bitmap = wxNullBitmap,
-                   wxCoord marginX = 0, wxCoord marginY = 0);
+    void DrawLabel();
+    void DrawButtonLabel(const wxBitmap& bitmap = wxNullBitmap,
+                         wxCoord marginX = 0, wxCoord marginY = 0);
 #if wxUSE_LISTBOX
     void DrawItems(const wxListBox *listbox,
                    size_t itemFirst, size_t itemLast);

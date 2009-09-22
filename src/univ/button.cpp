@@ -213,7 +213,7 @@ void wxButton::DoDraw(wxControlRenderer *renderer)
         renderer->DrawButtonBorder();
     }
 
-    renderer->DrawLabel(m_bitmap, m_marginBmpX, m_marginBmpY);
+    renderer->DrawButtonLabel(m_bitmap, m_marginBmpX, m_marginBmpY);
 }
 
 bool wxButton::DoDrawBackground(wxDC& dc)
