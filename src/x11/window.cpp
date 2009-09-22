@@ -1641,9 +1641,7 @@ bool wxWindowX11::SetForegroundColour(const wxColour& col)
 
 wxWindow *wxGetActiveWindow()
 {
-    // TODO
-    wxFAIL_MSG(wxT("Not implemented"));
-    return NULL;
+    return wxGetTopLevelParent(wxWindow::FindFocus());
 }
 
 /* static */
