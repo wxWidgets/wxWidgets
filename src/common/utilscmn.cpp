@@ -161,16 +161,6 @@ wxString wxDecToHex(int dec)
 // misc functions
 // ----------------------------------------------------------------------------
 
-// Don't synthesize KeyUp events holding down a key and producing KeyDown
-// events with autorepeat. On by default and always on in wxMSW. wxGTK version
-// in utilsgtk.cpp.
-#ifndef __WXGTK__
-bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
-{
-    return true;    // detectable auto-repeat is the only mode MSW supports
-}
-#endif // !wxGTK
-
 // Return the current date/time
 wxString wxNow()
 {
@@ -932,6 +922,13 @@ void wxQsort(void *const pbase, size_t total_elems,
 // ============================================================================
 
 #if wxUSE_GUI
+
+#ifndef __WXGTK__
+bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
+{
+    return true;    // detectable auto-repeat is the only mode MSW supports
+}
+#endif // !wxGTK
 
 // ----------------------------------------------------------------------------
 // Launch default browser
