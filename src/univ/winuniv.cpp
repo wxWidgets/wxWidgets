@@ -728,6 +728,11 @@ wxSize wxWindow::DoGetBestClientSize() const
     return wxWindowNative::DoGetBestSize();
 }
 
+wxSize wxWindow::DoGetBorderSize() const
+{
+    return AdjustSize(wxSize(0, 0));
+}
+
 wxSize wxWindow::AdjustSize(const wxSize& size) const
 {
     wxSize sz = size;

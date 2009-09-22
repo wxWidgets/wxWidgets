@@ -1661,8 +1661,8 @@ protected:
     // of the left and the right border in the x component of the returned size
     // and the sum of the heights of the top and bottom borders in the y one
     //
-    // NB: this is new/temporary API only implemented by wxMSW so far and
-    //     subject to change, don't use
+    // NB: this is new/temporary API only implemented by wxMSW and wxUniv so
+    //     far and subject to change, don't use
     virtual wxSize DoGetBorderSize() const
     {
         wxFAIL_MSG( "must be overridden if called" );

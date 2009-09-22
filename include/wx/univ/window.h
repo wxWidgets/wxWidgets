@@ -243,6 +243,9 @@ protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual wxSize DoGetBestSize() const;
 
+    // override the base class method to return the size of the window borders
+    virtual wxSize DoGetBorderSize() const;
+
     // adjust the size of the window to take into account its borders
     wxSize AdjustSize(const wxSize& size) const;
 
