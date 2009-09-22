@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 September 2009                                                   *
+# Date : 22 September 2009                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -48,6 +48,11 @@ gtk : [.include.wx]setup.h
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	set default [-.propgrid]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
+	set default [-.ribbon]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk1]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
@@ -85,6 +90,10 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.minimal]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.propgrid]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.ribbon]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richedit]
 #	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.sockets]
@@ -113,6 +122,11 @@ gtk2 : [.include.wx]setup.h
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	set default [-.propgrid]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
+	set default [-.ribbon]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
@@ -170,6 +184,11 @@ x11 : [.include.wx]setup.h
 	set default [-.unix]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	set default [-.propgrid]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
+	set default [-.ribbon]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.univ]
