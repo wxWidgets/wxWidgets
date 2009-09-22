@@ -45,18 +45,6 @@
 #include "gtk/gtk.h"
 #include "gdk/gdkx.h"
 
-#ifdef HAVE_X11_XKBLIB_H
-    /* under HP-UX and Solaris 2.6, at least, XKBlib.h defines structures with
-     * field named "explicit" - which is, of course, an error for a C++
-     * compiler. To be on the safe side, just redefine it everywhere. */
-    #define explicit __wx_explicit
-
-    #include "X11/XKBlib.h"
-
-    #undef explicit
-#endif // HAVE_X11_XKBLIB_H
-
-
 #if wxUSE_DETECT_SM
     #include "X11/Xlib.h"
     #include "X11/SM/SMlib.h"
@@ -77,22 +65,6 @@ extern GtkWidget *wxGetRootWindow();
 void wxBell()
 {
     gdk_beep();
-}
-#endif
-
-/* Don't synthesize KeyUp events holding down a key and producing
-   KeyDown events with autorepeat. */
-#ifdef HAVE_X11_XKBLIB_H
-bool wxSetDetectableAutoRepeat( bool flag )
-{
-    Bool result;
-    XkbSetDetectableAutoRepeat( GDK_DISPLAY(), flag, &result );
-    return result;       /* true if keyboard hardware supports this mode */
-}
-#else
-bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
-{
-    return false;
 }
 #endif
 

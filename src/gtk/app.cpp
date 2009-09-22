@@ -438,8 +438,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();
 
-    wxSetDetectableAutoRepeat( true );
-
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif

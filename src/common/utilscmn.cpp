@@ -923,12 +923,15 @@ void wxQsort(void *const pbase, size_t total_elems,
 
 #if wxUSE_GUI
 
-#ifndef __WXGTK__
+// this function is only really implemented for X11-based ports, including GTK1
+// (GTK2 sets detectable auto-repeat automatically anyhow)
+#if !(defined(__WXX11__) || defined(__WXMOTIF__) || \
+        (defined(__WXGTK__) && !defined(__WXGTK20__)))
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
-    return true;    // detectable auto-repeat is the only mode MSW supports
+    return true;
 }
-#endif // !wxGTK
+#endif // !X11-based port
 
 // ----------------------------------------------------------------------------
 // Launch default browser
