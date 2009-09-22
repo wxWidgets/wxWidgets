@@ -188,6 +188,10 @@ bool wxGUIEventLoop::Pending() const
 
 bool wxGUIEventLoop::Dispatch()
 {
+    // see comment in wxEventLoopManual::ProcessEvents()
+    if ( wxTheApp )
+        wxTheApp->ProcessPendingEvents();
+
     XEvent event;
 
     // TODO allowing for threads, as per e.g. wxMSW
