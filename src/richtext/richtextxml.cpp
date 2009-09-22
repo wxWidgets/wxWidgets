@@ -495,7 +495,11 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
             OutputString(stream, str.Mid(last, i - last), convMem, convFile);
 
             wxString s(wxT("&#"));
+#if wxUSE_UNICODE
             s << (int) c;
+#else
+            s << (int) wxUChar(c);
+#endif
             s << wxT(";");
             OutputString(stream, s, NULL, NULL);
             last = i + 1;
@@ -547,7 +551,11 @@ static wxString AttributeToXML(const wxString& str)
             str1 += str.Mid(last, i - last);
 
             wxString s(wxT("&#"));
+#if wxUSE_UNICODE
             s << (int) c;
+#else
+            s << (int) wxUChar(c);
+#endif
             s << wxT(";");
             str1 += s;
             last = i + 1;
@@ -730,7 +738,11 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
         }
         else for (i = 0; i < len; i++)
         {
+#if wxUSE_UNICODE
             int c = (int) text[i];
+#else
+            int c = (int) wxUChar(text[i]);
+#endif
             if ((c < 32 || c == 34) && c != 9 && c != 10 && c != 13)
             {
                 if (i > 0)
