@@ -3446,9 +3446,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // now alter the client size making room for drawing a
                     // themed border
                     RECT *rect;
+                    NCCALCSIZE_PARAMS *csparam = NULL;
                     if ( wParam )
                     {
-                        NCCALCSIZE_PARAMS *csparam = (NCCALCSIZE_PARAMS *)lParam;
+                        csparam = (NCCALCSIZE_PARAMS *)lParam;
                         rect = &csparam->rgrc[0];
                     }
                     else
@@ -3471,8 +3472,14 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                                  &rcClient) == S_OK )
                     {
                         InflateRect(&rcClient, -1, -1);
-                        *rect = rcClient;
-                        rc.result = WVR_REDRAW;
+                        if (wParam)
+                            csparam->rgrc[0] = rcClient;
+                        else
+                            *((RECT*)lParam) = rcClient;
+
+                        // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
+                        // so don't use.
+                        // rc.result = WVR_REDRAW;
                     }
                 }
             }
