@@ -3362,7 +3362,9 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                             csparam->rgrc[0] = rcClient;
                         else
                             *((RECT*)lParam) = rcClient;
-                        rc.result = WVR_REDRAW;
+                        // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
+                        // so don't use.
+                        //rc.result = WVR_REDRAW;
                     }
                 }
             }
