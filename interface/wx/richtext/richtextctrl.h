@@ -953,6 +953,9 @@ public:
 
     /**
         Move the caret to the given character position.
+
+        Please note that this does not update the current editing style
+        from the new position; to do that, call wxRichTextCtrl::SetInsertionPoint instead.
     */
     virtual bool MoveCaret(long pos, bool showAtLineStart = false);
 
@@ -1254,8 +1257,13 @@ public:
     virtual void SetBasicStyle(const wxTextAttr& style);
 
     /**
+        Sets the caret position.
+
         The caret position is the character position just before the caret.
         A value of -1 means the caret is at the start of the buffer.
+        Please note that this does not update the current editing style
+        from the new position or cause the actual caret to be refreshed; to do that,
+        call wxRichTextCtrl::SetInsertionPoint instead.
     */
     void SetCaretPosition(long position,
                           bool showAtLineStart = false);
@@ -1302,7 +1310,8 @@ public:
     void SetHandlerFlags(int flags);
 
     /**
-        Sets the insertion point.
+        Sets the insertion point and causes the current editing style to be taken from
+        the new position (unlike wxRichTextCtrl::SetCaretPosition).
     */
     virtual void SetInsertionPoint(long pos);
 
