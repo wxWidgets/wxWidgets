@@ -496,7 +496,6 @@ wxRichTextColourSwatchCtrl::wxRichTextColourSwatchCtrl(wxWindow* parent, wxWindo
     wxControl::Create(parent, id, pos, size, style);
 
     SetColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetBackgroundStyle(wxBG_STYLE_COLOUR);
 }
 
 wxRichTextColourSwatchCtrl::~wxRichTextColourSwatchCtrl()
