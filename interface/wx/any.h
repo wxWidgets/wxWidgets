@@ -13,9 +13,9 @@
     The wxAny class represents a container for any type. Its value
     can be changed at run time, possibly to a different type of value.
 
-    wxAny is successor class for wxVariant, essentially doing the same thing
-    in a more modern, template-based manner and with transparent support
-    for any user data type.
+    wxAny is a backwards incompatible successor class for wxVariant,
+    essentially doing the same thing in a more modern, template-based manner
+    and with transparent support for any user data type.
 
     Some pseudo-code'ish example of use with arbitrary user data:
 
@@ -122,7 +122,7 @@ public:
         Template function that retrieves and converts the value of this
         wxAny to the type that T* value is.
 
-        @return Returns @true if conversion was succesfull.
+        @return Returns @true if conversion was successful.
     */
     template<typename T>
     bool GetAs(T* value) const;
