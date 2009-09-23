@@ -4177,18 +4177,14 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
-            pos.x = (rect.GetWidth() - (pos.x - rect.x) - rightIndent - size.x)/2 + pos.x;
-            // Lines are relative to the paragraph position
-            pos.x -= GetPosition().x;
+            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            pos.x = (rect.GetWidth() - pos.x - rightIndent - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
-            pos.x = rect.x + rect.GetWidth() - size.x - rightIndent;
-            // Lines are relative to the paragraph position
-            pos.x -= GetPosition().x;
+            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            pos.x = rect.GetWidth() - size.x - rightIndent;
             line->SetPosition(pos);
         }
 
@@ -5313,7 +5309,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
             dc.SetBackgroundMode(wxTRANSPARENT);
     }
 
-	wxCoord x_orig = x;
+    wxCoord x_orig = x;
     while (hasTabs)
     {
         // the string has a tab
