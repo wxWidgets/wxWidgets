@@ -156,6 +156,32 @@ public:
     /// Get URL cursor
     wxCursor GetURLCursor() const { return m_urlCursor; }
 
+    /// Are we showing the caret position at the start of a line
+    /// instead of at the end of the previous one?
+    bool GetCaretAtLineStart() const { return m_caretAtLineStart; }
+    void SetCaretAtLineStart(bool atStart) { m_caretAtLineStart = atStart; }
+
+    /// Are we dragging a selection?
+    bool GetDragging() const { return m_dragging; }
+    void SetDragging(bool dragging) { m_dragging = dragging; }
+
+    /// Get/set drag start position
+    const wxPoint& GetDragStart() const { return m_dragStart; }
+    void SetDragStart(const wxPoint& pt) { m_dragStart = pt; }
+
+    /// Get the buffer bitmap
+    const wxBitmap& GetBufferBitmap() const { return m_bufferBitmap; }
+    wxBitmap& GetBufferBitmap() { return m_bufferBitmap; }
+
+    /// Get/set context menu
+    wxMenu* GetContextMenu() const { return m_contextMenu; }
+    void SetContextMenu(wxMenu* menu) { m_contextMenu = menu; }
+
+    /// Anchor so we know how to extend the selection
+    /// It's a caret position since it's between two characters.
+    long GetSelectionAnchor() const { return m_selectionAnchor; }
+    void SetSelectionAnchor(long anchor) { m_selectionAnchor = anchor; }
+
 // Operations
 
     // editing
