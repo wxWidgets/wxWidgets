@@ -80,11 +80,27 @@ WX_DECLARE_HASH_SET_WITH_DECL(int, wxIntegerHash, wxIntegerEqual,
 // globals
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 //#define DEBUG_ATTR_CACHE
 #ifdef DEBUG_ATTR_CACHE
     static size_t gs_nAttrCacheHits = 0;
     static size_t gs_nAttrCacheMisses = 0;
 #endif
+
+// this struct simply combines together the default header renderers
+//
+// as the renderers ctors are trivial, there is no problem with making them
+// globals
+struct DefaultHeaderRenderers
+{
+    wxGridColumnHeaderRendererDefault colRenderer;
+    wxGridRowHeaderRendererDefault rowRenderer;
+    wxGridCornerHeaderRendererDefault cornerRenderer;
+} gs_defaultHeaderRenderers;
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // constants
@@ -941,6 +957,23 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
 
         m_data->m_colAttrs.UpdateAttrRowsOrCols( pos, numCols );
     }
+}
+
+const wxGridColumnHeaderRenderer&
+wxGridCellAttrProvider::GetColumnHeaderRenderer(int WXUNUSED(col))
+{
+    return gs_defaultHeaderRenderers.colRenderer;
+}
+
+const wxGridRowHeaderRenderer&
+wxGridCellAttrProvider::GetRowHeaderRenderer(int WXUNUSED(row))
+{
+    return gs_defaultHeaderRenderers.rowRenderer;
+}
+
+const wxGridCornerHeaderRenderer& wxGridCellAttrProvider::GetCornerRenderer()
+{
+    return gs_defaultHeaderRenderers.cornerRenderer;
 }
 
 // ----------------------------------------------------------------------------
@@ -5408,8 +5441,11 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     if ( GetRowHeight(row) <= 0 || m_rowLabelWidth <= 0 )
         return;
 
+    wxGridCellAttrProvider * const
+        attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
     const wxGridRowHeaderRenderer&
-        rend = m_table->GetAttrProvider()->GetRowHeaderRenderer(row);
+        rend = attrProvider ? attrProvider->GetRowHeaderRenderer(row)
+                            : gs_defaultHeaderRenderers.rowRenderer;
     wxRect rect(0, GetRowTop(row), m_rowLabelWidth, GetRowHeight(row));
     rend.DrawBorder(*this, dc, rect);
 
@@ -5478,8 +5514,11 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
         rect.width++;
         rect.height++;
 
+        wxGridCellAttrProvider * const
+            attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
         const wxGridCornerHeaderRenderer&
-            rend = m_table->GetAttrProvider()->GetCornerRenderer();
+            rend = attrProvider ? attrProvider->GetCornerRenderer()
+                                : gs_defaultHeaderRenderers.cornerRenderer;
 
         rend.DrawBorder(*this, dc, rect);
     }
@@ -5493,8 +5532,11 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     int colLeft = GetColLeft(col);
 
     wxRect rect(colLeft, 0, GetColWidth(col), m_colLabelHeight);
+    wxGridCellAttrProvider * const
+        attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
     const wxGridColumnHeaderRenderer&
-        rend = m_table->GetAttrProvider()->GetColumnHeaderRenderer(col);
+        rend = attrProvider ? attrProvider->GetColumnHeaderRenderer(col)
+                            : gs_defaultHeaderRenderers.colRenderer;
 
     if ( m_nativeColumnLabels )
     {

@@ -549,38 +549,14 @@ public:
     // get renderers for the given row/column header label and the corner
     // window: unlike cell renderers, these objects are not reference counted
     // and are never NULL so they are returned by reference
-    virtual const wxGridColumnHeaderRenderer&
-        GetColumnHeaderRenderer(int WXUNUSED(col))
-    {
-        return m_defaultHeaderRenderers.colRenderer;
-    }
-
-    virtual const wxGridRowHeaderRenderer&
-        GetRowHeaderRenderer(int WXUNUSED(row))
-    {
-        return m_defaultHeaderRenderers.rowRenderer;
-    }
-
-    virtual const wxGridCornerHeaderRenderer& GetCornerRenderer()
-    {
-        return m_defaultHeaderRenderers.cornerRenderer;
-    }
+    virtual const wxGridColumnHeaderRenderer& GetColumnHeaderRenderer(int col);
+    virtual const wxGridRowHeaderRenderer& GetRowHeaderRenderer(int row);
+    virtual const wxGridCornerHeaderRenderer& GetCornerRenderer();
 
 private:
     void InitData();
 
     wxGridCellAttrProviderData *m_data;
-
-    // this struct simply combines together the default header renderers
-    //
-    // FIXME-VC6: this struct must be named because of VC6 bug, it fails
-    //            with error C2639 on this struct declaration without it
-    struct DefaultHeaderRenderers
-    {
-        wxGridColumnHeaderRendererDefault colRenderer;
-        wxGridRowHeaderRendererDefault rowRenderer;
-        wxGridCornerHeaderRendererDefault cornerRenderer;
-    } m_defaultHeaderRenderers;
 
     wxDECLARE_NO_COPY_CLASS(wxGridCellAttrProvider);
 };
