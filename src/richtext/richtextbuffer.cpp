@@ -4177,13 +4177,13 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
             pos.x = (rect.GetWidth() - pos.x - rightIndent - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
+            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
             pos.x = rect.GetWidth() - size.x - rightIndent;
             line->SetPosition(pos);
         }
