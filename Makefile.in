@@ -2839,6 +2839,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/ole/dropsrc.h \
 	wx/msw/ole/droptgt.h \
 	wx/msw/ole/oleutils.h \
+	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
@@ -3160,6 +3161,7 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/minifram.h \
 	wx/os2/msgdlg.h \
 	wx/os2/notebook.h \
+	wx/os2/ownerdrw.h \
 	wx/os2/palette.h \
 	wx/os2/pen.h \
 	wx/os2/pnghand.h \
@@ -3246,6 +3248,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/ole/dropsrc.h \
 	wx/msw/ole/droptgt.h \
 	wx/msw/ole/oleutils.h \
+	wx/msw/ownerdrw.h \
 	wx/msw/palette.h \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
@@ -4201,6 +4204,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_mousemanager.o \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
+	monodll_ownerdrwcmn.o \
 	monodll_paper.o \
 	monodll_persist.o \
 	monodll_pickerbase.o \
@@ -4394,6 +4398,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_mousemanager.o \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
+	monodll_ownerdrwcmn.o \
 	monodll_paper.o \
 	monodll_persist.o \
 	monodll_pickerbase.o \
@@ -6011,6 +6016,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_mousemanager.o \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
+	monolib_ownerdrwcmn.o \
 	monolib_paper.o \
 	monolib_persist.o \
 	monolib_pickerbase.o \
@@ -6204,6 +6210,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_mousemanager.o \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
+	monolib_ownerdrwcmn.o \
 	monolib_paper.o \
 	monolib_persist.o \
 	monolib_pickerbase.o \
@@ -7958,6 +7965,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_mousemanager.o \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
+	coredll_ownerdrwcmn.o \
 	coredll_paper.o \
 	coredll_persist.o \
 	coredll_pickerbase.o \
@@ -8151,6 +8159,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_mousemanager.o \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
+	coredll_ownerdrwcmn.o \
 	coredll_paper.o \
 	coredll_persist.o \
 	coredll_pickerbase.o \
@@ -9449,6 +9458,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_mousemanager.o \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
+	corelib_ownerdrwcmn.o \
 	corelib_paper.o \
 	corelib_persist.o \
 	corelib_pickerbase.o \
@@ -9642,6 +9652,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_mousemanager.o \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
+	corelib_ownerdrwcmn.o \
 	corelib_paper.o \
 	corelib_persist.o \
 	corelib_pickerbase.o \
@@ -18481,6 +18492,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
+@COND_USE_GUI_1@monodll_ownerdrwcmn.o: $(srcdir)/src/common/ownerdrwcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/ownerdrwcmn.cpp
+
 @COND_USE_GUI_1@monodll_paper.o: $(srcdir)/src/common/paper.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
@@ -23250,6 +23264,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
+
+@COND_USE_GUI_1@monolib_ownerdrwcmn.o: $(srcdir)/src/common/ownerdrwcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/ownerdrwcmn.cpp
 
 @COND_USE_GUI_1@monolib_paper.o: $(srcdir)/src/common/paper.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
@@ -28186,6 +28203,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
 
+@COND_USE_GUI_1@coredll_ownerdrwcmn.o: $(srcdir)/src/common/ownerdrwcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/ownerdrwcmn.cpp
+
 @COND_USE_GUI_1@coredll_paper.o: $(srcdir)/src/common/paper.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
@@ -31713,6 +31733,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_overlaycmn.o: $(srcdir)/src/common/overlaycmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/overlaycmn.cpp
+
+@COND_USE_GUI_1@corelib_ownerdrwcmn.o: $(srcdir)/src/common/ownerdrwcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/ownerdrwcmn.cpp
 
 @COND_USE_GUI_1@corelib_paper.o: $(srcdir)/src/common/paper.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp

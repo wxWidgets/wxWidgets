@@ -152,9 +152,6 @@ protected:
     bool m_updateHorizontalExtent;
     virtual void OnInternalIdle();
 
-    // free memory (common part of Clear() and dtor)
-    void Free();
-
     unsigned int m_noItems;
 
 #if wxUSE_OWNER_DRAWN

@@ -562,6 +562,10 @@ SOURCE=..\..\src\common\overlaycmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\ownerdrwcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\paper.cpp
 # End Source File
 # Begin Source File
@@ -5064,6 +5068,10 @@ SOURCE=..\..\include\wx\msw\notifmsg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\ole\oleutils.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\ownerdrw.h
 # End Source File
 # Begin Source File
 

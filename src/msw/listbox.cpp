@@ -118,18 +118,25 @@ TODO PROPERTIES
 class wxListBoxItem : public wxOwnerDrawn
 {
 public:
-    wxListBoxItem(const wxString& str = wxEmptyString);
-};
+    wxListBoxItem(wxListBox *parent)
+        { m_parent = parent; }
 
-wxListBoxItem::wxListBoxItem(const wxString& str) : wxOwnerDrawn(str, false)
-{
-    // no bitmaps/checkmarks
-    SetMarginWidth(0);
-}
+    wxListBox *GetParent() const
+        { return m_parent; }
+
+    int GetIndex() const
+        { return m_parent->GetItemIndex(const_cast<wxListBoxItem*>(this)); }
+
+    wxString GetName() const
+        { return m_parent->GetString(GetIndex()); }
+
+private:
+    wxListBox *m_parent;
+};
 
 wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 {
-    return new wxListBoxItem();
+    return new wxListBoxItem(this);
 }
 
 #endif  //USE_OWNER_DRAWN
@@ -279,6 +286,11 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::Delete") );
 
+#if wxUSE_OWNER_DRAWN
+    delete m_aItems[n];
+    m_aItems.RemoveAt(n);
+#endif // wxUSE_OWNER_DRAWN
+
     SendMessage(GetHwnd(), LB_DELETESTRING, n, 0);
     m_noItems--;
 
@@ -303,7 +315,12 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 
 void wxListBox::DoClear()
 {
-    Free();
+#if wxUSE_OWNER_DRAWN
+    if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
+        WX_CLEAR_ARRAY(m_aItems);
+    }
+#endif // wxUSE_OWNER_DRAWN
 
     ListBox_ResetContent(GetHwnd());
 
@@ -311,16 +328,6 @@ void wxListBox::DoClear()
     m_updateHorizontalExtent = true;
 
     UpdateOldSelections();
-}
-
-void wxListBox::Free()
-{
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        WX_CLEAR_ARRAY(m_aItems);
-    }
-#endif // wxUSE_OWNER_DRAWN
 }
 
 void wxListBox::DoSetSelection(int N, bool select)
@@ -469,7 +476,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
         if ( HasFlag(wxLB_OWNERDRAW) )
         {
             wxOwnerDrawn *pNewItem = CreateLboxItem(n);
-            pNewItem->SetName(items[i]);
             pNewItem->SetFont(GetFont());
             m_aItems.Insert(pNewItem, n);
         }
@@ -523,14 +529,6 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
         SetClientData(n, oldData);
     else if ( oldObjData )
         SetClientObject(n, oldObjData);
-
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        // update item's text
-        m_aItems[n]->SetName(s);
-    }
-#endif  //USE_OWNER_DRAWN
 
     // we may have lost the selection
     if ( wasSelected )
@@ -745,7 +743,7 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     return pItem->OnDrawItem(dc, wxRectFromRECT(pStruct->rcItem),
                              (wxOwnerDrawn::wxODAction)pStruct->itemAction,
-                             (wxOwnerDrawn::wxODStatus)pStruct->itemState);
+                             (wxOwnerDrawn::wxODStatus)(pStruct->itemState | wxOwnerDrawn::wxODHidePrefix));
 }
 
 #endif // wxUSE_OWNER_DRAWN

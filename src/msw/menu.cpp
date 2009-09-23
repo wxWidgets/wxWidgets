@@ -578,7 +578,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
                 // tell the item that it's not really owner-drawn but only
                 // needs to draw its bitmap, the rest is done by Windows
-                pItem->ResetOwnerDrawn();
+                pItem->SetOwnerDrawn(false);
             }
         }
 #endif // __DMC__

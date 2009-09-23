@@ -141,6 +141,8 @@ public:
 
     void SendEvent();
 
+    virtual wxString GetName() const { return m_pParent->GetString(m_nIndex); }
+
 private:
     bool            m_bChecked;
     wxCheckListBox *m_pParent;
@@ -150,7 +152,6 @@ private:
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
-                  : wxOwnerDrawn(wxEmptyString, true)   // checkable
 {
     m_bChecked = false;
     m_pParent  = pParent;
@@ -160,7 +161,7 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
     // done in OnMeasure while they are used only in OnDraw and we
     // know that there will always be OnMeasure before OnDraw
 
-    SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) - 2);
+    SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK));
 
     SetBackgroundColour(pParent->GetBackgroundColour());
 }

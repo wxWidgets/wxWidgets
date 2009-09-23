@@ -689,6 +689,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/mousemanager.cpp
     src/common/nbkbase.cpp
     src/common/overlaycmn.cpp
+    src/common/ownerdrwcmn.cpp
     src/common/paper.cpp
     src/common/persist.cpp
     src/common/pickerbase.cpp
@@ -1755,6 +1756,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/dropsrc.h
     wx/msw/ole/droptgt.h
     wx/msw/ole/oleutils.h
+    wx/msw/ownerdrw.h
     wx/msw/palette.h
     wx/msw/pen.h
     wx/msw/printdlg.h
@@ -2135,6 +2137,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/minifram.h
     wx/os2/msgdlg.h
     wx/os2/notebook.h
+    wx/os2/ownerdrw.h
     wx/os2/palette.h
     wx/os2/pen.h
     wx/os2/pnghand.h

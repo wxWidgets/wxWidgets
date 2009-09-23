@@ -40,6 +40,12 @@
 #include <os2.h>
 
 // ----------------------------------------------------------------------------
+// constants for base class
+// ----------------------------------------------------------------------------
+
+static const int CHECK_MARK_WIDTH = 15;
+
+// ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
@@ -81,6 +87,8 @@ public:
     void Check(bool bCheck);
     void Toggle(void) { Check(!IsChecked()); }
 
+    virtual wxString GetName() const { return m_pParent->GetString(m_nIndex); }
+
 private:
     bool            m_bChecked;
     wxCheckListBox* m_pParent;
@@ -101,7 +109,7 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox* pParent, size_t nIndex)
     // done in OnMeasure while they are used only in OnDraw and we
     // know that there will always be OnMeasure before OnDraw
     //
-    SetMarginWidth(GetDefaultMarginWidth());
+    SetMarginWidth(CHECK_MARK_WIDTH);
 } // end of wxCheckListBoxItem::wxCheckListBoxItem
 
 
@@ -128,7 +136,7 @@ bool wxCheckListBoxItem::OnDrawItem ( wxDC& rDc,
     vRect.y -= 3;
     if (wxOwnerDrawn::OnDrawItem( rDc, vRect, eAct, eStat))
     {
-        size_t    nCheckWidth  = GetDefaultMarginWidth();
+        size_t    nCheckWidth  = CHECK_MARK_WIDTH;
         size_t    nCheckHeight = m_pParent->GetItemHeight();
         int       nParentHeight;
         int       nX = rRect.GetX();
@@ -333,7 +341,7 @@ long wxCheckListBox::OS2OnMeasure ( WXMEASUREITEMSTRUCT* pItem )
         //
         // Add place for the check mark
         //
-        pStruct->rclItem.xRight += wxOwnerDrawn::GetDefaultMarginWidth();
+        pStruct->rclItem.xRight += CHECK_MARK_WIDTH;
         return long(MRFROM2SHORT((USHORT)m_nItemHeight, (USHORT)(pStruct->rclItem.xRight - pStruct->rclItem.xLeft)));
     }
     return 0L;
@@ -374,7 +382,7 @@ void wxCheckListBox::OnLeftClick ( wxMouseEvent& rEvent )
     //
     // Clicking on the item selects it, clicking on the checkmark toggles
     //
-    if (rEvent.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth())
+    if (rEvent.GetX() <= CHECK_MARK_WIDTH)
     {
         int                         nParentHeight;
         wxScreenDC                  vDc;
