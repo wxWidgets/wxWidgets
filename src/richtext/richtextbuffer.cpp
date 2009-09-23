@@ -3641,17 +3641,13 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttr& attr, const wxRe
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
             int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-            pos.x = (rect.GetWidth() - (pos.x - rect.x) - rightIndent - size.x)/2 + pos.x;
-            // Lines are relative to the paragraph position
-            pos.x -= GetPosition().x;
+            pos.x = (rect.GetWidth() - pos.x - rightIndent - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
             int rightIndent = ConvertTenthsMMToPixels(dc, attr.GetRightIndent());
-            pos.x = rect.x + rect.GetWidth() - size.x - rightIndent;
-            // Lines are relative to the paragraph position
-            pos.x -= GetPosition().x;
+            pos.x = rect.GetWidth() - size.x - rightIndent;
             line->SetPosition(pos);
         }
 
