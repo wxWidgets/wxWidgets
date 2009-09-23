@@ -2682,7 +2682,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
-    wxLogTrace(wxTraceMessages,
+    wxLogTrace("winmsg",
                wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
                wxGetMessageName(message), hWnd, (long)wParam, lParam);
 #endif // wxDEBUG_LEVEL >= 2
@@ -3546,7 +3546,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
     if ( !processed )
     {
 #if wxDEBUG_LEVEL >= 2
-        wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
+        wxLogTrace("winmsg", wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
 #endif // wxDEBUG_LEVEL >= 2
         rc.result = MSWDefWindowProc(message, wParam, lParam);
