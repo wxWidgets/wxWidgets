@@ -13,7 +13,12 @@ all_changed_files=`$SVNLOOK changed "$REPOS" -t "$TXN" | \
                     grep "^[AU]" | \
                     sed 's/^....//'`
 
+# notice that breaking all_changed_files into several lines by replacing spaces
+# with new lines only works as long as we don't have any files with spaces in
+# them -- which is the case for now, but if it ever changes we'd probably need
+# to use a shell array for all_changed_files or just rerun svnlook here again
 changed_sources=`echo $all_changed_files | \
+                    sed 's/ /\n/g' | \
                     egrep "\.(cpp|h|py)$" | \
                     egrep -v "src/(tiff|regex|jpeg|stc/scintilla)"`
 
