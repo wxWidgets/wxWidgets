@@ -333,9 +333,9 @@ struct WXDLLIMPEXP_CORE wxScrolledT_Helper
 // but wxScrolledWindow includes wxControlContainer functionality and that's
 // not always desirable.
 template<class T>
-class WXDLLIMPEXP_CORE wxScrolled : public T,
-                                    public wxScrollHelper,
-                                    private wxScrolledT_Helper
+class wxScrolled : public T,
+                   public wxScrollHelper,
+                   private wxScrolledT_Helper
 {
 public:
     wxScrolled() : wxScrollHelper(this) { }
@@ -408,12 +408,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxScrolled);
 #endif
 };
-
-// VC++ <= 6 requires this; it's unlikely any other specializations would
-// be needed by user code _and_ they were using VC6, so we list only wxWindow
-// (typical use) and wxPanel (wxScrolledWindow use) specializations here
-WXDLLIMPEXP_TEMPLATE_INSTANCE_CORE( wxScrolled<wxPanel> )
-WXDLLIMPEXP_TEMPLATE_INSTANCE_CORE( wxScrolled<wxWindow> )
 
 // for compatibility with existing code, we provide wxScrolledWindow
 // "typedef" for wxScrolled<wxPanel>. It's not a real typedef because we

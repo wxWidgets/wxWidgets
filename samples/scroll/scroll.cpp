@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        scroll.cpp
-// Purpose:     wxScrolledWindow sample
+// Purpose:     wxScrolled sample
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (C) 1998 Robert Roebling, 2002 Ron Lee, 2003 Matt Gregory
@@ -31,7 +31,7 @@
 // ----------------------------------------------------------------------------
 
 // MySimpleCanvas: a scrolled window which draws a simple rectangle
-class MySimpleCanvas : public wxScrolledWindow
+class MySimpleCanvas : public wxScrolled<wxWindow>
 {
 public:
     enum
@@ -44,7 +44,7 @@ public:
     };
 
     MySimpleCanvas(wxWindow *parent)
-        : wxScrolledWindow(parent, wxID_ANY)
+        : wxScrolled<wxWindow>(parent, wxID_ANY)
     {
         SetScrollRate( 10, 10 );
         SetVirtualSize( WIDTH, HEIGHT );
@@ -90,7 +90,7 @@ public:
 // ----------------------------------------------------------------------
 
 // MyCanvas
-class MyCanvas : public wxScrolledWindow
+class MyCanvas : public wxScrolled<wxPanel>
 {
 public:
     MyCanvas(wxWindow *parent);
@@ -149,13 +149,13 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// example using sizers with wxScrolledWindow
+// example using sizers with wxScrolled
 // ----------------------------------------------------------------------------
 
 const wxSize SMALL_BUTTON( 100, 50 );
 const wxSize LARGE_BUTTON( 300, 200 );
 
-class MySizerScrolledWindow : public wxScrolledWindow
+class MySizerScrolledWindow : public wxScrolled<wxWindow>
 {
 public:
     MySizerScrolledWindow(wxWindow *parent);
@@ -193,7 +193,7 @@ public:
 class MySubColLabels : public wxWindow
 {
 public:
-    MySubColLabels(wxScrolledWindow *parent)
+    MySubColLabels(wxScrolled<wxWindow> *parent)
         : wxWindow(parent, wxID_ANY)
     {
         m_owner = parent;
@@ -222,13 +222,13 @@ private:
         dc.DrawText("Column 3", 205, 5);
     }
 
-    wxScrolledWindow *m_owner;
+    wxScrolled<wxWindow> *m_owner;
 };
 
 class MySubRowLabels : public wxWindow
 {
 public:
-    MySubRowLabels(wxScrolledWindow *parent)
+    MySubRowLabels(wxScrolled<wxWindow> *parent)
         : wxWindow(parent, wxID_ANY)
     {
         m_owner = parent;
@@ -260,13 +260,13 @@ private:
         dc.DrawText("Row 6", 5, 130);
     }
 
-    wxScrolledWindow *m_owner;
+    wxScrolled<wxWindow> *m_owner;
 };
 
 class MySubCanvas : public wxPanel
 {
 public:
-    MySubCanvas(wxScrolledWindow *parent, wxWindow *cols, wxWindow *rows)
+    MySubCanvas(wxScrolled<wxWindow> *parent, wxWindow *cols, wxWindow *rows)
         : wxPanel(parent, wxID_ANY)
     {
         m_owner = parent;
@@ -358,12 +358,12 @@ private:
         }
     }
 
-    wxScrolledWindow *m_owner;
+    wxScrolled<wxWindow> *m_owner;
     wxWindow *m_colLabels,
              *m_rowLabels;
 };
 
-class MySubScrolledWindow : public wxScrolledWindow
+class MySubScrolledWindow : public wxScrolled<wxWindow>
 {
 public:
     enum
@@ -373,7 +373,7 @@ public:
     };
 
     MySubScrolledWindow(wxWindow *parent)
-        : wxScrolledWindow(parent, wxID_ANY)
+        : wxScrolled<wxWindow>(parent, wxID_ANY)
     {
         // create the children
         MySubColLabels *cols = new MySubColLabels(this);
@@ -444,17 +444,17 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// more simple examples of wxScrolledWindow usage
+// more simple examples of wxScrolled usage
 // ----------------------------------------------------------------------------
 
 // base class for both of them
-class MyScrolledWindowBase : public wxScrolledWindow
+class MyScrolledWindowBase : public wxScrolled<wxWindow>
 {
 public:
     MyScrolledWindowBase(wxWindow *parent)
-        : wxScrolledWindow(parent, wxID_ANY,
-                           wxDefaultPosition, wxDefaultSize,
-                           wxBORDER_SUNKEN)
+        : wxScrolled<wxWindow>(parent, wxID_ANY,
+                               wxDefaultPosition, wxDefaultSize,
+                               wxBORDER_SUNKEN)
     {
         m_nLines = 50;
         m_winSync = NULL;
@@ -476,7 +476,7 @@ public:
 
     virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL)
     {
-        wxScrolledWindow::ScrollWindow(dx, dy, rect);
+        wxScrolled<wxWindow>::ScrollWindow(dx, dy, rect);
 
         DoSyncIfNecessary();
     }
@@ -551,7 +551,7 @@ public:
 // functionality
 // ----------------------------------------------------------------------------
 
-class MyAutoScrollingWindow : public wxScrolledWindow
+class MyAutoScrollingWindow : public wxScrolled<wxWindow>
 {
 public:
     MyAutoScrollingWindow( wxWindow* parent );
@@ -660,7 +660,7 @@ const wxWindowID ID_QUERYPOS    = wxWindow::NewControlId();
 
 const wxWindowID ID_NEWBUTTON   = wxWindow::NewControlId();
 
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolled<wxPanel>)
     EVT_PAINT(                  MyCanvas::OnPaint)
     EVT_RIGHT_DOWN(             MyCanvas::OnMouseRightDown)
     EVT_MOUSEWHEEL(             MyCanvas::OnMouseWheel)
@@ -672,9 +672,9 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas(wxWindow *parent)
-    : wxScrolledWindow(parent, wxID_ANY,
-                       wxDefaultPosition, wxDefaultSize,
-                       wxSUNKEN_BORDER | wxTAB_TRAVERSAL)
+    : wxScrolled<wxPanel>(parent, wxID_ANY,
+                          wxDefaultPosition, wxDefaultSize,
+                          wxSUNKEN_BORDER | wxTAB_TRAVERSAL)
 {
     // you can use either a single SetScrollbars() call or these 2 functions,
     // usually using them is better because you normally won't need to change
@@ -781,7 +781,7 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
 // ----------------------------------------------------------------------------
 
 MySizerScrolledWindow::MySizerScrolledWindow(wxWindow *parent)
-    : wxScrolledWindow(parent)
+    : wxScrolled<wxWindow>(parent)
 {
     SetBackgroundColour( "GREEN" );
 
@@ -963,7 +963,7 @@ void MyFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)wxMessageBox( "wxScrolledWindow sample\n"
+    (void)wxMessageBox( "Scrolled window sample\n"
                         "\n"
                         "Robert Roebling (c) 1998\n"
                         "Vadim Zeitlin (c) 2008\n"
@@ -1046,7 +1046,7 @@ void MyScrolledWindowSmart::OnDraw(wxDC& dc)
 // MyAutoScrollingWindow
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(MyAutoScrollingWindow, wxScrolledWindow)
+BEGIN_EVENT_TABLE(MyAutoScrollingWindow, wxScrolled<wxWindow>)
     EVT_LEFT_DOWN(MyAutoScrollingWindow::OnMouseLeftDown)
     EVT_LEFT_UP(MyAutoScrollingWindow::OnMouseLeftUp)
     EVT_MOTION(MyAutoScrollingWindow::OnMouseMove)
@@ -1055,8 +1055,8 @@ BEGIN_EVENT_TABLE(MyAutoScrollingWindow, wxScrolledWindow)
 END_EVENT_TABLE()
 
 MyAutoScrollingWindow::MyAutoScrollingWindow(wxWindow* parent)
-    : wxScrolledWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxVSCROLL | wxHSCROLL | wxSUNKEN_BORDER),
+    : wxScrolled<wxWindow>(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                           wxVSCROLL | wxHSCROLL | wxSUNKEN_BORDER),
       m_selStart(-1, -1),
       m_cursor(-1, -1),
       m_font(9, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL)
