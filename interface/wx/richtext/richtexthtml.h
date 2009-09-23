@@ -49,7 +49,8 @@
     - wxRICHTEXT_HANDLER_NO_HEADER_FOOTER
       Don't include header and footer tags (HTML, HEAD, BODY), so that the HTML
       can be used as part of a larger document.
-
+    - wxRICHTEXT_HANDLER_USE_CSS
+      Use CSS where possible, otherwise use workarounds that will show in wxHtmlWindow.
 
     @library{wxrichtext}
     @category{richtext}

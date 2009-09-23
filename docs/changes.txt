@@ -1,4 +1,4 @@
-﻿-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
                              wxWidgets Change Log
 -------------------------------------------------------------------------------
 
@@ -427,10 +427,14 @@ All (GUI):
   Borders around property grid are now native for consistency.
 - Added wxXmlResource::LoadObjectRecursively().
 - Added wxColour::Set/GetRGB() and Set/GetRGBA() methods (Marcel Haß).
+- wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
+  where possible.
+- wxRTC: corrected centring and right-justification spacing.
 
 GTK:
 
 - wxRadioBox constructor uses default consistent with other ports now.
+- Corrected themed border display.
 
 MSW:
 
@@ -442,6 +446,9 @@ MSW:
 - Allow customizing wxStandardPaths logic for program directory determination.
 - Use time in wxDateTime <-> SYSTEMTIME conversion (troelsk).
 - Setting colours for wxSpinCtrl now works.
+- Worked around child window and caret positioning bug (in Windows) when using
+  wxBORDER_THEME in a container window.
+- Suppressed spurious character event for decimal key in numeric keypad.
 
 i18n:
 

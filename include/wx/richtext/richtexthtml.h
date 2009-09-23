@@ -18,6 +18,9 @@
 
 #include "wx/richtext/richtextbuffer.h"
 
+// Use CSS styles where applicable, otherwise use non-CSS workarounds
+#define wxRICHTEXT_HANDLER_USE_CSS 0x1000
+
 /*!
  * wxRichTextHTMLHandler
  */
