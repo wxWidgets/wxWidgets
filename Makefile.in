@@ -4099,6 +4099,16 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_propgridiface.o \
 	monodll_propgridpagestate.o \
 	monodll_props.o \
+	monodll_art_internal.o \
+	monodll_art_msw.o \
+	monodll_art_aui.o \
+	monodll_bar.o \
+	monodll_ribbon_buttonbar.o \
+	monodll_ribbon_control.o \
+	monodll_gallery.o \
+	monodll_page.o \
+	monodll_panel.o \
+	monodll_ribbon_toolbar.o \
 	monodll_richtextctrl.o \
 	monodll_richtextbuffer.o \
 	monodll_richtextstyles.o \
@@ -4221,7 +4231,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_wrapsizer.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
-	monodll_buttonbar.o \
+	monodll_generic_buttonbar.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
@@ -4414,7 +4424,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_wrapsizer.o \
 	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
-	monodll_buttonbar.o \
+	monodll_generic_buttonbar.o \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
@@ -5899,6 +5909,16 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_propgridiface.o \
 	monolib_propgridpagestate.o \
 	monolib_props.o \
+	monolib_art_internal.o \
+	monolib_art_msw.o \
+	monolib_art_aui.o \
+	monolib_bar.o \
+	monolib_ribbon_buttonbar.o \
+	monolib_ribbon_control.o \
+	monolib_gallery.o \
+	monolib_page.o \
+	monolib_panel.o \
+	monolib_ribbon_toolbar.o \
 	monolib_richtextctrl.o \
 	monolib_richtextbuffer.o \
 	monolib_richtextstyles.o \
@@ -6021,7 +6041,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_wrapsizer.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
-	monolib_buttonbar.o \
+	monolib_generic_buttonbar.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
@@ -6214,7 +6234,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_wrapsizer.o \
 	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
-	monolib_buttonbar.o \
+	monolib_generic_buttonbar.o \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
@@ -16130,6 +16150,36 @@ monodll_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(MONO
 monodll_props.o: $(srcdir)/src/propgrid/props.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
 
+monodll_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
+
+monodll_art_msw.o: $(srcdir)/src/ribbon/art_msw.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_msw.cpp
+
+monodll_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/art_aui.cpp
+
+monodll_bar.o: $(srcdir)/src/ribbon/bar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp
+
+monodll_ribbon_buttonbar.o: $(srcdir)/src/ribbon/buttonbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/buttonbar.cpp
+
+monodll_ribbon_control.o: $(srcdir)/src/ribbon/control.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
+
+monodll_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/gallery.cpp
+
+monodll_page.o: $(srcdir)/src/ribbon/page.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
+
+monodll_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
+
+monodll_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
+
 monodll_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
 
@@ -18521,7 +18571,7 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
-@COND_USE_GUI_1@monodll_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@monodll_generic_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 @COND_USE_GUI_1@monodll_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(MONODLL_ODEP)
@@ -20869,6 +20919,36 @@ monolib_propgridpagestate.o: $(srcdir)/src/propgrid/propgridpagestate.cpp $(MONO
 
 monolib_props.o: $(srcdir)/src/propgrid/props.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/propgrid/props.cpp
+
+monolib_art_internal.o: $(srcdir)/src/ribbon/art_internal.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_internal.cpp
+
+monolib_art_msw.o: $(srcdir)/src/ribbon/art_msw.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_msw.cpp
+
+monolib_art_aui.o: $(srcdir)/src/ribbon/art_aui.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/art_aui.cpp
+
+monolib_bar.o: $(srcdir)/src/ribbon/bar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp
+
+monolib_ribbon_buttonbar.o: $(srcdir)/src/ribbon/buttonbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/buttonbar.cpp
+
+monolib_ribbon_control.o: $(srcdir)/src/ribbon/control.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
+
+monolib_gallery.o: $(srcdir)/src/ribbon/gallery.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/gallery.cpp
+
+monolib_page.o: $(srcdir)/src/ribbon/page.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
+
+monolib_panel.o: $(srcdir)/src/ribbon/panel.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/panel.cpp
+
+monolib_ribbon_toolbar.o: $(srcdir)/src/ribbon/toolbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/ribbon/toolbar.cpp
 
 monolib_richtextctrl.o: $(srcdir)/src/richtext/richtextctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/richtext/richtextctrl.cpp
@@ -23261,7 +23341,7 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_busyinfo.o: $(srcdir)/src/generic/busyinfo.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/busyinfo.cpp
 
-@COND_USE_GUI_1@monolib_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@monolib_generic_buttonbar.o: $(srcdir)/src/generic/buttonbar.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/buttonbar.cpp
 
 @COND_USE_GUI_1@monolib_choicdgg.o: $(srcdir)/src/generic/choicdgg.cpp $(MONOLIB_ODEP)

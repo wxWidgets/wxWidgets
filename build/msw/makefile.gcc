@@ -1584,6 +1584,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_propgridiface.o \
 	$(OBJS)\monodll_propgridpagestate.o \
 	$(OBJS)\monodll_props.o \
+	$(OBJS)\monodll_art_internal.o \
+	$(OBJS)\monodll_art_msw.o \
+	$(OBJS)\monodll_art_aui.o \
+	$(OBJS)\monodll_bar.o \
+	$(OBJS)\monodll_buttonbar.o \
+	$(OBJS)\monodll_control.o \
+	$(OBJS)\monodll_gallery.o \
+	$(OBJS)\monodll_page.o \
+	$(OBJS)\monodll_panel.o \
+	$(OBJS)\monodll_toolbar.o \
 	$(OBJS)\monodll_richtextctrl.o \
 	$(OBJS)\monodll_richtextbuffer.o \
 	$(OBJS)\monodll_richtextstyles.o \
@@ -2276,6 +2286,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_propgridiface.o \
 	$(OBJS)\monolib_propgridpagestate.o \
 	$(OBJS)\monolib_props.o \
+	$(OBJS)\monolib_art_internal.o \
+	$(OBJS)\monolib_art_msw.o \
+	$(OBJS)\monolib_art_aui.o \
+	$(OBJS)\monolib_bar.o \
+	$(OBJS)\monolib_buttonbar.o \
+	$(OBJS)\monolib_control.o \
+	$(OBJS)\monolib_gallery.o \
+	$(OBJS)\monolib_page.o \
+	$(OBJS)\monolib_panel.o \
+	$(OBJS)\monolib_toolbar.o \
 	$(OBJS)\monolib_richtextctrl.o \
 	$(OBJS)\monolib_richtextbuffer.o \
 	$(OBJS)\monolib_richtextstyles.o \
@@ -6464,6 +6484,27 @@ $(OBJS)\monodll_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cpp
 $(OBJS)\monodll_props.o: ../../src/propgrid/props.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_art_internal.o: ../../src/ribbon/art_internal.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_art_msw.o: ../../src/ribbon/art_msw.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_art_aui.o: ../../src/ribbon/art_aui.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_bar.o: ../../src/ribbon/bar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_gallery.o: ../../src/ribbon/gallery.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_page.o: ../../src/ribbon/page.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_panel.o: ../../src/ribbon/panel.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6889,6 +6930,11 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_control.o: ../../src/ribbon/control.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
 $(OBJS)\monodll_dialog.o: ../../src/msw/dialog.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
@@ -7110,6 +7156,11 @@ ifeq ($(WXUNIV),1)
 $(OBJS)\monodll_toolbar.o: ../../src/univ/toolbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_toolbar.o: ../../src/ribbon/toolbar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
@@ -7695,6 +7746,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_buttonbar.o: ../../src/ribbon/buttonbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8816,6 +8872,27 @@ $(OBJS)\monolib_propgridpagestate.o: ../../src/propgrid/propgridpagestate.cpp
 $(OBJS)\monolib_props.o: ../../src/propgrid/props.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_art_internal.o: ../../src/ribbon/art_internal.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_art_msw.o: ../../src/ribbon/art_msw.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_art_aui.o: ../../src/ribbon/art_aui.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_bar.o: ../../src/ribbon/bar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_gallery.o: ../../src/ribbon/gallery.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_page.o: ../../src/ribbon/page.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_panel.o: ../../src/ribbon/panel.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_richtextctrl.o: ../../src/richtext/richtextctrl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9241,6 +9318,11 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_control.o: ../../src/ribbon/control.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 ifeq ($(WXUNIV),0)
 $(OBJS)\monolib_dialog.o: ../../src/msw/dialog.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
@@ -9462,6 +9544,11 @@ ifeq ($(WXUNIV),1)
 $(OBJS)\monolib_toolbar.o: ../../src/univ/toolbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_toolbar.o: ../../src/ribbon/toolbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
@@ -10047,6 +10134,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_buttonbar.o: ../../src/generic/buttonbar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_buttonbar.o: ../../src/ribbon/buttonbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

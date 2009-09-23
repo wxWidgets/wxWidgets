@@ -204,6 +204,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_propgridiface.obj &
 	$(OBJS)\monodll_propgridpagestate.obj &
 	$(OBJS)\monodll_props.obj &
+	$(OBJS)\monodll_art_internal.obj &
+	$(OBJS)\monodll_art_msw.obj &
+	$(OBJS)\monodll_art_aui.obj &
+	$(OBJS)\monodll_bar.obj &
+	$(OBJS)\monodll_buttonbar.obj &
+	$(OBJS)\monodll_control.obj &
+	$(OBJS)\monodll_gallery.obj &
+	$(OBJS)\monodll_page.obj &
+	$(OBJS)\monodll_panel.obj &
+	$(OBJS)\monodll_toolbar.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
@@ -901,6 +911,16 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_propgridiface.obj &
 	$(OBJS)\monolib_propgridpagestate.obj &
 	$(OBJS)\monolib_props.obj &
+	$(OBJS)\monolib_art_internal.obj &
+	$(OBJS)\monolib_art_msw.obj &
+	$(OBJS)\monolib_art_aui.obj &
+	$(OBJS)\monolib_bar.obj &
+	$(OBJS)\monolib_buttonbar.obj &
+	$(OBJS)\monolib_control.obj &
+	$(OBJS)\monolib_gallery.obj &
+	$(OBJS)\monolib_page.obj &
+	$(OBJS)\monolib_panel.obj &
+	$(OBJS)\monolib_toolbar.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
@@ -6731,6 +6751,27 @@ $(OBJS)\monodll_propgridpagestate.obj :  .AUTODEPEND ..\..\src\propgrid\propgrid
 $(OBJS)\monodll_props.obj :  .AUTODEPEND ..\..\src\propgrid\props.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_art_internal.obj :  .AUTODEPEND ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_art_msw.obj :  .AUTODEPEND ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7156,6 +7197,11 @@ $(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
@@ -7377,6 +7423,11 @@ $(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
 $(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
@@ -7962,6 +8013,11 @@ $(OBJS)\monodll_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -9083,6 +9139,27 @@ $(OBJS)\monolib_propgridpagestate.obj :  .AUTODEPEND ..\..\src\propgrid\propgrid
 $(OBJS)\monolib_props.obj :  .AUTODEPEND ..\..\src\propgrid\props.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_art_internal.obj :  .AUTODEPEND ..\..\src\ribbon\art_internal.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_art_msw.obj :  .AUTODEPEND ..\..\src\ribbon\art_msw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9508,6 +9585,11 @@ $(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 !ifeq WXUNIV 0
 $(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
@@ -9729,6 +9811,11 @@ $(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
 $(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
 !ifeq USE_GUI 1
@@ -10314,6 +10401,11 @@ $(OBJS)\monolib_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
