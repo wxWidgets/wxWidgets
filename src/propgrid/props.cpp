@@ -2120,12 +2120,14 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
     m_edValue = new wxTextCtrl(this,21,wxEmptyString,
         wxDefaultPosition,wxDefaultSize,wxTE_PROCESS_ENTER);
+#if wxUSE_VALIDATORS
     wxValidator* validator = GetTextCtrlValidator();
     if ( validator )
     {
         m_edValue->SetValidator( *validator );
         delete validator;
     }
+#endif
     rowsizer->Add( m_edValue,
         1, wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL|wxALL, spacing );
 

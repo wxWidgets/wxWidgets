@@ -87,7 +87,7 @@ extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
     class WXDLLIMPEXP_FWD_CORE wxValidator;
-    #define wxDefaultValidator (*(NULL))
+    #define wxDefaultValidator (*reinterpret_cast<wxValidator*>(NULL))
 
     // this macro allows to avoid warnings about unused parameters when
     // wxUSE_VALIDATORS == 0
