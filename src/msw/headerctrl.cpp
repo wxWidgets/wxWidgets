@@ -285,6 +285,7 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
             if ( !m_imageList )
             {
                 m_imageList = new wxImageList(bmpWidth, bmpHeight);
+                (void) // suppress mingw32 warning about unused computed value
                 Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
             }
             else // already have an image list
