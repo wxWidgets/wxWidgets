@@ -77,79 +77,108 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
 
     buffer->Defragment();
 
-    wxTextOutputStream str(stream);
-
-    wxTextAttr currentParaStyle = buffer->GetAttributes();
-    wxTextAttr currentCharStyle = buffer->GetAttributes();
-
-    if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
-        str << wxT("<html><head></head><body>\n");
-
-    OutputFont(currentParaStyle, str);
-
-    m_font = false;
-    m_inTable = false;
-
-    m_indents.Clear();
-    m_listTypes.Clear();
-
-    wxRichTextObjectList::compatibility_iterator node = buffer->GetChildren().GetFirst();
-    while (node)
+#if wxUSE_UNICODE
+    wxCSConv* customEncoding = NULL;
+    wxMBConv* conv = NULL;
+    if (!GetEncoding().IsEmpty())
     {
-        wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
-        wxASSERT (para != NULL);
-
-        if (para)
+        customEncoding = new wxCSConv(GetEncoding());
+        if (!customEncoding->IsOk())
         {
-            wxTextAttr paraStyle(para->GetCombinedAttributes());
-
-            BeginParagraphFormatting(currentParaStyle, paraStyle, str);
-
-            wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
-            while (node2)
-            {
-                wxRichTextObject* obj = node2->GetData();
-                wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
-                if (textObj && !textObj->IsEmpty())
-                {
-                    wxTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
-                    BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
-
-                    wxString text = textObj->GetText();
-
-                    if (charStyle.HasTextEffects() && (charStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
-                        text.MakeUpper();
-
-                    wxString toReplace = wxRichTextLineBreakChar;
-                    text.Replace(toReplace, wxT("<br>"));
-
-                    str << text;
-
-                    EndCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
-                }
-
-                wxRichTextImage* image = wxDynamicCast(obj, wxRichTextImage);
-                if( image && (!image->IsEmpty() || image->GetImageBlock().GetData()))
-                    WriteImage( image, stream );
-
-                node2 = node2->GetNext();
-            }
-
-            EndParagraphFormatting(currentParaStyle, paraStyle, str);
-
-            str << wxT("\n");
+            delete customEncoding;
+            customEncoding = NULL;
         }
-        node = node->GetNext();
+    }
+    if (customEncoding)
+        conv = customEncoding;
+    else
+        conv = & wxConvUTF8;
+#endif
+
+    {
+#if wxUSE_UNICODE
+        wxTextOutputStream str(stream, wxEOL_NATIVE, *conv);
+#else
+        wxTextOutputStream str(stream, wxEOL_NATIVE);
+#endif
+        
+        wxTextAttr currentParaStyle = buffer->GetAttributes();
+        wxTextAttr currentCharStyle = buffer->GetAttributes();
+        
+        if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
+            str << wxT("<html><head></head><body>\n");
+        
+        OutputFont(currentParaStyle, str);
+        
+        m_font = false;
+        m_inTable = false;
+        
+        m_indents.Clear();
+        m_listTypes.Clear();
+        
+        wxRichTextObjectList::compatibility_iterator node = buffer->GetChildren().GetFirst();
+        while (node)
+        {
+            wxRichTextParagraph* para = wxDynamicCast(node->GetData(), wxRichTextParagraph);
+            wxASSERT (para != NULL);
+            
+            if (para)
+            {
+                wxTextAttr paraStyle(para->GetCombinedAttributes());
+                
+                BeginParagraphFormatting(currentParaStyle, paraStyle, str);
+                
+                wxRichTextObjectList::compatibility_iterator node2 = para->GetChildren().GetFirst();
+                while (node2)
+                {
+                    wxRichTextObject* obj = node2->GetData();
+                    wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
+                    if (textObj && !textObj->IsEmpty())
+                    {
+                        wxTextAttr charStyle(para->GetCombinedAttributes(obj->GetAttributes()));
+                        BeginCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
+                        
+                        wxString text = textObj->GetText();
+                        
+                        if (charStyle.HasTextEffects() && (charStyle.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
+                            text.MakeUpper();
+                        
+                        wxString toReplace = wxRichTextLineBreakChar;
+                        text.Replace(toReplace, wxT("<br>"));
+                        
+                        str << text;
+                        
+                        EndCharacterFormatting(currentCharStyle, charStyle, paraStyle, str);
+                    }
+                    
+                    wxRichTextImage* image = wxDynamicCast(obj, wxRichTextImage);
+                    if( image && (!image->IsEmpty() || image->GetImageBlock().GetData()))
+                        WriteImage( image, stream );
+                    
+                    node2 = node2->GetNext();
+                }
+                
+                EndParagraphFormatting(currentParaStyle, paraStyle, str);
+                
+                str << wxT("\n");
+            }
+            node = node->GetNext();
+        }
+        
+        CloseLists(-1, str);
+        
+        str << wxT("</font>");
+        
+        if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
+            str << wxT("</body></html>");
+        
+        str << wxT("\n");
     }
 
-    CloseLists(-1, str);
-
-    str << wxT("</font>");
-
-    if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
-        str << wxT("</body></html>");
-
-    str << wxT("\n");
+#if wxUSE_UNICODE
+    if (customEncoding)
+        delete customEncoding;
+#endif
 
     m_buffer = NULL;
 
@@ -256,7 +285,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
             str << wxString::Format(wxT("<p align=\"%s\""), align.c_str());
 
             if (thisStyle.HasParagraphSpacingAfter() && thisStyle.GetParagraphSpacingAfter() == 0)
-                str << wxT(" style=\"line-height: 0px\"");
+                str << wxT(" style=\"margin: 0px;\"");
 
             str << wxT(">");
 
@@ -284,7 +313,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
         str << wxString::Format(wxT("<p align=\"%s\""), align.c_str());
 
         if (thisStyle.HasParagraphSpacingAfter() && thisStyle.GetParagraphSpacingAfter() == 0)
-            str << wxT(" style=\"line-height: 0px\"");
+            str << wxT(" style=\"margin: 0px;\"");
 
         str << wxT(">");
     }
