@@ -116,11 +116,14 @@ All (GUI):
 
 - Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).
 - wxRTC: fixed AltGr+key input and numeric keypad Delete on Windows.
+- wxRTC: added background colour setting to font dialog.
+- wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
+  where possible.
+- wxRTC: corrected centring and right-justification spacing.
 - Paper size conversion from dimensions to id now uses definition ordering
   in order to use common types where there are duplications, fixing problems
   where invalid sizes caused incorrect second invocation of page setup
   dialog.
-- Added background colour setting to wxRichTextCtrl font dialog.
 - Corrected writing direction for Farsi.
 
 wxMSW:
@@ -133,6 +136,10 @@ wxMSW:
   You now need to set wxUSE_HIGH_QUALITY_PREVIEW_IN_WXMSW in
   src/common/prntbase.cpp and wxUSE_ENH_METAFILE_FROM_DC in
   include/wx/msw/enhmeta.h.
+- Worked around child window and caret positioning bug (in Windows) when using
+  wxBORDER_THEME in a container window.
+- Suppressed spurious character event for decimal key in numeric keypad.
+  
 
 wxMac:
 
