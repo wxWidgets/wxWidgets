@@ -5443,9 +5443,15 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
 
     wxGridCellAttrProvider * const
         attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
+
+    // notice that an explicit static_cast is needed to avoid a compilation
+    // error with VC7.1 which, for some reason, tries to instantiate (abstract)
+    // wxGridRowHeaderRenderer class without it
     const wxGridRowHeaderRenderer&
         rend = attrProvider ? attrProvider->GetRowHeaderRenderer(row)
-                            : gs_defaultHeaderRenderers.rowRenderer;
+                            : static_cast<const wxGridRowHeaderRenderer&>
+                                (gs_defaultHeaderRenderers.rowRenderer);
+
     wxRect rect(0, GetRowTop(row), m_rowLabelWidth, GetRowHeight(row));
     rend.DrawBorder(*this, dc, rect);
 
@@ -5518,7 +5524,8 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
             attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
         const wxGridCornerHeaderRenderer&
             rend = attrProvider ? attrProvider->GetCornerRenderer()
-                                : gs_defaultHeaderRenderers.cornerRenderer;
+                                : static_cast<wxGridCornerHeaderRenderer&>
+                                    (gs_defaultHeaderRenderers.cornerRenderer);
 
         rend.DrawBorder(*this, dc, rect);
     }
@@ -5536,7 +5543,8 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
         attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
     const wxGridColumnHeaderRenderer&
         rend = attrProvider ? attrProvider->GetColumnHeaderRenderer(col)
-                            : gs_defaultHeaderRenderers.colRenderer;
+                            : static_cast<wxGridColumnHeaderRenderer&>
+                                (gs_defaultHeaderRenderers.colRenderer);
 
     if ( m_nativeColumnLabels )
     {
