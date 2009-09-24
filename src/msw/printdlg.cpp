@@ -339,6 +339,55 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
 {
     HGLOBAL hDevMode = static_cast<HGLOBAL>(m_devMode);
+    WinPrinter printer;
+    LPTSTR szPrinterName = (LPTSTR)data.GetPrinterName().wx_str();
+
+    // From MSDN: How To Modify Printer Settings with the DocumentProperties() Function
+    // The purpose of this is to fill the DEVMODE with privdata from printer driver.
+    // If we have a printer name and OpenPrinter sucessfully returns
+    // this replaces the PrintDlg function which creates the DEVMODE filled only with data from default printer.
+    if ( !m_devMode && !data.GetPrinterName().IsEmpty() )
+    {
+        // Open printer
+        if ( printer.Open( data.GetPrinterName() ) == TRUE )
+        {
+            DWORD dwNeeded, dwRet;
+
+            // Step 1:
+            // Allocate a buffer of the correct size.
+            dwNeeded = DocumentProperties( NULL,
+                printer,         // Handle to our printer.
+                szPrinterName,   // Name of the printer.
+                NULL,            // Asking for size, so
+                NULL,            // these are not used.
+                0 );             // Zero returns buffer size.
+
+            LPDEVMODE tempDevMode = static_cast<LPDEVMODE>( GlobalAlloc( GMEM_FIXED | GMEM_ZEROINIT, dwNeeded ) );
+
+            // Step 2:
+            // Get the default DevMode for the printer
+            dwRet = DocumentProperties( NULL,
+                printer,
+                szPrinterName,
+                tempDevMode,     // The address of the buffer to fill.
+                NULL,            // Not using the input buffer.
+                DM_OUT_BUFFER ); // Have the output buffer filled.
+
+            if ( dwRet != IDOK )
+            {
+                // If failure, cleanup
+                GlobalFree( tempDevMode );
+                printer.Close();
+            }
+            else
+            {
+                hDevMode = tempDevMode;
+                m_devMode = hDevMode;
+                tempDevMode = NULL;
+            }
+        }
+    }
+
     if ( !m_devMode )
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
@@ -508,6 +557,8 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
                 break;
             default:
                 quality = (short)data.GetQuality();
+                devMode->dmYResolution = quality;
+                devMode->dmFields |= DM_YRESOLUTION;
                 break;
         }
         devMode->dmPrintQuality = quality;
@@ -548,6 +599,21 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         {
             devMode->dmMediaType = data.GetMedia();
             devMode->dmFields |= DM_MEDIATYPE;
+        }
+
+        if( printer )
+        {
+            // Step 3:
+            // Merge the new settings with the old.
+            // This gives the driver an opportunity to update any private
+            // portions of the DevMode structure.
+            DocumentProperties( NULL,
+                printer,
+                szPrinterName,
+                (LPDEVMODE)hDevMode, // Reuse our buffer for output.
+                (LPDEVMODE)hDevMode, // Pass the driver our changes
+                DM_IN_BUFFER |       // Commands to Merge our changes and
+                DM_OUT_BUFFER );     // write the result.
         }
     }
 
