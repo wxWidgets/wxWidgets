@@ -233,6 +233,18 @@ wxView *wxDocument::GetFirstView() const
     return static_cast<wxView *>(m_documentViews.GetFirst()->GetData());
 }
 
+void wxDocument::Modify(bool mod)
+{
+    if (mod != m_documentModified)
+    {
+        m_documentModified = mod;
+
+        // Allow views to append asterix to the title
+        wxView* view = GetFirstView();
+        if (view) view->OnChangeFilename();
+    }
+}
+
 wxDocManager *wxDocument::GetDocumentManager() const
 {
     return m_documentTemplate ? m_documentTemplate->GetDocumentManager() : NULL;
@@ -713,7 +725,12 @@ void wxView::OnChangeFilename()
     wxDocument *doc = GetDocument();
     if (!doc) return;
 
-    win->SetLabel(doc->GetUserReadableName());
+    wxString label = doc->GetUserReadableName();
+    if (doc->IsModified())
+    {
+       label += "*";
+    }
+    win->SetLabel(label);
 }
 
 void wxView::SetDocument(wxDocument *doc)

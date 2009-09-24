@@ -133,7 +133,7 @@ public:
 
     virtual bool Draw(wxDC&);
     virtual bool IsModified() const { return m_documentModified; }
-    virtual void Modify(bool mod) { m_documentModified = mod; }
+    virtual void Modify(bool mod);
 
     virtual bool AddView(wxView *view);
     virtual bool RemoveView(wxView *view);
