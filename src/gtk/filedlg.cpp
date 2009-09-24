@@ -389,6 +389,7 @@ void wxFileDialog::SetPath(const wxString& path)
     if (!gtk_check_version(2,4,0))
     {
         if (path.empty()) return;
+        wxCHECK_RET(wxIsAbsolutePath(path), wxT(" wxFileDialog::SetPath requires an absolute filepath"));
 
         gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(path));
     }
@@ -402,7 +403,12 @@ void wxFileDialog::SetDirectory(const wxString& dir)
     {
         if (wxDirExists(dir))
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir));
+            if (gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir)))
+            {
+                // Cache the dir, as gtk_file_chooser_get_current_folder()
+                // doesn't return anything until the dialog has been shown
+                m_dir = dir;
+            }
         }
     }
     else
@@ -414,7 +420,14 @@ wxString wxFileDialog::GetDirectory() const
     if (!gtk_check_version(2,4,0))
     {
         wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
-        return wxConvFileName->cMB2WX(str);
+        wxString currentDir( wxConvFileName->cMB2WX(str) );
+        if (currentDir.empty())
+        {
+            // gtk_file_chooser_get_current_folder will return empty until the dialog has been shown
+            // in which case use any previously provided value
+            currentDir = m_dir;
+        }
+        return currentDir;
     }
 
     return wxGenericFileDialog::GetDirectory();
@@ -425,9 +438,21 @@ void wxFileDialog::SetFilename(const wxString& name)
     if (!gtk_check_version(2,4,0))
     {
         if (HasFdFlag(wxFD_SAVE))
+        {
             gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget), wxGTK_CONV(name));
+            m_fileName = name;
+        }
         else
-            SetPath(wxFileName(GetDirectory(), name).GetFullPath());
+        {
+            wxString path( GetDirectory() );
+            if (path.empty())
+            {
+                // SetPath() fires an assert if fed other than filepaths
+                return;
+            }
+            SetPath(wxFileName(path, name).GetFullPath());
+            m_fileName = name;
+        }
     }
     else
         wxGenericFileDialog::SetFilename( name );
@@ -436,7 +461,16 @@ void wxFileDialog::SetFilename(const wxString& name)
 wxString wxFileDialog::GetFilename() const
 {
     if (!gtk_check_version(2,4,0))
-        return wxFileName(GetPath()).GetFullName();
+    {
+        wxString currentFilename(  wxFileName(GetPath()).GetFullName() );
+        if (currentFilename.empty())
+        {
+            // GetPath() will return empty until the dialog has been shown
+            // in which case use any previously provided value
+            currentFilename = m_fileName;
+        }
+        return currentFilename;
+    }
     else
         return wxGenericFileDialog::GetFilename();
 }
