@@ -142,6 +142,34 @@ public:
         return sTmp;
     }
 
+    // Get line number of line starting with sSearch followed by = and return
+    // the string after the =
+    int GetCmd(const wxString& sSearch, wxString &cmd)
+    {
+        const size_t len = sSearch.Len();
+
+        for(size_t i = 0; i < GetLineCount(); i++)
+        {
+            wxString& sLine = GetLine(i);
+            sLine.Trim(false);
+            if (sLine.StartsWith(wxT("#")))
+                continue;
+            if (sLine.Len() <= len)
+                continue;
+
+            if (sLine[len] != '=')
+                continue;
+
+            if (sLine.Left(len).CmpNoCase(sSearch))
+                continue;
+
+            cmd = sLine.Mid(len + 1);
+            return (int)i;
+        }
+
+        return wxNOT_FOUND;
+    }
+
 protected:
     // we override this virtual method because we want to always use UTF-8
     // conversion allowing for invalid characters as MIME information files
@@ -783,15 +811,14 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     wxArrayString sExts;
     wxString mimetype, mime_desc, strIcon;
 
-    int nIndex = file.pIndexOf( wxT("MimeType=") );
+
+    int nIndex = file.GetCmd( wxT("MimeType"), mimetype );
     if (nIndex == wxNOT_FOUND)
     {
         // construct mimetype from the directory name and the basename of the
         // file (it always has .kdelnk extension)
         mimetype << subdir << wxT('/') << filename.BeforeLast( wxT('.') );
     }
-    else
-        mimetype = file.GetCmd(nIndex);
 
     // first find the description string: it is the value in either "Comment="
     // line or "Comment[<locale_name>]=" one
@@ -804,29 +831,23 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     if ( locale )
     {
         // try "Comment[locale name]" first
-        comment << wxT("Comment[") + locale->GetName() + wxT("]=");
-        nIndex = file.pIndexOf(comment);
+        comment << wxT("Comment[") + locale->GetName() + wxT("]");
+        nIndex = file.GetCmd(comment, mime_desc);
     }
 #endif
 
     if ( nIndex == wxNOT_FOUND )
-    {
-        comment = wxT("Comment=");
-        nIndex = file.pIndexOf(comment);
-    }
+        file.GetCmd(wxT("Comment"), mime_desc);
 
-    if ( nIndex != wxNOT_FOUND )
-        mime_desc = file.GetCmd(nIndex);
     //else: no description
 
     // next find the extensions
     wxString mime_extension;
 
-    nIndex = file.pIndexOf(wxT("Patterns="));
+    wxString exts;
+    nIndex = file.GetCmd(wxT("Patterns"), exts);
     if ( nIndex != wxNOT_FOUND )
     {
-        wxString exts = file.GetCmd(nIndex);
-
         wxStringTokenizer tokenizer(exts, wxT(";"));
         while ( tokenizer.HasMoreTokens() )
         {
@@ -850,11 +871,9 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
 
     // ok, now we can take care of icon:
 
-    nIndex = file.pIndexOf(wxT("Icon="));
+    nIndex = file.GetCmd(wxT("Icon"), strIcon);
     if ( nIndex != wxNOT_FOUND )
     {
-        strIcon = file.GetCmd(nIndex);
-
         wxLogTrace(TRACE_MIME, wxT("  icon %s"), strIcon.c_str());
 
         // it could be the real path, but more often a short name
@@ -885,18 +904,18 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
     // now look for lines which know about the application
     // exec= or DefaultApp=
 
-    nIndex = file.pIndexOf(wxT("DefaultApp"));
+    wxString sTmp;
+    nIndex = file.GetCmd(wxT("DefaultApp"), sTmp);
 
     if ( nIndex == wxNOT_FOUND )
     {
         // no entry try exec
-        nIndex = file.pIndexOf(wxT("Exec"));
+        nIndex = file.GetCmd(wxT("Exec"), sTmp);
     }
 
     if ( nIndex != wxNOT_FOUND )
     {
         // we expect %f; others including  %F and %U and %u are possible
-        wxString sTmp = file.GetCmd(nIndex);
         if (0 == sTmp.Replace( wxT("%f"), wxT("%s") ))
             sTmp += wxT(" %s");
         entry->AddOrReplaceVerb(wxString(wxT("open")), sTmp );
@@ -972,21 +991,23 @@ void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
         return;
 
     // Here, only type 'Application' should be considered.
-    int nIndex = file.pIndexOf( wxT("Type=") );
+    wxString type;
+    int nIndex = file.GetCmd( wxT("Type"), type);
     if (nIndex != wxNOT_FOUND &&
-        file.GetCmd(nIndex).Lower() != wxT("application"))
+        type.CmpNoCase(wxT("application")))
         return;
 
     // The hidden entry specifies a file to be ignored.
-    nIndex = file.pIndexOf( wxT("Hidden=") );
-    if (nIndex != wxNOT_FOUND && file.GetCmd(nIndex).Lower() == wxT("true"))
+    wxString hidden;
+    nIndex = file.GetCmd( wxT("Hidden"), hidden);
+    if (nIndex != wxNOT_FOUND && !hidden.CmpNoCase(wxT("true")))
         return;
 
     // Semicolon separated list of mime types handled by the application.
-    nIndex = file.pIndexOf( wxT("MimeType=") );
+    wxString mimetypes;
+    nIndex = file.GetCmd( wxT("MimeType"), mimetypes );
     if (nIndex == wxNOT_FOUND)
         return;
-    wxString mimetypes = file.GetCmd (nIndex);
 
     // Name of the application
     wxString nameapp;
@@ -994,33 +1015,32 @@ void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
 #if wxUSE_INTL // try "Name[locale name]" first
     wxLocale *locale = wxGetLocale();
     if ( locale )
-        nIndex = file.pIndexOf(_T("Name[")+locale->GetName()+_T("]="));
+        nIndex = file.GetCmd(_T("Name[")+locale->GetName()+_T("]"), nameapp);
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
-        nIndex = file.pIndexOf( wxT("Name=") );
-    if(nIndex != wxNOT_FOUND)
-        nameapp = file.GetCmd(nIndex);
+        nIndex = file.GetCmd( wxT("Name"), nameapp);
 
     // Icon of the application.
+    wxString icon;
     wxString nameicon, namemini;
     nIndex = wxNOT_FOUND;
 #if wxUSE_INTL // try "Icon[locale name]" first
     if ( locale )
-        nIndex = file.pIndexOf(_T("Icon[")+locale->GetName()+_T("]="));
+        nIndex = file.GetCmd(_T("Icon[")+locale->GetName()+_T("]"), icon);
 #endif // wxUSE_INTL
     if(nIndex == wxNOT_FOUND)
-        nIndex = file.pIndexOf( wxT("Icon=") );
+        nIndex = file.GetCmd( wxT("Icon"), icon);
     if(nIndex != wxNOT_FOUND) {
-        nameicon = wxString(wxT("--icon ")) + file.GetCmd(nIndex);
-        namemini = wxString(wxT("--miniicon ")) + file.GetCmd(nIndex);
+        nameicon = wxString(wxT("--icon ")) + icon;
+        namemini = wxString(wxT("--miniicon ")) + icon;
     }
 
     // Replace some of the field code in the 'Exec' entry.
     // TODO: deal with %d, %D, %n, %N, %k and %v (but last one is deprecated)
-    nIndex = file.pIndexOf( wxT("Exec=") );
+    wxString sCmd;
+    nIndex = file.GetCmd( wxT("Exec"), sCmd );
     if (nIndex == wxNOT_FOUND)
         return;
-    wxString sCmd = file.GetCmd(nIndex);
     // we expect %f; others including  %F and %U and %u are possible
     sCmd.Replace(wxT("%F"), wxT("%f"));
     sCmd.Replace(wxT("%U"), wxT("%f"));
