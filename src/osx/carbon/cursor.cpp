@@ -281,11 +281,6 @@ wxCursor::wxCursor( const wxImage &image )
 #endif
 }
 
-wxCursor::wxCursor(const char* const* bits)
-{
-    (void) CreateFromXpm(bits);
-}
-
 wxGDIRefData *wxCursor::CreateGDIRefData() const
 {
     return new wxCursorRefData;
