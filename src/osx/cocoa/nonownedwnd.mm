@@ -475,7 +475,12 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
 {
     if ( show )
     {
-        [m_macWindow makeKeyAndOrderFront:nil];
+        wxNonOwnedWindow* wxpeer = GetWXPeer(); 
+        if (wxpeer && !(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
+            [m_macWindow makeKeyAndOrderFront:nil]; 
+        else 
+            [m_macWindow orderFront:nil]; 
+
         [[m_macWindow contentView] setNeedsDisplay:YES];
     }
     else
