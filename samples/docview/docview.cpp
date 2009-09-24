@@ -216,6 +216,7 @@ bool MyApp::OnInit()
     {
         m_canvas = new MyCanvas(NULL, frame);
         m_menuEdit = CreateDrawingEditMenu();
+        docManager->CreateNewDocument();
     }
 
     CreateMenuBarForFrame(frame, menuFile, m_menuEdit);
