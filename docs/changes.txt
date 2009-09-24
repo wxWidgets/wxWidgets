@@ -153,6 +153,8 @@ Changes in behaviour not resulting in compilation errors, please read this!
   and not in both this and the orthogonal directions. This behaviour is what
   most of the people expect but if you really relied on this overload adding
   space in both directions you should change your code to use AddSpacer(x, x).
+  
+- wxTextCtrl::LoadFile no longer sends a text update event.
 
 
 Changes in behaviour which may result in compilation errors
@@ -352,6 +354,8 @@ Major new features in this release
 
 - New propgrid library containing wxPropertyGrid and related classes.
 
+- new ribbon library for advanced toolbars.
+
 - Many enhancements to wxDataViewCtrl.
 
 - Event loops, timers and sockets can now be used in wxBase, without GUI.
@@ -430,6 +434,7 @@ All (GUI):
 - wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
   where possible.
 - wxRTC: corrected centring and right-justification spacing.
+- Added wxBORDER_THEME to XRC.
 
 GTK:
 
