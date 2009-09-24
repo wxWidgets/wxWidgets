@@ -23,7 +23,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
 #ifndef WX_PRECOMP
 #endif //WX_PRECOMP
@@ -31,7 +31,13 @@
 #include "wx/notifmsg.h"
 #include "wx/toplevel.h"
 
-#include <hildon-widgets/hildon-banner.h>
+#if wxUSE_LIBHILDON
+    #include <hildon-widgets/hildon-banner.h>
+#endif // wxUSE_LIBHILDON
+
+#if wxUSE_LIBHILDON2
+    #include <hildon/hildon.h>
+#endif // wxUSE_LIBHILDON2
 
 // ============================================================================
 // wxNotificationMessage implementation
@@ -123,4 +129,4 @@ wxNotificationMessage::~wxNotificationMessage()
     Close();
 }
 
-#endif // wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2

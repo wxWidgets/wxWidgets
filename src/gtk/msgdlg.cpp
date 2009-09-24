@@ -32,6 +32,10 @@
     #include <hildon-widgets/hildon-note.h>
 #endif // wxUSE_LIBHILDON
 
+#if wxUSE_LIBHILDON2
+    #include <hildon/hildon.h>
+#endif // wxUSE_LIBHILDON2
+
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 wxMessageDialog::wxMessageDialog(wxWindow *parent,
@@ -84,7 +88,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
 {
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     const char *stockIcon;
     if ( m_dialogStyle & wxICON_NONE )
         stockIcon = "";
@@ -104,12 +108,16 @@ void wxMessageDialog::GTKCreateMsgDialog()
     m_widget = (GtkWidget *)g_object_new
                (
                 HILDON_TYPE_NOTE,
+#if wxUSE_LIBHILDON
                 "note_type", HILDON_NOTE_CONFIRMATION_BUTTON_TYPE,
+#else // wxUSE_LIBHILDON
+                "note_type", HILDON_NOTE_TYPE_CONFIRMATION_BUTTON,
+#endif // wxUSE_LIBHILDON /wxUSE_LIBHILDON2
                 "description", (const char *)GetFullMessage().utf8_str(),
                 "icon", stockIcon,
                 NULL
                );
-#else // !wxUSE_LIBHILDON
+#else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_NONE;
 
@@ -181,7 +189,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
         );
     }
 #endif // GTK+ 2.6+
-#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
     g_object_ref(m_widget);
 
@@ -199,7 +207,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
     // Yes/No/Cancel dialog as GTK+ doesn't support it natively and when using
     // Hildon we add all the buttons manually as it doesn't support too many of
     // the combinations we may have
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     static const bool addButtons = true;
 #else // !wxUSE_LIBHILDON
     const bool addButtons = buttons == GTK_BUTTONS_NONE;

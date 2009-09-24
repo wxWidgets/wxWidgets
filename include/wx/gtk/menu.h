@@ -49,12 +49,12 @@ public:
     // implementation only from now on
     void SetInvokingWindow( wxWindow *win );
     void UnsetInvokingWindow( wxWindow *win );
+    GtkWidget       *m_menubar; // Public for hildon support
 
 private:
     // common part of Append and Insert
     bool GtkAppend(wxMenu *menu, const wxString& title, int pos=-1);
 
-    GtkWidget       *m_menubar;
     wxWindow        *m_invokingWindow;
 
     void Init(size_t n, wxMenu *menus[], const wxString titles[], long style);

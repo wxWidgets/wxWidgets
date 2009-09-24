@@ -363,6 +363,7 @@ dnl libraries disabled by default
 DEFAULT_wxUSE_DMALLOC=no
 DEFAULT_wxUSE_LIBGNOMEVFS=no
 DEFAULT_wxUSE_LIBHILDON=no
+DEFAULT_wxUSE_LIBHILDON2=no
 DEFAULT_wxUSE_LIBMSPACK=no
 DEFAULT_wxUSE_LIBSDL=no
 
@@ -579,7 +580,7 @@ WX_ARG_WITH(libmspack,     [  --with-libmspack        use libmspack (CHM help fi
 WX_ARG_WITHOUT(gtkprint,   [  --without-gtkprint      don't use GTK printing support], wxUSE_GTKPRINT)
 WX_ARG_WITHOUT(gnomeprint, [  --without-gnomeprint    don't use GNOME printing libraries], wxUSE_LIBGNOMEPRINT)
 WX_ARG_WITH(gnomevfs,      [  --with-gnomevfs         use GNOME VFS for associating MIME types], wxUSE_LIBGNOMEVFS)
-WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770], wxUSE_LIBHILDON)
+WX_ARG_WITH(hildon,        [  --with-hildon           use Hildon framework for Nokia 770/800/810], wxUSE_LIBHILDON)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -5623,12 +5624,30 @@ if test "$WXGTK2" = 1; then
                 CFLAGS="$CFLAGS $HILDON_CFLAGS"
                 CXXFLAGS="$CXXFLAGS $HILDON_CFLAGS"
                 AC_DEFINE(wxUSE_LIBHILDON)
+                ac_hildon_lgpl=1
             ],
             [
                 AC_MSG_WARN([libhildon_lgpl not found])
                         wxUSE_LIBHILDON="no"
+                        ac_hildon_lgpl=0
             ]
         )
+
+        if test "$ac_hildon_lgpl" = 0 ; then
+            PKG_CHECK_MODULES(HILDON2,
+                              [hildon-1 >= 1.99],
+                [
+                    EXTRALIBS_HILDON="$HILDON2_LIBS"
+                    CFLAGS="$CFLAGS $HILDON2_CFLAGS"
+                    CXXFLAGS="$CXXFLAGS $HILDON2_CFLAGS"
+                    AC_DEFINE(wxUSE_LIBHILDON2)
+                ],
+                [
+                    AC_MSG_WARN([libhildon_1 not found])
+                            wxUSE_LIBHILDON2="no"
+                ]
+            )
+        fi
     fi
 fi
 
@@ -7701,6 +7720,9 @@ case "$TOOLKIT" in
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA gnomevfs"
             fi
             if test "$wxUSE_LIBHILDON" = "yes"; then
+                TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
+            fi
+            if test "$wxUSE_LIBHILDON2" = "yes"; then
                 TOOLKIT_EXTRA="$TOOLKIT_EXTRA hildon"
             fi
 

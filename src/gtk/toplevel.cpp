@@ -50,6 +50,10 @@
     #include <hildon-widgets/hildon-window.h>
 #endif // wxUSE_LIBHILDON
 
+#if wxUSE_LIBHILDON2
+    #include <hildon/hildon.h>
+#endif // wxUSE_LIBHILDON2
+
 // ----------------------------------------------------------------------------
 // data
 // ----------------------------------------------------------------------------
@@ -476,14 +480,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     //     e.g. in wxTaskBarIconAreaGTK
     if (m_widget == NULL)
     {
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
         // we must create HildonWindow and not a normal GtkWindow as the latter
         // doesn't look correctly in Maemo environment and it must also be
         // registered with the main program object
         m_widget = hildon_window_new();
         hildon_program_add_window(wxTheApp->GetHildonProgram(),
                                   HILDON_WINDOW(m_widget));
-#else // !wxUSE_LIBHILDON
+#else // !wxUSE_LIBHILDON || !wxUSE_LIBHILDON2
         m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         {
@@ -510,7 +514,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
                 style |= wxFRAME_NO_TASKBAR;
             }
         }
-#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON || !wxUSE_LIBHILDON2
 
         g_object_ref(m_widget);
     }
@@ -650,14 +654,14 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
 wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
 {
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // it can also be a (standard) dialog
     if ( HILDON_IS_WINDOW(m_widget) )
     {
         hildon_program_remove_window(wxTheApp->GetHildonProgram(),
                                      HILDON_WINDOW(m_widget));
     }
-#endif // wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
     if (m_grabbed)
     {
@@ -905,8 +909,25 @@ void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
     size -= m_decorSize;
     if (size.x < 0) size.x = 0;
     if (size.y < 0) size.y = 0;
+#if wxUSE_LIBHILDON2
+    if (width) {
+       if (size.x == 720)
+               *width = 696;
+       else
+               *width = size.x;
+    }
+    if (height) {
+       if (size.y == 420)
+               *height = 396;
+       else if (size.y == 270)
+               *height = 246;
+            else
+               *height = size.y;
+    }
+#else // wxUSE_LIBHILDON2
     if (width)  *width  = size.x;
     if (height) *height = size.y;
+#endif // wxUSE_LIBHILDON2 /!wxUSE_LIBHILDON2
 }
 
 void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )

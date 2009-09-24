@@ -27,7 +27,11 @@
     #define wxUSE_LIBHILDON 0
 #endif
 
-#if wxUSE_NOTIFICATION_MESSAGE && !wxUSE_LIBHILDON
+#ifndef wxUSE_LIBHILDON2
+    #define wxUSE_LIBHILDON2 0
+#endif
+
+#if wxUSE_NOTIFICATION_MESSAGE && (!wxUSE_LIBHILDON || !wxUSE_LIBHILDON2)
 
 #ifndef WX_PRECOMP
     #include "wx/dialog.h"
@@ -238,4 +242,4 @@ bool wxGenericNotificationMessage::Close()
     return true;
 }
 
-#endif // wxUSE_NOTIFICATION_MESSAGE && !wxUSE_LIBHILDON
+#endif // wxUSE_NOTIFICATION_MESSAGE && (!wxUSE_LIBHILDON || !wxUSE_LIBHILDON2)

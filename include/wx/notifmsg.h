@@ -127,7 +127,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxNotificationMessageBase);
 };
 
-#if defined(__WXGTK__) && wxUSE_LIBHILDON
+#if defined(__WXGTK__) && (wxUSE_LIBHILDON || wxUSE_LIBHILDON2)
     #include "wx/gtk/hildon/notifmsg.h"
 /*
     TODO: provide support for

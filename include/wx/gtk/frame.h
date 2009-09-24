@@ -53,10 +53,10 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     wxPoint GetClientAreaOrigin() const { return wxPoint(0, 0); }
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // in Hildon environment all frames are always shown maximized
     virtual bool IsMaximized() const { return true; }
-#endif // wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
     // implementation from now on
     // --------------------------

@@ -33,6 +33,10 @@
     #include <hildon-widgets/hildon-program.h>
 #endif // wxUSE_LIBHILDON
 
+#if wxUSE_LIBHILDON2
+    #include <hildon/hildon.h>
+#endif // wxUSE_LIBHILDON2
+
 #include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
@@ -263,14 +267,13 @@ bool wxApp::OnInitGui()
         }
     }
 
-#if wxUSE_LIBHILDON
-    m_hildonProgram = hildon_program_get_instance();
-    if ( !m_hildonProgram )
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
+    if ( !GetHildonProgram() )
     {
         wxLogError(_("Unable to initialize Hildon program"));
         return false;
     }
-#endif // wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
     return true;
 }
@@ -533,3 +536,12 @@ void wxGUIAppTraits::MutexGuiLeave()
     gdk_threads_leave();
 }
 #endif // wxUSE_THREADS
+
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
+// Maemo-specific method: get the main program object
+HildonProgram *wxApp::GetHildonProgram()
+{ 
+    return hildon_program_get_instance(); 
+}
+    
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2

@@ -63,12 +63,12 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
 {
     m_invokingWindow = NULL;
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // Hildon window uses a single menu instead of a menu bar, so wxMenuBar is
     // the same as menu in this case
     m_widget =
     m_menubar = gtk_menu_new();
-#else // !wxUSE_LIBHILDON
+#else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
     {
@@ -92,7 +92,7 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     PostCreation();
 
     GTKApplyWidgetStyle();
-#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2/!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
 
     g_object_ref(m_widget);
 
@@ -249,7 +249,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
 {
     menu->SetLayoutDirection(GetLayoutDirection());
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
     // if the menu has only one item, append it directly to the top level menu
     // instead of inserting a useless submenu
     if ( menu->GetMenuItemCount() == 1 )
@@ -269,7 +269,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
         item->SetMenuItem(menu->m_owner);
     }
     else
-#endif // wxUSE_LIBHILDON/!wxUSE_LIBHILDON
+#endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2 /!wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
     {
         const wxString str(wxConvertMnemonicsToGTK(title));
 

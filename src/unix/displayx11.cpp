@@ -326,7 +326,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 #include "wx/utils.h"
 
-#if wxUSE_LIBHILDON
+#if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
@@ -341,7 +341,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *height = 396;
 }
 
-#else // !wxUSE_LIBHILDON
+#else // !wxUSE_LIBHILDON || !wxUSE_LIBHILDON2
 
 #include "wx/log.h"
 

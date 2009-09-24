@@ -743,6 +743,10 @@
  */
 #define wxUSE_LIBHILDON 0
 /*
+ * Use the Hildon 2.0 framework
+ */
+#define wxUSE_LIBHILDON2 0
+/*
  * Have glibc2
  */
 #define wxHAVE_GLIBC2 0
