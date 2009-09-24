@@ -32,8 +32,6 @@ public:
 #endif
     virtual ~wxCursor();
 
-    bool CreateFromXpm(const char* const* bits);
-
     void MacInstall() const ;
 
     void SetHCURSOR(WXHCURSOR cursor);

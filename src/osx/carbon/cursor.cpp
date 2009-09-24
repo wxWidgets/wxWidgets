@@ -296,20 +296,6 @@ wxGDIRefData *wxCursor::CloneGDIRefData(const wxGDIRefData *data) const
     return new wxCursorRefData(*static_cast<const wxCursorRefData *>(data));
 }
 
-bool wxCursor::CreateFromXpm(const char* const* bits)
-{
-#if wxUSE_IMAGE
-    wxCHECK_MSG( bits != NULL, false, wxT("invalid cursor data") );
-    wxXPMDecoder decoder;
-    wxImage img = decoder.ReadData(bits);
-    wxCHECK_MSG( img.Ok(), false, wxT("invalid cursor data") );
-    CreateFromImage( img ) ;
-    return true;
-#else
-    return false;
-#endif
-}
-
 WXHCURSOR wxCursor::GetHCURSOR() const
 {
     return (M_CURSORDATA ? M_CURSORDATA->m_hCursor : 0);
