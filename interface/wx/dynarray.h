@@ -553,6 +553,10 @@ public:
         See also WX_CLEAR_ARRAY() macro which deletes all elements of a wxArray
         (supposed to contain pointers).
 
+        Notice that for sorted arrays this method uses binary search to find
+        the item so it doesn't necessarily remove the first matching item, but
+        the first one found by the binary search.
+
         @see RemoveAt()
     */
     void Remove(T item);
@@ -602,8 +606,8 @@ public:
     /**
         This version of Index() is for wxSortedArray only.
 
-        Searches the element in the array, starting from either beginning or
-        the end depending on the value of @a searchFromEnd parameter.
+        Searches for the element in the array, using binary search.
+
         @c wxNOT_FOUND is returned if the element is not found, otherwise the
         index of the element is returned.
     */
