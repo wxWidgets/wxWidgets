@@ -206,6 +206,10 @@ void wxGauge::SetRange(int r)
 
 void wxGauge::SetValue(int pos)
 {
+    // Setting the (same) position produces flicker on Vista,
+    // especially noticable if ownerdrawn
+    if (GetValue() == pos) return;
+
     // switch to determinate mode if required
     SetDeterminateMode();
 
