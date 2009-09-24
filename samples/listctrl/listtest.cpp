@@ -93,6 +93,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
+    EVT_MENU(LIST_LONG_OPERATION, MyFrame::OnLongOperation)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
@@ -250,6 +251,8 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->AppendCheckItem(LIST_TOGGLE_LINES, _T("Toggle &lines\tCtrl-I"));
     menuList->Append(LIST_TOGGLE_MULTI_SEL, _T("&Multiple selection\tCtrl-M"),
             _T("Toggle multiple selection"), true);
+    menuList->AppendSeparator();
+    menuList->Append(LIST_LONG_OPERATION, _T("&Updates a list during long operation"));
 
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, _T("&Foreground colour..."));
@@ -350,6 +353,30 @@ void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
     wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), event.IsChecked());
 }
 
+void MyFrame::OnLongOperation(wxCommandEvent & event)
+{
+    if ((m_listCtrl->GetWindowStyleFlag() & wxLC_MASK_TYPE) != wxLC_REPORT)
+    {
+        wxLogWarning(_T("need to be in report mode"));
+        return;
+    }
+
+    for (unsigned idx=0; idx<100; ++idx)
+    {
+        m_listCtrl->Freeze();
+        m_listCtrl->DeleteAllItems();
+        m_listCtrl->DeleteColumn(2);
+        m_listCtrl->DeleteColumn(1);
+        m_listCtrl->DeleteColumn(0);
+
+        InitWithReportItems (idx);
+
+        m_listCtrl->Thaw();
+
+        wxApp::GetInstance()->Yield(true);
+    }
+}
+
 void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
 {
     long index = m_listCtrl->GetItemCount() - 1;
@@ -425,7 +452,7 @@ void MyFrame::RecreateList(long flags, bool withText)
                 if ( flags & wxLC_VIRTUAL )
                     InitWithVirtualItems();
                 else
-                    InitWithReportItems();
+                    InitWithReportItems(0);
                 break;
 
             default:
@@ -456,7 +483,7 @@ void MyFrame::OnReportView(wxCommandEvent& WXUNUSED(event))
     RecreateList(wxLC_REPORT);
 }
 
-void MyFrame::InitWithReportItems()
+void MyFrame::InitWithReportItems(int shift)
 {
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
 
@@ -482,7 +509,7 @@ void MyFrame::InitWithReportItems()
 
     for ( int i = 0; i < NUM_ITEMS; i++ )
     {
-        m_listCtrl->InsertItemInReportView(i);
+        m_listCtrl->InsertItemInReportView(i, shift);
     }
 
     m_logWindow->WriteText(wxString::Format(_T("%d items inserted in %ldms\n"),
@@ -998,7 +1025,7 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 }
                 else // !virtual
                 {
-                    InsertItemInReportView(event.GetIndex());
+                    InsertItemInReportView(event.GetIndex(), 0);
                 }
             }
             //else: fall through
@@ -1093,17 +1120,17 @@ wxListItemAttr *MyListCtrl::OnGetItemAttr(long item) const
     return item % 2 ? NULL : (wxListItemAttr *)&m_attr;
 }
 
-void MyListCtrl::InsertItemInReportView(int i)
+void MyListCtrl::InsertItemInReportView(int i, int shift)
 {
     wxString buf;
-    buf.Printf(_T("This is item %d"), i);
+    buf.Printf(_T("This is item %d"), i+shift);
     long tmp = InsertItem(i, buf, 0);
     SetItemData(tmp, i);
 
-    buf.Printf(_T("Col 1, item %d"), i);
+    buf.Printf(_T("Col 1, item %d"), i+shift);
     SetItem(tmp, 1, buf);
 
-    buf.Printf(_T("Item %d in column 2"), i);
+    buf.Printf(_T("Item %d in column 2"), i+shift);
     SetItem(tmp, 2, buf);
 }
 

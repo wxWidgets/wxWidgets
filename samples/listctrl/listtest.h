@@ -46,7 +46,7 @@ public:
         }
 
     // add one item to the listctrl in report mode
-    void InsertItemInReportView(int i);
+    void InsertItemInReportView(int i, int shift);
 
     void OnColClick(wxListEvent& event);
     void OnColRightClick(wxListEvent& event);
@@ -137,6 +137,7 @@ protected:
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
     void OnToggleMacUseGeneric(wxCommandEvent& event);
+    void OnLongOperation(wxCommandEvent & event);
 
     void OnUpdateShowColInfo(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
@@ -154,7 +155,7 @@ private:
 
     // fill the control with items depending on the view
     void InitWithListItems();
-    void InitWithReportItems();
+    void InitWithReportItems(int shift);
     void InitWithIconItems(bool withText, bool sameIcon = false);
     void InitWithVirtualItems();
 
@@ -205,6 +206,7 @@ enum
     LIST_THAW,
     LIST_TOGGLE_LINES,
     LIST_MAC_USE_GENERIC,
+    LIST_LONG_OPERATION,
 
     LIST_CTRL                   = 1000
 };
