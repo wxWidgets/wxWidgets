@@ -98,14 +98,14 @@
         The same as EVT_TOOL_RANGE().
     @event{EVT_TOOL_RCLICKED(id, func)}
         Process a @c wxEVT_COMMAND_TOOL_RCLICKED event. Pass the id of the
-        tool.
+        tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_RCLICKED_RANGE(id1, id2, func)}
         Process a @c wxEVT_COMMAND_TOOL_RCLICKED event for a range of ids. Pass
-        the ids of the tools.
+        the ids of the tools.  (Not available on wxOSX.)
     @event{EVT_TOOL_ENTER(id, func)}
         Process a @c wxEVT_COMMAND_TOOL_ENTER event. Pass the id of the toolbar
         itself. The value of wxCommandEvent::GetSelection() is the tool id, or
-        -1 if the mouse cursor has moved off a tool.
+        -1 if the mouse cursor has moved off a tool.  (Not available on wxOSX.)
     @event{EVT_TOOL_DROPDOWN(id, func)}
         Process a @c wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED event. If unhandled,
         displays the default dropdown menu set using
