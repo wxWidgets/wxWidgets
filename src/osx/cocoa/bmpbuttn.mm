@@ -38,13 +38,17 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     if ( style & wxBORDER_NONE )
     {
         [v setBezelStyle:NSShadowlessSquareBezelStyle];
+        [v setBordered:NO]; 
     }
     else
     {
-        if ( style & wxBU_AUTODRAW )
-            [v setBezelStyle:NSShadowlessSquareBezelStyle];
-        else
+        // see trac #11128 for a thorough discussion
+        if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
             [v setBezelStyle:NSRegularSquareBezelStyle];
+        else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
+            [v setBezelStyle:NSSmallSquareBezelStyle];
+        else
+            [v setBezelStyle:NSShadowlessSquareBezelStyle];
     }
 
     if (bitmap.Ok())
