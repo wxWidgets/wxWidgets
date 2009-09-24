@@ -129,6 +129,7 @@ All (GUI):
   dialog.
 - Corrected writing direction for Farsi.
 - wxTextCtrl::LoadFile no longer sends a text event.
+- Added wxBORDER_THEME to XRC.
 
 wxMSW:
 
