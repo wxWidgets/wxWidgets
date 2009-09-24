@@ -197,6 +197,8 @@ public:
 
     /**
         Sets the default filename.
+        
+        In wxGTK this will have little effect unless a default directory has previously been set.
     */
     virtual void SetFilename(const wxString& setfilename);
 
