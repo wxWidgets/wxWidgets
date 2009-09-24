@@ -572,7 +572,7 @@ wxTextAttr* wxRichTextFontPage::GetAttributes()
 /// Updates the font preview
 void wxRichTextFontPage::UpdatePreview()
 {
-    wxFont font(*wxNORMAL_FONT);
+    wxTextAttr attr;
 
     if (m_colourPresent)
         m_previewCtrl->SetForegroundColour(m_colourCtrl->GetBackgroundColour());
@@ -583,7 +583,7 @@ void wxRichTextFontPage::UpdatePreview()
     if (m_faceListBox->GetSelection() != wxNOT_FOUND)
     {
         wxString faceName = m_faceListBox->GetFaceName(m_faceListBox->GetSelection());
-        font.SetFaceName(faceName);
+        attr.SetFontFaceName(faceName);
     }
 
     wxString strSize = m_sizeTextCtrl->GetValue();
@@ -591,29 +591,29 @@ void wxRichTextFontPage::UpdatePreview()
     {
         int sz = wxAtoi(strSize);
         if (sz > 0)
-            font.SetPointSize(sz);
+            attr.SetFontSize(sz);
     }
 
     if (m_styleCtrl->GetSelection() != wxNOT_FOUND)
     {
-        int style;
+        wxFontStyle style;
         if (m_styleCtrl->GetStringSelection() == _("Italic"))
-            style = wxITALIC;
+            style = wxFONTSTYLE_ITALIC;
         else
-            style = wxNORMAL;
+            style = wxFONTSTYLE_NORMAL;
 
-        font.SetStyle(style);
+        attr.SetFontStyle(style);
     }
 
     if (m_weightCtrl->GetSelection() != wxNOT_FOUND)
     {
-        int weight;
+        wxFontWeight weight;
         if (m_weightCtrl->GetStringSelection() == _("Bold"))
-            weight = wxBOLD;
+            weight = wxFONTWEIGHT_BOLD;
         else
-            weight = wxNORMAL;
+            weight = wxFONTWEIGHT_NORMAL;
 
-        font.SetWeight(weight);
+        attr.SetFontWeight(weight);
     }
 
     if (m_underliningCtrl->GetSelection() != wxNOT_FOUND)
@@ -624,7 +624,7 @@ void wxRichTextFontPage::UpdatePreview()
         else
             underlined = false;
 
-        font.SetUnderlined(underlined);
+        attr.SetFontUnderlined(underlined);
     }
 
     int textEffects = 0;
@@ -644,6 +644,7 @@ void wxRichTextFontPage::UpdatePreview()
     else if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED )
         textEffects |= wxTEXT_ATTR_EFFECT_SUBSCRIPT;
 
+    wxFont font = attr.GetFont();
     m_previewCtrl->SetFont(font);
     m_previewCtrl->SetTextEffects(textEffects);
     m_previewCtrl->Refresh();
