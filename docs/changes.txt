@@ -110,6 +110,7 @@ All:
   wxDC::SetDeviceClippingRegion(), wxShowEvent::IsShown(),
   wxIconizeEvent::IsIconized(), wxFileName::StripExtension(),
   wxXmlNode::GetAttribute[s](), wxXmlNode::AddAttribute().
+- wxDateTime timezone functions now dynamic (no caching).
 
 All (GUI):
 

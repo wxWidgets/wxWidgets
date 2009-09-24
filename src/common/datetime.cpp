@@ -150,14 +150,10 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #elif defined(__WXMSW__)
         static long wxGetTimeZone()
         {
-            static long s_timezone = MAXLONG; // invalid timezone
-            if (s_timezone == MAXLONG)
-            {
-                TIME_ZONE_INFORMATION info;
-                GetTimeZoneInformation(&info);
-                s_timezone = info.Bias * 60;  // convert minutes to seconds
-            }
-            return s_timezone;
+            TIME_ZONE_INFORMATION info;
+            GetTimeZoneInformation(&info);
+            long timeZone = info.Bias * 60;  // convert minutes to seconds
+            return timeZone;
         }
         #define WX_TIMEZONE wxGetTimeZone()
     #elif defined(__VISAGECPP__)
@@ -375,6 +371,7 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 // (in seconds)
 static int GetTimeZone()
 {
+#ifdef WX_GMTOFF_IN_TM
     // set to true when the timezone is set
     static bool s_timezoneSet = false;
     static long gmtoffset = LONG_MAX; // invalid timezone
@@ -390,17 +387,15 @@ static int GetTimeZone()
         wxLocaltime_r(&t, &tm);
         s_timezoneSet = true;
 
-#ifdef WX_GMTOFF_IN_TM
         // note that GMT offset is the opposite of time zone and so to return
         // consistent results in both WX_GMTOFF_IN_TM and !WX_GMTOFF_IN_TM
         // cases we have to negate it
         gmtoffset = -tm.tm_gmtoff;
-#else // !WX_GMTOFF_IN_TM
-        gmtoffset = WX_TIMEZONE;
-#endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
     }
-
     return (int)gmtoffset;
+#else // !WX_GMTOFF_IN_TM
+    return WX_TIMEZONE;
+#endif // WX_GMTOFF_IN_TM/!WX_GMTOFF_IN_TM
 }
 
 // return the integral part of the JDN for the midnight of the given date (to
