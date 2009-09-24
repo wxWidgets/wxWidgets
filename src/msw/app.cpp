@@ -563,6 +563,10 @@ void wxApp::WakeUpIdle()
             }
         }
     }
+#if wxUSE_THREADS
+    else
+        wxWakeUpMainThread();
+#endif // wxUSE_THREADS
 }
 
 // ----------------------------------------------------------------------------
