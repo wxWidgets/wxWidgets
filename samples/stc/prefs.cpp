@@ -230,7 +230,7 @@ const StyleInfo g_StylePrefs [] = {
 
     // mySTC_TYPE_WORD2
     {wxT("Keyword2"),
-     wxT("DARK BLUE"), wxT("WHITE"),
+     wxT("MIDNIGHT BLUE"), wxT("WHITE"),
      wxT(""), 10, 0, 0},
 
     // mySTC_TYPE_WORD3

@@ -73,6 +73,7 @@ enum {
     myID_PAGEPREV,
     myID_PAGENEXT,
     myID_SELECTLINE,
+    myID_WINDOW_MINIMAL,
 
     // other IDs
     myID_STATUSBAR,
