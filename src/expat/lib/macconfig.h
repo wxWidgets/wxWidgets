@@ -43,13 +43,17 @@
 #undef HAVE_STDINT_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
+#ifndef HAVE_STDLIB_H
 #define HAVE_STDLIB_H
+#endif
 
 /* Define to 1 if you have the <strings.h> header file. */
 #undef HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
+#ifndef HAVE_STRING_H
 #define HAVE_STRING_H
+#endif
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
@@ -76,7 +80,9 @@
 #undef PACKAGE_VERSION
 
 /* Define to 1 if you have the ANSI C header files. */
+#ifndef STDC_HEADERS
 #define STDC_HEADERS
+#endif
 
 /* whether byteorder is bigendian */
 #define WORDS_BIGENDIAN
