@@ -83,7 +83,9 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         {
             GtkRequisition req;
             gtk_widget_size_request(m_frameMenuBar->m_widget, &req);
+#if !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
             *height -= req.height;
+#endif
         }
 #endif // wxUSE_MENUS_NATIVE
 
