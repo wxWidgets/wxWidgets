@@ -650,6 +650,52 @@ private:
     DECLARE_NO_COPY_CLASS(GlobalPtrLock)
 };
 
+// smart pointer like class using OpenPrinter and ClosePrinter
+class WinPrinter
+{
+public:
+    // default ctor
+    WinPrinter()
+    {
+        m_hPrinter = (HANDLE)NULL;
+    }
+
+    WinPrinter( const wxString& printerName )
+    {
+        Open( printerName );
+    }
+
+    ~WinPrinter()
+    {
+        Close();
+    }
+
+    BOOL Open( const wxString& printerName, LPPRINTER_DEFAULTS pDefault=(LPPRINTER_DEFAULTS)NULL )
+    {
+        Close();
+        return OpenPrinter( (LPTSTR)printerName.wx_str(), &m_hPrinter, pDefault );
+    }
+
+    BOOL Close()
+    {
+        BOOL result = TRUE;
+        if( m_hPrinter )
+        {
+            result = ClosePrinter( m_hPrinter );
+            m_hPrinter = (HANDLE)NULL;
+        }
+        return result;
+    }
+
+    operator HANDLE() { return m_hPrinter; }
+    operator bool() { return m_hPrinter != (HANDLE)NULL; }
+
+private:
+    HANDLE m_hPrinter;
+
+    wxDECLARE_NO_COPY_CLASS(WinPrinter);
+};
+
 // register the class when it is first needed and unregister it in dtor
 class ClassRegistrar
 {
