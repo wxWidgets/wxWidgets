@@ -176,7 +176,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const = 0;
 
     // Convert to disabled (dimmed) bitmap.
-    wxBitmap ConvertToDisabled(unsigned char brightness = 255);
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
                           const wxPalette *palette = NULL) const = 0;
