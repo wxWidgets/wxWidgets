@@ -768,19 +768,12 @@ void wxGenericDirCtrl::CollapseDir(wxTreeItemId parentId)
         return;
 
     data->m_isExpanded = false;
-    wxTreeItemIdValue cookie;
-    /* Workaround because DeleteChildren has disapeared (why?) and
-     * CollapseAndReset doesn't work as advertised (deletes parent too) */
-    child = m_treeCtrl->GetFirstChild(parentId, cookie);
-    while (child.IsOk())
-    {
-        m_treeCtrl->Delete(child);
-        /* Not GetNextChild below, because the cookie mechanism can't
-         * handle disappearing children! */
-        child = m_treeCtrl->GetFirstChild(parentId, cookie);
-    }
+
+    m_treeCtrl->Freeze();
     if (parentId != m_treeCtrl->GetRootItem())
-        m_treeCtrl->Collapse(parentId);
+        m_treeCtrl->CollapseAndReset(parentId);
+    m_treeCtrl->DeleteChildren(parentId);
+    m_treeCtrl->Thaw();
 }
 
 void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
