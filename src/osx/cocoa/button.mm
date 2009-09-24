@@ -149,6 +149,8 @@ void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
 
 void wxWidgetCocoaImpl::PerformClick()
 {
+    if ([m_osxView isKindOfClass:[NSControl class]]) 
+        [(NSControl*)m_osxView performClick:nil]; 
 }
 
 //
