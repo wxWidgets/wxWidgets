@@ -499,6 +499,12 @@ public:
     wxSize GetSize() const;
 
     /**
+        Returns disabled (dimmed) version of the bitmap.
+        @since 2.9.0
+    */
+    wxBitmap ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
         Gets the width of the bitmap in pixels.
 
         @see GetHeight(), GetSize()

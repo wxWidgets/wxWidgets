@@ -172,6 +172,12 @@ public:
     virtual ~wxIcon();
 
     /**
+        Returns disabled (dimmed) version of the icon. MSW only.
+        @since 2.9.0
+    */
+    wxIcon ConvertToDisabled(unsigned char brightness = 255) const;
+
+    /**
         Copies @a bmp bitmap to this icon.
         Under MS Windows the bitmap must have mask colour set.
 

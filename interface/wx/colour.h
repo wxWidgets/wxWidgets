@@ -213,6 +213,54 @@ public:
         colours and alpha values.
     */
     bool operator ==(const wxColour& colour) const;
+
+    /**
+        Assign 0 or 255 to rgb out parameters.
+        @since 2.9.0
+    */
+    static void MakeMono(unsigned char* r, unsigned char* g, unsigned char* b, bool on);
+    
+    /**
+        Create a disabled (dimmed) colour from (in/out) rgb parameters.
+        @since 2.9.0
+    */
+    static void MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b, unsigned char brightness = 255);
+    
+    /**
+        Create a grey colour from (in/out) rgb parameters using integer arithmetic.
+        @since 2.9.0
+    */
+    static void MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b);
+    
+    /**
+        Create a grey colour from (in/out) rgb parameters using floating point arithmetic.
+        Defaults to using the standard ITU-T BT.601 when converting to YUV, where every pixel equals
+        (R * @a weight_r) + (G * @a weight_g) + (B * @a weight_b).
+        @since 2.9.0
+    */
+    static void MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b,
+                         double weight_r, double weight_g, double weight_b);
+
+    /**
+        Blend colour, taking alpha into account.
+        @since 2.9.0
+    */
+    static unsigned char AlphaBlend(unsigned char fg, unsigned char bg, double alpha);
+    
+    /**
+        ChangeLightness() is a utility function that simply darkens
+        or lightens a color, based on the specified percentage
+        ialpha of 0 would be completely black, 200 completely white
+        an ialpha of 100 returns the same colour
+        @since 2.9.0
+    */
+    static void ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);
+
+    /**
+        wxColour wrapper for ChangeLightness(r,g,b,ialpha).
+        @since 2.9.0
+    */
+    wxColour ChangeLightness(int ialpha) const;
 };
 
 

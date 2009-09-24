@@ -135,6 +135,16 @@ public:
     void OnExit() { wxBitmap::CleanUpHandlers(); }
 };
 
+wxBitmap wxBitmapBase::ConvertToDisabled(unsigned char brightness) const
+{
+    wxBitmap bmp;
+#if wxUSE_IMAGE
+    wxImage image = ConvertToImage();
+    bmp = wxBitmap(image.ConvertToDisabled(brightness));
+#endif
+    return bmp;
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapBaseModule, wxModule)
 
 #endif // wxUSE_BITMAP_BASE

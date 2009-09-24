@@ -109,23 +109,23 @@ public:
     /**
         Returns @true if this handler supports the image format contained in the
         given stream.
-        
+
         This function doesn't modify the current stream position (because it
         restores the original position before returning; this however requires the
         stream to be seekable; see wxStreamBase::IsSeekable).
     */
-    bool CanRead( wxInputStream& stream );    
+    bool CanRead( wxInputStream& stream );
 
     /**
         Returns @true if this handler supports the image format contained in the
         file with the given name.
-        
+
         This function doesn't modify the current stream position (because it
         restores the original position before returning; this however requires the
         stream to be seekable; see wxStreamBase::IsSeekable).
     */
     bool CanRead( const wxString& filename );
-    
+
     /**
         Gets the preferred file extension associated with this handler.
 
@@ -348,7 +348,7 @@ class wxImage : public wxObject
 {
 public:
     /**
-        A simple class which stores red, green and blue values as 8 bit unsigned integers 
+        A simple class which stores red, green and blue values as 8 bit unsigned integers
         in the range of 0-255.
     */
     class RGBValue
@@ -398,7 +398,7 @@ public:
             If @true, initialize the image to black.
     */
     wxImage(int width, int height, bool clear = true);
-    
+
     /**
         @overload
     */
@@ -425,7 +425,7 @@ public:
         @overload
     */
     wxImage(const wxSize& sz, unsigned char* data, bool static_data = false);
-    
+
     /**
         Creates an image from data in memory. If @a static_data is @false
         then the wxImage will take ownership of the data and free it
@@ -451,7 +451,7 @@ public:
     */
     wxImage(const wxSize& sz, unsigned char* data, unsigned char* data, unsigned char* alpha,
             bool static_data = false);
-    
+
     /**
         Creates an image from XPM data.
 
@@ -549,13 +549,13 @@ public:
     */
     virtual ~wxImage();
 
-    
-    
+
+
     /**
         @name Image creation, initialization and deletion functions
     */
     //@{
-    
+
     /**
         Returns an identical copy of this image.
     */
@@ -577,7 +577,7 @@ public:
     /**
         Creates a fresh image.
         See wxImage::wxImage(int,int,unsigned char*,bool) for more info.
-        
+
         @return @true if the call succeeded, @false otherwise.
     */
     bool Create( int width, int height, unsigned char* data, bool static_data = false );
@@ -590,16 +590,16 @@ public:
     /**
         Creates a fresh image.
         See wxImage::wxImage(int,int,unsigned char*,unsigned char*,bool) for more info.
-        
+
         @return @true if the call succeeded, @false otherwise.
     */
     bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    
+
     /**
         @overload
     */
     bool Create( const wxSize& sz, unsigned char* data, unsigned char* alpha, bool static_data = false );
-        
+
     /**
         Initialize the image data with zeroes (the default) or with the
         byte value given as @a value.
@@ -612,7 +612,7 @@ public:
         Destroys the image data.
     */
     void Destroy();
-    
+
     /**
         Initializes the image alpha channel data.
 
@@ -773,7 +773,7 @@ public:
     */
     wxImage Scale(int width, int height,
                    wxImageResizeQuality quality = wxIMAGE_QUALITY_NORMAL) const;
-    
+
     /**
         Returns a resized version of this image without scaling it by adding either a
         border with the given colour or cropping as necessary.
@@ -847,9 +847,15 @@ public:
         The returned image uses the luminance component of the original to
         calculate the greyscale. Defaults to using the standard ITU-T BT.601
         when converting to YUV, where every pixel equals
-        (R * @a lr) + (G * @a lg) + (B * @a lb).
+        (R * @a weight_r) + (G * @a weight_g) + (B * @a weight_b).
     */
-    wxImage ConvertToGreyscale(double lr = 0.299, double lg = 0.587, double lb = 1.114) const;
+    wxImage ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const;
+
+    /**
+        Returns a greyscale version of the image.
+        @since 2.9.0
+    */
+    wxImage ConvertToGreyscale() const;
 
     /**
         Returns monochromatic version of the image.
@@ -858,15 +864,21 @@ public:
         colour and black colour everywhere else.
     */
     wxImage ConvertToMono(unsigned char r, unsigned char g, unsigned char b) const;
-    
+
+    /**
+        Returns disabled (dimmed) version of the image.
+        @since 2.9.0
+    */
+    wxImage ConvertToDisabled(unsigned char brightness = 255) const;
+
     //@}
-    
-    
+
+
     /**
         @name Miscellaneous functions
     */
     //@{
-    
+
     /**
         Computes the histogram of the image. @a histogram is a reference to
         wxImageHistogram object. wxImageHistogram is a specialization of
@@ -889,7 +901,7 @@ public:
         @return Returns number of colours in the histogram.
     */
     unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
-    
+
     /**
         Finds the first colour that is never used in the image.
         The search begins at given initial colour and continues by increasing
@@ -922,10 +934,10 @@ public:
         @return Returns 'this' object.
     */
     wxImage& operator=(const wxImage& image);
-    
+
     //@}
-    
-    
+
+
     /**
         @name Getters
     */
@@ -1011,7 +1023,7 @@ public:
         @see GetHeight(), GetWidth()
     */
     wxSize GetSize() const;
-    
+
     /**
         Gets a user-defined string-valued option.
 
@@ -1390,12 +1402,12 @@ public:
         The data must have been allocated with @c malloc(), @b NOT with
         @c operator new.
 
-        If @a static_data is @false, after this call the pointer to the data is 
+        If @a static_data is @false, after this call the pointer to the data is
         owned by the wxImage object, that will be responsible for deleting it.
         Do not pass to this function a pointer obtained through GetData().
     */
     void SetData(unsigned char* data, bool static_data = false);
-    
+
     /**
         @overload
     */
@@ -1453,8 +1465,8 @@ public:
         @see GetOption(), GetOptionInt(), HasOption()
     */
     void SetOption(const wxString& name, const wxString& value);
-    
-    /** 
+
+    /**
         @overload
     */
     void SetOption(const wxString& name, int value);
@@ -1498,14 +1510,14 @@ public:
     void SetType(wxBitmapType type);
 
     //@}
-    
-    
-    
+
+
+
     /**
         @name Handler management functions
     */
     //@{
-    
+
     /**
         Register an image handler.
         See @ref image_handlers for a list of the available handlers.
@@ -1517,7 +1529,7 @@ public:
         This function is called by wxWidgets on exit.
     */
     static void CleanUpHandlers();
-    
+
     /**
         Finds the handler with the given name.
 
@@ -1610,22 +1622,22 @@ public:
         @see wxImageHandler
     */
     static bool RemoveHandler(const wxString& name);
-    
+
     //@}
-    
-    
+
+
     /**
-        Returns @true if at least one of the available image handlers can read 
+        Returns @true if at least one of the available image handlers can read
         the file with the given name.
-        
+
         See wxImageHandler::CanRead for more info.
     */
     static bool CanRead(const wxString& filename);
-    
+
     /**
-        Returns @true if at least one of the available image handlers can read 
+        Returns @true if at least one of the available image handlers can read
         the data in the given stream.
-        
+
         See wxImageHandler::CanRead for more info.
     */
     static bool CanRead(wxInputStream& stream);
@@ -1640,7 +1652,7 @@ public:
         of the file to query.
         For the overload taking the parameter @a stream, that's the opened input
         stream with image data.
-        
+
         See wxImageHandler::GetImageCount() for more info.
 
         The parameter @a type may be one of the following values:
@@ -1686,12 +1698,12 @@ public:
         @see wxImageHandler
     */
     static wxString GetImageExtWildcard();
-    
+
     /**
         Converts a color in RGB color space to HSV color space.
     */
     static wxImage::HSVValue RGBtoHSV(const wxImage::RGBValue& rgb);
-    
+
     /**
         Converts a color in HSV color space to RGB color space.
     */
@@ -1714,7 +1726,7 @@ wxImage wxNullImage;
 /**
     Initializes all available image handlers. For a list of available handlers,
     see wxImage.
-    If you don't need/want all image handlers loaded 
+    If you don't need/want all image handlers loaded
 
     @see wxImage, wxImageHandler
 

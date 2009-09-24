@@ -26,6 +26,7 @@
     #include "wx/module.h"
     #include "wx/palette.h"
     #include "wx/intl.h"
+    #include "wx/colour.h"
 #endif
 
 #include "wx/filefn.h"
@@ -1436,7 +1437,12 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
         }
 }
 
-wxImage wxImage::ConvertToGreyscale( double lr, double lg, double lb ) const
+wxImage wxImage::ConvertToGreyscale(void) const
+{
+    return ConvertToGreyscale(0.299, 0.587, 0.114);
+}
+
+wxImage wxImage::ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const
 {
     wxImage image;
 
@@ -1460,16 +1466,14 @@ wxImage wxImage::ConvertToGreyscale( double lr, double lg, double lb ) const
     const long size = M_IMGDATA->m_width * M_IMGDATA->m_height;
     for ( long i = 0; i < size; i++, src += 3, dest += 3 )
     {
+        memcpy(dest, src, 3);
         // don't modify the mask
         if ( hasMask && src[0] == maskRed && src[1] == maskGreen && src[2] == maskBlue )
         {
-            memcpy(dest, src, 3);
         }
         else
         {
-            // calculate the luma
-            double luma = (src[0] * lr + src[1] * lg + src[2] * lb) + 0.5;
-            dest[0] = dest[1] = dest[2] = static_cast<unsigned char>(luma);
+            wxColour::MakeGrey(dest + 0, dest + 1, dest + 2, weight_r, weight_g, weight_b);
         }
     }
 
@@ -1514,12 +1518,40 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 
     for ( long i = 0; i < size; i++, srcd += 3, tard += 3 )
     {
-        if (srcd[0] == r && srcd[1] == g && srcd[2] == b)
-            tard[0] = tard[1] = tard[2] = 255;
-        else
-            tard[0] = tard[1] = tard[2] = 0;
+        bool on = (srcd[0] == r) && (srcd[1] == g) && (srcd[2] == b);
+        wxColourBase::MakeMono(tard + 0, tard + 1, tard + 2, on);
     }
 
+    return image;
+}
+
+wxImage wxImage::ConvertToDisabled(unsigned char brightness) const
+{
+    wxImage image = *this;
+
+    unsigned char mr = image.GetMaskRed();
+    unsigned char mg = image.GetMaskGreen();
+    unsigned char mb = image.GetMaskBlue();
+
+    int width = image.GetWidth();
+    int height = image.GetHeight();
+    bool has_mask = image.HasMask();
+
+    for (int y = height-1; y >= 0; --y)
+    {
+        for (int x = width-1; x >= 0; --x)
+        {
+            unsigned char* data = image.GetData() + (y*(width*3))+(x*3);
+            unsigned char* r = data;
+            unsigned char* g = data+1;
+            unsigned char* b = data+2;
+
+            if (has_mask && (*r == mr) && (*g == mg) && (*b == mb))
+                continue;
+
+            wxColour::MakeDisabled(r, g, b, brightness);
+        }
+    }
     return image;
 }
 

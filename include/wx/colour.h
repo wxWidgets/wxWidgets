@@ -15,7 +15,6 @@
 #include "wx/defs.h"
 #include "wx/gdiobj.h"
 
-
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
 // A macro to define the standard wxColour constructors:
@@ -147,6 +146,22 @@ public:
     // because it's still widely used)
     bool Ok() const { return IsOk(); }
 #endif
+
+    // manipulation
+    // ------------
+    
+    // These methods are static because they are mostly used
+    // within tight loops (where we don't want to instantiate wxColour's)
+
+    static void          MakeMono    (unsigned char* r, unsigned char* g, unsigned char* b, bool on);
+    static void          MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b, unsigned char brightness = 255);
+    static void          MakeGrey    (unsigned char* r, unsigned char* g, unsigned char* b); // integer version
+    static void          MakeGrey    (unsigned char* r, unsigned char* g, unsigned char* b, 
+                                      double weight_r, double weight_g, double weight_b); // floating point version
+    static unsigned char AlphaBlend  (unsigned char fg, unsigned char bg, double alpha);
+    static void          ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);
+
+    wxColour ChangeLightness(int ialpha) const;
 
     // old, deprecated
     // ---------------

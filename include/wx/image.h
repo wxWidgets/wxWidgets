@@ -354,12 +354,16 @@ public:
                   unsigned char r2, unsigned char g2, unsigned char b2 );
 
     // Convert to greyscale image. Uses the luminance component (Y) of the image.
-    // The luma value (YUV) is calculated using (R * lr) + (G * lg) + (B * lb), defaults to ITU-T BT.601
-    wxImage ConvertToGreyscale( double lr = 0.299, double lg = 0.587, double lb = 0.114 ) const;
+    // The luma value (YUV) is calculated using (R * weight_r) + (G * weight_g) + (B * weight_b), defaults to ITU-T BT.601
+    wxImage ConvertToGreyscale(double weight_r, double weight_g, double weight_b) const;
+    wxImage ConvertToGreyscale(void) const;
 
     // convert to monochrome image (<r,g,b> will be replaced by white,
     // everything else by black)
     wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;
+
+    // Convert to disabled (dimmed) image.
+    wxImage ConvertToDisabled(unsigned char brightness = 255) const;
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
