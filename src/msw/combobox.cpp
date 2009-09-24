@@ -443,8 +443,16 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
     // to keep one version of the code for all platforms and fix it later if
     // problems are discovered
 
+#ifndef __WXWINCE__
+    COMBOBOXINFO info;
+    info.cbSize = sizeof(COMBOBOXINFO);
+
+    GetComboBoxInfo(GetHwnd(), & info);
+    return info.hwndItem;
+#else
     // we assume that the only child of the combobox is the edit window
     return (WXHWND)::GetWindow(GetHwnd(), GW_CHILD);
+#endif
 }
 
 WXHWND wxComboBox::GetEditHWND() const
