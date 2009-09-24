@@ -916,8 +916,6 @@ wxDocManager* wxDocManager::sm_docManager = NULL;
 
 wxDocManager::wxDocManager(long WXUNUSED(flags), bool initialize)
 {
-    wxASSERT_MSG( !sm_docManager, "multiple wxDocManagers not allowed" );
-
     sm_docManager = this;
 
     m_defaultDocumentNameCounter = 1;
