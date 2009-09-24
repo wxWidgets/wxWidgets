@@ -397,6 +397,7 @@ All:
 - Added wxMBConv::cMB2WC(wxCharBuffer) and cWC2MB(wxWCharBuffer) overloads.
 - Added wxAny class; a modern, backwards-incompatible replacement for
   wxVariant.
+- wxDateTime timezone functions now dynamic (no caching).
 
 All (GUI):
 
