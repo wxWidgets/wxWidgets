@@ -169,9 +169,11 @@ public:
     const wxPoint& GetDragStart() const { return m_dragStart; }
     void SetDragStart(const wxPoint& pt) { m_dragStart = pt; }
 
+#if wxRICHTEXT_BUFFERED_PAINTING
     /// Get the buffer bitmap
     const wxBitmap& GetBufferBitmap() const { return m_bufferBitmap; }
     wxBitmap& GetBufferBitmap() { return m_bufferBitmap; }
+#endif
 
     /// Get/set context menu
     wxMenu* GetContextMenu() const { return m_contextMenu; }
