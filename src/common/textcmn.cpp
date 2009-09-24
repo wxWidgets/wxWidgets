@@ -205,7 +205,7 @@ bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
-            ChangeValue(text);
+            SetValue(text);
 
             DiscardEdits();
 

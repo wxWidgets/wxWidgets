@@ -93,15 +93,11 @@ Major new features in 2.8 release
 
 *** INCOMPATIBLE CHANGES: ***
 
-1. Due to an oversight, a bug fix in wxMSW resulted in an incompatible change in
+   Due to an oversight, a bug fix in wxMSW resulted in an incompatible change in
    wxTreeCtrl behaviour: its EVT_TREE_ITEM_ACTIVATED handler now must skip the
    event being processed to allow the item to be toggled by double clicking on it.
    I.e. you need to ensure there is an "event.Skip()" in your item activation
    handler if you do wish to allow the item to be toggled.
-   
-2. wxTextCtrl::LoadFile no longer sends a text event. This corrects problematic
-   behaviour with spurious document modification.
-
 
 All:
 
@@ -128,7 +124,6 @@ All (GUI):
   where invalid sizes caused incorrect second invocation of page setup
   dialog.
 - Corrected writing direction for Farsi.
-- wxTextCtrl::LoadFile no longer sends a text event.
 - Added wxBORDER_THEME to XRC.
 
 wxMSW:
