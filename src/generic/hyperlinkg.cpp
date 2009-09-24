@@ -79,6 +79,7 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     // colours
     m_normalColour = *wxBLUE;
     m_hoverColour = *wxRED;
+    m_visitedColour = wxColour("#551a8b");
     SetForegroundColour(m_normalColour);
 
     // by default the font of an hyperlink control is underlined
