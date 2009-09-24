@@ -4760,6 +4760,7 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     switch ( GetBackgroundStyle() )
     {
         case wxBG_STYLE_ERASE:
+        case wxBG_STYLE_COLOUR:
             // we need to generate an erase background event
             {
                 wxDCTemp dc(hdc, GetClientSize());
@@ -4794,6 +4795,7 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
             break;
 
         case wxBG_STYLE_PAINT:
+        case wxBG_STYLE_TRANSPARENT:
             // no need to do anything here at all, background will be entirely
             // redrawn in WM_PAINT handler
             break;
