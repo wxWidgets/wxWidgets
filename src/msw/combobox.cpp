@@ -443,16 +443,32 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
     // to keep one version of the code for all platforms and fix it later if
     // problems are discovered
 
-#ifndef __WXWINCE__
-    COMBOBOXINFO info;
-    info.cbSize = sizeof(COMBOBOXINFO);
+    typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
+    static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
+    static bool s_triedToLoad = false;
+    if ( !s_triedToLoad )
+    {
+        s_triedToLoad = true;
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetComboBoxInfo, dllUser32);
+    }
 
-    GetComboBoxInfo(GetHwnd(), & info);
-    return info.hwndItem;
-#else
+    if ( s_pfnGetComboBoxInfo )
+    {
+        WinStruct<COMBOBOXINFO> info;
+        (*s_pfnGetComboBoxInfo)(GetHwnd(), &info);
+        return info.hwndItem;
+    }
+
+    if (HasFlag(wxCB_SIMPLE))
+    {
+        POINT pt;
+        pt.x = pt.y = 4;
+        return (WXHWND) ::ChildWindowFromPoint(GetHwnd(), pt);
+    }
+
     // we assume that the only child of the combobox is the edit window
     return (WXHWND)::GetWindow(GetHwnd(), GW_CHILD);
-#endif
 }
 
 WXHWND wxComboBox::GetEditHWND() const
