@@ -552,13 +552,20 @@ void wxChoice::DoSetSize(int x, int y,
     // don't make the drop down list too tall, arbitrarily limit it to 30
     // items max and also don't make it too small if it's currently empty
     size_t nItems = GetCount();
-    if ( !nItems )
-        nItems = 9;
-    else if ( nItems > 30 )
-        nItems = 30;
+    if (!HasFlag(wxCB_SIMPLE))
+    {
+        if ( !nItems )
+            nItems = 9;
+        else if ( nItems > 30 )
+            nItems = 30;
+    }
 
     const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
-    const int heightWithItems = height + hItem*nItems;
+    int heightWithItems = 0;
+    if (!HasFlag(wxCB_SIMPLE))
+        heightWithItems = height + hItem*nItems;
+    else
+        heightWithItems = SetHeightSimpleComboBox(nItems);
 
 
     // do resize the native control
@@ -592,6 +599,7 @@ wxSize wxChoice::DoGetBestSize() const
 {
     // find the widest string
     int wChoice = 0;
+    int hChoice;
     const unsigned int nItems = GetCount();
     for ( unsigned int i = 0; i < nItems; i++ )
     {
@@ -608,10 +616,24 @@ wxSize wxChoice::DoGetBestSize() const
 
     // the combobox should be slightly larger than the widest string
     wChoice += 5*GetCharWidth();
+    if( HasFlag( wxCB_SIMPLE ) )
+    {
+        hChoice = SetHeightSimpleComboBox( nItems );
+    }
+    else
+        hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight());
 
-    wxSize best(wChoice, EDIT_HEIGHT_FROM_CHAR_HEIGHT(GetCharHeight()));
+    wxSize best(wChoice, hChoice);
     CacheBestSize(best);
     return best;
+}
+
+int wxChoice::SetHeightSimpleComboBox(int nItems) const
+{
+    int cx, cy;
+    wxGetCharSize( GetHWND(), &cx, &cy, GetFont() );
+    int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, -1, 0);
+    return EDIT_HEIGHT_FROM_CHAR_HEIGHT( cy ) * wxMin( wxMax( nItems, 3 ), 6 ) + hItem - 1;
 }
 
 // ----------------------------------------------------------------------------

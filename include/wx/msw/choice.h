@@ -135,6 +135,9 @@ protected:
     // free all memory we have (used by Clear() and dtor)
     void Free();
 
+    // set the height for simple combo box
+    int SetHeightSimpleComboBox(int nItems) const;
+
 #if wxUSE_DEFERRED_SIZING
     virtual void MSWEndDeferWindowPos();
 #endif // wxUSE_DEFERRED_SIZING
