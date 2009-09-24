@@ -587,7 +587,7 @@ wxTextAttrEx* wxRichTextFontPage::GetAttributes()
 /// Updates the font preview
 void wxRichTextFontPage::UpdatePreview()
 {
-    wxFont font(*wxNORMAL_FONT);
+    wxRichTextAttr attr;
 
     if (m_colourPresent)
         m_previewCtrl->SetForegroundColour(m_colourCtrl->GetColour());
@@ -598,7 +598,7 @@ void wxRichTextFontPage::UpdatePreview()
     if (m_faceListBox->GetSelection() != wxNOT_FOUND)
     {
         wxString faceName = m_faceListBox->GetFaceName(m_faceListBox->GetSelection());
-        font.SetFaceName(faceName);
+        attr.SetFontFaceName(faceName);
     }
 
     wxString strSize = m_sizeTextCtrl->GetValue();
@@ -606,7 +606,7 @@ void wxRichTextFontPage::UpdatePreview()
     {
         int sz = wxAtoi(strSize);
         if (sz > 0)
-            font.SetPointSize(sz);
+            attr.SetFontSize(sz);
     }
 
     if (m_styleCtrl->GetSelection() != wxNOT_FOUND)
@@ -617,7 +617,7 @@ void wxRichTextFontPage::UpdatePreview()
         else
             style = wxNORMAL;
 
-        font.SetStyle(style);
+        attr.SetFontStyle(style);
     }
 
     if (m_weightCtrl->GetSelection() != wxNOT_FOUND)
@@ -628,7 +628,7 @@ void wxRichTextFontPage::UpdatePreview()
         else
             weight = wxNORMAL;
 
-        font.SetWeight(weight);
+        attr.SetFontWeight(weight);
     }
 
     if (m_underliningCtrl->GetSelection() != wxNOT_FOUND)
@@ -639,7 +639,7 @@ void wxRichTextFontPage::UpdatePreview()
         else
             underlined = false;
 
-        font.SetUnderlined(underlined);
+        attr.SetFontUnderlined(underlined);
     }
 
     int textEffects = 0;
@@ -659,6 +659,7 @@ void wxRichTextFontPage::UpdatePreview()
     else if ( m_subscriptCtrl->Get3StateValue() == wxCHK_CHECKED )
         textEffects |= wxTEXT_ATTR_EFFECT_SUBSCRIPT;
 
+    wxFont font = attr.CreateFont();
     m_previewCtrl->SetFont(font);
     m_previewCtrl->SetTextEffects(textEffects);
     m_previewCtrl->Refresh();
