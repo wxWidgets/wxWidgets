@@ -436,6 +436,10 @@ GTK:
 - wxRadioBox constructor uses default consistent with other ports now.
 - Corrected themed border display.
 
+Mac:
+
+- Correct min/max pages display in the print dialog (Auria).
+
 MSW:
 
 - Translate wxMessageDialog labels to the language of the current locale.
