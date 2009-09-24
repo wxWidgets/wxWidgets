@@ -103,9 +103,9 @@ public:
                          | wxFRAME_FLOAT_ON_PARENT
                          | wxBORDER_NONE
 #ifdef __WXMAC__
-                         | wxPOPUP_WINDOW  
+                         | wxPOPUP_WINDOW
 #endif
-            ), 
+            ),
 #endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
@@ -180,7 +180,7 @@ public:
         return rv;
     }
 #endif
-    
+
     wxPoint GetMyPosition()
     {
         return wxPoint(m_cx, m_cy);
@@ -500,7 +500,7 @@ void ScintillaWX::Paste() {
 
 #if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
-        data.SetText(wxEmptyString); 
+        data.SetText(wxEmptyString);
         text = wxEmptyString;
 #endif
         int len = strlen(buf);
@@ -674,12 +674,17 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
           char* defn = reinterpret_cast<char *>(lParam);
           AutoCompleteCancel();
           pt.y += vs.lineHeight;
+          int ctStyle = ct.UseStyleCallTip() ? STYLE_CALLTIP : STYLE_DEFAULT;
+          if (ct.UseStyleCallTip())
+          {
+              ct.SetForeBack(vs.styles[STYLE_CALLTIP].fore, vs.styles[STYLE_CALLTIP].back);
+          }
           PRectangle rc = ct.CallTipStart(currentPos, pt,
                                           defn,
-                                          vs.styles[STYLE_DEFAULT].fontName,
-                                          vs.styles[STYLE_DEFAULT].sizeZoomed,
+                                          vs.styles[ctStyle].fontName,
+                                          vs.styles[ctStyle].sizeZoomed,
                                           CodePage(),
-                                          vs.styles[STYLE_DEFAULT].characterSet,
+                                          vs.styles[ctStyle].characterSet,
                                           wMain);
           // If the call-tip window would be out of the client
           // space, adjust so it displays above the text.
