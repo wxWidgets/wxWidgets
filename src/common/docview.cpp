@@ -1026,6 +1026,7 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_PRINTING_ARCHITECTURE
+    wxBusyCursor busy;
     wxView *view = GetCurrentView();
     if (!view)
         return;
