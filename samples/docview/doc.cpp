@@ -34,6 +34,7 @@
 #else
     #include "wx/txtstrm.h"
 #endif
+#include "wx/wfstream.h"
 
 #include "doc.h"
 #include "view.h"
@@ -247,3 +248,58 @@ wxTextCtrl* TextEditDocument::GetTextCtrl() const
     wxView* view = GetFirstView();
     return view ? wxStaticCast(view, TextEditView)->GetText() : NULL;
 }
+
+// ----------------------------------------------------------------------------
+// wxImageDocument implementation
+// ----------------------------------------------------------------------------
+
+/////////////////////////////////////////////////////////////////////////////
+// wxImageDocument
+
+IMPLEMENT_DYNAMIC_CLASS(wxImageDocument, wxDocument)
+
+wxImageDocument::wxImageDocument() : wxDocument()
+{
+}
+
+wxImageDocument::~wxImageDocument()
+{
+}
+
+bool wxImageDocument::DeleteContents()
+{
+    bool ok = wxDocument::DeleteContents();
+    if (ok && m_image.IsOk())
+    {
+        m_image.Destroy();
+    }
+    return ok;
+}
+
+bool wxImageDocument::SaveFile(wxOutputStream* stream, wxBitmapType type) const
+{
+    return m_image.IsOk() && m_image.SaveFile(*stream, type);
+}
+
+bool wxImageDocument::DoOpenDocument(const wxString& file)
+{
+    wxFileInputStream stream(file);
+    return stream.IsOk() && DoOpenDocument(&stream);
+}
+
+bool wxImageDocument::DoSaveDocument(const wxString& file)
+{
+    wxFileOutputStream stream(file);
+    return stream.IsOk() && DoSaveDocument(&stream);
+}
+
+bool wxImageDocument::DoOpenDocument(wxInputStream* stream)
+{
+    return m_image.LoadFile(*stream);
+}
+
+bool wxImageDocument::DoSaveDocument(wxOutputStream* stream) const
+{
+    return m_image.IsOk() && SaveFile(stream, m_image.GetType());
+}
+

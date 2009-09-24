@@ -114,4 +114,65 @@ private:
     DECLARE_DYNAMIC_CLASS(TextEditView)
 };
 
+// ----------------------------------------------------------------------------
+// wxImageCanvas
+// ----------------------------------------------------------------------------
+
+class wxImageCanvas : public wxScrolledWindow
+{
+public:
+    wxImageCanvas(wxView*, wxWindow* parent);
+
+    virtual void OnDraw(wxDC& dc);
+
+    // in a normal multiple document application a canvas is associated with
+    // one view from the beginning until the end, but to support the single
+    // document mode in which all documents reuse the same MyApp::GetCanvas()
+    // we need to allow switching the canvas from one view to another one
+
+    void SetView(wxView* view)
+    {
+        wxASSERT_MSG( !m_view, "shouldn't be already associated with a view" );
+
+        m_view = view;
+    }
+
+    void ResetView()
+    {
+        wxASSERT_MSG( m_view, "should be associated with a view" );
+
+        m_view = NULL;
+    }
+
+protected:
+    wxView *m_view;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// wxImageView
+// ----------------------------------------------------------------------------
+
+class wxImageDocument;
+class wxImageView : public wxView
+{
+public:
+    wxImageView() : wxView(), m_frame(NULL) {}
+
+    virtual bool OnCreate(wxDocument*, long flags);
+    virtual void OnDraw(wxDC*);
+    virtual bool OnClose(bool deleteWindow = true);
+    virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
+
+    wxImageDocument* GetDocument();
+
+protected:
+    wxFrame* m_frame;
+    wxImageCanvas* m_canvas;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxImageView)
+};
+
 #endif // _WX_SAMPLES_DOCVIEW_VIEW_H_

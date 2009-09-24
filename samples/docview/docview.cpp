@@ -148,6 +148,8 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    ::wxInitAllImageHandlers();
+
     SetAppName("DocView Sample");
 
     //// Create a document manager
@@ -176,6 +178,10 @@ bool MyApp::OnInit()
 #if defined( __WXMAC__ ) && wxOSX_USE_CARBON
         wxFileName::MacRegisterDefaultTypeAndCreator("txt" , 'TEXT' , 'WXMA');
 #endif
+        // Create a template relating image documents to their views
+        new wxDocTemplate(docManager, "Image", "*.png;*.jpg", "", "png;jpg",
+                          "Image Doc", "Image View",
+                          CLASSINFO(wxImageDocument), CLASSINFO(wxImageView));
     }
 
     // create the main frame window

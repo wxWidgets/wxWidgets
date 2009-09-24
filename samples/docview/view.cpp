@@ -104,8 +104,9 @@ DrawingDocument* DrawingView::GetDocument()
     return wxStaticCast(wxView::GetDocument(), DrawingDocument);
 }
 
-void DrawingView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
+void DrawingView::OnUpdate(wxView* sender, wxObject* hint)
 {
+    wxView::OnUpdate(sender, hint);
     if ( m_canvas )
         m_canvas->Refresh();
 }
@@ -280,5 +281,88 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
     }
 
     m_lastMousePos = pt;
+}
+
+// ----------------------------------------------------------------------------
+// wxImageCanvas implementation
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxImageCanvas, wxScrolledWindow)
+END_EVENT_TABLE()
+
+// Define a constructor for my canvas
+wxImageCanvas::wxImageCanvas(wxView* view, wxWindow* parent)
+    : wxScrolledWindow(parent, wxID_ANY, wxPoint(0, 0), parent->GetClientSize())
+{
+    m_view = view;
+}
+
+// Define the repainting behaviour
+void wxImageCanvas::OnDraw(wxDC& dc)
+{
+    if ( m_view )
+        m_view->OnDraw(& dc);
+}
+
+// ----------------------------------------------------------------------------
+// wxImageView implementation
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxImageView, wxView)
+
+BEGIN_EVENT_TABLE(wxImageView, wxView)
+END_EVENT_TABLE()
+
+wxImageDocument* wxImageView::GetDocument()
+{
+    return wxStaticCast(wxView::GetDocument(), wxImageDocument);
+}
+
+bool wxImageView::OnCreate(wxDocument* doc, long WXUNUSED(flags))
+{
+    m_frame = wxGetApp().CreateChildFrame(doc, this, false);
+    m_frame->SetTitle("Image View");
+    m_canvas = new wxImageCanvas(this, m_frame);
+    m_frame->Show(true);
+    Activate(true);
+    return true;
+}
+
+void wxImageView::OnUpdate(wxView* sender, wxObject* hint)
+{
+    wxView::OnUpdate(sender, hint);
+    const wxImage* image = GetDocument()->GetImage();
+    if (image->IsOk())
+    {
+        m_canvas->SetScrollbars( 1, 1, image->GetWidth(), image->GetHeight() );
+    }
+}
+
+void wxImageView::OnDraw(wxDC* dc)
+{
+    const wxImage* image = GetDocument()->GetImage();
+    if (image->IsOk())
+    {
+        dc->DrawBitmap(wxBitmap(*image), 0, 0);
+    }
+}
+
+bool wxImageView::OnClose(bool deleteWindow)
+{
+    if ( !GetDocument()->Close() )
+        return false;
+
+    Activate(false);
+
+    if ( wxGetApp().GetMode() == MyApp::Mode_Single )
+    {
+        GetDocument()->DeleteContents();
+    }
+    else // not single window mode
+    {
+        if ( deleteWindow )
+            wxDELETE(m_frame);
+    }
+    return true;
 }
 

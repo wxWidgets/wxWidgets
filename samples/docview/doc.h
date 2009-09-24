@@ -16,6 +16,7 @@
 #include "wx/docview.h"
 #include "wx/cmdproc.h"
 #include "wx/vector.h"
+#include "wx/image.h"
 
 // This sample is written to build both with wxUSE_STD_IOSTREAM==0 and 1, which
 // somewhat complicates its code but is necessary in order to support building
@@ -194,6 +195,36 @@ public:
 
     wxDECLARE_NO_COPY_CLASS(TextEditDocument);
     DECLARE_DYNAMIC_CLASS(TextEditDocument)
+};
+
+// ----------------------------------------------------------------------------
+// A basic image document class
+// ----------------------------------------------------------------------------
+
+class wxImageDocument : public wxDocument
+{
+protected:
+    wxImage m_image;
+public:
+    wxImageDocument();
+
+    wxImage*       GetImage()       { return &m_image; }
+    const wxImage& GetImage() const { return m_image; }
+
+    bool SaveFile(wxOutputStream*, wxBitmapType) const;
+
+public:
+    virtual ~wxImageDocument();
+    virtual bool DeleteContents();
+
+    virtual bool DoOpenDocument(const wxString& file);
+    virtual bool DoSaveDocument(const wxString& file);
+
+    virtual bool DoOpenDocument(wxInputStream*);
+    virtual bool DoSaveDocument(wxOutputStream*) const;
+
+    wxDECLARE_NO_COPY_CLASS(wxImageDocument);
+    DECLARE_DYNAMIC_CLASS(wxImageDocument)
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_DOC_H_
