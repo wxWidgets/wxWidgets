@@ -3355,8 +3355,8 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     wxPoint currentPosition(0, spaceBeforePara); // We will calculate lines relative to paragraph
     int lineHeight = 0;
     int maxWidth = 0;
+    int maxAscent = 0;
     int maxDescent = 0;
-
     int lineCount = 0;
 
     wxRichTextObjectList::compatibility_iterator node;
@@ -3484,8 +3484,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 #endif
 
             currentWidth = actualSize.x;
-            lineHeight = wxMax(lineHeight, actualSize.y);
             maxDescent = wxMax(childDescent, maxDescent);
+            maxAscent = wxMax(actualSize.y-childDescent, maxAscent);
+            lineHeight = maxDescent + maxAscent;
 
             // Add a new line
             wxRichTextLine* line = AllocateLine(lineCount);
@@ -3501,6 +3502,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             currentPosition.y += lineSpacing;
             currentWidth = 0;
             maxDescent = 0;
+            maxAscent = 0;
             maxWidth = wxMax(maxWidth, currentWidth);
 
             lineCount ++;
@@ -3524,8 +3526,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         {
             // We still fit, so don't add a line, and keep going
             currentWidth += childSize.x;
-            lineHeight = wxMax(lineHeight, childSize.y);
             maxDescent = wxMax(childDescent, maxDescent);
+            maxAscent = wxMax(childSize.y-childDescent, maxAscent);
+            lineHeight = maxDescent + maxAscent;
 
             maxWidth = wxMax(maxWidth, currentWidth);
             lastEndPos = child->GetRange().GetEnd();
