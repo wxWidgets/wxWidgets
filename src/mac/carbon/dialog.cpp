@@ -21,6 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/mac/uma.h"
+#include "wx/evtloop.h"
 
 
 // Lists to keep track of windows, so we can disable/enable them
@@ -162,11 +163,10 @@ void wxDialog::DoShowModal()
     }
     BeginAppModalStateForWindow(windowRef) ;
 
+    wxEventLoopGuarantor ensureHasLoop;
+    wxEventLoopBase * const loop = wxEventLoop::GetActive();
     while ( IsModalShowing() )
-    {
-        wxTheApp->MacDoOneEvent() ;
-        // calls process idle itself
-    }
+        loop->Dispatch();
 
     EndAppModalStateForWindow(windowRef) ;
     if ( resetGroupParent )
