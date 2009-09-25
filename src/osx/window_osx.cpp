@@ -1190,9 +1190,30 @@ wxWindow *wxGetActiveWindow()
 }
 
 // Coordinates relative to the window
-void wxWindowMac::WarpPointer(int WXUNUSED(x_pos), int WXUNUSED(y_pos))
+void wxWindowMac::WarpPointer(int x_pos, int y_pos)
 {
-    // We really don't move the mouse programmatically under Mac.
+    int x = x_pos;
+    int y = y_pos;
+    DoClientToScreen(&x, &y);
+    CGPoint cgpoint = CGPointMake( x, y );
+    CGWarpMouseCursorPosition( cgpoint );
+
+    // At least GTK sends a mouse moved event after WarpMouse
+    wxMouseEvent event(wxEVT_MOTION);
+    event.m_x = x_pos;
+    event.m_y = y_pos;
+    wxMouseState mState = ::wxGetMouseState();
+
+    event.m_altDown = mState.AltDown();
+    event.m_controlDown = mState.ControlDown();
+    event.m_leftDown = mState.LeftDown();
+    event.m_middleDown = mState.MiddleDown();
+    event.m_rightDown = mState.RightDown();
+    event.m_metaDown = mState.MetaDown();
+    event.m_shiftDown = mState.ShiftDown();
+    event.SetId(GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 int wxWindowMac::GetScrollPos(int orient) const
