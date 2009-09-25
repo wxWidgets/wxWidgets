@@ -224,8 +224,8 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     m_depth = d ;
     m_hBitmap = NULL ;
     
-    m_bytesPerRow = GetBestBytesPerRow( w * 4 ) ;
-    size_t size = m_bytesPerRow * h ;
+    m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
+    size_t size = m_bytesPerRow * m_height ;
     void* data = m_memBuf.GetWriteBuf( size ) ;
     if (data != NULL)
     {
@@ -675,13 +675,13 @@ PicHandle wxBitmapRefData::GetPictHandle()
                 err = GraphicsExportDoExport(exporter, NULL);
                 CGImageRelease( imageRef );
 
-				size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
-				// the 512 bytes header is only needed for pict files, but not in memory
-				if ( handleSize >= 512 )
-				{
-					memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
-					SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
-				}
+                size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
+                // the 512 bytes header is only needed for pict files, but not in memory
+                if ( handleSize >= 512 )
+                {
+                    memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
+                    SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
+                }
             }
             CloseComponent( exporter );
         }
