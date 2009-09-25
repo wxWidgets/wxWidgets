@@ -41,9 +41,12 @@ void wxDialog::DoShowModal()
     if ( GetParent() == NULL )
     {
         windowGroup = GetWindowGroup(windowRef) ;
-        formerParentGroup = GetWindowGroupParent( windowGroup );
-        SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
-        resetGroupParent = true;
+        if ( windowGroup != GetWindowGroupOfClass( kMovableModalWindowClass ) )
+        {
+            formerParentGroup = GetWindowGroupParent( windowGroup );
+            SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+            resetGroupParent = true;
+        }
     }
     BeginAppModalStateForWindow(windowRef) ;
 
