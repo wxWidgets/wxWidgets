@@ -153,6 +153,7 @@ int wxFileDialog::ShowModal()
 
     m_path = wxEmptyString;
     m_fileNames.Clear();
+    m_paths.Clear();
 
     wxNonOwnedWindow* parentWindow = NULL;
     int returnCode = -1;
