@@ -394,6 +394,8 @@ void wxFontRefData::MacFindFont()
     if ( m_fontValid )
         return;
 
+    wxCHECK_RET( m_info.m_pointSize > 0, wxT("Point size should not be zero.") );
+
     m_info.EnsureValid();
 
 #if wxOSX_USE_CORE_TEXT
@@ -472,7 +474,8 @@ void wxFontRefData::MacFindFont()
                                      WXSIZEOF(atsuTags),
                                      atsuTags, atsuSizes, atsuValues);
 
-        wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
+        wxASSERT_MSG( status == noErr , wxString::Format(wxT("couldn't modify ATSU style. Status was %d"), (int) status).c_str() );
+
         if ( m_cgFont.get() == NULL )
         {
             ATSFontRef fontRef = FMGetATSFontRefFromFont(m_info.m_atsuFontID);
