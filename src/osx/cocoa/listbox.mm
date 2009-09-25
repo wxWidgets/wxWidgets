@@ -34,6 +34,9 @@
 class wxListWidgetCocoaImpl;
 
 @interface wxNSTableDataSource : NSObject
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    <NSTableViewDataSource>
+#endif
 {
     wxListWidgetCocoaImpl* impl;
 }
@@ -54,6 +57,9 @@ class wxListWidgetCocoaImpl;
 @end
 
 @interface wxNSTableView : NSTableView
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+    <NSTableViewDelegate>
+#endif
 {
 }
 
@@ -143,7 +149,6 @@ public :
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) ;
     virtual void            UpdateLineToEnd( unsigned int n);
 
-    virtual void            controlAction(WXWidget slf, void* _cmd, void *sender);
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
 protected :
     wxNSTableView*          m_tableView ;
@@ -284,6 +289,33 @@ protected:
         wxOSXCocoaClassAddWXMethods( self );
     }
 }
+
+- (void) tableViewSelectionDidChange: (NSNotification *) notification
+{
+    wxUnusedVar(notification);
+    
+    int row = [self selectedRow];
+    
+    if (row == -1) 
+    {
+        // no row selected
+    } 
+    else 
+    {
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
+        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+        
+        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+        
+        if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
+            return;
+        
+        if ( !list->MacGetBlockEvents() )
+            list->HandleLineEvent( row, false );
+    }
+    
+} 
 
 @end
 
@@ -466,20 +498,6 @@ void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int WXUNUSED(n))
     [m_tableView reloadData];
 }
 
-void wxListWidgetCocoaImpl::controlAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
-{
-    wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
-    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
-
-    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
-
-    int sel = [m_tableView clickedRow];
-    if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
-       return;
-
-    list->HandleLineEvent( sel, false );
-}
-
 void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
@@ -518,6 +536,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     // setting up the true table
 
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
+    [tableview setDelegate:tableview];
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];
