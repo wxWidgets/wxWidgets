@@ -278,6 +278,9 @@ pascal Boolean CrossPlatformFilterCallback(
 
 int wxFileDialog::ShowModal()
 {
+    m_paths.Empty();
+    m_fileNames.Empty();
+
     OSErr err;
     NavDialogCreationOptions dialogCreateOptions;
 
