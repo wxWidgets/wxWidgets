@@ -2873,7 +2873,6 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     ThemeDrawingState savedState = NULL;
 #endif
     CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
-    wxMacCGContextStateSaver top_saver_cg( context );
 
     RGBColor labelColor;
     labelColor.red = 0;
@@ -2918,13 +2917,14 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &backgroundColor);
             GetThemeTextColor(kThemeTextColorBlack, gdDepth, colorDevice, &labelColor);
         }
-        wxMacCGContextStateSaver cg( context );
+        CGContextSaveGState(context);
 
         CGContextSetRGBFillColor(context,
                                  (float)backgroundColor.red / (float)USHRT_MAX,
                                  (float)backgroundColor.green / (float)USHRT_MAX,
                                  (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
         CGContextFillRect(context, enclosingCGRect);
+        CGContextRestoreGState(context);
     }
     else
     {
@@ -2937,13 +2937,15 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         if (bgColor.Ok())
         {
             backgroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
-            wxMacCGContextStateSaver cg( context );
+            CGContextSaveGState(context);
 
             CGContextSetRGBFillColor(context,
                                      (float)backgroundColor.red / (float)USHRT_MAX,
                                      (float)backgroundColor.green / (float)USHRT_MAX,
                                      (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
             CGContextFillRect(context, enclosingCGRect);
+
+            CGContextRestoreGState(context);
         }
     }
 
@@ -2956,13 +2958,15 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             wxBitmap bmp = imageList->GetBitmap(imgIndex);
             IconRef icon = bmp.GetBitmapData()->GetIconRef();
 
-            wxMacCGContextStateSaver cg( context );
+            CGContextSaveGState(context);
 
             CGContextTranslateCTM(context, 0,iconCGRect.origin.y + CGRectGetMaxY(iconCGRect));
             CGContextScaleCTM(context,1.0f,-1.0f);
             PlotIconRefInContext(context, &iconCGRect, kAlignNone,
               active ? kTransformNone : kTransformDisabled, NULL,
               kPlotIconRefNormalFlags, icon);
+
+            CGContextRestoreGState(context);
         }
     }
 
@@ -3012,14 +3016,13 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     info.truncationPosition = kHIThemeTextTruncationEnd;
     info.truncationMaxLines = 1;
 
-    {
-        wxMacCGContextStateSaver cg( context );
-        CGContextSetRGBFillColor (context, (float)labelColor.red / (float)USHRT_MAX,
+    CGContextSaveGState(context);
+    CGContextSetRGBFillColor (context, (float)labelColor.red / (float)USHRT_MAX,
                           (float)labelColor.green / (float)USHRT_MAX,
                           (float)labelColor.blue / (float)USHRT_MAX, 1.0);
 
-        HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal);
-    }
+    HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal);
+    CGContextRestoreGState(context);
 
 #ifndef __LP64__
     if (savedState != NULL)
