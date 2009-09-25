@@ -380,6 +380,8 @@ void wxSpinCtrl::SetTextValue(int val)
     // select all text
     m_text->SetSelection(0, -1);
 
+    m_text->SetInsertionPointEnd();
+
     // and give focus to the control!
     // m_text->SetFocus();    Why???? TODO.
 }
