@@ -448,6 +448,7 @@ void wxSpinCtrlGenericBase::SetValue(const wxString& text)
     {
         m_textCtrl->SetValue(text);
         m_textCtrl->SetSelection(0, -1);
+        m_textCtrl->SetInsertionPointEnd();
     }
 }
 
@@ -478,6 +479,7 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val)
         m_value = val;
         str.ToDouble( &m_value );    // wysiwyg for textctrl
         m_textCtrl->SetValue( str );
+        m_textCtrl->SetInsertionPointEnd();
         m_textCtrl->DiscardEdits();
         return true;
     }
