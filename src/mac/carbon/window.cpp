@@ -3693,6 +3693,8 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
         wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
 
         ::EmbedControl( m_peer->GetControlRef() , container ) ;
+
+        MacChildAdded();
     }
     return true;
 }
