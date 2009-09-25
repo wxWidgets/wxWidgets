@@ -783,7 +783,7 @@ void wxMenuBar::MacInstallMenuBar()
     wxString strippedHelpMenuTitle = wxStripMenuCodes( wxApp::s_macHelpMenuTitleName ) ;
     wxString strippedTranslatedHelpMenuTitle = wxStripMenuCodes( wxString( _("&Help") ) ) ;
 
-    wxString strippedWindowMenuTitle = wxStripMenuCodes( wxT("&Window") /* wxApp::s_macWindowMenuTitleName */ ) ;
+    wxString strippedWindowMenuTitle = wxStripMenuCodes( wxString(wxT("&Window")) /* wxApp::s_macWindowMenuTitleName */ ) ;
     wxString strippedTranslatedWindowMenuTitle = wxStripMenuCodes( wxString( _("&Window") ) ) ;
 
     wxMenuList::compatibility_iterator menuIter = m_menus.GetFirst();
