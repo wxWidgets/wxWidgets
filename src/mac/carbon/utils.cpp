@@ -650,10 +650,10 @@ wxString wxGetOsDescription()
 #ifdef __DARWIN__
     struct utsname name;
     uname(&name);
-	return wxString::Format(_T("Mac OS X (%s %s %s)"),
-			wxString::FromAscii(name.sysname).c_str(),
-			wxString::FromAscii(name.release).c_str(),
-			wxString::FromAscii(name.machine).c_str());
+    return wxString::Format(_T("Mac OS X (%s %s %s)"),
+            wxString::FromAscii(name.sysname).c_str(),
+            wxString::FromAscii(name.release).c_str(),
+            wxString::FromAscii(name.machine).c_str());
 #else
 #ifdef WXWIN_OS_DESCRIPTION
     // use configure generated description if available
@@ -1642,6 +1642,11 @@ OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID pro
     Boolean expandableRows )
 {
     return SetDataBrowserListViewDisclosureColumn( m_controlRef, property, expandableRows);
+}
+
+OSStatus wxMacDataBrowserControl::GetItemPartBounds( DataBrowserItemID item, DataBrowserPropertyID property, DataBrowserPropertyPart part, Rect * bounds )
+{
+    return GetDataBrowserItemPartBounds( m_controlRef, item, property, part, bounds);
 }
 
 // ============================================================================

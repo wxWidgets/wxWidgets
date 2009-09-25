@@ -802,6 +802,8 @@ public :
     OSStatus SetHeaderDesc( DataBrowserPropertyID property, DataBrowserListViewHeaderDesc *desc );
 
     OSStatus SetDisclosureColumn( DataBrowserPropertyID property , Boolean expandableRows );
+
+    OSStatus GetItemPartBounds( DataBrowserItemID item, DataBrowserPropertyID property, DataBrowserPropertyPart part, Rect * bounds );
 protected :
 
     static pascal void DataBrowserItemNotificationProc(
