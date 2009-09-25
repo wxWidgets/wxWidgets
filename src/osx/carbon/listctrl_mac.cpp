@@ -103,7 +103,7 @@ wxEND_HANDLERS_TABLE()
 wxCONSTRUCTOR_5( wxListCtrl , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle )
 
 /*
- TODO : Expose more information of a list's layout etc. via appropriate objects (à la NotebookPageInfo)
+ TODO : Expose more information of a list's layout etc. via appropriate objects (a la NotebookPageInfo)
 */
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
@@ -615,7 +615,7 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
     int hitResult;
     long current = HitTest(event.GetPosition(), hitResult);
     if ((current == m_current) &&
-        (hitResult == wxLIST_HITTEST_ONITEM) &&
+        (hitResult & wxLIST_HITTEST_ONITEMLABEL) &&
         HasFlag(wxLC_EDIT_LABELS) )
     {
         m_renameTimer->Start( 100, true );
@@ -2020,11 +2020,16 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
     return -1;
 }
 
+static void calculateCGDrawingBounds(CGRect inItemRect, CGRect *outIconRect, CGRect *outTextRect, bool hasIcon);
+
 // Determines which item (if any) is at the specified point,
 // giving details in 'flags' (see wxLIST_HITTEST_... flags above)
 long
 wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 {
+    if (ptrSubItem)
+        *ptrSubItem = -1;
+
     if (m_genericImpl)
         return m_genericImpl->HitTest(point, flags, ptrSubItem);
 
@@ -2051,27 +2056,95 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
         DataBrowserItemID id;
         m_dbImpl->GetItemID( (DataBrowserTableViewRowIndex) row, &id );
 
-        // TODO: Use GetDataBrowserItemPartBounds to return if we are in icon or label
-        if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
+        CGPoint click_point = CGPointMake( point.x, point.y );
+        if (row < GetItemCount() )
         {
-            wxMacListCtrlItem* lcItem;
-            lcItem = (wxMacListCtrlItem*) id;
-            if (lcItem)
+            short column;
+            for( column = 0; column < GetColumnCount(); column++ )
             {
-                flags = wxLIST_HITTEST_ONITEM;
-                return row;
-            }
-        }
-        else
-        {
-            if (row < GetItemCount() )
-            {
-                flags = wxLIST_HITTEST_ONITEM;
-                return row;
-            }
-        }
+               Rect enclosingRect;
+               CGRect enclosingCGRect, iconCGRect, textCGRect;
+               int imgIndex = -1;
+               wxMacListCtrlItem* lcItem;
 
+               WXUNUSED_UNLESS_DEBUG( OSStatus status = ) m_dbImpl->GetItemPartBounds( id, kMinColumnId + column, kDataBrowserPropertyEnclosingPart, &enclosingRect );
+               wxASSERT( status == noErr );
+              
+               enclosingCGRect = CGRectMake(enclosingRect.left,
+                                            enclosingRect.top,
+                                            enclosingRect.right - enclosingRect.left,
+                                            enclosingRect.bottom - enclosingRect.top);
+              
+               if (column >= 0)
+               {
+                   if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
+                   {
+                       lcItem = (wxMacListCtrlItem*) id;
+                       if (lcItem->HasColumnInfo(column))
+                       {
+                           wxListItem* item = lcItem->GetColumnInfo(column);
+                          
+                           if (item->GetMask() & wxLIST_MASK_IMAGE)
+                           {
+                               imgIndex = item->GetImage();
+                           }
+                       }
+                   }
+                   else
+                   {
+                       long itemNum = (long)id-1;
+                       if (itemNum >= 0 && itemNum < GetItemCount())
+                       {
+                           imgIndex = OnGetItemColumnImage( itemNum, column );
+                       }
+                   }
+               }
+          
+               calculateCGDrawingBounds(enclosingCGRect, &iconCGRect, &textCGRect, (imgIndex != -1) );
+              
+               if ( CGRectContainsPoint( iconCGRect, click_point ) )
+               {
+                   flags = wxLIST_HITTEST_ONITEMICON;
+                   if (ptrSubItem)
+                       *ptrSubItem = column;
+                   return row;
+               }
+               else if ( CGRectContainsPoint( textCGRect, click_point ) )
+               {
+                   flags = wxLIST_HITTEST_ONITEMLABEL;
+                   if (ptrSubItem)
+                       *ptrSubItem = column;
+                   return row;
+               }
+           }
+
+           if ( !(GetWindowStyleFlag() & wxLC_VIRTUAL ) )
+           {
+               wxMacListCtrlItem* lcItem;
+               lcItem = (wxMacListCtrlItem*) id;
+               if (lcItem)
+               {
+                   flags = wxLIST_HITTEST_ONITEM;
+                   if (ptrSubItem)
+                       *ptrSubItem = column;
+                   return row;
+               }
+           }
+           else
+           {
+               flags = wxLIST_HITTEST_ONITEM;
+               if (ptrSubItem)
+                   *ptrSubItem = column;
+               return row;
+           }
+         }
+         else
+         {
+             if ( wxControl::HitTest( point ) )
+                 flags = wxLIST_HITTEST_NOWHERE;
+         }
     }
+
     return -1;
 }
 
@@ -2793,6 +2866,8 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     Boolean active;
     ThemeDrawingState savedState = NULL;
     CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
+    wxMacCGContextStateSaver top_saver_cg( context );
+
     RGBColor labelColor;
     labelColor.red = 0;
     labelColor.green = 0;
@@ -2835,14 +2910,12 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &backgroundColor);
             GetThemeTextColor(kThemeTextColorBlack, gdDepth, colorDevice, &labelColor);
         }
-        CGContextSaveGState(context);
+        wxMacCGContextStateSaver cg( context );
 
         CGContextSetRGBFillColor(context, (CGFloat)backgroundColor.red / (CGFloat)USHRT_MAX,
                       (CGFloat)backgroundColor.green / (CGFloat)USHRT_MAX,
                       (CGFloat)backgroundColor.blue / (CGFloat)USHRT_MAX, (CGFloat) 1.0);
         CGContextFillRect(context, enclosingCGRect);
-
-        CGContextRestoreGState(context);
     }
     else
     {
@@ -2871,18 +2944,18 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     if (imgIndex != -1)
     {
         wxImageList* imageList = list->GetImageList(wxIMAGE_LIST_SMALL);
-        if (imageList && imageList->GetImageCount() > 0){
+        if (imageList && imageList->GetImageCount() > 0)
+        {
             wxBitmap bmp = imageList->GetBitmap(imgIndex);
             IconRef icon = bmp.GetIconRef();
 
-            CGContextSaveGState(context);
+            wxMacCGContextStateSaver cg( context );
+
             CGContextTranslateCTM(context, 0,iconCGRect.origin.y + CGRectGetMaxY(iconCGRect));
             CGContextScaleCTM(context,1.0f,-1.0f);
             PlotIconRefInContext(context, &iconCGRect, kAlignNone,
               active ? kTransformNone : kTransformDisabled, NULL,
               kPlotIconRefNormalFlags, icon);
-
-            CGContextRestoreGState(context);
         }
     }
 
@@ -2940,14 +3013,14 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     info.truncationPosition = kHIThemeTextTruncationEnd;
     info.truncationMaxLines = 1;
 
-    CGContextSaveGState(context);
-    CGContextSetRGBFillColor (context, (CGFloat)labelColor.red / (CGFloat)USHRT_MAX,
+    {
+        wxMacCGContextStateSaver cg( context );
+        CGContextSetRGBFillColor (context, (CGFloat)labelColor.red / (CGFloat)USHRT_MAX,
                       (CGFloat)labelColor.green / (CGFloat)USHRT_MAX,
                       (CGFloat)labelColor.blue / (CGFloat)USHRT_MAX, (CGFloat) 1.0);
 
-    HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal);
-
-    CGContextRestoreGState(context);
+        HIThemeDrawTextBox(cfString, &textCGRect, &info, context, kHIThemeOrientationNormal);
+    }
 
 #ifndef __LP64__
     if (savedState != NULL)

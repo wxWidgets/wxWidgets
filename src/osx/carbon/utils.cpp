@@ -624,6 +624,11 @@ OSStatus wxMacDataBrowserControl::SetDisclosureColumn( DataBrowserPropertyID pro
     return SetDataBrowserListViewDisclosureColumn( m_controlRef, property, expandableRows);
 }
 
+OSStatus wxMacDataBrowserControl::GetItemPartBounds( DataBrowserItemID item, DataBrowserPropertyID property, DataBrowserPropertyPart part, Rect * bounds )
+{
+    return GetDataBrowserItemPartBounds( m_controlRef, item, property, part, bounds);
+}
+
 // ============================================================================
 // Higher-level Databrowser
 // ============================================================================
