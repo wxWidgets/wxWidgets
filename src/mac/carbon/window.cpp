@@ -362,8 +362,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             inKillFocusEvent = true ;
                             wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                             event.SetEventObject(thisWindow);
-                            thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                            // Call this function before sending the event, in case the window is destroyed.
                             thisWindow->wxWindowMac::OnSetFocus(event);
+                            thisWindow->GetEventHandler()->ProcessEvent(event) ;
                             inKillFocusEvent = false ;
                         }
                     }
