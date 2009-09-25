@@ -693,7 +693,7 @@ public:
 private:
     HANDLE m_hPrinter;
 
-    wxDECLARE_NO_COPY_CLASS(WinPrinter);
+    DECLARE_NO_COPY_CLASS(WinPrinter);
 };
 
 // register the class when it is first needed and unregister it in dtor
