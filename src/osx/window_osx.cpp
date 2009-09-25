@@ -2250,6 +2250,8 @@ bool wxWindowMac::Reparent(wxWindowBase *newParentBase)
 
     m_peer->RemoveFromParent();
     m_peer->Embed( GetParent()->GetPeer() );
+
+    MacChildAdded();
     return true;
 }
 
