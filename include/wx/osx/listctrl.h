@@ -326,6 +326,10 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   virtual bool SetBackgroundColour(const wxColour& colour);
   virtual wxColour GetBackgroundColour() const;
 
+  virtual void Freeze ();
+  virtual void Thaw ();
+  virtual void Update ();
+
   // functions for editing/timer
   void OnRenameTimer();
   bool OnRenameAccept(long itemEdit, const wxString& value);
