@@ -150,6 +150,8 @@ public :
     virtual void            UpdateLineToEnd( unsigned int n);
 
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
+    virtual bool            DoHandleKeyEvent(NSEvent *event);
+
 protected :
     wxNSTableView*          m_tableView ;
 
@@ -508,6 +510,18 @@ void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXU
        return;
 
     list->HandleLineEvent( sel, true );
+}
+
+bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
+{
+    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    SetupKeyEvent( wxevent, event );
+    wxevent.SetEventObject(GetWXPeer());
+    bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
+
+    // no interpretKeyEvents here, but rerouting to native keyhandling
+    
+    return result;
 }
 
 // accessing content
