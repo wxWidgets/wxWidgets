@@ -644,6 +644,9 @@ void wxMenuBar::MacInstallMenuBar()
                 if (subMenu)
                 {
                     // we don't support hierarchical menus in the help menu yet
+                    UMAAppendMenuItem(mh, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding() );
+                    MenuItemIndex position = CountMenuItems(mh);
+                    ::SetMenuItemHierarchicalMenu(mh, position, MAC_WXHMENU(subMenu->GetHMenu()));
                 }
                 else
                 {
