@@ -1683,7 +1683,6 @@ wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItem
   bool is_active = IsControlActive( this->m_controlRef );
   if (state == kDataBrowserItemIsSelected)
   {
-
       wxColour col( wxMacCreateCGColorFromHITheme( (is_active) ?
                              kThemeBrushAlternatePrimaryHighlightColor
                              : kThemeBrushSecondaryHighlightColor ) );
@@ -1695,14 +1694,9 @@ wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItem
       rect.x = itemrect.left-2;
       rect.width = itemrect.right-itemrect.left+3;
 
-      wxBrush selBrush( col );
-      wxPen oldpen( dc->GetPen() );
-      wxBrush oldbrush( dc->GetBrush() );
-      dc->SetPen( *wxTRANSPARENT_PEN );
-      dc->SetBrush( selBrush );
+      wxDCPenChanger setPen(*dc, *wxTRANSPARENT_PEN);
+      wxDCBrushChanger setBrush(*dc, col);
       dc->DrawRectangle(rect);
-      dc->SetBrush( oldbrush );
-      dc->SetPen( oldpen );
   }
 
   wxDataViewModel *model = dataViewCtrlPtr->GetModel();
