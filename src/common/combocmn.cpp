@@ -1874,7 +1874,7 @@ void wxComboCtrlBase::OnButtonClick()
     {
         wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
         event.SetEventObject(this);
-        ProcessCommand(event);
+        HandleWindowEvent(event);
 
         ShowPopup();
     }
@@ -2157,7 +2157,7 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     {
         wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
         event.SetEventObject(this);
-        ProcessCommand(event);
+        HandleWindowEvent(event);
     }
 }
 
