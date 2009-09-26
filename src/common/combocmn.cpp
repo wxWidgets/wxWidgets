@@ -291,7 +291,7 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
          winFocused != m_combo->GetButton() // GTK (atleast) requires this
         )
     {
-        m_combo->HidePopup();
+        m_combo->HidePopup(true);
     }
 
     event.Skip();
@@ -299,37 +299,37 @@ void wxComboFrameEventHandler::OnIdle( wxIdleEvent& event )
 
 void wxComboFrameEventHandler::OnMenuEvent( wxMenuEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
 void wxComboFrameEventHandler::OnMouseEvent( wxMouseEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
 void wxComboFrameEventHandler::OnClose( wxCloseEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
 void wxComboFrameEventHandler::OnActivate( wxActivateEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
 void wxComboFrameEventHandler::OnResize( wxSizeEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
 void wxComboFrameEventHandler::OnMove( wxMoveEvent& event )
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
     event.Skip();
 }
 
@@ -413,7 +413,7 @@ void wxComboPopupWindow::OnDismiss()
     wxASSERT_MSG( combo->IsKindOf(CLASSINFO(wxComboCtrlBase)),
                   wxT("parent might not be wxComboCtrl, but check IMPLEMENT_DYNAMIC_CLASS(2) macro for correctness") );
 
-    combo->OnPopupDismiss();
+    combo->OnPopupDismiss(true);
 }
 #endif // USES_WXPOPUPTRANSIENTWINDOW
 
@@ -476,7 +476,7 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
     if ( !event.GetActive() )
     {
         // Tell combo control that we are dismissed.
-        m_combo->HidePopup();
+        m_combo->HidePopup(true);
 
         event.Skip();
     }
@@ -551,7 +551,7 @@ bool wxComboPopup::LazyCreate()
 
 void wxComboPopup::Dismiss()
 {
-    m_combo->HidePopup();
+    m_combo->HidePopup(true);
 }
 
 // ----------------------------------------------------------------------------
@@ -1624,7 +1624,7 @@ bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
         if ( IsPopupWindowState(Visible) &&
              ( evtType == wxEVT_LEFT_DOWN || evtType == wxEVT_RIGHT_DOWN ) )
         {
-            HidePopup();
+            HidePopup(true);
             return true;
         }
     }
@@ -1652,7 +1652,7 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
     #if USES_WXPOPUPWINDOW
             // Click here always hides the popup.
             if ( m_popupWinType == POPUPWIN_WXPOPUPWINDOW )
-                HidePopup();
+                HidePopup(true);
     #endif
         }
         else
@@ -1808,7 +1808,7 @@ void wxComboCtrlBase::CreatePopup()
 // Destroy popup window and the child control
 void wxComboCtrlBase::DestroyPopup()
 {
-    HidePopup();
+    HidePopup(true);
 
     if ( m_popup )
         m_popup->RemoveEventHandler(m_popupExtraHandler);
@@ -1871,9 +1871,17 @@ void wxComboCtrlBase::OnButtonClick()
     // Derived classes can override this method for totally custom
     // popup action
     if ( !IsPopupWindowState(Visible) )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+        event.SetEventObject(this);
+        ProcessCommand(event);
+
         ShowPopup();
+    }
     else
-        HidePopup();
+    {
+        HidePopup(true);
+    }
 }
 
 void wxComboCtrlBase::ShowPopup()
@@ -2092,7 +2100,7 @@ void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
     Refresh();
 }
 
-void wxComboCtrlBase::OnPopupDismiss()
+void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
 {
     // Just in case, avoid double dismiss
     if ( IsPopupWindowState(Hidden) )
@@ -2144,9 +2152,16 @@ void wxComboCtrlBase::OnPopupDismiss()
     Refresh();
 
     SetFocus();
+
+    if ( generateEvent )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
+        event.SetEventObject(this);
+        ProcessCommand(event);
+    }
 }
 
-void wxComboCtrlBase::HidePopup()
+void wxComboCtrlBase::HidePopup(bool generateEvent)
 {
     // Should be able to call this without popup interface
     if ( IsPopupWindowState(Hidden) )
@@ -2158,7 +2173,7 @@ void wxComboCtrlBase::HidePopup()
 
     m_winPopup->Hide();
 
-    OnPopupDismiss();
+    OnPopupDismiss(generateEvent);
 }
 
 // ----------------------------------------------------------------------------

@@ -304,6 +304,12 @@ struct wxComboCtrlFeatures
     @event{EVT_TEXT_ENTER(id, func)}
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
+    @event{EVT_COMBOX_DROPDOWN(id, func)}
+           Process a wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           when the popup window is shown (drops down).
+    @event{EVT_COMBOX_CLOSEUP(id, func)}
+           Process a wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           when the popup window of the combo control disappears (closes up).
     @endEventTable
 
     @library{wxbase}
@@ -504,8 +510,12 @@ public:
 
     /**
         Dismisses the popup window.
+
+        @param generateEvent
+            Set this to @true in order to generate
+            wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
     */
-    virtual void HidePopup();
+    virtual void HidePopup(bool generateEvent=false);
 
     /**
         Returns @true if the popup is currently shown

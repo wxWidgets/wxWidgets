@@ -158,7 +158,7 @@ public:
 
     // show/hide popup window
     virtual void ShowPopup();
-    virtual void HidePopup();
+    virtual void HidePopup(bool generateEvent=false);
 
     // Override for totally custom combo action
     virtual void OnButtonClick();
@@ -403,7 +403,7 @@ public:
     bool IsCreated() const { return m_iFlags & wxCC_IFLAG_CREATED ? true : false; }
 
     // common code to be called on popup hide/dismiss
-    void OnPopupDismiss();
+    void OnPopupDismiss(bool generateEvent);
 
     // PopupShown states
     enum

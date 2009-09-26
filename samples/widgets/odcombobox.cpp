@@ -113,6 +113,8 @@ protected:
     void OnButtonAddMany(wxCommandEvent& event);
 
     void OnComboBox(wxCommandEvent& event);
+    void OnDropDown(wxCommandEvent& event);
+    void OnCloseUp(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -218,6 +220,8 @@ BEGIN_EVENT_TABLE(ODComboboxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(ODComboPage_ChangeText, ODComboboxWidgetsPage::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(ODComboPage_DeleteSel, ODComboboxWidgetsPage::OnUpdateUIDeleteSelButton)
 
+    EVT_COMBOBOX_DROPDOWN(ODComboPage_Combo, ODComboboxWidgetsPage::OnDropDown)
+    EVT_COMBOBOX_CLOSEUP(ODComboPage_Combo, ODComboboxWidgetsPage::OnCloseUp)
     EVT_COMBOBOX(ODComboPage_Combo, ODComboboxWidgetsPage::OnComboBox)
     EVT_TEXT(ODComboPage_Combo, ODComboboxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(ODComboPage_Combo, ODComboboxWidgetsPage::OnComboText)
@@ -842,6 +846,16 @@ wxBitmap ODComboboxWidgetsPage::CreateBitmap(const wxColour& colour)
     bmp.SetMask(mask);
 
     return bmp;
+}
+
+void ODComboboxWidgetsPage::OnDropDown(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(wxT("Combobox dropped down"));
+}
+
+void ODComboboxWidgetsPage::OnCloseUp(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(wxT("Combobox closed up"));
 }
 
 #endif //wxUSE_ODCOMBOBOX
