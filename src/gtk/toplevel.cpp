@@ -636,7 +636,17 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if ((style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
     {
         m_gdkDecor = 0;
-        m_gdkFunc = 0;
+        m_gdkFunc = GDK_FUNC_MOVE;
+
+        if ( ( style & wxMINIMIZE_BOX ) == wxMINIMIZE_BOX )
+        {
+            m_gdkFunc |= GDK_FUNC_MINIMIZE;
+        }
+
+        if ( ( style & wxCLOSE_BOX ) == wxCLOSE_BOX )
+        {
+            m_gdkFunc |= GDK_FUNC_CLOSE;
+        }
     }
     else
     if (m_miniEdge > 0)
@@ -810,7 +820,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         if (frame && frame->GetToolBar())
         {
             frame->GetToolBar()->Show(true);
-	}
+        }
     }
 #endif
 
