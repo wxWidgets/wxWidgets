@@ -17,7 +17,7 @@
 
 #include "wx/object.h"
 
-class WXDLLIMPEXP_ADV wxSoundTimer;
+class WXDLLIMPEXP_FWD_ADV wxSoundTimer;
 
 class WXDLLIMPEXP_ADV wxSoundData
 {
