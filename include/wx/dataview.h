@@ -727,6 +727,20 @@ public:
         { return false; }
 #endif // wxUSE_DRAG_AND_DROP
 
+    // define control visual attributes
+    // --------------------------------
+
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL)
+    {
+        return wxControl::GetCompositeControlsDefaultAttributes(variant);
+    }
+
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
     virtual void DoSetIndent() = 0;
