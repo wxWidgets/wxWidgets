@@ -2732,7 +2732,10 @@ void wxListMainWindow::Thaw()
     wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen list control?") );
 
     if ( --m_freezeCount == 0 )
-        Refresh();
+        if (m_dirty)
+            RecalculatePositions();
+        else
+            Refresh();
 }
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -5943,6 +5946,14 @@ void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
             }
         }
     }
+}
+
+void wxGenericListCtrl::Update()
+{
+    if (m_mainWin && m_mainWin->m_dirty)
+        m_mainWin->RecalculatePositions();
+
+    wxControl::Update();
 }
 
 void wxGenericListCtrl::Freeze()

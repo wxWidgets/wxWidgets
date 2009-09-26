@@ -136,8 +136,7 @@ public:
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, long data );
     bool Update( long item );
-    // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxControl::Update(); }
+    virtual void Update();
 
     // are we in report mode?
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
