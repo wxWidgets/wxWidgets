@@ -447,6 +447,8 @@ protected:
     virtual void DoSetExpanderColumn();
     virtual void DoSetIndent();
 
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
+
 private:
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;

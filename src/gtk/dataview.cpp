@@ -4643,6 +4643,10 @@ void wxDataViewCtrl::GtkEnableSelectionEvents()
                             G_CALLBACK (wxdataview_selection_changed_callback), this);
 }
 
+// ----------------------------------------------------------------------------
+// visual attributes stuff
+// ----------------------------------------------------------------------------
+
 // static
 wxVisualAttributes
 wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
@@ -4650,9 +4654,12 @@ wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return GetDefaultAttributesFromGTKWidget(gtk_tree_view_new);
 }
 
+void wxDataViewCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
+{
+    wxDataViewCtrlBase::DoApplyWidgetStyle(style);
+    gtk_widget_modify_style(m_treeview, style);
+}
 
-#endif
-    // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxUSE_GENERICDATAVIEWCTRL
 
-#endif
-    // wxUSE_DATAVIEWCTRL
+#endif // wxUSE_DATAVIEWCTRL
