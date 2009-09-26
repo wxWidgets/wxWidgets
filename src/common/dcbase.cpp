@@ -30,6 +30,7 @@
 #include "wx/dcscreen.h"
 #include "wx/dcprint.h"
 #include "wx/prntbase.h"
+#include "wx/scopeguard.h"
 
 #ifndef WX_PRECOMP
     #include "wx/math.h"
@@ -1054,8 +1055,9 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
                                       const wxColour& destColour,
                                       const wxPoint& circleCenter)
 {
-    //save the old pen color
-    wxColour oldPenColour = m_pen.GetColour();
+    // save the old pen and ensure it is restored on exit
+    const wxPen penOrig = m_pen;
+    wxON_BLOCK_EXIT_SET(m_pen, penOrig);
 
     wxUint8 nR1 = destColour.Red();
     wxUint8 nG1 = destColour.Green();
@@ -1100,12 +1102,10 @@ void wxDCImpl::DoGradientFillConcentric(const wxRect& rect,
             nB = (wxUint8)(nB1 + ((nB2 - nB1) * nGradient / 100));
 
             //set the pixel
-            m_pen.SetColour(wxColour(nR,nG,nB));
+            m_pen = wxColour(nR,nG,nB);
             DoDrawPoint(x + rect.GetLeft(), y + rect.GetTop());
         }
     }
-    //return old pen color
-    m_pen.SetColour(oldPenColour);
 }
 
 void wxDCImpl::InheritAttributes(wxWindow *win)
