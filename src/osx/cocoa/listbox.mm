@@ -512,7 +512,7 @@ void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXU
     list->HandleLineEvent( sel, true );
 }
 
-bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
+bool wxListWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );

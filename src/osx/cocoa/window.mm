@@ -271,7 +271,7 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
     return retval;
 }
 
-void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charString = NULL )
+void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charString)
 {
     UInt32 modifiers = [nsEvent modifierFlags] ;
     int eventType = [nsEvent type];
@@ -350,12 +350,19 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     wxevent.m_uniChar = aunichar;
 #endif
     wxevent.m_keyCode = keyval;
+
+    wxWindowMac* peer = GetWXPeer();
+    if ( peer )
+    {
+        wxevent.SetEventObject(peer);
+        wxevent.SetId(peer->GetId()) ;
+    }
 }
 
 UInt32 g_lastButton = 0 ;
 bool g_lastButtonWasFakeRight = false ;
 
-void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
+void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 {
     int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
@@ -521,7 +528,12 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     }
 
     wxevent.m_clickCount = clickCount;
-
+    wxWindowMac* peer = GetWXPeer();
+    if ( peer )
+    {
+        wxevent.SetEventObject(peer);
+        wxevent.SetId(peer->GetId()) ;
+    }
 }
 
 @implementation wxNSView
@@ -1554,7 +1566,6 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
     wxKeyEvent wxevent(wxEVT_CHAR);
     SetupKeyEvent( wxevent, event, text );
-    wxevent.SetEventObject(GetWXPeer());
 
     return GetWXPeer()->OSXHandleKeyEvent(wxevent);
 }
@@ -1563,7 +1574,6 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
-    wxevent.SetEventObject(GetWXPeer());
     bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
 
     // this will fire higher level events, like insertText, to help
@@ -1589,8 +1599,7 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     clickLocation = [m_osxView convertPoint:[event locationInWindow] fromView:nil];
     wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent( wxevent , event ) ;
-    wxevent.SetEventObject(GetWXPeer());
+    SetupMouseEvent(wxevent , event) ;
     wxevent.m_x = pt.x;
     wxevent.m_y = pt.y;
 
