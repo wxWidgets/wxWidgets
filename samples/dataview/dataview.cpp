@@ -28,6 +28,7 @@
 #include "wx/datetime.h"
 #include "wx/splitter.h"
 #include "wx/aboutdlg.h"
+#include "wx/colordlg.h"
 #include "wx/choicdlg.h"
 #include "wx/numdlg.h"
 #include "wx/spinctrl.h"
@@ -73,6 +74,8 @@ public:
 public:     // event handlers
 
     void OnStyleChange(wxCommandEvent& event);
+    void OnSetBackgroundColour(wxCommandEvent& event);
+    void OnSetForegroundColour(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -227,6 +230,8 @@ bool MyApp::OnInit()
 enum
 {
     ID_CLEARLOG = wxID_HIGHEST+1,
+    ID_BACKGROUND_COLOUR,
+    ID_FOREGROUND_COLOUR,
     ID_STYLE_MENU,
 
     // file menu
@@ -264,6 +269,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
     EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
     EVT_MENU( ID_CLEARLOG, MyFrame::OnClearLog )
+
+    EVT_MENU( ID_FOREGROUND_COLOUR, MyFrame::OnSetForegroundColour )
+    EVT_MENU( ID_BACKGROUND_COLOUR, MyFrame::OnSetBackgroundColour )
 
     EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, MyFrame::OnPageChanged )
 
@@ -330,7 +338,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     style_menu->AppendCheckItem(ID_VERT_RULES, "Display vertical rules");
 
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(ID_CLEARLOG, "Clear log");
+    file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
+    file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-F");
+    file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
     file_menu->AppendSeparator();
     file_menu->Append(ID_EXIT, "E&xit");
@@ -609,6 +619,28 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 void MyFrame::OnClearLog( wxCommandEvent& WXUNUSED(event) )
 {
     m_log->Clear();
+}
+
+void MyFrame::OnSetForegroundColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    wxColour col = wxGetColourFromUser(this, dvc->GetForegroundColour());
+    if ( col.IsOk() )
+    {
+        dvc->SetForegroundColour(col);
+        Refresh();
+    }
+}
+
+void MyFrame::OnSetBackgroundColour(wxCommandEvent& WXUNUSED(event))
+{
+    wxDataViewCtrl * const dvc = m_ctrl[m_notebook->GetSelection()];
+    wxColour col = wxGetColourFromUser(this, dvc->GetBackgroundColour());
+    if ( col.IsOk() )
+    {
+        dvc->SetBackgroundColour(col);
+        Refresh();
+    }
 }
 
 void MyFrame::OnPageChanged( wxBookCtrlEvent& WXUNUSED(event) )
