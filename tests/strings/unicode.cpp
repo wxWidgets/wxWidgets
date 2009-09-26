@@ -193,9 +193,9 @@ void UnicodeTestCase::ToFromAscii()
 
 void UnicodeTestCase::ConstructorsWithConversion()
 {
-    // the string "Déjà" in UTF-8 and wchar_t:
+    // the string "DÃ©jÃ " in UTF-8 and wchar_t:
     const unsigned char utf8Buf[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
-    const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "Déj"
+    const unsigned char utf8subBuf[] = {0x44,0xC3,0xA9,0x6A,0}; // just "DÃ©j"
     const char *utf8 = (char *)utf8Buf;
     const char *utf8sub = (char *)utf8subBuf;
 
@@ -221,7 +221,7 @@ void UnicodeTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT_EQUAL( sub, s4 );
 
     // conversion should stop with failure at pos 35
-    wxString s("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", wxConvUTF8);
+    wxString s("\t[pl]open.format.Sformatuj dyskietk\xea=gfloppy %f", wxConvUTF8);
     CPPUNIT_ASSERT( s.empty() );
 #endif // wxUSE_UNICODE
 
