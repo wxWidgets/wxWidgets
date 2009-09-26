@@ -47,7 +47,7 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
-#include "wx/file.h"
+#include "wx/ffile.h"
 
 #include "ScintillaWX.h"
 
@@ -509,73 +509,56 @@ void wxStyledTextCtrl::ScrollToColumn(int column) {
 
 
 #if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxStyledTextCtrl::DoSaveFile(const wxString& filename, int fileType)
+{
+   bool ok = wxTextAreaBase::DoSaveFile(filename, fileType);
 #else
 bool wxStyledTextCtrl::SaveFile(const wxString& filename)
-#endif
 {
-    wxFile file(filename, wxFile::write);
-
-    if (!file.IsOpened())
-        return false;
-
-    bool success = file.Write(GetText(), *wxConvCurrent);
-
-    if (success)
+#if wxUSE_FFILE
+    wxFFile file(filename, wxT("w"));
+    bool ok = file.IsOpened() && file.Write(GetValue(), *wxConvCurrent);
+#else
+    bool ok = false;
+#endif // wxUSE_FFILE
+#endif
+    if (ok)
+    {
         SetSavePoint();
-
-    return success;
+    }
+    return ok;
 }
 
 #if wxUSE_TEXTCTRL
-bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxStyledTextCtrl::DoLoadFile(const wxString& filename, int fileType)
+{
+   bool ok = wxTextAreaBase::DoLoadFile(filename, fileType);
 #else
 bool wxStyledTextCtrl::LoadFile(const wxString& filename)
-#endif
 {
-    bool success = false;
-    wxFile file(filename, wxFile::read);
-
-    if (file.IsOpened())
+#if wxUSE_FFILE
+    wxFFile file(filename);
+    bool ok = file.IsOpened();
+    if (ok)
     {
-        wxString contents;
-        // get the file size (assume it is not huge file...)
-        ssize_t len = (ssize_t)file.Length();
-
-        if (len > 0)
+        wxString text;
+        ok = file.ReadAll(&text, *wxConvCurrent);
+        if (ok)
         {
-#if wxUSE_UNICODE
-            wxMemoryBuffer buffer(len+1);
-            success = (file.Read(buffer.GetData(), len) == len);
-            if (success) {
-                ((char*)buffer.GetData())[len] = 0;
-                contents = wxString(buffer, *wxConvCurrent, len);
-            }
-#else
-            wxString buffer;
-            success = (file.Read(wxStringBuffer(buffer, len), len) == len);
-            contents = buffer;
-#endif
-        }
-        else
-        {
-            if (len == 0)
-                success = true;  // empty file is ok
-            else
-                success = false; // len == wxInvalidOffset
-        }
-
-        if (success)
-        {
-            SetText(contents);
-            EmptyUndoBuffer();
-            SetSavePoint();
+            SetValue(text);
         }
     }
-
-    return success;
+#else
+    bool ok = false;
+#endif // wxUSE_FFILE
+#endif
+   if (ok)
+   {
+       EmptyUndoBuffer();
+       SetSavePoint();
+   }
+   return ok;
 }
-
 
 #if wxUSE_DRAG_AND_DROP
 wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {

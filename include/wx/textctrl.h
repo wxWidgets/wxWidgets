@@ -582,11 +582,13 @@ public:
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                             wxTextCoord *col,
                                             wxTextCoord *row) const;
+    virtual wxString GetValue() const = 0;
+    virtual void SetValue(const wxString& value) = 0;
 
 protected:
     // implementation of loading/saving
-    virtual bool DoLoadFile(const wxString& file, int fileType) = 0;
-    virtual bool DoSaveFile(const wxString& file, int fileType) = 0;
+    virtual bool DoLoadFile(const wxString& file, int fileType);
+    virtual bool DoSaveFile(const wxString& file, int fileType);
 
 
     // the name of the last file loaded with LoadFile() which will be used by
@@ -610,6 +612,16 @@ class WXDLLIMPEXP_CORE wxTextCtrlIface : public wxTextAreaBase,
 {
 public:
     wxTextCtrlIface() { }
+
+    // wxTextAreaBase overrides
+    virtual wxString GetValue() const
+    {
+       return wxTextEntryBase::GetValue();
+    }
+    virtual void SetValue(const wxString& value)
+    {
+       wxTextEntryBase::SetValue(value);
+    }
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlIface);
@@ -682,6 +694,16 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
+
+    // wxTextAreaBase overrides
+    virtual wxString GetValue() const
+    {
+       return wxTextEntry::GetValue();
+    }
+    virtual void SetValue(const wxString& value)
+    {
+       wxTextEntry::SetValue(value);
+    }
 
 protected:
     // override streambuf method

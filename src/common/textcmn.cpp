@@ -736,7 +736,7 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 // file IO functions
 // ----------------------------------------------------------------------------
 
-bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextAreaBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType))
 {
 #if wxUSE_FFILE
     wxFFile file(filename);
@@ -745,20 +745,36 @@ bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int WXUNUSED(fileType)
         wxString text;
         if ( file.ReadAll(&text) )
         {
-            ChangeValue(text);
-
-            DiscardEdits();
-
-            m_filename = filename;
+            SetValue(text);
 
             return true;
         }
     }
-
-    wxLogError(_("File couldn't be loaded."));
 #endif // wxUSE_FFILE
 
     return false;
+}
+
+bool wxTextCtrlBase::DoLoadFile(const wxString& filename, int fileType)
+{
+    if ( wxTextAreaBase::DoLoadFile(filename, fileType) )
+    {
+        DiscardEdits();
+        m_filename = filename;
+        return true;
+    }
+    wxLogError(_("File couldn't be loaded."));
+    return false;
+}
+
+bool wxTextAreaBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+{
+#if wxUSE_FFILE
+    wxFFile file(filename, wxT("w"));
+    return file.IsOpened() && file.Write(GetValue(), *wxConvCurrent);
+#else
+    return false;
+#endif // wxUSE_FFILE
 }
 
 bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
@@ -775,11 +791,9 @@ bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
     return DoSaveFile(filenameToUse, fileType);
 }
 
-bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType))
+bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int fileType)
 {
-#if wxUSE_FFILE
-    wxFFile file(filename, wxT("w"));
-    if ( file.IsOpened() && file.Write(GetValue()) )
+    if ( wxTextAreaBase::DoSaveFile(filename, fileType) )
     {
         // if it worked, save for future calls
         m_filename = filename;
@@ -789,10 +803,6 @@ bool wxTextCtrlBase::DoSaveFile(const wxString& filename, int WXUNUSED(fileType)
 
         return true;
     }
-#endif // wxUSE_FFILE
-
-    wxLogError(_("The text couldn't be saved."));
-
     return false;
 }
 

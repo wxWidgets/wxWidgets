@@ -84,11 +84,12 @@ class  WXDLLIMPEXP_FWD_STC wxStyledTextEvent;
 
 //----------------------------------------------------------------------
 
-class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl
-                                       , public wxTextEntryBase
+class WXDLLIMPEXP_STC wxStyledTextCtrl : public wxControl,
 #if wxUSE_TEXTCTRL
-                                       , public wxTextAreaBase
-#endif // wxUSE_TEXTCTRL
+                                         public wxTextCtrlIface
+#else // !wxUSE_TEXTCTRL
+                                         public wxTextEntryBase
+#endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL
 {
 public:
 
