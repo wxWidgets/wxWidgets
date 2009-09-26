@@ -416,8 +416,10 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
     wxMacEditHelper helper(m_textView);
-
+    NSEvent* formerEvent = m_lastKeyDownEvent;
+    m_lastKeyDownEvent = nil;
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    m_lastKeyDownEvent = formerEvent;
 }
 
 void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
@@ -538,6 +540,8 @@ void wxNSTextFieldControl::SetSelection( long from , long to )
 
 void wxNSTextFieldControl::WriteText(const wxString& str)
 {
+    NSEvent* formerEvent = m_lastKeyDownEvent;
+    m_lastKeyDownEvent = nil;
     NSText* editor = [m_textField currentEditor];
     if ( editor )
     {
@@ -554,6 +558,7 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
         SetStringValue( val ) ;
         SetSelection( start + str.length() , start + str.length() ) ;
     }
+    m_lastKeyDownEvent = formerEvent;
 }
 
 void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),

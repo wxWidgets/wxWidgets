@@ -881,11 +881,14 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
+    if ( [event type] == NSKeyDown )
+        m_lastKeyDownEvent = event;
     if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
     }
+    m_lastKeyDownEvent = NULL;
 }
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
@@ -895,7 +898,6 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, text);
     }
-    m_lastKeyDownEvent = NULL;
 }
 
 
@@ -1578,9 +1580,9 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
-    if ( !m_hasEditor && [event type] == NSKeyDown)
+
+    if ( m_wxPeer->MacIsUserPane() && [event type] == NSKeyDown)
     {
-        m_lastKeyDownEvent = event;
         if ( !result )
         {
             if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
@@ -1590,6 +1592,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
             result = true;
         }
     }
+
     return result;
 }
 
