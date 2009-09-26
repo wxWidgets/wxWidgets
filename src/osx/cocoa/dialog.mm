@@ -28,6 +28,19 @@ void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
 
+    // If the app hasn't started, flush the event queue
+    // If we don't do this, the Dock doesn't get the message that
+    // the app has started so will refuse to activate it.
+    NSApplication *theNSApp = [NSApplication sharedApplication];
+    if (![theNSApp isRunning])
+    {
+        wxMacAutoreleasePool pool;
+        while(NSEvent *event = [theNSApp nextEventMatchingMask:NSAnyEventMask untilDate:nil inMode:NSDefaultRunLoopMode dequeue:YES])
+        {
+            [theNSApp sendEvent:event];
+        }
+    }
+
     wxModalDialogs.Append(this);
 
     SetFocus() ;
@@ -55,9 +68,23 @@ void wxDialog::DoShowModal()
         // unsafe
         [NSApp runModalSession:session];
 
+        // break if ended, perform no further idle processing
+        if (!IsModal())
+            break;
+
         // do some idle processing
+        bool needMore = false;
         if (wxTheApp)
-            wxTheApp->ProcessIdle();
+        {
+            wxTheApp->ProcessPendingEvents();
+            needMore = wxTheApp->ProcessIdle();
+        }
+        
+        if (!needMore)
+        {
+            // no more idle processing wanted - block until the next event
+            [theNSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantFuture] inMode:NSDefaultRunLoopMode dequeue:NO];
+        }
     }
     [NSApp endModalSession:session];
 

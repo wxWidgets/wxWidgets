@@ -116,6 +116,9 @@ bool wxGUIEventLoop::Dispatch()
     }
     else
     {
+        if (wxTheApp)
+            wxTheApp->ProcessPendingEvents();
+        
         if ( wxTheApp->ProcessIdle() )
             m_sleepTime = 0.0 ;
         else
@@ -160,6 +163,10 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     // might have been changed (it also will update other things set from
     // OnUpdateUI() which is a nice (and desired) side effect)
     while ( ProcessIdle() ) {}
+
+    // if there are pending events, we must process them.
+    if (wxTheApp)
+        wxTheApp->ProcessPendingEvents();
 
 #if wxUSE_LOG
     wxLog::Resume();
