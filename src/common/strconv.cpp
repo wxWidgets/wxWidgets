@@ -216,7 +216,7 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
     // all the complication come from the fact that this function, for
     // historical reasons, must behave in 2 subtly different ways when it's
     // called with a fixed number of characters and when it's called for the
-    // entire NUL-terminated string: in the former case (srcEnd == NULL) we
+    // entire NUL-terminated string: in the former case (srcEnd != NULL) we
     // must count all characters we convert, NUL or not; but in the latter we
     // do not count the trailing NUL -- but still count all the NULs inside the
     // string
@@ -258,11 +258,13 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
         if ( !srcEnd )
         {
             // we convert just one chunk in this case as this is the entire
-            // string anyhow
+            // string anyhow (and we don't count the trailing NUL in this case)
             break;
         }
 
-        // advance the input pointer past the end of this chunk
+        // advance the input pointer past the end of this chunk: notice that we
+        // will always stop before srcEnd because we know that the chunk is
+        // always properly NUL-terminated
         while ( NotAllNULs(src, nulLen) )
         {
             // notice that we must skip over multiple bytes here as we suppose
@@ -272,23 +274,20 @@ wxMBConv::ToWChar(wchar_t *dst, size_t dstLen,
             src += nulLen;
         }
 
-        src += nulLen; // skipping over its terminator as well
-
-        // note that ">=" (and not just "==") is needed here as the terminator
-        // we skipped just above could be inside or just after the buffer
-        // delimited by srcEnd
-        if ( src >= srcEnd )
+        // if the buffer ends before this NUL, we shouldn't count it in our
+        // output so skip the code below
+        if ( src == srcEnd )
             break;
 
-        // if we got here then this wasn't the last chunk in this string and
-        // hence we must count an extra char for L'\0' even when converting a
-        // fixed number of characters
-        if ( srcEnd )
-        {
-            dstWritten++;
-            if ( dst )
-                dst++;
-        }
+        // do count this terminator as it's inside the buffer we convert
+        dstWritten++;
+        if ( dst )
+            dst++;
+
+        src += nulLen; // skip the terminator itself
+
+        if ( src >= srcEnd )
+            break;
     }
 
     return dstWritten;
@@ -333,7 +332,7 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
             return wxCONV_FAILED;
 
         dstWritten += lenChunk;
-        if ( src+lenChunk < srcEnd || isNulTerminated )
+        if ( src + lenChunk < srcEnd || isNulTerminated )
             dstWritten += lenNul;
 
         if ( dst )
@@ -345,7 +344,7 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
                 return wxCONV_FAILED;
 
             dst += lenChunk;
-            if ( src+lenChunk < srcEnd || isNulTerminated )
+            if ( src + lenChunk < srcEnd || isNulTerminated )
                 dst += lenNul;
         }
     }

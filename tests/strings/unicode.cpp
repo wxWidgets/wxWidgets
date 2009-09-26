@@ -139,7 +139,7 @@ private:
     CPPUNIT_TEST_SUITE( UnicodeTestCase );
         CPPUNIT_TEST( ToFromAscii );
         CPPUNIT_TEST( ConstructorsWithConversion );
-        CPPUNIT_TEST( ConversionEmpty );
+        CPPUNIT_TEST( ConversionFixed );
         CPPUNIT_TEST( ConversionWithNULs );
         CPPUNIT_TEST( ConversionUTF7 );
         CPPUNIT_TEST( ConversionUTF8 );
@@ -153,7 +153,7 @@ private:
 
     void ToFromAscii();
     void ConstructorsWithConversion();
-    void ConversionEmpty();
+    void ConversionFixed();
     void ConversionWithNULs();
     void ConversionUTF7();
     void ConversionUTF8();
@@ -238,7 +238,7 @@ void UnicodeTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT( s5 != "SomethingElse" );
 }
 
-void UnicodeTestCase::ConversionEmpty()
+void UnicodeTestCase::ConversionFixed()
 {
     size_t len;
 
@@ -249,6 +249,15 @@ void UnicodeTestCase::ConversionEmpty()
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     CPPUNIT_ASSERT_EQUAL( 0, len );
+
+#if wxUSE_UNICODE
+    // check that when we convert a fixed number of characters we obtain the
+    // expected return value
+    CPPUNIT_ASSERT_EQUAL( 0, wxConvLibc.ToWChar(NULL, 0, "", 0) );
+    CPPUNIT_ASSERT_EQUAL( 1, wxConvLibc.ToWChar(NULL, 0, "x", 1) );
+    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(NULL, 0, "x", 2) );
+    CPPUNIT_ASSERT_EQUAL( 2, wxConvLibc.ToWChar(NULL, 0, "xy", 2) );
+#endif // wxUSE_UNICODE
 }
 
 void UnicodeTestCase::ConversionWithNULs()
