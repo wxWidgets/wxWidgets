@@ -369,6 +369,7 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
+    gtk_selection_clear_targets(m_clipboardWidget, m_usePrimary ? GDK_SELECTION_PRIMARY : g_clipboardAtom);
     if (m_data)
     {
 #if wxUSE_THREADS
