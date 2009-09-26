@@ -399,7 +399,7 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
                 pItem->SetBitmap(img, checked);
             }
 
-            return GetHbitmapOf(pItem->GetBitmap());
+            return GetHbitmapOf(pItem->GetBitmap(checked));
         }
     }
 #endif // wxUSE_IMAGE
