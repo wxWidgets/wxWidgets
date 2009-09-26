@@ -35,6 +35,7 @@
     #include "wx/statbmp.h"
     #include "wx/bitmap.h"
     #include "wx/utils.h"       // for wxStripMenuCodes()
+    #include "wx/settings.h"
 #endif
 
 const char wxControlNameStr[] = "control";
@@ -215,6 +216,17 @@ int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
 wxBorder wxControlBase::GetDefaultBorder() const
 {
     return wxBORDER_THEME;
+}
+
+/* static */ wxVisualAttributes
+wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+
+    return attrs;
 }
 
 // ----------------------------------------------------------------------------

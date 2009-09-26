@@ -303,18 +303,6 @@ wxControl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attrs;
 }
 
-// another version for the "composite", i.e. non simple controls
-/* static */ wxVisualAttributes
-wxControl::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(variant))
-{
-    wxVisualAttributes attrs;
-    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-
-    return attrs;
-}
-
 // ----------------------------------------------------------------------------
 // message handling
 // ----------------------------------------------------------------------------

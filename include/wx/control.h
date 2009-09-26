@@ -131,6 +131,13 @@ public:
     static int FindAccelIndex(const wxString& label,
                               wxString *labelOnly = NULL);
 
+    // this is a helper for the derived class GetClassDefaultAttributes()
+    // implementation: it returns the right colours for the classes which
+    // contain something else (e.g. wxListBox, wxTextCtrl, ...) instead of
+    // being simple controls (such as wxButton, wxCheckBox, ...)
+    static wxVisualAttributes
+        GetCompositeControlsDefaultAttributes(wxWindowVariant variant);
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
