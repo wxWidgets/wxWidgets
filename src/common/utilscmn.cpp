@@ -815,17 +815,21 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
     sei.lpVerb = _T("open");
     sei.nShow = SW_SHOWNORMAL;
 
-    ::ShellExecuteEx(&sei);
+    BOOL nExecResult = ::ShellExecuteEx(&sei);
 
+    //From MSDN for wince
+    //hInstApp member is only valid if the function fails, in which case it
+    //receives one of the following error values, which are less than or
+    //equal to 32.
     const int nResult = (int) sei.hInstApp;
 
     // Firefox returns file not found for some reason, so make an exception
     // for it
-    if ( nResult > 32 || nResult == SE_ERR_FNF )
+    if ( nResult > 32 || nResult == SE_ERR_FNF  || nExecResult == TRUE )
     {
 #ifdef __WXDEBUG__
         // Log something if SE_ERR_FNF happens
-        if ( nResult == SE_ERR_FNF )
+        if ( nResult == SE_ERR_FNF || nExecResult == FALSE )
             wxLogDebug(wxT("SE_ERR_FNF from ShellExecute -- maybe FireFox?"));
 #endif // __WXDEBUG__
         return true;
@@ -859,7 +863,7 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
         wxLogDebug(wxT("ICStart error %d"), (int) err);
         return false;
     }
-#else 
+#else
     // (non-Mac, non-MSW)
 
 #ifdef __UNIX__
