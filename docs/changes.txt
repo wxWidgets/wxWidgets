@@ -398,6 +398,7 @@ All:
 - Added wxAny class; a modern, backwards-incompatible replacement for
   wxVariant.
 - wxDateTime timezone functions now dynamic (no caching).
+- Added wxHttp::GetCookie and wxHttp::HasCookies (dodge).
 
 All (GUI):
 

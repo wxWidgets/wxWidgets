@@ -66,6 +66,11 @@ void wxHTTP::ClearHeaders()
     m_headers.clear();
 }
 
+void wxHTTP::ClearCookies()
+{
+    m_cookies.clear();
+}
+
 wxString wxHTTP::GetContentType() const
 {
     return GetHeader(wxT("Content-Type"));
@@ -100,6 +105,30 @@ wxHTTP::wxHeaderConstIterator wxHTTP::FindHeader(const wxString& header) const
     return it;
 }
 
+wxHTTP::wxCookieIterator wxHTTP::FindCookie(const wxString& cookie)
+{
+    wxCookieIterator it = m_cookies.begin();
+    for ( wxCookieIterator en = m_cookies.end(); it != en; ++it )
+    {
+        if ( cookie.CmpNoCase(it->first) == 0 )
+            break;
+    }
+
+    return it;
+}
+
+wxHTTP::wxCookieConstIterator wxHTTP::FindCookie(const wxString& cookie) const
+{
+    wxCookieConstIterator it = m_cookies.begin();
+    for ( wxCookieConstIterator en = m_cookies.end(); it != en; ++it )
+    {
+        if ( cookie.CmpNoCase(it->first) == 0 )
+            break;
+    }
+
+    return it;
+}
+
 void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 {
     if (m_read) {
@@ -119,6 +148,13 @@ wxString wxHTTP::GetHeader(const wxString& header) const
     wxHeaderConstIterator it = FindHeader(header);
 
     return it == m_headers.end() ? wxGetEmptyString() : it->second;
+}
+
+wxString wxHTTP::GetCookie(const wxString& cookie) const
+{
+    wxCookieConstIterator it = FindCookie(cookie);
+
+    return it == m_cookies.end() ? wxGetEmptyString() : it->second;
 }
 
 wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) const
@@ -178,6 +214,7 @@ bool wxHTTP::ParseHeaders()
     wxStringTokenizer tokenzr;
 
     ClearHeaders();
+    ClearCookies();
     m_read = true;
 
     for ( ;; )
@@ -190,7 +227,19 @@ bool wxHTTP::ParseHeaders()
             break;
 
         wxString left_str = line.BeforeFirst(':');
-        m_headers[left_str] = line.AfterFirst(':').Strip(wxString::both);
+        if(!left_str.CmpNoCase("Set-Cookie"))
+        {
+            wxString cookieName = line.AfterFirst(':').Strip(wxString::both).BeforeFirst('=');
+            wxString cookieValue = line.AfterFirst(':').Strip(wxString::both).AfterFirst('=').BeforeFirst(';');
+            m_cookies[cookieName] = cookieValue;
+
+            // For compatibility
+            m_headers[left_str] = line.AfterFirst(':').Strip(wxString::both);
+        }
+        else
+        {
+            m_headers[left_str] = line.AfterFirst(':').Strip(wxString::both);
+        }
     }
     return true;
 }

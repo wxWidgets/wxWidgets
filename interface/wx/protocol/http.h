@@ -92,5 +92,17 @@ public:
         This is a low level function and it assumes that you know what you are doing.
     */
     void SetHeader(const wxString& header, const wxString& h_data);
+
+    /**
+        Returns the value of a cookie.
+    */
+
+    wxString GetCookie(const wxString& cookie) const;
+
+    /**
+        Returns @true if there were cookies.
+    */
+
+    bool HasCookies() const;
 };
 

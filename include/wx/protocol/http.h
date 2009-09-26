@@ -39,6 +39,10 @@ public:
     void SetPostBuffer(const wxString& post_buf);
     void SetProxyMode(bool on);
 
+    /* Cookies */
+    wxString GetCookie(const wxString& cookie) const;
+    bool HasCookies() const { return m_cookies.size() > 0; }
+
 protected:
     enum wxHTTP_Req
     {
@@ -49,6 +53,8 @@ protected:
 
     typedef wxStringToStringHashMap::iterator wxHeaderIterator;
     typedef wxStringToStringHashMap::const_iterator wxHeaderConstIterator;
+    typedef wxStringToStringHashMap::iterator wxCookieIterator;
+    typedef wxStringToStringHashMap::const_iterator wxCookieConstIterator;
 
     bool BuildRequest(const wxString& path, wxHTTP_Req req);
     void SendHeaders();
@@ -59,12 +65,16 @@ protected:
     // find the header in m_headers
     wxHeaderIterator FindHeader(const wxString& header);
     wxHeaderConstIterator FindHeader(const wxString& header) const;
+    wxCookieIterator FindCookie(const wxString& cookie);
+    wxCookieConstIterator FindCookie(const wxString& cookie) const;
 
     // deletes the header value strings
     void ClearHeaders();
-
+    void ClearCookies();
 
     // internal variables:
+
+    wxStringToStringHashMap m_cookies;
 
     wxStringToStringHashMap m_headers;
     bool m_read,
