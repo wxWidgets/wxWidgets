@@ -14,6 +14,7 @@
 
 #if wxUSE_PROPGRID
 
+#include "wx/thread.h"
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/tooltip.h"
@@ -42,6 +43,14 @@ public:
 
     wxPGGlobalVarsClass();
     ~wxPGGlobalVarsClass();
+
+#if wxUSE_THREAD
+    // Critical section for handling the globals. Generally it is not needed
+    // since GUI code is supposed to be in single thread. However,
+    // we do want the user to be able to convey wxPropertyGridEvents to other
+    // threads.
+    wxCriticalSection   m_critSect;
+#endif
 
     // Used by advprops, but here to make things easier.
     wxString            m_pDefaultImageWildcard;
@@ -420,7 +429,7 @@ public:
     /**
         Returns reference to pending value.
     */
-    const wxVariant& GetValue() const
+    wxVariant& GetValue()
     {
         wxASSERT(m_pValue);
         return *m_pValue;
@@ -642,6 +651,7 @@ enum wxPG_KEYBOARD_ACTIONS
 class WXDLLIMPEXP_PROPGRID
     wxPropertyGrid : public wxScrolledWindow, public wxPropertyGridInterface
 {
+    friend class wxPropertyGridEvent;
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridManager;
@@ -1851,6 +1861,9 @@ protected:
     // labels when properties use common values
     wxVector<wxPGCommonValue*>  m_commonValues;
 
+    // array of live events
+    wxVector<wxPropertyGridEvent*>  m_liveEvents;
+
     // Which cv selection really sets value to unspecified?
     int                 m_cvUnspecified;
 
@@ -2215,14 +2228,43 @@ public:
     */
     void Veto( bool veto = true ) { m_wasVetoed = veto; }
 
-    /** Returns value that is about to be set for wxEVT_PG_CHANGING.
+    /**
+        Returns name of the associated property.
+
+        @remarks Property name is stored in event, so it remains
+                 accessible even after the associated property or
+                 the property grid has been deleted.
     */
-    const wxVariant& GetValue() const
+    wxString GetPropertyName() const
     {
-        wxASSERT_MSG( m_validationInfo,
-                      "Only call GetValue from a handler "
-                      "of event type that supports it" );
-        return m_validationInfo->GetValue();
+        return m_propertyName;
+    }
+
+    /**
+        Returns value of the associated property. Works for all event
+        types, but for wxEVT_PG_CHANGING this member function returns
+        the value that is pending, so you can call Veto() if the
+        value is not satisfactory.
+
+        @remarks Property value is stored in event, so it remains
+                 accessible even after the associated property or
+                 the property grid has been deleted.
+    */
+    wxVariant GetPropertyValue() const
+    {
+        if ( m_validationInfo )
+            return m_validationInfo->GetValue();
+        return m_value;
+    }
+
+    /**
+        Returns value of the associated property.
+
+        @see GetPropertyValue
+    */
+    wxVariant GetValue() const
+    {
+        return GetPropertyValue();
     }
 
     /**
@@ -2262,24 +2304,43 @@ public:
     bool WasVetoed() const { return m_wasVetoed; }
 
     /** Changes the associated property. */
-    void SetProperty( wxPGProperty* p ) { m_property = p; }
+    void SetProperty( wxPGProperty* p )
+    {
+        m_property = p;
+        if ( p )
+            m_propertyName = p->GetName();
+    }
 
-    void SetPropertyGrid( wxPropertyGrid* pg ) { m_pg = pg; }
+    void SetPropertyValue( wxVariant value )
+    {
+        m_value = value;
+    }
+
+    void SetPropertyGrid( wxPropertyGrid* pg )
+    {
+        m_pg = pg;
+        OnPropertyGridSet();
+    }
 
     void SetupValidationInfo()
     {
         wxASSERT(m_pg);
         wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
         m_validationInfo = &m_pg->GetValidationInfo();
+        m_value = m_validationInfo->GetValue();
     }
 
 private:
     void Init();
+    void OnPropertyGridSet();
     DECLARE_DYNAMIC_CLASS(wxPropertyGridEvent)
 
     wxPGProperty*       m_property;
     wxPropertyGrid*     m_pg;
     wxPGValidationInfo* m_validationInfo;
+
+    wxString            m_propertyName;
+    wxVariant           m_value;
 
     unsigned int        m_column;
 

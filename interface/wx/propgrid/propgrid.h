@@ -270,7 +270,7 @@ public:
     /**
         Returns reference to pending value.
     */
-    const wxVariant& GetValue() const;
+    wxVariant& GetValue();
 
     /** Set validation failure behavior
 
@@ -1076,9 +1076,30 @@ public:
     wxPGVFBFlags GetValidationFailureBehavior() const;
 
     /**
-        Returns value that is about to be set for wxEVT_PG_CHANGING.
+        Returns name of the associated property.
+
+        @remarks Property name is stored in event, so it remains
+                 accessible even after the associated property or
+                 the property grid has been deleted.
     */
-    const wxVariant& GetValue() const;
+    wxString GetPropertyName() const;
+
+    /**
+        Returns value of the associated property. Works for all event
+        types, but for wxEVT_PG_CHANGING this member function returns
+        the value that is pending, so you can call Veto() if the
+        value is not satisfactory.
+
+        @remarks Property value is stored in event, so it remains
+                 accessible even after the associated property or
+                 the property grid has been deleted.
+    */
+    wxVariant GetPropertyValue() const
+
+    /**
+        @see GetPropertyValue()
+    */
+    wxVariant GetValue() const;
 
     /**
         Set if event can be vetoed.
