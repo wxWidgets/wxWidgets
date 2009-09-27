@@ -755,11 +755,37 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
+#if 0
             if (anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) ||
                 (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())))
             {
                 Destroy();
                 return wxGIF_INVFORMAT;
+            }
+#endif
+            if ( anim )
+            {
+                // some GIF images specify incorrect animation size but we can
+                // still open them if we fix up the animation size, see #9465
+                if ( m_nFrames == 0 )
+                {
+                    if ( pimg->w > (unsigned)m_szAnimation.x )
+                        m_szAnimation.x = pimg->w;
+                    if ( pimg->h > (unsigned)m_szAnimation.y )
+                        m_szAnimation.y = pimg->h;
+                }
+                else // subsequent frames
+                {
+                    // check that we have valid size
+                    if ( (!pimg->w || pimg->w > (unsigned)m_szAnimation.x) ||
+                            (!pimg->h || pimg->h > (unsigned)m_szAnimation.y) )
+                    {
+                        wxLogError(_("Incorrect GIF frame size (%u, %d) for the frame #%u"),
+                                   pimg->w, pimg->h, m_nFrames);
+                        Destroy();
+                        return wxGIF_INVFORMAT;
+                    }
+                }
             }
 
             interl = ((buf[8] & 0x40)? 1 : 0);
