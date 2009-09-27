@@ -29,13 +29,17 @@ enum
 
 union wxAnyValueBuffer
 {
+    union Alignment
+    {
+    #if wxHAS_INT64
+        wxInt64 m_int64;
+    #endif
+        long double m_longDouble;
+        void ( *m_funcPtr )(void);
+        void ( wxAnyValueBuffer::*m_mFuncPtr )(void);
+    } m_alignment;
+
     void*   m_ptr;
-#if wxHAS_INT64
-    wxInt64 m_int64;
-#endif
-    double  m_double;
-    void    ( *m_funcPtr )(void);
-    void    ( wxAnyValueBuffer::*m_mFuncPtr )(void);
     wxByte  m_buffer[WX_ANY_VALUE_BUFFER_SIZE];
 };
 
