@@ -556,16 +556,18 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
 #include "wx/fontenum.h"
 
 static const wxChar* gs_fp_es_family_labels[] = {
-    wxT("Default"), wxT("Decorative"),
-    wxT("Roman"), wxT("Script"),
-    wxT("Swiss"), wxT("Modern"),
+    wxS("Default"), wxS("Decorative"),
+    wxS("Roman"), wxS("Script"),
+    wxS("Swiss"), wxS("Modern"),
+    wxS("Teletype"), wxS("Unknown"),
     (const wxChar*) NULL
 };
 
 static long gs_fp_es_family_values[] = {
-    wxDEFAULT, wxDECORATIVE,
-    wxROMAN, wxSCRIPT,
-    wxSWISS, wxMODERN
+    wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
+    wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
+    wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
+    wxFONTFAMILY_TELETYPE, wxFONTFAMILY_UNKNOWN
 };
 
 static const wxChar* gs_fp_es_style_labels[] = {
@@ -625,10 +627,6 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     AddPrivateChild( new wxIntProperty( _("Point Size"),
                      wxS("Point Size"),(long)font.GetPointSize() ) );
 
-    AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
-                     gs_fp_es_family_labels,gs_fp_es_family_values,
-                     font.GetFamily()) );
-
     wxString faceName = font.GetFaceName();
     // If font was not in there, add it now
     if ( faceName.length() &&
@@ -652,6 +650,10 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     AddPrivateChild( new wxBoolProperty(_("Underlined"), wxS("Underlined"),
                      font.GetUnderlined()) );
+
+    AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
+                     gs_fp_es_family_labels,gs_fp_es_family_values,
+                     font.GetFamily()) );
 }
 
 wxFontProperty::~wxFontProperty() { }
@@ -707,11 +709,11 @@ void wxFontProperty::RefreshChildren()
     wxFont font;
     font << m_value;
     Item(0)->SetValue( (long)font.GetPointSize() );
-    Item(1)->SetValue( (long)font.GetFamily() );
-    Item(2)->SetValueFromString( font.GetFaceName(), wxPG_FULL_VALUE );
-    Item(3)->SetValue( (long)font.GetStyle() );
-    Item(4)->SetValue( (long)font.GetWeight() );
-    Item(5)->SetValue( font.GetUnderlined() );
+    Item(1)->SetValueFromString( font.GetFaceName(), wxPG_FULL_VALUE );
+    Item(2)->SetValue( (long)font.GetStyle() );
+    Item(3)->SetValue( (long)font.GetWeight() );
+    Item(4)->SetValue( font.GetUnderlined() );
+    Item(5)->SetValue( (long)font.GetFamily() );
 }
 
 wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
@@ -727,14 +729,6 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     }
     else if ( ind == 1 )
     {
-        int fam = childValue.GetLong();
-        if ( fam < wxDEFAULT ||
-             fam > wxTELETYPE )
-             fam = wxDEFAULT;
-        font.SetFamily( fam );
-    }
-    else if ( ind == 2 )
-    {
         wxString faceName;
         int faceIndex = childValue.GetLong();
 
@@ -743,7 +737,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
 
         font.SetFaceName( faceName );
     }
-    else if ( ind == 3 )
+    else if ( ind == 2 )
     {
         int st = childValue.GetLong();
         if ( st != wxFONTSTYLE_NORMAL &&
@@ -752,7 +746,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              st = wxFONTWEIGHT_NORMAL;
         font.SetStyle( st );
     }
-    else if ( ind == 4 )
+    else if ( ind == 3 )
     {
         int wt = childValue.GetLong();
         if ( wt != wxFONTWEIGHT_NORMAL &&
@@ -761,9 +755,17 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
              wt = wxFONTWEIGHT_NORMAL;
         font.SetWeight( wt );
     }
-    else if ( ind == 5 )
+    else if ( ind == 4 )
     {
         font.SetUnderlined( childValue.GetBool() );
+    }
+    else if ( ind == 5 )
+    {
+        int fam = childValue.GetLong();
+        if ( fam < wxDEFAULT ||
+             fam > wxTELETYPE )
+             fam = wxDEFAULT;
+        font.SetFamily( fam );
     }
 
     wxVariant newVariant;
