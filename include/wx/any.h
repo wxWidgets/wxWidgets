@@ -30,6 +30,10 @@ enum
 union wxAnyValueBuffer
 {
     void*   m_ptr;
+#if wxHAS_INT64
+    wxInt64 m_int64;
+#endif
+    double  m_double;
     wxByte  m_buffer[WX_ANY_VALUE_BUFFER_SIZE];
 };
 
@@ -774,8 +778,8 @@ private:
     }
 
     // Data
-    wxAnyValueType*     m_type;
     wxAnyValueBuffer    m_buffer;
+    wxAnyValueType*     m_type;
 };
 
 
