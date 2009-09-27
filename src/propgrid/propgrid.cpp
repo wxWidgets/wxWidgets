@@ -3334,7 +3334,12 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     // Somehow, event is handled after property has been deselected.
     // Possibly, but very rare.
-    if ( !selected || selected->HasFlag(wxPG_PROP_BEING_DELETED) )
+    if ( !selected ||
+          selected->HasFlag(wxPG_PROP_BEING_DELETED) ||
+          // Also don't handle editor event if wxEVT_PG_CHANGED or
+          // similar is currently doing something (showing a
+          // message box, for instance).
+          m_processedEvent )
         return;
 
     if ( m_iFlags & wxPG_FL_IN_HANDLECUSTOMEDITOREVENT )
