@@ -555,11 +555,15 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
 #include "wx/fontdlg.h"
 #include "wx/fontenum.h"
 
+//
+// NB: Do not use wxS here since unlike wxT it doesn't translate to wxChar*
+//
+
 static const wxChar* gs_fp_es_family_labels[] = {
-    wxS("Default"), wxS("Decorative"),
-    wxS("Roman"), wxS("Script"),
-    wxS("Swiss"), wxS("Modern"),
-    wxS("Teletype"), wxS("Unknown"),
+    wxT("Default"), wxT("Decorative"),
+    wxT("Roman"), wxT("Script"),
+    wxT("Swiss"), wxT("Modern"),
+    wxT("Teletype"), wxT("Unknown"),
     (const wxChar*) NULL
 };
 
