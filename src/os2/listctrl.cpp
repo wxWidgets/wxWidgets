@@ -1464,7 +1464,7 @@ bool wxListCtrl::SetItemImage (
 bool wxListCtrl::SetItemColumnImage (
   long                              lItem
 , long                              lColumn
-, int                               nImage
+, int                               nImage)
 {
     wxListItem                      vInfo;
 
