@@ -126,6 +126,7 @@ void wxWindowMac::Init()
     m_vScrollBar = NULL ;
     m_hScrollBarAlwaysShown = false;
     m_vScrollBarAlwaysShown = false;
+    m_growBox = NULL ;
 
     m_macIsUserPane = true;
     m_clipChildren = false ;
@@ -264,6 +265,8 @@ void wxWindowMac::MacChildAdded()
         m_vScrollBar->Raise() ;
     if ( m_hScrollBar )
         m_hScrollBar->Raise() ;
+    if ( m_growBox )
+        m_growBox->Raise() ;
 #endif
 }
 
@@ -1319,6 +1322,7 @@ void  wxWindowMac::MacPaintGrowBox()
 #if wxUSE_SCROLLBAR
     if ( MacHasScrollBarCorner() )
     {
+#if 0
         CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
@@ -1344,7 +1348,17 @@ void  wxWindowMac::MacPaintGrowBox()
         }
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
+#else
+        if (m_growBox)
+        {
+             if ( m_backgroundColour.Ok() )
+                 m_growBox->SetBackgroundColour(m_backgroundColour);
+             else
+                 m_growBox->SetBackgroundColour(*wxWHITE);
+        }
+#endif
     }
+
 #endif
 }
 
@@ -1411,6 +1425,8 @@ void wxWindowMac::RemoveChild( wxWindowBase *child )
         m_hScrollBar = NULL ;
     if ( child == m_vScrollBar )
         m_vScrollBar = NULL ;
+    if ( child == m_growBox )
+        m_growBox = NULL ;
 #endif
     wxWindowBase::RemoveChild( child ) ;
 }
@@ -1496,6 +1512,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         if (child == m_vScrollBar)
             continue;
         if (child == m_hScrollBar)
+            continue;
+        if (child == m_growBox)
             continue;
 #endif
         if (child->IsTopLevel())
@@ -1888,6 +1906,8 @@ void wxWindowMac::MacPaintChildrenBorders()
             continue;
         if (child == m_hScrollBar)
             continue;
+         if (child == m_growBox)
+             continue;
 #endif
         if (child->IsTopLevel())
             continue;
@@ -2021,6 +2041,10 @@ void wxWindowMac::MacCreateScrollBars( long style )
             m_hScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, hPoint, hSize , wxHORIZONTAL);
             m_hScrollBar->SetMinSize( wxDefaultSize );
         }
+
+        wxPoint gPoint(width - scrlsize, height - scrlsize);
+        wxSize gSize(scrlsize, scrlsize);
+        m_growBox = new wxPanel((wxWindow *)this, wxID_ANY, gPoint, gSize, 0);
     }
 
     // because the create does not take into account the client area origin
@@ -2033,7 +2057,7 @@ bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
 {
     bool result = ((child == NULL)
 #if wxUSE_SCROLLBAR
-     || ((child != m_hScrollBar) && (child != m_vScrollBar))
+      || ((child != m_hScrollBar) && (child != m_vScrollBar) && (child != m_growBox))
 #endif
      );
 
@@ -2065,6 +2089,20 @@ void wxWindowMac::MacRepositionScrollBars()
         m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
     if ( m_hScrollBar )
         m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
+    if ( m_growBox )
+    {
+        if ( MacHasScrollBarCorner() )
+        {
+            m_growBox->SetSize( width - scrlsize, height - scrlsize, wxDefaultCoord, wxDefaultCoord, wxSIZE_USE_EXISTING );
+            if ( !m_growBox->IsShown() )
+                m_growBox->Show();
+        }
+        else
+        {
+            if ( m_growBox->IsShown() )
+                m_growBox->Hide();
+        }
+    }
 #endif
 }
 

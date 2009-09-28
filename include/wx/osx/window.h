@@ -17,6 +17,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
+class WXDLLIMPEXP_FWD_CORE wxPanel;
 class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 
 #if wxOSX_USE_CARBON
@@ -275,6 +276,7 @@ protected:
     wxScrollBar*        m_vScrollBar ;
     bool                m_hScrollBarAlwaysShown;
     bool                m_vScrollBarAlwaysShown;
+    wxPanel*            m_growBox ;
     wxString            m_label ;
 
     // set to true if we do a sharp clip at the content area of this window
