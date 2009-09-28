@@ -1644,10 +1644,9 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
 
 wxFileProperty::~wxFileProperty() {}
 
-#if wxUSE_VALIDATORS
-
 wxValidator* wxFileProperty::GetClassValidator()
 {
+#if wxUSE_VALIDATORS
     WX_PG_DOGETVALIDATOR_ENTRY()
 
     // Atleast wxPython 2.6.2.1 required that the string argument is given
@@ -1665,14 +1664,15 @@ wxValidator* wxFileProperty::GetClassValidator()
     validator->SetExcludes(exChars);
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
+#else
+    return NULL;
+#endif
 }
 
 wxValidator* wxFileProperty::DoGetValidator() const
 {
     return GetClassValidator();
 }
-
-#endif
 
 void wxFileProperty::OnSetValue()
 {
