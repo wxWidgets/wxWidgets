@@ -28,6 +28,7 @@
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
         *wxShowEvent*IsShown*;
+        *wxSound*Create*;
         *wxIconizeEvent*IsIconized*;
         *wxXmlNode*Attribute*;
 };
