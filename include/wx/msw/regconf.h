@@ -12,6 +12,10 @@
 #ifndef   _REGCONF_H
 #define   _REGCONF_H
 
+#include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 #ifndef   _REGISTRY_H
   #include "wx/msw/registry.h"
 #endif
@@ -107,4 +111,6 @@ private:
   wxString  m_strPath;
 };
 
-#endif  //_REGCONF_H
+#endif // wxUSE_CONFIG
+
+#endif // _REGCONF_H

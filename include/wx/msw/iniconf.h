@@ -12,6 +12,10 @@
 #ifndef   _INICONF_H
 #define   _INICONF_H
 
+#include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 // ----------------------------------------------------------------------------
 // wxIniConfig is a wxConfig implementation which uses MS Windows INI files to
 // store the data. Because INI files don't really support arbitrary nesting of
@@ -92,4 +96,6 @@ private:
            m_strPath;     // the rest of the path (no trailing '_'!)
 };
 
-#endif  //_INICONF_H
+#endif // wxUSE_CONFIG
+
+#endif // _INICONF_H

@@ -12,6 +12,10 @@
 #ifndef _PREFCONF_H_
 #define _PREFCONF_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 // ----------------------------------------------------------------------------
 // wxPrefConfig
 // ----------------------------------------------------------------------------
@@ -86,5 +90,6 @@ private:
   bool m_modGroup;
 };
 
-#endif // _PREFCONF_H_
+#endif // wxUSE_CONFIG
 
+#endif // _PREFCONF_H_
