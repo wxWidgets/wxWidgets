@@ -438,11 +438,7 @@ bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
 
 WXHWND wxComboBox::GetEditHWNDIfAvailable() const
 {
-    // notice that a slightly safer alternative could be to use FindWindowEx()
-    // but it's not available under WinCE so just take the first child for now
-    // to keep one version of the code for all platforms and fix it later if
-    // problems are discovered
-
+#if defined(WINVER) && WINVER >= 0x0500
     typedef BOOL (WINAPI *GetComboBoxInfo_t)(HWND, COMBOBOXINFO*);
     static GetComboBoxInfo_t s_pfnGetComboBoxInfo = NULL;
     static bool s_triedToLoad = false;
@@ -459,6 +455,7 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
         (*s_pfnGetComboBoxInfo)(GetHwnd(), &info);
         return info.hwndItem;
     }
+#endif
 
     if (HasFlag(wxCB_SIMPLE))
     {
@@ -466,6 +463,11 @@ WXHWND wxComboBox::GetEditHWNDIfAvailable() const
         pt.x = pt.y = 4;
         return (WXHWND) ::ChildWindowFromPoint(GetHwnd(), pt);
     }
+
+    // notice that a slightly safer alternative could be to use FindWindowEx()
+    // but it's not available under WinCE so just take the first child for now
+    // to keep one version of the code for all platforms and fix it later if
+    // problems are discovered
 
     // we assume that the only child of the combobox is the edit window
     return (WXHWND)::GetWindow(GetHwnd(), GW_CHILD);
