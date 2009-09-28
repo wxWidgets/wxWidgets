@@ -582,7 +582,7 @@ wxPropertyGrid::~wxPropertyGrid()
 {
     size_t i;
 
-#if wxUSE_THREAD
+#if wxUSE_THREADS
     wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
 #endif
 
@@ -5894,7 +5894,7 @@ void wxPropertyGridEvent::OnPropertyGridSet()
     if ( !m_pg )
         return;
 
-#if wxUSE_THREAD
+#if wxUSE_THREADS
     wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
 #endif
     m_pg->m_liveEvents.push_back(this);
@@ -5906,7 +5906,7 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
 {
     if ( m_pg )
     {
-    #if wxUSE_THREAD
+    #if wxUSE_THREADS
         wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
     #endif
 

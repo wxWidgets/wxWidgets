@@ -44,7 +44,7 @@ public:
     wxPGGlobalVarsClass();
     ~wxPGGlobalVarsClass();
 
-#if wxUSE_THREAD
+#if wxUSE_THREADS
     // Critical section for handling the globals. Generally it is not needed
     // since GUI code is supposed to be in single thread. However,
     // we do want the user to be able to convey wxPropertyGridEvents to other
