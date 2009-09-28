@@ -126,6 +126,7 @@ All (GUI):
   dialog.
 - Corrected writing direction for Farsi.
 - Added wxBORDER_THEME to XRC.
+- Speeded up wxTreeCtrl by caching text size (botg).
 
 wxMSW:
 
