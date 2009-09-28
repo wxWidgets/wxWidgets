@@ -224,7 +224,6 @@ MyFrame::MyFrame(const wxString& title)
 
 bool MyFrame::CreateSound(wxSound& snd) const
 {
-#ifndef __WXMAC__
     if ( m_useMemory )
     {
         // this is the dump of cuckoo.wav
@@ -957,7 +956,6 @@ bool MyFrame::CreateSound(wxSound& snd) const
 
         return snd.Create(sizeof(data), data);
     }
-#endif // !__WXMAC__
 
 #ifdef __WXMSW__
     if ( !m_soundRes.empty() )

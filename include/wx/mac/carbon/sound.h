@@ -21,20 +21,23 @@ class WXDLLEXPORT wxSound : public wxSoundBase
 {
 public:
   wxSound();
-  wxSound(const wxString& fileName, bool isResource = FALSE);
+  wxSound(const wxString& fileName, bool isResource = false);
   wxSound(int size, const wxByte* data);
   virtual ~wxSound();
 
 public:
-  bool  Create(const wxString& fileName, bool isResource = FALSE);
-  bool  IsOk() const { return !m_sndname.IsEmpty(); }
+  bool  Create(const wxString& fileName, bool isResource = false);
+  bool  IsOk() const { return !m_sndname.IsEmpty() || m_hSnd; }
   static void  Stop();
   static bool IsPlaying();
 
   void* GetHandle();
 protected:  
   bool  DoPlay(unsigned flags) const;
-
+public:
+#if wxABI_VERSION >= 20811
+  bool  Create(int size, const wxByte* data);
+#endif
 private:
     wxString m_sndname; //file path
     char* m_hSnd; //pointer to resource or memory location
