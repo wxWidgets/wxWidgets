@@ -431,7 +431,7 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
     wxButton *btnHelp=0;
 #ifdef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
-        btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);
+        btnHelp=new wxButton(this, wxID_HELP, wxEmptyString, wxDefaultPosition, wxDefaultSize, buttonStyle);
 #endif
 
     m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
