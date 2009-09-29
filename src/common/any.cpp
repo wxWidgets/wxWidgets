@@ -354,12 +354,12 @@ class wxAnyValueTypeImpl<wxAnyNullValue> : public wxAnyValueType
 {
     WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxAnyNullValue>)
 public:
+    // Dummy implementations
     virtual void DeleteValue(wxAnyValueBuffer& buf) const
     {
-        buf.m_ptr = NULL;  // This is important
+        wxUnusedVar(buf);
     }
 
-    // Dummy implementations
     virtual void CopyBuffer(const wxAnyValueBuffer& src,
                             wxAnyValueBuffer& dst) const
     {

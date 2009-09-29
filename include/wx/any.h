@@ -83,9 +83,14 @@ public:
     virtual void DeleteValue(wxAnyValueBuffer& buf) const = 0;
 
     /**
-        Implement this for buffer-to-buffer copy. src.m_ptr can
-        be expected to be NULL if value type of previously stored
-        data was different.
+        Implement this for buffer-to-buffer copy.
+
+        @param src
+            This is the source data buffer.
+
+        @param dst
+            This is the destination data buffer that is in either
+            uninitialized or freed state.
     */
     virtual void CopyBuffer(const wxAnyValueBuffer& src,
                             wxAnyValueBuffer& dst) const = 0;
@@ -259,13 +264,11 @@ public:
     virtual void DeleteValue(wxAnyValueBuffer& buf) const
     {
         Ops::DeleteValue(buf);
-        buf.m_ptr = NULL;  // This is important
     }
 
     virtual void CopyBuffer(const wxAnyValueBuffer& src,
                             wxAnyValueBuffer& dst) const
     {
-        Ops::DeleteValue(dst);
         Ops::SetValue(Ops::GetValue(src), dst);
     }
 
@@ -767,12 +770,15 @@ private:
     // Assignment functions
     void AssignAny(const wxAny& any)
     {
-        if ( !any.m_type->IsSameType(m_type) )
-        {
-            m_type->DeleteValue(m_buffer);
-            m_type = any.m_type;
-        }
-        m_type->CopyBuffer(any.m_buffer, m_buffer);
+        // Must delete value - CopyBuffer() never does that
+        m_type->DeleteValue(m_buffer);
+
+        wxAnyValueType* newType = any.m_type;
+
+        if ( !newType->IsSameType(m_type) )
+            m_type = newType;
+
+        newType->CopyBuffer(any.m_buffer, m_buffer);
     }
 
     template<typename T>

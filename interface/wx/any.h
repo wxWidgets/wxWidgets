@@ -321,6 +321,8 @@ union wxAnyValueBuffer
                                     wxAnyValueBuffer& dst) const
             {
                 // TODO: Copy value from one buffer to another.
+                //       dst is already uninitialized and does not
+                //       need to be freed.
             }
 
             virtual bool ConvertValue(const wxAnyValueBuffer& src,
@@ -394,9 +396,14 @@ public:
                               wxAnyValueBuffer& dst) const = 0;
 
     /**
-        Implement this for buffer-to-buffer copy. src.m_ptr can
-        be expected to be NULL if value type of previously stored
-        data was different.
+        Implement this for buffer-to-buffer copy.
+
+        @param src
+            This is the source data buffer.
+
+        @param dst
+            This is the destination data buffer that is in either
+            uninitialized or freed state.
     */
     virtual void CopyBuffer(const wxAnyValueBuffer& src,
                             wxAnyValueBuffer& dst) const = 0;
