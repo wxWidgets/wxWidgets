@@ -289,6 +289,17 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     wxAcceleratorTable accel(6, entries);
     SetAcceleratorTable(accel);
 
+    m_contextMenu = new wxMenu;
+    m_contextMenu->Append(wxID_UNDO, _("&Undo"));
+    m_contextMenu->Append(wxID_REDO, _("&Redo"));
+    m_contextMenu->AppendSeparator();
+    m_contextMenu->Append(wxID_CUT, _("Cu&t"));
+    m_contextMenu->Append(wxID_COPY, _("&Copy"));
+    m_contextMenu->Append(wxID_PASTE, _("&Paste"));
+    m_contextMenu->Append(wxID_CLEAR, _("&Delete"));
+    m_contextMenu->AppendSeparator();
+    m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
+
     return true;
 }
 
@@ -2504,6 +2515,13 @@ bool wxRichTextCtrl::CanDeleteSelection() const
 // Accessors
 // ----------------------------------------------------------------------------
 
+void wxRichTextCtrl::SetContextMenu(wxMenu* menu)
+{
+    if (m_contextMenu && m_contextMenu != menu)
+        delete m_contextMenu;
+    m_contextMenu = menu;
+}
+
 void wxRichTextCtrl::SetEditable(bool editable)
 {
     m_editable = editable;
@@ -2803,20 +2821,8 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
         return;
     }
 
-    if (!m_contextMenu)
-    {
-        m_contextMenu = new wxMenu;
-        m_contextMenu->Append(wxID_UNDO, _("&Undo"));
-        m_contextMenu->Append(wxID_REDO, _("&Redo"));
-        m_contextMenu->AppendSeparator();
-        m_contextMenu->Append(wxID_CUT, _("Cu&t"));
-        m_contextMenu->Append(wxID_COPY, _("&Copy"));
-        m_contextMenu->Append(wxID_PASTE, _("&Paste"));
-        m_contextMenu->Append(wxID_CLEAR, _("&Delete"));
-        m_contextMenu->AppendSeparator();
-        m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
-    }
-    PopupMenu(m_contextMenu);
+    if (m_contextMenu)
+        PopupMenu(m_contextMenu);
     return;
 }
 

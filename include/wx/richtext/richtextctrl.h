@@ -177,7 +177,7 @@ public:
 
     /// Get/set context menu
     wxMenu* GetContextMenu() const { return m_contextMenu; }
-    void SetContextMenu(wxMenu* menu) { m_contextMenu = menu; }
+    void SetContextMenu(wxMenu* menu);
 
     /// Anchor so we know how to extend the selection
     /// It's a caret position since it's between two characters.
