@@ -383,10 +383,12 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyWizard::MyWizard(wxFrame *frame, bool useSizer)
-        : wxWizard(frame,wxID_ANY,wxT("Absolutely Useless Wizard"),
-                   wxBitmap(wiztest_xpm),wxDefaultPosition,
-                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
+    SetExtraStyle(wxWIZARD_EX_HELPBUTTON);
+
+    Create(frame,wxID_ANY,wxT("Absolutely Useless Wizard"),
+                   wxBitmap(wiztest_xpm),wxDefaultPosition,
+                   wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
     SetIcon(wxIcon(sample_xpm));
 
     // Allow the bitmap to be expanded to fit the page height
