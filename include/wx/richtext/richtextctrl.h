@@ -160,6 +160,12 @@ public:
     wxCursor GetURLCursor() const { return m_urlCursor; }
 #endif
 
+#if wxABI_VERSION >= 20811
+    /// Get/set context menu
+    wxMenu* GetContextMenu() const { return m_contextMenu; }
+    void SetContextMenu(wxMenu* menu);
+#endif
+
 // Operations
 
     // editing

@@ -27,9 +27,11 @@
 @WX_VERSION_TAG@.11 {
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
+        *wxIconizeEvent*IsIconized*;
+        *wxRichTextCtrl*GetContextMenu*;
+        *wxRichTextCtrl*SetContextMenu*;
         *wxShowEvent*IsShown*;
         *wxSound*Create*;
-        *wxIconizeEvent*IsIconized*;
         *wxXmlNode*Attribute*;
 };
 
