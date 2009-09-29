@@ -1233,6 +1233,7 @@ void wxGenericTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font
     wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
 
     wxGenericTreeItem *pItem = (wxGenericTreeItem*) item.m_pItem;
+    pItem->Attr().SetFont(font);
     pItem->ResetTextSize();
     pItem->CalculateSize(this);
     RefreshLine(pItem);
@@ -3564,10 +3565,9 @@ void wxGenericTreeCtrl::OnInternalIdle()
         DoDirtyProcessing();
 }
 
-void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
+void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *WXUNUSED(item), wxDC &WXUNUSED(dc) )
 {
-    // Should not be called anymore
-    // Does this function need to stay for ABI compatibility?
+    // Should not be called anymore, keeping for ABI compatibility.
 }
 
 // -----------------------------------------------------------------------------
