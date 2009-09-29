@@ -21,6 +21,7 @@
 #endif
 
 #include "wx/artprov.h"
+#include "wx/image.h"
 #include "wx/msw/wrapwin.h"
 
 
@@ -35,28 +36,50 @@ protected:
                                   const wxSize& size);
 };
 
-static wxBitmap CreateFromStdIcon(const char *iconName)
+static wxBitmap CreateFromStdIcon(const char *iconName,
+                                  const wxArtClient& client)
 {
     wxIcon icon(iconName);
     wxBitmap bmp;
     bmp.CopyFromIcon(icon);
+
+#if wxUSE_IMAGE
+    // The standard native message box icons are in message box size (32x32).
+    // If they are requested in any size other than the default or message
+    // box size, they must be rescaled first.
+    if ( client != wxART_MESSAGE_BOX && client != wxART_OTHER )
+    {
+        const wxSize size = wxArtProvider::GetNativeSizeHint(client);
+        if ( size != wxDefaultSize )
+        {
+            wxImage img = bmp.ConvertToImage();
+            img.Rescale(size.x, size.y);
+            bmp = wxBitmap(img);
+        }
+    }
+#endif // wxUSE_IMAGE
+
     return bmp;
 }
 
 wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
-                                            const wxArtClient& WXUNUSED(client),
+                                            const wxArtClient& client,
                                             const wxSize& WXUNUSED(size))
 {
     // handle message box icons specially (wxIcon ctor treat these names
     // as special cases via wxICOResourceHandler::LoadIcon):
+    const char *name = NULL;
     if ( id == wxART_ERROR )
-        return CreateFromStdIcon("wxICON_ERROR");
+        name = "wxICON_ERROR";
     else if ( id == wxART_INFORMATION )
-        return CreateFromStdIcon("wxICON_INFORMATION");
+        name = "wxICON_INFORMATION";
     else if ( id == wxART_WARNING )
-        return CreateFromStdIcon("wxICON_WARNING");
+        name = "wxICON_WARNING";
     else if ( id == wxART_QUESTION )
-        return CreateFromStdIcon("wxICON_QUESTION");
+        name = "wxICON_QUESTION";
+
+    if ( name )
+        return CreateFromStdIcon(name, client);
 
     // for anything else, fall back to generic provider:
     return wxNullBitmap;
