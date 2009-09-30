@@ -1412,7 +1412,7 @@ int wxAppTraits::WaitForChild(wxExecuteData& execData)
     }
     //else: synchronous execution case
 
-#if HAS_PIPE_INPUT_STREAM
+#if HAS_PIPE_INPUT_STREAM && wxUSE_SOCKETS
     wxProcess * const process = execData.process;
     if ( process && process->IsRedirected() )
     {
