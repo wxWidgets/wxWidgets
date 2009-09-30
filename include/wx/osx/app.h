@@ -50,9 +50,7 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     virtual bool OnInitGui();
 #endif // wxUSE_GUI
 
-#ifdef __WXOSX_IPHONE__
     virtual int OnRun();
-#endif
 
     virtual bool ProcessIdle();
 
