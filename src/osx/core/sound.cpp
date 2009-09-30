@@ -61,7 +61,9 @@ wxOSXAudioToolboxSoundData::~wxOSXAudioToolboxSoundData()
     DoStop();
 }
 
-void wxOSXAudioToolboxSoundData::CompletionCallback(SystemSoundID  mySSID, void * soundRef)
+void
+wxOSXAudioToolboxSoundData::CompletionCallback(SystemSoundID WXUNUSED(mySSID),
+                                               void * soundRef)
 {
     wxOSXAudioToolboxSoundData* data = (wxOSXAudioToolboxSoundData*) soundRef;
     
@@ -124,16 +126,16 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     return true;
 }
 
-bool wxSound::Create(int size, const wxByte* data)
+bool wxSound::Create(int WXUNUSED(size), const wxByte* WXUNUSED(data))
 {
+    wxFAIL_MSG( "not implemented" );
+
     return false;
 }
 
 bool wxSound::Create(const wxString& fileName, bool isResource)
 {
-    if ( isResource )
-        return false;
-    
+    wxCHECK_MSG( !isResource, false, "not implemented" );
     
     m_data = new wxOSXAudioToolboxSoundData(fileName);
     return true;
