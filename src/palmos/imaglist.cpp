@@ -91,7 +91,7 @@ bool wxImageList::GetSize(int WXUNUSED(index), int &width, int &height) const
 // ----------------------------------------------------------------------------
 
 int wxImageList::Add(const wxBitmap& bitmap, const wxBitmap& mask)
-
+{
     return 0;
 }
 
