@@ -133,7 +133,8 @@ int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
 // YieldFor
 //-----------------------------------------------------------------------------
 
-static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
+extern "C" {
+static void wxgtk_main_do_event(GdkEvent* event, void* data)
 {
     // categorize the GDK event according to wxEventCategory.
     // See http://library.gnome.org/devel/gdk/unstable/gdk-Events.html#GdkEventType
@@ -210,12 +211,15 @@ static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
         break;
     }
 
+    wxGUIEventLoop* evtloop = static_cast<wxGUIEventLoop*>(data);
+
     // is this event allowed now?
     if (evtloop->IsEventAllowedInsideYield(cat))
         gtk_main_do_event(event);         // process it now
     else if (event->type != GDK_NOTHING)
         evtloop->StoreGdkEventForLaterProcessing(gdk_event_copy(event));
             // process it later (but make a copy; the caller will free the event pointer)
+}
 }
 
 bool wxGUIEventLoop::YieldFor(long eventsToProcess)
@@ -245,7 +249,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     //       and then call gtk_main_do_event()!
     //       In particular in this way we also process input from sources like
     //       GIOChannels (this is needed for e.g. wxGUIAppTraits::WaitForChild).
-    gdk_event_handler_set ((GdkEventFunc)wxgtk_main_do_event, this, NULL);
+    gdk_event_handler_set(wxgtk_main_do_event, this, NULL);
     while (Pending())   // avoid false positives from our idle source
         gtk_main_iteration();
     gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
