@@ -399,8 +399,11 @@ HBITMAP GetHBitmapForMenu(wxMenuItem *pItem, bool checked = true)
                 pItem->SetBitmap(img, checked);
             }
 
-            return GetHbitmapOf(pItem->GetBitmap());
+            return GetHbitmapOf(pItem->GetBitmap(checked));
         }
+        //else: bitmap is not set
+
+        return NULL;
     }
 #endif // wxUSE_IMAGE
 
@@ -518,17 +521,18 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             WinStruct<MENUITEMINFO> mii;
             mii.fMask = MIIM_STRING | MIIM_DATA;
 
-            if ( pItem->GetBitmap().IsOk() )
-            {
-                mii.fMask |= MIIM_BITMAP;
-                mii.hbmpItem = GetHBitmapForMenu(pItem);
-            }
-
+            // don't set hbmpItem for the checkable items as it would
+            // be used for both checked and unchecked state
             if ( pItem->IsCheckable() )
             {
                 mii.fMask |= MIIM_CHECKMARKS;
                 mii.hbmpChecked = GetHBitmapForMenu(pItem, true);
                 mii.hbmpUnchecked = GetHBitmapForMenu(pItem, false);
+            }
+            else if ( pItem->GetBitmap().IsOk() )
+            {
+                mii.fMask |= MIIM_BITMAP;
+                mii.hbmpItem = GetHBitmapForMenu(pItem);
             }
 
             mii.cch = itemText.length();
