@@ -1625,8 +1625,9 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 #endif
         if ( m_cgContext )
         {
-            CGContextConcatCTM( m_cgContext, m_windowTransform );
             CGContextSaveGState( m_cgContext );
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
             m_contextSynthesized = true;
 #if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
