@@ -120,6 +120,14 @@ private:
     wxAcceleratorArray m_accels;
 #endif // wxUSE_ACCEL
 
+#if wxUSE_OWNER_DRAWN
+    // true if the menu has any ownerdrawn items
+    bool m_ownerDrawn;
+
+    // the max width of menu items bitmaps
+    int m_maxBitmapWidth;
+#endif // wxUSE_OWNER_DRAWN
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
 };
 
