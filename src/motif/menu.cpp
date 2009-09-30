@@ -397,8 +397,8 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
             Widget tearOff = XmGetTearOffControl(GetWidget(menu));
             wxDoChangeForegroundColour((Widget) tearOff, m_foregroundColour);
             wxDoChangeBackgroundColour((Widget) tearOff, m_backgroundColour, true);
-#endif
         }
+#endif
     }
 
     SetBackgroundColour(m_backgroundColour);
