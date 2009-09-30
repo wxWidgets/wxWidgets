@@ -114,6 +114,8 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setTarget:(id)anObject;
 - (void)setAction:(SEL)aSelector;
 - (void)setDoubleAction:(SEL)aSelector;
+- (void)setBackgroundColor:(NSColor*)aColor;
+- (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
 
 long wxOSXTranslateCocoaKey( NSEvent* event )
@@ -1330,9 +1332,19 @@ void wxWidgetCocoaImpl::Embed( wxWidgetImpl *parent )
     [container addSubview:m_osxView];
 }
 
-void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
+void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 {
-    // m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    NSView* targetView = m_osxView;
+    if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+        targetView = [(NSScrollView*) m_osxView documentView];
+
+    if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
+    {
+        [targetView setBackgroundColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
+                                                                green:(CGFloat) (col.Green() / 255.0)
+                                                                 blue:(CGFloat) (col.Blue() / 255.0)
+                                                                alpha:(CGFloat) (col.Alpha() / 255.0)]];
+    }
 }
 
 void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding )
