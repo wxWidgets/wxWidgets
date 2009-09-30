@@ -50,7 +50,9 @@ void wxDialog::DoShowModal()
     }
     BeginAppModalStateForWindow(windowRef) ;
 
+#if wxUSE_CONSOLE_EVENTLOOP
     wxEventLoopGuarantor ensureHasLoop;
+#endif
     wxEventLoopBase * const loop = wxEventLoop::GetActive();
     while ( IsModal() )
         loop->Dispatch();
