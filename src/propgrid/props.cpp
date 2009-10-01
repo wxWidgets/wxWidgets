@@ -1034,9 +1034,7 @@ bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, i
 
     // If text not any of the choices, store as text instead
     // (but only if we are wxEditEnumProperty)
-    if ( useIndex == -1 &&
-         (value.GetType() != wxPG_VARIANT_TYPE_STRING || (m_value.GetString() != text)) &&
-         isEdit )
+    if ( useIndex == -1 && isEdit )
     {
         asText = true;
     }
