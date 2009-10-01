@@ -59,7 +59,8 @@ class wxMacEditHelper
 public :
     wxMacEditHelper( NSView* textView )
     {
-        m_textView = textView ;
+        m_textView = textView;
+        m_formerState = YES;
         if ( textView )
         {
             m_formerState = [textView isEditable];
@@ -422,7 +423,7 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     m_lastKeyDownEvent = formerEvent;
 }
 
-void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
+void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSED(foreground) , long WXUNUSED(windowStyle), bool WXUNUSED(ignoreBlack) )
 {
     if ([m_textView respondsToSelector:@selector(setFont:)])
         [m_textView setFont: font.OSXGetNSFont()];
@@ -581,7 +582,7 @@ void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf),
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    const wxString& str,
+                                    const wxString& WXUNUSED(str),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
@@ -595,7 +596,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         wxNSTextScrollView* v = nil;
         v = [[wxNSTextScrollView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
-        static_cast<wxNSTextViewControl*>(c)->SetStringValue(str);
     }
     else
     {
@@ -615,7 +615,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [v setBordered:NO];
 
         c = new wxNSTextFieldControl( wxpeer, v );
-        static_cast<wxNSTextFieldControl*>(c)->SetStringValue(str);
     }
 
     return c;

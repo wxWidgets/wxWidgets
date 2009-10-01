@@ -119,7 +119,13 @@ bool wxTextCtrl::Create( wxWindow *parent,
     m_peer = wxWidgetImpl::CreateTextControl( this, GetParent(), GetId(), str, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate(pos, size) ;
-
+    
+#if wxOSX_USE_COCOA
+    // under carbon everything can already be set before the MacPostControlCreate embedding takes place
+    // but under cocoa for single line textfields this only works after everything has been set up
+    GetTextPeer()->SetStringValue(str);
+#endif
+    
     // only now the embedding is correct and we can do a positioning update
 
     MacSuperChangedPosition() ;
