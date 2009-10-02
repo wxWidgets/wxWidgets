@@ -2635,6 +2635,9 @@ public :
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) ;
 
+    // create a graphics bitmap from a native bitmap
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
+
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) ;
 private :
@@ -2784,9 +2787,19 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
     if ( bmp.Ok() )
     {
         wxGraphicsBitmap p;
-#ifdef __WXMAC__
         p.SetRefData(new wxMacCoreGraphicsBitmapData( this , bmp.CreateCGImage(), bmp.GetDepth() == 1 ) );
-#endif
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
+{
+    if ( bitmap != NULL )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxMacCoreGraphicsBitmapData( this , (CGImageRef) bitmap, false ));
         return p;
     }
     else

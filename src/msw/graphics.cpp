@@ -1580,6 +1580,9 @@ public :
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
 
+    // create a graphics bitmap from a native bitmap
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
+    
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
@@ -1801,6 +1804,19 @@ wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxGDIPlusBitmapData( this , bitmap ));
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmapFromNativeBitmap( void *bitmap )
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsBitmap);
+    if ( bitmap != NULL )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxGDIPlusBitmapData( this , (Bitmap*) bitmap ));
         return p;
     }
     else

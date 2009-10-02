@@ -290,6 +290,7 @@ class wxCairoBitmapData : public wxGraphicsObjectRefData
 {
 public:
     wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp );
+    wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap );
     ~wxCairoBitmapData();
 
     virtual cairo_surface_t* GetCairoSurface() { return m_surface; }
@@ -1014,6 +1015,13 @@ void * wxCairoMatrixData::GetNativeMatrix() const
 // wxCairoBitmap implementation
 //-----------------------------------------------------------------------------
 
+wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, cairo_surface_t* bitmap ) :
+    wxGraphicsObjectRefData( renderer )
+{
+    m_surface = bitmap;
+    m_pattern = cairo_pattern_create_for_surface(m_surface);
+}
+
 wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitmap& bmp ) : wxGraphicsObjectRefData( renderer )
 {
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
@@ -1708,6 +1716,9 @@ public :
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap );
 
+    // create a graphics bitmap from a native bitmap
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
+
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
@@ -1873,6 +1884,18 @@ wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
     {
         wxGraphicsBitmap p;
         p.SetRefData(new wxCairoBitmapData( this , bmp ));
+        return p;
+    }
+    else
+        return wxNullGraphicsBitmap;
+}
+
+wxGraphicsBitmap wxCairoRenderer::CreateBitmapFromNativeBitmap( void* bitmap )
+{
+    if ( bitmap != NULL )
+    {
+        wxGraphicsBitmap p;
+        p.SetRefData(new wxCairoBitmapData( this , (cairo_surface_t*) bitmap ));
         return p;
     }
     else

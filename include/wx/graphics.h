@@ -657,6 +657,9 @@ public:
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
+    
+    // create a graphics bitmap from a native bitmap
+    virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
 
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  ) = 0;
