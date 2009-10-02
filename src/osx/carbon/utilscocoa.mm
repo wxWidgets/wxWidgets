@@ -313,7 +313,7 @@ WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image )
     return( newImage );
 }
 
-CGImageRef wxOSXCreateCGImageFromNSSImage( WX_NSImage nsimage )
+CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
     
