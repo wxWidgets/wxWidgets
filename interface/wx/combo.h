@@ -310,6 +310,7 @@ struct wxComboCtrlFeatures
     @event{EVT_COMBOX_CLOSEUP(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
            when the popup window of the combo control disappears (closes up).
+           You should avoid adding or deleting items in this event.
     @endEventTable
 
     @library{wxbase}
