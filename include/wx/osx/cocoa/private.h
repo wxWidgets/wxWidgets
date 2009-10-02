@@ -46,6 +46,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
 WX_NSImage WXDLLIMPEXP_CORE wxOSXCreateNSImageFromCGImage( CGImageRef image );
+CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSSImage( WX_NSImage nsimage );
 #endif
 
 long UMAGetSystemVersion() ;
