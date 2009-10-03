@@ -63,6 +63,25 @@
     Note that pointers to any and all classes are already automatically
     declared as movable data.
 
+    @warning Caveat with shared libraries (DLLs): If you have a scenario where
+             you use wxAny across application's shared library and application
+             itself (or, with another of your shared libraries), then you must
+             use wxDECLARE_ANY_TYPE() macro in your shared library code to
+             correctly make sure that the wxAnyValueType implementation is
+             generated correctly. Failure to do this will result in breakage
+             of the wxAny type recognition with type in question. Below is an
+             example how to use the macro.
+             @code
+                // In your shared library/DLL-only
+                wxDECLARE_ANY_TYPE(MyClass, WXEXPORT)
+
+                // In your shared library/DLL source code
+                WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<MyClass>)
+
+                // In code using said shared library/DLL
+                wxDECLARE_ANY_TYPE(MyClass, WXIMPORT)
+             @endcode
+
     @library{wxbase}
     @category{data}
 

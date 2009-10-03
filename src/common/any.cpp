@@ -339,6 +339,10 @@ WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplString)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<bool>)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplDouble)
 
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxObject*>)
+//WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxArrayString>)
+
 //-------------------------------------------------------------------------
 // wxAnyNullValueType implementation
 //-------------------------------------------------------------------------

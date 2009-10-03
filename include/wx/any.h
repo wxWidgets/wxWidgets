@@ -479,6 +479,53 @@ WX_ANY_DEFINE_SUB_TYPE(float, Double)
 WX_ANY_DEFINE_SUB_TYPE(double, Double)
 
 
+//
+// Defines a dummy wxAnyValueTypeImpl<> with given export
+// declaration. This is needed if a class is used with
+// wxAny in both user shared library and application.
+//
+#define wxDECLARE_ANY_TYPE(CLS, DECL) \
+template<> \
+class DECL wxAnyValueTypeImpl<CLS> : \
+    public wxAnyValueTypeImplBase<CLS> \
+{ \
+    WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl<CLS>) \
+public: \
+    wxAnyValueTypeImpl() : \
+        wxAnyValueTypeImplBase<CLS>() { } \
+    virtual ~wxAnyValueTypeImpl() { } \
+ \
+    virtual bool ConvertValue(const wxAnyValueBuffer& src, \
+                              wxAnyValueType* dstType, \
+                              wxAnyValueBuffer& dst) const \
+    { \
+        wxUnusedVar(src); \
+        wxUnusedVar(dstType); \
+        wxUnusedVar(dst); \
+        return false; \
+    } \
+};
+
+
+// Make sure some of wx's own types get the right wxAnyValueType export
+// (this is needed only for types that are referred to from wxBase.
+// currently we may not use any of these types from there, but let's
+// use the macro on at least one to make sure it compiles since we can't
+// really test it properly in unittests since a separate DLL would
+// be needed).
+#if wxUSE_DATETIME
+    #include "wx/datetime.h"
+    wxDECLARE_ANY_TYPE(wxDateTime, WXDLLIMPEXP_BASE)
+#endif
+
+//#include "wx/object.h"
+//wxDECLARE_ANY_TYPE(wxObject*, WXDLLIMPEXP_BASE)
+
+//#include "wx/arrstr.h"
+//wxDECLARE_ANY_TYPE(wxArrayString, WXDLLIMPEXP_BASE)
+
+
+
 #ifdef __VISUALC6__
     // Re-enable useless VC6 warnings
     #pragma warning (pop)
