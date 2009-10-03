@@ -639,6 +639,9 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
     {
         if ( m_depth != 1 && m_bitmapMask == NULL )
         {
+#if 0
+            // in order for this code to work properly, wxMask would have to invert black and white
+            // in the native bitmap
             if ( m_bitmapMask )
             {
                 CGImageRef tempImage = CGBitmapContextCreateImage( m_hBitmap );
@@ -648,6 +651,7 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
                 CGImageRelease(tempImage);
             }
             else
+#endif
                 image = CGBitmapContextCreateImage( m_hBitmap );
         }
         else
