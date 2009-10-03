@@ -21,6 +21,8 @@
 #endif
 
 #include "wx/metafile.h"
+#include "wx/xpmdecod.h"
+
 #include "wx/rawbmp.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
@@ -65,11 +67,9 @@ public:
     void Free();
     void SetOk( bool isOk) { m_ok = isOk; }
 
-#if WXWIN_COMPATIBILITY_2_8
     void SetWidth( int width ) { m_width = width; }
     void SetHeight( int height ) { m_height = height; }
     void SetDepth( int depth ) { m_depth = depth; }
-#endif
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
@@ -109,7 +109,7 @@ public:
     CGContextRef  GetBitmapContext() const;
 
     int           GetBytesPerRow() const { return m_bytesPerRow; }
-private:
+    private :
     bool Create(int width , int height , int depth);
     void Init();
 
@@ -510,10 +510,10 @@ IconRef wxBitmapRefData::GetIconRef()
             {
                 // setup the header properly
 
-                Handle data;
-                Handle maskdata;
-                unsigned char * maskptr;
-                unsigned char * ptr;
+                Handle data = NULL ;
+                Handle maskdata = NULL ;
+                unsigned char * maskptr = NULL ;
+                unsigned char * ptr = NULL ;
                 size_t datasize, masksize ;
 
                 datasize = sz * sz * 4 ;
@@ -1403,7 +1403,6 @@ bool wxBitmap::HasAlpha() const
    return M_BITMAPDATA->HasAlpha() ;
 }
 
-#if WXWIN_COMPATIBILITY_2_8
 void wxBitmap::SetWidth(int w)
 {
     AllocExclusive();
@@ -1421,7 +1420,6 @@ void wxBitmap::SetDepth(int d)
     AllocExclusive();
     M_BITMAPDATA->SetDepth(d);
 }
-#endif // WXWIN_COMPATIBILITY_2_8
 
 void wxBitmap::SetOk(bool isOk)
 {
