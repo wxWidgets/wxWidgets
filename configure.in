@@ -7420,13 +7420,8 @@ dnl ---------------------------------------------------------------------------
 dnl all additional libraries (except wxWidgets itself) we link with
 
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_SOUND" = "yes" || test "$wxUSE_MEDIACTRL" = "yes"; then
-        if test "$USE_DARWIN" = 1; then
-            LDFLAGS="$LDFLAGS -framework QuickTime"
-        fi
-    fi
     if test "$USE_DARWIN" = 1; then
-        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL"
+        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
