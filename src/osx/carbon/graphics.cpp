@@ -453,32 +453,32 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 
     switch ( pen.GetStyle() )
     {
-        case wxSOLID :
+        case wxPENSTYLE_SOLID:
             break;
 
-        case wxDOT :
+        case wxPENSTYLE_DOT:
             m_count = WXSIZEOF(dotted);
             m_userLengths = new CGFloat[ m_count ] ;
             memcpy( m_userLengths, dotted, sizeof(dotted) );
             m_lengths = m_userLengths;
             break;
 
-        case wxLONG_DASH :
+        case wxPENSTYLE_LONG_DASH:
             m_count = WXSIZEOF(dashed);
             m_lengths = dashed;
             break;
 
-        case wxSHORT_DASH :
+        case wxPENSTYLE_SHORT_DASH:
             m_count = WXSIZEOF(short_dashed);
             m_lengths = short_dashed;
             break;
 
-        case wxDOT_DASH :
+        case wxPENSTYLE_DOT_DASH:
             m_count = WXSIZEOF(dotted_dashed);
             m_lengths = dotted_dashed;
             break;
 
-        case wxUSER_DASH :
+        case wxPENSTYLE_USER_DASH:
             wxDash *dashes;
             m_count = pen.GetDashes( &dashes );
             if ((dashes != NULL) && (m_count > 0))
@@ -497,7 +497,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
             m_lengths = m_userLengths;
             break;
 
-        case wxSTIPPLE :
+        case wxPENSTYLE_STIPPLE:
             {
                 wxBitmap* bmp = pen.GetStipple();
                 if ( bmp && bmp->Ok() )
@@ -572,20 +572,6 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
 //
 // Brush
 //
-
-static const char *gs_stripedback_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"4 4 2 1",
-". c #F0F0F0",
-"X c #ECECEC",
-/* pixels */
-"....",
-"....",
-"XXXX",
-"XXXX"
-};
-
-wxBitmap gs_stripedback_bmp( wxImage( (const char* const* ) gs_stripedback_xpm  ), -1 ) ;
 
 // make sure we all use one class for all conversions from wx to native colour
 
@@ -1674,7 +1660,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
 
 bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return true;
 
     if (m_antialias == antialias)
@@ -1700,7 +1686,7 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 
 bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return true;
 
     if ( m_composition == op )
@@ -1917,7 +1903,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     if ( m_pen.IsNull() )
         return ;
 
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -1932,7 +1918,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -1988,7 +1974,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
     if ( m_brush.IsNull() )
         return;
 
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -2089,7 +2075,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -2131,7 +2117,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -2150,7 +2136,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 
 void wxMacCoreGraphicsContext::PushState()
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     CGContextSaveGState( m_cgContext );
@@ -2158,7 +2144,7 @@ void wxMacCoreGraphicsContext::PushState()
 
 void wxMacCoreGraphicsContext::PopState()
 {
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     CGContextRestoreGState( m_cgContext );
@@ -2168,7 +2154,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
@@ -2231,7 +2217,7 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
-    if (EnsureIsValid()==false)
+    if (!EnsureIsValid())
         return;
 
     if (m_composition == wxCOMPOSITION_DEST)
