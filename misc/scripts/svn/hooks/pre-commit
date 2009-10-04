@@ -18,7 +18,8 @@ rc=0
 all_changed_files=`svnl changed | \
                     grep "^[AU]" | \
                     sed 's/^....//' | \
-                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)"`
+                    egrep -v "src/(tiff|regex|jpeg|stc/scintilla)" | \
+		    egrep -v "_wrap.cpp"`
 
 # analyze the changed files to find all non-binary and all source files
 for f in $all_changed_files; do
@@ -59,3 +60,4 @@ for f in $changed_text_files; do
 done
 
 exit $rc
+
