@@ -885,7 +885,7 @@ bool OutputIndentation(wxOutputStream& stream,
                        wxMBConv *convFile)
 {
     wxString str(wxS("\n"));
-    str += wxString(2*indent, wxS(' '));
+    str += wxString(indent, wxS(' '));
     return OutputString(stream, str, convMem, convFile);
 }
 

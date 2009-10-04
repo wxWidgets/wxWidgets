@@ -265,8 +265,8 @@ public:
                       const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
 
     // Saves document as .xml file.
-    virtual bool Save(const wxString& filename, int indentstep = 1) const;
-    virtual bool Save(wxOutputStream& stream, int indentstep = 1) const;
+    virtual bool Save(const wxString& filename, int indentstep = 2) const;
+    virtual bool Save(wxOutputStream& stream, int indentstep = 2) const;
 
     bool IsOk() const { return m_root != NULL; }
 

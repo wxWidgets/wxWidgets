@@ -153,8 +153,13 @@ Changes in behaviour not resulting in compilation errors, please read this!
   and not in both this and the orthogonal directions. This behaviour is what
   most of the people expect but if you really relied on this overload adding
   space in both directions you should change your code to use AddSpacer(x, x).
-  
+
 - wxTextCtrl::LoadFile no longer sends a text update event.
+
+- wxXmlDocument::Save()'s indentstep argument's interpretation was fixed
+  to match the documentation: it now really is the number of spaces in
+  indentation instead of being its double. Its default value was changed
+  accordingly, to 2.
 
 
 Changes in behaviour which may result in compilation errors

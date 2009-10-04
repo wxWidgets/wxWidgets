@@ -597,13 +597,13 @@ public:
         If @a indentstep is @c wxXML_NO_INDENTATION, then, automatic indentation
         is turned off.
     */
-    virtual bool Save(const wxString& filename, int indentstep = 1) const;
+    virtual bool Save(const wxString& filename, int indentstep = 2) const;
 
     /**
         Saves XML tree in the given output stream.
         See Save(const wxString&, int) for a description of @a indentstep.
     */
-    virtual bool Save(wxOutputStream& stream, int indentstep = 1) const;
+    virtual bool Save(wxOutputStream& stream, int indentstep = 2) const;
 
     /**
         Sets the enconding of the document.
