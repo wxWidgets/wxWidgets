@@ -155,6 +155,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                 break;
             case wxWINDOW_VARIANT_SMALL:
                 maxHeight = 17;
+                break;
             case wxWINDOW_VARIANT_MINI:
                 maxHeight = 15;
         }
