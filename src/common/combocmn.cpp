@@ -32,7 +32,6 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
-    #include "wx/dialog.h"
     #include "wx/timer.h"
     #include "wx/textctrl.h"
 #endif
@@ -59,6 +58,11 @@
 
 #if defined(__WXMSW__)
 
+// Let's use wxFrame as a fall-back solution until wxMSW gets wxNonOwnedWindow
+#include "wx/frame.h"
+#define wxCC_GENERIC_TLW_IS_FRAME
+#define wxComboCtrlGenericTLW   wxFrame
+
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
@@ -71,13 +75,17 @@
 
 #elif defined(__WXGTK__)
 
-#include "wx/gtk/private.h"
-
 // NB: It is not recommended to use wxDialog as popup on wxGTK, because of
 //     this bug: If wxDialog is hidden, its position becomes corrupt
 //     between hide and next show, but without internal coordinates being
 //     reflected (or something like that - atleast commenting out ->Hide()
 //     seemed to eliminate the position change).
+
+#include "wx/dialog.h"
+#define wxCC_GENERIC_TLW_IS_DIALOG
+#define wxComboCtrlGenericTLW   wxDialog
+
+#include "wx/gtk/private.h"
 
 // NB: Let's not be afraid to use wxGTK's wxPopupTransientWindow as a
 //     'perfect' popup, as it can succesfully host child controls even in
@@ -92,6 +100,10 @@
 
 #elif defined(__WXMAC__)
 
+#include "wx/nonownedwnd.h"
+#define wxCC_GENERIC_TLW_IS_NONOWNEDWINDOW
+#define wxComboCtrlGenericTLW   wxNonOwnedWindow
+
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
@@ -105,6 +117,10 @@
 #define COMBO_MARGIN                  FOCUS_RING
 
 #else
+
+#include "wx/dialog.h"
+#define wxCC_GENERIC_TLW_IS_DIALOG
+#define wxComboCtrlGenericTLW   wxDialog
 
 #define USE_TRANSIENT_POPUP           0 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
 #define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
@@ -139,7 +155,7 @@ enum
     POPUPWIN_NONE                   = 0,
     POPUPWIN_WXPOPUPTRANSIENTWINDOW = 1,
     POPUPWIN_WXPOPUPWINDOW          = 2,
-    POPUPWIN_WXDIALOG               = 3
+    POPUPWIN_GENERICTLW             = 3
 };
 
 
@@ -157,9 +173,9 @@ enum
         #define SECONDARY_POPUP_TYPE        POPUPWIN_WXPOPUPWINDOW
         #define USES_WXPOPUPWINDOW          1
     #else
-        #define wxComboPopupWindowBase2     wxDialog
-        #define SECONDARY_POPUP_TYPE        POPUPWIN_WXDIALOG
-        #define USES_WXDIALOG               1
+        #define wxComboPopupWindowBase2     wxComboCtrlGenericTLW
+        #define SECONDARY_POPUP_TYPE        POPUPWIN_GENERICTLW
+        #define USES_GENERICTLW             1
     #endif
 
 #elif wxUSE_POPUPWIN
@@ -170,17 +186,17 @@ enum
     #define USES_WXPOPUPWINDOW          1
 
     #if !POPUPWIN_IS_PERFECT
-        #define wxComboPopupWindowBase2     wxDialog
-        #define SECONDARY_POPUP_TYPE        POPUPWIN_WXDIALOG
-        #define USES_WXDIALOG               1
+        #define wxComboPopupWindowBase2     wxComboCtrlGenericTLW
+        #define SECONDARY_POPUP_TYPE        POPUPWIN_GENERICTLW
+        #define USES_GENERICTLW             1
     #endif
 
 #else
     // wxPopupWindow is not implemented
 
-    #define wxComboPopupWindowBase      wxDialog
-    #define PRIMARY_POPUP_TYPE          POPUPWIN_WXDIALOG
-    #define USES_WXDIALOG               1
+    #define wxComboPopupWindowBase      wxComboCtrlGenericTLW
+    #define PRIMARY_POPUP_TYPE          POPUPWIN_GENERICTLW
+    #define USES_GENERICTLW             1
 
 #endif
 
@@ -193,8 +209,8 @@ enum
     #define USES_WXPOPUPWINDOW          0
 #endif
 
-#ifndef USES_WXDIALOG
-    #define USES_WXDIALOG               0
+#ifndef USES_GENERICTLW
+    #define USES_GENERICTLW             0
 #endif
 
 
@@ -435,7 +451,7 @@ public:
 
     void OnSizeEvent( wxSizeEvent& event );
     void OnKeyEvent(wxKeyEvent& event);
-#if USES_WXDIALOG
+#if USES_GENERICTLW
     void OnActivate( wxActivateEvent& event );
 #endif
 
@@ -449,7 +465,7 @@ private:
 BEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxComboPopupWindowEvtHandler::OnKeyEvent)
     EVT_KEY_UP(wxComboPopupWindowEvtHandler::OnKeyEvent)
-#if USES_WXDIALOG
+#if USES_GENERICTLW
     EVT_ACTIVATE(wxComboPopupWindowEvtHandler::OnActivate)
 #endif
     EVT_SIZE(wxComboPopupWindowEvtHandler::OnSizeEvent)
@@ -470,7 +486,7 @@ void wxComboPopupWindowEvtHandler::OnKeyEvent( wxKeyEvent& event )
     child->GetEventHandler()->AddPendingEvent(event);
 }
 
-#if USES_WXDIALOG
+#if USES_GENERICTLW
 void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
 {
     if ( !event.GetActive() )
@@ -1618,7 +1634,7 @@ bool wxComboCtrlBase::PreprocessMouseEvent( wxMouseEvent& event,
     wxLongLong t = ::wxGetLocalTimeMillis();
     int evtType = event.GetEventType();
 
-#if USES_WXPOPUPWINDOW || USES_WXDIALOG
+#if USES_WXPOPUPWINDOW || USES_GENERICTLW
     if ( m_popupWinType != POPUPWIN_WXPOPUPTRANSIENTWINDOW )
     {
         if ( IsPopupWindowState(Visible) &&
@@ -1772,12 +1788,23 @@ void wxComboCtrlBase::CreatePopup()
 #ifdef wxComboPopupWindowBase2
         if ( m_iFlags & wxCC_IFLAG_USE_ALT_POPUP )
         {
-        #if !USES_WXDIALOG
+        #if !USES_GENERICTLW
             m_winPopup = new wxComboPopupWindowBase2( this, wxNO_BORDER );
         #else
+            int tlwFlags = wxNO_BORDER;
+          #ifdef wxCC_GENERIC_TLW_IS_FRAME
+            tlwFlags |= wxFRAME_NO_TASKBAR;
+          #endif
+
+          #ifdef wxCC_GENERIC_TLW_IS_NONOWNEDWINDOW
+            m_winPopup = new wxComboPopupWindowBase2( this, wxID_ANY,
+                                                      wxPoint(-21,-21), wxSize(20, 20),
+                                                      tlwFlags );
+          #else
             m_winPopup = new wxComboPopupWindowBase2( this, wxID_ANY, wxEmptyString,
                                                       wxPoint(-21,-21), wxSize(20, 20),
-                                                      wxNO_BORDER );
+                                                      tlwFlags );
+          #endif
         #endif
             m_popupWinType = SECONDARY_POPUP_TYPE;
         }
