@@ -36,7 +36,8 @@ public:
     virtual void ShowMessage(const wxString& msg,
                              int flags = wxICON_INFORMATION) = 0;
 
-    // add an extra button to the bar, near the message
+    // add an extra button to the bar, near the message (replacing the default
+    // close button which is only shown if no extra buttons are used)
     virtual void AddButton(wxWindowID btnid,
                            const wxString& label = wxString()) = 0;
 

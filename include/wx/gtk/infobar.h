@@ -57,6 +57,10 @@ protected:
 private:
     void Init() { m_impl = NULL; }
 
+    // add a button with the given id/label and return its widget
+    GtkWidget *GTKAddButton(wxWindowID btnid,
+                            const wxString& label = wxString());
+
 
     // only used when the native implementation is really being used
     class wxInfoBarGTKImpl *m_impl;

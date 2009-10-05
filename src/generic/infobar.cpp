@@ -245,9 +245,15 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
     wxSizer * const sizer = GetSizer();
     wxCHECK_RET( sizer, "must be created first" );
 
-    sizer->Insert(sizer->GetItemCount() - 1,
-                  new wxButton(this, btnid, label),
-                  wxSizerFlags().Centre().DoubleBorder());
+    // user-added buttons replace the standard close button so remove it if we
+    // hadn't done it yet
+    if ( sizer->Detach(m_button) )
+    {
+        m_button->Hide();
+    }
+
+    sizer->Add(new wxButton(this, btnid, label),
+               wxSizerFlags().Centre().DoubleBorder());
 }
 
 void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
@@ -263,7 +269,6 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
           node != items.GetFirst();
           node = node->GetPrevious() )
     {
-        node = node->GetPrevious();
         const wxSizerItem * const item = node->GetData();
 
         // if we reached the spacer separating the buttons from the text
@@ -281,6 +286,15 @@ void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
             delete item->GetWindow();
             break;
         }
+    }
+
+    // check if there are any custom buttons left
+    if ( sizer->GetChildren().GetLast()->GetData()->IsSpacer() )
+    {
+        // if the last item is the spacer, none are left so restore the
+        // standard close button
+        sizer->Add(m_button, wxSizerFlags().Centre().DoubleBorder());
+        m_button->Show();
     }
 }
 

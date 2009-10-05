@@ -114,7 +114,9 @@ public:
 
         The button added by this method will be shown to the right of the text
         (in LTR layout), with each successive button being added to the right
-        of the previous one.
+        of the previous one. If any buttons are added to the info bar using
+        this method, the default "Close" button is not shown as it is assumed
+        that the extra buttons already allow the user to close it.
 
         Clicking the button will generate a normal EVT_COMMAND_BUTTON_CLICKED
         event which can be handled as usual. The default handler in wxInfoBar
