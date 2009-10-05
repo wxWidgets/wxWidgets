@@ -111,10 +111,10 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     m_text = new wxStaticText(this, wxID_ANY, "");
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
-    const wxSize sizeBmp = wxArtProvider::GetSizeHint(wxART_FRAME_ICON);
+    const wxSize sizeBmp = wxArtProvider::GetSizeHint(wxART_BUTTON);
     wxBitmap bmp = GetCloseButtonBitmap(this, sizeBmp, colBg);
 #else // !wxHAS_DRAW_TITLE_BAR_BITMAP
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_MENU);
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_CLOSE, wxART_BUTTON);
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
     m_button = new wxBitmapButton
                    (
@@ -264,7 +264,7 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     {
         m_icon->SetBitmap(wxArtProvider::GetBitmap(
                             wxArtProvider::GetMessageBoxIconId(flags),
-                          wxART_MENU));
+                          wxART_BUTTON));
         m_icon->Show();
     }
 
