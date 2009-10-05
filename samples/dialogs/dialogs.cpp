@@ -561,6 +561,12 @@ MyFrame::MyFrame(const wxString& title)
     sizer->Add(m_canvas, wxSizerFlags(1).Expand());
     sizer->Add(m_infoBarAdvanced, wxSizerFlags().Expand());
     SetSizer(sizer);
+
+    // final touch: under MSW the info bars are shown progressively and parts
+    // of the parent window can be seen during the process, so use the same
+    // background colour for our background as for the canvas window which
+    // covers our entire client area to avoid jarring colour jumps
+    SetOwnBackgroundColour(m_canvas->GetBackgroundColour());
 #endif // wxUSE_INFOBAR
 }
 

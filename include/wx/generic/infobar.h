@@ -97,12 +97,6 @@ private:
     // handler for the close button
     void OnButton(wxCommandEvent& event);
 
-    // change the parent background colour to match that of our sibling
-    void ChangeParentBackground();
-
-    // restore the parent background changed by the above function
-    void RestoreParentBackground();
-
     // show/hide the bar
     void DoShow();
     void DoHide();
@@ -117,9 +111,6 @@ private:
     wxShowEffect m_showEffect,
                  m_hideEffect;
     int m_effectDuration;
-
-    // the original parent background colour, before we changed it
-    wxColour m_origParentBgCol;
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);

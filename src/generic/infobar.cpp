@@ -170,55 +170,10 @@ void wxInfoBarGeneric::UpdateParent()
     parent->Layout();
 }
 
-void wxInfoBarGeneric::ChangeParentBackground()
-{
-    wxWindow * const parent = GetParent();
-    m_origParentBgCol = parent->GetBackgroundColour();
-
-    wxSizer * const sizer = GetContainingSizer();
-    if ( !sizer )
-        return;
-
-    wxWindow *sibling = NULL;
-    for ( wxSizerItemList::compatibility_iterator
-            node = sizer->GetChildren().GetFirst();
-            node;
-            node = node->GetNext() )
-    {
-        if ( node->GetData()->GetWindow() == this )
-        {
-            // find the next window following us
-            for ( node = node->GetNext();
-                  node;
-                  node = node->GetNext() )
-            {
-                wxSizerItem * const item = node->GetData();
-                if ( item->IsWindow() )
-                {
-                    sibling = item->GetWindow();
-                    break;
-                }
-            }
-
-            break;
-        }
-    }
-
-    if ( sibling )
-        parent->SetOwnBackgroundColour(sibling->GetBackgroundColour());
-}
-
-void wxInfoBarGeneric::RestoreParentBackground()
-{
-    GetParent()->SetOwnBackgroundColour(m_origParentBgCol);
-}
-
 void wxInfoBarGeneric::DoHide()
 {
-    ChangeParentBackground();
-    wxON_BLOCK_EXIT_THIS0( wxInfoBarGeneric::RestoreParentBackground );
-
     HideWithEffect(m_hideEffect, m_effectDuration);
+
     UpdateParent();
 }
 
@@ -233,12 +188,6 @@ void wxInfoBarGeneric::DoShow()
     // just change the internal flag indicating that the window is visible,
     // without really showing it
     wxWindowBase::Show();
-
-    // an extra hack: we want the temporarily uncovered area in which we're
-    // going to expand to look like part of this sibling for a better effect so
-    // temporarily change the background of our parent to the same colour
-    ChangeParentBackground();
-    wxON_BLOCK_EXIT_THIS0( wxInfoBarGeneric::RestoreParentBackground );
 
     // adjust the parent layout to account for us
     UpdateParent();
