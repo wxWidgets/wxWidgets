@@ -593,19 +593,14 @@ wxSize wxWindowBase::DoGetBestSize() const
     }
     else // ! has children
     {
-        // for a generic window there is no natural best size so, if the
-        // minimal size is not set, use the current size but take care to
-        // remember it as minimal size for the next time because our best size
-        // should be constant: otherwise we could get into a situation when the
-        // window is initially at some size, then expanded to a larger size and
-        // then, when the containing window is shrunk back (because our initial
-        // best size had been used for computing the parent min size), we can't
-        // be shrunk back any more because our best size is now bigger
         wxSize size = GetMinSize();
         if ( !size.IsFullySpecified() )
         {
-            size.SetDefaults(GetSize());
-            wxConstCast(this, wxWindowBase)->SetMinSize(size);
+            // if the window doesn't define its best size we assume that it can
+            // be arbitrarily small -- usually this is not the case, of course,
+            // but we have no way to know what the limit is, it should really
+            // override DoGetBestClientSize() itself to tell us
+            size.SetDefaults(wxSize(1, 1));
         }
 
         // return as-is, unadjusted by the client size difference.
