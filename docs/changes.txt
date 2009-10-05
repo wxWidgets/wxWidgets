@@ -449,6 +449,7 @@ All (GUI):
 GTK:
 
 - wxRadioBox constructor uses default consistent with other ports now.
+- Partially implemented wxTextCtrl::GetStyle() (Igor Romanov).
 - Corrected themed border display.
 
 Mac:

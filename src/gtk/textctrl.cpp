@@ -22,6 +22,7 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/scopeguard.h"
 #include "wx/strconv.h"
 #include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
 
@@ -1683,6 +1684,43 @@ bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr& style )
     //else: single line text controls don't support styles
 
     return false;
+}
+
+bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
+{
+    if ( !IsMultiLine() )
+    {
+        // no styles for GtkEntry
+        return false;
+    }
+
+    gint l = gtk_text_buffer_get_char_count( m_buffer );
+
+    wxCHECK_MSG( position >= 0 && position <= l, false,
+                 _T("invalid range in wxTextCtrl::GetStyle") );
+
+    GtkTextIter positioni;
+    gtk_text_buffer_get_iter_at_offset(m_buffer, &positioni, position);
+
+    // Obtain a copy of the default attributes
+    GtkTextAttributes * const
+        pattr = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(m_text));
+    wxON_BLOCK_EXIT1( g_free, pattr );
+
+    // And query GTK for the attributes at the given position using it as base
+    if ( !gtk_text_iter_get_attributes(&positioni, pattr) )
+    {
+        style = m_defaultStyle;
+    }
+    else // have custom attributes
+    {
+        style.SetBackgroundColour(pattr->appearance.bg_color);
+        style.SetTextColour(pattr->appearance.fg_color);
+
+        // TODO: set font, alignment, tabs and indents
+    }
+
+    return true;
 }
 
 void wxTextCtrl::DoApplyWidgetStyle(GtkRcStyle *style)

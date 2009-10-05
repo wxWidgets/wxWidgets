@@ -63,6 +63,7 @@ public:
     virtual void DiscardEdits();
 
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+    virtual bool GetStyle(long position, wxTextAttr& style);
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
