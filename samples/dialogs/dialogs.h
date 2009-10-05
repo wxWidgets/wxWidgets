@@ -422,15 +422,21 @@ private:
 
     wxColourData m_clrData;
 
+    // just a window which we use to show the effect of font/colours selection
+    wxWindow *m_canvas;
+
     DECLARE_EVENT_TABLE()
 };
 
 class MyCanvas: public wxScrolledWindow
 {
 public:
-    MyCanvas(wxWindow *parent) :
-       wxScrolledWindow(parent,wxID_ANY,wxDefaultPosition,wxDefaultSize,wxNO_FULL_REPAINT_ON_RESIZE) { }
+    MyCanvas(wxWindow *parent) : wxScrolledWindow(parent, wxID_ANY)
+    {
+        SetBackgroundColour(*wxWHITE);
+    }
 
+private:
     void OnPaint(wxPaintEvent& event);
 
     DECLARE_EVENT_TABLE()

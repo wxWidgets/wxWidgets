@@ -260,8 +260,6 @@ BEGIN_EVENT_TABLE(StdButtonSizerDialog, wxDialog)
     EVT_RADIOBUTTON(wxID_ANY, StdButtonSizerDialog::OnEvent)
 END_EVENT_TABLE()
 
-MyCanvas *myCanvas = (MyCanvas *) NULL;
-
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
@@ -475,9 +473,6 @@ bool MyApp::OnInit()
 
     frame->SetMenuBar(menubar);
 
-    myCanvas = new MyCanvas(frame);
-    myCanvas->SetBackgroundColour(*wxWHITE);
-
     frame->Centre(wxBOTH);
 
     // Show the frame
@@ -520,6 +515,8 @@ MyFrame::MyFrame(wxWindow *parent,
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
+
+    m_canvas = new MyCanvas(this);
 }
 
 MyFrame::~MyFrame()
@@ -533,16 +530,16 @@ MyFrame::~MyFrame()
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event))
 {
-    m_clrData.SetColour(myCanvas->GetBackgroundColour());
+    m_clrData.SetColour(m_canvas->GetBackgroundColour());
 
     wxColourDialog dialog(this, &m_clrData);
     dialog.SetTitle(_("Please choose the background colour"));
     if ( dialog.ShowModal() == wxID_OK )
     {
         m_clrData = dialog.GetColourData();
-        myCanvas->SetBackgroundColour(m_clrData.GetColour());
-        myCanvas->ClearBackground();
-        myCanvas->Refresh();
+        m_canvas->SetBackgroundColour(m_clrData.GetColour());
+        m_canvas->ClearBackground();
+        m_canvas->Refresh();
     }
 }
 
@@ -557,7 +554,7 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
     if ( clr.IsOk() )
     {
         wxGetApp().m_canvasTextColour = clr;
-        myCanvas->Refresh();
+        m_canvas->Refresh();
     }
     //else: dialog cancelled by user
 }
@@ -568,7 +565,7 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
 #if USE_COLOURDLG_GENERIC
 void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
 {
-    m_clrData.SetColour(myCanvas->GetBackgroundColour());
+    m_clrData.SetColour(m_canvas->GetBackgroundColour());
 
     //FIXME:TODO:This has no effect...
     m_clrData.SetChooseFull(true);
@@ -587,9 +584,9 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
     if (dialog->ShowModal() == wxID_OK)
     {
         m_clrData = dialog->GetColourData();
-        myCanvas->SetBackgroundColour(m_clrData.GetColour());
-        myCanvas->ClearBackground();
-        myCanvas->Refresh();
+        m_canvas->SetBackgroundColour(m_clrData.GetColour());
+        m_canvas->ClearBackground();
+        m_canvas->Refresh();
     }
     dialog->Destroy();
 }
@@ -614,7 +611,7 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
         wxFontData retData = dialog.GetFontData();
         wxGetApp().m_canvasFont = retData.GetChosenFont();
         wxGetApp().m_canvasTextColour = retData.GetColour();
-        myCanvas->Refresh();
+        m_canvas->Refresh();
     }
     //else: cancelled by the user, don't change the font
 }
@@ -633,7 +630,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
         wxFontData retData = dialog->GetFontData();
         wxGetApp().m_canvasFont = retData.GetChosenFont();
         wxGetApp().m_canvasTextColour = retData.GetColour();
-        myCanvas->Refresh();
+        m_canvas->Refresh();
     }
     dialog->Destroy();
 }
