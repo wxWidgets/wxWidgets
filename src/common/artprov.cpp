@@ -332,9 +332,8 @@ wxIconBundle wxArtProvider::DoGetIconBundle(const wxArtID& id, const wxArtClient
 }
 
 /* static */
-wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
+wxArtID wxArtProvider::GetMessageBoxIconId(int flags)
 {
-    wxIcon icon;
     switch ( flags & wxICON_MASK )
     {
         default:
@@ -342,23 +341,17 @@ wxIcon wxArtProvider::GetMessageBoxIcon(int flags)
             // fall through
 
         case wxICON_ERROR:
-            icon = wxArtProvider::GetIcon(wxART_ERROR, wxART_MESSAGE_BOX);
-            break;
+            return wxART_ERROR;
 
         case wxICON_INFORMATION:
-            icon = wxArtProvider::GetIcon(wxART_INFORMATION, wxART_MESSAGE_BOX);
-            break;
+            return wxART_INFORMATION;
 
         case wxICON_WARNING:
-            icon = wxArtProvider::GetIcon(wxART_WARNING, wxART_MESSAGE_BOX);
-            break;
+            return wxART_WARNING;
 
         case wxICON_QUESTION:
-            icon = wxArtProvider::GetIcon(wxART_QUESTION, wxART_MESSAGE_BOX);
-            break;
+            return wxART_QUESTION;
     }
-
-    return icon;
 }
 
 /*static*/ wxSize wxArtProvider::GetSizeHint(const wxArtClient& client,
