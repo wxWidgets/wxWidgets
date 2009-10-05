@@ -203,7 +203,10 @@ public:
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0);
+                              int flags = 0)
+    {
+        DoDrawButton(DFCS_BUTTONCHECK, win, dc, rect, flags);
+    }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -213,28 +216,39 @@ public:
     virtual void DrawChoice(wxWindow* win,
                             wxDC& dc,
                             const wxRect& rect,
-                            int flags=0);
+                            int flags = 0);
 
     virtual void DrawComboBox(wxWindow* win,
-                                wxDC& dc,
-                                const wxRect& rect,
-                                int flags=0);
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawTextCtrl(wxWindow* win,
-                                wxDC& dc,
-                                const wxRect& rect,
-                                int flags=0);
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawRadioBitmap(wxWindow* win,
-                                wxDC& dc,
-                                const wxRect& rect,
-                                int flags=0);
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0)
+    {
+        DoDrawButton(DFCS_BUTTONRADIO, win, dc, rect, flags);
+    }
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
 private:
+    // common part of Draw{PushButton,CheckBox,RadioBitmap}(): wraps
+    // DrawFrameControl(DFC_BUTTON)
+    void DoDrawButton(UINT kind,
+                      wxWindow *win,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int flags);
+
     wxDECLARE_NO_COPY_CLASS(wxRendererMSW);
 };
 
@@ -286,7 +300,13 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawRadioBitmap(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
@@ -383,7 +403,8 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
 }
 
 void
-wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
+wxRendererMSW::DoDrawButton(UINT kind,
+                            wxWindow * WXUNUSED(win),
                             wxDC& dc,
                             const wxRect& rect,
                             int flags)
@@ -391,7 +412,7 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
     RECT r;
     wxCopyRectToRECT(rect, r);
 
-    int style = DFCS_BUTTONCHECK;
+    int style = kind;
     if ( flags & wxCONTROL_CHECKED )
         style |= DFCS_CHECKED;
     if ( flags & wxCONTROL_DISABLED )
@@ -407,18 +428,12 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
 }
 
 void
-wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
+wxRendererMSW::DrawPushButton(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rectOrig,
                               int flags)
 {
     wxRect rect(rectOrig);
-
-    int style = DFCS_BUTTONPUSH;
-    if ( flags & wxCONTROL_DISABLED )
-        style |= DFCS_INACTIVE;
-    if ( flags & wxCONTROL_PRESSED )
-        style |= DFCS_PUSHED | DFCS_FLAT;
     if ( flags & wxCONTROL_ISDEFAULT )
     {
         // DrawFrameControl() doesn't seem to support default buttons so we
@@ -429,10 +444,7 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
         rect.Deflate(1);
     }
 
-    RECT rc;
-    wxCopyRectToRECT(rect, rc);
-
-    ::DrawFrameControl(GraphicsHDC(&dc), &rc, DFC_BUTTON, style);
+    DoDrawButton(DFCS_BUTTONPUSH, win, dc, rect, flags);
 }
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
@@ -502,7 +514,7 @@ void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 }
 
 
-// Draw the equivallent of a wxComboBox
+// Draw the equivalent of a wxComboBox
 void wxRendererMSW::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
     // Draw the main part of the control same as TextCtrl
@@ -523,51 +535,6 @@ void wxRendererMSW::DrawChoice(wxWindow* win, wxDC& dc,
                            const wxRect& rect, int flags)
 {
     DrawComboBox(win, dc, rect, flags);
-}
-
-
-// Draw a themed radio button
-void wxRendererMSW::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
-{
-#if wxUSE_UXTHEME
-    wxUxThemeHandle hTheme(win, L"BUTTON");
-    if ( !hTheme )
-#endif
-    {
-        // ??? m_rendererNative.DrawRadioButton(win, dc, rect, flags);
-        return;
-    }
-
-#if wxUSE_UXTHEME
-    RECT r;
-    wxCopyRectToRECT(rect, r);
-
-    int state;
-    if ( flags & wxCONTROL_CHECKED )
-        state = RBS_CHECKEDNORMAL;
-    else if ( flags & wxCONTROL_UNDETERMINED )
-        state = RBS_MIXEDNORMAL;
-    else
-        state = RBS_UNCHECKEDNORMAL;
-
-    // RBS_XXX is followed by RBX_XXXGOT, then RBS_XXXPRESSED and DISABLED
-    if ( flags & wxCONTROL_CURRENT )
-        state += 1;
-    else if ( flags & wxCONTROL_PRESSED )
-        state += 2;
-    else if ( flags & wxCONTROL_DISABLED )
-        state += 3;
-
-    wxUxThemeEngine::Get()->DrawThemeBackground
-                            (
-                                hTheme,
-                                GraphicsHDC(&dc),
-                                BP_RADIOBUTTON,
-                                state,
-                                &r,
-                                NULL
-                            );
-#endif
 }
 
 // ============================================================================
@@ -696,8 +663,6 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                             );
 }
 
-
-
 void
 wxRendererXP::DrawCheckBox(wxWindow *win,
                            wxDC& dc,
@@ -742,6 +707,48 @@ wxRendererXP::DrawCheckBox(wxWindow *win,
                                 hTheme,
                                 GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
                                 BP_CHECKBOX,
+                                state,
+                                &r,
+                                NULL
+                            );
+}
+
+void wxRendererXP::DrawRadioBitmap(wxWindow* win,
+                                   wxDC& dc,
+                                   const wxRect& rect,
+                                   int flags)
+{
+    wxUxThemeHandle hTheme(win, L"BUTTON");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
+        return;
+    }
+
+    RECT r;
+    wxCopyRectToRECT(rect, r);
+
+    int state;
+    if ( flags & wxCONTROL_CHECKED )
+        state = RBS_CHECKEDNORMAL;
+    else if ( flags & wxCONTROL_UNDETERMINED )
+        state = RBS_MIXEDNORMAL;
+    else
+        state = RBS_UNCHECKEDNORMAL;
+
+    // RBS_XXX is followed by RBX_XXXGOT, then RBS_XXXPRESSED and DISABLED
+    if ( flags & wxCONTROL_CURRENT )
+        state += 1;
+    else if ( flags & wxCONTROL_PRESSED )
+        state += 2;
+    else if ( flags & wxCONTROL_DISABLED )
+        state += 3;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                            (
+                                hTheme,
+                                GraphicsHDC(&dc),
+                                BP_RADIOBUTTON,
                                 state,
                                 &r,
                                 NULL
