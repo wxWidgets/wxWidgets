@@ -1925,30 +1925,6 @@ void gtk_window_style_set_callback( GtkWidget *WXUNUSED(widget),
 
 } // extern "C"
 
-// Helper to suspend colour change event event processing while we change a widget's style
-class wxSuspendStyleEvents
-{
-public:
-    wxSuspendStyleEvents(wxWindow* win)
-    {
-        m_win = NULL;
-        if (win->m_wxwindow && win->IsTopLevel())
-        {
-            m_win = win;
-            g_signal_handlers_block_by_func(
-                m_win->m_wxwindow, (void*)gtk_window_style_set_callback, m_win);
-        }
-    }
-    ~wxSuspendStyleEvents()
-    {
-        if (m_win)
-            g_signal_handlers_unblock_by_func(
-                m_win->m_wxwindow, (void*)gtk_window_style_set_callback, m_win);
-    }
-
-    wxWindow* m_win;
-};
-
 // ----------------------------------------------------------------------------
 // this wxWindowBase function is implemented here (in platform-specific file)
 // because it is static and so couldn't be made virtual
@@ -3907,12 +3883,30 @@ void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
 {
-    wxSuspendStyleEvents s(static_cast<wxWindow*>(this));
+    if ( m_wxwindow )
+    {
+        // block the signal temporarily to avoid sending
+        // wxSysColourChangedEvents when we change the colours ourselves
+        bool unblock = false;
+        if ( IsTopLevel() )
+        {
+            unblock = true;
+            g_signal_handlers_block_by_func(
+                m_wxwindow, (void *)gtk_window_style_set_callback, this);
+        }
 
-    if (m_wxwindow)
         gtk_widget_modify_style(m_wxwindow, style);
+
+        if ( unblock )
+        {
+            g_signal_handlers_unblock_by_func(
+                m_wxwindow, (void *)gtk_window_style_set_callback, this);
+        }
+    }
     else
+    {
         gtk_widget_modify_style(m_widget, style);
+    }
 }
 
 bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
