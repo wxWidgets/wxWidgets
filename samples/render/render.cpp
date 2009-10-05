@@ -130,13 +130,33 @@ public:
     {
         wxPaintDC dc(this);
 
-        dc.DrawText(wxT("Below is the standard header button drawn"), 10, 10);
-        dc.DrawText(wxT("using the current renderer:"), 10, 40);
-
         wxRendererNative& renderer = wxRendererNative::Get();
-        const wxCoord height = renderer.GetHeaderButtonHeight(this);
 
-        renderer.DrawHeaderButton(this, dc, wxRect(20, 70, 100, height));
+        int x1 = 10,    // text offset
+            x2 = 200,   // drawing offset
+            y = 10;
+
+        const int lineHeight = dc.GetCharHeight();
+        dc.DrawText("Demonstration of various wxRenderer functions:", x1, y);
+        y += lineHeight*3;
+
+        dc.DrawText("DrawHeaderButton() (overridden)", x1, y);
+        const wxCoord heightHdr = renderer.GetHeaderButtonHeight(this);
+        renderer.DrawHeaderButton(this, dc, wxRect(x2, y, 100, heightHdr));
+        y += lineHeight + heightHdr;
+
+        dc.DrawText("DrawCheckBox()", x1, y);
+        const wxSize sizeCheck = renderer.GetCheckBoxSize(this);
+        renderer.DrawCheckBox(this, dc, wxRect(wxPoint(x2, y), sizeCheck));
+        y += lineHeight + sizeCheck.y;
+
+        dc.DrawText("DrawRadioBitmap()", x1, y);
+        renderer.DrawRadioBitmap(this, dc, wxRect(wxPoint(x2, y), sizeCheck));
+        y += lineHeight + sizeCheck.y;
+
+        dc.DrawText("DrawTreeItemButton()", x1, y);
+        renderer.DrawTreeItemButton(this, dc, wxRect(x2, y, 20, 20));
+        y += lineHeight + 20;
     }
 
     DECLARE_EVENT_TABLE()
