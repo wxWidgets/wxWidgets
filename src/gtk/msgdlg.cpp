@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/messagetype.h"
 #include "wx/gtk/private/mnemonics.h"
 #include <gtk/gtk.h>
 
@@ -137,20 +138,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
         }
     }
 
-#ifdef __WXGTK210__
-    if ( gtk_check_version(2, 10, 0) == NULL && (m_dialogStyle & wxICON_NONE))
-        type = GTK_MESSAGE_OTHER;
-    else
-#endif // __WXGTK210__
-    if (m_dialogStyle & wxICON_EXCLAMATION)
-        type = GTK_MESSAGE_WARNING;
-    else if (m_dialogStyle & wxICON_ERROR)
-        type = GTK_MESSAGE_ERROR;
-    else if (m_dialogStyle & wxICON_INFORMATION)
-        type = GTK_MESSAGE_INFO;
-    else if (m_dialogStyle & wxICON_QUESTION)
-        type = GTK_MESSAGE_QUESTION;
-    else
+    if ( !wxGTKImpl::ConvertMessageTypeFromWX(m_dialogStyle, &type) )
     {
         // if no style is explicitly specified, detect the suitable icon
         // ourselves (this can be disabled by using wxICON_NONE)
