@@ -21,7 +21,7 @@
     #include "wx/osx/private.h"
 #endif
 
-#include "wx/hashmap.h"
+#include "wx/evtloop.h"
 
 #if wxUSE_CARET
     #include "wx/caret.h"
@@ -32,15 +32,6 @@
 #endif
 
 #include <objc/objc-runtime.h>
-
-namespace
-{
-
-// stop animation of this window if one is in progress
-void StopAnimation(wxWindow *win);
-
-} // anonymous namespace
-
 
 // Get the window with the focus
 
@@ -1180,8 +1171,6 @@ void wxWidgetCocoaImpl::Init()
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
 {
-    StopAnimation(m_wxPeer);
-
     RemoveAssociations( this );
 
     if ( !IsRootControl() )
@@ -1209,70 +1198,41 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 // window animation stuff
 // ----------------------------------------------------------------------------
 
-namespace
-{
-
-WX_DECLARE_VOIDPTR_HASH_MAP(NSViewAnimation *, wxNSViewAnimations);
-
-// all currently active animations
-//
-// this is MT-safe because windows can only be animated from the main
-// thread anyhow
-wxNSViewAnimations gs_activeAnimations;
-
-void StopAnimation(wxWindow *win)
-{
-    wxNSViewAnimations::iterator it = gs_activeAnimations.find(win);
-    if ( it != gs_activeAnimations.end() )
-    {
-        [it->second stopAnimation];
-    }
-}
-
-} // anonymous namespace
-
-// define a delegate used to detect the end of the window animation
+// define a delegate used to refresh the window during animation
 @interface wxNSAnimationDelegate : NSObject
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
                                    <NSAnimationDelegate>
 #endif
 {
-    // can't use wxRect here as it has a user-defined ctor and so can't be used
-    // as an Objective-C field
-    struct
-    {
-        int x, y, w, h;
-    } m_origRect;
     wxWindow *m_win;
-    bool m_show;
+    bool m_isDone;
 }
 
-- (id)initWithWindow:(wxWindow *)win show:(bool)show;
+- (id)init:(wxWindow *)win;
+
+- (bool)isDone;
 
 // NSAnimationDelegate methods
+- (void)animationDidEnd:(NSAnimation*)animation;
 - (void)animation:(NSAnimation*)animation
         didReachProgressMark:(NSAnimationProgress)progress;
-- (void)animationDidStop:(NSAnimation *)animation;
-- (void)animationDidEnd:(NSAnimation *)animation;
-
-// private helpers
-- (void)finishAnimation:(NSAnimation *)animation;
 @end
 
 @implementation wxNSAnimationDelegate
 
-- (id)initWithWindow:(wxWindow *)win show:(bool)show
+- (id)init:(wxWindow *)win
 {
     [super init];
 
     m_win = win;
-    m_show = show;
-    if ( !show )
-    {
-        m_win->GetPosition(&m_origRect.x, &m_origRect.y);
-        m_win->GetSize(&m_origRect.w, &m_origRect.h);
-    }
+    m_isDone = false;
+
     return self;
+}
+
+- (bool)isDone
+{
+    return m_isDone;
 }
 
 - (void)animation:(NSAnimation*)animation
@@ -1284,49 +1244,9 @@ void StopAnimation(wxWindow *win)
     m_win->SendSizeEvent();
 }
 
-- (void)animationDidStop:(NSAnimation *)animation
+- (void)animationDidEnd:(NSAnimation*)animation
 {
-    [self finishAnimation:animation];
-}
-
-- (void)animationDidEnd:(NSAnimation *)animation
-{
-    [self finishAnimation:animation];
-}
-
-- (void)finishAnimation:(NSAnimation *)animation
-{
-    if ( m_show )
-    {
-        // the window expects to be sent a size event when it is shown normally
-        // and so it should also get one when it is shown with effect
-        m_win->SendSizeEvent();
-    }
-    else // window was being hidden
-    {
-        // NSViewAnimation is smart enough to hide the NSView itself but we
-        // also need to ensure that it's considered to be hidden at wx level
-        m_win->Hide();
-
-        // and we also need to restore its original size which was changed by
-        // the animation
-        m_win->SetSize(m_origRect.x, m_origRect.y, m_origRect.w, m_origRect.h);
-    }
-
-    wxNSViewAnimations::iterator it = gs_activeAnimations.find(m_win);
-    wxASSERT_MSG( it != gs_activeAnimations.end() && it->second == animation,
-                  "corrupted active animations list?" );
-
-    gs_activeAnimations.erase(it);
-
-    // we don't dare to release it immediately as we're called from its code
-    // but schedule the animation itself for deletion soon
-    [animation autorelease];
-
-    // ensure that this delegate is definitely not needed any more before
-    // destroying it
-    [animation setDelegate:nil];
-    [self release];
+    m_isDone = true;
 }
 
 @end
@@ -1338,13 +1258,6 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
                                               wxShowEffect effect,
                                               unsigned timeout)
 {
-    // first of all, check if this window is not being already animated and
-    // cancel the previous animation if it is as performing more than one
-    // animation on the same window at the same time results in some really
-    // unexpected effects
-    StopAnimation(win);
-
-
     // create the dictionary describing the animation to perform on this view
     NSObject * const
         viewOrWin = static_cast<NSObject *>(win->OSXGetViewOrWindow());
@@ -1353,10 +1266,11 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     [dict setObject:viewOrWin forKey:NSViewAnimationTargetKey];
 
     // determine the start and end rectangles assuming we're hiding the window
+    const wxRect rectOrig = win->GetRect();
     wxRect rectStart,
            rectEnd;
     rectStart =
-    rectEnd = win->GetRect();
+    rectEnd = rectOrig;
 
     if ( show )
     {
@@ -1431,7 +1345,7 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
         // animation to be visible at all (but don't restore it at its full
         // rectangle as it shouldn't appear immediately)
         win->SetSize(rectStart);
-        win->Show(true);
+        win->Show();
     }
 
     NSView * const parentView = [viewOrWin isKindOfClass:[NSView class]]
@@ -1446,13 +1360,9 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
           forKey:NSViewAnimationEndFrameKey];
 
     // create an animation using the values in the above dictionary
-    //
-    // notice that it will be released when it is removed from
-    // gs_activeAnimations
     NSViewAnimation * const
         anim = [[NSViewAnimation alloc]
                 initWithViewAnimations:[NSArray arrayWithObject:dict]];
-    gs_activeAnimations[win] = anim;
 
     if ( !timeout )
     {
@@ -1472,8 +1382,43 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     for ( float f = 1./NUM_LAYOUTS; f < 1.; f += 1./NUM_LAYOUTS )
         [anim addProgressMark:f];
 
-    [anim setDelegate:[[wxNSAnimationDelegate alloc] initWithWindow:win show:show]];
+    wxNSAnimationDelegate * const
+        animDelegate = [[wxNSAnimationDelegate alloc] init:win];
+    [anim setDelegate:animDelegate];
     [anim startAnimation];
+
+    // Cocoa is capable of doing animation asynchronously or even from separate
+    // thread but wx API doesn't provide any way to be notified about the
+    // animation end and without this we really must ensure that the window has
+    // the expected (i.e. the same as if a simple Show() had been used) size
+    // when we return, so block here until the animation finishes
+    //
+    // notice that because the default animation mode is NSAnimationBlocking,
+    // no user input events ought to be processed from here
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    while ( ![animDelegate isDone] )
+        loop->Dispatch();
+
+    if ( !show )
+    {
+        // NSViewAnimation is smart enough to hide the NSView being animated at
+        // the end but we also must ensure that it's hidden for wx too
+        win->Hide();
+
+        // and we must also restore its size because it isn't expected to
+        // change just because the window was hidden
+        win->SetSize(rectOrig);
+    }
+    else
+    {
+        // refresh it once again after the end to ensure that everything is in
+        // place
+        win->SendSizeEvent();
+    }
+
+    [anim setDelegate:nil];
+    [animDelegate release];
+    [anim release];
 
     return true;
 }
