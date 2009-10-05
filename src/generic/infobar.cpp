@@ -39,6 +39,10 @@
 #include "wx/scopeguard.h"
 #include "wx/sizer.h"
 
+BEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
+    EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -88,14 +92,6 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
                     wxBORDER_NONE
                    );
     m_button->SetToolTip(_("Hide this notification message."));
-
-    Connect
-    (
-        wxEVT_COMMAND_BUTTON_CLICKED,
-        wxCommandEventHandler(wxInfoBarGeneric::OnButton),
-        NULL,
-        this
-    );
 
     // center the text inside the sizer with an icon to the left of it and a
     // button at the very right

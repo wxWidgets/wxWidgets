@@ -114,6 +114,7 @@ private:
     // the original parent background colour, before we changed it
     wxColour m_origParentBgCol;
 
+    DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);
 };
 
