@@ -132,6 +132,16 @@ public:
     void AddButton(wxWindowID btnid, const wxString& label = wxString());
 
     /**
+        Remove a button previously added by AddButton().
+
+        @param btnid
+            Id of the button to remove. If more than one button with the same
+            id is used in the info bar (which is in any case not recommended),
+            the last, i.e. most recently added, button with this id is removed.
+     */
+    void RemoveButton(wxWindowID btnid);
+
+    /**
         Show a message in the bar.
 
         If the bar is currently hidden, it will be shown. Otherwise its message

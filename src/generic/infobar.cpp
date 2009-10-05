@@ -249,9 +249,43 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
     wxSizer * const sizer = GetSizer();
     wxCHECK_RET( sizer, "must be created first" );
 
-    sizer->Insert(sizer->GetItemCount() - 2,
+    sizer->Insert(sizer->GetItemCount() - 1,
                   new wxButton(this, btnid, label),
                   wxSizerFlags().Centre().DoubleBorder());
+}
+
+void wxInfoBarGeneric::RemoveButton(wxWindowID btnid)
+{
+    wxSizer * const sizer = GetSizer();
+    wxCHECK_RET( sizer, "must be created first" );
+
+    // iterate over the sizer items in reverse order to find the last added
+    // button with this id (ids of all buttons should be unique anyhow but if
+    // they are repeated removing the last added one probably makes more sense)
+    const wxSizerItemList& items = sizer->GetChildren();
+    for ( wxSizerItemList::compatibility_iterator node = items.GetLast();
+          node != items.GetFirst();
+          node = node->GetPrevious() )
+    {
+        node = node->GetPrevious();
+        const wxSizerItem * const item = node->GetData();
+
+        // if we reached the spacer separating the buttons from the text
+        // preceding them without finding our button, it must mean it's not
+        // there at all
+        if ( item->IsSpacer() )
+        {
+            wxFAIL_MSG( wxString::Format("button with id %d not found", btnid) );
+            return;
+        }
+
+        // check if we found our button
+        if ( item->GetWindow()->GetId() == btnid )
+        {
+            delete item->GetWindow();
+            break;
+        }
+    }
 }
 
 void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))

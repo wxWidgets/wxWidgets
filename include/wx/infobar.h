@@ -40,6 +40,9 @@ public:
     virtual void AddButton(wxWindowID btnid,
                            const wxString& label = wxString()) = 0;
 
+    // remove a button previously added by AddButton()
+    virtual void RemoveButton(wxWindowID btnid) = 0;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);
 };

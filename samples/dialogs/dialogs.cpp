@@ -531,6 +531,12 @@ MyFrame::MyFrame(const wxString& title)
     // or it can also be customized
     m_infoBarAdvanced = new wxInfoBar(this);
     m_infoBarAdvanced->AddButton(wxID_UNDO);
+    m_infoBarAdvanced->AddButton(wxID_REDO);
+
+    // adding and removing a button immediately doesn't make sense here, of
+    // course, it's done just to show that it is possible
+    m_infoBarAdvanced->AddButton(wxID_EXIT);
+    m_infoBarAdvanced->RemoveButton(wxID_EXIT);
 
     m_infoBarAdvanced->SetOwnBackgroundColour(0xc8ffff);
     m_infoBarAdvanced->SetShowHideEffects(wxSHOW_EFFECT_EXPAND,

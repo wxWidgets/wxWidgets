@@ -43,6 +43,7 @@ public:
 
     virtual void AddButton(wxWindowID btnid, const wxString& label = wxString());
 
+    virtual void RemoveButton(wxWindowID btnid);
 
     // methods specific to this version
     // --------------------------------

@@ -44,6 +44,8 @@ public:
     virtual void AddButton(wxWindowID btnid,
                            const wxString& label = wxString());
 
+    virtual void RemoveButton(wxWindowID btnid);
+
     // implementation only
     // -------------------
 
@@ -53,9 +55,11 @@ protected:
     virtual bool GTKShouldConnectSizeRequest() const { return false; }
 
 private:
-    void Init() { m_label = NULL; }
+    void Init() { m_impl = NULL; }
 
-    GtkWidget *m_label;
+
+    // only used when the native implementation is really being used
+    class wxInfoBarGTKImpl *m_impl;
 
     wxDECLARE_NO_COPY_CLASS(wxInfoBar);
 };
