@@ -117,6 +117,14 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
         // "32 x 32 pixels is the recommended size"
         return wxSize(32, 32);
     }
+    else if ( client == wxART_BUTTON || client == wxART_MENU )
+    {
+        // Mac UI doesn't use any images in neither buttons nor menus in
+        // general but the code using wxArtProvider can use wxART_BUTTON to
+        // find the icons of a roughly appropriate size for the buttons and
+        // 16x16 seems to be the best choice for this kind of use
+        return wxSize(16, 16);
+    }
 
     return wxDefaultSize;
 }

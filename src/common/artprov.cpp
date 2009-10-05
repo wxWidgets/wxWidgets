@@ -238,6 +238,7 @@ wxArtProvider::~wxArtProvider()
                 break;
         }
 
+        wxSize sizeNeeded = size;
         if ( !bmp.Ok() )
         {
             // no bitmap created -- as a fallback, try if we can find desired
@@ -245,28 +246,31 @@ wxArtProvider::~wxArtProvider()
             wxIconBundle iconBundle = DoGetIconBundle(id, client);
             if ( iconBundle.IsOk() )
             {
-                wxSize sz(size != wxDefaultSize
-                            ? size
-                            : GetNativeSizeHint(client));
-                wxIcon icon(iconBundle.GetIcon(sz));
+                if ( sizeNeeded == wxDefaultSize )
+                    sizeNeeded = GetNativeSizeHint(client);
+
+                wxIcon icon(iconBundle.GetIcon(sizeNeeded));
                 if ( icon.IsOk() )
+                {
+                    // this icon may be not of the correct size, it will be
+                    // rescaled below in such case
                     bmp.CopyFromIcon(icon);
+                }
             }
         }
 
-        if ( bmp.IsOk() )
-        {
-            // if we didn't get the correct size, resize the bitmap
+        // if we didn't get the correct size, resize the bitmap
 #if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
-            if ( size != wxDefaultSize &&
-                 (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
+        if ( bmp.IsOk() && sizeNeeded != wxDefaultSize )
+        {
+            if ( bmp.GetSize() != sizeNeeded )
             {
                 wxImage img = bmp.ConvertToImage();
-                img.Rescale(size.x, size.y);
+                img.Rescale(sizeNeeded.x, sizeNeeded.y);
                 bmp = wxBitmap(img);
             }
-#endif
         }
+#endif // wxUSE_IMAGE
 
         sm_cache->PutBitmap(hashId, bmp);
     }
