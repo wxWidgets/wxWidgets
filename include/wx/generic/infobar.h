@@ -63,8 +63,8 @@ public:
     }
 
     // get effect used when showing/hiding the window
-    wxShowEffect GetShowEffect() const { return m_showEffect; }
-    wxShowEffect GetHideEffect() const { return m_hideEffect; }
+    wxShowEffect GetShowEffect() const;
+    wxShowEffect GetHideEffect() const;
 
     // set the duration of animation used when showing/hiding the bar, in ms
     void SetEffectDuration(int duration) { m_effectDuration = duration; }
@@ -101,13 +101,26 @@ private:
     void DoShow();
     void DoHide();
 
+    // determine the placement of the bar from its position in the containing
+    // sizer
+    enum BarPlacement
+    {
+        BarPlacement_Top,
+        BarPlacement_Bottom,
+        BarPlacement_Unknown
+    };
+
+    BarPlacement GetBarPlacement() const;
+
 
     // different controls making up the bar
     wxStaticBitmap *m_icon;
     wxStaticText *m_text;
     wxBitmapButton *m_button;
 
-    // the effects to use when showing/hiding and duration for them
+    // the effects to use when showing/hiding and duration for them: by default
+    // the effect is determined by the info bar automatically depending on its
+    // position and the default duration is used
     wxShowEffect m_showEffect,
                  m_hideEffect;
     int m_effectDuration;

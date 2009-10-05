@@ -82,8 +82,8 @@ void wxInfoBarGeneric::Init()
     m_text = NULL;
     m_button = NULL;
 
-    m_showEffect = wxSHOW_EFFECT_SLIDE_TO_BOTTOM;
-    m_hideEffect = wxSHOW_EFFECT_SLIDE_TO_TOP;
+    m_showEffect =
+    m_hideEffect = wxSHOW_EFFECT_MAX;
 
     // use default effect duration
     m_effectDuration = 0;
@@ -164,6 +164,65 @@ bool wxInfoBarGeneric::SetFont(const wxFont& font)
     return true;
 }
 
+wxInfoBarGeneric::BarPlacement wxInfoBarGeneric::GetBarPlacement() const
+{
+    wxSizer * const sizer = GetContainingSizer();
+    if ( !sizer )
+        return BarPlacement_Unknown;
+
+    const wxSizerItemList& siblings = sizer->GetChildren();
+    if ( siblings.GetFirst()->GetData()->GetWindow() == this )
+        return BarPlacement_Top;
+    else if ( siblings.GetLast()->GetData()->GetWindow() == this )
+        return BarPlacement_Bottom;
+    else
+        return BarPlacement_Unknown;
+}
+
+wxShowEffect wxInfoBarGeneric::GetShowEffect() const
+{
+    if ( m_showEffect != wxSHOW_EFFECT_MAX )
+        return m_showEffect;
+
+    switch ( GetBarPlacement() )
+    {
+        case BarPlacement_Top:
+            return wxSHOW_EFFECT_SLIDE_TO_BOTTOM;
+
+        case BarPlacement_Bottom:
+            return wxSHOW_EFFECT_SLIDE_TO_TOP;
+
+        default:
+            wxFAIL_MSG( "unknown info bar placement" );
+            // fall through
+
+        case BarPlacement_Unknown:
+            return wxSHOW_EFFECT_NONE;
+    }
+}
+
+wxShowEffect wxInfoBarGeneric::GetHideEffect() const
+{
+    if ( m_hideEffect != wxSHOW_EFFECT_MAX )
+        return m_hideEffect;
+
+    switch ( GetBarPlacement() )
+    {
+        case BarPlacement_Top:
+            return wxSHOW_EFFECT_SLIDE_TO_TOP;
+
+        case BarPlacement_Bottom:
+            return wxSHOW_EFFECT_SLIDE_TO_BOTTOM;
+
+        default:
+            wxFAIL_MSG( "unknown info bar placement" );
+            // fall through
+
+        case BarPlacement_Unknown:
+            return wxSHOW_EFFECT_NONE;
+    }
+}
+
 void wxInfoBarGeneric::UpdateParent()
 {
     wxWindow * const parent = wxGetTopLevelParent(GetParent());
@@ -172,7 +231,7 @@ void wxInfoBarGeneric::UpdateParent()
 
 void wxInfoBarGeneric::DoHide()
 {
-    HideWithEffect(m_hideEffect, m_effectDuration);
+    HideWithEffect(GetHideEffect(), GetEffectDuration());
 
     UpdateParent();
 }
@@ -198,7 +257,7 @@ void wxInfoBarGeneric::DoShow()
 
 
     // finally do really show the window.
-    ShowWithEffect(m_showEffect, m_effectDuration);
+    ShowWithEffect(GetShowEffect(), GetEffectDuration());
 }
 
 void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)

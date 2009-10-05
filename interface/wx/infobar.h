@@ -71,7 +71,7 @@
 
     @since 2.9.1
 */
-class wxInfoBar : public wxWindow
+class wxInfoBar : public wxControl
 {
 public:
     /**
@@ -200,17 +200,17 @@ public:
         Either or both of the parameters can be set to wxSHOW_EFFECT_NONE to
         disable using effects entirely.
 
-        Notice that if you place the bar at the bottom of the window you should
-        reverse the effects used for showing and hiding for better appearance.
+        By default, the info bar uses wxSHOW_EFFECT_SLIDE_TO_BOTTOM effect for
+        showing itself and wxSHOW_EFFECT_SLIDE_TO_TOP for hiding if it is the
+        first element of the containing sizer and reverse effects if it's the
+        last one. If it is neither the first nor the last element, no effect is
+        used to avoid the use of an inappropriate one and this function must be
+        called if an effect is desired.
 
         @param showEffect
-            The effect to use when showing the bar. By default,
-            wxSHOW_EFFECT_SLIDE_TO_BOTTOM which is appropriate for the bars
-            placed at the top of the window.
+            The effect to use when showing the bar.
         @param hideEffect
-            The effect to use when hiding the bar. By default,
-            wxSHOW_EFFECT_SLIDE_TO_TOP which is appropriate for the bars placed
-            at the top of the window.
+            The effect to use when hiding the bar.
      */
     void SetShowHideEffects(wxShowEffect showEffect, wxShowEffect hideEffect);
 
