@@ -26,15 +26,15 @@
 #include <string.h>
 
 #include "Platform.h"
+#include "PropSet.h"
+#include "Accessor.h"
+#include "KeyWords.h"
 
 #include "Scintilla.h"
 #include "CharClassify.h"
 #include "XPM.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
-#include "PropSet.h"
-#include "Accessor.h"
-#include "KeyWords.h"
 #endif
 #include "SplitVector.h"
 #include "Partitioning.h"

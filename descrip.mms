@@ -57,6 +57,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.richtext]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.stc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.gtk1]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
@@ -112,6 +114,8 @@ gtk : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.sockets]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.stc]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.xrc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [--]
@@ -144,6 +148,8 @@ gtk2 : [.include.wx]setup.h
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.richtext]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
+	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
 	set default [-.gtk]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK2__=1)
@@ -210,6 +216,8 @@ x11 : [.include.wx]setup.h
 	set default [-.ribbon]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.richtext]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
+	set default [-.stc]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
 	set default [-.x11]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXX11__=1,__WXUNIVERSAL__=1)
