@@ -21,7 +21,7 @@
 // wxInfoBar shows non-critical but important information to the user
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxInfoBarBase : public wxWindow
+class WXDLLIMPEXP_ADV wxInfoBarBase : public wxControl
 {
 public:
     // real ctors are provided by the derived classes, just notice that unlike
@@ -33,7 +33,8 @@ public:
 
 
     // show the info bar with the given message and optionally an icon
-    virtual void ShowMessage(const wxString& msg, int flags = wxICON_NONE) = 0;
+    virtual void ShowMessage(const wxString& msg,
+                             int flags = wxICON_INFORMATION) = 0;
 
     // add an extra button to the bar, near the message
     virtual void AddButton(wxWindowID btnid,
@@ -43,10 +44,20 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);
 };
 
-// include platform-dependent implementation
-//
-// TODO-GTK: implement a native version using GtkInfoBar (GTK+ 2.18+)
-#include "wx/generic/infobar.h"
+// currently only GTK+ has a native implementation
+#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
+    #include <gtk/gtkversion.h>
+    #if GTK_CHECK_VERSION(2, 18, 0)
+        #include "wx/gtk/infobar.h"
+        #define wxHAS_NATIVE_INFOBAR
+    #endif
+#endif // wxGTK2
+
+// if the generic version is the only one we have, use it
+#ifndef wxHAS_NATIVE_INFOBAR
+    #include "wx/generic/infobar.h"
+    #define wxInfoBar wxInfoBarGeneric
+#endif
 
 #endif // wxUSE_INFOBAR
 

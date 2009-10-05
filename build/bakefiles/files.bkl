@@ -3028,6 +3028,7 @@ src/osx/iphone/window.mm
     src/gtk/calctrl.cpp
     src/gtk/dataview.cpp
     src/gtk/hyperlink.cpp
+    src/gtk/infobar.cpp
 </set>
 <set var="ADVANCED_GTK_NATIVE_HDR" hints="files">
     wx/gtk/animate.h
@@ -3035,6 +3036,7 @@ src/osx/iphone/window.mm
     wx/gtk/calctrl.h
     wx/gtk/dataview.h
     wx/gtk/hyperlink.h
+    wx/gtk/infobar.h
 </set>
 
 <set var="ADVANCED_GTK1_SRC" hints="files">

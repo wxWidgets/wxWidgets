@@ -26,7 +26,6 @@
 #if wxUSE_INFOBAR
 
 #ifndef WX_PRECOMP
-    #include "wx/artprov.h"
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
     #include "wx/settings.h"
@@ -36,6 +35,7 @@
 
 #include "wx/infobar.h"
 
+#include "wx/artprov.h"
 #include "wx/scopeguard.h"
 #include "wx/sizer.h"
 
@@ -43,7 +43,7 @@
 // implementation
 // ============================================================================
 
-void wxInfoBar::Init()
+void wxInfoBarGeneric::Init()
 {
     m_icon = NULL;
     m_text = NULL;
@@ -56,7 +56,7 @@ void wxInfoBar::Init()
     m_effectDuration = 0;
 }
 
-bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
+bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
 {
     // calling Hide() before Create() ensures that we're created initially
     // hidden
@@ -92,7 +92,7 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     Connect
     (
         wxEVT_COMMAND_BUTTON_CLICKED,
-        wxCommandEventHandler(wxInfoBar::OnButton),
+        wxCommandEventHandler(wxInfoBarGeneric::OnButton),
         NULL,
         this
     );
@@ -113,7 +113,7 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     return true;
 }
 
-bool wxInfoBar::SetFont(const wxFont& font)
+bool wxInfoBarGeneric::SetFont(const wxFont& font)
 {
     if ( !wxInfoBarBase::SetFont(font) )
         return false;
@@ -125,13 +125,13 @@ bool wxInfoBar::SetFont(const wxFont& font)
     return true;
 }
 
-void wxInfoBar::UpdateParent()
+void wxInfoBarGeneric::UpdateParent()
 {
     wxWindow * const parent = wxGetTopLevelParent(GetParent());
     parent->Layout();
 }
 
-void wxInfoBar::ChangeParentBackground()
+void wxInfoBarGeneric::ChangeParentBackground()
 {
     wxWindow * const parent = GetParent();
     m_origParentBgCol = parent->GetBackgroundColour();
@@ -169,21 +169,21 @@ void wxInfoBar::ChangeParentBackground()
         parent->SetOwnBackgroundColour(sibling->GetBackgroundColour());
 }
 
-void wxInfoBar::RestoreParentBackground()
+void wxInfoBarGeneric::RestoreParentBackground()
 {
     GetParent()->SetOwnBackgroundColour(m_origParentBgCol);
 }
 
-void wxInfoBar::DoHide()
+void wxInfoBarGeneric::DoHide()
 {
     ChangeParentBackground();
-    wxON_BLOCK_EXIT_THIS0( wxInfoBar::RestoreParentBackground );
+    wxON_BLOCK_EXIT_THIS0( wxInfoBarGeneric::RestoreParentBackground );
 
     HideWithEffect(m_hideEffect, m_effectDuration);
     UpdateParent();
 }
 
-void wxInfoBar::DoShow()
+void wxInfoBarGeneric::DoShow()
 {
     // re-layout the parent first so that the window expands into an already
     // unoccupied by the other controls area: for this we need to change our
@@ -199,7 +199,7 @@ void wxInfoBar::DoShow()
     // going to expand to look like part of this sibling for a better effect so
     // temporarily change the background of our parent to the same colour
     ChangeParentBackground();
-    wxON_BLOCK_EXIT_THIS0( wxInfoBar::RestoreParentBackground );
+    wxON_BLOCK_EXIT_THIS0( wxInfoBarGeneric::RestoreParentBackground );
 
     // adjust the parent layout to account for us
     UpdateParent();
@@ -213,7 +213,7 @@ void wxInfoBar::DoShow()
     ShowWithEffect(m_showEffect, m_effectDuration);
 }
 
-void wxInfoBar::ShowMessage(const wxString& msg, int flags)
+void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
 {
     // first update the controls
     const int icon = flags & wxICON_MASK;
@@ -244,7 +244,7 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     }
 }
 
-void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
+void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 {
     wxSizer * const sizer = GetSizer();
     wxCHECK_RET( sizer, "must be created first" );
@@ -254,7 +254,7 @@ void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
                   wxSizerFlags().Centre().DoubleBorder());
 }
 
-void wxInfoBar::OnButton(wxCommandEvent& WXUNUSED(event))
+void wxInfoBarGeneric::OnButton(wxCommandEvent& WXUNUSED(event))
 {
     DoHide();
 }

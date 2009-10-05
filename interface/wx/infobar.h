@@ -59,10 +59,10 @@
     See the dialogs sample for more sophisticated examples.
 
 
-    Only generic implementation of this class exists currently but it is
-    planned to provide a native GTK+-based version in future wxWidgets releases
-    so avoid the use of the methods marked "generic only" for maximal
-    portability.
+    Currently this class is implemented generically (i.e. in the same
+    platform-independent way for all ports) and also natively in wxGTK but the
+    native implementation requires a recent -- as of this writing -- GTK+ 2.18
+    version.
 
     @library{wxadv}
     @category{miscwnd}
@@ -140,10 +140,14 @@ public:
         @param msg
             The text of the message.
         @param flags
-            One of wxICON_NONE (default), wxICON_INFORMATION, wxICON_QUESTION,
+            One of wxICON_NONE, wxICON_INFORMATION (default), wxICON_QUESTION,
             wxICON_WARNING or wxICON_ERROR values. These flags have the same
-            meaning as in wxMessageDialog, i.e. show the corresponding icon in
-            the bar.
+            meaning as in wxMessageDialog for the generic version, i.e. show
+            (or not, in case of wxICON_NONE) the corresponding icon in the bar
+            but can be interpreted by the native versions. For example, the
+            GTK+ native implementation doesn't show icons at all but uses this
+            parameter to select the appropriate background colour for the
+            notification.
      */
     void ShowMessage(const wxString& msg, int flags = wxICON_NONE);
 
@@ -153,9 +157,9 @@ public:
         All these methods exist in the generic version of the class only.
 
         The generic version uses wxWindow::ShowWithEffect() function to
-        progressively show it on the platforms which support it. The methods
-        here allow to change the default effect used (or disable it entirely)
-        and change its duration.
+        progressively show it on the platforms which support it (currently only
+        wxMSW). The methods here allow to change the default effect used (or
+        disable it entirely) and change its duration.
      */
     //@{
 

@@ -19,14 +19,14 @@ class WXDLLIMPEXP_FWD_CORE wxStaticText;
 // wxInfoBar
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxInfoBar : public wxInfoBarBase
+class WXDLLIMPEXP_ADV wxInfoBarGeneric : public wxInfoBarBase
 {
 public:
     // the usual ctors and Create() but remember that info bar is created
     // hidden
-    wxInfoBar() { Init(); }
+    wxInfoBarGeneric() { Init(); }
 
-    wxInfoBar(wxWindow *parent, wxWindowID winid = wxID_ANY)
+    wxInfoBarGeneric(wxWindow *parent, wxWindowID winid = wxID_ANY)
     {
         Init();
         Create(parent, winid);
@@ -38,7 +38,8 @@ public:
     // implement base class methods
     // ----------------------------
 
-    virtual void ShowMessage(const wxString& msg, int flags = wxICON_NONE);
+    virtual void ShowMessage(const wxString& msg,
+                             int flags = wxICON_INFORMATION);
 
     virtual void AddButton(wxWindowID btnid, const wxString& label = wxString());
 
@@ -76,15 +77,17 @@ public:
     // (default font is a larger and bold version of the normal one)
     virtual bool SetFont(const wxFont& font);
 
+protected:
+    // update the parent to take our new or changed size into account (notably
+    // should be called when we're shown or hidden)
+    void UpdateParent();
+
 private:
     // common part of all ctors
     void Init();
 
     // handler for the close button
     void OnButton(wxCommandEvent& event);
-
-    // update the parent after we're shown or hidden
-    void UpdateParent();
 
     // change the parent background colour to match that of our sibling
     void ChangeParentBackground();
@@ -110,7 +113,7 @@ private:
     // the original parent background colour, before we changed it
     wxColour m_origParentBgCol;
 
-    wxDECLARE_NO_COPY_CLASS(wxInfoBar);
+    wxDECLARE_NO_COPY_CLASS(wxInfoBarGeneric);
 };
 
 #endif // _WX_GENERIC_INFOBAR_H_
