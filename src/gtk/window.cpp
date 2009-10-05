@@ -2382,6 +2382,11 @@ void wxWindowGTK::PostCreation()
         gtk_widget_show( m_widget );
 }
 
+gulong wxWindowGTK::GTKConnectWidget(const char *signal, void (*callback)())
+{
+    return g_signal_connect(m_widget, signal, callback, this);
+}
+
 void wxWindowGTK::ConnectWidget( GtkWidget *widget )
 {
     g_signal_connect (widget, "key_press_event",

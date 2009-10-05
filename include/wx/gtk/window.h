@@ -363,6 +363,12 @@ protected:
     // should be called from OnInternalIdle() if it's overridden
     void GTKUpdateCursor();
 
+    // Connect the given function to the specified signal on m_widget.
+    //
+    // This is just a wrapper for g_signal_connect() and returns the handler id
+    // just as it does.
+    gulong GTKConnectWidget(const char *signal, void (*callback)());
+
     // Return true from here if PostCreation() should connect to size_request
     // signal: this is done by default but doesn't work for some native
     // controls which override this function to return false
