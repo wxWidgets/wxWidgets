@@ -118,6 +118,7 @@ enum wxWindowVariant
 // valid values for Show/HideWithEffect()
 enum wxShowEffect
 {
+    wxSHOW_EFFECT_NONE,
     wxSHOW_EFFECT_ROLL_TO_LEFT,
     wxSHOW_EFFECT_ROLL_TO_RIGHT,
     wxSHOW_EFFECT_ROLL_TO_TOP,

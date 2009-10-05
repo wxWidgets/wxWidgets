@@ -12,6 +12,13 @@
 */
 enum wxShowEffect
 {
+    /**
+        No effect, equivalent to normal wxWindow::Show() or Hide() call.
+
+        @since 2.9.1
+     */
+    wxSHOW_EFFECT_NONE,
+
     /// Roll window to the left
     wxSHOW_EFFECT_ROLL_TO_LEFT,
 

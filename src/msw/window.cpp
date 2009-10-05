@@ -724,6 +724,9 @@ wxWindowMSW::MSWShowWithEffect(bool show,
                                wxShowEffect effect,
                                unsigned timeout)
 {
+    if ( effect == wxSHOW_EFFECT_NONE )
+        return Show(show);
+
     if ( !wxWindowBase::Show(show) )
         return false;
 

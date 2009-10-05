@@ -181,6 +181,7 @@ private:
     {
         static const char *names[] =
         {
+            "none",
             "roll to left",
             "roll to right",
             "roll to top",
@@ -346,7 +347,7 @@ void MainFrame::OnShowEffect(wxCommandEvent& event)
             return;
     }
 
-    new EffectFrame(this, eff,1000);
+    new EffectFrame(this,  eff, 1000);
 }
 
 // ----------------------------------------------------------------------------
