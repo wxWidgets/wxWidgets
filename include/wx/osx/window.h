@@ -237,6 +237,15 @@ public:
     // the 'true' OS level control for this wxWindow
     wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
 
+#if wxOSX_USE_COCOA_OR_IPHONE
+    // the NSView or NSWindow of this window: can be used for both child and
+    // non-owned windows
+    //
+    // this is useful for a few Cocoa function which can work with either views
+    // or windows indiscriminately, e.g. for setting NSViewAnimationTargetKey
+    virtual void *OSXGetViewOrWindow() const { return GetHandle(); }
+#endif // Cocoa
+
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
 

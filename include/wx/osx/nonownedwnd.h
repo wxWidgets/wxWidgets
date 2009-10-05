@@ -97,6 +97,11 @@ public:
 
     wxNonOwnedWindowImpl* GetNonOwnedPeer() const { return m_nowpeer; }
 
+#if wxOSX_USE_COCOA_OR_IPHONE
+    // override the base class method to return an NSWindow instead of NSView
+    virtual void *OSXGetViewOrWindow() const { return GetWXWindow(); }
+#endif // Cocoa
+
     // osx specific event handling common for all osx-ports
 
     virtual void HandleActivated( double timestampsec, bool didActivate );
