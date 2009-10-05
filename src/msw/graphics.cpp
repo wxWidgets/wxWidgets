@@ -40,6 +40,7 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
+#include "wx/dcgraph.h"
 
 #include "wx/stack.h"
 
@@ -1849,5 +1850,33 @@ private:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusRendererModule, wxModule)
+
+// ----------------------------------------------------------------------------
+// wxMSW-specific parts of wxGCDC
+// ----------------------------------------------------------------------------
+
+WXHDC wxGCDC::AcquireHDC()
+{
+    wxGraphicsContext * const gc = GetGraphicsContext();
+    if ( !gc )
+        return NULL;
+
+    Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
+    return g ? g->GetHDC() : NULL;
+}
+
+void wxGCDC::ReleaseHDC(WXHDC hdc)
+{
+    if ( !hdc )
+        return;
+
+    wxGraphicsContext * const gc = GetGraphicsContext();
+    wxCHECK_RET( gc, "can't release HDC because there is no wxGraphicsContext" );
+
+    Graphics * const g = static_cast<Graphics *>(gc->GetNativeContext());
+    wxCHECK_RET( g, "can't release HDC because there is no Graphics" );
+
+    g->ReleaseHDC((HDC)hdc);
+}
 
 #endif  // wxUSE_GRAPHICS_CONTEXT

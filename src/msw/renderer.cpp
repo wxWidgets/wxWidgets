@@ -35,23 +35,7 @@
 #include "wx/splitter.h"
 #include "wx/renderer.h"
 #include "wx/msw/private.h"
-#include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
-
-#if wxUSE_GRAPHICS_CONTEXT
-// TODO remove this dependency (gdiplus needs the macros)
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
-#include "wx/dcgraph.h"
-#include "gdiplus.h"
-using namespace Gdiplus;
-#endif // wxUSE_GRAPHICS_CONTEXT
 
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier
 // compilers
@@ -109,45 +93,6 @@ using namespace Gdiplus;
     #define TMT_BORDERCOLOR     3801
     #define TMT_EDGEFILLCOLOR   3808
 #endif
-
-
-// ----------------------------------------------------------------------------
-// If the DC is a wxGCDC then pull out the HDC from the GraphicsContext when
-// it is needed, and handle the Release when done.
-
-class GraphicsHDC
-{
-public:
-    GraphicsHDC(wxDC* dc)
-    {
-#if wxUSE_GRAPHICS_CONTEXT
-        m_graphics = NULL;
-        wxGCDC* gcdc = wxDynamicCast(dc, wxGCDC);
-        if (gcdc) {
-            m_graphics = (Graphics*)gcdc->GetGraphicsContext()->GetNativeContext();
-            m_hdc = m_graphics->GetHDC();
-        }
-        else
-#endif
-            m_hdc = GetHdcOf(*((wxMSWDCImpl*)dc->GetImpl()));
-    }
-
-    ~GraphicsHDC()
-    {
-#if wxUSE_GRAPHICS_CONTEXT
-        if (m_graphics)
-            m_graphics->ReleaseHDC(m_hdc);
-#endif
-    }
-
-    operator HDC() const { return m_hdc; }
-
-private:
-    HDC         m_hdc;
-#if wxUSE_GRAPHICS_CONTEXT
-    Graphics*   m_graphics;
-#endif
-};
 
 #if defined(__WXWINCE__)
     #ifndef DFCS_FLAT
@@ -345,7 +290,7 @@ void wxRendererMSWBase::DrawFocusRect(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFocusRect(GraphicsHDC(&dc), &rc);
+    ::DrawFocusRect(GetHdcOf(dc.GetTempHDC()), &rc);
 }
 
 void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
@@ -418,7 +363,7 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED | DFCS_FLAT;
 
-    ::DrawFrameControl(GraphicsHDC(&dc), &r, DFC_SCROLL, style);
+    ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, DFC_SCROLL, style);
 }
 
 void
@@ -443,7 +388,7 @@ wxRendererMSW::DoDrawButton(UINT kind,
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
 
-    ::DrawFrameControl(GraphicsHDC(&dc), &r, DFC_BUTTON, style);
+    ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, DFC_BUTTON, style);
 }
 
 void
@@ -602,7 +547,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
+                                GetHdcOf(dc.GetTempHDC()),
                                 CP_DROPDOWNBUTTON,
                                 state,
                                 &r,
@@ -638,7 +583,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
+                                GetHdcOf(dc.GetTempHDC()),
                                 HP_HEADERITEM,
                                 state,
                                 &r,
@@ -674,7 +619,7 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
+                                GetHdcOf(dc.GetTempHDC()),
                                 TVP_GLYPH,
                                 state,
                                 &r,
@@ -748,7 +693,7 @@ wxRendererXP::DoDrawXPButton(int kind,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
+                                GetHdcOf(dc.GetTempHDC()),
                                 kind,
                                 state,
                                 &r,

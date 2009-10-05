@@ -1199,7 +1199,50 @@ public:
 #endif  // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WXMSW__
+    // GetHDC() is the simplest way to retrieve an HDC From a wxDC but only
+    // works if this wxDC is GDI-based and fails for GDI+ contexts (and
+    // anything else without HDC, e.g. wxPostScriptDC)
     WXHDC GetHDC() const;
+
+    // don't use these methods manually, use GetTempHDC() instead
+    virtual WXHDC AcquireHDC() { return GetHDC(); }
+    virtual void ReleaseHDC(WXHDC WXUNUSED(hdc)) { }
+
+    // helper class holding the result of GetTempHDC() with std::auto_ptr<>-like
+    // semantics, i.e. it is moved when copied
+    class TempHDC
+    {
+    public:
+        TempHDC(wxDC& dc)
+            : m_dc(dc),
+              m_hdc(dc.AcquireHDC())
+        {
+        }
+
+        TempHDC(const TempHDC& thdc)
+            : m_dc(thdc.m_dc),
+              m_hdc(thdc.m_hdc)
+        {
+            const_cast<TempHDC&>(thdc).m_hdc = 0;
+        }
+
+        ~TempHDC()
+        {
+            if ( m_hdc )
+                m_dc.ReleaseHDC(m_hdc);
+        }
+
+        WXHDC GetHDC() const { return m_hdc; }
+
+    private:
+        wxDC& m_dc;
+        WXHDC m_hdc;
+
+        wxDECLARE_NO_ASSIGN_CLASS(TempHDC);
+    };
+
+    // GetTempHDC() also works for wxGCDC (but still not for wxPostScriptDC &c)
+    TempHDC GetTempHDC() { return TempHDC(*this); }
 #endif // __WXMSW__
 
 protected:

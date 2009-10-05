@@ -35,6 +35,14 @@ public:
     wxGraphicsContext* GetGraphicsContext();
     void SetGraphicsContext( wxGraphicsContext* ctx );
 
+#ifdef __WXMSW__
+    // override wxDC virtual functions to provide access to HDC associated with
+    // this Graphics object (implemented in src/msw/graphics.cpp)
+    virtual WXHDC AcquireHDC();
+    virtual void ReleaseHDC(WXHDC hdc);
+#endif // __WXMSW__
+
+private:
     DECLARE_DYNAMIC_CLASS(wxGCDC)
     wxDECLARE_NO_COPY_CLASS(wxGCDC);
 };
