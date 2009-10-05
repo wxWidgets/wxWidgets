@@ -266,4 +266,12 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
     wxFAIL_MSG( wxString::Format("button with id %d not found", btnid) );
 }
 
+void wxInfoBar::DoApplyWidgetStyle(GtkRcStyle *style)
+{
+    wxInfoBarGeneric::DoApplyWidgetStyle(style);
+
+    if ( UseNative() )
+        gtk_widget_modify_style(m_impl->m_label, style);
+}
+
 #endif // wxUSE_INFOBAR

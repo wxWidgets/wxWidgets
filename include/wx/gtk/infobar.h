@@ -55,6 +55,7 @@ public:
 
 protected:
     virtual bool GTKShouldConnectSizeRequest() const { return false; }
+    virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
     void Init() { m_impl = NULL; }
