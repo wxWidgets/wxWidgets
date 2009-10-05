@@ -169,28 +169,32 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 // wxNonOwnedWindow misc
 // ----------------------------------------------------------------------------
 
-bool wxNonOwnedWindow::ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout )
+bool wxNonOwnedWindow::OSXShowWithEffect(bool show,
+                                         wxShowEffect effect,
+                                         unsigned timeout)
 {
-    if ( !wxWindow::Show(true) )
+    // Cocoa code needs to manage window visibility on its own and so calls
+    // wxWindow::Show() as needed but if we already changed the internal
+    // visibility flag here, Show() would do nothing, so avoid doing it
+#if wxOSX_USE_CARBON
+    if ( !wxWindow::Show(show) )
         return false;
+#endif // Carbon
 
-    // because apps expect a size event to occur at this moment
-    wxSizeEvent event(GetSize() , m_windowId);
-    event.SetEventObject(this);
-    HandleWindowEvent(event);
+    if ( effect == wxSHOW_EFFECT_NONE ||
+            !m_nowpeer || !m_nowpeer->ShowWithEffect(show, effect, timeout) )
+        return Show(show);
 
+    if ( show )
+    {
+        // as apps expect a size event to occur when the window is shown,
+        // generate one when it is shown with effect too
+        wxSizeEvent event(GetSize(), m_windowId);
+        event.SetEventObject(this);
+        HandleWindowEvent(event);
+    }
 
-    return m_nowpeer->ShowWithEffect(true, effect, timeout);
-}
-
-bool wxNonOwnedWindow::HideWithEffect(wxShowEffect effect,
-                                unsigned timeout )
-{
-    if ( !wxWindow::Show(false) )
-        return false;
-
-    return m_nowpeer->ShowWithEffect(false, effect, timeout);
+    return true;
 }
 
 wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const

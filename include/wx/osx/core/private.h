@@ -188,6 +188,13 @@ public :
     // set the visibility of this widget (maybe latent)
     virtual void        SetVisibility( bool visible ) = 0;
 
+    virtual bool ShowWithEffect(bool WXUNUSED(show),
+                                wxShowEffect WXUNUSED(effect),
+                                unsigned WXUNUSED(timeout))
+    {
+        return false;
+    }
+
     virtual void        Raise() = 0;
 
     virtual void        Lower() = 0;

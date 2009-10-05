@@ -1063,6 +1063,17 @@ bool wxWindowMac::Show(bool show)
     return true;
 }
 
+bool wxWindowMac::OSXShowWithEffect(bool show,
+                                    wxShowEffect effect,
+                                    unsigned timeout)
+{
+    if ( effect == wxSHOW_EFFECT_NONE ||
+            !m_peer || !m_peer->ShowWithEffect(show, effect, timeout) )
+        return Show(show);
+
+    return true;
+}
+
 void wxWindowMac::DoEnable(bool enable)
 {
     m_peer->Enable( enable ) ;

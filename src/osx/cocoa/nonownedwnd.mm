@@ -488,9 +488,12 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
     return true;
 }
 
-bool wxNonOwnedWindowCocoaImpl::ShowWithEffect(bool show, wxShowEffect WXUNUSED(effect), unsigned WXUNUSED(timeout))
+bool wxNonOwnedWindowCocoaImpl::ShowWithEffect(bool show,
+                                               wxShowEffect effect,
+                                               unsigned timeout)
 {
-    return Show(show);
+    return wxWidgetCocoaImpl::
+            ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
 void wxNonOwnedWindowCocoaImpl::Update()

@@ -63,6 +63,16 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
+    virtual bool ShowWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0)
+    {
+        return OSXShowWithEffect(true, effect, timeout);
+    }
+    virtual bool HideWithEffect(wxShowEffect effect,
+                                unsigned timeout = 0)
+    {
+        return OSXShowWithEffect(false, effect, timeout);
+    }
 
     virtual bool IsShownOnScreen() const;
 
@@ -341,6 +351,11 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
 
+    // common part of Show/HideWithEffect()
+    virtual bool OSXShowWithEffect(bool show,
+                                   wxShowEffect effect,
+                                   unsigned timeout);
+
 private:
     // common part of all ctors
     void Init();
@@ -348,7 +363,6 @@ private:
     // show/hide scrollbars as needed, common part of SetScrollbar() and
     // AlwaysShowScrollbars()
     void DoUpdateScrollbarVisibility();
-
 
     wxDECLARE_NO_COPY_CLASS(wxWindowMac);
     DECLARE_EVENT_TABLE()

@@ -73,6 +73,17 @@ public :
     virtual bool        IsVisible() const ;
     virtual void        SetVisibility(bool);
 
+    // we provide a static function which can be reused from
+    // wxNonOwnedWindowCocoaImpl too
+    static bool ShowViewOrWindowWithEffect(wxWindow *win,
+                                           bool show,
+                                           wxShowEffect effect,
+                                           unsigned timeout);
+
+    virtual bool ShowWithEffect(bool show,
+                                wxShowEffect effect,
+                                unsigned timeout);
+
     virtual void        Raise();
 
     virtual void        Lower();
@@ -190,7 +201,10 @@ public :
     void Raise();
     void Lower();
     bool Show(bool show);
-    bool ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout);
+
+    virtual bool ShowWithEffect(bool show,
+                                wxShowEffect effect,
+                                unsigned timeout);
 
     void Update();
     bool SetTransparent(wxByte alpha);

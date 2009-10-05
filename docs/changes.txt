@@ -455,6 +455,7 @@ GTK:
 
 Mac:
 
+- Implement wxWindow::ShowWithEffect() in wxOSX/Cocoa.
 - Correct min/max pages display in the print dialog (Auria).
 
 MSW:

@@ -85,12 +85,6 @@ public:
     virtual void Lower();
     virtual bool Show( bool show = true );
 
-    virtual bool ShowWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0) ;
-
-    virtual bool HideWithEffect(wxShowEffect effect,
-                                unsigned timeout = 0) ;
-
     virtual void SetExtraStyle(long exStyle) ;
 
     virtual bool SetBackgroundColour( const wxColour &colour );
@@ -117,6 +111,10 @@ protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
+
+    virtual bool OSXShowWithEffect(bool show,
+                                   wxShowEffect effect,
+                                   unsigned timeout);
 
     wxNonOwnedWindowImpl* m_nowpeer ;
 

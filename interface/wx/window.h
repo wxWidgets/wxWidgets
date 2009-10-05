@@ -2185,8 +2185,10 @@ public:
             milliseconds. If the default value of 0 is used, the default
             animation time for the current platform is used.
 
-        @note Currently this function is only implemented in wxMSW and does the
-              same thing as Show() in the other ports.
+        @note Currently this function is only implemented in wxMSW and wxOSX
+              (for wxTopLevelWindows only in Carbon version and for any kind of
+              windows in Cocoa) and does the same thing as Show() in the other
+              ports.
 
         @since 2.9.0
 
