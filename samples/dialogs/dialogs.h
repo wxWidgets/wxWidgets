@@ -117,9 +117,6 @@ class MyApp: public wxApp
 public:
     virtual bool OnInit();
 
-    wxFont       m_canvasFont;
-    wxColour     m_canvasTextColour;
-
 protected:
 #if wxUSE_LOG
     virtual wxAppTraits *CreateTraits() { return new MyAppTraits; }
@@ -434,7 +431,9 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas(wxWindow *parent) : wxScrolledWindow(parent, wxID_ANY)
     {
+        SetForegroundColour(*wxBLACK);
         SetBackgroundColour(*wxWHITE);
+        SetFont(*wxNORMAL_FONT);
     }
 
 private:

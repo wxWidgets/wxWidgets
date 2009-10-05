@@ -271,9 +271,6 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
 #endif
 
-    m_canvasTextColour = *wxBLACK;
-    m_canvasFont = *wxNORMAL_FONT;
-
     // Create the main frame window
     MyFrame *frame = new MyFrame(wxT("wxWidgets dialogs example"));
 
@@ -544,12 +541,12 @@ void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
     wxColour clr = wxGetColourFromUser
                    (
                     this,
-                    wxGetApp().m_canvasTextColour,
+                    m_canvas->GetForegroundColour(),
                     "Please choose the foreground colour"
                    );
     if ( clr.IsOk() )
     {
-        wxGetApp().m_canvasTextColour = clr;
+        m_canvas->SetForegroundColour(clr);
         m_canvas->Refresh();
     }
     //else: dialog cancelled by user
@@ -592,8 +589,8 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
 {
     wxFontData data;
-    data.SetInitialFont(wxGetApp().m_canvasFont);
-    data.SetColour(wxGetApp().m_canvasTextColour);
+    data.SetInitialFont(m_canvas->GetFont());
+    data.SetColour(m_canvas->GetForegroundColour());
 
     // you might also do this:
     //
@@ -605,8 +602,8 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
     if (dialog.ShowModal() == wxID_OK)
     {
         wxFontData retData = dialog.GetFontData();
-        wxGetApp().m_canvasFont = retData.GetChosenFont();
-        wxGetApp().m_canvasTextColour = retData.GetColour();
+        m_canvas->SetFont(retData.GetChosenFont());
+        m_canvas->SetForegroundColour(retData.GetColour());
         m_canvas->Refresh();
     }
     //else: cancelled by the user, don't change the font
@@ -617,15 +614,15 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
 {
     wxFontData data;
-    data.SetInitialFont(wxGetApp().m_canvasFont);
-    data.SetColour(wxGetApp().m_canvasTextColour);
+    data.SetInitialFont(m_canvas->GetFont());
+    data.SetColour(m_canvas->GetForegroundColour());
 
     wxGenericFontDialog *dialog = new wxGenericFontDialog(this, data);
     if (dialog->ShowModal() == wxID_OK)
     {
         wxFontData retData = dialog->GetFontData();
-        wxGetApp().m_canvasFont = retData.GetChosenFont();
-        wxGetApp().m_canvasTextColour = retData.GetColour();
+        m_canvas->SetFont(retData.GetChosenFont());
+        m_canvas->SetForegroundColour(retData.GetColour());
         m_canvas->Refresh();
     }
     dialog->Destroy();
@@ -1933,8 +1930,6 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
-    dc.SetFont(wxGetApp().m_canvasFont);
-    dc.SetTextForeground(wxGetApp().m_canvasTextColour);
     dc.SetBackgroundMode(wxTRANSPARENT);
     dc.DrawText(
                 wxT("wxWidgets common dialogs")
