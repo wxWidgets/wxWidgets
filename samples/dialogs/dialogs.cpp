@@ -525,13 +525,23 @@ MyFrame::MyFrame(const wxString& title)
     m_canvas = new MyCanvas(this);
 
 #if wxUSE_INFOBAR
+    // an info bar can be created very simply and used without any extra effort
     m_infoBarSimple = new wxInfoBar(this);
-    m_infoBarAdvanced = NULL;
+
+    // or it can also be customized
+    m_infoBarAdvanced = new wxInfoBar(this);
+    m_infoBarAdvanced->AddButton(wxID_UNDO);
+
+    m_infoBarAdvanced->SetOwnBackgroundColour(0xc8ffff);
+    m_infoBarAdvanced->SetShowHideEffects(wxSHOW_EFFECT_EXPAND,
+                                          wxSHOW_EFFECT_EXPAND);
+    m_infoBarAdvanced->SetEffectDuration(1500);
 
     // to use the info bars we need to use sizer for the window layout
     wxBoxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
     sizer->Add(m_infoBarSimple, wxSizerFlags().Expand());
     sizer->Add(m_canvas, wxSizerFlags(1).Expand());
+    sizer->Add(m_infoBarAdvanced, wxSizerFlags().Expand());
     SetSizer(sizer);
 #endif // wxUSE_INFOBAR
 }
@@ -690,6 +700,7 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
 {
+    m_infoBarAdvanced->ShowMessage("Sorry, it didn't work out.", wxICON_WARNING);
 }
 
 #endif // wxUSE_INFOBAR

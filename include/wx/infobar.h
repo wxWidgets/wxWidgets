@@ -35,6 +35,10 @@ public:
     // show the info bar with the given message and optionally an icon
     virtual void ShowMessage(const wxString& msg, int flags = wxICON_NONE) = 0;
 
+    // add an extra button to the bar, near the message
+    virtual void AddButton(wxWindowID btnid,
+                           const wxString& label = wxString()) = 0;
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxInfoBarBase);
 };

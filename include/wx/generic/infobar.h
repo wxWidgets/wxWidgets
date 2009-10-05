@@ -40,6 +40,8 @@ public:
 
     virtual void ShowMessage(const wxString& msg, int flags = wxICON_NONE);
 
+    virtual void AddButton(wxWindowID btnid, const wxString& label = wxString());
+
 
     // methods specific to this version
     // --------------------------------

@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
     #include "wx/artprov.h"
     #include "wx/bmpbuttn.h"
+    #include "wx/button.h"
     #include "wx/settings.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
@@ -96,7 +97,11 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
         this
     );
 
-    // Center the text inside the sizer.
+    // center the text inside the sizer with an icon to the left of it and a
+    // button at the very right
+    //
+    // NB: AddButton() relies on the button being the last control in the sizer
+    //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->AddStretchSpacer();
     sizer->Add(m_icon, wxSizerFlags().Centre().DoubleBorder());
@@ -237,6 +242,16 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
         // just update the layout to correspond to the new message
         Layout();
     }
+}
+
+void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
+{
+    wxSizer * const sizer = GetSizer();
+    wxCHECK_RET( sizer, "must be created first" );
+
+    sizer->Insert(sizer->GetItemCount() - 2,
+                  new wxButton(this, btnid, label),
+                  wxSizerFlags().Centre().DoubleBorder());
 }
 
 void wxInfoBar::OnButton(wxCommandEvent& WXUNUSED(event))
