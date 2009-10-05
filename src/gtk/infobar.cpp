@@ -177,17 +177,26 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     UpdateParent();
 }
 
+void wxInfoBar::Dismiss()
+{
+    if ( !UseNative() )
+    {
+        wxInfoBarGeneric::Dismiss();
+        return;
+    }
+
+    Hide();
+
+    UpdateParent();
+}
+
 void wxInfoBar::GTKResponse(int btnid)
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, btnid);
     event.SetEventObject(this);
 
     if ( !HandleWindowEvent(event) )
-    {
-        Hide();
-
-        UpdateParent();
-    }
+        Dismiss();
 }
 
 GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)

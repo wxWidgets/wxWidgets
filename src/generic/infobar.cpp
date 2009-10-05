@@ -240,6 +240,11 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     }
 }
 
+void wxInfoBarGeneric::Dismiss()
+{
+    DoHide();
+}
+
 void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 {
     wxSizer * const sizer = GetSizer();

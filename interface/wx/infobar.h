@@ -123,9 +123,10 @@ public:
         itself closes the window whenever a button in it is clicked so if you
         wish the info bar to be hidden when the button is clicked, simply call
         @c event.Skip() in the button handler to let the base class handler do
-        it. On the other hand, if you don't skip the event, the info bar will
-        remain opened so make sure to do it for at least some buttons to allow
-        the user to close it.
+        it (calling Dismiss() explicitly works too, of course). On the other
+        hand, if you don't skip the event, the info bar will remain opened so
+        make sure to do it for at least some buttons to allow the user to close
+        it.
 
         Notice that the generic wxInfoBar implementation handles the button
         events itself and so they are not propagated to the info bar parent and
@@ -142,6 +143,14 @@ public:
             wxGetStockLabel()) will be used.
      */
     void AddButton(wxWindowID btnid, const wxString& label = wxString());
+
+    /**
+        Hide the info bar window.
+
+        This method hides the window and lays out the parent window to account
+        for its disappearance (unlike a simple Hide()).
+     */
+    void Dismiss();
 
     /**
         Remove a button previously added by AddButton().

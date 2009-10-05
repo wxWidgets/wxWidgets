@@ -41,6 +41,8 @@ public:
     virtual void ShowMessage(const wxString& msg,
                              int flags = wxICON_INFORMATION);
 
+    virtual void Dismiss();
+
     virtual void AddButton(wxWindowID btnid,
                            const wxString& label = wxString());
 
