@@ -78,19 +78,18 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // the icon is not shown unless it's assigned a valid bitmap
     m_icon = new wxStaticBitmap(this, wxID_ANY, wxNullBitmap);
 
-    // by default, the text uses a larger, more noticeable, font
     m_text = new wxStaticText(this, wxID_ANY, "");
-    m_text->SetFont(m_text->GetFont().Bold().Larger());
 
     m_button = new wxBitmapButton
                    (
                     this,
                     wxID_ANY,
-                    wxArtProvider::GetBitmap(wxART_CROSS_MARK),
+                    wxArtProvider::GetBitmap(wxART_CLOSE, wxART_MENU),
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxBORDER_NONE
                    );
+    m_button->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
     m_button->SetToolTip(_("Hide this notification message."));
 
     // center the text inside the sizer with an icon to the left of it and a
@@ -99,11 +98,10 @@ bool wxInfoBarGeneric::Create(wxWindow *parent, wxWindowID winid)
     // NB: AddButton() relies on the button being the last control in the sizer
     //     and being preceded by a spacer
     wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
+    sizer->Add(m_icon, wxSizerFlags().Centre().Border());
+    sizer->Add(m_text, wxSizerFlags().Centre());
     sizer->AddStretchSpacer();
-    sizer->Add(m_icon, wxSizerFlags().Centre().DoubleBorder());
-    sizer->Add(m_text, wxSizerFlags().Centre().DoubleBorder());
-    sizer->AddStretchSpacer();
-    sizer->Add(m_button, wxSizerFlags().Centre().DoubleBorder());
+    sizer->Add(m_button, wxSizerFlags().Centre().Border());
     SetSizer(sizer);
 
     return true;
@@ -219,7 +217,9 @@ void wxInfoBarGeneric::ShowMessage(const wxString& msg, int flags)
     }
     else // do show an icon
     {
-        m_icon->SetBitmap(wxArtProvider::GetMessageBoxIcon(icon));
+        m_icon->SetBitmap(wxArtProvider::GetBitmap(
+                            wxArtProvider::GetMessageBoxIconId(flags),
+                          wxART_MENU));
         m_icon->Show();
     }
 
