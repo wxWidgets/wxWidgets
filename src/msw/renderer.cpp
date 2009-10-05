@@ -293,21 +293,40 @@ public:
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0);
+                              int flags = 0)
+    {
+        if ( !DoDrawXPButton(BP_CHECKBOX, win, dc, rect, flags) )
+            m_rendererNative.DrawCheckBox(win, dc, rect, flags);
+    }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0);
+                                int flags = 0)
+    {
+        if ( !DoDrawXPButton(BP_PUSHBUTTON, win, dc, rect, flags) )
+            m_rendererNative.DrawPushButton(win, dc, rect, flags);
+    }
 
     virtual void DrawRadioBitmap(wxWindow *win,
                                  wxDC& dc,
                                  const wxRect& rect,
-                                 int flags = 0);
+                                 int flags = 0)
+    {
+        if ( !DoDrawXPButton(BP_RADIOBUTTON, win, dc, rect, flags) )
+            m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
+    }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
+    // common part of DrawCheckBox(), DrawPushButton() and DrawRadioBitmap()
+    bool DoDrawXPButton(int kind,
+                        wxWindow *win,
+                        wxDC& dc,
+                        const wxRect& rect,
+                        int flags);
+
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
 
@@ -663,137 +682,81 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                             );
 }
 
-void
-wxRendererXP::DrawCheckBox(wxWindow *win,
-                           wxDC& dc,
-                           const wxRect& rect,
-                           int flags)
-{
-    wxUxThemeHandle hTheme(win, L"BUTTON");
-    if ( !hTheme )
-    {
-        m_rendererNative.DrawCheckBox(win, dc, rect, flags);
-        return;
-    }
-
-    RECT r;
-    wxCopyRectToRECT(rect, r);
-
-    int state;
-    if ( flags & wxCONTROL_CHECKED )
-        state = CBS_CHECKEDNORMAL;
-    else if ( flags & wxCONTROL_UNDETERMINED )
-        state = CBS_MIXEDNORMAL;
-    else
-        state = CBS_UNCHECKEDNORMAL;
-
-    // CBS_XXX is followed by CBX_XXXHOT, then CBS_XXXPRESSED and DISABLED
-    enum
-    {
-        CBS_HOT_OFFSET = 1,
-        CBS_PRESSED_OFFSET = 2,
-        CBS_DISABLED_OFFSET = 3
-    };
-
-    if ( flags & wxCONTROL_DISABLED )
-        state += CBS_DISABLED_OFFSET;
-    else if ( flags & wxCONTROL_PRESSED )
-        state += CBS_PRESSED_OFFSET;
-    else if ( flags & wxCONTROL_CURRENT )
-        state += CBS_HOT_OFFSET;
-
-    wxUxThemeEngine::Get()->DrawThemeBackground
-                            (
-                                hTheme,
-                                GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
-                                BP_CHECKBOX,
-                                state,
-                                &r,
-                                NULL
-                            );
-}
-
-void wxRendererXP::DrawRadioBitmap(wxWindow* win,
-                                   wxDC& dc,
-                                   const wxRect& rect,
-                                   int flags)
-{
-    wxUxThemeHandle hTheme(win, L"BUTTON");
-    if ( !hTheme )
-    {
-        m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
-        return;
-    }
-
-    RECT r;
-    wxCopyRectToRECT(rect, r);
-
-    int state;
-    if ( flags & wxCONTROL_CHECKED )
-        state = RBS_CHECKEDNORMAL;
-    else if ( flags & wxCONTROL_UNDETERMINED )
-        state = RBS_MIXEDNORMAL;
-    else
-        state = RBS_UNCHECKEDNORMAL;
-
-    // RBS_XXX is followed by RBX_XXXGOT, then RBS_XXXPRESSED and DISABLED
-    if ( flags & wxCONTROL_CURRENT )
-        state += 1;
-    else if ( flags & wxCONTROL_PRESSED )
-        state += 2;
-    else if ( flags & wxCONTROL_DISABLED )
-        state += 3;
-
-    wxUxThemeEngine::Get()->DrawThemeBackground
-                            (
-                                hTheme,
-                                GraphicsHDC(&dc),
-                                BP_RADIOBUTTON,
-                                state,
-                                &r,
-                                NULL
-                            );
-}
-
-void
-wxRendererXP::DrawPushButton(wxWindow * win,
+bool
+wxRendererXP::DoDrawXPButton(int kind,
+                             wxWindow *win,
                              wxDC& dc,
                              const wxRect& rect,
                              int flags)
 {
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if ( !hTheme )
-    {
-        m_rendererNative.DrawPushButton(win, dc, rect, flags);
-        return;
-    }
+        return false;
 
     RECT r;
     wxCopyRectToRECT(rect, r);
 
+    // determine the base state depending on the button kind
     int state;
-    if ( flags & wxCONTROL_PRESSED )
-        state = PBS_PRESSED;
+    switch ( kind )
+    {
+        case BP_PUSHBUTTON:
+            state = PBS_NORMAL;
+            break;
+
+        case BP_RADIOBUTTON:
+            state = RBS_UNCHECKEDNORMAL;
+            break;
+
+        case BP_CHECKBOX:
+            state = CBS_UNCHECKEDNORMAL;
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown button kind" );
+            return false;
+    }
+
+    // XBS_XXX is followed by XBX_XXXHOT, then XBS_XXXPRESSED and DISABLED
+    enum
+    {
+        NORMAL_OFFSET,
+        HOT_OFFSET,
+        PRESSED_OFFSET,
+        DISABLED_OFFSET,
+        STATES_COUNT
+    };
+
+    // in both RBS_ and CBS_ enums CHECKED elements are offset by 4 from base
+    // (UNCHECKED) ones and MIXED are offset by 4 again as there are all states
+    // from the above enum in between them
+    if ( flags & wxCONTROL_CHECKED )
+        state += STATES_COUNT;
+    else if ( flags & wxCONTROL_UNDETERMINED )
+        state += 2*STATES_COUNT;
+
+    if ( flags & wxCONTROL_DISABLED )
+        state += DISABLED_OFFSET;
+    else if ( flags & wxCONTROL_PRESSED )
+        state += PRESSED_OFFSET;
     else if ( flags & wxCONTROL_CURRENT )
-        state = PBS_HOT;
-    else if ( flags & wxCONTROL_DISABLED )
-        state = PBS_DISABLED;
-    else if ( flags & wxCONTROL_ISDEFAULT )
+        state += HOT_OFFSET;
+    // wxCONTROL_ISDEFAULT flag is only valid for push buttons
+    else if ( kind == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
-    else
-        state = PBS_NORMAL;
 
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
                                 GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())),
-                                BP_PUSHBUTTON,
+                                kind,
                                 state,
                                 &r,
                                 NULL
                             );
-}
 
+    return true;
+}
 
 // ----------------------------------------------------------------------------
 // splitter drawing
