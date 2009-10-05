@@ -2341,29 +2341,23 @@ void wxWindowGTK::PostCreation()
             G_CALLBACK(size_allocate), this);
     }
 
-    if (m_wxwindow)
-    {
 #if GTK_CHECK_VERSION(2, 8, 0)
-        if (!gtk_check_version(2,8,0))
+    if ( gtk_check_version(2,8,0) == NULL )
+    {
+        // Make sure we can notify the app when mouse capture is lost
+        if ( m_wxwindow )
         {
-            // Make sure we can notify the app when mouse capture is lost
             g_signal_connect (m_wxwindow, "grab_broken_event",
                           G_CALLBACK (gtk_window_grab_broken), this);
         }
-#endif
-    }
 
-    if ( connect_widget != m_wxwindow )
-    {
-#if GTK_CHECK_VERSION(2, 8, 0)
-        if (!gtk_check_version(2,8,0))
+        if ( connect_widget != m_wxwindow )
         {
-            // Make sure we can notify app code when mouse capture is lost
             g_signal_connect (connect_widget, "grab_broken_event",
                         G_CALLBACK (gtk_window_grab_broken), this);
         }
-#endif
     }
+#endif // GTK+ >= 2.8
 
     if ( GTKShouldConnectSizeRequest() )
     {
