@@ -117,6 +117,7 @@ protected:
 #include "../../art/new.xpm"
 #include "../../art/undo.xpm"
 #include "../../art/redo.xpm"
+#include "../../art/close.xpm"
 #include "../../art/quit.xpm"
 #include "../../art/find.xpm"
 #include "../../art/findrepl.xpm"
@@ -175,6 +176,7 @@ wxBitmap wxDefaultArtProvider_CreateBitmap(const wxArtID& id)
     ART(wxART_DELETE,                              delete)
     ART(wxART_UNDO,                                undo)
     ART(wxART_REDO,                                redo)
+    ART(wxART_CLOSE,                               close)
     ART(wxART_QUIT,                                quit)
     ART(wxART_FIND,                                find)
     ART(wxART_FIND_AND_REPLACE,                    findrepl)

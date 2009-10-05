@@ -113,6 +113,7 @@ wxString wxArtIDToStock(const wxArtID& id)
     ART(wxART_UNDO,                                GTK_STOCK_UNDO)
     ART(wxART_REDO,                                GTK_STOCK_REDO)
 
+    ART(wxART_CLOSE,                               GTK_STOCK_CLOSE)
     ART(wxART_QUIT,                                GTK_STOCK_QUIT)
 
     ART(wxART_FIND,                                GTK_STOCK_FIND)

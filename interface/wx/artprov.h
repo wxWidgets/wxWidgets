@@ -108,6 +108,7 @@ typedef wxString wxArtID;
      @li wxART_PASTE
      @li wxART_UNDO
      @li wxART_REDO
+     @li wxART_CLOSE
      @li wxART_QUIT
      @li wxART_FIND
      @li wxART_FIND_AND_REPLACE

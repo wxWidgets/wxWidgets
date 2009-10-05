@@ -101,6 +101,7 @@ typedef wxString wxArtID;
 #define wxART_UNDO                 wxART_MAKE_ART_ID(wxART_UNDO)
 #define wxART_REDO                 wxART_MAKE_ART_ID(wxART_REDO)
 
+#define wxART_CLOSE                wxART_MAKE_ART_ID(wxART_CLOSE)
 #define wxART_QUIT                 wxART_MAKE_ART_ID(wxART_QUIT)
 
 #define wxART_FIND                 wxART_MAKE_ART_ID(wxART_FIND)
