@@ -363,6 +363,11 @@ protected:
     // should be called from OnInternalIdle() if it's overridden
     void GTKUpdateCursor();
 
+    // Return true from here if PostCreation() should connect to size_request
+    // signal: this is done by default but doesn't work for some native
+    // controls which override this function to return false
+    virtual bool GTKShouldConnectSizeRequest() const { return !IsTopLevel(); }
+
     void ConstrainSize();
 
 private:
