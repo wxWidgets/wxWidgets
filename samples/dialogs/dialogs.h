@@ -429,6 +429,8 @@ private:
     wxWindow *m_canvas;
 
 #if wxUSE_INFOBAR
+    void OnInfoBarRedo(wxCommandEvent& event);
+
     wxInfoBar *m_infoBarSimple,
               *m_infoBarAdvanced;
 #endif // wxUSE_INFOBAR

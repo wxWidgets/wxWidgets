@@ -116,10 +116,20 @@ public:
         (in LTR layout), with each successive button being added to the right
         of the previous one.
 
-        Clicking the button will generate a normal event which can be handled
-        as usual. Notice that if you wish the info bar to be hidden when the
-        button is clicked, simply call @c event.Skip() in the button handler to
-        let the base class handler do it.
+        Clicking the button will generate a normal EVT_COMMAND_BUTTON_CLICKED
+        event which can be handled as usual. The default handler in wxInfoBar
+        itself closes the window whenever a button in it is clicked so if you
+        wish the info bar to be hidden when the button is clicked, simply call
+        @c event.Skip() in the button handler to let the base class handler do
+        it. On the other hand, if you don't skip the event, the info bar will
+        remain opened so make sure to do it for at least some buttons to allow
+        the user to close it.
+
+        Notice that the generic wxInfoBar implementation handles the button
+        events itself and so they are not propagated to the info bar parent and
+        you need to either inherit from wxInfoBar and handle them in your
+        derived class or use wxEvtHandler::Connect(), as is done in the dialogs
+        sample, to handle the button events in the parent frame.
 
         @param btnid
             Id of the button. It will be used in the button message clicking

@@ -528,20 +528,32 @@ MyFrame::MyFrame(const wxString& title)
     // an info bar can be created very simply and used without any extra effort
     m_infoBarSimple = new wxInfoBar(this);
 
-    // or it can also be customized
+    // or it can also be customized by
     m_infoBarAdvanced = new wxInfoBar(this);
+
+    // ... adding extra buttons (but more than two will usually be too many)
     m_infoBarAdvanced->AddButton(wxID_UNDO);
     m_infoBarAdvanced->AddButton(wxID_REDO);
+
+    m_infoBarAdvanced->Connect(wxID_REDO, wxEVT_COMMAND_BUTTON_CLICKED,
+                                wxCommandEventHandler(MyFrame::OnInfoBarRedo),
+                                NULL,
+                                this);
 
     // adding and removing a button immediately doesn't make sense here, of
     // course, it's done just to show that it is possible
     m_infoBarAdvanced->AddButton(wxID_EXIT);
     m_infoBarAdvanced->RemoveButton(wxID_EXIT);
 
+    // ... changing the colours and/or fonts
     m_infoBarAdvanced->SetOwnBackgroundColour(0xc8ffff);
+    m_infoBarAdvanced->SetFont(GetFont().Bold().Larger());
+
+    // ... and changing the effect (only does anything under MSW currently)
     m_infoBarAdvanced->SetShowHideEffects(wxSHOW_EFFECT_EXPAND,
                                           wxSHOW_EFFECT_EXPAND);
     m_infoBarAdvanced->SetEffectDuration(1500);
+
 
     // to use the info bars we need to use sizer for the window layout
     wxBoxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
@@ -707,6 +719,11 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
 {
     m_infoBarAdvanced->ShowMessage("Sorry, it didn't work out.", wxICON_WARNING);
+}
+
+void MyFrame::OnInfoBarRedo(wxCommandEvent& WXUNUSED(event))
+{
+    m_infoBarAdvanced->ShowMessage("Still no, sorry again.", wxICON_ERROR);
 }
 
 #endif // wxUSE_INFOBAR

@@ -163,11 +163,17 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     UpdateParent();
 }
 
-void wxInfoBar::GTKResponse(int WXUNUSED(btnid))
+void wxInfoBar::GTKResponse(int btnid)
 {
-    Hide();
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, btnid);
+    event.SetEventObject(this);
 
-    UpdateParent();
+    if ( !HandleWindowEvent(event) )
+    {
+        Hide();
+
+        UpdateParent();
+    }
 }
 
 void wxInfoBar::AddButton(wxWindowID btnid, const wxString& label)
