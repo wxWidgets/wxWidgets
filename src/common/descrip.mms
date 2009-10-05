@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 23 March 2009                                                       *
+# Date : 3 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -10,24 +10,26 @@
 
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
-	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
+	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
+CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)/incl=[-.regex]
 .else
 .ifdef __WXGTK__
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
+	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
+CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+	/incl=[-.regex]
 .else
 .ifdef __WXGTK2__
 CXX_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)/ieee=denorm
+	   /assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
+CC_DEFINE = /define=(__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
+	/ieee=denorm/incl=[-.regex]
 .else
 .ifdef __WXX11__
 CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)/incl=[-.regex]
 CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)
+	/name=(as_is,short)/incl=[-.regex]
 .else
 CXX_DEFINE =
 CC_DEFINE =
