@@ -1570,12 +1570,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_art_msw.obj \
 	$(OBJS)\monodll_art_aui.obj \
 	$(OBJS)\monodll_bar.obj \
-	$(OBJS)\monodll_buttonbar.obj \
-	$(OBJS)\monodll_control.obj \
+	$(OBJS)\monodll_ribbon_buttonbar.obj \
+	$(OBJS)\monodll_ribbon_control.obj \
 	$(OBJS)\monodll_gallery.obj \
 	$(OBJS)\monodll_page.obj \
 	$(OBJS)\monodll_panel.obj \
-	$(OBJS)\monodll_toolbar.obj \
+	$(OBJS)\monodll_ribbon_toolbar.obj \
 	$(OBJS)\monodll_richtextctrl.obj \
 	$(OBJS)\monodll_richtextbuffer.obj \
 	$(OBJS)\monodll_richtextstyles.obj \
@@ -1644,56 +1644,56 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
 	$(OBJS)\monodll_fontpickerg.obj \
-	$(OBJS)\monodll_statusbr.obj \
+	$(OBJS)\monodll_generic_statusbr.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
-	$(OBJS)\monodll_accel.obj \
+	$(OBJS)\monodll_msw_accel.obj \
 	$(OBJS)\monodll_artmsw.obj \
-	$(OBJS)\monodll_bmpbuttn.obj \
-	$(OBJS)\monodll_button.obj \
-	$(OBJS)\monodll_checkbox.obj \
-	$(OBJS)\monodll_choice.obj \
+	$(OBJS)\monodll_msw_bmpbuttn.obj \
+	$(OBJS)\monodll_msw_button.obj \
+	$(OBJS)\monodll_msw_checkbox.obj \
+	$(OBJS)\monodll_msw_choice.obj \
 	$(OBJS)\monodll_colordlg.obj \
 	$(OBJS)\monodll_combo.obj \
-	$(OBJS)\monodll_combobox.obj \
-	$(OBJS)\monodll_control.obj \
-	$(OBJS)\monodll_dialog.obj \
+	$(OBJS)\monodll_msw_combobox.obj \
+	$(OBJS)\monodll_msw_control.obj \
+	$(OBJS)\monodll_msw_dialog.obj \
 	$(OBJS)\monodll_dirdlg.obj \
 	$(OBJS)\monodll_dragimag.obj \
 	$(OBJS)\monodll_filedlg.obj \
 	$(OBJS)\monodll_frame.obj \
-	$(OBJS)\monodll_gauge.obj \
+	$(OBJS)\monodll_msw_gauge.obj \
 	$(OBJS)\monodll_headerctrl.obj \
 	$(OBJS)\monodll_iniconf.obj \
-	$(OBJS)\monodll_listbox.obj \
-	$(OBJS)\monodll_listctrl.obj \
+	$(OBJS)\monodll_msw_listbox.obj \
+	$(OBJS)\monodll_msw_listctrl.obj \
 	$(OBJS)\monodll_mdi.obj \
-	$(OBJS)\monodll_menu.obj \
+	$(OBJS)\monodll_msw_menu.obj \
 	$(OBJS)\monodll_menuitem.obj \
 	$(OBJS)\monodll_metafile.obj \
 	$(OBJS)\monodll_msgdlg.obj \
 	$(OBJS)\monodll_nativdlg.obj \
 	$(OBJS)\monodll_nativewin.obj \
-	$(OBJS)\monodll_notebook.obj \
+	$(OBJS)\monodll_msw_notebook.obj \
 	$(OBJS)\monodll_access.obj \
 	$(OBJS)\monodll_ownerdrw.obj \
-	$(OBJS)\monodll_radiobox.obj \
-	$(OBJS)\monodll_radiobut.obj \
-	$(OBJS)\monodll_scrolbar.obj \
-	$(OBJS)\monodll_slider.obj \
-	$(OBJS)\monodll_spinbutt.obj \
+	$(OBJS)\monodll_msw_radiobox.obj \
+	$(OBJS)\monodll_msw_radiobut.obj \
+	$(OBJS)\monodll_msw_scrolbar.obj \
+	$(OBJS)\monodll_msw_slider.obj \
+	$(OBJS)\monodll_msw_spinbutt.obj \
 	$(OBJS)\monodll_spinctrl.obj \
-	$(OBJS)\monodll_statbmp.obj \
-	$(OBJS)\monodll_statbox.obj \
+	$(OBJS)\monodll_msw_statbmp.obj \
+	$(OBJS)\monodll_msw_statbox.obj \
 	$(OBJS)\monodll_statusbar.obj \
-	$(OBJS)\monodll_statline.obj \
-	$(OBJS)\monodll_stattext.obj \
-	$(OBJS)\monodll_toolbar.obj \
-	$(OBJS)\monodll_textctrl.obj \
+	$(OBJS)\monodll_msw_statline.obj \
+	$(OBJS)\monodll_msw_stattext.obj \
+	$(OBJS)\monodll_msw_toolbar.obj \
+	$(OBJS)\monodll_msw_textctrl.obj \
 	$(OBJS)\monodll_textentry.obj \
-	$(OBJS)\monodll_tglbtn.obj \
+	$(OBJS)\monodll_msw_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
-	$(OBJS)\monodll_checklst.obj \
-	$(OBJS)\monodll_fdrepdlg.obj \
+	$(OBJS)\monodll_msw_checklst.obj \
+	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
 	$(OBJS)\monodll_accelcmn.obj \
 	$(OBJS)\monodll_accesscmn.obj \
@@ -1800,7 +1800,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wrapsizer.obj \
 	$(OBJS)\monodll_xpmdecod.obj \
 	$(OBJS)\monodll_busyinfo.obj \
-	$(OBJS)\monodll_buttonbar.obj \
+	$(OBJS)\monodll_generic_buttonbar.obj \
 	$(OBJS)\monodll_choicdgg.obj \
 	$(OBJS)\monodll_choicbkg.obj \
 	$(OBJS)\monodll_combog.obj \
@@ -1882,54 +1882,54 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_helpwin.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_uuid.obj \
-	$(OBJS)\monodll_accel.obj \
+	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_colrdlgg.obj \
 	$(OBJS)\monodll_dirdlgg.obj \
-	$(OBJS)\monodll_fdrepdlg.obj \
+	$(OBJS)\monodll_generic_fdrepdlg.obj \
 	$(OBJS)\monodll_filedlgg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
 	$(OBJS)\monodll_fontdlgg.obj \
 	$(OBJS)\monodll_fontpickerg.obj \
-	$(OBJS)\monodll_listctrl.obj \
+	$(OBJS)\monodll_generic_listctrl.obj \
 	$(OBJS)\monodll_mdig.obj \
 	$(OBJS)\monodll_msgdlgg.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
-	$(OBJS)\monodll_bmpbuttn.obj \
-	$(OBJS)\monodll_button.obj \
-	$(OBJS)\monodll_checkbox.obj \
-	$(OBJS)\monodll_checklst.obj \
-	$(OBJS)\monodll_choice.obj \
-	$(OBJS)\monodll_combobox.obj \
-	$(OBJS)\monodll_control.obj \
+	$(OBJS)\monodll_univ_bmpbuttn.obj \
+	$(OBJS)\monodll_univ_button.obj \
+	$(OBJS)\monodll_univ_checkbox.obj \
+	$(OBJS)\monodll_univ_checklst.obj \
+	$(OBJS)\monodll_univ_choice.obj \
+	$(OBJS)\monodll_univ_combobox.obj \
+	$(OBJS)\monodll_univ_control.obj \
 	$(OBJS)\monodll_ctrlrend.obj \
-	$(OBJS)\monodll_dialog.obj \
+	$(OBJS)\monodll_univ_dialog.obj \
 	$(OBJS)\monodll_framuniv.obj \
-	$(OBJS)\monodll_gauge.obj \
+	$(OBJS)\monodll_univ_gauge.obj \
 	$(OBJS)\monodll_inpcons.obj \
 	$(OBJS)\monodll_inphand.obj \
-	$(OBJS)\monodll_listbox.obj \
-	$(OBJS)\monodll_menu.obj \
-	$(OBJS)\monodll_notebook.obj \
-	$(OBJS)\monodll_radiobox.obj \
-	$(OBJS)\monodll_radiobut.obj \
+	$(OBJS)\monodll_univ_listbox.obj \
+	$(OBJS)\monodll_univ_menu.obj \
+	$(OBJS)\monodll_univ_notebook.obj \
+	$(OBJS)\monodll_univ_radiobox.obj \
+	$(OBJS)\monodll_univ_radiobut.obj \
 	$(OBJS)\monodll_scrarrow.obj \
-	$(OBJS)\monodll_scrolbar.obj \
+	$(OBJS)\monodll_univ_scrolbar.obj \
 	$(OBJS)\monodll_scrthumb.obj \
 	$(OBJS)\monodll_settingsuniv.obj \
-	$(OBJS)\monodll_slider.obj \
-	$(OBJS)\monodll_spinbutt.obj \
-	$(OBJS)\monodll_statbmp.obj \
-	$(OBJS)\monodll_statbox.obj \
-	$(OBJS)\monodll_statline.obj \
-	$(OBJS)\monodll_stattext.obj \
-	$(OBJS)\monodll_statusbr.obj \
+	$(OBJS)\monodll_univ_slider.obj \
+	$(OBJS)\monodll_univ_spinbutt.obj \
+	$(OBJS)\monodll_univ_statbmp.obj \
+	$(OBJS)\monodll_univ_statbox.obj \
+	$(OBJS)\monodll_univ_statline.obj \
+	$(OBJS)\monodll_univ_stattext.obj \
+	$(OBJS)\monodll_univ_statusbr.obj \
 	$(OBJS)\monodll_stdrend.obj \
-	$(OBJS)\monodll_textctrl.obj \
-	$(OBJS)\monodll_tglbtn.obj \
+	$(OBJS)\monodll_univ_textctrl.obj \
+	$(OBJS)\monodll_univ_tglbtn.obj \
 	$(OBJS)\monodll_theme.obj \
-	$(OBJS)\monodll_toolbar.obj \
+	$(OBJS)\monodll_univ_toolbar.obj \
 	$(OBJS)\monodll_topluniv.obj \
 	$(OBJS)\monodll_winuniv.obj \
 	$(OBJS)\monodll_gtk.obj \
@@ -2041,7 +2041,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_wrapsizer.obj \
 	$(OBJS)\monodll_xpmdecod.obj \
 	$(OBJS)\monodll_busyinfo.obj \
-	$(OBJS)\monodll_buttonbar.obj \
+	$(OBJS)\monodll_generic_buttonbar.obj \
 	$(OBJS)\monodll_choicdgg.obj \
 	$(OBJS)\monodll_choicbkg.obj \
 	$(OBJS)\monodll_combog.obj \
@@ -2268,12 +2268,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_art_msw.obj \
 	$(OBJS)\monolib_art_aui.obj \
 	$(OBJS)\monolib_bar.obj \
-	$(OBJS)\monolib_buttonbar.obj \
-	$(OBJS)\monolib_control.obj \
+	$(OBJS)\monolib_ribbon_buttonbar.obj \
+	$(OBJS)\monolib_ribbon_control.obj \
 	$(OBJS)\monolib_gallery.obj \
 	$(OBJS)\monolib_page.obj \
 	$(OBJS)\monolib_panel.obj \
-	$(OBJS)\monolib_toolbar.obj \
+	$(OBJS)\monolib_ribbon_toolbar.obj \
 	$(OBJS)\monolib_richtextctrl.obj \
 	$(OBJS)\monolib_richtextbuffer.obj \
 	$(OBJS)\monolib_richtextstyles.obj \
@@ -2342,56 +2342,56 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
 	$(OBJS)\monolib_fontpickerg.obj \
-	$(OBJS)\monolib_statusbr.obj \
+	$(OBJS)\monolib_generic_statusbr.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
-	$(OBJS)\monolib_accel.obj \
+	$(OBJS)\monolib_msw_accel.obj \
 	$(OBJS)\monolib_artmsw.obj \
-	$(OBJS)\monolib_bmpbuttn.obj \
-	$(OBJS)\monolib_button.obj \
-	$(OBJS)\monolib_checkbox.obj \
-	$(OBJS)\monolib_choice.obj \
+	$(OBJS)\monolib_msw_bmpbuttn.obj \
+	$(OBJS)\monolib_msw_button.obj \
+	$(OBJS)\monolib_msw_checkbox.obj \
+	$(OBJS)\monolib_msw_choice.obj \
 	$(OBJS)\monolib_colordlg.obj \
 	$(OBJS)\monolib_combo.obj \
-	$(OBJS)\monolib_combobox.obj \
-	$(OBJS)\monolib_control.obj \
-	$(OBJS)\monolib_dialog.obj \
+	$(OBJS)\monolib_msw_combobox.obj \
+	$(OBJS)\monolib_msw_control.obj \
+	$(OBJS)\monolib_msw_dialog.obj \
 	$(OBJS)\monolib_dirdlg.obj \
 	$(OBJS)\monolib_dragimag.obj \
 	$(OBJS)\monolib_filedlg.obj \
 	$(OBJS)\monolib_frame.obj \
-	$(OBJS)\monolib_gauge.obj \
+	$(OBJS)\monolib_msw_gauge.obj \
 	$(OBJS)\monolib_headerctrl.obj \
 	$(OBJS)\monolib_iniconf.obj \
-	$(OBJS)\monolib_listbox.obj \
-	$(OBJS)\monolib_listctrl.obj \
+	$(OBJS)\monolib_msw_listbox.obj \
+	$(OBJS)\monolib_msw_listctrl.obj \
 	$(OBJS)\monolib_mdi.obj \
-	$(OBJS)\monolib_menu.obj \
+	$(OBJS)\monolib_msw_menu.obj \
 	$(OBJS)\monolib_menuitem.obj \
 	$(OBJS)\monolib_metafile.obj \
 	$(OBJS)\monolib_msgdlg.obj \
 	$(OBJS)\monolib_nativdlg.obj \
 	$(OBJS)\monolib_nativewin.obj \
-	$(OBJS)\monolib_notebook.obj \
+	$(OBJS)\monolib_msw_notebook.obj \
 	$(OBJS)\monolib_access.obj \
 	$(OBJS)\monolib_ownerdrw.obj \
-	$(OBJS)\monolib_radiobox.obj \
-	$(OBJS)\monolib_radiobut.obj \
-	$(OBJS)\monolib_scrolbar.obj \
-	$(OBJS)\monolib_slider.obj \
-	$(OBJS)\monolib_spinbutt.obj \
+	$(OBJS)\monolib_msw_radiobox.obj \
+	$(OBJS)\monolib_msw_radiobut.obj \
+	$(OBJS)\monolib_msw_scrolbar.obj \
+	$(OBJS)\monolib_msw_slider.obj \
+	$(OBJS)\monolib_msw_spinbutt.obj \
 	$(OBJS)\monolib_spinctrl.obj \
-	$(OBJS)\monolib_statbmp.obj \
-	$(OBJS)\monolib_statbox.obj \
+	$(OBJS)\monolib_msw_statbmp.obj \
+	$(OBJS)\monolib_msw_statbox.obj \
 	$(OBJS)\monolib_statusbar.obj \
-	$(OBJS)\monolib_statline.obj \
-	$(OBJS)\monolib_stattext.obj \
-	$(OBJS)\monolib_toolbar.obj \
-	$(OBJS)\monolib_textctrl.obj \
+	$(OBJS)\monolib_msw_statline.obj \
+	$(OBJS)\monolib_msw_stattext.obj \
+	$(OBJS)\monolib_msw_toolbar.obj \
+	$(OBJS)\monolib_msw_textctrl.obj \
 	$(OBJS)\monolib_textentry.obj \
-	$(OBJS)\monolib_tglbtn.obj \
+	$(OBJS)\monolib_msw_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
-	$(OBJS)\monolib_checklst.obj \
-	$(OBJS)\monolib_fdrepdlg.obj \
+	$(OBJS)\monolib_msw_checklst.obj \
+	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
 	$(OBJS)\monolib_accelcmn.obj \
 	$(OBJS)\monolib_accesscmn.obj \
@@ -2498,7 +2498,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wrapsizer.obj \
 	$(OBJS)\monolib_xpmdecod.obj \
 	$(OBJS)\monolib_busyinfo.obj \
-	$(OBJS)\monolib_buttonbar.obj \
+	$(OBJS)\monolib_generic_buttonbar.obj \
 	$(OBJS)\monolib_choicdgg.obj \
 	$(OBJS)\monolib_choicbkg.obj \
 	$(OBJS)\monolib_combog.obj \
@@ -2580,54 +2580,54 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_helpwin.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_uuid.obj \
-	$(OBJS)\monolib_accel.obj \
+	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_colrdlgg.obj \
 	$(OBJS)\monolib_dirdlgg.obj \
-	$(OBJS)\monolib_fdrepdlg.obj \
+	$(OBJS)\monolib_generic_fdrepdlg.obj \
 	$(OBJS)\monolib_filedlgg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
 	$(OBJS)\monolib_fontdlgg.obj \
 	$(OBJS)\monolib_fontpickerg.obj \
-	$(OBJS)\monolib_listctrl.obj \
+	$(OBJS)\monolib_generic_listctrl.obj \
 	$(OBJS)\monolib_mdig.obj \
 	$(OBJS)\monolib_msgdlgg.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
-	$(OBJS)\monolib_bmpbuttn.obj \
-	$(OBJS)\monolib_button.obj \
-	$(OBJS)\monolib_checkbox.obj \
-	$(OBJS)\monolib_checklst.obj \
-	$(OBJS)\monolib_choice.obj \
-	$(OBJS)\monolib_combobox.obj \
-	$(OBJS)\monolib_control.obj \
+	$(OBJS)\monolib_univ_bmpbuttn.obj \
+	$(OBJS)\monolib_univ_button.obj \
+	$(OBJS)\monolib_univ_checkbox.obj \
+	$(OBJS)\monolib_univ_checklst.obj \
+	$(OBJS)\monolib_univ_choice.obj \
+	$(OBJS)\monolib_univ_combobox.obj \
+	$(OBJS)\monolib_univ_control.obj \
 	$(OBJS)\monolib_ctrlrend.obj \
-	$(OBJS)\monolib_dialog.obj \
+	$(OBJS)\monolib_univ_dialog.obj \
 	$(OBJS)\monolib_framuniv.obj \
-	$(OBJS)\monolib_gauge.obj \
+	$(OBJS)\monolib_univ_gauge.obj \
 	$(OBJS)\monolib_inpcons.obj \
 	$(OBJS)\monolib_inphand.obj \
-	$(OBJS)\monolib_listbox.obj \
-	$(OBJS)\monolib_menu.obj \
-	$(OBJS)\monolib_notebook.obj \
-	$(OBJS)\monolib_radiobox.obj \
-	$(OBJS)\monolib_radiobut.obj \
+	$(OBJS)\monolib_univ_listbox.obj \
+	$(OBJS)\monolib_univ_menu.obj \
+	$(OBJS)\monolib_univ_notebook.obj \
+	$(OBJS)\monolib_univ_radiobox.obj \
+	$(OBJS)\monolib_univ_radiobut.obj \
 	$(OBJS)\monolib_scrarrow.obj \
-	$(OBJS)\monolib_scrolbar.obj \
+	$(OBJS)\monolib_univ_scrolbar.obj \
 	$(OBJS)\monolib_scrthumb.obj \
 	$(OBJS)\monolib_settingsuniv.obj \
-	$(OBJS)\monolib_slider.obj \
-	$(OBJS)\monolib_spinbutt.obj \
-	$(OBJS)\monolib_statbmp.obj \
-	$(OBJS)\monolib_statbox.obj \
-	$(OBJS)\monolib_statline.obj \
-	$(OBJS)\monolib_stattext.obj \
-	$(OBJS)\monolib_statusbr.obj \
+	$(OBJS)\monolib_univ_slider.obj \
+	$(OBJS)\monolib_univ_spinbutt.obj \
+	$(OBJS)\monolib_univ_statbmp.obj \
+	$(OBJS)\monolib_univ_statbox.obj \
+	$(OBJS)\monolib_univ_statline.obj \
+	$(OBJS)\monolib_univ_stattext.obj \
+	$(OBJS)\monolib_univ_statusbr.obj \
 	$(OBJS)\monolib_stdrend.obj \
-	$(OBJS)\monolib_textctrl.obj \
-	$(OBJS)\monolib_tglbtn.obj \
+	$(OBJS)\monolib_univ_textctrl.obj \
+	$(OBJS)\monolib_univ_tglbtn.obj \
 	$(OBJS)\monolib_theme.obj \
-	$(OBJS)\monolib_toolbar.obj \
+	$(OBJS)\monolib_univ_toolbar.obj \
 	$(OBJS)\monolib_topluniv.obj \
 	$(OBJS)\monolib_winuniv.obj \
 	$(OBJS)\monolib_gtk.obj \
@@ -2739,7 +2739,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_wrapsizer.obj \
 	$(OBJS)\monolib_xpmdecod.obj \
 	$(OBJS)\monolib_busyinfo.obj \
-	$(OBJS)\monolib_buttonbar.obj \
+	$(OBJS)\monolib_generic_buttonbar.obj \
 	$(OBJS)\monolib_choicdgg.obj \
 	$(OBJS)\monolib_choicbkg.obj \
 	$(OBJS)\monolib_combog.obj \
@@ -2933,56 +2933,56 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
 	$(OBJS)\coredll_fontpickerg.obj \
-	$(OBJS)\coredll_statusbr.obj \
+	$(OBJS)\coredll_generic_statusbr.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
-	$(OBJS)\coredll_accel.obj \
+	$(OBJS)\coredll_msw_accel.obj \
 	$(OBJS)\coredll_artmsw.obj \
-	$(OBJS)\coredll_bmpbuttn.obj \
-	$(OBJS)\coredll_button.obj \
-	$(OBJS)\coredll_checkbox.obj \
-	$(OBJS)\coredll_choice.obj \
+	$(OBJS)\coredll_msw_bmpbuttn.obj \
+	$(OBJS)\coredll_msw_button.obj \
+	$(OBJS)\coredll_msw_checkbox.obj \
+	$(OBJS)\coredll_msw_choice.obj \
 	$(OBJS)\coredll_colordlg.obj \
 	$(OBJS)\coredll_combo.obj \
-	$(OBJS)\coredll_combobox.obj \
-	$(OBJS)\coredll_control.obj \
-	$(OBJS)\coredll_dialog.obj \
+	$(OBJS)\coredll_msw_combobox.obj \
+	$(OBJS)\coredll_msw_control.obj \
+	$(OBJS)\coredll_msw_dialog.obj \
 	$(OBJS)\coredll_dirdlg.obj \
 	$(OBJS)\coredll_dragimag.obj \
 	$(OBJS)\coredll_filedlg.obj \
 	$(OBJS)\coredll_frame.obj \
-	$(OBJS)\coredll_gauge.obj \
+	$(OBJS)\coredll_msw_gauge.obj \
 	$(OBJS)\coredll_headerctrl.obj \
 	$(OBJS)\coredll_iniconf.obj \
-	$(OBJS)\coredll_listbox.obj \
-	$(OBJS)\coredll_listctrl.obj \
+	$(OBJS)\coredll_msw_listbox.obj \
+	$(OBJS)\coredll_msw_listctrl.obj \
 	$(OBJS)\coredll_mdi.obj \
-	$(OBJS)\coredll_menu.obj \
+	$(OBJS)\coredll_msw_menu.obj \
 	$(OBJS)\coredll_menuitem.obj \
 	$(OBJS)\coredll_metafile.obj \
 	$(OBJS)\coredll_msgdlg.obj \
 	$(OBJS)\coredll_nativdlg.obj \
 	$(OBJS)\coredll_nativewin.obj \
-	$(OBJS)\coredll_notebook.obj \
+	$(OBJS)\coredll_msw_notebook.obj \
 	$(OBJS)\coredll_access.obj \
 	$(OBJS)\coredll_ownerdrw.obj \
-	$(OBJS)\coredll_radiobox.obj \
-	$(OBJS)\coredll_radiobut.obj \
-	$(OBJS)\coredll_scrolbar.obj \
-	$(OBJS)\coredll_slider.obj \
-	$(OBJS)\coredll_spinbutt.obj \
+	$(OBJS)\coredll_msw_radiobox.obj \
+	$(OBJS)\coredll_msw_radiobut.obj \
+	$(OBJS)\coredll_msw_scrolbar.obj \
+	$(OBJS)\coredll_msw_slider.obj \
+	$(OBJS)\coredll_msw_spinbutt.obj \
 	$(OBJS)\coredll_spinctrl.obj \
-	$(OBJS)\coredll_statbmp.obj \
-	$(OBJS)\coredll_statbox.obj \
+	$(OBJS)\coredll_msw_statbmp.obj \
+	$(OBJS)\coredll_msw_statbox.obj \
 	$(OBJS)\coredll_statusbar.obj \
-	$(OBJS)\coredll_statline.obj \
-	$(OBJS)\coredll_stattext.obj \
-	$(OBJS)\coredll_toolbar.obj \
-	$(OBJS)\coredll_textctrl.obj \
+	$(OBJS)\coredll_msw_statline.obj \
+	$(OBJS)\coredll_msw_stattext.obj \
+	$(OBJS)\coredll_msw_toolbar.obj \
+	$(OBJS)\coredll_msw_textctrl.obj \
 	$(OBJS)\coredll_textentry.obj \
-	$(OBJS)\coredll_tglbtn.obj \
+	$(OBJS)\coredll_msw_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
-	$(OBJS)\coredll_checklst.obj \
-	$(OBJS)\coredll_fdrepdlg.obj \
+	$(OBJS)\coredll_msw_checklst.obj \
+	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
 	$(OBJS)\coredll_accelcmn.obj \
 	$(OBJS)\coredll_accesscmn.obj \
@@ -3171,54 +3171,54 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_helpwin.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_uuid.obj \
-	$(OBJS)\coredll_accel.obj \
+	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_colrdlgg.obj \
 	$(OBJS)\coredll_dirdlgg.obj \
-	$(OBJS)\coredll_fdrepdlg.obj \
+	$(OBJS)\coredll_generic_fdrepdlg.obj \
 	$(OBJS)\coredll_filedlgg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
 	$(OBJS)\coredll_fontdlgg.obj \
 	$(OBJS)\coredll_fontpickerg.obj \
-	$(OBJS)\coredll_listctrl.obj \
+	$(OBJS)\coredll_generic_listctrl.obj \
 	$(OBJS)\coredll_mdig.obj \
 	$(OBJS)\coredll_msgdlgg.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
-	$(OBJS)\coredll_bmpbuttn.obj \
-	$(OBJS)\coredll_button.obj \
-	$(OBJS)\coredll_checkbox.obj \
-	$(OBJS)\coredll_checklst.obj \
-	$(OBJS)\coredll_choice.obj \
-	$(OBJS)\coredll_combobox.obj \
-	$(OBJS)\coredll_control.obj \
+	$(OBJS)\coredll_univ_bmpbuttn.obj \
+	$(OBJS)\coredll_univ_button.obj \
+	$(OBJS)\coredll_univ_checkbox.obj \
+	$(OBJS)\coredll_univ_checklst.obj \
+	$(OBJS)\coredll_univ_choice.obj \
+	$(OBJS)\coredll_univ_combobox.obj \
+	$(OBJS)\coredll_univ_control.obj \
 	$(OBJS)\coredll_ctrlrend.obj \
-	$(OBJS)\coredll_dialog.obj \
+	$(OBJS)\coredll_univ_dialog.obj \
 	$(OBJS)\coredll_framuniv.obj \
-	$(OBJS)\coredll_gauge.obj \
+	$(OBJS)\coredll_univ_gauge.obj \
 	$(OBJS)\coredll_inpcons.obj \
 	$(OBJS)\coredll_inphand.obj \
-	$(OBJS)\coredll_listbox.obj \
-	$(OBJS)\coredll_menu.obj \
-	$(OBJS)\coredll_notebook.obj \
-	$(OBJS)\coredll_radiobox.obj \
-	$(OBJS)\coredll_radiobut.obj \
+	$(OBJS)\coredll_univ_listbox.obj \
+	$(OBJS)\coredll_univ_menu.obj \
+	$(OBJS)\coredll_univ_notebook.obj \
+	$(OBJS)\coredll_univ_radiobox.obj \
+	$(OBJS)\coredll_univ_radiobut.obj \
 	$(OBJS)\coredll_scrarrow.obj \
-	$(OBJS)\coredll_scrolbar.obj \
+	$(OBJS)\coredll_univ_scrolbar.obj \
 	$(OBJS)\coredll_scrthumb.obj \
 	$(OBJS)\coredll_settingsuniv.obj \
-	$(OBJS)\coredll_slider.obj \
-	$(OBJS)\coredll_spinbutt.obj \
-	$(OBJS)\coredll_statbmp.obj \
-	$(OBJS)\coredll_statbox.obj \
-	$(OBJS)\coredll_statline.obj \
-	$(OBJS)\coredll_stattext.obj \
-	$(OBJS)\coredll_statusbr.obj \
+	$(OBJS)\coredll_univ_slider.obj \
+	$(OBJS)\coredll_univ_spinbutt.obj \
+	$(OBJS)\coredll_univ_statbmp.obj \
+	$(OBJS)\coredll_univ_statbox.obj \
+	$(OBJS)\coredll_univ_statline.obj \
+	$(OBJS)\coredll_univ_stattext.obj \
+	$(OBJS)\coredll_univ_statusbr.obj \
 	$(OBJS)\coredll_stdrend.obj \
-	$(OBJS)\coredll_textctrl.obj \
-	$(OBJS)\coredll_tglbtn.obj \
+	$(OBJS)\coredll_univ_textctrl.obj \
+	$(OBJS)\coredll_univ_tglbtn.obj \
 	$(OBJS)\coredll_theme.obj \
-	$(OBJS)\coredll_toolbar.obj \
+	$(OBJS)\coredll_univ_toolbar.obj \
 	$(OBJS)\coredll_topluniv.obj \
 	$(OBJS)\coredll_winuniv.obj \
 	$(OBJS)\coredll_gtk.obj \
@@ -3420,56 +3420,56 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
 	$(OBJS)\corelib_fontpickerg.obj \
-	$(OBJS)\corelib_statusbr.obj \
+	$(OBJS)\corelib_generic_statusbr.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
-	$(OBJS)\corelib_accel.obj \
+	$(OBJS)\corelib_msw_accel.obj \
 	$(OBJS)\corelib_artmsw.obj \
-	$(OBJS)\corelib_bmpbuttn.obj \
-	$(OBJS)\corelib_button.obj \
-	$(OBJS)\corelib_checkbox.obj \
-	$(OBJS)\corelib_choice.obj \
+	$(OBJS)\corelib_msw_bmpbuttn.obj \
+	$(OBJS)\corelib_msw_button.obj \
+	$(OBJS)\corelib_msw_checkbox.obj \
+	$(OBJS)\corelib_msw_choice.obj \
 	$(OBJS)\corelib_colordlg.obj \
 	$(OBJS)\corelib_combo.obj \
-	$(OBJS)\corelib_combobox.obj \
-	$(OBJS)\corelib_control.obj \
-	$(OBJS)\corelib_dialog.obj \
+	$(OBJS)\corelib_msw_combobox.obj \
+	$(OBJS)\corelib_msw_control.obj \
+	$(OBJS)\corelib_msw_dialog.obj \
 	$(OBJS)\corelib_dirdlg.obj \
 	$(OBJS)\corelib_dragimag.obj \
 	$(OBJS)\corelib_filedlg.obj \
 	$(OBJS)\corelib_frame.obj \
-	$(OBJS)\corelib_gauge.obj \
+	$(OBJS)\corelib_msw_gauge.obj \
 	$(OBJS)\corelib_headerctrl.obj \
 	$(OBJS)\corelib_iniconf.obj \
-	$(OBJS)\corelib_listbox.obj \
-	$(OBJS)\corelib_listctrl.obj \
+	$(OBJS)\corelib_msw_listbox.obj \
+	$(OBJS)\corelib_msw_listctrl.obj \
 	$(OBJS)\corelib_mdi.obj \
-	$(OBJS)\corelib_menu.obj \
+	$(OBJS)\corelib_msw_menu.obj \
 	$(OBJS)\corelib_menuitem.obj \
 	$(OBJS)\corelib_metafile.obj \
 	$(OBJS)\corelib_msgdlg.obj \
 	$(OBJS)\corelib_nativdlg.obj \
 	$(OBJS)\corelib_nativewin.obj \
-	$(OBJS)\corelib_notebook.obj \
+	$(OBJS)\corelib_msw_notebook.obj \
 	$(OBJS)\corelib_access.obj \
 	$(OBJS)\corelib_ownerdrw.obj \
-	$(OBJS)\corelib_radiobox.obj \
-	$(OBJS)\corelib_radiobut.obj \
-	$(OBJS)\corelib_scrolbar.obj \
-	$(OBJS)\corelib_slider.obj \
-	$(OBJS)\corelib_spinbutt.obj \
+	$(OBJS)\corelib_msw_radiobox.obj \
+	$(OBJS)\corelib_msw_radiobut.obj \
+	$(OBJS)\corelib_msw_scrolbar.obj \
+	$(OBJS)\corelib_msw_slider.obj \
+	$(OBJS)\corelib_msw_spinbutt.obj \
 	$(OBJS)\corelib_spinctrl.obj \
-	$(OBJS)\corelib_statbmp.obj \
-	$(OBJS)\corelib_statbox.obj \
+	$(OBJS)\corelib_msw_statbmp.obj \
+	$(OBJS)\corelib_msw_statbox.obj \
 	$(OBJS)\corelib_statusbar.obj \
-	$(OBJS)\corelib_statline.obj \
-	$(OBJS)\corelib_stattext.obj \
-	$(OBJS)\corelib_toolbar.obj \
-	$(OBJS)\corelib_textctrl.obj \
+	$(OBJS)\corelib_msw_statline.obj \
+	$(OBJS)\corelib_msw_stattext.obj \
+	$(OBJS)\corelib_msw_toolbar.obj \
+	$(OBJS)\corelib_msw_textctrl.obj \
 	$(OBJS)\corelib_textentry.obj \
-	$(OBJS)\corelib_tglbtn.obj \
+	$(OBJS)\corelib_msw_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
-	$(OBJS)\corelib_checklst.obj \
-	$(OBJS)\corelib_fdrepdlg.obj \
+	$(OBJS)\corelib_msw_checklst.obj \
+	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
 	$(OBJS)\corelib_accelcmn.obj \
 	$(OBJS)\corelib_accesscmn.obj \
@@ -3658,54 +3658,54 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_helpwin.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_uuid.obj \
-	$(OBJS)\corelib_accel.obj \
+	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_colrdlgg.obj \
 	$(OBJS)\corelib_dirdlgg.obj \
-	$(OBJS)\corelib_fdrepdlg.obj \
+	$(OBJS)\corelib_generic_fdrepdlg.obj \
 	$(OBJS)\corelib_filedlgg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
 	$(OBJS)\corelib_fontdlgg.obj \
 	$(OBJS)\corelib_fontpickerg.obj \
-	$(OBJS)\corelib_listctrl.obj \
+	$(OBJS)\corelib_generic_listctrl.obj \
 	$(OBJS)\corelib_mdig.obj \
 	$(OBJS)\corelib_msgdlgg.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
-	$(OBJS)\corelib_bmpbuttn.obj \
-	$(OBJS)\corelib_button.obj \
-	$(OBJS)\corelib_checkbox.obj \
-	$(OBJS)\corelib_checklst.obj \
-	$(OBJS)\corelib_choice.obj \
-	$(OBJS)\corelib_combobox.obj \
-	$(OBJS)\corelib_control.obj \
+	$(OBJS)\corelib_univ_bmpbuttn.obj \
+	$(OBJS)\corelib_univ_button.obj \
+	$(OBJS)\corelib_univ_checkbox.obj \
+	$(OBJS)\corelib_univ_checklst.obj \
+	$(OBJS)\corelib_univ_choice.obj \
+	$(OBJS)\corelib_univ_combobox.obj \
+	$(OBJS)\corelib_univ_control.obj \
 	$(OBJS)\corelib_ctrlrend.obj \
-	$(OBJS)\corelib_dialog.obj \
+	$(OBJS)\corelib_univ_dialog.obj \
 	$(OBJS)\corelib_framuniv.obj \
-	$(OBJS)\corelib_gauge.obj \
+	$(OBJS)\corelib_univ_gauge.obj \
 	$(OBJS)\corelib_inpcons.obj \
 	$(OBJS)\corelib_inphand.obj \
-	$(OBJS)\corelib_listbox.obj \
-	$(OBJS)\corelib_menu.obj \
-	$(OBJS)\corelib_notebook.obj \
-	$(OBJS)\corelib_radiobox.obj \
-	$(OBJS)\corelib_radiobut.obj \
+	$(OBJS)\corelib_univ_listbox.obj \
+	$(OBJS)\corelib_univ_menu.obj \
+	$(OBJS)\corelib_univ_notebook.obj \
+	$(OBJS)\corelib_univ_radiobox.obj \
+	$(OBJS)\corelib_univ_radiobut.obj \
 	$(OBJS)\corelib_scrarrow.obj \
-	$(OBJS)\corelib_scrolbar.obj \
+	$(OBJS)\corelib_univ_scrolbar.obj \
 	$(OBJS)\corelib_scrthumb.obj \
 	$(OBJS)\corelib_settingsuniv.obj \
-	$(OBJS)\corelib_slider.obj \
-	$(OBJS)\corelib_spinbutt.obj \
-	$(OBJS)\corelib_statbmp.obj \
-	$(OBJS)\corelib_statbox.obj \
-	$(OBJS)\corelib_statline.obj \
-	$(OBJS)\corelib_stattext.obj \
-	$(OBJS)\corelib_statusbr.obj \
+	$(OBJS)\corelib_univ_slider.obj \
+	$(OBJS)\corelib_univ_spinbutt.obj \
+	$(OBJS)\corelib_univ_statbmp.obj \
+	$(OBJS)\corelib_univ_statbox.obj \
+	$(OBJS)\corelib_univ_statline.obj \
+	$(OBJS)\corelib_univ_stattext.obj \
+	$(OBJS)\corelib_univ_statusbr.obj \
 	$(OBJS)\corelib_stdrend.obj \
-	$(OBJS)\corelib_textctrl.obj \
-	$(OBJS)\corelib_tglbtn.obj \
+	$(OBJS)\corelib_univ_textctrl.obj \
+	$(OBJS)\corelib_univ_tglbtn.obj \
 	$(OBJS)\corelib_theme.obj \
-	$(OBJS)\corelib_toolbar.obj \
+	$(OBJS)\corelib_univ_toolbar.obj \
 	$(OBJS)\corelib_topluniv.obj \
 	$(OBJS)\corelib_winuniv.obj \
 	$(OBJS)\corelib_gtk.obj \
@@ -5878,14 +5878,41 @@ $(OBJS)\monodll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
 
+$(OBJS)\monodll_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\statusbr.cpp
+
+$(OBJS)\monodll_msw_accel.obj: ..\..\src\msw\accel.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\accel.cpp
+
 $(OBJS)\monodll_artmsw.obj: ..\..\src\msw\artmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
+$(OBJS)\monodll_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
+
+$(OBJS)\monodll_msw_button.obj: ..\..\src\msw\button.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\button.cpp
+
+$(OBJS)\monodll_msw_checkbox.obj: ..\..\src\msw\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checkbox.cpp
+
+$(OBJS)\monodll_msw_choice.obj: ..\..\src\msw\choice.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\choice.cpp
 
 $(OBJS)\monodll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
 $(OBJS)\monodll_combo.obj: ..\..\src\msw\combo.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\combo.cpp
+
+$(OBJS)\monodll_msw_combobox.obj: ..\..\src\msw\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\combobox.cpp
+
+$(OBJS)\monodll_msw_control.obj: ..\..\src\msw\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\control.cpp
+
+$(OBJS)\monodll_msw_dialog.obj: ..\..\src\msw\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dialog.cpp
 
 $(OBJS)\monodll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dirdlg.cpp
@@ -5899,14 +5926,26 @@ $(OBJS)\monodll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\monodll_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\frame.cpp
 
+$(OBJS)\monodll_msw_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
+
 $(OBJS)\monodll_headerctrl.obj: ..\..\src\msw\headerctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\headerctrl.cpp
 
 $(OBJS)\monodll_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
+$(OBJS)\monodll_msw_listbox.obj: ..\..\src\msw\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
+
+$(OBJS)\monodll_msw_listctrl.obj: ..\..\src\msw\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\listctrl.cpp
+
 $(OBJS)\monodll_mdi.obj: ..\..\src\msw\mdi.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\mdi.cpp
+
+$(OBJS)\monodll_msw_menu.obj: ..\..\src\msw\menu.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\menu.cpp
 
 $(OBJS)\monodll_menuitem.obj: ..\..\src\msw\menuitem.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\menuitem.cpp
@@ -5923,26 +5962,74 @@ $(OBJS)\monodll_nativdlg.obj: ..\..\src\msw\nativdlg.cpp
 $(OBJS)\monodll_nativewin.obj: ..\..\src\msw\nativewin.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\nativewin.cpp
 
+$(OBJS)\monodll_msw_notebook.obj: ..\..\src\msw\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
+
 $(OBJS)\monodll_access.obj: ..\..\src\msw\ole\access.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 
 $(OBJS)\monodll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
+$(OBJS)\monodll_msw_radiobox.obj: ..\..\src\msw\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\radiobox.cpp
+
+$(OBJS)\monodll_msw_radiobut.obj: ..\..\src\msw\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\radiobut.cpp
+
+$(OBJS)\monodll_msw_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
+
+$(OBJS)\monodll_msw_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\slider.cpp
+
+$(OBJS)\monodll_msw_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
+
 $(OBJS)\monodll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
+
+$(OBJS)\monodll_msw_statbmp.obj: ..\..\src\msw\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statbmp.cpp
+
+$(OBJS)\monodll_msw_statbox.obj: ..\..\src\msw\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statbox.cpp
 
 $(OBJS)\monodll_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
+$(OBJS)\monodll_msw_statline.obj: ..\..\src\msw\statline.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statline.cpp
+
+$(OBJS)\monodll_msw_stattext.obj: ..\..\src\msw\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\stattext.cpp
+
+$(OBJS)\monodll_msw_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+
+$(OBJS)\monodll_msw_textctrl.obj: ..\..\src\msw\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\textctrl.cpp
+
 $(OBJS)\monodll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
+
+$(OBJS)\monodll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\monodll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
+
+$(OBJS)\monodll_msw_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
+
 $(OBJS)\monodll_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\fontdlg.cpp
+
+$(OBJS)\monodll_generic_accel.obj: ..\..\src\generic\accel.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\accel.cpp
 
 $(OBJS)\monodll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\colrdlgg.cpp
@@ -5950,11 +6037,17 @@ $(OBJS)\monodll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\monodll_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\dirdlgg.cpp
 
+$(OBJS)\monodll_generic_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
+
 $(OBJS)\monodll_filedlgg.obj: ..\..\src\generic\filedlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\filedlgg.cpp
 
 $(OBJS)\monodll_fontdlgg.obj: ..\..\src\generic\fontdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\fontdlgg.cpp
+
+$(OBJS)\monodll_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\monodll_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\mdig.cpp
@@ -5962,11 +6055,38 @@ $(OBJS)\monodll_mdig.obj: ..\..\src\generic\mdig.cpp
 $(OBJS)\monodll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 
+$(OBJS)\monodll_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
+
+$(OBJS)\monodll_univ_button.obj: ..\..\src\univ\button.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\button.cpp
+
+$(OBJS)\monodll_univ_checkbox.obj: ..\..\src\univ\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\checkbox.cpp
+
+$(OBJS)\monodll_univ_checklst.obj: ..\..\src\univ\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\checklst.cpp
+
+$(OBJS)\monodll_univ_choice.obj: ..\..\src\univ\choice.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\choice.cpp
+
+$(OBJS)\monodll_univ_combobox.obj: ..\..\src\univ\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\combobox.cpp
+
+$(OBJS)\monodll_univ_control.obj: ..\..\src\univ\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\control.cpp
+
 $(OBJS)\monodll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
 
+$(OBJS)\monodll_univ_dialog.obj: ..\..\src\univ\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\dialog.cpp
+
 $(OBJS)\monodll_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\framuniv.cpp
+
+$(OBJS)\monodll_univ_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
 
 $(OBJS)\monodll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\inpcons.cpp
@@ -5974,8 +6094,26 @@ $(OBJS)\monodll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 $(OBJS)\monodll_inphand.obj: ..\..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\inphand.cpp
 
+$(OBJS)\monodll_univ_listbox.obj: ..\..\src\univ\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\listbox.cpp
+
+$(OBJS)\monodll_univ_menu.obj: ..\..\src\univ\menu.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\menu.cpp
+
+$(OBJS)\monodll_univ_notebook.obj: ..\..\src\univ\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\notebook.cpp
+
+$(OBJS)\monodll_univ_radiobox.obj: ..\..\src\univ\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\radiobox.cpp
+
+$(OBJS)\monodll_univ_radiobut.obj: ..\..\src\univ\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\radiobut.cpp
+
 $(OBJS)\monodll_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\scrarrow.cpp
+
+$(OBJS)\monodll_univ_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
 
 $(OBJS)\monodll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
@@ -5983,11 +6121,41 @@ $(OBJS)\monodll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monodll_settingsuniv.obj: ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\settingsuniv.cpp
 
+$(OBJS)\monodll_univ_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\slider.cpp
+
+$(OBJS)\monodll_univ_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
+
+$(OBJS)\monodll_univ_statbmp.obj: ..\..\src\univ\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statbmp.cpp
+
+$(OBJS)\monodll_univ_statbox.obj: ..\..\src\univ\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statbox.cpp
+
+$(OBJS)\monodll_univ_statline.obj: ..\..\src\univ\statline.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statline.cpp
+
+$(OBJS)\monodll_univ_stattext.obj: ..\..\src\univ\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
+
+$(OBJS)\monodll_univ_statusbr.obj: ..\..\src\univ\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statusbr.cpp
+
 $(OBJS)\monodll_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
+$(OBJS)\monodll_univ_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\textctrl.cpp
+
+$(OBJS)\monodll_univ_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
+
 $(OBJS)\monodll_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\theme.cpp
+
+$(OBJS)\monodll_univ_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\monodll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -6346,6 +6514,12 @@ $(OBJS)\monodll_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\monodll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
+$(OBJS)\monodll_ribbon_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
+
+$(OBJS)\monodll_ribbon_control.obj: ..\..\src\ribbon\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\control.cpp
+
 $(OBJS)\monodll_gallery.obj: ..\..\src\ribbon\gallery.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
 
@@ -6354,6 +6528,9 @@ $(OBJS)\monodll_page.obj: ..\..\src\ribbon\page.cpp
 
 $(OBJS)\monodll_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\panel.cpp
+
+$(OBJS)\monodll_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
 $(OBJS)\monodll_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
@@ -6662,299 +6839,9 @@ $(OBJS)\monodll_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\fontpickerg.cpp
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_statusbr.obj: ..\..\src\generic\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\statusbr.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_statusbr.obj: ..\..\src\univ\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statusbr.cpp
-!endif
-
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_accel.obj: ..\..\src\msw\accel.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_accel.obj: ..\..\src\generic\accel.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_button.obj: ..\..\src\msw\button.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_button.obj: ..\..\src\univ\button.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_checkbox.obj: ..\..\src\msw\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_checkbox.obj: ..\..\src\univ\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_choice.obj: ..\..\src\msw\choice.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_choice.obj: ..\..\src\univ\choice.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_combobox.obj: ..\..\src\msw\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_combobox.obj: ..\..\src\univ\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_control.obj: ..\..\src\msw\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_control.obj: ..\..\src\univ\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_control.obj: ..\..\src\ribbon\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_dialog.obj: ..\..\src\msw\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_dialog.obj: ..\..\src\univ\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_gauge.obj: ..\..\src\msw\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_listbox.obj: ..\..\src\msw\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_listbox.obj: ..\..\src\univ\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_listctrl.obj: ..\..\src\msw\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_listctrl.obj: ..\..\src\generic\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_menu.obj: ..\..\src\msw\menu.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_menu.obj: ..\..\src\univ\menu.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_notebook.obj: ..\..\src\msw\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_notebook.obj: ..\..\src\univ\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_radiobox.obj: ..\..\src\msw\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_radiobox.obj: ..\..\src\univ\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_radiobut.obj: ..\..\src\msw\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_radiobut.obj: ..\..\src\univ\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_slider.obj: ..\..\src\msw\slider.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_statbmp.obj: ..\..\src\msw\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_statbmp.obj: ..\..\src\univ\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_statbox.obj: ..\..\src\msw\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_statbox.obj: ..\..\src\univ\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_statline.obj: ..\..\src\msw\statline.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_statline.obj: ..\..\src\univ\statline.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_stattext.obj: ..\..\src\msw\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_stattext.obj: ..\..\src\univ\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_toolbar.obj: ..\..\src\msw\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_textctrl.obj: ..\..\src\msw\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_textctrl.obj: ..\..\src\univ\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_checklst.obj: ..\..\src\msw\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_checklst.obj: ..\..\src\univ\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monodll_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -7483,13 +7370,8 @@ $(OBJS)\monodll_busyinfo.obj: ..\..\src\generic\busyinfo.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
+$(OBJS)\monodll_generic_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\buttonbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8159,14 +8041,41 @@ $(OBJS)\monolib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
 
+$(OBJS)\monolib_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\statusbr.cpp
+
+$(OBJS)\monolib_msw_accel.obj: ..\..\src\msw\accel.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\accel.cpp
+
 $(OBJS)\monolib_artmsw.obj: ..\..\src\msw\artmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
+$(OBJS)\monolib_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
+
+$(OBJS)\monolib_msw_button.obj: ..\..\src\msw\button.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\button.cpp
+
+$(OBJS)\monolib_msw_checkbox.obj: ..\..\src\msw\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checkbox.cpp
+
+$(OBJS)\monolib_msw_choice.obj: ..\..\src\msw\choice.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\choice.cpp
 
 $(OBJS)\monolib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
 $(OBJS)\monolib_combo.obj: ..\..\src\msw\combo.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\combo.cpp
+
+$(OBJS)\monolib_msw_combobox.obj: ..\..\src\msw\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\combobox.cpp
+
+$(OBJS)\monolib_msw_control.obj: ..\..\src\msw\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\control.cpp
+
+$(OBJS)\monolib_msw_dialog.obj: ..\..\src\msw\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dialog.cpp
 
 $(OBJS)\monolib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dirdlg.cpp
@@ -8180,14 +8089,26 @@ $(OBJS)\monolib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\monolib_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\frame.cpp
 
+$(OBJS)\monolib_msw_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
+
 $(OBJS)\monolib_headerctrl.obj: ..\..\src\msw\headerctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\headerctrl.cpp
 
 $(OBJS)\monolib_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
+$(OBJS)\monolib_msw_listbox.obj: ..\..\src\msw\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
+
+$(OBJS)\monolib_msw_listctrl.obj: ..\..\src\msw\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\listctrl.cpp
+
 $(OBJS)\monolib_mdi.obj: ..\..\src\msw\mdi.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\mdi.cpp
+
+$(OBJS)\monolib_msw_menu.obj: ..\..\src\msw\menu.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\menu.cpp
 
 $(OBJS)\monolib_menuitem.obj: ..\..\src\msw\menuitem.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\menuitem.cpp
@@ -8204,26 +8125,74 @@ $(OBJS)\monolib_nativdlg.obj: ..\..\src\msw\nativdlg.cpp
 $(OBJS)\monolib_nativewin.obj: ..\..\src\msw\nativewin.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\nativewin.cpp
 
+$(OBJS)\monolib_msw_notebook.obj: ..\..\src\msw\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
+
 $(OBJS)\monolib_access.obj: ..\..\src\msw\ole\access.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 
 $(OBJS)\monolib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
+$(OBJS)\monolib_msw_radiobox.obj: ..\..\src\msw\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\radiobox.cpp
+
+$(OBJS)\monolib_msw_radiobut.obj: ..\..\src\msw\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\radiobut.cpp
+
+$(OBJS)\monolib_msw_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
+
+$(OBJS)\monolib_msw_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\slider.cpp
+
+$(OBJS)\monolib_msw_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
+
 $(OBJS)\monolib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
+
+$(OBJS)\monolib_msw_statbmp.obj: ..\..\src\msw\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statbmp.cpp
+
+$(OBJS)\monolib_msw_statbox.obj: ..\..\src\msw\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statbox.cpp
 
 $(OBJS)\monolib_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
+$(OBJS)\monolib_msw_statline.obj: ..\..\src\msw\statline.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statline.cpp
+
+$(OBJS)\monolib_msw_stattext.obj: ..\..\src\msw\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\stattext.cpp
+
+$(OBJS)\monolib_msw_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+
+$(OBJS)\monolib_msw_textctrl.obj: ..\..\src\msw\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\textctrl.cpp
+
 $(OBJS)\monolib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
+
+$(OBJS)\monolib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\monolib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
+
+$(OBJS)\monolib_msw_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
+
 $(OBJS)\monolib_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\fontdlg.cpp
+
+$(OBJS)\monolib_generic_accel.obj: ..\..\src\generic\accel.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\accel.cpp
 
 $(OBJS)\monolib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\colrdlgg.cpp
@@ -8231,11 +8200,17 @@ $(OBJS)\monolib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\monolib_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\dirdlgg.cpp
 
+$(OBJS)\monolib_generic_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
+
 $(OBJS)\monolib_filedlgg.obj: ..\..\src\generic\filedlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\filedlgg.cpp
 
 $(OBJS)\monolib_fontdlgg.obj: ..\..\src\generic\fontdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\fontdlgg.cpp
+
+$(OBJS)\monolib_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\monolib_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\mdig.cpp
@@ -8243,11 +8218,38 @@ $(OBJS)\monolib_mdig.obj: ..\..\src\generic\mdig.cpp
 $(OBJS)\monolib_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 
+$(OBJS)\monolib_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
+
+$(OBJS)\monolib_univ_button.obj: ..\..\src\univ\button.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\button.cpp
+
+$(OBJS)\monolib_univ_checkbox.obj: ..\..\src\univ\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\checkbox.cpp
+
+$(OBJS)\monolib_univ_checklst.obj: ..\..\src\univ\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\checklst.cpp
+
+$(OBJS)\monolib_univ_choice.obj: ..\..\src\univ\choice.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\choice.cpp
+
+$(OBJS)\monolib_univ_combobox.obj: ..\..\src\univ\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\combobox.cpp
+
+$(OBJS)\monolib_univ_control.obj: ..\..\src\univ\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\control.cpp
+
 $(OBJS)\monolib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
 
+$(OBJS)\monolib_univ_dialog.obj: ..\..\src\univ\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\dialog.cpp
+
 $(OBJS)\monolib_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\framuniv.cpp
+
+$(OBJS)\monolib_univ_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
 
 $(OBJS)\monolib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\inpcons.cpp
@@ -8255,8 +8257,26 @@ $(OBJS)\monolib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 $(OBJS)\monolib_inphand.obj: ..\..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\inphand.cpp
 
+$(OBJS)\monolib_univ_listbox.obj: ..\..\src\univ\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\listbox.cpp
+
+$(OBJS)\monolib_univ_menu.obj: ..\..\src\univ\menu.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\menu.cpp
+
+$(OBJS)\monolib_univ_notebook.obj: ..\..\src\univ\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\notebook.cpp
+
+$(OBJS)\monolib_univ_radiobox.obj: ..\..\src\univ\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\radiobox.cpp
+
+$(OBJS)\monolib_univ_radiobut.obj: ..\..\src\univ\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\radiobut.cpp
+
 $(OBJS)\monolib_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\scrarrow.cpp
+
+$(OBJS)\monolib_univ_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
 
 $(OBJS)\monolib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
@@ -8264,11 +8284,41 @@ $(OBJS)\monolib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monolib_settingsuniv.obj: ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\settingsuniv.cpp
 
+$(OBJS)\monolib_univ_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\slider.cpp
+
+$(OBJS)\monolib_univ_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
+
+$(OBJS)\monolib_univ_statbmp.obj: ..\..\src\univ\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statbmp.cpp
+
+$(OBJS)\monolib_univ_statbox.obj: ..\..\src\univ\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statbox.cpp
+
+$(OBJS)\monolib_univ_statline.obj: ..\..\src\univ\statline.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statline.cpp
+
+$(OBJS)\monolib_univ_stattext.obj: ..\..\src\univ\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
+
+$(OBJS)\monolib_univ_statusbr.obj: ..\..\src\univ\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statusbr.cpp
+
 $(OBJS)\monolib_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
+$(OBJS)\monolib_univ_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\textctrl.cpp
+
+$(OBJS)\monolib_univ_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
+
 $(OBJS)\monolib_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\theme.cpp
+
+$(OBJS)\monolib_univ_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\monolib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -8627,6 +8677,12 @@ $(OBJS)\monolib_art_aui.obj: ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\monolib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
+$(OBJS)\monolib_ribbon_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
+
+$(OBJS)\monolib_ribbon_control.obj: ..\..\src\ribbon\control.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\control.cpp
+
 $(OBJS)\monolib_gallery.obj: ..\..\src\ribbon\gallery.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\gallery.cpp
 
@@ -8635,6 +8691,9 @@ $(OBJS)\monolib_page.obj: ..\..\src\ribbon\page.cpp
 
 $(OBJS)\monolib_panel.obj: ..\..\src\ribbon\panel.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\panel.cpp
+
+$(OBJS)\monolib_ribbon_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
 
 $(OBJS)\monolib_richtextctrl.obj: ..\..\src\richtext\richtextctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\richtext\richtextctrl.cpp
@@ -8943,299 +9002,9 @@ $(OBJS)\monolib_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\fontpickerg.cpp
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_statusbr.obj: ..\..\src\generic\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\statusbr.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_statusbr.obj: ..\..\src\univ\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statusbr.cpp
-!endif
-
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_accel.obj: ..\..\src\msw\accel.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_accel.obj: ..\..\src\generic\accel.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_button.obj: ..\..\src\msw\button.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_button.obj: ..\..\src\univ\button.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_checkbox.obj: ..\..\src\msw\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_checkbox.obj: ..\..\src\univ\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_choice.obj: ..\..\src\msw\choice.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_choice.obj: ..\..\src\univ\choice.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_combobox.obj: ..\..\src\msw\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_combobox.obj: ..\..\src\univ\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_control.obj: ..\..\src\msw\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_control.obj: ..\..\src\univ\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_control.obj: ..\..\src\ribbon\control.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_dialog.obj: ..\..\src\msw\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_dialog.obj: ..\..\src\univ\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_gauge.obj: ..\..\src\msw\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_listbox.obj: ..\..\src\msw\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_listbox.obj: ..\..\src\univ\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_listctrl.obj: ..\..\src\msw\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_listctrl.obj: ..\..\src\generic\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_menu.obj: ..\..\src\msw\menu.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_menu.obj: ..\..\src\univ\menu.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_notebook.obj: ..\..\src\msw\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_notebook.obj: ..\..\src\univ\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_radiobox.obj: ..\..\src\msw\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_radiobox.obj: ..\..\src\univ\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_radiobut.obj: ..\..\src\msw\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_radiobut.obj: ..\..\src\univ\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_slider.obj: ..\..\src\msw\slider.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_statbmp.obj: ..\..\src\msw\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_statbmp.obj: ..\..\src\univ\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_statbox.obj: ..\..\src\msw\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_statbox.obj: ..\..\src\univ\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_statline.obj: ..\..\src\msw\statline.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_statline.obj: ..\..\src\univ\statline.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_stattext.obj: ..\..\src\msw\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_stattext.obj: ..\..\src\univ\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_toolbar.obj: ..\..\src\msw\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_toolbar.obj: ..\..\src\ribbon\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_textctrl.obj: ..\..\src\msw\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_textctrl.obj: ..\..\src\univ\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_checklst.obj: ..\..\src\msw\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_checklst.obj: ..\..\src\univ\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\monolib_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9764,13 +9533,8 @@ $(OBJS)\monolib_busyinfo.obj: ..\..\src\generic\busyinfo.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
+$(OBJS)\monolib_generic_buttonbar.obj: ..\..\src\generic\buttonbar.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\buttonbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -10833,14 +10597,41 @@ $(OBJS)\coredll_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\volume.cpp
 
+$(OBJS)\coredll_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\statusbr.cpp
+
+$(OBJS)\coredll_msw_accel.obj: ..\..\src\msw\accel.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\accel.cpp
+
 $(OBJS)\coredll_artmsw.obj: ..\..\src\msw\artmsw.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
+$(OBJS)\coredll_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
+
+$(OBJS)\coredll_msw_button.obj: ..\..\src\msw\button.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\button.cpp
+
+$(OBJS)\coredll_msw_checkbox.obj: ..\..\src\msw\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checkbox.cpp
+
+$(OBJS)\coredll_msw_choice.obj: ..\..\src\msw\choice.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\choice.cpp
 
 $(OBJS)\coredll_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
 $(OBJS)\coredll_combo.obj: ..\..\src\msw\combo.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\combo.cpp
+
+$(OBJS)\coredll_msw_combobox.obj: ..\..\src\msw\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\combobox.cpp
+
+$(OBJS)\coredll_msw_control.obj: ..\..\src\msw\control.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\control.cpp
+
+$(OBJS)\coredll_msw_dialog.obj: ..\..\src\msw\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\dialog.cpp
 
 $(OBJS)\coredll_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\dirdlg.cpp
@@ -10854,14 +10645,26 @@ $(OBJS)\coredll_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\coredll_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\frame.cpp
 
+$(OBJS)\coredll_msw_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
+
 $(OBJS)\coredll_headerctrl.obj: ..\..\src\msw\headerctrl.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\headerctrl.cpp
 
 $(OBJS)\coredll_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
+$(OBJS)\coredll_msw_listbox.obj: ..\..\src\msw\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
+
+$(OBJS)\coredll_msw_listctrl.obj: ..\..\src\msw\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\listctrl.cpp
+
 $(OBJS)\coredll_mdi.obj: ..\..\src\msw\mdi.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\mdi.cpp
+
+$(OBJS)\coredll_msw_menu.obj: ..\..\src\msw\menu.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\menu.cpp
 
 $(OBJS)\coredll_menuitem.obj: ..\..\src\msw\menuitem.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\menuitem.cpp
@@ -10878,26 +10681,74 @@ $(OBJS)\coredll_nativdlg.obj: ..\..\src\msw\nativdlg.cpp
 $(OBJS)\coredll_nativewin.obj: ..\..\src\msw\nativewin.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\nativewin.cpp
 
+$(OBJS)\coredll_msw_notebook.obj: ..\..\src\msw\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
+
 $(OBJS)\coredll_access.obj: ..\..\src\msw\ole\access.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 
 $(OBJS)\coredll_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
+$(OBJS)\coredll_msw_radiobox.obj: ..\..\src\msw\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\radiobox.cpp
+
+$(OBJS)\coredll_msw_radiobut.obj: ..\..\src\msw\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\radiobut.cpp
+
+$(OBJS)\coredll_msw_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
+
+$(OBJS)\coredll_msw_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\slider.cpp
+
+$(OBJS)\coredll_msw_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
+
 $(OBJS)\coredll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
+
+$(OBJS)\coredll_msw_statbmp.obj: ..\..\src\msw\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statbmp.cpp
+
+$(OBJS)\coredll_msw_statbox.obj: ..\..\src\msw\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statbox.cpp
 
 $(OBJS)\coredll_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
+$(OBJS)\coredll_msw_statline.obj: ..\..\src\msw\statline.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statline.cpp
+
+$(OBJS)\coredll_msw_stattext.obj: ..\..\src\msw\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\stattext.cpp
+
+$(OBJS)\coredll_msw_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+
+$(OBJS)\coredll_msw_textctrl.obj: ..\..\src\msw\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\textctrl.cpp
+
 $(OBJS)\coredll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
+
+$(OBJS)\coredll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\coredll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
+
+$(OBJS)\coredll_msw_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
+
 $(OBJS)\coredll_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\fontdlg.cpp
+
+$(OBJS)\coredll_generic_accel.obj: ..\..\src\generic\accel.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\accel.cpp
 
 $(OBJS)\coredll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\colrdlgg.cpp
@@ -10905,11 +10756,17 @@ $(OBJS)\coredll_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\coredll_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\dirdlgg.cpp
 
+$(OBJS)\coredll_generic_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
+
 $(OBJS)\coredll_filedlgg.obj: ..\..\src\generic\filedlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\filedlgg.cpp
 
 $(OBJS)\coredll_fontdlgg.obj: ..\..\src\generic\fontdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\fontdlgg.cpp
+
+$(OBJS)\coredll_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\coredll_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\mdig.cpp
@@ -10917,11 +10774,38 @@ $(OBJS)\coredll_mdig.obj: ..\..\src\generic\mdig.cpp
 $(OBJS)\coredll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 
+$(OBJS)\coredll_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
+
+$(OBJS)\coredll_univ_button.obj: ..\..\src\univ\button.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\button.cpp
+
+$(OBJS)\coredll_univ_checkbox.obj: ..\..\src\univ\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\checkbox.cpp
+
+$(OBJS)\coredll_univ_checklst.obj: ..\..\src\univ\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\checklst.cpp
+
+$(OBJS)\coredll_univ_choice.obj: ..\..\src\univ\choice.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\choice.cpp
+
+$(OBJS)\coredll_univ_combobox.obj: ..\..\src\univ\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\combobox.cpp
+
+$(OBJS)\coredll_univ_control.obj: ..\..\src\univ\control.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\control.cpp
+
 $(OBJS)\coredll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
 
+$(OBJS)\coredll_univ_dialog.obj: ..\..\src\univ\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\dialog.cpp
+
 $(OBJS)\coredll_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\framuniv.cpp
+
+$(OBJS)\coredll_univ_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
 
 $(OBJS)\coredll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\inpcons.cpp
@@ -10929,8 +10813,26 @@ $(OBJS)\coredll_inpcons.obj: ..\..\src\univ\inpcons.cpp
 $(OBJS)\coredll_inphand.obj: ..\..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\inphand.cpp
 
+$(OBJS)\coredll_univ_listbox.obj: ..\..\src\univ\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\listbox.cpp
+
+$(OBJS)\coredll_univ_menu.obj: ..\..\src\univ\menu.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\menu.cpp
+
+$(OBJS)\coredll_univ_notebook.obj: ..\..\src\univ\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\notebook.cpp
+
+$(OBJS)\coredll_univ_radiobox.obj: ..\..\src\univ\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\radiobox.cpp
+
+$(OBJS)\coredll_univ_radiobut.obj: ..\..\src\univ\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\radiobut.cpp
+
 $(OBJS)\coredll_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\scrarrow.cpp
+
+$(OBJS)\coredll_univ_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
 
 $(OBJS)\coredll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
@@ -10938,11 +10840,41 @@ $(OBJS)\coredll_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 $(OBJS)\coredll_settingsuniv.obj: ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\settingsuniv.cpp
 
+$(OBJS)\coredll_univ_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\slider.cpp
+
+$(OBJS)\coredll_univ_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
+
+$(OBJS)\coredll_univ_statbmp.obj: ..\..\src\univ\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statbmp.cpp
+
+$(OBJS)\coredll_univ_statbox.obj: ..\..\src\univ\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statbox.cpp
+
+$(OBJS)\coredll_univ_statline.obj: ..\..\src\univ\statline.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statline.cpp
+
+$(OBJS)\coredll_univ_stattext.obj: ..\..\src\univ\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
+
+$(OBJS)\coredll_univ_statusbr.obj: ..\..\src\univ\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statusbr.cpp
+
 $(OBJS)\coredll_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
+$(OBJS)\coredll_univ_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\textctrl.cpp
+
+$(OBJS)\coredll_univ_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
+
 $(OBJS)\coredll_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\theme.cpp
+
+$(OBJS)\coredll_univ_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\coredll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -11227,289 +11159,9 @@ $(OBJS)\coredll_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\fontpickerg.cpp
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_statusbr.obj: ..\..\src\generic\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\statusbr.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_statusbr.obj: ..\..\src\univ\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statusbr.cpp
-!endif
-
 !if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_accel.obj: ..\..\src\msw\accel.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_accel.obj: ..\..\src\generic\accel.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_button.obj: ..\..\src\msw\button.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_button.obj: ..\..\src\univ\button.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_checkbox.obj: ..\..\src\msw\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_checkbox.obj: ..\..\src\univ\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_choice.obj: ..\..\src\msw\choice.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_choice.obj: ..\..\src\univ\choice.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_combobox.obj: ..\..\src\msw\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_combobox.obj: ..\..\src\univ\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_control.obj: ..\..\src\msw\control.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_control.obj: ..\..\src\univ\control.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_dialog.obj: ..\..\src\msw\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_dialog.obj: ..\..\src\univ\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_gauge.obj: ..\..\src\msw\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_listbox.obj: ..\..\src\msw\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_listbox.obj: ..\..\src\univ\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_listctrl.obj: ..\..\src\msw\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_listctrl.obj: ..\..\src\generic\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_menu.obj: ..\..\src\msw\menu.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_menu.obj: ..\..\src\univ\menu.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_notebook.obj: ..\..\src\msw\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_notebook.obj: ..\..\src\univ\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_radiobox.obj: ..\..\src\msw\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_radiobox.obj: ..\..\src\univ\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_radiobut.obj: ..\..\src\msw\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_radiobut.obj: ..\..\src\univ\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_slider.obj: ..\..\src\msw\slider.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_statbmp.obj: ..\..\src\msw\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_statbmp.obj: ..\..\src\univ\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_statbox.obj: ..\..\src\msw\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_statbox.obj: ..\..\src\univ\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_statline.obj: ..\..\src\msw\statline.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_statline.obj: ..\..\src\univ\statline.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_stattext.obj: ..\..\src\msw\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_stattext.obj: ..\..\src\univ\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_toolbar.obj: ..\..\src\msw\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_textctrl.obj: ..\..\src\msw\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_textctrl.obj: ..\..\src\univ\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_checklst.obj: ..\..\src\msw\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_checklst.obj: ..\..\src\univ\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\coredll_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12214,14 +11866,41 @@ $(OBJS)\corelib_mslu.obj: ..\..\src\msw\mslu.cpp
 $(OBJS)\corelib_volume.obj: ..\..\src\msw\volume.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\volume.cpp
 
+$(OBJS)\corelib_generic_statusbr.obj: ..\..\src\generic\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\statusbr.cpp
+
+$(OBJS)\corelib_msw_accel.obj: ..\..\src\msw\accel.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\accel.cpp
+
 $(OBJS)\corelib_artmsw.obj: ..\..\src\msw\artmsw.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\artmsw.cpp
+
+$(OBJS)\corelib_msw_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
+
+$(OBJS)\corelib_msw_button.obj: ..\..\src\msw\button.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\button.cpp
+
+$(OBJS)\corelib_msw_checkbox.obj: ..\..\src\msw\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checkbox.cpp
+
+$(OBJS)\corelib_msw_choice.obj: ..\..\src\msw\choice.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\choice.cpp
 
 $(OBJS)\corelib_colordlg.obj: ..\..\src\msw\colordlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\colordlg.cpp
 
 $(OBJS)\corelib_combo.obj: ..\..\src\msw\combo.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\combo.cpp
+
+$(OBJS)\corelib_msw_combobox.obj: ..\..\src\msw\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\combobox.cpp
+
+$(OBJS)\corelib_msw_control.obj: ..\..\src\msw\control.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\control.cpp
+
+$(OBJS)\corelib_msw_dialog.obj: ..\..\src\msw\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\dialog.cpp
 
 $(OBJS)\corelib_dirdlg.obj: ..\..\src\msw\dirdlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\dirdlg.cpp
@@ -12235,14 +11914,26 @@ $(OBJS)\corelib_filedlg.obj: ..\..\src\msw\filedlg.cpp
 $(OBJS)\corelib_frame.obj: ..\..\src\msw\frame.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\frame.cpp
 
+$(OBJS)\corelib_msw_gauge.obj: ..\..\src\msw\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
+
 $(OBJS)\corelib_headerctrl.obj: ..\..\src\msw\headerctrl.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\headerctrl.cpp
 
 $(OBJS)\corelib_iniconf.obj: ..\..\src\msw\iniconf.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\iniconf.cpp
 
+$(OBJS)\corelib_msw_listbox.obj: ..\..\src\msw\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
+
+$(OBJS)\corelib_msw_listctrl.obj: ..\..\src\msw\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\listctrl.cpp
+
 $(OBJS)\corelib_mdi.obj: ..\..\src\msw\mdi.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\mdi.cpp
+
+$(OBJS)\corelib_msw_menu.obj: ..\..\src\msw\menu.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\menu.cpp
 
 $(OBJS)\corelib_menuitem.obj: ..\..\src\msw\menuitem.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\menuitem.cpp
@@ -12259,26 +11950,74 @@ $(OBJS)\corelib_nativdlg.obj: ..\..\src\msw\nativdlg.cpp
 $(OBJS)\corelib_nativewin.obj: ..\..\src\msw\nativewin.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\nativewin.cpp
 
+$(OBJS)\corelib_msw_notebook.obj: ..\..\src\msw\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
+
 $(OBJS)\corelib_access.obj: ..\..\src\msw\ole\access.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\access.cpp
 
 $(OBJS)\corelib_ownerdrw.obj: ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ownerdrw.cpp
 
+$(OBJS)\corelib_msw_radiobox.obj: ..\..\src\msw\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\radiobox.cpp
+
+$(OBJS)\corelib_msw_radiobut.obj: ..\..\src\msw\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\radiobut.cpp
+
+$(OBJS)\corelib_msw_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
+
+$(OBJS)\corelib_msw_slider.obj: ..\..\src\msw\slider.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\slider.cpp
+
+$(OBJS)\corelib_msw_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
+
 $(OBJS)\corelib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\spinctrl.cpp
+
+$(OBJS)\corelib_msw_statbmp.obj: ..\..\src\msw\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statbmp.cpp
+
+$(OBJS)\corelib_msw_statbox.obj: ..\..\src\msw\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statbox.cpp
 
 $(OBJS)\corelib_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
+$(OBJS)\corelib_msw_statline.obj: ..\..\src\msw\statline.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statline.cpp
+
+$(OBJS)\corelib_msw_stattext.obj: ..\..\src\msw\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\stattext.cpp
+
+$(OBJS)\corelib_msw_toolbar.obj: ..\..\src\msw\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
+
+$(OBJS)\corelib_msw_textctrl.obj: ..\..\src\msw\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\textctrl.cpp
+
 $(OBJS)\corelib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
+
+$(OBJS)\corelib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\corelib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
+
+$(OBJS)\corelib_msw_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
+
 $(OBJS)\corelib_fontdlg.obj: ..\..\src\msw\fontdlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\fontdlg.cpp
+
+$(OBJS)\corelib_generic_accel.obj: ..\..\src\generic\accel.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\accel.cpp
 
 $(OBJS)\corelib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\colrdlgg.cpp
@@ -12286,11 +12025,17 @@ $(OBJS)\corelib_colrdlgg.obj: ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\corelib_dirdlgg.obj: ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\dirdlgg.cpp
 
+$(OBJS)\corelib_generic_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
+
 $(OBJS)\corelib_filedlgg.obj: ..\..\src\generic\filedlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\filedlgg.cpp
 
 $(OBJS)\corelib_fontdlgg.obj: ..\..\src\generic\fontdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\fontdlgg.cpp
+
+$(OBJS)\corelib_generic_listctrl.obj: ..\..\src\generic\listctrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\listctrl.cpp
 
 $(OBJS)\corelib_mdig.obj: ..\..\src\generic\mdig.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\mdig.cpp
@@ -12298,11 +12043,38 @@ $(OBJS)\corelib_mdig.obj: ..\..\src\generic\mdig.cpp
 $(OBJS)\corelib_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
 
+$(OBJS)\corelib_univ_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
+
+$(OBJS)\corelib_univ_button.obj: ..\..\src\univ\button.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\button.cpp
+
+$(OBJS)\corelib_univ_checkbox.obj: ..\..\src\univ\checkbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\checkbox.cpp
+
+$(OBJS)\corelib_univ_checklst.obj: ..\..\src\univ\checklst.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\checklst.cpp
+
+$(OBJS)\corelib_univ_choice.obj: ..\..\src\univ\choice.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\choice.cpp
+
+$(OBJS)\corelib_univ_combobox.obj: ..\..\src\univ\combobox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\combobox.cpp
+
+$(OBJS)\corelib_univ_control.obj: ..\..\src\univ\control.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\control.cpp
+
 $(OBJS)\corelib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
 
+$(OBJS)\corelib_univ_dialog.obj: ..\..\src\univ\dialog.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\dialog.cpp
+
 $(OBJS)\corelib_framuniv.obj: ..\..\src\univ\framuniv.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\framuniv.cpp
+
+$(OBJS)\corelib_univ_gauge.obj: ..\..\src\univ\gauge.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
 
 $(OBJS)\corelib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\inpcons.cpp
@@ -12310,8 +12082,26 @@ $(OBJS)\corelib_inpcons.obj: ..\..\src\univ\inpcons.cpp
 $(OBJS)\corelib_inphand.obj: ..\..\src\univ\inphand.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\inphand.cpp
 
+$(OBJS)\corelib_univ_listbox.obj: ..\..\src\univ\listbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\listbox.cpp
+
+$(OBJS)\corelib_univ_menu.obj: ..\..\src\univ\menu.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\menu.cpp
+
+$(OBJS)\corelib_univ_notebook.obj: ..\..\src\univ\notebook.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\notebook.cpp
+
+$(OBJS)\corelib_univ_radiobox.obj: ..\..\src\univ\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\radiobox.cpp
+
+$(OBJS)\corelib_univ_radiobut.obj: ..\..\src\univ\radiobut.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\radiobut.cpp
+
 $(OBJS)\corelib_scrarrow.obj: ..\..\src\univ\scrarrow.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\scrarrow.cpp
+
+$(OBJS)\corelib_univ_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
 
 $(OBJS)\corelib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\scrthumb.cpp
@@ -12319,11 +12109,41 @@ $(OBJS)\corelib_scrthumb.obj: ..\..\src\univ\scrthumb.cpp
 $(OBJS)\corelib_settingsuniv.obj: ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\settingsuniv.cpp
 
+$(OBJS)\corelib_univ_slider.obj: ..\..\src\univ\slider.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\slider.cpp
+
+$(OBJS)\corelib_univ_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
+
+$(OBJS)\corelib_univ_statbmp.obj: ..\..\src\univ\statbmp.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statbmp.cpp
+
+$(OBJS)\corelib_univ_statbox.obj: ..\..\src\univ\statbox.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statbox.cpp
+
+$(OBJS)\corelib_univ_statline.obj: ..\..\src\univ\statline.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statline.cpp
+
+$(OBJS)\corelib_univ_stattext.obj: ..\..\src\univ\stattext.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
+
+$(OBJS)\corelib_univ_statusbr.obj: ..\..\src\univ\statusbr.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statusbr.cpp
+
 $(OBJS)\corelib_stdrend.obj: ..\..\src\univ\stdrend.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\stdrend.cpp
 
+$(OBJS)\corelib_univ_textctrl.obj: ..\..\src\univ\textctrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\textctrl.cpp
+
+$(OBJS)\corelib_univ_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
+
 $(OBJS)\corelib_theme.obj: ..\..\src\univ\theme.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\theme.cpp
+
+$(OBJS)\corelib_univ_toolbar.obj: ..\..\src\univ\toolbar.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
 
 $(OBJS)\corelib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\topluniv.cpp
@@ -12608,289 +12428,9 @@ $(OBJS)\corelib_fontpickerg.obj: ..\..\src\generic\fontpickerg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\fontpickerg.cpp
 !endif
 
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_statusbr.obj: ..\..\src\generic\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\statusbr.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_statusbr.obj: ..\..\src\univ\statusbr.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statusbr.cpp
-!endif
-
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\prntdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_accel.obj: ..\..\src\msw\accel.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_accel.obj: ..\..\src\generic\accel.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\accel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_bmpbuttn.obj: ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_bmpbuttn.obj: ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\bmpbuttn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_button.obj: ..\..\src\msw\button.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_button.obj: ..\..\src\univ\button.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\button.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_checkbox.obj: ..\..\src\msw\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_checkbox.obj: ..\..\src\univ\checkbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\checkbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_choice.obj: ..\..\src\msw\choice.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_choice.obj: ..\..\src\univ\choice.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\choice.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_combobox.obj: ..\..\src\msw\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_combobox.obj: ..\..\src\univ\combobox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\combobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_control.obj: ..\..\src\msw\control.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_control.obj: ..\..\src\univ\control.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\control.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_dialog.obj: ..\..\src\msw\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_dialog.obj: ..\..\src\univ\dialog.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\dialog.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_gauge.obj: ..\..\src\msw\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_gauge.obj: ..\..\src\univ\gauge.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\gauge.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_listbox.obj: ..\..\src\msw\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_listbox.obj: ..\..\src\univ\listbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\listbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_listctrl.obj: ..\..\src\msw\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_listctrl.obj: ..\..\src\generic\listctrl.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\listctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_menu.obj: ..\..\src\msw\menu.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_menu.obj: ..\..\src\univ\menu.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\menu.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_notebook.obj: ..\..\src\msw\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_notebook.obj: ..\..\src\univ\notebook.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\notebook.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_radiobox.obj: ..\..\src\msw\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_radiobox.obj: ..\..\src\univ\radiobox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\radiobox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_radiobut.obj: ..\..\src\msw\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_radiobut.obj: ..\..\src\univ\radiobut.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\radiobut.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_scrolbar.obj: ..\..\src\msw\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_scrolbar.obj: ..\..\src\univ\scrolbar.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\scrolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_slider.obj: ..\..\src\msw\slider.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_slider.obj: ..\..\src\univ\slider.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\slider.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_spinbutt.obj: ..\..\src\msw\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_spinbutt.obj: ..\..\src\univ\spinbutt.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\spinbutt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_statbmp.obj: ..\..\src\msw\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_statbmp.obj: ..\..\src\univ\statbmp.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statbmp.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_statbox.obj: ..\..\src\msw\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_statbox.obj: ..\..\src\univ\statbox.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_statline.obj: ..\..\src\msw\statline.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_statline.obj: ..\..\src\univ\statline.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\statline.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_stattext.obj: ..\..\src\msw\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_stattext.obj: ..\..\src\univ\stattext.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\stattext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_toolbar.obj: ..\..\src\msw\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_toolbar.obj: ..\..\src\univ\toolbar.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\toolbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_textctrl.obj: ..\..\src\msw\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_textctrl.obj: ..\..\src\univ\textctrl.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\textctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_tglbtn.obj: ..\..\src\univ\tglbtn.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\tglbtn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_checklst.obj: ..\..\src\msw\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_checklst.obj: ..\..\src\univ\checklst.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\checklst.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "0"
-$(OBJS)\corelib_fdrepdlg.obj: ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\fdrepdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_fdrepdlg.obj: ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\fdrepdlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

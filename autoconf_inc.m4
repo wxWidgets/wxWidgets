@@ -974,12 +974,12 @@ dnl ### begin block 20_COND_USE_RTTI_1[../../demos/bombs/bombs.bkl,../../demos/f
         COND_USE_RTTI_1=""
     fi
     AC_SUBST(COND_USE_RTTI_1)
-dnl ### begin block 20_COND_USE_SOSYMLINKS_1[wx.bkl] ###
-    COND_USE_SOSYMLINKS_1="#"
-    if test "x$USE_SOSYMLINKS" = "x1" ; then
-        COND_USE_SOSYMLINKS_1=""
+dnl ### begin block 20_COND_USE_SOTWOSYMLINKS_1[wx.bkl] ###
+    COND_USE_SOTWOSYMLINKS_1="#"
+    if test "x$USE_SOTWOSYMLINKS" = "x1" ; then
+        COND_USE_SOTWOSYMLINKS_1=""
     fi
-    AC_SUBST(COND_USE_SOSYMLINKS_1)
+    AC_SUBST(COND_USE_SOTWOSYMLINKS_1)
 dnl ### begin block 20_COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1[wx.bkl] ###
     COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1="#"
     if test "x$USE_SOVERCYGWIN" = "x1" -a "x$USE_SOVERSION" = "x1" ; then
@@ -998,6 +998,12 @@ dnl ### begin block 20_COND_USE_SOVERSION_0[wx.bkl] ###
         COND_USE_SOVERSION_0=""
     fi
     AC_SUBST(COND_USE_SOVERSION_0)
+dnl ### begin block 20_COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1[wx.bkl] ###
+    COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1="#"
+    if test "x$USE_SOVERSION" = "x1" -a "x$USE_SOVERSOLARIS" = "x1" ; then
+        COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1=""
+    fi
+    AC_SUBST(COND_USE_SOVERSION_1_USE_SOVERSOLARIS_1)
 dnl ### begin block 20_COND_USE_SOVERSOLARIS_1[wx.bkl] ###
     COND_USE_SOVERSOLARIS_1="#"
     if test "x$USE_SOVERSOLARIS" = "x1" ; then

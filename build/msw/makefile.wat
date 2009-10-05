@@ -208,12 +208,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_art_msw.obj &
 	$(OBJS)\monodll_art_aui.obj &
 	$(OBJS)\monodll_bar.obj &
-	$(OBJS)\monodll_buttonbar.obj &
-	$(OBJS)\monodll_control.obj &
+	$(OBJS)\monodll_ribbon_buttonbar.obj &
+	$(OBJS)\monodll_ribbon_control.obj &
 	$(OBJS)\monodll_gallery.obj &
 	$(OBJS)\monodll_page.obj &
 	$(OBJS)\monodll_panel.obj &
-	$(OBJS)\monodll_toolbar.obj &
+	$(OBJS)\monodll_ribbon_toolbar.obj &
 	$(OBJS)\monodll_richtextctrl.obj &
 	$(OBJS)\monodll_richtextbuffer.obj &
 	$(OBJS)\monodll_richtextstyles.obj &
@@ -284,56 +284,56 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_collpaneg.obj &
 	$(OBJS)\monodll_filepickerg.obj &
 	$(OBJS)\monodll_fontpickerg.obj &
-	$(OBJS)\monodll_statusbr.obj &
+	$(OBJS)\monodll_generic_statusbr.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
-	$(OBJS)\monodll_accel.obj &
+	$(OBJS)\monodll_msw_accel.obj &
 	$(OBJS)\monodll_artmsw.obj &
-	$(OBJS)\monodll_bmpbuttn.obj &
-	$(OBJS)\monodll_button.obj &
-	$(OBJS)\monodll_checkbox.obj &
-	$(OBJS)\monodll_choice.obj &
+	$(OBJS)\monodll_msw_bmpbuttn.obj &
+	$(OBJS)\monodll_msw_button.obj &
+	$(OBJS)\monodll_msw_checkbox.obj &
+	$(OBJS)\monodll_msw_choice.obj &
 	$(OBJS)\monodll_colordlg.obj &
 	$(OBJS)\monodll_combo.obj &
-	$(OBJS)\monodll_combobox.obj &
-	$(OBJS)\monodll_control.obj &
-	$(OBJS)\monodll_dialog.obj &
+	$(OBJS)\monodll_msw_combobox.obj &
+	$(OBJS)\monodll_msw_control.obj &
+	$(OBJS)\monodll_msw_dialog.obj &
 	$(OBJS)\monodll_dirdlg.obj &
 	$(OBJS)\monodll_dragimag.obj &
 	$(OBJS)\monodll_filedlg.obj &
 	$(OBJS)\monodll_frame.obj &
-	$(OBJS)\monodll_gauge.obj &
+	$(OBJS)\monodll_msw_gauge.obj &
 	$(OBJS)\monodll_headerctrl.obj &
 	$(OBJS)\monodll_iniconf.obj &
-	$(OBJS)\monodll_listbox.obj &
-	$(OBJS)\monodll_listctrl.obj &
+	$(OBJS)\monodll_msw_listbox.obj &
+	$(OBJS)\monodll_msw_listctrl.obj &
 	$(OBJS)\monodll_mdi.obj &
-	$(OBJS)\monodll_menu.obj &
+	$(OBJS)\monodll_msw_menu.obj &
 	$(OBJS)\monodll_menuitem.obj &
 	$(OBJS)\monodll_metafile.obj &
 	$(OBJS)\monodll_msgdlg.obj &
 	$(OBJS)\monodll_nativdlg.obj &
 	$(OBJS)\monodll_nativewin.obj &
-	$(OBJS)\monodll_notebook.obj &
+	$(OBJS)\monodll_msw_notebook.obj &
 	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
-	$(OBJS)\monodll_radiobox.obj &
-	$(OBJS)\monodll_radiobut.obj &
-	$(OBJS)\monodll_scrolbar.obj &
-	$(OBJS)\monodll_slider.obj &
-	$(OBJS)\monodll_spinbutt.obj &
+	$(OBJS)\monodll_msw_radiobox.obj &
+	$(OBJS)\monodll_msw_radiobut.obj &
+	$(OBJS)\monodll_msw_scrolbar.obj &
+	$(OBJS)\monodll_msw_slider.obj &
+	$(OBJS)\monodll_msw_spinbutt.obj &
 	$(OBJS)\monodll_spinctrl.obj &
-	$(OBJS)\monodll_statbmp.obj &
-	$(OBJS)\monodll_statbox.obj &
+	$(OBJS)\monodll_msw_statbmp.obj &
+	$(OBJS)\monodll_msw_statbox.obj &
 	$(OBJS)\monodll_statusbar.obj &
-	$(OBJS)\monodll_statline.obj &
-	$(OBJS)\monodll_stattext.obj &
-	$(OBJS)\monodll_toolbar.obj &
-	$(OBJS)\monodll_textctrl.obj &
+	$(OBJS)\monodll_msw_statline.obj &
+	$(OBJS)\monodll_msw_stattext.obj &
+	$(OBJS)\monodll_msw_toolbar.obj &
+	$(OBJS)\monodll_msw_textctrl.obj &
 	$(OBJS)\monodll_textentry.obj &
-	$(OBJS)\monodll_tglbtn.obj &
+	$(OBJS)\monodll_msw_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
-	$(OBJS)\monodll_checklst.obj &
-	$(OBJS)\monodll_fdrepdlg.obj &
+	$(OBJS)\monodll_msw_checklst.obj &
+	$(OBJS)\monodll_msw_fdrepdlg.obj &
 	$(OBJS)\monodll_fontdlg.obj &
 	$(OBJS)\monodll_accelcmn.obj &
 	$(OBJS)\monodll_accesscmn.obj &
@@ -440,7 +440,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wrapsizer.obj &
 	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
-	$(OBJS)\monodll_buttonbar.obj &
+	$(OBJS)\monodll_generic_buttonbar.obj &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_combog.obj &
@@ -524,54 +524,54 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_helpwin.obj &
 	$(OBJS)\monodll_automtn.obj &
 	$(OBJS)\monodll_uuid.obj &
-	$(OBJS)\monodll_accel.obj &
+	$(OBJS)\monodll_generic_accel.obj &
 	$(OBJS)\monodll_clrpickerg.obj &
 	$(OBJS)\monodll_collpaneg.obj &
 	$(OBJS)\monodll_colrdlgg.obj &
 	$(OBJS)\monodll_dirdlgg.obj &
-	$(OBJS)\monodll_fdrepdlg.obj &
+	$(OBJS)\monodll_generic_fdrepdlg.obj &
 	$(OBJS)\monodll_filedlgg.obj &
 	$(OBJS)\monodll_filepickerg.obj &
 	$(OBJS)\monodll_fontdlgg.obj &
 	$(OBJS)\monodll_fontpickerg.obj &
-	$(OBJS)\monodll_listctrl.obj &
+	$(OBJS)\monodll_generic_listctrl.obj &
 	$(OBJS)\monodll_mdig.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
-	$(OBJS)\monodll_bmpbuttn.obj &
-	$(OBJS)\monodll_button.obj &
-	$(OBJS)\monodll_checkbox.obj &
-	$(OBJS)\monodll_checklst.obj &
-	$(OBJS)\monodll_choice.obj &
-	$(OBJS)\monodll_combobox.obj &
-	$(OBJS)\monodll_control.obj &
+	$(OBJS)\monodll_univ_bmpbuttn.obj &
+	$(OBJS)\monodll_univ_button.obj &
+	$(OBJS)\monodll_univ_checkbox.obj &
+	$(OBJS)\monodll_univ_checklst.obj &
+	$(OBJS)\monodll_univ_choice.obj &
+	$(OBJS)\monodll_univ_combobox.obj &
+	$(OBJS)\monodll_univ_control.obj &
 	$(OBJS)\monodll_ctrlrend.obj &
-	$(OBJS)\monodll_dialog.obj &
+	$(OBJS)\monodll_univ_dialog.obj &
 	$(OBJS)\monodll_framuniv.obj &
-	$(OBJS)\monodll_gauge.obj &
+	$(OBJS)\monodll_univ_gauge.obj &
 	$(OBJS)\monodll_inpcons.obj &
 	$(OBJS)\monodll_inphand.obj &
-	$(OBJS)\monodll_listbox.obj &
-	$(OBJS)\monodll_menu.obj &
-	$(OBJS)\monodll_notebook.obj &
-	$(OBJS)\monodll_radiobox.obj &
-	$(OBJS)\monodll_radiobut.obj &
+	$(OBJS)\monodll_univ_listbox.obj &
+	$(OBJS)\monodll_univ_menu.obj &
+	$(OBJS)\monodll_univ_notebook.obj &
+	$(OBJS)\monodll_univ_radiobox.obj &
+	$(OBJS)\monodll_univ_radiobut.obj &
 	$(OBJS)\monodll_scrarrow.obj &
-	$(OBJS)\monodll_scrolbar.obj &
+	$(OBJS)\monodll_univ_scrolbar.obj &
 	$(OBJS)\monodll_scrthumb.obj &
 	$(OBJS)\monodll_settingsuniv.obj &
-	$(OBJS)\monodll_slider.obj &
-	$(OBJS)\monodll_spinbutt.obj &
-	$(OBJS)\monodll_statbmp.obj &
-	$(OBJS)\monodll_statbox.obj &
-	$(OBJS)\monodll_statline.obj &
-	$(OBJS)\monodll_stattext.obj &
-	$(OBJS)\monodll_statusbr.obj &
+	$(OBJS)\monodll_univ_slider.obj &
+	$(OBJS)\monodll_univ_spinbutt.obj &
+	$(OBJS)\monodll_univ_statbmp.obj &
+	$(OBJS)\monodll_univ_statbox.obj &
+	$(OBJS)\monodll_univ_statline.obj &
+	$(OBJS)\monodll_univ_stattext.obj &
+	$(OBJS)\monodll_univ_statusbr.obj &
 	$(OBJS)\monodll_stdrend.obj &
-	$(OBJS)\monodll_textctrl.obj &
-	$(OBJS)\monodll_tglbtn.obj &
+	$(OBJS)\monodll_univ_textctrl.obj &
+	$(OBJS)\monodll_univ_tglbtn.obj &
 	$(OBJS)\monodll_theme.obj &
-	$(OBJS)\monodll_toolbar.obj &
+	$(OBJS)\monodll_univ_toolbar.obj &
 	$(OBJS)\monodll_topluniv.obj &
 	$(OBJS)\monodll_winuniv.obj &
 	$(OBJS)\monodll_gtk.obj &
@@ -683,7 +683,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_wrapsizer.obj &
 	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
-	$(OBJS)\monodll_buttonbar.obj &
+	$(OBJS)\monodll_generic_buttonbar.obj &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_combog.obj &
@@ -917,12 +917,12 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_art_msw.obj &
 	$(OBJS)\monolib_art_aui.obj &
 	$(OBJS)\monolib_bar.obj &
-	$(OBJS)\monolib_buttonbar.obj &
-	$(OBJS)\monolib_control.obj &
+	$(OBJS)\monolib_ribbon_buttonbar.obj &
+	$(OBJS)\monolib_ribbon_control.obj &
 	$(OBJS)\monolib_gallery.obj &
 	$(OBJS)\monolib_page.obj &
 	$(OBJS)\monolib_panel.obj &
-	$(OBJS)\monolib_toolbar.obj &
+	$(OBJS)\monolib_ribbon_toolbar.obj &
 	$(OBJS)\monolib_richtextctrl.obj &
 	$(OBJS)\monolib_richtextbuffer.obj &
 	$(OBJS)\monolib_richtextstyles.obj &
@@ -993,56 +993,56 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_collpaneg.obj &
 	$(OBJS)\monolib_filepickerg.obj &
 	$(OBJS)\monolib_fontpickerg.obj &
-	$(OBJS)\monolib_statusbr.obj &
+	$(OBJS)\monolib_generic_statusbr.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
-	$(OBJS)\monolib_accel.obj &
+	$(OBJS)\monolib_msw_accel.obj &
 	$(OBJS)\monolib_artmsw.obj &
-	$(OBJS)\monolib_bmpbuttn.obj &
-	$(OBJS)\monolib_button.obj &
-	$(OBJS)\monolib_checkbox.obj &
-	$(OBJS)\monolib_choice.obj &
+	$(OBJS)\monolib_msw_bmpbuttn.obj &
+	$(OBJS)\monolib_msw_button.obj &
+	$(OBJS)\monolib_msw_checkbox.obj &
+	$(OBJS)\monolib_msw_choice.obj &
 	$(OBJS)\monolib_colordlg.obj &
 	$(OBJS)\monolib_combo.obj &
-	$(OBJS)\monolib_combobox.obj &
-	$(OBJS)\monolib_control.obj &
-	$(OBJS)\monolib_dialog.obj &
+	$(OBJS)\monolib_msw_combobox.obj &
+	$(OBJS)\monolib_msw_control.obj &
+	$(OBJS)\monolib_msw_dialog.obj &
 	$(OBJS)\monolib_dirdlg.obj &
 	$(OBJS)\monolib_dragimag.obj &
 	$(OBJS)\monolib_filedlg.obj &
 	$(OBJS)\monolib_frame.obj &
-	$(OBJS)\monolib_gauge.obj &
+	$(OBJS)\monolib_msw_gauge.obj &
 	$(OBJS)\monolib_headerctrl.obj &
 	$(OBJS)\monolib_iniconf.obj &
-	$(OBJS)\monolib_listbox.obj &
-	$(OBJS)\monolib_listctrl.obj &
+	$(OBJS)\monolib_msw_listbox.obj &
+	$(OBJS)\monolib_msw_listctrl.obj &
 	$(OBJS)\monolib_mdi.obj &
-	$(OBJS)\monolib_menu.obj &
+	$(OBJS)\monolib_msw_menu.obj &
 	$(OBJS)\monolib_menuitem.obj &
 	$(OBJS)\monolib_metafile.obj &
 	$(OBJS)\monolib_msgdlg.obj &
 	$(OBJS)\monolib_nativdlg.obj &
 	$(OBJS)\monolib_nativewin.obj &
-	$(OBJS)\monolib_notebook.obj &
+	$(OBJS)\monolib_msw_notebook.obj &
 	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
-	$(OBJS)\monolib_radiobox.obj &
-	$(OBJS)\monolib_radiobut.obj &
-	$(OBJS)\monolib_scrolbar.obj &
-	$(OBJS)\monolib_slider.obj &
-	$(OBJS)\monolib_spinbutt.obj &
+	$(OBJS)\monolib_msw_radiobox.obj &
+	$(OBJS)\monolib_msw_radiobut.obj &
+	$(OBJS)\monolib_msw_scrolbar.obj &
+	$(OBJS)\monolib_msw_slider.obj &
+	$(OBJS)\monolib_msw_spinbutt.obj &
 	$(OBJS)\monolib_spinctrl.obj &
-	$(OBJS)\monolib_statbmp.obj &
-	$(OBJS)\monolib_statbox.obj &
+	$(OBJS)\monolib_msw_statbmp.obj &
+	$(OBJS)\monolib_msw_statbox.obj &
 	$(OBJS)\monolib_statusbar.obj &
-	$(OBJS)\monolib_statline.obj &
-	$(OBJS)\monolib_stattext.obj &
-	$(OBJS)\monolib_toolbar.obj &
-	$(OBJS)\monolib_textctrl.obj &
+	$(OBJS)\monolib_msw_statline.obj &
+	$(OBJS)\monolib_msw_stattext.obj &
+	$(OBJS)\monolib_msw_toolbar.obj &
+	$(OBJS)\monolib_msw_textctrl.obj &
 	$(OBJS)\monolib_textentry.obj &
-	$(OBJS)\monolib_tglbtn.obj &
+	$(OBJS)\monolib_msw_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
-	$(OBJS)\monolib_checklst.obj &
-	$(OBJS)\monolib_fdrepdlg.obj &
+	$(OBJS)\monolib_msw_checklst.obj &
+	$(OBJS)\monolib_msw_fdrepdlg.obj &
 	$(OBJS)\monolib_fontdlg.obj &
 	$(OBJS)\monolib_accelcmn.obj &
 	$(OBJS)\monolib_accesscmn.obj &
@@ -1149,7 +1149,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wrapsizer.obj &
 	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
-	$(OBJS)\monolib_buttonbar.obj &
+	$(OBJS)\monolib_generic_buttonbar.obj &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_combog.obj &
@@ -1233,54 +1233,54 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_helpwin.obj &
 	$(OBJS)\monolib_automtn.obj &
 	$(OBJS)\monolib_uuid.obj &
-	$(OBJS)\monolib_accel.obj &
+	$(OBJS)\monolib_generic_accel.obj &
 	$(OBJS)\monolib_clrpickerg.obj &
 	$(OBJS)\monolib_collpaneg.obj &
 	$(OBJS)\monolib_colrdlgg.obj &
 	$(OBJS)\monolib_dirdlgg.obj &
-	$(OBJS)\monolib_fdrepdlg.obj &
+	$(OBJS)\monolib_generic_fdrepdlg.obj &
 	$(OBJS)\monolib_filedlgg.obj &
 	$(OBJS)\monolib_filepickerg.obj &
 	$(OBJS)\monolib_fontdlgg.obj &
 	$(OBJS)\monolib_fontpickerg.obj &
-	$(OBJS)\monolib_listctrl.obj &
+	$(OBJS)\monolib_generic_listctrl.obj &
 	$(OBJS)\monolib_mdig.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
-	$(OBJS)\monolib_bmpbuttn.obj &
-	$(OBJS)\monolib_button.obj &
-	$(OBJS)\monolib_checkbox.obj &
-	$(OBJS)\monolib_checklst.obj &
-	$(OBJS)\monolib_choice.obj &
-	$(OBJS)\monolib_combobox.obj &
-	$(OBJS)\monolib_control.obj &
+	$(OBJS)\monolib_univ_bmpbuttn.obj &
+	$(OBJS)\monolib_univ_button.obj &
+	$(OBJS)\monolib_univ_checkbox.obj &
+	$(OBJS)\monolib_univ_checklst.obj &
+	$(OBJS)\monolib_univ_choice.obj &
+	$(OBJS)\monolib_univ_combobox.obj &
+	$(OBJS)\monolib_univ_control.obj &
 	$(OBJS)\monolib_ctrlrend.obj &
-	$(OBJS)\monolib_dialog.obj &
+	$(OBJS)\monolib_univ_dialog.obj &
 	$(OBJS)\monolib_framuniv.obj &
-	$(OBJS)\monolib_gauge.obj &
+	$(OBJS)\monolib_univ_gauge.obj &
 	$(OBJS)\monolib_inpcons.obj &
 	$(OBJS)\monolib_inphand.obj &
-	$(OBJS)\monolib_listbox.obj &
-	$(OBJS)\monolib_menu.obj &
-	$(OBJS)\monolib_notebook.obj &
-	$(OBJS)\monolib_radiobox.obj &
-	$(OBJS)\monolib_radiobut.obj &
+	$(OBJS)\monolib_univ_listbox.obj &
+	$(OBJS)\monolib_univ_menu.obj &
+	$(OBJS)\monolib_univ_notebook.obj &
+	$(OBJS)\monolib_univ_radiobox.obj &
+	$(OBJS)\monolib_univ_radiobut.obj &
 	$(OBJS)\monolib_scrarrow.obj &
-	$(OBJS)\monolib_scrolbar.obj &
+	$(OBJS)\monolib_univ_scrolbar.obj &
 	$(OBJS)\monolib_scrthumb.obj &
 	$(OBJS)\monolib_settingsuniv.obj &
-	$(OBJS)\monolib_slider.obj &
-	$(OBJS)\monolib_spinbutt.obj &
-	$(OBJS)\monolib_statbmp.obj &
-	$(OBJS)\monolib_statbox.obj &
-	$(OBJS)\monolib_statline.obj &
-	$(OBJS)\monolib_stattext.obj &
-	$(OBJS)\monolib_statusbr.obj &
+	$(OBJS)\monolib_univ_slider.obj &
+	$(OBJS)\monolib_univ_spinbutt.obj &
+	$(OBJS)\monolib_univ_statbmp.obj &
+	$(OBJS)\monolib_univ_statbox.obj &
+	$(OBJS)\monolib_univ_statline.obj &
+	$(OBJS)\monolib_univ_stattext.obj &
+	$(OBJS)\monolib_univ_statusbr.obj &
 	$(OBJS)\monolib_stdrend.obj &
-	$(OBJS)\monolib_textctrl.obj &
-	$(OBJS)\monolib_tglbtn.obj &
+	$(OBJS)\monolib_univ_textctrl.obj &
+	$(OBJS)\monolib_univ_tglbtn.obj &
 	$(OBJS)\monolib_theme.obj &
-	$(OBJS)\monolib_toolbar.obj &
+	$(OBJS)\monolib_univ_toolbar.obj &
 	$(OBJS)\monolib_topluniv.obj &
 	$(OBJS)\monolib_winuniv.obj &
 	$(OBJS)\monolib_gtk.obj &
@@ -1392,7 +1392,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_wrapsizer.obj &
 	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
-	$(OBJS)\monolib_buttonbar.obj &
+	$(OBJS)\monolib_generic_buttonbar.obj &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_combog.obj &
@@ -1611,56 +1611,56 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_collpaneg.obj &
 	$(OBJS)\coredll_filepickerg.obj &
 	$(OBJS)\coredll_fontpickerg.obj &
-	$(OBJS)\coredll_statusbr.obj &
+	$(OBJS)\coredll_generic_statusbr.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
-	$(OBJS)\coredll_accel.obj &
+	$(OBJS)\coredll_msw_accel.obj &
 	$(OBJS)\coredll_artmsw.obj &
-	$(OBJS)\coredll_bmpbuttn.obj &
-	$(OBJS)\coredll_button.obj &
-	$(OBJS)\coredll_checkbox.obj &
-	$(OBJS)\coredll_choice.obj &
+	$(OBJS)\coredll_msw_bmpbuttn.obj &
+	$(OBJS)\coredll_msw_button.obj &
+	$(OBJS)\coredll_msw_checkbox.obj &
+	$(OBJS)\coredll_msw_choice.obj &
 	$(OBJS)\coredll_colordlg.obj &
 	$(OBJS)\coredll_combo.obj &
-	$(OBJS)\coredll_combobox.obj &
-	$(OBJS)\coredll_control.obj &
-	$(OBJS)\coredll_dialog.obj &
+	$(OBJS)\coredll_msw_combobox.obj &
+	$(OBJS)\coredll_msw_control.obj &
+	$(OBJS)\coredll_msw_dialog.obj &
 	$(OBJS)\coredll_dirdlg.obj &
 	$(OBJS)\coredll_dragimag.obj &
 	$(OBJS)\coredll_filedlg.obj &
 	$(OBJS)\coredll_frame.obj &
-	$(OBJS)\coredll_gauge.obj &
+	$(OBJS)\coredll_msw_gauge.obj &
 	$(OBJS)\coredll_headerctrl.obj &
 	$(OBJS)\coredll_iniconf.obj &
-	$(OBJS)\coredll_listbox.obj &
-	$(OBJS)\coredll_listctrl.obj &
+	$(OBJS)\coredll_msw_listbox.obj &
+	$(OBJS)\coredll_msw_listctrl.obj &
 	$(OBJS)\coredll_mdi.obj &
-	$(OBJS)\coredll_menu.obj &
+	$(OBJS)\coredll_msw_menu.obj &
 	$(OBJS)\coredll_menuitem.obj &
 	$(OBJS)\coredll_metafile.obj &
 	$(OBJS)\coredll_msgdlg.obj &
 	$(OBJS)\coredll_nativdlg.obj &
 	$(OBJS)\coredll_nativewin.obj &
-	$(OBJS)\coredll_notebook.obj &
+	$(OBJS)\coredll_msw_notebook.obj &
 	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
-	$(OBJS)\coredll_radiobox.obj &
-	$(OBJS)\coredll_radiobut.obj &
-	$(OBJS)\coredll_scrolbar.obj &
-	$(OBJS)\coredll_slider.obj &
-	$(OBJS)\coredll_spinbutt.obj &
+	$(OBJS)\coredll_msw_radiobox.obj &
+	$(OBJS)\coredll_msw_radiobut.obj &
+	$(OBJS)\coredll_msw_scrolbar.obj &
+	$(OBJS)\coredll_msw_slider.obj &
+	$(OBJS)\coredll_msw_spinbutt.obj &
 	$(OBJS)\coredll_spinctrl.obj &
-	$(OBJS)\coredll_statbmp.obj &
-	$(OBJS)\coredll_statbox.obj &
+	$(OBJS)\coredll_msw_statbmp.obj &
+	$(OBJS)\coredll_msw_statbox.obj &
 	$(OBJS)\coredll_statusbar.obj &
-	$(OBJS)\coredll_statline.obj &
-	$(OBJS)\coredll_stattext.obj &
-	$(OBJS)\coredll_toolbar.obj &
-	$(OBJS)\coredll_textctrl.obj &
+	$(OBJS)\coredll_msw_statline.obj &
+	$(OBJS)\coredll_msw_stattext.obj &
+	$(OBJS)\coredll_msw_toolbar.obj &
+	$(OBJS)\coredll_msw_textctrl.obj &
 	$(OBJS)\coredll_textentry.obj &
-	$(OBJS)\coredll_tglbtn.obj &
+	$(OBJS)\coredll_msw_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
-	$(OBJS)\coredll_checklst.obj &
-	$(OBJS)\coredll_fdrepdlg.obj &
+	$(OBJS)\coredll_msw_checklst.obj &
+	$(OBJS)\coredll_msw_fdrepdlg.obj &
 	$(OBJS)\coredll_fontdlg.obj &
 	$(OBJS)\coredll_accelcmn.obj &
 	$(OBJS)\coredll_accesscmn.obj &
@@ -1851,54 +1851,54 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_helpwin.obj &
 	$(OBJS)\coredll_automtn.obj &
 	$(OBJS)\coredll_uuid.obj &
-	$(OBJS)\coredll_accel.obj &
+	$(OBJS)\coredll_generic_accel.obj &
 	$(OBJS)\coredll_clrpickerg.obj &
 	$(OBJS)\coredll_collpaneg.obj &
 	$(OBJS)\coredll_colrdlgg.obj &
 	$(OBJS)\coredll_dirdlgg.obj &
-	$(OBJS)\coredll_fdrepdlg.obj &
+	$(OBJS)\coredll_generic_fdrepdlg.obj &
 	$(OBJS)\coredll_filedlgg.obj &
 	$(OBJS)\coredll_filepickerg.obj &
 	$(OBJS)\coredll_fontdlgg.obj &
 	$(OBJS)\coredll_fontpickerg.obj &
-	$(OBJS)\coredll_listctrl.obj &
+	$(OBJS)\coredll_generic_listctrl.obj &
 	$(OBJS)\coredll_mdig.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
-	$(OBJS)\coredll_bmpbuttn.obj &
-	$(OBJS)\coredll_button.obj &
-	$(OBJS)\coredll_checkbox.obj &
-	$(OBJS)\coredll_checklst.obj &
-	$(OBJS)\coredll_choice.obj &
-	$(OBJS)\coredll_combobox.obj &
-	$(OBJS)\coredll_control.obj &
+	$(OBJS)\coredll_univ_bmpbuttn.obj &
+	$(OBJS)\coredll_univ_button.obj &
+	$(OBJS)\coredll_univ_checkbox.obj &
+	$(OBJS)\coredll_univ_checklst.obj &
+	$(OBJS)\coredll_univ_choice.obj &
+	$(OBJS)\coredll_univ_combobox.obj &
+	$(OBJS)\coredll_univ_control.obj &
 	$(OBJS)\coredll_ctrlrend.obj &
-	$(OBJS)\coredll_dialog.obj &
+	$(OBJS)\coredll_univ_dialog.obj &
 	$(OBJS)\coredll_framuniv.obj &
-	$(OBJS)\coredll_gauge.obj &
+	$(OBJS)\coredll_univ_gauge.obj &
 	$(OBJS)\coredll_inpcons.obj &
 	$(OBJS)\coredll_inphand.obj &
-	$(OBJS)\coredll_listbox.obj &
-	$(OBJS)\coredll_menu.obj &
-	$(OBJS)\coredll_notebook.obj &
-	$(OBJS)\coredll_radiobox.obj &
-	$(OBJS)\coredll_radiobut.obj &
+	$(OBJS)\coredll_univ_listbox.obj &
+	$(OBJS)\coredll_univ_menu.obj &
+	$(OBJS)\coredll_univ_notebook.obj &
+	$(OBJS)\coredll_univ_radiobox.obj &
+	$(OBJS)\coredll_univ_radiobut.obj &
 	$(OBJS)\coredll_scrarrow.obj &
-	$(OBJS)\coredll_scrolbar.obj &
+	$(OBJS)\coredll_univ_scrolbar.obj &
 	$(OBJS)\coredll_scrthumb.obj &
 	$(OBJS)\coredll_settingsuniv.obj &
-	$(OBJS)\coredll_slider.obj &
-	$(OBJS)\coredll_spinbutt.obj &
-	$(OBJS)\coredll_statbmp.obj &
-	$(OBJS)\coredll_statbox.obj &
-	$(OBJS)\coredll_statline.obj &
-	$(OBJS)\coredll_stattext.obj &
-	$(OBJS)\coredll_statusbr.obj &
+	$(OBJS)\coredll_univ_slider.obj &
+	$(OBJS)\coredll_univ_spinbutt.obj &
+	$(OBJS)\coredll_univ_statbmp.obj &
+	$(OBJS)\coredll_univ_statbox.obj &
+	$(OBJS)\coredll_univ_statline.obj &
+	$(OBJS)\coredll_univ_stattext.obj &
+	$(OBJS)\coredll_univ_statusbr.obj &
 	$(OBJS)\coredll_stdrend.obj &
-	$(OBJS)\coredll_textctrl.obj &
-	$(OBJS)\coredll_tglbtn.obj &
+	$(OBJS)\coredll_univ_textctrl.obj &
+	$(OBJS)\coredll_univ_tglbtn.obj &
 	$(OBJS)\coredll_theme.obj &
-	$(OBJS)\coredll_toolbar.obj &
+	$(OBJS)\coredll_univ_toolbar.obj &
 	$(OBJS)\coredll_topluniv.obj &
 	$(OBJS)\coredll_winuniv.obj &
 	$(OBJS)\coredll_gtk.obj &
@@ -2108,56 +2108,56 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_collpaneg.obj &
 	$(OBJS)\corelib_filepickerg.obj &
 	$(OBJS)\corelib_fontpickerg.obj &
-	$(OBJS)\corelib_statusbr.obj &
+	$(OBJS)\corelib_generic_statusbr.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
-	$(OBJS)\corelib_accel.obj &
+	$(OBJS)\corelib_msw_accel.obj &
 	$(OBJS)\corelib_artmsw.obj &
-	$(OBJS)\corelib_bmpbuttn.obj &
-	$(OBJS)\corelib_button.obj &
-	$(OBJS)\corelib_checkbox.obj &
-	$(OBJS)\corelib_choice.obj &
+	$(OBJS)\corelib_msw_bmpbuttn.obj &
+	$(OBJS)\corelib_msw_button.obj &
+	$(OBJS)\corelib_msw_checkbox.obj &
+	$(OBJS)\corelib_msw_choice.obj &
 	$(OBJS)\corelib_colordlg.obj &
 	$(OBJS)\corelib_combo.obj &
-	$(OBJS)\corelib_combobox.obj &
-	$(OBJS)\corelib_control.obj &
-	$(OBJS)\corelib_dialog.obj &
+	$(OBJS)\corelib_msw_combobox.obj &
+	$(OBJS)\corelib_msw_control.obj &
+	$(OBJS)\corelib_msw_dialog.obj &
 	$(OBJS)\corelib_dirdlg.obj &
 	$(OBJS)\corelib_dragimag.obj &
 	$(OBJS)\corelib_filedlg.obj &
 	$(OBJS)\corelib_frame.obj &
-	$(OBJS)\corelib_gauge.obj &
+	$(OBJS)\corelib_msw_gauge.obj &
 	$(OBJS)\corelib_headerctrl.obj &
 	$(OBJS)\corelib_iniconf.obj &
-	$(OBJS)\corelib_listbox.obj &
-	$(OBJS)\corelib_listctrl.obj &
+	$(OBJS)\corelib_msw_listbox.obj &
+	$(OBJS)\corelib_msw_listctrl.obj &
 	$(OBJS)\corelib_mdi.obj &
-	$(OBJS)\corelib_menu.obj &
+	$(OBJS)\corelib_msw_menu.obj &
 	$(OBJS)\corelib_menuitem.obj &
 	$(OBJS)\corelib_metafile.obj &
 	$(OBJS)\corelib_msgdlg.obj &
 	$(OBJS)\corelib_nativdlg.obj &
 	$(OBJS)\corelib_nativewin.obj &
-	$(OBJS)\corelib_notebook.obj &
+	$(OBJS)\corelib_msw_notebook.obj &
 	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
-	$(OBJS)\corelib_radiobox.obj &
-	$(OBJS)\corelib_radiobut.obj &
-	$(OBJS)\corelib_scrolbar.obj &
-	$(OBJS)\corelib_slider.obj &
-	$(OBJS)\corelib_spinbutt.obj &
+	$(OBJS)\corelib_msw_radiobox.obj &
+	$(OBJS)\corelib_msw_radiobut.obj &
+	$(OBJS)\corelib_msw_scrolbar.obj &
+	$(OBJS)\corelib_msw_slider.obj &
+	$(OBJS)\corelib_msw_spinbutt.obj &
 	$(OBJS)\corelib_spinctrl.obj &
-	$(OBJS)\corelib_statbmp.obj &
-	$(OBJS)\corelib_statbox.obj &
+	$(OBJS)\corelib_msw_statbmp.obj &
+	$(OBJS)\corelib_msw_statbox.obj &
 	$(OBJS)\corelib_statusbar.obj &
-	$(OBJS)\corelib_statline.obj &
-	$(OBJS)\corelib_stattext.obj &
-	$(OBJS)\corelib_toolbar.obj &
-	$(OBJS)\corelib_textctrl.obj &
+	$(OBJS)\corelib_msw_statline.obj &
+	$(OBJS)\corelib_msw_stattext.obj &
+	$(OBJS)\corelib_msw_toolbar.obj &
+	$(OBJS)\corelib_msw_textctrl.obj &
 	$(OBJS)\corelib_textentry.obj &
-	$(OBJS)\corelib_tglbtn.obj &
+	$(OBJS)\corelib_msw_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
-	$(OBJS)\corelib_checklst.obj &
-	$(OBJS)\corelib_fdrepdlg.obj &
+	$(OBJS)\corelib_msw_checklst.obj &
+	$(OBJS)\corelib_msw_fdrepdlg.obj &
 	$(OBJS)\corelib_fontdlg.obj &
 	$(OBJS)\corelib_accelcmn.obj &
 	$(OBJS)\corelib_accesscmn.obj &
@@ -2348,54 +2348,54 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_helpwin.obj &
 	$(OBJS)\corelib_automtn.obj &
 	$(OBJS)\corelib_uuid.obj &
-	$(OBJS)\corelib_accel.obj &
+	$(OBJS)\corelib_generic_accel.obj &
 	$(OBJS)\corelib_clrpickerg.obj &
 	$(OBJS)\corelib_collpaneg.obj &
 	$(OBJS)\corelib_colrdlgg.obj &
 	$(OBJS)\corelib_dirdlgg.obj &
-	$(OBJS)\corelib_fdrepdlg.obj &
+	$(OBJS)\corelib_generic_fdrepdlg.obj &
 	$(OBJS)\corelib_filedlgg.obj &
 	$(OBJS)\corelib_filepickerg.obj &
 	$(OBJS)\corelib_fontdlgg.obj &
 	$(OBJS)\corelib_fontpickerg.obj &
-	$(OBJS)\corelib_listctrl.obj &
+	$(OBJS)\corelib_generic_listctrl.obj &
 	$(OBJS)\corelib_mdig.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
-	$(OBJS)\corelib_bmpbuttn.obj &
-	$(OBJS)\corelib_button.obj &
-	$(OBJS)\corelib_checkbox.obj &
-	$(OBJS)\corelib_checklst.obj &
-	$(OBJS)\corelib_choice.obj &
-	$(OBJS)\corelib_combobox.obj &
-	$(OBJS)\corelib_control.obj &
+	$(OBJS)\corelib_univ_bmpbuttn.obj &
+	$(OBJS)\corelib_univ_button.obj &
+	$(OBJS)\corelib_univ_checkbox.obj &
+	$(OBJS)\corelib_univ_checklst.obj &
+	$(OBJS)\corelib_univ_choice.obj &
+	$(OBJS)\corelib_univ_combobox.obj &
+	$(OBJS)\corelib_univ_control.obj &
 	$(OBJS)\corelib_ctrlrend.obj &
-	$(OBJS)\corelib_dialog.obj &
+	$(OBJS)\corelib_univ_dialog.obj &
 	$(OBJS)\corelib_framuniv.obj &
-	$(OBJS)\corelib_gauge.obj &
+	$(OBJS)\corelib_univ_gauge.obj &
 	$(OBJS)\corelib_inpcons.obj &
 	$(OBJS)\corelib_inphand.obj &
-	$(OBJS)\corelib_listbox.obj &
-	$(OBJS)\corelib_menu.obj &
-	$(OBJS)\corelib_notebook.obj &
-	$(OBJS)\corelib_radiobox.obj &
-	$(OBJS)\corelib_radiobut.obj &
+	$(OBJS)\corelib_univ_listbox.obj &
+	$(OBJS)\corelib_univ_menu.obj &
+	$(OBJS)\corelib_univ_notebook.obj &
+	$(OBJS)\corelib_univ_radiobox.obj &
+	$(OBJS)\corelib_univ_radiobut.obj &
 	$(OBJS)\corelib_scrarrow.obj &
-	$(OBJS)\corelib_scrolbar.obj &
+	$(OBJS)\corelib_univ_scrolbar.obj &
 	$(OBJS)\corelib_scrthumb.obj &
 	$(OBJS)\corelib_settingsuniv.obj &
-	$(OBJS)\corelib_slider.obj &
-	$(OBJS)\corelib_spinbutt.obj &
-	$(OBJS)\corelib_statbmp.obj &
-	$(OBJS)\corelib_statbox.obj &
-	$(OBJS)\corelib_statline.obj &
-	$(OBJS)\corelib_stattext.obj &
-	$(OBJS)\corelib_statusbr.obj &
+	$(OBJS)\corelib_univ_slider.obj &
+	$(OBJS)\corelib_univ_spinbutt.obj &
+	$(OBJS)\corelib_univ_statbmp.obj &
+	$(OBJS)\corelib_univ_statbox.obj &
+	$(OBJS)\corelib_univ_statline.obj &
+	$(OBJS)\corelib_univ_stattext.obj &
+	$(OBJS)\corelib_univ_statusbr.obj &
 	$(OBJS)\corelib_stdrend.obj &
-	$(OBJS)\corelib_textctrl.obj &
-	$(OBJS)\corelib_tglbtn.obj &
+	$(OBJS)\corelib_univ_textctrl.obj &
+	$(OBJS)\corelib_univ_tglbtn.obj &
 	$(OBJS)\corelib_theme.obj &
-	$(OBJS)\corelib_toolbar.obj &
+	$(OBJS)\corelib_univ_toolbar.obj &
 	$(OBJS)\corelib_topluniv.obj &
 	$(OBJS)\corelib_winuniv.obj &
 	$(OBJS)\corelib_gtk.obj &
@@ -6303,13 +6303,40 @@ $(OBJS)\monodll_sockmsw.obj :  .AUTODEPEND ..\..\src\msw\sockmsw.cpp
 $(OBJS)\monodll_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
@@ -6324,13 +6351,25 @@ $(OBJS)\monodll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\monodll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
@@ -6348,25 +6387,73 @@ $(OBJS)\monodll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 $(OBJS)\monodll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_msw_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -6375,10 +6462,16 @@ $(OBJS)\monodll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\monodll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
@@ -6387,10 +6480,37 @@ $(OBJS)\monodll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_univ_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
@@ -6399,7 +6519,25 @@ $(OBJS)\monodll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 $(OBJS)\monodll_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_univ_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
@@ -6408,10 +6546,40 @@ $(OBJS)\monodll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monodll_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_univ_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_univ_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_univ_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -6771,6 +6939,12 @@ $(OBJS)\monodll_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\monodll_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_ribbon_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_ribbon_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6778,6 +6952,9 @@ $(OBJS)\monodll_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
@@ -7088,410 +7265,8 @@ $(OBJS)\monodll_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
 !endif
 
 !ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monodll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monodll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -8020,12 +7795,7 @@ $(OBJS)\monodll_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monodll_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
+$(OBJS)\monodll_generic_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -8696,13 +8466,40 @@ $(OBJS)\monolib_sockmsw.obj :  .AUTODEPEND ..\..\src\msw\sockmsw.cpp
 $(OBJS)\monolib_urlmsw.obj :  .AUTODEPEND ..\..\src\msw\urlmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
@@ -8717,13 +8514,25 @@ $(OBJS)\monolib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\monolib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
@@ -8741,25 +8550,73 @@ $(OBJS)\monolib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 $(OBJS)\monolib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_msw_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -8768,10 +8625,16 @@ $(OBJS)\monolib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\monolib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
@@ -8780,10 +8643,37 @@ $(OBJS)\monolib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_univ_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
@@ -8792,7 +8682,25 @@ $(OBJS)\monolib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 $(OBJS)\monolib_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_univ_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
@@ -8801,10 +8709,40 @@ $(OBJS)\monolib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\monolib_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_univ_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_univ_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_univ_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -9164,6 +9102,12 @@ $(OBJS)\monolib_art_aui.obj :  .AUTODEPEND ..\..\src\ribbon\art_aui.cpp
 $(OBJS)\monolib_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_ribbon_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_ribbon_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_gallery.obj :  .AUTODEPEND ..\..\src\ribbon\gallery.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -9171,6 +9115,9 @@ $(OBJS)\monolib_page.obj :  .AUTODEPEND ..\..\src\ribbon\page.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_panel.obj :  .AUTODEPEND ..\..\src\ribbon\panel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_ribbon_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_richtextctrl.obj :  .AUTODEPEND ..\..\src\richtext\richtextctrl.cpp
@@ -9481,410 +9428,8 @@ $(OBJS)\monolib_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
 !endif
 
 !ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monolib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_toolbar.obj :  .AUTODEPEND ..\..\src\ribbon\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\monolib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -10413,12 +9958,7 @@ $(OBJS)\monolib_busyinfo.obj :  .AUTODEPEND ..\..\src\generic\busyinfo.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monolib_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
+$(OBJS)\monolib_generic_buttonbar.obj :  .AUTODEPEND ..\..\src\generic\buttonbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11482,13 +11022,40 @@ $(OBJS)\coredll_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 $(OBJS)\coredll_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
@@ -11503,13 +11070,25 @@ $(OBJS)\coredll_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\coredll_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
@@ -11527,25 +11106,73 @@ $(OBJS)\coredll_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 $(OBJS)\coredll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_msw_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -11554,10 +11181,16 @@ $(OBJS)\coredll_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\coredll_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
@@ -11566,10 +11199,37 @@ $(OBJS)\coredll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 $(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_univ_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
@@ -11578,7 +11238,25 @@ $(OBJS)\coredll_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 $(OBJS)\coredll_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_univ_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
@@ -11587,10 +11265,40 @@ $(OBJS)\coredll_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\coredll_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_univ_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_univ_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_univ_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -11877,400 +11585,8 @@ $(OBJS)\coredll_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
 !endif
 
 !ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\coredll_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\coredll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\coredll_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
 !endif
 
 !ifeq USE_GUI 1
@@ -12975,13 +12291,40 @@ $(OBJS)\corelib_mslu.obj :  .AUTODEPEND ..\..\src\msw\mslu.cpp
 $(OBJS)\corelib_volume.obj :  .AUTODEPEND ..\..\src\msw\volume.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_generic_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_artmsw.obj :  .AUTODEPEND ..\..\src\msw\artmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colordlg.obj :  .AUTODEPEND ..\..\src\msw\colordlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_dirdlg.obj :  .AUTODEPEND ..\..\src\msw\dirdlg.cpp
@@ -12996,13 +12339,25 @@ $(OBJS)\corelib_filedlg.obj :  .AUTODEPEND ..\..\src\msw\filedlg.cpp
 $(OBJS)\corelib_frame.obj :  .AUTODEPEND ..\..\src\msw\frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_headerctrl.obj :  .AUTODEPEND ..\..\src\msw\headerctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_iniconf.obj :  .AUTODEPEND ..\..\src\msw\iniconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_mdi.obj :  .AUTODEPEND ..\..\src\msw\mdi.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_menuitem.obj :  .AUTODEPEND ..\..\src\msw\menuitem.cpp
@@ -13020,25 +12375,73 @@ $(OBJS)\corelib_nativdlg.obj :  .AUTODEPEND ..\..\src\msw\nativdlg.cpp
 $(OBJS)\corelib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_msw_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_fontdlg.obj :  .AUTODEPEND ..\..\src\msw\fontdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_generic_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
@@ -13047,10 +12450,16 @@ $(OBJS)\corelib_colrdlgg.obj :  .AUTODEPEND ..\..\src\generic\colrdlgg.cpp
 $(OBJS)\corelib_dirdlgg.obj :  .AUTODEPEND ..\..\src\generic\dirdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_generic_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_filedlgg.obj :  .AUTODEPEND ..\..\src\generic\filedlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_fontdlgg.obj :  .AUTODEPEND ..\..\src\generic\fontdlgg.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_generic_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
@@ -13059,10 +12468,37 @@ $(OBJS)\corelib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_univ_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_univ_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_framuniv.obj :  .AUTODEPEND ..\..\src\univ\framuniv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
@@ -13071,7 +12507,25 @@ $(OBJS)\corelib_inpcons.obj :  .AUTODEPEND ..\..\src\univ\inpcons.cpp
 $(OBJS)\corelib_inphand.obj :  .AUTODEPEND ..\..\src\univ\inphand.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_univ_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_scrarrow.obj :  .AUTODEPEND ..\..\src\univ\scrarrow.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
@@ -13080,10 +12534,40 @@ $(OBJS)\corelib_scrthumb.obj :  .AUTODEPEND ..\..\src\univ\scrthumb.cpp
 $(OBJS)\corelib_settingsuniv.obj :  .AUTODEPEND ..\..\src\univ\settingsuniv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_univ_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_stdrend.obj :  .AUTODEPEND ..\..\src\univ\stdrend.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_univ_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_theme.obj :  .AUTODEPEND ..\..\src\univ\theme.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_univ_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_topluniv.obj :  .AUTODEPEND ..\..\src\univ\topluniv.cpp
@@ -13370,400 +12854,8 @@ $(OBJS)\corelib_fontpickerg.obj :  .AUTODEPEND ..\..\src\generic\fontpickerg.cpp
 !endif
 
 !ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_statusbr.obj :  .AUTODEPEND ..\..\src\generic\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_statusbr.obj :  .AUTODEPEND ..\..\src\univ\statusbr.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\corelib_prntdlgg.obj :  .AUTODEPEND ..\..\src\generic\prntdlgg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_accel.obj :  .AUTODEPEND ..\..\src\msw\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_accel.obj :  .AUTODEPEND ..\..\src\generic\accel.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\msw\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_bmpbuttn.obj :  .AUTODEPEND ..\..\src\univ\bmpbuttn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_button.obj :  .AUTODEPEND ..\..\src\msw\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_button.obj :  .AUTODEPEND ..\..\src\univ\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_checkbox.obj :  .AUTODEPEND ..\..\src\msw\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_checkbox.obj :  .AUTODEPEND ..\..\src\univ\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_choice.obj :  .AUTODEPEND ..\..\src\msw\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_choice.obj :  .AUTODEPEND ..\..\src\univ\choice.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_combobox.obj :  .AUTODEPEND ..\..\src\univ\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_control.obj :  .AUTODEPEND ..\..\src\univ\control.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\msw\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_dialog.obj :  .AUTODEPEND ..\..\src\univ\dialog.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\msw\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_gauge.obj :  .AUTODEPEND ..\..\src\univ\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_listbox.obj :  .AUTODEPEND ..\..\src\msw\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_listbox.obj :  .AUTODEPEND ..\..\src\univ\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_listctrl.obj :  .AUTODEPEND ..\..\src\msw\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_listctrl.obj :  .AUTODEPEND ..\..\src\generic\listctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_menu.obj :  .AUTODEPEND ..\..\src\msw\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_menu.obj :  .AUTODEPEND ..\..\src\univ\menu.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_notebook.obj :  .AUTODEPEND ..\..\src\msw\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_notebook.obj :  .AUTODEPEND ..\..\src\univ\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_radiobox.obj :  .AUTODEPEND ..\..\src\msw\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_radiobox.obj :  .AUTODEPEND ..\..\src\univ\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_radiobut.obj :  .AUTODEPEND ..\..\src\msw\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_radiobut.obj :  .AUTODEPEND ..\..\src\univ\radiobut.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_scrolbar.obj :  .AUTODEPEND ..\..\src\msw\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_scrolbar.obj :  .AUTODEPEND ..\..\src\univ\scrolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\msw\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_slider.obj :  .AUTODEPEND ..\..\src\univ\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_spinbutt.obj :  .AUTODEPEND ..\..\src\msw\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_spinbutt.obj :  .AUTODEPEND ..\..\src\univ\spinbutt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_statbmp.obj :  .AUTODEPEND ..\..\src\msw\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_statbmp.obj :  .AUTODEPEND ..\..\src\univ\statbmp.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_statbox.obj :  .AUTODEPEND ..\..\src\msw\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_statbox.obj :  .AUTODEPEND ..\..\src\univ\statbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_statline.obj :  .AUTODEPEND ..\..\src\msw\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_statline.obj :  .AUTODEPEND ..\..\src\univ\statline.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\msw\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_stattext.obj :  .AUTODEPEND ..\..\src\univ\stattext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\msw\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_toolbar.obj :  .AUTODEPEND ..\..\src\univ\toolbar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\msw\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_textctrl.obj :  .AUTODEPEND ..\..\src\univ\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_tglbtn.obj :  .AUTODEPEND ..\..\src\univ\tglbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_checklst.obj :  .AUTODEPEND ..\..\src\univ\checklst.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 0
-$(OBJS)\corelib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\msw\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\corelib_fdrepdlg.obj :  .AUTODEPEND ..\..\src\generic\fdrepdlg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
 !endif
 
 !ifeq USE_GUI 1
