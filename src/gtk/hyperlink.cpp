@@ -107,7 +107,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         m_parent->DoAddChild( this );
 
         PostCreation(size);
-        SetInitialSize(size);
 
         // wxWindowGTK will connect to the enter_notify and leave_notify GTK+ signals
         // thus overriding GTK+'s internal signal handlers which set the cursor of
