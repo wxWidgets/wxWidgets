@@ -965,7 +965,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
     // Windows draws the filled rectangles without outline (i.e. drawn with a
     // transparent pen) one pixel smaller in both directions and we want them
     // to have the same size regardless of which pen is used - adjust
-    if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
+    if ( m_pen.IsOk() && m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
     {
         x2++;
         y2++;
