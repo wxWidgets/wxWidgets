@@ -476,19 +476,15 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
-    bool ret wxDUMMY_INITIALIZE(false);
-
     wxSize sizeReal = size;
     if ( !sizeReal.IsFullySpecified() )
     {
         sizeReal.SetDefaults(GetDefaultSize());
     }
 
-    m_windowStyle = style;
-
-    SetName(name);
-
-    m_windowId = id == wxID_ANY ? NewControlId() : id;
+    bool ret = CreateBase(parent, id, pos, sizeReal, style, name);
+    if ( !ret )
+        return false;
 
     wxTopLevelWindows.Append(this);
 

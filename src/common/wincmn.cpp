@@ -215,7 +215,6 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxPoint& WXUNUSED(pos),
                               const wxSize& WXUNUSED(size),
                               long style,
-                              const wxValidator& wxVALIDATOR_PARAM(validator),
                               const wxString& name)
 {
     // ids are limited to 16 bits under MSW so if you care about portability,
@@ -242,6 +241,20 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
 
     SetName(name);
     SetParent(parent);
+
+    return true;
+}
+
+bool wxWindowBase::CreateBase(wxWindowBase *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxValidator& wxVALIDATOR_PARAM(validator),
+                              const wxString& name)
+{
+    if ( !CreateBase(parent, id, pos, size, style, name) )
+        return false;
 
 #if wxUSE_VALIDATORS
     SetValidator(validator);

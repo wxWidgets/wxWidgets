@@ -174,15 +174,6 @@ public:
         // Create()
     wxWindowBase() ;
 
-        // pseudo ctor (can't be virtual, called from ctor)
-    bool CreateBase(wxWindowBase *parent,
-                    wxWindowID winid,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = 0,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString& name = wxPanelNameStr);
-
     virtual ~wxWindowBase();
 
     // deleting the window
@@ -1421,6 +1412,24 @@ public:
     virtual bool CanApplyThemeBorder() const { return true; }
 
 protected:
+    // helper for the derived class Create() methods: the first overload, with
+    // validator parameter, should be used for child windows while the second
+    // one is used for top level ones
+    bool CreateBase(wxWindowBase *parent,
+                    wxWindowID winid,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxPanelNameStr);
+
+    bool CreateBase(wxWindowBase *parent,
+                    wxWindowID winid,
+                    const wxPoint& pos,
+                    const wxSize& size,
+                    long style,
+                    const wxString& name);
+
     // event handling specific to wxWindow
     virtual bool TryBefore(wxEvent& event);
     virtual bool TryAfter(wxEvent& event);
