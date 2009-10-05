@@ -3400,6 +3400,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
+	wx/generic/infobar.h \
 	wx/generic/laywin.h \
 	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
@@ -3408,6 +3409,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/wizard.h \
 	wx/grid.h \
 	wx/hyperlink.h \
+	wx/infobar.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/notifmsg.h \
@@ -3443,6 +3445,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
+	wx/generic/infobar.h \
 	wx/generic/laywin.h \
 	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
@@ -3451,6 +3454,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/wizard.h \
 	wx/grid.h \
 	wx/hyperlink.h \
+	wx/infobar.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/notifmsg.h \
@@ -5611,6 +5615,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
+	monodll_infobar.o \
 	monodll_laywin.o \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
@@ -5640,6 +5645,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
+	monodll_infobar.o \
 	monodll_laywin.o \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
@@ -7421,6 +7427,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
+	monolib_infobar.o \
 	monolib_laywin.o \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
@@ -7450,6 +7457,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
+	monolib_infobar.o \
 	monolib_laywin.o \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
@@ -10913,6 +10921,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
+	advdll_infobar.o \
 	advdll_laywin.o \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
@@ -10942,6 +10951,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
+	advdll_infobar.o \
 	advdll_laywin.o \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
@@ -11007,6 +11017,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
+	advlib_infobar.o \
 	advlib_laywin.o \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
@@ -11036,6 +11047,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
+	advlib_infobar.o \
 	advlib_laywin.o \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
@@ -18712,6 +18724,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
+@COND_USE_GUI_1@monodll_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
@@ -23481,6 +23496,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
+
+@COND_USE_GUI_1@monolib_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -31969,6 +31987,9 @@ advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVDLL_ODEP)
 advdll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
+advdll_infobar.o: $(srcdir)/src/generic/infobar.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
 
@@ -32292,6 +32313,9 @@ advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVLIB_ODEP)
 
 advlib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
+
+advlib_infobar.o: $(srcdir)/src/generic/infobar.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp

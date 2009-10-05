@@ -409,6 +409,8 @@
 
 #define wxUSE_IMAGLIST      0
 
+#define wxUSE_INFOBAR       0
+
 #define wxUSE_MENUS         0
 
 #define wxUSE_NOTIFICATION_MESSAGE 0

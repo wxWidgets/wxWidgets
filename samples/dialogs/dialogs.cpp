@@ -87,6 +87,10 @@
     #include "wx/fdrepdlg.h"
 #endif // wxUSE_FINDREPLDLG
 
+#if wxUSE_INFOBAR
+    #include "wx/infobar.h"
+#endif // wxUSE_INFOBAR
+
 #include "wx/spinctrl.h"
 #include "wx/propdlg.h"
 
@@ -134,6 +138,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_LOG_DIALOG
     EVT_MENU(DIALOGS_LOG_DIALOG,                    MyFrame::LogDialog)
 #endif // wxUSE_LOG_DIALOG
+#if wxUSE_INFOBAR
+    EVT_MENU(DIALOGS_INFOBAR_SIMPLE,                MyFrame::InfoBarSimple)
+    EVT_MENU(DIALOGS_INFOBAR_ADVANCED,              MyFrame::InfoBarAdvanced)
+#endif // wxUSE_INFOBAR
 
 #if wxUSE_TEXTDLG
     EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
@@ -395,9 +403,14 @@ bool MyApp::OnInit()
        info_menu->Append(DIALOGS_LOG_DIALOG, wxT("&Log dialog\tCtrl-L"));
     #endif // wxUSE_LOG_DIALOG
 
+    #if wxUSE_INFOBAR
+       info_menu->Append(DIALOGS_INFOBAR_SIMPLE, "Simple &info bar\tCtrl-I");
+       info_menu->Append(DIALOGS_INFOBAR_ADVANCED, "&Advanced info bar\tShift-Ctrl-I");
+    #endif // wxUSE_INFOBAR
+
     #if wxUSE_MSGDLG
         info_menu->Append(DIALOGS_MESSAGE_BOX_WXINFO,
-                             wxT("&wxWidgets information\tCtrl-I"));
+                             wxT("&wxWidgets information\tCtrl-W"));
     #endif // wxUSE_MSGDLG
 
     menuDlg->Append(wxID_ANY,wxT("&Informative dialogs"),info_menu);
@@ -414,9 +427,9 @@ bool MyApp::OnInit()
 
     wxMenu *dialogs_menu = new wxMenu;
 #if USE_MODAL_PRESENTATION
-    dialogs_menu->Append(DIALOGS_MODAL, wxT("&Modal dialog\tCtrl-W"));
+    dialogs_menu->Append(DIALOGS_MODAL, wxT("&Modal dialog\tShift-Ctrl-W"));
 #endif // USE_MODAL_PRESENTATION
-    dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, wxT("Mode&less dialog\tCtrl-Z"));
+    dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, wxT("Mode&less dialog\tShift-Ctrl-Z"));
     dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, wxT("Centered on &screen\tShift-Ctrl-1"));
     dialogs_menu->Append(DIALOGS_CENTRE_PARENT, wxT("Centered on &parent\tShift-Ctrl-2"));
 #if wxUSE_MINIFRAME
@@ -510,6 +523,17 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_STATUSBAR
 
     m_canvas = new MyCanvas(this);
+
+#if wxUSE_INFOBAR
+    m_infoBarSimple = new wxInfoBar(this);
+    m_infoBarAdvanced = NULL;
+
+    // to use the info bars we need to use sizer for the window layout
+    wxBoxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_infoBarSimple, wxSizerFlags().Expand());
+    sizer->Add(m_canvas, wxSizerFlags(1).Expand());
+    SetSizer(sizer);
+#endif // wxUSE_INFOBAR
 }
 
 MyFrame::~MyFrame()
@@ -652,6 +676,24 @@ void MyFrame::LogDialog(wxCommandEvent& WXUNUSED(event))
     wxLogMessage(wxT("And this is the same dialog but with only one message."));
 }
 #endif // wxUSE_LOG_DIALOG
+
+#if wxUSE_INFOBAR
+
+void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
+{
+    static int s_count = 0;
+    m_infoBarSimple->ShowMessage
+                     (
+                      wxString::Format("Message #%d in the info bar.", ++s_count)
+                     );
+}
+
+void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
+{
+}
+
+#endif // wxUSE_INFOBAR
+
 
 #if wxUSE_MSGDLG
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))

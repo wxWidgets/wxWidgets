@@ -2283,6 +2283,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.obj \
 	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_hyperlinkg.obj \
+	$(OBJS)\monodll_infobar.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_notifmsgg.obj \
 	$(OBJS)\monodll_odcombo.obj \
@@ -2322,6 +2323,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.obj \
 	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_hyperlinkg.obj \
+	$(OBJS)\monodll_infobar.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_notifmsgg.obj \
 	$(OBJS)\monodll_odcombo.obj \
@@ -2985,6 +2987,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.obj \
 	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_hyperlinkg.obj \
+	$(OBJS)\monolib_infobar.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_notifmsgg.obj \
 	$(OBJS)\monolib_odcombo.obj \
@@ -3024,6 +3027,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.obj \
 	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_hyperlinkg.obj \
+	$(OBJS)\monolib_infobar.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_notifmsgg.obj \
 	$(OBJS)\monolib_odcombo.obj \
@@ -4113,6 +4117,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.obj \
 	$(OBJS)\advdll_helpext.obj \
 	$(OBJS)\advdll_hyperlinkg.obj \
+	$(OBJS)\advdll_infobar.obj \
 	$(OBJS)\advdll_laywin.obj \
 	$(OBJS)\advdll_notifmsgg.obj \
 	$(OBJS)\advdll_odcombo.obj \
@@ -4152,6 +4157,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.obj \
 	$(OBJS)\advdll_helpext.obj \
 	$(OBJS)\advdll_hyperlinkg.obj \
+	$(OBJS)\advdll_infobar.obj \
 	$(OBJS)\advdll_laywin.obj \
 	$(OBJS)\advdll_notifmsgg.obj \
 	$(OBJS)\advdll_odcombo.obj \
@@ -4197,6 +4203,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.obj \
 	$(OBJS)\advlib_helpext.obj \
 	$(OBJS)\advlib_hyperlinkg.obj \
+	$(OBJS)\advlib_infobar.obj \
 	$(OBJS)\advlib_laywin.obj \
 	$(OBJS)\advlib_notifmsgg.obj \
 	$(OBJS)\advlib_odcombo.obj \
@@ -4236,6 +4243,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.obj \
 	$(OBJS)\advlib_helpext.obj \
 	$(OBJS)\advlib_hyperlinkg.obj \
+	$(OBJS)\advlib_infobar.obj \
 	$(OBJS)\advlib_laywin.obj \
 	$(OBJS)\advlib_notifmsgg.obj \
 	$(OBJS)\advlib_odcombo.obj \
@@ -8081,6 +8089,11 @@ $(OBJS)\monodll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_infobar.obj: ..\..\src\generic\infobar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\infobar.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
 !endif
@@ -10354,6 +10367,11 @@ $(OBJS)\monolib_helpext.obj: ..\..\src\generic\helpext.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_infobar.obj: ..\..\src\generic\infobar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\infobar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13985,6 +14003,9 @@ $(OBJS)\advdll_helpext.obj: ..\..\src\generic\helpext.cpp
 $(OBJS)\advdll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
 
+$(OBJS)\advdll_infobar.obj: ..\..\src\generic\infobar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\infobar.cpp
+
 $(OBJS)\advdll_laywin.obj: ..\..\src\generic\laywin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
 
@@ -14095,6 +14116,9 @@ $(OBJS)\advlib_helpext.obj: ..\..\src\generic\helpext.cpp
 
 $(OBJS)\advlib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+
+$(OBJS)\advlib_infobar.obj: ..\..\src\generic\infobar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\infobar.cpp
 
 $(OBJS)\advlib_laywin.obj: ..\..\src\generic\laywin.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\laywin.cpp

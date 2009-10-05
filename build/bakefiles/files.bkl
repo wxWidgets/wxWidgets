@@ -2829,6 +2829,7 @@ src/osx/iphone/window.mm
     src/generic/gridsel.cpp
     src/generic/helpext.cpp
     src/generic/hyperlinkg.cpp
+    src/generic/infobar.cpp
     src/generic/laywin.cpp
     src/generic/notifmsgg.cpp
     src/generic/odcombo.cpp
@@ -2860,6 +2861,7 @@ src/osx/iphone/window.mm
     wx/generic/gridsel.h
     wx/generic/helpext.h
     wx/generic/hyperlink.h
+    wx/generic/infobar.h
     wx/generic/laywin.h
     wx/generic/notifmsg.h
     wx/generic/propdlg.h
@@ -2868,6 +2870,7 @@ src/osx/iphone/window.mm
     wx/generic/wizard.h
     wx/grid.h
     wx/hyperlink.h
+    wx/infobar.h
     wx/joystick.h
     wx/laywin.h
     wx/notifmsg.h

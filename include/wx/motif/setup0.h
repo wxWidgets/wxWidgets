@@ -570,6 +570,14 @@
 // possible in which case setting this to 0 can gain up to 100KB.
 #define wxUSE_VARIANT 1
 
+// Support for wxAny class, the successor for wxVariant.
+//
+// Default is 1.
+//
+// Recommended setting: 1 unless you want to reduce the library size by a small amount,
+// or your compiler cannot for some reason cope with complexity of templates used.
+#define wxUSE_ANY 1
+
 // Support for regular expression matching via wxRegEx class: enable this to
 // use POSIX regular expressions in your code. You need to compile regex
 // library from src/regex to use it under Windows.
@@ -890,6 +898,14 @@
 // Recommended setting: 1 (set it to 0 if you don't use any of the controls
 // enumerated above, then this class is mostly useless too)
 #define wxUSE_IMAGLIST      1
+
+// Use wxInfoBar class.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be disabled without problems as nothing
+// depends on it)
+#define wxUSE_INFOBAR       1
 
 // Use wxMenu, wxMenuBar, wxMenuItem.
 //

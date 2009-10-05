@@ -5327,6 +5327,10 @@ SOURCE=..\..\include\wx\generic\hyperlink.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\infobar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
@@ -6116,6 +6120,10 @@ SOURCE=..\..\include\wx\imagtiff.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\imagxpm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\infobar.h
 # End Source File
 # Begin Source File
 

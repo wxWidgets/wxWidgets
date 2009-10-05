@@ -4606,6 +4606,9 @@
 				RelativePath="..\..\include\wx\generic\hyperlink.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\infobar.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\laywin.h">
 			</File>
 			<File
@@ -5201,6 +5204,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\imagxpm.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\infobar.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\joystick.h">

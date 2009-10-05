@@ -899,6 +899,14 @@
 // enumerated above, then this class is mostly useless too)
 #define wxUSE_IMAGLIST      1
 
+// Use wxInfoBar class.
+//
+// Default is 1.
+//
+// Recommended setting: 1 (but can be disabled without problems as nothing
+// depends on it)
+#define wxUSE_INFOBAR       1
+
 // Use wxMenu, wxMenuBar, wxMenuItem.
 //
 // Default is 1.

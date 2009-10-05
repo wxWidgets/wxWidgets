@@ -917,6 +917,7 @@ WX_ARG_FEATURE(grid,        [  --enable-grid           use wxGrid class], wxUSE_
 WX_ARG_FEATURE(headerctrl,  [  --enable-headerctrl     use wxHeaderCtrl class], wxUSE_HEADERCTRL)
 WX_ARG_FEATURE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
 WX_ARG_FEATURE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
+WX_ARG_FEATURE(infobar,     [  --enable-infobar        use wxInfoBar class], wxUSE_INFOBAR)
 WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
 WX_ARG_FEATURE(listbox,     [  --enable-listbox        use wxListBox class], wxUSE_LISTBOX)
 WX_ARG_FEATURE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wxUSE_LISTCTRL)
@@ -6685,6 +6686,10 @@ fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
     AC_DEFINE(wxUSE_IMAGLIST)
+fi
+
+if test "$wxUSE_INFOBAR" = "yes"; then
+    AC_DEFINE(wxUSE_INFOBAR)
 fi
 
 if test "$wxUSE_LISTBOOK" = "yes"; then

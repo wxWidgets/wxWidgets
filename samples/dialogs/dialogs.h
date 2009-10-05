@@ -303,6 +303,11 @@ public:
     void LogDialog(wxCommandEvent& event);
 #endif // wxUSE_LOG_DIALOG
 
+#if wxUSE_INFOBAR
+    void InfoBarSimple(wxCommandEvent& event);
+    void InfoBarAdvanced(wxCommandEvent& event);
+#endif // wxUSE_INFOBAR
+
 #if wxUSE_CHOICEDLG
     void SingleChoice(wxCommandEvent& event);
     void MultiChoice(wxCommandEvent& event);
@@ -423,6 +428,11 @@ private:
     // just a window which we use to show the effect of font/colours selection
     wxWindow *m_canvas;
 
+#if wxUSE_INFOBAR
+    wxInfoBar *m_infoBarSimple,
+              *m_infoBarAdvanced;
+#endif // wxUSE_INFOBAR
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -472,6 +482,8 @@ enum
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
+    DIALOGS_INFOBAR_SIMPLE,
+    DIALOGS_INFOBAR_ADVANCED,
     DIALOGS_MODAL,
     DIALOGS_MODELESS,
     DIALOGS_CENTRE_SCREEN,

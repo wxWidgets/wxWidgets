@@ -696,6 +696,14 @@
 #   endif
 #endif /* !defined(wxUSE_IMAGLIST) */
 
+#ifndef wxUSE_INFOBAR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_INFOBAR must be defined."
+#   else
+#       define wxUSE_INFOBAR 0
+#   endif
+#endif /* !defined(wxUSE_INFOBAR) */
+
 #ifndef wxUSE_JOYSTICK
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_JOYSTICK must be defined."
