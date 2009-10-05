@@ -66,8 +66,8 @@ public:
                                   wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* WXUNUSED(params) = NULL)
     {
-        dc.SetBrush(*wxBLUE_BRUSH);
-        dc.SetTextForeground(*wxWHITE);
+        wxDCBrushChanger setBrush(dc, *wxBLUE_BRUSH);
+        wxDCTextColourChanger setFgCol(dc, *wxWHITE);
         dc.DrawRoundedRectangle(rect, 5);
         dc.DrawLabel(wxT("MyRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
         return rect.width;
