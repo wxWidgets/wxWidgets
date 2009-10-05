@@ -120,6 +120,14 @@ public:
 
     virtual void DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+    virtual void DrawTitleBarBitmap(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxTitleBarButton button,
+                                    int flags = 0);
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -751,7 +759,22 @@ void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc)
     wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawTextCtrl");
 }
 
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
 
+void wxRendererGeneric::DrawTitleBarBitmap(wxWindow * WXUNUSED(win),
+                                           wxDC& WXUNUSED(dc),
+                                           const wxRect& WXUNUSED(rect),
+                                           wxTitleBarButton WXUNUSED(button),
+                                           int WXUNUSED(flags))
+{
+    // no need to fail here, if wxHAS_DRAW_TITLE_BAR_BITMAP is defined this
+    // will be implemented in the native renderer and this version is never
+    // going to be used -- but we still need to define it to allow
+    // instantiation of this class (which would have been pure virtual
+    // otherwise)
+}
+
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
 
 // ----------------------------------------------------------------------------

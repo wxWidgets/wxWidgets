@@ -193,6 +193,27 @@ private:
         renderer.DrawTreeItemButton(this, dc,
                                     wxRect(x2, y, 20, 20), m_flags);
         y += lineHeight + 20;
+
+#ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
+        dc.DrawText("DrawTitleBarBitmap()", x1, y);
+        wxRect rBtn(x2, y, 21, 21);
+        renderer.DrawTitleBarBitmap(this, dc, rBtn,
+                                    wxTITLEBAR_BUTTON_HELP, m_flags);
+        rBtn.x += 2*rBtn.width;
+        renderer.DrawTitleBarBitmap(this, dc, rBtn,
+                                    wxTITLEBAR_BUTTON_ICONIZE, m_flags);
+        rBtn.x += 2*rBtn.width;
+        renderer.DrawTitleBarBitmap(this, dc, rBtn,
+                                    wxTITLEBAR_BUTTON_RESTORE, m_flags);
+        rBtn.x += 2*rBtn.width;
+        renderer.DrawTitleBarBitmap(this, dc, rBtn,
+                                    wxTITLEBAR_BUTTON_MAXIMIZE, m_flags);
+        rBtn.x += 2*rBtn.width;
+        renderer.DrawTitleBarBitmap(this, dc, rBtn,
+                                    wxTITLEBAR_BUTTON_CLOSE, m_flags);
+
+        y += lineHeight + rBtn.height;
+#endif // wxHAS_DRAW_TITLE_BAR_BITMAP
     }
 
     int m_flags;

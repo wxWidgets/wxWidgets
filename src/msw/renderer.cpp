@@ -92,6 +92,12 @@
     #define TMT_TEXTCOLOR       3803
     #define TMT_BORDERCOLOR     3801
     #define TMT_EDGEFILLCOLOR   3808
+
+    #define WP_MINBUTTON 15
+    #define WP_MAXBUTTON 17
+    #define WP_CLOSEBUTTON 18
+    #define WP_RESTOREBUTTON 21
+    #define WP_HELPBUTTON 23
 #endif
 
 #if defined(__WXWINCE__)
@@ -181,18 +187,35 @@ public:
         DoDrawButton(DFCS_BUTTONRADIO, win, dc, rect, flags);
     }
 
+    virtual void DrawTitleBarBitmap(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxTitleBarButton button,
+                                    int flags = 0);
+
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
 private:
+    // wrapper of DrawFrameControl()
+    void DoDrawFrameControl(UINT type,
+                            UINT kind,
+                            wxWindow *win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags);
+
     // common part of Draw{PushButton,CheckBox,RadioBitmap}(): wraps
     // DrawFrameControl(DFC_BUTTON)
     void DoDrawButton(UINT kind,
                       wxWindow *win,
                       wxDC& dc,
                       const wxRect& rect,
-                      int flags);
+                      int flags)
+    {
+        DoDrawFrameControl(DFC_BUTTON, kind, win, dc, rect, flags);
+    }
 
     wxDECLARE_NO_COPY_CLASS(wxRendererMSW);
 };
@@ -262,9 +285,24 @@ public:
             m_rendererNative.DrawRadioBitmap(win, dc, rect, flags);
     }
 
+    virtual void DrawTitleBarBitmap(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxTitleBarButton button,
+                                    int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
+    // wrapper around DrawThemeBackground() translating flags to NORMAL/HOT/
+    // PUSHED/DISABLED states (and so suitable for drawing anything
+    // button-like)
+    void DoDrawButtonLike(HTHEME htheme,
+                          int part,
+                          wxDC& dc,
+                          const wxRect& rect,
+                          int flags);
+
     // common part of DrawCheckBox(), DrawPushButton() and DrawRadioBitmap()
     bool DoDrawXPButton(int kind,
                         wxWindow *win,
@@ -367,11 +405,12 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
 }
 
 void
-wxRendererMSW::DoDrawButton(UINT kind,
-                            wxWindow * WXUNUSED(win),
-                            wxDC& dc,
-                            const wxRect& rect,
-                            int flags)
+wxRendererMSW::DoDrawFrameControl(UINT type,
+                                  UINT kind,
+                                  wxWindow * WXUNUSED(win),
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags)
 {
     RECT r;
     wxCopyRectToRECT(rect, r);
@@ -388,7 +427,7 @@ wxRendererMSW::DoDrawButton(UINT kind,
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
 
-    ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, DFC_BUTTON, style);
+    ::DrawFrameControl(GetHdcOf(dc.GetTempHDC()), &r, type, style);
 }
 
 void
@@ -409,6 +448,44 @@ wxRendererMSW::DrawPushButton(wxWindow *win,
     }
 
     DoDrawButton(DFCS_BUTTONPUSH, win, dc, rect, flags);
+}
+
+void
+wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  wxTitleBarButton button,
+                                  int flags)
+{
+    UINT kind;
+    switch ( button )
+    {
+        case wxTITLEBAR_BUTTON_CLOSE:
+            kind = DFCS_CAPTIONCLOSE;
+            break;
+
+        case wxTITLEBAR_BUTTON_MAXIMIZE:
+            kind = DFCS_CAPTIONMAX;
+            break;
+
+        case wxTITLEBAR_BUTTON_ICONIZE:
+            kind = DFCS_CAPTIONMIN;
+            break;
+
+        case wxTITLEBAR_BUTTON_RESTORE:
+            kind = DFCS_CAPTIONRESTORE;
+            break;
+
+        case wxTITLEBAR_BUTTON_HELP:
+            kind = DFCS_CAPTIONHELP;
+            break;
+
+        default:
+            wxFAIL_MSG( "unsupported title bar button" );
+            return;
+    }
+
+    DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
@@ -638,29 +715,24 @@ wxRendererXP::DoDrawXPButton(int kind,
     if ( !hTheme )
         return false;
 
+    DoDrawButtonLike(hTheme, kind, dc, rect, flags);
+
+    return true;
+}
+
+void
+wxRendererXP::DoDrawButtonLike(HTHEME htheme,
+                               int part,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags)
+{
     RECT r;
     wxCopyRectToRECT(rect, r);
 
-    // determine the base state depending on the button kind
-    int state;
-    switch ( kind )
-    {
-        case BP_PUSHBUTTON:
-            state = PBS_NORMAL;
-            break;
-
-        case BP_RADIOBUTTON:
-            state = RBS_UNCHECKEDNORMAL;
-            break;
-
-        case BP_CHECKBOX:
-            state = CBS_UNCHECKEDNORMAL;
-            break;
-
-        default:
-            wxFAIL_MSG( "unknown button kind" );
-            return false;
-    }
+    // the base state is always 1, whether it is PBS_NORMAL,
+    // {CBS,RBS}_UNCHECKEDNORMAL or CBS_NORMAL
+    int state = 1;
 
     // XBS_XXX is followed by XBX_XXXHOT, then XBS_XXXPRESSED and DISABLED
     enum
@@ -687,20 +759,63 @@ wxRendererXP::DoDrawXPButton(int kind,
     else if ( flags & wxCONTROL_CURRENT )
         state += HOT_OFFSET;
     // wxCONTROL_ISDEFAULT flag is only valid for push buttons
-    else if ( kind == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
+    else if ( part == BP_PUSHBUTTON && (flags & wxCONTROL_ISDEFAULT) )
         state = PBS_DEFAULTED;
 
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
-                                hTheme,
+                                htheme,
                                 GetHdcOf(dc.GetTempHDC()),
-                                kind,
+                                part,
                                 state,
                                 &r,
                                 NULL
                             );
+}
 
-    return true;
+void
+wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 wxTitleBarButton button,
+                                 int flags)
+{
+    wxUxThemeHandle hTheme(win, L"WINDOW");
+    if ( !hTheme )
+    {
+        m_rendererNative.DrawTitleBarBitmap(win, dc, rect, button, flags);
+        return;
+    }
+
+    int part;
+    switch ( button )
+    {
+        case wxTITLEBAR_BUTTON_CLOSE:
+            part = WP_CLOSEBUTTON;
+            break;
+
+        case wxTITLEBAR_BUTTON_MAXIMIZE:
+            part = WP_MAXBUTTON;
+            break;
+
+        case wxTITLEBAR_BUTTON_ICONIZE:
+            part = WP_MINBUTTON;
+            break;
+
+        case wxTITLEBAR_BUTTON_RESTORE:
+            part = WP_RESTOREBUTTON;
+            break;
+
+        case wxTITLEBAR_BUTTON_HELP:
+            part = WP_HELPBUTTON;
+            break;
+
+        default:
+            wxFAIL_MSG( "unsupported title bar button" );
+            return;
+    }
+
+    DoDrawButtonLike(hTheme, part, dc, rect, flags);
 }
 
 // ----------------------------------------------------------------------------
