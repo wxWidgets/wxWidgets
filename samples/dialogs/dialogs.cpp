@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialogs.cpp
 // Purpose:     Common dialogs demo
-// Author:      Julian Smart
-// Modified by: ABX (2004) - adjustements for conditional building + new menu
+// Author:      Julian Smart, Vadim Zeitlin, ABX
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
+//              (c) 2004 ABX
+//              (c) Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -274,7 +275,7 @@ bool MyApp::OnInit()
     m_canvasFont = *wxNORMAL_FONT;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, wxT("wxWidgets dialogs example"));
+    MyFrame *frame = new MyFrame(wxT("wxWidgets dialogs example"));
 
     // Make a menubar
     wxMenu *menuDlg = new wxMenu;
@@ -474,19 +475,14 @@ bool MyApp::OnInit()
     frame->SetMenuBar(menubar);
 
     frame->Centre(wxBOTH);
-
-    // Show the frame
     frame->Show(true);
-
-    SetTopWindow(frame);
 
     return true;
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxWindow *parent,
-                 const wxString& title)
-       : wxFrame(parent, wxID_ANY, title)
+MyFrame::MyFrame(const wxString& title)
+       : wxFrame(NULL, wxID_ANY, title)
 {
     SetIcon(sample_xpm);
 

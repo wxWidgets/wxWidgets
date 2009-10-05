@@ -1,11 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dialogs.h
 // Purpose:     Common dialogs demo
-// Author:      Julian Smart
-// Modified by: ABX (2004) - adjustementd for conditional building
+// Author:      Julian Smart, Vadim Zeitlin, ABX
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
+//              (c) 2004 ABX
+//              (c) Vadim Zeitlin
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -283,7 +284,7 @@ DECLARE_EVENT_TABLE()
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxWindow *parent, const wxString& title);
+    MyFrame(const wxString& title);
     virtual ~MyFrame();
 
 #if wxUSE_MSGDLG
