@@ -66,6 +66,14 @@ public:
     // get the currently used effect animation duration
     int GetEffectDuration() const { return m_effectDuration; }
 
+
+    // overridden base class methods
+    // -----------------------------
+
+    // setting the font of this window sets it for the text control inside it
+    // (default font is a larger and bold version of the normal one)
+    virtual bool SetFont(const wxFont& font);
+
 private:
     // common part of all ctors
     void Init();

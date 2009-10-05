@@ -108,6 +108,18 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     return true;
 }
 
+bool wxInfoBar::SetFont(const wxFont& font)
+{
+    if ( !wxInfoBarBase::SetFont(font) )
+        return false;
+
+    // check that we're not called before Create()
+    if ( m_text )
+        m_text->SetFont(font);
+
+    return true;
+}
+
 void wxInfoBar::UpdateParent()
 {
     wxWindow * const parent = wxGetTopLevelParent(GetParent());
