@@ -215,7 +215,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
-		regex.obj,any.obj
+		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
+		arcfind.obj,tarstrm.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -413,7 +414,8 @@ SOURCES = \
 		xti.cpp,\
 		xtistrm.cpp,\
 		xtixml.cpp,\
-		wrapsizer.cpp
+		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.obj,arcfind.obj,\
+		tarstrm.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -654,3 +656,8 @@ rearrangectrl.obj : rearrangectrl.cpp
 spinctrlcmn.obj : spinctrlcmn.cpp
 datetimefmt.obj : datetimefmt.cpp
 xlocale.obj : xlocale.cpp
+archive.obj : archive.cpp
+fs_arc.obj : fs_arc.cpp
+arcall.obj : arcall.cpp
+arcfind.obj : arcfind.cpp
+tarstrm.obj : tarstrm.cpp

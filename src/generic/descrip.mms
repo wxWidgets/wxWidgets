@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 18 June 2009                                                        *
+# Date : 6 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -168,18 +168,18 @@ SOURCES = \
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
 	combog.obj,animateg.obj,colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,\
-	mdig.obj
+	mdig.obj,infobar.obj
 .else
 .ifdef __WXX11__
 OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
 	combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
-	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
+	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,infobar.obj
 .else
 .ifdef __WXGTK__
 OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
 	combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
-	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
+	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,infobar.obj
 .else
 OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
 	combog.obj,icon.obj
@@ -291,3 +291,4 @@ notifmsgg.obj : notifmsgg.cpp
 stattextg.obj : stattextg.cpp
 headerctrlg.obj : headerctrlg.cpp
 grideditors.obj : grideditors.cpp
+infobar.obj : infobar.cpp
