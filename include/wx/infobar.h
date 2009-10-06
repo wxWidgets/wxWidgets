@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxInfoBarBase defining common API of wxInfoBar
 // Author:      Vadim Zeitlin
 // Created:     2009-07-28
-// RCS-ID:      $Id: wxhead.h,v 1.11 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@
 
 #if wxUSE_INFOBAR
 
-#include "wx/window.h"
+#include "wx/control.h"
 
 // ----------------------------------------------------------------------------
 // wxInfoBar shows non-critical but important information to the user
