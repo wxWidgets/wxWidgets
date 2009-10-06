@@ -216,7 +216,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
-		arcfind.obj,tarstrm.obj
+		arcfind.obj,tarstrm.obj,datavcmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -415,7 +415,7 @@ SOURCES = \
 		xtistrm.cpp,\
 		xtixml.cpp,\
 		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.obj,arcfind.obj,\
-		tarstrm.cpp
+		tarstrm.cpp,datavcmn.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -661,3 +661,4 @@ fs_arc.obj : fs_arc.cpp
 arcall.obj : arcall.cpp
 arcfind.obj : arcfind.cpp
 tarstrm.obj : tarstrm.cpp
+datavcmn.obj : datavcmn.cpp

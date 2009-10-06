@@ -93,7 +93,7 @@ OBJECTS = \
 		bmpcboxg.obj,\
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
-		editlbox.obj
+		editlbox.obj,datavgen.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -163,7 +163,8 @@ SOURCES = \
 		filepickerg.cpp,\
 		vscroll.cpp,\
 		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp\
-		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp
+		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
+		datavgen.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -292,3 +293,4 @@ stattextg.obj : stattextg.cpp
 headerctrlg.obj : headerctrlg.cpp
 grideditors.obj : grideditors.cpp
 infobar.obj : infobar.cpp
+datavgen.obj : datavgen.cpp
