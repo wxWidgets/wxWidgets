@@ -323,7 +323,7 @@ CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage )
     NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:nsGraphicsContext];
-    [[NSColor yellowColor] setFill];
+    [[NSColor whiteColor] setFill];
     NSRectFill(NSMakeRect(0.0, 0.0, imageSize.width, imageSize.height));
     [nsimage drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
     [NSGraphicsContext setCurrentContext:nsGraphicsContext];
