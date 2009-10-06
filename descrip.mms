@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 5 October 2009                                                      *
+# Date : 6 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -267,6 +267,8 @@ motif : [.include.wx]setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.regex]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 October 2009                                                      *
+# Date : 6 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -215,14 +215,14 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
-		any.obj
+		regex.obj,any.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
 OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
-	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
+	taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj
 
 
