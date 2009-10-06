@@ -170,10 +170,13 @@ wxInfoBarGeneric::BarPlacement wxInfoBarGeneric::GetBarPlacement() const
     if ( !sizer )
         return BarPlacement_Unknown;
 
+    // FIXME-VC6: can't compare "const wxInfoBarGeneric *" and "wxWindow *",
+    //            so need this workaround
+    wxWindow * const self = const_cast<wxInfoBarGeneric *>(this);
     const wxSizerItemList& siblings = sizer->GetChildren();
-    if ( siblings.GetFirst()->GetData()->GetWindow() == this )
+    if ( siblings.GetFirst()->GetData()->GetWindow() == self )
         return BarPlacement_Top;
-    else if ( siblings.GetLast()->GetData()->GetWindow() == this )
+    else if ( siblings.GetLast()->GetData()->GetWindow() == self )
         return BarPlacement_Bottom;
     else
         return BarPlacement_Unknown;
