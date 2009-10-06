@@ -1395,9 +1395,12 @@ wxWidgetCocoaImpl::ShowViewOrWindowWithEffect(wxWindow *win,
     //
     // notice that because the default animation mode is NSAnimationBlocking,
     // no user input events ought to be processed from here
-    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
-    while ( ![animDelegate isDone] )
-        loop->Dispatch();
+    {
+        wxEventLoopGuarantor ensureEventLoopExistence;
+        wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+        while ( ![animDelegate isDone] )
+            loop->Dispatch();
+    }
 
     if ( !show )
     {
