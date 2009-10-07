@@ -1454,23 +1454,37 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     RectF layoutRect(0,0, 100000.0f, 100000.0f);
     StringFormat strFormat( StringFormat::GenericTypographic() );
 
-    CharacterRange* ranges = new CharacterRange[len] ;
-    Region* regions = new Region[len];
-    for( size_t i = 0 ; i < len ; ++i)
-    {
-        ranges[i].First = i ;
-        ranges[i].Length = 1 ;
-    }
-    strFormat.SetMeasurableCharacterRanges(len,ranges);
-    strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
-    m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,1,regions) ;
+    size_t startPosition = 0;
+    size_t reminder = len;
+    const size_t maxSpan = 32;
+    CharacterRange* ranges = new CharacterRange[maxSpan] ;
+    Region* regions = new Region[maxSpan];
 
-    RectF bbox ;
-    for ( size_t i = 0 ; i < len ; ++i)
+    while( reminder > 0 )
     {
-        regions[i].GetBounds(&bbox,m_context);
-        widths[i] = bbox.GetRight()-bbox.GetLeft();
+        size_t span = wxMin( maxSpan, reminder );
+
+        for( size_t i = 0 ; i < span ; ++i)
+        {
+            ranges[i].First = 0 ;
+            ranges[i].Length = startPosition+i+1 ;
+        }
+        strFormat.SetMeasurableCharacterRanges(span,ranges);
+        strFormat.SetFormatFlags( StringFormatFlagsMeasureTrailingSpaces | strFormat.GetFormatFlags() );
+        m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,span,regions) ;
+
+        RectF bbox ;
+        for ( size_t i = 0 ; i < span ; ++i)
+        {
+            regions[i].GetBounds(&bbox,m_context);
+            widths[startPosition+i] = bbox.Width;
+        }
+        reminder -= span;
+        startPosition += span;
     }
+
+    delete[] ranges;
+    delete[] regions;
 }
 
 bool wxGDIPlusContext::ShouldOffset() const
