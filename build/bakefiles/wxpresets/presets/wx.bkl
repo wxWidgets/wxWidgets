@@ -385,7 +385,7 @@
     </define-tag>
 
     <!-- Sets as output folder for the current target a directory
-         called "$(value)/$(COMPILER)_lib|dll", just like wxWidgets does.
+         called "$(value)/$(COMPILER_PREFIX)_lib|dll", just like wxWidgets does.
          This makes it possible to keep separed the libraries/exes compiled with
          different compilers and with a different value for WX_SHARED.
     -->
@@ -396,7 +396,7 @@
                 <if cond="WX_SHARED=='1'">dll</if>
             </set>
             <set var="_DIRNAME">
-                $(value)/$(COMPILER)_$(_DIRNAME_SHARED_SUFFIX)
+                $(value)/$(COMPILER_PREFIX)_$(_DIRNAME_SHARED_SUFFIX)
             </set>
 
             <dirname>$(_DIRNAME)</dirname>
@@ -479,7 +479,7 @@
             </set>
 
             <set var="BUILDDIR">
-                $(COMPILER)$(WX_PORT)$(WXLIBPOSTFIX)$(_BUILDDIR_SHARED_SUFFIX)
+                $(COMPILER_PREFIX)$(WX_PORT)$(WXLIBPOSTFIX)$(_BUILDDIR_SHARED_SUFFIX)
             </set>
         </if>
     </define-global-tag>

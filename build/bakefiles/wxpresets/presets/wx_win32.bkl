@@ -66,8 +66,8 @@
     </set>
 
     <set var="WXLIBPATH">
-        <if cond="WX_SHARED=='0'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_lib</if>
-        <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER)$(WXCPU)_dll</if>
+        <if cond="WX_SHARED=='0'">$(DIRSEP)lib$(DIRSEP)$(COMPILER_PREFIX)$(WXCPU)_lib</if>
+        <if cond="WX_SHARED=='1'">$(DIRSEP)lib$(DIRSEP)$(COMPILER_PREFIX)$(WXCPU)_dll</if>
     </set>
 
     <!-- under Unix this is an option (detected at configure-time);
