@@ -1683,6 +1683,7 @@ void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
     if (  [m_osxView respondsToSelector:@selector(setImage:)] )
     {
         [m_osxView setImage:bitmap.GetNSImage()];
+        [m_osxView setNeedsDisplay:YES];
     }
 }
 

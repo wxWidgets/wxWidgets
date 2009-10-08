@@ -22,6 +22,21 @@
 
 #include "wx/osx/private.h"
 
+class wxBitmapButtonCocoaImpl : public wxWidgetCocoaImpl, public wxBitmapButtonImpl
+{
+    public :
+    wxBitmapButtonCocoaImpl( wxWindowMac* peer , WXWidget w) : wxWidgetCocoaImpl(peer,w)
+    {
+    }
+    
+    void SetPressedBitmap( const wxBitmap& bitmap )
+    {
+        wxNSButton* button = (wxNSButton*) m_osxView;
+        [button setAlternateImage: bitmap.GetNSImage()];
+        [button setButtonType:NSMomentaryChangeButton];
+    }
+} ;
+
 wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
@@ -55,7 +70,7 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
         [v setImage:bitmap.GetNSImage() ];
 
     [v setButtonType:NSMomentaryPushInButton];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxWidgetCocoaImpl* c = new wxBitmapButtonCocoaImpl( wxpeer, v );
     return c;
 }
 

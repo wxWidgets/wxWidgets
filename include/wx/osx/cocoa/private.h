@@ -261,6 +261,7 @@ protected :
 
     @interface wxNSButton : NSButton
     {
+        NSTrackingRectTag rectTag;
     }
 
     @end

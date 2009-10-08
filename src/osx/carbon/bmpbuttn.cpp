@@ -27,7 +27,7 @@ namespace
 
 // define a derived class to override SetBitmap() and also to provide
 // InitButtonContentInfo() helper used by CreateBitmapButton()
-class wxMacBitmapButton : public wxMacControl
+class wxMacBitmapButton : public wxMacControl, public wxBitmapButtonImpl
 {
 public:
     wxMacBitmapButton(wxWindowMac* peer, const wxBitmap& bitmap, int style)
@@ -70,6 +70,11 @@ public:
                                 m_isIcon ? kControlContentIconRef : 0);
     }
 
+    void SetPressedBitmap( const wxBitmap& WXUNUSED(bitmap) )
+    {
+        // not implemented under Carbon
+    }    
+    
 private:
     // helper function: returns true if the given bitmap is of one of standard
     // sizes supported by OS X icons

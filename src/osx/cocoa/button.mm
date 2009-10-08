@@ -82,6 +82,16 @@ wxSize wxButton::GetDefaultSize()
     }
 }
 
+- (void) setTrackingTag: (NSTrackingRectTag)tag
+{
+    rectTag = tag;
+}
+
+- (NSTrackingRectTag) trackingTag
+{
+    return rectTag;
+}
+
 @end
 
 namespace

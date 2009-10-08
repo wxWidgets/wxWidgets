@@ -588,6 +588,19 @@ public :
 };
 
 //
+// common interface bitmapbuttons
+//
+
+class wxBitmapButtonImpl
+{
+    public :
+    wxBitmapButtonImpl(){}
+    virtual ~wxBitmapButtonImpl(){}
+    
+    virtual void SetPressedBitmap( const wxBitmap& bitmap ) = 0;
+} ;
+
+//
 // common interface for search controls
 //
 
