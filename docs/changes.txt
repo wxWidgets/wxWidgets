@@ -405,6 +405,11 @@ All:
 - wxDateTime timezone functions now dynamic (no caching).
 - Added wxHttp::GetCookie and wxHttp::HasCookies (dodge).
 
+Unix:
+
+- Allow to use WX_APPNAME_DATA_DIR environment var to override the return value
+  of wxStandardPaths::GetDataDir().
+
 All (GUI):
 
 - Added support for showing bitmaps in wxButton.

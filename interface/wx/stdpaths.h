@@ -103,10 +103,19 @@ public:
     /**
         Return the location of the applications global, i.e. not user-specific,
         data files.
+
         Example return values:
         - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
         - Mac: @c appinfo.app/Contents/SharedSupport bundle subdirectory
+
+        Under Unix (only) it is possible to override the default value returned
+        from this function by setting the value of @c WX_APPNAME_DATA_DIR
+        environment variable to the directory to use (where @c APPNAME is the
+        upper-cased value of wxApp::GetAppName()). This is useful in order to
+        be able to run applications using this function without installing them
+        as you can simply set this environment variable to the source directory
+        location to allow the application to find its files there.
 
         @see GetLocalDataDir()
     */
