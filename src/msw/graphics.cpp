@@ -1455,14 +1455,14 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     StringFormat strFormat( StringFormat::GenericTypographic() );
 
     size_t startPosition = 0;
-    size_t reminder = len;
+    size_t remainder = len;
     const size_t maxSpan = 32;
     CharacterRange* ranges = new CharacterRange[maxSpan] ;
     Region* regions = new Region[maxSpan];
 
-    while( reminder > 0 )
+    while( remainder > 0 )
     {
-        size_t span = wxMin( maxSpan, reminder );
+        size_t span = wxMin( maxSpan, remainder );
 
         for( size_t i = 0 ; i < span ; ++i)
         {
@@ -1479,7 +1479,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
             regions[i].GetBounds(&bbox,m_context);
             widths[startPosition+i] = bbox.Width;
         }
-        reminder -= span;
+        remainder -= span;
         startPosition += span;
     }
 
