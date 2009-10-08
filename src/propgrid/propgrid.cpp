@@ -2903,7 +2903,10 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 
     m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
 
-    if ( pendingValue.GetType() == wxPG_VARIANT_TYPE_LIST )
+    //
+    // Variant list a special value that cannot be validated
+    // by normal means.
+    if ( pendingValue.GetType() != wxPG_VARIANT_TYPE_LIST )
     {
         if ( !p->ValidateValue(pendingValue, m_validationInfo) )
             return false;
