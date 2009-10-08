@@ -3,7 +3,7 @@
 // Purpose:     wxInfoBar implementation for GTK
 // Author:      Vadim Zeitlin
 // Created:     2009-09-27
-// RCS-ID:      $Id: wxhead.cpp,v 1.10 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,6 +31,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/vector.h"
+#include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/messagetype.h"
@@ -143,7 +144,7 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     GTKConnectWidget("response", G_CALLBACK(wxgtk_infobar_response));
     GTKConnectWidget("close", G_CALLBACK(wxgtk_infobar_close));
 
-    return false;
+    return true;
 }
 
 wxInfoBar::~wxInfoBar()
@@ -254,13 +255,16 @@ void wxInfoBar::RemoveButton(wxWindowID btnid)
           i != buttons.rend();
           ++i )
     {
-        gtk_widget_destroy(i->button);
-        buttons.erase(i.base());
+        if (i->id == btnid)
+        {
+            gtk_widget_destroy(i->button);
+            buttons.erase(i.base());
 
-        // see comment in GTKAddButton()
-        InvalidateBestSize();
+            // see comment in GTKAddButton()
+            InvalidateBestSize();
 
-        return;
+            return;
+        }
     }
 
     wxFAIL_MSG( wxString::Format("button with id %d not found", btnid) );
