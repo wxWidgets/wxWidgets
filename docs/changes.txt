@@ -141,7 +141,10 @@ wxMSW:
 - Worked around child window and caret positioning bug (in Windows) when using
   wxBORDER_THEME in a container window.
 - Suppressed spurious character event for decimal key in numeric keypad.
-  
+
+wxGTK:
+
+- Don't access a possibly destroyed timer object from GTK callback (Tim Kosse).
 
 wxMac:
 

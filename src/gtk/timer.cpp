@@ -30,7 +30,8 @@ static gint timeout_callback( gpointer data )
 
     // Don't change the order of anything in this callback!
 
-    if (timer->IsOneShot())
+    const bool oneshot = timer->IsOneShot();
+    if ( oneshot )
     {
         // This sets m_tag to -1
         timer->Stop();
@@ -50,7 +51,7 @@ static gint timeout_callback( gpointer data )
     if (app)
         app->WakeUpIdle();
 
-    if (timer->IsOneShot())
+    if ( oneshot )
         return FALSE;
 
     return TRUE;
