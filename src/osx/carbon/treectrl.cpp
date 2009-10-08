@@ -284,7 +284,7 @@ bool wxTreeCtrl::ExpandItem(long item, int action)
         break;
 
     default:
-        wxFAIL_MSG(wxT("unknown action in wxTreeCtrl::ExpandItem");
+        wxFAIL_MSG(wxT("unknown action in wxTreeCtrl::ExpandItem"));
     }
 
     // TODO: expand item
