@@ -15,11 +15,11 @@
     In the description of the methods below, the example return values are given
     for the Unix, Windows and Mac OS X systems, however please note that these are
     just the examples and the actual values may differ. For example, under Windows:
-    the system administrator may change the standard directories locations, i.e.
+    the system administrator may change the standard directories locations, e.g.
     the Windows directory may be named @c "W:\Win2003" instead of
     the default @c "C:\Windows".
 
-    Notice that in the examples below the string @c appname may be either just
+    Notice that in the examples below the string @c appinfo may be either just
     the application name (as returned by wxApp::GetAppName()) or a combination
     of the vendor name (wxApp::GetVendorName()) and the application name, with
     a path separator between them. By default, the vendor name is used under
@@ -79,9 +79,9 @@ public:
         returns GetDocumentsDir().
 
         Example return values:
-        - Unix: @c ~/appname
-        - Windows: @c "C:\Documents and Settings\username\My Documents\appname"
-        - Mac: @c ~/Documents/appname
+        - Unix: @c ~/appinfo
+        - Windows: @c "C:\Documents and Settings\username\My Documents\appinfo"
+        - Mac: @c ~/Documents/appinfo
 
         @since 2.9.0
 
@@ -104,9 +104,9 @@ public:
         Return the location of the applications global, i.e. not user-specific,
         data files.
         Example return values:
-        - Unix: @c prefix/share/appname
+        - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
-        - Mac: @c appname.app/Contents/SharedSupport bundle subdirectory
+        - Mac: @c appinfo.app/Contents/SharedSupport bundle subdirectory
 
         @see GetLocalDataDir()
     */
@@ -150,7 +150,7 @@ public:
         Return the location for application data files which are host-specific and
         can't, or shouldn't, be shared with the other machines.
 
-        This is the same as GetDataDir() except under Unix where it returns @c /etc/appname.
+        This is the same as GetDataDir() except under Unix where it returns @c /etc/appinfo.
     */
     virtual wxString GetLocalDataDir() const;
 
@@ -171,9 +171,9 @@ public:
     /**
         Return the directory where the loadable modules (plugins) live.
         Example return values:
-        - Unix: @c prefix/lib/appname
+        - Unix: @c prefix/lib/appinfo
         - Windows: the directory of the executable file
-        - Mac: @c appname.app/Contents/PlugIns bundle subdirectory
+        - Mac: @c appinfo.app/Contents/PlugIns bundle subdirectory
 
         @see wxDynamicLibrary
     */
@@ -187,9 +187,9 @@ public:
 
         This function is the same as GetDataDir() for all platforms except Mac OS X.
         Example return values:
-        - Unix: @c prefix/share/appname
+        - Unix: @c prefix/share/appinfo
         - Windows: the directory where the executable file is located
-        - Mac: @c appname.app/Contents/Resources bundle subdirectory
+        - Mac: @c appinfo.app/Contents/Resources bundle subdirectory
 
         @since 2.7.0
 
@@ -219,9 +219,9 @@ public:
 
     /**
         Return the directory for the user-dependent application data files:
-        - Unix: @c ~/.appname
-        - Windows: @c "C:\Documents and Settings\username\Application Data\appname"
-        - Mac: @c "~/Library/Application Support/appname"
+        - Unix: @c ~/.appinfo
+        - Windows: @c "C:\Documents and Settings\username\Application Data\appinfo"
+        - Mac: @c "~/Library/Application Support/appinfo"
     */
     virtual wxString GetUserDataDir() const;
 
@@ -230,7 +230,7 @@ public:
         the other machines.
 
         This is the same as GetUserDataDir() for all platforms except Windows where it returns
-        @c "C:\Documents and Settings\username\Local Settings\Application Data\appname"
+        @c "C:\Documents and Settings\username\Local Settings\Application Data\appinfo"
     */
     virtual wxString GetUserLocalDataDir() const;
 
@@ -319,9 +319,13 @@ public:
         should be unique to this program, such as the application data directory, the
         plugins directory on Unix, etc.
 
-        Valid values for @a info are @c AppInfo_None and either one or combination
-        of @c AppInfo_AppName and @c AppInfo_VendorName. The first one tells this
-        class to not use neither application nor vendor name in the paths.
+        Valid values for @a info are:
+            - @c AppInfo_None: don't use neither application nor vendor name in
+            the paths.
+            - @c AppInfo_AppName: use the application name in the paths.
+            - @c AppInfo_VendorName: use the vendor name in the paths, usually
+            used combined with AppInfo_AppName, i.e. as @code AppInfo_AppName |
+            AppInfo_VendorName @endcode
 
         By default, only the application name is used under Unix systems but both
         application and vendor names are used under Windows and Mac.
