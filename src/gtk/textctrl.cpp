@@ -1717,7 +1717,14 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
 
-        // TODO: set font, alignment, tabs and indents
+        const wxGtkString
+            pangoFontString(pango_font_description_to_string(pattr->font));
+
+        wxFont font;
+        if ( font.SetNativeFontInfo(wxString(pangoFontString)) )
+            style.SetFont(font);
+
+        // TODO: set alignment, tabs and indents
     }
 
     return true;
