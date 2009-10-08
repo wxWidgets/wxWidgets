@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 October 2009                                                      *
+# Date : 7 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -216,7 +216,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
-		arcfind.obj,tarstrm.obj,datavcmn.obj
+		arcfind.obj,tarstrm.obj,datavcmn.obj,debugrpt.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -414,8 +414,8 @@ SOURCES = \
 		xti.cpp,\
 		xtistrm.cpp,\
 		xtixml.cpp,\
-		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.obj,arcfind.obj,\
-		tarstrm.cpp,datavcmn.cpp
+		wrapsizer.cpp,archive.cpp,fs_arc.cpp,arcall.cpp,arcfind.cpp,\
+		tarstrm.cpp,datavcmn.cpp,debugrpt.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -662,3 +662,4 @@ arcall.obj : arcall.cpp
 arcfind.obj : arcfind.cpp
 tarstrm.obj : tarstrm.cpp
 datavcmn.obj : datavcmn.cpp
+debugrpt.obj : debugrpt.cpp

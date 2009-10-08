@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 October 2009                                                      *
+# Date : 8 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -93,7 +93,7 @@ OBJECTS = \
 		bmpcboxg.obj,\
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
 		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj,\
-		editlbox.obj,datavgen.obj
+		editlbox.obj,datavgen.obj,dbgrptg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -164,7 +164,7 @@ SOURCES = \
 		vscroll.cpp,\
 		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp\
 		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp,editlbox.cpp,\
-		datavgen.cpp
+		datavgen.cpp,dbgrptg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -294,3 +294,4 @@ headerctrlg.obj : headerctrlg.cpp
 grideditors.obj : grideditors.cpp
 infobar.obj : infobar.cpp
 datavgen.obj : datavgen.cpp
+dbgrptg.obj : dbgrptg.cpp

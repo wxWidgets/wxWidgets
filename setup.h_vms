@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 6 October 2009                                                     *
+ * Date : 7 October 2009                                                     *
  *                                                                           *
  *****************************************************************************/
 
@@ -171,17 +171,17 @@ typedef pid_t GPid;
 
 #define wxDIALOG_UNIT_COMPATIBILITY   1
 
-#define wxUSE_DEBUG_CONTEXT 0
+#define wxUSE_DEBUG_CONTEXT 1
 
-#define wxUSE_DEBUGREPORT 0
+#define wxUSE_DEBUGREPORT 1
 
 #define wxUSE_MEMORY_TRACING 0
 
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 
-#define wxUSE_DEBUG_NEW_ALWAYS 0
+#define wxUSE_DEBUG_NEW_ALWAYS 1
 
-#define wxUSE_ON_FATAL_EXCEPTION 0
+#define wxUSE_ON_FATAL_EXCEPTION 1
 
 #define wxUSE_STACKWALKER 0
 
@@ -875,7 +875,7 @@ typedef pid_t GPid;
 #undef WX_STATFS_T
 
 /* The signal handler prototype */
-#undef wxTYPE_SA_HANDLER
+#define wxTYPE_SA_HANDLER int
 
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */

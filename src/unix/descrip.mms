@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 August 2009                                                      *
+# Date : 7 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -100,6 +100,8 @@ all : $(SOURCES)
 .endif
 .endif
 .endif
+
+$(OBJECTS) : [--.include.wx]setup.h
 
 appunix.obj : appunix.cpp
 apptraits.obj : apptraits.cpp

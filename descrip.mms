@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 October 2009                                                      *
+# Date : 7 October 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -97,6 +97,8 @@ gtk : [.include.wx]setup.h
 	set default [-.controls]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.dataview]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
+	set default [-.debugrpt]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXGTK__=1)
