@@ -52,7 +52,7 @@ ScriptStream::ScriptStream()
 
 ScriptStream::~ScriptStream()
 {
-    if ( m_pBuf ) delete m_pBuf;
+    delete [] m_pBuf;
 }
 
 void ScriptStream::WriteBytes( const void* srcBuf, size_t count )
@@ -74,7 +74,7 @@ void ScriptStream::WriteBytes( const void* srcBuf, size_t count )
         if ( oldBuf )
         {
             memcpy( m_pBuf, oldBuf, m_Size );
-            delete oldBuf;
+            delete [] oldBuf;
         }
     }
 
