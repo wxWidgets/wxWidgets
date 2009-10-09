@@ -339,15 +339,6 @@ bool wxDocument::SaveAs()
     if (fileName.empty())
         return false; // cancelled by user
 
-    wxString ext;
-    wxFileName::SplitPath(fileName, NULL, NULL, &ext);
-
-    if (ext.empty())
-    {
-        fileName += wxT(".");
-        fileName += docTemplate->GetDefaultExtension();
-    }
-
     // Files that were not saved correctly are not added to the FileHistory.
     if (!OnSaveDocument(fileName))
         return false;
@@ -355,16 +346,16 @@ bool wxDocument::SaveAs()
     SetTitle(wxFileNameFromPath(fileName));
     SetFilename(fileName, true);    // will call OnChangeFileName automatically
 
-   // A file that doesn't use the default extension of its document template
-   // cannot be opened via the FileHistory, so we do not add it.
-   if (docTemplate->FileMatchesTemplate(fileName))
-   {
-       GetDocumentManager()->AddFileToHistory(fileName);
-   }
-   //else: the user will probably not be able to open the file again, so we
-   //      could warn about the wrong file-extension here
+    // A file that doesn't use the default extension of its document template
+    // cannot be opened via the FileHistory, so we do not add it.
+    if (docTemplate->FileMatchesTemplate(fileName))
+    {
+        GetDocumentManager()->AddFileToHistory(fileName);
+    }
+    //else: the user will probably not be able to open the file again, so we
+    //      could warn about the wrong file-extension here
 
-   return true;
+    return true;
 }
 
 bool wxDocument::OnSaveDocument(const wxString& file)
