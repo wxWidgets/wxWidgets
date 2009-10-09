@@ -1206,6 +1206,7 @@ wxWindow *wxGetActiveWindow()
 // Coordinates relative to the window
 void wxWindowMac::WarpPointer(int x_pos, int y_pos)
 {
+#if wxOSX_USE_COCOA_OR_CARBON
     int x = x_pos;
     int y = y_pos;
     DoClientToScreen(&x, &y);
@@ -1220,14 +1221,15 @@ void wxWindowMac::WarpPointer(int x_pos, int y_pos)
 
     event.m_altDown = mState.AltDown();
     event.m_controlDown = mState.ControlDown();
-    event.m_leftDown = mState.LeftDown();
-    event.m_middleDown = mState.MiddleDown();
-    event.m_rightDown = mState.RightDown();
+    event.m_leftDown = mState.LeftIsDown();
+    event.m_middleDown = mState.MiddleIsDown();
+    event.m_rightDown = mState.RightIsDown();
     event.m_metaDown = mState.MetaDown();
     event.m_shiftDown = mState.ShiftDown();
     event.SetId(GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+#endif
 }
 
 int wxWindowMac::GetScrollPos(int orient) const
