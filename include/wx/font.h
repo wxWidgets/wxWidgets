@@ -249,14 +249,16 @@ public:
     wxString GetStyleString() const;
     wxString GetWeightString() const;
 
-    // Unofficial API, don't use
-    virtual void SetNoAntiAliasing( bool WXUNUSED(no) = true ) {  }
-    virtual bool GetNoAntiAliasing() const { return false; }
-
     // the default encoding is used for creating all fonts with default
     // encoding parameter
     static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
     static void SetDefaultEncoding(wxFontEncoding encoding);
+
+    // this doesn't do anything and is kept for compatibility only
+#ifdef WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no););
+    wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
+#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     // the function called by both overloads of SetNativeFontInfo()

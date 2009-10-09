@@ -450,12 +450,6 @@ void wxGCDCImpl::SetFont( const wxFont &font )
         if ( f.IsOk() )
             f.SetPointSize( /*LogicalToDeviceYRel*/(font.GetPointSize()));
         m_graphicContext->SetFont( f, m_textForegroundColour );
-#if defined(__WXGTK__) || defined(__WXOSX__)
-        if ( m_font.IsOk() && m_font.GetNoAntiAliasing() )
-        {
-            m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
-        }
-#endif
     }
 }
 

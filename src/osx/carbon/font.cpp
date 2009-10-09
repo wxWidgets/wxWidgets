@@ -61,10 +61,6 @@ public:
 
     virtual ~wxFontRefData();
 
-    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
-
-    bool GetNoAntiAliasing() const { return m_noAA; }
-
     void SetPointSize( int size )
     {
         if( GetPointSize() != size )
@@ -154,7 +150,6 @@ protected:
 #if wxOSX_USE_CORE_TEXT
     // void Init( CTFontRef font );
 #endif
-    bool            m_noAA;      // No anti-aliasing
 public:
     bool            m_fontValid;
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
@@ -184,7 +179,6 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 {
     Init();
     m_info = data.m_info;
-    m_noAA = data.m_noAA;
     m_fontValid = data.m_fontValid;
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
     m_macThemeFontID = data.m_macThemeFontID;
@@ -219,7 +213,6 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 
 void wxFontRefData::Init()
 {
-    m_noAA = false;
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
     m_macThemeFontID = kThemeCurrentPortFont ;
 #endif
@@ -656,13 +649,6 @@ void wxFont::SetUnderlined(bool underlined)
     M_FONTDATA->SetUnderlined( underlined );
 }
 
-void wxFont::SetNoAntiAliasing( bool no )
-{
-    AllocExclusive();
-
-    M_FONTDATA->SetNoAntiAliasing( no );
-}
-
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
@@ -731,13 +717,6 @@ wxFontEncoding wxFont::GetEncoding() const
     wxCHECK_MSG( M_FONTDATA != NULL , wxFONTENCODING_DEFAULT , wxT("invalid font") );
 
     return M_FONTDATA->GetEncoding() ;
-}
-
-bool wxFont::GetNoAntiAliasing() const
-{
-    wxCHECK_MSG( M_FONTDATA != NULL , false, wxT("invalid font") );
-
-    return M_FONTDATA->GetNoAntiAliasing();
 }
 
 #if wxOSX_USE_ATSU_TEXT && wxOSX_USE_CARBON

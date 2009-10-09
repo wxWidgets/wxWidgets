@@ -125,9 +125,6 @@ public:
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
-    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
-    bool GetNoAntiAliasing() const { return m_noAA; }
-
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -152,7 +149,6 @@ protected:
     bool          m_underlined;
     wxString      m_faceName;
     wxFontEncoding m_encoding;   // Unused in Unicode mode
-    bool            m_noAA;      // No anti-aliasing
 
     wxNativeFontInfo m_nativeFontInfo;
 
@@ -232,8 +228,6 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::InitFromNative()
 {
-    m_noAA = false;
-
 #if wxUSE_UNICODE
     // Get native info
     PangoFontDescription *desc = m_nativeFontInfo.description;
@@ -413,8 +407,6 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
 
     m_faceName = data.m_faceName;
     m_encoding = data.m_encoding;
-
-    m_noAA = data.m_noAA;
 
     m_nativeFontInfo = data.m_nativeFontInfo;
 }
@@ -768,13 +760,6 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
-bool wxFont::GetNoAntiAliasing() const
-{
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
-
-    return M_FONTDATA->m_noAA;
-}
-
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
@@ -872,15 +857,7 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
     M_FONTDATA->SetNativeFontInfo( info );
 }
 
-void wxFont::SetNoAntiAliasing( bool no )
-{
-    Unshare();
-
-    M_FONTDATA->SetNoAntiAliasing( no );
-}
-
-#if wxUSE_UNICODE
-#else
+#if !wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // X11 implementation
@@ -946,4 +923,4 @@ WXFontStructPtr wxFont::GetFontStruct(double scale, WXDisplay* display) const
     return (f ? f->m_fontStruct : (WXFontStructPtr) 0);
 }
 
-#endif
+#endif // !wxUSE_UNICODE

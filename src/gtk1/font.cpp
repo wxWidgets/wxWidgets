@@ -91,9 +91,6 @@ public:
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
-    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
-    bool GetNoAntiAliasing() const { return m_noAA; }
-
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -124,7 +121,6 @@ private:
     bool            m_underlined;
     wxString        m_faceName;
     wxFontEncoding  m_encoding;  // Unused under GTK 2.0
-    bool            m_noAA;      // No anti-aliasing
 
     // The native font info, basicly an XFLD under GTK 1.2 and
     // the pango font description under GTK 2.0.
@@ -163,14 +159,10 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
-
-    m_noAA = false;
 }
 
 void wxFontRefData::InitFromNative()
 {
-    m_noAA = false;
-
     // get the font parameters from the XLFD
     // -------------------------------------
 
@@ -282,8 +274,6 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
 
     m_faceName = data.m_faceName;
     m_encoding = data.m_encoding;
-
-    m_noAA = data.m_noAA;
 
     // Forces a copy of the internal data.  wxNativeFontInfo should probably
     // have a copy ctor and assignment operator to fix this properly but that
@@ -580,13 +570,6 @@ wxFontEncoding wxFont::GetEncoding() const
     return M_FONTDATA->m_encoding;
 }
 
-bool wxFont::GetNoAntiAliasing() const
-{
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
-
-    return M_FONTDATA->m_noAA;
-}
-
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
@@ -677,13 +660,6 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
     Unshare();
 
     M_FONTDATA->SetNativeFontInfo( info );
-}
-
-void wxFont::SetNoAntiAliasing( bool no )
-{
-    Unshare();
-
-    M_FONTDATA->SetNoAntiAliasing( no );
 }
 
 // ----------------------------------------------------------------------------

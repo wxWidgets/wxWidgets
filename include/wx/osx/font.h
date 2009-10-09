@@ -120,10 +120,6 @@ public:
 
     virtual bool RealizeResource();
 
-    // Unofficial API, don't use
-    virtual void SetNoAntiAliasing( bool noAA = TRUE ) ;
-    virtual bool GetNoAntiAliasing() const  ;
-
     // Mac-specific, risks to change, don't use in portable code
 
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT

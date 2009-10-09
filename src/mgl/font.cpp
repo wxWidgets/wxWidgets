@@ -145,13 +145,6 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return M_FONTDATA->GetNativeFontInfo();
 }
 
-bool wxFont::GetNoAntiAliasing() const
-{
-    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
-
-    return M_FONTDATA->GetNoAntiAliasing();
-}
-
 // ----------------------------------------------------------------------------
 // change font attributes
 // ----------------------------------------------------------------------------
@@ -199,8 +192,3 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
-void wxFont::SetNoAntiAliasing(bool no)
-{
-    AllocExclusive();
-    M_FONTDATA->SetNoAntiAliasing(no);
-}

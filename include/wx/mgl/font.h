@@ -106,10 +106,6 @@ public:
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    // Unofficial API, don't use
-    virtual void SetNoAntiAliasing(bool no = true);
-    virtual bool GetNoAntiAliasing() const;
-
     struct font_t *GetMGLfont_t(float scale, bool antialiased);
 
 protected:

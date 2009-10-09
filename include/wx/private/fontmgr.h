@@ -237,15 +237,10 @@ public:
     void SetUnderlined(bool underlined);
     void SetEncoding(wxFontEncoding encoding);
 
-    // Unofficial API, don't use
-    void SetNoAntiAliasing(bool no);
-    bool GetNoAntiAliasing() const { return m_noAA; }
-
 private:
     void EnsureValidFont();
 
     wxNativeFontInfo  m_info;
-    bool              m_noAA;
 
     wxFontFace       *m_fontFace;
     wxFontBundle     *m_fontBundle;

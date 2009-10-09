@@ -90,10 +90,6 @@ public:
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    // Unofficial API, don't use
-    virtual void SetNoAntiAliasing(bool no = true);
-    virtual bool GetNoAntiAliasing() const;
-
     // implementation from now on:
     wxIDirectFBFontPtr GetDirectFBFont(bool antialiased) const;
 

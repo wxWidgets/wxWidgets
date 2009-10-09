@@ -111,9 +111,6 @@ public:
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    virtual void SetNoAntiAliasing( bool no = true );
-    virtual bool GetNoAntiAliasing() const ;
-
     // implementation from now on
     void Unshare();
 

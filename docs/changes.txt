@@ -345,6 +345,9 @@ Deprecated methods and their replacements
   the static box itself.
 - wxMouseState::{Left,Middle,Right}Down() were renamed to XXXIsDown() for
   consistency with wxMouseEvent and the old names were deprecated.
+- wxFont::SetNoAntiAliasing() was deprecated, it never really worked in most
+  ports and was always marked as "experimental" API. It will be replaced with
+  wxDC-level anti-aliasing control in the future.
 
 
 Major new features in this release

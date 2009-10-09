@@ -100,9 +100,6 @@ public:
 
     wxDECLARE_COMMON_FONT_METHODS();
 
-    virtual void SetNoAntiAliasing( bool no = TRUE );
-    virtual bool GetNoAntiAliasing() const ;
-
     // Implementation
 
 #if wxUSE_PANGO

@@ -245,8 +245,6 @@ wxFontMgrFontRefData::wxFontMgrFontRefData(int size,
     m_info.underlined = underlined;
     m_info.encoding = encoding;
 
-    m_noAA = false;
-
     m_fontFace = NULL;
     m_fontBundle = NULL;
     m_fontValid = false;
@@ -255,7 +253,6 @@ wxFontMgrFontRefData::wxFontMgrFontRefData(int size,
 wxFontMgrFontRefData::wxFontMgrFontRefData(const wxFontMgrFontRefData& data)
 {
     m_info = data.m_info;
-    m_noAA = data.m_noAA;
 
     m_fontFace = data.m_fontFace;
     m_fontBundle = data.m_fontBundle;
@@ -281,7 +278,7 @@ wxFontMgrFontRefData::GetFontInstance(float scale, bool antialiased) const
 {
     wxConstCast(this, wxFontMgrFontRefData)->EnsureValidFont();
     return m_fontFace->GetFontInstance(m_info.pointSize * scale,
-                                       antialiased && !m_noAA);
+                                       antialiased);
 }
 
 void wxFontMgrFontRefData::SetPointSize(int pointSize)
@@ -325,12 +322,6 @@ void wxFontMgrFontRefData::SetEncoding(wxFontEncoding encoding)
     m_info.encoding = encoding;
     m_fontValid = false;
 }
-
-void wxFontMgrFontRefData::SetNoAntiAliasing(bool no)
-{
-    m_noAA = no;
-}
-
 
 void wxFontMgrFontRefData::EnsureValidFont()
 {

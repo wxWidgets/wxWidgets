@@ -73,9 +73,6 @@ public:
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
-    void SetNoAntiAliasing( bool no = true ) { m_noAA = no; }
-    bool GetNoAntiAliasing() const { return m_noAA; }
-
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -94,7 +91,6 @@ protected:
 
 private:
     bool            m_underlined;
-    bool            m_noAA;      // No anti-aliasing
 
     // The native font info: basically a PangoFontDescription
     wxNativeFontInfo m_nativeFontInfo;
@@ -120,7 +116,6 @@ void wxFontRefData::Init(int pointSize,
         family = wxFONTFAMILY_SWISS;
 
     m_underlined = underlined;
-    m_noAA = false;
 
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
@@ -145,8 +140,6 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::InitFromNative()
 {
-    m_noAA = false;
-
     // Get native info
     PangoFontDescription *desc = m_nativeFontInfo.description;
 
@@ -163,7 +156,6 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
              : wxGDIRefData()
 {
     m_underlined = data.m_underlined;
-    m_noAA = data.m_noAA;
 
     // Forces a copy of the internal data.  wxNativeFontInfo should probably
     // have a copy ctor and assignment operator to fix this properly but that
@@ -377,13 +369,6 @@ wxFontEncoding wxFont::GetEncoding() const
         // Pango always uses UTF8... see also SetEncoding()
 }
 
-bool wxFont::GetNoAntiAliasing() const
-{
-    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
-
-    return M_FONTDATA->m_noAA;
-}
-
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid font") );
@@ -457,13 +442,6 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
     AllocExclusive();
 
     M_FONTDATA->SetNativeFontInfo( info );
-}
-
-void wxFont::SetNoAntiAliasing( bool no )
-{
-    AllocExclusive();
-
-    M_FONTDATA->SetNoAntiAliasing( no );
 }
 
 wxGDIRefData* wxFont::CreateGDIRefData() const
