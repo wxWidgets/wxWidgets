@@ -4309,10 +4309,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     m_width = width;
     m_height = height;
 
-    // Explicitly pass the position - works around a bug in wxWidgets when the property grid
-    // has a native XP border and a contained window creeps up-and-left when size is set without
-    // the position.
-    m_canvas->SetSize( 0, 0, x, y );
+    m_canvas->SetSize( x, y );
 
     m_pState->CheckColumnWidths();
 
