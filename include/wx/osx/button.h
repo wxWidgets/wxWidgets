@@ -54,13 +54,30 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const ;
 
-#if wxOSX_USE_COCOA
+    void OnEnterWindow( wxMouseEvent& event);
+    void OnLeaveWindow( wxMouseEvent& event);
+    
     virtual wxBitmap DoGetBitmap(State which) const;
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
     virtual void DoSetBitmapPosition(wxDirection dir);
-#endif // wxOSX_USE_COCOA
 
+    virtual void DoSetBitmapMargins(int x, int y)
+    {
+        m_marginX = x;
+        m_marginY = y;
+    }
+    
+    // the margins around the bitmap
+    int m_marginX;
+    int m_marginY;
+
+    // the bitmaps for the different state of the buttons, all of them may be
+    // invalid and the button only shows a bitmap at all if State_Normal bitmap
+    // is valid
+    wxBitmap m_bitmaps[State_Max];    
+    
     DECLARE_DYNAMIC_CLASS(wxButton)
+    DECLARE_EVENT_TABLE()
 };
 
 // OS X specific class, not part of public wx API
@@ -97,7 +114,6 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const ;
-
 };
 
 #endif // _WX_OSX_BUTTON_H_

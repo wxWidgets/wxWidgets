@@ -25,6 +25,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 
+BEGIN_EVENT_TABLE(wxButton, wxControl)
+    EVT_ENTER_WINDOW(wxButton::OnEnterWindow)
+    EVT_LEAVE_WINDOW(wxButton::OnLeaveWindow)
+END_EVENT_TABLE()
+
 bool wxButton::Create(wxWindow *parent,
     wxWindowID id,
     const wxString& lbl,
@@ -34,6 +39,9 @@ bool wxButton::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
+    m_marginX =
+    m_marginY = 0;
+
     // FIXME: this hack is needed because we're called from
     //        wxBitmapButton::Create() with this style and we currently use a
     //        different wxWidgetImpl method (CreateBitmapButton() rather than
@@ -79,27 +87,29 @@ void wxButton::SetLabel(const wxString& label)
     wxButtonBase::SetLabel(label);
 }
 
-// there is no support for button bitmaps in wxOSX/Carbon so there is no need
-// for these methods there
-#if wxOSX_USE_COCOA
-
 wxBitmap wxButton::DoGetBitmap(State which) const
 {
-    return which == State_Normal ? m_peer->GetBitmap() : wxBitmap();
+    return m_bitmaps[which];
 }
 
 void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
+    m_bitmaps[which] = bitmap;
+    
     if ( which == State_Normal )
         m_peer->SetBitmap(bitmap);
+    else if ( which == State_Pressed )
+    {
+        wxButtonImpl* bi = dynamic_cast<wxButtonImpl*> (m_peer);
+        if ( bi )
+            bi->SetPressedBitmap(bitmap);
+    }
 }
 
 void wxButton::DoSetBitmapPosition(wxDirection dir)
 {
     m_peer->SetBitmapPosition(dir);
 }
-
-#endif // wxOSX_USE_COCOA
 
 wxWindow *wxButton::SetDefault()
 {
@@ -119,6 +129,18 @@ void wxButton::Command (wxCommandEvent & WXUNUSED(event))
 {
     m_peer->PerformClick() ;
     // ProcessCommand(event);
+}
+
+void wxButton::OnEnterWindow( wxMouseEvent& WXUNUSED(event))
+{
+    if ( DoGetBitmap( State_Current ).IsOk() )
+        m_peer->SetBitmap( DoGetBitmap( State_Current ) );       
+}
+
+void wxButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
+{
+    if ( DoGetBitmap( State_Current ).IsOk() )
+        m_peer->SetBitmap( DoGetBitmap( State_Normal ) );       
 }
 
 bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )

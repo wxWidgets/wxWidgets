@@ -22,10 +22,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton, wxButton)
 
-BEGIN_EVENT_TABLE(wxBitmapButton, wxButton)
-    EVT_ENTER_WINDOW(wxBitmapButton::OnEnterWindow)
-    EVT_LEAVE_WINDOW(wxBitmapButton::OnLeaveWindow)
-END_EVENT_TABLE()
 
 #include "wx/osx/private.h"
 
@@ -66,23 +62,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
     return true;
 }
 
-void wxBitmapButton::DoSetBitmap(const wxBitmap& bitmap, State which)
-{
-    wxBitmapButtonBase::DoSetBitmap(bitmap, which);
-
-    // we don't support any other states currently
-    if ( which == State_Normal )
-    {
-        m_peer->SetBitmap( bitmap );
-    }
-    else if ( which == State_Pressed )
-    {
-        wxBitmapButtonImpl* bi = dynamic_cast<wxBitmapButtonImpl*> (m_peer);
-        if ( bi )
-            bi->SetPressedBitmap(bitmap);
-    }
-}
-
 wxSize wxBitmapButton::DoGetBestSize() const
 {
     wxSize best(m_marginX, m_marginY);
@@ -95,18 +74,6 @@ wxSize wxBitmapButton::DoGetBestSize() const
     }
 
     return best;
-}
-
-void wxBitmapButton::OnEnterWindow( wxMouseEvent& WXUNUSED(event))
-{
-    if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Current ) );       
-}
-
-void wxBitmapButton::OnLeaveWindow( wxMouseEvent& WXUNUSED(event))
-{
-    if ( DoGetBitmap( State_Current ).IsOk() )
-        m_peer->SetBitmap( DoGetBitmap( State_Normal ) );       
 }
 
 #endif // wxUSE_BMPBUTTON

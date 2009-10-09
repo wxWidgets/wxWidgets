@@ -588,14 +588,14 @@ public :
 };
 
 //
-// common interface bitmapbuttons
+// common interface for buttons
 //
 
-class wxBitmapButtonImpl
+class wxButtonImpl
 {
     public :
-    wxBitmapButtonImpl(){}
-    virtual ~wxBitmapButtonImpl(){}
+    wxButtonImpl(){}
+    virtual ~wxButtonImpl(){}
     
     virtual void SetPressedBitmap( const wxBitmap& bitmap ) = 0;
 } ;

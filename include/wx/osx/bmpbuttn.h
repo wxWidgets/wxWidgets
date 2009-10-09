@@ -40,15 +40,10 @@ public:
                 const wxString& name = wxButtonNameStr);
 
 protected:
-    void OnEnterWindow( wxMouseEvent& event);
-    void OnLeaveWindow( wxMouseEvent& event);
     
     virtual wxSize DoGetBestSize() const;
 
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
-
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
-    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_OSX_BMPBUTTN_H_

@@ -27,7 +27,7 @@ namespace
 
 // define a derived class to override SetBitmap() and also to provide
 // InitButtonContentInfo() helper used by CreateBitmapButton()
-class wxMacBitmapButton : public wxMacControl, public wxBitmapButtonImpl
+class wxMacBitmapButton : public wxMacControl, public wxButtonImpl
 {
 public:
     wxMacBitmapButton(wxWindowMac* peer, const wxBitmap& bitmap, int style)
