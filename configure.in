@@ -3469,11 +3469,20 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         dnl wxMac version of wxBase and wxCocoa or wxBase-only built on Darwin
         dnl are different, so they need different names:
         WXBASEPORT="_carbon"
+
+        dnl in addition to defining __WXOSX_CARBON__ for this toolkit we want
+        dnl to also define these extra symbols to make it possible to test for
+        dnl any Mac port (__WXMAC__ is for backwards compatibility, __WXOSX__
+        dnl is a new name)
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
     if test "$wxUSE_OSX_COCOA" = 1; then
         TOOLKIT=OSX_COCOA
         GUIDIST=OSX_COCOA_DIST
+
+        dnl see the comment above in wxUSE_OSX_CARBON branch
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
     if test "$wxUSE_COCOA" = 1; then

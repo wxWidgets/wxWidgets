@@ -32813,11 +32813,15 @@ echo "${ECHO_T}none" >&6; }
         TOOLKIT=OSX_CARBON
                 GUIDIST=OSX_CARBON_DIST
                         WXBASEPORT="_carbon"
+
+                                        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
     if test "$wxUSE_OSX_COCOA" = 1; then
         TOOLKIT=OSX_COCOA
         GUIDIST=OSX_COCOA_DIST
+
+                TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
     if test "$wxUSE_COCOA" = 1; then

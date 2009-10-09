@@ -33,20 +33,25 @@
     __WXOSX_IPHONE__ means OS X iPhone
 */
 
-/* backwards compatible define, until configure gets updated */
-#if defined __WXMAC__
-#define __WXOSX_CARBON__ 1
-#endif
+/*
+    Normally all of __WXOSX_XXX__, __WXOSX__ and __WXMAC__ are defined by
+    configure but ensure that we also define them if configure was not used for
+    whatever reason.
 
+    The primare symbol remains __WXOSX_XXX__ one, __WXOSX__ exists to allow
+    checking for any OS X port (Carbon and Cocoa) and __WXMAC__ is an old name
+    for it.
+ */
 #if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__)
-#   define __WXOSX__ 1
-#endif
-
-#ifdef __WXOSX__
-/* for backwards compatibility of code (including our own) define __WXMAC__ */
+#   ifndef __WXOSX__
+#       define __WXOSX__ 1
+#   endif
 #   ifndef __WXMAC__
 #       define __WXMAC__ 1
 #   endif
+#endif
+
+#ifdef __WXOSX__
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
 #   if defined(__WXOSX_IPHONE__)
