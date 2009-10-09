@@ -44,12 +44,12 @@ class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
 {
 public:
     wxSound();
-    wxSound(const wxString& fileName, bool isResource = FALSE);
+    wxSound(const wxString& fileName, bool isResource = false);
     wxSound(int size, const wxByte* data);
     virtual ~wxSound();
 
     // Create from resource or file
-    bool  Create(const wxString& fileName, bool isResource = FALSE);
+    bool  Create(const wxString& fileName, bool isResource = false);
     // Create from data
     bool Create(int size, const wxByte* data);
 

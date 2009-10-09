@@ -59,7 +59,7 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
 
     // override some more virtuals
-    virtual bool Enable(bool enable = TRUE) ;
+    virtual bool Enable(bool enable = true) ;
 
     // event handlers
     void OnActivate(wxActivateEvent& event);

@@ -137,7 +137,7 @@ public:
     virtual void EnableTop( size_t pos, bool flag );
     virtual void SetMenuLabel( size_t pos, const wxString& label );
     virtual wxString GetMenuLabel( size_t pos ) const;
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable( bool enable = true );
     // for virtual function hiding
     virtual void Enable( int itemid, bool enable )
     {
@@ -163,7 +163,7 @@ public:
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
-    void Refresh(bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL);
+    void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
 
     static void SetAutoWindowMenu( bool enable ) { s_macAutoWindowMenu = enable ; }
     static bool GetAutoWindowMenu() { return s_macAutoWindowMenu ; }

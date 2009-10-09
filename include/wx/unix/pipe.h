@@ -46,10 +46,10 @@ public:
         {
             wxLogSysError(_("Pipe creation failed"));
 
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     // return TRUE if we were created successfully

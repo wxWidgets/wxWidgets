@@ -142,13 +142,13 @@ public: \
 
 #define IMPLEMENT_PROTOCOL(class, name, serv, host) \
 wxProtoInfo class::g_proto_##class(name, serv, host, CLASSINFO(class)); \
-bool wxProtocolUse##class = TRUE;
+bool wxProtocolUse##class = true;
 
 #define USE_PROTOCOL(class) \
     extern bool wxProtocolUse##class ; \
     static struct wxProtocolUserFor##class \
     { \
-        wxProtocolUserFor##class() { wxProtocolUse##class = TRUE; } \
+        wxProtocolUserFor##class() { wxProtocolUse##class = true; } \
     } wxProtocolDoUse##class;
 
 class WXDLLIMPEXP_NET wxProtoInfo : public wxObject

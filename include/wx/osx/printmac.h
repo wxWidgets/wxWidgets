@@ -28,7 +28,7 @@ class WXDLLIMPEXP_CORE wxMacPrinter: public wxPrinterBase
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
-                       bool prompt = TRUE);
+                       bool prompt = true);
     virtual wxDC* PrintDialog(wxWindow *parent);
   virtual bool Setup(wxWindow *parent);
 

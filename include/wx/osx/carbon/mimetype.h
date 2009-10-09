@@ -91,7 +91,7 @@ public:
 
     // set an arbitrary command, ask confirmation if it already exists and
     // overwriteprompt is TRUE
-    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = TRUE);
+    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = true);
     bool SetDefaultIcon(const wxString& strIcon = wxEmptyString, int index = 0);
 
  private:

@@ -78,8 +78,8 @@ public:
     // implementation from now on
 
     // forward these functions to all subcontrols
-    virtual bool Enable(bool enable = TRUE);
-    virtual bool Show(bool show = TRUE);
+    virtual bool Enable(bool enable = true);
+    virtual bool Show(bool show = true);
 
     // get the subcontrols
     wxTextCtrl *GetText() const { return m_text; }

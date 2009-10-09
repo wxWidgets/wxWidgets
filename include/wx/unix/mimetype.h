@@ -93,7 +93,7 @@ protected:
                       wxMimeTypeCommands *entry,
                       const wxArrayString& strExtensions,
                       const wxString& strDesc,
-                      bool replaceExisting = TRUE);
+                      bool replaceExisting = true);
     virtual bool DoAssociation(const wxString& strType,
                        const wxString& strIcon,
                        wxMimeTypeCommands *entry,
@@ -120,12 +120,12 @@ public:
     // accessors
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const
-        { *mimeType = m_manager->m_aTypes[m_index[0]]; return TRUE; }
+        { *mimeType = m_manager->m_aTypes[m_index[0]]; return true; }
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
     bool GetIcon(wxIconLocation *iconLoc) const;
 
     bool GetDescription(wxString *desc) const
-        { *desc = m_manager->m_aDescriptions[m_index[0]]; return TRUE; }
+        { *desc = m_manager->m_aDescriptions[m_index[0]]; return true; }
 
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters& params) const
@@ -155,7 +155,7 @@ public:
 
     // set an arbitrary command, ask confirmation if it already exists and
     // overwriteprompt is TRUE
-    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = TRUE);
+    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = true);
     bool SetDefaultIcon(const wxString& strIcon = wxEmptyString, int index = 0);
 
 private:

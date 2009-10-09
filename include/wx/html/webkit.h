@@ -75,9 +75,9 @@ public:
     bool CanDecreaseTextSize();
     void DecreaseTextSize();
 
-    void Print(bool showPrompt=FALSE);
+    void Print(bool showPrompt = false);
 
-    void MakeEditable(bool enable=TRUE);
+    void MakeEditable(bool enable = true);
     bool IsEditable();
 
     wxString RunScript(const wxString& javascript);

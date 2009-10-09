@@ -38,7 +38,7 @@ public:
   void SetLabel( const wxString &str ) ;
   bool SetFont( const wxFont &font );
 
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected :
 

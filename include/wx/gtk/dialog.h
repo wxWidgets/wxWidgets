@@ -8,8 +8,8 @@
 // Licence:           wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDIALOGH__
-#define __GTKDIALOGH__
+#ifndef _WX_GTKDIALOG_H_
+#define _WX_GTKDIALOG_H_
 
 class WXDLLIMPEXP_FWD_CORE wxGUIEventLoop;
 
@@ -35,7 +35,7 @@ public:
             const wxString &name = wxDialogNameStr );
     virtual ~wxDialog();
 
-    virtual bool Show( bool show = TRUE );
+    virtual bool Show( bool show = true );
     virtual int ShowModal();
     virtual void EndModal( int retCode );
     virtual bool IsModal() const;
@@ -53,4 +53,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxDialog)
 };
 
-#endif // __GTKDIALOGH__
+#endif // _WX_GTKDIALOG_H_

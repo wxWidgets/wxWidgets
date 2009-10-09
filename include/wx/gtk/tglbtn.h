@@ -65,7 +65,7 @@ public:
     // Set the label
     virtual void SetLabel(const wxString& label) { wxControl::SetLabel(label); }
     virtual void SetLabel(const wxBitmap& label);
-    bool Enable(bool enable = TRUE);
+    bool Enable(bool enable = true);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -123,7 +123,7 @@ public:
 
     // Set the label
     void SetLabel(const wxString& label);
-    bool Enable(bool enable = TRUE);
+    bool Enable(bool enable = true);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

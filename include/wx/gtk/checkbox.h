@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKCHECKBOXH__
-#define __GTKCHECKBOXH__
+#ifndef _WX_GTKCHECKBOX_H_
+#define _WX_GTKCHECKBOX_H_
 
 // ----------------------------------------------------------------------------
 // wxCheckBox
@@ -39,7 +39,7 @@ public:
     bool GetValue() const;
 
     virtual void SetLabel( const wxString& label );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable( bool enable = true );
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -64,4 +64,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
 };
 
-#endif // __GTKCHECKBOXH__
+#endif // _WX_GTKCHECKBOX_H_

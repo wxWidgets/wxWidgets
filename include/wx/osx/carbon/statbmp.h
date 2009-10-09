@@ -52,7 +52,7 @@ class WXDLLIMPEXP_CORE wxStaticBitmap: public wxStaticBitmapBase
   void  SetIcon(const wxIcon& icon) { SetBitmap( (const wxBitmap &)icon ) ; }
 
   // overriden base class virtuals
-  virtual bool AcceptsFocus() const { return FALSE; }
+  virtual bool AcceptsFocus() const { return false; }
 
  protected:
     virtual wxSize DoGetBestSize() const;
