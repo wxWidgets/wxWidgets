@@ -491,7 +491,7 @@ public:
 
 
     virtual void GetTextExtent( const wxString &text, wxDouble *width, wxDouble *height,
-        wxDouble *descent, wxDouble *externalLeading ) const  = 0;
+        wxDouble *descent = NULL, wxDouble *externalLeading = NULL ) const  = 0;
 
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const = 0;
 
