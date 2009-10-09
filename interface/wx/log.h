@@ -633,6 +633,11 @@ public:
 
     @section log_tracemasks Using trace masks
 
+    Notice that the use of log trace masks is hardly necessary any longer in
+    current wxWidgets version as the same effect can be achieved by using
+    different log components for different log statements of any level. Please
+    see @ref overview_log_enable for more information about the log components.
+
     The functions below allow some limited customization of wxLog behaviour
     without writing a new log target class (which, aside from being a matter of
     several minutes, allows you to do anything you want).
@@ -1257,6 +1262,13 @@ void wxVLogError(const char* formatString, va_list argPtr);
 /** @addtogroup group_funcmacro_log */
 //@{
 /**
+    Log a message at wxLOG_Trace log level.
+
+    Notice that the use of trace masks is not recommended any more as setting
+    the log components (please see @ref overview_log_enable) provides a way to
+    do the same thing for log messages of any level, and not just the tracing
+    ones.
+
     Like wxLogDebug(), trace functions only do something in debug builds and
     expand to nothing in the release one. The reason for making it a separate
     function is that usually there are a lot of trace messages, so it might
