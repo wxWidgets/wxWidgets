@@ -243,16 +243,30 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     g_signal_connect (m_widget, "response",
         G_CALLBACK (gtk_filedialog_response_callback), this);
 
+
+    // deal with extensions/filters
     SetWildcard(wildCard);
+
+    wxString defaultFileNameWithExt = defaultFileName;
+    if ( !wildCard.empty() && !defaultFileName.empty() &&
+            !wxFileName(defaultFileName).HasExt() )
+    {
+        // append the default extension to the initial file name: GTK won't do
+        // it for us by default (unlike e.g. MSW)
+        const wxString defaultExt = m_fc.GetCurrentWildCard().AfterFirst('.');
+        if ( defaultExt.find_first_of("?*") == wxString::npos )
+            defaultFileNameWithExt += "." + defaultExt;
+    }
+
 
     // if defaultDir is specified it should contain the directory and
     // defaultFileName should contain the default name of the file, however if
     // directory is not given, defaultFileName contains both
     wxFileName fn;
     if ( defaultDir.empty() )
-        fn.Assign(defaultFileName);
-    else if ( !defaultFileName.empty() )
-        fn.Assign(defaultDir, defaultFileName);
+        fn.Assign(defaultFileNameWithExt);
+    else if ( !defaultFileNameWithExt.empty() )
+        fn.Assign(defaultDir, defaultFileNameWithExt);
     else
         fn.AssignDir(defaultDir);
 
@@ -334,21 +348,7 @@ void wxFileDialog::OnSize(wxSizeEvent&)
 
 wxString wxFileDialog::GetPath() const
 {
-    wxFileName fn = m_fc.GetPath();
-
-    if (HasFdFlag(wxFD_SAVE))
-    {
-        // add extension
-        if (!fn.HasExt())
-        {
-           wxFileName wildcard( "/dummy", m_fc.GetCurrentWildCard() );
-           wxString ext = wildcard.GetExt();
-           if (!ext.empty() && (ext.Find('?') == wxNOT_FOUND) && (ext.Find('*') == wxNOT_FOUND))
-               fn.SetExt( ext );
-        }
-    }
-
-    return fn.GetFullPath();
+    return m_fc.GetPath();
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const
