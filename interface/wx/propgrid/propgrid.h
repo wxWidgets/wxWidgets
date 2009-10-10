@@ -583,7 +583,7 @@ public:
         Returns wxWindow that the properties are painted on, and which should be
         used as the parent for editor controls.
     */
-    wxPanel* GetPanel() const;
+    wxWindow* GetPanel();
 
     /**
         Returns current category caption background colour.

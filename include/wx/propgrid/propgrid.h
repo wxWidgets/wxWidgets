@@ -655,7 +655,6 @@ class WXDLLIMPEXP_PROPGRID
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridManager;
-    friend class wxPGCanvas;
 
     DECLARE_DYNAMIC_CLASS(wxPropertyGrid)
 public:
@@ -814,9 +813,9 @@ public:
         Returns wxWindow that the properties are painted on, and which should
         be used as the parent for editor controls.
     */
-    wxPanel* GetPanel() const
+    wxWindow* GetPanel()
     {
-        return m_canvas;
+        return this;
     }
 
     /** Returns current category caption background colour. */
@@ -1623,9 +1622,6 @@ protected:
     wxWindow            *m_wndEditor;
     wxWindow            *m_wndEditor2;
 
-    /** wxPGCanvas instance. */
-    wxPanel             *m_canvas;
-
 #if wxPG_DOUBLE_BUFFER
     wxBitmap            *m_doubleBuffer;
 #endif
@@ -1882,7 +1878,6 @@ protected:
 
     // main event receivers
     void OnMouseMove( wxMouseEvent &event );
-    void OnMouseMoveBottom( wxMouseEvent &event );
     void OnMouseClick( wxMouseEvent &event );
     void OnMouseRightClick( wxMouseEvent &event );
     void OnMouseDoubleClick( wxMouseEvent &event );

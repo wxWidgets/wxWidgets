@@ -234,113 +234,6 @@ void wxPropertyGridInitGlobalsIfNeeded()
 }
 
 // -----------------------------------------------------------------------
-// wxPGCanvas
-// -----------------------------------------------------------------------
-
-//
-// wxPGCanvas acts as a graphics sub-window of the
-// wxScrolledWindow that wxPropertyGrid is.
-//
-class wxPGCanvas : public wxPanel
-{
-public:
-    wxPGCanvas() : wxPanel()
-    {
-    }
-    virtual ~wxPGCanvas() { }
-
-protected:
-    void OnMouseMove( wxMouseEvent &event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnMouseMove( event );
-    }
-
-    void OnMouseClick( wxMouseEvent &event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnMouseClick( event );
-    }
-
-    void OnMouseUp( wxMouseEvent &event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnMouseUp( event );
-    }
-
-    void OnMouseRightClick( wxMouseEvent &event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnMouseRightClick( event );
-    }
-
-    void OnMouseDoubleClick( wxMouseEvent &event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnMouseDoubleClick( event );
-    }
-
-    void OnKey( wxKeyEvent& event )
-    {
-        wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-        pg->OnKey( event );
-    }
-
-    void OnPaint( wxPaintEvent& event );
-
-    // Always be focussable, even with child windows
-    virtual void SetCanFocus(bool WXUNUSED(canFocus))
-    {  wxPanel::SetCanFocus(true); }
-
-
-private:
-    DECLARE_EVENT_TABLE()
-    DECLARE_ABSTRACT_CLASS(wxPGCanvas)
-};
-
-
-IMPLEMENT_ABSTRACT_CLASS(wxPGCanvas,wxPanel)
-
-BEGIN_EVENT_TABLE(wxPGCanvas, wxPanel)
-    EVT_MOTION(wxPGCanvas::OnMouseMove)
-    EVT_PAINT(wxPGCanvas::OnPaint)
-    EVT_LEFT_DOWN(wxPGCanvas::OnMouseClick)
-    EVT_LEFT_UP(wxPGCanvas::OnMouseUp)
-    EVT_RIGHT_UP(wxPGCanvas::OnMouseRightClick)
-    EVT_LEFT_DCLICK(wxPGCanvas::OnMouseDoubleClick)
-    EVT_KEY_DOWN(wxPGCanvas::OnKey)
-END_EVENT_TABLE()
-
-
-void wxPGCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
-{
-    wxPropertyGrid* pg = wxStaticCast(GetParent(), wxPropertyGrid);
-    wxASSERT( pg->IsKindOf(CLASSINFO(wxPropertyGrid)) );
-
-    wxPaintDC dc(this);
-
-    // Don't paint after destruction has begun
-    if ( !(pg->GetInternalFlags() & wxPG_FL_INITIALIZED) )
-        return;
-
-    // Update everything inside the box
-    wxRect r = GetUpdateRegion().GetBox();
-
-    // FIXME: This is just a workaround for a bug that causes splitters not
-    //        to paint when other windows are being dragged over the grid.
-    wxRect fullRect = GetRect();
-    r.x = fullRect.x;
-    r.width = fullRect.width;
-
-    // Repaint this rectangle
-    pg->DrawItems( dc, r.y, r.y + r.height, &r );
-
-    // We assume that the size set when grid is shown
-    // is what is desired.
-    pg->SetInternalFlag(wxPG_FL_GOOD_SIZE_SET);
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGrid
 // -----------------------------------------------------------------------
 
@@ -348,7 +241,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxPropertyGrid, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxPropertyGrid, wxScrolledWindow)
   EVT_IDLE(wxPropertyGrid::OnIdle)
-  EVT_MOTION(wxPropertyGrid::OnMouseMoveBottom)
   EVT_PAINT(wxPropertyGrid::OnPaint)
   EVT_SIZE(wxPropertyGrid::OnResize)
   EVT_ENTER_WINDOW(wxPropertyGrid::OnMouseEntry)
@@ -359,8 +251,13 @@ BEGIN_EVENT_TABLE(wxPropertyGrid, wxScrolledWindow)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
+  EVT_MOTION(wxPropertyGrid::OnMouseMove)
+  EVT_LEFT_DOWN(wxPropertyGrid::OnMouseClick)
+  EVT_LEFT_UP(wxPropertyGrid::OnMouseUp)
+  EVT_RIGHT_UP(wxPropertyGrid::OnMouseRightClick)
+  EVT_LEFT_DCLICK(wxPropertyGrid::OnMouseDoubleClick)
+  EVT_KEY_DOWN(wxPropertyGrid::OnKey)
 END_EVENT_TABLE()
-
 
 // -----------------------------------------------------------------------
 
@@ -456,8 +353,6 @@ void wxPropertyGrid::Init1()
 
     m_coloursCustomized = 0;
     m_frozen = 0;
-
-    m_canvas = NULL;
 
 #if wxPG_DOUBLE_BUFFER
     m_doubleBuffer = NULL;
@@ -561,10 +456,9 @@ void wxPropertyGrid::Init2()
 
     m_timeCreated = ::wxGetLocalTimeMillis();
 
-    m_canvas = new wxPGCanvas();
-    m_canvas->Create(this, wxID_ANY, wxPoint(0, 0), GetClientSize(),
-                     wxWANTS_CHARS | wxCLIP_CHILDREN);
-    m_canvas->SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    //m_canvas->Create(this, wxID_ANY, wxPoint(0, 0), GetClientSize(),
+    //                 wxWANTS_CHARS | wxCLIP_CHILDREN);
+    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
     m_iFlags |= wxPG_FL_INITIALIZED;
 
@@ -619,7 +513,7 @@ wxPropertyGrid::~wxPropertyGrid()
     m_iFlags &= ~(wxPG_FL_INITIALIZED);
 
     if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
-        m_canvas->ReleaseMouse();
+        ReleaseMouse();
 
     // Call with NULL to disconnect event handling
     if ( GetExtraStyle() & wxPG_EX_ENABLE_TLP_TRACKING )
@@ -662,7 +556,7 @@ wxPropertyGrid::~wxPropertyGrid()
 bool wxPropertyGrid::Destroy()
 {
     if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
-        m_canvas->ReleaseMouse();
+        ReleaseMouse();
 
     return wxScrolledWindow::Destroy();
 }
@@ -723,7 +617,7 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             //
             // Tooltips disabled
             //
-            m_canvas->SetToolTip( NULL );
+            wxScrolledWindow::SetToolTip( NULL );
         }
     #endif
     }
@@ -762,7 +656,7 @@ void wxPropertyGrid::Thaw()
         wxScrolledWindow::Thaw();
         RecalculateVirtualSize();
     #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-        m_canvas->Refresh();
+        Refresh();
     #endif
 
         // Force property re-selection
@@ -1828,13 +1722,34 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
+    PrepareDC(dc);
+
+    // Don't paint after destruction has begun
+    if ( !HasInternalFlag(wxPG_FL_INITIALIZED) )
+        return;
+
+    // Find out where the window is scrolled to
+    int vx,vy;                     // Top left corner of client
+    GetViewStart(&vx,&vy);
+    vy *= wxPG_PIXELS_PER_UNIT;
 
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
 
-    dc.SetPen(m_colEmptySpace);
-    dc.SetBrush(m_colEmptySpace);
-    dc.DrawRectangle(r);
+    r.y += vy;
+
+    // FIXME: This is just a workaround for a bug that causes splitters not
+    //        to paint when other windows are being dragged over the grid.
+    wxRect fullRect = GetRect();
+    r.x = fullRect.x;
+    r.width = fullRect.width;
+
+    // Repaint this rectangle
+    DrawItems( dc, r.y, r.y + r.height, &r );
+
+    // We assume that the size set when grid is shown
+    // is what is desired.
+    SetInternalFlag(wxPG_FL_GOOD_SIZE_SET);
 }
 
 // -----------------------------------------------------------------------
@@ -1920,7 +1835,8 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
                                 unsigned int bottomy,
                                 const wxRect* clipRect )
 {
-    if ( m_frozen || m_height < 1 || bottomy < topy || !m_pState ) return;
+    if ( m_frozen || m_height < 1 || bottomy < topy || !m_pState )
+        return;
 
     m_pState->EnsureVirtualHeight();
 
@@ -1968,25 +1884,34 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         {
             dc.SetClippingRegion( *clipRect );
             paintFinishY = DoDrawItems( *dcPtr, clipRect, isBuffered );
+
+            // Clear area beyond bottomY?
+            if ( paintFinishY < (clipRect->y+clipRect->height) )
+            {
+                dcPtr->SetPen(m_colEmptySpace);
+                dcPtr->SetBrush(m_colEmptySpace);
+                dcPtr->DrawRectangle( 0, paintFinishY, m_width,
+                                     (clipRect->y+clipRect->height) );
+            }
         }
 
     #if wxPG_DOUBLE_BUFFER
         if ( bufferDC )
         {
-            dc.Blit( clipRect->x, clipRect->y, clipRect->width, clipRect->height,
-                bufferDC, 0, 0, wxCOPY );
-            dc.DestroyClippingRegion(); // Is this really necessary?
+            dc.Blit( clipRect->x, clipRect->y, clipRect->width,
+                     clipRect->height,
+                     bufferDC, 0, 0, wxCOPY );
+            dc.DestroyClippingRegion();  // Is this really necessary?
             delete bufferDC;
         }
     #endif
     }
-
-    // Clear area beyond bottomY?
-    if ( paintFinishY < (clipRect->y+clipRect->height) )
+    else
     {
+        // Just clear the area
         dc.SetPen(m_colEmptySpace);
         dc.SetBrush(m_colEmptySpace);
-        dc.DrawRectangle( 0, paintFinishY, m_width, (clipRect->y+clipRect->height) );
+        dc.DrawRectangle(*clipRect);
     }
 }
 
@@ -2519,7 +2444,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
     wxRect r = GetPropertyRect(p1, p2);
     if ( r.width > 0 )
     {
-        m_canvas->RefreshRect(r);
+        RefreshRect(r);
     }
 }
 
@@ -2587,10 +2512,7 @@ void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
 {
     PrepareAfterItemsAdded();
 
-    wxWindow::Refresh(false);
-    if ( m_canvas )
-        // TODO: Coordinate translation
-        m_canvas->Refresh(false, rect);
+    wxWindow::Refresh(false, rect);
 
 #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
     // I think this really helps only GTK+1.2
@@ -3487,10 +3409,13 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 {
     int itemy = p->GetY2(m_lineHeight);
-    int vy = 0;
     int splitterX = m_pState->DoGetSplitterPosition(column-1);
     int colEnd = splitterX + m_pState->m_colWidths[column];
     int imageOffset = 0;
+
+    int vx, vy;  // Top left corner of client
+    GetViewStart(&vx, &vy);
+    vy *= wxPG_PIXELS_PER_UNIT;
 
     // TODO: If custom image detection changes from current, change this.
     if ( m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE )
@@ -3597,7 +3522,7 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
     if ( type == wxCURSOR_SIZEWE )
         cursor = m_cursorSizeWE;
 
-    m_canvas->SetCursor( *cursor );
+    SetCursor( *cursor );
 
     m_curcursor = type;
 }
@@ -3693,7 +3618,7 @@ void wxPropertyGrid::FreeEditors()
         wxWindow* parent = focus->GetParent();
         while ( parent )
         {
-            if ( parent == m_canvas )
+            if ( parent == this )
             {
                 SetFocusOnCanvas();
                 break;
@@ -3889,10 +3814,11 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                 m_iFlags &= ~wxPG_FL_FIXED_WIDTH_EDITOR;
 
-                wxPGWindowList wndList = editor->CreateControls(this,
-                                                                p,
-                                                                goodPos,
-                                                                grect.GetSize());
+                wxPGWindowList wndList =
+                    editor->CreateControls(this,
+                                           p,
+                                           goodPos,
+                                           grect.GetSize());
 
                 m_wndEditor = wndList.m_primary;
                 m_wndEditor2 = wndList.m_secondary;
@@ -3902,15 +3828,17 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 // Essentially, primaryCtrl == m_wndEditor
                 //
 
-                // NOTE: It is allowed for m_wndEditor to be NULL - in this case
-                //       value is drawn as normal, and m_wndEditor2 is assumed
-                //       to be a right-aligned button that triggers a separate editorCtrl
-                //       window.
+                // NOTE: It is allowed for m_wndEditor to be NULL - in this
+                //       case value is drawn as normal, and m_wndEditor2 is
+                //       assumed to be a right-aligned button that triggers
+                //       a separate editorCtrl window.
 
                 if ( m_wndEditor )
                 {
                     wxASSERT_MSG( m_wndEditor->GetParent() == GetPanel(),
-                                  wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
+                                  "CreateControls must use result of "
+                                  "wxPropertyGrid::GetPanel() as parent "
+                                  "of controls." );
 
                     // Set validator, if any
                 #if wxUSE_VALIDATORS
@@ -3924,7 +3852,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
                     // If it has modified status, use bold font
                     // (must be done before capturing m_ctrlXAdjust)
-                    if ( (p->m_flags & wxPG_PROP_MODIFIED) && (m_windowStyle & wxPG_BOLD_MODIFIED) )
+                    if ( (p->m_flags & wxPG_PROP_MODIFIED) &&
+                         (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
 
                     // Store x relative to splitter (we'll need it).
@@ -3953,7 +3882,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 if ( m_wndEditor2 )
                 {
                     wxASSERT_MSG( m_wndEditor2->GetParent() == GetPanel(),
-                                  wxT("CreateControls must use result of wxPropertyGrid::GetPanel() as parent of controls.") );
+                                  "CreateControls must use result of "
+                                  "wxPropertyGrid::GetPanel() as parent "
+                                  "of controls." );
 
                     // Get proper id for wndSecondary
                     m_wndSecId = m_wndEditor2->GetId();
@@ -3984,7 +3915,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             }
             else
             {
-                // Make sure focus is in grid canvas (important for wxGTK, at least)
+                // Make sure focus is in grid canvas (important for wxGTK,
+                // at least)
                 SetFocusOnCanvas();
             }
 
@@ -4309,8 +4241,6 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     m_width = width;
     m_height = height;
 
-    m_canvas->SetSize( x, y );
-
     m_pState->CheckColumnWidths();
 
     if ( GetSelection() )
@@ -4327,7 +4257,7 @@ void wxPropertyGrid::OnResize( wxSizeEvent& event )
         return;
 
     int width, height;
-    GetClientSize(&width,&height);
+    GetClientSize(&width, &height);
 
     m_width = width;
     m_height = height;
@@ -4397,7 +4327,7 @@ void wxPropertyGrid::SetVirtualWidth( int width )
 
 void wxPropertyGrid::SetFocusOnCanvas()
 {
-    m_canvas->SetFocusIgnoringChildren();
+    SetFocusIgnoringChildren();
     m_editorFocused = 0;
 }
 
@@ -4558,15 +4488,13 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
 
                         if ( !(m_iFlags & wxPG_FL_MOUSE_CAPTURED) )
                         {
-                            m_canvas->CaptureMouse();
+                            CaptureMouse();
                             m_iFlags |= wxPG_FL_MOUSE_CAPTURED;
                         }
 
                         m_dragStatus = 1;
                         m_draggedSplitter = splitterHit;
                         m_dragOffset = splitterHitOffset;
-
-                        wxClientDC dc(m_canvas);
 
                     #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
                         // Fixes button disappearance bug
@@ -4653,14 +4581,14 @@ void wxPropertyGrid::SetToolTip( const wxString& tipString )
 {
     if ( tipString.length() )
     {
-        m_canvas->SetToolTip(tipString);
+        wxScrolledWindow::SetToolTip(tipString);
     }
     else
     {
     #if wxPG_ALLOW_EMPTY_TOOLTIPS
-        m_canvas->SetToolTip( m_emptyString );
+        wxScrolledWindow::SetToolTip( m_emptyString );
     #else
-        m_canvas->SetToolTip( NULL );
+        wxScrolledWindow::SetToolTip( NULL );
     #endif
     }
 }
@@ -4670,13 +4598,14 @@ void wxPropertyGrid::SetToolTip( const wxString& tipString )
 // -----------------------------------------------------------------------
 
 // Return false if should be skipped
-bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event )
+bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
+                                      wxMouseEvent &event )
 {
     // Safety check (needed because mouse capturing may
     // otherwise freeze the control)
     if ( m_dragStatus > 0 && !event.Dragging() )
     {
-        HandleMouseUp(x,y,event);
+        HandleMouseUp(x, y, event);
     }
 
     wxPropertyGridPageState* state = m_pState;
@@ -4701,7 +4630,9 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
             {
                 // Move everything
                 SetInternalFlag(wxPG_FL_DONT_CENTER_SPLITTER);
-                state->DoSetSplitterPosition( newSplitterX, m_draggedSplitter, false );
+                state->DoSetSplitterPosition(newSplitterX,
+                                             m_draggedSplitter,
+                                             false);
                 state->m_fSplitterX = (float) newSplitterX;
 
                 if ( GetSelection() )
@@ -4757,7 +4688,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
         //
         if ( m_windowStyle & wxPG_TOOLTIPS )
         {
-            wxToolTip* tooltip = m_canvas->GetToolTip();
+            wxToolTip* tooltip = GetToolTip();
 
             if ( m_propHover != prevHover || prevSide != m_mouseSide )
             {
@@ -4788,7 +4719,9 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
 
                             space = m_width - splitterX;
                             if ( m_propHover->m_flags & wxPG_PROP_CUSTOMIMAGE )
-                                space -= wxPG_CUSTOM_IMAGE_WIDTH + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2;
+                                space -= wxPG_CUSTOM_IMAGE_WIDTH +
+                                         wxCC_CUSTOM_IMAGE_MARGIN1 +
+                                         wxCC_CUSTOM_IMAGE_MARGIN2;
                         }
 
                         if ( space )
@@ -4805,9 +4738,9 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
                             if ( tooltip )
                             {
                             #if wxPG_ALLOW_EMPTY_TOOLTIPS
-                                m_canvas->SetToolTip( m_emptyString );
+                                SetToolTip( m_emptyString );
                             #else
-                                m_canvas->SetToolTip( NULL );
+                                wxScrolledWindow::SetToolTip( NULL );
                             #endif
                             }
                         }
@@ -4819,9 +4752,9 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
                     if ( tooltip )
                     {
                     #if wxPG_ALLOW_EMPTY_TOOLTIPS
-                        m_canvas->SetToolTip( m_emptyString );
+                        SetToolTip( m_emptyString );
                     #else
-                        m_canvas->SetToolTip( NULL );
+                        wxScrolledWindow::SetToolTip( NULL );
                     #endif
                     }
                 }
@@ -4849,8 +4782,8 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
 
                 // hovering on splitter
 
-                // NB: Condition disabled since MouseLeave event (from the editor control) cannot be
-                //     reliably detected.
+                // NB: Condition disabled since MouseLeave event (from the
+                //     editor control) cannot be reliably detected.
                 //if ( m_curcursor != wxCURSOR_SIZEWE )
                 CustomSetCursor( wxCURSOR_SIZEWE, true );
 
@@ -4930,7 +4863,7 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
         // This is necessary to return cursor
         if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
         {
-            m_canvas->ReleaseMouse();
+            ReleaseMouse();
             m_iFlags &= ~(wxPG_FL_MOUSE_CAPTURED);
         }
 
@@ -4972,10 +4905,8 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
 {
     int splitterX = GetSplitterPosition();
 
-    //int ux, uy;
-    //CalcUnscrolledPosition( event.m_x, event.m_y, &ux, &uy );
-    int ux = event.m_x;
-    int uy = event.m_y;
+    int ux, uy;
+    CalcUnscrolledPosition( event.m_x, event.m_y, &ux, &uy );
 
     wxWindow* wnd = GetEditorControl();
 
@@ -5058,14 +4989,6 @@ void wxPropertyGrid::OnMouseMove( wxMouseEvent &event )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::OnMouseMoveBottom( wxMouseEvent& WXUNUSED(event) )
-{
-    // Called when mouse moves in the empty space below the properties.
-    CustomSetCursor( wxCURSOR_ARROW );
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGrid::OnMouseUp( wxMouseEvent &event )
 {
     int x, y;
@@ -5100,7 +5023,7 @@ void wxPropertyGrid::OnMouseEntry( wxMouseEvent &event )
     else if ( event.Leaving() )
     {
         // Without this, wxSpinCtrl editor will sometimes have wrong cursor
-        m_canvas->SetCursor( wxNullCursor );
+        SetCursor( wxNullCursor );
 
         // Get real cursor position
         wxPoint pt = ScreenToClient(::wxGetMousePosition());

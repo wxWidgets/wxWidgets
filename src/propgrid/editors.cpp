@@ -558,7 +558,7 @@ public:
 
     wxPropertyGrid* GetGrid() const
     {
-        wxPropertyGrid* pg = wxDynamicCast(GetParent()->GetParent(),
+        wxPropertyGrid* pg = wxDynamicCast(GetParent(),
                                            wxPropertyGrid);
         wxASSERT(pg);
         return pg;
@@ -1377,7 +1377,7 @@ void wxSimpleCheckBox::SetValue( int value )
 
     wxCommandEvent evt(wxEVT_COMMAND_CHECKBOX_CLICKED,GetParent()->GetId());
 
-    wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent()->GetParent();
+    wxPropertyGrid* propGrid = (wxPropertyGrid*) GetParent();
     wxASSERT( propGrid->IsKindOf(CLASSINFO(wxPropertyGrid)) );
     propGrid->HandleCustomEditorEvent(evt);
 }
