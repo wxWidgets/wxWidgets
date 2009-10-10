@@ -338,8 +338,9 @@ bool wxHtmlWindow::Create(wxWindow *parent, wxWindowID id,
     // at all so disable it to avoid executing any user-defined handlers twice
     // (and to avoid processing unnecessary event if no handlers are defined).
     SetBackgroundStyle(wxBG_STYLE_PAINT);
-
     SetPage(wxT("<html><body></body></html>"));
+
+    SetInitialSize(size);
     return true;
 }
 
