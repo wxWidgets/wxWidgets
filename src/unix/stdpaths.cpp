@@ -197,7 +197,11 @@ wxString wxStandardPaths::GetDataDir() const
     // practice for running well-written (and so using wxStandardPaths to find
     // their files) wx applications without installing them
     static const wxString
-      envOverride(getenv("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR"));
+      envOverride(
+        getenv(
+            ("WX_" + wxTheApp->GetAppName().Upper() + "_DATA_DIR").c_str()
+        )
+      );
 
     if ( !envOverride.empty() )
         return envOverride;
