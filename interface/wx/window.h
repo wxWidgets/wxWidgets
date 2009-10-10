@@ -2811,8 +2811,10 @@ public:
     /**
         Moves the pointer to the given position on the window.
 
-        @note This function is not supported under Mac because Apple Human
-              Interface Guidelines forbid moving the mouse cursor programmatically.
+        @note Apple Human Interface Guidelines forbid moving the mouse cursor
+              programmatically so you should avoid using this function in Mac
+              applications (and probably avoid using it under the other
+              platforms without good reason as well).
 
         @param x
             The new x position for the cursor.
