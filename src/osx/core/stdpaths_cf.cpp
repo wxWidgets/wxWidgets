@@ -49,14 +49,12 @@ wxStandardPathsCF::wxStandardPathsCF()
                  : m_bundle(CFBundleGetMainBundle())
 {
     CFRetain(m_bundle);
-    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
 }
 
 wxStandardPathsCF::wxStandardPathsCF(wxCFBundleRef bundle)
                  : m_bundle(bundle)
 {
     CFRetain(m_bundle);
-    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
 }
 
 wxStandardPathsCF::~wxStandardPathsCF()

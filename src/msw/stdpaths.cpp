@@ -333,9 +333,6 @@ wxString wxStandardPaths::MSWGetShellDir(int csidl)
 
 wxStandardPaths::wxStandardPaths()
 {
-    // under MSW it's common to use both the applicatio nand vendor
-    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
-
     // make it possible to run uninstalled application from the build directory
     IgnoreAppBuildSubDirs();
 }

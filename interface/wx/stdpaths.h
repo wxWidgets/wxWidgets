@@ -22,8 +22,8 @@
     Notice that in the examples below the string @c appinfo may be either just
     the application name (as returned by wxApp::GetAppName()) or a combination
     of the vendor name (wxApp::GetVendorName()) and the application name, with
-    a path separator between them. By default, the vendor name is used under
-    Windows and OS X but not under other Unix systems, see UseAppInfo().
+    a path separator between them. By default, only the application name is
+    used, use UseAppInfo() to change this.
 
     The other placeholders should be self-explanatory: the string @c username
     should be replaced with the value the name of the currently logged in user.
@@ -336,8 +336,7 @@ public:
             used combined with AppInfo_AppName, i.e. as @code AppInfo_AppName |
             AppInfo_VendorName @endcode
 
-        By default, only the application name is used under Unix systems but both
-        application and vendor names are used under Windows and Mac.
+        By default, only the application name is used.
 
         @since 2.9.0
     */

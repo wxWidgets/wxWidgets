@@ -80,11 +80,6 @@ Changes in behaviour not resulting in compilation errors, please read this!
 - Default location of wxFileConfig files has changed under Windows, you will
   need to update your code if you access these files directly.
 
-- Return value of wxStandardPaths::GetUserDataDir() and similar functions has
-  changed if the vendor name is defined as it now includes it by default under
-  Windows and OS X. Call wxStandardPaths::UseAppInfo(AppInfo_AppName) to
-  revert to behaviour compatible with 2.8 version.
-
 - wxWindow::IsEnabled() now returns false if a window parent (and not
   necessarily the window itself) is disabled, new function IsThisEnabled()
   with the same behaviour as old IsEnabled() was added.
@@ -384,6 +379,14 @@ Major new features in this release
 
 2.9.1:
 ------
+
+INCOMPATIBLE CHANGE SINCE 2.9.0
+
+- wxStandardPaths doesn't use vendor name by default under MSW and OSX to
+  remain compatible with 2.8 behaviour but this makes it incompatible with
+  2.9.0. Please use UseAppInfo(AppInfo_AppName | AppInfo_VendorName) explicitly
+  to use the vendor name in the paths returned by wxStandardPaths.
+
 
 All:
 
