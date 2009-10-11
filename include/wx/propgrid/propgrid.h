@@ -1953,8 +1953,10 @@ protected:
                                      wxPGProperty* property ) const;
 
     /** Draws items from topitemy to bottomitemy */
-    void DrawItems( wxDC& dc, unsigned int topitemy, unsigned int bottomitemy,
-                    const wxRect* clip_rect = (const wxRect*) NULL );
+    void DrawItems( wxDC& dc,
+                    unsigned int topItemY,
+                    unsigned int bottomItemY,
+                    const wxRect* drawRect = NULL );
 
     // Translate wxKeyEvent to wxPG_ACTION_XXX
     int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;

@@ -1831,11 +1831,14 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
 // topy and bottomy are already unscrolled (ie. physical)
 //
 void wxPropertyGrid::DrawItems( wxDC& dc,
-                                unsigned int topy,
-                                unsigned int bottomy,
+                                unsigned int topItemY,
+                                unsigned int bottomItemY,
                                 const wxRect* drawRect )
 {
-    if ( m_frozen || m_height < 1 || bottomy < topy || !m_pState )
+    if ( m_frozen ||
+         m_height < 1 ||
+         bottomItemY < topItemY ||
+         !m_pState )
         return;
 
     m_pState->EnsureVirtualHeight();
@@ -1843,9 +1846,9 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     wxRect tempDrawRect;
     if ( !drawRect )
     {
-        tempDrawRect = wxRect(0, topy,
+        tempDrawRect = wxRect(0, topItemY,
                               m_pState->m_width,
-                              bottomy);
+                              bottomItemY);
         drawRect = &tempDrawRect;
     }
 
@@ -1888,7 +1891,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             paintFinishY = DoDrawItems( *dcPtr, drawRect, isBuffered );
             int drawBottomY = drawRect->y + drawRect->height;
 
-            // Clear area beyond bottomY?
+            // Clear area beyond last painted property
             if ( paintFinishY < drawBottomY )
             {
                 dcPtr->SetPen(m_colEmptySpace);
@@ -1923,22 +1926,23 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 // -----------------------------------------------------------------------
 
 int wxPropertyGrid::DoDrawItems( wxDC& dc,
-                                 const wxRect* clipRect,
+                                 const wxRect* drawRect,
                                  bool isBuffered ) const
 {
     const wxPGProperty* firstItem;
     const wxPGProperty* lastItem;
 
-    firstItem = DoGetItemAtY(clipRect->y);
-    lastItem = DoGetItemAtY(clipRect->y+clipRect->height-1);
+    firstItem = DoGetItemAtY(drawRect->y);
+    lastItem = DoGetItemAtY(drawRect->y+drawRect->height-1);
 
     if ( !lastItem )
         lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     if ( m_frozen || m_height < 1 || firstItem == NULL )
-        return clipRect->y;
+        return drawRect->y;
 
-    wxCHECK_MSG( !m_pState->m_itemsAdded, clipRect->y, wxT("no items added") );
+    wxCHECK_MSG( !m_pState->m_itemsAdded, drawRect->y,
+                 "no items added" );
     wxASSERT( m_pState->m_properties->GetChildCount() );
 
     int lh = m_lineHeight;
@@ -1946,8 +1950,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int firstItemTopY;
     int lastItemBottomY;
 
-    firstItemTopY = clipRect->y;
-    lastItemBottomY = clipRect->y + clipRect->height;
+    firstItemTopY = drawRect->y;
+    lastItemBottomY = drawRect->y + drawRect->height;
 
     // Align y coordinates to item boundaries
     firstItemTopY -= firstItemTopY % lh;
@@ -1955,19 +1959,22 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     lastItemBottomY -= 1;
 
     // Entire range outside scrolled, visible area?
-    if ( firstItemTopY >= (int)m_pState->GetVirtualHeight() || lastItemBottomY <= 0 )
-        return clipRect->y;
+    if ( firstItemTopY >= (int)m_pState->GetVirtualHeight() ||
+         lastItemBottomY <= 0 )
+        return drawRect->y;
 
-    wxCHECK_MSG( firstItemTopY < lastItemBottomY, clipRect->y, wxT("invalid y values") );
-
+    wxCHECK_MSG( firstItemTopY < lastItemBottomY,
+                 drawRect->y,
+                 "invalid y values" );
 
     /*
-    wxLogDebug(wxT("  -> DoDrawItems ( \"%s\" -> \"%s\", height=%i (ch=%i), clipRect = 0x%lX )"),
+    wxLogDebug("  -> DoDrawItems ( \"%s\" -> \"%s\"
+               "height=%i (ch=%i), drawRect = 0x%lX )",
         firstItem->GetLabel().c_str(),
         lastItem->GetLabel().c_str(),
         (int)(lastItemBottomY - firstItemTopY),
         (int)m_height,
-        (unsigned long)clipRect );
+        (unsigned long)drawRect );
     */
 
     wxRect r;
@@ -1979,7 +1986,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     //
     // With wxPG_DOUBLE_BUFFER, do double buffering
-    // - buffer's y = 0, so align cliprect and coordinates to that
+    // - buffer's y = 0, so align drawRect and coordinates to that
     //
 #if wxPG_DOUBLE_BUFFER
 
@@ -1987,15 +1994,15 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     if ( isBuffered )
     {
-        xRelMod = clipRect->x;
-        yRelMod = clipRect->y;
+        xRelMod = drawRect->x;
+        yRelMod = drawRect->y;
 
         //
-        // clipRect conversion
-        cr2 = *clipRect;
+        // drawRect conversion
+        cr2 = *drawRect;
         cr2.x -= xRelMod;
         cr2.y -= yRelMod;
-        clipRect = &cr2;
+        drawRect = &cr2;
         firstItemTopY -= yRelMod;
         lastItemBottomY -= yRelMod;
     }
