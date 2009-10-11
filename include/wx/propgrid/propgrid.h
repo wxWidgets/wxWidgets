@@ -1944,7 +1944,7 @@ protected:
     void CorrectEditorWidgetPosY();
 
     int DoDrawItems( wxDC& dc,
-                     const wxRect* clipRect,
+                     const wxRect* drawRect,
                      bool isBuffered ) const;
 
     /** Draws an expand/collapse (ie. +/-) button.

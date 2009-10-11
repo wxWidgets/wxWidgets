@@ -1833,18 +1833,20 @@ void wxPropertyGrid::DrawExpanderButton( wxDC& dc, const wxRect& rect,
 void wxPropertyGrid::DrawItems( wxDC& dc,
                                 unsigned int topy,
                                 unsigned int bottomy,
-                                const wxRect* clipRect )
+                                const wxRect* drawRect )
 {
     if ( m_frozen || m_height < 1 || bottomy < topy || !m_pState )
         return;
 
     m_pState->EnsureVirtualHeight();
 
-    wxRect tempClipRect;
-    if ( !clipRect )
+    wxRect tempDrawRect;
+    if ( !drawRect )
     {
-        tempClipRect = wxRect(0,topy,m_pState->m_width,bottomy);
-        clipRect = &tempClipRect;
+        tempDrawRect = wxRect(0, topy,
+                              m_pState->m_width,
+                              bottomy);
+        drawRect = &tempDrawRect;
     }
 
     // items added check
@@ -1864,7 +1866,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         {
             if ( !m_doubleBuffer )
             {
-                paintFinishY = clipRect->y;
+                paintFinishY = drawRect->y;
                 dcPtr = NULL;
             }
             else
@@ -1882,26 +1884,29 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
         if ( dcPtr )
         {
-            dc.SetClippingRegion( *clipRect );
-            paintFinishY = DoDrawItems( *dcPtr, clipRect, isBuffered );
+            dc.SetClippingRegion( *drawRect );
+            paintFinishY = DoDrawItems( *dcPtr, drawRect, isBuffered );
+            int drawBottomY = drawRect->y + drawRect->height;
 
             // Clear area beyond bottomY?
-            if ( paintFinishY < (clipRect->y+clipRect->height) )
+            if ( paintFinishY < drawBottomY )
             {
                 dcPtr->SetPen(m_colEmptySpace);
                 dcPtr->SetBrush(m_colEmptySpace);
-                dcPtr->DrawRectangle( 0, paintFinishY, m_width,
-                                     (clipRect->y+clipRect->height) );
+                dcPtr->DrawRectangle(0, paintFinishY,
+                                     m_width,
+                                     drawBottomY );
             }
+
+            dc.DestroyClippingRegion();
         }
 
     #if wxPG_DOUBLE_BUFFER
         if ( bufferDC )
         {
-            dc.Blit( clipRect->x, clipRect->y, clipRect->width,
-                     clipRect->height,
+            dc.Blit( drawRect->x, drawRect->y, drawRect->width,
+                     drawRect->height,
                      bufferDC, 0, 0, wxCOPY );
-            dc.DestroyClippingRegion();  // Is this really necessary?
             delete bufferDC;
         }
     #endif
@@ -1911,7 +1916,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         // Just clear the area
         dc.SetPen(m_colEmptySpace);
         dc.SetBrush(m_colEmptySpace);
-        dc.DrawRectangle(*clipRect);
+        dc.DrawRectangle(*drawRect);
     }
 }
 
@@ -2384,7 +2389,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     }
 #endif
 
-    return y + yRelMod;
+    return y;
 }
 
 // -----------------------------------------------------------------------
