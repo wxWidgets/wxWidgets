@@ -738,6 +738,12 @@ protected:
 
     unsigned char               m_vhCalcPending;
 
+    /** True if splitter has been pre-set by the application. */
+    bool                        m_isSplitterPreSet;
+
+    /** Used to (temporarily) disable splitter centering. */
+    bool                        m_dontCenterSplitter;
+
 private:
     /** Only inits arrays, doesn't migrate things or such. */
     void InitNonCatMode();

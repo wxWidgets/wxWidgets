@@ -815,6 +815,9 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
 
     pageObj->m_id = m_nextTbInd;
 
+    if ( !HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+        pageObj->m_dontCenterSplitter = true;
+
     if ( isPageInserted )
         m_arrPages.push_back( pageObj );
 
@@ -1548,12 +1551,11 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
             maxW += m_pPropGrid->m_marginWidth;
             if ( maxW > highest )
                 highest = maxW;
+            m_pState->m_dontCenterSplitter = true;
         }
 
         if ( highest > 0 )
             m_pPropGrid->SetSplitterPosition( highest );
-
-        m_pPropGrid->m_iFlags |= wxPG_FL_DONT_CENTER_SPLITTER;
     }
 }
 
@@ -1575,12 +1577,30 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
 {
     int width, height;
 
-    GetClientSize(&width,&height);
+    GetClientSize(&width, &height);
 
     if ( m_width == -12345 )
         RecreateControls();
 
-    RecalculatePositions(width,height);
+    RecalculatePositions(width, height);
+
+    if ( m_pPropGrid && m_pPropGrid->m_parent )
+    {
+        int pgWidth, pgHeight;
+        m_pPropGrid->GetClientSize(&pgWidth, &pgHeight);
+
+        // Regenerate splitter positions for non-current pages
+        for ( unsigned int i=0; i<GetPageCount(); i++ )
+        {
+            wxPropertyGridPage* page = GetPage(i);
+            if ( page != m_pPropGrid->GetState() )
+            {
+                page->OnClientWidthChange(pgWidth,
+                                          pgWidth - page->m_width,
+                                          true);
+            }
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1718,9 +1738,8 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     {
         wxPropertyGridPage* page = GetPage(i);
         page->DoSetSplitterPosition( pos, splitterColumn, false );
+        page->m_isSplitterPreSet = true;
     }
-
-    m_pPropGrid->SetInternalFlag(wxPG_FL_SPLITTER_PRE_SET);
 }
 
 // -----------------------------------------------------------------------

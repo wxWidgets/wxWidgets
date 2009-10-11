@@ -549,8 +549,6 @@ enum wxPG_KEYBOARD_ACTIONS
 #define wxPG_FL_IN_SELECT_PROPERTY          0x00100000
 // Set when help string is shown in status bar
 #define wxPG_FL_STRING_IN_STATUSBAR         0x00200000
-// Splitter position has been custom-set by the user
-#define wxPG_FL_SPLITTER_PRE_SET            0x00400000
 // Validation failed. Clear on modify event.
 #define wxPG_FL_VALIDATION_FAILED           0x00800000
 // Auto sort is enabled (for categorized mode)
@@ -1172,7 +1170,7 @@ public:
     void SetSplitterPosition( int newxpos, int col = 0 )
     {
         DoSetSplitterPosition_(newxpos, true, col);
-        m_iFlags |= wxPG_FL_SPLITTER_PRE_SET;
+        m_pState->m_isSplitterPreSet = true;
     }
 
     /**
@@ -2465,7 +2463,6 @@ protected:
     #undef wxPG_FL_MOUSE_CAPTURED
     #undef wxPG_FL_INITIALIZED
     #undef wxPG_FL_ACTIVATION_BY_CLICK
-    #undef wxPG_FL_DONT_CENTER_SPLITTER
     #undef wxPG_SUPPORT_TOOLTIPS
     #undef wxPG_DOUBLE_BUFFER
     #undef wxPG_ICON_WIDTH

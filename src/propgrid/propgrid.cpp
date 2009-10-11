@@ -406,7 +406,7 @@ void wxPropertyGrid::Init2()
     }
 
     if ( !(m_windowStyle & wxPG_SPLITTER_AUTO_CENTER) )
-        m_iFlags |= wxPG_FL_DONT_CENTER_SPLITTER;
+        m_pState->m_dontCenterSplitter = true;
 
     if ( m_windowStyle & wxPG_HIDE_CATEGORIES )
     {
@@ -2634,10 +2634,11 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     {
         //
         // Just in case, fully re-center splitter
-        if ( HasFlag( wxPG_SPLITTER_AUTO_CENTER ) )
-            pNewState->m_fSplitterX = -1.0;
+        //if ( HasFlag( wxPG_SPLITTER_AUTO_CENTER ) )
+        //    pNewState->m_fSplitterX = -1.0;
 
-        pNewState->OnClientWidthChange( pgWidth, pgWidth - pNewState->m_width );
+        pNewState->OnClientWidthChange(pgWidth,
+                                       pgWidth - pNewState->m_width);
     }
 
     m_propHover = NULL;
@@ -2668,7 +2669,9 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
 // Call to SetSplitterPosition will always disable splitter auto-centering
 // if parent window is shown.
-void wxPropertyGrid::DoSetSplitterPosition_( int newxpos, bool refresh, int splitterIndex, bool allPages )
+void wxPropertyGrid::DoSetSplitterPosition_( int newxpos, bool refresh,
+                                             int splitterIndex,
+                                             bool allPages )
 {
     if ( ( newxpos < wxPG_DRAG_MARGIN ) )
         return;
@@ -2690,9 +2693,9 @@ void wxPropertyGrid::DoSetSplitterPosition_( int newxpos, bool refresh, int spli
 
 void wxPropertyGrid::CenterSplitter( bool enableAutoCentering )
 {
-    SetSplitterPosition( m_width/2, true );
-    if ( enableAutoCentering && ( m_windowStyle & wxPG_SPLITTER_AUTO_CENTER ) )
-        m_iFlags &= ~(wxPG_FL_DONT_CENTER_SPLITTER);
+    SetSplitterPosition( m_width/2 );
+    if ( enableAutoCentering && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+        m_pState->m_dontCenterSplitter = false;
 }
 
 // -----------------------------------------------------------------------
@@ -4087,8 +4090,8 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
     }
 
     // Store dont-center-splitter flag 'cause we need to temporarily set it
-    wxUint32 old_flag = m_iFlags & wxPG_FL_DONT_CENTER_SPLITTER;
-    m_iFlags |= wxPG_FL_DONT_CENTER_SPLITTER;
+    bool prevDontCenterSplitter = m_pState->m_dontCenterSplitter;
+    m_pState->m_dontCenterSplitter = true;
 
     bool res = m_pState->DoCollapse(pwc);
 
@@ -4101,8 +4104,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
         Refresh();
     }
 
-    // Clear dont-center-splitter flag if it wasn't set
-    m_iFlags = (m_iFlags & ~wxPG_FL_DONT_CENTER_SPLITTER) | old_flag;
+    m_pState->m_dontCenterSplitter = prevDontCenterSplitter;
 
     return res;
 }
@@ -4116,8 +4118,8 @@ bool wxPropertyGrid::DoExpand( wxPGProperty* p, bool sendEvents )
     wxPGProperty* pwc = (wxPGProperty*)p;
 
     // Store dont-center-splitter flag 'cause we need to temporarily set it
-    wxUint32 old_flag = m_iFlags & wxPG_FL_DONT_CENTER_SPLITTER;
-    m_iFlags |= wxPG_FL_DONT_CENTER_SPLITTER;
+    bool prevDontCenterSplitter = m_pState->m_dontCenterSplitter;
+    m_pState->m_dontCenterSplitter = true;
 
     bool res = m_pState->DoExpand(pwc);
 
@@ -4130,8 +4132,7 @@ bool wxPropertyGrid::DoExpand( wxPGProperty* p, bool sendEvents )
         Refresh();
     }
 
-    // Clear dont-center-splitter flag if it wasn't set
-    m_iFlags = (m_iFlags & ~wxPG_FL_DONT_CENTER_SPLITTER) | old_flag;
+    m_pState->m_dontCenterSplitter = prevDontCenterSplitter;
 
     return res;
 }
@@ -4620,7 +4621,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             if ( newSplitterX != splitterX )
             {
                 // Move everything
-                SetInternalFlag(wxPG_FL_DONT_CENTER_SPLITTER);
+                state->m_dontCenterSplitter = true;
                 state->DoSetSplitterPosition(newSplitterX,
                                              m_draggedSplitter,
                                              false);
@@ -4849,7 +4850,7 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
         //splitterX = x;
 
         // Disable splitter auto-centering
-        m_iFlags |= wxPG_FL_DONT_CENTER_SPLITTER;
+        state->m_dontCenterSplitter = true;
 
         // This is necessary to return cursor
         if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
