@@ -4091,16 +4091,7 @@ bool wxPropertyGrid::DoCollapse( wxPGProperty* p, bool sendEvents )
             SendEvent( wxEVT_PG_ITEM_COLLAPSED, p );
 
         RecalculateVirtualSize();
-
-        // Redraw etc. only if collapsed was visible.
-        if (pwc->IsVisible() &&
-            !m_frozen &&
-            ( !pwc->IsCategory() || !(m_windowStyle & wxPG_HIDE_CATEGORIES) ) )
-        {
-            // When item is collapsed so that scrollbar would move,
-            // graphics mess is about (unless we redraw everything).
-            Refresh();
-        }
+        Refresh();
     }
 
     // Clear dont-center-splitter flag if it wasn't set
@@ -4129,19 +4120,7 @@ bool wxPropertyGrid::DoExpand( wxPGProperty* p, bool sendEvents )
             SendEvent( wxEVT_PG_ITEM_EXPANDED, p );
 
         RecalculateVirtualSize();
-
-        // Redraw etc. only if expanded was visible.
-        if ( pwc->IsVisible() && !m_frozen &&
-             ( !pwc->IsCategory() || !(m_windowStyle & wxPG_HIDE_CATEGORIES) )
-           )
-        {
-            // Redraw
-        #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-            Refresh();
-        #else
-            DrawItems(pwc, NULL);
-        #endif
-        }
+        Refresh();
     }
 
     // Clear dont-center-splitter flag if it wasn't set
