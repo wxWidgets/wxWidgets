@@ -48,11 +48,9 @@ public:
     virtual bool
     RenderWithAttr(wxDC& dc,
                    const wxRect& rect,
-                   const wxDataViewItemAttr * WXUNUSED(attr), // NULL if none
-                   int state)
-    {
-        return Render(rect, &dc, state);
-    }
+                   int align,   // combination of horizontal and vertical
+                   const wxDataViewItemAttr *attr, // may be NULL if none
+                   int state);
 
     virtual wxSize GetSize() const = 0;
 
@@ -118,6 +116,7 @@ public:
     // Draw the text using the provided attributes
     void RenderText(wxDC& dc,
                     const wxRect& rect,
+                    int align,
                     const wxString& text,
                     const wxDataViewItemAttr *attr, // may be NULL if none
                     int state,
@@ -147,11 +146,15 @@ public:
 
     virtual bool RenderWithAttr(wxDC& dc,
                                 const wxRect& rect,
+                                int align,
                                 const wxDataViewItemAttr *attr,
                                 int state);
-    virtual bool Render( wxRect cell, wxDC *dc, int state )
+    virtual bool Render(wxRect WXUNUSED(cell),
+                        wxDC * WXUNUSED(dc),
+                        int WXUNUSED(state))
     {
-        return RenderWithAttr(*dc, cell, NULL, state);
+        wxFAIL_MSG("only RenderWithAttr() should be called");
+        return false;
     }
 
     wxSize GetSize() const;

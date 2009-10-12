@@ -620,6 +620,41 @@ wxDataViewRenderer::~wxDataViewRenderer()
         delete m_dc;
 }
 
+bool
+wxDataViewRenderer::RenderWithAttr(wxDC& dc,
+                                   const wxRect& cell_rect,
+                                   int align,
+                                   const wxDataViewItemAttr *WXUNUSED(attr),
+                                   int state)
+{
+    // adjust the rectangle ourselves to account for the alignment
+
+    wxRect item_rect = cell_rect;
+    if ( align )
+    {
+        const wxSize size = GetSize();
+
+        // horizontal alignment:
+        if (align & wxALIGN_CENTER_HORIZONTAL)
+            item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
+        else if (align & wxALIGN_RIGHT)
+            item_rect.x = cell_rect.x + cell_rect.width - size.x;
+        // else: wxALIGN_LEFT is the default
+
+        // vertical alignment:
+        item_rect.y = cell_rect.y;
+        if (align & wxALIGN_CENTER_VERTICAL)
+            item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
+        else if (align & wxALIGN_BOTTOM)
+            item_rect.y = cell_rect.y + cell_rect.height - size.y;
+        // else: wxALIGN_TOP is the default
+
+        item_rect.SetSize(size);
+    }
+
+    return Render(item_rect, &dc, state);
+}
+
 wxDC *wxDataViewRenderer::GetDC()
 {
     if (m_dc == NULL)
@@ -678,12 +713,13 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
 
     wxDataViewItemAttr attr;
     attr.SetColour(col);
-    RenderText(*dc, cell, text, &attr, state, xoffset);
+    RenderText(*dc, cell, wxALIGN_NOT, text, &attr, state, xoffset);
 }
 
 void
 wxDataViewCustomRenderer::RenderText(wxDC& dc,
                                      const wxRect& rect,
+                                     int align,
                                      const wxString& text,
                                      const wxDataViewItemAttr *attr,
                                      int WXUNUSED(state),
@@ -705,9 +741,11 @@ wxDataViewCustomRenderer::RenderText(wxDC& dc,
         changeFont.Set(font);
     }
 
-    dc.DrawText(text,
-                rect.x + xoffset,
-                rect.y + ((rect.height - dc.GetCharHeight()) / 2));
+    wxRect rectText = rect;
+    rectText.x += xoffset;
+    rectText.width -= xoffset;
+
+    dc.DrawLabel(text, rectText, align);
 }
 
 // ---------------------------------------------------------
@@ -763,10 +801,11 @@ bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVarian
 bool
 wxDataViewTextRenderer::RenderWithAttr(wxDC& dc,
                                        const wxRect& rect,
+                                       int align,
                                        const wxDataViewItemAttr *attr,
                                        int state)
 {
-    RenderText(dc, rect, m_text, attr, state);
+    RenderText(dc, rect, align, m_text, attr, state);
     return true;
 }
 
@@ -1578,37 +1617,15 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         model->GetValue( value, item, column->GetModelColumn());
         cell->SetValue( value );
 
-        wxSize size = cell->GetSize();
-        size.x = wxMin( 2*PADDING_RIGHTLEFT + size.x, width );
-        size.y = height;
-        wxRect item_rect(x, 0, size.x, size.y);
-
-        int align = cell->CalculateAlignment();
-        // horizontal alignment:
-        item_rect.x = x;
-        if (align & wxALIGN_CENTER_HORIZONTAL)
-            item_rect.x = x + (width / 2) - (size.x / 2);
-        else if (align & wxALIGN_RIGHT)
-            item_rect.x = x + width - size.x;
-        // else: wxALIGN_LEFT is the default
-
-        // vertical alignment:
-        item_rect.y = 0;
-        if (align & wxALIGN_CENTER_VERTICAL)
-            item_rect.y = (height / 2) - (size.y / 2);
-        else if (align & wxALIGN_BOTTOM)
-            item_rect.y = height - size.y;
-        // else: wxALIGN_TOP is the default
-
-        // add padding
-        item_rect.x += PADDING_RIGHTLEFT;
-        item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
+        wxRect item_rect(x, 0, width, height);
+        item_rect.Deflate(PADDING_RIGHTLEFT, 0);
 
         // dc.SetClippingRegion( item_rect );
         wxDataViewItemAttr attr;
         const bool
             hasAttr = model->GetAttr(item, column->GetModelColumn(), attr);
-        cell->RenderWithAttr(dc, item_rect, hasAttr ? &attr : NULL, 0);
+        cell->RenderWithAttr(dc, item_rect, cell->CalculateAlignment(),
+                                hasAttr ? &attr : NULL, 0);
         // dc.DestroyClippingRegion();
 
         x += width;
@@ -1850,40 +1867,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 wxDELETE(node);
             }
 
-            // cannot be bigger than allocated space
-            wxSize size = cell->GetSize();
+            wxRect item_rect = cell_rect;
+            item_rect.Deflate(PADDING_RIGHTLEFT, 0);
 
-            // Because of the tree structure indent, here we should minus the width
-            // of the cell for drawing
-            size.x = wxMin( size.x + 2*PADDING_RIGHTLEFT, cell_rect.width - indent );
-            // size.y = wxMin( size.y, cell_rect.height );
-            size.y = cell_rect.height;
-
-            wxRect item_rect(cell_rect.GetTopLeft(), size);
-            int align = cell->CalculateAlignment();
-
-            // horizontal alignment:
-            item_rect.x = cell_rect.x;
-            if (align & wxALIGN_CENTER_HORIZONTAL)
-                item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
-            else if (align & wxALIGN_RIGHT)
-                item_rect.x = cell_rect.x + cell_rect.width - size.x;
-            // else: wxALIGN_LEFT is the default
-
-            // vertical alignment:
-            item_rect.y = cell_rect.y;
-            if (align & wxALIGN_CENTER_VERTICAL)
-                item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
-            else if (align & wxALIGN_BOTTOM)
-                item_rect.y = cell_rect.y + cell_rect.height - size.y;
-            // else: wxALIGN_TOP is the default
-
-            // add padding
-            item_rect.x += PADDING_RIGHTLEFT;
-            item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
-
-            // Here we add the tree indent
+            // account for the tree indent (harmless if we're not indented)
             item_rect.x += indent;
+            item_rect.width -= indent;
 
             int state = 0;
             if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
@@ -1896,14 +1885,13 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             //       respect the given wxRect's top & bottom coords, eventually
             //       violating only the left & right coords - however the user can
             //       make its own renderer and thus we cannot be sure of that.
-            dc.SetClippingRegion( item_rect );
+            wxDCClipper clip(dc, item_rect);
 
             wxDataViewItemAttr attr;
             const bool
                 hasAttr = model->GetAttr(dataitem, col->GetModelColumn(), attr);
-            cell->RenderWithAttr(dc, item_rect, hasAttr ? &attr : NULL, state);
-
-            dc.DestroyClippingRegion();
+            cell->RenderWithAttr(dc, item_rect, cell->CalculateAlignment(),
+                                    hasAttr ? &attr : NULL, state);
         }
 
         cell_rect.x += cell_rect.width;
