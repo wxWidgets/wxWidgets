@@ -433,9 +433,9 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 
     if (row < m_array.GetCount())
     {
-        attr.SetColour( (row%2) == 0 ? *wxBLUE :
-                            ((row%3) == 0 ? *wxGREEN : *wxRED) );
-        attr.SetItalic( (row%2) == 5 );
+        attr.SetColour( (row%3) == 0 ? *wxBLUE :
+                            ((row%3) == 1 ? *wxGREEN : *wxRED) );
+        attr.SetItalic( (row%10) == 5 );
     }
 
     return true;
