@@ -1505,15 +1505,56 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   return NO;
 }
 
--(void) outlineView:(NSOutlineView*)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn*) tableColumn item:(id)item
+-(void) outlineView:(wxCocoaOutlineView*)outlineView
+        willDisplayCell:(id)cell
+        forTableColumn:(NSTableColumn*)tableColumn
+        item:(id)item
 {
-  wxDataViewColumn* dataViewColumnPtr(reinterpret_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
+    wxDataViewCtrl * const dvc = implementation->GetDataViewCtrl();
+    wxDataViewModel * const model = dvc->GetModel();
 
+    wxDataViewColumn * const
+        dvCol(reinterpret_cast<wxDataViewColumn*>(
+                [[tableColumn identifier] pointer]
+            )
+        );
 
-  dataViewColumnPtr->GetRenderer()->GetNativeData()->SetColumnPtr(tableColumn);
-  dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItem(item);
-  dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItemCell(cell);
-  (void) dataViewColumnPtr->GetRenderer()->MacRender();
+    wxDataViewItem dvItem([static_cast<wxPointerObject *>(item) pointer]);
+    wxDataViewItemAttr attr;
+    if ( model && model->GetAttr(dvItem, dvCol->GetModelColumn(), attr) )
+    {
+        if ( attr.HasFont() )
+        {
+            wxFont font(dvc->GetFont());
+            if ( attr.GetBold() )
+                font.MakeBold();
+            if ( attr.GetItalic() )
+                font.MakeItalic();
+            [cell setFont:font.OSXGetNSFont()];
+        }
+
+        // we can set font for any cell but only NSTextFieldCell provides a
+        // method for setting text colour so check that this method is
+        // available before using it
+        if ( attr.HasColour() &&
+                [cell respondsToSelector:@selector(setTextColor:)] )
+        {
+            const wxColour& c = attr.GetColour();
+            [cell setTextColor:[NSColor colorWithDeviceRed:c.Red()
+                                                       green:c.Green()
+                                                       blue:c.Blue()
+                                                       alpha:c.Alpha()]];
+        }
+    }
+
+    wxDataViewRenderer * const renderer = dvCol->GetRenderer();
+    wxDataViewRendererNativeData * const data = renderer->GetNativeData();
+
+    data->SetColumnPtr(tableColumn);
+    data->SetItem(item);
+    data->SetItemCell(cell);
+
+    renderer->MacRender();
 }
 
 //
