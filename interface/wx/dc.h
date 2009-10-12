@@ -1494,6 +1494,18 @@ class wxDCFontChanger
 {
 public:
     /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the font
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous font.
+
+        @since 2.9.1
+     */
+    wxDCFontChanger(wxDC& dc);
+
+    /**
         Sets @a font on the given @a dc, storing the old one.
 
         @param dc
@@ -1504,7 +1516,18 @@ public:
     wxDCFontChanger(wxDC& dc, const wxFont& font);
 
     /**
-        Restores the colour originally selected in the DC passed to the ctor.
+        Set the font to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking wxColour argument and
+        has the same effect as the other constructor, i.e. sets the font to
+        the given @a font and ensures that the old value is restored when this
+        object is destroyed.
+     */
+    void Set(const wxFont& font);
+
+    /**
+        Restores the font originally selected in the DC passed to the ctor.
     */
     ~wxDCFontChanger();
 };

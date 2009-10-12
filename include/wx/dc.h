@@ -1377,8 +1377,21 @@ private:
 class WXDLLIMPEXP_CORE wxDCFontChanger
 {
 public:
-    wxDCFontChanger(wxDC& dc, const wxFont& font) : m_dc(dc), m_fontOld(dc.GetFont())
+    wxDCFontChanger(wxDC& dc)
+        : m_dc(dc), m_fontOld()
     {
+    }
+
+    wxDCFontChanger(wxDC& dc, const wxFont& font)
+        : m_dc(dc), m_fontOld(dc.GetFont())
+    {
+        m_dc.SetFont(font);
+    }
+
+    void Set(const wxFont& font)
+    {
+        if ( !m_fontOld.Ok() )
+            m_fontOld = m_dc.GetFont();
         m_dc.SetFont(font);
     }
 
