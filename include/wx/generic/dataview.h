@@ -275,12 +275,19 @@ public:
     wxDataViewIconTextRenderer( const wxString &varianttype = wxT("wxDataViewIconText"),
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
-    virtual ~wxDataViewIconTextRenderer();
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
 
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual bool RenderWithAttr(wxDC& dc,
+                                const wxRect& rect,
+                                int align,
+                                const wxDataViewItemAttr *attr,
+                                int state);
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
+    {
+        return DummyRender(cell, dc, state);
+    }
     virtual wxSize GetSize() const;
 
     virtual bool HasEditorCtrl() const { return true; }

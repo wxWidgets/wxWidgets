@@ -1108,10 +1108,6 @@ const wxString &varianttype, wxDataViewCellMode mode, int align ) :
     SetAlignment(align);
 }
 
-wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
-{
-}
-
 bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
 {
     m_value << value;
@@ -1123,17 +1119,23 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
     return false;
 }
 
-bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
+bool
+wxDataViewIconTextRenderer::RenderWithAttr(wxDC& dc,
+                                           const wxRect& rect,
+                                           int align,
+                                           const wxDataViewItemAttr *attr,
+                                           int state)
 {
     int xoffset = 0;
-    const wxIcon &icon = m_value.GetIcon();
-    if (icon.IsOk())
+
+    const wxIcon& icon = m_value.GetIcon();
+    if ( icon.IsOk() )
     {
-        dc->DrawIcon( icon, cell.x, cell.y + ((cell.height - icon.GetHeight()) / 2));
-        xoffset =  icon.GetWidth()+4;
+        dc.DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
+        xoffset = icon.GetWidth()+4;
     }
 
-    RenderText( m_value.GetText(), xoffset, cell, dc, state );
+    RenderText(dc, rect, align, m_value.GetText(), attr, state, xoffset);
 
     return true;
 }

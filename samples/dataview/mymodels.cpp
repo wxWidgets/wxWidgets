@@ -430,31 +430,42 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                                 wxDataViewItemAttr &attr )
 {
-    if (col != 2)
-        return false;
-
-    // do what the labels defined above hint at
-    switch ( row % 5 )
+    switch ( col )
     {
         case 0:
-            attr.SetColour(*wxBLUE);
-            break;
+            return false;
 
         case 1:
-            attr.SetColour(*wxGREEN);
+            if ( !(row % 2) )
+                return false;
+            attr.SetColour(*wxLIGHT_GREY);
             break;
 
         case 2:
-            attr.SetColour(*wxRED);
-            break;
+            // do what the labels defined above hint at
+            switch ( row % 5 )
+            {
+                case 0:
+                    attr.SetColour(*wxBLUE);
+                    break;
 
-        case 3:
-            attr.SetColour(*wxCYAN);
-            attr.SetBold(true);
-            break;
+                case 1:
+                    attr.SetColour(*wxGREEN);
+                    break;
 
-        case 4:
-            return false;
+                case 2:
+                    attr.SetColour(*wxRED);
+                    break;
+
+                case 3:
+                    attr.SetColour(*wxCYAN);
+                    attr.SetBold(true);
+                    break;
+
+                case 4:
+                    return false;
+            }
+            break;
     }
 
     return true;
