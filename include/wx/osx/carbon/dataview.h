@@ -26,7 +26,7 @@ public:
 //
 // constructors / destructor
 //
-  wxDataViewColumnNativeData(void)
+  wxDataViewColumnNativeData()
   {
   }
   wxDataViewColumnNativeData(DataBrowserPropertyID initPropertyID)
@@ -37,14 +37,14 @@ public:
 //
 // data access methods
 //
-  DataBrowserPropertyID GetPropertyID(void) const
+  DataBrowserPropertyID GetPropertyID() const
   {
-    return this->m_PropertyID;
+    return m_PropertyID;
   }
 
   void SetPropertyID(DataBrowserPropertyID newPropertyID)
   {
-    this->m_PropertyID = newPropertyID;
+    m_PropertyID = newPropertyID;
   }
 
 protected:
@@ -64,7 +64,7 @@ public:
 //
 // constructors / destructor
 //
-  wxDataViewRendererNativeData(void)
+  wxDataViewRendererNativeData()
   {
   }
   wxDataViewRendererNativeData(DataBrowserPropertyType initPropertyType, DataBrowserItemDataRef initItemDataRef=NULL)
@@ -75,22 +75,22 @@ public:
 //
 // data access methods
 //
-  DataBrowserItemDataRef GetItemDataRef(void) const
+  DataBrowserItemDataRef GetItemDataRef() const
   {
-    return this->m_ItemDataRef;
+    return m_ItemDataRef;
   }
-  DataBrowserPropertyType GetPropertyType(void) const
+  DataBrowserPropertyType GetPropertyType() const
   {
-    return this->m_PropertyType;
+    return m_PropertyType;
   }
 
   void SetItemDataRef(DataBrowserItemDataRef newItemDataRef)
   {
-    this->m_ItemDataRef = newItemDataRef;
+    m_ItemDataRef = newItemDataRef;
   }
   void SetPropertyType(DataBrowserPropertyType newPropertyType)
   {
-    this->m_PropertyType = newPropertyType;
+    m_PropertyType = newPropertyType;
   }
 
 protected:
@@ -126,10 +126,10 @@ public:
 // constructors / destructor
 //
   wxMacDataBrowserTableViewControl(wxWindow* peer, const wxPoint& pos, const wxSize& size, long style);
-  wxMacDataBrowserTableViewControl(void)
+  wxMacDataBrowserTableViewControl()
   {
   }
-  ~wxMacDataBrowserTableViewControl(void);
+  ~wxMacDataBrowserTableViewControl();
 
 //
 // callback handling
@@ -204,14 +204,14 @@ public:
 //
   OSStatus AddItem(DataBrowserItemID container, DataBrowserItemID const* itemID) // adds a single item
   {
-    return this->AddItems(container,1,itemID,kDataBrowserItemNoProperty);
+    return AddItems(container,1,itemID,kDataBrowserItemNoProperty);
   }
   OSStatus AddItems(DataBrowserItemID container, UInt32 numItems, DataBrowserItemID const* items, DataBrowserPropertyID preSortProperty); // adds items to the data browser
 
   OSStatus GetFreeItemID(DataBrowserItemID* id) const; // this method returns an item id that is valid and currently not used; if it cannot be found 'errDataBrowserItemNotAdded' is returned
   OSStatus GetItemCount (ItemCount* numItems) const
   {
-    return this->GetItemCount(kDataBrowserNoItem,true,kDataBrowserItemAnyState,numItems);
+    return GetItemCount(kDataBrowserNoItem,true,kDataBrowserItemAnyState,numItems);
   }
   OSStatus GetItemCount (DataBrowserItemID container, Boolean recurse, DataBrowserItemState state, ItemCount* numItems) const;
   OSStatus GetItemID    (DataBrowserTableViewRowIndex row, DataBrowserItemID* item) const;
@@ -225,21 +225,21 @@ public:
 
   OSStatus RemoveItem(DataBrowserItemID container, DataBrowserItemID const* itemID) // removes a single item
   {
-    return this->RemoveItems(container,1,itemID,kDataBrowserItemNoProperty);
+    return RemoveItems(container,1,itemID,kDataBrowserItemNoProperty);
   }
   OSStatus RemoveItems(void) // removes all items
   {
-    return this->RemoveItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty);
+    return RemoveItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty);
   }
   OSStatus RemoveItems(DataBrowserItemID container, UInt32 numItems, DataBrowserItemID const* items, DataBrowserPropertyID preSortProperty);
 
   OSStatus UpdateItem(DataBrowserItemID container, DataBrowserItemID const* item) // updates all columns of the passed item
   {
-    return this->UpdateItems(container,1,item,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
+    return UpdateItems(container,1,item,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
   }
   OSStatus UpdateItems(void) // updates all items
   {
-    return this->UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
+    return UpdateItems(kDataBrowserNoItem,0,NULL,kDataBrowserItemNoProperty,kDataBrowserItemNoProperty);
   }
   OSStatus UpdateItems(DataBrowserItemID container, UInt32 numItems, DataBrowserItemID const* items, DataBrowserPropertyID preSortProperty, DataBrowserPropertyID propertyID) const;
 
@@ -370,7 +370,7 @@ public:
  //
  // column related methods (inherited from wxDataViewWidgetImpl)
  //
-  virtual bool              ClearColumns       (void);
+  virtual bool              ClearColumns       ();
   virtual bool              DeleteColumn       (wxDataViewColumn* columnPtr);
   virtual void              DoSetExpanderColumn(wxDataViewColumn const* columnPtr);
   virtual wxDataViewColumn* GetColumn          (unsigned int pos) const;
@@ -385,10 +385,10 @@ public:
   virtual void         Collapse     (wxDataViewItem const& item);
   virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr);
   virtual void         Expand       (wxDataViewItem const& item);
-  virtual unsigned int GetCount     (void) const;
+  virtual unsigned int GetCount     () const;
   virtual wxRect       GetRectangle (wxDataViewItem const& item, wxDataViewColumn const* columnPtr);
   virtual bool         IsExpanded   (wxDataViewItem const& item) const;
-  virtual bool         Reload       (void);
+  virtual bool         Reload       ();
   virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItem const& item);
   virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItemArray const& item);
   virtual bool         Update       (wxDataViewColumn const* columnPtr);
@@ -406,15 +406,15 @@ public:
   virtual int  GetSelections(wxDataViewItemArray& sel)   const;
   virtual bool IsSelected   (wxDataViewItem const& item) const;
   virtual void Select       (wxDataViewItem const& item);
-  virtual void SelectAll    (void);
+  virtual void SelectAll    ();
   virtual void Unselect     (wxDataViewItem const& item);
-  virtual void UnselectAll  (void);
+  virtual void UnselectAll  ();
 
  //
  // sorting related methods
  //
-  virtual wxDataViewColumn* GetSortingColumn (void) const;
-  virtual void              Resort           (void);
+  virtual wxDataViewColumn* GetSortingColumn () const;
+  virtual void              Resort           ();
 
  //
  // other methods (inherited from wxDataViewWidgetImpl)
@@ -422,14 +422,14 @@ public:
   virtual void DoSetIndent (int indent);
   virtual void HitTest     (wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height);
-  virtual void OnSize      (void);
+  virtual void OnSize      ();
 
  //
  // other methods
  //
-  wxDataViewCtrl* GetDataViewCtrl(void) const
+  wxDataViewCtrl* GetDataViewCtrl() const
   {
-    return dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+    return dynamic_cast<wxDataViewCtrl*>(GetWXPeer());
   }
 
 protected:

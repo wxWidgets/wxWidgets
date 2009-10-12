@@ -1020,7 +1020,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 
   customRendererObject->customRenderer->LeftClick(wxFromNSPoint(controlView,point),wxFromNSRect(controlView,cellFrame),
                                                   customRendererObject->GetOwner()->GetOwner(),wxDataViewItem([customRendererObject->item pointer]),
-                                                  [this->m_OutlineView columnWithIdentifier:[customRendererObject->GetColumnPtr() identifier]]);
+                                                  [m_OutlineView columnWithIdentifier:[customRendererObject->GetColumnPtr() identifier]]);
   return NSCellHitContentArea;
 }
 #endif
@@ -1643,7 +1643,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer, wxPoint const& po
                         m_DataSource(NULL), m_OutlineView([[wxCocoaOutlineView alloc] init])
 {
  // initialize scrollview (the outline view is part of a scrollview):
-  NSScrollView* scrollview = (NSScrollView*) this->GetWXWidget(); // definition for abbreviational purposes
+  NSScrollView* scrollview = (NSScrollView*) GetWXWidget(); // definition for abbreviational purposes
 
 
   [scrollview setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
@@ -1651,76 +1651,76 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer, wxPoint const& po
   [scrollview setHasVerticalScroller:YES];
   [scrollview setHasHorizontalScroller:YES];
   [scrollview setAutohidesScrollers:YES];
-  [scrollview setDocumentView:this->m_OutlineView];
+  [scrollview setDocumentView:m_OutlineView];
 
  // setting up the native control itself
   NSUInteger maskGridStyle(NSTableViewGridNone);
 
-  [this->m_OutlineView setImplementation:this];
-  [this->m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
-  [this->m_OutlineView setIndentationPerLevel:this->GetDataViewCtrl()->GetIndent()];
+  [m_OutlineView setImplementation:this];
+  [m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
+  [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
   if (style & wxDV_HORIZ_RULES)
     maskGridStyle |= NSTableViewSolidHorizontalGridLineMask;
   if (style & wxDV_VERT_RULES)
     maskGridStyle |= NSTableViewSolidVerticalGridLineMask;
-  [this->m_OutlineView setGridStyleMask:maskGridStyle];
-  [this->m_OutlineView setAllowsMultipleSelection:           (style & wxDV_MULTIPLE)  != 0];
-  [this->m_OutlineView setUsesAlternatingRowBackgroundColors:(style & wxDV_ROW_LINES) != 0];
+  [m_OutlineView setGridStyleMask:maskGridStyle];
+  [m_OutlineView setAllowsMultipleSelection:           (style & wxDV_MULTIPLE)  != 0];
+  [m_OutlineView setUsesAlternatingRowBackgroundColors:(style & wxDV_ROW_LINES) != 0];
 }
 
-wxCocoaDataViewControl::~wxCocoaDataViewControl(void)
+wxCocoaDataViewControl::~wxCocoaDataViewControl()
 {
-  [this->m_DataSource  release];
-  [this->m_OutlineView release];
+  [m_DataSource  release];
+  [m_OutlineView release];
 }
 
 //
 // column related methods (inherited from wxDataViewWidgetImpl)
 //
-bool wxCocoaDataViewControl::ClearColumns(void)
+bool wxCocoaDataViewControl::ClearColumns()
 {
-  bool const bufAllowsMultipleSelection = [this->m_OutlineView allowsMultipleSelection];
+  bool const bufAllowsMultipleSelection = [m_OutlineView allowsMultipleSelection];
 
 
  // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the columns cannot be deleted if there is an outline column in the view;
  // therefore, the whole view is deleted and newly constructed:
-  [this->m_OutlineView release];
-  this->m_OutlineView = [[wxCocoaOutlineView alloc] init];
-  [((NSScrollView*) this->GetWXWidget()) setDocumentView:this->m_OutlineView];
+  [m_OutlineView release];
+  m_OutlineView = [[wxCocoaOutlineView alloc] init];
+  [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
 
  // setting up the native control itself
-  [this->m_OutlineView setImplementation:this];
-  [this->m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
-  [this->m_OutlineView setIndentationPerLevel:this->GetDataViewCtrl()->GetIndent()];
+  [m_OutlineView setImplementation:this];
+  [m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
+  [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
   if (bufAllowsMultipleSelection)
-    [this->m_OutlineView setAllowsMultipleSelection:YES];
-  [this->m_OutlineView setDataSource:this->m_DataSource];
+    [m_OutlineView setAllowsMultipleSelection:YES];
+  [m_OutlineView setDataSource:m_DataSource];
  // done:
   return true;
 }
 
 bool wxCocoaDataViewControl::DeleteColumn(wxDataViewColumn* columnPtr)
 {
-  if ([this->m_OutlineView outlineTableColumn] == columnPtr->GetNativeData()->GetNativeColumnPtr())
-    [this->m_OutlineView setOutlineTableColumn:nil]; // due to a bug this does not work
-  [this->m_OutlineView removeTableColumn:columnPtr->GetNativeData()->GetNativeColumnPtr()]; // due to a confirmed bug #6555162 the deletion does not work for
+  if ([m_OutlineView outlineTableColumn] == columnPtr->GetNativeData()->GetNativeColumnPtr())
+    [m_OutlineView setOutlineTableColumn:nil]; // due to a bug this does not work
+  [m_OutlineView removeTableColumn:columnPtr->GetNativeData()->GetNativeColumnPtr()]; // due to a confirmed bug #6555162 the deletion does not work for
                                                                                             // outline table columns (... and there is no workaround)
-  return (([this->m_OutlineView columnWithIdentifier:[[[wxPointerObject alloc] initWithPointer:columnPtr] autorelease]]) == -1);
+  return (([m_OutlineView columnWithIdentifier:[[[wxPointerObject alloc] initWithPointer:columnPtr] autorelease]]) == -1);
 }
 
 void wxCocoaDataViewControl::DoSetExpanderColumn(wxDataViewColumn const* columnPtr)
 {
-  [this->m_OutlineView setOutlineTableColumn:columnPtr->GetNativeData()->GetNativeColumnPtr()];
+  [m_OutlineView setOutlineTableColumn:columnPtr->GetNativeData()->GetNativeColumnPtr()];
 }
 
 wxDataViewColumn* wxCocoaDataViewControl::GetColumn(unsigned int pos) const
 {
-  return reinterpret_cast<wxDataViewColumn*>([[[[this->m_OutlineView tableColumns] objectAtIndex:pos] identifier] pointer]);
+  return reinterpret_cast<wxDataViewColumn*>([[[[m_OutlineView tableColumns] objectAtIndex:pos] identifier] pointer]);
 }
 
 int wxCocoaDataViewControl::GetColumnPosition(wxDataViewColumn const* columnPtr) const
 {
-  return [this->m_OutlineView columnWithIdentifier:[[[wxPointerObject alloc] initWithPointer:const_cast<wxDataViewColumn*>(columnPtr)] autorelease]];
+  return [m_OutlineView columnWithIdentifier:[[[wxPointerObject alloc] initWithPointer:const_cast<wxDataViewColumn*>(columnPtr)] autorelease]];
 }
 
 bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
@@ -1733,9 +1733,9 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
   columnPtr->GetNativeData()->SetNativeColumnPtr(nativeColumn);
  // as the native control does not allow the insertion of a column at a specified position the column is first appended and
  // - if necessary - moved to its final position:
-  [this->m_OutlineView addTableColumn:nativeColumn];
-  if (pos != static_cast<unsigned int>([this->m_OutlineView numberOfColumns]-1))
-    [this->m_OutlineView moveColumn:[this->m_OutlineView numberOfColumns]-1 toColumn:pos];
+  [m_OutlineView addTableColumn:nativeColumn];
+  if (pos != static_cast<unsigned int>([m_OutlineView numberOfColumns]-1))
+    [m_OutlineView moveColumn:[m_OutlineView numberOfColumns]-1 toColumn:pos];
  // done:
   return true;
 }
@@ -1746,81 +1746,81 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
 bool wxCocoaDataViewControl::Add(wxDataViewItem const& parent, wxDataViewItem const& WXUNUSED(item))
 {
   if (parent.IsOk())
-    [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
   else
-    [this->m_OutlineView reloadData];
+    [m_OutlineView reloadData];
   return true;
 }
 
 bool wxCocoaDataViewControl::Add(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(items))
 {
   if (parent.IsOk())
-    [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
   else
-    [this->m_OutlineView reloadData];
+    [m_OutlineView reloadData];
   return true;
 }
 
 void wxCocoaDataViewControl::Collapse(wxDataViewItem const& item)
 {
-  [this->m_OutlineView collapseItem:[this->m_DataSource getDataViewItemFromBuffer:item]];
+  [m_OutlineView collapseItem:[m_DataSource getDataViewItemFromBuffer:item]];
 }
 
 void wxCocoaDataViewControl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
 {
   if (item.IsOk())
   {
-    [this->m_OutlineView scrollRowToVisible:[this->m_OutlineView rowForItem:[this->m_DataSource getDataViewItemFromBuffer:item]]];
+    [m_OutlineView scrollRowToVisible:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]];
     if (columnPtr != NULL)
-      [this->m_OutlineView scrollColumnToVisible:this->GetColumnPosition(columnPtr)];
+      [m_OutlineView scrollColumnToVisible:GetColumnPosition(columnPtr)];
   }
 }
 
 void wxCocoaDataViewControl::Expand(wxDataViewItem const& item)
 {
-  [this->m_OutlineView expandItem:[this->m_DataSource getDataViewItemFromBuffer:item]];
+  [m_OutlineView expandItem:[m_DataSource getDataViewItemFromBuffer:item]];
 }
 
-unsigned int wxCocoaDataViewControl::GetCount(void) const
+unsigned int wxCocoaDataViewControl::GetCount() const
 {
-  return [this->m_OutlineView numberOfRows];
+  return [m_OutlineView numberOfRows];
 }
 
 wxRect wxCocoaDataViewControl::GetRectangle(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
 {
-  return wxFromNSRect([m_osxView superview],[this->m_OutlineView frameOfCellAtColumn:this->GetColumnPosition(columnPtr)
-                                             row:[this->m_OutlineView rowForItem:[this->m_DataSource getDataViewItemFromBuffer:item]]]);
+  return wxFromNSRect([m_osxView superview],[m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)
+                                             row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]]);
 }
 
 bool wxCocoaDataViewControl::IsExpanded(wxDataViewItem const& item) const
 {
-  return [this->m_OutlineView isItemExpanded:[this->m_DataSource getDataViewItemFromBuffer:item]];
+  return [m_OutlineView isItemExpanded:[m_DataSource getDataViewItemFromBuffer:item]];
 }
 
-bool wxCocoaDataViewControl::Reload(void)
+bool wxCocoaDataViewControl::Reload()
 {
-  [this->m_DataSource clearBuffers];
-  [this->m_OutlineView scrollColumnToVisible:0];
-  [this->m_OutlineView scrollRowToVisible:0];
-  [this->m_OutlineView reloadData];
+  [m_DataSource clearBuffers];
+  [m_OutlineView scrollColumnToVisible:0];
+  [m_OutlineView scrollRowToVisible:0];
+  [m_OutlineView reloadData];
   return true;
 }
 
 bool wxCocoaDataViewControl::Remove(wxDataViewItem const& parent, wxDataViewItem const& WXUNUSED(item))
 {
   if (parent.IsOk())
-    [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
   else
-    [this->m_OutlineView reloadData];
+    [m_OutlineView reloadData];
   return true;
 }
 
 bool wxCocoaDataViewControl::Remove(wxDataViewItem const& parent, wxDataViewItemArray const& WXUNUSED(item))
 {
   if (parent.IsOk())
-    [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
   else
-    [this->m_OutlineView reloadData];
+    [m_OutlineView reloadData];
   return true;
 }
 
@@ -1831,14 +1831,14 @@ bool wxCocoaDataViewControl::Update(wxDataViewColumn const* columnPtr)
 
 bool wxCocoaDataViewControl::Update(wxDataViewItem const& WXUNUSED(parent), wxDataViewItem const& item)
 {
-  [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:item]];
+  [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:item]];
   return true;
 }
 
 bool wxCocoaDataViewControl::Update(wxDataViewItem const& WXUNUSED(parent), wxDataViewItemArray const& items)
 {
   for (size_t i=0; i<items.GetCount(); ++i)
-    [this->m_OutlineView reloadItem:[this->m_DataSource getDataViewItemFromBuffer:items[i]]];
+    [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:items[i]]];
   return true;
 }
 
@@ -1847,16 +1847,16 @@ bool wxCocoaDataViewControl::Update(wxDataViewItem const& WXUNUSED(parent), wxDa
 //
 bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
 {
-  [this->m_DataSource release];
+  [m_DataSource release];
   if (model != NULL)
   {
-    this->m_DataSource = [[wxCocoaOutlineDataSource alloc] init];
-    [this->m_DataSource setImplementation:this];
-    [this->m_DataSource setModel:model];
+    m_DataSource = [[wxCocoaOutlineDataSource alloc] init];
+    [m_DataSource setImplementation:this];
+    [m_DataSource setModel:model];
   }
   else
-    this->m_DataSource = NULL;
-  [this->m_OutlineView setDataSource:this->m_DataSource]; // if there is a data source the data is immediately going to be requested
+    m_DataSource = NULL;
+  [m_OutlineView setDataSource:m_DataSource]; // if there is a data source the data is immediately going to be requested
   return true;
 }
 
@@ -1865,7 +1865,7 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
 //
 int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
-  NSIndexSet* selectedRowIndexes([this->m_OutlineView selectedRowIndexes]);
+  NSIndexSet* selectedRowIndexes([m_OutlineView selectedRowIndexes]);
 
   NSUInteger indexRow;
 
@@ -1875,7 +1875,7 @@ int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
   indexRow = [selectedRowIndexes firstIndex];
   while (indexRow != NSNotFound)
   {
-    sel.Add(wxDataViewItem([[this->m_OutlineView itemAtRow:indexRow] pointer]));
+    sel.Add(wxDataViewItem([[m_OutlineView itemAtRow:indexRow] pointer]));
     indexRow = [selectedRowIndexes indexGreaterThanIndex:indexRow];
   }
   return sel.GetCount();
@@ -1883,38 +1883,38 @@ int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
 
 bool wxCocoaDataViewControl::IsSelected(wxDataViewItem const& item) const
 {
-  return [this->m_OutlineView isRowSelected:[this->m_OutlineView rowForItem:[this->m_DataSource getDataViewItemFromBuffer:item]]];
+  return [m_OutlineView isRowSelected:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]];
 }
 
 void wxCocoaDataViewControl::Select(wxDataViewItem const& item)
 {
   if (item.IsOk())
-    [this->m_OutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[this->m_OutlineView rowForItem:[this->m_DataSource getDataViewItemFromBuffer:item]]]
+    [m_OutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]]
                         byExtendingSelection:NO];
 }
 
-void wxCocoaDataViewControl::SelectAll(void)
+void wxCocoaDataViewControl::SelectAll()
 {
-  [this->m_OutlineView selectAll:this->m_OutlineView];
+  [m_OutlineView selectAll:m_OutlineView];
 }
 
 void wxCocoaDataViewControl::Unselect(wxDataViewItem const& item)
 {
   if (item.IsOk())
-    [this->m_OutlineView deselectRow:[this->m_OutlineView rowForItem:[this->m_DataSource getDataViewItemFromBuffer:item]]];
+    [m_OutlineView deselectRow:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]];
 }
 
-void wxCocoaDataViewControl::UnselectAll(void)
+void wxCocoaDataViewControl::UnselectAll()
 {
-  [this->m_OutlineView deselectAll:this->m_OutlineView];
+  [m_OutlineView deselectAll:m_OutlineView];
 }
 
 //
 // sorting related methods
 //
-wxDataViewColumn* wxCocoaDataViewControl::GetSortingColumn(void) const
+wxDataViewColumn* wxCocoaDataViewControl::GetSortingColumn() const
 {
-  NSArray* const columns = [this->m_OutlineView tableColumns];
+  NSArray* const columns = [m_OutlineView tableColumns];
 
   UInt32 const noOfColumns = [columns count];
 
@@ -1925,10 +1925,10 @@ wxDataViewColumn* wxCocoaDataViewControl::GetSortingColumn(void) const
   return NULL;
 }
 
-void wxCocoaDataViewControl::Resort(void)
+void wxCocoaDataViewControl::Resort()
 {
-  [this->m_DataSource clearChildren];
-  [this->m_OutlineView reloadData];
+  [m_DataSource clearChildren];
+  [m_OutlineView reloadData];
 }
 
 //
@@ -1936,23 +1936,23 @@ void wxCocoaDataViewControl::Resort(void)
 //
 void wxCocoaDataViewControl::DoSetIndent(int indent)
 {
-  [this->m_OutlineView setIndentationPerLevel:static_cast<CGFloat>(indent)];
+  [m_OutlineView setIndentationPerLevel:static_cast<CGFloat>(indent)];
 }
 
 void wxCocoaDataViewControl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
-  NSPoint const nativePoint = wxToNSPoint((NSScrollView*) this->GetWXWidget(),point);
+  NSPoint const nativePoint = wxToNSPoint((NSScrollView*) GetWXWidget(),point);
 
   int indexColumn;
   int indexRow;
 
 
-  indexColumn = [this->m_OutlineView columnAtPoint:nativePoint];
-  indexRow    = [this->m_OutlineView rowAtPoint:   nativePoint];
+  indexColumn = [m_OutlineView columnAtPoint:nativePoint];
+  indexRow    = [m_OutlineView rowAtPoint:   nativePoint];
   if ((indexColumn >= 0) && (indexRow >= 0))
   {
-    columnPtr = reinterpret_cast<wxDataViewColumn*>([[[[this->m_OutlineView tableColumns] objectAtIndex:indexColumn] identifier] pointer]);
-    item      = wxDataViewItem([[this->m_OutlineView itemAtRow:indexRow] pointer]);
+    columnPtr = reinterpret_cast<wxDataViewColumn*>([[[[m_OutlineView tableColumns] objectAtIndex:indexColumn] identifier] pointer]);
+    item      = wxDataViewItem([[m_OutlineView itemAtRow:indexRow] pointer]);
   }
   else
   {
@@ -1966,10 +1966,10 @@ void wxCocoaDataViewControl::SetRowHeight(wxDataViewItem const& WXUNUSED(item), 
 {
 }
 
-void wxCocoaDataViewControl::OnSize(void)
+void wxCocoaDataViewControl::OnSize()
 {
-  if ([this->m_OutlineView numberOfColumns] == 1)
-    [this->m_OutlineView sizeLastColumnToFit];
+  if ([m_OutlineView numberOfColumns] == 1)
+    [m_OutlineView sizeLastColumnToFit];
 }
 
 //
@@ -2071,28 +2071,28 @@ wxDataViewRenderer::wxDataViewRenderer(wxString const& varianttype, wxDataViewCe
 {
 }
 
-wxDataViewRenderer::~wxDataViewRenderer(void)
+wxDataViewRenderer::~wxDataViewRenderer()
 {
-  delete this->m_NativeDataPtr;
+  delete m_NativeDataPtr;
 }
 
 void wxDataViewRenderer::SetAlignment(int align)
 {
-  this->m_alignment = align;
-  [this->GetNativeData()->GetColumnCell() setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+  m_alignment = align;
+  [GetNativeData()->GetColumnCell() setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
 }
 
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
 {
-  this->m_mode = mode;
-  if (this->GetOwner() != NULL)
-    [this->GetOwner()->GetNativeData()->GetNativeColumnPtr() setEditable:(mode == wxDATAVIEW_CELL_EDITABLE)];
+  m_mode = mode;
+  if (GetOwner() != NULL)
+    [GetOwner()->GetNativeData()->GetNativeColumnPtr() setEditable:(mode == wxDATAVIEW_CELL_EDITABLE)];
 }
 
 void wxDataViewRenderer::SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr)
 {
-  delete this->m_NativeDataPtr;
-  this->m_NativeDataPtr = newNativeDataPtr;
+  delete m_NativeDataPtr;
+  m_NativeDataPtr = newNativeDataPtr;
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
@@ -2103,14 +2103,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
                          :wxDataViewRenderer(varianttype,mode,align), m_editorCtrlPtr(NULL), m_DCPtr(NULL)
 {
-  this->SetNativeData(new wxDataViewRendererNativeData([[wxCustomCell alloc] init]));
+  SetNativeData(new wxDataViewRendererNativeData([[wxCustomCell alloc] init]));
 }
 
 bool wxDataViewCustomRenderer::MacRender()
 {
-  [this->GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this
-                                                                                                    item:this->GetNativeData()->GetItem()
-                                                                                                  column:this->GetNativeData()->GetColumnPtr()] autorelease]];
+  [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this
+                                                                                                    item:GetNativeData()->GetItem()
+                                                                                                  column:GetNativeData()->GetColumnPtr()] autorelease]];
   return true;
 }
 
@@ -2128,20 +2128,20 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(wxString const& varianttype, wxDa
   cell = [[NSTextFieldCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
   [cell setLineBreakMode:NSLineBreakByTruncatingMiddle];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
 bool wxDataViewTextRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
-    [this->GetNativeData()->GetItemCell() setObjectValue:wxCFStringRef(this->GetValue().GetString()).AsNSString()];
+    [GetNativeData()->GetItemCell() setObjectValue:wxCFStringRef(GetValue().GetString()).AsNSString()];
     return true;
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Text renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Text renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2158,7 +2158,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(wxString const& varianttype, 
 
 
   cell = [[NSImageCell alloc] init];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
@@ -2168,13 +2168,13 @@ bool wxDataViewBitmapRenderer::MacRender()
  //  - the passed bitmap is invalid (or is not initialized); this case simulates a non-existing bitmap.
  // In all other cases the method returns 'false'.
 {
-  wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Bitmap renderer cannot render value; value type: ")) << this->GetValue().GetType());
+  wxCHECK_MSG(GetValue().GetType() == GetVariantType(),false,wxString(_("Bitmap renderer cannot render value; value type: ")) << GetValue().GetType());
 
   wxBitmap bitmap;
 
-  bitmap << this->GetValue();
+  bitmap << GetValue();
   if (bitmap.IsOk())
-    [this->GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
+    [GetNativeData()->GetItemCell() setObjectValue:[[bitmap.GetNSImage() retain] autorelease]];
   return true;
 }
 
@@ -2194,20 +2194,20 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(wxArrayString const& choices,
   [cell setFont:[[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]] autorelease]];
   for (size_t i=0; i<choices.GetCount(); ++i)
     [cell addItemWithTitle:[[wxCFStringRef(choices[i]).AsNSString() retain] autorelease]];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
 bool wxDataViewChoiceRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
-    [((NSPopUpButtonCell*) this->GetNativeData()->GetItemCell()) selectItemWithTitle:[[wxCFStringRef(this->GetValue().GetString()).AsNSString() retain] autorelease]];
+    [((NSPopUpButtonCell*) GetNativeData()->GetItemCell()) selectItemWithTitle:[[wxCFStringRef(GetValue().GetString()).AsNSString() retain] autorelease]];
     return true;
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Choice renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Choice renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2231,16 +2231,16 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(wxString const& varianttype, wxDa
   cell = [[NSTextFieldCell alloc] init];
   [cell setFormatter:dateFormatter];
   [cell setLineBreakMode:NSLineBreakByTruncatingMiddle];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
+  SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
   [cell          release];
   [dateFormatter release];
 }
 
 bool wxDataViewDateRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
-    if (this->GetValue().GetDateTime().IsValid())
+    if (GetValue().GetDateTime().IsValid())
     {
      // -- find best fitting style to show the date --
      // as the style should be identical for all cells a reference date instead of the actual cell's date
@@ -2252,31 +2252,31 @@ bool wxDataViewDateRenderer::MacRender()
      // if the shortest time and date format does not fit into the cell the time part is dropped;
      // remark: the time part itself is not modified per iteration loop and only uses the short style,
      //         means that only the hours and minutes are being shown
-      [this->GetNativeData()->GetItemCell() setObjectValue:this->GetNativeData()->GetObject()]; // GetObject() returns a date for testing the size of a date object
-      [[this->GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterShortStyle];
+      [GetNativeData()->GetItemCell() setObjectValue:GetNativeData()->GetObject()]; // GetObject() returns a date for testing the size of a date object
+      [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterShortStyle];
       for (int dateFormatterStyle=4; dateFormatterStyle>0; --dateFormatterStyle)
       {
-        [[this->GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
+        [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
         if (dateFormatterStyle == 1)
         {
          // if the shortest style for displaying the date and time is too long to be fully visible remove the time part of the date:
-          if ([this->GetNativeData()->GetItemCell() cellSize].width > [this->GetNativeData()->GetColumnPtr() width])
-            [[this->GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterNoStyle];
+          if ([GetNativeData()->GetItemCell() cellSize].width > [GetNativeData()->GetColumnPtr() width])
+            [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterNoStyle];
           break; // basically not necessary as the loop would end anyway but let's save the last comparison
         }
-        else if ([this->GetNativeData()->GetItemCell() cellSize].width <= [this->GetNativeData()->GetColumnPtr() width])
+        else if ([GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width])
           break;
       }
      // set data (the style is set by the previous loop);
      // on OSX the date has to be specified with respect to UTC; in wxWidgets the date is always entered in the local timezone; so, we have to do a conversion
      // from the local to UTC timezone when adding the seconds to 1970-01-01 UTC:
-      [this->GetNativeData()->GetItemCell() setObjectValue:[NSDate dateWithTimeIntervalSince1970:this->GetValue().GetDateTime().ToUTC().Subtract(wxDateTime(1,wxDateTime::Jan,1970)).GetSeconds().ToDouble()]];
+      [GetNativeData()->GetItemCell() setObjectValue:[NSDate dateWithTimeIntervalSince1970:GetValue().GetDateTime().ToUTC().Subtract(wxDateTime(1,wxDateTime::Jan,1970)).GetSeconds().ToDouble()]];
     }
     return true;
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Date renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Date renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2294,20 +2294,20 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& variantty
 
   cell = [[wxImageTextCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
 bool wxDataViewIconTextRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
     wxDataViewIconText iconText;
 
     wxImageTextCell* cell;
 
-    cell = (wxImageTextCell*) this->GetNativeData()->GetItemCell();
-    iconText << this->GetValue();
+    cell = (wxImageTextCell*) GetNativeData()->GetItemCell();
+    iconText << GetValue();
     if (iconText.GetIcon().IsOk())
       [cell setImage:[[wxBitmap(iconText.GetIcon()).GetNSImage() retain] autorelease]];
     [cell setStringValue:[[wxCFStringRef(iconText.GetText()).AsNSString() retain] autorelease]];
@@ -2315,7 +2315,7 @@ bool wxDataViewIconTextRenderer::MacRender()
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Icon & text renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Icon & text renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2335,20 +2335,20 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, 
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
   [cell setButtonType:NSSwitchButton];
   [cell setImagePosition:NSImageOnly];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
 bool wxDataViewToggleRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
-    [this->GetNativeData()->GetItemCell() setIntValue:this->GetValue().GetLong()];
+    [GetNativeData()->GetItemCell() setIntValue:GetValue().GetLong()];
     return true;
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Toggle renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Toggle renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2367,20 +2367,20 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& label, wx
   cell = [[NSLevelIndicatorCell alloc] initWithLevelIndicatorStyle:NSContinuousCapacityLevelIndicatorStyle];
   [cell setMinValue:0];
   [cell setMaxValue:100];
-  this->SetNativeData(new wxDataViewRendererNativeData(cell));
+  SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
 
 bool wxDataViewProgressRenderer::MacRender()
 {
-  if (this->GetValue().GetType() == this->GetVariantType())
+  if (GetValue().GetType() == GetVariantType())
   {
-    [this->GetNativeData()->GetItemCell() setIntValue:this->GetValue().GetLong()];
+    [GetNativeData()->GetItemCell() setIntValue:GetValue().GetLong()];
     return true;
   }
   else
   {
-    wxFAIL_MSG(wxString(_("Progress renderer cannot render value because of wrong value type; value type: ")) << this->GetValue().GetType());
+    wxFAIL_MSG(wxString(_("Progress renderer cannot render value because of wrong value type; value type: ")) << GetValue().GetType());
     return false;
   }
 }
@@ -2393,7 +2393,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)
 wxDataViewColumn::wxDataViewColumn(const wxString& title, wxDataViewRenderer* renderer, unsigned int model_column, int width, wxAlignment align, int flags)
                  :wxDataViewColumnBase(renderer, model_column), m_NativeDataPtr(new wxDataViewColumnNativeData()), m_title(title)
 {
-  this->InitCommon(width, align, flags);
+  InitCommon(width, align, flags);
   if ((renderer != NULL) && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
     renderer->SetAlignment(align);
 }
@@ -2401,47 +2401,47 @@ wxDataViewColumn::wxDataViewColumn(const wxString& title, wxDataViewRenderer* re
 wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap, wxDataViewRenderer* renderer, unsigned int model_column, int width, wxAlignment align, int flags)
                  :wxDataViewColumnBase(bitmap, renderer, model_column), m_NativeDataPtr(new wxDataViewColumnNativeData())
 {
-  this->InitCommon(width, align, flags);
+  InitCommon(width, align, flags);
   if ((renderer != NULL) && (renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
     renderer->SetAlignment(align);
 }
 
-wxDataViewColumn::~wxDataViewColumn(void)
+wxDataViewColumn::~wxDataViewColumn()
 {
-  delete this->m_NativeDataPtr;
+  delete m_NativeDataPtr;
 }
 
 bool wxDataViewColumn::IsSortKey() const
 {
-  return ((this->GetNativeData()->GetNativeColumnPtr() != NULL) && ([this->GetNativeData()->GetNativeColumnPtr() sortDescriptorPrototype] != nil));
+  return ((GetNativeData()->GetNativeColumnPtr() != NULL) && ([GetNativeData()->GetNativeColumnPtr() sortDescriptorPrototype] != nil));
 }
 
 void wxDataViewColumn::SetAlignment(wxAlignment align)
 {
-  this->m_alignment = align;
-  [[this->m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-  if ((this->m_renderer != NULL) && (this->m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
-    this->m_renderer->SetAlignment(align);
+  m_alignment = align;
+  [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
+  if ((m_renderer != NULL) && (m_renderer->GetAlignment() == wxDVR_DEFAULT_ALIGNMENT))
+    m_renderer->SetAlignment(align);
 }
 
 void wxDataViewColumn::SetBitmap(wxBitmap const& bitmap)
 {
  // bitmaps and titles cannot exist at the same time - if the bitmap is set the title is removed:
-  this->m_title = wxEmptyString;
-  this->wxDataViewColumnBase::SetBitmap(bitmap);
-  [[this->m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:[[bitmap.GetNSImage() retain] autorelease]];
+  m_title = wxEmptyString;
+  wxDataViewColumnBase::SetBitmap(bitmap);
+  [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:[[bitmap.GetNSImage() retain] autorelease]];
 }
 
 void wxDataViewColumn::SetMaxWidth(int maxWidth)
 {
-  this->m_maxWidth = maxWidth;
-  [this->m_NativeDataPtr->GetNativeColumnPtr() setMaxWidth:maxWidth];
+  m_maxWidth = maxWidth;
+  [m_NativeDataPtr->GetNativeColumnPtr() setMaxWidth:maxWidth];
 }
 
 void wxDataViewColumn::SetMinWidth(int minWidth)
 {
-  this->m_minWidth = minWidth;
-  [this->m_NativeDataPtr->GetNativeColumnPtr() setMinWidth:minWidth];
+  m_minWidth = minWidth;
+  [m_NativeDataPtr->GetNativeColumnPtr() setMinWidth:minWidth];
 }
 
 void wxDataViewColumn::SetReorderable(bool reorderable)
@@ -2450,16 +2450,16 @@ void wxDataViewColumn::SetReorderable(bool reorderable)
 
 void wxDataViewColumn::SetResizeable(bool resizeable)
 {
-  this->wxDataViewColumnBase::SetResizeable(resizeable);
+  wxDataViewColumnBase::SetResizeable(resizeable);
   if (resizeable)
-    [this->m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
+    [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnUserResizingMask];
   else
-    [this->m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
+    [m_NativeDataPtr->GetNativeColumnPtr() setResizingMask:NSTableColumnNoResizing];
 }
 
 void wxDataViewColumn::SetSortable(bool sortable)
 {
-  this->wxDataViewColumnBase::SetSortable(sortable);
+  wxDataViewColumnBase::SetSortable(sortable);
 }
 
 void wxDataViewColumn::SetSortOrder(bool ascending)
@@ -2467,14 +2467,14 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
   if (m_ascending != ascending)
   {
     m_ascending = ascending;
-    if (this->IsSortKey())
+    if (IsSortKey())
     {
      // change sorting order:
       NSArray*          sortDescriptors;
       NSSortDescriptor* sortDescriptor;
       NSTableColumn*    tableColumn;
 
-      tableColumn     = this->m_NativeDataPtr->GetNativeColumnPtr();
+      tableColumn     = m_NativeDataPtr->GetNativeColumnPtr();
       sortDescriptor  = [[NSSortDescriptor alloc] initWithKey:[[tableColumn sortDescriptorPrototype] key] ascending:m_ascending];
       sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
       [tableColumn setSortDescriptorPrototype:sortDescriptor];
@@ -2487,15 +2487,15 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
 void wxDataViewColumn::SetTitle(wxString const& title)
 {
  // bitmaps and titles cannot exist at the same time - if the title is set the bitmap is removed:
-  this->wxDataViewColumnBase::SetBitmap(wxBitmap());
-  this->m_title = title;
-  [[this->m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:[[wxCFStringRef(title).AsNSString() retain] autorelease]];
+  wxDataViewColumnBase::SetBitmap(wxBitmap());
+  m_title = title;
+  [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:[[wxCFStringRef(title).AsNSString() retain] autorelease]];
 }
 
 void wxDataViewColumn::SetWidth(int width)
 {
-  [this->m_NativeDataPtr->GetNativeColumnPtr() setWidth:width];
-  this->m_width = width;
+  [m_NativeDataPtr->GetNativeColumnPtr() setWidth:width];
+  m_width = width;
 }
 
 void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
@@ -2506,7 +2506,7 @@ void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
 
 void wxDataViewColumn::SetNativeData(wxDataViewColumnNativeData* newNativeDataPtr)
 {
-  delete this->m_NativeDataPtr;
-  this->m_NativeDataPtr = newNativeDataPtr;
+  delete m_NativeDataPtr;
+  m_NativeDataPtr = newNativeDataPtr;
 }
 #endif // (wxUSE_DATAVIEWCTRL == 1) && !defined(wxUSE_GENERICDATAVIEWCTRL)

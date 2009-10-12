@@ -100,14 +100,14 @@ public:
 //
 // data access methods
 //
-  NSTableColumn* GetNativeColumnPtr(void) const
+  NSTableColumn* GetNativeColumnPtr() const
   {
-    return this->m_NativeColumnPtr;
+    return m_NativeColumnPtr;
   }
 
   void SetNativeColumnPtr(NSTableColumn* newNativeColumnPtr)
   {
-    this->m_NativeColumnPtr = newNativeColumnPtr;
+    m_NativeColumnPtr = newNativeColumnPtr;
   }
 
 protected:
@@ -136,59 +136,59 @@ public:
   wxDataViewRendererNativeData(NSCell* initColumnCell, id initObject) : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain])
   {
   }
-  ~wxDataViewRendererNativeData(void)
+  ~wxDataViewRendererNativeData()
   {
-    [this->m_ColumnCell release];
-    [this->m_Object     release];
+    [m_ColumnCell release];
+    [m_Object     release];
   }
 
  //
  // data access methods
  //
-  NSCell* GetColumnCell(void) const
+  NSCell* GetColumnCell() const
   {
-    return this->m_ColumnCell;
+    return m_ColumnCell;
   }
-  NSTableColumn* GetColumnPtr(void) const
+  NSTableColumn* GetColumnPtr() const
   {
-    return this->m_TableColumnPtr;
+    return m_TableColumnPtr;
   }
-  id GetItem(void) const
+  id GetItem() const
   {
-    return this->m_Item;
+    return m_Item;
   }
-  NSCell* GetItemCell(void) const
+  NSCell* GetItemCell() const
   {
-    return this->m_ItemCell;
+    return m_ItemCell;
   }
-  id GetObject(void) const
+  id GetObject() const
   {
-    return this->m_Object;
+    return m_Object;
   }
 
   void SetColumnCell(NSCell* newCell)
   {
     [newCell retain];
-    [this->m_ColumnCell release];
-    this->m_ColumnCell = newCell;
+    [m_ColumnCell release];
+    m_ColumnCell = newCell;
   }
   void SetColumnPtr(NSTableColumn* newColumnPtr)
   {
-    this->m_TableColumnPtr = newColumnPtr;
+    m_TableColumnPtr = newColumnPtr;
   }
   void SetItem(id newItem)
   {
-    this->m_Item = newItem;
+    m_Item = newItem;
   }
   void SetItemCell(NSCell* newCell)
   {
-    this->m_ItemCell = newCell;
+    m_ItemCell = newCell;
   }
   void SetObject(id newObject)
   {
     [newObject retain];
-    [this->m_Object release];
-    this->m_Object = newObject;
+    [m_Object release];
+    m_Object = newObject;
   }
 
 protected:
@@ -405,12 +405,12 @@ public:
  // constructors / destructor
  //
   wxCocoaDataViewControl(wxWindow* peer, wxPoint const& pos, wxSize const& size, long style);
-  ~wxCocoaDataViewControl(void);
+  ~wxCocoaDataViewControl();
 
  //
  // column related methods (inherited from wxDataViewWidgetImpl)
  //
-  virtual bool              ClearColumns       (void);
+  virtual bool              ClearColumns       ();
   virtual bool              DeleteColumn       (wxDataViewColumn* columnPtr);
   virtual void              DoSetExpanderColumn(wxDataViewColumn const* columnPtr);
   virtual wxDataViewColumn* GetColumn          (unsigned int pos) const;
@@ -425,10 +425,10 @@ public:
   virtual void         Collapse     (wxDataViewItem const& item);
   virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr);
   virtual void         Expand       (wxDataViewItem const& item);
-  virtual unsigned int GetCount     (void) const;
+  virtual unsigned int GetCount     () const;
   virtual wxRect       GetRectangle (wxDataViewItem const& item, wxDataViewColumn const* columnPtr);
   virtual bool         IsExpanded   (wxDataViewItem const& item) const;
-  virtual bool         Reload       (void);
+  virtual bool         Reload       ();
   virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItem const& item);
   virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItemArray const& item);
   virtual bool         Update       (wxDataViewColumn const* columnPtr);
@@ -446,15 +446,15 @@ public:
   virtual int  GetSelections(wxDataViewItemArray& sel)   const;
   virtual bool IsSelected   (wxDataViewItem const& item) const;
   virtual void Select       (wxDataViewItem const& item);
-  virtual void SelectAll    (void);
+  virtual void SelectAll    ();
   virtual void Unselect     (wxDataViewItem const& item);
-  virtual void UnselectAll  (void);
+  virtual void UnselectAll  ();
 
  //
  // sorting related methods
  //
-  virtual wxDataViewColumn* GetSortingColumn (void) const;
-  virtual void              Resort           (void);
+  virtual wxDataViewColumn* GetSortingColumn () const;
+  virtual void              Resort           ();
 
  //
  // other methods (inherited from wxDataViewWidgetImpl)
@@ -462,14 +462,14 @@ public:
   virtual void DoSetIndent (int indent);
   virtual void HitTest     (wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height);
-  virtual void OnSize      (void);
+  virtual void OnSize      ();
 
  //
  // other methods
  //
-  wxDataViewCtrl* GetDataViewCtrl(void) const
+  wxDataViewCtrl* GetDataViewCtrl() const
   {
-    return dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+    return dynamic_cast<wxDataViewCtrl*>(GetWXPeer());
   }
 
 //

@@ -33,22 +33,22 @@ public:
 //
   wxDataViewRenderer(wxString const& varianttype, wxDataViewCellMode mode=wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
 
-  virtual ~wxDataViewRenderer(void);
+  virtual ~wxDataViewRenderer();
 
 //
 // inherited methods from wxDataViewRendererBase
 //
   virtual int GetAlignment() const
   {
-    return this->m_alignment;
+    return m_alignment;
   }
   virtual wxDataViewCellMode GetMode() const
   {
-    return this->m_mode;
+    return m_mode;
   }
   virtual bool GetValue(wxVariant& value) const
   {
-    value = this->m_value;
+    value = m_value;
     return true;
   }
 
@@ -57,7 +57,7 @@ public:
   virtual void SetMode(wxDataViewCellMode mode);
   virtual bool SetValue(wxVariant const& newValue)
   {
-    this->m_value = newValue;
+    m_value = newValue;
     return true;
   }
 
@@ -66,12 +66,12 @@ public:
 //
   wxVariant const& GetValue() const
   {
-    return this->m_value;
+    return m_value;
   }
 
   wxDataViewRendererNativeData* GetNativeData() const
   {
-    return this->m_NativeDataPtr;
+    return m_NativeDataPtr;
   }
 
   virtual bool MacRender() = 0; // a call to the native data browser function to render the data;
@@ -238,11 +238,11 @@ public:
 //
   wxString GetChoice(size_t index) const
   {
-    return this->m_Choices[index];
+    return m_Choices[index];
   }
-  wxArrayString const& GetChoices(void) const
+  wxArrayString const& GetChoices() const
   {
-    return this->m_Choices;
+    return m_Choices;
   }
 
 private:
@@ -352,7 +352,7 @@ public:
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
-    virtual ~wxDataViewColumn(void);
+    virtual ~wxDataViewColumn();
 
     // implement wxHeaderColumnBase pure virtual methods
     virtual wxAlignment GetAlignment() const { return m_alignment; }
@@ -380,9 +380,9 @@ public:
     virtual void SetAsSortKey  (bool sort = true);
 
    // implementation only
-    wxDataViewColumnNativeData* GetNativeData(void) const
+    wxDataViewColumnNativeData* GetNativeData() const
     {
-      return this->m_NativeDataPtr;
+      return m_NativeDataPtr;
     }
 
     void SetNativeData(wxDataViewColumnNativeData* newNativeDataPtr); // class takes ownership of pointer
@@ -435,13 +435,13 @@ public:
  // Constructors / destructor:
   wxDataViewCtrl()
   {
-    this->Init();
+    Init();
   }
   wxDataViewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
                  const wxValidator& validator = wxDefaultValidator)
   {
-    this->Init();
-    this->Create(parent, id, pos, size, style, validator );
+    Init();
+    Create(parent, id, pos, size, style, validator );
   }
 
   ~wxDataViewCtrl();
@@ -459,12 +459,12 @@ public:
   virtual bool AssociateModel(wxDataViewModel* model);
 
   virtual bool              AppendColumn     (wxDataViewColumn* columnPtr);
-  virtual bool              ClearColumns     (void);
+  virtual bool              ClearColumns     ();
   virtual bool              DeleteColumn     (wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn        (unsigned int pos) const;
-  virtual unsigned int      GetColumnCount   (void) const;
+  virtual unsigned int      GetColumnCount   () const;
   virtual int               GetColumnPosition(const wxDataViewColumn* columnPtr) const;
-  virtual wxDataViewColumn* GetSortingColumn (void) const;
+  virtual wxDataViewColumn* GetSortingColumn () const;
   virtual bool              InsertColumn     (unsigned int pos, wxDataViewColumn *col);
   virtual bool              PrependColumn    (wxDataViewColumn* columnPtr);
 
@@ -494,36 +494,36 @@ public:
 // implementation
 //
  // returns a pointer to the native implementation
-  wxDataViewWidgetImpl* GetDataViewPeer(void) const;
+  wxDataViewWidgetImpl* GetDataViewPeer() const;
 
  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
   void AddChildren(wxDataViewItem const& parentItem);
 
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
-  void FinishCustomItemEditing(void);
+  void FinishCustomItemEditing();
 
  // returns the n-th pointer to a column;
  // this method is different from GetColumn(unsigned int pos) because here 'n' is not a position in the control but the n-th
  // position in the internal list/array of column pointers
   wxDataViewColumn* GetColumnPtr(size_t n) const
   {
-    return this->m_ColumnPtrs[n];
+    return m_ColumnPtrs[n];
   }
  // returns the current being rendered item of the customized renderer (this item is only valid during editing)
   wxDataViewItem const& GetCustomRendererItem() const
   {
-    return this->m_CustomRendererItem;
+    return m_CustomRendererItem;
   }
  // returns a pointer to a customized renderer (this pointer is only valid during editing)
   wxDataViewCustomRenderer* GetCustomRendererPtr() const
   {
-    return this->m_CustomRendererPtr;
+    return m_CustomRendererPtr;
   }
 
  // checks if currently a delete process is running
   bool IsDeleting() const
   {
-    return this->m_Deleting;
+    return m_Deleting;
   }
 
  // with CG, we need to get the context from an kEventControlDraw event
@@ -532,27 +532,27 @@ public:
  // events so we can access it in the callbacks.
   void MacSetDrawingContext(void* context)
   {
-    this->m_cgContext = context;
+    m_cgContext = context;
   }
   void* MacGetDrawingContext() const
   {
-    return this->m_cgContext;
+    return m_cgContext;
   }
 
  // sets the currently being edited item of the custom renderer
   void SetCustomRendererItem(wxDataViewItem const& NewItem)
   {
-    this->m_CustomRendererItem = NewItem;
+    m_CustomRendererItem = NewItem;
   }
  // sets the custom renderer
   void SetCustomRendererPtr(wxDataViewCustomRenderer* NewCustomRendererPtr)
   {
-    this->m_CustomRendererPtr = NewCustomRendererPtr;
+    m_CustomRendererPtr = NewCustomRendererPtr;
   }
  // sets the flag indicating a deletion process:
   void SetDeleting(bool deleting)
   {
-    this->m_Deleting = deleting;
+    m_Deleting = deleting;
   }
 
   virtual wxVisualAttributes GetDefaultAttributes() const
