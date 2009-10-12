@@ -938,10 +938,6 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     m_value = 0;
 }
 
-wxDataViewProgressRenderer::~wxDataViewProgressRenderer()
-{
-}
-
 bool wxDataViewProgressRenderer::SetValue( const wxVariant &value )
 {
     m_value = (long) value;
@@ -958,18 +954,24 @@ bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-bool wxDataViewProgressRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
+bool wxDataViewProgressRenderer::RenderWithAttr(wxDC& dc,
+                                                const wxRect& rect,
+                                                int WXUNUSED(align),
+                                                const wxDataViewItemAttr *attr,
+                                                int WXUNUSED(state))
 {
-    double pct = (double)m_value / 100.0;
-    wxRect bar = cell;
-    bar.width = (int)(cell.width * pct);
-    dc->SetPen( *wxTRANSPARENT_PEN );
-    dc->SetBrush( *wxBLUE_BRUSH );
-    dc->DrawRectangle( bar );
+    // deflat the rect to leave a small border between bars in adjacent rows
+    wxRect bar = rect.Deflate(0, 1);
 
-    dc->SetBrush( *wxTRANSPARENT_BRUSH );
-    dc->SetPen( *wxBLACK_PEN );
-    dc->DrawRectangle( cell );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.SetPen( *wxBLACK_PEN );
+    dc.DrawRectangle( bar );
+
+    bar.width = (int)(bar.width * m_value / 100.);
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.SetBrush( attr && attr->HasColour() ? wxBrush(attr->GetColour())
+                                           : *wxBLUE_BRUSH );
+    dc.DrawRectangle( bar );
 
     return true;
 }

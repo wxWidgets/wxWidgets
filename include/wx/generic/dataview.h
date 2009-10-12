@@ -93,12 +93,23 @@ public:
     // implementation
     int CalculateAlignment() const;
 
+protected:
+    // This is just a convenience for the derived classes overriding
+    // RenderWithAttr() to avoid repeating the same wxFAIL_MSG() in all of them
+    bool DummyRender(wxRect WXUNUSED(cell),
+                     wxDC * WXUNUSED(dc),
+                     int WXUNUSED(state))
+    {
+        wxFAIL_MSG("shouldn't be called at all, use RenderWithAttr() instead");
+
+        return false;
+    }
+
 private:
     wxDC                        *m_dc;
     int                          m_align;
     wxDataViewCellMode           m_mode;
 
-protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
 };
 
@@ -149,12 +160,9 @@ public:
                                 int align,
                                 const wxDataViewItemAttr *attr,
                                 int state);
-    virtual bool Render(wxRect WXUNUSED(cell),
-                        wxDC * WXUNUSED(dc),
-                        int WXUNUSED(state))
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
     {
-        wxFAIL_MSG("only RenderWithAttr() should be called");
-        return false;
+        return DummyRender(cell, dc, state);
     }
 
     wxSize GetSize() const;
@@ -234,12 +242,19 @@ public:
                                 const wxString &varianttype = wxT("long"),
                                 wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                 int align = wxDVR_DEFAULT_ALIGNMENT );
-    virtual ~wxDataViewProgressRenderer();
 
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant& value ) const;
 
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
+    virtual bool RenderWithAttr(wxDC& dc,
+                                const wxRect& rect,
+                                int align,
+                                const wxDataViewItemAttr *attr,
+                                int state);
+    virtual bool Render(wxRect cell, wxDC *dc, int state)
+    {
+        return DummyRender(cell, dc, state);
+    }
     virtual wxSize GetSize() const;
 
 private:
