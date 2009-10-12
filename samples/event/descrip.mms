@@ -37,41 +37,41 @@ CXX_DEFINE =
 
 all :
 .ifdef __WXMOTIF__
-	$(MMS)$(MMSQUALIFIERS) erase.exe
+	$(MMS)$(MMSQUALIFIERS) event.exe
 .else
 .ifdef __WXGTK__
-	$(MMS)$(MMSQUALIFIERS) erase_gtk.exe
+	$(MMS)$(MMSQUALIFIERS) event_gtk.exe
 .else
 .ifdef __WXGTK2__
-	$(MMS)$(MMSQUALIFIERS) erase_gtk2.exe
+	$(MMS)$(MMSQUALIFIERS) event_gtk2.exe
 .else
 .ifdef __WXX11__
-	$(MMS)$(MMSQUALIFIERS) erase_x11.exe
+	$(MMS)$(MMSQUALIFIERS) event_x11.exe
 .endif
 .endif
 .endif
 .endif
 
-OBJS=erase.obj
+OBJS=event.obj
 
 .ifdef __WXMOTIF__
-erase.exe : $(OBJS)
+event.exe : $(OBJS)
 	cxxlink $(OBJS),[--.lib]vms/opt
 .else
 .ifdef __WXGTK__
-erase_gtk.exe : $(OBJS)
-	cxxlink/exec=erase_gtk.exe $(OBJS),[--.lib]vms_gtk/opt
+event_gtk.exe : $(OBJS)
+	cxxlink/exec=event_gtk.exe $(OBJS),[--.lib]vms_gtk/opt
 .else
 .ifdef __WXGTK2__
-erase_gtk2.exe : $(OBJS)
-	cxxlink/exec=erase_gtk2.exe $(OBJS),[--.lib]vms_gtk2/opt
+event_gtk2.exe : $(OBJS)
+	cxxlink/exec=event_gtk2.exe $(OBJS),[--.lib]vms_gtk2/opt
 .else
 .ifdef __WXX11__
-erase_x11.exe : $(OBJS)
-	cxxlink/exec=erase_x11.exe $(OBJS),[--.lib]vms_x11_univ/opt
+event_x11.exe : $(OBJS)
+	cxxlink/exec=event_x11.exe $(OBJS),[--.lib]vms_x11_univ/opt
 .endif
 .endif
 .endif
 .endif
 
-erase.obj : erase.cpp
+event.obj : event.cpp
