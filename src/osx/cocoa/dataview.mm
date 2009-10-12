@@ -1547,10 +1547,10 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
                 }
 
                 const wxColour& c = attr.GetColour();
-                colText = [NSColor colorWithDeviceRed:c.Red()
-                                                  green:c.Green()
-                                                  blue:c.Blue()
-                                                  alpha:c.Alpha()];
+                colText = [NSColor colorWithDeviceRed:c.Red() / 255.
+                                                  green:c.Green() / 255.
+                                                  blue:c.Blue() / 255.
+                                                  alpha:c.Alpha() / 255.];
             }
         }
     }
