@@ -1525,12 +1525,19 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
     {
         if ( attr.HasFont() )
         {
-            wxFont font(dvc->GetFont());
-            if ( attr.GetBold() )
-                font.MakeBold();
-            if ( attr.GetItalic() )
-                font.MakeItalic();
-            [cell setFont:font.OSXGetNSFont()];
+            // FIXME: using wxFont methods here doesn't work for some reason
+            NSFontManager * const fm = [NSFontManager sharedFontManager];
+            NSFont *font = [cell font];
+            if ( font )
+            {
+                if ( attr.GetBold() )
+                    font = [fm convertFont:font toHaveTrait:NSBoldFontMask];
+                if ( attr.GetItalic() )
+                    font = [fm convertFont:font toHaveTrait:NSItalicFontMask];
+
+                [cell setFont:font];
+            }
+            //else: can't change font if the cell doesn't have any
         }
 
         // we can set font for any cell but only NSTextFieldCell provides a
