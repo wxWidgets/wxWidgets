@@ -1438,6 +1438,16 @@ class wxDCTextColourChanger
 {
 public:
     /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the colour
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous colour.
+     */
+    wxDCTextColourChanger(wxDC& dc);
+
+    /**
         Sets @a col on the given @a dc, storing the old one.
 
         @param dc
@@ -1446,6 +1456,17 @@ public:
             The colour to set.
     */
     wxDCTextColourChanger(wxDC& dc, const wxColour& col);
+
+    /**
+        Set the colour to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking wxColour argument and
+        has the same effect as the other constructor, i.e. sets the colour to
+        the given @a col and ensures that the old value is restored when this
+        object is destroyed.
+     */
+    void Set(const wxColour& col);
 
     /**
         Restores the colour originally selected in the DC passed to the ctor.
