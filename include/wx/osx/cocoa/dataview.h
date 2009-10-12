@@ -129,17 +129,24 @@ public:
 //
   wxDataViewRendererNativeData(void) : m_Object(NULL), m_ColumnCell(NULL)
   {
+      Init();
   }
   wxDataViewRendererNativeData(NSCell* initColumnCell) : m_Object(NULL), m_ColumnCell([initColumnCell retain])
   {
+      Init();
   }
   wxDataViewRendererNativeData(NSCell* initColumnCell, id initObject) : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain])
   {
+      Init();
   }
+
   ~wxDataViewRendererNativeData()
   {
     [m_ColumnCell release];
     [m_Object     release];
+
+    [m_origFont release];
+    [m_origTextColour release];
   }
 
  //
@@ -191,11 +198,34 @@ public:
     m_Object = newObject;
   }
 
-protected:
+  // The original cell font and text colour stored here are NULL by default and
+  // are only initialized to the values retrieved from the cell when we change
+  // them from wxCocoaOutlineView:willDisplayCell:forTableColumn:item: which
+  // calls our SaveOriginalXXX() methods before changing the cell attributes.
+  //
+  // This allows us to avoid doing anything for the columns without any
+  // attributes but still be able to restore the correct attributes for the
+  // ones that do.
+  NSFont *GetOriginalFont() const { return m_origFont; }
+  NSColor *GetOriginalTextColour() const { return m_origTextColour; }
+
+  void SaveOriginalFont(NSFont *font)
+  {
+      m_origFont = [font retain];
+  }
+
+  void SaveOriginalTextColour(NSColor *textColour)
+  {
+      m_origTextColour = [textColour retain];
+  }
+
 private:
-//
-// variables
-//
+  void Init()
+  {
+      m_origFont = NULL;
+      m_origTextColour = NULL;
+  }
+
   id m_Item;   // item NOT owned by renderer
   id m_Object; // object that can be used by renderer for storing special data (owned by renderer)
 
@@ -203,6 +233,10 @@ private:
   NSCell* m_ItemCell;   // item's cell is NOT owned by renderer
 
   NSTableColumn* m_TableColumnPtr; // column NOT owned by renderer
+
+  // we own those if they're non-NULL
+  NSFont *m_origFont;
+  NSColor *m_origTextColour;
 };
 
 // ============================================================================

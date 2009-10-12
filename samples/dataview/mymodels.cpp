@@ -418,10 +418,12 @@ void MyListModel::GetValueByRow( wxVariant &variant,
     }
     else if (col==2)
     {
-        if (row >= m_array.GetCount())
-            variant = "plain";
-        else
-            variant = "blue/green/red";
+        static const char *labels[5] =
+        {
+            "blue", "green", "red", "bold cyan", "default",
+        };
+
+        variant = labels[row % 5];
     }
 }
 
@@ -431,11 +433,28 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
     if (col != 2)
         return false;
 
-    if (row < m_array.GetCount())
+    // do what the labels defined above hint at
+    switch ( row % 5 )
     {
-        attr.SetColour( (row%3) == 0 ? *wxBLUE :
-                            ((row%3) == 1 ? *wxGREEN : *wxRED) );
-        attr.SetItalic( (row%10) == 5 );
+        case 0:
+            attr.SetColour(*wxBLUE);
+            break;
+
+        case 1:
+            attr.SetColour(*wxGREEN);
+            break;
+
+        case 2:
+            attr.SetColour(*wxRED);
+            break;
+
+        case 3:
+            attr.SetColour(*wxCYAN);
+            attr.SetBold(true);
+            break;
+
+        case 4:
+            return false;
     }
 
     return true;

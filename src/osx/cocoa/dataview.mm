@@ -1495,43 +1495,76 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
             )
         );
 
+    wxDataViewRenderer * const renderer = dvCol->GetRenderer();
+    wxDataViewRendererNativeData * const data = renderer->GetNativeData();
+
     wxDataViewItem dvItem([static_cast<wxPointerObject *>(item) pointer]);
+
+    // set the font and text colour to use: we need to do it if we had ever
+    // changed them before, even if this item itself doesn't have any special
+    // attributes as otherwise it would reuse the attributes from the previous
+    // cell rendered using the same renderer
+    NSFont *font = NULL;
+    NSColor *colText = NULL;
+
     wxDataViewItemAttr attr;
     if ( model && model->GetAttr(dvItem, dvCol->GetModelColumn(), attr) )
     {
         if ( attr.HasFont() )
         {
-            // FIXME: using wxFont methods here doesn't work for some reason
-            NSFontManager * const fm = [NSFontManager sharedFontManager];
-            NSFont *font = [cell font];
+            font = data->GetOriginalFont();
+            if ( !font )
+            {
+                // this is the first time we're setting the font, remember the
+                // original one before changing it
+                font = [cell font];
+                data->SaveOriginalFont(font);
+            }
+
             if ( font )
             {
+                // FIXME: using wxFont methods here doesn't work for some reason
+                NSFontManager * const fm = [NSFontManager sharedFontManager];
                 if ( attr.GetBold() )
                     font = [fm convertFont:font toHaveTrait:NSBoldFontMask];
                 if ( attr.GetItalic() )
                     font = [fm convertFont:font toHaveTrait:NSItalicFontMask];
-
-                [cell setFont:font];
             }
             //else: can't change font if the cell doesn't have any
         }
 
-        // we can set font for any cell but only NSTextFieldCell provides a
-        // method for setting text colour so check that this method is
-        // available before using it
-        if ( attr.HasColour() &&
-                [cell respondsToSelector:@selector(setTextColor:)] )
+        if ( attr.HasColour() )
         {
-            const wxColour& c = attr.GetColour();
-            [cell setTextColor:[NSColor colorWithDeviceRed:c.Red()
-                                                       green:c.Green()
-                                                       blue:c.Blue()
-                                                       alpha:c.Alpha()]];
+            // we can set font for any cell but only NSTextFieldCell provides
+            // a method for setting text colour so check that this method is
+            // available before using it
+            if ( [cell respondsToSelector:@selector(setTextColor:)] &&
+                    [cell respondsToSelector:@selector(textColor)] )
+            {
+                if ( !data->GetOriginalTextColour() )
+                {
+                    data->SaveOriginalTextColour([cell textColor]);
+                }
+
+                const wxColour& c = attr.GetColour();
+                colText = [NSColor colorWithDeviceRed:c.Red()
+                                                  green:c.Green()
+                                                  blue:c.Blue()
+                                                  alpha:c.Alpha()];
+            }
         }
     }
 
-    wxDataViewRenderer * const renderer = dvCol->GetRenderer();
-    wxDataViewRendererNativeData * const data = renderer->GetNativeData();
+    if ( !font )
+        font = data->GetOriginalFont();
+    if ( !colText )
+        colText = data->GetOriginalTextColour();
+
+    if ( font )
+        [cell setFont:font];
+
+    if ( colText )
+        [cell setTextColor:colText];
 
     data->SetColumnPtr(tableColumn);
     data->SetItem(item);
