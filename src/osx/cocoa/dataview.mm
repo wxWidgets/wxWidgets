@@ -37,18 +37,14 @@
 @interface wxCustomRendererObject : NSObject <NSCopying>
 {
 @public
-  NSTableColumn* tableColumn; // not owned by the class
-
   wxDataViewCustomRenderer* customRenderer; // not owned by the class
-
-  wxPointerObject* item; // not owned by the class
 }
 
  //
  // initialization
  //
   -(id) init;
-  -(id) initWithRenderer:(wxDataViewCustomRenderer*)initRenderer item:(wxPointerObject*)initItem column:(NSTableColumn*)initTableColumn;
+  -(id) initWithRenderer:(wxDataViewCustomRenderer*)renderer;
 
 @end
 
@@ -62,20 +58,16 @@
   if (self != nil)
   {
     customRenderer = NULL;
-    item           = NULL;
-    tableColumn    = NULL;
   }
   return self;
 }
 
--(id) initWithRenderer:(wxDataViewCustomRenderer*)initRenderer item:(wxPointerObject*)initItem column:(NSTableColumn*)initTableColumn
+-(id) initWithRenderer:(wxDataViewCustomRenderer*)renderer
 {
   self = [super init];
   if (self != nil)
   {
-    customRenderer = initRenderer;
-    item           = initItem;
-    tableColumn    = initTableColumn;
+    customRenderer = renderer;
   }
   return self;
 }
@@ -84,11 +76,8 @@
 {
   wxCustomRendererObject* copy;
 
-
   copy = [[[self class] allocWithZone:zone] init];
   copy->customRenderer = customRenderer;
-  copy->item           = item;
-  copy->tableColumn    = tableColumn;
 
   return copy;
 }
@@ -981,16 +970,17 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 // ============================================================================
 // wxCustomCell
 // ============================================================================
+
 @implementation wxCustomCell
-//
-// other methods
-//
+
 -(NSSize) cellSize
 {
-  wxCustomRendererObject* customRendererObject(((wxCustomRendererObject*)[self objectValue]));
+    wxCustomRendererObject * const
+        obj = static_cast<wxCustomRendererObject *>([self objectValue]);
 
 
-  return NSMakeSize(customRendererObject->customRenderer->GetSize().GetWidth(),customRendererObject->customRenderer->GetSize().GetHeight());
+    const wxSize size = obj->customRenderer->GetSize();
+    return NSMakeSize(size.x, size.y);
 }
 
 //
@@ -998,32 +988,18 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 //
 -(void) drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView
 {
-  wxCustomRendererObject* customRendererObject(((wxCustomRendererObject*)[self objectValue]));
+    wxCustomRendererObject * const
+        obj = static_cast<wxCustomRendererObject *>([self objectValue]);
+    wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
+    // draw its own background:
+    [[self backgroundColor] set];
+    NSRectFill(cellFrame);
 
- // draw its own background:
-  [[self backgroundColor] set];
-  NSRectFill(cellFrame);
-
-  (void) (customRendererObject->customRenderer->Render(wxFromNSRect(controlView,cellFrame),customRendererObject->customRenderer->GetDC(),0));
-  customRendererObject->customRenderer->SetDC(NULL);
+    // TODO: attributes support
+    renderer->Render(wxFromNSRect(controlView, cellFrame), renderer->GetDC(), 0);
+    renderer->SetDC(NULL);
 }
-
-#if 0 //TODO FIXME: MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
--(NSUInteger) hitTestForEvent:(NSEvent*)event inRect:(NSRect)cellFrame ofView:(NSView*)controlView
-{
-  NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
-
-  wxCustomRendererObject* customRendererObject((wxCustomRendererObject*)[self objectValue]);
-
-
-
-  customRendererObject->customRenderer->LeftClick(wxFromNSPoint(controlView,point),wxFromNSRect(controlView,cellFrame),
-                                                  customRendererObject->GetOwner()->GetOwner(),wxDataViewItem([customRendererObject->item pointer]),
-                                                  [m_OutlineView columnWithIdentifier:[customRendererObject->GetColumnPtr() identifier]]);
-  return NSCellHitContentArea;
-}
-#endif
 
 -(NSRect) imageRectForBounds:(NSRect)cellFrame
 {
@@ -2156,9 +2132,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, 
 
 bool wxDataViewCustomRenderer::MacRender()
 {
-  [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this
-                                                                                                    item:GetNativeData()->GetItem()
-                                                                                                  column:GetNativeData()->GetColumnPtr()] autorelease]];
+  [GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this] autorelease]];
   return true;
 }
 
