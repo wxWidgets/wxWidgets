@@ -2497,14 +2497,8 @@ gtk_dataview_header_button_press_callback( GtkWidget *WXUNUSED(widget),
     return FALSE;
 }
 
-extern "C" {
-static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
-                            GtkCellRenderer *cell,
-                            GtkTreeModel *model,
-                            GtkTreeIter *iter,
-                            gpointer data );
-}
-
+extern "C"
+{
 
 static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
                             GtkCellRenderer *renderer,
@@ -2523,37 +2517,25 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     if (!wx_model->IsVirtualListModel())
     {
-
-    if (wx_model->IsContainer( item ))
-    {
-        if (wx_model->HasContainerColumns( item ) || (cell->GetOwner()->GetModelColumn() == 0))
+        gboolean visible;
+        if (wx_model->IsContainer( item ))
         {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, G_TYPE_BOOLEAN );
-            g_value_set_boolean( &gvalue, TRUE );
-            g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
-            g_value_unset( &gvalue );
+            visible = wx_model->HasContainerColumns( item ) ||
+                        (cell->GetOwner()->GetModelColumn() == 0);
         }
         else
         {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, G_TYPE_BOOLEAN );
-            g_value_set_boolean( &gvalue, FALSE );
-            g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
-            g_value_unset( &gvalue );
-
-            return;
+            visible = true;
         }
-    }
-    else
-    {
+
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, TRUE );
+        g_value_set_boolean( &gvalue, visible );
         g_object_set_property( G_OBJECT(renderer), "visible", &gvalue );
         g_value_unset( &gvalue );
-    }
 
+        if ( !visible )
+            return;
     }
 
     wxVariant value;
@@ -2649,6 +2631,8 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 #endif
 
 }
+
+} // extern "C"
 
 #include <wx/listimpl.cpp>
 WX_DEFINE_LIST(wxDataViewColumnList)
