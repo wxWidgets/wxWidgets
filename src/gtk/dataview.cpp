@@ -1553,6 +1553,9 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
 {
     m_renderer = NULL;
 
+    // we haven't changed them yet
+    m_usingDefaultAttrs = true;
+
     // NOTE: SetMode() and SetAlignment() needs to be called in the renderer's ctor,
     //       after the m_renderer pointer has been initialized
 }
@@ -2550,62 +2553,76 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 
     cell->SetValue( value );
 
+
+    // deal with attributes
     wxDataViewItemAttr attr;
-    if (wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr ))
+    if ( !wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
+            && cell->GtkIsUsingDefaultAttrs() )
     {
-        if (attr.HasColour())
-        {
-            const GdkColor * const gcol = attr.GetColour().GetColor();
+        // no custom attributes specified and we're already using the default
+        // ones -- nothing to do
+        return;
+    }
 
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, GDK_TYPE_COLOR );
-            g_value_set_boxed( &gvalue, gcol );
-            g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
-            g_value_unset( &gvalue );
-        }
-        else
-        {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, G_TYPE_BOOLEAN );
-            g_value_set_boolean( &gvalue, FALSE );
-            g_object_set_property( G_OBJECT(renderer), "foreground-set", &gvalue );
-            g_value_unset( &gvalue );
-        }
+    bool usingDefaultAttrs = true;
+    if (attr.HasColour())
+    {
+        const GdkColor * const gcol = attr.GetColour().GetColor();
 
-        if (attr.GetItalic())
-        {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, PANGO_TYPE_STYLE );
-            g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
-            g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
-            g_value_unset( &gvalue );
-        }
-        else
-        {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, G_TYPE_BOOLEAN );
-            g_value_set_boolean( &gvalue, FALSE );
-            g_object_set_property( G_OBJECT(renderer), "style-set", &gvalue );
-            g_value_unset( &gvalue );
-        }
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, GDK_TYPE_COLOR );
+        g_value_set_boxed( &gvalue, gcol );
+        g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "foreground-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+    if (attr.GetItalic())
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, PANGO_TYPE_STYLE );
+        g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
+        g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "style-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
 
 
-        if (attr.GetBold())
-        {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, PANGO_TYPE_WEIGHT );
-            g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
-            g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
-            g_value_unset( &gvalue );
-        }
-        else
-        {
-            GValue gvalue = { 0, };
-            g_value_init( &gvalue, G_TYPE_BOOLEAN );
-            g_value_set_boolean( &gvalue, FALSE );
-            g_object_set_property( G_OBJECT(renderer), "weight-set", &gvalue );
-            g_value_unset( &gvalue );
-        }
+    if (attr.GetBold())
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, PANGO_TYPE_WEIGHT );
+        g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
+        g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "weight-set", &gvalue );
+        g_value_unset( &gvalue );
     }
 
 #if 0
@@ -2630,6 +2647,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     }
 #endif
 
+    cell->GtkSetUsingDefaultAttrs(usingDefaultAttrs);
 }
 
 } // extern "C"

@@ -42,9 +42,16 @@ public:
     void GtkInitHandlers();
     void GtkUpdateAlignment();
 
+    bool GtkIsUsingDefaultAttrs() const { return m_usingDefaultAttrs; }
+    void GtkSetUsingDefaultAttrs(bool def) { m_usingDefaultAttrs = def; }
+
 protected:
     GtkCellRenderer   *m_renderer;
     int                m_alignment;
+
+    // true if we hadn't changed any visual attributes or restored them since
+    // doing this
+    bool m_usingDefaultAttrs;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
