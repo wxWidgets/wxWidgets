@@ -325,16 +325,6 @@ void wxDataViewCustomRenderer::SetDC(wxDC* newDCPtr)
   m_DCPtr = newDCPtr;
 }
 
-// ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-wxDataViewTextRendererAttr::wxDataViewTextRendererAttr(wxString const& varianttype, wxDataViewCellMode mode, int align)
-                           :wxDataViewTextRenderer(varianttype,mode,align)
-{
-}
-
-IMPLEMENT_CLASS(wxDataViewTextRendererAttr,wxDataViewTextRenderer)
-
 //-----------------------------------------------------------------------------
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------

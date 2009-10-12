@@ -1033,7 +1033,6 @@ enum wxDataViewCellRenderState
     One instance of a renderer class is owned by a wxDataViewColumn.
     There is a number of ready-to-use renderers provided:
     - wxDataViewTextRenderer,
-    - wxDataViewTextRendererAttr,
     - wxDataViewIconTextRenderer,
     - wxDataViewToggleRenderer,
     - wxDataViewProgressRenderer,
@@ -1259,30 +1258,6 @@ public:
     wxDataViewDateRenderer(const wxString& varianttype = "datetime",
                            wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                            int align = wxDVR_DEFAULT_ALIGNMENT);
-};
-
-
-
-/**
-    @class wxDataViewTextRendererAttr
-
-    The same as wxDataViewTextRenderer but with support for font attributes.
-    Font attributes are currently only supported under GTK+ and MSW.
-
-    @see wxDataViewModel::GetAttr and wxDataViewItemAttr.
-
-    @library{wxadv}
-    @category{dvc}
-*/
-class wxDataViewTextRendererAttr : public wxDataViewTextRenderer
-{
-public:
-    /**
-        The ctor.
-    */
-    wxDataViewTextRendererAttr(const wxString& varianttype = "string",
-                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                               int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
 

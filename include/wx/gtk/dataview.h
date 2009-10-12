@@ -40,7 +40,6 @@ public:
     // implementation
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
-    virtual bool GtkHasAttributes() { return false; }
     void GtkUpdateAlignment();
 
 protected:
@@ -69,24 +68,6 @@ public:
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
-};
-
-// ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewTextRendererAttr: public wxDataViewTextRenderer
-{
-public:
-    wxDataViewTextRendererAttr( const wxString &varianttype = wxT("string"),
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                            int align = wxDVR_DEFAULT_ALIGNMENT );
-
-    // implementation
-    bool GtkHasAttributes() { return true; }
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRendererAttr)
 };
 
 // ---------------------------------------------------------

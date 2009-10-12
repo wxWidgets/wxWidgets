@@ -192,22 +192,6 @@ private:
 };
 
 // ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewTextRendererAttr: public wxDataViewTextRenderer
-{
-public:
-//
-// constructors / destructor
-//
-    wxDataViewTextRendererAttr(wxString const& varianttype=wxT("string"), wxDataViewCellMode mode=wxDATAVIEW_CELL_INERT, int align=wxDVR_DEFAULT_ALIGNMENT);
-
-private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRendererAttr)
-};
-
-// ---------------------------------------------------------
 // wxDataViewBitmapRenderer
 // ---------------------------------------------------------
 

@@ -144,6 +144,7 @@ public:
     bool HasColour() const { return m_colour.Ok(); }
     const wxColour& GetColour() const { return m_colour; }
 
+    bool HasFont() const { return m_bold || m_italic; }
     bool GetBold() const { return m_bold; }
     bool GetItalic() const { return m_italic; }
 
@@ -982,6 +983,10 @@ private:
 };
 
 #endif
+
+// this class is obsolete, its functionality was merged in
+// wxDataViewTextRenderer itself now, don't use it any more
+#define wxDataViewTextRendererAttr wxDataViewTextRenderer
 
 //-----------------------------------------------------------------------------
 // wxDataViewListStore

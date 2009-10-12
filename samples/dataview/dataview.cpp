@@ -553,7 +553,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[1]->AppendIconTextColumn("icon", 1, wxDATAVIEW_CELL_INERT);
 #endif
             m_ctrl[1]->AppendColumn(
-                new wxDataViewColumn("attributes", new wxDataViewTextRendererAttr, 2 ));
+                new wxDataViewColumn("attributes", new wxDataViewTextRenderer, 2 ));
         }
         break;
 

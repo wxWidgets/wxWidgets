@@ -38,7 +38,22 @@ public:
                         int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewRenderer();
 
+    // these methods are used to draw the cell contents, Render() doesn't care
+    // about the attributes while RenderWithAttr() does -- override it if you
+    // want to take the attributes defined for this cell into account, otherwise
+    // overriding Render() is enough
     virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
+
+    // NB: RenderWithAttr() also has more standard parameter order and types
+    virtual bool
+    RenderWithAttr(wxDC& dc,
+                   const wxRect& rect,
+                   const wxDataViewItemAttr * WXUNUSED(attr), // NULL if none
+                   int state)
+    {
+        return Render(rect, &dc, state);
+    }
+
     virtual wxSize GetSize() const = 0;
 
     virtual void SetAlignment( int align );
@@ -77,10 +92,6 @@ public:
     // Create DC on request
     virtual wxDC *GetDC();
 
-    void SetHasAttr( bool set )  { m_hasAttr = set; }
-    void SetAttr( const wxDataViewItemAttr &attr ) { m_attr = attr; }
-    bool GetWantsAttr() const { return m_wantsAttr; }
-
     // implementation
     int CalculateAlignment() const;
 
@@ -88,11 +99,6 @@ private:
     wxDC                        *m_dc;
     int                          m_align;
     wxDataViewCellMode           m_mode;
-
-protected:
-    bool                         m_wantsAttr;
-    bool                         m_hasAttr;
-    wxDataViewItemAttr           m_attr;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
@@ -109,6 +115,15 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
+    // Draw the text using the provided attributes
+    void RenderText(wxDC& dc,
+                    const wxRect& rect,
+                    const wxString& text,
+                    const wxDataViewItemAttr *attr, // may be NULL if none
+                    int state,
+                    int xoffset = 0);
+
+    // Overload using standard attributes
     void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
 
 protected:
@@ -130,7 +145,15 @@ public:
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
 
-    bool Render( wxRect cell, wxDC *dc, int state );
+    virtual bool RenderWithAttr(wxDC& dc,
+                                const wxRect& rect,
+                                const wxDataViewItemAttr *attr,
+                                int state);
+    virtual bool Render( wxRect cell, wxDC *dc, int state )
+    {
+        return RenderWithAttr(*dc, cell, NULL, state);
+    }
+
     wxSize GetSize() const;
 
     // in-place editing
@@ -144,23 +167,6 @@ protected:
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
-};
-
-// ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewTextRendererAttr: public wxDataViewTextRenderer
-{
-public:
-    wxDataViewTextRendererAttr( const wxString &varianttype = wxT("string"),
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                            int align = wxDVR_DEFAULT_ALIGNMENT );
-
-    bool Render( wxRect cell, wxDC *dc, int state );
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRendererAttr)
 };
 
 // ---------------------------------------------------------

@@ -612,8 +612,6 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype,
     m_dc = NULL;
     m_align = align;
     m_mode = mode;
-    m_wantsAttr = false;
-    m_hasAttr = false;
 }
 
 wxDataViewRenderer::~wxDataViewRenderer()
@@ -674,14 +672,42 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
                                            wxRect cell, wxDC *dc, int state )
 {
-    wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
-                        view->GetForegroundColour();
-    dc->SetTextForeground(col);
-    dc->DrawText( text,
-                  cell.x + xoffset,
-                  cell.y + ((cell.height - dc->GetCharHeight()) / 2));
+    wxColour col = state & wxDATAVIEW_CELL_SELECTED
+                    ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT)
+                    : GetOwner()->GetOwner()->GetForegroundColour();
+
+    wxDataViewItemAttr attr;
+    attr.SetColour(col);
+    RenderText(*dc, cell, text, &attr, state, xoffset);
+}
+
+void
+wxDataViewCustomRenderer::RenderText(wxDC& dc,
+                                     const wxRect& rect,
+                                     const wxString& text,
+                                     const wxDataViewItemAttr *attr,
+                                     int WXUNUSED(state),
+                                     int xoffset)
+{
+    wxDCTextColourChanger changeFg(dc);
+    if ( attr && attr->HasColour() )
+        changeFg.Set(attr->GetColour());
+
+    wxDCFontChanger changeFont(dc);
+    if ( attr && attr->HasFont() )
+    {
+        wxFont font(dc.GetFont());
+        if ( attr->GetBold() )
+            font.MakeBold();
+        if ( attr->GetItalic() )
+            font.MakeItalic();
+
+        changeFont.Set(font);
+    }
+
+    dc.DrawText(text,
+                rect.x + xoffset,
+                rect.y + ((rect.height - dc.GetCharHeight()) / 2));
 }
 
 // ---------------------------------------------------------
@@ -734,9 +760,13 @@ bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVarian
     return true;
 }
 
-bool wxDataViewTextRenderer::Render( wxRect cell, wxDC *dc, int state )
+bool
+wxDataViewTextRenderer::RenderWithAttr(wxDC& dc,
+                                       const wxRect& rect,
+                                       const wxDataViewItemAttr *attr,
+                                       int state)
 {
-    RenderText( m_text, 0, cell, dc, state );
+    RenderText(dc, rect, m_text, attr, state);
     return true;
 }
 
@@ -747,60 +777,6 @@ wxSize wxDataViewTextRenderer::GetSize() const
         return view->wxWindowBase::GetTextExtent( m_text );
     return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
 }
-
-// ---------------------------------------------------------
-// wxDataViewTextRendererAttr
-// ---------------------------------------------------------
-
-IMPLEMENT_CLASS(wxDataViewTextRendererAttr, wxDataViewTextRenderer)
-
-wxDataViewTextRendererAttr::wxDataViewTextRendererAttr( const wxString &varianttype,
-                            wxDataViewCellMode mode, int align ) :
-    wxDataViewTextRenderer( varianttype, mode, align )
-{
-    m_wantsAttr = true;
-}
-
-bool wxDataViewTextRendererAttr::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
-{
-    wxFont font;
-    wxColour colour;
-
-    if (m_hasAttr)
-    {
-        if (m_attr.HasColour())
-        {
-            colour = dc->GetTextForeground();
-            dc->SetTextForeground( m_attr.GetColour() );
-        }
-
-        if (m_attr.GetBold() || m_attr.GetItalic())
-        {
-            font = dc->GetFont();
-            wxFont myfont = font;
-            if (m_attr.GetBold())
-                myfont.SetWeight( wxFONTWEIGHT_BOLD );
-            if (m_attr.GetItalic())
-                myfont.SetStyle( wxFONTSTYLE_ITALIC );
-            dc->SetFont( myfont );
-        }
-    }
-
-    dc->DrawText( m_text, cell.x, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
-
-    // restore dc
-    if (m_hasAttr)
-    {
-        if (m_attr.HasColour())
-            dc->SetTextForeground( colour );
-
-        if (m_attr.GetBold() || m_attr.GetItalic())
-            dc->SetFont( font );
-    }
-
-    return true;
-}
-
 
 // ---------------------------------------------------------
 // wxDataViewBitmapRenderer
@@ -1602,15 +1578,6 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         model->GetValue( value, item, column->GetModelColumn());
         cell->SetValue( value );
 
-        if (cell->GetWantsAttr())
-        {
-                wxDataViewItemAttr attr;
-                bool ret = model->GetAttr( item, column->GetModelColumn(), attr );
-                if (ret)
-                    cell->SetAttr( attr );
-                cell->SetHasAttr( ret );
-        }
-
         wxSize size = cell->GetSize();
         size.x = wxMin( 2*PADDING_RIGHTLEFT + size.x, width );
         size.y = height;
@@ -1638,7 +1605,10 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
 
         // dc.SetClippingRegion( item_rect );
-        cell->Render( item_rect, &dc, 0 );
+        wxDataViewItemAttr attr;
+        const bool
+            hasAttr = model->GetAttr(item, column->GetModelColumn(), attr);
+        cell->RenderWithAttr(dc, item_rect, hasAttr ? &attr : NULL, 0);
         // dc.DestroyClippingRegion();
 
         x += width;
@@ -1830,15 +1800,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
-            if (cell->GetWantsAttr())
-            {
-                wxDataViewItemAttr attr;
-                bool ret = model->GetAttr( dataitem, col->GetModelColumn(), attr );
-                if (ret)
-                    cell->SetAttr( attr );
-                cell->SetHasAttr( ret );
-            }
-
             // update cell_rect
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
@@ -1936,7 +1897,12 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             //       violating only the left & right coords - however the user can
             //       make its own renderer and thus we cannot be sure of that.
             dc.SetClippingRegion( item_rect );
-            cell->Render( item_rect, &dc, state );
+
+            wxDataViewItemAttr attr;
+            const bool
+                hasAttr = model->GetAttr(dataitem, col->GetModelColumn(), attr);
+            cell->RenderWithAttr(dc, item_rect, hasAttr ? &attr : NULL, state);
+
             dc.DestroyClippingRegion();
         }
 
