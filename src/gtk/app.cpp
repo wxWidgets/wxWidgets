@@ -149,9 +149,11 @@ extern "C"
 // One-shot emission hook for "event" signal, to install idle handler.
 // This will be called when the "event" signal is issued on any GtkWidget object.
 static gboolean
-event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
+event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer data)
 {
     wxapp_install_idle_handler();
+    bool* hook_installed = (bool*)data;
+    *hook_installed = false;
     // remove hook
     return false;
 }
@@ -159,12 +161,17 @@ event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
 // add emission hook for "event" signal, to re-install idle handler when needed
 static inline void wxAddEmissionHook()
 {
+    static bool hook_installed;
     GType widgetType = GTK_TYPE_WIDGET;
-    // if GtkWidget type is loaded
-    if (g_type_class_peek(widgetType) != NULL)
+    // if hook not installed and GtkWidget type is loaded
+    if (!hook_installed && g_type_class_peek(widgetType))
     {
-        guint sig_id = g_signal_lookup("event", widgetType);
-        g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+        static guint sig_id;
+        if (sig_id == 0)
+            sig_id = g_signal_lookup("event", widgetType);
+        hook_installed = true;
+        g_signal_add_emission_hook(
+            sig_id, 0, event_emission_hook, &hook_installed, NULL);
     }
 }
 
