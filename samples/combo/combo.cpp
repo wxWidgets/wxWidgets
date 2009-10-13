@@ -743,11 +743,12 @@ MyFrame::MyFrame(const wxString& title)
     wxPanel* panel = new wxPanel(this);
 
     // Prepare log window right away since it shows EVT_TEXTs
-    m_logWin = new wxTextCtrl( panel, 105, wxEmptyString, wxDefaultPosition,
-                               wxSize(-1,125), wxTE_MULTILINE|wxFULL_REPAINT_ON_RESIZE );
-    m_logWin->SetEditable(false);
-    wxLogTextCtrl* logger = new wxLogTextCtrl( m_logWin );
-    m_logOld = logger->SetActiveTarget( logger );
+    m_logWin = new wxTextCtrl(panel, 105, wxEmptyString,
+                              wxDefaultPosition,
+                              wxSize(-1, 125),
+                              wxTE_MULTILINE);
+    wxLogTextCtrl* logger = new wxLogTextCtrl(m_logWin);
+    m_logOld = logger->SetActiveTarget(logger);
     logger->DisableTimestamp();
 
 

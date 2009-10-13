@@ -162,8 +162,9 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
     const int spacing = 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    wxTextCtrl* ed = new wxTextCtrl(dlg,11,text,
-        wxDefaultPosition,wxDefaultSize,wxTE_MULTILINE|wxTE_READONLY);
+    wxTextCtrl* ed = new wxTextCtrl(dlg, 11, text,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxTE_MULTILINE);
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
     topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
     rowsizer = new wxBoxSizer( wxHORIZONTAL );
@@ -342,8 +343,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     const int spacing = 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    wxTextCtrl* ed = new wxTextCtrl(dlg,11,wxEmptyString,
-        wxDefaultPosition,wxDefaultSize,wxTE_MULTILINE|wxTE_READONLY);
+    wxTextCtrl* ed = new wxTextCtrl(dlg, 11, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxTE_MULTILINE);
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
     topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
     rowsizer = new wxBoxSizer( wxHORIZONTAL );
