@@ -14,10 +14,6 @@
 // classes
 //-----------------------------------------------------------------------------
 
-#if wxUSE_THREADS
-class WXDLLIMPEXP_FWD_BASE wxMutex;
-#endif
-
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
 typedef struct _HildonProgram HildonProgram;
 #endif // wxUSE_LIBHILDON || wxUSE_LIBHILDON2
@@ -81,7 +77,7 @@ private:
     bool m_isInAssert;
 
 #if wxUSE_THREADS
-    wxMutex* m_idleMutex;
+    wxMutex m_idleMutex;
 #endif
     guint m_idleSourceId;
 

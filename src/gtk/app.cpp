@@ -60,9 +60,9 @@ wx_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer data)
     wxApp* app = wxTheApp;
     if (app != NULL)
         app->WakeUpIdle();
-    gulong* hook_id = (gulong*)data;
+    bool* hook_installed = (bool*)data;
     // record that hook is not installed
-    *hook_id = 0;
+    *hook_installed = false;
     // remove hook
     return false;
 }
@@ -73,28 +73,30 @@ static void wx_add_idle_hooks()
 {
     // "event" hook
     {
-        static gulong hook_id = 0;
-        if (hook_id == 0)
+        static bool hook_installed;
+        if (!hook_installed)
         {
-            static guint sig_id = 0;
+            static guint sig_id;
             if (sig_id == 0)
                 sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
-            hook_id = g_signal_add_emission_hook(
-                sig_id, 0, wx_emission_hook, &hook_id, NULL);
+            hook_installed = true;
+            g_signal_add_emission_hook(
+                sig_id, 0, wx_emission_hook, &hook_installed, NULL);
         }
     }
     // "size_allocate" hook
     // Needed to match the behavior of the old idle system,
     // but probably not necessary.
     {
-        static gulong hook_id = 0;
-        if (hook_id == 0)
+        static bool hook_installed;
+        if (!hook_installed)
         {
-            static guint sig_id = 0;
+            static guint sig_id;
             if (sig_id == 0)
                 sig_id = g_signal_lookup("size_allocate", GTK_TYPE_WIDGET);
-            hook_id = g_signal_add_emission_hook(
-                sig_id, 0, wx_emission_hook, &hook_id, NULL);
+            hook_installed = true;
+            g_signal_add_emission_hook(
+                sig_id, 0, wx_emission_hook, &hook_installed, NULL);
         }
     }
 }
@@ -114,7 +116,7 @@ bool wxApp::DoIdle()
         // Needed if an idle event handler runs a new event loop,
         // for example by showing a dialog.
 #if wxUSE_THREADS
-        wxMutexLocker lock(*m_idleMutex);
+        wxMutexLocker lock(m_idleMutex);
 #endif
         id_save = m_idleSourceId;
         m_idleSourceId = 0;
@@ -138,7 +140,7 @@ bool wxApp::DoIdle()
     gdk_threads_leave();
 
 #if wxUSE_THREADS
-    wxMutexLocker lock(*m_idleMutex);
+    wxMutexLocker lock(m_idleMutex);
 #endif
     // if a new idle source was added during ProcessIdle
     if (m_idleSourceId != 0)
@@ -150,7 +152,8 @@ bool wxApp::DoIdle()
 
     // Pending events can be added asynchronously,
     // need to keep idle source if any have appeared
-    needMore = needMore || HasPendingEvents();
+    if (HasPendingEvents())
+        needMore = true;
 
     // if more idle processing requested
     if (needMore)
@@ -189,10 +192,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 wxApp::wxApp()
 {
     m_isInAssert = false;
-
-#if wxUSE_THREADS
-    m_idleMutex = NULL;
-#endif
     m_idleSourceId = 0;
 }
 
@@ -445,9 +444,6 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-#if wxUSE_THREADS
-    m_idleMutex = new wxMutex;
-#endif
     // make sure GtkWidget type is loaded, idle hooks need it
     g_type_class_ref(GTK_TYPE_WIDGET);
     WakeUpIdle();
@@ -466,20 +462,12 @@ void wxApp::CleanUp()
     gdk_threads_leave();
 
     wxAppBase::CleanUp();
-
-    // delete this mutex as late as possible as it's used from WakeUpIdle(), in
-    // particular do it after calling the base class CleanUp() which can result
-    // in it being called
-#if wxUSE_THREADS
-    delete m_idleMutex;
-    m_idleMutex = NULL;
-#endif
 }
 
 void wxApp::WakeUpIdle()
 {
 #if wxUSE_THREADS
-    wxMutexLocker lock(*m_idleMutex);
+    wxMutexLocker lock(m_idleMutex);
 #endif
     if (m_idleSourceId == 0)
         m_idleSourceId = g_idle_add_full(G_PRIORITY_LOW, wxapp_idle_callback, NULL, NULL);
@@ -490,7 +478,7 @@ void wxApp::WakeUpIdle()
 bool wxApp::EventsPending()
 {
 #if wxUSE_THREADS
-    wxMutexLocker lock(*m_idleMutex);
+    wxMutexLocker lock(m_idleMutex);
 #endif
     if (m_idleSourceId != 0)
     {
