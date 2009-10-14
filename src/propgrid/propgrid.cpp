@@ -1982,13 +1982,13 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     long windowStyle = m_windowStyle;
 
     int xRelMod = 0;
-    int yRelMod = 0;
 
     //
     // With wxPG_DOUBLE_BUFFER, do double buffering
     // - buffer's y = 0, so align drawRect and coordinates to that
     //
 #if wxPG_DOUBLE_BUFFER
+    int yRelMod = 0;
 
     wxRect cr2;
 
