@@ -52,12 +52,9 @@ private:
 };
 
 // currently only GTK+ has a native implementation
-#if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
-    #include <gtk/gtkversion.h>
-    #if GTK_CHECK_VERSION(2, 18, 0)
-        #include "wx/gtk/infobar.h"
-        #define wxHAS_NATIVE_INFOBAR
-    #endif
+#if defined(__WXGTK218__) && !defined(__WXUNIVERSAL__)
+    #include "wx/gtk/infobar.h"
+    #define wxHAS_NATIVE_INFOBAR
 #endif // wxGTK2
 
 // if the generic version is the only one we have, use it

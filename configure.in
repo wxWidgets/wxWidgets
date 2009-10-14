@@ -2903,47 +2903,71 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-            dnl test if we have at least GTK+ 2.10:
-            AC_MSG_CHECKING([if GTK+ is version >= 2.10])
+            dnl test if we have at least GTK+ 2.18:
+            AC_MSG_CHECKING([if GTK+ is version >= 2.18])
             AC_TRY_COMPILE([
                             #include <gtk/gtk.h>
                            ],
                            [
-                            #if !GTK_CHECK_VERSION(2,10,0)
-                            Not GTK+ 2.10
+                            #if !GTK_CHECK_VERSION(2,18,0)
+                            Not GTK+ 2.18
                             #endif
                            ],
                            [
+                            AC_DEFINE(__WXGTK218__)
                             AC_DEFINE(__WXGTK210__)
                             AC_DEFINE(__WXGTK26__)
                             AC_MSG_RESULT([yes])
-                            ac_wxgtk210=1
+                            ac_wxgtk218=1
                            ],
                            [
                             AC_MSG_RESULT([no])
-                            ac_wxgtk210=0
+                            ac_wxgtk218=0
                            ])
 
-            if test "$ac_wxgtk210" = 0; then
-                dnl test if we have at least GTK+ 2.6:
-                AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+            if test "$ac_wxgtk218" = 0; then
+                dnl test if we have at least GTK+ 2.10:
+                AC_MSG_CHECKING([if GTK+ is version >= 2.10])
                 AC_TRY_COMPILE([
                                 #include <gtk/gtk.h>
-                            ],
-                            [
-                                #if !GTK_CHECK_VERSION(2,6,0)
-                                Not GTK+ 2.6
+                               ],
+                               [
+                                #if !GTK_CHECK_VERSION(2,10,0)
+                                Not GTK+ 2.10
                                 #endif
-                            ],
-                            [
+                               ],
+                               [
+                                AC_DEFINE(__WXGTK210__)
                                 AC_DEFINE(__WXGTK26__)
                                 AC_MSG_RESULT([yes])
-                                ac_wxgtk26=1
-                            ],
-                            [
+                                ac_wxgtk210=1
+                               ],
+                               [
                                 AC_MSG_RESULT([no])
-                                ac_wxgtk26=0
-                            ])
+                                ac_wxgtk210=0
+                               ])
+
+                if test "$ac_wxgtk210" = 0; then
+                    dnl test if we have at least GTK+ 2.6:
+                    AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+                    AC_TRY_COMPILE([
+                                    #include <gtk/gtk.h>
+                                ],
+                                [
+                                    #if !GTK_CHECK_VERSION(2,6,0)
+                                    Not GTK+ 2.6
+                                    #endif
+                                ],
+                                [
+                                    AC_DEFINE(__WXGTK26__)
+                                    AC_MSG_RESULT([yes])
+                                    ac_wxgtk26=1
+                                ],
+                                [
+                                    AC_MSG_RESULT([no])
+                                    ac_wxgtk26=0
+                                ])
+                fi
             fi
 
             CFLAGS="$save_CFLAGS"

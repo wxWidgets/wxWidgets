@@ -29532,8 +29532,8 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
             CFLAGS="$wx_cv_cflags_gtk $CFLAGS"
             LIBS="$LIBS $wx_cv_libs_gtk"
 
-                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.10" >&5
-echo $ECHO_N "checking if GTK+ is version >= 2.10... $ECHO_C" >&6; }
+                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.18" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.18... $ECHO_C" >&6; }
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -29547,8 +29547,8 @@ int
 main ()
 {
 
-                            #if !GTK_CHECK_VERSION(2,10,0)
-                            Not GTK+ 2.10
+                            #if !GTK_CHECK_VERSION(2,18,0)
+                            Not GTK+ 2.18
                             #endif
 
   ;
@@ -29574,6 +29574,10 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
        } && test -s conftest.$ac_objext; then
 
                             cat >>confdefs.h <<\_ACEOF
+#define __WXGTK218__ 1
+_ACEOF
+
+                            cat >>confdefs.h <<\_ACEOF
 #define __WXGTK210__ 1
 _ACEOF
 
@@ -29583,7 +29587,7 @@ _ACEOF
 
                             { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-                            ac_wxgtk210=1
+                            ac_wxgtk218=1
 
 else
   echo "$as_me: failed program was:" >&5
@@ -29592,15 +29596,15 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                             { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-                            ac_wxgtk210=0
+                            ac_wxgtk218=0
 
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-            if test "$ac_wxgtk210" = 0; then
-                                { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.6" >&5
-echo $ECHO_N "checking if GTK+ is version >= 2.6... $ECHO_C" >&6; }
+            if test "$ac_wxgtk218" = 0; then
+                                { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.10" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.10... $ECHO_C" >&6; }
                 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -29614,8 +29618,8 @@ int
 main ()
 {
 
-                                #if !GTK_CHECK_VERSION(2,6,0)
-                                Not GTK+ 2.6
+                                #if !GTK_CHECK_VERSION(2,10,0)
+                                Not GTK+ 2.10
                                 #endif
 
   ;
@@ -29641,12 +29645,16 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
        } && test -s conftest.$ac_objext; then
 
                                 cat >>confdefs.h <<\_ACEOF
+#define __WXGTK210__ 1
+_ACEOF
+
+                                cat >>confdefs.h <<\_ACEOF
 #define __WXGTK26__ 1
 _ACEOF
 
                                 { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-                                ac_wxgtk26=1
+                                ac_wxgtk210=1
 
 else
   echo "$as_me: failed program was:" >&5
@@ -29655,11 +29663,75 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                                 { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-                                ac_wxgtk26=0
+                                ac_wxgtk210=0
 
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+                if test "$ac_wxgtk210" = 0; then
+                                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.6" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.6... $ECHO_C" >&6; }
+                    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                    #include <gtk/gtk.h>
+
+int
+main ()
+{
+
+                                    #if !GTK_CHECK_VERSION(2,6,0)
+                                    Not GTK+ 2.6
+                                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+                                    cat >>confdefs.h <<\_ACEOF
+#define __WXGTK26__ 1
+_ACEOF
+
+                                    { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+                                    ac_wxgtk26=1
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                                    { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                                    ac_wxgtk26=0
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+                fi
             fi
 
             CFLAGS="$save_CFLAGS"
