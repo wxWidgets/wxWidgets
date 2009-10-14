@@ -1419,6 +1419,11 @@ bool wxNonOwnedWindowCarbonImpl::ShowWithEffect(bool show,
                 transition = kWindowZoomTransitionEffect;
             break;
 
+        case wxSHOW_EFFECT_NONE:
+            // wxNonOwnedWindow is supposed to call Show() itself in this case
+            wxFAIL_MSG( "ShowWithEffect() shouldn't be called" );
+            return false;
+
         case wxSHOW_EFFECT_MAX:
             wxFAIL_MSG( "invalid effect flag" );
             return false;
