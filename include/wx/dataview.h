@@ -85,7 +85,17 @@ private:
     void* m_id;
 };
 
-bool operator == (const wxDataViewItem &left, const wxDataViewItem &right);
+inline
+bool operator==(const wxDataViewItem& left, const wxDataViewItem& right)
+{
+    return left.GetID() == right.GetID();
+}
+
+inline
+bool operator!=(const wxDataViewItem& left, const wxDataViewItem& right)
+{
+    return !(left == right);
+}
 
 WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 
@@ -482,7 +492,18 @@ private:
     DECLARE_DYNAMIC_CLASS(wxDataViewIconText)
 };
 
-bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two);
+inline
+bool operator==(const wxDataViewIconText& left, const wxDataViewIconText& right)
+{
+    return left.GetText() == right.GetText() &&
+             left.GetIcon().IsSameAs(right.GetIcon());
+}
+
+inline
+bool operator!=(const wxDataViewIconText& left, const wxDataViewIconText& right)
+{
+    return !(left == right);
+}
 
 DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
 

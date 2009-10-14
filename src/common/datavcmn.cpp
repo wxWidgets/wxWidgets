@@ -32,12 +32,6 @@
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
-
-bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
-{
-    return (left.GetID() == right.GetID() );
-}
-
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
@@ -641,13 +635,6 @@ unsigned int wxDataViewVirtualListModel::GetChildren( const wxDataViewItem &WXUN
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewIconText,wxObject)
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
-
-bool operator == (const wxDataViewIconText &one, const wxDataViewIconText &two)
-{
-    if (one.GetText() != two.GetText()) return false;
-    if (one.IsSameAs(two)) return false;
-    return true;
-}
 
 // ---------------------------------------------------------
 // wxDataViewRendererBase
