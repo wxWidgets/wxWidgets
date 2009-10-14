@@ -662,7 +662,7 @@ void wxPropertyGrid::Thaw()
         // Force property re-selection
         // NB: We must copy the selection.
         wxArrayPGProperty selection = m_pState->m_selection;
-        DoSetSelection(selection, wxPG_SEL_FORCE);
+        DoSetSelection(selection, wxPG_SEL_FORCE | wxPG_SEL_NONVISIBLE);
     }
 }
 
