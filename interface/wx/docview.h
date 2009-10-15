@@ -1268,7 +1268,7 @@ public:
 
     /**
         If the document has been modified, prompts the user to ask if the
-        changes should be changed. If the user replies Yes, the Save() function
+        changes should be saved. If the user replies Yes, the Save() function
         is called. If No, the document is marked as unmodified and the function
         succeeds. If Cancel, the function fails.
     */
