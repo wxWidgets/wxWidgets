@@ -173,7 +173,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     // All validators share a common (static) flag that controls
     // whether they beep on error. Here we turn it off:
-    wxValidator::SetBellOnError(m_silent);
+    wxValidator::SuppressBellOnError(m_silent);
     file_menu->Check(VALIDATE_TOGGLE_BELL, !wxValidator::IsSilent());
 
 #if wxUSE_STATUSBAR
@@ -221,7 +221,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_silent = !m_silent;
-    wxValidator::SetBellOnError(m_silent);
+    wxValidator::SuppressBellOnError(m_silent);
     event.Skip();
 }
 

@@ -74,8 +74,14 @@ public:
     /**
         This functions switches on or turns off the error sound produced by the
         validators if an invalid key is pressed.
+
+        @since 2.9.1
+
+        @param suppress
+            If @true, error sound is not played when a validator detects an
+            error. If @false, error sound is enabled.
     */
-    static void SetBellOnError(bool doIt = true);
+    static void SuppressBellOnError(bool suppress = true);
 
     /**
         Associates a window with the validator.

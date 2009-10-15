@@ -343,6 +343,9 @@ Deprecated methods and their replacements
 - wxFont::SetNoAntiAliasing() was deprecated, it never really worked in most
   ports and was always marked as "experimental" API. It will be replaced with
   wxDC-level anti-aliasing control in the future.
+- wxValidator::SetBellOnError() incorrectly interpreted its argument (it
+  disabled the bell when it was true) and was replaced by SuppressBellOnError()
+  with more expected semantics.
 
 
 Major new features in this release

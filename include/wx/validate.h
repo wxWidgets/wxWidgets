@@ -62,10 +62,23 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)m_validatorWindow; }
     void SetWindow(wxWindowBase *win) { m_validatorWindow = win; }
 
-    // validators beep by default if invalid key is pressed, these functions
-    // allow to change it
+    // validators beep by default if invalid key is pressed, this function
+    // allows to change this
+    static void SuppressBellOnError(bool suppress = true)
+        { ms_isSilent = suppress; }
+
+    // test if beep is currently disabled
     static bool IsSilent() { return ms_isSilent; }
-    static void SetBellOnError(bool doIt = true) { ms_isSilent = doIt; }
+
+    // this function is deprecated because it handled its parameter
+    // unnaturally: it disabled the bell when it was true, not false as could
+    // be expected; use SuppressBellOnError() instead
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_INLINE(
+        static void SetBellOnError(bool doIt = true),
+        ms_isSilent = doIt;
+    )
+#endif
 
 protected:
     wxWindowBase *m_validatorWindow;
