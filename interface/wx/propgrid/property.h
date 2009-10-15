@@ -1323,12 +1323,13 @@ public:
         @param colour
             Background colour to use.
 
-        @param recursively
-            If @true, children are affected recursively, and any categories
-            are not.
+        @param flags
+            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Omit this flag to only set colour for the property in question
+            and not any of its children.
     */
     void SetBackgroundColour( const wxColour& colour,
-                              bool recursively = false );
+                              int flags = wxPG_RECURSE );
 
     /**
         Sets editor for a property.
@@ -1433,12 +1434,13 @@ public:
         @param colour
             Text colour to use.
 
-        @param recursively
-            If @true, children are affected recursively, and any categories
-            are not.
+        @param flags
+            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Omit this flag to only set colour for the property in question
+            and not any of its children.
     */
     void SetTextColour( const wxColour& colour,
-                        bool recursively = false );
+                        int flags = wxPG_RECURSE );
 
     /** Sets wxValidator for a property */
     void SetValidator( const wxValidator& validator );

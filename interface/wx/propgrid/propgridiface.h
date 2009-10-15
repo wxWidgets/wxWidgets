@@ -713,13 +713,14 @@ public:
         @param colour
             New background colour.
 
-        @param recursively
-            If True, child properties are affected recursively. Property
-            categories are skipped if this flag is used.
+        @param flags
+            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Omit this flag to only set colour for the property in question
+            and not any of its children.
     */
     void SetPropertyBackgroundColour( wxPGPropArg id,
                                       const wxColour& colour,
-                                      bool recursively = true );
+                                      int flags = wxPG_RECURSE );
 
     /**
         Sets text, bitmap, and colours for given column's cell.
@@ -860,13 +861,14 @@ public:
         @param colour
             New background colour.
 
-        @param recursively
-            If True, child properties are affected recursively. Property
-            categories are skipped if this flag is used.
+        @param flags
+            Default is wxPG_RECURSE which causes colour to be set recursively.
+            Omit this flag to only set colour for the property in question
+            and not any of its children.
     */
     void SetPropertyTextColour( wxPGPropArg id,
                                 const wxColour& colour,
-                                bool recursively = true );
+                                int flags = wxPG_RECURSE );
 
     /**
         Sets validator of a property.

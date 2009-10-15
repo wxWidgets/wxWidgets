@@ -652,22 +652,22 @@ bool wxPropertyGridInterface::SetPropertyMaxLength( wxPGPropArg id, int maxLen )
 void
 wxPropertyGridInterface::SetPropertyBackgroundColour( wxPGPropArg id,
                                                       const wxColour& colour,
-                                                      bool recursively )
+                                                      int flags )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    p->SetBackgroundColour( colour, recursively );
-    RefreshProperty( p );
+    p->SetBackgroundColour(colour, flags);
+    RefreshProperty(p);
 }
 
 // -----------------------------------------------------------------------
 
 void wxPropertyGridInterface::SetPropertyTextColour( wxPGPropArg id,
                                                      const wxColour& colour,
-                                                     bool recursively )
+                                                     int flags )
 {
     wxPG_PROP_ARG_CALL_PROLOG()
-    p->SetTextColour( colour, recursively );
-    RefreshProperty( p );
+    p->SetTextColour(colour, flags);
+    RefreshProperty(p);
 }
 
 // -----------------------------------------------------------------------

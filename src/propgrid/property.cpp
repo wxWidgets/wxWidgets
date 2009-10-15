@@ -1547,9 +1547,10 @@ wxPGCell& wxPGProperty::GetOrCreateCell( unsigned int column )
 }
 
 void wxPGProperty::SetBackgroundColour( const wxColour& colour,
-                                        bool recursively )
+                                        int flags )
 {
     wxPGProperty* firstProp = this;
+    bool recursively = flags & wxPG_RECURSE ? true : false;
 
     //
     // If category is tried to set recursively, skip it and only
@@ -1582,9 +1583,10 @@ void wxPGProperty::SetBackgroundColour( const wxColour& colour,
 }
 
 void wxPGProperty::SetTextColour( const wxColour& colour,
-                                  bool recursively )
+                                  int flags )
 {
     wxPGProperty* firstProp = this;
+    bool recursively = flags & wxPG_RECURSE ? true : false;
 
     //
     // If category is tried to set recursively, skip it and only
