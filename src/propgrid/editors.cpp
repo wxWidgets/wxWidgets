@@ -682,6 +682,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     if ( pDc )
         pDc->SetBrush(*wxWHITE_BRUSH);
 
+    wxPGCellRenderer* renderer = NULL;
+    const wxPGChoiceEntry* cell = NULL;
+
     if ( rect.x >= 0 )
     {
         //
@@ -750,11 +753,13 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
             if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
             {
-                const wxPGChoiceEntry& cell = choices.Item(item);
-                wxPGCellRenderer* renderer = wxPGGlobalVars->m_defaultRenderer;
-                int imageOffset = renderer->PreDrawCell( dc, rect, cell, renderFlags );
+                cell = &choices.Item(item);
+                renderer = wxPGGlobalVars->m_defaultRenderer;
+                int imageOffset = renderer->PreDrawCell(dc, rect, *cell,
+                                                        renderFlags );
                 if ( imageOffset )
-                    imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2;
+                    imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
+                                   wxCC_CUSTOM_IMAGE_MARGIN2;
                 pt.x += imageOffset;
             }
         }
@@ -768,6 +773,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         pt.x += 1;
 
         dc.DrawText( text, pt.x + wxPG_XBEFORETEXT, pt.y );
+
+        if ( renderer )
+            renderer->PostDrawCell(dc, this, *cell, renderFlags);
     }
     else
     {

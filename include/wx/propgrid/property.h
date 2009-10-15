@@ -137,14 +137,28 @@ public:
                           wxPGProperty* property,
                           const wxPGEditor* editor ) const;
 
-    /** Utility to render cell bitmap and set text colour plus bg brush colour.
+    /** Utility to render cell bitmap and set text colour plus bg brush
+        colour.
 
-        Returns image width that, for instance, can be passed to DrawText.
+        @return Returns image width, which, for instance, can be passed to
+                DrawText.
     */
     int PreDrawCell( wxDC& dc,
                      const wxRect& rect,
                      const wxPGCell& cell,
                      int flags ) const;
+
+    /**
+        Utility to be called after drawing is done, to revert whatever
+        changes PreDrawCell() did.
+
+        @param flags
+            Same as those passed to PreDrawCell().
+    */
+    void PostDrawCell( wxDC& dc,
+                       const wxPropertyGrid* propGrid,
+                       const wxPGCell& cell,
+                       int flags ) const;
 };
 
 
@@ -162,6 +176,7 @@ public:
     void SetBitmap( const wxBitmap& bitmap ) { m_bitmap = bitmap; }
     void SetFgCol( const wxColour& col ) { m_fgCol = col; }
     void SetBgCol( const wxColour& col ) { m_bgCol = col; }
+    void SetFont( const wxFont& font ) { m_font = font; }
 
 protected:
     virtual ~wxPGCellData() { }
@@ -170,14 +185,16 @@ protected:
     wxBitmap    m_bitmap;
     wxColour    m_fgCol;
     wxColour    m_bgCol;
+    wxFont      m_font;
 
     // True if m_text is valid and specified
     bool        m_hasValidText;
 };
 
-/** @class wxPGCell
+/**
+    @class wxPGCell
 
-    Base class for simple wxPropertyGrid cell information.
+    Base class for wxPropertyGrid cell information.
 */
 class WXDLLIMPEXP_PROPGRID wxPGCell : public wxObject
 {
@@ -218,11 +235,32 @@ public:
     void SetText( const wxString& text );
     void SetBitmap( const wxBitmap& bitmap );
     void SetFgCol( const wxColour& col );
+
+    /**
+        Sets font of the cell.
+
+        @remarks Because wxPropertyGrid does not support rows of
+                 different height, it makes little sense to change
+                 size of the font. Therefore it is recommended
+                 to use return value of wxPropertyGrid::GetFont()
+                 or wxPropertyGrid::GetCaptionFont() as a basis
+                 for the font that, after modifications, is passed
+                 to this member function.
+    */
+    void SetFont( const wxFont& font );
+
     void SetBgCol( const wxColour& col );
 
     const wxString& GetText() const { return GetData()->m_text; }
     const wxBitmap& GetBitmap() const { return GetData()->m_bitmap; }
     const wxColour& GetFgCol() const { return GetData()->m_fgCol; }
+
+    /**
+        Returns font of the cell. If no specific font is set for this
+        cell, then the font will be invalid.
+    */
+    const wxFont& GetFont() const { return GetData()->m_font; }
+
     const wxColour& GetBgCol() const { return GetData()->m_bgCol; }
 
     wxPGCell& operator=( const wxPGCell& other )

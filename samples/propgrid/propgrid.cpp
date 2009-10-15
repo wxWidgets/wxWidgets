@@ -1793,9 +1793,19 @@ void FormMain::PopulateWithLibraryConfig ()
 
     wxPGProperty* pid;
 
+    wxFont italicFont = pgman->GetGrid()->GetCaptionFont();
+    italicFont.SetStyle(wxFONTSTYLE_ITALIC);
+
+    wxString italicFontHelp = "Font of this property's wxPGCell has "
+                              "been modified. Obtain property's cell "
+                              "with wxPGProperty::"
+                              "GetOrCreateCell(column).";
+
 #define ADD_WX_LIB_CONF_GROUP(A) \
     cat = pg->AppendIn( pid, new wxPropertyCategory(A) ); \
-    pg->SetPropertyCell( cat, 0, wxPG_LABEL, bmp );
+    pg->SetPropertyCell( cat, 0, wxPG_LABEL, bmp ); \
+    cat->GetCell(0).SetFont(italicFont); \
+    cat->SetHelpString(italicFontHelp);
 
 #define ADD_WX_LIB_CONF(A) pg->Append( new wxBoolProperty(wxT(#A),wxPG_LABEL,(bool)((A>0)?true:false)));
 #define ADD_WX_LIB_CONF_NODEF(A) pg->Append( new wxBoolProperty(wxT(#A),wxPG_LABEL,(bool)false) ); \

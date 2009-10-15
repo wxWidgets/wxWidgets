@@ -149,6 +149,11 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
     if ( !(flags & (Control|ChoicePopup)) )
         dc.DrawRectangle(rect);
 
+    // Use cell font, if provided
+    const wxFont& font = cell.GetFont();
+    if ( font.IsOk() )
+        dc.SetFont(font);
+
     const wxBitmap& bmp = cell.GetBitmap();
     if ( bmp.Ok() &&
         // Do not draw oversized bitmap outside choice popup
@@ -163,6 +168,17 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
     }
 
     return imageWidth;
+}
+
+void wxPGCellRenderer::PostDrawCell( wxDC& dc,
+                                     const wxPropertyGrid* propGrid,
+                                     const wxPGCell& cell,
+                                     int WXUNUSED(flags) ) const
+{
+    // Revert font
+    const wxFont& font = cell.GetFont();
+    if ( font.IsOk() )
+        dc.SetFont(propGrid->GetFont());
 }
 
 // -----------------------------------------------------------------------
@@ -276,6 +292,8 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
                                       propertyGrid->GetFontHeight()+(wxPG_CAPRECTYMARGIN*2) );
         }
     }
+
+    PostDrawCell(dc, propertyGrid, *cell, preDrawFlags);
 }
 
 wxSize wxPGDefaultRenderer::GetImageSize( const wxPGProperty* property,
@@ -360,6 +378,13 @@ void wxPGCell::SetFgCol( const wxColour& col )
     AllocExclusive();
 
     GetData()->SetFgCol(col);
+}
+
+void wxPGCell::SetFont( const wxFont& font )
+{
+    AllocExclusive();
+
+    GetData()->SetFont(font);
 }
 
 void wxPGCell::SetBgCol( const wxColour& col )

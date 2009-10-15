@@ -1506,6 +1506,73 @@ public:
 
 
 /**
+    @class wxPGCell
+
+    Base class for wxPropertyGrid cell information.
+
+    @library{wxpropgrid}
+    @category{propgrid}
+*/
+class wxPGCell : public wxObject
+{
+public:
+    wxPGCell();
+    wxPGCell(const wxPGCell& other);
+    wxPGCell( const wxString& text,
+              const wxBitmap& bitmap = wxNullBitmap,
+              const wxColour& fgCol = wxNullColour,
+              const wxColour& bgCol = wxNullColour );
+
+    virtual ~wxPGCell();
+
+    const wxPGCellData* GetData() const;
+
+    /**
+        Returns @true if this cell has custom text stored within.
+    */
+    bool HasText() const;
+
+    /**
+        Merges valid data from srcCell into this.
+    */
+    void MergeFrom( const wxPGCell& srcCell );
+
+    void SetText( const wxString& text );
+    void SetBitmap( const wxBitmap& bitmap );
+    void SetFgCol( const wxColour& col );
+
+    /**
+        Sets font of the cell.
+
+        @remarks Because wxPropertyGrid does not support rows of
+                 different height, it makes little sense to change
+                 size of the font. Therefore it is recommended
+                 to use return value of wxPropertyGrid::GetFont()
+                 or wxPropertyGrid::GetCaptionFont() as a basis
+                 for the font that, after modifications, is passed
+                 to this member function.
+    */
+    void SetFont( const wxFont& font );
+
+    void SetBgCol( const wxColour& col );
+
+    const wxString& GetText() const;
+    const wxBitmap& GetBitmap() const;
+    const wxColour& GetFgCol() const;
+
+    /**
+        Returns font of the cell. If no specific font is set for this
+        cell, then the font will be invalid.
+    */
+    const wxFont& GetFont() const;
+
+    const wxColour& GetBgCol() const;
+
+    wxPGCell& operator=( const wxPGCell& other );
+};
+
+
+/**
     @class wxPGChoices
 
     Helper class for managing choices of wxPropertyGrid properties.
@@ -1522,7 +1589,7 @@ public:
     @library{wxpropgrid}
     @category{propgrid}
 */
-class WXDLLIMPEXP_PROPGRID wxPGChoices
+class wxPGChoices
 {
 public:
     typedef long ValArrItem;
