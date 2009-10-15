@@ -277,10 +277,10 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     {
         if ( flags & Selected )
         {
-            if ( imageWidth > 0 )
+            if ( imageOffset > 0 )
             {
                 imageOffset -= DEFAULT_IMAGE_OFFSET_INCREMENT;
-                imageWidth += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
+                imageOffset += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
             }
 
             DrawCaptionSelectionRect( dc,
