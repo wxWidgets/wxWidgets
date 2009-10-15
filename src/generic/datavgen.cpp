@@ -634,22 +634,35 @@ wxDataViewRenderer::RenderWithAttr(wxDC& dc,
     {
         const wxSize size = GetSize();
 
-        // horizontal alignment:
-        if (align & wxALIGN_CENTER_HORIZONTAL)
-            item_rect.x = cell_rect.x + (cell_rect.width / 2) - (size.x / 2);
-        else if (align & wxALIGN_RIGHT)
-            item_rect.x = cell_rect.x + cell_rect.width - size.x;
-        // else: wxALIGN_LEFT is the default
+        // take alignment into account only if there is enough space, otherwise
+        // show as much contents as possible
+        //
+        // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
+        // return hard-coded size which can be more than they need and if we
+        // trusted their GetSize() we'd draw the text out of cell bounds
+        // entirely
 
-        // vertical alignment:
-        item_rect.y = cell_rect.y;
-        if (align & wxALIGN_CENTER_VERTICAL)
-            item_rect.y = cell_rect.y + (cell_rect.height / 2) - (size.y / 2);
-        else if (align & wxALIGN_BOTTOM)
-            item_rect.y = cell_rect.y + cell_rect.height - size.y;
-        // else: wxALIGN_TOP is the default
+        if ( size.x < cell_rect.width )
+        {
+            if (align & wxALIGN_CENTER_HORIZONTAL)
+                item_rect.x += (cell_rect.width - size.x)/2;
+            else if (align & wxALIGN_RIGHT)
+                item_rect.x += cell_rect.width - size.x;
+            // else: wxALIGN_LEFT is the default
 
-        item_rect.SetSize(size);
+            item_rect.width = size.x;
+        }
+
+        if ( size.y < cell_rect.height )
+        {
+            if (align & wxALIGN_CENTER_VERTICAL)
+                item_rect.y += (cell_rect.height - size.y)/2;
+            else if (align & wxALIGN_BOTTOM)
+                item_rect.y += cell_rect.height - size.y;
+            // else: wxALIGN_TOP is the default
+
+            item_rect.height = size.y;
+        }
     }
 
     return Render(item_rect, &dc, state);
