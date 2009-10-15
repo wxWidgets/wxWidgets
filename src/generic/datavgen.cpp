@@ -704,30 +704,24 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 {
 }
 
-void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
-                                           wxRect cell, wxDC *dc, int state )
-{
-    wxColour col = state & wxDATAVIEW_CELL_SELECTED
-                    ? wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT)
-                    : GetOwner()->GetOwner()->GetForegroundColour();
-
-    wxDataViewItemAttr attr;
-    attr.SetColour(col);
-    RenderText(*dc, cell, wxALIGN_NOT, text, &attr, state, xoffset);
-}
-
 void
 wxDataViewCustomRenderer::RenderText(wxDC& dc,
                                      const wxRect& rect,
                                      int align,
                                      const wxString& text,
                                      const wxDataViewItemAttr *attr,
-                                     int WXUNUSED(state),
+                                     int state,
                                      int xoffset)
 {
-    wxDCTextColourChanger changeFg(dc);
+    wxColour col;
     if ( attr && attr->HasColour() )
-        changeFg.Set(attr->GetColour());
+        col = attr->GetColour();
+    else if ( state & wxDATAVIEW_CELL_SELECTED )
+        col = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    else // use default foreground
+        col = GetOwner()->GetOwner()->GetForegroundColour();
+
+    wxDCTextColourChanger changeFg(dc, col);
 
     wxDCFontChanger changeFont(dc);
     if ( attr && attr->HasFont() )

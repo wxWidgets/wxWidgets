@@ -134,7 +134,14 @@ public:
                     int xoffset = 0);
 
     // Overload using standard attributes
-    void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
+    void RenderText(const wxString& text,
+                    int xoffset,
+                    wxRect cell,
+                    wxDC *dc,
+                    int state)
+    {
+        RenderText(*dc, cell, wxALIGN_NOT, text, NULL, state, xoffset);
+    }
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
