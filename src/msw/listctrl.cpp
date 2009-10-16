@@ -1753,7 +1753,10 @@ long wxListCtrl::InsertItem(const wxListItem& info)
         }
     }
 
-    long rv = ListView_InsertItem(GetHwnd(), & item);
+    const long rv = ListView_InsertItem(GetHwnd(), & item);
+
+    // failing to insert the item is really unexpected
+    wxCHECK_MSG( rv != -1, rv, "failed to insert an item in wxListCtrl" );
 
     m_count++;
     wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
