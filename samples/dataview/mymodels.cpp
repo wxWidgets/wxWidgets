@@ -334,13 +334,16 @@ MyListModel::MyListModel() :
     m_virtualItems = INITIAL_NUMBER_OF_ITEMS;
 
     // the first 100 items are really stored in this model;
-    // all the others are synthetized on request
-    for (unsigned int i = 0; i < 100; i++)
+    // all the others are synthesized on request
+    static const unsigned NUMBER_REAL_ITEMS = 100;
+
+    m_textColValues.reserve(NUMBER_REAL_ITEMS);
+    for (unsigned int i = 0; i < NUMBER_REAL_ITEMS; i++)
     {
-        wxString str;
-        str.Printf( "real row %d", i );
-        m_array.Add( str );
+        m_textColValues.push_back(wxString::Format("real row %d", i));
     }
+
+    m_iconColValues.assign(NUMBER_REAL_ITEMS, "test");
 
     m_icon[0] = wxIcon( null_xpm );
     m_icon[1] = wxIcon( wx_small_xpm );
@@ -348,17 +351,17 @@ MyListModel::MyListModel() :
 
 void MyListModel::Prepend( const wxString &text )
 {
-    m_array.Insert( text, 0 );
+    m_textColValues.Insert( text, 0 );
     RowPrepended();
 }
 
 void MyListModel::DeleteItem( const wxDataViewItem &item )
 {
     unsigned int row = GetRow( item );
-    if (row >= m_array.GetCount())
+    if (row >= m_textColValues.GetCount())
         return;
 
-    m_array.RemoveAt( row );
+    m_textColValues.RemoveAt( row );
     RowDeleted( row );
 }
 
@@ -369,7 +372,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     for (i = 0; i < items.GetCount(); i++)
     {
         unsigned int row = GetRow( items[i] );
-        if (row < m_array.GetCount())
+        if (row < m_textColValues.GetCount())
             rows.Add( row );
     }
 
@@ -377,7 +380,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     {
         // none of the selected items were in the range of the items
         // which we store... for simplicity, don't allow removing them
-        wxLogError( "Cannot remove rows with an index greater than %d", m_array.GetCount() );
+        wxLogError( "Cannot remove rows with an index greater than %d", m_textColValues.GetCount() );
         return;
     }
 
@@ -386,7 +389,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     // remaining indeces would all be wrong.
     rows.Sort( my_sort_reverse );
     for (i = 0; i < rows.GetCount(); i++)
-        m_array.RemoveAt( rows[i] );
+        m_textColValues.RemoveAt( rows[i] );
 
     // This is just to test if wxDataViewCtrl can
     // cope with removing rows not sorted in
@@ -398,7 +401,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 void MyListModel::AddMany()
 {
     m_virtualItems += 1000;
-    Reset( m_array.GetCount() + m_virtualItems );
+    Reset( m_textColValues.GetCount() + m_virtualItems );
 }
 
 void MyListModel::GetValueByRow( wxVariant &variant,
@@ -406,15 +409,20 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 {
     if (col==0)
     {
-        if (row >= m_array.GetCount())
+        if (row >= m_textColValues.GetCount())
             variant = wxString::Format( "virtual row %d", row );
         else
-            variant = m_array[ row ];
+            variant = m_textColValues[ row ];
     }
     else if (col==1)
     {
-        wxDataViewIconText data( "test", m_icon[ row%2 ] );
-        variant << data;
+        wxString text;
+        if ( row >= m_iconColValues.GetCount() )
+            text = "virtual icon";
+        else
+            text = m_iconColValues[row];
+
+        variant << wxDataViewIconText(text, m_icon[row % 2]);
     }
     else if (col==2)
     {
@@ -474,19 +482,35 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 bool MyListModel::SetValueByRow( const wxVariant &variant,
                                  unsigned int row, unsigned int col )
 {
-    if (col == 0)
+    switch ( col )
     {
-        if (row >= m_array.GetCount())
-        {
-            // the item is not in the range of the items
-            // which we store... for simplicity, don't allow editing it
-            wxLogError( "Cannot edit rows with an index greater than %d", m_array.GetCount() );
-            return false;
-        }
+        case 0:
+        case 1:
+            if (row >= m_textColValues.GetCount())
+            {
+                // the item is not in the range of the items
+                // which we store... for simplicity, don't allow editing it
+                wxLogError( "Cannot edit rows with an index greater than %d",
+                            m_textColValues.GetCount() );
+                return false;
+            }
 
-        m_array[row] = variant.GetString();
-        return true;
+            if ( col == 0 )
+            {
+                m_textColValues[row] = variant.GetString();
+            }
+            else // col == 1
+            {
+                wxDataViewIconText iconText;
+                iconText << variant;
+                m_iconColValues[row] = iconText.GetText();
+            }
+            break;
+
+        default:
+            wxLogError("Cannot edit the column %d", col);
+            return false;
     }
 
-    return false;
+    return true;
 }

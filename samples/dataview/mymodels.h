@@ -215,7 +215,7 @@ public:
 
     virtual unsigned int GetRowCount()
     {
-        return m_array.GetCount();
+        return m_textColValues.GetCount();
     }
 
     virtual void GetValueByRow( wxVariant &variant,
@@ -225,7 +225,8 @@ public:
                                 unsigned int row, unsigned int col );
 
 private:
-    wxArrayString    m_array;
+    wxArrayString    m_textColValues;
+    wxArrayString    m_iconColValues;
     wxIcon           m_icon[2];
     int              m_virtualItems;
 };

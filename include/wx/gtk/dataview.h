@@ -19,6 +19,7 @@
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
 
+typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 
 // ---------------------------------------------------------
 // wxDataViewRenderer
@@ -37,7 +38,22 @@ public:
     virtual void SetAlignment( int align );
     virtual int GetAlignment() const;
 
-    // implementation
+
+    // GTK-specific implementation
+    // ---------------------------
+
+    // pack the GTK cell renderers used by this renderer to the given column
+    //
+    // by default only a single m_renderer is used but some renderers use more
+    // than one GTK cell renderer
+    virtual void GtkPackIntoColumn(GtkTreeViewColumn *column);
+
+    // called when the cell value was edited by user with the new value
+    //
+    // it validates the new value and notifies the model about the change by
+    // calling GtkOnCellChanged() if it was accepted
+    void GtkOnTextEdited(const gchar *itempath, const wxString& value);
+
     GtkCellRenderer* GetGtkHandle() { return m_renderer; }
     void GtkInitHandlers();
     void GtkUpdateAlignment();
@@ -46,6 +62,11 @@ public:
     void GtkSetUsingDefaultAttrs(bool def) { m_usingDefaultAttrs = def; }
 
 protected:
+    virtual void GtkOnCellChanged(const wxVariant& value,
+                                  const wxDataViewItem& item,
+                                  unsigned col);
+
+
     GtkCellRenderer   *m_renderer;
     int                m_alignment;
 
@@ -68,12 +89,30 @@ public:
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int align = wxDVR_DEFAULT_ALIGNMENT );
 
-    bool SetValue( const wxVariant &value );
-    bool GetValue( wxVariant &value ) const;
+    virtual bool SetValue( const wxVariant &value )
+    {
+        return SetTextValue(value);
+    }
 
-    void SetAlignment( int align );
+    virtual bool GetValue( wxVariant &value ) const
+    {
+        wxString str;
+        if ( !GetTextValue(str) )
+            return false;
+
+        value = str;
+
+        return true;
+    }
+
+    virtual void SetAlignment( int align );
 
 protected:
+    // implementation of Set/GetValue()
+    bool SetTextValue(const wxString& str);
+    bool GetTextValue(wxString& str) const;
+
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
 };
 
@@ -156,7 +195,7 @@ private:
     wxDC        *m_dc;
 
 public:
-    // Internal, temporay for RenderText.
+    // Internal, temporary for RenderText.
     GtkCellRenderer      *m_text_renderer;
     GdkWindow            *window;
     GtkWidget            *widget;
@@ -200,7 +239,7 @@ protected:
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewCustomRenderer
+class WXDLLIMPEXP_ADV wxDataViewIconTextRenderer: public wxDataViewTextRenderer
 {
 public:
     wxDataViewIconTextRenderer( const wxString &varianttype = wxT("wxDataViewIconText"),
@@ -211,17 +250,19 @@ public:
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
 
-    virtual bool Render( wxRect cell, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
+    virtual void GtkPackIntoColumn(GtkTreeViewColumn *column);
 
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+protected:
+    virtual void GtkOnCellChanged(const wxVariant& value,
+                                  const wxDataViewItem& item,
+                                  unsigned col);
 
 private:
     wxDataViewIconText   m_value;
 
-protected:
+    // we use the base class m_renderer for the text and this one for the icon
+    GtkCellRenderer *m_rendererIcon;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
 };
 

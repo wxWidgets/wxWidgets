@@ -1560,6 +1560,11 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, wxDataViewC
     //       after the m_renderer pointer has been initialized
 }
 
+void wxDataViewRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
+{
+    gtk_tree_view_column_pack_end( column, m_renderer, TRUE /* expand */);
+}
+
 void wxDataViewRenderer::GtkInitHandlers()
 {
     if (!gtk_check_version(2,6,0))
@@ -1686,37 +1691,48 @@ int wxDataViewRenderer::GetAlignment() const
     return m_alignment;
 }
 
+void
+wxDataViewRenderer::GtkOnTextEdited(const gchar *itempath, const wxString& str)
+{
+    wxVariant value(str);
+    if (!Validate( value ))
+        return;
+
+    GtkTreePath *path = gtk_tree_path_new_from_string( itempath );
+    GtkTreeIter iter;
+    GetOwner()->GetOwner()->GtkGetInternal()->get_iter( &iter, path );
+    wxDataViewItem item( (void*) iter.user_data );;
+    gtk_tree_path_free( path );
+
+    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+}
+
+void
+wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
+                                     const wxDataViewItem& item,
+                                     unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->SetValue( value, item, col );
+    model->ValueChanged( item, col );
+}
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
 
-extern "C" {
-static void wxGtkTextRendererEditedCallback( GtkCellRendererText *renderer,
-    gchar *arg1, gchar *arg2, gpointer user_data );
-}
+extern "C"
+{
 
 static void wxGtkTextRendererEditedCallback( GtkCellRendererText *WXUNUSED(renderer),
     gchar *arg1, gchar *arg2, gpointer user_data )
 {
     wxDataViewRenderer *cell = (wxDataViewRenderer*) user_data;
 
-    wxString tmp = wxGTK_CONV_BACK_FONT(arg2, cell->GetOwner()->GetOwner()->GetFont());
-    wxVariant value = tmp;
-    if (!cell->Validate( value ))
-        return;
+    cell->GtkOnTextEdited(arg1, wxGTK_CONV_BACK_FONT(
+                arg2, cell->GetOwner()->GetOwner()->GetFont()));
+}
 
-    wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
-
-    GtkTreePath *path = gtk_tree_path_new_from_string( arg1 );
-    GtkTreeIter iter;
-    cell->GetOwner()->GetOwner()->GtkGetInternal()->get_iter( &iter, path );
-    wxDataViewItem item( (void*) iter.user_data );;
-    gtk_tree_path_free( path );
-
-    unsigned int model_col = cell->GetOwner()->GetModelColumn();
-
-    model->SetValue( value, item, model_col );
-    model->ValueChanged( item, model_col );
 }
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
@@ -1746,28 +1762,24 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
     SetAlignment(align);
 }
 
-bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
+bool wxDataViewTextRenderer::SetTextValue(const wxString& str)
 {
-    wxString tmp = value;
-
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
-    g_value_set_string( &gvalue, wxGTK_CONV_FONT( tmp, GetOwner()->GetOwner()->GetFont() ) );
+    g_value_set_string( &gvalue, wxGTK_CONV_FONT( str, GetOwner()->GetOwner()->GetFont() ) );
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
     return true;
 }
 
-bool wxDataViewTextRenderer::GetValue( wxVariant &value ) const
+bool wxDataViewTextRenderer::GetTextValue(wxString& str) const
 {
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
     g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-    wxString tmp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
+    str = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
     g_value_unset( &gvalue );
-
-    value = tmp;
 
     return true;
 }
@@ -1797,13 +1809,28 @@ void wxDataViewTextRenderer::SetAlignment( int align )
 // wxDataViewBitmapRenderer
 // ---------------------------------------------------------
 
+namespace
+{
+
+// set "pixbuf" property on the given renderer
+void SetPixbufProp(GtkCellRenderer *renderer, GdkPixbuf *pixbuf)
+{
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, G_TYPE_OBJECT );
+    g_value_set_object( &gvalue, pixbuf );
+    g_object_set_property( G_OBJECT(renderer), "pixbuf", &gvalue );
+    g_value_unset( &gvalue );
+}
+
+} // anonymous namespace
+
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer)
 
 wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype, wxDataViewCellMode mode,
                                                     int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
-    m_renderer = (GtkCellRenderer*) gtk_cell_renderer_pixbuf_new();
+    m_renderer = gtk_cell_renderer_pixbuf_new();
 
     SetMode(mode);
     SetAlignment(align);
@@ -1816,38 +1843,23 @@ bool wxDataViewBitmapRenderer::SetValue( const wxVariant &value )
         wxBitmap bitmap;
         bitmap << value;
 
-        // This may create a Pixbuf representation in the
-        // wxBitmap object (and it will stay there)
-        GdkPixbuf *pixbuf = bitmap.GetPixbuf();
-
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_OBJECT );
-        g_value_set_object( &gvalue, pixbuf );
-        g_object_set_property( G_OBJECT(m_renderer), "pixbuf", &gvalue );
-        g_value_unset( &gvalue );
-
-        return true;
+        // GetPixbuf() may create a Pixbuf representation in the wxBitmap
+        // object (and it will stay there and remain owned by wxBitmap)
+        SetPixbufProp(m_renderer, bitmap.GetPixbuf());
     }
-
-    if (value.GetType() == wxT("wxIcon"))
+    else if (value.GetType() == wxT("wxIcon"))
     {
-        wxIcon bitmap;
-        bitmap << value;
+        wxIcon icon;
+        icon << value;
 
-        // This may create a Pixbuf representation in the
-        // wxBitmap object (and it will stay there)
-        GdkPixbuf *pixbuf = bitmap.GetPixbuf();
-
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_OBJECT );
-        g_value_set_object( &gvalue, pixbuf );
-        g_object_set_property( G_OBJECT(m_renderer), "pixbuf", &gvalue );
-        g_value_unset( &gvalue );
-
-        return true;
+        SetPixbufProp(m_renderer, icon.GetPixbuf());
+    }
+    else
+    {
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 bool wxDataViewBitmapRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
@@ -2399,67 +2411,63 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *m
 
 IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
 
-wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(
-  const wxString &varianttype, wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer
+                            (
+                             const wxString &varianttype,
+                             wxDataViewCellMode mode,
+                             int align
+                            )
+    : wxDataViewTextRenderer(varianttype, mode, align)
 {
-    SetMode(mode);
-    SetAlignment(align);
+    m_rendererIcon = gtk_cell_renderer_pixbuf_new();
 }
 
 wxDataViewIconTextRenderer::~wxDataViewIconTextRenderer()
 {
 }
 
+void wxDataViewIconTextRenderer::GtkPackIntoColumn(GtkTreeViewColumn *column)
+{
+    // add the icon renderer first
+    gtk_tree_view_column_pack_start(column, m_rendererIcon, FALSE /* !expand */);
+
+    // add the text renderer too
+    wxDataViewRenderer::GtkPackIntoColumn(column);
+}
+
 bool wxDataViewIconTextRenderer::SetValue( const wxVariant &value )
 {
     m_value << value;
-    return true;
-}
 
-bool wxDataViewIconTextRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
-{
-    return false;
-}
-
-bool wxDataViewIconTextRenderer::Render( wxRect cell, wxDC *dc, int state )
-{
-    const wxIcon &icon = m_value.GetIcon();
-    int offset = 0;
-    if (icon.IsOk())
-    {
-        int yoffset = wxMax( 0, (cell.height - icon.GetHeight()) / 2 );
-        dc->DrawIcon( icon, cell.x, cell.y + yoffset );
-        offset = icon.GetWidth() + 4;
-    }
-
-    RenderText( m_value.GetText(), offset, cell, dc, state );
+    SetTextValue(m_value.GetText());
+    SetPixbufProp(m_rendererIcon, m_value.GetIcon().GetPixbuf());
 
     return true;
 }
 
-wxSize wxDataViewIconTextRenderer::GetSize() const
+bool wxDataViewIconTextRenderer::GetValue(wxVariant& value) const
 {
-    wxSize size;
-    if (m_value.GetIcon().IsOk())
-        size.x = 4 + m_value.GetIcon().GetWidth();
-    wxCoord x,y,d;
-    GetView()->GetTextExtent( m_value.GetText(), &x, &y, &d );
-    size.x += x;
-    size.y = y+d;
-    return size;
+    wxString str;
+    if ( !GetTextValue(str) )
+        return false;
+
+    // user doesn't have any way to edit the icon so leave it unchanged
+    value << wxDataViewIconText(str, m_value.GetIcon());
+
+    return true;
 }
 
-wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(
-    wxWindow *WXUNUSED(parent), wxRect WXUNUSED(labelRect), const wxVariant &WXUNUSED(value) )
+void
+wxDataViewIconTextRenderer::GtkOnCellChanged(const wxVariant& value,
+                                             const wxDataViewItem& item,
+                                             unsigned col)
 {
-    return NULL;
-}
-
-bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl(
-   wxControl* WXUNUSED(editor), wxVariant &WXUNUSED(value) )
-{
-    return false;
+    // we receive just the text part of our value as it's the only one which
+    // can be edited, but we need the full wxDataViewIconText value for the
+    // model
+    wxVariant valueIconText;
+    valueIconText << wxDataViewIconText(value.GetString(), m_value.GetIcon());
+    wxDataViewTextRenderer::GtkOnCellChanged(valueIconText, item, col);
 }
 
 // ---------------------------------------------------------
@@ -2679,7 +2687,6 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
 {
     m_isConnected = false;
 
-    GtkCellRenderer *renderer = (GtkCellRenderer *) GetRenderer()->GetGtkHandle();
     GtkTreeViewColumn *column = gtk_tree_view_column_new();
     m_column = (GtkWidget*) column;
 
@@ -2698,10 +2705,13 @@ void wxDataViewColumn::Init(wxAlignment align, int flags, int width)
     gtk_box_pack_end( GTK_BOX(box), GTK_WIDGET(m_label), FALSE, FALSE, 1 );
     gtk_tree_view_column_set_widget( column, box );
 
-    gtk_tree_view_column_pack_end( column, renderer, TRUE );
+    wxDataViewRenderer * const colRenderer = GetRenderer();
+    GtkCellRenderer * const cellRenderer = colRenderer->GetGtkHandle();
 
-    gtk_tree_view_column_set_cell_data_func( column, renderer,
-        wxGtkTreeCellDataFunc, (gpointer) GetRenderer(), NULL );
+    colRenderer->GtkPackIntoColumn(column);
+
+    gtk_tree_view_column_set_cell_data_func( column, cellRenderer,
+        wxGtkTreeCellDataFunc, (gpointer) colRenderer, NULL );
 }
 
 void wxDataViewColumn::OnInternalIdle()

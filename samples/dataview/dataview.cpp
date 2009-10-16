@@ -545,13 +545,8 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[1]->AssociateModel( m_list_model.get() );
 
             // the various columns
-#if 1
-            m_ctrl[1]->AppendTextColumn("editable string", 0, wxDATAVIEW_CELL_EDITABLE, 120);
-            m_ctrl[1]->AppendIconTextColumn(wxIcon(wx_small_xpm), 1, wxDATAVIEW_CELL_INERT )->SetTitle( "icon");
-#else
             m_ctrl[1]->AppendTextColumn("editable string", 0, wxDATAVIEW_CELL_EDITABLE);
-            m_ctrl[1]->AppendIconTextColumn("icon", 1, wxDATAVIEW_CELL_INERT);
-#endif
+            m_ctrl[1]->AppendIconTextColumn("icon", 1, wxDATAVIEW_CELL_EDITABLE);
             m_ctrl[1]->AppendColumn(
                 new wxDataViewColumn("attributes", new wxDataViewTextRenderer, 2 ));
         }
