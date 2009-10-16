@@ -245,6 +245,8 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     wxASSERT_MSG(!curLine.Contains('\n'),
                  "Use Ellipsize() instead!");
 
+    wxASSERT_MSG( mode != wxELLIPSIZE_NONE, "shouldn't be called at all then" );
+
     // NOTE: this function assumes that any mnemonic/tab character has already
     //       been handled if it was necessary to handle them (see Ellipsize())
 
@@ -348,6 +350,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
             }
             break;
 
+        case wxELLIPSIZE_NONE:
         default:
             wxFAIL_MSG("invalid ellipsize mode");
             return curLine;

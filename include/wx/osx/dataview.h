@@ -61,6 +61,9 @@ public:
     return true;
   }
 
+  virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE);
+  virtual wxEllipsizeMode GetEllipsizeMode() const;
+
 //
 // implementation
 //

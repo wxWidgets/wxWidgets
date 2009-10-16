@@ -1061,9 +1061,47 @@ public:
                        int align = wxDVR_DEFAULT_ALIGNMENT );
 
     /**
+        Enable or disable replacing parts of the item text with ellipsis to
+        make it fit the column width.
+
+        This method only makes sense for the renderers working with text, such
+        as wxDataViewTextRenderer or wxDataViewIconTextRenderer.
+
+        By default wxELLIPSIZE_MIDDLE is used.
+
+        @param mode
+            Ellipsization mode, use wxELLIPSIZE_NONE to disable.
+
+        @since 2.9.1
+     */
+    void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE);
+
+    /**
+        Disable replacing parts of the item text with ellipsis.
+
+        If ellipsizing is disabled, the string will be truncated if it doesn't
+        fit.
+
+        This is the same as @code EnableEllipsize(wxELLIPSIZE_NONE) @endcode.
+
+        @since 2.9.1
+     */
+    void DisableEllipsize();
+
+    /**
         Returns the alignment. See SetAlignment()
     */
     virtual int GetAlignment() const;
+
+    /**
+        Returns the ellipsize mode used by the renderer.
+
+        If the return value is wxELLIPSIZE_NONE, the text is simply truncated
+        if it doesn't fit.
+
+        @see EnableEllipsize()
+     */
+    wxEllipsizeMode GetEllipsizeMode() const;
 
     /**
         Returns the cell mode.

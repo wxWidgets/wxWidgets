@@ -219,12 +219,16 @@ public:
       m_origTextColour = [textColour retain];
   }
 
+  // The ellipsization mode which we need to set for each cell being rendered.
+  void SetEllipsizeMode(wxEllipsizeMode mode) { m_ellipsizeMode = mode; }
+  wxEllipsizeMode GetEllipsizeMode() const { return m_ellipsizeMode; }
+
+  // Set the line break mode for the given cell using our m_ellipsizeMode
+  void ApplyLineBreakMode(NSCell *cell);
+
 private:
-  void Init()
-  {
-      m_origFont = NULL;
-      m_origTextColour = NULL;
-  }
+  // common part of all ctors
+  void Init();
 
   id m_Item;   // item NOT owned by renderer
   id m_Object; // object that can be used by renderer for storing special data (owned by renderer)
@@ -237,6 +241,8 @@ private:
   // we own those if they're non-NULL
   NSFont *m_origFont;
   NSColor *m_origTextColour;
+
+  wxEllipsizeMode m_ellipsizeMode;
 };
 
 // ============================================================================

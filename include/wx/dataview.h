@@ -411,7 +411,7 @@ public:
     wxDataViewRendererBase( const wxString &varianttype,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    ~wxDataViewRendererBase();
+    virtual ~wxDataViewRendererBase();
 
     virtual bool Validate( wxVariant& WXUNUSED(value) )
         { return true; }
@@ -434,6 +434,14 @@ public:
     //       to combine alignment flags (e.g. wxALIGN_LEFT|wxALIGN_BOTTOM)
     virtual void SetAlignment( int align ) = 0;
     virtual int GetAlignment() const = 0;
+
+    // enable or disable (if called with wxELLIPSIZE_NONE) replacing parts of
+    // the item text (hence this only makes sense for renderers showing
+    // text...) with ellipsis in order to make it fit the column width
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) = 0;
+    void DisableEllipsize() { EnableEllipsize(wxELLIPSIZE_NONE); }
+
+    virtual wxEllipsizeMode GetEllipsizeMode() const = 0;
 
     // in-place editing
     virtual bool HasEditorCtrl() const

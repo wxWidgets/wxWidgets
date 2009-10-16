@@ -2186,35 +2186,114 @@ void wxDataViewRenderer::SetAlignment(int align)
   m_alignment = align;
 }
 
+namespace
+{
+
+// get the browser control or NULL if anything went wrong (it's not supposed to
+// so we assert if it did)
+wxMacDataViewDataBrowserListViewControl *
+GetBrowserFromCol(wxDataViewColumn *col)
+{
+    wxCHECK_MSG( col, NULL, "should have a valid column" );
+
+    wxDataViewCtrl * const dvc = col->GetOwner();
+    wxCHECK_MSG( dvc, NULL, "column must be associated with the control" );
+
+    return static_cast<wxMacDataViewDataBrowserListViewControl *>(dvc->GetPeer());
+}
+
+} // anonymous namespace
+
 void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
 {
-  wxDataViewColumn* dataViewColumnPtr;
+    wxDataViewColumn * const col = GetOwner();
+    wxMacDataViewDataBrowserListViewControl * const
+        browser = GetBrowserFromCol(col);
+    wxCHECK_RET( browser, "must be fully initialized" );
 
+    const DataBrowserPropertyID colID = col->GetNativeData()->GetPropertyID();
 
-  m_mode = mode;
-  dataViewColumnPtr = GetOwner();
-  if (dataViewColumnPtr != NULL)
-  {
-    wxDataViewCtrl* dataViewCtrlPtr(dataViewColumnPtr->GetOwner());
+    DataBrowserPropertyFlags flags;
+    verify_noerr( browser->GetPropertyFlags(colID, &flags) );
 
-    if (dataViewCtrlPtr != NULL)
+    if ( (mode == wxDATAVIEW_CELL_EDITABLE) ||
+            (mode == wxDATAVIEW_CELL_ACTIVATABLE) )
+        flags |= kDataBrowserPropertyIsEditable;
+    else
+        flags &= ~kDataBrowserPropertyIsEditable;
+
+    verify_noerr( browser->SetPropertyFlags(colID, flags) );
+}
+
+void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
+{
+    wxDataViewColumn * const col = GetOwner();
+
+    wxMacDataViewDataBrowserListViewControl * const
+        browser = GetBrowserFromCol(col);
+    wxCHECK_RET( browser, "must be fully initialized" );
+
+    const DataBrowserPropertyID colID = col->GetNativeData()->GetPropertyID();
+
+    DataBrowserPropertyFlags flags;
+    browser->GetPropertyFlags(colID, &flags);
+
+    flags &= ~(kDataBrowserDoNotTruncateText |
+               kDataBrowserTruncateTextAtStart |
+               kDataBrowserTruncateTextMiddle |
+               kDataBrowserTruncateTextAtEnd);
+
+    int flagToSet = 0;
+    switch ( mode )
     {
-      wxMacDataViewDataBrowserListViewControlPointer macDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(dataViewCtrlPtr->GetPeer()));
+        case wxELLIPSIZE_NONE:
+            flagToSet = kDataBrowserDoNotTruncateText;
+            break;
 
-      if (macDataViewListCtrlPtr != NULL)
-      {
-        DataBrowserPropertyFlags flags;
+        case wxELLIPSIZE_START:
+            flagToSet = kDataBrowserTruncateTextAtStart;
+            break;
 
-        verify_noerr(macDataViewListCtrlPtr->GetPropertyFlags(dataViewColumnPtr->GetNativeData()->GetPropertyID(),&flags));
-        if ((mode == wxDATAVIEW_CELL_EDITABLE) ||
-            (mode == wxDATAVIEW_CELL_ACTIVATABLE))
-          flags |= kDataBrowserPropertyIsEditable;
-        else
-          flags &= ~kDataBrowserPropertyIsEditable;
-        verify_noerr(macDataViewListCtrlPtr->SetPropertyFlags(dataViewColumnPtr->GetNativeData()->GetPropertyID(),flags));
-      }
+        case wxELLIPSIZE_MIDDLE:
+            flagToSet = kDataBrowserTruncateTextMiddle;
+            break;
+
+        case wxELLIPSIZE_END:
+            flagToSet = kDataBrowserTruncateTextAtEnd;
+            break;
     }
-  }
+
+    wxCHECK_RET( flagToSet, "unknown wxEllipsizeMode value" );
+
+    flags |= flagToSet;
+    verify_noerr( browser->SetPropertyFlags(colID, flags) );
+}
+
+wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
+{
+    wxDataViewColumn * const col = GetOwner();
+
+    wxMacDataViewDataBrowserListViewControl * const
+        browser = GetBrowserFromCol(col);
+    wxCHECK_MSG( browser, wxELLIPSIZE_NONE, "must be fully initialized" );
+
+    const DataBrowserPropertyID colID = col->GetNativeData()->GetPropertyID();
+
+    DataBrowserPropertyFlags flags;
+    browser->GetPropertyFlags(colID, &flags);
+
+    if ( flags & kDataBrowserDoNotTruncateText )
+        return wxELLIPSIZE_NONE;
+    if ( flags & kDataBrowserTruncateTextAtStart )
+        return wxELLIPSIZE_START;
+    if ( flags & kDataBrowserTruncateTextMiddle )
+        return wxELLIPSIZE_MIDDLE;
+    if ( flags & kDataBrowserTruncateTextAtEnd )
+        return wxELLIPSIZE_END;
+
+    wxFAIL_MSG( "unknown flags" );
+
+    return wxELLIPSIZE_NONE;
 }
 
 void wxDataViewRenderer::SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr)

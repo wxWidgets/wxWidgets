@@ -1691,6 +1691,35 @@ int wxDataViewRenderer::GetAlignment() const
     return m_alignment;
 }
 
+void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
+{
+    if ( gtk_check_version(2, 6, 0) != NULL )
+        return;
+
+    // we use the same values in wxEllipsizeMode as PangoEllipsizeMode so we
+    // can just cast between them
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, PANGO_TYPE_ELLIPSIZE_MODE );
+    g_value_set_enum( &gvalue, static_cast<PangoEllipsizeMode>(mode) );
+    g_object_set_property( G_OBJECT(m_renderer), "ellipsize", &gvalue );
+    g_value_unset( &gvalue );
+}
+
+wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
+{
+    if ( gtk_check_version(2, 6, 0) != NULL )
+        return wxELLIPSIZE_NONE;
+
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, PANGO_TYPE_ELLIPSIZE_MODE );
+    g_object_get_property( G_OBJECT(m_renderer), "ellipsize", &gvalue );
+    wxEllipsizeMode
+        mode = static_cast<wxEllipsizeMode>(g_value_get_enum( &gvalue ));
+    g_value_unset( &gvalue );
+
+    return mode;
+}
+
 void
 wxDataViewRenderer::GtkOnTextEdited(const gchar *itempath, const wxString& str)
 {

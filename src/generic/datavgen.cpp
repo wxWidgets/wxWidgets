@@ -612,6 +612,7 @@ wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype,
     m_dc = NULL;
     m_align = align;
     m_mode = mode;
+    m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
 }
 
 wxDataViewRenderer::~wxDataViewRenderer()
@@ -752,7 +753,22 @@ wxDataViewCustomRenderer::RenderText(wxDC& dc,
     rectText.x += xoffset;
     rectText.width -= xoffset;
 
-    dc.DrawLabel(text, rectText, align);
+    // check if we want to ellipsize the text if it doesn't fit
+    wxString ellipsizedText;
+    if ( GetEllipsizeMode() != wxELLIPSIZE_NONE )
+    {
+        ellipsizedText = wxControl::Ellipsize
+                                    (
+                                        text,
+                                        dc,
+                                        GetEllipsizeMode(),
+                                        rect.width,
+                                        wxELLIPSIZE_FLAGS_NONE
+                                    );
+    }
+
+    dc.DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
+                 rectText, align);
 }
 
 // ---------------------------------------------------------

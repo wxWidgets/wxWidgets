@@ -47,6 +47,9 @@ enum wxEllipsizeFlags
 */
 enum wxEllipsizeMode
 {
+    /// Don't ellipsize the text at all. @since 2.9.1
+    wxELLIPSIZE_NONE,
+
     /// Put the ellipsis at the start of the string, if the string needs ellipsization.
     wxELLIPSIZE_START,
 

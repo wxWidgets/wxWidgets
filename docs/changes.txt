@@ -435,6 +435,7 @@ All (GUI):
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.
 - Fixed wxDataViewCtrl::Set{Foreground,Background}Colour().
+- Added wxDataViewRenderer::EnableEllipsize().
 - Improve wxTreeCtrl::ScrollTo() in generic version (Raanan Barzel).
 - Added wxFont::[Make]{Bold,Italic,Smaller,Larger} and Scale[d]() methods.
 - Added wxDC::CopyAttributes() and use it in wxBufferedDC.

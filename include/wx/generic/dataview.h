@@ -57,6 +57,11 @@ public:
     virtual void SetAlignment( int align );
     virtual int GetAlignment() const;
 
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE)
+        { m_ellipsizeMode = mode; }
+    virtual wxEllipsizeMode GetEllipsizeMode() const
+        { return m_ellipsizeMode; }
+
     virtual void SetMode( wxDataViewCellMode mode )
         { m_mode=mode; }
     virtual wxDataViewCellMode GetMode() const
@@ -109,6 +114,8 @@ private:
     wxDC                        *m_dc;
     int                          m_align;
     wxDataViewCellMode           m_mode;
+
+    wxEllipsizeMode m_ellipsizeMode;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
 };

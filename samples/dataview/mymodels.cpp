@@ -338,7 +338,8 @@ MyListModel::MyListModel() :
     static const unsigned NUMBER_REAL_ITEMS = 100;
 
     m_textColValues.reserve(NUMBER_REAL_ITEMS);
-    for (unsigned int i = 0; i < NUMBER_REAL_ITEMS; i++)
+    m_textColValues.push_back("first row with long label to test ellipsization");
+    for (unsigned int i = 1; i < NUMBER_REAL_ITEMS; i++)
     {
         m_textColValues.push_back(wxString::Format("real row %d", i));
     }

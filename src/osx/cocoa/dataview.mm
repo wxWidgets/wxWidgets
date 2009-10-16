@@ -159,13 +159,19 @@ static NSTableColumn* CreateNativeColumn(wxDataViewColumn const* columnPtr)
    // setting the visibility:
     [nativeColumn setHidden:static_cast<BOOL>(columnPtr->IsHidden())];
 #endif
+
+    wxDataViewRendererNativeData * const
+        renderData = columnPtr->GetRenderer()->GetNativeData();
+
    // setting the header:
     [[nativeColumn headerCell] setAlignment:ConvertToNativeHorizontalTextAlignment(columnPtr->GetAlignment())];
     [[nativeColumn headerCell] setStringValue:[[wxCFStringRef(columnPtr->GetTitle()).AsNSString() retain] autorelease]];
+    renderData->ApplyLineBreakMode([nativeColumn headerCell]);
+
    // setting data cell's properties:
     [[nativeColumn dataCell] setWraps:NO];
    // setting the default data cell:
-    [nativeColumn setDataCell:columnPtr->GetRenderer()->GetNativeData()->GetColumnCell()];
+    [nativeColumn setDataCell:renderData->GetColumnCell()];
    // setting the editablility:
     bool const dataCellIsEditable = (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE);
 
@@ -1026,7 +1032,6 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   if (self != nil)
   {
    // initializing the text part:
-    [self setLineBreakMode:NSLineBreakByTruncatingMiddle];
     [self setSelectable:YES];
    // initializing the image part:
     image       = nil;
@@ -1565,6 +1570,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 
     if ( colText )
         [cell setTextColor:colText];
+
 
     data->SetColumnPtr(tableColumn);
     data->SetItem(item);
@@ -2120,6 +2126,47 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
   }
 }
 
+// ----------------------------------------------------------------------------
+// wxDataViewRendererNativeData
+// ----------------------------------------------------------------------------
+
+void wxDataViewRendererNativeData::Init()
+{
+    m_origFont = NULL;
+    m_origTextColour = NULL;
+    m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
+
+    if ( m_ColumnCell )
+        ApplyLineBreakMode(m_ColumnCell);
+}
+
+void wxDataViewRendererNativeData::ApplyLineBreakMode(NSCell *cell)
+{
+    NSLineBreakMode nsMode = NSLineBreakByWordWrapping;
+    switch ( m_ellipsizeMode )
+    {
+        case wxELLIPSIZE_NONE:
+            nsMode = NSLineBreakByClipping;
+            break;
+
+        case wxELLIPSIZE_START:
+            nsMode = NSLineBreakByTruncatingHead;
+            break;
+
+        case wxELLIPSIZE_MIDDLE:
+            nsMode = NSLineBreakByTruncatingMiddle;
+            break;
+
+        case wxELLIPSIZE_END:
+            nsMode = NSLineBreakByTruncatingTail;
+            break;
+    }
+
+    wxASSERT_MSG( nsMode != NSLineBreakByWordWrapping, "unknown wxEllipsizeMode" );
+
+    [cell setLineBreakMode: nsMode];
+}
+
 // ---------------------------------------------------------
 // wxDataViewRenderer
 // ---------------------------------------------------------
@@ -2152,6 +2199,22 @@ void wxDataViewRenderer::SetNativeData(wxDataViewRendererNativeData* newNativeDa
   m_NativeDataPtr = newNativeDataPtr;
 }
 
+void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
+{
+    // we need to store this value to apply it to the columns headerCell in
+    // CreateNativeColumn()
+    GetNativeData()->SetEllipsizeMode(mode);
+
+    // but we may already apply it to the column cell which will be used for
+    // this column
+    GetNativeData()->ApplyLineBreakMode(GetNativeData()->GetColumnCell());
+}
+
+wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
+{
+    return GetNativeData()->GetEllipsizeMode();
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 
 // ---------------------------------------------------------
@@ -2182,7 +2245,6 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(wxString const& varianttype, wxDa
 
   cell = [[NSTextFieldCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
-  [cell setLineBreakMode:NSLineBreakByTruncatingMiddle];
   SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
 }
@@ -2285,7 +2347,6 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(wxString const& varianttype, wxDa
   [dateFormatter setDateStyle:NSDateFormatterShortStyle];
   cell = [[NSTextFieldCell alloc] init];
   [cell setFormatter:dateFormatter];
-  [cell setLineBreakMode:NSLineBreakByTruncatingMiddle];
   SetNativeData(new wxDataViewRendererNativeData(cell,[NSDate dateWithString:@"2000-12-30 20:00:00 +0000"]));
   [cell          release];
   [dateFormatter release];

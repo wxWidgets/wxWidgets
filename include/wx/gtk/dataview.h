@@ -38,6 +38,8 @@ public:
     virtual void SetAlignment( int align );
     virtual int GetAlignment() const;
 
+    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE);
+    virtual wxEllipsizeMode GetEllipsizeMode() const;
 
     // GTK-specific implementation
     // ---------------------------
