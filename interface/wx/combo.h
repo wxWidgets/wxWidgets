@@ -304,10 +304,10 @@ struct wxComboCtrlFeatures
     @event{EVT_TEXT_ENTER(id, func)}
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combo control.
-    @event{EVT_COMBOX_DROPDOWN(id, func)}
+    @event{EVT_COMBOBOX_DROPDOWN(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
            when the popup window is shown (drops down).
-    @event{EVT_COMBOX_CLOSEUP(id, func)}
+    @event{EVT_COMBOBOX_CLOSEUP(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
            when the popup window of the combo control disappears (closes up).
            You should avoid adding or deleting items in this event.
