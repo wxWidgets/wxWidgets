@@ -130,6 +130,26 @@ private:
     }
 };
 
+// set bezel style depending on the wxBORDER_XXX flags specified by the style
+void SetBezelStyleFromBorderFlags(NSButton *v, long style)
+{
+    if ( style & wxBORDER_NONE )
+    {
+        [v setBezelStyle:NSShadowlessSquareBezelStyle];
+        [v setBordered:NO];
+    }
+    else // we do have a border
+    {
+        // see trac #11128 for a thorough discussion
+        if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
+            [v setBezelStyle:NSRegularSquareBezelStyle];
+        else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
+            [v setBezelStyle:NSSmallSquareBezelStyle];
+        else
+            [v setBezelStyle:NSShadowlessSquareBezelStyle];
+    }
+}
+
 } // anonymous namespace
 
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
@@ -167,8 +187,8 @@ void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
 
 void wxWidgetCocoaImpl::PerformClick()
 {
-    if ([m_osxView isKindOfClass:[NSControl class]]) 
-        [(NSControl*)m_osxView performClick:nil]; 
+    if ([m_osxView isKindOfClass:[NSControl class]])
+        [(NSControl*)m_osxView performClick:nil];
 }
 
 #if wxUSE_BMPBUTTON
@@ -184,33 +204,18 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
-    
-    // trying to get as close as possible to flags
-    if ( style & wxBORDER_NONE )
-    {
-        [v setBezelStyle:NSShadowlessSquareBezelStyle];
-        [v setBordered:NO]; 
-    }
-    else
-    {
-        // see trac #11128 for a thorough discussion
-        if ( (style & wxBORDER_MASK) == wxBORDER_RAISED )
-            [v setBezelStyle:NSRegularSquareBezelStyle];
-        else if ( (style & wxBORDER_MASK) == wxBORDER_SUNKEN )
-            [v setBezelStyle:NSSmallSquareBezelStyle];
-        else
-            [v setBezelStyle:NSShadowlessSquareBezelStyle];
-    }
-    
+
+    SetBezelStyleFromBorderFlags(v, style);
+
     if (bitmap.Ok())
         [v setImage:bitmap.GetNSImage() ];
-    
+
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxButtonCocoaImpl( wxpeer, v );
     return c;
 }
 
-#endif
+#endif // wxUSE_BMPBUTTON
 
 //
 // wxDisclosureButton implementation
@@ -262,7 +267,6 @@ static const char * disc_triangle_xpm[] = {
 - (id) initWithFrame:(NSRect) frame
 {
     self = [super initWithFrame:frame];
-    [self setBezelStyle:NSSmallSquareBezelStyle];
     isOpen = NO;
     [self setImagePosition:NSImageLeft];
     [self updateImage];
@@ -348,16 +352,19 @@ public :
 
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
-                                    wxWindowID WXUNUSED(id),
+                                    wxWindowID WXUNUSED(winid),
                                     const wxString& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxDisclosureNSButton* v = [[wxDisclosureNSButton alloc] initWithFrame:r];
-    [v setTitle:wxCFStringRef( label).AsNSString()];
-    wxDisclosureTriangleCocoaImpl* c = new wxDisclosureTriangleCocoaImpl( wxpeer, v );
-    return c;
+    if ( !label.empty() )
+        [v setTitle:wxCFStringRef(label).AsNSString()];
+
+    SetBezelStyleFromBorderFlags(v, style);
+
+    return new wxDisclosureTriangleCocoaImpl( wxpeer, v );
 }

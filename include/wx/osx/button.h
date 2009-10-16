@@ -89,7 +89,7 @@ public:
              const wxString& label = wxEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
-             long style = 0,
+             long style = wxBORDER_NONE,
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxButtonNameStr)
     {
@@ -101,7 +101,7 @@ public:
                 const wxString& label = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = 0,
+                long style = wxBORDER_NONE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 

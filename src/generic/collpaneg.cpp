@@ -87,22 +87,22 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
     m_strLabel = label;
 
-#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
-    // on Mac we use the disclosure triangle
-    m_pStaticLine = NULL;
-    m_pButton = new wxDisclosureTriangle(this, wxID_ANY, GetBtnLabel(),
-                                         wxDefaultPosition, wxDefaultSize,
-                                         style & wxBORDER_MASK);
+    // sizer containing the expand button and possibly a static line
     m_sz = new wxBoxSizer(wxHORIZONTAL);
-    m_sz->Add(m_pButton, wxSizerFlags(1).Expand());
+
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
+    // on Mac we use the special disclosure triangle button
+    m_pStaticLine = NULL;
+    m_pButton = new wxDisclosureTriangle(this, wxID_ANY, GetBtnLabel());
+    m_sz->Add(m_pButton);
 #else
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
     m_pButton = new wxButton(this, wxID_ANY, GetBtnLabel(), wxPoint(0, 0),
                              wxDefaultSize, wxBU_EXACTFIT);
     m_pStaticLine = new wxStaticLine(this, wxID_ANY);
+
     // on other platforms we put the static line and the button horizontally
-    m_sz = new wxBoxSizer(wxHORIZONTAL);
     m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
     m_sz->Add(m_pStaticLine, 1, wxALIGN_CENTER|wxLEFT|wxRIGHT, GetBorder());
 #endif
