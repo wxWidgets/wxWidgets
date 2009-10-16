@@ -11,21 +11,33 @@
 */
 enum wxEllipsizeFlags
 {
-    /// With this flag when calculating the size of the passed string, mnemonics
-    /// characters (see wxControl::SetLabel) will be automatically reduced to a
-    /// single character.
-    /// This leads to correct calculations only if the string passed to Ellipsize()
-    /// will be used with wxControl::SetLabel. If you don't want ampersand to
-    /// be interpreted as mnemonics (e.g. because you use wxControl::SetLabelText)
-    /// then don't use this flag.
-    wxELLIPSIZE_PROCESS_MNEMONICS = 1,
+    /// No special flags.
+    wxELLIPSIZE_FLAGS_NONE = 0,
 
-    /// This flag tells wxControl::Ellipsize to calculate the width of tab
-    /// characters @c '\\t' as 6 spaces.
-    wxELLIPSIZE_EXPAND_TAB = 2,
+    /**
+        Take mnemonics into account when calculating the text width.
+
+        With this flag when calculating the size of the passed string,
+        mnemonics characters (see wxControl::SetLabel) will be automatically
+        reduced to a single character. This leads to correct calculations only
+        if the string passed to Ellipsize() will be used with
+        wxControl::SetLabel. If you don't want ampersand to be interpreted as
+        mnemonics (e.g. because you use wxControl::SetLabelText) then don't use
+        this flag.
+     */
+    wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS = 1,
+
+    /**
+        Expand tabs in spaces when calculating the text width.
+
+        This flag tells wxControl::Ellipsize() to calculate the width of tab
+        characters @c '\\t' as 6 spaces.
+     */
+    wxELLIPSIZE_FLAGS_EXPAND_TABS = 2,
 
     /// The default flags for wxControl::Ellipsize.
-    wxELLIPSIZE_DEFAULT_FLAGS = wxELLIPSIZE_PROCESS_MNEMONICS|wxELLIPSIZE_EXPAND_TAB
+    wxELLIPSIZE_FLAGS_DEFAULT = wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS|
+                                wxELLIPSIZE_FLAGS_EXPAND_TABS
 };
 
 
@@ -96,7 +108,7 @@ public:
     */
     static wxString Ellipsize(const wxString& label, const wxDC& dc,
                               wxEllipsizeMode mode, int maxWidth,
-                              int flags = wxELLIPSIZE_DEFAULT_FLAGS);
+                              int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 
     /**
         Returns the control's text.

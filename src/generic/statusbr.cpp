@@ -248,7 +248,7 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
         text = wxControl::Ellipsize(text, dc,
                                     ellmode,
                                     maxWidth,
-                                    wxELLIPSIZE_EXPAND_TAB);
+                                    wxELLIPSIZE_FLAGS_EXPAND_TABS);
             // Ellipsize() will do something only if necessary
 
         // update the ellipsization status for this pane; this is used later to

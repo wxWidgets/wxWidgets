@@ -412,7 +412,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
             }
         }
         // we need to remove mnemonics from the label for correct calculations
-        else if ( *pc == wxS('&') && (flags & wxELLIPSIZE_PROCESS_MNEMONICS) != 0 )
+        else if ( *pc == wxS('&') && (flags & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS) )
         {
             // pc+1 is safe: at worst we'll be at end()
             wxString::const_iterator next = pc + 1;
@@ -421,7 +421,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
             //else: remove this ampersand
         }
         // we need also to expand tabs to properly calc their size
-        else if ( *pc == wxS('\t') && (flags & wxELLIPSIZE_EXPAND_TAB) != 0 )
+        else if ( *pc == wxS('\t') && (flags & wxELLIPSIZE_FLAGS_EXPAND_TABS) )
         {
             // Windows natively expands the TABs to 6 spaces. Do the same:
             curLine += wxS("      ");

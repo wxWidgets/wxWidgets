@@ -316,7 +316,7 @@ void wxStatusBar::DoUpdateStatusText(int nField)
                                      *m_pDC,
                                      ellmode,
                                      maxWidth,
-                                     wxELLIPSIZE_EXPAND_TAB);
+                                     wxELLIPSIZE_FLAGS_EXPAND_TABS);
 
         // update the ellipsization status for this pane; this is used later to
         // decide whether a tooltip should be shown or not for this pane

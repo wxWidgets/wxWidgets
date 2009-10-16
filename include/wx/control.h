@@ -31,10 +31,12 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 
 enum wxEllipsizeFlags
 {
-    wxELLIPSIZE_PROCESS_MNEMONICS = 1,
-    wxELLIPSIZE_EXPAND_TAB = 2,
+    wxELLIPSIZE_FLAGS_NONE = 0,
+    wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS = 1,
+    wxELLIPSIZE_FLAGS_EXPAND_TABS = 2,
 
-    wxELLIPSIZE_DEFAULT_FLAGS = wxELLIPSIZE_PROCESS_MNEMONICS|wxELLIPSIZE_EXPAND_TAB
+    wxELLIPSIZE_FLAGS_DEFAULT = wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS |
+                                wxELLIPSIZE_FLAGS_EXPAND_TABS
 };
 
 enum wxEllipsizeMode
@@ -115,7 +117,7 @@ public:
     // replaces parts of the (multiline) string with ellipsis if needed
     static wxString Ellipsize(const wxString& label, const wxDC& dc,
                               wxEllipsizeMode mode, int maxWidth,
-                              int flags = wxELLIPSIZE_DEFAULT_FLAGS);
+                              int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 
     // get the string without mnemonic characters ('&')
     static wxString GetLabelText(const wxString& label);
