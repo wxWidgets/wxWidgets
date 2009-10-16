@@ -795,7 +795,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     // create the list ctrl now
     m_listctrl = new wxListCtrl(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxSUNKEN_BORDER |
+                                wxBORDER_SIMPLE |
                                 wxLC_REPORT |
                                 wxLC_NO_HEADER |
                                 wxLC_SINGLE_SEL);
