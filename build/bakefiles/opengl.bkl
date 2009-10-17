@@ -28,6 +28,7 @@
         <depends>coredll</depends>
         <!-- link against the wxWin library in monolithic build: -->
         <sys-lib>$(WXLIB_MONO)</sys-lib>
+        <depends>monodll</depends>
 
         <ldlibs>$(EXTRALIBS_OPENGL)</ldlibs>
     </dll>
