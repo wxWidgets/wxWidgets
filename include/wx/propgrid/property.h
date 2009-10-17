@@ -162,6 +162,31 @@ public:
 };
 
 
+/**
+    @class wxPGDefaultRenderer
+
+    Default cell renderer, that can handles the common
+    scenarios.
+*/
+class WXDLLIMPEXP_PROPGRID wxPGDefaultRenderer : public wxPGCellRenderer
+{
+public:
+    virtual void Render( wxDC& dc,
+                         const wxRect& rect,
+                         const wxPropertyGrid* propertyGrid,
+                         wxPGProperty* property,
+                         int column,
+                         int item,
+                         int flags ) const;
+
+    virtual wxSize GetImageSize( const wxPGProperty* property,
+                                 int column,
+                                 int item ) const;
+
+protected:
+};
+
+
 class WXDLLIMPEXP_PROPGRID wxPGCellData : public wxObjectRefData
 {
     friend class wxPGCell;
@@ -190,6 +215,8 @@ protected:
     // True if m_text is valid and specified
     bool        m_hasValidText;
 };
+
+#endif  // !SWIG
 
 /**
     @class wxPGCell
@@ -272,38 +299,16 @@ public:
         return *this;
     }
 
-protected:
+private:
     virtual wxObjectRefData *CreateRefData() const
         { return new wxPGCellData(); }
 
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 };
 
-
-/** @class wxPGDefaultRenderer
-
-    Default cell renderer, that can handles the common
-    scenarios.
-*/
-class WXDLLIMPEXP_PROPGRID wxPGDefaultRenderer : public wxPGCellRenderer
-{
-public:
-    virtual void Render( wxDC& dc,
-                         const wxRect& rect,
-                         const wxPropertyGrid* propertyGrid,
-                         wxPGProperty* property,
-                         int column,
-                         int item,
-                         int flags ) const;
-
-    virtual wxSize GetImageSize( const wxPGProperty* property,
-                                 int column,
-                                 int item ) const;
-
-protected:
-};
-
 // -----------------------------------------------------------------------
+
+#ifndef SWIG
 
 /** @class wxPGAttributeStorage
 
