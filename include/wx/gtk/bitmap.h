@@ -17,7 +17,7 @@ class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 // wxMask
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxMask: public wxObject
+class WXDLLIMPEXP_CORE wxMask: public wxMaskBase
 {
 public:
     wxMask();
@@ -28,18 +28,15 @@ public:
     wxMask( const wxBitmap& bitmap );
     virtual ~wxMask();
 
-    bool Create( const wxBitmap& bitmap, const wxColour& colour );
-#if wxUSE_PALETTE
-    bool Create( const wxBitmap& bitmap, int paletteIndex );
-#endif // wxUSE_PALETTE
-    bool Create( const wxBitmap& bitmap );
-
     // implementation
     GdkBitmap   *m_bitmap;
-
     GdkBitmap *GetBitmap() const;
 
-private:
+protected:
+    virtual void FreeData();
+    virtual bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour);
+    virtual bool InitFromMonoBitmap(const wxBitmap& bitmap);
+
     DECLARE_DYNAMIC_CLASS(wxMask)
 };
 

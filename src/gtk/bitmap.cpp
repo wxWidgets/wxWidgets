@@ -37,7 +37,7 @@ extern GtkWidget *wxGetRootWindow();
 // wxMask
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxMask, wxMaskBase)
 
 wxMask::wxMask()
 {
@@ -47,7 +47,7 @@ wxMask::wxMask()
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
     m_bitmap = NULL;
-    Create( bitmap, colour );
+    InitFromColour(bitmap, colour);
 }
 
 #if wxUSE_PALETTE
@@ -61,7 +61,7 @@ wxMask::wxMask( const wxBitmap& bitmap, int paletteIndex )
 wxMask::wxMask( const wxBitmap& bitmap )
 {
     m_bitmap = NULL;
-    Create( bitmap );
+    InitFromMonoBitmap(bitmap);
 }
 
 wxMask::~wxMask()
@@ -70,15 +70,17 @@ wxMask::~wxMask()
         g_object_unref (m_bitmap);
 }
 
-bool wxMask::Create( const wxBitmap& bitmap,
-                     const wxColour& colour )
+void wxMask::FreeData()
 {
     if (m_bitmap)
     {
         g_object_unref (m_bitmap);
         m_bitmap = NULL;
     }
+}
 
+bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
+{
     const int w = bitmap.GetWidth();
     const int h = bitmap.GetHeight();
 
@@ -136,28 +138,8 @@ bool wxMask::Create( const wxBitmap& bitmap,
     return true;
 }
 
-#if wxUSE_PALETTE
-bool wxMask::Create( const wxBitmap& bitmap, int paletteIndex )
+bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
-    unsigned char r,g,b;
-    wxPalette *pal = bitmap.GetPalette();
-
-    wxCHECK_MSG( pal, false, wxT("Cannot create mask from bitmap without palette") );
-
-    pal->GetRGB(paletteIndex, &r, &g, &b);
-
-    return Create(bitmap, wxColour(r, g, b));
-}
-#endif // wxUSE_PALETTE
-
-bool wxMask::Create( const wxBitmap& bitmap )
-{
-    if (m_bitmap)
-    {
-        g_object_unref (m_bitmap);
-        m_bitmap = NULL;
-    }
-
     if (!bitmap.IsOk()) return false;
 
     wxCHECK_MSG( bitmap.GetDepth() == 1, false, wxT("Cannot create mask from colour bitmap") );
