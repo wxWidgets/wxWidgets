@@ -1338,7 +1338,9 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   self = [super init];
   if (self != nil)
   {
-    isEditingCell = NO;
+    currentlyEditedColumn =
+    currentlyEditedRow = -1;
+
     [self registerForDraggedTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil]];
     [self setDelegate:self];
     [self setDoubleAction:@selector(actionDoubleClick:)];
@@ -1644,21 +1646,26 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
  // informed about a change of data):
   [super textDidBeginEditing:notification];
 
-  wxDataViewColumn* const dataViewColumnPtr = reinterpret_cast<wxDataViewColumn*>([[[[self tableColumns] objectAtIndex:[self editedColumn]] identifier] pointer]);
+  // remember the column being edited, it will be used in textDidEndEditing:
+  currentlyEditedColumn = [self editedColumn];
+  currentlyEditedRow = [self editedRow];
+
+  wxDataViewColumn* const dataViewColumnPtr =
+      static_cast<wxDataViewColumn*>(
+        [[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
 
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
 
 
  // stop editing of a custom item first (if necessary)
   dataViewCtrlPtr->FinishCustomItemEditing();
- // set the flag that currently a cell is being edited (see also textDidEndEditing:):
-  isEditingCell = YES;
 
  // now, send the event:
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dataViewCtrlPtr->GetId()); // variable definition
 
   dataViewEvent.SetEventObject(dataViewCtrlPtr);
-  dataViewEvent.SetItem(wxDataViewItem([((wxPointerObject*) [self itemAtRow:[self editedRow]]) pointer]));
+  dataViewEvent.SetItem(
+        wxDataViewItem([((wxPointerObject*) [self itemAtRow:currentlyEditedRow]) pointer]));
   dataViewEvent.SetColumn(dataViewCtrlPtr->GetColumnPosition(dataViewColumnPtr));
   dataViewEvent.SetDataViewColumn(dataViewColumnPtr);
   dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
@@ -1674,10 +1681,12 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
  // editing session has been sent (see Documentation for NSControl controlTextDidEndEditing:); this is not expected by a user
  // of the wxWidgets library and therefore an wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event is only sent if a corresponding
  // wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has been sent before; to check if a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED
- // has been sent the flag isEditingCell is used:
-  if (isEditingCell == YES)
+ // has been sent the last edited column/row are valid:
+  if ( currentlyEditedColumn != -1 && currentlyEditedRow != -1 )
   {
-    wxDataViewColumn* const dataViewColumnPtr = reinterpret_cast<wxDataViewColumn*>([[[[self tableColumns] objectAtIndex:[self editedColumn]] identifier] pointer]);
+    wxDataViewColumn* const dataViewColumnPtr =
+        static_cast<wxDataViewColumn*>(
+            [[[[self tableColumns] objectAtIndex:currentlyEditedColumn] identifier] pointer]);
 
     wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
 
@@ -1685,12 +1694,16 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
     wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
 
     dataViewEvent.SetEventObject(dataViewCtrlPtr);
-    dataViewEvent.SetItem(wxDataViewItem([((wxPointerObject*) [self itemAtRow:[self editedRow]]) pointer]));
+    dataViewEvent.SetItem(
+        wxDataViewItem([((wxPointerObject*) [self itemAtRow:currentlyEditedRow]) pointer]));
     dataViewEvent.SetColumn(dataViewCtrlPtr->GetColumnPosition(dataViewColumnPtr));
     dataViewEvent.SetDataViewColumn(dataViewColumnPtr);
     dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-   // set flag to the inactive state:
-    isEditingCell = NO;
+
+
+    // we're not editing any more
+    currentlyEditedColumn =
+    currentlyEditedRow = -1;
   }
 }
 

@@ -418,7 +418,9 @@ private:
 @interface wxCocoaOutlineView : NSOutlineView
 {
 @private
-  BOOL isEditingCell; // flag indicating if a cell is currently being edited
+  // column and row of the cell being edited or -1 if none
+  int currentlyEditedColumn,
+      currentlyEditedRow;
 
   wxCocoaDataViewControl* implementation;
 }
