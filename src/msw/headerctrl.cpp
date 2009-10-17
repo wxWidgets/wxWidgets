@@ -657,22 +657,24 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( order != -1 )
             event.SetNewOrder(order);
 
-        if ( GetEventHandler()->ProcessEvent(event) )
-        {
-            if ( event.IsAllowed() )
-                return true;    // skip default message handling below
+        const bool processed = GetEventHandler()->ProcessEvent(event);
 
-            // we need to veto the default handling of this message, don't
-            // return to execute the code in the "if veto" branch below
+        if ( processed && !event.IsAllowed() )
             veto = true;
-        }
-        else // not processed
+
+        if ( !veto )
         {
             // special post-processing for HDN_ENDDRAG: we need to update the
             // internal column indices array if this is allowed to go ahead as
             // the native control is going to reorder its columns now
             if ( evtType == wxEVT_COMMAND_HEADER_END_REORDER )
                 MoveColumnInOrderArray(m_colIndices, idx, order);
+
+            if ( processed )
+            {
+                // skip default processing below
+                return true;
+            }
         }
     }
 
