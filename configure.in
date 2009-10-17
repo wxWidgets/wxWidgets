@@ -2737,6 +2737,11 @@ if test "$USE_WIN32" = 1 ; then
 	x86_64-*-mingw32* )
             dnl --- For mingw-w64 lctl3d32's name has changed
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
+
+            dnl we need to define this to embed the manifest for correct
+            dnl platform from wx/msw/wx.rc (this is not needed for x86 which is
+            dnl the default in wx/msw/rcdefs.h)
+            WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
         * )
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
@@ -7845,7 +7850,7 @@ if test "$wxUSE_MSW" = 1 ; then
         AC_MSG_ERROR([Required windres program not found])
     fi
 
-    RESCOMP="$WINDRES"
+    RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
 fi
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then

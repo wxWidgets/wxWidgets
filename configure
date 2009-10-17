@@ -28363,6 +28363,8 @@ fi
             case "${host}" in
 	x86_64-*-mingw32* )
                         LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
+
+                                                WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
         * )
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
@@ -50931,7 +50933,7 @@ echo "$as_me: error: Required windres program not found" >&2;}
    { (exit 1); exit 1; }; }
     fi
 
-    RESCOMP="$WINDRES"
+    RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
 fi
 
 if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
