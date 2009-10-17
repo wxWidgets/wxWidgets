@@ -82,6 +82,14 @@ public:
 
   void SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr);
 
+
+#if wxOSX_USE_COCOA
+  // called when a value was edited by user
+  virtual void OSXOnCellChanged(const wxVariant& value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
+
 private:
 //
 // variables
@@ -271,6 +279,13 @@ public:
 // inherited functions from wxDataViewRenderer
 //
   virtual bool MacRender();
+
+#if wxOSX_USE_COCOA
+  // called when a value was edited by user
+  virtual void OSXOnCellChanged(const wxVariant& value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
 
 protected:
 private:

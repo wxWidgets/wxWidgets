@@ -516,47 +516,31 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewItem dataViewItem([((wxPointerObject*) item) pointer]);
 
+    wxVariant value;
+    if ( [object isKindOfClass:[NSString class]] )
+        value = wxCFStringRef([((NSString*) object) retain]).AsString();
+    else if ( [object isKindOfClass:[NSNumber class]] )
+        value = (long)[((NSNumber *)object) intValue];
+    else if ( [object isKindOfClass:[NSDate class]] )
+    {
+        // get the number of seconds since 1970-01-01 UTC and this is the only
+        // way to convert a double to a wxLongLong
+        const wxLongLong seconds = [((NSDate*) object) timeIntervalSince1970];
 
-    if (((dynamic_cast<wxDataViewTextRenderer*>(col->GetRenderer()) != NULL) || (dynamic_cast<wxDataViewIconTextRenderer*>(col->GetRenderer()) != NULL)) &&
-            ([object isKindOfClass:[NSString class]] == YES))
-    {
-        model->SetValue(wxVariant(wxCFStringRef([((NSString*) object) retain]).AsString()),dataViewItem,col->GetModelColumn()); // the string has to be retained before being passed to wxCFStringRef
-        model->ValueChanged(dataViewItem,col->GetModelColumn());
-    }
-    else if (dynamic_cast<wxDataViewChoiceRenderer*>(col->GetRenderer()) != NULL)
-    {
-        if ([object isKindOfClass:[NSNumber class]] == YES)
-        {
-            model->SetValue(wxVariant(dynamic_cast<wxDataViewChoiceRenderer*>(col->GetRenderer())->GetChoice([((NSNumber*) object) intValue])),
-                    dataViewItem,col->GetModelColumn());
-            model->ValueChanged(dataViewItem,col->GetModelColumn());
-        }
-        else if ([object isKindOfClass:[NSString class]] == YES) // do not know if this case can occur but initializing using strings works
-        {
-            model->SetValue(wxVariant(wxCFStringRef((NSString*) object).AsString()),dataViewItem,col->GetModelColumn());
-            model->ValueChanged(dataViewItem,col->GetModelColumn());
-        }
-    }
-    else if ((dynamic_cast<wxDataViewDateRenderer*>(col->GetRenderer()) != NULL) && ([object isKindOfClass:[NSDate class]] == YES))
-    {
-        wxDateTime wxDateTimeValue(1,wxDateTime::Jan,1970);
+        wxDateTime dt(1, wxDateTime::Jan, 1970);
+        dt.Add(wxTimeSpan(0,0,seconds));
 
-        wxLongLong seconds;
+        // the user has entered a date in the local timezone but seconds
+        // contains the number of seconds from date in the local timezone
+        // since 1970-01-01 UTC; therefore, the timezone information has to be
+        // transferred to wxWidgets, too:
+        dt.MakeFromTimezone(wxDateTime::UTC);
 
-        seconds.Assign([((NSDate*) object) timeIntervalSince1970]); // get the number of seconds since 1970-01-01 UTC and this is
-        // the only way to convert a double to a wxLongLong
-        // the user has entered a date in the local timezone but seconds contains the number of seconds from date in the local timezone since 1970-01-01 UTC;
-        // therefore, the timezone information has to be transferred to wxWidgets, too:
-        wxDateTimeValue.Add(wxTimeSpan(0,0,seconds));
-        wxDateTimeValue.MakeFromTimezone(wxDateTime::UTC);
-        model->SetValue(wxVariant(wxDateTimeValue),dataViewItem,col->GetModelColumn());
-        model->ValueChanged(dataViewItem,col->GetModelColumn());
+        value = dt;
     }
-    else if ((dynamic_cast<wxDataViewToggleRenderer*>(col->GetRenderer()) != NULL) && ([object isKindOfClass:[NSNumber class]] == YES))
-    {
-        model->SetValue(wxVariant((bool) [((NSNumber*) object) boolValue]),dataViewItem,col->GetModelColumn());
-        model->ValueChanged(dataViewItem,col->GetModelColumn());
-    }
+
+    col->GetRenderer()->
+        OSXOnCellChanged(value, dataViewItem, col->GetModelColumn());
 }
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
@@ -2196,8 +2180,14 @@ void wxDataViewRendererNativeData::ApplyLineBreakMode(NSCell *cell)
 // ---------------------------------------------------------
 // wxDataViewRenderer
 // ---------------------------------------------------------
-    wxDataViewRenderer::wxDataViewRenderer(const wxString& varianttype, wxDataViewCellMode mode, int align)
-:wxDataViewRendererBase(varianttype,mode,align), m_alignment(align), m_mode(mode), m_NativeDataPtr(NULL)
+
+wxDataViewRenderer::wxDataViewRenderer(const wxString& varianttype,
+                                       wxDataViewCellMode mode,
+                                       int align)
+    : wxDataViewRendererBase(varianttype, mode, align),
+      m_alignment(align),
+      m_mode(mode),
+      m_NativeDataPtr(NULL)
 {
 }
 
@@ -2239,6 +2229,15 @@ void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
 wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
 {
     return GetNativeData()->GetEllipsizeMode();
+}
+
+void wxDataViewRenderer::OSXOnCellChanged(const wxVariant& value,
+                                          const wxDataViewItem& item,
+                                          unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->SetValue(value, item, col);
+    model->ValueChanged(item, col);
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
@@ -2475,6 +2474,20 @@ bool wxDataViewIconTextRenderer::MacRender()
         wxFAIL_MSG(wxString("Icon & text renderer cannot render value because of wrong value type; value type: ") << GetValue().GetType());
         return false;
     }
+}
+
+void
+wxDataViewIconTextRenderer::OSXOnCellChanged(const wxVariant& value,
+                                             const wxDataViewItem& item,
+                                             unsigned col)
+{
+    // we receive just the text (because it's the only component which can be
+    // edited by user) from the native control but we need wxDataViewIconText
+    // for the model, so construct it here
+    wxVariant valueIconText;
+    valueIconText << wxDataViewIconText(value.GetString());
+
+    wxDataViewRenderer::OSXOnCellChanged(valueIconText, item, col);
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
