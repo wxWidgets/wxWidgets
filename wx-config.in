@@ -46,7 +46,7 @@ usage()
  wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--release] [--version-full]
            [--list] [--selected-config] [--host=HOST] [--toolkit=TOOLKIT]
            [--universal[=yes|no]] [--unicode[=yes|no]] [--static[=yes|no]]
-           [--version[=VERSION]] [--basename] [--cc] [--cxx]
+           [--debug[=yes|no]] [--version[=VERSION]] [--basename] [--cc] [--cxx]
            [--cppflags [base]] [--cxxflags [base]] [--cflags]
            [--rescomp] [--linkdeps] [--ld] [--utility=UTIL]
            [--libs [LIBS...]] [--optional-libs [LIBS...]]
@@ -55,7 +55,11 @@ usage()
   your system.  It may be used to retrieve the information required to build
   applications using these libraries using --cppflags, --cxxflags, --cflags,
   and --libs options. And you may query the properties of this configuration
-  using --query-{host,toolkit,widgetset,chartype,version,linkage}.
+  using --query-{host,toolkit,widgetset,chartype,debugtype,version,linkage}.
+
+    NOTE:    Usage of --debug and --query-debugtype are only relevant if you
+  have any  versions prior to 2.9 installed  and use the --version option to
+  select an earlier version.
 
     If multiple builds of wxWidgets  are available,  you can use the options
   --prefix, --host, --toolkit, --unicode, --static, --universal or --version
@@ -114,7 +118,7 @@ EGREP="@EGREP@"
 # configs to this one.  Options earlier in the list should be more crucial
 # to match well than those that follow.  Options specified by the user will
 # always take precedence and are not subject to any partial ordering here.
-wxconfig_schema="host toolkit widgetset chartype flavour version linkage"
+wxconfig_schema="host toolkit widgetset chartype debugtype flavour version linkage"
 
 # Options that are expected to generate some output.
 wxconfig_output_options="prefix exec_prefix
@@ -322,6 +326,7 @@ done
 check_yesno_option universal widgetset univ
 check_yesno_option unicode chartype unicode ansi
 check_yesno_option static linkage static
+check_yesno_option debug debugtype debug release
 
 # Dump everything we just read in debug mode.
 if [ -n "$WXDEBUG" ]; then
@@ -364,7 +369,28 @@ fi
 get_mask()
 {
     [ $# -gt 0 ] || set m
-    eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+
+    case "$m_ourversion" in
+        2.9)
+            is29orlater=1
+            ;;
+        2.*)
+            # there is no 2.10 so currently everything else is <= 2.8
+            is29orlater=0
+            ;;
+        *)
+            # 3.x and later "is29orlater" too
+            is29orlater=1
+            ;;
+    esac
+
+    # use 2.8 or 2.9 version of the mask: the difference is the presence of
+    # debug type in pre-2.9
+    if [ $is29orlater == 1 ]; then
+        eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+    else
+        eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+    fi
 }
 
 # Returns true if this script is for a cross compiled config.
@@ -386,11 +412,10 @@ this_host="${target:+${target}}"
 this_toolkit="@TOOLKIT_DIR@@TOOLKIT_VERSION@"
 this_widgetset="@WIDGET_SET@"
 this_chartype="@WX_CHARTYPE@"
+this_debugtype="release"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
 this_linkage=`[ "x@SHARED@" = "x1" ] || echo 'static'`
-
-this_config=`get_mask this`
 
 
 # Extract the user specification from the options parsed.
@@ -399,10 +424,24 @@ m_host=${m_host:-$this_host}
 m_toolkit=${input_option_toolkit:-'[^-]+'}
 m_widgetset=${input_option_widgetset-'(univ)?'}
 m_chartype=${input_option_chartype:-'(unicode|ansi)'}
+m_debugtype=${input_option_debugtype:-'(debug|release)'}
 m_flavour=${input_option_flavour:+-$input_option_flavour}
 m_flavour=${m_flavour:-${input_option_flavour-'(-[^-]+)?'}}
 m_version=${input_option_version:-'[0-9]+\.[0-9]+'}
 m_linkage=${input_option_linkage-'?(static)?'}
+
+# Test whether or not --version has been specified
+#
+# This must be done after getting the input options so get_mask works correctly
+# since it is version-dependent
+
+if [ -z "$input_option_version" ]; then
+    m_ourversion="2.9"
+else
+    m_ourversion=$m_version
+fi
+
+this_config=`get_mask this`
 
 configmask="^`get_mask`$"
 
@@ -419,6 +458,7 @@ if [ -n "$WXDEBUG" ]; then
     decho "  m_toolkit    = '$m_toolkit'"
     decho "  m_widgetset  = '$m_widgetset'"
     decho "  m_chartype   = '$m_chartype'"
+    decho "  m_debugtype  = '$m_debugtype'"
     decho "  m_flavour    = '$m_flavour'"
     decho "  m_version    = '$m_version'"
     decho "  m_linkage    = '$m_linkage'"
