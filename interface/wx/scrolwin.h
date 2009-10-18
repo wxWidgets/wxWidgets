@@ -163,6 +163,11 @@ public:
         10) and so the call to CalcScrolledPosition(0, 10, xx, yy) will return
         0 in yy.
 
+        @beginWxPerlOnly
+        In wxPerl this method takes two parameters and returns a
+        2-element list (xx, yy).
+        @endWxPerlOnly
+
         @see CalcUnscrolledPosition()
     */
     void CalcScrolledPosition(int x, int y, int* xx, int* yy) const;
@@ -173,6 +178,11 @@ public:
         the origin are (0, 0) (as always), but the logical coordinates are (0,
         10) and so the call to CalcUnscrolledPosition(0, 0, xx, yy) will return
         10 in yy.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes two parameters and returns a
+        2-element list (xx, yy).
+        @endWxPerlOnly
 
         @see CalcScrolledPosition()
     */
@@ -283,6 +293,11 @@ public:
         @param yUnit
             Receives the number of pixels per vertical unit.
 
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a
+        2-element list (xUnit, yUnit).
+        @endWxPerlOnly
+
         @see SetScrollbars(), GetVirtualSize()
     */
     void GetScrollPixelsPerUnit(int* xUnit, int* yUnit) const;
@@ -303,6 +318,11 @@ public:
             The positions are in logical scroll units, not pixels, so to convert
             to pixels you will have to multiply by the number of pixels per scroll
             increment.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a
+        2-element list (x, y).
+        @endWxPerlOnly
 
         @see SetScrollbars(), Scroll()
     */
@@ -326,6 +346,11 @@ public:
 
         @remarks Use wxDC::DeviceToLogicalX() and wxDC::DeviceToLogicalY() to
                  translate these units to logical units.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a
+        2-element list (xUnit, yUnit).
+        @endWxPerlOnly
 
         @see SetScrollbars(), GetScrollPixelsPerUnit()
     */

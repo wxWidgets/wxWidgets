@@ -60,6 +60,11 @@ public:
         @param blue
             An array of blue values.
 
+        @beginWxPerlOnly
+        In wxPerl this method takes as parameters
+        3 array references (they must be of the same length).
+        @endWxPerlOnly
+
         @see Create()
     */
     wxPalette(int n, const unsigned char* red,
@@ -129,6 +134,11 @@ public:
             Receives the blue value.
 
         @return @true if the operation was successful.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes only the @a pixel parameter and
+        returns a 3-element list (or the empty list upon failure).
+        @endWxPerlOnly
 
         @see GetPixel()
     */

@@ -77,6 +77,13 @@ public:
         - GetData(): Returns a reference to the Python Object.
         - SetData(obj): Associates a new Python Object with the wxTreeItemData.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl the constructor accepts a scalar as an optional parameter
+        and stores it as client data; use
+        - GetData() to retrieve the value.
+        - SetData(data) to set it.
+        @endWxPerlOnly
     */
     wxTreeItemData();
 

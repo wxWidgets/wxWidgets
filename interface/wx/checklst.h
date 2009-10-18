@@ -62,6 +62,10 @@ public:
             Window validator.
         @param name
             Window name.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxCheckListBox(wxWindow* parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,
@@ -91,6 +95,10 @@ public:
             Window validator.
         @param name
             Window name.
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
     */
     wxCheckListBox(wxWindow* parent, wxWindowID id,
                    const wxPoint& pos,

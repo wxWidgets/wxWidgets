@@ -117,6 +117,10 @@ public:
         arguments are to a single argument, which is a list of strings.
         @endWxPythonOnly
 
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+
         @see Create(), wxValidator
     */
     wxComboBox(wxWindow* parent, wxWindowID id,
@@ -155,6 +159,10 @@ public:
         The wxComboBox constructor in wxPython reduces the @a n and @a choices
         arguments are to a single argument, which is a list of strings.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
 
         @see Create(), wxValidator
     */

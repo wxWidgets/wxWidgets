@@ -331,7 +331,7 @@ public:
 
     @beginWxPerlOnly
     In wxPerl, you need to derive your file system handler class
-    from Wx::PlFileSystemHandler.
+    from @c Wx::PlFileSystemHandler.
     @endWxPerlOnly
 
     @library{wxbase}

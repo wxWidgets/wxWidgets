@@ -278,6 +278,11 @@ enum wxLayoutDirection
 /**
     Encapsulates a ::wxLanguage indentifier together with OS-specific information
     related to that language.
+
+    @beginWxPerlOnly
+    In wxPerl @c Wx::LanguageInfo has only one method:
+    - Wx::LanguageInfo->new(language, canonicalName, WinLang, WinSubLang, Description)
+    @endWxPerlOnly
 */
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {

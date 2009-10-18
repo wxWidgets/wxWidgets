@@ -111,6 +111,10 @@ public:
             Bits for a mask bitmap.
 
         @onlyfor{wxgtk,wxmotif}
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Cursor->newData(bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0).
+        @endWxPerlOnly
     */
     wxCursor(const char bits[], int width, int height,
              int hotSpotX = -1, int hotSpotY = -1,

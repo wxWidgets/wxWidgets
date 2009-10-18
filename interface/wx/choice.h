@@ -73,6 +73,10 @@ public:
         arguments to a single argument, which is a list of strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -111,6 +115,10 @@ public:
         arguments to a single argument, which is a list of strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
     */
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos,

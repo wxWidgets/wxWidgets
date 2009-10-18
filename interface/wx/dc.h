@@ -347,6 +347,10 @@ public:
         The wxPython version of this method accepts a Python list of wxPoint
         objects.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     void DrawLines(int n, wxPoint points[], wxCoord xoffset = 0,
                    wxCoord yoffset = 0);
@@ -359,6 +363,12 @@ public:
         The wxPython version of this method accepts a Python list of wxPoint
         objects.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        The wxPerl version of this method accepts
+        as its first parameter a reference to an array
+        of wxPoint objects.
+        @endWxPerlOnly
     */
     void DrawLines(const wxPointList* points,
                    wxCoord xoffset = 0, wxCoord yoffset = 0);
@@ -379,6 +389,10 @@ public:
 
         The current pen is used for drawing the outline, and the current brush
         for filling the shape. Using a transparent brush suppresses filling.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
                      wxCoord yoffset = 0,
@@ -400,6 +414,12 @@ public:
         The wxPython version of this method accepts a Python list of wxPoint
         objects.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        The wxPerl version of this method accepts
+        as its first parameter a reference to an array
+        of wxPoint objects.
+        @endWxPerlOnly
     */
     void DrawPolygon(const wxPointList* points,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
@@ -480,16 +500,32 @@ public:
         The wxPython version of this method accepts a Python list of wxPoint
         objects.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     void DrawSpline(int n, wxPoint points[]);
 
     /**
         @overload
+
+
+        @beginWxPerlOnly
+        The wxPerl version of this method accepts
+        as its first parameter a reference to an array
+        of wxPoint objects.
+        @endWxPerlOnly
     */
     void DrawSpline(const wxPointList* points);
 
     /**
         @overload
+
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3);
@@ -669,6 +705,12 @@ public:
 
         @note This function works with both single-line and multi-line strings.
 
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as
+        GetMultiLineTextExtent(string, font = undef) returning a
+        3-element list (width, height, line_height)
+        @endWxPerlOnly
+
         @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
     */
     void GetMultiLineTextExtent(const wxString& string, wxCoord* w,
@@ -683,6 +725,10 @@ public:
         @return The text extent as a wxSize object.
 
         @note This function works with both single-line and multi-line strings.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
 
         @see wxFont, SetFont(), GetPartialTextExtents(), GetTextExtent()
     */
@@ -700,6 +746,11 @@ public:
         This method only takes the @a text parameter and returns a Python list
         of integers.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a text parameter and
+        returns the widths as a list of integers.
+        @endWxPerlOnly
 
         @see GetMultiLineTextExtent(), GetTextExtent()
     */
@@ -729,6 +780,12 @@ public:
             Returns a 4-tuple, (width, height, descent, externalLeading).
         @endWxPythonOnly
 
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetTextExtent(string,
+        font = undef) returning a 4-element list (width, height,
+        descent, externalLeading)
+        @endWxPerlOnly
+
         @see wxFont, SetFont(), GetPartialTextExtents(),
              GetMultiLineTextExtent()
     */
@@ -739,6 +796,11 @@ public:
 
     /**
         @overload
+
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxSize GetTextExtent(const wxString& string) const;
 
@@ -1203,6 +1265,13 @@ public:
         - GetSize() - Returns a wxSize.
         - GetSizeWH() - Returns a 2-tuple (width, height).
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl there are two methods instead of a single overloaded
+        method:
+        - GetSize(): returns a Wx::Size object.
+        - GetSizeWH(): returns a 2-element list (width, height).
+        @endWxPerlOnly
     */
     void GetSize(wxCoord* width, wxCoord* height) const;
 
@@ -1223,6 +1292,11 @@ public:
 
     /**
         Gets the current user scale factor.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and return a two
+        element array (x, y).
+        @endWxPerlOnly
 
         @see SetUserScale()
     */

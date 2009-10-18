@@ -53,6 +53,10 @@ public:
             the menu bar.
         @param style
             If wxMB_DOCKABLE the menu bar can be detached (wxGTK only).
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxMenuBar(size_t n, wxMenu* menus[], const wxString titles[],
               long style = 0);
@@ -124,6 +128,12 @@ public:
             If not @NULL, menu will get set to the associated menu.
 
         @return The found menu item object, or @NULL if one was not found.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes just the @a id parameter;
+        in scalar context it returns the associated @c Wx::MenuItem, in list
+        context it returns a 2-element list (item, submenu).
+        @endWxPerlOnly
     */
     virtual wxMenuItem* FindItem(int id, wxMenu* menu = NULL) const;
 

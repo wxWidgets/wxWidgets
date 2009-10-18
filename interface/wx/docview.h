@@ -60,6 +60,28 @@ public:
             - wxTEMPLATE_INVISIBLE     - The template may not be displayed to
                                          the user in dialogs.
             - wxDEFAULT_TEMPLATE_FLAGS - Defined as wxTEMPLATE_VISIBLE.
+
+        @beginWxPerlOnly
+
+        In wxPerl @a docClassInfo and @a viewClassInfo can be either
+        @c Wx::ClassInfo objects or strings containing the name of the
+        perl packages which are to be used as @c Wx::Document and
+        @c Wx::View classes (they must have a constructor named new);
+        as an example:
+
+        - Wx::DocTemplate->new(docmgr, descr, filter, dir, ext,
+          docTypeName, viewTypeName, docClassInfo, viewClassInfo,
+          flags): will construct document and view objects from the
+          class information.
+        - Wx::DocTemplate->new(docmgr, descr, filter, dir, ext,
+          docTypeName, viewTypeName, docClassName, viewClassName,
+          flags): will construct document and view objects from perl
+          packages.
+        - Wx::DocTemplate->new(docmgr, descr, filter, dir, ext,
+          docTypeName, viewTypeName):
+          in this case @c Wx::DocTemplate::CreateDocument() and
+          @c Wx::DocTemplate::CreateView() must be overridden
+        @endWxPerlOnly
     */
     wxDocTemplate(wxDocManager* manager, const wxString& descr,
                   const wxString& filter, const wxString& dir,
@@ -578,6 +600,16 @@ public:
         choice list is popped up, followed by a file selector.
 
         This function is used in CreateDocument().
+
+        @beginWxPerlOnly
+        In wxPerl @a templates is a reference to a list of templates.
+        If you override this method in your document manager it must
+        return two values, eg:
+
+        @code
+        (doctemplate, path) = My::DocManager->SelectDocumentPath(...);
+        @endcode
+        @endWxPerlOnly
     */
     virtual wxDocTemplate* SelectDocumentPath(wxDocTemplate** templates,
                                               int noTemplates, wxString& path,
@@ -597,6 +629,10 @@ public:
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
+
+        @beginWxPerlOnly
+        In wxPerl @a templates is a reference to a list of templates.
+        @endWxPerlOnly
     */
     virtual wxDocTemplate* SelectDocumentType(wxDocTemplate** templates,
                                               int noTemplates,
@@ -619,6 +655,10 @@ public:
             parameter indicates whether the list of templates that the user
             will have to choose from is sorted or not when shown the choice box
             dialog. Default is @false.
+
+        @beginWxPerlOnly
+        In wxPerl @a templates is a reference to a list of templates.
+        @endWxPerlOnly
     */
     virtual wxDocTemplate* SelectViewType(wxDocTemplate** templates,
                                           int noTemplates, bool sort = false);

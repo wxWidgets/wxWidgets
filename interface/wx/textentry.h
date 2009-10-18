@@ -198,6 +198,11 @@ public:
             The returned first position.
         @param to
             The returned last position.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a
+        2-element list (from, to).
+        @endWxPerlOnly
     */
     virtual void GetSelection(long* from, long* to) const;
 

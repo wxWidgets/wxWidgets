@@ -60,6 +60,10 @@ public:
         strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxMultiChoiceDialog(wxWindow* parent, const wxString& message,
                         const wxString& caption,
@@ -103,6 +107,10 @@ public:
         strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
     */
     wxMultiChoiceDialog(wxWindow* parent,
                         const wxString& message,
@@ -189,6 +197,10 @@ public:
         strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxSingleChoiceDialog(wxWindow* parent, const wxString& message,
                          const wxString& caption,
@@ -237,6 +249,10 @@ public:
         strings.
 
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
     */
     wxSingleChoiceDialog(wxWindow* parent,
                          const wxString& message,
@@ -287,6 +303,10 @@ public:
     selected string. If the user pressed cancel, -1 is returned.
 
     @header{wx/choicdlg.h}
+
+    @beginWxPerlOnly
+    Use an array reference for the @a aChoices parameter.
+    @endWxPerlOnly
 */
 int wxGetSingleChoiceIndex(const wxString& message,
                            const wxString& caption,
@@ -328,6 +348,10 @@ int wxGetSingleChoiceIndex(const wxString& message,
     characters) is centred; if @false, the message is left-justified.
 
     @header{wx/choicdlg.h}
+
+    @beginWxPerlOnly
+    Use an array reference for the @a choices parameter.
+    @endWxPerlOnly
 */
 wxString wxGetSingleChoice(const wxString& message,
                            const wxString& caption,
@@ -361,6 +385,10 @@ wxString wxGetSingleChoice(const wxString& message,
     of elements as @c choices or @c aChoices!
 
     @header{wx/choicdlg.h}
+
+    @beginWxPerlOnly
+    Use an array reference for the @a aChoices and @a client_data parameters.
+    @endWxPerlOnly
 */
 wxString wxGetSingleChoiceData(const wxString& message,
                                const wxString& caption,
@@ -405,6 +433,12 @@ wxString wxGetSingleChoiceData(const wxString& message,
     characters) is centred; if @false, the message is left-justified.
 
     @header{wx/choicdlg.h}
+
+    @beginWxPerlOnly
+    Use an array reference for the @a choices parameter.
+    In wxPerl there is no @a selections parameter; the function
+    returns an array containing the user selections.
+    @endWxPerlOnly
 */
 int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,

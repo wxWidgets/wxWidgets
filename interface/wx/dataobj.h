@@ -67,12 +67,20 @@ public:
     /**
         Constructs a data format object for one of the standard data formats or
         an empty data object (use SetType() or SetId() later in this case).
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Bitmap->newNative(format).
+        @endWxPerlOnly
     */
     wxDataFormat(wxDataFormatId format = wxDF_INVALID);
 
     /**
         Constructs a data format object for a custom format identified by its
         name @a format.
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Bitmap->newUser(format).
+        @endWxPerlOnly
     */
     wxDataFormat(const wxString& format);
 
@@ -245,6 +253,13 @@ public:
         Copies all formats supported in the given direction @a dir to the array 
         pointed to by @a formats. 
         There must be enough space for GetFormatCount(dir) formats in it.
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a dir parameter.  In scalar
+        context it returns the first format in the list, in list
+        context it returns a list containing all the supported
+        formats.
+        @endWxPerlOnly
     */
     virtual void GetAllFormats(wxDataFormat* formats,
                                Direction dir = Get) const = 0;

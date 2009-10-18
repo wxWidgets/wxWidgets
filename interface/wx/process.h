@@ -75,6 +75,11 @@ enum wxKillError
     @library{wxbase}
     @category{appmanagement}
 
+    @beginWxPerlOnly
+    In wxPerl this class has an additional @c Destroy method,
+    for explicit destruction.
+    @endWxPerlOnly
+
     @see wxExecute(), @ref page_samples_exec
 */
 class wxProcess : public wxEvtHandler

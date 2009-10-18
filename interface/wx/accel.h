@@ -179,6 +179,13 @@ public:
             Number of accelerator entries.
         @param entries
             The array of entries.
+
+        @beginWxPerlOnly
+        The wxPerl constructor accepts a list of either
+        Wx::AcceleratorEntry objects or references to 3-element arrays
+        [flags, keyCode, cmd] , like the parameters of
+        Wx::AcceleratorEntry::new.
+        @endWxPerlOnly
     */
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 

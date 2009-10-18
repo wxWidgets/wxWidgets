@@ -586,6 +586,11 @@ public:
         @beginWxPythonOnly
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and returns a
+        2-element list (w, h).
+        @endWxPerlOnly
     */
     void GetPPIPrinter(int* w, int* h) const;
 
@@ -601,6 +606,11 @@ public:
         @beginWxPythonOnly
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and returns a
+        2-element list (w, h).
+        @endWxPerlOnly
     */
     void GetPPIScreen(int* w, int* h) const;
 
@@ -630,6 +640,11 @@ public:
         @beginWxPythonOnly
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and returns a
+        2-element list (w, h).
+        @endWxPerlOnly
     */
     void GetPageSizeMM(int* w, int* h) const;
 
@@ -646,6 +661,11 @@ public:
         @beginWxPythonOnly
         This method returns the output-only parameters as a tuple.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and returns a
+        2-element list (w, h).
+        @endWxPerlOnly
     */
     void GetPageSizePixels(int* w, int* h) const;
 

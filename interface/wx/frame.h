@@ -415,6 +415,10 @@ public:
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
                  non-variable fields, divided by the number of variable fields.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes the field widths as parameters.
+        @endWxPerlOnly
     */
     virtual void SetStatusWidths(int n, const int* widths_field);
 

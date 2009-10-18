@@ -457,6 +457,10 @@ public:
 
         @param xpmData
             A pointer to XPM image data.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     wxImage(const char* const* xpmData);
 

@@ -95,6 +95,10 @@ public:
             The validator for this control.
         @param name
             The name of this class.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
 
     wxListBox(wxWindow* parent, wxWindowID id,
@@ -112,6 +116,10 @@ public:
         See the other wxListBox() constructor; the only difference is that
         this overload takes a wxArrayString instead of a pointer to an array
         of wxString.
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
     */
 
     wxListBox(wxWindow* parent, wxWindowID id,
@@ -169,6 +177,11 @@ public:
 
         @remarks Use this with a multiple selection listbox.
 
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and return the
+        selected items as a list.
+        @endWxPerlOnly
+
         @see wxControlWithItems::GetSelection, wxControlWithItems::GetStringSelection,
              wxControlWithItems::SetSelection
     */
@@ -205,6 +218,10 @@ public:
         @param pos
             Position before which to insert the items: if pos is 0 the
             items will be inserted in the beginning of the listbox
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     void InsertItems(unsigned int nItems, const wxString *items,
                      unsigned int pos);
@@ -217,6 +234,10 @@ public:
         @param pos
             Position before which to insert the items: if pos is @c 0 the
             items will be inserted in the beginning of the listbox
+
+        @beginWxPerlOnly
+        Use an array reference for the @a items parameter.
+        @endWxPerlOnly
     */
     void InsertItems(const wxArrayString& items,
                      unsigned int pos);

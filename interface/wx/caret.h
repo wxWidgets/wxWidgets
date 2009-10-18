@@ -60,6 +60,13 @@ public:
     //@{
     /**
         Get the caret position (in pixels).
+
+        @beginWxPerlOnly
+        In wxPerl there are two methods instead of a single overloaded
+        method:
+        - GetPosition(): returns a Wx::Point object.
+        - GetPositionXY(): returns a 2-element list (x, y).
+        @endWxPerlOnly
     */
     void GetPosition(int* x, int* y) const;
     wxPoint GetPosition() const;
@@ -68,6 +75,13 @@ public:
     //@{
     /**
         Get the caret size.
+
+        @beginWxPerlOnly
+        In wxPerl there are two methods instead of a single overloaded
+        method:
+        - GetSize(): returns a Wx::Size object.
+        - GetSizeWH(): returns a 2-element list (width, height).
+        @endWxPerlOnly
     */
     void GetSize(int* width, int* height) const;
     wxSize GetSize() const;

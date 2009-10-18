@@ -780,9 +780,7 @@ wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
     @header{wx/utils.h}
 
     @beginWxPerlOnly
-    This function is called @c Wx::ExecuteStdoutStderr and it only takes the
-    @a command argument, and returns a 3-element list (@c status, @c output,
-    @c errors), where @c output and @c errors are array references.
+    In wxPerl this function is called @c Wx::ExecuteCommand.
     @endWxPerlOnly
 */
 long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
@@ -815,6 +813,10 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
 
     @header{wx/utils.h}
+
+    @beginWxPerlOnly
+    In wxPerl this function is called @c Wx::ExecuteArgs.
+    @endWxPerlOnly
 */
 long wxExecute(char** argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL);
@@ -847,6 +849,12 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
 
     @header{wx/utils.h}
+
+    @beginWxPerlOnly
+    This function is called @c Wx::ExecuteStdout: it only takes the
+    @a command argument, and returns a 2-element list (@c status, @c output),
+    where @c output in an array reference.
+    @endWxPerlOnly
 */
 long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
 
@@ -874,6 +882,12 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
 
     @header{wx/utils.h}
+
+    @beginWxPerlOnly
+    This function is called @c Wx::ExecuteStdoutStderr: it only takes the
+    @a command argument, and returns a 3-element list (@c status, @c output,
+    @c errors), where @c output and @c errors are array references.
+    @endWxPerlOnly
 */
 long wxExecute(const wxString& command, wxArrayString& output,
                 wxArrayString& errors, int flags = 0);

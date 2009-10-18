@@ -77,6 +77,10 @@ public:
         @param name
             Window name.
 
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
+
         @see Create(), wxValidator
     */
     wxRadioBox(wxWindow* parent, wxWindowID id,
@@ -117,6 +121,10 @@ public:
             Window validator.
         @param name
             Window name.
+
+        @beginWxPerlOnly
+        Use an array reference for the @a choices parameter.
+        @endWxPerlOnly
 
         @see Create(), wxValidator
     */

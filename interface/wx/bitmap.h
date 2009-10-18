@@ -260,6 +260,10 @@ public:
         @param depth
             Specifies the depth of the bitmap.
             If this is omitted, then a value of 1 (monochrome bitmap) is used.
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Bitmap->newFromBits(bits, width, height, depth).
+        @endWxPerlOnly
     */
     wxBitmap(const char bits[], int width, int height, int depth = 1);
 
@@ -281,6 +285,10 @@ public:
 
     /**
         Creates a bitmap from XPM data.
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Bitmap->newFromXPM(data).
+        @endWxPerlOnly
     */
     wxBitmap(const char* const* bits);
 

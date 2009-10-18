@@ -94,6 +94,10 @@ public:
         @param height
             The height of the image.
 
+        @beginWxPerlOnly
+        In wxPerl use Wx::Icon->newBits(bits, width, height, depth = -1);
+        @endWxPerlOnly
+
         @onlyfor{wxmsw,wxosx}
     */
     wxIcon(const char bits[], int width, int height);
@@ -125,6 +129,10 @@ public:
         wxIcon icon("mondrian");
         #endif
         @endcode
+
+        @beginWxPerlOnly
+        In wxPerl use Wx::Icon->newFromXPM(data).
+        @endWxPerlOnly
     */
     wxIcon(const char* const* bits);
 

@@ -358,6 +358,11 @@ public:
         textOnly parameters. The return value is either a wxRect object or @c
         None.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a item and
+        @a textOnly parameters and returns a @c Wx::Rect (or @c undef).
+        @endWxPerlOnly
     */
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
                                  bool textOnly = false) const;
@@ -408,6 +413,11 @@ public:
         returned as a tuple containing the two values.
         @endWxPythonOnly
 
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a item parameter, and
+        returns a 2-element list (item, cookie).
+        @endWxPerlOnly
+
         @see GetNextChild(), GetNextSibling()
     */
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item,
@@ -452,6 +462,13 @@ public:
         @li GetPyData(item): Returns the Python Object associated with the
             wxTreeItemData for the given item Id.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        wxPerl provides the following shortcut method:
+        - GetPlData(item): returns the Perl data
+          associated with the Wx::TreeItemData. It is just the same as
+          tree->GetItemData(item)->GetData().
+        @endWxPerlOnly
     */
     virtual wxTreeItemData* GetItemData(const wxTreeItemId& item) const;
 
@@ -517,6 +534,11 @@ public:
         In wxPython the returned wxTreeItemId and the new cookie value are both
         returned as a tuple containing the two values.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method returns a 2-element list
+        (item, cookie) instead of modifying its parameters.
+        @endWxPerlOnly
 
         @see GetFirstChild()
     */
@@ -591,6 +613,11 @@ public:
         The wxPython version of this method accepts no parameters and returns a
         Python list of @ref wxTreeItemId "wxTreeItemId"s.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a list of
+        @c Wx::TreeItemId.
+        @endWxPerlOnly
     */
     virtual size_t GetSelections(wxArrayTreeItemIds& selection) const;
 
@@ -621,6 +648,11 @@ public:
         @beginWxPythonOnly
         In wxPython both the wxTreeItemId and the flags are returned as a tuple.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a point parameter
+        and returns a 2-element list (item, flags).
+        @endWxPerlOnly
     */
     wxTreeItemId HitTest(const wxPoint& point, int& flags) const;
 
@@ -795,6 +827,12 @@ public:
             the wxTreeItemData for the given item Id.
         @endWxPythonOnly
 
+        @beginWxPerlOnly
+        wxPerl provides the following shortcut method:
+        - SetPlData(item, data): sets the Perl data
+          associated with the @c Wx::TreeItemData. It is just the same as
+          tree->GetItemData(item)->SetData(data).
+        @endWxPerlOnly
     */
     virtual void SetItemData(const wxTreeItemId& item, wxTreeItemData* data);
 

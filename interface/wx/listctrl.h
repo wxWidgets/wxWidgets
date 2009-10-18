@@ -264,18 +264,31 @@ public:
     /**
         Find an item whose data matches this data, starting from start or the
         beginning if 'start' is @c -1.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as FindItemData(start, data).
+        @endWxPerlOnly
     */
     long FindItem(long start, wxUIntPtr data);
 
     /**
         Find an item nearest this position in the specified direction,
         starting from @a start or the beginning if @a start is -1.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as FindItemAtPos(start, pt, direction).
+        @endWxPerlOnly
     */
     long FindItem(long start, const wxPoint& pt, int direction);
 
     /**
         Gets information about this column.
         See SetItem() for more information.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes only the @a col parameter and
+        returns a @c Wx::ListItem (or @c undef).
+        @endWxPerlOnly
     */
     bool GetColumn(int col, wxListItem& item) const;
 
@@ -359,6 +372,11 @@ public:
         You must call @e info.SetId() to set the ID of item you're interested in
         before calling this method, and @e info.SetMask() with the flags indicating
         what fields you need to retrieve from @a info.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes as parameter the ID of the item
+        and (optionally) the column, and returns a Wx::ListItem object.
+        @endWxPerlOnly
     */
     bool GetItem(wxListItem& info) const;
 
@@ -388,6 +406,11 @@ public:
 
     /**
         Returns the position of the item, in icon or small icon view.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes only the @a item parameter and
+        returns a @c Wx::Point (or @c undef).
+        @endWxPerlOnly
     */
     bool GetItemPosition(long item, wxPoint& pos) const;
 
@@ -396,6 +419,11 @@ public:
         coordinates.
 
         @a code is one of wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes only the @a item and @a code parameters and
+        returns a @c Wx::Rect (or @c undef).
+        @endWxPerlOnly
     */
     bool GetItemRect(long item, wxRect& rect,
                      int code = wxLIST_RECT_BOUNDS) const;
@@ -541,6 +569,11 @@ public:
         the host system or the value stored in @a ptrSubItem will be always -1.
         To compile this feature into wxWidgets library you need to have access to
         commctrl.h of version 4.70 that is provided by Microsoft.
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a point parameter
+        and returns a 2-element list (item, flags).
+        @endWxPerlOnly
     */
     long HitTest(const wxPoint& point, int& flags, long* ptrSubItem = NULL) const;
 
@@ -571,6 +604,10 @@ public:
             Index of the new item, supplied by the application
         @param label
             String label
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as InsertStringItem(index, label).
+        @endWxPerlOnly
     */
     long InsertItem(long index, const wxString& label);
 
@@ -581,6 +618,10 @@ public:
             Index of the new item, supplied by the application
         @param imageIndex
             Index into the image list associated with this control and view style
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as InsertImageItem(index, imageIndex).
+        @endWxPerlOnly
     */
     long InsertItem(long index, int imageIndex);
 
@@ -593,6 +634,10 @@ public:
             String label
         @param imageIndex
             Index into the image list associated with this control and view style
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as InsertImageStringItem(index, label, imageIndex).
+        @endWxPerlOnly
     */
     long InsertItem(long index, const wxString& label,
                     int imageIndex);
@@ -860,6 +905,12 @@ public:
         items in the control.
 
         Please see the @ref page_samples_listctrl for an example of using this function.
+
+        @beginWxPerlOnly
+        In wxPerl the comparison function must take just two parameters;
+        however, you may use a closure to achieve an effect similar to the
+        SortItems third parameter.
+        @endWxPerlOnly
     */
     bool SortItems(wxListCtrlCompare fnSortCallBack, wxIntPtr data);
 

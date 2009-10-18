@@ -135,6 +135,11 @@ public:
 
         @return @true if the field index is valid, @false otherwise.
 
+        @beginWxPerlOnly
+        In wxPerl this function returns a @c Wx::Rect if the field
+        index is valid, @c undef otherwise.
+        @endWxPerlOnly
+
         @see wxRect
     */
     virtual bool GetFieldRect(int i, wxRect& rect) const;
@@ -215,6 +220,11 @@ public:
         @param widths
             An array of n integers interpreted in the same way as
             in SetStatusWidths().
+
+        @beginWxPerlOnly
+        In wxPerl this function accepts only the @a number parameter.
+        Use SetStatusWidths to set the field widths.
+        @endWxPerlOnly
     */
     virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
 
@@ -286,6 +296,10 @@ public:
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
                  non-variable fields, divided by the number of variable fields.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes as parameters the field widths.
+        @endWxPerlOnly
 
         @see SetFieldsCount(), wxFrame::SetStatusWidths()
     */

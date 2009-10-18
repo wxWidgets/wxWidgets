@@ -1236,6 +1236,11 @@ public:
         Please note that this function is currently only implemented in wxUniv, wxMSW
         and wxGTK2 ports.
 
+        @beginWxPerlOnly
+        In wxPerl this function takes only the @a pt argument and
+        returns a 3-element list (result, col, row).
+        @endWxPerlOnly
+
         @see PositionToXY(), XYToPosition()
     */
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
@@ -1312,6 +1317,11 @@ public:
         @return
             @true on success, @false on failure (most likely due to a too large
             position parameter).
+
+        @beginWxPerlOnly
+        In wxPerl this function takes only the @a pos argument and
+        returns a 2-element list (x, y).
+        @endWxPerlOnly
 
         @see XYToPosition()
     */

@@ -782,6 +782,11 @@ public:
         Note that if this window is a top-level one and it is currently minimized, the
         return size is empty (both width and height are 0).
 
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns
+        a 2-element list (width, height).
+        @endWxPerlOnly
+
         @see GetSize(), GetVirtualSize()
     */
     void GetClientSize(int* width, int* height) const;
@@ -857,6 +862,11 @@ public:
             Receives the window width.
         @param height
             Receives the window height.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetSizeWH() returning
+        a 2-element list (width, height).
+        @endWxPerlOnly
 
         @see GetClientSize(), GetVirtualSize(), @ref overview_windowsizing
     */
@@ -1197,6 +1207,11 @@ public:
         @param y
             Receives the y position of the window if non-@NULL.
 
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetPositionXY() returning
+        a 2-element list (x, y).
+        @endWxPerlOnly
+
         @see GetScreenPosition()
     */
     void GetPosition(int* x, int* y) const;
@@ -1305,6 +1320,11 @@ public:
             - ClientToScreen(point): Accepts and returns a wxPoint
             - ClientToScreenXY(x, y): Returns a 2-tuple, (x, y)
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method returns a 2-element list instead of
+        modifying its parameters.
+        @endWxPerlOnly
     */
     void ClientToScreen(int* x, int* y) const;
 
@@ -1511,6 +1531,12 @@ public:
             Return value for external leading (optional).
         @param font
             Font to use instead of the current window font (optional).
+
+        @beginWxPerlOnly
+        In wxPerl this method takes only the @a string and optionally
+        @a font parameters, and returns a 4-element list
+        (x, y, descent, externalLeading).
+        @endWxPerlOnly
     */
     void GetTextExtent(const wxString& string,
                         int* w, int* h,
@@ -2861,6 +2887,10 @@ public:
         Returns the platform-specific handle of the physical window.
         Cast it to an appropriate handle, such as @b HWND for Windows,
         @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
+
+        @beginWxPerlOnly
+        This method will return an integer in wxPerl.
+        @endWxPerlOnly
     */
     virtual WXWidget GetHandle() const;
 

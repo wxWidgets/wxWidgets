@@ -374,6 +374,11 @@ public:
         The wxPython version of this method returns a 3-tuple consisting of the
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a 3-element
+        list (continue_flag, string, index_for_getnextentry).
+        @endWxPerlOnly
     */
     virtual bool GetFirstEntry(wxString& str, long& index) const = 0;
 
@@ -384,6 +389,11 @@ public:
         The wxPython version of this method returns a 3-tuple consisting of the
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no parameters and returns a 3-element
+        list (continue_flag, string, index_for_getnextentry).
+        @endWxPerlOnly
     */
     virtual bool GetFirstGroup(wxString& str, long& index) const = 0;
 
@@ -394,6 +404,12 @@ public:
         The wxPython version of this method returns a 3-tuple consisting of the
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a index parameter and
+        returns a 3-element list (continue_flag, string,
+        index_for_getnextentry).
+        @endWxPerlOnly
     */
     virtual bool GetNextEntry(wxString& str, long& index) const = 0;
 
@@ -404,6 +420,12 @@ public:
         The wxPython version of this method returns a 3-tuple consisting of the
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
+
+        @beginWxPerlOnly
+        In wxPerl this method only takes the @a index parameter and
+        returns a 3-element list (continue_flag, string,
+        index_for_getnextentry).
+        @endWxPerlOnly
     */
     virtual bool GetNextGroup(wxString& str, long& index) const = 0;
 
@@ -496,6 +518,10 @@ public:
     /**
         Read a string from the key, returning @true if the value was read. If
         the key was not found, @a str is not changed.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, wxString* str) const;
     /**
@@ -503,44 +529,84 @@ public:
         was not found.
 
         @return @true if value was really read, @false if the default was used.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, wxString* str,
               const wxString& defaultVal) const;
     /**
         Another version of Read(), returning the string value directly.
+
+        @beginWxPerlOnly
+        In wxPerl, this can be called as:
+        - Read(key): returns the empty string if no key is found
+        - Read(key, default): returns the default value if no key is found
+        @endWxPerlOnly
     */
     const wxString Read(const wxString& key,
                         const wxString& defaultVal) const;
     /**
         Reads a long value, returning @true if the value was found. If the
         value was not found, @a l is not changed.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, long* l) const;
     /**
         Reads a long value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
+
+        @beginWxPerlOnly
+        In wxPerl, this can be called as:
+        - ReadInt(key): returns the 0 if no key is found
+        - ReadInt(key, default): returns the default value if no key is found
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, long* l,
               long defaultVal) const;
     /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a d is not changed.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, double* d) const;
     /**
         Reads a double value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
+
+        @beginWxPerlOnly
+        In wxPerl, this can be called as:
+        - ReadFloat(key): returns the 0.0 if no key is found
+        - ReadFloat(key, default): returns the default value if no key is found
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, double* d,
                      double defaultVal) const;
     /**
         Reads a bool value, returning @true if the value was found. If the
         value was not found, @a b is not changed.
+
+        @beginWxPerlOnly
+        Not supported by wxPerl.
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, bool* b) const;
     /**
         Reads a bool value, returning @true if the value was found. If the
         value was not found, @a defaultVal is used instead.
+
+        @beginWxPerlOnly
+        In wxPerl, this can be called as:
+        - ReadBool(key): returns false if no key is found
+        - ReadBool(key, default): returns the default value if no key is found
+        @endWxPerlOnly
     */
     bool Read(const wxString& key, bool* d,
               bool defaultVal) const;
