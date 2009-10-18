@@ -42,7 +42,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -122,7 +122,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -200,7 +200,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -280,7 +280,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -358,7 +358,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -438,7 +438,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -516,7 +516,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>
@@ -596,7 +596,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WX__;SCI_LEXER;LINK_LEXERS"
 				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
 			/>

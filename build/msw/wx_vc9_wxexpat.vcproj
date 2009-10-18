@@ -42,7 +42,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -122,7 +122,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -200,7 +200,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -280,7 +280,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_lib"
 			/>
@@ -358,7 +358,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -438,7 +438,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -516,7 +516,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>
@@ -596,7 +596,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;COMPILED_FROM_DSP"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll"
 			/>

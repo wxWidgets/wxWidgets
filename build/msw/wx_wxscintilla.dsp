@@ -46,8 +46,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -92,8 +92,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_dll\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -138,8 +138,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -184,8 +184,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\wxscintilla"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
-# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD BASE CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
+# ADD CPP /nologo /FD /MD /W1 /O2 /GR /EHsc /I "..\..\src\stc\scintilla\include" /I "..\..\src\stc\scintilla\src" /Zi /Fd..\..\lib\vc_lib\wxscintilla.pdb /opt:ref /opt:icf /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WX__" /D "SCI_LEXER" /D "LINK_LEXERS" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe

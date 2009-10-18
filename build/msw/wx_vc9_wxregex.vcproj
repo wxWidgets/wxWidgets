@@ -43,7 +43,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswud"
 			/>
@@ -124,7 +124,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswu"
 			/>
@@ -203,7 +203,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswunivud"
 			/>
@@ -284,7 +284,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_lib\mswunivu"
 			/>
@@ -363,7 +363,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswud"
 			/>
@@ -444,7 +444,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WXMSW__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswu"
 			/>
@@ -523,7 +523,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswunivud"
 			/>
@@ -604,7 +604,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE"
 				AdditionalIncludeDirectories="..\..\include;..\..\lib\vc_dll\mswunivu"
 			/>

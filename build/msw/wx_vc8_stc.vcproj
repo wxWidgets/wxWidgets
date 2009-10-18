@@ -510,7 +510,7 @@
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxscintilla.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				OutputFile="..\..\lib\vc_dll\wxmsw291u_stc_vc_custom.dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_stc.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
@@ -518,6 +518,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw291u_stc_vc_custom.pdb"
 				TargetMachine="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -695,7 +697,7 @@
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxscintilla.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
 				OutputFile="..\..\lib\vc_dll\wxmswuniv291u_stc_vc_custom.dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_stc.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
@@ -703,6 +705,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv291u_stc_vc_custom.pdb"
 				TargetMachine="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 			/>
 			<Tool
 				Name="VCALinkTool"
