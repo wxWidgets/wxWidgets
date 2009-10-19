@@ -112,6 +112,7 @@
 
     <requires version="0.2.2"/>
 
+    <using module="wx_presets"/>
 
     <!-- this variable identifies the version of the wx presets.
          this is changed only when major changes to wxpresets take place.
@@ -272,8 +273,7 @@
         <if cond="WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
     </set>
 
-    <!-- FIXME: how to make it a make var? -->
-    <set var="COMPILER_PREFIX">$(COMPILER)</set>
+    <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
 
 
 

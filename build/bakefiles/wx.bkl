@@ -87,7 +87,7 @@
 
         <data-files>
             <srcdir>$(SRCDIR)/build/bakefiles/wxpresets/presets</srcdir>
-            <files>wx.bkl wx_unix.bkl wx_win32.bkl wx_xrc.bkl</files>
+            <files>wx.bkl wx_unix.bkl wx_win32.bkl wx_xrc.bkl wx_presets.py</files>
             <install-to>$(DATADIR)/bakefile/presets</install-to>
         </data-files>
 
