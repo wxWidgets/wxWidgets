@@ -386,7 +386,7 @@ get_mask()
 
     # use 2.8 or 2.9 version of the mask: the difference is the presence of
     # debug type in pre-2.9
-    if [ $is29orlater == 1 ]; then
+    if [ $is29orlater = 1 ]; then
         eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
     else
         eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
