@@ -4894,7 +4894,14 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       else
           dnl yes, these special compiler flags should be used with the
           dnl linker as well
+          dnl
+          dnl NB: add them to LDFLAGS immediately because we need them to be
+          dnl     used for the subsequent tests some of which can fail without
+          dnl     MT support, hence the reason for the duplication below:
+          dnl     adding them just to WXCONFIG_LDFLAGS and adding the entire
+          dnl     contents of the latter to LDFLAGS in the end is not enough.
           LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+          WXCONFIG_LDFLAGS="$THREADS_CFLAGS $WXCONFIG_LDFLAGS"
           LIBS="$THREADS_LINK $LIBS"
 
           AC_MSG_CHECKING([if more special flags are required for pthreads])
@@ -4908,6 +4915,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 dnl     search path should include -L/usr/lib/threads at the
                 dnl     beginning of the path.
                 LDFLAGS="-L/usr/lib/threads $LDFLAGS"
+                WXCONFIG_LDFLAGS="-L/usr/lib/threads $WXCONFIG_LDFLAGS"
                 flag="-D_THREAD_SAFE"
                 ;;
             *-freebsd*)
@@ -7461,21 +7469,24 @@ dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
 dnl all additional libraries (except wxWidgets itself) we link with
-
+EXTRA_FRAMEWORKS=
 if test "$wxUSE_MAC" = 1 ; then
     if test "$USE_DARWIN" = 1; then
-        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework IOKit -framework Cocoa"
+    EXTRA_FRAMEWORKS="-framework IOKit -framework Cocoa"
     if test "$wxUSE_MEDIACTRL" = "yes"; then
-        LDFLAGS="$LDFLAGS -framework QuickTime"
+        EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
     fi
 fi
 if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1 ; then
-    LDFLAGS="$LDFLAGS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
+    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
+
+LDFLAGS="$LDFLAGS $EXTRA_FRAMEWORKS"
+WXCONFIG_LDFLAGS="$WXCONFIG_LDFLAGS $EXTRA_FRAMEWORKS"
 
 LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
 
@@ -8048,6 +8059,7 @@ AC_SUBST(WXCONFIG_CXXFLAGS)
 
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_RPATH)
+AC_SUBST(WXCONFIG_LDFLAGS)
 AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WXCONFIG_RESFLAGS)
 

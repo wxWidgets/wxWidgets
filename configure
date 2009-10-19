@@ -1023,6 +1023,7 @@ WXCONFIG_CFLAGS
 WXCONFIG_CXXFLAGS
 WXCONFIG_LIBS
 WXCONFIG_RPATH
+WXCONFIG_LDFLAGS
 WXCONFIG_LDFLAGS_GUI
 WXCONFIG_RESFLAGS
 GUIDIST
@@ -39277,7 +39278,8 @@ echo "${ECHO_T}$THREADS_OK" >&6; }
           { echo "$as_me:$LINENO: WARNING: No thread support on this system... disabled" >&5
 echo "$as_me: WARNING: No thread support on this system... disabled" >&2;}
       else
-                              LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+                                                                                          LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+          WXCONFIG_LDFLAGS="$THREADS_CFLAGS $WXCONFIG_LDFLAGS"
           LIBS="$THREADS_LINK $LIBS"
 
           { echo "$as_me:$LINENO: checking if more special flags are required for pthreads" >&5
@@ -39286,6 +39288,7 @@ echo $ECHO_N "checking if more special flags are required for pthreads... $ECHO_
           case "${host}" in
             *-aix*)
                                                                                                                 LDFLAGS="-L/usr/lib/threads $LDFLAGS"
+                WXCONFIG_LDFLAGS="-L/usr/lib/threads $WXCONFIG_LDFLAGS"
                 flag="-D_THREAD_SAFE"
                 ;;
             *-freebsd*)
@@ -47345,21 +47348,24 @@ fi
 
 
 
-
+EXTRA_FRAMEWORKS=
 if test "$wxUSE_MAC" = 1 ; then
     if test "$USE_DARWIN" = 1; then
-        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
     fi
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework IOKit -framework Cocoa"
+    EXTRA_FRAMEWORKS="-framework IOKit -framework Cocoa"
     if test "$wxUSE_MEDIACTRL" = "yes"; then
-        LDFLAGS="$LDFLAGS -framework QuickTime"
+        EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
     fi
 fi
 if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1 ; then
-    LDFLAGS="$LDFLAGS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
+    EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
+
+LDFLAGS="$LDFLAGS $EXTRA_FRAMEWORKS"
+WXCONFIG_LDFLAGS="$WXCONFIG_LDFLAGS $EXTRA_FRAMEWORKS"
 
 LIBS="$ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $DL_LINK $LIBS"
 
@@ -51142,6 +51148,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 { echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \$(MAKE)... $ECHO_C" >&6; }
 set x ${MAKE-make}; ac_make=`echo "$2" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
@@ -52598,6 +52605,7 @@ WXCONFIG_CFLAGS!$WXCONFIG_CFLAGS$ac_delim
 WXCONFIG_CXXFLAGS!$WXCONFIG_CXXFLAGS$ac_delim
 WXCONFIG_LIBS!$WXCONFIG_LIBS$ac_delim
 WXCONFIG_RPATH!$WXCONFIG_RPATH$ac_delim
+WXCONFIG_LDFLAGS!$WXCONFIG_LDFLAGS$ac_delim
 WXCONFIG_LDFLAGS_GUI!$WXCONFIG_LDFLAGS_GUI$ac_delim
 WXCONFIG_RESFLAGS!$WXCONFIG_RESFLAGS$ac_delim
 GUIDIST!$GUIDIST$ac_delim
@@ -52622,7 +52630,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 41; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 42; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

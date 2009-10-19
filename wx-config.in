@@ -1265,7 +1265,7 @@ if [ -n "$output_option_libs" ]; then
 
     is_installed || [ -n "$flag_option_no_rpath" ] || _rpath="@WXCONFIG_RPATH@"
 
-    echo $_ldflags "@LDFLAGS@" $_rpath $wx_libs "@DMALLOC_LIBS@"
+    echo $_ldflags "@WXCONFIG_LDFLAGS@" $_rpath $wx_libs "@DMALLOC_LIBS@"
 
 elif [ -n "$output_option_optional_libs" ]; then
     # if only --optional-libs then output just the libs
