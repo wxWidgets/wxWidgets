@@ -83,7 +83,7 @@ enum wxTitleBarButton
 {
     wxTITLEBAR_BUTTON_CLOSE    = 0x01000000,
     wxTITLEBAR_BUTTON_MAXIMIZE = 0x02000000,
-    wxTITLEBAR_BUTTON_ICONIZE =  0x04000000,
+    wxTITLEBAR_BUTTON_ICONIZE  = 0x04000000,
     wxTITLEBAR_BUTTON_RESTORE  = 0x08000000,
     wxTITLEBAR_BUTTON_HELP     = 0x10000000
 };
@@ -304,10 +304,13 @@ public:
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
     // Draw one of the standard title bar buttons
     //
-    // This is currently implemented only for MSW because there is no way to
-    // render standard title bar buttons under the other platforms, the best
-    // can be done is to use normal (only) images which wxArtProvider provides
-    // for wxART_HELP and wxART_CLOSE (but not any other title bar buttons)
+    // This is currently implemented only for MSW and OS X (for the close
+    // button only) because there is no way to render standard title bar
+    // buttons under the other platforms, the best can be done is to use normal
+    // (only) images which wxArtProvider provides for wxART_HELP and
+    // wxART_CLOSE (but not any other title bar buttons)
+    //
+    // NB: make sure PNG handler is enabled if using this function under OS X
     virtual void DrawTitleBarBitmap(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,

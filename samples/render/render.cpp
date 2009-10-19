@@ -35,6 +35,7 @@
     #include "wx/log.h"
     #include "wx/msgdlg.h"
     #include "wx/icon.h"
+    #include "wx/image.h"
 #endif
 
 #include "wx/apptrait.h"
@@ -296,6 +297,13 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
+
+#ifdef __WXOSX__
+    // currently the images used by DrawTitleBarBitmap() are hard coded as PNG
+    // images inside the library itself so we need to enable PNG support to use
+    // this function
+    wxImage::AddHandler(new wxPNGHandler);
+#endif // OS X
 
     // create the main application window
     new MyFrame;

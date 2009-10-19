@@ -57,6 +57,18 @@ enum
 };
 
 /**
+    Title bar buttons supported by wxRendererNative::DrawTitleBarBitmap().
+ */
+enum wxTitleBarButton
+{
+    wxTITLEBAR_BUTTON_CLOSE    = 0x01000000,
+    wxTITLEBAR_BUTTON_MAXIMIZE = 0x02000000,
+    wxTITLEBAR_BUTTON_ICONIZE  = 0x04000000,
+    wxTITLEBAR_BUTTON_RESTORE  = 0x08000000,
+    wxTITLEBAR_BUTTON_HELP     = 0x10000000
+};
+
+/**
     @struct wxSplitterRenderParams
 
     This is just a simple @c struct used as a return value of
@@ -425,6 +437,30 @@ public:
         Draw a native wxRadioButton bitmap.
     */
     virtual void DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) = 0;
+
+    /**
+        Draw a title bar button in the given state.
+
+        This function is currently only available under MSW and OS X (and only
+        for wxTITLEBAR_BUTTON_CLOSE under the latter), its best replacement for
+        the other platforms is to use wxArtProvider to retrieve the bitmaps for
+        @c wxART_HELP and @c wxART_CLOSE (but not any other title bar buttons
+        and not for any state but normal, i.e. not pressed and not current one).
+
+        The presence of this function is indicated by @c
+        wxHAS_DRAW_TITLE_BAR_BITMAP symbol being defined.
+
+        Also notice that PNG handler must be enabled using wxImage::AddHandler()
+        to use this function under OS X currently as the bitmaps are embedded
+        in the library itself in PNG format.
+
+        @since 2.9.1
+     */
+    virtual void DrawTitleBarBitmap(wxWindow *win,
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    wxTitleBarButton button,
+                                    int flags = 0) = 0;
 
     /**
         Return the currently used renderer.
