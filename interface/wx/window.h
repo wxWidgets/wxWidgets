@@ -1625,6 +1625,9 @@ public:
                  usually the themes represent the appearance chosen by the user
                  to be used for all applications on the system.
 
+        @return @true if the colour was really changed, @false if it was already set
+                to this colour and nothing was done.
+
         @see GetBackgroundColour(), SetForegroundColour(),
              GetForegroundColour(), ClearBackground(),
              Refresh(), wxEraseEvent
@@ -1676,8 +1679,8 @@ public:
             Font to associate with this window, pass
             wxNullFont to reset to the default font.
 
-        @return @true if the want was really changed, @false if it was already set
-                to this  font and so nothing was done.
+        @return @true if the font was really changed, @false if it was already set
+                to this font and nothing was done.
 
         @see GetFont(), InheritAttributes()
     */
@@ -1695,6 +1698,9 @@ public:
         @remarks The interpretation of foreground colour is open to
                  interpretation according to the window class; it may be
                  the text colour or other colour, or it may not be used at all.
+
+        @return @true if the colour was really changed, @false if it was already set
+                to this colour and nothing was done.
 
         @see GetForegroundColour(), SetBackgroundColour(),
              GetBackgroundColour(), ShouldInheritColours()
