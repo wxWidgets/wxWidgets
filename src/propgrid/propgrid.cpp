@@ -115,6 +115,11 @@
 
 //#define wxPG_TOOLTIP_DELAY              1000
 
+// This is the number of pixels the expander button inside
+// property cells (i.e. not in the grey margin area are
+// adjusted.
+#define IN_CELL_EXPANDER_BUTTON_X_ADJUST    2
+
 // -----------------------------------------------------------------------
 
 #if wxUSE_INTL
@@ -2272,6 +2277,10 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
         else
         {
+            // Fine tune button rectangle to actually fit the cell
+            if ( butRect.x > 0 )
+                butRect.x += IN_CELL_EXPANDER_BUTTON_X_ADJUST;
+
             if ( p->m_flags & wxPG_PROP_MODIFIED && (windowStyle & wxPG_BOLD_MODIFIED) )
             {
                 dc.SetFont(m_captionFont);
@@ -4505,6 +4514,10 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
             if ( p->GetChildCount() )
             {
                 int nx = x + m_marginWidth - marginEnds; // Normalize x.
+
+                // Fine tune cell button x
+                if ( !p->IsCategory() )
+                    nx -= IN_CELL_EXPANDER_BUTTON_X_ADJUST;
 
                 if ( (nx >= m_gutterWidth && nx < (m_gutterWidth+m_iconWidth)) )
                 {
