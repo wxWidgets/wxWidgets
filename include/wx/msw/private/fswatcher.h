@@ -179,7 +179,7 @@ public:
         wxCHECK_MSG( overlapped != NULL, false,
                      "Null out parameter 'overlapped'");
 
-        int ret = GetQueuedCompletionStatus(m_iocp, count, (PULONG_PTR)watch,
+        int ret = GetQueuedCompletionStatus(m_iocp, count, (ULONG_PTR *)watch,
                                             overlapped, INFINITE);
         if (!ret)
         {
