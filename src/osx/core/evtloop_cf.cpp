@@ -27,6 +27,10 @@
 
 #if wxUSE_EVENTLOOP_SOURCE
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif
+
 #include "wx/evtloopsrc.h"
 
 #include "wx/scopedptr.h"
