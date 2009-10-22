@@ -327,7 +327,18 @@ public:
 
     virtual bool CheckResult()
     {
-        CPPUNIT_ASSERT_EQUAL( 1, m_events.size() );
+        CPPUNIT_ASSERT_MESSAGE( "No events received", !m_events.empty() );
+
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            (
+                "Extra event received, last has type=%x, path=\"%s\"",
+                m_events.back()->GetChangeType(),
+                m_events.back()->GetPath().GetFullPath()
+            ),
+            1, m_events.size()
+        );
+
         const wxFileSystemWatcherEvent * const e = m_events.front();
 
         // this is our "reference event"
@@ -342,7 +353,6 @@ public:
 
         CPPUNIT_ASSERT_EQUAL(expected.GetPath(), e->GetPath());
         CPPUNIT_ASSERT_EQUAL(expected.GetNewPath(), e->GetNewPath());
-        CPPUNIT_ASSERT_EQUAL(expected.GetChangeType(), e->GetChangeType());
 
         return true;
     }
