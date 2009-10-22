@@ -284,6 +284,7 @@ wx/unix/apptbase.h
 wx/unix/apptrait.h
 wx/unix/chkconf.h
 wx/unix/evtloop.h
+wx/unix/evtloopsrc.h
 wx/unix/pipe.h
 wx/unix/stdpaths.h
 wx/unix/stackwalk.h

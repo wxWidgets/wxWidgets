@@ -68,6 +68,22 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
+    void OnPaint(wxPaintEvent&)
+    {
+        wxPaintDC dc(this);
+
+        wxFont font = GetFont();
+
+        for ( int size = 10; size < 20; size++ )
+        {
+            font.SetPixelSize(wxSize(0, size));
+            dc.SetFont(font);
+            dc.DrawText(wxString::Format("%dpx The quick brown fox jumps over the lazy dog.", size),
+                        10, 10 + (size - 10)*20);
+        }
+    }
+
+
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -99,6 +115,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_PAINT(MyFrame::OnPaint)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create

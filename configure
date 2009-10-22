@@ -48868,7 +48868,7 @@ EOF
         chmod +x shared-ld-sh
 
         SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="CXX=\$(CXX) $SHARED_LD_MODULE_CC"
+        SHARED_LD_MODULE_CXX="CXX=\"\$(CXX)\" $SHARED_LD_MODULE_CC"
 
 
                                 { echo "$as_me:$LINENO: checking for gcc 3.1 or later" >&5
@@ -49975,10 +49975,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.6"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.7"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.6"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.7"
 
 
 
