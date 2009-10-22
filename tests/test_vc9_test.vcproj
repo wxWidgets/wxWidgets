@@ -43,7 +43,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;."
 			/>
@@ -139,7 +139,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswu;.\..\include;."
 			/>
@@ -233,7 +233,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivud;.\..\include;."
 			/>
@@ -329,7 +329,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswunivu;.\..\include;."
 			/>
@@ -423,7 +423,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswud;.\..\include;."
 			/>
@@ -519,7 +519,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswu;.\..\include;."
 			/>
@@ -613,7 +613,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivud;.\..\include;."
 			/>
@@ -709,7 +709,7 @@
 				Name="VCWebServiceProxyGeneratorTool"
 			/>
 			<Tool
-				Name="VCIDLTool"
+				Name="VCMIDLTool"
 				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\lib\vc_dll\mswunivu;.\..\include;."
 			/>
@@ -912,6 +912,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\evtsource.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\exec\exec.cpp"
 				>
 			</File>
@@ -953,6 +957,10 @@
 			</File>
 			<File
 				RelativePath=".\formatconverter\formatconvertertest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fswatcher\fswatchertest.cpp"
 				>
 			</File>
 			<File

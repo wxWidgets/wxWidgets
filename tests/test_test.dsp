@@ -293,6 +293,10 @@ SOURCE=.\events\evthandler.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\evtsource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\exec\exec.cpp
 # End Source File
 # Begin Source File
@@ -334,6 +338,10 @@ SOURCE=.\fontmap\fontmaptest.cpp
 # Begin Source File
 
 SOURCE=.\formatconverter\formatconvertertest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\fswatcher\fswatchertest.cpp
 # End Source File
 # Begin Source File
 

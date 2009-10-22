@@ -708,6 +708,7 @@ Related overview: @ref overview_file
 @li wxTextFile: Class for working with text files as with arrays of lines
 @li wxStandardPaths: Paths for standard directories
 @li wxPathList: A class to help search multiple paths
+@li wxFileSystemWatcher: Class providing notifications of file system changes
 
 
 

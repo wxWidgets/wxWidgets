@@ -375,6 +375,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_xtistrm.o \
 	$(OBJS)\monodll_zipstrm.o \
 	$(OBJS)\monodll_zstream.o \
+	$(OBJS)\monodll_fswatchercmn.o \
+	$(OBJS)\monodll_fswatcherg.o \
 	$(OBJS)\monodll_basemsw.o \
 	$(OBJS)\monodll_crashrpt.o \
 	$(OBJS)\monodll_debughlp.o \
@@ -392,6 +394,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_utils.o \
 	$(OBJS)\monodll_utilsexc.o \
+	$(OBJS)\monodll_fswatcher.o \
 	$(OBJS)\monodll_event.o \
 	$(OBJS)\monodll_fs_mem.o \
 	$(OBJS)\monodll_msgout.o \
@@ -517,6 +520,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_xtistrm.o \
 	$(OBJS)\monolib_zipstrm.o \
 	$(OBJS)\monolib_zstream.o \
+	$(OBJS)\monolib_fswatchercmn.o \
+	$(OBJS)\monolib_fswatcherg.o \
 	$(OBJS)\monolib_basemsw.o \
 	$(OBJS)\monolib_crashrpt.o \
 	$(OBJS)\monolib_debughlp.o \
@@ -534,6 +539,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_utils.o \
 	$(OBJS)\monolib_utilsexc.o \
+	$(OBJS)\monolib_fswatcher.o \
 	$(OBJS)\monolib_event.o \
 	$(OBJS)\monolib_fs_mem.o \
 	$(OBJS)\monolib_msgout.o \
@@ -657,6 +663,8 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_xtistrm.o \
 	$(OBJS)\basedll_zipstrm.o \
 	$(OBJS)\basedll_zstream.o \
+	$(OBJS)\basedll_fswatchercmn.o \
+	$(OBJS)\basedll_fswatcherg.o \
 	$(OBJS)\basedll_basemsw.o \
 	$(OBJS)\basedll_crashrpt.o \
 	$(OBJS)\basedll_debughlp.o \
@@ -674,6 +682,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_timer.o \
 	$(OBJS)\basedll_utils.o \
 	$(OBJS)\basedll_utilsexc.o \
+	$(OBJS)\basedll_fswatcher.o \
 	$(OBJS)\basedll_event.o \
 	$(OBJS)\basedll_fs_mem.o \
 	$(OBJS)\basedll_msgout.o \
@@ -780,6 +789,8 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_xtistrm.o \
 	$(OBJS)\baselib_zipstrm.o \
 	$(OBJS)\baselib_zstream.o \
+	$(OBJS)\baselib_fswatchercmn.o \
+	$(OBJS)\baselib_fswatcherg.o \
 	$(OBJS)\baselib_basemsw.o \
 	$(OBJS)\baselib_crashrpt.o \
 	$(OBJS)\baselib_debughlp.o \
@@ -797,6 +808,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_timer.o \
 	$(OBJS)\baselib_utils.o \
 	$(OBJS)\baselib_utilsexc.o \
+	$(OBJS)\baselib_fswatcher.o \
 	$(OBJS)\baselib_event.o \
 	$(OBJS)\baselib_fs_mem.o \
 	$(OBJS)\baselib_msgout.o \
@@ -1434,7 +1446,7 @@ ifeq ($(OFFICIAL_BUILD),0)
 VENDORTAG = _$(VENDOR)
 endif
 ifeq ($(OFFICIAL_BUILD),1)
-VENDORTAG = 
+VENDORTAG =
 endif
 ifeq ($(BUILD),debug)
 WXDEBUGFLAG = d
@@ -1464,10 +1476,10 @@ ifeq ($(USE_GUI),1)
 __wxtiff___depname = $(LIBDIRNAME)\libwxtiff$(WXDEBUGFLAG).a
 endif
 ifeq ($(MONOLITHIC),0)
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
 ifeq ($(SHARED),1)
@@ -4413,11 +4425,11 @@ endif
 endif
 ifeq ($(BUILD),release)
 ifeq ($(DEBUG_INFO),default)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 endif
 ifeq ($(DEBUG_INFO),0)
-__DEBUGINFO = 
+__DEBUGINFO =
 endif
 ifeq ($(DEBUG_INFO),1)
 __DEBUGINFO = -g
@@ -4429,7 +4441,7 @@ ifeq ($(BUILD),release)
 __OPTIMIZEFLAG = -O2
 endif
 ifeq ($(USE_THREADS),0)
-__THREADSFLAG = 
+__THREADSFLAG =
 endif
 ifeq ($(USE_THREADS),1)
 __THREADSFLAG = -mthreads
@@ -4438,13 +4450,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG = 
+__RTTIFLAG =
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG = 
+__EXCEPTIONSFLAG =
 endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -4489,7 +4501,7 @@ $(OBJS):
 
 all: setup_h $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
-clean: 
+clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a del $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a
@@ -4996,10 +5008,10 @@ wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 endif
 endif
 
-samples: 
+samples:
 	$(MAKE) -C ..\..\samples -f makefile.gcc $(MAKEARGS) all
 
-$(LIBDIRNAME): 
+$(LIBDIRNAME):
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
 
 $(SETUPHDIR): $(LIBDIRNAME)
@@ -5008,10 +5020,10 @@ $(SETUPHDIR): $(LIBDIRNAME)
 $(SETUPHDIR)\wx: $(SETUPHDIR)
 	if not exist $(SETUPHDIR)\wx mkdir $(SETUPHDIR)\wx
 
-..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h: 
+..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h:
 	if not exist ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup0.h ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h
 
-$(SETUPHDIR)\wx\setup.h: 
+$(SETUPHDIR)\wx\setup.h:
 	if not exist $(SETUPHDIR)\wx\setup.h copy ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h
 
 $(SETUPHDIR)\wx\msw: $(SETUPHDIR)\wx
@@ -5925,6 +5937,12 @@ $(OBJS)\monodll_zipstrm.o: ../../src/common/zipstrm.cpp
 $(OBJS)\monodll_zstream.o: ../../src/common/zstream.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_fswatchercmn.o: ../../src/common/fswatchercmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_fswatcherg.o: ../../src/generic/fswatcherg.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5974,6 +5992,9 @@ $(OBJS)\monodll_utils.o: ../../src/msw/utils.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_utilsexc.o: ../../src/msw/utilsexc.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_fswatcher.o: ../../src/msw/fswatcher.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_event.o: ../../src/common/event.cpp
@@ -8088,6 +8109,12 @@ $(OBJS)\monolib_zipstrm.o: ../../src/common/zipstrm.cpp
 $(OBJS)\monolib_zstream.o: ../../src/common/zstream.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_fswatchercmn.o: ../../src/common/fswatchercmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_fswatcherg.o: ../../src/generic/fswatcherg.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8137,6 +8164,9 @@ $(OBJS)\monolib_utils.o: ../../src/msw/utils.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_utilsexc.o: ../../src/msw/utilsexc.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_fswatcher.o: ../../src/msw/fswatcher.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_event.o: ../../src/common/event.cpp
@@ -10251,6 +10281,12 @@ $(OBJS)\basedll_zipstrm.o: ../../src/common/zipstrm.cpp
 $(OBJS)\basedll_zstream.o: ../../src/common/zstream.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_fswatchercmn.o: ../../src/common/fswatchercmn.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_fswatcherg.o: ../../src/generic/fswatcherg.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10300,6 +10336,9 @@ $(OBJS)\basedll_utils.o: ../../src/msw/utils.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_utilsexc.o: ../../src/msw/utilsexc.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_fswatcher.o: ../../src/msw/fswatcher.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_event.o: ../../src/common/event.cpp
@@ -10569,6 +10608,12 @@ $(OBJS)\baselib_zipstrm.o: ../../src/common/zipstrm.cpp
 $(OBJS)\baselib_zstream.o: ../../src/common/zstream.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\baselib_fswatchercmn.o: ../../src/common/fswatchercmn.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_fswatcherg.o: ../../src/generic/fswatcherg.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\baselib_basemsw.o: ../../src/msw/basemsw.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10618,6 +10663,9 @@ $(OBJS)\baselib_utils.o: ../../src/msw/utils.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_utilsexc.o: ../../src/msw/utilsexc.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_fswatcher.o: ../../src/msw/fswatcher.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_event.o: ../../src/common/event.cpp

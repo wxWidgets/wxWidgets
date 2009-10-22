@@ -48,6 +48,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_evthandler.obj \
+	$(OBJS)\test_evtsource.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
 	$(OBJS)\test_filetest.obj \
@@ -56,6 +57,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filesystest.obj \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
+	$(OBJS)\test_fswatchertest.obj \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
@@ -166,10 +168,10 @@ LIBTYPE_SUFFIX = lib
 LIBTYPE_SUFFIX = dll
 !endif
 !if "$(MONOLITHIC)" == "0"
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 !endif
 !if "$(MONOLITHIC)" == "1"
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 !endif
 !if "$(USE_GUI)" == "1"
 __test_gui___depname = $(OBJS)\test_gui.exe
@@ -240,13 +242,13 @@ __OPTIMIZEFLAG = -Od
 __OPTIMIZEFLAG = -O2
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG = 
+__THREADSFLAG =
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG = mt
 !endif
 !if "$(USE_THREADS)" == "0"
-__THREADSFLAG_0 = 
+__THREADSFLAG_0 =
 !endif
 !if "$(USE_THREADS)" == "1"
 __THREADSFLAG_0 = -tWM
@@ -255,13 +257,13 @@ __THREADSFLAG_0 = -tWM
 __RUNTIME_LIBS = -tWR
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS = 
+__RUNTIME_LIBS =
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_0 = i
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
-__RUNTIME_LIBS_0 = 
+__RUNTIME_LIBS_0 =
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
@@ -337,7 +339,7 @@ $(OBJS):
 
 all: $(OBJS)\test.exe $(__test_gui___depname) data fr
 
-clean: 
+clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
@@ -366,11 +368,11 @@ $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\t
 |
 !endif
 
-data: 
+data:
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-fr: 
+fr:
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
 
@@ -410,6 +412,9 @@ $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 $(OBJS)\test_evthandler.obj: .\events\evthandler.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\evthandler.cpp
 
+$(OBJS)\test_evtsource.obj: .\events\evtsource.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\evtsource.cpp
+
 $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\timertest.cpp
 
@@ -433,6 +438,9 @@ $(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp
 
 $(OBJS)\test_formatconvertertest.obj: .\formatconverter\formatconvertertest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\formatconverter\formatconvertertest.cpp
+
+$(OBJS)\test_fswatchertest.obj: .\fswatcher\fswatchertest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\fswatcher\fswatchertest.cpp
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\hashes\hashes.cpp

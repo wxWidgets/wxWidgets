@@ -1738,6 +1738,7 @@ Optional Features:
   --enable-fs_archive     use virtual archive filesystems
   --enable-fs_inet        use virtual HTTP/FTP filesystems
   --enable-fs_zip         now replaced by fs_archive
+  --enable-fswatcher      use wxFileSystemWatcher class
   --enable-geometry       use geometry class
   --enable-log            use logging system
   --enable-longlong       use wxLongLong class
@@ -7205,6 +7206,50 @@ fi
             fi
           else
             result=$wxUSE_FS_ZIP
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-fswatcher" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-fswatcher... $ECHO_C" >&6; }
+          # Check whether --enable-fswatcher was given.
+if test "${enable_fswatcher+set}" = set; then
+  enableval=$enable_fswatcher;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_fswatcher='wxUSE_FSWATCHER=yes'
+                          else
+                            wx_cv_use_fswatcher='wxUSE_FSWATCHER=no'
+                          fi
+
+else
+
+                          wx_cv_use_fswatcher='wxUSE_FSWATCHER=${'DEFAULT_wxUSE_FSWATCHER":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_fswatcher"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_FSWATCHER = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_FSWATCHER
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -42423,6 +42468,150 @@ echo "$as_me: WARNING: plugins require wxDynamicLibrary, disabling" >&2;}
 #define wxUSE_PLUGINS 1
 _ACEOF
 
+    fi
+fi
+
+
+if test "$wxUSE_FSWATCHER" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FSWATCHER 1
+_ACEOF
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
+
+    if test "$wxUSE_UNIX" = "yes"; then
+
+for ac_header in sys/inotify.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Header=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+        if test "$ac_cv_header_sys_inotify_h" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define wxHAS_INOTIFY 1
+_ACEOF
+
+        else
+
+for ac_header in sys/event.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Header=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
+            if test "$ac_cv_header_sys_event_h" = "yes"; then
+                cat >>confdefs.h <<\_ACEOF
+#define wxHAS_KQUEUE 1
+_ACEOF
+
+            else
+                { echo "$as_me:$LINENO: WARNING: No native wxFileSystemWatcher implementation available for on this platform" >&5
+echo "$as_me: WARNING: No native wxFileSystemWatcher implementation available for on this platform" >&2;}
+            fi
+        fi
     fi
 fi
 

@@ -733,6 +733,9 @@
 				RelativePath="..\..\src\common\fs_mem.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\fswatchercmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\hash.cpp">
 			</File>
 			<File
@@ -905,6 +908,9 @@
 				RelativePath="..\..\src\msw\evtloop.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\fswatcher.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\main.cpp">
 			</File>
 			<File
@@ -960,6 +966,13 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\volume.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Generic Sources"
+			UniqueIdentifier="{FEA0C02F-F300-53BA-B784-52A5086B8093}">
+			<File
+				RelativePath="..\..\src\generic\fswatcherg.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -1082,6 +1095,9 @@
 				RelativePath="..\..\include\wx\msw\debughlp.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\fswatcher.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\gccpriv.h">
 			</File>
 			<File
@@ -1197,6 +1213,13 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\wrapwin.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Generic Headers"
+			UniqueIdentifier="{61C63C83-EF8C-51CA-A418-51936E7FCD4A}">
+			<File
+				RelativePath="..\..\include\wx\generic\fswatcher.h">
 			</File>
 		</Filter>
 		<Filter
@@ -1367,6 +1390,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\fs_zip.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\fswatcher.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\hash.h">

@@ -750,6 +750,7 @@ WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conv
 WX_ARG_FEATURE(fs_archive,    [  --enable-fs_archive     use virtual archive filesystems], wxUSE_FS_ARCHIVE)
 WX_ARG_FEATURE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
 WX_ARG_FEATURE(fs_zip,        [  --enable-fs_zip         now replaced by fs_archive], wxUSE_FS_ZIP)
+WX_ARG_FEATURE(fswatcher,     [  --enable-fswatcher      use wxFileSystemWatcher class], wxUSE_FSWATCHER)
 WX_ARG_FEATURE(geometry,      [  --enable-geometry       use geometry class], wxUSE_GEOMETRY)
 WX_ARG_FEATURE(log,           [  --enable-log            use logging system], wxUSE_LOG)
 WX_ARG_FEATURE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
@@ -5507,6 +5508,29 @@ if test "$wxUSE_PLUGINS" = "yes" ; then
     fi
     if test "$wxUSE_PLUGINS" = "yes" ; then
         AC_DEFINE(wxUSE_PLUGINS)
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl File system watcher checks
+dnl ---------------------------------------------------------------------------
+
+if test "$wxUSE_FSWATCHER" = "yes"; then
+    AC_DEFINE(wxUSE_FSWATCHER)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
+
+    if test "$wxUSE_UNIX" = "yes"; then
+        AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
+        if test "$ac_cv_header_sys_inotify_h" = "yes"; then
+            AC_DEFINE(wxHAS_INOTIFY)
+        else
+            AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
+            if test "$ac_cv_header_sys_event_h" = "yes"; then
+                AC_DEFINE(wxHAS_KQUEUE)
+            else
+                AC_MSG_WARN([No native wxFileSystemWatcher implementation available for on this platform])
+            fi
+        fi
     fi
 fi
 

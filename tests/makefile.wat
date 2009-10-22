@@ -63,10 +63,10 @@ LIBTYPE_SUFFIX = dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
-EXTRALIBS_FOR_BASE = 
+EXTRALIBS_FOR_BASE =
 !endif
 !ifeq MONOLITHIC 1
-EXTRALIBS_FOR_BASE =  
+EXTRALIBS_FOR_BASE =
 !endif
 __test_gui___depname =
 !ifeq USE_GUI 1
@@ -136,11 +136,11 @@ __DEBUGINFO_1 = debug all
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = 
+__DEBUGINFO_1 =
 !endif
 !ifeq DEBUG_INFO 1
 __DEBUGINFO_1 = debug all
@@ -154,7 +154,7 @@ __OPTIMIZEFLAG = -ot -ox
 !endif
 __THREADSFLAG =
 !ifeq USE_THREADS 0
-__THREADSFLAG = 
+__THREADSFLAG =
 !endif
 !ifeq USE_THREADS 1
 __THREADSFLAG = -bm
@@ -164,18 +164,18 @@ __RUNTIME_LIBS =
 __RUNTIME_LIBS = -br
 !endif
 !ifeq RUNTIME_LIBS static
-__RUNTIME_LIBS = 
+__RUNTIME_LIBS =
 !endif
 __RTTIFLAG =
 !ifeq USE_RTTI 0
-__RTTIFLAG = 
+__RTTIFLAG =
 !endif
 !ifeq USE_RTTI 1
 __RTTIFLAG = -xr
 !endif
 __EXCEPTIONSFLAG =
 !ifeq USE_EXCEPTIONS 0
-__EXCEPTIONSFLAG = 
+__EXCEPTIONSFLAG =
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
@@ -269,6 +269,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_fileconf.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_evthandler.obj &
+	$(OBJS)\test_evtsource.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
 	$(OBJS)\test_filetest.obj &
@@ -277,6 +278,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_filesystest.obj &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
+	$(OBJS)\test_fswatchertest.obj &
 	$(OBJS)\test_hashes.obj &
 	$(OBJS)\test_intltest.obj &
 	$(OBJS)\test_lists.obj &
@@ -369,7 +371,7 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data fr
 
-clean : .SYMBOLIC 
+clean : .SYMBOLIC
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
@@ -404,11 +406,11 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	wlink @$(OBJS)\test_gui.lbc
 !endif
 
-data : .SYMBOLIC 
+data : .SYMBOLIC
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-fr : .SYMBOLIC 
+fr : .SYMBOLIC
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
 
@@ -448,6 +450,9 @@ $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 $(OBJS)\test_evthandler.obj :  .AUTODEPEND .\events\evthandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_evtsource.obj :  .AUTODEPEND .\events\evtsource.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -470,6 +475,9 @@ $(OBJS)\test_fontmaptest.obj :  .AUTODEPEND .\fontmap\fontmaptest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_formatconvertertest.obj :  .AUTODEPEND .\formatconverter\formatconvertertest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_fswatchertest.obj :  .AUTODEPEND .\fswatcher\fswatchertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp

@@ -188,6 +188,70 @@ wxConsoleEventLoop::~wxConsoleEventLoop()
 }
 
 //-----------------------------------------------------------------------------
+// adding & removing sources
+//-----------------------------------------------------------------------------
+
+#if wxUSE_EVENTLOOP_SOURCE
+
+// This class is a temporary bridge between event loop sources and
+// FDIODispatcher. It is going to be removed soon, when all subject interfaces
+// are modified
+class wxFDIOEventLoopSourceHandler : public wxFDIOHandler
+{
+public:
+    wxFDIOEventLoopSourceHandler(wxEventLoopSourceHandler* handler) :
+        m_impl(handler) { }
+
+    virtual void OnReadWaiting()
+    {
+        m_impl->OnReadWaiting();
+    }
+    virtual void OnWriteWaiting()
+    {
+        m_impl->OnWriteWaiting();
+    }
+
+    virtual void OnExceptionWaiting()
+    {
+        m_impl->OnExceptionWaiting();
+    }
+
+protected:
+    wxEventLoopSourceHandler* m_impl;
+};
+
+bool wxConsoleEventLoop::DoAddSource(wxAbstractEventLoopSource* src)
+{
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
+
+    wxLogTrace(wxTRACE_EVT_SOURCE,
+                "wxConsoleEventLoop::AddSource() source=%d",
+                source->GetResource());
+
+    // translating into wxFDIOHandler
+    // XXX this is a memory leak of course, but this is really temporary, so
+    // we are not creating another map of handlers
+    wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(source->GetHandler());
+
+    return m_dispatcher->RegisterFD(source->GetResource(), h,
+                                    source->GetFlags());
+}
+
+bool wxConsoleEventLoop::DoRemoveSource(wxAbstractEventLoopSource* src)
+{
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
+
+    wxLogTrace(wxTRACE_EVT_SOURCE,
+               "wxConsoleEventLoop::RemoveSource() source=%d",
+               source->GetResource());
+
+    return m_dispatcher->UnregisterFD(source->GetResource());
+}
+#endif
+
+//-----------------------------------------------------------------------------
 // events dispatch and loop handling
 //-----------------------------------------------------------------------------
 

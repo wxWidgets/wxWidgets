@@ -32,6 +32,7 @@
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
+#include <glib.h>
 
 // ============================================================================
 // wxEventLoop implementation
@@ -79,6 +80,87 @@ void wxGUIEventLoop::WakeUp()
     //       nothing when we don't...
     if ( wxTheApp )
         wxTheApp->WakeUpIdle();
+}
+
+// ----------------------------------------------------------------------------
+// wxEventLoop adding & removing sources
+// ----------------------------------------------------------------------------
+
+extern "C"
+{
+static gboolean wx_on_channel_event(GIOChannel *channel,
+                                    GIOCondition condition, gpointer data)
+{
+    wxLogTrace(wxTRACE_EVT_SOURCE, "wx_on_channel_event, gtk_source_id=%d",
+               g_io_channel_unix_get_fd(channel));
+
+    wxEventLoopSourceHandler* handler =
+                                static_cast<wxEventLoopSourceHandler*>(data);
+
+    if (condition & G_IO_IN || condition & G_IO_PRI)
+    {
+        handler->OnReadWaiting();
+    }
+    else if (condition & G_IO_OUT)
+    {
+        handler->OnWriteWaiting();
+    }
+    else if (condition & G_IO_ERR || condition & G_IO_NVAL)
+    {
+        handler->OnExceptionWaiting();
+    }
+    else
+    {
+        wxFAIL_MSG(wxString::Format("Inavlid condition=%d", condition));
+    }
+
+    // we never want to remove source here, so always return true
+    return TRUE;
+}
+}
+
+bool wxGUIEventLoop::DoAddSource(wxAbstractEventLoopSource* src)
+{
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
+
+    wxLogTrace(wxTRACE_EVT_SOURCE,
+               "wxGUIEventLoop::DoAddSource() source=%d",
+               source->GetResource());
+
+    int flags = source->GetFlags();
+    int condition = 0;
+    if (flags & wxEVENT_SOURCE_INPUT)
+        condition |= G_IO_IN | G_IO_PRI;
+    if (flags & wxEVENT_SOURCE_OUTPUT)
+        condition |= G_IO_OUT;
+    if (flags & wxEVENT_SOURCE_EXCEPTION)
+        condition |= G_IO_ERR | G_IO_HUP | G_IO_NVAL;
+
+    GIOChannel* channel = g_io_channel_unix_new(source->GetResource());
+    int gtk_id = g_io_add_watch(channel, (GIOCondition)condition,
+                                &wx_on_channel_event, source->GetHandler());
+    g_io_channel_unref(channel);
+
+    wxEventLoopSourceIdMap::value_type val(source, gtk_id);
+    return m_sourceIdMap.insert(val).second;
+}
+
+bool wxGUIEventLoop::DoRemoveSource(wxAbstractEventLoopSource* src)
+{
+    Source* source = dynamic_cast<Source*>(src);
+    wxCHECK_MSG( source, false, "Invalid source type" );
+
+    wxLogTrace(wxTRACE_EVT_SOURCE,
+               "wxGUIEventLoop::DoRemoveSource() source=%d",
+               source->GetResource());
+
+    wxEventLoopSourceIdMap::iterator it = m_sourceIdMap.find(source);
+    wxCHECK_MSG( it != m_sourceIdMap.end(), false, "Source not on the list" );
+
+    int gtk_id = it->second;
+    m_sourceIdMap.erase(it);
+    return g_source_remove(gtk_id);
 }
 
 // ----------------------------------------------------------------------------

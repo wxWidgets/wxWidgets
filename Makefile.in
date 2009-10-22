@@ -452,6 +452,8 @@ ALL_BASE_HEADERS =  \
 	wx/meta/if.h \
 	wx/meta/int2type.h \
 	wx/meta/movable.h \
+	wx/fswatcher.h \
+	wx/generic/fswatcher.h \
 	$(BASE_PLATFORM_HDR) \
 	wx/fs_inet.h \
 	wx/protocol/file.h \
@@ -613,6 +615,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/meta/if.h \
 	wx/meta/int2type.h \
 	wx/meta/movable.h \
+	wx/fswatcher.h \
+	wx/generic/fswatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -622,8 +626,10 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
+	wx/unix/fswatcher_inotify.h \
 	wx/msw/apptrait.h \
 	wx/msw/apptbase.h \
 	wx/msw/chkconf.h \
@@ -644,6 +650,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/msw/wrapcctl.h \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
+	wx/msw/fswatcher.h \
 	$(BASE_WINCE_HDR) \
 	$(BASE_OSX_HDR) \
 	wx/palmos/apptbase.h \
@@ -747,6 +754,8 @@ ALL_BASE_SOURCES =  \
 	src/common/xtistrm.cpp \
 	src/common/zipstrm.cpp \
 	src/common/zstream.cpp \
+	src/common/fswatchercmn.cpp \
+	src/generic/fswatcherg.cpp \
 	src/common/fdiodispatcher.cpp \
 	src/common/selectdispatcher.cpp \
 	src/unix/appunix.cpp \
@@ -761,7 +770,9 @@ ALL_BASE_SOURCES =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
+	src/unix/fswatcher_inotify.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -779,6 +790,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/timer.cpp \
 	src/msw/utils.cpp \
 	src/msw/utilsexc.cpp \
+	src/msw/fswatcher.cpp \
 	$(BASE_WINCE_SRC) \
 	$(BASE_OSX_SRC) \
 	src/common/fdiodispatcher.cpp \
@@ -938,6 +950,8 @@ MONODLL_OBJECTS =  \
 	monodll_xtistrm.o \
 	monodll_zipstrm.o \
 	monodll_zstream.o \
+	monodll_fswatchercmn.o \
+	monodll_fswatcherg.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS) \
 	monodll_event.o \
 	monodll_fs_mem.o \
@@ -1066,6 +1080,8 @@ MONOLIB_OBJECTS =  \
 	monolib_xtistrm.o \
 	monolib_zipstrm.o \
 	monolib_zstream.o \
+	monolib_fswatchercmn.o \
+	monolib_fswatcherg.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_1) \
 	monolib_event.o \
 	monolib_fs_mem.o \
@@ -1189,6 +1205,8 @@ BASEDLL_OBJECTS =  \
 	basedll_xtistrm.o \
 	basedll_zipstrm.o \
 	basedll_zstream.o \
+	basedll_fswatchercmn.o \
+	basedll_fswatcherg.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_2) \
 	basedll_event.o \
 	basedll_fs_mem.o \
@@ -1295,6 +1313,8 @@ BASELIB_OBJECTS =  \
 	baselib_xtistrm.o \
 	baselib_zipstrm.o \
 	baselib_zstream.o \
+	baselib_fswatchercmn.o \
+	baselib_fswatcherg.o \
 	$(__BASE_PLATFORM_SRC_OBJECTS_3) \
 	baselib_event.o \
 	baselib_fs_mem.o \
@@ -2023,6 +2043,7 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/stdpaths_cf.cpp \
@@ -2044,6 +2065,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/stdpaths_cf.cpp \
@@ -2065,6 +2087,7 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/stdpaths_cf.cpp \
@@ -2086,6 +2109,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/stdpaths_cf.cpp \
@@ -2111,7 +2135,8 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp
+	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
@@ -2132,7 +2157,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/unix/stdpaths.cpp \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
-	src/unix/utilsunx.cpp
+	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_SRC = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC)
 COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/common/fdiodispatcher.cpp \
@@ -2149,6 +2175,7 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/timerunx.cpp \
 	src/unix/threadpsx.cpp \
 	src/unix/utilsunx.cpp \
+	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
 	src/osx/core/stdpaths_cf.cpp \
@@ -2165,6 +2192,7 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2185,6 +2213,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2205,6 +2234,7 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2225,6 +2255,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2251,7 +2282,8 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR =  \
 	wx/unix/pipe.h \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h
+	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h
 @COND_TOOLKIT_OSX_CARBON@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR)
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/cfdataref.h \
@@ -2269,7 +2301,8 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/pipe.h \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
-	wx/unix/tls.h
+	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/app.h \
@@ -2281,6 +2314,7 @@ COND_TOOLKIT_X11_BASE_OSX_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
 	wx/unix/mimetype.h \
 	wx/osx/core/cfdataref.h \
@@ -2314,8 +2348,10 @@ COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
 	wx/unix/stdpaths.h \
 	wx/unix/stackwalk.h \
 	wx/unix/tls.h \
+	wx/unix/fswatcher_kqueue.h \
 	wx/unix/execute.h \
-	wx/unix/mimetype.h
+	wx/unix/mimetype.h \
+	wx/unix/fswatcher_inotify.h
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/apptrait.h \
@@ -2338,6 +2374,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/wrapcctl.h \
 	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
+	wx/msw/fswatcher.h \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
@@ -3939,7 +3976,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_unix_stdpaths.o \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
-	monodll_utilsunx.o
+	monodll_utilsunx.o \
+	monodll_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_MSDOS_1@	monodll_msdos_dir.o monodll_msdos_mimetype.o \
@@ -3973,7 +4011,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_timerunx.o \
 	monodll_threadpsx.o \
 	monodll_utilsunx.o \
-	monodll_unix_mimetype.o
+	monodll_fswatcher_kqueue.o \
+	monodll_unix_mimetype.o \
+	monodll_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -3993,6 +4033,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_msw_timer.o \
 	monodll_msw_utils.o \
 	monodll_msw_utilsexc.o \
+	monodll_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS = monodll_time.o
@@ -5752,7 +5793,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_unix_stdpaths.o \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
-	monolib_utilsunx.o
+	monolib_utilsunx.o \
+	monolib_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MSDOS_1@	= monolib_msdos_dir.o monolib_msdos_mimetype.o \
@@ -5786,7 +5828,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_timerunx.o \
 	monolib_threadpsx.o \
 	monolib_utilsunx.o \
-	monolib_unix_mimetype.o
+	monolib_fswatcher_kqueue.o \
+	monolib_unix_mimetype.o \
+	monolib_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -5806,6 +5850,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_msw_timer.o \
 	monolib_msw_utils.o \
 	monolib_msw_utilsexc.o \
+	monolib_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_1 = monolib_time.o
@@ -7618,7 +7663,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_unix_stdpaths.o \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
-	basedll_utilsunx.o
+	basedll_utilsunx.o \
+	basedll_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MSDOS_1@	= basedll_msdos_dir.o basedll_msdos_mimetype.o \
@@ -7652,7 +7698,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timerunx.o \
 	basedll_threadpsx.o \
 	basedll_utilsunx.o \
-	basedll_unix_mimetype.o
+	basedll_fswatcher_kqueue.o \
+	basedll_unix_mimetype.o \
+	basedll_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -7672,6 +7720,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timer.o \
 	basedll_msw_utils.o \
 	basedll_msw_utilsexc.o \
+	basedll_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_2 = basedll_time.o
@@ -7713,7 +7762,8 @@ COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_unix_stdpaths.o \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
-	baselib_utilsunx.o
+	baselib_utilsunx.o \
+	baselib_fswatcher_kqueue.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_PLATFORM_MSDOS_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MSDOS_1@	= baselib_msdos_dir.o baselib_msdos_mimetype.o \
@@ -7747,7 +7797,9 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timerunx.o \
 	baselib_threadpsx.o \
 	baselib_utilsunx.o \
-	baselib_unix_mimetype.o
+	baselib_fswatcher_kqueue.o \
+	baselib_unix_mimetype.o \
+	baselib_fswatcher_inotify.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -7767,6 +7819,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timer.o \
 	baselib_msw_utils.o \
 	baselib_msw_utilsexc.o \
+	baselib_fswatcher.o \
 	$(__BASE_WINCE_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_WINCE@__BASE_WINCE_SRC_OBJECTS_3 = baselib_time.o
@@ -14738,8 +14791,17 @@ monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(MONODLL_ODEP)
 monodll_zstream.o: $(srcdir)/src/common/zstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
+monodll_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fswatchercmn.cpp
+
+monodll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
+
 monodll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+monodll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
 monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -14791,6 +14853,9 @@ monodll_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(MONODLL_ODEP)
 
 monodll_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilsexc.cpp
+
+monodll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
 monodll_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -16594,6 +16659,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_UNIX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_MACOSX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
 @COND_PLATFORM_UNIX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -19514,8 +19585,17 @@ monolib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(MONOLIB_ODEP)
 monolib_zstream.o: $(srcdir)/src/common/zstream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
+monolib_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fswatchercmn.cpp
+
+monolib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
+
 monolib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+monolib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
 monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -19567,6 +19647,9 @@ monolib_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(MONOLIB_ODEP)
 
 monolib_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilsexc.cpp
+
+monolib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
 monolib_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -21370,6 +21453,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_UNIX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_MACOSX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
 @COND_PLATFORM_UNIX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -24290,8 +24379,17 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(BASEDLL_ODEP)
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
+basedll_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/fswatchercmn.cpp
+
+basedll_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
+
 basedll_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+basedll_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
 basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -24343,6 +24441,9 @@ basedll_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASEDLL_ODEP)
 
 basedll_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/utilsexc.cpp
+
+basedll_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
 basedll_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -24523,6 +24624,12 @@ basedll_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@basedll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_MACOSX_1@basedll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
 baselib_any.o: $(srcdir)/src/common/any.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/any.cpp
@@ -24764,8 +24871,17 @@ baselib_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp $(BASELIB_ODEP)
 baselib_zstream.o: $(srcdir)/src/common/zstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/zstream.cpp
 
+baselib_fswatchercmn.o: $(srcdir)/src/common/fswatchercmn.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/fswatchercmn.cpp
+
+baselib_fswatcherg.o: $(srcdir)/src/generic/fswatcherg.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/generic/fswatcherg.cpp
+
 baselib_unix_mimetype.o: $(srcdir)/src/unix/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/mimetype.cpp
+
+baselib_fswatcher_inotify.o: $(srcdir)/src/unix/fswatcher_inotify.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_inotify.cpp
 
 baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/basemsw.cpp
@@ -24817,6 +24933,9 @@ baselib_msw_utils.o: $(srcdir)/src/msw/utils.cpp $(BASELIB_ODEP)
 
 baselib_msw_utilsexc.o: $(srcdir)/src/msw/utilsexc.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/utilsexc.cpp
+
+baselib_fswatcher.o: $(srcdir)/src/msw/fswatcher.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/fswatcher.cpp
 
 baselib_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -24997,6 +25116,12 @@ baselib_cocoa_utils.o: $(srcdir)/src/osx/cocoa/utils.mm $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@baselib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
+
+@COND_PLATFORM_MACOSX_1@baselib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
 
 netdll_version_rc.o: $(srcdir)/src/msw/version.rc $(NETDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIX)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define wxUSE_GUI=0 --define WXUSINGDLL --define WXMAKINGDLL_NET

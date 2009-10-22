@@ -245,6 +245,8 @@
 
 #define wxUSE_STOPWATCH     0
 
+#define wxUSE_FSWATCHER     0
+
 #define wxUSE_CONFIG        0
 
 #define wxUSE_CONFIG_NATIVE   0
@@ -1158,6 +1160,12 @@
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
+
+/* Define if you have inotify_xxx() functions. */
+#undef wxHAS_INOTIFY
+
+/* Define if you have kqueu_xxx() functions. */
+#undef wxHAS_KQUEUE
 
 /* -------------------------------------------------------------------------
    Win32 adjustments section

@@ -39,6 +39,7 @@
             config/fileconf.cpp
             datetime/datetimetest.cpp
             events/evthandler.cpp
+            events/evtsource.cpp
             events/timertest.cpp
             exec/exec.cpp
             file/filetest.cpp
@@ -47,6 +48,7 @@
             filesys/filesystest.cpp
             fontmap/fontmaptest.cpp
             formatconverter/formatconvertertest.cpp
+            fswatcher/fswatchertest.cpp
             hashes/hashes.cpp
             intl/intltest.cpp
             lists/lists.cpp

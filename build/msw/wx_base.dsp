@@ -391,6 +391,10 @@ SOURCE=..\..\src\common\fs_mem.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\fswatchercmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -619,6 +623,10 @@ SOURCE=..\..\src\msw\evtloop.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\fswatcher.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\main.cpp
 # End Source File
 # Begin Source File
@@ -707,6 +715,14 @@ SOURCE=..\..\src\msw\version.rc
 # Begin Source File
 
 SOURCE=..\..\src\msw\volume.cpp
+# End Source File
+# End Group
+# Begin Group "Generic Sources"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\generic\fswatcherg.cpp
 # End Source File
 # End Group
 # Begin Group "Setup Headers"
@@ -884,6 +900,10 @@ SOURCE=..\..\include\wx\msw\debughlp.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\fswatcher.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File
@@ -1024,6 +1044,14 @@ SOURCE=..\..\include\wx\msw\wrapcdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\wrapwin.h
+# End Source File
+# End Group
+# Begin Group "Generic Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\fswatcher.h
 # End Source File
 # End Group
 # Begin Group "wxHTML Headers"
@@ -1248,6 +1276,10 @@ SOURCE=..\..\include\wx\fs_mem.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\fs_zip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\fswatcher.h
 # End Source File
 # Begin Source File
 
