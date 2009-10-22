@@ -305,15 +305,13 @@ public:
     virtual bool AfterWait()
     {
         // fail if still no events
-         if (!tested)
-         {
-             wxString s;
-             s.Printf("No events from watcher during %d seconds!",
-                                                             WAIT_DURATION);
-             CPPUNIT_FAIL((const char*)s);
-         }
+        WX_ASSERT_MESSAGE
+        (
+             ("No events during %d seconds!", static_cast<int>(WAIT_DURATION)),
+             tested
+        );
 
-         return true;
+        return true;
     }
 
     virtual void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
