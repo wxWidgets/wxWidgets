@@ -14,208 +14,20 @@
 
 #include "wx/event.h"
 #include "wx/utils.h"
-#include "wx/hashset.h"
 
-// ----------------------------------------------------------------------------
-// wxEventLoopSource: source of i/o for wxEventLoop
-// ----------------------------------------------------------------------------
-
-#define wxTRACE_EVT_SOURCE "EventSource"
-
-#if defined(__UNIX__) && (wxUSE_CONSOLE_EVENTLOOP || defined(__WXGTK__) || \
-    defined(__WXOSX_COCOA__))
+// TODO: implement wxEventLoopSource for MSW (it should wrap a HANDLE and be
+//       monitored using MsgWaitForMultipleObjects())
+#if defined(__WXOSX__) || defined(__WXGTK20__) || defined(__WXDFB__) || \
+        (!wxUSE_GUI && defined(__UNIX__))
     #define wxUSE_EVENTLOOP_SOURCE 1
 #else
     #define wxUSE_EVENTLOOP_SOURCE 0
 #endif
 
 #if wxUSE_EVENTLOOP_SOURCE
-
-// handler used to process events on event loop sources
-class WXDLLIMPEXP_BASE wxEventLoopSourceHandler
-{
-public:
-    // called when descriptor is available for non-blocking read
-    virtual void OnReadWaiting() = 0;
-
-    // called when descriptor is available  for non-blocking write
-    virtual void OnWriteWaiting() = 0;
-
-    // called when there is exception on descriptor
-    virtual void OnExceptionWaiting() = 0;
-
-    // virtual dtor for the base class
-    virtual ~wxEventLoopSourceHandler() { }
-};
-
-// those flags describes what events should be reported
-enum
-{
-    wxEVENT_SOURCE_INPUT = 0x01,
-    wxEVENT_SOURCE_OUTPUT = 0x02,
-    wxEVENT_SOURCE_EXCEPTION = 0x04,
-    wxEVENT_SOURCE_ALL = wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_OUTPUT |
-                         wxEVENT_SOURCE_EXCEPTION,
-};
-
-class wxAbstractEventLoopSource
-{
-public:
-    wxAbstractEventLoopSource() :
-        m_handler(NULL), m_flags(-1)
-    {}
-
-    wxAbstractEventLoopSource(wxEventLoopSourceHandler* handler, int flags) :
-        m_handler(handler), m_flags(flags)
-    {}
-
-    virtual ~wxAbstractEventLoopSource() { }
-
-    virtual bool IsOk() const = 0;
-
-    virtual void Invalidate() = 0;
-
-    void SetHandler(wxEventLoopSourceHandler* handler)
-    {
-        m_handler = handler;
-    }
-
-    wxEventLoopSourceHandler* GetHandler() const
-    {
-        return m_handler;
-    }
-
-    void SetFlags(int flags)
-    {
-        m_flags = flags;
-    }
-
-    int GetFlags() const
-    {
-        return m_flags;
-    }
-
-protected:
-    wxEventLoopSourceHandler* m_handler;
-    int m_flags;
-};
-
-// This class is a simple wrapper for OS specific resources than can be a
-// source of I/O. On Unix,for instance these are file descriptors.
-//
-// Instances of this class doesn't take resposibility of any resource you pass
-// to them, I.E. you have to release them yourself.
-template<class T>
-class WXDLLIMPEXP_BASE wxEventLoopSourceBase : public wxAbstractEventLoopSource
-{
-public:
-    typedef T Resource;
-
-    // copy ctor
-    wxEventLoopSourceBase(const wxEventLoopSourceBase& source) :
-        wxAbstractEventLoopSource(source.GetHandler(), source.GetFlags()),
-        m_res(source.GetResource())
-    {
-    }
-
-    virtual const T InvalidResource() const
-    {
-        return (T)-1;
-    }
-
-    virtual void Invalidate()
-    {
-        SetResource(InvalidResource());
-        SetHandler(NULL);
-    }
-
-    // sets internal value to res
-    void SetResource(T res)
-    {
-        m_res = res;
-    }
-
-    // returns associated resource
-    T GetResource() const
-    {
-        return m_res;
-    }
-
-    virtual bool IsOk() const
-    {
-        // flags < 0 are invalid and flags == 0 mean monitoring for nothing
-        return m_res != InvalidResource() && m_handler && m_flags >=1;
-    }
-
-protected:
-    // empty ctor, beacuse we often store event sources as values
-    wxEventLoopSourceBase() :
-        wxAbstractEventLoopSource(),
-        m_res(InvalidResource())
-    {
-    }
-
-    // ctor setting internal value to the os resource res
-    wxEventLoopSourceBase(T res, wxEventLoopSourceHandler* handler,
-                          int flags) :
-        wxAbstractEventLoopSource(handler, flags),
-        m_res(res)
-    { }
-
-    T m_res;
-};
-
-#if defined(__WXMAC__)
-class wxMacEventLoopSource : public wxEventLoopSourceBase<CFRunLoopSourceRef>
-{
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    int GetFileDescriptor() const
-    {
-        return m_fd;
-    }
+    class wxEventLoopSource;
+    class wxEventLoopSourceHandler;
 #endif
-protected:
-    wxMacEventLoopSource() : wxEventLoopSourceBase<CFRunLoopSourceRef>() { }
-
-    // ctor setting internal value to the os resource res
-    wxMacEventLoopSource(CFRunLoopSourceRef res,
-                         wxEventLoopSourceHandler* handler, int flags) :
-        wxEventLoopSourceBase<CFRunLoopSourceRef>(res, handler, flags)
-    {
-    }
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-    int m_fd;
-#endif
-
-    friend class wxGUIEventLoop;
-};
-#endif
-
-#if defined(__UNIX__)
-class wxUnixEventLoopSource : public wxEventLoopSourceBase<int>
-{
-protected:
-    wxUnixEventLoopSource() : wxEventLoopSourceBase<int>() { }
-
-    // ctor setting internal value to the os resource res
-    wxUnixEventLoopSource(int res, wxEventLoopSourceHandler* handler,
-                          int flags) :
-        wxEventLoopSourceBase<int>(res, handler, flags)
-    {
-    }
-
-    friend class wxConsoleEventLoop;
-    friend class wxGUIEventLoop;
-};
-#endif
-
-// the list of watched sources
-WX_DECLARE_HASH_SET(wxAbstractEventLoopSource*, wxPointerHash, wxPointerEqual,
-                    wxEventLoopSourceHashSet);
-
-#endif
-
 
 /*
     NOTE ABOUT wxEventLoopBase::YieldFor LOGIC
@@ -267,67 +79,11 @@ public:
     bool IsMain() const;
 
 #if wxUSE_EVENTLOOP_SOURCE
-    virtual wxAbstractEventLoopSource* CreateSource() const = 0;
-
-    virtual wxAbstractEventLoopSource* CreateSource(int WXUNUSED(res),
-                                   wxEventLoopSourceHandler* WXUNUSED(handler),
-                                   int WXUNUSED(flags)) const
-    {
-        return NULL;
-    }
-
-    // adds source to be monitored for I/O events specified in flags. Upon an
-    // event the appropriate method of handler will be called. The handler is
-    // owned be the calling client and will not be freed in any case.
-    // Returns true if the source was successfully added, false if it failed
-    // (this may happen for example when this source is already monitored)
-    virtual bool AddSource(wxAbstractEventLoopSource* source)
-    {
-        wxCHECK_MSG( source && source->IsOk(), false, "Invalid source" );
-
-        wxEventLoopSourceHashSet::value_type val(source);
-        if (!m_sourceMap.insert(val).second)
-        {
-            return false;
-        }
-
-        bool ret = DoAddSource(source);
-        if (!ret)
-        {
-            (void) m_sourceMap.erase(source);
-        }
-        return ret;
-    }
-
-    // removes the source from the list of monitored sources.
-    // Returns true if the source was successfully removed, false otherwise
-    virtual bool RemoveSource(wxAbstractEventLoopSource* source)
-    {
-        wxCHECK_MSG( source && source->IsOk(), false, "Invalid source" );
-
-        if (m_sourceMap.find(source) == m_sourceMap.end())
-        {
-            return false;
-        }
-
-        bool ret = DoRemoveSource(source);
-        m_sourceMap.erase(source);
-        return ret;
-    }
-
-    bool RemoveAllSources()
-    {
-        wxEventLoopSourceHashSet::iterator it = m_sourceMap.begin();
-        while ( !m_sourceMap.empty() )
-        {
-            (void) RemoveSource(*it);
-            m_sourceMap.erase(it);
-            it = m_sourceMap.begin();
-        }
-
-        return true;
-    }
-#endif
+    // create a new event loop source wrapping the given file descriptor and
+    // start monitoring it
+    virtual wxEventLoopSource *
+      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags) = 0;
+#endif // wxUSE_EVENTLOOP_SOURCE
 
     // dispatch&processing
     // -------------------
@@ -414,13 +170,6 @@ public:
 
 
 protected:
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual bool DoAddSource(wxAbstractEventLoopSource* source) = 0;
-    virtual bool DoRemoveSource(wxAbstractEventLoopSource* source) = 0;
-
-    wxEventLoopSourceHashSet m_sourceMap;
-#endif
-
     // this function should be called before the event loop terminates, whether
     // this happens normally (because of Exit() call) or abnormally (because of
     // an exception thrown from inside the loop)
@@ -479,18 +228,31 @@ private:
 
 #endif // platforms using "manual" loop
 
+// include the header defining wxConsoleEventLoop for Unix systems
+#if defined(__UNIX__)
+    #include "wx/unix/evtloop.h"
+#endif
+
 // we're moving away from old m_impl wxEventLoop model as otherwise the user
 // code doesn't have access to platform-specific wxEventLoop methods and this
 // can sometimes be very useful (e.g. under MSW this is necessary for
-// integration with MFC) but currently this is done for MSW only, other ports
-// should follow a.s.a.p.
+// integration with MFC) but currently this is not done for all ports yet (e.g.
+// wxX11) so fall back to the old wxGUIEventLoop definition below for them
+
 #if defined(__WXPALMOS__)
     #include "wx/palmos/evtloop.h"
 #elif defined(__WXMSW__)
+    // this header defines both console and GUI loops for MSW
     #include "wx/msw/evtloop.h"
-#elif defined(__WXMAC__)
+#elif defined(__WXOSX__)
+    // CoreFoundation-based event loop is currently in wxBase so include it in
+    // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/evtloop.h"
-#elif defined(__WXCOCOA__)
+#elif wxUSE_GUI
+
+// include the appropriate header defining wxGUIEventLoop
+
+#if defined(__WXCOCOA__)
     #include "wx/cocoa/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
@@ -538,16 +300,13 @@ protected:
 
 #endif // platforms
 
-// also include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__)
-    #include "wx/unix/evtloop.h"
-#endif
+#endif // wxUSE_GUI
 
-// we use a class rather than a typedef because wxEventLoop is forward-declared
-// in many places
 #if wxUSE_GUI
+    // we use a class rather than a typedef because wxEventLoop is
+    // forward-declared in many places
     class wxEventLoop : public wxGUIEventLoop { };
-#else // !GUI
+#else // !wxUSE_GUI
     // we can't define wxEventLoop differently in GUI and base libraries so use
     // a #define to still allow writing wxEventLoop in the user code
     #if wxUSE_CONSOLE_EVENTLOOP && (defined(__WXMSW__) || defined(__UNIX__))

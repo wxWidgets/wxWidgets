@@ -106,29 +106,4 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxFSWatchEntryKq);
 };
 
-
-// ============================================================================
-// wxFSWSourceHandler helper class
-// ============================================================================
-
-class wxFSWatcherImplKqueue;
-
-/**
- * Handler for handling i/o from inotify descriptor
- */
-class wxFSWSourceHandler : public wxEventLoopSourceHandler
-{
-public:
-    wxFSWSourceHandler(wxFSWatcherImplKqueue* service) :
-        m_service(service)
-    {  }
-
-    virtual void OnReadWaiting();
-    virtual void OnWriteWaiting();
-    virtual void OnExceptionWaiting();
-
-protected:
-    wxFSWatcherImplKqueue* m_service;
-};
-
 #endif /* WX_UNIX_PRIVATE_FSWATCHER_KQUEUE_H_ */

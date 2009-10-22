@@ -87,102 +87,10 @@ void wxGUIEventLoop::WakeUp()
     wxMacWakeUp();
 }
 
-//-----------------------------------------------------------------------------
-// event loop sources operations
-//-----------------------------------------------------------------------------
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-extern "C"
+CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
 {
-struct wx_cffd_data
-{
-    wxEventLoopSourceHandler* handler;
-    int flags;
-};
-
-static void wx_cffiledescriptor_callback(CFFileDescriptorRef cffd,
-                                         CFOptionFlags flags, void* ctxData)
-{
-    wxLogTrace(wxTRACE_EVT_SOURCE, "CFFileDescriptor Callback");
-
-    wx_cffd_data* data = static_cast<wx_cffd_data*>(ctxData);
-    wxEventLoopSourceHandler* handler = data->handler;
-    if (flags & kCFFileDescriptorReadCallBack)
-        handler->OnReadWaiting();
-    if (flags & kCFFileDescriptorWriteCallBack)
-        handler->OnWriteWaiting();
-
-    // reenable callbacks
-    if (data->flags & wxEVENT_SOURCE_INPUT)
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorReadCallBack);
-    if (data->flags & wxEVENT_SOURCE_OUTPUT)
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorWriteCallBack);
-}
-}
-
-wxMacEventLoopSource* wxGUIEventLoop::CreateSource(int fd,
-                                            wxEventLoopSourceHandler* handler,
-                                            int flags) const
-{
-    wxMacEventLoopSource* source = new wxMacEventLoopSource();
-    // FIXME this is currently a leak :-)
-    wx_cffd_data* data = new wx_cffd_data;
-    data->handler = handler;
-    data->flags = flags;
-    CFFileDescriptorContext ctx = { 0, data, NULL, NULL, NULL };
-    CFFileDescriptorRef cffd = CFFileDescriptorCreate(kCFAllocatorDefault, fd,
-                                     true, wx_cffiledescriptor_callback, &ctx);
-
-    if (flags & wxEVENT_SOURCE_INPUT)
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorReadCallBack);
-    if (flags & wxEVENT_SOURCE_OUTPUT)
-        CFFileDescriptorEnableCallBacks(cffd, kCFFileDescriptorWriteCallBack);
-
-    source->SetResource(
-            CFFileDescriptorCreateRunLoopSource(kCFAllocatorDefault, cffd, 0));
-    source->SetHandler(handler);
-    source->SetFlags(flags);
-    return source;
-}
-#elif
-wxMacEventLoopSource* wxGUIEventLoop::CreateSource(int fd,
-                                            wxEventLoopSourceHandler* handler,
-                                            int flags) const
-{
-    return NULL;
-}
-#endif
-
-bool wxGUIEventLoop::DoAddSource(wxAbstractEventLoopSource* src)
-{
-    Source* source = dynamic_cast<Source*>(src);
-    wxCHECK_MSG( source, false, "Invalid source type" );
-
-    wxLogTrace(wxTRACE_EVT_SOURCE,
-                "wxGUIEventLoop::AddSource() source=%d",
-                source->GetResource());
-
     NSRunLoop* nsloop = [NSRunLoop currentRunLoop];
-    CFRunLoopRef cfloop = [nsloop getCFRunLoop];
-    CFRunLoopAddSource(cfloop, source->GetResource(), kCFRunLoopDefaultMode);
-
-    return true;
-}
-
-bool wxGUIEventLoop::DoRemoveSource(wxAbstractEventLoopSource* src)
-{
-    Source* source = dynamic_cast<Source*>(src);
-    wxCHECK_MSG( source, false, "Invalid source type" );
-
-    wxLogTrace(wxTRACE_EVT_SOURCE,
-                "wxGUIEventLoop::RemoveSource() source=%d",
-                source->GetResource());
-
-    NSRunLoop* nsloop = [NSRunLoop currentRunLoop];
-    CFRunLoopRef cfloop = [nsloop getCFRunLoop];
-    CFRunLoopRemoveSource(cfloop, source->GetResource(), kCFRunLoopDefaultMode);
-
-    return true;
+    return [nsloop getCFRunLoop];
 }
 
 //-----------------------------------------------------------------------------

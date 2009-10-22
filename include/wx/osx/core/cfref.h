@@ -308,6 +308,15 @@ public:
         wxCFRelease(m_ptr);
         m_ptr = p; // Automatic conversion should occur
     }
+
+    // Release the pointer, i.e. give up its ownership.
+    refType release()
+    {
+        refType p = m_ptr;
+        m_ptr = NULL;
+        return p;
+    }
+
 protected:
     /*! @var m_ptr      The raw pointer.
     */

@@ -2046,6 +2046,7 @@ COND_TOOLKIT__BASE_OSX_SRC =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2068,6 +2069,7 @@ COND_TOOLKIT_COCOA_BASE_OSX_SRC =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2090,6 +2092,7 @@ COND_TOOLKIT_GTK_BASE_OSX_SRC =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2112,6 +2115,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -2119,6 +2123,7 @@ COND_TOOLKIT_MOTIF_BASE_OSX_SRC =  \
 COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
@@ -2141,6 +2146,7 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_SRC =  \
 COND_TOOLKIT_OSX_COCOA_BASE_OSX_SRC =  \
 	src/osx/core/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp \
@@ -2178,6 +2184,7 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/unix/fswatcher_kqueue.cpp \
 	src/unix/mimetype.cpp \
 	src/osx/core/cfstring.cpp \
+	src/osx/core/evtloop_cf.cpp \
 	src/osx/core/stdpaths_cf.cpp \
 	src/osx/core/strconv_cf.cpp \
 	src/osx/core/utilsexc_base.cpp
@@ -3960,6 +3967,7 @@ COND_USE_SOVERSOLARIS_1___monodll___so_symlinks_uninst_cmd = rm -f \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_core_mimetype.o \
 	monodll_cfstring.o \
+	monodll_evtloop_cf.o \
 	monodll_stdpaths_cf.o \
 	monodll_strconv_cf.o \
 	monodll_utilsexc_base.o \
@@ -5777,6 +5785,7 @@ COND_MONOLITHIC_1_SHARED_0___monolib___depname = \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_core_mimetype.o \
 	monolib_cfstring.o \
+	monolib_evtloop_cf.o \
 	monolib_stdpaths_cf.o \
 	monolib_strconv_cf.o \
 	monolib_utilsexc_base.o \
@@ -7647,6 +7656,7 @@ COND_USE_SOVERSOLARIS_1___basedll___so_symlinks_uninst_cmd = rm -f \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_core_mimetype.o \
 	basedll_cfstring.o \
+	basedll_evtloop_cf.o \
 	basedll_stdpaths_cf.o \
 	basedll_strconv_cf.o \
 	basedll_utilsexc_base.o \
@@ -7746,6 +7756,7 @@ COND_MONOLITHIC_0_SHARED_0___baselib___depname = \
 COND_PLATFORM_MACOSX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_core_mimetype.o \
 	baselib_cfstring.o \
+	baselib_evtloop_cf.o \
 	baselib_stdpaths_cf.o \
 	baselib_strconv_cf.o \
 	baselib_utilsexc_base.o \
@@ -14866,6 +14877,9 @@ monodll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONODLL_ODEP)
 monodll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
+monodll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
+
 monodll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -19659,6 +19673,9 @@ monolib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(MONOLIB_ODEP)
 
 monolib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
+
+monolib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
 monolib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
@@ -24454,6 +24471,9 @@ basedll_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASEDLL_ODEP)
 basedll_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
 
+basedll_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
+
 basedll_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp
 
@@ -24945,6 +24965,9 @@ baselib_core_mimetype.o: $(srcdir)/src/osx/core/mimetype.cpp $(BASELIB_ODEP)
 
 baselib_cfstring.o: $(srcdir)/src/osx/core/cfstring.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/cfstring.cpp
+
+baselib_evtloop_cf.o: $(srcdir)/src/osx/core/evtloop_cf.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/evtloop_cf.cpp
 
 baselib_stdpaths_cf.o: $(srcdir)/src/osx/core/stdpaths_cf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/osx/core/stdpaths_cf.cpp

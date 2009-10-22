@@ -1,4 +1,4 @@
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/unix/evtloop.h
 // Purpose:     declares wxEventLoop class
 // Author:      Lukasz Michalski (lm@zork.pl)
@@ -18,6 +18,7 @@
 // ----------------------------------------------------------------------------
 
 class wxFDIODispatcher;
+class wxUnixEventLoopSource;
 
 namespace wxPrivate
 {
@@ -27,8 +28,6 @@ namespace wxPrivate
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxEventLoopManual
 {
 public:
-    typedef wxUnixEventLoopSource Source;
-
     // initialize the event loop, use IsOk() to check if we were successful
     wxConsoleEventLoop();
     virtual ~wxConsoleEventLoop();
@@ -42,26 +41,11 @@ public:
     virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
 #if wxUSE_EVENTLOOP_SOURCE
-    virtual wxUnixEventLoopSource* CreateSource() const
-    {
-        return new wxUnixEventLoopSource();
-    }
-
-    virtual wxUnixEventLoopSource* CreateSource(int res,
-                                           wxEventLoopSourceHandler* handler,
-                                           int flags) const
-    {
-        return new wxUnixEventLoopSource(res, handler, flags);
-    }
-#endif
+    virtual wxEventLoopSource *
+      AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
+#endif // wxUSE_EVENTLOOP_SOURCE
 
 protected:
-#if wxUSE_EVENTLOOP_SOURCE
-    // adding/removing sources
-    virtual bool DoAddSource(wxAbstractEventLoopSource* source);
-    virtual bool DoRemoveSource(wxAbstractEventLoopSource* source);
-#endif
-
     virtual void OnNextIteration();
 
 private:

@@ -66,8 +66,7 @@ public:
     // 'Main program' equivalent: the program execution "starts" here
     virtual bool OnInit()
     {
-        // TODO remove then this code becomes rock-solid
-        wxLog::AddTraceMask(wxTRACE_EVT_SOURCE);
+        wxLog::AddTraceMask("EventSource");
         wxLog::AddTraceMask(wxTRACE_FSWATCHER);
 
         // create the main application window

@@ -15,7 +15,7 @@
 class OpaqueEventRef;
 typedef OpaqueEventRef *EventRef;
 
-class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopManual
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxCFEventLoop
 {
 public:
     wxGUIEventLoop();
@@ -27,6 +27,9 @@ public:
 
     virtual void WakeUp();
     virtual bool YieldFor(long eventsToProcess);
+
+protected:
+    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 
 private:
     // dispatch an event and release it

@@ -79,6 +79,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/unix/apptrait.h
     wx/unix/chkconf.h
     wx/unix/evtloop.h
+    wx/unix/evtloopsrc.h
     wx/unix/pipe.h
     wx/unix/stdpaths.h
     wx/unix/stackwalk.h
@@ -186,6 +187,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Used on Mac OS X wxMac base, and Mac OS X darwin base -->
 <set var="BASE_COREFOUNDATION_SRC" hints="files">
     src/osx/core/cfstring.cpp
+    src/osx/core/evtloop_cf.cpp
     src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
@@ -892,6 +894,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/docview.h
     wx/effects.h
     wx/evtloop.h
+    wx/evtloopsrc.h
     wx/fdrepdlg.h
     wx/filectrl.h
     wx/filepicker.h
@@ -1057,6 +1060,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dcscreen.h
     wx/gtk/dnd.h
     wx/gtk/evtloop.h
+    wx/gtk/evtloopsrc.h
     wx/gtk/font.h
     wx/gtk/minifram.h
     wx/gtk/pen.h
@@ -2367,6 +2371,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/dirdlg.h
     wx/osx/dnd.h
     wx/osx/evtloop.h
+    wx/osx/evtloopsrc.h
     wx/osx/filedlg.h
     wx/osx/font.h
     wx/osx/fontdlg.h

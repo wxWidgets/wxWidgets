@@ -45,8 +45,8 @@ class wxFSWatcherImplUnix : public wxFSWatcherImpl
 public:
     wxFSWatcherImplUnix(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_loop(NULL),
-        m_source(NULL)
+        m_source(NULL),
+        m_ifd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
     }
@@ -65,42 +65,39 @@ public:
     bool Init()
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
-        wxCHECK_MSG( m_loop == NULL, false, "Event loop != NULL");
 
-        m_loop = (wxEventLoopBase::GetActive());
-        wxCHECK_MSG( m_loop, false, "File system watcher needs an active loop" );
+        wxEventLoopBase *loop = wxEventLoopBase::GetActive();
+        wxCHECK_MSG( loop, false, "File system watcher needs an event loop" );
 
-        int fd = inotify_init();
-        if (fd == -1)
+        m_ifd = inotify_init();
+        if ( m_ifd == -1 )
         {
             wxLogSysError( _("Unable to create inotify instance") );
             return false;
         }
 
-        int flags = wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION;
-        m_source = static_cast<wxUnixEventLoopSource*>(
-                                   m_loop->CreateSource(fd, m_handler, flags));
-        return RegisterSource();
+        m_source = loop->AddSourceForFD
+                         (
+                          m_ifd,
+                          m_handler,
+                          wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION
+                         );
+
+        return m_source != NULL;
     }
 
-    bool Close()
+    void Close()
     {
-        wxCHECK_MSG( IsOk(), false,
+        wxCHECK_RET( IsOk(),
                     "Inotify not initialized or invalid inotify descriptor" );
-        wxCHECK_MSG( m_loop, false,
-                    "m_loop shouldn't be null if inotify is initialized" );
 
-        // ignore errors
-        (void) UnregisterSource();
+        delete m_source;
+        m_source = NULL;
 
-        int ret = close(m_source->GetResource());
-        if (ret == -1)
+        if ( close(m_ifd) != 0 )
         {
             wxLogSysError( _("Unable to close inotify instance") );
         }
-        m_source->Invalidate();
-
-        return ret != -1;
     }
 
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
@@ -193,39 +190,16 @@ public:
         return event_count;
     }
 
-    bool IsOk()
+    bool IsOk() const
     {
-        return m_source && m_source->IsOk();
+        return m_source != NULL;
     }
 
 protected:
-    bool RegisterSource()
-    {
-        wxCHECK_MSG( IsOk(), false,
-                    "Inotify not initialized or invalid inotify descriptor" );
-
-        bool ret = m_loop->AddSource(m_source);
-        return ret;
-    }
-
-    bool UnregisterSource()
-    {
-        wxCHECK_MSG( IsOk(), false,
-                    "Inotify not initialized or invalid inotify descriptor" );
-        wxCHECK_MSG( m_loop, false,
-                    "m_loop shouldn't be null if inotify is initialized" );
-
-        bool ret = m_loop->RemoveSource(m_source);
-        m_loop = NULL;
-        return ret;
-    }
-
     int DoAddInotify(wxFSWatchEntry* watch)
     {
         int flags = Watcher2NativeFlags(watch->GetFlags());
-        int wd = inotify_add_watch(m_source->GetResource(),
-                                   watch->GetPath().fn_str(),
-                                   flags);
+        int wd = inotify_add_watch(m_ifd, watch->GetPath().fn_str(), flags);
         // finally we can set watch descriptor
         watch->SetWatchDescriptor(wd);
         return wd;
@@ -233,8 +207,7 @@ protected:
 
     int DoRemoveInotify(wxFSWatchEntry* watch)
     {
-        return inotify_rm_watch(m_source->GetResource(),
-                                watch->GetWatchDescriptor());
+        return inotify_rm_watch(m_ifd, watch->GetWatchDescriptor());
     }
 
     void ProcessNativeEvent(const inotify_event& inevt)
@@ -352,7 +325,7 @@ protected:
                     "Inotify not initialized or invalid inotify descriptor" );
 
         memset(buf, 0, size);
-        ssize_t left = read(m_source->GetResource(), buf, size);
+        ssize_t left = read(m_ifd, buf, size);
         if (left == -1)
         {
             wxLogSysError(_("Unable to read from inotify descriptor"));
@@ -451,8 +424,10 @@ protected:
     wxFSWSourceHandler* m_handler;        // handler for inotify event source
     wxFSWatchEntryDescriptors m_watchMap; // inotify wd=>wxFSWatchEntry* map
     wxInotifyCookies m_cookies;           // map to track renames
-    wxEventLoopBase* m_loop;
-    wxUnixEventLoopSource* m_source;      // our event loop source
+    wxEventLoopSource* m_source;          // our event loop source
+
+    // file descriptor created by inotify_init()
+    int m_ifd;
 };
 
 

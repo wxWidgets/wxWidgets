@@ -49,6 +49,11 @@ void wxGUIEventLoop::WakeUp()
     wxMacWakeUp();
 }
 
+CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
+{
+    return CFRunLoopGetCurrent();
+}
+
 void wxGUIEventLoop::DispatchAndReleaseEvent(EventRef theEvent)
 {
     if ( wxTheApp )

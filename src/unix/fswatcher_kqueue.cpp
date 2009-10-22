@@ -23,8 +23,36 @@
 
 #include <sys/types.h>
 #include <sys/event.h>
+
 #include "wx/dynarray.h"
+#include "wx/evtloop.h"
+#include "wx/evtloopsrc.h"
+
 #include "wx/private/fswatcher.h"
+
+// ============================================================================
+// wxFSWSourceHandler helper class
+// ============================================================================
+
+class wxFSWatcherImplKqueue;
+
+/**
+ * Handler for handling i/o from inotify descriptor
+ */
+class wxFSWSourceHandler : public wxEventLoopSourceHandler
+{
+public:
+    wxFSWSourceHandler(wxFSWatcherImplKqueue* service) :
+        m_service(service)
+    {  }
+
+    virtual void OnReadWaiting();
+    virtual void OnWriteWaiting();
+    virtual void OnExceptionWaiting();
+
+protected:
+    wxFSWatcherImplKqueue* m_service;
+};
 
 // ============================================================================
 // wxFSWatcherImpl implementation & helper wxFSWSourceHandler implementation
@@ -38,14 +66,13 @@ class wxFSWatcherImplKqueue : public wxFSWatcherImpl
 public:
     wxFSWatcherImplKqueue(wxFileSystemWatcherBase* watcher) :
         wxFSWatcherImpl(watcher),
-        m_loop(NULL),
         m_source(NULL),
         m_kfd(-1)
     {
         m_handler = new wxFSWSourceHandler(this);
     }
 
-    ~wxFSWatcherImplKqueue()
+    virtual ~wxFSWatcherImplKqueue()
     {
         // we close kqueue only if initialized before
         if (IsOk())
@@ -60,10 +87,9 @@ public:
     {
         wxCHECK_MSG( !IsOk(), false,
                      "Kqueue appears to be already initialized" );
-        wxCHECK_MSG( m_loop == NULL, false, "Event loop != NULL");
 
-        m_loop = (wxEventLoopBase::GetActive());
-        wxCHECK_MSG( m_loop, false, "File system watcher needs an active loop" );
+        wxEventLoopBase *loop = wxEventLoopBase::GetActive();
+        wxCHECK_MSG( loop, false, "File system watcher needs an active loop" );
 
         // create kqueue
         m_kfd = kqueue();
@@ -74,32 +100,23 @@ public:
         }
 
         // create source
-        int flags = wxEVENT_SOURCE_INPUT;
-        m_source = m_loop->CreateSource(m_kfd, m_handler, flags);
-        wxCHECK_MSG( m_source, false,
-                     "Active loop has no support for fd-based sources" );
+        m_source = loop->AddSourceForFD(m_kfd, m_handler, wxEVENT_SOURCE_INPUT);
 
-        return RegisterSource();
+        return m_source != NULL;
     }
 
-    bool Close()
+    void Close()
     {
-        wxCHECK_MSG( IsOk(), false,
+        wxCHECK_RET( IsOk(),
                     "Kqueue not initialized or invalid kqueue descriptor" );
-        wxCHECK_MSG( m_loop, false,
-                    "m_loop shouldn't be null if kqueue is initialized" );
 
-        // ignore errors
-        (void) UnregisterSource();
-
-        int ret = close(m_kfd);
-        if (ret == -1)
+        if ( close(m_kfd) != 0 )
         {
-            wxLogSysError(_("Unable to close kqueue instance"));
+            wxLogSysError(_("Error closing kqueue instance"));
         }
-        m_source->Invalidate();
 
-        return ret != -1;
+        delete m_source;
+        m_source = NULL;
     }
 
     virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryKq> watch)
@@ -186,43 +203,18 @@ public:
         return true;
     }
 
-    bool IsOk()
+    bool IsOk() const
     {
-        return m_source && m_source->IsOk();
+        return m_source != NULL;
     }
-
-/*
-    wxAbstractEventLoopSource* GetSource() const
-    {
-        return m_source;
-    }*/
 
 protected:
-    bool RegisterSource()
-    {
-        wxCHECK_MSG( IsOk(), false,
-                    "Kqueue not initialized or invalid kqueue descriptor" );
-
-        return m_loop->AddSource(m_source);
-    }
-
-    bool UnregisterSource()
-    {
-        wxCHECK_MSG( IsOk(), false,
-                    "Kqueue not initialized or invalid kqueue descriptor" );
-        wxCHECK_MSG( m_loop, false,
-                    "m_loop shouldn't be null if kqueue is initialized" );
-
-        bool ret = m_loop->RemoveSource(m_source);
-        m_loop = NULL;
-        return ret;
-    }
-
     // returns all new dirs/files present in the immediate level of the dir
     // pointed by watch.GetPath(). "new" means created between the last time
     // the state of watch was computed and now
-    void FindChanges(wxFSWatchEntryKq& watch, wxArrayString& changedFiles,
-                      wxArrayInt& changedFlags)
+    void FindChanges(wxFSWatchEntryKq& watch,
+                     wxArrayString& changedFiles,
+                     wxArrayInt& changedFlags)
     {
         wxFSWatchEntryKq::wxDirState old = watch.GetLastState();
         watch.RefreshState();
@@ -386,8 +378,9 @@ protected:
     }
 
     wxFSWSourceHandler* m_handler;        // handler for kqueue event source
-    wxEventLoopBase* m_loop;              // event loop we have registered with
-    wxAbstractEventLoopSource* m_source;  // our event loop source
+    wxEventLoopSource* m_source;          // our event loop source
+
+    // descriptor created by kqueue()
     int m_kfd;
 };
 

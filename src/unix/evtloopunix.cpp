@@ -30,12 +30,17 @@
 
 #include <errno.h>
 #include "wx/apptrait.h"
+#include "wx/scopedptr.h"
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/unix/pipe.h"
 #include "wx/unix/private/timer.h"
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
+
+#if wxUSE_EVENTLOOP_SOURCE
+    #include "wx/evtloopsrc.h"
+#endif // wxUSE_EVENTLOOP_SOURCE
 
 #define TRACE_EVENTS wxT("events")
 
@@ -220,36 +225,40 @@ protected:
     wxEventLoopSourceHandler* m_impl;
 };
 
-bool wxConsoleEventLoop::DoAddSource(wxAbstractEventLoopSource* src)
+wxEventLoopSource *
+wxConsoleEventLoop::AddSourceForFD(int fd,
+                                   wxEventLoopSourceHandler *handler,
+                                   int flags)
 {
-    Source* source = dynamic_cast<Source*>(src);
-    wxCHECK_MSG( source, false, "Invalid source type" );
+    wxCHECK_MSG( fd != -1, NULL, "can't monitor invalid fd" );
 
     wxLogTrace(wxTRACE_EVT_SOURCE,
-                "wxConsoleEventLoop::AddSource() source=%d",
-                source->GetResource());
+                "Adding event loop source for fd=%d", fd);
 
-    // translating into wxFDIOHandler
-    // XXX this is a memory leak of course, but this is really temporary, so
-    // we are not creating another map of handlers
-    wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(source->GetHandler());
+    // we need a bridge to wxFDIODispatcher
+    //
+    // TODO: refactor the code so that only wxEventLoopSourceHandler is used
+    wxScopedPtr<wxFDIOHandler>
+        fdioHandler(new wxFDIOEventLoopSourceHandler(handler));
 
-    return m_dispatcher->RegisterFD(source->GetResource(), h,
-                                    source->GetFlags());
+    if ( !m_dispatcher->RegisterFD(fd, fdioHandler.get(), flags) )
+        return NULL;
+
+    return new wxUnixEventLoopSource(m_dispatcher, fdioHandler.release(),
+                                     fd, handler, flags);
 }
 
-bool wxConsoleEventLoop::DoRemoveSource(wxAbstractEventLoopSource* src)
+wxUnixEventLoopSource::~wxUnixEventLoopSource()
 {
-    Source* source = dynamic_cast<Source*>(src);
-    wxCHECK_MSG( source, false, "Invalid source type" );
-
     wxLogTrace(wxTRACE_EVT_SOURCE,
-               "wxConsoleEventLoop::RemoveSource() source=%d",
-               source->GetResource());
+               "Removing event loop source for fd=%d", m_fd);
 
-    return m_dispatcher->UnregisterFD(source->GetResource());
+    m_dispatcher->UnregisterFD(m_fd);
+
+    delete m_fdioHandler;
 }
-#endif
+
+#endif // wxUSE_EVENTLOOP_SOURCE
 
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling

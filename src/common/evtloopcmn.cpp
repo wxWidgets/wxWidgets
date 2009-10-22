@@ -54,11 +54,6 @@ void wxEventLoopBase::OnExit()
 {
     if (wxTheApp)
         wxTheApp->OnEventLoopExit(this);
-
-#if wxUSE_EVENTLOOP_SOURCE
-    // unregister all sources
-    (void) RemoveAllSources();
-#endif
 }
 
 void wxEventLoopBase::WakeUpIdle()

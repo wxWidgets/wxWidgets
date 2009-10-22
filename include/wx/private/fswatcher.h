@@ -52,7 +52,7 @@ public:
         wxCHECK_MSG( m_watches.find(winfo.GetPath()) == m_watches.end(), false,
                      "Path '%s' is already watched");
 
-        // conctruct watch entry
+        // construct watch entry
         wxSharedPtr<wxFSWatchEntry> watch(new wxFSWatchEntry(winfo));
 
         if (!DoAdd(watch))
