@@ -13,6 +13,14 @@
 #include "wx/filefn.h"
 #include "wx/filename.h"
 
+#include <ostream>
+
+// define stream inserter for wxFileName to use it in CPPUNIT_ASSERT_EQUAL()
+inline std::ostream& operator<<(std::ostream& o, const wxFileName& fn)
+{
+    return o << fn.GetFullPath();
+}
+
 // ----------------------------------------------------------------------------
 // TestFile: self deleting test file in temporary directory
 // ----------------------------------------------------------------------------
