@@ -49,9 +49,15 @@
 
 #include "wx/beforestd.h"
 #ifdef __VISUALC__
+    #pragma warning(push)
+
     // with cppunit 1.12 we get many bogus warnings 4701 (local variable may be
     // used without having been initialized) in TestAssert.h
     #pragma warning(disable:4701)
+
+    // and also 4100 (unreferenced formal parameter) in extensions/
+    // ExceptionTestCaseDecorator.h
+    #pragma warning(disable:4100)
 #endif
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -61,7 +67,7 @@
 #include <cppunit/CompilerOutputter.h>
 
 #ifdef __VISUALC__
-    #pragma warning(default:4701)
+    #pragma warning(pop)
 #endif
 #include "wx/afterstd.h"
 
