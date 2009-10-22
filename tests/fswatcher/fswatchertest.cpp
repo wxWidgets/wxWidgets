@@ -147,8 +147,10 @@ public:
         CPPUNIT_ASSERT(dir.DirExists());
 
         // just to be really sure we know what we remove
-        CPPUNIT_ASSERT(dir.GetDirs().Last() == "fswatcher_test");
-        CPPUNIT_ASSERT(dir.Rmdir(wxPATH_RMDIR_RECURSIVE));
+        CPPUNIT_ASSERT_EQUAL( "fswatcher_test", dir.GetDirs().Last() );
+
+        // FIXME-VC6: using non-static Rmdir() results in ICE
+        CPPUNIT_ASSERT( wxFileName::Rmdir(dir.GetFullPath(), wxPATH_RMDIR_RECURSIVE) );
     }
 
     static wxFileName RandomName(const wxFileName& base, int length = 10)
@@ -182,7 +184,7 @@ EventGenerator* EventGenerator::ms_instance = 0;
 class EventHandler : public wxEvtHandler
 {
 public:
-    const static int WAIT_DURATION = 3;
+    enum { WAIT_DURATION = 3 };
 
     EventHandler() :
         eg(EventGenerator::Get()), m_loop(0), m_count(0), m_watcher(0)
