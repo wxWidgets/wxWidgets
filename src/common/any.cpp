@@ -112,27 +112,23 @@ wxAnyValueType::wxAnyValueType()
 //
 // Define integer minimum and maximum as helpers
 #ifdef wxLongLong_t
-const wxAnyBaseIntType UseIntMin = wxINT64_MIN;
-const wxAnyBaseUintType UseIntMax = wxINT64_MAX;
-const wxAnyBaseUintType UseUintMax = wxUINT64_MAX;
+    #define UseIntMin  (wxINT64_MIN)
+    #define UseIntMax  (wxINT64_MAX)
+    #define UseUintMax (wxUINT64_MAX)
 #else
-const wxAnyBaseIntType UseIntMin = LONG_MIN;
-const wxAnyBaseUintType UseUintMax = ULONG_MAX;
-const wxAnyBaseUintType UseIntMax = LONG_MAX;
+    #define UseIntMin  (LONG_MIN)
+    #define UseIntMax  (LONG_MAX)
+    #define UseUintMax (ULONG_MAX)
 #endif
+
+namespace
+{
 
 const double UseIntMinF = static_cast<double>(UseIntMin);
-#ifndef __VISUALC6__
 const double UseIntMaxF = static_cast<double>(UseIntMax);
 const double UseUintMaxF = static_cast<double>(UseUintMax);
-#else
-// VC6 doesn't implement conversion from unsigned __int64 to double
-const wxAnyBaseIntType UseIntMax0 = static_cast<wxAnyBaseIntType>(UseIntMax);
-const wxAnyBaseIntType UseUintMax0 = static_cast<wxAnyBaseIntType>(UseUintMax);
-const double UseIntMaxF = static_cast<double>(UseIntMax0);
-const double UseUintMaxF = static_cast<double>(UseUintMax0);
-#endif
 
+} // anonymous namespace
 
 bool wxAnyValueTypeImplInt::ConvertValue(const wxAnyValueBuffer& src,
                                          wxAnyValueType* dstType,
