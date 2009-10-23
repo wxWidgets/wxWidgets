@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 7 October 2009                                                     *
+ * Date : 23 October 2009                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -264,6 +264,8 @@ typedef pid_t GPid;
 #define wxUSE_TIMER         1
 
 #define wxUSE_STOPWATCH     1
+
+#define wxUSE_FSWATCHER     1
 
 #define wxUSE_CONFIG        1
 
@@ -1253,6 +1255,12 @@ typedef pid_t GPid;
 
 /* Define if locale_t is available */
 #undef HAVE_LOCALE_T
+
+/* Define if you have inotify_xxx() functions. */
+#undef wxHAS_INOTIFY
+
+/* Define if you have kqueu_xxx() functions. */
+#undef wxHAS_KQUEUE
 
 /* ---------------------------------------------------------------------
    Win32 adjustments section
