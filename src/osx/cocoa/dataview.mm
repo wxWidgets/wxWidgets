@@ -84,6 +84,71 @@
 namespace
 {
 
+// convert from NSObject to different C++ types: all these functions check
+// that the conversion really makes sense and assert if it doesn't
+wxString ObjectToString(NSObject *object)
+{
+    wxCHECK_MSG( [object isKindOfClass:[NSString class]], "",
+                 wxString::Format
+                 (
+                    "string expected but got %s",
+                    wxCFStringRef::AsString([object className])
+                 ));
+
+    return wxCFStringRef([((NSString*) object) retain]).AsString();
+}
+
+bool ObjectToBool(NSObject *object)
+{
+    // actually the value must be of NSCFBoolean class but it's private so we
+    // can't check for it directly
+    wxCHECK_MSG( [object isKindOfClass:[NSNumber class]], false,
+                 wxString::Format
+                 (
+                    "number expected but got %s",
+                    wxCFStringRef::AsString([object className])
+                 ));
+
+    return [(NSNumber *)object boolValue];
+}
+
+long ObjectToLong(NSObject *object)
+{
+    wxCHECK_MSG( [object isKindOfClass:[NSNumber class]], -1,
+                 wxString::Format
+                 (
+                    "number expected but got %s",
+                    wxCFStringRef::AsString([object className])
+                 ));
+
+    return [(NSNumber *)object longValue];
+}
+
+wxDateTime ObjectToDate(NSObject *object)
+{
+    wxCHECK_MSG( [object isKindOfClass:[NSDate class]], wxInvalidDateTime,
+                 wxString::Format
+                 (
+                    "date expected but got %s",
+                    wxCFStringRef::AsString([object className])
+                 ));
+
+    // get the number of seconds since 1970-01-01 UTC and this is the only
+    // way to convert a double to a wxLongLong
+    const wxLongLong seconds = [((NSDate*) object) timeIntervalSince1970];
+
+    wxDateTime dt(1, wxDateTime::Jan, 1970);
+    dt.Add(wxTimeSpan(0,0,seconds));
+
+    // the user has entered a date in the local timezone but seconds
+    // contains the number of seconds from date in the local timezone
+    // since 1970-01-01 UTC; therefore, the timezone information has to be
+    // transferred to wxWidgets, too:
+    dt.MakeFromTimezone(wxDateTime::UTC);
+
+    return dt;
+}
+
 NSInteger CompareItems(id item1, id item2, void* context)
 {
     NSArray* const sortDescriptors = (NSArray*) context;
@@ -516,31 +581,8 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewItem dataViewItem([((wxPointerObject*) item) pointer]);
 
-    wxVariant value;
-    if ( [object isKindOfClass:[NSString class]] )
-        value = wxCFStringRef([((NSString*) object) retain]).AsString();
-    else if ( [object isKindOfClass:[NSNumber class]] )
-        value = (long)[((NSNumber *)object) intValue];
-    else if ( [object isKindOfClass:[NSDate class]] )
-    {
-        // get the number of seconds since 1970-01-01 UTC and this is the only
-        // way to convert a double to a wxLongLong
-        const wxLongLong seconds = [((NSDate*) object) timeIntervalSince1970];
-
-        wxDateTime dt(1, wxDateTime::Jan, 1970);
-        dt.Add(wxTimeSpan(0,0,seconds));
-
-        // the user has entered a date in the local timezone but seconds
-        // contains the number of seconds from date in the local timezone
-        // since 1970-01-01 UTC; therefore, the timezone information has to be
-        // transferred to wxWidgets, too:
-        dt.MakeFromTimezone(wxDateTime::UTC);
-
-        value = dt;
-    }
-
     col->GetRenderer()->
-        OSXOnCellChanged(value, dataViewItem, col->GetModelColumn());
+        OSXOnCellChanged(object, dataViewItem, col->GetModelColumn());
 }
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
@@ -2231,10 +2273,35 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     return GetNativeData()->GetEllipsizeMode();
 }
 
-void wxDataViewRenderer::OSXOnCellChanged(const wxVariant& value,
-                                          const wxDataViewItem& item,
-                                          unsigned col)
+void
+wxDataViewRenderer::OSXOnCellChanged(NSObject *object,
+                                     const wxDataViewItem& item,
+                                     unsigned col)
 {
+    // TODO: we probably should get rid of this code entirely and make this
+    //       function pure virtual, but currently we still have some native
+    //       renderers (wxDataViewChoiceRenderer) which don't override it and
+    //       there is also wxDataViewCustomRenderer for which it's not obvious
+    //       how it should be implemented so keep this "auto-deduction" of
+    //       variant type from NSObject for now
+
+    wxVariant value;
+    if ( [object isKindOfClass:[NSString class]] )
+        value = ObjectToString(object);
+    else if ( [object isKindOfClass:[NSNumber class]] )
+        value = ObjectToLong(object);
+    else if ( [object isKindOfClass:[NSDate class]] )
+        value = ObjectToDate(object);
+    else
+    {
+        wxFAIL_MSG( wxString::Format
+                    (
+                     "unknown value type %s",
+                     wxCFStringRef::AsString([object className])
+                    ));
+        return;
+    }
+
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
     model->ChangeValue(value, item, col);
 }
@@ -2291,6 +2358,15 @@ bool wxDataViewTextRenderer::MacRender()
         wxFAIL_MSG(wxString("Text renderer cannot render value because of wrong value type; value type: ") << GetValue().GetType());
         return false;
     }
+}
+
+void
+wxDataViewTextRenderer::OSXOnCellChanged(NSObject *value,
+                                         const wxDataViewItem& item,
+                                         unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(ObjectToString(value), item, col);
 }
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer,wxDataViewRenderer)
@@ -2434,6 +2510,15 @@ bool wxDataViewDateRenderer::MacRender()
     }
 }
 
+void
+wxDataViewDateRenderer::OSXOnCellChanged(NSObject *value,
+                                         const wxDataViewItem& item,
+                                         unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(ObjectToDate(value), item, col);
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer,wxDataViewRenderer)
 
 // ---------------------------------------------------------
@@ -2476,17 +2561,15 @@ bool wxDataViewIconTextRenderer::MacRender()
 }
 
 void
-wxDataViewIconTextRenderer::OSXOnCellChanged(const wxVariant& value,
+wxDataViewIconTextRenderer::OSXOnCellChanged(NSObject *value,
                                              const wxDataViewItem& item,
                                              unsigned col)
 {
-    // we receive just the text (because it's the only component which can be
-    // edited by user) from the native control but we need wxDataViewIconText
-    // for the model, so construct it here
     wxVariant valueIconText;
-    valueIconText << wxDataViewIconText(value.GetString());
+    valueIconText << wxDataViewIconText(ObjectToString(value));
 
-    wxDataViewRenderer::OSXOnCellChanged(valueIconText, item, col);
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(valueIconText, item, col);
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
@@ -2524,6 +2607,15 @@ bool wxDataViewToggleRenderer::MacRender()
     }
 }
 
+void
+wxDataViewToggleRenderer::OSXOnCellChanged(NSObject *value,
+                                           const wxDataViewItem& item,
+                                           unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(ObjectToBool(value), item, col);
+}
+
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
 
 // ---------------------------------------------------------
@@ -2556,6 +2648,15 @@ bool wxDataViewProgressRenderer::MacRender()
         wxFAIL_MSG(wxString("Progress renderer cannot render value because of wrong value type; value type: ") << GetValue().GetType());
         return false;
     }
+}
+
+void
+wxDataViewProgressRenderer::OSXOnCellChanged(NSObject *value,
+                                             const wxDataViewItem& item,
+                                             unsigned col)
+{
+    wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
+    model->ChangeValue(ObjectToLong(value), item, col);
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer,wxDataViewRenderer)

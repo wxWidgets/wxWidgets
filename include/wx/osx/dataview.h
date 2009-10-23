@@ -85,7 +85,7 @@ public:
 
 #if wxOSX_USE_COCOA
   // called when a value was edited by user
-  virtual void OSXOnCellChanged(const wxVariant& value,
+  virtual void OSXOnCellChanged(NSObject *value,
                                 const wxDataViewItem& item,
                                 unsigned col);
 #endif // Cocoa
@@ -197,7 +197,12 @@ public:
 //
   virtual bool MacRender();
 
-protected:
+#if wxOSX_USE_COCOA
+  virtual void OSXOnCellChanged(NSObject *value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
 };
@@ -281,8 +286,7 @@ public:
   virtual bool MacRender();
 
 #if wxOSX_USE_COCOA
-  // called when a value was edited by user
-  virtual void OSXOnCellChanged(const wxVariant& value,
+  virtual void OSXOnCellChanged(NSObject *value,
                                 const wxDataViewItem& item,
                                 unsigned col);
 #endif // Cocoa
@@ -306,7 +310,12 @@ public:
 //
   virtual bool MacRender();
 
-protected:
+#if wxOSX_USE_COCOA
+  virtual void OSXOnCellChanged(NSObject *value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
+
 private:
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
 };
@@ -326,7 +335,12 @@ public:
 //
   virtual bool MacRender();
 
-protected:
+#if wxOSX_USE_COCOA
+  virtual void OSXOnCellChanged(NSObject *value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
 };
@@ -345,7 +359,12 @@ public:
 //
   virtual bool MacRender();
 
-protected:
+#if wxOSX_USE_COCOA
+  virtual void OSXOnCellChanged(NSObject *value,
+                                const wxDataViewItem& item,
+                                unsigned col);
+#endif // Cocoa
+
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
 };
