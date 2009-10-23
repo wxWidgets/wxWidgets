@@ -23,7 +23,7 @@
     Since you will usually also allow the wxDataViewCtrl to change your data
     through its graphical interface, you will also have to override
     wxDataViewModel::SetValue which the wxDataViewCtrl will call when a change
-    to some data has been commited.
+    to some data has been committed.
 
     wxDataViewModel (as indeed the entire wxDataViewCtrl code) is using wxVariant
     to store data and its type in a generic way. wxVariant can be extended to contain
@@ -90,6 +90,28 @@ public:
         Adds a wxDataViewModelNotifier to the model.
     */
     void AddNotifier(wxDataViewModelNotifier* notifier);
+
+    /**
+        Change the value of the given item and update the control to reflect
+        it.
+
+        This function simply calls SetValue() and, if it succeeded,
+        ValueChanged().
+
+        @since 2.9.1
+
+        @param variable
+            The new value.
+        @param item
+            The item (row) to update.
+        @param col
+            The column to update.
+        @return
+            @true if both SetValue() and ValueChanged() returned @true.
+     */
+    bool ChangeValue(const wxVariant& variant,
+                     const wxDataViewItem& item,
+                     unsigned int col);
 
     /**
         Called to inform the model that all data has been cleared.
@@ -229,12 +251,17 @@ public:
 
     /**
         This gets called in order to set a value in the data model.
+
         The most common scenario is that the wxDataViewCtrl calls this method
         after the user changed some data in the view.
 
-        Afterwards ValueChanged() has to be called!
+        This is the function you need to override in your derived class but if
+        you want to call it, ChangeValue() is usually more convenient as
+        otherwise you need to manually call ValueChanged() to update the
+        control itself.
     */
-    virtual bool SetValue(const wxVariant& variant, const wxDataViewItem& item,
+    virtual bool SetValue(const wxVariant& variant,
+                          const wxDataViewItem& item,
                           unsigned int col) = 0;
 
     /**

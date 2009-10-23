@@ -1742,8 +1742,7 @@ wxDataViewRenderer::GtkOnCellChanged(const wxVariant& value,
                                      unsigned col)
 {
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->SetValue( value, item, col );
-    model->ValueChanged( item, col );
+    model->ChangeValue( value, item, col );
 }
 
 // ---------------------------------------------------------
@@ -1933,8 +1932,7 @@ static void wxGtkToggleRendererToggledCallback( GtkCellRendererToggle *renderer,
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
-    model->SetValue( value, item, model_col );
-    model->ValueChanged( item, model_col );
+    model->ChangeValue( value, item, model_col );
 }
 
 IMPLEMENT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer)
@@ -2371,10 +2369,7 @@ END_EVENT_TABLE()
 
 void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
 {
-    wxDateTime date = event.GetDate();
-    wxVariant value = date;
-    m_model->SetValue( value, m_item, m_col );
-    m_model->ValueChanged( m_item, m_col );
+    m_model->ChangeValue( event.GetDate(), m_item, m_col );
     DismissAndNotify();
 }
 

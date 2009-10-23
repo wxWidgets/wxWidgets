@@ -933,10 +933,7 @@ bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell),
                                         wxDataViewModel *model,
                                         const wxDataViewItem & item, unsigned int col)
 {
-    bool value = !m_toggle;
-    wxVariant variant = value;
-    model->SetValue( variant, item, col);
-    model->ValueChanged( item, col );
+    model->ChangeValue(!m_toggle, item, col);
     return true;
 }
 
@@ -1051,10 +1048,7 @@ END_EVENT_TABLE()
 
 void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
 {
-    wxDateTime date = event.GetDate();
-    wxVariant value = date;
-    m_model->SetValue( value, m_item, m_col );
-    m_model->ValueChanged( m_item, m_col );
+    m_model->ChangeValue( event.GetDate(), m_item, m_col );
     DismissAndNotify();
 }
 

@@ -1318,8 +1318,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
                // variable definition and initialization:
                 wxVariant modifiedData(true);
 
-                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
-                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
+                if (dataViewCtrlPtr->GetModel()->ChangeValue(modifiedData, dvItem, col))
                     return noErr;
                 else
                     return errDataBrowserInvalidPropertyData;
@@ -1329,8 +1328,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
                // variable definition and initialization:
                 wxVariant modifiedData(false);
 
-                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
-                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
+                if (dataViewCtrlPtr->GetModel()->ChangeValue(modifiedData, dvItem, col))
                     return noErr;
                 else
                     return errDataBrowserInvalidPropertyData;
@@ -1357,8 +1355,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
 #endif
               wxVariant           modifiedData(modifiedString.AsString());
 
-                if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
-                    dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
+                if (dataViewCtrlPtr->GetModel()->ChangeValue(modifiedData, dvItem, col))
                     return noErr;
                 else
                     return errDataBrowserInvalidPropertyData;

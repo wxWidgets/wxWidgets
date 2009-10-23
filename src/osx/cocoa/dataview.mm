@@ -2236,8 +2236,7 @@ void wxDataViewRenderer::OSXOnCellChanged(const wxVariant& value,
                                           unsigned col)
 {
     wxDataViewModel *model = GetOwner()->GetOwner()->GetModel();
-    model->SetValue(value, item, col);
-    model->ValueChanged(item, col);
+    model->ChangeValue(value, item, col);
 }
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)

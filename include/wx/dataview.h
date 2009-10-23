@@ -186,9 +186,20 @@ public:
     virtual void GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const = 0;
 
-    // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) = 0;
+    // usually ValueChanged() should be called after changing the value in the
+    // model to update the control, ChangeValue() does it on its own while
+    // SetValue() does not -- so while you will override SetValue(), you should
+    // be usually calling ChangeValue()
+    virtual bool SetValue(const wxVariant &variant,
+                          const wxDataViewItem &item,
+                          unsigned int col) = 0;
+
+    bool ChangeValue(const wxVariant& variant,
+                     const wxDataViewItem& item,
+                     unsigned int col)
+    {
+        return SetValue(variant, item, col) && ValueChanged(item, col);
+    }
 
     // Get text attribute, return false of default attributes should be used
     virtual bool GetAttr( const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )

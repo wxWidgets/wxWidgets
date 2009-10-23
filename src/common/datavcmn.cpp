@@ -751,8 +751,7 @@ bool wxDataViewRendererBase::FinishEditing()
         return false;
 
     unsigned int col = GetOwner()->GetModelColumn();
-    dv_ctrl->GetModel()->SetValue( value, m_item, col );
-    dv_ctrl->GetModel()->ValueChanged( m_item, col );
+    dv_ctrl->GetModel()->ChangeValue(value, m_item, col);
 
     // Now we should send Editing Done event
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
