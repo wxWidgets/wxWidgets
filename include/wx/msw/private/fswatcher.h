@@ -78,10 +78,13 @@ private:
     // asynchronous watched with ReadDirectoryChangesW
     static HANDLE OpenDir(const wxString& path)
     {
-        HANDLE handle = CreateFile(path, FILE_LIST_DIRECTORY,
-                                   FILE_SHARE_READ | FILE_SHARE_WRITE |
+        HANDLE handle = CreateFile(path.t_str(),
+                                   FILE_LIST_DIRECTORY,
+                                   FILE_SHARE_READ |
+                                   FILE_SHARE_WRITE |
                                    FILE_SHARE_DELETE,
-                                   NULL, OPEN_EXISTING,
+                                   NULL,
+                                   OPEN_EXISTING,
                                    FILE_FLAG_BACKUP_SEMANTICS |
                                    FILE_FLAG_OVERLAPPED,
                                    NULL);
