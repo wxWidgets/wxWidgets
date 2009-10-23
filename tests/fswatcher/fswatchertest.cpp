@@ -329,17 +329,20 @@ public:
     {
         CPPUNIT_ASSERT_MESSAGE( "No events received", !m_events.empty() );
 
+        const wxFileSystemWatcherEvent * const e = m_events.front();
+
         WX_ASSERT_EQUAL_MESSAGE
         (
             (
-                "Extra event received, last has type=%x, path=\"%s\"",
+                "Extra events received, first is of type %x, for path=\"%s\","
+                "last is of type %x, path=\"%s\"",
+                e->GetChangeType(),
+                e->GetPath().GetFullPath(),
                 m_events.back()->GetChangeType(),
                 m_events.back()->GetPath().GetFullPath()
             ),
             1, m_events.size()
         );
-
-        const wxFileSystemWatcherEvent * const e = m_events.front();
 
         // this is our "reference event"
         const wxFileSystemWatcherEvent expected = ExpectedEvent();
