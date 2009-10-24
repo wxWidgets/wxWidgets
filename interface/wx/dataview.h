@@ -194,6 +194,20 @@ public:
     virtual bool HasDefaultCompare() const;
 
     /**
+        Return true if there is a value in the given column of this item.
+
+        All normal items have values in all columns but the container items
+        only show their label in the first column (@a col == 0) by default (but
+        see HasContainerColumns()). So this function always returns true for
+        the first column while for the other ones it returns true only if the
+        item is not a container or HasContainerColumns() was overridden to
+        return true for it.
+
+        @since 2.9.1
+     */
+    bool HasValue(const wxDataViewItem& item, unsigned col) const;
+
+    /**
         Override this to indicate of @a item is a container, i.e. if
         it can have child items.
     */

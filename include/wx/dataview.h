@@ -186,6 +186,14 @@ public:
     virtual void GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const = 0;
 
+    // return true if the given item has a value to display in the given
+    // column: this is always true except for container items which by default
+    // only show their label in the first column (but see HasContainerColumns())
+    bool HasValue(const wxDataViewItem& item, unsigned col) const
+    {
+        return col == 0 || !IsContainer(item) || HasContainerColumns(item);
+    }
+
     // usually ValueChanged() should be called after changing the value in the
     // model to update the control, ChangeValue() does it on its own while
     // SetValue() does not -- so while you will override SetValue(), you should
