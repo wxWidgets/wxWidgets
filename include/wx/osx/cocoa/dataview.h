@@ -498,6 +498,9 @@ public:
     wxDataFormat GetDnDDataFormat(wxDataObjectComposite* dataObjects);
     wxDataObjectComposite* GetDnDDataObjects(NSData* dataObject) const;
 
+    // Cocoa-specific helpers
+    id GetItemAtRow(int row) const;
+
 private:
     wxCocoaOutlineDataSource* m_DataSource;
 

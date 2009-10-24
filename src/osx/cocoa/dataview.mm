@@ -34,6 +34,11 @@
 // ============================================================================
 // Classes used locally in dataview.mm
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxCustomRendererObject
+// ----------------------------------------------------------------------------
+
 @interface wxCustomRendererObject : NSObject <NSCopying>
 {
 @public
@@ -75,6 +80,55 @@
 
     return copy;
 }
+@end
+
+// ----------------------------------------------------------------------------
+// wxDVCNSTableColumn: exists only to override NSTableColumn:dataCellForRow:
+// ----------------------------------------------------------------------------
+
+@interface wxDVCNSTableColumn : NSTableColumn
+{
+}
+
+    -(id) dataCellForRow:(NSInteger)row;
+@end
+
+@implementation wxDVCNSTableColumn
+
+-(id) dataCellForRow:(NSInteger)row
+{
+    // what we want to do here is to simply return nil for the cells which
+    // shouldn't show anything as otherwise we would show e.g. empty combo box
+    // or progress cells in the columns using the corresponding types even for
+    // the container rows which is wrong
+
+    // half of the problem is just finding the objects we need from the column
+    // pointer which is itself stashed inside wxPointerObject which we use as
+    // our identifier
+    const wxDataViewColumn * const
+        dvCol = static_cast<wxDataViewColumn *>(
+                    [(wxPointerObject *)[self identifier] pointer]
+                );
+
+    const wxDataViewCtrl * const dvc = dvCol->GetOwner();
+    const wxCocoaDataViewControl * const
+        peer = static_cast<wxCocoaDataViewControl *>(dvc->GetPeer());
+
+
+    // once we do have everything, simply ask NSOutlineView for the item...
+    const id item = peer->GetItemAtRow(row);
+    if ( item )
+    {
+        // ... and if it succeeded, ask the model whether it has any value
+        wxDataViewItem dvItem([((wxPointerObject*) item) pointer]);
+
+        if ( !dvc->GetModel()->HasValue(dvItem, dvCol->GetModelColumn()) )
+            return nil;
+    }
+
+    return [super dataCellForRow:row];
+}
+
 @end
 
 // ============================================================================
@@ -196,8 +250,8 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
 
     wxCHECK_MSG( renderer, NULL, "column should have a renderer" );
 
-    NSTableColumn * const nativeColumn(
-        [[NSTableColumn alloc] initWithIdentifier:
+    wxDVCNSTableColumn * const nativeColumn(
+        [[wxDVCNSTableColumn alloc] initWithIdentifier:
             [[[wxPointerObject alloc] initWithPointer:
                 const_cast<wxDataViewColumn*>(column)]
              autorelease]]
@@ -558,16 +612,20 @@ outlineView:(NSOutlineView*)outlineView
     objectValueForTableColumn:(NSTableColumn*)tableColumn
     byItem:(id)item
 {
+    wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
+
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
+    const unsigned colIdx = col->GetModelColumn();
 
     wxDataViewItem dataViewItem([((wxPointerObject*) item) pointer]);
 
-    wxVariant value;
+    if ( model->HasValue(dataViewItem, colIdx) )
+    {
+        wxVariant value;
+        model->GetValue(value,dataViewItem, colIdx);
+        col->GetRenderer()->SetValue(value);
+    }
 
-
-    wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
-    model->GetValue(value,dataViewItem,col->GetModelColumn());
-    col->GetRenderer()->SetValue(value);
     return nil;
 }
 
@@ -1036,6 +1094,13 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxCustomRendererObject * const
         obj = static_cast<wxCustomRendererObject *>([self objectValue]);
+    if ( !obj )
+    {
+        // this may happen for the custom cells in container rows: they don't
+        // have any values
+        return;
+    }
+
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
     // draw its own background:
@@ -1542,11 +1607,15 @@ item:(id)item
                     [[tableColumn identifier] pointer]
                     )
              );
+    const unsigned colIdx = dvCol->GetModelColumn();
+
+    wxDataViewItem dvItem([static_cast<wxPointerObject *>(item) pointer]);
+
+    if ( !model->HasValue(dvItem, colIdx) )
+        return;
 
     wxDataViewRenderer * const renderer = dvCol->GetRenderer();
     wxDataViewRendererNativeData * const data = renderer->GetNativeData();
-
-    wxDataViewItem dvItem([static_cast<wxPointerObject *>(item) pointer]);
 
     // set the font and text colour to use: we need to do it if we had ever
     // changed them before, even if this item itself doesn't have any special
@@ -1556,7 +1625,7 @@ item:(id)item
     NSColor *colText = NULL;
 
     wxDataViewItemAttr attr;
-    if ( model && model->GetAttr(dvItem, dvCol->GetModelColumn(), attr) )
+    if ( model && model->GetAttr(dvItem, colIdx, attr) )
     {
         if ( attr.HasFont() )
         {
@@ -2176,6 +2245,11 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
         default:
             return NULL;
     }
+}
+
+id wxCocoaDataViewControl::GetItemAtRow(int row) const
+{
+    return [m_OutlineView itemAtRow:row];
 }
 
 // ----------------------------------------------------------------------------
