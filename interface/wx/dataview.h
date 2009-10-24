@@ -135,10 +135,21 @@ public:
         Override this to indicate that the item has special font attributes.
         This only affects the wxDataViewTextRendererText renderer.
 
+        The base class version always simply returns @false.
+
         @see wxDataViewItemAttr.
+
+        @param item
+            The item for which the attribute is requested.
+        @param col
+            The column of the item for which the attribute is requested.
+        @param attr
+            The attribute to be filled in if the function returns @true.
+        @return
+            @true if this item has an attribute or @false otherwise.
     */
     virtual bool GetAttr(const wxDataViewItem& item, unsigned int col,
-                         wxDataViewItemAttr& attr);
+                         wxDataViewItemAttr& attr) const;
 
     /**
         Override this so the control can query the child items of an item.
@@ -339,10 +350,21 @@ public:
         Override this to indicate that the row has special font attributes.
         This only affects the wxDataViewTextRendererText() renderer.
 
+        The base class version always simply returns @false.
+
         @see wxDataViewItemAttr.
+
+        @param row
+            The row for which the attribute is requested.
+        @param col
+            The column for which the attribute is requested.
+        @param attr
+            The attribute to be filled in if the function returns @true.
+        @return
+            @true if this item has an attribute or @false otherwise.
     */
     virtual bool GetAttrByRow(unsigned int row, unsigned int col,
-                         wxDataViewItemAttr& attr);
+                         wxDataViewItemAttr& attr) const;
 
     /**
         Returns the wxDataViewItem at the given @e row.

@@ -220,7 +220,8 @@ public:
 
     virtual void GetValueByRow( wxVariant &variant,
                                 unsigned int row, unsigned int col ) const;
-    virtual bool GetAttrByRow( unsigned int row, unsigned int col, wxDataViewItemAttr &attr );
+    virtual bool GetAttrByRow( unsigned int row, unsigned int col,
+                               wxDataViewItemAttr &attr ) const;
     virtual bool SetValueByRow( const wxVariant &variant,
                                 unsigned int row, unsigned int col );
 

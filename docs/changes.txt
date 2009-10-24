@@ -390,6 +390,10 @@ INCOMPATIBLE CHANGE SINCE 2.9.0
   2.9.0. Please use UseAppInfo(AppInfo_AppName | AppInfo_VendorName) explicitly
   to use the vendor name in the paths returned by wxStandardPaths.
 
+- wxDataViewModel::GetAttr() is now const, as it should have been from the very
+  beginning. You will need to change it to be const in your derived model
+  class too if you override it.
+
 
 All:
 

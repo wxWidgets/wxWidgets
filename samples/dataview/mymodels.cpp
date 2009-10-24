@@ -433,7 +433,7 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 }
 
 bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
-                                wxDataViewItemAttr &attr )
+                                wxDataViewItemAttr &attr ) const
 {
     switch ( col )
     {

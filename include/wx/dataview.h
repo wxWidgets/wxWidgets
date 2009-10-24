@@ -210,8 +210,12 @@ public:
     }
 
     // Get text attribute, return false of default attributes should be used
-    virtual bool GetAttr( const wxDataViewItem &WXUNUSED(item), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
-        { return false; }
+    virtual bool GetAttr(const wxDataViewItem &WXUNUSED(item),
+                         unsigned int WXUNUSED(col),
+                         wxDataViewItemAttr &WXUNUSED(attr)) const
+    {
+        return false;
+    }
 
     // define hierachy
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const = 0;
@@ -272,7 +276,7 @@ public:
 
     virtual bool
     GetAttrByRow(unsigned WXUNUSED(row), unsigned WXUNUSED(col),
-                 wxDataViewItemAttr &WXUNUSED(attr))
+                 wxDataViewItemAttr &WXUNUSED(attr)) const
     {
         return false;
     }
@@ -310,7 +314,7 @@ public:
     }
 
     virtual bool GetAttr(const wxDataViewItem &item, unsigned int col,
-                         wxDataViewItemAttr &attr)
+                         wxDataViewItemAttr &attr) const
     {
         return GetAttrByRow( GetRow(item), col, attr );
     }
