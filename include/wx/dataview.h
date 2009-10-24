@@ -252,24 +252,78 @@ protected:
     wxDataViewModelNotifiers  m_notifiers;
 };
 
+// ----------------------------------------------------------------------------
+// wxDataViewListModel: a model of a list, i.e. flat data structure without any
+//      branches/containers, used as base class by wxDataViewIndexListModel and
+//      wxDataViewVirtualListModel
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewListModel : public wxDataViewModel
+{
+public:
+    // derived classes should override these methods instead of
+    // {Get,Set}Value() and GetAttr() inherited from the base class
+
+    virtual void GetValueByRow(wxVariant &variant,
+                               unsigned row, unsigned col) const = 0;
+
+    virtual bool SetValueByRow(const wxVariant &variant,
+                               unsigned row, unsigned col) = 0;
+
+    virtual bool
+    GetAttrByRow(unsigned WXUNUSED(row), unsigned WXUNUSED(col),
+                 wxDataViewItemAttr &WXUNUSED(attr))
+    {
+        return false;
+    }
+
+
+    // helper methods provided by list models only
+    virtual unsigned GetRow( const wxDataViewItem &item ) const = 0;
+
+
+    // implement some base class pure virtual directly
+    virtual wxDataViewItem
+    GetParent( const wxDataViewItem & WXUNUSED(item) ) const
+    {
+        // items never have valid parent in this model
+        return wxDataViewItem();
+    }
+
+    virtual bool IsContainer( const wxDataViewItem &item ) const
+    {
+        // only the invisible (and invalid) root item has children
+        return !item.IsOk();
+    }
+
+    // and implement some others by forwarding them to our own ones
+    virtual void GetValue( wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col ) const
+    {
+        GetValueByRow(variant, GetRow(item), col);
+    }
+
+    virtual bool SetValue( const wxVariant &variant,
+                           const wxDataViewItem &item, unsigned int col )
+    {
+        return SetValueByRow( variant, GetRow(item), col );
+    }
+
+    virtual bool GetAttr(const wxDataViewItem &item, unsigned int col,
+                         wxDataViewItemAttr &attr)
+    {
+        return GetAttrByRow( GetRow(item), col, attr );
+    }
+};
+
 // ---------------------------------------------------------
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewIndexListModel: public wxDataViewModel
+class WXDLLIMPEXP_ADV wxDataViewIndexListModel: public wxDataViewListModel
 {
 public:
     wxDataViewIndexListModel( unsigned int initial_size = 0 );
-    ~wxDataViewIndexListModel();
-
-    virtual void GetValueByRow( wxVariant &variant,
-                           unsigned int row, unsigned int col ) const = 0;
-
-    virtual bool SetValueByRow( const wxVariant &variant,
-                           unsigned int row, unsigned int col ) = 0;
-
-    virtual bool GetAttrByRow( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
-        { return false; }
 
     void RowPrepended();
     void RowInserted( unsigned int before );
@@ -282,7 +336,7 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    unsigned int GetRow( const wxDataViewItem &item ) const;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // compare based on index
@@ -292,18 +346,9 @@ public:
     virtual bool HasDefaultCompare() const;
 
     // implement base methods
-
-    virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const;
-    virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col );
-    virtual bool GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr );
-    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
-    virtual bool IsContainer( const wxDataViewItem &item ) const;
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
     // internal
-    virtual bool IsVirtualListModel() const { return false; }
     unsigned int GetCount() const { return m_hash.GetCount(); }
 
 private:
@@ -321,20 +366,10 @@ private:
 typedef wxDataViewIndexListModel wxDataViewVirtualListModel;
 #else
 
-class WXDLLIMPEXP_ADV wxDataViewVirtualListModel: public wxDataViewModel
+class WXDLLIMPEXP_ADV wxDataViewVirtualListModel: public wxDataViewListModel
 {
 public:
     wxDataViewVirtualListModel( unsigned int initial_size = 0 );
-    ~wxDataViewVirtualListModel();
-
-    virtual void GetValueByRow( wxVariant &variant,
-                           unsigned int row, unsigned int col ) const = 0;
-
-    virtual bool SetValueByRow( const wxVariant &variant,
-                           unsigned int row, unsigned int col ) = 0;
-
-    virtual bool GetAttrByRow( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
-        { return false; }
 
     void RowPrepended();
     void RowInserted( unsigned int before );
@@ -347,7 +382,7 @@ public:
 
     // convert to/from row/wxDataViewItem
 
-    unsigned int GetRow( const wxDataViewItem &item ) const;
+    virtual unsigned GetRow( const wxDataViewItem &item ) const;
     wxDataViewItem GetItem( unsigned int row ) const;
 
     // compare based on index
@@ -357,14 +392,6 @@ public:
     virtual bool HasDefaultCompare() const;
 
     // implement base methods
-
-    virtual void GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const;
-    virtual bool SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col );
-    virtual bool GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr );
-    virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
-    virtual bool IsContainer( const wxDataViewItem &item ) const;
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
     // internal

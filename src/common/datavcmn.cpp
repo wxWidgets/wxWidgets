@@ -306,10 +306,6 @@ wxDataViewIndexListModel::wxDataViewIndexListModel( unsigned int initial_size )
     m_nextFreeID = initial_size + 1;
 }
 
-wxDataViewIndexListModel::~wxDataViewIndexListModel()
-{
-}
-
 void wxDataViewIndexListModel::Reset( unsigned int new_size )
 {
     m_hash.Clear();
@@ -443,37 +439,6 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
     return GetRow(item2) - GetRow(item1);
 }
 
-void wxDataViewIndexListModel::GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const
-{
-    GetValueByRow( variant, GetRow(item), col );
-}
-
-bool wxDataViewIndexListModel::SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col )
-{
-    return SetValueByRow( variant, GetRow(item), col );
-}
-
-bool wxDataViewIndexListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
-{
-    return GetAttrByRow( GetRow(item), col, attr );
-}
-
-wxDataViewItem wxDataViewIndexListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
-{
-    return wxDataViewItem(0);
-}
-
-bool wxDataViewIndexListModel::IsContainer( const wxDataViewItem &item ) const
-{
-    // only the invisible root item has children
-    if (!item.IsOk())
-        return true;
-
-    return false;
-}
-
 unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const
 {
     if (item.IsOk())
@@ -493,10 +458,6 @@ unsigned int wxDataViewIndexListModel::GetChildren( const wxDataViewItem &item, 
 wxDataViewVirtualListModel::wxDataViewVirtualListModel( unsigned int initial_size )
 {
     m_size = initial_size;
-}
-
-wxDataViewVirtualListModel::~wxDataViewVirtualListModel()
-{
 }
 
 void wxDataViewVirtualListModel::Reset( unsigned int new_size )
@@ -588,37 +549,6 @@ int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
        return pos1 - pos2;
     else
        return pos2 - pos1;
-}
-
-void wxDataViewVirtualListModel::GetValue( wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col ) const
-{
-    GetValueByRow( variant, GetRow(item), col );
-}
-
-bool wxDataViewVirtualListModel::SetValue( const wxVariant &variant,
-                           const wxDataViewItem &item, unsigned int col )
-{
-    return SetValueByRow( variant, GetRow(item), col );
-}
-
-bool wxDataViewVirtualListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
-{
-    return GetAttrByRow( GetRow(item), col, attr );
-}
-
-wxDataViewItem wxDataViewVirtualListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
-{
-    return wxDataViewItem(0);
-}
-
-bool wxDataViewVirtualListModel::IsContainer( const wxDataViewItem &item ) const
-{
-    // only the invisible root item has children
-    if (!item.IsOk())
-        return true;
-
-    return false;
 }
 
 unsigned int wxDataViewVirtualListModel::GetChildren( const wxDataViewItem &WXUNUSED(item), wxDataViewItemArray &WXUNUSED(children) ) const
