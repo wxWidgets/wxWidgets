@@ -322,11 +322,7 @@ static int my_sort( int *v1, int *v2 )
    return *v1-*v2;
 }
 
-#ifdef __WXMAC__
-    #define INITIAL_NUMBER_OF_ITEMS 100
-#else
-    #define INITIAL_NUMBER_OF_ITEMS 100000
-#endif
+#define INITIAL_NUMBER_OF_ITEMS 100000
 
 MyListModel::MyListModel() :
         wxDataViewVirtualListModel( INITIAL_NUMBER_OF_ITEMS )
