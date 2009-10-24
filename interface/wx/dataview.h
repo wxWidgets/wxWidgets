@@ -71,7 +71,7 @@
         wxDataViewModel *musicModel = new MyMusicModel;
         m_musicCtrl->AssociateModel( musicModel );
         musicModel->DecRef();  // avoid memory leak !!
-        
+
         // add columns now
     @endcode
 
@@ -1611,11 +1611,11 @@ public:
        data.push_back( wxVariant("row 3") );
        listctrl->AppendItem( data );
     @endcode
-    
+
     @beginStyleTable
     See wxDataViewCtrl for the list of supported styles.
     @endStyleTable
-    
+
     @beginEventEmissionTable
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
@@ -1664,7 +1664,7 @@ public:
         @name Column management functions
     */
     //@{
-   
+
     /**
         Appends a column to the control and additionally appends a
         column to the store with the type string.
@@ -1679,24 +1679,24 @@ public:
 
     /**
         Appends a text column to the control and the store.
-        
+
         See wxDataViewColumn::wxDataViewColumn for more info about
         the parameters.
     */
     wxDataViewColumn *AppendTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
         Appends a toggle column to the control and the store.
-        
+
         See wxDataViewColumn::wxDataViewColumn for more info about
         the parameters.
     */
     wxDataViewColumn *AppendToggleColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -1707,7 +1707,7 @@ public:
     */
     wxDataViewColumn *AppendProgressColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -1718,7 +1718,7 @@ public:
     */
     wxDataViewColumn *AppendIconTextColumn( const wxString &label,
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT,
           int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -1731,7 +1731,7 @@ public:
         Inserts a column to the control and additionally inserts a
         column to the list store with the type @a varianttype.
     */
-    void InsertColumn( unsigned int pos, wxDataViewColumn *column, 
+    void InsertColumn( unsigned int pos, wxDataViewColumn *column,
                        const wxString &varianttype );
 
     /**
@@ -1747,13 +1747,13 @@ public:
     void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
 
     //@}
-    
-    
+
+
     /**
         @name Item management functions
     */
     //@{
-    
+
     /**
         Appends an item (=row) to the control and store.
     */
@@ -1820,7 +1820,7 @@ public:
          respective column.
     */
     bool GetToggleValue( unsigned int row, unsigned int col ) const;
-    
+
     //@}
 };
 
@@ -1832,13 +1832,13 @@ public:
     and forwards most of its API to that class.
     Additionally, it uses a wxImageList to store a list of icons.
 
-    The main purpose of this class is to represent a possible replacement for
-    wxTreeCtrl.
+    The main purpose of this class is to provide a simple upgrade path for code
+    using wxTreeCtrl.
 
     @beginStyleTable
     See wxDataViewCtrl for the list of supported styles.
     @endStyleTable
-    
+
     @beginEventEmissionTable
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
@@ -1856,12 +1856,14 @@ public:
     wxDataViewTreeCtrl();
 
     /**
-        Constructor. Calls Create().
+        Constructor.
+
+        Calls Create().
     */
     wxDataViewTreeCtrl(wxWindow* parent, wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
-                       long style = wxDV_NO_HEADER,
+                       long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
                        const wxValidator& validator = wxDefaultValidator);
 
     /**
@@ -1888,11 +1890,14 @@ public:
 
     /**
         Creates the control and a wxDataViewTreeStore as its internal model.
+
+        The default tree column created by this method is an editable column
+        using wxDataViewIconTextRenderer as its renderer.
     */
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxDV_NO_HEADER,
+                long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
                 const wxValidator& validator = wxDefaultValidator);
 
     /**
@@ -2375,7 +2380,7 @@ public:
     @event{EVT_DATAVIEW_CACHE_HINT(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_CACHE_HINT event.
     @endEventTable
-    
+
     @library{wxadv}
     @category{events,dvc}
 */

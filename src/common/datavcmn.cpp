@@ -2011,40 +2011,30 @@ BEGIN_EVENT_TABLE(wxDataViewTreeCtrl,wxDataViewCtrl)
    EVT_SIZE( wxDataViewTreeCtrl::OnSize )
 END_EVENT_TABLE()
 
-wxDataViewTreeCtrl::wxDataViewTreeCtrl()
-{
-    m_imageList = NULL;
-}
-
-wxDataViewTreeCtrl::wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
-{
-    m_imageList = NULL;
-    Create( parent, id, pos, size, style, validator );
-
-    wxDataViewTreeStore *store = new wxDataViewTreeStore;
-    AssociateModel( store );
-    store->DecRef();
-
-    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_INERT,-1);
-}
-
 wxDataViewTreeCtrl::~wxDataViewTreeCtrl()
 {
-    if (m_imageList)
-        delete m_imageList;
+    delete m_imageList;
 }
 
 bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator )
 {
-    return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
+    if ( !wxDataViewCtrl::Create( parent, id, pos, size, style, validator ) )
+        return false;
+
+    // create the standard model and a column in the tree
+    wxDataViewTreeStore *store = new wxDataViewTreeStore;
+    AssociateModel( store );
+    store->DecRef();
+
+    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_EDITABLE,-1);
+
+    return true;
 }
 
 void wxDataViewTreeCtrl::SetImageList( wxImageList *imagelist )
 {
-    if (m_imageList)
-        delete m_imageList;
+    delete m_imageList;
 
     m_imageList = imagelist;
 }

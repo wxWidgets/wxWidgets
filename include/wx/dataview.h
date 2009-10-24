@@ -1327,17 +1327,27 @@ public:
 class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl
 {
 public:
-    wxDataViewTreeCtrl();
-    wxDataViewTreeCtrl( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
-           const wxValidator& validator = wxDefaultValidator );
-    ~wxDataViewTreeCtrl();
+    wxDataViewTreeCtrl() { Init(); }
+    wxDataViewTreeCtrl(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
+                       const wxValidator& validator = wxDefaultValidator)
+    {
+        Init();
 
-    bool Create( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
-           const wxValidator& validator = wxDefaultValidator );
+        Create(parent, id, pos, size, style, validator);
+    }
+
+    virtual ~wxDataViewTreeCtrl();
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDV_NO_HEADER | wxDV_ROW_LINES,
+                const wxValidator& validator = wxDefaultValidator);
 
     wxDataViewTreeStore *GetStore()
         { return (wxDataViewTreeStore*) GetModel(); }
@@ -1392,7 +1402,12 @@ public:
     void OnSize( wxSizeEvent &event );
 
 private:
-    wxImageList  *m_imageList;
+    void Init()
+    {
+        m_imageList = NULL;
+    }
+
+    wxImageList *m_imageList;
 
 private:
     DECLARE_EVENT_TABLE()
