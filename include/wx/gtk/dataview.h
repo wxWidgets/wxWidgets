@@ -414,17 +414,17 @@ public:
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator )
     {
+        Init();
+
         Create(parent, id, pos, size, style, validator );
     }
-
-    virtual ~wxDataViewCtrl();
-
-    void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator );
+
+    virtual ~wxDataViewCtrl();
 
     virtual bool AssociateModel( wxDataViewModel *model );
 
@@ -481,6 +481,8 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
 private:
+    void Init();
+
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;
     friend class wxGtkDataViewModelNotifier;
