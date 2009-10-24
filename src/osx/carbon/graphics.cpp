@@ -2010,9 +2010,6 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextRestoreGState( m_cgContext );
         if ( m_contextSynthesized )
         {
-            // TODO: in case of performance problems, try issuing this not too
-            // frequently (half of refresh rate)
-            CGContextFlush(m_cgContext);
 #if wxOSX_USE_CARBON
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 #endif

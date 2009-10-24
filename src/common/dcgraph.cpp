@@ -265,9 +265,7 @@ void wxGCDCImpl::EndPage()
 
 void wxGCDCImpl::Flush()
 {
-#ifdef __WXOSX_OR_COCOA__
-    CGContextFlush( (CGContextRef) m_graphicContext->GetNativeContext() );
-#endif
+    m_graphicContext->Flush();
 }
 
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )

@@ -181,6 +181,10 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
+#ifdef __WXOSX_IPHONE__
+    m_graphicContext->ResetClip();
+    m_clipping = false;
+#endif
     DoSetClippingRegion( 0 , 0 , m_width , m_height ) ;
 }
 
