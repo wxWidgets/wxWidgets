@@ -194,7 +194,7 @@ void wxNonOwnedWindowIPhoneImpl::GetSize( int &width, int &height ) const
 
 void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
-    CGRect rect = [m_macWindow frame];
+    CGRect rect = [m_macWindow bounds];
     width = rect.size.width;
     height = rect.size.height;
     left = rect.origin.x;

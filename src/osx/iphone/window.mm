@@ -321,17 +321,21 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation
 {
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+    
+    // TODO: determine NO or YES based on min size requirements (whether it fits on the new orientation)
+    
     return YES;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     CGRect fr = [self.view frame];
-//    CGRect cv = [[self.view superview] frame];
-//    CGRect bounds = CGRectMake( 0,0,fr.size.width, fr.size.height);
-//    [[self.view superview] setFrame: fr ];
-//    [self.view setFrame: bounds];
-//    [self.view setNeedsDisplayInRect:bounds];
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+        
+    now->HandleResized(0);
 }
 
 @end
@@ -419,7 +423,9 @@ void wxWidgetIPhoneImpl::GetSize( int &width, int &height ) const
 void wxWidgetIPhoneImpl::GetContentArea( int&left, int &top, int &width, int &height ) const
 {
     left = top = 0;
-    GetSize( width, height );
+    CGRect rect = [m_osxView bounds];
+    width = rect.size.width;
+    height = rect.size.height;
 }
 
 void wxWidgetIPhoneImpl::SetNeedsDisplay( const wxRect* where )
@@ -767,31 +773,21 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
     UIWindow* toplevelwindow = now->GetWXWindow();
+    CGRect frame = [toplevelwindow bounds];
+    CGRect appframe = [[UIScreen mainScreen] applicationFrame];
 
-    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:[toplevelwindow bounds]];
+    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE )
+    {
+        double offset = appframe.origin.y;
+        frame.origin.y += offset;
+        frame.size.height -= offset;
+    }
+    
+    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:frame];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] init];
     controller.view = contentview;
-    /*
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    // left orientation not yet implemented !
-    if (orientation == UIInterfaceOrientationLandscapeRight )
-    {
-        CGAffineTransform transform = v.transform;
 
-        // Use the status bar frame to determine the center point of the window's content area.
-        CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-        CGRect bounds = CGRectMake(0, 0, statusBarFrame.size.height, statusBarFrame.origin.x);
-        CGPoint center = CGPointMake(bounds.size.height / 2.0, bounds.size.width / 2.0);
-
-        // Set the center point of the view to the center point of the window's content area.
-        v.center = center;
-
-        // Rotate the view 90 degrees around its new center point.
-        transform = CGAffineTransformRotate(transform, ( M_PI / 2.0));
-        v.transform = transform;
-    }
-    */
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
     impl->InstallEventHandler();
     [toplevelwindow addSubview:contentview];

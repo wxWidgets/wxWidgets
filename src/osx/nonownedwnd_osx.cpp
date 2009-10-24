@@ -399,8 +399,13 @@ void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
         return;
 
     int left, top, w, h;
+    // perhaps we should do this for all ?
+#ifdef __WXOSX_IPHONE__
+    m_peer->GetContentArea(left, top, w, h);
+#else
     m_nowpeer->GetContentArea(left, top, w, h);
-
+#endif
+    
     if (width)
        *width = w ;
     if (height)

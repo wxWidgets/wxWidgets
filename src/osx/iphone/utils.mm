@@ -136,6 +136,7 @@ extern CGSize MeasureTextInContext( UIFont *font, NSString* text )
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
+#if 0
     CGRect r = [[UIScreen mainScreen] applicationFrame];
     CGRect bounds = [[UIScreen mainScreen] bounds];
     if ( bounds.size.height > r.size.height )
@@ -162,6 +163,15 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         if ( height )
             *height = r.size.width;
     }
+#else
+    // it's easier to treat the status bar as an element of the toplevel window 
+    // instead of the desktop in order to support easy rotation
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
+    wxDisplaySize(width, height);
+#endif
 }
 
 void wxGetMousePosition( int* x, int* y )
