@@ -761,7 +761,7 @@ WX_ARG_FEATURE(sound,         [  --enable-sound          use wxSound class], wxU
 WX_ARG_FEATURE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
 WX_ARG_FEATURE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
 WX_ARG_FEATURE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
-WX_ARG_FEATURE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
+WX_ARG_FEATURE(sysoptions,    [  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
 WX_ARG_FEATURE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUSE_TARSTREAM)
 WX_ARG_FEATURE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_FEATURE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
