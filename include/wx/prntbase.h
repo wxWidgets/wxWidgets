@@ -370,8 +370,8 @@ public:
                    const wxString& title = wxT("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxDEFAULT_FRAME_STYLE,
-                   const wxString& name = wxT("frame"));
+                   long style = wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
+                   const wxString& name = wxFrameNameStr);
     virtual ~wxPreviewFrame();
 
     void OnCloseWindow(wxCloseEvent& event);
