@@ -677,6 +677,14 @@ wxSize wxButtonBase::GetDefaultSize()
 // ----------------------------------------------------------------------------
 
 /*
+   The comment below and all this code is probably due to not using WM_NEXTDLGCTL
+   message when changing focus (but just SetFocus() which is not enough), see
+   http://blogs.msdn.com/oldnewthing/archive/2004/08/02/205624.aspx for the
+   full explanation.
+
+   TODO: Do use WM_NEXTDLGCTL and get rid of all this code.
+
+
    "Everything you ever wanted to know about the default buttons" or "Why do we
    have to do all this?"
 
