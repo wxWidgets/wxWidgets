@@ -486,9 +486,11 @@ void wxFileName::Assign(const wxString& fullpathOrig,
 
     SplitPath(fullpath, &volume, &path, &nameDummy, &extDummy, format);
 
-    wxASSERT_MSG( nameDummy.empty() && extDummy.empty(),
+#ifndef __VMS
+   // This test makes no sense on an OpenVMS system.
+   wxASSERT_MSG( nameDummy.empty() && extDummy.empty(),
                   wxT("the path shouldn't contain file name nor extension") );
-
+#endif
     Assign(volume, path, name, ext, hasExt, format);
 }
 
