@@ -889,6 +889,12 @@ bool wxTopLevelWindowGTK::Show( bool show )
     return change;
 }
 
+void wxTopLevelWindowGTK::ShowWithoutActivating()
+{
+    gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), false);
+    Show(true);
+}
+
 void wxTopLevelWindowGTK::Raise()
 {
     gtk_window_present( GTK_WINDOW( m_widget ) );
