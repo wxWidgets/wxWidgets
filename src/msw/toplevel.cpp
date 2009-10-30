@@ -612,7 +612,7 @@ void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
 void wxTopLevelWindowMSW::ShowWithoutActivating()
 {
     if ( !wxWindowBase::Show(true) )
-        return false;
+        return;
         
     DoShowWindow(SW_SHOWNA);
 }
