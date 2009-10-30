@@ -609,6 +609,14 @@ void wxTopLevelWindowMSW::DoShowWindow(int nShowCmd)
     m_iconized = nShowCmd == SW_MINIMIZE;
 }
 
+void wxTopLevelWindowMSW::ShowWithoutActivating()
+{
+    if ( !wxWindowBase::Show(true) )
+        return false;
+        
+    DoShowWindow(SW_SHOWNA);
+}
+
 bool wxTopLevelWindowMSW::Show(bool show)
 {
     // don't use wxWindow version as we want to call DoShowWindow() ourselves

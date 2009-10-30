@@ -51,6 +51,21 @@ void wxNonOwnedWindowCarbonImpl::Lower()
     ::SendBehind( m_macWindow , NULL ) ;
 }
 
+void wxNonOwnedWindowCarbonImpl::ShowWithoutActivating()
+{
+    bool plainTransition = true;
+
+#if wxUSE_SYSTEM_OPTIONS
+    if ( wxSystemOptions::HasOption(wxMAC_WINDOW_PLAIN_TRANSITION) )
+        plainTransition = ( wxSystemOptions::GetOptionInt( wxMAC_WINDOW_PLAIN_TRANSITION ) == 1 ) ;
+#endif
+
+    if ( plainTransition )
+       ::ShowWindow( (WindowRef)m_macWindow );
+    else
+       ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
+}
+
 bool wxNonOwnedWindowCarbonImpl::Show(bool show)
 {
     bool plainTransition = true;
@@ -62,14 +77,8 @@ bool wxNonOwnedWindowCarbonImpl::Show(bool show)
 
     if (show)
     {
-#if wxOSX_USE_CARBON
-        if ( plainTransition )
-           ::ShowWindow( (WindowRef)m_macWindow );
-        else
-           ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
-
+        ShowWithoutActivating();
         ::SelectWindow( (WindowRef)m_macWindow ) ;
-#endif
     }
     else
     {
@@ -1667,6 +1676,11 @@ void wxNonOwnedWindowCarbonImpl::WindowToScreen( int *x, int *y )
         *x = (int)p.x;
     if ( y )
         *y = (int)p.y;
+}
+
+bool wxNonOwnedWindowCarbonImpl::IsActive()
+{
+    return ActiveNonFloatingWindow() == m_macWindow;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,

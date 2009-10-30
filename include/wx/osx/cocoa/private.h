@@ -233,6 +233,8 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool ShowFullScreen(bool show, long style);
+    
+    virtual void ShowWithoutActivating();
 
     virtual void RequestUserAttention(int flags);
 
@@ -240,6 +242,8 @@ public :
 
     virtual void WindowToScreen( int *x, int *y );
 
+    virtual bool IsActive();
+    
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
     WX_wxNSWindow         m_macWindow;

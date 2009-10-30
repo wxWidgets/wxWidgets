@@ -160,6 +160,12 @@ public:
 
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
+    
+    // shows the window, but doesn't activate it. If the base code is being run,
+    // it means the port doesn't implement this method yet and so alert the user.
+    virtual void ShowWithoutActivating() { 
+        wxFAIL_MSG("ShowWithoutActivating not implemented on this platform.");
+    }
 
     // return true if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;

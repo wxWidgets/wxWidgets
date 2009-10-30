@@ -62,7 +62,10 @@ public:
     virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void Restore();
+    
+    virtual bool IsActive();
 
+    virtual void ShowWithoutActivating();
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) ;
     virtual bool IsFullScreen() const ;
 

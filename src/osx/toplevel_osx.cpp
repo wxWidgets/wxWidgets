@@ -157,6 +157,11 @@ wxString wxTopLevelWindowMac::GetTitle() const
     return wxWindow::GetLabel();
 }
 
+void wxTopLevelWindowMac::ShowWithoutActivating()
+{
+    return m_nowpeer->ShowWithoutActivating();
+}
+
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
 {
     return m_nowpeer->ShowFullScreen(show, style);
@@ -170,4 +175,9 @@ bool wxTopLevelWindowMac::IsFullScreen() const
 void wxTopLevelWindowMac::RequestUserAttention(int flags)
 {
     return m_nowpeer->RequestUserAttention(flags);
+}
+
+bool wxTopLevelWindowMac::IsActive()
+{
+    return m_nowpeer->IsActive();
 }

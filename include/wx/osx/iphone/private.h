@@ -169,6 +169,9 @@ public :
 
     virtual void WindowToScreen( int *x, int *y );
 
+    // FIXME: Does iPhone have a concept of inactive windows?
+    virtual bool IsActive() { return true; }
+    
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
     WX_UIWindow          m_macWindow;

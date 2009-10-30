@@ -52,6 +52,7 @@ public:
 
     virtual bool EnableCloseButton(bool enable = true);
 
+    virtual void ShowWithoutActivating();
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 

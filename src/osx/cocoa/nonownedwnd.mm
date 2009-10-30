@@ -471,17 +471,21 @@ void wxNonOwnedWindowCocoaImpl::Lower()
     [m_macWindow orderWindow:NSWindowBelow relativeTo:0];
 }
 
+void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
+{
+    [[m_macWindow contentView] setNeedsDisplay:YES];
+}
+
 bool wxNonOwnedWindowCocoaImpl::Show(bool show)
 {
     if ( show )
     {
         wxNonOwnedWindow* wxpeer = GetWXPeer(); 
         if (wxpeer && !(wxpeer->GetWindowStyle() & wxFRAME_TOOL_WINDOW)) 
-            [m_macWindow makeKeyAndOrderFront:nil]; 
+            [m_macWindow makeKeyAndOrderFront:nil];
         else 
             [m_macWindow orderFront:nil]; 
-
-        [[m_macWindow contentView] setNeedsDisplay:YES];
+        ShowWithoutActivating();
     }
     else
         [m_macWindow orderOut:nil];
@@ -674,6 +678,11 @@ void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
         *x = p.x;
     if ( y )
         *y = p.y;
+}
+
+bool wxNonOwnedWindowCocoaImpl::IsActive()
+{
+    return [m_macWindow isKeyWindow];
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,

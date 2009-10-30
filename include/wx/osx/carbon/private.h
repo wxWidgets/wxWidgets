@@ -1040,12 +1040,15 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool ShowFullScreen(bool show, long style);
+    
+    virtual void ShowWithoutActivating();
 
     virtual void RequestUserAttention(int flags);
 
     virtual void ScreenToWindow( int *x, int *y );
 
     virtual void WindowToScreen( int *x, int *y );
+    virtual bool IsActive();
 
 
     bool MacGetUnifiedAppearance() const ;

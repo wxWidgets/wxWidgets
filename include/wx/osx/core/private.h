@@ -717,6 +717,8 @@ public :
 
     virtual bool IsFullScreen() const= 0;
 
+    virtual void ShowWithoutActivating() { Show(true); }
+    
     virtual bool ShowFullScreen(bool show, long style)= 0;
 
     virtual void RequestUserAttention(int flags) = 0;
@@ -725,6 +727,8 @@ public :
 
     virtual void WindowToScreen( int *x, int *y ) = 0;
 
+    virtual bool IsActive() = 0;
+    
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
     // static creation methods, must be implemented by all toolkits
