@@ -141,6 +141,7 @@ wxMSW:
 - Worked around child window and caret positioning bug (in Windows) when using
   wxBORDER_THEME in a container window.
 - Suppressed spurious character event for decimal key in numeric keypad.
+- Prevented wxCheckListBox from corrupting menu items.
 
 wxGTK:
 

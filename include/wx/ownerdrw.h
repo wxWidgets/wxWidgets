@@ -144,6 +144,16 @@ protected:
   // get the font to use, whether m_font is set or not
   wxFont GetFontToUse() const;
 
+  // Same as wxOwnerDrawn::SetMarginWidth() but does not affect
+  // ms_nLastMarginWidth. Exists solely to work around bug #4068,
+  // and will not exist in wxWidgets 2.9.0 and later.
+  void SetOwnMarginWidth(int nWidth)
+  {
+      m_nMarginWidth = (size_t) nWidth;
+      if ( ((size_t) nWidth) != ms_nDefaultMarginWidth )
+          m_bOwnerDrawn = true;
+  }
+
 
   wxString  m_strName,      // label for a manu item
             m_strAccel;     // the accel string ("Ctrl-F17") if any
