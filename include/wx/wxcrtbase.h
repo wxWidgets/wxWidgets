@@ -57,7 +57,7 @@
    define it ourselves for them
  */
 #ifndef isascii
-    #if defined(__MWERKS__)
+    #if defined(__MWERKS__) || defined(__STRICT_ANSI__)
         #define wxNEED_ISASCII
     #elif defined(_WIN32_WCE)
         #if _WIN32_WCE <= 211
@@ -180,12 +180,12 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
    Mac and OpenVMS do not have wcsdup: */
 #if defined(__VISUALC__) && __VISUALC__ >= 1400
     #define wxCRT_StrdupA _strdup
-#elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
+#elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__) && !defined(__STRICT_ANSI__)
     #define wxCRT_StrdupA strdup
 #endif
 
 // all compilers except Cygwin provide _wcsdup() under Windows
-#if defined(__WINDOWS__) && !defined(__CYGWIN__)
+#if defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__STRICT_ANSI__)
     #define wxCRT_StrdupW _wcsdup
 #elif defined(HAVE_WCSDUP)
     #define wxCRT_StrdupW wcsdup
@@ -266,7 +266,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
         (defined(__MWERKS__) && defined(__INTEL__))
     #define wxCRT_StricmpA _stricmp
     #define wxCRT_StrnicmpA _strnicmp
-#elif defined(__UNIX__) || defined(__GNUWIN32__)
+#elif defined(__UNIX__) || (defined(__GNUWIN32__) && !defined(__STRICT_ANSI__))
     #define wxCRT_StricmpA strcasecmp
     #define wxCRT_StrnicmpA strncasecmp
 /* #else -- use wxWidgets implementation */
@@ -460,7 +460,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 #else /* Unicode filenames */
     /* special case: these functions are missing under Win9x with Unicows so we
        have to implement them ourselves */
-    #if wxUSE_UNICODE_MSLU
+    #if wxUSE_UNICODE_MSLU || defined(__STRICT_ANSI__)
             WXDLLIMPEXP_BASE FILE* wxMSLU__wfopen(const wchar_t *name, const wchar_t *mode);
             WXDLLIMPEXP_BASE FILE* wxMSLU__wfreopen(const wchar_t *name, const wchar_t *mode, FILE *stream);
             WXDLLIMPEXP_BASE int wxMSLU__wrename(const wchar_t *oldname, const wchar_t *newname);
@@ -575,7 +575,7 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
         #define wxCRT_AtolW         watol
     /* else: use ANSI versions */
     #endif
-#elif defined(wxHAVE_TCHAR_SUPPORT)
+#elif defined(wxHAVE_TCHAR_SUPPORT) && !defined(__STRICT_ANSI__)
     #define  wxCRT_AtoiW           _wtoi
     #define  wxCRT_AtolW           _wtol
     /* _wtof doesn't exist */

@@ -344,7 +344,7 @@ enum wxFileKind
 
     // finally the default char-type versions
     #if wxUSE_UNICODE
-        #if wxUSE_UNICODE_MSLU
+        #if wxUSE_UNICODE_MSLU || defined(__STRICT_ANSI__)
             // implement the missing file functions in Win9x ourselves
             WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
                                                int flags, int mode);
