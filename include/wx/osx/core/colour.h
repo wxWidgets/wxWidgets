@@ -58,6 +58,9 @@ public:
     wxColour(const RGBColor& col);
     wxColour& operator=(const RGBColor& col);
 #endif
+#if wxOSX_USE_COCOA
+    wxColour(WX_NSColor color);
+#endif
     wxColour& operator=(CGColorRef col);
     wxColour& operator=(const wxColour& col);
 
@@ -68,6 +71,7 @@ protected :
     void InitRGBColor( const RGBColor& col );
 #endif
     void InitCGColorRef( CGColorRef col );
+    void InitFromComponents(const CGFloat* components, size_t numComponents );
 private:
     wxCFRef<CGColorRef>     m_cgColour;
 

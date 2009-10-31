@@ -111,30 +111,39 @@ void wxColour::InitCGColorRef( CGColorRef col )
 {
     m_cgColour.reset( col );
     size_t noComp = CGColorGetNumberOfComponents( col );
+    
+    const CGFloat *components = NULL;
     if ( noComp >= 1 && noComp <= 4 )
     {
         // TODO verify whether we really are on a RGB color space
         m_alpha = wxALPHA_OPAQUE;
-        const CGFloat *components = CGColorGetComponents( col );
-        if ( noComp >= 3 )
-        {
-            m_red = (int)(components[0]*255+0.5);
-            m_green = (int)(components[1]*255+0.5);
-            m_blue = (int)(components[2]*255+0.5);
-            if ( noComp == 4 )
-                m_alpha =  (int)(components[3]*255+0.5);
-        }
-        else
-        {
-            m_red = (int)(components[0]*255+0.5);
-            m_green = (int)(components[0]*255+0.5);
-            m_blue = (int)(components[0]*255+0.5);
-        }
+        components = CGColorGetComponents( col );
     }
-    else
+    InitFromComponents(components, noComp);
+}
+
+void wxColour::InitFromComponents(const CGFloat* components, size_t numComponents )
+{
+    if ( numComponents < 1 || !components )
     {
         m_alpha = wxALPHA_OPAQUE;
         m_red = m_green = m_blue = 0;
+        return;
+    }
+    
+    if ( numComponents >= 3 )
+    {
+        m_red = (int)(components[0]*255+0.5);
+        m_green = (int)(components[1]*255+0.5);
+        m_blue = (int)(components[2]*255+0.5);
+        if ( numComponents == 4 )
+            m_alpha =  (int)(components[3]*255+0.5);
+    }
+    else
+    {
+        m_red = (int)(components[0]*255+0.5);
+        m_green = (int)(components[0]*255+0.5);
+        m_blue = (int)(components[0]*255+0.5);
     }
 }
 

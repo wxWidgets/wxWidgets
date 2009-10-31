@@ -2462,6 +2462,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/button.mm
     src/osx/cocoa/checkbox.mm
     src/osx/cocoa/choice.mm
+    src/osx/cocoa/colour.mm
     src/osx/cocoa/dialog.mm
     src/osx/cocoa/dirdlg.mm
     src/osx/cocoa/evtloop.mm
