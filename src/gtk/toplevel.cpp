@@ -358,6 +358,8 @@ gtk_frame_map_callback( GtkWidget*,
         eventShow.SetEventObject(win);
         win->GetEventHandler()->ProcessEvent(eventShow);
     }
+    // restore focus-on-map setting in case ShowWithoutActivating() was called
+    gtk_window_set_focus_on_map(GTK_WINDOW(win->m_widget), true);
     return false;
 }
 }
@@ -891,8 +893,11 @@ bool wxTopLevelWindowGTK::Show( bool show )
 
 void wxTopLevelWindowGTK::ShowWithoutActivating()
 {
-    gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), false);
-    Show(true);
+    if (!m_isShown)
+    {
+        gtk_window_set_focus_on_map(GTK_WINDOW(m_widget), false);
+        Show(true);
+    }
 }
 
 void wxTopLevelWindowGTK::Raise()
