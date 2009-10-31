@@ -397,7 +397,7 @@ public:
     virtual int GetMaxWidth() const { return m_maxWidth; }
     virtual int GetMinWidth() const { return m_minWidth; }
     virtual wxString GetTitle() const { return m_title; }
-    virtual int GetWidth() const { return m_width; }
+    virtual int GetWidth() const;
     virtual bool IsHidden() const { return false; } // TODO
     virtual bool IsSortOrderAscending() const { return m_ascending; }
     virtual bool IsSortKey() const;
@@ -423,6 +423,10 @@ public:
     }
 
     void SetNativeData(wxDataViewColumnNativeData* newNativeDataPtr); // class takes ownership of pointer
+    int GetWidthVariable() const
+    {
+        return m_width;
+    }
     void SetWidthVariable(int NewWidth)
     {
         m_width = NewWidth;

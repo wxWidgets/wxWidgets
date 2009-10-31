@@ -258,6 +258,7 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     );
 
     // setting the size related parameters:
+    const int width = column->GetWidthVariable();
     if (column->IsResizeable())
     {
         [nativeColumn setResizingMask:NSTableColumnUserResizingMask];
@@ -267,10 +268,10 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
     else
     {
         [nativeColumn setResizingMask:NSTableColumnNoResizing];
-        [nativeColumn setMinWidth:column->GetWidth()];
-        [nativeColumn setMaxWidth:column->GetWidth()];
+        [nativeColumn setMinWidth:width];
+        [nativeColumn setMaxWidth:width];
     }
-    [nativeColumn setWidth:column->GetWidth()];
+    [nativeColumn setWidth:width];
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
     // setting the visibility:
@@ -2771,6 +2772,11 @@ wxDataViewColumn::wxDataViewColumn(const wxBitmap& bitmap,
 wxDataViewColumn::~wxDataViewColumn()
 {
     delete m_NativeDataPtr;
+}
+
+int wxDataViewColumn::GetWidth() const
+{
+    return [m_NativeDataPtr->GetNativeColumnPtr() width];
 }
 
 bool wxDataViewColumn::IsSortKey() const

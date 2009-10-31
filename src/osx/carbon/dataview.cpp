@@ -2476,6 +2476,13 @@ wxDataViewColumn::~wxDataViewColumn()
   delete m_NativeDataPtr;
 }
 
+int wxDataViewColumn::GetWidth() const
+{
+    // FIXME: This returns the last programatically set width and will not work if
+    //        the user changes the column's width by dragging it with the mouse.
+    return m_width;
+}
+
 bool wxDataViewColumn::IsSortKey() const
 {
     wxDataViewCtrl * const dataViewCtrlPtr(GetOwner());
