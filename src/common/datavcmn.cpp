@@ -274,7 +274,7 @@ int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem 
         if (dt1.IsEarlierThan(dt2))
             return 1;
         if (dt2.IsEarlierThan(dt1))
-            return -11;
+            return -1;
     }
 
     // items must be different
