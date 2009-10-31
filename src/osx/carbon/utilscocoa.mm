@@ -102,6 +102,40 @@ void* wxMacCocoaRetain( void* obj )
 // ----------------------------------------------------------------------------
 
 #if wxOSX_USE_COCOA
+wxFont::wxFont(WX_NSFont nsfont)
+{
+    [nsfont retain];
+    wxNativeFontInfo info;
+    SetNativeInfoFromNSFont(nsfont, &info);
+    Create(info);
+}
+
+void wxFont::SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info)
+{   
+    NSFontDescriptor*desc = [[nsfont fontDescriptor] retain];
+    if ( info->m_faceName.empty())
+    {
+        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
+        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
+        bool underlined = false;
+
+        int size = (int) ([desc pointSize]+0.5);
+        NSFontSymbolicTraits traits = [desc symbolicTraits];
+
+        if ( traits & NSFontBoldTrait )
+            fontweight = wxFONTWEIGHT_BOLD ;
+        else
+            fontweight = wxFONTWEIGHT_NORMAL ;
+        if ( traits & NSFontItalicTrait )
+            fontstyle = wxFONTSTYLE_ITALIC ;
+
+        wxCFStringRef fontname( [desc postscriptName] );
+        info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
+            fontname.AsString(), wxFONTENCODING_DEFAULT);
+
+    }
+    info->m_nsFontDescriptor = desc;
+}
 
 WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 {
@@ -138,29 +172,7 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
             break;
     }
     [nsfont retain];
-    NSFontDescriptor*desc = [[nsfont fontDescriptor] retain];
-    if ( info->m_faceName.empty())
-    {
-        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
-        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
-        bool underlined = false;
-
-        int size = (int) ([desc pointSize]+0.5);
-        NSFontSymbolicTraits traits = [desc symbolicTraits];
-
-        if ( traits & NSFontBoldTrait )
-            fontweight = wxFONTWEIGHT_BOLD ;
-        else
-            fontweight = wxFONTWEIGHT_NORMAL ;
-        if ( traits & NSFontItalicTrait )
-            fontstyle = wxFONTSTYLE_ITALIC ;
-
-        wxCFStringRef fontname( [desc postscriptName] );
-        info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
-            fontname.AsString(), wxFONTENCODING_DEFAULT);
-
-    }
-    info->m_nsFontDescriptor = desc;
+    SetNativeInfoFromNSFont(nsfont, info);
     return nsfont;
 }
 

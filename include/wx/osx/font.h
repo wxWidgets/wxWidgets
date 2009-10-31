@@ -37,6 +37,10 @@ public:
     // ctors and such
     wxFont() { }
 
+#if wxOSX_USE_COCOA
+    wxFont(WX_NSFont nsfont);
+#endif
+
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
     wxFont(int size,
            int family,
@@ -153,6 +157,7 @@ public:
     WX_NSFont OSXGetNSFont() const;
     static WX_NSFont OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
     static WX_NSFont OSXCreateNSFont(const wxNativeFontInfo* info);
+    static void SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info);
 #endif
 
 #if wxOSX_USE_IPHONE
