@@ -352,7 +352,6 @@ public:
     // implement base methods
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
-    // internal
     unsigned int GetCount() const { return m_hash.GetCount(); }
 
 private:
@@ -398,9 +397,10 @@ public:
     // implement base methods
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
+    unsigned int GetCount() const { return m_size; }
+
     // internal
     virtual bool IsVirtualListModel() const { return true; }
-    unsigned int GetCount() const { return m_size; }
 
 private:
     unsigned int m_size;

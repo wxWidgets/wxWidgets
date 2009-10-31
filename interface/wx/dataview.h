@@ -367,6 +367,11 @@ public:
                          wxDataViewItemAttr& attr) const;
 
     /**
+        Returns the number of items (i.e. rows) in the list.
+    */
+    unsigned int GetCount() const;
+
+    /**
         Returns the wxDataViewItem at the given @e row.
     */
     wxDataViewItem GetItem(unsigned int row) const;
@@ -458,6 +463,11 @@ public:
         Constructor.
     */
     wxDataViewVirtualListModel(unsigned int initial_size = 0);
+
+    /**
+        Returns the number of virtual items (i.e. rows) in the list.
+    */
+    unsigned int GetCount() const;
 };
 
 
