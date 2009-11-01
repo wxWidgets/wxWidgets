@@ -93,6 +93,7 @@ public:
     // methods apply the given text style to the given selection or to
     // set/get the style which will be used for all appended text
     virtual bool SetFont( const wxFont &font );
+    virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 

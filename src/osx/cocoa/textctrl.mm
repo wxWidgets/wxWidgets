@@ -429,6 +429,45 @@ void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSE
         [m_textView setFont: font.OSXGetNSFont()];
 }
 
+bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
+{
+    if (m_textView) {
+        NSTextStorage* storage = [m_textView textStorage];
+        NSFont* font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
+        if (font)
+            style.SetFont(wxFont(font));
+        NSColor* bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL];
+        if (bgcolor)
+            style.SetBackgroundColour(wxColour(bgcolor));
+        NSColor* fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
+        style.SetTextColour(wxColour(fgcolor));
+        return true;
+    }
+
+    return false;
+}
+
+void wxNSTextViewControl::SetStyle(long start,
+                                long end,
+                                const wxTextAttr& style)
+{
+    if (m_textView) {
+        NSRange range = NSMakeRange(start, end-start);
+        NSTextStorage* storage = [m_textView textStorage];
+        
+        wxFont font = style.GetFont();
+        if (font.IsOk())
+            [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
+        
+        wxColour bgcolor = style.GetBackgroundColour();
+        if (bgcolor.IsOk())
+            [storage addAttribute:NSBackgroundColorAttributeName value:bgcolor.OSXGetNSColor() range:range];
+        
+        wxColour fgcolor = style.GetTextColour();
+        if (fgcolor.IsOk())
+            [storage addAttribute:NSForegroundColorAttributeName value:fgcolor.OSXGetNSColor() range:range];
+    }
+}
 
 // wxNSTextFieldControl
 

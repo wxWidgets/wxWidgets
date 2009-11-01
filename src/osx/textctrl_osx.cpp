@@ -373,6 +373,11 @@ wxSize wxTextCtrl::DoGetBestSize() const
     return wxSize(wText, hText);
 }
 
+bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
+{
+    return GetTextPeer()->GetStyle(position, style);
+}
+
 // ----------------------------------------------------------------------------
 // Undo/redo
 // ----------------------------------------------------------------------------
@@ -723,6 +728,12 @@ bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
 // ----------------------------------------------------------------------------
 // implementation base class
 // ----------------------------------------------------------------------------
+
+bool wxTextWidgetImpl::GetStyle(long WXUNUSED(position),
+                                wxTextAttr& WXUNUSED(style))
+{
+    return false;
+}
 
 void wxTextWidgetImpl::SetStyle(long WXUNUSED(start),
                                 long WXUNUSED(end),

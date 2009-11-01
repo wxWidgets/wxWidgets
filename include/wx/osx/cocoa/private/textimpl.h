@@ -57,6 +57,9 @@ public:
     virtual void SetSelection( long from , long to );
     virtual void WriteText(const wxString& str) ;
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    
+    virtual bool GetStyle(long position, wxTextAttr& style);
+    virtual void SetStyle(long start, long end, const wxTextAttr& style);
 
 protected:
     NSScrollView* m_scrollView;
