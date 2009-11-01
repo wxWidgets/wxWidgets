@@ -33,4 +33,9 @@ wxColour::wxColour(WX_NSColor col)
     }
     InitFromComponents(const_cast<const CGFloat*>(components), noComp);
 }
+
+WX_NSColor wxColour::OSXGetNSColor()
+{
+    return [NSColor colorWithDeviceRed:m_red / 255.0 green:m_green / 255.0 blue:m_blue / 255.0 alpha:m_alpha / 255.0]; 
+}
 #endif
