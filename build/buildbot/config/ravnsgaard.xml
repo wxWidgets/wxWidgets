@@ -9,13 +9,37 @@
     <xi:include href="include/unix.xml"/>
 
     <build>
+        <name>Linux i386 wxGTK trunk STL debug</name>
+        <builddir>ravnsgaard_wxgtk_debug</builddir>
+        <scheduler>daily_0600</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+            <compile-all/>
+            <run-tests/>
+        </steps>
+    </build>
+
+    <build>
         <name>Linux i386 wxGTK stable STL debug</name>
         <builddir>ravnsgaard_wxgtk_stable_debug</builddir>
         <scheduler>daily_0600</scheduler>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
+            <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat26"/>
             <compile-all utils="false"/>
+            <run-tests/>
+        </steps>
+    </build>
+
+    <build>
+        <name>Linux i386 wxGTK trunk STL release</name>
+        <builddir>ravnsgaard_wxgtk_release</builddir>
+        <scheduler>trunk_quick</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+            <compile-all/>
             <run-tests/>
         </steps>
     </build>
@@ -26,7 +50,7 @@
         <scheduler>stable_quick</scheduler>
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
-            <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
+            <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat26"/>
             <compile-all utils="false"/>
             <run-tests/>
         </steps>
