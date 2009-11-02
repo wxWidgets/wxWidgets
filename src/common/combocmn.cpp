@@ -2313,7 +2313,7 @@ wxPoint wxComboCtrlBase::DoGetMargins() const
     return wxPoint(m_marginLeft, -1);
 }
 
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_8
 void wxComboCtrlBase::SetTextIndent( int indent )
 {
     if ( indent < 0 )

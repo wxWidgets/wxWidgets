@@ -303,7 +303,7 @@ public:
                            const wxBitmap& bmpHover = wxNullBitmap,
                            const wxBitmap& bmpDisabled = wxNullBitmap );
 
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_8
     //
     // This will set the space in pixels between left edge of the control and the
     // text, regardless whether control is read-only (ie. no wxTextCtrl) or not.
