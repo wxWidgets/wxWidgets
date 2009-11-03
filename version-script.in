@@ -24,7 +24,12 @@
 # and once released its version cannot be changed.
 
 # public symbols added in 2.8.11 (please keep in alphabetical order):
+#
+# NB: Convert{From,To}IeeeExtended() were not really added but they were not
+#     exported from the shared library before so the effect is as if they were
 @WX_VERSION_TAG@.11 {
+        *ConvertFromIeeeExtended*;
+        *ConvertToIeeeExtended*;
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
         *wxIconizeEvent*IsIconized*;

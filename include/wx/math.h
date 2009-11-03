@@ -129,8 +129,8 @@
     extern "C" {
 #endif
     /* functions from common/extended.c */
-    extern wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes);
-    extern void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
+    WXDLLEXPORT wxFloat64 ConvertFromIeeeExtended(const wxInt8 *bytes);
+    WXDLLEXPORT void ConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
 #ifdef __cplusplus
     }
 #endif
