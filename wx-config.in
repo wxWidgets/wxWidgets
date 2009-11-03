@@ -336,7 +336,28 @@ fi
 get_mask()
 {
     [ $# -gt 0 ] || set m
-    eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+
+    case "$m_ourversion" in
+        2.9)
+            is29orlater=1
+            ;;
+        2.*)
+            # there is no 2.10 so currently everything else is <= 2.8
+            is29orlater=0
+            ;;
+        *)
+            # 3.x and later "is29orlater" too
+            is29orlater=1
+            ;;
+    esac
+
+    # use 2.8 or 2.9 version of the mask: the difference is the presence of
+    # debug type in pre-2.9
+    if [ $is29orlater == 0 ]; then
+        eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+    else
+        eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
+    fi
 }
 
 # Returns true if this script is for a cross compiled config.
@@ -363,8 +384,6 @@ this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
 this_linkage=`[ "x@SHARED@" = "x1" ] || echo 'static'`
 
-this_config=`get_mask this`
-
 
 # Extract the user specification from the options parsed.
 m_host=${input_option_host:+"${input_option_host}-?"}
@@ -377,6 +396,19 @@ m_flavour=${input_option_flavour:+-$input_option_flavour}
 m_flavour=${m_flavour:-${input_option_flavour-'(-[^-]+)?'}}
 m_version=${input_option_version:-'[0-9]+\.[0-9]+'}
 m_linkage=${input_option_linkage-'?(static)?'}
+
+# Test whether or not --version has been specified
+#
+# This must be done after getting the input options so get_mask works correctly
+# since it is version-dependent
+
+if [ -z "$input_option_version" ]; then
+    m_ourversion="2.8"
+else
+    m_ourversion=$m_version
+fi
+
+this_config=`get_mask this`
 
 configmask="^`get_mask`$"
 
