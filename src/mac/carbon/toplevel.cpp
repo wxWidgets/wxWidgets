@@ -367,7 +367,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                 EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
                 SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
 
-                if ( axis == kEventMouseWheelAxisY )
+                if ( axis == kEventMouseWheelAxisX ||
+                        axis == kEventMouseWheelAxisY )
                 {
                     wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
                     wxevent.m_wheelRotation = delta;
