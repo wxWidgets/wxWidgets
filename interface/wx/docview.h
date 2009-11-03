@@ -1367,10 +1367,25 @@ public:
     virtual void SetDocumentTemplate(wxDocTemplate* templ);
 
     /**
+        Sets if this document has been already saved or not.
+
+        Normally there is no need to call this function as the document-view
+        framework does it itself as the documents are loaded from and saved to
+        the files. However it may be useful in some particular cases, for
+        example it may be called with @false argument to prevent the user
+        from saving the just opened document into the same file if this
+        shouldn't be done for some reason (e.g. file format version changes and
+        a new extension should be used for saving).
+
+        @see GetDocumentSaved(), AlreadySaved()
+     */
+    void SetDocumentSaved(bool saved = true);
+
+    /**
         Sets the filename for this document. Usually called by the framework.
 
         Calls OnChangeFilename() which in turn calls wxView::OnChangeFilename() for
-        all views if @a notifyViews is @true,
+        all views if @a notifyViews is @true.
     */
     void SetFilename(const wxString& filename, bool notifyViews = false);
 
