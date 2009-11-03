@@ -252,7 +252,7 @@ wxWindow* g_MacLastWindow = NULL ;
 
 EventMouseButton g_lastButton = 0 ;
 bool g_lastButtonWasFakeRight = false ;
- 
+
 void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 {
     UInt32 modifiers = cEvent.GetParameter<UInt32>(kEventParamKeyModifiers, typeUInt32) ;
@@ -312,13 +312,13 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     if( thisButtonIsFakeRight && ( mouseChord & 1U ) )
         mouseChord = ((mouseChord & ~1U) | 2U);
 
-    if(mouseChord & 1U) 
+    if(mouseChord & 1U)
         wxevent.m_leftDown = true ;
-    if(mouseChord & 2U) 
+    if(mouseChord & 2U)
         wxevent.m_rightDown = true ;
-    if(mouseChord & 4U) 
+    if(mouseChord & 4U)
         wxevent.m_middleDown = true ;
-    
+
     // translate into wx types
     switch ( cEvent.GetKind() )
     {
@@ -537,7 +537,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 }
 #endif
             }
-            
+
             // disabled windows must not get any input messages
             if ( currentMouseWindow && !currentMouseWindow->MacIsReallyEnabled() )
                 currentMouseWindow = NULL;
@@ -614,7 +614,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         {
             /*
             // this code is dangerous in case the delete in the mouse down occured further up in the chain, trying alternative
-            
+
             if ((currentMouseWindowParent != NULL) &&
                 (currentMouseWindowParent->GetChildren().Find(currentMouseWindow) == NULL))
             */
@@ -987,7 +987,7 @@ bool wxTopLevelWindowMac::Destroy()
     // and may fire a kill focus event on a control being destroyed
     if (m_macWindow)
         ClearKeyboardFocus( (WindowRef)m_macWindow );
-        
+
     return wxTopLevelWindowBase::Destroy();
 }
 
@@ -1122,7 +1122,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
 }
 
 void  wxTopLevelWindowMac::DoMacCreateRealWindow(
-    wxWindow* parent, 
+    wxWindow* parent,
     const wxString& title,
     const wxPoint& pos,
     const wxSize& size,
@@ -1156,8 +1156,8 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     WindowGroupRef group = NULL ;
-	bool activationScopeSet = false;
-	WindowActivationScope activationScope = kWindowActivationScopeNone;
+    bool activationScopeSet = false;
+    WindowActivationScope activationScope = kWindowActivationScopeNone;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
@@ -1200,7 +1200,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
         else
             wclass = kPlainWindowClass ;  // has a single line border, it will have to do for now
         //attr |= kWindowNoShadowAttribute; // turn off the shadow  Should we??
-        group = GetWindowGroupOfClass(    // float above other windows   
+        group = GetWindowGroupOfClass(    // float above other windows
             kFloatingWindowClass) ;
     }
     else if ( HasFlag( wxCAPTION ) )
@@ -1255,14 +1255,14 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
 
     if ( HasFlag( wxFRAME_FLOAT_ON_PARENT ) )
         group = GetWindowGroupOfClass(kFloatingWindowClass) ;
-        
+
     if ( group == NULL && parent != NULL )
     {
         WindowRef parenttlw = (WindowRef) parent->MacGetTopLevelWindowRef();
         if( parenttlw )
             group = GetWindowGroupParent( GetWindowGroup( parenttlw ) );
     }
-        
+
     attr |= kWindowCompositingAttribute;
 #if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;
@@ -1272,7 +1272,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     {
         WindowDefSpec customWindowDefSpec;
         customWindowDefSpec.defType = kWindowDefProcPtr;
-        customWindowDefSpec.u.defProc = 
+        customWindowDefSpec.u.defProc =
 #ifdef __LP64__
             (WindowDefUPP) wxShapedMacWindowDef;
 #else
@@ -1293,17 +1293,17 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
 
     // setup a separate group for each window, so that overlays can be handled easily
-    
+
     WindowGroupRef overlaygroup = NULL;
     verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &overlaygroup ));
     verify_noerr( SetWindowGroupParent( overlaygroup, GetWindowGroup( (WindowRef) m_macWindow )));
     verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , overlaygroup ));
-  
-	if ( activationScopeSet )
-	{
-		verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
-	}
-  
+
+    if ( activationScopeSet )
+    {
+        verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
+    }
+
     // the create commands are only for content rect,
     // so we have to set the size again as structure bounds
     SetWindowBounds(  (WindowRef) m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
@@ -1569,7 +1569,7 @@ void wxTopLevelWindowMac::SetExtraStyle(long exStyle)
         {
             if ( MacGetUnifiedAppearance() )
                 MacSetUnifiedAppearance( !metal ) ;
-            
+
             MacSetMetalAppearance( metal ) ;
         }
     }
@@ -1647,7 +1647,7 @@ void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 #if TARGET_API_MAC_OSX
     if ( MacGetUnifiedAppearance() )
         MacSetUnifiedAppearance( false ) ;
-    
+
     MacChangeWindowAttributes( set ? kWindowMetalAttribute : kWindowNoAttributes ,
         set ? kWindowNoAttributes : kWindowMetalAttribute ) ;
 #endif
@@ -1669,13 +1669,13 @@ void wxTopLevelWindowMac::MacSetUnifiedAppearance( bool set )
     {
         if ( MacGetMetalAppearance() )
             MacSetMetalAppearance( false ) ;
-        
+
         MacChangeWindowAttributes( set ? kWindowUnifiedTitleAndToolbarAttribute : kWindowNoAttributes ,
             set ? kWindowNoAttributes : kWindowUnifiedTitleAndToolbarAttribute) ;
-        
+
         // For some reason, Tiger uses white as the background color for this appearance,
         // while most apps using it use the typical striped background. Restore that behavior
-        // for wx. 
+        // for wx.
         // TODO: Determine if we need this on Leopard as well. (should be harmless either way,
         // though)
         SetBackgroundColour( wxSYS_COLOUR_WINDOW ) ;
