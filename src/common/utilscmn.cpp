@@ -761,13 +761,11 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
             wxRegKey keyDDE(key, wxT("DDEExec"));
             if ( keyDDE.Exists() )
             {
-                const wxString ddeTopic = wxRegKey(keyDDE, wxT("topic"));
-
                 // we only know the syntax of WWW_OpenURL DDE request for IE,
                 // optimistically assume that all other browsers are compatible
                 // with it
-                wxString ddeCmd;
-                bool ok = ddeTopic == wxT("WWW_OpenURL");
+                wxRegKey keyTopic(keyDDE, wxT("topic"));
+                bool ok = keyTopic.Exists() && keyTopic == wxT("WWW_OpenURL");
                 if ( ok )
                 {
                     ddeCmd = keyDDE.QueryDefaultValue();
@@ -814,6 +812,7 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
     sei.lpFile = url.c_str();
     sei.lpVerb = _T("open");
     sei.nShow = SW_SHOWNORMAL;
+    sei.fMask = SEE_MASK_FLAG_NO_UI; // we give error message ourselves
 
     BOOL nExecResult = ::ShellExecuteEx(&sei);
 
