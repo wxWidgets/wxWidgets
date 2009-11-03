@@ -764,8 +764,10 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
                 // we only know the syntax of WWW_OpenURL DDE request for IE,
                 // optimistically assume that all other browsers are compatible
                 // with it
+                static const wxChar *TOPIC_OPEN_URL = wxT("WWW_OpenURL");
+                wxString ddeCmd;
                 wxRegKey keyTopic(keyDDE, wxT("topic"));
-                bool ok = keyTopic.Exists() && keyTopic == wxT("WWW_OpenURL");
+                bool ok = keyTopic.Exists() && keyTopic == TOPIC_OPEN_URL;
                 if ( ok )
                 {
                     ddeCmd = keyDDE.QueryDefaultValue();
@@ -794,7 +796,7 @@ static bool wxLaunchDefaultBrowserBaseImpl(const wxString& url, int flags)
                     wxLogNull noLog;
 
                     const wxString ddeServer = wxRegKey(keyDDE, wxT("application"));
-                    if ( wxExecuteDDE(ddeServer, ddeTopic, ddeCmd) )
+                    if ( wxExecuteDDE(ddeServer, TOPIC_OPEN_URL, ddeCmd) )
                         return true;
 
                     // this is not necessarily an error: maybe browser is
