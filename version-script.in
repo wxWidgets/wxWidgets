@@ -33,6 +33,7 @@
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
         *wxIconizeEvent*IsIconized*;
+        *wxMouseState*IsDown*;
         *wxRichTextCtrl*GetContextMenu*;
         *wxRichTextCtrl*SetContextMenu*;
         *wxShowEvent*IsShown*;

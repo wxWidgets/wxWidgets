@@ -229,6 +229,12 @@ public:
     bool        MiddleDown()  { return m_middleDown; }
     bool        RightDown()   { return m_rightDown; }
 
+#if wxABI_VERSION >= 20811
+    bool        LeftIsDown()    { return m_leftDown; }
+    bool        MiddleIsDown()  { return m_middleDown; }
+    bool        RightIsDown()   { return m_rightDown; }
+#endif // wx >= 2.8.11
+
     bool        ControlDown() { return m_controlDown; }
     bool        ShiftDown()   { return m_shiftDown; }
     bool        AltDown()     { return m_altDown; }
