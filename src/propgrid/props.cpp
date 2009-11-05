@@ -358,7 +358,7 @@ static const wxChar* gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
     wxT("%u"),wxT("%o")
 };
 
-static const wxChar* gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
+static const char* gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
     "%" wxLongLongFmtSpec "x",
     "0x%" wxLongLongFmtSpec "x",
     "$%" wxLongLongFmtSpec "x",
