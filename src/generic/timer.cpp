@@ -74,7 +74,7 @@
     typedef wxLongLong wxTimerTick_t;
 
     #if wxUSE_LONGLONG_WX
-        #define wxTimerTickFmtSpec wxLongLongFmtSpec wxT("d")
+        #define wxTimerTickFmtSpec wxLongLongFmtSpec "d"
         #define wxTimerTickPrintfArg(tt) (tt.GetValue())
     #else // using native wxLongLong
         #define wxTimerTickFmtSpec wxT("s")

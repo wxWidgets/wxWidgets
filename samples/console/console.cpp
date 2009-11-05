@@ -1915,7 +1915,7 @@ I am ready for my first lesson today.");
   {
       wxChar buf[200];
 
-      wxSprintf(buf, wxT("%07") wxLongLongFmtSpec wxT("o"), wxLL(040000000000));
+      wxSprintf(buf, "%07" wxLongLongFmtSpec "o", wxLL(040000000000));
       #if 0
         // for some reason below line fails under Borland
       wxPrintf (wxT("sprintf (buf, \"%%07Lo\", 040000000000ll) = %s"), buf);

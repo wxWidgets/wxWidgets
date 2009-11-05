@@ -359,14 +359,14 @@ static const wxChar* gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
 };
 
 static const wxChar* gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
-    wxT("%") wxLongLongFmtSpec wxT("x"),
-    wxT("0x%") wxLongLongFmtSpec wxT("x"),
-    wxT("$%") wxLongLongFmtSpec wxT("x"),
-    wxT("%") wxLongLongFmtSpec wxT("X"),
-    wxT("0x%") wxLongLongFmtSpec wxT("X"),
-    wxT("$%") wxLongLongFmtSpec wxT("X"),
-    wxT("%") wxLongLongFmtSpec wxT("u"),
-    wxT("%") wxLongLongFmtSpec wxT("o")
+    "%" wxLongLongFmtSpec "x",
+    "0x%" wxLongLongFmtSpec "x",
+    "$%" wxLongLongFmtSpec "x",
+    "%" wxLongLongFmtSpec "X",
+    "0x%" wxLongLongFmtSpec "X",
+    "$%" wxLongLongFmtSpec "X",
+    "%" wxLongLongFmtSpec "u",
+    "%" wxLongLongFmtSpec "o"
 };
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,

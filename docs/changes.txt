@@ -283,6 +283,11 @@ Changes in behaviour which may result in compilation errors
   presence of an element in the list only. If you used it as Find(), simple do
   use Find() instead.
 
+- wxLongLongFmtSpec is now a normal and not wide string so you will need to
+  change expressions of the form wxT("%") wxLongLongFmtSpec wxT("x") to
+  just "%" wxLongLongFmtSpec "x", i.e. simply remove wxT() from the strings you
+  concatenate with it.
+
 
 Deprecated methods and their replacements
 -----------------------------------------

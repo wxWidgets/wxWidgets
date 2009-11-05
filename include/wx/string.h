@@ -2071,14 +2071,12 @@ public:
       // insert a long long if they exist and aren't longs
   wxString& operator<<(wxLongLong_t ll)
     {
-      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("d");
-      return (*this) << Format(fmt, ll);
+      return (*this) << Format("%" wxLongLongFmtSpec "d", ll);
     }
       // insert an unsigned long long
   wxString& operator<<(wxULongLong_t ull)
     {
-      const wxChar *fmt = wxT("%") wxLongLongFmtSpec wxT("u");
-      return (*this) << Format(fmt , ull);
+      return (*this) << Format("%" wxLongLongFmtSpec "u" , ull);
     }
 #endif // wxLongLong_t && !wxLongLongIsLong
       // insert a float into string
