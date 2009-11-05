@@ -144,6 +144,8 @@
 extern const wxULongLong wxInvalidSize = (unsigned)-1;
 #endif // wxUSE_LONGLONG
 
+namespace
+{
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -295,16 +297,25 @@ static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
     return path;
 }
 
+// return true if the character is a DOS path separator i.e. either a slash or
+// a backslash
+inline bool IsDOSPathSep(wxUniChar ch)
+{
+    return ch == wxFILE_SEP_PATH_DOS || ch == wxFILE_SEP_PATH_UNIX;
+}
+
 // return true if the format used is the DOS/Windows one and the string looks
 // like a UNC path
 static bool IsUNCPath(const wxString& path, wxPathFormat format)
 {
     return format == wxPATH_DOS &&
                 path.length() >= 4 && // "\\a" can't be a UNC path
-                    path[0u] == wxFILE_SEP_PATH_DOS &&
-                        path[1u] == wxFILE_SEP_PATH_DOS &&
-                            path[2u] != wxFILE_SEP_PATH_DOS;
+                    IsDOSPathSep(path[0u]) &&
+                        IsDOSPathSep(path[1u]) &&
+                            !IsDOSPathSep(path[2u]);
 }
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation

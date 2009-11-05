@@ -124,6 +124,7 @@ private:
 #ifdef __WINDOWS__
         CPPUNIT_TEST( TestShortLongPath );
 #endif // __WINDOWS__
+        CPPUNIT_TEST( TestUNC );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -136,6 +137,7 @@ private:
 #ifdef __WINDOWS__
     void TestShortLongPath();
 #endif // __WINDOWS__
+    void TestUNC();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -493,3 +495,15 @@ void FileNameTestCase::TestShortLongPath()
 }
 
 #endif // __WINDOWS__
+
+void FileNameTestCase::TestUNC()
+{
+    wxFileName fn("//share/path/name.ext", wxPATH_DOS);
+    CPPUNIT_ASSERT_EQUAL( "share", fn.GetVolume() );
+    CPPUNIT_ASSERT_EQUAL( "/path", fn.GetPath() );
+
+    fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
+    CPPUNIT_ASSERT_EQUAL( "share2", fn.GetVolume() );
+    CPPUNIT_ASSERT_EQUAL( "/path2", fn.GetPath() );
+}
+
