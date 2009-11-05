@@ -1072,6 +1072,13 @@ wxApp::wxApp()
     m_macCurrentEvent = NULL ;
     m_macCurrentEventHandlerCallRef = NULL ;
     m_macEventPosted = NULL ;
+    m_macPool = new wxMacAutoreleasePool();
+}
+
+wxApp::~wxApp()
+{
+    if (m_macPool)
+        delete m_macPool;
 }
 
 CFMutableArrayRef GetAutoReleaseArray()
@@ -1085,6 +1092,13 @@ CFMutableArrayRef GetAutoReleaseArray()
 void wxApp::MacAddToAutorelease( void* cfrefobj )
 {
     CFArrayAppendValue( GetAutoReleaseArray(), cfrefobj );
+}
+
+void wxApp::MacReleaseAutoreleasePool()
+{
+    if (m_macPool)
+        delete m_macPool;
+    m_macPool = new wxMacAutoreleasePool();
 }
 
 void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
