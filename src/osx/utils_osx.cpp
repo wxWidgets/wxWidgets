@@ -154,9 +154,31 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
     return new wxEventLoop;
 }
 
+wxNonOwnedWindow *wxFindWindowFromWXWindow(WXWindow inWindowRef);
+wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt);
+
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
-    return wxGenericFindWindowAtPoint(pt);
+#if wxOSX_USE_CARBON
+
+    Point screenPoint = { pt.y , pt.x };
+    WindowRef windowRef;
+
+    if ( FindWindow( screenPoint , &windowRef ) )
+    {
+        wxNonOwnedWindow *nonOwned = wxFindWindowFromWXWindow( windowRef );
+
+        if ( nonOwned )
+            return wxFindWindowAtPoint( nonOwned , pt );
+    }
+
+    return NULL;
+
+#else
+
+    return wxGenericFindWindowAtPoint( pt );
+
+#endif
 }
 
 /*
