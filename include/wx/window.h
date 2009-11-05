@@ -609,7 +609,7 @@ public:
     virtual void SetWindowStyleFlag( long style ) { m_windowStyle = style; }
     virtual long GetWindowStyleFlag() const { return m_windowStyle; }
 
-        // just some (somewhat shorter) synonims
+        // just some (somewhat shorter) synonyms
     void SetWindowStyle( long style ) { SetWindowStyleFlag(style); }
     long GetWindowStyle() const { return GetWindowStyleFlag(); }
 

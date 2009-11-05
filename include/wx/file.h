@@ -42,7 +42,7 @@ enum wxPosixPermissions
     wxS_IWOTH = 00002,
     wxS_IXOTH = 00001,
 
-    // longer but more readable synonims for the constants above:
+    // longer but more readable synonyms for the constants above:
     wxPOSIX_USER_READ = wxS_IRUSR,
     wxPOSIX_USER_WRITE = wxS_IWUSR,
     wxPOSIX_USER_EXECUTE = wxS_IXUSR,
