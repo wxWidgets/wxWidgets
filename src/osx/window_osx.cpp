@@ -1060,6 +1060,11 @@ bool wxWindowMac::Show(bool show)
     if ( m_peer )
         m_peer->SetVisibility( show ) ;
 
+    wxShowEvent eventShow(GetId(), show);
+    eventShow.SetEventObject(this);
+    
+    HandleWindowEvent(eventShow);
+    
     return true;
 }
 
