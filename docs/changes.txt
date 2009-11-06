@@ -95,6 +95,15 @@ Changes in behaviour not resulting in compilation errors, please read this!
   sizes of the sizer items to be in the same proportion as the items
   proportions to return to the old behaviour.
 
+- Interpretation of font height in pixels parameter has changed in wxFont
+  ctor and SetPixelSize() in wxMSW: it is now used as character height and not
+  the total cell height. If you previously used negative height to explicitly
+  request character height matching, you may now change your code to use
+  positive value (passing negative height still works but is undocumented and
+  deprecated). If you used positive height before you should retest your code
+  to check if the changes correspond to your expectations. And if you do need
+  the old behaviour please contact us at wx-dev to let us know about it!
+
 - wxWindow::Freeze/Thaw() are not virtual any more, if you overrode them in
   your code you need to override DoFreeze/DoThaw() instead now.
 

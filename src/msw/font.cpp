@@ -216,6 +216,9 @@ public:
 
     void SetPixelSize(const wxSize& pixelSize)
     {
+        wxCHECK_RET( pixelSize.GetWidth() >= 0, "negative font width" );
+        wxCHECK_RET( pixelSize.GetHeight() != 0, "zero font height" );
+
         Free();
 
         m_nativeFontInfo.SetPixelSize(pixelSize);
@@ -503,13 +506,16 @@ void wxNativeFontInfo::SetPointSize(int pointsize)
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
 {
-    // NOTE: although the MSW port allows for negative pixel size heights,
-    //       other ports don't and since it's a very useful feature assert
-    //       here if we get a negative height:
-    wxCHECK_RET( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0,
-                 "Negative values for the pixel size or zero pixel height are not allowed" );
-
-    lf.lfHeight = pixelSize.GetHeight();
+    // MSW accepts both positive and negative heights here but they mean
+    // different things: positive specifies the cell height while negative
+    // specifies the character height. We used to just pass the value to MSW
+    // unchanged but changed the behaviour for positive values in 2.9.1 to
+    // match other ports and, more importantly, the expected behaviour. So now
+    // passing the negative height doesn't make sense at all any more but we
+    // still accept it for compatibility with the existing code which worked
+    // around the wrong interpretation of the height argument in older wxMSW
+    // versions by passing a negative value explicitly itself.
+    lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
 }
 
