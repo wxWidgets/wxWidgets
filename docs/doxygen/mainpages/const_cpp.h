@@ -169,7 +169,7 @@ compiler used.
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
                     __VISUALCn__ are also defined for each major compiler version from
-                    5 to 9, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
+                    5 to 10, i.e. you can use tests such @ifdef_ __VISUALC7__ to test
                     for compiler version being precisely 7.}
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to

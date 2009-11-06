@@ -544,8 +544,10 @@
 #       define __VISUALC8__
 #   elif __VISUALC__ < 1600
 #       define __VISUALC9__
+#   elif __VISUALC__ < 1700
+#       define __VISUALC10__
 #   else
-#       pragma message("Please update this code for the next VC++ version")
+#       pragma message("Please update wx/platform.h to recognize this VC++ version")
 #   endif
 
 #    elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
