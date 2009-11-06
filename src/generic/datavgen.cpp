@@ -727,11 +727,14 @@ wxDataViewCustomRenderer::RenderText(wxDC& dc,
                                      int state,
                                      int xoffset)
 {
+    // override custom foreground with the standard one for the selected items
+    // because we currently don't allow changing the selection background and
+    // custom colours may be unreadable on it
     wxColour col;
-    if ( attr && attr->HasColour() )
-        col = attr->GetColour();
-    else if ( state & wxDATAVIEW_CELL_SELECTED )
+    if ( state & wxDATAVIEW_CELL_SELECTED )
         col = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    else if ( attr && attr->HasColour() )
+        col = attr->GetColour();
     else // use default foreground
         col = GetOwner()->GetOwner()->GetForegroundColour();
 
