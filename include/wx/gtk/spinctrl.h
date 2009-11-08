@@ -23,17 +23,15 @@
 class WXDLLIMPEXP_CORE wxSpinCtrlGTKBase : public wxSpinCtrlBase
 {
 public:
-    wxSpinCtrlGTKBase() : m_value(0) {}
-
     bool Create(wxWindow *parent,
-                wxWindowID id = wxID_ANY,
-                const wxString& value = wxEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
-                double min = 0, double max = 100, double initial = 0,
-                double inc = 1,
-                const wxString& name = wxT("wxSpinCtrlGTKBase"));
+                wxWindowID id,
+                const wxString& value,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                double min, double max, double initial,
+                double inc,
+                const wxString& name);
 
     // wxSpinCtrl(Double) methods call DoXXX functions of the same name
 
@@ -60,10 +58,7 @@ public:
     // implementation
     void OnChar( wxKeyEvent &event );
 
-    double m_value; // public for GTK callback function
-
 protected:
-
     double DoGetValue() const;
     double DoGetMin() const;
     double DoGetMax() const;
@@ -84,7 +79,6 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlGTKBase)
     DECLARE_EVENT_TABLE()
 };
@@ -104,7 +98,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100, int initial = 0,
-               const wxString& name = wxT("wxSpinCtrl"))
+               const wxString& name = wxS("wxSpinCtrl"))
     {
         Create(parent, id, value, pos, size, style, min, max, initial, name);
     }
@@ -116,7 +110,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
-                const wxString& name = wxT("wxSpinCtrl"))
+                const wxString& name = wxS("wxSpinCtrl"))
     {
         return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size,
                                          style, min, max, initial, 1, name);
@@ -134,7 +128,6 @@ public:
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement( double inc )         { DoSetIncrement(inc); }
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
@@ -154,7 +147,7 @@ public:
                      long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                      double min = 0, double max = 100, double initial = 0,
                      double inc = 1,
-                     const wxString& name = wxT("wxSpinCtrlDouble"))
+                     const wxString& name = wxS("wxSpinCtrlDouble"))
     {
         Create(parent, id, value, pos, size, style,
                min, max, initial, inc, name);
@@ -168,7 +161,7 @@ public:
                 long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 double min = 0, double max = 100, double initial = 0,
                 double inc = 1,
-                const wxString& name = wxT("wxSpinCtrlDouble"))
+                const wxString& name = wxS("wxSpinCtrlDouble"))
     {
         return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size,
                                          style, min, max, initial, inc, name);
@@ -188,7 +181,6 @@ public:
     void SetIncrement(double inc)               { DoSetIncrement(inc); }
     void SetDigits(unsigned digits);
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
 };
 
