@@ -38,20 +38,12 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    win->m_pos = int(gtk_spin_button_get_value(spinbutton));
     if (!win->m_hasVMT || g_blockEventsOnDrag || win->m_blockScrollEvent)
         return;
 
     wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
     event.SetEventObject( win );
-
-    // note that we don't use wxSpinCtrl::GetValue() here because it would
-    // adjust the value to fit into the control range and this means that we
-    // would never be able to enter an "invalid" value in the control, even
-    // temporarily - and trying to enter 10 into the control which accepts the
-    // values in range 5..50 is then, ummm, quite challenging (hint: you can't
-    // enter 1!) (VZ)
-    event.SetInt(win->m_pos);
+    event.SetInt(win->GetValue());
     win->GetEventHandler()->ProcessEvent( event );
 }
 }
@@ -72,9 +64,7 @@ gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
-
-    // see above
-    event.SetInt(win->m_pos);
+    event.SetInt(win->GetValue());
     win->GetEventHandler()->ProcessEvent( event );
 }
 }
@@ -91,7 +81,6 @@ END_EVENT_TABLE()
 
 wxSpinCtrl::wxSpinCtrl()
 {
-    m_pos = 0;
 }
 
 bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -113,7 +102,6 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_widget = gtk_spin_button_new_with_range(min, max, 1);
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), initial);
-    m_pos = (int) gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_widget) );
 
     gtk_spin_button_set_wrap( GTK_SPIN_BUTTON(m_widget),
                               (int)(m_windowStyle & wxSP_WRAP) );
@@ -173,13 +161,27 @@ int wxSpinCtrl::GetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, wxT("invalid spin button") );
 
-    wxSpinCtrl_GtkDisableEvents( this );
-    gtk_spin_button_update( GTK_SPIN_BUTTON(m_widget) );
-    wx_const_cast(wxSpinCtrl*, this)->m_pos =
-        int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
-    wxSpinCtrl_GtkEnableEvents( this );
+    // Get value directly from current control text, just as
+    // gtk_spin_button_update() would do. Calling gtk_spin_button_update() causes
+    // a redraw, which causes an idle event, so if GetValue() is called from
+    // a UI update handler, you get a never ending sequence of idle events. It
+    // also forces the text into valid range, which wxMSW GetValue() does not do.
+    static unsigned sig_id;
+    if (sig_id == 0)
+        sig_id = g_signal_lookup("input", GTK_TYPE_SPIN_BUTTON);
+    double value;
+    int handled = 0;
+    g_signal_emit(m_widget, sig_id, 0, &value, &handled);
+    if (!handled)
+        value = g_strtod(gtk_entry_get_text(GTK_ENTRY(m_widget)), NULL);
+    const GtkAdjustment* adj =
+        gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(m_widget));
+    if (value < adj->lower)
+        value = adj->lower;
+    else if (value > adj->upper)
+        value = adj->upper;
 
-    return m_pos;
+    return value;
 }
 
 void wxSpinCtrl::SetValue( const wxString& value )
@@ -207,7 +209,6 @@ void wxSpinCtrl::SetValue( int value )
 
     wxSpinCtrl_GtkDisableEvents( this );
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), value);
-    m_pos = (int) gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_widget) );
     wxSpinCtrl_GtkEnableEvents( this );
 }
 
@@ -230,7 +231,6 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
 
     wxSpinCtrl_GtkDisableEvents( this );
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
-    m_pos = int(gtk_spin_button_get_value(GTK_SPIN_BUTTON(m_widget)));
     wxSpinCtrl_GtkEnableEvents( this );
 }
 
