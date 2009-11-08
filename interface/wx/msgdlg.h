@@ -98,12 +98,16 @@ public:
         If it is set, the main message appears highlighted -- if supported --
         and this message appears beneath it in normal font. On the platforms
         which don't support extended messages, it is simply appended to the
-        normal message with a new line separating them.
+        normal message with an empty line separating them.
+
+        @since 2.9.0
     */
     virtual void SetExtendedMessage(const wxString& extendedMessage);
 
     /**
         Sets the message shown by the dialog.
+
+        @since 2.9.0
     */
     virtual void SetMessage(const wxString& message);
 
@@ -111,6 +115,8 @@ public:
         Overrides the default labels of the OK and Cancel buttons.
 
         Please see the remarks in SetYesNoLabels() documentation.
+
+        @since 2.9.0
     */
     virtual bool SetOKCancelLabels(const ButtonLabel& ok,
                                    const ButtonLabel& cancel);
@@ -119,6 +125,8 @@ public:
         Overrides the default label of the OK button.
 
         Please see the remarks in SetYesNoLabels() documentation.
+
+        @since 2.9.0
     */
     virtual bool SetOKLabel(const ButtonLabel& ok);
 
@@ -126,6 +134,8 @@ public:
         Overrides the default labels of the Yes, No and Cancel buttons.
 
         Please see the remarks in SetYesNoLabels() documentation.
+
+        @since 2.9.0
     */
     virtual bool SetYesNoCancelLabels(const ButtonLabel& yes,
                                       const ButtonLabel& no,
@@ -162,6 +172,8 @@ public:
         else // buttons have standard "Yes"/"No" values, so rephrase the question
             dlg.SetMessage(_("Do you really want to quit?"));
         @endcode
+
+        @since 2.9.0
     */
     virtual bool SetYesNoLabels(const ButtonLabel& yes, const ButtonLabel& no);
 
