@@ -217,6 +217,17 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
     return true;
 }
 
+void wxNonOwnedWindow::SetWindowStyleFlag(long flags)
+{
+    if (flags == GetWindowStyleFlag())
+        return;
+        
+    wxWindow::SetWindowStyleFlag(flags);
+    
+    if (m_nowpeer)
+        m_nowpeer->SetWindowStyleFlag(flags);
+}
+
 // Raise the window to the top of the Z order
 void wxNonOwnedWindow::Raise()
 {

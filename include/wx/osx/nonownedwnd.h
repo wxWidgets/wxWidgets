@@ -80,6 +80,7 @@ public:
     static void MacDelayedDeactivation(long timestamp);
     virtual void MacActivate( long timestamp , bool inIsActivating ) ;
 
+    virtual void SetWindowStyleFlag(long flags);
 
     virtual void Raise();
     virtual void Lower();

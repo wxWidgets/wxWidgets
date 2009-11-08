@@ -210,6 +210,7 @@ public :
     bool SetTransparent(wxByte alpha);
     bool SetBackgroundColour(const wxColour& col );
     void SetExtraStyle( long exStyle );
+    void SetWindowStyleFlag( long style );
     bool SetBackgroundStyle(wxBackgroundStyle style);
     bool CanSetTransparent();
 

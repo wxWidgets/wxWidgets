@@ -685,7 +685,11 @@ public :
     virtual void SetExtraStyle( long WXUNUSED(exStyle) )
     {
     }
-
+    
+    virtual void SetWindowStyleFlag( long WXUNUSED(style) )
+    {
+    }
+    
     virtual bool SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
     {
         return false ;

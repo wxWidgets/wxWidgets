@@ -533,6 +533,21 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
     }
 }
 
+void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
+{
+    if (m_macWindow)
+    {
+        CGWindowLevel level = kCGNormalWindowLevel;
+        
+        if (style & wxSTAY_ON_TOP)
+            level = kCGUtilityWindowLevel;
+        else if (( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ))
+            level = kCGFloatingWindowLevel;
+        
+        [m_macWindow setLevel: level];
+    }
+}
+
 bool wxNonOwnedWindowCocoaImpl::SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
 {
     return true;
