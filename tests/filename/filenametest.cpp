@@ -500,10 +500,10 @@ void FileNameTestCase::TestUNC()
 {
     wxFileName fn("//share/path/name.ext", wxPATH_DOS);
     CPPUNIT_ASSERT_EQUAL( "share", fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "/path", fn.GetPath() );
+    CPPUNIT_ASSERT_EQUAL( "\\path", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
 
     fn.Assign("\\\\share2\\path2\\name.ext", wxPATH_DOS);
     CPPUNIT_ASSERT_EQUAL( "share2", fn.GetVolume() );
-    CPPUNIT_ASSERT_EQUAL( "/path2", fn.GetPath() );
+    CPPUNIT_ASSERT_EQUAL( "\\path2", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
 }
 
