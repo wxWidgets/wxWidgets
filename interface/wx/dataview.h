@@ -1445,7 +1445,7 @@ public:
     virtual wxSize GetSize() const = 0;
 
     /**
-        Overrride this so that the renderer can get the value from the editor
+        Override this so that the renderer can get the value from the editor
         control (pointed to by @a editor):
         @code
         {
@@ -1466,7 +1466,7 @@ public:
     virtual bool HasEditorCtrl() const;
 
     /**
-        Overrride this to react to a left click.
+        Override this to react to a left click.
         This method will only be called in @c wxDATAVIEW_CELL_ACTIVATABLE mode.
     */
     virtual bool LeftClick( wxPoint cursor,
@@ -1492,7 +1492,7 @@ public:
                     wxDC* dc, int state);
 
     /**
-        Overrride this to start a drag operation. Not yet supported.
+        Override this to start a drag operation. Not yet supported.
     */
     virtual bool StartDrag(wxPoint cursor, wxRect cell,
                            wxDataViewModel* model,
