@@ -4214,13 +4214,10 @@ void wxDataViewCtrl::OnInternalIdle()
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
-    if (GetModel())
+    if ( m_internal )
     {
         delete m_internal;
         m_internal = NULL;
-
-        delete m_notifier;
-        m_notifier = NULL;
     }
 
     if (!wxDataViewCtrlBase::AssociateModel( model ))
