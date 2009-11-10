@@ -83,6 +83,10 @@ public:
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+
+    // called to ensure that the given attribute will be used for rendering the
+    // next cell (which had been already associated with this renderer before)
+    virtual void OSXApplyAttr(const wxDataViewItemAttr& attr);
 #endif // Cocoa
 
 private:
