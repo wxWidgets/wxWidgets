@@ -1104,10 +1104,6 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewCustomRenderer * const renderer = obj->customRenderer;
 
-    // draw its own background:
-    [[self backgroundColor] set];
-    NSRectFill(cellFrame);
-
     wxDC * const dc = renderer->GetDC();
     renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), dc, 0);
     renderer->SetDC(NULL);
