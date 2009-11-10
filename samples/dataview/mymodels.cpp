@@ -203,18 +203,13 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         variant = node->m_quality;
         break;
     case 4:
-        // wxMac doesn't conceal the popularity progress renderer, return 0 for containers
-        if (IsContainer(item))
-            variant = (long) 0;
-        else
-            variant = (long) 80;  // all music is very 80% popular
+        variant = 80L;  // all music is very 80% popular
         break;
     case 5:
-        // Make size of red square depend on year
         if (GetYear(item) < 1900)
-            variant = (long) 35;
+            variant = "old";
         else
-            variant = (long) 25;
+            variant = "new";
         break;
 
     default:
@@ -436,6 +431,10 @@ void MyListModel::GetValueByRow( wxVariant &variant,
             }
             break;
 
+        case Col_Custom:
+            variant = wxString::Format("%d", row % 100);
+            break;
+
         case Col_Max:
             wxFAIL_MSG( "invalid column" );
     }
@@ -456,7 +455,8 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             break;
 
         case Col_TextWithAttr:
-            // do what the labels defined above hint at
+        case Col_Custom:
+            // do what the labels defined in GetValueByRow() hint at
             switch ( row % 5 )
             {
                 case 0:
@@ -517,6 +517,7 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
             return true;
 
         case Col_TextWithAttr:
+        case Col_Custom:
             wxLogError("Cannot edit the column %d", col);
             break;
 

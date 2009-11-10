@@ -150,15 +150,25 @@ private:
 class MyCustomRenderer: public wxDataViewCustomRenderer
 {
 public:
-    MyCustomRenderer( wxDataViewCellMode mode, int alignment ) :
-       wxDataViewCustomRenderer( wxString("long"), mode, alignment )
-       { m_height = 25; }
+    MyCustomRenderer()
+        : wxDataViewCustomRenderer("string",
+                                   wxDATAVIEW_CELL_ACTIVATABLE,
+                                   wxALIGN_CENTER)
+       { }
 
-    virtual bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
+    virtual bool Render( wxRect rect, wxDC *dc, int state )
     {
-        dc->SetBrush( *wxRED_BRUSH );
+        dc->SetBrush( *wxLIGHT_GREY_BRUSH );
         dc->SetPen( *wxTRANSPARENT_PEN );
-        dc->DrawRectangle( rect.Deflate(2) );
+
+        rect.Deflate(2);
+        dc->DrawRoundedRectangle( rect, 5 );
+
+        RenderText(m_value,
+                   0, // no offset
+                   wxRect(dc->GetTextExtent(m_value)).CentreIn(rect),
+                   dc,
+                   state);
         return true;
     }
 
@@ -182,20 +192,19 @@ public:
 
     virtual wxSize GetSize() const
     {
-        //return wxSize(60,m_height);
         return wxSize(60,20);
     }
 
     virtual bool SetValue( const wxVariant &value )
     {
-        m_height = value;
+        m_value = value.GetString();
         return true;
     }
 
     virtual bool GetValue( wxVariant &WXUNUSED(value) ) const { return true; }
 
 private:
-    long m_height;
+    wxString m_value;
 };
 
 
@@ -523,7 +532,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             // column 5 of the view control:
 
-            MyCustomRenderer *cr = new MyCustomRenderer( wxDATAVIEW_CELL_ACTIVATABLE, wxALIGN_RIGHT );
+            MyCustomRenderer *cr = new MyCustomRenderer;
             wxDataViewColumn *column5 =
                 new wxDataViewColumn( "custom", cr, 5, -1, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
@@ -555,6 +564,12 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                 new wxDataViewColumn("attributes",
                                      new wxDataViewTextRenderer,
                                      MyListModel::Col_TextWithAttr)
+            );
+
+            m_ctrl[1]->AppendColumn(
+                new wxDataViewColumn("custom renderer",
+                                     new MyCustomRenderer,
+                                     MyListModel::Col_Custom)
             );
         }
         break;

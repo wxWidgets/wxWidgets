@@ -193,6 +193,7 @@ public:
         Col_EditableText,
         Col_IconText,
         Col_TextWithAttr,
+        Col_Custom,
         Col_Max
     };
 
