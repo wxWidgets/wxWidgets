@@ -1751,7 +1751,8 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
 
     event.SetEventObject(dvc);
-    event.SetModel      (dvc->GetModel());
+    event.SetModel(dvc->GetModel());
+    event.SetItem(dvc->GetSelection());
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
