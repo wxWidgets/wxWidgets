@@ -1232,47 +1232,33 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     cell->expose_area = expose_area;
     cell->flags = flags;
 
-    GdkRectangle rect;
-    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
-                                   &rect.x,
-                                   &rect.y,
-                                   &rect.width,
-                                   &rect.height);
+    wxRect rect(wxRectFromGDKRect(cell_area));
+    rect = rect.Deflate(renderer->xpad, renderer->ypad);
 
-    rect.x += cell_area->x;
-    rect.y += cell_area->y;
-    rect.width  -= renderer->xpad * 2;
-    rect.height -= renderer->ypad * 2;
+    wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
+    wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
 
-    GdkRectangle dummy;
-    if (gdk_rectangle_intersect (expose_area, &rect, &dummy))
+    // Reinitialize wxWindowDC's GDK window if drawing occurs into a different
+    // window such as a DnD drop window.
+    if (window != impl->m_gdkwindow)
     {
-        wxRect renderrect(wxRectFromGDKRect(&rect));
-        wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
-        wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
-
-        // Reinitialize wxWindowDC's GDK window if drawing occurs into a different
-        // window such as a DnD drop window.
-        if (window != impl->m_gdkwindow)
-        {
-            impl->Destroy();
-            impl->m_gdkwindow = window;
-            impl->SetUpDC();
-        }
-
-        int state = 0;
-        if (flags & GTK_CELL_RENDERER_SELECTED)
-            state |= wxDATAVIEW_CELL_SELECTED;
-        if (flags & GTK_CELL_RENDERER_PRELIT)
-            state |= wxDATAVIEW_CELL_PRELIT;
-        if (flags & GTK_CELL_RENDERER_INSENSITIVE)
-            state |= wxDATAVIEW_CELL_INSENSITIVE;
-        if (flags & GTK_CELL_RENDERER_INSENSITIVE)
-            state |= wxDATAVIEW_CELL_INSENSITIVE;
-        if (flags & GTK_CELL_RENDERER_FOCUSED)
-            state |= wxDATAVIEW_CELL_FOCUSED;
-        cell->WXCallRender( renderrect, dc, state );
+        impl->Destroy();
+        impl->m_gdkwindow = window;
+        impl->SetUpDC();
     }
+
+    int state = 0;
+    if (flags & GTK_CELL_RENDERER_SELECTED)
+        state |= wxDATAVIEW_CELL_SELECTED;
+    if (flags & GTK_CELL_RENDERER_PRELIT)
+        state |= wxDATAVIEW_CELL_PRELIT;
+    if (flags & GTK_CELL_RENDERER_INSENSITIVE)
+        state |= wxDATAVIEW_CELL_INSENSITIVE;
+    if (flags & GTK_CELL_RENDERER_INSENSITIVE)
+        state |= wxDATAVIEW_CELL_INSENSITIVE;
+    if (flags & GTK_CELL_RENDERER_FOCUSED)
+        state |= wxDATAVIEW_CELL_FOCUSED;
+    cell->WXCallRender( rect, dc, state );
 }
 
 static gboolean
