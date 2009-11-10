@@ -404,31 +404,40 @@ void MyListModel::AddMany()
 void MyListModel::GetValueByRow( wxVariant &variant,
                                  unsigned int row, unsigned int col ) const
 {
-    if (col==0)
+    switch ( col )
     {
-        if (row >= m_textColValues.GetCount())
-            variant = wxString::Format( "virtual row %d", row );
-        else
-            variant = m_textColValues[ row ];
-    }
-    else if (col==1)
-    {
-        wxString text;
-        if ( row >= m_iconColValues.GetCount() )
-            text = "virtual icon";
-        else
-            text = m_iconColValues[row];
+        case Col_EditableText:
+            if (row >= m_textColValues.GetCount())
+                variant = wxString::Format( "virtual row %d", row );
+            else
+                variant = m_textColValues[ row ];
+            break;
 
-        variant << wxDataViewIconText(text, m_icon[row % 2]);
-    }
-    else if (col==2)
-    {
-        static const char *labels[5] =
-        {
-            "blue", "green", "red", "bold cyan", "default",
-        };
+        case Col_IconText:
+            {
+                wxString text;
+                if ( row >= m_iconColValues.GetCount() )
+                    text = "virtual icon";
+                else
+                    text = m_iconColValues[row];
 
-        variant = labels[row % 5];
+                variant << wxDataViewIconText(text, m_icon[row % 2]);
+            }
+            break;
+
+        case Col_TextWithAttr:
+            {
+                static const char *labels[5] =
+                {
+                    "blue", "green", "red", "bold cyan", "default",
+                };
+
+                variant = labels[row % 5];
+            }
+            break;
+
+        case Col_Max:
+            wxFAIL_MSG( "invalid column" );
     }
 }
 
@@ -437,16 +446,16 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 {
     switch ( col )
     {
-        case 0:
+        case Col_EditableText:
             return false;
 
-        case 1:
+        case Col_IconText:
             if ( !(row % 2) )
                 return false;
             attr.SetColour(*wxLIGHT_GREY);
             break;
 
-        case 2:
+        case Col_TextWithAttr:
             // do what the labels defined above hint at
             switch ( row % 5 )
             {
@@ -471,6 +480,9 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                     return false;
             }
             break;
+
+        case Col_Max:
+            wxFAIL_MSG( "invalid column" );
     }
 
     return true;
@@ -481,8 +493,8 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
 {
     switch ( col )
     {
-        case 0:
-        case 1:
+        case Col_EditableText:
+        case Col_IconText:
             if (row >= m_textColValues.GetCount())
             {
                 // the item is not in the range of the items
@@ -492,22 +504,25 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
                 return false;
             }
 
-            if ( col == 0 )
+            if ( col == Col_EditableText )
             {
                 m_textColValues[row] = variant.GetString();
             }
-            else // col == 1
+            else // col == Col_IconText
             {
                 wxDataViewIconText iconText;
                 iconText << variant;
                 m_iconColValues[row] = iconText.GetText();
             }
+            return true;
+
+        case Col_TextWithAttr:
+            wxLogError("Cannot edit the column %d", col);
             break;
 
-        default:
-            wxLogError("Cannot edit the column %d", col);
-            return false;
+        case Col_Max:
+            wxFAIL_MSG( "invalid column" );
     }
 
-    return true;
+    return false;
 }

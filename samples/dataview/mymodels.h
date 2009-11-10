@@ -188,6 +188,14 @@ private:
 class MyListModel: public wxDataViewVirtualListModel
 {
 public:
+    enum
+    {
+        Col_EditableText,
+        Col_IconText,
+        Col_TextWithAttr,
+        Col_Max
+    };
+
     MyListModel();
 
     // helper methods to change the model
@@ -202,12 +210,12 @@ public:
 
     virtual unsigned int GetColumnCount() const
     {
-        return 3;
+        return Col_Max;
     }
 
     virtual wxString GetColumnType( unsigned int col ) const
     {
-        if (col == 1)
+        if (col == Col_IconText)
             return wxT("wxDataViewIconText");
 
         return wxT("string");
