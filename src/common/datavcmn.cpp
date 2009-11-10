@@ -2064,7 +2064,15 @@ bool wxDataViewTreeCtrl::Create( wxWindow *parent, wxWindowID id,
     AssociateModel( store );
     store->DecRef();
 
-    AppendIconTextColumn(wxString(),0,wxDATAVIEW_CELL_EDITABLE,-1);
+    AppendIconTextColumn
+    (
+        wxString(),                 // no label (header is not shown anyhow)
+        0,                          // the only model column
+        wxDATAVIEW_CELL_EDITABLE,
+        -1,                         // default width
+        wxALIGN_NOT,                //  and alignment
+        0                           // not resizeable
+    );
 
     return true;
 }

@@ -323,18 +323,24 @@ NSTableColumn* CreateNativeColumn(const wxDataViewColumn *column)
 
     // setting the size related parameters:
     const int width = column->GetWidthVariable();
+    int resizingMask;
     if (column->IsResizeable())
     {
-        [nativeColumn setResizingMask:NSTableColumnUserResizingMask];
+        resizingMask = NSTableColumnUserResizingMask;
         [nativeColumn setMinWidth:column->GetMinWidth()];
         [nativeColumn setMaxWidth:column->GetMaxWidth()];
     }
-    else
+    else // column is not resizeable [by user]
     {
-        [nativeColumn setResizingMask:NSTableColumnNoResizing];
-        [nativeColumn setMinWidth:width];
-        [nativeColumn setMaxWidth:width];
+        // if the control doesn't show a header, make the columns resize
+        // automatically, this is particularly important for the single column
+        // controls (such as wxDataViewTreeCtrl) as their unique column should
+        // always take up all the available splace
+        resizingMask = column->GetOwner()->HasFlag(wxDV_NO_HEADER)
+                            ? NSTableColumnAutoresizingMask
+                            : NSTableColumnNoResizing;
     }
+    [nativeColumn setResizingMask:resizingMask];
     [nativeColumn setWidth:width];
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
