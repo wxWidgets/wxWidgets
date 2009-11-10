@@ -276,7 +276,6 @@ NSInteger CompareItems(id item1, id item2, void* context)
     NSInteger result = NSOrderedSame;
     for ( NSUInteger i = 0; i < count && result == NSOrderedSame; ++i )
     {
-        // constant definition for abbreviational purposes:
         wxSortDescriptorObject* const
             sortDescriptor = (wxSortDescriptorObject*)
                 [sortDescriptors objectAtIndex:i];
@@ -681,9 +680,10 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
-// Warning: the new sort descriptors are guaranteed to be only of type NSSortDescriptor! Therefore, the
-// sort descriptors for the data source have to be converted.
 {
+    // Warning: the new sort descriptors are guaranteed to be only of type
+    // NSSortDescriptor! Therefore, the sort descriptors for the data source
+    // have to be converted.
     NSArray* newDescriptors;
 
     NSMutableArray* wxSortDescriptors;
@@ -699,7 +699,6 @@ outlineView:(NSOutlineView*)outlineView
     wxSortDescriptors = [NSMutableArray arrayWithCapacity:noOfDescriptors];
     for (NSUInteger i=0; i<noOfDescriptors; ++i)
     {
-        // constant definition for abbreviational purposes:
         NSSortDescriptor* const newDescriptor = [newDescriptors objectAtIndex:i];
 
         [wxSortDescriptors addObject:[[[wxSortDescriptorObject alloc] initWithModelPtr:model
@@ -708,14 +707,13 @@ outlineView:(NSOutlineView*)outlineView
     }
     [[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
 
-    // send first the event to wxWidgets that the sorting has changed so that the program can do special actions before
-    // the sorting actually starts:
+    // send first the event to wxWidgets that the sorting has changed so that
+    // the program can do special actions before the sorting actually starts:
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,dvc->GetId()); // variable defintion
 
     event.SetEventObject(dvc);
     if (noOfDescriptors > 0)
     {
-        // constant definition for abbreviational purposes:
         wxDataViewColumn* const col = [[wxSortDescriptors objectAtIndex:0] columnPtr];
 
         event.SetColumn(dvc->GetColumnPosition(col));
@@ -796,7 +794,9 @@ outlineView:(NSOutlineView*)outlineView
     }
     else
     {
-        CFDataRef              osxData; // needed to convert internally used UTF-16 representation to a UTF-8 representation
+        // needed to convert internally used UTF-16 representation to a UTF-8
+        // representation
+        CFDataRef              osxData;
         wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
         wxTextDataObject*      textDataObject(new wxTextDataObject());
 
@@ -826,10 +826,11 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView writeItems:(NSArray*)writeItems toPasteboard:(NSPasteboard*)pasteboard
-// the pasteboard will be filled up with an array containing the data as returned by the events (including the data type)
-// and a concatenation of text (string) data; the text data will only be put onto the pasteboard if for all items a
-// string representation exists
 {
+    // the pasteboard will be filled up with an array containing the data as
+    // returned by the events (including the data type) and a concatenation of
+    // text (string) data; the text data will only be put onto the pasteboard
+    // if for all items a string representation exists
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewItemArray dataViewItems;
@@ -844,7 +845,8 @@ outlineView:(NSOutlineView*)outlineView
         NSMutableArray* dataArray = [[NSMutableArray arrayWithCapacity:[writeItems count]] retain]; // data of all items
         wxString        dataString; // contains the string data of all items
 
-        // send a begin drag event for all selected items and proceed with dragging unless the event is vetoed:
+        // send a begin drag event for all selected items and proceed with
+        // dragging unless the event is vetoed:
         wxDataViewEvent
             event(wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG,dvc->GetId());
 
@@ -864,9 +866,7 @@ outlineView:(NSOutlineView*)outlineView
             // check if event has not been vetoed:
             if (dvc->HandleWindowEvent(event) && event.IsAllowed() && (event.GetDataObject()->GetFormatCount() > 0))
             {
-                // constant definition for abbreviational purposes:
                 size_t const noOfFormats = event.GetDataObject()->GetFormatCount();
-                // variable definition and initialization:
                 wxDataFormat* dataFormats(new wxDataFormat[noOfFormats]);
 
                 event.GetDataObject()->GetAllFormats(dataFormats,wxDataObject::Get);
@@ -883,7 +883,10 @@ outlineView:(NSOutlineView*)outlineView
                     switch (idDataFormat)
                     {
                         case wxDF_TEXT:
-                            if (!itemStringAvailable) // otherwise wxDF_UNICODETEXT already filled up the string; and the UNICODE representation has priority
+                            // otherwise wxDF_UNICODETEXT already filled up
+                            // the string; and the UNICODE representation has
+                            // priority
+                            if (!itemStringAvailable)
                             {
                                 event.GetDataObject()->GetDataHere(wxDF_TEXT,dataBuffer.GetAppendBuf(dataSize));
                                 dataBuffer.UngetAppendBuf(dataSize);
@@ -1290,7 +1293,9 @@ outlineView:(NSOutlineView*)outlineView
             {
                 CGFloat const cellSpace = cellFrame.size.width-[self cellSize].width;
 
-                if (cellSpace <= 0) // if the cell's frame is smaller than its contents (at least in x-direction) make sure that the image is visible:
+                // if the cell's frame is smaller than its contents (at least
+                // in x-direction) make sure that the image is visible:
+                if (cellSpace <= 0)
                     NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText,NSMinXEdge);
                 else // otherwise center the image and text in the cell's frame
                     NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText+0.5*cellSpace,NSMinXEdge);
@@ -1305,7 +1310,9 @@ outlineView:(NSOutlineView*)outlineView
             {
                 CGFloat const cellSpace = cellFrame.size.width-[self cellSize].width;
 
-                if (cellSpace <= 0) // if the cell's frame is smaller than its contents (at least in x-direction) make sure that the image is visible:
+                // if the cell's frame is smaller than its contents (at least
+                // in x-direction) make sure that the image is visible:
+                if (cellSpace <= 0)
                     NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText,NSMinXEdge);
                 else // otherwise right align the image and text in the cell's frame
                     NSDivideRect(cellFrame,imageFrame,textFrame,xImageShift+imageSize.width+spaceImageText+cellSpace,NSMinXEdge);
@@ -1325,7 +1332,8 @@ outlineView:(NSOutlineView*)outlineView
 
     [self determineCellParts:cellFrame imagePart:&imageFrame textPart:&textFrame];
     // draw the image part by ourselves;
-    // check if the cell has to draw its own background (checking is done by the parameter of the textfield's cell):
+    // check if the cell has to draw its own background (checking is done by
+    // the parameter of the textfield's cell):
     if ([self drawsBackground])
     {
         [[self backgroundColor] set];
@@ -1333,8 +1341,10 @@ outlineView:(NSOutlineView*)outlineView
     }
     if (image != nil)
     {
-        // the image is slightly shifted (xImageShift) and has a fixed size but the image's frame might be larger and starts
-        // currently on the left side of the cell's frame; therefore, the origin and the image's frame size have to be adjusted:
+        // the image is slightly shifted (xImageShift) and has a fixed size
+        // but the image's frame might be larger and starts currently on the
+        // left side of the cell's frame; therefore, the origin and the
+        // image's frame size have to be adjusted:
         if (imageFrame.size.width >= xImageShift+imageSize.width+spaceImageText)
         {
             imageFrame.origin.x += imageFrame.size.width-imageSize.width-spaceImageText;
@@ -1350,8 +1360,10 @@ outlineView:(NSOutlineView*)outlineView
             imageFrame.size.height = imageSize.height;
         imageFrame.origin.y += ceil(0.5*(cellFrame.size.height-imageFrame.size.height));
 
-        // according to the documentation the coordinate system should be flipped for NSTableViews (y-coordinate goes from top to bottom);
-        // to draw an image correctly the coordinate system has to be transformed to a bottom-top coordinate system, otherwise the image's
+        // according to the documentation the coordinate system should be
+        // flipped for NSTableViews (y-coordinate goes from top to bottom); to
+        // draw an image correctly the coordinate system has to be transformed
+        // to a bottom-top coordinate system, otherwise the image's
         // content is flipped:
         NSAffineTransform* coordinateTransform([NSAffineTransform transform]);
 
@@ -1363,14 +1375,21 @@ outlineView:(NSOutlineView*)outlineView
         }
         [image drawInRect:imageFrame fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0]; // suggested method to draw the image
         // instead of compositeToPoint:operation:
-        // take back previous transformation (if the view is not flipped the coordinate transformation matrix contains the identity matrix
-        // and the next two operations do not change the content's transformation matrix):
+        // take back previous transformation (if the view is not flipped the
+        // coordinate transformation matrix contains the identity matrix and
+        // the next two operations do not change the content's transformation
+        // matrix):
         [coordinateTransform invert];
         [coordinateTransform concat];
     }
     // let the textfield cell draw the text part:
-    if (textFrame.size.width > [self cellTextSize].width) // for unknown reasons the alignment of the text cell is ignored; therefore change the size so that
-        textFrame.size.width = [self cellTextSize].width;   // alignment does not influence the visualization anymore
+    if (textFrame.size.width > [self cellTextSize].width)
+    {
+        // for unknown reasons the alignment of the text cell is ignored;
+        // therefore change the size so that alignment does not influence the
+        // visualization anymore
+        textFrame.size.width = [self cellTextSize].width;
+    }
     [super drawWithFrame:textFrame inView:controlView];
 }
 
@@ -1409,13 +1428,20 @@ outlineView:(NSOutlineView*)outlineView
         if (imageFrame.size.height > imageSize.height)
             imageFrame.size.height = imageSize.height;
         imageFrame.origin.y += ceil(0.5*(cellFrame.size.height-imageFrame.size.height));
-        // If the point is in the image rect, then it is a content hit (see documentation for hitTestForEvent:inRect:ofView):
+        // If the point is in the image rect, then it is a content hit (see
+        // documentation for hitTestForEvent:inRect:ofView):
         if (NSMouseInRect(point, imageFrame, [controlView isFlipped]))
             return NSCellHitContentArea;
     }
     // if the image was not hit let's try the text part:
-    if (textFrame.size.width > [self cellTextSize].width) // for unknown reasons the alignment of the text cell is ignored; therefore change the size so that
-        textFrame.size.width = [self cellTextSize].width;   // alignment does not influence the visualization anymore
+    if (textFrame.size.width > [self cellTextSize].width)
+    {
+        // for unknown reasons the alignment of the text cell is ignored;
+        // therefore change the size so that alignment does not influence the
+        // visualization anymore
+        textFrame.size.width = [self cellTextSize].width;
+    }
+
     return [super hitTestForEvent:event inRect:textFrame ofView:controlView];
 }
 #endif
@@ -1507,12 +1533,13 @@ outlineView:(NSOutlineView*)outlineView
 // actions
 //
 -(void) actionDoubleClick:(id)sender
-// actually the documentation (NSTableView 2007-10-31) for doubleAction: and setDoubleAction: seems to be wrong as this action message is always sent
-// whether the cell is editable or not
 {
+    // actually the documentation (NSTableView 2007-10-31) for doubleAction:
+    // and setDoubleAction: seems to be wrong as this action message is always
+    // sent whether the cell is editable or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,dvc->GetId()); // variable definition
+    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1525,9 +1552,10 @@ outlineView:(NSOutlineView*)outlineView
 // contextual menus
 //
 -(NSMenu*) menuForEvent:(NSEvent*)theEvent
-// this method does not do any special menu event handling but only sends an event message; therefore, the user
-// has full control if a context menu should be shown or not
 {
+    // this method does not do any special menu event handling but only sends
+    // an event message; therefore, the user has full control if a context
+    // menu should be shown or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU,dvc->GetId());
@@ -1538,8 +1566,9 @@ outlineView:(NSOutlineView*)outlineView
     event.SetEventObject(dvc);
     event.SetModel(dvc->GetModel());
     // get the item information;
-    // theoretically more than one ID can be returned but the event can only handle one item, therefore only the first
-    // item of the array is returned:
+    // theoretically more than one ID can be returned but the event can only
+    // handle one item, therefore only the first item of the array is
+    // returned:
     if (dvc->GetSelections(selectedItems) > 0)
         event.SetItem(selectedItems[0]);
     dvc->GetEventHandler()->ProcessEvent(event);
@@ -1567,13 +1596,15 @@ outlineView:(NSOutlineView*)outlineView
     dvc->HandleWindowEvent(event);
 
     // now, check if the click may have had an influence on sorting, too;
-    // the sorting setup has to be done only if the clicked table column is sortable and has not been used for
-    // sorting before the click; if the column is already responsible for sorting the native control changes
-    // the sorting direction automatically and informs the data source via outlineView:sortDescriptorsDidChange:
+    // the sorting setup has to be done only if the clicked table column is
+    // sortable and has not been used for sorting before the click; if the
+    // column is already responsible for sorting the native control changes
+    // the sorting direction automatically and informs the data source via
+    // outlineView:sortDescriptorsDidChange:
     if (col->IsSortable() && ([tableColumn sortDescriptorPrototype] == nil))
     {
-        // remove the sort order from the previously sorted column table (it can also be that
-        // no sorted column table exists):
+        // remove the sort order from the previously sorted column table (it
+        // can also be that no sorted column table exists):
         UInt32 const noOfColumns = [outlineView numberOfColumns];
 
         for (UInt32 i=0; i<noOfColumns; ++i)
@@ -1595,7 +1626,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dvc->GetId()); // variable definition
+    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1611,7 +1642,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dvc->GetId()); // variable definition
+    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dvc->GetId());
 
 
     event.SetEventObject(dvc);
@@ -1717,8 +1748,7 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
 
-    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId()); // variable definition
-
+    wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dvc->GetId());
 
     event.SetEventObject(dvc);
     event.SetModel      (dvc->GetModel());
@@ -1726,11 +1756,13 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 -(void) textDidBeginEditing:(NSNotification*)notification
-// this notification is only sent if the user started modifying the cell (not when the user clicked into the cell
-// and the cell's editor is called!)
 {
-    // call method of superclass (otherwise editing does not work correctly - the outline data source class is not
-    // informed about a change of data):
+    // this notification is only sent if the user started modifying the cell
+    // (not when the user clicked into the cell and the cell's editor is
+    // called!)
+
+    // call method of superclass (otherwise editing does not work correctly -
+    // the outline data source class is not informed about a change of data):
     [super textDidBeginEditing:notification];
 
     // remember the column being edited, it will be used in textDidEndEditing:
@@ -1749,7 +1781,7 @@ outlineView:(NSOutlineView*)outlineView
 
     // now, send the event:
     wxDataViewEvent
-        event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dvc->GetId()); // variable definition
+        event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dvc->GetId());
 
     event.SetEventObject(dvc);
     event.SetItem(
@@ -1761,15 +1793,18 @@ outlineView:(NSOutlineView*)outlineView
 
 -(void) textDidEndEditing:(NSNotification*)notification
 {
-    // call method of superclass (otherwise editing does not work correctly - the outline data source class is not
-    // informed about a change of data):
+    // call method of superclass (otherwise editing does not work correctly -
+    // the outline data source class is not informed about a change of data):
     [super textDidEndEditing:notification];
 
-    // under OSX an event indicating the end of an editing session can be sent even if no event indicating a start of an
-    // editing session has been sent (see Documentation for NSControl controlTextDidEndEditing:); this is not expected by a user
-    // of the wxWidgets library and therefore an wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event is only sent if a corresponding
-    // wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has been sent before; to check if a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED
-    // has been sent the last edited column/row are valid:
+    // under OSX an event indicating the end of an editing session can be sent
+    // even if no event indicating a start of an editing session has been sent
+    // (see Documentation for NSControl controlTextDidEndEditing:); this is
+    // not expected by a user of the wxWidgets library and therefore an
+    // wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event is only sent if a
+    // corresponding wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has been sent
+    // before; to check if a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED has
+    // been sent the last edited column/row are valid:
     if ( currentlyEditedColumn != -1 && currentlyEditedRow != -1 )
     {
         wxDataViewColumn* const col =
@@ -1780,7 +1815,7 @@ outlineView:(NSOutlineView*)outlineView
 
         // send event to wxWidgets:
         wxDataViewEvent
-            event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dvc->GetId()); // variable definition
+            event(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dvc->GetId());
 
         event.SetEventObject(dvc);
         event.SetItem(
@@ -2527,11 +2562,13 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(const wxString& varianttype,
     [cell release];
 }
 
+// This method returns 'true' if
+//  - the passed bitmap is valid and it could be assigned to the native data
+//  browser;
+//  - the passed bitmap is invalid (or is not initialized); this case
+//  simulates a non-existing bitmap.
+// In all other cases the method returns 'false'.
 bool wxDataViewBitmapRenderer::MacRender()
-    // This method returns 'true' if
-    //  - the passed bitmap is valid and it could be assigned to the native data browser;
-    //  - the passed bitmap is invalid (or is not initialized); this case simulates a non-existing bitmap.
-    // In all other cases the method returns 'false'.
 {
     wxCHECK_MSG(GetValue().GetType() == GetVariantType(),false,wxString("Bitmap renderer cannot render value; value type: ") << GetValue().GetType());
 
@@ -2613,33 +2650,47 @@ bool wxDataViewDateRenderer::MacRender()
         if (GetValue().GetDateTime().IsValid())
         {
             // -- find best fitting style to show the date --
-            // as the style should be identical for all cells a reference date instead of the actual cell's date
-            // value is used for all cells; this reference date is stored in the renderer's native data section
-            // for speed purposes; otherwise, the reference date's string has to be recalculated for each item that
-            // may become timewise long if a lot of rows using dates exist;
-            // the algorithm has the preference to display as much information as possible in the first instance;
-            // but as this is often impossible due to space restrictions the style is shortened per loop; finally,
-            // if the shortest time and date format does not fit into the cell the time part is dropped;
-            // remark: the time part itself is not modified per iteration loop and only uses the short style,
-            //         means that only the hours and minutes are being shown
-            [GetNativeData()->GetItemCell() setObjectValue:GetNativeData()->GetObject()]; // GetObject() returns a date for testing the size of a date object
+            // as the style should be identical for all cells a reference date
+            // instead of the actual cell's date value is used for all cells;
+            // this reference date is stored in the renderer's native data
+            // section for speed purposes; otherwise, the reference date's
+            // string has to be recalculated for each item that may become
+            // timewise long if a lot of rows using dates exist; the algorithm
+            // has the preference to display as much information as possible
+            // in the first instance; but as this is often impossible due to
+            // space restrictions the style is shortened per loop; finally, if
+            // the shortest time and date format does not fit into the cell
+            // the time part is dropped; remark: the time part itself is not
+            // modified per iteration loop and only uses the short style,
+            // means that only the hours and minutes are being shown
+
+            // GetObject() returns a date for testing the size of a date object
+            [GetNativeData()->GetItemCell() setObjectValue:GetNativeData()->GetObject()];
             [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterShortStyle];
             for (int dateFormatterStyle=4; dateFormatterStyle>0; --dateFormatterStyle)
             {
                 [[GetNativeData()->GetItemCell() formatter] setDateStyle:(NSDateFormatterStyle)dateFormatterStyle];
                 if (dateFormatterStyle == 1)
                 {
-                    // if the shortest style for displaying the date and time is too long to be fully visible remove the time part of the date:
+                    // if the shortest style for displaying the date and time
+                    // is too long to be fully visible remove the time part of
+                    // the date:
                     if ([GetNativeData()->GetItemCell() cellSize].width > [GetNativeData()->GetColumnPtr() width])
                         [[GetNativeData()->GetItemCell() formatter] setTimeStyle:NSDateFormatterNoStyle];
-                    break; // basically not necessary as the loop would end anyway but let's save the last comparison
+                    {
+                        // basically not necessary as the loop would end anyway
+                        // but let's save the last comparison
+                        break;
+                    }
                 }
                 else if ([GetNativeData()->GetItemCell() cellSize].width <= [GetNativeData()->GetColumnPtr() width])
                     break;
             }
-            // set data (the style is set by the previous loop);
-            // on OSX the date has to be specified with respect to UTC; in wxWidgets the date is always entered in the local timezone; so, we have to do a conversion
-            // from the local to UTC timezone when adding the seconds to 1970-01-01 UTC:
+            // set data (the style is set by the previous loop); on OSX the
+            // date has to be specified with respect to UTC; in wxWidgets the
+            // date is always entered in the local timezone; so, we have to do
+            // a conversion from the local to UTC timezone when adding the
+            // seconds to 1970-01-01 UTC:
             [GetNativeData()->GetItemCell() setObjectValue:[NSDate dateWithTimeIntervalSince1970:GetValue().GetDateTime().ToUTC().Subtract(wxDateTime(1,wxDateTime::Jan,1970)).GetSeconds().ToDouble()]];
         }
         return true;
@@ -2861,7 +2912,8 @@ void wxDataViewColumn::SetAlignment(wxAlignment align)
 
 void wxDataViewColumn::SetBitmap(const wxBitmap& bitmap)
 {
-    // bitmaps and titles cannot exist at the same time - if the bitmap is set the title is removed:
+    // bitmaps and titles cannot exist at the same time - if the bitmap is set
+    // the title is removed:
     m_title = wxEmptyString;
     wxDataViewColumnBase::SetBitmap(bitmap);
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setImage:[[bitmap.GetNSImage() retain] autorelease]];
@@ -2921,7 +2973,8 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
 
 void wxDataViewColumn::SetTitle(const wxString& title)
 {
-    // bitmaps and titles cannot exist at the same time - if the title is set the bitmap is removed:
+    // bitmaps and titles cannot exist at the same time - if the title is set
+    // the bitmap is removed:
     wxDataViewColumnBase::SetBitmap(wxBitmap());
     m_title = title;
     [[m_NativeDataPtr->GetNativeColumnPtr() headerCell] setStringValue:[[wxCFStringRef(title).AsNSString() retain] autorelease]];
