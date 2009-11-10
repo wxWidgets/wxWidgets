@@ -12,6 +12,8 @@
 #ifndef _WX_GTK_DVRENDERERS_H_
 #define _WX_GTK_DVRENDERERS_H_
 
+typedef struct _GdkRectangle GdkRectangle;
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -124,9 +126,9 @@ public:
     GtkCellRenderer      *m_text_renderer;
     GdkWindow            *window;
     GtkWidget            *widget;
-    void                 *background_area;
-    void                 *cell_area;
-    void                 *expose_area;
+    GdkRectangle         *background_area;
+    GdkRectangle         *cell_area;
+    GdkRectangle         *expose_area;
     int                   flags;
 
 protected:

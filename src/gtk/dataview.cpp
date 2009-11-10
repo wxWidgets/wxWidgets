@@ -1224,10 +1224,10 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
 
     cell->window = window;
     cell->widget = widget;
-    cell->background_area = (void*) background_area;
-    cell->cell_area = (void*) cell_area;
-    cell->expose_area = (void*) expose_area;
-    cell->flags = (int) flags;
+    cell->background_area = background_area;
+    cell->cell_area = cell_area;
+    cell->expose_area = expose_area;
+    cell->flags = flags;
 
     GdkRectangle rect;
     gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
@@ -2064,19 +2064,19 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
     g_object_set_property( G_OBJECT(m_text_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
-    ((GdkRectangle*) cell_area)->x += xoffset;
-    ((GdkRectangle*) cell_area)->width -= xoffset;
+    cell_area->x += xoffset;
+    cell_area->width -= xoffset;
 
     gtk_cell_renderer_render( m_text_renderer,
         window,
         widget,
-        (GdkRectangle*) background_area,
-        (GdkRectangle*) cell_area,
-        (GdkRectangle*) expose_area,
+        background_area,
+        cell_area,
+        expose_area,
         (GtkCellRendererState) flags );
 
-    ((GdkRectangle*) cell_area)->x -= xoffset;
-    ((GdkRectangle*) cell_area)->width += xoffset;
+    cell_area->x -= xoffset;
+    cell_area->width += xoffset;
 #endif
 }
 
