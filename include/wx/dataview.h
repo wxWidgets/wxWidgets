@@ -166,6 +166,8 @@ public:
     bool GetBold() const { return m_bold; }
     bool GetItalic() const { return m_italic; }
 
+    bool IsDefault() const { return !(HasColour() || HasFont()); }
+
 private:
     wxColour m_colour;
     bool     m_bold;

@@ -1748,6 +1748,102 @@ static void wxGtkTextRendererEditedCallback( GtkCellRendererText *WXUNUSED(rende
 
 }
 
+namespace
+{
+
+// helper function used by wxDataViewTextRenderer and
+// wxDataViewCustomRenderer::RenderText(): it applies the attributes to the
+// given text renderer and returns true if anything was done
+bool GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
+{
+    bool usingDefaultAttrs = true;
+    if (attr.HasColour())
+    {
+        const GdkColor * const gcol = attr.GetColour().GetColor();
+
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, GDK_TYPE_COLOR );
+        g_value_set_boxed( &gvalue, gcol );
+        g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "foreground-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+    if (attr.GetItalic())
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, PANGO_TYPE_STYLE );
+        g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
+        g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "style-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+
+    if (attr.GetBold())
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, PANGO_TYPE_WEIGHT );
+        g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
+        g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
+        g_value_unset( &gvalue );
+
+        usingDefaultAttrs = false;
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "weight-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
+#if 0
+    if (attr.HasBackgroundColour())
+    {
+        wxColour colour = attr.GetBackgroundColour();
+        const GdkColor * const gcol = colour.GetColor();
+
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, GDK_TYPE_COLOR );
+        g_value_set_boxed( &gvalue, gcol );
+        g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "cell-background-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+#endif
+
+    return !usingDefaultAttrs;
+}
+
+} // anonymous namespace
+
 IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
 
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxDataViewCellMode mode,
@@ -1816,6 +1912,11 @@ void wxDataViewTextRenderer::SetAlignment( int align )
     g_value_set_enum( &gvalue, pangoAlign );
     g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
     g_value_unset( &gvalue );
+}
+
+bool wxDataViewTextRenderer::GtkSetAttr(const wxDataViewItemAttr& attr)
+{
+    return GtkApplyAttr(GTK_CELL_RENDERER_TEXT(m_renderer), attr);
 }
 
 // ---------------------------------------------------------
@@ -2036,7 +2137,7 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
                                            int WXUNUSED(state) )
 {
     if (!m_text_renderer)
-        m_text_renderer = gtk_cell_renderer_text_new();
+        m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
 
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
@@ -2044,12 +2145,14 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text,
     g_object_set_property( G_OBJECT(m_text_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
+    GtkApplyAttr(m_text_renderer, GetAttr());
+
     GdkRectangle cell_area;
     wxRectToGDKRect(cell, cell_area);
     cell_area.x += xoffset;
     cell_area.width -= xoffset;
 
-    gtk_cell_renderer_render( m_text_renderer,
+    gtk_cell_renderer_render( GTK_CELL_RENDERER(m_text_renderer),
         m_renderParams.window,
         m_renderParams.widget,
         m_renderParams.background_area,
@@ -2565,108 +2668,21 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     cell->SetValue( value );
 
 
-    // deal with attributes if we can handle them here: currently this is only
-    // the case for wxDataViewTextRenderer (and derived) class(es) because
-    // GtkCellRendererText is the only GTK renderer that we use which supports
-    // the properties below (foreground_gdk, style, weight) -- if any other
-    // renderers added in the future support them too, they should simply
-    // override their GtkSupportsAttrs() to return true
+    // deal with attributes: if the renderer doesn't support them at all, we
+    // don't even need to query the model for them
     if ( !cell->GtkSupportsAttrs() )
         return;
 
+    // it can support attributes so check if this item has any
     wxDataViewItemAttr attr;
-    if ( !wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
-            && cell->GtkIsUsingDefaultAttrs() )
+    if ( wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
+            || !cell->GtkIsUsingDefaultAttrs() )
     {
-        // no custom attributes specified and we're already using the default
-        // ones -- nothing to do
-        return;
+        bool usingDefaultAttrs = !cell->GtkSetAttr(attr);
+        cell->GtkSetUsingDefaultAttrs(usingDefaultAttrs);
     }
-
-    bool usingDefaultAttrs = true;
-    if (attr.HasColour())
-    {
-        const GdkColor * const gcol = attr.GetColour().GetColor();
-
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, GDK_TYPE_COLOR );
-        g_value_set_boxed( &gvalue, gcol );
-        g_object_set_property( G_OBJECT(renderer), "foreground_gdk", &gvalue );
-        g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
-    }
-    else
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, FALSE );
-        g_object_set_property( G_OBJECT(renderer), "foreground-set", &gvalue );
-        g_value_unset( &gvalue );
-    }
-
-    if (attr.GetItalic())
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, PANGO_TYPE_STYLE );
-        g_value_set_enum( &gvalue, PANGO_STYLE_ITALIC );
-        g_object_set_property( G_OBJECT(renderer), "style", &gvalue );
-        g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
-    }
-    else
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, FALSE );
-        g_object_set_property( G_OBJECT(renderer), "style-set", &gvalue );
-        g_value_unset( &gvalue );
-    }
-
-
-    if (attr.GetBold())
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, PANGO_TYPE_WEIGHT );
-        g_value_set_enum( &gvalue, PANGO_WEIGHT_BOLD );
-        g_object_set_property( G_OBJECT(renderer), "weight", &gvalue );
-        g_value_unset( &gvalue );
-
-        usingDefaultAttrs = false;
-    }
-    else
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, FALSE );
-        g_object_set_property( G_OBJECT(renderer), "weight-set", &gvalue );
-        g_value_unset( &gvalue );
-    }
-
-#if 0
-    if (attr.HasBackgroundColour())
-    {
-        wxColour colour = attr.GetBackgroundColour();
-        const GdkColor * const gcol = colour.GetColor();
-
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, GDK_TYPE_COLOR );
-        g_value_set_boxed( &gvalue, gcol );
-        g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
-        g_value_unset( &gvalue );
-    }
-    else
-    {
-        GValue gvalue = { 0, };
-        g_value_init( &gvalue, G_TYPE_BOOLEAN );
-        g_value_set_boolean( &gvalue, FALSE );
-        g_object_set_property( G_OBJECT(renderer), "cell-background-set", &gvalue );
-        g_value_unset( &gvalue );
-    }
-#endif
-
-    cell->GtkSetUsingDefaultAttrs(usingDefaultAttrs);
+    // else: no custom attributes specified and we're already using the default
+    //       ones -- nothing to do
 }
 
 } // extern "C"

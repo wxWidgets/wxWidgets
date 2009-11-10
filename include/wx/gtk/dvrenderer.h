@@ -58,6 +58,14 @@ public:
     // for details
     virtual bool GtkSupportsAttrs() const { return false; }
 
+    // if GtkSupportsAttrs() returns true, this function will be called to
+    // effectively set the attribute to use for rendering the next item
+    //
+    // it should return true if the attribute had any non-default properties
+    virtual bool GtkSetAttr(const wxDataViewItemAttr& WXUNUSED(attr))
+        { return false; }
+
+
     // these functions are only called if GtkSupportsAttrs() returns true and
     // are used to remember whether the renderer currently uses the default
     // attributes or if we changed (and not reset them)

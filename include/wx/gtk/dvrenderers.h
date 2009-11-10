@@ -13,6 +13,7 @@
 #define _WX_GTK_DVRENDERERS_H_
 
 typedef struct _GdkRectangle GdkRectangle;
+typedef struct _GtkCellRendererText GtkCellRendererText;
 
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
@@ -44,6 +45,7 @@ public:
     virtual void SetAlignment( int align );
 
     virtual bool GtkSupportsAttrs() const { return true; }
+    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr);
 
 protected:
     // implementation of Set/GetValue()
@@ -128,13 +130,23 @@ public:
         m_renderParams.flags = flags;
     }
 
+    // we may or not support attributes, as we don't know it, return true to
+    // make it possible to use them
+    virtual bool GtkSupportsAttrs() const { return true; }
+
+    virtual bool GtkSetAttr(const wxDataViewItemAttr& attr)
+    {
+        SetAttr(attr);
+        return !attr.IsDefault();
+    }
+
 protected:
     bool Init(wxDataViewCellMode mode, int align);
 
 private:
     wxDC        *m_dc;
 
-    GtkCellRenderer      *m_text_renderer;
+    GtkCellRendererText      *m_text_renderer;
 
     // parameters of the original render() call stored so that we could pass
     // them forward to m_text_renderer if our RenderText() is called
