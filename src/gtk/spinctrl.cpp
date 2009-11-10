@@ -218,9 +218,6 @@ void wxSpinCtrlGTKBase::DoSetValue( double value )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    if (wxIsKindOf(this, wxSpinCtrl))
-        value = wxRound( value );
-
     GtkDisableEvents();
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), value);
     GtkEnableEvents();
