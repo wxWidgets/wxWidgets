@@ -41,6 +41,8 @@ public:
 
     virtual void SetAlignment( int align );
 
+    virtual bool GtkSupportsAttrs() const { return true; }
+
 protected:
     // implementation of Set/GetValue()
     bool SetTextValue(const wxString& str);

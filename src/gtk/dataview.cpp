@@ -2587,7 +2587,15 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     cell->SetValue( value );
 
 
-    // deal with attributes
+    // deal with attributes if we can handle them here: currently this is only
+    // the case for wxDataViewTextRenderer (and derived) class(es) because
+    // GtkCellRendererText is the only GTK renderer that we use which supports
+    // the properties below (foreground_gdk, style, weight) -- if any other
+    // renderers added in the future support them too, they should simply
+    // override their GtkSupportsAttrs() to return true
+    if ( !cell->GtkSupportsAttrs() )
+        return;
+
     wxDataViewItemAttr attr;
     if ( !wx_model->GetAttr( item, cell->GetOwner()->GetModelColumn(), attr )
             && cell->GtkIsUsingDefaultAttrs() )

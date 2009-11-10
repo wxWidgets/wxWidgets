@@ -53,6 +53,14 @@ public:
     void GtkInitHandlers();
     void GtkUpdateAlignment();
 
+    // should be overridden to return true if the renderer supports properties
+    // corresponding to wxDataViewItemAttr field, see wxGtkTreeCellDataFunc()
+    // for details
+    virtual bool GtkSupportsAttrs() const { return false; }
+
+    // these functions are only called if GtkSupportsAttrs() returns true and
+    // are used to remember whether the renderer currently uses the default
+    // attributes or if we changed (and not reset them)
     bool GtkIsUsingDefaultAttrs() const { return m_usingDefaultAttrs; }
     void GtkSetUsingDefaultAttrs(bool def) { m_usingDefaultAttrs = def; }
 
