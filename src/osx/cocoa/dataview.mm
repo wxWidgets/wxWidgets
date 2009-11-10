@@ -35,6 +35,70 @@
 // Classes used locally in dataview.mm
 // ============================================================================
 
+// ============================================================================
+// wxPointerObject
+// ============================================================================
+
+@implementation wxPointerObject
+
+-(id) init
+{
+    self = [super init];
+    if (self != nil)
+        self->pointer = NULL;
+    return self;
+}
+
+-(id) initWithPointer:(void*) initPointer
+{
+    self = [super init];
+    if (self != nil)
+        self->pointer = initPointer;
+    return self;
+}
+
+//
+// inherited methods from NSObject
+//
+-(BOOL) isEqual:(id)object
+{
+    return (object != nil) &&
+             ([object isKindOfClass:[wxPointerObject class]]) &&
+                 (pointer == [((wxPointerObject*) object) pointer]);
+}
+
+-(NSUInteger) hash
+{
+    return (NSUInteger) pointer;
+}
+
+-(void*) pointer
+{
+    return pointer;
+}
+
+-(void) setPointer:(void*) newPointer
+{
+    pointer = newPointer;
+}
+
+@end
+
+namespace
+{
+
+inline wxDataViewItem wxDataViewItemFromItem(id item)
+{
+    return wxDataViewItem([static_cast<wxPointerObject *>(item) pointer]);
+}
+
+inline wxDataViewItem wxDataViewItemFromMaybeNilItem(id item)
+{
+    return item == nil ? wxDataViewItem() : wxDataViewItemFromItem(item);
+}
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxCustomRendererObject
 // ----------------------------------------------------------------------------
@@ -120,7 +184,7 @@
     if ( item )
     {
         // ... and if it succeeded, ask the model whether it has any value
-        wxDataViewItem dvItem([((wxPointerObject*) item) pointer]);
+        wxDataViewItem dvItem(wxDataViewItemFromItem(item));
 
         if ( !dvc->GetModel()->HasValue(dvItem, dvCol->GetModelColumn()) )
             return nil;
@@ -219,8 +283,8 @@ NSInteger CompareItems(id item1, id item2, void* context)
 
         int rc = [sortDescriptor modelPtr]->Compare
                  (
-                     wxDataViewItem([((wxPointerObject*) item1) pointer]),
-                     wxDataViewItem([((wxPointerObject*) item2) pointer]),
+                     wxDataViewItemFromItem(item1),
+                     wxDataViewItemFromItem(item2),
                      [sortDescriptor columnPtr]->GetModelColumn(),
                      [sortDescriptor ascending] == YES
                  );
@@ -316,55 +380,6 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer,
 {
     return new wxCocoaDataViewControl(wxpeer,pos,size,style);
 }
-
-// ============================================================================
-// wxPointerObject
-// ============================================================================
-
-@implementation wxPointerObject
-
--(id) init
-{
-    self = [super init];
-    if (self != nil)
-        self->pointer = NULL;
-    return self;
-}
-
--(id) initWithPointer:(void*) initPointer
-{
-    self = [super init];
-    if (self != nil)
-        self->pointer = initPointer;
-    return self;
-}
-
-//
-// inherited methods from NSObject
-//
--(BOOL) isEqual:(id)object
-{
-    return (object != nil) &&
-             ([object isKindOfClass:[wxPointerObject class]]) &&
-                 (pointer == [((wxPointerObject*) object) pointer]);
-}
-
--(NSUInteger) hash
-{
-    return (NSUInteger) pointer;
-}
-
--(void*) pointer
-{
-    return pointer;
-}
-
--(void) setPointer:(void*) newPointer
-{
-    pointer = newPointer;
-}
-
-@end
 
 // ============================================================================
 // wxSortDescriptorObject
@@ -495,19 +510,22 @@ outlineView:(NSOutlineView*)outlineView
 
     wxDataViewEvent event(wxEVT_COMMAND_DATAVIEW_ITEM_DROP, dvc->GetId());
     event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItem([((wxPointerObject*) item) pointer]));
+    event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
 
     BOOL dragSuccessful;
     if ( [bestType compare:DataViewPboardType] == NSOrderedSame )
     {
-        NSArray*   dataArray((NSArray*)[pasteboard propertyListForType:DataViewPboardType]);
+        NSArray* dataArray((NSArray*)
+                      [pasteboard propertyListForType:DataViewPboardType]);
         NSUInteger indexDraggedItem, noOfDraggedItems([dataArray count]);
 
         indexDraggedItem = 0;
         while (indexDraggedItem < noOfDraggedItems)
         {
-            wxDataObjectComposite* dataObjects(implementation->GetDnDDataObjects((NSData*)[dataArray objectAtIndex:indexDraggedItem]));
+            wxDataObjectComposite* dataObjects(
+                implementation->GetDnDDataObjects((NSData*)
+                    [dataArray objectAtIndex:indexDraggedItem]));
 
             if (dataObjects && (dataObjects->GetFormatCount() > 0))
             {
@@ -515,9 +533,12 @@ outlineView:(NSOutlineView*)outlineView
 
                 // copy data into data object:
                 event.SetDataObject(dataObjects);
-                event.SetDataFormat(implementation->GetDnDDataFormat(dataObjects));
+                event.SetDataFormat(
+                    implementation->GetDnDDataFormat(dataObjects));
                 // copy data into buffer:
-                dataObjects->GetDataHere(event.GetDataFormat().GetType(),buffer.GetWriteBuf(event.GetDataSize()));
+                dataObjects->GetDataHere(
+                    event.GetDataFormat().GetType(),
+                    buffer.GetWriteBuf(event.GetDataSize()));
                 buffer.UngetWriteBuf(event.GetDataSize());
                 event.SetDataBuffer(buffer.GetData());
                 // finally, send event:
@@ -543,12 +564,21 @@ outlineView:(NSOutlineView*)outlineView
     }
     else
     {
-        CFDataRef              osxData; // needed to convert internally used UTF-16 representation to a UTF-8 representation
+        // needed to convert internally used UTF-16 representation to a UTF-8
+        // representation
+        CFDataRef              osxData;
         wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
         wxTextDataObject*      textDataObject(new wxTextDataObject());
 
-        osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],kCFStringEncodingUTF8,32);
-        if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
+        osxData = ::CFStringCreateExternalRepresentation
+                    (
+                     kCFAllocatorDefault,
+                     (CFStringRef)[pasteboard stringForType:NSStringPboardType],
+                     kCFStringEncodingUTF8,
+                     32
+                    );
+        if (textDataObject->SetData(::CFDataGetLength(osxData),
+                                    ::CFDataGetBytePtr(osxData)))
             dataObjects->Add(textDataObject);
         else
             delete textDataObject;
@@ -570,27 +600,28 @@ outlineView:(NSOutlineView*)outlineView
     }
 }
 
--(id) outlineView:(NSOutlineView*)outlineView child:(NSInteger)index ofItem:(id)item
+-(id) outlineView:(NSOutlineView*)outlineView
+    child:(NSInteger)index
+    ofItem:(id)item
 {
-    if ((item == currentParentItem) && (index < ((NSInteger) [self getChildCount])))
+    if ((item == currentParentItem) &&
+            (index < ((NSInteger) [self getChildCount])))
         return [self getChild:index];
-    else
-    {
-        wxDataViewItemArray dataViewChildren;
 
-        wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
-        (void) model->GetChildren((item == nil) ? wxDataViewItem() : wxDataViewItem([((wxPointerObject*) item) pointer]),dataViewChildren);
-        [self bufferItem:item withChildren:&dataViewChildren];
-        if ([sortDescriptors count] > 0)
-            [children sortUsingFunction:CompareItems context:sortDescriptors];
-        return [self getChild:index];
-    }
+    wxDataViewItemArray dataViewChildren;
+
+    wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
+    model->GetChildren(wxDataViewItemFromMaybeNilItem(item), dataViewChildren);
+    [self bufferItem:item withChildren:&dataViewChildren];
+    if ([sortDescriptors count] > 0)
+        [children sortUsingFunction:CompareItems context:sortDescriptors];
+    return [self getChild:index];
 }
 
 -(BOOL) outlineView:(NSOutlineView*)outlineView isItemExpandable:(id)item
 {
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
-    return model->IsContainer(wxDataViewItem([((wxPointerObject*) item) pointer]));
+    return model->IsContainer(wxDataViewItemFromItem(item));
 }
 
 -(NSInteger) outlineView:(NSOutlineView*)outlineView numberOfChildrenOfItem:(id)item
@@ -601,7 +632,8 @@ outlineView:(NSOutlineView*)outlineView
 
 
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
-    noOfChildren = model->GetChildren((item == nil) ? wxDataViewItem() : wxDataViewItem([((wxPointerObject*) item) pointer]),dataViewChildren);
+    noOfChildren = model->GetChildren(wxDataViewItemFromMaybeNilItem(item),
+                                      dataViewChildren);
     [self bufferItem:item withChildren:&dataViewChildren];
     if ([sortDescriptors count] > 0)
         [children sortUsingFunction:CompareItems context:sortDescriptors];
@@ -618,7 +650,7 @@ outlineView:(NSOutlineView*)outlineView
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
     const unsigned colIdx = col->GetModelColumn();
 
-    wxDataViewItem dataViewItem([((wxPointerObject*) item) pointer]);
+    wxDataViewItem dataViewItem(wxDataViewItemFromItem(item));
 
     if ( model->HasValue(dataViewItem, colIdx) )
     {
@@ -638,10 +670,8 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxDataViewColumn* col(static_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
 
-    wxDataViewItem dataViewItem([((wxPointerObject*) item) pointer]);
-
     col->GetRenderer()->
-        OSXOnCellChanged(object, dataViewItem, col->GetModelColumn());
+        OSXOnCellChanged(object, wxDataViewItemFromItem(item), col->GetModelColumn());
 }
 
 -(void) outlineView:(NSOutlineView*)outlineView sortDescriptorsDidChange:(NSArray*)oldDescriptors
@@ -714,7 +744,7 @@ outlineView:(NSOutlineView*)outlineView
         event(wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE,dvc->GetId());
 
     event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItem([((wxPointerObject*) item) pointer]));
+    event.SetItem(wxDataViewItemFromItem(item));
     event.SetModel(dvc->GetModel());
     if ([bestType compare:DataViewPboardType] == NSOrderedSame)
     {
@@ -820,7 +850,8 @@ outlineView:(NSOutlineView*)outlineView
             wxDataObjectComposite* itemObject(new wxDataObjectComposite()); // data object for current item
             wxString               itemString;                              // contains the TAB concatenated data of an item
 
-            event.SetItem(wxDataViewItem([((wxPointerObject*) [writeItems objectAtIndex:itemCounter]) pointer]));
+            event.SetItem(
+                wxDataViewItemFromItem([writeItems objectAtIndex:itemCounter]));
             itemString = ::ConcatenateDataViewItemValues(dvc,event.GetItem());
             itemObject->Add(new wxTextDataObject(itemString));
             event.SetDataObject(itemObject);
@@ -1479,7 +1510,7 @@ outlineView:(NSOutlineView*)outlineView
 
 
     event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItem([((wxPointerObject*) [self itemAtRow:[self clickedRow]]) pointer]));
+    event.SetItem(wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]));
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1562,7 +1593,7 @@ outlineView:(NSOutlineView*)outlineView
 
 
     event.SetEventObject(dvc);
-    event.SetItem       (wxDataViewItem([((wxPointerObject*) item) pointer]));
+    event.SetItem       (wxDataViewItemFromItem(item));
     event.SetModel      (dvc->GetModel());
     // finally send the equivalent wxWidget event:
     dvc->GetEventHandler()->ProcessEvent(event);
@@ -1578,7 +1609,7 @@ outlineView:(NSOutlineView*)outlineView
 
 
     event.SetEventObject(dvc);
-    event.SetItem       (wxDataViewItem([((wxPointerObject*) item) pointer]));
+    event.SetItem       (wxDataViewItemFromItem(item));
     event.SetModel      (dvc->GetModel());
     // finally send the equivalent wxWidget event:
     dvc->GetEventHandler()->ProcessEvent(event);
@@ -1606,7 +1637,7 @@ outlineView:(NSOutlineView*)outlineView
              );
     const unsigned colIdx = dvCol->GetModelColumn();
 
-    wxDataViewItem dvItem([static_cast<wxPointerObject *>(item) pointer]);
+    wxDataViewItem dvItem(wxDataViewItemFromItem(item));
 
     if ( !model->HasValue(dvItem, colIdx) )
         return;
@@ -1658,7 +1689,8 @@ outlineView:(NSOutlineView*)outlineView
 
 
     event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItem([((wxPointerObject*) [[notification userInfo] objectForKey:@"NSObject"]) pointer]));
+    event.SetItem(wxDataViewItemFromItem(
+                    [[notification userInfo] objectForKey:@"NSObject"]));
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1670,7 +1702,8 @@ outlineView:(NSOutlineView*)outlineView
 
 
     event.SetEventObject(dvc);
-    event.SetItem(wxDataViewItem([((wxPointerObject*) [[notification userInfo] objectForKey:@"NSObject"]) pointer]));
+    event.SetItem(wxDataViewItemFromItem(
+                    [[notification userInfo] objectForKey:@"NSObject"]));
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1714,7 +1747,7 @@ outlineView:(NSOutlineView*)outlineView
 
     event.SetEventObject(dvc);
     event.SetItem(
-            wxDataViewItem([((wxPointerObject*) [self itemAtRow:currentlyEditedRow]) pointer]));
+            wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]));
     event.SetColumn(dvc->GetColumnPosition(col));
     event.SetDataViewColumn(col);
     dvc->GetEventHandler()->ProcessEvent(event);
@@ -1745,7 +1778,7 @@ outlineView:(NSOutlineView*)outlineView
 
         event.SetEventObject(dvc);
         event.SetItem(
-                wxDataViewItem([((wxPointerObject*) [self itemAtRow:currentlyEditedRow]) pointer]));
+                wxDataViewItemFromItem([self itemAtRow:currentlyEditedRow]));
         event.SetColumn(dvc->GetColumnPosition(col));
         event.SetDataViewColumn(col);
         dvc->GetEventHandler()->ProcessEvent(event);
@@ -1758,19 +1791,25 @@ outlineView:(NSOutlineView*)outlineView
 }
 
 @end
+
 // ============================================================================
 // wxCocoaDataViewControl
 // ============================================================================
-//
-// constructors / destructor
-//
-    wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer, const wxPoint& pos, const wxSize& size, long style)
-:wxWidgetCocoaImpl(peer,[[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]),
-    m_DataSource(NULL), m_OutlineView([[wxCocoaOutlineView alloc] init])
+
+wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
+                                               const wxPoint& pos,
+                                               const wxSize& size,
+                                               long style)
+    : wxWidgetCocoaImpl
+      (
+        peer,
+        [[NSScrollView alloc] initWithFrame:wxOSXGetFrameForControl(peer,pos,size)]
+      ),
+      m_DataSource(NULL),
+      m_OutlineView([[wxCocoaOutlineView alloc] init])
 {
     // initialize scrollview (the outline view is part of a scrollview):
-    NSScrollView* scrollview = (NSScrollView*) GetWXWidget(); // definition for abbreviational purposes
-
+    NSScrollView* scrollview = (NSScrollView*) GetWXWidget();
 
     [scrollview setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [scrollview setBorderType:NSNoBorder];
@@ -1808,7 +1847,8 @@ bool wxCocoaDataViewControl::ClearColumns()
     bool const bufAllowsMultipleSelection = [m_OutlineView allowsMultipleSelection];
 
 
-    // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the columns cannot be deleted if there is an outline column in the view;
+    // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the
+    // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
@@ -1854,8 +1894,9 @@ bool wxCocoaDataViewControl::InsertColumn(unsigned int pos, wxDataViewColumn* co
     // create column and set the native data of the dataview column:
     NSTableColumn *nativeColumn = ::CreateNativeColumn(columnPtr);
     columnPtr->GetNativeData()->SetNativeColumnPtr(nativeColumn);
-    // as the native control does not allow the insertion of a column at a specified position the column is first appended and
-    // - if necessary - moved to its final position:
+    // as the native control does not allow the insertion of a column at a
+    // specified position the column is first appended and - if necessary -
+    // moved to its final position:
     [m_OutlineView addTableColumn:nativeColumn];
     if (pos != static_cast<unsigned int>([m_OutlineView numberOfColumns]-1))
         [m_OutlineView moveColumn:[m_OutlineView numberOfColumns]-1 toColumn:pos];
