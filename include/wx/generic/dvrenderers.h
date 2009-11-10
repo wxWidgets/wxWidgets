@@ -44,17 +44,8 @@ public:
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
 
-    virtual bool RenderWithAttr(wxDC& dc,
-                                const wxRect& rect,
-                                int align,
-                                const wxDataViewItemAttr *attr,
-                                int state);
-    virtual bool Render(wxRect cell, wxDC *dc, int state)
-    {
-        return DummyRender(cell, dc, state);
-    }
-
-    wxSize GetSize() const;
+    virtual bool Render(wxRect cell, wxDC *dc, int state);
+    virtual wxSize GetSize() const;
 
     // in-place editing
     virtual bool HasEditorCtrl() const;
@@ -135,15 +126,7 @@ public:
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant& value ) const;
 
-    virtual bool RenderWithAttr(wxDC& dc,
-                                const wxRect& rect,
-                                int align,
-                                const wxDataViewItemAttr *attr,
-                                int state);
-    virtual bool Render(wxRect cell, wxDC *dc, int state)
-    {
-        return DummyRender(cell, dc, state);
-    }
+    virtual bool Render(wxRect cell, wxDC *dc, int state);
     virtual wxSize GetSize() const;
 
 private:
@@ -168,15 +151,7 @@ public:
     bool SetValue( const wxVariant &value );
     bool GetValue( wxVariant &value ) const;
 
-    virtual bool RenderWithAttr(wxDC& dc,
-                                const wxRect& rect,
-                                int align,
-                                const wxDataViewItemAttr *attr,
-                                int state);
-    virtual bool Render(wxRect cell, wxDC *dc, int state)
-    {
-        return DummyRender(cell, dc, state);
-    }
+    virtual bool Render(wxRect cell, wxDC *dc, int state);
     virtual wxSize GetSize() const;
 
     virtual bool HasEditorCtrl() const { return true; }

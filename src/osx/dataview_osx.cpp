@@ -303,15 +303,6 @@ wxDataViewCustomRenderer::~wxDataViewCustomRenderer()
   delete m_DCPtr;
 }
 
-void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state )
-{
-    wxDataViewCtrl *view = GetOwner()->GetOwner();
-
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ? *wxWHITE : view->GetForegroundColour();
-    dc->SetTextForeground(col);
-    dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
-}
-
 wxDC* wxDataViewCustomRenderer::GetDC()
 {
   if ((m_DCPtr == NULL) && (GetOwner() != NULL) && (GetOwner()->GetOwner() != NULL))

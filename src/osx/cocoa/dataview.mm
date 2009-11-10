@@ -1108,8 +1108,8 @@ outlineView:(NSOutlineView*)outlineView
     [[self backgroundColor] set];
     NSRectFill(cellFrame);
 
-    // TODO: attributes support
-    renderer->Render(wxFromNSRect(controlView, cellFrame), renderer->GetDC(), 0);
+    wxDC * const dc = renderer->GetDC();
+    renderer->WXCallRender(wxFromNSRect(controlView, cellFrame), dc, 0);
     renderer->SetDC(NULL);
 }
 

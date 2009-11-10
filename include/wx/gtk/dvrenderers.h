@@ -100,15 +100,15 @@ public:
     virtual ~wxDataViewCustomRenderer();
 
 
-    virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
-
-    void RenderText( const wxString &text, int xoffset,  wxRect cell, wxDC *dc, int state );
-
-    virtual wxSize GetSize() const = 0;
-
     // Create DC on request
     virtual wxDC *GetDC();
 
+    // override the base class function to use GTK text cell renderer
+    virtual void RenderText(const wxString& text,
+                            int xoffset,
+                            wxRect cell,
+                            wxDC *dc,
+                            int state);
 
 protected:
 

@@ -644,123 +644,6 @@ int wxDataViewRenderer::GetAlignment() const
     return m_align;
 }
 
-int wxDataViewRenderer::CalculateAlignment() const
-{
-    if (m_align == wxDVR_DEFAULT_ALIGNMENT)
-    {
-        if (GetOwner() == NULL)
-            return wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL;
-
-        return GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
-    }
-
-    return m_align;
-}
-
-bool
-wxDataViewRenderer::RenderWithAttr(wxDC& dc,
-                                   const wxRect& cell_rect,
-                                   int align,
-                                   const wxDataViewItemAttr *WXUNUSED(attr),
-                                   int state)
-{
-    // adjust the rectangle ourselves to account for the alignment
-
-    wxRect item_rect = cell_rect;
-    if ( align )
-    {
-        const wxSize size = GetSize();
-
-        // take alignment into account only if there is enough space, otherwise
-        // show as much contents as possible
-        //
-        // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
-        // return hard-coded size which can be more than they need and if we
-        // trusted their GetSize() we'd draw the text out of cell bounds
-        // entirely
-
-        if ( size.x < cell_rect.width )
-        {
-            if (align & wxALIGN_CENTER_HORIZONTAL)
-                item_rect.x += (cell_rect.width - size.x)/2;
-            else if (align & wxALIGN_RIGHT)
-                item_rect.x += cell_rect.width - size.x;
-            // else: wxALIGN_LEFT is the default
-
-            item_rect.width = size.x;
-        }
-
-        if ( size.y < cell_rect.height )
-        {
-            if (align & wxALIGN_CENTER_VERTICAL)
-                item_rect.y += (cell_rect.height - size.y)/2;
-            else if (align & wxALIGN_BOTTOM)
-                item_rect.y += cell_rect.height - size.y;
-            // else: wxALIGN_TOP is the default
-
-            item_rect.height = size.y;
-        }
-    }
-
-    return Render(item_rect, &dc, state);
-}
-
-void
-wxDataViewRenderer::RenderText(wxDC& dc,
-                               const wxRect& rect,
-                               int align,
-                               const wxString& text,
-                               const wxDataViewItemAttr *attr,
-                               int state,
-                               int xoffset)
-{
-    // override custom foreground with the standard one for the selected items
-    // because we currently don't allow changing the selection background and
-    // custom colours may be unreadable on it
-    wxColour col;
-    if ( state & wxDATAVIEW_CELL_SELECTED )
-        col = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    else if ( attr && attr->HasColour() )
-        col = attr->GetColour();
-    else // use default foreground
-        col = GetOwner()->GetOwner()->GetForegroundColour();
-
-    wxDCTextColourChanger changeFg(dc, col);
-
-    wxDCFontChanger changeFont(dc);
-    if ( attr && attr->HasFont() )
-    {
-        wxFont font(dc.GetFont());
-        if ( attr->GetBold() )
-            font.MakeBold();
-        if ( attr->GetItalic() )
-            font.MakeItalic();
-
-        changeFont.Set(font);
-    }
-
-    wxRect rectText = rect;
-    rectText.x += xoffset;
-    rectText.width -= xoffset;
-
-    // check if we want to ellipsize the text if it doesn't fit
-    wxString ellipsizedText;
-    if ( GetEllipsizeMode() != wxELLIPSIZE_NONE )
-    {
-        ellipsizedText = wxControl::Ellipsize
-                                    (
-                                        text,
-                                        dc,
-                                        GetEllipsizeMode(),
-                                        rect.width,
-                                        wxELLIPSIZE_FLAGS_NONE
-                                    );
-    }
-
-    dc.DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
-                 rectText, align);
-}
-
 // ---------------------------------------------------------
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
@@ -823,14 +706,9 @@ bool wxDataViewTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVarian
     return true;
 }
 
-bool
-wxDataViewTextRenderer::RenderWithAttr(wxDC& dc,
-                                       const wxRect& rect,
-                                       int align,
-                                       const wxDataViewItemAttr *attr,
-                                       int state)
+bool wxDataViewTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {
-    RenderText(dc, rect, align, m_text, attr, state);
+    RenderText(m_text, 0, rect, dc, state);
     return true;
 }
 
@@ -976,24 +854,23 @@ bool wxDataViewProgressRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
-bool wxDataViewProgressRenderer::RenderWithAttr(wxDC& dc,
-                                                const wxRect& rect,
-                                                int WXUNUSED(align),
-                                                const wxDataViewItemAttr *attr,
-                                                int WXUNUSED(state))
+bool
+wxDataViewProgressRenderer::Render(wxRect rect, wxDC *dc, int WXUNUSED(state))
 {
-    // deflat the rect to leave a small border between bars in adjacent rows
+    // deflate the rect to leave a small border between bars in adjacent rows
     wxRect bar = rect.Deflate(0, 1);
 
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.SetPen( *wxBLACK_PEN );
-    dc.DrawRectangle( bar );
+    dc->SetBrush( *wxTRANSPARENT_BRUSH );
+    dc->SetPen( *wxBLACK_PEN );
+    dc->DrawRectangle( bar );
 
     bar.width = (int)(bar.width * m_value / 100.);
-    dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.SetBrush( attr && attr->HasColour() ? wxBrush(attr->GetColour())
-                                           : *wxBLUE_BRUSH );
-    dc.DrawRectangle( bar );
+    dc->SetPen( *wxTRANSPARENT_PEN );
+
+    const wxDataViewItemAttr& attr = GetAttr();
+    dc->SetBrush( attr.HasColour() ? wxBrush(attr.GetColour())
+                                  : *wxBLUE_BRUSH );
+    dc->DrawRectangle( bar );
 
     return true;
 }
@@ -1138,23 +1015,18 @@ bool wxDataViewIconTextRenderer::GetValue( wxVariant& WXUNUSED(value) ) const
     return false;
 }
 
-bool
-wxDataViewIconTextRenderer::RenderWithAttr(wxDC& dc,
-                                           const wxRect& rect,
-                                           int align,
-                                           const wxDataViewItemAttr *attr,
-                                           int state)
+bool wxDataViewIconTextRenderer::Render(wxRect rect, wxDC *dc, int state)
 {
     int xoffset = 0;
 
     const wxIcon& icon = m_value.GetIcon();
     if ( icon.IsOk() )
     {
-        dc.DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
+        dc->DrawIcon(icon, rect.x, rect.y + (rect.height - icon.GetHeight())/2);
         xoffset = icon.GetWidth()+4;
     }
 
-    RenderText(dc, rect, align, m_value.GetText(), attr, state, xoffset);
+    RenderText(m_value.GetText(), xoffset, rect, dc, state);
 
     return true;
 }
@@ -1640,15 +1512,15 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         model->GetValue( value, item, column->GetModelColumn());
         cell->SetValue( value );
 
+        wxDataViewItemAttr attr;
+        model->GetAttr(item, column->GetModelColumn(), attr);
+        cell->SetAttr(attr);
+
         wxRect item_rect(x, 0, width, height);
         item_rect.Deflate(PADDING_RIGHTLEFT, 0);
 
         // dc.SetClippingRegion( item_rect );
-        wxDataViewItemAttr attr;
-        const bool
-            hasAttr = model->GetAttr(item, column->GetModelColumn(), attr);
-        cell->RenderWithAttr(dc, item_rect, cell->CalculateAlignment(),
-                                hasAttr ? &attr : NULL, 0);
+        cell->WXCallRender(item_rect, &dc, 0);
         // dc.DestroyClippingRegion();
 
         x += width;
@@ -1840,6 +1712,10 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             model->GetValue( value, dataitem, col->GetModelColumn());
             cell->SetValue( value );
 
+            wxDataViewItemAttr attr;
+            model->GetAttr(dataitem, col->GetModelColumn(), attr);
+            cell->SetAttr(attr);
+
             // update cell_rect
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
@@ -1910,11 +1786,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             //       make its own renderer and thus we cannot be sure of that.
             wxDCClipper clip(dc, item_rect);
 
-            wxDataViewItemAttr attr;
-            const bool
-                hasAttr = model->GetAttr(dataitem, col->GetModelColumn(), attr);
-            cell->RenderWithAttr(dc, item_rect, cell->CalculateAlignment(),
-                                    hasAttr ? &attr : NULL, state);
+            cell->WXCallRender(item_rect, &dc, state);
         }
 
         cell_rect.x += cell_rect.width;

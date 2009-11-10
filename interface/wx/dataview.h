@@ -1435,9 +1435,20 @@ public:
                                         const wxVariant& value);
 
     /**
-        Create DC on request. Internal.
-    */
-    virtual wxDC* GetDC();
+        Return the attribute to be used for rendering.
+
+        This function may be called from Render() implementation to use the
+        attributes defined for the item if the renderer supports them.
+
+        Notice that when Render() is called, the wxDC object passed to it is
+        already set up to use the correct attributes (e.g. its font is set to
+        bold or italic version if wxDataViewItemAttr::GetBold() or GetItalic()
+        returns true) so it may not be necessary to call it explicitly if you
+        only want to render text using the items attributes.
+
+        @since 2.9.1
+     */
+    const wxDataViewItemAttr& GetAttr() const;
 
     /**
         Return size required to show content.

@@ -24,42 +24,7 @@ public:
                         int align = wxDVR_DEFAULT_ALIGNMENT );
     virtual ~wxDataViewRenderer();
 
-    // these methods are used to draw the cell contents, Render() doesn't care
-    // about the attributes while RenderWithAttr() does -- override it if you
-    // want to take the attributes defined for this cell into account, otherwise
-    // overriding Render() is enough
-    virtual bool Render( wxRect cell, wxDC *dc, int state ) = 0;
-
-    // NB: RenderWithAttr() also has more standard parameter order and types
-    virtual bool
-    RenderWithAttr(wxDC& dc,
-                   const wxRect& rect,
-                   int align,   // combination of horizontal and vertical
-                   const wxDataViewItemAttr *attr, // may be NULL if none
-                   int state);
-
-    virtual wxSize GetSize() const = 0;
     virtual wxDC *GetDC();
-
-    // Draw the text using the provided attributes
-    void RenderText(wxDC& dc,
-                    const wxRect& rect,
-                    int align,
-                    const wxString& text,
-                    const wxDataViewItemAttr *attr, // may be NULL if none
-                    int state,
-                    int xoffset = 0);
-
-    // Overload using standard attributes
-    void RenderText(const wxString& text,
-                    int xoffset,
-                    wxRect cell,
-                    wxDC *dc,
-                    int state)
-    {
-        RenderText(*dc, cell, wxALIGN_NOT, text, NULL, state, xoffset);
-    }
-
 
     virtual void SetAlignment( int align );
     virtual int GetAlignment() const;
@@ -75,7 +40,6 @@ public:
         { return m_mode; }
 
     // implementation
-    int CalculateAlignment() const;
 
     // this is a replacement for dynamic_cast<wxDataViewCustomRenderer> in the
     // code checking whether the renderer is interested in mouse events, it's
@@ -88,18 +52,6 @@ public:
     // that it doesn't work at run-time because Activate/LeftClick() would
     // never be called
     virtual wxDataViewCustomRenderer *WXGetAsCustom() { return NULL; }
-
-protected:
-    // This is just a convenience for the derived classes overriding
-    // RenderWithAttr() to avoid repeating the same wxFAIL_MSG() in all of them
-    bool DummyRender(wxRect WXUNUSED(cell),
-                     wxDC * WXUNUSED(dc),
-                     int WXUNUSED(state))
-    {
-        wxFAIL_MSG("shouldn't be called at all, use RenderWithAttr() instead");
-
-        return false;
-    }
 
 private:
     int                          m_align;

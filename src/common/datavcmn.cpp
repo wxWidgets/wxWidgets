@@ -694,6 +694,113 @@ bool wxDataViewRendererBase::FinishEditing()
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// wxDataViewCustomRendererBase
+// ----------------------------------------------------------------------------
+
+void
+wxDataViewCustomRendererBase::WXCallRender(wxRect rectCell, wxDC *dc, int state)
+{
+    wxCHECK_RET( dc, "no DC to draw on in custom renderer?" );
+
+    // adjust the rectangle ourselves to account for the alignment
+    wxRect rectItem = rectCell;
+    const int align = GetAlignment();
+    if ( align != wxDVR_DEFAULT_ALIGNMENT )
+    {
+        const wxSize size = GetSize();
+
+        // take alignment into account only if there is enough space, otherwise
+        // show as much contents as possible
+        //
+        // notice that many existing renderers (e.g. wxDataViewSpinRenderer)
+        // return hard-coded size which can be more than they need and if we
+        // trusted their GetSize() we'd draw the text out of cell bounds
+        // entirely
+
+        if ( size.x >= 0 && size.x < rectCell.width )
+        {
+            if ( align & wxALIGN_CENTER_HORIZONTAL )
+                rectItem.x += (rectCell.width - size.x)/2;
+            else if ( align & wxALIGN_RIGHT )
+                rectItem.x += rectCell.width - size.x;
+            // else: wxALIGN_LEFT is the default
+
+            rectItem.width = size.x;
+        }
+
+        if ( size.y >= 0 && size.y < rectCell.height )
+        {
+            if ( align & wxALIGN_CENTER_VERTICAL )
+                rectItem.y += (rectCell.height - size.y)/2;
+            else if ( align & wxALIGN_BOTTOM )
+                rectItem.y += rectCell.height - size.y;
+            // else: wxALIGN_TOP is the default
+
+            rectItem.height = size.y;
+        }
+    }
+
+
+    // set up the DC attributes
+
+    // override custom foreground with the standard one for the selected items
+    // because we currently don't allow changing the selection background and
+    // custom colours may be unreadable on it
+    wxColour col;
+    if ( state & wxDATAVIEW_CELL_SELECTED )
+        col = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    else if ( m_attr.HasColour() )
+        col = m_attr.GetColour();
+    else // use default foreground
+        col = GetOwner()->GetOwner()->GetForegroundColour();
+
+    wxDCTextColourChanger changeFg(*dc, col);
+
+    wxDCFontChanger changeFont(*dc);
+    if ( m_attr.HasFont() )
+    {
+        wxFont font(dc->GetFont());
+        if ( m_attr.GetBold() )
+            font.MakeBold();
+        if ( m_attr.GetItalic() )
+            font.MakeItalic();
+
+        changeFont.Set(font);
+    }
+
+    Render(rectItem, dc, state);
+}
+
+void
+wxDataViewCustomRendererBase::RenderText(const wxString& text,
+                                         int xoffset,
+                                         wxRect rect,
+                                         wxDC *dc,
+                                         int WXUNUSED(state))
+{
+    wxRect rectText = rect;
+    rectText.x += xoffset;
+    rectText.width -= xoffset;
+
+    // check if we want to ellipsize the text if it doesn't fit
+    wxString ellipsizedText;
+    if ( GetEllipsizeMode() != wxELLIPSIZE_NONE )
+    {
+        ellipsizedText = wxControl::Ellipsize
+                                    (
+                                        text,
+                                        *dc,
+                                        GetEllipsizeMode(),
+                                        rect.width,
+                                        wxELLIPSIZE_FLAGS_NONE
+                                    );
+    }
+
+    dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
+                  rectText, GetAlignment());
+}
+
 //-----------------------------------------------------------------------------
 // wxDataViewEditorCtrlEvtHandler
 //-----------------------------------------------------------------------------

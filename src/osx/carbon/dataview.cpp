@@ -1701,7 +1701,7 @@ wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItem
   {
       // make sure that 'Render' can draw only in the allowed area:
       dc->SetClippingRegion(content.left,content.top,content.right-content.left+1,content.bottom-content.top+1);
-      (void) (dataViewCustomRendererPtr->Render( cellrect, dc,
+      (void) (dataViewCustomRendererPtr->WXCallRender( cellrect, dc,
                                             ((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
       dc->DestroyClippingRegion(); // probably not necessary
   }

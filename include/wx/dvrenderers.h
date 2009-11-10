@@ -109,13 +109,16 @@ public:
     void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
     wxDataViewColumn* GetOwner() const          { return m_owner; }
 
-    // renderer properties:
+    // renderer value and attributes: SetValue() and SetAttr() are called
+    // before a cell is rendered using this renderer
+    virtual bool SetValue(const wxVariant& value) = 0;
+    virtual bool GetValue(wxVariant& value) const = 0;
 
-    virtual bool SetValue( const wxVariant& WXUNUSED(value) ) = 0;
-    virtual bool GetValue( wxVariant& WXUNUSED(value) ) const = 0;
+    virtual void SetAttr(const wxDataViewItemAttr& WXUNUSED(attr)) { }
 
     wxString GetVariantType() const             { return m_variantType; }
 
+    // renderer properties:
     virtual void SetMode( wxDataViewCellMode mode ) = 0;
     virtual wxDataViewCellMode GetMode() const = 0;
 
@@ -204,6 +207,12 @@ public:
     }
 
 
+    // Render the item using the current value (returned by GetValue()).
+    virtual bool Render(wxRect cell, wxDC *dc, int state) = 0;
+
+    // Return the size of the item appropriate to its current value.
+    virtual wxSize GetSize() const = 0;
+
     // Define virtual function which are called when the item is activated
     // (double-clicked or Enter is pressed on it), clicked or the user starts
     // to drag it: by default they all simply return false indicating that the
@@ -230,7 +239,34 @@ public:
         { return false; }
 
 
+    // Helper which can be used by Render() implementation in the derived
+    // classes: it will draw the text in the same manner as the standard
+    // renderers do.
+    virtual void RenderText(const wxString& text,
+                            int xoffset,
+                            wxRect cell,
+                            wxDC *dc,
+                            int state);
+
+
+    // Override the base class virtual method to simply store the attribute so
+    // that it can be accessed using GetAttr() from Render() if needed.
+    virtual void SetAttr(const wxDataViewItemAttr& attr) { m_attr = attr; }
+    const wxDataViewItemAttr& GetAttr() const { return m_attr; }
+
+
+    // Implementation only from now on
+
+    // Retrieve the DC to use for drawing. This is implemented in derived
+    // platform-specific classes.
+    virtual wxDC *GetDC() = 0;
+
+    // Prepare DC to use attributes and call Render().
+    void WXCallRender(wxRect rect, wxDC *dc, int state);
+
 private:
+    wxDataViewItemAttr m_attr;
+
     wxDECLARE_NO_COPY_CLASS(wxDataViewCustomRendererBase);
 };
 

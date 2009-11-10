@@ -24,12 +24,6 @@ public:
 
     virtual ~wxDataViewCustomRenderer();
 
-    void RenderText( const wxString &text, int xoffset, wxRect cell, wxDC *dc, int state );
-
-    virtual wxSize GetSize() const = 0;
-
-    virtual bool Render(wxRect cell, wxDC* dc, int state) = 0;
-
 
     // implementation only
     // -------------------
