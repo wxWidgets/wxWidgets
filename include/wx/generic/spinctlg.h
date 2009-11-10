@@ -275,12 +275,11 @@ public:
         { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue( int value )              { DoSetValue(value); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
-    void SetIncrement( double inc )         { DoSetIncrement(inc); }
+    void SetIncrement(int inc) { DoSetIncrement(inc); }
 
 protected:
     virtual void DoSendEvent();
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
@@ -344,7 +343,6 @@ protected:
 
     unsigned m_digits;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrlDouble)
 };
 

@@ -126,7 +126,7 @@ public:
     void SetValue(const wxString& value)    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
     void SetValue( int value )              { DoSetValue(value); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
-    void SetIncrement( double inc )         { DoSetIncrement(inc); }
+    void SetIncrement(int inc) { DoSetIncrement(inc); }
 
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
