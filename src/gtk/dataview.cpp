@@ -33,6 +33,9 @@
 #include "wx/gtk/dc.h"
 #include "wx/gtk/dcclient.h"
 
+#include "wx/gtk/private/gdkconv.h"
+using namespace wxGTKImpl;
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -1150,8 +1153,8 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 //    rect.width  -= renderer->xpad * 2;
 //    rect.height -= renderer->ypad * 2;
 
-//    wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
-    wxRect renderrect( cell_area->x, cell_area->y, cell_area->width, cell_area->height );
+//    wxRect renderrect(wxRectFromGDKRect(&rect));
+    wxRect renderrect(wxRectFromGDKRect(cell_area));
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
     GtkTreeIter iter;
@@ -1244,7 +1247,7 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     GdkRectangle dummy;
     if (gdk_rectangle_intersect (expose_area, &rect, &dummy))
     {
-        wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+        wxRect renderrect(wxRectFromGDKRect(&rect));
         wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
         wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
 
@@ -1297,7 +1300,7 @@ gtk_wx_cell_renderer_activate(
     rect.width  -= renderer->xpad * 2;
     rect.height -= renderer->ypad * 2;
 
-    wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+    wxRect renderrect(wxRectFromGDKRect(&rect));
 
     wxDataViewModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
