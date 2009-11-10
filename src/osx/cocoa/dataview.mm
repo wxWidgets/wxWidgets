@@ -1818,12 +1818,16 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
     [scrollview setAutohidesScrollers:YES];
     [scrollview setDocumentView:m_OutlineView];
 
-    // setting up the native control itself
-    NSUInteger maskGridStyle(NSTableViewGridNone);
+    // initialize the native control itself too
+    InitOutlineView(style);
+}
 
+void wxCocoaDataViewControl::InitOutlineView(long style)
+{
     [m_OutlineView setImplementation:this];
     [m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
     [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
+    NSUInteger maskGridStyle(NSTableViewGridNone);
     if (style & wxDV_HORIZ_RULES)
         maskGridStyle |= NSTableViewSolidHorizontalGridLineMask;
     if (style & wxDV_VERT_RULES)
@@ -1831,6 +1835,9 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer,
     [m_OutlineView setGridStyleMask:maskGridStyle];
     [m_OutlineView setAllowsMultipleSelection:           (style & wxDV_MULTIPLE)  != 0];
     [m_OutlineView setUsesAlternatingRowBackgroundColors:(style & wxDV_ROW_LINES) != 0];
+
+    if ( style & wxDV_NO_HEADER )
+        [m_OutlineView setHeaderView:nil];
 }
 
 wxCocoaDataViewControl::~wxCocoaDataViewControl()
@@ -1844,24 +1851,16 @@ wxCocoaDataViewControl::~wxCocoaDataViewControl()
 //
 bool wxCocoaDataViewControl::ClearColumns()
 {
-    bool const bufAllowsMultipleSelection = [m_OutlineView allowsMultipleSelection];
-
-
     // as there is a bug in NSOutlineView version (OSX 10.5.6 #6555162) the
     // columns cannot be deleted if there is an outline column in the view;
     // therefore, the whole view is deleted and newly constructed:
     [m_OutlineView release];
     m_OutlineView = [[wxCocoaOutlineView alloc] init];
     [((NSScrollView*) GetWXWidget()) setDocumentView:m_OutlineView];
-
-    // setting up the native control itself
-    [m_OutlineView setImplementation:this];
-    [m_OutlineView setColumnAutoresizingStyle:NSTableViewSequentialColumnAutoresizingStyle];
-    [m_OutlineView setIndentationPerLevel:GetDataViewCtrl()->GetIndent()];
-    if (bufAllowsMultipleSelection)
-        [m_OutlineView setAllowsMultipleSelection:YES];
     [m_OutlineView setDataSource:m_DataSource];
-    // done:
+
+    InitOutlineView(GetDataViewCtrl()->GetWindowStyle());
+
     return true;
 }
 

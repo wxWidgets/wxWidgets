@@ -604,7 +604,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             wxASSERT(!m_ctrl[3]);
             wxDataViewTreeCtrl* tc =
                 new wxDataViewTreeCtrl( parent, wxID_ANY, wxDefaultPosition,
-                                        wxDefaultSize, style );
+                                        wxDefaultSize, style | wxDV_NO_HEADER );
             m_ctrl[3] = tc;
 
             wxImageList *ilist = new wxImageList( 16, 16 );

@@ -502,6 +502,8 @@ public:
     id GetItemAtRow(int row) const;
 
 private:
+    void InitOutlineView(long style);
+
     wxCocoaOutlineDataSource* m_DataSource;
 
     wxCocoaOutlineView* m_OutlineView;
