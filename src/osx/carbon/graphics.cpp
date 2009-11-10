@@ -2349,10 +2349,13 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
         wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-        double w;
+        // round the returned extent: this is probably more correct anyhow but
+        // we also need to do it to be consistent with GetPartialTextExtents()
+        // below and avoid strange situation when the last partial extent
+        // returned by it could have been greater than the full extent returned
+        // by us
         CGFloat a, d, l;
-
-        w = CTLineGetTypographicBounds(line, &a, &d, &l) ;
+        int w = CTLineGetTypographicBounds(line, &a, &d, &l) + 0.5;
 
         if ( height )
             *height = a+d+l;
@@ -2447,7 +2450,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
         int chars = text.length();
         for ( int pos = 0; pos < (int)chars; pos ++ )
         {
-            widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL )+0.5;
+            widths[pos] = CTLineGetOffsetForStringIndex( line, pos+1 , NULL );
         }
 
         return;
