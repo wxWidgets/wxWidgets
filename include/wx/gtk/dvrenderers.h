@@ -114,24 +114,39 @@ public:
                             wxDC *dc,
                             int state);
 
-protected:
+    // store GTK render call parameters for possible later use
+    void GTKStashRenderParams(GdkWindow *window,
+                              GtkWidget *widget,
+                              GdkRectangle *background_area,
+                              GdkRectangle *expose_area,
+                              int flags)
+    {
+        m_renderParams.window = window;
+        m_renderParams.widget = widget;
+        m_renderParams.background_area = background_area;
+        m_renderParams.expose_area = expose_area;
+        m_renderParams.flags = flags;
+    }
 
+protected:
     bool Init(wxDataViewCellMode mode, int align);
 
 private:
     wxDC        *m_dc;
 
-public:
-    // Internal, temporary for RenderText.
     GtkCellRenderer      *m_text_renderer;
-    GdkWindow            *window;
-    GtkWidget            *widget;
-    GdkRectangle         *background_area;
-    GdkRectangle         *cell_area;
-    GdkRectangle         *expose_area;
-    int                   flags;
 
-protected:
+    // parameters of the original render() call stored so that we could pass
+    // them forward to m_text_renderer if our RenderText() is called
+    struct GTKRenderParams
+    {
+        GdkWindow            *window;
+        GtkWidget            *widget;
+        GdkRectangle         *background_area;
+        GdkRectangle         *expose_area;
+        int                   flags;
+    } m_renderParams;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
 };
 

@@ -1225,12 +1225,8 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
     GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
 
-    cell->window = window;
-    cell->widget = widget;
-    cell->background_area = background_area;
-    cell->cell_area = cell_area;
-    cell->expose_area = expose_area;
-    cell->flags = flags;
+    cell->GTKStashRenderParams(window, widget,
+                               background_area, expose_area, flags);
 
     wxRect rect(wxRectFromGDKRect(cell_area));
     rect = rect.Deflate(renderer->xpad, renderer->ypad);
@@ -2033,17 +2029,12 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
-void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
-                                           wxRect WXUNUSED(cell), wxDC *WXUNUSED(dc), int WXUNUSED(state) )
+void wxDataViewCustomRenderer::RenderText( const wxString &text,
+                                           int xoffset,
+                                           wxRect cell,
+                                           wxDC *WXUNUSED(dc),
+                                           int WXUNUSED(state) )
 {
-#if 0
-    wxDataViewCtrl *view = GetOwner()->GetOwner();
-    wxColour col = (state & wxDATAVIEW_CELL_SELECTED) ?
-                        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) :
-                        view->GetForegroundColour();
-    dc->SetTextForeground(col);
-    dc->DrawText( text, cell.x + xoffset, cell.y + ((cell.height - dc->GetCharHeight()) / 2));
-#else
     if (!m_text_renderer)
         m_text_renderer = gtk_cell_renderer_text_new();
 
@@ -2053,20 +2044,18 @@ void wxDataViewCustomRenderer::RenderText( const wxString &text, int xoffset,
     g_object_set_property( G_OBJECT(m_text_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
-    cell_area->x += xoffset;
-    cell_area->width -= xoffset;
+    GdkRectangle cell_area;
+    wxRectToGDKRect(cell, cell_area);
+    cell_area.x += xoffset;
+    cell_area.width -= xoffset;
 
     gtk_cell_renderer_render( m_text_renderer,
-        window,
-        widget,
-        background_area,
-        cell_area,
-        expose_area,
-        (GtkCellRendererState) flags );
-
-    cell_area->x -= xoffset;
-    cell_area->width += xoffset;
-#endif
+        m_renderParams.window,
+        m_renderParams.widget,
+        m_renderParams.background_area,
+        &cell_area,
+        m_renderParams.expose_area,
+        (GtkCellRendererState) m_renderParams.flags );
 }
 
 bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
