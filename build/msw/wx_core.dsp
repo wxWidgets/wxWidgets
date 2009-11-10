@@ -5275,6 +5275,14 @@ SOURCE=..\..\include\wx\generic\dragimgg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\dvrenderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dvrenderers.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\fdrepdlg.h
 # End Source File
 # Begin Source File
@@ -5924,6 +5932,10 @@ SOURCE=..\..\include\wx\docview.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dragimag.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dvrenderers.h
 # End Source File
 # Begin Source File
 

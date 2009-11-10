@@ -1324,6 +1324,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\dvrenderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\dvrenderers.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\grid.h"
 				>
 			</File>
@@ -1410,6 +1418,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dcbuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\dvrenderers.h"
 				>
 			</File>
 			<File

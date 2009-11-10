@@ -3400,6 +3400,8 @@ COND_TOOLKIT_MOTIF_ADVANCED_PLATFORM_HDR =  \
 COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/osx/dataview.h \
+	wx/osx/dvrenderer.h \
+	wx/osx/dvrenderers.h \
 	wx/osx/joystick.h \
 	wx/osx/sound.h \
 	wx/osx/taskbarosx.h \
@@ -3410,6 +3412,8 @@ COND_TOOLKIT_OSX_CARBON_ADVANCED_PLATFORM_HDR =  \
 COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
 	wx/osx/dataview.h \
+	wx/osx/dvrenderer.h \
+	wx/osx/dvrenderers.h \
 	wx/osx/joystick.h \
 	wx/osx/sound.h \
 	wx/osx/taskbarosx.h \
@@ -3427,6 +3431,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/calctrl.h \
 	wx/gtk/dataview.h \
+	wx/gtk/dvrenderer.h \
+	wx/gtk/dvrenderers.h \
 	wx/gtk/hyperlink.h \
 	wx/gtk/infobar.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
@@ -3445,12 +3451,15 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/datectrl.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/dvrenderers.h \
 	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/bmpcbox.h \
 	wx/generic/calctrlg.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
+	wx/generic/dvrenderer.h \
+	wx/generic/dvrenderers.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
 	wx/generic/grideditors.h \
@@ -3490,12 +3499,15 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/datectrl.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/dvrenderers.h \
 	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/bmpcbox.h \
 	wx/generic/calctrlg.h \
 	wx/generic/datectrl.h \
 	wx/generic/dataview.h \
+	wx/generic/dvrenderer.h \
+	wx/generic/dvrenderers.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
 	wx/generic/grideditors.h \

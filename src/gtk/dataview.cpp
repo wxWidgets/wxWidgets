@@ -2030,9 +2030,10 @@ public:
 IMPLEMENT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
 
 wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
-                                                    wxDataViewCellMode mode, int align,
-                                                    bool no_init ) :
-    wxDataViewRenderer( varianttype, mode, align )
+                                                    wxDataViewCellMode mode,
+                                                    int align,
+                                                    bool no_init )
+    : wxDataViewCustomRendererBase( varianttype, mode, align )
 {
     m_dc = NULL;
     m_text_renderer = NULL;

@@ -858,6 +858,14 @@ SOURCE=..\..\include\wx\generic\datectrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\dvrenderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\dvrenderers.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\grid.h
 # End Source File
 # Begin Source File
@@ -943,6 +951,10 @@ SOURCE=..\..\include\wx\dateevt.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dcbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\dvrenderers.h
 # End Source File
 # Begin Source File
 

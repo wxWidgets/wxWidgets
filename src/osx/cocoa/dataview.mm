@@ -2389,7 +2389,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 wxDataViewCustomRenderer::wxDataViewCustomRenderer(const wxString& varianttype,
                                                    wxDataViewCellMode mode,
                                                    int align)
-    : wxDataViewRenderer(varianttype, mode, align),
+    : wxDataViewCustomRendererBase(varianttype, mode, align),
       m_editorCtrlPtr(NULL),
       m_DCPtr(NULL)
 {
@@ -2486,7 +2486,8 @@ IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(const wxArrayString& choices,
                                                    wxDataViewCellMode mode,
                                                    int alignment)
-    : wxDataViewRenderer(wxT("string"),mode,alignment), m_Choices(choices)
+    : wxDataViewRenderer(wxT("string"), mode, alignment),
+      m_choices(choices)
 {
     NSPopUpButtonCell* cell;
 

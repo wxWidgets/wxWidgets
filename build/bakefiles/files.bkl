@@ -2865,12 +2865,15 @@ src/osx/iphone/window.mm
     wx/datectrl.h
     wx/dateevt.h
     wx/dcbuffer.h
+    wx/dvrenderers.h
     wx/editlbox.h
     wx/generic/aboutdlgg.h
     wx/generic/bmpcbox.h
     wx/generic/calctrlg.h
     wx/generic/datectrl.h
     wx/generic/dataview.h
+    wx/generic/dvrenderer.h
+    wx/generic/dvrenderers.h
     wx/generic/grid.h
     wx/generic/gridctrl.h
     wx/generic/grideditors.h
@@ -2952,6 +2955,8 @@ src/osx/iphone/window.mm
 <set var="ADVANCED_OSX_CARBON_HDR" hints="files">
     wx/generic/animate.h
     wx/osx/dataview.h
+    wx/osx/dvrenderer.h
+    wx/osx/dvrenderers.h
     wx/osx/joystick.h
     wx/osx/sound.h
     wx/osx/taskbarosx.h
@@ -2976,6 +2981,8 @@ src/osx/iphone/window.mm
 <set var="ADVANCED_OSX_COCOA_HDR" hints="files">
     wx/generic/animate.h
     wx/osx/dataview.h
+    wx/osx/dvrenderer.h
+    wx/osx/dvrenderers.h
     wx/osx/joystick.h
     wx/osx/sound.h
     wx/osx/taskbarosx.h
@@ -3051,6 +3058,8 @@ src/osx/iphone/window.mm
     wx/gtk/bmpcbox.h
     wx/gtk/calctrl.h
     wx/gtk/dataview.h
+    wx/gtk/dvrenderer.h
+    wx/gtk/dvrenderers.h
     wx/gtk/hyperlink.h
     wx/gtk/infobar.h
 </set>

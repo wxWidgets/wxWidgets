@@ -32,6 +32,14 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
+    // this symbol doesn't follow the convention for wxUSE_XXX symbols which
+    // are normally always defined as either 0 or 1, so its use is deprecated
+    // and it only exists for backwards compatibility, don't use it any more
+    // and use wxHAS_GENERIC_DATAVIEWCTRL instead
+    #define wxUSE_GENERICDATAVIEWCTRL
+#endif
+
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
@@ -436,134 +444,11 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-// ---------------------------------------------------------
-// wxDataViewRendererBase
-// ---------------------------------------------------------
+// ----------------------------------------------------------------------------
+// wxDataViewRenderer and related classes
+// ----------------------------------------------------------------------------
 
-enum wxDataViewCellMode
-{
-    wxDATAVIEW_CELL_INERT,
-    wxDATAVIEW_CELL_ACTIVATABLE,
-    wxDATAVIEW_CELL_EDITABLE
-};
-
-enum wxDataViewCellRenderState
-{
-    wxDATAVIEW_CELL_SELECTED    = 1,
-    wxDATAVIEW_CELL_PRELIT      = 2,
-    wxDATAVIEW_CELL_INSENSITIVE = 4,
-    wxDATAVIEW_CELL_FOCUSED     = 8
-};
-
-class WXDLLIMPEXP_ADV wxDataViewRendererBase: public wxObject
-{
-public:
-    wxDataViewRendererBase( const wxString &varianttype,
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual ~wxDataViewRendererBase();
-
-    virtual bool Validate( wxVariant& WXUNUSED(value) )
-        { return true; }
-
-    void SetOwner( wxDataViewColumn *owner )    { m_owner = owner; }
-    wxDataViewColumn* GetOwner() const          { return m_owner; }
-
-    // renderer properties:
-
-    virtual bool SetValue( const wxVariant& WXUNUSED(value) ) = 0;
-    virtual bool GetValue( wxVariant& WXUNUSED(value) ) const = 0;
-
-    wxString GetVariantType() const             { return m_variantType; }
-
-    virtual void SetMode( wxDataViewCellMode mode ) = 0;
-    virtual wxDataViewCellMode GetMode() const = 0;
-
-    // NOTE: Set/GetAlignment do not take/return a wxAlignment enum but
-    //       rather an "int"; that's because for rendering cells it's allowed
-    //       to combine alignment flags (e.g. wxALIGN_LEFT|wxALIGN_BOTTOM)
-    virtual void SetAlignment( int align ) = 0;
-    virtual int GetAlignment() const = 0;
-
-    // enable or disable (if called with wxELLIPSIZE_NONE) replacing parts of
-    // the item text (hence this only makes sense for renderers showing
-    // text...) with ellipsis in order to make it fit the column width
-    virtual void EnableEllipsize(wxEllipsizeMode mode = wxELLIPSIZE_MIDDLE) = 0;
-    void DisableEllipsize() { EnableEllipsize(wxELLIPSIZE_NONE); }
-
-    virtual wxEllipsizeMode GetEllipsizeMode() const = 0;
-
-    // in-place editing
-    virtual bool HasEditorCtrl() const
-        { return false; }
-    virtual wxControl* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
-                                        wxRect WXUNUSED(labelRect),
-                                        const wxVariant& WXUNUSED(value))
-        { return NULL; }
-    virtual bool GetValueFromEditorCtrl(wxControl * WXUNUSED(editor),
-                                        wxVariant& WXUNUSED(value))
-        { return false; }
-
-    virtual bool StartEditing( const wxDataViewItem &item, wxRect labelRect );
-    virtual void CancelEditing();
-    virtual bool FinishEditing();
-
-    wxControl *GetEditorCtrl() { return m_editorCtrl; }
-
-protected:
-    wxString                m_variantType;
-    wxDataViewColumn       *m_owner;
-    wxWeakRef<wxControl>    m_editorCtrl;
-    wxDataViewItem          m_item; // for m_editorCtrl
-
-    // internal utility:
-    const wxDataViewCtrl* GetView() const;
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRendererBase)
-};
-
-//-----------------------------------------------------------------------------
-// wxDataViewIconText
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewIconText: public wxObject
-{
-public:
-    wxDataViewIconText( const wxString &text = wxEmptyString, const wxIcon& icon = wxNullIcon )
-        : m_text(text), m_icon(icon)
-    { }
-    wxDataViewIconText( const wxDataViewIconText &other )
-        : wxObject()
-    { m_icon = other.m_icon; m_text = other.m_text; }
-
-    void SetText( const wxString &text ) { m_text = text; }
-    wxString GetText() const             { return m_text; }
-    void SetIcon( const wxIcon &icon )   { m_icon = icon; }
-    const wxIcon &GetIcon() const        { return m_icon; }
-
-private:
-    wxString    m_text;
-    wxIcon      m_icon;
-
-private:
-    DECLARE_DYNAMIC_CLASS(wxDataViewIconText)
-};
-
-inline
-bool operator==(const wxDataViewIconText& left, const wxDataViewIconText& right)
-{
-    return left.GetText() == right.GetText() &&
-             left.GetIcon().IsSameAs(right.GetIcon());
-}
-
-inline
-bool operator!=(const wxDataViewIconText& left, const wxDataViewIconText& right)
-{
-    return !(left == right);
-}
-
-DECLARE_VARIANT_OBJECT_EXPORTED(wxDataViewIconText, WXDLLIMPEXP_ADV)
+#include "wx/dvrenderers.h"
 
 // ---------------------------------------------------------
 // wxDataViewColumnBase
@@ -998,12 +883,6 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_ITEM_DROP(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DROP, id, fn)
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
-    // this symbol doesn't follow the convention for wxUSE_XXX symbols which
-    // are normally always defined as either 0 or 1, so its use is deprecated
-    // and it only exists for backwards compatibility, don't use it any more
-    // and use wxHAS_GENERIC_DATAVIEWCTRL instead
-    #define wxUSE_GENERICDATAVIEWCTRL
-
     #include "wx/generic/dataview.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/dataview.h"
@@ -1012,60 +891,6 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #else
     #error "unknown native wxDataViewCtrl implementation"
 #endif
-
-// -------------------------------------
-// wxDataViewSpinRenderer
-// -------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewSpinRenderer: public wxDataViewCustomRenderer
-{
-public:
-    wxDataViewSpinRenderer( int min, int max,
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
-                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
-    virtual bool Render( wxRect rect, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
-
-private:
-    long    m_data;
-    long    m_min,m_max;
-};
-
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXOSX_CARBON__)
-
-// -------------------------------------
-// wxDataViewChoiceRenderer
-// -------------------------------------
-
-class WXDLLIMPEXP_ADV wxDataViewChoiceRenderer: public wxDataViewCustomRenderer
-{
-public:
-    wxDataViewChoiceRenderer( const wxArrayString &choices,
-                            wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
-                            int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() const { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
-    virtual bool Render( wxRect rect, wxDC *dc, int state );
-    virtual wxSize GetSize() const;
-    virtual bool SetValue( const wxVariant &value );
-    virtual bool GetValue( wxVariant &value ) const;
-
-private:
-    wxArrayString m_choices;
-    wxString      m_data;
-};
-
-#endif
-
-// this class is obsolete, its functionality was merged in
-// wxDataViewTextRenderer itself now, don't use it any more
-#define wxDataViewTextRendererAttr wxDataViewTextRenderer
 
 //-----------------------------------------------------------------------------
 // wxDataViewListStore

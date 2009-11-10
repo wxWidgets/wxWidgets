@@ -607,18 +607,54 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
 wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype,
                                         wxDataViewCellMode mode,
                                         int align) :
-    wxDataViewRendererBase( varianttype, mode, align )
+    wxDataViewCustomRendererBase( varianttype, mode, align )
 {
-    m_dc = NULL;
     m_align = align;
     m_mode = mode;
     m_ellipsizeMode = wxELLIPSIZE_MIDDLE;
+    m_dc = NULL;
 }
 
 wxDataViewRenderer::~wxDataViewRenderer()
 {
-    if (m_dc)
-        delete m_dc;
+    delete m_dc;
+}
+
+wxDC *wxDataViewRenderer::GetDC()
+{
+    if (m_dc == NULL)
+    {
+        if (GetOwner() == NULL)
+            return NULL;
+        if (GetOwner()->GetOwner() == NULL)
+            return NULL;
+        m_dc = new wxClientDC( GetOwner()->GetOwner() );
+    }
+
+    return m_dc;
+}
+
+void wxDataViewRenderer::SetAlignment( int align )
+{
+    m_align=align;
+}
+
+int wxDataViewRenderer::GetAlignment() const
+{
+    return m_align;
+}
+
+int wxDataViewRenderer::CalculateAlignment() const
+{
+    if (m_align == wxDVR_DEFAULT_ALIGNMENT)
+    {
+        if (GetOwner() == NULL)
+            return wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL;
+
+        return GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+    }
+
+    return m_align;
 }
 
 bool
@@ -669,63 +705,14 @@ wxDataViewRenderer::RenderWithAttr(wxDC& dc,
     return Render(item_rect, &dc, state);
 }
 
-wxDC *wxDataViewRenderer::GetDC()
-{
-    if (m_dc == NULL)
-    {
-        if (GetOwner() == NULL)
-            return NULL;
-        if (GetOwner()->GetOwner() == NULL)
-            return NULL;
-        m_dc = new wxClientDC( GetOwner()->GetOwner() );
-    }
-
-    return m_dc;
-}
-
-void wxDataViewRenderer::SetAlignment( int align )
-{
-    m_align=align;
-}
-
-int wxDataViewRenderer::GetAlignment() const
-{
-    return m_align;
-}
-
-int wxDataViewRenderer::CalculateAlignment() const
-{
-    if (m_align == wxDVR_DEFAULT_ALIGNMENT)
-    {
-        if (GetOwner() == NULL)
-        return wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL;
-
-        return GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
-    }
-
-    return m_align;
-}
-
-// ---------------------------------------------------------
-// wxDataViewCustomRenderer
-// ---------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
-
-wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
-                        wxDataViewCellMode mode, int align ) :
-    wxDataViewRenderer( varianttype, mode, align )
-{
-}
-
 void
-wxDataViewCustomRenderer::RenderText(wxDC& dc,
-                                     const wxRect& rect,
-                                     int align,
-                                     const wxString& text,
-                                     const wxDataViewItemAttr *attr,
-                                     int state,
-                                     int xoffset)
+wxDataViewRenderer::RenderText(wxDC& dc,
+                               const wxRect& rect,
+                               int align,
+                               const wxString& text,
+                               const wxDataViewItemAttr *attr,
+                               int state,
+                               int xoffset)
 {
     // override custom foreground with the standard one for the selected items
     // because we currently don't allow changing the selection background and
@@ -775,14 +762,26 @@ wxDataViewCustomRenderer::RenderText(wxDC& dc,
 }
 
 // ---------------------------------------------------------
+// wxDataViewCustomRenderer
+// ---------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewCustomRenderer, wxDataViewRenderer)
+
+wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
+                        wxDataViewCellMode mode, int align ) :
+    wxDataViewRenderer( varianttype, mode, align )
+{
+}
+
+// ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewRenderer)
 
 wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                                                 wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
 }
 
@@ -847,11 +846,11 @@ wxSize wxDataViewTextRenderer::GetSize() const
 // wxDataViewBitmapRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewRenderer)
 
 wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
                                                     wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
 }
 
@@ -894,11 +893,11 @@ wxSize wxDataViewBitmapRenderer::GetSize() const
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer, wxDataViewRenderer)
 
 wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
     m_toggle = false;
 }
@@ -951,11 +950,11 @@ wxSize wxDataViewToggleRenderer::GetSize() const
 // wxDataViewProgressRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewRenderer)
 
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
     m_label = label;
     m_value = 0;
@@ -1057,11 +1056,11 @@ void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
 
 #endif // wxUSE_DATE_RENDERER_POPUP
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewRenderer)
 
 wxDataViewDateRenderer::wxDataViewDateRenderer( const wxString &varianttype,
                         wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
 }
 
@@ -1118,11 +1117,11 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *m
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
 
-IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewCustomRenderer)
+IMPLEMENT_CLASS(wxDataViewIconTextRenderer, wxDataViewRenderer)
 
 wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(
 const wxString &varianttype, wxDataViewCellMode mode, int align ) :
-    wxDataViewCustomRenderer( varianttype, mode, align )
+    wxDataViewRenderer( varianttype, mode, align )
 {
     SetMode(mode);
     SetAlignment(align);
@@ -3665,12 +3664,15 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
-                wxVariant value;
-                model->GetValue( value, item, col->GetModelColumn() );
-                cell->SetValue( value );
-                wxRect cell_rect( xpos, GetLineStart( current ),
-                                col->GetWidth(), GetLineHeight( current ) );
-                cell->Activate( cell_rect, model, item, col->GetModelColumn() );
+                if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
+                {
+                    wxVariant value;
+                    model->GetValue( value, item, col->GetModelColumn() );
+                    custom->SetValue( value );
+                    wxRect cell_rect( xpos, GetLineStart( current ),
+                                    col->GetWidth(), GetLineHeight( current ) );
+                    custom->Activate( cell_rect, model, item, col->GetModelColumn() );
+                }
             }
             else
             {
@@ -3839,14 +3841,17 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Call LeftClick after everything else as under GTK+
         if (cell->GetMode() & wxDATAVIEW_CELL_ACTIVATABLE)
         {
-            // notify cell about right click
-            wxVariant value;
-            model->GetValue( value, item, col->GetModelColumn() );
-            cell->SetValue( value );
-            wxRect cell_rect( xpos, GetLineStart( current ),
-                              col->GetWidth(), GetLineHeight( current ) );
-             /* ignore ret */ cell->LeftClick( event.GetPosition(), cell_rect,
-                              model, item, col->GetModelColumn());
+            if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
+            {
+                // notify cell about click
+                wxVariant value;
+                model->GetValue( value, item, col->GetModelColumn() );
+                custom->SetValue( value );
+                wxRect cell_rect( xpos, GetLineStart( current ),
+                                  col->GetWidth(), GetLineHeight( current ) );
+                 /* ignore ret */ custom->LeftClick( event.GetPosition(), cell_rect,
+                                  model, item, col->GetModelColumn());
+            }
         }
     }
 }

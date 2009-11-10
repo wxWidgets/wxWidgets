@@ -2305,7 +2305,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer,wxDataViewRendererBase)
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
 wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
-                         :wxDataViewRenderer(varianttype,mode,align), m_editorCtrlPtr(NULL), m_DCPtr(NULL)
+                         :wxDataViewCustomRendererBase(varianttype,mode,align),
+                          m_editorCtrlPtr(NULL),
+                          m_DCPtr(NULL)
 {
   SetNativeData(new wxDataViewRendererNativeData(kDataBrowserCustomType));
 }

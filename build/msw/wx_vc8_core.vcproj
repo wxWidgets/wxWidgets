@@ -6113,6 +6113,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\dvrenderer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\dvrenderers.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\fdrepdlg.h"
 				>
 			</File>
@@ -6765,6 +6773,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dragimag.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\dvrenderers.h"
 				>
 			</File>
 			<File
