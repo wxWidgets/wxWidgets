@@ -1745,9 +1745,8 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     // FIXME: This is just a workaround for a bug that causes splitters not
     //        to paint when other windows are being dragged over the grid.
-    wxRect fullRect = GetRect();
-    r.x = fullRect.x;
-    r.width = fullRect.width;
+    r.x = 0;
+    r.width = GetClientSize().x;
 
     // Repaint this rectangle
     DrawItems( dc, r.y, r.y + r.height, &r );

@@ -322,7 +322,11 @@ void wxPropertyGridPageState::CalculateFontAndBitmapStuff( int WXUNUSED(vspacing
 
 void wxPropertyGridPageState::SetVirtualWidth( int width )
 {
-    wxASSERT( width >= 0 );
+    // Sometimes width less than 0 is offered. Let's make things easy for
+    // everybody and deal with it here.
+    if ( width < 0 )
+        width = 0;
+
     wxPropertyGrid* pg = GetGrid();
     int gw = pg->GetClientSize().x;
     if ( width < gw )
