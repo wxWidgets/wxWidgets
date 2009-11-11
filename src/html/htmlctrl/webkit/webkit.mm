@@ -37,6 +37,8 @@
 
 #define DEBUG_WEBKIT_SIZING 0
 
+extern WXDLLEXPORT_DATA(const char) wxWebKitCtrlNameStr[] = "webkitctrl";
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
