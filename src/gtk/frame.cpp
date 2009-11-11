@@ -385,7 +385,7 @@ void wxFrame::GtkOnSize()
 #if wxUSE_MENUS_NATIVE
         if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
         {
-            if (!GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
+            if (m_frameMenuBar->IsShown() && !GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
                 gtk_widget_show( m_frameMenuBar->m_widget );
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
