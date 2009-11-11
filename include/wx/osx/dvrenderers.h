@@ -30,7 +30,9 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXApplyAttr(const wxDataViewItemAttr& attr);
+#endif // Cocoa
 
     virtual wxDC* GetDC(); // creates a device context and keeps it
     void SetDC(wxDC* newDCPtr); // this method takes ownership of the pointer
