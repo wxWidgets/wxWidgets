@@ -2760,7 +2760,10 @@ struct WXDLLIMPEXP_BASE wxEventTableEntryBase
           m_lastId(idLast),
           m_fn(fn),
           m_callbackUserData(data)
-    { }
+    {
+        wxASSERT_MSG( idLast == wxID_ANY || winid <= idLast,
+                      "invalid IDs range: lower bound > upper bound" );
+    }
 
     wxEventTableEntryBase( const wxEventTableEntryBase &entry )
         : m_id( entry.m_id ),
