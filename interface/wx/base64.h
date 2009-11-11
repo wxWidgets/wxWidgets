@@ -145,14 +145,30 @@ size_t wxBase64Decode(void* dst, size_t dstLen,
                       size_t *posErr = NULL);
 
 /**
+    Decode a Base64-encoded wxString.
+
     See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t*)
-    overload for more info about the parameters of this function.
+    overload for more information about the parameters of this function, the
+    only difference between it and this one is that a wxString is used instead
+    of a @c char* pointer and its length.
 
-    This overload allocates memory internally and returns it as wxMemoryBuffer
-    and is recommended for normal use.
+    @since 2.9.1
 
-    This overload returns a buffer with the base64 decoded binary equivalent
-    of the input string. In neither case is the buffer @NULL-terminated.
+    @header{wx/base64.h}
+ */
+size_t wxBase64Decode(void* dst, size_t dstLen,
+                      const wxString& str,
+                      wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
+                      size_t *posErr = NULL);
+
+/**
+    Decode a Base64-encoded string and return decoded contents in a buffer.
+
+    See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t*)
+    overload for more information about the parameters of this function. The
+    difference of this overload is that it allocates a buffer of necessary size
+    on its own and returns it, freeing you from the need to do it manually.
+    Because of this, it is simpler to use and is recommended for normal use.
 
     @header{wx/base64.h}
 */
@@ -162,11 +178,13 @@ wxMemoryBuffer wxBase64Decode(const char* src,
                               size_t *posErr = NULL);
 
 /**
+    Decode a Base64-encoded wxString and return decoded contents in a buffer.
+
     See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t*)
-    overload for more info about the parameters of this function.
+    overload for more information about the parameters of this function.
 
     This overload takes as input a wxString and returns the internally-allocated
-    memory as a wxMemoryBuffer, containing the base64 decoded data.
+    memory as a wxMemoryBuffer, containing the Base64-decoded data.
 
     @header{wx/base64.h}
 */

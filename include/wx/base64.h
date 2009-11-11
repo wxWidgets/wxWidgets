@@ -89,6 +89,17 @@ wxBase64Decode(void *dst, size_t dstLen,
                wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
                size_t *posErr = NULL);
 
+inline size_t
+wxBase64Decode(void *dst, size_t dstLen,
+               const wxString& src,
+               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
+               size_t *posErr = NULL)
+{
+    // don't use str.length() here as the ASCII buffer is shorter than it for
+    // strings with embedded NULs
+    return wxBase64Decode(dst, dstLen, src.ToAscii(), wxNO_LEN, mode, posErr);
+}
+
 // decode the contents of the given string; the returned buffer is empty if an
 // error occurs during decoding
 WXDLLIMPEXP_BASE wxMemoryBuffer
