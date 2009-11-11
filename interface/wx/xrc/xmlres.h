@@ -175,7 +175,12 @@ public:
 
         If @a value_if_not_found is @c wxID_NONE, the number is obtained via
         wxNewId(). Otherwise @a value_if_not_found is used.
+
         Macro @c XRCID(name) is provided for convenient use in event tables.
+
+        @note IDs returned by XRCID() cannot be used with the <tt>EVT_*_RANGE</tt>
+              macros, because the order in which they are assigned to symbolic @a name
+              values is not guaranteed.
     */
     static int GetXRCID(const wxString& str_id, int value_if_not_found = wxID_NONE);
 
