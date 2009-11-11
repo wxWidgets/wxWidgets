@@ -56,9 +56,11 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+#endif // Cocoa
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
@@ -80,6 +82,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewBitmapRenderer)
 };
+
+#if wxOSX_USE_COCOA
 
 // -------------------------------------
 // wxDataViewChoiceRenderer
@@ -103,6 +107,8 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewChoiceRenderer)
 };
 
+#endif // wxOSX_USE_COCOA
+
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
@@ -115,9 +121,11 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+#endif // Cocoa
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewIconTextRenderer)
@@ -136,9 +144,11 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+#endif // Cocoa
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer)
@@ -158,9 +168,11 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+#endif // Cocoa
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewProgressRenderer)
@@ -179,9 +191,11 @@ public:
 
     virtual bool MacRender();
 
+#if wxOSX_USE_COCOA
     virtual void OSXOnCellChanged(NSObject *value,
                                   const wxDataViewItem& item,
                                   unsigned col);
+#endif // Cocoa
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewDateRenderer)
