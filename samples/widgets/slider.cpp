@@ -402,14 +402,14 @@ void SliderWidgetsPage::CreateSlider()
             break;
 
         case SliderTicks_Left:
-            flags |= wxSL_LEFT;
+            flags |= wxSL_LEFT | wxSL_VERTICAL;
             break;
 
         case SliderTicks_Bottom:
             flags |= wxSL_BOTTOM;
             break;
 
-        case SliderTicks_Right:
+        case SliderTicks_Right | wxSL_VERTICAL:
             flags |= wxSL_RIGHT;
             break;
 
