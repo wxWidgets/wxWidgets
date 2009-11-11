@@ -18,4 +18,12 @@ class wxStringPrinter:
     def to_string(self):
         return '"' + self.val['m_impl']['_M_dataplus']['_M_p'].string() + '"'
 
-gdb.pretty_printers['^wxString$'] = wxStringPrinter
+    def display_hint(self):
+        return 'string'
+
+def wxLookupFunction(val):
+    if val.type.tag == 'wxString':
+        return wxStringPrinter(val)
+    return None
+
+gdb.pretty_printers.append(wxLookupFunction)
