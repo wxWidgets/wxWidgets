@@ -743,31 +743,34 @@ bool wxRichTextXMLHandler::ExportXML(wxOutputStream& stream, wxMBConv* convMem, 
 #else
             int c = (int) wxUChar(text[i]);
 #endif
-            if ((c < 32 || c == 34) && c != 9 && c != 10 && c != 13)
+            if ((c < 32 || c == 34) && /* c != 9 && */ c != 10 && c != 13)
             {
                 if (i > 0)
                 {
-                    OutputIndentation(stream, indent);
-                    OutputString(stream, wxT("<") + objectName, convMem, convFile);
-
-                    OutputString(stream, style + wxT(">"), convMem, convFile);
-
                     wxString fragment(text.Mid(last, i-last));
-                    if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
+                    if (!fragment.IsEmpty())
                     {
-                        OutputString(stream, wxT("\""), convMem, convFile);
-                        OutputStringEnt(stream, fragment, convMem, convFile);
-                        OutputString(stream, wxT("\""), convMem, convFile);
+                        OutputIndentation(stream, indent);
+                        OutputString(stream, wxT("<") + objectName, convMem, convFile);
+                        
+                        OutputString(stream, style + wxT(">"), convMem, convFile);
+                        
+                        if (!fragment.empty() && (fragment[0] == wxT(' ') || fragment[fragment.length()-1] == wxT(' ')))
+                        {
+                            OutputString(stream, wxT("\""), convMem, convFile);
+                            OutputStringEnt(stream, fragment, convMem, convFile);
+                            OutputString(stream, wxT("\""), convMem, convFile);
+                        }
+                        else
+                            OutputStringEnt(stream, fragment, convMem, convFile);
+                        
+                        OutputString(stream, wxT("</text>"), convMem, convFile);
                     }
-                    else
-                        OutputStringEnt(stream, fragment, convMem, convFile);
-
-                    OutputString(stream, wxT("</text>"), convMem, convFile);
                 }
 
 
                 // Output this character as a number in a separate tag, because XML can't cope
-                // with entities below 32 except for 9, 10 and 13
+                // with entities below 32 except for 10 and 13
                 last = i + 1;
                 OutputIndentation(stream, indent);
                 OutputString(stream, wxT("<symbol"), convMem, convFile);
