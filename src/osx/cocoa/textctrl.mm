@@ -431,7 +431,7 @@ void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSE
 
 bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 {
-    if (m_textView) {
+    if (m_textView && position >=0 && position < [[m_textView string] length]) {
         NSTextStorage* storage = [m_textView textStorage];
         NSFont* font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
         if (font)
