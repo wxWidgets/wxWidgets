@@ -1681,12 +1681,16 @@ void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
     if ( gtk_check_version(2, 6, 0) != NULL )
         return;
 
+    GtkCellRendererText * const rend = GtkGetTextRenderer();
+    if ( !rend )
+        return;
+
     // we use the same values in wxEllipsizeMode as PangoEllipsizeMode so we
     // can just cast between them
     GValue gvalue = { 0, };
     g_value_init( &gvalue, PANGO_TYPE_ELLIPSIZE_MODE );
     g_value_set_enum( &gvalue, static_cast<PangoEllipsizeMode>(mode) );
-    g_object_set_property( G_OBJECT(m_renderer), "ellipsize", &gvalue );
+    g_object_set_property( G_OBJECT(rend), "ellipsize", &gvalue );
     g_value_unset( &gvalue );
 }
 
@@ -1695,9 +1699,13 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     if ( gtk_check_version(2, 6, 0) != NULL )
         return wxELLIPSIZE_NONE;
 
+    GtkCellRendererText * const rend = GtkGetTextRenderer();
+    if ( !rend )
+        return wxELLIPSIZE_NONE;
+
     GValue gvalue = { 0, };
     g_value_init( &gvalue, PANGO_TYPE_ELLIPSIZE_MODE );
-    g_object_get_property( G_OBJECT(m_renderer), "ellipsize", &gvalue );
+    g_object_get_property( G_OBJECT(rend), "ellipsize", &gvalue );
     wxEllipsizeMode
         mode = static_cast<wxEllipsizeMode>(g_value_get_enum( &gvalue ));
     g_value_unset( &gvalue );
@@ -1916,7 +1924,12 @@ void wxDataViewTextRenderer::SetAlignment( int align )
 
 bool wxDataViewTextRenderer::GtkSetAttr(const wxDataViewItemAttr& attr)
 {
-    return GtkApplyAttr(GTK_CELL_RENDERER_TEXT(m_renderer), attr);
+    return GtkApplyAttr(GtkGetTextRenderer(), attr);
+}
+
+GtkCellRendererText *wxDataViewTextRenderer::GtkGetTextRenderer() const
+{
+    return GTK_CELL_RENDERER_TEXT(m_renderer);
 }
 
 // ---------------------------------------------------------
@@ -2130,29 +2143,41 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
         Init(mode, align);
 }
 
+GtkCellRendererText *wxDataViewCustomRenderer::GtkGetTextRenderer() const
+{
+    if ( !m_text_renderer )
+    {
+        // we create it on demand so need to do it even from a const function
+        const_cast<wxDataViewCustomRenderer *>(this)->
+        m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
+    }
+
+    return m_text_renderer;
+}
+
 void wxDataViewCustomRenderer::RenderText( const wxString &text,
                                            int xoffset,
                                            wxRect cell,
                                            wxDC *WXUNUSED(dc),
                                            int WXUNUSED(state) )
 {
-    if (!m_text_renderer)
-        m_text_renderer = GTK_CELL_RENDERER_TEXT(gtk_cell_renderer_text_new());
+
+    GtkCellRendererText * const textRenderer = GtkGetTextRenderer();
 
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
     g_value_set_string( &gvalue, wxGTK_CONV_FONT( text, GetOwner()->GetOwner()->GetFont() ) );
-    g_object_set_property( G_OBJECT(m_text_renderer), "text", &gvalue );
+    g_object_set_property( G_OBJECT(textRenderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
-    GtkApplyAttr(m_text_renderer, GetAttr());
+    GtkApplyAttr(textRenderer, GetAttr());
 
     GdkRectangle cell_area;
     wxRectToGDKRect(cell, cell_area);
     cell_area.x += xoffset;
     cell_area.width -= xoffset;
 
-    gtk_cell_renderer_render( GTK_CELL_RENDERER(m_text_renderer),
+    gtk_cell_renderer_render( GTK_CELL_RENDERER(textRenderer),
         m_renderParams.window,
         m_renderParams.widget,
         m_renderParams.background_area,

@@ -13,7 +13,6 @@
 #define _WX_GTK_DVRENDERERS_H_
 
 typedef struct _GdkRectangle GdkRectangle;
-typedef struct _GtkCellRendererText GtkCellRendererText;
 
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
@@ -46,6 +45,8 @@ public:
 
     virtual bool GtkSupportsAttrs() const { return true; }
     virtual bool GtkSetAttr(const wxDataViewItemAttr& attr);
+
+    virtual GtkCellRendererText *GtkGetTextRenderer() const;
 
 protected:
     // implementation of Set/GetValue()
@@ -139,6 +140,8 @@ public:
         SetAttr(attr);
         return !attr.IsDefault();
     }
+
+    virtual GtkCellRendererText *GtkGetTextRenderer() const;
 
 protected:
     bool Init(wxDataViewCellMode mode, int align);

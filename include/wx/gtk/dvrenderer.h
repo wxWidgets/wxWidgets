@@ -12,6 +12,7 @@
 #ifndef _WX_GTK_DVRENDERER_H_
 #define _WX_GTK_DVRENDERER_H_
 
+typedef struct _GtkCellRendererText GtkCellRendererText;
 typedef struct _GtkTreeViewColumn GtkTreeViewColumn;
 
 // ----------------------------------------------------------------------------
@@ -71,6 +72,11 @@ public:
     // attributes or if we changed (and not reset them)
     bool GtkIsUsingDefaultAttrs() const { return m_usingDefaultAttrs; }
     void GtkSetUsingDefaultAttrs(bool def) { m_usingDefaultAttrs = def; }
+
+    // return the text renderer used by this renderer for setting text cell
+    // specific attributes: can return NULL if this renderer doesn't render any
+    // text
+    virtual GtkCellRendererText *GtkGetTextRenderer() const { return NULL; }
 
 protected:
     virtual void GtkOnCellChanged(const wxVariant& value,
