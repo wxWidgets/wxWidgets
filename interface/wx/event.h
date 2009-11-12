@@ -3660,7 +3660,7 @@ public:
 
     You may wish to use this for frames to resize their child windows as appropriate.
 
-    Note that the size passed is of the whole window: call wxWindow::GetClientSize
+    Note that the size passed is of the whole window: call wxWindow::GetClientSize()
     for the area which may be used by the application.
 
     When a window is resized, usually only a small part of the window is damaged
@@ -3688,6 +3688,11 @@ public:
 
     /**
         Returns the entire size of the window generating the size change event.
+
+        This is the new total size of the window, i.e. the same size as would
+        be returned by wxWindow::GetSize() if it were called now. Use
+        wxWindow::GetClientSize() if you catch this event in a top level window
+        such as wxFrame to find the size available for the window contents.
     */
     wxSize GetSize() const;
 };
