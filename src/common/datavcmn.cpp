@@ -2006,13 +2006,13 @@ int wxDataViewTreeStore::Compare( const wxDataViewItem &item1, const wxDataViewI
         return 0;
     }
 
-    if (node1->IsContainer() && !!node2->IsContainer())
-        return 1;
-
-    if (node2->IsContainer() && !!node1->IsContainer())
+    if (node1->IsContainer() && !node2->IsContainer())
         return -1;
 
-    return parent1->GetChildren().IndexOf( node1 ) - parent1->GetChildren().IndexOf( node2 );
+    if (node2->IsContainer() && !node1->IsContainer())
+        return 1;
+
+    return parent1->GetChildren().IndexOf( node1 ) - parent2->GetChildren().IndexOf( node2 );
 }
 
 wxDataViewTreeStoreNode *wxDataViewTreeStore::FindNode( const wxDataViewItem &item ) const
