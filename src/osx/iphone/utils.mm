@@ -100,6 +100,16 @@ void wxMacWakeUp()
 
 #if wxUSE_GUI
 
+// ----------------------------------------------------------------------------
+// Launch default browser
+// ----------------------------------------------------------------------------
+
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    return [[UIApplication sharedApplication] openURL:[NSURL URLWithString:wxCFStringRef(url).AsNSString()]]
+        == YES;
+}
+
 // TODO : reorganize
 
 extern wxFont* CreateNormalFont()
@@ -176,8 +186,17 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 void wxGetMousePosition( int* x, int* y )
 {
-//    wxPoint pt = wxFromNSPoint(NULL, [NSEvent mouseLocation]);
+    if ( x )
+        *x = 0;
+    if ( y )
+        *y = 0;
 };
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    return ms;
+}    
 
 // Returns depth of screen
 int wxDisplayDepth()
@@ -191,7 +210,7 @@ void wxDisplaySize(int *width, int *height)
     CGRect r = [[UIScreen mainScreen] applicationFrame];
     CGRect bounds = [[UIScreen mainScreen] bounds];
 
-    if ( bounds.size.height > r.size.height )
+    if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
     {
         // portrait
         if ( width )

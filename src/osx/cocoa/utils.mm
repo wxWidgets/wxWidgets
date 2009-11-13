@@ -254,6 +254,34 @@ void wxGetMousePosition( int* x, int* y )
         *y = pt.y;
 };
 
+#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+
+wxMouseState wxGetMouseState()
+{
+    wxMouseState ms;
+    
+    wxPoint pt = wxGetMousePosition();
+    ms.SetX(pt.x);
+    ms.SetY(pt.y);
+    
+    NSUInteger modifiers = [NSEvent modifierFlags];
+    NSUInteger buttons = [NSEvent pressedMouseButtons];
+    
+    ms.SetLeftDown( (buttons & 0x01) != 0 );
+    ms.SetMiddleDown( (buttons & 0x04) != 0 );
+    ms.SetRightDown( (buttons & 0x02) != 0 );
+    
+    ms.SetControlDown(modifiers & NSControlKeyMask);
+    ms.SetShiftDown(modifiers & NSShiftKeyMask);
+    ms.SetAltDown(modifiers & NSAlternateKeyMask);
+    ms.SetMetaDown(modifiers & NSCommandKeyMask);
+    
+    return ms;
+}
+
+
+#endif
+
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxOSXTimerImpl(timer);

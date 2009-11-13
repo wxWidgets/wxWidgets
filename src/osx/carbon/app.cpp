@@ -1323,6 +1323,12 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
 }
 #endif
 
+#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+
+// defined in utils.mm
+
+#elif wxOSX_USE_CARBON_OR_COCOA
+
 wxMouseState wxGetMouseState()
 {
     wxMouseState ms;
@@ -1331,7 +1337,6 @@ wxMouseState wxGetMouseState()
     ms.SetX(pt.x);
     ms.SetY(pt.y);
 
-#if wxOSX_USE_CARBON
     UInt32 buttons = GetCurrentButtonState();
     ms.SetLeftDown( (buttons & 0x01) != 0 );
     ms.SetMiddleDown( (buttons & 0x04) != 0 );
@@ -1342,11 +1347,11 @@ wxMouseState wxGetMouseState()
     ms.SetShiftDown(modifiers & shiftKey);
     ms.SetAltDown(modifiers & optionKey);
     ms.SetMetaDown(modifiers & cmdKey);
-#else
-    // TODO
-#endif
+
     return ms;
 }
+
+#endif
 
 // TODO : once the new key/char handling is tested, move all the code to wxWindow
 
