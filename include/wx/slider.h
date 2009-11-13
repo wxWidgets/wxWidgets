@@ -31,7 +31,6 @@
 
 #define wxSL_TICKS           0x0010
 #define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
-#define wxSL_LABELS          0x0020
 #define wxSL_LEFT            0x0040
 #define wxSL_TOP             0x0080
 #define wxSL_RIGHT           0x0100
@@ -39,6 +38,9 @@
 #define wxSL_BOTH            0x0400
 #define wxSL_SELRANGE        0x0800
 #define wxSL_INVERSE         0x1000
+#define wxSL_LABELS_MIN_MAX  0x2000
+#define wxSL_VALUE_LABEL     0x4000
+#define wxSL_LABELS          wxSL_LABELS_MIN_MAX|wxSL_VALUE_LABEL
 
 #if WXWIN_COMPATIBILITY_2_6
     // obsolete
