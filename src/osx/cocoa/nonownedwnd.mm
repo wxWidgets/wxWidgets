@@ -88,12 +88,20 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     wxNonOwnedWindowCocoaImpl* impl;
 }
 
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
 - (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
 - (wxNonOwnedWindowCocoaImpl*) implementation;
 - (void)noResponderFor: (SEL) selector;
 @end
 
 @implementation wxNSWindow
+
+// The default implementation always moves the window back onto the screen,
+// even when the programmer explicitly wants to hide it.
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+{
+    return frameRect;
+}
 
 - (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation
 {
