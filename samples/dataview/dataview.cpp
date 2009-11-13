@@ -1071,29 +1071,34 @@ void MyFrame::OnAddMany(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 // MyFrame - event handlers for the fourth page
 // ----------------------------------------------------------------------------
-void MyFrame::OnDeleteTreeItem(wxCommandEvent& WXUNUSED(event)) {
+
+void MyFrame::OnDeleteTreeItem(wxCommandEvent& WXUNUSED(event))
+{
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     wxDataViewItem selected = ctrl->GetSelection();
-    if (!selected.IsOk()) {
+    if (!selected.IsOk())
         return;
-    }
+        
     ctrl->DeleteItem(selected);
 }
 
-void MyFrame::OnDeleteAllTreeItems(wxCommandEvent& WXUNUSED(event)) {
+void MyFrame::OnDeleteAllTreeItems(wxCommandEvent& WXUNUSED(event))
+{
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     ctrl->DeleteAllItems();
 }
 
-void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event)) {
+void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event))
+{
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     wxDataViewItem selected = ctrl->GetSelection();
-    ctrl->AppendItem(selected, wxString(wxT("Item")), 0);
+    ctrl->AppendItem( selected, "Item", 0 );
 }
 
-void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event)) {
+void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event))
+{
     wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
     wxDataViewItem selected = ctrl->GetSelection();
-    ctrl->AppendContainer(selected, wxString(wxT("Container")), 0);
+    ctrl->AppendContainer(selected, "Container", 0 );
 }
 
