@@ -38,9 +38,9 @@
 #define wxSL_BOTH            0x0400
 #define wxSL_SELRANGE        0x0800
 #define wxSL_INVERSE         0x1000
-#define wxSL_LABELS_MIN_MAX  0x2000
+#define wxSL_MIN_MAX_LABELS  0x2000
 #define wxSL_VALUE_LABEL     0x4000
-#define wxSL_LABELS          wxSL_LABELS_MIN_MAX|wxSL_VALUE_LABEL
+#define wxSL_LABELS          wxSL_MIN_MAX_LABELS|wxSL_VALUE_LABEL
 
 #if WXWIN_COMPATIBILITY_2_6
     // obsolete
