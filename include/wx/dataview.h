@@ -1138,7 +1138,7 @@ public:
 
     wxDataViewItem GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const;
     int GetChildCount( const wxDataViewItem& parent ) const;
-
+    
     void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const;
     void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
@@ -1211,6 +1211,9 @@ public:
         { return (wxDataViewTreeStore*) GetModel(); }
     const wxDataViewTreeStore *GetStore() const
         { return (const wxDataViewTreeStore*) GetModel(); }
+
+    bool IsContainer( const wxDataViewItem& item ) const
+        { return GetStore()->IsContainer(item); }
 
     void SetImageList( wxImageList *imagelist );
     wxImageList* GetImageList() { return m_imageList; }

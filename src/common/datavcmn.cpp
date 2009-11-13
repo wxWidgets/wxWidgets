@@ -1790,6 +1790,14 @@ wxDataViewTreeStore::InsertContainer(const wxDataViewItem& parent,
     return node->GetItem();
 }
 
+bool wxDataViewTreeStore::IsContainer( const wxDataViewItem& item ) const
+{
+    wxDataViewTreeStoreNode *node = FindNode( item );
+    if (!node) return false;
+
+    return node->IsContainer();
+}
+
 wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
 {
     wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
@@ -1961,14 +1969,6 @@ wxDataViewItem wxDataViewTreeStore::GetParent( const wxDataViewItem &item ) cons
         return wxDataViewItem(0);
 
     return parent->GetItem();
-}
-
-bool wxDataViewTreeStore::IsContainer( const wxDataViewItem &item ) const
-{
-    wxDataViewTreeStoreNode *node = FindNode( item );
-    if (!node) return false;
-
-    return node->IsContainer();
 }
 
 unsigned int wxDataViewTreeStore::GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const

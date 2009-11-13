@@ -2024,6 +2024,11 @@ public:
                               wxClientData* data = NULL);
 
     /**
+        Returns true if item is a container.
+    */
+    bool IsContainer( const wxDataViewItem& item );
+    
+    /**
         Calls the same method from wxDataViewTreeStore but uses
         an index position in the image list instead of a wxIcon.
     */
