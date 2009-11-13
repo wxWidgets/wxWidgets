@@ -91,6 +91,11 @@ public:     // event handlers
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
+    // Fourth page.
+    void OnDeleteTreeItem(wxCommandEvent& event);
+    void OnDeleteAllTreeItems(wxCommandEvent& event);
+    void OnAddTreeItem(wxCommandEvent& event);
+    void OnAddTreeContainerItem(wxCommandEvent& event);
 
     void OnValueChanged( wxDataViewEvent &event );
 
@@ -270,7 +275,12 @@ enum
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
     ID_GOTO             = 202,
-    ID_ADD_MANY         = 203
+    ID_ADD_MANY         = 203,
+    // Fourth page.
+    ID_DELETE_TREE_ITEM = 400,
+    ID_DELETE_ALL_TREE_ITEMS = 401,
+    ID_ADD_TREE_ITEM = 402,
+    ID_ADD_TREE_CONTAINER_ITEM = 403
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -295,6 +305,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
     EVT_BUTTON( ID_ADD_MANY, MyFrame::OnAddMany)
+    // Fourth page.
+    EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
+    EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )
+    EVT_BUTTON( ID_ADD_TREE_ITEM, MyFrame::OnAddTreeItem )
+    EVT_BUTTON( ID_ADD_TREE_CONTAINER_ITEM, MyFrame::OnAddTreeContainerItem )
 
     EVT_DATAVIEW_ITEM_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
 
@@ -429,9 +444,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxPanel *fourthPanel = new wxPanel( m_notebook, wxID_ANY );
 
     BuildDataViewCtrl(fourthPanel, 3);    // sets m_ctrl[3]
+    // Buttons
+    wxBoxSizer *button_sizer4 = new wxBoxSizer( wxHORIZONTAL );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_TREE_ITEM, "Delete Selected"), 0, wxALL, 10 );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_DELETE_ALL_TREE_ITEMS, "Delete All"), 0, wxALL, 10 );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_ITEM, "Add Item"), 0, wxALL, 10 );
+    button_sizer4->Add( new wxButton( fourthPanel, ID_ADD_TREE_CONTAINER_ITEM, "Add Container"), 0, wxALL, 10 );
 
     wxSizer *fourthPanelSz = new wxBoxSizer( wxVERTICAL );
     fourthPanelSz->Add(m_ctrl[3], 1, wxGROW|wxALL, 5);
+    fourthPanelSz->Add(button_sizer4);
     fourthPanel->SetSizerAndFit(fourthPanelSz);
 
 
@@ -1044,5 +1066,34 @@ void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAddMany(wxCommandEvent& WXUNUSED(event))
 {
     m_list_model->AddMany();
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame - event handlers for the fourth page
+// ----------------------------------------------------------------------------
+void MyFrame::OnDeleteTreeItem(wxCommandEvent& WXUNUSED(event)) {
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
+    wxDataViewItem selected = ctrl->GetSelection();
+    if (!selected.IsOk()) {
+        return;
+    }
+    ctrl->DeleteItem(selected);
+}
+
+void MyFrame::OnDeleteAllTreeItems(wxCommandEvent& WXUNUSED(event)) {
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
+    ctrl->DeleteAllItems();
+}
+
+void MyFrame::OnAddTreeItem(wxCommandEvent& WXUNUSED(event)) {
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
+    wxDataViewItem selected = ctrl->GetSelection();
+    ctrl->AppendItem(selected, wxString(wxT("Item")), 0);
+}
+
+void MyFrame::OnAddTreeContainerItem(wxCommandEvent& WXUNUSED(event)) {
+    wxDataViewTreeCtrl* ctrl = (wxDataViewTreeCtrl*) m_ctrl[3];
+    wxDataViewItem selected = ctrl->GetSelection();
+    ctrl->AppendContainer(selected, wxString(wxT("Container")), 0);
 }
 
