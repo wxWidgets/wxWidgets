@@ -48,8 +48,10 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
     // override/implement base class virtuals
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
+#ifndef __WXOSX_IPHONE__
     virtual bool Show(bool show = true);
     virtual bool IsShown() const;
+#endif
     virtual bool Realize();
 
     virtual void SetToolBitmapSize(const wxSize& size);
@@ -60,13 +62,15 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
     virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
 
+#ifndef __WXOSX_IPHONE__
     // Add all the buttons
 
     virtual wxString MacGetToolTipString( wxPoint &where ) ;
     void OnPaint(wxPaintEvent& event) ;
     void OnMouse(wxMouseEvent& event) ;
     virtual void MacSuperChangedPosition() ;
-
+#endif
+    
 #if wxOSX_USE_NATIVE_TOOLBAR
     bool MacInstallNativeToolbar(bool usesNative);
     bool MacWantsNativeToolbar();
@@ -76,8 +80,10 @@ protected:
     // common part of all ctors
     void Init();
 
-    virtual void DoGetSize(int *width, int *height) const;
+#ifndef __WXOSX_IPHONE__
+   virtual void DoGetSize(int *width, int *height) const;
     virtual wxSize DoGetBestSize() const;
+#endif
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
 
@@ -100,6 +106,9 @@ protected:
 #if wxOSX_USE_NATIVE_TOOLBAR
     bool m_macUsesNativeToolbar ;
     void* m_macToolbar ;
+#endif
+#ifdef __WXOSX_IPHONE__
+    WX_UIView m_macToolbar; 
 #endif
 };
 
