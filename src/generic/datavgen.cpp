@@ -4106,7 +4106,12 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
         // Unselect all rows before select another in the single select mode
         if (m_clientArea->IsSingleSel())
             m_clientArea->SelectAllRows(false);
+            
         m_clientArea->SelectRow(row, true);
+        
+        // Also reset focus
+        if (m_clientArea->IsSingleSel())
+            m_clientArea->ChangeCurrentRow( row );
     }
 }
 
