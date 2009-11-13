@@ -2054,6 +2054,7 @@ bool wxDataViewMainWindow::Cleared()
 void wxDataViewMainWindow::UpdateDisplay()
 {
     m_dirty = true;
+    m_underMouse = NULL;
 }
 
 void wxDataViewMainWindow::OnInternalIdle()
