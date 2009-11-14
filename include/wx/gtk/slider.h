@@ -60,12 +60,19 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // implementation
+    void GTKDisableEvents();
+    void GTKEnableEvents();
+    bool GTKEventsDisabled() const;
+    
     double m_pos;
     int m_scrollEventType;
     bool m_needThumbRelease;
-    bool m_blockScrollEvent;
+    GtkWidget *m_scale;
 
 protected:
+    GtkWidget *m_minLabel,*m_maxLabel;
+    bool m_blockScrollEvent;
+
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // set the slider value unconditionally
