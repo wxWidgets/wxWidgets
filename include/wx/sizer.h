@@ -827,7 +827,7 @@ class WXDLLIMPEXP_CORE wxFlexGridSizer: public wxGridSizer
 public:
     // ctors specifying the number of columns only: number of rows will be
     // deduced automatically depending on the number of sizer elements
-    wxFlexGridSizer( int cols, int vgap, int hgap );
+    wxFlexGridSizer( int cols, int vgap, int hgap = 0);
     wxFlexGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
 
     // ctors specifying the number of rows and columns

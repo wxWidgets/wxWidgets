@@ -1446,7 +1446,7 @@ public:
 
         @since 2.9.1 (except for the four argument overload)
     */
-    wxFlexGridSizer( int cols, int vgap, int hgap );
+    wxFlexGridSizer( int cols, int vgap, int hgap = 0 );
     wxFlexGridSizer( int cols, const wxSize& gap = wxSize(0, 0) );
 
     wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
