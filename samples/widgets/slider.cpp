@@ -418,8 +418,8 @@ void SliderWidgetsPage::CreateSlider()
             flags |= wxSL_BOTTOM;
             break;
 
-        case SliderTicks_Right | wxSL_VERTICAL:
-            flags |= wxSL_RIGHT;
+        case SliderTicks_Right:
+            flags |= wxSL_RIGHT | wxSL_VERTICAL;
             break;
 
         default:
