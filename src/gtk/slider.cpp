@@ -302,7 +302,7 @@ bool wxSlider::Create(wxWindow *parent,
         wxFAIL_MSG( wxT("wxSlider creation failed") );
         return false;
     }
-    
+
 
     if (style & wxSL_VERTICAL)
         m_scale = gtk_vscale_new( NULL );
@@ -313,7 +313,7 @@ bool wxSlider::Create(wxWindow *parent,
     if (style & wxSL_MIN_MAX_LABELS)
     {
         gtk_widget_show( m_scale );
-        
+
         if (style & wxSL_VERTICAL)
             m_widget = gtk_hbox_new(false, 0);
         else
@@ -330,20 +330,20 @@ bool wxSlider::Create(wxWindow *parent,
         g_object_ref(box);
         gtk_widget_show(box);
         gtk_container_add( GTK_CONTAINER(m_widget), box );
-        
+
         m_minLabel = gtk_label_new(NULL);
         g_object_ref(m_minLabel);
         gtk_widget_show( m_minLabel );
         gtk_container_add( GTK_CONTAINER(box), m_minLabel );
         gtk_box_set_child_packing( GTK_BOX(box), m_minLabel, FALSE, FALSE, 0, GTK_PACK_START );
-        
+
         // expanding empty space between the min/max labels
         GtkWidget *space = gtk_label_new(NULL);
         g_object_ref(space);
         gtk_widget_show( space );
         gtk_container_add( GTK_CONTAINER(box), space );
         gtk_box_set_child_packing( GTK_BOX(box), space, TRUE, FALSE, 0, GTK_PACK_START );
-        
+
         m_maxLabel = gtk_label_new(NULL);
         g_object_ref(m_maxLabel);
         gtk_widget_show( m_maxLabel );
@@ -356,11 +356,11 @@ bool wxSlider::Create(wxWindow *parent,
         m_maxLabel = NULL;
         m_minLabel = NULL;
     }
-    
+
     if (style & wxSL_VALUE_LABEL)
     {
         gtk_scale_set_draw_value(GTK_SCALE (m_scale), TRUE );
-    
+
         if (style & wxSL_VERTICAL)
             gtk_scale_set_value_pos( GTK_SCALE(m_scale), GTK_POS_LEFT );
     }
@@ -368,7 +368,7 @@ bool wxSlider::Create(wxWindow *parent,
     {
         gtk_scale_set_draw_value(GTK_SCALE (m_scale), FALSE );
     }
-    
+
     // Keep full precision in position value
     gtk_scale_set_digits(GTK_SCALE (m_scale), -1);
 
@@ -437,23 +437,23 @@ void wxSlider::SetRange( int minValue, int maxValue )
     gtk_range_set_range(GTK_RANGE (m_scale), minValue, maxValue);
     gtk_range_set_increments(GTK_RANGE (m_scale), 1, (maxValue - minValue + 9) / 10);
     GTKEnableEvents();
-    
+
     if (HasFlag(wxSL_MIN_MAX_LABELS))
     {
         wxString str;
-        
+
         str.Printf( "%d", minValue );
         if (HasFlag(wxSL_INVERSE))
             gtk_label_set_text( GTK_LABEL(m_maxLabel), str.utf8_str() );
         else
             gtk_label_set_text( GTK_LABEL(m_minLabel), str.utf8_str() );
-            
+
         str.Printf( "%d", maxValue );
         if (HasFlag(wxSL_INVERSE))
             gtk_label_set_text( GTK_LABEL(m_minLabel), str.utf8_str() );
         else
             gtk_label_set_text( GTK_LABEL(m_maxLabel), str.utf8_str() );
-            
+
     }
 }
 
