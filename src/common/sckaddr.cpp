@@ -49,7 +49,7 @@
 
 #include <errno.h>
 
-#ifdef __UNIX__
+#if defined (__UNIX__) || defined (__SYMBIAN32__)
     #include <netdb.h>
     #include <arpa/inet.h>
 #endif // __UNIX__
@@ -78,6 +78,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 
 // TODO: use POSIX getaddrinfo() (also available in Winsock 2) for simplicity
 //       and to use the same code for IPv4 and IPv6 support
+
+#ifdef __WXSYMBIAN__
+    #define HAVE_INET_ADDR
+
+    #define HAVE_GETHOSTBYNAME
+    #define HAVE_GETSERVBYNAME
+    #define HAVE_INET_ATON
+#endif
 
 #ifdef __WXMSW__
     #define HAVE_INET_ADDR

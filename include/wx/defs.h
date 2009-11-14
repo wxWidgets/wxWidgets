@@ -34,6 +34,7 @@
 #   elif !defined(__WXMOTIF__) && \
          !defined(__WXMSW__)   && \
          !defined(__WXPALMOS__)&& \
+         !defined(__WXSYMBIAN__) && \
          !defined(__WXGTK__)   && \
          !defined(__WXPM__)    && \
          !defined(__WXOSX_CARBON__)   && \
@@ -52,6 +53,10 @@
 #       endif /*  Unix/!Unix */
 #   endif
 #endif /*__cplusplus*/
+
+#ifdef __WXSYMBIAN__
+    #include <e32std.h>
+#endif
 
 #ifndef __WXWINDOWS__
     #define __WXWINDOWS__ 1
@@ -192,6 +197,11 @@
 #if defined(__HPUX__) && defined(__GNUG__)
 #define va_list __gnuc_va_list
 #endif /*  HP-UX */
+
+#if defined(__WXSYMBIAN__)
+    #include <stdarg.h>            // For va_list
+#endif /* WXSYMBIAN */
+
 
 /*  ---------------------------------------------------------------------------- */
 /*  check for native bool type and TRUE/FALSE constants */
@@ -819,6 +829,16 @@ typedef wxUint16 wxWord;
     #endif
     #define SIZEOF_VOID_P 4
     #define SIZEOF_SIZE_T 4
+#elif defined(__WXSYMBIAN__)
+    typedef int wxInt32;
+    typedef unsigned int wxUint32;
+    #define SIZEOF_INT 4
+    #define SIZEOF_LONG 4
+    #define SIZEOF_WCHAR_T 2
+    #define SIZEOF_SIZE_T 4
+    #define wxSIZE_T_IS_UINT
+    #define SIZEOF_VOID_P 4
+    #define SIZEOF_SIZE_T 4
 #elif defined(__WINDOWS__)
     /*  Win64 uses LLP64 model and so ints and longs have the same size as in */
     /*  Win32 */
@@ -1012,6 +1032,19 @@ typedef wxUint32 wxDword;
     #endif /* __WXPALMOS6__ */
     #define wxLongLongSuffix ll
     #define wxLongLongFmtSpec "ll"
+#elif defined(__WXSYMBIAN__)
+    #if defined(__SERIES60_1X__) || defined(__SERIES60_2X__)
+        // No support for 64 bit on < Symbian9. There is a class TInt64 but
+        // this is not a basic type so can't be used here. long long is
+        // apparently supported in Symbian 8.0 and above but there were
+        // recommendations not to use it as some phones might not work. That
+        // being the case, safer to just have no 64bit numeric support.
+    #else
+        #define wxLongLong_t TInt64
+        #define wxLongLongSuffix ll
+        #define wxLongLongFmtSpec "ll"
+        #define wxUSE_LONGLONG_NATIVE 1
+    #endif
 #elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
     #define wxLongLong_t long long
 #elif (defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG >= 8)  || \
@@ -1038,6 +1071,8 @@ typedef wxUint32 wxDword;
     #else
         #define wxULongLong_t unsigned long long
     #endif /* __WXPALMOS6__ */
+    #elif defined(__WXSYMBIAN__)
+        #define wxULongLong_t TUint64
     #else
         #define wxULongLong_t unsigned wxLongLong_t
     #endif
@@ -2853,7 +2888,7 @@ typedef WX_NSString* WXGLPixelFormat;
 
 #endif // __WXMAC__
 
-#if defined(__WXPALMOS__)
+#if defined(__WXPALMOS__) || defined(__WXSYMBIAN__)
 
 typedef void *          WXHWND;
 typedef void *          WXHANDLE;
@@ -2885,7 +2920,7 @@ typedef void *          WXFORMPTR;
 typedef void *          WXEVENTPTR;
 typedef void *          WXRECTANGLEPTR;
 
-#endif /* __WXPALMOS__ */
+#endif /* __WXPALMOS__ & __WXSYMBIAN__ */
 
 
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */

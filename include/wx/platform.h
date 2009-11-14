@@ -153,6 +153,26 @@
 #   endif
 #endif
 
+#if defined(__SYMBIAN32__)
+#   define  __WXSYMBIAN__ 1
+
+#   ifdef __WXMSW__
+#       undef __WXMSW__
+#   endif
+#   ifdef __WINDOWS__
+#       undef __WINDOWS__
+#   endif
+#   ifdef __WIN32__
+#       undef __WIN32__
+#   endif
+#   ifdef WIN32
+#       undef WIN32
+#   endif
+#   ifdef _WIN32
+#       undef _WIN32
+#   endif
+#endif
+
 #if defined(_WIN64)
 #    ifndef _WIN32
         /*
@@ -192,6 +212,16 @@
 #        define __WIN32__
 #   endif
 #endif /* __WXMSW__ */
+
+/* detect Symbian as a smartphone */
+#if defined( __SYMBIAN32__)
+#   ifndef __SMARTPHONE__
+#       define __SMARTPHONE__
+#   endif
+#   ifndef __WXSYMBIAN__
+#       define __WXSYMBIAN__
+#   endif
+#endif
 
 /* detect MS SmartPhone */
 #if defined( WIN32_PLATFORM_WFSP )
@@ -506,6 +536,17 @@
 #    endif
 #    ifdef __WXMSW__
 #        error "__WXMSW__ should not be defined for PalmOS"
+#    endif
+
+#elif defined(__SYMBIAN32__)
+#    ifdef __WIN32__
+#        error "__WIN32__ should not be defined for Symbian"
+#    endif
+#    ifdef __WINDOWS__
+#        error "__WINDOWS__ should not be defined for Symbian"
+#    endif
+#    ifdef __WXMSW__
+#        error "__WXMSW__ should not be defined for Symbian"
 #    endif
 
 /*

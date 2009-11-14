@@ -48,7 +48,7 @@
 
    Actually MinGW has tchar.h, but it does not include wchar.h
  */
-#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__)
+#if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__) || defined(__SYMBIAN32__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
     #endif
@@ -154,13 +154,20 @@
     /* Sun's SunPro compiler supports the wchar_t type and wide character    */
     /* functions, but does not define __WCHAR_TYPE__. Define it here to      */
     /* allow unicode enabled builds.                                         */
-    #if (defined(__SUNPRO_CC) || defined(__SUNPRO_C)) && !defined(__WCHAR_TYPE__)
+    #if (defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined(__WXSYMBIAN__)) && !defined(__WCHAR_TYPE__)
         #define __WCHAR_TYPE__ wxchar_t
     #endif
 
+    #if defined(__WXSYMBIAN__)
+        #include <stddef.h>
+        #include <e32def.h>
+        typedef wchar_t wxChar;
+        typedef TInt16  wxSChar;
+        typedef TText16 wxUChar;
+
     /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
     /* comment below */
-    #if !defined(__WCHAR_TYPE__) || \
+    #elif !defined(__WCHAR_TYPE__) || \
         (!defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 96))
         /* standard case */
         typedef wchar_t wxChar;

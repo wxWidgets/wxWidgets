@@ -82,6 +82,9 @@
     #include <unistd.h>
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/missing.h"
+#elif defined(__WXSYMBIAN__)
+    #include <stat.h>
+    #include <unistd.h>
 #else
     #error  "Please specify the header with file functions declarations."
 #endif  //Win/UNIX
@@ -572,6 +575,38 @@ void wxTempFile::Discard()
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
     }
 }
+
+#ifdef __WXSYMBIAN__
+
+bool wxEof(int _filedes)
+{
+    // No native eof in Symbian for _filedes type files. It is there for FILE * but not this type - anyone think of a better way to do this?
+    wxFileOffset pos = wxTell(_filedes);
+    wxFileOffset newpos = wxSeek(_filedes, 1, SEEK_CUR);
+    if (newpos == pos + 1)
+    {
+        wxSeek(_filedes, -1, SEEK_CUR);
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+size_t wxRead(int _fildes, void *_buf, size_t _nbyte)
+{
+    // There seems to be a scoping problem if you just #define wxRead to read
+    return read(_fildes, (char *)_buf, _nbyte);
+}
+
+size_t wxWrite(int _fildes, const void *_buf, size_t _nbyte)
+{
+    // There seems to be a scoping problem if you just #define wxWrite to write
+    return write(_fildes, (char *)_buf, _nbyte);
+}
+
+#endif /* __WXSYMBIAN__ */
 
 #endif // wxUSE_FILE
 

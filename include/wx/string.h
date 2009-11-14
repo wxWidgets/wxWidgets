@@ -170,6 +170,8 @@ inline int Stricmp(const char *psz1, const char *psz2)
   return stricmp(psz1, psz2);
 #elif defined(__WXPM__)
   return stricmp(psz1, psz2);
+#elif defined(__WXSYMBIAN__)
+  return strcasecmp(psz1, psz2);
 #elif defined(__WXPALMOS__) || \
       defined(HAVE_STRCASECMP_IN_STRING_H) || \
       defined(HAVE_STRCASECMP_IN_STRINGS_H) || \
@@ -1247,6 +1249,15 @@ public:
     { assign(nRepeat, ch); }
   wxString(size_t nRepeat, wchar_t ch)
     { assign(nRepeat, ch); }
+#ifdef __SYMBIAN32__
+  wxString(const TPtrC psz)
+    { assign( (const char *)psz.Ptr(), (int)psz.Length() ); }
+  const TPtrC PtrC() const
+    {
+      const wchar_t* ptr = data().AsWChar();
+      return TPtrC( (TUint16 *) ptr, size() );
+    }
+#endif // __SYMBIAN32__
 
     // ctors from char* strings:
   wxString(const char *psz)

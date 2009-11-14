@@ -55,6 +55,9 @@
     #endif
 #endif
 
+#if defined(__SYMBIAN32__)
+    #include  <unistd.h>
+#endif
 #if defined(__WXMAC__)
     #include  "wx/osx/private.h"  // includes mac headers
 #endif
@@ -582,7 +585,7 @@ static CharType *wxDoExpandPath(CharType *buf, const wxString& name)
 #  endif
 #endif
             // No env variables on WinCE
-#ifndef __WXWINCE__
+#if !defined (__WXWINCE__) || !defined (__WXSYMBIAN__)
 #ifdef __WXMSW__
         if (*s++ == wxT('$') && (*s == wxT('{') || *s == wxT(')')))
 #else
@@ -708,7 +711,7 @@ wxContractPath (const wxString& filename,
 
   // Handle environment
   wxString val;
-#ifndef __WXWINCE__
+#if  !defined (__WXWINCE__) && !defined (__WXSYMBIAN__)
   wxChar *tcp;
   if (!envname.empty() && !(val = wxGetenv (envname)).empty() &&
      (tcp = wxStrstr (dest, val)) != NULL)
@@ -1169,10 +1172,10 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     }
 #endif // wxMac || wxCocoa
 
-#if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
+#if !defined(__VISAGECPP__) && !defined(__WXMAC__) && !defined(__WXSYMBIAN__) || defined(__UNIX__)
     // no chmod in VA.  Should be some permission API for HPFS386 partitions
     // however
-    if ( chmod(file2.fn_str(), fbuf.st_mode) != 0 )
+    if ( chmod(wxFNCONV(file2.fn_str()), fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
@@ -1209,7 +1212,7 @@ wxRenameFile(const wxString& file1, const wxString& file2, bool overwrite)
 
 #if !defined(__WXWINCE__) && !defined(__WXPALMOS__)
     // Normal system call
-  if ( wxRename (file1, file2) == 0 )
+  if ( wxRename (file1.c_str(), file2.c_str()) == 0 )
     return true;
 #endif
 
@@ -1229,6 +1232,7 @@ bool wxRemoveFile(const wxString& file)
  || defined(__WATCOMC__) \
  || defined(__DMC__) \
  || defined(__GNUWIN32__) \
+ || defined(__SYMBIAN32__) \
  || (defined(__MWERKS__) && defined(__MSL__))
     int res = wxRemove(file);
 #elif defined(__WXMAC__)
@@ -1253,6 +1257,8 @@ bool wxMkdir(const wxString& dir, int perm)
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
+#elif defined (__WXSYMBIAN__)
+    if ( wmkdir(dir.fn_str(), perm) != 0 )
 #elif (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || \
       (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
       defined(__WINE__) || defined(__WXMICROWIN__)
@@ -1622,6 +1628,8 @@ bool wxSetWorkingDirectory(const wxString& d)
     return (::DosSetCurrentDir(d.c_str()) == 0);
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
     return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
+#elif  defined (__SYMBIAN32__)
+    return (wchdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
 
 #ifdef __WIN32__

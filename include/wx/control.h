@@ -179,6 +179,8 @@ protected:
     #include "wx/univ/control.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/control.h"
+#elif defined(__WXSYMBIAN__)
+    #include "wx/symbian/control.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/control.h"
 #elif defined(__WXMOTIF__)

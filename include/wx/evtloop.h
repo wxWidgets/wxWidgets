@@ -185,7 +185,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || defined(__UNIX__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || defined(__UNIX__) || defined(__SYMBIAN32__)
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -241,6 +241,8 @@ private:
 
 #if defined(__WXPALMOS__)
     #include "wx/palmos/evtloop.h"
+#elif defined(__WXSYMBIAN__)
+    #include "wx/symbian/evtloop.h"
 #elif defined(__WXMSW__)
     // this header defines both console and GUI loops for MSW
     #include "wx/msw/evtloop.h"
@@ -309,7 +311,7 @@ protected:
 #else // !wxUSE_GUI
     // we can't define wxEventLoop differently in GUI and base libraries so use
     // a #define to still allow writing wxEventLoop in the user code
-    #if wxUSE_CONSOLE_EVENTLOOP && (defined(__WXMSW__) || defined(__UNIX__))
+    #if wxUSE_CONSOLE_EVENTLOOP && (defined(__WXMSW__) || defined(__UNIX__) || defined(__SYMBIAN32__) )
         #define wxEventLoop wxConsoleEventLoop
     #else // we still must define it somehow for the code below...
         #define wxEventLoop wxEventLoopBase

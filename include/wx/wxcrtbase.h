@@ -113,6 +113,12 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #endif
 #endif /* __MWERKS__ */
 
+#ifdef __WXSYMBIAN__
+    #define HAVE_WPRINTF   1
+    #define HAVE_WCSRTOMBS 1
+    #define HAVE_VSWPRINTF 1
+    #define HAVE_VSWSCANF  1
+#endif
 
 /* -------------------------------------------------------------------------
                             UTF-8 locale handling
@@ -470,8 +476,14 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
             #define wxCRT_Remove    wxMSLU__wremove
             #define wxCRT_Rename    wxMSLU__wrename
     #else
-        /* WinCE CRT doesn't provide these functions so use our own */
-        #ifdef __WXWINCE__
+        #ifdef __WXSYMBIAN__
+            #define wxCRT_Rename   wrename
+            #define wxCRT_Remove   wremove
+            #define wxCRT_Fopen    wfopen
+            #define wxCRT_Freopen  wfreopen
+        #else
+        #if __WXWINCE__
+            /* WinCE CRT doesn't provide these functions so use our own */
             WXDLLIMPEXP_BASE int wxCRT_Rename(const wchar_t *src,
                                               const wchar_t *dst);
             WXDLLIMPEXP_BASE int wxCRT_Remove(const wchar_t *path);
@@ -481,6 +493,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
         #endif
         #define wxCRT_Fopen    _wfopen
         #define wxCRT_Freopen  _wfreopen
+        #endif
     #endif
 
 #endif /* wxMBFILES/!wxMBFILES */

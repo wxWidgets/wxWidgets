@@ -407,6 +407,42 @@ enum wxFileKind
 
     // it's a private define, undefine it so that nobody gets tempted to use it
     #undef wxHAS_HUGE_FILES
+#elif defined(__WXSYMBIAN__)
+    #include <unistd.h>
+
+    #define   wxClose      close
+    #define   wxLseek      lseek
+    #define   wxSeek       lseek
+    #define   wxEof        eof
+
+    #define   HAVE_FSYNC
+    #define   wxFsync      fsync
+    #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
+
+#if !wxMBFILES
+    #define   wxCRT_Open      wopen
+    #define      wxRename        wrename
+    #define   wxCRT_Access    waccess
+    #define   wxCRT_Stat    wstat
+    #define   wxCRT_RmDir    wrmdir
+    #define   wxCRT_MkDir    wmkdir
+    #define   _wgetcwd        wgetcwd
+#else
+    #define   wxCRT_Open      open
+    #define      wxRename        rename
+    #define   wxCRT_Access    access
+    #define   wxCRT_Stat    stat
+    #define   wxCRT_RmDir    rmdir
+    #define   wxCRT_MkDir    mkdir
+    #define   _wgetcwd        getcwd
+#endif
+
+    bool wxEof(int _filedes);
+    size_t wxRead(int _fildes, void *_buf, size_t _nbyte);
+    size_t wxWrite(int _fildes, const void *_buf, size_t _nbyte);
+
+    typedef long wxFileOffset;
+    #define   wxStructStat struct stat
 #elif defined (__WXPALMOS__)
     typedef off_t wxFileOffset;
 #ifdef _LARGE_FILES

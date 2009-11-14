@@ -120,6 +120,9 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 #if !defined(WX_TIMEZONE) && !defined(WX_GMTOFF_IN_TM)
     #if defined(__WXPALMOS__)
         #define WX_GMTOFF_IN_TM
+    #elif defined(__WXSYMBIAN__)
+        #define WX_GMTOFF_IN_TM
+        #define WX_TIMEZONE timezone
     #elif defined(__BORLANDC__) || defined(__MINGW32__) || defined(__VISAGECPP__)
         #define WX_TIMEZONE _timezone
     #elif defined(__MWERKS__)

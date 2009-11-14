@@ -50,6 +50,8 @@
         #include "wx/os2/tls.h"
     #elif defined(__UNIX__)
         #include "wx/unix/tls.h"
+    #elif defined(__WXSYMBIAN__)
+        #include "wx/symbian/tls.h"
     #else
         // TODO: we could emulate TLS for such platforms...
         #error Neither compiler nor OS support thread-specific variables.

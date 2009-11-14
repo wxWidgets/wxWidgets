@@ -28,8 +28,6 @@
     #pragma hdrstop
 #endif
 
-#include "wx/stopwatch.h"
-
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
         #include "wx/msw/wrapwin.h"
@@ -56,6 +54,10 @@
 #if defined(__MWERKS__) && defined(__WXMSW__)
 #   undef HAVE_FTIME
 #   undef HAVE_GETTIMEOFDAY
+#endif
+
+#if defined(__WXSYMBIAN__)
+    #define HAVE_GETTIMEOFDAY
 #endif
 
 #ifndef __WXPALMOS5__
@@ -94,6 +96,8 @@
 // ----------------------------------------------------------------------------
 
 #if wxUSE_STOPWATCH
+
+#include "wx/stopwatch.h"
 
 void wxStopWatch::Start(long t)
 {

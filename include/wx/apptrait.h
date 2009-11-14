@@ -179,6 +179,8 @@ private:
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WXPALMOS__)
     #include "wx/palmos/apptbase.h"
+#elif defined(__SYMBIAN32__)
+    #include "wx/symbian/apptbase.h"
 #elif defined(__WIN32__)
     #include "wx/msw/apptbase.h"
 #elif defined(__UNIX__) && !defined(__EMX__)
@@ -276,6 +278,8 @@ public:
 // ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port
 #if defined(__WXPALMOS__)
     #include "wx/palmos/apptrait.h"
+#elif defined(__SYMBIAN32__)
+    #include "wx/symbian/apptrait.h"
 #elif defined(__WIN32__)
     #include "wx/msw/apptrait.h"
 #elif defined(__OS2__)

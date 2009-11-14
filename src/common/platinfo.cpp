@@ -237,7 +237,8 @@ wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
         string = wxT("DOS");
     else if ( os == wxOS_OS2 )
         string = wxT("OS/2");
-
+    else if ( os == wxOS_SYMBIAN_S60 )
+        string = wxT("S60");
     return string;
 }
 

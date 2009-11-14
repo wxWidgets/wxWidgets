@@ -712,6 +712,10 @@ static bool wxTempOpen(wxFFile *file, const wxString& path, bool *deleteOnClose)
     #define WXFILEARGS(x, y) x, y
 #endif
 
+#if defined(__SYMBIAN32__)
+    #define HAVE_MKSTEMP
+    #define HAVE_MKTEMP
+#endif
 
 // Implementation of wxFileName::CreateTempFileName().
 //
@@ -1066,6 +1070,8 @@ wxString wxFileName::GetTempDir()
     {
 #if defined(__WXWINCE__)
         dir = CheckIfDirExists(wxT("\\temp"));
+#elif defined(__WXSYMBIAN__)
+        dir = CheckIfDirExists(wxT("C:\\System\\temp"));
 #elif defined(__WINDOWS__) && !defined(__WXMICROWIN__)
         if ( !::GetTempPath(MAX_PATH, wxStringBuffer(dir, MAX_PATH + 1)) )
         {

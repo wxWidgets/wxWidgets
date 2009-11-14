@@ -62,7 +62,11 @@ enum wxOperatingSystemId
 
     wxOS_PALM_OS        = 1 << 17,       // Pure Palm OS
     wxOS_PALM_LINUX     = 1 << 18,       // Palm over linux
-    wxOS_PALM = wxOS_PALM_OS | wxOS_PALM_LINUX
+    wxOS_PALM = wxOS_PALM_OS | wxOS_PALM_LINUX,
+    wxOS_SYMBIAN_S60    = 1 << 19,
+    wxOS_SYMBIAN_UIQ3    = 1 << 20,
+    wxOS_SYMBIAN = wxOS_SYMBIAN_S60 |
+                   wxOS_SYMBIAN_UIQ3
 };
 
 // list of wxWidgets ports - some of them can be used with more than

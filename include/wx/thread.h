@@ -22,6 +22,9 @@
 
 #if wxUSE_THREADS
 
+#if defined(__WXSYMBIAN__)
+#include <e32std.h>
+#endif
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -204,7 +207,7 @@ private:
 
 // in order to avoid any overhead under platforms where critical sections are
 // just mutexes make all wxCriticalSection class functions inline
-#if !defined(__WXMSW__)
+#if !defined(__WXMSW__) && !defined(__WXSYMBIAN__)
     #define wxCRITSECT_IS_MUTEX 1
 
     #define wxCRITSECT_INLINE WXEXPORT inline
@@ -264,6 +267,10 @@ private:
 
         wxCritSectBuffer m_buffer;
     };
+#elif defined(__WXSYMBIAN__)
+    RCriticalSection m_critsect;
+    bool m_created;
+    TThreadId m_lockthread;
 #endif // Unix&OS2/Win32
 
     wxDECLARE_NO_COPY_CLASS(wxCriticalSection);

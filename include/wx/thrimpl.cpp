@@ -76,7 +76,7 @@ wxMutexError wxMutex::Unlock()
 // variables and their events/event semaphores have quite different semantics,
 // so we reimplement the conditions from scratch using the mutexes and
 // semaphores
-#if defined(__WXMSW__) || defined(__OS2__) || defined(__EMX__)
+#if defined(__WXMSW__) || defined(__OS2__) || defined(__EMX__) || defined(__WXSYMBIAN__)
 
 class wxConditionInternal
 {
@@ -93,8 +93,11 @@ public:
 
 private:
     // the number of threads currently waiting for this condition
+#ifdef __WXSYMBIAN__
+    TInt64 m_numWaiters;
+#else
     LONG m_numWaiters;
-
+#endif
     // the critical section protecting m_numWaiters
     wxCriticalSection m_csWaiters;
 
