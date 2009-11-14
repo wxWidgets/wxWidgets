@@ -514,7 +514,7 @@ public:
     @class wxDataViewItem
 
     wxDataViewItem is a small opaque class that represents an item in a wxDataViewCtrl
-    in a persistent way, i.e. indepent of the position of the item in the control
+    in a persistent way, i.e. independent of the position of the item in the control
     or changes to its contents.
 
     It must hold a unique ID of type @e void* in its only field and can be converted
