@@ -797,8 +797,17 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
                                     );
     }
 
+    // get the alignment to use
+    int align = GetAlignment();
+    if ( align == wxDVR_DEFAULT_ALIGNMENT )
+    {
+        // if we don't have an explicit alignment ourselves, use that of the
+        // column in horizontal direction and default vertical alignment
+        align = GetOwner()->GetAlignment() | wxALIGN_CENTRE_VERTICAL;
+    }
+
     dc->DrawLabel(ellipsizedText.empty() ? text : ellipsizedText,
-                  rectText, GetAlignment());
+                  rectText, align);
 }
 
 //-----------------------------------------------------------------------------
