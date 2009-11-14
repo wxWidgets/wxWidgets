@@ -24,11 +24,12 @@
     @style{wxSL_AUTOTICKS}
            Displays tick marks. Windows only.
     @style{wxSL_MIN_MAX_LABELS}
-           Displays minimum, maximum labels.
+           Displays minimum, maximum labels (new since wxWidgets 2.9.1).
     @style{wxSL_VALUE_LABEL}
-           Displays value label.
+           Displays value label (new since wxWidgets 2.9.1).
     @style{wxSL_LABELS}
-           Displays minimum, maximum and value labels (same as the two above together).
+           Displays minimum, maximum and value labels (same as wxSL_VALUE_LABEL
+           and wxSL_MIN_MAX_LABELS together).
     @style{wxSL_LEFT}
            Displays ticks on the left and forces the slider to be vertical.
     @style{wxSL_RIGHT}
