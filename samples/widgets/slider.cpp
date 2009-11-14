@@ -159,7 +159,8 @@ protected:
     // ------------
 
     // the check/radio boxes for styles
-    wxCheckBox *m_chkLabels,
+    wxCheckBox *m_chkMinMaxLabels,
+               *m_chkValueLabel,
                *m_chkInverse,
                *m_chkTicks,
                *m_chkBothSides;
@@ -238,7 +239,8 @@ SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
 
     m_chkInverse =
     m_chkTicks =
-    m_chkLabels =
+    m_chkMinMaxLabels =
+    m_chkValueLabel =
     m_chkBothSides = (wxCheckBox *)NULL;
 
     m_radioSides = (wxRadioBox *)NULL;
@@ -257,7 +259,8 @@ void SliderWidgetsPage::CreateContent()
 
     m_chkInverse = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Inverse"));
     m_chkTicks = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &ticks"));
-    m_chkLabels = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &labels"));
+    m_chkMinMaxLabels = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show min/max &labels"));
+    m_chkValueLabel = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &value label"));
     static const wxString sides[] =
     {
         wxT("top"),
@@ -370,7 +373,8 @@ void SliderWidgetsPage::Reset()
 {
     m_chkInverse->SetValue(false);
     m_chkTicks->SetValue(true);
-    m_chkLabels->SetValue(true);
+    m_chkValueLabel->SetValue(true);
+    m_chkMinMaxLabels->SetValue(true);
     m_chkBothSides->SetValue(false);
 
     m_radioSides->SetSelection(SliderTicks_Top);
@@ -385,9 +389,14 @@ void SliderWidgetsPage::CreateSlider()
         flags |= wxSL_INVERSE;
     }
 
-    if ( m_chkLabels->GetValue() )
+    if ( m_chkMinMaxLabels->GetValue() )
     {
-        flags |= wxSL_LABELS;
+        flags |= wxSL_MIN_MAX_LABELS;
+    }
+
+    if ( m_chkValueLabel->GetValue() )
+    {
+        flags |= wxSL_VALUE_LABEL;
     }
 
     if ( m_chkTicks->GetValue() )
@@ -645,7 +654,8 @@ void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkInverse->GetValue() ||
                   !m_chkTicks->GetValue() ||
-                  !m_chkLabels->GetValue() ||
+                  !m_chkValueLabel->GetValue() ||
+                  !m_chkMinMaxLabels->GetValue() ||
                   m_chkBothSides->GetValue() ||
                   m_radioSides->GetSelection() != SliderTicks_Top );
 }
@@ -662,7 +672,7 @@ void SliderWidgetsPage::OnUpdateUICurValueText(wxUpdateUIEvent& event)
 
 void SliderWidgetsPage::OnUpdateUIRadioSides(wxUpdateUIEvent& event)
 {
-    event.Enable( m_chkLabels->GetValue() || m_chkTicks->GetValue() );
+    event.Enable( m_chkValueLabel->GetValue() || m_chkTicks->GetValue() );
 }
 
 void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
