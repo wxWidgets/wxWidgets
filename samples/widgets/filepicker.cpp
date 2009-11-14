@@ -197,12 +197,10 @@ void FilePickerWidgetsPage::CreateContent()
 void FilePickerWidgetsPage::CreatePicker()
 {
     delete m_filePicker;
-    
-    wxString path = "/home/robert/wxDesigner.tar.gz";
 
     // pass an empty string as initial file
     m_filePicker = new wxFilePickerCtrl(this, PickerPage_File,
-                                        path,
+                                        wxEmptyString,
                                         wxT("Hello!"), wxT("*"),
                                         wxDefaultPosition, wxDefaultSize,
                                         GetPickerStyle());
