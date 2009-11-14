@@ -364,6 +364,10 @@ bool wxSlider::Create(wxWindow *parent,
         if (style & wxSL_VERTICAL)
             gtk_scale_set_value_pos( GTK_SCALE(m_scale), GTK_POS_LEFT );
     }
+    else
+    {
+        gtk_scale_set_draw_value(GTK_SCALE (m_scale), FALSE );
+    }
     
     // Keep full precision in position value
     gtk_scale_set_digits(GTK_SCALE (m_scale), -1);
