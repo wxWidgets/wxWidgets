@@ -45,6 +45,13 @@
            compatible with wxSL_SELRANGE.
     @endStyleTable
 
+    Notice that @c wxSL_LEFT, @c wxSL_TOP, @c wxSL_RIGHT and @c wxSL_BOTTOM
+    specify the position of the slider ticks in MSW implementation and that the
+    slider labels, if any, are positioned on the opposite side. So, to have a
+    label on the left side of a vertical slider, @b wxSL_RIGHT must be used (or
+    none of these styles at all should be specified as left and top are default
+    positions for the vertical and horizontal sliders respectively).
+
     @beginEventEmissionTable{wxScrollEvent}
     You can use EVT_COMMAND_SCROLL... macros with window IDs for when intercepting
     scroll events from controls, or EVT_SCROLL... macros without window IDs for

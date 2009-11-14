@@ -357,16 +357,30 @@ bool wxSlider::Create(wxWindow *parent,
         m_minLabel = NULL;
     }
 
-    if (style & wxSL_VALUE_LABEL)
+    const bool showValueLabel = (style & wxSL_VALUE_LABEL) != 0;
+    gtk_scale_set_draw_value(GTK_SCALE (m_scale), showValueLabel );
+    if ( showValueLabel )
     {
-        gtk_scale_set_draw_value(GTK_SCALE (m_scale), TRUE );
+        // position the label appropriately: notice that wxSL_DIRECTION flags
+        // specify the position of the ticks, not label, under MSW and so the
+        // label is on the opposite side
+        GtkPositionType posLabel;
+        if ( style & wxSL_VERTICAL )
+        {
+            if ( style & wxSL_LEFT )
+                posLabel = GTK_POS_RIGHT;
+            else // if ( style & wxSL_RIGHT ) -- this is also the default
+                posLabel = GTK_POS_LEFT;
+        }
+        else // horizontal slider
+        {
+            if ( style & wxSL_TOP )
+                posLabel = GTK_POS_BOTTOM;
+            else // if ( style & wxSL_BOTTOM) -- this is again the default
+                posLabel = GTK_POS_TOP;
+        }
 
-        if (style & wxSL_VERTICAL)
-            gtk_scale_set_value_pos( GTK_SCALE(m_scale), GTK_POS_LEFT );
-    }
-    else
-    {
-        gtk_scale_set_draw_value(GTK_SCALE (m_scale), FALSE );
+        gtk_scale_set_value_pos( GTK_SCALE(m_scale), posLabel );
     }
 
     // Keep full precision in position value

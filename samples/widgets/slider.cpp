@@ -80,6 +80,7 @@ enum
 // sides radiobox values
 enum
 {
+    SliderTicks_None,
     SliderTicks_Top,
     SliderTicks_Bottom,
     SliderTicks_Left,
@@ -263,12 +264,13 @@ void SliderWidgetsPage::CreateContent()
     m_chkValueLabel = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &value label"));
     static const wxString sides[] =
     {
+        wxT("default"),
         wxT("top"),
         wxT("bottom"),
         wxT("left"),
         wxT("right"),
     };
-    m_radioSides = new wxRadioBox(this, SliderPage_RadioSides, wxT("&Ticks/Labels"),
+    m_radioSides = new wxRadioBox(this, SliderPage_RadioSides, wxT("&Label position"),
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(sides), sides,
                                  1, wxRA_SPECIFY_COLS);
@@ -377,7 +379,7 @@ void SliderWidgetsPage::Reset()
     m_chkMinMaxLabels->SetValue(true);
     m_chkBothSides->SetValue(false);
 
-    m_radioSides->SetSelection(SliderTicks_Top);
+    m_radioSides->SetSelection(SliderTicks_None);
 }
 
 void SliderWidgetsPage::CreateSlider()
@@ -404,22 +406,28 @@ void SliderWidgetsPage::CreateSlider()
         flags |= wxSL_AUTOTICKS;
     }
 
+    // notice that the style names refer to the _ticks_ positions while we want
+    // to allow the user to select the label(s) positions and the labels are on
+    // the opposite side from the ticks, hence the apparent reversal below
     switch ( m_radioSides->GetSelection() )
     {
+        case SliderTicks_None:
+            break;
+
         case SliderTicks_Top:
-            flags |= wxSL_TOP;
-            break;
-
-        case SliderTicks_Left:
-            flags |= wxSL_LEFT | wxSL_VERTICAL;
-            break;
-
-        case SliderTicks_Bottom:
             flags |= wxSL_BOTTOM;
             break;
 
-        case SliderTicks_Right:
+        case SliderTicks_Left:
             flags |= wxSL_RIGHT | wxSL_VERTICAL;
+            break;
+
+        case SliderTicks_Bottom:
+            flags |= wxSL_TOP;
+            break;
+
+        case SliderTicks_Right:
+            flags |= wxSL_LEFT | wxSL_VERTICAL;
             break;
 
         default:
@@ -657,7 +665,7 @@ void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   !m_chkValueLabel->GetValue() ||
                   !m_chkMinMaxLabels->GetValue() ||
                   m_chkBothSides->GetValue() ||
-                  m_radioSides->GetSelection() != SliderTicks_Top );
+                  m_radioSides->GetSelection() != SliderTicks_None );
 }
 
 void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
