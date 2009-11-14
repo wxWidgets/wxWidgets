@@ -1875,6 +1875,7 @@ bool wxWindowMac::MacDoRedraw( long time )
             break;
 
         case wxBG_STYLE_PAINT:
+        case wxBG_STYLE_TRANSPARENT:
             // nothing to do, user-defined EVT_PAINT handler will overwrite the
             // entire window client area
             break;
