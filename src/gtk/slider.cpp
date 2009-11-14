@@ -357,10 +357,13 @@ bool wxSlider::Create(wxWindow *parent,
         m_minLabel = NULL;
     }
     
-    gtk_scale_set_draw_value(GTK_SCALE (m_scale), (style & wxSL_VALUE_LABEL) != 0);
+    if (style & wxSL_VALUE_LABEL)
+    {
+        gtk_scale_set_draw_value(GTK_SCALE (m_scale), TRUE );
     
-    if ((style & wxSL_MIN_MAX_LABELS) && (style & wxSL_VERTICAL))
-        gtk_scale_set_value_pos( GTK_SCALE(m_scale), GTK_POS_LEFT );
+        if (style & wxSL_VERTICAL)
+            gtk_scale_set_value_pos( GTK_SCALE(m_scale), GTK_POS_LEFT );
+    }
     
     // Keep full precision in position value
     gtk_scale_set_digits(GTK_SCALE (m_scale), -1);
