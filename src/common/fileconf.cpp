@@ -58,11 +58,6 @@
 #include  <ctype.h>
 
 // ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-#define CONST_CAST ((wxFileConfig *)this)->
-
-// ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
@@ -791,12 +786,14 @@ size_t wxFileConfig::GetNumberOfEntries(bool bRecursive) const
 {
     size_t n = m_pCurrentGroup->Entries().GetCount();
     if ( bRecursive ) {
+        wxFileConfig * const self = const_cast<wxFileConfig *>(this);
+
         wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
         size_t nSubgroups = m_pCurrentGroup->Groups().GetCount();
         for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
-            CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+            self->m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
             n += GetNumberOfEntries(true);
-            CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+            self->m_pCurrentGroup = pOldCurrentGroup;
         }
     }
 
@@ -807,12 +804,14 @@ size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
 {
     size_t n = m_pCurrentGroup->Groups().GetCount();
     if ( bRecursive ) {
+        wxFileConfig * const self = const_cast<wxFileConfig *>(this);
+
         wxFileConfigGroup *pOldCurrentGroup = m_pCurrentGroup;
         size_t nSubgroups = m_pCurrentGroup->Groups().GetCount();
         for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
-            CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
+            self->m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
             n += GetNumberOfGroups(true);
-            CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
+            self->m_pCurrentGroup = pOldCurrentGroup;
         }
     }
 
