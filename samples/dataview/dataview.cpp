@@ -363,7 +363,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(ID_CLEARLOG, "&Clear log\tCtrl-L");
-    file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-F");
+    file_menu->Append(ID_FOREGROUND_COLOUR, "Set &foreground colour...\tCtrl-S");
     file_menu->Append(ID_BACKGROUND_COLOUR, "Set &background colour...\tCtrl-B");
     file_menu->Append(ID_STYLE_MENU, "&Style", style_menu);
     file_menu->AppendSeparator();
