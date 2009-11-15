@@ -41,7 +41,8 @@ public:
 
     // implementation
 
-    GdkAtom GtkGetMatchingPair(bool quiet = false);
+    GdkAtom GTKGetMatchingPair(bool quiet = false);
+    wxDragResult GTKFigureOutSuggestedAction();
 
     void GtkRegisterWidget( GtkWidget *widget );
     void GtkUnregisterWidget( GtkWidget *widget );
@@ -52,10 +53,10 @@ public:
     guint               m_dragTime;
     bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
-    void GtkSetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
-    void GtkSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
-    void GtkSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-    void GtkSetDragTime( guint time ) { m_dragTime = time; }
+    void GTKSetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
+    void GTKSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
+    void GTKSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
+    void GTKSetDragTime( guint time ) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
