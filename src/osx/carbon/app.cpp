@@ -1323,7 +1323,11 @@ int wxMacKeyCodeToModifier(wxKeyCode key)
 }
 #endif
 
-#if !wxOSX_USE_IPHONE && !(wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6)
+#if wxOSX_USE_COCOA && MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+
+// defined in utils.mm
+
+#elif wxOSX_USE_COCOA_OR_CARBON
 
 wxMouseState wxGetMouseState()
 {
