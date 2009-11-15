@@ -481,7 +481,8 @@ void wxNonOwnedWindowCocoaImpl::Lower()
 
 void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
 {
-    [[m_macWindow contentView] setNeedsDisplay:YES];
+    [m_macWindow orderBack:nil];
+    [[m_macWindow contentView] setNeedsDisplay: YES];
 }
 
 bool wxNonOwnedWindowCocoaImpl::Show(bool show)
@@ -493,7 +494,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
             [m_macWindow makeKeyAndOrderFront:nil];
         else 
             [m_macWindow orderFront:nil]; 
-        ShowWithoutActivating();
+        [[m_macWindow contentView] setNeedsDisplay: YES];
     }
     else
         [m_macWindow orderOut:nil];
@@ -556,8 +557,14 @@ void wxNonOwnedWindowCocoaImpl::SetWindowStyleFlag( long style )
     }
 }
 
-bool wxNonOwnedWindowCocoaImpl::SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
+bool wxNonOwnedWindowCocoaImpl::SetBackgroundStyle(wxBackgroundStyle style)
 {
+    if ( style == wxBG_STYLE_TRANSPARENT )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setBackgroundColor:[NSColor clearColor]];
+    }
+
     return true;
 }
 
@@ -600,7 +607,10 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
 
 bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
 {
-    return false;
+    [m_macWindow setOpaque:NO];
+    [m_macWindow setBackgroundColor:[NSColor clearColor]];
+
+    return true;
 }
 
 void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding encoding )
