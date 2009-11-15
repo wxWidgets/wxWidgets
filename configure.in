@@ -5034,24 +5034,21 @@ fi
 
 dnl backtrace() and backtrace_symbols() for wxStackWalker
 if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
-    AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
-        [
-            AC_LANG_PUSH(C++)
-            AC_TRY_COMPILE([#include <execinfo.h>],
+    AC_LANG_PUSH(C++)
+    AC_SEARCH_LIBS(backtrace, execinfo,
+        [AC_CACHE_CHECK([for backtrace() in <execinfo.h>], wx_cv_func_backtrace,
+            [AC_TRY_LINK([#include <execinfo.h>],
                 [
                     void *trace[1];
                     char **messages;
-
                     backtrace(trace, 1);
                     messages = backtrace_symbols(trace, 1);
                 ],
                 wx_cv_func_backtrace=yes,
                 wx_cv_func_backtrace=no
-            )
-            AC_LANG_POP()
-        ]
-    )
-
+            )]
+        )],
+        wx_cv_func_backtrace=no)
 
     if test "$wx_cv_func_backtrace" = "no"; then
         AC_MSG_WARN([backtrace() is not available, wxStackWalker will not be available])
@@ -5059,7 +5056,6 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     else
         AC_CACHE_CHECK([for __cxa_demangle() in <cxxabi.h>], wx_cv_func_cxa_demangle,
             [
-                AC_LANG_PUSH(C++)
                 AC_TRY_LINK([#include <cxxabi.h>],
                     [
                         int rc;
@@ -5068,7 +5064,6 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
                     wx_cv_func_cxa_demangle=yes,
                     wx_cv_func_cxa_demangle=no
                 )
-                AC_LANG_POP()
             ]
         )
 
@@ -5076,6 +5071,7 @@ if test "$wxUSE_STACKWALKER" = "yes" -a "$wxUSE_UNIX" = "yes"; then
             AC_DEFINE(HAVE_CXA_DEMANGLE)
         fi
     fi
+    AC_LANG_POP()
 fi
 
 if test "$wxUSE_STACKWALKER" = "yes" -a "$USE_WIN32" != "1" -a "$USE_UNIX" != "1"; then
