@@ -4109,9 +4109,8 @@ void wxDataViewCtrl::Select( const wxDataViewItem & item )
             
         m_clientArea->SelectRow(row, true);
         
-        // Also reset focus
-        if (m_clientArea->IsSingleSel())
-            m_clientArea->ChangeCurrentRow( row );
+        // Also set focus to the selected item
+        m_clientArea->ChangeCurrentRow( row );
     }
 }
 
