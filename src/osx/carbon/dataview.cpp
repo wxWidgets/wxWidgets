@@ -2283,14 +2283,11 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
         return wxELLIPSIZE_NONE;
     if ( flags & kDataBrowserTruncateTextAtStart )
         return wxELLIPSIZE_START;
-    if ( flags & kDataBrowserTruncateTextMiddle )
-        return wxELLIPSIZE_MIDDLE;
     if ( flags & kDataBrowserTruncateTextAtEnd )
         return wxELLIPSIZE_END;
 
-    wxFAIL_MSG( "unknown flags" );
-
-    return wxELLIPSIZE_NONE;
+    // kDataBrowserTruncateTextMiddle == 0 so there is no need to test for it
+    return wxELLIPSIZE_MIDDLE;
 }
 
 void wxDataViewRenderer::SetNativeData(wxDataViewRendererNativeData* newNativeDataPtr)
