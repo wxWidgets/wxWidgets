@@ -3589,6 +3589,9 @@ void wxAuiManager::OnFloatingPaneMoveStart(wxWindow* wnd)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
+    if(!pane.frame)
+        return;
+
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         pane.frame->SetTransparent(150);
 }
