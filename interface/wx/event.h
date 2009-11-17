@@ -3409,13 +3409,13 @@ public:
 
     @beginEventTable{wxCloseEvent}
     @event{EVT_CLOSE(func)}
-        Process a close event, supplying the member function.
+        Process a @c wxEVT_CLOSE_WINDOW command event, supplying the member function.
         This event applies to wxFrame and wxDialog classes.
     @event{EVT_QUERY_END_SESSION(func)}
-        Process a query end session event, supplying the member function.
+        Process a @c wxEVT_QUERY_END_SESSION session event, supplying the member function.
         This event can be handled in wxApp-derived class only.
     @event{EVT_END_SESSION(func)}
-        Process an end session event, supplying the member function.
+        Process a @c wxEVT_END_SESSION session event, supplying the member function.
         This event can be handled in wxApp-derived class only.
     @endEventTable
 
