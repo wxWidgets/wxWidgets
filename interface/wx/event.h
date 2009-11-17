@@ -467,11 +467,11 @@ public:
            the function skips to step (7).
         -# TryBefore() is called (this is where wxValidator are taken into
            account for wxWindow objects). If this returns @true, the function exits.
-        -# Dynamic event table of the handlers binded using Bind<>() is
+        -# Dynamic event table of the handlers bound using Bind<>() is
            searched. If a handler is found, it is executed and the function
            returns @true unless the handler used wxEvent::Skip() to indicate
            that it didn't handle the event in which case the search continues.
-        -# Static events table of the handlers binded using event table
+        -# Static events table of the handlers bound using event table
            macros is searched for this event handler. If this fails, the base
            class event table table is tried, and so on until no more tables
            exist or an appropriate function was found. If a handler is found,
@@ -839,7 +839,7 @@ public:
 
         This method can only unbind functions, functors or methods which have
         been added using the Bind<>() method. There is no way to unbind
-        functions binded using the (static) event tables.
+        functions bound using the (static) event tables.
 
         @param eventType
             The event type associated with this event handler.
