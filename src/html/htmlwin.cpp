@@ -657,6 +657,16 @@ bool wxHtmlWindow::ScrollToAnchor(const wxString& anchor)
     }
     else
     {
+        // Go to next visible cell in current container, if it exists. This
+        // yields a bit better (even though still imperfect) results in that
+        // there's better chance of using a suitable cell for upper Y
+        // coordinate value. See bug #11406 for additional discussion.
+        const wxHtmlCell *c_save = c;
+        while ( c && c->IsFormattingCell() )
+            c = c->GetNext();
+        if ( !c )
+            c = c_save;
+
         int y;
 
         for (y = 0; c != NULL; c = c->GetParent()) y += c->GetPosY();

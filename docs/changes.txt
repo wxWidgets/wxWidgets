@@ -716,6 +716,7 @@ All (GUI):
   new CheckFit() method for more information.
 - Allow reading GIFs with incorrectly specified animation size.
 - Return number of frames in animated GIF from wxGIFHandler::GetImageCount().
+- Improved anchors handling in wxHTML.
 
 wxGTK:
 
