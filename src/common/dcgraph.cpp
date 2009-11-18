@@ -172,7 +172,15 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
    wxDCImpl( owner )
 {
     Init();
-    SetGraphicsContext( wxGraphicsContext::Create(dc) );
+    wxGraphicsContext* context;
+#if wxUSE_CAIRO
+    wxGraphicsRenderer* renderer = wxGraphicsRenderer::GetCairoRenderer();
+    context = renderer->CreateContext(dc);
+#else
+    context = wxGraphicsContext::Create(dc);
+#endif
+
+    SetGraphicsContext( context );
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE

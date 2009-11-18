@@ -15,9 +15,10 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT
-
+#include "wx/cairo.h"
 #include "wx/graphics.h"
+
+#if wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -60,6 +61,10 @@ using namespace std;
 #endif
 
 #include <cairo.h>
+#ifdef __WXMSW__
+#include <cairo-win32.h>
+#endif
+
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
 #include "wx/fontutil.h"
@@ -284,6 +289,9 @@ private :
     cairo_font_slant_t m_slant;
     cairo_font_weight_t m_weight;
 #endif
+#ifdef __WXMSW__
+    wxCairoContext( wxGraphicsRenderer* renderer, HDC context );
+#endif
 };
 
 class wxCairoBitmapData : public wxGraphicsObjectRefData
@@ -331,6 +339,9 @@ public:
     }
 
     virtual void Clip( const wxRegion &region );
+#ifdef __WXMSW__
+    cairo_surface_t* m_mswSurface;
+#endif
 
     // clips drawings to the rect
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
@@ -1227,6 +1238,18 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, GdkDrawable *drawa
 }
 #endif
 
+#ifdef __WXMSW__
+wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
+: wxGraphicsContext(renderer)
+{
+    m_mswSurface = cairo_win32_surface_create(handle);
+    m_context = cairo_create(m_mswSurface);
+    PushState();
+    PushState();
+}
+#endif
+
+
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
@@ -1258,9 +1281,17 @@ wxCairoContext::~wxCairoContext()
     if ( m_context )
     {
         PopState();
+#ifdef __WXMSW__
+    m_mswSurface = cairo_win32_surface_create((HDC)window->GetHandle());
+    m_context = cairo_create(m_mswSurface);
+#endif
         PopState();
         cairo_destroy(m_context);
     }
+#ifdef __WXMSW__
+    if ( m_mswSurface )
+        cairo_surface_destroy(m_mswSurface);
+#endif
 }
 
 void wxCairoContext::Init(cairo_t *context)
@@ -1768,7 +1799,12 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {
+#if __WXMSW__
+    return new wxCairoContext(this,(HDC)context);
+#endif
+#if __WXGTK__
     return new wxCairoContext(this,(cairo_t*)context);
+#endif
 }
 
 
@@ -1913,4 +1949,15 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
     return wxNullGraphicsBitmap;
 }
 
-#endif  // wxUSE_GRAPHICS_CONTEXT
+#endif  // wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+
+#if wxUSE_GRAPHICS_CONTEXT
+wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
+{
+#if wxUSE_CAIRO
+    return &gs_cairoGraphicsRenderer;
+#else
+    return NULL;
+#endif
+}
+#endif

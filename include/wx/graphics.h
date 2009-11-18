@@ -611,6 +611,7 @@ public:
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 
+    static wxGraphicsRenderer* GetCairoRenderer();
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0;
