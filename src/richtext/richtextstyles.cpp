@@ -753,7 +753,7 @@ void wxRichTextStyleListBox::OnLeftDown(wxMouseEvent& event)
 {
     wxVListBox::OnLeftDown(event);
 
-    int item = HitTest(event.GetPosition());
+    int item = VirtualHitTest(event.GetPosition().y);
     if (item != wxNOT_FOUND && GetApplyOnSelection())
         ApplyStyle(item);
 }
@@ -762,7 +762,7 @@ void wxRichTextStyleListBox::OnLeftDoubleClick(wxMouseEvent& event)
 {
     wxVListBox::OnLeftDown(event);
 
-    int item = HitTest(event.GetPosition());
+    int item = VirtualHitTest(event.GetPosition().y);
     if (item != wxNOT_FOUND && !GetApplyOnSelection())
         ApplyStyle(item);
 }
@@ -1099,7 +1099,7 @@ void wxRichTextStyleComboPopup::OnMouseMove(wxMouseEvent& event)
 {
     // Move selection to cursor if it is inside the popup
 
-    int itemHere = wxRichTextStyleListBox::HitTest(event.GetPosition());
+    int itemHere = wxRichTextStyleListBox::VirtualHitTest(event.GetPosition().y);
     if ( itemHere >= 0 )
     {
         wxRichTextStyleListBox::SetSelection(itemHere);
