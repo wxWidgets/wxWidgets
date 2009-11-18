@@ -161,7 +161,7 @@ public:
     {
         wxCHECK_MSG( m_iocp != INVALID_HANDLE_VALUE, false, "IOCP not init" );
 
-        int ret = PostQueuedCompletionStatus(m_iocp, 0, NULL, NULL);
+        int ret = PostQueuedCompletionStatus(m_iocp, 0, 0, NULL);
         if (!ret)
         {
             wxLogSysError(_("Unable to post completion status"));
