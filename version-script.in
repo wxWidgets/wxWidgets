@@ -26,6 +26,7 @@
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
 
+        *wxGraphicsContext*GetCairoRenderer*;
 @WX_VERSION_TAG@ {
         *;
 };

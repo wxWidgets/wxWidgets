@@ -666,6 +666,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontpickercmn.cpp
     src/common/fldlgcmn.cpp
     src/common/fontcmn.cpp
+    src/generic/graphicc.cpp
     src/common/fontenumcmn.cpp
     src/common/fontmap.cpp
     src/common/fontutilcmn.cpp
@@ -1077,7 +1078,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fdrepdlg.cpp
     <!-- Needed as long as we support GTK+ < 2.6 -->
     src/generic/filepickerg.cpp
-    src/generic/graphicc.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
