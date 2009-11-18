@@ -322,7 +322,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
             str << wxT(">");
 
             // TODO: convert to pixels
-            int indentPixels = indentLeftMM*10/4;
+            int indentPixels = static_cast<int>(indentLeftMM*10/4);
 
             if ((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) == 0)
             {
