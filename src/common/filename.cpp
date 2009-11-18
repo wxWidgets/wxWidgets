@@ -396,6 +396,13 @@ void wxFileName::SetPath( const wxString& pathOrig, wxPathFormat format )
     }
 
     // 1) Determine if the path is relative or absolute.
+
+    if ( path.empty() )
+    {
+        // we had only the volume
+        return;
+    }
+
     wxChar leadingChar = path[0u];
 
     switch (format)
@@ -2125,8 +2132,11 @@ wxFileName::SplitVolume(const wxString& fullpathWithVolume,
     {
         wxString sepVol = GetVolumeSeparator(format);
 
+        // we have to exclude the case of a colon in the very beginning of the
+        // string as it can't be a volume separator (nor can this be a valid
+        // DOS file name at all but we'll leave dealing with this to our caller)
         size_t posFirstColon = fullpath.find_first_of(sepVol);
-        if ( posFirstColon != wxString::npos )
+        if ( posFirstColon && posFirstColon != wxString::npos )
         {
             if ( pstrVolume )
             {
