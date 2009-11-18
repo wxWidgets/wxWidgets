@@ -330,7 +330,7 @@ protected:
             return wxString();
         }
 
-        // in spit of its type, the otmpFaceName field of OUTLINETEXTMETRIC
+        // in spite of its type, the otmpFaceName field of OUTLINETEXTMETRIC
         // gives an offset in _bytes_ of the face name from the struct start
         // while the name itself is an array of TCHARs
         return reinterpret_cast<wxChar *>(otm) +
@@ -619,77 +619,34 @@ bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 
 void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
-    BYTE ff_family;
-    wxArrayString facename;
-
-    // the list of fonts associated with a family was partially
-    // taken from http://www.codestyle.org/css/font-family
+    BYTE ff_family = FF_DONTCARE;
 
     switch ( family )
     {
         case wxFONTFAMILY_SCRIPT:
             ff_family = FF_SCRIPT;
-            facename.Add(wxS("Script"));
-            facename.Add(wxS("Brush Script MT"));
-            facename.Add(wxS("Comic Sans MS"));
-            facename.Add(wxS("Lucida Handwriting"));
             break;
 
         case wxFONTFAMILY_DECORATIVE:
             ff_family = FF_DECORATIVE;
-            facename.Add(wxS("Old English Text MT"));
-            facename.Add(wxS("Comic Sans MS"));
-            facename.Add(wxS("Lucida Handwriting"));
             break;
 
         case wxFONTFAMILY_ROMAN:
             ff_family = FF_ROMAN;
-            facename.Add(wxS("Times New Roman"));
-            facename.Add(wxS("Georgia"));
-            facename.Add(wxS("Garamond"));
-            facename.Add(wxS("Bookman Old Style"));
-            facename.Add(wxS("Book Antiqua"));
             break;
 
         case wxFONTFAMILY_TELETYPE:
         case wxFONTFAMILY_MODERN:
             ff_family = FF_MODERN;
-            facename.Add(wxS("Courier New"));
-            facename.Add(wxS("Lucida Console"));
-            facename.Add(wxS("Andale Mono"));
-            facename.Add(wxS("OCR A Extended"));
-            facename.Add(wxS("Terminal"));
             break;
 
         case wxFONTFAMILY_SWISS:
-            ff_family = FF_SWISS;
-            facename.Add(wxS("Arial"));
-            facename.Add(wxS("Century Gothic"));
-            facename.Add(wxS("Lucida Sans Unicode"));
-            facename.Add(wxS("Tahoma"));
-            facename.Add(wxS("Trebuchet MS"));
-            facename.Add(wxS("Verdana"));
-            break;
-
         case wxFONTFAMILY_DEFAULT:
-        default:
-        {
-            // We want Windows 2000 or later to have new fonts even MS Shell Dlg
-            // is returned as default GUI font for compatibility
-            int verMaj;
             ff_family = FF_SWISS;
-            if(wxGetOsVersion(&verMaj) == wxOS_WINDOWS_NT && verMaj >= 5)
-                facename.Add(wxS("MS Shell Dlg 2"));
-            else
-                facename.Add(wxS("MS Shell Dlg"));
-
-            // Quoting the MSDN:
-            //     "MS Shell Dlg is a mapping mechanism that enables
-            //     U.S. English Microsoft Windows NT, and Microsoft Windows 2000 to
-            //     support locales that have characters that are not contained in code
-            //     page 1252. It is not a font but a face name for a nonexistent font."
-        }
+            break;
     }
+
+    wxCHECK_RET( ff_family != FF_DONTCARE, "unknown wxFontFamily" );
 
     lf.lfPitchAndFamily = (BYTE)(DEFAULT_PITCH) | ff_family;
 
