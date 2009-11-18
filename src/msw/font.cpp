@@ -32,6 +32,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/encinfo.h"
+    #include "wx/scopeguard.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -182,7 +183,19 @@ public:
 
     wxString GetFaceName() const
     {
-        return m_nativeFontInfo.GetFaceName();
+        wxString facename = m_nativeFontInfo.GetFaceName();
+        if ( facename.empty() )
+        {
+            facename = GetMSWFaceName();
+            if ( !facename.empty() )
+            {
+                // cache the face name, it shouldn't change unless the family
+                // does and wxNativeFontInfo::SetFamily() resets the face name
+                const_cast<wxFontRefData *>(this)->SetFaceName(facename);
+            }
+        }
+
+        return facename;
     }
 
     wxFontEncoding GetEncoding() const
@@ -290,6 +303,39 @@ protected:
               wxFontEncoding encoding);
 
     void Init(const wxNativeFontInfo& info, WXHFONT hFont = 0);
+
+    // retrieve the face name really being used by the font: this is used to
+    // get the face name selected by the system when we don't specify it (but
+    // use just the family for example)
+    wxString GetMSWFaceName() const
+    {
+        ScreenHDC hdc;
+        SelectInHDC selectFont(hdc, m_hFont);
+
+        UINT otmSize = GetOutlineTextMetrics(hdc, 0, NULL);
+        if ( !otmSize )
+        {
+            wxLogLastError("GetOutlineTextMetrics(NULL)");
+            return wxString();
+        }
+
+        OUTLINETEXTMETRIC * const
+            otm = static_cast<OUTLINETEXTMETRIC *>(malloc(otmSize));
+        wxON_BLOCK_EXIT1( free, otm );
+
+        otm->otmSize = otmSize;
+        if ( !GetOutlineTextMetrics(hdc, otmSize, otm) )
+        {
+            wxLogLastError("GetOutlineTextMetrics()");
+            return wxString();
+        }
+
+        // in spit of its type, the otmpFaceName field of OUTLINETEXTMETRIC
+        // gives an offset in _bytes_ of the face name from the struct start
+        // while the name itself is an array of TCHARs
+        return reinterpret_cast<wxChar *>(otm) +
+                    wxPtrToUInt(otm->otmpFaceName)/sizeof(wxChar);
+    }
 
     // are we using m_nativeFontInfo.lf.lfHeight for point size or pixel size?
     bool             m_sizeUsingPixels;
