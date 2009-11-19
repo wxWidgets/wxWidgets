@@ -153,6 +153,8 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
 #ifdef wxHAS_EVENT_BIND
 
+#include "wx/typeinfo.h"
+
 // The tag is a type associated to the event type (which is an integer itself,
 // in spite of its name) value. It exists in order to be used as a template
 // parameter and provide a mapping between the event type values and their
@@ -189,16 +191,6 @@ typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 // compiler we can restore its old definition for it.
 typedef wxEventFunction wxObjectEventFunction;
 
-
-// wxEventFunctorClassInfo is used as a unique identifier for wxEventFunctor-
-// derived classes; it is more light weight than wxClassInfo and can be used in
-// template classes
-typedef void (*wxEventFunctorClassInfo)();
-
-// this macro must be used in wxEventFunctor-derived classes
-#define wxDEFINE_EVENT_FUNCTOR_CLASS_INFO( classInfoName ) \
-    static void classInfoName() {}
-
 // The event functor which is stored in the static and dynamic event tables:
 class WXDLLIMPEXP_BASE wxEventFunctor
 {
@@ -212,11 +204,6 @@ public:
     // finding it in an event table in Unbind(), by the given functor:
     virtual bool IsMatching(const wxEventFunctor& functor) const = 0;
 
-    // Test whether the given class info is the same as from this functor. This
-    // allows us in IsMatching to safely downcast the given wxEventFunctor without
-    // the usage of dynamic_cast<>().
-    virtual bool IsSameClass(wxEventFunctorClassInfo classInfo) const = 0;
-
     // If the functor holds an wxEvtHandler, then get access to it and track
     // its lifetime with wxEventConnectionRef:
     virtual wxEvtHandler *GetEvtHandler() const
@@ -228,6 +215,9 @@ public:
     // wxEventFunction:
     virtual wxEventFunction GetEvtMethod() const
         { return NULL; }
+
+private:
+    WX_DECLARE_ABSTRACT_TYPEINFO(wxEventFunctor)
 };
 
 // A plain method functor for the untyped legacy event types:
@@ -247,7 +237,7 @@ public:
 
     virtual bool IsMatching(const wxEventFunctor& functor) const
     {
-        if ( functor.IsSameClass( sm_classInfo ))
+        if ( wxTypeId(functor) == wxTypeId(*this) )
         {
             const wxObjectEventFunctor &other =
                 static_cast< const wxObjectEventFunctor & >( functor );
@@ -262,9 +252,6 @@ public:
             return false;
     }
 
-    virtual bool IsSameClass( wxEventFunctorClassInfo otherClassInfo ) const
-        { return sm_classInfo == otherClassInfo; }
-
     virtual wxEvtHandler *GetEvtHandler() const
         { return m_handler; }
 
@@ -275,7 +262,10 @@ private:
     wxEvtHandler *m_handler;
     wxEventFunction m_method;
 
-    wxDEFINE_EVENT_FUNCTOR_CLASS_INFO( sm_classInfo );
+    // Provide a dummy default ctor for type info purposes
+    wxObjectEventFunctor() { }
+
+    WX_DECLARE_TYPEINFO_INLINE(wxObjectEventFunctor)
 };
 
 // Create a functor for the legacy events: used by Connect()
@@ -424,21 +414,18 @@ public:
 
     virtual bool IsMatching(const wxEventFunctor& functor) const
     {
-        if ( !functor.IsSameClass(sm_classInfo) )
+        if ( wxTypeId(functor) != wxTypeId(*this) )
             return false;
 
         typedef wxEventFunctorMethod<EventTag, Class, EventArg, EventHandler>
             ThisFunctor;
 
-        // the cast is valid because IsSameClass() returned true above
+        // the cast is valid because wxTypeId()s matched above
         const ThisFunctor& other = static_cast<const ThisFunctor &>(functor);
 
         return (m_method == other.m_method || other.m_method == NULL) &&
                (m_handler == other.m_handler || other.m_handler == NULL);
     }
-
-    virtual bool IsSameClass( wxEventFunctorClassInfo otherClassInfo ) const
-        { return sm_classInfo == otherClassInfo; }
 
     virtual wxEvtHandler *GetEvtHandler() const
         { return this->ConvertToEvtHandler(m_handler); }
@@ -450,7 +437,12 @@ private:
     EventHandler *m_handler;
     void (Class::*m_method)(EventArg&);
 
-    wxDEFINE_EVENT_FUNCTOR_CLASS_INFO( sm_classInfo );
+    // Provide a dummy default ctor for type info purposes
+    wxEventFunctorMethod() { }
+
+    typedef wxEventFunctorMethod<EventTag, Class,
+                                 EventArg, EventHandler> thisClass;
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 
@@ -488,7 +480,7 @@ public:
 
     virtual bool IsMatching(const wxEventFunctor &functor) const
     {
-        if ( !functor.IsSameClass(sm_classInfo) )
+        if ( wxTypeId(functor) != wxTypeId(*this) )
             return false;
 
         typedef wxEventFunctorFunction<EventTag, EventArg> ThisFunctor;
@@ -498,13 +490,14 @@ public:
         return m_handler == other.m_handler;
     }
 
-    virtual bool IsSameClass( wxEventFunctorClassInfo otherClassInfo ) const
-        { return sm_classInfo == otherClassInfo; }
-
 private:
     void (*m_handler)(EventArg&);
 
-    wxDEFINE_EVENT_FUNCTOR_CLASS_INFO( sm_classInfo );
+    // Provide a dummy default ctor for type info purposes
+    wxEventFunctorFunction() { }
+
+    typedef wxEventFunctorFunction<EventTag, EventArg> thisClass;
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 
@@ -532,7 +525,7 @@ public:
 
     virtual bool IsMatching(const wxEventFunctor &functor) const
     {
-        if ( !functor.IsSameClass(sm_classInfo) )
+        if ( wxTypeId(functor) != wxTypeId(*this) )
             return false;
 
         typedef wxEventFunctorFunctor<EventTag, Functor> FunctorThis;
@@ -544,9 +537,6 @@ public:
         return m_handlerAddr == other.m_handlerAddr;
     }
 
-    virtual bool IsSameClass( wxEventFunctorClassInfo otherClassInfo ) const
-        { return sm_classInfo == otherClassInfo; }
-
 private:
     // Store a copy of the functor to prevent using/calling an already
     // destroyed instance:
@@ -555,7 +545,11 @@ private:
     // Use the address of the original functor for comparison in IsMatching:
     const void *m_handlerAddr;
 
-    wxDEFINE_EVENT_FUNCTOR_CLASS_INFO( sm_classInfo );
+    // Provide a dummy default ctor for type info purposes
+    wxEventFunctorFunctor() { }
+
+    typedef wxEventFunctorFunctor<EventTag, Functor> thisClass;
+    WX_DECLARE_TYPEINFO_INLINE(thisClass)
 };
 
 // Create functors for the templatized events, either allocated on the heap for

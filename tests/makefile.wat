@@ -300,6 +300,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_convautotest.obj &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_misctests.obj &
+	$(OBJS)\test_typeinfotest.obj &
 	$(OBJS)\test_ipc.obj &
 	$(OBJS)\test_socket.obj &
 	$(OBJS)\test_regextest.obj &
@@ -516,6 +517,9 @@ $(OBJS)\test_mbconvtest.obj :  .AUTODEPEND .\mbconv\mbconvtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_misctests.obj :  .AUTODEPEND .\misc\misctests.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_typeinfotest.obj :  .AUTODEPEND .\misc\typeinfotest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_ipc.obj :  .AUTODEPEND .\net\ipc.cpp

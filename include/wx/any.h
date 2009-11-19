@@ -19,6 +19,7 @@
 #include "wx/string.h"
 #include "wx/meta/movable.h"
 #include "wx/meta/if.h"
+#include "wx/typeinfo.h"
 
 
 // Size of the wxAny value buffer.
@@ -43,9 +44,6 @@ union wxAnyValueBuffer
     wxByte  m_buffer[WX_ANY_VALUE_BUFFER_SIZE];
 };
 
-typedef void (*wxAnyClassInfo)();
-
-
 //
 // wxAnyValueType is base class for value type functionality for C++ data
 // types used with wxAny. Usually the default template (wxAnyValueTypeImpl<>)
@@ -53,6 +51,7 @@ typedef void (*wxAnyClassInfo)();
 //
 class WXDLLIMPEXP_BASE wxAnyValueType
 {
+    WX_DECLARE_ABSTRACT_TYPEINFO(wxAnyValueType)
 public:
     /**
         Default constructor.
@@ -65,11 +64,6 @@ public:
     virtual ~wxAnyValueType()
     {
     }
-
-    /**
-        This function is used for internal type matching.
-    */
-    virtual wxAnyClassInfo GetClassInfo() const = 0;
 
     /**
         This function is used for internal type matching.
@@ -125,28 +119,22 @@ private:
 #define wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T) \
     wxAnyValueTypeImpl<T>::IsSameClass(valueTypePtr)
 
-    //valueTypePtr->CheckType(static_cast<T*>(NULL))
-
 
 /**
     Helper macro for defining user value types.
 
-    NB: We really cannot compare sm_classInfo directly in IsSameClass(),
-        but instead call sm_instance->GetClassInfo(). The former technique
-        broke at least on GCC 4.2 (but worked on VC8 shared build).
+    Even though C++ RTTI would be fully available to use, we'd have to to
+    facilitate sub-type system which allows, for instance, wxAny with
+    signed short '15' to be treated equal to wxAny with signed long long '15'.
+    Having sm_instance is important here.
 */
 #define WX_DECLARE_ANY_VALUE_TYPE(CLS) \
     friend class wxAny; \
+    WX_DECLARE_TYPEINFO_INLINE(CLS) \
 public: \
-    static void sm_classInfo() {} \
- \
-    virtual wxAnyClassInfo GetClassInfo() const \
-    { \
-        return sm_classInfo; \
-    } \
     static bool IsSameClass(const wxAnyValueType* otherType) \
     { \
-        return sm_instance->GetClassInfo() == otherType->GetClassInfo(); \
+        return wxTypeId(*sm_instance) == wxTypeId(*otherType); \
     } \
     virtual bool IsSameType(const wxAnyValueType* otherType) const \
     { \

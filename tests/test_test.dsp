@@ -461,6 +461,10 @@ SOURCE=.\strings\tokenizer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\typeinfotest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\unichar.cpp
 # End Source File
 # Begin Source File

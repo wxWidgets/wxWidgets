@@ -200,6 +200,12 @@ void wxAnyTestCase::Equality()
     CPPUNIT_ASSERT(wxANY_AS(m_anyWxObjectPtr2, wxObject*)
                         == dummyWxObjectPointer);
     CPPUNIT_ASSERT(wxANY_AS(m_anyVoidPtr2, void*) == dummyVoidPointer);
+
+    // Test sub-type system type compatibility
+    CPPUNIT_ASSERT(m_anySignedShort1.GetType()->
+                  IsSameType(m_anySignedLongLong1.GetType()));
+    CPPUNIT_ASSERT(m_anyUnsignedShort1.GetType()->
+                   IsSameType(m_anyUnsignedLongLong1.GetType()));
 }
 
 void wxAnyTestCase::As()
@@ -266,6 +272,7 @@ void wxAnyTestCase::GetAs()
     // Test dynamic conversion
     bool res;
     long l = 0;
+    short int si = 0;
     unsigned long ul = 0;
     wxString s;
     // Let's test against float instead of double, since the former
@@ -275,9 +282,14 @@ void wxAnyTestCase::GetAs()
     bool b = false;
 
     // Conversions from signed long type
+    // The first check should be enough to make sure that the sub-type system
+    // has not failed.
+    res = m_anySignedLong1.GetAs(&si);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT_EQUAL(si, 15);
     res = m_anySignedLong1.GetAs(&ul);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT_EQUAL(ul, static_cast<unsigned long>(15));
+    CPPUNIT_ASSERT_EQUAL(ul, 15UL);
     res = m_anySignedLong1.GetAs(&s);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(s == "15");

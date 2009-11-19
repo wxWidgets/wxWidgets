@@ -1539,6 +1539,10 @@ SOURCE=..\..\include\wx\txtstrm.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\typeinfo.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\types.h
 # End Source File
 # Begin Source File

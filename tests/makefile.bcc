@@ -66,6 +66,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_misctests.obj \
+	$(OBJS)\test_typeinfotest.obj \
 	$(OBJS)\test_ipc.obj \
 	$(OBJS)\test_socket.obj \
 	$(OBJS)\test_regextest.obj \
@@ -478,6 +479,9 @@ $(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 
 $(OBJS)\test_misctests.obj: .\misc\misctests.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\misctests.cpp
+
+$(OBJS)\test_typeinfotest.obj: .\misc\typeinfotest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\typeinfotest.cpp
 
 $(OBJS)\test_ipc.obj: .\net\ipc.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\net\ipc.cpp

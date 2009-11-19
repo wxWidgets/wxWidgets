@@ -2130,6 +2130,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\typeinfo.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\types.h"
 				>
 			</File>

@@ -251,6 +251,7 @@ wx/tls.h
 wx/tokenzr.h
 wx/tracker.h
 wx/txtstrm.h
+wx/typeinfo.h
 wx/types.h
 wx/unichar.h
 wx/uri.h

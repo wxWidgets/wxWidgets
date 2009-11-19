@@ -57,6 +57,7 @@
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
             misc/misctests.cpp
+            misc/typeinfotest.cpp
             net/ipc.cpp
             net/socket.cpp
             regex/regextest.cpp

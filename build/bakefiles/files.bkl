@@ -519,6 +519,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tokenzr.h
     wx/tracker.h
     wx/txtstrm.h
+    wx/typeinfo.h
     wx/types.h
     wx/unichar.h
     wx/uri.h

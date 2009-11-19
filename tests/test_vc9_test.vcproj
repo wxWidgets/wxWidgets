@@ -1088,6 +1088,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\typeinfotest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\strings\unichar.cpp"
 				>
 			</File>
