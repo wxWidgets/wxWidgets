@@ -26,6 +26,7 @@
 #include "wx/dynarray.h"
 #include "wx/thread.h"
 #include "wx/tracker.h"
+#include "wx/typeinfo.h"
 
 #ifdef wxHAS_EVENT_BIND
     #include "wx/meta/convertible.h"
@@ -152,8 +153,6 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
 
 #ifdef wxHAS_EVENT_BIND
-
-#include "wx/typeinfo.h"
 
 // The tag is a type associated to the event type (which is an integer itself,
 // in spite of its name) value. It exists in order to be used as a template
