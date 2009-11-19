@@ -209,9 +209,9 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     GtkWidget *button = gtk_info_bar_add_button
                         (
                             GTK_INFO_BAR(m_widget),
-                            label.empty()
+                            (label.empty()
                                 ? GTKConvertMnemonics(wxGetStockGtkID(btnid))
-                                : label,
+                                : label).utf8_str(),
                             btnid
                         );
 
