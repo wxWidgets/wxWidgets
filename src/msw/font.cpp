@@ -32,7 +32,6 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/encinfo.h"
-    #include "wx/scopeguard.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -44,6 +43,7 @@
     #include "wx/sysopt.h"
 #endif
 
+#include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 
 #if wxUSE_EXTENDED_RTTI
