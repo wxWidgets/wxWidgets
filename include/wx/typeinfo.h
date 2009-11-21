@@ -14,9 +14,13 @@
 //
 // This file defines wxTypeId macro that should be used internally in
 // wxWidgets instead of typeid(), for compatibility with builds that do
-// not implement C++ RTTI. Also, type defining macros in this file are also
+// not implement C++ RTTI. Also, type defining macros in this file are
 // intended for internal use only at this time and may change in future
 // versions.
+//
+// The reason why we need this simple RTTI system in addition to the older
+// wxObject-based one is that the latter does not work in template
+// classes.
 //
 
 #include "wx/defs.h"
@@ -40,20 +44,20 @@
 // wxTypeId could of course simply be defined as typeid.
 //
 
-class wxTypeInfo
+class wxTypeIdentifier
 {
 public:
-    wxTypeInfo(const char* className)
+    wxTypeIdentifier(const char* className)
     {
         m_className = className;
     }
 
-    bool operator==(const wxTypeInfo& other)
+    bool operator==(const wxTypeIdentifier& other)
     {
         return strcmp(m_className, other.m_className) == 0;
     }
 
-    bool operator!=(const wxTypeInfo& other)
+    bool operator!=(const wxTypeIdentifier& other)
     {
         return strcmp(m_className, other.m_className) != 0;
     }
@@ -61,7 +65,7 @@ private:
     const char* m_className;
 };
 
-#define wxTypeId(OBJ) wxTypeInfo(typeid(OBJ).name())
+#define wxTypeId(OBJ) wxTypeIdentifier(typeid(OBJ).name())
 
 #else // if !wxNO_RTTI
 
