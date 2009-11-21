@@ -449,6 +449,7 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 
     [m_macWindow setImplementation:this];
+    r = [NSWindow contentRectForFrameRect:r styleMask:windowstyle];
 
     [m_macWindow initWithContentRect:r
         styleMask:windowstyle
