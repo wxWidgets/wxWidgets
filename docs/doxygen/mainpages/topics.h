@@ -100,6 +100,7 @@ The following is a basic categorization of them:
 @li @subpage overview_backwardcompat
 @li @subpage overview_exceptions
 @li @subpage overview_rtti
+@li @subpage overview_cpp_rtti_disabled
 @li @subpage overview_refcount
 @li @subpage overview_mbconv
 @li @subpage overview_nonenglish

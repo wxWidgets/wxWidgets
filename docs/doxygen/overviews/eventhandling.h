@@ -221,6 +221,8 @@ events.
 
 @subsection overview_events_bind Dynamic Event Handling
 
+@see @ref overview_cpp_rtti_disabled
+
 The possibilities of handling events in this way are rather different.
 Let us start by looking at the syntax: the first obvious difference is that you
 need not use DECLARE_EVENT_TABLE() nor BEGIN_EVENT_TABLE() and the

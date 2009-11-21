@@ -66,7 +66,7 @@
     @library{wxbase}
     @category{data}
 
-    @see wxAnyValueType, wxVariant
+    @see wxAnyValueType, wxVariant, @ref overview_cpp_rtti_disabled
 */
 class wxAny
 {

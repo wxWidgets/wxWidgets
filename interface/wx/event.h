@@ -790,6 +790,8 @@ public:
         @param userData
             Data to be associated with the event table entry.
 
+        @see @ref overview_cpp_rtti_disabled
+
         @since 2.9.0
     */
     template <typename EventTag, typename Functor>
@@ -823,6 +825,8 @@ public:
         @param userData
             Data to be associated with the event table entry.
 
+        @see @ref overview_cpp_rtti_disabled
+
         @since 2.9.0
     */
     template <typename EventTag, typename Class, typename EventArg, typename EventHandler>
@@ -855,6 +859,8 @@ public:
         @param userData
             Data associated with the event table entry.
 
+        @see @ref overview_cpp_rtti_disabled
+
         @since 2.9.0
     */
     template <typename EventTag, typename Functor>
@@ -884,6 +890,8 @@ public:
             handler.
         @param userData
             Data associated with the event table entry.
+
+        @see @ref overview_cpp_rtti_disabled
 
         @since 2.9.0
     */
