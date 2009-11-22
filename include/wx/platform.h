@@ -825,4 +825,25 @@
 #define POSSEC_FILEFN
 #endif // __WXPALMOS5__
 
+/*
+    Optionally supported C++ features.
+ */
+
+/*
+    RTTI: if it is disabled in build/msw/makefile.* then this symbol will
+    already be defined but it's also possible to do it from configure (with
+    g++) or by editing project files with MSVC so test for it here too.
+ */
+#ifndef wxNO_RTTI
+#   ifdef __GNUG__
+#       ifndef __GXX_RTTI
+#           define wxNO_RTTI
+#       endif
+#   elif defined(_MSC_VER)
+#       ifndef _CPPRTTI
+#           define wxNO_RTTI
+#       endif
+#   endif
+#endif // wxNO_RTTI
+
 #endif /* _WX_PLATFORM_H_ */
