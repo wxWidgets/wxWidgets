@@ -111,7 +111,7 @@ public:
         Sets the new text control value.
 
         It also marks the control as not-modified which means that IsModified()
-        would return @false immediately after the call to SetValue().
+        would return @false immediately after the call to ChangeValue().
 
         The insertion point is set to the start of the control (i.e. position
         0) by this function.
