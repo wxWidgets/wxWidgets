@@ -92,6 +92,10 @@ public:
         used and SetOwner() wasn't called.
 
         Perform whatever action which is to be taken periodically here.
+
+        Notice that throwing exceptions from this method is currently not
+        supported, use event-based timer handling approach if an exception can
+        be thrown while handling timer notifications.
     */
     virtual void Notify();
 
