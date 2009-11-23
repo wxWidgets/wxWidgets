@@ -69,6 +69,8 @@ enum
     Menu_Bitmap, Menu_Bitmap2,
     Menu_Submenu, Menu_Sub1, Menu_Sub2, Menu_Sub3,
     Menu_Toggle, Menu_About,
+    Menu_Drawn1, Menu_Drawn2, Menu_Drawn3, Menu_Drawn4, Menu_Drawn5,
+    Menu_Native1, Menu_Native2, Menu_Native3, Menu_Native4, Menu_Native5,
     Control_First = 1000,
     Control_Listbox, Control_Listbox2
 };
@@ -198,9 +200,62 @@ void OwnerDrawnFrame::InitMenu()
                            wxITEM_NORMAL);
     file_menu->Append(pItem);
 
+    wxMenu* drawn_menu = new wxMenu;
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn1, wxT("&Menu item\tCtrl+K"));
+    drawn_menu->Append(pItem);
+
+    drawn_menu->AppendSeparator();
+
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn2, wxT("&Cheked item"),
+        wxT("check/uncheck me!"), wxITEM_CHECK);
+    drawn_menu->Append(pItem);
+    drawn_menu->Check(Menu_Drawn2, true);
+
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn3, wxT("&Radio item"),
+        wxT("check/uncheck me!"), wxITEM_RADIO);
+    drawn_menu->Append(pItem);
+
+    drawn_menu->AppendSeparator();
+
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn4, wxT("&Disabled item\tCtrl+RatherLongAccel"),
+        wxT("disabled item"));
+    pItem->Enable(false);
+    drawn_menu->Append(pItem);
+
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn5, wxT("&Other\tCtrl+O"), wxT("other item"));
+    pItem->SetTextColour(*wxRED);
+    drawn_menu->Append(pItem);
+
+    wxMenu* native_menu = new wxMenu;
+    pItem = new wxMenuItem(native_menu, Menu_Native1, wxT("&Menu item\tCtrl+K"));
+    native_menu->Append(pItem);
+
+    native_menu->AppendSeparator();
+
+    pItem = new wxMenuItem(native_menu, Menu_Native2, wxT("&Cheked item"),
+        wxT("check/uncheck me!"), wxITEM_CHECK);
+    native_menu->Append(pItem);
+    native_menu->Check(Menu_Native2, true);
+
+    pItem = new wxMenuItem(native_menu, Menu_Native3, wxT("&Radio item"),
+        wxT("check/uncheck me!"), wxITEM_RADIO);
+    native_menu->Append(pItem);
+
+    native_menu->AppendSeparator();
+
+    pItem = new wxMenuItem(native_menu, Menu_Native4, wxT("&Disabled item\tCtrl+RatherLongAccel"),
+        wxT("disabled item"));
+    pItem->Enable(false);
+    native_menu->Append(pItem);
+
+    pItem = new wxMenuItem(native_menu, Menu_Native5, wxT("&Other\tCtrl+O"), wxT("other item"));
+    native_menu->Append(pItem);
+
     wxMenuBar *menu_bar = new wxMenuBar;
 
     menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(drawn_menu, wxT("&Drawn"));
+    menu_bar->Append(native_menu, wxT("&Native"));
     SetMenuBar(menu_bar);
 }
 

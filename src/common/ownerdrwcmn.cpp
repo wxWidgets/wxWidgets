@@ -86,8 +86,17 @@ void wxOwnerDrawnBase::GetColourToUse(wxODStatus stat, wxColour& colText, wxColo
     else
     {
         // fall back to default colors if none explicitly specified
-        colText = m_colText.Ok() ? m_colText
-                                 : wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+
+        if ( stat & wxODDisabled )
+        {
+            colText = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+        }
+        else
+        {
+            colText = m_colText.Ok() ? m_colText
+                                     : wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
+        }
+
         colBack = m_colBack.Ok() ? m_colBack
                                  : wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
     }
