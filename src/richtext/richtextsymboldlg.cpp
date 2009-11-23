@@ -296,6 +296,7 @@ BEGIN_EVENT_TABLE( wxSymbolPickerDialog, wxDialog )
 
 #if defined(__UNICODE__)
     EVT_COMBOBOX( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSubsetSelected )
+    EVT_UPDATE_UI( ID_SYMBOLPICKERDIALOG_SUBSET, wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate )
 #endif
 
 #if defined(__UNICODE__)
@@ -394,7 +395,7 @@ void wxSymbolPickerDialog::CreateControls()
     itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_fontCtrlStrings;
-    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, wxT(""), wxDefaultPosition, wxSize(240, -1), m_fontCtrlStrings, wxCB_READONLY );
+    m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, wxEmptyString, wxDefaultPosition, wxSize(240, -1), m_fontCtrlStrings, wxCB_READONLY );
     m_fontCtrl->SetHelpText(_("The font from which to take the symbol."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_fontCtrl->SetToolTip(_("The font from which to take the symbol."));
@@ -410,7 +411,7 @@ void wxSymbolPickerDialog::CreateControls()
 
 #if defined(__UNICODE__)
     wxArrayString m_subsetCtrlStrings;
-    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, wxT(""), wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
+    m_subsetCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_SUBSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, m_subsetCtrlStrings, wxCB_READONLY );
     m_subsetCtrl->SetHelpText(_("Shows a Unicode subset."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_subsetCtrl->SetToolTip(_("Shows a Unicode subset."));
@@ -432,7 +433,7 @@ void wxSymbolPickerDialog::CreateControls()
     wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Character code:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, wxT(""), wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
+    m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, wxEmptyString, wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
     m_characterCodeCtrl->SetHelpText(_("The character code."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_characterCodeCtrl->SetToolTip(_("The character code."));
@@ -450,8 +451,8 @@ void wxSymbolPickerDialog::CreateControls()
     wxArrayString m_fromUnicodeCtrlStrings;
     m_fromUnicodeCtrlStrings.Add(_("ASCII"));
     m_fromUnicodeCtrlStrings.Add(_("Unicode"));
-    m_fromUnicodeCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FROM, _("ASCII"), wxDefaultPosition, wxDefaultSize, m_fromUnicodeCtrlStrings, wxCB_READONLY );
-    m_fromUnicodeCtrl->SetStringSelection(_("ASCII"));
+    m_fromUnicodeCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FROM, _("Unicode"), wxDefaultPosition, wxDefaultSize, m_fromUnicodeCtrlStrings, wxCB_READONLY );
+    m_fromUnicodeCtrl->SetStringSelection(_("Unicode"));
     m_fromUnicodeCtrl->SetHelpText(_("The range to show."));
     if (wxSymbolPickerDialog::ShowToolTips())
         m_fromUnicodeCtrl->SetToolTip(_("The range to show."));
@@ -521,6 +522,10 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
         }
         m_subsetCtrl->SetSelection(0);
     }
+#endif
+
+#if defined(__UNICODE__)
+    m_symbolsCtrl->SetUnicodeMode(m_fromUnicode);
 #endif
 
     UpdateSymbolDisplay();
@@ -655,6 +660,18 @@ void wxSymbolPickerDialog::OnSubsetSelected( wxCommandEvent& WXUNUSED(event) )
 }
 #endif
 
+#if defined(__UNICODE__)
+
+/*!
+ * wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
+ */
+
+void wxSymbolPickerDialog::OnSymbolpickerdialogSubsetUpdate( wxUpdateUIEvent& event )
+{
+    event.Enable(m_fromUnicode);
+}
+#endif
+
 /*!
  * wxEVT_UPDATE_UI event handler for wxID_OK
  */
@@ -779,6 +796,8 @@ bool wxSymbolListCtrl::Create(wxWindow *parent,
     SetFont(*wxNORMAL_FONT);
 
     SetupCtrl();
+
+    SetInitialSize(size);
 
     return true;
 }

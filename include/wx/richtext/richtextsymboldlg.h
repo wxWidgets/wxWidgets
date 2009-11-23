@@ -112,6 +112,9 @@ public:
     /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_SYMBOLPICKERDIALOG_SUBSET
     void OnSubsetSelected( wxCommandEvent& event );
 
+    /// wxEVT_UPDATE_UI event handler for ID_SYMBOLPICKERDIALOG_SUBSET
+    void OnSymbolpickerdialogSubsetUpdate( wxUpdateUIEvent& event );
+
 #endif
 #if defined(__UNICODE__)
     /// wxEVT_COMMAND_COMBOBOX_SELECTED event handler for ID_SYMBOLPICKERDIALOG_FROM
