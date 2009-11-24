@@ -189,6 +189,14 @@ public:
             facename = GetMSWFaceName();
             if ( !facename.empty() )
             {
+                // the face name returned by GetOutlineTextMetrics() may have
+                // these suffixes which we don't count as part of face name
+                // because we have separate fields for them so remove them
+                wxString basename;
+                if ( facename.EndsWith(wxS(" Italic"), &basename) ||
+                        facename.EndsWith(wxS(" Bold"), &basename) )
+                    facename = basename;
+
                 // cache the face name, it shouldn't change unless the family
                 // does and wxNativeFontInfo::SetFamily() resets the face name
                 const_cast<wxFontRefData *>(this)->SetFaceName(facename);
