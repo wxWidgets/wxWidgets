@@ -160,17 +160,21 @@ class wxFileHandle
 public:
     enum OpenMode
     {
-        Read,
-        Write
+        ReadAttr,
+        WriteAttr
     };
 
     wxFileHandle(const wxString& filename, OpenMode mode, int flags = 0)
     {
+        // be careful and use FILE_{READ,WRITE}_ATTRIBUTES here instead of the
+        // usual GENERIC_{READ,WRITE} as we don't want the file access time to
+        // be changed when we open it because this class is used for setting
+        // access time (see #10567)
         m_hFile = ::CreateFile
                     (
                      filename.fn_str(),             // name
-                     mode == Read ? GENERIC_READ    // access mask
-                                  : GENERIC_WRITE,
+                     mode == ReadAttr ? FILE_READ_ATTRIBUTES    // access mask
+                                      : FILE_WRITE_ATTRIBUTES,
                      FILE_SHARE_READ |              // sharing mode
                      FILE_SHARE_WRITE,              // (allow everything)
                      NULL,                          // no secutity attr
@@ -181,7 +185,7 @@ public:
 
         if ( m_hFile == INVALID_HANDLE_VALUE )
         {
-            if ( mode == Read )
+            if ( mode == ReadAttr )
             {
                 wxLogSysError(_("Failed to open '%s' for reading"),
                               filename.c_str());
@@ -2331,7 +2335,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         flags = 0;
     }
 
-    wxFileHandle fh(path, wxFileHandle::Write, flags);
+    wxFileHandle fh(path, wxFileHandle::WriteAttr, flags);
     if ( fh.IsOk() )
     {
         if ( ::SetFileTime(fh,
@@ -2415,7 +2419,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     }
     else // file
     {
-        wxFileHandle fh(GetFullPath(), wxFileHandle::Read);
+        wxFileHandle fh(GetFullPath(), wxFileHandle::ReadAttr);
         if ( fh.IsOk() )
         {
             ok = ::GetFileTime(fh,
@@ -2485,7 +2489,7 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
     // TODO
     return wxInvalidSize;
 #elif defined(__WIN32__)
-    wxFileHandle f(filename, wxFileHandle::Read);
+    wxFileHandle f(filename, wxFileHandle::ReadAttr);
     if (!f.IsOk())
         return wxInvalidSize;
 
