@@ -656,16 +656,17 @@
 // Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
 // 2D drawing API.  (Still somewhat experimental)
 //
-// Please note that on Windows you will need to link with gdiplus.lib (use
-// USE_GDIPLUS=1 for makefile builds) and distribute gdiplus.dll with your
-// application if you want it to be runnable on pre-XP systems.
+// Please note that on Windows gdiplus.dll is loaded dynamically which means
+// that nothing special needs to be done as long as you don't use
+// wxGraphicsContext at all or only use it on XP and later systems but you
+// still do need to distribute it yourself for an application using
+// wxGraphicsContext to be runnable on pre-XP systems.
 //
-// Default is 0
+// Default is 1 if the compiler has gdiplus.h (currently only MSVC 7+ under
+// Windows is known to).
 //
 // Recommended setting: 1
-#ifndef wxUSE_GRAPHICS_CONTEXT
-#define wxUSE_GRAPHICS_CONTEXT 0
-#endif
+#define wxUSE_GRAPHICS_CONTEXT 1
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls

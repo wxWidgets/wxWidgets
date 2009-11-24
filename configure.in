@@ -369,7 +369,6 @@ DEFAULT_wxUSE_LIBSDL=no
 
 dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
-DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
@@ -807,10 +806,15 @@ WX_ARG_FEATURE(mediactrl,   [  --enable-mediactrl      use wxMediaCtrl class], w
 WX_ARG_FEATURE(gstreamer8,  [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)
 WX_ARG_FEATURE(webkit,      [  --enable-webkit         use wxWebKitCtrl (Mac)], wxUSE_WEBKIT)
 WX_ARG_FEATURE(richtext,    [  --enable-richtext       use wxRichTextCtrl], wxUSE_RICHTEXT)
-WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
 WX_ARG_FEATURE(postscript,  [  --enable-postscript     use wxPostscriptDC device context (default for gtk+)], wxUSE_POSTSCRIPT)
 WX_ARG_FEATURE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_FEATURE(svg,         [  --enable-svg            use wxSVGFileDC device context], wxUSE_SVG)
+
+dnl wxDC is implemented in terms of wxGraphicsContext in wxOSX so the latter
+dnl can't be disabled, don't even provide an option to do it
+if test "$wxUSE_MAC" != 1; then
+WX_ARG_FEATURE(graphics_ctx,[  --enable-graphics_ctx   use graphics context 2D drawing API], wxUSE_GRAPHICS_CONTEXT)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -7305,23 +7309,50 @@ dnl ---------------------------------------------------------------------------
 dnl wxGraphicsContext
 dnl ---------------------------------------------------------------------------
 
+dnl Under Mac we don't even provide --enable-graphics_ctx switch as we always
+dnl need it -- but because we don't have the option, wxUSE_GRAPHICS_CONTEXT is
+dnl not defined automatically and we need to do it ourselves
 if test "$wxUSE_MAC" = 1; then
-	wxUSE_GRAPHICS_CONTEXT="yes"
+    wxUSE_GRAPHICS_CONTEXT="yes"
 fi
 
 if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
-   if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
-      AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
-   elif test "$wxUSE_GTK" != 1; then
-      dnl for other builds we'll just wing it for now...
-      AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
-   else
-      dnl ...but let's check for cairo availability for wxGTK builds
-      PKG_CHECK_MODULES(CAIRO, cairo,
-          [AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)],
-          [AC_MSG_WARN([Cairo library not found, unable to set wxUSE_GRAPHICS_CONTEXT])]
-      )
-   fi
+    wx_has_graphics=0
+    if test "$wxUSE_MSW" = 1; then
+        AC_CACHE_CHECK([if GDI+ is available], wx_cv_lib_gdiplus,
+            [
+                dnl we need just the header, not the library, as we load the
+                dnl GDI+ DLL dynamically anyhow during run-time
+                AC_LANG_PUSH(C++)
+                AC_TRY_COMPILE(
+                    [#include <gdiplus.h>],
+                    [
+                        using namespace Gdiplus;
+                    ],
+                    wx_cv_lib_gdiplus=yes,
+                    wx_cv_lib_gdiplus=no
+                )
+                AC_LANG_POP()
+            ]
+        )
+        if test "$wx_cv_lib_gdiplus" = "yes"; then
+            wx_has_graphics=1
+        fi
+    elif test "$wxUSE_GTK" = 1; then
+        PKG_CHECK_MODULES(CAIRO, cairo,
+            [wx_has_graphics=1],
+            [AC_MSG_WARN([Cairo library not found])]
+        )
+    else
+        dnl assume it's ok, add more checks here if needed
+        wx_has_graphics=1
+    fi
+
+    if test "$wx_has_graphics" = 1; then
+        AC_DEFINE(wxUSE_GRAPHICS_CONTEXT)
+    else
+        AC_MSG_WARN([wxGraphicsContext won't be available])
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
