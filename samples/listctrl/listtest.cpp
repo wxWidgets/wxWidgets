@@ -1117,8 +1117,8 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             }
             break;
 
-        case '1': // show sub item bounding rectangle
-        case '2':
+        case '1': // show sub item bounding rectangle for the given column
+        case '2': // (and icon/label rectangle if Shift/Ctrl is pressed)
         case '3':
         case '4': // this column is invalid but we want to test it too
             if ( InReportView() )
@@ -1126,7 +1126,14 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                 int subItem = event.GetKeyCode() - '1';
                 item = event.GetIndex();
                 wxRect r;
-                if ( !GetSubItemRect(item, subItem, r) )
+
+                int code = wxLIST_RECT_BOUNDS;
+                if ( wxGetKeyState(WXK_SHIFT) )
+                    code = wxLIST_RECT_ICON;
+                else if ( wxGetKeyState(WXK_CONTROL) )
+                    code = wxLIST_RECT_LABEL;
+
+                if ( !GetSubItemRect(item, subItem, r, code) )
                 {
                     wxLogError(wxT("Failed to retrieve rect of item %ld column %d"), item, subItem + 1);
                     break;

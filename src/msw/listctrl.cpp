@@ -1183,7 +1183,7 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     // there is no way to retrieve the first sub item bounding rectangle using
     // wxGetListCtrlSubItemRect() as 0 means the whole item, so we need to
     // truncate it at first column ourselves
-    if ( subItem == 0 )
+    if ( subItem == 0 && code == wxLIST_RECT_BOUNDS )
         rect.width = GetColumnWidth(0);
 
     return true;
