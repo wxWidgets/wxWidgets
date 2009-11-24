@@ -770,7 +770,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
 
     // the face name may be empty
-    wxStrcpy(lf.lfFaceName, tokenizer.GetNextToken());
+    SetFaceName(tokenizer.GetNextToken());
 
     return true;
 }
