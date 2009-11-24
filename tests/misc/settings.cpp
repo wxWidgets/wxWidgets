@@ -120,7 +120,12 @@ void SettingsTestCase::GlobalFonts()
 
         const wxString facename = font[i].GetFaceName();
         if ( !facename.empty() )
-            CPPUNIT_ASSERT( wxFontEnumerator::IsValidFacename(facename) );
+        {
+            WX_ASSERT_MESSAGE(
+                ("font #%u: facename \"%s\" is invalid", i, facename),
+                wxFontEnumerator::IsValidFacename(facename)
+            );
+        }
     }
 }
 
