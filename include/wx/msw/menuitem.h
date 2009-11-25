@@ -118,6 +118,10 @@ protected:
     virtual void GetFontToUse(wxFont& font) const;
     virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const;
 
+private:
+    // helper function for draw std menu check mark
+    void DrawStdCheckMark(HDC hdc, const RECT* rc, wxODStatus stat);
+
 #endif // wxUSE_OWNER_DRAWN
 
 private:

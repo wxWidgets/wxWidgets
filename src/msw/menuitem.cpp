@@ -1021,54 +1021,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     {
         if ( stat & wxODChecked )
         {
-        #if wxUSE_UXTHEME
-            wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
-            if ( theme )
-            {
-                wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
-
-                POPUPCHECKBACKGROUNDSTATES stateCheckBg = (stat & wxODDisabled)
-                                                            ? MCB_DISABLED
-                                                            : MCB_NORMAL;
-
-                theme->DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECKBACKGROUND,
-                                           stateCheckBg, &rcImg, NULL);
-
-                // check mark will be drawn centered on the background
-
-                POPUPCHECKSTATES stateCheck = (stat & wxODDisabled)
-                                                ? MC_CHECKMARKDISABLED
-                                                : MC_CHECKMARKNORMAL;
-
-                theme->DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECK,
-                                           stateCheck, &rcImg, NULL);
-            }
-            else
-        #endif // wxUSE_UXTHEME
-            {
-                int cx = imgWidth;
-                int cy = rcImg.bottom - rcImg.top;
-
-                // what goes on: DrawFrameControl creates a b/w mask,
-                // then we copy it to screen to have right colors
-
-                // first create a monochrome bitmap in a memory DC
-                HDC hdcMem = ::CreateCompatibleDC(hdc);
-                HBITMAP hbmpCheck = ::CreateBitmap(cx, cy, 1, 1, 0);
-                ::SelectObject(hdcMem, hbmpCheck);
-
-                // then draw a check mark into it
-                RECT rect = { 0, 0, cx, cy };
-                if ( rc.GetHeight() > 0 )
-                {
-                    ::DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
-                }
-
-                // finally copy it to screen DC and clean up
-                ::BitBlt(hdc, rcImg.left, rcImg.top, cx, cy, hdcMem, 0, 0, SRCCOPY);
-
-                ::DeleteDC(hdcMem);
-            }
+            DrawStdCheckMark(hdc, &rcImg, stat);
         }
     }
     else
@@ -1118,6 +1071,119 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     return true;
 
+}
+
+namespace
+{
+
+// helper function for draw coloured check mark
+void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask, int idxColor)
+{
+    const COLORREF colBlack = RGB(0, 0, 0);
+    const COLORREF colWhite = RGB(255, 255, 255);
+
+    COLORREF colOldText = ::SetTextColor(hdc, colBlack);
+    COLORREF colOldBack = ::SetBkColor(hdc, colWhite);
+    int prevMode = SetBkMode(hdc, TRANSPARENT);
+
+    // memory DC for color bitmap
+    MemoryHDC hdcMem(hdc);
+    CompatibleBitmap hbmpMem(hdc, cx, cy);
+    SelectInHDC selMem(hdcMem, hbmpMem);
+
+    RECT rect = { 0, 0, cx, cy };
+    ::FillRect(hdcMem, &rect, ::GetSysColorBrush(idxColor));
+
+    const COLORREF colCheck = ::GetSysColor(idxColor);
+    if ( colCheck == colWhite )
+    {
+        ::BitBlt(hdc, x, y, cx, cy, hdcCheckMask, 0, 0, MERGEPAINT);
+        ::BitBlt(hdc, x, y, cx, cy, hdcMem, 0, 0, SRCAND);
+    }
+    else
+    {
+        if ( colCheck != colBlack )
+        {
+            const DWORD ROP_DSna = 0x00220326;  // dest = (NOT src) AND dest
+            ::BitBlt(hdcMem, 0, 0, cx, cy, hdcCheckMask, 0, 0, ROP_DSna);
+        }
+
+        ::BitBlt(hdc, x, y, cx, cy, hdcCheckMask, 0, 0, SRCAND);
+        ::BitBlt(hdc, x, y, cx, cy, hdcMem, 0, 0, SRCPAINT);
+    }
+
+    ::SetBkMode(hdc, prevMode);
+    ::SetBkColor(hdc, colOldBack);
+    ::SetTextColor(hdc, colOldText);
+}
+
+} // anonymous namespace
+
+void wxMenuItem::DrawStdCheckMark(HDC hdc, const RECT* rc, wxODStatus stat)
+{
+#if wxUSE_UXTHEME
+    wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
+    if ( theme )
+    {
+        wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
+
+        POPUPCHECKBACKGROUNDSTATES stateCheckBg = (stat & wxODDisabled)
+                                                    ? MCB_DISABLED
+                                                    : MCB_NORMAL;
+
+        theme->DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECKBACKGROUND,
+                                   stateCheckBg, rc, NULL);
+
+        // check mark will be drawn centered on the background
+
+        POPUPCHECKSTATES stateCheck;
+        if ( GetKind() == wxITEM_CHECK )
+        {
+            stateCheck = (stat & wxODDisabled) ? MC_CHECKMARKDISABLED
+                                               : MC_CHECKMARKNORMAL;
+        }
+        else
+        {
+            stateCheck = (stat & wxODDisabled) ? MC_BULLETDISABLED
+                                               : MC_BULLETNORMAL;
+        }
+
+        theme->DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECK,
+                                   stateCheck, rc, NULL);
+    }
+    else
+#endif // wxUSE_UXTHEME
+    {
+        int cx = rc->right - rc->left;
+        int cy = rc->bottom - rc->top;
+
+        // first create mask of check mark
+        MemoryHDC hdcMask(hdc);
+        MonoBitmap hbmpMask(cx, cy);
+        SelectInHDC selMask(hdcMask,hbmpMask);
+
+        // then draw a check mark into it
+        UINT stateCheck = (GetKind() == wxITEM_CHECK) ? DFCS_MENUCHECK
+                                                      : DFCS_MENUBULLET;
+        RECT rect = { 0, 0, cx, cy };
+        ::DrawFrameControl(hdcMask, &rect, DFC_MENU, stateCheck);
+
+        // first draw shadow if disabled
+        if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
+        {
+            DrawColorCheckMark(hdc, rc->left + 1, rc->top + 1,
+                               cx, cy, hdcMask, COLOR_3DHILIGHT);
+        }
+
+        // then draw a check mark
+        int color = COLOR_MENUTEXT;
+        if ( stat & wxODDisabled )
+            color = COLOR_BTNSHADOW;
+        else if ( stat & wxODSelected )
+            color = COLOR_HIGHLIGHTTEXT;
+
+        DrawColorCheckMark(hdc, rc->left, rc->top, cx, cy, hdcMask, color);
+    }
 }
 
 void wxMenuItem::GetFontToUse(wxFont& font) const
