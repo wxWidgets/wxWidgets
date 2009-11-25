@@ -211,15 +211,25 @@ public:
     Margins CheckMargin;        // popup check margins
     Margins CheckBgMargin;      // popup check background margins
 
+    Margins ArrowMargin;        // popup submenu arrow margins
+
     Margins SeparatorMargin;    // popup separator margins
 
     SIZE CheckSize;             // popup check size metric
+    SIZE ArrowSize;             // popup submenu arrow size metric
     SIZE SeparatorSize;         // popup separator size metric
+
+    int TextBorder;             // popup border space between
+                                // item text and gutter
 
     int AccelBorder;            // popup border space between
                                 // item text and accelerator
-    int TextBorder;             // popup border space between
-                                // item text and gutter
+
+    int ArrowBorder;            // popup border space between
+                                // item accelerator and submenu arrow
+
+    int Offset;                 // system added space at the end of the menu,
+                                // add this offset for remove the extra space
 
     wxFont Font;                // default menu font
 
@@ -309,6 +319,10 @@ void MenuDrawData::Init()
                                TMT_CONTENTMARGINS, NULL,
                                reinterpret_cast<MARGINS*>(&CheckBgMargin));
 
+        theme->GetThemeMargins(hTheme, NULL, MENU_POPUPSUBMENU, 0,
+                               TMT_CONTENTMARGINS, NULL,
+                               reinterpret_cast<MARGINS*>(&ArrowMargin));
+
         theme->GetThemeMargins(hTheme, NULL, MENU_POPUPSEPARATOR, 0,
                                TMT_SIZINGMARGINS, NULL,
                                reinterpret_cast<MARGINS*>(&SeparatorMargin));
@@ -316,11 +330,18 @@ void MenuDrawData::Init()
         theme->GetThemePartSize(hTheme, NULL, MENU_POPUPCHECK, 0,
                                 NULL, TS_TRUE, &CheckSize);
 
+        theme->GetThemePartSize(hTheme, NULL, MENU_POPUPSUBMENU, 0,
+                                NULL, TS_TRUE, &ArrowSize);
+
         theme->GetThemePartSize(hTheme, NULL, MENU_POPUPSEPARATOR, 0,
                                 NULL, TS_TRUE, &SeparatorSize);
 
-        theme->GetThemeInt(hTheme, MENU_POPUPBORDERS, 0, TMT_BORDERSIZE, &AccelBorder);
         theme->GetThemeInt(hTheme, MENU_POPUPBACKGROUND, 0, TMT_BORDERSIZE, &TextBorder);
+
+        AccelBorder = 34;
+        ArrowBorder = 0;
+
+        Offset = -14;
 
         wxNativeFontInfo fontInfo;
         theme->GetThemeSysFont(hTheme, TMT_MENUFONT, &fontInfo.lf);
@@ -352,6 +373,10 @@ void MenuDrawData::Init()
         CheckSize.cx = ::GetSystemMetrics(SM_CXMENUCHECK);
         CheckSize.cy = ::GetSystemMetrics(SM_CYMENUCHECK);
 
+        ArrowMargin = Margins();
+
+        ArrowSize = CheckSize;
+
         // separator height with margins
         int sepFullSize = metrics.iMenuHeight / 2;
 
@@ -365,6 +390,9 @@ void MenuDrawData::Init()
 
         TextBorder = 0;
         AccelBorder = 8;
+        ArrowBorder = 6;
+
+        Offset = -12;
 
         Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont));
 
@@ -683,6 +711,21 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
 #if wxUSE_OWNER_DRAWN
 
+int wxMenuItem::MeasureAccelWidth() const
+{
+    wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
+
+    wxMemoryDC dc;
+    wxFont font;
+    GetFontToUse(font);
+    dc.SetFont(font);
+
+    wxCoord w;
+    dc.GetTextExtent(accel, &w, NULL);
+
+    return w;
+}
+
 wxString wxMenuItem::GetName() const
 {
     return GetItemLabelText();
@@ -706,10 +749,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
             return true;
         }
 
-        wxString str = GetItemLabel();
-
-        // text and accel separator char removal
-        str.Replace(wxT('\t'), wxEmptyString);
+        wxString str = GetName();
 
         wxMemoryDC dc;
         wxFont font;
@@ -719,12 +759,15 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
         wxCoord w, h;
         dc.GetTextExtent(str, &w, &h);
 
-        *width = w + data->TextBorder + data->AccelBorder;
+        *width = data->TextBorder + w + data->AccelBorder;
         *height = h;
 
-        // system added space at the end of the menu for the submenu expansion
-        // arrow, but we must add a 4-pixel separator for better apperance
-        *width += 4;
+        w = m_parentMenu->GetMaxAccelWidth();
+        if ( w > 0 )
+            *width += w + data->ArrowBorder;
+
+        *width += data->Offset;
+        *width += data->ArrowMargin.left + data->ArrowSize.cx + data->ArrowMargin.right;
     }
     else // don't draw the text, just the bitmap (if any)
     {
@@ -941,10 +984,17 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
                  (stat & wxODDisabled) && !(stat & wxODSelected) )
                 flags |= DSS_DISABLED;
 
-            // right align accel string with right edge of menu
-            // (offset by the margin width)
+            int x = rcText.right - data->ArrowMargin.left
+                                 - data->ArrowSize.cx
+                                 - data->ArrowMargin.right
+                                 - data->ArrowBorder;
 
-            int x = rcText.right - 16 - accelSize.cx;
+            // right align accel on FullTheme menu, left otherwise
+            if ( data->MenuLayout() == MenuDrawData::FullTheme)
+                x -= accelSize.cx;
+            else
+                x -= m_parentMenu->GetMaxAccelWidth();
+
             int y = rcText.top + (rcText.bottom - rcText.top - accelSize.cy) / 2;
 
             ::DrawState(hdc, NULL, NULL, (LPARAM)accel.wx_str(),
