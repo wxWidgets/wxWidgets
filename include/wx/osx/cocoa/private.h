@@ -301,7 +301,7 @@ protected :
     @end
 
 
-    @interface wxNSTextView : NSTextView <NSTextViewDelegate>
+    @interface wxNSTextView : NSTextView
     {
     }
     
