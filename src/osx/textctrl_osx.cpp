@@ -190,7 +190,8 @@ bool wxTextCtrl::SetFont( const wxFont& font )
 
 bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 {
-    GetTextPeer()->SetStyle( start , end , style ) ;
+    if (GetTextPeer())
+        GetTextPeer()->SetStyle( start , end , style ) ;
 
     return true ;
 }
@@ -337,6 +338,13 @@ bool wxTextCtrl::AcceptsFocus() const
 
 wxSize wxTextCtrl::DoGetBestSize() const
 {
+    if (GetTextPeer())
+    {
+        wxSize size = GetTextPeer()->GetBestSize();
+        if (size.x > 0 && size.y > 0)
+            return size;
+    }
+    
     int wText, hText;
 
     // these are the numbers from the HIG:
@@ -826,7 +834,11 @@ int wxTextWidgetImpl::GetNumberOfLines() const
 
     for (size_t i = 0; i < content.length() ; i++)
     {
+#if wxOSX_USE_COCOA
+        if (content[i] == '\n')
+#else
         if (content[i] == '\r')
+#endif
             lines++;
     }
 

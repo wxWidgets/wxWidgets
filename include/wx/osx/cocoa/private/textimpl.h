@@ -62,6 +62,7 @@ public:
     virtual void SetStyle(long start, long end, const wxTextAttr& style);
     
     virtual void CheckSpelling(bool check);
+    virtual wxSize GetBestSize() const;
 
 protected:
     NSScrollView* m_scrollView;

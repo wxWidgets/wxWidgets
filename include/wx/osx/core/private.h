@@ -586,6 +586,8 @@ public :
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool WXUNUSED(check)) { }
+    
+    virtual wxSize GetBestSize() const { return wxDefaultSize; }
 };
 
 //

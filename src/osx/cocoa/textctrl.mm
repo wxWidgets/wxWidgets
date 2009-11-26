@@ -514,6 +514,18 @@ void wxNSTextViewControl::CheckSpelling(bool check)
         [m_textView setContinuousSpellCheckingEnabled: check];
 }
 
+wxSize wxNSTextViewControl::GetBestSize() const
+{
+    if (m_textView && [m_textView layoutManager])
+    {
+        NSRect rect = [[m_textView layoutManager] usedRectForTextContainer: [m_textView textContainer]];
+        wxSize size = wxSize(rect.size.width, rect.size.height);
+        size.x += [m_textView textContainerInset].width;
+        size.y += [m_textView textContainerInset].height;
+        return size;
+    }
+}
+
 // wxNSTextFieldControl
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
