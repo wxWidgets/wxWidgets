@@ -86,8 +86,16 @@ public:
     virtual int GetSelection() const;
     virtual int GetSelections(wxArrayInt& aSelections) const;
 
-    // wxCheckListBox support
+    // return the index of the item at this position or wxNOT_FOUND
+    int HitTest(const wxPoint& pt) const { return DoHitTestList(pt); }
+    int HitTest(wxCoord x, wxCoord y) const { return DoHitTestList(wxPoint(x, y)); }
+
+    // ownerdrawn wxListBox and wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
+    // override base class virtuals
+    virtual void Delete(unsigned int n);
+    virtual bool SetFont(const wxFont &font);
+
     bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
     bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
 
@@ -99,6 +107,12 @@ public:
 
     // get the index of the given item
     int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
+
+    // get rect of the given item index
+    bool GetItemRect(size_t n, wxRect& rect) const;
+
+    // redraw the given item
+    bool RefreshItem(size_t n);
 #endif // wxUSE_OWNER_DRAWN
 
     // Windows-specific code to update the horizontal extent of the listbox, if
@@ -147,7 +161,9 @@ protected:
     virtual void DoSetFirstItem(int n);
     virtual void DoSetItemClientData(unsigned int n, void* clientData);
     virtual void* DoGetItemClientData(unsigned int n) const;
-    virtual int DoListHitTest(const wxPoint& point) const;
+
+    // this can't be called DoHitTest() because wxWindow already has this method
+    virtual int DoHitTestList(const wxPoint& point) const;
 
     bool m_updateHorizontalExtent;
     virtual void OnInternalIdle();

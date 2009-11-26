@@ -490,7 +490,7 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
     return n;
 }
 
-int wxListBox::DoListHitTest(const wxPoint& point) const
+int wxListBox::DoHitTestList(const wxPoint& point) const
 {
     LRESULT lRes = ::SendMessage(GetHwnd(), LB_ITEMFROMPOINT,
                                  0, MAKELPARAM(point.x, point.y));
@@ -683,12 +683,73 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 #if wxUSE_OWNER_DRAWN
 
+// misc overloaded methods
+// -----------------------
+
+void wxListBox::Delete(unsigned int n)
+{
+    wxCHECK_RET( IsValid(n),
+                 wxT("invalid index in wxListBox::Delete") );
+
+    wxListBoxBase::Delete(n);
+
+    // free memory
+    delete m_aItems[n];
+    m_aItems.RemoveAt(n);
+}
+
+bool wxListBox::SetFont(const wxFont &font)
+{
+    unsigned int i;
+    for ( i = 0; i < m_aItems.GetCount(); i++ )
+        m_aItems[i]->SetFont(font);
+
+    wxListBoxBase::SetFont(font);
+
+    return true;
+}
+
+bool wxListBox::GetItemRect(size_t n, wxRect& rect) const
+{
+    wxCHECK_MSG( IsValid(n), false,
+                 wxT("invalid index in wxListBox::GetItemRect") );
+
+    RECT rc;
+
+    if ( ListBox_GetItemRect(GetHwnd(), n, &rc) != LB_ERR )
+    {
+        rect = wxRectFromRECT(rc);
+        return true;
+    }
+    else
+    {
+        // couldn't retrieve rect: for example, item isn't visible
+        return false;
+    }
+}
+
+bool wxListBox::RefreshItem(size_t n)
+{
+    wxRect rect;
+    if ( !GetItemRect(n, rect) )
+        return false;
+
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    return ::InvalidateRect((HWND)GetHWND(), &rc, FALSE) == TRUE;
+}
+
+
 // drawing
 // -------
 
-// space beneath/above each row in pixels
-// "standard" checklistbox use 1 here, some might prefer 2. 0 is ugly.
-#define OWNER_DRAWN_LISTBOX_EXTRA_SPACE    (1)
+namespace
+{
+    // space beneath/above each row in pixels
+    static const int LISTBOX_EXTRA_SPACE = 1;
+
+} // anonymous namespace
 
 // the height is the same for all items
 // TODO should be changed for LBS_OWNERDRAWVARIABLE style listboxes
@@ -712,7 +773,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
         wxDCTemp dc((WXHDC)hdc);
         dc.SetFont(GetFont());
 
-        pStruct->itemHeight = dc.GetCharHeight() + 2*OWNER_DRAWN_LISTBOX_EXTRA_SPACE;
+        pStruct->itemHeight = dc.GetCharHeight() + 2 * LISTBOX_EXTRA_SPACE;
         pStruct->itemWidth  = dc.GetCharWidth();
     }
 
