@@ -20,6 +20,7 @@
 
 #include "wx/filedlg.h"
 #include "wx/dirdlg.h"
+#include "wx/filename.h"
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
@@ -178,6 +179,27 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     // creating the native dialog and this seems to be the only way
     wxDialog dlg(NULL, wxID_ANY, "");
     return (*m_extraControlCreator)(&dlg)->GetSize();
+}
+
+void wxFileDialogBase::SetPath(const wxString& path)
+{
+    wxString ext;
+    wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
+    if ( !ext.empty() )
+        m_fileName << _T('.') << ext;
+    m_path = path;
+}
+
+void wxFileDialogBase::SetDirectory(const wxString& dir)
+{
+    m_dir = dir;
+    m_path = wxFileName(m_dir, m_fileName).GetFullPath();
+}
+
+void wxFileDialogBase::SetFilename(const wxString& name)
+{
+    m_fileName = name;
+    m_path = wxFileName(m_dir, m_fileName).GetFullPath();
 }
 
 //----------------------------------------------------------------------------

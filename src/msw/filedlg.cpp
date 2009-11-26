@@ -174,14 +174,6 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     files = m_fileNames;
 }
 
-void wxFileDialog::SetPath(const wxString& path)
-{
-    wxString ext;
-    wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
-    if ( !ext.empty() )
-        m_fileName << wxT('.') << ext;
-}
-
 void wxFileDialog::DoGetPosition(int *x, int *y) const
 {
     if ( x )

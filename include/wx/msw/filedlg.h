@@ -29,7 +29,6 @@ public:
                  const wxSize& sz = wxDefaultSize,
                  const wxString& name = wxFileDialogNameStr);
 
-    virtual void SetPath(const wxString& path);
     virtual void GetPaths(wxArrayString& paths) const;
     virtual void GetFilenames(wxArrayString& files) const;
 #ifndef __WXWINCE__

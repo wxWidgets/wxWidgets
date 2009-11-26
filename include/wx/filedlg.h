@@ -107,9 +107,9 @@ public:
     bool HasFdFlag(int flag) const { return HasFlag(flag); }
 
     virtual void SetMessage(const wxString& message) { m_message = message; }
-    virtual void SetPath(const wxString& path) { m_path = path; }
-    virtual void SetDirectory(const wxString& dir) { m_dir = dir; }
-    virtual void SetFilename(const wxString& name) { m_fileName = name; }
+    virtual void SetPath(const wxString& path);
+    virtual void SetDirectory(const wxString& dir);
+    virtual void SetFilename(const wxString& name);
     virtual void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
     virtual void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
 
