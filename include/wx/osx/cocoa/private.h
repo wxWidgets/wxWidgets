@@ -301,10 +301,12 @@ protected :
     @end
 
 
-    @interface wxNSTextView : NSTextView
+    @interface wxNSTextView : NSTextView <NSTextViewDelegate>
     {
     }
-
+    
+    - (void)textDidChange:(NSNotification *)aNotification;
+    
     @end
 
     @interface wxNSMenu : NSMenu

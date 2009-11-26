@@ -60,6 +60,8 @@ public:
     
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual void SetStyle(long start, long end, const wxTextAttr& style);
+    
+    virtual void CheckSpelling(bool check);
 
 protected:
     NSScrollView* m_scrollView;

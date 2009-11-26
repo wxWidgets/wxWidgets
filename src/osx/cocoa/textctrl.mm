@@ -192,6 +192,21 @@ protected :
     }
 }
 
+- (void)textDidChange:(NSNotification *)aNotification
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [aNotification object] );
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer ) {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
+
 @end
 
 @implementation wxNSTextField
@@ -319,7 +334,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxW
 
     [m_scrollView setDocumentView: tv];
 
-    [tv setDelegate: w];
+    [tv setDelegate: tv];
 
     InstallEventHandler(tv);
 }
@@ -431,16 +446,37 @@ void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSE
 
 bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 {
-    if (m_textView && position >=0 && position < [[m_textView string] length]) {
-        NSTextStorage* storage = [m_textView textStorage];
-        NSFont* font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
+    if (m_textView && position >=0)
+    {   
+        NSFont* font = NULL;
+        NSColor* bgcolor = NULL;
+        NSColor* fgcolor = NULL;
+        // NOTE: It appears that other platforms accept GetStyle with the position == length
+        // but that NSTextStorage does not accept length as a valid position.
+        // Therefore we return the default control style in that case.
+        if (position < [[m_textView string] length]) 
+        {
+            NSTextStorage* storage = [m_textView textStorage];
+            font = [[storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL] autorelease];
+            bgcolor = [[storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
+            fgcolor = [[storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL] autorelease];
+        }
+        else
+        {
+            NSDictionary* attrs = [m_textView typingAttributes];
+            font = [[attrs objectForKey:NSFontAttributeName] autorelease];
+            bgcolor = [[attrs objectForKey:NSBackgroundColorAttributeName] autorelease];
+            fgcolor = [[attrs objectForKey:NSForegroundColorAttributeName] autorelease];
+        }
+        
         if (font)
             style.SetFont(wxFont(font));
-        NSColor* bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL];
+        
         if (bgcolor)
             style.SetBackgroundColour(wxColour(bgcolor));
-        NSColor* fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
-        style.SetTextColour(wxColour(fgcolor));
+            
+        if (fgcolor)
+            style.SetTextColour(wxColour(fgcolor));
         return true;
     }
 
@@ -453,20 +489,29 @@ void wxNSTextViewControl::SetStyle(long start,
 {
     if (m_textView) {
         NSRange range = NSMakeRange(start, end-start);
+        if (start == -1 && end == -1)
+            range = [m_textView selectedRange];
+
         NSTextStorage* storage = [m_textView textStorage];
         
         wxFont font = style.GetFont();
-        if (font.IsOk())
-            [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
+        if (style.HasFont() && font.IsOk())
+            [storage addAttribute:NSFontAttributeName value:font.OSXGetNSFont() range:range];
         
         wxColour bgcolor = style.GetBackgroundColour();
-        if (bgcolor.IsOk())
+        if (style.HasBackgroundColour() && bgcolor.IsOk())
             [storage addAttribute:NSBackgroundColorAttributeName value:bgcolor.OSXGetNSColor() range:range];
         
         wxColour fgcolor = style.GetTextColour();
-        if (fgcolor.IsOk())
+        if (style.HasTextColour() && fgcolor.IsOk())
             [storage addAttribute:NSForegroundColorAttributeName value:fgcolor.OSXGetNSColor() range:range];
     }
+}
+
+void wxNSTextViewControl::CheckSpelling(bool check)
+{
+    if (m_textView)
+        [m_textView setContinuousSpellCheckingEnabled: check];
 }
 
 // wxNSTextFieldControl
