@@ -1928,6 +1928,21 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 }
             }
             break;
+
+#if wxUSE_MENUS
+        case WM_SETCURSOR:
+            // rich text controls seem to have a bug and don't change the
+            // cursor to the standard arrow one from the I-beam cursor usually
+            // used by them even when a popup menu is shown (this works fine
+            // for plain EDIT controls though), so explicitly work around this
+            if ( IsRich() )
+            {
+                extern wxMenu *wxCurrentPopupMenu;
+                if ( wxCurrentPopupMenu &&
+                        wxCurrentPopupMenu->GetInvokingWindow() == this )
+                    ::SetCursor(GetHcursorOf(*wxSTANDARD_CURSOR));
+            }
+#endif // wxUSE_MENUS
     }
 
     return lRc;
