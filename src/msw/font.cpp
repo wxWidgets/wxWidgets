@@ -289,7 +289,14 @@ public:
     }
 
     const wxNativeFontInfo& GetNativeFontInfo() const
-        { return m_nativeFontInfo; }
+    {
+        // ensure that we have a valid face name in our font information:
+        // GetFaceName() will try to retrieve it from our HFONT and save it if
+        // it was successful
+        (void)GetFaceName();
+
+        return m_nativeFontInfo;
+    }
 
     void SetNativeFontInfo(const wxNativeFontInfo& nativeFontInfo)
     {
