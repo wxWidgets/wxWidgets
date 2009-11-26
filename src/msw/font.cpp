@@ -213,8 +213,7 @@ public:
 
     WXHFONT GetHFONT() const
     {
-        if ( !m_hFont )
-            const_cast<wxFontRefData *>(this)->Alloc();
+        AllocIfNeeded();
 
         return (WXHFONT)m_hFont;
     }
@@ -290,6 +289,10 @@ public:
 
     const wxNativeFontInfo& GetNativeFontInfo() const
     {
+        // we need to create the font now to get the corresponding LOGFONT if
+        // it hadn't been done yet
+        AllocIfNeeded();
+
         // ensure that we have a valid face name in our font information:
         // GetFaceName() will try to retrieve it from our HFONT and save it if
         // it was successful
@@ -318,6 +321,12 @@ protected:
               wxFontEncoding encoding);
 
     void Init(const wxNativeFontInfo& info, WXHFONT hFont = 0);
+
+    void AllocIfNeeded() const
+    {
+        if ( !m_hFont )
+            const_cast<wxFontRefData *>(this)->Alloc();
+    }
 
     // retrieve the face name really being used by the font: this is used to
     // get the face name selected by the system when we don't specify it (but
@@ -1053,24 +1062,6 @@ wxFontEncoding wxFont::GetEncoding() const
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
-}
-
-wxString wxFont::GetNativeFontInfoDesc() const
-{
-    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
-
-    // be sure we have an HFONT associated...
-    const_cast<wxFont*>(this)->RealizeResource();
-    return wxFontBase::GetNativeFontInfoDesc();
-}
-
-wxString wxFont::GetNativeFontInfoUserDesc() const
-{
-    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
-
-    // be sure we have an HFONT associated...
-    const_cast<wxFont*>(this)->RealizeResource();
-    return wxFontBase::GetNativeFontInfoUserDesc();
 }
 
 bool wxFont::IsFixedWidth() const

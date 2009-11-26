@@ -110,10 +110,6 @@ public:
 
     virtual ~wxFont();
 
-    // wxFontBase overridden functions
-    virtual wxString GetNativeFontInfoDesc() const;
-    virtual wxString GetNativeFontInfoUserDesc() const;
-
     // implement base class pure virtuals
     virtual int GetPointSize() const;
     virtual wxSize GetPixelSize() const;

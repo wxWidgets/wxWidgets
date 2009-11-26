@@ -442,7 +442,9 @@ public:
 
     /**
         Returns the platform-dependent string completely describing this font.
-        Returned string is always non-empty.
+
+        Returned string is always non-empty unless the font is invalid (in
+        which case an assert is triggered).
 
         Note that the returned string is not meant to be shown or edited by the user: a
         typical use of this function is for serializing in string-form a wxFont object.
@@ -453,7 +455,9 @@ public:
 
     /**
         Returns a user-friendly string for this font object.
-        Returned string is always non-empty.
+
+        Returned string is always non-empty unless the font is invalid (in
+        which case an assert is triggered).
 
         The string does not encode all wxFont infos under all platforms;
         e.g. under wxMSW the font family is not present in the returned string.
