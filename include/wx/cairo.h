@@ -11,15 +11,6 @@
 #ifndef _WX_CAIRO_H_BASE_
 #define _WX_CAIRO_H_BASE_
 
-// for now GTK+ only
-#ifndef wxUSE_CAIRO
-    #ifdef __WXGTK210__
-        #define wxUSE_CAIRO 1
-    #else
-        #define wxUSE_CAIRO 0
-    #endif
-#endif
-
 #if wxUSE_CAIRO
 
 #include "wx/dynlib.h"

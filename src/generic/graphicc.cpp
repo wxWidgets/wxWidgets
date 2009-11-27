@@ -15,10 +15,10 @@
     #pragma hdrstop
 #endif
 
-#include "wx/cairo.h"
-#include "wx/graphics.h"
-
 #if wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+
+#include "wx/graphics.h"
+#include "wx/cairo.h"
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
