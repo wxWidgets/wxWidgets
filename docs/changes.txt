@@ -450,6 +450,7 @@ All (GUI):
 - Added wxEditableListBox XRC handler.
 - Added multiple selection support to wxDirCtrl (Steve Lamerton).
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
+- wxGrid: allow changing the horizontal alignment of numeric cells.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.

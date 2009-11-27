@@ -476,6 +476,15 @@ void wxGridCellAttr::GetAlignment(int *hAlign, int *vAlign) const
     }
 }
 
+void wxGridCellAttr::GetNonDefaultAlignment(int *hAlign, int *vAlign) const
+{
+    if ( hAlign && m_hAlign != wxALIGN_INVALID )
+        *hAlign = m_hAlign;
+
+    if ( vAlign && m_vAlign != wxALIGN_INVALID )
+        *vAlign = m_vAlign;
+}
+
 void wxGridCellAttr::GetSize( int *num_rows, int *num_cols ) const
 {
     if ( num_rows )

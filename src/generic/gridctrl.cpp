@@ -145,9 +145,9 @@ void wxGridCellDateTimeRenderer::Draw(wxGrid& grid,
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     // draw the text right aligned by default
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxRIGHT;
+    int hAlign = wxALIGN_RIGHT,
+        vAlign = wxALIGN_INVALID;
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     wxRect rect = rectCell;
     rect.Inflate(-1);
@@ -222,9 +222,9 @@ void wxGridCellEnumRenderer::Draw(wxGrid& grid,
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     // draw the text right aligned by default
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxRIGHT;
+    int hAlign = wxALIGN_RIGHT,
+        vAlign = wxALIGN_INVALID;
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     wxRect rect = rectCell;
     rect.Inflate(-1);
@@ -576,9 +576,9 @@ void wxGridCellNumberRenderer::Draw(wxGrid& grid,
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     // draw the text right aligned by default
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxALIGN_RIGHT;
+    int hAlign = wxALIGN_RIGHT,
+        vAlign = wxALIGN_INVALID;
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     wxRect rect = rectCell;
     rect.Inflate(-1);
@@ -679,9 +679,9 @@ void wxGridCellFloatRenderer::Draw(wxGrid& grid,
     SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     // draw the text right aligned by default
-    int hAlign, vAlign;
-    attr.GetAlignment(&hAlign, &vAlign);
-    hAlign = wxALIGN_RIGHT;
+    int hAlign = wxALIGN_RIGHT,
+        vAlign = wxALIGN_INVALID;
+    attr.GetNonDefaultAlignment(&hAlign, &vAlign);
 
     wxRect rect = rectCell;
     rect.Inflate(-1);

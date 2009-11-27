@@ -527,7 +527,21 @@ public:
     void DecRef();
 
     /**
-        See SetAlignment() for the returned values.
+        Get the alignment to use for the cell with the given attribute.
+
+        If this attribute doesn't specify any alignment, the default attribute
+        alignment is used (which can be changed using
+        wxGrid::SetDefaultCellAlignment() but is left and top by default).
+
+        Notice that @a hAlign and @a vAlign values are always overwritten by
+        this function, use GetNonDefaultAlignment() if this is not desirable.
+
+        @param hAlign
+            Horizontal alignment is returned here if this argument is non-@NULL.
+            It is one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT.
+        @param vAlign
+            Vertical alignment is returned here if this argument is non-@NULL.
+            It is one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
     */
     void GetAlignment(int* hAlign, int* vAlign) const;
 
@@ -545,6 +559,29 @@ public:
         Returns the font.
     */
     const wxFont& GetFont() const;
+
+    /**
+        Get the alignment defined by this attribute.
+
+        Unlike GetAlignment() this function only modifies @a hAlign and @a
+        vAlign if this attribute does define a non-default alignment. This
+        means that they must be initialized before calling this function and
+        that their values will be preserved unchanged if they are different
+        from wxALIGN_INVALID.
+
+        For example, the following fragment can be used to use the cell
+        alignment if one is defined but right-align its contents by default
+        (instead of left-aligning it by default) while still using the default
+        vertical alignment:
+        @code
+            int hAlign = wxALIGN_RIGHT,
+                vAlign = wxALIGN_INVALID;
+            attr.GetNonDefaultAlignment(&hAlign, &vAlign);
+        @endcode
+
+        @since 2.9.1
+     */
+    void GetNonDefaultAlignment(int *hAlign, int *vAlign) const;
 
     /**
         Returns the cell renderer.

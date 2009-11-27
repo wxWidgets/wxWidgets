@@ -449,6 +449,15 @@ public:
     const wxColour& GetBackgroundColour() const;
     const wxFont& GetFont() const;
     void GetAlignment(int *hAlign, int *vAlign) const;
+
+    // unlike GetAlignment() which always overwrites its output arguments with
+    // the alignment values to use, falling back on default alignment if this
+    // attribute doesn't have any, this function will preserve the values of
+    // parameters on entry if the corresponding alignment is not set in this
+    // attribute meaning that they can be initialized to default alignment (and
+    // also that they must be initialized, unlike with GetAlignment())
+    void GetNonDefaultAlignment(int *hAlign, int *vAlign) const;
+
     void GetSize(int *num_rows, int *num_cols) const;
     bool GetOverflow() const
         { return m_overflow != SingleCell; }

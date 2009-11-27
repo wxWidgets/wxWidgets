@@ -456,6 +456,8 @@ GridFrame::GridFrame()
     grid->SetCellValue(0, 8, "17");
     grid->SetCellValue(1, 8, "0");
     grid->SetCellValue(2, 8, "-666");
+    grid->SetCellAlignment(2, 8, wxALIGN_CENTRE, wxALIGN_TOP);
+    grid->SetCellValue(2, 9, "<- This numeric cell should be centred");
 
     const wxString choices[] =
     {
