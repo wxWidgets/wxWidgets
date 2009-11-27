@@ -1799,10 +1799,10 @@ wxGraphicsContext * wxCairoRenderer::CreateContext( const wxPrinterDC& dc)
 
 wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeContext( void * context )
 {
-#if __WXMSW__
+#ifdef __WXMSW__
     return new wxCairoContext(this,(HDC)context);
 #endif
-#if __WXGTK__
+#ifdef __WXGTK__
     return new wxCairoContext(this,(cairo_t*)context);
 #endif
 }
