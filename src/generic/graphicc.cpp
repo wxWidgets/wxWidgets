@@ -15,9 +15,12 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+#if wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/graphics.h"
+
+#if wxUSE_CAIRO
+
 #include "wx/cairo.h"
 
 #ifndef WX_PRECOMP
@@ -1949,9 +1952,8 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
     return wxNullGraphicsBitmap;
 }
 
-#endif  // wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+#endif  // wxUSE_CAIRO
 
-#if wxUSE_GRAPHICS_CONTEXT
 wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 {
 #if wxUSE_CAIRO
@@ -1960,4 +1962,5 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
     return NULL;
 #endif
 }
-#endif
+
+#endif // wxUSE_GRAPHICS_CONTEXT
