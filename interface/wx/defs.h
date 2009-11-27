@@ -66,6 +66,16 @@ enum wxDirection
 */
 enum wxAlignment
 {
+    /**
+        A value different from any valid alignment value.
+
+        Note that you shouldn't use 0 for this as it's the value of (valid)
+        alignments wxALIGN_LEFT and wxALIGN_TOP.
+
+        @since 2.9.1
+     */
+    wxALIGN_INVALID           = -1,
+
     wxALIGN_NOT               = 0x0000,
     wxALIGN_CENTER_HORIZONTAL = 0x0100,
     wxALIGN_CENTRE_HORIZONTAL = wxALIGN_CENTER_HORIZONTAL,

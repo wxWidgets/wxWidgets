@@ -388,8 +388,7 @@ public:
     {
         Init(attrDefault);
 
-        // MB: args used to be 0,0 here but wxALIGN_LEFT is 0
-        SetAlignment(-1, -1);
+        SetAlignment(wxALIGN_INVALID, wxALIGN_INVALID);
     }
 
     // VZ: considering the number of members wxGridCellAttr has now, this ctor
@@ -436,7 +435,10 @@ public:
     bool HasTextColour() const { return m_colText.Ok(); }
     bool HasBackgroundColour() const { return m_colBack.Ok(); }
     bool HasFont() const { return m_font.Ok(); }
-    bool HasAlignment() const { return (m_hAlign != -1 || m_vAlign != -1); }
+    bool HasAlignment() const
+    {
+        return m_hAlign != wxALIGN_INVALID || m_vAlign != wxALIGN_INVALID;
+    }
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
@@ -1675,9 +1677,9 @@ public:
     void SetLabelAlignment( int orientation, int align )
         {
             if ( orientation == wxHORIZONTAL )
-                SetColLabelAlignment( align, -1 );
+                SetColLabelAlignment( align, wxALIGN_INVALID );
             else
-                SetRowLabelAlignment( align, -1 );
+                SetRowLabelAlignment( align, wxALIGN_INVALID );
         }
 
     int GetLabelAlignment( int orientation, int WXUNUSED(align) ) const

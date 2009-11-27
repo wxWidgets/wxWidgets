@@ -1466,6 +1466,11 @@ enum wxDirection
 
 enum wxAlignment
 {
+    // 0 is a valid wxAlignment value (both wxALIGN_LEFT and wxALIGN_TOP use
+    // it) so define a symbolic name for an invalid alignment value which can
+    // be assumed to be different from anything else
+    wxALIGN_INVALID           = -1,
+
     wxALIGN_NOT               = 0x0000,
     wxALIGN_CENTER_HORIZONTAL = 0x0100,
     wxALIGN_CENTRE_HORIZONTAL = wxALIGN_CENTER_HORIZONTAL,
