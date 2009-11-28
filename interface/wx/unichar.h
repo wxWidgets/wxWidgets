@@ -33,7 +33,7 @@ public:
     //@{
     /**
         Create a character from the 8-bit character value @a c using the
-        current locale’s encoding.
+        current locale encoding.
     */
     wxUniChar(char c);
     wxUniChar(unsigned char c);
