@@ -132,6 +132,14 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     }
 }
 
+// We need this for borderless windows, i.e. shaped windows or windows without  
+// a title bar. For more info, see:
+// http://lists.apple.com/archives/cocoa-dev/2008/May/msg02091.html
+- (BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+
 @end
 
 @interface wxNSPanel : NSPanel
