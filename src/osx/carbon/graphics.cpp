@@ -1138,8 +1138,11 @@ public :
     // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
-    // appends an ellipsis as a new closed subpath fitting the passed rectangle
+    // appends a circle as a new closed subpath 
     virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r );
+
+    // appends an ellipsis as a new closed subpath fitting the passed rectangle
+    virtual void AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     // draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r );
@@ -1217,7 +1220,12 @@ void wxMacCoreGraphicsPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w
 
 void wxMacCoreGraphicsPathData::AddCircle( wxDouble x, wxDouble y , wxDouble r )
 {
-    CGPathAddArc( m_path , NULL , (CGFloat) x , (CGFloat) y , (CGFloat) r , (CGFloat) 0.0 , (CGFloat) (2 * M_PI) , true );
+    CGPathAddEllipseInRect( m_path, NULL, CGRectMake(x-r,y-r,2*r,2*r));
+}
+
+void wxMacCoreGraphicsPathData::AddEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
+{
+    CGPathAddEllipseInRect( m_path, NULL, CGRectMake(x,y,w,h));
 }
 
 // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
