@@ -189,14 +189,6 @@ public:
             facename = GetMSWFaceName();
             if ( !facename.empty() )
             {
-                // the face name returned by GetOutlineTextMetrics() may have
-                // these suffixes which we don't count as part of face name
-                // because we have separate fields for them so remove them
-                wxString basename;
-                if ( facename.EndsWith(wxS(" Italic"), &basename) ||
-                        facename.EndsWith(wxS(" Bold"), &basename) )
-                    facename = basename;
-
                 // cache the face name, it shouldn't change unless the family
                 // does and wxNativeFontInfo::SetFamily() resets the face name
                 const_cast<wxFontRefData *>(this)->SetFaceName(facename);
@@ -354,11 +346,14 @@ protected:
             return wxString();
         }
 
-        // in spite of its type, the otmpFaceName field of OUTLINETEXTMETRIC
-        // gives an offset in _bytes_ of the face name from the struct start
-        // while the name itself is an array of TCHARs
+        // in spite of its type, the otmpFamilyName field of OUTLINETEXTMETRIC
+        // gives an offset in _bytes_ of the face (not family!) name from the
+        // struct start while the name itself is an array of TCHARs
+        //
+        // FWIW otmpFaceName contains the same thing as otmpFamilyName followed
+        // by a possible " Italic" or " Bold" or something else suffix
         return reinterpret_cast<wxChar *>(otm) +
-                    wxPtrToUInt(otm->otmpFaceName)/sizeof(wxChar);
+                    wxPtrToUInt(otm->otmpFamilyName)/sizeof(wxChar);
     }
 
     // are we using m_nativeFontInfo.lf.lfHeight for point size or pixel size?
