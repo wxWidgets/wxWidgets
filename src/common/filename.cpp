@@ -144,6 +144,13 @@
 extern const wxULongLong wxInvalidSize = (unsigned)-1;
 #endif // wxUSE_LONGLONG
 
+#ifdef __WIN32__
+    // this define is missing from VC6 headers
+    #ifndef INVALID_FILE_ATTRIBUTES
+        #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+    #endif
+#endif // __WIN32__
+
 namespace
 {
 
@@ -574,7 +581,7 @@ bool wxFileName::FileExists() const
 /* static */
 bool wxFileName::FileExists( const wxString &filePath )
 {
-    #if defined(__WXPALMOS__)
+#if defined(__WXPALMOS__)
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // we must use GetFileAttributes() instead of the ANSI C functions because
