@@ -68,6 +68,27 @@ public:
     // Returns true if the character is an ASCII character:
     bool IsAscii() const { return m_value < 0x80; }
 
+    // Returns true if the character is representable as a single byte in the
+    // current locale encoding and return this byte in output argument c (which
+    // must be non-NULL)
+    bool GetAsChar(char *c) const
+    {
+#if wxUSE_UNICODE
+        if ( !IsAscii() )
+        {
+#if !wxUSE_UTF8_LOCALE_ONLY
+            if ( GetAsHi8bit(m_value, c) )
+                return true;
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+            return false;
+        }
+#endif // wxUSE_UNICODE
+
+        *c = wx_truncate_cast(char, m_value);
+        return true;
+    }
+
     // Conversions to char and wchar_t types: all of those are needed to be
     // able to pass wxUniChars to verious standard narrow and wide character
     // functions
@@ -165,7 +186,8 @@ private:
 
     // helpers of the functions above called to deal with non-ASCII chars
     static value_type FromHi8bit(char c);
-    static char ToHi8bit(value_type c);
+    static char ToHi8bit(value_type v);
+    static bool GetAsHi8bit(value_type v, char *c);
 
 private:
     value_type m_value;
@@ -209,6 +231,7 @@ public:
 #endif // wxUSE_UNICODE_UTF8
 
     bool IsAscii() const { return UniChar().IsAscii(); }
+    bool GetAsChar(char *c) const { return UniChar().GetAsChar(c); }
 
     // Assignment operators:
 #if wxUSE_UNICODE_UTF8

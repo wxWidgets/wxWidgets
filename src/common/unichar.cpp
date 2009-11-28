@@ -58,27 +58,31 @@ wxUniChar::value_type wxUniChar::FromHi8bit(char c)
 }
 
 /* static */
-char wxUniChar::ToHi8bit(wxUniChar::value_type c)
+char wxUniChar::ToHi8bit(wxUniChar::value_type v)
 {
-#if wxUSE_UTF8_LOCALE_ONLY
-    wxFAIL_MSG( "character cannot be converted to single UTF-8 byte" );
-    wxUnusedVar(c);
+    char c;
+    if ( !GetAsHi8bit(v, &c) )
+    {
+        wxFAIL_MSG( "character cannot be converted to single byte" );
+        c = '?'; // FIXME-UTF8: what to use as failure character?
+    }
 
-    return '?'; // FIXME-UTF8: what to use as failure character?
-#else
+    return c;
+}
+
+/* static */
+bool wxUniChar::GetAsHi8bit(value_type v, char *c)
+{
     wchar_t wbuf[2];
-    wbuf[0] = c;
+    wbuf[0] = v;
     wbuf[1] = L'\0';
     char cbuf[2];
     if ( wxConvLibc.FromWChar(cbuf, 2, wbuf, 2) != 2 )
-    {
-        wxFAIL_MSG( "character cannot be converted to single byte" );
-        return '?'; // FIXME-UTF8: what to use as failure character?
-    }
-    return cbuf[0];
-#endif
-}
+        return false;
 
+    *c = cbuf[0];
+    return true;
+}
 
 // ---------------------------------------------------------------------------
 // wxUniCharRef

@@ -44,6 +44,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( CrtTestCase );
         CPPUNIT_TEST( SetGetEnv );
+        CPPUNIT_TEST( Strchr );
         CPPUNIT_TEST( Strcmp );
         CPPUNIT_TEST( Strspn );
         CPPUNIT_TEST( Strcspn );
@@ -52,6 +53,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void SetGetEnv();
+    void Strchr();
     void Strcmp();
     void Strspn();
     void Strcspn();
@@ -87,6 +89,19 @@ void CrtTestCase::SetGetEnv()
     CPPUNIT_ASSERT( !wxGetenv(TESTVAR_NAME) );
 
 #undef TESTVAR_NAME
+}
+
+void CrtTestCase::Strchr()
+{
+    // test that searching for a wide character in a narrow string simply
+    // doesn't find it but doesn't fail with an assert (#11487)
+    const wxUniChar smiley = *wxString::FromUTF8("\xe2\x98\xba").begin();
+
+    CPPUNIT_ASSERT( !wxStrchr("hello", smiley) );
+
+    // but searching for an explicitly wide character does find it
+    CPPUNIT_ASSERT( wxStrchr(wxString::FromUTF8(":-) == \xe2\x98\xba"),
+                    static_cast<wchar_t>(smiley)) );
 }
 
 void CrtTestCase::Strcmp()

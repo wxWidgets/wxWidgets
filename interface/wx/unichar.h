@@ -58,6 +58,30 @@ public:
     */
     bool IsAscii() const;
 
+    /**
+        Returns true if the character is representable as a single byte in the
+        current locale encoding.
+
+        This function only returns true if the character can be converted in
+        exactly one byte, e.g. it only returns true for 7 bit ASCII characters
+        when the encoding used is UTF-8.
+
+        It is mostly useful to test if the character can be passed to functions
+        taking a char and is used by wxWidgets itself for this purpose.
+
+        @param c
+            An output pointer to the value of this Unicode character as a @c
+            char. Must be non-@NULL.
+        @return
+            @true if the object is an 8 bit char and @a c was filled with its
+            value as char or @false otherwise (@a c won't be modified then).
+
+        @see IsAscii()
+
+        @since 2.9.1
+     */
+    bool GetAsChar(char *c) const;
+
     //@{
     /**
         Conversions to char and wchar_t types: all of those are needed to be
