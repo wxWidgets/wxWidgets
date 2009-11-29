@@ -350,6 +350,7 @@ void wxPropertyGridInterface::ClearModifiedStatus()
         if ( !page ) break;
 
         page->DoGetRoot()->SetFlagRecursively(wxPG_PROP_MODIFIED, false);
+        page->m_anyModified = false;
 
         pageIndex++;
     }
