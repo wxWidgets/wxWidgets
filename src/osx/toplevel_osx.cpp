@@ -159,7 +159,12 @@ wxString wxTopLevelWindowMac::GetTitle() const
 
 void wxTopLevelWindowMac::ShowWithoutActivating()
 {
-    return m_nowpeer->ShowWithoutActivating();
+    if ( !wxTopLevelWindowBase::Show(true) )
+        return;
+
+    m_nowpeer->ShowWithoutActivating();
+    
+    // TODO: Should we call EVT_SIZE here?
 }
 
 bool wxTopLevelWindowMac::ShowFullScreen(bool show, long style)
