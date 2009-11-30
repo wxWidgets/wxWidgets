@@ -656,13 +656,13 @@ inline const char* wxStrchr(const wxString& s, int c)
 inline const char* wxStrrchr(const wxString& s, int c)
     { return wxCRT_StrrchrA((const char*)s.c_str(), c); }
 inline const char* wxStrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
 inline const char* wxStrrchr(const wxString& s, const wxUniChar& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
 inline const char* wxStrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrchrA(s.c_str(), c) : NULL; }
 inline const char* wxStrrchr(const wxString& s, const wxUniCharRef& uc)
-    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s, c) : NULL; }
+    { char c; return uc.GetAsChar(&c) ? wxCRT_StrrchrA(s.c_str(), c) : NULL; }
 inline const wchar_t* wxStrchr(const wxString& s, wchar_t c)
     { return wxCRT_StrchrW((const wchar_t*)s.c_str(), c); }
 inline const wchar_t* wxStrrchr(const wxString& s, wchar_t c)
