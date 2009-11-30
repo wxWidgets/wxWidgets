@@ -490,7 +490,7 @@ void wxNonOwnedWindowCocoaImpl::Lower()
 
 void wxNonOwnedWindowCocoaImpl::ShowWithoutActivating()
 {
-    [m_macWindow orderBack:nil];
+    [m_macWindow orderFront:nil];
     [[m_macWindow contentView] setNeedsDisplay: YES];
 }
 
