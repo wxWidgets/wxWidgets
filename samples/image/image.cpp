@@ -210,11 +210,21 @@ private:
                                                 wxEmptyString,
                                                 (const wxChar *)NULL,
                                                 wxT("BMP files (*.bmp)|*.bmp|")
+#if wxUSE_LIBPNG
                                                 wxT("PNG files (*.png)|*.png|")
+#endif
+#if wxUSE_LIBJPEG
                                                 wxT("JPEG files (*.jpg)|*.jpg|")
+#endif
+#if wxUSE_GIF
                                                 wxT("GIF files (*.gif)|*.gif|")
+#endif
+#if wxUSE_LIBTIFF
                                                 wxT("TIFF files (*.tif)|*.tif|")
+#endif
+#if wxUSE_PCX
                                                 wxT("PCX files (*.pcx)|*.pcx|")
+#endif
                                                 wxT("ICO files (*.ico)|*.ico|")
                                                 wxT("CUR files (*.cur)|*.cur"),
                                                 wxFD_SAVE,
@@ -274,6 +284,7 @@ private:
                 }
             }
         }
+#if wxUSE_LIBPNG
         else if ( extension == wxT("png") )
         {
             static const int pngvalues[] =
@@ -344,6 +355,7 @@ private:
                 }
             }
         }
+#endif // wxUSE_LIBPNG
         else if ( extension == wxT("cur") )
         {
             image.Rescale(32,32);
