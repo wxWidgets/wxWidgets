@@ -2088,7 +2088,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 #endif
 
 
-    m_wxwindow = wxPizza::New(m_windowStyle,this);
+    m_wxwindow = wxPizza::New(m_windowStyle);
 #ifndef __WXUNIVERSAL__
     if (HasFlag(wxPizza::BORDER_STYLES))
     {
