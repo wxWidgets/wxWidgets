@@ -355,6 +355,16 @@
             neither we nor wx users are interested in debugging them anyhow
          -->
         <define>NDEBUG</define>
+
+        <if cond="IS_MSVC">
+            <!--
+                we're not interested in deprecation warnings about the use of
+                standard C functions in the 3rd party libraries (these warnings
+                are only given by VC8+ but it's simpler to just always define
+                this symbol which disables them, even for previous VC versions)
+             -->
+            <define>_CRT_SECURE_NO_WARNINGS</define>
+        </if>
     </template>
 
 
