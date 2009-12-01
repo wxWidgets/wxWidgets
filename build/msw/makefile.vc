@@ -141,8 +141,8 @@ WXJPEG_OBJECTS =  \
 WXTIFF_CFLAGS = /M$(__RUNTIME_LIBS_70)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG /D_CRT_SECURE_NO_WARNINGS \
-	/I..\..\src\zlib /I..\..\src\jpeg /I..\..\src\tiff\libtiff $(CPPFLAGS) \
-	$(CFLAGS)
+	/I..\..\src\zlib /I..\..\src\jpeg /I..\..\src\tiff\libtiff \
+	/D_CRT_NONSTDC_NO_WARNINGS $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \

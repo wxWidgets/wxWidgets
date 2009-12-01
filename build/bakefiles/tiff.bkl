@@ -55,6 +55,16 @@
         <cflags-watcom>-wcd=124</cflags-watcom>
         <define cond="PLATFORM_OS2=='1' and FORMAT=='watcom'">OS2_32</define>
         <define cond="PLATFORM_MSDOS=='1' and FORMAT=='watcom'">__MSDOS__</define>
+        <if cond="IS_MSVC">
+            <!--
+                define this to get rid of a warning about using POSIX lfind():
+                confusingly enough, we do define lfind as _lfind for MSVC but
+                doing this results in a just more confusing warning, see:
+                http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=101278
+             -->
+            <define>_CRT_NONSTDC_NO_WARNINGS</define>
+        </if>
+
         <sources>
             $(TIFF_PLATFORM_SRC)
             src/tiff/libtiff/tif_aux.c
