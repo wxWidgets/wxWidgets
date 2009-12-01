@@ -30,6 +30,14 @@ For RTL, child widget positions are mirrored in size_allocate.
 
 static GtkWidgetClass* parent_class;
 
+static inline GdkWindow* get_backing_window(GtkWidget* widget)
+{
+    GdkWindow* w = NULL;
+    if (widget->window && WX_PIZZA(widget)->m_is_scrollable)
+        w = gdk_window_get_parent(widget->window);
+    return w;
+}
+
 extern "C" {
 
 struct wxPizzaClass
@@ -61,7 +69,8 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
         if (pizza->m_is_scrollable)
         {
             // two windows, both same size
-            gdk_window_move_resize(pizza->m_backing_window,
+            GdkWindow* backing_window = gdk_window_get_parent(widget->window);
+            gdk_window_move_resize(backing_window,
                 alloc->x + border_x, alloc->y + border_y, w, h);
             if (is_resize)
                 gdk_window_resize(widget->window, w, h);
@@ -142,19 +151,19 @@ static void realize(GtkWidget* widget)
             attr.colormap = gtk_widget_get_colormap(widget);
             attr.window_type = GDK_WINDOW_CHILD;
 
-            pizza->m_backing_window = gdk_window_new(
+            GdkWindow* backing_window = gdk_window_new(
                 gdk_window_get_parent(widget->window),
                 &attr,
                 GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP);
 
-            gdk_window_set_user_data(pizza->m_backing_window, widget);
-            gdk_window_reparent(widget->window, pizza->m_backing_window, 0, 0);
+            gdk_window_set_user_data(backing_window, widget);
+            gdk_window_reparent(widget->window, backing_window, 0, 0);
             gdk_window_resize(widget->window, w, h);
 
-            // Parts of m_backing_window may be exposed temporarily while
+            // Parts of backing window may be exposed temporarily while
             // resizing. Setting the backing pixmap to None prevents those
             // areas from being briefly painted black.
-            gdk_window_set_back_pixmap(pizza->m_backing_window, NULL, false);
+            gdk_window_set_back_pixmap(backing_window, NULL, false);
         }
         else
             gdk_window_move_resize(widget->window, x, y, w, h);
@@ -163,33 +172,34 @@ static void realize(GtkWidget* widget)
 
 static void unrealize(GtkWidget* widget)
 {
+    GdkWindow* backing_window = get_backing_window(widget);
+
     parent_class->unrealize(widget);
 
-    wxPizza* pizza = WX_PIZZA(widget);
-    if (pizza->m_backing_window)
+    if (backing_window)
     {
-        gdk_window_set_user_data(pizza->m_backing_window, NULL);
-        gdk_window_destroy(pizza->m_backing_window);
-        pizza->m_backing_window = NULL;
+        gdk_window_set_user_data(backing_window, NULL);
+        gdk_window_destroy(backing_window);
     }
 }
 
 static void map(GtkWidget* widget)
 {
-    parent_class->map(widget);
+    GdkWindow* backing_window = get_backing_window(widget);
+    if (backing_window)
+        gdk_window_show(backing_window);
 
-    wxPizza* pizza = WX_PIZZA(widget);
-    if (pizza->m_backing_window)
-        gdk_window_show(pizza->m_backing_window);
+    parent_class->map(widget);
 }
 
 static void unmap(GtkWidget* widget)
 {
+    GdkWindow* backing_window = get_backing_window(widget);
+
     parent_class->unmap(widget);
 
-    wxPizza* pizza = WX_PIZZA(widget);
-    if (pizza->m_backing_window)
-        gdk_window_hide(pizza->m_backing_window);
+    if (backing_window)
+        gdk_window_hide(backing_window);
 }
 
 // not used, but needs to exist so gtk_widget_set_scroll_adjustments will work
@@ -286,7 +296,6 @@ GtkWidget* wxPizza::New(long windowStyle)
 {
     GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
     wxPizza* pizza = WX_PIZZA(widget);
-    pizza->m_backing_window = NULL;
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;
     pizza->m_is_scrollable = (windowStyle & (wxHSCROLL | wxVSCROLL)) != 0;

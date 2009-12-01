@@ -28,7 +28,6 @@ struct WXDLLIMPEXP_CORE wxPizza
     void get_border_widths(int& x, int& y);
 
     GtkFixed m_fixed;
-    GdkWindow* m_backing_window;
     int m_scroll_x;
     int m_scroll_y;
     int m_border_style;
