@@ -32,6 +32,8 @@
         *ConvertToIeeeExtended*;
         *wxDC*SetDeviceClippingRegion*;
         *wxGraphicsContext*GetCairoRenderer*;
+        *wxHtmlEasyPrinting*GetName*;
+        *wxHtmlEasyPrinting*SetName*;
         *wxIconizeEvent*IsIconized*;
         *wxMouseState*IsDown*;
         *wxRichTextCtrl*GetContextMenu*;

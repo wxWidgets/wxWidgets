@@ -263,6 +263,13 @@ public:
             // set the parent window
 #endif
 
+#if wxABI_VERSION >= 20811
+    const wxString& GetName() const { return m_Name; }
+            // get the printout name
+    void SetName(const wxString& name) { m_Name = name; }
+            // set the printout name
+#endif
+
 protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
