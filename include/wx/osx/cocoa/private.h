@@ -144,7 +144,7 @@ public :
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow);
-    
+
     virtual void        SetupKeyEvent(wxKeyEvent &wxevent, NSEvent * nsEvent, NSString* charString = NULL);
     virtual void        SetupMouseEvent(wxMouseEvent &wxevent, NSEvent * nsEvent);
 
@@ -234,7 +234,7 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool ShowFullScreen(bool show, long style);
-    
+
     virtual void ShowWithoutActivating();
 
     virtual void RequestUserAttention(int flags);
@@ -244,7 +244,7 @@ public :
     virtual void WindowToScreen( int *x, int *y );
 
     virtual bool IsActive();
-    
+
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
     WX_wxNSWindow         m_macWindow;
@@ -301,12 +301,12 @@ protected :
     @end
 
 
-    @interface wxNSTextView : NSTextView
+    @interface wxNSTextView : NSTextView wxOSX_10_6_AND_LATER(<NSTextViewDelegate>)
     {
     }
-    
+
     - (void)textDidChange:(NSNotification *)aNotification;
-    
+
     @end
 
     @interface wxNSMenu : NSMenu

@@ -1199,10 +1199,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 // ----------------------------------------------------------------------------
 
 // define a delegate used to refresh the window during animation
-@interface wxNSAnimationDelegate : NSObject
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-                                   <NSAnimationDelegate>
-#endif
+@interface wxNSAnimationDelegate : NSObject wxOSX_10_6_AND_LATER(<NSAnimationDelegate>)
 {
     wxWindow *m_win;
     bool m_isDone;

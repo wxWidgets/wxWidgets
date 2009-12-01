@@ -33,10 +33,7 @@
 
 class wxListWidgetCocoaImpl;
 
-@interface wxNSTableDataSource : NSObject
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-    <NSTableViewDataSource>
-#endif
+@interface wxNSTableDataSource : NSObject wxOSX_10_6_AND_LATER(<NSTableViewDataSource>)
 {
     wxListWidgetCocoaImpl* impl;
 }
@@ -56,10 +53,7 @@ class wxListWidgetCocoaImpl;
 
 @end
 
-@interface wxNSTableView : NSTableView
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
-    <NSTableViewDelegate>
-#endif
+@interface wxNSTableView : NSTableView wxOSX_10_6_AND_LATER(<NSTableViewDelegate>)
 {
 }
 
