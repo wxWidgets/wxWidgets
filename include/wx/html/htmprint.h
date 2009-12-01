@@ -276,6 +276,11 @@ public:
     void SetParentWindow(wxWindow* window) { m_ParentWindow = window; }
             // set the parent window
 
+    const wxString& GetName() const { return m_Name; }
+            // get the printout name
+    void SetName(const wxString& name) { m_Name = name; }
+            // set the printout name
+
 protected:
     virtual wxHtmlPrintout *CreatePrintout();
     virtual bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);

@@ -191,6 +191,14 @@ public:
                        wxWindow* parentWindow = NULL);
 
     /**
+        Returns the current name being used for preview frames and setup
+        dialogs.
+
+        @since 2.8.11 / 2.9.1
+    */
+    const wxString& GetName() const;
+
+    /**
         Returns a pointer to wxPageSetupDialogData instance used by this class.
         You can set its parameters (via SetXXXX methods).
     */
@@ -264,6 +272,13 @@ public:
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);
   
+    /**
+        Sets the name used for preview frames and setup dialogs.
+
+        @since 2.8.11 / 2.9.1
+    */
+    void SetName(const wxString& name);
+
     /**
         Sets default font sizes and/or default font size. 
         See wxHtmlDCRenderer::SetStandardFonts for detailed description.
