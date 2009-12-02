@@ -234,9 +234,12 @@ public:
     */
     wxCFRef& operator=(const wxCFRef& otherRef)
     {
-        wxCFRetain(otherRef.m_ptr);
-        wxCFRelease(m_ptr);
-        m_ptr = otherRef.m_ptr;
+        if (this != &otherRef)
+        {
+            wxCFRetain(otherRef.m_ptr);
+            wxCFRelease(m_ptr);
+            m_ptr = otherRef.m_ptr;
+        }
         return *this;
     }
 

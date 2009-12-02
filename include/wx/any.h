@@ -663,7 +663,8 @@ public:
     */
     wxAny& operator=(const wxAny &any)
     {
-        AssignAny(any);
+        if (this != &any)
+            AssignAny(any);
         return *this;
     }
 

@@ -137,10 +137,11 @@ public:
 
     wxSockAddressImpl& operator=(const wxSockAddressImpl& other)
     {
-        free(m_addr);
-
-        InitFromOther(other);
-
+        if (this != &other)
+        {
+            free(m_addr);
+            InitFromOther(other);
+        }
         return *this;
     }
 
