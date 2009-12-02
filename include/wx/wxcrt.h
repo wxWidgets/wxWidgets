@@ -82,7 +82,7 @@ inline bool wxIsEmpty(const wxCStrData& s) { return s.AsString().empty(); }
         for(;l && *s != c;--l, ++s) {}
 
         if(l)
-            return (wxChar*)s;
+            return const_cast<wxChar*>(s);
         return NULL;
     }
 
@@ -724,30 +724,30 @@ inline const T *wxStrpbrk(const S& s, const wxScopedCharTypeBuffer<T>& accept)
 /* inlined non-const versions */
 template <typename T>
 inline char *wxStrstr(char *haystack, T needle)
-    { return (char *)wxStrstr((const char *)haystack, needle); }
+    { return const_cast<char*>(wxStrstr(const_cast<const char*>(haystack), needle)); }
 template <typename T>
 inline wchar_t *wxStrstr(wchar_t *haystack, T needle)
-    { return (wchar_t *)wxStrstr((const wchar_t *)haystack, needle); }
+    { return const_cast<wchar_t*>(wxStrstr(const_cast<const wchar_t*>(haystack), needle)); }
 
 template <typename T>
 inline char * wxStrchr(char *s, T c)
-    { return (char *)wxStrchr((const char *)s, c); }
+    { return const_cast<char*>(wxStrchr(const_cast<const char*>(s), c)); }
 template <typename T>
 inline wchar_t * wxStrchr(wchar_t *s, T c)
     { return (wchar_t *)wxStrchr((const wchar_t *)s, c); }
 template <typename T>
 inline char * wxStrrchr(char *s, T c)
-    { return (char *)wxStrrchr((const char *)s, c); }
+    { return const_cast<char*>(wxStrrchr(const_cast<const char*>(s), c)); }
 template <typename T>
 inline wchar_t * wxStrrchr(wchar_t *s, T c)
-    { return (wchar_t *)wxStrrchr((const wchar_t *)s, c); }
+    { return const_cast<wchar_t*>(wxStrrchr(const_cast<const wchar_t*>(s), c)); }
 
 template <typename T>
 inline char * wxStrpbrk(char *s, T accept)
-    { return (char *)wxStrpbrk((const char *)s, accept); }
+    { return const_cast<char*>(wxStrpbrk(const_cast<const char*>(s), accept)); }
 template <typename T>
 inline wchar_t * wxStrpbrk(wchar_t *s, T accept)
-    { return (wchar_t *)wxStrpbrk((const wchar_t *)s, accept); }
+    { return const_cast<wchar_t*>(wxStrpbrk(const_cast<const wchar_t*>(s), accept)); }
 
 
 // ----------------------------------------------------------------------------
