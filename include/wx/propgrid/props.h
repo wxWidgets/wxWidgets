@@ -370,7 +370,7 @@ public:
 #ifndef SWIG
     wxEnumProperty( const wxString& label = wxPG_LABEL,
                     const wxString& name = wxPG_LABEL,
-                    const wxChar** labels = NULL,
+                    const wxChar* const* labels = NULL,
                     const long* values = NULL,
                     int value = 0 );
     wxEnumProperty( const wxString& label,
@@ -381,7 +381,7 @@ public:
     // Special constructor for caching choices (used by derived class)
     wxEnumProperty( const wxString& label,
                     const wxString& name,
-                    const wxChar** labels,
+                    const wxChar* const* labels,
                     const long* values,
                     wxPGChoices* choicesCache,
                     int value = 0 );
@@ -468,7 +468,7 @@ public:
 
     wxEditEnumProperty( const wxString& label,
                         const wxString& name,
-                        const wxChar** labels,
+                        const wxChar* const* labels,
                         const long* values,
                         const wxString& value );
     wxEditEnumProperty( const wxString& label = wxPG_LABEL,
@@ -484,7 +484,7 @@ public:
     // Special constructor for caching choices (used by derived class)
     wxEditEnumProperty( const wxString& label,
                         const wxString& name,
-                        const wxChar** labels,
+                        const wxChar* const* labels,
                         const long* values,
                         wxPGChoices* choicesCache,
                         const wxString& value );
@@ -514,7 +514,7 @@ public:
 #ifndef SWIG
     wxFlagsProperty( const wxString& label,
                      const wxString& name,
-                     const wxChar** labels,
+                     const wxChar* const* labels,
                      const long* values = NULL,
                      long value = 0 );
     wxFlagsProperty( const wxString& label,

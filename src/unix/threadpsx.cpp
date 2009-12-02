@@ -725,7 +725,7 @@ public:
     void SetState(wxThreadState state)
     {
 #if wxUSE_LOG_TRACE
-        static const wxChar *stateNames[] =
+        static const wxChar *const stateNames[] =
         {
             wxT("NEW"),
             wxT("RUNNING"),

@@ -116,7 +116,7 @@ static void *wx_darwin_dlopen(const char *path, int WXUNUSED(mode) /* mode is ig
     {
         handle = NULL;
 
-        static const char *errorStrings[] =
+        static const char *const errorStrings[] =
         {
             "%d: Object Image Load Failure",
             "%d: Object Image Load Success",

@@ -55,7 +55,7 @@
 // ----------------------------------------------------------------------------
 
 // encodings supported by GetEncodingDescription
-static wxFontEncoding gs_encodings[] =
+static const wxFontEncoding gs_encodings[] =
 {
     wxFONTENCODING_ISO8859_1,
     wxFONTENCODING_ISO8859_2,
@@ -144,7 +144,7 @@ static wxFontEncoding gs_encodings[] =
 };
 
 // the descriptions for them
-static const char* gs_encodingDescs[] =
+static const char* const gs_encodingDescs[] =
 {
     wxTRANSLATE( "Western European (ISO-8859-1)" ),
     wxTRANSLATE( "Central European (ISO-8859-2)" ),
@@ -240,7 +240,7 @@ static const char* gs_encodingDescs[] =
 };
 
 // and the internal names (these are not translated on purpose!)
-static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
+static const wxChar* const gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
 {
     // names from the columns correspond to these OS:
     //      Linux        Solaris and IRIX       HP-UX             AIX
@@ -642,7 +642,7 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
 
         for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); ++i )
         {
-            for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
+            for ( const wxChar* const* encName = gs_encodingNames[i]; *encName; ++encName )
             {
                 if ( cs.CmpNoCase(*encName) == 0 )
                     return gs_encodings[i];
@@ -831,17 +831,17 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
 /* static */
 const wxChar** wxFontMapperBase::GetAllEncodingNames(wxFontEncoding encoding)
 {
-    static const wxChar* dummy[] = { NULL };
+    static const wxChar* const dummy[] = { NULL };
 
     for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); i++ )
     {
         if ( gs_encodings[i] == encoding )
         {
-            return gs_encodingNames[i];
+            return const_cast<const wxChar**>(gs_encodingNames[i]);
         }
     }
 
-    return dummy;
+    return const_cast<const wxChar**>(dummy);
 }
 
 /* static */
@@ -851,7 +851,7 @@ wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
 
     for ( size_t i = 0; i < count; i++ )
     {
-        for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
+        for ( const wxChar* const* encName = gs_encodingNames[i]; *encName; ++encName )
         {
             if ( name.CmpNoCase(*encName) == 0 )
                 return gs_encodings[i];

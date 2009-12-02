@@ -818,7 +818,7 @@ public:
         @param values
             Values for choices. If NULL, indexes are used.
     */
-    wxPGChoices( const wxChar** labels, const long* values = NULL )
+    wxPGChoices( const wxChar* const* labels, const long* values = NULL )
     {
         Init();
         Set(labels,values);
@@ -866,7 +866,7 @@ public:
         @param values
             Values for added choices. If empty, relevant entry indexes are used.
     */
-    void Add( const wxChar** labels, const ValArrItem* values = NULL );
+    void Add( const wxChar* const* labels, const ValArrItem* values = NULL );
 
     /** Version that works with wxArrayString and wxArrayInt. */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint = wxArrayInt() );
@@ -994,7 +994,7 @@ public:
 
 #ifndef SWIG
     /** Does not create copies for itself. */
-    void Set( const wxChar** labels, const long* values = NULL )
+    void Set( const wxChar* const* labels, const long* values = NULL )
     {
         Free();
         Add(labels,values);
@@ -2067,7 +2067,7 @@ public:
             return m_validator;
         return DoGetValidator();
     }
-#endif // #if wxUSE_VALIDATORS
+#endif // wxUSE_VALIDATORS
 
 #ifndef SWIG
     /** Returns client data (void*) of a property.

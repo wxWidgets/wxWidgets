@@ -2811,7 +2811,7 @@ bool wxRichEditModule::Load(Version version)
         return true;
     }
 
-    static const wxChar *dllnames[] =
+    static const wxChar *const dllnames[] =
     {
         wxT("riched32"),
         wxT("riched20"),

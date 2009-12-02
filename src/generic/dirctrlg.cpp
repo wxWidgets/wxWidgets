@@ -1414,7 +1414,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 
 #ifndef __WXGTK20__
 /* Computer (c) Julian Smart */
-static const char * file_icons_tbl_computer_xpm[] = {
+static const char* const file_icons_tbl_computer_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 16 42 1",
 "r c #4E7FD0",

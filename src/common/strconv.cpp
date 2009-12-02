@@ -2144,9 +2144,9 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
         wxLogTrace(TRACE_STRCONV, wxT("Looking for wide char codeset:"));
 
 #if wxUSE_FONTMAP
-        const wxChar **names = wxFontMapperBase::GetAllEncodingNames(WC_ENC);
+        const wxChar *const *names = wxFontMapperBase::GetAllEncodingNames(WC_ENC);
 #else // !wxUSE_FONTMAP
-        static const wxChar *names_static[] =
+        static const wxChar *const names_static[] =
         {
 #if SIZEOF_WCHAR_T == 4
             wxT("UCS-4"),
@@ -2155,7 +2155,7 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
 #endif
             NULL
         };
-        const wxChar **names = names_static;
+        const wxChar *const *names = names_static;
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
 
         for ( ; *names && ms_wcCharsetName.empty(); ++names )
@@ -3068,7 +3068,7 @@ wxMBConv *wxCSConv::DoCreate() const
                 delete conv;
             }
 
-            const wxChar** names = wxFontMapperBase::GetAllEncodingNames(encoding);
+            const wxChar* const* names = wxFontMapperBase::GetAllEncodingNames(encoding);
             // CS : in case this does not return valid names (eg for MacRoman)
             // encoding got a 'failure' entry in the cache all the same,
             // although it just has to be created using a different method, so

@@ -559,7 +559,7 @@ void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
 // NB: Do not use wxS here since unlike wxT it doesn't translate to wxChar*
 //
 
-static const wxChar* gs_fp_es_family_labels[] = {
+static const wxChar* const gs_fp_es_family_labels[] = {
     wxT("Default"), wxT("Decorative"),
     wxT("Roman"), wxT("Script"),
     wxT("Swiss"), wxT("Modern"),
@@ -567,34 +567,34 @@ static const wxChar* gs_fp_es_family_labels[] = {
     (const wxChar*) NULL
 };
 
-static long gs_fp_es_family_values[] = {
+static const long gs_fp_es_family_values[] = {
     wxFONTFAMILY_DEFAULT, wxFONTFAMILY_DECORATIVE,
     wxFONTFAMILY_ROMAN, wxFONTFAMILY_SCRIPT,
     wxFONTFAMILY_SWISS, wxFONTFAMILY_MODERN,
     wxFONTFAMILY_TELETYPE, wxFONTFAMILY_UNKNOWN
 };
 
-static const wxChar* gs_fp_es_style_labels[] = {
+static const wxChar* const gs_fp_es_style_labels[] = {
     wxT("Normal"),
     wxT("Slant"),
     wxT("Italic"),
     (const wxChar*) NULL
 };
 
-static long gs_fp_es_style_values[] = {
+static const long gs_fp_es_style_values[] = {
     wxNORMAL,
     wxSLANT,
     wxITALIC
 };
 
-static const wxChar* gs_fp_es_weight_labels[] = {
+static const wxChar* const gs_fp_es_weight_labels[] = {
     wxT("Normal"),
     wxT("Light"),
     wxT("Bold"),
     (const wxChar*) NULL
 };
 
-static long gs_fp_es_weight_values[] = {
+static const long gs_fp_es_weight_values[] = {
     wxNORMAL,
     wxLIGHT,
     wxBOLD
@@ -831,7 +831,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 #include "wx/colordlg.h"
 
 //#define wx_cp_es_syscolours_len 25
-static const wxChar* gs_cp_es_syscolour_labels[] = {
+static const wxChar* const gs_cp_es_syscolour_labels[] = {
     wxT("AppWorkspace"),
     wxT("ActiveBorder"),
     wxT("ActiveCaption"),
@@ -860,7 +860,7 @@ static const wxChar* gs_cp_es_syscolour_labels[] = {
     (const wxChar*) NULL
 };
 
-static long gs_cp_es_syscolour_values[] = {
+static const long gs_cp_es_syscolour_values[] = {
     wxSYS_COLOUR_APPWORKSPACE,
     wxSYS_COLOUR_ACTIVEBORDER,
     wxSYS_COLOUR_ACTIVECAPTION,
@@ -934,7 +934,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar** labels, const long* values, wxPGChoices* choicesCache,
+    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColourPropertyValue& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -946,7 +946,7 @@ wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxS
 
 
 wxSystemColourProperty::wxSystemColourProperty( const wxString& label, const wxString& name,
-    const wxChar** labels, const long* values, wxPGChoices* choicesCache,
+    const wxChar* const* labels, const long* values, wxPGChoices* choicesCache,
     const wxColour& value )
     : wxEnumProperty( label, name, labels, values, choicesCache )
 {
@@ -1492,7 +1492,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 // wxColourProperty
 // -----------------------------------------------------------------------
 
-static const wxChar* gs_cp_es_normcolour_labels[] = {
+static const wxChar* const gs_cp_es_normcolour_labels[] = {
     wxT("Black"),
     wxT("Maroon"),
     wxT("Navy"),
@@ -1515,7 +1515,7 @@ static const wxChar* gs_cp_es_normcolour_labels[] = {
     (const wxChar*) NULL
 };
 
-static unsigned long gs_cp_es_normcolour_colours[] = {
+static const unsigned long gs_cp_es_normcolour_colours[] = {
     wxPG_COLOUR(0,0,0),
     wxPG_COLOUR(128,0,0),
     wxPG_COLOUR(0,0,128),
@@ -1604,7 +1604,7 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 #define NUM_CURSORS 28
 
 //#define wx_cp_es_syscursors_len 28
-static const wxChar* gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
+static const wxChar* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     wxT("Default"),
     wxT("Arrow"),
     wxT("Right Arrow"),
@@ -1636,7 +1636,7 @@ static const wxChar* gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     (const wxChar*) NULL
 };
 
-static long gs_cp_es_syscursors_values[NUM_CURSORS] = {
+static const long gs_cp_es_syscursors_values[NUM_CURSORS] = {
     wxCURSOR_NONE,
     wxCURSOR_ARROW,
     wxCURSOR_RIGHT_ARROW,

@@ -76,7 +76,7 @@ const char wxPropertyGridManagerNameStr[] = "wxPropertyGridManager";
 
 
 // Categoric Mode Icon
-static const char* gs_xpm_catmode[] = {
+static const char* const gs_xpm_catmode[] = {
 "16 16 5 1",
 ". c none",
 "B c black",
@@ -102,7 +102,7 @@ static const char* gs_xpm_catmode[] = {
 };
 
 // Alphabetic Mode Icon
-static const char* gs_xpm_noncatmode[] = {
+static const char* const gs_xpm_noncatmode[] = {
 "16 16 5 1",
 ". c none",
 "B c black",
@@ -128,7 +128,7 @@ static const char* gs_xpm_noncatmode[] = {
 };
 
 // Default Page Icon.
-static const char* gs_xpm_defpage[] = {
+static const char* const gs_xpm_defpage[] = {
 "16 16 5 1",
 ". c none",
 "B c black",
@@ -840,7 +840,7 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
                 m_pToolbar->AddTool(m_nextTbInd,label,bmp,label,wxITEM_RADIO);
                 //m_pToolbar->InsertTool(index+3,m_nextTbInd,bmp);
             else
-                m_pToolbar->AddTool(m_nextTbInd,label,wxBitmap( (const char**)gs_xpm_defpage ),
+                m_pToolbar->AddTool(m_nextTbInd,label,wxBitmap(gs_xpm_defpage),
                     label,wxITEM_RADIO);
 
             m_nextTbInd++;
@@ -1274,10 +1274,10 @@ void wxPropertyGridManager::RecreateControls()
                 wxString desc1(_("Categorized Mode"));
                 wxString desc2(_("Alphabetic Mode"));
                 m_pToolbar->AddTool(baseId+ID_ADVTBITEMSBASE_OFFSET+0,
-                    desc1,wxBitmap ( (const char**)gs_xpm_catmode ),
+                    desc1,wxBitmap (gs_xpm_catmode),
                     desc1,wxITEM_RADIO);
                 m_pToolbar->AddTool(baseId+ID_ADVTBITEMSBASE_OFFSET+1,
-                    desc2,wxBitmap ( (const char**)gs_xpm_noncatmode ),
+                    desc2,wxBitmap (gs_xpm_noncatmode),
                     desc2,wxITEM_RADIO);
                 m_pToolbar->Realize();
             }

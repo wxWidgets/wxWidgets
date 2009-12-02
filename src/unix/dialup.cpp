@@ -645,7 +645,7 @@ wxDialUpManagerImpl::CheckIfconfig()
     // first time check for ifconfig location
     if ( m_CanUseIfconfig == -1 ) // unknown
     {
-        static const wxChar *ifconfigLocations[] =
+        static const wxChar *const ifconfigLocations[] =
         {
             wxT("/sbin"),         // Linux, FreeBSD, Darwin
             wxT("/usr/sbin"),     // SunOS, Solaris, AIX, HP-UX

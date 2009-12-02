@@ -352,13 +352,13 @@ wxValidator* wxIntProperty::DoGetValidator() const
 
 #define wxPG_UINT_TEMPLATE_MAX 8
 
-static const wxChar* gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
+static const wxChar* const gs_uintTemplates32[wxPG_UINT_TEMPLATE_MAX] = {
     wxT("%x"),wxT("0x%x"),wxT("$%x"),
     wxT("%X"),wxT("0x%X"),wxT("$%X"),
     wxT("%u"),wxT("%o")
 };
 
-static const char* gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
+static const char* const gs_uintTemplates64[wxPG_UINT_TEMPLATE_MAX] = {
     "%" wxLongLongFmtSpec "x",
     "0x%" wxLongLongFmtSpec "x",
     "$%" wxLongLongFmtSpec "x",
@@ -874,7 +874,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxEnumProperty, wxPGProperty)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEnumProperty,long,Choice)
 
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, int value ) : wxPGProperty(label,name)
 {
     SetIndex(0);
@@ -888,7 +888,7 @@ wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, con
     }
 }
 
-wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+wxEnumProperty::wxEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, wxPGChoices* choicesCache, int value )
     : wxPGProperty(label,name)
 {
@@ -1138,14 +1138,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxEditEnumProperty, wxPGProperty)
 
 WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxEditEnumProperty,wxString,ComboBox)
 
-wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, const wxString& value )
     : wxEnumProperty(label,name,labels,values,0)
 {
     SetValue( value );
 }
 
-wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar** labels,
+wxEditEnumProperty::wxEditEnumProperty( const wxString& label, const wxString& name, const wxChar* const* labels,
     const long* values, wxPGChoices* choicesCache, const wxString& value )
     : wxEnumProperty(label,name,labels,values,choicesCache,0)
 {
@@ -1264,7 +1264,7 @@ void wxFlagsProperty::Init()
 }
 
 wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
-    const wxChar** labels, const long* values, long value ) : wxPGProperty(label,name)
+    const wxChar* const* labels, const long* values, long value ) : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
 

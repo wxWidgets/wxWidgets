@@ -110,7 +110,7 @@
 // ============================================================================
 
 // Array used in DecToHex conversion routine.
-static wxChar hexArray[] = wxT("0123456789ABCDEF");
+static const wxChar hexArray[] = wxT("0123456789ABCDEF");
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& buf)

@@ -58,7 +58,7 @@ END_EVENT_TABLE()
 
 // don't change the number of elements (48) in this array, the code below is
 // hardcoded to use it
-static const wxChar *wxColourDialogNames[] =
+static const wxChar *const wxColourDialogNames[] =
 {
     wxT("ORANGE"),
     wxT("GOLDENROD"),
@@ -380,7 +380,7 @@ void wxGenericColourDialog::PaintBasicColours(wxDC& dc)
             int y = (i*(m_smallRectangleSize.y+m_gridSpacing) + m_standardColoursRect.y);
 
             dc.SetPen(*wxBLACK_PEN);
-            wxBrush brush(m_standardColours[ptr], wxSOLID);
+            wxBrush brush(m_standardColours[ptr]);
             dc.SetBrush(brush);
 
             dc.DrawRectangle( x, y, m_smallRectangleSize.x, m_smallRectangleSize.y);
@@ -403,7 +403,7 @@ void wxGenericColourDialog::PaintCustomColours(wxDC& dc)
 
       dc.SetPen(*wxBLACK_PEN);
 
-      wxBrush brush(m_customColours[ptr], wxSOLID);
+      wxBrush brush(m_customColours[ptr]);
       dc.SetBrush(brush);
 
       dc.DrawRectangle( x, y, m_smallRectangleSize.x, m_smallRectangleSize.y);
@@ -461,7 +461,7 @@ void wxGenericColourDialog::PaintCustomColour(wxDC& dc)
 {
     dc.SetPen(*wxBLACK_PEN);
 
-    wxBrush *brush = new wxBrush(m_colourData.m_dataColour, wxSOLID);
+    wxBrush *brush = new wxBrush(m_colourData.m_dataColour);
     dc.SetBrush(*brush);
 
     dc.DrawRectangle( m_singleCustomColourRect.x, m_singleCustomColourRect.y,

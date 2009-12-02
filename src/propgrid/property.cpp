@@ -1707,7 +1707,7 @@ wxVariant wxPGProperty::GetAttributesAsList() const
 // Slots of utility flags are NULL
 const unsigned int gs_propFlagToStringSize = 14;
 
-static const wxChar* gs_propFlagToString[gs_propFlagToStringSize] = {
+static const wxChar* const gs_propFlagToString[gs_propFlagToStringSize] = {
     NULL,
     wxT("DISABLED"),
     wxT("HIDDEN"),
@@ -2684,12 +2684,12 @@ wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
 
 // -----------------------------------------------------------------------
 
-void wxPGChoices::Add( const wxChar** labels, const ValArrItem* values )
+void wxPGChoices::Add( const wxChar* const* labels, const ValArrItem* values )
 {
     AllocExclusive();
 
     unsigned int itemcount = 0;
-    const wxChar** p = &labels[0];
+    const wxChar* const* p = &labels[0];
     while ( *p ) { p++; itemcount++; }
 
     unsigned int i;

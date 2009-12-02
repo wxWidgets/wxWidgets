@@ -3582,7 +3582,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
                               bool captureMouse)
 {
 #if wxUSE_LOG_TRACE
-    static const wxChar *cursorModes[] =
+    static const wxChar *const cursorModes[] =
     {
         wxT("SELECT_CELL"),
         wxT("RESIZE_ROW"),

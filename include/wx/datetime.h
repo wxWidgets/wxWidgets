@@ -128,8 +128,8 @@ WXDLLIMPEXP_BASE struct tm *wxGmtime_r(const time_t*, struct tm*);
 // wxInvalidDateTime)
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
-extern WXDLLIMPEXP_DATA_BASE(const char *) wxDefaultDateTimeFormat;
-extern WXDLLIMPEXP_DATA_BASE(const char *) wxDefaultTimeSpanFormat;
+extern WXDLLIMPEXP_DATA_BASE(const char) wxDefaultDateTimeFormat[];
+extern WXDLLIMPEXP_DATA_BASE(const char) wxDefaultTimeSpanFormat[];
 extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 
 #define wxInvalidDateTime wxDefaultDateTime

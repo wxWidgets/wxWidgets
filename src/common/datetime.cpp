@@ -323,8 +323,8 @@ const long wxDateTime::TIME_T_FACTOR = 1000l;
 // global data
 // ----------------------------------------------------------------------------
 
-const char *wxDefaultDateTimeFormat = "%c";
-const char *wxDefaultTimeSpanFormat = "%H:%M:%S";
+const char wxDefaultDateTimeFormat[] = "%c";
+const char wxDefaultTimeSpanFormat[] = "%H:%M:%S";
 
 // in the fine tradition of ANSI C we use our equivalent of (time_t)-1 to
 // indicate an invalid wxDateTime object
@@ -356,7 +356,7 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 {
     // the number of days in month in Julian/Gregorian calendar: the first line
     // is for normal years, the second one is for the leap ones
-    static wxDateTime::wxDateTime_t daysInMonth[2][MONTHS_IN_YEAR] =
+    static const wxDateTime::wxDateTime_t daysInMonth[2][MONTHS_IN_YEAR] =
     {
         { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
         { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
@@ -820,7 +820,7 @@ wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
 {
     wxCHECK_MSG( month != Inv_Month, wxEmptyString, "invalid month" );
 
-    static const char *monthNames[2][MONTHS_IN_YEAR] =
+    static const char *const monthNames[2][MONTHS_IN_YEAR] =
     {
         { "January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December" },
@@ -859,7 +859,7 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
 {
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, wxT("invalid weekday") );
 
-    static const char *weekdayNames[2][DAYS_PER_WEEK] =
+    static const char *const weekdayNames[2][DAYS_PER_WEEK] =
     {
         { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
           "Saturday" },

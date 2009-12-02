@@ -1760,7 +1760,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 else // not a valid weekday name
                 {
                     // try the ordinals
-                    static const char *ordinals[] =
+                    static const char *const ordinals[] =
                     {
                         wxTRANSLATE("first"),
                         wxTRANSLATE("second"),
@@ -1937,7 +1937,7 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
 
     // try all time formats we may think about in the order from longest to
     // shortest
-    static const char *timeFormats[] =
+    static const char *const timeFormats[] =
     {
         "%I:%M:%S %p",  // 12hour with AM/PM
         "%H:%M:%S",     // could be the same or 24 hour one so try it too

@@ -618,7 +618,7 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
 
 static const char *ParseColor(const char *data)
 {
-    static const char *targets[] =
+    static const char *const targets[] =
                         {"c ", "g ", "g4 ", "m ", "b ", "s ", NULL};
 
     const char *p, *r;

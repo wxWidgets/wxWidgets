@@ -185,8 +185,8 @@ wxAuiDefaultToolBarArt::wxAuiDefaultToolBarArt()
     m_gripper_pen2 = wxPen(darker3_colour);
     m_gripper_pen3 = *wxWHITE_PEN;
 
-    static unsigned char button_dropdown_bits[] = { 0xe0, 0xf1, 0xfb };
-    static unsigned char overflow_bits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
+    static const unsigned char button_dropdown_bits[] = { 0xe0, 0xf1, 0xfb };
+    static const unsigned char overflow_bits[] = { 0x80, 0xff, 0x80, 0xc1, 0xe3, 0xf7 };
 
     m_button_dropdown_bmp = wxAuiBitmapFromBits(button_dropdown_bits, 5, 3,
                                                 *wxBLACK);
