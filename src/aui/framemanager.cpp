@@ -706,7 +706,6 @@ BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_MOUSE_CAPTURE_LOST(wxAuiManager::OnCaptureLost)
     EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
     EVT_AUI_FIND_MANAGER(wxAuiManager::OnFindManager)
-    EVT_TIMER(101, wxAuiManager::OnHintFadeTimer)
 END_EVENT_TABLE()
 
 
@@ -3313,6 +3312,8 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     if (!m_hint_wnd || m_hint_fadeamt >= m_hint_fademax)
     {
         m_hint_fadetimer.Stop();
+        Disconnect(m_hint_fadetimer.GetId(), wxEVT_TIMER,
+                   wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
         return;
     }
 
@@ -3354,8 +3355,10 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         if (m_hint_fadeamt != m_hint_fademax) //  Only fade if we need to
         {
             // start fade in timer
-            m_hint_fadetimer.SetOwner(this, 101);
+            m_hint_fadetimer.SetOwner(this);
             m_hint_fadetimer.Start(5);
+            Connect(m_hint_fadetimer.GetId(), wxEVT_TIMER,
+                    wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
         }
     }
     else  // Not using a transparent hint window...
@@ -3423,6 +3426,10 @@ void wxAuiManager::HideHint()
             m_hint_wnd->Show(false);
         m_hint_wnd->SetTransparent(0);
         m_hint_fadetimer.Stop();
+        // In case this is called while a hint fade is going, we need to
+        // disconnect the event handler.
+        Disconnect(m_hint_fadetimer.GetId(), wxEVT_TIMER,
+                   wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
         m_last_hint = wxRect();
         return;
     }
