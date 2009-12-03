@@ -36,6 +36,8 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/filename.h"
+
 #include "wx/generic/statbmpg.h"
 #include "wx/sizer.h"
 #include "wx/filepicker.h"
@@ -82,7 +84,13 @@ void StatBmpWidgetsPage::CreateContent()
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(choices), choices);
 
-    m_filepicker = new wxFilePickerCtrl(this, wxID_ANY, "../image/toucan.png");
+    wxString testImage;
+#if wxUSE_LIBPNG
+    wxFileName fn("../image/toucan.png");
+    if ( fn.FileExists() )
+        testImage = fn.GetFullPath();
+#endif // wxUSE_LIBPNG
+    m_filepicker = new wxFilePickerCtrl(this, wxID_ANY, testImage);
 
     m_sbsizer = new wxStaticBoxSizer(wxVERTICAL, this, "wxStaticBitmap inside");
 
@@ -96,9 +104,9 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxInitAllImageHandlers();
 
-    Connect(wxEVT_COMMAND_FILEPICKER_CHANGED, 
+    Connect(wxEVT_COMMAND_FILEPICKER_CHANGED,
             wxFileDirPickerEventHandler(StatBmpWidgetsPage::OnFileChange));
-    Connect(wxEVT_COMMAND_RADIOBOX_SELECTED, 
+    Connect(wxEVT_COMMAND_RADIOBOX_SELECTED,
             wxCommandEventHandler(StatBmpWidgetsPage::OnRadioChange));
 
     m_statbmp = NULL;
@@ -108,12 +116,16 @@ void StatBmpWidgetsPage::CreateContent()
 void StatBmpWidgetsPage::RecreateWidget()
 {
     delete m_statbmp;
+    m_statbmp = NULL;
+
     wxString filepath = m_filepicker->GetPath();
+    if ( filepath.empty() )
+        return;
+
     wxImage image(filepath);
     if (! image.Ok() )
     {
         wxLogMessage("Reading image from file '%s' failed.", filepath.c_str());
-        m_statbmp = NULL;
         return;
     }
     if (m_radio->GetSelection() == 0)
@@ -122,11 +134,11 @@ void StatBmpWidgetsPage::RecreateWidget()
         m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, wxBitmap(image));
     m_sbsizer->Add(m_statbmp, wxSizerFlags(1).Expand());
     GetSizer()->Layout();
-    m_statbmp->Connect(wxEVT_LEFT_DOWN, 
+    m_statbmp->Connect(wxEVT_LEFT_DOWN,
                        wxMouseEventHandler(StatBmpWidgetsPage::OnMouseEvent),
                        NULL, this);
-    // When switching from generic to native control on wxMSW under Wine, 
+    // When switching from generic to native control on wxMSW under Wine,
     // the explicit Refresh() is necessary
-    m_statbmp->Refresh(); 
+    m_statbmp->Refresh();
 }
 
