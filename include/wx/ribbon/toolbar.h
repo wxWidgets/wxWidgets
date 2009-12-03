@@ -88,10 +88,10 @@ public:
     virtual void SetRows(int nMin, int nMax = -1);
 
     virtual bool IsSizingContinuous() const;
-    virtual wxSize DoGetBestSize() const;
 
 protected:
     friend class wxRibbonToolBarEvent;
+    virtual wxSize DoGetBestSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);

@@ -36,11 +36,12 @@ public:
     void SetHCURSOR(WXHCURSOR cursor);
     WXHCURSOR GetHCURSOR() const;
 
-private:
-    void InitFromStock(wxStockCursor);
-
+protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+private:
+    void InitFromStock(wxStockCursor);
 
     void CreateFromImage(const wxImage & image) ;
 

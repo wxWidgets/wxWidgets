@@ -87,9 +87,9 @@ public:
     virtual bool IsSizingContinuous() const;
 
     virtual wxSize GetMinSize() const;
-    virtual wxSize DoGetBestSize() const;
 protected:
     friend class wxRibbonButtonBarEvent;
+    virtual wxSize DoGetBestSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void OnEraseBackground(wxEraseEvent& evt);

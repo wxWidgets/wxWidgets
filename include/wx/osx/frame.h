@@ -88,6 +88,9 @@ public:
 
     void PositionBars();
 
+    // osx specific event handling common for all osx-ports
+    virtual void HandleResized( double timestampsec );
+
 protected:
     // common part of all ctors
     void Init();
@@ -108,16 +111,11 @@ protected:
     virtual void AttachMenuBar(wxMenuBar *menubar);
 #endif
 
-    // osx specific event handling common for all osx-ports
-    virtual void HandleResized( double timestampsec );
-
-protected:
     // the last focused child: we restore focus to it on activation
     wxWindow             *m_winLastFocused;
 
     virtual bool        MacIsChildOfClientArea( const wxWindow* child ) const ;
 
-private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)
 };

@@ -15,8 +15,7 @@
 
 class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
 {
-    DECLARE_DYNAMIC_CLASS(wxStatusBarMac)
-
+public:
     wxStatusBarMac();
     wxStatusBarMac(wxWindow *parent, wxWindowID id = wxID_ANY,
            long style = wxSTB_DEFAULT_STYLE,
@@ -28,16 +27,16 @@ class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
               long style = wxSTB_DEFAULT_STYLE,
               const wxString& name = wxStatusBarNameStr);
 
-    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
-    virtual void DrawField(wxDC& dc, int i, int textHeight);
-
     // Implementation
     virtual void MacHiliteChanged();
     void OnPaint(wxPaintEvent& event);
 
 protected:
+    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
+    virtual void DrawField(wxDC& dc, int i, int textHeight);
     virtual void DoUpdateStatusText(int number = 0);
 
+    DECLARE_DYNAMIC_CLASS(wxStatusBarMac)
     DECLARE_EVENT_TABLE()
 };
 

@@ -115,7 +115,6 @@ public:
     wxRibbonPage* GetPage(int n);
     bool DismissExpandedPanel();
 
-    virtual wxSize DoGetBestSize() const;
     virtual bool HasMultiplePages() const { return true; }
 
     void SetWindowStyleFlag(long style);
@@ -125,6 +124,7 @@ public:
 protected:
     friend class wxRibbonPage;
 
+    virtual wxSize DoGetBestSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
 

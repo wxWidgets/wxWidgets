@@ -714,7 +714,6 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
-private:
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }
 

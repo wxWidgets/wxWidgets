@@ -1411,6 +1411,12 @@ public:
     // used only by Windows
     virtual bool CanApplyThemeBorder() const { return true; }
 
+    // returns the main window of composite control; this is the window
+    // that FindFocus returns if the focus is in one of composite control's
+    // windows
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+        { return (wxWindow*)this; }
+
 protected:
     // helper for the derived class Create() methods: the first overload, with
     // validator parameter, should be used for child windows while the second
@@ -1457,12 +1463,6 @@ protected:
     // Send the wxWindowDestroyEvent if not done yet and sets m_isBeingDeleted
     // to true
     void SendDestroyEvent();
-
-    // returns the main window of composite control; this is the window
-    // that FindFocus returns if the focus is in one of composite control's
-    // windows
-    virtual wxWindow *GetMainWindowOfCompositeControl()
-        { return (wxWindow*)this; }
 
     // this method should be implemented to use operating system specific code
     // to really enable/disable the widget, it will only be called when we

@@ -65,7 +65,6 @@ public:
     virtual bool Realize();
     virtual bool Layout();
     virtual wxSize GetMinSize() const;
-    virtual wxSize DoGetBestSize() const;
 
     virtual bool IsSizingContinuous() const;
 
@@ -76,6 +75,7 @@ public:
     wxRibbonPanel* GetExpandedPanel();
 
 protected:
+    virtual wxSize DoGetBestSize() const;
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
     wxSize GetMinNotMinimisedSize() const;
 

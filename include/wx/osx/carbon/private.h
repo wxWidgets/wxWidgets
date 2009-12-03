@@ -901,14 +901,16 @@ public:
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL );
     virtual void            UpdateLineToEnd( unsigned int n) ;
 
+    // pointing back
+
+    wxMacDataBrowserColumn*     GetColumnFromProperty( DataBrowserPropertyID );
+
+protected:
     virtual void            ItemNotification(
                                 DataBrowserItemID itemID,
                                 DataBrowserItemNotification message,
                                 DataBrowserItemDataRef itemData);
 
-    // pointing back
-
-    wxMacDataBrowserColumn*     GetColumnFromProperty( DataBrowserPropertyID );
 private:
     wxArrayMacDataBrowserColumns m_columns;
     int m_nextColumnId ;

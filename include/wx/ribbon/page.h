@@ -46,7 +46,6 @@ public:
 
     wxBitmap& GetIcon() {return m_icon;}
     virtual wxSize GetMinSize() const;
-    virtual wxSize DoGetBestSize() const;
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
     void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
 
@@ -63,6 +62,7 @@ public:
     virtual void RemoveChild(wxWindowBase *child);
 
 protected:
+    virtual wxSize DoGetBestSize() const;
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);

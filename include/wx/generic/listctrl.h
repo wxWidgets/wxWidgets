@@ -243,11 +243,12 @@ protected:
 
     virtual wxBorder GetDefaultBorder() const;
 
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
+
 private:
     void CreateOrDestroyHeaderWindowAsNeeded();
     void OnScroll( wxScrollWinEvent& event );
     void OnSize( wxSizeEvent &event );
-    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
 
     // we need to return a special WM_GETDLGCODE value to process just the
     // arrows but let the other navigation characters through
