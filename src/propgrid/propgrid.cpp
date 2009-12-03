@@ -3278,6 +3278,12 @@ bool wxPropertyGrid::DoEditorValidate()
 
 void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 {
+    // It is possible that this handler receives event even before
+    // the control has been properly initialized. Let's skip the
+    // event handling in that case.
+    if ( !m_pState )
+        return;
+
     wxPGProperty* selected = GetSelection();
 
     // Somehow, event is handled after property has been deselected.
