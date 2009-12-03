@@ -369,8 +369,11 @@ void wxFileDialog::SetMessage(const wxString& message)
 
 void wxFileDialog::SetPath(const wxString& path)
 {
-    wxCHECK_RET(wxIsAbsolutePath(path), " wxFileDialog::SetPath requires an absolute filepath");
-    m_fc.SetPath( path );
+    // we need an absolute path for GTK native chooser so ensure that we have
+    // it
+    wxFileName fn(path);
+    fn.MakeAbsolute();
+    m_fc.SetPath(fn.GetFullPath());
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
