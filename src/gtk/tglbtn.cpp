@@ -285,17 +285,13 @@ void wxToggleButton::SetLabel(const wxString& label)
 
 bool wxToggleButton::Enable(bool enable /*=true*/)
 {
-    bool isEnabled = IsEnabled();
-
-    if (!wxControl::Enable(enable))
+    if (!base_type::Enable(enable))
         return false;
 
     gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
 
-    if (!isEnabled && enable)
-    {
+    if (enable)
         GTKFixSensitivity();
-    }
 
     return true;
 }

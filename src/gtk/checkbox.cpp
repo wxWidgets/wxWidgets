@@ -217,17 +217,13 @@ void wxCheckBox::SetLabel( const wxString& label )
 
 bool wxCheckBox::Enable( bool enable )
 {
-    bool isEnabled = IsEnabled();
-
-    if ( !wxControl::Enable( enable ) )
+    if (!base_type::Enable(enable))
         return false;
 
     gtk_widget_set_sensitive( m_widgetLabel, enable );
 
-    if (!isEnabled && enable)
-    {
+    if (enable)
         GTKFixSensitivity();
-    }
 
     return true;
 }

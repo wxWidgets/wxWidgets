@@ -84,6 +84,8 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
+    typedef wxToggleButtonBase base_type;
+
     DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
 };
 
@@ -137,6 +139,8 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
+    typedef wxToggleButtonBase base_type;
+
     DECLARE_DYNAMIC_CLASS(wxToggleButton)
 };
 

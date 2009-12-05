@@ -53,6 +53,9 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
+private:
+    typedef wxControl base_type;
+
     DECLARE_DYNAMIC_CLASS(wxRadioButton)
 };
 

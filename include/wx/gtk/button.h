@@ -68,6 +68,8 @@ protected:
     virtual void DoSetBitmapPosition(wxDirection dir);
 
 private:
+    typedef wxButtonBase base_type;
+
     // common part of all ctors
     void Init()
     {
@@ -89,7 +91,6 @@ private:
     // show the given bitmap (must be valid)
     void GTKDoShowBitmap(const wxBitmap& bitmap);
 
-
     // the bitmaps for the different state of the buttons, all of them may be
     // invalid and the button only shows a bitmap at all if State_Normal bitmap
     // is valid
@@ -100,7 +101,6 @@ private:
 
     // true iff the button is in pressed state
     bool m_isPressed;
-
 
     DECLARE_DYNAMIC_CLASS(wxButton)
 };

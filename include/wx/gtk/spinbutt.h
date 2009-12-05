@@ -60,6 +60,8 @@ protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
 private:
+    typedef wxSpinButtonBase base_type;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSpinButton)
 };
