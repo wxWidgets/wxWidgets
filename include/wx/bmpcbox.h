@@ -18,8 +18,8 @@
 #if wxUSE_BITMAPCOMBOBOX
 
 #include "wx/bitmap.h"
-#include "wx/window.h"
 
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxItemContainer;
 
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which

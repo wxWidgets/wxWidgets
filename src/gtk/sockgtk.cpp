@@ -14,11 +14,10 @@
 
 #if wxUSE_SOCKETS
 
-#include <gdk/gdk.h>
-#include <glib.h>
-
 #include "wx/apptrait.h"
 #include "wx/private/fdiomanager.h"
+
+#include <gdk/gdk.h>
 
 extern "C" {
 static

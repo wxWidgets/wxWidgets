@@ -191,8 +191,8 @@ bool wxMacLaunch(char **argv)
     // Loop through command line arguments to the bundle,
     // turn them into CFURLs and then put them in cfaFiles
     // For use to launch services call
-        for( ; *argv != NULL ; ++argv)
-        {
+    for( ; *argv != NULL ; ++argv)
+    {
         // Check for '<' as this will ring true for
         // CFURLCreateWithString but is generally not considered
         // typical on mac but is usually passed here from wxExecute
@@ -244,12 +244,12 @@ bool wxMacLaunch(char **argv)
 
         // Add the valid CFURL to the argument array and then
         // release it as the CFArray adds a ref count to it
-            CFArrayAppendValue(
-                cfaFiles,
-                cfurlCurrentFile
-                            );
-            CFRelease(cfurlCurrentFile); // array has retained it
-        }
+        CFArrayAppendValue(
+            cfaFiles,
+            cfurlCurrentFile
+                        );
+        CFRelease(cfurlCurrentFile); // array has retained it
+    }
 
     // Create a LSLaunchURLSpec for use with LSOpenFromURLSpec
     // Note that there are several flag options (launchFlags) such

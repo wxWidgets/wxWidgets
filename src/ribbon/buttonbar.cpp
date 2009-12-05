@@ -125,7 +125,7 @@ public:
 
 WX_DECLARE_OBJARRAY(wxRibbonButtonBarButtonInstance, wxArrayRibbonButtonBarButtonInstance);
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayRibbonButtonBarButtonInstance);
+WX_DEFINE_OBJARRAY(wxArrayRibbonButtonBarButtonInstance)
 
 class wxRibbonButtonBarLayout
 {
@@ -627,7 +627,7 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     m_lock_active_state = false;
 
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-};
+}
 
 wxSize wxRibbonButtonBar::GetMinSize() const
 {
@@ -787,7 +787,7 @@ bool wxRibbonButtonBar::TryCollapseLayout(wxRibbonButtonBarLayout* original,
         layout->overall_size.GetHeight() > original->overall_size.GetHeight())
     {
         delete layout;
-        wxASSERT_MSG(false, wxT("Layout collapse resulted in increased size"));
+        wxFAIL_MSG("Layout collapse resulted in increased size");
         return false;
     }
 

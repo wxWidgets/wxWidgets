@@ -3,7 +3,7 @@
 // Purpose:     generic wxInfoBar implementation
 // Author:      Vadim Zeitlin
 // Created:     2009-07-28
-// RCS-ID:      $Id: wxhead.cpp,v 1.10 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,6 +25,8 @@
 
 #if wxUSE_INFOBAR
 
+#include "wx/infobar.h"
+
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
     #include "wx/button.h"
@@ -32,14 +34,12 @@
     #include "wx/settings.h"
     #include "wx/statbmp.h"
     #include "wx/stattext.h"
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
-
-#include "wx/infobar.h"
 
 #include "wx/artprov.h"
 #include "wx/renderer.h"
 #include "wx/scopeguard.h"
-#include "wx/sizer.h"
 
 BEGIN_EVENT_TABLE(wxInfoBarGeneric, wxInfoBarBase)
     EVT_BUTTON(wxID_ANY, wxInfoBarGeneric::OnButton)

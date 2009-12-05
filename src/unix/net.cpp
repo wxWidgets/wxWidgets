@@ -79,7 +79,7 @@ public:
        wxDialUpManager methods.
    */
    virtual bool IsOk() const
-      { return TRUE; }
+      { return true; }
 
    /** The simplest way to initiate a dial up: this function dials the given
        ISP (exact meaning of the parameter depends on the platform), returns
@@ -112,7 +112,7 @@ public:
    // so, in general, the user should be allowed to override it. This function
    // allows to forcefully set the online status - whatever our internal
    // algorithm may think about it.
-   virtual void SetOnlineStatus(bool isOnline = TRUE)
+   virtual void SetOnlineStatus(bool isOnline = true)
       { m_IsOnline = isOnline; }
 
    // set misc wxDialUpManager options
@@ -180,11 +180,11 @@ public:
    AutoCheckTimer(wxDialUpManagerImpl *dupman)
       {
          m_dupman = dupman;
-         m_started = FALSE;
+         m_started = false;
       }
 
    virtual bool Start( int millisecs = -1 )
-      { m_started = TRUE; return wxTimer::Start(millisecs, FALSE); }
+      { m_started = true; return wxTimer::Start(millisecs, false); }
 
    virtual void Notify()
       { wxLogTrace("Checking dial up network status."); m_dupman->CheckStatus(); }
@@ -202,7 +202,7 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
                           const wxString & WXUNUSED(password))
 {
    if(m_IsOnline == 1)
-      return FALSE;
+      return false;
    m_IsOnline = -1;
    m_ISPname = isp;
    wxString cmd;
@@ -217,7 +217,7 @@ bool
 wxDialUpManagerImpl::HangUp(void)
 {
    if(m_IsOnline == 0)
-      return FALSE;
+      return false;
    m_IsOnline = -1;
    wxString cmd;
    if(m_HangUpCommand.Find("%s"))

@@ -225,7 +225,7 @@ void wxListBox::SetValueCallback( unsigned int WXUNUSED(n), wxListWidgetColumn* 
 wxSize wxListBox::DoGetBestSize() const
 {
     int lbWidth = 100;  // some defaults
-    int lbHeight = 110;
+    int lbHeight;
     int wLine;
 
     {

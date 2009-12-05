@@ -720,8 +720,7 @@ void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
         m_privateContextMenu->Append(wxID_SELECTALL, _("Select &All"));
     }
 
-    if (m_privateContextMenu != NULL)
-        PopupMenu(m_privateContextMenu);
+    PopupMenu(m_privateContextMenu);
 #endif
 }
 
@@ -828,9 +827,8 @@ void wxTextWidgetImpl::ShowPosition( long WXUNUSED(pos) )
 
 int wxTextWidgetImpl::GetNumberOfLines() const
 {
-    ItemCount lines = 0 ;
     wxString content = GetStringValue() ;
-    lines = 1;
+    ItemCount lines = 1;
 
     for (size_t i = 0; i < content.length() ; i++)
     {

@@ -251,10 +251,8 @@ GtkWidget* wxComboBox::GetConnectWidget()
     return GTK_WIDGET( GetEntry() );
 }
 
-GdkWindow *wxComboBox::GTKGetWindow(wxArrayGdkWindows& windows) const
+GdkWindow* wxComboBox::GTKGetWindow(wxArrayGdkWindows& /* windows */) const
 {
-    wxUnusedVar(windows);
-
     return GetEntry()->text_area;
 }
 

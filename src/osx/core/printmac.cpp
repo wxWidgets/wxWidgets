@@ -525,11 +525,11 @@ wxPrintNativeDataBase* wxOSXCreatePrintData()
 {
 #if wxOSX_USE_COCOA
     return new wxOSXCocoaPrintData();
-#endif
-#if wxOSX_USE_CARBON
+#elif wxOSX_USE_CARBON
     return new wxOSXCarbonPrintData();
-#endif
+#else
     return NULL;
+#endif
 }
 
 /*
@@ -659,7 +659,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     {
         if (sm_abortIt)
         {
-                keepGoing = false;
                 break;
         }
         else
@@ -717,7 +716,7 @@ bool wxMacPrinter::Setup(wxWindow *WXUNUSED(parent))
     return (ret == wxID_OK);
 #endif
 
-    return wxID_CANCEL;
+    return false;
 }
 
 /*

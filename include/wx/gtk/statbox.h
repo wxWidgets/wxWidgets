@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSTATICBOXH__
-#define __GTKSTATICBOXH__
+#ifndef _WX_GTKSTATICBOX_H_
+#define _WX_GTKSTATICBOX_H_
 
 //-----------------------------------------------------------------------------
 // wxStaticBox
@@ -40,7 +40,7 @@ public:
 
     // implementation
 
-    virtual bool IsTransparentForMouse() const { return TRUE; }
+    virtual bool IsTransparentForMouse() const { return true; }
 
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
@@ -52,8 +52,7 @@ protected:
 
     void DoApplyWidgetStyle(GtkRcStyle *style);
 
-private:
     DECLARE_DYNAMIC_CLASS(wxStaticBox)
 };
 
-#endif // __GTKSTATICBOXH__
+#endif // _WX_GTKSTATICBOX_H_

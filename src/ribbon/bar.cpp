@@ -31,7 +31,7 @@
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray);
+WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray)
 
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
@@ -210,9 +210,9 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
     if(m_tab_scroll_buttons_shown)
     {
 #define SET_FLAG(variable, flag) \
-    { if(((variable) & (flag)) != (flag)) variable |= (flag), refresh_tabs = true; }
+    { if(((variable) & (flag)) != (flag)) { variable |= (flag); refresh_tabs = true; }}
 #define UNSET_FLAG(variable, flag) \
-    { if((variable) & (flag)) variable &= ~(flag), refresh_tabs = true; }
+    { if((variable) & (flag)) { variable &= ~(flag); refresh_tabs = true; }}
 
         if(m_tab_scroll_left_button_rect.Contains(x, y))
             SET_FLAG(m_tab_scroll_left_button_state, wxRIBBON_SCROLL_BTN_HOVERED)

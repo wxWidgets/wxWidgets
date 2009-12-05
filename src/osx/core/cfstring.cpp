@@ -186,8 +186,8 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
 #if 0
     case wxFONTENCODING_UTF7 :
         enc = CreateTextEncoding(kCFStringEncodingUnicodeDefault,0,kUnicodeUTF7Format) ;
-#endif
         break ;
+#endif
     case wxFONTENCODING_UTF8 :
         enc = kCFStringEncodingUTF8;
         break ;
@@ -638,9 +638,8 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
         return wxEmptyString ;
 
     Size cflen = CFStringGetLength( ref )  ;
-    char* buf = NULL ;
 
-    CFStringEncoding cfencoding = 0;
+    CFStringEncoding cfencoding;
     wxString result;
 #if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
@@ -657,7 +656,7 @@ wxString wxCFStringRef::AsString( CFStringRef ref, wxFontEncoding WXUNUSED_IN_UN
     CFIndex cStrLen ;
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding ,
         '?' , false , NULL , 0 , &cStrLen ) ;
-    buf = new char[ cStrLen ] ;
+    char* buf = new char[cStrLen];
     CFStringGetBytes( ref , CFRangeMake(0, cflen) , cfencoding,
         '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
 

@@ -897,22 +897,20 @@ wxSize wxWindowMac::DoGetBestSize() const
             r.width =
             r.height = 16 ;
 
-            if ( 0 )
-            {
-            }
 #if wxUSE_SCROLLBAR
-            else if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
+            if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
             {
                 r.height = 16 ;
             }
+            else
 #endif
 #if wxUSE_SPINBTN
-            else if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
+            if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
             {
                 r.height = 24 ;
             }
-#endif
             else
+#endif
             {
                 // return wxWindowBase::DoGetBestSize() ;
             }

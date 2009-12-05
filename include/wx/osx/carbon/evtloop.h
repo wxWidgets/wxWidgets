@@ -12,7 +12,7 @@
 #ifndef _WX_MAC_CARBON_EVTLOOP_H_
 #define _WX_MAC_CARBON_EVTLOOP_H_
 
-class OpaqueEventRef;
+struct OpaqueEventRef;
 typedef OpaqueEventRef *EventRef;
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxCFEventLoop

@@ -9,12 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef _TASKBAR_H_
-#define _TASKBAR_H_
-
-class WXDLLIMPEXP_FWD_CORE wxIcon;
-class WXDLLIMPEXP_FWD_CORE wxFrame;
-class WXDLLIMPEXP_FWD_CORE wxWindow;
+#ifndef _WX_UNIX_TASKBAR_H_
+#define _WX_UNIX_TASKBAR_H_
 
 class WXDLLIMPEXP_FWD_ADV wxTaskBarIconArea;
 
@@ -42,5 +38,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 };
 
-#endif
-    // _TASKBAR_H_
+#endif // _WX_UNIX_TASKBAR_H_

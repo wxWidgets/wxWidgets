@@ -19,7 +19,6 @@
 #include "wx/log.h"
 #include "wx/stream.h"
 
-class WXDLLIMPEXP_FWD_BASE wxInputStream;
 class WXDLLIMPEXP_FWD_CORE wxImage;
 
 /*

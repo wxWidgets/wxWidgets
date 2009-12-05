@@ -3,20 +3,19 @@
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
-// Id:
+// Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __IMAGELISTH_G__
-#define __IMAGELISTH_G__
+#ifndef _WX_IMAGLISTG_H_
+#define _WX_IMAGLISTG_H_
 
-#include "wx/defs.h"
 #include "wx/list.h"
-#include "wx/icon.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
 
@@ -78,5 +77,4 @@ public:
 };
 #endif // !wxHAS_NATIVE_IMAGELIST
 
-#endif  // __IMAGELISTH_G__
-
+#endif  // _WX_IMAGLISTG_H_

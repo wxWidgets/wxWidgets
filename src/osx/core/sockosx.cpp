@@ -287,6 +287,6 @@ static struct OSXManagerSetter
 } gs_OSXManagerSetter;
 
 // see the relative linker macro in socket.cpp
-wxFORCE_LINK_THIS_MODULE( osxsocket );
+wxFORCE_LINK_THIS_MODULE(osxsocket)
 
 #endif // wxUSE_SOCKETS
