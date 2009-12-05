@@ -1022,11 +1022,14 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
                     cpContainer->FindConnectionPoint(ta->guid, cp.GetRef());
                 CHECK_HR(hret);
 
-                IDispatch* disp;
-                m_frameSite->QueryInterface(IID_IDispatch, (void**)&disp);
-                hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
-                                  &adviseCookie);
-                CHECK_HR(hret);
+                if ( cp )
+                {
+                    IDispatch* disp;
+                    m_frameSite->QueryInterface(IID_IDispatch, (void**)&disp);
+                    hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
+                                      &adviseCookie);
+                    CHECK_HR(hret);
+                }
             }
         }
 
