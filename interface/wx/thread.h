@@ -518,6 +518,10 @@ enum wxCriticalSectionType
     @library{wxbase}
     @category{threading}
 
+    @note Critical sections can be used before the wxWidgets library is fully
+          initialized. In particular, it's safe to create global
+          wxCriticalSection instances.
+
     @see wxThread, wxCondition, wxCriticalSectionLocker
 */
 class wxCriticalSection
