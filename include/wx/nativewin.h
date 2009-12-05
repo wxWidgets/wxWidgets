@@ -145,6 +145,9 @@ public:
         return false;
     }
 
+#ifdef __WXMSW__
+    virtual bool IsShown() const;
+#endif // __WXMSW__
 
     // this is an implementation detail: called when the native window is
     // destroyed by an outside agency; deletes the C++ object too but can in

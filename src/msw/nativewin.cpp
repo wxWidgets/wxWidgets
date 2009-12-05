@@ -54,6 +54,11 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle hwnd)
     return true;
 }
 
+bool wxNativeContainerWindow::IsShown() const
+{
+    return (IsWindowVisible(static_cast<HWND>(m_hWnd)) != 0);
+}
+
 void wxNativeContainerWindow::OnNativeDestroyed()
 {
     // don't use Close() or even Destroy() here, we really don't want to keep
