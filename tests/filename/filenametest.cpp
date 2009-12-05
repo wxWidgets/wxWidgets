@@ -69,6 +69,10 @@ static struct TestFileNameInfo
     { "c:foo.bar", "c", "", "foo", "bar", false, wxPATH_DOS },
     { "c:\\foo.bar", "c", "\\", "foo", "bar", true, wxPATH_DOS },
     { "c:\\Windows\\command.com", "c", "\\Windows", "command", "com", true, wxPATH_DOS },
+    { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
+      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\", "", "", true, wxPATH_DOS },
+    { "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\Program Files\\setup.exe",
+      "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}", "\\Program Files", "setup", "exe", true, wxPATH_DOS },
 
 #if 0
     // NB: when using the wxFileName::GetLongPath() function on these two
@@ -125,6 +129,7 @@ private:
         CPPUNIT_TEST( TestShortLongPath );
 #endif // __WINDOWS__
         CPPUNIT_TEST( TestUNC );
+        CPPUNIT_TEST( TestVolumeUniqueName );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -138,6 +143,7 @@ private:
     void TestShortLongPath();
 #endif // __WINDOWS__
     void TestUNC();
+    void TestVolumeUniqueName();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -507,3 +513,23 @@ void FileNameTestCase::TestUNC()
     CPPUNIT_ASSERT_EQUAL( "\\path2", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
 }
 
+void FileNameTestCase::TestVolumeUniqueName()
+{
+    wxFileName fn("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
+                  wxPATH_DOS);
+    CPPUNIT_ASSERT_EQUAL( "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}",
+                          fn.GetVolume() );
+    CPPUNIT_ASSERT_EQUAL( "\\", fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
+    CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\",
+                          fn.GetFullPath(wxPATH_DOS) );
+
+    fn.Assign("\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
+              "Program Files\\setup.exe", wxPATH_DOS);
+    CPPUNIT_ASSERT_EQUAL( "Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}",
+                          fn.GetVolume() );
+    CPPUNIT_ASSERT_EQUAL( "\\Program Files",
+                          fn.GetPath(wxPATH_NO_SEPARATOR, wxPATH_DOS) );
+    CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
+                          "Program Files\\setup.exe",
+                          fn.GetFullPath(wxPATH_DOS) );
+}

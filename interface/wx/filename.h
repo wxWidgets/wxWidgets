@@ -820,6 +820,24 @@ public:
                                 wxPathFormat format = wxPATH_NATIVE);
 
     /**
+        Returns @true if the volume part of the path is a unique volume name.
+
+        This function will always return @false if the path format is not
+        wxPATH_DOS.
+
+        Unique volume names are Windows volume identifiers which remain the same
+        regardless of where the volume is actually mounted. Example of a path
+        using a volume name could be
+        @code
+            \\?\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\Program Files\setup.exe
+        @endcode
+
+        @since 2.9.1
+    */
+    static bool IsMSWUniqueVolumeNamePath(const wxString& path,
+                                          wxPathFormat format = wxPATH_NATIVE);
+
+    /**
         Returns @true if this filename is not absolute.
     */
     bool IsRelative(wxPathFormat format = wxPATH_NATIVE) const;

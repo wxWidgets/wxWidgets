@@ -22,7 +22,16 @@
                 drive:\dir1\dir2\...\dirN\filename.ext where drive is a single
                 letter. "." and ".." as for Unix but no "~".
 
-                There are also UNC names of the form \\share\fullpath
+                There are also UNC names of the form \\share\fullpath and
+                MSW unique volume names of the form \\?\Volume{GUID}\fullpath.
+
+                The latter provide a uniform way to access a volume regardless of
+                its current mount point, i.e. you can change a volume's mount
+                point from D: to E:, or even remove it, and still be able to
+                access it through its unique volume name. More on the subject can
+                be found in MSDN's article "Naming a Volume" that is currently at
+                http://msdn.microsoft.com/en-us/library/aa365248(VS.85).aspx.
+
 
    wxPATH_MAC:  Mac OS 8/9 and Mac OS X under CodeWarrior 7 format, absolute file
                 names have the form
@@ -296,7 +305,18 @@ static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
         // although I didn't find any authoritative docs on this)
         if ( format == wxPATH_DOS && volume.length() > 1 )
         {
-            path << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << volume;
+            // We also have to check for Windows unique volume names here and
+            // return it with '\\?\' prepended to it
+            if ( wxFileName::IsMSWUniqueVolumeNamePath("\\\\?\\" + volume + "\\",
+                                                       format) )
+            {
+                path << "\\\\?\\" << volume;
+            }
+            else
+            {
+                // it must be a UNC path
+                path << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << volume;
+            }
         }
         else if  ( format == wxPATH_DOS || format == wxPATH_VMS )
         {
@@ -325,6 +345,13 @@ static bool IsUNCPath(const wxString& path, wxPathFormat format)
                         IsDOSPathSep(path[1u]) &&
                             !IsDOSPathSep(path[2u]);
 }
+
+// ----------------------------------------------------------------------------
+// private constants
+// ----------------------------------------------------------------------------
+
+// length of \\?\Volume{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\ string
+static const size_t wxMSWUniqueVolumePrefixLength = 49;
 
 } // anonymous namespace
 
@@ -620,12 +647,17 @@ bool wxFileName::DirExists( const wxString &dirPath )
 #if defined(__WINDOWS__) || defined(__OS2__)
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
     // so remove all trailing backslashes from the path - but don't do this for
-    // the paths "d:\" (which are different from "d:") nor for just "\"
+    // the paths "d:\" (which are different from "d:"), for just "\" or for
+    // windows unique volume names ("\\?\Volume{GUID}\")
     while ( wxEndsWithPathSeparator(strPath) )
     {
         size_t len = strPath.length();
-        if ( len == 1 || (len == 3 && strPath[len - 2] == wxT(':')) )
+        if ( len == 1 || (len == 3 && strPath[len - 2] == wxT(':')) ||
+            (len == wxMSWUniqueVolumePrefixLength &&
+             wxFileName::IsMSWUniqueVolumeNamePath(strPath)))
+        {
             break;
+        }
 
         strPath.Truncate(len - 1);
     }
@@ -1810,6 +1842,18 @@ bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
     return ch != wxT('\0') && GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
 }
 
+/* static */
+bool
+wxFileName::IsMSWUniqueVolumeNamePath(const wxString& path, wxPathFormat format)
+{
+    // return true if the format used is the DOS/Windows one and the string begins
+    // with a Windows unique volume name ("\\?\Volume{guid}\")
+    return format == wxPATH_DOS &&
+            path.length() >= wxMSWUniqueVolumePrefixLength &&
+             path.StartsWith(wxS("\\\\?\\Volume{")) &&
+              path[wxMSWUniqueVolumePrefixLength - 1] == wxFILE_SEP_PATH_DOS;
+}
+
 // ----------------------------------------------------------------------------
 // path components manipulation
 // ----------------------------------------------------------------------------
@@ -2194,9 +2238,26 @@ wxFileName::SplitVolume(const wxString& fullpathWithVolume,
 
     wxString fullpath = fullpathWithVolume;
 
-    // special Windows UNC paths hack: transform \\share\path into share:path
-    if ( IsUNCPath(fullpath, format) )
+    if ( IsMSWUniqueVolumeNamePath(fullpath, format) )
     {
+        // special Windows unique volume names hack: transform
+        // \\?\Volume{guid}\path into Volume{guid}:path
+        // note: this check must be done before the check for UNC path
+
+        // we know the last backslash from the unique volume name is located
+        // there from IsMSWUniqueVolumeNamePath
+        fullpath[wxMSWUniqueVolumePrefixLength - 1] = wxFILE_SEP_DSK;
+
+        // paths starting with a unique volume name should always be absolute
+        fullpath.insert(wxMSWUniqueVolumePrefixLength, 1, wxFILE_SEP_PATH_DOS);
+
+        // remove the leading "\\?\" part
+        fullpath.erase(0, 4);
+    }
+    else if ( IsUNCPath(fullpath, format) )
+    {
+        // special Windows UNC paths hack: transform \\share\path into share:path
+
         fullpath.erase(0, 2);
 
         size_t posFirstSlash =

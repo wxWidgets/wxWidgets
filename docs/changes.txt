@@ -432,6 +432,7 @@ All:
   wxVariant.
 - wxDateTime timezone functions now dynamic (no caching).
 - Added wxHttp::GetCookie and wxHttp::HasCookies (dodge).
+- Added support for unique volume names to wxFileName (Neno Ganchev).
 
 Unix:
 
