@@ -49,7 +49,6 @@ public:
     void GTKEnableEvents();
 
 protected:
-    virtual wxSize DoGetBestSize() const;
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 

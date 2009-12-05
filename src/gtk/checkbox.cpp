@@ -239,11 +239,6 @@ GdkWindow *wxCheckBox::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
     return GTK_BUTTON(m_widgetCheckbox)->event_window;
 }
 
-wxSize wxCheckBox::DoGetBestSize() const
-{
-    return wxControl::DoGetBestSize();
-}
-
 // static
 wxVisualAttributes
 wxCheckBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
