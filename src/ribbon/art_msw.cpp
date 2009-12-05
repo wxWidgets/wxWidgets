@@ -1932,10 +1932,9 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(
     wxPoint offset(wnd->GetPosition());
     wxRibbonPage* page = NULL;
     wxWindow* parent = wnd->GetParent();
-    wxRibbonPanel* panel = NULL;
+    wxRibbonPanel* panel = wxDynamicCast(wnd, wxRibbonPanel);
     bool hovered = false;
 
-    panel = wxDynamicCast(wnd, wxRibbonPanel);
     if(panel != NULL)
     {
         hovered = allow_hovered && panel->IsHovered();
@@ -2638,12 +2637,10 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             wxCoord label_height;
             wxCoord best_width;
             dc.GetTextExtent(label, &best_width, &label_height);
-            int best_num_lines = 1;
             int last_line_extra_width = 0;
             if(kind != wxRIBBON_BUTTON_NORMAL)
             {
                 last_line_extra_width += 8;
-                best_num_lines = 2; // label on top line, button below
             }
             size_t i;
             for(i = 0; i < label.Len(); ++i)
@@ -2656,7 +2653,6 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                     if(width < best_width)
                     {
                         best_width = width;
-                        best_num_lines = 2;
                     }
                 }
             }

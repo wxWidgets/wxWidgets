@@ -18,7 +18,7 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
-#include "wx/private/graphics.h"
+#include "wx/graphics.h"
 
 #ifndef WX_PRECOMP
     #include "wx/icon.h"
@@ -28,11 +28,7 @@
     #include "wx/log.h"
 #endif
 
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-static const double RAD2DEG = 180.0 / M_PI;
+#include "wx/private/graphics.h"
 
 //-----------------------------------------------------------------------------
 // Local functions
@@ -480,7 +476,6 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
     wxDouble dist = r / sin(alpha/2) * cos(alpha/2);
     // calculate tangential points
     wxPoint2DDouble t1 = dist*v1 + p1;
-    wxPoint2DDouble t2 = dist*v2 + p1;
 
     wxPoint2DDouble nv1 = v1;
     nv1.SetVectorAngle(v1.GetVectorAngle()-90);
@@ -565,7 +560,7 @@ void wxGraphicsContext::SetPen( const wxGraphicsPen& pen )
 
 void wxGraphicsContext::SetPen( const wxPen& pen )
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.Ok() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         SetPen( wxNullGraphicsPen );
     else
         SetPen( CreatePen( pen ) );
@@ -579,7 +574,7 @@ void wxGraphicsContext::SetBrush( const wxGraphicsBrush& brush )
 
 void wxGraphicsContext::SetBrush( const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.Ok() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         SetBrush( wxNullGraphicsBrush );
     else
         SetBrush( CreateBrush( brush ) );

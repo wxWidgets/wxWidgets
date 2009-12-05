@@ -458,9 +458,6 @@ void wxRibbonGallery::OnPaint(wxPaintEvent& WXUNUSED(evt))
     if(m_art == NULL)
         return;
 
-    wxSize cur_size = GetSize();
-    wxSize min_size = GetMinSize();
-
     m_art->DrawGalleryBackground(dc, this, GetSize());
 
     int padding_top = m_art->GetMetric(wxRIBBON_ART_GALLERY_BITMAP_PADDING_TOP_SIZE);
