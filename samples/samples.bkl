@@ -29,6 +29,7 @@
     <subproject id="dialogs" template="sub"/>
     <subproject id="dialup" template="sub"/>
     <subproject id="display" template="sub"/>
+    <subproject id="dll" template="sub"/>
     <subproject id="dnd" template="sub"/>
     <subproject id="docview" template="sub"/>
     <subproject id="dragimag" template="sub"/>

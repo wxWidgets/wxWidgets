@@ -45,7 +45,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -115,6 +115,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>display.bat
 	call display.bat
 	@del display.bat
+	@echo cd dll >dll.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dll.bat
+	call dll.bat
+	@del dll.bat
 	@echo cd dnd >dnd.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>dnd.bat
 	call dnd.bat
@@ -455,6 +459,12 @@ display:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>display.bat
 	call display.bat
 	@del display.bat
+
+dll: 
+	@echo cd dll >dll.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>dll.bat
+	call dll.bat
+	@del dll.bat
 
 dnd: 
 	@echo cd dnd >dnd.bat

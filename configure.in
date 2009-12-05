@@ -7564,7 +7564,7 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$TOOLKIT" = "MSW"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS regtest"
         if test "$wxUSE_UNIVERSAL" != "yes"; then
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw nativdlg"
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS ownerdrw nativdlg dll"
         fi
     fi
     if test "$TOOLKIT" = "PM" -a "$wxUSE_UNIVERSAL" != "yes"; then
