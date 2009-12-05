@@ -1778,13 +1778,14 @@ static void ScheduleThreadForDeletion()
 
 static void DeleteThread(wxThread *This)
 {
-    // gs_mutexDeleteThread should be unlocked before signalling the condition
-    // or wxThreadModule::OnExit() would deadlock
-    wxMutexLocker locker( *gs_mutexDeleteThread );
-
     wxLogTrace(TRACE_THREADS, wxT("Thread %p auto deletes."), This->GetId());
 
     delete This;
+
+    // only lock gs_mutexDeleteThread after deleting the thread to avoid
+    // calling out into user code with it locked as this may result in
+    // deadlocks if the thread dtor deletes another thread (see #11501)
+    wxMutexLocker locker( *gs_mutexDeleteThread );
 
     wxCHECK_RET( gs_nThreadsBeingDeleted > 0,
                  wxT("no threads scheduled for deletion, yet we delete one?") );
