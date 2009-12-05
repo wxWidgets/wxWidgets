@@ -854,8 +854,15 @@ void wxLogChain::DoLogRecord(wxLogLevel level,
         m_logOld->LogRecord(level, msg, info);
 
     // and also send it to the new one
-    if ( m_logNew && m_logNew != this )
-        m_logNew->LogRecord(level, msg, info);
+    if ( m_logNew )
+    {
+        // don't call m_logNew->LogRecord() to avoid infinite recursion when
+        // m_logNew is this object itself
+        if ( m_logNew != this )
+            m_logNew->LogRecord(level, msg, info);
+        else
+            wxLog::DoLogRecord(level, msg, info);
+    }
 }
 
 #ifdef __VISUALC__
