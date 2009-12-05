@@ -3494,10 +3494,10 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
 
         if test "x$wxUSE_UNIX" = "xyes"; then
-            CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon $CPPFLAGS"
+            CPPFLAGS="$CPPFLAGS_PASCAL -I/Developer/Headers/FlatCarbon $CPPFLAGS"
         else
             dnl platform.h needs TARGET_CARBON before setup.h
-            CPPFLAGS="$CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON $CPPFLAGS"
+            CPPFLAGS="$CPPFLAGS_PASCAL -DTARGET_CARBON $CPPFLAGS"
         fi
 
         TOOLKIT=OSX_CARBON
