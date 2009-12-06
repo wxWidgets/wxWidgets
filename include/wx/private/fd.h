@@ -37,11 +37,11 @@
         return FD_ISSET(fd, fds);
         #pragma warning(pop)
     }
-    inline bool wxFD_CLR(int fd, fd_set *fds)
+    inline void wxFD_CLR(int fd, fd_set *fds)
     {
         #pragma warning(push, 1)
         #pragma warning(disable:1469)
-        return FD_CLR(fd, fds);
+        FD_CLR(fd, fds);
         #pragma warning(pop)
     }
 #else // !__INTELC__
