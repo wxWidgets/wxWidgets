@@ -1845,6 +1845,7 @@ bool wxWindowMac::MacDoRedraw( long time )
     {
         case wxBG_STYLE_ERASE:
         case wxBG_STYLE_SYSTEM:
+        case wxBG_STYLE_COLOUR:
             {
                 // for the toplevel window this really is the entire area for
                 // all the others only their client area, otherwise they might
