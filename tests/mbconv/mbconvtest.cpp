@@ -81,6 +81,7 @@ private:
         CPPUNIT_TEST( Latin1Tests );
         CPPUNIT_TEST( FontmapTests );
         CPPUNIT_TEST( BufSize );
+        CPPUNIT_TEST( FromWCharTests );
 #ifdef HAVE_WCHAR_H
         CPPUNIT_TEST( UTF8_41 );
         CPPUNIT_TEST( UTF8_7f );
@@ -115,6 +116,7 @@ private:
     void LibcTests();
     void FontmapTests();
     void BufSize();
+    void FromWCharTests();
     void IconvTests();
     void Latin1Tests();
 
@@ -863,6 +865,70 @@ void MBConvTestCase::BufSize()
     CPPUNIT_ASSERT_EQUAL( '?', buf[lenMB + 2] );
 }
 
+void MBConvTestCase::FromWCharTests()
+{
+    wxCSConv conv950("CP950");
+    char mbuf[10];
+    // U+4e00 is 2 bytes (0xa4 0x40) in cp950
+    wchar_t wbuf[] = { 0x4e00, 0, 0x4e00, 0 };
+
+    // test simple ASCII text
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 0, L"a", 1));
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[0]);
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( 1, conv950.FromWChar(mbuf, 1, L"a", 1));
+    CPPUNIT_ASSERT_EQUAL( 'a', mbuf[0]);
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[1]);
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 1, L"a", 2));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( 2, conv950.FromWChar(mbuf, 2, L"a", 2));
+    CPPUNIT_ASSERT_EQUAL( 'a', mbuf[0]);
+    CPPUNIT_ASSERT_EQUAL( '\0', mbuf[1]);
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[2]);
+
+    // test non-ASCII text, 1 wchar -> 2 char
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 0, wbuf, 1));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 1, wbuf, 1));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( 2, conv950.FromWChar(mbuf, 2, wbuf, 1));
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[2]);
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 2, wbuf, 2));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( 3, conv950.FromWChar(mbuf, 3, wbuf, 2));
+    CPPUNIT_ASSERT_EQUAL( '\0', mbuf[2]);
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[3]);
+
+    // test text with embedded NUL-character and srcLen specified
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 3, wbuf, 3));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 4, wbuf, 3));
+    CPPUNIT_ASSERT_EQUAL( 5, conv950.FromWChar(mbuf, 5, wbuf, 3));
+    CPPUNIT_ASSERT_EQUAL( '\0', mbuf[2]);
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[5]);
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( wxCONV_FAILED, conv950.FromWChar(mbuf, 5, wbuf, 4));
+
+    memset(mbuf, '!', sizeof(mbuf));
+    CPPUNIT_ASSERT_EQUAL( 6, conv950.FromWChar(mbuf, 6, wbuf, 4));
+    CPPUNIT_ASSERT_EQUAL( '\0', mbuf[2]);
+    CPPUNIT_ASSERT_EQUAL( '\0', mbuf[5]);
+    CPPUNIT_ASSERT_EQUAL( '!', mbuf[6]);
+}
 
 WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_iconv( const char* name );
 

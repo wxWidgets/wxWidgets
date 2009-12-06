@@ -323,16 +323,22 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
     const size_t lenNul = GetMBNulLen();
     for ( const wchar_t * const srcEnd = src + srcLen;
           src < srcEnd;
-          src += wxWcslen(src) + 1 /* skip L'\0' too */ )
+          src++ /* skip L'\0' too */ )
     {
         // try to convert the current chunk
         size_t lenChunk = WC2MB(NULL, src, 0);
-
         if ( lenChunk == wxCONV_FAILED )
             return wxCONV_FAILED;
 
         dstWritten += lenChunk;
-        if ( src + lenChunk < srcEnd || isNulTerminated )
+
+        const wchar_t * const
+            chunkEnd = isNulTerminated ? srcEnd - 1 : src + wxWcslen(src);
+
+        // our return value accounts for the trailing NUL(s), unlike that of
+        // WC2MB(), however don't do it for the last NUL we artificially added
+        // ourselves above
+        if ( chunkEnd < srcEnd )
             dstWritten += lenNul;
 
         if ( dst )
@@ -340,13 +346,42 @@ wxMBConv::FromWChar(char *dst, size_t dstLen,
             if ( dstWritten > dstLen )
                 return wxCONV_FAILED;
 
-            if ( WC2MB(dst, src, lenChunk + lenNul) == wxCONV_FAILED )
+            // if we know that there is enough space in the destination buffer
+            // (because we accounted for lenNul in dstWritten above), we can
+            // convert directly in place -- but otherwise we need another
+            // temporary buffer to ensure that we don't overwrite the output
+            wxCharBuffer dstBuf;
+            char *dstTmp;
+            if ( chunkEnd == srcEnd )
+            {
+                dstBuf = wxCharBuffer(lenChunk + lenNul - 1);
+                dstTmp = dstBuf.data();
+            }
+            else
+            {
+                dstTmp = dst;
+            }
+
+            if ( WC2MB(dstTmp, src, lenChunk + lenNul) == wxCONV_FAILED )
                 return wxCONV_FAILED;
 
+            if ( dstTmp != dst )
+            {
+                // copy everything up to but excluding the terminating NUL(s)
+                // into the real output buffer
+                memcpy(dst, dstTmp, lenChunk);
+
+                // micro-optimization: if dstTmp != dst it means that chunkEnd
+                // == srcEnd and so we're done, no need to update anything below
+                break;
+            }
+
             dst += lenChunk;
-            if ( src + lenChunk < srcEnd || isNulTerminated )
+            if ( chunkEnd < srcEnd )
                 dst += lenNul;
         }
+
+        src = chunkEnd;
     }
 
     return dstWritten;
