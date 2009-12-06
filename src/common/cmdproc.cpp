@@ -28,6 +28,7 @@
     #include "wx/intl.h"
     #include "wx/string.h"
     #include "wx/menu.h"
+    #include "wx/accel.h"
 #endif //WX_PRECOMP
 
 #include "wx/cmdproc.h"
@@ -59,8 +60,8 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 #if wxUSE_MENUS
     m_commandEditMenu = NULL;
 #endif // wxUSE_MENUS
-    m_undoAccelerator = wxT("\tCtrl+Z");
-    m_redoAccelerator = wxT("\tCtrl+Y");
+    m_undoAccelerator = wxAcceleratorEntry(wxACCEL_CTRL, 'Z').ToString();
+    m_redoAccelerator = wxAcceleratorEntry(wxACCEL_CTRL, 'Y').ToString();
 
     m_lastSavedCommand =
     m_currentCommand = wxList::compatibility_iterator();
