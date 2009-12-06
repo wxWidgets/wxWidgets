@@ -61,19 +61,21 @@ public:
     // there is not enough space for everything, including the trailing NUL
     // character(s), in the output buffer, wxCONV_FAILED is returned.
     //
-    // In the special case when dstLen is 0 (outputBuf may be NULL then) the
-    // return value is the length of the needed buffer but nothing happens
-    // otherwise. If srcLen is wxNO_LEN, the entire string, up to and
+    // In the special case when dst is NULL (the value of dstLen is ignored
+    // then) the return value is the length of the needed buffer but nothing
+    // happens otherwise. If srcLen is wxNO_LEN, the entire string, up to and
     // including the trailing NUL(s), is converted, otherwise exactly srcLen
     // bytes are.
     //
     // Typical usage:
     //
     //          size_t dstLen = conv.ToWChar(NULL, 0, src);
-    //          if ( dstLen != wxCONV_FAILED )
+    //          if ( dstLen == wxCONV_FAILED )
     //              ... handle error ...
     //          wchar_t *wbuf = new wchar_t[dstLen];
     //          conv.ToWChar(wbuf, dstLen, src);
+    //          ... work with wbuf ...
+    //          delete [] wbuf;
     //
     virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
                            const char *src, size_t srcLen = wxNO_LEN) const;
