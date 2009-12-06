@@ -60,8 +60,8 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 #if wxUSE_MENUS
     m_commandEditMenu = NULL;
 #endif // wxUSE_MENUS
-    m_undoAccelerator = wxAcceleratorEntry(wxACCEL_CTRL, 'Z').ToString();
-    m_redoAccelerator = wxAcceleratorEntry(wxACCEL_CTRL, 'Y').ToString();
+    m_undoAccelerator = '\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Z').ToString();
+    m_redoAccelerator = '\t' + wxAcceleratorEntry(wxACCEL_CTRL, 'Y').ToString();
 
     m_lastSavedCommand =
     m_currentCommand = wxList::compatibility_iterator();
