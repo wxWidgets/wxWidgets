@@ -154,6 +154,10 @@ wxAppConsoleBase::wxAppConsoleBase()
 
 wxAppConsoleBase::~wxAppConsoleBase()
 {
+    // we're being destroyed and using this object from now on may not work or
+    // even crash so don't leave dangling pointers to it
+    ms_appInstance = NULL;
+
     delete m_traits;
 }
 
