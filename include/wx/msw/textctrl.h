@@ -179,7 +179,6 @@ public:
 
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-    virtual wxVisualAttributes GetDefaultAttributes() const;
 
 protected:
     // common part of all ctors

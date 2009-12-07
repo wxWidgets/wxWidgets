@@ -705,6 +705,18 @@ public:
        wxTextEntry::SetValue(value);
     }
 
+    // wxWindow overrides
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL)
+    {
+        return GetCompositeControlsDefaultAttributes(variant);
+    }
+
 protected:
     // override streambuf method
 #if wxHAS_TEXT_WINDOW_STREAM

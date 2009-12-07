@@ -2197,23 +2197,6 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& event)
     event.Skip();
 }
 
-// ----------------------------------------------------------------------------
-// Default colors for MSW text control
-//
-// Set default background color to the native white instead of
-// the default wxSYS_COLOUR_BTNFACE (is triggered with wxNullColour).
-// ----------------------------------------------------------------------------
-
-wxVisualAttributes wxTextCtrl::GetDefaultAttributes() const
-{
-    wxVisualAttributes attrs;
-    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW); //white
-
-    return attrs;
-}
-
 // the rest of the file only deals with the rich edit controls
 #if wxUSE_RICHEDIT
 
