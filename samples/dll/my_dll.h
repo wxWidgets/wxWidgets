@@ -15,11 +15,17 @@
 extern "C" {
 #endif
 
+#ifdef MY_DLL_BUILDING
+    #define MY_DLL_DECL WXEXPORT
+#else
+    #define MY_DLL_DECL WXIMPORT
+#endif
+
 // launch wx UI from some application that may or may not be written in wx
-WXIMPORT void run_wx_gui_from_dll(const char *title);
+MY_DLL_DECL void run_wx_gui_from_dll(const char *title);
 
 // run this to shutdown running threads etc.
-WXIMPORT void wx_dll_cleanup(void);
+MY_DLL_DECL void wx_dll_cleanup();
 
 
 #ifdef __cplusplus

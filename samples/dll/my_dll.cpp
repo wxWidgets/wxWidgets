@@ -231,7 +231,9 @@ unsigned wxSTDCALL MyAppLauncher(void* event)
 // public DLL interface
 // ----------------------------------------------------------------------------
 
-extern "C" WXEXPORT
+extern "C"
+{
+
 void run_wx_gui_from_dll(const char *title)
 {
     // In order to prevent conflicts with hosting app's event loop, we
@@ -291,9 +293,7 @@ void run_wx_gui_from_dll(const char *title)
     wxQueueEvent(wxApp::GetInstance(), event);
 }
 
-
-extern "C" WXEXPORT
-void wx_dll_cleanup(void)
+void wx_dll_cleanup()
 {
     wxCriticalSectionLocker lock(gs_wxStartupCS);
 
@@ -311,3 +311,5 @@ void wx_dll_cleanup(void)
     CloseHandle(gs_wxMainThread);
     gs_wxMainThread = NULL;
 }
+
+} // extern "C"

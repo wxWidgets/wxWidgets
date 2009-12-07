@@ -8,6 +8,7 @@
          cond="PLATFORM_WIN32=='1'">
 
         <define>$(DLLFLAG)</define>
+        <define>MY_DLL_BUILDING</define>
         <include>$(SRCDIR)</include>
 
         <sources>my_dll.cpp</sources>
