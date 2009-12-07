@@ -39,6 +39,11 @@ WX_EXE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) 
 WX_EXE_OBJECTS =  \
 	$(OBJS)\wx_exe_sample_rc.o \
 	$(OBJS)\wx_exe_wx_exe.o
+SDK_EXE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
+	$(GCCFLAGS) -DHAVE_W32API_H $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
+	$(CXXFLAGS)
+SDK_EXE_OBJECTS =  \
+	$(OBJS)\sdk_exe_sdk_exe.o
 
 ### Conditionally set variables: ###
 
@@ -111,24 +116,6 @@ endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p_3 = --define WXUSINGDLL
 endif
-ifeq ($(BUILD),debug)
-__OPTIMIZEFLAG = -O0
-endif
-ifeq ($(BUILD),release)
-__OPTIMIZEFLAG = -O2
-endif
-ifeq ($(USE_RTTI),0)
-__RTTIFLAG = -fno-rtti
-endif
-ifeq ($(USE_RTTI),1)
-__RTTIFLAG = 
-endif
-ifeq ($(USE_EXCEPTIONS),0)
-__EXCEPTIONSFLAG = -fno-exceptions
-endif
-ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG = 
-endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
@@ -196,6 +183,24 @@ ifeq ($(USE_CAIRO),1)
 ____CAIRO_LIBDIR_FILENAMES = -L$(CAIRO_ROOT)\lib
 endif
 ifeq ($(BUILD),debug)
+__OPTIMIZEFLAG = -O0
+endif
+ifeq ($(BUILD),release)
+__OPTIMIZEFLAG = -O2
+endif
+ifeq ($(USE_RTTI),0)
+__RTTIFLAG = -fno-rtti
+endif
+ifeq ($(USE_RTTI),1)
+__RTTIFLAG =
+endif
+ifeq ($(USE_EXCEPTIONS),0)
+__EXCEPTIONSFLAG = -fno-exceptions
+endif
+ifeq ($(USE_EXCEPTIONS),1)
+__EXCEPTIONSFLAG =
+endif
+ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
 __DEBUGINFO = -g
 endif
@@ -225,7 +230,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\my_dll.dll $(__wx_exe___depname)
+all: $(OBJS)\my_dll.dll $(__wx_exe___depname) $(OBJS)\sdk_exe.exe
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -233,6 +238,7 @@ clean:
 	-if exist $(OBJS)\my_dll.dll del $(OBJS)\my_dll.dll
 	-if exist $(OBJS)\libmy_dll.a del $(OBJS)\libmy_dll.a
 	-if exist $(OBJS)\wx_exe.exe del $(OBJS)\wx_exe.exe
+	-if exist $(OBJS)\sdk_exe.exe del $(OBJS)\sdk_exe.exe
 
 $(OBJS)\my_dll.dll: $(MY_DLL_OBJECTS)
 	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ $(MY_DLL_OBJECTS)  -Wl,--out-implib=$(OBJS)\libmy_dll.a $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
@@ -242,6 +248,9 @@ $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample_rc.o $(OBJS)\my_dll.
 	$(CXX) -o $@ $(WX_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(OBJS)\libmy_dll.a $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 endif
 
+$(OBJS)\sdk_exe.exe: $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
+	$(CXX) -o $@ $(SDK_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  $(OBJS)\libmy_dll.a
+
 $(OBJS)\my_dll_my_dll.o: ./my_dll.cpp
 	$(CXX) -c -o $@ $(MY_DLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -250,6 +259,9 @@ $(OBJS)\wx_exe_sample_rc.o: ./../../samples/sample.rc
 
 $(OBJS)\wx_exe_wx_exe.o: ./wx_exe.cpp
 	$(CXX) -c -o $@ $(WX_EXE_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\sdk_exe_sdk_exe.o: ./sdk_exe.cpp
+	$(CXX) -c -o $@ $(SDK_EXE_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean
 

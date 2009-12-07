@@ -62,6 +62,9 @@ WX_EXE_OBJECTS =  \
 	$(__wx_exe___win32rc) \
 	$(__wx_exe_os2_lib_res) \
 	wx_exe_wx_exe.o
+SDK_EXE_CXXFLAGS =          $(CPPFLAGS) $(CXXFLAGS)
+SDK_EXE_OBJECTS =  \
+	sdk_exe_sdk_exe.o
 
 ### Conditionally set variables: ###
 
@@ -115,6 +118,13 @@ COND_PLATFORM_OS2_1___wx_exe___os2_emxbindcmd = $(NM) wx_exe$(EXEEXT) | if grep 
 @COND_TOOLKIT_OSX_IPHONE@	= $(__wx_exe_app_Contents_PkgInfo___depname)
 @COND_TOOLKIT_COCOA@____wx_exe_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__wx_exe_app_Contents_PkgInfo___depname)
+@COND_PLATFORM_WIN32_1@__sdk_exe___depname = sdk_exe$(EXEEXT)
+@COND_PLATFORM_MAC_0@__sdk_exe___mac_setfilecmd = @true
+@COND_PLATFORM_MAC_1@__sdk_exe___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL sdk_exe$(EXEEXT)
+COND_PLATFORM_OS2_1___sdk_exe___os2_emxbindcmd = $(NM) sdk_exe$(EXEEXT) | if \
+	grep -q pmwin.763 ; then emxbind -ep sdk_exe$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__sdk_exe___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___sdk_exe___os2_emxbindcmd)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_DEBUG_FLAG_0@__DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -149,7 +159,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: $(__my_dll___depname) $(__wx_exe___depname) $(__wx_exe_bundle___depname)
+all: $(__my_dll___depname) $(__wx_exe___depname) $(__wx_exe_bundle___depname) $(__sdk_exe___depname)
 
 install: 
 
@@ -164,6 +174,7 @@ clean:
 	rm -f $(LIBPREFIX)my_dll.$(DLLIMP_SUFFIX)
 	rm -f wx_exe$(EXEEXT)
 	rm -rf wx_exe.app
+	rm -f sdk_exe$(EXEEXT)
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -199,6 +210,12 @@ distclean: clean
 
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@wx_exe_bundle: $(____wx_exe_BUNDLE_TGT_REF_DEP)
 
+@COND_PLATFORM_WIN32_1@sdk_exe$(EXEEXT): $(SDK_EXE_OBJECTS) $(__my_dll___depname)
+@COND_PLATFORM_WIN32_1@	$(CXX) -o $@ $(SDK_EXE_OBJECTS) -L.    $(LDFLAGS_GUI) $(LDFLAGS)  -lmy_dll $(LIBS)
+@COND_PLATFORM_WIN32_1@
+@COND_PLATFORM_WIN32_1@	$(__sdk_exe___mac_setfilecmd)
+@COND_PLATFORM_WIN32_1@	$(__sdk_exe___os2_emxbindcmd)
+
 my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 	$(CXXC) -c -o $@ $(MY_DLL_CXXFLAGS) $(srcdir)/my_dll.cpp
 
@@ -207,6 +224,9 @@ wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
 
 wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
 	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp
+
+sdk_exe_sdk_exe.o: $(srcdir)/sdk_exe.cpp
+	$(CXXC) -c -o $@ $(SDK_EXE_CXXFLAGS) $(srcdir)/sdk_exe.cpp
 
 
 # Include dependency info, if present:

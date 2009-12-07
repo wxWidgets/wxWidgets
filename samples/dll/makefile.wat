@@ -72,22 +72,61 @@ __wx_exe___depname =
 !ifeq SHARED 0
 __wx_exe___depname = $(OBJS)\wx_exe.exe
 !endif
-__DEBUGINFO_1 =
+__WXLIB_CORE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_CORE_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
+!endif
+__WXLIB_BASE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__WXLIB_MONO_p =
+!ifeq MONOLITHIC 1
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__LIB_TIFF_p =
+!ifeq USE_GUI 1
+__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
+!endif
+__LIB_JPEG_p =
+!ifeq USE_GUI 1
+__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
+!endif
+__LIB_PNG_p =
+!ifeq USE_GUI 1
+__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
+!endif
+__GDIPLUS_LIB_p =
+!ifeq USE_GDIPLUS 1
+__GDIPLUS_LIB_p = gdiplus.lib
+!endif
+__CAIRO_LIB_p =
+!ifeq USE_CAIRO 1
+__CAIRO_LIB_p = cairo.lib
+!endif
+____CAIRO_LIBDIR_FILENAMES =
+!ifeq USE_CAIRO 1
+____CAIRO_LIBDIR_FILENAMES = libpath $(CAIRO_ROOT)\lib
+!endif
+__DEBUGINFO_0 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = -d2
+__DEBUGINFO_0 = -d2
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_1 = -d0
+__DEBUGINFO_0 = -d0
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_1 = -d0
+__DEBUGINFO_0 = -d0
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_1 = -d2
+__DEBUGINFO_0 = -d2
 !endif
 __DEBUGINFO =
 !ifeq BUILD debug
@@ -141,45 +180,6 @@ __EXCEPTIONSFLAG =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
 !endif
-__WXLIB_CORE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_CORE_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib
-!endif
-__WXLIB_BASE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_BASE_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__WXLIB_MONO_p =
-!ifeq MONOLITHIC 1
-__WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__LIB_TIFF_p =
-!ifeq USE_GUI 1
-__LIB_TIFF_p = wxtiff$(WXDEBUGFLAG).lib
-!endif
-__LIB_JPEG_p =
-!ifeq USE_GUI 1
-__LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
-!endif
-__LIB_PNG_p =
-!ifeq USE_GUI 1
-__LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
-!endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES = libpath $(CAIRO_ROOT)\lib
-!endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
@@ -229,7 +229,7 @@ OBJS = &
 LIBDIRNAME = .\..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-MY_DLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+MY_DLL_CXXFLAGS = -bd $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
@@ -238,7 +238,7 @@ MY_DLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MY_DLL_OBJECTS =  &
 	$(OBJS)\my_dll_my_dll.obj
-WX_EXE_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+WX_EXE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
@@ -247,6 +247,10 @@ WX_EXE_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  &
 	$(OBJS)\wx_exe_wx_exe.obj
+SDK_EXE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
+	$(__RUNTIME_LIBS) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+SDK_EXE_OBJECTS =  &
+	$(OBJS)\sdk_exe_sdk_exe.obj
 
 
 all : $(OBJS)
@@ -255,7 +259,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\my_dll.dll $(__wx_exe___depname)
+all : .SYMBOLIC $(OBJS)\my_dll.dll $(__wx_exe___depname) $(OBJS)\sdk_exe.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -266,6 +270,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\my_dll.dll del $(OBJS)\my_dll.dll
 	-if exist $(OBJS)\my_dll.lib del $(OBJS)\my_dll.lib
 	-if exist $(OBJS)\wx_exe.exe del $(OBJS)\wx_exe.exe
+	-if exist $(OBJS)\sdk_exe.exe del $(OBJS)\sdk_exe.exe
 
 $(OBJS)\my_dll.dll :  $(MY_DLL_OBJECTS)
 	@%create $(OBJS)\my_dll.lbc
@@ -294,6 +299,18 @@ $(OBJS)\wx_exe.exe :  $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample.res $(OBJS)\my_dll
 	wlink @$(OBJS)\wx_exe.lbc
 !endif
 
+$(OBJS)\sdk_exe.exe :  $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
+	@%create $(OBJS)\sdk_exe.lbc
+	@%append $(OBJS)\sdk_exe.lbc option quiet
+	@%append $(OBJS)\sdk_exe.lbc name $^@
+	@%append $(OBJS)\sdk_exe.lbc option caseexact
+	@%append $(OBJS)\sdk_exe.lbc  $(__DEBUGINFO)  system nt_win ref '_WinMain@16' $(LDFLAGS)
+	@for %i in ($(SDK_EXE_OBJECTS)) do @%append $(OBJS)\sdk_exe.lbc file %i
+	@for %i in ( $(OBJS)\my_dll.lib) do @%append $(OBJS)\sdk_exe.lbc library %i
+	@%append $(OBJS)\sdk_exe.lbc
+	@for %i in () do @%append $(OBJS)\sdk_exe.lbc option stack=%i
+	wlink @$(OBJS)\sdk_exe.lbc
+
 $(OBJS)\my_dll_my_dll.obj :  .AUTODEPEND .\my_dll.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MY_DLL_CXXFLAGS) $<
 
@@ -302,4 +319,7 @@ $(OBJS)\wx_exe_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 
 $(OBJS)\wx_exe_wx_exe.obj :  .AUTODEPEND .\wx_exe.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WX_EXE_CXXFLAGS) $<
+
+$(OBJS)\sdk_exe_sdk_exe.obj :  .AUTODEPEND .\sdk_exe.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(SDK_EXE_CXXFLAGS) $<
 

@@ -26,4 +26,10 @@
         <library>my_dll</library>
     </exe>
 
+    <exe id="sdk_exe" template="common_settings"
+         cond="PLATFORM_WIN32=='1'">
+         <app-type>gui</app-type>
+         <sources>sdk_exe.cpp</sources>
+        <library>my_dll</library>
+    </exe>
 </makefile>

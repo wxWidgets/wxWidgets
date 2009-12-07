@@ -21,7 +21,7 @@ LIBDIRNAME = \
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 MY_DLL_CXXFLAGS = /M$(__RUNTIME_LIBS_11)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO_1) /Fd$(OBJS)\my_dll.pdb $(____DEBUGRUNTIME) \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\my_dll.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
@@ -31,7 +31,7 @@ MY_DLL_CXXFLAGS = /M$(__RUNTIME_LIBS_11)$(__DEBUGRUNTIME) /DWIN32 \
 MY_DLL_OBJECTS =  \
 	$(OBJS)\my_dll_my_dll.obj
 WX_EXE_CXXFLAGS = /M$(__RUNTIME_LIBS_25)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO_1) /Fd$(OBJS)\wx_exe.pdb $(____DEBUGRUNTIME) \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\wx_exe.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
@@ -43,6 +43,12 @@ WX_EXE_OBJECTS =  \
 	$(OBJS)\wx_exe_wx_exe.obj
 WX_EXE_RESOURCES =  \
 	$(OBJS)\wx_exe_sample.res
+SDK_EXE_CXXFLAGS = /M$(__RUNTIME_LIBS_41)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO_0) /Fd$(OBJS)\sdk_exe.pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D_WINDOWS $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+SDK_EXE_OBJECTS =  \
+	$(OBJS)\sdk_exe_sdk_exe.obj
 
 ### Conditionally set variables: ###
 
@@ -104,7 +110,7 @@ EXTRALIBS_FOR_BASE =
 EXTRALIBS_FOR_BASE =  
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_3 = $(__DEBUGRUNTIME_0)
+__DEBUGINFO_3 = $(__DEBUGRUNTIME_1)
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_3 = 
@@ -113,7 +119,7 @@ __DEBUGINFO_3 =
 __DEBUGINFO_3 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_3 = $(__DEBUGRUNTIME_0)
+__DEBUGINFO_3 = $(__DEBUGRUNTIME_1)
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_11 = D
@@ -125,7 +131,7 @@ __RUNTIME_LIBS_11 = $(__THREADSFLAG)
 __wx_exe___depname = $(OBJS)\wx_exe.exe
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_17 = $(__DEBUGRUNTIME_0)
+__DEBUGINFO_17 = $(__DEBUGRUNTIME_1)
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
 __DEBUGINFO_17 = 
@@ -134,7 +140,7 @@ __DEBUGINFO_17 =
 __DEBUGINFO_17 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_17 = $(__DEBUGRUNTIME_0)
+__DEBUGINFO_17 = $(__DEBUGRUNTIME_1)
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
 ____DEBUGRUNTIME_18_p_1 = /d _DEBUG
@@ -194,94 +200,22 @@ ____CAIRO_INCLUDEDIR_FILENAMES_3_p = /i $(CAIRO_ROOT)\include\cairo
 __DLLFLAG_p_3 = /d WXUSINGDLL
 !endif
 !if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_1 = /Zi
+__DEBUGINFO_33 = $(__DEBUGRUNTIME_1)
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO_1 = 
+__DEBUGINFO_33 =
 !endif
 !if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO_1 = 
+__DEBUGINFO_33 =
 !endif
 !if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO_1 = /Zi
+__DEBUGINFO_33 = $(__DEBUGRUNTIME_1)
 !endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = /DEBUG
+!if "$(RUNTIME_LIBS)" == "dynamic"
+__RUNTIME_LIBS_41 = D
 !endif
-!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-__DEBUGINFO = 
-!endif
-!if "$(DEBUG_INFO)" == "0"
-__DEBUGINFO = 
-!endif
-!if "$(DEBUG_INFO)" == "1"
-__DEBUGINFO = /DEBUG
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME = /D_DEBUG
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-____DEBUGRUNTIME = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-____DEBUGRUNTIME = /D_DEBUG
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME = d
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME = 
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME = d
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_0 = 
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
-__DEBUGRUNTIME_0 = /opt:ref /opt:icf
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "0"
-__DEBUGRUNTIME_0 = /opt:ref /opt:icf
-!endif
-!if "$(DEBUG_RUNTIME_LIBS)" == "1"
-__DEBUGRUNTIME_0 = 
-!endif
-!if "$(BUILD)" == "debug"
-__OPTIMIZEFLAG = /Od
-!endif
-!if "$(BUILD)" == "release"
-__OPTIMIZEFLAG = /O2
-!endif
-!if "$(USE_THREADS)" == "0"
-__THREADSFLAG = L
-!endif
-!if "$(USE_THREADS)" == "1"
-__THREADSFLAG = T
-!endif
-!if "$(USE_RTTI)" == "0"
-__RTTIFLAG = 
-!endif
-!if "$(USE_RTTI)" == "1"
-__RTTIFLAG = /GR
-!endif
-!if "$(USE_EXCEPTIONS)" == "0"
-__EXCEPTIONSFLAG = 
-!endif
-!if "$(USE_EXCEPTIONS)" == "1"
-__EXCEPTIONSFLAG = /EHsc
-!endif
-!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
-__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
-!endif
-!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
-__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!if "$(RUNTIME_LIBS)" == "static"
+__RUNTIME_LIBS_41 = $(__THREADSFLAG)
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
@@ -349,6 +283,96 @@ __CAIRO_LIB_p = cairo.lib
 !if "$(USE_CAIRO)" == "1"
 ____CAIRO_LIBDIR_FILENAMES = /LIBPATH:$(CAIRO_ROOT)\lib
 !endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_0 = /Zi
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO_0 =
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO_0 =
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO_0 = /Zi
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO = /DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
+__DEBUGINFO = 
+!endif
+!if "$(DEBUG_INFO)" == "0"
+__DEBUGINFO = 
+!endif
+!if "$(DEBUG_INFO)" == "1"
+__DEBUGINFO = /DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = /D_DEBUG
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+____DEBUGRUNTIME = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+____DEBUGRUNTIME = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+____DEBUGRUNTIME = /D_DEBUG
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = d
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME = 
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME = d
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_1 =
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__DEBUGRUNTIME_1 = /opt:ref /opt:icf
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__DEBUGRUNTIME_1 = /opt:ref /opt:icf
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "1"
+__DEBUGRUNTIME_1 =
+!endif
+!if "$(BUILD)" == "debug"
+__OPTIMIZEFLAG = /Od
+!endif
+!if "$(BUILD)" == "release"
+__OPTIMIZEFLAG = /O2
+!endif
+!if "$(USE_THREADS)" == "0"
+__THREADSFLAG = L
+!endif
+!if "$(USE_THREADS)" == "1"
+__THREADSFLAG = T
+!endif
+!if "$(USE_RTTI)" == "0"
+__RTTIFLAG = 
+!endif
+!if "$(USE_RTTI)" == "1"
+__RTTIFLAG = /GR
+!endif
+!if "$(USE_EXCEPTIONS)" == "0"
+__EXCEPTIONSFLAG = 
+!endif
+!if "$(USE_EXCEPTIONS)" == "1"
+__EXCEPTIONSFLAG = /EHsc
+!endif
+!if "$(BUILD)" == "debug" && "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_FLAG)" == "1"
+__NO_VC_CRTDBG_p = /D__NO_VC_CRTDBG__
+!endif
 
 
 all: $(OBJS)
@@ -357,7 +381,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\my_dll.dll $(__wx_exe___depname)
+all: $(OBJS)\my_dll.dll $(__wx_exe___depname) $(OBJS)\sdk_exe.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -370,6 +394,9 @@ clean:
 	-if exist $(OBJS)\wx_exe.exe del $(OBJS)\wx_exe.exe
 	-if exist $(OBJS)\wx_exe.ilk del $(OBJS)\wx_exe.ilk
 	-if exist $(OBJS)\wx_exe.pdb del $(OBJS)\wx_exe.pdb
+	-if exist $(OBJS)\sdk_exe.exe del $(OBJS)\sdk_exe.exe
+	-if exist $(OBJS)\sdk_exe.ilk del $(OBJS)\sdk_exe.ilk
+	-if exist $(OBJS)\sdk_exe.pdb del $(OBJS)\sdk_exe.pdb
 
 $(OBJS)\my_dll.dll: $(MY_DLL_OBJECTS)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO) /pdb:"$(OBJS)\my_dll.pdb" $(__DEBUGINFO_3)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
@@ -383,6 +410,11 @@ $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample.res $(OBJS)\my_dll.d
 <<
 !endif
 
+$(OBJS)\sdk_exe.exe: $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO) /pdb:"$(OBJS)\sdk_exe.pdb" $(__DEBUGINFO_33)  $(LINK_TARGET_CPU) /SUBSYSTEM:WINDOWS $(LDFLAGS) @<<
+	$(SDK_EXE_OBJECTS)   $(OBJS)\my_dll.lib
+<<
+
 $(OBJS)\my_dll_my_dll.obj: .\my_dll.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MY_DLL_CXXFLAGS) .\my_dll.cpp
 
@@ -391,4 +423,7 @@ $(OBJS)\wx_exe_sample.res: .\..\..\samples\sample.rc
 
 $(OBJS)\wx_exe_wx_exe.obj: .\wx_exe.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WX_EXE_CXXFLAGS) .\wx_exe.cpp
+
+$(OBJS)\sdk_exe_sdk_exe.obj: .\sdk_exe.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(SDK_EXE_CXXFLAGS) .\sdk_exe.cpp
 
