@@ -544,7 +544,20 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
 
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
+    else
 #endif // wxUSE_RICHEDIT
+    if ( HasFlag(wxTE_MULTILINE) && HasFlag(wxTE_READONLY) )
+    {
+        // non-rich read-only multiline controls have grey background by
+        // default under MSW but this is not always appropriate, so forcefully
+        // reset the background colour to normal default
+        //
+        // this is not ideal but, after a long discussion on wx-dev (see
+        // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/116360/) it
+        // was finally deemed to be the best behaviour by default (and ideally
+        // we'd have a way to change this, see #11521)
+        SetBackgroundColour(GetClassDefaultAttributes().colBg);
+    }
 
 #ifndef __WXWINCE__
     // Without this, if we pass the size in the constructor and then don't change it,

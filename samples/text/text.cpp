@@ -1031,7 +1031,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_LOG
     m_log = new wxTextCtrl( this, wxID_ANY, wxT("This is the log window.\n"),
                             wxPoint(5,260), wxSize(630,100),
-                            wxTE_MULTILINE | wxTE_READONLY | wxTE_RICH);
+                            wxTE_MULTILINE | wxTE_READONLY);
 
     m_logOld = wxLog::SetActiveTarget( new wxLogTextCtrl( m_log ) );
 #endif // wxUSE_LOG
