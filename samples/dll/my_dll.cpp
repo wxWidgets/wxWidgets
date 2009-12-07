@@ -186,7 +186,7 @@ HANDLE gs_wxMainThread = NULL;
 
 
 //  wx application startup code -- runs from its own thread
-__stdcall unsigned MyAppLauncher(void* event)
+unsigned wxSTDCALL MyAppLauncher(void* event)
 {
     // Note: The thread that called run_wx_gui_from_dll() holds gs_wxStartupCS
     //       at this point and won't release it until we signal it.
