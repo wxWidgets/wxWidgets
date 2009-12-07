@@ -40,7 +40,7 @@ WX_EXE_CXXFLAGS = /M$(__RUNTIME_LIBS_25)$(__DEBUGRUNTIME) /DWIN32 \
 	/I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)
 WX_EXE_OBJECTS =  \
-	$(OBJS)\wx_exe_dll_user_wx.obj
+	$(OBJS)\wx_exe_wx_exe.obj
 WX_EXE_RESOURCES =  \
 	$(OBJS)\wx_exe_sample.res
 
@@ -389,6 +389,6 @@ $(OBJS)\my_dll_my_dll.obj: .\my_dll.cpp
 $(OBJS)\wx_exe_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_18_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
 
-$(OBJS)\wx_exe_dll_user_wx.obj: .\dll_user_wx.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WX_EXE_CXXFLAGS) .\dll_user_wx.cpp
+$(OBJS)\wx_exe_wx_exe.obj: .\wx_exe.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WX_EXE_CXXFLAGS) .\wx_exe.cpp
 

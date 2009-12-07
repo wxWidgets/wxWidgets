@@ -60,7 +60,7 @@ WX_EXE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 WX_EXE_OBJECTS =  \
 	$(__wx_exe___win32rc) \
 	$(__wx_exe_os2_lib_res) \
-	wx_exe_dll_user_wx.o
+	wx_exe_wx_exe.o
 
 ### Conditionally set variables: ###
 
@@ -204,8 +204,8 @@ my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__DEBUG_DEFINE_p_4) $(__EXCEPTIONS_DEFINE_p_4) $(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4)   --include-dir $(srcdir) $(__DLLFLAG_p_4) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
-wx_exe_dll_user_wx.o: $(srcdir)/dll_user_wx.cpp
-	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/dll_user_wx.cpp
+wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
+	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp
 
 
 # Include dependency info, if present:

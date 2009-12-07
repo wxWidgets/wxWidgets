@@ -144,11 +144,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\dll_user_wx.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\..\..\samples\sample.rc
+SOURCE=.\wx_exe.cpp
 # End Source File
 # End Group
 # End Target

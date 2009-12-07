@@ -246,7 +246,7 @@ WX_EXE_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $(__RTTIFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  &
-	$(OBJS)\wx_exe_dll_user_wx.obj
+	$(OBJS)\wx_exe_wx_exe.obj
 
 
 all : $(OBJS)
@@ -300,6 +300,6 @@ $(OBJS)\my_dll_my_dll.obj :  .AUTODEPEND .\my_dll.cpp
 $(OBJS)\wx_exe_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
-$(OBJS)\wx_exe_dll_user_wx.obj :  .AUTODEPEND .\dll_user_wx.cpp
+$(OBJS)\wx_exe_wx_exe.obj :  .AUTODEPEND .\wx_exe.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WX_EXE_CXXFLAGS) $<
 

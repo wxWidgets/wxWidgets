@@ -418,7 +418,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\dll_user_wx.cpp"
+				RelativePath=".\wx_exe.cpp"
 				>
 			</File>
 		</Filter>

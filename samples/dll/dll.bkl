@@ -19,7 +19,7 @@
          the same copy of wx would be used -->
     <exe id="wx_exe" template="wx_sample" template_append="wx_append"
          cond="SHARED=='0' and PLATFORM_WIN32=='1'">
-        <sources>dll_user_wx.cpp</sources>
+        <sources>wx_exe.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <library>my_dll</library>

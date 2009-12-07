@@ -44,7 +44,7 @@ WX_EXE_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -I. $(__DLLFLAG_p) -I.\..\..\samples \
 	-DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
-	$(OBJS)\wx_exe_dll_user_wx.obj
+	$(OBJS)\wx_exe_wx_exe.obj
 
 ### Conditionally set variables: ###
 
@@ -269,6 +269,6 @@ $(OBJS)\my_dll_my_dll.obj: .\my_dll.cpp
 $(OBJS)\wx_exe_sample.res: .\..\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) -i$(SETUPHDIR) -i.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) -i. $(__DLLFLAG_p_3) -i.\..\..\samples -dNOPCH .\..\..\samples\sample.rc
 
-$(OBJS)\wx_exe_dll_user_wx.obj: .\dll_user_wx.cpp
-	$(CXX) -q -c -P -o$@ $(WX_EXE_CXXFLAGS) .\dll_user_wx.cpp
+$(OBJS)\wx_exe_wx_exe.obj: .\wx_exe.cpp
+	$(CXX) -q -c -P -o$@ $(WX_EXE_CXXFLAGS) .\wx_exe.cpp
 
