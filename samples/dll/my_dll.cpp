@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/app.h"
+#include "wx/dynlib.h"
 #include "wx/frame.h"
 #include "wx/panel.h"
 #include "wx/sizer.h"
@@ -192,16 +193,15 @@ unsigned wxSTDCALL MyAppLauncher(void* event)
     //       at this point and won't release it until we signal it.
 
     // We need to pass correct HINSTANCE to wxEntry() and the right value is
-    // HINSTANCE of this DLL, not of the main .exe.
-    //
-    // This method of obtaining DLL's instance handle requires at least
-    // Windows XP/2003. We could also implement DllMain() and remember it from
-    // there, that would work on older systems too.
-    HINSTANCE hInstance;
-    int ret = GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS,
-                                (LPCTSTR)&MyAppLauncher,
-                                &hInstance);
-    if ( ret == 0 )
+    // HINSTANCE of this DLL, not of the main .exe, use this MSW-specific wx
+    // function to get it. Notice that under Windows XP and later the name is
+    // not needed/used as we retrieve the DLL handle from an address inside it
+    // but you do need to use the correct name for this code to work with older
+    // systems as well.
+    const HINSTANCE
+        hInstance = wxDynamicLibrary::MSWGetModuleHandle("my_dll",
+                                                         &gs_wxMainThread);
+    if ( !hInstance )
         return 0; // failed to get DLL's handle
 
     // IMPLEMENT_WXWIN_MAIN does this as the first thing

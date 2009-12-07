@@ -100,53 +100,6 @@ public:
     EnumModulesProc(NameStr_t name, DWORD_32_64 base, ULONG size, void *data);
 };
 
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// return the module handle for the given base name
-static
-HMODULE wxGetModuleHandle(const char *name, void *addr)
-{
-    // we want to use GetModuleHandleEx() instead of usual GetModuleHandle()
-    // because the former works correctly for comctl32.dll while the latter
-    // returns NULL when comctl32.dll version 6 is used under XP (note that
-    // GetModuleHandleEx() is only available under XP and later, coincidence?)
-
-    // check if we can use GetModuleHandleEx
-    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCSTR, HMODULE *);
-
-    static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
-
-    static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
-    if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
-    {
-        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
-        s_pfnGetModuleHandleEx =
-            (GetModuleHandleEx_t)dll.RawGetSymbol(wxT("GetModuleHandleExA"));
-
-        // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
-    }
-
-    // get module handle from its address
-    if ( s_pfnGetModuleHandleEx )
-    {
-        // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
-        //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
-        HMODULE hmod;
-        if ( s_pfnGetModuleHandleEx(6, (char *)addr, &hmod) && hmod )
-            return hmod;
-    }
-
-    // Windows CE only has Unicode API, so even we have an ANSI string here, we
-    // still need to use GetModuleHandleW() there
-#ifdef __WXWINCE__
-    return ::GetModuleHandleW(wxConvLibc.cMB2WC(name).data());
-#else
-    return ::GetModuleHandleA((char *)name);
-#endif
-}
-
 // ============================================================================
 // wxVersionDLL implementation
 // ============================================================================
@@ -246,7 +199,8 @@ wxDynamicLibraryDetailsCreator::EnumModulesProc(NameStr_t name,
     details->m_length = size;
 
     // to get the version, we first need the full path
-    HMODULE hmod = wxGetModuleHandle(name, details->m_address);
+    const HMODULE
+        hmod = wxDynamicLibrary::MSWGetModuleHandle(name, details->m_address);
     if ( hmod )
     {
         wxString fullname = wxGetFullModuleName(hmod);
@@ -339,6 +293,48 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 #endif // wxUSE_DBGHELP
 
     return dlls;
+}
+
+/* static */
+HMODULE wxDynamicLibrary::MSWGetModuleHandle(const char *name, void *addr)
+{
+    // we want to use GetModuleHandleEx() instead of usual GetModuleHandle()
+    // because the former works correctly for comctl32.dll while the latter
+    // returns NULL when comctl32.dll version 6 is used under XP (note that
+    // GetModuleHandleEx() is only available under XP and later, coincidence?)
+
+    // check if we can use GetModuleHandleEx
+    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCSTR, HMODULE *);
+
+    static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
+
+    static GetModuleHandleEx_t s_pfnGetModuleHandleEx = INVALID_FUNC_PTR;
+    if ( s_pfnGetModuleHandleEx == INVALID_FUNC_PTR )
+    {
+        wxDynamicLibrary dll(wxT("kernel32.dll"), wxDL_VERBATIM);
+        s_pfnGetModuleHandleEx =
+            (GetModuleHandleEx_t)dll.RawGetSymbol(wxT("GetModuleHandleExA"));
+
+        // dll object can be destroyed, kernel32.dll won't be unloaded anyhow
+    }
+
+    // get module handle from its address
+    if ( s_pfnGetModuleHandleEx )
+    {
+        // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
+        //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+        HMODULE hmod;
+        if ( s_pfnGetModuleHandleEx(6, (char *)addr, &hmod) && hmod )
+            return hmod;
+    }
+
+    // Windows CE only has Unicode API, so even we have an ANSI string here, we
+    // still need to use GetModuleHandleW() there
+#ifdef __WXWINCE__
+    return ::GetModuleHandleW(wxConvLibc.cMB2WC(name).data());
+#else
+    return ::GetModuleHandleA((char *)name);
+#endif
 }
 
 #endif // wxUSE_DYNLIB_CLASS

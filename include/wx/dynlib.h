@@ -357,6 +357,19 @@ public:
     static wxString GetPluginsDirectory();
 
 
+#ifdef __WXMSW__
+    // return the handle (HMODULE/HINSTANCE) of the DLL with the given name
+    // and/or containing the specified address: for XP and later systems only
+    // the address is used and the name is ignored but for the previous systems
+    // only the name (which may be either a full path to the DLL or just its
+    // base name, possibly even without extension) is used
+    //
+    // the returned handle reference count is not incremented so it doesn't
+    // need to be freed using FreeLibrary() but it also means that it can
+    // become invalid if the DLL is unloaded
+    static HINSTANCE MSWGetModuleHandle(const char *name, void *addr);
+#endif // __WXMSW__
+
 protected:
     // common part of GetSymbol() and HasSymbol()
     void *DoGetSymbol(const wxString& name, bool *success = 0) const;
