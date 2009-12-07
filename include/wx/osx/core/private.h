@@ -753,6 +753,9 @@ public :
 
     static wxNonOwnedWindowImpl* CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name  ) ;
+    
+    virtual void SetModified(bool WXUNUSED(modified)) { }
+    virtual bool GetModified() const { return false; }
 
 protected :
     wxNonOwnedWindow*   m_wxPeer;

@@ -256,6 +256,9 @@ public:
     // a different API for SetSizeHints
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
+    
+    virtual void SetModified(bool modified) { m_modified = modified; }
+    virtual bool GetModified() const { return m_modified; }
 
 protected:
     // the frame client to screen translation should take account of the
@@ -304,6 +307,8 @@ protected:
 
     // a temporary override of m_winDefault, use the latter if NULL
     wxWindowRef m_winTmpDefault;
+    
+    bool m_modified;
 
     wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);
     DECLARE_EVENT_TABLE()

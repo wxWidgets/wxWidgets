@@ -244,6 +244,9 @@ public :
     virtual void WindowToScreen( int *x, int *y );
 
     virtual bool IsActive();
+    
+    virtual void SetModified(bool modified);
+    virtual bool GetModified() const;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :

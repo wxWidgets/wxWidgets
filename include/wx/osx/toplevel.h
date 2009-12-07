@@ -75,6 +75,9 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+    virtual void SetModified(bool modified);
+    virtual bool GetModified() const;
+
 protected:
     // common part of all ctors
     void Init();

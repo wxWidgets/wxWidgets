@@ -727,6 +727,16 @@ bool wxNonOwnedWindowCocoaImpl::IsActive()
     return [m_macWindow isKeyWindow];
 }
 
+void wxNonOwnedWindowCocoaImpl::SetModified(bool modified)
+{
+    [m_macWindow setDocumentEdited:modified];
+}
+
+bool wxNonOwnedWindowCocoaImpl::GetModified() const
+{
+    return [m_macWindow isDocumentEdited];
+}
+
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name )
 {

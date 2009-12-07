@@ -439,6 +439,18 @@ public:
         there are any open top level windows.
     */
     virtual bool ShouldPreventAppExit() const;
+    
+    /**
+        This function sets the wxTopLevelWindow's modified state, so that the 
+        wxTopLevelWindow can change its GUI to reflect the current state. (e.g. on 
+        Mac, the close button gets a black dot to reflect that there are unsaved changes)
+    */
+    virtual void SetModified(bool modified);
+    
+    /**
+        Returns the current modified state of the wxTopLevelWindow. 
+    */
+    virtual bool GetModified() const;
 
     /**
         Depending on the value of @a show parameter the window is either shown
