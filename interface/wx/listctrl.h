@@ -257,6 +257,8 @@ public:
         beginning if start is @c -1. The string comparison is case insensitive.
 
         If @a partial is @true then this method will look for items which begin with @a str.
+
+        @return The next matching item if any or @c -1 (wxNOT_FOUND) otherwise.
     */
     long FindItem(long start, const wxString& str,
                   bool partial = false);
@@ -268,6 +270,8 @@ public:
         @beginWxPerlOnly
         In wxPerl this method is implemented as FindItemData(start, data).
         @endWxPerlOnly
+
+        @return The next matching item if any or @c -1 (wxNOT_FOUND) otherwise.
     */
     long FindItem(long start, wxUIntPtr data);
 
@@ -278,6 +282,8 @@ public:
         @beginWxPerlOnly
         In wxPerl this method is implemented as FindItemAtPos(start, pt, direction).
         @endWxPerlOnly
+
+        @return The next matching item if any or @c -1 (wxNOT_FOUND) otherwise.
     */
     long FindItem(long start, const wxPoint& pt, int direction);
 
