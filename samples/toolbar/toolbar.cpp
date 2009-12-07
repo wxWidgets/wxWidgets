@@ -134,6 +134,7 @@ public:
 
     void OnToolbarStyle(wxCommandEvent& event);
     void OnToolbarBgCol(wxCommandEvent& event);
+    void OnToolbarCustomBg(wxCommandEvent& event);
     void OnToolbarCustomBitmap(wxCommandEvent& event);
 
     void OnToolLeftClick(wxCommandEvent& event);
@@ -148,6 +149,8 @@ public:
         { event.Enable( m_tbar != NULL ); }
 
 private:
+    void OnEraseToolBarBackground(wxEraseEvent& event);
+
     void DoEnablePrint();
     void DoDeletePrint();
     void DoToggleHelp();
@@ -206,6 +209,7 @@ enum
     IDM_TOOLBAR_SHOW_ICONS,
     IDM_TOOLBAR_SHOW_BOTH,
     IDM_TOOLBAR_BG_COL,
+    IDM_TOOLBAR_CUSTOM_BG,
     IDM_TOOLBAR_CUSTOM_PATH,
     IDM_TOOLBAR_TOP_ORIENTATION,
     IDM_TOOLBAR_LEFT_ORIENTATION,
@@ -264,6 +268,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU_RANGE(IDM_TOOLBAR_SHOW_TEXT, IDM_TOOLBAR_SHOW_BOTH,
                    MyFrame::OnToolbarStyle)
     EVT_MENU(IDM_TOOLBAR_BG_COL, MyFrame::OnToolbarBgCol)
+    EVT_MENU(IDM_TOOLBAR_CUSTOM_BG, MyFrame::OnToolbarCustomBg)
 
     EVT_MENU(IDM_TOOLBAR_CUSTOM_PATH, MyFrame::OnToolbarCustomBitmap)
 
@@ -370,6 +375,17 @@ void MyFrame::RecreateToolbar()
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
 #endif
+
+    if ( GetMenuBar()->IsChecked(IDM_TOOLBAR_CUSTOM_BG) )
+    {
+        toolBar->Connect
+                 (
+                    wxEVT_ERASE_BACKGROUND,
+                    wxEraseEventHandler(MyFrame::OnEraseToolBarBackground),
+                    NULL,
+                    this
+                 );
+    }
 
     PopulateToolbar(toolBar);
 }
@@ -591,6 +607,7 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, wxT("Show &both\tCtrl-Alt-B"));
     tbarMenu->AppendSeparator();
     tbarMenu->Append(IDM_TOOLBAR_BG_COL, wxT("Choose bac&kground colour..."));
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_CUSTOM_BG, wxT("Draw custom back&ground"));
     tbarMenu->Append(IDM_TOOLBAR_CUSTOM_PATH, wxT("Custom &bitmap...\tCtrl-B"));
 
     wxMenu *toolMenu = new wxMenu;
@@ -688,6 +705,15 @@ void MyFrame::OnSize(wxSizeEvent& event)
     {
         event.Skip();
     }
+}
+
+void MyFrame::OnEraseToolBarBackground(wxEraseEvent& event)
+{
+    wxDC& dc = *event.GetDC();
+    const wxSize size = dc.GetSize();
+    dc.SetPen(*wxRED_PEN);
+    dc.DrawLine(0, 0, size.x, size.y);
+    dc.DrawLine(0, size.y, size.x, 0);
 }
 
 void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
@@ -954,6 +980,34 @@ void MyFrame::OnToolbarBgCol(wxCommandEvent& WXUNUSED(event))
         GetToolBar()->SetBackgroundColour(col);
         GetToolBar()->Refresh();
     }
+}
+
+void MyFrame::OnToolbarCustomBg(wxCommandEvent& event)
+{
+    wxToolBarBase *tb = GetToolBar();
+
+    if ( event.IsChecked() )
+    {
+        tb->Connect
+            (
+             wxEVT_ERASE_BACKGROUND,
+             wxEraseEventHandler(MyFrame::OnEraseToolBarBackground),
+             NULL,
+             this
+            );
+    }
+    else
+    {
+        tb->Disconnect
+            (
+             wxEVT_ERASE_BACKGROUND,
+             wxEraseEventHandler(MyFrame::OnEraseToolBarBackground),
+             NULL,
+             this
+            );
+    }
+
+    tb->Refresh();
 }
 
 void MyFrame::OnToolbarCustomBitmap(wxCommandEvent& WXUNUSED(event))

@@ -4754,12 +4754,6 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
-    // standard non top level controls (i.e. except the dialogs) always erase
-    // their background themselves in HandleCtlColor() or have some control-
-    // specific ways to set the colours (common controls)
-    if ( IsOfStandardClass() && !IsTopLevel() )
-        return false;
-
     switch ( GetBackgroundStyle() )
     {
         case wxBG_STYLE_ERASE:
@@ -4782,7 +4776,7 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
                 if ( rc )
                 {
-                    // background erase by the user-defined handler
+                    // background erased by the user-defined handler
                     return true;
                 }
             }
