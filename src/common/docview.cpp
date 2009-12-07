@@ -630,7 +630,7 @@ wxView::wxView()
 
 wxView::~wxView()
 {
-    if (GetDocumentManager())
+    if (m_viewDocument && GetDocumentManager())
         GetDocumentManager()->ActivateView(this, false);
     if (m_viewDocument)
         m_viewDocument->RemoveView(this);
