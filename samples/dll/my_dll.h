@@ -16,9 +16,9 @@ extern "C" {
 #endif
 
 #ifdef MY_DLL_BUILDING
-    #define MY_DLL_DECL WXEXPORT
+    #define MY_DLL_DECL __declspec(dllexport)
 #else
-    #define MY_DLL_DECL WXIMPORT
+    #define MY_DLL_DECL __declspec(dllimport)
 #endif
 
 // launch wx UI from some application that may or may not be written in wx
