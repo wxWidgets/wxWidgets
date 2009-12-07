@@ -213,7 +213,7 @@ wxWindowBase::wxWindowBase()
 bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               wxWindowID id,
                               const wxPoint& WXUNUSED(pos),
-                              const wxSize& WXUNUSED(size),
+                              const wxSize& size,
                               long style,
                               const wxString& name)
 {
@@ -238,6 +238,11 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // to change the flag after creation as it tries to reflect the changes in
     // flags by updating the window dynamically and we don't need this here
     m_windowStyle = style;
+
+    // assume the user doesn't want this window to shrink beneath its initial
+    // size, this worked like this in wxWidgets 2.8 and before and generally
+    // often makes sense
+    SetMinSize(size);
 
     SetName(name);
     SetParent(parent);
