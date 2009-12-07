@@ -630,8 +630,10 @@ wxView::wxView()
 
 wxView::~wxView()
 {
-    GetDocumentManager()->ActivateView(this, false);
-    m_viewDocument->RemoveView(this);
+    if (GetDocumentManager())
+        GetDocumentManager()->ActivateView(this, false);
+    if (m_viewDocument)
+        m_viewDocument->RemoveView(this);
 }
 
 // Extend event processing to search the document's event table
