@@ -651,7 +651,7 @@ wxView::wxView()
 
 wxView::~wxView()
 {
-    if (GetDocumentManager())
+    if (m_viewDocument && GetDocumentManager())
         GetDocumentManager()->ActivateView(this, false);
 
     // reset our frame view first, before removing it from the document as
