@@ -2469,7 +2469,7 @@ wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 // ----------------------------------------------------------------------------
 
 // propagate the colour change event to the subwindows
-void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
