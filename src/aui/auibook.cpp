@@ -2833,6 +2833,9 @@ public:
         if (!m_tabs)
             return;
 
+        if (m_tabs->IsFrozen() || m_tabs->GetParent()->IsFrozen())
+            return;
+
         if (m_tabs->GetFlags() & wxAUI_NB_BOTTOM)
         {
             m_tab_rect = wxRect (m_rect.x, m_rect.y + m_rect.height - m_tab_ctrl_height, m_rect.width, m_tab_ctrl_height);
@@ -3273,7 +3276,7 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 
     // hide the window in advance, as this will
     // prevent flicker
-	if ( !IsBeingDeleted() )
+    if ( !IsBeingDeleted() )
         ShowWnd(wnd, false);
 
     if (!RemovePage(page_idx))
@@ -3797,7 +3800,7 @@ void wxAuiNotebook::OnTabClicked(wxCommandEvent& command_evt)
     // to the child tab in the SetSelection call below
     // (the child focus event will also let wxAuiManager, if any,
     // know that the notebook control has been activated)
-    
+
     wxWindow* parent = GetParent();
     if (parent)
     {
