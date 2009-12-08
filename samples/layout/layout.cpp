@@ -31,6 +31,7 @@
 #include "wx/notebook.h"
 #include "wx/spinctrl.h"
 #include "wx/wrapsizer.h"
+#include "wx/generic/stattextg.h"
 
 #include "layout.h"
 
@@ -77,9 +78,7 @@ END_EVENT_TABLE()
 
 // Define my frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Layout Demo"),
-                 wxPoint(30,30), wxDefaultSize,
-                 wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Layout Demo"))
 {
     SetIcon(wxICON(sample));
 
@@ -314,16 +313,16 @@ void MyFlexSizerFrame::InitFlexSizer(wxFlexGridSizer *sizer, wxWindow* parent)
     {
         for ( int j = 0; j < 3; j++ )
         {
-            sizer->Add(new wxStaticText
-                           (
-                            parent,
-                            wxID_ANY,
-                            wxString::Format(wxT("(%d, %d)"), i + 1, j + 1),
-                            wxDefaultPosition,
-                            wxDefaultSize,
-                            wxALIGN_CENTER
-                           ),
-                       0, wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALL, 3);
+            wxWindow * const cell = new wxGenericStaticText
+                                        (
+                                            parent,
+                                            wxID_ANY,
+                                            wxString::Format("(%d, %d)",
+                                                             i + 1, j + 1)
+                                        );
+            if ( (i + j) % 2 )
+                cell->SetBackgroundColour( *wxLIGHT_GREY );
+            sizer->Add(cell, 0, wxEXPAND | wxALIGN_CENTER_VERTICAL | wxALL, 3);
         }
     }
 }
