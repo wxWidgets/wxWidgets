@@ -306,8 +306,8 @@
     </if>
 
     <set var="LINK_TARGET_CPU">
-        <if cond="TARGET_CPU=='amd64'">/MACHINE:AMD64</if>
-        <if cond="TARGET_CPU=='AMD64'">/MACHINE:AMD64</if>
+        <if cond="TARGET_CPU=='amd64'">/MACHINE:X64</if>
+        <if cond="TARGET_CPU=='AMD64'">/MACHINE:X64</if>
         <if cond="TARGET_CPU=='ia64'">/MACHINE:IA64</if>
         <if cond="TARGET_CPU=='IA64'">/MACHINE:IA64</if>
     </set>
