@@ -83,7 +83,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name,
                          const wxString& device_name,
                          const wxString& file,
                          bool interactive,
-                         int orientation)
+                         wxPrintOrientation orientation)
 {
     m_isInteractive = interactive;
 

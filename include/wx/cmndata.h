@@ -192,7 +192,7 @@ public:
 
     int GetNoCopies() const { return m_printNoCopies; }
     bool GetCollate() const { return m_printCollate; }
-    int  GetOrientation() const { return m_printOrientation; }
+    wxPrintOrientation GetOrientation() const { return m_printOrientation; }
     bool IsOrientationReversed() const { return m_printOrientationReversed; }
 
     // Is this data OK for showing the print dialog?
@@ -212,7 +212,11 @@ public:
 
     void SetNoCopies(int v) { m_printNoCopies = v; }
     void SetCollate(bool flag) { m_printCollate = flag; }
-    void SetOrientation(int orient) { m_printOrientation = orient; }
+
+    // Please use the overloaded method below
+    wxDEPRECATED_INLINE(void SetOrientation(int orient),
+                        m_printOrientation = (wxPrintOrientation)orient; )
+    void SetOrientation(wxPrintOrientation orient) { m_printOrientation = orient; }
     void SetOrientationReversed(bool reversed) { m_printOrientationReversed = reversed; }
 
     void SetPrinterName(const wxString& name) { m_printerName = name; }
@@ -247,7 +251,7 @@ private:
     wxPrintMode     m_printMode;
 
     int             m_printNoCopies;
-    int             m_printOrientation;
+    wxPrintOrientation m_printOrientation;
     bool            m_printOrientationReversed;
     bool            m_printCollate;
 

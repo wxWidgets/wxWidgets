@@ -201,7 +201,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
 
     //// Orientation
     if (devMode->dmFields & DM_ORIENTATION)
-        data.SetOrientation( devMode->dmOrientation );
+        data.SetOrientation( (wxPrintOrientation)devMode->dmOrientation );
 
     //// Collation
     if (devMode->dmFields & DM_COLLATE)

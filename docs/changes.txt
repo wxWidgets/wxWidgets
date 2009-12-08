@@ -360,6 +360,8 @@ Deprecated methods and their replacements
 - wxValidator::SetBellOnError() incorrectly interpreted its argument (it
   disabled the bell when it was true) and was replaced by SuppressBellOnError()
   with more expected semantics.
+- wxPORTRAIT and wxLANDSCAPE are now elements of wxPrintOrientation enum and
+  wxPrintData::SetOrientation(int) takes wxPrintOrientation and not int.
 
 
 Major new features in this release

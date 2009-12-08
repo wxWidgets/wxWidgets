@@ -567,7 +567,7 @@ public:
     /**
         Gets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
     */
-    int GetOrientation() const;
+    wxPrintOrientation GetOrientation() const;
 
     /**
         Returns the paper size id.
@@ -634,7 +634,7 @@ public:
     /**
         Sets the orientation. This can be wxLANDSCAPE or wxPORTRAIT.
     */
-    void SetOrientation(int orientation);
+    void SetOrientation(wxPrintOrientation orientation);
 
     /**
         Sets the paper id. This indicates the type of paper to be used. For a

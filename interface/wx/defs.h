@@ -778,6 +778,15 @@ enum wxPaperSize
     wxPAPER_PENV_10_ROTATED     ///< PRC Envelope #10 Rotated 458 x 324 m
 };
 
+/**
+    Printing orientation
+*/
+
+enum wxPrintOrientation
+{
+   wxPORTRAIT,
+   wxLANDSCAPE
+};
 
 /**
     Duplex printing modes.

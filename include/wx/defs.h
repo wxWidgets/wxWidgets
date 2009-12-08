@@ -2543,10 +2543,11 @@ typedef enum
 } wxPaperSize;
 
 /* Printing orientation */
-#ifndef wxPORTRAIT
-#define wxPORTRAIT      1
-#define wxLANDSCAPE     2
-#endif
+enum wxPrintOrientation
+{
+   wxPORTRAIT = 1,
+   wxLANDSCAPE
+};
 
 /* Duplex printing modes
  */

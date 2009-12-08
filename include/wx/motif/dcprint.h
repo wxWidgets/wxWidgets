@@ -21,7 +21,7 @@ public:
     wxPrinterDCImpl(const wxString& driver, const wxString& device,
                     const wxString& output,
                     bool interactive = true,
-                    int orientation = wxPORTRAIT);
+                    wxPrintOrientation orientation = wxPORTRAIT);
     virtual ~wxPrinterDC();
 
     wxRect GetPaperRect() const;

@@ -21,7 +21,7 @@ class WXDLLIMPEXP_CORE wxPrinterDC : public wxDC
 {
 public:
     // Create a printer DC (obsolete function: use wxPrintData version now)
-    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = TRUE, int orientation = wxPORTRAIT);
+    wxPrinterDC(const wxString& driver, const wxString& device, const wxString& output, bool interactive = TRUE, wxPrintOrientation orientation = wxPORTRAIT);
 
     // Create from print data
     wxPrinterDC(const wxPrintData& data);
