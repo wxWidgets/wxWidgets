@@ -44,8 +44,8 @@ public:
                 const wxString& name = wxStaticTextNameStr);
 
 
+protected:
     virtual wxSize DoGetBestClientSize() const;
-    virtual wxSize DoGetBestSize() const;
 
     virtual void SetLabel(const wxString& label);
     virtual bool SetFont(const wxFont &font);
@@ -53,11 +53,11 @@ public:
     virtual wxString DoGetLabel() const { return m_label; }
     virtual void DoSetLabel(const wxString& label);
 
-protected:
-    void OnPaint(wxPaintEvent& event);
     void DoSetSize(int x, int y, int width, int height, int sizeFlags);
 
 private:
+    void OnPaint(wxPaintEvent& event);
+
     wxString m_label;
     int m_mnemonic;
 

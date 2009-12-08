@@ -82,14 +82,6 @@ wxSize wxGenericStaticText::DoGetBestClientSize() const
     return wxSize(width, height);
 }
 
-wxSize wxGenericStaticText::DoGetBestSize() const
-{
-    wxSize ret = DoGetBestClientSize();
-    CacheBestSize(ret);
-    return ret;
-}
-
-
 void wxGenericStaticText::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
