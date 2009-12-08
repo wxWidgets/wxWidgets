@@ -2479,7 +2479,7 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
         if ( !win->IsTopLevel() )
         {
             wxSysColourChangedEvent event2;
-            event.SetEventObject(win);
+            event2.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event2);
         }
 
