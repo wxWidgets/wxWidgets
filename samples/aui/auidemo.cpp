@@ -1574,6 +1574,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
                                     wxPoint(client_size.x, client_size.y),
                                     wxSize(430,200),
                                     m_notebook_style);
+   ctrl->Freeze();
 
    wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
 
@@ -1620,6 +1621,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );
 
+   ctrl->Thaw();
    return ctrl;
 }
 
