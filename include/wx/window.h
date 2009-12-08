@@ -1671,14 +1671,9 @@ protected:
     // of the left and the right border in the x component of the returned size
     // and the sum of the heights of the top and bottom borders in the y one
     //
-    // NB: this is new/temporary API only implemented by wxMSW and wxUniv so
-    //     far and subject to change, don't use
-    virtual wxSize DoGetBorderSize() const
-    {
-        wxFAIL_MSG( "must be overridden if called" );
-
-        return wxDefaultSize;
-    }
+    // NB: this is currently only implemented by wxMSW and wxUniv so far and
+    //     simply asserts in the other ports
+    virtual wxSize DoGetBorderSize() const;
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just

@@ -722,6 +722,21 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     return min;
 }
 
+wxSize wxWindowBase::DoGetBorderSize() const
+{
+    // there is one case in which we can implement it for all ports easily:
+    // do it as some classes used by both wxUniv and native ports (e.g.
+    // wxGenericStaticText) do override DoGetBestClientSize() and so this
+    // method must work for them and that ensures that it does, at least in
+    // the default case)
+    if ( GetBorder() == wxBORDER_NONE )
+        return wxSize(0, 0);
+
+    wxFAIL_MSG( "must be overridden if called" );
+
+    return wxDefaultSize;
+}
+
 wxSize wxWindowBase::GetBestSize() const
 {
     if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
