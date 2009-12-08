@@ -133,7 +133,7 @@ MyFrame::MyFrame(wxWindow *parent,
 
     wxMenu *play_menu = new wxMenu;
     play_menu->Append(ID_PLAY, wxT("Play\tCtrl+P"), wxT("Play the animation"));
-    play_menu->Append(wxID_STOP, wxT("Stop\tCtrl+P"), wxT("Stop the animation"));
+    play_menu->Append(wxID_STOP, wxT("Stop\tCtrl+S"), wxT("Stop the animation"));
     play_menu->AppendSeparator();
     play_menu->Append(ID_SET_NULL_ANIMATION, wxT("Set null animation"),
                       wxT("Sets the empty animation in the control"));
