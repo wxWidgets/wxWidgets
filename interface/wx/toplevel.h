@@ -441,16 +441,21 @@ public:
     virtual bool ShouldPreventAppExit() const;
     
     /**
-        This function sets the wxTopLevelWindow's modified state, so that the 
-        wxTopLevelWindow can change its GUI to reflect the current state. (e.g. on 
-        Mac, the close button gets a black dot to reflect that there are unsaved changes)
+        This function sets the wxTopLevelWindow's modified state on OS X,
+        which currently draws a black dot in the wxTopLevelWindow's close button.
+        On other platforms, this method does nothing.
+        
+        @see OSXIsModified()
     */
-    virtual void SetModified(bool modified);
+    virtual void OSXSetModified(bool modified);
     
     /**
-        Returns the current modified state of the wxTopLevelWindow. 
+        Returns the current modified state of the wxTopLevelWindow on OS X.
+        On other platforms, this method does nothing.
+        
+        @see OSXSetModified()
     */
-    virtual bool GetModified() const;
+    virtual bool OSXIsModified() const;
 
     /**
         Depending on the value of @a show parameter the window is either shown

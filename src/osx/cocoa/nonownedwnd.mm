@@ -732,7 +732,7 @@ void wxNonOwnedWindowCocoaImpl::SetModified(bool modified)
     [m_macWindow setDocumentEdited:modified];
 }
 
-bool wxNonOwnedWindowCocoaImpl::GetModified() const
+bool wxNonOwnedWindowCocoaImpl::IsModified() const
 {
     return [m_macWindow isDocumentEdited];
 }

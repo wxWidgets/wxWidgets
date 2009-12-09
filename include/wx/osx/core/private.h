@@ -755,7 +755,7 @@ public :
     long style, long extraStyle, const wxString& name  ) ;
     
     virtual void SetModified(bool WXUNUSED(modified)) { }
-    virtual bool GetModified() const { return false; }
+    virtual bool IsModified() const { return false; }
 
 protected :
     wxNonOwnedWindow*   m_wxPeer;

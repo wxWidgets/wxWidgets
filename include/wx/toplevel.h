@@ -257,8 +257,8 @@ public:
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
     
-    virtual void SetModified(bool modified) { m_modified = modified; }
-    virtual bool GetModified() const { return m_modified; }
+    virtual void OSXSetModified(bool modified) { m_modified = modified; }
+    virtual bool OSXIsModified() const { return m_modified; }
 
 protected:
     // the frame client to screen translation should take account of the

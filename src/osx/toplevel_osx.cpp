@@ -187,12 +187,12 @@ bool wxTopLevelWindowMac::IsActive()
     return m_nowpeer->IsActive();
 }
 
-void wxTopLevelWindowMac::SetModified(bool modified)
+void wxTopLevelWindowMac::OSXSetModified(bool modified)
 {
     m_nowpeer->SetModified(modified);
 }
 
-bool wxTopLevelWindowMac::GetModified() const
+bool wxTopLevelWindowMac::OSXIsModified() const
 {
-    return m_nowpeer->GetModified();
+    return m_nowpeer->IsModified();
 }

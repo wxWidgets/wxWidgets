@@ -246,7 +246,7 @@ public :
     virtual bool IsActive();
     
     virtual void SetModified(bool modified);
-    virtual bool GetModified() const;
+    virtual bool IsModified() const;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
