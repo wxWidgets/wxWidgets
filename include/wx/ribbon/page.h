@@ -66,6 +66,7 @@ protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
+    bool DoActualLayout();
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
@@ -76,6 +77,7 @@ protected:
     void HideScrollButtons();
 
     void CommonInit(const wxString& label, const wxBitmap& icon);
+    void PopulateSizeCalcArray(wxSize (wxWindow::*get_size)(void) const);
 
     wxArrayRibbonControl m_collapse_stack;
     wxBitmap m_icon;
@@ -83,6 +85,8 @@ protected:
     // NB: Scroll button windows are siblings rather than children (to get correct clipping of children)
     wxRibbonPageScrollButton* m_scroll_left_btn;
     wxRibbonPageScrollButton* m_scroll_right_btn;
+    wxSize* m_size_calc_array;
+    size_t m_size_calc_array_size;
     int m_scroll_amount;
     int m_scroll_amount_limit;
     int m_size_in_major_axis_for_children;

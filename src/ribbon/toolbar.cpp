@@ -433,6 +433,7 @@ bool wxRibbonToolBar::Realize()
             smallest_area = GetSizeInOrientation(size, major_axis);
         }
     }
+    delete[] row_sizes;
 
     // Position the groups
     wxSizeEvent dummy_event(GetSize());
