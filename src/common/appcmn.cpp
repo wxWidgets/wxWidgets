@@ -447,6 +447,7 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
+#if wxDEBUG_LEVEL
     // under MSW we prefer to use the base class version using ::MessageBox()
     // even if wxMessageBox() is available because it has less chances to
     // double fault our app than our wxMessageBox()
@@ -455,50 +456,51 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
     //
     // and finally we can't use wxMessageBox() if it wasn't compiled in, of
     // course
-#if defined(__WXMSW__) || defined(__WXDFB__) || !wxUSE_MSGDLG
-    return wxAppTraitsBase::ShowAssertDialog(msg);
-#else // wxUSE_MSGDLG
-#if wxDEBUG_LEVEL
-    wxString msgDlg = msg;
+#if !defined(__WXMSW__) && !defined(__WXDFB__) && wxUSE_MSGDLG
+
+    // we can't (safely) show the GUI dialog from another thread, only do it
+    // for the asserts in the main thread
+    if ( wxIsMainThread() )
+    {
+        wxString msgDlg = msg;
 
 #if wxUSE_STACKWALKER
-    // on Unix stack frame generation may take some time, depending on the
-    // size of the executable mainly... warn the user that we are working
-    wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
-    fflush(stderr);
+        // on Unix stack frame generation may take some time, depending on the
+        // size of the executable mainly... warn the user that we are working
+        wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
+        fflush(stderr);
 
-    const wxString stackTrace = GetAssertStackTrace();
-    if ( !stackTrace.empty() )
-        msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
+        const wxString stackTrace = GetAssertStackTrace();
+        if ( !stackTrace.empty() )
+            msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
 #endif // wxUSE_STACKWALKER
 
-    // this message is intentionally not translated -- it is for
-    // developpers only
-    msgDlg += wxT("\nDo you want to stop the program?\n")
-              wxT("You can also choose [Cancel] to suppress ")
-              wxT("further warnings.");
+        // this message is intentionally not translated -- it is for
+        // developpers only
+        msgDlg += wxT("\nDo you want to stop the program?\n")
+                  wxT("You can also choose [Cancel] to suppress ")
+                  wxT("further warnings.");
 
-    switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
-                          wxYES_NO | wxCANCEL | wxICON_STOP ) )
-    {
-        case wxYES:
-            wxTrap();
-            break;
+        switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
+                              wxYES_NO | wxCANCEL | wxICON_STOP ) )
+        {
+            case wxYES:
+                wxTrap();
+                break;
 
-        case wxCANCEL:
-            // no more asserts
-            return true;
+            case wxCANCEL:
+                // no more asserts
+                return true;
 
-        //case wxNO: nothing to do
+            //case wxNO: nothing to do
+        }
+
+        return false;
     }
-#else // !wxDEBUG_LEVEL
-    // this function always exists (for ABI compatibility) but is never called
-    // if debug level is 0 and so can simply do nothing then
-    wxUnusedVar(msg);
-#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
+#endif // wxUSE_MSGDLG
+#endif // wxDEBUG_LEVEL
 
-    return false;
-#endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
+    return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
 bool wxGUIAppTraitsBase::HasStderr()

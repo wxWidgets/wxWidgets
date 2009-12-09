@@ -44,6 +44,8 @@
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
     #include "wx/icon.h"
+
+    #include "wx/thread.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -128,8 +130,13 @@ protected:
     // catch exceptions which occur in MyFrame methods here
     virtual bool ProcessEvent(wxEvent& event);
 
-    // show how an assert failure message box looks like
+    // provoke assert in main or worker thread
+    //
+    // this is used to show how an assert failure message box looks like
     void OnShowAssert(wxCommandEvent& event);
+#if wxUSE_THREADS
+    void OnShowAssertInThread(wxCommandEvent& event);
+#endif // wxUSE_THREADS
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -185,6 +192,9 @@ enum
     Except_HandleCrash,
 #endif // wxUSE_ON_FATAL_EXCEPTION
     Except_ShowAssert,
+#if wxUSE_THREADS
+    Except_ShowAssertInThread,
+#endif // wxUSE_THREADS
     Except_Dialog,
 
     Except_Quit = wxID_EXIT,
@@ -211,6 +221,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
 #endif // wxUSE_ON_FATAL_EXCEPTION
     EVT_MENU(Except_ShowAssert, MyFrame::OnShowAssert)
+#if wxUSE_THREADS
+    EVT_MENU(Except_ShowAssertInThread, MyFrame::OnShowAssertInThread)
+#endif // wxUSE_THREADS
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -301,14 +314,17 @@ void MyApp::OnAssertFailure(const wxChar *file,
                             const wxChar *cond,
                             const wxChar *msg)
 {
-    if ( wxMessageBox
-         (
-            wxString::Format("An assert failed in %s().", func) +
-            "\n"
-            "Do you want to call the default assert handler?",
-            "wxExcept Sample",
-            wxYES_NO | wxICON_QUESTION
-         ) == wxYES )
+    // take care to not show the message box from a worker thread, this doesn't
+    // work as it doesn't have any event loop
+    if ( !wxIsMainThread() ||
+            wxMessageBox
+            (
+                wxString::Format("An assert failed in %s().", func) +
+                "\n"
+                "Do you want to call the default assert handler?",
+                "wxExcept Sample",
+                wxYES_NO | wxICON_QUESTION
+            ) == wxYES )
     {
         wxApp::OnAssertFailure(file, line, func, cond, msg);
     }
@@ -343,6 +359,10 @@ MyFrame::MyFrame()
     menuFile->AppendSeparator();
 #endif // wxUSE_ON_FATAL_EXCEPTION
     menuFile->Append(Except_ShowAssert, wxT("Provoke &assert failure\tCtrl-A"));
+#if wxUSE_THREADS
+    menuFile->Append(Except_ShowAssertInThread,
+                     wxT("Assert failure in &thread\tShift-Ctrl-A"));
+#endif // wxUSE_THREADS
     menuFile->AppendSeparator();
     menuFile->Append(Except_Quit, wxT("E&xit\tCtrl-Q"), wxT("Quit this program"));
 
@@ -442,6 +462,35 @@ void MyFrame::OnShowAssert(wxCommandEvent& WXUNUSED(event))
     wxArrayString arr;
     arr[0];
 }
+
+#if wxUSE_THREADS
+
+void MyFrame::OnShowAssertInThread(wxCommandEvent& WXUNUSED(event))
+{
+    class AssertThread : public wxThread
+    {
+    public:
+        AssertThread()
+            : wxThread(wxTHREAD_JOINABLE)
+        {
+        }
+
+    protected:
+        virtual void *Entry()
+        {
+            wxFAIL_MSG("Test assert in another thread.");
+
+            return 0;
+        }
+    };
+
+    AssertThread thread;
+    thread.Create();
+    thread.Run();
+    thread.Wait();
+}
+
+#endif // wxUSE_THREADS
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {

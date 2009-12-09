@@ -354,55 +354,60 @@ extern "C"
 bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 {
 #if wxDEBUG_LEVEL
-    // under GTK2 we prefer to use a dialog widget written using directly in
-    // GTK+ as use a dialog written using wxWidgets would need the wxWidgets
-    // idle processing to work correctly which might not be the case when
-    // assert happens
-    GtkWidget *dialog = gtk_assert_dialog_new();
-    gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
+    // we can't show the dialog from another thread
+    if ( wxIsMainThread() )
+    {
+        // under GTK2 we prefer to use a dialog widget written using directly
+        // in GTK+ as use a dialog written using wxWidgets would need the
+        // wxWidgets idle processing to work correctly which might not be the
+        // case when assert happens
+        GtkWidget *dialog = gtk_assert_dialog_new();
+        gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
 
 #if wxUSE_STACKWALKER
-    // don't show more than maxLines or we could get a dialog too tall to be
-    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
-    // characters it is still only 300 pixels...
-    static const int maxLines = 20;
+        // don't show more than maxLines or we could get a dialog too tall to
+        // be shown on screen: 20 should be ok everywhere as even with 15 pixel
+        // high characters it is still only 300 pixels...
+        static const int maxLines = 20;
 
-    // save current stack frame...
-    StackDump dump(GTK_ASSERT_DIALOG(dialog));
-    dump.SaveStack(maxLines);
+        // save current stack frame...
+        StackDump dump(GTK_ASSERT_DIALOG(dialog));
+        dump.SaveStack(maxLines);
 
-    // ...but process it only if the user needs it
-    gtk_assert_dialog_set_backtrace_callback(GTK_ASSERT_DIALOG(dialog),
-                                             (GtkAssertDialogStackFrameCallback)get_stackframe_callback,
-                                             &dump);
-#endif      // wxUSE_STACKWALKER
+        // ...but process it only if the user needs it
+        gtk_assert_dialog_set_backtrace_callback
+        (
+            GTK_ASSERT_DIALOG(dialog),
+            (GtkAssertDialogStackFrameCallback)get_stackframe_callback,
+            &dump
+        );
+#endif // wxUSE_STACKWALKER
 
-    gint result = gtk_dialog_run(GTK_DIALOG (dialog));
-    bool returnCode = false;
-    switch (result)
-    {
-    case GTK_ASSERT_DIALOG_STOP:
-        wxTrap();
-        break;
-    case GTK_ASSERT_DIALOG_CONTINUE:
-        // nothing to do
-        break;
-    case GTK_ASSERT_DIALOG_CONTINUE_SUPPRESSING:
-        // no more asserts
-        returnCode = true;
-        break;
+        gint result = gtk_dialog_run(GTK_DIALOG (dialog));
+        bool returnCode = false;
+        switch (result)
+        {
+            case GTK_ASSERT_DIALOG_STOP:
+                wxTrap();
+                break;
+            case GTK_ASSERT_DIALOG_CONTINUE:
+                // nothing to do
+                break;
+            case GTK_ASSERT_DIALOG_CONTINUE_SUPPRESSING:
+                // no more asserts
+                returnCode = true;
+                break;
 
-    default:
-        wxFAIL_MSG( wxT("unexpected return code from GtkAssertDialog") );
+            default:
+                wxFAIL_MSG( wxT("unexpected return code from GtkAssertDialog") );
+        }
+
+        gtk_widget_destroy(dialog);
+        return returnCode;
     }
+#endif // wxDEBUG_LEVEL
 
-    gtk_widget_destroy(dialog);
-    return returnCode;
-#else // !wxDEBUG_LEVEL
-    // this function is never called in this case
-    wxUnusedVar(msg);
-    return false;
-#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
+    return wxAppTraitsBase::ShowAssertDialog(msg);
 }
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const

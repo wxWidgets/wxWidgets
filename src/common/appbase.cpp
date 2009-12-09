@@ -1186,11 +1186,9 @@ bool DoShowAssertDialog(const wxString& msg)
         //case IDNO: nothing to do
     }
 #else // !__WXMSW__
-    wxFprintf(stderr, wxT("%s\n"), msg.c_str());
-    fflush(stderr);
+    wxMessageOutputDebug().Output(msg);
 
-    // TODO: ask the user to enter "Y" or "N" on the console?
-    wxTrap();
+    // TODO: ask the user whether to trap on the console?
 #endif // __WXMSW__/!__WXMSW__
 
     // continue with the asserts
@@ -1236,27 +1234,15 @@ void ShowAssertDialog(const wxString& file,
     // since dialogs cannot be displayed
     if ( !wxThread::IsMain() )
     {
-        msg += wxT(" [in child thread]");
-
-#if defined(__WXMSW__) && !defined(__WXMICROWIN__)
-        msg << wxT("\r\n");
-        OutputDebugString(msg.wx_str());
-#else
-        // send to stderr
-        wxFprintf(stderr, wxT("%s\n"), msg.c_str());
-        fflush(stderr);
-#endif
-        // He-e-e-e-elp!! we're asserting in a child thread
-        wxTrap();
+        msg += wxString::Format(" [in thread %lx]", wxThread::GetCurrentId());
     }
-    else
 #endif // wxUSE_THREADS
+
+    // log the assert in any case
+    wxMessageOutputDebug().Output(msg);
 
     if ( !s_bNoAsserts )
     {
-        // send it to the normal log destination
-        wxLogDebug(wxT("%s"), msg.c_str());
-
         if ( traits )
         {
             // delegate showing assert dialog (if possible) to that class
