@@ -872,22 +872,19 @@ void WXDLLIMPEXP_BASE wxMutexGuiLeave()
 bool wxAppTraitsBase::ShowAssertDialog(const wxString& msgOriginal)
 {
 #if wxDEBUG_LEVEL
-    wxString msg = msgOriginal;
+    wxString msg;
 
 #if wxUSE_STACKWALKER
-#if !defined(__WXMSW__)
-    // on Unix stack frame generation may take some time, depending on the
-    // size of the executable mainly... warn the user that we are working
-    wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
-    fflush(stderr);
-#endif
-
     const wxString stackTrace = GetAssertStackTrace();
     if ( !stackTrace.empty() )
+    {
         msg << wxT("\n\nCall stack:\n") << stackTrace;
+
+        wxMessageOutputDebug().Output(msg);
+    }
 #endif // wxUSE_STACKWALKER
 
-    return DoShowAssertDialog(msg);
+    return DoShowAssertDialog(msgOriginal + msg);
 #else // !wxDEBUG_LEVEL
     wxUnusedVar(msgOriginal);
 
@@ -899,6 +896,15 @@ bool wxAppTraitsBase::ShowAssertDialog(const wxString& msgOriginal)
 wxString wxAppTraitsBase::GetAssertStackTrace()
 {
 #if wxDEBUG_LEVEL
+
+#if !defined(__WXMSW__)
+    // on Unix stack frame generation may take some time, depending on the
+    // size of the executable mainly... warn the user that we are working
+    wxFprintf(stderr, "Collecting stack trace information, please wait...");
+    fflush(stderr);
+#endif // !__WXMSW__
+
+
     wxString stackTrace;
 
     class StackDump : public wxStackWalker
@@ -1186,12 +1192,10 @@ bool DoShowAssertDialog(const wxString& msg)
         //case IDNO: nothing to do
     }
 #else // !__WXMSW__
-    wxMessageOutputDebug().Output(msg);
-
-    // TODO: ask the user whether to trap on the console?
+    wxUnusedVar(msg);
 #endif // __WXMSW__/!__WXMSW__
 
-    // continue with the asserts
+    // continue with the asserts by default
     return false;
 }
 

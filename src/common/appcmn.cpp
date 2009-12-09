@@ -465,11 +465,6 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
         wxString msgDlg = msg;
 
 #if wxUSE_STACKWALKER
-        // on Unix stack frame generation may take some time, depending on the
-        // size of the executable mainly... warn the user that we are working
-        wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
-        fflush(stderr);
-
         const wxString stackTrace = GetAssertStackTrace();
         if ( !stackTrace.empty() )
             msgDlg << wxT("\n\nCall stack:\n") << stackTrace;
