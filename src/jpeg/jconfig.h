@@ -55,8 +55,14 @@
   #undef CHAR_IS_UNSIGNED
 #endif
 
+#ifndef HAVE_STDDEF_H
 #define HAVE_STDDEF_H
+#endif
+
+#ifndef HAVE_STDLIB_H
 #define HAVE_STDLIB_H
+#endif
+
 #undef NEED_BSD_STRINGS
 #undef NEED_SYS_TYPES_H
 #undef NEED_FAR_POINTERS
