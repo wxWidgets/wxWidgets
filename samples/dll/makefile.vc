@@ -412,7 +412,7 @@ $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample.res $(OBJS)\my_dll.d
 
 $(OBJS)\sdk_exe.exe: $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO) /pdb:"$(OBJS)\sdk_exe.pdb" $(__DEBUGINFO_33)  $(LINK_TARGET_CPU) /SUBSYSTEM:WINDOWS $(LDFLAGS) @<<
-	$(SDK_EXE_OBJECTS)   $(OBJS)\my_dll.lib
+	$(SDK_EXE_OBJECTS)   $(OBJS)\my_dll.lib user32.lib
 <<
 
 $(OBJS)\my_dll_my_dll.obj: .\my_dll.cpp
