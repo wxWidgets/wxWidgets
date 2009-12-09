@@ -1,0 +1,30 @@
+/*
+============================================================================
+ Name		: wxSymLib.mmp
+ Author	  : Veon
+ Copyright   : Copyright 2008 by Sunbay Software Crimea Ltd.
+Prospekt Kirova 29/1 office 432, 95000 Simferopol, Ukraine
+All rights reserved
+ Description : This is the project specification file for wxSymLib.
+============================================================================
+*/
+
+TARGET		  wxSymbian.lib
+TARGETTYPE	  lib
+UID			 0
+
+SYSTEMINCLUDE \epoc32\include\stdapis
+SYSTEMINCLUDE \epoc32\include\stdapis\stlport
+SYSTEMINCLUDE \epoc32\include\stdapis\sys
+SYSTEMINCLUDE \epoc32\include
+
+USERINCLUDE	 ..\..\include\
+
+SOURCEPATH ..\..\src\symbian 
+SOURCE dir.cpp evtloop.cpp thread.cpp timer.cpp utils.cpp sockunix.cpp mimetype.cpp fdiounix.cpp utilsexc.cpp
+
+SOURCEPATH ..\..\src\common 
+SOURCE arrstr.cpp clntdata.cpp cmdline.cpp config.cpp datetime.cpp datetimefmt.cpp dircmn.cpp dynarray.cpp encconv.cpp event.cpp file.cpp fileconf.cpp filefn.cpp filename.cpp hash.cpp hashmap.cpp init.cpp list.cpp log.cpp longlong.cpp mimecmn.cpp module.cpp msgout.cpp object.cpp process.cpp stdpbase.cpp stopwatch.cpp strconv.cpp stream.cpp string.cpp sysopt.cpp textbuf.cpp textcmn.cpp textfile.cpp tokenzr.cpp txtstrm.cpp uri.cpp url.cpp utilscmn.cpp wfstream.cpp appbase.cpp clntdata.cpp cmdline.cpp config.cpp datetime.cpp dircmn.cpp dynarray.cpp encconv.cpp event.cpp file.cpp fileconf.cpp filefn.cpp filename.cpp hash.cpp hashmap.cpp init.cpp list.cpp log.cpp longlong.cpp mimecmn.cpp module.cpp msgout.cpp object.cpp process.cpp stdpbase.cpp stopwatch.cpp strconv.cpp stream.cpp string.cpp sysopt.cpp textbuf.cpp textcmn.cpp textfile.cpp tokenzr.cpp txtstrm.cpp uri.cpp url.cpp utilscmn.cpp wfstream.cpp
+SOURCE powercmn.cpp
+SOURCE platinfo.cpp ffile.cpp evtloopcmn.cpp timercmn.cpp timerimpl.cpp wxcrt.cpp wxprintf.cpp stringimpl.cpp intl.cpp filesys.cpp strvararg.cpp xlocale.cpp
+SOURCE fileback.cpp unichar.cpp base64.cpp convauto.cpp http.cpp protocol.cpp ftp.cpp sckaddr.cpp socket.cpp sckstrm.cpp socketiohandler.cpp fdiodispatcher.cpp selectdispatcher.cpp

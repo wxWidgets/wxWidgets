@@ -1,0 +1,17 @@
+/*
+============================================================================
+ Name		: bld.inf
+ Author	  : Veon
+ Copyright   : Copyright 2008 by Sunbay Software Crimea Ltd.
+Prospekt Kirova 29/1 office 432, 95000 Simferopol, Ukraine
+All rights reserved
+ Description : This file provides the information required for building the
+			   whole of a wxSymLib.
+============================================================================
+*/
+
+PRJ_PLATFORMS
+DEFAULT
+
+PRJ_MMPFILES
+wxSymLib.mmp BUILD_AS_ARM
