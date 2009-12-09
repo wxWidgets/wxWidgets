@@ -363,10 +363,13 @@ wxAssertHandler_t wxSetAssertHandler(wxAssertHandler_t handler);
 void wxSetDefaultAssertHandler();
 
 /**
-    In debug mode (when @c __WXDEBUG__ is defined) this function generates a
-    debugger exception meaning that the control is passed to the debugger if
-    one is attached to the process. Otherwise the program just terminates
-    abnormally. In release mode this function does nothing.
+    Generate a debugger exception meaning that the control is passed to the
+    debugger if one is attached to the process.
+
+    Otherwise the program just terminates abnormally.
+
+    If @c wxDEBUG_LEVEL is 0 (which is not the default) this function does
+    nothing.
 
     @header{wx/debug.h}
 */
