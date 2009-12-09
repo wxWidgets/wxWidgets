@@ -78,11 +78,11 @@ wxPoint wxFrame::GetClientAreaOrigin() const
         int w, h;
         toolbar->GetSize(&w, &h);
 
-        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        if ( toolbar->HasFlag(wxTB_LEFT) )
         {
             pt.x += w;
         }
-        else
+        else if ( HasFlag(wxTB_TOP) )
         {
 #if !wxOSX_USE_NATIVE_TOOLBAR
             pt.y += h;
@@ -337,16 +337,19 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     if ( m_frameToolBar == toolbar )
         return ;
 
+#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_NATIVE_TOOLBAR
     if ( m_frameToolBar )
         m_frameToolBar->MacInstallNativeToolbar( false ) ;
 #endif
-
+#endif
     m_frameToolBar = toolbar ;
 
+#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_NATIVE_TOOLBAR
     if ( toolbar )
         toolbar->MacInstallNativeToolbar( true ) ;
+#endif
 #endif
 }
 
@@ -373,6 +376,12 @@ void wxFrame::PositionToolBar()
         GetStatusBar()->GetClientSize(&statusX, &statusY);
         ch -= statusY;
     }
+#endif
+
+#ifdef __WXOSX_IPHONE__
+    // TODO integrate this in a better way, on iphone the status bar is not a child of the content view
+    // but the toolbar is
+    ch -= 20;
 #endif
 
     if (GetToolBar())
