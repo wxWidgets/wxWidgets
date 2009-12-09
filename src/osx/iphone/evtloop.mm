@@ -87,6 +87,11 @@ void wxGUIEventLoop::WakeUp()
     wxMacWakeUp();
 }
 
+CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
+{
+    return CFRunLoopGetCurrent();
+}
+
 bool wxGUIEventLoop::Pending() const
 {
     wxMacAutoreleasePool autoreleasepool;
