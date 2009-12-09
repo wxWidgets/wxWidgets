@@ -91,14 +91,13 @@ public:
     // crash (e.g. dereferencing null pointer, division by 0, ...)
     virtual void OnFatalException();
 
-#ifdef __WXDEBUG__
-    // in debug mode, you can override this function to do something different
-    // (e.g. log the assert to file) whenever an assertion fails
-    virtual void OnAssert(const wxChar *file,
-                          int line,
-                          const wxChar *cond,
-                          const wxChar *msg);
-#endif // __WXDEBUG__
+    // you can override this function to do something different (e.g. log the
+    // assert to file) whenever an assertion fails
+    virtual void OnAssertFailure(const wxChar *file,
+                                 int line,
+                                 const wxChar *func,
+                                 const wxChar *cond,
+                                 const wxChar *msg);
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -302,18 +301,24 @@ void MyApp::OnFatalException()
                  wxT("wxExcept Sample"), wxOK | wxICON_ERROR);
 }
 
-#ifdef __WXDEBUG__
-
-void MyApp::OnAssert(const wxChar *file,
-                     int line,
-                     const wxChar *cond,
-                     const wxChar *msg)
+void MyApp::OnAssertFailure(const wxChar *file,
+                            int line,
+                            const wxChar *func,
+                            const wxChar *cond,
+                            const wxChar *msg)
 {
-    // we don't have anything special to do here
-    wxApp::OnAssert(file, line, cond, msg);
+    if ( wxMessageBox
+         (
+            wxString::Format("An assert failed in %s().", func) +
+            "\n"
+            "Do you want to call the default assert handler?",
+            "wxExcept Sample",
+            wxYES_NO | wxICON_QUESTION
+         ) == wxYES )
+    {
+        wxApp::OnAssertFailure(file, line, func, cond, msg);
+    }
 }
-
-#endif // __WXDEBUG__
 
 // ============================================================================
 // MyFrame implementation
