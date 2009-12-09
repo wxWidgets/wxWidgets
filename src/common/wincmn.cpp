@@ -243,7 +243,9 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // size, this worked like this in wxWidgets 2.8 and before and generally
     // often makes sense for child windows (for top level ones it definitely
     // does not as the user should be able to resize the window)
-    if ( !wxTopLevelWindows.Find(this) ) // can't use IsTopLevel() from ctor
+    //
+    // note that we can't use IsTopLevel() from ctor
+    if ( !wxTopLevelWindows.Find((wxWindow *)this) )
         SetMinSize(size);
 
     SetName(name);
