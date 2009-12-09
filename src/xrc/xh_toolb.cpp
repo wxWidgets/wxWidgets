@@ -78,7 +78,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
             kind = wxITEM_CHECK;
         }
-
+#if wxUSE_MENUS
         // check whether we have dropdown tag inside
         wxMenu *menu = NULL; // menu for drop down items
         wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
@@ -122,7 +122,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                 }
             }
         }
-
+#endif
         wxToolBarToolBase * const tool =
             m_toolbar->AddTool
                        (
@@ -137,10 +137,11 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
 
         if ( GetBool(wxT("disabled")) )
             m_toolbar->EnableTool(GetID(), false);
-
+#if wxUSE_MENUS
         if ( menu )
             tool->SetDropdownMenu(menu);
-
+#endif
+        
         return m_toolbar; // must return non-NULL
     }
 
