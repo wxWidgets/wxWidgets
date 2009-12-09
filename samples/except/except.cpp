@@ -128,10 +128,8 @@ protected:
     // catch exceptions which occur in MyFrame methods here
     virtual bool ProcessEvent(wxEvent& event);
 
-#ifdef __WXDEBUG__
     // show how an assert failure message box looks like
     void OnShowAssert(wxCommandEvent& event);
-#endif // __WXDEBUG__
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -186,9 +184,7 @@ enum
 #if wxUSE_ON_FATAL_EXCEPTION
     Except_HandleCrash,
 #endif // wxUSE_ON_FATAL_EXCEPTION
-#ifdef __WXDEBUG__
     Except_ShowAssert,
-#endif // __WXDEBUG__
     Except_Dialog,
 
     Except_Quit = wxID_EXIT,
@@ -214,9 +210,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_ON_FATAL_EXCEPTION
     EVT_MENU(Except_HandleCrash, MyFrame::OnHandleCrash)
 #endif // wxUSE_ON_FATAL_EXCEPTION
-#ifdef __WXDEBUG__
     EVT_MENU(Except_ShowAssert, MyFrame::OnShowAssert)
-#endif // __WXDEBUG__
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -348,10 +342,8 @@ MyFrame::MyFrame()
     menuFile->AppendCheckItem(Except_HandleCrash, wxT("&Handle crashes\tCtrl-H"));
     menuFile->AppendSeparator();
 #endif // wxUSE_ON_FATAL_EXCEPTION
-#ifdef __WXDEBUG__
     menuFile->Append(Except_ShowAssert, wxT("Provoke &assert failure\tCtrl-A"));
     menuFile->AppendSeparator();
-#endif // __WXDEBUG__
     menuFile->Append(Except_Quit, wxT("E&xit\tCtrl-Q"), wxT("Quit this program"));
 
     wxMenu *helpMenu = new wxMenu;
@@ -444,16 +436,12 @@ void MyFrame::OnHandleCrash(wxCommandEvent& event)
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __WXDEBUG__
-
 void MyFrame::OnShowAssert(wxCommandEvent& WXUNUSED(event))
 {
     // provoke an assert from wxArrayString
     wxArrayString arr;
     arr[0];
 }
-
-#endif // __WXDEBUG__
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
