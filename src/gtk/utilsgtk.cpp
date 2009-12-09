@@ -365,14 +365,9 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
         gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
 
 #if wxUSE_STACKWALKER
-        // don't show more than maxLines or we could get a dialog too tall to
-        // be shown on screen: 20 should be ok everywhere as even with 15 pixel
-        // high characters it is still only 300 pixels...
-        static const int maxLines = 20;
-
-        // save current stack frame...
+        // save the current stack ow...
         StackDump dump(GTK_ASSERT_DIALOG(dialog));
-        dump.SaveStack(maxLines);
+        dump.SaveStack(100); // showing more than 100 frames is not very useful
 
         // ...but process it only if the user needs it
         gtk_assert_dialog_set_backtrace_callback
