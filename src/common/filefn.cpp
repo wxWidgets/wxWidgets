@@ -1079,7 +1079,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 
     wxStructStat fbuf;
     // get permissions of file1
-    if ( wxStat( file1.c_str(), &fbuf) != 0 )
+    if ( wxStat( file1, &fbuf) != 0 )
     {
         // the file probably doesn't exist or we haven't the rights to read
         // from it anyhow

@@ -943,7 +943,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags);
 
 #elif defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || \
-      (defined(__WXMAC__) && !defined(__WXOSX_IPHONE__))
+      (defined(__WXOSX__) )
 
 // implemented in a port-specific utils source file:
 bool wxDoLaunchDefaultBrowser(const wxString& url, int flags);

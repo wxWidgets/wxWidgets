@@ -304,7 +304,7 @@ bool wxDir::HasSubDirs(const wxString& spec) const
         // caller will learn it soon enough when it calls GetFirst(wxDIR)
         // anyhow
         wxStructStat stBuf;
-        if ( wxStat(M_DIR->GetName().c_str(), &stBuf) == 0 )
+        if ( wxStat(M_DIR->GetName(), &stBuf) == 0 )
         {
             switch ( stBuf.st_nlink )
             {

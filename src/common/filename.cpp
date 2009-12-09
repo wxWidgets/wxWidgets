@@ -621,16 +621,13 @@ bool wxFileName::FileExists( const wxString &filePath )
         #define S_ISREG(mode) ((mode) & S_IFREG)
     #endif
     wxStructStat st;
-#ifndef wxNEED_WX_UNISTD_H
-    return (wxStat( filePath.fn_str() , &st) == 0 && S_ISREG(st.st_mode))
+
+    return (wxStat( filePath, &st) == 0 && S_ISREG(st.st_mode))
 #ifdef __OS2__
       || (errno == EACCES) // if access is denied something with that name
                             // exists and is opened in exclusive mode.
 #endif
       ;
-#else
-    return wxStat( filePath , &st) == 0 && S_ISREG(st.st_mode);
-#endif
 #endif // __WIN32__/!__WIN32__
 }
 
@@ -688,10 +685,10 @@ bool wxFileName::DirExists( const wxString &dirPath )
 
     wxStructStat st;
 #ifndef __VISAGECPP__
-    return wxStat(strPath.c_str(), &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
+    return wxStat(strPath, &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
 #else
     // S_IFMT not supported in VA compilers.. st_mode is a 2byte value only
-    return wxStat(strPath.c_str(), &st) == 0 && (st.st_mode == S_IFDIR);
+    return wxStat(strPath, &st) == 0 && (st.st_mode == S_IFDIR);
 #endif
 
 #endif // __WIN32__/!__WIN32__
@@ -2587,7 +2584,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     // no need to test for IsDir() here
     wxStructStat stBuf;
-    if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
+    if ( wxStat( GetFullPath(), &stBuf) == 0 )
     {
         if ( dtAccess )
             dtAccess->Set(stBuf.st_atime);
@@ -2641,11 +2638,7 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
     return wxULongLong(lpFileSizeHigh, ret);
 #else // ! __WIN32__
     wxStructStat st;
-#ifndef wxNEED_WX_UNISTD_H
-    if (wxStat( filename.fn_str() , &st) != 0)
-#else
     if (wxStat( filename, &st) != 0)
-#endif
         return wxInvalidSize;
     return wxULongLong(st.st_size);
 #endif
