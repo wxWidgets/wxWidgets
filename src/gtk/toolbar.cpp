@@ -519,6 +519,15 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
         case wxTOOL_STYLE_SEPARATOR:
             tool->m_item = gtk_separator_tool_item_new();
+            if ( tool->IsStretchable() )
+            {
+                gtk_separator_tool_item_set_draw
+                (
+                    GTK_SEPARATOR_TOOL_ITEM(tool->m_item),
+                    FALSE
+                );
+                gtk_tool_item_set_expand(tool->m_item, TRUE);
+            }
             gtk_toolbar_insert(m_toolbar, tool->m_item, int(pos));
             break;
 

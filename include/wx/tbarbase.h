@@ -101,11 +101,6 @@ public:
         m_control = control;
     }
 
-        m_toolStyle = wxTOOL_STYLE_CONTROL;
-
-        m_dropdownMenu = 0;
-    }
-
     virtual ~wxToolBarToolBase();
 
     // accessors
@@ -123,16 +118,25 @@ public:
 
     wxToolBarBase *GetToolBar() const { return m_tbar; }
 
-    // style
+    // style/kind
+    bool IsStretchable() const { return m_stretchable; }
     bool IsButton() const { return m_toolStyle == wxTOOL_STYLE_BUTTON; }
     bool IsControl() const { return m_toolStyle == wxTOOL_STYLE_CONTROL; }
     bool IsSeparator() const { return m_toolStyle == wxTOOL_STYLE_SEPARATOR; }
+    bool IsStretchableSpace() const { return IsSeparator() && IsStretchable(); }
     int GetStyle() const { return m_toolStyle; }
     wxItemKind GetKind() const
     {
         wxASSERT_MSG( IsButton(), wxT("only makes sense for buttons") );
 
         return m_kind;
+    }
+
+    void MakeStretchable()
+    {
+        wxASSERT_MSG( IsSeparator(), "only separators can be stretchable" );
+
+        m_stretchable = true;
     }
 
     // state
@@ -214,6 +218,7 @@ protected:
 
         m_clientData = NULL;
 
+        m_stretchable = false;
         m_toggled = false;
         m_enabled = true;
 
@@ -223,7 +228,7 @@ protected:
     wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
 
     // tool parameters
-    int m_toolStyle;    // see enum wxToolBarToolStyle
+    wxToolBarToolStyle m_toolStyle;
     wxWindowIDRef m_id; // the tool id, wxID_SEPARATOR for separator
     wxItemKind m_kind;  // for normal buttons may be wxITEM_NORMAL/CHECK/RADIO
 
@@ -233,6 +238,9 @@ protected:
         wxObject         *m_clientData;
         wxControl        *m_control;
     };
+
+    // true if this tool is stretchable: currently is only value for separators
+    bool m_stretchable;
 
     // tool state
     bool m_toggled;
@@ -361,6 +369,12 @@ public:
     // add a separator to the toolbar
     virtual wxToolBarToolBase *AddSeparator();
     virtual wxToolBarToolBase *InsertSeparator(size_t pos);
+
+    // add a stretchable space to the toolbar: this is similar to a separator
+    // except that it's always blank and that all the extra space the toolbar
+    // has is [equally] distributed among the stretchable spaces in it
+    virtual wxToolBarToolBase *AddStretchableSpace();
+    virtual wxToolBarToolBase *InsertStretchableSpace(size_t pos);
 
     // remove the tool from the toolbar: the caller is responsible for actually
     // deleting the pointer
@@ -605,6 +619,17 @@ protected:
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) = 0;
+
+    // this one is not virtual but just a simple helper/wrapper around
+    // CreateTool() for separators
+    wxToolBarToolBase *CreateSeparator()
+    {
+        return CreateTool(wxID_SEPARATOR,
+                          wxEmptyString,
+                          wxNullBitmap, wxNullBitmap,
+                          wxITEM_SEPARATOR, NULL,
+                          wxEmptyString, wxEmptyString);
+    }
 
     // helper functions
     // ----------------

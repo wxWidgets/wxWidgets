@@ -310,7 +310,7 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  wxT("wxToolBar Sample"),
-                                  wxPoint(100, 100), wxSize(550, 300));
+                                  wxPoint(100, 100), wxSize(650, 300));
 
     frame->Show(true);
 
@@ -474,9 +474,12 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
 #endif // USE_CONTROLS_IN_TOOLBAR
 
     toolBar->AddTool(wxID_SAVE, wxT("Save"), toolBarBitmaps[Tool_save], wxT("Toggle button 1"), wxITEM_CHECK);
+
+    toolBar->AddSeparator();
     toolBar->AddTool(wxID_COPY, wxT("Copy"), toolBarBitmaps[Tool_copy], wxT("Toggle button 2"), wxITEM_CHECK);
     toolBar->AddTool(wxID_CUT, wxT("Cut"), toolBarBitmaps[Tool_cut], wxT("Toggle/Untoggle help button"));
     toolBar->AddTool(wxID_PASTE, wxT("Paste"), toolBarBitmaps[Tool_paste], wxT("Paste"));
+    toolBar->AddSeparator();
 
     if ( m_useCustomDisabled )
     {
@@ -500,7 +503,9 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                          wxT("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
     }
 
-    toolBar->AddSeparator();
+    // add a stretchable space before the "Help" button to make it
+    // right-aligned
+    toolBar->AddStretchableSpace();
     toolBar->AddTool(wxID_HELP, wxT("Help"), toolBarBitmaps[Tool_help], wxT("Help button"), wxITEM_CHECK);
 
     if ( !m_pathBmp.empty() )
@@ -899,14 +904,12 @@ void MyFrame::DoToggleHelp()
 
 void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
 {
-    static const int searchPos = 3;
-
     wxToolBarBase * const tb = GetToolBar();
     if ( !m_searchTool )
     {
         wxSearchCtrl * const srch = new wxSearchCtrl(tb, wxID_ANY, "needle");
         srch->SetMinSize(wxSize(80, -1));
-        m_searchTool = tb->InsertControl(searchPos, srch);
+        m_searchTool = tb->AddControl(srch);
     }
     else // tool already exists
     {
@@ -919,7 +922,7 @@ void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
         }
         else // tool exists in detached state, attach it back
         {
-            tb->InsertTool(searchPos, m_searchTool);
+            tb->AddTool(m_searchTool);
             win->Show();
         }
     }

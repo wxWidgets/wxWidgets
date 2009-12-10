@@ -960,16 +960,21 @@ bool wxToolBar::Realize()
                             }
                         }
                     }
+
+                    wxCFStringRef cfidentifier;
+                    const NSString *nsItemId;
                     if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
-                        [refTB insertItemWithItemIdentifier:NSToolbarSeparatorItemIdentifier atIndex:currentPosition];
+                    {
+                        nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
+                                                         : NSToolbarSeparatorItemIdentifier;
+                    }
                     else
                     {
-                            
-                        wxString identifier = wxString::Format( wxT("%ld"), (long) tool );
-                        wxCFStringRef cfidentifier(identifier);
-
-                        [refTB insertItemWithItemIdentifier:cfidentifier.AsNSString() atIndex:currentPosition];
+                        cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
+                        nsItemId = cfidentifier.AsNSString();
                     }
+
+                    [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
                     tool->SetIndex( currentPosition );
                 }
 
@@ -1220,7 +1225,10 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 #if wxOSX_USE_NATIVE_TOOLBAR
                 if (m_macToolbar != NULL)
                 {
-                    NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:NSToolbarSeparatorItemIdentifier];
+                    const NSString * const
+                        nsItemId = tool->IsStretchable() ? NSToolbarFlexibleSpaceItemIdentifier
+                                                         : NSToolbarSeparatorItemIdentifier;
+                    NSToolbarItem* item = [[NSToolbarItem alloc] initWithItemIdentifier:nsItemId];
                     tool->SetToolbarItemRef( item );
                 }
 #endif // wxOSX_USE_NATIVE_TOOLBAR

@@ -142,12 +142,27 @@ protected:
     // the total number of toolbar elements
     size_t m_nButtons;
 
+    // the sum of the sizes of the fixed items (i.e. excluding stretchable
+    // spaces) in the toolbar direction
+    int m_totalFixedSize;
+
     // the tool the cursor is in
     wxToolBarToolBase *m_pInTool;
 
 private:
     // makes sure tool bitmap size is sufficient for all tools
     void AdjustToolBitmapSize();
+
+    // update the sizes of stretchable spacers to consume all extra space we
+    // have
+    void UpdateStretchableSpacersSize();
+
+    // redraw the background of the given part of the window (or entire window
+    // if the parameter is NULL) to erase separator drawn in it
+    //
+    // return true if the background was erased using DrawThemeBackground()
+    bool MSWEraseRect(wxDC& dc, const wxRect *rectItem = NULL);
+
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)

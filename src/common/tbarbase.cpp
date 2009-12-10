@@ -259,11 +259,29 @@ wxToolBarToolBase *wxToolBarBase::AddSeparator()
 
 wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
-    return DoInsertNewTool(pos, CreateTool(wxID_SEPARATOR,
-                                           wxEmptyString,
-                                           wxNullBitmap, wxNullBitmap,
-                                           wxITEM_SEPARATOR, NULL,
-                                           wxEmptyString, wxEmptyString));
+    return DoInsertNewTool(pos, CreateSeparator());
+}
+
+wxToolBarToolBase *wxToolBarBase::AddStretchableSpace()
+{
+    return InsertStretchableSpace(GetToolsCount());
+}
+
+wxToolBarToolBase *wxToolBarBase::InsertStretchableSpace(size_t pos)
+{
+    wxToolBarToolBase * const tool = CreateSeparator();
+    if ( tool )
+    {
+        // this is a hack but we know that all the current implementations
+        // don't really use the tool when it's created, they will do it
+        // InsertTool() at earliest and maybe even in Realize() much later
+        //
+        // so we can create the tool as a plain separator and mark it as being
+        // a stretchable space later
+        tool->MakeStretchable();
+    }
+
+    return DoInsertNewTool(pos, tool);
 }
 
 wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)

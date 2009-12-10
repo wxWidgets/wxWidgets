@@ -228,9 +228,26 @@ public:
         platform so it can be a vertical line (MSW, some versions of GTK) or
         just an empty space or something else.
 
-        @see AddTool(), SetToolSeparation()
+        @see AddTool(), SetToolSeparation(), AddStretchableSpace()
     */
     virtual wxToolBarToolBase* AddSeparator();
+
+    /**
+        Adds a stretchable space to the toolbar.
+
+        Any space not taken up by the fixed items (all items except for
+        stretchable spaces) is distributed in equal measure between the
+        stretchable spaces in the toolbar. The most common use for this method
+        is to add a single stretchable space before the items which should be
+        right-aligned in the toolbar, but more exotic possibilities are
+        possible, e.g. a stretchable space may be added in the beginning and
+        the end of the toolbar to centre all toolbar items.
+
+        @see AddTool(), AddSeparator(), InsertStretchableSpace()
+
+        @since 2.9.1
+     */
+    wxToolBarToolBase *AddStretchableSpace();
 
     //@{
     /**
@@ -524,6 +541,17 @@ public:
         @see AddSeparator(), InsertTool()
     */
     virtual wxToolBarToolBase* InsertSeparator(size_t pos);
+
+    /**
+        Inserts a stretchable space at the given position.
+
+        See AddStretchableSpace() for details about stretchable spaces.
+
+        @see InsertTool(), InsertSeparator()
+
+        @since 2.9.1
+     */
+    wxToolBarToolBase *InsertStretchableSpace(size_t pos);
 
     //@{
     /**
