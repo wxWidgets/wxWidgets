@@ -697,49 +697,23 @@ void wxFrame::PositionToolBar()
                 tx = 0;
         }
 
-        int desiredW = tw;
-        int desiredH = th;
+        int desiredW,
+            desiredH;
 
         if ( toolbar->IsVertical() )
         {
+            desiredW = tw;
             desiredH = height;
         }
         else
         {
             desiredW = width;
+            desiredH = th;
         }
 
-        // use the 'real' MSW position here, don't offset relativly to the
+        // use the 'real' MSW position here, don't offset relatively to the
         // client area origin
-
-        // Optimise such that we don't have to always resize the toolbar
-        // when the frame changes, otherwise we'll get a lot of flicker.
-        bool heightChanging wxDUMMY_INITIALIZE(true);
-        bool widthChanging wxDUMMY_INITIALIZE(true);
-
-        if ( toolbar->IsVertical() )
-        {
-            // It's OK if the current height is greater than what can be shown.
-            heightChanging = (desiredH > th) ;
-            widthChanging = (desiredW != tw) ;
-
-            // The next time around, we may not have to set the size
-            if (heightChanging)
-                desiredH = desiredH + 200;
-        }
-        else
-        {
-            // It's OK if the current width is greater than what can be shown.
-            widthChanging = (desiredW > tw) ;
-            heightChanging = (desiredH != th) ;
-
-            // The next time around, we may not have to set the size
-            if (widthChanging)
-                desiredW = desiredW + 200;
-        }
-
-        if (tx != 0 || ty != 0 || widthChanging || heightChanging)
-            toolbar->SetSize(x, y, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
+        toolbar->SetSize(x, y, desiredW, desiredH, wxSIZE_NO_ADJUSTMENTS);
 
     }
 #endif // !WINCE_WITH_COMMANDBAR
