@@ -60,6 +60,7 @@ public:
     // ctors & dtor
     // ------------
 
+    // generic ctor for any kind of tool
     wxToolBarToolBase(wxToolBarBase *tbar = NULL,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
@@ -71,40 +72,34 @@ public:
                       const wxString& longHelpString = wxEmptyString)
         : m_label(label),
           m_shortHelpString(shortHelpString),
-          m_longHelpString(longHelpString),
-          m_dropdownMenu(NULL)
+          m_longHelpString(longHelpString)
     {
-        m_tbar = tbar;
-        m_id = toolid;
-        if (m_id == wxID_ANY)
-            m_id = wxWindow::NewControlId();
+        Init
+        (
+            tbar,
+            toolid == wxID_SEPARATOR ? wxTOOL_STYLE_SEPARATOR
+                                     : wxTOOL_STYLE_BUTTON,
+            toolid == wxID_ANY ? wxWindow::NewControlId()
+                               : toolid,
+            kind
+        );
+
         m_clientData = clientData;
 
         m_bmpNormal = bmpNormal;
         m_bmpDisabled = bmpDisabled;
-
-        m_kind = kind;
-
-        m_enabled = true;
-        m_toggled = false;
-
-        m_toolStyle = toolid == wxID_SEPARATOR ? wxTOOL_STYLE_SEPARATOR
-                                           : wxTOOL_STYLE_BUTTON;
     }
 
+    // ctor for controls only
     wxToolBarToolBase(wxToolBarBase *tbar,
                       wxControl *control,
                       const wxString& label)
         : m_label(label)
     {
-        m_tbar = tbar;
+        Init(tbar, wxTOOL_STYLE_CONTROL, control->GetId(), wxITEM_MAX);
+
         m_control = control;
-        m_id = control->GetId();
-
-        m_kind = wxITEM_MAX;    // invalid value
-
-        m_enabled = true;
-        m_toggled = false;
+    }
 
         m_toolStyle = wxTOOL_STYLE_CONTROL;
 
@@ -206,6 +201,25 @@ public:
     wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
 
 protected:
+    // common part of all ctors
+    void Init(wxToolBarBase *tbar,
+              wxToolBarToolStyle style,
+              int toolid,
+              wxItemKind kind)
+    {
+        m_tbar = tbar;
+        m_toolStyle = style;
+        m_id = toolid;
+        m_kind = kind;
+
+        m_clientData = NULL;
+
+        m_toggled = false;
+        m_enabled = true;
+
+        m_dropdownMenu = NULL;
+    }
+
     wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
 
     // tool parameters
