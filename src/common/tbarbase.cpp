@@ -180,17 +180,8 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
     wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  wxT("invalid position in wxToolBar::InsertTool()") );
 
-    wxToolBarToolBase *tool = CreateTool(id, label, bitmap, bmpDisabled, kind,
-                                         clientData, shortHelp, longHelp);
-
-    if ( !InsertTool(pos, tool) )
-    {
-        delete tool;
-
-        return NULL;
-    }
-
-    return tool;
+    return DoInsertNewTool(pos, CreateTool(id, label, bitmap, bmpDisabled, kind,
+                                           clientData, shortHelp, longHelp));
 }
 
 wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
@@ -232,19 +223,7 @@ wxToolBarBase::InsertControl(size_t pos,
     wxCHECK_MSG( control->GetParent() == this, NULL,
                  wxT("control must have toolbar as parent") );
 
-    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 wxT("invalid position in wxToolBar::InsertControl()") );
-
-    wxToolBarToolBase *tool = CreateTool(control, label);
-
-    if ( !InsertTool(pos, tool) )
-    {
-        delete tool;
-
-        return NULL;
-    }
-
-    return tool;
+    return DoInsertNewTool(pos, CreateTool(control, label));
 }
 
 wxControl *wxToolBarBase::FindControl( int id )
@@ -280,25 +259,11 @@ wxToolBarToolBase *wxToolBarBase::AddSeparator()
 
 wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
-                 wxT("invalid position in wxToolBar::InsertSeparator()") );
-
-    wxToolBarToolBase *tool = CreateTool(wxID_SEPARATOR,
-                                         wxEmptyString,
-                                         wxNullBitmap, wxNullBitmap,
-                                         wxITEM_SEPARATOR, NULL,
-                                         wxEmptyString, wxEmptyString);
-
-    if ( !tool || !DoInsertTool(pos, tool) )
-    {
-        delete tool;
-
-        return NULL;
-    }
-
-    m_tools.Insert(pos, tool);
-
-    return tool;
+    return DoInsertNewTool(pos, CreateTool(wxID_SEPARATOR,
+                                           wxEmptyString,
+                                           wxNullBitmap, wxNullBitmap,
+                                           wxITEM_SEPARATOR, NULL,
+                                           wxEmptyString, wxEmptyString));
 }
 
 wxToolBarToolBase *wxToolBarBase::RemoveTool(int id)

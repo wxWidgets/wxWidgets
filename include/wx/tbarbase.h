@@ -608,6 +608,17 @@ protected:
     // make the size of the buttons big enough to fit the largest bitmap size
     void AdjustToolBitmapSize();
 
+    // calls InsertTool() and deletes the tool if inserting it failed
+    wxToolBarToolBase *DoInsertNewTool(size_t pos, wxToolBarToolBase *tool)
+    {
+        if ( !InsertTool(pos, tool) )
+        {
+            delete tool;
+            return NULL;
+        }
+
+        return tool;
+    }
 
     // the list of all our tools
     wxToolBarToolsList m_tools;

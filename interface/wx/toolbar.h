@@ -533,6 +533,10 @@ public:
         You must call Realize() for the change to take place.
 
         @see AddTool(), InsertControl(), InsertSeparator()
+
+        @return The newly inserted tool or @NULL on failure. Notice that with
+            the overload taking @a tool parameter the caller is responsible for
+            deleting the tool in the latter case.
     */
     wxToolBarToolBase* InsertTool(size_t pos, int toolId,
                                   const wxBitmap& bitmap1,
