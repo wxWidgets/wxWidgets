@@ -94,7 +94,7 @@ OBJECTS0= \
 	statbox.obj,\
 	statline.obj,\
 	stattext.obj,\
-	tbargtk.obj,\
+	toolbar.obj,\
 	textctrl.obj,\
 	tglbtn.obj,\
 	msgdlg.obj,\
@@ -156,7 +156,7 @@ SOURCES =\
 	statbox.cpp,\
 	statline.cpp,\
 	stattext.cpp,\
-	tbargtk.cpp,\
+	toolbar.cpp,\
 	textctrl.cpp,\
 	tglbtn.cpp,\
 	timer.cpp,\
@@ -243,7 +243,7 @@ statbmp.obj : statbmp.cpp
 statbox.obj : statbox.cpp
 statline.obj : statline.cpp
 stattext.obj : stattext.cpp
-tbargtk.obj : tbargtk.cpp
+toolbar.obj : toolbar.cpp
 textctrl.obj : textctrl.cpp
 tglbtn.obj : tglbtn.cpp
 timer.obj : timer.cpp

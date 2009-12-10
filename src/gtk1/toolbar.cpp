@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/gtk1/tbargtk.cpp
+// Name:        src/gtk1/toolbar.cpp
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // Modified:    13.12.99 by VZ to derive from wxToolBarBase

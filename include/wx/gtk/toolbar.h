@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk1/tbargtk.h
+// Name:        wx/gtk/toolbar.h
 // Purpose:     GTK toolbar
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_TBARGTK_H_
-#define _WX_GTK_TBARGTK_H_
+#ifndef _WX_GTK_TOOLBAR_H_
+#define _WX_GTK_TOOLBAR_H_
 
 #if wxUSE_TOOLBAR
 
@@ -25,7 +25,7 @@ public:
                wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTB_HORIZONTAL,
                const wxString& name = wxToolBarNameStr )
     {
         Init();
@@ -37,14 +37,10 @@ public:
                  wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
-                 long style = 0,
+                 long style = wxTB_HORIZONTAL,
                  const wxString& name = wxToolBarNameStr );
 
     virtual ~wxToolBar();
-
-    // override base class virtuals
-    virtual void SetMargins(int x, int y);
-    virtual void SetToolSeparation(int separation);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
@@ -52,24 +48,20 @@ public:
 
     virtual void SetWindowStyleFlag( long style );
 
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // implementation from now on
     // --------------------------
 
-    GtkToolbar   *m_toolbar;
-
-    bool          m_blockEvent;
-
     void OnInternalIdle();
 
 protected:
-    // common part of all ctors
-    void Init();
-
-    // set the GTK toolbar style and orientation
-    void GtkSetStyle();
+    virtual wxSize DoGetBestSize() const;
+    virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     // implement base class pure virtuals
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
@@ -91,10 +83,18 @@ protected:
                                           const wxString& label);
 
 private:
+    void Init();
+    void GtkSetStyle();
+    GSList* GetRadioGroup(size_t pos);
+    virtual void AddChildGTK(wxWindowGTK* child);
+
+    GtkToolbar* m_toolbar;
+    GtkTooltips* m_tooltips;
+
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
 
 #endif // wxUSE_TOOLBAR
 
 #endif
-    // _WX_GTK_TBARGTK_H_
+    // _WX_GTK_TOOLBAR_H_

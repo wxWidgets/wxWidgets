@@ -2707,7 +2707,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/gtk1/statbox.h \
 	wx/gtk1/statline.h \
 	wx/gtk1/stattext.h \
-	wx/gtk1/tbargtk.h \
+	wx/gtk1/tooltip.h \
 	wx/gtk1/textctrl.h \
 	wx/gtk1/tglbtn.h \
 	wx/gtk1/treectrl.h
@@ -2759,7 +2759,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/statbox.h \
 	wx/gtk/statline.h \
 	wx/gtk/stattext.h \
-	wx/gtk/tbargtk.h \
+	wx/gtk/toolbar.h \
 	wx/gtk/textctrl.h \
 	wx/gtk/textentry.h \
 	wx/gtk/tglbtn.h \
@@ -4987,7 +4987,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_gtk1_statbox.o \
 	monodll_gtk1_statline.o \
 	monodll_gtk1_stattext.o \
-	monodll_gtk1_tbargtk.o \
+	monodll_gtk1_tooltip.o \
 	monodll_gtk1_textctrl.o \
 	monodll_gtk1_tglbtn.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS)
@@ -5040,7 +5040,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_statbox.o \
 	monodll_gtk_statline.o \
 	monodll_gtk_stattext.o \
-	monodll_gtk_tbargtk.o \
+	monodll_gtk_toolbar.o \
 	monodll_gtk_textctrl.o \
 	monodll_gtk_textentry.o \
 	monodll_gtk_tglbtn.o \
@@ -6807,7 +6807,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk1_statbox.o \
 	monolib_gtk1_statline.o \
 	monolib_gtk1_stattext.o \
-	monolib_gtk1_tbargtk.o \
+	monolib_gtk1_tooltip.o \
 	monolib_gtk1_textctrl.o \
 	monolib_gtk1_tglbtn.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1)
@@ -6860,7 +6860,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_statbox.o \
 	monolib_gtk_statline.o \
 	monolib_gtk_stattext.o \
-	monolib_gtk_tbargtk.o \
+	monolib_gtk_toolbar.o \
 	monolib_gtk_textctrl.o \
 	monolib_gtk_textentry.o \
 	monolib_gtk_tglbtn.o \
@@ -8816,7 +8816,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk1_statbox.o \
 	coredll_gtk1_statline.o \
 	coredll_gtk1_stattext.o \
-	coredll_gtk1_tbargtk.o \
+	coredll_gtk1_tooltip.o \
 	coredll_gtk1_textctrl.o \
 	coredll_gtk1_tglbtn.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2)
@@ -8869,7 +8869,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_statbox.o \
 	coredll_gtk_statline.o \
 	coredll_gtk_stattext.o \
-	coredll_gtk_tbargtk.o \
+	coredll_gtk_toolbar.o \
 	coredll_gtk_textctrl.o \
 	coredll_gtk_textentry.o \
 	coredll_gtk_tglbtn.o \
@@ -10309,7 +10309,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk1_statbox.o \
 	corelib_gtk1_statline.o \
 	corelib_gtk1_stattext.o \
-	corelib_gtk1_tbargtk.o \
+	corelib_gtk1_tooltip.o \
 	corelib_gtk1_textctrl.o \
 	corelib_gtk1_tglbtn.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3)
@@ -10362,7 +10362,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_statbox.o \
 	corelib_gtk_statline.o \
 	corelib_gtk_stattext.o \
-	corelib_gtk_tbargtk.o \
+	corelib_gtk_toolbar.o \
 	corelib_gtk_textctrl.o \
 	corelib_gtk_textentry.o \
 	corelib_gtk_tglbtn.o \
@@ -15149,8 +15149,8 @@ monodll_gtk_statline.o: $(srcdir)/src/gtk/statline.cpp $(MONODLL_ODEP)
 monodll_gtk_stattext.o: $(srcdir)/src/gtk/stattext.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/stattext.cpp
 
-monodll_gtk_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/tbargtk.cpp
+monodll_gtk_toolbar.o: $(srcdir)/src/gtk/toolbar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/toolbar.cpp
 
 monodll_gtk_textctrl.o: $(srcdir)/src/gtk/textctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/textctrl.cpp
@@ -15244,9 +15244,6 @@ monodll_gtk1_statline.o: $(srcdir)/src/gtk1/statline.cpp $(MONODLL_ODEP)
 
 monodll_gtk1_stattext.o: $(srcdir)/src/gtk1/stattext.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/stattext.cpp
-
-monodll_gtk1_tbargtk.o: $(srcdir)/src/gtk1/tbargtk.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/tbargtk.cpp
 
 monodll_gtk1_textctrl.o: $(srcdir)/src/gtk1/textctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/textctrl.cpp
@@ -19949,8 +19946,8 @@ monolib_gtk_statline.o: $(srcdir)/src/gtk/statline.cpp $(MONOLIB_ODEP)
 monolib_gtk_stattext.o: $(srcdir)/src/gtk/stattext.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/stattext.cpp
 
-monolib_gtk_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/tbargtk.cpp
+monolib_gtk_toolbar.o: $(srcdir)/src/gtk/toolbar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/toolbar.cpp
 
 monolib_gtk_textctrl.o: $(srcdir)/src/gtk/textctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/textctrl.cpp
@@ -20044,9 +20041,6 @@ monolib_gtk1_statline.o: $(srcdir)/src/gtk1/statline.cpp $(MONOLIB_ODEP)
 
 monolib_gtk1_stattext.o: $(srcdir)/src/gtk1/stattext.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/stattext.cpp
-
-monolib_gtk1_tbargtk.o: $(srcdir)/src/gtk1/tbargtk.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/tbargtk.cpp
 
 monolib_gtk1_textctrl.o: $(srcdir)/src/gtk1/textctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/textctrl.cpp
@@ -25460,8 +25454,8 @@ coredll_gtk_statline.o: $(srcdir)/src/gtk/statline.cpp $(COREDLL_ODEP)
 coredll_gtk_stattext.o: $(srcdir)/src/gtk/stattext.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/stattext.cpp
 
-coredll_gtk_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/tbargtk.cpp
+coredll_gtk_toolbar.o: $(srcdir)/src/gtk/toolbar.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/toolbar.cpp
 
 coredll_gtk_textctrl.o: $(srcdir)/src/gtk/textctrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/textctrl.cpp
@@ -25555,9 +25549,6 @@ coredll_gtk1_statline.o: $(srcdir)/src/gtk1/statline.cpp $(COREDLL_ODEP)
 
 coredll_gtk1_stattext.o: $(srcdir)/src/gtk1/stattext.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/stattext.cpp
-
-coredll_gtk1_tbargtk.o: $(srcdir)/src/gtk1/tbargtk.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/tbargtk.cpp
 
 coredll_gtk1_textctrl.o: $(srcdir)/src/gtk1/textctrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/textctrl.cpp
@@ -28991,8 +28982,8 @@ corelib_gtk_statline.o: $(srcdir)/src/gtk/statline.cpp $(CORELIB_ODEP)
 corelib_gtk_stattext.o: $(srcdir)/src/gtk/stattext.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/stattext.cpp
 
-corelib_gtk_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/tbargtk.cpp
+corelib_gtk_toolbar.o: $(srcdir)/src/gtk/toolbar.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/toolbar.cpp
 
 corelib_gtk_textctrl.o: $(srcdir)/src/gtk/textctrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/textctrl.cpp
@@ -29086,9 +29077,6 @@ corelib_gtk1_statline.o: $(srcdir)/src/gtk1/statline.cpp $(CORELIB_ODEP)
 
 corelib_gtk1_stattext.o: $(srcdir)/src/gtk1/stattext.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/stattext.cpp
-
-corelib_gtk1_tbargtk.o: $(srcdir)/src/gtk1/tbargtk.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/tbargtk.cpp
 
 corelib_gtk1_textctrl.o: $(srcdir)/src/gtk1/textctrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/textctrl.cpp

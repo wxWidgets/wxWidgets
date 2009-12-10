@@ -1126,7 +1126,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/statbox.cpp
     src/gtk/statline.cpp
     src/gtk/stattext.cpp
-    src/gtk/tbargtk.cpp
+    src/gtk/toolbar.cpp
     src/gtk/textctrl.cpp
     src/gtk/textentry.cpp
     src/gtk/tglbtn.cpp
@@ -1179,7 +1179,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/statbox.h
     wx/gtk/statline.h
     wx/gtk/stattext.h
-    wx/gtk/tbargtk.h
+    wx/gtk/toolbar.h
     wx/gtk/textctrl.h
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
@@ -1297,7 +1297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/statbox.cpp
     src/gtk1/statline.cpp
     src/gtk1/stattext.cpp
-    src/gtk1/tbargtk.cpp
+    src/gtk1/tooltip.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
 </set>
@@ -1343,7 +1343,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/statbox.h
     wx/gtk1/statline.h
     wx/gtk1/stattext.h
-    wx/gtk1/tbargtk.h
+    wx/gtk1/tooltip.h
     wx/gtk1/textctrl.h
     wx/gtk1/tglbtn.h
     wx/gtk1/treectrl.h

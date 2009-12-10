@@ -668,7 +668,7 @@ void wxFont::DoSetNativeFontInfo( const wxNativeFontInfo& info )
 
 static GdkFont *g_systemDefaultGuiFont = NULL;
 
-// this is also used from tbargtk.cpp and tooltip.cpp, hence extern
+// this is also used from toolbar.cpp and tooltip.cpp, hence extern
 extern GdkFont *GtkGetDefaultGuiFont()
 {
     if (!g_systemDefaultGuiFont)
