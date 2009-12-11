@@ -81,6 +81,8 @@ include/wx/msw/wince/*.h
 
 include/wx/msdos/*.h
 
+samples/Makefile*
+samples/makefile*
 samples/console/testdata.fc
 samples/console/*.cpp
 samples/console/*.h
