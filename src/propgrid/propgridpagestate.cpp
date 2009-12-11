@@ -1094,7 +1094,8 @@ void wxPropertyGridPageState::SetColumnCount( int colCount )
     wxASSERT( colCount >= 2 );
     m_colWidths.SetCount( colCount, wxPG_DRAG_MARGIN );
     if ( m_colWidths.size() > (unsigned int)colCount )
-        m_colWidths.RemoveAt( m_colWidths.size(), m_colWidths.size() - colCount );
+        m_colWidths.RemoveAt( m_colWidths.size()-1,
+                              m_colWidths.size() - colCount );
 
     if ( m_pPropGrid->GetState() == this )
         m_pPropGrid->RecalculateVirtualSize();
