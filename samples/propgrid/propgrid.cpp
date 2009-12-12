@@ -1033,16 +1033,16 @@ void FormMain::OnPropertyGridPageChange( wxPropertyGridEvent& WXUNUSED(event) )
 
 void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
 {
-    wxLogDebug("wxPG_EVT_LABEL_EDIT_BEGIN(%s)",
-               event.GetProperty()->GetLabel().c_str());
+    wxLogMessage("wxPG_EVT_LABEL_EDIT_BEGIN(%s)",
+                 event.GetProperty()->GetLabel().c_str());
 }
 
 // -----------------------------------------------------------------------
 
 void FormMain::OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event )
 {
-    wxLogDebug("wxPG_EVT_LABEL_EDIT_ENDING(%s)",
-               event.GetProperty()->GetLabel().c_str());
+    wxLogMessage("wxPG_EVT_LABEL_EDIT_ENDING(%s)",
+                 event.GetProperty()->GetLabel().c_str());
 }
 
 // -----------------------------------------------------------------------
@@ -1121,14 +1121,14 @@ void FormMain::OnPropertyGridButtonClick ( wxCommandEvent& )
 
 void FormMain::OnPropertyGridItemCollapse( wxPropertyGridEvent& )
 {
-    wxLogDebug(wxT("Item was Collapsed"));
+    wxLogMessage(wxT("Item was Collapsed"));
 }
 
 // -----------------------------------------------------------------------
 
 void FormMain::OnPropertyGridItemExpand( wxPropertyGridEvent& )
 {
-    wxLogDebug(wxT("Item was Expanded"));
+    wxLogMessage(wxT("Item was Expanded"));
 }
 
 // -----------------------------------------------------------------------
@@ -1137,12 +1137,12 @@ void FormMain::OnPropertyGridColBeginDrag( wxPropertyGridEvent& event )
 {
     if ( m_itemVetoDragging->IsChecked() )
     {
-        wxLogDebug("Splitter %i resize was vetoed", event.GetColumn());
+        wxLogMessage("Splitter %i resize was vetoed", event.GetColumn());
         event.Veto();
     }
     else
     {
-        wxLogDebug("Splitter %i resize began", event.GetColumn());
+        wxLogMessage("Splitter %i resize began", event.GetColumn());
     }
 }
 
@@ -1150,15 +1150,16 @@ void FormMain::OnPropertyGridColBeginDrag( wxPropertyGridEvent& event )
 
 void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
 {
+    wxUnusedVar(event);
     // For now, let's not spam the log output
-    //wxLogDebug("Splitter %i is being resized", event.GetColumn());
+    //wxLogMessage("Splitter %i is being resized", event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
 
 void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
 {
-    wxLogDebug("Splitter %i resize ended", event.GetColumn());
+    wxLogMessage("Splitter %i resize ended", event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
@@ -2339,6 +2340,14 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 #endif // wxUSE_STATUSBAR
 
     FinalizeFramePosition();
+
+#if wxUSE_LOGWINDOW
+    // Create log window
+    m_logWindow = new wxLogWindow(this, "Log Messages", false);
+    m_logWindow->GetFrame()->Move(GetPosition().x + GetSize().x + 10,
+                                  GetPosition().y);
+    m_logWindow->Show();
+#endif
 }
 
 void FormMain::FinalizeFramePosition()

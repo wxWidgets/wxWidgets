@@ -139,6 +139,10 @@ public:
     wxWindow*       m_panel;
     wxBoxSizer*     m_topSizer;
 
+#if wxUSE_LOGWINDOW
+    wxLogWindow*    m_logWindow;
+#endif
+
     wxPGEditor*     m_pSampleMultiButtonEditor;
     wxPGChoices     m_combinedFlags;
 
