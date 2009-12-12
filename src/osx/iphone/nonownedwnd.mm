@@ -15,6 +15,7 @@
 
 #include "wx/nonownedwnd.h"
 #include "wx/frame.h"
+#include <algorithm>
 
 CGRect wxToNSRect(UIView* parent, const wxRect& r )
 {
@@ -48,6 +49,26 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
     return wxPoint( x, y);
 }
 
+@interface wxUIContentViewController : UIViewController
+{
+}
+
+@end
+
+@interface wxUIContentView : wxUIView
+{
+    wxUIContentViewController* _controller;
+}
+
+- (void) setController: (UIViewController*) controller;
+- (UIViewController*) controller;
+@end
+
+
+
+//
+// c++ impl
+//
 
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowIPhoneImpl , wxNonOwnedWindowImpl )
 
@@ -104,6 +125,8 @@ long style, long extraStyle, const wxString& name )
     if ( ( style & wxSTAY_ON_TOP ) )
         level = UIWindowLevelAlert;
     CGRect r = CGRectMake( 0, 0, size.x, size.y) ;
+    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
+        std::swap(r.size.width,r.size.height);
 
     [m_macWindow initWithFrame:r ];
 
@@ -175,6 +198,9 @@ bool wxNonOwnedWindowIPhoneImpl::CanSetTransparent()
 void wxNonOwnedWindowIPhoneImpl::MoveWindow(int x, int y, int width, int height)
 {
     CGRect r = CGRectMake( x,y,width,height) ;
+    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
+        std::swap(r.size.width,r.size.height);
+
     [m_macWindow setFrame:r];
 }
 
@@ -187,18 +213,22 @@ void wxNonOwnedWindowIPhoneImpl::GetPosition( int &x, int &y ) const
 
 void wxNonOwnedWindowIPhoneImpl::GetSize( int &width, int &height ) const
 {
-    CGRect rect = [m_macWindow frame];
-    width = rect.size.width;
-    height = rect.size.height;
+    CGRect r = [m_macWindow frame];
+    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
+        std::swap(r.size.width,r.size.height);
+    width = r.size.width;
+    height = r.size.height;
 }
 
 void wxNonOwnedWindowIPhoneImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
-    CGRect rect = [m_macWindow bounds];
-    width = rect.size.width;
-    height = rect.size.height;
-    left = rect.origin.x;
-    top = rect.origin.y;
+    CGRect r = [m_macWindow bounds];
+    if ( UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) )
+        std::swap(r.size.width,r.size.height);
+    width = r.size.width;
+    height = r.size.height;
+    left = r.origin.x;
+    top = r.origin.y;
 }
 
 bool wxNonOwnedWindowIPhoneImpl::SetShape(const wxRegion& region)
@@ -270,3 +300,91 @@ wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWind
     now->Create( parent, pos, size, style , extraStyle, name );
     return now;
 }
+
+wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
+{
+    UIWindow* toplevelwindow = now->GetWXWindow();
+    CGRect frame = [toplevelwindow bounds];
+    CGRect appframe = [[UIScreen mainScreen] applicationFrame];
+    
+    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE )
+    {
+        double offset = appframe.origin.y;
+        frame.origin.y += offset;
+        frame.size.height -= offset;
+    }
+    
+    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:frame];
+    contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    wxUIContentViewController* controller = [[wxUIContentViewController alloc] init];
+    controller.view = contentview;
+    [contentview setController:controller];
+    
+    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
+    impl->InstallEventHandler();
+    [toplevelwindow addSubview:contentview];
+    return impl;
+}
+
+//
+// obj-c impl
+//
+
+@implementation wxUIContentView
+
+- (void) setController: (UIViewController*) controller
+{
+    _controller = controller;
+}
+
+- (UIViewController*) controller
+{
+    return _controller;
+}
+
+@end
+
+@implementation wxUIContentViewController
+
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+    
+    // TODO: determine NO or YES based on min size requirements (whether it fits on the new orientation)
+    
+    return YES;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    CGRect fr = [self.view frame];
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+    
+    now->HandleResized(0);
+}
+
+-(void) dealloc
+{
+    [super dealloc];
+}
+
+- (UIView*) rotatingFooterView
+{
+    UIView* footerView = [super rotatingFooterView];
+    if ( footerView == nil )
+    {
+        wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+        wxFrame* frame = dynamic_cast<wxFrame*> (impl->GetWXPeer());
+        if ( frame && frame->GetToolBar())
+        {
+            footerView = frame->GetToolBar()->GetHandle();
+        }
+    }
+}
+
+@end
+
+
+

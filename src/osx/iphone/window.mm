@@ -56,11 +56,6 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     return wxToNSRect( sv, bounds );
 }
 
-@interface wxUIView : UIView
-{
-}
-
-@end // wxUIView
 
 @interface wxUIView(PossibleMethods)
 - (void)setTitle:(NSString *)title forState:(UIControlState)state;
@@ -74,18 +69,6 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
-@end
-
-@interface wxUIContentView : wxUIView
-{
-}
-
-@end
-
-@interface wxUIContentViewController : UIViewController
-{
-}
-
 @end
 
 //
@@ -313,33 +296,6 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
     class_addMethod(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_CGRect={_CGPoint=ff}{_CGSize=ff}}" );
 }
 
-@implementation wxUIContentView
-
-@end
-
-@implementation wxUIContentViewController
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation
-{
-    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
-    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-    
-    // TODO: determine NO or YES based on min size requirements (whether it fits on the new orientation)
-    
-    return YES;
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    CGRect fr = [self.view frame];
-    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
-    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-        
-    now->HandleResized(0);
-}
-
-@end
-
 
 IMPLEMENT_DYNAMIC_CLASS( wxWidgetIPhoneImpl , wxWidgetImpl )
 
@@ -486,7 +442,7 @@ void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to
 
 void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 {
-    // m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
 }
 
 void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
@@ -731,19 +687,32 @@ void wxWidgetIPhoneImpl::drawRect(CGRect* rect, WXWidget slf, void *WXUNUSED(_cm
 
 void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf, void *WXUNUSED(_cmd))
 {
-    CGPoint clickLocation;
+    bool inRecursion = false;
+    if ( inRecursion )
+        return;
+    
     UITouch *touch = [touches anyObject];
-    clickLocation = [touch locationInView:slf];
-    wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
-
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent( wxevent , touches, event ) ;
-    wxevent.m_x = pt.x;
-    wxevent.m_y = pt.y;
-    wxevent.SetEventObject( GetWXPeer() ) ;
-    //?wxevent.SetId( GetWXPeer()->GetId() ) ;
-
-    GetWXPeer()->HandleWindowEvent(wxevent);
+    CGPoint clickLocation;
+    if ( [touch view] != slf && IsRootControl() )
+    {
+        NSLog(@"self is %@ and touch view is %@",slf,[touch view]);
+        inRecursion = true;
+        inRecursion = false;
+    }
+    else 
+    {
+        clickLocation = [touch locationInView:slf];
+        wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
+        
+        wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+        SetupMouseEvent( wxevent , touches, event ) ;
+        wxevent.m_x = pt.x;
+        wxevent.m_y = pt.y;
+        wxevent.SetEventObject( GetWXPeer() ) ;
+        //?wxevent.SetId( GetWXPeer()->GetId() ) ;
+        
+        GetWXPeer()->HandleWindowEvent(wxevent);
+    }
 }
 
 void wxWidgetIPhoneImpl::touchUpInsideAction(void* sender, WX_UIEvent evt, WXWidget slf, void* _cmd)
@@ -768,29 +737,5 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     sv.clearsContextBeforeDrawing = NO;
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
-}
-
-wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
-{
-    UIWindow* toplevelwindow = now->GetWXWindow();
-    CGRect frame = [toplevelwindow bounds];
-    CGRect appframe = [[UIScreen mainScreen] applicationFrame];
-
-    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE )
-    {
-        double offset = appframe.origin.y;
-        frame.origin.y += offset;
-        frame.size.height -= offset;
-    }
-    
-    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:frame];
-    contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    wxUIContentViewController* controller = [[wxUIContentViewController alloc] init];
-    controller.view = contentview;
-
-    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
-    impl->InstallEventHandler();
-    [toplevelwindow addSubview:contentview];
-    return impl;
 }
 
