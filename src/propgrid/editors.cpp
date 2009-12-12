@@ -1695,6 +1695,18 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     SetupTextCtrlValue(value);
     tc->Create(ctrlParent,id,value, p, s,tcFlags);
 
+#if defined(__WXMSW__)
+    // On Windows, we need to override read-only text ctrl's background
+    // colour to white. One problem with native 'grey' background is that
+    // tc->GetBackgroundColour() doesn't seem to return correct value
+    // for it.
+    if ( tcFlags & wxTE_READONLY )
+    {
+        wxVisualAttributes vattrs = tc->GetDefaultAttributes();
+        tc->SetBackgroundColour(vattrs.colBg);
+    }
+#endif
+
     // Center the control vertically
     if ( !hasSpecialSize )
         FixPosForTextCtrl(tc, forColumn);
