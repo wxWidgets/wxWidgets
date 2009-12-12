@@ -383,7 +383,7 @@ protected:
             The column index, between 0 and the value last passed to
             SetColumnCount().
      */
-    virtual const wxHeaderColumnBase& GetColumn(unsigned int idx) const = 0;
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const = 0;
 
     /**
         Method called when the column visibility is changed by the user.
@@ -439,7 +439,7 @@ protected:
         to fit its width on header double click you need to implement this
         method using logic similar to this example:
         @code
-            class MyHeaderCtrl : public wxHeaderColumnBase
+            class MyHeaderColumn : public wxHeaderColumn
             {
             public:
                 ...
@@ -455,7 +455,7 @@ protected:
             {
             public:
             protected:
-                virtual wxHeaderColumnBase& GetColumn(unsigned int idx) const
+                virtual wxHeaderColumn& GetColumn(unsigned int idx) const
                 {
                     return m_cols[idx];
                 }
