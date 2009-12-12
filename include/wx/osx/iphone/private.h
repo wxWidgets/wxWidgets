@@ -195,6 +195,12 @@ protected :
 
     @end
 
+    @interface wxUIView : UIView
+    {
+    }
+
+    @end // wxUIView
+
     void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);
 
 #endif

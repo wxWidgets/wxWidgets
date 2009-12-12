@@ -120,10 +120,8 @@
 #define wxUSE_RADIOBOX 0
 #define wxUSE_TOGGLEBTN 0
 
-#undef wxUSE_TOOLBAR
 #undef wxUSE_HTML
 
-#define wxUSE_TOOLBAR 0
 #define wxUSE_HTML 0
 
 #undef wxUSE_RICHTEXT
@@ -291,6 +289,13 @@
 #undef wxUSE_COLOURDLG
 #define wxUSE_COLOURDLG 0
 #endif // wxUSE_COLOURDLG
+
+// iphone has a toolbar that is a regular UIView
+
+#if wxOSX_USE_NATIVE_TOOLBAR
+#undef wxOSX_USE_NATIVE_TOOLBAR
+#define wxOSX_USE_NATIVE_TOOLBAR 0
+#endif
 
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
