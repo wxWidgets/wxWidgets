@@ -392,6 +392,15 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
         Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when is about to
         end editing of a property label. You can veto this event to prevent the
         action.
+    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
+        Respond to wxEVT_PG_COL_BEGIN_DRAG event, generated when user
+        starts resizing a column - can be vetoed.
+    @event{EVT_PG_COL_DRAGGING,(id, func)}
+        Respond to wxEVT_PG_COL_DRAGGING, event, generated when a
+        column resize by user is in progress.
+    @event{EVT_PG_COL_END_DRAG(id, func)}
+        Respond to wxEVT_PG_COL_END_DRAG event, generated after column
+        resize by user has finished.
     @endEventTable
 
     @remarks
@@ -1054,6 +1063,13 @@ public:
         Returns true if you can veto the action that the event is signaling.
     */
     bool CanVeto() const;
+
+    /**
+        Returns the column index associated with this event.
+        For the column dragging events, it is the column to the left
+        of the splitter being dragged
+    */
+    unsigned int GetColumn() const;
 
     /**
         Returns highest level non-category, non-root parent of property for

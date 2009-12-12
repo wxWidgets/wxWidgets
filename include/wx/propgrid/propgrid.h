@@ -635,6 +635,15 @@ enum wxPG_KEYBOARD_ACTIONS
         Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when is about to
         end editing of a property label. You can veto this event to prevent the
         action.
+    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
+        Respond to wxEVT_PG_COL_BEGIN_DRAG event, generated when user
+        starts resizing a column - can be vetoed.
+    @event{EVT_PG_COL_DRAGGING,(id, func)}
+        Respond to wxEVT_PG_COL_DRAGGING, event, generated when a
+        column resize by user is in progress.
+    @event{EVT_PG_COL_END_DRAG(id, func)}
+        Respond to wxEVT_PG_COL_END_DRAG event, generated after column
+        resize by user has finished.
     @endEventTable
 
     @remarks
@@ -2115,6 +2124,12 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_LABEL_EDIT_BEGIN, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_LABEL_EDIT_ENDING, wxPropertyGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
+                          wxEVT_PG_COL_BEGIN_DRAG, wxPropertyGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
+                          wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
+                          wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
 
 #else
     enum {
@@ -2128,7 +2143,10 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
         wxEVT_PG_ITEM_EXPANDED,
         wxEVT_PG_DOUBLE_CLICK,
         wxEVT_PG_LABEL_EDIT_BEGIN,
-        wxEVT_PG_LABEL_EDIT_ENDING
+        wxEVT_PG_LABEL_EDIT_ENDING,
+        wxEVT_PG_COL_BEGIN_DRAG,
+        wxEVT_PG_COL_DRAGGING,
+        wxEVT_PG_COL_END_DRAG
     };
 #endif
 
@@ -2151,6 +2169,9 @@ typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 #define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
 #define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
 #define EVT_PG_LABEL_EDIT_ENDING(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_BEGIN_DRAG(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_DRAGGING(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_END_DRAG(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
 
 #define wxPropertyGridEventHandler(fn) \
     wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn )
@@ -2184,6 +2205,8 @@ public:
 
     /**
         Returns the column index associated with this event.
+        For the column dragging events, it is the column to the left
+        of the splitter being dragged
     */
     unsigned int GetColumn() const
     {

@@ -688,7 +688,8 @@ enum
     ID_SAVESTATE,
     ID_RESTORESTATE,
     ID_RUNMINIMAL,
-    ID_ENABLELABELEDITING
+    ID_ENABLELABELEDITING,
+    ID_VETOCOLDRAG
 };
 
 // -----------------------------------------------------------------------
@@ -725,6 +726,10 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
 
     EVT_PG_ITEM_COLLAPSED( PGID, FormMain::OnPropertyGridItemCollapse )
     EVT_PG_ITEM_EXPANDED( PGID, FormMain::OnPropertyGridItemExpand )
+
+    EVT_PG_COL_BEGIN_DRAG( PGID, FormMain::OnPropertyGridColBeginDrag )
+    EVT_PG_COL_DRAGGING( PGID, FormMain::OnPropertyGridColDragging )
+    EVT_PG_COL_END_DRAG( PGID, FormMain::OnPropertyGridColEndDrag )
 
     EVT_TEXT( PGID, FormMain::OnPropertyGridTextUpdate )
 
@@ -1124,6 +1129,36 @@ void FormMain::OnPropertyGridItemCollapse( wxPropertyGridEvent& )
 void FormMain::OnPropertyGridItemExpand( wxPropertyGridEvent& )
 {
     wxLogDebug(wxT("Item was Expanded"));
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnPropertyGridColBeginDrag( wxPropertyGridEvent& event )
+{
+    if ( m_itemVetoDragging->IsChecked() )
+    {
+        wxLogDebug("Splitter %i resize was vetoed", event.GetColumn());
+        event.Veto();
+    }
+    else
+    {
+        wxLogDebug("Splitter %i resize began", event.GetColumn());
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
+{
+    // For now, let's not spam the log output
+    //wxLogDebug("Splitter %i is being resized", event.GetColumn());
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
+{
+    wxLogDebug("Splitter %i resize ended", event.GetColumn());
 }
 
 // -----------------------------------------------------------------------
@@ -2248,6 +2283,9 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools2->Append(ID_REMOVEPAGE, wxT("Remove Page") );
     menuTools2->AppendSeparator();
     menuTools2->Append(ID_FITCOLUMNS, wxT("Fit Columns") );
+    m_itemVetoDragging =
+        menuTools2->AppendCheckItem(ID_VETOCOLDRAG,
+                                    "Veto Column Dragging");
     menuTools2->AppendSeparator();
     menuTools2->Append(ID_CHANGEFLAGSITEMS, wxT("Change Children of FlagsProp") );
     menuTools2->AppendSeparator();

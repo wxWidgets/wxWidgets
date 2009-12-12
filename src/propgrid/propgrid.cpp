@@ -4350,6 +4350,9 @@ bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
                                 unsigned int selFlags,
                                 unsigned int column )
 {
+    // selFlags should have wxPG_SEL_NOVALIDATE if event is not
+    // vetoable.
+
     // Send property grid event of specific type and with specific property
     wxPropertyGridEvent evt( eventType, m_eventObject->GetId() );
     evt.SetPropertyGrid(this);
@@ -4484,33 +4487,39 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                         // send event
                         DoEndLabelEdit(true, wxPG_SEL_NOVALIDATE);
 
-                        if ( m_wndEditor )
+                        // Allow application to veto dragging
+                        if ( !SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
+                                        p, NULL, 0,
+                                        (unsigned int)splitterHit) )
                         {
-                            // Changes must be committed here or the
-                            // value won't be drawn correctly
-                            if ( !CommitChangesFromEditor() )
-                                return res;
+                            if ( m_wndEditor )
+                            {
+                                // Changes must be committed here or the
+                                // value won't be drawn correctly
+                                if ( !CommitChangesFromEditor() )
+                                    return res;
 
-                            m_wndEditor->Show ( false );
+                                m_wndEditor->Show ( false );
+                            }
+
+                            if ( !(m_iFlags & wxPG_FL_MOUSE_CAPTURED) )
+                            {
+                                CaptureMouse();
+                                m_iFlags |= wxPG_FL_MOUSE_CAPTURED;
+                            }
+
+                            m_dragStatus = 1;
+                            m_draggedSplitter = splitterHit;
+                            m_dragOffset = splitterHitOffset;
+
+                        #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
+                            // Fixes button disappearance bug
+                            if ( m_wndEditor2 )
+                                m_wndEditor2->Show ( false );
+                        #endif
+
+                            m_startingSplitterX = x - splitterHitOffset;
                         }
-
-                        if ( !(m_iFlags & wxPG_FL_MOUSE_CAPTURED) )
-                        {
-                            CaptureMouse();
-                            m_iFlags |= wxPG_FL_MOUSE_CAPTURED;
-                        }
-
-                        m_dragStatus = 1;
-                        m_draggedSplitter = splitterHit;
-                        m_dragOffset = splitterHitOffset;
-
-                    #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
-                        // Fixes button disappearance bug
-                        if ( m_wndEditor2 )
-                            m_wndEditor2->Show ( false );
-                    #endif
-
-                        m_startingSplitterX = x - splitterHitOffset;
                     }
                 }
             }
@@ -4652,6 +4661,12 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
 
                 Update();
                 Refresh();
+
+                SendEvent(wxEVT_PG_COL_DRAGGING,
+                          m_propHover,
+                          NULL,
+                          wxPG_SEL_NOVALIDATE,
+                          (unsigned int)m_draggedSplitter);
             }
 
             m_dragStatus = 2;
@@ -4868,6 +4883,12 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
         // DO NOT ENABLE FOLLOWING LINE!
         // (it is only here as a reminder to not to do it)
         //splitterX = x;
+
+        SendEvent(wxEVT_PG_COL_END_DRAG,
+                  m_propHover,
+                  NULL,
+                  wxPG_SEL_NOVALIDATE,
+                  (unsigned int)m_draggedSplitter);
 
         // Disable splitter auto-centering
         state->m_dontCenterSplitter = true;
@@ -5787,6 +5808,9 @@ wxDEFINE_EVENT( wxEVT_PG_ITEM_COLLAPSED, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_DOUBLE_CLICK, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_LABEL_EDIT_BEGIN, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_LABEL_EDIT_ENDING, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_COL_BEGIN_DRAG, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
 
 // -----------------------------------------------------------------------
 

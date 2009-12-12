@@ -145,6 +145,7 @@ public:
     wxMenuItem*     m_itemCatColours;
     wxMenuItem*     m_itemFreeze;
     wxMenuItem*     m_itemEnable;
+    wxMenuItem*     m_itemVetoDragging;
 
     wxVariant       m_storedValues;
 
@@ -233,6 +234,9 @@ public:
     void OnPropertyGridItemExpand( wxPropertyGridEvent& event );
     void OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event );
     void OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event );
+    void OnPropertyGridColBeginDrag( wxPropertyGridEvent& event );
+    void OnPropertyGridColDragging( wxPropertyGridEvent& event );
+    void OnPropertyGridColEndDrag( wxPropertyGridEvent& event );
 
     void OnAbout( wxCommandEvent& event );
 
