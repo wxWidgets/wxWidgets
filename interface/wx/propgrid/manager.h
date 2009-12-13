@@ -128,8 +128,8 @@ public:
     @class wxPropertyGridManager
 
     wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
-    which can optionally have toolbar for mode and page selection, and a help text
-    box.
+    which can optionally have toolbar for mode and page selection, a help text
+    box, and a header.
 
     wxPropertyGridManager inherits from wxPropertyGridInterface, and as such
     it has most property manipulation functions. However, only some of them affect
@@ -183,6 +183,9 @@ public:
         page->Append( "Text",wxPG_LABEL,"(no text)" );
 
         page->Append( new wxFontProperty("Font",wxPG_LABEL) );
+
+        // Display a header above the grid
+        pgMan->ShowHeader();
     @endcode
 
     @section propgridmanager_window_styles_ Window Styles
@@ -427,8 +430,21 @@ public:
 
     /**
         Sets number of columns on given page (default is current page).
+
+        @remarks If you use header, then you should always use this
+                 member function to set the column count, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetColumnCount( int colCount, int page = -1 );
+
+    /**
+        Sets a column title. Default title for column 0 is "Property",
+        and "Value" for column 1.
+
+        @remarks If header is not shown yet, then calling this
+                 member function will make it visible.
+    */
+    void SetColumnTitle( int idx, const wxString& title );
 
     /**
         Sets label and text in description box.
@@ -451,21 +467,40 @@ public:
     */
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
-    /** Sets splitter position on individual page. */
+    /**
+        Sets splitter position on individual page.
+
+        @remarks If you use header, then you should always use this
+                 member function to set the splitter position, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
+    */
     void SetPageSplitterPosition( int page, int pos, int column = 0 );
 
     /**
         Sets splitter position for all pages.
 
-        @remarks Splitter position cannot exceed grid size, and therefore setting
-                it during form creation may fail as initial grid size is often
-                smaller than desired splitter position, especially when sizers
-                are being used.
+        @remarks Splitter position cannot exceed grid size, and therefore
+                 setting it during form creation may fail as initial grid
+                 size is often smaller than desired splitter position,
+                 especially when sizers are being used.
+
+                 If you use header, then you should always use this
+                 member function to set the splitter position, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetSplitterPosition( int pos, int column = 0 );
 
     /** Synonyme for SelectPage(name). */
     void SetStringSelection( const wxChar* name );
+
+    /**
+        Show or hide the property grid header control. It is hidden
+        by the default.
+
+        @remarks Grid may look better if you use wxPG_NO_INTERNAL_BORDER
+                 window style when showing a header.
+    */
+    void ShowHeader(bool show = true);
 
 protected:
 

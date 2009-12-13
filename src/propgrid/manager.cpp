@@ -209,17 +209,196 @@ void wxPropertyGridPage::SetSplitterPosition( int splitterPos, int col )
 
 void wxPropertyGridPage::DoSetSplitterPosition( int pos,
                                                 int splitterColumn,
-                                                bool allPages,
-                                                bool fromAutoCenter )
+                                                int flags )
 {
-    if ( allPages && m_manager->GetPageCount() )
+    if ( (flags & wxPG_SPLITTER_ALL_PAGES) && m_manager->GetPageCount() )
         m_manager->SetSplitterPosition( pos, splitterColumn );
     else
         wxPropertyGridPageState::DoSetSplitterPosition( pos,
                                                         splitterColumn,
-                                                        allPages,
-                                                        fromAutoCenter );
+                                                        flags );
 }
+
+// -----------------------------------------------------------------------
+// wxPGHeaderCtrl
+// -----------------------------------------------------------------------
+
+#if wxUSE_HEADERCTRL
+
+class wxPGHeaderCtrl : public wxHeaderCtrl
+{
+public:
+    wxPGHeaderCtrl(wxPropertyGridManager* manager) :
+        wxHeaderCtrl()
+    {
+        m_manager = manager;
+        EnsureColumnCount(2);
+
+        // Seed titles with defaults
+        m_columns[0]->SetTitle(_("Property"));
+        m_columns[1]->SetTitle(_("Value"));
+    }
+
+    virtual ~wxPGHeaderCtrl()
+    {
+        for (unsigned int i=0; i<m_columns.size(); i++ )
+            delete m_columns[i];
+    }
+
+    int DetermineColumnWidth(unsigned int idx, int* pMinWidth) const
+    {
+        const wxPropertyGridPage* page = m_page;
+        int colWidth = page->GetColumnWidth(idx);
+        int colMinWidth = page->GetColumnMinWidth(idx);
+        if ( idx == 0 )
+        {
+            wxPropertyGrid* pg = m_manager->GetGrid();
+            int margin = pg->GetMarginWidth();
+
+            // Compensate for the internal border
+            margin += (pg->GetSize().x - pg->GetClientSize().x) / 2;
+
+            colWidth += margin;
+            colMinWidth += margin;
+        }
+        *pMinWidth = colMinWidth;
+        return colWidth;
+    }
+
+    void OnPageChanged(const wxPropertyGridPage* page)
+    {
+        m_page = page;
+        OnPageUpdated();
+    }
+
+    void OnPageUpdated()
+    {
+        // Get column info from the page
+        const wxPropertyGridPage* page = m_page;
+        unsigned int colCount = page->GetColumnCount();
+        EnsureColumnCount(colCount);
+
+        for ( unsigned int i=0; i<colCount; i++ )
+        {
+            wxHeaderColumnSimple* colInfo = m_columns[i];
+            int colMinWidth = 0;
+            int colWidth = DetermineColumnWidth(i, &colMinWidth);
+            colInfo->SetWidth(colWidth);
+            colInfo->SetMinWidth(colMinWidth);
+        }
+
+        SetColumnCount(colCount);
+    }
+
+    void OnColumWidthsChanged()
+    {
+        const wxPropertyGridPage* page = m_page;
+        unsigned int colCount = page->GetColumnCount();
+
+        for ( unsigned int i=0; i<colCount; i++ )
+        {
+            wxHeaderColumnSimple* colInfo = m_columns[i];
+            int colMinWidth = 0;
+            int colWidth = DetermineColumnWidth(i, &colMinWidth);
+            colInfo->SetWidth(colWidth);
+            colInfo->SetMinWidth(colMinWidth);
+            UpdateColumn(i);
+        }
+    }
+
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
+    {
+        return *m_columns[idx];
+    }
+
+    void SetColumnTitle(unsigned int idx, const wxString& title)
+    {
+        EnsureColumnCount(idx+1);
+        m_columns[idx]->SetTitle(title);
+    }
+
+private:
+    void EnsureColumnCount(unsigned int count)
+    {
+        while ( m_columns.size() < count )
+        {
+            wxHeaderColumnSimple* colInfo = new wxHeaderColumnSimple("");
+            m_columns.push_back(colInfo);
+        }
+    }
+
+    void OnSetColumnWidth(int col, int colWidth)
+    {
+        wxPropertyGrid* pg = m_manager->GetGrid();
+
+        // Compensate for the internal border
+        int x = -((pg->GetSize().x - pg->GetClientSize().x) / 2);
+
+        for ( int i=0; i<col; i++ )
+            x += m_columns[i]->GetWidth();
+
+        x += colWidth;
+
+        pg->DoSetSplitterPosition(x, col,
+                                  wxPG_SPLITTER_REFRESH |
+                                  wxPG_SPLITTER_FROM_EVENT);
+    }
+
+    virtual bool ProcessEvent( wxEvent& event )
+    {
+        if ( event.IsKindOf(CLASSINFO(wxHeaderCtrlEvent)) )
+        {
+            wxHeaderCtrlEvent& hcEvent =
+                static_cast<wxHeaderCtrlEvent&>(event);
+
+            wxPropertyGrid* pg = m_manager->GetGrid();
+            int col = hcEvent.GetColumn();
+            int evtType = event.GetEventType();
+
+            if ( evtType == wxEVT_COMMAND_HEADER_RESIZING )
+            {
+                int colWidth = hcEvent.GetWidth();
+
+                OnSetColumnWidth(col, colWidth);
+
+                pg->SendEvent(wxEVT_PG_COL_DRAGGING,
+                              NULL, NULL, 0,
+                              (unsigned int)col);
+
+                return true;
+            }
+            else if ( evtType == wxEVT_COMMAND_HEADER_BEGIN_RESIZE )
+            {
+                // Never allow column resize if layout is static
+                if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
+                    hcEvent.Veto();
+                // Allow application to veto dragging
+                else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
+                                        NULL, NULL, 0,
+                                        (unsigned int)col) )
+                    hcEvent.Veto();
+
+                return true;
+            }
+            else if ( evtType == wxEVT_COMMAND_HEADER_END_RESIZE )
+            {
+                pg->SendEvent(wxEVT_PG_COL_END_DRAG,
+                              NULL, NULL, 0,
+                              (unsigned int)col);
+
+                return true;
+            }
+        }
+
+        return wxHeaderCtrl::ProcessEvent(event);
+    }
+
+    wxPropertyGridManager*          m_manager;
+    const wxPropertyGridPage*       m_page;
+    wxVector<wxHeaderColumnSimple*> m_columns;
+};
+
+#endif // wxUSE_HEADERCTRL
 
 // -----------------------------------------------------------------------
 // wxPropertyGridManager
@@ -235,7 +414,7 @@ IMPLEMENT_CLASS(wxPropertyGridManager, wxPanel)
 #define ID_ADVTOOLBAR_OFFSET        1
 #define ID_ADVHELPCAPTION_OFFSET    2
 #define ID_ADVHELPCONTENT_OFFSET    3
-//#define ID_ADVBUTTON_OFFSET         4
+#define ID_ADVHEADERCTRL_OFFSET     4
 #define ID_ADVTBITEMSBASE_OFFSET    5   // Must be last.
 
 // -----------------------------------------------------------------------
@@ -309,6 +488,10 @@ void wxPropertyGridManager::Init1()
 
 #if wxUSE_TOOLBAR
     m_pToolbar = NULL;
+#endif
+#if wxUSE_HEADERCTRL
+    m_pHeaderCtrl = NULL;
+    m_showHeader = false;
 #endif
     m_pTxtHelpCaption = NULL;
     m_pTxtHelpContent = NULL;
@@ -413,9 +596,13 @@ void wxPropertyGridManager::Init2( int style )
     // Connect to property grid onselect event.
     // NB: Even if wxID_ANY is used, this doesn't connect properly in wxPython
     //     (see wxPropertyGridManager::ProcessEvent).
-    Connect(m_pPropGrid->GetId()/*wxID_ANY*/,
-            wxEVT_PG_SELECTED,
-            wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect) );
+    Connect(m_pPropGrid->GetId(),
+     wxEVT_PG_SELECTED,
+     wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
+
+    Connect(m_pPropGrid->GetId(),
+            wxEVT_PG_COL_DRAGGING,
+            wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
 
     // Connect to toolbar button events.
     Connect(baseId+ID_ADVTBITEMSBASE_OFFSET,baseId+ID_ADVTBITEMSBASE_OFFSET+50,
@@ -616,6 +803,11 @@ bool wxPropertyGridManager::DoSelectPage( int index )
     }
 #endif
 
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnPageChanged(nextPage);
+#endif
+
     return true;
 }
 
@@ -733,6 +925,11 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
 
     GetPageState(page)->SetColumnCount( colCount );
     GetGrid()->Refresh();
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnPageUpdated();
+#endif
 }
 // -----------------------------------------------------------------------
 
@@ -896,6 +1093,31 @@ bool wxPropertyGridManager::IsPageModified( size_t index ) const
         return true;
     return false;
 }
+
+// -----------------------------------------------------------------------
+
+#if wxUSE_HEADERCTRL
+void wxPropertyGridManager::ShowHeader(bool show)
+{
+    if ( show != m_showHeader)
+    {
+        m_showHeader = show;
+        RecreateControls();
+    }
+}
+#endif
+
+// -----------------------------------------------------------------------
+
+#if wxUSE_HEADERCTRL
+void wxPropertyGridManager::SetColumnTitle( int idx, const wxString& title )
+{
+    if ( !m_pHeaderCtrl )
+        ShowHeader();
+
+    m_pHeaderCtrl->SetColumnTitle(idx, title);
+}
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -1110,6 +1332,15 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     }
 #endif
 
+    // Header comes after the tool bar
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+    {
+        m_pHeaderCtrl->SetSize(0, propgridY, width, -1);
+        propgridY += m_pHeaderCtrl->GetSize().y;
+    }
+#endif
+
     // Help box.
     if ( m_pTxtHelpCaption )
     {
@@ -1308,6 +1539,31 @@ void wxPropertyGridManager::RecreateControls()
         if ( m_pToolbar )
             m_pToolbar->Destroy();
         m_pToolbar = NULL;
+    }
+#endif
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+    {
+        wxPGHeaderCtrl* hc;
+
+        if ( !m_pHeaderCtrl )
+        {
+            hc = new wxPGHeaderCtrl(this);
+            hc->Create(this, baseId+ID_ADVHEADERCTRL_OFFSET);
+            m_pHeaderCtrl = hc;
+        }
+        else
+        {
+            m_pHeaderCtrl->Show();
+        }
+
+        m_pHeaderCtrl->OnPageChanged(GetCurrentPage());
+    }
+    else
+    {
+        if ( m_pHeaderCtrl )
+            m_pHeaderCtrl->Hide();
     }
 #endif
 
@@ -1557,6 +1813,11 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
         if ( highest > 0 )
             m_pPropGrid->SetSplitterPosition( highest );
     }
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1569,6 +1830,19 @@ void wxPropertyGridManager::OnPropertyGridSelect( wxPropertyGridEvent& event )
 
     SetDescribedProperty(event.GetProperty());
     event.Skip();
+}
+
+// -----------------------------------------------------------------------
+
+void
+wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
+{
+#if wxUSE_HEADERCTRL
+    if ( !m_showHeader )
+        return;
+
+    m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1737,9 +2011,28 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     for ( i=0; i<GetPageCount(); i++ )
     {
         wxPropertyGridPage* page = GetPage(i);
-        page->DoSetSplitterPosition( pos, splitterColumn, false );
-        page->m_isSplitterPreSet = true;
+        page->DoSetSplitterPosition( pos, splitterColumn,
+                                     wxPG_SPLITTER_REFRESH );
     }
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGridManager::SetPageSplitterPosition( int page,
+                                                     int pos,
+                                                     int column )
+{
+    GetPage(page)->DoSetSplitterPosition( pos, column );
+
+#if wxUSE_HEADERCTRL
+    if ( m_showHeader )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------

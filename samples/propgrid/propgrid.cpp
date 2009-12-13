@@ -689,7 +689,8 @@ enum
     ID_RESTORESTATE,
     ID_RUNMINIMAL,
     ID_ENABLELABELEDITING,
-    ID_VETOCOLDRAG
+    ID_VETOCOLDRAG,
+    ID_SHOWHEADER
 };
 
 // -----------------------------------------------------------------------
@@ -758,6 +759,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_CLEARMODIF, FormMain::OnClearModifyStatusClick )
     EVT_MENU( ID_FREEZE, FormMain::OnFreezeClick )
     EVT_MENU( ID_ENABLELABELEDITING, FormMain::OnEnableLabelEditing )
+    EVT_MENU( ID_SHOWHEADER, FormMain::OnShowHeader )
     EVT_MENU( ID_DUMPLIST, FormMain::OnDumpList )
 
     EVT_MENU( ID_COLOURSCHEME1, FormMain::OnColourScheme )
@@ -2300,6 +2302,9 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         wxT("Select window style flags used by the grid."));
     menuTry->Append(ID_ENABLELABELEDITING, "Enable label editing",
         "This calls wxPropertyGrid::MakeColumnEditable(0)");
+    menuTry->AppendCheckItem(ID_SHOWHEADER,
+        "Enable header",
+        "This calls wxPropertyGridManager::ShowHeader()");
     menuTry->AppendSeparator();
     menuTry->AppendRadioItem( ID_COLOURSCHEME1, wxT("Standard Colour Scheme") );
     menuTry->AppendRadioItem( ID_COLOURSCHEME2, wxT("White Colour Scheme") );
@@ -2854,6 +2859,14 @@ void FormMain::OnFreezeClick( wxCommandEvent& event )
 void FormMain::OnEnableLabelEditing( wxCommandEvent& WXUNUSED(event) )
 {
     m_propGrid->MakeColumnEditable(0);
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnShowHeader( wxCommandEvent& event )
+{
+    m_pPropGridManager->ShowHeader(event.IsChecked());
+    m_pPropGridManager->SetColumnTitle(2, _("Units"));
 }
 
 // -----------------------------------------------------------------------

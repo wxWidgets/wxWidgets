@@ -2677,24 +2677,29 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
 
 // Call to SetSplitterPosition will always disable splitter auto-centering
 // if parent window is shown.
-void wxPropertyGrid::DoSetSplitterPosition_( int newxpos, bool refresh,
-                                             int splitterIndex,
-                                             bool allPages )
+void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
+                                            int splitterIndex,
+                                            int flags )
 {
     if ( ( newxpos < wxPG_DRAG_MARGIN ) )
         return;
 
     wxPropertyGridPageState* state = m_pState;
 
-    state->DoSetSplitterPosition( newxpos, splitterIndex, allPages );
+    if ( flags & wxPG_SPLITTER_FROM_EVENT )
+        state->m_dontCenterSplitter = true;
 
-    if ( refresh )
+    state->DoSetSplitterPosition(newxpos, splitterIndex, flags);
+
+    if ( flags & wxPG_SPLITTER_REFRESH )
     {
         if ( GetSelection() )
             CorrectEditorWidgetSizeX();
 
         Refresh();
     }
+
+    return;
 }
 
 // -----------------------------------------------------------------------
@@ -4476,7 +4481,16 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     if ( event.GetEventType() == wxEVT_LEFT_DCLICK )
                     {
                         // Double-clicking the splitter causes auto-centering
-                        CenterSplitter( true );
+                        if ( m_pState->GetColumnCount() <= 2 )
+                        {
+                            CenterSplitter( true );
+
+                            SendEvent(wxEVT_PG_COL_DRAGGING,
+                                      m_propHover,
+                                      NULL,
+                                      wxPG_SEL_NOVALIDATE,
+                                      (unsigned int)m_draggedSplitter);
+                        }
                     }
                     else if ( m_dragStatus == 0 )
                     {
@@ -4650,17 +4664,10 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             if ( newSplitterX != splitterX )
             {
                 // Move everything
-                state->m_dontCenterSplitter = true;
-                state->DoSetSplitterPosition(newSplitterX,
-                                             m_draggedSplitter,
-                                             false);
-                state->m_fSplitterX = (float) newSplitterX;
-
-                if ( GetSelection() )
-                    CorrectEditorWidgetSizeX();
-
-                Update();
-                Refresh();
+                DoSetSplitterPosition(newSplitterX,
+                                      m_draggedSplitter,
+                                      wxPG_SPLITTER_REFRESH |
+                                      wxPG_SPLITTER_FROM_EVENT);
 
                 SendEvent(wxEVT_PG_COL_DRAGGING,
                           m_propHover,

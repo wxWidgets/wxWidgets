@@ -190,6 +190,7 @@ public:
     void OnClearModifyStatusClick( wxCommandEvent& event );
     void OnFreezeClick( wxCommandEvent& event );
     void OnEnableLabelEditing( wxCommandEvent& event );
+    void OnShowHeader( wxCommandEvent& event );
     void OnDumpList( wxCommandEvent& event );
     void OnCatColours( wxCommandEvent& event );
     void OnSetColumns( wxCommandEvent& event );

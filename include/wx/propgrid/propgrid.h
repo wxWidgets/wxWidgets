@@ -192,8 +192,8 @@ wxPG_TOOLBAR                        = 0x00001000,
 */
 wxPG_DESCRIPTION                    = 0x00002000,
 
-/** wxPropertyGridManager only: don't show an internal border around
-    the property grid.
+/** wxPropertyGridManager only: don't show an internal border around the
+    property grid. Recommended if you use a header.
 */
 wxPG_NO_INTERNAL_BORDER             = 0x00004000
 };
@@ -513,6 +513,19 @@ enum wxPG_KEYBOARD_ACTIONS
 
 // -----------------------------------------------------------------------
 
+// DoSetSplitterPosition() flags
+
+enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
+{
+    wxPG_SPLITTER_REFRESH           = 0x0001,
+    wxPG_SPLITTER_ALL_PAGES         = 0x0002,
+    wxPG_SPLITTER_FROM_EVENT        = 0x0004,
+    wxPG_SPLITTER_FROM_AUTO_CENTER  = 0x0008
+};
+
+
+// -----------------------------------------------------------------------
+
 #ifndef SWIG
 
 // Internal flags
@@ -640,7 +653,9 @@ enum wxPG_KEYBOARD_ACTIONS
         starts resizing a column - can be vetoed.
     @event{EVT_PG_COL_DRAGGING,(id, func)}
         Respond to wxEVT_PG_COL_DRAGGING, event, generated when a
-        column resize by user is in progress.
+        column resize by user is in progress. This event is also generated
+        when user double-clicks the splitter in order to recenter
+        it.
     @event{EVT_PG_COL_END_DRAG(id, func)}
         Respond to wxEVT_PG_COL_END_DRAG event, generated after column
         resize by user has finished.
@@ -662,6 +677,7 @@ class WXDLLIMPEXP_PROPGRID
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridManager;
+    friend class wxPGHeaderCtrl;
 
     DECLARE_DYNAMIC_CLASS(wxPropertyGrid)
 public:
@@ -893,6 +909,9 @@ public:
 
     /** Returns background colour of margin. */
     wxColour GetMarginColour() const { return m_colMargin; }
+
+    /** Returns margin width. */
+    int GetMarginWidth() const { return m_marginWidth; }
 
     /**
         Returns most up-to-date value of selected property. This will return
@@ -1176,10 +1195,9 @@ public:
         during form creation may fail as initial grid size is often smaller
         than desired splitter position, especially when sizers are being used.
     */
-    void SetSplitterPosition( int newxpos, int col = 0 )
+    void SetSplitterPosition( int newXPos, int col = 0 )
     {
-        DoSetSplitterPosition_(newxpos, true, col);
-        m_pState->m_isSplitterPreSet = true;
+        DoSetSplitterPosition(newXPos, col, wxPG_SPLITTER_REFRESH);
     }
 
     /**
@@ -1994,6 +2012,10 @@ protected:
     void DoSetSelection( const wxArrayPGProperty& newSelection,
                          int selFlags = 0 );
 
+    void DoSetSplitterPosition( int newxpos,
+                                int splitterIndex = 0,
+                                int flags = wxPG_SPLITTER_REFRESH );
+
     bool DoAddToSelection( wxPGProperty* prop,
                            int selFlags = 0 );
 
@@ -2006,11 +2028,6 @@ protected:
     void OnLabelEditorKeyPress( wxKeyEvent& event );
 
     wxPGProperty* DoGetItemAtY( int y ) const;
-
-    void DoSetSplitterPosition_( int newxpos,
-                                 bool refresh = true,
-                                 int splitterIndex = 0,
-                                 bool allPages = false );
 
     void DestroyEditorWnd( wxWindow* wnd );
     void FreeEditors();
@@ -2039,7 +2056,11 @@ protected:
 
     void PrepareAfterItemsAdded();
 
-    // Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
+    /**
+        Send event from the property grid.
+
+        Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
+    */
     bool SendEvent( int eventType, wxPGProperty* p,
                     wxVariant* pValue = NULL,
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,

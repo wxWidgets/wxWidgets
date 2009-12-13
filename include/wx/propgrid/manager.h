@@ -23,6 +23,7 @@
 #include "wx/button.h"
 #include "wx/textctrl.h"
 #include "wx/dialog.h"
+#include <wx/headerctrl.h>
 
 // -----------------------------------------------------------------------
 
@@ -161,8 +162,7 @@ protected:
     */
     virtual void DoSetSplitterPosition( int pos,
                                         int splitterColumn = 0,
-                                        bool allPages = false,
-                                        bool fromAutoCenter = false );
+                                        int flags = wxPG_SPLITTER_REFRESH );
 
     /** Page label (may be referred as name in some parts of documentation).
         Can be set in constructor, or passed in
@@ -187,6 +187,11 @@ private:
 };
 
 // -----------------------------------------------------------------------
+
+#if wxUSE_HEADERCTRL
+class wxPGHeaderCtrl;
+#endif
+
 
 /** @class wxPropertyGridManager
 
@@ -534,7 +539,21 @@ public:
         return p->GetParentState()->DoSelectProperty(p, focus);
     }
 
-    /** Sets number of columns on given page (default is current page).
+    /**
+        Sets a column title. Default title for column 0 is "Property",
+        and "Value" for column 1.
+
+        @remarks If header is not shown yet, then calling this
+                 member function will make it visible.
+    */
+    void SetColumnTitle( int idx, const wxString& title );
+
+    /**
+        Sets number of columns on given page (default is current page).
+
+        @remarks If you use header, then you should always use this
+                 member function to set the column count, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetColumnCount( int colCount, int page = -1 );
 
@@ -555,19 +574,39 @@ public:
     */
     void SetSplitterLeft( bool subProps = false, bool allPages = true );
 
-    /** Sets splitter position on individual page. */
-    void SetPageSplitterPosition( int page, int pos, int column = 0 )
-    {
-        GetPage(page)->DoSetSplitterPosition( pos, column );
-    }
+    /**
+        Sets splitter position on individual page.
 
-    /** Sets splitter position for all pages.
-        @remarks
-        Splitter position cannot exceed grid size, and therefore setting it
-        during form creation may fail as initial grid size is often smaller
-        than desired splitter position, especially when sizers are being used.
+        @remarks If you use header, then you should always use this
+                 member function to set the splitter position, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
+    */
+    void SetPageSplitterPosition( int page, int pos, int column = 0 );
+
+    /**
+        Sets splitter position for all pages.
+
+        @remarks Splitter position cannot exceed grid size, and therefore
+                 setting it during form creation may fail as initial grid
+                 size is often smaller than desired splitter position,
+                 especially when sizers are being used.
+
+                 If you use header, then you should always use this
+                 member function to set the splitter position, instead of
+                 ones present in wxPropertyGrid or wxPropertyGridPage.
     */
     void SetSplitterPosition( int pos, int column = 0 );
+
+#if wxUSE_HEADERCTRL
+    /**
+        Show or hide the property grid header control. It is hidden
+        by the default.
+
+        @remarks Grid may look better if you use wxPG_NO_INTERNAL_BORDER
+                 window style when showing a header.
+    */
+    void ShowHeader(bool show = true);
+#endif
 
 protected:
 
@@ -600,12 +639,10 @@ public:
     virtual void SetWindowStyleFlag ( long style );
     virtual bool Reparent( wxWindowBase *newParent );
 
+#ifndef SWIG
+
 protected:
     virtual wxSize DoGetBestSize() const;
-
-public:
-
-#ifndef SWIG
 
     //
     // Event handlers
@@ -620,8 +657,8 @@ public:
     void OnToolbarClick( wxCommandEvent &event );
     void OnResize( wxSizeEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
+    void OnPGColDrag( wxPropertyGridEvent& event );
 
-protected:
 
     wxPropertyGrid* m_pPropGrid;
 
@@ -630,10 +667,15 @@ protected:
 #if wxUSE_TOOLBAR
     wxToolBar*      m_pToolbar;
 #endif
+#if wxUSE_HEADERCTRL
+    wxPGHeaderCtrl* m_pHeaderCtrl;
+#endif
     wxStaticText*   m_pTxtHelpCaption;
     wxStaticText*   m_pTxtHelpContent;
 
     wxPropertyGridPage*     m_emptyPage;
+
+    wxArrayString   m_columnLabels;
 
     long            m_iFlags;
 
@@ -663,6 +705,8 @@ protected:
     unsigned char   m_dragStatus;
 
     unsigned char   m_onSplitter;
+
+    bool            m_showHeader;
 
     virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const;
 

@@ -842,8 +842,7 @@ void wxPropertyGridPageState::PropagateColSizeDec( int column,
 
 void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
                                                      int splitterColumn,
-                                                     bool WXUNUSED(allPages),
-                                                     bool fromAutoCenter )
+                                                     int flags )
 {
     wxPropertyGrid* pg = GetGrid();
 
@@ -878,7 +877,8 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
     if ( splitterColumn == 0 )
         m_fSplitterX = (double) newXPos;
 
-    if ( !fromAutoCenter )
+    if ( !(flags & wxPG_SPLITTER_FROM_AUTO_CENTER) &&
+         !(flags & wxPG_SPLITTER_FROM_EVENT) )
     {
         // Don't allow initial splitter auto-positioning after this.
         m_isSplitterPreSet = true;
@@ -1083,7 +1083,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             }
         }
 
-        DoSetSplitterPosition((int)splitterX, 0, false, true);
+        DoSetSplitterPosition((int)splitterX, 0,
+                              wxPG_SPLITTER_FROM_AUTO_CENTER);
 
         m_fSplitterX = splitterX; // needed to retain accuracy
     }

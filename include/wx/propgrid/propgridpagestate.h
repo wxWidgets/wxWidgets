@@ -463,8 +463,7 @@ public:
     */
     virtual void DoSetSplitterPosition( int pos,
                                         int splitterColumn = 0,
-                                        bool allPages = false,
-                                        bool fromAutoCenter = false );
+                                        int flags = 0 );
 
     bool EnableCategories( bool enable );
 
