@@ -2765,7 +2765,7 @@ if test "$USE_WIN32" = 1 ; then
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
     case "${host}" in
-	x86_64-*-mingw32* )
+        x86_64-*-mingw32* )
             dnl --- For mingw-w64 lctl3d32's name has changed
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lwctl3d32 -ladvapi32 -lwsock32 -lgdi32"
 
@@ -7819,19 +7819,7 @@ AC_SUBST(EXTRALIBS_HILDON)
 AC_SUBST(UNICODE)
 AC_SUBST(DEBUG_INFO)
 AC_SUBST(DEBUG_FLAG)
-TOOLKIT_LOWERCASE=xxx
-if test "$TOOLKIT" = "MAC"; then
-    TOOLKIT_LOWERCASE=osx_carbon
-fi
-if test "$TOOLKIT" = "OSX_CARBON"; then
-    TOOLKIT_LOWERCASE=osx_carbon
-fi
-if test "$TOOLKIT" = "OSX_COCOA"; then
-    TOOLKIT_LOWERCASE=osx_cocoa
-fi
-if test "$TOOLKIT_LOWERCASE" = "xxx"; then
-    TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
-fi
+TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr '[[A-Z]]' '[[a-z]]'`
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(DYLIB_RPATH_INSTALL)
