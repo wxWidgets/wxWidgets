@@ -1919,9 +1919,11 @@ Optional Packages:
   --with-motif            use Motif/Lesstif
   --with-osx_carbon       use Mac OS X (Carbon)
   --with-osx_cocoa        use Mac OS X (Cocoa)
+  --with-osx_iphone       use iPhone OS X port
   --with-osx              use Mac OS X (default port, currently Carbon)
   --with-carbon           same as --with-osx_carbon
   --with-cocoa            same as --with-osx_cocoa
+  --with-iphone           same as --with-osx_iphone
   --with-mac              same as --with-osx
   --with-old_cocoa        use old, deprecated, Cocoa port
   --with-wine             use Wine
@@ -2608,12 +2610,13 @@ USE_ALPHA=
 
 NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB"
 
 DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
+DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_wxUSE_MGL=0
 DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_wxUSE_MOTIF=0
@@ -2626,6 +2629,7 @@ DEFAULT_DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
+DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=0
 DEFAULT_DEFAULT_wxUSE_MGL=0
 DEFAULT_DEFAULT_wxUSE_MICROWIN=0
 DEFAULT_DEFAULT_wxUSE_MOTIF=0
@@ -2888,6 +2892,20 @@ _ACEOF
     export PATH="$ac_TEMP_PATH"
     unset ac_TEMP_PATH
     DEFAULT_STD_FLAG=no
+  ;;
+
+  arm-apple-darwin*)
+        USE_BSD=1
+    USE_DARWIN=1
+    cat >>confdefs.h <<\_ACEOF
+#define __BSD__ 1
+_ACEOF
+
+    cat >>confdefs.h <<\_ACEOF
+#define __DARWIN__ 1
+_ACEOF
+
+    DEFAULT_DEFAULT_wxUSE_OSX_IPHONE=1
   ;;
 
   *-*-darwin* )
@@ -3327,6 +3345,12 @@ if test "${with_osx_cocoa+set}" = set; then
 fi
 
 
+# Check whether --with-osx_iphone was given.
+if test "${with_osx_iphone+set}" = set; then
+  withval=$with_osx_iphone; wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
+fi
+
+
 # Check whether --with-osx was given.
 if test "${with_osx+set}" = set; then
   withval=$with_osx; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
@@ -3342,6 +3366,12 @@ fi
 # Check whether --with-cocoa was given.
 if test "${with_cocoa+set}" = set; then
   withval=$with_cocoa; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+fi
+
+
+# Check whether --with-iphone was given.
+if test "${with_iphone+set}" = set; then
+  withval=$with_iphone; wxUSE_OSX_IPHONE="$withval" CACHE_OSX_IPHONE=1 TOOLKIT_GIVEN=1
 fi
 
 
@@ -3540,7 +3570,7 @@ echo "$as_me: error: BeOS GUI is not supported yet, use --disable-gui" >&2;}
     fi
 
             NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
-                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
+                  + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
         case "${host}" in
@@ -3589,7 +3619,9 @@ echo "${ECHO_T}base only" >&6; }
 fi
 
 wxUSE_MAC=0
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1; then
+if test "$wxUSE_OSX_CARBON" = 1 \
+       -o "$wxUSE_OSX_COCOA" = 1 \
+       -o "$wxUSE_OSX_IPHONE" = 1; then
     wxUSE_MAC=1
 fi
 
@@ -33019,6 +33051,10 @@ echo "${ECHO_T}none" >&6; }
         GUIDIST=OSX_COCOA_DIST
 
                 TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
+    fi
+
+    if test "$wxUSE_OSX_IPHONE" = 1; then
+        TOOLKIT=OSX_IPHONE
     fi
 
     if test "$wxUSE_OLD_COCOA" = 1; then
