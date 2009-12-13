@@ -1918,8 +1918,11 @@ Optional Packages:
   --with-motif            use Motif/Lesstif
   --with-osx_carbon       use Mac OS X (Carbon)
   --with-osx_cocoa        use Mac OS X (Cocoa)
-  --with-mac              use Mac OS X (Default)
-  --with-cocoa            use Cocoa
+  --with-osx              use Mac OS X (default port, currently Carbon)
+  --with-carbon           same as --with-osx_carbon
+  --with-cocoa            same as --with-osx_cocoa
+  --with-mac              same as --with-osx
+  --with-old_cocoa        use old, deprecated, Cocoa port
   --with-wine             use Wine
   --with-msw              use MS-Windows
   --with-pm               use OS/2 Presentation Manager
@@ -2606,7 +2609,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 
 ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA MGL MICROWIN MOTIF MSW PM X11 DFB"
 
-DEFAULT_wxUSE_COCOA=0
+DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_wxUSE_OSX_COCOA=0
@@ -2618,7 +2621,7 @@ DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
 
-DEFAULT_DEFAULT_wxUSE_COCOA=0
+DEFAULT_DEFAULT_wxUSE_OLD_COCOA=0
 DEFAULT_DEFAULT_wxUSE_GTK=0
 DEFAULT_DEFAULT_wxUSE_OSX_CARBON=0
 DEFAULT_DEFAULT_wxUSE_OSX_COCOA=0
@@ -3323,15 +3326,33 @@ if test "${with_osx_cocoa+set}" = set; then
 fi
 
 
+# Check whether --with-osx was given.
+if test "${with_osx+set}" = set; then
+  withval=$with_osx; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
+fi
+
+
+# Check whether --with-carbon was given.
+if test "${with_carbon+set}" = set; then
+  withval=$with_carbon; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
+fi
+
+
+# Check whether --with-cocoa was given.
+if test "${with_cocoa+set}" = set; then
+  withval=$with_cocoa; wxUSE_OSX_COCOA="$withval" CACHE_OSX_COCOA=1 TOOLKIT_GIVEN=1
+fi
+
+
 # Check whether --with-mac was given.
 if test "${with_mac+set}" = set; then
   withval=$with_mac; wxUSE_OSX_CARBON="$withval" CACHE_OSX_CARBON=1 TOOLKIT_GIVEN=1
 fi
 
 
-# Check whether --with-cocoa was given.
-if test "${with_cocoa+set}" = set; then
-  withval=$with_cocoa; wxUSE_COCOA="$withval" CACHE_COCOA=1 TOOLKIT_GIVEN=1
+# Check whether --with-old_cocoa was given.
+if test "${with_old_cocoa+set}" = set; then
+  withval=$with_old_cocoa; wxUSE_OLD_COCOA="$withval" CACHE_OLD_COCOA=1 TOOLKIT_GIVEN=1
 fi
 
 
@@ -3517,7 +3538,7 @@ echo "$as_me: error: BeOS GUI is not supported yet, use --disable-gui" >&2;}
       done
     fi
 
-            NUM_TOOLKITS=`expr ${wxUSE_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
+            NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
                   + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
 
@@ -28503,7 +28524,7 @@ if test "$wxUSE_GUI" = "yes"; then
     WXGTK2=
     WXGPE=
 
-    if test "$wxUSE_COCOA" = 1 ; then
+    if test "$wxUSE_OLD_COCOA" = 1 ; then
         if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
             { echo "$as_me:$LINENO: WARNING: Printing not supported under wxCocoa yet, disabled" >&5
 echo "$as_me: WARNING: Printing not supported under wxCocoa yet, disabled" >&2;}
@@ -32951,7 +32972,7 @@ echo "${ECHO_T}none" >&6; }
                 TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXMAC__ -D__WXOSX__"
     fi
 
-    if test "$wxUSE_COCOA" = 1; then
+    if test "$wxUSE_OLD_COCOA" = 1; then
         TOOLKIT=COCOA
         GUIDIST=COCOA_DIST
     fi
@@ -33193,7 +33214,7 @@ fi
 
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
         { echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
 
@@ -33373,7 +33394,7 @@ echo "${ECHO_T}$ac_cv_header_ddraw_h" >&6; }
 fi
 
 if test "$wxUSE_DETECT_SM" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1; then
+    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
         { echo "$as_me:$LINENO: checking for -lSM - X11 session management" >&5
 echo $ECHO_N "checking for -lSM - X11 session management... $ECHO_C" >&6; }
 
@@ -33426,7 +33447,7 @@ USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
 
 
-    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
+    if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
@@ -34300,7 +34321,7 @@ TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffi
 TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 
-if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_COCOA" = 1; then
+if test "$wxUSE_OSX_CARBON" = 1 -o "$wxUSE_OSX_COCOA" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
     WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
 else
     WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${WX_LIB_FLAVOUR}"
@@ -34313,7 +34334,7 @@ fi
 
 
 
-if test "$wxUSE_COCOA" = 1; then
+if test "$wxUSE_OLD_COCOA" = 1; then
 
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -46486,7 +46507,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_COCOA" = 1 ; then
+    if test "$wxUSE_OLD_COCOA" = 1 ; then
         { echo "$as_me:$LINENO: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&5
 echo "$as_me: WARNING: Toggle button not yet supported under Mac OS X... disabled" >&2;}
         wxUSE_TOGGLEBTN=no
@@ -46569,7 +46590,7 @@ echo "$as_me: WARNING: wxTreeCtrl requires wxImageList and won't be compiled wit
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_COCOA" = 1 ; then
+    if test "$wxUSE_OLD_COCOA" = 1 ; then
         { echo "$as_me:$LINENO: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
 echo "$as_me: WARNING: Popup window not yet supported under Mac OS X... disabled" >&2;}
     else
@@ -46589,7 +46610,7 @@ _ACEOF
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1 -o "$wxUSE_MGL" = 1; then
         { echo "$as_me:$LINENO: WARNING: Dialup manager not supported on this platform... disabled" >&5
 echo "$as_me: WARNING: Dialup manager not supported on this platform... disabled" >&2;}
     else
@@ -46728,7 +46749,7 @@ fi
 
 
         CPPFLAGS="$old_CPPFLAGS"
-    elif test "$wxUSE_COCOA" = 1; then
+    elif test "$wxUSE_OLD_COCOA" = 1; then
         cat >>confdefs.h <<\_ACEOF
 #define wxUSE_WEBKIT 1
 _ACEOF
@@ -47621,13 +47642,13 @@ if test "$wxUSE_MAC" = 1 ; then
         EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
     fi
 fi
-if test "$wxUSE_COCOA" = 1 ; then
+if test "$wxUSE_OLD_COCOA" = 1 ; then
     EXTRA_FRAMEWORKS="-framework IOKit -framework Cocoa"
     if test "$wxUSE_MEDIACTRL" = "yes"; then
         EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework QuickTime"
     fi
 fi
-if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_COCOA" != 1 ; then
+if test "$USE_DARWIN" = 1 -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1 ; then
     EXTRA_FRAMEWORKS="$EXTRA_FRAMEWORKS -framework IOKit -framework CoreServices -framework System -framework ApplicationServices"
 fi
 
@@ -51227,7 +51248,7 @@ echo "$as_me: error: Required windres program not found" >&2;}
     RESCOMP="$WINDRES $WINDRES_CPU_DEFINE"
 fi
 
-if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1; then
+if test "$wxUSE_MAC" = 1 -o "$wxUSE_OLD_COCOA" = 1; then
             WX_RESOURCES_MACOSX_ASCII="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.r"
     WX_RESOURCES_MACOSX_DATA="libwx_${TOOLCHAIN_NAME}.${wx_release_number}.rsrc"
 
