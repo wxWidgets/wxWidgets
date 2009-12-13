@@ -676,6 +676,7 @@ CXX
 CXXFLAGS
 ac_ct_CXX
 AR
+OSX_SW_VERS
 subdirs
 PKG_CONFIG
 GTK_CFLAGS
@@ -18415,7 +18416,55 @@ echo "$as_me: WARNING: Could not determine deployment target from SDKSettings.pl
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    OSX_VERSION=`sw_vers -productVersion | grep 10.[0-9]`
+    for ac_prog in sw_vers
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+if test "${ac_cv_prog_OSX_SW_VERS+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test -n "$OSX_SW_VERS"; then
+  ac_cv_prog_OSX_SW_VERS="$OSX_SW_VERS" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_OSX_SW_VERS="$ac_prog"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+fi
+fi
+OSX_SW_VERS=$ac_cv_prog_OSX_SW_VERS
+if test -n "$OSX_SW_VERS"; then
+  { echo "$as_me:$LINENO: result: $OSX_SW_VERS" >&5
+echo "${ECHO_T}$OSX_SW_VERS" >&6; }
+else
+  { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+fi
+
+
+  test -n "$OSX_SW_VERS" && break
+done
+
+    if test "$OSX_SW_VERS" != ""; then
+        OSX_VERSION=`sw_vers -productVersion | grep 10.[0-9]`
+    else
+                        { echo "$as_me:$LINENO: WARNING: Assuming OS X 10.4, use --with-macosx-version-min to override." >&5
+echo "$as_me: WARNING: Assuming OS X 10.4, use --with-macosx-version-min to override." >&2;}
+        OSX_VERSION="10.4"
+    fi
     if test "$wxUSE_OSX_CARBON" = 1 -o "x$OSX_VERSION" = "x10.4"; then
         # otherwise configure stops on leopard for universal_binary
         wxUSE_MACOSX_VERSION_MIN=10.4
@@ -52400,6 +52449,7 @@ CXX!$CXX$ac_delim
 CXXFLAGS!$CXXFLAGS$ac_delim
 ac_ct_CXX!$ac_ct_CXX$ac_delim
 AR!$AR$ac_delim
+OSX_SW_VERS!$OSX_SW_VERS$ac_delim
 subdirs!$subdirs$ac_delim
 PKG_CONFIG!$PKG_CONFIG$ac_delim
 GTK_CFLAGS!$GTK_CFLAGS$ac_delim
@@ -52436,7 +52486,6 @@ HILDON_LIBS!$HILDON_LIBS$ac_delim
 HILDON2_CFLAGS!$HILDON2_CFLAGS$ac_delim
 HILDON2_LIBS!$HILDON2_LIBS$ac_delim
 PYTHON!$PYTHON$ac_delim
-COND_PYTHON!$COND_PYTHON$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52478,6 +52527,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_PYTHON!$COND_PYTHON$ac_delim
 CAIRO_CFLAGS!$CAIRO_CFLAGS$ac_delim
 CAIRO_LIBS!$CAIRO_LIBS$ac_delim
 GST_CFLAGS!$GST_CFLAGS$ac_delim
@@ -52574,7 +52624,6 @@ WINDRES!$WINDRES$ac_delim
 REZ!$REZ$ac_delim
 SETFILE!$SETFILE$ac_delim
 OBJCXXFLAGS!$OBJCXXFLAGS$ac_delim
-GCC_PCH!$GCC_PCH$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52616,6 +52665,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+GCC_PCH!$GCC_PCH$ac_delim
 ICC_PCH!$ICC_PCH$ac_delim
 ICC_PCH_CREATE_SWITCH!$ICC_PCH_CREATE_SWITCH$ac_delim
 ICC_PCH_USE_SWITCH!$ICC_PCH_USE_SWITCH$ac_delim
@@ -52712,7 +52762,6 @@ COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
 COND_PLATFORM_WIN32_0!$COND_PLATFORM_WIN32_0$ac_delim
 COND_PLATFORM_WIN32_1!$COND_PLATFORM_WIN32_1$ac_delim
 COND_PLATFORM_WIN32_1_SHARED_0!$COND_PLATFORM_WIN32_1_SHARED_0$ac_delim
-COND_SHARED_0!$COND_SHARED_0$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52754,6 +52803,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_SHARED_0!$COND_SHARED_0$ac_delim
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0$ac_delim
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0$ac_delim
 COND_SHARED_0_TOOLKIT_PM_WXUNIV_0!$COND_SHARED_0_TOOLKIT_PM_WXUNIV_0$ac_delim
@@ -52850,7 +52900,6 @@ COND_wxUSE_LIBJPEG_builtin!$COND_wxUSE_LIBJPEG_builtin$ac_delim
 COND_wxUSE_LIBPNG_builtin!$COND_wxUSE_LIBPNG_builtin$ac_delim
 COND_wxUSE_LIBTIFF_builtin!$COND_wxUSE_LIBTIFF_builtin$ac_delim
 COND_wxUSE_REGEX_builtin!$COND_wxUSE_REGEX_builtin$ac_delim
-COND_wxUSE_ZLIB_builtin!$COND_wxUSE_ZLIB_builtin$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -52892,6 +52941,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_wxUSE_ZLIB_builtin!$COND_wxUSE_ZLIB_builtin$ac_delim
 DEREZ!$DEREZ$ac_delim
 SHARED!$SHARED$ac_delim
 WX_LIBRARY_BASENAME_NOGUI!$WX_LIBRARY_BASENAME_NOGUI$ac_delim
@@ -52939,7 +52989,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 45; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

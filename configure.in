@@ -1205,7 +1205,15 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    OSX_VERSION=`sw_vers -productVersion | grep 10.[[0-9]]`
+    AC_CHECK_PROGS(OSX_SW_VERS, sw_vers)
+    if test "$OSX_SW_VERS" != ""; then
+        OSX_VERSION=`sw_vers -productVersion | grep 10.[[0-9]]`
+    else
+        dnl can't determine it (happens e.g. when cross-compiling) so use a
+        dnl conservative default
+        AC_MSG_WARN([Assuming OS X 10.4, use --with-macosx-version-min to override.])
+        OSX_VERSION="10.4"
+    fi
     if test "$wxUSE_OSX_CARBON" = 1 -o "x$OSX_VERSION" = "x10.4"; then
         # otherwise configure stops on leopard for universal_binary
         wxUSE_MACOSX_VERSION_MIN=10.4
