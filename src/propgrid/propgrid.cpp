@@ -779,9 +779,12 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
                                                    wxMouseEvent* mouseEvent,
                                                    int selFlags )
 {
+    const wxArrayPGProperty& selection = GetSelectedProperties();
     bool alreadySelected = m_pState->DoIsPropertySelected(prop);
     bool res = true;
-    bool addToExistingSelection;
+
+    // Set to 2 if also add all items in between
+    int addToExistingSelection = 0;
 
     if ( GetExtraStyle() & wxPG_EX_MULTIPLE_SELECTION )
     {
@@ -799,21 +802,24 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
             }
             else
             {
-                addToExistingSelection = mouseEvent->ShiftDown();
+                if ( mouseEvent->ControlDown() )
+                {
+                    addToExistingSelection = 1;
+                }
+                else if ( mouseEvent->ShiftDown() )
+                {
+                    if ( selection.size() > 0 && !prop->IsCategory() )
+                        addToExistingSelection = 2;
+                    else
+                        addToExistingSelection = 1;
+                }
             }
         }
-        else
-        {
-            addToExistingSelection = false;
-        }
-    }
-    else
-    {
-        addToExistingSelection = false;
     }
 
-    if ( addToExistingSelection )
+    if ( addToExistingSelection == 1 )
     {
+        // Add/remove one
         if ( !alreadySelected )
         {
             res = DoAddToSelection(prop, selFlags);
@@ -821,6 +827,59 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
         else if ( GetSelectedProperties().size() > 1 )
         {
             res = DoRemoveFromSelection(prop, selFlags);
+        }
+    }
+    else if ( addToExistingSelection == 2 )
+    {
+        // Add this, and all in between
+
+        // Find top selected property
+        wxPGProperty* topSelProp = selection[0];
+        int topSelPropY = topSelProp->GetY();
+        for ( unsigned int i=1; i<selection.size(); i++ )
+        {
+            wxPGProperty* p = selection[i];
+            int y = p->GetY();
+            if ( y < topSelPropY )
+            {
+                topSelProp = p;
+                topSelPropY = y;
+            }
+        }
+
+        wxPGProperty* startFrom;
+        wxPGProperty* stopAt;
+
+        if ( prop->GetY() <= topSelPropY )
+        {
+            // Property is above selection (or same)
+            startFrom = prop;
+            stopAt = topSelProp;
+        }
+        else
+        {
+            // Property is below selection
+            startFrom = topSelProp;
+            stopAt = prop;
+        }
+
+        // Iterate through properties in-between, and select them
+        wxPropertyGridIterator it;
+
+        for ( it = GetIterator(wxPG_ITERATE_VISIBLE, startFrom);
+              !it.AtEnd();
+              it++ )
+        {
+            wxPGProperty* p = *it;
+
+            if ( !p->IsCategory() &&
+                 !m_pState->DoIsPropertySelected(p) )
+            {
+                DoAddToSelection(p, selFlags);
+            }
+
+            if ( p == stopAt )
+                break;
         }
     }
     else
