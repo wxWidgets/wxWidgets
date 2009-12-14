@@ -1565,6 +1565,13 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // compute which columns needs to be redrawn
     unsigned int cols = GetOwner()->GetColumnCount();
+    if ( !cols )
+    {
+        // we assume that we have at least one column below and painting an
+        // empty control is unnecessary anyhow
+        return;
+    }
+
     unsigned int col_start = 0;
     unsigned int x_start;
     for (x_start = 0; col_start < cols; col_start++)
