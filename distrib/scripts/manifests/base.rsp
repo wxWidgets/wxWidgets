@@ -37,6 +37,8 @@ src/msw/ole/*.cpp
 
 src/msw/wince/*.cpp
 
+src/xml/*.cpp
+
 src/unix/*.cpp
 
 src/zlib/*.c
