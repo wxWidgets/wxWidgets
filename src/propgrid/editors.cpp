@@ -1510,7 +1510,7 @@ void wxPGCheckBoxEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), w
 
 void wxPGCheckBoxEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* ctrl ) const
 {
-    ((wxSimpleCheckBox*)ctrl)->m_state = 0;
+    ((wxSimpleCheckBox*)ctrl)->m_state = wxSCB_STATE_UNSPECIFIED;
     ctrl->Refresh();
 }
 
