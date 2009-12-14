@@ -2043,7 +2043,7 @@ public:
     void SetValueToUnspecified()
     {
         wxVariant val;  // Create NULL variant
-        SetValue(val);
+        SetValue(val, NULL, wxPG_SETVAL_REFRESH_EDITOR);
     }
 
     // Helper function (for wxPython bindings and such) for settings protected

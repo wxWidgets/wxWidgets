@@ -1053,8 +1053,7 @@ public:
     void SetPropertyValueUnspecified( wxPGPropArg id )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
-        wxVariant nullVariant;
-        SetPropVal(p, nullVariant);
+        p->SetValueToUnspecified();
     }
 
 #ifndef SWIG
