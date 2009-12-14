@@ -1366,16 +1366,23 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         UpdateParentValues();
 
     //
-    // Update editor control
-    //
-
-    // We need to check for these, otherwise GetGrid() may fail.
+    // Update editor control.
     if ( flags & wxPG_SETVAL_REFRESH_EDITOR )
     {
-        RefreshEditor();
         wxPropertyGrid* pg = GetGridIfDisplayed();
         if ( pg )
+        {
+            wxPGProperty* selected = pg->GetSelectedProperty();
+
+            // Only refresh the control if this was selected, or
+            // this was some parent of selected, or vice versa)
+            if ( selected && (selected == this ||
+                              selected->IsSomeParent(this) ||
+                              this->IsSomeParent(selected)) )
+                RefreshEditor();
+
             pg->DrawItemAndValueRelated(this);
+        }
     }
 }
 
