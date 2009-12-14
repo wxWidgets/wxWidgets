@@ -2249,7 +2249,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools1->AppendSeparator();
     menuTools1->Append(ID_SETBGCOLOUR, wxT("Set Bg Colour") );
     menuTools1->Append(ID_SETBGCOLOURRECUR, wxT("Set Bg Colour (Recursively)") );
-    menuTools1->Append(ID_UNSPECIFY, wxT("Set to Unspecified") );
+    menuTools1->Append(ID_UNSPECIFY, "Set Value to Unspecified");
     menuTools1->AppendSeparator();
     m_itemEnable = menuTools1->Append(ID_ENABLE, wxT("Enable"),
         wxT("Toggles item's enabled state.") );
