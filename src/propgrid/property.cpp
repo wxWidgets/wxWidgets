@@ -216,10 +216,10 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
 
     if ( column == 1 )
     {
+        editor = property->GetColumnEditor(column);
+
         if ( !isUnspecified )
         {
-            editor = property->GetColumnEditor(column);
-
             // Regular property value
 
             wxSize imageSize = propertyGrid->GetImageSize(property, item);
