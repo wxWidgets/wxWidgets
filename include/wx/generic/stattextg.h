@@ -44,11 +44,12 @@ public:
                 const wxString& name = wxStaticTextNameStr);
 
 
-protected:
-    virtual wxSize DoGetBestClientSize() const;
-
+    // overridden base class virtual methods
     virtual void SetLabel(const wxString& label);
     virtual bool SetFont(const wxFont &font);
+
+protected:
+    virtual wxSize DoGetBestClientSize() const;
 
     virtual wxString DoGetLabel() const { return m_label; }
     virtual void DoSetLabel(const wxString& label);
