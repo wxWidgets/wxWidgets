@@ -37,9 +37,9 @@
     #include "wx/dcscreen.h"
     #include "wx/dcclient.h"
     #include "wx/toplevel.h"
-    #include "wx/imaglist.h"
 #endif
 
+#include "wx/imaglist.h"
 #include "wx/stockitem.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
