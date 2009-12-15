@@ -277,6 +277,16 @@ public:
         return true;
     }
 
+protected:
+    virtual void DoSetSizeHints( int minW, int minH,
+                                 int maxW, int maxH,
+                                 int incW, int incH)
+    {
+        // the real wxFrame method doesn't work for us because we're not really
+        // a top level window so skip it
+        wxWindow::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+    }
+
 private:
     DECLARE_DYNAMIC_CLASS(wxPseudoTransparentFrame)
 };
