@@ -266,6 +266,11 @@
     <set var="DEBUG_DEFINE">
         <if cond="DEBUG_FLAG=='0'">wxDEBUG_LEVEL=0</if>
     </set>
+    <set var="NDEBUG_DEFINE">
+        <if cond="FORMAT!='autoconf' and DEBUG_RUNTIME_LIBS=='default' and BUILD=='release'">NDEBUG</if>
+        <if cond="FORMAT!='autoconf' and DEBUG_RUNTIME_LIBS=='0'">NDEBUG</if>
+    </set>
+
     <!-- does not cover all cases, but better than nothing -->
     <set var="NO_VC_CRTDBG">
         <if cond="FORMAT=='msvc' and BUILD=='debug' and DEBUG_RUNTIME_LIBS=='0'">__NO_VC_CRTDBG__</if>
@@ -496,6 +501,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
         <define>$(DEBUG_DEFINE)</define>
+        <define>$(NDEBUG_DEFINE)</define>
         <define>$(EXCEPTIONS_DEFINE)</define>
         <define>$(RTTI_DEFINE)</define>
         <define>$(THREAD_DEFINE)</define>
