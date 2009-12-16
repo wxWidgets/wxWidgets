@@ -2341,8 +2341,6 @@ bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
     if ( !handler.LoadFile(this, stream, true/*verbose*/, index) )
         return false;
 
-    M_IMGDATA->m_type = handler.GetType();
-
     // rescale the image to the specified size if needed
     if ( maxWidth || maxHeight )
     {
@@ -2362,6 +2360,9 @@ bool wxImage::DoLoad(wxImageHandler& handler, wxInputStream& stream, int index)
         if ( width != widthOrig || height != heightOrig )
             Rescale(width, height, wxIMAGE_QUALITY_HIGH);
     }
+
+    // Set this after Rescale, which currently does not preserve it
+    M_IMGDATA->m_type = handler.GetType();
 
     return true;
 }
