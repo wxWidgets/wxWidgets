@@ -991,10 +991,12 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
-    // Since client size is being explicitly set, don't change it later
-    m_deferShowAllowed = false;
-
     wxTopLevelWindowBase::DoSetClientSize(width, height);
+
+    // Since client size is being explicitly set, don't change it later
+    // Has to be done after calling base because it calls SetSize,
+    // which sets this true
+    m_deferShowAllowed = false;
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
