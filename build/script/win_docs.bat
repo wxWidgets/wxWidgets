@@ -55,6 +55,9 @@ cd %WXWIN%\build\script
 mkdir %DAILY%\in
 nmake -f makedocs.vc cleandocs
 nmake -f makedocs.vc alldocs
+nmake -f makedocs.vc allpdfrtf
+nmake -f makedocs.vc htmlhelp
+nmake -f makedocs.vc htb
 
 del %DAILY%\in\*.p*
 mkdir %WXWIN%\docs\pdf
