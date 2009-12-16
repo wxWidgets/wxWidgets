@@ -264,6 +264,10 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             {
                 text = vInlineHelp.GetString();
                 dc.SetTextForeground(propertyGrid->GetCellDisabledTextColour());
+
+                // Must make the editor NULL to override it's own rendering
+                // code.
+                editor = NULL;
             }
         }
     }
