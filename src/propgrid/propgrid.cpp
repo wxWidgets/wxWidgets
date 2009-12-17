@@ -4250,10 +4250,11 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
 
 void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 {
+    // Don't check for !HasInternalFlag(wxPG_FL_INITIALIZED) here. Otherwise
+    // virtual size calculation may go wrong.
     if ( HasInternalFlag(wxPG_FL_RECALCULATING_VIRTUAL_SIZE) ||
          m_frozen ||
-         !m_pState ||
-         !HasInternalFlag(wxPG_FL_INITIALIZED) )
+         !m_pState )
         return;
 
     //
