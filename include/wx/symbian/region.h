@@ -4,17 +4,13 @@
 // Author:      Jordan Langholz
 // Modified by:
 // Created:     04/20/07
-// RCS-ID:      $Id: region.h,v 1.1 2004/10/19 13:39:47 JS Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Jordan Langholz
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_REGION_H_
 #define _WX_REGION_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "region.h"
-#endif
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"

@@ -1088,6 +1088,8 @@
 
 #if defined(__WXPALMOS__)
 #  include "wx/palmos/chkconf.h"
+#elif defined(__WXSYMBIAN__)
+#  include "wx/symbian/chkconf.h"
 #elif defined(__WXWINCE__)
 #  include "wx/msw/wince/chkconf.h"
 #elif defined(__WXMSW__)

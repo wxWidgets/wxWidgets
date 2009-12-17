@@ -4,17 +4,13 @@
 // Author:      Jordan Langholz
 // Modified by:
 // Created:     04/24/07
-// RCS-ID:      $Id: msgdlg.h,v 1.3 2005/03/11 15:33:59 ABX Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Jordan Langholz
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSGBOXDLG_H_
 #define _WX_MSGBOXDLG_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "msgdlg.h"
-#endif
 
 #include "wx/defs.h"
 #include "wx/dialog.h"

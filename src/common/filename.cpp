@@ -785,8 +785,11 @@ static wxString wxCreateTempImpl(
     path += wxT("XXXXXX");
 
     // we need to copy the path to the buffer in which mkstemp() can modify it
+#ifdef __SYMBIAN32__
+    wxCharBuffer buf(path.utf8_str());
+#else
     wxCharBuffer buf(path.fn_str());
-
+#endif
     // cast is safe because the string length doesn't change
     int fdTemp = mkstemp( (char*)(const char*) buf );
     if ( fdTemp == -1 )

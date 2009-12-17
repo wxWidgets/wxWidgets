@@ -67,6 +67,11 @@
     #include <sys/time.h>   // for timeval
 #endif
 
+#ifdef __WXSYMBIAN__
+    #define WX_SOCKLEN_T socklen_t
+    #define SOCKOPTLEN_T socklen_t
+#endif
+
 // these definitions are for MSW when we don't use configure, otherwise these
 // symbols are defined by configure
 #ifndef WX_SOCKLEN_T

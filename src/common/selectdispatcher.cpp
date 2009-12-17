@@ -34,11 +34,6 @@
     #include "wx/intl.h"
 #endif
 
-#if defined(HAVE_SYS_SELECT_H) || defined(__WATCOMC__)
-    #include <sys/time.h>
-    #include <sys/select.h>
-#endif
-
 #include <errno.h>
 
 #define wxSelectDispatcher_Trace wxT("selectdispatcher")

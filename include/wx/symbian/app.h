@@ -10,10 +10,6 @@
 #ifndef _WX_APP_SYMBIAN_H_
 #define _WX_APP_SYMBIAN_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "app.h"
-#endif
-
 #include "wx/event.h"
 #if wxUSE_GUI
 #include "wx/icon.h"

@@ -18,10 +18,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/app.h"
@@ -161,10 +157,12 @@ CTelephony::TBatteryInfoV1 wxGetBatteryInfo()
 {
     CTelephony* iTelephony;
     TRequestStatus iStatus;
+    iTelephony = CTelephony::NewL();
     CTelephony::TBatteryInfoV1      iBatteryInfoV1;
     CTelephony::TBatteryInfoV1Pckg  iBatteryInfoV1Pckg(iBatteryInfoV1);
     iTelephony->GetBatteryInfo(iStatus, iBatteryInfoV1Pckg); // Create asynchronous request to Telephony server
     User::WaitForRequest(iStatus);
+    delete iTelephony;
     return iBatteryInfoV1;
 }
 

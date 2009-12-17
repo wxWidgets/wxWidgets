@@ -9,6 +9,9 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
+#undef wxUSE_GUI
+#define wxUSE_GUI 0
+
 #undef wxUSE_WXHTML_HELP
 #define wxUSE_WXHTML_HELP 0
 

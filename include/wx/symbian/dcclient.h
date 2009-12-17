@@ -4,7 +4,7 @@
 // Author:      Jordan Langholz
 // Modified by:
 // Created:     04/24/07
-// RCS-ID:      $Id: dcclient.h,v 1.3 2005/05/31 09:18:43 JS Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Jordan Langholz
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -15,10 +15,6 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dcclient.h"
-#endif
 
 #include "wx/dc.h"
 #include "wx/dynarray.h"

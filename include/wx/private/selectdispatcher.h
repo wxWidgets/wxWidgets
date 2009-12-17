@@ -27,6 +27,11 @@
 
 #include "wx/private/fdiodispatcher.h"
 
+#if defined(HAVE_SYS_SELECT_H) || defined(__WATCOMC__)
+    #include <sys/time.h>
+    #include <sys/select.h>
+#endif
+
 // helper class storing all the select() fd sets
 class WXDLLIMPEXP_BASE wxSelectSets
 {

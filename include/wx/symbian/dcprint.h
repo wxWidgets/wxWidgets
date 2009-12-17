@@ -4,17 +4,13 @@
 // Author:      Jordan Langholz
 // Modified by:
 // Created:     04/24/07
-// RCS-ID:      $Id: dcprint.h,v 1.2 2005/01/18 21:14:24 ABX Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Jordan Langholz
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_DCPRINT_H_
 #define _WX_DCPRINT_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "dcprint.h"
-#endif
 
 #if wxUSE_PRINTING_ARCHITECTURE
 

@@ -3,17 +3,13 @@
 // Purpose:     wxTopLevelWindow
 // Author:      Jordan Langholz
 // Created:     04/24/07
-// RCS-ID:      $Id: toplevel.h,v 1.10 2005/07/01 19:36:51 ABX Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) Jordan Langholz
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SYMBIAN_TOPLEVEL_H_
 #define _WX_SYMBIAN_TOPLEVEL_H_
-
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "toplevel.h"
-#endif
 
 #include <aknview.h>
 

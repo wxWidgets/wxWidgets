@@ -49,6 +49,8 @@
 
 #ifdef __UNIX__
     #include <errno.h>
+#elif defined __SYMBIAN32__
+    #include <sys/select.h>
 #endif
 
 // we use MSG_NOSIGNAL to avoid getting SIGPIPE when sending data to a remote
