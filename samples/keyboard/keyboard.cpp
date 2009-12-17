@@ -32,8 +32,17 @@ private:
     // event handlers
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
     void OnAbout(wxCommandEvent& event);
+
+    void OnTestAccelA(wxCommandEvent& WXUNUSED(event))
+        { m_logText->AppendText("Test accelerator \"A\" used.\n"); }
+    void OnTestAccelCtrlA(wxCommandEvent& WXUNUSED(event))
+        { m_logText->AppendText("Test accelerator \"Ctrl-A\" used.\n"); }
+    void OnTestAccelEsc(wxCommandEvent& WXUNUSED(event))
+        { m_logText->AppendText("Test accelerator \"Esc\" used.\n"); }
+
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_logText->Clear(); }
     void OnSkip(wxCommandEvent& event) { m_skip = event.IsChecked(); }
+
     void OnKeyDown(wxKeyEvent& event) { LogEvent("KeyDown", event); }
     void OnKeyUp(wxKeyEvent& event) { LogEvent("KeyUp", event); }
     void OnChar(wxKeyEvent& event) { LogEvent("Char", event); }
@@ -88,12 +97,20 @@ MyFrame::MyFrame(const wxString& title)
         QuitID = wxID_EXIT,
         ClearID = wxID_CLEAR,
         SkipID = 100,
+        TestAccelA,
+        TestAccelCtrlA,
+        TestAccelEsc
     };
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
     menuFile->Append(ClearID, "&Clear log\tCtrl-L");
+    menuFile->AppendSeparator();
+
+    menuFile->Append(TestAccelA, "Test accelerator &1\tA");
+    menuFile->Append(TestAccelCtrlA, "Test accelerator &2\tCtrl-A");
+    menuFile->Append(TestAccelEsc, "Test accelerator &3\tEsc");
     menuFile->AppendSeparator();
 
     menuFile->AppendCheckItem(SkipID, "Call event.&Skip()\tCtrl-S");
@@ -160,6 +177,15 @@ MyFrame::MyFrame(const wxString& title)
 
     Connect(SkipID, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnSkip));
+
+    Connect(TestAccelA, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnTestAccelA));
+
+    Connect(TestAccelCtrlA, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnTestAccelCtrlA));
+
+    Connect(TestAccelEsc, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnTestAccelEsc));
 
     // connect event handlers for the blue input window
     m_inputWin->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnKeyDown),
