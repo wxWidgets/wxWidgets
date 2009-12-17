@@ -70,6 +70,8 @@ public:
     virtual wxVideoMode GetCurrentMode() const;
     virtual bool ChangeMode(const wxVideoMode& mode);
 
+    virtual bool IsPrimary() const;
+
 private:
     CGDirectDisplayID m_id;
 
@@ -93,15 +95,55 @@ protected:
 // wxDisplayFactoryMacOSX implementation
 // ============================================================================
 
+// gets all displays that are not mirror displays
+
+static CGDisplayErr wxOSXGetDisplayList(CGDisplayCount maxDisplays,
+                                   CGDirectDisplayID *displays,
+                                   CGDisplayCount *displayCount)
+{
+    CGDisplayErr error = kCGErrorSuccess;
+    CGDisplayCount onlineCount;
+    
+    error = CGGetOnlineDisplayList(0,NULL,&onlineCount);
+    if ( error == kCGErrorSuccess )
+    {
+        *displayCount = 0;
+        if ( onlineCount > 0 )
+        {
+            CGDirectDisplayID *onlineDisplays = new CGDirectDisplayID[onlineCount];
+            error = CGGetOnlineDisplayList(onlineCount,onlineDisplays,&onlineCount);
+            if ( error == kCGErrorSuccess )
+            {
+                for ( CGDisplayCount i = 0; i < onlineCount; ++i )
+                {
+                    if ( CGDisplayMirrorsDisplay(onlineDisplays[i]) != kCGNullDirectDisplay )
+                        continue;
+                    
+                    if ( displays == NULL )
+                        *displayCount += 1;
+                    else
+                    {
+                        if ( *displayCount < maxDisplays )
+                        {
+                            displays[*displayCount] = onlineDisplays[i];
+                            *displayCount += 1;
+                        }
+                    }
+                }
+            }
+            delete[] onlineDisplays;
+        }
+            
+    }
+    return error;
+}
+
 unsigned wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
-#ifdef __WXDEBUG__
-    CGDisplayErr err =
-#endif
-    CGGetActiveDisplayList(0, NULL, &count);
+    CGDisplayErr err = wxOSXGetDisplayList(0, NULL, &count);
 
-    wxASSERT(err == CGDisplayNoErr);
+    wxCHECK_MSG( err == CGDisplayNoErr, 0, wxT("wxOSXGetDisplayList() failed") );
 
     return count;
 }
@@ -120,7 +162,7 @@ int wxDisplayFactoryMacOSX::GetFromPoint(const wxPoint& p)
     {
         theCount = GetCount();
         CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
-        err = CGGetActiveDisplayList(theCount, theIDs, &theCount);
+        err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
         wxASSERT(err == CGDisplayNoErr);
 
         for (nWhich = 0; nWhich < (int) theCount; ++nWhich)
@@ -146,12 +188,9 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
     CGDisplayCount theCount = GetCount();
     CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
 
-#ifdef __WXDEBUG__
-    CGDisplayErr err =
-#endif
-    CGGetActiveDisplayList(theCount, theIDs, &theCount);
+    CGDisplayErr err = wxOSXGetDisplayList(theCount, theIDs, &theCount);
+    wxCHECK_MSG( err == CGDisplayNoErr, NULL, wxT("wxOSXGetDisplayList() failed") );
 
-    wxASSERT( err == CGDisplayNoErr );
     wxASSERT( n < theCount );
 
     wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(n, theIDs[n]);
@@ -164,6 +203,11 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
 // ============================================================================
 // wxDisplayImplMacOSX implementation
 // ============================================================================
+
+bool wxDisplayImplMacOSX::IsPrimary() const
+{
+    return CGDisplayIsMain(m_id);
+}
 
 wxRect wxDisplayImplMacOSX::GetGeometry() const
 {
