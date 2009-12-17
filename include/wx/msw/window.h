@@ -601,7 +601,7 @@ private:
 
 // kbd code translation
 WXDLLIMPEXP_CORE int wxCharCodeMSWToWX(int keySym, WXLPARAM lParam = 0);
-WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id, bool *IsVirtual = NULL);
+WXDLLIMPEXP_CORE WXWORD wxCharCodeWXToMSW(int id);
 
 // window creation helper class: before creating a new HWND, instantiate an
 // object of this class on stack - this allows to process the messages sent to

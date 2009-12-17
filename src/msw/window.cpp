@@ -6095,11 +6095,8 @@ int wxCharCodeMSWToWX(int vk, WXLPARAM lParam)
     return wxk;
 }
 
-WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
+WXWORD wxCharCodeWXToMSW(int wxk)
 {
-    if ( isVirtual )
-        *isVirtual = true;
-
     // check the table first
     for ( size_t n = 0; n < WXSIZEOF(gs_specialKeys); n++ )
     {
@@ -6174,8 +6171,6 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
             else
 #endif // !__WXWINCE__
             {
-                if ( isVirtual )
-                    *isVirtual = false;
                 vk = (WXWORD)wxk;
             }
     }
