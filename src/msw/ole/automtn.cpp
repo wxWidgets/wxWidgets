@@ -139,7 +139,6 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     HRESULT hr;
     DISPPARAMS dispparams;
     unsigned int uiArgErr;
-    EXCEPINFO excep;
 
     // Get the IDs for the member and its arguments.  GetIDsOfNames expects the
     // member name as the first name, followed by argument names (if any).
@@ -181,7 +180,8 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     dispparams.cArgs = noArgs;
     dispparams.cNamedArgs = namedArgCount;
 
-    excep.pfnDeferredFillIn = NULL;
+    EXCEPINFO excep;
+    wxZeroMemory(excep);
 
     hr = ((IDispatch*)m_dispatchPtr)->Invoke(dispIds[0], IID_NULL, LOCALE_SYSTEM_DEFAULT,
                         (WORD)action, &dispparams, vReturnPtr, &excep, &uiArgErr);
