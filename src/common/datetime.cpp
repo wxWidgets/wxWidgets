@@ -2054,16 +2054,22 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
                                                     const TimeZone& tz) const
 {
     Tm tm = GetTm(tz);
-    wxDateTime dtMonthStart = wxDateTime(1, tm.mon, tm.year);
-    int nWeek = GetWeekOfYear(flags) - dtMonthStart.GetWeekOfYear(flags) + 1;
-    if ( nWeek < 0 )
+    const wxDateTime dateFirst = wxDateTime(1, tm.mon, tm.year);
+    const wxDateTime::WeekDay wdFirst = dateFirst.GetWeekDay();
+
+    if ( flags == Default_First )
     {
-        // this may happen for January when Jan, 1 is the last week of the
-        // previous year
-        nWeek += IsLeapYear(tm.year - 1) ? 53 : 52;
+        flags = GetCountry() == USA ? Sunday_First : Monday_First;
     }
 
-    return (wxDateTime::wxDateTime_t)nWeek;
+    // compute offset of dateFirst from the beginning of the week
+    int firstOffset;
+    if ( flags == Sunday_First )
+        firstOffset = wdFirst - Sun;
+    else
+        firstOffset = wdFirst == Sun ? DAYS_PER_WEEK - 1 : wdFirst - Mon;
+
+    return (wxDateTime::wxDateTime_t)((tm.mday - 1 + firstOffset)/7 + 1);
 }
 
 wxDateTime& wxDateTime::SetToYearDay(wxDateTime::wxDateTime_t yday)

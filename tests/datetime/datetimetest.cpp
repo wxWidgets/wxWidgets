@@ -555,6 +555,8 @@ for n in range(20):
         { { 16, wxDateTime::Oct, 1942, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 }, 42, 3, 3, 289 },
         { { 30, wxDateTime::Dec, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 5, 5, 364 },
         { {  2, wxDateTime::Jan, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 1, 1,   2 },
+        { {  5, wxDateTime::Jan, 2010, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 2, 2,   5 },
+        { {  3, wxDateTime::Jan, 2011, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },  1, 2, 2,   3 },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
@@ -570,10 +572,14 @@ for n in range(20):
             wmon2 = dt.GetWeekOfMonth(wxDateTime::Sunday_First),
             dnum = dt.GetDayOfYear();
 
-        CPPUNIT_ASSERT_EQUAL( wn.dnum, dnum );
-        CPPUNIT_ASSERT_EQUAL( wn.wmon, wmon );
-        CPPUNIT_ASSERT_EQUAL( wn.wmon2, wmon2 );
-        CPPUNIT_ASSERT_EQUAL( wn.week, week );
+        WX_ASSERT_EQUAL_MESSAGE( ("day of year for %s", d.Format()),
+                                 wn.dnum, dnum );
+        WX_ASSERT_EQUAL_MESSAGE( ("week of month (Monday) for %s", d.Format()),
+                                 wn.wmon, wmon );
+        WX_ASSERT_EQUAL_MESSAGE( ("week of month (Sunday) for %s", d.Format()),
+                                 wn.wmon2, wmon2 );
+        WX_ASSERT_EQUAL_MESSAGE( ("week of year for %s", d.Format()),
+                                 wn.week, week );
 
         int year = d.year;
         if ( week == 1 && d.month != wxDateTime::Jan )
