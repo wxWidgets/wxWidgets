@@ -1772,17 +1772,21 @@ void wxMSWDCImpl::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y
     }
 #endif // !defined(_WIN32_WCE) || (_WIN32_WCE >= 400)
 
-    TEXTMETRIC tm;
-    ::GetTextMetrics(GetHdc(), &tm);
-
     if (x)
         *x = sizeRect.cx;
     if (y)
         *y = sizeRect.cy;
-    if (descent)
-        *descent = tm.tmDescent;
-    if (externalLeading)
-        *externalLeading = tm.tmExternalLeading;
+
+    if ( descent || externalLeading )
+    {
+        TEXTMETRIC tm;
+        ::GetTextMetrics(GetHdc(), &tm);
+
+        if (descent)
+            *descent = tm.tmDescent;
+        if (externalLeading)
+            *externalLeading = tm.tmExternalLeading;
+    }
 
     if ( hfontOld )
     {
