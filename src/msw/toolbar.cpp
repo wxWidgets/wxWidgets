@@ -1835,6 +1835,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 
     // prepare the DC on which we'll be drawing
     wxClientDC dc(this);
+    dc.SetBrush(GetBackgroundColour());
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     RECT rcUpdate;
