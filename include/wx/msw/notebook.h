@@ -183,7 +183,7 @@ public:
   }
 
   // return the themed brush for painting our children
-  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, WXHWND hWnd);
+  virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child);
 
   // draw child background
   virtual bool MSWPrintChild(WXHDC hDC, wxWindow *win);

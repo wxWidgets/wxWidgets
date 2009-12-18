@@ -365,7 +365,7 @@ void wxStaticBox::PaintBackground(wxDC& dc, const RECT& rc)
     //     see http://groups.google.com/groups?selm=4252E932.3080801%40able.es
     wxWindow *parent = GetParent();
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
-    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(impl->GetHDC(), GetHWND());
+    HBRUSH hbr = (HBRUSH)parent->MSWGetBgBrush(impl->GetHDC(), this);
 
     // if there is no special brush for painting this control, just use the
     // solid background colour

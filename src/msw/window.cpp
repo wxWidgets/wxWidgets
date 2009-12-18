@@ -4816,7 +4816,7 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), WXHWND hWnd)
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindowMSW *child)
 {
     if ( m_hasBgCol )
     {
@@ -4828,11 +4828,10 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), WXHWND hWnd)
         //     children because it would look wrong if a child of non
         //     transparent child would show our bg colour when the child itself
         //     does not
-        wxWindow *win = wxFindWinFromHandle(hWnd);
-        if ( win == this ||
+        if ( child == this ||
                 m_inheritBgCol ||
-                    (win && win->HasTransparentBackground() &&
-                        win->GetParent() == this) )
+                    (child->HasTransparentBackground() &&
+                        child->GetParent() == this) )
         {
             // draw children with the same colour as the parent
             wxBrush *
@@ -4845,14 +4844,11 @@ wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), WXHWND hWnd)
     return 0;
 }
 
-WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, WXHWND hWndToPaint)
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, wxWindowMSW *child)
 {
-    if ( !hWndToPaint )
-        hWndToPaint = GetHWND();
-
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, hWndToPaint);
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, child);
         if ( hBrush )
             return hBrush;
 
