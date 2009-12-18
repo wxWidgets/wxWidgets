@@ -67,7 +67,6 @@ public:
 
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
 
     void SetFocus() {}
 
@@ -157,12 +156,11 @@ private:
     // have
     void UpdateStretchableSpacersSize();
 
-    // redraw the background of the given part of the window (or entire window
-    // if the parameter is NULL) to erase separator drawn in it
-    //
-    // return true if the background was erased using DrawThemeBackground()
-    bool MSWEraseRect(wxDC& dc, const wxRect *rectItem = NULL);
-
+#ifndef __WXWINCE__
+    // redraw the background of the given part of the window to erase separator
+    // drawn in it
+    void MSWEraseRect(wxDC& dc, const wxRect& rectItem);
+#endif // !__WXWINCE__
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)

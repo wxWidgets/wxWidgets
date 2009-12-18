@@ -126,7 +126,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 BEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
-    EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -1649,64 +1648,6 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
     }
 }
 
-// This handler is required to allow the toolbar to be set to a non-default
-// colour: for example, when it must blend in with a notebook page.
-void wxToolBar::OnEraseBackground(wxEraseEvent& event)
-{
-    RECT rect = wxGetClientRect(GetHwnd());
-
-    wxDC *dc = event.GetDC();
-    HDC hdc = GetHdcOf(*dc);
-
-#if wxUSE_UXTHEME
-    // we may need to draw themed colour so that we appear correctly on
-    // e.g. notebook page under XP with themes but only do it if the parent
-    // draws themed background itself
-    if ( !UseBgCol() && !GetParent()->UseBgCol() )
-    {
-        wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
-        if ( theme )
-        {
-            HRESULT
-                hr = theme->DrawThemeParentBackground(GetHwnd(), hdc, &rect);
-            if ( hr == S_OK )
-                return;
-
-            // it can also return S_FALSE which seems to simply say that it
-            // didn't draw anything but no error really occurred
-            if ( FAILED(hr) )
-            {
-                wxLogApiError(wxT("DrawThemeParentBackground(toolbar)"), hr);
-            }
-        }
-    }
-
-    if ( MSWEraseRect(*dc) )
-        return;
-#endif // wxUSE_UXTHEME
-
-    // we need to always draw our background under XP, as otherwise it doesn't
-    // appear correctly with some themes (e.g. Zune one)
-    if ( wxGetWinVersion() == wxWinVersion_XP ||
-            UseBgCol() || (GetMSWToolbarStyle() & TBSTYLE_TRANSPARENT) )
-    {
-        // do draw our background
-        //
-        // notice that this 'dumb' implementation may cause flicker for some of
-        // the controls in which case they should intercept wxEraseEvent and
-        // process it themselves somehow
-        AutoHBRUSH hBrush(wxColourToRGB(GetBackgroundColour()));
-
-        wxCHANGE_HDC_MAP_MODE(hdc, MM_TEXT);
-        ::FillRect(hdc, &rect, hBrush);
-    }
-    else // we have no non-default background colour
-    {
-        // let the system do it for us
-        event.Skip();
-    }
-}
-
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     // wait until we have some tools
@@ -1759,58 +1700,9 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 
 #ifndef __WXWINCE__
 
-bool wxToolBar::MSWEraseRect(wxDC& dc, const wxRect *rectItem)
+void wxToolBar::MSWEraseRect(wxDC& dc, const wxRect& rectItem)
 {
-    // erase the given rectangle to hide the separator
-#if wxUSE_UXTHEME
-    // themed background doesn't look well under XP so only draw it for Vista
-    // and later
-    if ( !UseBgCol() && wxGetWinVersion() >= wxWinVersion_Vista )
-    {
-        wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
-        if ( theme )
-        {
-            wxUxThemeHandle hTheme(this, L"REBAR");
-
-            // Draw the whole background since the pattern may be position
-            // sensitive; but clip it to the area of interest.
-            RECT rcTotal;
-            wxCopyRectToRECT(GetClientSize(), rcTotal);
-
-            RECT rcItem;
-            if ( rectItem )
-                wxCopyRectToRECT(*rectItem, rcItem);
-
-            HRESULT hr = theme->DrawThemeBackground
-                                (
-                                    hTheme,
-                                    GetHdcOf(dc),
-                                    0, 0,
-                                    &rcTotal,
-                                    rectItem ? &rcItem : NULL
-                                );
-            if ( hr == S_OK )
-                return true;
-
-            // it can also return S_FALSE which seems to simply say that it
-            // didn't draw anything but no error really occurred
-            if ( FAILED(hr) )
-            {
-                wxLogApiError(wxT("DrawThemeBackground(toolbar)"), hr);
-            }
-        }
-    }
-#endif // wxUSE_UXTHEME
-
-    // this is a bit peculiar but we may simply do nothing here if no rectItem
-    // is specified (and hence we need to erase everything) as this only
-    // happens when we're called from OnEraseBackground() and in this case we
-    // may simply return false to let the systems default background erasing to
-    // take place
-    if ( rectItem )
-        dc.DrawRectangle(*rectItem);
-
-    return false;
+    dc.DrawRectangle(rectItem);
 }
 
 bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
@@ -1915,7 +1807,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 else
                     continue;
 
-                MSWEraseRect(dc, &rectItem);
+                MSWEraseRect(dc, rectItem);
             }
         }
         else if ( tool->IsStretchableSpace() )
@@ -1924,7 +1816,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 rectItem = wxRectFromRECT(wxGetTBItemRect(GetHwnd(), toolIndex));
 
             if ( rectUpdate.Intersects(rectItem) )
-                MSWEraseRect(dc, &rectItem);
+                MSWEraseRect(dc, rectItem);
         }
     }
 
