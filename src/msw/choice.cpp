@@ -142,10 +142,6 @@ bool wxChoice::CreateAndInit(wxWindow *parent,
         return false;
 
 
-    // choice/combobox normally has "white" (depends on colour scheme, of
-    // course) background rather than inheriting the parent's background
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-
     // initialize the controls contents
     for ( int i = 0; i < n; i++ )
     {
