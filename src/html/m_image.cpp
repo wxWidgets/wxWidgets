@@ -651,7 +651,7 @@ TAG_HANDLER_BEGIN(IMG, "IMG,MAP,AREA")
                 if (tag.HasParam(wxT("USEMAP")))
                 {
                     mn = tag.GetParam( wxT("USEMAP") );
-                    if (mn.GetChar(0) == wxT('#'))
+                    if ( !mn.empty() && *mn.begin() == '#' )
                     {
                         mn = mn.Mid( 1 );
                     }
