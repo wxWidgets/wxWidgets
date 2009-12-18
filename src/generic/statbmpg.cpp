@@ -36,8 +36,7 @@ bool wxGenericStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 void wxGenericStaticBitmap::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
-    PrepareDC(dc);
-    if (m_bitmap.Ok())
+    if (m_bitmap.IsOk())
         dc.DrawBitmap(m_bitmap, 0, 0, true);
 }
 
