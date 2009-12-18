@@ -101,6 +101,11 @@ bool wxStaticText::Create(wxWindow *parent,
     // need to do many operation on it for ellipsization&markup support
     SetLabel(label);
 
+    // as we didn't pass the correct label to MSWCreateControl(), it didn't set
+    // the initial size correctly -- do it now
+    InvalidateBestSize();
+    SetInitialSize(size);
+
     // NOTE: if the label contains ampersand characters which are interpreted as
     //       accelerators, they will be rendered (at least on WinXP) only if the
     //       static text is placed inside a window class which correctly handles
