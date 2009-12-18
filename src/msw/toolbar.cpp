@@ -940,6 +940,10 @@ bool wxToolBar::Realize()
                     // so we need a valid id for it and not wxID_SEPARATOR
                     // which is used by spacers by default
                     tool->AllocSpacerId();
+
+                    // also set the number of separators so that the logic in
+                    // HandlePaint() works correctly
+                    tool->SetSeparatorsCount(1);
                 }
 
                 button.idCommand = tool->GetId();
@@ -1196,7 +1200,11 @@ bool wxToolBar::Realize()
 
 void wxToolBar::UpdateStretchableSpacersSize()
 {
-    // we can't resize the spacers if TB_SETBUTTONINFO is not supported
+#ifdef TB_SETBUTTONINFO
+    // we can't resize the spacers if TB_SETBUTTONINFO is not supported (we
+    // could try to do it with multiple separators as for the controls but this
+    // is too painful and it just doesn't seem to be worth doing for the
+    // ancient systems)
     if ( wxApp::GetComCtl32Version() < 471 )
         return;
 
@@ -1263,6 +1271,7 @@ void wxToolBar::UpdateStretchableSpacersSize()
             offset += tbbi.cx - (rcOld.right - rcOld.left);
         }
     }
+#endif // TB_SETBUTTONINFO
 }
 
 // ----------------------------------------------------------------------------
@@ -1700,127 +1709,41 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 
 #ifndef __WXWINCE__
 
-void wxToolBar::MSWEraseRect(wxDC& dc, const wxRect& rectItem)
+bool wxToolBar::HandlePaint(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
 {
-    dc.DrawRectangle(rectItem);
-}
-
-bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
-{
-    // erase any dummy separators which were used only for reserving space in
-    // the toolbar (either for a control or just for a stretchable space)
-
-    // first of all, are there any controls at all?
-    wxToolBarToolsList::compatibility_iterator node;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-    {
-        wxToolBarToolBase * const tool = node->GetData();
-        if ( tool->IsControl() || tool->IsStretchableSpace() )
-            break;
-    }
-
-    if ( !node )
-    {
-        // no controls, nothing to erase
-        return false;
-    }
-
-    // prepare the DC on which we'll be drawing
-    wxClientDC dc(this);
-    dc.SetBrush(GetBackgroundColour());
-    dc.SetPen(*wxTRANSPARENT_PEN);
-
-    RECT rcUpdate;
-    if ( !::GetUpdateRect(GetHwnd(), &rcUpdate, FALSE) )
-    {
-        // nothing to redraw anyhow
-        return false;
-    }
-
-    const wxRect rectUpdate = wxRectFromRECT(rcUpdate);
-    dc.SetClippingRegion(rectUpdate);
-
-    // draw the toolbar tools, separators &c normally
-    wxControl::MSWWindowProc(WM_PAINT, wParam, lParam);
-
-    // for each control in the toolbar find all the separators intersecting it
-    // and erase them
-    //
-    // NB: this is really the only way to do it as we don't know if a separator
-    //     corresponds to a control (i.e. is a dummy one) or a real one
-    //     otherwise
+    // exclude the area occupied by the controls and stretchable spaces from
+    // the update region to prevent the toolbar from drawing separators in it
     int toolIndex = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext(), toolIndex++ )
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
     {
-        wxToolBarTool *tool = (wxToolBarTool*)node->GetData();
-        if ( tool->IsControl() )
+        wxToolBarTool * const
+            tool = static_cast<wxToolBarTool *>(node->GetData());
+
+        if ( tool->IsControl() || tool->IsStretchableSpace() )
         {
-            // get the control rect in our client coords
-            wxControl *control = tool->GetControl();
-            wxStaticText *staticText = tool->GetStaticText();
-            wxRect rectCtrl = control->GetRect();
-            wxRect rectStaticText;
-            if ( staticText )
-                rectStaticText = staticText->GetRect();
-
-            if ( !rectCtrl.Intersects(rectUpdate) &&
-                    (!staticText || !rectStaticText.Intersects(rectUpdate)) )
-                continue;
-
-            // iterate over all buttons to find all separators intersecting
-            // this control
-            TBBUTTON tbb;
-            int count = ::SendMessage(GetHwnd(), TB_BUTTONCOUNT, 0, 0);
-            for ( int n = 0; n < count; n++ )
+            const size_t numSeps = tool->GetSeparatorsCount();
+            for ( size_t n = 0; n < numSeps; n++, toolIndex++ )
             {
-                // is it a separator?
-                if ( !::SendMessage(GetHwnd(), TB_GETBUTTON,
-                                    n, (LPARAM)&tbb) )
+                const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
+
+                const wxRegion rgnItem(wxRectFromRECT(rcItem));
+                if ( !ValidateRgn(GetHwnd(), GetHrgnOf(rgnItem)) )
                 {
-                    wxLogDebug(wxT("TB_GETBUTTON failed?"));
-
-                    continue;
+                    wxLogLastError(wxT("ValidateRgn()"));
                 }
-
-                if ( tbb.fsStyle != TBSTYLE_SEP )
-                    continue;
-
-                // get the bounding rect of the separator
-                RECT r = wxGetTBItemRect(GetHwnd(), n);
-                if ( !r.right )
-                    continue;
-
-                const wxRect rectItem = wxRectFromRECT(r);
-
-                // does it intersect the update region at all?
-                if ( !rectUpdate.Intersects(rectItem) )
-                    continue;
-
-                // does it intersect the control itself or its label?
-                //
-                // if it does, refresh it so it's redrawn on top of the
-                // background
-                if ( rectCtrl.Intersects(rectItem) )
-                    control->Refresh(false);
-                else if ( staticText && rectStaticText.Intersects(rectItem) )
-                    staticText->Refresh(false);
-                else
-                    continue;
-
-                MSWEraseRect(dc, rectItem);
             }
         }
-        else if ( tool->IsStretchableSpace() )
+        else
         {
-            const wxRect
-                rectItem = wxRectFromRECT(wxGetTBItemRect(GetHwnd(), toolIndex));
-
-            if ( rectUpdate.Intersects(rectItem) )
-                MSWEraseRect(dc, rectItem);
+            // normal tools never correspond to more than one native button
+            toolIndex++;
         }
     }
 
-    return true;
+    // still let the native control draw everything else normally
+    return false;
 }
 #endif // __WXWINCE__
 

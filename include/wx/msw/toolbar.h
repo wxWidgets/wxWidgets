@@ -156,12 +156,6 @@ private:
     // have
     void UpdateStretchableSpacersSize();
 
-#ifndef __WXWINCE__
-    // redraw the background of the given part of the window to erase separator
-    // drawn in it
-    void MSWEraseRect(wxDC& dc, const wxRect& rectItem);
-#endif // !__WXWINCE__
-
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
     wxDECLARE_NO_COPY_CLASS(wxToolBar);
