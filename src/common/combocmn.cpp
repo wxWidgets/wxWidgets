@@ -858,7 +858,12 @@ void wxComboCtrlBase::OnThemeChange()
     // be the correct colour and themed brush.  Instead we'll use
     // wxSYS_COLOUR_WINDOW in the EVT_PAINT handler as needed.
 #ifndef __WXMAC__
-    SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    if ( !m_hasBgCol )
+    {
+        wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        SetOwnBackgroundColour(bgCol);
+        m_hasBgCol = false;
+    }
 #endif
 }
 
@@ -1262,30 +1267,40 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
+    wxColour fgCol;
     wxColour bgCol;
 
     if ( isEnabled )
     {
-        // If popup is hidden and this control is focused,
-        // then draw the focus-indicator (selbgcolor background etc.).
-        if ( isFocused )
-        {
-            dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
-            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-        }
+        if ( m_hasFgCol )
+            // Honour the custom foreground colour
+            fgCol = GetForegroundColour();
+        else if ( isFocused )
+            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
         else
-        {
-            dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
+            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    }
+    else
+    {
+        fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+    }
+
+    if ( isEnabled )
+    {
+        if ( m_hasBgCol )
+            // Honour the custom background colour
+            bgCol = GetBackgroundColour();
+        else if ( isFocused )
+            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        else
 #ifndef __WXMAC__  // see note in OnThemeChange
             bgCol = GetBackgroundColour();
 #else
             bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #endif
-        }
     }
     else
     {
-        dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT) );
 #ifndef __WXMAC__  // see note in OnThemeChange
         bgCol = GetBackgroundColour();
 #else
@@ -1293,6 +1308,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
 #endif
     }
 
+    dc.SetTextForeground( fgCol );
     dc.SetBrush( bgCol );
     dc.SetPen( bgCol );
     dc.DrawRectangle( selRect );

@@ -170,7 +170,14 @@ void wxComboCtrl::OnThemeChange()
 {
     // there doesn't seem to be any way to get the text colour using themes
     // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
-    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+    if ( !m_hasFgCol )
+    {
+        wxColour fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+        SetForegroundColour(fgCol);
+        m_hasFgCol = false;
+    }
+
+    wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 
 #if wxUSE_UXTHEME
     wxUxThemeEngine * const theme = wxUxThemeEngine::GetIfActive();
@@ -189,17 +196,21 @@ void wxComboCtrl::OnThemeChange()
                             );
         if ( SUCCEEDED(hr) )
         {
-            SetBackgroundColour(wxRGBToColour(col));
-
-            // skip the call below
-            return;
+            bgCol = wxRGBToColour(col);
         }
-
-        wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
+        else
+        {
+            wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"),
+                          hr);
+        }
     }
 #endif
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+    if ( !m_hasBgCol )
+    {
+        SetBackgroundColour(bgCol);
+        m_hasBgCol = false;
+    }
 }
 
 void wxComboCtrl::OnResize()
@@ -347,65 +358,43 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
     //    theme = wxUxThemeEngine::GetIfActive();
 
     wxColour bgCol;
+    wxColour fgCol;
     bool drawDottedEdge = false;
+
+    if ( isEnabled && isFocused && HasFlag(wxCB_READONLY) )
+        drawDottedEdge = true;
 
     if ( isEnabled )
     {
-        // If popup is hidden and this control is focused,
-        // then draw the focus-indicator (selbgcolor background etc.).
-        if ( isFocused )
-        {
-        #if 0
-            // TODO: Proper theme color getting (JMS: I don't know which parts/colors to use,
-            //       those below don't work)
-            if ( hTheme )
-            {
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_SELECTED,TMT_TEXTCOLOR,&cref);
-                dc.SetTextForeground( wxRGBToColour(cref) );
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_SELECTED,TMT_FILLCOLOR,&cref);
-                bgCol = wxRGBToColour(cref);
-            }
-            else
-        #endif
-            {
-                dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
-                bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-                if ( m_windowStyle & wxCB_READONLY )
-                    drawDottedEdge = true;
-            }
-        }
+        if ( m_hasFgCol )
+            // Honour the custom foreground colour
+            fgCol = GetForegroundColour();
+        else if ( isFocused )
+            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         else
-        {
-            /*if ( hTheme )
-            {
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_TEXTCOLOR,&cref);
-                dc.SetTextForeground( wxRGBToColour(cref) );
-                theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_FILLCOLOR,&cref);
-                bgCol = wxRGBToColour(cref);
-            }
-            else
-            {*/
-                dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
-                bgCol = GetBackgroundColour();
-            //}
-        }
+            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     }
     else
     {
-        /*if ( hTheme )
-        {
-            theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_DISABLED,TMT_TEXTCOLOR,&cref);
-            dc.SetTextForeground( wxRGBToColour(cref) );
-            theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_DISABLED,TMT_EDGEFILLCOLOR,&cref);
-            bgCol = wxRGBToColour(cref);
-        }
-        else
-        {*/
-            dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT) );
-            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-        //}
+        fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
     }
 
+    if ( isEnabled )
+    {
+        if ( m_hasBgCol )
+            // Honour the custom background colour
+            bgCol = GetBackgroundColour();
+        else if ( isFocused )
+            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        else
+            bgCol = GetBackgroundColour();
+    }
+    else
+    {
+        bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+    }
+
+    dc.SetTextForeground(fgCol);
     dc.SetBrush(bgCol);
     dc.SetPen(bgCol);
     dc.DrawRectangle(selRect);
@@ -725,7 +714,7 @@ bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
                     ( !isPopupShown &&
                       HasFlag(wxCB_READONLY)
 #if wxUSE_UXTHEME
-					  &&
+                      &&
                       !wxUxThemeEngine::GetIfActive()
 #endif
                     ) )
