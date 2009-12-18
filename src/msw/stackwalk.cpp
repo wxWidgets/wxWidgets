@@ -300,14 +300,10 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
         }
     }
 
-    // this results in crashes inside ntdll.dll when called from
-    // exception handler ...
-#if 0
     if ( !wxDbgHelpDLL::SymCleanup(hProcess) )
     {
         wxDbgHelpDLL::LogError(wxT("SymCleanup"));
     }
-#endif
 }
 
 void wxStackWalker::WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip, size_t maxDepth)
