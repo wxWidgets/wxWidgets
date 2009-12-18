@@ -366,11 +366,11 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 
     if ( isEnabled )
     {
-        if ( m_hasFgCol )
+        if ( isFocused )
+            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        else if ( m_hasFgCol )
             // Honour the custom foreground colour
             fgCol = GetForegroundColour();
-        else if ( isFocused )
-            fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
         else
             fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
     }
@@ -381,11 +381,11 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
 
     if ( isEnabled )
     {
-        if ( m_hasBgCol )
+        if ( isFocused )
+            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+        else if ( m_hasBgCol )
             // Honour the custom background colour
             bgCol = GetBackgroundColour();
-        else if ( isFocused )
-            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
         else
             bgCol = GetBackgroundColour();
     }
