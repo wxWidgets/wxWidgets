@@ -4755,6 +4755,11 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                 themeName, themePart, themeState, themeProperty),
             hr);
     }
+#else
+    wxUnusedVar(themeName);
+    wxUnusedVar(themePart);
+    wxUnusedVar(themeState);
+    wxUnusedVar(themeColour);
 #endif
     return wxSystemSettings::GetColour(fallback);
 }
