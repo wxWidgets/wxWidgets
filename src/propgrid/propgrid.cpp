@@ -3377,17 +3377,26 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Filter out excess wxTextCtrl modified events
-    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED &&
-         wnd &&
-         wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED && wnd )
     {
-        wxTextCtrl* tc = (wxTextCtrl*) wnd;
+        if ( wnd->IsKindOf(CLASSINFO(wxTextCtrl)) )
+        {
+            wxTextCtrl* tc = (wxTextCtrl*) wnd;
 
-        wxString newTcValue = tc->GetValue();
-        if ( m_prevTcValue == newTcValue )
-            return;
+            wxString newTcValue = tc->GetValue();
+            if ( m_prevTcValue == newTcValue )
+                return;
+            m_prevTcValue = newTcValue;
+        }
+        else if ( wnd->IsKindOf(CLASSINFO(wxComboCtrl)) )
+        {
+            wxComboCtrl* cc = (wxComboCtrl*) wnd;
 
-        m_prevTcValue = newTcValue;
+            wxString newTcValue = cc->GetTextCtrl()->GetValue();
+            if ( m_prevTcValue == newTcValue )
+                return;
+            m_prevTcValue = newTcValue;
+        }
     }
 
     SetInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT);
