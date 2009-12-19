@@ -792,7 +792,7 @@ wxDataViewCustomRendererBase::RenderText(const wxString& text,
                                         text,
                                         *dc,
                                         GetEllipsizeMode(),
-                                        rect.width,
+                                        rectText.width,
                                         wxELLIPSIZE_FLAGS_NONE
                                     );
     }
