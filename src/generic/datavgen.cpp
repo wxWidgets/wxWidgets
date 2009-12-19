@@ -800,6 +800,12 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE)
         flags |= wxCONTROL_DISABLED;
 
+    // check boxes we draw must always have the same, standard size (if it's
+    // bigger than the cell size the checkbox will be truncated because the
+    // caller had set the clipping rectangle to prevent us from drawing outside
+    // the cell)
+    cell.SetSize(GetSize());
+
     wxRendererNative::Get().DrawCheckBox(
             GetOwner()->GetOwner(),
             *dc,
