@@ -1656,7 +1656,8 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             if (m_hasFocus)
                 flags |= wxCONTROL_FOCUSED;
 
-            wxRect rect( x_start, GetLineStart( item ), x_last, GetLineHeight( item ) );
+            wxRect rect( x_start, GetLineStart( item ),
+                         x_last - x_start, GetLineHeight( item ) );
             wxRendererNative::Get().DrawItemSelectionRect
                                 (
                                     this,
@@ -1671,7 +1672,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (m_dropHint)
     {
         wxRect rect( x_start, GetLineStart( m_dropHintLine ),
-                    x_last, GetLineHeight( m_dropHintLine ) );
+                     x_last - x_start, GetLineHeight( m_dropHintLine ) );
         dc.SetPen( *wxBLACK_PEN );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
         dc.DrawRectangle( rect );
