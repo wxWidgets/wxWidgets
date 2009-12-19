@@ -1696,7 +1696,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
 
-        if (col->IsHidden())
+        if ( col->IsHidden() || cell_rect.width <= 0 )
             continue;       // skip it!
 
         for (unsigned int item = item_start; item < item_last; item++)
@@ -1734,40 +1734,42 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             cell_rect.y = GetLineStart( item );
             cell_rect.height = GetLineHeight( item );
 
-            // Draw the expander here.
+            // deal with the expander
             int indent = 0;
             if ((!IsVirtualList()) && (col == expander))
             {
-                indent = node->GetIndentLevel();
-
                 // Calculate the indent first
-                indent = cell_rect.x + GetOwner()->GetIndent() * indent;
+                indent = GetOwner()->GetIndent() * node->GetIndentLevel();
 
-                int expander_width = m_lineHeight - 2*EXPANDER_MARGIN;
+                // we reserve m_lineHeight of horizontal space for the expander
+                // but leave EXPANDER_MARGIN around the expander itself
+                int exp_x = cell_rect.x + indent + EXPANDER_MARGIN;
 
-                // change the cell_rect.x to the appropriate pos
-                int expander_x = indent + EXPANDER_MARGIN;
-                int expander_y = cell_rect.y + EXPANDER_MARGIN + (GetLineHeight(item) / 2)
-                                 - (expander_width/2) - EXPANDER_OFFSET;
+                indent += m_lineHeight;
 
-                indent = indent + m_lineHeight;
-                    // try to use the m_lineHeight as the expander space
-
-                dc.SetPen( m_penExpander );
-                dc.SetBrush( wxNullBrush );
-                if( node->HasChildren() )
+                // draw expander if needed and visible
+                if ( node->HasChildren() && exp_x < cell_rect.GetRight() )
                 {
-                    wxRect rect( expander_x , expander_y, expander_width, expander_width);
+                    dc.SetPen( m_penExpander );
+                    dc.SetBrush( wxNullBrush );
+
+                    int exp_size = m_lineHeight - 2*EXPANDER_MARGIN;
+                    int exp_y = cell_rect.y + (cell_rect.height - exp_size)/2
+                                   + EXPANDER_MARGIN - EXPANDER_OFFSET;
+
+                    const wxRect rect(exp_x, exp_y, exp_size, exp_size);
+
                     int flag = 0;
-                    if (m_underMouse == node)
-                    {
+                    if ( m_underMouse == node )
                         flag |= wxCONTROL_CURRENT;
-                    }
-                    if( node->IsOpen() )
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect,
-                                                                    flag|wxCONTROL_EXPANDED );
-                    else
-                        wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
+                    if ( node->IsOpen() )
+                        flag |= wxCONTROL_EXPANDED;
+
+                    // ensure that we don't overflow the cell (which might
+                    // happen if the column is very narrow)
+                    wxDCClipper clip(dc, cell_rect);
+
+                    wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
 
                 // force the expander column to left-center align
@@ -1786,6 +1788,9 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             // account for the tree indent (harmless if we're not indented)
             item_rect.x += indent;
             item_rect.width -= indent;
+
+            if ( item_rect.width <= 0 )
+                continue;
 
             int state = 0;
             if (m_hasFocus && (m_selection.Index(item) != wxNOT_FOUND))
