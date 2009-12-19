@@ -232,34 +232,12 @@ void wxComboCtrl::OnThemeChange()
         m_hasFgCol = false;
     }
 
-    wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-
-#if wxUSE_UXTHEME
-    wxUxThemeEngine * const theme = wxUxThemeEngine::GetIfActive();
-    if ( theme )
-    {
-        // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
-        wxUxThemeHandle hTheme(this, L"EDIT");
-        COLORREF col;
-        HRESULT hr = theme->GetThemeColor
-                            (
-                                hTheme,
-                                EP_EDITTEXT,
-                                ETS_NORMAL,
-                                TMT_FILLCOLOR,
-                                &col
-                            );
-        if ( SUCCEEDED(hr) )
-        {
-            bgCol = wxRGBToColour(col);
-        }
-        else
-        {
-            wxLogApiError("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)",
-                          hr);
-        }
-    }
-#endif
+    // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
+    wxColour bgCol = MSWGetThemeColour(L"EDIT",
+                                       EP_EDITTEXT,
+                                       ETS_NORMAL,
+                                       ThemeColourBackground,
+                                       wxSYS_COLOUR_WINDOW);
 
     if ( !m_hasBgCol )
     {

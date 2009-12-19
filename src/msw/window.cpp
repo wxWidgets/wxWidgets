@@ -4701,6 +4701,64 @@ extern wxCOLORMAP *wxGetStdColourMap()
     return s_cmap;
 }
 
+#if wxUSE_UXTHEME && !defined(TMT_FILLCOLOR)
+    #define TMT_FILLCOLOR       3802
+    #define TMT_TEXTCOLOR       3803
+    #define TMT_BORDERCOLOR     3801
+#endif
+
+wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
+                                        int themePart,
+                                        int themeState,
+                                        MSWThemeColour themeColour,
+                                        wxSystemColour fallback)
+{
+#if wxUSE_UXTHEME
+    const wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+    if ( theme )
+    {
+        int themeProperty = 0;
+
+        // TODO: Convert this into a table? Sure would be faster.
+        switch ( themeColour )
+        {
+            case ThemeColourBackground:
+                themeProperty = TMT_FILLCOLOR;
+                break;
+            case ThemeColourText:
+                themeProperty = TMT_TEXTCOLOR;
+                break;
+            case ThemeColourBorder:
+                themeProperty = TMT_BORDERCOLOR;
+                break;
+            default:
+                wxFAIL_MSG(wxT("unsupported theme colour"));
+        };
+
+        wxUxThemeHandle hTheme(this, themeName);
+        COLORREF col;
+        HRESULT hr = theme->GetThemeColor
+                            (
+                                hTheme,
+                                themePart,
+                                themeState,
+                                themeProperty,
+                                &col
+                            );
+
+        if ( SUCCEEDED(hr) )
+            return wxRGBToColour(col);
+
+        wxLogApiError(
+            wxString::Format(
+                "GetThemeColor(%s, %i, %i, %i)",
+                themeName, themePart, themeState, themeProperty),
+            hr);
+    }
+#endif
+    return wxSystemSettings::GetColour(fallback);
+}
+
 // ---------------------------------------------------------------------------
 // painting
 // ---------------------------------------------------------------------------

@@ -13,6 +13,8 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
+enum wxSystemColour;
+
 // if this is set to 1, we use deferred window sizing to reduce flicker when
 // resizing complicated window hierarchies, but this can in theory result in
 // different behaviour than the old code so we keep the possibility to use it
@@ -412,6 +414,21 @@ public:
     // quering the parent windows via their MSWGetBgBrushForChild() recursively
     WXHBRUSH MSWGetBgBrush(WXHDC hDC) { return MSWGetBgBrush(hDC, this); }
     WXHBRUSH MSWGetBgBrush(WXHDC hDC, wxWindowMSW *child);
+
+    enum MSWThemeColour
+    {
+        ThemeColourText = 0,
+        ThemeColourBackground,
+        ThemeColourBorder
+    };
+
+    // returns a specific theme colour, or if that is not possible then
+    // wxSystemSettings::GetColour(fallback)
+    wxColour MSWGetThemeColour(const wchar_t *themeName,
+                               int themePart,
+                               int themeState,
+                               MSWThemeColour themeColour,
+                               wxSystemColour fallback);
 
     // gives the parent the possibility to draw its children background, e.g.
     // this is used by wxNotebook to do it using DrawThemeBackground()
