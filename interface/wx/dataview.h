@@ -596,6 +596,8 @@ public:
     @style{wxDV_VARIABLE_LINE_HEIGHT}
            Allow variable line heights.
            This can be inefficient when displaying large number of items.
+    @style{wxDV_NO_HEADER}
+           Do not show column headers (which are shown by default).
     @endStyleTable
 
     @beginEventEmissionTable{wxDataViewEvent}
