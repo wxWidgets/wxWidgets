@@ -5565,6 +5565,8 @@ bool wxPropertyGrid::IsEditorFocused() const
 void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
 {
     unsigned int oldFlags = m_iFlags;
+    bool wasEditorFocused = false;
+    wxWindow* wndEditor = m_wndEditor;
 
     m_iFlags &= ~(wxPG_FL_FOCUSED);
 
@@ -5573,14 +5575,29 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     // This must be one of nextFocus' parents.
     while ( parent )
     {
+        if ( parent == wndEditor )
+        {
+            wasEditorFocused = true;
+        }
         // Use m_eventObject, which is either wxPropertyGrid or
         // wxPropertyGridManager, as appropriate.
-        if ( parent == m_eventObject )
+        else if ( parent == m_eventObject )
         {
             m_iFlags |= wxPG_FL_FOCUSED;
             break;
         }
         parent = parent->GetParent();
+    }
+
+    // Notify editor control when it receives a focus
+    if ( wasEditorFocused && m_curFocused != newFocused )
+    {
+        wxPGProperty* p = GetSelection();
+        if ( p )
+        {
+            const wxPGEditor* editor = p->GetEditorClass();
+            editor->OnFocus(p, GetEditorControl());
+        }
     }
 
     m_curFocused = newFocused;
