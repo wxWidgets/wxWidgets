@@ -1018,6 +1018,30 @@ public:
     virtual ~wxSizerItem();
 
     /**
+        Set the window to be tracked by this item.
+
+        The old window isn't deleted as it is now owned by the sizer item.
+    */
+    void AssignWindow(wxWindow *window);
+
+    /**
+        Set the sizer tracked by this item.
+
+        Old sizer, if any, is deleted.
+    */
+    void AssignSizer(wxSizer *sizer);
+
+    //@{
+    /**
+        Set the size of the spacer tracked by this item.
+
+        Old spacer, if any, is deleted.
+    */
+    void AssignSpacer(const wxSize& size);
+    void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
+    //@}
+
+    /**
         Calculates the minimum desired size for the item, including any space
         needed by borders.
     */
@@ -1186,13 +1210,17 @@ public:
 
     /**
         Set the sizer tracked by this item.
-        @deprecated @todo provide deprecation description
+
+        @deprecated This function does not free the old sizer which may result
+        in memory leaks, use AssignSizer() which does free it instead.
     */
     void SetSizer(wxSizer* sizer);
 
     /**
         Set the size of the spacer tracked by this item.
-        @deprecated @todo provide deprecation description
+
+        @deprecated This function does not free the old spacer which may result
+        in memory leaks, use AssignSpacer() which does free it instead.
     */
     void SetSpacer(const wxSize& size);
 
