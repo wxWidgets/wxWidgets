@@ -91,9 +91,8 @@ public:
             case the given kind is ignored and taken to be @c wxITEM_SEPARATOR
             instead.
         @param text
-            Text for the menu item, as shown on the menu. An accelerator key can
-            be specified using the ampersand @c & character. In order to embed an
-            ampersand character in the menu item text, the ampersand must be doubled.
+            Text for the menu item, as shown on the menu.
+            See SetItemLabel() for more info.
         @param helpString
             Optional help string that will be shown on the status bar.
         @param kind
@@ -125,17 +124,50 @@ public:
     virtual void Enable(bool enable = true);
 
     /**
-        Returns the background colour associated with the menu item (Windows only).
+        @deprecated This function is deprecated; please use GetLabelText() instead.
+
+        @see GetLabelText()
+    */
+    static wxString GetLabelFromText(const wxString& text);
+
+    /**
+        Strips all accelerator characters and mnemonics from the given @a text.
+        For example:
+
+        @code
+          wxMenuItem::GetLabelfromText("&Hello\tCtrl-h");
+        @endcode
+
+        will return just @c "Hello".
+
+        @see GetItemLabelText(), GetItemLabel()
+    */
+    static wxString GetLabelText(const wxString& text);
+    
+    
+    /**
+        @name Getters
+    */
+    //@{
+    
+    /**
+        Returns the background colour associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     wxColour GetBackgroundColour() const;
 
     /**
-        Returns the checked or unchecked bitmap (Windows only).
+        Returns the checked or unchecked bitmap.
+        
+        @onlyfor{wxmsw}
     */
     virtual const wxBitmap& GetBitmap() const;
 
     /**
-        Returns the font associated with the menu item (Windows only).
+        Returns the font associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     wxFont GetFont() const;
 
@@ -177,33 +209,14 @@ public:
 
         @deprecated This function is deprecated in favour of GetItemLabelText().
 
-        @see GetText(), GetLabelFromText()
+        @see GetItemLabelText()
     */
     wxString GetLabel() const;
 
     /**
-        @deprecated This function is deprecated; please use GetLabelText() instead.
-
-        @see GetText(), GetLabel()
-    */
-    static wxString GetLabelFromText(const wxString& text);
-
-    /**
-        Strips all accelerator characters and mnemonics from the given @a text.
-        For example:
-
-        @code
-          wxMenuItem::GetLabelfromText("&Hello\tCtrl-h");
-        @endcode
-
-        will return just @c "Hello".
-
-        @see GetItemLabelText(), GetItemLabel()
-    */
-    static wxString GetLabelText(const wxString& text);
-
-    /**
-        Gets the width of the menu item checkmark bitmap (Windows only).
+        Gets the width of the menu item checkmark bitmap.
+        
+        @onlyfor{wxmsw}
     */
     int GetMarginWidth() const;
 
@@ -216,9 +229,9 @@ public:
     /**
         Returns the text associated with the menu item.
 
-        @deprecated This function is deprecated. Please use
-
-        GetItemLabel() or GetItemLabelText() instead.
+        @deprecated This function is deprecated. Please use GetItemLabel() or GetItemLabelText() instead.
+        
+        @see GetItemLabel(), GetItemLabelText()
     */
     wxString GetName() const;
 
@@ -233,14 +246,25 @@ public:
 
         @deprecated This function is deprecated in favour of GetItemLabel().
 
-        @see GetLabel(), GetLabelFromText()
+        @see GetLabelFromText()
     */
     const wxString& GetText() const;
 
     /**
-        Returns the text colour associated with the menu item (Windows only).
+        Returns the text colour associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     wxColour GetTextColour() const;
+    
+    //@}
+    
+    
+    
+    /**
+        @name Checkers
+    */
+    //@{
 
     /**
         Returns @true if the item is checkable.
@@ -266,17 +290,28 @@ public:
         Returns @true if the item is a submenu.
     */
     bool IsSubMenu() const;
+    
+    //@}
+    
+    
+    
+    /**
+        @name Setters
+    */
+    //@{
 
     /**
-        Sets the background colour associated with the menu item (Windows only).
+        Sets the background colour associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     void SetBackgroundColour(const wxColour& colour) const;
 
     /**
         Sets the bitmap for the menu item.
 
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if @a
-        checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if 
+        @a checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
         otherwise.
 
         @onlyfor{wxmsw,wxosx,wxgtk}
@@ -293,7 +328,9 @@ public:
                     const wxBitmap& unchecked = wxNullBitmap);
 
     /**
-        Sets the font associated with the menu item (Windows only).
+        Sets the font associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     void SetFont(const wxFont& font);
 
@@ -304,11 +341,58 @@ public:
 
     /**
         Sets the label associated with the menu item.
+        
+        Note that if the ID of this menu item corrisponds to a stock ID, then it is 
+        not necessary to specify a label: wxWidgets will automatically use the stock
+        item label associated with that ID. See the @ref wxMenuItem::wxMenuItem "constructor"
+        for more info.
+        
+        The label string for the normal menu items (not separators) may include the 
+        accelerator which can be used to activate the menu item from keyboard.
+        An accelerator key can be specified using the ampersand <tt>&</tt> character. 
+        In order to embed an ampersand character in the menu item text, the ampersand 
+        must be doubled.
+        
+        Optionally you can specify also an accelerator string appending a tab character 
+        <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
+        Its general syntax is any combination of @c "CTRL", @c "ALT" and @c "SHIFT" strings
+        (case doesn't matter) separated by either @c '-' or @c '+' characters and followed
+        by the accelerator itself.
+        The accelerator may be any alphanumeric character, any function key
+        (from F1 to F12) or one of the special characters listed in the table
+        below (again, case doesn't matter):
+        - @c DEL or @c DELETE: Delete key
+        - @c INS or @c INSERT: Insert key
+        - @c ENTER or @c RETURN: Enter key
+        - @c PGUP: PageUp key
+        - @c PGDN: PageDown key
+        - @c LEFT: Left cursor arrow key
+        - @c RIGHT: Right cursor arrow key
+        - @c UP: Up cursor arrow key
+        - @c DOWN: Down cursor arrow key
+        - @c HOME: Home key
+        - @c END: End key
+        - @c SPACE: Space
+        - @c TAB: Tab key
+        - @c ESC or @c ESCAPE: Escape key (Windows only)
+
+        Examples:
+
+        @code
+        m_pMyMenuItem->SetItemLabel("My &item\tCTRL+I");
+        m_pMyMenuItem2->SetItemLabel("Clean && build\tF7");
+        m_pMyMenuItem3->SetItemLabel("Simple item");
+        m_pMyMenuItem4->SetItemLabel("Item with &accelerator");
+        @endcode
+        
+        @see GetItemLabel(), GetItemLabelText()
     */
     virtual void SetItemLabel(const wxString& label);
 
     /**
-        Sets the width of the menu item checkmark bitmap (Windows only).
+        Sets the width of the menu item checkmark bitmap.
+        
+        @onlyfor{wxmsw}
     */
     void SetMarginWidth(int width) const;
 
@@ -326,12 +410,18 @@ public:
         Sets the text associated with the menu item.
 
         @deprecated This function is deprecated in favour of SetItemLabel().
+        
+        @see SetItemLabel().
     */
     virtual void SetText(const wxString& text);
 
     /**
-        Sets the text colour associated with the menu item (Windows only).
+        Sets the text colour associated with the menu item.
+        
+        @onlyfor{wxmsw}
     */
     void SetTextColour(const wxColour& colour);
+    
+    //@}
 };
 

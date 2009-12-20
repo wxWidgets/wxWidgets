@@ -486,44 +486,26 @@ public:
             The menu command identifier.
         @param item
             The string to appear on the menu item.
+            See wxMenuItem::SetItemLabel() for more details.
         @param helpString
             An optional help string associated with the item.
-            By default, the handler for the wxEVT_MENU_HIGHLIGHT event displays
+            By default, the handler for the @c wxEVT_MENU_HIGHLIGHT event displays
             this string in the status line.
         @param kind
-            May be wxITEM_SEPARATOR, wxITEM_NORMAL, wxITEM_CHECK or wxITEM_RADIO
+            May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or @c wxITEM_RADIO.
+        
+        Example:
+        @code
+        m_pFileMenu->Append(ID_NEW_FILE, "&New file\tCTRL+N", "Creates a new XYZ document");
+        @endcode
+        or even better for stock menu items (see wxMenuItem::wxMenuItem):
+        @code
+        m_pFileMenu->Append(wxID_NEW, "", "Creates a new XYZ document");
+        @endcode
 
         @remarks
         This command can be used after the menu has been shown, as well as on
         initial creation of a menu or menubar.
-
-        The item string for the normal menu items (not submenus or separators)
-        may include the accelerator which can be used to activate the menu item
-        from keyboard.
-        The accelerator string follows the item label and is separated from it
-        by a TAB character ('\\t').
-
-        Its general syntax is any combination of "CTRL", "ALT" and "SHIFT" strings
-        (case doesn't matter) separated by either '-' or '+' characters and followed
-        by the accelerator itself.
-        The accelerator may be any alphanumeric character, any function key
-        (from F1 to F12) or one of the special characters listed in the table
-        below (again, case doesn't matter):
-
-        - DEL or DELETE: Delete key
-        - INS or INSERT: Insert key
-        - ENTER or RETURN: Enter key
-        - PGUP: PageUp key
-        - PGDN: PageDown key
-        - LEFT: Left cursor arrow key
-        - RIGHT: Right cursor arrow key
-        - UP: Up cursor arrow key
-        - DOWN: Down cursor arrow key
-        - HOME: Home key
-        - END: End key
-        - SPACE: Space
-        - TAB: Tab key
-        - ESC: or ESCAPE Escape key (Windows only)
 
         @see AppendSeparator(), AppendCheckItem(), AppendRadioItem(),
              AppendSubMenu(), Insert(), SetLabel(), GetHelpString(),
