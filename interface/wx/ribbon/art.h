@@ -186,8 +186,8 @@ enum wxRibbonButtonKind
     appearance.
 
     By default, a wxRibbonBar uses an instance of this class called
-    wxRibbonDefaultArtProvider, which resolves to wxRibbonAUIArtProvider,
-    wxRibbonMSWArtProvider, or wxRibbonOSXArtProvider - whichever is most appropriate
+    @c wxRibbonDefaultArtProvider, which resolves to @c wxRibbonAUIArtProvider,
+    @c wxRibbonMSWArtProvider, or @c wxRibbonOSXArtProvider - whichever is most appropriate
     to the current platform. These art providers are all slightly configurable with
     regard to colours and fonts, but for larger modifications, you can derive from
     one of these classes, or write a completely new art provider class.
@@ -265,17 +265,17 @@ public:
         @a id can be one of the colour values of @ref wxRibbonArtSetting, though
         not all colour settings will have an affect on every art provider.
         
-        \see SetColourScheme()
+        @see SetColourScheme()
     */
     virtual void SetColour(int id, const wxColor& colour) = 0;
     
     /**
-        \see wxRibbonArtProvider::GetColour()
+        @see wxRibbonArtProvider::GetColour()
     */
     wxColour GetColor(int id) const;
     
     /**
-        \see wxRibbonArtProvider::SetColour()
+        @see wxRibbonArtProvider::SetColour()
     */
     void SetColor(int id, const wxColour& color);
     
@@ -298,11 +298,11 @@ public:
         values are dependant upon the last values given to SetColourScheme(),
         as described above.
         
-        \param[out] primary
+        @param[out] primary
             Pointer to a location to store the primary colour, or NULL.
-        \param[out] secondary
+        @param[out] secondary
             Pointer to a location to store the secondary colour, or NULL.
-        \param[out] tertiary
+        @param[out] tertiary
             Pointer to a location to store the tertiary colour, or NULL.
     */
     virtual void GetColourScheme(wxColour* primary,
@@ -318,8 +318,8 @@ public:
         Note that some art providers may not use the tertiary colour for
         anything, and some may not use the secondary colour either.
         
-        \see SetColour()
-        \see GetColourScheme()
+        @see SetColour()
+        @see GetColourScheme()
     */    
     virtual void SetColourScheme(const wxColour& primary,
                         const wxColour& secondary,
@@ -899,7 +899,11 @@ public:
             The ribbon panel in question. Attributes like the panel label can
             be queried from this.
         @param[out] desired_bitmap_size
-            
+            Optional parameter which is filled with the size of the bitmap
+            suitable for a minimised ribbon panel.
+        @param[out] expanded_panel_direction
+            Optional parameter which is filled with the direction of the
+            minimised panel (@c wxEAST or @c wxSOUTH depending on the style).
     */
     virtual wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,

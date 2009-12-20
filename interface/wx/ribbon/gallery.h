@@ -58,6 +58,8 @@ public:
         Construct a ribbon gallery with the given parameters.
         @param parent
             Parent window for the gallery (typically a wxRibbonPanel).
+        @param id
+            An identifier for the gallery. @c wxID_ANY is taken to mean a default.
         @param pos
             Initial position of the gallery.
         @param size

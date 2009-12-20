@@ -39,8 +39,11 @@ public:
 
     /**
         Construct a ribbon tool bar with the given parameters.
+        
         @param parent
             Parent window for the tool bar (typically a wxRibbonPanel).
+        @param id
+            An identifier for the toolbar. @c wxID_ANY is taken to mean a default.
         @param pos
             Initial position of the tool bar.
         @param size
@@ -121,9 +124,7 @@ public:
         @return An opaque pointer which can be used only with other tool bar
             methods.
             
-        @see AddDropdownTool()
-        @see AddHybridTool()
-        @saa AddSeparator()
+        @see AddDropdownTool(), AddHybridTool(), AddSeparator()
     */
     virtual wxRibbonToolBarToolBase* AddTool(
                 int tool_id,

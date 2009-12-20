@@ -124,8 +124,11 @@ public:
 
     /**
         Construct a ribbon button bar with the given parameters.
+        
         @param parent
             Parent window for the button bar (typically a wxRibbonPanel).
+        @param id
+            An identifier for the button bar. @c wxID_ANY is taken to mean a default.
         @param pos
             Initial position of the button bar.
         @param size
