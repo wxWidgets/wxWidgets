@@ -1239,6 +1239,14 @@ public:
         return m_sortFunction;
     }
 
+    /**
+        Returns (visual) text representation of the unspecified
+        property value.
+
+        @param argFlags For internal use only.
+    */
+    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+
     /** Set virtual width for this particular page. Width -1 indicates that the
         virtual width should be disabled. */
     void SetVirtualWidth( int width );

@@ -928,8 +928,10 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
     }
 #endif
 
+    wxPropertyGrid* pg = GetGrid();
+
     if ( IsValueUnspecified() )
-        return wxEmptyString;
+        return pg->GetUnspecifiedValueText(argFlags);
 
     if ( m_commonValue == -1 )
     {
@@ -939,7 +941,6 @@ wxString wxPGProperty::GetValueAsString( int argFlags ) const
 
     //
     // Return common value's string representation
-    wxPropertyGrid* pg = GetGrid();
     const wxPGCommonValue* cv = pg->GetCommonValue(m_commonValue);
 
     if ( argFlags & wxPG_FULL_VALUE )

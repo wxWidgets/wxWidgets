@@ -3629,6 +3629,12 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
     m_curcursor = type;
 }
 
+wxString
+wxPropertyGrid::GetUnspecifiedValueText( int WXUNUSED(argFlags) ) const
+{
+    return wxEmptyString;
+}
+
 // -----------------------------------------------------------------------
 // wxPropertyGrid property selection, editor creation
 // -----------------------------------------------------------------------

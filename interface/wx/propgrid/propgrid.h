@@ -741,6 +741,14 @@ public:
     wxTextCtrl* GetEditorTextCtrl() const;
 
     /**
+        Returns (visual) text representation of the unspecified
+        property value.
+
+        @param argFlags For internal use only.
+    */
+    wxString GetUnspecifiedValueText( int argFlags = 0 ) const;
+
+    /**
         Returns current vertical spacing.
     */
     int GetVerticalSpacing() const;
