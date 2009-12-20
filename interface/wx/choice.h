@@ -40,7 +40,6 @@ public:
     */
     wxChoice();
 
-    //@{
     /**
         Constructor, creating and showing a choice.
 
@@ -127,7 +126,6 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
-    //@}
 
     /**
         Destructor, destroying the choice item.

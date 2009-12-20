@@ -20,40 +20,41 @@
 
     Here is an example function using this class which inserts hard line breaks
     into a string of text at the positions where it would be wrapped:
+    
     @code
-wxString WrapText(wxWindow *win, const wxString& text, int widthMax)
-{
-    class HardBreakWrapper : public wxTextWrapper
+    wxString WrapText(wxWindow *win, const wxString& text, int widthMax)
     {
-    public:
-        HardBreakWrapper(wxWindow *win, const wxString& text, int widthMax)
+        class HardBreakWrapper : public wxTextWrapper
         {
-            Wrap(win, text, widthMax);
-        }
+        public:
+            HardBreakWrapper(wxWindow *win, const wxString& text, int widthMax)
+            {
+                Wrap(win, text, widthMax);
+            }
 
-        wxString const& GetWrapped() const { return m_wrapped; }
+            wxString const& GetWrapped() const { return m_wrapped; }
 
-    protected:
-        virtual void OnOutputLine(const wxString& line)
-        {
-            m_wrapped += line;
-        }
+        protected:
+            virtual void OnOutputLine(const wxString& line)
+            {
+                m_wrapped += line;
+            }
 
-        virtual void OnNewLine()
-        {
-            m_wrapped += '\n';
-        }
+            virtual void OnNewLine()
+            {
+                m_wrapped += '\n';
+            }
 
-    private:
-        wxString m_wrapped;
-    };
+        private:
+            wxString m_wrapped;
+        };
 
-    HardBreakWrapper wrapper(win, text, widthMax);
-    return wrapper.GetWrapped();
-}
+        HardBreakWrapper wrapper(win, text, widthMax);
+        return wrapper.GetWrapped();
+    }
     @endcode
 
-    @library{none}
+    @nolibrary
     @category{gdi}
  */
 class wxTextWrapper

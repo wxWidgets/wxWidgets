@@ -784,7 +784,7 @@ class wxGridColumnHeaderRenderer : public wxGridHeaderLabelsRenderer
 
     @since 2.9.1
  */
-class wxGridRowHeaderRendererDefault : public wxGridRowHeaderRendererDefault
+class wxGridRowHeaderRendererDefault : public wxGridRowHeaderRenderer
 {
 public:
     /// Implement border drawing for the row labels.

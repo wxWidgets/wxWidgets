@@ -31,7 +31,7 @@
     (although this is the most common case) -- it can be any value which can
     be used to uniquely identify an item.
 
-    @library{core}
+    @library{wxcore}
     @category{events}
  */
 class wxMouseEventsManager : public wxEvtHandler

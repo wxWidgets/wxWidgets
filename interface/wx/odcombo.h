@@ -68,7 +68,6 @@ public:
     */
     wxOwnerDrawnComboBox();
 
-    //@{
     /**
         Constructor, creating and showing a owner-drawn combobox.
 
@@ -138,7 +137,6 @@ public:
                          long style = 0,
                          const wxValidator& validator = wxDefaultValidator,
                          const wxString& name = "comboBox");
-    //@}
 
     /**
         Destructor, destroying the owner-drawn combobox.

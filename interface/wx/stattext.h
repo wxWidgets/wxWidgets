@@ -89,10 +89,15 @@ public:
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxStaticTextNameStr);
 
+    // NB: when writing docs for the following function remember that Doxygen
+    //     will always expand HTML entities (e.g. &quot;) and thus we need to
+    //     write e.g. "&amp;lt;" to have in the output the "&lt;" string.
     /**
-        Escapes all the symbols of @a str that have a special meaning (<tt><>"'&</tt>) for
+        Escapes all the symbols of @a str that have a special meaning (<tt><>&quot;'&</tt>) for
         wxStaticText objects with the @c wxST_MARKUP style.
-        Those symbols are replaced the corresponding entities (&lt; &gt; &quot; &apos; &amp;).
+        
+        Those symbols are replaced the corresponding entities 
+        (&amp;lt; &amp;gt; &amp;quot; &amp;apos; &amp;amp;).
     */
     static wxString EscapeMarkup(const wxString& str);
 

@@ -9,8 +9,8 @@
 /**
     @class wxClientDataContainer
 
-    This class is a mixin that provides storage and management of "client
-    data." This data can either be of type void - in which case the data
+    This class is a mixin that provides storage and management of "client data".
+    This data can either be of type void - in which case the data
     @e container does not take care of freeing the data again or it is of
     type wxClientData or its derivatives. In that case the container will free
     the memory itself later. Note that you @e must not assign both void data

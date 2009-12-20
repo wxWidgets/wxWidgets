@@ -257,7 +257,7 @@ public:
             The tool to be added.
 
         @remarks After you have added tools to a toolbar, you must call
-            Realize() in order to have the tools appear.
+                 Realize() in order to have the tools appear.
 
         @see AddSeparator(), AddCheckTool(), AddRadioTool(),
              InsertTool(), DeleteTool(), Realize(), SetDropdownMenu()
