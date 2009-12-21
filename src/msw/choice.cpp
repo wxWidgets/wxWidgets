@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
+    #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/brush.h"
     #include "wx/settings.h"
@@ -218,6 +219,37 @@ WXDWORD wxChoice::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= CBS_SORT;
 
     return msStyle;
+}
+
+#ifndef EP_EDITTEXT
+    #define EP_EDITTEXT         1
+    #define ETS_NORMAL          1
+#endif
+
+wxVisualAttributes
+wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    // it is important to return valid values for all attributes from here,
+    // GetXXX() below rely on this
+    wxVisualAttributes attrs;
+
+    // FIXME: Use better dummy window?
+    wxWindow* wnd = wxTheApp->GetTopWindow();
+
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    // there doesn't seem to be any way to get the text colour using themes
+    // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+
+    // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
+    attrs.colBg = wnd->MSWGetThemeColour(L"EDIT",
+                                         EP_EDITTEXT, 
+                                         ETS_NORMAL,
+                                         ThemeColourBackground,
+                                         wxSYS_COLOUR_WINDOW);
+
+    return attrs;
 }
 
 wxChoice::~wxChoice()

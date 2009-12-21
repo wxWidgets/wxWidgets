@@ -221,31 +221,6 @@ wxComboCtrl::~wxComboCtrl()
 {
 }
 
-void wxComboCtrl::OnThemeChange()
-{
-    // there doesn't seem to be any way to get the text colour using themes
-    // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
-    if ( !m_hasFgCol )
-    {
-        wxColour fgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
-        SetForegroundColour(fgCol);
-        m_hasFgCol = false;
-    }
-
-    // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
-    wxColour bgCol = MSWGetThemeColour(L"EDIT",
-                                       EP_EDITTEXT,
-                                       ETS_NORMAL,
-                                       ThemeColourBackground,
-                                       wxSYS_COLOUR_WINDOW);
-
-    if ( !m_hasBgCol )
-    {
-        SetBackgroundColour(bgCol);
-        m_hasBgCol = false;
-    }
-}
-
 void wxComboCtrl::OnResize()
 {
     //

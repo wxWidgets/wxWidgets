@@ -77,6 +77,14 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
 
+    virtual wxVisualAttributes GetDefaultAttributes() const
+    {
+        return GetClassDefaultAttributes(GetWindowVariant());
+    }
+
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+
     // MSW only
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);

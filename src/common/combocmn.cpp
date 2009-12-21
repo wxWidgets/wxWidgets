@@ -913,13 +913,27 @@ void wxComboCtrlBase::OnThemeChange()
     // be the correct colour and themed brush.  Instead we'll use
     // wxSYS_COLOUR_WINDOW in the EVT_PAINT handler as needed.
 #ifndef __WXMAC__
+  #if defined(__WXMSW__) || defined(__WXGTK__)
+    wxVisualAttributes vattrs = wxComboBox::GetClassDefaultAttributes();
+  #else
+    wxVisualAttributes vattrs;
+    vattrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    vattrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+  #endif
+
+    // Only change the colours if application has not specified
+    // custom ones.
+    if ( !m_hasFgCol )
+    {
+        SetOwnForegroundColour(vattrs.colFg);
+        m_hasFgCol = false;
+    }
     if ( !m_hasBgCol )
     {
-        wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-        SetOwnBackgroundColour(bgCol);
+        SetOwnBackgroundColour(vattrs.colBg);
         m_hasBgCol = false;
     }
-#endif
+#endif // !__WXMAC__
 }
 
 wxComboCtrlBase::~wxComboCtrlBase()

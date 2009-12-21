@@ -86,7 +86,6 @@ protected:
     // customization
     virtual void OnResize();
     virtual wxCoord GetNativeTextIndent() const;
-    virtual void OnThemeChange();
 
     // event handlers
     void OnPaintEvent( wxPaintEvent& event );
