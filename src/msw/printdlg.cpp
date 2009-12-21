@@ -89,7 +89,7 @@ public:
 private:
     HANDLE m_hPrinter;
 
-    DECLARE_NO_COPY_CLASS(WinPrinter);
+    DECLARE_NO_COPY_CLASS(WinPrinter)
 };
 
 //----------------------------------------------------------------------------
