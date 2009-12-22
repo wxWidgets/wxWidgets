@@ -173,13 +173,16 @@
 extern wxMenu *wxCurrentPopupMenu;
 #endif
 
+namespace
+{
+
 // true if we had already created the std colour map, used by
 // wxGetStdColourMap() and wxWindow::OnSysColourChanged()           (FIXME-MT)
-static bool gs_hasStdCmap = false;
+bool gs_hasStdCmap = false;
 
 // last mouse event information we need to filter out the duplicates
 #if wxUSE_MOUSEEVENT_HACK
-static struct MouseEventInfoDummy
+struct MouseEventInfoDummy
 {
     // mouse position (in screen coordinates)
     wxPoint pos;
@@ -194,14 +197,29 @@ WX_DECLARE_HASH_MAP(int, wxWindow::MSWMessageHandler,
                     wxIntegerHash, wxIntegerEqual,
                     MSWMessageHandlers);
 
-static MSWMessageHandlers gs_messageHandlers;
+MSWMessageHandlers gs_messageHandlers;
 
 // hash containing all our windows, it uses HWND keys and wxWindow* values
 WX_DECLARE_HASH_MAP(HWND, wxWindow *,
                     wxPointerHash, wxPointerEqual,
                     WindowHandles);
 
-static WindowHandles gs_windowHandles;
+WindowHandles gs_windowHandles;
+
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
+// temporary override for WM_ERASEBKGND processing: we don't store this in
+// wxWindow itself as we don't need it during most of the time so don't
+// increase the size of all window objects unnecessarily
+WX_DECLARE_HASH_MAP(wxWindow *, wxWindow *,
+                    wxPointerHash, wxPointerEqual,
+                    EraseBgHooks);
+
+EraseBgHooks gs_eraseBgHooks;
+
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
+} // anonymous namespace
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -3269,7 +3287,17 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 
         case WM_ERASEBKGND:
-            processed = HandleEraseBkgnd((WXHDC)wParam);
+            {
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                // check if an override was configured for this window
+                EraseBgHooks::const_iterator it = gs_eraseBgHooks.find(this);
+                if ( it != gs_eraseBgHooks.end() )
+                    processed = it->second->MSWEraseBgHook((WXHDC)wParam);
+                else
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+                    processed = HandleEraseBkgnd((WXHDC)wParam);
+            }
+
             if ( processed )
             {
                 // we processed the message, i.e. erased the background
@@ -4867,13 +4895,47 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
     return true;
 }
 
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
+bool wxWindowMSW::MSWHasEraseBgHook() const
+{
+    return gs_eraseBgHooks.find(this) != gs_eraseBgHooks.end();
+}
+
+void wxWindowMSW::MSWSetEraseBgHook(wxWindow *child)
+{
+    if ( child )
+    {
+        if ( !gs_eraseBgHooks.insert(
+                EraseBgHooks::value_type(this, child)).second )
+        {
+            wxFAIL_MSG( wxT("Setting erase background hook twice?") );
+        }
+    }
+    else // reset the hook
+    {
+        if ( gs_eraseBgHooks.erase(this) != 1 )
+        {
+            wxFAIL_MSG( wxT("Resetting erase background which was not set?") );
+        }
+    }
+}
+
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
 bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 {
     HBRUSH hbr = (HBRUSH)MSWGetBgBrush(hDC);
     if ( !hbr )
         return false;
 
-    wxFillRect(GetHwnd(), (HDC)hDC, hbr);
+    // erase just the client area of the window, this is important for the
+    // frames to avoid drawing over the toolbar part of the window (you might
+    // think using WS_CLIPCHILDREN would prevent this from happening, but it
+    // clearly doesn't)
+    RECT rc;
+    wxCopyRectToRECT(GetClientRect(), rc);
+    ::FillRect((HDC)hDC, &rc, hbr);
 
     return true;
 }

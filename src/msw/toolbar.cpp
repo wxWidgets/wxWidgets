@@ -36,6 +36,7 @@
     #include "wx/intl.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
+    #include "wx/region.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
     #include "wx/app.h"         // for GetComCtl32Version
@@ -335,17 +336,11 @@ bool wxToolBar::Create(wxWindow *parent,
 
     wxSetCCUnicodeFormat(GetHwnd());
 
-    // workaround for flat toolbar on Windows XP classic style: we have to set
-    // the style after creating the control; doing it at creation time doesn't work
-#if wxUSE_UXTHEME
-    if ( style & wxTB_FLAT )
-    {
-        LRESULT style = GetMSWToolbarStyle();
-
-        if ( !(style & TBSTYLE_FLAT) )
-            ::SendMessage(GetHwnd(), TB_SETSTYLE, 0, style | TBSTYLE_FLAT);
-    }
-#endif // wxUSE_UXTHEME
+    // we always erase our background on WM_PAINT so there is no need to do it
+    // in WM_ERASEBKGND too (by default this won't be done but if the toolbar
+    // has a non default background colour, then it would be used in both
+    // places resulting in flicker)
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -500,21 +495,11 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( !(style & wxTB_NO_TOOLTIPS) )
         msStyle |= TBSTYLE_TOOLTIPS;
 
-    if ( style & (wxTB_FLAT | wxTB_HORZ_LAYOUT) )
-    {
-        // static as it doesn't change during the program lifetime
-        static const int s_verComCtl = wxApp::GetComCtl32Version();
+    if ( style & wxTB_FLAT && wxApp::GetComCtl32Version() > 400 )
+        msStyle |= TBSTYLE_FLAT;
 
-        // comctl32.dll 4.00 doesn't support the flat toolbars and using this
-        // style with 6.00 (part of Windows XP) leads to the toolbar with
-        // incorrect background colour - and not using it still results in the
-        // correct (flat) toolbar, so don't use it there
-        if ( s_verComCtl > 400 && s_verComCtl < 600 )
-            msStyle |= TBSTYLE_FLAT | TBSTYLE_TRANSPARENT;
-
-        if ( s_verComCtl >= 470 && style & wxTB_HORZ_LAYOUT )
-            msStyle |= TBSTYLE_LIST;
-    }
+    if ( style & wxTB_HORZ_LAYOUT && wxApp::GetComCtl32Version() >= 470 )
+        msStyle |= TBSTYLE_LIST;
 
     if ( style & wxTB_NODIVIDER )
         msStyle |= CCS_NODIVIDER;
@@ -530,6 +515,15 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     if ( style & wxTB_RIGHT )
         msStyle |= CCS_RIGHT;
+
+    // always use TBSTYLE_TRANSPARENT because the background is not drawn
+    // correctly without it in all themes and, for whatever reason, the control
+    // also flickers horribly when it is resized if this style is not used
+    //
+    // note that this is implicitly enabled by the native toolbar itself when
+    // TBSTYLE_FLAT is used (i.e. it's impossible to use TBSTYLE_FLAT without
+    // TBSTYLE_TRANSPARENT) but turn it on explicitly in any case
+    msStyle |= TBSTYLE_TRANSPARENT;
 
     return msStyle;
 }
@@ -1707,12 +1701,19 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
     return true;
 }
 
-#ifndef __WXWINCE__
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
-bool wxToolBar::HandlePaint(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
+bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 {
-    // exclude the area occupied by the controls and stretchable spaces from
-    // the update region to prevent the toolbar from drawing separators in it
+    // we must prevent the dummy separators corresponding to controls or
+    // stretchable spaces from being seen: we used to do it by painting over
+    // them but this, unsurprisingly, resulted in a lot of flicker so now we
+    // prevent the toolbar from painting them at all
+
+    // compute the region containing all dummy separators which we don't want
+    // to be seen
+    wxRegion rgnDummySeps;
+    const wxRect rectTotal = GetClientRect();
     int toolIndex = 0;
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
@@ -1726,13 +1727,14 @@ bool wxToolBar::HandlePaint(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam)
             const size_t numSeps = tool->GetSeparatorsCount();
             for ( size_t n = 0; n < numSeps; n++, toolIndex++ )
             {
-                const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
+                // for some reason TB_GETITEMRECT returns a rectangle 1 pixel
+                // shorter than the full window size (at least under Windows 7)
+                // but we need to erase the full height below
+                RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex);
+                rcItem.top = 0;
+                rcItem.bottom = rectTotal.height;
 
-                const wxRegion rgnItem(wxRectFromRECT(rcItem));
-                if ( !ValidateRgn(GetHwnd(), GetHrgnOf(rgnItem)) )
-                {
-                    wxLogLastError(wxT("ValidateRgn()"));
-                }
+                rgnDummySeps.Union(wxRectFromRECT(rcItem));
             }
         }
         else
@@ -1742,10 +1744,114 @@ bool wxToolBar::HandlePaint(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam)
         }
     }
 
-    // still let the native control draw everything else normally
-    return false;
+    if ( !rgnDummySeps.IsOk() )
+    {
+        // don't interfere with toolbar default painting at all if we don't
+        // need to -- and we don't if we have no dummy separators at all
+        return false;
+    }
+
+    // exclude the area occupied by the controls and stretchable spaces from
+    // the update region to prevent the toolbar from drawing separators in it
+    if ( !::ValidateRgn(GetHwnd(), GetHrgnOf(rgnDummySeps)) )
+    {
+        wxLogLastError(wxT("ValidateRgn()"));
+    }
+
+    // still let the native control draw everything else normally but set up a
+    // hook to be able to process the next WM_ERASEBKGND sent to our parent
+    // because toolbar will ask it to erase its background from its WM_PAINT
+    // handler (when using TBSTYLE_TRANSPARENT which we do always use)
+    //
+    // installing hook is not completely trivial as all kinds of strange
+    // situations are possible: sometimes we can be called recursively from
+    // inside the native toolbar WM_PAINT handler so the hook might already be
+    // installed and sometimes the native toolbar might not send WM_ERASEBKGND
+    // to the parent at all for whatever reason, so deal with all these cases
+    wxWindow * const parent = GetParent();
+    const bool hadHook = parent->MSWHasEraseBgHook();
+    if ( !hadHook )
+        GetParent()->MSWSetEraseBgHook(this);
+
+    MSWDefWindowProc(WM_PAINT, wParam, lParam);
+
+    if ( !hadHook )
+        GetParent()->MSWSetEraseBgHook(NULL);
+
+
+    // erase the dummy separators region ourselves now as nobody painted over
+    // them
+    WindowHDC hdc(GetHwnd());
+    ::SelectClipRgn(hdc, GetHrgnOf(rgnDummySeps));
+    MSWDoEraseBackground(hdc);
+
+    return true;
 }
-#endif // __WXWINCE__
+
+WXHBRUSH wxToolBar::MSWGetToolbarBgBrush()
+{
+    // we conservatively use a solid brush here but we could also use a themed
+    // brush by using DrawThemeBackground() to create a bitmap brush (it'd need
+    // to be invalidated whenever the toolbar is resized and, also, correctly
+    // aligned using SetBrushOrgEx() before each use -- there is code for doing
+    // this in wxNotebook already so it'd need to be refactored into wxWindow)
+    //
+    // however inasmuch as there is a default background for the toolbar at all
+    // (and this is not a trivial question as different applications use very
+    // different colours), it seems to be a solid one and using REBAR
+    // background brush as we used to do before doesn't look good at all under
+    // Windows 7 (and probably Vista too), so for now we just keep it simple
+    wxColour const
+        colBg = m_hasBgCol ? GetBackgroundColour()
+                           : wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+    wxBrush * const
+        brush = wxTheBrushList->FindOrCreateBrush(colBg);
+
+    return brush ? brush->GetResourceHandle() : 0;
+}
+
+WXHBRUSH wxToolBar::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)
+{
+    WXHBRUSH hbr = wxToolBarBase::MSWGetBgBrushForChild(hDC, child);
+    if ( hbr )
+        return hbr;
+
+    // the base class version only returns a brush for erasing children
+    // background if we have a non-default background colour but as the toolbar
+    // doesn't erase its own background by default, we need to always do it for
+    // (semi-)transparent children
+    if ( child->GetParent() == this && child->HasTransparentBackground() )
+        return MSWGetToolbarBgBrush();
+
+    return 0;
+}
+
+void wxToolBar::MSWDoEraseBackground(WXHDC hDC)
+{
+    wxFillRect(GetHwnd(), (HDC)hDC, (HBRUSH)MSWGetToolbarBgBrush());
+}
+
+bool wxToolBar::MSWEraseBgHook(WXHDC hDC)
+{
+    // toolbar WM_PAINT handler offsets the DC origin before sending
+    // WM_ERASEBKGND to the parent but as we handle it in the toolbar itself,
+    // we need to reset it back
+    HDC hdc = (HDC)hDC;
+    POINT ptOldOrg;
+    if ( !::SetWindowOrgEx(hdc, 0, 0, &ptOldOrg) )
+    {
+        wxLogLastError(wxT("SetWindowOrgEx(tbar-bg-hdc)"));
+        return false;
+    }
+
+    MSWDoEraseBackground(hDC);
+
+    ::SetWindowOrgEx(hdc, ptOldOrg.x, ptOldOrg.y, NULL);
+
+    return true;
+}
+
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
 void wxToolBar::HandleMouseMove(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
@@ -1776,7 +1882,7 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
                 return 0;
             break;
 
-#ifndef __WXWINCE__
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
         case WM_PAINT:
             // refreshing the controls in the toolbar inside a composite window
             // results in an endless stream of WM_PAINT messages -- and seems
@@ -1785,7 +1891,7 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
             if ( !IsDoubleBuffered() && HandlePaint(wParam, lParam) )
                 return 0;
             break;
-#endif // __WXWINCE__
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
     }
 
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

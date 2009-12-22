@@ -80,6 +80,11 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+    virtual bool MSWEraseBgHook(WXHDC hDC);
+    virtual WXHBRUSH MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child);
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+
 protected:
     // common part of all ctors
     void Init();
@@ -115,9 +120,9 @@ protected:
 
     // handlers for various events
     bool HandleSize(WXWPARAM wParam, WXLPARAM lParam);
-#ifndef __WXWINCE__
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     bool HandlePaint(WXWPARAM wParam, WXLPARAM lParam);
-#endif // __WXWINCE__
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
     void HandleMouseMove(WXWPARAM wParam, WXLPARAM lParam);
 
     // should be called whenever the toolbar size changes
@@ -155,6 +160,16 @@ private:
     // update the sizes of stretchable spacers to consume all extra space we
     // have
     void UpdateStretchableSpacersSize();
+
+#ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
+    // do erase the toolbar background, always do it for the entire control as
+    // the caller sets the clipping region correctly to exclude parts which
+    // should not be erased
+    void MSWDoEraseBackground(WXHDC hDC);
+
+    // return the brush to use for erasing the toolbar background
+    WXHBRUSH MSWGetToolbarBgBrush();
+#endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
