@@ -574,8 +574,10 @@ wxSize wxButton::DoGetBestSize() const
 {
     wxSize size;
 
-    // account for the text part
-    if ( ShowsLabel() )
+    // account for the text part if we have it or if we don't have any image at
+    // all (buttons initially created with empty label should still have a non
+    // zero size)
+    if ( ShowsLabel() || !m_imageData )
     {
         size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
     }
