@@ -345,6 +345,9 @@ void wxPropertyGrid::Init1()
     m_mouseSide = 16;
     m_editorFocused = 0;
 
+    // Must set empty but valid data
+    m_unspecifiedAppearance.SetEmptyData();
+
     // Set default keys
     AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RIGHT );
     AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_DOWN );
@@ -441,9 +444,9 @@ void wxPropertyGrid::Init2()
 
     CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
 
-    // Allocate cell datas indirectly by calling setter
-    m_propertyDefaultCell.SetBgCol(*wxBLACK);
-    m_categoryDefaultCell.SetBgCol(*wxBLACK);
+    // Allocate cell datas
+    m_propertyDefaultCell.SetEmptyData();
+    m_categoryDefaultCell.SetEmptyData();
 
     RegainColours();
 
@@ -1384,6 +1387,8 @@ void wxPropertyGrid::RegainColours()
         wxColour bgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
         m_colPropBack = bgCol;
         m_propertyDefaultCell.GetData()->SetBgCol(bgCol);
+        if ( !m_unspecifiedAppearance.GetBgCol().IsOk() )
+            m_unspecifiedAppearance.SetBgCol(bgCol);
     }
 
     if ( !(m_coloursCustomized & 0x0010) )
@@ -1391,6 +1396,8 @@ void wxPropertyGrid::RegainColours()
         wxColour fgCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
         m_colPropFore = fgCol;
         m_propertyDefaultCell.GetData()->SetFgCol(fgCol);
+        if ( !m_unspecifiedAppearance.GetFgCol().IsOk() )
+            m_unspecifiedAppearance.SetFgCol(fgCol);
     }
 
     if ( !(m_coloursCustomized & 0x0020) )
@@ -1462,6 +1469,7 @@ void wxPropertyGrid::SetCellBackgroundColour( const wxColour& col )
     m_coloursCustomized |= 0x08;
 
     m_propertyDefaultCell.GetData()->SetBgCol(col);
+    m_unspecifiedAppearance.SetBgCol(col);
 
     Refresh();
 }
@@ -1474,6 +1482,7 @@ void wxPropertyGrid::SetCellTextColour( const wxColour& col )
     m_coloursCustomized |= 0x10;
 
     m_propertyDefaultCell.GetData()->SetFgCol(col);
+    m_unspecifiedAppearance.SetFgCol(col);
 
     Refresh();
 }
@@ -3629,9 +3638,18 @@ void wxPropertyGrid::CustomSetCursor( int type, bool override )
     m_curcursor = type;
 }
 
+// -----------------------------------------------------------------------
+
 wxString
-wxPropertyGrid::GetUnspecifiedValueText( int WXUNUSED(argFlags) ) const
+wxPropertyGrid::GetUnspecifiedValueText( int argFlags ) const
 {
+    const wxPGCell& ua = GetUnspecifiedValueAppearance();
+
+    if ( ua.HasText() &&
+         !(argFlags & wxPG_FULL_VALUE) &&
+         !(argFlags & wxPG_EDITABLE_VALUE) )
+        return ua.GetText();
+
     return wxEmptyString;
 }
 
@@ -3916,6 +3934,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 wxRect grect = GetEditorWidgetRect(p, m_selColumn);
                 wxPoint goodPos = grect.GetPosition();
 
+                // Editor appearance can now be considered clear
+                m_editorAppearance.SetEmptyData();
+
                 const wxPGEditor* editor = p->GetEditorClass();
                 wxCHECK_MSG(editor, false,
                     wxT("NULL editor class not allowed"));
@@ -3984,6 +4005,12 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                         primaryCtrl->SetFocus();
 
                         p->GetEditorClass()->OnFocus(p, primaryCtrl);
+                    }
+                    else
+                    {
+                        if ( p->IsValueUnspecified() )
+                            SetEditorAppearance(m_unspecifiedAppearance,
+                                                true);
                     }
                 }
 
@@ -4151,7 +4178,7 @@ void wxPropertyGrid::RefreshEditor()
     editorClass->UpdateControl(p, wnd);
 
     if ( p->IsValueUnspecified() )
-        editorClass ->SetValueToUnspecified(p, wnd);
+        SetEditorAppearance(m_unspecifiedAppearance, true);
 }
 
 // -----------------------------------------------------------------------

@@ -741,6 +741,13 @@ public:
     wxTextCtrl* GetEditorTextCtrl() const;
 
     /**
+        Returns current appearance of unspecified value cells.
+
+        @see SetUnspecifiedValueAppearance()
+    */
+    const wxPGCell& GetUnspecifiedValueAppearance() const;
+
+    /**
         Returns (visual) text representation of the unspecified
         property value.
 
@@ -980,6 +987,19 @@ public:
             If @false, will still allow private children to be cropped.
     */
     void SetSplitterLeft( bool privateChildrenToo = false );
+
+    /**
+        Sets appearance of value cells representing an unspecified property
+        value. Default appearance is blank.
+
+        @remarks If you set the unspecified value to have any
+                 textual representation, then that will override
+                 "InlineHelp" attribute.
+
+        @see wxPGProperty::SetValueToUnspecified(),
+             wxPGProperty::IsValueUnspecified()
+    */
+    void SetUnspecifiedValueAppearance( const wxPGCell& cell );
 
     /**
         Sets vertical spacing. Can be 1, 2, or 3 - a value relative to font

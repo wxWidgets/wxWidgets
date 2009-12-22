@@ -169,13 +169,11 @@ wxString wxPGEditor::GetName() const
     return GetClassInfo()->GetClassName();
 }
 
-void wxPGEditor::DrawValue( wxDC& dc, const wxRect& rect, wxPGProperty* property, const wxString& text ) const
+void wxPGEditor::DrawValue( wxDC& dc, const wxRect& rect,
+                            wxPGProperty* WXUNUSED(property),
+                            const wxString& text ) const
 {
-    if ( !property->IsValueUnspecified() )
-        dc.DrawText( text, rect.x+wxPG_XBEFORETEXT, rect.y );
-    else
-        dc.DrawText( property->GetGrid()->GetUnspecifiedValueText(),
-                     rect.x+wxPG_XBEFORETEXT, rect.y );
+    dc.DrawText( text, rect.x+wxPG_XBEFORETEXT, rect.y );
 }
 
 bool wxPGEditor::GetValueFromControl( wxVariant&, wxPGProperty*, wxWindow* ) const
@@ -209,6 +207,104 @@ void wxPGEditor::OnFocus( wxPGProperty*, wxWindow* ) const
 {
 }
 
+void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
+                                       wxPGProperty* property,
+                                       wxWindow* ctrl,
+                                       const wxPGCell& cell,
+                                       const wxPGCell& oCell,
+                                       bool WXUNUSED(unspecified) ) const
+{
+    // Get old editor appearance
+    wxTextCtrl* tc = NULL;
+    wxComboCtrl* cb = NULL;
+    if ( ctrl->IsKindOf(CLASSINFO(wxTextCtrl)) )
+    {
+        tc = (wxTextCtrl*) ctrl;
+    }
+    else
+    {
+        if ( ctrl->IsKindOf(CLASSINFO(wxComboCtrl)) )
+        {
+            cb = (wxComboCtrl*) ctrl;
+            tc = cb->GetTextCtrl();
+        }
+    }
+
+    if ( tc || cb )
+    {
+        wxString tcText;
+        bool changeText = false;
+
+        if ( cell.HasText() && !pg->IsEditorFocused() )
+        {
+            tcText = cell.GetText();
+            changeText = true;
+        }
+        else if ( oCell.HasText() )
+        {
+            tcText = property->GetValueAsString(
+                property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
+            changeText = true;
+        }
+
+        if ( changeText )
+        {
+            // This prevents value from being modified
+            if ( tc )
+            {
+                pg->SetupTextCtrlValue(tcText);
+                tc->SetValue(tcText);
+            }
+            else
+            {
+                cb->SetText(tcText);
+            }
+        }
+    }
+
+    wxVisualAttributes vattrs = ctrl->GetDefaultAttributes();
+
+    // Foreground colour
+    const wxColour& fgCol = cell.GetFgCol();
+    if ( fgCol.IsOk() )
+    {
+        ctrl->SetForegroundColour(fgCol);
+    }
+    else if ( oCell.GetFgCol().IsOk() )
+    {
+        ctrl->SetForegroundColour(vattrs.colFg);
+    }
+
+    // Background colour
+    const wxColour& bgCol = cell.GetBgCol();
+    if ( bgCol.IsOk() )
+    {
+        ctrl->SetBackgroundColour(bgCol);
+    }
+    else if ( oCell.GetBgCol().IsOk() )
+    {
+        ctrl->SetBackgroundColour(vattrs.colBg);
+    }
+
+    // Font
+    const wxFont& font = cell.GetFont();
+    if ( font.IsOk() )
+    {
+        ctrl->SetFont(font);
+    }
+    else if ( oCell.GetFont().IsOk() )
+    {
+        ctrl->SetFont(vattrs.font);
+    }
+
+    // Also call the old SetValueToUnspecified()
+    SetValueToUnspecified(property, ctrl);
+}
+
+void wxPGEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
+                                        wxWindow* WXUNUSED(ctrl) ) const
+{
+}
 
 bool wxPGEditor::CanContainCustomImage() const
 {
@@ -235,8 +331,10 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
          property->GetChildCount() )
         return NULL;
 
-    int argFlags = property->HasFlag(wxPG_PROP_READONLY) ? 
-        0 : wxPG_EDITABLE_VALUE;
+    int argFlags = 0;
+    if ( !property->HasFlag(wxPG_PROP_READONLY) &&
+         !property->IsValueUnspecified() )
+        argFlags |= wxPG_EDITABLE_VALUE;
     text = property->GetValueAsString(argFlags);
 
     int flags = 0;
@@ -366,21 +464,6 @@ bool wxPGTextCtrlEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
 }
 
 
-void wxPGTextCtrlEditor::SetValueToUnspecified( wxPGProperty* property, wxWindow* ctrl ) const
-{
-    wxTextCtrl* tc = wxStaticCast(ctrl, wxTextCtrl);
-
-    wxPropertyGrid* pg = property->GetGrid();
-    wxASSERT(pg);  // Really, property grid should exist if editor does
-    if ( pg )
-    {
-        wxString unspecValueText = pg->GetUnspecifiedValueText();
-        pg->SetupTextCtrlValue(unspecValueText);
-        tc->SetValue(unspecValueText);
-    }
-}
-
-
 void wxPGTextCtrlEditor::SetControlStringValue( wxPGProperty* property, wxWindow* ctrl, const wxString& txt ) const
 {
     wxTextCtrl* tc = wxStaticCast(ctrl, wxTextCtrl);
@@ -395,13 +478,30 @@ void wxPGTextCtrlEditor::SetControlStringValue( wxPGProperty* property, wxWindow
 }
 
 
-void wxPGTextCtrlEditor::OnFocus( wxPGProperty*, wxWindow* wnd ) const
+void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
+                                 wxTextCtrl* tc )
 {
-    wxTextCtrl* tc = wxStaticCast(wnd, wxTextCtrl);
+    // Make sure there is correct text (instead of unspecified value
+    // indicator or inline help)
+    int flags = property->HasFlag(wxPG_PROP_READONLY) ? 
+        0 : wxPG_EDITABLE_VALUE;
+    wxString correctText = property->GetValueAsString(flags);
+
+    if ( tc->GetValue() != correctText )
+    {
+        property->GetGrid()->SetupTextCtrlValue(correctText);
+        tc->SetValue(correctText);
+    }
 
     tc->SetSelection(-1,-1);
 }
-
+ 
+void wxPGTextCtrlEditor::OnFocus( wxPGProperty* property,
+                                  wxWindow* wnd ) const
+{
+    wxTextCtrl* tc = wxStaticCast(wnd, wxTextCtrl);
+    wxPGTextCtrlEditor_OnFocus(property, tc);
+}
 
 wxPGTextCtrlEditor::~wxPGTextCtrlEditor() { }
 
@@ -810,6 +910,13 @@ bool wxPGChoiceEditor_SetCustomPaintWidth( wxPropertyGrid* propGrid, wxPGComboBo
     wxSize imageSize;
     bool res;
 
+    // TODO: Do this always when cell has custom text.
+    if ( property->IsValueUnspecified() )
+    {
+        cb->SetCustomPaintWidth( 0 );
+        return true;
+    }
+
     if ( cmnVal >= 0 )
     {
         // Yes, a common value is being selected
@@ -842,10 +949,11 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     wxString defString;
     int index = property->GetChoiceSelection();
 
-    bool isUnspecified = property->IsValueUnspecified();
-
-    if ( !isUnspecified )
-        defString = property->GetDisplayedString();
+    int argFlags = 0;
+    if ( !property->HasFlag(wxPG_PROP_READONLY) &&
+         !property->IsValueUnspecified() )
+        argFlags |= wxPG_EDITABLE_VALUE;
+    defString = property->GetValueAsString(argFlags);
 
     wxArrayString labels = choices.GetLabels();
 
@@ -871,7 +979,7 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     unsigned int cmnVals = property->GetDisplayedCommonValueCount();
     if ( cmnVals )
     {
-        if ( !isUnspecified )
+        if ( !property->IsValueUnspecified() )
         {
             int cmnVal = property->GetCommonValue();
             if ( cmnVal >= 0 )
@@ -1040,25 +1148,13 @@ void wxPGChoiceEditor::SetControlIntValue( wxPGProperty* WXUNUSED(property), wxW
 }
 
 
-void wxPGChoiceEditor::SetValueToUnspecified( wxPGProperty* property,
+void wxPGChoiceEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
                                               wxWindow* ctrl ) const
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
 
-    if ( !cb->HasFlag(wxCB_READONLY) )
-    {
-        wxPropertyGrid* pg = property->GetGrid();
-        if ( pg )
-        {
-            wxString tcText = pg->GetUnspecifiedValueText();
-            pg->SetupTextCtrlValue(tcText);
-            cb->SetValue(tcText);
-        }
-    }
-    else
-    {
+    if ( cb->HasFlag(wxCB_READONLY) )
         cb->SetSelection(-1);
-    }
 }
 
 
@@ -1144,10 +1240,11 @@ bool wxPGComboBoxEditor::GetValueFromControl( wxVariant& variant, wxPGProperty* 
 }
 
 
-void wxPGComboBoxEditor::OnFocus( wxPGProperty*, wxWindow* ctrl ) const
+void wxPGComboBoxEditor::OnFocus( wxPGProperty* property,
+                                  wxWindow* ctrl ) const
 {
     wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*)ctrl;
-    cb->GetTextCtrl()->SetSelection(-1,-1);
+    wxPGTextCtrlEditor_OnFocus(property, cb->GetTextCtrl());
 }
 
 
@@ -1867,6 +1964,28 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
         text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY)?0:wxPG_EDITABLE_VALUE);
 
     return GenerateEditorTextCtrl(pos,sz,text,but,property->m_maxLen);
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::SetEditorAppearance( const wxPGCell& cell,
+                                          bool unspecified )
+{
+    wxPGProperty* property = GetSelection();
+    if ( !property )
+        return;
+    wxWindow* ctrl = GetEditorControl();
+    if ( !ctrl )
+        return;
+
+    property->GetEditorClass()->SetControlAppearance( this,
+                                                      property,
+                                                      ctrl,
+                                                      cell,
+                                                      m_editorAppearance,
+                                                      unspecified );
+
+    m_editorAppearance = cell;
 }
 
 // -----------------------------------------------------------------------

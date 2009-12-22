@@ -1240,6 +1240,33 @@ public:
     }
 
     /**
+        Sets appearance of value cells representing an unspecified property
+        value. Default appearance is blank.
+
+        @remarks If you set the unspecified value to have any
+                 textual representation, then that will override
+                 "InlineHelp" attribute.
+
+        @see wxPGProperty::SetValueToUnspecified(),
+             wxPGProperty::IsValueUnspecified()
+    */
+    void SetUnspecifiedValueAppearance( const wxPGCell& cell )
+    {
+        m_unspecifiedAppearance = m_propertyDefaultCell;
+        m_unspecifiedAppearance.MergeFrom(cell);
+    }
+
+    /**
+        Returns current appearance of unspecified value cells.
+
+        @see SetUnspecifiedValueAppearance()
+    */
+    const wxPGCell& GetUnspecifiedValueAppearance() const
+    {
+        return m_unspecifiedAppearance;
+    }
+
+    /**
         Returns (visual) text representation of the unspecified
         property value.
 
@@ -1764,6 +1791,12 @@ protected:
     /** Actions and keys that trigger them. */
     wxPGHashMapI2I      m_actionTriggers;
 
+    /** Appearance of currently active editor. */
+    wxPGCell            m_editorAppearance;
+
+    /** Appearance of a unspecified value cell. */
+    wxPGCell            m_unspecifiedAppearance;
+
     //
     // Temporary values
     //
@@ -2061,6 +2094,16 @@ protected:
         size.
     */
     void RecalculateVirtualSize( int forceXPos = -1 );
+
+    void SetEditorAppearance( const wxPGCell& cell,
+                              bool unspecified = false );
+
+    void ResetEditorAppearance()
+    {
+        wxPGCell cell;
+        cell.SetEmptyData();
+        SetEditorAppearance(cell, false);
+    }
 
     void PrepareAfterItemsAdded();
 

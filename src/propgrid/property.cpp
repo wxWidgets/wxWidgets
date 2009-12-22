@@ -135,8 +135,9 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
     // If possible, use cell colours
     if ( !(flags & DontUseCellBgCol) )
     {
-        dc.SetPen(cell.GetBgCol());
-        dc.SetBrush(cell.GetBgCol());
+        const wxColour& bgCol = cell.GetBgCol();
+        dc.SetPen(bgCol);
+        dc.SetBrush(bgCol);
     }
 
     if ( !(flags & DontUseCellFgCol) )
@@ -416,6 +417,12 @@ void wxPGCell::MergeFrom( const wxPGCell& srcCell )
     if ( srcCell.GetBitmap().IsOk() )
         data->SetBitmap(srcCell.GetBitmap());
 }
+
+void wxPGCell::SetEmptyData()
+{
+    AllocExclusive();
+}
+
 
 // -----------------------------------------------------------------------
 // wxPGProperty
@@ -706,8 +713,17 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 
     if ( !(flags & wxPGCellRenderer::ChoicePopup) )
     {
-        // Not painting listi of choice popups, so get text from property
-        cell = &GetCell(column);
+        // Not painting list of choice popups, so get text from property
+        if ( column != 1 || !IsValueUnspecified() || IsCategory() )
+        {
+            cell = &GetCell(column);
+        }
+        else
+        {
+            // Use special unspecified value cell
+            cell = &GetGrid()->GetUnspecifiedValueAppearance();
+        }
+
         if ( cell->HasText() )
         {
             *pString = cell->GetText();

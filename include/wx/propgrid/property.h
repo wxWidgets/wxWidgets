@@ -255,6 +255,11 @@ public:
     }
 
     /**
+        Sets empty but valid data to this cell object.
+    */
+    void SetEmptyData();
+
+    /**
         Merges valid data from srcCell into this.
     */
     void MergeFrom( const wxPGCell& srcCell );
