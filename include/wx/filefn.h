@@ -172,7 +172,9 @@ enum wxFileKind
         defined(__BORLANDC__) \
       )
 
+    // temporary defines just used immediately below
     #undef wxHAS_HUGE_FILES
+    #undef wxHAS_HUGE_STDIO_FILES
 
     // detect compilers which have support for huge files
     #if defined(__VISUALC__)
@@ -181,6 +183,13 @@ enum wxFileKind
         #define wxHAS_HUGE_FILES 1
     #elif defined(_LARGE_FILES)
         #define wxHAS_HUGE_FILES 1
+    #endif
+
+    // detect compilers which have support for huge stdio files
+    #if wxCHECK_VISUALC_VERSION(8)
+        #define wxHAS_HUGE_STDIO_FILES
+        #define wxFseek _fseeki64
+        #define wxFtell _ftelli64
     #endif
 
     // other Windows compilers (DMC, Watcom, Metrowerks and Borland) don't have
@@ -397,16 +406,19 @@ enum wxFileKind
     #endif // wxHAS_UNDERSCORES_IN_POSIX_IDENTS
 
     #ifdef wxHAS_HUGE_FILES
-        // wxFile is present and supports large files. Currently wxFFile
-        // doesn't have large file support with any Windows compiler (even
-        // Win64 ones).
+        // wxFile is present and supports large files.
         #if wxUSE_FILE
             #define wxHAS_LARGE_FILES
         #endif
+        // wxFFile is present and supports large files
+        #if wxUSE_FFILE && defined wxHAS_HUGE_STDIO_FILES
+            #define wxHAS_LARGE_FFILES
+        #endif
     #endif
 
-    // it's a private define, undefine it so that nobody gets tempted to use it
+    // private defines, undefine so that nobody gets tempted to use
     #undef wxHAS_HUGE_FILES
+    #undef wxHAS_HUGE_STDIO_FILES
 #elif defined (__WXPALMOS__)
     typedef off_t wxFileOffset;
 #ifdef _LARGE_FILES
@@ -458,6 +470,10 @@ enum wxFileKind
         #if wxUSE_FFILE && (SIZEOF_LONG == 8 || defined HAVE_FSEEKO)
             #define wxHAS_LARGE_FFILES
         #endif
+        #ifdef HAVE_FSEEKO
+            #define wxFseek fseeko
+            #define wxFtell ftello
+        #endif
     #else
         #define wxFileOffsetFmtSpec wxT("")
     #endif
@@ -489,6 +505,15 @@ enum wxFileKind
 // wxCRT_Stat to avoid #ifdefs in the code using it
 #ifndef wxHAS_NATIVE_LSTAT
     #define wxCRT_Lstat wxCRT_Stat
+#endif
+
+// define wxFseek/wxFtell to large file versions if available (done above) or
+// to fseek/ftell if not, to save ifdefs in using code
+#ifndef wxFseek
+    #define wxFseek fseek
+#endif
+#ifndef wxFtell
+    #define wxFtell ftell
 #endif
 
 inline int wxAccess(const wxString& path, mode_t mode)
