@@ -105,12 +105,22 @@ bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
     if ( !wxTimerImpl::Start(milliseconds, oneShot) )
         return false;
 
-    m_id = ::SetTimer(
-        wxTimerHiddenWindowModule::GetHWND(),  // window to send the messages to
-        GetId(),                               // timer ID
-        (UINT)m_milli,                         // delay
-        NULL                                   // timer proc.  Not used since we pass hwnd
-        );
+    // SetTimer() doesn't accept 0 timer id so use something else if the timer
+    // id at wx level is 0: as -1 (wxID_ANY) can't be used, we can safely
+    // replace 0 with it at MSW level
+    UINT idTimer = GetId();
+    if ( !idTimer )
+        idTimer = (UINT)-1;
+
+    // SetTimer() normally returns just idTimer but this might change in the
+    // future so use its return value to be safe
+    m_id = ::SetTimer
+             (
+              wxTimerHiddenWindowModule::GetHWND(),  // window for WM_TIMER
+              idTimer,                               // timer ID to create
+              (UINT)m_milli,                         // delay
+              NULL                                   // timer proc (unused)
+             );
 
     if ( !m_id )
     {
