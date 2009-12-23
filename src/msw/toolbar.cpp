@@ -1744,18 +1744,15 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
         }
     }
 
-    if ( !rgnDummySeps.IsOk() )
+    if ( rgnDummySeps.IsOk() )
     {
-        // don't interfere with toolbar default painting at all if we don't
-        // need to -- and we don't if we have no dummy separators at all
-        return false;
-    }
-
-    // exclude the area occupied by the controls and stretchable spaces from
-    // the update region to prevent the toolbar from drawing separators in it
-    if ( !::ValidateRgn(GetHwnd(), GetHrgnOf(rgnDummySeps)) )
-    {
-        wxLogLastError(wxT("ValidateRgn()"));
+        // exclude the area occupied by the controls and stretchable spaces
+        // from the update region to prevent the toolbar from drawing
+        // separators in it
+        if ( !::ValidateRgn(GetHwnd(), GetHrgnOf(rgnDummySeps)) )
+        {
+            wxLogLastError(wxT("ValidateRgn()"));
+        }
     }
 
     // still let the native control draw everything else normally but set up a
@@ -1779,11 +1776,14 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
         GetParent()->MSWSetEraseBgHook(NULL);
 
 
-    // erase the dummy separators region ourselves now as nobody painted over
-    // them
-    WindowHDC hdc(GetHwnd());
-    ::SelectClipRgn(hdc, GetHrgnOf(rgnDummySeps));
-    MSWDoEraseBackground(hdc);
+    if ( rgnDummySeps.IsOk() )
+    {
+        // erase the dummy separators region ourselves now as nobody painted
+        // over them
+        WindowHDC hdc(GetHwnd());
+        ::SelectClipRgn(hdc, GetHrgnOf(rgnDummySeps));
+        MSWDoEraseBackground(hdc);
+    }
 
     return true;
 }
