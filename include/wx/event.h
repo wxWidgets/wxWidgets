@@ -3923,12 +3923,12 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 #ifdef wxHAS_EVENT_BIND
     #define wxBIND_OR_CONNECT_HACK_BASE_CLASS
     #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
-    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
+    #define wxBIND_OR_CONNECT_HACK(win, evt, handler, func, obj) \
         win->Bind(evt, &func, obj)
 #else // wxHAS_EVENT_BIND
     #define wxBIND_OR_CONNECT_HACK_BASE_CLASS public wxEvtHandler,
     #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS : public wxEvtHandler
-    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
+    #define wxBIND_OR_CONNECT_HACK(win, evt, handler, func, obj) \
         win->Connect(evt, handler(func), NULL, obj)
 #endif // wxHAS_EVENT_BIND
 
