@@ -82,11 +82,20 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 @interface wxNSView : NSView
 {
     NSTrackingRectTag rectTag;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+    NSTrackingArea* _trackingArea;
+#endif
 }
 
 // the tracking tag is needed to track mouse enter / exit events
 - (void) setTrackingTag: (NSTrackingRectTag)tag;
 - (NSTrackingRectTag) trackingTag;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+// under 10.5 we can also track mouse moved events on non-focused windows if
+// we use the new NSTrackingArea APIs. 
+- (void) updateTrackingArea;
+- (NSTrackingArea*) trackingArea;
+#endif
 @end // wxNSView
 
 @interface NSView(PossibleMethods)
@@ -562,6 +571,28 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
     return rectTag;
 }
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+- (void) updateTrackingArea
+{
+    if (_trackingArea)
+    {
+        [self removeTrackingArea: _trackingArea];
+        [_trackingArea release];
+    }
+    
+    NSTrackingAreaOptions options = NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveAlways;
+        
+    NSTrackingArea* area = [[NSTrackingArea alloc] initWithRect: [self bounds] options: options owner: self userInfo: nil];
+    [self addTrackingArea: area];
+
+    _trackingArea = area;
+}
+
+- (NSTrackingArea*) trackingArea
+{
+    return _trackingArea;
+}
+#endif
 @end // wxNSView
 
 //
@@ -1476,13 +1507,19 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     [m_osxView setFrame:r];
     [[m_osxView superview] setNeedsDisplayInRect:r];
 
+    wxNSView* wxview = (wxNSView*)m_osxView;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+    if ([wxview respondsToSelector:@selector(updateTrackingArea)] )
+        [wxview updateTrackingArea]; 
+#else
     if ([m_osxView respondsToSelector:@selector(trackingTag)] )
     {
-        if ( [(wxNSView*)m_osxView trackingTag] )
-            [m_osxView removeTrackingRect: [(wxNSView*)m_osxView trackingTag]];
+        if ( [wxview trackingTag] )
+            [wxview removeTrackingRect: [wxview trackingTag]];
 
-        [(wxNSView*)m_osxView setTrackingTag: [m_osxView addTrackingRect: [m_osxView bounds] owner: m_osxView userData: nil assumeInside: NO]];
+        [wxview setTrackingTag: [wxview addTrackingRect: [m_osxView bounds] owner: wxview userData: nil assumeInside: NO]];
     }
+#endif
 }
 
 void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
