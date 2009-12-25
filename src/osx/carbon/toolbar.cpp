@@ -926,26 +926,17 @@ bool wxToolBar::Create(
 
 wxToolBar::~wxToolBar()
 {
-#if wxOSX_USE_NATIVE_TOOLBAR
-    if (m_macToolbar != NULL)
+    CFIndex count = CFGetRetainCount( m_macToolbar ) ;
+    // Leopard seems to have one refcount more, so we cannot check reliably at the moment
+    if ( UMAGetSystemVersion() < 0x1050 )
     {
-        // if this is the installed toolbar, then deinstall it
-        if (m_macUsesNativeToolbar)
-            MacInstallNativeToolbar( false );
-
-        CFIndex count = CFGetRetainCount( m_macToolbar ) ;
-        // Leopard seems to have one refcount more, so we cannot check reliably at the moment
-        if ( UMAGetSystemVersion() < 0x1050 )
+        if ( count != 1 )
         {
-            if ( count != 1 )
-            {
-                wxFAIL_MSG("Reference count of native control was not 1 in wxToolBar destructor");
-            }
+            wxFAIL_MSG("Reference count of native control was not 1 in wxToolBar destructor");
         }
-        CFRelease( (HIToolbarRef)m_macToolbar );
-        m_macToolbar = NULL;
     }
-#endif
+    CFRelease( (HIToolbarRef)m_macToolbar );
+    m_macToolbar = NULL;
 }
 
 bool wxToolBar::Show( bool show )
@@ -1135,7 +1126,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
             ShowHideWindowToolbar( tlw, false, false );
             ChangeWindowAttributes( tlw, 0, kWindowToolbarButtonAttribute );
-            SetWindowToolbar( tlw, NULL );
+            MacUninstallNativeToolbar();
 
             m_peer->SetVisibility( true );
         }
@@ -1146,6 +1137,16 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
 // wxLogDebug( wxT("    --> [%lx] - result [%s]"), (long)this, bResult ? wxT("T") : wxT("F") );
     return bResult;
+}
+
+void wxToolBar::MacUninstallNativeToolbar()
+{
+    if (!m_macToolbar)
+        return;
+        
+    WindowRef tlw = MAC_WXHWND(MacGetTopLevelWindowRef());
+    if (tlw)
+        SetWindowToolbar( tlw, NULL );
 }
 #endif
 

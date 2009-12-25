@@ -44,6 +44,8 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
             const wxString& name = wxToolBarNameStr);
 
     virtual void SetWindowStyleFlag(long style);
+    
+    virtual bool Destroy();
 
     // override/implement base class virtuals
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
@@ -73,6 +75,7 @@ class WXDLLIMPEXP_CORE wxToolBar: public wxToolBarBase
     
 #if wxOSX_USE_NATIVE_TOOLBAR
     bool MacInstallNativeToolbar(bool usesNative);
+    void MacUninstallNativeToolbar();
     bool MacWantsNativeToolbar();
     bool MacTopLevelHasNativeToolbar(bool *ownToolbarInstalled) const;
 #endif

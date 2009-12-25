@@ -631,19 +631,10 @@ bool wxToolBar::Create(
 }
 
 wxToolBar::~wxToolBar()
-{
-#if wxOSX_USE_NATIVE_TOOLBAR
-    if (m_macToolbar != NULL)
-    {
-        // if this is the installed toolbar, then deinstall it
-        if (m_macUsesNativeToolbar)
-            MacInstallNativeToolbar( false );
-
-        [(NSToolbar*)m_macToolbar setDelegate:nil];
-        [(NSToolbar*)m_macToolbar release];
-        m_macToolbar = NULL;
-    }
-#endif
+{  
+    [(NSToolbar*)m_macToolbar setDelegate:nil];
+    [(NSToolbar*)m_macToolbar release];
+    m_macToolbar = NULL;
 }
 
 bool wxToolBar::Show( bool show )
@@ -824,7 +815,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
         {
             bResult = true;
             [(NSToolbar*) m_macToolbar setVisible:NO];
-            [tlw setToolbar:nil];
+            MacUninstallNativeToolbar();
             m_peer->SetVisibility( true );
         }
     }
@@ -834,6 +825,16 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
 // wxLogDebug( wxT("    --> [%lx] - result [%s]"), (long)this, bResult ? wxT("T") : wxT("F") );
     return bResult;
+}
+
+void wxToolBar::MacUninstallNativeToolbar()
+{
+    if (!m_macToolbar)
+        return;
+        
+    WXWindow tlw = MacGetTopLevelWindowRef();
+    if (tlw)
+        [tlw setToolbar:nil];
 }
 #endif
 

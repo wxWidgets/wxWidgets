@@ -26,6 +26,12 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 
-// no common implementation
+bool wxToolBar::Destroy()
+{
+#if wxOSX_USE_NATIVE_TOOLBAR
+    MacUninstallNativeToolbar();
+#endif
+    return wxToolBarBase::Destroy();
+}
 
 #endif // wxUSE_TOOLBAR
