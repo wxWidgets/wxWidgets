@@ -450,8 +450,12 @@ bool wxTextEntry::SetHint(const wxString& hint)
     if ( wxUxThemeEngine::GetIfActive() )
     {
         // notice that this message always works with Unicode strings
+        //
+        // we always use TRUE for wParam to show the hint even when the window
+        // has focus, otherwise there would be no way to show the hint for the
+        // initially focused window
         if ( ::SendMessage(GetEditHwnd(), EM_SETCUEBANNER,
-                             0, (LPARAM)(const wchar_t *)hint.wc_str()) )
+                             TRUE, (LPARAM)(const wchar_t *)hint.wc_str()) )
             return true;
     }
 
