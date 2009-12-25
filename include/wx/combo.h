@@ -483,6 +483,10 @@ protected:
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
 
+    // also set the embedded wxTextCtrl colours
+    virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetBackgroundColour(const wxColour& colour);
+
     // NULL popup can be used to indicate default in a derived class
     virtual void DoSetPopupControl(wxComboPopup* popup);
 

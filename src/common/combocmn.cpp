@@ -1322,6 +1322,27 @@ wxValidator* wxComboCtrlBase::GetValidator()
 }
 #endif // wxUSE_VALIDATORS
 
+bool wxComboCtrlBase::SetForegroundColour(const wxColour& colour)
+{
+    if ( wxControl::SetForegroundColour(colour) )
+    {
+        if ( m_text )
+            m_text->SetForegroundColour(colour);
+        return true;
+    }
+    return false;
+}
+
+bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
+{
+    if ( wxControl::SetBackgroundColour(colour) )
+    {
+        if ( m_text )
+            m_text->SetBackgroundColour(colour);
+        return true;
+    }
+    return false;
+}
 // ----------------------------------------------------------------------------
 // painting
 // ----------------------------------------------------------------------------
