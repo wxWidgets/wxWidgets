@@ -193,7 +193,7 @@ public :
 
     virtual ~wxNonOwnedWindowCocoaImpl();
 
-    virtual void Destroy() ;
+    virtual void WillBeDestroyed() ;
     void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name ) ;
 

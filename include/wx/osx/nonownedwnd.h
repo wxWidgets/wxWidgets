@@ -116,6 +116,8 @@ protected:
     virtual bool OSXShowWithEffect(bool show,
                                    wxShowEffect effect,
                                    unsigned timeout);
+    
+    void OnWindowDestroy( wxWindowDestroyEvent &event);
 
     wxNonOwnedWindowImpl* m_nowpeer ;
 

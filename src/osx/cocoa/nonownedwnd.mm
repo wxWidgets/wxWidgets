@@ -351,9 +351,9 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
     [m_macWindow release];
 }
 
-void wxNonOwnedWindowCocoaImpl::Destroy()
+void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
 {
-    wxPendingDelete.Append( new wxDeferredObjectDeleter( this ) );
+    [m_macWindow setDelegate:nil];
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,

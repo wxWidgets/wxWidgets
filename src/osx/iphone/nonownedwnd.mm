@@ -90,9 +90,8 @@ wxNonOwnedWindowIPhoneImpl::~wxNonOwnedWindowIPhoneImpl()
     [m_macWindow release];
 }
 
-void wxNonOwnedWindowIPhoneImpl::Destroy()
+void wxNonOwnedWindowIPhoneImpl::WillBeDestroyed()
 {
-    wxPendingDelete.Append( new wxDeferredObjectDeleter( this ) );
 }
 
 void wxNonOwnedWindowIPhoneImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,

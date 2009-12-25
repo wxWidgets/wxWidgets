@@ -1144,15 +1144,13 @@ wxNonOwnedWindowCarbonImpl::~wxNonOwnedWindowCarbonImpl()
 
 }
 
-void wxNonOwnedWindowCarbonImpl::Destroy()
+void wxNonOwnedWindowCarbonImpl::WillBeDestroyed()
 {
     if ( m_macEventHandler )
     {
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
         m_macEventHandler = NULL ;
     }
-
-    wxPendingDelete.Append( new wxDeferredObjectDeleter( this ) ) ;
 }
 
 void wxNonOwnedWindowInstallTopLevelWindowEventHandler(WindowRef window, EventHandlerRef* handler, void *ref)

@@ -147,6 +147,9 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
+    wxBIND_OR_CONNECT_HACK(this, wxEVT_DESTROY, wxWindowDestroyEventHandler,
+                           wxNonOwnedWindow::OnWindowDestroy, this);
+
     return true;
 }
 
@@ -159,10 +162,19 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
     DestroyChildren();
 
     delete m_nowpeer;
+    m_nowpeer = NULL;
 
     // avoid dangling refs
     if ( s_macDeactivateWindow == this )
         s_macDeactivateWindow = NULL;
+}
+
+void wxNonOwnedWindow::OnWindowDestroy( wxWindowDestroyEvent &event)
+{
+    event.Skip();
+    
+    if ( m_nowpeer )
+        m_nowpeer->WillBeDestroyed();
 }
 
 // ----------------------------------------------------------------------------
