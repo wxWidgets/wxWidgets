@@ -808,20 +808,44 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                    rect.y + 1);
 
         int renderFlags = wxPGCellRenderer::DontUseCellColours;
+        bool useCustomPaintProcedure;
 
-        if ( flags & wxODCB_PAINTING_CONTROL )
-            renderFlags |= wxPGCellRenderer::Control;
+        // If custom image had some size, we will start from the assumption
+        // that custom paint procedure is required
+        if ( cis.x > 0 )
+            useCustomPaintProcedure = true;
         else
-            renderFlags |= wxPGCellRenderer::ChoicePopup;
+            useCustomPaintProcedure = false;
 
         if ( flags & wxODCB_PAINTING_SELECTED )
             renderFlags |= wxPGCellRenderer::Selected;
 
-        if ( cis.x > 0 && (p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || !(flags & wxODCB_PAINTING_CONTROL)) &&
-             ( !p->m_valueBitmap || item == pCb->GetSelection() ) &&
-             ( item >= 0 || (flags & wxODCB_PAINTING_CONTROL) ) &&
-             !itemBitmap
-           )
+        if ( flags & wxODCB_PAINTING_CONTROL )
+        {
+            renderFlags |= wxPGCellRenderer::Control;
+
+            // If wxPG_PROP_CUSTOMIMAGE was set, then that means any custom
+            // image will not appear on the control row (it may be too
+            // large to fit, for instance). Also do not draw custom image
+            // if no choice was selected.
+            if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
+                useCustomPaintProcedure = false;
+        }
+        else
+        {
+            renderFlags |= wxPGCellRenderer::ChoicePopup;
+        }
+
+        // If not drawing a selected popup item, then give property's
+        // m_valueBitmap a chance.
+        if ( p->m_valueBitmap && item != pCb->GetSelection() )
+            useCustomPaintProcedure = false;
+        // If current choice had a bitmap set by the application, then
+        // use it instead of any custom paint procedure.
+        else if ( itemBitmap )
+            useCustomPaintProcedure = false;
+
+        if ( useCustomPaintProcedure )
         {
             pt.x += wxCC_CUSTOM_IMAGE_MARGIN1;
             wxRect r(pt.x,pt.y,cis.x,cis.y);
