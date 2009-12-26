@@ -454,8 +454,7 @@ bool wxToolBarBase::Realize()
     if ( m_tools.empty() )
         return false;
 
-    // make sure tool size is larger enough for all all bitmaps to fit in
-    // (this is consistent with what other ports do):
+    // make sure tool size is large enough for all bitmaps to fit in
     AdjustToolBitmapSize();
 
     return true;
