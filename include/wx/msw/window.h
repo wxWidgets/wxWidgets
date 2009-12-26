@@ -13,7 +13,7 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-enum wxSystemColour;
+#include "wx/settings.h"        // solely for wxSystemColour
 
 // if this is set to 1, we use deferred window sizing to reduce flicker when
 // resizing complicated window hierarchies, but this can in theory result in
