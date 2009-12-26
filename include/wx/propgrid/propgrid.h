@@ -87,7 +87,10 @@ public:
     wxPGCachedString    m_strMin;
     wxPGCachedString    m_strMax;
     wxPGCachedString    m_strUnits;
+    wxPGCachedString    m_strHint;
+#if wxPG_COMPATIBILITY_1_4
     wxPGCachedString    m_strInlineHelp;
+#endif
 
     // If true then some things are automatically translated
     bool                m_autoGetTranslation;
@@ -2145,6 +2148,22 @@ inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
     return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
 }
 #endif
+
+wxString wxPGProperty::GetHintText() const
+{
+    wxVariant vHintText = GetAttribute(wxPGGlobalVars->m_strHint);
+
+#if wxPG_COMPATIBILITY_1_4
+    // Try the old, deprecated "InlineHelp"
+    if ( vHintText.IsNull() )
+        vHintText = GetAttribute(wxPGGlobalVars->m_strInlineHelp);
+#endif
+
+    if ( !vHintText.IsNull() )
+        return vHintText.GetString();
+
+    return wxEmptyString;
+}
 
 inline int wxPGProperty::GetDisplayedCommonValueCount() const
 {

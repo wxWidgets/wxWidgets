@@ -482,7 +482,7 @@ void wxPGTextCtrlEditor_OnFocus( wxPGProperty* property,
                                  wxTextCtrl* tc )
 {
     // Make sure there is correct text (instead of unspecified value
-    // indicator or inline help)
+    // indicator or hint text)
     int flags = property->HasFlag(wxPG_PROP_READONLY) ? 
         0 : wxPG_EDITABLE_VALUE;
     wxString correctText = property->GetValueAsString(flags);
@@ -656,7 +656,17 @@ public:
                              int flags ) const
     {
         wxPropertyGrid* pg = GetGrid();
-        pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
+
+        // Handle hint text via super class
+        if ( (flags & wxODCB_PAINTING_CONTROL) &&
+             ShouldUseHintText(flags) )
+        {
+            wxOwnerDrawnComboBox::OnDrawItem(dc, rect, item, flags);
+        }
+        else
+        {
+            pg->OnComboItemPaint( this, item, &dc, (wxRect&)rect, flags );
+        }
     }
 
     virtual wxCoord OnMeasureItem( size_t item ) const
@@ -1032,7 +1042,11 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
     cb->SetButtonPosition(si.y,0,wxRIGHT);
     cb->SetMargins(wxPG_XBEFORETEXT-1);
 
-    wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb, property->GetCommonValue() );
+    // Set hint text
+    cb->SetHint(property->GetHintText());
+
+    wxPGChoiceEditor_SetCustomPaintWidth( propGrid, cb,
+                                          property->GetCommonValue() );
 
     if ( index >= 0 && index < (int)cb->GetCount() )
     {
@@ -1897,6 +1911,9 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
         wxASSERT(attrVal.GetType() == wxS("arrstring"));
         tc->AutoComplete(attrVal.GetArrayString());
     }
+
+    // Set hint text
+    tc->SetHint(prop->GetHintText());
 
     return tc;
 }

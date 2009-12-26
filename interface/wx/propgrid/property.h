@@ -41,8 +41,13 @@
 */
 #define wxPG_ATTR_UNITS                     wxS("Units")
 
-/** Universal, string. When set, will be shown in property's value cell
-    when displayed value string is empty, or value is unspecified.
+/** When set, will be shown as 'greyed' text in property's value cell when
+    the actual displayed value is blank.
+*/
+#define wxPG_ATTR_HINT                      wxS("Hint")
+
+/**
+    @deprecated Use "Hint" (wxPG_ATTR_INLINE_HELP) instead.
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
 

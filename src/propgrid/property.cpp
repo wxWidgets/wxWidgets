@@ -259,12 +259,12 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
 
         if ( text.length() == 0 )
         {
-            // Try to show inline help if no text
-            wxVariant vInlineHelp = property->GetAttribute(wxPGGlobalVars->m_strInlineHelp);
-            if ( !vInlineHelp.IsNull() )
+            text = property->GetHintText();
+            if ( text.length() > 0 )
             {
-                text = vInlineHelp.GetString();
-                dc.SetTextForeground(propertyGrid->GetCellDisabledTextColour());
+                const wxColour& hCol =
+                    propertyGrid->GetCellDisabledTextColour();
+                dc.SetTextForeground(hCol);
 
                 // Must make the editor NULL to override it's own rendering
                 // code.

@@ -546,10 +546,17 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 */
 #define wxPG_ATTR_UNITS                     wxS("Units")
 
-/** Universal, string. When set, will be shown in property's value cell
-    when displayed value string is empty, or value is unspecified.
+/** When set, will be shown as 'greyed' text in property's value cell when
+    the actual displayed value is blank.
+*/
+#define wxPG_ATTR_HINT                      wxS("Hint")
+
+#if wxPG_COMPATIBILITY_1_4
+/**
+    @deprecated Use "Hint" (wxPG_ATTR_INLINE_HELP) instead.
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
+#endif
 
 /** Universal, wxArrayString. Set to enable auto-completion in any
     wxTextCtrl-based property editor.
@@ -683,8 +690,12 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 #define wxPG_ATTR_MAX                     wxPGGlobalVars->m_strMax
 #undef wxPG_ATTR_UNITS
 #define wxPG_ATTR_UNITS                   wxPGGlobalVars->m_strUnits
+#undef wxPG_ATTR_HINT
+#define wxPG_ATTR_HINT                    wxPGGlobalVars->m_strHint
+#if wxPG_COMPATIBILITY_1_4
 #undef wxPG_ATTR_INLINE_HELP
 #define wxPG_ATTR_INLINE_HELP             wxPGGlobalVars->m_strInlineHelp
+#endif
 
 #endif  // !SWIG
 
@@ -1637,6 +1648,11 @@ public:
     {
         return GetValueAsString(0);
     }
+
+    /**
+        Returns property's hint text (shown in empty value cell).
+    */
+    inline wxString GetHintText() const;
 
     /** Returns property grid where property lies. */
     wxPropertyGrid* GetGrid() const;

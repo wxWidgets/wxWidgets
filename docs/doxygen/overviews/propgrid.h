@@ -35,6 +35,7 @@ should carefully read final section in @ref propgrid_compat.
 @li @ref propgrid_processingvalues
 @li @ref propgrid_iterating
 @li @ref propgrid_events
+@li @ref propgrid_tooltipandhint
 @li @ref propgrid_validating
 @li @ref propgrid_populating
 @li @ref propgrid_cellrender
@@ -637,6 +638,19 @@ void MyForm::OnPropertyGridChanging( wxPropertyGridEvent& event )
   to obtain its topmost non-category parent (useful, if you have deeply nested
   properties).
 
+@section propgrid_tooltipandhint Help String, Hint and Tool Tips
+
+For each property you can specify two different types of help text. First,
+you can use wxPropertyGridInterface::SetPropertyHelpString() or
+wxPGProperty::SetHelpString() to set property's help text. Second, you
+can use wxPGProperty::SetAttribute() to set property's "Hint" attribute.
+
+Difference between hint and help string is that the hint is shown in an empty
+property value cell, while help string is shown either in the description text
+box, as a tool tip, or on the status bar, whichever of these is available.
+
+To enable display of help string as tool tips, you must explicitly use
+the wxPG_EX_HELP_AS_TOOLTIPS extra window style.
 
 @section propgrid_validating Validating Property Values
 
@@ -945,6 +959,8 @@ without warnings or errors.
 
   - wxPropertyGridEvent::HasProperty() is removed. You can use GetProperty()
     as immediate replacement when checking if event has a property.
+
+  - "InlineHelp" property has been replaced with "Hint".
 
 @subsection propgrid_compat_propdev Property and Editor Sub-classing Changes
 
