@@ -51,6 +51,8 @@ public:
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
     virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
 
+    virtual bool Realize();
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

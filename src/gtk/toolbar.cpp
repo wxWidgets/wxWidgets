@@ -445,6 +445,32 @@ void wxToolBar::SetWindowStyleFlag( long style )
         GtkSetStyle();
 }
 
+bool wxToolBar::Realize()
+{
+    if ( !wxToolBarBase::Realize() )
+        return false;
+
+    // bring the initial state of all the toolbar items in line with the
+    // internal state if the latter was changed by calling wxToolBarTool::
+    // Enable(): this works under MSW, where the toolbar items are only created
+    // in Realize() which uses the internal state to determine the initial
+    // button state, so make it work under GTK too
+    for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
+          i != m_tools.end();
+          ++i )
+    {
+        // by default the toolbar items are enabled and not toggled, so we only
+        // have to do something if their internal state doesn't correspond to
+        // this
+        if ( !(*i)->IsEnabled() )
+            DoEnableTool(*i, false);
+        if ( (*i)->IsToggled() )
+            DoToggleTool(*i, true);
+    }
+
+    return true;
+}
+
 bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
