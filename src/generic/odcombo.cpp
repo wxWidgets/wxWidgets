@@ -1089,7 +1089,20 @@ void wxOwnerDrawnComboBox::OnDrawItem( wxDC& dc,
 {
     if ( flags & wxODCB_PAINTING_CONTROL )
     {
-        dc.DrawText( GetValue(),
+        wxString text;
+
+        if ( !ShouldUseHintText() )
+        {
+            text = GetValue();
+        }
+        else
+        {
+            text = GetHint();
+            wxColour col = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
+            dc.SetTextForeground(col);
+        }
+
+        dc.DrawText( text,
                      rect.x + GetMargins().x,
                      (rect.height-dc.GetCharHeight())/2 + rect.y );
     }

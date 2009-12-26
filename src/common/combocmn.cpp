@@ -904,6 +904,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
                        style, validator);
+        m_text->SetHint(m_hintText);
     }
 }
 
@@ -2537,6 +2538,21 @@ void wxComboCtrlBase::Undo()
 {
     if ( m_text )
         m_text->Undo();
+}
+
+bool wxComboCtrlBase::SetHint(const wxString& hint)
+{
+    m_hintText = hint;
+    bool res = true;
+    if ( m_text )
+        res = m_text->SetHint(hint);
+    Refresh();
+    return res;
+}
+
+wxString wxComboCtrlBase::GetHint() const
+{
+    return m_hintText;
 }
 
 #endif // wxUSE_COMBOCTRL

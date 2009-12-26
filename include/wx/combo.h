@@ -385,6 +385,10 @@ public:
     const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
     const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
 
+    // Hint functions mirrored from TextEntryBase
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
+
     // Margins functions mirrored from TextEntryBase
     // (wxComboCtrl does not inherit from wxTextEntry, but may embed a
     // wxTextCtrl, so we need these). Also note that these functions
@@ -426,6 +430,16 @@ public:
         { return m_mainCtrlWnd; }
 
 protected:
+
+    // Returns true if hint text should be drawn in the control
+    bool ShouldUseHintText(int flags = 0) const
+    {
+        return ( !m_text &&
+                 !(flags & wxCONTROL_ISSUBMENU) &&
+                 !m_valueString.length() &&
+                 m_hintText.length() &&
+                 !ShouldDrawFocus() );
+    }
 
     //
     // Override these for customization purposes
@@ -543,6 +557,9 @@ protected:
 
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
+
+    // This is used when control is unfocused and m_valueString is empty
+    wxString                m_hintText;
 
     // the text control and button we show all the time
     wxTextCtrl*             m_text;

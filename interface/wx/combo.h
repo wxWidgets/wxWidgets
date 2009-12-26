@@ -449,6 +449,15 @@ public:
     static int GetFeatures();
 
     /**
+        Returns the current hint string.
+
+        See SetHint() for more information about hints.
+
+        @since 2.9.1
+    */
+    virtual wxString GetHint() const;
+
+    /**
         Returns the insertion point for the combo control's text field.
 
         @note Under Windows, this function always returns 0 if the combo
@@ -619,6 +628,18 @@ public:
         to indicate area that is not covered by the focus rectangle.
     */
     void SetCustomPaintWidth(int width);
+
+    /**
+        Sets a hint shown in an empty unfocused combo control.
+
+        Notice that hints are known as <em>cue banners</em> under MSW or
+        <em>placeholder strings</em> under OS X.
+
+        @see wxTextEntry::SetHint()
+
+        @since 2.9.1
+    */
+    virtual void SetHint(const wxString& hint);
 
     /**
         Sets the insertion point in the text field.
