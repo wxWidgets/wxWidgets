@@ -118,6 +118,31 @@ public:
     wxFileStream(const wxString& fileName);
     virtual bool IsOk() const;
 
+    // override (some) virtual functions inherited from both classes to resolve
+    // ambiguities (this wouldn't be necessary if wxStreamBase were a virtual
+    // base class but it isn't)
+
+    virtual bool IsSeekable() const
+    {
+        return wxFileInputStream::IsSeekable();
+    }
+
+    virtual wxFileOffset GetLength() const
+    {
+        return wxFileInputStream::GetLength();
+    }
+
+protected:
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode)
+    {
+        return wxFileInputStream::OnSysSeek(pos, mode);
+    }
+
+    virtual wxFileOffset OnSysTell() const
+    {
+        return wxFileInputStream::OnSysTell();
+    }
+
 private:
     wxDECLARE_NO_COPY_CLASS(wxFileStream);
 };
@@ -193,7 +218,32 @@ class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
 {
 public:
     wxFFileStream(const wxString& fileName, const wxString& mode = "w+b");
+
+    // override some virtual functions to resolve ambiguities, just as in
+    // wxFileStream
+
     virtual bool IsOk() const;
+
+    virtual bool IsSeekable() const
+    {
+        return wxFFileInputStream::IsSeekable();
+    }
+
+    virtual wxFileOffset GetLength() const
+    {
+        return wxFFileInputStream::GetLength();
+    }
+
+protected:
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode)
+    {
+        return wxFFileInputStream::OnSysSeek(pos, mode);
+    }
+
+    virtual wxFileOffset OnSysTell() const
+    {
+        return wxFFileInputStream::OnSysTell();
+    }
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxFFileStream);

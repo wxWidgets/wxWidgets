@@ -122,7 +122,7 @@ class wxFileOutputStream : public wxOutputStream
 public:
     /**
         Creates a new file with @a ofileName name and initializes the stream in write-only mode.
-        
+
         @warning
         You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
@@ -171,7 +171,7 @@ class wxFileInputStream : public wxInputStream
 public:
     /**
         Opens the specified file using its @a ifileName name in read-only mode.
-        
+
         @warning
         You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
@@ -253,24 +253,34 @@ public:
 /**
     @class wxFFileStream
 
-    @todo describe this class.
+    This stream allows to both read from and write to a file using buffered
+    STDIO functions.
 
     @library{wxbase}
     @category{streams}
 
-    @see wxStreamBuffer
+    @see wxFFileInputStream, wxFFileOutputStream, wxFileStream
 */
-class wxFFileStream : public wxFFileOutputStream
+class wxFFileStream : public wxFFileInputStream,
+                      public wxFFileOutputStream
 {
 public:
     /**
         Initializes a new file stream in the given @a mode using the specified
         @a iofileName name.
-        
+
         @warning
         You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFFileStream(const wxString& iofileName, const wxString& mode = "w+b");
+
+    /**
+        Returns @true if the stream is initialized and ready.
+
+        This method returns @true if the stream can be both read from and
+        written to.
+    */
+    bool IsOk() const;
 };
 
 
@@ -278,23 +288,34 @@ public:
 /**
     @class wxFileStream
 
-    @todo describe this class.
+    This class represents data that can be both read from and written to a file.
+    There are actually two such groups of classes: this one is based on wxFile
+    whereas wxFFileStream is based in the wxFFile class.
 
     @library{wxbase}
     @category{streams}
 
-    @see wxStreamBuffer
+    @see wxFileInputStream, wxFileOutputStream, wxFFileStream
 */
-class wxFileStream : public wxFileOutputStream
+class wxFileStream : public wxFileOutputStream,
+                     public wxFileInputStream
 {
 public:
     /**
         Initializes a new file stream in read-write mode using the specified
         @a iofileName name.
-        
+
         @warning
-        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
+        You should use IsOk() to verify if the constructor succeeded.
     */
     wxFileStream(const wxString& iofileName);
+
+    /**
+        Returns @true if the stream is initialized and ready.
+
+        This method returns @true if the stream can be both read from and
+        written to.
+    */
+    bool IsOk() const;
 };
 
