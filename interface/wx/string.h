@@ -584,6 +584,7 @@ public:
     wxString& operator<<(wchar_t ch);
     wxString& operator<<(const wxCharBuffer& s);
     wxString& operator<<(const wxWCharBuffer& s);
+    wxString& operator<<(wxUniChar ch);
     wxString& operator<<(wxUniCharRef ch);
     wxString& operator<<(unsigned int ui);
     wxString& operator<<(long l);
