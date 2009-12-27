@@ -18497,13 +18497,22 @@ done
 echo "$as_me: WARNING: Assuming OS X 10.4, use --with-macosx-version-min to override." >&2;}
         OSX_VERSION="10.4"
     fi
-    if test "$wxUSE_OSX_CARBON" = 1 -o "x$OSX_VERSION" = "x10.4"; then
-        # otherwise configure stops on leopard for universal_binary
-        wxUSE_MACOSX_VERSION_MIN=10.4
-    else
-        # for OS X Cocoa, use 10.5 so we can get 64-bit compile on Snow Leopard
-        wxUSE_MACOSX_VERSION_MIN=10.5
-    fi
+
+    case "$OSX_VERSION" in
+        10.4* )
+            wxUSE_MACOSX_VERSION_MIN=10.4
+            ;;
+
+        * )
+            if test "$wxUSE_OSX_CARBON" = 1; then
+                # otherwise configure stops on leopard for universal_binary
+                wxUSE_MACOSX_VERSION_MIN=10.4
+            else
+                # for Cocoa, use 10.5 to be able to compile it in 64 bits too
+                wxUSE_MACOSX_VERSION_MIN=10.5
+            fi
+            ;;
+    esac
 fi
 
 NEEDS_GCC40="no"
