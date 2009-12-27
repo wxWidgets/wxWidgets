@@ -245,7 +245,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // does not as the user should be able to resize the window)
     //
     // note that we can't use IsTopLevel() from ctor
-    if ( !wxTopLevelWindows.Find((wxWindow *)this) )
+    if ( size != wxDefaultSize && !wxTopLevelWindows.Find((wxWindow *)this) )
         SetMinSize(size);
 
     SetName(name);
