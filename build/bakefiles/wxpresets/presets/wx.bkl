@@ -273,7 +273,9 @@
         <if cond="WX_DEBUG=='0' and WX_UNICODE=='1'">u</if>
     </set>
 
-    <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
+    <if cond="FORMAT!='autoconf'">
+        <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
+    </if>
 
 
 
