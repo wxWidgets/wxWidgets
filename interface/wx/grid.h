@@ -1510,6 +1510,22 @@ public:
         wxGridSelectColumns
     };
 
+    /**
+        Return values for GetCellSize().
+
+        @since 2.9.1
+     */
+    enum CellSpan
+    {
+        /// This cell is inside a span covered by another cell.
+        CellSpan_Inside = -1,
+
+        /// This is a normal, non-spanning cell.
+        CellSpan_None = 0,
+
+        /// This cell spans several physical wxGrid cells.
+        CellSpan_Main
+    };
 
     /**
         @name Constructors and Initialization
@@ -2651,6 +2667,81 @@ public:
         @sa SetColSizes()
      */
     void SetRowSizes(const wxGridSizesInfo& sizeInfo);
+
+    /**
+        Set the size of the cell.
+
+        Specifying a value of more than 1 in @a num_rows or @a num_cols will
+        make the cell at (@a row, @a col) span the block of the specified size,
+        covering the other cells which would be normally shown in it. Passing 1
+        for both arguments resets the cell to normal appearance.
+
+        @see GetCellSize()
+
+        @param row
+            The row of the cell.
+        @param col
+            The column of the cell.
+        @param num_rows
+            Number of rows to be occupied by this cell, must be >= 1.
+        @param num_cols
+            Number of columns to be occupied by this cell, must be >= 1.
+     */
+    void SetCellSize(int row, int col, int num_rows, int num_cols);
+
+    /**
+        Get the size of the cell in number of cells covered by it.
+
+        For normal cells, the function fills both @a num_rows and @a num_cols
+        with 1 and returns CellSpan_None. For cells which span multiple cells, i.e.
+        for which SetCellSize() had been called, the returned values are the
+        same ones as were passed to SetCellSize() call and the function return
+        value is CellSpan_Main.
+
+        More unexpectedly, perhaps, the returned values may be @em negative for
+        the cells which are inside a span covered by a cell occupying multiple
+        rows or columns. They correspond to the offset of the main cell of the
+        span from the cell passed to this functions and the function returns
+        CellSpan_Inside value to indicate this.
+
+        As an example, consider a 3*3 grid with the cell (1, 1) (the one in the
+        middle) having a span of 2 rows and 2 columns, i.e. the grid looks like
+        @code
+            +----+----+----+
+            |    |    |    |
+            +----+----+----+
+            |    |         |
+            +----+         |
+            |    |         |
+            +----+----+----+
+        @endcode
+        Then the function returns 2 and 2 in @a num_rows and @a num_cols for
+        the cell (1, 1) itself and -1 and -1 for the cell (2, 2) as well as -1
+        and 0 for the cell (2, 1).
+
+        @param row
+            The row of the cell.
+        @param col
+            The column of the cell.
+        @param num_rows
+            Pointer to variable receiving the number of rows, must not be @NULL.
+        @param num_cols
+            Pointer to variable receiving the number of columns, must not be
+            @NULL.
+        @return
+            The kind of this cell span (the return value is new in wxWidgets
+            2.9.1, this function was void in previous wxWidgets versions).
+     */
+    CellSpan GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
+
+    /**
+        Get the number of rows and columns allocated for this cell.
+
+        This overload doesn't return a CellSpan value but the values returned
+        may still be negative, see GetCellSize(int, int, int *, int *) for
+        details.
+     */
+    wxSize GetCellSize(const wxGridCellCoords& coords);
 
     //@}
 

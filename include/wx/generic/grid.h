@@ -1301,7 +1301,24 @@ public:
     void     GetCellAlignment( int row, int col, int *horiz, int *vert ) const;
     bool     GetDefaultCellOverflow() const;
     bool     GetCellOverflow( int row, int col ) const;
-    void     GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
+
+    // this function returns 1 in num_rows and num_cols for normal cells,
+    // positive numbers for a cell spanning multiple columns/rows (as set with
+    // SetCellSize()) and _negative_ numbers corresponding to the offset of the
+    // top left cell of the span from this one for the other cells covered by
+    // this cell
+    //
+    // the return value is CellSpan_None, CellSpan_Main or CellSpan_Inside for
+    // each of these cases respectively
+    enum CellSpan
+    {
+        CellSpan_Inside = -1,
+        CellSpan_None = 0,
+        CellSpan_Main
+    };
+
+    CellSpan GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
+
     wxSize GetCellSize(const wxGridCellCoords& coords)
     {
         wxSize s;

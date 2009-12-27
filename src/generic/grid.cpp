@@ -7139,11 +7139,21 @@ bool wxGrid::GetCellOverflow( int row, int col ) const
     return allow;
 }
 
-void wxGrid::GetCellSize( int row, int col, int *num_rows, int *num_cols ) const
+wxGrid::CellSpan
+wxGrid::GetCellSize( int row, int col, int *num_rows, int *num_cols ) const
 {
     wxGridCellAttr *attr = GetCellAttr(row, col);
     attr->GetSize( num_rows, num_cols );
     attr->DecRef();
+
+    if ( *num_rows == 1 && *num_cols == 1 )
+        return CellSpan_None; // just a normal cell
+
+    if ( *num_rows < 0 || *num_cols < 0 )
+        return CellSpan_Inside; // covered by a multi-span cell
+
+    // this cell spans multiple cells to its right/bottom
+    return CellSpan_Main;
 }
 
 wxGridCellRenderer* wxGrid::GetCellRenderer(int row, int col) const
