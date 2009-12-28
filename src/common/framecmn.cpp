@@ -500,15 +500,40 @@ wxToolBar* wxFrameBase::OnCreateToolBar(long style,
 
 void wxFrameBase::SetToolBar(wxToolBar *toolbar)
 {
-    bool hadBar = m_frameToolBar != NULL;
-    m_frameToolBar = toolbar;
-
-    if ( (m_frameToolBar != NULL) != hadBar )
+    if ( (toolbar != NULL) != (m_frameToolBar != NULL) )
     {
-        PositionToolBar();
+        // the toolbar visibility must have changed so we need to both position
+        // the toolbar itself (if it appeared) and to relayout the frame
+        // contents in any case
+
+        if ( toolbar )
+        {
+            // we need to assign it to m_frameToolBar for PositionToolBar() to
+            // do anything
+            m_frameToolBar = toolbar;
+            PositionToolBar();
+        }
+        //else: tricky: do not reset m_frameToolBar yet as otherwise DoLayout()
+        //      wouldn't recognize the (still existing) toolbar as one of our
+        //      bars and wouldn't layout the single child of the frame correctly
+
+
+        // and this is even more tricky: we want DoLayout() to recognize the
+        // old toolbar for the purpose of not counting it among our non-bar
+        // children but we don't want to reserve any more space for it so we
+        // temporarily hide it
+        if ( m_frameToolBar )
+            m_frameToolBar->Hide();
 
         DoLayout();
+
+        if ( m_frameToolBar )
+            m_frameToolBar->Show();
     }
+
+    // this might have been already done above but it's simpler to just always
+    // do it unconditionally instead of testing for whether we already did it
+    m_frameToolBar = toolbar;
 }
 
 #endif // wxUSE_TOOLBAR

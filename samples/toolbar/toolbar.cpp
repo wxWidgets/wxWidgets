@@ -706,9 +706,11 @@ void MyFrame::OnToggleToolbar(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
+        // notice that there is no need to call SetToolBar(NULL) here (although
+        // this it is harmless to do and it must be called if you do not delete
+        // the toolbar but keep it for later reuse), just delete the toolbar
+        // directly and it will reset the associated frame toolbar pointer
         delete tbar;
-
-        SetToolBar(NULL);
     }
 }
 
