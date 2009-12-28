@@ -627,6 +627,7 @@ MyFrame::MyFrame(wxFrame* parent,
     // Associate the menu bar with the frame
     SetMenuBar(menuBar);
 
+    menuBar->Check(IDM_TOOLBAR_TOGGLE_TOOLBAR, true);
     menuBar->Check(IDM_TOOLBAR_SHOW_BOTH, true);
     menuBar->Check(IDM_TOOLBAR_TOGGLETOOLTIPS, true);
 
