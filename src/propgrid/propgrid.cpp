@@ -2123,6 +2123,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
+    const wxArrayInt& colWidths = state->m_colWidths;
 
 #if wxPG_REFRESH_CONTROLS_AFTER_REPAINT
     bool wasSelectedPainted = false;
@@ -2222,9 +2223,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         unsigned int si;
         int sx = x;
 
-        for ( si=0; si<state->m_colWidths.size(); si++ )
+        for ( si=0; si<colWidths.size(); si++ )
         {
-            sx += state->m_colWidths[si];
+            sx += colWidths[si];
             dc.DrawLine( sx, y, sx, y2 );
         }
 
@@ -2320,12 +2321,16 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                         m_marginWidth,
                         lh );
 
-        if ( p->IsCategory() )
+        // Default cell rect fill the entire row
+        wxRect cellRect(greyDepthX, y,
+                        gridWidth - greyDepth + 2, rowHeight-1 );
+
+        bool isCategory = p->IsCategory();
+
+        if ( isCategory )
         {
-            // Captions have their cell areas merged as one
             dc.SetFont(m_captionFont);
             fontChanged = true;
-            wxRect cellRect(greyDepthX, y, gridWidth - greyDepth + 2, rowHeight-1 );
 
             if ( renderFlags & wxPGCellRenderer::DontUseCellBgCol )
             {
@@ -2337,13 +2342,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             {
                 dc.SetTextForeground(rowFgCol);
             }
-
-            wxPGCellRenderer* renderer = p->GetCellRenderer(0);
-            renderer->Render( dc, cellRect, this, p, 0, -1, renderFlags );
-
-            // Tree Item Button
-            if ( !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
-                DrawExpanderButton( dc, butRect, p );
         }
         else
         {
@@ -2351,111 +2349,148 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             if ( butRect.x > 0 )
                 butRect.x += IN_CELL_EXPANDER_BUTTON_X_ADJUST;
 
-            if ( p->m_flags & wxPG_PROP_MODIFIED && (windowStyle & wxPG_BOLD_MODIFIED) )
+            if ( p->m_flags & wxPG_PROP_MODIFIED &&
+                 (windowStyle & wxPG_BOLD_MODIFIED) )
             {
                 dc.SetFont(m_captionFont);
                 fontChanged = true;
             }
 
-            unsigned int ci;
-            int cellX = x + 1;
-            int nextCellWidth = state->m_colWidths[0] -
-                                (greyDepthX - m_marginWidth);
-            wxRect cellRect(greyDepthX+1, y, 0, rowHeight-1);
-            int textXAdd = textMarginHere - greyDepthX;
+            // Magic fine-tuning for non-category rows
+            cellRect.x += 1;
+        }
 
-            for ( ci=0; ci<state->m_colWidths.size(); ci++ )
+        int firstCellWidth = colWidths[0] - (greyDepthX - m_marginWidth);
+        int firstCellX = cellRect.x;
+
+        // Calculate cellRect.x for the last cell
+        unsigned int ci = 0;
+        int cellX = x + 1;
+        for ( ci=0; ci<colWidths.size(); ci++ )
+            cellX += colWidths[ci];
+        cellRect.x = cellX;
+
+        // Draw cells from back to front so that we can easily tell if the
+        // cell on the right was empty from text
+        bool prevFilled = true;
+        ci = colWidths.size();
+        do
+        {
+            ci--;
+
+            int textXAdd = 0;
+
+            if ( ci == 0 )
             {
-                cellRect.width = nextCellWidth - 1;
+                textXAdd = textMarginHere - greyDepthX;
+                cellRect.width = firstCellWidth;
+                cellRect.x = firstCellX;
+            }
+            else
+            {
+                int colWidth = colWidths[ci];
+                cellRect.width = colWidth;
+                cellRect.x -= colWidth;
+            }
 
-                wxWindow* cellEditor = NULL;
-                int cellRenderFlags = renderFlags;
+            // Merge with column to the right?
+            if ( !prevFilled && isCategory )
+            {
+                cellRect.width += colWidths[ci+1];
+            }
 
-                // Tree Item Button (must be drawn before clipping is set up)
-                if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
-                    DrawExpanderButton( dc, butRect, p );
+            if ( !isCategory )
+                cellRect.width -= 1;
 
-                // Background
-                if ( isSelected && (ci == 1 || ci == m_selColumn) )
+            wxWindow* cellEditor = NULL;
+            int cellRenderFlags = renderFlags;
+
+            // Tree Item Button (must be drawn before clipping is set up)
+            if ( ci == 0 && !HasFlag(wxPG_HIDE_MARGIN) && p->HasVisibleChildren() )
+                DrawExpanderButton( dc, butRect, p );
+
+            // Background
+            if ( isSelected && (ci == 1 || ci == m_selColumn) )
+            {
+                if ( p == firstSelected )
                 {
-                    if ( p == firstSelected )
-                    {
-                        if ( ci == 1 && m_wndEditor )
-                            cellEditor = m_wndEditor;
-                        else if ( ci == m_selColumn && m_labelEditor )
-                            cellEditor = m_labelEditor;
-                    }
+                    if ( ci == 1 && m_wndEditor )
+                        cellEditor = m_wndEditor;
+                    else if ( ci == m_selColumn && m_labelEditor )
+                        cellEditor = m_labelEditor;
+                }
 
-                    if ( cellEditor )
-                    {
-                        wxColour editorBgCol =
-                            cellEditor->GetBackgroundColour();
-                        dc.SetBrush(editorBgCol);
-                        dc.SetPen(editorBgCol);
-                        dc.SetTextForeground(m_colPropFore);
-                        dc.DrawRectangle(cellRect);
+                if ( cellEditor )
+                {
+                    wxColour editorBgCol =
+                        cellEditor->GetBackgroundColour();
+                    dc.SetBrush(editorBgCol);
+                    dc.SetPen(editorBgCol);
+                    dc.SetTextForeground(m_colPropFore);
+                    dc.DrawRectangle(cellRect);
 
-                        if ( m_dragStatus != 0 ||
-                             (m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE) )
-                            cellEditor = NULL;
-                    }
-                    else
-                    {
-                        dc.SetBrush(m_colPropBack);
-                        dc.SetPen(m_colPropBack);
-                        dc.SetTextForeground(m_colDisPropFore);
-                        if ( p->IsEnabled() )
-                            dc.SetTextForeground(rowFgCol);
-                        else
-                            dc.SetTextForeground(m_colDisPropFore);
-                    }
+                    if ( m_dragStatus != 0 ||
+                         (m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE) )
+                        cellEditor = NULL;
                 }
                 else
                 {
-                    if ( renderFlags & wxPGCellRenderer::DontUseCellBgCol )
-                    {
-                        dc.SetBrush(rowBgBrush);
-                        dc.SetPen(rowBgCol);
-                    }
-
-                    if ( renderFlags & wxPGCellRenderer::DontUseCellFgCol )
-                    {
+                    dc.SetBrush(m_colPropBack);
+                    dc.SetPen(m_colPropBack);
+                    dc.SetTextForeground(m_colDisPropFore);
+                    if ( p->IsEnabled() )
                         dc.SetTextForeground(rowFgCol);
-                    }
-                }
-
-                dc.SetClippingRegion(cellRect);
-
-                cellRect.x += textXAdd;
-                cellRect.width -= textXAdd;
-
-                // Foreground
-                if ( !cellEditor )
-                {
-                    wxPGCellRenderer* renderer;
-                    int cmnVal = p->GetCommonValue();
-                    if ( cmnVal == -1 || ci != 1 )
-                    {
-                        renderer = p->GetCellRenderer(ci);
-                        renderer->Render( dc, cellRect, this, p, ci, -1,
-                                          cellRenderFlags );
-                    }
                     else
-                    {
-                        renderer = GetCommonValue(cmnVal)->GetRenderer();
-                        renderer->Render( dc, cellRect, this, p, ci, -1,
-                                          cellRenderFlags );
-                    }
+                        dc.SetTextForeground(m_colDisPropFore);
+                }
+            }
+            else
+            {
+                if ( renderFlags & wxPGCellRenderer::DontUseCellBgCol )
+                {
+                    dc.SetBrush(rowBgBrush);
+                    dc.SetPen(rowBgCol);
                 }
 
-                cellX += state->m_colWidths[ci];
-                if ( ci < (state->m_colWidths.size()-1) )
-                    nextCellWidth = state->m_colWidths[ci+1];
-                cellRect.x = cellX;
-                dc.DestroyClippingRegion(); // Is this really necessary?
-                textXAdd = 0;
+                if ( renderFlags & wxPGCellRenderer::DontUseCellFgCol )
+                {
+                    dc.SetTextForeground(rowFgCol);
+                }
             }
+
+            dc.SetClippingRegion(cellRect);
+
+            cellRect.x += textXAdd;
+            cellRect.width -= textXAdd;
+
+            // Foreground
+            if ( !cellEditor )
+            {
+                wxPGCellRenderer* renderer;
+                int cmnVal = p->GetCommonValue();
+                if ( cmnVal == -1 || ci != 1 )
+                {
+                    renderer = p->GetCellRenderer(ci);
+                    prevFilled = renderer->Render(dc, cellRect, this,
+                                                  p, ci, -1,
+                                                  cellRenderFlags );
+                }
+                else
+                {
+                    renderer = GetCommonValue(cmnVal)->GetRenderer();
+                    prevFilled = renderer->Render(dc, cellRect, this,
+                                                  p, ci, -1,
+                                                  cellRenderFlags );
+                }
+            }
+            else
+            {
+                prevFilled = true;
+            }
+
+            dc.DestroyClippingRegion(); // Is this really necessary?
         }
+        while ( ci > 0 );
 
         if ( fontChanged )
             dc.SetFont(normalFont);

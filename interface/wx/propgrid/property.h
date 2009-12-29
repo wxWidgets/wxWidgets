@@ -207,7 +207,10 @@
     @subsection wxPropertyCategory
 
     Not an actual property per se, but a header for a group of properties.
-    Regardless inherits from wxPGProperty.
+    Regardless inherits from wxPGProperty, and supports displaying 'labels'
+    for columns other than the first one. Easiest way to set category's
+    label for second column is to call wxPGProperty::SetValue() with string
+    argument.
 
     @subsection wxStringProperty
 

@@ -1868,6 +1868,10 @@ void FormMain::PopulateWithLibraryConfig ()
     pid = pg->Append( new wxPropertyCategory( wxT("wxWidgets Library Configuration") ) );
     pg->SetPropertyCell( pid, 0, wxPG_LABEL, bmp );
 
+    // Both of following lines would set a label for the second column
+    pg->SetPropertyCell( pid, 1, "Is Enabled" );
+    pid->SetValue("Is Enabled");
+
     ADD_WX_LIB_CONF_GROUP(wxT("Global Settings"))
     ADD_WX_LIB_CONF( wxUSE_GUI )
 

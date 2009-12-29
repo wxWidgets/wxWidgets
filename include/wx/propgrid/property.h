@@ -98,7 +98,11 @@ public:
                               DontUseCellBgCol
     };
 
-    virtual void Render( wxDC& dc,
+    /**
+        Returns @true if rendered something in the foreground (text or
+        bitmap.
+    */
+    virtual bool Render( wxDC& dc,
                          const wxRect& rect,
                          const wxPropertyGrid* propertyGrid,
                          wxPGProperty* property,
@@ -171,7 +175,7 @@ public:
 class WXDLLIMPEXP_PROPGRID wxPGDefaultRenderer : public wxPGCellRenderer
 {
 public:
-    virtual void Render( wxDC& dc,
+    virtual bool Render( wxDC& dc,
                          const wxRect& rect,
                          const wxPropertyGrid* propertyGrid,
                          wxPGProperty* property,
@@ -2484,6 +2488,7 @@ public:
     int GetTextExtent( const wxWindow* wnd, const wxFont& font ) const;
 
     virtual wxString ValueToString( wxVariant& value, int argFlags ) const;
+    virtual wxString GetValueAsString( int argFlags = 0 ) const;
 
 protected:
     void SetTextColIndex( unsigned int colInd )
