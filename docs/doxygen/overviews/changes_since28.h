@@ -61,6 +61,24 @@ to use, e.g.:
     OpenLogFile(s.mb_str());    // OK: always calls narrow string overload
     OpenLogFile(s.wc_str());    // OK: always calls wide string overload
 @endcode
+A common example of such problem arises with @c std::fstream class constructor
+in Microsoft Visual C++ standard library implementation. In addition to a
+constructor from @c const @c char * which this class must have, it also
+provides a constructor taking a wide character file name. Because of this, code
+like the following
+@code
+    #include <fstream>
+
+    void MyFunc(const wxString& filename)
+    {
+        std::ifstream ifs(filename.c_str());
+        ...
+    }
+@endcode
+does not compile when using Microsoft Visual C++ and needs to be changed to use
+mb_str() (which will not work for file names containing Unicode characters,
+consider using wxWidgets classes and functions to work with such file names as
+they are not supported by standard C++ library).
 
 The other class of incompatible changes is due to modifying some virtual
 methods to use @c wxString parameters instead of @c const @c wxChar* ones to
