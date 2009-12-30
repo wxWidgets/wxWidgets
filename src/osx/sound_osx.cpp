@@ -39,12 +39,14 @@ public:
     virtual ~wxSoundTimer()
     {
         Stop();
-        m_sound->DoStop();
+        if (m_sound)
+            m_sound->DoStop();
     }
     
     void Notify()
     {
-        m_sound->SoundTask();
+        if (m_sound)
+            m_sound->SoundTask();
     }
     
 protected:
@@ -56,10 +58,16 @@ wxVector<wxSoundData*> s_soundsPlaying;
 wxSoundData::wxSoundData()
 {
     m_pTimer = NULL;
+    m_markedForDeletion = false;
 }
 
 wxSoundData::~wxSoundData()
 {
+}
+
+void wxSoundData::MarkForDeletion()
+{
+    m_markedForDeletion = true;
 }
 
 void wxSoundData::Stop()
@@ -105,7 +113,24 @@ wxSound::wxSound(int size, const wxByte* data)
 
 wxSound::~wxSound()
 {
-    delete m_data;
+    // if the sound is in a playing state, just mark it to be deleted and
+    // delete it after it plays. Otherwise, async sounds created on the stack
+    // may never get the chance to play.
+    bool isPlaying = false;
+    for ( wxVector<wxSoundData*>::reverse_iterator s = s_soundsPlaying.rbegin();
+         s != s_soundsPlaying.rend(); ++s )
+    {
+        if (*s == m_data)
+        {
+            isPlaying = true;
+            break;
+        }
+    }
+    
+    if (isPlaying)
+        m_data->MarkForDeletion();
+    else
+        delete m_data;
 }
 
 void wxSound::Init()

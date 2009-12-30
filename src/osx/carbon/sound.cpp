@@ -100,6 +100,9 @@ void wxOSXSoundManagerSoundData::DoStop()
         m_pSndChannel = NULL;
         wxSound::SoundStopped(this);
     }
+    
+    if (IsMarkedForDeletion())
+        delete this;
 }
 
 bool wxOSXSoundManagerSoundData::Play(unsigned flags)

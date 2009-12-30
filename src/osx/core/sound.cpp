@@ -68,6 +68,9 @@ wxOSXAudioToolboxSoundData::CompletionCallback(SystemSoundID WXUNUSED(mySSID),
     wxOSXAudioToolboxSoundData* data = (wxOSXAudioToolboxSoundData*) soundRef;
     
     data->SoundCompleted();
+    
+    if (data->IsMarkedForDeletion())
+        delete data;
 }
 
 void wxOSXAudioToolboxSoundData::SoundCompleted()

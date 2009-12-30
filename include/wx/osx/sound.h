@@ -30,6 +30,9 @@ public :
     virtual void Stop();
     // can be called by a timer for repeated tasks during playback
     virtual void SoundTask();
+    // mark this to be deleted
+    virtual void MarkForDeletion();
+    virtual bool IsMarkedForDeletion() const { return m_markedForDeletion; }
     
     // does the true work of stopping and cleaning up
     virtual void DoStop() = 0;
@@ -38,6 +41,7 @@ protected :
     
     unsigned int m_flags;
     wxSoundTimer* m_pTimer;
+    bool m_markedForDeletion;
 } ;
 
 class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
