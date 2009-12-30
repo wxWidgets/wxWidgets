@@ -159,7 +159,9 @@ wxString wxTopLevelWindowMac::GetTitle() const
 
 void wxTopLevelWindowMac::ShowWithoutActivating()
 {
-    if ( !wxTopLevelWindowBase::Show(true) )
+    // wxTopLevelWindowBase is derived from wxNonOwnedWindow, so don't
+    // call it here.
+    if ( !wxWindow::Show(true) )
         return;
 
     m_nowpeer->ShowWithoutActivating();
