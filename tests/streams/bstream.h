@@ -217,9 +217,6 @@ protected:
         CleanupHelper cleanup(this);
         TStreamIn &stream_in = CreateInStream();
 
-        // this test shouldn't be used at all if the stream isn't seekable
-        CPPUNIT_ASSERT( stream_in.IsSeekable() );
-
         CPPUNIT_ASSERT(!stream_in.Eof());
 
         // Try to Get the location in the stream...
@@ -360,9 +357,6 @@ protected:
     {
         CleanupHelper cleanup(this);
         TStreamOut &stream_out = CreateOutStream();
-
-        // If this test is used, the stream must be seekable
-        CPPUNIT_ASSERT( stream_out.IsSeekable() );
 
         // Try to Get the location in the stream...
         CPPUNIT_ASSERT_EQUAL(0, stream_out.TellO());
