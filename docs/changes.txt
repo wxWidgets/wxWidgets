@@ -476,9 +476,11 @@ All (GUI):
   dismissed immediately as text control grabbed the focus).
 - wxPropertyGrid: added wxPG_EX_MULTIPLE_SELECTION.
 - wxPropertyGrid: added functions for editing property labels.
-- wxPropertyGrid: added wxPG_NO_INTERNAL_BORDER, wxPG_EX_NO_TOOLBAR_DIVIDER
-  and wxPG_EX_TOOLBAR_SEPARATOR styles for finer control over borders.
-  Borders around property grid are now native for consistency.
+- wxPropertyGridManager: added wxPG_NO_INTERNAL_BORDER,
+  wxPG_EX_NO_TOOLBAR_DIVIDER and wxPG_EX_TOOLBAR_SEPARATOR styles for finer
+  control over borders. Borders around property grid are now native for
+  consistency.
+- Added wxPropertyGridManager::ShowHeader().
 - Added wxXmlResource::LoadObjectRecursively().
 - Added wxColour::Set/GetRGB() and Set/GetRGBA() methods (Marcel Haß).
 - wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
