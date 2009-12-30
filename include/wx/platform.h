@@ -652,6 +652,8 @@
 #else
 #    undef wxCHECK_W32API_VERSION
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
+#    undef wxCHECK_MINGW32_VERSION
+#    define wxCHECK_MINGW32_VERSION(maj, min) (0)
 #endif
 
 /**

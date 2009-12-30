@@ -190,6 +190,10 @@ enum wxFileKind
         #define wxHAS_HUGE_STDIO_FILES
         #define wxFseek _fseeki64
         #define wxFtell _ftelli64
+    #elif wxCHECK_MINGW32_VERSION(3, 5) // mingw-runtime version (not gcc)
+        #define wxHAS_HUGE_STDIO_FILES
+        #define wxFseek fseeko64
+        #define wxFtell ftello64
     #endif
 
     // other Windows compilers (DMC, Watcom, Metrowerks and Borland) don't have
