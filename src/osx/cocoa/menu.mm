@@ -143,10 +143,25 @@ public :
 
     virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
+        NSMenuItem* nsmenuitem = (NSMenuItem*) pItem->GetPeer()->GetHMenuItem();
+        // make sure a call of SetSubMenu is also reflected (occuring after Create)
+        // update the native menu item accordingly
+        
+        if ( pItem->IsSubMenu() )
+        {
+            wxMenu* wxsubmenu = pItem->GetSubMenu();
+            WXHMENU nssubmenu = wxsubmenu->GetHMenu();
+            if ( [nsmenuitem submenu] != nssubmenu )
+            {
+                wxsubmenu->GetPeer()->SetTitle( pItem->GetItemLabelText() );
+                [nsmenuitem setSubmenu:nssubmenu];
+            }
+        }
+        
         if ( pos == (size_t) -1 )
-            [m_osxMenu addItem:(NSMenuItem*) pItem->GetPeer()->GetHMenuItem() ];
+            [m_osxMenu addItem:nsmenuitem ];
         else
-            [m_osxMenu insertItem:(NSMenuItem*) pItem->GetPeer()->GetHMenuItem() atIndex:pos];
+            [m_osxMenu insertItem:nsmenuitem atIndex:pos];
     }
 
     virtual void Remove( wxMenuItem *pItem )
