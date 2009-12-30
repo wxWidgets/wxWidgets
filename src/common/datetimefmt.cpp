@@ -1922,14 +1922,13 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
     for ( size_t n = 0; n < WXSIZEOF(stdTimes); n++ )
     {
         const wxString timeString = wxGetTranslation(stdTimes[n].name);
-        const wxString::const_iterator p = time.begin() + timeString.length();
-        if ( timeString.CmpNoCase(wxString(time.begin(), p)) == 0 )
+        if ( timeString.CmpNoCase(wxString(time, timeString.length())) == 0 )
         {
             // casts required by DigitalMars
             Set(stdTimes[n].hour, wxDateTime_t(0), wxDateTime_t(0));
 
             if ( end )
-                *end = p;
+                *end = time.begin() + timeString.length();
 
             return true;
         }
