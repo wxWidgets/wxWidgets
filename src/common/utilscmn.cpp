@@ -1343,7 +1343,7 @@ void wxInfoMessageBox(wxWindow* parent)
                             GTK_MICRO_VERSION);
 #endif // __WXGTK__
 
-    msg += wxS("\nCopyright (c) 1995-2009 wxWidgets team");
+    msg += wxS("\nCopyright (c) 1995-2010 wxWidgets team");
 
     wxMessageBox(msg, wxT("wxWidgets information"),
                  wxICON_INFORMATION | wxOK,
