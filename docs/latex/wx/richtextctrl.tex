@@ -389,6 +389,9 @@ Deletes content if there is a selection, e.g. when pressing a key.
 Returns the new caret position in {\it newPos}, or leaves it if there
 was no action. This is undoable.
 
+\perlnote{In wxPerl this method takes no arguments and returns a 2-element
+list {\tt ( ok, newPos )}.}
+
 \membersection{wxRichTextCtrl::DeleteSelection}\label{wxrichtextctrldeleteselection}
 
 \func{void}{DeleteSelection}{\void}
@@ -583,6 +586,9 @@ Returns the current caret position.
 
 Returns the caret height and position for the given character position
 
+\perlnote{In wxPerl this method takes the position as argument and
+  returns a 2-element list {\tt ( ok, rect )}.}
+
 \membersection{wxRichTextCtrl::GetCommandProcessor}\label{wxrichtextctrlgetcommandprocessor}
 
 \constfunc{wxCommandProcessor*}{GetCommandProcessor}{\void}
@@ -710,6 +716,17 @@ This function gets the combined style - that is, the style you see on the screen
 of combining base style, paragraph style and character style attributes. To get the character
 or paragraph style alone, use \helpref{GetUncombinedStyle}{wxrichtextctrlgetuncombinedstyle}.
 
+\perlnote{In place of a single overloaded method, wxPerl uses:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetTextAttrStyle(pos)}}{Returns a Wx::TextAttr
+  object, or undef}
+\twocolitem{{\bf GetTextAttrExStyle(pos)}}{Returns a Wx::TextAttrEx
+  object, or undef}
+\twocolitem{{\bf GetRichTextAttrStyle(pos)}}{Returns a Wx::RichTextAttr
+  object, or undef}
+\end{twocollist}
+}}
+
 \membersection{wxRichTextCtrl::GetStyleForRange}\label{wxrichtextctrlgetstyleforrange}
 
 \func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxRichTextAttr\& }{style}}
@@ -718,6 +735,15 @@ or paragraph style alone, use \helpref{GetUncombinedStyle}{wxrichtextctrlgetunco
 
 Gets the attributes common to the specified range. Attributes that differ in value within the range will
 not be included in {\it style}'s flags.
+
+\perlnote{In place of a single overloaded method, wxPerl uses:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetTextAttrExStyleForRange(range)}}{Returns a Wx::TextAttrEx
+  object, or undef}
+\twocolitem{{\bf GetRichTextAttrStyleForRange(range)}}{Returns a Wx::RichTextAttr
+  object, or undef}
+\end{twocollist}
+}}
 
 \membersection{wxRichTextCtrl::GetStyleSheet}\label{wxrichtextctrlgetstylesheet}
 
@@ -743,6 +769,17 @@ screen. To get the combined attributes, use \helpref{GetStyle}{wxrichtextctrlget
 
 If you specify (any) paragraph attribute in {\it style}'s flags, this function will fetch
 the paragraph attributes. Otherwise, it will return the character attributes.
+
+\perlnote{In place of a single overloaded method, wxPerl uses:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf GetTextAttrUncombinedStyle(pos)}}{Returns a Wx::TextAttr
+  object, or undef}
+\twocolitem{{\bf GetTextAttrExUncombinedStyle(pos)}}{Returns a Wx::TextAttrEx
+  object, or undef}
+\twocolitem{{\bf GetRichTextAttrUncombinedStyle(pos)}}{Returns a Wx::RichTextAttr
+  object, or undef}
+\end{twocollist}
+}}
 
 \membersection{wxRichTextCtrl::GetValue}\label{wxrichtextctrlgetvalue}
 
