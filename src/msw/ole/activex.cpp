@@ -36,14 +36,14 @@
 #include "wx/msw/private.h" // for wxCopyRectToRECT
 
 // autointerfaces that we only use here
-WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceSite, IOleInPlaceSite)
-WX_DECLARE_AUTOOLE(wxAutoIOleDocument, IOleDocument)
-WX_DECLARE_AUTOOLE(wxAutoIPersistStreamInit, IPersistStreamInit)
-WX_DECLARE_AUTOOLE(wxAutoIAdviseSink, IAdviseSink)
-WX_DECLARE_AUTOOLE(wxAutoIProvideClassInfo, IProvideClassInfo)
-WX_DECLARE_AUTOOLE(wxAutoITypeInfo, ITypeInfo)
-WX_DECLARE_AUTOOLE(wxAutoIConnectionPoint, IConnectionPoint)
-WX_DECLARE_AUTOOLE(wxAutoIConnectionPointContainer, IConnectionPointContainer)
+typedef wxAutoOleInterface<IOleInPlaceSite> wxAutoIOleInPlaceSite;
+typedef wxAutoOleInterface<IOleDocument> wxAutoIOleDocument;
+typedef wxAutoOleInterface<IPersistStreamInit> wxAutoIPersistStreamInit;
+typedef wxAutoOleInterface<IAdviseSink> wxAutoIAdviseSink;
+typedef wxAutoOleInterface<IProvideClassInfo> wxAutoIProvideClassInfo;
+typedef wxAutoOleInterface<ITypeInfo> wxAutoITypeInfo;
+typedef wxAutoOleInterface<IConnectionPoint> wxAutoIConnectionPoint;
+typedef wxAutoOleInterface<IConnectionPointContainer> wxAutoIConnectionPointContainer;
 
 wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent );
 

@@ -71,76 +71,92 @@ class FrameSite;
 //
 //---------------------------------------------------------------------------
 
-#define WX_DECLARE_AUTOOLE(wxAutoOleInterface, I) \
-class wxAutoOleInterface \
-{   \
-    protected: \
-    I *m_interface; \
-\
-    public: \
-    explicit wxAutoOleInterface(I *pInterface = NULL) : m_interface(pInterface) {} \
-    wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(NULL) \
-    {   QueryInterface(riid, pUnk); } \
-    wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(NULL) \
-    {   QueryInterface(riid, pDispatch); } \
-    wxAutoOleInterface(REFCLSID clsid, REFIID riid) : m_interface(NULL)\
-    {   CreateInstance(clsid, riid); }\
-    wxAutoOleInterface(const wxAutoOleInterface& ti) : m_interface(NULL)\
-    {   operator = (ti); }\
-\
-    wxAutoOleInterface& operator = (const wxAutoOleInterface& ti)\
-    {\
-        if (ti.m_interface)\
-            ti.m_interface->AddRef();\
-        Free();\
-        m_interface = ti.m_interface;\
-        return *this;\
-    }\
-\
-    wxAutoOleInterface& operator = (I *&ti)\
-    {\
-        Free();\
-        m_interface = ti;\
-        return *this;\
-    }\
-\
-    ~wxAutoOleInterface() {   Free();   }\
-\
-    inline void Free()\
-    {\
-        if (m_interface)\
-            m_interface->Release();\
-        m_interface = NULL;\
-    }\
-\
-    HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)\
-    {\
-        Free();\
-        wxASSERT(pUnk != NULL);\
-        return pUnk->QueryInterface(riid, (void **) &m_interface);\
-    }\
-\
-    HRESULT CreateInstance(REFCLSID clsid, REFIID riid)\
-    {\
-        Free();\
-        return CoCreateInstance(clsid, NULL, CLSCTX_ALL, riid, (void **) &m_interface);\
-    }\
-\
-    inline operator I *() const {return m_interface;}\
-    inline I* operator ->() {return m_interface;}\
-    inline I** GetRef()    {return &m_interface;}\
-    inline bool Ok() const { return IsOk(); }\
-    inline bool IsOk() const    {return m_interface != NULL;}\
+template<typename I>
+class wxAutoOleInterface
+{
+public:
+    typedef I Interface;
+
+    explicit wxAutoOleInterface(I *pInterface = NULL) : m_interface(pInterface)
+        {}
+    wxAutoOleInterface(REFIID riid, IUnknown *pUnk) : m_interface(NULL)
+        { QueryInterface(riid, pUnk); }
+    wxAutoOleInterface(REFIID riid, IDispatch *pDispatch) : m_interface(NULL)
+        { QueryInterface(riid, pDispatch); }
+    wxAutoOleInterface(REFCLSID clsid, REFIID riid) : m_interface(NULL)
+        { CreateInstance(clsid, riid); }
+    wxAutoOleInterface(const wxAutoOleInterface& ti) : m_interface(NULL)
+        { operator=(ti); }
+
+    wxAutoOleInterface& operator=(const wxAutoOleInterface& ti)
+    {
+        if ( ti.m_interface )
+            ti.m_interface->AddRef();
+        Free();
+        m_interface = ti.m_interface;
+        return *this;
+    }
+
+    wxAutoOleInterface& operator=(I*& ti)
+    {
+        Free();
+        m_interface = ti;
+        return *this;
+    }
+
+    ~wxAutoOleInterface() { Free(); }
+
+    void Free()
+    {
+        if ( m_interface )
+            m_interface->Release();
+        m_interface = NULL;
+    }
+
+    HRESULT QueryInterface(REFIID riid, IUnknown *pUnk)
+    {
+        Free();
+        wxASSERT(pUnk != NULL);
+        return pUnk->QueryInterface(riid, (void **)&m_interface);
+    }
+
+    HRESULT CreateInstance(REFCLSID clsid, REFIID riid)
+    {
+        Free();
+        return CoCreateInstance
+               (
+                   clsid,
+                   NULL,
+                   CLSCTX_ALL,
+                   riid,
+                   (void **)&m_interface
+               );
+    }
+
+    operator I*() const {return m_interface; }
+    I* operator->() {return m_interface; }
+    I** GetRef() {return &m_interface; }
+    bool Ok() const { return IsOk(); }
+    bool IsOk() const { return m_interface != NULL; }
+
+protected:
+    I *m_interface;
 };
 
-WX_DECLARE_AUTOOLE(wxAutoIDispatch, IDispatch)
-WX_DECLARE_AUTOOLE(wxAutoIOleClientSite, IOleClientSite)
-WX_DECLARE_AUTOOLE(wxAutoIUnknown, IUnknown)
-WX_DECLARE_AUTOOLE(wxAutoIOleObject, IOleObject)
-WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceObject, IOleInPlaceObject)
-WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceActiveObject, IOleInPlaceActiveObject)
-WX_DECLARE_AUTOOLE(wxAutoIOleDocumentView, IOleDocumentView)
-WX_DECLARE_AUTOOLE(wxAutoIViewObject, IViewObject)
+#if WXWIN_COMPATIBILITY_2_8
+// this macro is kept for compatibility with older wx versions
+#define WX_DECLARE_AUTOOLE(wxAutoOleInterfaceType, I) \
+    typedef wxAutoOleInterface<I> wxAutoOleInterfaceType;
+#endif // WXWIN_COMPATIBILITY_2_8
+
+typedef wxAutoOleInterface<IDispatch> wxAutoIDispatch;
+typedef wxAutoOleInterface<IOleClientSite> wxAutoIOleClientSite;
+typedef wxAutoOleInterface<IUnknown> wxAutoIUnknown;
+typedef wxAutoOleInterface<IOleObject> wxAutoIOleObject;
+typedef wxAutoOleInterface<IOleInPlaceObject> wxAutoIOleInPlaceObject;
+typedef wxAutoOleInterface<IOleInPlaceActiveObject> wxAutoIOleInPlaceActiveObject;
+typedef wxAutoOleInterface<IOleDocumentView> wxAutoIOleDocumentView;
+typedef wxAutoOleInterface<IViewObject> wxAutoIViewObject;
 
 class WXDLLIMPEXP_CORE wxActiveXContainer : public wxWindow
 {
