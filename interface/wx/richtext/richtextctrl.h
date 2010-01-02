@@ -501,6 +501,11 @@ public:
         Deletes content if there is a selection, e.g. when pressing a key.
         Returns the new caret position in @e newPos, or leaves it if there
         was no action. This is undoable.
+
+        @beginWxPerlOnly
+        In wxPerl this method takes no arguments and returns a 2-element
+        list (ok, newPos).
+        @endWxPerlOnly
     */
     bool DeleteSelectedContent(long* newPos = NULL);
 
@@ -663,6 +668,12 @@ public:
 
     /**
         Returns the caret height and position for the given character position.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as
+        GetCaretPositionForIndex(@a position) returning a
+        2-element list (ok, rect).
+        @endWxPerlOnly
     */
     bool GetCaretPositionForIndex(long position, wxRect& rect);
 
@@ -767,6 +778,11 @@ public:
         style attributes.
 
         To get the character or paragraph style alone, use GetUncombinedStyle().
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetStyle(@a position)
+        returning a 2-element list (ok, attr).
+        @endWxPerlOnly
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
 
@@ -774,6 +790,11 @@ public:
         Gets the attributes common to the specified range.
         Attributes that differ in value within the range will not be included
         in @a style flags.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetStyleForRange(@a position)
+        returning a 2-element list (ok, attr).
+        @endWxPerlOnly
     */
     virtual bool GetStyleForRange(const wxRichTextRange& range,
                                   wxTextAttr& style);
@@ -794,6 +815,11 @@ public:
         If you specify (any) paragraph attribute in @e style's flags, this function
         will fetch the paragraph attributes.
         Otherwise, it will return the character attributes.
+
+        @beginWxPerlOnly
+        In wxPerl this method is implemented as GetUncombinedStyle(@a position)
+        returning a 2-element list (ok, attr).
+        @endWxPerlOnly
     */
     virtual bool GetUncombinedStyle(long position, wxTextAttr& style);
 
