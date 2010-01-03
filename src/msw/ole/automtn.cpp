@@ -54,8 +54,6 @@
 #include "wx/datetime.h"
 #endif // wxUSE_DATETIME
 
-extern void wxClearVariant(VARIANTARG *pvarg) ;
-extern void wxReleaseVariant(VARIANTARG *pvarg) ;
 // static void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned int uiArgErr);
 
 #if wxUSE_OLE_AUTOMATION
@@ -103,7 +101,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     }
 
     VARIANTARG vReturn;
-    wxClearVariant(& vReturn);
+    VariantInit(& vReturn);
 
     VARIANTARG* vReturnPtr = & vReturn;
 
@@ -194,7 +192,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     delete[] dispIds;
 
     for (i = 0; i < noArgs; i++)
-        wxReleaseVariant(& oleArgs[i]) ;
+        VariantClear(& oleArgs[i]) ;
     delete[] oleArgs;
 
     if (FAILED(hr))
@@ -208,7 +206,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
         SysFreeString(excep.bstrHelpFile);
 
         if (vReturnPtr)
-            wxReleaseVariant(vReturnPtr);
+            VariantClear(vReturnPtr);
         return false;
     }
     else
@@ -222,7 +220,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
             {
                 vReturn.pdispVal = NULL;
             }
-            wxReleaseVariant(& vReturn);
+            VariantClear(& vReturn);
         }
     }
     return true;
