@@ -103,6 +103,8 @@ public:
     virtual void HandleResized( double timestampsec );
     virtual void HandleMoved( double timestampsec );
     virtual void HandleResizing( double timestampsec, wxRect* rect );
+    
+    virtual bool Destroy();
 
 protected:
     // common part of all ctors
@@ -117,7 +119,7 @@ protected:
                                    wxShowEffect effect,
                                    unsigned timeout);
     
-    void OnWindowDestroy( wxWindowDestroyEvent &event);
+    virtual void WillBeDestroyed();
 
     wxNonOwnedWindowImpl* m_nowpeer ;
 
