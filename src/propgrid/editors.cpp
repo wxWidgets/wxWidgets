@@ -262,7 +262,7 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
         }
     }
 
-    wxVisualAttributes vattrs = ctrl->GetDefaultAttributes();
+    wxVisualAttributes vattrs = ctrl->GetClassDefaultAttributes();
 
     // Foreground colour
     const wxColour& fgCol = cell.GetFgCol();
