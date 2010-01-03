@@ -203,7 +203,7 @@ void wxGCDCImpl::Init()
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_graphicContext = NULL;
+    m_graphicContext = wxGraphicsContext::Create();
     m_logicalFunctionSupported = true;
 }
 
@@ -981,7 +981,7 @@ void wxGCDCImpl::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *
                               wxCoord *descent, wxCoord *externalLeading ,
                               const wxFont *theFont ) const
 {
-    wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoGetTextExtent - invalid DC") );
+    wxCHECK_RET( m_graphicContext, wxT("wxGCDC(cg)::DoGetTextExtent - invalid DC") );
 
     if ( theFont )
     {
@@ -1009,7 +1009,7 @@ void wxGCDCImpl::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *
 
 bool wxGCDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
 {
-    wxCHECK_MSG( IsOk(), false, wxT("wxGCDC(cg)::DoGetPartialTextExtents - invalid DC") );
+    wxCHECK_MSG( m_graphicContext, false, wxT("wxGCDC(cg)::DoGetPartialTextExtents - invalid DC") );
     widths.Clear();
     widths.Add(0,text.Length());
     if ( text.IsEmpty() )
