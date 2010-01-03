@@ -148,14 +148,11 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
         oleVariant.vt = VT_I4;
         oleVariant.lVal = variant.GetLong() ;
     }
-    // cVal not always present
-#ifndef __GNUWIN32__
     else if (type == wxT("char"))
     {
         oleVariant.vt=VT_I1;            // Signed Char
         oleVariant.cVal=variant.GetChar();
     }
-#endif
     else if (type == wxT("double"))
     {
         oleVariant.vt = VT_R8;
@@ -164,12 +161,7 @@ WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& ole
     else if (type == wxT("bool"))
     {
         oleVariant.vt = VT_BOOL;
-        // 'bool' required for VC++ 4 apparently
-#if (defined(__VISUALC__) && (__VISUALC__ <= 1000))
-        oleVariant.bool = variant.GetBool();
-#else
         oleVariant.boolVal = variant.GetBool();
-#endif
     }
     else if (type == wxT("string"))
     {
