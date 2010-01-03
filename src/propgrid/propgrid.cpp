@@ -5667,6 +5667,7 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
         if ( p )
         {
             const wxPGEditor* editor = p->GetEditorClass();
+            ResetEditorAppearance();
             editor->OnFocus(p, GetEditorControl());
         }
     }
