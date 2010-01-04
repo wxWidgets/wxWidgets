@@ -322,6 +322,12 @@ wxWindowBase::~wxWindowBase()
     // we weren't a dialog class
     wxTopLevelWindows.DeleteObject((wxWindow*)this);
 
+    // Any additional event handlers should be popped before the window is
+    // deleted as otherwise the last handler will be left with a dangling
+    // pointer to this window result in a difficult to diagnose crash later on.
+    wxASSERT_MSG( GetEventHandler() == this,
+                    wxT("any pushed event handlers must have been removed") );
+
 #if wxUSE_MENUS
     // The associated popup menu can still be alive, disassociate from it in
     // this case
