@@ -26,6 +26,7 @@
 #if wxUSE_WCHAR_T
 
 #ifndef WX_PRECOMP
+    #include "wx/wx.h"
 #endif //WX_PRECOMP
 
 #include "wx/convauto.h"
@@ -52,55 +53,86 @@ void wxConvAuto::SetFallbackEncoding(wxFontEncoding enc)
 /* static */
 wxConvAuto::BOMType wxConvAuto::DetectBOM(const char *src, size_t srcLen)
 {
-    if ( srcLen < 2 )
-    {
-        // minimal BOM is 2 bytes so bail out immediately and simplify the code
-        // below which wouldn't need to check for length for UTF-16 cases
-        return BOM_None;
-    }
-
     // examine the buffer for BOM presence
     //
-    // see http://www.unicode.org/faq/utf_bom.html#BOM
-    switch ( *src++ )
+    // quoting from http://www.unicode.org/faq/utf_bom.html#BOM:
+    //
+    //  Bytes           Encoding Form
+    //
+    //  00 00 FE FF     UTF-32, big-endian
+    //  FF FE 00 00     UTF-32, little-endian
+    //  FE FF           UTF-16, big-endian
+    //  FF FE           UTF-16, little-endian
+    //  EF BB BF        UTF-8
+    //
+    // as some BOMs are prefixes of other ones we may need to read more bytes
+    // to disambiguate them
+
+    switch ( srcLen )
     {
-        case '\0':
-            // could only be big endian UTF-32 (00 00 FE FF)
-            if ( srcLen >= 4 &&
-                    src[0] == '\0' &&
-                        src[1] == '\xfe' &&
-                            src[2] == '\xff' )
+        case 0:
+            return BOM_Unknown;
+
+        case 1:
+            if ( src[0] == '\x00' || src[0] == '\xFF' ||
+                 src[0] == '\xFE' || src[0] == '\xEF')
             {
-                return BOM_UTF32BE;
+                // this could be a BOM but we don't know yet
+                return BOM_Unknown;
             }
             break;
 
-        case '\xfe':
-            // could only be big endian UTF-16 (FE FF)
-            if ( *src++ == '\xff' )
+        case 2:
+        case 3:
+            if ( src[0] == '\xEF' && src[1] == '\xBB' )
             {
+                if ( srcLen == 3 )
+                    return src[2] == '\xBF' ? BOM_UTF8 : BOM_None;
+
+                return BOM_Unknown;
+            }
+
+            if ( src[0] == '\xFE' && src[1] == '\xFF' )
                 return BOM_UTF16BE;
+
+            if ( src[0] == '\xFF' && src[1] == '\xFE' )
+            {
+                // if the next byte is 0, it could be an UTF-32LE BOM but if it
+                // isn't we can be sure it's UTF-16LE
+                if ( srcLen == 3 && src[2] != '\x00' )
+                    return BOM_UTF16LE;
+
+                return BOM_Unknown;
             }
+
+            if ( src[0] == '\x00' && src[1] == '\x00' )
+            {
+                // this could only be UTF-32BE
+                if ( srcLen == 3 && src[2] == '\xFE' )
+                    return BOM_Unknown;
+            }
+
             break;
 
-        case '\xff':
-            // could be either little endian UTF-16 or UTF-32, both start
-            // with FF FE
-            if ( *src++ == '\xfe' )
-            {
-                return srcLen >= 4 && src[0] == '\0' && src[1] == '\0'
-                            ? BOM_UTF32LE
-                            : BOM_UTF16LE;
-            }
-            break;
-
-        case '\xef':
-            // is this UTF-8 BOM (EF BB BF)?
-            if ( srcLen >= 3 && src[0] == '\xbb' && src[1] == '\xbf' )
-            {
+        default:
+            // we have at least 4 characters so we may finally decide whether
+            // we have a BOM or not
+            if ( src[0] == '\xEF' && src[1] == '\xBB' && src[2] == '\xBF' )
                 return BOM_UTF8;
-            }
-            break;
+
+            if ( src[0] == '\x00' && src[1] == '\x00' &&
+                 src[2] == '\xFE' && src[3] == '\xFF' )
+                return BOM_UTF32BE;
+
+            if ( src[0] == '\xFF' && src[1] == '\xFE' &&
+                 src[2] == '\x00' && src[3] == '\x00' )
+                return BOM_UTF32LE;
+
+            if ( src[0] == '\xFE' && src[1] == '\xFF' )
+                return BOM_UTF16BE;
+
+            if ( src[0] == '\xFF' && src[1] == '\xFE' )
+                return BOM_UTF16LE;
     }
 
     return BOM_None;
@@ -112,6 +144,14 @@ void wxConvAuto::InitFromBOM(BOMType bomType)
 
     switch ( bomType )
     {
+        case BOM_Unknown:
+            wxFAIL_MSG( "shouldn't be called for this BOM type" );
+            break;
+
+        case BOM_None:
+            // use the default
+            break;
+
         case BOM_UTF32BE:
             m_conv = new wxMBConvUTF32BE;
             m_ownsConv = true;
@@ -137,12 +177,16 @@ void wxConvAuto::InitFromBOM(BOMType bomType)
             break;
 
         default:
-            wxFAIL_MSG( wxT("unexpected BOM type") );
-            // fall through: still need to create something
+            wxFAIL_MSG( "unknown BOM type" );
+    }
 
-        case BOM_None:
-            InitWithUTF8();
-            m_consumedBOM = true; // as there is nothing to consume
+    if ( !m_conv )
+    {
+        // we end up here if there is no BOM or we didn't recognize it somehow
+        // (this shouldn't happen but still don't crash if it does), so use the
+        // default encoding
+        InitWithUTF8();
+        m_consumedBOM = true; // as there is nothing to consume
     }
 }
 
@@ -151,6 +195,14 @@ void wxConvAuto::SkipBOM(const char **src, size_t *len) const
     int ofs;
     switch ( m_bomType )
     {
+        case BOM_Unknown:
+            wxFAIL_MSG( "shouldn't be called for this BOM type" );
+            return;
+
+        case BOM_None:
+            ofs = 0;
+            break;
+
         case BOM_UTF32BE:
         case BOM_UTF32LE:
             ofs = 4;
@@ -166,11 +218,8 @@ void wxConvAuto::SkipBOM(const char **src, size_t *len) const
             break;
 
         default:
-            wxFAIL_MSG( wxT("unexpected BOM type") );
-            // fall through: still need to create something
-
-        case BOM_None:
-            ofs = 0;
+            wxFAIL_MSG( "unknown BOM type" );
+            return;
     }
 
     *src += ofs;
@@ -178,11 +227,16 @@ void wxConvAuto::SkipBOM(const char **src, size_t *len) const
         *len -= ofs;
 }
 
-void wxConvAuto::InitFromInput(const char **src, size_t *len)
+bool wxConvAuto::InitFromInput(const char **src, size_t *len)
 {
     m_bomType = DetectBOM(*src, *len);
+    if ( m_bomType == BOM_Unknown )
+        return false;
+
     InitFromBOM(m_bomType);
     SkipBOM(src, len);
+
+    return true;
 }
 
 size_t
@@ -195,16 +249,20 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
     // dst as typically we're first called with NULL dst to calculate the
     // needed buffer size
     wxConvAuto *self = const_cast<wxConvAuto *>(this);
+
+
     if ( !m_conv )
     {
-        self->InitFromInput(&src, &srcLen);
-        if ( dst )
-            self->m_consumedBOM = true;
+        if ( !self->InitFromInput(&src, &srcLen) )
+        {
+            // there is not enough data to determine whether we have a BOM or
+            // not, so fail for now -- the caller is supposed to call us again
+            // with more data
+            return wxCONV_FAILED;
+        }
     }
-
-    if ( !m_consumedBOM && dst )
+    else if ( !m_consumedBOM && dst )
     {
-        self->m_consumedBOM = true;
         SkipBOM(&src, &srcLen);
     }
 
@@ -228,6 +286,8 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
         }
     }
 
+    if (rc != wxCONV_FAILED && dst && !m_consumedBOM)
+        self->m_consumedBOM = true;
     return rc;
 }
 
@@ -245,4 +305,3 @@ wxConvAuto::FromWChar(char *dst, size_t dstLen,
 }
 
 #endif // wxUSE_WCHAR_T
-

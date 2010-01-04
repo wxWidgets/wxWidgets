@@ -76,7 +76,7 @@ wxChar wxTextInputStream::NextChar()
             return wxEOT;
 
         if ( m_conv->ToWChar(wbuf, WXSIZEOF(wbuf), m_lastBytes, inlen + 1)
-                != wxCONV_FAILED )
+                == 1 )
             return wbuf[0];
     }
     // there should be no encoding which requires more than nine bytes for one character...

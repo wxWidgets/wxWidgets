@@ -75,6 +75,7 @@ private:
     // all currently recognized BOM values
     enum BOMType
     {
+        BOM_Unknown = -1,
         BOM_None,
         BOM_UTF32BE,
         BOM_UTF32LE,
@@ -107,7 +108,10 @@ private:
 
     // create the correct conversion object for the BOM present in the
     // beginning of the buffer; adjust the buffer to skip the BOM if found
-    void InitFromInput(const char **src, size_t *len);
+    //
+    // return false if the buffer is too short to allow us to determine if we
+    // have BOM or not
+    bool InitFromInput(const char **src, size_t *len);
 
     // adjust src and len to skip over the BOM (identified by m_bomType) at the
     // start of the buffer
