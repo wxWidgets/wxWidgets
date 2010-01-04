@@ -106,7 +106,7 @@ wxLogRecords gs_bufferedLogRecords;
 // than main, i.e. it protects all accesses to gs_bufferedLogRecords above
 WX_DEFINE_LOG_CS(BackgroundLog);
 
-// this one is used for protecting ms_aTraceMasks from concurrent access
+// this one is used for protecting TraceMasks() from concurrent access
 WX_DEFINE_LOG_CS(TraceMask);
 
 // and this one is used for GetComponentLevels()
@@ -598,36 +598,67 @@ wxLogLevel wxLog::GetComponentLevel(wxString component)
 // wxLog trace masks
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
+// because IsAllowedTraceMask() may be called during static initialization
+// (this is not recommended but it may still happen, see #11592) we can't use a
+// simple static variable which might be not initialized itself just yet to
+// store the trace masks, but need this accessor function which will ensure
+// that the variable is always correctly initialized before being accessed
+//
+// notice that this doesn't make accessing it MT-safe, of course, you need to
+// serialize accesses to it using GetTraceMaskCS() for this
+wxArrayString& TraceMasks()
+{
+    static wxArrayString s_traceMasks;
+
+    return s_traceMasks;
+}
+
+} // anonymous namespace
+
+/* static */ const wxArrayString& wxLog::GetTraceMasks()
+{
+    // because of this function signature (it returns a reference, not the
+    // object), it is inherently MT-unsafe so there is no need to acquire the
+    // lock here anyhow
+
+    return TraceMasks();
+}
+
 void wxLog::AddTraceMask(const wxString& str)
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
-    ms_aTraceMasks.push_back(str);
+    TraceMasks().push_back(str);
 }
 
 void wxLog::RemoveTraceMask(const wxString& str)
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
-    int index = ms_aTraceMasks.Index(str);
+    int index = TraceMasks().Index(str);
     if ( index != wxNOT_FOUND )
-        ms_aTraceMasks.RemoveAt((size_t)index);
+        TraceMasks().RemoveAt((size_t)index);
 }
 
 void wxLog::ClearTraceMasks()
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
-    ms_aTraceMasks.Clear();
+    TraceMasks().Clear();
 }
 
 /*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
 
-    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
-                                  en = ms_aTraceMasks.end();
-         it != en; ++it )
+    const wxArrayString& masks = GetTraceMasks();
+    for ( wxArrayString::const_iterator it = masks.begin(),
+                                        en = masks.end();
+          it != en;
+          ++it )
     {
         if ( *it == mask)
             return true;
@@ -917,8 +948,6 @@ wxString        wxLog::ms_timestamp(wxS("%X"));  // time only, no date
 #if WXWIN_COMPATIBILITY_2_8
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 #endif // wxDEBUG_LEVEL
-
-wxArrayString   wxLog::ms_aTraceMasks;
 
 // ----------------------------------------------------------------------------
 // stdout error logging helper

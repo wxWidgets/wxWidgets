@@ -453,7 +453,7 @@ public:
 
     // get string trace masks: note that this is MT-unsafe if other threads can
     // call AddTraceMask() concurrently
-    static const wxArrayString& GetTraceMasks() { return ms_aTraceMasks; }
+    static const wxArrayString& GetTraceMasks();
 
     // sets the time stamp string format: this is used as strftime() format
     // string for the log targets which add time stamps to the messages; set
@@ -644,9 +644,6 @@ private:
 #if WXWIN_COMPATIBILITY_2_8
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
 #endif // WXWIN_COMPATIBILITY_2_8
-
-    // currently enabled trace masks
-    static wxArrayString ms_aTraceMasks;
 };
 
 // ----------------------------------------------------------------------------
