@@ -23,12 +23,12 @@ SETUPHDIR = \
 TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_10)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(OBJS)\test.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
 	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	/I$(SETUPHDIR) /I.\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. \
-	$(__DLLFLAG_p) /D_CONSOLE /DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" \
-	$(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
+	/DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	/Yu"testprec.h" /Fp"$(OBJS)\testprec_test.pch" $(CPPFLAGS) $(CXXFLAGS)
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
@@ -103,9 +103,9 @@ TEST_OBJECTS =  \
 TEST_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_27)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\test_gui.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /I.\..\samples \
 	/DNOPCH $(CPPUNIT_CFLAGS) /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	/Yu"testprec.h" /Fp"$(OBJS)\testprec_test_gui.pch" $(CPPFLAGS) $(CXXFLAGS)
@@ -262,6 +262,12 @@ __WXUNIV_DEFINE_p_3 = /d __WXUNIVERSAL__
 !if "$(DEBUG_FLAG)" == "0"
 __DEBUG_DEFINE_p_3 = /d wxDEBUG_LEVEL=0
 !endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
+!endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p_3 = /d wxNO_EXCEPTIONS
 !endif
@@ -413,6 +419,12 @@ __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
 !if "$(DEBUG_FLAG)" == "0"
 __DEBUG_DEFINE_p = /DwxDEBUG_LEVEL=0
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__NDEBUG_DEFINE_p = /DNDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NDEBUG_DEFINE_p = /DNDEBUG
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p = /DwxNO_EXCEPTIONS
@@ -724,7 +736,7 @@ $(OBJS)\test_gui_dummy.obj: .\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) /Yctestprec.h .\dummy.cpp
 
 $(OBJS)\test_gui_sample.res: .\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_20_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /i .\..\samples /d NOPCH /d _CONSOLE .\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_20_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /i .\..\samples /d NOPCH /d _CONSOLE .\..\samples\sample.rc
 
 $(OBJS)\test_gui_test.obj: .\test.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\test.cpp

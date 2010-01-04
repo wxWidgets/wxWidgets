@@ -7,16 +7,16 @@
 CFG=sdk_exe - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "dll_sdk_exe.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE
+!MESSAGE 
 !MESSAGE NMAKE /f "dll_sdk_exe.mak" CFG="sdk_exe - Win32 Debug"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
-!MESSAGE
+!MESSAGE 
 !MESSAGE "sdk_exe - Win32 DLL Universal Release" (based on "Win32 (x86) Application")
 !MESSAGE "sdk_exe - Win32 DLL Universal Debug" (based on "Win32 (x86) Application")
 !MESSAGE "sdk_exe - Win32 DLL Release" (based on "Win32 (x86) Application")
@@ -25,7 +25,7 @@ CFG=sdk_exe - Win32 Debug
 !MESSAGE "sdk_exe - Win32 Universal Debug" (based on "Win32 (x86) Application")
 !MESSAGE "sdk_exe - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "sdk_exe - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -57,8 +57,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswunivudll\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivudll\sdk_exe.exe" /debug /pdb:"vc_mswunivudll\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswunivudll\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivudll\sdk_exe.exe" /debug /pdb:"vc_mswunivudll\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswunivudll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivudll\sdk_exe.exe" /debug /pdb:"vc_mswunivudll\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswunivudll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivudll\sdk_exe.exe" /debug /pdb:"vc_mswunivudll\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 DLL Universal Debug"
 
@@ -82,8 +82,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswunivuddll\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivuddll\sdk_exe.exe" /debug /pdb:"vc_mswunivuddll\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswunivuddll\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivuddll\sdk_exe.exe" /debug /pdb:"vc_mswunivuddll\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswunivuddll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\sdk_exe.exe" /debug /pdb:"vc_mswunivuddll\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswunivuddll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\sdk_exe.exe" /debug /pdb:"vc_mswunivuddll\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 DLL Release"
 
@@ -107,8 +107,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswudll\my_dll.lib /nologo /machine:i386 /out:"vc_mswudll\sdk_exe.exe" /debug /pdb:"vc_mswudll\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswudll\my_dll.lib /nologo /machine:i386 /out:"vc_mswudll\sdk_exe.exe" /debug /pdb:"vc_mswudll\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswudll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswudll\sdk_exe.exe" /debug /pdb:"vc_mswudll\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswudll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswudll\sdk_exe.exe" /debug /pdb:"vc_mswudll\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 DLL Debug"
 
@@ -132,8 +132,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswuddll\my_dll.lib /nologo /machine:i386 /out:"vc_mswuddll\sdk_exe.exe" /debug /pdb:"vc_mswuddll\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswuddll\my_dll.lib /nologo /machine:i386 /out:"vc_mswuddll\sdk_exe.exe" /debug /pdb:"vc_mswuddll\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswuddll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswuddll\sdk_exe.exe" /debug /pdb:"vc_mswuddll\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswuddll\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswuddll\sdk_exe.exe" /debug /pdb:"vc_mswuddll\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 Universal Release"
 
@@ -157,8 +157,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswunivu\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivu\sdk_exe.exe" /debug /pdb:"vc_mswunivu\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswunivu\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivu\sdk_exe.exe" /debug /pdb:"vc_mswunivu\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswunivu\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivu\sdk_exe.exe" /debug /pdb:"vc_mswunivu\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswunivu\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivu\sdk_exe.exe" /debug /pdb:"vc_mswunivu\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 Universal Debug"
 
@@ -182,8 +182,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswunivud\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivud\sdk_exe.exe" /debug /pdb:"vc_mswunivud\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswunivud\my_dll.lib /nologo /machine:i386 /out:"vc_mswunivud\sdk_exe.exe" /debug /pdb:"vc_mswunivud\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswunivud\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivud\sdk_exe.exe" /debug /pdb:"vc_mswunivud\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswunivud\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswunivud\sdk_exe.exe" /debug /pdb:"vc_mswunivud\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 Release"
 
@@ -207,8 +207,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswu\my_dll.lib /nologo /machine:i386 /out:"vc_mswu\sdk_exe.exe" /debug /pdb:"vc_mswu\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswu\my_dll.lib /nologo /machine:i386 /out:"vc_mswu\sdk_exe.exe" /debug /pdb:"vc_mswu\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswu\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswu\sdk_exe.exe" /debug /pdb:"vc_mswu\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswu\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswu\sdk_exe.exe" /debug /pdb:"vc_mswu\sdk_exe.pdb" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "sdk_exe - Win32 Debug"
 
@@ -232,8 +232,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 vc_mswud\my_dll.lib /nologo /machine:i386 /out:"vc_mswud\sdk_exe.exe" /debug /pdb:"vc_mswud\sdk_exe.pdb" /subsystem:windows
-# ADD LINK32 vc_mswud\my_dll.lib /nologo /machine:i386 /out:"vc_mswud\sdk_exe.exe" /debug /pdb:"vc_mswud\sdk_exe.pdb" /subsystem:windows
+# ADD BASE LINK32 vc_mswud\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswud\sdk_exe.exe" /debug /pdb:"vc_mswud\sdk_exe.pdb" /subsystem:windows
+# ADD LINK32 vc_mswud\my_dll.lib user32.lib /nologo /machine:i386 /out:"vc_mswud\sdk_exe.exe" /debug /pdb:"vc_mswud\sdk_exe.pdb" /subsystem:windows
 
 !ENDIF
 

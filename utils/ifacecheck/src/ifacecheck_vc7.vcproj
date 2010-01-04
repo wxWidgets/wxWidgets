@@ -93,7 +93,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswu;.\..\..\..\include;."
-				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -121,7 +121,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswu;.\..\..\..\include;."/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -131,7 +131,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswu;.\..\..\..\include;."/>
 			<Tool
@@ -222,7 +222,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswunivu;.\..\..\..\include;."
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -250,7 +250,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswunivu;.\..\..\..\include;."/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -260,7 +260,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_lib\mswunivu;.\..\..\..\include;."/>
 			<Tool
@@ -351,7 +351,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswu;.\..\..\..\include;."
-				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -379,7 +379,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswu;.\..\..\..\include;."/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -389,7 +389,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswu;.\..\..\..\include;."/>
 			<Tool
@@ -480,7 +480,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswunivu;.\..\..\..\include;."
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -508,7 +508,7 @@
 				EnableCOMDATFolding="2"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="WIN32;__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswunivu;.\..\..\..\include;."/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -518,7 +518,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;NDEBUG;_UNICODE;WXUSINGDLL;_CONSOLE;wxUSE_GUI=0"
 				Culture="1033"
 				AdditionalIncludeDirectories=".\..\..\..\lib\vc_dll\mswunivu;.\..\..\..\include;."/>
 			<Tool

@@ -22,20 +22,22 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 MY_DLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
-	$(__DLLFLAG_p) -DMY_DLL_BUILDING -I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall $(__DLLFLAG_p) -DMY_DLL_BUILDING \
+	-I. $(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+	$(CXXFLAGS)
 MY_DLL_OBJECTS =  \
 	$(OBJS)\my_dll_my_dll.o
 WX_EXE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  \
 	$(OBJS)\wx_exe_sample_rc.o \
 	$(OBJS)\wx_exe_wx_exe.o
@@ -89,6 +91,9 @@ endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p_3 = --define wxDEBUG_LEVEL=0
 endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p_3 = --define NDEBUG
+endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_3 = --define wxNO_EXCEPTIONS
 endif
@@ -121,6 +126,9 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p = -DNDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -192,13 +200,13 @@ ifeq ($(USE_RTTI),0)
 __RTTIFLAG = -fno-rtti
 endif
 ifeq ($(USE_RTTI),1)
-__RTTIFLAG =
+__RTTIFLAG = 
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONSFLAG = -fno-exceptions
 endif
 ifeq ($(USE_EXCEPTIONS),1)
-__EXCEPTIONSFLAG =
+__EXCEPTIONSFLAG = 
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -249,13 +257,13 @@ $(OBJS)\wx_exe.exe: $(WX_EXE_OBJECTS) $(OBJS)\wx_exe_sample_rc.o $(OBJS)\my_dll.
 endif
 
 $(OBJS)\sdk_exe.exe: $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
-	$(CXX) -o $@ $(SDK_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  $(OBJS)\libmy_dll.a
+	$(CXX) -o $@ $(SDK_EXE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  $(OBJS)\libmy_dll.a -luser32
 
 $(OBJS)\my_dll_my_dll.o: ./my_dll.cpp
 	$(CXX) -c -o $@ $(MY_DLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wx_exe_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p_1) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\wx_exe_wx_exe.o: ./wx_exe.cpp
 	$(CXX) -c -o $@ $(WX_EXE_CXXFLAGS) $(CPPDEPS) $<

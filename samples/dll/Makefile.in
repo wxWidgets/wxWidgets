@@ -211,8 +211,8 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0@wx_exe_bundle: $(____wx_exe_BUNDLE_TGT_REF_DEP)
 
 @COND_PLATFORM_WIN32_1@sdk_exe$(EXEEXT): $(SDK_EXE_OBJECTS) $(__my_dll___depname)
-@COND_PLATFORM_WIN32_1@	$(CXX) -o $@ $(SDK_EXE_OBJECTS) -L.    $(LDFLAGS_GUI) $(LDFLAGS)  -lmy_dll $(LIBS)
-@COND_PLATFORM_WIN32_1@
+@COND_PLATFORM_WIN32_1@	$(CXX) -o $@ $(SDK_EXE_OBJECTS) -L.    $(LDFLAGS_GUI) $(LDFLAGS)  -lmy_dll -luser32 $(LIBS)
+@COND_PLATFORM_WIN32_1@	
 @COND_PLATFORM_WIN32_1@	$(__sdk_exe___mac_setfilecmd)
 @COND_PLATFORM_WIN32_1@	$(__sdk_exe___os2_emxbindcmd)
 
@@ -220,7 +220,7 @@ my_dll_my_dll.o: $(srcdir)/my_dll.cpp
 	$(CXXC) -c -o $@ $(MY_DLL_CXXFLAGS) $(srcdir)/my_dll.cpp
 
 wx_exe_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__DEBUG_DEFINE_p_4) $(__EXCEPTIONS_DEFINE_p_4) $(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4)   --include-dir $(srcdir) $(__DLLFLAG_p_4) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_4) $(__DEBUG_DEFINE_p_4)  $(__EXCEPTIONS_DEFINE_p_4) $(__RTTI_DEFINE_p_4) $(__THREAD_DEFINE_p_4)   --include-dir $(srcdir) $(__DLLFLAG_p_4) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 wx_exe_wx_exe.o: $(srcdir)/wx_exe.cpp
 	$(CXXC) -c -o $@ $(WX_EXE_CXXFLAGS) $(srcdir)/wx_exe.cpp

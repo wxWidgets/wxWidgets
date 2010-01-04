@@ -188,6 +188,10 @@ __DEBUG_DEFINE_p =
 !ifeq DEBUG_FLAG 0
 __DEBUG_DEFINE_p = -dwxDEBUG_LEVEL=0
 !endif
+__NDEBUG_DEFINE_p =
+!ifeq BUILD release
+__NDEBUG_DEFINE_p = -dNDEBUG
+!endif
 __EXCEPTIONS_DEFINE_p =
 !ifeq USE_EXCEPTIONS 0
 __EXCEPTIONS_DEFINE_p = -dwxNO_EXCEPTIONS
@@ -231,20 +235,20 @@ SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 MY_DLL_CXXFLAGS = -bd $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 $(__DLLFLAG_p) -dMY_DLL_BUILDING -i=. $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
+	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
+	-wcd=549 -wcd=656 -wcd=657 -wcd=667 $(__DLLFLAG_p) -dMY_DLL_BUILDING -i=. &
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MY_DLL_OBJECTS =  &
 	$(OBJS)\my_dll_my_dll.obj
 WX_EXE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 -wcd=656 &
-	-wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
+	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
+	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
+	-dNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WX_EXE_OBJECTS =  &
 	$(OBJS)\wx_exe_wx_exe.obj
 SDK_EXE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
@@ -306,7 +310,7 @@ $(OBJS)\sdk_exe.exe :  $(SDK_EXE_OBJECTS) $(OBJS)\my_dll.dll
 	@%append $(OBJS)\sdk_exe.lbc option caseexact
 	@%append $(OBJS)\sdk_exe.lbc  $(__DEBUGINFO)  system nt_win ref '_WinMain@16' $(LDFLAGS)
 	@for %i in ($(SDK_EXE_OBJECTS)) do @%append $(OBJS)\sdk_exe.lbc file %i
-	@for %i in ( $(OBJS)\my_dll.lib) do @%append $(OBJS)\sdk_exe.lbc library %i
+	@for %i in ( $(OBJS)\my_dll.lib user32.lib) do @%append $(OBJS)\sdk_exe.lbc library %i
 	@%append $(OBJS)\sdk_exe.lbc
 	@for %i in () do @%append $(OBJS)\sdk_exe.lbc option stack=%i
 	wlink @$(OBJS)\sdk_exe.lbc
@@ -315,7 +319,7 @@ $(OBJS)\my_dll_my_dll.obj :  .AUTODEPEND .\my_dll.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MY_DLL_CXXFLAGS) $<
 
 $(OBJS)\wx_exe_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 
 $(OBJS)\wx_exe_wx_exe.obj :  .AUTODEPEND .\wx_exe.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WX_EXE_CXXFLAGS) $<

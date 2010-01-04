@@ -23,9 +23,9 @@ SETUPHDIR = \
 MY_DLL_CXXFLAGS = /M$(__RUNTIME_LIBS_11)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\my_dll.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 $(__DLLFLAG_p) /DMY_DLL_BUILDING /I. \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MY_DLL_OBJECTS =  \
@@ -33,9 +33,9 @@ MY_DLL_OBJECTS =  \
 WX_EXE_CXXFLAGS = /M$(__RUNTIME_LIBS_25)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO_0) /Fd$(OBJS)\wx_exe.pdb $(____DEBUGRUNTIME) \
 	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
 	/I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -172,6 +172,12 @@ __WXUNIV_DEFINE_p_3 = /d __WXUNIVERSAL__
 !if "$(DEBUG_FLAG)" == "0"
 __DEBUG_DEFINE_p_3 = /d wxDEBUG_LEVEL=0
 !endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NDEBUG_DEFINE_p_3 = /d NDEBUG
+!endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p_3 = /d wxNO_EXCEPTIONS
 !endif
@@ -222,6 +228,12 @@ __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
 !endif
 !if "$(DEBUG_FLAG)" == "0"
 __DEBUG_DEFINE_p = /DwxDEBUG_LEVEL=0
+!endif
+!if "$(BUILD)" == "release" && "$(DEBUG_RUNTIME_LIBS)" == "default"
+__NDEBUG_DEFINE_p = /DNDEBUG
+!endif
+!if "$(DEBUG_RUNTIME_LIBS)" == "0"
+__NDEBUG_DEFINE_p = /DNDEBUG
 !endif
 !if "$(USE_EXCEPTIONS)" == "0"
 __EXCEPTIONS_DEFINE_p = /DwxNO_EXCEPTIONS
@@ -419,7 +431,7 @@ $(OBJS)\my_dll_my_dll.obj: .\my_dll.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MY_DLL_CXXFLAGS) .\my_dll.cpp
 
 $(OBJS)\wx_exe_sample.res: .\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_18_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_18_p_1) $(__NO_VC_CRTDBG_p_3)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__NDEBUG_DEFINE_p_3) $(__EXCEPTIONS_DEFINE_p_3) $(__RTTI_DEFINE_p_3) $(__THREAD_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) $(__MSLU_DEFINE_p_3) $(__GFXCTX_DEFINE_p_3) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_3_p) /i . $(__DLLFLAG_p_3) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\wx_exe_wx_exe.obj: .\wx_exe.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WX_EXE_CXXFLAGS) .\wx_exe.cpp

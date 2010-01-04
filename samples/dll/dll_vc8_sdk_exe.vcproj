@@ -18,7 +18,7 @@
 		/>
 	</Platforms>
 	<ToolFiles>
-
+		
 	</ToolFiles>
 	<Configurations>
 		<Configuration
@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswud\my_dll.lib"
+				AdditionalDependencies="vc_mswud\my_dll.lib user32.lib"
 				OutputFile="vc_mswud\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -172,7 +172,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswu\my_dll.lib"
+				AdditionalDependencies="vc_mswu\my_dll.lib user32.lib"
 				OutputFile="vc_mswu\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -270,7 +270,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswunivud\my_dll.lib"
+				AdditionalDependencies="vc_mswunivud\my_dll.lib user32.lib"
 				OutputFile="vc_mswunivud\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -363,7 +363,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswunivu\my_dll.lib"
+				AdditionalDependencies="vc_mswunivu\my_dll.lib user32.lib"
 				OutputFile="vc_mswunivu\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -461,7 +461,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswuddll\my_dll.lib"
+				AdditionalDependencies="vc_mswuddll\my_dll.lib user32.lib"
 				OutputFile="vc_mswuddll\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -554,7 +554,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswudll\my_dll.lib"
+				AdditionalDependencies="vc_mswudll\my_dll.lib user32.lib"
 				OutputFile="vc_mswudll\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -652,7 +652,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswunivuddll\my_dll.lib"
+				AdditionalDependencies="vc_mswunivuddll\my_dll.lib user32.lib"
 				OutputFile="vc_mswunivuddll\sdk_exe.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -745,7 +745,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="vc_mswunivudll\my_dll.lib"
+				AdditionalDependencies="vc_mswunivudll\my_dll.lib user32.lib"
 				OutputFile="vc_mswunivudll\sdk_exe.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -787,7 +787,7 @@
 		</Configuration>
 	</Configurations>
 	<References>
-
+		
 	</References>
 	<Files>
 		<Filter
@@ -802,7 +802,7 @@
 		</Filter>
 	</Files>
 	<Globals>
-
+		
 	</Globals>
 </VisualStudioProject>
 
