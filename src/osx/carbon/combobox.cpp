@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX && !defined(wxOSX_USE_NATIVE_COMBOBOX)
 
 #include "wx/combobox.h"
 
@@ -686,4 +686,4 @@ bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     return true ;
 }
 
-#endif // wxUSE_COMBOBOX
+#endif // wxUSE_COMBOBOX && !defined(wxOSX_USE_NATIVE_COMBOBOX)

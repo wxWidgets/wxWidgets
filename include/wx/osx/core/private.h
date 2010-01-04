@@ -470,6 +470,17 @@ public :
                                     long style,
                                     long extraStyle);
 
+#ifdef wxOSX_USE_NATIVE_COMBOBOX
+    static wxWidgetImplType*    CreateComboBox( wxWindowMac* wxpeer, 
+                                    wxWindowMac* parent, 
+                                    wxWindowID id, 
+                                    wxMenu* menu,
+                                    const wxPoint& pos, 
+                                    const wxSize& size,
+                                    long style, 
+                                    long extraStyle);
+#endif
+
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
 protected :

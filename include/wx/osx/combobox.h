@@ -30,9 +30,11 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
  public:
     virtual ~wxComboBox();
 
+#ifndef wxOSX_USE_NATIVE_COMBOBOX
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
+#endif
 
     // callback functions
     virtual void DelegateTextChanged( const wxString& value );
@@ -129,9 +131,11 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 
     virtual bool        OSXHandleClicked( double timestampsec );
 
+#ifndef wxOSX_USE_NATIVE_COMBOBOX
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 
     WX_DECLARE_CONTROL_CONTAINER();
+#endif
 
 protected:
     // common part of all ctors
@@ -145,9 +149,11 @@ protected:
     virtual wxString DoGetValue() const;
     virtual wxWindow *GetEditableWindow() { return this; }
 
+#ifndef wxOSX_USE_NATIVE_COMBOBOX
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
+#endif
 
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
@@ -164,7 +170,9 @@ protected:
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;
 
+#ifndef wxOSX_USE_NATIVE_COMBOBOX
     DECLARE_EVENT_TABLE()
+#endif
 };
 
 #endif // _WX_COMBOBOX_H_

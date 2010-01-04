@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX && defined(wxOSX_USE_NATIVE_COMBOBOX)
 
 #include "wx/combobox.h"
 
@@ -64,9 +64,9 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r pullsDown:NO];
+    wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
 }
 
-#endif // wxUSE_CHOICE
+#endif // wxUSE_COMBOBOX && defined(wxOSX_USE_NATIVE_COMBOBOX)
