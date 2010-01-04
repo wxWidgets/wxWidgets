@@ -17,8 +17,8 @@
 #if wxUSE_STD_IOSTREAM
 
 #include <iosfwd>
-#include <wx/defs.h>
-#include <wx/stream.h>
+#include "wx/defs.h"
+#include "wx/stream.h"
 
 // ==========================================================================
 // wxStdInputStreamBuffer
