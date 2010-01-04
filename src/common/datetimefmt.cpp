@@ -1559,7 +1559,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     const wxString::const_iterator pEnd = date.end();
 
     wxString::const_iterator p = pBegin;
-    while ( wxIsspace(*p) )
+    while ( p != pEnd && wxIsspace(*p) )
         p++;
 
     // some special cases
