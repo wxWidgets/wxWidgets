@@ -270,7 +270,7 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
             return false;
 
         // If active, Set active Editor.
-        if ( grid->GetState() == state && p == grid->GetSelection() )
+        if ( grid && grid->GetState() == state && p == grid->GetSelection() )
             grid->DoSelectProperty( p, wxPG_SEL_FORCE );
     }
     else
@@ -279,7 +279,7 @@ bool wxPropertyGridInterface::EnableProperty( wxPGPropArg id, bool enable )
             return false;
 
         // If active, Disable as active Editor.
-        if ( grid->GetState() == state && p == grid->GetSelection() )
+        if ( grid && grid->GetState() == state && p == grid->GetSelection() )
             grid->DoSelectProperty( p, wxPG_SEL_FORCE );
     }
 
