@@ -23,7 +23,7 @@
 #include "wx/button.h"
 #include "wx/textctrl.h"
 #include "wx/dialog.h"
-#include <wx/headerctrl.h>
+#include "wx/headerctrl.h"
 
 // -----------------------------------------------------------------------
 
