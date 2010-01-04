@@ -1099,8 +1099,23 @@ void DateTimeTestCase::TestDateTimeParse()
         bool good;
     } parseTestDates[] =
     {
-        { "Thu 22 Nov 2007 07:40:00 PM",
-         { 22, wxDateTime::Nov, 2007, 19, 40, 0}, true },
+        {
+            "Thu 22 Nov 2007 07:40:00 PM",
+            { 22, wxDateTime::Nov, 2007, 19, 40, 0 },
+            true
+        },
+
+        {
+            "2010-01-04 14:30",
+            {  4, wxDateTime::Jan, 2010, 14, 30, 0 },
+            true
+        },
+
+        {
+            "bloordyblop",
+            { },
+            false
+        },
     };
 
     // the test strings here use "PM" which is not available in all locales so
