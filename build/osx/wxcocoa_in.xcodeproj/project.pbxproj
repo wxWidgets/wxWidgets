@@ -185,6 +185,10 @@
 					"__WXDEBUG__=1",
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks/";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
 			};
 			name = Debug;
 		};
@@ -196,6 +200,10 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = "@executable_path/../Frameworks/";
+				OTHER_LDFLAGS = (
+					"$(OTHER_LDFLAGS)",
+					"-lz",
+				);
 			};
 			name = Release;
 		};
