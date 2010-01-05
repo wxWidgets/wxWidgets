@@ -262,7 +262,10 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
         }
     }
 
-    wxVisualAttributes vattrs = ctrl->GetClassDefaultAttributes();
+    // Do not make the mistake of calling GetClassDefaultAttributes()
+    // here. It is static, while GetDefaultAttributes() is virtual
+    // and the correct one to use.
+    wxVisualAttributes vattrs = ctrl->GetDefaultAttributes();
 
     // Foreground colour
     const wxColour& fgCol = cell.GetFgCol();
