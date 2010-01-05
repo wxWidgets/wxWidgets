@@ -1,5 +1,6 @@
 # translation of pt_BR2.po to
 # Adiel Mittmann <adiel@inf.ufsc.br>, 2007.
+# Allann Jones <allanjos@gmail.com>, 2009.
 # translation of pt_BR.po to
 msgid ""
 msgstr ""
@@ -24,7 +25,7 @@ msgid ""
 "Please send this report to the program maintainer, thank you!\n"
 msgstr ""
 "\n"
-"Por favor, envie este relatório ao mantedor do programa, obrigado a você!\n"
+"Por favor, envie este relatório ao mantenedor do programa, obrigado a você!\n"
 
 #: ../src/richtext/richtextstyledlg.cpp:202
 #: ../src/richtext/richtextstyledlg.cpp:214
@@ -258,7 +259,7 @@ msgstr "&Copiar URL"
 
 #: ../src/generic/dbgrptg.cpp:330
 msgid "&Debug report preview:"
-msgstr "&Pré-visualizar o relatório do debug:"
+msgstr "&Pré-visualizar o relatório do depuração:"
 
 #: ../src/common/stockitem.cpp:119
 #: ../src/richtext/richtextctrl.cpp:2598
@@ -341,7 +342,7 @@ msgstr "&Home"
 #: ../src/richtext/richtextliststylepage.cpp:371
 #: ../src/richtext/richtextindentspage.cpp:194
 msgid "&Indentation (tenths of a mm)"
-msgstr "&Recorte (décimos de um mm)"
+msgstr "&Indentação (décimos de um mm)"
 
 #: ../src/richtext/richtextliststylepage.cpp:355
 #: ../src/richtext/richtextindentspage.cpp:177
@@ -591,7 +592,7 @@ msgstr "&Desfazer "
 
 #: ../src/common/stockitem.cpp:158
 msgid "&Unindent"
-msgstr "&Sem parágrafo"
+msgstr "&Remover indentação"
 
 #: ../src/common/stockitem.cpp:127
 msgid "&Up"
@@ -621,7 +622,7 @@ msgstr "&Sim"
 #: ../src/msw/regconf.cpp:259
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' tem '..' extras; ignorados."
+msgstr "'%s' tem '..' extras, ignorado."
 
 #: ../src/common/valtext.cpp:147
 #: ../src/common/valtext.cpp:177
@@ -634,7 +635,7 @@ msgstr "'%s' é inválido"
 #: ../src/common/cmdline.cpp:838
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
-msgstr "'%s' não é um valor numérico correto para a opçãoo '%s'."
+msgstr "'%s' não é um valor numérico correto para a opção '%s'."
 
 #: ../src/common/intl.cpp:1283
 #, c-format
@@ -892,11 +893,11 @@ msgstr ">>|"
 
 #: ../src/generic/dbgrptg.cpp:314
 msgid "A debug report has been generated in the directory\n"
-msgstr "Um relatório de debug foi gerado no diretório\n"
+msgstr "Um relatório de depuração foi gerado no diretório\n"
 
 #: ../src/common/debugrpt.cpp:565
 msgid "A debug report has been generated. It can be found in"
-msgstr "Um relatório de debug foi gerado. Ele pode ser achado em"
+msgstr "Um relatório de depuração foi gerado. Ele pode ser encontrado em"
 
 #: ../src/common/xtixml.cpp:406
 msgid "A non empty collection must consist of 'element' nodes"
@@ -907,7 +908,7 @@ msgstr "Uma coleção não vazia deve consistir de nodes do 'elemento'"
 #: ../src/richtext/richtextbulletspage.cpp:255
 #: ../src/richtext/richtextbulletspage.cpp:257
 msgid "A standard bullet name."
-msgstr "Um nome para o projétil padrão."
+msgstr "Um nome padrão para o marcador."
 
 #: ../src/common/paper.cpp:161
 msgid "A2 420 x 594 mm"
@@ -967,7 +968,7 @@ msgstr "A5 Rotacionada 210 x 148 mm"
 
 #: ../src/common/paper.cpp:156
 msgid "A5 Transverse 148 x 210 mm"
-msgstr "A5 Tranversal 148 x 210 mm"
+msgstr "A5 Transversal 148 x 210 mm"
 
 #: ../src/common/paper.cpp:110
 msgid "A5 sheet, 148 x 210 mm"
@@ -1103,7 +1104,7 @@ msgstr "Árabe (ISO-8859-6)"
 
 #: ../src/html/chm.cpp:564
 msgid "Archive doesnt contain #SYSTEM file"
-msgstr "O arquivo não contém o arquivo #SYSTEM"
+msgstr "O arquivo compactado não contém o arquivo #SYSTEM"
 
 #: ../src/generic/aboutdlgg.cpp:150
 msgid "Artists"
@@ -1249,15 +1250,15 @@ msgstr "Procurar"
 #: ../src/richtext/richtextliststylepage.cpp:244
 #: ../src/richtext/richtextbulletspage.cpp:193
 msgid "Bullet &Alignment:"
-msgstr "Alinhamento do &Projétilr:"
+msgstr "Alinhamento do &Marcador:"
 
 #: ../src/richtext/richtextliststylepage.cpp:308
 msgid "Bullet style"
-msgstr "Estilo do projétil"
+msgstr "Estilo do marcador"
 
 #: ../src/richtext/richtextformatdlg.cpp:293
 msgid "Bullets"
-msgstr "Projéteis"
+msgstr "Marcadores"
 
 #: ../src/common/paper.cpp:100
 msgid "C sheet, 17 x 22 in"
@@ -1302,7 +1303,7 @@ msgstr "MAIÚSCULAS"
 #: ../src/html/chm.cpp:797
 #: ../src/html/chm.cpp:854
 msgid "CHM handler currently supports only local files!"
-msgstr "O manejador CHM suporta atualmente apenas arquivos locais!"
+msgstr "O tratador de CHM suporta atualmente apenas arquivos locais!"
 
 #: ../src/common/accelcmn.cpp:66
 msgid "CLEAR"
@@ -1524,7 +1525,7 @@ msgstr "Não pode converter do conjunto de caracteres '%s'!"
 #: ../src/mac/carbon/dataview.cpp:1056
 #: ../src/mac/carbon/dataview.cpp:1176
 msgid "Cannot create new column's ID. Probably max. number of columns reached."
-msgstr "Não pode criar a ID da nova coluna. O nº máx. de colunas provavelmente foi alcançado."
+msgstr "Não pode criar a ID da nova coluna. O número máximo de colunas provavelmente foi alcançado."
 
 #: ../src/msw/dialup.cpp:545
 #, c-format
@@ -1539,7 +1540,7 @@ msgstr "Não pode achar o recipiente para o controle desconhecido '%s'."
 #: ../src/xrc/xmlres.cpp:1380
 #, c-format
 msgid "Cannot find font node '%s'."
-msgstr "Não pode achar o node da fonte '%s'."
+msgstr "Não pode achar o nó da fonte '%s'."
 
 #: ../src/msw/dialup.cpp:856
 msgid "Cannot find the location of address book file"
@@ -1706,12 +1707,12 @@ msgstr "Mudar o Estilo"
 
 #: ../src/mac/carbon/dataview.cpp:251
 msgid "Changed item is invalid."
-msgstr "O item mudado é inválido."
+msgstr "O item modificado é inválido."
 
 #: ../src/common/fileconf.cpp:378
 #, c-format
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
-msgstr "As mudanças não serão salvas para evitar sobrescrever o arquivo existente \"%s\""
+msgstr "As modificações não serão salvas para evitar sobrescrever o arquivo existente \"%s\""
 
 #: ../src/richtext/richtextstyles.cpp:840
 msgid "Character styles"
@@ -1722,7 +1723,7 @@ msgstr "Estilos dos caracteres"
 #: ../src/richtext/richtextbulletspage.cpp:172
 #: ../src/richtext/richtextbulletspage.cpp:174
 msgid "Check to add a period after the bullet."
-msgstr "Marque para adicionar um período após o projétil."
+msgstr "Marque para adicionar um ponto após o marcador."
 
 #: ../src/richtext/richtextliststylepage.cpp:237
 #: ../src/richtext/richtextliststylepage.cpp:239
@@ -1736,7 +1737,7 @@ msgstr "Marque para adicionar um parêntese direito."
 #: ../src/richtext/richtextbulletspage.cpp:179
 #: ../src/richtext/richtextbulletspage.cpp:181
 msgid "Check to enclose the bullet in parentheses."
-msgstr "Marque para cercar o projétil com parênteses."
+msgstr "Marque para cercar o marcador com parênteses."
 
 #: ../src/mac/carbon/fontdlg.cpp:518
 #: ../src/mac/carbon/fontdlg.cpp:520
@@ -1766,21 +1767,21 @@ msgstr "Marque para mostrar uma linha através do texto."
 #: ../src/richtext/richtextfontpage.cpp:234
 #: ../src/richtext/richtextfontpage.cpp:236
 msgid "Check to show the text in capitals."
-msgstr "Marque para mostrar o texto em maiúsculas."
+msgstr "Marque para mostrar o texto em letras maiúsculas."
 
 #: ../src/richtext/richtextfontpage.cpp:248
 #: ../src/richtext/richtextfontpage.cpp:250
 msgid "Check to show the text in subscript."
-msgstr "Marque para mostrar o texto no subscript."
+msgstr "Marque para mostrar o texto no formato sobrescrito."
 
 #: ../src/richtext/richtextfontpage.cpp:241
 #: ../src/richtext/richtextfontpage.cpp:243
 msgid "Check to show the text in superscript."
-msgstr "Marque para mostrar o texto em superscript."
+msgstr "Marque para mostrar o texto em formato sobrescrito."
 
 #: ../src/msw/dialup.cpp:791
 msgid "Choose ISP to dial"
-msgstr "Escolha um ISP para discar"
+msgstr "Escolha um proveedor de serviço de Internet (ISP) para discar"
 
 #: ../src/gtk/colordlg.cpp:52
 #: ../src/generic/colrdlgg.cpp:144
@@ -1837,12 +1838,12 @@ msgstr "Clique para cancelar esta janela."
 #: ../src/mac/carbon/fontdlg.cpp:546
 #: ../src/mac/carbon/fontdlg.cpp:548
 msgid "Click to change the font colour."
-msgstr "Clique para mudar a cor da fonte."
+msgstr "Clique para modificar a cor da fonte."
 
 #: ../src/richtext/richtextfontpage.cpp:217
 #: ../src/richtext/richtextfontpage.cpp:219
 msgid "Click to change the text colour."
-msgstr "Clique para mudar a cor do texto."
+msgstr "Clique para modificar a cor do texto."
 
 #: ../src/richtext/richtextliststylepage.cpp:194
 #: ../src/richtext/richtextliststylepage.cpp:196
@@ -1852,7 +1853,7 @@ msgstr "Clique para escolher a fonte para este nível."
 #: ../src/richtext/richtextstyledlg.cpp:265
 #: ../src/richtext/richtextstyledlg.cpp:267
 msgid "Click to close this window."
-msgstr "Clique para fechar esta janela"
+msgstr "Clique para fechar esta janela."
 
 #: ../src/mac/carbon/fontdlg.cpp:572
 #: ../src/mac/carbon/fontdlg.cpp:574
@@ -1968,17 +1969,17 @@ msgstr "A descrição da coluna não pôde ser inicializada."
 #: ../src/mac/carbon/dataview.cpp:1050
 #: ../src/mac/carbon/dataview.cpp:1170
 msgid "Column does not have a renderer."
-msgstr "A coluna não tem um renderizador."
+msgstr "A coluna não possui um renderizador."
 
 #: ../src/mac/carbon/databrow.cpp:883
 #: ../src/mac/carbon/databrow.cpp:904
 msgid "Column index not found."
-msgstr "Índice da coluna não achado."
+msgstr "Índice da coluna não encontrado."
 
 #: ../src/mac/carbon/dataview.cpp:1049
 #: ../src/mac/carbon/dataview.cpp:1169
 msgid "Column pointer must not be NULL."
-msgstr "O ponteiro da coluna não dever ser NULO."
+msgstr "O ponteiro da coluna não dever ser nulo (NULL)."
 
 #: ../src/mac/carbon/databrow.cpp:959
 msgid "Column width could not be determined"
@@ -1992,16 +1993,16 @@ msgstr "A largura da coluna não pôde ser definida."
 #: ../src/mac/carbon/dataview.cpp:1053
 #: ../src/mac/carbon/dataview.cpp:1173
 msgid "Column's model column has no equivalent in the associated model."
-msgstr "A coluna modelo da coluna não tem equivalente no modelo associado."
+msgstr "A coluna modelo da coluna não possui equivalente no modelo associado."
 
 #: ../src/common/init.cpp:189
 #, c-format
 msgid "Command line argument %d couldn't be converted to Unicode and will be ignored."
-msgstr "O argumento da linha de comando %d não pôde ser convertido para o Unicode e será ignorado."
+msgstr "O argumento da linha de comando %d não pôde ser convertido para o formato de caracteres Unicode e será ignorado."
 
 #: ../src/html/helpwnd.cpp:1554
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
-msgstr "Arquivo de ajuda HTML Compactado (*.chm)|*.chm|"
+msgstr "Arquivo de ajuda HTML compactado (*.chm)|*.chm|"
 
 #: ../src/generic/dirctrlg.cpp:591
 msgid "Computer"
@@ -2010,7 +2011,7 @@ msgstr "Computador"
 #: ../src/common/fileconf.cpp:959
 #, c-format
 msgid "Config entry name cannot start with '%c'."
-msgstr "O nome da entrada da config não pode iniciar com '%c'."
+msgstr "O nome da entrada de configuração não pode iniciar com '%c'."
 
 #: ../src/gtk/filedlg.cpp:55
 msgid "Confirm"
@@ -2031,7 +2032,7 @@ msgstr "Conteúdos"
 
 #: ../src/mac/carbon/dataview.cpp:377
 msgid "Control is wrongly initialized."
-msgstr "O controle foi inicializado erroneamente."
+msgstr "O controle foi inicializado de forma incorreta."
 
 #: ../src/common/strconv.cpp:2003
 #, c-format
@@ -2058,7 +2059,7 @@ msgstr "Copiar a seleção"
 #: ../src/mac/carbon/dataview.cpp:1061
 #: ../src/mac/carbon/dataview.cpp:1181
 msgid "Could not add column to internal structures."
-msgstr "Não pôde adicionar a coluna as estruturas internas."
+msgstr "Não pôde adicionar a coluna às estruturas internas."
 
 #: ../src/html/chm.cpp:703
 #, c-format
@@ -2068,24 +2069,24 @@ msgstr "Não pôde criar o arquivo temporário '%s'"
 #: ../src/mac/carbon/databrow.cpp:628
 #: ../src/mac/carbon/databrow.cpp:1011
 msgid "Could not determine column index."
-msgstr "Não pôde determinar o índice da coluna."
+msgstr "Não foi possível determinar o índice da coluna."
 
 #: ../src/mac/carbon/dataview.cpp:1145
 msgid "Could not determine column's position"
-msgstr "Não pôde determinar a posição da coluna"
+msgstr "Não foi possível determinar a posição da coluna"
 
 #: ../src/mac/carbon/dataview.cpp:1253
 msgid "Could not determine number of items"
-msgstr "Não pôde determinar o número de itens"
+msgstr "Não foi possível determinar o número de itens"
 
 #: ../src/html/chm.cpp:274
 #, c-format
 msgid "Could not extract %s into %s: %s"
-msgstr "Não pôde extrair %s para %s: %s"
+msgstr "Não foi possível extrair %s para %s: %s"
 
 #: ../src/generic/tabg.cpp:1051
 msgid "Could not find tab for id"
-msgstr "Não pôde achar a aba pela id"
+msgstr "Não foi possível encontrar a aba para id"
 
 #: ../src/mac/carbon/dataview.cpp:739
 #: ../src/mac/carbon/dataview.cpp:776
@@ -2093,87 +2094,87 @@ msgstr "Não pôde achar a aba pela id"
 #: ../src/mac/carbon/dataview.cpp:837
 #: ../src/mac/carbon/dataview.cpp:948
 msgid "Could not get header description."
-msgstr "Não pôde obter a descrição do cabeçalho."
+msgstr "Não foi possível obter a descrição do cabeçalho."
 
 #: ../src/mac/carbon/dataview.cpp:1335
 #: ../src/mac/carbon/dataview.cpp:1395
 msgid "Could not get items."
-msgstr "Não pôde obter os itens."
+msgstr "Não foi possível obter os itens."
 
 #: ../src/mac/carbon/dataview.cpp:861
 #: ../src/mac/carbon/dataview.cpp:891
 msgid "Could not get property flags."
-msgstr "Não pôde obter as bandeiras de propriedade."
+msgstr "Não foi possível obter as bandeiras de propriedade."
 
 #: ../src/mac/carbon/databrow.cpp:504
 msgid "Could not get selected items."
-msgstr "Não pôde obter os itens selecionados."
+msgstr "Não foi possível obter os itens selecionados."
 
 #: ../src/html/chm.cpp:445
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr "Não pôde localizar o arquivo '%s'."
+msgstr "Não foi possível localizar o arquivo '%s'."
 
 #: ../src/mac/carbon/dataview.cpp:1090
 msgid "Could not remove column."
-msgstr "Não pôde remover a coluna."
+msgstr "Não foi possível remover a coluna."
 
 #: ../src/mac/carbon/databrow.cpp:425
 msgid "Could not retrieve number of items"
-msgstr "Não pôde recuperar o número de itens"
+msgstr "Não foi possível recuperar o número de itens"
 
 #: ../src/mac/carbon/dataview.cpp:755
 msgid "Could not set alignment."
-msgstr "Não pôde definir o alinhamento."
+msgstr "Não foi possível definir o alinhamento."
 
 #: ../src/mac/carbon/dataview.cpp:969
 msgid "Could not set column width."
-msgstr "Não pôde definir a largura da coluna."
+msgstr "Não foi possível definir a largura da coluna."
 
 #: ../src/mac/carbon/dataview.cpp:950
 msgid "Could not set header description."
-msgstr "Não pôde definir a descrição do cabeçalho."
+msgstr "Não foi possível definir a descrição do cabeçalho."
 
 #: ../src/mac/carbon/dataview.cpp:785
 msgid "Could not set icon."
-msgstr "Não pôde definir o ícone."
+msgstr "Não foi possível definir o ícone."
 
 #: ../src/mac/carbon/dataview.cpp:816
 msgid "Could not set maximum width."
-msgstr "Não pôde definir a largura máxima."
+msgstr "Não foi possível definir a largura máxima."
 
 #: ../src/mac/carbon/dataview.cpp:839
 msgid "Could not set minimum width."
-msgstr "Não pôde definir a largura mínima."
+msgstr "Não foi possível definir a largura mínima."
 
 #: ../src/mac/carbon/dataview.cpp:866
 #: ../src/mac/carbon/dataview.cpp:896
 msgid "Could not set property flags."
-msgstr "Não pode definir as bandeiras de propriedade."
+msgstr "Não foi possível definir as bandeiras de propriedade."
 
 #: ../src/common/prntbase.cpp:1547
 msgid "Could not start document preview."
-msgstr "Não pôde iniciar a pré-visualização do documento."
+msgstr "Não foi possível iniciar a pré-visualização do documento."
 
 #: ../src/gtk/gnome/gprint.cpp:925
 #: ../src/gtk/print.cpp:1042
 #: ../src/generic/printps.cpp:181
 #: ../src/msw/printwin.cpp:233
 msgid "Could not start printing."
-msgstr "Não pôde iniciar a impressão."
+msgstr "Não foi possível iniciar a impressão."
 
 #: ../src/common/wincmn.cpp:1621
 msgid "Could not transfer data to window"
-msgstr "Não pôde transferir os dados para a janela"
+msgstr "Não foi possível transferir os dados para a janela"
 
 #: ../src/mac/carbon/mpthread.cpp:222
 #: ../src/mac/carbon/mpthread.cpp:301
 msgid "Could not unlock mutex"
-msgstr "Não pôde destrancar o mutex"
+msgstr "Não foi possível liberar o mutex"
 
 #: ../src/os2/thread.cpp:159
 msgid "Couldn't acquire a mutex lock"
-msgstr "Não pôde adquirir uma tranca mutex"
+msgstr "Não foi possível adquirir trava para o mutex"
 
 #: ../src/msw/dragimag.cpp:156
 #: ../src/msw/dragimag.cpp:195
@@ -2181,80 +2182,80 @@ msgstr "Não pôde adquirir uma tranca mutex"
 #: ../src/msw/imaglist.cpp:167
 #: ../src/msw/imaglist.cpp:179
 msgid "Couldn't add an image to the image list."
-msgstr "Não pôde adicionar uma imagem a lista de imagens."
+msgstr "Não foi possível adicionar uma imagem a lista de imagens."
 
 #: ../src/os2/timer.cpp:114
 #: ../src/msw/timer.cpp:83
 msgid "Couldn't create a timer"
-msgstr "Não pôde criar um timer"
+msgstr "Não foi possível criar um temporizador (timer)"
 
 #: ../src/mgl/cursor.cpp:132
 #: ../src/mgl/cursor.cpp:163
 msgid "Couldn't create cursor."
-msgstr "Não pôde criar o cursor."
+msgstr "Não foi possível criar o cursor."
 
 #: ../src/mac/carbon/overlay.cpp:125
 msgid "Couldn't create the overlay window"
-msgstr "Não pôde crirar a janela overlay"
+msgstr "Não foi possível criar a janela overlay"
 
 #: ../src/common/dynlib.cpp:157
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "Não pôde achar o símbolo '%s' em uma biblioteca dinâmica"
+msgstr "Não foi possível encontrar o símbolo '%s' em uma biblioteca dinâmica"
 
 #: ../src/gtk/print.cpp:2055
 msgid "Couldn't get hatch style from wxBrush."
-msgstr "Não pôde obter o estilo hatch do wxBrush."
+msgstr "Não foi possível obter o estilo hatch do wxBrush."
 
 #: ../src/msw/thread.cpp:899
 msgid "Couldn't get the current thread pointer"
-msgstr "Não pôde obter o ponteiro atual do thread"
+msgstr "Não foi possível obter o ponteiro atual da thread"
 
 #: ../src/mac/carbon/overlay.cpp:132
 msgid "Couldn't init the context on the overlay window"
-msgstr "Não pôde inicializar o contexto na janela overlay"
+msgstr "Não foi possível inicializar o contexto na janela overlay"
 
 #: ../src/common/imagpng.cpp:615
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "Não pôde carregar uma imagem PNG - o arquivo está corrompido ou memória insuficiente."
+msgstr "Não foi possível carregar uma imagem PNG - o arquivo está corrompido ou a memória é insuficiente."
 
 #: ../src/unix/sound.cpp:471
 #, c-format
 msgid "Couldn't load sound data from '%s'."
-msgstr "Não pôde carregar os dados do som de '%s'."
+msgstr "Não foi possível carregar os dados do som de '%s'."
 
 #: ../src/unix/sound_sdl.cpp:228
 #, c-format
 msgid "Couldn't open audio: %s"
-msgstr "Não pôde abrir o áudio: %s"
+msgstr "Não foi possível abrir o áudio: %s"
 
 #: ../src/msw/ole/dataobj.cpp:145
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "Não pôde registrar o formato da área de transferência '%s'."
+msgstr "Não foi possível registrar o formato da área de transferência '%s'."
 
 #: ../src/os2/thread.cpp:176
 msgid "Couldn't release a mutex"
-msgstr "Não pôde liberar um mutex"
+msgstr "Não foi possível liberar um mutex"
 
 #: ../src/msw/listctrl.cpp:802
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
-msgstr "Não pôde recuperar a informação sobre o item de controle das listas %d."
+msgstr "Não foi possíevl recuperar a informação sobre o item de controle das listas %d."
 
 #: ../src/common/imagpng.cpp:664
 #: ../src/common/imagpng.cpp:673
 #: ../src/common/imagpng.cpp:681
 msgid "Couldn't save PNG image."
-msgstr "Não pôde salvar a imagem PNG."
+msgstr "Não foi possível salvar a imagem PNG."
 
 #: ../src/msw/thread.cpp:669
 msgid "Couldn't terminate thread"
-msgstr "Não pôde concluir o thread"
+msgstr "Não foi possível concluir o thread"
 
 #: ../src/common/xtistrm.cpp:157
 msgid "Create Parameter not found in declared RTTI Parameters"
-msgstr "Parâmetro Create não achado nos Parâmetros RTTI declarados"
+msgstr "'Create Parameter' não encontrado nos Parâmetros RTTI declarados"
 
 #: ../src/generic/dirdlgg.cpp:318
 msgid "Create directory"
@@ -2318,7 +2319,7 @@ msgstr "APAGAR"
 
 #: ../src/common/imagbmp.cpp:944
 msgid "DIB Header: Encoding doesn't match bitdepth."
-msgstr "Cabeçalho DIB: A codificação não combina com a profundidade dos bits."
+msgstr "Cabeçalho DIB: A codificação não combina com a profundidade dos bits (bitdepth)."
 
 #: ../src/common/imagbmp.cpp:905
 msgid "DIB Header: Image height > 32767 pixels for file."
@@ -2350,7 +2351,7 @@ msgstr "PARA_BAIXO"
 
 #: ../src/mac/carbon/dataview.cpp:345
 msgid "Data view control is not correctly initialized"
-msgstr "O controle da visualização dos dados não foi inicializado corretamente"
+msgstr "O controle de visualização de dados (data view control) não foi inicializado corretamente"
 
 #: ../src/mac/carbon/dataview.cpp:694
 msgid "Date renderer cannot render value; value type: "
@@ -2359,15 +2360,15 @@ msgstr "O renderizador da data não pode renderizar o valor; tipo de valor:"
 #: ../src/generic/dbgrptg.cpp:296
 #, c-format
 msgid "Debug report \"%s\""
-msgstr "Relatório do debug \"%s\""
+msgstr "Relatório de depuração \"%s\""
 
 #: ../src/common/debugrpt.cpp:209
 msgid "Debug report couldn't be created."
-msgstr "O relatório de debug não pôde ser criado."
+msgstr "O relatório de depuração não pôde ser criado."
 
 #: ../src/common/debugrpt.cpp:545
 msgid "Debug report generation has failed."
-msgstr "A geração do relatório de debug falhou."
+msgstr "A geração do relatório de depuração falhou."
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Decorative"
@@ -2419,7 +2420,7 @@ msgstr "Apagar o estilo %s?"
 #: ../src/unix/snglinst.cpp:296
 #, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "Arquivo de stale lock apagado '%s'."
+msgstr "Arquivo de trava antiga (stale) '%s' apagado."
 
 #: ../src/common/module.cpp:125
 #, c-format
@@ -2449,7 +2450,7 @@ msgstr "Você sabia..."
 #: ../src/dfb/wrapdfb.cpp:64
 #, c-format
 msgid "DirectFB error %d occured."
-msgstr "Ocorreu o erro DirectFB %d."
+msgstr "Ocorreu erro '%d' no DirectFB."
 
 #: ../src/motif/filedlg.cpp:219
 msgid "Directories"
@@ -2475,15 +2476,15 @@ msgstr "O diretório não existe."
 
 #: ../src/html/helpwnd.cpp:498
 msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "Exibe todos os itens do índice que contém a substring dada. A busca é caso sensitivo."
+msgstr "Exibe todos os itens do índice que contém a substring dada. A busca diferencia letras maiúsculas e minúsculas (case sensitive)."
 
 #: ../src/html/helpwnd.cpp:695
 msgid "Display options dialog"
-msgstr "Exibir o diálogo das opções"
+msgstr "Exibir o diálogo de opções"
 
 #: ../src/html/helpwnd.cpp:325
 msgid "Displays help as you browse the books on the left."
-msgstr "Exibe a ajuda enquanto você navega pelos livros a esquerda."
+msgstr "Exibe a ajuda enquanto você navega pelos livros à esquerda."
 
 #: ../src/msw/mimetype.cpp:699
 msgid ""
@@ -2502,11 +2503,11 @@ msgstr ""
 #: ../src/common/docview.cpp:481
 #, c-format
 msgid "Do you want to save changes to document %s?"
-msgstr "Você quer salvar as mudanças no documento %s?"
+msgstr "Você quer salvar as modificações no documento %s?"
 
 #: ../src/generic/aboutdlgg.cpp:74
 msgid "Documentation by "
-msgstr "Documentação de"
+msgstr "Documentação por "
 
 #: ../src/generic/aboutdlgg.cpp:146
 msgid "Documentation writers"
@@ -2598,7 +2599,7 @@ msgstr "Insira o comando para abrir o arquivo \"%s\":"
 
 #: ../src/generic/helpext.cpp:465
 msgid "Entries found"
-msgstr "Entradas achadas"
+msgstr "Entradas encontradas"
 
 #: ../src/common/paper.cpp:144
 msgid "Envelope Invite 220 x 220 mm"
@@ -2607,7 +2608,7 @@ msgstr "Envelope de Convite 220 x 220 mm"
 #: ../src/common/config.cpp:433
 #, c-format
 msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "A expansão das variáveis do ambiente falhou: '%c' desaparecido na posição %u em '%s'."
+msgstr "A expansão das variáveis do ambiente falhou: '%c' não encontrado na posição %u em '%s'."
 
 #: ../src/gtk/filedlg.cpp:67
 #: ../src/gtk1/fontdlg.cpp:75
@@ -2638,7 +2639,7 @@ msgstr "Erro ao ler a imagem DIB."
 
 #: ../src/common/fileconf.cpp:459
 msgid "Error reading config options."
-msgstr "Erro ao ler as opções da config."
+msgstr "Erro ao ler as opções de configuração."
 
 #: ../src/common/fileconf.cpp:1058
 msgid "Error saving user configuration data."
@@ -2646,7 +2647,7 @@ msgstr "Erro ao salvar os dados de configuração do usuário."
 
 #: ../src/gtk/print.cpp:677
 msgid "Error while printing: "
-msgstr "Erro enquanto imprimia:"
+msgstr "Erro enquanto imprimia: "
 
 #: ../src/mac/carbon/mpthread.cpp:477
 msgid "Error while waiting on semaphore"
@@ -2703,7 +2704,7 @@ msgstr "F"
 
 #: ../src/unix/snglinst.cpp:270
 msgid "Failed to access lock file."
-msgstr "Falhou em acessar o arquivo da tranca."
+msgstr "Falhou em acessar o arquivo de trava (lock)."
 
 #: ../src/unix/epolldispatcher.cpp:114
 #, c-format
@@ -2717,25 +2718,25 @@ msgstr "Falhou em distribuir a cor para o OpenGL"
 #: ../src/msw/dib.cpp:567
 #, c-format
 msgid "Failed to allocated %luKb of memory for bitmap data."
-msgstr "Falhou em distribuir %luKb de memória para os dados do bitmap."
+msgstr "Falhou em alocar %luKb de memória para os dados do bitmap."
 
 #: ../src/unix/displayx11.cpp:234
 msgid "Failed to change video mode"
-msgstr "Falhou em mudar o modo de vídeo"
+msgstr "Falhou em modificar o modo de vídeo"
 
 #: ../src/common/debugrpt.cpp:243
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "Falhou em limpar o diretório do relatório de debug \"%s\"."
+msgstr "Falhou em limpar o diretório do relatório de depuração \"%s\"."
 
 #: ../src/common/filename.cpp:196
 msgid "Failed to close file handle"
-msgstr "Falhou em fechar o manejamento dos arquivos"
+msgstr "Falhou em fechar o manipulador (handle) dos arquivos"
 
 #: ../src/unix/snglinst.cpp:335
 #, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "Falhou em fechar o arquivo da tranca '%s'"
+msgstr "Falhou em fechar o arquivo de trava (lock) '%s'"
 
 #: ../src/msw/clipbrd.cpp:113
 msgid "Failed to close the clipboard."
@@ -2753,11 +2754,11 @@ msgstr "Falhou em conectar ao gerenciador da sessão: %s"
 
 #: ../src/msw/dialup.cpp:825
 msgid "Failed to connect: missing username/password."
-msgstr "Falhou em conectar: faltando o nome de usuário/senha."
+msgstr "Falhou em conectar: faltando o nome de usuário e (ou) senha."
 
 #: ../src/msw/dialup.cpp:771
 msgid "Failed to connect: no ISP to dial."
-msgstr "Falhou em conectar nenhum ISP para discar."
+msgstr "Falhou em conectar: nenhum provedor de serviço de Internet (ISP) para discar."
 
 #: ../src/common/textfile.cpp:177
 #, c-format
@@ -2790,7 +2791,7 @@ msgstr "Falhou em criar a string DDE"
 
 #: ../src/msw/mdi.cpp:470
 msgid "Failed to create MDI parent frame."
-msgstr "Falhou em criar o MDI parent frame."
+msgstr "Falhou em criar o frame MDI pai (parent)."
 
 #: ../src/msw/statusbar.cpp:115
 msgid "Failed to create a status bar."
@@ -2839,11 +2840,11 @@ msgstr "Falhou em criar a entrada no registro para os arquivos '%s'."
 #: ../src/msw/fdrepdlg.cpp:443
 #, c-format
 msgid "Failed to create the standard find/replace dialog (error code %d)"
-msgstr "Falhou em criar o diálogo achar/substituir padrão (código do erro %d)"
+msgstr "Falhou em criar o diálogo procurar/substituir padrão (código do erro %d)"
 
 #: ../src/unix/evtloopunix.cpp:52
 msgid "Failed to create wake up pipe used by event loop."
-msgstr "Falhou em criar wake up pipe usado para o loop de evento."
+msgstr "Falhou em criar pipe de reativação (wake up) usado para o loop de evento."
 
 #: ../src/html/winpars.cpp:704
 #, c-format
@@ -2882,12 +2883,12 @@ msgstr "Falhou ao executar o curl, por favor instale-o no PATH."
 #: ../src/common/regex.cpp:481
 #, c-format
 msgid "Failed to find match for regular expression: %s"
-msgstr "Falhou em achar a combinação para a expressãoo regular: %s"
+msgstr "Falhou em encontrar a combinação para a expressão regular: %s"
 
 #: ../src/msw/dialup.cpp:723
 #, c-format
 msgid "Failed to get ISP names: %s"
-msgstr "Falhou em obter os nomes dos ISPs: %s"
+msgstr "Falhou em obter os nomes dos provedores de serviço de Internet (ISPs): %s"
 
 #: ../src/msw/clipbrd.cpp:743
 msgid "Failed to get data from the clipboard"
@@ -2899,11 +2900,11 @@ msgstr "Falhou em obter a hora local do sistema"
 
 #: ../src/common/filefn.cpp:1544
 msgid "Failed to get the working directory"
-msgstr "Falhou em obter o diretório de trabalho"
+msgstr "Falhou em obter o diretório atual de trabalho"
 
 #: ../src/univ/theme.cpp:114
 msgid "Failed to initialize GUI: no built-in themes found."
-msgstr "Falhou em inicializar a GUI: não foram achados temas embutidos."
+msgstr "Falhou em inicializar a interface gráfica: não foram encontrados temas embutidos."
 
 #: ../src/msw/helpchm.cpp:64
 msgid "Failed to initialize MS HTML Help."
@@ -2925,11 +2926,11 @@ msgstr "Falhou em inserir o texto no controle."
 #: ../src/unix/snglinst.cpp:242
 #, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Falhou em inspecionar o arquivo da tranca '%s'"
+msgstr "Falhou em inspecionar o arquivo da trava (lock) '%s'"
 
 #: ../src/unix/appunix.cpp:89
 msgid "Failed to install signal handler"
-msgstr "Falhou em instalar o manejador do sinal"
+msgstr "Falhou em instalar o manipulador do sinal (signal handler)"
 
 #: ../src/unix/threadpsx.cpp:979
 msgid "Failed to join a thread, potential memory leak detected - please restart the program"
@@ -2948,7 +2949,7 @@ msgstr "Falhou em carregar a imagem %d do arquivo '%s'."
 #: ../src/msw/enhmeta.cpp:97
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Falhou em carregar o meta-arquivo do arquivo \"%s\"."
+msgstr "Falhou em carregar o arquivo de informações (metafile) do arquivo \"%s\"."
 
 #: ../src/msw/volume.cpp:324
 msgid "Failed to load mpr.dll."
@@ -2962,7 +2963,7 @@ msgstr "Falhou em carregar a biblioteca compartilhada '%s'"
 #: ../src/unix/snglinst.cpp:199
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "Falhou em trancar o arquivo da tranca '%s'"
+msgstr "Falhou em travar o arquivo de trava (lock) '%s'"
 
 #: ../src/unix/epolldispatcher.cpp:134
 #, c-format
@@ -3001,7 +3002,7 @@ msgstr "Falhou em abrir a URL '%s' no navegador padrão."
 #: ../src/x11/utils.cpp:226
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "Falhou em abrir a exibição \"%s\""
+msgstr "Falhou em abrir o display \"%s\""
 
 #: ../src/common/filename.cpp:894
 msgid "Failed to open temporary file."
@@ -3017,15 +3018,15 @@ msgstr "Falhou em pôr os dados na área de transferência"
 
 #: ../src/unix/snglinst.cpp:279
 msgid "Failed to read PID from lock file."
-msgstr "Falhou em ler o PID do arquivo da tranca."
+msgstr "Falhou em ler o PID do arquivo de trava (lock)."
 
 #: ../src/common/fileconf.cpp:470
 msgid "Failed to read config options."
-msgstr "Falhou em ler as opções de config."
+msgstr "Falhou em ler as opções de configuração."
 
 #: ../src/unix/evtloopunix.cpp:104
 msgid "Failed to read from wake-up pipe"
-msgstr "Falhou em ler do wake-up pipe"
+msgstr "Falhou em ler do pipe reativado (wake-up pipe)"
 
 #: ../src/unix/utilsunx.cpp:635
 msgid "Failed to redirect child process input/output"
@@ -3052,17 +3053,17 @@ msgstr "Falhou em lembrar a codificação do conjunto de caracteres '%s'."
 #: ../src/common/debugrpt.cpp:226
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "Falhou em remover o arquivo do relatório do debug \"%s\""
+msgstr "Falhou em remover o arquivo do relatório de depuração \"%s\""
 
 #: ../src/unix/snglinst.cpp:323
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Falhou em remover o arquivo da tranca '%s'"
+msgstr "Falhou em remover o arquivo de trava '%s'"
 
 #: ../src/unix/snglinst.cpp:289
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "Falhou em remover o arquivo do stale lock '%s'."
+msgstr "Falhou em remover o arquivo de trava antiga (stale) '%s'."
 
 #: ../src/msw/registry.cpp:474
 #, c-format
@@ -3072,7 +3073,7 @@ msgstr "Falhou em renomear o valor do registro de '%s' para '%s'."
 #: ../src/common/filefn.cpp:1208
 #, c-format
 msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
-msgstr "Falhou em renomear o arquivo '%s' para '%s' porque o arquivo destino já existe."
+msgstr "Falhou em renomear o arquivo '%s' para '%s' porque o arquivo de destino já existe."
 
 #: ../src/msw/registry.cpp:579
 #, c-format
@@ -3090,7 +3091,7 @@ msgstr "Falhou em recuperar as horas do arquivo para '%s'"
 
 #: ../src/msw/dialup.cpp:490
 msgid "Failed to retrieve text of RAS error message"
-msgstr "Falhou em recuperar o texto da mensagem de erro do RAS"
+msgstr "Falhou em recuperar o texto da mensagem de erro do serviço de acesso remoto (RAS)"
 
 #: ../src/msw/clipbrd.cpp:780
 msgid "Failed to retrieve the supported clipboard formats"
@@ -3099,7 +3100,7 @@ msgstr "Falhou em recuperar os formatos da área de transferência suportados"
 #: ../src/msw/dib.cpp:345
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "Falhou em salvar a imagem bitmap como o arquivo \"%s\"."
+msgstr "Falhou em salvar a imagem bitmap para o arquivo \"%s\"."
 
 #: ../src/msw/dde.cpp:766
 msgid "Failed to send DDE advise notification"
@@ -3117,11 +3118,11 @@ msgstr "Falhou em definir os dados da área de transferência."
 #: ../src/unix/snglinst.cpp:182
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr "Falhou em definir as permissões sobre o arquivo da tranca '%s'"
+msgstr "Falhou em definir as permissões sobre o arquivo de trava '%s'"
 
 #: ../src/common/file.cpp:509
 msgid "Failed to set temporary file permissions"
-msgstr "Falhou em definir as permissões do arquivo temporário"
+msgstr "Falhou em definir as permissões sobre o arquivo temporário"
 
 #: ../src/gtk/textctrl.cpp:969
 msgid "Failed to set text in the text control."
@@ -3131,7 +3132,7 @@ msgstr "Falhou em definir o texto no controle de texto."
 #: ../src/unix/threadpsx.cpp:1327
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr "Falhou em definir a prioridade do thread %d."
+msgstr "Falhou em definir a prioridade da thread %d."
 
 #: ../src/common/fs_mem.cpp:256
 #, c-format
@@ -3140,12 +3141,12 @@ msgstr "Falhou em armazenar a imagem '%s' na memória VFS!"
 
 #: ../src/unix/evtloopunix.cpp:61
 msgid "Failed to switch wake up pipe to non-blocking mode"
-msgstr "Falhou em trocar o wake up pipe para o modo não bloqueador"
+msgstr "Falhou em trocar o wake up pipe para o modo não bloqueante"
 
 #: ../src/unix/threadpsx.cpp:1500
 #: ../src/mac/carbon/mpthread.cpp:1268
 msgid "Failed to terminate a thread."
-msgstr "Falhou em concluir um thread."
+msgstr "Falhou em concluir uma thread."
 
 #: ../src/msw/dde.cpp:744
 msgid "Failed to terminate the advise loop with DDE server"
@@ -3164,7 +3165,7 @@ msgstr "Falhou em tocar o arquivo '%s'"
 #: ../src/unix/snglinst.cpp:329
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Falhou em destrancar o arquivo da tranca '%s'"
+msgstr "Falhou em liberar o arquivo da trava '%s'"
 
 #: ../src/msw/dde.cpp:315
 #, c-format
@@ -3174,7 +3175,7 @@ msgstr "Falhou em des-registrar o servidor DDE '%s'"
 #: ../src/unix/epolldispatcher.cpp:153
 #, c-format
 msgid "Failed to unregister descriptor %d from epoll descriptor %d"
-msgstr "Falhou em des-registrar o descritor %d do descritor epoll %d"
+msgstr "Falhou em desfazer o registro do descritor %d do descritor epoll %d"
 
 #: ../src/common/fileconf.cpp:1031
 msgid "Failed to update user configuration file."
@@ -3183,12 +3184,12 @@ msgstr "Falhou em atualizar o arquivo de configuração do usuário."
 #: ../src/common/debugrpt.cpp:685
 #, c-format
 msgid "Failed to upload the debug report (error code %d)."
-msgstr "Falhou em enviar o relatório de debug (código do erro %d)."
+msgstr "Falhou em enviar o relatório de depuração (código do erro %d)."
 
 #: ../src/unix/snglinst.cpp:169
 #, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "Falhou em escrever no arquivo da tranca '%s'"
+msgstr "Falhou em escrever no arquivo de trava '%s'"
 
 #: ../src/generic/logg.cpp:424
 msgid "Fatal error"
@@ -3259,7 +3260,7 @@ msgstr "Fonte fixa:"
 
 #: ../src/html/helpwnd.cpp:1277
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
-msgstr "Face do tamanho fixo.<br> <b>negrito</b> <i>itálico</i> "
+msgstr "Face de tamanho fixo.<br> <b>negrito</b> <i>itálico</i> "
 
 #: ../src/common/paper.cpp:113
 msgid "Folio, 8 1/2 x 13 in"
@@ -3297,7 +3298,7 @@ msgstr "O fork falhou"
 
 #: ../src/common/xtixml.cpp:232
 msgid "Forward hrefs are not supported"
-msgstr "hrefs adiantadas não são suportadas"
+msgstr "hrefs adiantadas (forward) não são suportadas"
 
 #: ../src/html/htmlhelp.cpp:460
 #: ../src/html/helpwnd.cpp:893
@@ -3315,7 +3316,7 @@ msgstr "GB-2312"
 
 #: ../src/common/imaggif.cpp:80
 msgid "GIF: Invalid gif index."
-msgstr "GIF: Índice gif inválido."
+msgstr "GIF: Índice GIF inválido."
 
 #: ../src/common/imaggif.cpp:70
 msgid "GIF: data stream seems to be truncated."
@@ -3367,12 +3368,12 @@ msgstr "Ir adiante para a próxima página HTML"
 
 #: ../src/html/helpwnd.cpp:669
 msgid "Go one level up in document hierarchy"
-msgstr "Ir um nível aciima na hierarquia do documento"
+msgstr "Subir um nível na hierarquia do documento"
 
 #: ../src/generic/dirdlgg.cpp:137
 #: ../src/generic/filedlgg.cpp:225
 msgid "Go to home directory"
-msgstr "Ir para o diretório home"
+msgstr "Ir para o diretório inicial (home)"
 
 #: ../src/generic/filedlgg.cpp:221
 msgid "Go to parent directory"
@@ -3384,7 +3385,7 @@ msgstr "Ir para a página"
 
 #: ../src/generic/aboutdlgg.cpp:77
 msgid "Graphics art by "
-msgstr "Arte gráfica de"
+msgstr "Arte gráfica por "
 
 #: ../src/common/fmapbase.cpp:114
 msgid "Greek (ISO-8859-7)"
@@ -3393,7 +3394,7 @@ msgstr "Grego (ISO-8859-7)"
 #: ../src/common/zstream.cpp:142
 #: ../src/common/zstream.cpp:290
 msgid "Gzip not supported by this version of zlib"
-msgstr "Gzip não suportado por esta versão do zlib"
+msgstr "Gzip não suportado por esta versão da biblioteca zlib"
 
 #: ../src/common/accelcmn.cpp:74
 msgid "HELP"
@@ -3554,7 +3555,7 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Se você deseja suprimir este relatório de debug completamente, por favor escolha o botão \"Cancelar\",\n"
+"Se você deseja suprimir este relatório de depuração completamente, por favor escolha o botão \"Cancelar\",\n"
 "mas esteja avisado que pode impedir de melhorar o programa, então se\n"
 "possível de algum modo por favor continue com a geraçãoo do relatório.\n"
 
@@ -3565,7 +3566,7 @@ msgstr "Ignorando o valor \"%s\" da chave \"%s\"."
 
 #: ../src/common/xtistrm.cpp:256
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
-msgstr "Classe de Objeto Ilegal (Não-wxEvtHandler) como Fonte do Evento"
+msgstr "Classe de Objeto Ilegal (Non-wxEvtHandler) como Fonte do Evento"
 
 #: ../src/generic/filectrlg.cpp:790
 #: ../src/generic/dirctrlg.cpp:703
@@ -3593,7 +3594,7 @@ msgstr "O arquivo de imagem não é do tipo %s."
 
 #: ../src/msw/textctrl.cpp:464
 msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
-msgstr "Impossível criar um controle de edição rica, usando o controle de texto simples em vez disso. Por favor reinstale o riched32.dll"
+msgstr "Impossível criar um controle de edição rica, usando o controle de texto simples ao invés disso. Por favor reinstale o arquivo riched32.dll"
 
 #: ../src/unix/utilsunx.cpp:314
 msgid "Impossible to get child process input"
@@ -3602,7 +3603,7 @@ msgstr "Impossível obter a entrada do processo filho"
 #: ../src/common/filefn.cpp:1114
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
-msgstr "Impossível obter as permissões para o arquivo '%s'"
+msgstr "Impossível obter as permissões sobre o arquivo '%s'"
 
 #: ../src/common/filefn.cpp:1128
 #, c-format
@@ -3612,7 +3613,7 @@ msgstr "Impossível sobrescrever o arquivo '%s'"
 #: ../src/common/filefn.cpp:1182
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
-msgstr "Impossível definir as permissões para o arquivo '%s'"
+msgstr "Impossível definir as permissões sobre o arquivo '%s'"
 
 #: ../src/common/stockitem.cpp:130
 msgid "Indent"
@@ -3687,7 +3688,7 @@ msgstr "Especificação da geometria '%s' inválida "
 #: ../src/unix/snglinst.cpp:307
 #, c-format
 msgid "Invalid lock file '%s'."
-msgstr "Arquivo da tranca '%s' inválido."
+msgstr "Arquivo de trava '%s' é inválido."
 
 #: ../src/common/xtistrm.cpp:361
 #: ../src/common/xtistrm.cpp:376
@@ -4814,7 +4815,7 @@ msgstr "Imprimindo..."
 #: ../src/common/debugrpt.cpp:552
 #, c-format
 msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
-msgstr "O processamento do relatório do debug falhou, deixando os arquivos no diretório \"%s\"."
+msgstr "O processamento do relatório de depuração falhou, deixando os arquivos no diretório \"%s\"."
 
 #: ../src/common/log.cpp:699
 msgid "Program aborted."
