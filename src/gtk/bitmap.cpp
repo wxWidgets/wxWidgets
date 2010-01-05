@@ -14,7 +14,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/palette.h"
     #include "wx/icon.h"
     #include "wx/math.h"
     #include "wx/image.h"
@@ -178,9 +177,6 @@ public:
     int             m_width;
     int             m_height;
     int             m_bpp;
-#if wxUSE_PALETTE
-    wxPalette      *m_palette;
-#endif // wxUSE_PALETTE
 };
 
 wxBitmapRefData::wxBitmapRefData()
@@ -191,9 +187,6 @@ wxBitmapRefData::wxBitmapRefData()
     m_width = 0;
     m_height = 0;
     m_bpp = 0;
-#if wxUSE_PALETTE
-    m_palette = NULL;
-#endif // wxUSE_PALETTE
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -203,9 +196,6 @@ wxBitmapRefData::~wxBitmapRefData()
     if (m_pixbuf)
         g_object_unref (m_pixbuf);
     delete m_mask;
-#if wxUSE_PALETTE
-    delete m_palette;
-#endif // wxUSE_PALETTE
 }
 
 
@@ -666,9 +656,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
-    wxCHECK_MSG(IsOk(), NULL, wxT("invalid bitmap"));
-
-    return M_BMPDATA->m_palette;
+    return NULL;
 }
 
 void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
@@ -900,10 +888,6 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
         gdk_draw_drawable(newRef->m_mask->m_bitmap,
             gc, oldRef->m_mask->m_bitmap, 0, 0, 0, 0, -1, -1);
     }
-#if wxUSE_PALETTE
-    // implement this if SetPalette is ever implemented
-    wxASSERT(oldRef->m_palette == NULL);
-#endif
 
     return newRef;
 }
