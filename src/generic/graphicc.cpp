@@ -1040,8 +1040,8 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
 {
     wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
 
-    int bw = bmp.GetWidth();
-    int bh = bmp.GetHeight();
+    int bw = m_width = bmp.GetWidth();
+    int bh = m_height = bmp.GetHeight();
     wxBitmap bmpSource = bmp;  // we need a non-const instance
     m_buffer = new unsigned char[bw*bh*4];
     wxUint32* data = (wxUint32*)m_buffer;
