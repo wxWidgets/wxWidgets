@@ -277,21 +277,6 @@ bool wxApp::OnInitGui()
     return true;
 }
 
-GdkVisual *wxApp::GetGdkVisual()
-{
-    GdkVisual *visual = NULL;
-
-    XVisualInfo *xvi = (XVisualInfo *)GetXVisualInfo();
-    if ( xvi )
-        visual = gdkx_visual_get( xvi->visualid );
-    else
-        visual = gdk_drawable_get_visual( wxGetRootWindow()->window );
-
-    wxASSERT( visual );
-
-    return visual;
-}
-
 // use unusual names for the parameters to avoid conflict with wxApp::arg[cv]
 bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {

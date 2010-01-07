@@ -64,10 +64,6 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    // This returns the current visual: either that used by wxRootWindow
-    // or the XVisualInfo* for SGI.
-    GdkVisual      *GetGdkVisual();
-
     // check for pending events, without interference from our idle source
     bool EventsPending();
     bool DoIdle();
