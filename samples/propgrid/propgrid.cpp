@@ -1328,7 +1328,7 @@ void FormMain::PopulateWithStandardItems ()
     // an empty value cell, while help string is shown either in the
     // description text box, as a tool tip, or on the status bar.
     pg->SetPropertyHelpString("Height",
-        "This property uses attributes \"Units\" and \"InlineHelp\"." );
+        "This property uses attributes \"Units\" and \"Hint\"." );
 
     pg->Append( new wxIntProperty(wxT("Width"),wxPG_LABEL,640) );
     pg->SetPropertyAttribute(wxT("Width"), wxPG_ATTR_MIN, (long)10 );
@@ -1336,8 +1336,10 @@ void FormMain::PopulateWithStandardItems ()
     pg->SetPropertyAttribute(wxT("Width"), wxPG_ATTR_UNITS, wxT("Pixels") );
 
     pg->SetPropertyValueUnspecified(wxT("Width"));
-    pg->SetPropertyAttribute(wxT("Width"), wxPG_ATTR_INLINE_HELP, wxT("Enter new width for window") );
-    pg->SetPropertyHelpString(wxT("Width"), wxT("This property uses attributes \"Units\" and \"InlineHelp\".") );
+    pg->SetPropertyAttribute("Width", wxPG_ATTR_HINT,
+                             "Enter new width for window" );
+    pg->SetPropertyHelpString("Width",
+        "This property uses attributes \"Units\" and \"Hint\"." );
 
     pg->Append( new wxIntProperty(wxT("X"),wxPG_LABEL,10) );
     pg->SetPropertyAttribute(wxT("X"), wxPG_ATTR_UNITS, wxT("Pixels") );
