@@ -1456,12 +1456,16 @@ public:
     */
     virtual void RefreshChildren();
 
-    /** Special handling for attributes of this property.
+    /**
+        Reimplement this member function to add special handling for
+        attributes of this property.
 
-        If returns false, then the attribute will be automatically stored in
-        m_attributes.
+        @return Return @false to have the attribute automatically stored in
+                m_attributes. Default implementation simply does that and
+                nothing else.
 
-        Default implementation simply returns false.
+        @remarks To actually set property attribute values from the
+                 application, use wxPGProperty::SetAttribute() instead.
     */
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
