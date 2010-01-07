@@ -47,7 +47,7 @@
 #define wxPG_ATTR_HINT                      wxS("Hint")
 
 /**
-    @deprecated Use "Hint" (wxPG_ATTR_INLINE_HELP) instead.
+    @deprecated Use "Hint" (wxPG_ATTR_HINT) instead.
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
 
