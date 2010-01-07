@@ -287,6 +287,14 @@ private:
     void ClearFocusedItem();
     void SetFocusedItem(const wxTreeItemId& item);
 
+    // check if the given flags (taken from TV_HITTESTINFO structure)
+    // indicate a position "on item": this is less trivial than just checking
+    // for TVHT_ONITEM because we consider that points to the left and right of
+    // item text are also "on item" when wxTR_FULL_ROW_HIGHLIGHT is used as the
+    // item visually spans the entire breadth of the window then
+    bool MSWIsOnItem(unsigned flags) const;
+
+
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
 
