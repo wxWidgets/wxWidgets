@@ -557,7 +557,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 
 #if wxPG_COMPATIBILITY_1_4
 /**
-    @deprecated Use "Hint" (wxPG_ATTR_INLINE_HELP) instead.
+    @deprecated Use "Hint" (wxPG_ATTR_HINT) instead.
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
 #endif
