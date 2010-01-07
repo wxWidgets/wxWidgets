@@ -104,8 +104,7 @@ public:
     void SetHeight( int height );
     void SetWidth( int width );
     void SetDepth( int depth );
-    void SetPixmap( GdkPixmap *pixmap );
-    void SetPixbuf(GdkPixbuf* pixbuf, int depth = 0);
+    void SetPixbuf(GdkPixbuf* pixbuf);
 
     GdkPixmap *GetPixmap() const;
     bool HasPixmap() const;
@@ -127,6 +126,7 @@ protected:
     virtual wxGDIRefData* CloneGDIRefData(const wxGDIRefData* data) const;
 
 private:
+    void SetPixmap(GdkPixmap* pixmap);
 #if wxUSE_IMAGE
     // to be called from CreateFromImage only!
     bool CreateFromImageAsPixmap(const wxImage& image, int depth);
@@ -144,7 +144,6 @@ public:
     // (wxBitmap may keep same bitmap e.g. as both pixmap and pixbuf):
     void PurgeOtherRepresentations(Representation keep);
 
-private:
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
