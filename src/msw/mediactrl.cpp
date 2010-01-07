@@ -582,7 +582,7 @@ struct IMediaPlayer2 : public IMediaPlayer
 {
     STDMETHOD(get_DVD)(struct IMediaPlayerDvd __RPC_FAR *__RPC_FAR *ppdispatch) PURE;
     STDMETHOD(GetMediaParameter)(long EntryNum, BSTR bstrParameterName, BSTR __RPC_FAR *pbstrParameterValue) PURE;
-    STDMETHOD(GetMediaParameterName(long EntryNum, long Index, BSTR __RPC_FAR *pbstrParameterName) PURE;
+    STDMETHOD(GetMediaParameterName)(long EntryNum, long Index, BSTR __RPC_FAR *pbstrParameterName) PURE;
     STDMETHOD(get_EntryCount)(long __RPC_FAR *pNumberEntries) PURE;
     STDMETHOD(GetCurrentEntry)(long __RPC_FAR *pEntryNumber) PURE;
     STDMETHOD(SetCurrentEntry)(long EntryNumber) PURE;
@@ -725,7 +725,7 @@ struct INSPlay : public INSOPlay
     STDMETHOD(put_BaseURL)(BSTR pbstrBaseURL) PURE;
     STDMETHOD(get_DefaultFrame)(BSTR __RPC_FAR *pbstrDefaultFrame) PURE;
     STDMETHOD(put_DefaultFrame)(BSTR pbstrDefaultFrame) PURE;
-    STDMETHOD(AboutBox))(void) PURE;
+    STDMETHOD(AboutBox)(void) PURE;
     STDMETHOD(Cancel)(void) PURE;
     STDMETHOD(GetCodecInstalled)(long CodecNum, VARIANT_BOOL __RPC_FAR *pCodecInstalled) PURE;
     STDMETHOD(GetCodecDescription)(long CodecNum, BSTR __RPC_FAR *pbstrCodecDescription) PURE;
