@@ -629,42 +629,37 @@ bool wxBitmap::SaveFile( const wxString &name, wxBitmapType type, const wxPalett
     wxCHECK_MSG( IsOk(), false, wxT("invalid bitmap") );
 
 #if wxUSE_IMAGE
-    // Try to save the bitmap via wxImage handlers:
     wxImage image = ConvertToImage();
-    return image.Ok() && image.SaveFile(name, type);
-#else // !wxUSE_IMAGE
-    wxUnusedVar(name);
-    wxUnusedVar(type);
-
-    return false;
-#endif // wxUSE_IMAGE
+    if (image.IsOk() && image.SaveFile(name, type))
+        return true;
+#endif
+    const char* type_name = NULL;
+    switch (type)
+    {
+        case wxBITMAP_TYPE_BMP:  type_name = "bmp";  break;
+        case wxBITMAP_TYPE_ICO:  type_name = "ico";  break;
+        case wxBITMAP_TYPE_JPEG: type_name = "jpeg"; break;
+        case wxBITMAP_TYPE_PNG:  type_name = "png";  break;
+        default: break;
+    }
+    return type_name &&
+        gdk_pixbuf_save(GetPixbuf(), name.fn_str(), type_name, NULL, NULL);
 }
 
 bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 {
-    UnRef();
-
-    if (type == wxBITMAP_TYPE_XPM)
-    {
-        GdkBitmap *mask = NULL;
-        SetPixmap(gdk_pixmap_create_from_xpm(wxGetRootWindow()->window, &mask, NULL, name.fn_str()));
-        if (!M_BMPDATA)
-            return false;   // do not set the mask
-
-        if (mask)
-        {
-            M_BMPDATA->m_mask = new wxMask;
-            M_BMPDATA->m_mask->m_bitmap = mask;
-        }
-    }
 #if wxUSE_IMAGE
-    else // try if wxImage can load it
+    wxImage image;
+    if (image.LoadFile(name, type) && image.IsOk())
+        *this = wxBitmap(image);
+    else
+#endif
     {
-        wxImage image;
-        if (image.LoadFile(name, type) && image.Ok())
-            CreateFromImage(image, -1);
+        UnRef();
+        GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(name.fn_str(), NULL);
+        if (pixbuf)
+            SetPixbuf(pixbuf);
     }
-#endif // wxUSE_IMAGE
 
     return IsOk();
 }
