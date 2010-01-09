@@ -574,19 +574,6 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
 
             processed = true;
             break;
-
-        case WM_ERASEBKGND:
-            processed = true;
-
-            // we erase background ourselves
-            rc = true;
-            break;
-
-        case WM_SIZE:
-            // though we don't (usually) resize the MDI client to exactly fit
-            // the client area we need to pass this one to DefFrameProc to
-            // allow the children to show
-            break;
     }
 
     if ( !processed )
