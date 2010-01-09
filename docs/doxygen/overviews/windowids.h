@@ -26,15 +26,15 @@
 
 @section overview_windowids_intro Introduction
 
-Various contols and other parts of wxWidgets need an ID.  Sometimes the ID may
-be directly provided by the use or have a predefined value, such as
+Various controls and other parts of wxWidgets need an ID.  Sometimes the ID may
+be directly provided by the user or have a predefined value, such as
 @c wxID_OPEN. Often, however, the value of the ID is unimportant and is created
 automatically by calling wxWindow::NewControlId or by passing @c wxID_ANY as
 the ID of an object.
 
-There are two ways to generate an ID.  One way, is to start at a negative
+There are two ways to generate an ID.  One way is to start at a negative
 number, and for each new ID, return the next smallest number.  This is fine for
-systems that can used the full range of negative numbers for an ID, as this
+systems that can use the full range of negative numbers for IDs, as this
 provides more than enough IDs and it would take a very very long time to run
 out and wrap around.  However, some systems can not use the full range of the
 ID value. Windows, for example, can only use 16 bit IDs, and only has about
@@ -70,8 +70,8 @@ it is assigned to a wxWindowIDRef, then it will be unreserved automatically and
 will be considered free when the count is 0, and should NOT be manually
 unreserved.
 
-wxWindowIDRef can store both automatic IDs from wxWindow::NewControlId as well
-as normal IDs.  Reference counting is only done for the automatic IDs.  Also,
+wxWindowIDRef can store both automatic IDs from wxWindow::NewControlId and
+normal IDs.  Reference counting is only done for the automatic IDs.  Also,
 wxWindowIDRef has conversion operators that allow it to be treated just like a
 wxWindowID.
 

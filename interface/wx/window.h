@@ -68,7 +68,7 @@ enum wxWindowVariant
     @class wxWindow
 
     wxWindow is the base class for all windows and represents any visible object
-    om screen. All controls, top level windows and so on are windows. Sizers and
+    on screen. All controls, top level windows and so on are windows. Sizers and
     device contexts are not, however, as they don't appear on screen themselves.
 
     Please note that all children of the window will be deleted automatically by
@@ -172,8 +172,8 @@ enum wxWindowVariant
     @style{wxWS_EX_TRANSIENT}
            Don't use this window as an implicit parent for the other windows:
            this must be used with transient windows as otherwise there is the
-           risk of creating a dialog/frame with this window as a parent which
-           would lead to a crash if the parent is destroyed before the child.
+           risk of creating a dialog/frame with this window as a parent, which
+           would lead to a crash if the parent were destroyed before the child.
     @style{wxWS_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
@@ -322,7 +322,7 @@ public:
     virtual bool AcceptsFocusFromKeyboard() const;
 
      /**
-        Overridden to indicate wehter this window or one of its children accepts
+        Overridden to indicate whether this window or one of its children accepts
         focus. Usually it's the same as AcceptsFocus() but is overridden for
         container windows.
      */
@@ -439,7 +439,7 @@ public:
     wxWindow* GetGrandParent() const;
 
     /**
-        Returns the next window after this one among the parent children or @NULL
+        Returns the next window after this one among the parent's children or @NULL
         if this window is the last child.
 
         @since 2.8.8
@@ -454,7 +454,7 @@ public:
     wxWindow* GetParent() const;
 
     /**
-        Returns the previous window before this one among the parent children or @c
+        Returns the previous window before this one among the parent's children or @c
         @NULL if this window is the first child.
 
         @since 2.8.8
@@ -799,10 +799,10 @@ public:
     /**
         Merges the window's best size into the min size and returns the result.
         This is the value used by sizers to determine the appropriate
-        ammount of space to allocate for the widget.
+        amount of space to allocate for the widget.
 
-        This is the method called by any wxSizer when they query the size
-        of a certain window or control.
+        This is the method called by a wxSizer when it queries the size
+        of a window or control.
 
         @see GetBestSize(), SetInitialSize(), @ref overview_windowsizing
     */
@@ -1171,13 +1171,13 @@ public:
         Centres the window.
 
         @param direction
-            Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
+            Specifies the direction for the centring. May be wxHORIZONTAL, wxVERTICAL
             or wxBOTH. It may also include wxCENTRE_ON_SCREEN flag
-            if you want to center the window on the entire screen and not on its
+            if you want to centre the window on the entire screen and not on its
             parent window.
 
         @remarks If the window is a top level one (i.e. doesn't have a parent),
-                 it will be centered relative to the screen anyhow.
+                 it will be centred relative to the screen anyhow.
 
         @see Center()
     */
@@ -1187,10 +1187,10 @@ public:
         Centres the window on its parent. This is a more readable synonym for Centre().
 
         @param direction
-            Specifies the direction for the centering. May be wxHORIZONTAL, wxVERTICAL
+            Specifies the direction for the centring. May be wxHORIZONTAL, wxVERTICAL
             or wxBOTH.
 
-        @remarks This methods provides for a way to center top level windows over
+        @remarks This methods provides for a way to centre top level windows over
                  their parents instead of the entire screen.  If there
                  is no parent or if the window is not a top level
                  window, then behaviour is the same as Centre().
@@ -1434,12 +1434,12 @@ public:
     void Freeze();
 
     /**
-        Reenables window updating after a previous call to Freeze().
+        Re-enables window updating after a previous call to Freeze().
 
         To really thaw the control, it must be called exactly the same number
         of times as Freeze().
 
-        If the window has any children, they are recursively thawn too.
+        If the window has any children, they are recursively thawed too.
 
         @see wxWindowUpdateLocker, Freeze(), IsFrozen()
     */
@@ -1504,9 +1504,8 @@ public:
     /**
         Returns the foreground colour of the window.
 
-        @remarks The interpretation of foreground colour is open to
-                 interpretation according to the window class; it may be
-                 the text colour or other colour, or it may not be used at all.
+        @remarks The meaning of foreground colour varies according to the window class;
+                 it may be the text colour or other colour, or it may not be used at all.
 
         @see SetForegroundColour(), SetBackgroundColour(),
              GetBackgroundColour()
@@ -1517,7 +1516,7 @@ public:
         Gets the dimensions of the string as it would be drawn on the
         window with the currently selected font.
 
-        The text extent is returned in @a w and @a h pointers.
+        The text extent is returned in the @a w and @a h pointers.
 
         @param string
             String whose extent is to be measured.
@@ -1595,8 +1594,8 @@ public:
 
     /**
         Calling this method immediately repaints the invalidated area of the window and
-        all of its children recursively while this would usually only happen when the
-        flow of control returns to the event loop.
+        all of its children recursively (this normally only happens when the
+        flow of control returns to the event loop).
 
         Notice that this function doesn't invalidate any area of the window so
         nothing happens if nothing has been invalidated (i.e. marked as requiring
@@ -1611,7 +1610,7 @@ public:
         this method and SetOwnBackgroundColour().
 
         @param colour
-            The colour to be used as the background colour, pass
+            The colour to be used as the background colour; pass
             wxNullColour to reset to the default colour.
 
         @remarks The background colour is usually painted by the default
@@ -1639,9 +1638,9 @@ public:
 
         The default background style is wxBG_STYLE_ERASE which indicates that
         the window background may be erased in EVT_ERASE_BACKGROUND handler.
-        This is a safe compatibility default however you may want to change it
+        This is a safe, compatibility default; however you may want to change it
         to wxBG_STYLE_SYSTEM if you don't define any erase background event
-        handlers at all to avoid unnecessary generation of erase background
+        handlers at all, to avoid unnecessary generation of erase background
         events and always let system erase the background. And you should
         change the background style to wxBG_STYLE_PAINT if you define an
         EVT_PAINT handler which completely overwrites the window background as
@@ -1692,12 +1691,11 @@ public:
         this method and SetOwnForegroundColour().
 
         @param colour
-            The colour to be used as the foreground colour, pass
+            The colour to be used as the foreground colour; pass
             wxNullColour to reset to the default colour.
 
-        @remarks The interpretation of foreground colour is open to
-                 interpretation according to the window class; it may be
-                 the text colour or other colour, or it may not be used at all.
+        @remarks The meaning of foreground colour varies according to the window class;
+                 it may be the text colour or other colour, or it may not be used at all.
 
         @return @true if the colour was really changed, @false if it was already set
                 to this colour and nothing was done.
@@ -1738,7 +1736,7 @@ public:
 
     /**
         Return @true from here to allow the colours of this window to be changed by
-        InheritAttributes(), returning @false forbids inheriting them from the parent window.
+        InheritAttributes(). Returning @false forbids inheriting them from the parent window.
 
         The base class version returns @false, but this method is overridden in
         wxControl where it returns @true.
@@ -1747,7 +1745,7 @@ public:
 
     /**
         This function tells a window if it should use the system's "theme" code
-        to draw the windows' background instead if its own background drawing
+        to draw the windows' background instead of its own background drawing
         code. This does not always have any effect since the underlying platform
         obviously needs to support the notion of themes in user defined windows.
         One such platform is GTK+ where windows can have (very colourful) backgrounds
@@ -1823,7 +1821,7 @@ public:
         This is the same as writing @code GetEventHandler()->ProcessEvent(event);
         @endcode but more convenient. Notice that ProcessEvent() itself can't
         be called for wxWindow objects as it ignores the event handlers
-        associated with the window, use this function instead.
+        associated with the window; use this function instead.
     */
     bool ProcessWindowEvent(wxEvent& event);
 
@@ -2282,7 +2280,7 @@ public:
         Attach a tooltip to the window.
 
         wxToolTip pointer can be @NULL in the overload taking the pointer,
-        meaning to unset any existing tooltips, however UnsetToolTip() provides
+        meaning to unset any existing tooltips; however UnsetToolTip() provides
         a more readable alternative to this operation.
 
         Notice that these methods are always available, even if wxWidgets was
@@ -2351,7 +2349,7 @@ public:
         window, and returns control when the user has dismissed the menu.
 
         If a menu item is selected, the corresponding menu event is generated and will be
-        processed as usually. If the coordinates are not specified, current mouse
+        processed as usual. If coordinates are not specified, the current mouse
         cursor position is used.
 
         @a menu is the menu to pop up.
@@ -2445,7 +2443,7 @@ public:
         Returns the identifier of the window.
 
         @remarks Each window has an integer identifier. If the application
-                 has not provided one (or the default wxID_ANY) an unique
+                 has not provided one (or the default wxID_ANY) a unique
                  identifier with a negative value will be generated.
 
         @see SetId(), @ref overview_windowids
@@ -2612,9 +2610,9 @@ public:
     /**
         Returns true if this window is in process of being destroyed.
 
-        The top level windows are not deleted immediately but are rather
+        Top level windows are not deleted immediately but are rather
         scheduled for later destruction to give them time to process any
-        pending messages, see Destroy() description.
+        pending messages; see Destroy() description.
 
         This function returns @true if this window, or one of its parent
         windows, is scheduled for destruction and can be useful to avoid
@@ -2671,13 +2669,13 @@ public:
     //@{
 
     /**
-        Return the sizer that this window is a member of, if any, otherwise @NULL.
+        Returns the sizer of which this window is a member, if any, otherwise @NULL.
     */
     wxSizer* GetContainingSizer() const;
 
     /**
-        Return the sizer associated with the window by a previous call to
-        SetSizer() or @NULL.
+        Returns the sizer associated with the window by a previous call to
+        SetSizer(), or @NULL.
     */
     wxSizer* GetSizer() const;
 
@@ -2904,7 +2902,7 @@ public:
         This method should be overridden to return @true if this window has
         multiple pages. All standard class with multiple pages such as
         wxNotebook, wxListbook and wxTreebook already override it to return @true
-        and user-defined classes with similar behaviour should do it as well to
+        and user-defined classes with similar behaviour should also do so, to
         allow the library to handle such windows appropriately.
     */
     virtual bool HasMultiplePages() const;
@@ -3185,8 +3183,8 @@ public:
         @param count
             The number of sequential IDs to reserve.
 
-        @return Returns the ID or the first ID of the range, or wxID_NONE if the
-                specified number of identifiers couldn't be allocated.
+        @return Returns the ID or the first ID of the range (i.e. the most negative),
+                or wxID_NONE if the specified number of identifiers couldn't be allocated.
 
         @see UnreserveControlId(), wxIdManager,
              @ref overview_windowids
@@ -3257,7 +3255,7 @@ protected:
         itself.
 
         For convenience, a ProcessWindowEvent() method is provided as a synonym
-        for @code GetEventHandler()->ProcessEvent() @endcode.
+        for @code GetEventHandler()->ProcessEvent() @endcode
 
         Note that it's still possible to call these functions directly on the
         wxWindow object (e.g. casting it to wxEvtHandler) but doing that will
