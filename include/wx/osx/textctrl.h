@@ -69,17 +69,10 @@ public:
     virtual int GetNumberOfLines() const;
 
     virtual bool IsModified() const;
-    virtual bool IsEditable() const;
-
-    // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(long* from, long* to) const;
 
     // operations
     // ----------
 
-    // editing
-    virtual void Clear();
-    virtual void Remove(long from, long to);
 
     // sets/clears the dirty flag
     virtual void MarkDirty();
@@ -97,10 +90,6 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
-    // writing text inserts it at the current position;
-    // appending always inserts it at the end
-    virtual void WriteText(const wxString& text);
-
     // translate between the position (which is just an index into the textctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
@@ -109,30 +98,13 @@ public:
 
     virtual void ShowPosition(long pos);
 
-    // Clipboard operations
-    virtual void Copy();
+    // overrides so that we can send text updated events
     virtual void Cut();
     virtual void Paste();
-
-    virtual bool CanCopy() const;
-    virtual bool CanCut() const;
-    virtual bool CanPaste() const;
-
-    // Undo/redo
-    virtual void Undo();
-    virtual void Redo();
-
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
-
-    // Insertion point
-    virtual void SetInsertionPoint(long pos);
-    virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const;
-    virtual wxTextPos GetLastPosition() const;
-
-    virtual void SetSelection(long from, long to);
-    virtual void SetEditable(bool editable);
+    
+    virtual void WriteText(const wxString& text);
+    virtual void Clear();
+    virtual void Remove(long from, long to);
 
     // Implementation
     // --------------
@@ -168,14 +140,12 @@ public:
     virtual void MacSuperChangedPosition();
     virtual void MacCheckSpelling(bool check);
 
-    wxTextWidgetImpl * GetTextPeer() const;
+    virtual wxTextWidgetImpl * GetTextPeer() const;
 protected:
     // common part of all ctors
     void Init();
 
     virtual wxSize DoGetBestSize() const;
-
-    virtual wxString DoGetValue() const;
 
     bool  m_editable;
 

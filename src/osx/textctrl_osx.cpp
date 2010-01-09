@@ -163,16 +163,6 @@ void wxTextCtrl::MacCheckSpelling(bool check)
     GetTextPeer()->CheckSpelling(check);
 }
 
-wxString wxTextCtrl::DoGetValue() const
-{
-    return GetTextPeer()->GetStringValue() ;
-}
-
-void wxTextCtrl::GetSelection(long* from, long* to) const
-{
-    GetTextPeer()->GetSelection( from , to ) ;
-}
-
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
     m_maxLength = len ;
@@ -204,130 +194,9 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& style)
     return true ;
 }
 
-// Clipboard operations
-
-void wxTextCtrl::Copy()
-{
-    if (CanCopy())
-        GetTextPeer()->Copy() ;
-}
-
-void wxTextCtrl::Cut()
-{
-    if (CanCut())
-    {
-        GetTextPeer()->Cut() ;
-
-        SendTextUpdatedEvent();
-    }
-}
-
-void wxTextCtrl::Paste()
-{
-    if (CanPaste())
-    {
-        GetTextPeer()->Paste() ;
-
-        // TODO: eventually we should add setting the default style again
-        SendTextUpdatedEvent();
-    }
-}
-
-bool wxTextCtrl::CanCopy() const
-{
-    // Can copy if there's a selection
-    long from, to;
-    GetSelection( &from, &to );
-
-    return (from != to);
-}
-
-bool wxTextCtrl::CanCut() const
-{
-    if ( !IsEditable() )
-        return false;
-
-    // Can cut if there's a selection
-    long from, to;
-    GetSelection( &from, &to );
-
-    return (from != to);
-}
-
-bool wxTextCtrl::CanPaste() const
-{
-    if (!IsEditable())
-        return false;
-
-    return GetTextPeer()->CanPaste() ;
-}
-
-void wxTextCtrl::SetEditable(bool editable)
-{
-    if ( editable != m_editable )
-    {
-        m_editable = editable ;
-        GetTextPeer()->SetEditable( editable ) ;
-    }
-}
-
-void wxTextCtrl::SetInsertionPoint(long pos)
-{
-    SetSelection( pos , pos ) ;
-}
-
-void wxTextCtrl::SetInsertionPointEnd()
-{
-    long pos = GetLastPosition();
-    SetInsertionPoint( pos );
-}
-
-long wxTextCtrl::GetInsertionPoint() const
-{
-    long begin, end ;
-    GetSelection( &begin , &end ) ;
-
-    return begin ;
-}
-
-wxTextPos wxTextCtrl::GetLastPosition() const
-{
-    return GetTextPeer()->GetLastPosition() ;
-}
-
-void wxTextCtrl::Remove(long from, long to)
-{
-    GetTextPeer()->Remove( from , to ) ;
-    if ( m_triggerUpdateEvents )
-        SendTextUpdatedEvent();
-}
-
-void wxTextCtrl::SetSelection(long from, long to)
-{
-    GetTextPeer()->SetSelection( from , to ) ;
-}
-
-void wxTextCtrl::WriteText(const wxString& str)
-{
-    GetTextPeer()->WriteText( str ) ;
-    if ( m_triggerUpdateEvents )
-        SendTextUpdatedEvent();
-}
-
-void wxTextCtrl::Clear()
-{
-    GetTextPeer()->Clear() ;
-    SendTextUpdatedEvent();
-}
-
 bool wxTextCtrl::IsModified() const
 {
     return m_dirty;
-}
-
-bool wxTextCtrl::IsEditable() const
-{
-    return IsEnabled() && m_editable ;
 }
 
 bool wxTextCtrl::AcceptsFocus() const
@@ -386,38 +255,6 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     return GetTextPeer()->GetStyle(position, style);
 }
 
-// ----------------------------------------------------------------------------
-// Undo/redo
-// ----------------------------------------------------------------------------
-
-void wxTextCtrl::Undo()
-{
-    if (CanUndo())
-        GetTextPeer()->Undo() ;
-}
-
-void wxTextCtrl::Redo()
-{
-    if (CanRedo())
-        GetTextPeer()->Redo() ;
-}
-
-bool wxTextCtrl::CanUndo() const
-{
-    if ( !IsEditable() )
-        return false ;
-
-    return GetTextPeer()->CanUndo() ;
-}
-
-bool wxTextCtrl::CanRedo() const
-{
-    if ( !IsEditable() )
-        return false ;
-
-    return GetTextPeer()->CanRedo() ;
-}
-
 void wxTextCtrl::MarkDirty()
 {
     m_dirty = true;
@@ -458,10 +295,45 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     return GetTextPeer()->GetLineText(lineNo) ;
 }
 
-void wxTextCtrl::Command(wxCommandEvent & event)
+void wxTextCtrl::Remove(long from, long to)
 {
-    SetValue(event.GetString());
-    ProcessCommand(event);
+    wxTextEntry::Remove(from, to);
+    if ( m_triggerUpdateEvents )
+        SendTextUpdatedEvent();
+}
+
+void wxTextCtrl::WriteText(const wxString& str)
+{
+    wxTextEntry::WriteText( str ) ;
+    if ( m_triggerUpdateEvents )
+        SendTextUpdatedEvent();
+}
+
+void wxTextCtrl::Clear()
+{
+    wxTextEntry::Clear() ;
+    SendTextUpdatedEvent();
+}
+
+void wxTextCtrl::Cut()
+{
+    if (CanCut())
+    {
+        wxTextEntry::Cut() ;
+
+        SendTextUpdatedEvent();
+    }
+}
+
+void wxTextCtrl::Paste()
+{
+    if (CanPaste())
+    {
+        wxTextEntry::Paste();
+
+        // TODO: eventually we should add setting the default style again
+        SendTextUpdatedEvent();
+    }
 }
 
 void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
@@ -614,9 +486,17 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 #endif
 }
 
+void wxTextCtrl::Command(wxCommandEvent & event)
+{
+    SetValue(event.GetString());
+    ProcessCommand(event);
+}
+
 // ----------------------------------------------------------------------------
 // standard handlers for standard edit menu events
 // ----------------------------------------------------------------------------
+
+// CS: Context Menus only work with MLTE implementations or non-multiline HIViews at the moment
 
 void wxTextCtrl::OnCut(wxCommandEvent& WXUNUSED(event))
 {
@@ -694,8 +574,6 @@ void wxTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
     event.Enable(GetLastPosition() > 0);
 }
-
-// CS: Context Menus only work with MLTE implementations or non-multiline HIViews at the moment
 
 void wxTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {

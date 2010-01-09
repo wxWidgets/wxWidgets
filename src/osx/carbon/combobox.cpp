@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_COMBOBOX && !defined(wxOSX_USE_NATIVE_COMBOBOX)
+#if wxUSE_COMBOBOX && wxOSX_USE_CARBON
 
 #include "wx/combobox.h"
 
@@ -686,4 +686,12 @@ bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     return true ;
 }
 
-#endif // wxUSE_COMBOBOX && !defined(wxOSX_USE_NATIVE_COMBOBOX)
+wxTextWidgetImpl* wxComboBox::GetTextPeer() const
+{
+    if (m_text)
+        return m_text->GetTextPeer();
+    
+    return NULL;
+}
+
+#endif // wxUSE_COMBOBOX && wxOSX_USE_CARBON

@@ -248,6 +248,8 @@ private:
     };
 #elif defined(__WXGTK20__)
     #include "wx/gtk/textentry.h"
+#elif defined(__WXMAC__)
+    #include "wx/osx/textentry.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/textentry.h"
 #elif defined(__WXMOTIF__)

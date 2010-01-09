@@ -470,7 +470,7 @@ public :
                                     long style,
                                     long extraStyle);
 
-#ifdef wxOSX_USE_NATIVE_COMBOBOX
+#if wxOSX_USE_COCOA
     static wxWidgetImplType*    CreateComboBox( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
                                     wxWindowID id, 
@@ -610,6 +610,31 @@ public :
     virtual void CheckSpelling(bool WXUNUSED(check)) { }
     
     virtual wxSize GetBestSize() const { return wxDefaultSize; }
+};
+
+// common interface for all implementations
+class WXDLLIMPEXP_CORE wxComboWidgetImpl
+
+{
+public :
+    wxComboWidgetImpl() {}
+
+    virtual ~wxComboWidgetImpl() {}
+  
+    virtual int GetSelectedItem() const { return -1; };
+    virtual void SetSelectedItem(int WXUNUSED(item)) {};
+    
+    virtual int GetNumberOfItems() const { return -1; };
+    
+    virtual void InsertItem(int WXUNUSED(pos), const wxString& WXUNUSED(item)) {}
+    
+    virtual void RemoveItem(int WXUNUSED(pos)) {}
+    
+    virtual void Clear() {}
+    
+    virtual wxString GetStringAtIndex(int WXUNUSED(pos)) const { return wxEmptyString; }
+    
+    virtual int FindString(const wxString& WXUNUSED(text)) const { return -1; }
 };
 
 //

@@ -528,7 +528,7 @@ wxSize wxNSTextViewControl::GetBestSize() const
 
 // wxNSTextFieldControl
 
-wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+wxNSTextFieldControl::wxNSTextFieldControl( wxWindow *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
     m_textField = (NSTextField*) w;
     [m_textField setDelegate: w];

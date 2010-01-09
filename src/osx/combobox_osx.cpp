@@ -11,7 +11,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_COMBOBOX && defined(wxOSX_USE_NATIVE_COMBOBOX)
+#if wxUSE_COMBOBOX && wxOSX_USE_COCOA
 
 #include "wx/combobox.h"
 #include "wx/osx/private.h"
@@ -63,6 +63,12 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
         
+    if (style & wxCB_READONLY)
+        wxLogWarning("wxCB_READONLY style not supported by OS X Cocoa. Use wxChoice instead.");
+    
+    if (style & wxCB_SORT)
+        wxLogWarning("wxCB_SORT style not currently supported by OS X Cocoa.");
+        
     m_peer = wxWidgetImpl::CreateComboBox( this, parent, id, NULL, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
@@ -89,222 +95,108 @@ void wxComboBox::DelegateChoice( const wxString& value )
     SetStringSelection( value );
 }
 
-wxString wxComboBox::GetValue() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return wxEmptyString;
-}
-
-void wxComboBox::SetValue(const wxString& value)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-// Clipboard operations
-void wxComboBox::Copy()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::Cut()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::Paste()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::SetEditable(bool editable)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::SetInsertionPoint(long pos)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::SetInsertionPointEnd()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-long wxComboBox::GetInsertionPoint() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
-}
-
-wxTextPos wxComboBox::GetLastPosition() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
-}
-
-void wxComboBox::Replace(long from, long to, const wxString& value)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::Remove(long from, long to)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::SetSelection(long from, long to)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
 int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type)
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
+    const unsigned int numItems = items.GetCount();
+    for( unsigned int i = 0; i < numItems; ++i, ++pos )
+    {
+        unsigned int idx;
+
+        idx = pos;
+        GetComboPeer()->InsertItem( idx, items[i] );
+
+        if (idx > m_datas.GetCount())
+            m_datas.SetCount(idx);
+        m_datas.Insert( NULL, idx );
+        AssignNewItemClientData(idx, clientData, i, type);
+    }
+
+    m_peer->SetMaximum( GetCount() );
+
+    return pos - 1;
 }
 
+// ----------------------------------------------------------------------------
+// client data
+// ----------------------------------------------------------------------------
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxFAIL_MSG("Method Not Implemented.");
+    wxCHECK_RET( IsValid(n), wxT("wxChoice::DoSetItemClientData: invalid index") );
+
+    m_datas[n] = (char*)clientData ;
 }
 
-void* wxComboBox::DoGetItemClientData(unsigned int n) const
+void * wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return NULL;
+    wxCHECK_MSG( IsValid(n), NULL, wxT("wxChoice::DoGetClientData: invalid index") );
+
+    return (void *)m_datas[n];
 }
 
 unsigned int wxComboBox::GetCount() const 
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
+    return GetComboPeer()->GetNumberOfItems();
 }
 
 void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
-    wxFAIL_MSG("Method Not Implemented.");
+    GetComboPeer()->RemoveItem(n);
 }
 
 void wxComboBox::DoClear()
 {
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-int wxComboBox::GetSelection() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
+    GetComboPeer()->Clear();
+    SetValue(wxEmptyString);
 }
 
 void wxComboBox::GetSelection(long *from, long *to) const
 {
-    wxFAIL_MSG("Method Not Implemented.");
+    wxTextEntry::GetSelection(from, to);
+}
+    
+int wxComboBox::GetSelection() const
+{
+    return GetComboPeer()->GetSelectedItem();
 }
 
 void wxComboBox::SetSelection(int n)
 {
-    wxFAIL_MSG("Method Not Implemented.");
+    GetComboPeer()->SetSelectedItem(n);
+}
+
+void wxComboBox::SetSelection(long from, long to)
+{
+    wxTextEntry::SetSelection(from, to);
 }
 
 int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return 0;
+    if (!bCase)
+        wxLogWarning("wxComboBox::FindString on Mac doesn't currently support case insensitive search.");
+    
+    return GetComboPeer()->FindString(s);
 }
 
 wxString wxComboBox::GetString(unsigned int n) const
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return wxEmptyString;
+    return GetComboPeer()->GetStringAtIndex(n);
 }
 
 wxString wxComboBox::GetStringSelection() const
 {
-    wxFAIL_MSG("Method Not Implemented.");
-    return wxEmptyString;
+    return GetString(GetSelection());
 }
 
 void wxComboBox::SetString(unsigned int n, const wxString& s)
 {
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-bool wxComboBox::IsEditable() const
-{
-    return !HasFlag(wxCB_READONLY);
-}
-
-void wxComboBox::Undo()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::Redo()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::SelectAll()
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-bool wxComboBox::CanCopy() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return false;
-}
-
-bool wxComboBox::CanCut() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return false;
-}
-
-bool wxComboBox::CanPaste() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return false;
-}
-
-bool wxComboBox::CanUndo() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return false;
-}
-
-bool wxComboBox::CanRedo() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return false;
+    Delete(n);
+    Insert(s, n);
+    SetValue(s); // changing the item in the list won't update the display item
 }
 
 void wxComboBox::EnableTextChangedEvents(bool enable)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-void wxComboBox::WriteText(const wxString& text)
-{
-    wxFAIL_MSG("Method Not Implemented.");
-}
-
-wxString wxComboBox::DoGetValue() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return wxEmptyString;
-}
-
-wxClientDataType wxComboBox::GetClientDataType() const
-{
-    wxFAIL_MSG("Method Not Implemented.");
-    return wxClientData_None;
-}
-
-void wxComboBox::SetClientDataType(wxClientDataType clientDataItemsType)
 {
     wxFAIL_MSG("Method Not Implemented.");
 }
@@ -319,4 +211,14 @@ bool wxComboBox::OSXHandleClicked( double timestampsec )
     return true;
 }
 
-#endif // wxUSE_COMBOBOX && defined(wxOSX_USE_NATIVE_COMBOBOX)
+wxTextWidgetImpl* wxComboBox::GetTextPeer() const
+{
+    return dynamic_cast<wxTextWidgetImpl*> (m_peer);
+}
+
+wxComboWidgetImpl* wxComboBox::GetComboPeer() const
+{
+    return dynamic_cast<wxComboWidgetImpl*> (m_peer);
+}
+
+#endif // wxUSE_COMBOBOX && wxOSX_USE_COCOA
