@@ -269,13 +269,13 @@ baseipcserver$(EXEEXT): $(BASEIPCSERVER_OBJECTS)
 	$(__baseipcserver___mac_setfilecmd)
 
 ipcclient_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 ipcclient_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(srcdir)/client.cpp
 
 ipcserver_sample_rc.o: $(srcdir)/../../samples/sample.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0)  $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0)   --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include
 
 ipcserver_server.o: $(srcdir)/server.cpp
 	$(CXXC) -c -o $@ $(IPCSERVER_CXXFLAGS) $(srcdir)/server.cpp

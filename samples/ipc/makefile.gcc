@@ -22,9 +22,9 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 IPCCLIENT_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
 	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -33,9 +33,9 @@ IPCCLIENT_OBJECTS =  \
 	$(OBJS)\ipcclient_client.o
 IPCSERVER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
 	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -44,9 +44,9 @@ IPCSERVER_OBJECTS =  \
 	$(OBJS)\ipcserver_server.o
 BASEIPCCLIENT_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -54,9 +54,9 @@ BASEIPCCLIENT_OBJECTS =  \
 	$(OBJS)\baseipcclient_baseclient.o
 BASEIPCSERVER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) -DwxUSE_GUI=0 \
 	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -109,6 +109,9 @@ __WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p_0 = --define wxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p_0 = --define NDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_0 = --define wxNO_EXCEPTIONS
@@ -173,6 +176,9 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p = -DNDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -282,13 +288,13 @@ $(OBJS)\baseipcserver.exe: $(BASEIPCSERVER_OBJECTS)
 	$(CXX) -o $@ $(BASEIPCSERVER_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 $(OBJS)\ipcclient_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\ipcclient_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\ipcserver_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\ipcserver_server.o: ./server.cpp
 	$(CXX) -c -o $@ $(IPCSERVER_CXXFLAGS) $(CPPDEPS) $<

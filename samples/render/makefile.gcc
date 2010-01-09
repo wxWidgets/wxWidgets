@@ -23,19 +23,20 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 RENDER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	-I$(SETUPHDIR) -I.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall \
-	-I. $(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\samples -DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 RENDER_OBJECTS =  \
 	$(OBJS)\render_sample_rc.o \
 	$(OBJS)\render_render.o
 RENDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -DWXUSINGDLL $(__RTTIFLAG) \
 	$(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 RENDDLL_OBJECTS =  \
@@ -81,6 +82,9 @@ __WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p_1 = --define wxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p_1 = --define NDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p_1 = --define wxNO_EXCEPTIONS
@@ -139,6 +143,9 @@ __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p = -DNDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -244,7 +251,7 @@ $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_VERSI
 endif
 
 $(OBJS)\render_sample_rc.o: ./../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\render_render.o: ./render.cpp
 	$(CXX) -c -o $@ $(RENDER_CXXFLAGS) $(CPPDEPS) $<

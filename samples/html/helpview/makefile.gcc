@@ -22,9 +22,9 @@ SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 HELPVIEW_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include \
+	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include \
 	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -W -Wall -I. $(__DLLFLAG_p) \
 	-I.\..\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
@@ -96,6 +96,12 @@ __DEBUG_DEFINE_p = -DwxDEBUG_LEVEL=0
 endif
 ifeq ($(DEBUG_FLAG),0)
 __DEBUG_DEFINE_p_1 = --define wxDEBUG_LEVEL=0
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p = -DNDEBUG
+endif
+ifeq ($(BUILD),release)
+__NDEBUG_DEFINE_p_1 = --define NDEBUG
 endif
 ifeq ($(USE_EXCEPTIONS),0)
 __EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
@@ -236,7 +242,7 @@ $(OBJS)\helpview_helpview.o: ./helpview.cpp
 	$(CXX) -c -o $@ $(HELPVIEW_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\helpview_helpview_rc.o: ./helpview.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
 
 .PHONY: all clean data
 
