@@ -147,13 +147,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    bool  m_editable;
-
     // flag is set to true when the user edits the controls contents
     bool m_dirty;
-
-  // need to make this public because of the current implementation via callbacks
-    unsigned long  m_maxLength;
 
     virtual void EnableTextChangedEvents(bool enable)
     {

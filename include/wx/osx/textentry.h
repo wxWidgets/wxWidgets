@@ -32,7 +32,9 @@ class WXDLLIMPEXP_CORE wxTextEntry: public wxTextEntryBase
 {
 
 public:
-    wxTextEntry()
+    wxTextEntry() 
+        : m_editable(true),
+          m_maxLength(0)
     { }
     
     virtual ~wxTextEntry() {};
@@ -94,13 +96,6 @@ protected:
 
   // need to make this public because of the current implementation via callbacks
     unsigned long  m_maxLength;
-
-    virtual void EnableTextChangedEvents(bool enable)
-    {
-        m_triggerUpdateEvents = enable;
-    }
-
-    bool m_triggerUpdateEvents ;
 
 };
 

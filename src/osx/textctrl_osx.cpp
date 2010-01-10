@@ -75,10 +75,8 @@ END_EVENT_TABLE()
 
 void wxTextCtrl::Init()
 {
-    m_editable = true ;
     m_dirty = false;
 
-    m_maxLength = 0;
     m_privateContextMenu = NULL;
     m_triggerUpdateEvents = true ;
 }
