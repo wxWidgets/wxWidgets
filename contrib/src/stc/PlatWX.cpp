@@ -17,6 +17,9 @@
 #ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
 #endif
+#if wxUSE_GRAPHICS_CONTEXT
+#include "wx/dcgraph.h"
+#endif
 
 #include "Platform.h"
 #include "PlatWX.h"
@@ -44,6 +47,14 @@ wxColour wxColourFromCA(const ColourAllocated& ca) {
     return wxColour((unsigned char)cd.GetRed(),
                     (unsigned char)cd.GetGreen(),
                     (unsigned char)cd.GetBlue());
+}
+
+wxColour wxColourFromCAandAlpha(const ColourAllocated& ca, int alpha) {
+    ColourDesired cd(ca.AsLong());
+    return wxColour((unsigned char)cd.GetRed(),
+                    (unsigned char)cd.GetGreen(),
+                    (unsigned char)cd.GetBlue(),
+                    (unsigned char)alpha);
 }
 
 //----------------------------------------------------------------------
@@ -348,6 +359,16 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
                                  ColourAllocated fill, int alphaFill,
                                  ColourAllocated outline, int alphaOutline,
                                  int /*flags*/) {
+#if wxUSE_GRAPHICS_CONTEXT
+    wxGCDC dc(*(wxMemoryDC*)hdc);
+    wxColour penColour(wxColourFromCAandAlpha(outline, alphaOutline));
+    wxColour brushColour(wxColourFromCAandAlpha(fill, alphaFill));
+    dc.SetPen(wxPen(penColour));
+    dc.SetBrush(wxBrush(brushColour));
+    dc.DrawRoundedRectangle(wxRectFromPRectangle(rc), cornerSize);
+    return;
+#else
+
 #ifdef wxHAVE_RAW_BITMAP
 
     // TODO:  do something with cornerSize
@@ -416,6 +437,7 @@ void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize,
     wxUnusedVar(alphaFill);
     wxUnusedVar(alphaOutline);
     RectangleDraw(rc, outline, fill);
+#endif
 #endif
 }
 
