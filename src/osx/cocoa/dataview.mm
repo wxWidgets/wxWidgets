@@ -21,8 +21,8 @@
     #include "wx/utils.h"
 #endif
 
-#include "wx/osx/cocoa/dataview.h"
 #include "wx/osx/private.h"
+#include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 
 // ============================================================================
@@ -603,6 +603,7 @@ outlineView:(NSOutlineView*)outlineView
         ::CFRelease(osxData);
         delete dataObjects;
     }
+    return dragSuccessful;
 }
 
 -(id) outlineView:(NSOutlineView*)outlineView
@@ -705,7 +706,7 @@ outlineView:(NSOutlineView*)outlineView
             sortingColumnPtr:dvc->GetColumn([[newDescriptor key] intValue])
             ascending:[newDescriptor ascending]] autorelease]];
     }
-    [[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
+    [(wxCocoaOutlineDataSource*)[outlineView dataSource] setSortDescriptors:wxSortDescriptors];
 
     // send first the event to wxWidgets that the sorting has changed so that
     // the program can do special actions before the sorting actually starts:

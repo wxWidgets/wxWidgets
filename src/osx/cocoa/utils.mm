@@ -79,7 +79,7 @@ void wxMacWakeUp()
 
 #if wxUSE_GUI
 
-@interface wxNSAppController : NSObject
+@interface wxNSAppController : NSObject wxOSX_10_6_AND_LATER(<NSApplicationDelegate>)
 {
 }
 

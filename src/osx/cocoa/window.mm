@@ -40,7 +40,7 @@ NSView* GetViewFromResponder( NSResponder* responder )
     NSView* view = nil;
     if ( [responder isKindOfClass:[NSTextView class]] )
     {
-        NSView* delegate =  [(NSTextView*)responder delegate];
+        NSView* delegate = (NSView*) [(NSTextView*)responder delegate];
         if ( [delegate isKindOfClass:[NSTextField class] ] )
             view = delegate;
         else

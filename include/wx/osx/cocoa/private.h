@@ -287,7 +287,7 @@ protected :
 
     @end
 
-    @interface wxNSTextField : NSTextField
+    @interface wxNSTextField : NSTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)
     {
         wxNSTextFieldEditor* fieldEditor;
     }
@@ -297,7 +297,7 @@ protected :
 
     @end
 
-    @interface wxNSSecureTextField : NSSecureTextField
+    @interface wxNSSecureTextField : NSSecureTextField wxOSX_10_6_AND_LATER(<NSTextFieldDelegate>)
     {
     }
 

@@ -194,7 +194,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 // controller
 //
 
-@interface wxNonOwnedWindowController : NSObject
+@interface wxNonOwnedWindowController : NSObject wxOSX_10_6_AND_LATER(<NSWindowDelegate>)
 {
 }
 

@@ -250,7 +250,7 @@ private:
 // owned by the set. Furthermore, children of the last parent are stored
 // in a linear list.
 //
-@interface wxCocoaOutlineDataSource : NSObject
+@interface wxCocoaOutlineDataSource : NSObject wxOSX_10_6_AND_LATER(<NSOutlineViewDataSource>)
 {
     // descriptors specifying the sorting (currently the array only holds one
     // object only)
@@ -398,7 +398,7 @@ private:
 // wxCocoaOutlineView
 // ============================================================================
 
-@interface wxCocoaOutlineView : NSOutlineView
+@interface wxCocoaOutlineView : NSOutlineView wxOSX_10_6_AND_LATER(<NSOutlineViewDelegate>)
 {
 @private
     // column and row of the cell being edited or -1 if none

@@ -30,7 +30,7 @@
 // controller
 //
 
-@interface wxTabViewController : NSObject
+@interface wxTabViewController : NSObject wxOSX_10_6_AND_LATER(<NSTabViewDelegate>)
 {
 }
 

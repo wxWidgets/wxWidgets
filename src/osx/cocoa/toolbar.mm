@@ -269,7 +269,7 @@ private:
 @end
 
 
-@interface wxNSToolbarDelegate : NSObject
+@interface wxNSToolbarDelegate : NSObject wxOSX_10_6_AND_LATER(<NSToolbarDelegate>)
 {
 }
 
