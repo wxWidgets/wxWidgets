@@ -3050,7 +3050,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
             AC_CHECK_HEADER(png.h,,, [ ])
 
             if test "$ac_cv_header_png_h" = "yes"; then
-                AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng -lz", , [-lz -lm])
+                AC_CHECK_LIB(png, png_sig_cmp, PNG_LINK=" -lpng -lz", , [-lz -lm])
             fi
 
             if test "x$PNG_LINK" = "x" ; then
