@@ -2417,6 +2417,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/statusbr.h
     wx/osx/taskbarosx.h
     wx/osx/textctrl.h
+    wx/osx/textentry.h
     wx/osx/tglbtn.h
     wx/osx/toolbar.h
     wx/osx/tooltip.h
