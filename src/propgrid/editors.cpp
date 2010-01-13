@@ -212,7 +212,7 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
                                        wxWindow* ctrl,
                                        const wxPGCell& cell,
                                        const wxPGCell& oCell,
-                                       bool WXUNUSED(unspecified) ) const
+                                       bool unspecified ) const
 {
     // Get old editor appearance
     wxTextCtrl* tc = NULL;
@@ -301,7 +301,8 @@ void wxPGEditor::SetControlAppearance( wxPropertyGrid* pg,
     }
 
     // Also call the old SetValueToUnspecified()
-    SetValueToUnspecified(property, ctrl);
+    if ( unspecified )
+        SetValueToUnspecified(property, ctrl);
 }
 
 void wxPGEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property),
