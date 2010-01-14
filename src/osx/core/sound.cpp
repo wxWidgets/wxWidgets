@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/carbon/sound.cpp
-// Purpose:     wxSound class implementation: optional
-// Author:      Ryan Norton
+// Name:        src/osx/core/sound.cpp
+// Purpose:     wxSound class implementation using AudioToolbox
+// Author:      Stefan Csomor
 // Modified by: Stefan Csomor
-// Created:     1998-01-01
+// Created:     2009-01-01
 // RCS-ID:      $Id: sound.cpp 61475 2009-07-20 16:47:54Z VZ $
-// Copyright:   (c) Ryan Norton
+// Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -112,7 +112,7 @@ bool wxOSXAudioToolboxSoundData::Play(unsigned flags)
     wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
 
     AudioServicesCreateSystemSoundID(url, &m_soundID);
-    AudioServicesAddSystemSoundCompletion( m_soundID, NULL, NULL, wxOSXAudioToolboxSoundData::CompletionCallback, (void *) this );
+    AudioServicesAddSystemSoundCompletion( m_soundID, CFRunLoopGetCurrent(), NULL, wxOSXAudioToolboxSoundData::CompletionCallback, (void *) this );
 
     bool sync = !(flags & wxSOUND_ASYNC);
 
