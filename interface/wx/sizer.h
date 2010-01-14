@@ -1460,21 +1460,7 @@ public:
     /**
         wxFlexGridSizer constructors.
 
-        Usually only the number of columns in the flex grid sizer needs to be
-        specified using @a cols argument. The number of rows will be deduced
-        automatically depending on the number of the elements added to the
-        sizer.
-
-        If a constructor form with @a rows parameter is used (and the value of
-        @a rows argument is not zero, meaning "unspecified") the sizer will
-        check that no more than @c cols*rows elements are added to it, i.e.
-        that no more than the given number of @a rows is used. Adding less than
-        maximally allowed number of items is not an error however.
-
-        The @a gap (or @a vgap and @a hgap, which correspond to the height and
-        width of the wxSize object) argument defines the size of the padding
-        between the rows (its vertical component, or @a vgap) and columns
-        (its horizontal component, or @a hgap), in pixels.
+        Please see wxGridSizer::wxGridSizer documentation.
 
         @since 2.9.1 (except for the four argument overload)
     */
@@ -1617,17 +1603,26 @@ public:
     /**
         wxGridSizer constructors.
 
-        Usually only the number of columns in the grid sizer needs to be
+        Usually only the number of columns in the flex grid sizer needs to be
         specified using @a cols argument. The number of rows will be deduced
         automatically depending on the number of the elements added to the
-        sizer. If the number of @a rows is explicitly specified (and not zero),
-        the sizer will check that it no more than @code cols*rows @endcode
-        elements are added to it.
+        sizer.
 
-        The @a gap (or @a vgap and @a hgap, which correspond to @c y and @c x
-        fields of the wxSize object) argument defines the size of the padding
-        between the grid rows (its vertical component, or @a vgap) and columns
+        If a constructor form with @a rows parameter is used (and the value of
+        @a rows argument is not zero, meaning "unspecified") the sizer will
+        check that no more than @c cols*rows elements are added to it, i.e.
+        that no more than the given number of @a rows is used. Adding less than
+        maximally allowed number of items is not an error however.
+
+        Finally, it is also possible to specify the number of rows and use 0
+        for @a cols. In this case, the sizer will use the given fixed number of
+        rows and as many columns as necessary.
+
+        The @a gap (or @a vgap and @a hgap, which correspond to the height and
+        width of the wxSize object) argument defines the size of the padding
+        between the rows (its vertical component, or @a vgap) and columns
         (its horizontal component, or @a hgap), in pixels.
+
 
         @since 2.9.1 (except for the four argument overload)
     */
