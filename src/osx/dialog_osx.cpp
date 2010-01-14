@@ -138,7 +138,7 @@ int wxDialog::ShowModal()
     return GetReturnCode();
 }
 
-// NB: this function (surprizingly) may be called for both modal and modeless
+// NB: this function (surprisingly) may be called for both modal and modeless
 //     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {

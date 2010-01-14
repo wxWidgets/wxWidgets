@@ -2338,7 +2338,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             // combinations which are always processed)
             LONG lDlgCode = ::SendMessage(msg->hwnd, WM_GETDLGCODE, 0, 0);
 
-            // surprizingly, DLGC_WANTALLKEYS bit mask doesn't contain the
+            // surprisingly, DLGC_WANTALLKEYS bit mask doesn't contain the
             // DLGC_WANTTAB nor DLGC_WANTARROWS bits although, logically,
             // it, of course, implies them
             if ( lDlgCode & DLGC_WANTALLKEYS )

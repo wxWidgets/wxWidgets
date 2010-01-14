@@ -2454,7 +2454,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // wrap to the beginning if necessary
                         if ( currentPos == maxPos )
                         {
-                            // somewhat surprizingly, LVFI_WRAP isn't set in
+                            // somewhat surprisingly, LVFI_WRAP isn't set in
                             // flags but we still should wrap
                             currentPos = 0;
                         }

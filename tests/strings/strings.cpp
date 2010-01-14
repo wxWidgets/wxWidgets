@@ -567,7 +567,7 @@ static const struct ToLongData
     { wxT("--1"), 0, Number_Invalid },
 
     { wxT("-1"), -1, Number_Signed | Number_Long },
-    // this is surprizing but consistent with strtoul() behaviour
+    // this is surprising but consistent with strtoul() behaviour
     { wxT("-1"), ULONG_MAX, Number_Unsigned | Number_Long },
 
     // this must overflow, even with 64 bit long

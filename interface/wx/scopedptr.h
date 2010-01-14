@@ -20,7 +20,7 @@
     deleted when the smart pointer goes out of scope. This class is different from
     the @c std::auto_ptr<> in so far as it doesn't provide copy constructor
     nor assignment operator. This limits what you can do with it but is much less
-    surprizing than the "destructive copy" behaviour of the standard class.
+    surprising than the "destructive copy" behaviour of the standard class.
 
     @b Example:
 
