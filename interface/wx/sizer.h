@@ -1463,9 +1463,13 @@ public:
         Usually only the number of columns in the flex grid sizer needs to be
         specified using @a cols argument. The number of rows will be deduced
         automatically depending on the number of the elements added to the
-        sizer. If the number of @a rows is explicitly specified (and not zero),
-        the sizer will check that it no more than @code cols*rows @endcode
-        elements are added to it.
+        sizer.
+
+        If a constructor form with @a rows parameter is used (and the value of
+        @a rows argument is not zero, meaning "unspecified") the sizer will
+        check that no more than @c cols*rows elements are added to it, i.e.
+        that no more than the given number of @a rows is used. Adding less than
+        maximally allowed number of items is not an error however.
 
         The @a gap (or @a vgap and @a hgap, which correspond to the height and
         width of the wxSize object) argument defines the size of the padding
