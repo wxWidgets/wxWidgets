@@ -539,6 +539,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     {
         gtk_window_set_keep_above(GTK_WINDOW(m_widget), TRUE);
     }
+    if (style & wxMAXIMIZE)
+        gtk_window_maximize(GTK_WINDOW(m_widget));
 
 #if 0
     if (!name.empty())
@@ -1406,7 +1408,7 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 bool wxTopLevelWindowGTK::CanSetTransparent()
 {
     // allow to override automatic detection as it's far from perfect
-    static const wxChar *SYSOPT_TRANSPARENT = wxT("gtk.tlw.can-set-transparent");
+    const wxString SYSOPT_TRANSPARENT = "gtk.tlw.can-set-transparent";
     if ( wxSystemOptions::HasOption(SYSOPT_TRANSPARENT) )
     {
         return wxSystemOptions::GetOptionInt(SYSOPT_TRANSPARENT) != 0;
