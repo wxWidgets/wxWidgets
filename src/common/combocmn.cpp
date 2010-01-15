@@ -1621,12 +1621,12 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     {
         int keycode = event.GetKeyCode();
 
-        if ( GetParent()->HasFlag(wxTAB_TRAVERSAL) &&
+        wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
+
+        if ( mainCtrl->GetParent()->HasFlag(wxTAB_TRAVERSAL) &&
              keycode == WXK_TAB )
         {
             wxNavigationKeyEvent evt;
-
-            wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
 
             evt.SetFlags(wxNavigationKeyEvent::FromTab|
                          (!event.ShiftDown() ? wxNavigationKeyEvent::IsForward
