@@ -1775,9 +1775,13 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     }
     else // no popup
     {
-        if ( GetParent()->HasFlag(wxTAB_TRAVERSAL) &&
-             HandleAsNavigationKey(event) )
-            return;
+        wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
+
+        if ( mainCtrl->GetParent()->HasFlag(wxTAB_TRAVERSAL) )
+        {
+            if ( mainCtrl->HandleAsNavigationKey(event) )
+                return;
+        }
 
         if ( IsKeyPopupToggle(event) )
         {
@@ -2022,7 +2026,8 @@ void wxComboCtrlBase::ShowPopup()
     //     that if transient popup is open, then tab traversal is to be ignored.
     //     However, I think this code would still be needed for cases where
     //     transient popup doesn't work yet (wxWinCE?).
-    wxWindow* parent = GetParent();
+    wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
+    wxWindow* parent = mainCtrl->GetParent();
     int parentFlags = parent->GetWindowStyle();
     if ( parentFlags & wxTAB_TRAVERSAL )
     {
