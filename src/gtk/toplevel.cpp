@@ -561,6 +561,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif
 
+    if (style & wxMAXIMIZE)
+        gtk_window_maximize(GTK_WINDOW(m_widget));
+
 #if 0
     if (!name.empty())
         gtk_window_set_role( GTK_WINDOW(m_widget), wxGTK_CONV( name ) );
