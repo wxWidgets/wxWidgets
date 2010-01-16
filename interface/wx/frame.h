@@ -49,7 +49,7 @@
     @style{wxMINIMIZE_BOX}
            Displays a minimize box on the frame.
     @style{wxMAXIMIZE}
-           Displays the frame maximized. Windows only.
+           Displays the frame maximized. Windows and GTK+ only.
     @style{wxMAXIMIZE_BOX}
            Displays a maximize box on the frame.
     @style{wxCLOSE_BOX}
