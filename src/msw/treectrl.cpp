@@ -1667,6 +1667,12 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
             return;
         }
 
+        if ( item == m_htSelStart )
+            m_htSelStart.Unset();
+
+        if ( item == m_htClickedItem )
+            m_htClickedItem.Unset();
+
         if ( next.IsOk() )
         {
             wxTreeEvent changingEvent(wxEVT_COMMAND_TREE_SEL_CHANGING, this, next);
@@ -1720,6 +1726,10 @@ void wxTreeCtrl::DeleteAllItems()
 {
     // unlock tree selections on vista for the duration of this call
     TreeItemUnlocker unlock_all;
+
+    // invalidate all the items we store as they're going to become invalid
+    m_htSelStart =
+    m_htClickedItem = wxTreeItemId();
 
     // delete the "virtual" root item.
     if ( GET_VIRTUAL_ROOT() )
