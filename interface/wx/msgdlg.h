@@ -53,6 +53,9 @@
     @style{wxSTAY_ON_TOP}
         Makes the message box stay on top of all other windows and not only
         just its parent (currently implemented only under MSW and GTK).
+    @style{wxCENTRE}
+        Centre the message box on its parent or on the screen if parent is not
+        specified (currently only implemented under MSW).
     @endStyleTable
 
     @library{wxcore}
