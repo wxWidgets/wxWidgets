@@ -1012,6 +1012,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     // set background
     dc.SetBackground(wxBrush(wxT("white"), wxSOLID));
     dc.Clear();
+    dc.SetFont(m_font);
 
     // one text line height
     wxCoord hLine = dc.GetCharHeight();
@@ -1030,18 +1031,19 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.DrawText(fontInfo, x, y);
     y += hLine;
 
-    fontInfo.Printf(wxT("Size: %d points, encoding: %s"),
+    fontInfo.Printf(wxT("Size: %d points or %d pixels; %d*%d average char size"),
                     m_font.GetPointSize(),
-                    wxFontMapper::
-                        GetEncodingDescription(m_font.GetEncoding()).c_str());
+                    m_font.GetPixelSize().y,
+                    dc.GetCharWidth(), dc.GetCharHeight());
 
     dc.DrawText(fontInfo, x, y);
     y += hLine;
 
-    fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s"),
+    fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s, encoding: %s"),
                     m_font.GetStyleString().c_str(),
                     m_font.GetWeightString().c_str(),
-                    m_font.IsFixedWidth() ? wxT("yes") : wxT("no"));
+                    m_font.IsFixedWidth() ? wxT("yes") : wxT("no"),
+                    wxFontMapper::GetEncodingDescription(m_font.GetEncoding()));
 
     dc.DrawText(fontInfo, x, y);
     y += hLine;
@@ -1062,7 +1064,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     y += hLine;
 
     // prepare to draw the font
-    dc.SetFont(m_font);
     dc.SetTextForeground(m_colour);
 
     // the size of one cell (Normally biggest char + small margin)
