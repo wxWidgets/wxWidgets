@@ -107,7 +107,8 @@ bool wxFSWatcherImplMSW::DoAdd(wxSharedPtr<wxFSWatchEntryMSW> watch)
     return m_iocp.Add(watch);
 }
 
-bool wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> watch)
+bool
+wxFSWatcherImplMSW::DoRemove(wxSharedPtr<wxFSWatchEntryMSW> WXUNUSED(watch))
 {
     return true;
 }
