@@ -735,6 +735,11 @@ public:
 
     virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
 
+#ifdef __WXOSX__
+    // TODO change to better condition
+    using wxSizer::Insert;
+#endif
+
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 
