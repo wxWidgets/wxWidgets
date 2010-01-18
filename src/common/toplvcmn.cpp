@@ -226,7 +226,10 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 {
     // on some platforms centering top level windows is impossible
     // because they are always maximized by guidelines or limitations
-    if(IsAlwaysMaximized())
+    //
+    // and centering a maximized window doesn't make sense as its position
+    // can't change
+    if ( IsAlwaysMaximized() || IsMaximized() )
         return;
 
     // we need the display rect anyhow so store it first: notice that we should
@@ -248,24 +251,18 @@ void wxTopLevelWindowBase::DoCentre(int dir)
         // parent frame under Mac but could happen elsewhere too if the frame
         // was hidden/moved away for some reason), don't use it as otherwise
         // this window wouldn't be visible at all
-        if ( !rectDisplay.Contains(rectParent.GetTopLeft()) &&
-                !rectParent.Contains(rectParent.GetBottomRight()) )
+        if ( !rectParent.Intersects(rectDisplay) )
         {
-            // this is enough to make IsEmpty() test below pass
-            rectParent.width = 0;
+            // just centre on screen then
+            rectParent = rectDisplay;
         }
     }
-
-    if ( rectParent.IsEmpty() )
+    else
     {
         // we were explicitly asked to centre this window on the entire screen
         // or if we have no parent anyhow and so can't centre on it
         rectParent = rectDisplay;
     }
-
-    // centering maximized window on screen is no-op
-    if((rectParent == rectDisplay) && IsMaximized())
-        return;
 
     if ( !(dir & wxBOTH) )
         dir |= wxBOTH; // if neither is specified, center in both directions
