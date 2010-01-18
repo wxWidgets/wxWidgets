@@ -16,7 +16,9 @@
  *  for wxWidgets are under the wxWidgets licence, see README for details.
  */
 
+#ifndef CONST
 #define CONST const
+#endif
 
 /* ASCII character-name table */
 
