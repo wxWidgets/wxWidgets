@@ -478,8 +478,8 @@ void wxHIDKeyboard::BuildCookies(CFArrayRef Array)
 void wxHIDKeyboard::DoBuildCookies(CFArrayRef Array)
 {
     //Now go through each possible cookie
-    int i,
-        nUsage;
+    int i;
+    long nUsage;
 //    bool bEOTriggered = false;
     for (i = 0; i < CFArrayGetCount(Array); ++i)
     {
