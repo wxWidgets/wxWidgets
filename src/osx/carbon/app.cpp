@@ -513,7 +513,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
             GetMenuItemRefCon( command.menu.menuRef , command.menu.menuItemIndex , &refCon ) ;
             itemMenu = wxFindMenuFromMacMenu( command.menu.menuRef ) ;
             if ( itemMenu != NULL && refCon != 0)
-                item = ((wxMenuItemImpl*) refCon)->GetWXPeer() ;
+                item = (wxMenuItem*) refCon;
         }
     }
 #endif

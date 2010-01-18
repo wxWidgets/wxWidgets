@@ -151,7 +151,7 @@ public :
     {
         m_parentMenuRef = parentMenuRef;
         if ( m_parentMenuRef && index > 0 )
-            SetMenuItemRefCon( m_parentMenuRef, index, (URefCon) this );
+            SetMenuItemRefCon( m_parentMenuRef, index, (URefCon) m_peer );
     }
 
     MenuItemIndex FindMenuItemIndex()
@@ -163,7 +163,7 @@ public :
             {
                 URefCon storedRef = 0;
                 GetMenuItemRefCon(m_parentMenuRef, i, &storedRef );
-                if ( storedRef == (URefCon) this )
+                if ( storedRef == (URefCon) m_peer )
                 {
                     hit = i;
                     break;
