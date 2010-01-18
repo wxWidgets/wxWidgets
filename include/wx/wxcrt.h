@@ -987,4 +987,6 @@ wxDEPRECATED( inline int wxIsctrl(const wxUniChar& c) );
 inline int wxIsctrl(const wxUniChar& c) { return wxIscntrl(c); }
 #endif // WXWIN_COMPATIBILITY_2_8
 
+inline bool wxIsascii(const wxUniChar& c) { return c.IsAscii(); }
+
 #endif /* _WX_WXCRT_H_ */

@@ -94,8 +94,8 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
         const wxAcceleratorEntry& entry = entries[i];
 
         int keycode = entry.GetKeyCode();
-        if ( isascii(keycode) )
-            keycode = toupper(keycode);
+        if ( wxIsascii(keycode) )
+            keycode = wxToupper(keycode);
 
         M_ACCELDATA->m_accels.Append(new wxAcceleratorEntry(entry.GetFlags(),
                                                             keycode,

@@ -1027,13 +1027,8 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
     if ( wxGridCellEditor::IsAcceptedKey(event) )
     {
         const int keycode = event.GetKeyCode();
-        if ( isascii(keycode) )
+        if ( wxIsascii(keycode) )
         {
-            char tmpbuf[2];
-            tmpbuf[0] = (char) keycode;
-            tmpbuf[1] = '\0';
-            wxString strbuf(tmpbuf, *wxConvCurrent);
-
 #if wxUSE_INTL
             const wxString decimalPoint =
                 wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER);

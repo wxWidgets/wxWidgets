@@ -172,7 +172,7 @@ bool wxExtHelpController::ParseMapFileLine(const wxString& line)
     const wxChar *p = line.c_str();
 
     // skip whitespace
-    while ( isascii(*p) && isspace(*p) )
+    while ( isascii(*p) && wxIsspace(*p) )
         p++;
 
     // skip empty lines and comments
@@ -187,16 +187,16 @@ bool wxExtHelpController::ParseMapFileLine(const wxString& line)
         return false;
 
     p = end;
-    while ( isascii(*p) && isspace(*p) )
+    while ( isascii(*p) && wxIsspace(*p) )
         p++;
 
     // next should be the URL
     wxString url;
     url.reserve(line.length());
-    while ( isascii(*p) && !isspace(*p) )
+    while ( isascii(*p) && !wxIsspace(*p) )
         url += *p++;
 
-    while ( isascii(*p) && isspace(*p) )
+    while ( isascii(*p) && wxIsspace(*p) )
         p++;
 
     // and finally the optional description of the entry after comment
@@ -204,7 +204,7 @@ bool wxExtHelpController::ParseMapFileLine(const wxString& line)
     if ( *p == WXEXTHELP_COMMENTCHAR )
     {
         p++;
-        while ( isascii(*p) && isspace(*p) )
+        while ( isascii(*p) && wxIsspace(*p) )
             p++;
         doc = p;
     }

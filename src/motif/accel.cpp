@@ -108,8 +108,8 @@ bool wxAcceleratorEntry::MatchesEvent(const wxKeyEvent& event) const
     bool accShiftDown = ((GetFlags() & wxACCEL_SHIFT) == wxACCEL_SHIFT);
     int  accKeyCode = GetKeyCode();
     int  accKeyCode2 = GetKeyCode();
-    if (isascii(accKeyCode2))
-        accKeyCode2 = tolower(accKeyCode2);
+    if (wxIsascii(accKeyCode2))
+        accKeyCode2 = wxTolower(accKeyCode2);
 
     return ((eventAltDown == accAltDown) && (eventCtrlDown == accCtrlDown) &&
         (eventShiftDown == accShiftDown) &&

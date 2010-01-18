@@ -387,7 +387,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         XmTextVerifyCallbackStruct *textStruct =
             (XmTextVerifyCallbackStruct *) m_tempCallbackStruct;
         textStruct->doit = True;
-        if (isascii(event.m_keyCode) && (textStruct->text->length == 1))
+        if (wxIsascii(event.m_keyCode) && (textStruct->text->length == 1))
         {
             textStruct->text->ptr[0] = (char)((event.m_keyCode == WXK_RETURN) ? 10 : event.m_keyCode);
         }

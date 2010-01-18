@@ -323,7 +323,9 @@ wxString wxAcceleratorEntry::ToString() const
             // must be a simple key
             if (
 #if !wxUSE_UNICODE
-                 isascii(code) &&
+                 // we can't call wxIsalnum() for non-ASCII characters in ASCII
+                 // build as they're only defined for the ASCII range (or EOF)
+                 wxIsascii(code) &&
 #endif // ANSI
                     wxIsalnum(code) )
             {
