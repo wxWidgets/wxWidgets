@@ -553,27 +553,18 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     sm_abortWindow = NULL;
 
     if (!printout)
+    {
+        sm_lastError = wxPRINTER_ERROR;
         return false;
-
+    }
+    
     printout->SetIsPreview(false);
-
-    // Get some parameters from the printout, if defined
-    int fromPage, toPage;
-    int minPage, maxPage;
-    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-
-    if (maxPage == 0) return false;
-
-    // Only set min and max, because from and to will be
-    // set by the user
-    m_printDialogData.SetMinPage(minPage);
-    m_printDialogData.SetMaxPage(maxPage);
 
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
         m_printDialogData.SetMaxPage(9999);
-
+    
     // Create a suitable device context
     wxPrinterDC *dc = NULL;
     if (prompt)
@@ -642,6 +633,22 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     printout->OnPreparePrinting();
 
+    // Get some parameters from the printout, if defined
+    int fromPage, toPage;
+    int minPage, maxPage;
+    printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
+    
+    if (maxPage == 0)
+    {
+        sm_lastError = wxPRINTER_ERROR;
+        return false;
+    }
+    
+    // Only set min and max, because from and to will be
+    // set by the user
+    m_printDialogData.SetMinPage(minPage);
+    m_printDialogData.SetMaxPage(maxPage);
+        
     printout->OnBeginPrinting();
 
     bool keepGoing = true;
