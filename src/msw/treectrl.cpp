@@ -3167,7 +3167,8 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case VK_END:
             case VK_PRIOR:
             case VK_NEXT:
-                if ( !MSWHandleTreeKeyDownEvent(wParam, lParam) )
+                if ( !HandleKeyDown(wParam, lParam) &&
+                        !MSWHandleTreeKeyDownEvent(wParam, lParam) )
                 {
                     // use the key to update the selection if it was left
                     // unprocessed
