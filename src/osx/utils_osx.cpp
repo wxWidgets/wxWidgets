@@ -93,12 +93,20 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-    static const char * const OPEN_CMD = "/usr/bin/open";
-    if ( wxFileExists(OPEN_CMD) &&
-            wxExecute(wxString(OPEN_CMD) + " " + document) )
+    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(document)));
+    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
+    wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+    OSStatus err = LSOpenCFURLRef( curl , NULL );
+    
+    if (err == noErr)
+    {
         return true;
-
-    return false;
+    }
+    else
+    {
+        wxLogDebug(wxT("Default Application Launch error %d"), (int) err);
+        return false;
+    }
 }
 
 // ----------------------------------------------------------------------------
