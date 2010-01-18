@@ -4310,6 +4310,11 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 #endif
 
         GetSizer()->Prepend( m_headerWin, 0, wxGROW );
+#ifdef __WXOSX__
+        // TODO not tested under other platforms, remove the platform condition if
+        // it works on those as well
+        GetSizer()->SetItemMinSize( m_headerWin, wxSize(-1,m_headerHeight) ); 
+#endif
     }
     else
     {
