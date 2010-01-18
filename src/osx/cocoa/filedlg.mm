@@ -154,6 +154,8 @@ int wxFileDialog::ShowModal()
     m_path = wxEmptyString;
     m_fileNames.Clear();
     m_paths.Clear();
+    // since we don't support retrieving the matching filter
+    m_filterIndex = -1;
 
     wxNonOwnedWindow* parentWindow = NULL;
     int returnCode = -1;
