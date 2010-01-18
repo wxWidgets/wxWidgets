@@ -145,14 +145,19 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         return m_toolbar; // must return non-NULL
     }
 
-    else if (m_class == wxT("separator"))
+    else if (m_class == wxT("separator") || m_class == wxT("space"))
     {
         if ( !m_toolbar )
         {
-            ReportError("separator only allowed inside wxToolBar");
+            ReportError("separators only allowed inside wxToolBar");
             return NULL;
         }
-        m_toolbar->AddSeparator();
+
+        if ( m_class == wxT("separator") )
+            m_toolbar->AddSeparator();
+        else
+            m_toolbar->AddStretchableSpace();
+
         return m_toolbar; // must return non-NULL
     }
 
@@ -206,6 +211,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                 wxControl *control = wxDynamicCast(created, wxControl);
                 if (!IsOfClass(n, wxT("tool")) &&
                     !IsOfClass(n, wxT("separator")) &&
+                    !IsOfClass(n, wxT("space")) &&
                     control != NULL)
                     toolbar->AddControl(control);
             }
@@ -232,6 +238,7 @@ bool wxToolBarXmlHandler::CanHandle(wxXmlNode *node)
 {
     return ((!m_isInside && IsOfClass(node, wxT("wxToolBar"))) ||
             (m_isInside && IsOfClass(node, wxT("tool"))) ||
+            (m_isInside && IsOfClass(node, wxT("space"))) ||
             (m_isInside && IsOfClass(node, wxT("separator"))));
 }
 

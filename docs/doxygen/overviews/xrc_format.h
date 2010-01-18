@@ -1570,7 +1570,9 @@ A toolbar can have one or more child objects of any wxControl-derived class or
 one of two pseudo-classes: @c separator or @c tool.
 
 The @c separator pseudo-class is used to insert separators into the toolbar and
-has neither properties nor children.
+has neither properties nor children. Similarly, the @c space pseudo-class is
+used for stretchable spaces (see wxToolBar::AddStretchableSpace(), new since
+wxWidgets 2.9.1).
 
 The @c tool pseudo-class objects specify toolbar buttons and have the following
 properties:
@@ -1619,6 +1621,7 @@ Example:
         <bitmap>bar.png</bitmap>
         <label>Bar</label>
     </object>
+    <object class="separator"/>
     <object class="tool" name="view_auto">
         <bitmap>view.png</bitmap>
         <label>View</label>
@@ -1633,7 +1636,7 @@ Example:
             </object>
         </dropdown>
     </object>
-    <object class="separator"/>
+    <object class="space"/>
     <object class="wxComboBox">
         <content>
             <item>Just</item>

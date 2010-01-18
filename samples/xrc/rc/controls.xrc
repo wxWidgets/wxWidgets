@@ -65,8 +65,7 @@
                             <rows>0</rows>
                             <vgap>0</vgap>
                             <hgap>0</hgap>
-                            <growablecols>0,1</growablecols>
-                            <growablerows>0,1</growablerows>
+                            <growablecols>1</growablecols>
                             <object class="sizeritem">
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
@@ -75,9 +74,8 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <flag>wxEXPAND|wxALL</flag>
                                 <border>5</border>
-                                <size>300,60</size>
                                 <object class="wxToolBar">
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
                                     <margins>2,2</margins>
@@ -116,7 +114,7 @@
                                         <bitmap stock_id="wxART_GO_DOWN"/>
                                         <label>Down</label>
                                     </object>
-                                    <object class="separator"/>
+                                    <object class="space"/>
                                     <object class="wxComboBox">
                                         <content>
                                             <item>Just</item>
@@ -141,7 +139,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <flag>wxEXPAND|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxToolBar">
                                     <style>wxTB_FLAT|wxTB_NODIVIDER</style>
@@ -165,6 +163,7 @@
                                             </object>
                                         </dropdown>
                                     </object>
+                                    <object class="separator"/>
                                     <object class="tool" name="home">
                                         <toggle>1</toggle>
                                         <bitmap stock_id="wxART_GO_HOME"/>
@@ -181,7 +180,7 @@
                                         <bitmap stock_id="wxART_GO_DOWN"/>
                                         <label>Down</label>
                                     </object>
-                                    <object class="separator"/>
+                                    <object class="space"/>
                                     <object class="wxComboBox">
                                         <content>
                                             <item>Just</item>
