@@ -1219,13 +1219,13 @@ void wxToolBar::UpdateStretchableSpacersSize()
     // reduce their size if there is not enough place for all tools
     const int totalSize = IsVertical() ? GetClientSize().y : GetClientSize().x;
     const int extraSize = totalSize - m_totalFixedSize;
-    const int sizeSpacer = extraSize > 0 ? extraSize / numSpaces : 0;
+    const int sizeSpacer = extraSize > 0 ? extraSize / numSpaces : 1;
 
     // the last spacer should consume all remaining space if we have too much
     // of it (which can be greater than sizeSpacer because of the rounding)
     const int sizeLastSpacer = extraSize > 0
                                 ? extraSize - (numSpaces - 1)*sizeSpacer
-                                : 0;
+                                : 1;
 
     // cumulated offset by which we need to move all the following controls to
     // the right: while the toolbar takes care of the normal items, we must
