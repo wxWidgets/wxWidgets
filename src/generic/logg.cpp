@@ -610,9 +610,6 @@ void wxLogWindow::Show(bool bShow)
 
 void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 {
-    // first let the previous logger show it
-    wxLogPassThrough::DoLogTextAtLevel(level, msg);
-
     if ( !m_pLogFrame )
         return;
 
