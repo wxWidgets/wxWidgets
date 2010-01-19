@@ -886,16 +886,16 @@ public:
     // dialog units translations
     // -------------------------
 
-    wxPoint ConvertPixelsToDialog( const wxPoint& pt );
-    wxPoint ConvertDialogToPixels( const wxPoint& pt );
-    wxSize ConvertPixelsToDialog( const wxSize& sz )
+    wxPoint ConvertPixelsToDialog( const wxPoint& pt ) const;
+    wxPoint ConvertDialogToPixels( const wxPoint& pt ) const;
+    wxSize ConvertPixelsToDialog( const wxSize& sz ) const
     {
         wxPoint pt(ConvertPixelsToDialog(wxPoint(sz.x, sz.y)));
 
         return wxSize(pt.x, pt.y);
     }
 
-    wxSize ConvertDialogToPixels( const wxSize& sz )
+    wxSize ConvertDialogToPixels( const wxSize& sz ) const
     {
         wxPoint pt(ConvertDialogToPixels(wxPoint(sz.x, sz.y)));
 

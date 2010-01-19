@@ -1354,12 +1354,12 @@ public:
 
         @see ConvertPixelsToDialog()
     */
-    wxPoint ConvertDialogToPixels(const wxPoint& pt);
+    wxPoint ConvertDialogToPixels(const wxPoint& pt) const;
 
     /**
         @overload
     */
-    wxSize ConvertDialogToPixels(const wxSize& sz);
+    wxSize ConvertDialogToPixels(const wxSize& sz) const;
 
     /**
         Converts a point or size from pixels to dialog units.
@@ -1374,12 +1374,12 @@ public:
 
         @see ConvertDialogToPixels()
     */
-    wxPoint ConvertPixelsToDialog(const wxPoint& pt);
+    wxPoint ConvertPixelsToDialog(const wxPoint& pt) const;
 
     /**
         @overload
     */
-    wxSize ConvertPixelsToDialog(const wxSize& sz);
+    wxSize ConvertPixelsToDialog(const wxSize& sz) const;
 
     /**
         Converts from screen to client window coordinates.

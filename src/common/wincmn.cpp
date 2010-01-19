@@ -2461,7 +2461,7 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // dialog units translations
 // ----------------------------------------------------------------------------
 
-wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt)
+wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
@@ -2472,7 +2472,7 @@ wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt)
     return pt2;
 }
 
-wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
+wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
