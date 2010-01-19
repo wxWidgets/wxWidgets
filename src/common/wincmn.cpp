@@ -2463,26 +2463,22 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 
 wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt)
 {
-    int charWidth = GetCharWidth();
-    int charHeight = GetCharHeight();
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
-        pt2.x = (int) ((pt.x * 4) / charWidth);
+        pt2.x = (int) ((pt.x * 4) / GetCharWidth());
     if (pt.y != wxDefaultCoord)
-        pt2.y = (int) ((pt.y * 8) / charHeight);
+        pt2.y = (int) ((pt.y * 8) / GetCharHeight());
 
     return pt2;
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt)
 {
-    int charWidth = GetCharWidth();
-    int charHeight = GetCharHeight();
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
-        pt2.x = (int) ((pt.x * charWidth) / 4);
+        pt2.x = (int) ((pt.x * GetCharWidth()) / 4);
     if (pt.y != wxDefaultCoord)
-        pt2.y = (int) ((pt.y * charHeight) / 8);
+        pt2.y = (int) ((pt.y * GetCharHeight()) / 8);
 
     return pt2;
 }
