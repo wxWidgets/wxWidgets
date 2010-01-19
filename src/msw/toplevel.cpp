@@ -482,11 +482,14 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         sizeReal.SetDefaults(GetDefaultSize());
     }
 
+    // notice that we should append this window to wxTopLevelWindows list
+    // before calling CreateBase() as it behaves differently for TLW and
+    // non-TLW windows
+    wxTopLevelWindows.Append(this);
+
     bool ret = CreateBase(parent, id, pos, sizeReal, style, name);
     if ( !ret )
         return false;
-
-    wxTopLevelWindows.Append(this);
 
     if ( parent )
         parent->AddChild(this);
