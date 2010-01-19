@@ -27,6 +27,7 @@
 #include "wx/thread.h"
 #include "wx/tracker.h"
 #include "wx/typeinfo.h"
+#include "wx/any.h"
 
 #ifdef wxHAS_EVENT_BIND
     #include "wx/meta/convertible.h"
@@ -1203,6 +1204,10 @@ public:
         // make sure our string member (which uses COW, aka refcounting) is not
         // shared by other wxString instances:
         SetString(GetString().c_str());
+
+#if wxUSE_ANY && (!defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7))
+        m_payload = event.m_payload;
+#endif
     }
 
     virtual wxEvent *Clone() const
@@ -1214,6 +1219,23 @@ public:
     // gets processed when this is unwanted:
     virtual wxEventCategory GetEventCategory() const
         { return wxEVT_CATEGORY_THREAD; }
+
+#if wxUSE_ANY && (!defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7))
+    template<typename T>
+    void SetPayload(const T& payload)
+    {
+        m_payload = payload;
+    }
+
+    template<typename T>
+    T GetPayload() const
+    {
+        return m_payload.As<T>();
+    }
+
+protected:
+    wxAny m_payload;
+#endif // wxUSE_ANY && (!defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7))
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxThreadEvent)

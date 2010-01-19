@@ -2853,6 +2853,37 @@ public:
         when calling wxEventLoopBase::YieldFor().
     */
     virtual wxEventCategory GetEventCategory() const;
+
+    /**
+        Sets custom data payload.
+
+        The @a payload argument may be of any type that wxAny can handle
+        (i.e. pretty much anything). Note that T's copy constructor must be
+        thread-safe, i.e. create a copy that doesn't share anything with
+        the original (see Clone()).
+
+        @note This method is not available with Visual C++ 6.
+
+        @since 2.9.1
+
+        @see GetPayload(), wxAny
+     */
+    template<typename T>
+    void SetPayload(const T& payload);
+
+    /**
+        Get custom data payload.
+
+        Correct type is checked in debug builds.
+
+        @note This method is not available with Visual C++ 6.
+
+        @since 2.9.1
+
+        @see SetPayload(), wxAny
+     */
+    template<typename T>
+    T GetPayload() const;
 };
 
 
