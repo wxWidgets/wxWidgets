@@ -18,6 +18,17 @@ make it easier to find the relevant one if a simple grep through all sources
 didn't help. They also provide some notes about using the samples and what
 features of wxWidgets are they supposed to test.
 
+<hr/>
+Notice that all wxWidgets samples mentioned here can be found in @c samples
+subdirectory of the library distribution. When a @c foobar sample is mentioned
+below, its sources can be found in @c samples/foobar directory of your
+wxWidgets tree. If you installed wxWidgets from a binary package, you might not
+have this directory. In this case, you may view the samples online at
+http://svn.wxwidgets.org/viewvc/wx/wxWidgets/trunk/samples/ but you need to
+download the source distribution in order to be able to build them (highly
+recommended).
+<hr/>
+
 There are currently more than 80 different samples as part of wxWidgets:
 the list in this page is not complete!
 You should start your tour of wxWidgets with the @ref page_samples_minimal
@@ -25,9 +36,11 @@ which is the wxWidgets version of "Hello, world!".
 It shows the basic structure of wxWidgets program and is the most commented
 sample of all - looking at its source code is recommended.
 
-The next most useful samples are probably @ref page_samples_widgets and
-@ref page_samples_controls which show many of wxWidgets native and
-generic controls, such as buttons, listboxes, checkboxes, comboboxes etc.
+The next most useful sample is @ref page_samples_widgets which shows many of
+wxWidgets controls, such as buttons, text entry zones, list boxes, check boxes,
+combo boxes etc. It is organized in many different source files, one per each
+control, which makes it easier to study it, and also allows to change various
+control styles and call its methods interactively.
 
 Other, more complicated controls, have their own samples. In this category you
 may find the following samples showing the corresponding controls:
