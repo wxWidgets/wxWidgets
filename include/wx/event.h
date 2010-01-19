@@ -1207,12 +1207,7 @@ public:
 
     virtual wxEvent *Clone() const
     {
-        wxThreadEvent* ev = new wxThreadEvent(*this);
-
-        // make sure our string member (which uses COW, aka refcounting) is not
-        // shared by other wxString instances:
-        ev->SetString(GetString().c_str());
-        return ev;
+        return new wxThreadEvent(*this);
     }
 
     // this is important to avoid that calling wxEventLoopBase::YieldFor thread events
