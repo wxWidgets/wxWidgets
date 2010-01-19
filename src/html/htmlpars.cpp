@@ -655,6 +655,7 @@ wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const
             ENTITY("amp", 38),
             ENTITY("and", 8743),
             ENTITY("ang", 8736),
+            ENTITY("apos", 39),
             ENTITY("aring", 229),
             ENTITY("asymp", 8776),
             ENTITY("atilde", 227),
