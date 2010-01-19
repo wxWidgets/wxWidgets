@@ -128,10 +128,8 @@
 
 #if defined(__WXMSW__) && !defined(__WXWINCE__)
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
-#elif defined( __WXMAC__ )
-    #define wxMulDivInt32( a , b , c ) ( (wxInt32) ( ( (wxInt64)(a) * (wxInt64)(b) ) / (wxInt64)(c) ) )
 #else
-    #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))
+    #define wxMulDivInt32( a , b , c ) (wxRound((a)*(((wxDouble)b)/((wxDouble)c))))
 #endif
 
 #if wxUSE_APPLE_IEEE
