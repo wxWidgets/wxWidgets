@@ -104,6 +104,12 @@ bool wxStatusBar::Create(wxWindow *parent,
     if ( style & wxCLIP_SIBLINGS )
         wstyle |= WS_CLIPSIBLINGS;
 
+    // wxSTB_SIZEGRIP is part of our default style but it doesn't make sense to
+    // show size grip if this is the status bar of a non-resizeable TLW so turn
+    // it off in such case
+    if ( parent->IsTopLevel() && !parent->HasFlag(wxRESIZE_BORDER) )
+        style &= ~wxSTB_SIZEGRIP;
+
     // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
     // (at least in the version of comctl32.dll I'm using), and the only way to
     // turn it off is to use CCS_TOP style - as we position the status bar
