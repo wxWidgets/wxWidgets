@@ -124,7 +124,10 @@ wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const
 
 int wxNSComboBoxControl::FindString(const wxString& text) const
 {
-    return [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    int result = [m_comboBox indexOfItemWithObjectValue:wxCFStringRef( text , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    if (result == NSNotFound)
+        result = wxNOT_FOUND;
+    return result;
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer, 
