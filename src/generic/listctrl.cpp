@@ -2732,10 +2732,12 @@ void wxListMainWindow::Thaw()
     wxCHECK_RET( m_freezeCount > 0, _T("thawing unfrozen list control?") );
 
     if ( --m_freezeCount == 0 )
+    {
         if (m_dirty)
             RecalculatePositions();
         else
             Refresh();
+    }
 }
 
 void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
