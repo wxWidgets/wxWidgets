@@ -21,15 +21,14 @@
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxItemContainer;
-#if defined(wxBITMAPCOMBOBOX_OWNERDRAWN_BASED)
-class WXDLLIMPEXP_FWD_CORE wxDC;
-#endif
 
 // Define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED for platforms which
 // wxBitmapComboBox implementation utilizes ownerdrawn combobox
 // (either native or generic).
 #if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
     #define wxBITMAPCOMBOBOX_OWNERDRAWN_BASED
+
+class WXDLLIMPEXP_FWD_CORE wxDC;
 #endif
 
 extern WXDLLIMPEXP_DATA_ADV(const char) wxBitmapComboBoxNameStr[];
