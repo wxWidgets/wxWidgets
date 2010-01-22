@@ -653,7 +653,8 @@ GdkWindow *wxRadioBox::GTKGetWindow(wxArrayGdkWindows& windows) const
     {
         GtkWidget *button = GTK_WIDGET( node->GetData()->button );
 
-        windows.push_back(button->window);
+        if (button->window)
+            windows.push_back(button->window);
 
         node = node->GetNext();
     }
