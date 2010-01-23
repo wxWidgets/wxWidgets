@@ -45,6 +45,7 @@
 #endif // wxUSE_ACCEL
 
 #include "wx/msw/private.h"
+#include "wx/msw/dc.h"
 
 #ifdef __WXWINCE__
 // Implemented in menu.cpp
@@ -58,16 +59,24 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags) ;
 // hide the ugly cast
 #define GetHMenuOf(menu)    ((HMENU)menu->GetHMenu())
 
-// conditional compilation
-#if wxUSE_OWNER_DRAWN
-    #define OWNER_DRAWN_ONLY( code ) if ( IsOwnerDrawn() ) code
-#else // !wxUSE_OWNER_DRAWN
-    #define OWNER_DRAWN_ONLY( code )
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
-
 // ============================================================================
 // implementation
 // ============================================================================
+
+#if wxUSE_OWNER_DRAWN
+
+#include "wx/fontutil.h"
+#include "wx/msw/private/metrics.h"
+
+#ifndef SPI_GETKEYBOARDCUES
+#define SPI_GETKEYBOARDCUES 0x100A
+#endif
+
+#ifndef DSS_HIDEPREFIX
+#define DSS_HIDEPREFIX  0x0200
+#endif
+
+#endif // wxUSE_OWNER_DRAWN
 
 // ----------------------------------------------------------------------------
 // dynamic classes implementation
@@ -120,6 +129,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 // wxMenuItem
 // ----------------------------------------------------------------------------
 
+#if wxUSE_OWNER_DRAWN
+
+// these static variables are from the wxMenuItem object for cache
+// system settings returned by the Win32 API's SystemParametersInfo() call
+wxFont wxMenuItem::ms_systemMenuFont;
+size_t wxMenuItem::ms_systemMenuHeight = 0;
+bool   wxMenuItem::ms_alwaysShowCues = false;
+
+#endif // wxUSE_OWNER_DRAWN
+
+
 // ctor & dtor
 // -----------
 
@@ -130,9 +150,6 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxItemKind kind,
                        wxMenu *pSubMenu)
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
-#if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(text, kind == wxITEM_CHECK, true)
-#endif // owner drawn
 {
     Init();
 }
@@ -146,9 +163,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        wxMenu *subMenu)
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
-#if wxUSE_OWNER_DRAWN
-           , wxOwnerDrawn(text, isCheckable, true)
-#endif // owner drawn
 {
     Init();
 }
@@ -161,6 +175,24 @@ void wxMenuItem::Init()
 
 #if  wxUSE_OWNER_DRAWN
 
+    // init static varaibles
+    if ( !ms_systemMenuHeight )
+    {
+        const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics();
+
+        ms_systemMenuFont = wxFont(wxNativeFontInfo(metrics.lfMenuFont));
+        ms_systemMenuHeight = metrics.iMenuHeight;
+
+        if ( ::SystemParametersInfo(SPI_GETKEYBOARDCUES, 0,
+                                    &ms_alwaysShowCues, 0) == 0 )
+        {
+            // if it's not supported, we must be on an old Windows version
+            // which always shows them
+            ms_alwaysShowCues = true;
+        }
+
+    }
+
     // when the color is not valid, wxOwnerDraw takes the default ones.
     // If we set the colors here and they are changed by the user during
     // the execution, then the colors are not updated until the application
@@ -169,14 +201,12 @@ void wxMenuItem::Init()
     SetBackgroundColour(wxNullColour);
 
     // setting default colors switched ownerdraw on: switch it off again
-    ResetOwnerDrawn();
+    SetOwnerDrawn(false);
 
     //  switch ownerdraw back on if using a non default margin
     if ( !IsSeparator() )
         SetMarginWidth(GetMarginWidth());
 
-    // tell the owner drawing code to show the accel string as well
-    SetAccelString(m_text.AfterFirst(wxT('\t')));
 #endif // wxUSE_OWNER_DRAWN
 }
 
@@ -365,15 +395,6 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     // wxMenuItemBase will do stock ID checks
     wxMenuItemBase::SetItemLabel(text);
 
-    // m_text could now be different from 'text' if we are a stock menu item,
-    // so use only m_text below
-
-    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetName(m_text) );
-#if wxUSE_OWNER_DRAWN
-    // tell the owner drawing code to to show the accel string as well
-    SetAccelString(m_text.AfterFirst(wxT('\t')));
-#endif
-
     // the item can be not attached to any menu yet and SetItemLabel() is still
     // valid to call in this case and should do nothing else
     if ( !m_parentMenu )
@@ -430,11 +451,317 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     }
 }
 
-void wxMenuItem::SetCheckable(bool checkable)
+#if wxUSE_OWNER_DRAWN
+
+wxString wxMenuItem::GetName() const
 {
-    wxMenuItemBase::SetCheckable(checkable);
-    OWNER_DRAWN_ONLY( wxOwnerDrawn::SetCheckable(checkable) );
+    return GetItemLabelText();
 }
+
+bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
+{
+    if ( IsOwnerDrawn() )
+    {
+
+        wxString str = GetName();
+
+        // if we have a valid accel string, then pad out
+        // the menu string so that the menu and accel string are not
+        // placed on top of each other.
+        wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
+        if ( !accel.empty() )
+        {
+            str.Pad(str.length()%8);
+            str += accel;
+        }
+
+        wxMemoryDC dc;
+        wxFont font;
+        GetFontToUse(font);
+        dc.SetFont(font);
+
+        wxCoord w, h;
+        dc.GetTextExtent(str, &w, &h);
+        *width = w;
+        *height = h;
+    }
+    else // don't draw the text, just the bitmap (if any)
+    {
+        *width = 0;
+        *height = 0;
+    }
+
+    // increase size to accommodate bigger bitmaps if necessary
+    if (m_bmpChecked.Ok())
+    {
+        // Is BMP height larger than text height?
+        size_t adjustedHeight = m_bmpChecked.GetHeight();
+        if ( *height < adjustedHeight )
+            *height = adjustedHeight;
+
+        const int widthBmp = m_bmpChecked.GetWidth();
+        if ( IsOwnerDrawn() )
+        {
+            // widen the margin to fit the bitmap if necessary
+            if ( GetMarginWidth() < widthBmp )
+                SetMarginWidth(widthBmp);
+
+        }
+        else // we must allocate enough space for the bitmap
+        {
+            *width += widthBmp;
+        }
+    }
+
+    // add a 4-pixel separator, otherwise menus look cluttered
+    *width += 4;
+
+    // notice that this adjustment must be done after (possibly) changing the
+    // margin width above
+    if ( IsOwnerDrawn() )
+    {
+        // add space at the end of the menu for the submenu expansion arrow
+        // this will also allow offsetting the accel string from the right edge
+        *width += GetMarginWidth() + 16;
+    }
+
+    // make sure that this item is at least as tall as the system menu height
+    if ( *height < ms_systemMenuHeight )
+      *height = ms_systemMenuHeight;
+
+    return true;
+}
+
+bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
+                            wxODAction WXUNUSED(act), wxODStatus stat)
+{
+
+    // this flag determines whether or not an edge will
+    // be drawn around the bitmap. In most "windows classic"
+    // applications, a 1-pixel highlight edge is drawn around
+    // the bitmap of an item when it is selected.  However,
+    // with the new "luna" theme, no edge is drawn around
+    // the bitmap because the background is white (this applies
+    // only to "non-XP style" menus w/ bitmaps --
+    // see IE 6 menus for an example)
+
+    bool draw_bitmap_edge = true;
+
+    // set the colors
+    // --------------
+    wxColour colText1, colBack1;
+    GetColourToUse(stat, colText1, colBack1);
+
+    DWORD colText = wxColourToPalRGB(colText1);
+    DWORD colBack = wxColourToPalRGB(colBack1);
+
+    if ( IsOwnerDrawn() )
+    {
+        // don't draw an edge around the bitmap, if background is white ...
+        DWORD menu_bg_color = GetSysColor(COLOR_MENU);
+        if ( GetRValue( menu_bg_color ) >= 0xf0 &&
+             GetGValue( menu_bg_color ) >= 0xf0 &&
+             GetBValue( menu_bg_color ) >= 0xf0 )
+        {
+            draw_bitmap_edge = false;
+        }
+    }
+    else // edge doesn't look well with default Windows drawing
+    {
+        draw_bitmap_edge = false;
+    }
+
+
+    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
+    HDC hdc = GetHdcOf(*impl);
+    COLORREF colOldText = ::SetTextColor(hdc, colText);
+    COLORREF colOldBack = ::SetBkColor(hdc, colBack);
+
+    // *2, as in wxSYS_EDGE_Y
+    int margin = GetMarginWidth() + 2 * wxSystemSettings::GetMetric(wxSYS_EDGE_X);
+
+    // select the font and draw the text
+    // ---------------------------------
+
+
+    // determine where to draw and leave space for a check-mark.
+    // + 1 pixel to separate the edge from the highlight rectangle
+    int xText = rc.x + margin + 1;
+
+
+    // using native API because it recognizes '&'
+    if ( IsOwnerDrawn() )
+    {
+        int prevMode = SetBkMode(hdc, TRANSPARENT);
+        AutoHBRUSH hbr(colBack);
+        SelectInHDC selBrush(hdc, hbr);
+
+        RECT rectFill;
+        wxCopyRectToRECT(rc, rectFill);
+
+        if ( (stat & wxODSelected) && m_bmpChecked.Ok() && draw_bitmap_edge )
+        {
+            // only draw the highlight under the text, not under
+            // the bitmap or checkmark
+            rectFill.left = xText;
+        }
+
+        ::FillRect(hdc, &rectFill, hbr);
+
+        // use default font if no font set
+        wxFont font;
+        GetFontToUse(font);
+        SelectInHDC selFont(hdc, GetHfontOf(font));
+
+        // item text name with menemonic
+        wxString text = GetItemLabel().BeforeFirst('\t');
+
+        xText += 3; // separate text from the highlight rectangle
+
+        SIZE textRect;
+        ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &textRect);
+
+        int flags = DST_PREFIXTEXT;
+        if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
+            flags |= DSS_DISABLED;
+
+        if ( (stat & wxODHidePrefix) && !ms_alwaysShowCues )
+            flags |= DSS_HIDEPREFIX;
+
+        int x = xText;
+        int y = rc.y + (rc.GetHeight() - textRect.cy) / 2;
+        int cx = rc.GetWidth() - GetMarginWidth();
+        int cy = textRect.cy;
+
+        ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
+                    text.length(), x, y, cx, cy, flags);
+
+        // ::SetTextAlign(hdc, TA_RIGHT) doesn't work with DSS_DISABLED or DSS_MONO
+        // as the last parameter in DrawState() (at least with Windows98). So we have
+        // to take care of right alignment ourselves.
+        wxString accel = GetItemLabel().AfterFirst(wxT('\t'));
+        if ( !accel.empty() )
+        {
+            SIZE accelRect;
+            ::GetTextExtentPoint32(hdc, accel.c_str(), accel.length(), &accelRect);
+
+            int flags = DST_TEXT;
+            if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
+                flags |= DSS_DISABLED;
+
+            // right align accel string with right edge of menu
+            // (offset by the margin width)
+
+            int x = rc.GetWidth() - 16 - accelRect.cx;
+            int y = rc.y + (rc.GetHeight() - accelRect.cy) / 2;
+            ::DrawState(hdc, NULL, NULL, (LPARAM)accel.wx_str(),
+                        accel.length(), x, y, 0, 0, flags);
+        }
+
+        ::SetBkMode(hdc, prevMode);
+    }
+
+
+    // draw the bitmap
+    // ---------------
+    if ( IsCheckable() && !m_bmpChecked.Ok() )
+    {
+        if ( stat & wxODChecked )
+        {
+            // what goes on: DrawFrameControl creates a b/w mask,
+            // then we copy it to screen to have right colors
+
+            // first create a monochrome bitmap in a memory DC
+            HDC hdcMem = CreateCompatibleDC(hdc);
+            HBITMAP hbmpCheck = CreateBitmap(margin, rc.GetHeight(), 1, 1, 0);
+            SelectObject(hdcMem, hbmpCheck);
+
+            // then draw a check mark into it
+            RECT rect = { 0, 0, margin, rc.GetHeight() };
+            if ( rc.GetHeight() > 0 )
+            {
+                ::DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
+            }
+
+            // finally copy it to screen DC and clean up
+            BitBlt(hdc, rc.x, rc.y, margin, rc.GetHeight(), hdcMem, 0, 0, SRCCOPY);
+
+            DeleteDC(hdcMem);
+            DeleteObject(hbmpCheck);
+        }
+    }
+    else
+    {
+        wxBitmap bmp;
+
+        if ( stat & wxODDisabled )
+        {
+            bmp = GetDisabledBitmap();
+        }
+
+        if ( !bmp.Ok() )
+        {
+            // for not checkable bitmaps we should always use unchecked one
+            // because their checked bitmap is not set
+            bmp = GetBitmap(!IsCheckable() || (stat & wxODChecked));
+
+#if wxUSE_IMAGE
+            if ( bmp.Ok() && stat & wxODDisabled )
+            {
+                // we need to grey out the bitmap as we don't have any specific
+                // disabled bitmap
+                wxImage imgGrey = bmp.ConvertToImage().ConvertToGreyscale();
+                if ( imgGrey.Ok() )
+                    bmp = wxBitmap(imgGrey);
+            }
+#endif // wxUSE_IMAGE
+        }
+
+        if ( bmp.Ok() )
+        {
+            wxMemoryDC dcMem(&dc);
+            dcMem.SelectObjectAsSource(bmp);
+
+            // center bitmap
+            int nBmpWidth = bmp.GetWidth(),
+                nBmpHeight = bmp.GetHeight();
+
+            // there should be enough space!
+            wxASSERT((nBmpWidth <= rc.GetWidth()) && (nBmpHeight <= rc.GetHeight()));
+
+            int heightDiff = rc.GetHeight() - nBmpHeight;
+            dc.Blit(rc.x + (margin - nBmpWidth) / 2,
+                    rc.y + heightDiff / 2,
+                    nBmpWidth, nBmpHeight,
+                    &dcMem, 0, 0, wxCOPY, true /* use mask */);
+
+            if ( ( stat & wxODSelected ) && !( stat & wxODDisabled ) && draw_bitmap_edge )
+            {
+                RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
+                                 rc.GetLeft() + margin,
+                                 rc.GetTop() + rc.GetHeight() };
+                SetBkColor(hdc, colBack);
+
+                DrawEdge(hdc, &rectBmp, BDR_RAISEDINNER, BF_RECT);
+            }
+        }
+    }
+
+    ::SetTextColor(hdc, colOldText);
+    ::SetBkColor(hdc, colOldBack);
+
+    return true;
+
+}
+
+void wxMenuItem::GetFontToUse(wxFont& font) const
+{
+    font = GetFont();
+    if ( !font.IsOk() )
+        font = ms_systemMenuFont;
+}
+
+#endif // wxUSE_OWNER_DRAWN
 
 // ----------------------------------------------------------------------------
 // wxMenuItemBase

@@ -814,6 +814,9 @@
 				RelativePath="..\..\src\common\overlaycmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\ownerdrwcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\paper.cpp">
 			</File>
 			<File
@@ -4415,6 +4418,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\ole\oleutils.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\ownerdrw.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\palette.h">

@@ -50,25 +50,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 class wxListBoxItem : public wxOwnerDrawn
 {
 public:
-    wxListBoxItem(const wxString& rsStr = wxEmptyString);
-};
+    wxListBoxItem(wxListBox *parent)
+        { m_parent = parent; }
 
-wxListBoxItem::wxListBoxItem(
-  const wxString& rsStr
-)
-: wxOwnerDrawn( rsStr
-               ,false
-              )
-{
-    //
-    // No bitmaps/checkmarks
-    //
-    SetMarginWidth(0);
-} // end of wxListBoxItem::wxListBoxItem
+    wxListBox *GetParent() const
+        { return m_parent; }
+
+    int GetIndex() const
+        { return m_parent->GetItemIndex(const_cast<wxListBoxItem*>(this)); }
+
+    wxString GetName() const
+        { return m_parent->GetString(GetIndex()); }
+
+private:
+    wxListBox *m_parent;
+};
 
 wxOwnerDrawn* wxListBox::CreateItem( size_t WXUNUSED(n) )
 {
-    return new wxListBoxItem();
+    return new wxListBoxItem(this);
 } // end of wxListBox::CreateItem
 
 #endif  //USE_OWNER_DRAWN
@@ -225,14 +225,7 @@ bool wxListBox::Create( wxWindow* pParent,
 
 wxListBox::~wxListBox()
 {
-#if wxUSE_OWNER_DRAWN
-    size_t lUiCount = m_aItems.Count();
-
-    while (lUiCount-- != 0)
-    {
-        delete m_aItems[lUiCount];
-    }
-#endif // wxUSE_OWNER_DRAWN
+    Clear();
 } // end of wxListBox::~wxListBox
 
 void wxListBox::SetupColours()
@@ -261,7 +254,7 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
 #if wxUSE_OWNER_DRAWN
     delete m_aItems[n];
     m_aItems.RemoveAt(n);
-#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
+#endif // wxUSE_OWNER_DRAWN
 
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, (MPARAM)0);
     m_nNumItems--;
@@ -303,12 +296,9 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 #if wxUSE_OWNER_DRAWN
         if (HasFlag(wxLB_OWNERDRAW))
         {
-            wxOwnerDrawn*               pNewItem = CreateItem(n); // dummy argument
-            wxScreenDC                  vDc; // FIXME: is it really needed here?
-
-            pNewItem->SetName(items[i]);
-            m_aItems.Insert(pNewItem, n);
+            wxOwnerDrawn* pNewItem = CreateItem(n); // dummy argument
             pNewItem->SetFont(GetFont());
+            m_aItems.Insert(pNewItem, n);
         }
 #endif
         AssignNewItemClientData(n, clientData, i, type);
@@ -323,14 +313,10 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 void wxListBox::DoClear()
 {
 #if wxUSE_OWNER_DRAWN
-    unsigned int lUiCount = m_aItems.Count();
-
-    while (lUiCount-- != 0)
+    if ( m_windowStyle & wxLB_OWNERDRAW )
     {
-        delete m_aItems[lUiCount];
+        WX_CLEAR_ARRAY(m_aItems);
     }
-
-    m_aItems.Clear();
 #endif // wxUSE_OWNER_DRAWN
     ::WinSendMsg(GetHwnd(), LM_DELETEALL, (MPARAM)0, (MPARAM)0);
 
@@ -537,14 +523,6 @@ void wxListBox::SetString(unsigned int n, const wxString& rsString)
     //
     if (bWasSelected)
         Select(n);
-
-#if wxUSE_OWNER_DRAWN
-    if (m_windowStyle & wxLB_OWNERDRAW)
-        //
-        // Update item's text
-        //
-        m_aItems[n]->SetName(rsString);
-#endif  //USE_OWNER_DRAWN
 } // end of wxListBox::SetString
 
 unsigned int wxListBox::GetCount() const
@@ -793,7 +771,7 @@ bool wxListBox::OS2OnDraw (
     return pData->OnDrawItem( vDc
                              ,vRect
                              ,(wxOwnerDrawn::wxODAction)eAction
-                             ,(wxOwnerDrawn::wxODStatus)eStatus
+                             ,(wxOwnerDrawn::wxODStatus)(eStatus | wxOwnerDrawn::wxODHidePrefix)
                             );
 } // end of wxListBox::OS2OnDraw
 
