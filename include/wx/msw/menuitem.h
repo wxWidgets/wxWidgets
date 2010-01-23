@@ -115,6 +115,7 @@ public:
 
 protected:
     virtual void GetFontToUse(wxFont& font) const;
+    virtual void GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const;
 
 #endif // wxUSE_OWNER_DRAWN
 
@@ -140,11 +141,6 @@ private:
     wxBitmap m_bmpChecked,     // bitmap to put near the item
              m_bmpUnchecked,   // (checked is used also for 'uncheckable' items)
              m_bmpDisabled;
-
-    // static variables for cache some system settings
-    static wxFont ms_systemMenuFont;
-    static size_t ms_systemMenuHeight;
-    static bool ms_alwaysShowCues;
 #endif // wxUSE_OWNER_DRAWN
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenuItem)

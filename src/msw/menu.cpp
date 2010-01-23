@@ -112,7 +112,8 @@ void SetDefaultMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
 // make the given menu item owner-drawn
 void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
                            UINT WXUNUSED_IN_WINCE(id),
-                           ULONG_PTR WXUNUSED_IN_WINCE(data))
+                           ULONG_PTR WXUNUSED_IN_WINCE(data),
+                           BOOL WXUNUSED_IN_WINCE(byPositon = FALSE))
 {
 #ifndef __WXWINCE__
     MENUITEMINFO mii;
@@ -122,7 +123,10 @@ void SetOwnerDrawnMenuItem(HMENU WXUNUSED_IN_WINCE(hmenu),
     mii.fType = MFT_OWNERDRAW;
     mii.dwItemData = data;
 
-    if ( !::SetMenuItemInfo(hmenu, id, FALSE, &mii) )
+    if ( reinterpret_cast<wxMenuItem*>(data)->IsSeparator() )
+        mii.fType |= MFT_SEPARATOR;
+
+    if ( !::SetMenuItemInfo(hmenu, id, byPositon, &mii) )
     {
         wxLogLastError(wxT("SetMenuItemInfo"));
     }
@@ -496,7 +500,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     // Under older systems mixing owner-drawn and non-owner-drawn items results
     // in inconsistent margins, so we force this one to be owner-drawn if any
     // other items already are.
-    if ( m_ownerDrawn && !pItem->IsSeparator() )
+    if ( m_ownerDrawn )
         pItem->SetOwnerDrawn(true);
 #endif // wxUSE_OWNER_DRAWN
 
@@ -506,7 +510,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
 #ifndef __DMC__
 
-        if ( !m_ownerDrawn )
+        if ( !m_ownerDrawn && !pItem->IsSeparator() )
         {
             // MIIM_BITMAP only works under WinME/2000+ so we always use owner
             // drawn item under the previous versions and we also have to use
@@ -631,23 +635,25 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             // make other item ownerdrawn and update margin width for equals alignment
             if ( !m_ownerDrawn || updateAllMargins )
             {
+                // we must use position in SetOwnerDrawnMenuItem because
+                // all separators have the same id
+                int pos = 0;
                 wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
                 while (node)
                 {
                     wxMenuItem* item = node->GetData();
 
-                    if ( !item->IsSeparator() )
+                    if ( !item->IsOwnerDrawn())
                     {
-                        if ( !item->IsOwnerDrawn() )
-                        {
-                            item->SetOwnerDrawn(true);
-                            SetOwnerDrawnMenuItem(GetHmenu(), item->GetMSWId(),
-                                                  reinterpret_cast<ULONG_PTR>(item));
-                        }
-                        item->SetMarginWidth(m_maxBitmapWidth);
+                        item->SetOwnerDrawn(true);
+                        SetOwnerDrawnMenuItem(GetHmenu(), pos,
+                                              reinterpret_cast<ULONG_PTR>(item), TRUE);
                     }
 
+                    item->SetMarginWidth(m_maxBitmapWidth);
+
                     node = node->GetNext();
+                    pos++;
                 }
 
                 // set menu as ownerdrawn
