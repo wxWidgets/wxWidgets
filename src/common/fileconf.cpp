@@ -469,32 +469,35 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     cbuf = wxCharBuffer::CreateNonOwned((char *)buf.GetData(), buf.GetDataLen());
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-
-    // now break it into lines
-    wxMemoryText memText;
-    for ( const wxChar *s = cbuf; ; ++s )
+    // parse the input contents if there is anything to parse
+    if ( cbuf )
     {
-        const wxChar *e = s;
-        while ( *e != '\0' && *e != '\n' && *e != '\r' )
-            ++e;
+        // now break it into lines
+        wxMemoryText memText;
+        for ( const wxChar *s = cbuf; ; ++s )
+        {
+            const wxChar *e = s;
+            while ( *e != '\0' && *e != '\n' && *e != '\r' )
+                ++e;
 
-        // notice that we throw away the original EOL kind here, maybe we
-        // should preserve it?
-        if ( e != s )
-            memText.AddLine(wxString(s, e));
+            // notice that we throw away the original EOL kind here, maybe we
+            // should preserve it?
+            if ( e != s )
+                memText.AddLine(wxString(s, e));
 
-        if ( *e == '\0' )
-            break;
+            if ( *e == '\0' )
+                break;
 
-        // skip the second EOL byte if it's a DOS one
-        if ( *e == '\r' && e[1] == '\n' )
-            ++e;
+            // skip the second EOL byte if it's a DOS one
+            if ( *e == '\r' && e[1] == '\n' )
+                ++e;
 
-        s = e;
+            s = e;
+        }
+
+        // Finally we can parse it all.
+        Parse(memText, true /* local */);
     }
-
-    // Finally we can parse it all.
-    Parse(memText, true /* local */);
 
     SetRootPath();
     ResetDirty();

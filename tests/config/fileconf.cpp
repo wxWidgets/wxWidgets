@@ -81,6 +81,7 @@ private:
         CPPUNIT_TEST( DeleteAndRecreateGroup );
         CPPUNIT_TEST( AddToExistingRoot );
         CPPUNIT_TEST( ReadNonExistent );
+        CPPUNIT_TEST( ReadEmpty );
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
@@ -103,6 +104,7 @@ private:
     void DeleteAndRecreateGroup();
     void AddToExistingRoot();
     void ReadNonExistent();
+    void ReadEmpty();
 
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
@@ -647,6 +649,14 @@ void FileConfigTestCase::ReadNonExistent()
 
     wxString url;
     CPPUNIT_ASSERT( !fc.Read("URL", &url) );
+}
+
+void FileConfigTestCase::ReadEmpty()
+{
+    static const char *confTest = "";
+
+    wxStringInputStream sis(confTest);
+    wxFileConfig fc(sis);
 }
 
 #endif // wxUSE_FILECONFIG
