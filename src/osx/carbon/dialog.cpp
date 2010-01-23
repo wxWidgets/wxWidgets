@@ -25,6 +25,20 @@
 
 extern wxList wxModalDialogs;
 
+void wxDialog::EndWindowModal()
+{
+    // Nothing to do for now.
+}
+
+void wxDialog::ShowWindowModal()
+{
+    // If someone wants to add support for this to wxOSX Carbon, here would 
+    // be the place to start: http://trac.wxwidgets.org/ticket/9459
+    // Unfortunately, supporting sheets in Carbon isn't as straightforward
+    // as with Cocoa, so it will probably take some tweaking.
+    wxDialogBase::ShowWindowModal();
+}
+
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );

@@ -145,5 +145,10 @@ void wxDialog::EndModal(int retCode)
     SetReturnCode(retCode);
     Show(false);
     SetModal(false);
+    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
+    {
+        EndWindowModal(); // OS X implementation method for cleanup
+        SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+    }
 }
 

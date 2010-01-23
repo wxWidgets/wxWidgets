@@ -24,6 +24,29 @@
 
 extern wxList wxModalDialogs;
 
+void wxDialog::ShowWindowModal()
+{   
+    wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>(wxGetTopLevelParent(GetParent()));
+    
+    wxASSERT_MSG(parent, "ShowWindowModal requires the dialog to have a parent.");
+    
+    NSWindow* parentWindow = parent->GetWXWindow();
+    NSWindow* theWindow = GetWXWindow();
+    
+    wxASSERT_MSG([theWindow styleMask] & NSDocModalWindowMask, "Window must have DocModal mask set.");
+
+    [NSApp beginSheet: theWindow
+            modalForWindow: parentWindow
+            modalDelegate: theWindow
+            didEndSelector: nil
+            contextInfo: nil];
+}
+
+void wxDialog::EndWindowModal()
+{
+    [NSApp endSheet: GetWXWindow()];
+}
+
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );

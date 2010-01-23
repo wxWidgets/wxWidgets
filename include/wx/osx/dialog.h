@@ -55,6 +55,8 @@ public:
 
     // For now, same as Show(TRUE) but returns return code
     virtual int ShowModal();
+    
+    virtual void ShowWindowModal();
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
@@ -68,6 +70,9 @@ public:
 protected:
     // mac also takes command-period as cancel
     virtual bool IsEscapeKey(const wxKeyEvent& event);
+
+    // needed for cleanup on the Cocoa side.
+    void EndWindowModal();
 
 private:
     void Init();

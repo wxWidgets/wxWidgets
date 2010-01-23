@@ -74,7 +74,7 @@ public:
     virtual bool IsModal() const = 0;
     // show the dialog frame-modally (needs a parent), using app-modal
     // dialogs on platforms that don't support it
-    virtual bool ShowWindowModal () ;
+    virtual void ShowWindowModal () ;
     virtual void SendWindowModalDialogEvent ( wxEventType type );
 
     // Modal dialogs have a return code - usually the id of the last
