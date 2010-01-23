@@ -45,50 +45,57 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc, const wxRect& rc,
     if ( !IsOwnerDrawn() )
         return true;
 
-    // set the font and colors
-    wxFont font;
-    GetFontToUse(font);
-
-    wxColour colText, colBack;
-    GetColourToUse(stat, colText, colBack);
-
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
     HDC hdc = GetHdcOf(*impl);
 
-    SelectInHDC selFont(hdc, GetHfontOf(font));
+    RECT rect;
+    wxCopyRectToRECT(rc, rect);
 
-    wxMSWImpl::wxTextColoursChanger textCol(hdc, colText, colBack);
-    wxMSWImpl::wxBkModeChanger bkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
+    {
+        // set the font and colors
+        wxFont font;
+        GetFontToUse(font);
+
+        wxColour colText, colBack;
+        GetColourToUse(stat, colText, colBack);
+
+        SelectInHDC selFont(hdc, GetHfontOf(font));
+
+        wxMSWImpl::wxTextColoursChanger textCol(hdc, colText, colBack);
+        wxMSWImpl::wxBkModeChanger bkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
 
 
-    AutoHBRUSH hbr(wxColourToPalRGB(colBack));
-    SelectInHDC selBrush(hdc, hbr);
+        AutoHBRUSH hbr(wxColourToPalRGB(colBack));
+        SelectInHDC selBrush(hdc, hbr);
 
-    RECT rectFill;
-    wxCopyRectToRECT(rc, rectFill);
-    ::FillRect(hdc, &rectFill, hbr);
+        ::FillRect(hdc, &rect, hbr);
 
-    // using native API because it recognizes '&'
+        // using native API because it recognizes '&'
 
-    wxString text = GetName();
+        wxString text = GetName();
 
-    SIZE sizeRect;
-    ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &sizeRect);
+        SIZE sizeRect;
+        ::GetTextExtentPoint32(hdc, text.c_str(), text.length(), &sizeRect);
 
-    int flags = DST_PREFIXTEXT;
-    if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
-        flags |= DSS_DISABLED;
+        int flags = DST_PREFIXTEXT;
+        if ( (stat & wxODDisabled) && !(stat & wxODSelected) )
+            flags |= DSS_DISABLED;
 
-    if ( (stat & wxODHidePrefix) )
-        flags |= DSS_HIDEPREFIX;
+        if ( (stat & wxODHidePrefix) )
+            flags |= DSS_HIDEPREFIX;
 
-    int x = rc.x + GetMarginWidth();
-    int y = rc.y + (rc.GetHeight() - sizeRect.cy) / 2;
-    int cx = rc.GetWidth() - GetMarginWidth();
-    int cy = sizeRect.cy;
+        int x = rc.x + GetMarginWidth();
+        int y = rc.y + (rc.GetHeight() - sizeRect.cy) / 2;
+        int cx = rc.GetWidth() - GetMarginWidth();
+        int cy = sizeRect.cy;
 
-    ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
-                text.length(), x, y, cx, cy, flags);
+        ::DrawState(hdc, NULL, NULL, (LPARAM)text.wx_str(),
+                    text.length(), x, y, cx, cy, flags);
+
+    } // reset to default the font, colors and brush
+
+    if (stat & wxODHasFocus)
+        ::DrawFocusRect(hdc, &rect);
 
     return true;
 }
