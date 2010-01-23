@@ -32,8 +32,6 @@ void wxDialog::ShowWindowModal()
     
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow = GetWXWindow();
-    
-    wxASSERT_MSG([theWindow styleMask] & NSDocModalWindowMask, "Window must have DocModal mask set.");
 
     [NSApp beginSheet: theWindow
             modalForWindow: parentWindow
