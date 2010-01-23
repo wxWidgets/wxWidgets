@@ -492,6 +492,8 @@ int wxNotebook::ChangeSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxNOT_FOUND, wxT("notebook page out of range") );
 
+    const int selOld = m_nSelection;
+
     if ( m_nSelection == wxNOT_FOUND || nPage != (size_t)m_nSelection )
     {
         TabCtrl_SetCurSel(GetHwnd(), nPage);
@@ -499,7 +501,7 @@ int wxNotebook::ChangeSelection(size_t nPage)
         UpdateSelection(nPage);
     }
 
-    return m_nSelection;
+    return selOld;
 }
 
 bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
