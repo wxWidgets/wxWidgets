@@ -476,7 +476,6 @@ void wxDialogBase::ShowWindowModal ()
 {
     ShowModal();
     SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
-    return true;
 }
 
 void wxDialogBase::SendWindowModalDialogEvent ( wxEventType type )
