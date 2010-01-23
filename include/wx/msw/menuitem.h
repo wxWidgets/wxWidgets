@@ -107,6 +107,7 @@ public:
     const wxBitmap& GetDisabledBitmap() const
         { return m_bmpDisabled; }
 
+    int MeasureAccelWidth() const;
 
     // override wxOwnerDrawn base class virtuals
     virtual wxString GetName() const;

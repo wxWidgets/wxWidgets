@@ -271,6 +271,7 @@ void wxMenu::Init()
 #if wxUSE_OWNER_DRAWN
     m_ownerDrawn = false;
     m_maxBitmapWidth = 0;
+    m_maxAccelWidth = -1;
 #endif // wxUSE_OWNER_DRAWN
 
     // create the menu
@@ -389,6 +390,8 @@ void wxMenu::UpdateAccel(wxMenuItem *item)
         {
             GetMenuBar()->RebuildAccelTable();
         }
+
+        ResetMaxAccelWidth();
     }
     //else: it is a separator, they can't have accels, nothing to do
 }
@@ -658,6 +661,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
                 // set menu as ownerdrawn
                 m_ownerDrawn = true;
+
+                ResetMaxAccelWidth();
             }
             // only update our margin for equals alignment to other item
             else if ( !updateAllMargins )
@@ -802,6 +807,8 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         delete m_accels[n];
 
         m_accels.RemoveAt(n);
+
+        ResetMaxAccelWidth();
     }
     //else: this item doesn't have an accel, nothing to do
 #endif // wxUSE_ACCEL
@@ -851,6 +858,34 @@ wxAcceleratorTable *wxMenu::CreateAccelTable() const
 }
 
 #endif // wxUSE_ACCEL
+
+// ---------------------------------------------------------------------------
+// ownerdrawn helpers
+// ---------------------------------------------------------------------------
+
+#if wxUSE_OWNER_DRAWN
+
+void wxMenu::CalculateMaxAccelWidth()
+{
+    wxASSERT_MSG( m_maxAccelWidth == -1, wxT("it's really needed?") );
+
+    wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
+    while (node)
+    {
+        wxMenuItem* item = node->GetData();
+
+        if ( item->IsOwnerDrawn() )
+        {
+            int width = item->MeasureAccelWidth();
+            if (width > m_maxAccelWidth )
+                m_maxAccelWidth = width;
+        }
+
+        node = node->GetNext();
+    }
+}
+
+#endif // wxUSE_OWNER_DRAWN
 
 // ---------------------------------------------------------------------------
 // set wxMenu title

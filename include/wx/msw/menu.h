@@ -91,6 +91,25 @@ public:
     wxAcceleratorTable *CreateAccelTable() const;
 #endif // wxUSE_ACCEL
 
+#if wxUSE_OWNER_DRAWN
+
+    int GetMaxAccelWidth()
+    {
+        if (m_maxAccelWidth == -1)
+            CalculateMaxAccelWidth();
+        return m_maxAccelWidth;
+    }
+
+    void ResetMaxAccelWidth()
+    {
+        m_maxAccelWidth = -1;
+    }
+
+private:
+    void CalculateMaxAccelWidth();
+
+#endif // wxUSE_OWNER_DRAWN
+
 protected:
     virtual wxMenuItem* DoAppend(wxMenuItem *item);
     virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
@@ -126,6 +145,9 @@ private:
 
     // the max width of menu items bitmaps
     int m_maxBitmapWidth;
+
+    // the max width of menu items accels
+    int m_maxAccelWidth;
 #endif // wxUSE_OWNER_DRAWN
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMenu)
