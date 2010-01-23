@@ -236,6 +236,11 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     }
     else // not in cache, create a new one
     {
+        // see comments in src/msw/window.cpp where this is defined
+        extern bool wxDidCreatePaintDC;
+
+        wxDidCreatePaintDC = true;
+
         m_hDC = (WXHDC)::BeginPaint(GetHwndOf(m_window), &g_paintStruct);
         if (m_hDC)
             ms_cache.Add(new wxPaintDCInfo(m_window, this));

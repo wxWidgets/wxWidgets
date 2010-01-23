@@ -1547,16 +1547,8 @@ public:
 
     A paint event is sent when a window's contents needs to be repainted.
 
-    Please notice that in general it is impossible to change the drawing of a
-    standard control (such as wxButton) and so you shouldn't attempt to handle
-    paint events for them as even if it might work on some platforms, this is
-    inherently not portable and won't work everywhere.
-
-    @remarks
-    Note that in a paint event handler, the application must always create a
-    wxPaintDC object, even if you do not use it. Otherwise, under MS Windows,
-    refreshing for this and other windows will go wrong.
-    For example:
+    The handler of this event must create a wxPaintDC object and use it for
+    painting the window contents. For example:
     @code
     void MyWindow::OnPaint(wxPaintEvent& event)
     {
@@ -1565,6 +1557,12 @@ public:
         DrawMyDocument(dc);
     }
     @endcode
+
+    Notice that you must @e not create other kinds of wxDC (e.g. wxClientDC or
+    wxWindowDC) in EVT_PAINT handlers and also don't create wxPaintDC outside
+    of this event handlers.
+
+
     You can optimize painting by retrieving the rectangles that have been damaged
     and only repainting these. The rectangles are in terms of the client area,
     and are unscrolled, so you will need to do some calculations using the current
@@ -1600,6 +1598,12 @@ public:
         }
     }
     @endcode
+
+    @remarks
+    Please notice that in general it is impossible to change the drawing of a
+    standard control (such as wxButton) and so you shouldn't attempt to handle
+    paint events for them as even if it might work on some platforms, this is
+    inherently not portable and won't work everywhere.
 
 
     @beginEventTable{wxPaintEvent}

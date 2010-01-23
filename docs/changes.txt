@@ -517,6 +517,7 @@ MSW:
 - Worked around child window and caret positioning bug (in Windows) when using
   wxBORDER_THEME in a container window.
 - Suppressed spurious character event for decimal key in numeric keypad.
+- Allow to not create wxPaintDC in EVT_PAINT handler.
 
 i18n:
 

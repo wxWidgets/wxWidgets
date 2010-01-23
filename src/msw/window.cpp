@@ -4796,6 +4796,14 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 // painting
 // ---------------------------------------------------------------------------
 
+// this variable is used to check that a paint event handler which processed
+// the event did create a wxPaintDC inside its code and called BeginPaint() to
+// validate the invalidated window area as otherwise we'd keep getting an
+// endless stream of WM_PAINT messages for this window resulting in a lot of
+// difficult to debug problems (e.g. impossibility to repaint other windows,
+// lack of timer and idle events and so on)
+extern bool wxDidCreatePaintDC = false;
+
 bool wxWindowMSW::HandlePaint()
 {
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
@@ -4810,10 +4818,19 @@ bool wxWindowMSW::HandlePaint()
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 
+    wxDidCreatePaintDC = false;
+
     wxPaintEvent event(m_windowId);
     event.SetEventObject(this);
 
     bool processed = HandleWindowEvent(event);
+
+    if ( processed && !wxDidCreatePaintDC )
+    {
+        // do call MSWDefWindowProc() to validate the update region to avoid
+        // the problems mentioned above
+        processed = false;
+    }
 
     // note that we must generate NC event after the normal one as otherwise
     // BeginPaint() will happily overwrite our decorations with the background
