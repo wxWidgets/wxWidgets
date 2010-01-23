@@ -634,7 +634,7 @@ wxSizer::~wxSizer()
     WX_CLEAR_LIST(wxSizerItemList, m_children);
 }
 
-wxSizerItem* wxSizer::Insert( size_t index, wxSizerItem *item )
+wxSizerItem* wxSizer::DoInsert( size_t index, wxSizerItem *item )
 {
     m_children.Insert( index, item );
 
@@ -1349,7 +1349,7 @@ wxGridSizer::wxGridSizer( int rows, int cols, const wxSize& gap )
 {
 }
 
-wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
+wxSizerItem *wxGridSizer::DoInsert(size_t index, wxSizerItem *item)
 {
     // if only the number of columns or the number of rows is specified for a
     // sizer, arbitrarily many items can be added to it but if both of them are
@@ -1379,7 +1379,7 @@ wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
         }
     }
 
-    return wxSizer::Insert(index, item);
+    return wxSizer::DoInsert(index, item);
 }
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const

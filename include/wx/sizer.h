@@ -542,7 +542,11 @@ public:
                         int width,
                         int height,
                         const wxSizerFlags& flags);
-    virtual wxSizerItem* Insert( size_t index, wxSizerItem *item);
+
+    // NB: do _not_ override this function in the derived classes, this one is
+    //     virtual for compatibility reasons only to allow old code overriding
+    //     it to continue to work, override DoInsert() instead in the new code
+    virtual wxSizerItem* Insert(size_t index, wxSizerItem *item);
 
     wxSizerItem* InsertSpacer(size_t index, int size);
     wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
@@ -713,6 +717,10 @@ protected:
     virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
     virtual bool DoSetItemMinSize( size_t index, int width, int height );
 
+    // insert a new item into m_children at given index and return the item
+    // itself
+    virtual wxSizerItem* DoInsert(size_t index, wxSizerItem *item);
+
 private:
     DECLARE_CLASS(wxSizer)
 };
@@ -732,13 +740,6 @@ public:
     // ctors specifying the number of rows and columns
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int rows, int cols, const wxSize& gap );
-
-    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
-
-#ifdef __WXOSX__
-    // TODO change to better condition
-    using wxSizer::Insert;
-#endif
 
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
@@ -778,6 +779,8 @@ protected:
     // gaps between rows and columns
     int    m_vgap;
     int    m_hgap;
+
+    virtual wxSizerItem *DoInsert(size_t index, wxSizerItem *item);
 
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
@@ -1269,6 +1272,12 @@ inline wxSizerItem*
 wxSizer::Insert( size_t index, int width, int height, const wxSizerFlags& flags )
 {
     return Insert( index, new wxSizerItem(width, height, flags) );
+}
+
+inline wxSizerItem*
+wxSizer::Insert(size_t index, wxSizerItem *item)
+{
+    return DoInsert(index, item);
 }
 
 inline wxSizerItem*
