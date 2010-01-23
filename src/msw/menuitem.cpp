@@ -779,7 +779,7 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 
     if ( IsOwnerDrawn() )
     {
-        // width of menu icon in ownerdrawn menu
+        // width of menu icon with margins in ownerdrawn menu
         // if any bitmap is not set, the width of space reserved for icon
         // image is equal to the width of std check mark,
         // if bitmap is set, then the width is set to the width of the widest
@@ -833,8 +833,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     RECT rect;
     wxCopyRectToRECT(rc, rect);
 
-    int imgWidth = wxMax(GetMarginWidth(), data->CheckSize.cx)
-                 + data->CheckMargin.left + data->CheckMargin.right;
+    int imgWidth = wxMax(GetMarginWidth(), data->CheckSize.cx);
 
     if ( IsOwnerDrawn() )
     {
@@ -869,11 +868,18 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
         CopyRect(&rcGutter, &rcSelection);
         rcGutter.right = data->ItemMargin.left
                        + data->CheckBgMargin.left
+                       + data->CheckMargin.left
                        + imgWidth
+                       + data->CheckMargin.right
                        + data->CheckBgMargin.right;
 
         CopyRect(&rcText, &rcSelection);
         rcText.left = rcGutter.right + data->TextBorder;
+
+        // we draw the text label vertically centered, but this results in it
+        // being 1px too low compared to native menus for some reason, fix it
+        if ( data->MenuLayout() != MenuDrawData::FullTheme )
+            rcText.top--;
 
 #if wxUSE_UXTHEME
         wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
@@ -1011,11 +1017,19 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     RECT rcImg;
     SetRect(&rcImg,
-            rect.left + data->ItemMargin.left + data->CheckBgMargin.left,
-            rect.top  + data->ItemMargin.top  + data->CheckBgMargin.top,
-            rect.left + data->ItemMargin.left + data->CheckBgMargin.left
-                      + imgWidth,
-            rect.bottom - data->ItemMargin.bottom - data->CheckBgMargin.bottom);
+            rect.left   + data->ItemMargin.left
+                        + data->CheckBgMargin.left
+                        + data->CheckMargin.left,
+            rect.top    + data->ItemMargin.top
+                        + data->CheckBgMargin.top
+                        + data->CheckMargin.top,
+            rect.left   + data->ItemMargin.left
+                        + data->CheckBgMargin.left
+                        + data->CheckMargin.left
+                        + imgWidth,
+            rect.bottom - data->ItemMargin.bottom
+                        - data->CheckBgMargin.bottom
+                        - data->CheckMargin.bottom);
 
     if ( IsCheckable() && !m_bmpChecked.Ok() )
     {
@@ -1127,14 +1141,22 @@ void wxMenuItem::DrawStdCheckMark(HDC hdc, const RECT* rc, wxODStatus stat)
     {
         wxUxThemeHandle hTheme(GetMenu()->GetWindow(), L"MENU");
 
+        const MenuDrawData* data = MenuDrawData::Get();
+
+        // rect for background must be without check margins
+        RECT rcBg;
+        SetRect(&rcBg,
+                rc->left   - data->CheckMargin.left,
+                rc->top    - data->CheckMargin.top,
+                rc->right  + data->CheckMargin.right,
+                rc->bottom + data->CheckMargin.bottom);
+
         POPUPCHECKBACKGROUNDSTATES stateCheckBg = (stat & wxODDisabled)
                                                     ? MCB_DISABLED
                                                     : MCB_NORMAL;
 
         theme->DrawThemeBackground(hTheme, hdc, MENU_POPUPCHECKBACKGROUND,
-                                   stateCheckBg, rc, NULL);
-
-        // check mark will be drawn centered on the background
+                                   stateCheckBg, &rcBg, NULL);
 
         POPUPCHECKSTATES stateCheck;
         if ( GetKind() == wxITEM_CHECK )
