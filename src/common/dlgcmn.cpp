@@ -472,7 +472,7 @@ wxDEFINE_EVENT( wxEVT_WINDOW_MODAL_DIALOG_CLOSED , wxWindowModalDialogEvent  );
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowModalDialogEvent, wxCommandEvent)
 
-bool wxDialogBase::ShowWindowModal ()
+void wxDialogBase::ShowWindowModal ()
 {
     ShowModal();
     SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
