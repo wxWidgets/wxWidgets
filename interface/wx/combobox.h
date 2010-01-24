@@ -249,6 +249,9 @@ public:
 
         Currently only implemented in wxMSW and wxGTK.
 
+        Notice that calling this function will generate a
+        wxEVT_COMMAND_COMBOBOX_DROPDOWN event.
+
         @since 2.9.1
     */
     virtual void Popup();
@@ -257,6 +260,9 @@ public:
         Hides the list box portion of the combo box.
 
         Currently only implemented in wxMSW and wxGTK.
+
+        Notice that calling this function will generate a
+        wxEVT_COMMAND_COMBOBOX_CLOSEUP event.
 
         @since 2.9.1
     */
