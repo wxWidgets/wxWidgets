@@ -243,5 +243,23 @@ public:
             The text to set.
     */
     virtual void SetValue(const wxString& text);
+
+    /**
+        Shows the list box portion of the combo box.
+
+        Currently only implemented in wxMSW and wxGTK.
+
+        @since 2.9.1
+    */
+    virtual void Popup();
+
+    /**
+        Hides the list box portion of the combo box.
+
+        Currently only implemented in wxMSW and wxGTK.
+
+        @since 2.9.1
+    */
+    virtual void Dismiss();
 };
 

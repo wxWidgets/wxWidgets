@@ -88,6 +88,8 @@ public:
     {
         return wxItemContainer::GetStringSelection();
     }
+    virtual void Popup();
+    virtual void Dismiss();
 
     virtual void Clear()
     {

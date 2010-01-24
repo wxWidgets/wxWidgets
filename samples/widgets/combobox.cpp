@@ -53,6 +53,8 @@
 enum
 {
     ComboPage_Reset = wxID_HIGHEST,
+    ComboPage_Popup,
+    ComboPage_Dismiss,
     ComboPage_SetCurrent,
     ComboPage_CurText,
     ComboPage_InsertionPointText,
@@ -102,6 +104,8 @@ public:
 protected:
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
+    void OnButtonPopup(wxCommandEvent&) { m_combobox->Popup(); }
+    void OnButtonDismiss(wxCommandEvent&) { m_combobox->Dismiss(); }
     void OnButtonChange(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
@@ -170,6 +174,8 @@ private:
 
 BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ComboPage_Reset, ComboboxWidgetsPage::OnButtonReset)
+    EVT_BUTTON(ComboPage_Popup, ComboboxWidgetsPage::OnButtonPopup)
+    EVT_BUTTON(ComboPage_Dismiss, ComboboxWidgetsPage::OnButtonDismiss)
     EVT_BUTTON(ComboPage_Change, ComboboxWidgetsPage::OnButtonChange)
     EVT_BUTTON(ComboPage_Delete, ComboboxWidgetsPage::OnButtonDelete)
     EVT_BUTTON(ComboPage_DeleteSel, ComboboxWidgetsPage::OnButtonDeleteSel)
@@ -246,8 +252,7 @@ void ComboboxWidgetsPage::CreateContent()
     */
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
-    // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("&Set style"));
+    // upper left pane
 
     // should be in sync with ComboKind_XXX values
     static const wxString kinds[] =
@@ -262,18 +267,31 @@ void ComboboxWidgetsPage::CreateContent()
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+    wxSizer *sizerLeftTop = new wxStaticBoxSizer(wxVERTICAL, this, "&Set style");
 
-    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Sort items"));
-    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Read only"));
-    m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&File name"));
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Sort items"));
+    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&Read only"));
+    m_chkFilename = CreateCheckBoxAndAddToSizer(sizerLeftTop, wxT("&File name"));
     m_chkFilename->Disable(); // not implemented yet
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
-    sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
+    sizerLeftTop->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeftTop->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 
     wxButton *btn = new wxButton(this, ComboPage_Reset, wxT("&Reset"));
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeftTop->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+
+    // lower left pane
+    wxSizer *sizerLeftBottom = new wxStaticBoxSizer(wxVERTICAL, this, "&Popup");
+    sizerLeftBottom->Add(new wxButton(this, ComboPage_Popup, "&Show"),
+                         wxSizerFlags().Border().Centre());
+    sizerLeftBottom->Add(new wxButton(this, ComboPage_Dismiss, "&Hide"),
+                         wxSizerFlags().Border().Centre());
+
+
+    wxSizer *sizerLeft = new wxBoxSizer(wxVERTICAL);
+    sizerLeft->Add(sizerLeftTop);
+    sizerLeft->AddSpacer(10);
+    sizerLeft->Add(sizerLeftBottom);
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY,

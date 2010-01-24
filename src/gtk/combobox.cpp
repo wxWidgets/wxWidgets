@@ -337,4 +337,13 @@ void wxComboBox::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(!wxTextEntry::IsEmpty());
 }
 
+void wxComboBox::Popup()
+{
+     gtk_combo_box_popup( GTK_COMBO_BOX(m_widget) );
+}
+
+void wxComboBox::Dismiss()
+{
+    gtk_combo_box_popdown( GTK_COMBO_BOX(m_widget) );
+}
 #endif // wxUSE_COMBOBOX

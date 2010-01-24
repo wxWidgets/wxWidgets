@@ -82,7 +82,8 @@ public:
     virtual void SetValue(const wxString& value);
     virtual wxString GetStringSelection() const
         { return wxChoice::GetStringSelection(); }
-
+    virtual void Popup() { MSWDoPopupOrDismiss(true); }
+    virtual void Dismiss() { MSWDoPopupOrDismiss(false); }
     virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
     virtual void SetSelection(long from, long to)
         { wxTextEntry::SetSelection(from, to); }
@@ -125,6 +126,7 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
 #endif
+    void MSWDoPopupOrDismiss(bool show);
 
     // this is the implementation of GetEditHWND() which can also be used when
     // we don't have the edit control, it simply returns NULL then
