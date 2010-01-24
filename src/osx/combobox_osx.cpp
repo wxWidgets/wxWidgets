@@ -62,13 +62,13 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
-        
-    if (style & wxCB_READONLY)
-        wxLogWarning("wxCB_READONLY style not supported by OS X Cocoa. Use wxChoice instead.");
-    
-    if (style & wxCB_SORT)
-        wxLogWarning("wxCB_SORT style not currently supported by OS X Cocoa.");
-        
+
+    wxASSERT_MSG( !(style & wxCB_READONLY),
+                  "wxCB_READONLY not supported, use wxChoice instead" );
+
+    wxASSERT_MSG( !(style & wxCB_SORT),
+                  "wxCB_SORT not currently supported by wxOSX/Cocoa");
+
     m_peer = wxWidgetImpl::CreateComboBox( this, parent, id, NULL, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
@@ -123,19 +123,19 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
 // ----------------------------------------------------------------------------
 void wxComboBox::DoSetItemClientData(unsigned int n, void* clientData)
 {
-    wxCHECK_RET( IsValid(n), wxT("wxChoice::DoSetItemClientData: invalid index") );
+    wxCHECK_RET( IsValid(n), "invalid index" );
 
     m_datas[n] = (char*)clientData ;
 }
 
 void * wxComboBox::DoGetItemClientData(unsigned int n) const
 {
-    wxCHECK_MSG( IsValid(n), NULL, wxT("wxChoice::DoGetClientData: invalid index") );
+    wxCHECK_MSG( IsValid(n), NULL, "invalid index" );
 
     return (void *)m_datas[n];
 }
 
-unsigned int wxComboBox::GetCount() const 
+unsigned int wxComboBox::GetCount() const
 {
     return GetComboPeer()->GetNumberOfItems();
 }
@@ -155,7 +155,7 @@ void wxComboBox::GetSelection(long *from, long *to) const
 {
     wxTextEntry::GetSelection(from, to);
 }
-    
+
 int wxComboBox::GetSelection() const
 {
     return GetComboPeer()->GetSelectedItem();
@@ -173,9 +173,9 @@ void wxComboBox::SetSelection(long from, long to)
 
 int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    if (!bCase)
-        wxLogWarning("wxComboBox::FindString on Mac doesn't currently support case insensitive search.");
-    
+    wxASSERT_MSG( "wxComboBox::FindString() doesn't currently support case "
+                  "insensitive search in wxOSX/Cocoa");
+
     return GetComboPeer()->FindString(s);
 }
 
