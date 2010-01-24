@@ -73,6 +73,11 @@
 #endif
 
 #include "wx/platinfo.h"
+#include "wx/private/window.h"
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif
 
 // Windows List
 WXDLLIMPEXP_DATA_CORE(wxWindowList) wxTopLevelWindows;
@@ -2461,24 +2466,57 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 // dialog units translations
 // ----------------------------------------------------------------------------
 
+// Windows' computes dialog units using average character width over upper-
+// and lower-case ASCII alphabet and not using the average character width
+// metadata stored in the font; see
+// http://support.microsoft.com/default.aspx/kb/145994 for detailed discussion.
+// It's important that we perform the conversion in identical way, because
+// dialog units natively exist only on Windows and Windows HIG is expressed
+// using them.
+wxSize wxWindowBase::GetDlgUnitBase() const
+{
+    const wxWindow *parent = wxGetTopLevelParent((wxWindow*)this);
+
+    if ( !parent->m_font.IsOk() )
+    {
+        // Default GUI font is used. This is the most common case, so
+        // cache the results.
+        static wxSize s_defFontSize;
+        if ( s_defFontSize.x == 0 )
+            s_defFontSize = wxPrivate::GetAverageASCIILetterSize(*parent);
+        return s_defFontSize;
+    }
+    else
+    {
+        // Custom font, we always need to compute the result
+        return wxPrivate::GetAverageASCIILetterSize(*parent);
+    }
+}
+
 wxPoint wxWindowBase::ConvertPixelsToDialog(const wxPoint& pt) const
 {
+    const wxSize base = GetDlgUnitBase();
+
+    // NB: wxMulDivInt32() is used, because it correctly rounds the result
+
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
-        pt2.x = (int) ((pt.x * 4) / GetCharWidth());
+        pt2.x = wxMulDivInt32(pt.x, 4, base.x);
     if (pt.y != wxDefaultCoord)
-        pt2.y = (int) ((pt.y * 8) / GetCharHeight());
+        pt2.y = wxMulDivInt32(pt.y, 8, base.y);
 
     return pt2;
 }
 
 wxPoint wxWindowBase::ConvertDialogToPixels(const wxPoint& pt) const
 {
+    const wxSize base = GetDlgUnitBase();
+
     wxPoint pt2 = wxDefaultPosition;
     if (pt.x != wxDefaultCoord)
-        pt2.x = (int) ((pt.x * GetCharWidth()) / 4);
+        pt2.x = wxMulDivInt32(pt.x, base.x, 4);
     if (pt.y != wxDefaultCoord)
-        pt2.y = (int) ((pt.y * GetCharHeight()) / 8);
+        pt2.y = wxMulDivInt32(pt.y, base.y, 8);
 
     return pt2;
 }

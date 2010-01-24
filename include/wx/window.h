@@ -1736,6 +1736,8 @@ private:
     // explicitly disabled with SetAutoLayout(false)
     void InternalOnSize(wxSizeEvent& event);
 
+    // base for dialog unit conversion, i.e. average character size
+    wxSize GetDlgUnitBase() const;
 
     // the stack of windows which have captured the mouse
     static struct WXDLLIMPEXP_FWD_CORE wxWindowNext *ms_winCaptureNext;

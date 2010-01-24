@@ -44,6 +44,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
 #include "wx/msw/private/dc.h"
+#include "wx/private/window.h"
 
 using namespace wxMSWImpl;
 
@@ -662,16 +663,20 @@ wxSize wxButtonBase::GetDefaultSize()
         wxScreenDC dc;
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-        // the size of a standard button in the dialog units is 50x14,
-        // translate this to pixels
-        // NB1: the multipliers come from the Windows convention
-        // NB2: the extra +1/+2 were needed to get the size be the same as the
-        //      size of the buttons in the standard dialog - I don't know how
-        //      this happens, but on my system this size is 75x23 in pixels and
-        //      23*8 isn't even divisible by 14... Would be nice to understand
-        //      why these constants are needed though!
-        s_sizeBtn.x = (50 * (dc.GetCharWidth() + 1))/4;
-        s_sizeBtn.y = ((14 * dc.GetCharHeight()) + 2)/8;
+        // The size of a standard button in the dialog units is 50x14,
+        // translate this to pixels.
+        //
+        // Windows' computes dialog units using average character width over
+        // upper- and lower-case ASCII alphabet and not using the average
+        // character width metadata stored in the font; see
+        // http://support.microsoft.com/default.aspx/kb/145994 for detailed
+        // discussion.
+        //
+        // NB: wxMulDivInt32() is used, because it correctly rounds the result
+
+        const wxSize base = wxPrivate::GetAverageASCIILetterSize(dc);
+        s_sizeBtn.x = wxMulDivInt32(50, base.x, 4);
+        s_sizeBtn.y = wxMulDivInt32(14, base.y, 8);
     }
 
     return s_sizeBtn;
