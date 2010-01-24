@@ -173,7 +173,7 @@ void wxComboBox::SetSelection(long from, long to)
 
 int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    wxASSERT_MSG( "wxComboBox::FindString() doesn't currently support case "
+    wxASSERT_MSG(bCase, "wxComboBox::FindString() doesn't currently support case "
                   "insensitive search in wxOSX/Cocoa");
 
     return GetComboPeer()->FindString(s);
