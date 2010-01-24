@@ -471,13 +471,13 @@ WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 
 #if defined(wxCRT_StrcollA) && defined(wxCRT_StrcollW)
 
-// GCC 3.3 and other compilers have a bug that causes it to fail compilation if
+// GCC 3.4 and other compilers have a bug that causes it to fail compilation if
 // the template's implementation uses overloaded function declared later (see
 // the wxStrcoll() call in wxStrcoll_String<T>()), so we have to
 // forward-declare the template and implement it below WX_STRCMP_FUNC. OTOH,
 // this fails to compile with VC6, so don't do it for VC. It also causes
 // problems with GCC visibility in newer GCC versions.
-#if !(defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,4))
+#if !(defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,5))
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2);
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
@@ -497,7 +497,7 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 #endif
 }
 
-#if defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,4)
+#if defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,5)
 // this is exactly the same WX_STRCMP_FUNC line as above wxStrcoll_String<>
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif
