@@ -43,7 +43,6 @@
 
 #include "itemcontainer.h"
 #include "widgets.h"
-#if 1
 #include "icons/combobox.xpm"
 
 // ----------------------------------------------------------------------------
@@ -654,6 +653,4 @@ void ComboboxWidgetsPage::OnCloseup(wxCommandEvent& WXUNUSED(event))
     wxLogMessage(wxT("Combobox closed up"));
 }
 
-#endif //wxUSE_COMBOBOX
-
-#endif
+#endif // wxUSE_COMBOBOX
