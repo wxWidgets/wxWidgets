@@ -120,7 +120,7 @@ protected:
 
 private:
     // helper function for draw std menu check mark
-    void DrawStdCheckMark(HDC hdc, const RECT* rc, wxODStatus stat);
+    void DrawStdCheckMark(WXHDC hdc, const RECT* rc, wxODStatus stat);
 
 #endif // wxUSE_OWNER_DRAWN
 

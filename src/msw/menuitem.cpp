@@ -1035,7 +1035,7 @@ bool wxMenuItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     {
         if ( stat & wxODChecked )
         {
-            DrawStdCheckMark(hdc, &rcImg, stat);
+            DrawStdCheckMark((WXHDC)hdc, &rcImg, stat);
         }
     }
     else
@@ -1133,8 +1133,10 @@ void DrawColorCheckMark(HDC hdc, int x, int y, int cx, int cy, HDC hdcCheckMask,
 
 } // anonymous namespace
 
-void wxMenuItem::DrawStdCheckMark(HDC hdc, const RECT* rc, wxODStatus stat)
+void wxMenuItem::DrawStdCheckMark(WXHDC hdc_, const RECT* rc, wxODStatus stat)
 {
+    HDC hdc = (HDC)hdc_;
+
 #if wxUSE_UXTHEME
     wxUxThemeEngine* theme = MenuDrawData::GetUxThemeEngine();
     if ( theme )
