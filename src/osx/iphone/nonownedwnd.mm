@@ -306,7 +306,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     CGRect frame = [toplevelwindow bounds];
     CGRect appframe = [[UIScreen mainScreen] applicationFrame];
     
-    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE )
+    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] != UIStatusBarStyleBlackTranslucent)
     {
         double offset = appframe.origin.y;
         frame.origin.y += offset;
@@ -357,9 +357,31 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    CGRect fr = [self.view frame];
+    CGRect frame = [self.view frame];
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
     wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+
+    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent)
+    {
+        CGRect appframe = [[UIScreen mainScreen] applicationFrame];
+        if ( CGRectEqualToRect(appframe, frame) ) 
+        {
+            if ( appframe.origin.y != 0 )
+            {
+                double offset = appframe.origin.y;
+                frame.origin.y -= offset;
+                frame.size.height += offset;
+            }
+            else 
+            {
+                double offset = appframe.origin.x;
+                frame.origin.x -= offset;
+                frame.size.width += offset;
+            }
+
+            [self.view setFrame:frame];
+        }
+    }
     
     now->HandleResized(0);
 }
