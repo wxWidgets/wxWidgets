@@ -106,14 +106,8 @@ void strStream::CheckString(const wxString& text)
 {
     wxStringOutputStream sos;
 
-    size_t len = text.length();
-#if wxUSE_UNICODE
-    const wxCharBuffer textMB(wxConvLibc.cWC2MB(text.wc_str(), len + 1, &len));
-#else
-    const char *textMB = text.c_str();
-#endif
-
-    sos.Write(textMB, len);
+    const wxScopedCharBuffer buf(text.mb_str());
+    sos.Write(buf, buf.length());
 
     CPPUNIT_ASSERT_EQUAL( text, sos.GetString() );
 }
