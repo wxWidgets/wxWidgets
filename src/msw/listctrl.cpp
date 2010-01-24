@@ -2029,29 +2029,50 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         event.m_itemIndex = -1;
 
+        bool ignore = false;
         switch ( nmhdr->code )
         {
             // yet another comctl32.dll bug: under NT/W2K it sends Unicode
             // TRACK messages even to ANSI programs: on my system I get
-            // HDN_BEGINTRACKW and HDN_ENDTRACKA and no HDN_TRACK at all!
+            // HDN_BEGINTRACKW and HDN_ENDTRACKA!
             //
             // work around is to simply catch both versions and hope that it
             // works (why should this message exist in ANSI and Unicode is
             // beyond me as it doesn't deal with strings at all...)
             //
-            // note that fr HDN_TRACK another possibility could be to use
-            // HDN_ITEMCHANGING but it is sent even after HDN_ENDTRACK and when
-            // something other than the item width changes so we'd have to
-            // filter out the unwanted events then
+            // another problem is that HDN_TRACK is not sent at all by header
+            // with HDS_FULLDRAG style which is used by default by wxListCtrl
+            // under recent Windows versions (starting from at least XP) so we
+            // need to use HDN_ITEMCHANGING instead of it
             case HDN_BEGINTRACKA:
             case HDN_BEGINTRACKW:
                 eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
                 // fall through
 
-            case HDN_TRACKA:
-            case HDN_TRACKW:
+            case HDN_ITEMCHANGING:
                 if ( eventType == wxEVT_NULL )
+                {
+                    if ( !nmHDR->pitem || !(nmHDR->pitem->mask & HDI_WIDTH) )
+                    {
+                        // something other than the width is being changed,
+                        // ignore it
+                        ignore = true;
+                        break;
+                    }
+
+                    // also ignore the events sent when the width didn't really
+                    // change: this is not just an optimization but also gets
+                    // rid of a useless and unexpected DRAGGING event which
+                    // would otherwise be sent after the END_DRAG one as we get
+                    // an HDN_ITEMCHANGING after HDN_ENDTRACK for some reason
+                    if ( nmHDR->pitem->cxy == GetColumnWidth(nmHDR->iItem) )
+                    {
+                        ignore = true;
+                        break;
+                    }
+
                     eventType = wxEVT_COMMAND_LIST_COL_DRAGGING;
+                }
                 // fall through
 
             case HDN_ENDTRACKA:
@@ -2089,8 +2110,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 return true;
 
             default:
-                return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                ignore = true;
         }
+
+        if ( ignore )
+            return wxControl::MSWOnNotify(idCtrl, lParam, result);
     }
     else
 #endif // defined(HDN_BEGINTRACKA)

@@ -518,6 +518,7 @@ MSW:
   wxBORDER_THEME in a container window.
 - Suppressed spurious character event for decimal key in numeric keypad.
 - Allow to not create wxPaintDC in EVT_PAINT handler.
+- Fix sending of wxEVT_COMMAND_LIST_COL_DRAGGING events in wxListCtrl.
 
 i18n:
 
