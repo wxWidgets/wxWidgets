@@ -1347,6 +1347,9 @@
 				RelativePath="..\..\include\wx\event.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\evtloop.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\except.h">
 			</File>
 			<File

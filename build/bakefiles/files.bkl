@@ -440,6 +440,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dynload.h
     wx/encconv.h
     wx/event.h
+    wx/evtloop.h
     wx/except.h
     wx/features.h
     wx/flags.h
@@ -896,7 +897,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/docmdi.h
     wx/docview.h
     wx/effects.h
-    wx/evtloop.h
     wx/evtloopsrc.h
     wx/fdrepdlg.h
     wx/filectrl.h

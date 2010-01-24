@@ -5093,9 +5093,6 @@
 				RelativePath="..\..\include\wx\encinfo.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\evtloop.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\evtloopsrc.h">
 			</File>
 			<File

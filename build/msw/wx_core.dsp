@@ -5967,10 +5967,6 @@ SOURCE=..\..\include\wx\encinfo.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\evtloop.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\evtloopsrc.h
 # End Source File
 # Begin Source File
