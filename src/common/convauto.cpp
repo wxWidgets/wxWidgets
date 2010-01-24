@@ -107,11 +107,13 @@ wxConvAuto::BOMType wxConvAuto::DetectBOM(const char *src, size_t srcLen)
 
             if ( src[0] == '\x00' && src[1] == '\x00' )
             {
-                // this could only be UTF-32BE
-                if ( srcLen == 3 && src[2] == '\xFE' )
-                    return BOM_Unknown;
-            }
+                // this could only be UTF-32BE, check that the data we have so
+                // far allows for it
+                if ( srcLen == 3 && src[2] != '\xFE' )
+                    return BOM_None;
 
+                return BOM_Unknown;
+            }
             break;
 
         default:
