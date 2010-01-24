@@ -28,6 +28,7 @@ public:
     wxStringInputStream(const wxString& s);
 
     virtual wxFileOffset GetLength() const;
+    virtual bool IsSeekable() const { return true; }
 
 protected:
     virtual wxFileOffset OnSysSeek(wxFileOffset ofs, wxSeekMode mode);
@@ -75,6 +76,8 @@ public:
 
     // get the string containing current output
     const wxString& GetString() const { return *m_str; }
+
+    virtual bool IsSeekable() const { return true; }
 
 protected:
     virtual wxFileOffset OnSysTell() const;
