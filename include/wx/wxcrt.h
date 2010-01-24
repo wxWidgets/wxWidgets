@@ -478,10 +478,14 @@ WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 // this fails to compile with VC6, so don't do it for VC. It also causes
 // problems with GCC visibility in newer GCC versions.
 #if !(defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,5))
+    #define wxNEEDS_DECL_BEFORE_TEMPLATE
+#endif
+
+#ifdef wxNEEDS_DECL_BEFORE_TEMPLATE
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2);
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
-#endif // !__VISUALC__
+#endif // wxNEEDS_DECL_BEFORE_TEMPLATE
 
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2)
@@ -497,8 +501,9 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 #endif
 }
 
-#if defined(__VISUALC__) || wxCHECK_GCC_VERSION(3,5)
-// this is exactly the same WX_STRCMP_FUNC line as above wxStrcoll_String<>
+#ifndef wxNEEDS_DECL_BEFORE_TEMPLATE
+// this is exactly the same WX_STRCMP_FUNC line as above, insde the
+// wxNEEDS_DECL_BEFORE_TEMPLATE case
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif
 
