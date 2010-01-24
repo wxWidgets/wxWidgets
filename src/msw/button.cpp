@@ -457,7 +457,10 @@ wxSize wxMSWButton::ComputeBestSize(wxControl *btn)
     // creating the button
     if ( !btn->HasFlag(wxBU_EXACTFIT) )
     {
-        wxSize sizeDef = wxButton::GetDefaultSize();
+        // The size of a standard button in the dialog units is 50x14, use it.
+        // Note that we intentionally don't use GetDefaultSize() here, because
+        // it's inexact -- dialog units depend on this dialog's font.
+        wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
         if ( sizeBtn.x < sizeDef.x )
             sizeBtn.x = sizeDef.x;
         if ( sizeBtn.y < sizeDef.y )
