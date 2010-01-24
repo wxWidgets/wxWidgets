@@ -227,14 +227,13 @@ void wxConvAuto::SkipBOM(const char **src, size_t *len) const
         *len -= ofs;
 }
 
-bool wxConvAuto::InitFromInput(const char **src, size_t *len)
+bool wxConvAuto::InitFromInput(const char *src, size_t len)
 {
-    m_bomType = DetectBOM(*src, *len);
+    m_bomType = DetectBOM(src, len);
     if ( m_bomType == BOM_Unknown )
         return false;
 
     InitFromBOM(m_bomType);
-    SkipBOM(src, len);
 
     return true;
 }
@@ -253,7 +252,7 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
 
     if ( !m_conv )
     {
-        if ( !self->InitFromInput(&src, &srcLen) )
+        if ( !self->InitFromInput(src, srcLen) )
         {
             // there is not enough data to determine whether we have a BOM or
             // not, so fail for now -- the caller is supposed to call us again
@@ -261,9 +260,21 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
             return wxCONV_FAILED;
         }
     }
-    else if ( !m_consumedBOM && dst )
+
+    if ( !m_consumedBOM )
     {
         SkipBOM(&src, &srcLen);
+        if ( srcLen == 0 )
+        {
+            // there is nothing left except the BOM so we'd return 0 below but
+            // this is unexpected: decoding a non-empty string must either fail
+            // or return something non-empty, in particular this would break
+            // the code in wxTextInputStream::NextChar()
+            //
+            // so still return an error as we need some more data to be able to
+            // decode it
+            return wxCONV_FAILED;
+        }
     }
 
     // try to convert using the auto-detected encoding
@@ -286,8 +297,10 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
         }
     }
 
-    if (rc != wxCONV_FAILED && dst && !m_consumedBOM)
+    // don't skip the BOM again the next time if we really consumed it
+    if ( rc != wxCONV_FAILED && dst && !m_consumedBOM )
         self->m_consumedBOM = true;
+
     return rc;
 }
 

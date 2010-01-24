@@ -107,11 +107,11 @@ private:
     void InitFromBOM(BOMType bomType);
 
     // create the correct conversion object for the BOM present in the
-    // beginning of the buffer; adjust the buffer to skip the BOM if found
+    // beginning of the buffer
     //
     // return false if the buffer is too short to allow us to determine if we
     // have BOM or not
-    bool InitFromInput(const char **src, size_t *len);
+    bool InitFromInput(const char *src, size_t len);
 
     // adjust src and len to skip over the BOM (identified by m_bomType) at the
     // start of the buffer
