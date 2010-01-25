@@ -24,7 +24,7 @@
 
 extern wxList wxModalDialogs;
 
-void wxDialog::ShowWindowModal()
+void wxDialog::DoShowWindowModal()
 {   
     wxTopLevelWindow* parent = static_cast<wxTopLevelWindow*>(wxGetTopLevelParent(GetParent()));
     
@@ -32,8 +32,6 @@ void wxDialog::ShowWindowModal()
     
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow = GetWXWindow();
-
-    wxWindow::Show(true);
     
     [NSApp beginSheet: theWindow
             modalForWindow: parentWindow
@@ -49,8 +47,6 @@ void wxDialog::EndWindowModal()
 
 void wxDialog::DoShowModal()
 {
-    wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
-
     // If the app hasn't started, flush the event queue
     // If we don't do this, the Dock doesn't get the message that
     // the app has started so will refuse to activate it.
@@ -63,8 +59,6 @@ void wxDialog::DoShowModal()
             [theNSApp sendEvent:event];
         }
     }
-
-    wxModalDialogs.Append(this);
 
     SetFocus() ;
 /*

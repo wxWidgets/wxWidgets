@@ -50,10 +50,10 @@ public:
 //    virtual bool Destroy();
     virtual bool Show(bool show = true);
 
-    void SetModal(bool flag);
+    // return true if we're showing the dialog modally
     virtual bool IsModal() const;
 
-    // For now, same as Show(TRUE) but returns return code
+    // show the dialog modally and return the value passed to EndModal()
     virtual int ShowModal();
     
     virtual void ShowWindowModal();
@@ -64,10 +64,15 @@ public:
     // implementation
     // --------------
 
+    wxDialogModality GetModality() const;
+    
+protected:
     // show modal dialog and enter modal loop
     void DoShowModal();
+    
+    // show modal dialog and enter modal loop
+    void DoShowWindowModal();
 
-protected:
     // mac also takes command-period as cancel
     virtual bool IsEscapeKey(const wxKeyEvent& event);
 
@@ -77,7 +82,7 @@ protected:
 private:
     void Init();
 
-    bool m_isModalStyle;
+    wxDialogModality m_modality;
 };
 
 #endif

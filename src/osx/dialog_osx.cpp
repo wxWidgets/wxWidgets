@@ -32,7 +32,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
 void wxDialog::Init()
 {
-    m_isModalStyle = false;
+    m_modality = wxDIALOG_MODALITY_NONE;
 }
 
 bool wxDialog::Create( wxWindow *parent,
@@ -57,18 +57,6 @@ bool wxDialog::Create( wxWindow *parent,
     return true;
 }
 
-void wxDialog::SetModal( bool flag )
-{
-    if ( flag )
-    {
-        m_isModalStyle = true;
-    }
-    else
-    {
-        m_isModalStyle = false;
-    }
-}
-
 wxDialog::~wxDialog()
 {
     SendDestroyEvent();
@@ -89,16 +77,23 @@ bool wxDialog::IsEscapeKey(const wxKeyEvent& event)
 
 bool wxDialog::IsModal() const
 {
-    return wxModalDialogs.Find((wxDialog *)this) != NULL; // const_cast
-    //    return m_isModalStyle;
+    return m_modality != wxDIALOG_MODALITY_NONE;
 }
-
 
 bool wxDialog::Show(bool show)
 {
-    if ( !wxDialogBase::Show(show) )
-        // nothing to do
-        return false;
+    if ( m_modality == wxDIALOG_MODALITY_WINDOW_MODAL )
+    {
+        if ( !wxWindow::Show(show) )
+            // nothing to do
+            return false;
+    }
+    else 
+    {
+        if ( !wxDialogBase::Show(show) )
+            // nothing to do
+            return false;
+    }
 
     if (show && CanDoLayoutAdaptation())
         DoLayoutAdaptation();
@@ -107,35 +102,47 @@ bool wxDialog::Show(bool show)
         // usually will result in TransferDataToWindow() being called
         InitDialog();
 
-    if ( m_isModalStyle )
+    if ( !show )
     {
-        if ( show )
+        switch( m_modality )
         {
-            DoShowModal();
+            case wxDIALOG_MODALITY_WINDOW_MODAL:
+                EndWindowModal(); // OS X implementation method for cleanup
+                SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );        
+                break;
+            default:
+                break;
         }
-        else // end of modal dialog
-        {
-            // this will cause IsModalShowing() return false and our local
-            // message loop will terminate
-            wxModalDialogs.DeleteObject(this);
-        }
+        m_modality = wxDIALOG_MODALITY_NONE;
     }
-
+    
     return true;
 }
 
 // Replacement for Show(true) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
-    if ( !m_isModalStyle )
-        SetModal(true);
+    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    
+    Show();
 
-    if ( IsShown() )
-        DoShowModal();
-    else
-        Show(true);
+    DoShowModal();
 
     return GetReturnCode();
+}
+
+void wxDialog::ShowWindowModal()
+{
+    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    
+    Show();
+    
+    DoShowWindowModal();
+}
+
+wxDialogModality wxDialog::GetModality() const
+{
+    return m_modality;
 }
 
 // NB: this function (surprisingly) may be called for both modal and modeless
@@ -144,11 +151,5 @@ void wxDialog::EndModal(int retCode)
 {
     SetReturnCode(retCode);
     Show(false);
-    SetModal(false);
-    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
-    {
-        EndWindowModal(); // OS X implementation method for cleanup
-        SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
-    }
 }
 

@@ -23,14 +23,12 @@
 #include "wx/osx/private.h"
 #include "wx/evtloop.h"
 
-extern wxList wxModalDialogs;
-
 void wxDialog::EndWindowModal()
 {
     // Nothing to do for now.
 }
 
-void wxDialog::ShowWindowModal()
+void wxDialog::DoShowWindowModal()
 {
     // If someone wants to add support for this to wxOSX Carbon, here would 
     // be the place to start: http://trac.wxwidgets.org/ticket/9459
@@ -41,9 +39,6 @@ void wxDialog::ShowWindowModal()
 
 void wxDialog::DoShowModal()
 {
-    wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
-
-    wxModalDialogs.Append(this);
 
     SetFocus() ;
 
