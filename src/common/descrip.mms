@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 7 October 2009                                                      *
+# Date : 25 January 2010                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -532,6 +532,8 @@ hash.obj : hash.cpp
 hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
+	cxx$(CXXFLAGS)$(CXX_DEFINE)/warn=disable=(UNSCOMZER)/obj=http.obj \
+	http.cpp
 hyperlnkcmn.obj : hyperlnkcmn.cpp
 iconbndl.obj : iconbndl.cpp
 init.obj : init.cpp
