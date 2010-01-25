@@ -164,7 +164,7 @@ public:
     static void EnableLayoutAdaptation(bool enable) { sm_layoutAdaptation = enable; }
 
     // modality kind
-    wxDialogModality GetModality() const;
+    virtual wxDialogModality GetModality() const;
 protected:
     // emulate click of a button with the given id if it's present in the dialog
     //
