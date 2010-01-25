@@ -33,6 +33,8 @@ void wxDialog::ShowWindowModal()
     NSWindow* parentWindow = parent->GetWXWindow();
     NSWindow* theWindow = GetWXWindow();
 
+    wxWindow::Show(true);
+    
     [NSApp beginSheet: theWindow
             modalForWindow: parentWindow
             modalDelegate: theWindow
