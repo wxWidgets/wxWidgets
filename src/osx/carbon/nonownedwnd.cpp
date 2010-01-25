@@ -537,8 +537,9 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                     break ;
             }
             break ;
-
-     case kEventMouseWheelMoved :
+     // TODO http://developer.apple.com/qa/qa2005/qa1453.html
+     // add declaration for 10.4 and change to kEventMouseScroll
+    case kEventMouseWheelMoved :
         {
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
 
