@@ -24,6 +24,14 @@
 
 extern wxList wxModalDialogs;
 
+void wxDialog::ShowWindowModal()
+{   
+}
+
+void wxDialog::EndWindowModal()
+{
+}
+
 void wxDialog::DoShowModal()
 {
     wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
