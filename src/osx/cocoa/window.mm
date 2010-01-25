@@ -375,6 +375,14 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
 UInt32 g_lastButton = 0 ;
 bool g_lastButtonWasFakeRight = false ;
 
+// better scroll wheel support 
+// see http://lists.apple.com/archives/cocoa-dev/2007/Feb/msg00050.html
+
+@interface NSEvent (DeviceDelta)
+- (float)deviceDeltaX;
+- (float)deviceDeltaY;
+@end
+
 void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 {
     int eventType = [nsEvent type];
@@ -512,14 +520,14 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
             wxevent.m_wheelDelta = 10;
             wxevent.m_linesPerAction = 1;
 
-            if ( fabs([nsEvent deltaX]) > fabs([nsEvent deltaY]) )
+            if ( fabs([nsEvent deviceDeltaX]) > fabs([nsEvent deviceDeltaY]) )
             {
                 wxevent.m_wheelAxis = 1;
-                wxevent.m_wheelRotation = (int)([nsEvent deltaX] * 10);
+                wxevent.m_wheelRotation = (int)[nsEvent deviceDeltaX];
             }
             else
             {
-                wxevent.m_wheelRotation = (int)([nsEvent deltaY] * 10);
+                wxevent.m_wheelRotation = (int)[nsEvent deviceDeltaY];
             }
         }
         break ;
