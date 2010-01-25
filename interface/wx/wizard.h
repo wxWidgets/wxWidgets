@@ -98,6 +98,8 @@ public:
         The page has been just changed (this event can not be vetoed).
     @event{EVT_WIZARD_PAGE_CHANGING(id, func)}
         The page is being changed (this event can be vetoed).
+    @event{EVT_WIZARD_PAGE_SHOWN(id, func)}
+        The page was shown and laid out (this event cannot be vetoed).
     @event{EVT_WIZARD_CANCEL(id, func)}
         The user attempted to cancel the wizard (this event may also be vetoed).
     @event{EVT_WIZARD_HELP(id, func)}
@@ -229,6 +231,8 @@ public:
         The page has just been changed (this event cannot be vetoed).
     @event{EVT_WIZARD_PAGE_CHANGING(id, func)}
         The page is being changed (this event can be vetoed).
+    @event{EVT_WIZARD_PAGE_SHOWN(id, func)}
+        The page was shown and laid out (this event cannot be vetoed).
     @event{EVT_WIZARD_CANCEL(id, func)}
         The user attempted to cancel the wizard (this event may also be vetoed).
     @event{EVT_WIZARD_HELP(id, func)}

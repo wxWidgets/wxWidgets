@@ -86,6 +86,7 @@ wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_CANCEL, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent );
 wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_SHOWN, wxWizardEvent );
 
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)
@@ -661,6 +662,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
         if (m_usingSizer)
             m_sizerPage->RecalcSizes();
     }
+
+    wxWizardEvent pageShownEvent(wxEVT_WIZARD_PAGE_SHOWN, GetId(),
+        goingForward, m_page);
+    m_page->GetEventHandler()->ProcessEvent(pageShownEvent);
 
     return true;
 }

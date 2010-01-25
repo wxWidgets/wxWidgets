@@ -290,6 +290,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_CHANGING, wxWizardE
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_CANCEL, wxWizardEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_HELP, wxWizardEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_FINISHED, wxWizardEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_SHOWN, wxWizardEvent );
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
@@ -315,6 +316,9 @@ typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 // the user pressed "Help" button
 #define EVT_WIZARD_HELP(id, fn) wx__DECLARE_WIZARDEVT(HELP, id, fn)
+
+// the page was just shown and laid out
+#define EVT_WIZARD_PAGE_SHOWN(id, fn) wx__DECLARE_WIZARDEVT(PAGE_SHOWN, id, fn)
 
 #endif // wxUSE_WIZARDDLG
 
