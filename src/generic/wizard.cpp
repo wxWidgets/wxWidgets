@@ -84,6 +84,7 @@ DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_CANCEL)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_FINISHED)
 DEFINE_EVENT_TYPE(wxEVT_WIZARD_HELP)
+DEFINE_EVENT_TYPE(wxEVT_WIZARD_PAGE_SHOWN)
 
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)
@@ -681,6 +682,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
                 CentreOnScreen();
         }
     }
+
+    wxWizardEvent pageShownEvent(wxEVT_WIZARD_PAGE_SHOWN, GetId(),
+        goingForward, m_page);
+    m_page->GetEventHandler()->ProcessEvent(pageShownEvent);
 
     return true;
 }

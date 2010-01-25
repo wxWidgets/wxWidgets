@@ -285,6 +285,9 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_WIZARD_CANCEL, 902)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_WIZARD_HELP, 903)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_WIZARD_FINISHED, 903)
+#if wxABI_VERSION >= 20811
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_SHOWN, 904)
+#endif
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
@@ -311,6 +314,9 @@ typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 // the user pressed "Help" button
 #define EVT_WIZARD_HELP(id, fn) wx__DECLARE_WIZARDEVT(HELP, id, fn)
+
+// the page was just shown and laid out
+#define EVT_WIZARD_PAGE_SHOWN(id, fn) wx__DECLARE_WIZARDEVT(PAGE_SHOWN, id, fn)
 
 #endif // wxUSE_WIZARDDLG
 
