@@ -22,6 +22,7 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/dc.h"
+#include "wx/msw/wrapcctl.h"            // for HIMAGELIST
 
 #ifndef DSS_HIDEPREFIX
 #define DSS_HIDEPREFIX  0x0200
