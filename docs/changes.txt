@@ -437,6 +437,7 @@ All:
 - Added support for unique volume names to wxFileName (Neno Ganchev).
 - Correct bugs when using wxTextInputStream with wxConvAuto (Leon Buikstra).
 - Don't crash when input is empty in wxFileConfig ctor (Lukasz Michalski).
+- Correct wxSocket::Peek() to not block (Anders Larsen).
 
 Unix:
 

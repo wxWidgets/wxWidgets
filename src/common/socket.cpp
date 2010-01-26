@@ -1109,6 +1109,9 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 {
     wxSocketReadGuard read(this);
 
+    // Peek() should never block
+    wxSocketWaitModeChanger changeFlags(this, wxSOCKET_NOWAIT);
+
     m_lcount = DoRead(buffer, nbytes);
 
     Pushback(buffer, m_lcount);
