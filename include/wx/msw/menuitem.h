@@ -19,6 +19,8 @@
 #if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
     #include "wx/bitmap.h"
+
+    struct tagRECT;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -120,7 +122,7 @@ protected:
 
 private:
     // helper function for draw std menu check mark
-    void DrawStdCheckMark(WXHDC hdc, const RECT* rc, wxODStatus stat);
+    void DrawStdCheckMark(WXHDC hdc, const tagRECT* rc, wxODStatus stat);
 
 #endif // wxUSE_OWNER_DRAWN
 

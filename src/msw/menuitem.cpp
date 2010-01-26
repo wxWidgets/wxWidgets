@@ -30,6 +30,8 @@
 #include "wx/stockitem.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/dcmemory.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
     #include "wx/settings.h"
