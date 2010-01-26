@@ -4802,7 +4802,8 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
 // endless stream of WM_PAINT messages for this window resulting in a lot of
 // difficult to debug problems (e.g. impossibility to repaint other windows,
 // lack of timer and idle events and so on)
-extern bool wxDidCreatePaintDC = false;
+extern bool wxDidCreatePaintDC;
+bool wxDidCreatePaintDC = false;
 
 bool wxWindowMSW::HandlePaint()
 {
