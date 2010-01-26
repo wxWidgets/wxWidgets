@@ -4763,7 +4763,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                 wxFAIL_MSG(wxT("unsupported theme colour"));
         };
 
-        wxUxThemeHandle hTheme(this, themeName);
+        wxUxThemeHandle hTheme((wxWindow *)this, themeName);
         COLORREF col;
         HRESULT hr = theme->GetThemeColor
                             (
