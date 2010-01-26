@@ -209,6 +209,7 @@ public:
     void OnSelect(wxCommandEvent& event);
     void OnUnselect(wxCommandEvent& event);
     void OnToggleSel(wxCommandEvent& event);
+    void OnSelectChildren(wxCommandEvent& event);
 #endif // NO_MULTIPLE_SELECTION
     void OnSelectRoot(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
@@ -354,6 +355,7 @@ enum
     TreeTest_Select,
     TreeTest_Unselect,
     TreeTest_SelectRoot,
+    TreeTest_SelectChildren,
     TreeTest_ShowFirstVisible,
     TreeTest_ShowLastVisible,
     TreeTest_ShowNextVisible,

@@ -1883,6 +1883,39 @@ void wxTreeCtrl::UnselectAll()
     }
 }
 
+void wxTreeCtrl::DoSelectChildren(const wxTreeItemId& parent)
+{
+    DoUnselectAll();
+
+    wxTreeItemIdValue cookie;
+    wxTreeItemId child = GetFirstChild(parent, cookie);
+    while ( child.IsOk() )
+    {
+        DoSelectItem(child, true);
+        child = GetNextChild(child, cookie);
+    }
+}
+
+void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
+{
+    wxCHECK_RET( HasFlag(wxTR_MULTIPLE),
+                 "this only works with multiple selection controls" );
+
+    HTREEITEM htFocus = (HTREEITEM)TreeView_GetSelection(GetHwnd());
+
+    wxTreeEvent changingEvent(wxEVT_COMMAND_TREE_SEL_CHANGING, this);
+    changingEvent.m_itemOld = htFocus;
+
+    if ( IsTreeEventAllowed(changingEvent) )
+    {
+        DoSelectChildren(parent);
+
+        wxTreeEvent changedEvent(wxEVT_COMMAND_TREE_SEL_CHANGED, this);
+        changedEvent.m_itemOld = htFocus;
+        (void)HandleTreeEvent(changedEvent);
+    }
+}
+
 void wxTreeCtrl::DoSelectItem(const wxTreeItemId& item, bool select)
 {
     TempSetter set(m_changingSelection);

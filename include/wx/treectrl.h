@@ -324,6 +324,9 @@ public:
     virtual void UnselectAll() = 0;
         // select this item
     virtual void SelectItem(const wxTreeItemId& item, bool select = true) = 0;
+        // selects all (direct) children for given parent (only for
+        // multiselection controls)
+    virtual void SelectChildren(const wxTreeItemId& parent) = 0;
         // unselect this item
     void UnselectItem(const wxTreeItemId& item) { SelectItem(item, false); }
         // toggle item selection
@@ -400,7 +403,7 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
-    // comon part of Get/SetItemState()
+    // common part of Get/SetItemState()
     virtual int DoGetItemState(const wxTreeItemId& item) const = 0;
     virtual void DoSetItemState(const wxTreeItemId& item, int state) = 0;
 

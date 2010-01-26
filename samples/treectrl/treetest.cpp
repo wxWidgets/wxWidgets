@@ -98,6 +98,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(Select)
     MENU_LINK(Unselect)
     MENU_LINK(ToggleSel)
+    MENU_LINK(SelectChildren)
 #endif // NO_MULTIPLE_SELECTION
     MENU_LINK(Rename)
     MENU_LINK(Count)
@@ -262,6 +263,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_DeleteChildren, wxT("Delete &children"));
     tree_menu->Append(TreeTest_DeleteAll, wxT("Delete &all items"));
     tree_menu->Append(TreeTest_SelectRoot, wxT("Select root item"));
+
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_Count, wxT("Count children of current item"));
     tree_menu->Append(TreeTest_CountRec, wxT("Recursively count children of current item"));
@@ -307,6 +309,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_DumpSelected, wxT("Dump selected items\tAlt-D"));
     item_menu->Append(TreeTest_Select, wxT("Select current item\tAlt-S"));
     item_menu->Append(TreeTest_Unselect, wxT("Unselect everything\tAlt-U"));
+    item_menu->Append(TreeTest_SelectChildren, wxT("Select all children\tCtrl-A"));
 #endif // NO_MULTIPLE_SELECTION
 
     wxMenuBar *menu_bar = new wxMenuBar;
@@ -592,6 +595,15 @@ void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->UnselectAll();
+}
+
+void MyFrame::OnSelectChildren(wxCommandEvent& WXUNUSED(event))
+{
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
+    if ( !item.IsOk() )
+        item = m_treeCtrl->GetRootItem();
+
+    m_treeCtrl->SelectChildren(item);
 }
 
 #endif // NO_MULTIPLE_SELECTION

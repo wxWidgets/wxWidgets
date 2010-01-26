@@ -954,6 +954,15 @@ public:
         Unselects the given item. This works in multiselection controls only.
     */
     void UnselectItem(const wxTreeItemId& item);
+
+    /**
+        Select all the immediate children of the given parent.
+
+        This function can be used with multiselection controls only.
+
+        @since 2.9.1
+    */
+    virtual void SelectChildren(const wxTreeItemId& parent);
 };
 
 

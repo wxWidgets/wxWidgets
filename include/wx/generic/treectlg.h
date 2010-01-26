@@ -155,6 +155,7 @@ public:
     virtual void Unselect();
     virtual void UnselectAll();
     virtual void SelectItem(const wxTreeItemId& item, bool select = true);
+    virtual void SelectChildren(const wxTreeItemId& parent);
 
     virtual void EnsureVisible(const wxTreeItemId& item);
     virtual void ScrollTo(const wxTreeItemId& item);

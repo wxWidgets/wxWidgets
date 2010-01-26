@@ -1983,6 +1983,42 @@ void wxGenericTreeCtrl::UnselectAll()
     }
 }
 
+void wxGenericTreeCtrl::SelectChildren(const wxTreeItemId& parent)
+{
+    wxCHECK_RET( HasFlag(wxTR_MULTIPLE),
+                 "this only works with multiple selection controls" );
+
+    UnselectAll();
+
+    if ( !HasChildren(parent) )
+        return;
+
+
+    wxArrayGenericTreeItems&
+        children = ((wxGenericTreeItem*) parent.m_pItem)->GetChildren();
+    size_t count = children.GetCount();
+
+    wxGenericTreeItem *
+        item = (wxGenericTreeItem*) ((wxTreeItemId)children[0]).m_pItem;
+    wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
+    event.m_itemOld = m_current;
+
+    if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
+        return;
+
+    for ( size_t n = 0; n < count; ++n )
+    {
+        m_current = m_key_current = children[n];
+        m_current->SetHilight(true);
+        RefreshSelected();
+    }
+
+
+    event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+    GetEventHandler()->ProcessEvent( event );
+}
+
+
 // Recursive function !
 // To stop we must have crt_item<last_item
 // Algorithm :
