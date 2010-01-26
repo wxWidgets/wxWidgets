@@ -349,6 +349,15 @@ void wxCursor::InitFromStock(wxStockCursor idCursor)
 
     if ( !hcursor )
     {
+        if ( !stdCursor.isStd )
+        {
+            // it may be not obvious to the programmer why did loading fail,
+            // try to help by pointing to the by far the most probable reason
+            wxFAIL_MSG(wxT("Loading a cursor defined by wxWidgets failed, ")
+                       wxT("did you include include/wx/msw/wx.rc file from ")
+                       wxT("your resource file?"));
+        }
+
         wxLogLastError(wxT("LoadCursor"));
     }
     else

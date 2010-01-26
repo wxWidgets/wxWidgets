@@ -58,7 +58,14 @@ enum wxPolygonFillMode
 };
 
 /**
-    Standard cursors. See wxCursor.
+    Standard cursors.
+
+    Notice that under wxMSW some of these cursors are defined in @c wx.rc file
+    and not by the system itself so you should include this file from your own
+    resource file (possibly creating a trivial resource file just containing a
+    single include line if you don't need it otherwise) to be able to use them.
+
+    See wxCursor.
 */
 enum wxStockCursor
 {
