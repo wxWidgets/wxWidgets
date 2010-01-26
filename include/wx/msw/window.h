@@ -428,7 +428,7 @@ public:
                                int themePart,
                                int themeState,
                                MSWThemeColour themeColour,
-                               wxSystemColour fallback);
+                               wxSystemColour fallback) const;
 
     // gives the parent the possibility to draw its children background, e.g.
     // this is used by wxNotebook to do it using DrawThemeBackground()

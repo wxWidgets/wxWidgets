@@ -4739,7 +4739,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                                         int themePart,
                                         int themeState,
                                         MSWThemeColour themeColour,
-                                        wxSystemColour fallback)
+                                        wxSystemColour fallback) const
 {
 #if wxUSE_UXTHEME
     const wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
@@ -4763,7 +4763,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                 wxFAIL_MSG(wxT("unsupported theme colour"));
         };
 
-        wxUxThemeHandle hTheme((wxWindow *)this, themeName);
+        wxUxThemeHandle hTheme((const wxWindow *)this, themeName);
         COLORREF col;
         HRESULT hr = theme->GetThemeColor
                             (
