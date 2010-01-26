@@ -692,8 +692,25 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
     return true;
 }
 
-void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int WXUNUSED(flags))
+void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int flagsWX)
 {
+    int flagsOSX;
+    switch ( flagsWX )
+    {
+        case wxUSER_ATTENTION_INFO:
+            flagsOSX = NSInformationalRequest;
+            break;
+
+        case wxUSER_ATTENTION_ERROR:
+            flagsOSX = NSCriticalRequest;
+            break;
+
+        default:
+            wxFAIL_MSG( "invalid RequestUserAttention() flags" );
+            return;
+    }
+
+    [NSApp requestUserAttention:flagsOSX];
 }
 
 void wxNonOwnedWindowCocoaImpl::ScreenToWindow( int *x, int *y )
