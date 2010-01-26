@@ -663,6 +663,10 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
         case wxFONTFAMILY_DEFAULT:
             ff_family = FF_SWISS;
             break;
+
+        case wxFONTFAMILY_UNKNOWN:
+            wxFAIL_MSG( "invalid font family" );
+            return;
     }
 
     wxCHECK_RET( ff_family != FF_DONTCARE, "unknown wxFontFamily" );
