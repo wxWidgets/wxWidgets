@@ -417,10 +417,25 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
             m_bHasMessages = true;
             break;
 
-        default:
-            // let the base class deal with debug/trace messages as well as any
-            // custom levels
+        case wxLOG_Debug:
+        case wxLOG_Trace:
+            // let the base class deal with debug/trace messages
             wxLog::DoLogRecord(level, msg, info);
+            break;
+
+        case wxLOG_FatalError:
+        case wxLOG_Max:
+            // fatal errors are shown immediately and terminate the program so
+            // we should never see them here
+            wxFAIL_MSG("unexpected log level");
+            break;
+
+        case wxLOG_Progress:
+        case wxLOG_User:
+            // just ignore those: passing them to the base class would result
+            // in asserts from DoLogText() because DoLogTextAtLevel() would
+            // call it as it doesn't know how to handle these levels otherwise
+            break;
     }
 }
 
