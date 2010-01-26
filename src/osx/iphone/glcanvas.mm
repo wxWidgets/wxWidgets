@@ -46,6 +46,7 @@
 
 @interface wxUICustomOpenGLView : UIView
 {
+    CGRect oldRect;
     EAGLContext* context;
 
     /* The pixel dimensions of the backbuffer */
@@ -61,6 +62,7 @@
 
 - (BOOL) createFramebuffer;
 - (void) destroyFramebuffer;
+- (id) initWithFrame:(CGRect) rect;
 
 @end
 
@@ -78,6 +80,15 @@
         initialized = YES;
         wxOSXIPhoneClassAddWXMethods( self );
     }
+}
+
+- (id) initWithFrame:(CGRect)rect
+{
+    if ( !(self=[super initWithFrame:rect]) )
+        return nil;
+    
+    oldRect = rect;
+    return self;
 }
 
 - (BOOL)isOpaque
@@ -131,14 +142,27 @@
 - (void) setContext:(EAGLContext*) ctx {
     context = ctx;
     [EAGLContext setCurrentContext:ctx];
-    [self destroyFramebuffer];
-    [self createFramebuffer];
+#if 0
+    CGRect newRect = [self frame];
+    if ( /* (CGRectEqualToRect(newRect, oldRect) == NO && ![self isHidden] && newRect.size.width > 0 && newRect.size.height > 0 ) 
+        || */ viewFramebuffer == 0 )
+    {
+        [self destroyFramebuffer];
+        [self createFramebuffer];        
+    }
+#endif
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 }
  
 - (void) swapBuffers {
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
     [context presentRenderbuffer:GL_RENDERBUFFER_OES];
+}
+
+- (void)layoutSubviews {
+    [EAGLContext setCurrentContext:context];
+    [self destroyFramebuffer];
+    [self createFramebuffer];
 }
 
 @end
