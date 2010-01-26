@@ -2149,7 +2149,7 @@ inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
 }
 #endif
 
-wxString wxPGProperty::GetHintText() const
+inline wxString wxPGProperty::GetHintText() const
 {
     wxVariant vHintText = GetAttribute(wxPGGlobalVars->m_strHint);
 
