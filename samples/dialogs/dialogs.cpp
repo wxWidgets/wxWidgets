@@ -123,6 +123,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #if wxUSE_MSGDLG
     EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
+    EVT_MENU(DIALOGS_MESSAGE_BOX_WINDOW_MODAL,      MyFrame::MessageBoxWindowModal)
     EVT_MENU(DIALOGS_MESSAGE_DIALOG,                MyFrame::MessageBoxDialog)
     EVT_MENU(DIALOGS_MESSAGE_BOX_WXINFO,            MyFrame::MessageBoxInfo)
 #endif // wxUSE_MSGDLG
@@ -286,6 +287,7 @@ bool MyApp::OnInit()
     wxMenu *menuDlg = new wxMenu;
 
     menuDlg->Append(DIALOGS_MESSAGE_BOX, wxT("&Message box\tCtrl-M"));
+    menuDlg->Append(DIALOGS_MESSAGE_BOX_WINDOW_MODAL, wxT("Window-Modal Message box "));
     menuDlg->Append(DIALOGS_MESSAGE_DIALOG, wxT("Message dialog\tShift-Ctrl-M"));
 
 
@@ -746,9 +748,57 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
                            wxCENTER |
                            wxNO_DEFAULT | wxYES_NO | wxCANCEL |
                            wxICON_INFORMATION);
-
+    
     wxString extmsg;
     if ( dialog.SetYesNoCancelLabels
+        (
+         "Answer &Yes",
+         "Answer &No",
+         "Refuse to answer"
+         ) )
+    {
+        extmsg = "This platform supports custom button labels,\n"
+        "so you should see the descriptive labels below.";
+    }
+    else
+    {
+        extmsg = "Custom button labels are not supported on this platform,\n"
+        "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
+    }
+    dialog.SetExtendedMessage(extmsg);
+    
+    switch ( dialog.ShowModal() )
+    {
+        case wxID_YES:
+            wxLogStatus(wxT("You pressed \"Yes\""));
+            break;
+            
+        case wxID_NO:
+            wxLogStatus(wxT("You pressed \"No\""));
+            break;
+            
+        case wxID_CANCEL:
+            wxLogStatus(wxT("You pressed \"Cancel\""));
+            break;
+            
+        default:
+            wxLogError(wxT("Unexpected wxMessageDialog return code!"));
+    }
+}
+
+void MyFrame::MessageBoxWindowModal(wxCommandEvent& WXUNUSED(event))
+{
+    wxMessageDialog* dialog = new wxMessageDialog(this,
+                           "This is a message box\n"
+                           "This is a long, long string to test out if the message box "
+                           "is laid out properly.",
+                           "Message box text",
+                           wxCENTER |
+                           wxNO_DEFAULT | wxYES_NO | wxCANCEL |
+                           wxICON_INFORMATION);
+
+    wxString extmsg;
+    if ( dialog->SetYesNoCancelLabels
                 (
                     "Answer &Yes",
                     "Answer &No",
@@ -763,9 +813,15 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
         extmsg = "Custom button labels are not supported on this platform,\n"
                  "so the default \"Yes\"/\"No\"/\"Cancel\" buttons are used.";
     }
-    dialog.SetExtendedMessage(extmsg);
+    dialog->SetExtendedMessage(extmsg);
+    dialog->Connect( wxEVT_WINDOW_MODAL_DIALOG_CLOSED, wxWindowModalDialogEventHandler(MyFrame::MessageBoxWindowModalClosed), NULL, this );
+    dialog->ShowWindowModal();
+}
 
-    switch ( dialog.ShowModal() )
+void MyFrame::MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event)
+{
+    wxDialog* dialog = event.GetDialog();
+    switch ( dialog->GetReturnCode() )
     {
         case wxID_YES:
             wxLogStatus(wxT("You pressed \"Yes\""));
@@ -782,6 +838,7 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event))
         default:
             wxLogError(wxT("Unexpected wxMessageDialog return code!"));
     }
+    delete dialog;
 }
 
 void MyFrame::MessageBoxDialog(wxCommandEvent& WXUNUSED(event))

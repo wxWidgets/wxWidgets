@@ -288,6 +288,8 @@ public:
     void MessageBox(wxCommandEvent& event);
     void MessageBoxDialog(wxCommandEvent& event);
     void MessageBoxInfo(wxCommandEvent& event);
+    void MessageBoxWindowModal(wxCommandEvent& event);
+    void MessageBoxWindowModalClosed(wxWindowModalDialogEvent& event);
 #endif // wxUSE_MSGDLG
 
 #if wxUSE_COLOURDLG
@@ -464,6 +466,7 @@ enum
     DIALOGS_CHOOSE_FONT,
     DIALOGS_CHOOSE_FONT_GENERIC,
     DIALOGS_MESSAGE_BOX,
+    DIALOGS_MESSAGE_BOX_WINDOW_MODAL,
     DIALOGS_MESSAGE_DIALOG,
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_SINGLE_CHOICE,
