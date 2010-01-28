@@ -55,12 +55,12 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "NDEBUG" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "NDEBUG" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -80,12 +80,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -105,12 +105,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "NDEBUG" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "NDEBUG" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -130,12 +130,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmswuniv28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmswuniv28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -155,12 +155,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28u_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "NDEBUG" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "NDEBUG" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswu" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28u_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -180,12 +180,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28ud_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswud" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28ud_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -205,12 +205,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_mmediadll.pch" /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "NDEBUG" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "NDEBUG" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\msw" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -230,12 +230,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /i "..\..\src\mmedia\..\..\..\include" /d WXDLLNAME=wxmsw28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_mmediadll.pch" /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_dll\wxmsw28d_mmedia_vc_custom.pdb /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /D "WXUSINGDLL" /D "WXMAKINGDLL_MMEDIA" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\mmedia\..\..\..\lib\vc_dll\mswd" /i "..\..\src\mmedia\..\..\..\include" /d "WXBUILDING" /d WXDLLNAME=wxmsw28d_mmedia_vc_custom /i "..\..\src\mmedia\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_MMEDIA
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -255,8 +255,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -278,8 +278,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -301,8 +301,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "NDEBUG" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -324,8 +324,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmswuniv28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -347,8 +347,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswu" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28u_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "NDEBUG" /D "_UNICODE" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -370,8 +370,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswud" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28ud_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -393,8 +393,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\msw" /I "..\..\src\mmedia\..\..\..\include" /W4 /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "NDEBUG" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -416,8 +416,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\mmedia\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\mmedia"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /c
+# ADD CPP /nologo /FD /MDd /Od /Gm /GR /EHsc /I "..\..\src\mmedia\..\..\..\lib\vc_lib\mswd" /I "..\..\src\mmedia\..\..\..\include" /W4 /Zi /Fd..\..\src\mmedia\..\..\..\lib\vc_lib\wxmsw28d_mmedia.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_mmedialib.pch" /I "..\..\src\mmedia\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXBUILDING" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
