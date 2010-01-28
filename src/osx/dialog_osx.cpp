@@ -122,7 +122,7 @@ bool wxDialog::Show(bool show)
 // Replacement for Show(true) for modal dialogs - returns return code
 int wxDialog::ShowModal()
 {
-    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+    m_modality = wxDIALOG_MODALITY_APP_MODAL;
     
     Show();
 

@@ -66,6 +66,10 @@ public:
 
     wxDialogModality GetModality() const;
     
+#if wxOSX_USE_COCOA
+    virtual void ModalFinishedCallback(void* WXUNUSED(panel), int WXUNUSED(returnCode)) {}
+#endif
+
 protected:
     // show modal dialog and enter modal loop
     void DoShowModal();
@@ -79,10 +83,10 @@ protected:
     // needed for cleanup on the Cocoa side.
     void EndWindowModal();
 
+    wxDialogModality m_modality;
+
 private:
     void Init();
-
-    wxDialogModality m_modality;
 };
 
 #endif

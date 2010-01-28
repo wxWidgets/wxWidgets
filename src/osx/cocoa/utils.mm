@@ -11,14 +11,13 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/wxprec.h"
-
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
     #if wxUSE_GUI
+        #include "wx/dialog.h"
         #include "wx/toplevel.h"
         #include "wx/font.h"
     #endif
@@ -176,7 +175,13 @@ void wxMacWakeUp()
     [super init];
     sheetFinished = NO;
     resultCode = -1;
+    impl = 0;
     return self;
+}
+
+- (void)setImplementation: (wxDialog *)dialog
+{
+    impl = dialog;
 }
 
 - (BOOL)finished
@@ -205,6 +210,9 @@ void wxMacWakeUp()
     // NSAlerts don't need nor respond to orderOut
     if ([sheet respondsToSelector:@selector(orderOut:)])
         [sheet orderOut: self];
+        
+    if (impl)
+        impl->ModalFinishedCallback(sheet, returnCode);
 }
 @end
 

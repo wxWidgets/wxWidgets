@@ -38,6 +38,11 @@ public:
     virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
     virtual int ShowModal();
+    
+#if wxOSX_USE_COCOA
+    virtual void ShowWindowModal();
+    virtual void ModalFinishedCallback(void* panel, int resultCode);
+#endif
 
 protected:
     // not supported for file dialog, RR

@@ -86,7 +86,7 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding()) ;
         wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
 
-        int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
+        int m_buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
         if (style & wxYES_NO)
         {
@@ -94,32 +94,32 @@ int wxMessageDialog::ShowModal()
             {
                 defaultButtonTitle = cfNoString;
                 alternateButtonTitle = cfYesString;
-                buttonId[0] = wxID_NO;
-                buttonId[1] = wxID_YES;
+                m_buttonId[0] = wxID_NO;
+                m_buttonId[1] = wxID_YES;
             }
             else
             {
                 defaultButtonTitle = cfYesString;
                 alternateButtonTitle = cfNoString;
-                buttonId[0] = wxID_YES;
-                buttonId[1] = wxID_NO;
+                m_buttonId[0] = wxID_YES;
+                m_buttonId[1] = wxID_NO;
             }
             if (style & wxCANCEL)
             {
                 otherButtonTitle = cfCancelString;
-                buttonId[2] = wxID_CANCEL;
+                m_buttonId[2] = wxID_CANCEL;
             }
         }
         else
         {
             // the MSW implementation even shows an OK button if it is not specified, we'll do the same
-            buttonId[0] = wxID_OK;
+            m_buttonId[0] = wxID_OK;
             // using null as default title does not work on earlier systems
             defaultButtonTitle = cfOKString;
             if (style & wxCANCEL)
             {
                 alternateButtonTitle = cfCancelString;
-                buttonId[1] = wxID_CANCEL;
+                m_buttonId[1] = wxID_CANCEL;
             }
         }
 
@@ -128,99 +128,135 @@ int wxMessageDialog::ShowModal()
             0, alertType, NULL, NULL, NULL, cfTitle, cfText,
             defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
         if (err == noErr)
-            resultbutton = buttonId[exitButton];
+            resultbutton = m_buttonId[exitButton];
     }
     else
     {
-        NSAlert* alert = [[NSAlert alloc] init];
+        NSAlert* alert = (NSAlert*)ConstructNSAlert();
 
-        wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
-        wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
-
-        wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-        wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
-
-        [alert setMessageText:cfTitle.AsNSString()];
-        [alert setInformativeText:cfText.AsNSString()];
-
-        int buttonId[3] = { 0, 0, 0 };
-        int buttonCount = 0;
-
-        if (style & wxYES_NO)
-        {
-            if ( style & wxNO_DEFAULT )
-            {
-                [alert addButtonWithTitle:cfNoString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_NO;
-                [alert addButtonWithTitle:cfYesString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_YES;
-            }
-            else
-            {
-                [alert addButtonWithTitle:cfYesString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_YES;
-                [alert addButtonWithTitle:cfNoString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_NO;
-            }
-
-            if (style & wxCANCEL)
-            {
-                [alert addButtonWithTitle:cfCancelString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_CANCEL;
-            }
-        }
-        // the MSW implementation even shows an OK button if it is not specified, we'll do the same
-        else
-        {
-            [alert addButtonWithTitle:cfOKString.AsNSString()];
-            buttonId[ buttonCount++ ] = wxID_OK;
-            if (style & wxCANCEL)
-            {
-                [alert addButtonWithTitle:cfCancelString.AsNSString()];
-                buttonId[ buttonCount++ ] = wxID_CANCEL;
-            }
-        }
-
-
-        wxNonOwnedWindow* parentWindow = NULL;
         int button = -1;
-
-        if (GetParent())
-        {
-            parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
-        }
-
- /*
-        if (parentWindow)
-        {
-            NSWindow* nativeParent = parentWindow->GetWXWindow();
-            ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
-            [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate
-                didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
-                contextInfo: nil];
-            [sheetDelegate waitForSheetToFinish];
-            button = [sheetDelegate code];
-            [sheetDelegate release];
-        }
-        else
-*/
-        {
-            button = [alert runModal];
-        }
+        button = [alert runModal];
         [alert release];
-
-        if ( button < NSAlertFirstButtonReturn )
-            resultbutton = wxID_CANCEL;
-        else
-        {
-            if ( button - NSAlertFirstButtonReturn < buttonCount )
-                resultbutton = buttonId[ button - NSAlertFirstButtonReturn ];
-            else
-                resultbutton = wxID_CANCEL;
-        }
+        ModalFinishedCallback(alert, button);
     }
 
-    return resultbutton;
+    return GetReturnCode();
+}
+
+void wxMessageDialog::ShowWindowModal()
+{
+    NSAlert* alert = (NSAlert*)ConstructNSAlert();
+
+    wxNonOwnedWindow* parentWindow = NULL;
+
+    m_modality = wxDIALOG_MODALITY_WINDOW_MODAL;
+
+    if (GetParent())
+        parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
+
+    wxASSERT_MSG(parentWindow, "Window modal display requires parent.");
+
+    if (parentWindow)
+    {
+        NSWindow* nativeParent = parentWindow->GetWXWindow();
+        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init];
+        [sheetDelegate setImplementation: this];
+        [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate
+            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:)
+            contextInfo: nil];
+    }
+}
+
+void wxMessageDialog::ModalFinishedCallback(void* panel, int resultCode)
+{
+    int resultbutton = wxID_CANCEL;
+    if ( resultCode < NSAlertFirstButtonReturn )
+        resultbutton = wxID_CANCEL;
+    else
+    {
+        if ( resultCode - NSAlertFirstButtonReturn < m_buttonCount )
+            resultbutton = m_buttonId[ resultCode - NSAlertFirstButtonReturn ];
+        else
+            resultbutton = wxID_CANCEL;
+    }
+    SetReturnCode(resultbutton);
+    
+    if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
+        SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+}
+
+void* wxMessageDialog::ConstructNSAlert()
+{
+    const long style = GetMessageDialogStyle();
+
+    wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
+
+    // work out what to display
+    // if the extended text is empty then we use the caption as the title
+    // and the message as the text (for backwards compatibility)
+    // but if the extended message is not empty then we use the message as the title
+    // and the extended message as the text because that makes more sense
+
+    wxString msgtitle,msgtext;
+    if(m_extendedMessage.IsEmpty())
+    {
+        msgtitle = m_caption;
+        msgtext  = m_message;
+    }
+    else
+    {
+        msgtitle = m_message;
+        msgtext  = m_extendedMessage;
+    }
+
+    NSAlert* alert = [[NSAlert alloc] init];
+
+    wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding() );
+    wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
+
+    wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
+    wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
+
+    [alert setMessageText:cfTitle.AsNSString()];
+    [alert setInformativeText:cfText.AsNSString()];
+
+    m_buttonCount = 0;
+
+    if (style & wxYES_NO)
+    {
+        if ( style & wxNO_DEFAULT )
+        {
+            [alert addButtonWithTitle:cfNoString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_NO;
+            [alert addButtonWithTitle:cfYesString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_YES;
+        }
+        else
+        {
+            [alert addButtonWithTitle:cfYesString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_YES;
+            [alert addButtonWithTitle:cfNoString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_NO;
+        }
+
+        if (style & wxCANCEL)
+        {
+            [alert addButtonWithTitle:cfCancelString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_CANCEL;
+        }
+    }
+    // the MSW implementation even shows an OK button if it is not specified, we'll do the same
+    else
+    {
+        [alert addButtonWithTitle:cfOKString.AsNSString()];
+        m_buttonId[ m_buttonCount++ ] = wxID_OK;
+        if (style & wxCANCEL)
+        {
+            [alert addButtonWithTitle:cfCancelString.AsNSString()];
+            m_buttonId[ m_buttonCount++ ] = wxID_CANCEL;
+        }
+    }
+    return alert;
 }

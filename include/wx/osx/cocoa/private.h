@@ -55,6 +55,8 @@ WXDLLIMPEXP_BASE wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef add
 WXDLLIMPEXP_BASE OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef );
 WXDLLIMPEXP_BASE wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname );
 
+class WXDLLIMPEXP_FWD_CORE wxDialog;
+
 //
 //
 //
@@ -346,8 +348,10 @@ protected :
     {
         BOOL sheetFinished;
         int resultCode;
+        wxDialog* impl;
     }
 
+    - (void)setImplementation: (wxDialog *)dialog;
     - (BOOL)finished;
     - (int)code;
     - (void)waitForSheetToFinish;

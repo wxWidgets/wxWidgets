@@ -23,12 +23,24 @@ public:
                     const wxPoint& pos = wxDefaultPosition);
 
     virtual int ShowModal();
+    
+#if wxOSX_USE_COCOA
+    virtual void ShowWindowModal();
+    virtual void ModalFinishedCallback(void* panel, int resultCode);
+#endif
 
 protected:
     // not supported for message dialog
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+
+#if wxOSX_USE_COCOA
+    void* ConstructNSAlert();
+#endif
+
+    int m_buttonId[3];
+    int m_buttonCount;
 
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
