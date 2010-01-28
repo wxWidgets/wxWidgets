@@ -34,7 +34,10 @@ void wxDialog::DoShowWindowModal()
     // be the place to start: http://trac.wxwidgets.org/ticket/9459
     // Unfortunately, supporting sheets in Carbon isn't as straightforward
     // as with Cocoa, so it will probably take some tweaking.
-    wxDialogBase::ShowWindowModal();
+
+    m_modality = wxDIALOG_MODALITY_APP_MODAL;
+    ShowModal();
+    SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
 
 void wxDialog::DoShowModal()
