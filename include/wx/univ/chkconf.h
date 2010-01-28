@@ -11,6 +11,17 @@
 #ifndef _WX_UNIV_CHKCONF_H_
 #define _WX_UNIV_CHKCONF_H_
 
+#if wxUSE_OWNER_DRAWN
+    /*
+        It is not clear if owner-drawn code makes much sense for wxUniv in the
+        first place but in any case it doesn't link currently (at least under
+        wxMSW but probably elsewhere too) as there is no wxUniv-specific
+        wxOwnerDrawnBase implementation so disable it for now.
+    */
+    #undef wxUSE_OWNER_DRAWN
+    #define wxUSE_OWNER_DRAWN 0
+#endif /* wxUSE_OWNER_DRAWN */
+
 #if (wxUSE_COMBOBOX || wxUSE_MENUS) && !wxUSE_POPUPWIN
 #    ifdef wxABORT_ON_CONFIG_ERROR
 #        error "wxUSE_POPUPWIN must be defined to use comboboxes/menus"
