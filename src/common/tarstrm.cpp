@@ -1307,6 +1307,11 @@ bool wxTarOutputStream::WriteHeaders(wxTarEntry& entry)
         m_tarsize += rounded;
 
         *m_extendedHdr = 0;
+
+        // update m_headpos which is used to seek back to fix up the file
+        // length if it is not known in advance
+        if (m_tarstart != wxInvalidOffset)
+            m_headpos = m_tarstart + m_tarsize;
     }
 
     // if don't have extended headers just report error
