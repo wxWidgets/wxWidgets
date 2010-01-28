@@ -25,6 +25,23 @@
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
 
+namespace 
+{
+    NSAlertStyle GetAlertStyleFromWXStyle( long style )
+    {
+        NSAlertStyle alertType = NSWarningAlertStyle;
+        if (style & wxICON_EXCLAMATION)
+            alertType = NSCriticalAlertStyle;
+        else if (style & wxICON_HAND)
+            alertType = NSWarningAlertStyle;
+        else if (style & wxICON_INFORMATION)
+            alertType = NSInformationalAlertStyle;
+        else if (style & wxICON_QUESTION)
+            alertType = NSInformationalAlertStyle;
+        return alertType;
+    }
+}
+
 wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& message,
                                  const wxString& caption,
@@ -41,17 +58,6 @@ int wxMessageDialog::ShowModal()
     const long style = GetMessageDialogStyle();
 
     wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
-
-    NSAlertStyle alertType = NSWarningAlertStyle;
-    if (style & wxICON_EXCLAMATION)
-        alertType = NSCriticalAlertStyle;
-    else if (style & wxICON_HAND)
-        alertType = NSWarningAlertStyle;
-    else if (style & wxICON_INFORMATION)
-        alertType = NSInformationalAlertStyle;
-    else if (style & wxICON_QUESTION)
-        alertType = NSInformationalAlertStyle;
-
 
     // work out what to display
     // if the extended text is empty then we use the caption as the title
@@ -86,6 +92,8 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfOKString( GetOKLabel(), GetFont().GetEncoding()) ;
         wxCFStringRef cfCancelString( GetCancelLabel(), GetFont().GetEncoding() );
 
+        NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
+                
         int m_buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
         if (style & wxYES_NO)
@@ -210,6 +218,7 @@ void* wxMessageDialog::ConstructNSAlert()
     }
 
     NSAlert* alert = [[NSAlert alloc] init];
+    NSAlertStyle alertType = GetAlertStyleFromWXStyle(style);
 
     wxCFStringRef cfNoString( GetNoLabel(), GetFont().GetEncoding() );
     wxCFStringRef cfYesString( GetYesLabel(), GetFont().GetEncoding() );
@@ -221,6 +230,7 @@ void* wxMessageDialog::ConstructNSAlert()
 
     [alert setMessageText:cfTitle.AsNSString()];
     [alert setInformativeText:cfText.AsNSString()];
+    [alert setAlertStyle:alertType];
 
     m_buttonCount = 0;
 
