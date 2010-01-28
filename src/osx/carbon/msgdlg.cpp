@@ -247,6 +247,8 @@ int wxMessageDialog::ShowModal()
             }
         }
     }
+    
+    SetReturnCode(resultbutton);
 
     return resultbutton;
 }
