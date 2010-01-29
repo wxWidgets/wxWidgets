@@ -5562,21 +5562,32 @@ dnl File system watcher checks
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-    AC_DEFINE(wxUSE_FSWATCHER)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
-
-    if test "$wxUSE_UNIX" = "yes"; then
-        AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
-        if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-            AC_DEFINE(wxHAS_INOTIFY)
-        else
-            AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
-            if test "$ac_cv_header_sys_event_h" = "yes"; then
-                AC_DEFINE(wxHAS_KQUEUE)
+    dnl wxFileSystemWatcher is always available under MSW but we need either
+    dnl inotify or kqueue support in the system for it under Unix (this
+    dnl includes OS X which does have kqueue but no other platforms)
+    if test "$wxUSE_MSW" != "1"; then
+        if test "$wxUSE_UNIX" = "yes"; then
+            AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
+            if test "$ac_cv_header_sys_inotify_h" = "yes"; then
+                AC_DEFINE(wxHAS_INOTIFY)
             else
-                AC_MSG_WARN([No native wxFileSystemWatcher implementation available for on this platform])
+                AC_CHECK_HEADERS(sys/event.h,,, [AC_INCLUDES_DEFAULT()])
+                if test "$ac_cv_header_sys_event_h" = "yes"; then
+                    AC_DEFINE(wxHAS_KQUEUE)
+                else
+                    wxUSE_FSWATCHER=no
+                fi
             fi
+        else
+            wxUSE_FSWATCHER=no
         fi
+    fi
+
+    if test "$wxUSE_FSWATCHER" = "yes"; then
+        AC_DEFINE(wxUSE_FSWATCHER)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
+    else
+        AC_MSG_WARN([wxFileSystemWatcher won't be available on this platform])
     fi
 fi
 

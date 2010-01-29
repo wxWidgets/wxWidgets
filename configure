@@ -42595,13 +42595,8 @@ fi
 
 
 if test "$wxUSE_FSWATCHER" = "yes"; then
-    cat >>confdefs.h <<\_ACEOF
-#define wxUSE_FSWATCHER 1
-_ACEOF
-
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
-
-    if test "$wxUSE_UNIX" = "yes"; then
+                if test "$wxUSE_MSW" != "1"; then
+        if test "$wxUSE_UNIX" = "yes"; then
 
 for ac_header in sys/inotify.h
 do
@@ -42660,12 +42655,12 @@ fi
 
 done
 
-        if test "$ac_cv_header_sys_inotify_h" = "yes"; then
-            cat >>confdefs.h <<\_ACEOF
+            if test "$ac_cv_header_sys_inotify_h" = "yes"; then
+                cat >>confdefs.h <<\_ACEOF
 #define wxHAS_INOTIFY 1
 _ACEOF
 
-        else
+            else
 
 for ac_header in sys/event.h
 do
@@ -42724,16 +42719,29 @@ fi
 
 done
 
-            if test "$ac_cv_header_sys_event_h" = "yes"; then
-                cat >>confdefs.h <<\_ACEOF
+                if test "$ac_cv_header_sys_event_h" = "yes"; then
+                    cat >>confdefs.h <<\_ACEOF
 #define wxHAS_KQUEUE 1
 _ACEOF
 
-            else
-                { echo "$as_me:$LINENO: WARNING: No native wxFileSystemWatcher implementation available for on this platform" >&5
-echo "$as_me: WARNING: No native wxFileSystemWatcher implementation available for on this platform" >&2;}
+                else
+                    wxUSE_FSWATCHER=no
+                fi
             fi
+        else
+            wxUSE_FSWATCHER=no
         fi
+    fi
+
+    if test "$wxUSE_FSWATCHER" = "yes"; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FSWATCHER 1
+_ACEOF
+
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
+    else
+        { echo "$as_me:$LINENO: WARNING: wxFileSystemWatcher won't be available on this platform" >&5
+echo "$as_me: WARNING: wxFileSystemWatcher won't be available on this platform" >&2;}
     fi
 fi
 
