@@ -983,6 +983,12 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
                                                 const wxSize& sz,
                                                 long extraStyle ) const
 {
+    // Since it is not possible (yet) to create a read-only combo box in
+    // the same sense that wxTextCtrl is read-only, simply do not create
+    // the control in this case.
+    if ( property->HasFlag(wxPG_PROP_READONLY) )
+        return NULL;
+
     const wxPGChoices& choices = property->GetChoices();
     wxString defString;
     int index = property->GetChoiceSelection();
@@ -1577,6 +1583,9 @@ wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
                                                    const wxPoint& pos,
                                                    const wxSize& size ) const
 {
+    if ( property->HasFlag(wxPG_PROP_READONLY) )
+        return NULL;
+
     wxPoint pt = pos;
     pt.x -= wxPG_XBEFOREWIDGET;
     wxSize sz = size;

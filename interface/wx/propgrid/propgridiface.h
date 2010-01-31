@@ -794,9 +794,6 @@ public:
         In other words, user cannot change the value in the editor, but they can
         still copy it.
 
-        @remarks This is mainly for use with textctrl editor. Only some other
-                editors fully support it.
-
         @param id
             Property name or pointer.
 
@@ -806,6 +803,9 @@ public:
         @param flags
             By default changes are applied recursively. Set this parameter
             wxPG_DONT_RECURSE to prevent this.
+
+        @remarks This is mainly for use with textctrl editor. Only some other
+                 editors fully support it.
     */
     void SetPropertyReadOnly( wxPGPropArg id, bool set = true,
                               int flags = wxPG_RECURSE );

@@ -451,7 +451,9 @@ wxPG_PROP_CATEGORY                  = 0x2000,
 */
 wxPG_PROP_MISC_PARENT               = 0x4000,
 
-/** Property is read-only. Editor is still created.
+/** Property is read-only. Editor is still created for wxTextCtrl-based
+    property editors. For others, editor is not usually created because
+    they do implement wxTE_READONLY style or equivalent.
 */
 wxPG_PROP_READONLY                  = 0x8000,
 
