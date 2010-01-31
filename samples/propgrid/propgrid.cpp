@@ -644,6 +644,7 @@ enum
     ID_INSERTPROP,
     ID_INSERTCAT,
     ID_ENABLE,
+    ID_SETREADONLY,
     ID_HIDE,
     ID_DELETE,
     ID_DELETER,
@@ -748,6 +749,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_UNSPECIFY, FormMain::OnMisc )
     EVT_MENU( ID_DELETEALL, FormMain::OnClearClick )
     EVT_MENU( ID_ENABLE, FormMain::OnEnableDisable )
+    EVT_MENU( ID_SETREADONLY, FormMain::OnSetReadOnly )
     EVT_MENU( ID_HIDE, FormMain::OnHideShow )
 
     EVT_MENU( ID_ITERATE1, FormMain::OnIterate1Click )
@@ -2284,6 +2286,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         wxT("Toggles item's enabled state.") );
     m_itemEnable->Enable( FALSE );
     menuTools1->Append(ID_HIDE, wxT("Hide"), wxT("Shows or hides a property") );
+    menuTools1->Append(ID_SETREADONLY, "Set as Read-Only",
+                       "Set property as read-only" );
 
     menuTools2->Append(ID_ITERATE1, wxT("Iterate Over Properties") );
     menuTools2->Append(ID_ITERATE2, wxT("Iterate Over Visible Items") );
@@ -2727,6 +2731,19 @@ void FormMain::OnEnableDisable( wxCommandEvent& )
         m_pPropGridManager->EnableProperty ( id );
         m_itemEnable->SetItemLabel( wxT("Disable") );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnSetReadOnly( wxCommandEvent& WXUNUSED(event) )
+{
+    wxPGProperty* p = m_pPropGridManager->GetGrid()->GetSelection();
+    if ( !p )
+    {
+        wxMessageBox(wxT("First select a property."));
+        return;
+    }
+    m_pPropGridManager->SetPropertyReadOnly(p);
 }
 
 // -----------------------------------------------------------------------
