@@ -126,8 +126,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
                 PLATFORM_BEOS=1
             ;;
             * )
-                dnl wxWidgets-specific: allow unknown Unix systems
-                dnl AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
+                AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
             ;;
         esac
     fi
@@ -337,7 +336,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         chmod +x shared-ld-sh
 
         SHARED_LD_MODULE_CC="`pwd`/shared-ld-sh -bundle -headerpad_max_install_names -o"
-        SHARED_LD_MODULE_CXX="CXX=\$(CXX) $SHARED_LD_MODULE_CC"
+        SHARED_LD_MODULE_CXX="CXX=\"\$(CXX)\" $SHARED_LD_MODULE_CC"
 
         dnl Most apps benefit from being fully binded (its faster and static
         dnl variables initialized at startup work).
@@ -490,7 +489,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
     USE_SOVERLINUX=0
     USE_SOVERSOLARIS=0
     USE_SOVERCYGWIN=0
-    USE_SOSYMLINKS=0
+    USE_SOTWOSYMLINKS=0
     USE_MACVERSION=0
     SONAME_FLAG=
 
@@ -504,20 +503,19 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
         fi
         USE_SOVERSION=1
         USE_SOVERLINUX=1
-        USE_SOSYMLINKS=1
+        USE_SOTWOSYMLINKS=1
       ;;
 
       *-*-solaris2* )
         SONAME_FLAG="-h "
         USE_SOVERSION=1
         USE_SOVERSOLARIS=1
-        USE_SOSYMLINKS=1
       ;;
 
       *-*-darwin* )
         USE_MACVERSION=1
         USE_SOVERSION=1
-        USE_SOSYMLINKS=1
+        USE_SOTWOSYMLINKS=1
       ;;
 
       *-*-cygwin* )
@@ -531,7 +529,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
     AC_SUBST(USE_SOVERSOLARIS)
     AC_SUBST(USE_SOVERCYGWIN)
     AC_SUBST(USE_MACVERSION)
-    AC_SUBST(USE_SOSYMLINKS)
+    AC_SUBST(USE_SOTWOSYMLINKS)
     AC_SUBST(SONAME_FLAG)
 ])
 
@@ -839,7 +837,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.5"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.8"
 
     dnl includes autoconf_inc.m4:
     $1
