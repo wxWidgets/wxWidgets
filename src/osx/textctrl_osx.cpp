@@ -344,7 +344,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( event.MetaDown() )
+    if ( event.GetModifiers() == wxMOD_CMD )
     {
         switch( event.GetKeyCode() )
         {
