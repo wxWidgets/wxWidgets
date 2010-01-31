@@ -53,6 +53,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxTextCtrlBase)
 BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_DROP_FILES(wxTextCtrl::OnDropFiles)
     EVT_CHAR(wxTextCtrl::OnChar)
+    EVT_KEY_DOWN(wxTextCtrl::OnKeyDown)
     EVT_MENU(wxID_CUT, wxTextCtrl::OnCut)
     EVT_MENU(wxID_COPY, wxTextCtrl::OnCopy)
     EVT_MENU(wxID_PASTE, wxTextCtrl::OnPaste)
@@ -341,26 +342,40 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
         LoadFile( event.GetFiles()[0] );
 }
 
+void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
+{
+    if ( event.MetaDown() )
+    {
+        switch( event.GetKeyCode() )
+        {
+            case 'A':
+                SelectAll();
+                return;
+            case 'C':
+                if ( CanCopy() )
+                    Copy() ;
+                return;
+            case 'V':
+                if ( CanPaste() )
+                    Paste() ;
+                return;
+            case 'X':
+                if ( CanCut() )
+                    Cut() ;
+                return;
+            default:
+                break;
+        }
+    }
+    // no, we didn't process it
+    event.Skip();
+}
+
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     int key = event.GetKeyCode() ;
     bool eat_key = false ;
     long from, to;
-
-    if ( key == 'a' && event.MetaDown() )
-    {
-        SelectAll() ;
-
-        return ;
-    }
-
-    if ( key == 'c' && event.MetaDown() )
-    {
-        if ( CanCopy() )
-            Copy() ;
-
-        return ;
-    }
 
     if ( !IsEditable() && !event.IsKeyInCategory(WXK_CATEGORY_ARROW | WXK_CATEGORY_TAB) &&
         !( key == WXK_RETURN && ( (m_windowStyle & wxTE_PROCESS_ENTER) || (m_windowStyle & wxTE_MULTILINE) ) )
@@ -387,22 +402,6 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
 
     // assume that any key not processed yet is going to modify the control
     m_dirty = true;
-
-    if ( key == 'v' && event.MetaDown() )
-    {
-        if ( CanPaste() )
-            Paste() ;
-
-        return ;
-    }
-
-    if ( key == 'x' && event.MetaDown() )
-    {
-        if ( CanCut() )
-            Cut() ;
-
-        return ;
-    }
 
     switch ( key )
     {

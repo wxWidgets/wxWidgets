@@ -115,6 +115,7 @@ public:
     // callbacks
     void OnDropFiles(wxDropFilesEvent& event);
     void OnChar(wxKeyEvent& event); // Process 'enter' if required
+    void OnKeyDown(wxKeyEvent& event); // Process clipboard shortcuts
 
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
