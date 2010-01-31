@@ -820,14 +820,14 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     int key = event.GetKeyCode() ;
     bool eat_key = false ;
 
-    if ( key == 'a' && event.MetaDown() )
+    if ( key == 'a' && event.GetModifiers() == wxMOD_CMD )
     {
         SelectAll() ;
 
         return ;
     }
 
-    if ( key == 'c' && event.MetaDown() )
+    if ( key == 'c' && event.GetModifiers() == wxMOD_CMD )
     {
         if ( CanCopy() )
             Copy() ;
@@ -860,7 +860,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     // assume that any key not processed yet is going to modify the control
     m_dirty = true;
 
-    if ( key == 'v' && event.MetaDown() )
+    if ( key == 'v' && event.GetModifiers() == wxMOD_CMD )
     {
         if ( CanPaste() )
             Paste() ;
@@ -868,7 +868,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         return ;
     }
 
-    if ( key == 'x' && event.MetaDown() )
+    if ( key == 'x' && event.GetModifiers() == wxMOD_CMD )
     {
         if ( CanCut() )
             Cut() ;
