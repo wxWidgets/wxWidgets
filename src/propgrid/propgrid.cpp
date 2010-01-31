@@ -2437,9 +2437,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 {
                     dc.SetBrush(m_colPropBack);
                     dc.SetPen(m_colPropBack);
-                    dc.SetTextForeground(m_colDisPropFore);
                     if ( p->IsEnabled() )
-                        dc.SetTextForeground(rowFgCol);
+                        dc.SetTextForeground(m_colPropFore);
                     else
                         dc.SetTextForeground(m_colDisPropFore);
                 }
