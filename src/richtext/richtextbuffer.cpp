@@ -2495,7 +2495,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
         node = node->GetNext();
     }
 
-    return foundCount == matchingCount;
+    return foundCount == matchingCount && foundCount != 0;
 }
 
 /// Test if this whole range has paragraph attributes of the specified kind. If any
@@ -2533,7 +2533,7 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
 
         node = node->GetNext();
     }
-    return foundCount == matchingCount;
+    return foundCount == matchingCount && foundCount != 0;
 }
 
 void wxRichTextParagraphLayoutBox::Clear()
