@@ -302,7 +302,7 @@ void wxWidgetCocoaImpl::SetupKeyEvent(wxKeyEvent &wxevent , NSEvent * nsEvent, N
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = (wxevent.GetEventType() != wxEVT_CHAR) ? [nsEvent charactersIgnoringModifiers] : [nsEvent characters];
+        NSString* nschars = [nsEvent charactersIgnoringModifiers];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
