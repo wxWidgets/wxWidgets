@@ -694,7 +694,7 @@ bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 
 void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int flagsWX)
 {
-    int flagsOSX;
+    NSRequestUserAttentionType flagsOSX;
     switch ( flagsWX )
     {
         case wxUSER_ATTENTION_INFO:
