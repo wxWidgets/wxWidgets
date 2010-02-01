@@ -3012,7 +3012,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
         node = node->GetNext();
     }
 
-    return foundCount == matchingCount;
+    return foundCount == matchingCount && foundCount != 0;
 }
 
 bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const
@@ -3056,7 +3056,7 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
 
         node = node->GetNext();
     }
-    return foundCount == matchingCount;
+    return foundCount == matchingCount && foundCount != 0;
 }
 
 bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const

@@ -120,6 +120,7 @@ All (GUI):
 - wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
   where possible.
 - wxRTC: corrected centring and right-justification spacing.
+- wxRTC: corrected some problems with SelectAll. Caret is now set to end.
 - Paper size conversion from dimensions to id now uses definition ordering
   in order to use common types where there are duplications, fixing problems
   where invalid sizes caused incorrect second invocation of page setup

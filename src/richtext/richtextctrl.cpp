@@ -2175,8 +2175,7 @@ wxRichTextRange wxRichTextCtrl::AddImage(const wxImage& image)
 
 void wxRichTextCtrl::SelectAll()
 {
-    SetSelection(0, GetLastPosition()+1);
-    m_selectionAnchor = -1;
+    SetSelection(-1, -1);
 }
 
 /// Select none
@@ -2598,8 +2597,9 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
         wxRichTextRange oldSelection = m_selectionRange;
         m_selectionAnchor = from;
         m_selectionRange.SetRange(from, to-1);
-        if (from > -2)
-            m_caretPosition = from-1;
+
+        // Have to subtract 2, one because of endPos+1 rule (SetSelection docs) and another to turn into caret position.
+        m_caretPosition = wxMax(-1, to-2);
 
         wxRichTextCtrlRefreshForSelectionChange(*this, oldSelection, m_selectionRange);
         PositionCaret();
@@ -3420,13 +3420,7 @@ wxRichTextRange wxRichTextCtrl::GetSelectionRange() const
 
 void wxRichTextCtrl::SetSelectionRange(const wxRichTextRange& range)
 {
-    wxRichTextRange range1(range);
-    if (range1 != wxRichTextRange(-2,-2) && range1 != wxRichTextRange(-1,-1) )
-        range1.SetEnd(range1.GetEnd() - 1);
-
-    wxASSERT( range1.GetStart() > range1.GetEnd() );
-
-    SetInternalSelectionRange(range1);
+    SetSelection(range.GetStart(), range.GetEnd());
 }
 
 /// Set list style
