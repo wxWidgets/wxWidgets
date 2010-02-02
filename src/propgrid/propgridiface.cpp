@@ -587,8 +587,6 @@ void wxPropertyGridInterface::Sort( int flags )
 {
     wxPropertyGrid* pg = GetPropertyGrid();
 
-    pg->DoClearSelection();
-
     unsigned int pageIndex = 0;
 
     for (;;)
@@ -598,6 +596,10 @@ void wxPropertyGridInterface::Sort( int flags )
         page->DoSort(flags);
         pageIndex++;
     }
+
+    // Fix positions of any open editor controls
+    if ( pg )
+        pg->CorrectEditorWidgetPosY();
 }
 
 // -----------------------------------------------------------------------

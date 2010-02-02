@@ -1564,6 +1564,9 @@ void wxPropertyGrid::PrepareAfterItemsAdded()
         Sort(wxPG_SORT_TOP_LEVEL_ONLY);
 
     RecalculateVirtualSize();
+
+    // Fix editor position
+    CorrectEditorWidgetPosY();
 }
 
 // -----------------------------------------------------------------------

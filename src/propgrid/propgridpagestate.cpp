@@ -1671,10 +1671,6 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
     }
 #endif // wxDEBUG_LEVEL
 
-    // Make sure nothing is selected.
-    if ( propGrid )
-        propGrid->ClearSelection(false);
-
     // NULL parent == root parent
     if ( !scheduledParent )
         scheduledParent = DoGetRoot();
