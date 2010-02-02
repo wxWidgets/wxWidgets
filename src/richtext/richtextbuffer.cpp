@@ -2986,7 +2986,7 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
         {
             // Stop searching if we're beyond the range of interest
             if (para->GetRange().GetStart() > range.GetEnd())
-                return foundCount == matchingCount;
+                return foundCount == matchingCount && foundCount != 0;
 
             if (!para->GetRange().IsOutside(range))
             {
@@ -2995,7 +2995,12 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                 while (node2)
                 {
                     wxRichTextObject* child = node2->GetData();
-                    if (!child->GetRange().IsOutside(range) && child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
+                    // Allow for empty string if no buffer
+                    wxRichTextRange childRange = child->GetRange();
+                    if (childRange.GetLength() == 0 && GetRange().GetLength() == 1)
+                        childRange.SetEnd(childRange.GetEnd()+1);
+
+                    if (!childRange.IsOutside(range) && child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
                     {
                         foundCount ++;
                         wxTextAttrEx textAttr = para->GetCombinedAttributes(child->GetAttributes());
@@ -3040,7 +3045,7 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
         {
             // Stop searching if we're beyond the range of interest
             if (para->GetRange().GetStart() > range.GetEnd())
-                return foundCount == matchingCount;
+                return foundCount == matchingCount && foundCount != 0;
 
             if (!para->GetRange().IsOutside(range))
             {
@@ -7516,8 +7521,12 @@ void wxRichTextAction::UpdateAppearance(long caretPosition, bool sendUpdateEvent
                         // Detect last line in the buffer
                         else if (!node2->GetNext() && para->GetRange().Contains(m_buffer->GetRange().GetEnd()))
                         {
-                            foundEnd = true;
-                            lastY = pt.y + line->GetSize().y;
+                            // If deleting text, make sure we refresh below as well as above
+                            if (positionOffset >= 0)
+                            {
+                                foundEnd = true;
+                                lastY = pt.y + line->GetSize().y;
+                            }
 
                             node2 = wxRichTextLineList::compatibility_iterator();
                             node = wxRichTextObjectList::compatibility_iterator();

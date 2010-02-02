@@ -1085,7 +1085,15 @@ bool wxRichTextCtrl::DeleteSelectedContent(long* newPos)
     if (HasSelection())
     {
         long pos = m_selectionRange.GetStart();
-        GetBuffer().DeleteRangeWithUndo(m_selectionRange, this);
+        wxRichTextRange range = m_selectionRange;
+
+        // SelectAll causes more to be selected than doing it interactively,
+        // and causes a new paragraph to be inserted. So for multiline buffers,
+        // don't delete the final position.
+        if (range.GetEnd() == GetLastPosition() && GetNumberOfLines() > 0)
+            range.SetEnd(range.GetEnd()-1);
+
+        GetBuffer().DeleteRangeWithUndo(range, this);
         m_selectionRange.SetRange(-2, -2);
 
         if (newPos)
@@ -2595,7 +2603,7 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
     else
     {
         wxRichTextRange oldSelection = m_selectionRange;
-        m_selectionAnchor = from;
+        m_selectionAnchor = from-1;
         m_selectionRange.SetRange(from, to-1);
 
         // Have to subtract 2, one because of endPos+1 rule (SetSelection docs) and another to turn into caret position.
@@ -2816,7 +2824,7 @@ void wxRichTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 
 void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
-    event.Enable(GetLastPosition() > 0);
+    event.Enable(GetLastPosition() >= 0);
 }
 
 void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
