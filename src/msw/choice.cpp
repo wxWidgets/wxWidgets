@@ -235,6 +235,8 @@ wxChoice::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     // FIXME: Use better dummy window?
     wxWindow* wnd = wxTheApp->GetTopWindow();
+    if (!wnd)
+        return attrs;
 
     attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
