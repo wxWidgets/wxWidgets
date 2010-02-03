@@ -106,6 +106,7 @@ static const struct ControlValues
 
     bool password;
     bool readonly;
+    bool processEnter;
     bool filename;
 
     WrapStyle wrapStyle;
@@ -118,6 +119,7 @@ static const struct ControlValues
     TextLines_Multi,    // multiline
     false,              // not password
     false,              // not readonly
+    true,               // do process enter
     false,              // not filename
     WrapStyle_Word,     // wrap on word boundaries
 #ifdef __WXMSW__
@@ -205,6 +207,7 @@ protected:
     // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
                *m_chkReadonly,
+               *m_chkProcessEnter,
                *m_chkFilename;
 
     // under MSW we test rich edit controls as well here
@@ -364,6 +367,7 @@ TextWidgetsPage::TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist)
 
     m_chkPassword =
     m_chkReadonly =
+    m_chkProcessEnter =
     m_chkFilename = (wxCheckBox *)NULL;
 
     m_text =
@@ -409,6 +413,9 @@ void TextWidgetsPage::CreateContent()
                     );
     m_chkReadonly = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("&Read-only mode")
+                    );
+    m_chkProcessEnter = CreateCheckBoxAndAddToSizer(
+                        sizerLeft, wxT("Process &Enter")
                     );
     m_chkFilename = CreateCheckBoxAndAddToSizer(
                         sizerLeft, wxT("&Filename control")
@@ -611,6 +618,7 @@ void TextWidgetsPage::Reset()
 
     m_chkPassword->SetValue(DEFAULTS.password);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
+    m_chkProcessEnter->SetValue(DEFAULTS.processEnter);
     m_chkFilename->SetValue(DEFAULTS.filename);
 
     m_radioWrap->SetSelection(DEFAULTS.wrapStyle);
@@ -641,6 +649,8 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
+    if ( m_chkProcessEnter->GetValue() )
+        flags |= wxTE_PROCESS_ENTER;
 
     switch ( m_radioWrap->GetSelection() )
     {
@@ -885,6 +895,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 #endif // __WXMSW__
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
+                  (m_chkProcessEnter->GetValue() != DEFAULTS.processEnter) ||
                   (m_chkFilename->GetValue() != DEFAULTS.filename) ||
                   (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
 }
