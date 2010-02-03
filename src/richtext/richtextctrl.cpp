@@ -969,7 +969,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 }
             }
 
-            if (!processed)
+            if (!processed && newPos < (GetLastPosition()-1))
                 GetBuffer().DeleteRangeWithUndo(wxRichTextRange(newPos+1, newPos+1), this);
         }
 
