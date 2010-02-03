@@ -1059,8 +1059,11 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     const int w = bitmap.GetWidth();
     const int h = bitmap.GetHeight();
 
+    // notice that as the bitmap is not drawn upside down (or right to left)
+    // even if the corresponding axis direction is inversed, we need to take it
+    // into account when calculating its bounding box
     CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w, y + h);
+    CalcBoundingBox(x + m_signX*w, y + m_signY*h);
 
     // device coords
     int xx = LogicalToDeviceX(x);
