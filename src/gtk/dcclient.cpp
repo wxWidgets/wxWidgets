@@ -1335,7 +1335,9 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     return true;
 }
 
-void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
+void wxWindowDCImpl::DoDrawText(const wxString& text,
+                                wxCoord xLogical,
+                                wxCoord yLogical)
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -1343,8 +1345,8 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     if (text.empty()) return;
 
-    x = XLOG2DEV(x);
-    y = YLOG2DEV(y);
+    wxCoord x = XLOG2DEV(xLogical),
+            y = YLOG2DEV(yLogical);
 
     wxCHECK_RET( m_context, wxT("no Pango context") );
     wxCHECK_RET( m_layout, wxT("no Pango layout") );
@@ -1459,8 +1461,8 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         pango_layout_set_attributes(m_layout, NULL);
     }
 
-    CalcBoundingBox(x + int(w / m_scaleX), y + int(h / m_scaleY));
-    CalcBoundingBox(x, y);
+    CalcBoundingBox(xLogical + int(w / m_scaleX), yLogical + int(h / m_scaleY));
+    CalcBoundingBox(xLogical, yLogical);
 }
 
 // TODO: When GTK2.6 is required, merge DoDrawText and DoDrawRotatedText to
