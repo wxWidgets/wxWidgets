@@ -246,11 +246,12 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // ignored by the static control but result in extra lines and hence extra
     // scrollbar position in the edit one
     wxString text(wxGetWindowText(hwndStatic));
-    for ( wxString::iterator i = text.end() - 1; i != text.begin(); --i )
+    for ( wxString::reverse_iterator i = text.rbegin(); i != text.rend(); ++i )
     {
         if ( *i != '\n' )
         {
-            text.erase(i + 1, text.end());
+            // found last non-newline char, remove everything after it and stop
+            text.erase(i.base() + 1, text.end());
             break;
         }
     }
