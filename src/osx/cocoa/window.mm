@@ -516,19 +516,43 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 
      case NSScrollWheel :
         {
-            wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
-            wxevent.m_wheelDelta = 10;
-            wxevent.m_linesPerAction = 1;
+            float deltaX = 0.0;
+            float deltaY = 0.0;
 
-            if ( fabs([nsEvent deviceDeltaX]) > fabs([nsEvent deviceDeltaY]) )
+            wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
+
+            // see http://developer.apple.com/qa/qa2005/qa1453.html
+            // for more details on why we have to look for the exact type
+            
+            const EventRef cEvent = (EventRef) [nsEvent eventRef];
+            bool isMouseScrollEvent = false;
+            if ( cEvent )
+                isMouseScrollEvent = ::GetEventKind(cEvent) == kEventMouseScroll;
+                
+            if ( isMouseScrollEvent )
             {
-                wxevent.m_wheelAxis = 1;
-                wxevent.m_wheelRotation = (int)[nsEvent deviceDeltaX];
+                deltaX = [nsEvent deviceDeltaX];
+                deltaY = [nsEvent deviceDeltaY];
             }
             else
             {
-                wxevent.m_wheelRotation = (int)[nsEvent deviceDeltaY];
+                deltaX = ([nsEvent deltaX] * 10);
+                deltaY = ([nsEvent deltaY] * 10);
             }
+            
+            wxevent.m_wheelDelta = 10;
+            wxevent.m_linesPerAction = 1;
+                
+            if ( fabs(deltaX) > fabs(deltaY) )
+            {
+                wxevent.m_wheelAxis = 1;
+                wxevent.m_wheelRotation = (int)deltaX;
+            }
+            else
+            {
+                wxevent.m_wheelRotation = (int)deltaY;
+            }
+
         }
         break ;
 
