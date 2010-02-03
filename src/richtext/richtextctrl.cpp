@@ -2812,12 +2812,13 @@ void wxRichTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 void wxRichTextCtrl::OnSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-    SelectAll();
+    if (GetLastPosition() > 0)
+        SelectAll();
 }
 
 void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
 {
-    event.Enable(GetLastPosition() >= 0);
+    event.Enable(GetLastPosition() > 0);
 }
 
 void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
