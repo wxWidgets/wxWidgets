@@ -94,6 +94,7 @@ int wxNSComboBoxControl::GetSelectedItem() const
 
 void wxNSComboBoxControl::SetSelectedItem(int item)
 {
+    wxASSERT_MSG(item >= 0 && item < [m_comboBox numberOfItems], "Inavlid item index.");
     [m_comboBox selectItemAtIndex: item];
 }
 
