@@ -40,48 +40,22 @@ MacTrackingGlobals gTrackingGlobals;
 
 void wxMacEnsureTrackingHandlersInstalled();
 
-//----------------------------------------------------------------------------
-// wxDropTarget
-//----------------------------------------------------------------------------
+OSStatus wxMacPromiseKeeper(PasteboardRef WXUNUSED(inPasteboard),
+                            PasteboardItemID WXUNUSED(inItem),
+                            CFStringRef WXUNUSED(inFlavorType),
+                            void * WXUNUSED(inContext))
+{
+    OSStatus  err = noErr;
+
+    // we might add promises here later, inContext is the wxDropSource*
+
+    return err;
+}
 
 wxDropTarget::wxDropTarget( wxDataObject *data )
             : wxDropTargetBase( data )
 {
     wxMacEnsureTrackingHandlersInstalled();
-}
-
-wxDragResult wxDropTarget::OnDragOver(
-    wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-    wxDragResult def )
-{
-    return CurrentDragHasSupportedFormat() ? def : wxDragNone;
-}
-
-wxDataFormat wxDropTarget::GetMatchingPair()
-{
-    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/carbon/dnd.cpp");
-    return wxDF_INVALID;
-}
-
-bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
-{
-    if (m_dataObject == NULL)
-        return false;
-
-    return CurrentDragHasSupportedFormat();
-}
-
-wxDragResult wxDropTarget::OnData(
-    wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-    wxDragResult def )
-{
-    if (m_dataObject == NULL)
-        return wxDragNone;
-
-    if (!CurrentDragHasSupportedFormat())
-        return wxDragNone;
-
-    return GetData() ? def : wxDragNone;
 }
 
 bool wxDropTarget::CurrentDragHasSupportedFormat()
@@ -177,9 +151,6 @@ bool wxDropTarget::GetData()
 // wxDropSource
 //-------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// drag request
-
 wxDropSource::wxDropSource(wxWindow *win,
                            const wxCursor &cursorCopy,
                            const wxCursor &cursorMove,
@@ -204,22 +175,6 @@ wxDropSource::wxDropSource(wxDataObject& data,
     m_window = win;
 }
 
-wxDropSource::~wxDropSource()
-{
-}
-
-OSStatus wxMacPromiseKeeper(PasteboardRef WXUNUSED(inPasteboard),
-                            PasteboardItemID WXUNUSED(inItem),
-                            CFStringRef WXUNUSED(inFlavorType),
-                            void * WXUNUSED(inContext))
-{
-    OSStatus  err = noErr;
-
-    // we might add promises here later, inContext is the wxDropSource*
-
-    return err;
-}
-
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
@@ -227,7 +182,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if ((m_data == NULL) || (m_data->GetFormatCount() == 0))
         return (wxDragResult)wxDragNone;
 
-#if wxOSX_USE_CARBON
     DragReference theDrag;
     RgnHandle dragRegion;
     OSStatus err = noErr;
@@ -302,22 +256,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     DisposeDrag( theDrag );
     CFRelease( pasteboard );
     gTrackingGlobals.m_currentSource = NULL;
-#else
-    wxUnusedVar(flags);
-#endif
 
     return gTrackingGlobals.m_result;
-}
-
-bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
-{
-    const wxCursor& cursor = GetCursor(effect);
-    bool result = cursor.Ok();
-
-    if ( result )
-        cursor.MacInstall();
-
-    return result;
 }
 
 bool gTrackingGlobalsInstalled = false;
@@ -325,18 +265,15 @@ bool gTrackingGlobalsInstalled = false;
 // passing the globals via refcon is not needed by the CFM and later architectures anymore
 // but I'll leave it in there, just in case...
 
-#if wxOSX_USE_CARBON
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
     void *handlerRefCon, DragReference theDrag );
 pascal OSErr wxMacWindowDragReceiveHandler(
     WindowPtr theWindow, void *handlerRefCon,
     DragReference theDrag );
-#endif
 
 void wxMacEnsureTrackingHandlersInstalled()
 {
-#if wxOSX_USE_CARBON
     if ( !gTrackingGlobalsInstalled )
     {
         OSStatus err;
@@ -349,10 +286,8 @@ void wxMacEnsureTrackingHandlersInstalled()
 
         gTrackingGlobalsInstalled = true;
     }
-#endif
 }
 
-#if wxOSX_USE_CARBON
 pascal OSErr wxMacWindowDragTrackingHandler(
     DragTrackingMessage theMessage, WindowPtr theWindow,
     void *handlerRefCon, DragReference theDrag )
@@ -420,9 +355,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                             // this window is left
                             if ( trackingGlobals->m_currentTarget )
                             {
-#ifndef __LP64__
                                 HideDragHilite( theDrag );
-#endif
                                 trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                                 trackingGlobals->m_currentTarget->OnLeave();
                                 trackingGlobals->m_currentTarget = NULL;
@@ -451,9 +384,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                                     RgnHandle hiliteRgn = NewRgn();
                                     Rect r = { y, x, y + win->GetSize().y, x + win->GetSize().x };
                                     RectRgn( hiliteRgn, &r );
-#ifndef __LP64__
                                     ShowDragHilite( theDrag, hiliteRgn, true );
-#endif
                                     DisposeRgn( hiliteRgn );
                                 }
                             }
@@ -516,9 +447,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             {
                 trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                 trackingGlobals->m_currentTarget->OnLeave();
-#ifndef __LP64__
                 HideDragHilite( theDrag );
-#endif
                 trackingGlobals->m_currentTarget = NULL;
             }
             trackingGlobals->m_currentTargetWindow = NULL;
@@ -572,7 +501,6 @@ pascal OSErr wxMacWindowDragReceiveHandler(
 
     return noErr;
 }
-#endif
 
 #endif // wxUSE_DRAG_AND_DROP
 

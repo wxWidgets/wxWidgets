@@ -2236,6 +2236,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/checklst_osx.cpp
     src/osx/choice_osx.cpp
     src/osx/combobox_osx.cpp
+    src/osx/dnd_osx.cpp
     src/osx/gauge_osx.cpp
     src/osx/listbox_osx.cpp
     src/osx/menu_osx.cpp
@@ -2277,7 +2278,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/dcscreen.cpp
     src/osx/core/glgrab.cpp
     src/osx/carbon/graphics.cpp
-    src/osx/carbon/dnd.cpp
     src/osx/carbon/font.cpp
     src/osx/carbon/frame.cpp
     src/osx/carbon/mdi.cpp
@@ -2317,6 +2317,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/colordlg.cpp
     src/osx/carbon/dialog.cpp
     src/osx/carbon/dirdlg.cpp
+    src/osx/carbon/dnd.cpp
     src/osx/carbon/evtloop.cpp
     src/osx/carbon/filedlg.cpp
     src/osx/carbon/gauge.cpp
@@ -2473,6 +2474,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/combobox.mm
     src/osx/cocoa/dialog.mm
     src/osx/cocoa/dirdlg.mm
+    src/osx/cocoa/dnd.mm
     src/osx/cocoa/evtloop.mm
     src/osx/cocoa/filedlg.mm
     src/osx/cocoa/gauge.mm

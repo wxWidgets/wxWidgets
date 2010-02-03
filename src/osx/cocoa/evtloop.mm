@@ -121,6 +121,8 @@ bool wxGUIEventLoop::Dispatch()
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES])
     {
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(event, NULL);
         m_sleepTime = 0.0;
         [NSApp sendEvent: event];
     }
