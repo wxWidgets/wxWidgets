@@ -5189,6 +5189,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 	monodll_carbon_colordlg.o \
 	monodll_carbon_dialog.o \
 	monodll_carbon_dirdlg.o \
+	monodll_carbon_dnd.o \
 	monodll_carbon_evtloop.o \
 	monodll_carbon_filedlg.o \
 	monodll_carbon_gauge.o \
@@ -5225,6 +5226,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_osx_cocoa_combobox.o \
 	monodll_osx_cocoa_dialog.o \
 	monodll_osx_cocoa_dirdlg.o \
+	monodll_cocoa_dnd.o \
 	monodll_osx_cocoa_evtloop.o \
 	monodll_osx_cocoa_filedlg.o \
 	monodll_osx_cocoa_gauge.o \
@@ -7012,6 +7014,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 	monolib_carbon_colordlg.o \
 	monolib_carbon_dialog.o \
 	monolib_carbon_dirdlg.o \
+	monolib_carbon_dnd.o \
 	monolib_carbon_evtloop.o \
 	monolib_carbon_filedlg.o \
 	monolib_carbon_gauge.o \
@@ -7048,6 +7051,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_osx_cocoa_combobox.o \
 	monolib_osx_cocoa_dialog.o \
 	monolib_osx_cocoa_dirdlg.o \
+	monolib_cocoa_dnd.o \
 	monolib_osx_cocoa_evtloop.o \
 	monolib_osx_cocoa_filedlg.o \
 	monolib_osx_cocoa_gauge.o \
@@ -9024,6 +9028,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 	coredll_carbon_colordlg.o \
 	coredll_carbon_dialog.o \
 	coredll_carbon_dirdlg.o \
+	coredll_carbon_dnd.o \
 	coredll_carbon_evtloop.o \
 	coredll_carbon_filedlg.o \
 	coredll_carbon_gauge.o \
@@ -9060,6 +9065,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_osx_cocoa_combobox.o \
 	coredll_osx_cocoa_dialog.o \
 	coredll_osx_cocoa_dirdlg.o \
+	coredll_cocoa_dnd.o \
 	coredll_osx_cocoa_evtloop.o \
 	coredll_osx_cocoa_filedlg.o \
 	coredll_osx_cocoa_gauge.o \
@@ -10520,6 +10526,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 	corelib_carbon_colordlg.o \
 	corelib_carbon_dialog.o \
 	corelib_carbon_dirdlg.o \
+	corelib_carbon_dnd.o \
 	corelib_carbon_evtloop.o \
 	corelib_carbon_filedlg.o \
 	corelib_carbon_gauge.o \
@@ -10556,6 +10563,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_osx_cocoa_combobox.o \
 	corelib_osx_cocoa_dialog.o \
 	corelib_osx_cocoa_dirdlg.o \
+	corelib_cocoa_dnd.o \
 	corelib_osx_cocoa_evtloop.o \
 	corelib_osx_cocoa_filedlg.o \
 	corelib_osx_cocoa_gauge.o \
@@ -12297,6 +12305,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_checklst_osx.o \
 	monodll_choice_osx.o \
 	monodll_combobox_osx.o \
+	monodll_dnd_osx.o \
 	monodll_gauge_osx.o \
 	monodll_listbox_osx.o \
 	monodll_menu_osx.o \
@@ -12335,7 +12344,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_carbon_dcscreen.o \
 	monodll_glgrab.o \
 	monodll_carbon_graphics.o \
-	monodll_carbon_dnd.o \
 	monodll_carbon_font.o \
 	monodll_carbon_frame.o \
 	monodll_carbon_mdi.o \
@@ -12478,6 +12486,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0 =  \
 	monolib_checklst_osx.o \
 	monolib_choice_osx.o \
 	monolib_combobox_osx.o \
+	monolib_dnd_osx.o \
 	monolib_gauge_osx.o \
 	monolib_listbox_osx.o \
 	monolib_menu_osx.o \
@@ -12516,7 +12525,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0 =  \
 	monolib_carbon_dcscreen.o \
 	monolib_glgrab.o \
 	monolib_carbon_graphics.o \
-	monolib_carbon_dnd.o \
 	monolib_carbon_font.o \
 	monolib_carbon_frame.o \
 	monolib_carbon_mdi.o \
@@ -12659,6 +12667,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8 =  \
 	coredll_checklst_osx.o \
 	coredll_choice_osx.o \
 	coredll_combobox_osx.o \
+	coredll_dnd_osx.o \
 	coredll_gauge_osx.o \
 	coredll_listbox_osx.o \
 	coredll_menu_osx.o \
@@ -12697,7 +12706,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8 =  \
 	coredll_carbon_dcscreen.o \
 	coredll_glgrab.o \
 	coredll_carbon_graphics.o \
-	coredll_carbon_dnd.o \
 	coredll_carbon_font.o \
 	coredll_carbon_frame.o \
 	coredll_carbon_mdi.o \
@@ -12755,6 +12763,7 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9 =  \
 	corelib_checklst_osx.o \
 	corelib_choice_osx.o \
 	corelib_combobox_osx.o \
+	corelib_dnd_osx.o \
 	corelib_gauge_osx.o \
 	corelib_listbox_osx.o \
 	corelib_menu_osx.o \
@@ -12793,7 +12802,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9 =  \
 	corelib_carbon_dcscreen.o \
 	corelib_glgrab.o \
 	corelib_carbon_graphics.o \
-	corelib_carbon_dnd.o \
 	corelib_carbon_font.o \
 	corelib_carbon_frame.o \
 	corelib_carbon_mdi.o \
@@ -15499,6 +15507,9 @@ monodll_carbon_dialog.o: $(srcdir)/src/osx/carbon/dialog.cpp $(MONODLL_ODEP)
 monodll_carbon_dirdlg.o: $(srcdir)/src/osx/carbon/dirdlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dirdlg.cpp
 
+monodll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
+
 monodll_carbon_evtloop.o: $(srcdir)/src/osx/carbon/evtloop.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/evtloop.cpp
 
@@ -15597,6 +15608,9 @@ monodll_osx_cocoa_dialog.o: $(srcdir)/src/osx/cocoa/dialog.mm $(MONODLL_ODEP)
 
 monodll_osx_cocoa_dirdlg.o: $(srcdir)/src/osx/cocoa/dirdlg.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dirdlg.mm
+
+monodll_cocoa_dnd.o: $(srcdir)/src/osx/cocoa/dnd.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dnd.mm
 
 monodll_osx_cocoa_evtloop.o: $(srcdir)/src/osx/cocoa/evtloop.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/evtloop.mm
@@ -18385,6 +18399,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_combobox_osx.o: $(srcdir)/src/osx/combobox_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/combobox_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_gauge_osx.o: $(srcdir)/src/osx/gauge_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/gauge_osx.cpp
 
@@ -18612,12 +18632,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_font.o: $(srcdir)/src/osx/carbon/font.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/font.cpp
@@ -20314,6 +20328,9 @@ monolib_carbon_dialog.o: $(srcdir)/src/osx/carbon/dialog.cpp $(MONOLIB_ODEP)
 monolib_carbon_dirdlg.o: $(srcdir)/src/osx/carbon/dirdlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dirdlg.cpp
 
+monolib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
+
 monolib_carbon_evtloop.o: $(srcdir)/src/osx/carbon/evtloop.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/evtloop.cpp
 
@@ -20412,6 +20429,9 @@ monolib_osx_cocoa_dialog.o: $(srcdir)/src/osx/cocoa/dialog.mm $(MONOLIB_ODEP)
 
 monolib_osx_cocoa_dirdlg.o: $(srcdir)/src/osx/cocoa/dirdlg.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dirdlg.mm
+
+monolib_cocoa_dnd.o: $(srcdir)/src/osx/cocoa/dnd.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dnd.mm
 
 monolib_osx_cocoa_evtloop.o: $(srcdir)/src/osx/cocoa/evtloop.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/evtloop.mm
@@ -23200,6 +23220,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_combobox_osx.o: $(srcdir)/src/osx/combobox_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/combobox_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_gauge_osx.o: $(srcdir)/src/osx/gauge_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/gauge_osx.cpp
 
@@ -23427,12 +23453,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_font.o: $(srcdir)/src/osx/carbon/font.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/font.cpp
@@ -25840,6 +25860,9 @@ coredll_carbon_dialog.o: $(srcdir)/src/osx/carbon/dialog.cpp $(COREDLL_ODEP)
 coredll_carbon_dirdlg.o: $(srcdir)/src/osx/carbon/dirdlg.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dirdlg.cpp
 
+coredll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
+
 coredll_carbon_evtloop.o: $(srcdir)/src/osx/carbon/evtloop.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/evtloop.cpp
 
@@ -25938,6 +25961,9 @@ coredll_osx_cocoa_dialog.o: $(srcdir)/src/osx/cocoa/dialog.mm $(COREDLL_ODEP)
 
 coredll_osx_cocoa_dirdlg.o: $(srcdir)/src/osx/cocoa/dirdlg.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dirdlg.mm
+
+coredll_cocoa_dnd.o: $(srcdir)/src/osx/cocoa/dnd.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dnd.mm
 
 coredll_osx_cocoa_evtloop.o: $(srcdir)/src/osx/cocoa/evtloop.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/evtloop.mm
@@ -28198,6 +28224,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_combobox_osx.o: $(srcdir)/src/osx/combobox_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/combobox_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_gauge_osx.o: $(srcdir)/src/osx/gauge_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/gauge_osx.cpp
 
@@ -28425,12 +28457,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_font.o: $(srcdir)/src/osx/carbon/font.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/font.cpp
@@ -29386,6 +29412,9 @@ corelib_carbon_dialog.o: $(srcdir)/src/osx/carbon/dialog.cpp $(CORELIB_ODEP)
 corelib_carbon_dirdlg.o: $(srcdir)/src/osx/carbon/dirdlg.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dirdlg.cpp
 
+corelib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
+
 corelib_carbon_evtloop.o: $(srcdir)/src/osx/carbon/evtloop.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/evtloop.cpp
 
@@ -29484,6 +29513,9 @@ corelib_osx_cocoa_dialog.o: $(srcdir)/src/osx/cocoa/dialog.mm $(CORELIB_ODEP)
 
 corelib_osx_cocoa_dirdlg.o: $(srcdir)/src/osx/cocoa/dirdlg.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dirdlg.mm
+
+corelib_cocoa_dnd.o: $(srcdir)/src/osx/cocoa/dnd.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dnd.mm
 
 corelib_osx_cocoa_evtloop.o: $(srcdir)/src/osx/cocoa/evtloop.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/evtloop.mm
@@ -31744,6 +31776,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_combobox_osx.o: $(srcdir)/src/osx/combobox_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/combobox_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_dnd_osx.o: $(srcdir)/src/osx/dnd_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/dnd_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_gauge_osx.o: $(srcdir)/src/osx/gauge_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/gauge_osx.cpp
 
@@ -31971,12 +32009,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_graphics.o: $(srcdir)/src/osx/carbon/graphics.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/graphics.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_dnd.o: $(srcdir)/src/osx/carbon/dnd.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/dnd.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_font.o: $(srcdir)/src/osx/carbon/font.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/font.cpp
