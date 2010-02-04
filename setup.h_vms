@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 26 January 2010                                                    *
+ * Date : 4 February 2010                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -265,7 +265,7 @@ typedef pid_t GPid;
 
 #define wxUSE_STOPWATCH     1
 
-#define wxUSE_FSWATCHER     1
+#define wxUSE_FSWATCHER     0
 
 #define wxUSE_CONFIG        1
 
