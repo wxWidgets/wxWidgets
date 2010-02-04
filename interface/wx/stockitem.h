@@ -23,8 +23,8 @@ enum wxStockLabelQueryFlag
 
     /**
         Request the label with mnemonics character.
-       
-        E.g. "&amp;Print...".
+
+        E.g. "&Print...".
      */
     wxSTOCK_WITH_MNEMONIC = 1,
 
@@ -37,6 +37,20 @@ enum wxStockLabelQueryFlag
     wxSTOCK_WITH_ACCELERATOR = 2,
 
     /**
+        Return the label without any ellipsis at the end.
+
+        By default, stock items text is returned with ellipsis, if appropriate,
+        this flag allows to avoid having it. So using the same example as
+        above, the returned string would be "Print" or "&Print" if
+        wxSTOCK_WITH_MNEMONIC were also used.
+
+        This flag can't be combined with wxSTOCK_WITH_ACCELERATOR.
+
+        @since 2.9.1
+     */
+    wxSTOCK_WITHOUT_ELLIPSIS = 4,
+
+    /**
         Return the label appropriate for a button and not a menu item.
 
         Currently the main difference is that the trailing ellipsis used in
@@ -45,8 +59,10 @@ enum wxStockLabelQueryFlag
         wxID_PRINT when this flag is used is "&Print".
 
         This flag can't be combined with wxSTOCK_WITH_ACCELERATOR.
+
+        @since 2.9.1
      */
-    wxSTOCK_FOR_BUTTON = 5
+    wxSTOCK_FOR_BUTTON = wxSTOCK_WITHOUT_ELLIPSIS | wxSTOCK_WITH_MNEMONIC
 };
 
 /** @addtogroup group_funcmacro_misc */

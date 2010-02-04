@@ -205,16 +205,17 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
 
     #undef STOCKITEM
 
-    // we assume that buttons use the same labels as menu items but unlike them
-    // they should never use ellipsis
-    if ( (flags & wxSTOCK_FOR_BUTTON) == wxSTOCK_FOR_BUTTON )
+    if ( flags & wxSTOCK_WITHOUT_ELLIPSIS )
     {
         wxString baseLabel;
         if ( stockLabel.EndsWith("...", &baseLabel) )
             stockLabel = baseLabel;
 
+        // accelerators only make sense for the menu items which should have
+        // ellipsis too while wxSTOCK_WITHOUT_ELLIPSIS is mostly useful for
+        // buttons which shouldn't have accelerators in their labels
         wxASSERT_MSG( !(flags & wxSTOCK_WITH_ACCELERATOR),
-                        "button labels never use accelerators" );
+                        "labels without ellipsis shouldn't use accelerators" );
     }
 
 #ifdef __WXMSW__

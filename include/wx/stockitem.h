@@ -35,9 +35,13 @@ enum wxStockLabelQueryFlag
     wxSTOCK_WITH_MNEMONIC = 1,
     wxSTOCK_WITH_ACCELERATOR = 2,
 
-    // return label for button, not menu item: notice that this always included
-    // wxSTOCK_WITH_MNEMONIC as buttons should use mnemonics
-    wxSTOCK_FOR_BUTTON = 5
+    // by default, stock items text is returned with ellipsis, if appropriate,
+    // this flag allows to avoid having it
+    wxSTOCK_WITHOUT_ELLIPSIS = 4,
+
+    // return label for button, not menu item: buttons should always use
+    // mnemonics and never use ellipsis
+    wxSTOCK_FOR_BUTTON = wxSTOCK_WITHOUT_ELLIPSIS | wxSTOCK_WITH_MNEMONIC
 };
 
 // Returns label that should be used for given stock UI element (e.g. "&OK"
