@@ -3694,7 +3694,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             {
                 ChangeCurrentRow(current);
                 ReverseRowSelection(m_currentRow);
-                SendSelectionChangedEvent(GetItemByRow(m_selection[0]) );
+                SendSelectionChangedEvent(GetItemByRow(m_currentRow));
             }
             else if (event.ShiftDown())
             {
