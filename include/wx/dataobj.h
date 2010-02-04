@@ -274,10 +274,16 @@ public:
     void Add(wxDataObjectSimple *dataObject, bool preferred = false);
 
     // Report the format passed to the SetData method.  This should be the
-    // format of the data object within the composite that recieved data from
+    // format of the data object within the composite that received data from
     // the clipboard or the DnD operation.  You can use this method to find
-    // out what kind of data object was recieved.
+    // out what kind of data object was received.
     wxDataFormat GetReceivedFormat() const;
+
+    // Returns the pointer to the object which supports this format or NULL.
+    // The returned pointer is owned by wxDataObjectComposite and must
+    // therefore not be destroyed by the caller.
+    wxDataObjectSimple *GetObject(const wxDataFormat& format,
+                                  wxDataObjectBase::Direction dir = Get) const;
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -294,10 +300,6 @@ public:
                                    const wxDataFormat& format );
     virtual size_t GetBufferOffset( const wxDataFormat& format );
 #endif
-
-protected:
-    // returns the pointer to the object which supports this format or NULL
-    wxDataObjectSimple *GetObject(const wxDataFormat& format, wxDataObjectBase::Direction dir=Get) const;
 
 private:
     // the list of all (simple) data objects whose formats we support

@@ -134,7 +134,7 @@ public:
     set. In the general case, an object may support different formats on
     'input' and 'output', i.e. it may be able to render itself in a given
     format but not be created from data on this format or vice versa.
-    wxDataObject defines the wxDataObject::Direction enumeration type which 
+    wxDataObject defines the wxDataObject::Direction enumeration type which
     distinguishes between them.
 
     See wxDataFormat documentation for more about formats.
@@ -158,7 +158,7 @@ public:
 
     -# Use one of the built-in classes.
         - You may use wxTextDataObject, wxBitmapDataObject wxFileDataObject,
-          wxURLDataObject in the simplest cases when you only need to support 
+          wxURLDataObject in the simplest cases when you only need to support
           one format and your data is either text, bitmap or list of files.
     -# Use wxDataObjectSimple
         - Deriving from wxDataObjectSimple is the simplest solution for custom
@@ -228,13 +228,13 @@ public:
     {
         /** Format is supported by GetDataHere() */
         Get  = 0x01,
-        
+
         /** Format is supported by SetData() */
         Set  = 0x02,
-        
-        /** 
-            Format is supported by both GetDataHere() and SetData() 
-            (unused currently) 
+
+        /**
+            Format is supported by both GetDataHere() and SetData()
+            (unused currently)
          */
         Both = 0x03
     };
@@ -250,8 +250,8 @@ public:
     virtual ~wxDataObject();
 
     /**
-        Copies all formats supported in the given direction @a dir to the array 
-        pointed to by @a formats. 
+        Copies all formats supported in the given direction @a dir to the array
+        pointed to by @a formats.
         There must be enough space for GetFormatCount(dir) formats in it.
 
         @beginWxPerlOnly
@@ -414,6 +414,59 @@ public:
     wxDataObject directly instead of wxDataObjectComposite for efficiency
     reasons.
 
+    This example shows how a composite data object capable of storing either
+    bitmaps or file names (presumably of bitmap files) can be initialized and
+    used:
+
+    @code
+    MyDropTarget::MyDropTarget()
+    {
+        wxDataObjectComposite* dataobj = new wxDataObjectComposite();
+        dataobj->Add(new wxBitmapDataObject(), true);
+        dataobj->Add(new wxFileDataObject());
+        SetDataObject(dataobj);
+    }
+
+    wxDragResult MyDropTarget::OnData(wxCoord x, wxCoord y,
+                                      wxDragResult defaultDragResult)
+    {
+        wxDragResult dragResult = wxDropTarget::OnData(x, y, defaultDragResult);
+        if ( dragResult == defaultDragResult )
+        {
+            wxDataObjectComposite *
+                dataobjComp = static_cast<wxDataObjectComposite *>(GetDataObject());
+
+            wxDataFormat format = dataObjects->GetReceivedFormat();
+            wxDataObject *dataobj = dataobjComp->GetObject(format);
+            switch ( format.GetType() )
+            {
+                case wxDF_BITMAP:
+                    {
+                        wxBitmapDataObject *
+                            dataobjBitmap = static_cast<wxBitmapDataObject *>(dataobj);
+
+                        ... use dataobj->GetBitmap() ...
+                    }
+                    break;
+
+                case wxDF_FILENAME:
+                    {
+                        wxFileDataObject *
+                            dataobjFile = static_cast<wxFileDataObject *>(dataobj);
+
+                        ... use dataobj->GetFilenames() ...
+                    }
+                    break;
+
+                default:
+                    wxFAIL_MSG( "unexpected data object format" );
+            }
+        }
+
+        return dragResult;
+    }
+    @endcode
+
     @library{wxcore}
     @category{dnd}
 
@@ -436,11 +489,24 @@ public:
 
     /**
         Report the format passed to the SetData() method.  This should be the
-        format of the data object within the composite that recieved data from
+        format of the data object within the composite that received data from
         the clipboard or the DnD operation.  You can use this method to find
-        out what kind of data object was recieved.
+        out what kind of data object was received.
     */
     wxDataFormat GetReceivedFormat() const;
+
+    /**
+        Returns the pointer to the object which supports the passed format for
+        the specified direction.
+
+        @NULL is returned if the specified @a format is not supported for this
+        direction @a dir. The returned pointer is owned by wxDataObjectComposite
+        itself and shouldn't be deleted by caller.
+
+        @since 2.9.1
+    */
+    wxDataObjectSimple *GetObject(const wxDataFormat& format,
+                                  wxDataObjectBase::Direction dir = Get) const;
 };
 
 
@@ -448,9 +514,9 @@ public:
 /**
     @class wxDataObjectSimple
 
-    This is the simplest possible implementation of the wxDataObject class. 
-    The data object of (a class derived from) this class only supports 
-    <strong>one format</strong>, so the number of virtual functions to 
+    This is the simplest possible implementation of the wxDataObject class.
+    The data object of (a class derived from) this class only supports
+    <strong>one format</strong>, so the number of virtual functions to
     be implemented is reduced.
 
     Notice that this is still an abstract base class and cannot be used
@@ -486,8 +552,8 @@ public:
     wxDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
 
     /**
-        Copy the data to the buffer, return @true on success. 
-        Must be implemented in the derived class if the object supports rendering 
+        Copy the data to the buffer, return @true on success.
+        Must be implemented in the derived class if the object supports rendering
         its data.
 
         @beginWxPythonOnly
@@ -504,14 +570,14 @@ public:
     virtual size_t GetDataSize() const;
 
     /**
-        Returns the (one and only one) format supported by this object. 
+        Returns the (one and only one) format supported by this object.
         It is assumed that the format is supported in both directions.
     */
     const wxDataFormat& GetFormat() const;
 
     /**
-        Copy the data from the buffer, return @true on success. 
-        Must be implemented in the derived class if the object supports setting 
+        Copy the data from the buffer, return @true on success.
+        Must be implemented in the derived class if the object supports setting
         its data.
 
         @beginWxPythonOnly
@@ -622,7 +688,7 @@ public:
 /**
     @class wxTextDataObject
 
-    wxTextDataObject is a specialization of wxDataObjectSimple for text data. 
+    wxTextDataObject is a specialization of wxDataObjectSimple for text data.
     It can be used without change to paste data into the wxClipboard or a
     wxDropSource. A user may wish to derive a new class from this class for
     providing text on-demand in order to minimize memory consumption when
@@ -672,12 +738,12 @@ public:
         length plus 1 for a trailing zero, but this is not strictly required.
     */
     virtual size_t GetTextLength() const;
-    
+
     /**
         Returns 2 under wxMac and wxGTK, where text data coming from the
         clipboard may be provided as ANSI (@c wxDF_TEXT) or as Unicode text
         (@c wxDF_UNICODETEXT, but only when @c wxUSE_UNICODE==1).
-        
+
         Returns 1 under other platforms (e.g. wxMSW) or when building in ANSI mode
         (@c wxUSE_UNICODE==0).
     */
@@ -685,7 +751,7 @@ public:
 
     /**
         Returns the preferred format supported by this object.
-        
+
         This is @c wxDF_TEXT or @c wxDF_UNICODETEXT depending on the platform
         and from the build mode (i.e. from @c wxUSE_UNICODE).
     */
@@ -693,8 +759,8 @@ public:
 
     /**
         Returns all the formats supported by wxTextDataObject.
-        
-        Under wxMac and wxGTK they are @c wxDF_TEXT and @c wxDF_UNICODETEXT, 
+
+        Under wxMac and wxGTK they are @c wxDF_TEXT and @c wxDF_UNICODETEXT,
         under other ports returns only one of the two, depending on the build mode.
     */
     virtual void GetAllFormats(wxDataFormat* formats,
