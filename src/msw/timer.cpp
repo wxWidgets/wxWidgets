@@ -120,16 +120,25 @@ wxTimer::~wxTimer()
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
 {
-    (void)wxTimerBase::Start(milliseconds, oneShot);
+    if ( !wxTimerBase::Start(milliseconds, oneShot) )
+        return false;
 
-    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeout") );
+    // SetTimer() doesn't accept 0 timer id so use something else if the timer
+    // id at wx level is 0: as -1 (wxID_ANY) can't be used, we can safely
+    // replace 0 with it at MSW level
+    UINT idTimer = GetId();
+    if ( !idTimer )
+        idTimer = (UINT)-1;
 
-    m_id = ::SetTimer(
-        wxTimerHiddenWindowModule::GetHWND(),  // window to send the messages to
-        GetId(),                               // timer ID
-        (UINT)m_milli,                         // delay
-        NULL                                   // timer proc.  Not used since we pass hwnd
-        );
+    // SetTimer() normally returns just idTimer but this might change in the
+    // future so use its return value to be safe
+    m_id = ::SetTimer
+             (
+              wxTimerHiddenWindowModule::GetHWND(),  // window for WM_TIMER
+              idTimer,                               // timer ID to create
+              (UINT)m_milli,                         // delay
+              NULL                                   // timer proc (unused)
+             );
 
     if ( !m_id )
     {
@@ -141,6 +150,11 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
     // check that SetTimer() didn't reuse an existing id: according to the MSDN
     // this can happen and this would be catastrophic to us as we rely on ids
     // uniquely identifying the timers because we use them as keys in the hash
+    //
+    // notice that this also happens if the same id is reused for multiple
+    // timers: this used to work in previous versions but was never supported
+    // and absolutely shouldn't be done, use wxID_ANY to assign an id to the
+    // timer automatically or ensure that all your timers have unique ids
     if ( TimerMap().find(m_id) != TimerMap().end() )
     {
         wxLogError(_("Timer creation failed."));
