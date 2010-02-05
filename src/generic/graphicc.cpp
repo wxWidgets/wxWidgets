@@ -11,11 +11,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/dc.h"
-
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+#if wxUSE_GRAPHICS_CONTEXT
 
 #ifndef WX_PRECOMP
 #include "wx/image.h"
@@ -39,7 +39,7 @@
 #include "wx/graphics.h"
 #include "wx/rawbmp.h"
 
-#if wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+#if wxUSE_CAIRO
 
 #include <vector>
 
@@ -215,7 +215,7 @@ public :
     virtual void Scale( wxDouble xScale , wxDouble yScale );
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle );	
+    virtual void Rotate( wxDouble angle );
 
     //
     // apply the transforms
@@ -959,7 +959,7 @@ void wxCairoMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 void wxCairoMatrixData::Rotate( wxDouble angle ) 
 {
     cairo_matrix_rotate( &m_matrix, angle) ;
-}	
+}
 
 //
 // apply the transforms
@@ -1606,9 +1606,8 @@ wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
         return wxNullGraphicsBitmap;
 }
 
-#endif  // wxUSE_GRAPHICS_CONTEXT && wxUSE_CAIRO
+#endif  // wxUSE_CAIRO
 
-#if wxUSE_GRAPHICS_CONTEXT
 wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 {
 #if wxUSE_CAIRO
@@ -1617,4 +1616,5 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
     return NULL;
 #endif
 }
-#endif
+
+#endif // wxUSE_GRAPHICS_CONTEXT
