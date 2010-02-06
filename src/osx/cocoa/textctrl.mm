@@ -96,15 +96,7 @@ protected :
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
-    }
+        impl->controlTextDidChange();
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
@@ -194,17 +186,10 @@ protected :
 
 - (void)textDidChange:(NSNotification *)aNotification
 {
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [aNotification object] );
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
-    }
+        impl->controlTextDidChange();
 }
 
 @end
@@ -266,15 +251,7 @@ protected :
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
-    }
+        impl->controlTextDidChange();
 }
 
 typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl *control, NSTextView* textView, SEL commandSelector);

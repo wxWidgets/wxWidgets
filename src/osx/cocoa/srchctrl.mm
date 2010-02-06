@@ -77,6 +77,14 @@
     }
 }
 
+- (void)controlTextDidChange:(NSNotification *)aNotification
+{
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+        impl->controlTextDidChange();
+}
+
 @end
 
 // ============================================================================

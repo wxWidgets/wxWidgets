@@ -15,6 +15,7 @@
     #include "wx/dcclient.h"
     #include "wx/nonownedwnd.h"
     #include "wx/log.h"
+    #include "wx/textctrl.h"
 #endif
 
 #ifdef __WXMAC__
@@ -1121,6 +1122,18 @@ void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_c
 
 void wxWidgetCocoaImpl::controlDoubleAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
+}
+
+void wxWidgetCocoaImpl::controlTextDidChange()
+{
+    wxWindow* wxpeer = (wxWindow*)GetWXPeer();
+    if ( wxpeer ) 
+    {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+        event.SetEventObject( wxpeer );
+        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+        wxpeer->HandleWindowEvent( event );
+    }
 }
 
 //
