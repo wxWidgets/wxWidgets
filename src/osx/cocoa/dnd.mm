@@ -55,6 +55,7 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 - (void)setImplementation: (wxDropSource *)dropSource;
 - (BOOL)finished;
 - (NSDragOperation)code;
+- (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint;
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 @end
 
@@ -82,6 +83,48 @@ wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 - (NSDragOperation)code
 {
     return resultCode;
+}
+
+- (void)draggedImage:(NSImage *)anImage movedTo:(NSPoint)aPoint
+{
+    bool optionDown = GetCurrentKeyModifiers() & optionKey;
+    wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
+    
+    if (wxDropSource* source = impl)
+    {
+        if (!source->GiveFeedback(result))
+        {
+            wxStockCursor cursorID = wxCURSOR_NONE;
+
+            switch (result)
+            {
+                case wxDragCopy:
+                    cursorID = wxCURSOR_COPY_ARROW;
+                    break;
+
+                case wxDragMove:
+                    cursorID = wxCURSOR_ARROW;
+                    break;
+
+                case wxDragNone:
+                    cursorID = wxCURSOR_NO_ENTRY;
+                    break;
+
+                case wxDragError:
+                case wxDragLink:
+                case wxDragCancel:
+                default:
+                    // put these here to make gcc happy
+                    ;
+            }
+
+            if (cursorID != wxCURSOR_NONE)
+            {
+                wxCursor cursor( cursorID );
+                cursor.MacInstall();
+            }
+        }
+    }
 }
 
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
