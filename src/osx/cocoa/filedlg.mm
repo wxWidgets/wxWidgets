@@ -116,6 +116,10 @@ NSArray* GetTypesFromFilter( const wxString filter )
                 if (extension.length() && (extension.GetChar(0) == '.'))
                     extension = extension.Mid( 1 );
 
+                // Remove leading '*', this is for handling *.*
+                if (extension.length() && (extension.GetChar(0) == '*'))
+                    extension = extension.Mid( 1 );
+
                 if ( extension.IsEmpty() )
                 {
                     if ( types != nil )
