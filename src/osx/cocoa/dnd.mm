@@ -26,6 +26,8 @@
 #include <AppKit/AppKit.h>
 #include "wx/osx/private.h"
 
+wxDropSource* gCurrentSource = NULL;
+
 wxDragResult NSDragOperationToWxDragResult(NSDragOperation code)
 {
     switch (code)
@@ -96,25 +98,6 @@ wxDropTarget::wxDropTarget( wxDataObject *data )
 
 }
 
-bool wxDropTarget::CurrentDragHasSupportedFormat()
-{
-    if (m_dataObject == NULL)
-        return false;
-
-    return m_dataObject->HasDataInPasteboard( m_currentDragPasteboard );
-}
-
-bool wxDropTarget::GetData()
-{
-    if (m_dataObject == NULL)
-        return false;
-
-    if ( !CurrentDragHasSupportedFormat() )
-        return false;
-
-    return m_dataObject->GetFromPasteboard( m_currentDragPasteboard );
-}
-
 //-------------------------------------------------------------------------
 // wxDropSource
 //-------------------------------------------------------------------------
@@ -137,6 +120,11 @@ wxDropSource::wxDropSource(wxDataObject& data,
 {
     SetData( data );
     m_window = win;
+}
+
+wxDropSource* wxDropSource::GetCurrentDropSource()
+{
+    return gCurrentSource;
 }
 
 wxDragResult wxDropSource::DoDragDrop(int flags)
@@ -171,6 +159,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
         
+        gCurrentSource = this;
         NSImage* image = [[NSImage alloc] initWithSize: NSMakeSize(16,16)];
         DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
         [delegate setImplementation: this];
@@ -184,6 +173,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         result = NSDragOperationToWxDragResult([delegate code]);
         [delegate release];
         [image release];
+        gCurrentSource = NULL;
     }
 
 

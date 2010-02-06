@@ -880,6 +880,45 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf),
     else if ( sourceDragMask & NSDragOperationMove )
         result = wxDragMove;
 
+    // FIXME: This doesn't seem the right place for the code, as GiveFeedback
+    // will only get called when the drop target is inside the app itself
+    // but at least some cases will work now.
+    if (wxDropSource* source = wxDropSource::GetCurrentDropSource())
+    {
+        if (!source->GiveFeedback(result))
+        {
+            wxStockCursor cursorID = wxCURSOR_NONE;
+
+            switch (result)
+            {
+                case wxDragCopy:
+                    cursorID = wxCURSOR_COPY_ARROW;
+                    break;
+
+                case wxDragMove:
+                    cursorID = wxCURSOR_ARROW;
+                    break;
+
+                case wxDragNone:
+                    cursorID = wxCURSOR_NO_ENTRY;
+                    break;
+
+                case wxDragError:
+                case wxDragLink:
+                case wxDragCancel:
+                default:
+                    // put these here to make gcc happy
+                    ;
+            }
+
+            if (cursorID != wxCURSOR_NONE)
+            {
+                wxCursor cursor( cursorID );
+                cursor.MacInstall();
+            }
+        }
+    }
+    
     PasteboardRef pboardRef;
     PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
     target->SetCurrentDragPasteboard(pboardRef);

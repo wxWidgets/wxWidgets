@@ -96,6 +96,7 @@ public:
     wxWindow*     GetWindow() { return m_window ; }
     void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
     bool MacInstallDefaultCursor(wxDragResult effect) ;
+    static wxDropSource* GetCurrentDropSource();
   protected :
 
     wxWindow        *m_window;

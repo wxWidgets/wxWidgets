@@ -162,6 +162,11 @@ wxDropSource::wxDropSource(wxWindow *win,
     m_window = win;
 }
 
+wxDropSource* wxDropSource::GetCurrentDropSource()
+{
+    return gTrackingGlobals.m_currentSource;
+}
+
 wxDropSource::wxDropSource(wxDataObject& data,
                            wxWindow *win,
                            const wxCursor &cursorCopy,
