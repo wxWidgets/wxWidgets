@@ -204,6 +204,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 - (void)windowDidBecomeKey:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
+- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame;
 
 @end
 
@@ -325,6 +326,19 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     }
 
     return nil;
+}
+
+- (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame
+{
+    wxNonOwnedWindowCocoaImpl* windowimpl = [(wxNSWindow*)window implementation];
+    if ( windowimpl )
+    {
+        wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
+        wxMaximizeEvent event(wxpeer->GetId());
+        event.SetEventObject(wxpeer);
+        return !wxpeer->HandleWindowEvent(event);
+    }
+    return true;
 }
 
 @end
