@@ -19,7 +19,8 @@
 class WXDLLIMPEXP_BASE wxMSWTimerImpl : public wxTimerImpl
 {
 public:
-    wxMSWTimerImpl(wxTimer *timer) : wxTimerImpl(timer) { m_id = 0; }
+    wxMSWTimerImpl(wxTimer *timer);
+    virtual ~wxMSWTimerImpl();
 
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
     virtual void Stop();
