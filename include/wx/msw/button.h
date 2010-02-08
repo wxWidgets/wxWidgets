@@ -80,6 +80,8 @@ protected:
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
 
+    virtual bool DoGetAuthNeeded() const;
+    virtual void DoSetAuthNeeded(bool show);
     virtual wxBitmap DoGetBitmap(State which) const;
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
     virtual wxSize DoGetBitmapMargins() const;
@@ -87,6 +89,9 @@ protected:
     virtual void DoSetBitmapPosition(wxDirection dir);
 
     class wxButtonImageData *m_imageData;
+
+    // true if the UAC symbol is shown
+    bool m_authNeeded;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)

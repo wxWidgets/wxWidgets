@@ -147,6 +147,19 @@ public:
                 const wxString& name = wxButtonNameStr);
 
     /**
+        Returns @true if an authentication needed symbol is displayed on the
+        button.
+
+        @remarks This method always returns @false if the platform is not
+                 Windows Vista or newer.
+
+        @see SetAuthNeeded()
+
+        @since 2.9.1
+     */
+    bool GetAuthNeeded() const;
+
+    /**
         Return the bitmap shown by the button.
 
         The returned bitmap may be invalid only if the button doesn't show any
@@ -222,6 +235,19 @@ public:
         @see SetLabel()
     */
     wxString GetLabel() const;
+
+    /**
+        Sets whether an authentication needed symbol should be displayed on the
+        button.
+
+        @remarks This method doesn't do anything if the platform is not Windows
+                 Vista or newer.
+
+        @see GetAuthNeeded()
+
+        @since 2.9.1
+     */
+    void SetAuthNeeded(bool needed = true);
 
     /**
         Sets the bitmap to display in the button.

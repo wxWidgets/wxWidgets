@@ -103,6 +103,12 @@ using namespace wxMSWImpl;
     #define DT_HIDEPREFIX       0x00100000
 #endif
 
+// set the value for BCM_SETSHIELD (for the UAC shield) if it's not defined in
+// the header
+#ifndef BCM_SETSHIELD
+    #define BCM_SETSHIELD       0x160c
+#endif
+
 // ----------------------------------------------------------------------------
 // button image data
 // ----------------------------------------------------------------------------
@@ -433,7 +439,9 @@ void wxMSWButton::UpdateMultilineStyle(HWND hwnd, const wxString& label)
         ::SetWindowLong(hwnd, GWL_STYLE, styleNew);
 }
 
-wxSize wxMSWButton::GetFittingSize(wxWindow *win, const wxSize& sizeLabel)
+wxSize wxMSWButton::GetFittingSize(wxWindow *win,
+                                   const wxSize& sizeLabel,
+                                   int flags)
 {
     // FIXME: this is pure guesswork, need to retrieve the real button margins
     wxSize sizeBtn = sizeLabel;
@@ -441,17 +449,21 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win, const wxSize& sizeLabel)
     sizeBtn.x += 3*win->GetCharWidth();
     sizeBtn.y = 11*EDIT_HEIGHT_FROM_CHAR_HEIGHT(sizeLabel.y)/10;
 
+    // account for the shield UAC icon if we have it
+    if ( flags & Size_AuthNeeded )
+        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+
     return sizeBtn;
 }
 
-wxSize wxMSWButton::ComputeBestSize(wxControl *btn)
+wxSize wxMSWButton::ComputeBestSize(wxControl *btn, int flags)
 {
     wxClientDC dc(btn);
 
     wxSize sizeBtn;
     dc.GetMultiLineTextExtent(btn->GetLabelText(), &sizeBtn.x, &sizeBtn.y);
 
-    sizeBtn = GetFittingSize(btn, sizeBtn);
+    sizeBtn = GetFittingSize(btn, sizeBtn, flags);
 
     // all buttons have at least the standard size unless the user explicitly
     // wants them to be of smaller size and used wxBU_EXACTFIT style when
@@ -486,6 +498,8 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
+    m_authNeeded = false;
+
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id))
     {
@@ -583,7 +597,11 @@ wxSize wxButton::DoGetBestSize() const
     // zero size)
     if ( ShowsLabel() || !m_imageData )
     {
-        size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
+        int flags = 0;
+        if ( GetAuthNeeded() )
+            flags |= wxMSWButton::Size_AuthNeeded;
+
+        size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this), flags);
     }
 
     if ( m_imageData )
@@ -946,6 +964,26 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+// ----------------------------------------------------------------------------
+// authentication needed handling
+// ----------------------------------------------------------------------------
+
+bool wxButton::DoGetAuthNeeded() const
+{
+    return m_authNeeded;
+}
+
+void wxButton::DoSetAuthNeeded(bool show)
+{
+    // show/hide UAC symbol on Windows Vista and later
+    if ( wxGetWinVersion() >= wxWinVersion_6 )
+    {
+        m_authNeeded = show;
+        ::SendMessage(GetHwnd(), BCM_SETSHIELD, 0, show);
+        InvalidateBestSize();
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -45,13 +45,19 @@ inline int GetMultilineStyle(const wxString& label)
 // depending on whether the label contains the new lines
 void UpdateMultilineStyle(HWND hwnd, const wxString& label);
 
+// flags for ComputeBestSize() and GetFittingSize()
+enum
+{
+    Size_AuthNeeded = 1
+};
+
 // common implementation of wxButton and wxToggleButton::DoGetBestSize()
 // (implemented in src/msw/button.cpp)
-wxSize ComputeBestSize(wxControl *btn);
+wxSize ComputeBestSize(wxControl *btn, int flags = 0);
 
 // compute the button size (as if wxBU_EXACTFIT were specified, i.e. without
 // adjusting it to be of default size if it's smaller) for the given label size
-wxSize GetFittingSize(wxWindow *win, const wxSize& sizeLabel);
+wxSize GetFittingSize(wxWindow *win, const wxSize& sizeLabel, int flags = 0);
 
 } // namespace wxMSWButton
 

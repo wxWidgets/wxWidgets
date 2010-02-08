@@ -64,6 +64,12 @@ class WXDLLIMPEXP_CORE wxButtonBase : public wxControl
 public:
     wxButtonBase() { }
 
+    // show the authentication needed symbol on the button: this is currently
+    // only implemented on Windows Vista and newer (on which it shows the UAC
+    // shield symbol)
+    void SetAuthNeeded(bool show = true) { DoSetAuthNeeded(show); }
+    bool GetAuthNeeded() const { return DoGetAuthNeeded(); }
+
     // show the image in the button in addition to the label: this method is
     // supported on all (major) platforms
     void SetBitmap(const wxBitmap& bitmap, wxDirection dir = wxLEFT)
@@ -169,6 +175,9 @@ public:
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+    virtual bool DoGetAuthNeeded() const { return false; }
+    virtual void DoSetAuthNeeded(bool WXUNUSED(show)) { }
 
     virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const
         { return wxBitmap(); }

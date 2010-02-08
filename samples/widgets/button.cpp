@@ -124,6 +124,7 @@ protected:
     wxCheckBox *m_chkBitmapOnly,
                *m_chkTextAndBitmap,
                *m_chkFit,
+               *m_chkAuthNeeded,
                *m_chkDefault;
 
     // more checkboxes for wxBitmapButton only
@@ -184,6 +185,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkBitmapOnly =
     m_chkTextAndBitmap =
     m_chkFit =
+    m_chkAuthNeeded =
     m_chkDefault =
     m_chkUsePressed =
     m_chkUseFocused =
@@ -210,8 +212,9 @@ void ButtonWidgetsPage::CreateContent()
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only");
-    m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and &bitmap");
+    m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and bitmap");
     m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Fit exactly"));
+    m_chkAuthNeeded = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Require a&uth"));
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Default"));
 
     sizerLeft->AddSpacer(5);
@@ -307,6 +310,7 @@ void ButtonWidgetsPage::Reset()
 {
     m_chkBitmapOnly->SetValue(false);
     m_chkFit->SetValue(true);
+    m_chkAuthNeeded->SetValue(false);
     m_chkTextAndBitmap->SetValue(false);
     m_chkDefault->SetValue(false);
 
@@ -432,10 +436,11 @@ void ButtonWidgetsPage::CreateButton()
     m_chkUseCurrent->Enable(showsBitmap);
     m_chkUseDisabled->Enable(showsBitmap);
 
+    if ( m_chkAuthNeeded->GetValue() )
+        m_button->SetAuthNeeded();
+
     if ( m_chkDefault->GetValue() )
-    {
         m_button->SetDefault();
-    }
 
     AddButtonToSizer();
 
