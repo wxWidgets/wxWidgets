@@ -364,6 +364,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent)
     {
         CGRect appframe = [[UIScreen mainScreen] applicationFrame];
+        CGRect bounds = [[UIScreen mainScreen] bounds];
         if ( CGRectEqualToRect(appframe, frame) ) 
         {
             if ( appframe.origin.y != 0 )
@@ -372,11 +373,19 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
                 frame.origin.y -= offset;
                 frame.size.height += offset;
             }
-            else 
+            else if ( appframe.origin.x != 0 )
             {
                 double offset = appframe.origin.x;
                 frame.origin.x -= offset;
                 frame.size.width += offset;
+            }
+            else if ( appframe.size.height < bounds.size.height )
+            {
+                frame.size.height = bounds.size.height;
+            }
+            else if ( appframe.size.width < bounds.size.width )
+            {
+                frame.size.width = bounds.size.width;
             }
 
             [self.view setFrame:frame];
