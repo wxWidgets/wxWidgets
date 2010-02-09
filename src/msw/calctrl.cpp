@@ -262,9 +262,11 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
 bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
 {
     wxCHECK_MSG( dt.IsValid(), false, "invalid date" );
-
+    wxDateTime newdt(dt);
+    newdt.ResetTime();
+    
     SYSTEMTIME st;
-    dt.GetAsMSWSysTime(&st);
+    newdt.GetAsMSWSysTime(&st);
     if ( !MonthCal_SetCurSel(GetHwnd(), &st) )
     {
         wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
@@ -272,7 +274,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
         return false;
     }
 
-    m_date = dt;
+    m_date = newdt;
 
     return true;
 }
