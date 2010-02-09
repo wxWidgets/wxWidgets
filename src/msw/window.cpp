@@ -4224,6 +4224,8 @@ bool wxWindowMSW::HandleSetCursor(WXHWND WXUNUSED(hWnd),
             y = pt.y;
         ScreenToClient(&x, &y);
         wxSetCursorEvent event(x, y);
+        event.SetId(GetId());
+        event.SetEventObject(this);
 
         bool processedEvtSetCursor = HandleWindowEvent(event);
         if ( processedEvtSetCursor && event.HasCursor() )
