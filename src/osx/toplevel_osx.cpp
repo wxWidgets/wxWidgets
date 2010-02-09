@@ -95,7 +95,7 @@ bool wxTopLevelWindowMac::Destroy()
     // NB: this will get called during destruction if we don't do it now,
     // and may fire a kill focus event on a control being destroyed
 #if wxOSX_USE_CARBON
-    if (m_nowpeer->GetWXWindow())
+    if (m_nowpeer && m_nowpeer->GetWXWindow())
         ClearKeyboardFocus( (WindowRef)m_nowpeer->GetWXWindow() );
 #endif
     return wxTopLevelWindowBase::Destroy();
