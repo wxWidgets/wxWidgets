@@ -28,8 +28,6 @@
 // NOTE: More in propertygrid.cpp
 //
 
-#ifndef SWIG
-
 #if defined(__WXMSW__)
 
     // space between vertical line and value text
@@ -209,7 +207,6 @@
     #define wxPG_SMALL_SCREEN       0
 #endif
 
-#endif // #ifndef SWIG
 
 // Undefine wxPG_ICON_WIDTH to use supplied xpm bitmaps instead
 // (for tree buttons)
@@ -264,17 +261,13 @@ class wxPGValidationInfo;
     @{
 */
 
-#ifndef SWIG
-    // Used to tell wxPGProperty to use label as name as well
-    #define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
-    // This is the value placed in wxPGProperty::sm_wxPG_LABEL
-    #define wxPG_LABEL_STRING       wxS("@!")
-    #define wxPG_NULL_BITMAP        wxNullBitmap
-    #define wxPG_COLOUR_BLACK       (*wxBLACK)
-#else
-    #define wxPG_NULL_BITMAP        wxBitmap_NULL
-    #define wxPG_COLOUR_BLACK       wxColour_BLACK
-#endif // #ifndef SWIG
+// Used to tell wxPGProperty to use label as name as well
+#define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
+
+// This is the value placed in wxPGProperty::sm_wxPG_LABEL
+#define wxPG_LABEL_STRING       wxS("@!")
+#define wxPG_NULL_BITMAP        wxNullBitmap
+#define wxPG_COLOUR_BLACK       (*wxBLACK)
 
 /** Convert Red, Green and Blue to a single 32-bit value.
 */
@@ -323,13 +316,10 @@ typedef wxString wxPGCachedString;
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxPGProperty*, wxArrayPGProperty,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
 
-// Always use wxString based hashmap with unicode, stl, swig and GCC 4.0+
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL(void*,
                                      wxPGHashMapS2P,
                                      class WXDLLIMPEXP_PROPGRID);
@@ -348,8 +338,6 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
                               wxIntegerEqual,
                               wxPGHashMapI2I,
                               class WXDLLIMPEXP_PROPGRID);
-
-#endif // #ifndef SWIG
 
 // -----------------------------------------------------------------------
 
@@ -442,15 +430,17 @@ enum wxPG_SETVALUE_FLAGS
 // -----------------------------------------------------------------------
 // Editor class.
 
-#ifndef SWIG
-
 // Editor accessor (for backwards compatiblity use only).
 #define wxPG_EDITOR(T)          wxPGEditor_##T
 
-// Declare editor class, with optional part.
-#define WX_PG_DECLARE_EDITOR_WITH_DECL(EDITOR,DECL) \
-extern DECL wxPGEditor* wxPGEditor_##EDITOR; \
-extern DECL wxPGEditor* wxPGConstruct##EDITOR##EditorClass();
+// Macro for declaring editor class, with optional impexpdecl part.
+#ifndef WX_PG_DECLARE_EDITOR_WITH_DECL
+
+    #define WX_PG_DECLARE_EDITOR_WITH_DECL(EDITOR,DECL) \
+    extern DECL wxPGEditor* wxPGEditor_##EDITOR; \
+    extern DECL wxPGEditor* wxPGConstruct##EDITOR##EditorClass();
+
+#endif
 
 // Declare editor class.
 #define WX_PG_DECLARE_EDITOR(EDITOR) \
@@ -466,8 +456,6 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(TextCtrlAndButton,WXDLLIMPEXP_PROPGRID)
 WX_PG_DECLARE_EDITOR_WITH_DECL(CheckBox,WXDLLIMPEXP_PROPGRID)
 #endif
 WX_PG_DECLARE_EDITOR_WITH_DECL(ChoiceAndButton,WXDLLIMPEXP_PROPGRID)
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -672,8 +660,6 @@ template<> inline wxVariant WXVARIANT( const wxColour& value )
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 //
 // Tokenizer macros.
 // NOTE: I have made two versions - worse ones (performance and consistency
@@ -728,8 +714,6 @@ protected:
 
 #define WX_PG_TOKENIZER2_END() \
     }
-
-#endif
 
 // -----------------------------------------------------------------------
 

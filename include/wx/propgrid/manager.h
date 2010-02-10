@@ -170,8 +170,6 @@ protected:
     */
     wxString                m_label;
 
-#ifndef SWIG
-
     //virtual bool ProcessEvent( wxEvent& event );
 
     wxPropertyGridManager*  m_manager;
@@ -181,9 +179,7 @@ protected:
 private:
     bool                    m_isDefault; // is this base page object?
 
-private:
     DECLARE_EVENT_TABLE()
-#endif
 };
 
 // -----------------------------------------------------------------------
@@ -639,8 +635,6 @@ public:
     virtual void SetWindowStyleFlag ( long style );
     virtual bool Reparent( wxWindowBase *newParent );
 
-#ifndef SWIG
-
 protected:
     virtual wxSize DoGetBestSize() const;
 
@@ -748,7 +742,6 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-#endif // #ifndef SWIG
 };
 
 // -----------------------------------------------------------------------

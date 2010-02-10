@@ -47,9 +47,6 @@ struct wxPGPaintData
 };
 
 
-#ifndef SWIG
-
-
 // space between vertical sides of a custom image
 #define wxPG_CUSTOM_IMAGE_SPACINGY      1
 
@@ -220,7 +217,6 @@ protected:
     bool        m_hasValidText;
 };
 
-#endif  // !SWIG
 
 /**
     @class wxPGCell
@@ -317,8 +313,6 @@ private:
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 /** @class wxPGAttributeStorage
 
     wxPGAttributeStorage is somewhat optimized storage for
@@ -366,7 +360,6 @@ protected:
     wxPGHashMapS2P  m_map;
 };
 
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -516,8 +509,6 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     (wxPG_PROP_DISABLED|wxPG_PROP_HIDDEN|wxPG_PROP_NOEDITOR|wxPG_PROP_COLLAPSED)
 
 // -----------------------------------------------------------------------
-
-#ifndef SWIG
 
 /**
     @section propgrid_property_attributes wxPropertyGrid Property Attribute
@@ -703,11 +694,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 #define wxPG_ATTR_INLINE_HELP             wxPGGlobalVars->m_strInlineHelp
 #endif
 
-#endif  // !SWIG
-
 // -----------------------------------------------------------------------
-
-#ifndef SWIG
 
 /** @class wxPGChoiceEntry
     Data of a single wxPGChoices choice.
@@ -789,7 +776,6 @@ private:
 
 #define wxPGChoicesEmptyData    ((wxPGChoicesData*)NULL)
 
-#endif // SWIG
 
 /** @class wxPGChoices
 
@@ -1014,14 +1000,14 @@ public:
     /** Removes count items starting at position nIndex. */
     void RemoveAt(size_t nIndex, size_t count = 1);
 
-#ifndef SWIG
-    /** Does not create copies for itself. */
+    /** Does not create copies for itself.
+        TODO: Deprecate.
+    */
     void Set( const wxChar* const* labels, const long* values = NULL )
     {
         Free();
         Add(labels,values);
     }
-#endif // SWIG
 
     /** Version that works with wxArrayString and wxArrayInt. */
     void Set( const wxArrayString& labels,
@@ -1058,7 +1044,6 @@ public:
 
     wxArrayString GetLabels() const;
 
-#ifndef SWIG
     void operator= (const wxPGChoices& a)
     {
         if (this != &a)
@@ -1080,7 +1065,6 @@ protected:
 
     void Init();
     void Free();
-#endif  // !SWIG
 };
 
 // -----------------------------------------------------------------------
@@ -1143,7 +1127,6 @@ public:
     */
     virtual wxVariant DoGetValue() const { return m_value; }
 
-#if !defined(SWIG) || defined(CREATE_VCW)
     /** Implement this function in derived class to check the value.
         Return true if it is ok. Returning false prevents property change events
         from occurring.
@@ -1215,7 +1198,7 @@ public:
     virtual bool IntToValue( wxVariant& value,
                              int number,
                              int argFlags = 0 ) const;
-#endif  // !defined(SWIG) || defined(CREATE_VCW)
+
     /**
         Converts property value into a text representation.
 
@@ -1931,7 +1914,6 @@ public:
     */
     void SetDefaultValue( wxVariant& value );
 
-#ifndef SWIG
     /** Sets editor for a property.
 
         @param editor
@@ -1946,7 +1928,6 @@ public:
     {
         m_customEditor = editor;
     }
-#endif
 
     /** Sets editor for a property.
     */
@@ -2100,7 +2081,6 @@ public:
     }
 #endif // wxUSE_VALIDATORS
 
-#ifndef SWIG
     /** Returns client data (void*) of a property.
     */
     void* GetClientData() const
@@ -2128,7 +2108,6 @@ public:
     /** Sets managed client object of a property.
     */
     wxClientData *GetClientObject() const { return m_clientObject; }
-#endif
 
     /** Sets new set of choices for property.
 
@@ -2226,16 +2205,12 @@ public:
     */
     int GetImageOffset( int imageWidth ) const;
 
-#ifndef SWIG
     // Returns wxPropertyGridPageState in which this property resides.
     wxPropertyGridPageState* GetParentState() const { return m_parentState; }
-#endif
 
-#ifndef SWIG
     wxPGProperty* GetItemAtY( unsigned int y,
                               unsigned int lh,
                               unsigned int* nextItemY ) const;
-#endif
 
     /** Returns property at given virtual y coordinate.
     */
@@ -2244,8 +2219,6 @@ public:
     /** Returns (direct) child property with given name (or NULL if not found).
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
-
-#ifndef SWIG
 
     // Returns various display-related information for given column
     void GetDisplayInfo( unsigned int column,
@@ -2414,7 +2387,6 @@ private:
     // Called in constructors.
     void Init();
     void Init( const wxString& label, const wxString& name );
-#endif // #ifndef SWIG
 };
 
 // -----------------------------------------------------------------------
@@ -2427,14 +2399,12 @@ private:
 #define WX_PG_DECLARE_DOGETEDITORCLASS \
     virtual const wxPGEditor* DoGetEditorClass() const;
 
-#ifndef SWIG
+#ifndef WX_PG_DECLARE_PROPERTY_CLASS
     #define WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME) \
         public: \
             DECLARE_DYNAMIC_CLASS(CLASSNAME) \
             WX_PG_DECLARE_DOGETEDITORCLASS \
         private:
-#else
-    #define WX_PG_DECLARE_PROPERTY_CLASS(CLASSNAME)
 #endif
 
 // Implements sans constructor function. Also, first arg is class name, not
@@ -2446,8 +2416,6 @@ const wxPGEditor* PROPNAME::DoGetEditorClass() const \
 }
 
 // -----------------------------------------------------------------------
-
-#ifndef SWIG
 
 /** @class wxPGRootProperty
     @ingroup classes
@@ -2510,8 +2478,6 @@ protected:
 private:
     void Init();
 };
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 

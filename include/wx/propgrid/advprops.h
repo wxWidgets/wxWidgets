@@ -18,9 +18,6 @@
 
 // -----------------------------------------------------------------------
 
-
-#ifndef SWIG
-
 //
 // Additional Value Type Handlers
 //
@@ -37,8 +34,6 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PROPGRID)
 #if wxUSE_DATEPICKCTRL
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PROPGRID)
 #endif
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -124,7 +119,6 @@ public:
         Init( type, colour );
     }
 
-#ifndef SWIG
     void operator=(const wxColourPropertyValue& cpv)
     {
         if (this != &cpv)
@@ -133,26 +127,13 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxColourPropertyValue)
-#endif
 };
 
 
-#ifndef SWIG
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxColourPropertyValue&, const wxColourPropertyValue&);
 
 DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
-
-#endif
-
-#ifndef SWIG
-    #define wxPG_EMPTY_CPV          (*(NULL))
-    #define wxPG_NORMAL_FONT        (*wxNORMAL_FONT)
-#else
-    #define wxPG_EMPTY_CPV          wxCPV_wxPG_EMPTY
-    #define wxPG_NORMAL_FONT        wxFONT_wxPG_NORMAL_FONT
-#endif
-
 
 // -----------------------------------------------------------------------
 // Declare part of custom colour property macro pairs.
@@ -162,9 +143,6 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 #endif
 
 // -----------------------------------------------------------------------
-
-// Exclude class from wxPython bindings
-#ifndef SWIG
 
 /** @class wxFontProperty
     @ingroup classes
@@ -190,8 +168,6 @@ public:
 
 protected:
 };
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -304,9 +280,6 @@ private:
 
 // -----------------------------------------------------------------------
 
-// Exclude classes from wxPython bindings
-#ifndef SWIG
-
 /** @class wxCursorProperty
     @ingroup classes
     Property representing wxCursor.
@@ -381,7 +354,6 @@ public:
                            const wxString& name,
                            const wxArrayString& strings,
                            const wxArrayString& value );
-#ifndef SWIG
     wxMultiChoiceProperty( const wxString& label,
                            const wxString& name,
                            const wxPGChoices& choices,
@@ -390,7 +362,7 @@ public:
     wxMultiChoiceProperty( const wxString& label = wxPG_LABEL,
                            const wxString& name = wxPG_LABEL,
                            const wxArrayString& value = wxArrayString() );
-#endif
+
     virtual ~wxMultiChoiceProperty();
 
     virtual void OnSetValue();
@@ -489,8 +461,6 @@ protected:
 };
 
 #endif // wxUSE_DATETIME
-
-#endif // !SWIG
 
 // -----------------------------------------------------------------------
 

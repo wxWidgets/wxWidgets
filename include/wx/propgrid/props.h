@@ -52,8 +52,6 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 /** @class wxPGInDialogValidator
     @ingroup classes
     Creates and manages a temporary wxTextCtrl for validation purposes.
@@ -80,8 +78,6 @@ public:
 private:
     wxTextCtrl*         m_textCtrl;
 };
-
-#endif  // SWIG
 
 
 // -----------------------------------------------------------------------
@@ -126,10 +122,9 @@ protected:
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
 /** Constants used with DoValidation() methods.
 */
-enum
+enum wxPGDoValidationConstants
 {
     /** Instead of modifying the value, show an error message.
     */
@@ -143,7 +138,6 @@ enum
     */
     wxPG_PROPERTY_VALIDATION_WRAP               = 2
 };
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -314,9 +308,6 @@ protected:
 
 // -----------------------------------------------------------------------
 
-// Exclude class from wxPython bindings
-#ifndef SWIG
-
 /** @class wxBoolProperty
     @ingroup classes
     Basic property with boolean value.
@@ -342,8 +333,6 @@ public:
                              int number, int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 };
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -684,9 +673,6 @@ protected:
 // -----------------------------------------------------------------------
 
 
-// Exclude class from wxPython bindings
-#ifndef SWIG
-
 /** @class wxDirProperty
     @ingroup classes
     Like wxLongStringProperty, but the button triggers dir selector instead.
@@ -711,8 +697,6 @@ public:
 protected:
     wxString    m_dlgMessage;
 };
-
-#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -758,10 +742,8 @@ public:
                                 wxWindow* primary,
                                 const wxChar* cbt );
 
-#ifndef SWIG
     // Creates wxArrayEditorDialog for string editing. Called in OnButtonClick.
     virtual wxArrayEditorDialog* CreateEditorDialog();
-#endif
 
 protected:
     wxString        m_display; // Cache for displayed text.

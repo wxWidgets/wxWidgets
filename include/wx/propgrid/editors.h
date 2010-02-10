@@ -30,7 +30,6 @@ public:
     wxWindow*   m_primary;
     wxWindow*   m_secondary;
 
-#ifndef SWIG
     wxPGWindowList( wxWindow* a )
     {
         m_primary = a;
@@ -41,7 +40,6 @@ public:
         m_primary = a;
         m_secondary = b;
     };
-#endif
 };
 
 // -----------------------------------------------------------------------
@@ -153,7 +151,6 @@ public:
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
         wxWindow* wnd_primary, wxEvent& event ) const = 0;
 
-#if !defined(SWIG) || defined(CREATE_VCW)
     /** Returns value from control, via parameter 'variant'.
         Usually ends up calling property's StringToValue or IntToValue.
         Returns true if value was different.
@@ -161,7 +158,6 @@ public:
     virtual bool GetValueFromControl( wxVariant& variant,
                                       wxPGProperty* property,
                                       wxWindow* ctrl ) const;
-#endif
 
     /**
         Sets new appearance for the control. Default implementation
@@ -363,9 +359,6 @@ public:
 };
 
 
-// Exclude classes from being able to be derived from in wxPython bindings
-#ifndef SWIG
-
 class WXDLLIMPEXP_PROPGRID wxPGChoiceAndButtonEditor : public wxPGChoiceEditor
 {
 public:
@@ -396,8 +389,6 @@ public:
 
     DECLARE_DYNAMIC_CLASS(wxPGTextCtrlAndButtonEditor)
 };
-
-#endif  // !SWIG
 
 
 #if wxPG_INCLUDE_CHECKBOX

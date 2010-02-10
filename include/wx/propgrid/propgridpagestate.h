@@ -379,7 +379,6 @@ public:
         m_pIt = it.m_pIt;
         m_pIt->IncRef();
     }
-#ifndef SWIG
     const wxPGVIterator& operator=( const wxPGVIterator& it )
     {
         if (this != &it)
@@ -390,7 +389,6 @@ public:
         }
         return *this;
     }
-#endif
     void Next() { m_pIt->Next(); }
     bool AtEnd() const { return m_pIt->m_it.AtEnd(); }
     wxPGProperty* GetProperty() const { return m_pIt->m_it.GetProperty(); }
@@ -399,9 +397,6 @@ protected:
 };
 
 // -----------------------------------------------------------------------
-
-#ifndef SWIG
-// We won't need this class from wxPython
 
 /** @class wxPropertyGridPageState
 
@@ -747,8 +742,6 @@ private:
     /** Only inits arrays, doesn't migrate things or such. */
     void InitNonCatMode();
 };
-
-#endif // #ifndef SWIG
 
 // -----------------------------------------------------------------------
 

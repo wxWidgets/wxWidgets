@@ -19,8 +19,6 @@
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 /** @section wxPGPropArgCls
 
     Most property grid functions have this type as their argument, as it can
@@ -109,8 +107,6 @@ private:
     } m_ptr;
     unsigned char m_flags;
 };
-
-#endif
 
 typedef const wxPGPropArgCls& wxPGPropArg;
 
@@ -415,14 +411,12 @@ public:
         return m_pState->GetPropertyCategory(p);
     }
 
-#ifndef SWIG
     /** Returns client data (void*) of a property. */
     void* GetPropertyClientData( wxPGPropArg id ) const
     {
         wxPG_PROP_ARG_CALL_PROLOG_RETVAL(NULL)
         return p->GetClientData();
     }
-#endif
 
     /**
         Returns first property which label matches given string.
@@ -511,10 +505,8 @@ public:
     {
         return (unsigned long) GetPropertyValueAsLong(id);
     }
-#ifndef SWIG
     int GetPropertyValueAsInt( wxPGPropArg id ) const
         { return (int)GetPropertyValueAsLong(id); }
-#endif
     bool GetPropertyValueAsBool( wxPGPropArg id ) const;
     double GetPropertyValueAsDouble( wxPGPropArg id ) const;
 
@@ -573,7 +565,6 @@ public:
     }
 #endif
 
-#ifndef SWIG
     /** Returns a wxVariant list containing wxVariant versions of all
         property values. Order is not guaranteed.
         @param flags
@@ -589,7 +580,6 @@ public:
     {
         return m_pState->DoGetPropertyValues(listname, baseparent, flags);
     }
-#endif
 
     /**
         Returns currently selected property. NULL if none.
@@ -610,9 +600,7 @@ public:
         return m_pState->m_selection;
     }
 
-#ifndef SWIG
     wxPropertyGridPageState* GetState() const { return m_pState; }
-#endif
 
     /** Similar to GetIterator(), but instead returns wxPGVIterator instance,
         which can be useful for forward-iterating through arbitrary property
@@ -967,7 +955,6 @@ public:
                           const wxColour& fgCol = wxNullColour,
                           const wxColour& bgCol = wxNullColour );
 
-#ifndef SWIG
     /** Sets client data (void*) of a property.
         @remarks
         This untyped client data has to be deleted manually.
@@ -995,7 +982,6 @@ public:
         p->SetEditor(editor);
         RefreshProperty(p);
     }
-#endif
 
     /** Sets editor control of a property. As editor argument, use
         editor name string, such as "TextCtrl" or "Choice".
@@ -1056,7 +1042,6 @@ public:
         p->SetValueToUnspecified();
     }
 
-#ifndef SWIG
     /**
         Sets property values from a list of wxVariants.
     */
@@ -1077,7 +1062,6 @@ public:
     {
         SetPropertyValues(list.GetList(),defaultCategory);
     }
-#endif
 
     /** Associates the help string with property.
         @remarks
@@ -1118,7 +1102,6 @@ public:
     }
 #endif
 
-#ifndef SWIG
     /** Sets value (long integer) of a property.
     */
     void SetPropertyValue( wxPGPropArg id, long value )
@@ -1217,7 +1200,6 @@ public:
         wxVariant v = WXVARIANT(value);
         SetPropVal( id, v );
     }
-#endif  // !SWIG
 
     /** Sets value (wxString) of a property.
 
@@ -1239,11 +1221,9 @@ public:
         SetPropVal( id, value );
     }
 
-#ifndef SWIG
     /** Sets value (wxVariant&) of a property. Same as SetPropertyValue, but
         accepts reference. */
     void SetPropVal( wxPGPropArg id, wxVariant& value );
-#endif
 
     /** Adjusts how wxPropertyGrid behaves when invalid value is entered
         in a property.
@@ -1332,8 +1312,6 @@ protected:
     // Default call's m_pState's BaseGetPropertyByName
     virtual wxPGProperty* DoGetPropertyByName( const wxString& name ) const;
 
-#ifndef SWIG
-
     // Deriving classes must set this (it must be only or current page).
     wxPropertyGridPageState*         m_pState;
 
@@ -1362,7 +1340,6 @@ private:
             return NULL;
         return static_cast<const wxPropertyGrid*>(m_pState->GetGrid());
     }
-#endif // #ifndef SWIG
 
     friend class wxPropertyGrid;
     friend class wxPropertyGridManager;

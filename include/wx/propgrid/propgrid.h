@@ -34,8 +34,6 @@ class wxPGComboBox;
 // Global variables
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 // This is required for sharing common global variables.
 class WXDLLIMPEXP_PROPGRID wxPGGlobalVarsClass
 {
@@ -118,8 +116,6 @@ extern WXDLLIMPEXP_DATA_PROPGRID(wxPGGlobalVarsClass*) wxPGGlobalVars;
 // When wxPG is loaded dynamically after the application is already running
 // then the built-in module system won't pick this one up.  Add it manually.
 WXDLLIMPEXP_PROPGRID void wxPGInitResourceModule();
-
-#endif // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -529,8 +525,6 @@ enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
 
 // -----------------------------------------------------------------------
 
-#ifndef SWIG
-
 // Internal flags
 #define wxPG_FL_INITIALIZED                 0x0001
 // Set when creating editor controls if it was clicked on.
@@ -583,9 +577,7 @@ enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
 // Prevents RecalculateVirtualSize re-entrancy
 #define wxPG_FL_RECALCULATING_VIRTUAL_SIZE  0x80000000
 
-#endif // #ifndef SWIG
-
-#if !defined(__wxPG_SOURCE_FILE__) && !defined(SWIG)
+#if !defined(__wxPG_SOURCE_FILE__)
     // Reduce compile time, but still include in user app
     #include "wx/propgrid/props.h"
 #endif
@@ -1007,7 +999,6 @@ public:
     */
     virtual void RefreshProperty( wxPGProperty* p );
 
-#ifndef SWIG
     /** Registers a new editor class.
         @return
         Pointer to the editor class instance that should be used.
@@ -1021,7 +1012,6 @@ public:
     static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editorClass,
                                               const wxString& editorName,
                                               bool noDefCheck = false );
-#endif
 
     /** Resets all colours to the original system values.
     */
@@ -1450,8 +1440,6 @@ public:
 
     // Events from editor controls are forward to this function
     void HandleCustomEditorEvent( wxEvent &event );
-
-#ifndef SWIG
 
     /**
         Generates contents for string dst based on the contents of
@@ -2129,7 +2117,6 @@ private:
     bool ButtonTriggerKeyTest( int action, wxKeyEvent& event );
 
     DECLARE_EVENT_TABLE()
-#endif // #ifndef SWIG
 };
 
 // -----------------------------------------------------------------------
@@ -2137,7 +2124,6 @@ private:
 // Bunch of inlines that need to resolved after all classes have been defined.
 //
 
-#ifndef SWIG
 inline bool wxPropertyGridPageState::IsDisplayed() const
 {
     return ( this == m_pPropGrid->GetState() );
@@ -2147,7 +2133,6 @@ inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
 {
     return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
 }
-#endif
 
 inline wxString wxPGProperty::GetHintText() const
 {
@@ -2284,10 +2269,10 @@ public:
 
     /** Constructor. */
     wxPropertyGridEvent(wxEventType commandType=0, int id=0);
-#ifndef SWIG
+
     /** Copy constructor. */
     wxPropertyGridEvent(const wxPropertyGridEvent& event);
-#endif
+
     /** Destructor. */
     ~wxPropertyGridEvent();
 
@@ -2397,7 +2382,6 @@ public:
         m_validationInfo->SetFailureMessage( message );
     }
 
-#ifndef SWIG
     wxPGVFBFlags GetValidationFailureBehavior() const
     {
         wxASSERT( GetEventType() == wxEVT_PG_CHANGING );
@@ -2455,8 +2439,6 @@ private:
 
     bool                m_canVeto;
     bool                m_wasVetoed;
-
-#endif
 };
 
 
