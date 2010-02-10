@@ -177,12 +177,14 @@ WXDWORD wxGauge::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxGauge::DoGetBestSize() const
 {
-    // VZ: no idea where does 28 come from, it was there before my changes and
-    //     as nobody ever complained I guess we can leave it...
+    // Windows HIG (http://msdn.microsoft.com/en-us/library/aa511279.aspx)
+    // suggest progress bar size of "107 or 237 x 8 dialog units". Let's use
+    // the smaller one.
+
     if (HasFlag(wxGA_VERTICAL))
-        return wxSize(28, 100);
+        return ConvertDialogToPixels(wxSize(8, 107));
     else
-        return wxSize(100, 28);
+        return ConvertDialogToPixels(wxSize(107, 8));
 }
 
 // ----------------------------------------------------------------------------
