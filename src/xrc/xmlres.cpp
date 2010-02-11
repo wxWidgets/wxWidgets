@@ -1561,9 +1561,9 @@ static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
 static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE)
 {
-    int index = 0;
+    unsigned int index = 0;
 
-    for (const wxChar *c = str_id; *c != wxT('\0'); c++) index += (int)*c;
+    for (const wxChar *c = str_id; *c != wxT('\0'); c++) index += (unsigned int)*c;
     index %= XRCID_TABLE_SIZE;
 
     XRCID_record *oldrec = NULL;
