@@ -148,7 +148,17 @@ wxMenuBarXmlHandler::wxMenuBarXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxMenuBarXmlHandler::DoCreateResource()
 {
-    wxMenuBar *menubar = new wxMenuBar(GetStyle());
+    wxMenuBar *menubar = NULL;
+
+    const int style = GetStyle();
+    wxASSERT_MSG(!style || !m_instance,
+                 "cannot use <style> with pre-created menubar");
+
+    if ( m_instance )
+        menubar = wxDynamicCast(m_instance, wxMenuBar);
+    if ( !menubar )
+        menubar = new wxMenuBar(style);
+
     CreateChildren(menubar);
 
     if (m_parentAsWindow)
