@@ -51,17 +51,8 @@
 
 #else
 
-// namespace support was first implemented in gcc-2.95,
-// so avoid using it for older versions.
-#if !defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 95)
-
-#define wxHAS_NAMESPACES
-
 namespace wxPrivate
 {
-#else
-#define wxPrivate
-#endif
     // in the original implementation this was a member template function of
     // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
     // support member templates and so we must make it global
@@ -84,9 +75,7 @@ namespace wxPrivate
     void Use(const T& WXUNUSED(t))
     {
     }
-#if !defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 95)
 } // namespace wxPrivate
-#endif
 
 #define wxPrivateOnScopeExit(n) wxPrivate::OnScopeExit(n)
 #define wxPrivateUse(n) wxPrivate::Use(n)
@@ -397,8 +386,6 @@ wxMakeObjGuard(Obj& obj, MemFun memFun, P1 p1, P2 p2, P3 p3)
 //                   setting a variable to some value on block exit
 // ----------------------------------------------------------------------------
 
-#ifdef wxHAS_NAMESPACES
-
 namespace wxPrivate
 {
 
@@ -468,8 +455,6 @@ wxPrivate::VariableNullerImpl<T> wxMakeVarNuller(T& var)
 {
     return wxPrivate::VariableNullerImpl<T>(var);
 }
-
-#endif // wxHAS_NAMESPACES
 
 // ============================================================================
 // macros for declaring unnamed scoped guards (which can't be dismissed)
