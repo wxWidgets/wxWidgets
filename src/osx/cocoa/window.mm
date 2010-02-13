@@ -32,6 +32,10 @@
     #include "wx/dnd.h"
 #endif
 
+#if wxUSE_TOOLTIPS
+    #include "wx/tooltip.h"
+#endif
+
 #include <objc/objc-runtime.h>
 
 // Get the window with the focus
@@ -1888,6 +1892,18 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
 {
     if ([m_osxView respondsToSelector:@selector(setFont:)])
         [m_osxView setFont: font.OSXGetNSFont()];
+}
+
+void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
+{
+    if (tooltip)
+    {
+        wxCFStringRef cf( tooltip->GetTip() , m_wxPeer->GetFont().GetEncoding() );
+        [m_osxView setToolTip: cf.AsNSString()];
+    }
+    else 
+        [m_osxView setToolTip: nil];
+
 }
 
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )

@@ -268,6 +268,8 @@ public :
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 
     virtual void        SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) = 0;
+    
+    virtual void        SetToolTip(wxToolTip* WXUNUSED(tooltip)) { }
 
     // is the clicked event sent AFTER the state already changed, so no additional
     // state changing logic is required from the outside

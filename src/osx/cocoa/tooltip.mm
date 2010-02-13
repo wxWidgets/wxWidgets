@@ -47,6 +47,8 @@ wxToolTip::~wxToolTip()
 void wxToolTip::SetTip( const wxString &tip )
 {
     m_text = tip;
+    if (m_window)
+        m_window->SetToolTip(this);
 }
 
 void wxToolTip::SetWindow( wxWindow *win )

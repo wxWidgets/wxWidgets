@@ -752,6 +752,9 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
     if ( m_tooltip )
         m_tooltip->SetWindow(this);
+        
+    if (m_peer)
+        m_peer->SetToolTip(tooltip);
 }
 
 #endif

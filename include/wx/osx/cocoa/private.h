@@ -145,6 +145,7 @@ public :
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+    void                SetToolTip( wxToolTip* tooltip );
 
     void                InstallEventHandler( WXWidget control = NULL );
 
