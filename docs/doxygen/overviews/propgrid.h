@@ -967,6 +967,9 @@ without warnings or errors.
 
   - "InlineHelp" property has been replaced with "Hint".
 
+  - wxPropertyGrid::CanClose() has been removed. Call
+    wxPropertyGridInterface::EditorValidate() instead.
+
 @subsection propgrid_compat_propdev Property and Editor Sub-classing Changes
 
   - Confusing custom property macros have been eliminated.
