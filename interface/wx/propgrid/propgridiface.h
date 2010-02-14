@@ -679,6 +679,18 @@ public:
                                 const wxString& falseChoice );
 
     /**
+        Set proportion of a auto-stretchable column. wxPG_SPLITTER_AUTO_CENTER
+        window style needs to be used to indicate that columns are auto-
+        resizeable.
+
+        @returns Returns @false on failure.
+
+        @remarks You should call this for individual pages of
+                 wxPropertyGridManager (if used).
+    */
+    bool SetColumnProportion( unsigned int column, int proportion );
+
+    /**
         Sets an attribute for this property.
 
         @param id

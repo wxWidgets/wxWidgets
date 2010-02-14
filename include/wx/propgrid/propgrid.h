@@ -150,8 +150,12 @@ wxPG_ALPHABETIC_MODE                = (wxPG_HIDE_CATEGORIES|wxPG_AUTO_SORT),
 */
 wxPG_BOLD_MODIFIED                  = 0x00000040,
 
-/** When wxPropertyGrid is resized, splitter moves to the center. This
-    behavior stops once the user manually moves the splitter.
+/** Using this style, the column splitters move automatically based on column
+    proportions (default is equal proportion for every column). This behavior
+    stops once the user manually moves a splitter, and returns when a
+    splitter is double-clicked.
+
+    @see wxPropertyGridInterface::SetColumnProportion().
 */
 wxPG_SPLITTER_AUTO_CENTER           = 0x00000080,
 

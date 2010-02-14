@@ -1845,6 +1845,10 @@ void FormMain::PopulateWithLibraryConfig ()
     wxPropertyGridManager* pgman = m_pPropGridManager;
     wxPropertyGridPage* pg = pgman->GetPage(wxT("wxWidgets Library Config"));
 
+    // Set custom column proportions
+    pg->SetColumnProportion(0, 3);
+    pg->SetColumnProportion(1, 1);
+
     wxPGProperty* cat;
 
     wxBitmap bmp = wxArtProvider::GetBitmap(wxART_REPORT_VIEW);

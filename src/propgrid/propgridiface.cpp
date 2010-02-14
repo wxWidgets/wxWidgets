@@ -359,6 +359,17 @@ void wxPropertyGridInterface::ClearModifiedStatus()
     GetPropertyGrid()->RefreshEditor();
 }
 
+bool wxPropertyGridInterface::SetColumnProportion( unsigned int column,
+                                                   int proportion )
+{
+    wxCHECK(m_pState, false);
+    wxPropertyGrid* pg = m_pState->GetGrid();
+    wxCHECK(pg, false);
+    wxCHECK(pg->HasFlag(wxPG_SPLITTER_AUTO_CENTER), false);
+    m_pState->DoSetColumnProportion(column, proportion);
+    return true;
+}
+
 // -----------------------------------------------------------------------
 // wxPropertyGridInterface property value setting and getting
 // -----------------------------------------------------------------------

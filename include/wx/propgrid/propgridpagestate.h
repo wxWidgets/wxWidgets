@@ -547,6 +547,8 @@ public:
 
     void DoRemoveFromSelection( wxPGProperty* prop );
 
+    void DoSetColumnProportion( unsigned int column, int proportion );
+
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
     wxPGProperty* GetPropertyByLabel( const wxString& name,
@@ -703,6 +705,9 @@ protected:
 
     /** List of indices of columns the user can edit by clicking it. */
     wxArrayInt                  m_editableColumns;
+
+    /** Column proportions */
+    wxArrayInt                  m_columnProportions;
 
     double                      m_fSplitterX;
 
