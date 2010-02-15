@@ -63,9 +63,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( !wxControl::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    wxASSERT_MSG( !(style & wxCB_READONLY),
-                  "wxCB_READONLY not supported, use wxChoice instead" );
-
     wxASSERT_MSG( !(style & wxCB_SORT),
                   "wxCB_SORT not currently supported by wxOSX/Cocoa");
 
@@ -173,8 +170,15 @@ void wxComboBox::SetSelection(long from, long to)
 
 int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
-    wxASSERT_MSG(bCase, "wxComboBox::FindString() doesn't currently support case "
-                  "insensitive search in wxOSX/Cocoa");
+    if (!bCase)
+    {
+        for (int i = 0; i < GetCount(); i++)
+        {
+            if (s.IsSameAs(GetString(i), false))
+                return i;
+        }
+        return wxNOT_FOUND;
+    }
 
     return GetComboPeer()->FindString(s);
 }

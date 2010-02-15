@@ -137,11 +137,13 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer,
                                     wxMenu* menu,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long style, 
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r];
+    if (style & wxCB_READONLY)
+        [v setEditable:NO];
     wxNSComboBoxControl* c = new wxNSComboBoxControl( wxpeer, v );
     return c;
 }
