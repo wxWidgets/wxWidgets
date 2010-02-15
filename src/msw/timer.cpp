@@ -118,22 +118,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxTimerHiddenWindowModule, wxModule)
 // wxMSWTimerImpl class
 // ----------------------------------------------------------------------------
 
-wxMSWTimerImpl::wxMSWTimerImpl(wxTimer *timer)
-:wxTimerImpl(timer)
-{
-    m_id = GetNewTimerId(this);
-}
-
-wxMSWTimerImpl::~wxMSWTimerImpl()
-{
-    TimerMap().erase(m_id);
-}
-
 bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
 {
     if ( !wxTimerImpl::Start(milliseconds, oneShot) )
         return false;
 
+    m_id = GetNewTimerId(this);
     // SetTimer() normally returns just idTimer but this might change in the
     // future so use its return value to be safe
     UINT_PTR ret = ::SetTimer
@@ -157,6 +147,8 @@ bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
 void wxMSWTimerImpl::Stop()
 {
     ::KillTimer(wxTimerHiddenWindowModule::GetHWND(), m_id);
+    TimerMap().erase(m_id);
+    m_id = 0;
 }
 
 // ----------------------------------------------------------------------------
