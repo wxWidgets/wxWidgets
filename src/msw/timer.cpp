@@ -128,19 +128,20 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 void wxTimer::Init()
 {
-    m_id = GetNewTimerId(this);
+    m_id = 0;
 }
 
 wxTimer::~wxTimer()
 {
     wxTimer::Stop();
-    TimerMap().erase(m_id);
 }
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
 {
     if ( !wxTimerBase::Start(milliseconds, oneShot) )
         return false;
+
+    m_id = GetNewTimerId(this);
 
     // SetTimer() normally returns just idTimer but this might change in the
     // future so use its return value to be safe
@@ -167,6 +168,8 @@ void wxTimer::Stop()
     if ( m_id )
     {
         ::KillTimer(wxTimerHiddenWindowModule::GetHWND(), m_id);
+        TimerMap().erase(m_id);
+        m_id = 0;
     }
 }
 
