@@ -549,6 +549,11 @@ public:
 
     void DoSetColumnProportion( unsigned int column, int proportion );
 
+    int DoGetColumnProportion( unsigned int column ) const
+    {
+        return m_columnProportions[column];
+    }
+
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
     wxPGProperty* GetPropertyByLabel( const wxString& name,

@@ -870,8 +870,20 @@ public:
 
         @remarks You should call this for individual pages of
                  wxPropertyGridManager (if used).
+
+        @see GetColumnProportion()
     */
     bool SetColumnProportion( unsigned int column, int proportion );
+
+    /**
+        Returns auto-resize proportion of the given column.
+
+        @see SetColumnProportion()
+    */
+    int GetColumnProportion( unsigned int column ) const
+    {
+        return m_pState->DoGetColumnProportion(column);
+    }
 
     /** Sets an attribute for this property.
         @param name

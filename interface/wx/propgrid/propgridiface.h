@@ -193,6 +193,13 @@ public:
     bool ExpandAll( bool expand = true );
 
     /**
+        Returns auto-resize proportion of the given column.
+
+        @see SetColumnProportion()
+    */
+    int GetColumnProportion( unsigned int column ) const;
+
+    /**
         Returns id of first child of given property.
 
         @remarks Does not return private children!
@@ -687,6 +694,8 @@ public:
 
         @remarks You should call this for individual pages of
                  wxPropertyGridManager (if used).
+
+        @see GetColumnProportion()
     */
     bool SetColumnProportion( unsigned int column, int proportion );
 
