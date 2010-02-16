@@ -389,13 +389,13 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
         Respond to wxEVT_PG_ITEM_EXPANDED event, generated when user expands
         a property or category.
     @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
-        Respond to wxEVT_PG_LABEL_EDIT_BEGIN event, generated when is about to
-        begin editing a property label. You can veto this event to prevent the
-        action.
+        Respond to wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
+        about to begin editing a property label. You can veto this event to
+        prevent the action.
     @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
-        Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when is about to
-        end editing of a property label. You can veto this event to prevent the
-        action.
+        Respond to wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
+        about to end editing of a property label. You can veto this event to
+        prevent the action.
     @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
         Respond to wxEVT_PG_COL_BEGIN_DRAG event, generated when user
         starts resizing a column - can be vetoed.
