@@ -2812,10 +2812,22 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGrid::CenterSplitter( bool enableAutoCentering )
+void wxPropertyGrid::ResetColumnSizes( bool enableAutoResizing )
+{
+    wxPropertyGridPageState* state = m_pState;
+    if ( state )
+        state->ResetColumnSizes(0);
+
+    if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+        m_pState->m_dontCenterSplitter = false;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::CenterSplitter( bool enableAutoResizing )
 {
     SetSplitterPosition( m_width/2 );
-    if ( enableAutoCentering && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+    if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
         m_pState->m_dontCenterSplitter = false;
 }
 
@@ -4626,7 +4638,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                         // Double-clicking the splitter causes auto-centering
                         if ( m_pState->GetColumnCount() <= 2 )
                         {
-                            CenterSplitter( true );
+                            ResetColumnSizes( true );
 
                             SendEvent(wxEVT_PG_COL_DRAGGING,
                                       m_propHover,
@@ -5040,8 +5052,14 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
                   wxPG_SEL_NOVALIDATE,
                   (unsigned int)m_draggedSplitter);
 
-        // Disable splitter auto-centering
-        state->m_dontCenterSplitter = true;
+        // Disable splitter auto-centering (but only if moved any -
+        // otherwise we end up disabling auto-center even after a
+        // recentering double-click).
+        int posDiff = abs(m_startingSplitterX - 
+                          GetSplitterPosition(m_draggedSplitter));
+
+        if ( posDiff > 1 )
+            state->m_dontCenterSplitter = true;
 
         // This is necessary to return cursor
         if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )

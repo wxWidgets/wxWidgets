@@ -503,11 +503,13 @@ public:
     bool ChangePropertyValue( wxPGPropArg id, wxVariant newValue );
 
     /**
-        Centers the splitter. If argument is true, automatic splitter centering
-        is enabled (only applicable if style wxPG_SPLITTER_AUTO_CENTER was
-        defined).
+        Centers the splitter.
+
+        @param enableAutoResizing
+            If @true, automatic column resizing is enabled (only applicapple
+            if window style wxPG_SPLITTER_AUTO_CENTER is used).
     */
-    void CenterSplitter( bool enable_auto_centering = false );
+    void CenterSplitter( bool enableAutoResizing = false );
 
     /**
         Deletes all properties.
@@ -735,7 +737,7 @@ public:
     /**
         Returns current splitter x position.
     */
-    int GetSplitterPosition() const;
+    int GetSplitterPosition( unsigned int splitterIndex = 0 ) const;
 
     /**
         Returns wxTextCtrl active in currently selected property, if any. Takes
@@ -838,6 +840,17 @@ public:
         Resets all colours to the original system values.
     */
     void ResetColours();
+
+    /**
+        Resets column sizes and splitter positions, based on proportions.
+
+        @param enableAutoResizing
+            If @true, automatic column resizing is enabled (only applicapple
+            if window style wxPG_SPLITTER_AUTO_CENTER is used).
+
+        @see wxPropertyGridInterface::SetColumnProportion()
+    */
+    void ResetColumnSizes( bool enableAutoResizing = false );
 
     /**
         Removes given property from selection. If property is not selected,

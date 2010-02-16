@@ -735,11 +735,12 @@ public:
 
     /**
         Centers the splitter.
-
-        If argument is true, automatic splitter centering is enabled (only
-        applicapple if style wxPG_SPLITTER_AUTO_CENTER was defined).
+        
+        @param enableAutoResizing
+            If @true, automatic column resizing is enabled (only applicapple
+            if window style wxPG_SPLITTER_AUTO_CENTER is used).
     */
-    void CenterSplitter( bool enable_auto_centering = false );
+    void CenterSplitter( bool enableAutoResizing = false );
 
     /** Deletes all properties.
     */
@@ -937,9 +938,13 @@ public:
     /** Returns current selection text colour. */
     wxColour GetSelectionForegroundColour() const { return m_colSelFore; }
 
-    /** Returns current splitter x position. */
-    int GetSplitterPosition() const
-        { return m_pState->DoGetSplitterPosition(0); }
+    /**
+        Returns current splitter x position.
+    */
+    int GetSplitterPosition( unsigned int splitterIndex = 0 ) const
+    {
+        return m_pState->DoGetSplitterPosition(splitterIndex);
+    }
 
     /** Returns wxTextCtrl active in currently selected property, if any. Takes
         into account wxOwnerDrawnComboBox.
@@ -1020,6 +1025,17 @@ public:
     /** Resets all colours to the original system values.
     */
     void ResetColours();
+
+    /**
+        Resets column sizes and splitter positions, based on proportions.
+
+        @param enableAutoResizing
+            If @true, automatic column resizing is enabled (only applicapple
+            if window style wxPG_SPLITTER_AUTO_CENTER is used).
+
+        @see wxPropertyGridInterface::SetColumnProportion()
+    */
+    void ResetColumnSizes( bool enableAutoResizing = false );
 
     /**
         Selects a property.

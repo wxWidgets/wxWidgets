@@ -554,6 +554,8 @@ public:
         return m_columnProportions[column];
     }
 
+    void ResetColumnSizes( int setSplitterFlags );
+
     wxPropertyCategory* GetPropertyCategory( const wxPGProperty* p ) const;
 
     wxPGProperty* GetPropertyByLabel( const wxString& name,
