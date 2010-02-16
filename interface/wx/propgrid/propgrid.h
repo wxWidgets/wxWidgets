@@ -364,6 +364,9 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
         function. For instance, collapsing a parent property programmatically
         causes any selected child property to become unselected, and may
         therefore cause this event to be generated.
+    @event{EVT_PG_CHANGED(id, func)}
+        Respond to wxEVT_PG_CHANGED event, generated when property value
+        has been changed by the user.
     @event{EVT_PG_CHANGING(id, func)}
         Respond to wxEVT_PG_CHANGING event, generated when property value
         is about to be changed by user. Use wxPropertyGridEvent::GetValue()
