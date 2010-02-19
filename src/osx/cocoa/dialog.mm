@@ -43,6 +43,7 @@ void wxDialog::DoShowWindowModal()
 void wxDialog::EndWindowModal()
 {
     [NSApp endSheet: GetWXWindow()];
+    [GetWXWindow() orderOut:GetWXWindow()];
 }
 
 void wxDialog::DoShowModal()
