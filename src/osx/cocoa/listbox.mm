@@ -461,7 +461,7 @@ int wxListWidgetCocoaImpl::ListGetSelections( wxArrayInt& aSelections ) const
 
     for ( int i = 0; i < count; ++i)
     {
-        if ([m_tableView isRowSelected:count])
+        if ([m_tableView isRowSelected:i])
         aSelections.Add(i);
     }
 
