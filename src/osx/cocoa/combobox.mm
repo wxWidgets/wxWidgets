@@ -46,7 +46,7 @@
 {
     wxUnusedVar(aNotification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
+    if ( impl && impl->ShouldSendEvents() )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer ) {
@@ -62,7 +62,7 @@
 {
     wxUnusedVar(notification);
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
+    if ( impl && impl->ShouldSendEvents())
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer ) {
@@ -95,7 +95,9 @@ int wxNSComboBoxControl::GetSelectedItem() const
 void wxNSComboBoxControl::SetSelectedItem(int item)
 {
     wxASSERT_MSG(item >= 0 && item < [m_comboBox numberOfItems], "Inavlid item index.");
+    SendEvents(false);
     [m_comboBox selectItemAtIndex: item];
+    SendEvents(true);
 }
 
 int wxNSComboBoxControl::GetNumberOfItems() const
@@ -110,12 +112,16 @@ void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 
 void wxNSComboBoxControl::RemoveItem(int pos)
 {
+    SendEvents(false);
     [m_comboBox removeItemAtIndex:pos];
+    SendEvents(true);
 }
 
 void wxNSComboBoxControl::Clear()
 {
+    SendEvents(false);
     [m_comboBox removeAllItems];
+    SendEvents(true);
 }
 
 wxString wxNSComboBoxControl::GetStringAtIndex(int pos) const

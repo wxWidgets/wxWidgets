@@ -2464,6 +2464,7 @@ wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl )
     Init();
     m_isRootControl = isRootControl;
     m_wxPeer = peer;
+    m_shouldSendEvents = true;
 }
 
 wxWidgetImpl::wxWidgetImpl()

@@ -276,6 +276,12 @@ public :
     virtual bool        ButtonClickDidStateChange() = 0;
 
     virtual void        InstallEventHandler( WXWidget control = NULL ) = 0;
+    
+    // Mechanism used to keep track of whether a change should send an event
+    // Do SendEvents(false) when starting actions that would trigger programmatic events
+    // and SendEvents(true) at the end of the block.
+    virtual void        SendEvents(bool shouldSendEvents) { m_shouldSendEvents = shouldSendEvents; }
+    virtual bool        ShouldSendEvents() { return m_shouldSendEvents; }
 
     // static methods for associating native controls and their implementations
 
@@ -490,6 +496,7 @@ protected :
     wxWindowMac*        m_wxPeer;
     bool                m_needsFocusRect;
     bool                m_needsFrame;
+    bool                m_shouldSendEvents;
 
     DECLARE_ABSTRACT_CLASS(wxWidgetImpl)
 };
