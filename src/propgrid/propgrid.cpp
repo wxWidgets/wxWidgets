@@ -4535,9 +4535,10 @@ bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
             evt.SetCanVeto(true);
     }
 
+    wxPropertyGridEvent* prevProcessedEvent = m_processedEvent;
     m_processedEvent = &evt;
     m_eventObject->HandleWindowEvent(evt);
-    m_processedEvent = NULL;
+    m_processedEvent = prevProcessedEvent;
 
     return evt.WasVetoed();
 }
@@ -5638,6 +5639,27 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
         wxWindow* tlp = ::wxGetTopLevelParent(this);
         if ( tlp != m_tlp )
             OnTLPChanging(tlp);
+    }
+
+    //
+    // Resolve pending property removals
+    if ( m_deletedProperties.size() > 0 )
+    {
+        wxArrayPGProperty& arr = m_deletedProperties;
+        for ( unsigned int i=0; i<arr.size(); i++ )
+        {
+            DeleteProperty(arr[i]);
+        }
+        arr.clear();
+    }
+    if ( m_removedProperties.size() > 0 )
+    {
+        wxArrayPGProperty& arr = m_removedProperties;
+        for ( unsigned int i=0; i<arr.size(); i++ )
+        {
+            RemoveProperty(arr[i]);
+        }
+        arr.clear();
     }
 }
 

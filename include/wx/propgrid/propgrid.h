@@ -1808,6 +1808,10 @@ protected:
     /** Appearance of a unspecified value cell. */
     wxPGCell            m_unspecifiedAppearance;
 
+    /** List of properties to be deleted/removed in idle event handler. */
+    wxArrayPGProperty   m_deletedProperties;
+    wxArrayPGProperty   m_removedProperties;
+
     //
     // Temporary values
     //

@@ -135,11 +135,19 @@ public:
     bool ChangePropertyValue( wxPGPropArg id, wxVariant newValue );
 
     /**
-        Deletes a property.
+        Removes and deletes a property and any children.
 
-        @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
-                selection is cleared even if editor had invalid value.
+        @param id
+            Pointer or name of a property.
+
+        @remarks If you delete a property in a wxPropertyGrid event
+                 handler, the actual deletion is postponed until the next
+                 idle event.
+
+                 This functions deselects selected property, if any.
+                 Validation failure option wxPG_VFB_STAY_IN_PROPERTY is not
+                 respected, ie. selection is cleared even if editor had
+                 invalid value.
     */
     void DeleteProperty( wxPGPropArg id );
 
@@ -589,12 +597,17 @@ public:
     static void RegisterAdditionalEditors();
 
     /**
-        Removes and returns a property.
+        Removes a property. Does not delete the property object, but
+        instead returns it.
 
         @param id
             Pointer or name of a property.
 
         @remarks Removed property cannot have any children.
+
+                 Also, if you remove property in a wxPropertyGrid event
+                 handler, the actual removal is postponed until the next
+                 idle event.
     */
     wxPGProperty* RemoveProperty( wxPGPropArg id );
 

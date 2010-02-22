@@ -1857,6 +1857,18 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     wxCHECK_RET( item != &m_regularArray && item != m_abcArray,
         wxT("wxPropertyGrid: Do not attempt to remove the root item.") );
 
+    wxPropertyGrid* pg = GetGrid();
+
+    // Must defer deletion? Yes, if handling a wxPG event.
+    if ( pg && pg->m_processedEvent )
+    {
+        if ( doDelete )
+            pg->m_deletedProperties.push_back(item);
+        else
+            pg->m_removedProperties.push_back(item);
+        return;
+    }
+
     unsigned int indinparent = item->GetIndexInParent();
 
     wxPGProperty* pwc = (wxPGProperty*)item;
@@ -1866,8 +1878,6 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         wxT("wxPropertyGrid: Do not attempt to remove sub-properties.") );
 
     wxASSERT( item->GetParentState() == this );
-
-    wxPropertyGrid* pg = GetGrid();
 
     if ( DoIsPropertySelected(item) )
     {
