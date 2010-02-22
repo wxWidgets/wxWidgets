@@ -33,6 +33,7 @@ public :
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to );
     virtual void WriteText(const wxString& str) ;
+    virtual bool HasOwnContextMenu() const { return true; }
 
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
 protected :
@@ -61,6 +62,8 @@ public:
     
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual void SetStyle(long start, long end, const wxTextAttr& style);
+    
+    virtual bool HasOwnContextMenu() const { return true; }
     
     virtual void CheckSpelling(bool check);
     virtual wxSize GetBestSize() const;
