@@ -1866,6 +1866,18 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             pg->m_deletedProperties.push_back(item);
         else
             pg->m_removedProperties.push_back(item);
+
+        // Rename the property so it won't remain in the way
+        // of the user code.
+
+        // Let's trust that no sane property uses prefix like
+        // this. It would be anyway fairly inconvenient (in
+        // current code) to check whether a new name is used
+        // by another property with parent (due to the child
+        // name notation).
+        wxString newName = wxS("_&/_%$") + item->GetBaseName();
+        DoSetPropertyName(item, newName);
+
         return;
     }
 
