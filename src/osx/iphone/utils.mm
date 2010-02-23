@@ -61,6 +61,10 @@ void wxBell()
 	wxTheApp->OnInit();
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application { 
+    wxCloseEvent event;
+    wxTheApp->OnEndSession(event);
+}
 
 - (void)dealloc {
 	[super dealloc];
