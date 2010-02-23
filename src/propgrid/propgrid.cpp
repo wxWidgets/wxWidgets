@@ -348,8 +348,8 @@ void wxPropertyGrid::Init1()
     m_mouseSide = 16;
     m_editorFocused = 0;
 
-    // Must set empty but valid data
-    m_unspecifiedAppearance.SetEmptyData();
+    // Set up default unspecified value 'colour'
+    m_unspecifiedAppearance.SetFgCol(*wxLIGHT_GREY);
 
     // Set default keys
     AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RIGHT );
