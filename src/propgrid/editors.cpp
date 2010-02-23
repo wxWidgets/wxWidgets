@@ -1400,12 +1400,12 @@ const int wxSCB_SETVALUE_CYCLE = 2;
 
 
 static void DrawSimpleCheckBox( wxDC& dc, const wxRect& rect, int box_hei,
-                                int state, const wxColour& lineCol )
+                                int state )
 {
     // Box rectangle.
     wxRect r(rect.x+wxPG_XBEFORETEXT,rect.y+((rect.height-box_hei)/2),
              box_hei,box_hei);
-    wxColour useCol = lineCol;
+    wxColour useCol = dc.GetTextForeground();
 
     if ( state & wxSCB_STATE_UNSPECIFIED )
     {
@@ -1529,14 +1529,14 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
     dc.SetPen( bgcol );
     dc.DrawRectangle( rect );
 
-    wxColour txcol = GetForegroundColour();
+    dc.SetTextForeground(GetForegroundColour());
 
     int state = m_state;
     if ( !(state & wxSCB_STATE_UNSPECIFIED) &&
          GetFont().GetWeight() == wxBOLD )
         state |= wxSCB_STATE_BOLD;
 
-    DrawSimpleCheckBox(dc,rect,m_boxHeight,state,txcol);
+    DrawSimpleCheckBox(dc, rect, m_boxHeight, state);
 }
 
 void wxSimpleCheckBox::OnLeftClick( wxMouseEvent& event )
@@ -1629,7 +1629,6 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
                                     const wxString& WXUNUSED(text) ) const
 {
     int state = wxSCB_STATE_UNCHECKED;
-    wxColour rectCol = dc.GetTextForeground();
 
     if ( !property->IsValueUnspecified() )
     {
@@ -1642,7 +1641,7 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
         state |= wxSCB_STATE_UNSPECIFIED;
     }
 
-    DrawSimpleCheckBox(dc, rect, dc.GetCharHeight(), state, rectCol);
+    DrawSimpleCheckBox(dc, rect, dc.GetCharHeight(), state);
 }
 
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
