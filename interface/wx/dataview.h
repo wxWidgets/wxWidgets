@@ -1268,8 +1268,8 @@ public:
     a small icon next to it as it is typically done in a file manager.
 
     This classes uses the wxDataViewIconText helper class to store its data.
-    wxDataViewIonText can be converted to and from a wxVariant using the left shift
-    operator.
+    wxDataViewIconText can be converted to and from a wxVariant using the left
+    shift operator.
 
     @library{wxadv}
     @category{dvc}
