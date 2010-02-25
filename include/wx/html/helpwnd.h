@@ -128,6 +128,7 @@ public:
     bool KeywordSearch(const wxString& keyword,
                        wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
+#if wxUSE_CONFIG
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
         {
             m_Config = config;
@@ -140,6 +141,7 @@ public:
     // saved values : things set by SetFonts, SetBorders.
     void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
     void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
+#endif // wxUSE_CONFIG
 
     // call this to let wxHtmlHelpWindow know page changed
     void NotifyPageChanged();
@@ -229,8 +231,10 @@ protected:
 
     wxHtmlHelpFrameCfg m_Cfg;
 
+#if wxUSE_CONFIG
     wxConfigBase *m_Config;
     wxString m_ConfigRoot;
+#endif // wxUSE_CONFIG
 
     // pagenumbers of controls in notebook (usually 0,1,2)
     int m_ContentsPage;

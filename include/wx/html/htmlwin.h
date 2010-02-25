@@ -318,12 +318,14 @@ public:
     // when/if we have CSS support we could add other possibilities...)
     void SetBackgroundImage(const wxBitmap& bmpBg) { m_bmpBg = bmpBg; }
 
+#if wxUSE_CONFIG
     // Saves custom settings into cfg config. it will use the path 'path'
     // if given, otherwise it will save info into currently selected path.
     // saved values : things set by SetFonts, SetBorders.
     virtual void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     // ...
     virtual void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+#endif // wxUSE_CONFIG
 
     // Goes to previous/next page (in browsing history)
     // Returns true if successful, false otherwise

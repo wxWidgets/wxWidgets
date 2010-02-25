@@ -69,11 +69,18 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
 END_EVENT_TABLE()
 
 wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow* parent, wxWindowID id, const wxString& title,
-                                 int style, wxHtmlHelpData* data,
-                                 wxConfigBase *config, const wxString& rootpath)
+                                 int style, wxHtmlHelpData* data
+#if wxUSE_CONFIG
+                                 , wxConfigBase *config, const wxString& rootpath
+#endif // wxUSE_CONFIG
+                                 )
 {
     Init(data);
-    Create(parent, id, title, style, config, rootpath);
+    Create(parent, id, title, style
+#if wxUSE_CONFIG
+        , config, rootpath
+#endif // wxUSE_CONFIG
+        );
 }
 
 void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
@@ -93,13 +100,18 @@ void wxHtmlHelpFrame::SetController(wxHtmlHelpController* controller)
 
 // Create: builds the GUI components.
 bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
-                             const wxString& WXUNUSED(title), int style,
-                             wxConfigBase *config, const wxString& rootpath)
+                             const wxString& WXUNUSED(title), int style
+#if wxUSE_CONFIG
+                             , wxConfigBase *config, const wxString& rootpath
+#endif // wxUSE_CONFIG
+                             )
 {
     m_HtmlHelpWin = new wxHtmlHelpWindow(m_Data);
     m_HtmlHelpWin->SetController(m_helpController);
-    if ( config)
+#if wxUSE_CONFIG
+    if ( config )
         m_HtmlHelpWin->UseConfig(config, rootpath);
+#endif // wxUSE_CONFIG
 
     wxFrame::Create(parent, id, _("Help"),
                     wxPoint(m_HtmlHelpWin->GetCfgData().x, m_HtmlHelpWin->GetCfgData().y),
@@ -225,12 +237,14 @@ void wxHtmlHelpFrame::AddGrabIfNeeded()
 #endif // __WXGTK__
 }
 
+#if wxUSE_CONFIG
 // For compatibility
 void wxHtmlHelpFrame::UseConfig(wxConfigBase *config, const wxString& rootPath)
 {
     if (m_HtmlHelpWin)
         m_HtmlHelpWin->UseConfig(config, rootPath);
 }
+#endif // wxUSE_CONFIG
 
 #ifdef __WXMAC__
 void wxHtmlHelpFrame::OnClose(wxCommandEvent& WXUNUSED(event))

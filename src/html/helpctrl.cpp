@@ -46,16 +46,20 @@ wxHtmlHelpController::wxHtmlHelpController(int style, wxWindow* parentWindow):
     m_helpWindow = NULL;
     m_helpFrame = NULL;
     m_helpDialog = NULL;
+#if wxUSE_CONFIG
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
+#endif // wxUSE_CONFIG
     m_titleFormat = _("Help: %s");
     m_FrameStyle = style;
 }
 
 wxHtmlHelpController::~wxHtmlHelpController()
 {
+#if wxUSE_CONFIG
     if (m_Config)
         WriteCustomization(m_Config, m_ConfigRoot);
+#endif // wxUSE_CONFIG
     if (m_helpWindow)
         DestroyHelpWindow();
 }
@@ -85,8 +89,10 @@ void wxHtmlHelpController::DestroyHelpWindow()
 
 void wxHtmlHelpController::OnCloseFrame(wxCloseEvent& evt)
 {
+#if wxUSE_CONFIG
     if (m_Config)
         WriteCustomization(m_Config, m_ConfigRoot);
+#endif // wxUSE_CONFIG
 
     evt.Skip();
 
@@ -151,7 +157,11 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
 {
     wxHtmlHelpFrame* frame = new wxHtmlHelpFrame(data);
     frame->SetController(this);
-    frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle, m_Config, m_ConfigRoot);
+    frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle
+#if wxUSE_CONFIG
+        , m_Config, m_ConfigRoot
+#endif // wxUSE_CONFIG
+        );
     frame->SetTitleFormat(m_titleFormat);
     m_helpFrame = frame;
     return frame;
@@ -180,12 +190,14 @@ wxWindow* wxHtmlHelpController::CreateHelpWindow()
         return m_helpWindow;
     }
 
+#if wxUSE_CONFIG
     if (m_Config == NULL)
     {
         m_Config = wxConfigBase::Get(false);
         if (m_Config != NULL)
             m_ConfigRoot = wxT("wxWindows/wxHtmlHelpController");
     }
+#endif // wxUSE_CONFIG
 
     if (m_FrameStyle & wxHF_DIALOG)
     {
@@ -207,6 +219,7 @@ wxWindow* wxHtmlHelpController::CreateHelpWindow()
     return m_helpWindow;
 }
 
+#if wxUSE_CONFIG
 void wxHtmlHelpController::ReadCustomization(wxConfigBase* cfg, const wxString& path)
 {
     /* should not be called by the user; call UseConfig, and the controller
@@ -229,6 +242,7 @@ void wxHtmlHelpController::UseConfig(wxConfigBase *config, const wxString& rootp
     if (m_helpWindow) m_helpWindow->UseConfig(config, rootpath);
     ReadCustomization(config, rootpath);
 }
+#endif // wxUSE_CONFIG
 
 //// Backward compatibility with wxHelpController API
 

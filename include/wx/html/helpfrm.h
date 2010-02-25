@@ -74,11 +74,17 @@ public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
     wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
                     const wxString& title = wxEmptyString,
-                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL,
-                    wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
+                    int style = wxHF_DEFAULT_STYLE, wxHtmlHelpData* data = NULL
+#if wxUSE_CONFIG
+                    , wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString
+#endif // wxUSE_CONFIG
+                    );
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
-                int style = wxHF_DEFAULT_STYLE,
-                wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString);
+                int style = wxHF_DEFAULT_STYLE
+#if wxUSE_CONFIG
+                , wxConfigBase *config=NULL, const wxString& rootpath = wxEmptyString
+#endif // wxUSE_CONFIG
+                );
     virtual ~wxHtmlHelpFrame();
 
     /// Returns the data associated with the window.
@@ -97,8 +103,10 @@ public:
     // (for title of displayed HTML page)
     void SetTitleFormat(const wxString& format);
 
+#if wxUSE_CONFIG
     // For compatibility
     void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
+#endif // wxUSE_CONFIG
 
     // Make the help controller's frame 'modal' if
     // needed

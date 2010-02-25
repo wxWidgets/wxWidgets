@@ -799,8 +799,7 @@ void wxHtmlWindow::CreateLayout()
     }
 }
 
-
-
+#if wxUSE_CONFIG
 void wxHtmlWindow::ReadCustomization(wxConfigBase *cfg, wxString path)
 {
     wxString oldpath;
@@ -853,8 +852,7 @@ void wxHtmlWindow::WriteCustomization(wxConfigBase *cfg, wxString path)
     if (path != wxEmptyString)
         cfg->SetPath(oldpath);
 }
-
-
+#endif // wxUSE_CONFIG
 
 bool wxHtmlWindow::HistoryBack()
 {

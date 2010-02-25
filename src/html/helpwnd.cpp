@@ -273,8 +273,10 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
 
     m_mergedIndex = NULL;
 
+#if wxUSE_CONFIG
     m_Config = NULL;
     m_ConfigRoot = wxEmptyString;
+#endif // wxUSE_CONFIG
 
     m_Cfg.x = m_Cfg.y = wxDefaultCoord;
     m_Cfg.w = 700;
@@ -315,10 +317,12 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 {
     m_hfStyle = helpStyle;
 
+#if wxUSE_CONFIG
     // Do the config in two steps. We read the HtmlWindow customization after we
     // create the window.
     if (m_Config)
         ReadCustomization(m_Config, m_ConfigRoot);
+#endif // wxUSE_CONFIG
 
     wxWindow::Create(parent, id, pos, size, style, wxT("wxHtmlHelp"));
 
@@ -393,8 +397,10 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
         topWindowSizer->Add(m_HtmlWin, 1, wxEXPAND);
     }
 
+#if wxUSE_CONFIG
     if ( m_Config )
         m_HtmlWin->ReadCustomization(m_Config, m_ConfigRoot);
+#endif // wxUSE_CONFIG
 
     // contents tree panel?
     if ( helpStyle & wxHF_CONTENTS )
@@ -1069,6 +1075,7 @@ void wxHtmlHelpWindow::RefreshLists()
     CreateSearch();
 }
 
+#if wxUSE_CONFIG
 void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path)
 {
     wxString oldpath;
@@ -1174,6 +1181,7 @@ void wxHtmlHelpWindow::WriteCustomization(wxConfigBase *cfg, const wxString& pat
     if (path != wxEmptyString)
         cfg->SetPath(oldpath);
 }
+#endif // wxUSE_CONFIG
 
 static void SetFontsToHtmlWin(wxHtmlWindow *win, const wxString& scalf, const wxString& fixf, int size)
 {
