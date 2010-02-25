@@ -750,7 +750,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_DELETEALL, FormMain::OnClearClick )
     EVT_MENU( ID_ENABLE, FormMain::OnEnableDisable )
     EVT_MENU( ID_SETREADONLY, FormMain::OnSetReadOnly )
-    EVT_MENU( ID_HIDE, FormMain::OnHideShow )
+    EVT_MENU( ID_HIDE, FormMain::OnHide )
 
     EVT_MENU( ID_ITERATE1, FormMain::OnIterate1Click )
     EVT_MENU( ID_ITERATE2, FormMain::OnIterate2Click )
@@ -2289,7 +2289,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     m_itemEnable = menuTools1->Append(ID_ENABLE, wxT("Enable"),
         wxT("Toggles item's enabled state.") );
     m_itemEnable->Enable( FALSE );
-    menuTools1->Append(ID_HIDE, wxT("Hide"), wxT("Shows or hides a property") );
+    menuTools1->Append(ID_HIDE, "Hide", "Hides a property" );
     menuTools1->Append(ID_SETREADONLY, "Set as Read-Only",
                        "Set property as read-only" );
 
@@ -2752,7 +2752,7 @@ void FormMain::OnSetReadOnly( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-void FormMain::OnHideShow( wxCommandEvent& WXUNUSED(event) )
+void FormMain::OnHide( wxCommandEvent& WXUNUSED(event) )
 {
     wxPGProperty* id = m_pPropGridManager->GetGrid()->GetSelection();
     if ( !id )
@@ -2761,27 +2761,7 @@ void FormMain::OnHideShow( wxCommandEvent& WXUNUSED(event) )
         return;
     }
 
-    if ( m_pPropGridManager->IsPropertyShown( id ) )
-    {
-        m_pPropGridManager->HideProperty( id, true );
-        m_itemEnable->SetItemLabel( wxT("Show") );
-    }
-    else
-    {
-        m_pPropGridManager->HideProperty( id, false );
-        m_itemEnable->SetItemLabel( wxT("Hide") );
-    }
-
-    wxPropertyGridPage* curPage = m_pPropGridManager->GetCurrentPage();
-
-    // Check for bottomY precalculation validity
-    unsigned int byPre = curPage->GetVirtualHeight();
-    unsigned int byAct = curPage->GetActualVirtualHeight();
-
-    if ( byPre != byAct )
-    {
-        wxLogDebug(wxT("VirtualHeight is %u, should be %u"), byPre, byAct);
-    }
+    m_pPropGridManager->HideProperty( id, true );
 }
 
 // -----------------------------------------------------------------------
