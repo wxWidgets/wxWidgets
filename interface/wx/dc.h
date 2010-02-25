@@ -232,6 +232,11 @@ public:
                  wxCoord xc, wxCoord yc);
 
     /**
+        @overload
+    */
+    void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
+
+    /**
         Draw a bitmap on the device context at the specified point. If
         @a transparent is @true and the bitmap has a transparency mask, the
         bitmap will be drawn transparently.
@@ -244,6 +249,12 @@ public:
         @see SetTextForeground(), SetTextBackground(), wxMemoryDC
     */
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
+                    bool useMask = false);
+
+    /**
+        @overload
+    */
+    void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt,
                     bool useMask = false);
 
     /**
@@ -307,11 +318,22 @@ public:
                           double start, double end);
 
     /**
+        @overload
+    */
+    void DrawEllipticArc(const wxPoint& pt, const wxSize& sz,
+                         double sa, double ea);
+
+    /**
         Draw an icon on the display (does nothing if the device context is
         PostScript). This can be the simplest way of drawing bitmaps on a
         window.
     */
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
+
+    /**
+        @overload
+    */
+    void DrawIcon(const wxIcon& icon, const wxPoint& pt);
 
     /**
         Draw optional bitmap and the text into the given rectangle and aligns
@@ -338,6 +360,11 @@ public:
         with the behaviour of many other toolkits).
     */
     void DrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
+
+    /**
+        @overload
+    */
+    void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
 
     /**
         Draws lines using an array of points of size @a n adding the optional
@@ -378,6 +405,11 @@ public:
         properties of the pen are not used, such as width.
     */
     void DrawPoint(wxCoord x, wxCoord y);
+
+    /**
+        @overload
+    */
+    void DrawPoint(const wxPoint& pt);
 
     /**
         Draws a filled polygon using an array of points of size @a n, adding
@@ -464,6 +496,16 @@ public:
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
     /**
+        @overload
+    */
+    void DrawRectangle(const wxPoint& pt, const wxSize& sz);
+
+    /**
+        @overload
+    */
+    void DrawRectangle(const wxRect& rect);
+
+    /**
         Draws the text rotated by @a angle degrees 
         (positive angles are counterclockwise; the full angle is 360 degrees).
 
@@ -475,6 +517,12 @@ public:
         @see DrawText()
     */
     void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+                         double angle);
+
+    /**
+        @overload
+    */
+    void DrawRotatedText(const wxString& text, const wxPoint&,
                          double angle);
 
     /**
@@ -492,6 +540,17 @@ public:
     */
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width,
                               wxCoord height, double radius);
+
+    /**
+        @overload
+    */
+    void DrawRoundedRectangle(const wxPoint& pt, const wxSize& sz,
+                              double radius);
+
+    /**
+        @overload
+    */
+    void DrawRoundedRectangle(const wxRect& rect, double radius);
 
     /**
         Draws a spline between all given points using the current pen.
@@ -542,6 +601,11 @@ public:
               ignored by this function.
     */
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
+
+    /**
+        @overload
+    */
+    void DrawText(const wxString& text, const wxPoint& pt);
 
     /**
         Fill the area specified by rect with a radial gradient, starting from
@@ -604,11 +668,22 @@ public:
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     /**
+        @overload
+    */
+    bool FloodFill(const wxPoint& pt, const wxColour& col,
+                   int style = wxFLOOD_SURFACE);
+
+    /**
         Displays a cross hair using the current pen. This is a vertical and
         horizontal line the height and width of the window, centred on the
         given point.
     */
     void CrossHair(wxCoord x, wxCoord y);
+
+    /**
+        @overload
+    */
+    void CrossHair(const wxPoint& pt);
 
     //@}
 
