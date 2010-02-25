@@ -3731,6 +3731,13 @@ private:
 
         m_propGrid->HandleCustomEditorEvent(event);
 
+        //
+        // NB: On wxMSW, a wxTextCtrl with wxTE_PROCESS_ENTER
+        //     may beep annoyingly if that event is skipped
+        //     and passed to parent event handler.
+        if ( event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER )
+            return true;
+
         return wxEvtHandler::ProcessEvent(event);
     }
 
