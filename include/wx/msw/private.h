@@ -62,6 +62,13 @@ extern WXDLLIMPEXP_DATA_CORE(HFONT) wxSTATUS_LINE_FONT;
 
 extern WXDLLIMPEXP_DATA_BASE(HINSTANCE) wxhInstance;
 
+extern "C"
+{
+    WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
+}
+
+WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
+
 // ---------------------------------------------------------------------------
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
@@ -769,7 +776,7 @@ public:
     {
         if ( IsRegistered() )
         {
-            if ( !::UnregisterClass(m_clsname.wx_str(), wxhInstance) )
+            if ( !::UnregisterClass(m_clsname.wx_str(), wxGetInstance()) )
             {
                 wxLogLastError(wxT("UnregisterClass"));
             }
@@ -838,13 +845,6 @@ private:
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
-
-extern "C"
-{
-    WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
-}
-
-WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
 // return the full path of the given module
 inline wxString wxGetFullModuleName(HMODULE hmod)

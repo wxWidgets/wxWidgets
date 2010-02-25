@@ -659,7 +659,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     wxZeroMemory(wndclass);
 
     wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
-    wndclass.hInstance     = wxhInstance;
+    wndclass.hInstance     = wxGetInstance();
     wndclass.hCursor       = ::LoadCursor(NULL, IDC_ARROW);
     wndclass.hbrBackground = (HBRUSH)wxUIntToPtr(bgBrushCol + 1);
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | extraStyles;
@@ -693,7 +693,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
                        regClass.regname));
-        ::UnregisterClass(regClass.regname.c_str(), wxhInstance);
+        ::UnregisterClass(regClass.regname.c_str(), wxGetInstance());
         return NULL;
     }
 
@@ -725,13 +725,13 @@ void wxApp::UnregisterWindowClasses()
     for ( size_t n = 0; n < count; n++ )
     {
         const ClassRegInfo& regClass = gs_regClassesInfo[n];
-        if ( !::UnregisterClass(regClass.regname.c_str(), wxhInstance) )
+        if ( !::UnregisterClass(regClass.regname.c_str(), wxGetInstance()) )
         {
             wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
                            regClass.regname));
         }
 
-        if ( !::UnregisterClass(regClass.regnameNR.c_str(), wxhInstance) )
+        if ( !::UnregisterClass(regClass.regnameNR.c_str(), wxGetInstance()) )
         {
             wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
                            regClass.regnameNR));

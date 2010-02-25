@@ -267,7 +267,7 @@ void wxMessageDialog::ReplaceStaticWithEdit()
                         rc.right - rc.left, rc.bottom - rc.top,
                         GetHwnd(),
                         NULL,
-                        wxhInstance,
+                        wxGetInstance(),
                         NULL
                       );
 
