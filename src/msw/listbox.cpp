@@ -287,8 +287,11 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
                  wxT("invalid index in wxListBox::Delete") );
 
 #if wxUSE_OWNER_DRAWN
-    delete m_aItems[n];
-    m_aItems.RemoveAt(n);
+    if ( HasFlag(wxLB_OWNERDRAW) )
+    {
+        delete m_aItems[n];
+        m_aItems.RemoveAt(n);
+    }
 #endif // wxUSE_OWNER_DRAWN
 
     SendMessage(GetHwnd(), LB_DELETESTRING, n, 0);
@@ -316,7 +319,7 @@ int wxListBox::FindString(const wxString& s, bool bCase) const
 void wxListBox::DoClear()
 {
 #if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
+    if ( HasFlag(wxLB_OWNERDRAW) )
     {
         WX_CLEAR_ARRAY(m_aItems);
     }
@@ -678,7 +681,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 }
 
 // ----------------------------------------------------------------------------
-// wxCheckListBox support
+// owner-drawn list boxes support
 // ----------------------------------------------------------------------------
 
 #if wxUSE_OWNER_DRAWN
@@ -686,23 +689,14 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 // misc overloaded methods
 // -----------------------
 
-void wxListBox::Delete(unsigned int n)
-{
-    wxCHECK_RET( IsValid(n),
-                 wxT("invalid index in wxListBox::Delete") );
-
-    wxListBoxBase::Delete(n);
-
-    // free memory
-    delete m_aItems[n];
-    m_aItems.RemoveAt(n);
-}
-
 bool wxListBox::SetFont(const wxFont &font)
 {
-    unsigned int i;
-    for ( i = 0; i < m_aItems.GetCount(); i++ )
-        m_aItems[i]->SetFont(font);
+    if ( HasFlag(wxLB_OWNERDRAW) )
+    {
+        const unsigned count = m_aItems.GetCount();
+        for ( unsigned i = 0; i < count; i++ )
+            m_aItems[i]->SetFont(font);
+    }
 
     wxListBoxBase::SetFont(font);
 
@@ -759,7 +753,7 @@ namespace
 bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 {
     // only owner-drawn control should receive this message
-    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false );
+    wxCHECK( HasFlag(wxLB_OWNERDRAW), false );
 
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
@@ -790,7 +784,7 @@ bool wxListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
 bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 {
     // only owner-drawn control should receive this message
-    wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false );
+    wxCHECK( HasFlag(wxLB_OWNERDRAW), false );
 
     DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
 

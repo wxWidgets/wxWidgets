@@ -93,7 +93,6 @@ public:
     // ownerdrawn wxListBox and wxCheckListBox support
 #if wxUSE_OWNER_DRAWN
     // override base class virtuals
-    virtual void Delete(unsigned int n);
     virtual bool SetFont(const wxFont &font);
 
     bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
