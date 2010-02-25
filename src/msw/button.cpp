@@ -954,7 +954,7 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 #if wxUSE_UXTHEME
                 wxUxThemeEngine::GetIfActive() ||
 #endif // wxUSE_UXTHEME
-                m_imageData && m_imageData->GetBitmap(State_Current).IsOk()
+                 (m_imageData && m_imageData->GetBitmap(State_Current).IsOk())
                 )
            )
         {
