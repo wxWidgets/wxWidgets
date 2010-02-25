@@ -51,7 +51,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 
                 msg.Printf(
                     _("File '%s' already exists, do you really want to overwrite it?"),
-                    wxString(filename, *wxConvFileName));
+                    wxString::FromUTF8(filename));
 
                 wxMessageDialog dlg(dialog, msg, _("Confirm"),
                                    wxYES_NO | wxICON_QUESTION);

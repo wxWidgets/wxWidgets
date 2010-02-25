@@ -47,7 +47,7 @@ wxString wxGtkFileChooser::GetPath() const
 
     wxString string;
     if (str.c_str() != NULL)
-        string = wxConvFileName->cMB2WX(str);
+        string = wxString::FromUTF8(str);
     return string;
 }
 
@@ -70,7 +70,7 @@ void wxGtkFileChooser::GetPaths( wxArrayString& paths ) const
         GSList *gpaths = gpathsi;
         while ( gpathsi )
         {
-            wxString file( wxConvFileName->cMB2WX( ( gchar* ) gpathsi->data ) );
+            wxString file(wxString::FromUTF8(static_cast<gchar *>(gpathsi->data)));
             paths.Add( file );
             g_free( gpathsi->data );
             gpathsi = gpathsi->next;
@@ -84,24 +84,21 @@ void wxGtkFileChooser::GetPaths( wxArrayString& paths ) const
 
 bool wxGtkFileChooser::SetPath( const wxString& path )
 {
-    if ( path.empty() ) return true;
+    if ( path.empty() )
+        return true;
 
-    return gtk_file_chooser_set_filename( m_widget,
-                                          wxConvFileName->cWX2MB( path.c_str() ) );
+    return gtk_file_chooser_set_filename( m_widget, path.utf8_str() );
 }
 
 bool wxGtkFileChooser::SetDirectory( const wxString& dir )
 {
-    const gboolean b =
-        gtk_file_chooser_set_current_folder( m_widget,
-                                             wxConvFileName->cWX2MB( dir.c_str() ) );
-    return b != 0;
+    return gtk_file_chooser_set_current_folder( m_widget, dir.utf8_str() ) != 0;
 }
 
 wxString wxGtkFileChooser::GetDirectory() const
 {
     const wxGtkString str( gtk_file_chooser_get_current_folder( m_widget ) );
-    return wxString( str, *wxConvFileName );
+    return wxString::FromUTF8(str);
 }
 
 wxString wxGtkFileChooser::GetFilename() const

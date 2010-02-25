@@ -172,7 +172,7 @@ void wxDirDialog::SetPath(const wxString& dir)
 wxString wxDirDialog::GetPath() const
 {
     wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-    return wxString(str, *wxConvFileName);
+    return wxString::FromUTF8(str);
 }
 
 #endif // wxUSE_DIRDLG
