@@ -38,6 +38,7 @@
 #include "wx/except.h"
 
 #if defined(__WXMSW__)
+    #include "wx/msw/private.h"
     #include "wx/msw/msvcrt.h"
 
     #ifdef wxCrtSetDbgFlag
@@ -237,6 +238,16 @@ static bool DoCommonPreInit()
     // what he is doing
     wxLog::GetActiveTarget();
 #endif // wxUSE_LOG
+
+#ifdef __WXMSW__
+    // GUI applications obtain HINSTANCE in their WinMain() but we also need to
+    // initialize the global wxhInstance variable for the console programs as
+    // they may need it too, so set it here if it wasn't done yet
+    if ( !wxGetInstance() )
+    {
+        wxSetInstance(::GetModuleHandle(NULL));
+    }
+#endif // __WXMSW__
 
     return true;
 }
