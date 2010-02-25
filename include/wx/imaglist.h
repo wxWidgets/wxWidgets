@@ -12,6 +12,8 @@
 #ifndef _WX_IMAGLIST_H_BASE_
 #define _WX_IMAGLIST_H_BASE_
 
+#include "wx/defs.h"
+
 /*
  * wxImageList is used for wxListCtrl, wxTreeCtrl. These controls refer to
  * images for their items by an index into an image list.
