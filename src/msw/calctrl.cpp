@@ -403,22 +403,33 @@ void wxCalendarCtrl::UpdateMarks()
     // before it and from the one after it so days from 3 different months can
     // be partially shown
     MONTHDAYSTATE states[3] = { 0 };
-    const int nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
+    const DWORD nMonths = MonthCal_GetMonthRange(GetHwnd(), GMR_DAYSTATE, NULL);
 
     // although in principle the calendar might not show any days from the
     // preceding months, it seems like it always does, consider e.g. Feb 2010
     // which starts on Monday and ends on Sunday and so could fit on 4 lines
     // without showing any subsequent months -- the standard control still
     // shows it on 6 lines and the number of visible months is still 3
-    wxCHECK_RET( nMonths == (int)WXSIZEOF(states), "unexpected months range" );
-
-    // the fully visible month is the one in the middle
-    states[1] = m_marks | m_holidays;
-
-    if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
+    //
+    // OTOH Windows 7 control can show all 12 months or even years or decades
+    // in its window if you "zoom out" of it by double clicking on free areas
+    // so the return value can be (much, in case of decades view) greater than
+    // 3 but in this case marks are not visible anyhow so simply ignore it
+    if ( nMonths < WXSIZEOF(states) )
     {
-        wxLogLastError(wxT("MonthCal_SetDayState"));
+        wxFAIL_MSG("unexpectedly few months shown in the control");
     }
+    else if ( nMonths == WXSIZEOF(states) )
+    {
+        // the fully visible month is the one in the middle
+        states[1] = m_marks | m_holidays;
+
+        if ( !MonthCal_SetDayState(GetHwnd(), nMonths, states) )
+        {
+            wxLogLastError(wxT("MonthCal_SetDayState"));
+        }
+    }
+    //else: not a month view at all
 }
 
 void wxCalendarCtrl::UpdateFirstDayOfWeek()
