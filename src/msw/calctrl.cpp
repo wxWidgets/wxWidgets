@@ -262,11 +262,11 @@ wxCalendarCtrl::HitTest(const wxPoint& pos,
 bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
 {
     wxCHECK_MSG( dt.IsValid(), false, "invalid date" );
-    wxDateTime newdt(dt);
-    newdt.ResetTime();
-    
+
+    const wxDateTime date = dt.GetDateOnly();
+
     SYSTEMTIME st;
-    newdt.GetAsMSWSysTime(&st);
+    date.GetAsMSWSysTime(&st);
     if ( !MonthCal_SetCurSel(GetHwnd(), &st) )
     {
         wxLogDebug(wxT("DateTime_SetSystemtime() failed"));
@@ -274,7 +274,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
         return false;
     }
 
-    m_date = newdt;
+    m_date = date;
 
     return true;
 }
@@ -292,7 +292,12 @@ wxDateTime wxCalendarCtrl::GetDate() const
 
     wxDateTime dt(st);
 
-    wxASSERT_MSG( dt == m_date, "mismatch between data and control" );
+    // Windows XP and earlier didn't include the time component into the
+    // returned date but Windows 7 does, so we can't compare the full objects
+    // in the same way under all the Windows versions, just compare their date
+    // parts
+    wxASSERT_MSG( dt.GetDateOnly() == m_date.GetDateOnly(),
+                  "mismatch between data and control" );
 #endif // wxDEBUG_LEVEL
 
     return m_date;
