@@ -1911,6 +1911,12 @@ void wxPGProperty::SetChoiceSelection( int newValue )
 
 bool wxPGProperty::SetChoices( wxPGChoices& choices )
 {
+    // Property must be de-selected first (otherwise choices in
+    // the control would be de-synced with true choices)
+    wxPropertyGrid* pg = GetGrid();
+    if ( pg && pg->GetSelection() == this )
+        pg->ClearSelection();
+
     m_choices.Assign(choices);
 
     {

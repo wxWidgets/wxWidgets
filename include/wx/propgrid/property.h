@@ -2109,10 +2109,11 @@ public:
     */
     wxClientData *GetClientObject() const { return m_clientObject; }
 
-    /** Sets new set of choices for property.
+    /**
+        Sets new set of choices for the property.
 
-        @remarks
-        This operation clears the property value.
+        @remarks This operation deselects the property and clears its
+                 value.
     */
     bool SetChoices( wxPGChoices& choices );
 
