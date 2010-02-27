@@ -63,6 +63,8 @@ public:
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual void SetStyle(long start, long end, const wxTextAttr& style);
     
+    virtual bool CanFocus() const;
+    
     virtual bool HasOwnContextMenu() const { return true; }
     
     virtual void CheckSpelling(bool check);

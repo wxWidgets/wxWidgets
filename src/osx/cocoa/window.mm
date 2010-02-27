@@ -1644,7 +1644,7 @@ bool wxWidgetCocoaImpl::HasFocus() const
 
 bool wxWidgetCocoaImpl::SetFocus()
 {
-    if ( [m_osxView canBecomeKeyView] == NO )
+    if ( !CanFocus() )
         return false;
 
     [[m_osxView window] makeFirstResponder: m_osxView] ;
