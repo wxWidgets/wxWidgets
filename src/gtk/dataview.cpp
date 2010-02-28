@@ -1695,6 +1695,7 @@ int wxDataViewRenderer::GetAlignment() const
 
 void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
 {
+#ifdef __WXGTK26__
     if ( gtk_check_version(2, 6, 0) != NULL )
         return;
 
@@ -1709,10 +1710,14 @@ void wxDataViewRenderer::EnableEllipsize(wxEllipsizeMode mode)
     g_value_set_enum( &gvalue, static_cast<PangoEllipsizeMode>(mode) );
     g_object_set_property( G_OBJECT(rend), "ellipsize", &gvalue );
     g_value_unset( &gvalue );
+#else // GTK < 2.6
+    wxUnusedVar(mode);
+#endif // GTK 2.6/before
 }
 
 wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
 {
+#ifdef __WXGTK26__
     if ( gtk_check_version(2, 6, 0) != NULL )
         return wxELLIPSIZE_NONE;
 
@@ -1728,6 +1733,9 @@ wxEllipsizeMode wxDataViewRenderer::GetEllipsizeMode() const
     g_value_unset( &gvalue );
 
     return mode;
+#else // GTK < 2.6
+    return wxELLIPSIZE_NONE;
+#endif // GTK 2.6/before
 }
 
 void
