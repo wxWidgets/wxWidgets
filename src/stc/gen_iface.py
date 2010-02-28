@@ -52,7 +52,7 @@ cmdValues = [ 2011,
 
 
 # Should a funciton be also generated for the CMDs?
-FUNC_FOR_CMD = True
+FUNC_FOR_CMD = 1
 
 
 # Map some generic typenames to wx types, using return value syntax
@@ -659,14 +659,14 @@ methodOverrideMap = {
 # some non-getter methods are also logically const and this set contains their
 # names (notice that it's useless to include here methods manually overridden
 # above)
-constNonGetterMethods = set((
+constNonGetterMethods = (
     'LineFromPosition',
     'PositionFromLine',
     'LineLength',
     'CanPaste',
     'CanRedo',
     'CanUndo',
-))
+)
 
 #----------------------------------------------------------------------------
 
@@ -736,6 +736,9 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest, docstr_dest):
 
 
 
+def joinWithNewLines(values):
+    return string.join(values, '\n')
+
 #----------------------------------------------------------------------------
 
 def processVals(values):
@@ -746,7 +749,7 @@ def processVals(values):
             for x in docs:
                 text.append('// ' + x)
         text.append('#define %s %s' % (name, value))
-    return string.join(text, '\n')
+    return joinWithNewLines(text)
 
 #----------------------------------------------------------------------------
 
@@ -766,7 +769,7 @@ def processMethods(methods):
 
         # Build docstrings
         st = 'DocStr(wxStyledTextCtrl::%s,\n' \
-             '"%s", "");\n' % (name, '\n'.join(docs))
+             '"%s", "");\n' % (name, joinWithNewLines(docs))
         dstr.append(st)
 
         # Build the method definition for the .h file
@@ -807,7 +810,7 @@ def processMethods(methods):
         imps.append(theImp)
 
 
-    return '\n'.join(defs), '\n'.join(imps), '\n'.join(dstr)
+    return joinWithNewLines(defs), joinWithNewLines(imps), joinWithNewLines(dstr)
 
 
 #----------------------------------------------------------------------------
