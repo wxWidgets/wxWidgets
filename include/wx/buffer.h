@@ -56,12 +56,8 @@ struct UntypedBufferData
     bool m_owned;
 };
 
-// this has to be defined inside the DLL (and not e.g. as a static variable
-// inside an inline function) as otherwise MSVC gives link errors when the
-// functions are effectively inlined (i.e. in non-debug build)
-//
 // NB: this is defined in string.cpp and not the (non-existent) buffer.cpp
-extern WXDLLIMPEXP_DATA_BASE(UntypedBufferData * const) untypedNullDataPtr;
+WXDLLIMPEXP_BASE UntypedBufferData * GetUntypedNullData();
 
 } // namespace wxPrivate
 
@@ -186,7 +182,7 @@ protected:
     // placeholder for NULL string, to simplify this code
     static Data *GetNullData()
     {
-        return static_cast<Data *>(wxPrivate::untypedNullDataPtr);
+        return static_cast<Data *>(wxPrivate::GetUntypedNullData());
     }
 
     void IncRef()

@@ -57,16 +57,20 @@
     #define wxStringStrlen   wxStrlen
 #endif
 
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
+// define a function declared in wx/buffer.h here as we don't have buffer.cpp
+// and don't want to add it just because of this simple function
 namespace wxPrivate
 {
 
-static UntypedBufferData s_untypedNullData(NULL, 0);
+// wxXXXBuffer classes can be (implicitly) used during global statics
+// initialization so wrap the status UntypedBufferData variable in a function
+// to make it safe to access it even before all global statics are initialized
+UntypedBufferData *GetUntypedNullData()
+{
+    static UntypedBufferData s_untypedNullData(NULL, 0);
 
-UntypedBufferData * const untypedNullDataPtr = &s_untypedNullData;
+    return &s_untypedNullData;
+}
 
 } // namespace wxPrivate
 
