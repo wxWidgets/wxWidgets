@@ -27,6 +27,16 @@
 
 #include "wx/glcanvas.h"
 
+// IRIX headers call this differently
+#ifdef __SGI__
+    #ifndef GLX_SAMPLE_BUFFERS_ARB
+        #define GLX_SAMPLE_BUFFERS_ARB GLX_SAMPLE_BUFFERS_SGIS
+    #endif
+    #ifndef GLX_SAMPLES_ARB
+        #define GLX_SAMPLES_ARB GLX_SAMPLES_SGIS
+    #endif
+#endif // __SGI__
+
 // ============================================================================
 // wxGLContext implementation
 // ============================================================================
@@ -278,30 +288,33 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     break;
 
                 case WX_GL_SAMPLE_BUFFERS:
-                    if ( !IsGLXMultiSampleAvailable() )
+#ifdef GLX_SAMPLE_BUFFERS_ARB
+                    if ( IsGLXMultiSampleAvailable() )
                     {
-                        // if it was specified just to disable it, no problem
-                        if ( !wxattrs[arg++] )
-                            continue;
-
-                        // otherwise indicate that it's not supported
-                        return false;
+                        glattrs[p++] = GLX_SAMPLE_BUFFERS_ARB;
+                        break;
                     }
+#endif // GLX_SAMPLE_BUFFERS_ARB
+                    // if it was specified just to disable it, no problem
+                    if ( !wxattrs[arg++] )
+                        continue;
 
-                    glattrs[p++] = GLX_SAMPLE_BUFFERS_ARB;
-                    break;
+                    // otherwise indicate that it's not supported
+                    return false;
 
                 case WX_GL_SAMPLES:
-                    if ( !IsGLXMultiSampleAvailable() )
+#ifdef GLX_SAMPLES_ARB
+                    if ( IsGLXMultiSampleAvailable() )
                     {
-                        if ( !wxattrs[arg++] )
-                            continue;
-
-                        return false;
+                        glattrs[p++] = GLX_SAMPLES_ARB;
+                        break;
                     }
+#endif // GLX_SAMPLES_ARB
 
-                    glattrs[p++] = GLX_SAMPLES_ARB;
-                    break;
+                    if ( !wxattrs[arg++] )
+                        continue;
+
+                    return false;
 
                 default:
                     wxLogDebug(wxT("Unsupported OpenGL attribute %d"),
