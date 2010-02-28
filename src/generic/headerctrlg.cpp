@@ -39,8 +39,6 @@
 namespace
 {
 
-const unsigned NO_SORT = (unsigned)-1;
-
 const unsigned COL_NONE = (unsigned)-1;
 
 } // anonymous namespace
