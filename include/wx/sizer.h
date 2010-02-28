@@ -1113,6 +1113,12 @@ inline void wxSizerItem::SetSpacer(int width, int height)
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
+inline wxSizerItem*
+wxSizer::Insert(size_t index, wxSizerItem *item)
+{
+    return DoInsert(index, item);
+}
+
 
 inline wxSizerItem*
 wxSizer::Add( wxSizerItem *item )
@@ -1272,12 +1278,6 @@ inline wxSizerItem*
 wxSizer::Insert( size_t index, int width, int height, const wxSizerFlags& flags )
 {
     return Insert( index, new wxSizerItem(width, height, flags) );
-}
-
-inline wxSizerItem*
-wxSizer::Insert(size_t index, wxSizerItem *item)
-{
-    return DoInsert(index, item);
 }
 
 inline wxSizerItem*
