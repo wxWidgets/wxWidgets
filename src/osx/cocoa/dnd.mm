@@ -17,13 +17,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/evtloop.h"
     #include "wx/toplevel.h"
     #include "wx/gdicmn.h"
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#include <AppKit/AppKit.h>
+#include "wx/evtloop.h"
+
 #include "wx/osx/private.h"
 
 wxDropSource* gCurrentSource = NULL;
