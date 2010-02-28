@@ -1827,18 +1827,57 @@ if test "x$SUNCC" = xyes; then
     CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
 fi
 
-dnl SGI mipsPro compiler gives this warning for "conversion from pointer to
-dnl same-sized integral type" even when there is an explicit cast and as there
-dnl is no way to turn it off and there are hundreds of these warnings in wx
-dnl sources, just turn it off for now
+dnl SGI mipsPro compiler version 7.4.4 and later (and maybe some earlier
+dnl versions too but it's known that 7.4.2 doesn't give this warning but does
+dnl instead warn about "unknown warning number 3970" which explains that we
+dnl don't want to do this for it) gives this warning for "conversion from
+dnl pointer to same-sized integral type" even when there is an explicit cast
+dnl and as there is no way to turn it off and there are hundreds of these
+dnl warnings in wx sources, just turn it off for now
 dnl
 dnl a better long term solution would be to use #pragma set/reset woff in
 dnl wxPtrToUInt() and use it instead of casts elsewhere
 if test "x$SGICC" = "xyes"; then
-    CFLAGS="-woff 3970 $CFLAGS"
+    AC_CACHE_CHECK([if cc version is 7.4.4 or greater],
+        wx_cv_prog_sgicc744,
+        [
+            AC_TRY_COMPILE([],
+                [
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+                ],
+                wx_cv_prog_sgicc744=no,
+                wx_cv_prog_sgicc744=yes
+            )
+        ]
+    )
+
+    if test "x$wx_cv_prog_sgicc744" = "xyes"; then
+        CFLAGS="-woff 3970 $CFLAGS"
+    fi
 fi
 if test "x$SGICXX" = "xyes"; then
-    CXXFLAGS="-woff 3970 $CXXFLAGS"
+    AC_CACHE_CHECK([if CC version is 7.4.4 or greater],
+        wx_cv_prog_sgicxx744,
+        [
+            AC_LANG_PUSH(C++)
+            AC_TRY_COMPILE([],
+                [
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+                ],
+                wx_cv_prog_sgicxx744=no,
+                wx_cv_prog_sgicxx744=yes
+            )
+            AC_LANG_POP()
+        ]
+    )
+
+    if test "x$wx_cv_prog_sgicxx744" = "xyes"; then
+        CXXFLAGS="-woff 3970 $CXXFLAGS"
+    fi
 fi
 
 dnl HP-UX c89/aCC compiler warnings
