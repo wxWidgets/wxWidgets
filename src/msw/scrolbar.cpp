@@ -106,46 +106,21 @@ wxScrollBar::~wxScrollBar(void)
 }
 
 bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                              WXWORD pos, WXHWND WXUNUSED(control))
+                              WXWORD WXUNUSED(pos), WXHWND WXUNUSED(control))
 {
-    // current and max positions
-    int position,
-        maxPos, trackPos = pos;
+    // don't use pos parameter because it is limited to 16 bits, get the full
+    // 32 bit position from the control itself instead
+    WinStruct<SCROLLINFO> scrollInfo;
+    scrollInfo.fMask = SIF_RANGE | SIF_POS | SIF_TRACKPOS;
 
-    wxUnusedVar(trackPos);
-
-    // when we're dragging the scrollbar we can't use pos parameter because it
-    // is limited to 16 bits
-    // JACS: now always using GetScrollInfo, since there's no reason
-    // not to
-//    if ( wParam == SB_THUMBPOSITION || wParam == SB_THUMBTRACK )
+    if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )
     {
-        SCROLLINFO scrollInfo;
-        wxZeroMemory(scrollInfo);
-        scrollInfo.cbSize = sizeof(SCROLLINFO);
-
-        // also get the range if we call GetScrollInfo() anyhow -- this is less
-        // expensive than call it once here and then call GetScrollRange()
-        // below
-        scrollInfo.fMask = SIF_RANGE | SIF_POS | SIF_TRACKPOS;
-
-        if ( !::GetScrollInfo(GetHwnd(), SB_CTL, &scrollInfo) )
-        {
-            wxLogLastError(wxT("GetScrollInfo"));
-        }
-
-        trackPos = scrollInfo.nTrackPos;
-        position = scrollInfo.nPos;
-        maxPos = scrollInfo.nMax;
+        wxLogLastError(wxT("GetScrollInfo"));
+        return false;
     }
-#if 0
-    else
-    {
-        position = ::GetScrollPos((HWND) control, SB_CTL);
-        int minPos;
-        ::GetScrollRange((HWND) control, SB_CTL, &minPos, &maxPos);
-    }
-#endif
+
+    int position = scrollInfo.nPos;
+    int maxPos = scrollInfo.nMax;
 
     // A page size greater than one has the effect of reducing the effective
     // range, therefore the range has already been boosted artificially - so
@@ -189,13 +164,10 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
             break;
 
         case SB_THUMBPOSITION:
-            nScrollInc = trackPos - position;
-            scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
-            break;
-
         case SB_THUMBTRACK:
-            nScrollInc = trackPos - position;
-            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            nScrollInc = scrollInfo.nTrackPos - position;
+            scrollEvent = wParam == SB_THUMBPOSITION ? wxEVT_SCROLL_THUMBRELEASE
+                                                     : wxEVT_SCROLL_THUMBTRACK;
             break;
 
         case SB_ENDSCROLL:
@@ -258,7 +230,6 @@ int wxScrollBar::GetThumbPosition(void) const
         wxLogLastError(wxT("GetScrollInfo"));
     }
     return scrollInfo.nPos;
-//    return ::GetScrollPos((HWND)m_hWnd, SB_CTL);
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
