@@ -29,6 +29,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
+
+#ifdef __SGI__
+    // wide character functions are declared in std namespace under IRIX
+    using namespace std;
+
+    // and this one is only declared if __c99 is defined which is not the case
+    // for C++ builds, so declare it ourselves
+    extern "C" int vswscanf(const wchar_t *, const wchar_t *, va_list);
+#endif
 
 #ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
@@ -1246,9 +1256,11 @@ void wxUpdateLocaleIsUtf8()
 
 int wxPuts(const wxString& s)
 {
+    // under IRIX putws() takes a non-const argument so use wchar_str() instead
+    // of wc_str()
     CALL_ANSI_OR_UNICODE(return,
                          wxCRT_PutsA(s.mb_str()),
-                         wxCRT_PutsW(s.wc_str()));
+                         wxCRT_PutsW(s.wchar_str()));
 }
 
 int wxFputs(const wxString& s, FILE *stream)
