@@ -225,19 +225,19 @@ public:
 
     inline ~wxCStrData();
 
-    // methods defined inline below must be declared inline or mingw32 3.4.5
-    // warns about "<symbol> defined locally after being referenced with
-    // dllimport linkage"
-#if wxUSE_UNICODE_WCHAR
-    inline
-#endif
-    const wchar_t* AsWChar() const;
+    // AsWChar() and AsChar() can't be defined here as they use wxString and so
+    // must come after it and because of this won't be inlined when called from
+    // wxString methods (without a lot of work to extract these wxString methods
+    // from inside the class itself). But we still define them being inline
+    // below to let compiler inline them from elsewhere. And because of this we
+    // must declare them as inline here because otherwise some compilers give
+    // warnings about them, e.g. mingw32 3.4.5 warns about "<symbol> defined
+    // locally after being referenced with dllimport linkage" while IRIX
+    // mipsPro 7.4 warns about "function declared inline after being called".
+    inline const wchar_t* AsWChar() const;
     operator const wchar_t*() const { return AsWChar(); }
 
-#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
-    inline
-#endif
-    const char* AsChar() const;
+    inline const char* AsChar() const;
     const unsigned char* AsUnsignedChar() const
         { return (const unsigned char *) AsChar(); }
     operator const char*() const { return AsChar(); }
