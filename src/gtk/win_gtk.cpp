@@ -103,8 +103,6 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
         const GtkFixedChild* child = static_cast<GtkFixedChild*>(list->data);
         if (GTK_WIDGET_VISIBLE(child->widget))
         {
-            GtkAllocation child_old_alloc = child->widget->allocation;
-
             GtkAllocation child_alloc;
             // note that child positions do not take border into
             // account, they need to be relative to widget->window,
