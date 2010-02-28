@@ -674,6 +674,39 @@ bool wxVarScrollHelperBase::DoScrollPages(int pages)
 
 void wxVarScrollHelperBase::HandleOnSize(wxSizeEvent& event)
 {
+    if ( m_unitMax )
+    {
+        // sometimes change in varscrollable window's size can result in
+        // unused empty space after the last item. Fix it by decrementing
+        // first visible item position according to the available space.
+
+        // determine free space
+        const wxCoord sWindow = GetOrientationTargetSize();
+        wxCoord s = 0;
+        size_t unit;
+        for ( unit = m_unitFirst; unit < m_unitMax; ++unit )
+        {
+            if ( s > sWindow )
+                break;
+
+            s += OnGetUnitSize(unit);
+        }
+        wxCoord freeSpace = sWindow - s;
+
+        // decrement first visible item index as long as there is free space
+        size_t idealUnitFirst;
+        for ( idealUnitFirst = m_unitFirst;
+              idealUnitFirst > 0;
+              idealUnitFirst-- )
+        {
+            wxCoord us = OnGetUnitSize(idealUnitFirst-1);
+            if ( freeSpace < us )
+                break;
+            freeSpace -= us;
+        }
+        m_unitFirst = idealUnitFirst;
+    }
+
     UpdateScrollbar();
 
     event.Skip();
