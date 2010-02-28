@@ -119,7 +119,6 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
         return false;
     }
 
-    int position = scrollInfo.nPos;
     int maxPos = scrollInfo.nMax;
 
     // A page size greater than one has the effect of reducing the effective
@@ -128,61 +127,54 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     if ( m_pageSize > 1 )
         maxPos -= (m_pageSize - 1);
 
+    int position = scrollInfo.nPos;
     wxEventType scrollEvent = wxEVT_NULL;
-
-    int nScrollInc;
     switch ( wParam )
     {
         case SB_TOP:
-            nScrollInc = maxPos - position;
+            position = 0;
             scrollEvent = wxEVT_SCROLL_TOP;
             break;
 
         case SB_BOTTOM:
-            nScrollInc = -position;
+            position = maxPos;
             scrollEvent = wxEVT_SCROLL_BOTTOM;
             break;
 
         case SB_LINEUP:
-            nScrollInc = -1;
+            position--;
             scrollEvent = wxEVT_SCROLL_LINEUP;
             break;
 
         case SB_LINEDOWN:
-            nScrollInc = 1;
+            position++;
             scrollEvent = wxEVT_SCROLL_LINEDOWN;
             break;
 
         case SB_PAGEUP:
-            nScrollInc = -GetPageSize();
+            position -= GetPageSize();
             scrollEvent = wxEVT_SCROLL_PAGEUP;
             break;
 
         case SB_PAGEDOWN:
-            nScrollInc = GetPageSize();
+            position += GetPageSize();
             scrollEvent = wxEVT_SCROLL_PAGEDOWN;
             break;
 
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
-            nScrollInc = scrollInfo.nTrackPos - position;
+            position = scrollInfo.nTrackPos;
             scrollEvent = wParam == SB_THUMBPOSITION ? wxEVT_SCROLL_THUMBRELEASE
                                                      : wxEVT_SCROLL_THUMBTRACK;
             break;
 
         case SB_ENDSCROLL:
-            nScrollInc = 0;
             scrollEvent = wxEVT_SCROLL_CHANGED;
             break;
-
-        default:
-            nScrollInc = 0;
     }
 
-    if ( nScrollInc )
+    if ( position != scrollInfo.nPos )
     {
-        position += nScrollInc;
-
         if ( position < 0 )
             position = 0;
         if ( position > maxPos )
