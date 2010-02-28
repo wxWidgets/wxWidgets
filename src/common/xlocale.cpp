@@ -32,6 +32,7 @@
 #include "wx/xlocale.h"
 
 #include <errno.h>
+#include <locale.h>
 
 // ----------------------------------------------------------------------------
 // module globals
