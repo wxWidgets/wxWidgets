@@ -281,8 +281,6 @@ static const int SEC_PER_MIN = 60;
 
 static const int MIN_PER_HOUR = 60;
 
-static const int HOURS_PER_DAY = 24;
-
 static const long SECONDS_PER_DAY = 86400l;
 
 static const int DAYS_PER_WEEK = 7;
