@@ -1461,14 +1461,18 @@ public :
         m_cg = cg;
         m_offset = offset;
         if ( m_offset )
-            CGContextTranslateCTM( m_cg, (CGFloat) 0.5, (CGFloat) 0.5 );
+        {
+            m_userOffset = CGContextConvertSizeToUserSpace( m_cg, CGSizeMake( 0.5 , 0.5 ) );
+            CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
+        }
     }
     ~wxQuartzOffsetHelper( )
     {
         if ( m_offset )
-            CGContextTranslateCTM( m_cg, (CGFloat) -0.5, (CGFloat) -0.5 );
+            CGContextTranslateCTM( m_cg, -m_userOffset.width , -m_userOffset.height );
     }
 public :
+    CGSize m_userOffset;
     CGContextRef m_cg;
     bool m_offset;
 } ;
