@@ -75,6 +75,10 @@ public:
 
     ~wxClipboardSync()
     {
+        // ensure that there is a running event loop: this might not be the
+        // case if we're called before the main event loop startup
+        wxEventLoopGuarantor ensureEventLoop;
+
         while (ms_clipboard)
             wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_CLIPBOARD);
     }
