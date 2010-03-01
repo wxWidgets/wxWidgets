@@ -2455,10 +2455,16 @@ void wxPGProperty::DeleteChildren()
 {
     wxPropertyGridPageState* state = m_parentState;
 
-    while ( GetChildCount() )
+    if ( !GetChildCount() )
+        return;
+
+    // Because deletion is sometimes deferred, we have to use
+    // this sort of code for enumerating the child properties.
+    unsigned int i = GetChildCount();
+    while ( i > 0 )
     {
-        wxPGProperty* child = Item(GetChildCount()-1);
-        state->DoDelete(child, true);
+        i--;
+        state->DoDelete(Item(i), true);
     }
 }
 
