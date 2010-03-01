@@ -480,7 +480,7 @@ void wxDialogBase::ShowWindowModal ()
 
 void wxDialogBase::SendWindowModalDialogEvent ( wxEventType type )
 {
-    wxCommandEvent event ( type, GetId());
+    wxWindowModalDialogEvent event ( type, GetId());
     event.SetEventObject(this);
 
     if ( !GetEventHandler()->ProcessEvent(event) )
