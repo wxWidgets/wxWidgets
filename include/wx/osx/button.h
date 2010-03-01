@@ -65,6 +65,7 @@ protected:
     {
         m_marginX = x;
         m_marginY = y;
+        InvalidateBestSize();
     }
     
     // the margins around the bitmap

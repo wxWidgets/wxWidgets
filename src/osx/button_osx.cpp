@@ -104,11 +104,13 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         if ( bi )
             bi->SetPressedBitmap(bitmap);
     }
+    InvalidateBestSize();
 }
 
 void wxButton::DoSetBitmapPosition(wxDirection dir)
 {
     m_peer->SetBitmapPosition(dir);
+    InvalidateBestSize();
 }
 
 wxWindow *wxButton::SetDefault()

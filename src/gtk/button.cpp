@@ -664,6 +664,7 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
         }
 
         gtk_button_set_image_position(GTK_BUTTON(m_widget), gtkpos);
+        InvalidateBestSize();
     }
 #endif // GTK+ 2.10+
 }

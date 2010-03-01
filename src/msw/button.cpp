@@ -1040,6 +1040,7 @@ void wxButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
     wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
 
     m_imageData->SetBitmapMargins(x, y);
+    InvalidateBestSize();
 }
 
 void wxButton::DoSetBitmapPosition(wxDirection dir)
@@ -1047,6 +1048,7 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
     wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
 
     m_imageData->SetBitmapPosition(dir);
+    InvalidateBestSize();
 }
 
 // ----------------------------------------------------------------------------
