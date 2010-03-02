@@ -42,6 +42,7 @@
 #include "wx/msgout.h"
 #include "wx/filename.h"
 #include "wx/apptrait.h"
+#include "wx/scopeguard.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -230,13 +231,45 @@ wxCmdLineParserData::wxCmdLineParserData()
 #endif
 }
 
+namespace
+{
+
+// Small helper function setting locale for all categories.
+//
+// We define it because wxSetlocale() can't be easily used with wxScopeGuard as
+// it has several overloads -- while this one can.
+inline char *SetAllLocaleFacets(const char *loc)
+{
+    return wxSetlocale(LC_ALL, loc);
+}
+
+} // private namespace
+
 void wxCmdLineParserData::SetArguments(int argc, char **argv)
 {
     m_arguments.clear();
 
+    // Command-line arguments are supposed to be in the user locale encoding
+    // (what else?) but wxLocale probably wasn't initialized yet as we're
+    // called early during the program startup and so our locale might not have
+    // been set from the environment yet. To work around this problem we
+    // temporarily change the locale here. The only drawback is that changing
+    // the locale is thread-unsafe but precisely because we're called so early
+    // it's hopefully safe to assume that no other threads had been created yet.
+    char * const locOld = SetAllLocaleFacets("");
+    wxON_BLOCK_EXIT1( SetAllLocaleFacets, locOld );
+
     for ( int n = 0; n < argc; n++ )
     {
-        m_arguments.push_back(wxString::FromAscii(argv[n]));
+        // try to interpret the string as being in the current locale
+        wxString arg(argv[n]);
+
+        // but just in case we guessed wrongly and the conversion failed, do
+        // try to salvage at least something
+        if ( arg.empty() && argv[n][0] != '\0' )
+            arg = wxString(argv[n], wxConvISO8859_1);
+
+        m_arguments.push_back(arg);
     }
 }
 
