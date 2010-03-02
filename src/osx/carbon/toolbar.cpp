@@ -926,6 +926,7 @@ bool wxToolBar::Create(
 
 wxToolBar::~wxToolBar()
 {
+#if wxOSX_USE_NATIVE_TOOLBAR
     CFIndex count = CFGetRetainCount( m_macToolbar ) ;
     // Leopard seems to have one refcount more, so we cannot check reliably at the moment
     if ( UMAGetSystemVersion() < 0x1050 )
@@ -937,6 +938,7 @@ wxToolBar::~wxToolBar()
     }
     CFRelease( (HIToolbarRef)m_macToolbar );
     m_macToolbar = NULL;
+#endif // wxOSX_USE_NATIVE_TOOLBAR
 }
 
 bool wxToolBar::Show( bool show )
