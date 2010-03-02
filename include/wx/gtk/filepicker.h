@@ -189,7 +189,7 @@ public:    // used by the GTK callback only
     bool m_bIgnoreNextChange;
 
     void UpdatePath(const char *gtkpath)
-        { m_path = wxString::FromAscii(gtkpath); }
+        { m_path = wxString::FromUTF8(gtkpath); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDirButton)
