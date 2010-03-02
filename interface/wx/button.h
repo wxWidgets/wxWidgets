@@ -223,6 +223,15 @@ public:
     wxBitmap GetBitmapPressed() const;
 
     /**
+        Get the margins between the bitmap and the text of the button.
+
+        @see SetBitmapMargins()
+
+        @since 2.9.1
+     */
+    wxSize GetBitmapMargins();
+
+    /**
         Returns the default size for the buttons. It is advised to make all the dialog
         buttons of the same size and this function allows to retrieve the (platform and
         current font dependent size) which should be the best suited for this.
