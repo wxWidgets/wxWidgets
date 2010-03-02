@@ -927,6 +927,11 @@ bool wxToolBar::Create(
 wxToolBar::~wxToolBar()
 {
 #if wxOSX_USE_NATIVE_TOOLBAR
+    // We could be not using a native tool bar at all, this happens when we're
+    // created with something other than the frame as parent for example.
+    if ( !m_macToolbar )
+        return;
+
     CFIndex count = CFGetRetainCount( m_macToolbar ) ;
     // Leopard seems to have one refcount more, so we cannot check reliably at the moment
     if ( UMAGetSystemVersion() < 0x1050 )
