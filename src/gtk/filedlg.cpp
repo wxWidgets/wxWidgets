@@ -56,7 +56,7 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
 
             msg.Printf(
                 _("File '%s' already exists, do you really want to overwrite it?"),
-                wxString(wxConvFileName->cMB2WX(filename)).c_str());
+                wxString(wxString::FromUTF8(filename)).c_str());
 
             wxMessageDialog dlg(dialog, msg, _("Confirm"),
                                wxYES_NO | wxICON_QUESTION);
@@ -326,7 +326,7 @@ wxString wxFileDialog::GetPath() const
     if (!gtk_check_version(2,4,0))
     {
         wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        return wxConvFileName->cMB2WX(str);
+        return wxString::FromUTF8(str);
     }
 
     return wxGenericFileDialog::GetPath();
@@ -358,7 +358,7 @@ void wxFileDialog::GetPaths(wxArrayString& paths) const
             GSList *gpaths = gpathsi;
             while (gpathsi)
             {
-                wxString file(wxConvFileName->cMB2WX((gchar*) gpathsi->data));
+                wxString file(wxString::FromUTF8((gchar*) gpathsi->data));
                 paths.Add(file);
                 g_free(gpathsi->data);
                 gpathsi = gpathsi->next;
@@ -391,7 +391,7 @@ void wxFileDialog::SetPath(const wxString& path)
         if (path.empty()) return;
         wxCHECK_RET(wxIsAbsolutePath(path), wxT(" wxFileDialog::SetPath requires an absolute filepath"));
 
-        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(path));
+        gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget), path.utf8_str());
     }
     else
         wxGenericFileDialog::SetPath( path );
@@ -403,7 +403,7 @@ void wxFileDialog::SetDirectory(const wxString& dir)
     {
         if (wxDirExists(dir))
         {
-            if (gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir)))
+            if (gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), dir.utf8_str()))
             {
                 // Cache the dir, as gtk_file_chooser_get_current_folder()
                 // doesn't return anything until the dialog has been shown
@@ -420,7 +420,7 @@ wxString wxFileDialog::GetDirectory() const
     if (!gtk_check_version(2,4,0))
     {
         wxGtkString str(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(m_widget)));
-        wxString currentDir( wxConvFileName->cMB2WX(str) );
+        wxString currentDir( wxString::FromUTF8(str) );
         if (currentDir.empty())
         {
             // gtk_file_chooser_get_current_folder will return empty until the dialog has been shown
