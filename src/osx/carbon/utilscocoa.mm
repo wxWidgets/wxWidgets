@@ -194,7 +194,7 @@ void wxNativeFontInfo::OSXValidateNSFontDescriptor()
         traits |= NSFontItalicTrait;
 
     desc = [NSFontDescriptor fontDescriptorWithFontAttributes:
-        [[NSDictionary alloc] initWithObjectsAndKeys:
+        [NSDictionary dictionaryWithObjectsAndKeys:
             wxCFStringRef(m_faceName).AsNSString(), NSFontFamilyAttribute,
             [NSNumber numberWithFloat:m_pointSize], NSFontSizeAttribute,
             [NSNumber numberWithUnsignedInt:traits], NSFontSymbolicTrait,
