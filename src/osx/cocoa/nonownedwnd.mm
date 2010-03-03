@@ -100,6 +100,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 // even when the programmer explicitly wants to hide it.
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
+    wxUnusedVar(screen);
     return frameRect;
 }
 
