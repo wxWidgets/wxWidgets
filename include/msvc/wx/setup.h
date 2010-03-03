@@ -39,9 +39,32 @@
     #endif // _UNICODE/!_UNICODE
 #endif
 
-// compiler-specific prefix, we may use version-specific one in the future but
-// for now it's just "vc" for all versions for compatibility
-#define wxCOMPILER_PREFIX vc
+// compiler-specific prefix: by default it's always just "vc" for compatibility
+// reasons but if you use multiple MSVC versions you probably build them with
+// COMPILER_PREFIX=vcXX and in this case you may want to either predefine
+// wxMSVC_VERSION as "XX" or define wxMSVC_VERSION_AUTO to use the appropriate
+// version depending on the compiler used
+#ifdef wxMSVC_VERSION
+    #define wxCOMPILER_PREFIX wxCONCAT2(vc, wxMSVC_VERSION)
+#elif defined(wxMSVC_VERSION_AUTO)
+    #if _MSC_VER == 1200
+        #define wxCOMPILER_PREFIX vc60
+    #elif _MSC_VER == 1300
+        #define wxCOMPILER_PREFIX vc70
+    #elif _MSC_VER == 1310
+        #define wxCOMPILER_PREFIX vc71
+    #elif _MSC_VER == 1400
+        #define wxCOMPILER_PREFIX vc80
+    #elif _MSC_VER == 1500
+        #define wxCOMPILER_PREFIX vc90
+    #elif _MSC_VER == 1600
+        #define wxCOMPILER_PREFIX vc100
+    #else
+        #error "Unknown MSVC compiler version, please report to wx-dev."
+    #endif
+#else
+    #define wxCOMPILER_PREFIX vc
+#endif
 
 // architecture-specific part: not used (again, for compatibility), for x86
 #if defined(_M_X64)
