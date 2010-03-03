@@ -60,8 +60,8 @@ wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p )
     wxUIContentViewController* _controller;
 }
 
-- (void) setController: (UIViewController*) controller;
-- (UIViewController*) controller;
+- (void) setController: (wxUIContentViewController*) controller;
+- (wxUIContentViewController*) controller;
 @end
 
 
@@ -77,12 +77,14 @@ wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl( wxNonOwnedWindow* nonown
 {
     m_macWindow = NULL;
     m_macFullScreenData = NULL;
+    m_initialShowSent = false;
 }
 
 wxNonOwnedWindowIPhoneImpl::wxNonOwnedWindowIPhoneImpl()
 {
     m_macWindow = NULL;
     m_macFullScreenData = NULL;
+    m_initialShowSent = false;
 }
 
 wxNonOwnedWindowIPhoneImpl::~wxNonOwnedWindowIPhoneImpl()
@@ -128,9 +130,9 @@ long style, long extraStyle, const wxString& name )
         std::swap(r.size.width,r.size.height);
 
     [m_macWindow initWithFrame:r ];
+    [m_macWindow setHidden:YES];
 
     [m_macWindow setWindowLevel:level];
-    // [m_macWindow makeKeyAndOrderFront:nil];
 }
 
 
@@ -152,6 +154,16 @@ bool wxNonOwnedWindowIPhoneImpl::Show(bool show)
     [m_macWindow setHidden:(show ? NO : YES)];
     if ( show )
     {
+        if ( !m_initialShowSent )
+        {
+            wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (GetWXPeer());
+            wxShowEvent eventShow(now->GetId(), true);
+            eventShow.SetEventObject(now);
+            
+            now->HandleWindowEvent(eventShow);
+
+            m_initialShowSent = true;
+        }
         //[m_macWindow orderFront: self];
         [m_macWindow makeKeyWindow];
     }
@@ -305,19 +317,16 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     UIWindow* toplevelwindow = now->GetWXWindow();
     CGRect frame = [toplevelwindow bounds];
     CGRect appframe = [[UIScreen mainScreen] applicationFrame];
-    
-    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] != UIStatusBarStyleBlackTranslucent)
-    {
-        double offset = appframe.origin.y;
-        frame.origin.y += offset;
-        frame.size.height -= offset;
-    }
-    
-    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:frame];
+    BOOL fullscreen = now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent;
+
+    wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? frame : appframe ) ];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] init];
+    controller.wantsFullScreenLayout = fullscreen;
     controller.view = contentview;
+    [contentview release];
     [contentview setController:controller];
+    [contentview setHidden:YES];
     
     wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
     impl->InstallEventHandler();
@@ -331,12 +340,12 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 
 @implementation wxUIContentView
 
-- (void) setController: (UIViewController*) controller
+- (void) setController: (wxUIContentViewController*) controller
 {
     _controller = controller;
 }
 
-- (UIViewController*) controller
+- (wxUIContentViewController*) controller
 {
     return _controller;
 }
@@ -357,42 +366,40 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    CGRect frame = [self.view frame];
     wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
     wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
-
-    if ( now->GetWindowStyle() == wxDEFAULT_FRAME_STYLE && [[UIApplication sharedApplication] statusBarStyle] == UIStatusBarStyleBlackTranslucent)
-    {
-        CGRect appframe = [[UIScreen mainScreen] applicationFrame];
-        CGRect bounds = [[UIScreen mainScreen] bounds];
-        if ( CGRectEqualToRect(appframe, frame) ) 
-        {
-            if ( appframe.origin.y != 0 )
-            {
-                double offset = appframe.origin.y;
-                frame.origin.y -= offset;
-                frame.size.height += offset;
-            }
-            else if ( appframe.origin.x != 0 )
-            {
-                double offset = appframe.origin.x;
-                frame.origin.x -= offset;
-                frame.size.width += offset;
-            }
-            else if ( appframe.size.height < bounds.size.height )
-            {
-                frame.size.height = bounds.size.height;
-            }
-            else if ( appframe.size.width < bounds.size.width )
-            {
-                frame.size.width = bounds.size.width;
-            }
-
-            [self.view setFrame:frame];
-        }
-    }
     
     now->HandleResized(0);
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+    wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
+    
+    if ( nowimpl->InitialShowEventSent() )
+    {
+        wxShowEvent eventShow(now->GetId(), true);
+        eventShow.SetEventObject(now);
+    
+        now->HandleWindowEvent(eventShow);
+    }
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( [self view] );
+    wxNonOwnedWindow* now = dynamic_cast<wxNonOwnedWindow*> (impl->GetWXPeer());
+    wxNonOwnedWindowIPhoneImpl* nowimpl = dynamic_cast<wxNonOwnedWindowIPhoneImpl*> (now->GetNonOwnedPeer());
+    
+    if ( nowimpl->InitialShowEventSent() )
+    {
+        wxShowEvent eventShow(now->GetId(), false);
+        eventShow.SetEventObject(now);
+    
+        now->HandleWindowEvent(eventShow);
+    }
 }
 
 -(void) dealloc

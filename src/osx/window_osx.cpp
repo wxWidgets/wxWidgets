@@ -1061,10 +1061,16 @@ bool wxWindowMac::Show(bool show)
     if ( m_peer )
         m_peer->SetVisibility( show ) ;
 
-    wxShowEvent eventShow(GetId(), show);
-    eventShow.SetEventObject(this);
+#ifdef __WXOSX_IPHONE__
+    // only when there's no native event support 
+    if ( !IsTopLevel() )
+#endif
+    {
+        wxShowEvent eventShow(GetId(), show);
+        eventShow.SetEventObject(this);
     
-    HandleWindowEvent(eventShow);
+        HandleWindowEvent(eventShow);
+    }
     
     return true;
 }
