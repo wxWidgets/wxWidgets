@@ -229,7 +229,7 @@ wxShowEffect wxInfoBarGeneric::GetHideEffect() const
 
 void wxInfoBarGeneric::UpdateParent()
 {
-    wxWindow * const parent = wxGetTopLevelParent(GetParent());
+    wxWindow * const parent = GetParent();
     parent->Layout();
 }
 
