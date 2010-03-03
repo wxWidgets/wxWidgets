@@ -223,6 +223,7 @@ wxMenuItemCocoaImpl::~wxMenuItemCocoaImpl()
 {
     if ( ![m_osxMenuItem isSeparatorItem] )
         [(wxNSMenuItem*)m_osxMenuItem setImplementation:nil];
+    [m_osxMenuItem release];
 }
 
 
