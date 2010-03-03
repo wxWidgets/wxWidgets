@@ -39,10 +39,23 @@
     #endif // _UNICODE/!_UNICODE
 #endif
 
+// compiler-specific prefix, we may use version-specific one in the future but
+// for now it's just "vc" for all versions for compatibility
+#define wxCOMPILER_PREFIX vc
+
+// architecture-specific part: not used (again, for compatibility), for x86
+#if defined(_M_X64)
+    #define wxARCH_SUFFIX _amd64
+#elif defined(_M_IA64)
+    #define wxARCH_SUFFIX _ia64
+#else // assume _M_IX86
+    #define wxARCH_SUFFIX
+#endif
+
 #ifdef WXUSINGDLL
-    #define wxLIB_SUBDIR vc_dll
+    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _dll)
 #else // !DLL
-    #define wxLIB_SUBDIR vc_lib
+    #define wxLIB_SUBDIR wxCONCAT3(wxCOMPILER_PREFIX, wxARCH_SUFFIX, _lib)
 #endif // DLL/!DLL
 
 
