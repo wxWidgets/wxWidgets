@@ -173,9 +173,12 @@ public :
     virtual bool IsActive() { return true; }
     
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
+
+    virtual bool InitialShowEventSent() { return m_initialShowSent; }
 protected :
     WX_UIWindow          m_macWindow;
     void *              m_macFullScreenData ;
+    bool                m_initialShowSent;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowIPhoneImpl)
 };
 
