@@ -166,10 +166,6 @@ wxPGProperty* wxPropertyGridInterface::RemoveProperty( wxPGPropArg id )
 
     state->DoDelete( p, false );
 
-    // Mark the property as 'unattached'
-    p->m_parentState = NULL;
-    p->m_parent = NULL;
-
     RefreshGrid(state);
 
     return p;

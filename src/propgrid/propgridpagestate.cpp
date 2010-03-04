@@ -1979,6 +1979,10 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     if ( pg && pg->m_propHover == item )
         pg->m_propHover = NULL;
 
+    // Mark the property as 'unattached'
+    item->m_parentState = NULL;
+    item->m_parent = NULL;
+
     // We can actually delete it now
     if ( doDelete )
         delete item;
