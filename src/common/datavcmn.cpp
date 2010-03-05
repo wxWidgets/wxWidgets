@@ -1486,6 +1486,7 @@ void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVarian
 void wxDataViewListStore::DeleteItem( unsigned int row )
 {
     wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin() + row;
+    delete *it;
     m_data.erase( it );
 
     RowDeleted( row );
