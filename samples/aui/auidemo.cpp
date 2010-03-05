@@ -1451,7 +1451,7 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
 
 void MyFrame::OnTabAlignment(wxCommandEvent &evt)
 {
-   size_t i, count;
+    size_t i, count;
     wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
     for (i = 0, count = all_panes.GetCount(); i < count; ++i)
     {
@@ -1460,10 +1460,14 @@ void MyFrame::OnTabAlignment(wxCommandEvent &evt)
         {
             wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
 
+            long style = nb->GetWindowStyleFlag();
+            style &= ~(wxAUI_NB_TOP | wxAUI_NB_BOTTOM);
             if (evt.GetId() == ID_NotebookAlignTop)
-                nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_BOTTOM|wxAUI_NB_TOP);
-           else if (evt.GetId() == ID_NotebookAlignBottom)
-               nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_TOP|wxAUI_NB_BOTTOM);
+                style |= wxAUI_NB_TOP;
+            else if (evt.GetId() == ID_NotebookAlignBottom)
+                style |= wxAUI_NB_BOTTOM;
+            nb->SetWindowStyleFlag(style);
+
             nb->Refresh();
         }
     }
