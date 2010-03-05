@@ -644,7 +644,19 @@ void wxNonOwnedWindowCocoaImpl::SetTitle( const wxString& title, wxFontEncoding 
 
 bool wxNonOwnedWindowCocoaImpl::IsMaximized() const
 {
-    return [m_macWindow isZoomed];
+    if (([m_macWindow styleMask] & NSResizableWindowMask) != 0)
+    {
+        return [m_macWindow isZoomed];
+    }
+    else
+    {
+        NSRect rectScreen = [[NSScreen mainScreen] visibleFrame];
+        NSRect rectWindow = [m_macWindow frame];
+        return (rectScreen.origin.x == rectWindow.origin.x &&
+                rectScreen.origin.y == rectWindow.origin.y &&
+                rectScreen.size.width == rectWindow.size.width &&
+                rectScreen.size.height == rectWindow.size.height);
+    }
 }
 
 bool wxNonOwnedWindowCocoaImpl::IsIconized() const
