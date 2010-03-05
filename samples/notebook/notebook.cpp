@@ -322,11 +322,11 @@ MyFrame::MyFrame()
     menuType->Check(ID_BOOK_NOTEBOOK + m_type, true);
 
     wxMenu *menuOrient = new wxMenu;
-    menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, wxT("&Default\tCtrl-5"));
-    menuOrient->AppendRadioItem(ID_ORIENT_TOP,     wxT("&Top\tCtrl-6"));
-    menuOrient->AppendRadioItem(ID_ORIENT_BOTTOM,  wxT("&Bottom\tCtrl-7"));
-    menuOrient->AppendRadioItem(ID_ORIENT_LEFT,    wxT("&Left\tCtrl-8"));
-    menuOrient->AppendRadioItem(ID_ORIENT_RIGHT,   wxT("&Right\tCtrl-9"));
+    menuOrient->AppendRadioItem(ID_ORIENT_DEFAULT, wxT("&Default\tAlt-0"));
+    menuOrient->AppendRadioItem(ID_ORIENT_TOP,     wxT("&Top\tAlt-1"));
+    menuOrient->AppendRadioItem(ID_ORIENT_BOTTOM,  wxT("&Bottom\tAlt-2"));
+    menuOrient->AppendRadioItem(ID_ORIENT_LEFT,    wxT("&Left\tAlt-3"));
+    menuOrient->AppendRadioItem(ID_ORIENT_RIGHT,   wxT("&Right\tAlt-4"));
 
     wxMenu *menuPageOperations = new wxMenu;
     menuPageOperations->Append(ID_ADD_PAGE, wxT("&Add page\tAlt-A"));
