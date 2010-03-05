@@ -187,7 +187,7 @@ void wxBitmapToggleButton::OnMouse(wxMouseEvent &event)
 
         if (event.LeftUp())
         {
-            ReleaseCapture();
+            ReleaseMouse();
             m_capturing = false;
             if (mouse_in)
             {
