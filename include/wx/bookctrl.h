@@ -141,7 +141,10 @@ public:
     wxSize GetControllerSize() const;
 
     // calculate the size of the control from the size of its page
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const = 0;
+    //
+    // by default this simply returns size enough to fit both the page and the
+    // controller
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
     // get/set size of area between book control area and page area
     unsigned int GetInternalBorder() const { return m_internalBorder; }

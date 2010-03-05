@@ -556,16 +556,6 @@ bool wxTreebook::SetPageImage(size_t n, int imageId)
     return true;
 }
 
-wxSize wxTreebook::CalcSizeFromPage(const wxSize& sizePage) const
-{
-    const wxSize sizeTree = GetControllerSize();
-
-    wxSize size = sizePage;
-    size.x += sizeTree.x;
-
-    return size;
-}
-
 int wxTreebook::GetSelection() const
 {
    return m_selection;

@@ -208,24 +208,6 @@ int wxListbook::HitTest(const wxPoint& pt, long *flags) const
     return pagePos;
 }
 
-wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
-{
-    // we need to add the size of the list control and the border between
-    const wxSize sizeList = GetControllerSize();
-
-    wxSize size = sizePage;
-    if ( IsVertical() )
-    {
-        size.y += sizeList.y + GetInternalBorder();
-    }
-    else // left/right aligned
-    {
-        size.x += sizeList.x + GetInternalBorder();
-    }
-
-    return size;
-}
-
 void wxListbook::UpdateSize()
 {
     // we should find a more elegant way to force a layout than generating this

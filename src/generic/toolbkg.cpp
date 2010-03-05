@@ -137,24 +137,6 @@ void wxToolbook::OnSize(wxSizeEvent& event)
     wxBookCtrlBase::OnSize(event);
 }
 
-wxSize wxToolbook::CalcSizeFromPage(const wxSize& sizePage) const
-{
-    // we need to add the size of the list control and the border between
-    const wxSize sizeToolBar = GetControllerSize();
-
-    wxSize size = sizePage;
-    if ( IsVertical() )
-    {
-        size.y += sizeToolBar.y + GetInternalBorder();
-    }
-    else // left/right aligned
-    {
-        size.x += sizeToolBar.x + GetInternalBorder();
-    }
-
-    return size;
-}
-
 // ----------------------------------------------------------------------------
 // accessing the pages
 // ----------------------------------------------------------------------------

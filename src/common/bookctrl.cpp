@@ -137,6 +137,28 @@ void wxBookCtrlBase::DoInvalidateBestSize()
         wxControl::InvalidateBestSize();
 }
 
+wxSize wxBookCtrlBase::CalcSizeFromPage(const wxSize& sizePage) const
+{
+    // we need to add the size of the choice control and the border between
+    const wxSize sizeController = GetControllerSize();
+
+    wxSize size = sizePage;
+    if ( IsVertical() )
+    {
+        if ( sizeController.x > sizePage.x )
+            size.x = sizeController.x;
+        size.y += sizeController.y + GetInternalBorder();
+    }
+    else // left/right aligned
+    {
+        size.x += sizeController.x + GetInternalBorder();
+        if ( sizeController.y > sizePage.y )
+            size.y = sizeController.y;
+    }
+
+    return size;
+}
+
 void wxBookCtrlBase::SetPageSize(const wxSize& size)
 {
     SetClientSize(CalcSizeFromPage(size));

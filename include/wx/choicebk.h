@@ -70,7 +70,6 @@ public:
     virtual wxString GetPageText(size_t n) const;
     virtual int GetPageImage(size_t n) const;
     virtual bool SetPageImage(size_t n, int imageId);
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
