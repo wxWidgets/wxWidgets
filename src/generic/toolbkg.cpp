@@ -132,8 +132,7 @@ bool wxToolbook::Create(wxWindow *parent,
 wxSize wxToolbook::GetControllerSize() const
 {
     const wxSize sizeClient = GetClientSize(),
-                 sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
-                 sizeToolBar = GetToolBar()->GetSize() + sizeBorder;
+                 sizeToolBar = GetToolBar()->GetBestSize();
 
     wxSize size;
 
