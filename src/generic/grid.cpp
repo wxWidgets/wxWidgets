@@ -3765,6 +3765,8 @@ void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords
 
     if ( isFirstDrag )
     {
+        wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
+
         m_winCapture = m_gridWin;
         m_winCapture->CaptureMouse();
     }
@@ -3944,6 +3946,14 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
 
 void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
 {
+    if ( event.Entering() || event.Leaving() )
+    {
+        // we don't care about these events but we must not reset m_isDragging
+        // if they happen so return before anything else is done
+        event.Skip();
+        return;
+    }
+
     const wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
 
     // coordinates of the cell under mouse
@@ -3968,17 +3978,6 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
 
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
-
-    // VZ: if we do this, the mode is reset to WXGRID_CURSOR_SELECT_CELL
-    //     immediately after it becomes WXGRID_CURSOR_RESIZE_ROW/COL under
-    //     wxGTK
-#if 0
-    if ( event.Entering() || event.Leaving() )
-    {
-        ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        m_gridWin->SetCursor( *wxSTANDARD_CURSOR );
-    }
-#endif // 0
 
     // deal with various button presses
     if ( event.IsButton() )
