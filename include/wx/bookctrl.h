@@ -137,6 +137,9 @@ public:
     // resize the notebook so that all pages will have the specified size
     virtual void SetPageSize(const wxSize& size);
 
+    // return the size of the area needed to accommodate the controller
+    wxSize GetControllerSize() const;
+
     // calculate the size of the control from the size of its page
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const = 0;
 
@@ -312,7 +315,6 @@ protected:
     virtual wxRect GetPageRect() const;
 
     // event handlers
-    virtual wxSize GetControllerSize() const;
     void OnSize(wxSizeEvent& event);
 
     // controller buddy if available, NULL otherwise (usually for native book controls like wxNotebook)

@@ -115,26 +115,6 @@ wxChoicebook::Create(wxWindow *parent,
 // wxChoicebook geometry management
 // ----------------------------------------------------------------------------
 
-wxSize wxChoicebook::GetControllerSize() const
-{
-    const wxSize sizeClient = GetClientSize(),
-                 sizeChoice = m_controlSizer->CalcMin();
-
-    wxSize size;
-    if ( IsVertical() )
-    {
-        size.x = sizeClient.x;
-        size.y = sizeChoice.y;
-    }
-    else // left/right aligned
-    {
-        size.x = sizeChoice.x;
-        size.y = sizeClient.y;
-    }
-
-    return size;
-}
-
 wxSize wxChoicebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     // we need to add the size of the choice control and the border between

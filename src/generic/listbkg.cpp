@@ -155,28 +155,6 @@ long wxListbook::GetListCtrlReportViewFlags() const
 // wxListbook geometry management
 // ----------------------------------------------------------------------------
 
-wxSize wxListbook::GetControllerSize() const
-{
-    const wxSize sizeClient = GetClientSize(),
-                 sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
-                 sizeList = GetListView()->GetViewRect().GetSize() + sizeBorder;
-
-    wxSize size;
-
-    if ( IsVertical() )
-    {
-        size.x = sizeClient.x;
-        size.y = sizeList.y;
-    }
-    else // left/right aligned
-    {
-        size.x = sizeList.x;
-        size.y = sizeClient.y;
-    }
-
-    return size;
-}
-
 void wxListbook::OnSize(wxSizeEvent& event)
 {
     // arrange the icons before calling SetClientSize(), otherwise it wouldn't

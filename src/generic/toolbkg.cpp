@@ -129,27 +129,6 @@ bool wxToolbook::Create(wxWindow *parent,
 // wxToolbook geometry management
 // ----------------------------------------------------------------------------
 
-wxSize wxToolbook::GetControllerSize() const
-{
-    const wxSize sizeClient = GetClientSize(),
-                 sizeToolBar = GetToolBar()->GetBestSize();
-
-    wxSize size;
-
-    if ( IsVertical() )
-    {
-        size.x = sizeClient.x;
-        size.y = sizeToolBar.y;
-    }
-    else // left/right aligned
-    {
-        size.x = sizeToolBar.x;
-        size.y = sizeClient.y;
-    }
-
-    return size;
-}
-
 void wxToolbook::OnSize(wxSizeEvent& event)
 {
     if (m_needsRealizing)

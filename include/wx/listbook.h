@@ -89,9 +89,6 @@ public:
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
-    // get the size which the list control should have
-    virtual wxSize GetControllerSize() const;
-
     void UpdateSelectedPage(size_t newsel);
 
     wxBookCtrlEvent* CreatePageChangingEvent() const;

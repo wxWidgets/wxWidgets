@@ -289,12 +289,11 @@ void wxBookCtrlBase::OnSize(wxSizeEvent& event)
 
 wxSize wxBookCtrlBase::GetControllerSize() const
 {
-    if(!m_bookctrl)
-        return wxSize(0,0);
+    if ( !m_bookctrl )
+        return wxSize(0, 0);
 
     const wxSize sizeClient = GetClientSize(),
-                 sizeBorder = m_bookctrl->GetSize() - m_bookctrl->GetClientSize(),
-                 sizeCtrl = m_bookctrl->GetBestSize() + sizeBorder;
+                 sizeCtrl = m_bookctrl->GetBestSize();
 
     wxSize size;
 

@@ -101,9 +101,6 @@ public:
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
-    // get the size which the list control should have
-    virtual wxSize GetControllerSize() const;
-
     // event handlers
     void OnToolSelected(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);

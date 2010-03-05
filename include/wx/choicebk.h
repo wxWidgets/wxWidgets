@@ -91,9 +91,6 @@ protected:
 
     virtual wxWindow *DoRemovePage(size_t page);
 
-    // get the size which the choice control should have
-    virtual wxSize GetControllerSize() const;
-
     void UpdateSelectedPage(size_t newsel)
     {
         m_selection = static_cast<int>(newsel);
