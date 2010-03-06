@@ -20,7 +20,7 @@ contribDir = os.path.join("contrib", "src")
 dirsToCopy = ["art", "build", "debian", "demos", "distrib/mac", "docs", "include", "interface", "lib",
                 "locale", "samples", "src", "tests", "utils"]
 
-dirsToIgnore = [".svn", "CVS"]
+dirsToIgnore = [".svn", "CVS", ".git"]
 excludeExtensions = [".rej", ".orig", ".mine", ".tmp"]
 
 option_dict = {
