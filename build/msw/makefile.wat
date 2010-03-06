@@ -332,6 +332,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textentry.obj &
 	$(OBJS)\monodll_msw_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
+	$(OBJS)\monodll_uiaction.obj &
 	$(OBJS)\monodll_msw_checklst.obj &
 	$(OBJS)\monodll_msw_fdrepdlg.obj &
 	$(OBJS)\monodll_fontdlg.obj &
@@ -434,6 +435,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textentrycmn.obj &
 	$(OBJS)\monodll_toplvcmn.obj &
 	$(OBJS)\monodll_treebase.obj &
+	$(OBJS)\monodll_uiactioncmn.obj &
 	$(OBJS)\monodll_valgen.obj &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
@@ -679,6 +681,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textentrycmn.obj &
 	$(OBJS)\monodll_toplvcmn.obj &
 	$(OBJS)\monodll_treebase.obj &
+	$(OBJS)\monodll_uiactioncmn.obj &
 	$(OBJS)\monodll_valgen.obj &
 	$(OBJS)\monodll_validate.obj &
 	$(OBJS)\monodll_valtext.obj &
@@ -1045,6 +1048,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textentry.obj &
 	$(OBJS)\monolib_msw_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
+	$(OBJS)\monolib_uiaction.obj &
 	$(OBJS)\monolib_msw_checklst.obj &
 	$(OBJS)\monolib_msw_fdrepdlg.obj &
 	$(OBJS)\monolib_fontdlg.obj &
@@ -1147,6 +1151,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textentrycmn.obj &
 	$(OBJS)\monolib_toplvcmn.obj &
 	$(OBJS)\monolib_treebase.obj &
+	$(OBJS)\monolib_uiactioncmn.obj &
 	$(OBJS)\monolib_valgen.obj &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
@@ -1392,6 +1397,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textentrycmn.obj &
 	$(OBJS)\monolib_toplvcmn.obj &
 	$(OBJS)\monolib_treebase.obj &
+	$(OBJS)\monolib_uiactioncmn.obj &
 	$(OBJS)\monolib_valgen.obj &
 	$(OBJS)\monolib_validate.obj &
 	$(OBJS)\monolib_valtext.obj &
@@ -1667,6 +1673,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textentry.obj &
 	$(OBJS)\coredll_msw_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
+	$(OBJS)\coredll_uiaction.obj &
 	$(OBJS)\coredll_msw_checklst.obj &
 	$(OBJS)\coredll_msw_fdrepdlg.obj &
 	$(OBJS)\coredll_fontdlg.obj &
@@ -1769,6 +1776,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textentrycmn.obj &
 	$(OBJS)\coredll_toplvcmn.obj &
 	$(OBJS)\coredll_treebase.obj &
+	$(OBJS)\coredll_uiactioncmn.obj &
 	$(OBJS)\coredll_valgen.obj &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
@@ -2014,6 +2022,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textentrycmn.obj &
 	$(OBJS)\coredll_toplvcmn.obj &
 	$(OBJS)\coredll_treebase.obj &
+	$(OBJS)\coredll_uiactioncmn.obj &
 	$(OBJS)\coredll_valgen.obj &
 	$(OBJS)\coredll_validate.obj &
 	$(OBJS)\coredll_valtext.obj &
@@ -2168,6 +2177,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textentry.obj &
 	$(OBJS)\corelib_msw_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
+	$(OBJS)\corelib_uiaction.obj &
 	$(OBJS)\corelib_msw_checklst.obj &
 	$(OBJS)\corelib_msw_fdrepdlg.obj &
 	$(OBJS)\corelib_fontdlg.obj &
@@ -2270,6 +2280,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textentrycmn.obj &
 	$(OBJS)\corelib_toplvcmn.obj &
 	$(OBJS)\corelib_treebase.obj &
+	$(OBJS)\corelib_uiactioncmn.obj &
 	$(OBJS)\corelib_valgen.obj &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
@@ -2515,6 +2526,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textentrycmn.obj &
 	$(OBJS)\corelib_toplvcmn.obj &
 	$(OBJS)\corelib_treebase.obj &
+	$(OBJS)\corelib_uiactioncmn.obj &
 	$(OBJS)\corelib_valgen.obj &
 	$(OBJS)\corelib_validate.obj &
 	$(OBJS)\corelib_valtext.obj &
@@ -6534,6 +6546,9 @@ $(OBJS)\monodll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monodll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -7855,6 +7870,11 @@ $(OBJS)\monodll_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_uiactioncmn.obj :  .AUTODEPEND ..\..\src\common\uiactioncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8714,6 +8734,9 @@ $(OBJS)\monolib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
@@ -10037,6 +10060,11 @@ $(OBJS)\monolib_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_uiactioncmn.obj :  .AUTODEPEND ..\..\src\common\uiactioncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -11300,6 +11328,9 @@ $(OBJS)\coredll_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 $(OBJS)\coredll_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12222,6 +12253,11 @@ $(OBJS)\coredll_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_uiactioncmn.obj :  .AUTODEPEND ..\..\src\common\uiactioncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_valgen.obj :  .AUTODEPEND ..\..\src\common\valgen.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12577,6 +12613,9 @@ $(OBJS)\corelib_msw_tglbtn.obj :  .AUTODEPEND ..\..\src\msw\tglbtn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_treectrl.obj :  .AUTODEPEND ..\..\src\msw\treectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_uiaction.obj :  .AUTODEPEND ..\..\src\msw\uiaction.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_checklst.obj :  .AUTODEPEND ..\..\src\msw\checklst.cpp
@@ -13497,6 +13536,11 @@ $(OBJS)\corelib_toplvcmn.obj :  .AUTODEPEND ..\..\src\common\toplvcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_treebase.obj :  .AUTODEPEND ..\..\src\common\treebase.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_uiactioncmn.obj :  .AUTODEPEND ..\..\src\common\uiactioncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

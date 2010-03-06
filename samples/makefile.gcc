@@ -37,7 +37,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -113,6 +113,7 @@ clean:
 	$(MAKE) -C toolbar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C treectrl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C typetest -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C uiaction -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C validate -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
@@ -334,6 +335,9 @@ treectrl:
 typetest: 
 	$(MAKE) -C typetest -f makefile.gcc $(MAKEARGS) all
 
+uiaction: 
+	$(MAKE) -C uiaction -f makefile.gcc $(MAKEARGS) all
+
 validate: 
 	$(MAKE) -C validate -f makefile.gcc $(MAKEARGS) all
 
@@ -361,8 +365,8 @@ memcheck:
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
 	opengl ownerdrw popup power printing propgrid regtest render ribbon richtext \
 	sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder \
-	taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard \
-	wrapsizer xrc memcheck
+	taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets \
+	wizard wrapsizer xrc memcheck
 
 
 SHELL := $(COMSPEC)

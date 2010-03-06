@@ -1211,6 +1211,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\uiactioncmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\utilscmn.cpp"
 				>
 			</File>
@@ -3265,6 +3269,26 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\treectrl.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\uiaction.cpp"
 				>
 				<FileConfiguration
 					Name="Universal Debug|Win32"
@@ -7385,6 +7409,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\treectrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\uiaction.h"
 				>
 			</File>
 			<File

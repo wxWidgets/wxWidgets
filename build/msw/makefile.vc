@@ -1964,6 +1964,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentry.obj \
 	$(OBJS)\monodll_msw_tglbtn.obj \
 	$(OBJS)\monodll_treectrl.obj \
+	$(OBJS)\monodll_uiaction.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2066,6 +2067,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentrycmn.obj \
 	$(OBJS)\monodll_toplvcmn.obj \
 	$(OBJS)\monodll_treebase.obj \
+	$(OBJS)\monodll_uiactioncmn.obj \
 	$(OBJS)\monodll_valgen.obj \
 	$(OBJS)\monodll_validate.obj \
 	$(OBJS)\monodll_valtext.obj \
@@ -2309,6 +2311,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_textentrycmn.obj \
 	$(OBJS)\monodll_toplvcmn.obj \
 	$(OBJS)\monodll_treebase.obj \
+	$(OBJS)\monodll_uiactioncmn.obj \
 	$(OBJS)\monodll_valgen.obj \
 	$(OBJS)\monodll_validate.obj \
 	$(OBJS)\monodll_valtext.obj \
@@ -2672,6 +2675,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentry.obj \
 	$(OBJS)\monolib_msw_tglbtn.obj \
 	$(OBJS)\monolib_treectrl.obj \
+	$(OBJS)\monolib_uiaction.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -2774,6 +2778,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentrycmn.obj \
 	$(OBJS)\monolib_toplvcmn.obj \
 	$(OBJS)\monolib_treebase.obj \
+	$(OBJS)\monolib_uiactioncmn.obj \
 	$(OBJS)\monolib_valgen.obj \
 	$(OBJS)\monolib_validate.obj \
 	$(OBJS)\monolib_valtext.obj \
@@ -3017,6 +3022,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_textentrycmn.obj \
 	$(OBJS)\monolib_toplvcmn.obj \
 	$(OBJS)\monolib_treebase.obj \
+	$(OBJS)\monolib_uiactioncmn.obj \
 	$(OBJS)\monolib_valgen.obj \
 	$(OBJS)\monolib_validate.obj \
 	$(OBJS)\monolib_valtext.obj \
@@ -3333,6 +3339,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentry.obj \
 	$(OBJS)\coredll_msw_tglbtn.obj \
 	$(OBJS)\coredll_treectrl.obj \
+	$(OBJS)\coredll_uiaction.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3435,6 +3442,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentrycmn.obj \
 	$(OBJS)\coredll_toplvcmn.obj \
 	$(OBJS)\coredll_treebase.obj \
+	$(OBJS)\coredll_uiactioncmn.obj \
 	$(OBJS)\coredll_valgen.obj \
 	$(OBJS)\coredll_validate.obj \
 	$(OBJS)\coredll_valtext.obj \
@@ -3678,6 +3686,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_textentrycmn.obj \
 	$(OBJS)\coredll_toplvcmn.obj \
 	$(OBJS)\coredll_treebase.obj \
+	$(OBJS)\coredll_uiactioncmn.obj \
 	$(OBJS)\coredll_valgen.obj \
 	$(OBJS)\coredll_validate.obj \
 	$(OBJS)\coredll_valtext.obj \
@@ -3830,6 +3839,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentry.obj \
 	$(OBJS)\corelib_msw_tglbtn.obj \
 	$(OBJS)\corelib_treectrl.obj \
+	$(OBJS)\corelib_uiaction.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -3932,6 +3942,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentrycmn.obj \
 	$(OBJS)\corelib_toplvcmn.obj \
 	$(OBJS)\corelib_treebase.obj \
+	$(OBJS)\corelib_uiactioncmn.obj \
 	$(OBJS)\corelib_valgen.obj \
 	$(OBJS)\corelib_validate.obj \
 	$(OBJS)\corelib_valtext.obj \
@@ -4175,6 +4186,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_textentrycmn.obj \
 	$(OBJS)\corelib_toplvcmn.obj \
 	$(OBJS)\corelib_treebase.obj \
+	$(OBJS)\corelib_uiactioncmn.obj \
 	$(OBJS)\corelib_valgen.obj \
 	$(OBJS)\corelib_validate.obj \
 	$(OBJS)\corelib_valtext.obj \
@@ -6706,6 +6718,9 @@ $(OBJS)\monodll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\monodll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\monodll_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
+
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -8027,6 +8042,11 @@ $(OBJS)\monodll_treebase.obj: ..\..\src\common\treebase.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_uiactioncmn.obj: ..\..\src\common\uiactioncmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\uiactioncmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_valgen.obj: ..\..\src\common\valgen.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\valgen.cpp
 !endif
@@ -8887,6 +8907,9 @@ $(OBJS)\monolib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\monolib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
+
+$(OBJS)\monolib_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
@@ -10209,6 +10232,11 @@ $(OBJS)\monolib_treebase.obj: ..\..\src\common\treebase.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_uiactioncmn.obj: ..\..\src\common\uiactioncmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\uiactioncmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_valgen.obj: ..\..\src\common\valgen.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\valgen.cpp
 !endif
@@ -11472,6 +11500,9 @@ $(OBJS)\coredll_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 $(OBJS)\coredll_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\treectrl.cpp
 
+$(OBJS)\coredll_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\uiaction.cpp
+
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -12394,6 +12425,11 @@ $(OBJS)\coredll_treebase.obj: ..\..\src\common\treebase.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_uiactioncmn.obj: ..\..\src\common\uiactioncmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\uiactioncmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_valgen.obj: ..\..\src\common\valgen.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\valgen.cpp
 !endif
@@ -12750,6 +12786,9 @@ $(OBJS)\corelib_msw_tglbtn.obj: ..\..\src\msw\tglbtn.cpp
 
 $(OBJS)\corelib_treectrl.obj: ..\..\src\msw\treectrl.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\treectrl.cpp
+
+$(OBJS)\corelib_uiaction.obj: ..\..\src\msw\uiaction.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\uiaction.cpp
 
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
@@ -13670,6 +13709,11 @@ $(OBJS)\corelib_toplvcmn.obj: ..\..\src\common\toplvcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_treebase.obj: ..\..\src\common\treebase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\treebase.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_uiactioncmn.obj: ..\..\src\common\uiactioncmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\uiactioncmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

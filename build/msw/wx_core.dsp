@@ -654,6 +654,10 @@ SOURCE=..\..\src\common\treebase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\uiactioncmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\utilscmn.cpp
 # End Source File
 # Begin Source File
@@ -2563,6 +2567,41 @@ SOURCE=..\..\src\msw\toplevel.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\treectrl.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\uiaction.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
@@ -6544,6 +6583,10 @@ SOURCE=..\..\include\wx\persist\treebook.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\treectrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\uiaction.h
 # End Source File
 # Begin Source File
 
