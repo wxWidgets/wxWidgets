@@ -3264,12 +3264,11 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
 
     RemoveEmptyTabFrames();
 
-    // set new active pane
+    m_curpage = wxNOT_FOUND;
+
+    // set new active pane unless we're being destroyed anyhow
     if (new_active && !m_isBeingDeleted)
-    {
-        m_curpage = -1;
         SetSelectionToWindow(new_active);
-    }
 
     return true;
 }

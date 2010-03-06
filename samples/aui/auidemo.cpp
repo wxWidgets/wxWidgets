@@ -152,6 +152,7 @@ private:
     void OnCustomizeToolbar(wxCommandEvent& evt);
     void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
     void OnNotebookPageClose(wxAuiNotebookEvent& evt);
+    void OnNotebookPageClosed(wxAuiNotebookEvent& evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
     void OnTabAlignment(wxCommandEvent &evt);
@@ -649,6 +650,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUI_PANE_CLOSE(MyFrame::OnPaneClose)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
+    EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
 END_EVENT_TABLE()
 
 
@@ -1323,6 +1325,19 @@ void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
         if (res != wxYES)
             evt.Veto();
     }
+}
+
+void MyFrame::OnNotebookPageClosed(wxAuiNotebookEvent& evt)
+{
+    wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
+
+    // selection should always be a valid index
+    wxASSERT_MSG( ctrl->GetSelection() < (int)ctrl->GetPageCount(),
+                  wxString::Format("Invalid selection %d, only %d pages left",
+                                   ctrl->GetSelection(),
+                                   (int)ctrl->GetPageCount()) );
+
+    evt.Skip();
 }
 
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
