@@ -4272,7 +4272,6 @@ void wxGenericListCtrl::Init()
 
     m_mainWin = NULL;
     m_headerWin = NULL;
-    m_headerHeight = wxRendererNative::Get().GetHeaderButtonHeight(this);
 }
 
 wxGenericListCtrl::~wxGenericListCtrl()
@@ -4299,7 +4298,11 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                       (
                         this, wxID_ANY, m_mainWin,
                         wxPoint(0,0),
-                        wxSize(GetClientSize().x, m_headerHeight),
+                        wxSize
+                        (
+                          GetClientSize().x,
+                          wxRendererNative::Get().GetHeaderButtonHeight(this)
+                        ),
                         wxTAB_TRAVERSAL
                       );
 
@@ -4313,7 +4316,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 #ifdef __WXOSX__
         // TODO not tested under other platforms, remove the platform condition if
         // it works on those as well
-        GetSizer()->SetItemMinSize( m_headerWin, wxSize(-1,m_headerHeight) ); 
+        GetSizer()->SetItemMinSize( m_headerWin, wxSize(-1, m_headerWin->GetSize().y) ); 
 #endif
     }
     else
@@ -4594,7 +4597,7 @@ bool wxGenericListCtrl::GetSubItemRect(long item,
         return false;
 
     if ( m_mainWin->HasHeader() )
-        rect.y += m_headerHeight + 1;
+        rect.y += m_headerWin->GetSize().y + 1;
 
     return true;
 }

@@ -212,7 +212,6 @@ public:
                          m_ownsImageListState;
     wxListHeaderWindow  *m_headerWin;
     wxListMainWindow    *m_mainWin;
-    wxCoord              m_headerHeight;
 
 protected:
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
