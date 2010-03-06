@@ -727,6 +727,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/textentrycmn.cpp
     src/common/toplvcmn.cpp
     src/common/treebase.cpp
+    src/common/uiactioncmn.cpp
     src/common/valgen.cpp
     src/common/validate.cpp
     src/common/valtext.cpp
@@ -966,6 +967,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/treebase.h
     wx/treebook.h
     wx/treectrl.h
+    wx/uiaction.h
     wx/valgen.h
     wx/vidmode.h
     wx/vlbox.h
@@ -991,10 +993,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
+    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
+    src/unix/uiactionx11.cpp
     src/unix/utilsx11.cpp
-    src/unix/displayx11.cpp
 </set>
 <set var="XWIN_LOWLEVEL_HDR" hints="files">
     wx/generic/caret.h
@@ -1710,6 +1713,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
+    src/msw/uiaction.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2257,6 +2261,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/textctrl_osx.cpp
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
+    src/osx/uiaction_osx.cpp
     <!-- wxWebKit files -->
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->

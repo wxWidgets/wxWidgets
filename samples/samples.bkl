@@ -84,6 +84,7 @@
     <subproject id="toolbar" template="sub"/>
     <subproject id="treectrl" template="sub"/>
     <subproject id="typetest" template="sub"/>
+    <subproject id="uiaction" template="sub"/>
     <subproject id="validate" template="sub"/>
     <subproject id="vscroll" template="sub"/>
     <subproject id="widgets" template="sub"/>
