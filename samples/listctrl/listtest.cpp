@@ -150,13 +150,17 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
+    EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
 #ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 #endif // __WXOSX__
     EVT_MENU(LIST_FIND, MyFrame::OnFind)
 
-    EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
+    EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateUIEnableInReport)
+    EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateUIEnableInReport)
+
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
+    EVT_UPDATE_UI(LIST_TOGGLE_HEADER, MyFrame::OnUpdateToggleHeader)
 END_EVENT_TABLE()
 
 // My frame constructor
@@ -251,8 +255,11 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Append(LIST_THAW, wxT("Tha&w\tCtrl-W"));
     menuList->AppendSeparator();
     menuList->AppendCheckItem(LIST_TOGGLE_LINES, wxT("Toggle &lines\tCtrl-I"));
-    menuList->Append(LIST_TOGGLE_MULTI_SEL, wxT("&Multiple selection\tCtrl-M"),
-            wxT("Toggle multiple selection"), true);
+    menuList->AppendCheckItem(LIST_TOGGLE_MULTI_SEL,
+                              wxT("&Multiple selection\tCtrl-M"));
+    menuList->Check(LIST_TOGGLE_MULTI_SEL, true);
+    menuList->AppendCheckItem(LIST_TOGGLE_HEADER, "Toggle &header\tCtrl-H");
+    menuList->Check(LIST_TOGGLE_HEADER, true);
 
     wxMenu *menuCol = new wxMenu;
     menuCol->Append(LIST_SET_FG_COL, wxT("&Foreground colour..."));
@@ -352,6 +359,13 @@ void MyFrame::OnThaw(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToggleLines(wxCommandEvent& event)
 {
     m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
+}
+
+void MyFrame::OnToggleHeader(wxCommandEvent& event)
+{
+    wxLogMessage("%s the header", event.IsChecked() ? "Showing" : "Hiding");
+
+    m_listCtrl->ToggleWindowStyle(wxLC_NO_HEADER);
 }
 
 #ifdef __WXOSX__
@@ -778,7 +792,7 @@ void MyFrame::OnShowColInfo(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnUpdateShowColInfo(wxUpdateUIEvent& event)
+void MyFrame::OnUpdateUIEnableInReport(wxUpdateUIEvent& event)
 {
     event.Enable( (m_listCtrl->GetWindowStyleFlag() & wxLC_REPORT) != 0 );
 }
@@ -799,7 +813,12 @@ void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnUpdateToggleMultiSel(wxUpdateUIEvent& event)
 {
-     event.Check((m_listCtrl->GetWindowStyleFlag() & wxLC_SINGLE_SEL) == 0);
+     event.Check(!m_listCtrl->HasFlag(wxLC_SINGLE_SEL));
+}
+
+void MyFrame::OnUpdateToggleHeader(wxUpdateUIEvent& event)
+{
+    event.Check(!m_listCtrl->HasFlag(wxLC_NO_HEADER));
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))

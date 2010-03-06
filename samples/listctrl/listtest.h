@@ -146,13 +146,15 @@ protected:
     void OnFreeze(wxCommandEvent& event);
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
+    void OnToggleHeader(wxCommandEvent& event);
 #ifdef __WXOSX__
     void OnToggleMacUseGeneric(wxCommandEvent& event);
 #endif // __WXOSX__
     void OnFind(wxCommandEvent& event);
 
-    void OnUpdateShowColInfo(wxUpdateUIEvent& event);
+    void OnUpdateUIEnableInReport(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
+    void OnUpdateToggleHeader(wxUpdateUIEvent& event);
 
     wxImageList *m_imageListNormal;
     wxImageList *m_imageListSmall;
@@ -216,6 +218,7 @@ enum
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,
     LIST_TOGGLE_MULTI_SEL,
+    LIST_TOGGLE_HEADER,
     LIST_TOGGLE_FIRST,
     LIST_SHOW_COL_INFO,
     LIST_SHOW_SEL_INFO,

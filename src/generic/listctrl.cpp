@@ -4446,6 +4446,10 @@ void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 
 void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 {
+    // update the window style first so that the header is created or destroyed
+    // corresponding to the new style
+    wxWindow::SetWindowStyleFlag( flag );
+
     if (m_mainWin)
     {
         // m_mainWin->DeleteEverything();  wxMSW doesn't do that
@@ -4454,8 +4458,6 @@ void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 
         GetSizer()->Layout();
     }
-
-    wxWindow::SetWindowStyleFlag( flag );
 }
 
 bool wxGenericListCtrl::GetColumn(int col, wxListItem &item) const
