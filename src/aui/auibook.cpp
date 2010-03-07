@@ -4158,6 +4158,8 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
 
 void wxAuiNotebook::OnChildFocusNotebook(wxChildFocusEvent& evt)
 {
+    evt.Skip();
+
     // if we're dragging a tab, don't change the current selection.
     // This code prevents a bug that used to happen when the hint window
     // was hidden.  In the bug, the focus would return to the notebook
