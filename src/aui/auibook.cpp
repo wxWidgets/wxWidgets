@@ -728,7 +728,7 @@ void wxAuiDefaultTabArt::DrawButton(wxDC& dc,
 
 int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
                                      const wxAuiNotebookPageArray& pages,
-                                     int active_idx)
+                                     int /*active_idx*/)
 {
     wxMenu menuPopup;
 
@@ -743,12 +743,10 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
         if (caption.IsEmpty())
             caption = wxT(" ");
 
-        menuPopup.AppendCheckItem(1000+i, caption);
-    }
-
-    if (active_idx != -1)
-    {
-        menuPopup.Check(1000+active_idx, true);
+        wxMenuItem* item = new wxMenuItem(NULL, 1000+i, caption);
+        if (page.bitmap.IsOk())
+            item->SetBitmap(page.bitmap);
+        menuPopup.Append(item);
     }
 
     // find out where to put the popup menu of window items

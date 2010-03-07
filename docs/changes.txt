@@ -494,6 +494,7 @@ All (GUI):
 - Fix building with using system libpng 1.4 (Volker Grabsch).
 - Add wxComboBox::Popup() and Dismiss() methods (Igor Korot).
 - Added wxTreeCtrl::SelectChildren() (Nikolay Tjushkov).
+- Show pages icons in window list menu in wxAuiNotebook (Ronny Krüger).
 
 GTK:
 
