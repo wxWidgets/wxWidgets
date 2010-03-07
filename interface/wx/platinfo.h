@@ -12,7 +12,12 @@
     whose version can be detected at run-time.
 
     The values of the constants are chosen so that they can be combined as flags;
-    this allows to check for operating system families like e.g. wxOS_MAC and wxOS_UNIX.
+    this allows to check for operating system families like e.g. @c wxOS_MAC and @c wxOS_UNIX.
+    
+    Note that you can obtain more detailed informations about the current OS
+    version in use by checking the major and minor version numbers returned
+    by ::wxGetOsVersion() or by wxPlatformInfo::GetOSMajorVersion(), 
+    wxPlatformInfo::GetOSMinorVersion().
 */
 enum wxOperatingSystemId
 {
@@ -20,12 +25,16 @@ enum wxOperatingSystemId
 
     wxOS_MAC_OS         = 1 << 0,     //!< Apple Mac OS 8/9/X with Mac paths
     wxOS_MAC_OSX_DARWIN = 1 << 1,     //!< Apple Mac OS X with Unix paths
+    
+    //! A combination of all @c wxOS_MAC_* values previously listed.
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
     wxOS_WINDOWS_9X     = 1 << 2,     //!< Windows 9x family (95/98/ME)
-    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (NT/2000/XP)
+    wxOS_WINDOWS_NT     = 1 << 3,     //!< Windows NT family (NT/2000/XP/Vista/7)
     wxOS_WINDOWS_MICRO  = 1 << 4,     //!< MicroWindows
     wxOS_WINDOWS_CE     = 1 << 5,     //!< Windows CE (Window Mobile)
+    
+    //! A combination of all @c wxOS_WINDOWS_* values previously listed.
     wxOS_WINDOWS = wxOS_WINDOWS_9X       |
                     wxOS_WINDOWS_NT      |
                     wxOS_WINDOWS_MICRO   |
@@ -38,6 +47,8 @@ enum wxOperatingSystemId
     wxOS_UNIX_SOLARIS   = 1 << 10,      //!< SunOS
     wxOS_UNIX_AIX       = 1 << 11,      //!< AIX
     wxOS_UNIX_HPUX      = 1 << 12,      //!< HP/UX
+    
+    //! A combination of all @c wxOS_UNIX_* values previously listed.
     wxOS_UNIX = wxOS_UNIX_LINUX     |
                 wxOS_UNIX_FREEBSD   |
                 wxOS_UNIX_OPENBSD   |
@@ -354,6 +365,8 @@ public:
 
     /**
         Returns the operating system ID of this wxPlatformInfo instance.
+        
+        See wxGetOsVersion() for more info.
     */
     wxOperatingSystemId GetOperatingSystemId() const;
     

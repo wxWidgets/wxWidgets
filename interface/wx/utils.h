@@ -649,8 +649,34 @@ bool wxGetUserName(char* buf, int sz);
 wxString wxGetOsDescription();
 
 /**
-    Gets the version and the operating system ID for currently running OS. See
-    wxPlatformInfo for more details about wxOperatingSystemId.
+    Gets the version and the operating system ID for currently running OS. 
+    The returned wxOperatingSystemId value can be used for a basic categorization
+    of the OS family; the major and minor version numbers allows to detect a specific
+    system.
+    
+    For Unix-like systems (@c wxOS_UNIX) the major and minor version integers will 
+    contain the kernel major and minor version numbers (as returned by the
+    'uname -r' command); e.g. "2" and "6" if the machine is using kernel 2.6.19.
+
+    For Mac OS X systems (@c wxOS_MAC) the major and minor version integers are the
+    natural version numbers associated with the OS; e.g. "10" and and "6" if the machine
+    is using Mac OS X Snow Leopard.    
+    
+    For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 
+    contain the following values:
+    @beginTable
+    @row3col{<b>Windows OS name</b>, <b>Major version</b>, <b>Minor version</b>}
+    @row3col{Windows 7,                 6, 1}
+    @row3col{Windows Server 2008 R2,    6, 1}
+    @row3col{Windows Server 2008,       6, 0}
+    @row3col{Windows Vista,             6, 0}
+    @row3col{Windows Server 2003 R2,    5, 2}
+    @row3col{Windows Server 2003,       5, 2}
+    @row3col{Windows XP,                5, 1}
+    @row3col{Windows 2000,              5, 0}
+    @endDefList
+    See the <a href="http://msdn.microsoft.com/en-us/library/ms724832(VS.85).aspx">MSDN</a>
+    for more info about the values above.
 
     @see wxGetOsDescription(), wxPlatformInfo
 
