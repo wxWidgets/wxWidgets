@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets-2.8.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-24 09:56+0200\n"
-"PO-Revision-Date: 2010-03-06 16:12+0100\n"
+"PO-Revision-Date: 2010-03-07 20:02+0100\n"
 "Last-Translator: Herbert Breunung <lichtkind@cpan.org>\n"
 "Language-Team: wxWidgets Team <wx-dev@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
@@ -101,22 +101,22 @@ msgstr "#define %s muss eine Ganzzahl sein"
 #: ../src/common/filename.cpp:2377
 #, c-format
 msgid "%.*f GB"
-msgstr ""
+msgstr "%.*f GB"
 
 #: ../src/common/filename.cpp:2375
 #, c-format
 msgid "%.*f MB"
-msgstr ""
+msgstr "%.*f MB"
 
 #: ../src/common/filename.cpp:2379
 #, c-format
 msgid "%.*f TB"
-msgstr ""
+msgstr "%.*f TB"
 
 #: ../src/common/filename.cpp:2373
 #, c-format
 msgid "%.*f kB"
-msgstr ""
+msgstr "%.*f kB"
 
 #: ../src/html/helpwnd.cpp:1045
 #: ../src/html/helpwnd.cpp:1047
@@ -141,7 +141,7 @@ msgstr " %s (oder %s)"
 #: ../src/common/filename.cpp:2371
 #, c-format
 msgid "%s B"
-msgstr ""
+msgstr "%s B"
 
 #: ../src/generic/logg.cpp:265
 #, c-format
@@ -1212,7 +1212,7 @@ msgstr "ZURÜCK"
 
 #: ../src/common/fmapbase.cpp:152
 msgid "BIG5"
-msgstr ""
+msgstr "BIG5"
 
 #: ../src/common/imagbmp.cpp:474
 #: ../src/common/imagbmp.cpp:490
@@ -1262,7 +1262,7 @@ msgstr "Vor einem Absatz"
 #: ../src/richtext/richtextliststylepage.cpp:491
 #: ../src/richtext/richtextbulletspage.cpp:289
 msgid "Bitmap"
-msgstr ""
+msgstr "Bitmap"
 
 #: ../contrib/src/deprecated/resource.cpp:2534
 #, c-format
@@ -1672,9 +1672,10 @@ msgid "Cannot read typename from '%s'!"
 msgstr "Kann die Typnamen nicht aus '%s' lesen !"
 
 # ????
+# Regeln für die Zeitplanung von Threads 
 #: ../src/unix/threadpsx.cpp:1109
 msgid "Cannot retrieve thread scheduling policy."
-msgstr "Kann Regeln für die Zeitplanung von Threads nicht abrufen."
+msgstr "Kann Regeln für die Taktung der Threads nicht abrufen."
 
 #: ../src/unix/threadpsx.cpp:732
 msgid "Cannot start thread: error writing TLS"
@@ -3172,7 +3173,7 @@ msgstr "Schrift$dicke:"
 
 #: ../src/html/helpwnd.cpp:1216
 msgid "Font size:"
-msgstr "Font Größe:"
+msgstr "Schriftgröße:"
 
 #: ../src/richtext/richtextfontpage.cpp:174
 msgid "Font st&yle:"
@@ -3212,7 +3213,7 @@ msgstr "Von:"
 
 #: ../src/common/fmapbase.cpp:154
 msgid "GB-2312"
-msgstr ""
+msgstr "GB-2312"
 
 #: ../src/common/imaggif.cpp:80
 msgid "GIF: Invalid gif index."
@@ -3704,99 +3705,99 @@ msgstr "KOI8-U"
 #: ../src/common/menucmn.cpp:267
 #: ../src/common/menucmn.cpp:325
 msgid "KP_"
-msgstr ""
+msgstr "Num_"
 
 #: ../src/common/menucmn.cpp:121
 msgid "KP_ADD"
-msgstr ""
+msgstr "Num_Plus"
 
 #: ../src/common/menucmn.cpp:116
 msgid "KP_BEGIN"
-msgstr ""
+msgstr "Num_Anfang"
 
 #: ../src/common/menucmn.cpp:124
 msgid "KP_DECIMAL"
-msgstr ""
+msgstr "Num_Dezimal"
 
 #: ../src/common/menucmn.cpp:118
 msgid "KP_DELETE"
-msgstr ""
+msgstr "Num_Entf"
 
 #: ../src/common/menucmn.cpp:125
 msgid "KP_DIVIDE"
-msgstr ""
+msgstr "Num_Division"
 
 #: ../src/common/menucmn.cpp:110
 msgid "KP_DOWN"
-msgstr ""
+msgstr "Num_Runter"
 
 #: ../src/common/menucmn.cpp:115
 msgid "KP_END"
-msgstr ""
+msgstr "Num_Ende"
 
 #: ../src/common/menucmn.cpp:105
 msgid "KP_ENTER"
-msgstr ""
+msgstr "Num_Eingabe"
 
 #: ../src/common/menucmn.cpp:119
 msgid "KP_EQUAL"
-msgstr ""
+msgstr "Num_Gleich"
 
 #: ../src/common/menucmn.cpp:106
 msgid "KP_HOME"
-msgstr ""
+msgstr "Num_Pos 1"
 
 #: ../src/common/menucmn.cpp:117
 msgid "KP_INSERT"
-msgstr ""
+msgstr "Num_Einfg"
 
 #: ../src/common/menucmn.cpp:107
 msgid "KP_LEFT"
-msgstr ""
+msgstr "Num_Links"
 
 #: ../src/common/menucmn.cpp:120
 msgid "KP_MULTIPLY"
-msgstr ""
+msgstr "Num_Mal"
 
 #: ../src/common/menucmn.cpp:113
 msgid "KP_NEXT"
-msgstr ""
+msgstr "Num_Nächster"
 
 #: ../src/common/menucmn.cpp:114
 msgid "KP_PAGEDOWN"
-msgstr ""
+msgstr "Num_Bild Runter"
 
 #: ../src/common/menucmn.cpp:112
 msgid "KP_PAGEUP"
-msgstr ""
+msgstr "Num_Bild Hoch"
 
 #: ../src/common/menucmn.cpp:111
 msgid "KP_PRIOR"
-msgstr ""
+msgstr "Num_Voriger"
 
 #: ../src/common/menucmn.cpp:109
 msgid "KP_RIGHT"
-msgstr ""
+msgstr "Num_Rechts"
 
 #: ../src/common/menucmn.cpp:122
 msgid "KP_SEPARATOR"
-msgstr ""
+msgstr "Num_Trennzeichen"
 
 #: ../src/common/menucmn.cpp:103
 msgid "KP_SPACE"
-msgstr ""
+msgstr "Num_Leertaste"
 
 #: ../src/common/menucmn.cpp:123
 msgid "KP_SUBTRACT"
-msgstr ""
+msgstr "Num_Minus"
 
 #: ../src/common/menucmn.cpp:104
 msgid "KP_TAB"
-msgstr ""
+msgstr "Num_Tab"
 
 #: ../src/common/menucmn.cpp:108
 msgid "KP_UP"
-msgstr ""
+msgstr "Num_Hoch"
 
 #: ../src/richtext/richtextindentspage.cpp:307
 msgid "L&ine spacing:"
@@ -4024,7 +4025,7 @@ msgstr "Nach oben"
 
 #: ../src/common/menucmn.cpp:99
 msgid "NUM_LOCK"
-msgstr ""
+msgstr "Num_LOCK"
 
 #: ../src/generic/filedlgg.cpp:506
 msgid "Name"
@@ -4833,7 +4834,7 @@ msgstr "TRENNER"
 
 #: ../src/common/fmapbase.cpp:153
 msgid "SHIFT-JIS"
-msgstr ""
+msgstr "Shift-JIS"
 
 #: ../src/common/menucmn.cpp:92
 msgid "SNAPSHOT"
@@ -4850,7 +4851,7 @@ msgstr "SPEZIAL"
 
 #: ../src/common/menucmn.cpp:96
 msgid "SUBTRACT"
-msgstr ""
+msgstr "Subtrahieren"
 
 #: ../src/common/sizer.cpp:2093
 msgid "Save"
@@ -5850,15 +5851,15 @@ msgstr "Darstellung"
 
 #: ../src/common/menucmn.cpp:126
 msgid "WINDOWS_LEFT"
-msgstr ""
+msgstr "WINDOWS_LINKS"
 
 #: ../src/common/menucmn.cpp:128
 msgid "WINDOWS_MENU"
-msgstr ""
+msgstr "WINDOWS_MENÜ"
 
 #: ../src/common/menucmn.cpp:127
 msgid "WINDOWS_RIGHT"
-msgstr ""
+msgstr "WINDOWS_RECHTS"
 
 #: ../src/unix/baseunix.cpp:78
 msgid "Waiting for subprocess termination failed"
@@ -6820,21 +6821,21 @@ msgstr "wxGetTimeOfDay gescheitert."
 
 #: ../include/wx/richtext/richtextbulletspage.h:34
 msgid "wxRichTextBulletsPage"
-msgstr ""
+msgstr "wxRichTextBulletsPage"
 
 #: ../include/wx/richtext/richtextindentspage.h:37
 #: ../include/wx/richtext/richtextfontpage.h:38
 #: ../include/wx/richtext/richtexttabspage.h:35
 msgid "wxRichTextFontPage"
-msgstr ""
+msgstr "wxRichTextFontPage"
 
 #: ../include/wx/richtext/richtextliststylepage.h:31
 msgid "wxRichTextListStylePage"
-msgstr ""
+msgstr "wxRichTextListStylePage"
 
 #: ../include/wx/richtext/richtextstylepage.h:21
 msgid "wxRichTextStylePage"
-msgstr ""
+msgstr "wxRichTextStylePage"
 
 #: ../src/common/socket.cpp:412
 #: ../src/common/socket.cpp:466
