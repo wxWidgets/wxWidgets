@@ -44,7 +44,13 @@
     #define wxTLS_PTR(var) (&(var))
     #define wxTLS_VALUE(var) (var)
 #else // !wxHAS_COMPILER_TLS
-    #ifdef __WXMSW__
+
+    extern "C"
+    {
+        typedef void (*wxTlsDestructorFunction)(void*);
+    }
+
+    #if defined(__WXMSW__)
         #include "wx/msw/tls.h"
     #elif defined(__OS2__)
         #include "wx/os2/tls.h"
@@ -60,6 +66,14 @@
     // wxTlsValue<T> represents a thread-specific value of type T but, unlike
     // with native compiler thread-specific variables, it behaves like a
     // (never NULL) pointer to T and so needs to be dereferenced before use
+    //
+    // Note: T must be a POD!
+    //
+    // Note: On Unix, thread-specific T value is freed when the thread exits.
+    //       On Windows, thread-specific values are freed later, when given
+    //       wxTlsValue<T> is destroyed.  The only exception to this is the
+    //       value for the main thread, which is always freed when
+    //       wxTlsValue<T> is destroyed.
     template <typename T>
     class wxTlsValue
     {
@@ -67,32 +81,17 @@
         typedef T ValueType;
 
         // ctor doesn't do anything, the object is created on first access
-        //
-        // FIXME: the thread-specific values are currently not freed under
-        //        Windows, resulting in memory leaks, this must be implemented
-        //        there somehow (probably by keeping a list of all TLS objects
-        //        and cleaning them up in wxThread cleanup)
-        wxTlsValue()
-#if !defined(__OS2__) && defined(__UNIX__)
-            : m_key(free)
-#endif
-        {
-        }
+        wxTlsValue() : m_key(free) {}
 
         // dtor is only called in the main thread context and so is not enough
         // to free memory allocated by us for the other threads, we use
         // destructor function when using Pthreads for this (which is not
         // called for the main thread as it doesn't call pthread_exit() but
-        // just to be safe we also reset the key anyhow) and simply leak the
-        // memory under Windows (see the FIXME above)
+        // just to be safe we also reset the key anyhow)
         ~wxTlsValue()
         {
-            void * const value = m_key.Get();
-            if ( value)
-            {
-                free(value);
-                m_key.Set(NULL);
-            }
+            if ( m_key.Get() )
+                m_key.Set(NULL); // this deletes the value
         }
 
         // access the object creating it on demand
