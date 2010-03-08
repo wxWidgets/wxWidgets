@@ -48,10 +48,12 @@ bool wxGenericFileDirButton::Create(wxWindow *parent,
                                     const wxString& wildcard,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     const wxValidator& validator,
                                     const wxString& name)
 {
+    m_pickerStyle = style;
+
     // create this button
     if ( !wxButton::Create(parent, id, label, pos, size, 0, validator, name) )
     {

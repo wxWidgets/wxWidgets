@@ -77,6 +77,11 @@ public:
 
 protected:
     wxString m_message, m_wildcard;
+
+    // we just store the style passed to the ctor here instead of passing it to
+    // wxButton as some of our bits can conflict with wxButton styles and it
+    // just doesn't make sense to use picker styles for wxButton anyhow
+    long m_pickerStyle;
 };
 
 
@@ -112,15 +117,15 @@ public:     // overrideable
     {
         long filedlgstyle = 0;
 
-        if (this->HasFlag(wxFLP_OPEN))
+        if ( m_pickerStyle & wxFLP_OPEN )
             filedlgstyle |= wxFD_OPEN;
-        if (this->HasFlag(wxFLP_SAVE))
+        if ( m_pickerStyle & wxFLP_SAVE )
             filedlgstyle |= wxFD_SAVE;
-        if (this->HasFlag(wxFLP_OVERWRITE_PROMPT))
+        if ( m_pickerStyle & wxFLP_OVERWRITE_PROMPT )
             filedlgstyle |= wxFD_OVERWRITE_PROMPT;
-        if (this->HasFlag(wxFLP_FILE_MUST_EXIST))
+        if ( m_pickerStyle & wxFLP_FILE_MUST_EXIST )
             filedlgstyle |= wxFD_FILE_MUST_EXIST;
-        if (this->HasFlag(wxFLP_CHANGE_DIR))
+        if ( m_pickerStyle & wxFLP_CHANGE_DIR )
             filedlgstyle |= wxFD_CHANGE_DIR;
 
         return filedlgstyle;
@@ -182,9 +187,9 @@ public:     // overrideable
     {
         long dirdlgstyle = wxDD_DEFAULT_STYLE;
 
-        if (this->HasFlag(wxDIRP_DIR_MUST_EXIST))
+        if ( m_pickerStyle & wxDIRP_DIR_MUST_EXIST )
             dirdlgstyle |= wxDD_DIR_MUST_EXIST;
-        if (this->HasFlag(wxDIRP_CHANGE_DIR))
+        if ( m_pickerStyle & wxDIRP_CHANGE_DIR )
             dirdlgstyle |= wxDD_CHANGE_DIR;
 
         return dirdlgstyle;
