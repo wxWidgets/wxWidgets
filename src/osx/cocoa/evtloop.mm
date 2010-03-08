@@ -99,13 +99,21 @@ CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
 
 bool wxGUIEventLoop::Pending() const
 {
+#if 0
+    // this code doesn't reliably detect pending events
+    // so better return true and have the dispatch deal with it
+    // as otherwise we end up in a tight loop when idle events are responded
+    // to by RequestMore(true)
     wxMacAutoreleasePool autoreleasepool;
-    // a pointer to the event is returned if there is one, or nil if not
+  
     return [[NSApplication sharedApplication]
             nextEventMatchingMask: NSAnyEventMask
             untilDate: nil
             inMode: NSDefaultRunLoopMode
-            dequeue: NO];
+            dequeue: NO] != nil;
+#else
+    return true;
+#endif
 }
 
 bool wxGUIEventLoop::Dispatch()
