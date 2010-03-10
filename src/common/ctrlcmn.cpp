@@ -233,14 +233,14 @@ wxControlBase::GetCompositeControlsDefaultAttributes(wxWindowVariant WXUNUSED(va
 // wxControlBase - ellipsization code
 // ----------------------------------------------------------------------------
 
-#define wxELLIPSE_REPLACEMENT       wxT("...")
+#define wxELLIPSE_REPLACEMENT       wxS("...")
 
 /* static and protected */
 wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
-                                              wxEllipsizeMode mode, int maxFinalWidth,
-                                              int replacementWidth, int marginWidth)
+                                              wxEllipsizeMode mode, int maxFinalWidthPx,
+                                              int replacementWidthPx, int marginWidthPx)
 {
-    wxASSERT_MSG(replacementWidth > 0 && marginWidth > 0,
+    wxASSERT_MSG(replacementWidthPx > 0 && marginWidthPx > 0,
                  "Invalid parameters");
     wxASSERT_MSG(!curLine.Contains('\n'),
                  "Use Ellipsize() instead!");
@@ -250,81 +250,81 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     // NOTE: this function assumes that any mnemonic/tab character has already
     //       been handled if it was necessary to handle them (see Ellipsize())
 
-    if (maxFinalWidth <= 0)
+    if (maxFinalWidthPx <= 0)
         return wxEmptyString;
 
-    wxArrayInt charOffsets;
+    wxArrayInt charOffsetsPx;
     size_t len = curLine.length();
     if (len == 0 ||
-        !dc.GetPartialTextExtents(curLine, charOffsets))
+        !dc.GetPartialTextExtents(curLine, charOffsetsPx))
         return curLine;
 
-    wxASSERT(charOffsets.GetCount() == len);
+    wxASSERT(charOffsetsPx.GetCount() == len);
 
-    size_t totalWidth = charOffsets.Last();
-    if ( totalWidth <= (size_t)maxFinalWidth )
+    size_t totalWidthPx = charOffsetsPx.Last();
+    if ( totalWidthPx <= (size_t)maxFinalWidthPx )
         return curLine;     // we don't need to do any ellipsization!
 
-    int excessPixels = totalWidth - maxFinalWidth +
-                       replacementWidth +
-                       marginWidth;     // security margin (NEEDED!)
-    wxASSERT(excessPixels>0);
+    int excessPx = totalWidthPx - maxFinalWidthPx +
+                   replacementWidthPx +
+                   marginWidthPx;     // security margin (NEEDED!)
+    wxASSERT(excessPx>0);
 
     // remove characters in excess
-    size_t initialChar,     // index of first char to erase
-           nChars;          // how many chars do we need to erase?
+    size_t initialCharToRemove,     // index of first char to erase
+           nCharsToRemove;          // how many chars do we need to erase?
 
     switch (mode)
     {
         case wxELLIPSIZE_START:
-            initialChar = 0;
-            for ( nChars=0;
-                  nChars < len && charOffsets[nChars] < excessPixels;
-                  nChars++ )
+            initialCharToRemove = 0;
+            for ( nCharsToRemove=0;
+                  nCharsToRemove < len && charOffsetsPx[nCharsToRemove] < excessPx;
+                  nCharsToRemove++ )
                 ;
             break;
 
         case wxELLIPSIZE_MIDDLE:
             {
                 // the start & end of the removed span of chars
-                initialChar = len/2;
+                initialCharToRemove = len/2;
                 size_t endChar = len/2;
 
-                int removed = 0;
-                for ( ; removed < excessPixels; )
+                int removedPx = 0;
+                for ( ; removedPx < excessPx; )
                 {
-                    if (initialChar > 0)
+                    if (initialCharToRemove > 0)
                     {
-                        // width of the initialChar-th character
-                        int width = charOffsets[initialChar] -
-                                    charOffsets[initialChar-1];
+                        // widthPx of the initialCharToRemove-th character
+                        int widthPx = charOffsetsPx[initialCharToRemove] -
+                                      charOffsetsPx[initialCharToRemove-1];
 
-                        // remove the initialChar-th character
-                        removed += width;
-                        initialChar--;
+                        // remove the initialCharToRemove-th character
+                        removedPx += widthPx;
+                        initialCharToRemove--;
                     }
 
                     if (endChar < len - 1 &&
-                        removed < excessPixels)
+                        removedPx < excessPx)
                     {
-                        // width of the (endChar+1)-th character
-                        int width = charOffsets[endChar+1] -
-                                    charOffsets[endChar];
+                        // widthPx of the (endChar+1)-th character
+                        int widthPx = charOffsetsPx[endChar+1] -
+                                      charOffsetsPx[endChar];
 
                         // remove the endChar-th character
-                        removed += width;
+                        removedPx += widthPx;
                         endChar++;
                     }
 
-                    if (initialChar == 0 && endChar == len-1)
+                    if (initialCharToRemove == 0 && endChar == len-1)
                     {
-                        nChars = len+1;
+                        nCharsToRemove = len+1;
                         break;
                     }
                 }
 
-                initialChar++;
-                nChars = endChar - initialChar + 1;
+                initialCharToRemove++;
+                nCharsToRemove = endChar - initialCharToRemove + 1;
             }
             break;
 
@@ -332,20 +332,20 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
             {
                 wxASSERT(len > 0);
 
-                int maxWidth = totalWidth - excessPixels;
-                for ( initialChar = 0;
-                      initialChar < len && charOffsets[initialChar] < maxWidth;
-                      initialChar++ )
+                int maxWidthPx = totalWidthPx - excessPx;
+                for ( initialCharToRemove = 0;
+                      initialCharToRemove < len && charOffsetsPx[initialCharToRemove] < maxWidthPx;
+                      initialCharToRemove++ )
                     ;
 
-                if (initialChar == 0)
+                if (initialCharToRemove == 0)
                 {
-                    nChars = len;
+                    nCharsToRemove = len;
                 }
                 else
                 {
-                    //initialChar--;      // go back one character
-                    nChars = len - initialChar;
+                    //initialCharToRemove--;      // go back one character
+                    nCharsToRemove = len - initialCharToRemove;
                 }
             }
             break;
@@ -357,24 +357,24 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     }
 
     wxString ret(curLine);
-    if (nChars >= len)
+    if (nCharsToRemove >= len)
     {
         // need to remove the entire row!
         ret.clear();
     }
     else
     {
-        // erase nChars characters after initialChar (included):
-        ret.erase(initialChar, nChars+1);
+        // erase nCharsToRemove characters after initialCharToRemove (included):
+        ret.erase(initialCharToRemove, nCharsToRemove+1);
 
         // if there is space for the replacement dots, add them
-        if (maxFinalWidth > replacementWidth)
-            ret.insert(initialChar, wxELLIPSE_REPLACEMENT);
+        if (maxFinalWidthPx > replacementWidthPx)
+            ret.insert(initialCharToRemove, wxELLIPSE_REPLACEMENT);
     }
 
     // if everything was ok, we should have shortened this line
-    // enough to make it fit in maxFinalWidth:
-    wxASSERT(dc.GetTextExtent(ret).GetWidth() < maxFinalWidth);
+    // enough to make it fit in maxFinalWidthPx:
+    wxASSERT(dc.GetTextExtent(ret).GetWidth() < maxFinalWidthPx);
 
     return ret;
 }
