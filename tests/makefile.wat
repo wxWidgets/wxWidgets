@@ -359,6 +359,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj &
 	$(OBJS)\test_gui_colour.obj &
+	$(OBJS)\test_gui_ellipsization.obj &
 	$(OBJS)\test_gui_measuring.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_comboboxtest.obj &
@@ -662,6 +663,9 @@ $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_colour.obj :  .AUTODEPEND .\graphics\colour.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_ellipsization.obj :  .AUTODEPEND .\graphics\ellipsization.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_measuring.obj :  .AUTODEPEND .\graphics\measuring.cpp

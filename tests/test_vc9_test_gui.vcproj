@@ -888,6 +888,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\graphics\ellipsization.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\font\fonttest.cpp"
 				>
 			</File>

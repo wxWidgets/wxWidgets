@@ -261,6 +261,10 @@ SOURCE=.\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\ellipsization.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\font\fonttest.cpp
 # End Source File
 # Begin Source File

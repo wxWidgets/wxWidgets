@@ -96,6 +96,10 @@ public:
     /**
         Replaces parts of the @a label string with ellipsis, if needed, so
         that it doesn't exceed @a maxWidth.
+        
+        Note that this functions is guaranteed to always returns a string
+        whose rendering on the given DC takes less than @a maxWidth pixels
+        in horizontal.
 
         @param label
             The string to ellipsize
@@ -103,11 +107,15 @@ public:
             The DC used to retrieve the character widths through the
             wxDC::GetPartialTextExtents() function.
         @param mode
-            The ellipsization modes. See ::wxEllipsizeMode.
+            The ellipsization mode. This is the setting which determines
+            which part of the string should be replaced by the ellipsis.
+            See ::wxEllipsizeMode enumeration values for more info.
         @param maxWidth
             The maximum width of the returned string in pixels.
+            This argument determines how much characters of the string need to
+            be removed (and replaced by ellipsis).
         @param flags
-            One or more of the ::wxEllipsize
+            One or more of the ::wxEllipsizeFlags enumeration values combined.
     */
     static wxString Ellipsize(const wxString& label, const wxDC& dc,
                               wxEllipsizeMode mode, int maxWidth,

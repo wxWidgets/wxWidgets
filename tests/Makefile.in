@@ -136,6 +136,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_size.o \
 	test_gui_point.o \
 	test_gui_colour.o \
+	test_gui_ellipsization.o \
 	test_gui_measuring.o \
 	test_gui_config.o \
 	test_gui_comboboxtest.o \
@@ -572,6 +573,9 @@ test_gui_point.o: $(srcdir)/geometry/point.cpp $(TEST_GUI_ODEP)
 
 test_gui_colour.o: $(srcdir)/graphics/colour.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/colour.cpp
+
+test_gui_ellipsization.o: $(srcdir)/graphics/ellipsization.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/ellipsization.cpp
 
 test_gui_measuring.o: $(srcdir)/graphics/measuring.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/graphics/measuring.cpp

@@ -117,6 +117,7 @@
             geometry/size.cpp
             geometry/point.cpp
             graphics/colour.cpp
+            graphics/ellipsization.cpp
             graphics/measuring.cpp
             config/config.cpp
             controls/comboboxtest.cpp
