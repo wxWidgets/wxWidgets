@@ -501,6 +501,7 @@ GTK:
 - wxRadioBox constructor uses default consistent with other ports now.
 - Partially implemented wxTextCtrl::GetStyle() (Igor Romanov).
 - Corrected themed border display.
+- Fix wxClipboard::GetData() for asymmetric wxDataObjects (Timothy Lee).
 
 Mac:
 
