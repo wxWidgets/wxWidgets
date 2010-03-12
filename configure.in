@@ -184,6 +184,11 @@ case "${host}" in
     AC_DEFINE(__SVR4__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
+  *-*-qnx*)
+    USE_QNX=1
+    AC_DEFINE(__QNX__)
+    DEFAULT_DEFAULT_wxUSE_X11=1
+  ;;
   *-*-solaris2* )
     USE_SUN=1
     USE_SOLARIS=1
@@ -4921,6 +4926,12 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 fi
                 ;;
 
+          *-*-qnx*)
+                dnl under QNX thread functions are in libc so we don't need any
+                dnl special options to link with them
+                THREAD_OPTS=""
+                ;;
+
           *-*-*UnixWare*)
                 dnl flying by man pages here: Caldera online docs use this
                 if test "x$GCC" != "xyes"; then
@@ -4929,10 +4940,22 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                 ;;
         esac
 
-        dnl simply linking with libpthread should make the test below work but
-        dnl it's far from certain that the threaded programs compiled without
-        dnl any special switches actually work, so try it after all the others
-        THREAD_OPTS="$THREAD_OPTS pthread none"
+        case "${host}" in
+            *-*-qnx*)
+                dnl -lpthread works, i.e. AC_TRY_LINK() would pass, but results
+                dnl in warnings and is not needed under QNX so try without it
+                dnl first
+                THREAD_OPTS="none pthread"
+                ;;
+
+            *)
+                dnl simply linking with libpthread should make the test below
+                dnl work but it's far from certain that the threaded programs
+                dnl compiled without any special switches actually work, so try
+                dnl it after all the others
+                THREAD_OPTS="$THREAD_OPTS pthread none"
+                ;;
+        esac
 
         dnl now test for all possibilities
         THREADS_OK=no

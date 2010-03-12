@@ -2698,6 +2698,14 @@ _ACEOF
 
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
   ;;
+  *-*-qnx*)
+    USE_QNX=1
+    cat >>confdefs.h <<\_ACEOF
+#define __QNX__ 1
+_ACEOF
+
+    DEFAULT_DEFAULT_wxUSE_X11=1
+  ;;
   *-*-solaris2* )
     USE_SUN=1
     USE_SOLARIS=1
@@ -39480,6 +39488,10 @@ echo "$as_me: WARNING: BeOS threads are not yet supported... disabled" >&2;}
                 fi
                 ;;
 
+          *-*-qnx*)
+                                                THREAD_OPTS=""
+                ;;
+
           *-*-*UnixWare*)
                                 if test "x$GCC" != "xyes"; then
                     THREAD_OPTS="-Ethread"
@@ -39487,7 +39499,15 @@ echo "$as_me: WARNING: BeOS threads are not yet supported... disabled" >&2;}
                 ;;
         esac
 
-                                THREAD_OPTS="$THREAD_OPTS pthread none"
+        case "${host}" in
+            *-*-qnx*)
+                                                                THREAD_OPTS="none pthread"
+                ;;
+
+            *)
+                                                                                THREAD_OPTS="$THREAD_OPTS pthread none"
+                ;;
+        esac
 
                 THREADS_OK=no
         for flag in $THREAD_OPTS; do

@@ -97,6 +97,7 @@
 #undef __NETBSD__
 #undef __OPENBSD__
 #undef __OSF__
+#undef __QNX__
 #undef __SGI__
 #undef __SOLARIS__
 #undef __SUN__

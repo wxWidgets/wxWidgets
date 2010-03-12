@@ -103,6 +103,7 @@ symbols, although this has not always been followed.
 @itemdef{__LINUX__, Linux}
 @itemdef{__MACH__, Mach-O Architecture (Mac OS X only builds)}
 @itemdef{__OSF__, OSF/1}
+@itemdef{__QNX__, QNX Neutrino RTOS}
 @itemdef{__PALMOS__, PalmOS}
 @itemdef{__SGI__, IRIX}
 @itemdef{__SOLARIS__, Solaris}
