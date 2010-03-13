@@ -43,6 +43,18 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// IDs for the controls and the menu commands
+enum
+{
+    // menu items
+    TheButton = 100,
+    RunSimulation
+};
+
+// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -69,21 +81,14 @@ public:
 private:
     bool m_buttonPressed;
     bool m_menuSelected;
+
+    DECLARE_EVENT_TABLE()
 };
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// IDs for the controls and the menu commands
-enum
-{
-    // menu items
-    TheButton = wxID_ANY,
-    RunSimulation = wxID_ANY
-};
-
-IMPLEMENT_APP(MyApp)
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_BUTTON(TheButton, MyFrame::OnButtonPressed)
+    EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
+END_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -92,6 +97,8 @@ IMPLEMENT_APP(MyApp)
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
@@ -134,8 +141,6 @@ MyFrame::MyFrame(const wxString& title)
 
     wxButton* button = new wxButton(this, TheButton, "Button");
     button->SetName("TheButton");
-    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MyFrame::OnButtonPressed, this, button->GetId());
-    Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnRunSimulation, this, RunSimulation);
 }
 
 
