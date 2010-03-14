@@ -3580,14 +3580,21 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
     GetViewStart(&vx, &vy);
     vy *= wxPG_PIXELS_PER_UNIT;
 
-    // TODO: If custom image detection changes from current, change this.
-    if ( m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE )
+    if ( column == 1 )
     {
-        //m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
-        int iw = p->OnMeasureImage().x;
-        if ( iw < 1 )
-            iw = wxPG_CUSTOM_IMAGE_WIDTH;
-        imageOffset = p->GetImageOffset(iw);
+        // TODO: If custom image detection changes from current, change this.
+        if ( m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE )
+        {
+            //m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
+            int iw = p->OnMeasureImage().x;
+            if ( iw < 1 )
+                iw = wxPG_CUSTOM_IMAGE_WIDTH;
+            imageOffset = p->GetImageOffset(iw);
+        }
+    }
+    else if ( column == 0 )
+    {
+        splitterX += (p->m_depth - 1) * m_subgroup_extramargin;
     }
 
     return wxRect
