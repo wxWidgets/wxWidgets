@@ -2589,15 +2589,24 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
 
 
     // icon choice
-    const wxString icons[] = {
-        "&None", "&Information", "&Question", "&Warning", "&Error"
+    const wxString icons[] =
+    {
+        "&Not specified",
+        "E&xplicitly none",
+        "&Information icon",
+        "&Question icon",
+        "&Warning icon",
+        "&Error icon"
     };
 
-    m_icons = new wxRadioBox(this, wxID_ANY, "&Icons",
+    wxCOMPILE_TIME_ASSERT( WXSIZEOF(icons) == MsgDlgIcon_Max, IconMismatch );
+
+    m_icons = new wxRadioBox(this, wxID_ANY, "&Icon style",
                              wxDefaultPosition, wxDefaultSize,
-                             WXSIZEOF(icons), icons);
+                             WXSIZEOF(icons), icons,
+                             2, wxRA_SPECIFY_ROWS);
     // Make the 'Information' icon the default one:
-    m_icons->SetSelection(1);
+    m_icons->SetSelection(MsgDlgIcon_Info);
     sizerTop->Add(m_icons, wxSizerFlags().Expand().Border());
 
 
@@ -2658,11 +2667,31 @@ void TestMessageBoxDialog::OnApply(wxCommandEvent& WXUNUSED(event))
 
     switch ( m_icons->GetSelection() )
     {
-        case 0: style |= wxICON_NONE; break;
-        case 1: style |= wxICON_INFORMATION; break;
-        case 2: style |= wxICON_QUESTION; break;
-        case 3: style |= wxICON_WARNING; break;
-        case 4: style |= wxICON_ERROR; break;
+        case MsgDlgIcon_Max:
+            wxFAIL_MSG( "unexpected selection" );
+
+        case MsgDlgIcon_No:
+            break;
+
+        case MsgDlgIcon_None:
+            style |= wxICON_NONE;
+            break;
+
+        case MsgDlgIcon_Info:
+            style |= wxICON_INFORMATION;
+            break;
+
+        case MsgDlgIcon_Question:
+            style |= wxICON_QUESTION;
+            break;
+
+        case MsgDlgIcon_Warning:
+            style |= wxICON_WARNING;
+            break;
+
+        case MsgDlgIcon_Error:
+            style |= wxICON_ERROR;
+            break;
     }
 
     if ( m_chkCentre->IsChecked() )

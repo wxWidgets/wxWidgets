@@ -214,6 +214,17 @@ private:
 
     static const BtnInfo ms_btnInfo[Btn_Max];
 
+    enum
+    {
+        MsgDlgIcon_No,
+        MsgDlgIcon_None,
+        MsgDlgIcon_Info,
+        MsgDlgIcon_Question,
+        MsgDlgIcon_Warning,
+        MsgDlgIcon_Error,
+        MsgDlgIcon_Max
+    };
+
     wxTextCtrl *m_textMsg,
                *m_textExtMsg;
 
