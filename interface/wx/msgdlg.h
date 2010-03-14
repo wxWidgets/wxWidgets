@@ -19,8 +19,9 @@
         Puts a Cancel button in the message box. Must be combined with
         either @c wxOK or @c wxYES_NO.
     @style{wxYES_NO}
-        Puts Yes and No buttons in the message box. May be combined with
-        @c wxCANCEL.
+        Puts Yes and No buttons in the message box. It is recommended to always
+        use @c wxCANCEL with this style as otherwise the message box won't have
+        a close button under wxMSW and the user will be forced to answer it.
     @style{wxNO_DEFAULT}
         Makes the "No" button default, can only be used with @c wxYES_NO.
     @style{wxCANCEL_DEFAULT}
