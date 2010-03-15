@@ -13,7 +13,8 @@
 #ifndef _WX_OSX_EVTLOOP_H_
 #define _WX_OSX_EVTLOOP_H_
 
-typedef struct __CFRunLoop * CFRunLoopRef;
+DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoop );
+DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopObserver );
 
 class WXDLLIMPEXP_BASE wxCFEventLoop : public wxEventLoopBase
 {
@@ -28,7 +29,7 @@ public:
     // sets the "should exit" flag and wakes up the loop so that it terminates
     // soon
     virtual void Exit(int rc = 0);
-
+    
     // return true if any events are available
     virtual bool Pending() const;
     
@@ -51,19 +52,22 @@ public:
       AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
 
+    void ObserverCallBack(CFRunLoopObserverRef observer, int activity);
+
 protected:
     // get the currently executing CFRunLoop
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 
     virtual int DoDispatchTimeout(unsigned long timeout);
 
-    double m_sleepTime;
-
     // should we exit the loop?
     bool m_shouldExit;
 
     // the loop exit code
     int m_exitcode;
+    
+    // runloop observer
+    CFRunLoopObserverRef m_runLoopObserver;
 
 private:
     // process all already pending events and dispatch a new one (blocking
@@ -71,6 +75,7 @@ private:
     //
     // returns the return value of DoDispatchTimeout()
     int DoProcessEvents();
+
 };
 
 #if wxUSE_GUI

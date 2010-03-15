@@ -142,10 +142,55 @@ wxCFEventLoop::AddSourceForFD(int WXUNUSED(fd),
 
 #endif // wxUSE_EVENTLOOP_SOURCE
 
+void wxObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
+{
+    wxCFEventLoop * eventloop = static_cast<wxCFEventLoop *>(info);
+    if ( eventloop )
+        eventloop->ObserverCallBack(observer, activity);
+}        
+
+void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity)
+{
+    if ( activity & kCFRunLoopBeforeTimers )
+    {
+        // process pending wx events first as they correspond to low-level events
+        // which happened before, i.e. typically pending events were queued by a
+        // previous call to Dispatch() and if we didn't process them now the next
+        // call to it might enqueue them again (as happens with e.g. socket events
+        // which would be generated as long as there is input available on socket
+        // and this input is only removed from it when pending event handlers are
+        // executed)
+
+        if ( wxTheApp )
+            wxTheApp->ProcessPendingEvents();
+    }
+    
+    if ( activity & kCFRunLoopBeforeWaiting )
+    {
+        if ( ProcessIdle() )
+        {
+            WakeUp();
+        }
+        else
+        {
+#if wxUSE_THREADS
+            wxMutexGuiLeave();
+            wxMilliSleep(20);
+            wxMutexGuiEnter();
+#endif
+        }
+    }
+}
+
 wxCFEventLoop::wxCFEventLoop()
 {
     m_shouldExit = false;
-    m_sleepTime = 0.0;
+    CFRunLoopObserverContext ctxt;
+    bzero( &ctxt, sizeof(ctxt) );
+    ctxt.info = this;
+    m_runLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0, 
+                                                wxObserverCallBack, &ctxt );
+    CFRunLoopAddObserver(CFGetCurrentRunLoop(), m_runLoopObserver, kCFRunLoopDefaultMode);
 }
 
 wxCFEventLoop::~wxCFEventLoop()
@@ -155,7 +200,7 @@ wxCFEventLoop::~wxCFEventLoop()
 
 CFRunLoopRef wxCFEventLoop::CFGetCurrentRunLoop() const
 {
-    return CFGetCurrentRunLoop();
+    return CFRunLoopGetCurrent();
 }
 
 void wxCFEventLoop::WakeUp()
@@ -214,22 +259,12 @@ bool wxCFEventLoop::Pending() const
 
 int wxCFEventLoop::DoProcessEvents()
 {
-    // process pending wx events first as they correspond to low-level events
-    // which happened before, i.e. typically pending events were queued by a
-    // previous call to Dispatch() and if we didn't process them now the next
-    // call to it might enqueue them again (as happens with e.g. socket events
-    // which would be generated as long as there is input available on socket
-    // and this input is only removed from it when pending event handlers are
-    // executed)
-    if ( wxTheApp )
-        wxTheApp->ProcessPendingEvents();
-    
-    return DispatchTimeout( (unsigned long)(m_sleepTime * 1000.0) );
+    return DispatchTimeout( 1000 );
 }
 
 bool wxCFEventLoop::Dispatch()
 {
-    return DispatchTimeout( (unsigned long)(m_sleepTime * 1000.0) ) != 0;
+    return DoProcessEvents() != 0;
 }
 
 int wxCFEventLoop::DispatchTimeout(unsigned long timeout)
@@ -249,20 +284,8 @@ int wxCFEventLoop::DispatchTimeout(unsigned long timeout)
             if ( m_shouldExit )
                 return 0;
             
-            if ( ProcessIdle() )
-                m_sleepTime = 0.0 ;
-            else
-            {
-                m_sleepTime = 1.0;
-#if wxUSE_THREADS
-                wxMutexGuiLeave();
-                wxMilliSleep(20);
-                wxMutexGuiEnter();
-#endif
-            }
             break;
         case 1:
-            m_sleepTime = 0;
             break;
     }
     
@@ -367,7 +390,6 @@ void wxCFEventLoop::Exit(int rc)
 {
     m_exitcode = rc;
     m_shouldExit = true;
-    m_sleepTime = 0;
 }
 
 
