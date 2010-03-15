@@ -20,22 +20,9 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxCFEventLoop
 public:
     wxGUIEventLoop();
 
-    // implement/override base class pure virtual
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
-
-    virtual void WakeUp();
-    virtual bool YieldFor(long eventsToProcess);
-
 protected:
-    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
+    virtual int DoDispatchTimeout(unsigned long timeout);
 
-private:
-    // dispatch an event and release it
-    void DispatchAndReleaseEvent(EventRef event);
-
-    double      m_sleepTime;
 };
 
 #endif // _WX_MAC_CARBON_EVTLOOP_H_

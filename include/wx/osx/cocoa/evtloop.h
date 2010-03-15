@@ -15,20 +15,10 @@ class WXDLLIMPEXP_BASE wxGUIEventLoop : public wxCFEventLoop
 {
 public:
     wxGUIEventLoop();
-
-    // implement/override base class pure virtual
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
-
-    virtual void WakeUp();
-    virtual bool YieldFor(long eventsToProcess);
-
+    
 protected:
-    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
-
-private:
-    double m_sleepTime;
+    virtual int DoDispatchTimeout(unsigned long timeout);
+    
 };
 
 #endif // _WX_OSX_COCOA_EVTLOOP_H_

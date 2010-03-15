@@ -77,25 +77,13 @@ static int CalculateNSEventMaskFromEventCategory(wxEventCategory cat)
 
 wxGUIEventLoop::wxGUIEventLoop()
 {
-    m_sleepTime = 0.0;
-}
-
-void wxGUIEventLoop::WakeUp()
-{
-    extern void wxMacWakeUp();
-
-    wxMacWakeUp();
-}
-
-CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
-{
-    NSRunLoop* nsloop = [NSRunLoop currentRunLoop];
-    return [nsloop getCFRunLoop];
 }
 
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling
 //-----------------------------------------------------------------------------
+
+#if 0
 
 bool wxGUIEventLoop::Pending() const
 {
@@ -155,48 +143,9 @@ bool wxGUIEventLoop::Dispatch()
     return true;
 }
 
-bool wxGUIEventLoop::YieldFor(long eventsToProcess)
-{
-#if wxUSE_THREADS
-    // Yielding from a non-gui thread needs to bail out, otherwise we end up
-    // possibly sending events in the thread too.
-    if ( !wxThread::IsMain() )
-    {
-        return true;
-    }
-#endif // wxUSE_THREADS
+#endif
 
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-#if wxUSE_LOG
-    // disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    wxLog::Suspend();
-#endif // wxUSE_LOG
-
-    // process all pending events:
-    while ( Pending() )
-        Dispatch();
-
-    // it's necessary to call ProcessIdle() to update the frames sizes which
-    // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect)
-    while ( ProcessIdle() ) {}
-
-    // if there are pending events, we must process them.
-    if (wxTheApp)
-        wxTheApp->ProcessPendingEvents();
-
-#if wxUSE_LOG
-    wxLog::Resume();
-#endif // wxUSE_LOG
-    m_isInsideYield = false;
-
-    return true;
-}
-
-int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 {
     wxMacAutoreleasePool autoreleasepool;
 
@@ -205,10 +154,11 @@ int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
                 untilDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000]
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES];
-    if ( !event )
+    
+    if ( event == nil )
         return -1;
 
     [NSApp sendEvent: event];
 
-    return true;
+    return 1;
 }
