@@ -29,7 +29,7 @@ class WXDLLIMPEXP_CORE wxGenericFileDirButton : public wxButton,
                                                 public wxFileDirPickerWidgetBase
 {
 public:
-    wxGenericFileDirButton() { }
+    wxGenericFileDirButton() { Init(); }
     wxGenericFileDirButton(wxWindow *parent,
                            wxWindowID id,
                            const wxString& label = wxFilePickerWidgetLabel,
@@ -42,11 +42,10 @@ public:
                            const wxValidator& validator = wxDefaultValidator,
                            const wxString& name = wxFilePickerWidgetNameStr)
     {
+        Init();
         Create(parent, id, label, path, message, wildcard,
                pos, size, style, validator, name);
     }
-
-    virtual ~wxGenericFileDirButton() {}
 
     virtual wxControl *AsControl() { return this; }
 
@@ -82,6 +81,10 @@ protected:
     // wxButton as some of our bits can conflict with wxButton styles and it
     // just doesn't make sense to use picker styles for wxButton anyhow
     long m_pickerStyle;
+
+private:
+    // common part of all ctors
+    void Init() { m_pickerStyle = -1; }
 };
 
 
@@ -115,6 +118,12 @@ public:     // overrideable
 
     virtual long GetDialogStyle() const
     {
+        // the derived class must initialize it if it doesn't use the
+        // non-default wxGenericFileDirButton ctor
+        wxASSERT_MSG( m_pickerStyle != -1,
+                      "forgot to initialize m_pickerStyle?" );
+
+
         long filedlgstyle = 0;
 
         if ( m_pickerStyle & wxFLP_OPEN )
