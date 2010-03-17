@@ -70,6 +70,9 @@ protected:
     // the loop exit code
     int m_exitcode;
     
+    // cfrunloop
+    CFRunLoopRef m_runLoop;
+    
     // runloop observer
     CFRunLoopObserverRef m_runLoopObserver;
     

@@ -27,7 +27,7 @@ namespace wxPrivate
 
 class WXDLLIMPEXP_BASE wxConsoleEventLoop 
 #ifdef __WXOSX__
-: public wxEventLoopBase
+: public wxCFEventLoop
 #else
 : public wxEventLoopManual
 #endif

@@ -228,11 +228,6 @@ private:
 
 #endif // platforms using "manual" loop
 
-// include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__)
-    #include "wx/unix/evtloop.h"
-#endif
-
 // we're moving away from old m_impl wxEventLoop model as otherwise the user
 // code doesn't have access to platform-specific wxEventLoop methods and this
 // can sometimes be very useful (e.g. under MSW this is necessary for
@@ -301,6 +296,11 @@ protected:
 #endif // platforms
 
 #endif // wxUSE_GUI
+
+// include the header defining wxConsoleEventLoop for Unix systems
+#if defined(__UNIX__)
+#include "wx/unix/evtloop.h"
+#endif
 
 #if wxUSE_GUI
     // we use a class rather than a typedef because wxEventLoop is

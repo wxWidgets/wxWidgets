@@ -186,16 +186,19 @@ wxCFEventLoop::wxCFEventLoop()
 {
     m_shouldExit = false;
     
+    m_runLoop = CFGetCurrentRunLoop();
+    
     CFRunLoopObserverContext ctxt;
     bzero( &ctxt, sizeof(ctxt) );
     ctxt.info = this;
     m_runLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0, 
                                                 wxObserverCallBack, &ctxt );
-    CFRunLoopAddObserver(CFGetCurrentRunLoop(), m_runLoopObserver, kCFRunLoopDefaultMode);
+    CFRunLoopAddObserver(m_runLoop, m_runLoopObserver, kCFRunLoopDefaultMode);
 }
 
 wxCFEventLoop::~wxCFEventLoop()
 {
+    CFRunLoopRemoveObserver(m_runLoop, m_runLoopObserver, kCFRunLoopDefaultMode);
 }
                         
 
