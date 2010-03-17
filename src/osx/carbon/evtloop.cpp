@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/nonownedwnd.h"
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
