@@ -185,6 +185,7 @@ void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity
 wxCFEventLoop::wxCFEventLoop()
 {
     m_shouldExit = false;
+    
     CFRunLoopObserverContext ctxt;
     bzero( &ctxt, sizeof(ctxt) );
     ctxt.info = this;
@@ -272,8 +273,6 @@ int wxCFEventLoop::DispatchTimeout(unsigned long timeout)
     if ( !wxTheApp )
         return 0;
 
-    wxMacAutoreleasePool autoreleasepool;
-    
     int status = DoDispatchTimeout(timeout);
     
     switch( status )
@@ -313,6 +312,32 @@ int wxCFEventLoop::DoDispatchTimeout(unsigned long timeout)
     return 1;
 }
 
+void wxCFEventLoop::DoRun()
+{
+    for ( ;; )
+    {
+        // generate and process idle events for as long as we don't
+        // have anything else to do
+        DoProcessEvents();
+        
+        // if the "should exit" flag is set, the loop should terminate
+        // but not before processing any remaining messages so while
+        // Pending() returns true, do process them
+        if ( m_shouldExit )
+        {
+            while ( DoProcessEvents() == 1 )
+                ;
+            
+            break;
+        }
+    }
+}
+
+void wxCFEventLoop::DoStop()
+{
+    CFRunLoopStop(CFGetCurrentRunLoop());
+}
+
 // enters a loop calling OnNextIteration(), Pending() and Dispatch() and
 // terminating when Exit() is called
 int wxCFEventLoop::Run()
@@ -336,23 +361,8 @@ int wxCFEventLoop::Run()
         try
         {
 #endif // wxUSE_EXCEPTIONS
-            for ( ;; )
-            {
-                // generate and process idle events for as long as we don't
-                // have anything else to do
-                DoProcessEvents();
             
-                // if the "should exit" flag is set, the loop should terminate
-                // but not before processing any remaining messages so while
-                // Pending() returns true, do process them
-                if ( m_shouldExit )
-                {
-                    while ( DoProcessEvents() == 1 )
-                        ;
-                    
-                    break;
-                }
-            }
+            DoRun();
             
 #if wxUSE_EXCEPTIONS
             // exit the outer loop as well
@@ -390,6 +400,29 @@ void wxCFEventLoop::Exit(int rc)
 {
     m_exitcode = rc;
     m_shouldExit = true;
+    DoStop();
 }
 
+#if wxUSE_GUI
 
+wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+{
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+}
+
+#ifdef __WXOSX_IPHONE__
+
+void wxModalEventLoop::DoRun()
+{
+    // presentModalViewController:animated:
+}
+
+void wxModalEventLoop::DoStop()
+{
+    // (void)dismissModalViewControllerAnimated:(BOOL)animated
+}
+
+#endif // wxUSE_GUI
+
+#endif

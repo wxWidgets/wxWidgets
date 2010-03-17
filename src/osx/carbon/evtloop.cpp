@@ -55,6 +55,8 @@ static void DispatchAndReleaseEvent(EventRef theEvent)
 
 int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 {
+    wxMacAutoreleasePool autoreleasepool;
+    
     EventRef event;
     OSStatus status = ReceiveNextEvent(0, NULL, timeout/1000, true, &event);
     switch ( status )
@@ -76,3 +78,56 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
             return 1;
     }
 }
+
+void wxGUIEventLoop::DoRun()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    RunApplicationEventLoop();
+}
+
+void wxGUIEventLoop::DoStop()
+{
+    QuitApplicationEventLoop();
+}
+
+void wxModalEventLoop::DoRun()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    WindowRef windowRef = m_modalWindow->GetWXWindow();
+
+    WindowGroupRef windowGroup = NULL;
+    WindowGroupRef formerParentGroup = NULL;
+    bool resetGroupParent = false;
+    
+    // make sure modal dialogs are in the right layer so that they are not covered
+    
+    if ( m_modalWindow->GetParent() == NULL )
+    {
+        windowGroup = GetWindowGroup(windowRef) ;
+        if ( windowGroup != GetWindowGroupOfClass( kMovableModalWindowClass ) )
+        {
+            formerParentGroup = GetWindowGroupParent( windowGroup );
+            SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+            resetGroupParent = true;
+        }
+    }
+
+    m_modalWindow->SetFocus();
+    
+    RunAppModalLoopForWindow(windowRef);
+
+    if ( resetGroupParent )
+    {
+        SetWindowGroupParent( windowGroup , formerParentGroup );
+    }
+
+}
+
+void wxModalEventLoop::DoStop()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    WindowRef theWindow = m_modalWindow->GetWXWindow();
+    QuitAppModalLoopForWindow(theWindow);
+}
+
+

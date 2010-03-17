@@ -25,7 +25,12 @@ namespace wxPrivate
     class PipeIOHandler;
 }
 
-class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxEventLoopManual
+class WXDLLIMPEXP_BASE wxConsoleEventLoop 
+#ifdef __WXOSX__
+: public wxEventLoopBase
+#else
+: public wxEventLoopManual
+#endif
 {
 public:
     // initialize the event loop, use IsOk() to check if we were successful

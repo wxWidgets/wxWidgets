@@ -162,3 +162,40 @@ int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
 
     return 1;
 }
+
+void wxGUIEventLoop::DoRun()
+{
+    wxMacAutoreleasePool autoreleasepool;
+    [NSApp run];
+}
+
+void wxGUIEventLoop::DoStop()
+{
+    [NSApp stop:0];
+}
+
+void wxModalEventLoop::DoRun()
+{
+    wxMacAutoreleasePool pool;
+
+    // If the app hasn't started, flush the event queue
+    // If we don't do this, the Dock doesn't get the message that
+    // the app has started so will refuse to activate it.
+    [NSApplication sharedApplication];
+    if (![NSApp isRunning])
+    {
+        while(NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:nil inMode:NSDefaultRunLoopMode dequeue:YES])
+        {
+            [NSApp sendEvent:event];
+        }
+    }
+    
+    NSWindow* theWindow = m_modalWindow->GetWXWindow();
+    [NSApp runModalForWindow:theWindow];
+}
+
+void wxModalEventLoop::DoStop()
+{
+    [NSApp stopModal];
+}
+

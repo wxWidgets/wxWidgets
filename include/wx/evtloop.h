@@ -185,7 +185,7 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || defined(__UNIX__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__WXOSX__))
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -318,7 +318,7 @@ protected:
 
 inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
 
-#if wxUSE_GUI
+#if wxUSE_GUI && !defined(__WXOSX__)
 // ----------------------------------------------------------------------------
 // wxModalEventLoop
 // ----------------------------------------------------------------------------

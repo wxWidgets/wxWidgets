@@ -59,7 +59,11 @@ protected:
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 
     virtual int DoDispatchTimeout(unsigned long timeout);
+    
+    virtual void DoRun();
 
+    virtual void DoStop();
+    
     // should we exit the loop?
     bool m_shouldExit;
 
@@ -68,22 +72,40 @@ protected:
     
     // runloop observer
     CFRunLoopObserverRef m_runLoopObserver;
-
+    
 private:
     // process all already pending events and dispatch a new one (blocking
     // until it appears in the event queue if necessary)
     //
     // returns the return value of DoDispatchTimeout()
     int DoProcessEvents();
-
 };
 
 #if wxUSE_GUI
-    #ifdef __WXOSX_COCOA__
-        #include "wx/osx/cocoa/evtloop.h"
-    #else
-        #include "wx/osx/carbon/evtloop.h"
-    #endif
+
+#ifdef __WXOSX_COCOA__
+    #include "wx/osx/cocoa/evtloop.h"
+#else
+    #include "wx/osx/carbon/evtloop.h"
+#endif
+
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
+
+class WXDLLIMPEXP_CORE wxModalEventLoop : public wxGUIEventLoop
+{
+public:
+    wxModalEventLoop(wxWindow *winModal);
+    
+protected:
+    virtual void DoRun();
+    
+    virtual void DoStop();
+    
+    // (in case) the modal window for this event loop
+    wxNonOwnedWindow* m_modalWindow;
+};
+
 #endif // wxUSE_GUI
 
 #endif // _WX_OSX_EVTLOOP_H_

@@ -75,26 +75,43 @@ static int CalculateUIEventMaskFromEventCategory(wxEventCategory cat)
 }
 */
 
+@interface wxAppDelegate : NSObject <UIApplicationDelegate> {
+}
+
+@end
+
+@implementation wxAppDelegate
+
+- (void)applicationDidFinishLaunching:(UIApplication *)application {	
+	wxTheApp->OnInit();
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application { 
+    wxCloseEvent event;
+    wxTheApp->OnEndSession(event);
+}
+
+- (void)dealloc {
+	[super dealloc];
+}
+
+@end
+
 wxGUIEventLoop::wxGUIEventLoop()
 {
-    m_sleepTime = 0.0;
 }
 
-int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
+void wxGUIEventLoop::DoRun()
 {
-    wxMacAutoreleasePool autoreleasepool;
-
-/*
-    UIEvent *event = [[UIApplication sharedApplication]
-                nextEventMatchingMask:NSAnyEventMask
-                untilDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000]
-                inMode:NSDefaultRunLoopMode
-                dequeue: YES];
-
-    if ( event == nil )
-        return -1;
-
-    [NSApp sendEvent: event];
-*/
-    return 1;
+    if ( IsMain() )
+    {
+        wxMacAutoreleasePool pool;
+        const char* appname = "app";
+        UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
+    }
+    else 
+    {
+        wxCFEventLoop::DoRun();
+    }
 }
+

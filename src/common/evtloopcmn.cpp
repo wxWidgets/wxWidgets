@@ -82,7 +82,7 @@ bool wxEventLoopBase::Yield(bool onlyIfNeeded)
 }
 
 // wxEventLoopManual is unused in the other ports
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && wxUSE_BASE)
+#if defined(__WXMSW__) || defined(__WXDFB__) || ( ( defined(__UNIX__) && !defined(__WXOSX__) ) && wxUSE_BASE)
 
 // ============================================================================
 // wxEventLoopManual implementation

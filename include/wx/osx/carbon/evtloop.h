@@ -23,6 +23,9 @@ public:
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 
+    virtual void DoRun();
+    
+    virtual void DoStop();
 };
 
 #endif // _WX_MAC_CARBON_EVTLOOP_H_
