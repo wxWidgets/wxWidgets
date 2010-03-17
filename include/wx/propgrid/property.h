@@ -367,7 +367,7 @@ protected:
     @{
 */
 
-enum wxPG_PROPERTY_FLAGS
+enum wxPGPropertyFlags
 {
 
 /** Indicates bold font.
@@ -499,7 +499,9 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Code should automatically take care of this, however.
 */
 #define wxPG_PROP_PARENTAL_FLAGS \
-    (wxPG_PROP_AGGREGATE|wxPG_PROP_CATEGORY|wxPG_PROP_MISC_PARENT)
+    ((wxPGPropertyFlags)(wxPG_PROP_AGGREGATE | \
+                         wxPG_PROP_CATEGORY | \
+                         wxPG_PROP_MISC_PARENT))
 
 /** @}
 */
@@ -1679,7 +1681,12 @@ public:
         return m_value.IsNull();
     }
 
-    FlagType HasFlag( FlagType flag ) const
+    /**
+        Returns non-zero if property has given flag set.
+
+        @see propgrid_propflags
+    */
+    FlagType HasFlag( wxPGPropertyFlags flag ) const
     {
         return ( m_flags & flag );
     }
@@ -1695,6 +1702,9 @@ public:
     */
     wxVariant GetAttributesAsList() const;
 
+    /**
+        Returns property flags.
+    */
     FlagType GetFlags() const
     {
         return m_flags;
@@ -2009,14 +2019,25 @@ public:
     }
 
     /**
-        Sets given property flag(s).
+        Sets given property flag.
+
+        @see propgrid_propflags
     */
-    void SetFlag( FlagType flag ) { m_flags |= flag; }
+    void SetFlag( wxPGPropertyFlags flag )
+    {
+        //
+        // NB: While using wxPGPropertyFlags here makes it difficult to
+        //     combine different flags, it usefully prevents user from
+        //     using incorrect flags (say, wxWindow styles).
+        m_flags |= flag;
+    }
 
     /**
-        Sets or clears given property flag(s).
+        Sets or clears given property flag.
+
+        @see propgrid_propflags
     */
-    void ChangeFlag( FlagType flag, bool set )
+    void ChangeFlag( wxPGPropertyFlags flag, bool set )
     {
         if ( set )
             m_flags |= flag;
@@ -2024,7 +2045,12 @@ public:
             m_flags &= ~flag;
     }
 
-    void SetFlagRecursively( FlagType flag, bool set );
+    /**
+        Sets or clears given property flag, recursively.
+
+        @see propgrid_propflags
+    */
+    void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
 
     void SetHelpString( const wxString& helpString )
     {

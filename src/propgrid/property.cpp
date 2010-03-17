@@ -1067,7 +1067,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
                     // Add only if editable or setting programmatically
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
-                         !child->HasFlag(wxPG_PROP_DISABLED|wxPG_PROP_READONLY) )
+                         (!child->HasFlag(wxPG_PROP_DISABLED) &&
+                          !child->HasFlag(wxPG_PROP_READONLY)) )
                     {
                         if ( len > 0 )
                         {
@@ -1147,7 +1148,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     wxVariant variant(oldChildValue);
 
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
-                         !child->HasFlag(wxPG_PROP_DISABLED|wxPG_PROP_READONLY) )
+                         (!child->HasFlag(wxPG_PROP_DISABLED) &&
+                          !child->HasFlag(wxPG_PROP_READONLY)) )
                     {
                         wxString childName = child->GetBaseName();
 
@@ -1427,7 +1429,7 @@ void wxPGProperty::SetValueInEvent( wxVariant value ) const
     GetGrid()->ValueChangeInEvent(value);
 }
 
-void wxPGProperty::SetFlagRecursively( FlagType flag, bool set )
+void wxPGProperty::SetFlagRecursively( wxPGPropertyFlags flag, bool set )
 {
     ChangeFlag(flag, set);
 

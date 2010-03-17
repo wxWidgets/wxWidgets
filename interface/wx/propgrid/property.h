@@ -168,6 +168,149 @@
 */
 
 
+/** @section propgrid_propflags wxPGProperty Flags
+    @{
+*/
+
+enum wxPGPropertyFlags
+{
+
+/** Indicates bold font.
+*/
+wxPG_PROP_MODIFIED                  = 0x0001,
+
+/** Disables ('greyed' text and editor does not activate) property.
+*/
+wxPG_PROP_DISABLED                  = 0x0002,
+
+/** Hider button will hide this property.
+*/
+wxPG_PROP_HIDDEN                    = 0x0004,
+
+/** This property has custom paint image just in front of its value.
+    If property only draws custom images into a popup list, then this
+    flag should not be set.
+*/
+wxPG_PROP_CUSTOMIMAGE               = 0x0008,
+
+/** Do not create text based editor for this property (but button-triggered
+    dialog and choice are ok).
+*/
+wxPG_PROP_NOEDITOR                  = 0x0010,
+
+/** Property is collapsed, ie. it's children are hidden.
+*/
+wxPG_PROP_COLLAPSED                 = 0x0020,
+
+/**
+    If property is selected, then indicates that validation failed for pending
+    value.
+
+    If property is not selected, then indicates that the the actual property
+    value has failed validation (NB: this behavior is not currently supported,
+    but may be used in future).
+*/
+wxPG_PROP_INVALID_VALUE             = 0x0040,
+
+// 0x0080,
+
+/** Switched via SetWasModified(). Temporary flag - only used when
+    setting/changing property value.
+*/
+wxPG_PROP_WAS_MODIFIED              = 0x0200,
+
+/**
+    If set, then child properties (if any) are private, and should be
+    "invisible" to the application.
+*/
+wxPG_PROP_AGGREGATE                 = 0x0400,
+
+/** If set, then child properties (if any) are copies and should not
+    be deleted in dtor.
+*/
+wxPG_PROP_CHILDREN_ARE_COPIES       = 0x0800,
+
+/**
+    Classifies this item as a non-category.
+
+    Used for faster item type identification.
+*/
+wxPG_PROP_PROPERTY                  = 0x1000,
+
+/**
+    Classifies this item as a category.
+
+    Used for faster item type identification.
+*/
+wxPG_PROP_CATEGORY                  = 0x2000,
+
+/** Classifies this item as a property that has children, but is not aggregate
+    (ie children are not private).
+*/
+wxPG_PROP_MISC_PARENT               = 0x4000,
+
+/** Property is read-only. Editor is still created for wxTextCtrl-based
+    property editors. For others, editor is not usually created because
+    they do implement wxTE_READONLY style or equivalent.
+*/
+wxPG_PROP_READONLY                  = 0x8000,
+
+//
+// NB: FLAGS ABOVE 0x8000 CANNOT BE USED WITH PROPERTY ITERATORS
+//
+
+/** Property's value is composed from values of child properties.
+    @remarks
+    This flag cannot be used with property iterators.
+*/
+wxPG_PROP_COMPOSED_VALUE            = 0x00010000,
+
+/** Common value of property is selectable in editor.
+    @remarks
+    This flag cannot be used with property iterators.
+*/
+wxPG_PROP_USES_COMMON_VALUE         = 0x00020000,
+
+/** Property can be set to unspecified value via editor.
+    Currently, this applies to following properties:
+    - wxIntProperty, wxUIntProperty, wxFloatProperty, wxEditEnumProperty:
+      Clear the text field
+
+    @remarks
+    This flag cannot be used with property iterators.
+*/
+wxPG_PROP_AUTO_UNSPECIFIED          = 0x00040000,
+
+/** Indicates the bit useable by derived properties.
+*/
+wxPG_PROP_CLASS_SPECIFIC_1          = 0x00080000,
+
+/** Indicates the bit useable by derived properties.
+*/
+wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000,
+
+/** Indicates that the property is being deleted and should be ignored.
+*/
+wxPG_PROP_BEING_DELETED             = 0x00200000
+
+};
+
+/** Topmost flag.
+*/
+#define wxPG_PROP_MAX               wxPG_PROP_AUTO_UNSPECIFIED
+
+/** Property with children must have one of these set, otherwise iterators
+    will not work correctly.
+    Code should automatically take care of this, however.
+*/
+#define wxPG_PROP_PARENTAL_FLAGS \
+    ((wxPGPropertyFlags)(wxPG_PROP_AGGREGATE | \
+                         wxPG_PROP_CATEGORY | \
+                         wxPG_PROP_MISC_PARENT))
+
+/** @}
+*/
+
 
 /**
     @class wxPGProperty
@@ -988,6 +1131,13 @@ public:
     bool AreChildrenComponents() const;
 
     /**
+        Sets or clears given property flag.
+
+        @see propgrid_propflags
+    */
+    void ChangeFlag( wxPGPropertyFlags flag, bool set );
+
+    /**
         Deletes children of the property.
     */
     void DeleteChildren();
@@ -1105,6 +1255,11 @@ public:
     */
     const wxPGEditor* GetEditorClass() const;
 
+    /**
+        Returns property flags.
+    */
+    FlagType GetFlags() const;
+
     /** Returns property grid where property lies. */
     wxPropertyGrid* GetGrid() const;
 
@@ -1208,6 +1363,13 @@ public:
         position of scrollbars is not taken into account.
     */
     int GetY() const;
+
+    /**
+        Returns non-zero if property has given flag set.
+
+        @see propgrid_propflags
+    */
+    FlagType HasFlag( wxPGPropertyFlags flag ) const;
 
     /**
         Returns @true if property has even one visible child.
@@ -1397,6 +1559,20 @@ public:
         @endcode
     */
     void SetDefaultValue( wxVariant& value );
+
+    /**
+        Sets given property flag.
+
+        @see propgrid_propflags
+    */
+    void SetFlag( wxPGPropertyFlags flag );
+
+    /**
+        Sets or clears given property flag, recursively.
+
+        @see propgrid_propflags
+    */
+    void SetFlagRecursively( wxPGPropertyFlags flag, bool set );
 
     /**
         Sets property's help string, which is shown, for example, in
