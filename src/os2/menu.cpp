@@ -323,7 +323,7 @@ bool wxMenu::DoInsertOrAppend( wxMenuItem* pItem,
             //
             rItem.afStyle |= MIS_TEXT;
         }
-        pData = (char*)pItem->GetText().c_str();
+        pData = (BYTE*)pItem->GetText().c_str();
     }
 
     if (nPos == (size_t)-1)
