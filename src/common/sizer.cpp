@@ -32,6 +32,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
+#include "wx/vector.h"
 #include "wx/listimpl.cpp"
 
 
@@ -1987,6 +1988,50 @@ wxSizerItem *wxBoxSizer::AddSpacer(int size)
     return IsVertical() ? Add(0, size) : Add(size, 0);
 }
 
+namespace
+{
+
+/*
+    Helper of RecalcSizes(): checks if there is enough remaining space for the
+    min size of the given item and returns its min size or the entire remaining
+    space depending on which one is greater.
+
+    This function updates the remaining space parameter to account for the size
+    effectively allocated to the item.
+ */
+int
+GetMinOrRemainingSize(int orient, const wxSizerItem *item, int *remainingSpace_)
+{
+    int& remainingSpace = *remainingSpace_;
+
+    wxCoord size;
+    if ( remainingSpace > 0 )
+    {
+        const wxSize sizeMin = item->GetMinSizeWithBorder();
+        size = orient == wxHORIZONTAL ? sizeMin.x : sizeMin.y;
+
+        if ( size >= remainingSpace )
+        {
+            // truncate the item to fit in the remaining space, this is better
+            // than showing it only partially in general, even if both choices
+            // are bad -- but there is nothing else we can do
+            size = remainingSpace;
+        }
+
+        remainingSpace -= size;
+    }
+    else // no remaining space
+    {
+        // no space at all left, no need to even query the item for its min
+        // size as we can't give it to it anyhow
+        size = 0;
+    }
+
+    return size;
+}
+
+} // anonymous namespace
+
 void wxBoxSizer::RecalcSizes()
 {
     if ( m_children.empty() )
@@ -1999,14 +2044,17 @@ void wxBoxSizer::RecalcSizes()
     // stretchable items (i.e. those with non zero proportion)
     int delta = totalMajorSize - GetSizeInMajorDir(m_minSize);
 
+    // declare loop variables used below:
+    wxSizerItemList::const_iterator i;  // iterator in m_children list
+    unsigned n = 0;                     // item index in majorSizes array
 
-    // Inform child items about the size in minor direction, that can
-    // change how much free space we have in major dir and how to distribute it.
-    int majorMinSum = 0;
-    wxSizerItemList::const_iterator i ;
-    for ( i = m_children.begin();
-          i != m_children.end();
-          ++i )
+
+    // First, inform item about the available size in minor direction as this
+    // can change their size in the major direction. Also compute the number of
+    // visible items and sum of their min sizes in major direction.
+
+    int minMajorSize = 0;
+    for ( i = m_children.begin(); i != m_children.end(); ++i )
     {
         wxSizerItem * const item = *i;
 
@@ -2023,64 +2071,174 @@ void wxBoxSizer::RecalcSizes()
             // take too much, so delta should not become negative.
             delta -= deltaChange;
         }
-        majorMinSum += GetSizeInMajorDir(item->GetMinSizeWithBorder());
+        minMajorSize += GetSizeInMajorDir(item->GetMinSizeWithBorder());
     }
-    // And update our min size
-    SizeInMajorDir(m_minSize) = majorMinSum;
+
+    // update our min size and delta which may have changed
+    SizeInMajorDir(m_minSize) = minMajorSize;
+    delta = totalMajorSize - minMajorSize;
 
 
-    // might have a new delta now
-    delta = totalMajorSize - GetSizeInMajorDir(m_minSize);
+    // space and sum of proportions for the remaining items, both may change
+    // below
+    wxCoord remaining = totalMajorSize;
+    int totalProportion = m_totalProportion;
+
+    // size of the (visible) items in major direction, -1 means "not fixed yet"
+    wxVector<int> majorSizes(GetItemCount(), wxDefaultCoord);
+
+
+    // Check for the degenerated case when we don't have enough space for even
+    // the min sizes of all the items: in this case we really can't do much
+    // more than to to allocate the min size to as many of fixed size items as
+    // possible (on the assumption that variable size items such as text zones
+    // or list boxes may use scrollbars to show their content even if their
+    // size is less than min size but that fixed size items such as buttons
+    // will suffer even more if we don't give them their min size)
+    if ( totalMajorSize < minMajorSize )
+    {
+        // Second degenerated case pass: allocate min size to all fixed size
+        // items.
+        for ( i = m_children.begin(), n = 0; i != m_children.end(); ++i, ++n )
+        {
+            wxSizerItem * const item = *i;
+
+            if ( !item->IsShown() )
+                continue;
+
+            // deal with fixed size items only during this pass
+            if ( item->GetProportion() )
+                continue;
+
+            majorSizes[n] = GetMinOrRemainingSize(m_orient, item, &remaining);
+        }
+
+
+        // Third degenerated case pass: allocate min size to all the remaining,
+        // i.e. non-fixed size, items.
+        for ( i = m_children.begin(), n = 0; i != m_children.end(); ++i, ++n )
+        {
+            wxSizerItem * const item = *i;
+
+            if ( !item->IsShown() )
+                continue;
+
+            // we've already dealt with fixed size items above
+            if ( !item->GetProportion() )
+                continue;
+
+            majorSizes[n] = GetMinOrRemainingSize(m_orient, item, &remaining);
+        }
+    }
+    else // we do have enough space to give at least min sizes to all items
+    {
+        // Second and maybe more passes in the non-degenerated case: deal with
+        // fixed size items and items whose min size is greater than what we
+        // would allocate to them taking their proportion into account. For
+        // both of them, we will just use their min size, but for the latter we
+        // also need to reexamine all the items as the items which fitted
+        // before we adjusted their size upwards might not fit any more. This
+        // does make for a quadratic algorithm but it's not obvious how to
+        // avoid it and hopefully it's not a huge problem in practice as the
+        // sizers don't have many items usually (and, of course, the algorithm
+        // still reduces into a linear one if there is enough space for all the
+        // min sizes).
+        bool nonFixedSpaceChanged = false;
+        for ( i = m_children.begin(), n = 0; ; ++i, ++n )
+        {
+            if ( nonFixedSpaceChanged )
+            {
+                i = m_children.begin();
+                n = 0;
+                nonFixedSpaceChanged = false;
+            }
+
+            // check for the end of the loop only after the check above as
+            // otherwise we wouldn't do another pass if the last child resulted
+            // in non fixed space reduction
+            if ( i == m_children.end() )
+                break;
+
+            wxSizerItem * const item = *i;
+
+            if ( !item->IsShown() )
+                continue;
+
+            // don't check the item which we had already dealt with during a
+            // previous pass (this is more than an optimization, the code
+            // wouldn't work correctly if we kept adjusting for the same item
+            // over and over again)
+            if ( majorSizes[n] != wxDefaultCoord )
+                continue;
+
+            const wxCoord
+                minMajor = GetSizeInMajorDir(item->GetMinSizeWithBorder());
+            const int propItem = item->GetProportion();
+            if ( propItem )
+            {
+                // is the desired size of this item big enough?
+                if ( (remaining*propItem)/totalProportion >= minMajor )
+                {
+                    // yes, it is, we'll determine the real size of this
+                    // item later, for now just leave it as wxDefaultCoord
+                    continue;
+                }
+
+                // the proportion of this item won't count, it has
+                // effectively become fixed
+                totalProportion -= propItem;
+            }
+
+            // we can already allocate space for this item
+            majorSizes[n] = minMajor;
+
+            // change the amount of the space remaining to the other items,
+            // as this can result in not being able to satisfy their
+            // proportions any more we will need to redo another loop
+            // iteration
+            remaining -= minMajor;
+
+            nonFixedSpaceChanged = true;
+        }
+
+
+        // Last by one pass: distribute the remaining space among the non-fixed
+        // items whose size weren't fixed yet according to their proportions.
+        for ( i = m_children.begin(), n = 0; i != m_children.end(); ++i, ++n )
+        {
+            wxSizerItem * const item = *i;
+
+            if ( !item->IsShown() )
+                continue;
+
+            if ( majorSizes[n] == wxDefaultCoord )
+            {
+                const int propItem = item->GetProportion();
+                majorSizes[n] = (remaining*propItem)/totalProportion;
+
+                remaining -= majorSizes[n];
+                totalProportion -= propItem;
+            }
+        }
+    }
+
 
     // the position at which we put the next child
     wxPoint pt(m_position);
 
-    // space remaining for the items
-    wxCoord majorRemaining = totalMajorSize;
 
-    int totalProportion = m_totalProportion;
-    for ( i = m_children.begin();
-          i != m_children.end();
-          ++i )
+    // Final pass: finally do position the items correctly using their sizes as
+    // determined above.
+    for ( i = m_children.begin(), n = 0; i != m_children.end(); ++i, ++n )
     {
         wxSizerItem * const item = *i;
 
         if ( !item->IsShown() )
             continue;
 
+        const int majorSize = majorSizes[n];
+
         const wxSize sizeThis(item->GetMinSizeWithBorder());
-
-        // adjust the size in the major direction using the proportion
-        wxCoord majorSize = GetSizeInMajorDir(sizeThis);
-
-        if ( delta > 0 )
-        {
-            // distribute extra space among the items respecting their
-            // proportions
-            const int propItem = item->GetProportion();
-            if ( propItem )
-            {
-                const int deltaItem = (delta * propItem) / totalProportion;
-
-                majorSize += deltaItem;
-
-                delta -= deltaItem;
-                totalProportion -= propItem;
-            }
-        }
-        else // delta < 0
-        {
-            // we're not going to have enough space for making all items even
-            // of their minimal size, check if this item still fits at all and
-            // truncate it if it doesn't -- even if it means giving it 0 size
-            // and thus making it invisible because we just can't do anything
-            // else
-            if ( majorSize > majorRemaining )
-                majorSize = majorRemaining;
-
-            majorRemaining -= majorSize;
-        }
-
 
         // apply the alignment in the minor direction
         wxPoint posChild(pt);
