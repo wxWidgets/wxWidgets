@@ -1130,6 +1130,11 @@ public:
 
     /**
         Returns property associated with this event.
+
+        @remarks You should assume that this property can always be NULL.
+                 For instance, wxEVT_PG_SELECTED is emitted not only when
+                 a new property is selected, but also when selection is
+                 cleared by user activity.
     */
     wxPGProperty* GetProperty() const;
 
