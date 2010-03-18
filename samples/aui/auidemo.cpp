@@ -847,6 +847,10 @@ MyFrame::MyFrame(wxWindow* parent,
     tb4->AddTool(ID_SampleItem+29, wxT("Item 8"), tb4_bmp1);
     tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
     tb4->SetCustomOverflowItems(prepend_items, append_items);
+    wxChoice* choice = new wxChoice(tb4, ID_SampleItem+35);
+    choice->AppendString(wxT("One choice"));
+    choice->AppendString(wxT("Another choice"));
+    tb4->AddControl(choice);
     tb4->Realize();
 
 

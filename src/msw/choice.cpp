@@ -553,8 +553,21 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
+    const int heightBest = GetBestSize().y;
+
     // we need the real height below so get the current one if it's not given
-    if ( height != wxDefaultCoord && height != GetBestSize().y )
+    if ( height == wxDefaultCoord )
+    {
+        // height not specified, use the same as before
+        DoGetSize(NULL, &height);
+    }
+    else if ( height == heightBest )
+    {
+        // we don't need to manually manage our height, let the system use the
+        // default one
+        m_heightOwn = wxDefaultCoord;
+    }
+    else // non-default height specified
     {
         // set our new own height but be careful not to make it too big: the
         // native control apparently stores it as a single byte and so setting
@@ -567,10 +580,6 @@ void wxChoice::DoSetSize(int x, int y,
         // nor too small: see MSWUpdateVisibleHeight()
         else if ( m_heightOwn < COMBO_HEIGHT_ADJ )
             m_heightOwn = COMBO_HEIGHT_ADJ;
-    }
-    else // height not specified
-    {
-        DoGetSize(NULL, &height);
     }
 
 
