@@ -2087,8 +2087,12 @@ void wxBoxSizer::RecalcSizes()
 
         wxCoord minorSize = GetSizeInMinorDir(sizeThis);
         const int flag = item->GetFlag();
-        if ( flag & (wxEXPAND | wxSHAPED) )
+        if ( (flag & (wxEXPAND | wxSHAPED)) || (minorSize > totalMinorSize) )
         {
+            // occupy all the available space if wxEXPAND was given and also if
+            // the item is too big to fit -- in this case we truncate it below
+            // its minimal size which is bad but better than not showing parts
+            // of the window at all
             minorSize = totalMinorSize;
         }
         else if ( flag & (IsVertical() ? wxALIGN_RIGHT : wxALIGN_BOTTOM) )
@@ -2097,7 +2101,8 @@ void wxBoxSizer::RecalcSizes()
         }
         // NB: wxCENTRE is used here only for backwards compatibility,
         //     wxALIGN_CENTRE should be used in new code
-        else if ( flag & (wxCENTER | (IsVertical() ? wxALIGN_CENTRE_HORIZONTAL : wxALIGN_CENTRE_VERTICAL)))
+        else if ( flag & (wxCENTER | (IsVertical() ? wxALIGN_CENTRE_HORIZONTAL
+                                                   : wxALIGN_CENTRE_VERTICAL)) )
         {
             PosInMinorDir(posChild) += (totalMinorSize - minorSize) / 2;
         }
