@@ -1993,10 +1993,11 @@ void wxBoxSizer::RecalcSizes()
         return;
 
     const wxCoord totalMinorSize = GetSizeInMinorDir(m_size);
+    const wxCoord totalMajorSize = GetSizeInMajorDir(m_size);
 
     // the amount of free space which we should redistribute among the
     // stretchable items (i.e. those with non zero proportion)
-    int delta = GetSizeInMajorDir(m_size) - GetSizeInMajorDir(m_minSize);
+    int delta = totalMajorSize - GetSizeInMajorDir(m_minSize);
 
 
     // Inform child items about the size in minor direction, that can
@@ -2029,10 +2030,13 @@ void wxBoxSizer::RecalcSizes()
 
 
     // might have a new delta now
-    delta = GetSizeInMajorDir(m_size) - GetSizeInMajorDir(m_minSize);
+    delta = totalMajorSize - GetSizeInMajorDir(m_minSize);
 
     // the position at which we put the next child
     wxPoint pt(m_position);
+
+    // space remaining for the items
+    wxCoord majorRemaining = totalMajorSize;
 
     int totalProportion = m_totalProportion;
     for ( i = m_children.begin();
@@ -2049,11 +2053,10 @@ void wxBoxSizer::RecalcSizes()
         // adjust the size in the major direction using the proportion
         wxCoord majorSize = GetSizeInMajorDir(sizeThis);
 
-        // if there is not enough space, don't try to distribute negative space
-        // among the children, this would result in overlapping windows which
-        // we don't want
         if ( delta > 0 )
         {
+            // distribute extra space among the items respecting their
+            // proportions
             const int propItem = item->GetProportion();
             if ( propItem )
             {
@@ -2064,6 +2067,18 @@ void wxBoxSizer::RecalcSizes()
                 delta -= deltaItem;
                 totalProportion -= propItem;
             }
+        }
+        else // delta < 0
+        {
+            // we're not going to have enough space for making all items even
+            // of their minimal size, check if this item still fits at all and
+            // truncate it if it doesn't -- even if it means giving it 0 size
+            // and thus making it invisible because we just can't do anything
+            // else
+            if ( majorSize > majorRemaining )
+                majorSize = majorRemaining;
+
+            majorRemaining -= majorSize;
         }
 
 

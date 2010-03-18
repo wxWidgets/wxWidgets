@@ -103,5 +103,11 @@ void BoxSizerTestCase::Size1()
     m_sizer->Add(child, wxSizerFlags(1).Expand());
     m_win->Layout();
     CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+
+    m_sizer->Clear();
+    m_sizer->Add(child, wxSizerFlags().Expand());
+    m_sizer->SetItemMinSize(child, sizeTotal*2);
+    m_win->Layout();
+    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
 }
 
