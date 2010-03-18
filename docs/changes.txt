@@ -441,6 +441,7 @@ All:
 
 Unix:
 
+- Return signed return code from wxExecute(wxEXEC_SYNC).
 - Allow to use WX_APPNAME_DATA_DIR environment var to override the return value
   of wxStandardPaths::GetDataDir().
 

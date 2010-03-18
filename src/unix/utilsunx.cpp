@@ -1373,15 +1373,21 @@ int DoWaitForChild(int pid, int flags = 0)
     {
         wxASSERT_MSG( rc == pid, "unexpected waitpid() return value" );
 
+        // notice that the caller expects the exit code to be signed, e.g. -1
+        // instead of 255 so don't assign WEXITSTATUS() to an int
+        signed char exitcode;
         if ( WIFEXITED(status) )
-            return WEXITSTATUS(status);
+            exitcode = WEXITSTATUS(status);
         else if ( WIFSIGNALED(status) )
-            return -WTERMSIG(status);
+            exitcode = -WTERMSIG(status);
         else
         {
             wxLogError("Child process (PID %d) exited for unknown reason, "
                        "status = %d", pid, status);
+            exitcode = -1;
         }
+
+        return exitcode;
     }
 
     return -1;
