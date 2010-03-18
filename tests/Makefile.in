@@ -156,6 +156,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_garbage.o \
 	test_gui_settings.o \
 	test_gui_socket.o \
+	test_gui_boxsizer.o \
 	test_gui_clientsize.o \
 	test_gui_setsize.o
 TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
@@ -633,6 +634,9 @@ test_gui_settings.o: $(srcdir)/misc/settings.cpp $(TEST_GUI_ODEP)
 
 test_gui_socket.o: $(srcdir)/net/socket.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/net/socket.cpp
+
+test_gui_boxsizer.o: $(srcdir)/sizers/boxsizer.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/boxsizer.cpp
 
 test_gui_clientsize.o: $(srcdir)/window/clientsize.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/window/clientsize.cpp

@@ -142,6 +142,7 @@
                 applications.
              -->
             net/socket.cpp
+            sizers/boxsizer.cpp
             window/clientsize.cpp
             window/setsize.cpp
         </sources>

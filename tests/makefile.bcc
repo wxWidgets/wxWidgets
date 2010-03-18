@@ -141,6 +141,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_garbage.obj \
 	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_socket.obj \
+	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj
 
@@ -687,6 +688,9 @@ $(OBJS)\test_gui_settings.obj: .\misc\settings.cpp
 
 $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\net\socket.cpp
+
+$(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\boxsizer.cpp
 
 $(OBJS)\test_gui_clientsize.obj: .\window\clientsize.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\window\clientsize.cpp
