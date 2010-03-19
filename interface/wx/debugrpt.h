@@ -98,7 +98,7 @@ public:
         By default, a unique name constructed from wxApp::GetAppName(), the
         current process id and the current date and time is used.
 
-        @param dir
+        @param name
             The base name (i.e. without extension) of the file.
 
         @since 2.9.1

@@ -491,7 +491,7 @@ public:
 
         @see EndLabelEdit(), MakeColumnEditable()
     */
-    void BeginLabelEdit( unsigned int column = 0 );
+    void BeginLabelEdit( unsigned int colIndex = 0 );
 
     /**
         Changes value of a property, as if from an editor. Use this instead of
@@ -795,6 +795,8 @@ public:
     /**
         Makes given column editable by user.
 
+        @param column
+            The index of the column to make editable.
         @param editable
             Using @false here will disable column from being editable.
 

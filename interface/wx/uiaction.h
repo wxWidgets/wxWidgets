@@ -147,4 +147,3 @@ class wxUIActionSimulator
     bool        Char(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
 };
 
-#endif

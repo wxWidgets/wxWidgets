@@ -119,17 +119,14 @@ public:
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
-        @param appearance
-            New appearance to be applied.
+        The parameter @a appearance represents the new appearance to be applied.
 
-        @param oldAppearance
-            Previously applied appearance. Used to detect which
-            control attributes need to be changed (e.g. so we only
-            change background colour if really needed).
+        The parameter @a oldAppearance is the previously applied appearance. 
+        Used to detect which control attributes need to be changed (e.g. so we only
+        change background colour if really needed).
 
-        @param unspecified
-            @true if the new appearance represents an unspecified
-            property value.
+        Finally, the parameter @a unspecified if @true tells this function that
+        the new appearance represents an unspecified property value.
     */
     virtual void SetControlAppearance( wxPropertyGrid* pg,
                                        wxPGProperty* property,

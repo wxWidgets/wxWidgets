@@ -14,8 +14,6 @@
 The wxRibbon library is a set of classes for writing a ribbon user interface.
 At the most generic level, this is a combination of a tab control with a
 toolbar. At a more functional level, it is similar to the user interface
-present in recent versions of Micrsoft Office.
-
-Related Overviews: @ref overview_ribbon
+present in recent versions of Microsoft Office.
 
 */

@@ -141,7 +141,7 @@ TODO: Organize them in a more human-readable way.
 @endTable
 
 
-<hr/>
+<hr>
 
 Notice that all wxWidgets samples mentioned above can be found in @c samples
 subdirectory of the library distribution. When a @c foobar sample is mentioned

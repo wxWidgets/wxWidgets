@@ -100,7 +100,7 @@ public:
 
         @since 2.9.1
 
-        @param variable
+        @param variant
             The new value.
         @param item
             The item (row) to update.
