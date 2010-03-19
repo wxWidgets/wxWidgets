@@ -241,6 +241,15 @@ public:
 
     static const MenuDrawData* Get()
     {
+        // notice that s_menuData can't be created as a global variable because
+        // it needs a window to initialize and no windows exist at the time of
+        // globals initialization yet
+        if ( !ms_instance )
+        {
+            static MenuDrawData s_menuData;
+            ms_instance = &s_menuData;
+        }
+
     #if wxUSE_UXTHEME
         bool theme = MenuLayout() == FullTheme;
         if ( ms_instance->Theme != theme )
@@ -251,7 +260,6 @@ public:
 
     MenuDrawData()
     {
-        ms_instance = this;
         Init();
     }
 
@@ -298,8 +306,6 @@ private:
 };
 
 MenuDrawData* MenuDrawData::ms_instance = NULL;
-
-MenuDrawData s_menuData;
 
 void MenuDrawData::Init()
 {
