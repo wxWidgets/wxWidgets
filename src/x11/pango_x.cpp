@@ -87,6 +87,7 @@ x11_draw_glyphs( Drawable            drawable,
     else
 #endif
     {
+        wxUnusedVar(colour);
         pango_x_render( wxGlobalDisplay(), drawable, gc, font, glyphs, x, y );
     }
 }

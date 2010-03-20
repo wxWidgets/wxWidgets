@@ -61,7 +61,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         long style,
                         const wxString& name,
                         const int *attribList,
-                        const wxPalette& palette)
+                        const wxPalette& WXUNUSED(palette))
 {
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
