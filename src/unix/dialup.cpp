@@ -684,7 +684,7 @@ wxDialUpManagerImpl::CheckIfconfig()
         cmd << wxT(" -a");
 #elif defined(__LINUX__) || defined(__SGI__)
         // nothing to be added to ifconfig
-#elif defined(__FREEBSD__) || defined(__DARWIN__)
+#elif defined(__FREEBSD__) || defined(__DARWIN__) || defined(__QNX__)
         // add -l flag
         cmd << wxT(" -l");
 #elif defined(__HPUX__)
@@ -723,7 +723,7 @@ wxDialUpManagerImpl::CheckIfconfig()
                     // dialup device under SunOS/Solaris
                     hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
                     hasLAN = strstr(output.fn_str(), "hme") != NULL;
-#elif defined(__LINUX__) || defined (__FREEBSD__)
+#elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip
@@ -799,7 +799,8 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckPing()
       defined(__LINUX__) || \
       defined(__OSF__) || \
       defined(__SGI__) || \
-      defined(__VMS)
+      defined(__VMS) || \
+      defined(__QNX__)
     cmd << wxT("-c 1 "); // only ping once
 #elif defined(__HPUX__)
     cmd << wxT("64 1 "); // only ping once (need also specify the packet size)
