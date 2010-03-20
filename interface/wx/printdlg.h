@@ -69,20 +69,14 @@ public:
 /**
     @class wxPageSetupDialog
 
-    This class represents the page setup common dialog. In MSW, the page setup
-    dialog is standard from Windows 95 on, replacing the print setup dialog (which
-    is retained in Windows and wxWidgets for backward compatibility).
-    On Windows 95 and NT 4.0 and above, the page setup dialog is native to the windowing
-    system, otherwise it is emulated.
+    This class represents the page setup common dialog.
 
-    The page setup dialog contains controls for paper size (A4, A5 etc.),
-    orientation (landscape or portrait), and controls for setting left, top, right
-    and bottom margin sizes in millimetres.
+    The page setup dialog contains controls for paper size (letter, A4, A5 etc.),
+    orientation (landscape or portrait), and, only under Windows currently,
+    controls for setting left, top, right and bottom margin sizes in millimetres.
 
-    On Macintosh, the native page setup dialog is used, which lets you select paper
-    size and orientation but it does not let you change the page margins.
-
-    On other platforms, a generic dialog is used.
+    The exact appearance of this dialog varies among the platforms as a native
+    dialog is used when available (currently the case for all major platforms).
 
     When the dialog has been closed, you need to query the wxPageSetupDialogData
     object associated with the dialog.
