@@ -403,7 +403,10 @@ wxPG_VFB_UNDEFINED                  = 0x80
 /** @}
 */
 
-typedef wxByte wxPGVFBFlags;
+// Having this as define instead of wxByte typedef makes things easier for
+// wxPython bindings (ignoring and redefining it in SWIG interface file
+// seemed rather tricky)
+#define wxPGVFBFlags unsigned char
 
 /**
     wxPGValidationInfo
