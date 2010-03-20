@@ -3097,6 +3097,8 @@ wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
 
     return fmtDateOnly;
 #else // !HAVE_LANGINFO_H
+    wxUnusedVar(index);
+
     // no fallback, let the application deal with unavailability of
     // nl_langinfo() itself as there is no good way for us to do it (well, we
     // could try to reverse engineer the format from strftime() output but this
