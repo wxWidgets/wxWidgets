@@ -1771,13 +1771,6 @@ static wxCairoRenderer gs_cairoGraphicsRenderer;
 extern wxGraphicsRenderer* gCairoRenderer;
 wxGraphicsRenderer* gCairoRenderer = &gs_cairoGraphicsRenderer;
 
-#ifdef __WXGTK__
-wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
-{
-    return &gs_cairoGraphicsRenderer;
-}
-#endif
-
 wxGraphicsContext * wxCairoRenderer::CreateContext( const wxWindowDC& dc)
 {
     return new wxCairoContext(this,dc);
@@ -1952,15 +1945,27 @@ wxCairoRenderer::CreateSubBitmap(const wxGraphicsBitmap& WXUNUSED(bitmap),
     return wxNullGraphicsBitmap;
 }
 
-#endif  // wxUSE_CAIRO
+wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
+{
+    return &gs_cairoGraphicsRenderer;
+}
+
+#else // !wxUSE_CAIRO
 
 wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 {
-#if wxUSE_CAIRO
-    return &gs_cairoGraphicsRenderer;
-#else
     return NULL;
-#endif
 }
+
+#endif  // wxUSE_CAIRO/!wxUSE_CAIRO
+
+// MSW and OS X have their own native default renderers, but the other ports
+// use Cairo by default
+#if !(defined(__WXMSW__) || defined(__WXOSX__))
+wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
+{
+    return GetCairoRenderer();
+}
+#endif // !(__WXMSW__ || __WXOSX__)
 
 #endif // wxUSE_GRAPHICS_CONTEXT
