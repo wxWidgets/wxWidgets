@@ -9,11 +9,11 @@
 
 void
 x11_draw_glyphs( Drawable       drawable,
-		         GC             gc,
-		         PangoFont     *font,
-		         int            x,
-		         int            y,
-		         PangoGlyphString *glyphs,
+                 GC             gc,
+                 PangoFont     *font,
+                 int            x,
+                 int            y,
+                 PangoGlyphString *glyphs,
                  wxColour       &colour );
 
 void
@@ -57,11 +57,11 @@ x11_pango_get_item_properties( PangoItem      *item,
 
 void
 x11_draw_glyphs( Drawable            drawable,
-		         GC                  gc,
-		         PangoFont          *font,
-		         int                 x,
-		         int                 y,
-		         PangoGlyphString   *glyphs,
+                 GC                  gc,
+                 PangoFont          *font,
+                 int                 x,
+                 int                 y,
+                 PangoGlyphString   *glyphs,
                  wxColour           &colour )
 {
 #ifdef HAVE_PANGO_XFT
@@ -137,11 +137,11 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
         }
 
 #if 0
-	    XDrawRectangle( drawable, gc, TRUE,
-			      x + (x_off + logical_rect.x) / PANGO_SCALE,
-			      risen_y + overall_rect.y / PANGO_SCALE,
-			      logical_rect.width / PANGO_SCALE,
-			      overall_rect.height / PANGO_SCALE);
+        XDrawRectangle( drawable, gc, TRUE,
+                  x + (x_off + logical_rect.x) / PANGO_SCALE,
+                  risen_y + overall_rect.y / PANGO_SCALE,
+                  logical_rect.width / PANGO_SCALE,
+                  overall_rect.height / PANGO_SCALE);
 #endif
 
         if (!shape_set)
@@ -155,9 +155,9 @@ x11_draw_layout_line_with_colors( Drawable         drawable,
         if (uline ==  PANGO_UNDERLINE_SINGLE)
         {
             XDrawLine( wxGlobalDisplay(), drawable, gc,
-			  x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
+              x + (x_off + ink_rect.x) / PANGO_SCALE - 1,
                           risen_y + 1,
-			  x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
+              x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
                          risen_y + 1);
         }
 
@@ -243,50 +243,50 @@ x11_pango_get_item_properties( PangoItem      *item,
       PangoAttribute *attr = (PangoAttribute *) tmp_list->data;
 
       switch (attr->klass->type)
-	{
-	case PANGO_ATTR_UNDERLINE:
-	  if (uline)
-	    *uline = (PangoUnderline) ((PangoAttrInt *)attr)->value;
-	  break;
+      {
+          case PANGO_ATTR_UNDERLINE:
+              if (uline)
+                  *uline = (PangoUnderline) ((PangoAttrInt *)attr)->value;
+              break;
 
-	case PANGO_ATTR_STRIKETHROUGH:
-	    if (strikethrough)
-		*strikethrough = ((PangoAttrInt *)attr)->value;
-	    break;
-	
-	case PANGO_ATTR_FOREGROUND:
-	  if (fg_color)
-	    *fg_color = ((PangoAttrColor *)attr)->color;
-	  if (fg_set)
-	    *fg_set = TRUE;
-	
-	  break;
-	
-	case PANGO_ATTR_BACKGROUND:
-	  if (bg_color)
-	    *bg_color = ((PangoAttrColor *)attr)->color;
-	  if (bg_set)
-	    *bg_set = TRUE;
-	
-	  break;
+          case PANGO_ATTR_STRIKETHROUGH:
+              if (strikethrough)
+                  *strikethrough = ((PangoAttrInt *)attr)->value;
+              break;
 
-	case PANGO_ATTR_SHAPE:
-	  if (shape_set)
-	    *shape_set = TRUE;
-	  if (logical_rect)
-	    *logical_rect = ((PangoAttrShape *)attr)->logical_rect;
-	  if (ink_rect)
-	    *ink_rect = ((PangoAttrShape *)attr)->ink_rect;
-	  break;
+          case PANGO_ATTR_FOREGROUND:
+              if (fg_color)
+                  *fg_color = ((PangoAttrColor *)attr)->color;
+              if (fg_set)
+                  *fg_set = TRUE;
 
-        case PANGO_ATTR_RISE:
-          if (rise)
-            *rise = ((PangoAttrInt *)attr)->value;
-          break;
+              break;
 
-	default:
-	  break;
-	}
+          case PANGO_ATTR_BACKGROUND:
+              if (bg_color)
+                  *bg_color = ((PangoAttrColor *)attr)->color;
+              if (bg_set)
+                  *bg_set = TRUE;
+
+              break;
+
+          case PANGO_ATTR_SHAPE:
+              if (shape_set)
+                  *shape_set = TRUE;
+              if (logical_rect)
+                  *logical_rect = ((PangoAttrShape *)attr)->logical_rect;
+              if (ink_rect)
+                  *ink_rect = ((PangoAttrShape *)attr)->ink_rect;
+              break;
+
+          case PANGO_ATTR_RISE:
+              if (rise)
+                  *rise = ((PangoAttrInt *)attr)->value;
+              break;
+
+          default:
+              break;
+      }
       tmp_list = tmp_list->next;
     }
 }
