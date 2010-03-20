@@ -40,17 +40,26 @@ int wxMessageDialog::ShowModal()
 
     const long style = GetMessageDialogStyle();
 
-    wxASSERT_MSG( (style & 0x3F) != wxYES, wxT("this style is not supported on Mac") );
+    wxASSERT_MSG( (style & 0x3F) != wxYES,
+        "this style is not supported on Mac" );
 
     AlertType alertType = kAlertPlainAlert;
-    if (style & wxICON_EXCLAMATION)
-        alertType = kAlertCautionAlert;
-    else if (style & wxICON_HAND)
-        alertType = kAlertStopAlert;
-    else if (style & wxICON_INFORMATION)
-        alertType = kAlertNoteAlert;
-    else if (style & wxICON_QUESTION)
-        alertType = kAlertNoteAlert;
+
+    switch ( GetEffectiveIcon() )
+    {
+        case wxICON_ERROR:
+            alertType = kAlertStopAlert;
+            break;
+
+        case wxICON_WARNING:
+            alertType = kAlertCautionAlert;
+            break;
+
+        case wxICON_QUESTION:
+        case wxICON_INFORMATION:
+            alertType = kAlertNoteAlert;
+            break;
+    }
 
 
     // work out what to display

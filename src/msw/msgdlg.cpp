@@ -508,16 +508,24 @@ int wxMessageDialog::ShowModal()
     }
 
     // set the icon style
-    if (wxStyle & wxICON_EXCLAMATION)
-        msStyle |= MB_ICONEXCLAMATION;
-    else if (wxStyle & wxICON_HAND)
-        msStyle |= MB_ICONHAND;
-    else if (wxStyle & wxICON_INFORMATION)
-        msStyle |= MB_ICONINFORMATION;
-    else if (wxStyle & wxICON_QUESTION)
-        msStyle |= MB_ICONQUESTION;
-    else if (!(wxStyle & wxICON_NONE))
-        msStyle |= wxStyle & wxYES ? MB_ICONQUESTION : MB_ICONINFORMATION;
+    switch ( GetEffectiveIcon() )
+    {
+        case wxICON_ERROR:
+            msStyle |= MB_ICONHAND;
+            break;
+
+        case wxICON_WARNING:
+            msStyle |= MB_ICONEXCLAMATION;
+            break;
+
+        case wxICON_QUESTION:
+            msStyle |= MB_ICONQUESTION;
+            break;
+
+        case wxICON_INFORMATION:
+            msStyle |= MB_ICONINFORMATION;
+            break;
+    }
 
     if ( wxStyle & wxSTAY_ON_TOP )
         msStyle |= MB_TOPMOST;

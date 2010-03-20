@@ -63,14 +63,25 @@ int wxMessageDialog::ShowModal()
     }
 
     // Add the icon styles
-    if (style & wxICON_EXCLAMATION)
-        AlertID=AlertID+0; // Warning
-    else if (style & wxICON_HAND)
-        AlertID=AlertID+1; // Error
-    else if (style & wxICON_INFORMATION)
-        AlertID=AlertID+2; // Information
-    else if (style & wxICON_QUESTION)
-        AlertID=AlertID+3; // Confirmation
+    switch ( GetEffectiveIcon() )
+    {
+        case wxICON_ERROR:
+            AlertID = AlertID + 1;
+            break;
+
+        case wxICON_WARNING:
+            AlertID = AlertID + 0;
+            break;
+
+        case wxICON_QUESTION:
+            AlertID = AlertID + 3;
+            break;
+
+        case wxICON_NONE:
+        case wxICON_INFORMATION:
+            AlertID = AlertID + 2;
+            break;
+    }
 
     // The Palm OS Dialog API does not support custom titles in a dialog box.
     // So we have to set the title by manipulating the resource.

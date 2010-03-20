@@ -168,6 +168,26 @@ public:
 protected:
     long GetMessageDialogStyle() const { return m_dialogStyle; }
 
+    // based on message dialog style, returns exactly one of: wxICON_NONE,
+    // wxICON_ERROR, wxICON_WARNING, wxICON_QUESTION, wxICON_INFORMATION
+    long GetEffectiveIcon() const
+    {
+        if ( m_dialogStyle & wxICON_NONE )
+            return wxICON_NONE;
+        else if ( m_dialogStyle & wxICON_ERROR )
+            return wxICON_ERROR;
+        else if ( m_dialogStyle & wxICON_WARNING )
+            return wxICON_WARNING;
+        else if ( m_dialogStyle & wxICON_QUESTION )
+            return wxICON_QUESTION;
+        else if ( m_dialogStyle & wxICON_INFORMATION )
+            return wxICON_INFORMATION;
+        else if ( m_dialogStyle & wxYES )
+            return wxICON_QUESTION;
+        else
+            return wxICON_INFORMATION;
+    }
+
 
     // for the platforms not supporting separate main and extended messages
     // this function should be used to combine both of them in a single string

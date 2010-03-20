@@ -73,14 +73,25 @@ int wxMessageDialog::ShowModal()
         else
             ulStyle = MB_OK;
     }
-    if (lStyle & wxICON_EXCLAMATION)
-        ulStyle |= MB_ICONEXCLAMATION;
-    else if (lStyle & wxICON_HAND)
-        ulStyle |= MB_ICONHAND;
-    else if (lStyle & wxICON_INFORMATION)
-        ulStyle |= MB_ICONEXCLAMATION;
-    else if (lStyle & wxICON_QUESTION)
-        ulStyle |= MB_ICONQUESTION;
+
+    switch ( GetEffectiveIcon() )
+    {
+        case wxICON_ERROR:
+            ulStyle |= MB_ERROR;
+            break;
+
+        case wxICON_WARNING:
+            ulStyle |= MB_WARNING;
+            break;
+
+        case wxICON_QUESTION:
+            ulStyle |= MB_QUERY;
+            break;
+
+        case wxICON_INFORMATION:
+            ulStyle |= MB_INFORMATION;
+            break;
+    }
 
     if (hWnd != HWND_DESKTOP)
         ulStyle |= MB_APPLMODAL;

@@ -90,19 +90,26 @@ void wxMessageDialog::GTKCreateMsgDialog()
     GtkWindow * const parent = m_parent ? GTK_WINDOW(m_parent->m_widget) : NULL;
 
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
-    const char *stockIcon;
-    if ( m_dialogStyle & wxICON_NONE )
-        stockIcon = "";
-    else if ( m_dialogStyle & wxICON_ERROR )
-        stockIcon = "qgn_note_gene_syserror";
-    else if ( m_dialogStyle & wxICON_EXCLAMATION )
-        stockIcon = "qgn_note_gene_syswarning";
-    else if ( m_dialogStyle & wxICON_INFORMATION )
-        stockIcon = "qgn_note_info";
-    else if ( m_dialogStyle & wxICON_QUESTION )
-        stockIcon = "qgn_note_confirm";
-    else
-        stockIcon = "";
+    const char *stockIcon = "";
+
+    switch ( GetEffectiveIcon() )
+    {
+        case wxICON_ERROR:
+            stockIcon = "qgn_note_gene_syserror";
+            break;
+
+        case wxICON_WARNING:
+            stockIcon = "qgn_note_gene_syswarning";
+            break;
+
+        case wxICON_QUESTION:
+            stockIcon = "qgn_note_confirm";
+            break;
+
+        case wxICON_INFORMATION:
+            stockIcon = "qgn_note_info";
+            break;
+    }
 
     // there is no generic note creation function in public API so we have no
     // choice but to use g_object_new() directly
@@ -138,7 +145,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
         }
     }
 
-    if ( !wxGTKImpl::ConvertMessageTypeFromWX(m_dialogStyle, &type) )
+    if ( !wxGTKImpl::ConvertMessageTypeFromWX(GetEffectiveIcon(), &type) )
     {
         // if no style is explicitly specified, detect the suitable icon
         // ourselves (this can be disabled by using wxICON_NONE)
