@@ -45,6 +45,7 @@
 #include <pthread.h>
 #include <errno.h>
 #include <time.h>
+#include <sys/time.h>           // needed for at least __QNX__
 #ifdef HAVE_SCHED_H
     #include <sched.h>
 #endif
@@ -56,9 +57,7 @@
 // we use wxFFile under Linux in GetCPUCount()
 #ifdef __LINUX__
     #include "wx/ffile.h"
-    // For setpriority.
-    #include <sys/time.h>
-    #include <sys/resource.h>
+    #include <sys/resource.h>   // for setpriority()
 #endif
 
 #ifdef __VMS
