@@ -183,7 +183,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC* owner, wxWindow *window )
 
     m_font = window->GetFont();
 
-    m_x11window = (WXWindow*) window->GetMainWindow();
+    m_x11window = (WXWindow*) window->X11GetMainWindow();
 
     // not realized ?
     if (!m_x11window)
@@ -2356,7 +2356,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window )
     m_x11window = (WXWindow*) window->GetClientAreaWindow();
 
     // Adjust the client area when the wxWindow is not using 2 X11 windows.
-    if (m_x11window == (WXWindow*) window->GetMainWindow())
+    if (m_x11window == (WXWindow*) window->X11GetMainWindow())
     {
         wxPoint ptOrigin = window->GetClientAreaOrigin();
         SetDeviceOrigin(ptOrigin.x, ptOrigin.y);

@@ -89,12 +89,12 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
 
     old = XSetErrorHandler(ErrorHandler);
     XReparentWindow( wxGlobalDisplay(),
-                     (Window) toReparent->GetMainWindow(),
-                     (Window) newParent->GetMainWindow(),
+                     (Window) toReparent->X11GetMainWindow(),
+                     (Window) newParent->X11GetMainWindow(),
                      0, 0);
 
     if (!XQueryTree( wxGlobalDisplay(),
-                     (Window) toReparent->GetMainWindow(),
+                     (Window) toReparent->X11GetMainWindow(),
                      &returnroot, &returnparent,
                      &children, &numchildren) || Xerror)
     {
@@ -123,7 +123,7 @@ bool wxReparenter::Reparent(wxWindow* newParent, wxAdoptedWindow* toReparent)
               "Reparenting child at offset %d and position %d, %d.\n",
                parentOffset, parentOffset+xwa.x, parentOffset+xwa.y);
             XReparentWindow( wxGlobalDisplay(),
-                             children[each], (Window) newParent->GetMainWindow(),
+                             children[each], (Window) newParent->X11GetMainWindow(),
                              xwa.x, xwa.y);
         }
     }

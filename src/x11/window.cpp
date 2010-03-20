@@ -148,7 +148,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (parent->GetInsertIntoMain())
     {
         // wxLogDebug( "Inserted into main: %s", GetName().c_str() );
-        xparent = (Window) parent->GetMainWindow();
+        xparent = (Window) parent->X11GetMainWindow();
     }
 
     // Size (not including the border) must be nonzero (or a Value error results)!
@@ -1267,7 +1267,7 @@ void wxWindowX11::SendNcPaintEvents()
             x = sb->GetPosition().x;
 
             Display *xdisplay = wxGlobalDisplay();
-            Window xwindow = (Window) GetMainWindow();
+            Window xwindow = (Window) X11GetMainWindow();
             Colormap cm = (Colormap) wxTheApp->GetMainColormap( wxGetDisplay() );
             wxColour colour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
             colour.CalcPixel( (WXColormap) cm );
@@ -1408,7 +1408,7 @@ void wxDeleteClientWindowFromTable(Window w)
 // X11-specific accessors
 // ----------------------------------------------------------------------------
 
-WXWindow wxWindowX11::GetMainWindow() const
+WXWindow wxWindowX11::X11GetMainWindow() const
 {
     return m_mainWindow;
 }

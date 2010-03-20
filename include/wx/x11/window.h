@@ -82,7 +82,7 @@ public:
     virtual void DragAcceptFiles(bool accept);
 
     // Get the unique identifier of a window
-    virtual WXWindow GetHandle() const { return GetMainWindow(); }
+    virtual WXWindow GetHandle() const { return X11GetMainWindow(); }
 
     // implementation from now on
     // --------------------------
@@ -91,7 +91,7 @@ public:
     // ---------
 
     // Get main X11 window
-    virtual WXWindow GetMainWindow() const;
+    virtual WXWindow X11GetMainWindow() const;
 
     // Get X11 window representing the client area
     virtual WXWindow GetClientAreaWindow() const;

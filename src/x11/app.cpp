@@ -338,7 +338,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
                 // If we only have one X11 window, always indicate
                 // that borders might have to be redrawn.
-                if (win->GetMainWindow() == win->GetClientAreaWindow())
+                if (win->X11GetMainWindow() == win->GetClientAreaWindow())
                     win->NeedUpdateNcAreaInIdle();
 
                 // Only erase background, paint in idle time.
