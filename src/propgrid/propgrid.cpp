@@ -4828,7 +4828,6 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         {
 
             int newSplitterX = x - m_dragOffset;
-            int splitterX = x - splitterHitOffset;
 
             // Splitter redraw required?
             if ( newSplitterX != splitterX )
