@@ -51,16 +51,24 @@ public:
     }
 
     // get the string without mnemonic characters ('&') and without markup
-    // (if wxST_MARKUP is being used)
+    // (if the wxST_MARKUP style is set)
     virtual wxString GetLabelText() const;
 
-    // public utilities (symmetric to those in wxControl about mnemonics):
+    // set label text (mnemonics and markup, if the wxST_MARKUP style is set,
+    // will be escaped)
+    virtual void SetLabelText(const wxString& text);
+
+
+    // static utilities for markup handling
+    // (symmetric to those in wxControl about mnemonics)
+    // -------------------------------------------------
 
     // get the string without mnemonic characters ('&') and without markup
+    // (note that markup is always removed; this function is static and cannot
+    //  check for wxST_MARKUP style presence/absence!)
     static wxString GetLabelText(const wxString& label);
 
-    // removes the markup accepted by wxStaticText when wxST_MARKUP is used,
-    // and then returns the cleaned string
+    // removes the markup recognized by wxStaticText and returns the cleaned string
     static wxString RemoveMarkup(const wxString& str);
 
     // escapes all special symbols (<>"'&) present in the given string
@@ -72,7 +80,14 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    // just calls RemoveMarkup & Ellipsize on the original label.
+    // calls only RemoveMarkup() on the original label 
+    // if the wxST_MARKUP style is set
+    // (but unlike GetLabelText won't remove mnemonics)
+    virtual wxString GetLabelWithoutMarkup() const;
+
+    // just calls RemoveMarkup() & Ellipsize() on the original label 
+    // if the wxST_MARKUP & wxST_ELLIPSIZE_* styles are set
+    // (but unlike GetLabelText won't remove mnemonics)
     virtual wxString GetEllipsizedLabelWithoutMarkup() const;
 
     // replaces parts of the string with ellipsis if needed

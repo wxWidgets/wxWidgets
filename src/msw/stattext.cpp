@@ -214,13 +214,13 @@ void wxStaticText::SetLabel(const wxString& label)
     }
 #endif // SS_ENDELLIPSIS
 
-    // this call will save the label in m_labelOrig and set it into this window
-    // (through wxWindow::SetLabel)
+    // save the label in m_labelOrig with both the markup (if any) and 
+    // the mnemonics characters (if any)
     m_labelOrig = label;
 
 #ifdef SS_ENDELLIPSIS
     if ( styleReal & SS_ENDELLIPSIS )
-        DoSetLabel(RemoveMarkup(label));
+        DoSetLabel(GetLabelWithoutMarkup());
     else
 #endif // SS_ENDELLIPSIS
         DoSetLabel(GetEllipsizedLabelWithoutMarkup());

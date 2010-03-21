@@ -88,13 +88,6 @@ bool wxControlBase::CreateControl(wxWindowBase *parent,
     return true;
 }
 
-/* static */
-wxString wxControlBase::GetLabelText(const wxString& label)
-{
-    // we don't want strip the TABs here, just the mnemonics
-    return wxStripMenuCodes(label, wxStrip_Mnemonics);
-}
-
 void wxControlBase::Command(wxCommandEvent& event)
 {
     (void)GetEventHandler()->ProcessEvent(event);
@@ -155,8 +148,16 @@ void wxControlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 }
 
 /* static */
+wxString wxControlBase::GetLabelText(const wxString& label)
+{
+    // we don't want strip the TABs here, just the mnemonics
+    return wxStripMenuCodes(label, wxStrip_Mnemonics);
+}
+
+/* static */
 wxString wxControlBase::RemoveMnemonics(const wxString& str)
 {
+    // we don't want strip the TABs here, just the mnemonics
     return wxStripMenuCodes(str, wxStrip_Mnemonics);
 }
 

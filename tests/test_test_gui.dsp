@@ -293,6 +293,10 @@ SOURCE=.\image\image.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\label.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\listctrltest.cpp
 # End Source File
 # Begin Source File

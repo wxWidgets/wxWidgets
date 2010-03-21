@@ -122,6 +122,7 @@
             config/config.cpp
             controls/comboboxtest.cpp
             controls/headerctrltest.cpp
+            controls/label.cpp
             controls/listctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp

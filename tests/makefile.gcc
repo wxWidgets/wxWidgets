@@ -120,6 +120,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_config.o \
 	$(OBJS)\test_gui_comboboxtest.o \
 	$(OBJS)\test_gui_headerctrltest.o \
+	$(OBJS)\test_gui_label.o \
 	$(OBJS)\test_gui_listctrltest.o \
 	$(OBJS)\test_gui_textctrltest.o \
 	$(OBJS)\test_gui_textentrytest.o \
@@ -624,6 +625,9 @@ $(OBJS)\test_gui_comboboxtest.o: ./controls/comboboxtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_headerctrltest.o: ./controls/headerctrltest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_label.o: ./controls/label.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_listctrltest.o: ./controls/listctrltest.cpp

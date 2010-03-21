@@ -71,6 +71,7 @@ public:
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
+    // set label with mnemonics
     virtual void SetLabel(const wxString& label)
     {
         m_labelOrig = label;
@@ -80,20 +81,18 @@ public:
         wxWindow::SetLabel(label);
     }
 
-    virtual wxString GetLabel() const
-    {
-        // return the original string, as it was passed to SetLabel()
-        // (i.e. with wx-style mnemonics)
-        return m_labelOrig;
-    }
+    // return the original string, as it was passed to SetLabel()
+    // (i.e. with wx-style mnemonics)
+    virtual wxString GetLabel() const { return m_labelOrig; }
 
-    // get just the text of the label, without mnemonic characters ('&')
-    wxString GetLabelText() const { return GetLabelText(GetLabel()); }
-
-    void SetLabelText(const wxString& text)
+    // set label text (mnemonics will be escaped)
+    virtual void SetLabelText(const wxString& text)
     {
         SetLabel(EscapeMnemonics(text));
     }
+
+    // get just the text of the label, without mnemonic characters ('&')
+    virtual wxString GetLabelText() const { return GetLabelText(GetLabel()); }
 
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
@@ -114,22 +113,28 @@ public:
 
 
 
-    // static utilities
-    // ----------------
+    // static utilities for mnemonics char (&) handling
+    // ------------------------------------------------
 
-    // replaces parts of the (multiline) string with ellipsis if needed
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
-                              wxEllipsizeMode mode, int maxWidth,
-                              int flags = wxELLIPSIZE_FLAGS_DEFAULT);
-
-    // get the string without mnemonic characters ('&')
+    // returns the given string without mnemonic characters ('&')
     static wxString GetLabelText(const wxString& label);
 
-    // removes the mnemonics characters
+    // returns the given string without mnemonic characters ('&')
+    // this function is identic to GetLabelText() and is provided for clarity
+    // and for symmetry with the wxStaticText::RemoveMarkup() function.
     static wxString RemoveMnemonics(const wxString& str);
 
     // escapes (by doubling them) the mnemonics
     static wxString EscapeMnemonics(const wxString& str);
+
+
+    // miscellaneous static utilities
+    // ------------------------------
+
+    // replaces parts of the given (multiline) string with an ellipsis if needed
+    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+                              wxEllipsizeMode mode, int maxWidth,
+                              int flags = wxELLIPSIZE_FLAGS_DEFAULT);
 
     // return the accel index in the string or -1 if none and puts the modified
     // string into second parameter if non NULL

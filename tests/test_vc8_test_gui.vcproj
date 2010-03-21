@@ -948,6 +948,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\label.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\listctrltest.cpp"
 				>
 			</File>

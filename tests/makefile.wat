@@ -364,6 +364,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_comboboxtest.obj &
 	$(OBJS)\test_gui_headerctrltest.obj &
+	$(OBJS)\test_gui_label.obj &
 	$(OBJS)\test_gui_listctrltest.obj &
 	$(OBJS)\test_gui_textctrltest.obj &
 	$(OBJS)\test_gui_textentrytest.obj &
@@ -679,6 +680,9 @@ $(OBJS)\test_gui_comboboxtest.obj :  .AUTODEPEND .\controls\comboboxtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_headerctrltest.obj :  .AUTODEPEND .\controls\headerctrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_label.obj :  .AUTODEPEND .\controls\label.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_listctrltest.obj :  .AUTODEPEND .\controls\listctrltest.cpp

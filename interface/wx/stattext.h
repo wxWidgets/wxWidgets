@@ -22,11 +22,11 @@
            Center the text (horizontally).
     @style{wxST_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
-           size of the text when  SetLabel is called. If this style flag is
+           size of the text when SetLabel() is called. If this style flag is
            given, the control will not change its size (this style is
-           especially useful with controls which also have wxALIGN_RIGHT or
-           CENTER style because otherwise they won't make sense any longer
-           after a call to SetLabel).
+           especially useful with controls which also have the @c wxALIGN_RIGHT or
+           the @c wxALIGN_CENTRE style because otherwise they won't make sense any 
+           longer after a call to SetLabel()).
     @style{wxST_ELLIPSIZE_START}
            If the labeltext width exceeds the control width, replace the beginning
            of the label with an ellipsis; uses wxControl::Ellipsize.
@@ -89,23 +89,12 @@ public:
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxString& name = wxStaticTextNameStr);
 
-    // NB: when writing docs for the following function remember that Doxygen
-    //     will always expand HTML entities (e.g. &quot;) and thus we need to
-    //     write e.g. "&amp;lt;" to have in the output the "&lt;" string.
-    /**
-        Escapes all the symbols of @a str that have a special meaning (<tt><>&quot;'&</tt>) for
-        wxStaticText objects with the @c wxST_MARKUP style.
-        
-        Those symbols are replaced the corresponding entities 
-        (&amp;lt; &amp;gt; &amp;quot; &amp;apos; &amp;amp;).
-    */
-    static wxString EscapeMarkup(const wxString& str);
-
     /**
         Returns the contents of the control.
 
-        Note that the returned string contains both the mnemonics (@& characters),
+        Note that the returned string may contain both the mnemonics (@& characters),
         if any, and markup tags, if any.
+
         Use GetLabelText() if only the label text is needed.
     */
     wxString GetLabel() const;
@@ -117,28 +106,18 @@ public:
     wxString GetLabelText() const;
 
     /**
-        This overload returns the given @a label string without the
-        mnemonics characters (if any) and without the markup.
-    */
-    static wxString GetLabelText(const wxString& label);
-
-    /**
         Returns @true if the window styles for this control contains one of the
         @c wxST_ELLIPSIZE_START, @c wxST_ELLIPSIZE_MIDDLE or @c wxST_ELLIPSIZE_END styles.
     */
     bool IsEllipsized() const;
 
-    /**
-        Removes the markup accepted by wxStaticText when the @c wxST_MARKUP style is used,
-        and then returns the cleaned string.
-
-        See SetLabel() for more info about the markup.
-    */
-    static wxString RemoveMarkup(const wxString& str);
+    // NB: when writing docs for the following function remember that Doxygen
+    //     will always expand HTML entities (e.g. &quot;) and thus we need to
+    //     write e.g. "&amp;lt;" to have in the output the "&lt;" string.
 
     /**
         Sets the static text label and updates the controls size to exactly fit the
-        label unless the control has wxST_NO_AUTORESIZE flag.
+        label unless the control has @c wxST_NO_AUTORESIZE flag.
 
         This function allows to set decorated static label text on platforms which
         support it (currently only GTK+ 2). For the other platforms, the markup is
@@ -146,6 +125,10 @@ public:
 
         The supported tags are:
         <TABLE>
+            <TR>
+                <TD><b>Tag</b></TD>
+                <TD><b>Description</b></TD>
+            </TR>
             <TR>
                 <TD>&lt;b&gt;</TD>
                 <TD>bold text</TD>
@@ -231,6 +214,17 @@ public:
             It may contain newline characters and the markup tags described above.
     */
     virtual void SetLabel(const wxString& label);
+    
+    /**
+                Sets the control's label to exactly the given string.
+
+        Unlike SetLabel(), this function shows exactly the @a text passed to it
+        in the control, without interpreting ampersands in it in any way.
+        Notice that it means that the control can't have any mnemonic defined
+        for it using this function.
+
+    */
+    virtual void SetLabelText(const wxString& text);
 
     /**
         This functions wraps the controls label so that each of its lines becomes at
@@ -244,5 +238,34 @@ public:
         @since 2.6.2
     */
     void Wrap(int width);
+
+
+public:     // static functions
+    
+    /**
+        Returns the given @a label string without the mnemonics characters (if any) 
+        and without the markup.
+
+        Note that since this function is static it will always remove markup
+        (since it cannot check @c wxST_MARKUP presence/absence!).
+    */
+    static wxString GetLabelText(const wxString& label);
+
+    /**
+        Escapes all the symbols of @a str that have a special meaning (<tt><>&quot;'&</tt>) for
+        wxStaticText objects with the @c wxST_MARKUP style.
+        
+        Those symbols are replaced the corresponding entities 
+        (&amp;lt; &amp;gt; &amp;quot; &amp;apos; &amp;amp;).
+    */
+    static wxString EscapeMarkup(const wxString& str);
+
+    /**
+        Removes the markup accepted by wxStaticText when the @c wxST_MARKUP style is used,
+        and then returns the cleaned string.
+
+        See SetLabel() for more info about the markup.
+    */
+    static wxString RemoveMarkup(const wxString& str);
 };
 

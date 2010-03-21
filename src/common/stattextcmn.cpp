@@ -154,15 +154,28 @@ wxString wxStaticTextBase::GetLabelText() const
     return RemoveMnemonics(ret);
 }
 
-/*static*/
+void wxStaticTextBase::SetLabelText(const wxString& text)
+{
+    wxString str = text;
+
+    if (HasFlag(wxST_MARKUP))
+        str = EscapeMarkup(str);        // escapes markup and the & characters (which are also mnemonics)
+    else
+        str = EscapeMnemonics(text);    // escape only the mnemonics
+    SetLabel(str);
+}
+
+/* static */
 wxString wxStaticTextBase::GetLabelText(const wxString& label)
 {
-    // remove markup
     wxString ret = RemoveMarkup(label);
+        // always remove the markup (this function is static 
+        // and cannot check for wxST_MARKUP presence/absence)
+
     return RemoveMnemonics(ret);
 }
 
-/*static*/
+/* static */
 wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
 {
     // strip out of "text" the markup for platforms which don't support it natively
@@ -291,6 +304,17 @@ void wxStaticTextBase::UpdateLabel()
     if (newlabel == DoGetLabel())
         return;
     DoSetLabel(newlabel);
+}
+
+wxString wxStaticTextBase::GetLabelWithoutMarkup() const
+{
+    wxString ret(m_labelOrig);
+
+    if (HasFlag(wxST_MARKUP))
+        ret = RemoveMarkup(ret);
+
+    // unlike GetLabelText() we don't remove the mnemonics here!
+    return ret;
 }
 
 wxString wxStaticTextBase::GetEllipsizedLabelWithoutMarkup() const
