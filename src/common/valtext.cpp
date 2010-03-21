@@ -232,7 +232,7 @@ wxString wxTextValidator::IsValid(const wxString& val) const
         return _("'%s' should only contain alphabetic characters.");
     if ( HasFlag(wxFILTER_ALPHANUMERIC) && !CheckString(wxIsalnum, val) )
         return _("'%s' should only contain alphabetic or numeric characters.");
-    if ( HasFlag(wxFILTER_DIGITS) && CheckString(wxIsdigit, val) )
+    if ( HasFlag(wxFILTER_DIGITS) && !CheckString(wxIsdigit, val) )
         return _("'%s' should only contain digits.");
     if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(val) )
         return _("'%s' should be numeric.");
