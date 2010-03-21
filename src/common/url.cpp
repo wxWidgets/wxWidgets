@@ -166,6 +166,8 @@ bool wxURL::ParseURL()
             m_url = m_url + wxT("//") + m_server;
 
         // We initialize specific variables.
+        if (m_protocol)
+            m_protocol->Destroy();
         m_protocol = m_proxy; // FIXME: we should clone the protocol
     }
 #endif // wxUSE_PROTOCOL_HTTP
@@ -183,9 +185,14 @@ void wxURL::CleanData()
 #if wxUSE_PROTOCOL_HTTP
     if (!m_useProxy)
 #endif // wxUSE_PROTOCOL_HTTP
+    {
         if (m_protocol)
+        {
             // Need to safely delete the socket (pending events)
             m_protocol->Destroy();
+            m_protocol = NULL;
+        }
+    }
 }
 
 wxURL::~wxURL()
