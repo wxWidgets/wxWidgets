@@ -2171,8 +2171,19 @@ void wxBoxSizer::RecalcSizes()
             if ( majorSizes[n] != wxDefaultCoord )
                 continue;
 
-            const wxCoord
-                minMajor = GetSizeInMajorDir(item->GetMinSizeWithBorder());
+            wxCoord minMajor = GetSizeInMajorDir(item->GetMinSizeWithBorder());
+
+            // it doesn't make sense for min size to be negative but right now
+            // it's possible to create e.g. a spacer with (-1, 10) as size and
+            // people do it in their code apparently (see #11842) so ensure
+            // that we don't use this -1 as real min size as it conflicts with
+            // the meaning we use for it here and negative min sizes just don't
+            // make sense anyhow (which is why it might be a better idea to
+            // deal with them at wxSizerItem level in the future but for now
+            // this is the minimal fix for the bug)
+            if ( minMajor < 0 )
+                minMajor = 0;
+
             const int propItem = item->GetProportion();
             if ( propItem )
             {
