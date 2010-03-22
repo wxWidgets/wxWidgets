@@ -1497,10 +1497,9 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
 {
     wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
 
-    // Set to current day and hour, so strings like '14:00' becomes today at
-    // 14, not some other random date
-    wxDateTime dtDate = wxDateTime::Today();
-    wxDateTime dtTime = wxDateTime::Today();
+    wxDateTime
+        dtDate,
+        dtTime;
 
     wxString::const_iterator
         endTime,

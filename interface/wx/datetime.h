@@ -59,7 +59,7 @@
     in 'free' format, i.e. allow them to be specified in any of possible ways.
     These functions will usually be used to parse the (interactive) user input
     which is not bound to be in any predefined format. As an example,
-    ParseDateTime() can parse the strings such as "tomorrow", "March first" and
+    ParseDate() can parse the strings such as "tomorrow", "March first" and
     even "next Sunday".
 
     Finally notice that each of the parsing functions is available in several
@@ -821,7 +821,9 @@ public:
         This function tries as hard as it can to interpret the given string as
         date and time. Unlike ParseRfc822Date(), it will accept anything that
         may be accepted and will only reject strings which can not be parsed in
-        any way at all.
+        any way at all. Notice that the function will fail if either date or
+        time part is present but not both, use ParseDate() or ParseTime() to
+        parse strings containing just the date or time component.
 
         See ParseFormat() for the description of function parameters and return
         value.
