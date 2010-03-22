@@ -24,15 +24,15 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_UIACTIONSIMULATOR
-
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
 
-#include "wx/uiaction.h"
+#if wxUSE_UIACTIONSIMULATOR
+    #include "wx/uiaction.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -67,6 +67,8 @@ public:
     virtual bool OnInit();
 };
 
+#if wxUSE_UIACTIONSIMULATOR
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -92,6 +94,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
 END_EVENT_TABLE()
 
+#endif // wxUSE_UIACTIONSIMULATOR
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -107,15 +111,22 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#if wxUSE_UIACTIONSIMULATOR
     MyFrame *frame = new MyFrame("wxUIActionSimulator sample application");
     frame->Show(true);
     
     return true;
+#else // !wxUSE_UIACTIONSIMULATOR
+    wxLogError("wxUSE_UIACTIONSIMULATOR must be 1 for this sample");
+    return false;
+#endif // wxUSE_UIACTIONSIMULATOR/!wxUSE_UIACTIONSIMULATOR
 }
 
 // ----------------------------------------------------------------------------
 // main frame
 // ----------------------------------------------------------------------------
+
+#if wxUSE_UIACTIONSIMULATOR
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
