@@ -2530,6 +2530,8 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
 
     //
     // Return rect which encloses the given property range
+    // (in logical grid coordinates)
+    // 
 
     int visTop = p1->GetY();
     int visBottom;
@@ -2572,6 +2574,13 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
     wxRect r = GetPropertyRect(p1, p2);
     if ( r.width > 0 )
     {
+        // Convert rectangle from logical grid coordinates to physical ones
+        int vx, vy;
+        GetViewStart(&vx, &vy);
+        vx *= wxPG_PIXELS_PER_UNIT;
+        vy *= wxPG_PIXELS_PER_UNIT;
+        r.x -= vx;
+        r.y -= vy;
         RefreshRect(r);
     }
 }

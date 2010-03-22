@@ -1433,7 +1433,7 @@ public:
 
     /**
         Returns rectangle that fully contains properties between and including
-        p1 and p2.
+        p1 and p2. Rectangle is in virtual scrolled window coordinates.
     */
     wxRect GetPropertyRect( const wxPGProperty* p1,
                             const wxPGProperty* p2 ) const;
