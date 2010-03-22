@@ -11,13 +11,11 @@
 
 #include "wx/wxprec.h"
 
-#ifndef WX_PRECOMP
-#include "wx/defs.h"
-#endif
+#if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
 DWORD EventTypeForMouseButton(int button, bool isDown)
 {
@@ -38,7 +36,7 @@ DWORD EventTypeForMouseButton(int button, bool isDown)
                 return MOUSEEVENTF_MIDDLEDOWN;
             else
                 return MOUSEEVENTF_MIDDLEUP;
-            
+
         default:
             wxFAIL_MSG("Unsupported button passed in.");
             return -1;
@@ -54,7 +52,7 @@ bool wxUIActionSimulator::MouseDown(int button)
 }
 
 bool wxUIActionSimulator::MouseMove(long x, long y)
-{   
+{
     mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
     return true;
 }
@@ -76,3 +74,4 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, bool shiftDown, bool cmd
     return true;
 }
 
+#endif // wxUSE_UIACTIONSIMULATOR

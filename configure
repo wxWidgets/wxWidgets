@@ -1883,6 +1883,7 @@ Optional Features:
   --enable-metafiles      use wxMetaFile (Win32 only)
   --enable-dragimage      use wxDragImage
   --enable-accessibility  enable accessibility support
+  --enable-uiactionsim    use wxUIActionSimulator (experimental)
   --enable-palette        use wxPalette class
   --enable-image          use wxImage class
   --enable-gif            use gif images (GIF file format)
@@ -2969,6 +2970,7 @@ DEFAULT_wxUSE_LIBSDL=no
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
+DEFAULT_wxUSE_UIACTIONSIMULATOR=no
 
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
@@ -13551,6 +13553,50 @@ fi
             fi
           else
             result=$wxUSE_ACCESSIBILITY
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-uiactionsim" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-uiactionsim... $ECHO_C" >&6; }
+          # Check whether --enable-uiactionsim was given.
+if test "${enable_uiactionsim+set}" = set; then
+  enableval=$enable_uiactionsim;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_uiactionsim='wxUSE_UIACTIONSIMULATOR=yes'
+                          else
+                            wx_cv_use_uiactionsim='wxUSE_UIACTIONSIMULATOR=no'
+                          fi
+
+else
+
+                          wx_cv_use_uiactionsim='wxUSE_UIACTIONSIMULATOR=${'DEFAULT_wxUSE_UIACTIONSIMULATOR":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_uiactionsim"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_UIACTIONSIMULATOR = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_UIACTIONSIMULATOR
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -46302,6 +46348,13 @@ fi
 if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
   cat >>confdefs.h <<\_ACEOF
 #define wxUSE_MOUSEWHEEL 1
+_ACEOF
+
+fi
+
+if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_UIACTIONSIMULATOR 1
 _ACEOF
 
 fi

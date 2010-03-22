@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_UIACTIONSIMULATOR
+
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
@@ -164,3 +166,5 @@ void MyFrame::OnButtonPressed(wxCommandEvent&)
 {
     m_buttonPressed = true;
 }
+
+#endif // wxUSE_UIACTIONSIMULATOR

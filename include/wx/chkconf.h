@@ -1065,6 +1065,14 @@
 #   endif
 #endif /* !defined(wxUSE_TREECTRL) */
 
+#ifndef wxUSE_UIACTIONSIMULATOR
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_UIACTIONSIMULATOR must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_UIACTIONSIMULATOR 0
+#   endif
+#endif /* !defined(wxUSE_UIACTIONSIMULATOR) */
+
 #ifndef wxUSE_VALIDATORS
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_VALIDATORS must be defined, please read comment near the top of this file."

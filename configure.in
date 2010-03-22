@@ -387,6 +387,7 @@ dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_IPV6=no
 DEFAULT_wxUSE_GSTREAMER8=no
+DEFAULT_wxUSE_UIACTIONSIMULATOR=no
 
 dnl automatic features
 DEFAULT_wxUSE_UNICODE_UTF8=auto
@@ -1013,6 +1014,7 @@ WX_ARG_FEATURE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JO
 WX_ARG_FEATURE(metafile,    [  --enable-metafiles      use wxMetaFile (Win32 only)], wxUSE_METAFILE)
 WX_ARG_FEATURE(dragimage,   [  --enable-dragimage      use wxDragImage], wxUSE_DRAGIMAGE)
 WX_ARG_FEATURE(accessibility,[  --enable-accessibility  enable accessibility support], wxUSE_ACCESSIBILITY)
+WX_ARG_FEATURE(uiactionsim,  [  --enable-uiactionsim    use wxUIActionSimulator (experimental)], wxUSE_UIACTIONSIMULATOR)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -6717,6 +6719,10 @@ fi
 
 if test "$wxUSE_MOUSEWHEEL" = "yes" ; then
   AC_DEFINE(wxUSE_MOUSEWHEEL)
+fi
+
+if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
+    AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
 fi
 
 dnl ---------------------------------------------------------------------------

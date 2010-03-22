@@ -520,6 +520,8 @@
 #define wxUSE_MOUSEWHEEL        0
 
 
+#define wxUSE_UIACTIONSIMULATOR 0
+
 
 #define wxUSE_POSTSCRIPT  0
 

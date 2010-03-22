@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_UIACTIONSIMULATOR
+
 #include "wx/uiaction.h"
 
 wxUIActionSimulator::wxUIActionSimulator()
@@ -22,21 +24,21 @@ wxUIActionSimulator::~wxUIActionSimulator()
 }
 
 
-bool wxUIActionSimulator::MouseClick(int button) 
+bool wxUIActionSimulator::MouseClick(int button)
 {
     MouseDown(button);
     MouseUp(button);
-    
+
     return true;
 }
 
-bool wxUIActionSimulator::MouseDblClick(int button) 
+bool wxUIActionSimulator::MouseDblClick(int button)
 {
     MouseDown(button);
     MouseUp(button);
     MouseDown(button);
     MouseUp(button);
-    
+
     return true;
 }
 
@@ -44,9 +46,9 @@ bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2, int 
 {
     MouseMove(x1, y1);
     MouseDown(button);
-    MouseMove(x2, y2);    
+    MouseMove(x2, y2);
     MouseUp(button);
-    
+
     return true;
 }
 
@@ -54,6 +56,8 @@ bool  wxUIActionSimulator::Char(int keycode, bool shiftDown, bool cmdDown, bool 
 {
     Key(keycode, false, shiftDown, cmdDown, altDown);
     Key(keycode, true, shiftDown, cmdDown, altDown);
-    
+
     return true;
-} 
+}
+
+#endif // wxUSE_UIACTIONSIMULATOR

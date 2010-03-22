@@ -1214,6 +1214,11 @@
 #define wxUSE_MOUSEWHEEL        1
                                 // Include mouse wheel support
 
+// Compile wxUIActionSimulator class?
+//
+// This is experimental code subject to change. It's not fully implemented yet.
+#define wxUSE_UIACTIONSIMULATOR 0
+
 // ----------------------------------------------------------------------------
 // wxDC classes for various output formats
 // ----------------------------------------------------------------------------

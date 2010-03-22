@@ -9,8 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include <wx/defs.h>
-#include <wx/uiaction.h>
+#include "wx/defs.h"
+
+#if wxUSE_UIACTIONSIMULATOR
+
+#include "wx/uiaction.h"
 
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -30,9 +33,9 @@ CGEventType CGEventTypeForMouseButton(int button, bool isDown)
                 return kCGEventRightMouseDown;
             else
                 return kCGEventRightMouseUp;
-                
-        // Apparently all other buttons use the constant OtherMouseDown 
-            
+
+        // Apparently all other buttons use the constant OtherMouseDown
+
         default:
             if (isDown)
                 return kCGEventOtherMouseDown;
@@ -55,13 +58,13 @@ bool wxUIActionSimulator::MouseDown(int button)
 {
     CGPoint pos;
     int x, y;
-    wxGetMousePosition(&x, &y); 
+    wxGetMousePosition(&x, &y);
     pos.x = x;
     pos.y = y;
     CGEventType type = CGEventTypeForMouseButton(button, true);
     CGEventRef event = CGEventCreateMouseEvent(NULL, type, pos, button);
     CGEventSetType(event, type);
-    
+
     if (event)
     {
         CGEventPost(tap, event);
@@ -78,13 +81,13 @@ bool wxUIActionSimulator::MouseMove(long x, long y)
     CGEventType type = kCGEventMouseMoved;
     CGEventRef event = CGEventCreateMouseEvent(NULL, type, pos, kCGMouseButtonLeft);
     CGEventSetType(event, type);
-    
+
     if (event)
     {
         CGEventPost(tap, event);
     }
     CFRelease(event);
-    
+
     return true;
 }
 
@@ -92,13 +95,13 @@ bool wxUIActionSimulator::MouseUp(int button)
 {
     CGPoint pos;
     int x, y;
-    wxGetMousePosition(&x, &y); 
+    wxGetMousePosition(&x, &y);
     pos.x = x;
     pos.y = y;
     CGEventType type = CGEventTypeForMouseButton(button, false);
     CGEventRef event = CGEventCreateMouseEvent(NULL, type, pos, button);
     CGEventSetType(event, type);
-    
+
     if (event)
     {
         CGEventPost(tap, event);
@@ -125,8 +128,9 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, bool shiftDown, bool cmd
         SendCharCode((CGCharCode)58, false);
     if (cmdDown)
         SendCharCode((CGCharCode)55, false);
-    
+
     return true;
 }
 
+#endif // wxUSE_UIACTIONSIMULATOR
 
