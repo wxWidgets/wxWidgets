@@ -6723,6 +6723,7 @@ fi
 
 if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
     AC_DEFINE(wxUSE_UIACTIONSIMULATOR)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
 fi
 
 dnl ---------------------------------------------------------------------------

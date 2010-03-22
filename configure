@@ -46357,6 +46357,7 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
 #define wxUSE_UIACTIONSIMULATOR 1
 _ACEOF
 
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS uiaction"
 fi
 
 
