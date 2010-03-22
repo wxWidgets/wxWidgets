@@ -39,6 +39,10 @@
 #include "wx/osx/private.h"
 #include "wx/osx/core/cfref.h"
 
+#if wxUSE_GUI
+    #include "wx/nonownedwnd.h"
+#endif
+
 // ============================================================================
 // wxCFEventLoopSource and wxCFEventLoop implementation
 // ============================================================================
@@ -147,7 +151,7 @@ void wxObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activit
     wxCFEventLoop * eventloop = static_cast<wxCFEventLoop *>(info);
     if ( eventloop )
         eventloop->ObserverCallBack(observer, activity);
-}        
+}
 
 void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity)
 {
@@ -164,7 +168,7 @@ void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity
         if ( wxTheApp )
             wxTheApp->ProcessPendingEvents();
     }
-    
+
     if ( activity & kCFRunLoopBeforeWaiting )
     {
         if ( ProcessIdle() )
@@ -185,13 +189,13 @@ void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity
 wxCFEventLoop::wxCFEventLoop()
 {
     m_shouldExit = false;
-    
+
     m_runLoop = CFGetCurrentRunLoop();
-    
+
     CFRunLoopObserverContext ctxt;
     bzero( &ctxt, sizeof(ctxt) );
     ctxt.info = this;
-    m_runLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0, 
+    m_runLoopObserver = CFRunLoopObserverCreate( kCFAllocatorDefault, kCFRunLoopBeforeTimers | kCFRunLoopBeforeWaiting , true /* repeats */, 0,
                                                 wxObserverCallBack, &ctxt );
     CFRunLoopAddObserver(m_runLoop, m_runLoopObserver, kCFRunLoopDefaultMode);
 }
@@ -200,7 +204,7 @@ wxCFEventLoop::~wxCFEventLoop()
 {
     CFRunLoopRemoveObserver(m_runLoop, m_runLoopObserver, kCFRunLoopDefaultMode);
 }
-                        
+
 
 CFRunLoopRef wxCFEventLoop::CFGetCurrentRunLoop() const
 {
@@ -210,7 +214,7 @@ CFRunLoopRef wxCFEventLoop::CFGetCurrentRunLoop() const
 void wxCFEventLoop::WakeUp()
 {
     extern void wxMacWakeUp();
-    
+
     wxMacWakeUp();
 }
 
@@ -224,34 +228,34 @@ bool wxCFEventLoop::YieldFor(long eventsToProcess)
         return true;
     }
 #endif // wxUSE_THREADS
-    
+
     m_isInsideYield = true;
     m_eventsToProcessInsideYield = eventsToProcess;
-    
+
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
 #endif // wxUSE_LOG
-    
+
     // process all pending events:
     while ( DoProcessEvents() == 1 )
         ;
-    
+
     // it's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from
     // OnUpdateUI() which is a nice (and desired) side effect)
     while ( ProcessIdle() ) {}
-    
+
     // if there are pending events, we must process them.
     if (wxTheApp)
         wxTheApp->ProcessPendingEvents();
-    
+
 #if wxUSE_LOG
     wxLog::Resume();
 #endif // wxUSE_LOG
     m_isInsideYield = false;
-    
+
     return true;
 }
 
@@ -277,7 +281,7 @@ int wxCFEventLoop::DispatchTimeout(unsigned long timeout)
         return 0;
 
     int status = DoDispatchTimeout(timeout);
-    
+
     switch( status )
     {
         case 0:
@@ -285,17 +289,17 @@ int wxCFEventLoop::DispatchTimeout(unsigned long timeout)
         case -1:
             if ( m_shouldExit )
                 return 0;
-            
+
             break;
         case 1:
             break;
     }
-    
+
     return status;
 }
 
 int wxCFEventLoop::DoDispatchTimeout(unsigned long timeout)
-{    
+{
     SInt32 status = CFRunLoopRunInMode(kCFRunLoopDefaultMode, timeout / 1000.0 , true);
     switch( status )
     {
@@ -322,7 +326,7 @@ void wxCFEventLoop::DoRun()
         // generate and process idle events for as long as we don't
         // have anything else to do
         DoProcessEvents();
-        
+
         // if the "should exit" flag is set, the loop should terminate
         // but not before processing any remaining messages so while
         // Pending() returns true, do process them
@@ -330,7 +334,7 @@ void wxCFEventLoop::DoRun()
         {
             while ( DoProcessEvents() == 1 )
                 ;
-            
+
             break;
         }
     }
@@ -347,12 +351,12 @@ int wxCFEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, wxT("can't reenter a message loop") );
-    
+
     // ProcessIdle() and ProcessEvents() below may throw so the code here should
     // be exception-safe, hence we must use local objects for all actions we
     // should undo
     wxEventLoopActivator activate(this);
-    
+
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside ProcessEvents() but we must call it from Exit() in normal
     // situations because it is supposed to be called synchronously,
@@ -364,9 +368,9 @@ int wxCFEventLoop::Run()
         try
         {
 #endif // wxUSE_EXCEPTIONS
-            
+
             DoRun();
-            
+
 #if wxUSE_EXCEPTIONS
             // exit the outer loop as well
             break;
@@ -393,7 +397,7 @@ int wxCFEventLoop::Run()
         }
     }
 #endif // wxUSE_EXCEPTIONS
-    
+
     return m_exitcode;
 }
 
