@@ -138,7 +138,6 @@ protected:
 
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
-    virtual wxSize DoGetBestSize() const;
 
     // string shown in the title bar
     wxString m_title;

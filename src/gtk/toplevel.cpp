@@ -381,7 +381,9 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxTopLevelWindow *win )
 {
-    win->SetIconizeState(true);
+    // hiding the window doesn't count as minimizing it
+    if (win->IsShown())
+        win->SetIconizeState(true);
     return false;
 }
 }
@@ -1010,17 +1012,6 @@ void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
     // Has to be done after calling base because it calls SetSize,
     // which sets this true
     m_deferShowAllowed = false;
-}
-
-wxSize wxTopLevelWindowGTK::DoGetBestSize() const
-{
-    // temporarily turn off m_isIconized,
-    // so we get an accurate client size from DoGetClientSize
-    const bool save = m_isIconized;
-    const_cast<wxTopLevelWindowGTK*>(this)->m_isIconized = false;
-    const wxSize size = base_type::DoGetBestSize();
-    const_cast<wxTopLevelWindowGTK*>(this)->m_isIconized = save;
-    return size;
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
