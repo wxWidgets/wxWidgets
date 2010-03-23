@@ -418,7 +418,22 @@ wxOutputStream& wxDocument::SaveObject(wxOutputStream& stream)
 
 bool wxDocument::Revert()
 {
-    return false;
+    if ( wxMessageBox
+         (
+            _("Discard changes and reload the last saved version?"),
+            wxTheApp->GetAppDisplayName(),
+            wxYES_NO | wxCANCEL | wxICON_QUESTION,
+            GetDocumentWindow()
+          ) != wxYES )
+        return false;
+
+    if ( !DoOpenDocument(GetFilename()) )
+        return false;
+
+    Modify(false);
+    UpdateAllViews();
+
+    return true;
 }
 
 
@@ -888,7 +903,7 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_UPDATE_UI(wxID_OPEN, wxDocManager::OnUpdateFileOpen)
     EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_CLOSE_ALL, wxDocManager::OnUpdateDisableIfNoDoc)
-    EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateDisableIfNoDoc)
+    EVT_UPDATE_UI(wxID_REVERT, wxDocManager::OnUpdateFileRevert)
     EVT_UPDATE_UI(wxID_NEW, wxDocManager::OnUpdateFileNew)
     EVT_UPDATE_UI(wxID_SAVE, wxDocManager::OnUpdateFileSave)
     EVT_UPDATE_UI(wxID_SAVEAS, wxDocManager::OnUpdateDisableIfNoDoc)
@@ -1166,6 +1181,12 @@ void wxDocManager::OnUpdateFileOpen(wxUpdateUIEvent& event)
 void wxDocManager::OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event)
 {
     event.Enable( GetCurrentDocument() != NULL );
+}
+
+void wxDocManager::OnUpdateFileRevert(wxUpdateUIEvent& event)
+{
+    wxDocument* doc = GetCurrentDocument();
+    event.Enable(doc && doc->IsModified() && doc->GetDocumentSaved());
 }
 
 void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)

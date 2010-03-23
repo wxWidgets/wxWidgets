@@ -1332,6 +1332,14 @@ public:
     */
     virtual bool SaveAs();
 
+    /**
+        Discard changes and load last saved version.
+
+        Prompts the user first, and then calls DoOpenDocument() to reload the
+        current file.
+    */
+    virtual bool Revert();
+
     //@{
     /**
         Override this function and call it from your own SaveObject() before

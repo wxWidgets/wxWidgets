@@ -497,6 +497,7 @@ All (GUI):
 - Added wxTreeCtrl::SelectChildren() (Nikolay Tjushkov).
 - Show pages icons in window list menu in wxAuiNotebook (Ronny Krüger).
 - Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tjushkov).
+- Implement wxDocument::Revert() (troelsk).
 
 GTK:
 

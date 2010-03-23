@@ -247,6 +247,7 @@ void MyApp::AppendDocumentFileCommands(wxMenu *menu, bool supportsPrinting)
     menu->Append(wxID_CLOSE);
     menu->Append(wxID_SAVE);
     menu->Append(wxID_SAVEAS);
+    menu->Append(wxID_REVERT, _("Re&vert..."));
 
     if ( supportsPrinting )
     {

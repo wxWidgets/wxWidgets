@@ -377,6 +377,7 @@ public:
     // Handlers for UI update commands
     void OnUpdateFileOpen(wxUpdateUIEvent& event);
     void OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event);
+    void OnUpdateFileRevert(wxUpdateUIEvent& event);
     void OnUpdateFileNew(wxUpdateUIEvent& event);
     void OnUpdateFileSave(wxUpdateUIEvent& event);
     void OnUpdateUndo(wxUpdateUIEvent& event);
