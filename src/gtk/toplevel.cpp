@@ -887,7 +887,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         HandleWindowEvent(event);
     }
 
-    bool change = wxTopLevelWindowBase::Show(show);
+    bool change = base_type::Show(show);
 
     if (change && !show)
     {
@@ -1004,12 +1004,23 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
-    wxTopLevelWindowBase::DoSetClientSize(width, height);
+    base_type::DoSetClientSize(width, height);
 
     // Since client size is being explicitly set, don't change it later
     // Has to be done after calling base because it calls SetSize,
     // which sets this true
     m_deferShowAllowed = false;
+}
+
+wxSize wxTopLevelWindowGTK::DoGetBestSize() const
+{
+    // temporarily turn off m_isIconized,
+    // so we get an accurate client size from DoGetClientSize
+    const bool save = m_isIconized;
+    const_cast<wxTopLevelWindowGTK*>(this)->m_isIconized = false;
+    const wxSize size = base_type::DoGetBestSize();
+    const_cast<wxTopLevelWindowGTK*>(this)->m_isIconized = save;
+    return size;
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
@@ -1035,7 +1046,7 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int maxW, int maxH,
                                           int incW, int incH )
 {
-    wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
+    base_type::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
 
     const wxSize minSize = GetMinSize();
     const wxSize maxSize = GetMaxSize();
@@ -1177,7 +1188,7 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxTopLevelWindowBase::SetIcons( icons );
+    base_type::SetIcons(icons);
 
     // Setting icons before window is realized can cause a GTK assertion if
     // another TLW is realized before this one, and it has this one as it's
