@@ -539,12 +539,6 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
             m_fontCtrl->SetSelection(0);
     }
 
-    if (!m_symbol.empty())
-    {
-        int sel = (int) m_symbol[0];
-        m_symbolsCtrl->SetSelection(sel);
-    }
-
 #if defined(__UNICODE__)
     if (m_subsetCtrl->GetCount() == 0)
     {
@@ -561,6 +555,12 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
 #if defined(__UNICODE__)
     m_symbolsCtrl->SetUnicodeMode(m_fromUnicode);
 #endif
+
+    if (!m_symbol.empty())
+    {
+        int sel = (int) m_symbol[0];
+        m_symbolsCtrl->SetSelection(sel);
+    }
 
     UpdateSymbolDisplay();
 
