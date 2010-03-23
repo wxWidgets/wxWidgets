@@ -1844,7 +1844,9 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 {
     if ( m_childView )
     {
-        if ( event.CanVeto() && !m_childView->Close(false) )
+        // notice that we must call wxView::Close() and OnClose() called from
+        // it in any case, even if we know that we are going to close anyhow
+        if ( !m_childView->Close(false) && event.CanVeto() )
         {
             event.Veto();
             return false;
