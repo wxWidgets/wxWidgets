@@ -2599,8 +2599,13 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
         "&Error icon"
     };
 
-    wxCOMPILE_TIME_ASSERT( WXSIZEOF(icons) == MsgDlgIcon_Max, IconMismatch );
-
+#ifndef __VMS
+   // This contruction not is not valid on OpenVMS:
+   // %CXX-W-REFNESTFUNVAR, reference to local variable of enclosing function is
+   // not allowed
+   wxCOMPILE_TIME_ASSERT( WXSIZEOF(icons) == MsgDlgIcon_Max, IconMismatch );
+#endif
+   
     m_icons = new wxRadioBox(this, wxID_ANY, "&Icon style",
                              wxDefaultPosition, wxDefaultSize,
                              WXSIZEOF(icons), icons,

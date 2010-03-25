@@ -26,7 +26,7 @@
 
 #ifndef SA_RESTART
     // don't use for systems which don't define it (at least VMS and QNX)
-    #define SA_RESTART
+    #define SA_RESTART 0
 #endif
 
 // use unusual names for arg[cv] to avoid clashes with wxApp members with the
