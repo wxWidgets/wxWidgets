@@ -3418,6 +3418,15 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     if ( !m_pState )
         return;
 
+    // Don't care about the event if it originated from the
+    // 'label editor'. In this function we only care about the
+    // property value editor.
+    if ( m_labelEditor && event.GetId() == m_labelEditor->GetId() )
+    {
+        event.Skip();
+        return;
+    }
+
     wxPGProperty* selected = GetSelection();
 
     // Somehow, event is handled after property has been deselected.
