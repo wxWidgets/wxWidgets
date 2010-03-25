@@ -1114,6 +1114,15 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+wxPreviewFrame* wxDocManager::CreatePreviewFrame(wxPrintPreviewBase* preview,
+                                                 wxWindow *parent,
+                                                 const wxString& title)
+{
+    return new wxPreviewFrame(preview, parent, title);
+}
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1135,9 +1144,11 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
             return;
         }
 
-        wxPreviewFrame *
-            frame = new wxPreviewFrame(preview, wxTheApp->GetTopWindow(),
-                                       _("Print Preview"));
+        wxPreviewFrame* frame = CreatePreviewFrame(preview,
+                                                   wxTheApp->GetTopWindow(),
+                                                   _("Print Preview"));
+        wxCHECK_RET( frame, "should create a print preview frame" );
+
         frame->Centre(wxBOTH);
         frame->Initialize();
         frame->Show(true);

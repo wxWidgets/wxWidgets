@@ -478,6 +478,12 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_6
 
 protected:
+#if wxUSE_PRINTING_ARCHITECTURE
+    virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
+                                               wxWindow *parent,
+                                               const wxString& title);
+#endif // wxUSE_PRINTING_ARCHITECTURE
+
     // hook the currently active view into event handlers chain here
     virtual bool TryBefore(wxEvent& event);
 

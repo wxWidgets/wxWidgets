@@ -498,6 +498,7 @@ All (GUI):
 - Show pages icons in window list menu in wxAuiNotebook (Ronny Krüger).
 - Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tjushkov).
 - Implement wxDocument::Revert() (troelsk).
+- Allow overriding print preview frame creation in docview (troelsk).
 
 GTK:
 
