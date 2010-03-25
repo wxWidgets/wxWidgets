@@ -1071,10 +1071,16 @@ void wxPropertyGrid::DoEndLabelEdit( bool commit, int selFlags )
     }
 
     m_selColumn = 1;
+    int wasFocused = m_iFlags & wxPG_FL_FOCUSED;
 
     DestroyEditorWnd(m_labelEditor);
+
     m_labelEditor = NULL;
     m_labelEditorProperty = NULL;
+
+    // Fix focus (needed at least on wxGTK)
+    if ( wasFocused )
+        SetFocusOnCanvas();
 
     DrawItem(prop);
 }
