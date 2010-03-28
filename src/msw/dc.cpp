@@ -1198,6 +1198,10 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             return;
     }
 
+#ifndef __WXWINCE__
+    StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
+#endif
+
     if ( useMask )
     {
         wxMask *mask = bmp.GetMask();
