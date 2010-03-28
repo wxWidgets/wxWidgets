@@ -287,20 +287,37 @@ bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     wxCHECK_MSG(width >= 1 && height >= 1, false,
                 wxT("In FloodFill, dc.GetSize routine failed, method not supported by this DC"));
 
-    //this is much faster than doing the individual pixels
-    wxMemoryDC memdc;
+    const int x_dev = dc->LogicalToDeviceX(x);
+    const int y_dev = dc->LogicalToDeviceY(y);
+
+    // if start point is outside dc, can't do anything
+    if (!wxRect(0, 0, width, height).Contains(x_dev, y_dev))
+        return false;
+
     wxBitmap bitmap(width, height);
-    memdc.SelectObject(bitmap);
-    memdc.Blit(0, 0, width, height, dc, 0, 0);
+    wxMemoryDC memdc(bitmap);
+    // match dc scales
+    double sx, sy;
+    dc->GetUserScale(&sx, &sy);
+    memdc.SetUserScale(sx, sy);
+    dc->GetLogicalScale(&sx, &sy);
+    memdc.SetLogicalScale(sx, sy);
+
+    // get logical size and origin
+    const int w_log = dc->DeviceToLogicalXRel(width);
+    const int h_log = dc->DeviceToLogicalYRel(height);
+    const int x0_log = dc->DeviceToLogicalX(0);
+    const int y0_log = dc->DeviceToLogicalY(0);
+
+    memdc.Blit(0, 0, w_log, h_log, dc, x0_log, y0_log);
     memdc.SelectObject(wxNullBitmap);
 
     wxImage image = bitmap.ConvertToImage();
-    wxImageFloodFill(&image, x,y, dc->GetBrush(), col, style,
+    wxImageFloodFill(&image, x_dev, y_dev, dc->GetBrush(), col, style,
                      dc->GetLogicalFunction());
     bitmap = wxBitmap(image);
     memdc.SelectObject(bitmap);
-    dc->Blit(0, 0, width, height, &memdc, 0, 0);
-    memdc.SelectObject(wxNullBitmap);
+    dc->Blit(x0_log, y0_log, w_log, h_log, &memdc, 0, 0);
 
     return true;
 }
