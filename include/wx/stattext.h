@@ -99,13 +99,14 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
 
     // These functions are platform-specific and must be overridden in ports
     // which do not natively support ellipsization and they must be implemented
-    // in a way so that the m_label member of wxControl is not touched:
+    // in a way so that the m_labelOrig member of wxControl is not touched:
 
     // returns the real label currently displayed inside the control.
     virtual wxString DoGetLabel() const { return wxEmptyString; }
 
     // sets the real label currently displayed inside the control,
-    // _without_ invalidating the size. The text passed is always markup-free.
+    // _without_ invalidating the size. The text passed is always markup-free
+    // but may contain the mnemonic characters.
     virtual void DoSetLabel(const wxString& WXUNUSED(str)) { }
 
 private:

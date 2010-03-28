@@ -132,7 +132,7 @@ void wxStaticText::SetLabel( const wxString& str )
 
     // adjust the label size to the new label unless disabled
     if ( !HasFlag(wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
+         !IsEllipsized() )  // if ellipsization is ON, then we don't want to get resized!
         SetSize( GetBestSize() );
 }
 
@@ -175,8 +175,8 @@ bool wxStaticText::SetFont( const wxFont &font )
 }
 
 void wxStaticText::DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags )
+                             int width, int height,
+                             int sizeFlags )
 {
     wxStaticTextBase::DoSetSize(x, y, width, height, sizeFlags);
 
@@ -230,7 +230,11 @@ wxString wxStaticText::DoGetLabel() const
 
 void wxStaticText::DoSetLabel(const wxString& str)
 {
-    GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
+    // this function looks like GTKSetLabelForLabel() but here we just want to modify
+    // the GTK control without altering any internal wxStaticText variable
+    
+    const wxString labelGTK = GTKConvertMnemonics(str);
+    gtk_label_set_text_with_mnemonic(GTK_LABEL(m_widget), wxGTK_CONV(labelGTK));
 }
 
 // static
