@@ -694,7 +694,10 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
     // here, in particular in GetRightLocation()
     url.Replace(wxT(":"), wxT("%3A"));
     url = wxT("file:") + url;
-    return url;
+
+    // Do wxURI- and common practice-compatible escaping: encode the string
+    // into UTF-8, then escape anything non-ASCII:
+    return wxURI(url).BuildURI();
 }
 
 
