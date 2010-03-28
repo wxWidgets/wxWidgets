@@ -125,13 +125,13 @@ void FileSystemTestCase::FileNameToUrlConversion()
 
 void FileSystemTestCase::UnicodeFileNameToUrlConversion()
 {
-    const char filename_utf8[] = {
+    const unsigned char filename_utf8[] = {
               0x4b, 0x72, 0xc3, 0xa1, 0x73, 0x79, 0x50, 0xc5,
               0x99, 0xc3, 0xad, 0x72, 0x6f, 0x64, 0x79, 0x2e,
               0x6a, 0x70, 0x67, 0x00
               // KrásyPřírody.jpg
         };
-    wxFileName filename(wxString::FromUTF8(filename_utf8));
+    wxFileName filename(wxString::FromUTF8((const char*)filename_utf8));
 
     wxString url = wxFileSystem::FileNameToURL(filename);
 
