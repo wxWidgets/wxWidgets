@@ -416,9 +416,13 @@ public:
 
     @section menu_allocation Allocation strategy
 
-    All menus except the popup ones must be created on the @b heap.
-    All menus attached to a menubar or to another menu will be deleted by their
-    parent when it is deleted.
+    All menus must be created on the @b heap because all menus attached to a
+    menubar or to another menu will be deleted by their parent when it is
+    deleted. The only exception to this rule are the popup menus (i.e. menus
+    used with wxWindow::PopupMenu()) as wxWidgets does not destroy them to
+    allow reusing the same menu more than once. But the exception applies only
+    to the menus themselves and not to any submenus of popup menus which are
+    still destroyed by wxWidgets as usual and so must be heap-allocated.
 
     As the frame menubar is deleted by the frame itself, it means that normally
     all menus used are deleted automatically.
