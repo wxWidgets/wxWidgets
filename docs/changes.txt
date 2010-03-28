@@ -545,7 +545,6 @@ All:
 - Cleaned up wxURI and made it Unicode-friendly.
 - Add support for wxExecute(wxEXEC_ASYNC) in wxBase (Lukasz Michalski).
 - Added wxXLocale class and xlocale-like functions using it.
-- Allow loading message catalogs from wxFileSystem (Axel Gembe).
 - Added wxMessageQueue class for inter-thread communications
 - Use UTF-8 for Unicode data in wxIPC classes (Anders Larsen)
 - Added support for user-defined types to wxConfig (Marcin Wojdyr).

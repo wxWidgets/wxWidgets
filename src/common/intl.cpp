@@ -70,7 +70,6 @@
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
-#include "wx/filesys.h"
 
 #if defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
@@ -1190,12 +1189,7 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     fn.SetExt(wxS("mo"));
 
     wxString strFullName;
-#if wxUSE_FILESYSTEM
-    wxFileSystem fileSys;
-    if ( !fileSys.FindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-#else // !wxUSE_FILESYSTEM
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-#endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
     {
         wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
         wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), szName);
@@ -1206,22 +1200,6 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
     wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
 
-#if wxUSE_FILESYSTEM
-    wxFSFile * const fileMsg = fileSys.OpenFile(strFullName);
-    if ( !fileMsg )
-        return false;
-
-    wxInputStream *fileStream = fileMsg->GetStream();
-    m_data.SetDataLen(0);
-
-    static const size_t chunkSize = 4096;
-    while ( !fileStream->Eof() ) {
-        fileStream->Read(m_data.GetAppendBuf(chunkSize), chunkSize);
-        m_data.UngetAppendBuf(fileStream->LastRead());
-    }
-
-    delete fileMsg;
-#else // !wxUSE_FILESYSTEM
     wxFile fileMsg(strFullName);
     if ( !fileMsg.IsOpened() )
         return false;
@@ -1239,7 +1217,6 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
         return false;
 
     m_data.UngetWriteBuf(nSize);
-#endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
 
 
     // examine header
