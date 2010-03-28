@@ -97,10 +97,6 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     if ( wasSkipped )
         event.Skip(false);
 
-    // reset the skipped flag to false as it might have been set to true in
-    // ProcessEvent() above
-    event.Skip(false);
-
     if ( evType == wxEVT_SCROLLWIN_TOP ||
          evType == wxEVT_SCROLLWIN_BOTTOM ||
          evType == wxEVT_SCROLLWIN_LINEUP ||
@@ -127,8 +123,7 @@ bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     }
 #endif // wxUSE_MOUSEWHEEL
 
-    if ( processed )
-        event.Skip(wasSkipped);
+    event.Skip(wasSkipped);
 
     return processed;
 }

@@ -298,8 +298,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
-    if ( processed )
-        event.Skip(wasSkipped);
+    event.Skip(wasSkipped);
 
     return processed;
 }
