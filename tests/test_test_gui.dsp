@@ -235,6 +235,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\graphics\bitmap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\sizers\boxsizer.cpp
 # End Source File
 # Begin Source File

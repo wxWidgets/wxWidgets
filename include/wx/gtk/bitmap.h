@@ -21,6 +21,7 @@ class WXDLLIMPEXP_CORE wxMask: public wxMaskBase
 {
 public:
     wxMask();
+    wxMask(const wxMask& mask);
     wxMask( const wxBitmap& bitmap, const wxColour& colour );
 #if wxUSE_PALETTE
     wxMask( const wxBitmap& bitmap, int paletteIndex );

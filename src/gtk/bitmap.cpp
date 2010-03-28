@@ -79,6 +79,23 @@ wxMask::wxMask()
     m_bitmap = NULL;
 }
 
+wxMask::wxMask(const wxMask& mask)
+{
+    if ( !mask.m_bitmap )
+    {
+        m_bitmap = NULL;
+        return;
+    }
+
+    // create a copy of an existing mask
+    gint w, h;
+    gdk_drawable_get_size(mask.m_bitmap, &w, &h);
+    m_bitmap = gdk_pixmap_new(mask.m_bitmap, w, h, 1);
+
+    wxGtkObject<GdkGC> gc(gdk_gc_new(m_bitmap));
+    gdk_draw_drawable(m_bitmap, gc, mask.m_bitmap, 0, 0, 0, 0, -1, -1);
+}
+
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
     m_bitmap = NULL;
@@ -859,12 +876,7 @@ wxGDIRefData* wxBitmap::CloneGDIRefData(const wxGDIRefData* data) const
     }
     if (oldRef->m_mask != NULL)
     {
-        newRef->m_mask = new wxMask;
-        newRef->m_mask->m_bitmap = gdk_pixmap_new(
-            oldRef->m_mask->m_bitmap, oldRef->m_width, oldRef->m_height, 1);
-        wxGtkObject<GdkGC> gc(gdk_gc_new(newRef->m_mask->m_bitmap));
-        gdk_draw_drawable(newRef->m_mask->m_bitmap,
-            gc, oldRef->m_mask->m_bitmap, 0, 0, 0, 0, -1, -1);
+        newRef->m_mask = new wxMask(*oldRef->m_mask);
     }
 
     return newRef;

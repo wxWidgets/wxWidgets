@@ -116,6 +116,7 @@
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp
+            graphics/bitmap.cpp
             graphics/colour.cpp
             graphics/ellipsization.cpp
             graphics/measuring.cpp
