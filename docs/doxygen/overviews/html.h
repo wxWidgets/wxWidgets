@@ -526,7 +526,7 @@ H5
 H6
 I
 IMG             SRC=[url]
-                WIDTH=[pixels]
+                WIDTH=[percent|pixels]
                 HEIGHT=[pixels]
                 ALIGN=TEXTTOP
                 ALIGN=CENTER
