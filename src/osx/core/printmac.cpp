@@ -46,9 +46,9 @@ static int ResolutionSorter(const void *e1, const void *e2)
 {
     const PMResolution *res1 = (const PMResolution *)e1;
     const PMResolution *res2 = (const PMResolution *)e2;
-    int area1 = res1->hRes * res1->vRes;
-    int area2 = res2->hRes * res2->vRes;
-    
+    const double area1 = res1->hRes * res1->vRes;
+    const double area2 = res2->hRes * res2->vRes;
+
     if (area1 < area2)
         return -1;
     else if (area1 > area2)
@@ -91,7 +91,7 @@ static PMResolution *GetSupportedResolutions(PMPrinter printer, UInt32 *count)
                 resolutions[realCount++] = res;
         }
         qsort(resolutions, realCount, sizeof(PMResolution), ResolutionSorter);
-        
+
         *count = realCount;
     }
     if ((*count == 0) && (resolutions))
@@ -136,7 +136,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     CFArrayRef printerList;
     CFIndex index, count;
     CFStringRef name;
-    
+
     if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr)
     {
         PMPrinter printer = NULL;
@@ -158,7 +158,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             PMSessionSetCurrentPMPrinter(m_macPrintSession, printer);
         CFRelease(printerList);
     }
-    
+
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
 
@@ -284,7 +284,7 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
         wxPrintQuality quality = data.GetQuality();
         if (quality >= 0)
             quality = wxPRINT_QUALITY_HIGH;
-        
+
         PMResolution res = resolutions[((quality - wxPRINT_QUALITY_DRAFT) * (resCount - 1)) / 3];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
         if ( PMPrinterSetOutputResolution != NULL )
@@ -374,7 +374,7 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
 
     /* assume high quality, will change below if we are able to */
     data.SetQuality(wxPRINT_QUALITY_HIGH);
-    
+
     PMResolution *resolutions;
     UInt32 resCount;
     resolutions = GetSupportedResolutions(printer, &resCount);
@@ -405,8 +405,8 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
                 data.SetQuality((((i + 1) * 3) / resCount) + wxPRINT_QUALITY_DRAFT);
         }
         free(resolutions);
-    }    
-    
+    }
+
     double height, width;
     PMPaperGetHeight(m_macPaper, &height);
     PMPaperGetWidth(m_macPaper, &width);
@@ -473,7 +473,7 @@ void wxOSXPrintData::TransferTo( wxPageSetupData* data )
 }
 
 void wxOSXPrintData::TransferTo( wxPrintDialogData* data )
-{ 
+{
 #if wxOSX_USE_COCOA
     UpdateToPMState();
 #endif
@@ -557,14 +557,14 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
-    
+
     printout->SetIsPreview(false);
 
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
         m_printDialogData.SetMaxPage(9999);
-    
+
     // Create a suitable device context
     wxPrinterDC *dc = NULL;
     if (prompt)
@@ -599,7 +599,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     if (PMSessionGetCurrentPrinter(nativeData->GetPrintSession(), &printer) == noErr)
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
         if ( PMPrinterGetOutputResolution != NULL )
         {
             if (PMPrinterGetOutputResolution( printer, nativeData->GetPrintSettings(), &res) == -9589 /* kPMKeyNotFound */ )
@@ -610,7 +610,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         else
 #endif
         {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
             PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res);
 #endif
         }
@@ -637,18 +637,18 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     int fromPage, toPage;
     int minPage, maxPage;
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-    
+
     if (maxPage == 0)
     {
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
-    
+
     // Only set min and max, because from and to will be
     // set by the user
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
-        
+
     printout->OnBeginPrinting();
 
     bool keepGoing = true;
