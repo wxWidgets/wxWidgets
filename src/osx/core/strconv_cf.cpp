@@ -212,13 +212,15 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
                 m_encoding,
                 0, // FAIL on unconvertible characters
                 false, // not an external representation
-                // if dstSize is 0 then pass NULL to get required length in usedBufLen
-                (dstSize != 0)?(UInt8*)dst:NULL,
+                (UInt8*)dst,
                 dstSize,
                 &usedBufLen
             );
 
-        if(charsConverted < CFStringGetLength(theString) )
+        // when dst is non-NULL, we check usedBufLen against dstSize as
+        // CFStringGetBytes sometimes treats dst as being NULL when dstSize==0
+        if( (charsConverted < CFStringGetLength(theString)) ||
+                (dst && (size_t) usedBufLen > dstSize) )
             return wxCONV_FAILED;
 
         return usedBufLen;
