@@ -109,7 +109,8 @@ public:
         Returns the control's label without mnemonics.
 
         Note that because of the stripping of the mnemonics the returned string may differ
-        from the string which was passed to SetLabel().
+        from the string which was passed to SetLabel() but should always be the same which
+        was passed to SetLabelText().
     */
     wxString GetLabelText() const;
 

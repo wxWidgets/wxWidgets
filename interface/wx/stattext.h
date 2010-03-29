@@ -92,16 +92,25 @@ public:
     /**
         Returns the contents of the control.
 
-        Note that the returned string may contain both the mnemonics (@& characters),
-        if any, and markup tags, if any.
+        Note that the returned string may contain both mnemonics (@& characters),
+        and markup tags, if they were passed to the SetLabel() function.
 
-        Use GetLabelText() if only the label text is needed.
+        Use GetLabelText() if only the label text, without mnemonics and without 
+        markup if the @c wxST_MARKUP style is set, is needed.
+        
+        Also note that the returned string is always the string which was passed to
+        SetLabel() but may be different from the string passed to SetLabelText()
+        (since this last one escapes mnemonic characters and eventually markup).
     */
     wxString GetLabel() const;
 
     /**
         This method returns the control's label without the mnemonics characters
-        (if any) and without the markup (if the control has @c wxST_MARKUP style).
+        (if any) and without the markup (if the control has the @c wxST_MARKUP style).
+        
+        Note that because of the stripping of the mnemonics and markup the returned 
+        string may differ from the string which was passed to SetLabel() but should 
+        always be the same which was passed to SetLabelText().
     */
     wxString GetLabelText() const;
 
@@ -119,9 +128,9 @@ public:
         Sets the static text label and updates the controls size to exactly fit the
         label unless the control has @c wxST_NO_AUTORESIZE flag.
 
-        This function allows to set decorated static label text on platforms which
-        support it (currently only GTK+ 2). For the other platforms, the markup is
-        ignored.
+        This function allows to set decorated static label text, when the @c wxST_MARKUP 
+        style is used, on those platforms which support it (currently only GTK+ 2). 
+        For the other platforms or when @c wxST_MARKUP is not used, the markup is ignored.
 
         The supported tags are:
         <TABLE>
@@ -216,13 +225,15 @@ public:
     virtual void SetLabel(const wxString& label);
     
     /**
-                Sets the control's label to exactly the given string.
+        Sets the control's label to exactly the given string.
 
         Unlike SetLabel(), this function shows exactly the @a text passed to it
-        in the control, without interpreting ampersands in it in any way.
-        Notice that it means that the control can't have any mnemonic defined
+        in the control, without interpreting ampersands in it in any way and,
+        if @c wxST_MARKUP is used, without interpreting markup tags.
+        Notice that it means that the control can't have any mnemonic nor markup defined
         for it using this function.
 
+        @see EscapeMarkup()
     */
     virtual void SetLabelText(const wxString& text);
 
