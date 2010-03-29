@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.11-rc1
+SET WXW_VER=2.8.11
 
 
 if (%WXW_VER%)==() SET WXW_VER=CVS
@@ -16,8 +16,8 @@ echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
 set WXWIN=c:\wx\wxw28b
 set DAILY=c:\daily28b
-set PATH=%PATH%;C:\wx\WXWIDG~1.0\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
-set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
+set PATH=%PATH%;k:\wx\WXWIDG~1.0\utils\tex2rtf\src\vc_based;k:\wx\Gnu\bin;k:\progra~1\htmlhe~1;k:\PROGRA~1\INNOSE~1
+set PATH=%PATH%;k:\Program Files\gs\gs8.51\lib;k:\Program Files\gs\gs8.51\bin;k:\progra~1\micros~4\vc98\bin;k:\progra~1\micros~4\Common\Tools
 echo %PATH% >> c:\temp.log
 
 rem update wxw28b (holds docs) and inno (cvs wxMSW setup.exe only)
