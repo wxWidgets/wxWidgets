@@ -52,7 +52,8 @@ public:
     // Set's the DC used for parsing. If SetDC() is not called,
     // parsing won't proceed
     virtual void SetDC(wxDC *dc, double pixel_scale = 1.0)
-        { m_DC = dc; m_PixelScale = pixel_scale; }
+        { SetDC(dc, pixel_scale, pixel_scale); }
+    void SetDC(wxDC *dc, double pixel_scale, double font_scale);
 
     wxDC *GetDC() {return m_DC;}
     double GetPixelScale() {return m_PixelScale;}
@@ -171,7 +172,7 @@ private:
         // temporary variables used by AddText
     wxHtmlWindowInterface *m_windowInterface;
             // window we're parsing for
-    double m_PixelScale;
+    double m_PixelScale, m_FontScale;
     wxDC *m_DC;
             // Device Context we're parsing for
     static wxList m_Modules;

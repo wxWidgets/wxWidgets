@@ -39,7 +39,9 @@ public:
     // Following 3 methods *must* be called before any call to Render:
 
     // Assign DC to this render
-    void SetDC(wxDC *dc, double pixel_scale = 1.0);
+    void SetDC(wxDC *dc, double pixel_scale = 1.0)
+        { SetDC(dc, pixel_scale, pixel_scale); }
+    void SetDC(wxDC *dc, double pixel_scale, double font_scale);
 
     // Sets size of output rectangle, in pixels. Note that you *can't* change
     // width of the rectangle between calls to Render! (You can freely change height.)

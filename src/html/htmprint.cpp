@@ -37,6 +37,28 @@
 #define DEFAULT_PRINT_FONT_SIZE   12
 
 
+// CSS specification offer following guidance on dealing with pixel sizes
+// when printing at
+// http://www.w3.org/TR/2004/CR-CSS21-20040225/syndata.html#length-units:
+//
+//      Pixel units are relative to the resolution of the viewing device, i.e.,
+//      most often a computer display. If the pixel density of the output
+//      device is very different from that of a typical computer display, the
+//      user agent should rescale pixel values. It is recommended that the [
+//      reference pixel] be the visual angle of one pixel on a device with a
+//      pixel density of 96dpi and a distance from the reader of an arm's
+//      length. For a nominal arm's length of 28 inches, the visual angle is
+//      therefore about 0.0213 degrees.
+//
+//      For reading at arm's length, 1px thus corresponds to about 0.26 mm
+//      (1/96 inch). When printed on a laser printer, meant for reading at a
+//      little less than arm's length (55 cm, 21 inches), 1px is about 0.20 mm.
+//      On a 300 dots-per-inch (dpi) printer, that may be rounded up to 3 dots
+//      (0.25 mm); on a 600 dpi printer, it can be rounded to 5 dots.
+//
+// See also http://trac.wxwidgets.org/ticket/10942.
+#define TYPICAL_SCREEN_DPI  96.0
+
 //--------------------------------------------------------------------------------
 // wxHtmlDCRenderer
 //--------------------------------------------------------------------------------
@@ -64,10 +86,10 @@ wxHtmlDCRenderer::~wxHtmlDCRenderer()
 
 
 
-void wxHtmlDCRenderer::SetDC(wxDC *dc, double pixel_scale)
+void wxHtmlDCRenderer::SetDC(wxDC *dc, double pixel_scale, double font_scale)
 {
     m_DC = dc;
-    m_Parser->SetDC(m_DC, pixel_scale);
+    m_Parser->SetDC(m_DC, pixel_scale, font_scale);
 }
 
 
@@ -258,7 +280,9 @@ void wxHtmlPrintout::OnPreparePrinting()
 
     /* prepare headers/footers renderer: */
 
-    m_RendererHdr->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
+    m_RendererHdr->SetDC(GetDC(),
+                         (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
+                         (double)ppiPrinterY / (double)ppiScreenY);
     m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
     if (m_Headers[0] != wxEmptyString)
@@ -283,7 +307,9 @@ void wxHtmlPrintout::OnPreparePrinting()
     }
 
     /* prepare main renderer: */
-    m_Renderer->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
+    m_Renderer->SetDC(GetDC(),
+                      (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
+                      (double)ppiPrinterY / (double)ppiScreenY);
 
     const int printAreaW = int(ppmm_h * (mm_w - m_MarginLeft - m_MarginRight));
     int printAreaH = int(ppmm_v * (mm_h - m_MarginTop - m_MarginBottom));
@@ -475,7 +501,9 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     dc->SetUserScale((double)dc_w / (double)pageWidth,
                      (double)dc_h / (double)pageHeight);
 
-    m_Renderer->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
+    m_Renderer->SetDC(dc,
+                      (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
+                      (double)ppiPrinterY / (double)ppiScreenY);
 
     dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
@@ -484,7 +512,9 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
                          m_PageBreaks[page-1], false, m_PageBreaks[page]-m_PageBreaks[page-1]);
 
 
-    m_RendererHdr->SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
+    m_RendererHdr->SetDC(dc,
+                         (double)ppiPrinterY / TYPICAL_SCREEN_DPI,
+                         (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString)
     {
         m_RendererHdr->SetHtmlText(TranslateHeader(m_Headers[page % 2], page));

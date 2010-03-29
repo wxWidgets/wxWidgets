@@ -552,6 +552,13 @@ void wxHtmlWinParser::SetFontSize(int s)
 }
 
 
+void wxHtmlWinParser::SetDC(wxDC *dc, double pixel_scale, double font_scale)
+{
+    m_DC = dc;
+    m_PixelScale = pixel_scale;
+    m_FontScale = font_scale;
+}
+
 
 wxFont* wxHtmlWinParser::CreateCurrentFont()
 {
@@ -582,7 +589,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
     {
         *faceptr = face;
         *fontptr = new wxFont(
-                       (int) (m_FontsSizes[fs] * m_PixelScale),
+                       (int) (m_FontsSizes[fs] * m_FontScale),
                        ff ? wxMODERN : wxSWISS,
                        fi ? wxITALIC : wxNORMAL,
                        fb ? wxBOLD : wxNORMAL,
