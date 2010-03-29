@@ -411,6 +411,16 @@
 #   endif
 #endif /* !wxUSE_ACTIVEX */
 
+#if !wxUSE_THREADS
+#   if wxUSE_FSWATCHER
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxFileSystemWatcher requires wxThread under MSW"
+#       else
+#           undef wxUSE_FSWATCHER
+#           define wxUSE_FSWATCHER 0
+#       endif
+#endif /* !wxUSE_THREADS */
+
 #if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
 #   undef wxUSE_POSTSCRIPT
 #   define wxUSE_POSTSCRIPT 1
