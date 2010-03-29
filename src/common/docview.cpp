@@ -1625,7 +1625,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                         GetLastDirectory(),
                                         wxEmptyString,
                                         &FilterIndex,
-                                        descrBuf);
+                                        descrBuf,
+                                        wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
     wxDocTemplate *theTemplate = NULL;
     if (!pathTmp.empty())
