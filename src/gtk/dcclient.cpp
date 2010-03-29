@@ -269,6 +269,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     m_font = window->GetFont();
 
     GtkWidget *widget = window->m_wxwindow;
+    m_gdkwindow = window->GTKGetDrawingWindow();
 
     // Some controls don't have m_wxwindow - like wxStaticBox, but the user
     // code should still be able to create wxClientDCs for them
@@ -278,6 +279,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 
         wxCHECK_RET(widget, "DC needs a widget");
 
+        m_gdkwindow = widget->window;
         if (GTK_WIDGET_NO_WINDOW(widget))
             SetDeviceLocalOrigin(widget->allocation.x, widget->allocation.y);
     }
@@ -285,8 +287,6 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     m_context = window->GTKGetPangoDefaultContext();
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
-
-    m_gdkwindow = widget->window;
 
     // Window not realized ?
     if (!m_gdkwindow)

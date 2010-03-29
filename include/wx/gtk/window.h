@@ -323,8 +323,8 @@ protected:
     virtual void DoFreeze();
     virtual void DoThaw();
 
-    static void GTKFreezeWidget(GtkWidget *w);
-    static void GTKThawWidget(GtkWidget *w);
+    void GTKFreezeWidget(GtkWidget *w);
+    void GTKThawWidget(GtkWidget *w);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

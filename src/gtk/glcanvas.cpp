@@ -247,7 +247,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
 Window wxGLCanvas::GetXWindow() const
 {
-    GdkWindow *window = m_wxwindow->window;
+    GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XWINDOW(window) : 0;
 }
 

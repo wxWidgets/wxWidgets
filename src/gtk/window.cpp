@@ -281,11 +281,11 @@ wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
 
 extern "C" {
 static gboolean
-gtk_window_expose_callback( GtkWidget* widget,
+gtk_window_expose_callback( GtkWidget*,
                             GdkEventExpose *gdk_event,
                             wxWindow *win )
 {
-    if (gdk_event->window == widget->window)
+    if (gdk_event->window == win->GTKGetDrawingWindow())
     {
         win->GetUpdateRegion() = wxRegion( gdk_event->region );
         win->GtkSendPaintEvents();
@@ -304,7 +304,7 @@ extern "C" {
 static gboolean
 expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 {
-    if (gdk_event->window != widget->window)
+    if (gdk_event->window != gtk_widget_get_parent_window(win->m_wxwindow))
         return false;
 
     const GtkAllocation& alloc = win->m_wxwindow->allocation;
@@ -1831,7 +1831,7 @@ gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
     if (win->m_imData)
     {
         gtk_im_context_set_client_window( win->m_imData->context,
-                                          widget->window);
+            win->m_wxwindow ? win->GTKGetDrawingWindow() : widget->window);
     }
 
     // We cannot set colours and fonts before the widget
@@ -1949,8 +1949,7 @@ void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
 
     gtk_widget_set_size_request(
         child->m_widget, child->m_width, child->m_height);
-    gtk_fixed_put(
-        GTK_FIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y);
+    pizza->put(child->m_widget, child->m_x, child->m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -2572,7 +2571,7 @@ void wxWindowGTK::OnInternalIdle()
 
         if (m_wxwindow && (m_wxwindow != m_widget))
         {
-            GdkWindow *window = m_wxwindow->window;
+            GdkWindow* window = GTKGetDrawingWindow();
             if (window)
                 gdk_window_set_cursor( window, cursor.GetCursor() );
 
@@ -3538,6 +3537,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
             if (!GTK_WIDGET_MAPPED (w))
                 return;
 
+        GdkWindow* window = GTKGetDrawingWindow();
         if (rect)
         {
             int x = rect->x;
@@ -3548,23 +3548,26 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
             r.y = rect->y;
             r.width = rect->width;
             r.height = rect->height;
-            gdk_window_invalidate_rect( m_wxwindow->window, &r, TRUE );
+            gdk_window_invalidate_rect(window, &r, true);
         }
         else
-            gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
+            gdk_window_invalidate_rect(window, NULL, true);
     }
 }
 
 void wxWindowGTK::Update()
 {
-    if (m_widget && m_widget->window)
+    if (m_widget && GTK_WIDGET_MAPPED(m_widget))
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
         // Flush everything out to the server, and wait for it to finish.
         // This ensures nothing will overwrite the drawing we are about to do.
         gdk_display_sync(display);
 
-        gdk_window_process_updates(m_widget->window, TRUE);
+        GdkWindow* window = GTKGetDrawingWindow();
+        if (window == NULL)
+            window = m_widget->window;
+        gdk_window_process_updates(window, true);
 
         // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
@@ -3669,7 +3672,7 @@ void wxWindowGTK::GtkSendPaintEvents()
                         rect.height = upd.GetHeight();
 
                         gtk_paint_flat_box( parent->m_widget->style,
-                                    m_wxwindow->window,
+                                    GTKGetDrawingWindow(),
                                     (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
                                     GTK_SHADOW_NONE,
                                     &rect,
@@ -3918,7 +3921,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
         GdkWindow *window;
         if ( m_wxwindow )
         {
-            window = m_wxwindow->window;
+            window = GTKGetDrawingWindow();
         }
         else
         {
@@ -4084,7 +4087,7 @@ bool wxWindowGTK::GTKIsOwnWindow(GdkWindow *window) const
 
 GdkWindow *wxWindowGTK::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return m_wxwindow ? m_wxwindow->window : m_widget->window;
+    return m_wxwindow ? GTKGetDrawingWindow() : m_widget->window;
 }
 
 bool wxWindowGTK::SetFont( const wxFont &font )
@@ -4107,7 +4110,7 @@ void wxWindowGTK::DoCaptureMouse()
 
     GdkWindow *window = NULL;
     if (m_wxwindow)
-        window = m_wxwindow->window;
+        window = GTKGetDrawingWindow();
     else
         window = GetConnectWidget()->window;
 
@@ -4140,7 +4143,7 @@ void wxWindowGTK::DoReleaseMouse()
 
     GdkWindow *window = NULL;
     if (m_wxwindow)
-        window = m_wxwindow->window;
+        window = GTKGetDrawingWindow();
     else
         window = GetConnectWidget()->window;
 
@@ -4412,7 +4415,7 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 {
     GdkWindow* window = NULL;
     if (m_wxwindow)
-        window = m_wxwindow->window;
+        window = WX_PIZZA(m_wxwindow)->m_draw_window;
     return window;
 }
 
@@ -4425,7 +4428,7 @@ extern "C"
 
 // this is called if we attempted to freeze unrealized widget when it finally
 // is realized (and so can be frozen):
-static void wx_frozen_widget_realize(GtkWidget* w, void* WXUNUSED(data))
+static void wx_frozen_widget_realize(GtkWidget* w, wxWindowGTK* win)
 {
     wxASSERT( w && !GTK_WIDGET_NO_WINDOW(w) );
     wxASSERT( GTK_WIDGET_REALIZED(w) );
@@ -4434,10 +4437,13 @@ static void wx_frozen_widget_realize(GtkWidget* w, void* WXUNUSED(data))
     (
         w,
         (void*)wx_frozen_widget_realize,
-        NULL
+        win
     );
 
-    gdk_window_freeze_updates(w->window);
+    GdkWindow* window = win->GTKGetDrawingWindow();
+    if (window == NULL)
+        window = w->window;
+    gdk_window_freeze_updates(window);
 }
 
 } // extern "C"
@@ -4456,12 +4462,15 @@ void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
             w,
             "realize",
             G_CALLBACK(wx_frozen_widget_realize),
-            NULL
+            this
         );
         return;
     }
 
-    gdk_window_freeze_updates(w->window);
+    GdkWindow* window = GTKGetDrawingWindow();
+    if (window == NULL)
+        window = w->window;
+    gdk_window_freeze_updates(window);
 }
 
 void wxWindowGTK::GTKThawWidget(GtkWidget *w)
@@ -4476,12 +4485,15 @@ void wxWindowGTK::GTKThawWidget(GtkWidget *w)
         (
             w,
             (void*)wx_frozen_widget_realize,
-            NULL
+            this
         );
         return;
     }
 
-    gdk_window_thaw_updates(w->window);
+    GdkWindow* window = GTKGetDrawingWindow();
+    if (window == NULL)
+        window = w->window;
+    gdk_window_thaw_updates(window);
 }
 
 void wxWindowGTK::DoFreeze()
