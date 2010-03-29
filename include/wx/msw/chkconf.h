@@ -419,6 +419,7 @@
 #           undef wxUSE_FSWATCHER
 #           define wxUSE_FSWATCHER 0
 #       endif
+#   endif
 #endif /* !wxUSE_THREADS */
 
 #if defined(__WXUNIVERSAL__) && wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW && !wxUSE_POSTSCRIPT
