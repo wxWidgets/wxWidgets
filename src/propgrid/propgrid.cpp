@@ -328,6 +328,7 @@ void wxPropertyGrid::Init1()
     if ( wxPGGlobalVars->m_mapEditorClasses.empty() )
         wxPropertyGrid::RegisterDefaultEditors();
 
+    m_validatingEditor = 0;
     m_iFlags = 0;
     m_pState = NULL;
     m_wndEditor = m_wndEditor2 = NULL;
@@ -3411,6 +3412,25 @@ wxVariant wxPropertyGrid::GetUncommittedPropertyValue()
 // Runs wxValidator for the selected property
 bool wxPropertyGrid::DoEditorValidate()
 {
+#if wxUSE_VALIDATORS
+    wxRecursionGuard guard(m_validatingEditor);
+    if ( guard.IsInside() )
+        return false;
+
+    wxPGProperty* selected = GetSelection();
+    if ( selected )
+    {
+        wxWindow* wnd = GetEditorControl();
+
+        wxValidator* validator = selected->GetValidator();
+        if ( validator && wnd )
+        {
+            validator->SetWindow(wnd);
+            if ( !validator->Validate(this) )
+                return false;
+        }
+    }
+#endif
     return true;
 }
 
@@ -3458,7 +3478,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     m_chgInfo_changedProperty = NULL;
 
-    m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED|wxPG_FL_VALUE_CHANGE_IN_EVENT);
+    m_iFlags &= ~wxPG_FL_VALUE_CHANGE_IN_EVENT;
 
     //
     // Filter out excess wxTextCtrl modified events
@@ -4001,8 +4021,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             int splitterX = GetSplitterPosition();
             m_editorFocused = 0;
             m_iFlags |= wxPG_FL_PRIMARY_FILLS_ENTIRE;
-            if ( p != prevFirstSel )
-                m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
 
             wxASSERT( m_wndEditor == NULL );
 

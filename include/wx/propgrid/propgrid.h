@@ -19,6 +19,7 @@
 #include "wx/scrolwin.h"
 #include "wx/tooltip.h"
 #include "wx/datetime.h"
+#include "wx/recguard.h"
 
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/propgridiface.h"
@@ -566,8 +567,6 @@ enum wxPG_SET_SPLITTER_POSITION_SPLITTER_FLAGS
 #define wxPG_FL_IN_SELECT_PROPERTY          0x00100000
 // Set when help string is shown in status bar
 #define wxPG_FL_STRING_IN_STATUSBAR         0x00200000
-// Validation failed. Clear on modify event.
-#define wxPG_FL_VALIDATION_FAILED           0x00800000
 // Auto sort is enabled (for categorized mode)
 #define wxPG_FL_CATMODE_AUTO_SORT           0x01000000
 // Set after page has been inserted to manager
@@ -1856,6 +1855,9 @@ protected:
 
     wxPGVFBFlags        m_permanentValidationFailureBehavior;  // Set by app
 
+    // DoEditorValidate() recursion guard
+    wxRecursionGuardFlag    m_validatingEditor;
+
     /** Internal flags - see wxPG_FL_XXX constants. */
     wxUint32            m_iFlags;
 
@@ -2059,7 +2061,7 @@ protected:
     /** Reloads all non-customized colours from system settings. */
     void RegainColours();
 
-    bool DoEditorValidate();
+    virtual bool DoEditorValidate();
 
     // Similar to DoSelectProperty() but also works on columns
     // other than 1. Does not active editor if column is not
