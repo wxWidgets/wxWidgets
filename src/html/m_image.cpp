@@ -24,6 +24,7 @@
     #include "wx/log.h"
     #include "wx/math.h"
     #include "wx/image.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/html/forcelnk.h"
