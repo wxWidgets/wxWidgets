@@ -380,6 +380,24 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
           unsigned int msg: expr; \
           wxMAKE_UNIQUE_ASSERT_NAME() { wxUnusedVar(msg); } \
         }
+#elif defined( __VMS )
+namespace wxdebug{
+
+// HP aCC cannot deal with missing names for template value parameters
+template <bool x> struct STATIC_ASSERTION_FAILURE;
+
+template <> struct STATIC_ASSERTION_FAILURE<true> { enum { value = 1 }; };
+
+// HP aCC cannot deal with missing names for template value parameters
+template<int x> struct static_assert_test{};
+
+}
+    #define WX_JOIN( X, Y ) X##Y
+    #define WX_STATIC_ASSERT_BOOL_CAST(x) (bool)(x)
+    #define wxCOMPILE_TIME_ASSERT(expr, msg) \
+       typedef ::wxdebug::static_assert_test<\
+          sizeof(::wxdebug::STATIC_ASSERTION_FAILURE< WX_STATIC_ASSERT_BOOL_CAST( expr ) >)>\
+            WX_JOIN(boost_static_assert_typedef_, __LINE__)
 #else
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
