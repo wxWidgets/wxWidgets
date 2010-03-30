@@ -86,25 +86,6 @@ extern const gchar *wx_pango_version_check(int major, int minor, int micro);
     #define wxGTK_CONV_BACK_SYS(s) wxConvertFromGTK((s))
 #endif
 
-// Some deprecated GTK+ prototypes we still use often
-// FIXME: Don't use them if possible.
-extern "C" {
-
-// Deprecated since GTK+-1.3.7:
-// Trivial wrapper around gtk_window_move, with some side effects we seem to rely on
-void gtk_widget_set_uposition (GtkWidget *widget,
-                               gint      x,
-                               gint      y);
-
-// We rely on the allow_shrink parameter in one place
-void gtk_window_set_policy (GtkWindow *window,
-                            gint       allow_shrink,
-                            gint       allow_grow,
-                            gint       auto_shrink);
-
-} // extern "C"
-
-
 // ----------------------------------------------------------------------------
 // various private helper functions
 // ----------------------------------------------------------------------------
