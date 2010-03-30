@@ -397,7 +397,7 @@ template<int x> struct static_assert_test{};
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
        typedef ::wxdebug::static_assert_test<\
           sizeof(::wxdebug::STATIC_ASSERTION_FAILURE< WX_STATIC_ASSERT_BOOL_CAST( expr ) >)>\
-            WX_JOIN(boost_static_assert_typedef_, __LINE__)
+            WX_JOIN(wx_static_assert_typedef_, __LINE__)
 #else
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         struct wxMAKE_UNIQUE_ASSERT_NAME { unsigned int msg: expr; }
