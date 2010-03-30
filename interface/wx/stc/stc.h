@@ -316,6 +316,14 @@ public:
         TOWRITE
     @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
         TOWRITE
+    @event{EVT_STC_INDICATOR_CLICK(id, fn)}
+        TOWRITE
+    @event{EVT_STC_INDICATOR_RELEASE(id, fn)}
+        TOWRITE
+    @event{EVT_STC_AUTOCOMP_CANCELLED(id, fn)}
+        TOWRITE
+    @event{EVT_STC_AUTOCOMP_CHAR_DELETED(id, fn)}
+        TOWRITE
     @endEventTable
 
     @library{wxbase}
@@ -1040,7 +1048,7 @@ public:
     int GetLayoutCache() const;
 
     /**
-        Returns the number of characters in the document.
+        Returns the number of bytes in the document.
     */
     int GetLength() const;
 
@@ -1568,7 +1576,7 @@ public:
     int LineFromPosition(int pos) const;
 
     /**
-        How many characters are on a line, not including end of line characters?
+        How many characters are on a line, including end of line characters?
     */
     int LineLength(int line) const;
 
@@ -2234,12 +2242,12 @@ public:
     void SetSelAlpha(int alpha);
 
     /**
-        Set the background colour of the selection and whether to use this setting.
+        Set the background colour of the main and additional selections and whether to use this setting.
     */
     void SetSelBackground(bool useSetting, const wxColour& back);
 
     /**
-        Set the foreground colour of the selection and whether to use this setting.
+        Set the foreground colour of the main and additional selections and whether to use this setting.
     */
     void SetSelForeground(bool useSetting, const wxColour& fore);
 
@@ -2254,9 +2262,8 @@ public:
     void SetSelectionEnd(int pos);
 
     /**
-        Set the selection mode to stream (SC_SEL_STREAM) or rectangular
-        (SC_SEL_RECTANGLE) or
-        by lines (SC_SEL_LINES).
+        Set the selection mode to stream (wxSTC_SEL_STREAM) or rectangular
+        (wxSTC_SEL_RECTANGLE/wxSTC_SEL_THIN) or by lines (wxSTC_SEL_LINES).
     */
     void SetSelectionMode(int mode);
 
@@ -2399,8 +2406,19 @@ public:
                                  const wxColour& fore);
 
     /**
+       Set the size of the dots used to mark space characters.
+    */
+    void SetWhitespaceSize(int size);
+
+    /**
+       Get the size of the dots used to mark space characters.
+    */
+    int GetWhitespaceSize() const;
+
+    
+    /**
         Set the set of characters making up words for when moving or selecting by word.
-        First sets deaults like SetCharsDefault.
+        First sets defaults like SetCharsDefault.
     */
     void SetWordChars(const wxString& characters);
 
@@ -2780,5 +2798,372 @@ public:
         Make the displayed text smaller by decreasing the sizes by 1 point.
     */
     void ZoomOut();
+
+
+
+    
+    /**
+       Set the size of the dots used to mark space characters.
+    */
+    void SetWhitespaceSize(int size);
+
+    /**
+       Get the size of the dots used to mark space characters.
+    */
+    int GetWhitespaceSize() const;
+
+    /**
+       Sets how wrapped sublines are placed. Default is fixed.
+    */
+    void SetWrapIndentMode(int mode);
+
+    /**
+       Retrieve how wrapped sublines are placed. Default is fixed.
+    */
+    int GetWrapIndentMode() const;
+
+    /**
+       Scroll so that a display line is at the top of the display.
+    */
+    void SetFirstVisibleLine(int lineDisplay);
+
+
+
+    /**
+       Copy the selection, if selection empty copy the line with the caret
+    */
+    void CopyAllowLine();
+
+    /**
+       Compact the document buffer and return a read-only pointer to the
+       characters in the document.
+    */
+    const char* GetCharacterPointer();
+
+    /**
+       Always interpret keyboard input as Unicode
+    */
+    void SetKeysUnicode(bool keysUnicode);
+
+    /**
+       Are keys always interpreted as Unicode?
+    */
+    bool GetKeysUnicode() const;
+
+    /**
+       Set the alpha fill colour of the given indicator.
+    */
+    void IndicatorSetAlpha(int indicator, int alpha);
+
+    /**
+       Get the alpha fill colour of the given indicator.
+    */
+    int IndicatorGetAlpha(int indicator) const;
+
+    /**
+       Set extra ascent for each line
+    */
+    void SetExtraAscent(int extraAscent);
+
+    /**
+       Get extra ascent for each line
+    */
+    int GetExtraAscent() const;
+
+    /**
+       Set extra descent for each line
+    */
+    void SetExtraDescent(int extraDescent);
+
+    /**
+       Get extra descent for each line
+    */
+    int GetExtraDescent() const;
+
+    /**
+       Which symbol was defined for markerNumber with MarkerDefine
+    */
+    int GetMarkerSymbolDefined(int markerNumber);
+
+    /**
+       Set the text in the text margin for a line
+    */
+    void MarginSetText(int line, const wxString& text);
+
+    /**
+       Get the text in the text margin for a line
+    */
+    wxString MarginGetText(int line) const;
+
+    /**
+       Set the style number for the text margin for a line
+    */
+    void MarginSetStyle(int line, int style);
+
+    /**
+       Get the style number for the text margin for a line
+    */
+    int MarginGetStyle(int line) const;
+
+    /**
+       Set the style in the text margin for a line
+    */
+    void MarginSetStyles(int line, const wxString& styles);
+
+    /**
+       Get the styles in the text margin for a line
+    */
+    wxString MarginGetStyles(int line) const;
+
+    /**
+       Clear the margin text on all lines
+    */
+    void MarginTextClearAll();
+
+    /**
+       Get the start of the range of style numbers used for margin text
+    */
+    void MarginSetStyleOffset(int style);
+
+    /**
+       Get the start of the range of style numbers used for margin text
+    */
+    int MarginGetStyleOffset() const;
+
+    /**
+       Set the annotation text for a line
+    */
+    void AnnotationSetText(int line, const wxString& text);
+
+    /**
+       Get the annotation text for a line
+    */
+    wxString AnnotationGetText(int line) const;
+
+    /**
+       Set the style number for the annotations for a line
+    */
+    void AnnotationSetStyle(int line, int style);
+
+    /**
+       Get the style number for the annotations for a line
+    */
+    int AnnotationGetStyle(int line) const;
+
+    /**
+       Set the annotation styles for a line
+    */
+    void AnnotationSetStyles(int line, const wxString& styles);
+
+    /**
+       Get the annotation styles for a line
+    */
+    wxString AnnotationGetStyles(int line) const;
+
+    /**
+       Get the number of annotation lines for a line
+    */
+    int AnnotationGetLines(int line) const;
+
+    /**
+       Clear the annotations from all lines
+    */
+    void AnnotationClearAll();
+
+    /**
+       Set the visibility for the annotations for a view
+    */
+    void AnnotationSetVisible(int visible);
+
+    /**
+       Get the visibility for the annotations for a view
+    */
+    int AnnotationGetVisible() const;
+
+    /**
+       Get the start of the range of style numbers used for annotations
+    */
+    void AnnotationSetStyleOffset(int style);
+
+    /**
+       Get the start of the range of style numbers used for annotations
+    */
+    int AnnotationGetStyleOffset() const;
+
+    /**
+       Add a container action to the undo stack
+    */
+    void AddUndoAction(int token, int flags);
+
+    /**
+       Find the position of a character from a point within the window.
+    */
+    int CharPositionFromPoint(int x, int y);
+
+    /**
+       Find the position of a character from a point within the window.
+       Return INVALID_POSITION if not close to text.
+    */
+    int CharPositionFromPointClose(int x, int y);
+
+    /**
+       Set whether multiple selections can be made
+    */
+    void SetMultipleSelection(bool multipleSelection);
+
+    /**
+       Whether multiple selections can be made
+    */
+    bool GetMultipleSelection() const;
+
+    /**
+       Set whether typing can be performed into multiple selections
+    */
+    void SetAdditionalSelectionTyping(bool additionalSelectionTyping);
+
+    /**
+       Whether typing can be performed into multiple selections
+    */
+    bool GetAdditionalSelectionTyping() const;
+
+    /**
+       Set whether additional carets will blink
+    */
+    void SetAdditionalCaretsBlink(bool additionalCaretsBlink);
+
+    /**
+       Whether additional carets will blink
+    */
+    bool GetAdditionalCaretsBlink() const;
+
+    /**
+       Set whether additional carets are visible
+    */
+    void SetAdditionalCaretsVisible(bool additionalCaretsBlink);
+
+    /**
+       Whether additional carets are visible
+    */
+    bool GetAdditionalCaretsVisible() const;
+
+    /**
+       How many selections are there?
+    */
+    int GetSelections() const;
+
+    /**
+       Clear selections to a single empty stream selection
+    */
+    void ClearSelections();
+
+    /**
+       Add a selection
+    */
+    int AddSelection(int caret, int anchor);
+
+    /**
+       Set the main selection
+    */
+    void SetMainSelection(int selection);
+
+    /**
+       Which selection is the main selection
+    */
+    int GetMainSelection() const;
+
+    void SetSelectionNCaret(int selection, int pos);
+    int GetSelectionNCaret(int selection) const;
+    void SetSelectionNAnchor(int selection, int posAnchor);
+    int GetSelectionNAnchor(int selection) const;
+    void SetSelectionNCaretVirtualSpace(int selection, int space);
+    int GetSelectionNCaretVirtualSpace(int selection) const;
+    void SetSelectionNAnchorVirtualSpace(int selection, int space);
+    int GetSelectionNAnchorVirtualSpace(int selection) const;
+
+    /**
+       Sets the position that starts the selection - this becomes the anchor.
+    */
+    void SetSelectionNStart(int selection, int pos);
+
+    /**
+       Returns the position at the start of the selection.
+    */
+    int GetSelectionNStart(int selection) const;
+
+    /**
+       Sets the position that ends the selection - this becomes the currentPosition.
+    */
+    void SetSelectionNEnd(int selection, int pos);
+
+    /**
+       Returns the position at the end of the selection.
+    */
+    int GetSelectionNEnd(int selection) const;
+    
+    void SetRectangularSelectionCaret(int pos);
+    int GetRectangularSelectionCaret() const;
+    void SetRectangularSelectionAnchor(int posAnchor);
+    int GetRectangularSelectionAnchor() const;
+    void SetRectangularSelectionCaretVirtualSpace(int space);
+    int GetRectangularSelectionCaretVirtualSpace() const;
+    void SetRectangularSelectionAnchorVirtualSpace(int space);
+    int GetRectangularSelectionAnchorVirtualSpace() const;
+    void SetVirtualSpaceOptions(int virtualSpaceOptions);
+    int GetVirtualSpaceOptions() const;
+
+    /**
+       Select the modifier key to use for mouse-based rectangular selection.
+    */
+    void SetRectangularSelectionModifier(int modifier);
+
+    /**
+       Get the modifier key used for rectangular selection.
+    */
+    int GetRectangularSelectionModifier() const;
+
+    /**
+       Set the foreground colour of additional selections.  Must have
+       previously called SetSelFore with non-zero first argument for this to
+       have an effect.
+    */
+    void SetAdditionalSelForeground(const wxColour& fore);
+
+    /**
+       Set the background colour of additional selections. Must have
+       previously called SetSelBack with non-zero first argument for this to
+       have an effect.
+    */
+    void SetAdditionalSelBackground(const wxColour& back);
+
+    /**
+       Set the alpha of the selection.
+    */
+    void SetAdditionalSelAlpha(int alpha);
+
+    /**
+       Get the alpha of the selection.
+    */
+    int GetAdditionalSelAlpha() const;
+
+    /**
+       Set the foreground colour of additional carets.
+    */
+    void SetAdditionalCaretForeground(const wxColour& fore);
+
+    /**
+       Get the foreground colour of additional carets.
+    */
+    wxColour GetAdditionalCaretForeground() const;
+
+    /**
+       Set the main selection to the next selection.
+    */
+    void RotateSelection();
+
+    /**
+       Swap that caret and anchor of the main selection.
+    */
+    void SwapMainAnchorCaret();
+    
 };
 

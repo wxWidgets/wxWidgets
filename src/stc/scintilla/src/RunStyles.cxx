@@ -77,11 +77,11 @@ RunStyles::~RunStyles() {
 	styles = NULL;
 }
 
-int RunStyles::Length() {
+int RunStyles::Length() const {
 	return starts->PositionFromPartition(starts->Partitions());
 }
 
-int RunStyles::ValueAt(int position) {
+int RunStyles::ValueAt(int position) const {
 	return styles->ValueAt(starts->PartitionFromPosition(position));
 }
 

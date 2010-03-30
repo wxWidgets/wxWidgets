@@ -3,7 +3,7 @@
  ** Interface to platform facilities. Also includes some basic utilities.
  ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
  **/
-// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2009 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PLATFORM_H
@@ -33,12 +33,13 @@
 #undef PLAT_GTK
 #define PLAT_GTK 1
 
-#ifdef _MSC_VER
+#if defined(__WIN32__) || defined(_MSC_VER)
 #undef PLAT_GTK_WIN32
 #define PLAT_GTK_WIN32 1
 #endif
 
-#elif defined(MACOSX)
+#elif defined(__APPLE__)
+
 #undef PLAT_MACOSX
 #define PLAT_MACOSX 1
 
@@ -122,7 +123,7 @@ public:
 	}
 	int Width() { return right - left; }
 	int Height() { return bottom - top; }
-	bool Empty() { 
+	bool Empty() {
 		return (Height() <= 0) || (Width() <= 0);
 	}
 };
@@ -282,24 +283,24 @@ public:
  */
 class Font {
 protected:
-	FontID id;
+	FontID fid;
 #if PLAT_WX
 	int ascent;
 #endif
 	// Private so Font objects can not be copied
 	Font(const Font &) {}
-	Font &operator=(const Font &) { id=0; return *this; }
+	Font &operator=(const Font &) { fid=0; return *this; }
 public:
 	Font();
 	virtual ~Font();
 
 	virtual void Create(const char *faceName, int characterSet, int size,
-		bool bold, bool italic, bool extraFontFlag=false);
+		bool bold, bool italic, int extraFontFlag=0);
 	virtual void Release();
 
-	FontID GetID() { return id; }
+	FontID GetID() { return fid; }
 	// Alias another font - caller guarantees not to Release
-	void SetID(FontID id_) { id = id_; }
+	void SetID(FontID fid_) { fid = fid_; }
 	friend class Surface;
         friend class SurfaceImpl;
 };
@@ -370,31 +371,31 @@ typedef void (*CallBackAction)(void*);
  */
 class Window {
 protected:
-	WindowID id;
+	WindowID wid;
 #if PLAT_MACOSX
 	void *windowRef;
 	void *control;
 #endif
 public:
-	Window() : id(0), cursorLast(cursorInvalid) {
+	Window() : wid(0), cursorLast(cursorInvalid) {
 #if PLAT_MACOSX
 	  windowRef = 0;
 	  control = 0;
 #endif
 	}
-	Window(const Window &source) : id(source.id), cursorLast(cursorInvalid) {
+	Window(const Window &source) : wid(source.wid), cursorLast(cursorInvalid) {
 #if PLAT_MACOSX
 	  windowRef = 0;
 	  control = 0;
 #endif
 	}
 	virtual ~Window();
-	Window &operator=(WindowID id_) {
-		id = id_;
+	Window &operator=(WindowID wid_) {
+		wid = wid_;
 		return *this;
 	}
-	WindowID GetID() const { return id; }
-	bool Created() const { return id != 0; }
+	WindowID GetID() const { return wid; }
+	bool Created() const { return wid != 0; }
 	void Destroy();
 	bool HasFocus();
 	PRectangle GetPosition();
@@ -451,10 +452,10 @@ public:
  * Menu management.
  */
 class Menu {
-	MenuID id;
+	MenuID mid;
 public:
 	Menu();
-	MenuID GetID() { return id; }
+	MenuID GetID() { return mid; }
 	void CreatePopUp();
 	void Destroy();
 	void Show(Point pt, Window &w);

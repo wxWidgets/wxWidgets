@@ -235,6 +235,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\Array.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\AutoComplete.cxx
 # End Source File
 # Begin Source File
@@ -336,6 +340,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexBullant.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\LexCLW.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexCOBOL.cxx
 # End Source File
 # Begin Source File
 
@@ -443,11 +451,27 @@ SOURCE=..\..\src\stc\scintilla\src\LexMSSQL.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexMagik.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexMarkdown.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexMatlab.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\LexMetapost.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexMySQL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexNimrod.cxx
 # End Source File
 # Begin Source File
 
@@ -487,6 +511,14 @@ SOURCE=..\..\src\stc\scintilla\src\LexPerl.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexPowerPro.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexPowerShell.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexProgress.cxx
 # End Source File
 # Begin Source File
@@ -507,6 +539,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexRuby.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexSML.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexSQL.cxx
 # End Source File
 # Begin Source File
@@ -519,6 +555,10 @@ SOURCE=..\..\src\stc\scintilla\src\LexSmalltalk.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexSorcus.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexSpecman.cxx
 # End Source File
 # Begin Source File
@@ -527,7 +567,15 @@ SOURCE=..\..\src\stc\scintilla\src\LexSpice.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\LexTACL.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\LexTADS3.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\LexTAL.cxx
 # End Source File
 # Begin Source File
 
@@ -559,6 +607,10 @@ SOURCE=..\..\src\stc\scintilla\src\LineMarker.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\stc\scintilla\src\PerLine.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\stc\scintilla\src\PositionCache.cxx
 # End Source File
 # Begin Source File
@@ -576,6 +628,10 @@ SOURCE=..\..\src\stc\scintilla\src\RunStyles.cxx
 # Begin Source File
 
 SOURCE=..\..\src\stc\scintilla\src\ScintillaBase.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\stc\scintilla\src\Selection.cxx
 # End Source File
 # Begin Source File
 

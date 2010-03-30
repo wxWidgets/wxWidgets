@@ -154,7 +154,8 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		rcSmall.bottom = rc.bottom - 2;
 		surface->RectangleDraw(rcSmall, fore.allocated, back.allocated);
 
-	} else if (markType == SC_MARK_EMPTY || markType == SC_MARK_BACKGROUND) {
+	} else if (markType == SC_MARK_EMPTY || markType == SC_MARK_BACKGROUND || 
+		markType == SC_MARK_UNDERLINE || markType == SC_MARK_AVAILABLE) {
 		// An invisible marker so don't draw anything
 
 	} else if (markType == SC_MARK_VLINE) {
@@ -299,6 +300,10 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		};
 		surface->Polygon(pts, sizeof(pts) / sizeof(pts[0]),
 				fore.allocated, back.allocated);
+	} else if (markType == SC_MARK_LEFTRECT) {
+		PRectangle rcLeft = rcWhole;
+		rcLeft.right = rcLeft.left + 4;
+		surface->FillRectangle(rcLeft, back.allocated);
 	} else { // SC_MARK_FULLRECT
 		surface->FillRectangle(rcWhole, back.allocated);
 	}

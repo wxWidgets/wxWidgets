@@ -28,6 +28,7 @@
 #include "CharClassify.h"
 #include "Decoration.h"
 #include "Document.h"
+#include "Selection.h"
 #include "PositionCache.h"
 
 #ifdef SCI_NAMESPACE
@@ -46,11 +47,11 @@ LineLayout::LineLayout(int maxLineLength_) :
 	inCache(false),
 	maxLineLength(-1),
 	numCharsInLine(0),
+	numCharsBeforeEOL(0),
 	validity(llInvalid),
 	xHighlightGuide(0),
 	highlightColumn(0),
-	selStart(0),
-	selEnd(0),
+	psel(NULL),
 	containsCaret(false),
 	edgeColumn(0),
 	chars(0),
@@ -61,7 +62,8 @@ LineLayout::LineLayout(int maxLineLength_) :
 	hsStart(0),
 	hsEnd(0),
 	widthLine(wrapWidthInfinite),
-	lines(1) {
+	lines(1),
+	wrapIndent(0) {
 	Resize(maxLineLength_);
 }
 
@@ -114,28 +116,21 @@ int LineLayout::LineLastVisible(int line) const {
 	if (line < 0) {
 		return 0;
 	} else if ((line >= lines-1) || !lineStarts) {
-		int startLine = LineStart(line);
-		int endLine = numCharsInLine;
-		while ((endLine > startLine) && IsEOLChar(chars[endLine-1])) {
-			endLine--;
-		}
-		return endLine;
+		return numCharsBeforeEOL;
 	} else {
 		return lineStarts[line+1];
 	}
 }
 
 bool LineLayout::InLine(int offset, int line) const {
-	return ((offset >= LineStart(line)) && (offset < LineStart(line + 1)) ||
-		((offset == numCharsInLine) && (line == (lines-1))));
+	return ((offset >= LineStart(line)) && (offset < LineStart(line + 1))) ||
+		((offset == numCharsInLine) && (line == (lines-1)));
 }
 
 void LineLayout::SetLineStart(int line, int start) {
 	if ((line >= lenLineStarts) && (line != 0)) {
 		int newMaxLines = line + 20;
 		int *newLineStarts = new int[newMaxLines];
-		if (!newLineStarts)
-			return;
 		for (int i = 0; i < newMaxLines; i++) {
 			if (i < lenLineStarts)
 				newLineStarts[i] = lineStarts[i];
@@ -198,6 +193,10 @@ int LineLayout::FindBefore(int x, int lower, int upper) const {
 		}
 	} while (lower < upper);
 	return lower;
+}
+
+int LineLayout::EndLineStyle() const {
+	return styles[numCharsBeforeEOL > 0 ? numCharsBeforeEOL-1 : 0];
 }
 
 LineLayoutCache::LineLayoutCache() :
@@ -385,7 +384,7 @@ static int NextBadU(const char *s, int p, int len, int &trailBytes) {
 	return -1;
 }
 
-BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart) :
+BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_, bool utf8_, int xStart, bool breakForSelection) :
 	ll(ll_),
 	lineStart(lineStart_),
 	lineEnd(lineEnd_),
@@ -411,9 +410,19 @@ BreakFinder::BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posL
 		nextBreak--;
 	}
 
-	if (ll->selStart != ll->selEnd) {
-		Insert(ll->selStart - posLineStart - 1);
-		Insert(ll->selEnd - posLineStart - 1);
+	if (breakForSelection) {
+		SelectionPosition posStart(posLineStart);
+		SelectionPosition posEnd(posLineStart + lineEnd);
+		SelectionSegment segmentLine(posStart, posEnd);
+		for (size_t r=0; r<ll->psel->Count(); r++) {
+			SelectionSegment portion = ll->psel->Range(r).Intersect(segmentLine);
+			if (!(portion.start == portion.end)) {
+				if (portion.start.IsValid())
+					Insert(portion.start.Position() - posLineStart - 1);
+				if (portion.end.IsValid())
+					Insert(portion.end.Position() - posLineStart - 1);
+			}
+		}
 	}
 
 	Insert(ll->edgeColumn - 1);
@@ -438,6 +447,10 @@ BreakFinder::~BreakFinder() {
 
 int BreakFinder::First() {
 	return nextBreak;
+}
+
+static bool IsTrailByte(int ch) {
+	return (ch >= 0x80) && (ch < (0x80 + 0x40));
 }
 
 int BreakFinder::Next() {
@@ -472,15 +485,20 @@ int BreakFinder::Next() {
 	} else {
 		int lastGoodBreak = -1;
 		int lastOKBreak = -1;
+		int lastUTF8Break = -1;
 		int j;
 		for (j = subBreak + 1; j <= nextBreak; j++) {
 			if (IsSpaceOrTab(ll->chars[j - 1]) && !IsSpaceOrTab(ll->chars[j])) {
 				lastGoodBreak = j;
 			}
-			if (ll->chars[j] < 'A') {
+			if (static_cast<unsigned char>(ll->chars[j]) < 'A') {
 				lastOKBreak = j;
 			}
-			if (((j - subBreak) >= lengthEachSubdivision) && ((lastGoodBreak >= 0) || (lastOKBreak >= 0))) {
+			if (utf8 && !IsTrailByte(static_cast<unsigned char>(ll->chars[j]))) {
+				lastUTF8Break = j;
+			}
+			if (((j - subBreak) >= lengthEachSubdivision) &&
+				((lastGoodBreak >= 0) || (lastOKBreak >= 0) || (lastUTF8Break >= 0))) {
 				break;
 			}
 		}
@@ -488,6 +506,8 @@ int BreakFinder::Next() {
 			subBreak = lastGoodBreak;
 		} else if (lastOKBreak >= 0) {
 			subBreak = lastOKBreak;
+		} else if (lastUTF8Break >= 0) {
+			subBreak = lastUTF8Break;
 		} else {
 			subBreak = nextBreak;
 		}

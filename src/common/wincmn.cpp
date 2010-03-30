@@ -1275,7 +1275,7 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handlerToRemove)
 
     // NOTE: the wxWindow event handler list is always terminated with "this" handler
     wxEvtHandler *handlerCur = GetEventHandler()->GetNextHandler();
-    while ( handlerCur != this )
+    while ( handlerCur != this && handlerCur )
     {
         wxEvtHandler *handlerNext = handlerCur->GetNextHandler();
 

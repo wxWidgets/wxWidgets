@@ -40,6 +40,7 @@ public:
 	ExternalLexerModule(int language_, LexerFunction fnLexer_, 
 		const char *languageName_=0, LexerFunction fnFolder_=0) : LexerModule(language_, fnLexer_, 0, fnFolder_){
 		strncpy(name, languageName_, sizeof(name));
+		name[sizeof(name)-1] = '\0';
 		languageName = name;
 	};
 	virtual void Lex(unsigned int startPos, int lengthDoc, int initStyle,
@@ -68,7 +69,7 @@ public:
 	void Release();
 	
 	LexerLibrary	*next;
-	SString			m_sModuleName;
+	std::string			m_sModuleName;
 };
 
 /// LexerManager manages external lexers, contains LexerLibrarys.

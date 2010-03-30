@@ -33,7 +33,7 @@
  * Interfaces:
  *  RESearch::Compile:      compile a regular expression into a NFA.
  *
- *          const char *RESearch::Compile(const char *pat, int length,
+ *          const char *RESearch::Compile(const char *pattern, int length,
  *                                        bool caseSensitive, bool posix)
  *
  * Returns a short error string if they fail.
@@ -198,6 +198,8 @@
  *  matches:    foo-foo fo-fo fob-fob foobar-foobar ...
  */
 
+#include <stdlib.h>
+
 #include "CharClassify.h"
 #include "RESearch.h"
 
@@ -347,13 +349,13 @@ static int GetHexaChar(unsigned char hd1, unsigned char hd2) {
 /**
  * Called when the parser finds a backslash not followed
  * by a valid expression (like \( in non-Posix mode).
- * @param pat: pointer on the char after the backslash.
+ * @param pattern: pointer on the char after the backslash.
  * @param incr: (out) number of chars to skip after expression evaluation.
  * @return the char if it resolves to a simple char,
  * or -1 for a char class. In this case, bittab is changed.
  */
 int RESearch::GetBackslashExpression(
-		const char *pat,
+		const char *pattern,
 		int &incr) {
 	// Since error reporting is primitive and messages are not used anyway,
 	// I choose to interpret unexpected syntax in a logical way instead
@@ -361,7 +363,7 @@ int RESearch::GetBackslashExpression(
 	incr = 0;	// Most of the time, will skip the char "naturally".
 	int c;
 	int result = -1;
-	unsigned char bsc = *pat;
+	unsigned char bsc = *pattern;
 	if (!bsc) {
 		// Avoid overrun
 		result = '\\';	// \ at end of pattern, take it literally
@@ -379,8 +381,8 @@ int RESearch::GetBackslashExpression(
 		result = escapeValue(bsc);
 		break;
 	case 'x': {
-			unsigned char hd1 = *(pat + 1);
-			unsigned char hd2 = *(pat + 2);
+			unsigned char hd1 = *(pattern + 1);
+			unsigned char hd2 = *(pattern + 2);
 			int hexValue = GetHexaChar(hd1, hd2);
 			if (hexValue >= 0) {
 				result = hexValue;
@@ -416,6 +418,7 @@ int RESearch::GetBackslashExpression(
 				ChSet(static_cast<unsigned char>(c));
 			}
 		}
+		break;
 	case 'w':
 		for (c = 0; c < MAXCHR; c++) {
 			if (iswordc(static_cast<unsigned char>(c))) {
@@ -436,7 +439,7 @@ int RESearch::GetBackslashExpression(
 	return result;
 }
 
-const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, bool posix) {
+const char *RESearch::Compile(const char *pattern, int length, bool caseSensitive, bool posix) {
 	char *mp=nfa;          /* nfa pointer       */
 	char *lp;              /* saved pointer     */
 	char *sp=nfa;          /* another one       */
@@ -449,14 +452,15 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 	char mask;             /* xor mask -CCL/NCL */
 	int c1, c2, prevChar;
 
-	if (!pat || !length)
+	if (!pattern || !length) {
 		if (sta)
 			return 0;
 		else
 			return badpat("No previous regular expression");
+	}
 	sta = NOP;
 
-	const char *p=pat;     /* pattern pointer   */
+	const char *p=pattern;     /* pattern pointer   */
 	for (int i=0; i<length; i++, p++) {
 		if (mp > mpMax)
 			return badpat("Pattern too long");
@@ -468,7 +472,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 			break;
 
 		case '^':               /* match beginning */
-			if (p == pat)
+			if (p == pattern)
 				*mp++ = BOL;
 			else {
 				*mp++ = CHR;
@@ -588,7 +592,7 @@ const char *RESearch::Compile(const char *pat, int length, bool caseSensitive, b
 
 		case '*':               /* match 0 or more... */
 		case '+':               /* match 1 or more... */
-			if (p == pat)
+			if (p == pattern)
 				return badpat("Empty closure");
 			lp = sp;		/* previous opcode */
 			if (*lp == CLO)		/* equivalence... */
@@ -853,6 +857,8 @@ int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
 				return NOTFOUND;
 			break;
 		case CCL:
+			if (lp >= endp)
+				return NOTFOUND;
 			c = ci.CharAt(lp++);
 			if (!isinset(ap,c))
 				return NOTFOUND;
@@ -873,7 +879,7 @@ int RESearch::PMatch(CharacterIndexer &ci, int lp, int endp, char *ap) {
 			eopat[*ap++] = lp;
 			break;
  		case BOW:
-			if (lp!=bol && iswordc(ci.CharAt(lp-1)) || !iswordc(ci.CharAt(lp)))
+			if ((lp!=bol && iswordc(ci.CharAt(lp-1))) || !iswordc(ci.CharAt(lp)))
 				return NOTFOUND;
 			break;
 		case EOW:

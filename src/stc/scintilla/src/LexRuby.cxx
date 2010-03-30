@@ -784,13 +784,13 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 				state = SCE_RB_COMMENTLINE;
 			} else if (ch == '=') {
 				// =begin indicates the start of a comment (doc) block
-                if (i == 0 || isEOLChar(chPrev)
+                if (i == 0 || (isEOLChar(chPrev)
                     && chNext == 'b'
                     && styler.SafeGetCharAt(i + 2) == 'e'
                     && styler.SafeGetCharAt(i + 3) == 'g'
                     && styler.SafeGetCharAt(i + 4) == 'i'
                     && styler.SafeGetCharAt(i + 5) == 'n'
-                    && !isSafeWordcharOrHigh(styler.SafeGetCharAt(i + 6))) {
+                    && !isSafeWordcharOrHigh(styler.SafeGetCharAt(i + 6)))) {
                     styler.ColourTo(i - 1, state);
                     state = SCE_RB_POD;
 				} else {
@@ -1641,7 +1641,7 @@ static void FoldRbDoc(unsigned int startPos, int length, int initStyle,
             if (foldComment && stylePrev != SCE_RB_COMMENTLINE) {
                 if (chNext == '{') {
 					levelCurrent++;
-				} else if (chNext == '}') {
+				} else if (chNext == '}' && levelCurrent > 0) {
 					levelCurrent--;
 				}
             }
@@ -1692,6 +1692,7 @@ static void FoldRbDoc(unsigned int startPos, int length, int initStyle,
 			visibleChars++;
             buffer_ends_with_eol = false;
         }
+		stylePrev = style;
     }
 	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
     if (!buffer_ends_with_eol) {

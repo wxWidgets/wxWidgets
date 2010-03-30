@@ -97,6 +97,7 @@ public:
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
+    void OnKey  (wxStyledTextEvent &event);
 
     //! language/lexer
     wxString DeterminePrefs (const wxString &filename);

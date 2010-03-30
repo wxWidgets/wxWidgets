@@ -3,7 +3,7 @@
  ** Lexer for YAML.
  **/
 // Copyright 2003- by Sean O'Dell <sean@celsoft.com>
-// Release under the same license as Scintilla/SciTE.
+// The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
 #include <string.h>
@@ -147,7 +147,7 @@ static void ColouriseYAMLLine(
 			} else {
 				unsigned int i2 = i;
 				while ((i < lengthLine) && lineBuffer[i]) {
-					if (!isdigit(lineBuffer[i]) && lineBuffer[i] != '-' && lineBuffer[i] != '.' && lineBuffer[i] != ',') {
+					if (!(isascii(lineBuffer[i]) && isdigit(lineBuffer[i])) && lineBuffer[i] != '-' && lineBuffer[i] != '.' && lineBuffer[i] != ',') {
 						styler.ColourTo(endPos, SCE_YAML_DEFAULT);
 						return;
 					}

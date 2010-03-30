@@ -214,6 +214,7 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexCSS.o \
 	$(OBJS)\wxscintilla_LexCaml.o \
 	$(OBJS)\wxscintilla_LexCsound.o \
+	$(OBJS)\wxscintilla_LexCOBOL.o \
 	$(OBJS)\wxscintilla_LexConf.o \
 	$(OBJS)\wxscintilla_LexCrontab.o \
 	$(OBJS)\wxscintilla_LexD.o \
@@ -232,11 +233,14 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexLisp.o \
 	$(OBJS)\wxscintilla_LexLout.o \
 	$(OBJS)\wxscintilla_LexLua.o \
+	$(OBJS)\wxscintilla_LexMagik.o \
 	$(OBJS)\wxscintilla_LexMMIXAL.o \
 	$(OBJS)\wxscintilla_LexMPT.o \
 	$(OBJS)\wxscintilla_LexMSSQL.o \
 	$(OBJS)\wxscintilla_LexMatlab.o \
 	$(OBJS)\wxscintilla_LexMetapost.o \
+	$(OBJS)\wxscintilla_LexMySQL.o \
+	$(OBJS)\wxscintilla_LexNimrod.o \
 	$(OBJS)\wxscintilla_LexNsis.o \
 	$(OBJS)\wxscintilla_LexOpal.o \
 	$(OBJS)\wxscintilla_LexOthers.o \
@@ -247,16 +251,22 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexPS.o \
 	$(OBJS)\wxscintilla_LexPascal.o \
 	$(OBJS)\wxscintilla_LexPerl.o \
+	$(OBJS)\wxscintilla_LexPowerPro.o \
+	$(OBJS)\wxscintilla_LexPowerShell.o \
 	$(OBJS)\wxscintilla_LexPython.o \
 	$(OBJS)\wxscintilla_LexR.o \
 	$(OBJS)\wxscintilla_LexRebol.o \
 	$(OBJS)\wxscintilla_LexRuby.o \
 	$(OBJS)\wxscintilla_LexSQL.o \
+	$(OBJS)\wxscintilla_LexSML.o \
 	$(OBJS)\wxscintilla_LexSmalltalk.o \
 	$(OBJS)\wxscintilla_LexTADS3.o \
 	$(OBJS)\wxscintilla_LexScriptol.o \
 	$(OBJS)\wxscintilla_LexSpecman.o \
+	$(OBJS)\wxscintilla_LexSorcus.o \
 	$(OBJS)\wxscintilla_LexSpice.o \
+	$(OBJS)\wxscintilla_LexTAL.o \
+	$(OBJS)\wxscintilla_LexTACL.o \
 	$(OBJS)\wxscintilla_LexTCL.o \
 	$(OBJS)\wxscintilla_LexTeX.o \
 	$(OBJS)\wxscintilla_LexVB.o \
@@ -264,17 +274,21 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexVerilog.o \
 	$(OBJS)\wxscintilla_LexYAML.o \
 	$(OBJS)\wxscintilla_LineMarker.o \
+	$(OBJS)\wxscintilla_PerLine.o \
 	$(OBJS)\wxscintilla_PositionCache.o \
 	$(OBJS)\wxscintilla_PropSet.o \
 	$(OBJS)\wxscintilla_RESearch.o \
 	$(OBJS)\wxscintilla_RunStyles.o \
+	$(OBJS)\wxscintilla_Selection.o \
 	$(OBJS)\wxscintilla_ScintillaBase.o \
 	$(OBJS)\wxscintilla_Style.o \
 	$(OBJS)\wxscintilla_StyleContext.o \
 	$(OBJS)\wxscintilla_UniConversion.o \
 	$(OBJS)\wxscintilla_ViewStyle.o \
 	$(OBJS)\wxscintilla_WindowAccessor.o \
-	$(OBJS)\wxscintilla_XPM.o
+	$(OBJS)\wxscintilla_XPM.o \
+	$(OBJS)\wxscintilla_LexMarkdown.o \
+	$(OBJS)\wxscintilla_Array.o
 MONODLL_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -5600,6 +5614,9 @@ $(OBJS)\wxscintilla_LexCaml.o: ../../src/stc/scintilla/src/LexCaml.cxx
 $(OBJS)\wxscintilla_LexCsound.o: ../../src/stc/scintilla/src/LexCsound.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexCOBOL.o: ../../src/stc/scintilla/src/LexCOBOL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5654,6 +5671,9 @@ $(OBJS)\wxscintilla_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
 $(OBJS)\wxscintilla_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexMagik.o: ../../src/stc/scintilla/src/LexMagik.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexMMIXAL.o: ../../src/stc/scintilla/src/LexMMIXAL.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5667,6 +5687,12 @@ $(OBJS)\wxscintilla_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexMetapost.o: ../../src/stc/scintilla/src/LexMetapost.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMySQL.o: ../../src/stc/scintilla/src/LexMySQL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexNimrod.o: ../../src/stc/scintilla/src/LexNimrod.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
@@ -5699,6 +5725,12 @@ $(OBJS)\wxscintilla_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
 $(OBJS)\wxscintilla_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexPowerPro.o: ../../src/stc/scintilla/src/LexPowerPro.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexPowerShell.o: ../../src/stc/scintilla/src/LexPowerShell.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5714,6 +5746,9 @@ $(OBJS)\wxscintilla_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 $(OBJS)\wxscintilla_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexSML.o: ../../src/stc/scintilla/src/LexSML.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexSmalltalk.o: ../../src/stc/scintilla/src/LexSmalltalk.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5726,7 +5761,16 @@ $(OBJS)\wxscintilla_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
 $(OBJS)\wxscintilla_LexSpecman.o: ../../src/stc/scintilla/src/LexSpecman.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_LexSorcus.o: ../../src/stc/scintilla/src/LexSorcus.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_LexSpice.o: ../../src/stc/scintilla/src/LexSpice.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTAL.o: ../../src/stc/scintilla/src/LexTAL.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexTACL.o: ../../src/stc/scintilla/src/LexTACL.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_LexTCL.o: ../../src/stc/scintilla/src/LexTCL.cxx
@@ -5750,6 +5794,9 @@ $(OBJS)\wxscintilla_LexYAML.o: ../../src/stc/scintilla/src/LexYAML.cxx
 $(OBJS)\wxscintilla_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxscintilla_PerLine.o: ../../src/stc/scintilla/src/PerLine.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxscintilla_PositionCache.o: ../../src/stc/scintilla/src/PositionCache.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5760,6 +5807,9 @@ $(OBJS)\wxscintilla_RESearch.o: ../../src/stc/scintilla/src/RESearch.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_RunStyles.o: ../../src/stc/scintilla/src/RunStyles.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_Selection.o: ../../src/stc/scintilla/src/Selection.cxx
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_ScintillaBase.o: ../../src/stc/scintilla/src/ScintillaBase.cxx
@@ -5781,6 +5831,12 @@ $(OBJS)\wxscintilla_WindowAccessor.o: ../../src/stc/scintilla/src/WindowAccessor
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxscintilla_XPM.o: ../../src/stc/scintilla/src/XPM.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_LexMarkdown.o: ../../src/stc/scintilla/src/LexMarkdown.cxx
+	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxscintilla_Array.o: ../../src/stc/scintilla/src/Array.cpp
 	$(CXX) -c -o $@ $(WXSCINTILLA_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_dummy.o: ../../src/common/dummy.cpp

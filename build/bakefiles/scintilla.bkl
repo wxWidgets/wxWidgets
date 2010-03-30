@@ -69,6 +69,7 @@
             src/stc/scintilla/src/LexCSS.cxx
             src/stc/scintilla/src/LexCaml.cxx
             src/stc/scintilla/src/LexCsound.cxx
+            src/stc/scintilla/src/LexCOBOL.cxx
             src/stc/scintilla/src/LexConf.cxx
             src/stc/scintilla/src/LexCrontab.cxx
             src/stc/scintilla/src/LexD.cxx
@@ -87,11 +88,14 @@
             src/stc/scintilla/src/LexLisp.cxx
             src/stc/scintilla/src/LexLout.cxx
             src/stc/scintilla/src/LexLua.cxx
+            src/stc/scintilla/src/LexMagik.cxx
             src/stc/scintilla/src/LexMMIXAL.cxx
             src/stc/scintilla/src/LexMPT.cxx
             src/stc/scintilla/src/LexMSSQL.cxx
             src/stc/scintilla/src/LexMatlab.cxx
             src/stc/scintilla/src/LexMetapost.cxx
+            src/stc/scintilla/src/LexMySQL.cxx
+            src/stc/scintilla/src/LexNimrod.cxx
             src/stc/scintilla/src/LexNsis.cxx
             src/stc/scintilla/src/LexOpal.cxx
             src/stc/scintilla/src/LexOthers.cxx
@@ -102,16 +106,22 @@
             src/stc/scintilla/src/LexPS.cxx
             src/stc/scintilla/src/LexPascal.cxx
             src/stc/scintilla/src/LexPerl.cxx
+            src/stc/scintilla/src/LexPowerPro.cxx
+            src/stc/scintilla/src/LexPowerShell.cxx
             src/stc/scintilla/src/LexPython.cxx
             src/stc/scintilla/src/LexR.cxx
             src/stc/scintilla/src/LexRebol.cxx
             src/stc/scintilla/src/LexRuby.cxx
             src/stc/scintilla/src/LexSQL.cxx
+            src/stc/scintilla/src/LexSML.cxx
             src/stc/scintilla/src/LexSmalltalk.cxx
             src/stc/scintilla/src/LexTADS3.cxx
             src/stc/scintilla/src/LexScriptol.cxx
             src/stc/scintilla/src/LexSpecman.cxx
+            src/stc/scintilla/src/LexSorcus.cxx
             src/stc/scintilla/src/LexSpice.cxx
+            src/stc/scintilla/src/LexTAL.cxx
+            src/stc/scintilla/src/LexTACL.cxx
             src/stc/scintilla/src/LexTCL.cxx
             src/stc/scintilla/src/LexTeX.cxx
             src/stc/scintilla/src/LexVB.cxx
@@ -119,10 +129,12 @@
             src/stc/scintilla/src/LexVerilog.cxx
             src/stc/scintilla/src/LexYAML.cxx
             src/stc/scintilla/src/LineMarker.cxx
+            src/stc/scintilla/src/PerLine.cxx
             src/stc/scintilla/src/PositionCache.cxx
             src/stc/scintilla/src/PropSet.cxx
             src/stc/scintilla/src/RESearch.cxx
             src/stc/scintilla/src/RunStyles.cxx
+            src/stc/scintilla/src/Selection.cxx
             src/stc/scintilla/src/ScintillaBase.cxx
             src/stc/scintilla/src/Style.cxx
             src/stc/scintilla/src/StyleContext.cxx
@@ -130,6 +142,8 @@
             src/stc/scintilla/src/ViewStyle.cxx
             src/stc/scintilla/src/WindowAccessor.cxx
             src/stc/scintilla/src/XPM.cxx
+            src/stc/scintilla/src/LexMarkdown.cxx
+	    src/stc/scintilla/src/Array.cpp
         </sources>
     </lib>
 

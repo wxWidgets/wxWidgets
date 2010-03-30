@@ -124,6 +124,8 @@ wxDEFINE_EVENT( wxEVT_STC_CALLTIP_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
 
 
 
@@ -1030,6 +1032,14 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_INDICATORRELEASE:
         evt.SetEventType(wxEVT_STC_INDICATOR_RELEASE);
+        break;
+
+    case SCN_AUTOCCANCELLED:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_CANCELLED);
+        break;
+
+    case SCN_AUTOCCHARDELETED:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
         break;
 
     default:

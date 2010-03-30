@@ -462,6 +462,9 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\Array.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\AutoComplete.cxx">
 			</File>
 			<File
@@ -538,6 +541,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexCLW.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexCOBOL.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexCPP.cxx">
@@ -618,10 +624,22 @@
 				RelativePath="..\..\src\stc\scintilla\src\LexMSSQL.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexMagik.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexMarkdown.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexMatlab.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexMetapost.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexMySQL.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexNimrod.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexNsis.cxx">
@@ -651,6 +669,12 @@
 				RelativePath="..\..\src\stc\scintilla\src\LexPerl.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexPowerPro.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexPowerShell.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexProgress.cxx">
 			</File>
 			<File
@@ -666,6 +690,9 @@
 				RelativePath="..\..\src\stc\scintilla\src\LexRuby.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexSML.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexSQL.cxx">
 			</File>
 			<File
@@ -675,13 +702,22 @@
 				RelativePath="..\..\src\stc\scintilla\src\LexSmalltalk.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexSorcus.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexSpecman.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexSpice.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexTACL.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexTADS3.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\LexTAL.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\LexTCL.cxx">
@@ -705,6 +741,9 @@
 				RelativePath="..\..\src\stc\scintilla\src\LineMarker.cxx">
 			</File>
 			<File
+				RelativePath="..\..\src\stc\scintilla\src\PerLine.cxx">
+			</File>
+			<File
 				RelativePath="..\..\src\stc\scintilla\src\PositionCache.cxx">
 			</File>
 			<File
@@ -718,6 +757,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\ScintillaBase.cxx">
+			</File>
+			<File
+				RelativePath="..\..\src\stc\scintilla\src\Selection.cxx">
 			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\Style.cxx">

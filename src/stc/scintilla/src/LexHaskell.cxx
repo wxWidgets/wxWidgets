@@ -25,6 +25,7 @@
 #include "Platform.h"
 
 #include "PropSet.h"
+#include "PropSetSimple.h"
 #include "Accessor.h"
 #include "StyleContext.h"
 #include "KeyWords.h"
@@ -179,6 +180,9 @@ static void ColorizeHaskellDoc(unsigned int startPos, int length, int initStyle,
          // Digit
          if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
             sc.SetState(SCE_HA_NUMBER);
+            if (sc.ch == '0' && (sc.chNext == 'X' || sc.chNext == 'x')) { // Match anything starting with "0x" or "0X", too
+               sc.Forward(1);
+            }
          }
          // Comment line
          else if (sc.Match("--")) {
@@ -222,7 +226,7 @@ static const char* LexerName = "haskell";
 void EXT_LEXER_DECL Lex(unsigned int lexer, unsigned int startPos, int length, int initStyle,
                         char *words[], WindowID window, char *props)
 {
-   PropSet ps;
+   PropSetSimple ps;
    ps.SetMultiple(props);
    WindowAccessor wa(window, ps);
 

@@ -43,7 +43,7 @@ protected:
 	/// reallocating if more space needed.
 	void RoomFor(int insertionLength) {
 		if (gapLength <= insertionLength) {
-			if (growSize * 6 < size)
+			while (growSize < size / 6)
 				growSize *= 2;
 			ReAllocate(size + insertionLength + growSize);
 		}
@@ -238,6 +238,12 @@ public:
 		DeleteRange(0, lengthBody);
 	}
 
+	T* BufferPointer() {
+		RoomFor(1);
+		GapTo(lengthBody);
+		body[lengthBody] = 0;
+		return body;
+	}
 };
 
 #endif

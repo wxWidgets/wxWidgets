@@ -26,32 +26,35 @@
 #include <string.h>
 
 #include "Platform.h"
-#include "PropSet.h"
-#include "Accessor.h"
-#include "KeyWords.h"
-
-#include "Scintilla.h"
-#include "CharClassify.h"
-#include "XPM.h"
-#ifdef SCI_LEXER
-#include "SciLexer.h"
-#endif
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
+#ifdef SCI_LEXER
+#include "SciLexer.h"
+#include "PropSet.h"
+#include "Accessor.h"
+#include "KeyWords.h"
+#endif
 #include "ContractionState.h"
+#include "SVector.h"
 #include "CellBuffer.h"
 #include "CallTip.h"
 #include "KeyMap.h"
 #include "Indicator.h"
+#include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
-#include "ViewStyle.h"
 #include "AutoComplete.h"
+#include "ViewStyle.h"
+#include "CharClassify.h"
 #include "Decoration.h"
 #include "Document.h"
+#include "Selection.h"
 #include "PositionCache.h"
 #include "Editor.h"
+#include "PropSetSimple.h"
 #include "ScintillaBase.h"
 
 #ifdef __WXMSW__

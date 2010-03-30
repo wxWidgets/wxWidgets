@@ -229,7 +229,7 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 	offsetMain = insetX;    // initial alignment assuming no arrows
 	PaintContents(surfaceWindow, true);
 
-#if !defined(__APPLE__) || defined(__WX__)
+#ifndef __APPLE__
 	// OSX doesn't put borders on "help tags"
 	// Draw a raised border around the edges of the window
 	surfaceWindow->MoveTo(0, rcClientSize.bottom - 1);
@@ -254,11 +254,9 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
                                  const char *faceName, int size,
                                  int codePage_, int characterSet, Window &wParent) {
 	clickPlace = 0;
-	if (val)
-		delete []val;
+	delete []val;
+	val = 0;
 	val = new char[strlen(defn) + 1];
-	if (!val)
-		return PRectangle();
 	strcpy(val, defn);
 	codePage = codePage_;
 	Surface *surfaceMeasure = Surface::Allocate();

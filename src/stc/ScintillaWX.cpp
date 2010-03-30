@@ -301,7 +301,7 @@ void ScintillaWX::StartDrag() {
         if (result == wxDragMove && dropWentOutside)
             ClearSelection();
         inDragDrop = ddNone;
-        SetDragPosition(invalidPosition);
+        SetDragPosition(SelectionPosition(invalidPosition));
     }
 #endif // wxUSE_DRAG_AND_DROP
 }
@@ -472,7 +472,7 @@ void ScintillaWX::CancelModes() {
 
 
 void ScintillaWX::Copy() {
-    if (currentPos != anchor) {
+    if (!sel.Empty()) {
         SelectionText st;
         CopySelectionRange(&st);
         CopyToClipboard(st);
@@ -504,8 +504,9 @@ void ScintillaWX::Paste() {
         text = wxEmptyString;
 #endif
         int len = strlen(buf);
-        pdoc->InsertString(currentPos, buf, len);
-        SetEmptySelection(currentPos + len);
+        int caretMain = sel.MainCaret();
+        pdoc->InsertString(caretMain, buf, len);
+        SetEmptySelection(caretMain + len);
     }
 #endif // wxUSE_DATAOBJ
 
@@ -580,7 +581,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 void ScintillaWX::ClaimSelection() {
 #ifdef __WXGTK__
     // Put the selected text in the PRIMARY selection
-    if (currentPos != anchor) {
+    if (!sel.Empty()) {
         SelectionText st;
         CopySelectionRange(&st);
         wxTheClipboard->UsePrimarySelection(true);
@@ -602,7 +603,7 @@ void ScintillaWX::UpdateSystemCaret() {
             DestroySystemCaret();
             CreateSystemCaret();
         }
-        Point pos = LocationFromPosition(currentPos);
+        Point pos = PointMainCaret();
         ::SetCaretPos(pos.x, pos.y);
     }
 #endif
@@ -679,7 +680,8 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
           {
               ct.SetForeBack(vs.styles[STYLE_CALLTIP].fore, vs.styles[STYLE_CALLTIP].back);
           }
-          PRectangle rc = ct.CallTipStart(currentPos, pt,
+          int caretMain = sel.MainCaret();
+          PRectangle rc = ct.CallTipStart(caretMain, pt,
                                           defn,
                                           vs.styles[ctStyle].fontName,
                                           vs.styles[ctStyle].sizeZoomed,
@@ -862,7 +864,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     // Set the current position to the mouse click point and
     // then paste in the PRIMARY selection, if any.  wxGTK only.
     int newPos = PositionFromLocation(pt);
-    MovePositionTo(newPos, noSel, true);
+    MovePositionTo(newPos, Selection::noSel, true);
 
     pdoc->BeginUndoAction();
     wxTextDataObject data;
@@ -878,8 +880,9 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
                                                   wxConvertEOLMode(pdoc->eolMode));
         wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
         int        len = strlen(buf);
-        pdoc->InsertString(currentPos, buf, len);
-        SetEmptySelection(currentPos + len);
+        int caretMain = sel.MainCaret();
+        pdoc->InsertString(caretMain, buf, len);
+        SetEmptySelection(caretMain + len);
     }
     pdoc->EndUndoAction();
     NotifyChange();
@@ -1007,7 +1010,7 @@ void ScintillaWX::DoOnIdle(wxIdleEvent& evt) {
 
 #if wxUSE_DRAG_AND_DROP
 bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
-    SetDragPosition(invalidPosition);
+    SetDragPosition(SelectionPosition(invalidPosition));
 
     wxString text = wxTextBuffer::Translate(data,
                                             wxConvertEOLMode(pdoc->eolMode));
@@ -1024,7 +1027,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
 
     dragResult = evt.GetDragResult();
     if (dragResult == wxDragMove || dragResult == wxDragCopy) {
-        DropAt(evt.GetPosition(),
+        DropAt(SelectionPosition(evt.GetPosition()),
                wx2stc(evt.GetDragText()),
                dragResult == wxDragMove,
                false); // TODO: rectangular?
@@ -1041,7 +1044,7 @@ wxDragResult ScintillaWX::DoDragEnter(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), 
 
 
 wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
-    SetDragPosition(PositionFromLocation(Point(x, y)));
+    SetDragPosition(SelectionPosition(PositionFromLocation(Point(x, y))));
 
     // Send an event to allow the drag result to be changed
     wxStyledTextEvent evt(wxEVT_STC_DRAG_OVER, stc->GetId());
@@ -1058,7 +1061,7 @@ wxDragResult ScintillaWX::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) {
 
 
 void ScintillaWX::DoDragLeave() {
-    SetDragPosition(invalidPosition);
+    SetDragPosition(SelectionPosition(invalidPosition));
 }
 #endif // wxUSE_DRAG_AND_DROP
 //----------------------------------------------------------------------

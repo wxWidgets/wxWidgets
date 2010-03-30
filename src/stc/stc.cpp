@@ -124,6 +124,8 @@ wxDEFINE_EVENT( wxEVT_STC_CALLTIP_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CANCELLED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_CHAR_DELETED, wxStyledTextEvent );
 
 
 
@@ -283,7 +285,7 @@ void wxStyledTextCtrl::ClearDocumentStyle()
     SendMsg(2005, 0, 0);
 }
 
-// Returns the number of characters in the document.
+// Returns the number of bytes in the document.
 int wxStyledTextCtrl::GetLength() const
 {
     return SendMsg(2006, 0, 0);
@@ -815,13 +817,13 @@ void wxStyledTextCtrl::StyleSetHotSpot(int style, bool hotspot)
     SendMsg(2409, style, hotspot);
 }
 
-// Set the foreground colour of the selection and whether to use this setting.
+// Set the foreground colour of the main and additional selections and whether to use this setting.
 void wxStyledTextCtrl::SetSelForeground(bool useSetting, const wxColour& fore)
 {
     SendMsg(2067, useSetting, wxColourAsLong(fore));
 }
 
-// Set the background colour of the selection and whether to use this setting.
+// Set the background colour of the main and additional selections and whether to use this setting.
 void wxStyledTextCtrl::SetSelBackground(bool useSetting, const wxColour& back)
 {
     SendMsg(2068, useSetting, wxColourAsLong(back));
@@ -897,7 +899,7 @@ void wxStyledTextCtrl::SetCaretPeriod(int periodMilliseconds)
 }
 
 // Set the set of characters making up words for when moving or selecting by word.
-// First sets deaults like SetCharsDefault.
+// First sets defaults like SetCharsDefault.
 void wxStyledTextCtrl::SetWordChars(const wxString& characters)
 {
     SendMsg(2077, 0, (sptr_t)(const char*)wx2stc(characters));
@@ -963,6 +965,18 @@ void wxStyledTextCtrl::SetWhitespaceForeground(bool useSetting, const wxColour& 
 void wxStyledTextCtrl::SetWhitespaceBackground(bool useSetting, const wxColour& back)
 {
     SendMsg(2085, useSetting, wxColourAsLong(back));
+}
+
+// Set the size of the dots used to mark space characters.
+void wxStyledTextCtrl::SetWhitespaceSize(int size)
+{
+    SendMsg(2086, size, 0);
+}
+
+// Get the size of the dots used to mark space characters.
+int wxStyledTextCtrl::GetWhitespaceSize() const
+{
+    return SendMsg(2087, 0, 0);
 }
 
 // Divide each styling byte into lexical class bits (default: 5) and indicator
@@ -1980,6 +1994,18 @@ int wxStyledTextCtrl::GetWrapStartIndent() const
     return SendMsg(2465, 0, 0);
 }
 
+// Sets how wrapped sublines are placed. Default is fixed.
+void wxStyledTextCtrl::SetWrapIndentMode(int mode)
+{
+    SendMsg(2472, mode, 0);
+}
+
+// Retrieve how wrapped sublines are placed. Default is fixed.
+int wxStyledTextCtrl::GetWrapIndentMode() const
+{
+    return SendMsg(2473, 0, 0);
+}
+
 // Sets the degree of caching of layout information.
 void wxStyledTextCtrl::SetLayoutCache(int mode)
 {
@@ -2074,6 +2100,12 @@ bool wxStyledTextCtrl::GetTwoPhaseDraw() const
 void wxStyledTextCtrl::SetTwoPhaseDraw(bool twoPhase)
 {
     SendMsg(2284, twoPhase, 0);
+}
+
+// Scroll so that a display line is at the top of the display.
+void wxStyledTextCtrl::SetFirstVisibleLine(int lineDisplay)
+{
+    SendMsg(2613, lineDisplay, 0);
 }
 
 // Make the target range start and end be the same as the selection range start and end.
@@ -2458,7 +2490,7 @@ void wxStyledTextCtrl::MoveCaretInsideView()
     SendMsg(2401, 0, 0);
 }
 
-// How many characters are on a line, not including end of line characters?
+// How many characters are on a line, including end of line characters?
 int wxStyledTextCtrl::LineLength(int line) const
 {
     return SendMsg(2350, line, 0);
@@ -2865,7 +2897,7 @@ void wxStyledTextCtrl::CopyText(int length, const wxString& text)
     SendMsg(2420, length, (sptr_t)(const char*)wx2stc(text));
 }
 
-// Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE) or
+// Set the selection mode to stream (SC_SEL_STREAM) or rectangular (SC_SEL_RECTANGLE/SC_SEL_THIN) or
 // by lines (SC_SEL_LINES).
 void wxStyledTextCtrl::SetSelectionMode(int mode)
 {
@@ -3156,6 +3188,485 @@ void wxStyledTextCtrl::SetPositionCacheSize(int size)
 int wxStyledTextCtrl::GetPositionCacheSize() const
 {
     return SendMsg(2515, 0, 0);
+}
+
+// Copy the selection, if selection empty copy the line with the caret
+void wxStyledTextCtrl::CopyAllowLine()
+{
+    SendMsg(2519, 0, 0);
+}
+
+// Compact the document buffer and return a read-only pointer to the
+// characters in the document.
+const char* wxStyledTextCtrl::GetCharacterPointer() {
+    return (const char*)SendMsg(2520, 0, 0);
+}
+
+// Always interpret keyboard input as Unicode
+void wxStyledTextCtrl::SetKeysUnicode(bool keysUnicode)
+{
+    SendMsg(2521, keysUnicode, 0);
+}
+
+// Are keys always interpreted as Unicode?
+bool wxStyledTextCtrl::GetKeysUnicode() const
+{
+    return SendMsg(2522, 0, 0) != 0;
+}
+
+// Set the alpha fill colour of the given indicator.
+void wxStyledTextCtrl::IndicatorSetAlpha(int indicator, int alpha)
+{
+    SendMsg(2523, indicator, alpha);
+}
+
+// Get the alpha fill colour of the given indicator.
+int wxStyledTextCtrl::IndicatorGetAlpha(int indicator) const
+{
+    return SendMsg(2524, indicator, 0);
+}
+
+// Set extra ascent for each line
+void wxStyledTextCtrl::SetExtraAscent(int extraAscent)
+{
+    SendMsg(2525, extraAscent, 0);
+}
+
+// Get extra ascent for each line
+int wxStyledTextCtrl::GetExtraAscent() const
+{
+    return SendMsg(2526, 0, 0);
+}
+
+// Set extra descent for each line
+void wxStyledTextCtrl::SetExtraDescent(int extraDescent)
+{
+    SendMsg(2527, extraDescent, 0);
+}
+
+// Get extra descent for each line
+int wxStyledTextCtrl::GetExtraDescent() const
+{
+    return SendMsg(2528, 0, 0);
+}
+
+// Which symbol was defined for markerNumber with MarkerDefine
+int wxStyledTextCtrl::GetMarkerSymbolDefined(int markerNumber)
+{
+    return SendMsg(2529, markerNumber, 0);
+}
+
+// Set the text in the text margin for a line
+void wxStyledTextCtrl::MarginSetText(int line, const wxString& text)
+{
+    SendMsg(2530, line, (sptr_t)(const char*)wx2stc(text));
+}
+
+// Get the text in the text margin for a line
+wxString wxStyledTextCtrl::MarginGetText(int line) const {
+         long msg = 2531;
+         long len = SendMsg(msg, line, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, line, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
+// Set the style number for the text margin for a line
+void wxStyledTextCtrl::MarginSetStyle(int line, int style)
+{
+    SendMsg(2532, line, style);
+}
+
+// Get the style number for the text margin for a line
+int wxStyledTextCtrl::MarginGetStyle(int line) const
+{
+    return SendMsg(2533, line, 0);
+}
+
+// Set the style in the text margin for a line
+void wxStyledTextCtrl::MarginSetStyles(int line, const wxString& styles)
+{
+    SendMsg(2534, line, (sptr_t)(const char*)wx2stc(styles));
+}
+
+// Get the styles in the text margin for a line
+wxString wxStyledTextCtrl::MarginGetStyles(int line) const {
+         long msg = 2535;
+         long len = SendMsg(msg, line, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, line, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
+// Clear the margin text on all lines
+void wxStyledTextCtrl::MarginTextClearAll()
+{
+    SendMsg(2536, 0, 0);
+}
+
+// Get the start of the range of style numbers used for margin text
+void wxStyledTextCtrl::MarginSetStyleOffset(int style)
+{
+    SendMsg(2537, style, 0);
+}
+
+// Get the start of the range of style numbers used for margin text
+int wxStyledTextCtrl::MarginGetStyleOffset() const
+{
+    return SendMsg(2538, 0, 0);
+}
+
+// Set the annotation text for a line
+void wxStyledTextCtrl::AnnotationSetText(int line, const wxString& text)
+{
+    SendMsg(2540, line, (sptr_t)(const char*)wx2stc(text));
+}
+
+// Get the annotation text for a line
+wxString wxStyledTextCtrl::AnnotationGetText(int line) const {
+         long msg = 2541;
+         long len = SendMsg(msg, line, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, line, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
+// Set the style number for the annotations for a line
+void wxStyledTextCtrl::AnnotationSetStyle(int line, int style)
+{
+    SendMsg(2542, line, style);
+}
+
+// Get the style number for the annotations for a line
+int wxStyledTextCtrl::AnnotationGetStyle(int line) const
+{
+    return SendMsg(2543, line, 0);
+}
+
+// Set the annotation styles for a line
+void wxStyledTextCtrl::AnnotationSetStyles(int line, const wxString& styles)
+{
+    SendMsg(2544, line, (sptr_t)(const char*)wx2stc(styles));
+}
+
+// Get the annotation styles for a line
+wxString wxStyledTextCtrl::AnnotationGetStyles(int line) const {
+         long msg = 2545;
+         long len = SendMsg(msg, line, 0);
+
+         wxMemoryBuffer mbuf(len+1);
+         char* buf = (char*)mbuf.GetWriteBuf(len+1);
+         SendMsg(msg, line, (sptr_t)buf);
+         mbuf.UngetWriteBuf(len);
+         mbuf.AppendByte(0);
+         return stc2wx(buf);
+}
+
+// Get the number of annotation lines for a line
+int wxStyledTextCtrl::AnnotationGetLines(int line) const
+{
+    return SendMsg(2546, line, 0);
+}
+
+// Clear the annotations from all lines
+void wxStyledTextCtrl::AnnotationClearAll()
+{
+    SendMsg(2547, 0, 0);
+}
+
+// Set the visibility for the annotations for a view
+void wxStyledTextCtrl::AnnotationSetVisible(int visible)
+{
+    SendMsg(2548, visible, 0);
+}
+
+// Get the visibility for the annotations for a view
+int wxStyledTextCtrl::AnnotationGetVisible() const
+{
+    return SendMsg(2549, 0, 0);
+}
+
+// Get the start of the range of style numbers used for annotations
+void wxStyledTextCtrl::AnnotationSetStyleOffset(int style)
+{
+    SendMsg(2550, style, 0);
+}
+
+// Get the start of the range of style numbers used for annotations
+int wxStyledTextCtrl::AnnotationGetStyleOffset() const
+{
+    return SendMsg(2551, 0, 0);
+}
+
+// Add a container action to the undo stack
+void wxStyledTextCtrl::AddUndoAction(int token, int flags)
+{
+    SendMsg(2560, token, flags);
+}
+
+// Find the position of a character from a point within the window.
+int wxStyledTextCtrl::CharPositionFromPoint(int x, int y)
+{
+    return SendMsg(2561, x, y);
+}
+
+// Find the position of a character from a point within the window.
+// Return INVALID_POSITION if not close to text.
+int wxStyledTextCtrl::CharPositionFromPointClose(int x, int y)
+{
+    return SendMsg(2562, x, y);
+}
+
+// Set whether multiple selections can be made
+void wxStyledTextCtrl::SetMultipleSelection(bool multipleSelection)
+{
+    SendMsg(2563, multipleSelection, 0);
+}
+
+// Whether multiple selections can be made
+bool wxStyledTextCtrl::GetMultipleSelection() const
+{
+    return SendMsg(2564, 0, 0) != 0;
+}
+
+// Set whether typing can be performed into multiple selections
+void wxStyledTextCtrl::SetAdditionalSelectionTyping(bool additionalSelectionTyping)
+{
+    SendMsg(2565, additionalSelectionTyping, 0);
+}
+
+// Whether typing can be performed into multiple selections
+bool wxStyledTextCtrl::GetAdditionalSelectionTyping() const
+{
+    return SendMsg(2566, 0, 0) != 0;
+}
+
+// Set whether additional carets will blink
+void wxStyledTextCtrl::SetAdditionalCaretsBlink(bool additionalCaretsBlink)
+{
+    SendMsg(2567, additionalCaretsBlink, 0);
+}
+
+// Whether additional carets will blink
+bool wxStyledTextCtrl::GetAdditionalCaretsBlink() const
+{
+    return SendMsg(2568, 0, 0) != 0;
+}
+
+// Set whether additional carets are visible
+void wxStyledTextCtrl::SetAdditionalCaretsVisible(bool additionalCaretsBlink)
+{
+    SendMsg(2608, additionalCaretsBlink, 0);
+}
+
+// Whether additional carets are visible
+bool wxStyledTextCtrl::GetAdditionalCaretsVisible() const
+{
+    return SendMsg(2609, 0, 0) != 0;
+}
+
+// How many selections are there?
+int wxStyledTextCtrl::GetSelections() const
+{
+    return SendMsg(2570, 0, 0);
+}
+
+// Clear selections to a single empty stream selection
+void wxStyledTextCtrl::ClearSelections()
+{
+    SendMsg(2571, 0, 0);
+}
+
+// Add a selection
+int wxStyledTextCtrl::AddSelection(int caret, int anchor)
+{
+    return SendMsg(2573, caret, anchor);
+}
+
+// Set the main selection
+void wxStyledTextCtrl::SetMainSelection(int selection)
+{
+    SendMsg(2574, selection, 0);
+}
+
+// Which selection is the main selection
+int wxStyledTextCtrl::GetMainSelection() const
+{
+    return SendMsg(2575, 0, 0);
+}
+void wxStyledTextCtrl::SetSelectionNCaret(int selection, int pos)
+{
+    SendMsg(2576, selection, pos);
+}
+int wxStyledTextCtrl::GetSelectionNCaret(int selection) const
+{
+    return SendMsg(2577, selection, 0);
+}
+void wxStyledTextCtrl::SetSelectionNAnchor(int selection, int posAnchor)
+{
+    SendMsg(2578, selection, posAnchor);
+}
+int wxStyledTextCtrl::GetSelectionNAnchor(int selection) const
+{
+    return SendMsg(2579, selection, 0);
+}
+void wxStyledTextCtrl::SetSelectionNCaretVirtualSpace(int selection, int space)
+{
+    SendMsg(2580, selection, space);
+}
+int wxStyledTextCtrl::GetSelectionNCaretVirtualSpace(int selection) const
+{
+    return SendMsg(2581, selection, 0);
+}
+void wxStyledTextCtrl::SetSelectionNAnchorVirtualSpace(int selection, int space)
+{
+    SendMsg(2582, selection, space);
+}
+int wxStyledTextCtrl::GetSelectionNAnchorVirtualSpace(int selection) const
+{
+    return SendMsg(2583, selection, 0);
+}
+
+// Sets the position that starts the selection - this becomes the anchor.
+void wxStyledTextCtrl::SetSelectionNStart(int selection, int pos)
+{
+    SendMsg(2584, selection, pos);
+}
+
+// Returns the position at the start of the selection.
+int wxStyledTextCtrl::GetSelectionNStart(int selection) const
+{
+    return SendMsg(2585, selection, 0);
+}
+
+// Sets the position that ends the selection - this becomes the currentPosition.
+void wxStyledTextCtrl::SetSelectionNEnd(int selection, int pos)
+{
+    SendMsg(2586, selection, pos);
+}
+
+// Returns the position at the end of the selection.
+int wxStyledTextCtrl::GetSelectionNEnd(int selection) const
+{
+    return SendMsg(2587, selection, 0);
+}
+void wxStyledTextCtrl::SetRectangularSelectionCaret(int pos)
+{
+    SendMsg(2588, pos, 0);
+}
+int wxStyledTextCtrl::GetRectangularSelectionCaret() const
+{
+    return SendMsg(2589, 0, 0);
+}
+void wxStyledTextCtrl::SetRectangularSelectionAnchor(int posAnchor)
+{
+    SendMsg(2590, posAnchor, 0);
+}
+int wxStyledTextCtrl::GetRectangularSelectionAnchor() const
+{
+    return SendMsg(2591, 0, 0);
+}
+void wxStyledTextCtrl::SetRectangularSelectionCaretVirtualSpace(int space)
+{
+    SendMsg(2592, space, 0);
+}
+int wxStyledTextCtrl::GetRectangularSelectionCaretVirtualSpace() const
+{
+    return SendMsg(2593, 0, 0);
+}
+void wxStyledTextCtrl::SetRectangularSelectionAnchorVirtualSpace(int space)
+{
+    SendMsg(2594, space, 0);
+}
+int wxStyledTextCtrl::GetRectangularSelectionAnchorVirtualSpace() const
+{
+    return SendMsg(2595, 0, 0);
+}
+void wxStyledTextCtrl::SetVirtualSpaceOptions(int virtualSpaceOptions)
+{
+    SendMsg(2596, virtualSpaceOptions, 0);
+}
+int wxStyledTextCtrl::GetVirtualSpaceOptions() const
+{
+    return SendMsg(2597, 0, 0);
+}
+
+// On GTK+, allow selecting the modifier key to use for mouse-based
+// rectangular selection. Often the window manager requires Alt+Mouse Drag
+// for moving windows.
+// Valid values are SCMOD_CTRL(default), SCMOD_ALT, or SCMOD_SUPER.
+void wxStyledTextCtrl::SetRectangularSelectionModifier(int modifier)
+{
+    SendMsg(2598, modifier, 0);
+}
+
+// Get the modifier key used for rectangular selection.
+int wxStyledTextCtrl::GetRectangularSelectionModifier() const
+{
+    return SendMsg(2599, 0, 0);
+}
+
+// Set the foreground colour of additional selections.
+// Must have previously called SetSelFore with non-zero first argument for this to have an effect.
+void wxStyledTextCtrl::SetAdditionalSelForeground(const wxColour& fore)
+{
+    SendMsg(2600, wxColourAsLong(fore), 0);
+}
+
+// Set the background colour of additional selections.
+// Must have previously called SetSelBack with non-zero first argument for this to have an effect.
+void wxStyledTextCtrl::SetAdditionalSelBackground(const wxColour& back)
+{
+    SendMsg(2601, wxColourAsLong(back), 0);
+}
+
+// Set the alpha of the selection.
+void wxStyledTextCtrl::SetAdditionalSelAlpha(int alpha)
+{
+    SendMsg(2602, alpha, 0);
+}
+
+// Get the alpha of the selection.
+int wxStyledTextCtrl::GetAdditionalSelAlpha() const
+{
+    return SendMsg(2603, 0, 0);
+}
+
+// Set the foreground colour of additional carets.
+void wxStyledTextCtrl::SetAdditionalCaretForeground(const wxColour& fore)
+{
+    SendMsg(2604, wxColourAsLong(fore), 0);
+}
+
+// Get the foreground colour of additional carets.
+wxColour wxStyledTextCtrl::GetAdditionalCaretForeground() const
+{
+    long c = SendMsg(2605, 0, 0);
+    return wxColourFromLong(c);
+}
+
+// Set the main selection to the next selection.
+void wxStyledTextCtrl::RotateSelection()
+{
+    SendMsg(2606, 0, 0);
+}
+
+// Swap that caret and anchor of the main selection.
+void wxStyledTextCtrl::SwapMainAnchorCaret()
+{
+    SendMsg(2607, 0, 0);
 }
 
 // Start notifying the container of all key presses and commands.
@@ -4021,6 +4532,14 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
 
     case SCN_INDICATORRELEASE:
         evt.SetEventType(wxEVT_STC_INDICATOR_RELEASE);
+        break;
+
+    case SCN_AUTOCCANCELLED:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_CANCELLED);
+        break;
+
+    case SCN_AUTOCCHARDELETED:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_CHAR_DELETED);
         break;
 
     default:

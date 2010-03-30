@@ -126,7 +126,7 @@ bool Style::EquivalentFontTo(const Style *other) const {
 	return strcmp(fontName, other->fontName) == 0;
 }
 
-void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, bool extraFontFlag) {
+void Style::Realise(Surface &surface, int zoomLevel, Style *defaultStyle, int extraFontFlag) {
 	sizeZoomed = size + zoomLevel;
 	if (sizeZoomed <= 2)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2;

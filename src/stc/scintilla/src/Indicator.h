@@ -19,7 +19,8 @@ public:
 	int style;
 	bool under;
 	ColourPair fore;
-	Indicator() : style(INDIC_PLAIN), under(false), fore(ColourDesired(0,0,0)) {
+	int fillAlpha;
+	Indicator() : style(INDIC_PLAIN), under(false), fore(ColourDesired(0,0,0)), fillAlpha(30) {
 	}
 	void Draw(Surface *surface, const PRectangle &rc, const PRectangle &rcLine);
 };

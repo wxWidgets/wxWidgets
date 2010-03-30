@@ -242,8 +242,11 @@ static void ColouriseTeXDoc(
 					}
 				}
 				if (isTeXzero(sc.ch)) {
-					sc.SetState(SCE_TEX_SYMBOL) ;
-					sc.ForwardSetState(SCE_TEX_DEFAULT) ;
+					sc.SetState(SCE_TEX_SYMBOL);
+
+					if (!endOfLine(styler,sc.currentPos + 1))
+						sc.ForwardSetState(SCE_TEX_DEFAULT) ;
+
 					inComment = ! processComment ;
 					newifDone = false ;
 				} else if (isTeXseven(sc.ch) && isTeXseven(sc.chNext)) {
@@ -395,7 +398,7 @@ static void FoldTexDoc(unsigned int startPos, int length, int, WordList *[], Acc
 			levelCurrent += classifyFoldPointTeXPaired(buffer)+classifyFoldPointTeXUnpaired(buffer);
 		}
 
-		if((ch == '\r' || ch=='\n') && (chNext == '\\')){
+		if (levelCurrent > SC_FOLDLEVELBASE && ((ch == '\r' || ch=='\n') && (chNext == '\\'))) {
             ParseTeXCommand(i+1, styler, buffer);
 			levelCurrent -= classifyFoldPointTeXUnpaired(buffer);
 		}

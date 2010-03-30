@@ -61,7 +61,10 @@ static void ColouriseSQLDoc(unsigned int startPos, int length, int initStyle, Wo
 
 	StyleContext sc(startPos, length, initStyle, styler);
 
+	// property sql.backslash.escapes 
+	//	Enables backslash as an escape character in SQL. 
 	bool sqlBackslashEscapes = styler.GetPropertyInt("sql.backslash.escapes", 0) != 0;
+
 	bool sqlBackticksIdentifier = styler.GetPropertyInt("lexer.sql.backticks.identifier", 0) != 0;
 	int styleBeforeDCKeyword = SCE_SQL_DEFAULT;
 	for (; sc.More(); sc.Forward()) {
@@ -228,6 +231,10 @@ static void FoldSQLDoc(unsigned int startPos, int length, int initStyle,
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	bool foldOnlyBegin = styler.GetPropertyInt("fold.sql.only.begin", 0) != 0;
 
+	// property fold.sql.exists 
+	//	Enables "EXISTS" to end a fold as is started by "IF" in "DROP TABLE IF EXISTS". 
+	bool foldSqlExists = styler.GetPropertyInt("fold.sql.exists", 1) != 0;
+
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);
@@ -300,9 +307,13 @@ static void FoldSQLDoc(unsigned int startPos, int length, int initStyle,
 				}
 			} else if (strcmp(s, "begin") == 0) {
 				levelNext++;
-			} else if (strcmp(s, "end") == 0 ||
-						// DROP TABLE IF EXISTS or CREATE TABLE IF NOT EXISTS
-						strcmp(s, "exists") == 0) {
+			} else if ((strcmp(s, "end") == 0) ||
+//						// DROP TABLE IF EXISTS or CREATE TABLE IF NOT EXISTS
+						(foldSqlExists && (strcmp(s, "exists") == 0)) ||
+//						//  SQL Anywhere permits IF ... ELSE ... ENDIF
+//						//      will only be active if "endif" appears in the 
+//						//		keyword list.
+						(strcmp(s, "endif") == 0)) {
 				endFound = true;
 				levelNext--;
 				if (levelNext < SC_FOLDLEVELBASE) {

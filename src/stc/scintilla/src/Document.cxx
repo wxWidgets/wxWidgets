@@ -17,6 +17,7 @@
 #include "Partitioning.h"
 #include "RunStyles.h"
 #include "CellBuffer.h"
+#include "PerLine.h"
 #include "CharClassify.h"
 #include "Decoration.h"
 #include "Document.h"
@@ -73,8 +74,15 @@ Document::Document() {
 	lenWatchers = 0;
 
 	matchesValid = false;
-	pre = 0;
-	substituted = 0;
+	regex = 0;
+
+	perLineData[ldMarkers] = new LineMarkers();
+	perLineData[ldLevels] = new LineLevels();
+	perLineData[ldState] = new LineState();
+	perLineData[ldMargin] = new LineAnnotation();
+	perLineData[ldAnnotation] = new LineAnnotation();
+
+	cb.SetPerLine(this);
 }
 
 Document::~Document() {
@@ -82,12 +90,35 @@ Document::~Document() {
 		watchers[i].watcher->NotifyDeleted(this, watchers[i].userData);
 	}
 	delete []watchers;
+	for (int j=0; j<ldSize; j++) {
+		delete perLineData[j];
+		perLineData[j] = 0;
+	}
 	watchers = 0;
 	lenWatchers = 0;
-	delete pre;
-	pre = 0;
-	delete []substituted;
-	substituted = 0;
+	delete regex;
+	regex = 0;
+}
+
+void Document::Init() {
+	for (int j=0; j<ldSize; j++) {
+		if (perLineData[j])
+			perLineData[j]->Init();
+	}
+}
+
+void Document::InsertLine(int line) {
+	for (int j=0; j<ldSize; j++) {
+		if (perLineData[j])
+			perLineData[j]->InsertLine(line);
+	}
+}
+
+void Document::RemoveLine(int line) {
+	for (int j=0; j<ldSize; j++) {
+		if (perLineData[j])
+			perLineData[j]->RemoveLine(line);
+	}
 }
 
 // Increase reference count and return its previous value.
@@ -109,40 +140,56 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
+int Document::GetMark(int line) { 
+	return static_cast<LineMarkers*>(perLineData[ldMarkers])->MarkValue(line); 
+}
+
 int Document::AddMark(int line, int markerNum) {
-	int prev = cb.AddMark(line, markerNum);
-	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
-	NotifyModified(mh);
-	return prev;
+	if (line <= LinesTotal()) {
+		int prev = static_cast<LineMarkers*>(perLineData[ldMarkers])->
+			AddMark(line, markerNum, LinesTotal());
+		DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+		NotifyModified(mh);
+		return prev;
+	} else {
+		return 0;
+	}
 }
 
 void Document::AddMarkSet(int line, int valueSet) {
 	unsigned int m = valueSet;
 	for (int i = 0; m; i++, m >>= 1)
 		if (m & 1)
-			cb.AddMark(line, i);
+			static_cast<LineMarkers*>(perLineData[ldMarkers])->
+				AddMark(line, i, LinesTotal());
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMark(int line, int markerNum) {
-	cb.DeleteMark(line, markerNum);
+	static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMark(line, markerNum, false);
 	DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMarkFromHandle(int markerHandle) {
-	cb.DeleteMarkFromHandle(markerHandle);
+	static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMarkFromHandle(markerHandle);
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	mh.line = -1;
 	NotifyModified(mh);
 }
 
 void Document::DeleteAllMarks(int markerNum) {
-	cb.DeleteAllMarks(markerNum);
+	for (int line = 0; line < LinesTotal(); line++) {
+		static_cast<LineMarkers*>(perLineData[ldMarkers])->DeleteMark(line, markerNum, true);
+	}
 	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
 	mh.line = -1;
 	NotifyModified(mh);
+}
+
+int Document::LineFromHandle(int markerHandle) { 
+	return static_cast<LineMarkers*>(perLineData[ldMarkers])->LineFromHandle(markerHandle); 
 }
 
 int Document::LineStart(int line) const {
@@ -162,18 +209,22 @@ int Document::LineEnd(int line) const {
 	}
 }
 
-int Document::LineFromPosition(int pos) {
+int Document::LineFromPosition(int pos) const {
 	return cb.LineFromPosition(pos);
 }
 
-int Document::LineEndPosition(int position) {
+int Document::LineEndPosition(int position) const {
 	return LineEnd(LineFromPosition(position));
 }
 
-int Document::VCHomePosition(int position) {
+bool Document::IsLineEndPosition(int position) const {
+	return LineEnd(LineFromPosition(position)) == position;
+}
+
+int Document::VCHomePosition(int position) const {
 	int line = LineFromPosition(position);
 	int startPosition = LineStart(line);
-	int endLine = LineStart(line + 1) - 1;
+	int endLine = LineEnd(line);
 	int startText = startPosition;
 	while (startText < endLine && (cb.CharAt(startText) == ' ' || cb.CharAt(startText) == '\t' ) )
 		startText++;
@@ -184,7 +235,7 @@ int Document::VCHomePosition(int position) {
 }
 
 int Document::SetLevel(int line, int level) {
-	int prev = cb.SetLevel(line, level);
+	int prev = static_cast<LineLevels*>(perLineData[ldLevels])->SetLevel(line, level, LinesTotal());
 	if (prev != level) {
 		DocModification mh(SC_MOD_CHANGEFOLD | SC_MOD_CHANGEMARKER,
 		                   LineStart(line), 0, 0, 0, line);
@@ -193,6 +244,14 @@ int Document::SetLevel(int line, int level) {
 		NotifyModified(mh);
 	}
 	return prev;
+}
+
+int Document::GetLevel(int line) { 
+	return static_cast<LineLevels*>(perLineData[ldLevels])->GetLevel(line); 
+}
+
+void Document::ClearLevels() { 
+	static_cast<LineLevels*>(perLineData[ldLevels])->ClearLevels(); 
 }
 
 static bool IsSubordinate(int levelStart, int levelTry) {
@@ -506,21 +565,27 @@ int Document::Undo() {
 				if (action.at == removeAction) {
 					NotifyModified(DocModification(
 									SC_MOD_BEFOREINSERT | SC_PERFORMED_UNDO, action));
+				} else if (action.at == containerAction) {
+					DocModification dm(SC_MOD_CONTAINER | SC_PERFORMED_UNDO);
+					dm.token = action.position;
+					NotifyModified(dm);
 				} else {
 					NotifyModified(DocModification(
 									SC_MOD_BEFOREDELETE | SC_PERFORMED_UNDO, action));
 				}
 				cb.PerformUndoStep();
 				int cellPosition = action.position;
-				ModifiedAt(cellPosition);
-				newPos = cellPosition;
+				if (action.at != containerAction) {
+					ModifiedAt(cellPosition);
+					newPos = cellPosition;
+				}
 
 				int modFlags = SC_PERFORMED_UNDO;
 				// With undo, an insertion action becomes a deletion notification
 				if (action.at == removeAction) {
 					newPos += action.lenData;
 					modFlags |= SC_MOD_INSERTTEXT;
-				} else {
+				} else if (action.at == insertAction) {
 					modFlags |= SC_MOD_DELETETEXT;
 				}
 				if (steps > 1)
@@ -561,19 +626,25 @@ int Document::Redo() {
 				if (action.at == insertAction) {
 					NotifyModified(DocModification(
 									SC_MOD_BEFOREINSERT | SC_PERFORMED_REDO, action));
+				} else if (action.at == containerAction) {
+					DocModification dm(SC_MOD_CONTAINER | SC_PERFORMED_REDO);
+					dm.token = action.position;
+					NotifyModified(dm);
 				} else {
 					NotifyModified(DocModification(
 									SC_MOD_BEFOREDELETE | SC_PERFORMED_REDO, action));
 				}
 				cb.PerformRedoStep();
-				ModifiedAt(action.position);
-				newPos = action.position;
+				if (action.at != containerAction) {
+					ModifiedAt(action.position);
+					newPos = action.position;
+				}
 
 				int modFlags = SC_PERFORMED_REDO;
 				if (action.at == insertAction) {
 					newPos += action.lenData;
 					modFlags |= SC_MOD_INSERTTEXT;
-				} else {
+				} else if (action.at == removeAction) {
 					modFlags |= SC_MOD_DELETETEXT;
 				}
 				if (steps > 1)
@@ -690,10 +761,9 @@ void Document::SetLineIndentation(int line, int indent) {
 		CreateIndentation(linebuf, sizeof(linebuf), indent, tabInChars, !useTabs);
 		int thisLineStart = LineStart(line);
 		int indentPos = GetLineIndentPosition(line);
-		BeginUndoAction();
+		UndoGroup ug(this);
 		DeleteChars(thisLineStart, indentPos - thisLineStart);
 		InsertCString(thisLineStart, linebuf);
-		EndUndoAction();
 	}
 }
 
@@ -734,8 +804,8 @@ int Document::GetColumn(int pos) {
 
 int Document::FindColumn(int line, int column) {
 	int position = LineStart(line);
-	int columnCurrent = 0;
 	if ((line >= 0) && (line < LinesTotal())) {
+		int columnCurrent = 0;
 		while ((columnCurrent < column) && (position < Length())) {
 			char ch = cb.CharAt(position);
 			if (ch == '\t') {
@@ -800,7 +870,7 @@ char *Document::TransformLineEnds(int *pLenOut, const char *s, size_t len, int e
 }
 
 void Document::ConvertLineEnds(int eolModeSet) {
-	BeginUndoAction();
+	UndoGroup ug(this);
 
 	for (int pos = 0; pos < Length(); pos++) {
 		if (cb.CharAt(pos) == '\r') {
@@ -835,7 +905,6 @@ void Document::ConvertLineEnds(int eolModeSet) {
 		}
 	}
 
-	EndUndoAction();
 }
 
 bool Document::IsWhiteLine(int line) const {
@@ -998,16 +1067,6 @@ bool Document::IsWordAt(int start, int end) {
 	return IsWordStartAt(start) && IsWordEndAt(end);
 }
 
-// The comparison and case changing functions here assume ASCII
-// or extended ASCII such as the normal Windows code page.
-
-static inline char MakeUpperCase(char ch) {
-	if (ch < 'a' || ch > 'z')
-		return ch;
-	else
-		return static_cast<char>(ch - 'a' + 'A');
-}
-
 static inline char MakeLowerCase(char ch) {
 	if (ch < 'A' || ch > 'Z')
 		return ch;
@@ -1015,123 +1074,18 @@ static inline char MakeLowerCase(char ch) {
 		return static_cast<char>(ch - 'A' + 'a');
 }
 
-// Define a way for the Regular Expression code to access the document
-class DocumentIndexer : public CharacterIndexer {
-	Document *pdoc;
-	int end;
-public:
-	DocumentIndexer(Document *pdoc_, int end_) :
-		pdoc(pdoc_), end(end_) {
-	}
-
-	virtual ~DocumentIndexer() {
-	}
-
-	virtual char CharAt(int index) {
-		if (index < 0 || index >= end)
-			return 0;
-		else
-			return pdoc->CharAt(index);
-	}
-};
-
 /**
  * Find text in document, supporting both forward and backward
  * searches (just pass minPos > maxPos to do a backward search)
  * Has not been tested with backwards DBCS searches yet.
  */
 long Document::FindText(int minPos, int maxPos, const char *s,
-                        bool caseSensitive, bool word, bool wordStart, bool regExp, bool posix,
+                        bool caseSensitive, bool word, bool wordStart, bool regExp, int flags,
                         int *length) {
 	if (regExp) {
-		if (!pre)
-			pre = new RESearch(&charClass);
-		if (!pre)
-			return -1;
-
-		int increment = (minPos <= maxPos) ? 1 : -1;
-
-		int startPos = minPos;
-		int endPos = maxPos;
-
-		// Range endpoints should not be inside DBCS characters, but just in case, move them.
-		startPos = MovePositionOutsideChar(startPos, 1, false);
-		endPos = MovePositionOutsideChar(endPos, 1, false);
-
-		const char *errmsg = pre->Compile(s, *length, caseSensitive, posix);
-		if (errmsg) {
-			return -1;
-		}
-		// Find a variable in a property file: \$(\([A-Za-z0-9_.]+\))
-		// Replace first '.' with '-' in each property file variable reference:
-		//     Search: \$(\([A-Za-z0-9_-]+\)\.\([A-Za-z0-9_.]+\))
-		//     Replace: $(\1-\2)
-		int lineRangeStart = LineFromPosition(startPos);
-		int lineRangeEnd = LineFromPosition(endPos);
-		if ((increment == 1) &&
-			(startPos >= LineEnd(lineRangeStart)) &&
-			(lineRangeStart < lineRangeEnd)) {
-			// the start position is at end of line or between line end characters.
-			lineRangeStart++;
-			startPos = LineStart(lineRangeStart);
-		}
-		int pos = -1;
-		int lenRet = 0;
-		char searchEnd = s[*length - 1];
-		int lineRangeBreak = lineRangeEnd + increment;
-		for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
-			int startOfLine = LineStart(line);
-			int endOfLine = LineEnd(line);
-			if (increment == 1) {
-				if (line == lineRangeStart) {
-					if ((startPos != startOfLine) && (s[0] == '^'))
-						continue;	// Can't match start of line if start position after start of line
-					startOfLine = startPos;
-				}
-				if (line == lineRangeEnd) {
-					if ((endPos != endOfLine) && (searchEnd == '$'))
-						continue;	// Can't match end of line if end position before end of line
-					endOfLine = endPos;
-				}
-			} else {
-				if (line == lineRangeEnd) {
-					if ((endPos != startOfLine) && (s[0] == '^'))
-						continue;	// Can't match start of line if end position after start of line
-					startOfLine = endPos;
-				}
-				if (line == lineRangeStart) {
-					if ((startPos != endOfLine) && (searchEnd == '$'))
-						continue;	// Can't match end of line if start position before end of line
-					endOfLine = startPos;
-				}
-			}
-
-			DocumentIndexer di(this, endOfLine);
-			int success = pre->Execute(di, startOfLine, endOfLine);
-			if (success) {
-				pos = pre->bopat[0];
-				lenRet = pre->eopat[0] - pre->bopat[0];
-				if (increment == -1) {
-					// Check for the last match on this line.
-					int repetitions = 1000;	// Break out of infinite loop
-					while (success && (pre->eopat[0] <= endOfLine) && (repetitions--)) {
-						success = pre->Execute(di, pos+1, endOfLine);
-						if (success) {
-							if (pre->eopat[0] <= minPos) {
-								pos = pre->bopat[0];
-								lenRet = pre->eopat[0] - pre->bopat[0];
-							} else {
-								success = 0;
-							}
-						}
-					}
-				}
-				break;
-			}
-		}
-		*length = lenRet;
-		return pos;
-
+		if (!regex)
+			regex = CreateRegexSearch(&charClass);
+		return regex->FindText(this, minPos, maxPos, s, caseSensitive, word, wordStart, flags, length);
 	} else {
 
 		bool forward = minPos <= maxPos;
@@ -1167,8 +1121,8 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 					}
 					if (found) {
 						if ((!word && !wordStart) ||
-						        word && IsWordAt(pos, pos + lengthFind) ||
-						        wordStart && IsWordStartAt(pos))
+						        (word && IsWordAt(pos, pos + lengthFind)) ||
+						        (wordStart && IsWordStartAt(pos)))
 							return pos;
 					}
 				}
@@ -1183,8 +1137,8 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 					}
 					if (found) {
 						if ((!word && !wordStart) ||
-						        word && IsWordAt(pos, pos + lengthFind) ||
-						        wordStart && IsWordStartAt(pos))
+						        (word && IsWordAt(pos, pos + lengthFind)) ||
+						        (wordStart && IsWordStartAt(pos)))
 							return pos;
 					}
 				}
@@ -1201,86 +1155,7 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 }
 
 const char *Document::SubstituteByPosition(const char *text, int *length) {
-	if (!pre)
-		return 0;
-	delete []substituted;
-	substituted = 0;
-	DocumentIndexer di(this, Length());
-	if (!pre->GrabMatches(di))
-		return 0;
-	unsigned int lenResult = 0;
-	for (int i = 0; i < *length; i++) {
-		if (text[i] == '\\') {
-			if (text[i + 1] >= '1' && text[i + 1] <= '9') {
-				unsigned int patNum = text[i + 1] - '0';
-				lenResult += pre->eopat[patNum] - pre->bopat[patNum];
-				i++;
-			} else {
-				switch (text[i + 1]) {
-				case 'a':
-				case 'b':
-				case 'f':
-				case 'n':
-				case 'r':
-				case 't':
-				case 'v':
-					i++;
-				}
-				lenResult++;
-			}
-		} else {
-			lenResult++;
-		}
-	}
-	substituted = new char[lenResult + 1];
-	if (!substituted)
-		return 0;
-	char *o = substituted;
-	for (int j = 0; j < *length; j++) {
-		if (text[j] == '\\') {
-			if (text[j + 1] >= '1' && text[j + 1] <= '9') {
-				unsigned int patNum = text[j + 1] - '0';
-				unsigned int len = pre->eopat[patNum] - pre->bopat[patNum];
-				if (pre->pat[patNum])	// Will be null if try for a match that did not occur
-					memcpy(o, pre->pat[patNum], len);
-				o += len;
-				j++;
-			} else {
-				j++;
-				switch (text[j]) {
-				case 'a':
-					*o++ = '\a';
-					break;
-				case 'b':
-					*o++ = '\b';
-					break;
-				case 'f':
-					*o++ = '\f';
-					break;
-				case 'n':
-					*o++ = '\n';
-					break;
-				case 'r':
-					*o++ = '\r';
-					break;
-				case 't':
-					*o++ = '\t';
-					break;
-				case 'v':
-					*o++ = '\v';
-					break;
-				default:
-					*o++ = '\\';
-					j--;
-				}
-			}
-		} else {
-			*o++ = text[j];
-		}
-	}
-	*o = '\0';
-	*length = lenResult;
-	return substituted;
+	return regex->SubstituteByPosition(this, text, length);
 }
 
 int Document::LinesTotal() const {
@@ -1342,7 +1217,7 @@ bool Document::SetStyleFor(int length, char style) {
 	}
 }
 
-bool Document::SetStyles(int length, char *styles) {
+bool Document::SetStyles(int length, const char *styles) {
 	if (enteredStyling != 0) {
 		return false;
 	} else {
@@ -1380,13 +1255,96 @@ void Document::EnsureStyledTo(int pos) {
 	}
 }
 
-int Document::SetLineState(int line, int state) { 
-	int statePrevious = cb.SetLineState(line, state);
+int Document::SetLineState(int line, int state) {
+	int statePrevious = static_cast<LineState*>(perLineData[ldState])->SetLineState(line, state);
 	if (state != statePrevious) {
 		DocModification mh(SC_MOD_CHANGELINESTATE, 0, 0, 0, 0, line);
 		NotifyModified(mh);
 	}
 	return statePrevious;
+}
+
+int Document::GetLineState(int line) { 
+	return static_cast<LineState*>(perLineData[ldState])->GetLineState(line); 
+}
+
+int Document::GetMaxLineState() { 
+	return static_cast<LineState*>(perLineData[ldState])->GetMaxLineState(); 
+}
+
+StyledText Document::MarginStyledText(int line) {
+	LineAnnotation *pla = static_cast<LineAnnotation*>(perLineData[ldMargin]);
+	return StyledText(pla->Length(line), pla->Text(line), 
+		pla->MultipleStyles(line), pla->Style(line), pla->Styles(line));
+}
+
+void Document::MarginSetText(int line, const char *text) {
+	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetText(line, text); 
+	DocModification mh(SC_MOD_CHANGEMARGIN, LineStart(line), 0, 0, 0, line);
+	NotifyModified(mh);
+}
+
+void Document::MarginSetStyle(int line, int style) {
+	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetStyle(line, style); 
+}
+
+void Document::MarginSetStyles(int line, const unsigned char *styles) {
+	static_cast<LineAnnotation*>(perLineData[ldMargin])->SetStyles(line, styles); 
+}
+
+int Document::MarginLength(int line) const {
+	return static_cast<LineAnnotation*>(perLineData[ldMargin])->Length(line);
+}
+
+void Document::MarginClearAll() {
+	int maxEditorLine = LinesTotal();
+	for (int l=0;l<maxEditorLine;l++)
+		MarginSetText(l, 0);
+	// Free remaining data
+	static_cast<LineAnnotation*>(perLineData[ldMargin])->ClearAll();
+}
+
+bool Document::AnnotationAny() const {
+	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->AnySet(); 
+}
+
+StyledText Document::AnnotationStyledText(int line) {
+	LineAnnotation *pla = static_cast<LineAnnotation*>(perLineData[ldAnnotation]);
+	return StyledText(pla->Length(line), pla->Text(line), 
+		pla->MultipleStyles(line), pla->Style(line), pla->Styles(line));
+}
+
+void Document::AnnotationSetText(int line, const char *text) {
+	const int linesBefore = AnnotationLines(line);
+	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetText(line, text); 
+	const int linesAfter = AnnotationLines(line);
+	DocModification mh(SC_MOD_CHANGEANNOTATION, LineStart(line), 0, 0, 0, line);
+	mh.annotationLinesAdded = linesAfter - linesBefore;
+	NotifyModified(mh);
+}
+
+void Document::AnnotationSetStyle(int line, int style) {
+	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetStyle(line, style); 
+}
+
+void Document::AnnotationSetStyles(int line, const unsigned char *styles) {
+	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->SetStyles(line, styles); 
+}
+
+int Document::AnnotationLength(int line) const {
+	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->Length(line);
+}
+
+int Document::AnnotationLines(int line) const {
+	return static_cast<LineAnnotation*>(perLineData[ldAnnotation])->Lines(line);
+}
+
+void Document::AnnotationClearAll() {
+	int maxEditorLine = LinesTotal();
+	for (int l=0;l<maxEditorLine;l++)
+		AnnotationSetText(l, 0);
+	// Free remaining data
+	static_cast<LineAnnotation*>(perLineData[ldAnnotation])->ClearAll();
 }
 
 void Document::IncrementStyleClock() {
@@ -1408,8 +1366,6 @@ bool Document::AddWatcher(DocWatcher *watcher, void *userData) {
 			return false;
 	}
 	WatcherWithUserData *pwNew = new WatcherWithUserData[lenWatchers + 1];
-	if (!pwNew)
-		return false;
 	for (int j = 0; j < lenWatchers; j++)
 		pwNew[j] = watchers[j];
 	pwNew[lenWatchers].watcher = watcher;
@@ -1430,8 +1386,6 @@ bool Document::RemoveWatcher(DocWatcher *watcher, void *userData) {
 				lenWatchers = 0;
 			} else {
 				WatcherWithUserData *pwNew = new WatcherWithUserData[lenWatchers];
-				if (!pwNew)
-					return false;
 				for (int j = 0; j < lenWatchers - 1; j++) {
 					pwNew[j] = (j < i) ? watchers[j] : watchers[j + 1];
 				}
@@ -1630,3 +1584,230 @@ int Document::BraceMatch(int position, int /*maxReStyle*/) {
 	}
 	return - 1;
 }
+
+/**
+ * Implementation of RegexSearchBase for the default built-in regular expression engine
+ */
+class BuiltinRegex : public RegexSearchBase {
+public:
+	BuiltinRegex(CharClassify *charClassTable) : search(charClassTable), substituted(NULL) {}
+
+	virtual ~BuiltinRegex() {
+		delete substituted;
+	}
+
+	virtual long FindText(Document *doc, int minPos, int maxPos, const char *s,
+                        bool caseSensitive, bool word, bool wordStart, int flags,
+                        int *length);
+
+	virtual const char *SubstituteByPosition(Document* doc, const char *text, int *length);
+
+private:
+	RESearch search;
+	char *substituted;
+};
+
+// Define a way for the Regular Expression code to access the document
+class DocumentIndexer : public CharacterIndexer {
+	Document *pdoc;
+	int end;
+public:
+	DocumentIndexer(Document *pdoc_, int end_) :
+		pdoc(pdoc_), end(end_) {
+	}
+
+	virtual ~DocumentIndexer() {
+	}
+
+	virtual char CharAt(int index) {
+		if (index < 0 || index >= end)
+			return 0;
+		else
+			return pdoc->CharAt(index);
+	}
+};
+
+long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s,
+                        bool caseSensitive, bool, bool, int flags,
+                        int *length) {
+	bool posix = (flags & SCFIND_POSIX) != 0;
+	int increment = (minPos <= maxPos) ? 1 : -1;
+
+	int startPos = minPos;
+	int endPos = maxPos;
+
+	// Range endpoints should not be inside DBCS characters, but just in case, move them.
+	startPos = doc->MovePositionOutsideChar(startPos, 1, false);
+	endPos = doc->MovePositionOutsideChar(endPos, 1, false);
+
+	const char *errmsg = search.Compile(s, *length, caseSensitive, posix);
+	if (errmsg) {
+		return -1;
+	}
+	// Find a variable in a property file: \$(\([A-Za-z0-9_.]+\))
+	// Replace first '.' with '-' in each property file variable reference:
+	//     Search: \$(\([A-Za-z0-9_-]+\)\.\([A-Za-z0-9_.]+\))
+	//     Replace: $(\1-\2)
+	int lineRangeStart = doc->LineFromPosition(startPos);
+	int lineRangeEnd = doc->LineFromPosition(endPos);
+	if ((increment == 1) &&
+		(startPos >= doc->LineEnd(lineRangeStart)) &&
+		(lineRangeStart < lineRangeEnd)) {
+		// the start position is at end of line or between line end characters.
+		lineRangeStart++;
+		startPos = doc->LineStart(lineRangeStart);
+	}
+	int pos = -1;
+	int lenRet = 0;
+	char searchEnd = s[*length - 1];
+	int lineRangeBreak = lineRangeEnd + increment;
+	for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
+		int startOfLine = doc->LineStart(line);
+		int endOfLine = doc->LineEnd(line);
+		if (increment == 1) {
+			if (line == lineRangeStart) {
+				if ((startPos != startOfLine) && (s[0] == '^'))
+					continue;	// Can't match start of line if start position after start of line
+				startOfLine = startPos;
+			}
+			if (line == lineRangeEnd) {
+				if ((endPos != endOfLine) && (searchEnd == '$'))
+					continue;	// Can't match end of line if end position before end of line
+				endOfLine = endPos;
+			}
+		} else {
+			if (line == lineRangeEnd) {
+				if ((endPos != startOfLine) && (s[0] == '^'))
+					continue;	// Can't match start of line if end position after start of line
+				startOfLine = endPos;
+			}
+			if (line == lineRangeStart) {
+				if ((startPos != endOfLine) && (searchEnd == '$'))
+					continue;	// Can't match end of line if start position before end of line
+				endOfLine = startPos;
+			}
+		}
+
+		DocumentIndexer di(doc, endOfLine);
+		int success = search.Execute(di, startOfLine, endOfLine);
+		if (success) {
+			pos = search.bopat[0];
+			lenRet = search.eopat[0] - search.bopat[0];
+			if (increment == -1) {
+				// Check for the last match on this line.
+				int repetitions = 1000;	// Break out of infinite loop
+				while (success && (search.eopat[0] <= endOfLine) && (repetitions--)) {
+					success = search.Execute(di, pos+1, endOfLine);
+					if (success) {
+						if (search.eopat[0] <= minPos) {
+							pos = search.bopat[0];
+							lenRet = search.eopat[0] - search.bopat[0];
+						} else {
+							success = 0;
+						}
+					}
+				}
+			}
+			break;
+		}
+	}
+	*length = lenRet;
+	return pos;
+}
+
+const char *BuiltinRegex::SubstituteByPosition(Document* doc, const char *text, int *length) {
+	delete []substituted;
+	substituted = 0;
+	DocumentIndexer di(doc, doc->Length());
+	if (!search.GrabMatches(di))
+		return 0;
+	unsigned int lenResult = 0;
+	for (int i = 0; i < *length; i++) {
+		if (text[i] == '\\') {
+			if (text[i + 1] >= '1' && text[i + 1] <= '9') {
+				unsigned int patNum = text[i + 1] - '0';
+				lenResult += search.eopat[patNum] - search.bopat[patNum];
+				i++;
+			} else {
+				switch (text[i + 1]) {
+				case 'a':
+				case 'b':
+				case 'f':
+				case 'n':
+				case 'r':
+				case 't':
+				case 'v':
+					i++;
+				}
+				lenResult++;
+			}
+		} else {
+			lenResult++;
+		}
+	}
+	substituted = new char[lenResult + 1];
+	char *o = substituted;
+	for (int j = 0; j < *length; j++) {
+		if (text[j] == '\\') {
+			if (text[j + 1] >= '1' && text[j + 1] <= '9') {
+				unsigned int patNum = text[j + 1] - '0';
+				unsigned int len = search.eopat[patNum] - search.bopat[patNum];
+				if (search.pat[patNum])	// Will be null if try for a match that did not occur
+					memcpy(o, search.pat[patNum], len);
+				o += len;
+				j++;
+			} else {
+				j++;
+				switch (text[j]) {
+				case 'a':
+					*o++ = '\a';
+					break;
+				case 'b':
+					*o++ = '\b';
+					break;
+				case 'f':
+					*o++ = '\f';
+					break;
+				case 'n':
+					*o++ = '\n';
+					break;
+				case 'r':
+					*o++ = '\r';
+					break;
+				case 't':
+					*o++ = '\t';
+					break;
+				case 'v':
+					*o++ = '\v';
+					break;
+				default:
+					*o++ = '\\';
+					j--;
+				}
+			}
+		} else {
+			*o++ = text[j];
+		}
+	}
+	*o = '\0';
+	*length = lenResult;
+	return substituted;
+}
+
+#ifndef SCI_OWNREGEX
+
+#ifdef SCI_NAMESPACE
+
+RegexSearchBase *Scintilla::CreateRegexSearch(CharClassify *charClassTable) {
+	return new BuiltinRegex(charClassTable);
+}
+
+#else
+
+RegexSearchBase *CreateRegexSearch(CharClassify *charClassTable) {
+	return new BuiltinRegex(charClassTable);
+}
+
+#endif
+
+#endif

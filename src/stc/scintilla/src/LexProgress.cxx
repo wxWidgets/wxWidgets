@@ -9,7 +9,6 @@
 /** TODO:
 WebSpeed support in html lexer
 Support "end triggers" expression of the triggers phrase
-change lmPS to lmProgress
 Support more than 6 comments levels
 **/
 #include <stdlib.h>
@@ -44,11 +43,11 @@ enum SentenceStart { SetSentenceStart = 0xf, ResetSentenceStart = 0x10}; // true
 static void Colourise4glDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
                             Accessor &styler) {
 
-    WordList &keywords1 = *keywordlists[0];
-    WordList &keywords2 = *keywordlists[1];
-    WordList &keywords3 = *keywordlists[2];
-    //WordList &keywords4 = *keywordlists[3];
-    //WordList &keywords5 = *keywordlists[4];
+    WordList &keywords1 = *keywordlists[0];   // regular keywords
+    WordList &keywords2 = *keywordlists[1];   // block opening keywords, only when SentenceStart
+    WordList &keywords3 = *keywordlists[2];   // block opening keywords
+    //WordList &keywords4 = *keywordlists[3]; // preprocessor keywords. Not implemented
+    
 
 	int visibleChars = 0;
 	int mask;
@@ -64,23 +63,28 @@ static void Colourise4glDoc(unsigned int startPos, int length, int initStyle, Wo
 		}
 
 		// Handle line continuation generically.
+		if ((sc.state & 0xf) < SCE_4GL_COMMENT1) {
 		if (sc.ch == '~') {
-			// Skip whitespace between ~ and EOL
-	/*		do {
-				sc.Forward();
-			} */
-			while ((sc.chNext == ' ' || sc.chNext == '\t') ) {
-				sc.Forward();
-				sc.More();
-			}
-			if (sc.chNext == '\n' || sc.chNext == '\r') {
-				sc.Forward();
-				if (sc.ch == '\r' && sc.chNext == '\n') {
-					sc.Forward();
-				}
+			if (sc.chNext > ' ') {
+				// skip special char after ~
 				sc.Forward();
 				continue;
 			}
+			else {
+				// Skip whitespace between ~ and EOL
+				while (sc.More() && (sc.chNext == ' ' || sc.chNext == '\t') ) {
+					sc.Forward();
+				}
+				if (sc.chNext == '\n' || sc.chNext == '\r') {
+					sc.Forward();
+					if (sc.ch == '\r' && sc.chNext == '\n') {
+						sc.Forward();
+					}
+					sc.Forward();
+					continue;
+				}
+			}
+		}
 		}
 		// Determine if a new state should be terminated.
 		mask = sc.state & 0x10;
@@ -97,7 +101,7 @@ static void Colourise4glDoc(unsigned int startPos, int length, int initStyle, Wo
 				if (!IsAWordChar(sc.ch) && sc.ch != '-') {
 					char s[1000];
 					sc.GetCurrentLowered(s, sizeof(s));
-					if (((sc.state & 0x10) == 0) && keywords2.InList(s) || keywords3.InList(s)) {
+					if ((((sc.state & 0x10) == 0) && keywords2.InList(s)) || keywords3.InList(s)) {
 						sc.ChangeState(SCE_4GL_BLOCK | ResetSentenceStart);
 					}
 					else if (keywords1.InList(s)) {
@@ -119,9 +123,10 @@ static void Colourise4glDoc(unsigned int startPos, int length, int initStyle, Wo
 			case SCE_4GL_PREPROCESSOR:
 				if (sc.atLineStart) {
 					sc.SetState(SCE_4GL_DEFAULT & SetSentenceStart);
-				} else if (sc.ch == '*' && sc.chNext == '/') {
-					sc.ForwardSetState(SCE_4GL_DEFAULT | mask);
 				}
+				/* code removed to allow comments inside preprocessor
+					else if (sc.ch == '*' && sc.chNext == '/') {
+					sc.ForwardSetState(SCE_4GL_DEFAULT | sentenceStartState); } */
 				break;
 			case SCE_4GL_STRING:
 				if (sc.ch == '\"') {
@@ -173,9 +178,12 @@ static void Colourise4glDoc(unsigned int startPos, int length, int initStyle, Wo
 			} else if ((sc.ch == '.' || sc.ch == ':' || sc.ch == '}') && (sc.chNext == ' ' || sc.chNext == '\t' || sc.chNext == '\n' || sc.chNext == '\r')) {
 				sc.SetState(sc.state & SetSentenceStart);
 			} else if (isoperator(static_cast<char>(sc.ch))) {
+		/* 	This code allows highlight of handles. Alas, it would cause the phrase "last-event:function"
+			to be recognized as a BlockBegin */
+			
 				if (sc.ch == ':')
 					sc.SetState(SCE_4GL_OPERATOR & SetSentenceStart);
-				else
+				/* else */
 					sc.SetState(SCE_4GL_OPERATOR | ResetSentenceStart);
 			}
 		}
@@ -268,4 +276,4 @@ static const char * const FglWordLists[] = {
             0,
         };
 
-LexerModule lmProgress(SCLEX_PS, Colourise4glDoc, "progress", Fold4glDoc, FglWordLists);
+LexerModule lmProgress(SCLEX_PROGRESS, Colourise4glDoc, "progress", Fold4glDoc, FglWordLists);

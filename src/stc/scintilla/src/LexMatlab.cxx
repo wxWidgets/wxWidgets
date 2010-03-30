@@ -1,7 +1,7 @@
 // Scintilla source code edit control
 /** @file LexMatlab.cxx
  ** Lexer for Matlab.
- ** Written by Jose' Fonseca
+ ** Written by José Fonseca
  **
  ** Changes by Christoph Dalitz 2003/12/04:
  **   - added support for Octave
@@ -128,7 +128,7 @@ static void ColouriseMatlabOctaveDoc(
 		if (sc.state == SCE_MATLAB_DEFAULT) {
 			if (IsCommentChar(sc.ch)) {
 				sc.SetState(SCE_MATLAB_COMMENT);
-			} else if (sc.ch == '!') {
+			} else if (sc.ch == '!' && sc.chNext != '=' ) {
 				sc.SetState(SCE_MATLAB_COMMAND);
 			} else if (sc.ch == '\'') {
 				if (transpose) {

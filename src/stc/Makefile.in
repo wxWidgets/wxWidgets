@@ -141,6 +141,7 @@ STCDLL_OBJECTS =  \
 	stcdll_PropSet.o \
 	stcdll_RESearch.o \
 	stcdll_ScintillaBase.o \
+        stcdll_Selection.o \
 	stcdll_Style.o \
 	stcdll_StyleContext.o \
 	stcdll_UniConversion.o \
@@ -231,6 +232,7 @@ STCLIB_OBJECTS =  \
 	stclib_PropSet.o \
 	stclib_RESearch.o \
 	stclib_ScintillaBase.o \
+        stcdll_Selection.o \
 	stclib_Style.o \
 	stclib_StyleContext.o \
 	stclib_UniConversion.o \
@@ -661,6 +663,9 @@ stcdll_RESearch.o: $(srcdir)/scintilla/src/RESearch.cxx
 stcdll_ScintillaBase.o: $(srcdir)/scintilla/src/ScintillaBase.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/ScintillaBase.cxx
 
+stcdll_Selection.o: $(srcdir)/scintilla/src/Selction.cxx
+	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/Selection.cxx
+
 stcdll_Style.o: $(srcdir)/scintilla/src/Style.cxx
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/scintilla/src/Style.cxx
 
@@ -912,6 +917,9 @@ stclib_RESearch.o: $(srcdir)/scintilla/src/RESearch.cxx
 
 stclib_ScintillaBase.o: $(srcdir)/scintilla/src/ScintillaBase.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/ScintillaBase.cxx
+
+stclib_Selection.o: $(srcdir)/scintilla/src/Selection.cxx
+	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/Selection.cxx
 
 stclib_Style.o: $(srcdir)/scintilla/src/Style.cxx
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/scintilla/src/Style.cxx
