@@ -48,11 +48,13 @@ class WXDLLIMPEXP_NET wxURL : public wxURI
 {
 public:
     wxURL(const wxString& sUrl = wxEmptyString);
-    wxURL(const wxURI& url);
+    wxURL(const wxURI& uri);
+    wxURL(const wxURL& url);
     virtual ~wxURL();
 
     wxURL& operator = (const wxString& url);
-    wxURL& operator = (const wxURI& url);
+    wxURL& operator = (const wxURI& uri);
+    wxURL& operator = (const wxURL& url);
 
     wxProtocol& GetProtocol()        { return *m_protocol; }
     wxURLError GetError() const      { return m_error; }
@@ -99,6 +101,7 @@ protected:
     void Init(const wxString&);
     bool ParseURL();
     void CleanData();
+    void Free();
     bool FetchProtocol();
 
     friend class wxProtoInfo;

@@ -37,9 +37,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( URLTestCase );
         CPPUNIT_TEST( GetInputStream );
+        CPPUNIT_TEST( CopyAndAssignment );
     CPPUNIT_TEST_SUITE_END();
 
     void GetInputStream();
+    void CopyAndAssignment();
 
     DECLARE_NO_COPY_CLASS(URLTestCase)
 };
@@ -68,7 +70,7 @@ void URLTestCase::GetInputStream()
         wxLogWarning("No network connectivity; skipping the URLTestCase::GetInputStream test unit.");
         return;
     }
-    
+
     wxURL url("http://wxwidgets.org/logo9.jpg");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
@@ -77,8 +79,54 @@ void URLTestCase::GetInputStream()
 
     wxMemoryOutputStream ostream;
     CPPUNIT_ASSERT(in_stream->Read(ostream).GetLastError() == wxSTREAM_EOF);
-    
+
     // wx logo image currently is 13219 bytes
     CPPUNIT_ASSERT(ostream.GetSize() == 13219);
+
+    // we have to delete the object created by GetInputStream()
+    delete in_stream;
 }
 
+void URLTestCase::CopyAndAssignment()
+{
+    wxURL url1("http://www.example.org/");
+    wxURL url2;
+    wxURI *puri = &url2;        // downcast
+
+    { // Copy constructor
+        wxURL url3(url1);
+        CPPUNIT_ASSERT(url1 == url3);
+    }
+    { // Constructor for string
+        wxURL url3(url1.GetURL());
+        CPPUNIT_ASSERT(url1 == url3);
+    }
+    { // 'Copy' constructor for uri
+        wxURL url3(*puri);
+        CPPUNIT_ASSERT(url2 == url3);
+    }
+
+    // assignment for uri
+    *puri = url1;
+    CPPUNIT_ASSERT(url1 == url2);
+
+    // assignment to self through base pointer
+    *puri = url2;
+
+    // Assignment of string
+    url1 = wxS("http://www.example2.org/index.html");
+    *puri = wxS("http://www.example2.org/index.html");
+    CPPUNIT_ASSERT(url1 == url2);
+
+    // Assignment
+    url1 = wxS("");
+    url2 = url1;
+    CPPUNIT_ASSERT(url1 == url2);
+
+    // assignment to self
+    url2 = url2;
+
+    // check for destructor (with base pointer!)
+    puri = new wxURL();
+    delete puri;
+}

@@ -65,9 +65,15 @@ wxURL::wxURL(const wxString& url) : wxURI(url)
     ParseURL();
 }
 
-wxURL::wxURL(const wxURI& url) : wxURI(url)
+wxURL::wxURL(const wxURI& uri) : wxURI(uri)
 {
-    Init(url.BuildURI());
+    Init(uri.BuildURI());
+    ParseURL();
+}
+
+wxURL::wxURL(const wxURL& url) : wxURI(url)
+{
+    Init(url.GetURL());
     ParseURL();
 }
 
@@ -102,18 +108,39 @@ void wxURL::Init(const wxString& url)
 // Assignment
 // --------------------------------------------------------------
 
-wxURL& wxURL::operator = (const wxURI& url)
-{
-    wxURI::operator = (url);
-    Init(url.BuildURI());
-    ParseURL();
-    return *this;
-}
 wxURL& wxURL::operator = (const wxString& url)
 {
     wxURI::operator = (url);
+    Free();
     Init(url);
     ParseURL();
+
+    return *this;
+}
+
+wxURL& wxURL::operator = (const wxURI& uri)
+{
+    if (&uri != this)
+    {
+        wxURI::operator = (uri);
+        Free();
+        Init(uri.BuildURI());
+        ParseURL();
+    }
+
+    return *this;
+}
+
+wxURL& wxURL::operator = (const wxURL& url)
+{
+    if (&url != this)
+    {
+        wxURI::operator = (url);
+        Free();
+        Init(url.GetURL());
+        ParseURL();
+    }
+
     return *this;
 }
 
@@ -195,7 +222,7 @@ void wxURL::CleanData()
     }
 }
 
-wxURL::~wxURL()
+void wxURL::Free()
 {
     CleanData();
 #if wxUSE_PROTOCOL_HTTP
@@ -205,6 +232,11 @@ wxURL::~wxURL()
 #if wxUSE_URL_NATIVE
     delete m_nativeImp;
 #endif
+}
+
+wxURL::~wxURL()
+{
+    Free();
 }
 
 // --------------------------------------------------------------
