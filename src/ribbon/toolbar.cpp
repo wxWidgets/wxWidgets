@@ -15,10 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/ribbon/toolbar.h"
-
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/toolbar.h"
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
 #include "wx/dcbuffer.h"

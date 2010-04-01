@@ -15,11 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/dcmemory.h"
-#include "wx/ribbon/art.h"
-
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/art.h"
 #include "wx/ribbon/art_internal.h"
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
@@ -27,6 +25,7 @@
 #include "wx/ribbon/toolbar.h"
 
 #ifndef WX_PRECOMP
+#include "wx/dcmemory.h"
 #endif
 
 #ifdef __WXMSW__

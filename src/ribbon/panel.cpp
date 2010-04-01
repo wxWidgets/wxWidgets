@@ -8,22 +8,23 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-#include "wx/ribbon/art.h"
-#include "wx/ribbon/bar.h"
-#include "wx/ribbon/panel.h"
-#include "wx/dcbuffer.h"
-#include "wx/display.h"
-#include "wx/frame.h"
-
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/panel.h"
+#include "wx/ribbon/art.h"
+#include "wx/ribbon/bar.h"
+#include "wx/dcbuffer.h"
+#include "wx/display.h"
+
 #ifndef WX_PRECOMP
+#include "wx/frame.h"
 #endif
 
 #ifdef __WXMSW__
