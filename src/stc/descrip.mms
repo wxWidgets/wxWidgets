@@ -2,36 +2,46 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 5 October 2009                                                      *
+# Date : 1 April 2010                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
-	   /assume=(nostdnew,noglobal_array_new)/include=([],[.scintilla.src],[.scintilla.include])
-CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
+CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
 	/include=([],[.scintilla.src],[.scintilla.include])
+CC_DEFINE = /define=(__WX__=1,__WXMOTIF__=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/name=(as_is,short)/include=([],[.scintilla.src],[.scintilla.include])
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)/include=([],[.scintilla.src],[.scintilla.include])
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
+	/assume=(nostdnew,noglobal_array_new)\
+	/include=([],[.scintilla.src],[.scintilla.include])
+CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
 	/include=([],[.scintilla.src],[.scintilla.include])
 .else
 .ifdef __WXGTK2__
-CXX_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)/ieee=denorm\
-	   /assume=(nostdnew,noglobal_array_new)/include=([],[.scintilla.src],[.scintilla.include])
-CC_DEFINE = /define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1)/float=ieee/name=(as_is,short)\
-	/ieee=denorm/include=([],[.scintilla.src],[.scintilla.include])
+CXX_DEFINE=/define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
+	/assume=(nostdnew,noglobal_array_new)\
+	/include=([],[.scintilla.src],[.scintilla.include])
+CC_DEFINE=/define=(__WX__=1,__WXGTK__=1,VMS_GTK2=1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)/ieee=denorm\
+	/include=([],[.scintilla.src],[.scintilla.include])
 .else
 .ifdef __WXX11__
-CXX_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
+CXX_DEFINE=\
+	/define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)\
 	/include=([],[.scintilla.src],[.scintilla.include])
-CC_DEFINE = /define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/include=([],[.scintilla.src],[.scintilla.include])
+CC_DEFINE=\
+	/define=(__WX__=1,__WXX11__=1,__WXUNIVERSAL__==1,SCI_LEXER=1,LINK_LEXERS=1)\
+	/float=ieee/name=(as_is,short)\
+	/include=([],[.scintilla.src],[.scintilla.include])
 .else
 CXX_DEFINE =
 CC_DEFINE =
