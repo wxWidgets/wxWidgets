@@ -539,6 +539,7 @@ bool wxRibbonPage::DoActualLayout()
         minor_axis_size = GetSize().GetWidth() - origin.x - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
         available_space = m_size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y;
     }
+    if (minor_axis_size < 0) minor_axis_size = 0;
     size_t size_index;
     for(size_index = 0; size_index < m_size_calc_array_size; ++size_index)
     {

@@ -637,6 +637,8 @@ wxSize wxRibbonAUIArtProvider::GetPanelClientSize(
         if(client_offset)
             *client_offset = wxPoint(3, label_height + 2);
     }
+    if (size.x < 0) size.x = 0;
+    if (size.y < 0) size.y = 0;
     return size;
 }
 
