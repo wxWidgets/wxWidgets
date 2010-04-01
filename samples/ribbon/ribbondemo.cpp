@@ -641,8 +641,10 @@ wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
                                  wxColour* value)
 {
     wxRibbonGalleryItem* item = NULL;
-    wxColour c(colour);
-    if(value != NULL)
+    wxColour c;
+    if (colour != wxT("Default"))
+        c = wxColour(colour);
+    if (!c.IsOk())
         c = *value;
     if(c.IsOk())
     {
