@@ -841,7 +841,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_USE_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
@@ -866,19 +866,11 @@ bool wxApp::ProcessIdle()
     return wxAppBase::ProcessIdle();
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
-
 int wxApp::OnRun()
 {
     wxMacAutoreleasePool pool;
     return wxAppBase::OnRun();
 }
-
-#else
-
-// iPhone version in utils.mm
-
-#endif
 
 #if wxOSX_USE_CARBON
 bool wxApp::DoInitGui()

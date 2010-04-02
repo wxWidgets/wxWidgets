@@ -82,22 +82,24 @@ void wxMacWakeUp()
 {
 }
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
+- (void)applicationWillFinishLaunching:(NSApplication *)sender;
+
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
 - (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename;
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
 - (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
-    withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+           withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
+- (void)applicationWillTerminate:(NSApplication *)sender;
 @end
 
 @implementation wxNSAppController
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
-{
-    wxUnusedVar(sender);
-    // let wx do this, not cocoa
-    return NO;
+- (void)applicationWillFinishLaunching:(NSApplication *)application {	
+    wxUnusedVar(application);
+	wxTheApp->OnInit();
 }
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
@@ -123,6 +125,23 @@ void wxMacWakeUp()
     return YES;
 }
 
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+    wxUnusedVar(flag);
+    wxUnusedVar(sender);
+    wxTheApp->MacReopenApp() ;
+    return NO;
+}
+
+- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
+           withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+    wxUnusedVar(replyEvent);
+    NSString* url = [[event descriptorAtIndex:1] stringValue];
+    wxCFStringRef cf(wxCFRetain(url));
+    wxTheApp->MacOpenURL(cf.AsString()) ;
+}
+
 /*
     Allowable return values are:
         NSTerminateNow - it is ok to proceed with termination
@@ -133,36 +152,28 @@ void wxMacWakeUp()
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     wxUnusedVar(sender);
-    wxWindow* win = wxTheApp->GetTopWindow() ;
-    if ( win )
-    {
-        wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macExitMenuItemId);
-        if (!win->GetEventHandler()->ProcessEvent(exitEvent))
-            win->Close(true) ;
-    }
-    else
-    {
-         wxTheApp->ExitMainLoop() ;
-    }
-    return NSTerminateCancel;
+    wxCloseEvent event;
+    wxTheApp->OnQueryEndSession(event);
+    if ( event.GetVeto() )
+        return NSTerminateCancel;
+    
+    return NSTerminateNow;
 }
 
-- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+- (void)applicationWillTerminate:(NSApplication *)application {
+    wxUnusedVar(application);
+    wxCloseEvent event;
+    event.SetCanVeto(false);
+    wxTheApp->OnEndSession(event);
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
-    wxUnusedVar(flag);
     wxUnusedVar(sender);
-    wxTheApp->MacReopenApp() ;
+    // let wx do this, not cocoa
     return NO;
 }
 
-- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
-    withReplyEvent:(NSAppleEventDescriptor *)replyEvent
-{
-    wxUnusedVar(replyEvent);
-    NSString* url = [[event descriptorAtIndex:1] stringValue];
-    wxCFStringRef cf(wxCFRetain(url));
-    wxTheApp->MacOpenURL(cf.AsString()) ;
-}
 @end
 
 /*
@@ -216,6 +227,14 @@ void wxMacWakeUp()
 }
 @end
 
+bool wxApp::CallOnInit()
+{
+    if ( sm_isEmbedded )
+        return OnInit();
+    
+    return true;
+}
+
 bool wxApp::DoInitGui()
 {
     wxMacAutoreleasePool pool;
@@ -229,7 +248,6 @@ bool wxApp::DoInitGui()
         NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
         [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
             forEventClass:kInternetEventClass andEventID:kAEGetURL];
-        [NSApp finishLaunching];
     }
     return true;
 }
