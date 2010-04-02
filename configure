@@ -47506,7 +47506,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <window.h>
+#include <windows.h>
 #include <gdiplus.h>
 int
 main ()
