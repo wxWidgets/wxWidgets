@@ -239,15 +239,6 @@
    Compiler-specific checks.
  */
 
-// Only MSVC 7+ has gdiplus.h, add exceptions for other compilers here if they
-// can support it too (but notice that Borland currently dies in
-// src/msw/gdiplus.cpp with "macro expansion too long" error even if the header
-// is available)
-#if !wxCHECK_VISUALC_VERSION(7)
-    #undef wxUSE_GRAPHICS_CONTEXT
-    #define wxUSE_GRAPHICS_CONTEXT 0
-#endif
-
 // Borland
 #ifdef __BORLANDC__
 

@@ -657,11 +657,17 @@
 // still do need to distribute it yourself for an application using
 // wxGraphicsContext to be runnable on pre-XP systems.
 //
-// Default is 1 if the compiler has gdiplus.h (currently only MSVC 7+ under
-// Windows is known to).
+// Default is 1 except if you're using a non-Microsoft compiler under Windows
+// as only MSVC7+ is known to ship with gdiplus.h. For other compilers (e.g.
+// mingw32) you may need to install the headers (and just the headers)
+// yourself. If you do, change the setting below manually.
 //
 // Recommended setting: 1
-#define wxUSE_GRAPHICS_CONTEXT 1
+#if !defined(__WXMSW__) || wxCHECK_VISUALC_VERSION(7)
+    #define wxUSE_GRAPHICS_CONTEXT 1
+#else
+    #define wxUSE_GRAPHICS_CONTEXT 0
+#endif
 
 // ----------------------------------------------------------------------------
 // Individual GUI controls

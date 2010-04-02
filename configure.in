@@ -7444,7 +7444,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
                 dnl GDI+ DLL dynamically anyhow during run-time
                 AC_LANG_PUSH(C++)
                 AC_TRY_COMPILE(
-                    [#include <gdiplus.h>],
+                    [#include <windows.h>
+                     #include <gdiplus.h>],
                     [
                         using namespace Gdiplus;
                     ],
