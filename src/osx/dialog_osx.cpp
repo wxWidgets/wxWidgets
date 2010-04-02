@@ -12,6 +12,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
+#include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -21,7 +22,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/osx/private.h"
-
 
 // Lists to keep track of windows, so we can disable/enable them
 // for modal dialogs
@@ -33,6 +33,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 void wxDialog::Init()
 {
     m_modality = wxDIALOG_MODALITY_NONE;
+    m_eventLoop = NULL;
 }
 
 bool wxDialog::Create( wxWindow *parent,
@@ -126,8 +127,13 @@ int wxDialog::ShowModal()
     
     Show();
 
-    DoShowModal();
-
+    wxModalEventLoop modalLoop(this);
+    m_eventLoop = &modalLoop;
+    
+    modalLoop.Run();
+    
+    m_eventLoop = NULL;
+    
     return GetReturnCode();
 }
 
@@ -149,6 +155,9 @@ wxDialogModality wxDialog::GetModality() const
 //     dialogs and should work for both of them
 void wxDialog::EndModal(int retCode)
 {
+    if ( m_eventLoop )
+        m_eventLoop->Exit(retCode);
+    
     SetReturnCode(retCode);
     Show(false);
 }

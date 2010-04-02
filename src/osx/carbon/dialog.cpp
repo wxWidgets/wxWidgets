@@ -39,39 +39,3 @@ void wxDialog::DoShowWindowModal()
     ShowModal();
     SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
 }
-
-void wxDialog::DoShowModal()
-{
-
-    SetFocus() ;
-
-    WindowRef windowRef = (WindowRef) GetWXWindow();
-    WindowGroupRef windowGroup = NULL;
-    WindowGroupRef formerParentGroup = NULL;
-    bool resetGroupParent = false;
-
-    if ( GetParent() == NULL )
-    {
-        windowGroup = GetWindowGroup(windowRef) ;
-        if ( windowGroup != GetWindowGroupOfClass( kMovableModalWindowClass ) )
-        {
-            formerParentGroup = GetWindowGroupParent( windowGroup );
-            SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
-            resetGroupParent = true;
-        }
-    }
-    BeginAppModalStateForWindow(windowRef) ;
-
-#if wxUSE_CONSOLE_EVENTLOOP
-    wxEventLoopGuarantor ensureHasLoop;
-#endif
-    wxEventLoopBase * const loop = wxEventLoop::GetActive();
-    while ( IsModal() )
-        loop->Dispatch();
-
-    EndAppModalStateForWindow(windowRef) ;
-    if ( resetGroupParent )
-    {
-        SetWindowGroupParent( windowGroup , formerParentGroup );
-    }
-}

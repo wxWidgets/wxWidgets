@@ -17,6 +17,7 @@
 WXDLLIMPEXP_DATA_CORE(extern const char) wxDialogNameStr[];
 
 class WXDLLIMPEXP_FWD_CORE wxMacToolTip ;
+class WXDLLIMPEXP_FWD_CORE wxModalEventLoop ;
 
 // Dialog boxes
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
@@ -71,19 +72,19 @@ public:
 #endif
 
 protected:
-    // show modal dialog and enter modal loop
-    void DoShowModal();
-    
-    // show modal dialog and enter modal loop
+    // show window modal dialog 
     void DoShowWindowModal();
+
+    // end window modal dialog.
+    void EndWindowModal();
 
     // mac also takes command-period as cancel
     virtual bool IsEscapeKey(const wxKeyEvent& event);
 
-    // needed for cleanup on the Cocoa side.
-    void EndWindowModal();
 
     wxDialogModality m_modality;
+    
+    wxModalEventLoop* m_eventLoop;
 
 private:
     void Init();
