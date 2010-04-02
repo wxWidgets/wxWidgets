@@ -1322,6 +1322,10 @@ bool wxToolBar::Realize()
                             wxFAIL_MSG("Reference count of native tool was illegal before removal");
                         }
                         wxASSERT( IsValidControlHandle(tool->GetControl()->GetPeer()->GetControlRef() )) ;
+
+                        wxString label = tool->GetLabel();
+                        if ( !label.empty() )
+                            HIToolbarItemSetLabel( hiItemRef, wxCFStringRef(label, GetFont().GetEncoding()) );
                     }
                 }
 
