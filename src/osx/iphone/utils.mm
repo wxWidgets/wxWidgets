@@ -78,14 +78,6 @@ bool wxApp::CallOnInit()
     return true;
 }
 
-int wxApp::OnRun()
-{
-    wxMacAutoreleasePool pool;
-    const char* appname = "app";
-    UIApplicationMain( 1, (char**) &appname, nil, @"wxAppDelegate" );
-    return 1;
-}
-
 bool wxApp::DoInitGui()
 {
     return true;

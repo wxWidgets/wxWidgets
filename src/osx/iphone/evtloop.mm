@@ -79,28 +79,6 @@ static int CalculateUIEventMaskFromEventCategory(wxEventCategory cat)
 }
 */
 
-@interface wxAppDelegate : NSObject <UIApplicationDelegate> {
-}
-
-@end
-
-@implementation wxAppDelegate
-
-- (void)applicationDidFinishLaunching:(UIApplication *)application {	
-	wxTheApp->OnInit();
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application { 
-    wxCloseEvent event;
-    wxTheApp->OnEndSession(event);
-}
-
-- (void)dealloc {
-	[super dealloc];
-}
-
-@end
-
 wxGUIEventLoop::wxGUIEventLoop()
 {
 }
