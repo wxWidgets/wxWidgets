@@ -25,6 +25,10 @@
 #include "wx/tglbtn.h"
 #include "wx/osx/private.h"
 
+// from button.mm
+
+extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
+
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
@@ -37,7 +41,8 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    [v setBezelStyle:NSSmallSquareBezelStyle];
+    SetBezelStyleFromBorderFlags(v, style);
+
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
@@ -46,16 +51,20 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
                                     wxWindowID WXUNUSED(id),
-                                    const wxBitmap& WXUNUSED(label),
+                                    const wxBitmap& label,
                                     const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style),
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
 
-    [v setBezelStyle:NSRegularSquareBezelStyle];
+    if (label.Ok())
+        [v setImage:label.GetNSImage() ];
+
+    SetBezelStyleFromBorderFlags(v, style);
+
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;

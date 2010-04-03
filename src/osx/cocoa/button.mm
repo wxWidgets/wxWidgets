@@ -130,6 +130,8 @@ private:
     }
 };
 
+extern "C" void SetBezelStyleFromBorderFlags(NSButton *v, long style);
+    
 // set bezel style depending on the wxBORDER_XXX flags specified by the style
 void SetBezelStyleFromBorderFlags(NSButton *v, long style)
 {
