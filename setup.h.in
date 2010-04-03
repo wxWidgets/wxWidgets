@@ -323,10 +323,24 @@
 #define wxUSE_STC 0
 
 
-#if !defined(__WXMSW__) || wxCHECK_VISUALC_VERSION(7)
-    #define wxUSE_GRAPHICS_CONTEXT 0
+
+#ifdef _MSC_VER
+#   if _MSC_VER >= 1400
+
+
+#define wxUSE_GRAPHICS_CONTEXT 0
+#   else
+
+
+#       define wxUSE_GRAPHICS_CONTEXT 0
+#   endif
 #else
-    #define wxUSE_GRAPHICS_CONTEXT 0
+
+
+
+
+
+#   define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
 

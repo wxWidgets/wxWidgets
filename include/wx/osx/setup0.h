@@ -667,11 +667,27 @@
 // mingw32) you may need to install the headers (and just the headers)
 // yourself. If you do, change the setting below manually.
 //
-// Recommended setting: 1
-#if !defined(__WXMSW__) || wxCHECK_VISUALC_VERSION(7)
-    #define wxUSE_GRAPHICS_CONTEXT 1
+// Recommended setting: 1 if supported by the compilation environment
+
+// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
+// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
+#ifdef _MSC_VER
+#   if _MSC_VER >= 1400
+        // MSVC7+ comes with new enough Platform SDK, enable wxGraphicsContext
+        // support for it
+#       define wxUSE_GRAPHICS_CONTEXT 1
+#   else
+        // MSVC 6 didn't include GDI+ headers so disable by default, enable it
+        // here if you use MSVC 6 with a newer SDK
+#       define wxUSE_GRAPHICS_CONTEXT 0
+#   endif
 #else
-    #define wxUSE_GRAPHICS_CONTEXT 0
+    // Disable support for other Windows compilers, enable it if your compiler
+    // comes with new enough SDK or you installed the headers manually.
+    //
+    // Notice that this will be set by configure under non-Windows platforms
+    // anyhow so the value there is not important.
+#   define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
 // ----------------------------------------------------------------------------
