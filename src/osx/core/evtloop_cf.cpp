@@ -409,27 +409,3 @@ void wxCFEventLoop::Exit(int rc)
     m_shouldExit = true;
     DoStop();
 }
-
-#if wxUSE_GUI
-
-wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
-{
-    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
-    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
-}
-
-#ifdef __WXOSX_IPHONE__
-
-void wxModalEventLoop::DoRun()
-{
-    // presentModalViewController:animated:
-}
-
-void wxModalEventLoop::DoStop()
-{
-    // (void)dismissModalViewControllerAnimated:(BOOL)animated
-}
-
-#endif // wxUSE_GUI
-
-#endif

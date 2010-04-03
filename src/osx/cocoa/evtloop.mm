@@ -175,6 +175,12 @@ void wxGUIEventLoop::DoStop()
     [NSApp stop:0];
 }
 
+wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+{
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+}
+
 void wxModalEventLoop::DoRun()
 {
     wxMacAutoreleasePool pool;

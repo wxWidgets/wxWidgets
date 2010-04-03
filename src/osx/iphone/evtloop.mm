@@ -32,6 +32,10 @@
 
 #include "wx/log.h"
 
+#if wxUSE_GUI
+    #include "wx/nonownedwnd.h"
+#endif
+
 #include "wx/osx/private.h"
 
 // ============================================================================
@@ -115,3 +119,18 @@ void wxGUIEventLoop::DoRun()
     }
 }
 
+wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+{
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+}
+
+void wxModalEventLoop::DoRun()
+{
+    // presentModalViewController:animated:
+}
+
+void wxModalEventLoop::DoStop()
+{
+    // (void)dismissModalViewControllerAnimated:(BOOL)animated
+}

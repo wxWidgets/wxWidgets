@@ -29,8 +29,11 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
-    #include "wx/nonownedwnd.h"
 #endif // WX_PRECOMP
+
+#if wxUSE_GUI
+#include "wx/nonownedwnd.h"
+#endif
 
 #include "wx/osx/private.h"
 
@@ -89,6 +92,12 @@ void wxGUIEventLoop::DoRun()
 void wxGUIEventLoop::DoStop()
 {
     QuitApplicationEventLoop();
+}
+
+wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+{
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
 }
 
 void wxModalEventLoop::DoRun()
