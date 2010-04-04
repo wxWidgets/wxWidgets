@@ -182,7 +182,11 @@ public:
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
     {
-        return *(reinterpret_cast<const T*>(&buf.m_buffer[0]));
+        // Breaking this code into two lines should supress
+        // GCC's 'type-punned pointer will break strict-aliasing rules'
+        // warning.
+        const T* value = reinterpret_cast<const T*>(&buf.m_buffer[0]);
+        return *value;
     }
 };
 
@@ -323,13 +327,17 @@ public: \
     virtual ~wxAnyValueTypeImpl() { } \
     static void SetValue(const T& value, wxAnyValueBuffer& buf) \
     { \
-        *(reinterpret_cast<UseDataType*>(&buf.m_buffer[0])) = \
-            static_cast<UseDataType>(value); \
+        void* voidPtr = reinterpret_cast<void*>(&buf.m_buffer[0]); \
+        UseDataType* dptr = reinterpret_cast<UseDataType*>(voidPtr); \
+        *dptr = static_cast<UseDataType>(value); \
     } \
     static T GetValue(const wxAnyValueBuffer& buf) \
     { \
-        return static_cast<T>( \
-            *(reinterpret_cast<const UseDataType*>(&buf.m_buffer[0]))); \
+        const void* voidPtr = \
+            reinterpret_cast<const void*>(&buf.m_buffer[0]); \
+        const UseDataType* sptr = \
+            reinterpret_cast<const UseDataType*>(voidPtr); \
+        return static_cast<T>(*sptr); \
     } \
 };
 
