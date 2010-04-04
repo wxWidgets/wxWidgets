@@ -530,6 +530,7 @@ MSW:
 - Allow to not create wxPaintDC in EVT_PAINT handler.
 - Fix sending of wxEVT_COMMAND_LIST_COL_DRAGGING events in wxListCtrl.
 - Allow putting the UAC symbol on buttons (Chris Spencer).
+- Fix wxTaskBarIcon for older Windows systems (Daniel Wyatt).
 
 i18n:
 

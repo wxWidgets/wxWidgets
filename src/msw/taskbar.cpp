@@ -45,6 +45,21 @@
     #define NIF_INFO        0x00000010
 #endif
 
+#ifndef NOTIFYICONDATA_V1_SIZE
+    #ifdef UNICODE
+        #define NOTIFYICONDATA_V1_SIZE 0x0098
+    #else
+        #define NOTIFYICONDATA_V1_SIZE 0x0058
+    #endif
+#endif
+
+#ifndef NOTIFYICONDATA_V2_SIZE
+    #ifdef UNICODE
+        #define NOTIFYICONDATA_V2_SIZE 0x03A8;
+    #else
+        #define NOTIFYICONDATA_V2_SIZE 0x01E8;
+    #endif
+#endif
 
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
@@ -133,7 +148,19 @@ struct NotifyIconData : public NOTIFYICONDATA
     NotifyIconData(WXHWND hwnd)
     {
         memset(this, 0, sizeof(NOTIFYICONDATA));
-        cbSize = sizeof(NOTIFYICONDATA);
+
+        // Do _not_ use sizeof(NOTIFYICONDATA) here, it may be too big if we're
+        // compiled with newer headers but running on an older system and while
+        // we could do complicated tests for the exact system version it's
+        // easier to just use an old size which should be supported everywhere
+        // from Windows 2000 up and which is all we need as we don't use any
+        // newer features so far. But if we're running under a really ancient
+        // system (Win9x), fall back to even smaller size -- then the balloon
+        // related features won't be available but the rest will still work.
+        cbSize = wxTheApp->GetShell32Version() >= 500
+                    ? NOTIFYICONDATA_V2_SIZE
+                    : NOTIFYICONDATA_V1_SIZE;
+
         hWnd = (HWND) hwnd;
         uCallbackMessage = gs_msgTaskbar;
         uFlags = NIF_MESSAGE;
@@ -231,7 +258,7 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     // the balloon disappearance
     NotifyIconData notifyData(hwnd);
     notifyData.uFlags = 0;
-    notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows XP */;
+    notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows 2000/XP */;
 
     if ( !wxShellNotifyIcon(NIM_SETVERSION, &notifyData) )
     {
