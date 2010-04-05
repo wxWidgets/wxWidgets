@@ -831,6 +831,8 @@ bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
 
         case WXK_DOWN:
         case WXK_UP:
+        case WXK_NUMPAD_DOWN:
+        case WXK_NUMPAD_UP:
             // On XP or with writable combo in Classic, arrows don't open the
             // popup but Alt-arrow does
             if ( event.AltDown() ||

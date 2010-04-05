@@ -271,22 +271,22 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         }
     }
 
-    if ( keycode == WXK_DOWN || keycode == WXK_RIGHT )
+    if ( keycode == WXK_DOWN || keycode == WXK_NUMPAD_DOWN || keycode == WXK_RIGHT )
     {
         value++;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_UP || keycode == WXK_LEFT )
+    else if ( keycode == WXK_UP || keycode == WXK_NUMPAD_UP || keycode == WXK_LEFT )
     {
         value--;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_PAGEDOWN )
+    else if ( keycode == WXK_PAGEDOWN || keycode == WXK_NUMPAD_PAGEDOWN )
     {
         value+=10;
         StopPartialCompletion();
     }
-    else if ( keycode == WXK_PAGEUP )
+    else if ( keycode == WXK_PAGEUP || keycode == WXK_NUMPAD_PAGEUP )
     {
         value-=10;
         StopPartialCompletion();

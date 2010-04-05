@@ -605,14 +605,17 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_HOME:
+        case WXK_NUMPAD_HOME:
             current = 0;
             break;
 
         case WXK_END:
+        case WXK_NUMPAD_END:
             current = GetRowCount() - 1;
             break;
 
         case WXK_DOWN:
+        case WXK_NUMPAD_DOWN:
             if ( m_current == (int)GetRowCount() - 1 )
                 return;
 
@@ -620,6 +623,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_UP:
+        case WXK_NUMPAD_UP:
             if ( m_current == wxNOT_FOUND )
                 current = GetRowCount() - 1;
             else if ( m_current != 0 )
@@ -629,11 +633,13 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_PAGEDOWN:
+        case WXK_NUMPAD_PAGEDOWN:
             PageDown();
             current = GetVisibleBegin();
             break;
 
         case WXK_PAGEUP:
+        case WXK_NUMPAD_PAGEUP:
             if ( m_current == (int)GetVisibleBegin() )
             {
                 PageUp();
