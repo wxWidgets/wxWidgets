@@ -24,6 +24,7 @@
     #include "wx/frame.h"
     #include "wx/utils.h"
     #include "wx/menu.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/msw/wrapshl.h"
