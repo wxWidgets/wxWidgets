@@ -483,7 +483,7 @@ void wxComboPopupWindowEvtHandler::OnKeyEvent( wxKeyEvent& event )
     wxWindowList children = m_combo->GetPopupWindow()->GetChildren();
     wxWindowList::iterator node = children.begin();
     wxWindow* child = (wxWindow*)*node;
-    child->GetEventHandler()->AddPendingEvent(event);
+    child->GetEventHandler()->ProcessEvent(event);
 }
 
 #if USES_GENERICTLW
@@ -1760,7 +1760,7 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
         if ( IsPopupShown() )
         {
             // relay (some) mouse events to the popup
-            m_popup->GetEventHandler()->AddPendingEvent(event);
+            m_popup->GetEventHandler()->ProcessEvent(event);
         }
         else if ( event.GetWheelAxis() == 0 &&
                   event.GetWheelRotation() != 0 &&
@@ -1773,7 +1773,7 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
             kevent.m_keyCode = event.GetWheelRotation() > 0
                                ? WXK_UP
                                : WXK_DOWN;
-            GetEventHandler()->AddPendingEvent(kevent);
+            GetEventHandler()->ProcessEvent(kevent);
         }
         else
         {
@@ -1791,7 +1791,7 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     if ( IsPopupShown() )
     {
         // pass it to the popped up control
-        GetPopupControl()->GetControl()->GetEventHandler()->AddPendingEvent(event);
+        GetPopupControl()->GetControl()->GetEventHandler()->ProcessEvent(event);
     }
     else // no popup
     {
