@@ -19,6 +19,7 @@
 #include "wx/geometry.h"
 #include "wx/dynarray.h"
 #include "wx/dc.h"
+#include "wx/vector.h"
 
 enum wxAntialiasMode
 {
@@ -304,6 +305,81 @@ private:
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 
 
+// Describes a single gradient stop.
+class wxGraphicsGradientStop
+{
+public:
+    wxGraphicsGradientStop(wxColour col, float pos)
+        : m_col(col),
+          m_pos(pos)
+    {
+    }
+
+    // default copy ctor, assignment operator and dtor are ok
+
+    const wxColour& GetColour() const { return m_col; }
+    void SetColour(const wxColour& col) { m_col = col; }
+
+    float GetPosition() const { return m_pos; }
+    void SetPosition(float pos)
+    {
+        wxASSERT_MSG( pos >= 0 && pos < 1, "invalid gradient stop position" );
+
+        m_pos = pos;
+    }
+
+private:
+    // The colour of this gradient band.
+    wxColour m_col;
+
+    // Its starting position: 0 is the beginning and 1 is the end.
+    float m_pos;
+};
+
+// A collection of gradient stops ordered by their positions (from lowest to
+// highest). The first stop (index 0, position 0.0) is always the starting
+// colour and the last one (index GetCount() - 1, position 1.0) is the end
+// colour.
+class WXDLLIMPEXP_CORE wxGraphicsGradientStops
+{
+public:
+    wxGraphicsGradientStops(wxColour startCol = wxTransparentColour,
+                            wxColour endCol = wxTransparentColour)
+    {
+        // we can't use Add() here as it relies on having start/end stops as
+        // first/last array elements so do it manually
+        m_stops.push_back(wxGraphicsGradientStop(startCol, 0.));
+        m_stops.push_back(wxGraphicsGradientStop(endCol, 1.));
+    }
+
+    // default copy ctor, assignment operator and dtor are ok for this class
+
+
+    // Add a stop in correct order.
+    void Add(const wxGraphicsGradientStop& stop);
+    void Add(wxColour col, float pos) { Add(wxGraphicsGradientStop(col, pos)); }
+
+    // Get the number of stops.
+    unsigned GetCount() const { return m_stops.size(); }
+
+    // Return the stop at the given index (which must be valid).
+    wxGraphicsGradientStop Item(unsigned n) const { return m_stops.at(n); }
+
+    // Get/set start and end colours.
+    void SetStartColour(wxColour col)
+        { m_stops[0].SetColour(col); }
+    wxColour GetStartColour() const
+        { return m_stops[0].GetColour(); }
+    void SetEndColour(wxColour col)
+        { m_stops[m_stops.size() - 1].SetColour(col); }
+    wxColour GetEndColour() const
+        { return m_stops[m_stops.size() - 1].GetColour(); }
+
+private:
+    // All the stops stored in ascending order of positions.
+    wxVector<wxGraphicsGradientStop> m_stops;
+};
+
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {
 public:
@@ -348,14 +424,29 @@ public:
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) const;
 
-    // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2) const;
+    // sets the brush to a linear gradient, starting at (x1,y1) and ending at
+    // (x2,y2) with the given boundary colours or the specified stops
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxColour& c1, const wxColour& c2) const;
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops) const;
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-    // with radius r and color cColor
-    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) const;
+    // sets the brush to a radial gradient originating at (xo,yc) and ending
+    // on a circle around (xc,yc) with the given radius; the colours may be
+    // specified by just the two extremes or the full array of gradient stops
+    wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc, wxDouble radius,
+                              const wxColour& oColor, const wxColour& cColor) const;
+
+    wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc, wxDouble radius,
+                              const wxGraphicsGradientStops& stops) const;
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
@@ -644,21 +735,26 @@ public:
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) = 0;
 
-    // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2) = 0;
+    // Gradient brush creation functions may not honour all the stops specified
+    // stops and use just its boundary colours (this is currently the case
+    // under OS X)
+    virtual wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops) = 0;
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-    // with radius r and color cColor
-    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) = 0;
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops) = 0;
 
-   // sets the font
+    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) = 0;
-    
+
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) = 0;
 

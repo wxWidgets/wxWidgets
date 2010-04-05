@@ -248,13 +248,19 @@ public:
     ~wxCairoBrushData ();
 
     virtual void Apply( wxGraphicsContext* context );
-    void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2 );
-    void CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor );
+
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                   wxDouble xc, wxDouble yc, wxDouble radius,
+                                   const wxGraphicsGradientStops& stops);
 
 protected:
     virtual void Init();
+
+    // common part of Create{Linear,Radial}GradientBrush()
+    void AddGradientStops(const wxGraphicsGradientStops& stops);
 
 private :
     double m_red;
@@ -683,26 +689,50 @@ void wxCairoBrushData::Apply( wxGraphicsContext* context )
     }
 }
 
-void wxCairoBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2 )
+void wxCairoBrushData::AddGradientStops(const wxGraphicsGradientStops& stops)
 {
-    m_brushPattern = cairo_pattern_create_linear(x1,y1,x2,y2);
-    cairo_pattern_add_color_stop_rgba(m_brushPattern,0.0,c1.Red()/255.0,
-        c1.Green()/255.0, c1.Blue()/255.0,c1.Alpha()/255.0);
-    cairo_pattern_add_color_stop_rgba(m_brushPattern,1.0,c2.Red()/255.0,
-        c2.Green()/255.0, c2.Blue()/255.0,c2.Alpha()/255.0);
-    wxASSERT_MSG(cairo_pattern_status(m_brushPattern) == CAIRO_STATUS_SUCCESS, wxT("Couldn't create cairo pattern"));
+    // loop over all the stops, they include the beginning and ending ones
+    const unsigned numStops = stops.GetCount();
+    for ( unsigned n = 0; n < numStops; n++ )
+    {
+        const wxGraphicsGradientStop stop = stops.Item(n);
+
+        const wxColour col = stop.GetColour();
+
+        cairo_pattern_add_color_stop_rgba
+        (
+            m_brushPattern,
+            stop.GetPosition(),
+            col.Red()/255.0,
+            col.Green()/255.0,
+            col.Blue()/255.0,
+            col.Alpha()/255.0
+        );
+    }
+
+    wxASSERT_MSG(cairo_pattern_status(m_brushPattern) == CAIRO_STATUS_SUCCESS,
+                 wxT("Couldn't create cairo pattern"));
 }
 
-void wxCairoBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor )
+void
+wxCairoBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                            wxDouble x2, wxDouble y2,
+                                            const wxGraphicsGradientStops& stops)
+{
+    m_brushPattern = cairo_pattern_create_linear(x1,y1,x2,y2);
+
+    AddGradientStops(stops);
+}
+
+void
+wxCairoBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                            wxDouble xc, wxDouble yc,
+                                            wxDouble radius,
+                                            const wxGraphicsGradientStops& stops)
 {
     m_brushPattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
-    cairo_pattern_add_color_stop_rgba(m_brushPattern,0.0,oColor.Red()/255.0,
-        oColor.Green()/255.0, oColor.Blue()/255.0,oColor.Alpha()/255.0);
-    cairo_pattern_add_color_stop_rgba(m_brushPattern,1.0,cColor.Red()/255.0,
-        cColor.Green()/255.0, cColor.Blue()/255.0,cColor.Alpha()/255.0);
-    wxASSERT_MSG(cairo_pattern_status(m_brushPattern) == CAIRO_STATUS_SUCCESS, wxT("Couldn't create cairo pattern"));
+
+    AddGradientStops(stops);
 }
 
 void wxCairoBrushData::Init()
@@ -1113,10 +1143,10 @@ wxCairoBitmapData::~wxCairoBitmapData()
 {
     if (m_pattern)
         cairo_pattern_destroy(m_pattern);
-    
+
     if (m_surface)
         cairo_surface_destroy(m_surface);
-    
+
     delete [] m_buffer;
 }
 
@@ -1735,14 +1765,16 @@ public :
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
-    // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2) ;
+    virtual wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops);
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-    // with radius r and color cColor
-    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) ;
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops);
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
@@ -1874,25 +1906,26 @@ wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
     }
 }
 
-// sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush wxCairoRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-                                                                      const wxColour&c1, const wxColour&c2)
+wxGraphicsBrush
+wxCairoRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                           wxDouble x2, wxDouble y2,
+                                           const wxGraphicsGradientStops& stops)
 {
     wxGraphicsBrush p;
     wxCairoBrushData* d = new wxCairoBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
     p.SetRefData(d);
     return p;
 }
 
-// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-// with radius r and color cColor
-wxGraphicsBrush wxCairoRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-                                                                      const wxColour &oColor, const wxColour &cColor)
+wxGraphicsBrush
+wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                           wxDouble xc, wxDouble yc, wxDouble r,
+                                           const wxGraphicsGradientStops& stops)
 {
     wxGraphicsBrush p;
     wxCairoBrushData* d = new wxCairoBrushData( this );
-    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    d->CreateRadialGradientBrush(xo, yo, xc, yc, r, stops);
     p.SetRefData(d);
     return p;
 }

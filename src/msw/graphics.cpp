@@ -246,16 +246,24 @@ public:
     wxGDIPlusBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
     ~wxGDIPlusBrushData ();
 
-    void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2 );
-    void CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor );
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                   wxDouble xc, wxDouble yc,
+                                   wxDouble radius,
+                                   const wxGraphicsGradientStops& stops);
+
     virtual Brush* GetGDIPlusBrush() { return m_brush; }
 
 protected:
     virtual void Init();
 
-private :
+private:
+    // common part of Create{Linear,Radial}GradientBrush()
+    template <typename T>
+    void SetGradientStops(T *brush, const wxGraphicsGradientStops& stops);
+
     Brush* m_brush;
     Image* m_brushImage;
     GraphicsPath* m_brushPath;
@@ -628,28 +636,67 @@ void wxGDIPlusBrushData::Init()
     m_brushPath= NULL;
 }
 
-void wxGDIPlusBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour&c1, const wxColour&c2)
+template <typename T>
+void
+wxGDIPlusBrushData::SetGradientStops(T *brush,
+        const wxGraphicsGradientStops& stops)
 {
-    m_brush = new LinearGradientBrush( PointF( x1,y1) , PointF( x2,y2),
-        Color( c1.Alpha(), c1.Red(),c1.Green() , c1.Blue() ),
-        Color( c2.Alpha(), c2.Red(),c2.Green() , c2.Blue() ));
+    const unsigned numStops = stops.GetCount();
+    if ( numStops <= 2 )
+    {
+        // initial and final colours are set during the brush creation, nothing
+        // more to do
+        return;
+    }
+
+    wxVector<Color> colors(numStops);
+    wxVector<REAL> positions(numStops);
+
+    for ( unsigned i = 0; i < numStops; i++ )
+    {
+        wxGraphicsGradientStop stop = stops.Item(i);
+
+        colors[i] = wxColourToColor(stop.GetColour());
+        positions[i] = stop.GetPosition();
+    }
+
+    brush->SetInterpolationColors(&colors[0], &positions[0], numStops);
 }
 
-void wxGDIPlusBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-                                               const wxColour &oColor, const wxColour &cColor)
+void
+wxGDIPlusBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                              wxDouble x2, wxDouble y2,
+                                              const wxGraphicsGradientStops& stops)
 {
-    // Create a path that consists of a single circle.
+    LinearGradientBrush * const
+        brush = new LinearGradientBrush(PointF(x1, y1) , PointF(x2, y2),
+                                        wxColourToColor(stops.GetStartColour()),
+                                        wxColourToColor(stops.GetEndColour()));
+    m_brush =  brush;
+
+    SetGradientStops(brush, stops);
+}
+
+void
+wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                              wxDouble xc, wxDouble yc,
+                                              wxDouble radius,
+                                              const wxGraphicsGradientStops& stops)
+{
     m_brushPath = new GraphicsPath();
-    m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius), (REAL)(2*radius), (REAL)(2*radius));
+    m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius),
+                             (REAL)(2*radius), (REAL)(2*radius));
 
-    PathGradientBrush *b = new PathGradientBrush(m_brushPath);
-    m_brush = b;
-    b->SetCenterPoint( PointF(xo,yo));
-    b->SetCenterColor(Color( oColor.Alpha(), oColor.Red(),oColor.Green() , oColor.Blue() ));
+    PathGradientBrush * const brush = new PathGradientBrush(m_brushPath);
+    m_brush = brush;
+    brush->SetCenterPoint(PointF(xo, yo));
+    brush->SetCenterColor(wxColourToColor(stops.GetStartColour()));
 
-    Color colors[] = {Color( cColor.Alpha(), cColor.Red(),cColor.Green() , cColor.Blue() )};
+    const Color col(wxColourToColor(stops.GetEndColour()));
     int count = 1;
-    b->SetSurroundColors(colors, &count);
+    brush->SetSurroundColors(&col, &count);
+
+    SetGradientStops(brush, stops);
 }
 
 //-----------------------------------------------------------------------------
@@ -1596,15 +1643,16 @@ public :
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
-    // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2) ;
+    virtual wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops);
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-    // with radius r and color cColor
-    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) ;
-
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops);
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
 
@@ -1613,7 +1661,7 @@ public :
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap );
-    
+
     // create a subimage from a native image representation
     virtual wxGraphicsBitmap CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  );
 
@@ -1789,27 +1837,29 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
     }
 }
 
-// sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-                                                                      const wxColour&c1, const wxColour&c2)
+wxGraphicsBrush
+wxGDIPlusRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                             wxDouble x2, wxDouble y2,
+                                             const wxGraphicsGradientStops& stops)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
     p.SetRefData(d);
     return p;
  }
 
-// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-// with radius r and color cColor
-wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-                                                                      const wxColour &oColor, const wxColour &cColor)
+wxGraphicsBrush
+wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                             wxDouble xc, wxDouble yc,
+                                             wxDouble radius,
+                                             const wxGraphicsGradientStops& stops)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
-    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,stops);
     p.SetRefData(d);
     return p;
 }

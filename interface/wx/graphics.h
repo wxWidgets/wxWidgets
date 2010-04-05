@@ -206,14 +206,14 @@ public:
 enum wxAntialiasMode
 {
     /** No anti-aliasing */
-    wxANTIALIAS_NONE, 
-    
+    wxANTIALIAS_NONE,
+
     /** The default anti-aliasing */
     wxANTIALIAS_DEFAULT,
 };
 
 /**
-    Compositing is done using Porter-Duff compositions 
+    Compositing is done using Porter-Duff compositions
     (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
     wxGraphicsContext::SetCompositionMode
 
@@ -361,15 +361,25 @@ public:
     static wxGraphicsContext* CreateFromNativeWindow(void* window);
 
     /**
-        Creates a native brush, having a linear gradient, starting at
-        (@a x1, @a y1) with color @a c1 to (@a x2, @a y2) with color @a c2.
+        Creates a native brush with a linear gradient.
+
+        The brush starts at (@a x1, @a y1) and ends at (@a x2, @a y2). Either
+        just the start and end gradient colours (@a c1 and @a c2) or full set
+        of gradient @a stops can be specified.
+
+        The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
-    virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
-                                                      wxDouble y1,
-                                                      wxDouble x2,
-                                                      wxDouble y2,
-                                                      const wxColour& c1,
-                                                      const wxColour& c2) const;
+    //@{
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxColour& c1, const wxColour& c2) const;
+
+    wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops) const;
+    //@}
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -391,15 +401,30 @@ public:
     virtual wxGraphicsPen CreatePen(const wxPen& pen) const;
 
     /**
-        Creates a native brush, having a radial gradient originating at
-        (@a xo, @a yc) with color @a oColour and ends on a circle around
-        (@a xc, @a yc) with the given @a radius and color @a cColour.
+        Creates a native brush with a radial gradient.
+
+        The brush originats at (@a xo, @a yc) and ends on a circle around
+        (@a xc, @a yc) with the given @a radius.
+
+        The gradient may be specified either by its start and end colours @a
+        oColor and @a cColor or by a full set of gradient @a stops.
+
+        The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
-    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                      wxDouble xc, wxDouble yc,
-                                                      wxDouble radius,
-                                                      const wxColour& oColor,
-                                                      const wxColour& cColor) const;
+    //@{
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxColour& oColor,
+                              const wxColour& cColor) const;
+
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops) = 0;
+    //@}
 
     /**
         Draws the bitmap. In case of a mono bitmap, this is treated as a mask
@@ -611,39 +636,152 @@ public:
     virtual void Translate(wxDouble dx, wxDouble dy) = 0;
 
     /**
-        Redirects all rendering is done into a fully transparent temporary context 
+        Redirects all rendering is done into a fully transparent temporary context
     */
     virtual void BeginLayer(wxDouble opacity) = 0;
 
-    /** 
-        Composites back the drawings into the context with the opacity given at 
+    /**
+        Composites back the drawings into the context with the opacity given at
         the BeginLayer call
     */
     virtual void EndLayer() = 0;
 
-    /** 
+    /**
         Sets the antialiasing mode, returns true if it supported
     */
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
-    /** 
+    /**
         Returns the current shape antialiasing mode
     */
     virtual wxAntialiasMode GetAntialiasMode() const ;
-    
+
     /**
         Sets the compositing operator, returns true if it supported
     */
     virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
-    /** 
+    /**
         Returns the current compositing operator
     */
     virtual wxCompositionMode GetCompositionMode() const;
-    
+
 };
 
+/**
+    Represents a single gradient stop in a collection of gradient stops as
+    represented by wxGraphicsGradientStops.
 
+    @library{wxcore}
+    @category{gdi}
+
+    @since 2.9.1
+*/
+class wxGraphicsGradientStop
+{
+public:
+    /**
+        Creates a stop with the given colour and position.
+
+        @param col The colour of this stop. Note that the alpha component of
+            the colour is honoured thus allowing the background colours to
+            partially show through the gradient.
+        @param pos The stop position, must be in [0, 1) range with 0 being the
+            beginning and 1 the end of the gradient (but it doesn't make sense
+            to create a stop at position 1 because it would never be visible
+            anyhow).
+    */
+    wxGraphicsGradientStop(wxColour col, float pos);
+
+    /// Return the stop colour.
+    const wxColour& GetColour() const;
+
+    /**
+        Change the stop colour.
+
+        @param col The new colour.
+    */
+    void SetColour(const wxColour& col);
+
+    /// Return the stop position.
+    float GetPosition() const;
+
+    /**
+        Change the stop position.
+
+        @param pos The new position, must always be in [0, 1) range.
+    */
+    void SetPosition(float pos);
+};
+
+/**
+    Represents a collection of wxGraphicGradientStop values for use with
+    CreateLinearGradientBrush and CreateRadialGradientBrush.
+
+    The stops are maintained in order of position.  If two or more stops are
+    added with the same position then the one(s) added later come later.
+    This can be useful for producing discontinuities in the colour gradient.
+
+    Notice that this class is write-once, you can't modify the stops once they
+    had been added.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @since 2.9.1
+*/
+class wxGraphicsGradientStops
+{
+public:
+    /**
+        Initializes the gradient stops with the given boundary colours.
+
+        Creates a wxGraphicsGradientStops instance with start colour given
+        by @a startCol and end colour given by @a endCol.
+    */
+    wxGraphicsGradientStops(wxColour startCol = wxTransparentColour,
+                            wxColour endCol = wxTransparentColour);
+
+    /**
+        Add a new stop.
+    */
+    //@{
+    void Add(const wxGraphicsGradientStop& stop);
+    void Add(wxColour col, float pos);
+    //@}
+
+    /**
+        Returns the stop at the given index.
+
+        @param n The index, must be in [0, GetCount()) range.
+    */
+    wxGraphicsGradientStop Item(unsigned n) const;
+
+    /**
+        Returns the number of stops.
+    */
+    unsigned GetCount() const;
+
+    /**
+        Set the start colour to @a col
+    */
+    void SetStartColour(wxColour col);
+
+    /**
+        Returns the start colour.
+    */
+    wxColour GetStartColour() const;
+
+    /**
+        Set the end colour to @a col
+    */
+    void SetEndColour(wxColour col);
+
+    /**
+        Returns the end colour.
+    */
+    wxColour GetEndColour() const;
+};
 
 /**
     @class wxGraphicsRenderer
@@ -707,7 +845,7 @@ public:
     virtual wxGraphicsContext* CreateContextFromNativeWindow(void* window) = 0;
 
     /**
-        Creates a wxGraphicsContext that can be used for measuring texts only. 
+        Creates a wxGraphicsContext that can be used for measuring texts only.
         No drawing commands are allowed.
     */
     virtual wxGraphicsContext * CreateMeasuringContext() = 0;
@@ -718,16 +856,18 @@ public:
     virtual wxGraphicsFont CreateFont(const wxFont& font,
                                       const wxColour& col = *wxBLACK) = 0;
 
+
     /**
-        Creates a native brush, having a linear gradient, starting at
-        (@a x1, @a y1) with color @a c1 to (@a x2, @a y2) with color @a c2.
+        Creates a native brush with a linear gradient.
+
+        Stops support is new since wxWidgets 2.9.1, previously only the start
+        and end colours could be specified.
     */
     virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
                                                       wxDouble y1,
                                                       wxDouble x2,
                                                       wxDouble y2,
-                                                      const wxColour& c1,
-                                                      const wxColour& c2) = 0;
+                                                      const wxGraphicsGradientStops& stops) = 0;
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -749,15 +889,15 @@ public:
     virtual wxGraphicsPen CreatePen(const wxPen& pen) = 0;
 
     /**
-        Creates a native brush, having a radial gradient originating at
-        (@a xo, @a yc) with color @a oColour and ends on a circle around
-        (@a xc, @a yc) with the given @a radius and color @a cColour.
+        Creates a native brush with a radial gradient.
+
+        Stops support is new since wxWidgets 2.9.1, previously only the start
+        and end colours could be specified.
     */
     virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                       wxDouble xc, wxDouble yc,
                                                       wxDouble radius,
-                                                      const wxColour& oColour,
-                                                      const wxColour& cColour) = 0;
+                                                      const wxGraphicsGradientStops& stops) = 0;
 
     /**
         Returns the default renderer on this platform. On OS X this is the Core

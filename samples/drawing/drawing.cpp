@@ -955,7 +955,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
 {
     wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
     gc->SetFont(font,*wxBLACK);
-    
+
     // make a path that contains a circle and some lines, centered at 0,0
     wxGraphicsPath path = gc->CreatePath() ;
     path.AddCircle( 0, 0, BASE2 );
@@ -965,14 +965,14 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     path.AddLineToPoint(BASE2, 0);
     path.CloseSubpath();
     path.AddRectangle(-BASE4, -BASE4/2, BASE2, BASE4);
-    
+
     // Now use that path to demonstrate various capbilites of the grpahics context
-    gc->PushState(); // save current translation/scale/other state 
+    gc->PushState(); // save current translation/scale/other state
     gc->Translate(60, 75); // reposition the context origin
 
     gc->SetPen(wxPen("navy", 1));
     gc->SetBrush(wxBrush("pink"));
-    
+
     for( int i = 0 ; i < 3 ; ++i )
     {
         wxString label;
@@ -1005,11 +1005,11 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
         }
         gc->Translate(2*BASE, 0);
     }
-            
+
     gc->PopState(); // restore saved state
     gc->PushState(); // save it again
     gc->Translate(60, 200); // offset to the lower part of the window
-        
+
     gc->DrawText("Scale", 0, -BASE2);
     gc->Translate(0, 20);
 
@@ -1017,14 +1017,14 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     for( int i = 0 ; i < 8 ; ++i )
     {
         gc->Scale(1.08, 1.08); // increase scale by 8%
-        gc->Translate(5,5);    
+        gc->Translate(5,5);
         gc->DrawPath(path);
     }
 
     gc->PopState(); // restore saved state
     gc->PushState(); // save it again
-    gc->Translate(400, 200); 
-    
+    gc->Translate(400, 200);
+
     gc->DrawText("Rotate", 0, -BASE2);
 
     // Move the origin over to the next location
@@ -1034,16 +1034,16 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     // and changing colors as we go
     for ( int angle = 0 ; angle < 360 ; angle += 30 )
     {
-        gc->PushState(); // save this new current state so we can 
+        gc->PushState(); // save this new current state so we can
         //  pop back to it at the end of the loop
         wxImage::RGBValue val = wxImage::HSVtoRGB(wxImage::HSVValue(float(angle)/360, 1, 1));
         gc->SetBrush(wxBrush(wxColour(val.red, val.green, val.blue, 64)));
         gc->SetPen(wxPen(wxColour(val.red, val.green, val.blue, 128)));
-        
+
         // use translate to artfully reposition each drawn path
         gc->Translate(1.5 * BASE2 * cos(DegToRad(angle)),
                      1.5 * BASE2 * sin(DegToRad(angle)));
-                     
+
         // use Rotate to rotate the path
         gc->Rotate(DegToRad(angle));
 
@@ -1231,6 +1231,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxUP);
 
+    wxRect  gfr = wxRect(r);
 
     // RHS: concentric
     r = wxRect(200, 10, 50, 50);
@@ -1283,6 +1284,127 @@ void MyCanvas::DrawGradients(wxDC& dc)
     dc.DrawRectangle(r4);
     r4.Deflate(1);
     dc.GradientFillLinear(r4, wxColour(0,0,0), wxColour(0,255,0), wxWEST);
+
+#if wxUSE_GRAPHICS_CONTEXT
+    if (m_useContext)
+    {
+        wxGCDC                      &gdc = (wxGCDC&)dc;
+        wxGraphicsContext           *gc = gdc.GetGraphicsContext();
+        wxGraphicsPath              pth;
+        wxGraphicsGradientStops     stops;
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Linear Gradient with Stops"), gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxColour(0,0,255));
+        stops.Add(wxColour(255,255,0), 0.33f);
+        stops.Add(wxColour(0,255,0), 0.67f);
+
+        gc->SetBrush(gc->CreateLinearGradientBrush(gfr.x, gfr.y,
+                                                   gfr.x + gfr.width, gfr.y + gfr.height,
+                                                   stops));
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+        gc->FillPath(pth);
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Radial Gradient with Stops"), gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.width / 2,
+                                                   stops));
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+        gc->FillPath(pth);
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Linear Gradient with Stops and Gaps"), gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxColour(0,0,255));
+        stops.Add(wxColour(255,255,0), 0.33f);
+        stops.Add(wxTransparentColour, 0.33f);
+        stops.Add(wxTransparentColour, 0.67f);
+        stops.Add(wxColour(0,255,0), 0.67f);
+
+        gc->SetBrush(gc->CreateLinearGradientBrush(gfr.x, gfr.y + gfr.height,
+                                                   gfr.x + gfr.width, gfr.y,
+                                                   stops));
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+        gc->FillPath(pth);
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Radial Gradient with Stops and Gaps"), gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.width / 2,
+                                                   stops));
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+        gc->FillPath(pth);
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText(wxT("Gradients with Stops and Transparency"), gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        stops = wxGraphicsGradientStops(wxColour(255,0,0), wxTransparentColour);
+        stops.Add(wxColour(255,0,0), 0.33f);
+        stops.Add(wxTransparentColour, 0.33f);
+        stops.Add(wxTransparentColour, 0.67f);
+        stops.Add(wxColour(0,0,255), 0.67f);
+        stops.Add(wxColour(0,0,255), 1.0f);
+
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width,gfr.y+gfr.height);
+        pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
+        pth.CloseSubpath();
+
+        gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.x + gfr.width / 2,
+                                                   gfr.y + gfr.height / 2,
+                                                   gfr.width / 2,
+                                                   stops));
+        gc->FillPath(pth);
+
+        stops = wxGraphicsGradientStops(wxColour(255,0,0, 128), wxColour(0,0,255, 128));
+        stops.Add(wxColour(255,255,0,128), 0.33f);
+        stops.Add(wxColour(0,255,0,128), 0.67f);
+
+        gc->SetBrush(gc->CreateLinearGradientBrush(gfr.x, gfr.y,
+                                                   gfr.x + gfr.width, gfr.y,
+                                                   stops));
+        gc->FillPath(pth);
+    }
+#endif // wxUSE_GRAPHICS_CONTEXT
 }
 
 void MyCanvas::DrawRegions(wxDC& dc)
@@ -1474,7 +1596,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
         m_owner->SetStatusText( str );
     }
-    
+
     if ( m_rubberBand )
     {
         int x,y, xx, yy ;
@@ -1504,8 +1626,8 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
 
 void MyCanvas::OnMouseDown(wxMouseEvent &event)
 {
-	int x,y,xx,yy ;
-	event.GetPosition(&x,&y);
+    int x,y,xx,yy ;
+    event.GetPosition(&x,&y);
     CalcUnscrolledPosition( x, y, &xx, &yy );
     m_anchorpoint = wxPoint( xx , yy ) ;
     m_currentpoint = m_anchorpoint ;
@@ -1530,9 +1652,9 @@ void MyCanvas::OnMouseUp(wxMouseEvent &event)
         int x,y,xx,yy ;
         event.GetPosition(&x,&y);
         CalcUnscrolledPosition( x, y, &xx, &yy );
-        
+
         wxString str;
-        str.Printf( wxT("Rectangle selection from %d,%d to %d,%d"), 
+        str.Printf( wxT("Rectangle selection from %d,%d to %d,%d"),
             m_anchorpoint.x, m_anchorpoint.y , (int)xx, (int)yy );
         wxMessageBox( str , wxT("Rubber-Banding") );
 
@@ -1658,8 +1780,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_xAxisReversed =
     m_yAxisReversed = false;
     m_backgroundMode = wxSOLID;
-    m_colourForeground = *wxRED;
-    m_colourBackground = *wxBLUE;
+    m_colourForeground = *wxBLACK;
+    m_colourBackground = *wxLIGHT_GREY;
     m_textureBackground = false;
 
     m_canvas = new MyCanvas( this );

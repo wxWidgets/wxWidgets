@@ -666,15 +666,18 @@ public:
     ~wxMacCoreGraphicsBrushData ();
 
     virtual void Apply( wxGraphicsContext* context );
-    void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2 );
-    void CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-    const wxColour &oColor, const wxColour &cColor );
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                   wxDouble xc, wxDouble yc, wxDouble radius,
+                                   const wxGraphicsGradientStops& stops);
 
     virtual bool IsShading() { return m_isShading; }
     CGShadingRef GetShading() { return m_shading; }
 protected:
-    CGFunctionRef CreateGradientFunction( const wxColour& c1, const wxColour& c2 );
+    CGFunctionRef CreateGradientFunction(const wxGraphicsGradientStops& stops);
+
     static void CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out);
     virtual void Init();
 
@@ -691,19 +694,24 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* rend
     Init();
 }
 
-void wxMacCoreGraphicsBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2 )
+void
+wxMacCoreGraphicsBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                                      wxDouble x2, wxDouble y2,
+                                                      const wxGraphicsGradientStops& stops)
 {
-    m_gradientFunction = CreateGradientFunction( c1, c2 );
+    m_gradientFunction = CreateGradientFunction(stops);
     m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) x1, (CGFloat) y1),
                                         CGPointMake((CGFloat) x2,(CGFloat) y2), m_gradientFunction, true, true ) ;
     m_isShading = true ;
 }
 
-void wxMacCoreGraphicsBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-    const wxColour &oColor, const wxColour &cColor )
+void
+wxMacCoreGraphicsBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                                      wxDouble xc, wxDouble yc,
+                                                      wxDouble radius,
+                                                      const wxGraphicsGradientStops& stops)
 {
-    m_gradientFunction = CreateGradientFunction( oColor, cColor );
+    m_gradientFunction = CreateGradientFunction(stops);
     m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0,
                                         CGPointMake((CGFloat) xc,(CGFloat) yc), (CGFloat) radius, m_gradientFunction, true, true ) ;
     m_isShading = true ;
@@ -759,8 +767,13 @@ void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFlo
     }
 }
 
-CGFunctionRef wxMacCoreGraphicsBrushData::CreateGradientFunction( const wxColour& c1, const wxColour& c2 )
+CGFunctionRef
+wxMacCoreGraphicsBrushData::CreateGradientFunction(const wxGraphicsGradientStops& stops)
 {
+    // TODO: implement support for intermediate gradient stops
+    const wxColour c1 = stops.GetStartColour();
+    const wxColour c2 = stops.GetEndColour();
+
     static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
     static const CGFloat input_value_range [2] = { 0, 1 };
     static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
@@ -1138,7 +1151,7 @@ public :
     // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
-    // appends a circle as a new closed subpath 
+    // appends a circle as a new closed subpath
     virtual void AddCircle( wxDouble x, wxDouble y, wxDouble r );
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
@@ -2618,14 +2631,16 @@ public :
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
-    // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-        const wxColour&c1, const wxColour&c2) ;
+    virtual wxGraphicsBrush
+    CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                              wxDouble x2, wxDouble y2,
+                              const wxGraphicsGradientStops& stops);
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-    // with radius r and color cColor
-    virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) ;
+    virtual wxGraphicsBrush
+    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                              wxDouble xc, wxDouble yc,
+                              wxDouble radius,
+                              const wxGraphicsGradientStops& stops);
 
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) ;
@@ -2819,25 +2834,27 @@ wxGraphicsBitmap wxMacCoreGraphicsRenderer::CreateSubBitmap( const wxGraphicsBit
         return wxNullGraphicsBitmap;
 }
 
-// sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-    const wxColour&c1, const wxColour&c2)
+wxGraphicsBrush
+wxMacCoreGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                                     wxDouble x2, wxDouble y2,
+                                                     const wxGraphicsGradientStops& stops)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, c1, c2);
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
     p.SetRefData(d);
     return p;
 }
 
-// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
-// with radius r and color cColor
-wxGraphicsBrush wxMacCoreGraphicsRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-    const wxColour &oColor, const wxColour &cColor)
+wxGraphicsBrush
+wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                                     wxDouble xc, wxDouble yc,
+                                                     wxDouble radius,
+                                                     const wxGraphicsGradientStops& stops)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,oColor,cColor);
+    d->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops);
     p.SetRefData(d);
     return p;
 }
