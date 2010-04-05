@@ -99,7 +99,6 @@ void wxMacWakeUp()
 
 - (void)applicationWillFinishLaunching:(NSApplication *)application {	
     wxUnusedVar(application);
-	wxTheApp->OnInit();
 }
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
@@ -226,14 +225,6 @@ void wxMacWakeUp()
         impl->ModalFinishedCallback(sheet, returnCode);
 }
 @end
-
-bool wxApp::CallOnInit()
-{
-    if ( sm_isEmbedded )
-        return OnInit();
-    
-    return true;
-}
 
 bool wxApp::DoInitGui()
 {

@@ -841,7 +841,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     return true;
 }
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
 bool wxApp::CallOnInit()
 {
     wxMacAutoreleasePool autoreleasepool;
