@@ -42,9 +42,18 @@
 #include "wx/msw/dc.h"
 #include "wx/dcgraph.h"
 
+#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
+
+#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
+#include <commdlg.h>
+#endif
+
 #include "wx/stack.h"
 
 WX_DECLARE_STACK(GraphicsState, GraphicsStates);
+
+namespace
+{
 
 //-----------------------------------------------------------------------------
 // constants
@@ -56,11 +65,19 @@ const double RAD2DEG = 180.0 / M_PI;
 // Local functions
 //-----------------------------------------------------------------------------
 
-static inline double dmin(double a, double b) { return a < b ? a : b; }
-static inline double dmax(double a, double b) { return a > b ? a : b; }
+inline double dmin(double a, double b) { return a < b ? a : b; }
+inline double dmax(double a, double b) { return a > b ? a : b; }
 
-static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
-static inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
+inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
+
+// translate a wxColour to a Color
+inline Color wxColourToColor(const wxColour& col)
+{
+    return Color(col.Alpha(), col.Red(), col.Green(), col.Blue());
+}
+
+} // anonymous namespace
 
 //-----------------------------------------------------------------------------
 // device context implementation
@@ -77,12 +94,6 @@ static inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
 //-----------------------------------------------------------------------------
 // wxGraphicsPath implementation
 //-----------------------------------------------------------------------------
-
-#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
-
-#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
-#include <commdlg.h>
-#endif
 
 class wxGDIPlusPathData : public wxGraphicsPathData
 {
@@ -404,8 +415,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
     if (m_width <= 0.0)
         m_width = 0.1;
 
-    m_pen = new Pen(Color( pen.GetColour().Alpha() , pen.GetColour().Red() ,
-        pen.GetColour().Green() , pen.GetColour().Blue() ), m_width );
+    m_pen = new Pen(wxColourToColor(pen.GetColour()), m_width );
 
     LineCap cap;
     switch ( pen.GetCap() )
@@ -528,8 +538,12 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
                 break ;
 
             }
-            m_penBrush = new HatchBrush(style,Color( pen.GetColour().Alpha() , pen.GetColour().Red() ,
-                pen.GetColour().Green() , pen.GetColour().Blue() ), Color::Transparent );
+            m_penBrush = new HatchBrush
+                             (
+                                style,
+                                wxColourToColor(pen.GetColour()),
+                                Color::Transparent
+                             );
             m_pen->SetBrush( m_penBrush );
         }
         break;
@@ -554,8 +568,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
     Init();
     if ( brush.GetStyle() == wxSOLID)
     {
-        m_brush = new SolidBrush( Color( brush.GetColour().Alpha() , brush.GetColour().Red() ,
-            brush.GetColour().Green() , brush.GetColour().Blue() ) );
+        m_brush = new SolidBrush(wxColourToColor( brush.GetColour()));
     }
     else if ( brush.IsHatch() )
     {
@@ -582,8 +595,12 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
             break ;
 
         }
-        m_brush = new HatchBrush(style,Color( brush.GetColour().Alpha() , brush.GetColour().Red() ,
-            brush.GetColour().Green() , brush.GetColour().Blue() ), Color::Transparent );
+        m_brush = new HatchBrush
+                      (
+                        style,
+                        wxColourToColor(brush.GetColour()),
+                        Color::Transparent
+                      );
     }
     else
     {
@@ -655,8 +672,7 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
     m_font = new Font( s , size , style );
-    m_textBrush = new SolidBrush( Color( col.Alpha() , col.Red() ,
-        col.Green() , col.Blue() ));
+    m_textBrush = new SolidBrush(wxColourToColor(col));
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
