@@ -89,6 +89,7 @@ public:
     virtual wxSize GetAdjustedSize( int minWidth, int prefHeight, int maxHeight );
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
     virtual void OnComboKeyEvent( wxKeyEvent& event );
+    virtual void OnComboCharEvent( wxKeyEvent& event );
     virtual void OnComboDoubleClick();
     virtual bool LazyCreate();
 
@@ -117,8 +118,8 @@ public:
 
 protected:
 
-    // Called by OnComboDoubleClick and OnComboKeyEvent
-    bool HandleKey( int keycode, bool saturate, wxChar unicode = 0 );
+    // Called by OnComboDoubleClick and OnCombo{Key,Char}Event
+    bool HandleKey( int keycode, bool saturate, wxChar keychar = 0 );
 
     // sends combobox select event from the parent combo control
     void SendComboBoxEvent( int selection );
@@ -164,6 +165,7 @@ protected:
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseWheel(wxMouseEvent& event);
     void OnKey(wxKeyEvent& event);
+    void OnChar(wxKeyEvent& event);
     void OnLeftClick(wxMouseEvent& event);
 
     // Return the widest item width (recalculating it if necessary)

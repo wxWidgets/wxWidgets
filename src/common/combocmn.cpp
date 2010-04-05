@@ -465,6 +465,7 @@ private:
 BEGIN_EVENT_TABLE(wxComboPopupWindowEvtHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxComboPopupWindowEvtHandler::OnKeyEvent)
     EVT_KEY_UP(wxComboPopupWindowEvtHandler::OnKeyEvent)
+    EVT_CHAR(wxComboPopupWindowEvtHandler::OnKeyEvent)
 #if USES_GENERICTLW
     EVT_ACTIVATE(wxComboPopupWindowEvtHandler::OnActivate)
 #endif
@@ -548,6 +549,11 @@ void wxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 }
 
 void wxComboPopup::OnComboKeyEvent( wxKeyEvent& event )
+{
+    event.Skip();
+}
+
+void wxComboPopup::OnComboCharEvent( wxKeyEvent& event )
 {
     event.Skip();
 }
@@ -780,6 +786,7 @@ BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
     EVT_IDLE(wxComboCtrlBase::OnIdleEvent)
     //EVT_BUTTON(wxID_ANY,wxComboCtrlBase::OnButtonClickEvent)
     EVT_KEY_DOWN(wxComboCtrlBase::OnKeyEvent)
+    EVT_CHAR(wxComboCtrlBase::OnCharEvent)
     EVT_TEXT_ENTER(wxID_ANY,wxComboCtrlBase::OnTextCtrlEvent)
     EVT_SYS_COLOUR_CHANGED(wxComboCtrlBase::OnSysColourChanged)
 END_EVENT_TABLE()
@@ -1827,6 +1834,27 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
         }
         else
             event.Skip();
+    }
+}
+
+void wxComboCtrlBase::OnCharEvent(wxKeyEvent& event)
+{
+    if ( IsPopupShown() )
+    {
+        // pass it to the popped up control
+        GetPopupControl()->GetControl()->GetEventHandler()->ProcessEvent(event);
+    }
+    else // no popup
+    {
+        wxComboPopup* popupInterface = GetPopupControl();
+        if ( popupInterface )
+        {
+            popupInterface->OnComboCharEvent(event);
+        }
+        else
+        {
+            event.Skip();
+        }
     }
 }
 

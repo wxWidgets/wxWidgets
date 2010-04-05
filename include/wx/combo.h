@@ -523,6 +523,7 @@ protected:
     void OnTextCtrlEvent(wxCommandEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnKeyEvent(wxKeyEvent& event);
+    void OnCharEvent(wxKeyEvent& event);
 
     // Set customization flags (directs how wxComboCtrlBase helpers behave)
     void Customize( wxUint32 flags ) { m_iFlags |= flags; }
@@ -726,9 +727,13 @@ public:
     // Default implementation draws value as string.
     virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
 
-    // Receives key events from the parent wxComboCtrl.
+    // Receives wxEVT_KEY_DOWN key events from the parent wxComboCtrl.
     // Events not handled should be skipped, as usual.
     virtual void OnComboKeyEvent( wxKeyEvent& event );
+
+    // Receives wxEVT_CHAR key events from the parent wxComboCtrl.
+    // Events not handled should be skipped, as usual.
+    virtual void OnComboCharEvent( wxKeyEvent& event );
 
     // Implement if you need to support special action when user
     // double-clicks on the parent wxComboCtrl.

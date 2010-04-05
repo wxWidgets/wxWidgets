@@ -54,6 +54,7 @@
 BEGIN_EVENT_TABLE(wxVListBoxComboPopup, wxVListBox)
     EVT_MOTION(wxVListBoxComboPopup::OnMouseMove)
     EVT_KEY_DOWN(wxVListBoxComboPopup::OnKey)
+    EVT_CHAR(wxVListBoxComboPopup::OnChar)
     EVT_LEFT_UP(wxVListBoxComboPopup::OnLeftClick)
 END_EVENT_TABLE()
 
@@ -244,7 +245,7 @@ void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
 }
 
 // returns true if key was consumed
-bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode )
+bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar )
 {
     const int itemCount = GetCount();
 
@@ -256,19 +257,12 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
     int value = m_value;
     int comboStyle = m_combo->GetWindowStyle();
 
-    // this is the character equivalent of the code
-    wxChar keychar = 0;
-    if ( keycode < WXK_START )
+    if ( keychar > 0 )
     {
-        if ( unicode > 0 )
-        {
-            if ( wxIsprint(unicode) )
-                keychar = unicode;
-        }
-        else if ( wxIsprint(keycode) )
-        {
-            keychar = (wxChar) keycode;
-        }
+        // we have character equivalent of the keycode; filter out these that
+        // are not printable characters
+        if ( !wxIsprint(keychar) )
+            keychar = 0;
     }
 
     if ( keycode == WXK_DOWN || keycode == WXK_NUMPAD_DOWN || keycode == WXK_RIGHT )
@@ -395,13 +389,21 @@ void wxVListBoxComboPopup::OnComboDoubleClick()
 void wxVListBoxComboPopup::OnComboKeyEvent( wxKeyEvent& event )
 {
     // Saturated key movement on
-    if ( !HandleKey(event.GetKeyCode(),true,
+    if ( !HandleKey(event.GetKeyCode(), true) )
+        event.Skip();
+}
+
+void wxVListBoxComboPopup::OnComboCharEvent( wxKeyEvent& event )
+{
+    // unlike in OnComboKeyEvent, wxEVT_CHAR contains meaningful
+    // printable character information, so pass it
 #if wxUSE_UNICODE
-        event.GetUnicodeKey()
+    const wxChar charcode = event.GetUnicodeKey();
 #else
-        0
+    const wxChar charcode = (wxChar)event.GetKeyCode();
 #endif
-        ) )
+
+    if ( !HandleKey(event.GetKeyCode(), true, charcode) )
         event.Skip();
 }
 
@@ -466,18 +468,31 @@ void wxVListBoxComboPopup::OnKey(wxKeyEvent& event)
     }
     else
     {
-        int comboStyle = m_combo->GetWindowStyle();
-        int keycode = event.GetKeyCode();
-        // Process partial completion key codes here, but not the arrow keys as the base class will do that for us
-        if ((comboStyle & wxCB_READONLY) &&
-            (keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
-        {
-            OnComboKeyEvent(event);
-            SetSelection(m_value); // ensure the highlight bar moves
-        }
-        else
-            event.Skip();
+        // completion is handled in OnChar() below
+        event.Skip();
     }
+}
+
+void wxVListBoxComboPopup::OnChar(wxKeyEvent& event)
+{
+    if ( m_combo->GetWindowStyle() & wxCB_READONLY )
+    {
+        // Process partial completion key codes here, but not the arrow keys as
+        // the base class will do that for us
+#if wxUSE_UNICODE
+        const wxChar charcode = event.GetUnicodeKey();
+#else
+        const wxChar charcode = (wxChar)event.GetKeyCode();
+#endif
+        if ( wxIsprint(charcode) )
+        {
+            OnComboCharEvent(event);
+            SetSelection(m_value); // ensure the highlight bar moves
+            return; // don't skip the event
+        }
+    }
+
+    event.Skip();
 }
 
 void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
