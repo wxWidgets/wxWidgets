@@ -37,6 +37,7 @@
 
     @stdobjects
     - ::wxNullColour - An empty, invalid colour.
+    - ::wxTransparentColour - Valid but fully transparent colour (new in 2.9.1).
     - ::wxBLACK
     - ::wxBLUE
     - ::wxCYAN

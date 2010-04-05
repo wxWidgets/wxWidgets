@@ -499,6 +499,7 @@ All (GUI):
 - Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tjushkov).
 - Implement wxDocument::Revert() (troelsk).
 - Allow overriding print preview frame creation in docview (troelsk).
+- Added wxTransparentColour.
 
 GTK:
 

@@ -43,6 +43,10 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 const unsigned char wxALPHA_TRANSPARENT = 0;
 const unsigned char wxALPHA_OPAQUE = 0xff;
 
+// a valid but fully transparent colour
+#define wxTransparentColour wxColour(0, 0, 0, wxALPHA_TRANSPARENT)
+#define wxTransparentColor wxTransparentColour
+
 // ----------------------------------------------------------------------------
 // wxVariant support
 // ----------------------------------------------------------------------------
@@ -149,14 +153,14 @@ public:
 
     // manipulation
     // ------------
-    
+
     // These methods are static because they are mostly used
     // within tight loops (where we don't want to instantiate wxColour's)
 
     static void          MakeMono    (unsigned char* r, unsigned char* g, unsigned char* b, bool on);
     static void          MakeDisabled(unsigned char* r, unsigned char* g, unsigned char* b, unsigned char brightness = 255);
     static void          MakeGrey    (unsigned char* r, unsigned char* g, unsigned char* b); // integer version
-    static void          MakeGrey    (unsigned char* r, unsigned char* g, unsigned char* b, 
+    static void          MakeGrey    (unsigned char* r, unsigned char* g, unsigned char* b,
                                       double weight_r, double weight_g, double weight_b); // floating point version
     static unsigned char AlphaBlend  (unsigned char fg, unsigned char bg, double alpha);
     static void          ChangeLightness(unsigned char* r, unsigned char* g, unsigned char* b, int ialpha);
