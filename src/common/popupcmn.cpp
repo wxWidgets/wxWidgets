@@ -86,7 +86,7 @@ public:
 
 protected:
     void OnKillFocus(wxFocusEvent& event);
-    void OnKeyDown(wxKeyEvent& event);
+    void OnChar(wxKeyEvent& event);
 
 private:
     wxPopupTransientWindow *m_popup;
@@ -105,7 +105,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
     EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
-    EVT_KEY_DOWN(wxPopupFocusHandler::OnKeyDown)
+    EVT_CHAR(wxPopupFocusHandler::OnChar)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
@@ -600,7 +600,7 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
     m_popup->DismissAndNotify();
 }
 
-void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
+void wxPopupFocusHandler::OnChar(wxKeyEvent& event)
 {
     // we can be associated with the popup itself in which case we should avoid
     // infinite recursion
