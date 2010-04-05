@@ -4446,9 +4446,9 @@ static void wx_frozen_widget_realize(GtkWidget* w, wxWindowGTK* win)
         win
     );
 
-    GdkWindow* window = win->GTKGetDrawingWindow();
-    if (window == NULL)
-        window = w->window;
+    GdkWindow* window = w->window;
+    if (w == win->m_wxwindow)
+        window = win->GTKGetDrawingWindow();
     gdk_window_freeze_updates(window);
 }
 
@@ -4473,9 +4473,9 @@ void wxWindowGTK::GTKFreezeWidget(GtkWidget *w)
         return;
     }
 
-    GdkWindow* window = GTKGetDrawingWindow();
-    if (window == NULL)
-        window = w->window;
+    GdkWindow* window = w->window;
+    if (w == m_wxwindow)
+        window = GTKGetDrawingWindow();
     gdk_window_freeze_updates(window);
 }
 
@@ -4496,9 +4496,9 @@ void wxWindowGTK::GTKThawWidget(GtkWidget *w)
         return;
     }
 
-    GdkWindow* window = GTKGetDrawingWindow();
-    if (window == NULL)
-        window = w->window;
+    GdkWindow* window = w->window;
+    if (w == m_wxwindow)
+        window = GTKGetDrawingWindow();
     gdk_window_thaw_updates(window);
 }
 
