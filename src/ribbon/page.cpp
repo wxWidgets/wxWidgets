@@ -373,6 +373,8 @@ void wxRibbonPage::SetSizeWithScrollButtonAdjustment(int x, int y, int width, in
             }
         }
     }
+    if (width < 0) width = 0;
+    if (height < 0) height = 0;
     SetSize(x, y, width, height);
 }
 
