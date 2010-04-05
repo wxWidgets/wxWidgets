@@ -1755,15 +1755,35 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
             }
         }
     }
-    else
-    if ( IsPopupShown() )
+    else if ( evtType == wxEVT_MOUSEWHEEL )
     {
-        // relay (some) mouse events to the popup
-        if ( evtType == wxEVT_MOUSEWHEEL )
+        if ( IsPopupShown() )
+        {
+            // relay (some) mouse events to the popup
             m_popup->GetEventHandler()->AddPendingEvent(event);
+        }
+        else if ( event.GetWheelAxis() == 0 &&
+                  event.GetWheelRotation() != 0 &&
+                  event.GetModifiers() == 0 )
+        {
+            // Translate mousewheel actions into key up/down. This is
+            // the simplest way of getting native behaviour: scrolling the
+            // wheel moves selection up/down by one item.
+            wxKeyEvent kevent(wxEVT_KEY_DOWN);
+            kevent.m_keyCode = event.GetWheelRotation() > 0
+                               ? WXK_UP
+                               : WXK_DOWN;
+            GetEventHandler()->AddPendingEvent(kevent);
+        }
+        else
+        {
+            event.Skip();
+        }
     }
     else if ( evtType )
+    {
         event.Skip();
+    }
 }
 
 void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
