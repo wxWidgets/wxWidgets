@@ -2,11 +2,14 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 5 October 2009                                                      *
+# Date : 6 April 2010                                                        *
 #                                                                            *
 #*****************************************************************************
+
 .first
 	define wx [--.include.wx]
+
+.suffixes : .cpp
 
 .ifdef __WXMOTIF__
 CXX_DEFINE = /define=(__WX__=1,__WXMOTIF__=1)/name=(as_is,short)\
@@ -42,6 +45,8 @@ CC_DEFINE =
 
 .cxx.obj :
 	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cxx
+.cpp.obj :
+	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cpp
 .c.obj :
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
@@ -64,7 +69,10 @@ OBJECTS1=LexHTML.obj,LexInno.obj,LexKix.obj,LexLisp.obj,LexLout.obj,LexLua.obj,\
 	LexTCL.obj,LexTeX.obj,LexVB.obj,LexVerilog.obj,LexVHDL.obj,\
 	LexYAML.obj,LineMarker.obj,PositionCache.obj,PropSet.obj,RESearch.obj,\
 	RunStyles.obj,ScintillaBase.obj,Style.obj,StyleContext.obj,\
-	UniConversion.obj,ViewStyle.obj,WindowAccessor.obj,XPM.obj
+	UniConversion.obj,ViewStyle.obj,WindowAccessor.obj,XPM.obj,\
+	PerLine.obj,Selection.obj,LexPowerPro.obj,Array.obj,LexCOBOL.obj,\
+	LexMagik.obj,LexMarkdown.obj,LexMySQL.obj,LexNimrod.obj,\
+	LexPowerShell.obj,LexSML.obj,LexSorcus.obj,LexTACL.obj,LexTAL.obj
 
 SOURCES=AutoComplete.cxx,CallTip.cxx,CellBuffer.cxx,CharClassify.cxx,\
 	ContractionState.cxx,Decoration.cxx,Document.cxx,DocumentAccessor.cxx,\
@@ -84,7 +92,10 @@ SOURCES=AutoComplete.cxx,CallTip.cxx,CellBuffer.cxx,CharClassify.cxx,\
 	LexTCL.cxx,LexTeX.cxx,LexVB.cxx,LexVerilog.cxx,LexVHDL.cxx,\
 	LexYAML.cxx,LineMarker.cxx,PositionCache.cxx,PropSet.cxx,RESearch.cxx,\
 	RunStyles.cxx,ScintillaBase.cxx,Style.cxx,StyleContext.cxx,\
-	UniConversion.cxx,ViewStyle.cxx,WindowAccessor.cxx,XPM.cxx
+	UniConversion.cxx,ViewStyle.cxx,WindowAccessor.cxx,XPM.cxx,\
+	PerLine.cxx,Selection.cxx,LexPowerPro.cxx,Array.cpp,LexCOBOL.cxx,\
+	LexMagik.cxx,LexMarkdown.cxx,LexMySQL.cxx,LexNimrod.cxx,\
+	LexPowerShell.cxx,LexSML.cxx,LexSorcus.cxx,LexTACL.cxx,LexTAL.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -92,18 +103,22 @@ all : $(SOURCES)
 .ifdef __WXMOTIF__
 	library [----.lib]libwx_motif.olb $(OBJECTS)
 	library [----.lib]libwx_motif.olb $(OBJECTS1)
+	library [----.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK__
 	library [----.lib]libwx_gtk.olb $(OBJECTS)
 	library [----.lib]libwx_gtk.olb $(OBJECTS1)
+	library [----.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK2__
 	library [----.lib]libwx_gtk2.olb $(OBJECTS)
 	library [----.lib]libwx_gtk2.olb $(OBJECTS1)
+	library [----.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXX11__
 	library [----.lib]libwx_x11_univ.olb $(OBJECTS)
 	library [----.lib]libwx_x11_univ.olb $(OBJECTS1)
+	library [----.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 .endif
 .endif
 .endif
@@ -203,3 +218,17 @@ UniConversion.obj : UniConversion.cxx
 ViewStyle.obj : ViewStyle.cxx
 WindowAccessor.obj : WindowAccessor.cxx
 XPM.obj : XPM.cxx
+PerLine.obj : PerLine.cxx
+Selection.obj : Selection.cxx
+LexPowerPro.obj : LexPowerPro.cxx
+Array.obj : Array.cpp
+LexCOBOL.obj : LexCOBOL.cxx
+LexMagik.obj : LexMagik.cxx
+LexMarkdown.obj : LexMarkdown.cxx
+LexMySQL.obj : LexMySQL.cxx
+LexNimrod.obj : LexNimrod.cxx
+LexPowerShell.obj : LexPowerShell.cxx
+LexSML.obj : LexSML.cxx
+LexSorcus.obj : LexSorcus.cxx
+LexTACL.obj : LexTACL.cxx
+LexTAL.obj : LexTAL.cxx
