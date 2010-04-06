@@ -38,13 +38,13 @@ enum wxPathFormat
 enum wxSizeConvention
 {
     /// 1000 bytes = 1KiB.
-    wxSIZE_CONV_REAL_SI,
+    wxSIZE_CONV_IEC,
 
     /// 1000 bytes = 1KB.
-    wxSIZE_CONV_TRAD_1000,
+    wxSIZE_CONV_SI,
 
     /// 1024 bytes = 1KB.
-    wxSIZE_CONV_TRAD_1024
+    wxSIZE_CONV_TRADITIONAL
 };
 
 
@@ -568,13 +568,13 @@ public:
     wxString
     GetHumanReadableSize(const wxString& failmsg = _("Not available"),
                          int precision = 1,
-                         wxSizeConvention conv = wxSIZE_CONV_TRADIONAL) const;
+                         wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL) const;
 
     static wxString
     GetHumanReadableSize(const wxULongLong& bytes,
                          const wxString& nullsize = _("Not available"),
                          int precision = 1,
-                         wxSizeConvention conv = wxSIZE_CONV_REAL_SI);
+                         wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
     //@}
 
     /**

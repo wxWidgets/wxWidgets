@@ -65,14 +65,13 @@ enum wxPathFormat
     wxPATH_MAX // Not a valid value for specifying path format
 };
 
-// different convention that may be used with GetHumanReadableSize()
+// different conventions that may be used with GetHumanReadableSize()
 enum wxSizeConvention
 {
-    wxSIZE_CONV_TRADIONAL,  // 1024 bytes = 1 KB
-    wxSIZE_CONV_IEC,        // 1024 bytes = 1 KiB
-    wxSIZE_CONV_SI          // 1000 bytes = 1 KB
+    wxSIZE_CONV_TRADITIONAL,  // 1024 bytes = 1 KB
+    wxSIZE_CONV_IEC,          // 1024 bytes = 1 KiB
+    wxSIZE_CONV_SI            // 1000 bytes = 1 KB
 };
-
 
 // the kind of normalization to do with the file name: these values can be
 // or'd together to perform several operations at once
@@ -552,12 +551,12 @@ public:
     wxString
     GetHumanReadableSize(const wxString& nullsize = _("Not available"),
                          int precision = 1,
-                         wxSizeConvention conv = wxSIZE_CONV_TRADIONAL) const;
+                         wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL) const;
     static wxString
     GetHumanReadableSize(const wxULongLong& sz,
                          const wxString& nullsize = _("Not available"),
                          int precision = 1,
-                         wxSizeConvention conv = wxSIZE_CONV_TRADIONAL);
+                         wxSizeConvention conv = wxSIZE_CONV_TRADITIONAL);
 #endif // wxUSE_LONGLONG
 
 

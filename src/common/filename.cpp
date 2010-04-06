@@ -2665,7 +2665,7 @@ wxString wxFileName::GetHumanReadableSize(const wxULongLong &bs,
             biInfix = "i";
             // fall through
 
-        case wxSIZE_CONV_TRADIONAL:
+        case wxSIZE_CONV_TRADITIONAL:
             multiplier = 1024.;
             break;
 
