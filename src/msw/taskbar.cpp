@@ -56,9 +56,9 @@
 
 #ifndef NOTIFYICONDATA_V2_SIZE
     #ifdef UNICODE
-        #define NOTIFYICONDATA_V2_SIZE 0x03A8;
+        #define NOTIFYICONDATA_V2_SIZE 0x03A8
     #else
-        #define NOTIFYICONDATA_V2_SIZE 0x01E8;
+        #define NOTIFYICONDATA_V2_SIZE 0x01E8
     #endif
 #endif
 
