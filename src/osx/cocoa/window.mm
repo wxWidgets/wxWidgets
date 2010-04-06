@@ -131,6 +131,7 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setAction:(SEL)aSelector;
 - (void)setDoubleAction:(SEL)aSelector;
 - (void)setBackgroundColor:(NSColor*)aColor;
+- (void)setTextColor:(NSColor *)color;
 - (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
 
@@ -1888,10 +1889,15 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
     }
 }
 
-void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
+void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&col, long, bool)
 {
     if ([m_osxView respondsToSelector:@selector(setFont:)])
         [m_osxView setFont: font.OSXGetNSFont()];
+    if ([m_osxView respondsToSelector:@selector(setTextColor:)])
+        [m_osxView setTextColor:[NSColor colorWithCalibratedRed:(CGFloat) (col.Red() / 255.0)
+                                                                 green:(CGFloat) (col.Green() / 255.0)
+                                                                  blue:(CGFloat) (col.Blue() / 255.0)
+                                                                 alpha:(CGFloat) (col.Alpha() / 255.0)]];
 }
 
 void wxWidgetCocoaImpl::SetToolTip(wxToolTip* tooltip)
