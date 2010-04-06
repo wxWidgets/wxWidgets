@@ -2647,27 +2647,53 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
 /* static */
 wxString wxFileName::GetHumanReadableSize(const wxULongLong &bs,
                                           const wxString &nullsize,
-                                          int precision)
+                                          int precision,
+                                          wxSizeConvention conv)
 {
-    static const double KILOBYTESIZE = 1024.0;
-    static const double MEGABYTESIZE = 1024.0*KILOBYTESIZE;
-    static const double GIGABYTESIZE = 1024.0*MEGABYTESIZE;
-    static const double TERABYTESIZE = 1024.0*GIGABYTESIZE;
-
-    if (bs == 0 || bs == wxInvalidSize)
+    // deal with trivial case first
+    if ( bs == 0 || bs == wxInvalidSize )
         return nullsize;
 
-    double bytesize = bs.ToDouble();
-    if (bytesize < KILOBYTESIZE)
-        return wxString::Format(_("%s B"), bs.ToString().c_str());
-    if (bytesize < MEGABYTESIZE)
-        return wxString::Format(_("%.*f kB"), precision, bytesize/KILOBYTESIZE);
-    if (bytesize < GIGABYTESIZE)
-        return wxString::Format(_("%.*f MB"), precision, bytesize/MEGABYTESIZE);
-    if (bytesize < TERABYTESIZE)
-        return wxString::Format(_("%.*f GB"), precision, bytesize/GIGABYTESIZE);
+    // depending on the convention used the multiplier may be either 1000 or
+    // 1024 and the binary infix may be empty (for "KB") or "i" (for "KiB")
+    double multiplier;
+    wxString biInfix;
 
-    return wxString::Format(_("%.*f TB"), precision, bytesize/TERABYTESIZE);
+    switch ( conv )
+    {
+        case wxSIZE_CONV_IEC:
+            biInfix = "i";
+            // fall through
+
+        case wxSIZE_CONV_TRADIONAL:
+            multiplier = 1024.;
+            break;
+
+        case wxSIZE_CONV_SI:
+            multiplier = 1000;
+            break;
+    }
+
+    const double kiloByteSize = multiplier;
+    const double megaByteSize = multiplier * kiloByteSize;
+    const double gigaByteSize = multiplier * megaByteSize;
+    const double teraByteSize = multiplier * gigaByteSize;
+
+    const double bytesize = bs.ToDouble();
+
+    wxString result;
+    if ( bytesize < kiloByteSize )
+        result.Printf("%s B", bs.ToString());
+    else if ( bytesize < megaByteSize )
+        result.Printf("%.*f K%sB", precision, bytesize/kiloByteSize, biInfix);
+    else if (bytesize < gigaByteSize)
+        result.Printf("%.*f M%sB", precision, bytesize/megaByteSize, biInfix);
+    else if (bytesize < teraByteSize)
+        result.Printf("%.*f G%sB", precision, bytesize/gigaByteSize, biInfix);
+    else
+        result.Printf("%.*f T%sB", precision, bytesize/teraByteSize, biInfix);
+
+    return result;
 }
 
 wxULongLong wxFileName::GetSize() const
@@ -2675,9 +2701,11 @@ wxULongLong wxFileName::GetSize() const
     return GetSize(GetFullPath());
 }
 
-wxString wxFileName::GetHumanReadableSize(const wxString &failmsg, int precision) const
+wxString wxFileName::GetHumanReadableSize(const wxString& failmsg,
+                                          int precision,
+                                          wxSizeConvention conv) const
 {
-    return GetHumanReadableSize(GetSize(), failmsg, precision);
+    return GetHumanReadableSize(GetSize(), failmsg, precision, conv);
 }
 
 #endif // wxUSE_LONGLONG

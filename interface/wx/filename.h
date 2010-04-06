@@ -28,6 +28,25 @@ enum wxPathFormat
     wxPATH_MAX   //!< Not a valid value for specifying path format
 };
 
+/**
+    Different conventions for human readable sizes.
+
+    @see wxFileName::GetHumanReadableSize().
+
+    @since 2.9.1
+*/
+enum wxSizeConvention
+{
+    /// 1000 bytes = 1KiB.
+    wxSIZE_CONV_REAL_SI,
+
+    /// 1000 bytes = 1KB.
+    wxSIZE_CONV_TRAD_1000,
+
+    /// 1024 bytes = 1KB.
+    wxSIZE_CONV_TRAD_1024
+};
+
 
 /**
     The kind of normalization to do with the file name: these values can be
@@ -522,30 +541,41 @@ public:
     */
     static wxString GetHomeDir();
 
+    //@{
     /**
-        Returns the size of the file in a human-readable form.
+        Returns the representation of the file size in a human-readable form.
 
-        If the size could not be retrieved the @c failmsg string
-        is returned. In case of success, the returned string is
-        a floating-point number with @c precision decimal digits
-        followed by the size unit (B, kB, MB, GB, TB: respectively
-        bytes, kilobytes, megabytes, gigabytes, terabytes).
+        In the first version, the size of this file is used. In the second one,
+        the specified size @a bytes is used.
+
+        If the file size could not be retrieved or @a bytes is ::wxInvalidSize
+        or zero, the @c failmsg string is returned.
+
+        Otherwise the returned string is a floating-point number with @c
+        precision decimal digits followed by the abbreviation of the unit used.
+        By default the traditional, although incorrect, convention of using SI
+        units for multiples of 1024 is used, i.e. returned string will use
+        suffixes of B, KB, MB, GB, TB for bytes, kilobytes, megabytes,
+        gigabytes and terabytes respectively. With the IEC convention the names
+        of the units are changed to B, KiB, MiB, GiB and TiB fofr bytes,
+        kibibytes, mebibyes, gibibytes and tebibytes. Finally, with SI
+        convention the same B, KB, MB, GB and TB suffixes are used but in their
+        correct SI meaning, i.e. as multiples of 1000 and not 1024.
+
+        Support for the different size conventions is new in wxWidgets 2.9.1,
+        in previous versions only the traditional convention was implemented.
     */
-    wxString GetHumanReadableSize(const wxString& failmsg = "Not available",
-                                  int precision = 1) const;
+    wxString
+    GetHumanReadableSize(const wxString& failmsg = _("Not available"),
+                         int precision = 1,
+                         wxSizeConvention conv = wxSIZE_CONV_TRADIONAL) const;
 
-    /**
-        Returns the size of the given number of bytes in a human-readable form.
-
-        If @a bytes is ::wxInvalidSize or zero, then @a nullsize is returned.
-
-        In case of success, the returned string is a floating-point number with
-        @a precision decimal digits followed by the size unit (B, kB, MB, GB,
-        TB: respectively bytes, kilobytes, megabytes, gigabytes, terabytes).
-    */
-    static wxString GetHumanReadableSize(const wxULongLong& bytes,
-                                         const wxString& nullsize = "Not available",
-                                         int precision = 1);
+    static wxString
+    GetHumanReadableSize(const wxULongLong& bytes,
+                         const wxString& nullsize = _("Not available"),
+                         int precision = 1,
+                         wxSizeConvention conv = wxSIZE_CONV_REAL_SI);
+    //@}
 
     /**
         Return the long form of the path (returns identity on non-Windows platforms).

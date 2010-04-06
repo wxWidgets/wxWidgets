@@ -125,6 +125,7 @@ private:
         CPPUNIT_TEST( TestStrip );
         CPPUNIT_TEST( TestNormalize );
         CPPUNIT_TEST( TestReplace );
+        CPPUNIT_TEST( TestGetHumanReadable );
 #ifdef __WINDOWS__
         CPPUNIT_TEST( TestShortLongPath );
 #endif // __WINDOWS__
@@ -139,6 +140,7 @@ private:
     void TestStrip();
     void TestNormalize();
     void TestReplace();
+    void TestGetHumanReadable();
 #ifdef __WINDOWS__
     void TestShortLongPath();
 #endif // __WINDOWS__
@@ -476,6 +478,39 @@ void FileNameTestCase::TestReplace()
 
     CPPUNIT_ASSERT_EQUAL( wxString("~/test1/test2/test3/some file"),
                           fn.GetFullPath(wxPATH_UNIX) );
+}
+
+void FileNameTestCase::TestGetHumanReadable()
+{
+    static const struct TestData
+    {
+        const char *result;
+        wxULongLong size;
+        int prec;
+        wxSizeConvention conv;
+    } testData[] =
+    {
+        { "NA",             0, 1, wxSIZE_CONV_TRADIONAL },
+        { "2.0 KB",      2000, 1, wxSIZE_CONV_TRADIONAL },
+        { "1.953 KiB",   2000, 3, wxSIZE_CONV_IEC       },
+        { "2.000 KB",    2000, 3, wxSIZE_CONV_SI        },
+        { "297 KB",    304351, 0, wxSIZE_CONV_TRADIONAL },
+        { "304 KB",    304351, 0, wxSIZE_CONV_SI        },
+    };
+
+    for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        const TestData& td = testData[n];
+
+        CPPUNIT_ASSERT_EQUAL
+        (
+            td.result,
+            wxFileName::GetHumanReadableSize(td.size, "NA", td.prec, td.conv)
+        );
+    }
+
+    // also test the default convention value
+    CPPUNIT_ASSERT_EQUAL( "1.4 MB", wxFileName::GetHumanReadableSize(1512993, "") );
 }
 
 void FileNameTestCase::TestStrip()
