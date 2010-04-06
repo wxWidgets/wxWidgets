@@ -79,7 +79,6 @@ void wxTextCtrl::Init()
     m_dirty = false;
 
     m_privateContextMenu = NULL;
-    m_triggerUpdateEvents = true ;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -287,26 +286,6 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
     return GetTextPeer()->GetLineText(lineNo) ;
-}
-
-void wxTextCtrl::Remove(long from, long to)
-{
-    wxTextEntry::Remove(from, to);
-    if ( m_triggerUpdateEvents )
-        SendTextUpdatedEvent();
-}
-
-void wxTextCtrl::WriteText(const wxString& str)
-{
-    wxTextEntry::WriteText( str ) ;
-    if ( m_triggerUpdateEvents )
-        SendTextUpdatedEvent();
-}
-
-void wxTextCtrl::Clear()
-{
-    wxTextEntry::Clear() ;
-    SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::Copy()

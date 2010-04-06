@@ -148,6 +148,8 @@ wxTextPos wxTextEntry::GetLastPosition() const
 void wxTextEntry::Remove(long from, long to)
 {
     GetTextPeer()->Remove( from , to ) ;
+
+    SendTextUpdatedEventIfAllowed();
 }
 
 void wxTextEntry::SetSelection(long from, long to)
@@ -158,11 +160,15 @@ void wxTextEntry::SetSelection(long from, long to)
 void wxTextEntry::WriteText(const wxString& str)
 {
     GetTextPeer()->WriteText( str ) ;
+
+    SendTextUpdatedEventIfAllowed();
 }
 
 void wxTextEntry::Clear()
 {
     GetTextPeer()->Clear() ;
+
+    SendTextUpdatedEventIfAllowed();
 }
 
 bool wxTextEntry::IsEditable() const

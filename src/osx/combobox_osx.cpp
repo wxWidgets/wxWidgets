@@ -147,7 +147,6 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
 void wxComboBox::DoClear()
 {
     GetComboPeer()->Clear();
-    SetValue(wxEmptyString);
 }
 
 void wxComboBox::GetSelection(long *from, long *to) const
@@ -204,7 +203,8 @@ void wxComboBox::SetString(unsigned int n, const wxString& s)
 
 void wxComboBox::EnableTextChangedEvents(bool WXUNUSED(enable))
 {
-    wxFAIL_MSG("Method Not Implemented.");
+    // nothing to do here, events are never generated when we change the
+    // control value programmatically anyhow by Cocoa
 }
 
 bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )

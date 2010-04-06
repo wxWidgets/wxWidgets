@@ -100,10 +100,6 @@ public:
     virtual void Cut();
     virtual void Paste();
     
-    virtual void WriteText(const wxString& text);
-    virtual void Clear();
-    virtual void Remove(long from, long to);
-
     // Implementation
     // --------------
     virtual void Command(wxCommandEvent& event);
@@ -148,17 +144,16 @@ protected:
     // flag is set to true when the user edits the controls contents
     bool m_dirty;
 
-    virtual void EnableTextChangedEvents(bool enable)
+    virtual void EnableTextChangedEvents(bool WXUNUSED(enable))
     {
-        m_triggerUpdateEvents = enable;
+        // nothing to do here as the events are never generated when we change
+        // the controls value programmatically anyhow
     }
 
-    bool m_triggerUpdateEvents ;
-
 private :
-  wxMenu  *m_privateContextMenu;
+    wxMenu  *m_privateContextMenu;
 
-  DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_TEXTCTRL_H_
