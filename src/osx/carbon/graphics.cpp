@@ -1545,6 +1545,11 @@ public :
             m_userOffset = CGContextConvertSizeToUserSpace( m_cg, CGSizeMake( 0.5 , 0.5 ) );
             CGContextTranslateCTM( m_cg, m_userOffset.width , m_userOffset.height );
         }
+        else 
+        {
+            m_userOffset = CGSizeMake(0.0, 0.0);
+        }
+
     }
     ~wxQuartzOffsetHelper( )
     {
