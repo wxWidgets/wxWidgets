@@ -172,7 +172,7 @@ int wxComboBox::FindString(const wxString& s, bool bCase) const
 {
     if (!bCase)
     {
-        for (int i = 0; i < GetCount(); i++)
+        for (unsigned i = 0; i < GetCount(); i++)
         {
             if (s.IsSameAs(GetString(i), false))
                 return i;
