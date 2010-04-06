@@ -1006,25 +1006,6 @@ wxTextAreaBase::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(pos)) const
     return wxTE_HT_UNKNOWN;
 }
 
-// ----------------------------------------------------------------------------
-// events
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
-{
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, win->GetId());
-
-    // do not do this as it could be very inefficient if the text control
-    // contains a lot of text and we're not using ref-counted wxString
-    // implementation -- instead, event.GetString() will query the control for
-    // its current text if needed
-    //event.SetString(win->GetValue());
-
-    event.SetEventObject(win);
-    return win->GetEventHandler()->ProcessEvent(event);
-}
-
 #else // !wxUSE_TEXTCTRL
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other

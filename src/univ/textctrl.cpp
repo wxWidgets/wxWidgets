@@ -1264,8 +1264,7 @@ void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
     // now call it to do the rest (not related to refreshing)
     ClearSelection();
 
-    if ( EventsAllowed() )
-        SendTextUpdatedEvent();
+    SendTextUpdatedEventIfAllowed();
 }
 
 void wxTextCtrl::Remove(wxTextPos from, wxTextPos to)

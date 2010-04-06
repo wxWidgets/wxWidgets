@@ -158,6 +158,16 @@ public:
     wxPoint GetMargins() const
         { return DoGetMargins(); }
 
+
+    // events
+    // ------
+
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for GetEditableWindow(),
+    // like SetValue() does and return true if the event was processed
+    //
+    // NB: this is public for wxRichTextCtrl use only right now, do not call it
+    static bool SendTextUpdatedEvent(wxWindow *win);
+
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
     // also used to implement WriteText() in wxMSW
@@ -207,8 +217,19 @@ protected:
 
     friend class EventsSuppressor;
 
-    // return true if the events are currently not suppressed
-    bool EventsAllowed() const { return m_eventsBlock == 0; }
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window
+    bool SendTextUpdatedEvent()
+    {
+        return SendTextUpdatedEvent(GetEditableWindow());
+    }
+
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
+    // events are not currently disabled
+    void SendTextUpdatedEventIfAllowed()
+    {
+        if ( EventsAllowed() )
+            SendTextUpdatedEvent();
+    }
 
 private:
     // suppress or resume the text changed events generation: don't use these
@@ -232,6 +253,10 @@ private:
     //
     // initially the generation of the events is enabled
     virtual void EnableTextChangedEvents(bool WXUNUSED(enable)) { }
+
+    // return true if the events are currently not suppressed
+    bool EventsAllowed() const { return m_eventsBlock == 0; }
+
 
     // if this counter is non-null, events are blocked
     unsigned m_eventsBlock;

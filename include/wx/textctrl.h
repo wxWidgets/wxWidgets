@@ -665,11 +665,6 @@ public:
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
 
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event, like SetValue() does and
-    // return true if the event was processed
-    static bool SendTextUpdatedEvent(wxWindow *win);
-    bool SendTextUpdatedEvent() { return SendTextUpdatedEvent(this); }
-
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
