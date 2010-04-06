@@ -168,6 +168,13 @@ public:
     // NB: this is public for wxRichTextCtrl use only right now, do not call it
     static bool SendTextUpdatedEvent(wxWindow *win);
 
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window
+    bool SendTextUpdatedEvent()
+    {
+        return SendTextUpdatedEvent(GetEditableWindow());
+    }
+
+
     // this function is provided solely for the purpose of forwarding text
     // change notifications state from one control to another, e.g. it can be
     // used by a wxComboBox which derives from wxTextEntry if it delegates all
@@ -231,12 +238,6 @@ protected:
     };
 
     friend class EventsSuppressor;
-
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window
-    bool SendTextUpdatedEvent()
-    {
-        return SendTextUpdatedEvent(GetEditableWindow());
-    }
 
     // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
     // events are not currently disabled
