@@ -146,10 +146,6 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
     WX_DECLARE_CONTROL_CONTAINER();
 #endif
 
-    // only used by the native Cocoa combobox, but we must define it everywhere
-    // to maintain the wxTextEntry abstraction.
-    virtual wxTextWidgetImpl * GetTextPeer() const;
-
 #if wxOSX_USE_COCOA
     wxComboWidgetImpl* GetComboPeer() const;
 #endif

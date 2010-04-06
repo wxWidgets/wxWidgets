@@ -217,11 +217,6 @@ bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
     return true;
 }
 
-wxTextWidgetImpl* wxComboBox::GetTextPeer() const
-{
-    return dynamic_cast<wxTextWidgetImpl*> (m_peer);
-}
-
 wxComboWidgetImpl* wxComboBox::GetComboPeer() const
 {
     return dynamic_cast<wxComboWidgetImpl*> (m_peer);

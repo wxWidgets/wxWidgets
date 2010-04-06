@@ -137,11 +137,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     return true;
 }
 
-wxTextWidgetImpl* wxTextCtrl::GetTextPeer() const
-{
-    return dynamic_cast<wxTextWidgetImpl*> (m_peer);
-}
-
 void wxTextCtrl::MacSuperChangedPosition()
 {
     wxWindow::MacSuperChangedPosition() ;

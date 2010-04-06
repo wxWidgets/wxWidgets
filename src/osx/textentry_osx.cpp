@@ -204,7 +204,9 @@ bool wxTextEntry::CanRedo() const
 
 wxTextWidgetImpl * wxTextEntry::GetTextPeer() const
 {
-    wxFAIL_MSG("You need to implement wxTextWidgetImpl* GetTextPeer() in your wxTextEntry subclass if you want to use the native impls of its methods.");
-    return NULL;
+    wxWindow * const win = const_cast<wxTextEntry *>(this)->GetEditableWindow();
+
+    return win ? dynamic_cast<wxTextWidgetImpl *>(win->GetPeer()) : NULL;
 }
+
 #endif // wxUSE_TEXTCTRL

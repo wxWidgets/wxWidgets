@@ -26,9 +26,6 @@
 #include "wx/control.h"
 #include "wx/textctrl.h"
 
-// forward decl for wxListWidgetImpl implementation type.
-class WXDLLIMPEXP_FWD_CORE wxTextWidgetImpl;
-
 class WXDLLIMPEXP_CORE wxTextCtrl: public wxTextCtrlBase
 {
   DECLARE_DYNAMIC_CLASS(wxTextCtrl)
@@ -142,7 +139,6 @@ public:
     virtual void MacSuperChangedPosition();
     virtual void MacCheckSpelling(bool check);
 
-    virtual wxTextWidgetImpl * GetTextPeer() const;
 protected:
     // common part of all ctors
     void Init();
