@@ -686,7 +686,42 @@ protected:
     bool m_isShading;
     CGFunctionRef m_gradientFunction;
     CGShadingRef m_shading;
-    CGFloat *m_gradientComponents;
+
+    // information about a single gradient component
+    struct GradientComponent
+    {
+        CGFloat pos;
+        CGFloat red;
+        CGFloat green;
+        CGFloat blue;
+        CGFloat alpha;
+    };
+
+    // and information about all of them
+    struct GradientComponents
+    {
+        GradientComponents()
+        {
+            count = 0;
+            comps = NULL;
+        }
+
+        void Init(unsigned count_)
+        {
+            count = count_;
+            comps = new GradientComponent[count];
+        }
+
+        ~GradientComponents()
+        {
+            delete [] comps;
+        }
+
+        unsigned count;
+        GradientComponent *comps;
+    };
+
+    GradientComponents m_gradientComponents;
 };
 
 wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) : wxGraphicsObjectRefData( renderer )
@@ -731,15 +766,12 @@ wxMacCoreGraphicsBrushData::~wxMacCoreGraphicsBrushData()
 
     if( m_gradientFunction )
         CGFunctionRelease(m_gradientFunction);
-
-    delete[] m_gradientComponents;
 }
 
 void wxMacCoreGraphicsBrushData::Init()
 {
     m_gradientFunction = NULL;
     m_shading = NULL;
-    m_gradientComponents = NULL;
     m_isShading = false;
 }
 
@@ -759,35 +791,70 @@ void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
 
 void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out)
 {
-    CGFloat* colors = (CGFloat*) info ;
+    const GradientComponents& stops = *(GradientComponents*) info ;
+
     CGFloat f = *in;
-    for( int i = 0 ; i < 4 ; ++i )
+    if (f <= 0.0)
     {
-        out[i] = colors[i] + ( colors[4+i] - colors[i] ) * f;
+        // Start
+        out[0] = stops.comps[0].red;
+        out[1] = stops.comps[1].green;
+        out[2] = stops.comps[2].blue;
+        out[3] = stops.comps[3].alpha;
+    }
+    else if (f >= 1.0)
+    {
+        // end
+        out[0] = stops.comps[stops.count - 1].red;
+        out[1] = stops.comps[stops.count - 1].green;
+        out[2] = stops.comps[stops.count - 1].blue;
+        out[3] = stops.comps[stops.count - 1].alpha;
+    }
+    else
+    {
+        // Find first component with position greater than f
+        unsigned i;
+        for ( i = 0; i < stops.count; i++ )
+        {
+            if (stops.comps[i].pos > f)
+                break;
+        }
+
+        // Interpolated between stops
+        CGFloat diff = (f - stops.comps[i-1].pos);
+        CGFloat range = (stops.comps[i].pos - stops.comps[i-1].pos);
+        CGFloat fact = diff / range;
+
+        out[0] = stops.comps[i - 1].red + (stops.comps[i].red - stops.comps[i - 1].red) * fact;
+        out[0] = stops.comps[i - 1].green + (stops.comps[i].green - stops.comps[i - 1].green) * fact;
+        out[0] = stops.comps[i - 1].blue + (stops.comps[i].blue - stops.comps[i - 1].blue) * fact;
+        out[0] = stops.comps[i - 1].alpha + (stops.comps[i].alpha - stops.comps[i - 1].alpha) * fact;
     }
 }
 
 CGFunctionRef
 wxMacCoreGraphicsBrushData::CreateGradientFunction(const wxGraphicsGradientStops& stops)
 {
-    // TODO: implement support for intermediate gradient stops
-    const wxColour c1 = stops.GetStartColour();
-    const wxColour c2 = stops.GetEndColour();
 
     static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
     static const CGFloat input_value_range [2] = { 0, 1 };
     static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
-    m_gradientComponents = new CGFloat[8] ;
-    m_gradientComponents[0] = (CGFloat) (c1.Red() / 255.0);
-    m_gradientComponents[1] = (CGFloat) (c1.Green() / 255.0);
-    m_gradientComponents[2] = (CGFloat) (c1.Blue() / 255.0);
-    m_gradientComponents[3] = (CGFloat) (c1.Alpha() / 255.0);
-    m_gradientComponents[4] = (CGFloat) (c2.Red() / 255.0);
-    m_gradientComponents[5] = (CGFloat) (c2.Green() / 255.0);
-    m_gradientComponents[6] = (CGFloat) (c2.Blue() / 255.0);
-    m_gradientComponents[7] = (CGFloat) (c2.Alpha() / 255.0);
 
-    return CGFunctionCreate ( m_gradientComponents,  1,
+    m_gradientComponents.Init(stops.GetCount());
+    for ( unsigned i = 0; i < m_gradientComponents.count; i++ )
+    {
+        const wxGraphicsGradientStop stop = stops.Item(i);
+
+        m_gradientComponents.comps[i].pos = stop.GetPosition();
+
+        const wxColour col = stop.GetColour();
+        m_gradientComponents.comps[i].red = (CGFloat) (col.Red() / 255.0);
+        m_gradientComponents.comps[i].green = (CGFloat) (col.Green() / 255.0);
+        m_gradientComponents.comps[i].blue = (CGFloat) (col.Blue() / 255.0);
+        m_gradientComponents.comps[i].alpha = (CGFloat) (col.Alpha() / 255.0);
+    }
+
+    return CGFunctionCreate ( &m_gradientComponents,  1,
                             input_value_range,
                             4,
                             output_value_ranges,
