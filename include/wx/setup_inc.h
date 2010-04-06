@@ -667,9 +667,9 @@
 // notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
 // included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
 #ifdef _MSC_VER
-#   if _MSC_VER >= 1400
-        // MSVC7+ comes with new enough Platform SDK, enable wxGraphicsContext
-        // support for it
+#   if _MSC_VER >= 1310
+        // MSVC7.1+ comes with new enough Platform SDK, enable
+        // wxGraphicsContext support for it
 #       define wxUSE_GRAPHICS_CONTEXT 1
 #   else
         // MSVC 6 didn't include GDI+ headers so disable by default, enable it
