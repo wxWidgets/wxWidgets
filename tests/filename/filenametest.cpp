@@ -485,7 +485,7 @@ void FileNameTestCase::TestGetHumanReadable()
     static const struct TestData
     {
         const char *result;
-        wxULongLong size;
+        int size;
         int prec;
         wxSizeConvention conv;
     } testData[] =
