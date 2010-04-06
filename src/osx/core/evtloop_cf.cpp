@@ -153,7 +153,7 @@ void wxObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activit
         eventloop->ObserverCallBack(observer, activity);
 }
 
-void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef observer, int activity)
+void wxCFEventLoop::ObserverCallBack(CFRunLoopObserverRef WXUNUSED(observer), int activity)
 {
     if ( activity & kCFRunLoopBeforeTimers )
     {

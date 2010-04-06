@@ -200,12 +200,12 @@ void wxComboBox::SetString(unsigned int n, const wxString& s)
     SetValue(s); // changing the item in the list won't update the display item
 }
 
-void wxComboBox::EnableTextChangedEvents(bool enable)
+void wxComboBox::EnableTextChangedEvents(bool WXUNUSED(enable))
 {
     wxFAIL_MSG("Method Not Implemented.");
 }
 
-bool wxComboBox::OSXHandleClicked( double timestampsec )
+bool wxComboBox::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());
