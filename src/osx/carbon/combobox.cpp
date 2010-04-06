@@ -59,10 +59,6 @@ public:
         m_cb = cb;
     }
 
-    void ForwardEnableTextChangedEvents(bool enable)
-    {
-        EnableTextChangedEvents(enable);
-    }
 protected:
     void OnChar( wxKeyEvent& event )
     {

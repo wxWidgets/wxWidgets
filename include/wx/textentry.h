@@ -159,14 +159,29 @@ public:
         { return DoGetMargins(); }
 
 
-    // events
-    // ------
+    // implementation only
+    // -------------------
 
     // generate the wxEVT_COMMAND_TEXT_UPDATED event for GetEditableWindow(),
     // like SetValue() does and return true if the event was processed
     //
     // NB: this is public for wxRichTextCtrl use only right now, do not call it
     static bool SendTextUpdatedEvent(wxWindow *win);
+
+    // this function is provided solely for the purpose of forwarding text
+    // change notifications state from one control to another, e.g. it can be
+    // used by a wxComboBox which derives from wxTextEntry if it delegates all
+    // of its methods to another wxTextCtrl
+    void ForwardEnableTextChangedEvents(bool enable)
+    {
+        // it's important to call the functions which update m_eventsBlock here
+        // and not just our own EnableTextChangedEvents() because our state
+        // (i.e. the result of EventsAllowed()) must change as well
+        if ( enable )
+            ResumeTextChangedEvents();
+        else
+            SuppressTextChangedEvents();
+    }
 
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
@@ -230,6 +245,7 @@ protected:
         if ( EventsAllowed() )
             SendTextUpdatedEvent();
     }
+
 
 private:
     // suppress or resume the text changed events generation: don't use these

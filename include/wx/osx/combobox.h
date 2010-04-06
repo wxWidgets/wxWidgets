@@ -132,7 +132,9 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
     virtual bool CanRedo() const;
 
     virtual wxClientDataType GetClientDataType() const;
-#endif
+
+    virtual wxTextWidgetImpl* GetTextPeer() const;
+#endif // wxOSX_USE_CARBON
 
 
 
