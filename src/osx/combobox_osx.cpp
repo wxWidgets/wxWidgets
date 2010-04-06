@@ -72,8 +72,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     Append(n, choices);
 
-    // Set the first item as being selected
-    if (n > 0)
+    // Set up the initial value, by default the first item is selected.
+    if ( !value.empty() )
+        SetValue(value);
+    else if (n > 0)
         SetSelection( 0 );
 
     // Needed because it is a wxControlWithItems
