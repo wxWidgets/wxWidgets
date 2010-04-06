@@ -309,7 +309,8 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPath) wxNullGraphicsPath;
 class wxGraphicsGradientStop
 {
 public:
-    wxGraphicsGradientStop(wxColour col, float pos)
+    wxGraphicsGradientStop(wxColour col = wxTransparentColour,
+                           float pos = 0.)
         : m_col(col),
           m_pos(pos)
     {

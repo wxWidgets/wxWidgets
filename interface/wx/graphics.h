@@ -686,12 +686,10 @@ public:
         @param col The colour of this stop. Note that the alpha component of
             the colour is honoured thus allowing the background colours to
             partially show through the gradient.
-        @param pos The stop position, must be in [0, 1) range with 0 being the
-            beginning and 1 the end of the gradient (but it doesn't make sense
-            to create a stop at position 1 because it would never be visible
-            anyhow).
+        @param pos The stop position, must be in [0, 1] range with 0 being the
+            beginning and 1 the end of the gradient.
     */
-    wxGraphicsGradientStop(wxColour col, float pos);
+    wxGraphicsGradientStop(wxColour col = wxTransparentColour, float pos = 0.);
 
     /// Return the stop colour.
     const wxColour& GetColour() const;
@@ -709,7 +707,7 @@ public:
     /**
         Change the stop position.
 
-        @param pos The new position, must always be in [0, 1) range.
+        @param pos The new position, must always be in [0, 1] range.
     */
     void SetPosition(float pos);
 };
