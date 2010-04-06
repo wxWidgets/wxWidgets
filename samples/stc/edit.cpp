@@ -190,7 +190,7 @@ void Edit::OnEditClear (wxCommandEvent &WXUNUSED(event)) {
     Clear ();
 }
 
-void Edit::OnKey  (wxStyledTextEvent &event)
+void Edit::OnKey (wxStyledTextEvent &WXUNUSED(event))
 {
     wxMessageBox("OnKey");
 }

@@ -185,7 +185,6 @@ void BoxSizerTestCase::Size3()
     child[1] = new wxWindow(m_win, wxID_ANY);
     child[2] = new wxWindow(m_win, wxID_ANY);
 
-    int j;
     for ( unsigned i = 0; i < WXSIZEOF(layoutTestData); i++ )
     {
         LayoutTestData ltd = layoutTestData[i];
@@ -219,6 +218,8 @@ void BoxSizerTestCase::Size3()
             }
 
             m_sizer->Clear();
+
+            unsigned j;
             for ( j = 0; j < WXSIZEOF(child); j++ )
                 ltd.AddToSizer(m_sizer, child[j], j);
 
