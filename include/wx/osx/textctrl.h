@@ -99,6 +99,7 @@ public:
     virtual void ShowPosition(long pos);
 
     // overrides so that we can send text updated events
+    virtual void Copy();
     virtual void Cut();
     virtual void Paste();
     

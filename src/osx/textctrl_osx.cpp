@@ -314,13 +314,31 @@ void wxTextCtrl::Clear()
     SendTextUpdatedEvent();
 }
 
+void wxTextCtrl::Copy()
+{
+    if (CanCopy())
+    {
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_COPY, GetId());        
+        evt.SetEventObject(this);
+        if (!GetEventHandler()->ProcessEvent(evt))
+        {
+            wxTextEntry::Copy();
+        }
+    }
+}
+
 void wxTextCtrl::Cut()
 {
     if (CanCut())
     {
-        wxTextEntry::Cut() ;
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_CUT, GetId());        
+        evt.SetEventObject(this);
+        if (!GetEventHandler()->ProcessEvent(evt))
+        {
+            wxTextEntry::Cut();
 
-        SendTextUpdatedEvent();
+            SendTextUpdatedEvent();
+        }
     }
 }
 
@@ -328,10 +346,15 @@ void wxTextCtrl::Paste()
 {
     if (CanPaste())
     {
-        wxTextEntry::Paste();
+        wxClipboardTextEvent evt(wxEVT_COMMAND_TEXT_PASTE, GetId());        
+        evt.SetEventObject(this);
+        if (!GetEventHandler()->ProcessEvent(evt))
+        {
+            wxTextEntry::Paste();
 
-        // TODO: eventually we should add setting the default style again
-        SendTextUpdatedEvent();
+            // TODO: eventually we should add setting the default style again
+            SendTextUpdatedEvent();
+        }
     }
 }
 
