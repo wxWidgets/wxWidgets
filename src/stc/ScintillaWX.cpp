@@ -1111,7 +1111,7 @@ void ScintillaWX::SetUseAntiAliasing(bool useAA) {
 }
 
 bool ScintillaWX::GetUseAntiAliasing() {
-    return vs.extraFontFlag;
+    return vs.extraFontFlag != 0;
 }
 
 //----------------------------------------------------------------------
