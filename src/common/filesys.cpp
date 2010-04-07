@@ -656,6 +656,42 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
     return wxFileName(path, wxPATH_NATIVE);
 }
 
+// Escapes non-ASCII and others characters in file: URL to be valid URLs
+static wxString EscapeFileNameCharsInURL(const char *in)
+{
+    wxString s;
+
+    for ( const unsigned char *p = (const unsigned char*)in; *p; ++p )
+    {
+        const unsigned char c = *p;
+
+        // notice that all colons *must* be encoded in the paths used by
+        // wxFileSystem even though this makes URLs produced by this method
+        // unusable with IE under Windows as it requires "file:///c:/foo.bar"
+        // and doesn't accept "file:///c%3a/foo.bar" -- but then we never made
+        // any guarantees about general suitability of the strings returned by
+        // this method, they must work with wxFileSystem only and not encoding
+        // the colon breaks handling of
+        // "http://wherever/whatever.zip#zip:filename.ext" URLs so we really
+        // can't do this without heavy changes to the parsing code here, in
+        // particular in GetRightLocation()
+
+        if ( c == '/' || c == '-' || c == '.' || c == '_' || c == '~' ||
+             (c >= '0' && c <= '9') ||
+             (c >= 'a' && c <= 'z') ||
+             (c >= 'A' && c <= 'Z') )
+        {
+            s << c;
+        }
+        else
+        {
+            s << wxString::Format("%%%02x", c);
+        }
+    }
+
+    return s;
+}
+
 // Returns the file URL for a native path
 wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 {
@@ -680,24 +716,10 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 #endif
 
     url.Replace(g_nativePathString, g_unixPathString);
-    url.Replace(wxT("%"), wxT("%25")); // '%'s must be replaced first!
-    url.Replace(wxT("#"), wxT("%23"));
-
-    // notice that all colons *must* be encoded in the paths used by
-    // wxFileSystem even though this makes URLs produced by this method
-    // unusable with IE under Windows as it requires "file:///c:/foo.bar" and
-    // doesn't accept "file:///c%3a/foo.bar" -- but then we never made any
-    // guarantees about general suitability of the strings returned by this
-    // method, they must work with wxFileSystem only and not encoding the colon
-    // breaks handling of "http://wherever/whatever.zip#zip:filename.ext" URLs
-    // so we really can't do this without heavy changes to the parsing code
-    // here, in particular in GetRightLocation()
-    url.Replace(wxT(":"), wxT("%3A"));
-    url = wxT("file:") + url;
 
     // Do wxURI- and common practice-compatible escaping: encode the string
     // into UTF-8, then escape anything non-ASCII:
-    return wxURI(url).BuildURI();
+    return wxT("file:") + EscapeFileNameCharsInURL(url.utf8_str());
 }
 
 
