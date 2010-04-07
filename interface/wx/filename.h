@@ -37,14 +37,14 @@ enum wxPathFormat
 */
 enum wxSizeConvention
 {
-    /// 1000 bytes = 1KiB.
+    /// 1024 bytes = 1KB.
+    wxSIZE_CONV_TRADITIONAL,
+
+    /// 1024 bytes = 1KiB.
     wxSIZE_CONV_IEC,
 
     /// 1000 bytes = 1KB.
-    wxSIZE_CONV_SI,
-
-    /// 1024 bytes = 1KB.
-    wxSIZE_CONV_TRADITIONAL
+    wxSIZE_CONV_SI
 };
 
 
