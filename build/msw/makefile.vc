@@ -193,8 +193,9 @@ WXSCINTILLA_CXXFLAGS = /M$(__RUNTIME_LIBS_100)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(LIBDIRNAME)\wxscintilla$(WXDEBUGFLAG).pdb \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /DNDEBUG \
 	/D_CRT_SECURE_NO_WARNINGS /I..\..\src\stc\scintilla\include \
-	/I..\..\src\stc\scintilla\src /D__WX__ /DSCI_LEXER /DLINK_LEXERS \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	/I..\..\src\stc\scintilla\src /I$(SETUPHDIR) /I..\..\include /DWXUSINGDLL \
+	/D__WX__ /D__WXMSW__ /DSCI_LEXER /DLINK_LEXERS $(__RTTIFLAG) \
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_AutoComplete.obj \
 	$(OBJS)\wxscintilla_CallTip.obj \
@@ -210,8 +211,8 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_KeyMap.obj \
 	$(OBJS)\wxscintilla_KeyWords.obj \
 	$(OBJS)\wxscintilla_LexAPDL.obj \
-	$(OBJS)\wxscintilla_LexAU3.obj \
 	$(OBJS)\wxscintilla_LexASY.obj \
+	$(OBJS)\wxscintilla_LexAU3.obj \
 	$(OBJS)\wxscintilla_LexAVE.obj \
 	$(OBJS)\wxscintilla_LexAbaqus.obj \
 	$(OBJS)\wxscintilla_LexAda.obj \
@@ -222,14 +223,14 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexBasic.obj \
 	$(OBJS)\wxscintilla_LexBullant.obj \
 	$(OBJS)\wxscintilla_LexCLW.obj \
-	$(OBJS)\wxscintilla_LexCmake.obj \
+	$(OBJS)\wxscintilla_LexCOBOL.obj \
 	$(OBJS)\wxscintilla_LexCPP.obj \
 	$(OBJS)\wxscintilla_LexCSS.obj \
 	$(OBJS)\wxscintilla_LexCaml.obj \
-	$(OBJS)\wxscintilla_LexCsound.obj \
-	$(OBJS)\wxscintilla_LexCOBOL.obj \
+	$(OBJS)\wxscintilla_LexCmake.obj \
 	$(OBJS)\wxscintilla_LexConf.obj \
 	$(OBJS)\wxscintilla_LexCrontab.obj \
+	$(OBJS)\wxscintilla_LexCsound.obj \
 	$(OBJS)\wxscintilla_LexD.obj \
 	$(OBJS)\wxscintilla_LexEScript.obj \
 	$(OBJS)\wxscintilla_LexEiffel.obj \
@@ -246,10 +247,11 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexLisp.obj \
 	$(OBJS)\wxscintilla_LexLout.obj \
 	$(OBJS)\wxscintilla_LexLua.obj \
-	$(OBJS)\wxscintilla_LexMagik.obj \
 	$(OBJS)\wxscintilla_LexMMIXAL.obj \
 	$(OBJS)\wxscintilla_LexMPT.obj \
 	$(OBJS)\wxscintilla_LexMSSQL.obj \
+	$(OBJS)\wxscintilla_LexMagik.obj \
+	$(OBJS)\wxscintilla_LexMarkdown.obj \
 	$(OBJS)\wxscintilla_LexMatlab.obj \
 	$(OBJS)\wxscintilla_LexMetapost.obj \
 	$(OBJS)\wxscintilla_LexMySQL.obj \
@@ -260,26 +262,26 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_LexPB.obj \
 	$(OBJS)\wxscintilla_LexPLM.obj \
 	$(OBJS)\wxscintilla_LexPOV.obj \
-	$(OBJS)\wxscintilla_LexProgress.obj \
 	$(OBJS)\wxscintilla_LexPS.obj \
 	$(OBJS)\wxscintilla_LexPascal.obj \
 	$(OBJS)\wxscintilla_LexPerl.obj \
 	$(OBJS)\wxscintilla_LexPowerPro.obj \
 	$(OBJS)\wxscintilla_LexPowerShell.obj \
+	$(OBJS)\wxscintilla_LexProgress.obj \
 	$(OBJS)\wxscintilla_LexPython.obj \
 	$(OBJS)\wxscintilla_LexR.obj \
 	$(OBJS)\wxscintilla_LexRebol.obj \
 	$(OBJS)\wxscintilla_LexRuby.obj \
-	$(OBJS)\wxscintilla_LexSQL.obj \
 	$(OBJS)\wxscintilla_LexSML.obj \
-	$(OBJS)\wxscintilla_LexSmalltalk.obj \
-	$(OBJS)\wxscintilla_LexTADS3.obj \
+	$(OBJS)\wxscintilla_LexSQL.obj \
 	$(OBJS)\wxscintilla_LexScriptol.obj \
-	$(OBJS)\wxscintilla_LexSpecman.obj \
+	$(OBJS)\wxscintilla_LexSmalltalk.obj \
 	$(OBJS)\wxscintilla_LexSorcus.obj \
+	$(OBJS)\wxscintilla_LexSpecman.obj \
 	$(OBJS)\wxscintilla_LexSpice.obj \
-	$(OBJS)\wxscintilla_LexTAL.obj \
 	$(OBJS)\wxscintilla_LexTACL.obj \
+	$(OBJS)\wxscintilla_LexTADS3.obj \
+	$(OBJS)\wxscintilla_LexTAL.obj \
 	$(OBJS)\wxscintilla_LexTCL.obj \
 	$(OBJS)\wxscintilla_LexTeX.obj \
 	$(OBJS)\wxscintilla_LexVB.obj \
@@ -292,16 +294,14 @@ WXSCINTILLA_OBJECTS =  \
 	$(OBJS)\wxscintilla_PropSet.obj \
 	$(OBJS)\wxscintilla_RESearch.obj \
 	$(OBJS)\wxscintilla_RunStyles.obj \
-	$(OBJS)\wxscintilla_Selection.obj \
 	$(OBJS)\wxscintilla_ScintillaBase.obj \
+	$(OBJS)\wxscintilla_Selection.obj \
 	$(OBJS)\wxscintilla_Style.obj \
 	$(OBJS)\wxscintilla_StyleContext.obj \
 	$(OBJS)\wxscintilla_UniConversion.obj \
 	$(OBJS)\wxscintilla_ViewStyle.obj \
 	$(OBJS)\wxscintilla_WindowAccessor.obj \
-	$(OBJS)\wxscintilla_XPM.obj \
-	$(OBJS)\wxscintilla_LexMarkdown.obj \
-	$(OBJS)\wxscintilla_Array.obj
+	$(OBJS)\wxscintilla_XPM.obj
 MONODLL_CFLAGS = /M$(__RUNTIME_LIBS_116)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_vc$(VENDORTAG).pdb \
@@ -5994,11 +5994,11 @@ $(OBJS)\wxscintilla_KeyWords.obj: ..\..\src\stc\scintilla\src\KeyWords.cxx
 $(OBJS)\wxscintilla_LexAPDL.obj: ..\..\src\stc\scintilla\src\LexAPDL.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexAPDL.cxx
 
-$(OBJS)\wxscintilla_LexAU3.obj: ..\..\src\stc\scintilla\src\LexAU3.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexAU3.cxx
-
 $(OBJS)\wxscintilla_LexASY.obj: ..\..\src\stc\scintilla\src\LexASY.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexASY.cxx
+
+$(OBJS)\wxscintilla_LexAU3.obj: ..\..\src\stc\scintilla\src\LexAU3.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexAU3.cxx
 
 $(OBJS)\wxscintilla_LexAVE.obj: ..\..\src\stc\scintilla\src\LexAVE.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexAVE.cxx
@@ -6030,8 +6030,8 @@ $(OBJS)\wxscintilla_LexBullant.obj: ..\..\src\stc\scintilla\src\LexBullant.cxx
 $(OBJS)\wxscintilla_LexCLW.obj: ..\..\src\stc\scintilla\src\LexCLW.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCLW.cxx
 
-$(OBJS)\wxscintilla_LexCmake.obj: ..\..\src\stc\scintilla\src\LexCmake.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCmake.cxx
+$(OBJS)\wxscintilla_LexCOBOL.obj: ..\..\src\stc\scintilla\src\LexCOBOL.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCOBOL.cxx
 
 $(OBJS)\wxscintilla_LexCPP.obj: ..\..\src\stc\scintilla\src\LexCPP.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCPP.cxx
@@ -6042,17 +6042,17 @@ $(OBJS)\wxscintilla_LexCSS.obj: ..\..\src\stc\scintilla\src\LexCSS.cxx
 $(OBJS)\wxscintilla_LexCaml.obj: ..\..\src\stc\scintilla\src\LexCaml.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCaml.cxx
 
-$(OBJS)\wxscintilla_LexCsound.obj: ..\..\src\stc\scintilla\src\LexCsound.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCsound.cxx
-
-$(OBJS)\wxscintilla_LexCOBOL.obj: ..\..\src\stc\scintilla\src\LexCOBOL.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCOBOL.cxx
+$(OBJS)\wxscintilla_LexCmake.obj: ..\..\src\stc\scintilla\src\LexCmake.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCmake.cxx
 
 $(OBJS)\wxscintilla_LexConf.obj: ..\..\src\stc\scintilla\src\LexConf.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexConf.cxx
 
 $(OBJS)\wxscintilla_LexCrontab.obj: ..\..\src\stc\scintilla\src\LexCrontab.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCrontab.cxx
+
+$(OBJS)\wxscintilla_LexCsound.obj: ..\..\src\stc\scintilla\src\LexCsound.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexCsound.cxx
 
 $(OBJS)\wxscintilla_LexD.obj: ..\..\src\stc\scintilla\src\LexD.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexD.cxx
@@ -6102,9 +6102,6 @@ $(OBJS)\wxscintilla_LexLout.obj: ..\..\src\stc\scintilla\src\LexLout.cxx
 $(OBJS)\wxscintilla_LexLua.obj: ..\..\src\stc\scintilla\src\LexLua.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexLua.cxx
 
-$(OBJS)\wxscintilla_LexMagik.obj: ..\..\src\stc\scintilla\src\LexMagik.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMagik.cxx
-
 $(OBJS)\wxscintilla_LexMMIXAL.obj: ..\..\src\stc\scintilla\src\LexMMIXAL.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMMIXAL.cxx
 
@@ -6113,6 +6110,12 @@ $(OBJS)\wxscintilla_LexMPT.obj: ..\..\src\stc\scintilla\src\LexMPT.cxx
 
 $(OBJS)\wxscintilla_LexMSSQL.obj: ..\..\src\stc\scintilla\src\LexMSSQL.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMSSQL.cxx
+
+$(OBJS)\wxscintilla_LexMagik.obj: ..\..\src\stc\scintilla\src\LexMagik.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMagik.cxx
+
+$(OBJS)\wxscintilla_LexMarkdown.obj: ..\..\src\stc\scintilla\src\LexMarkdown.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMarkdown.cxx
 
 $(OBJS)\wxscintilla_LexMatlab.obj: ..\..\src\stc\scintilla\src\LexMatlab.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMatlab.cxx
@@ -6144,9 +6147,6 @@ $(OBJS)\wxscintilla_LexPLM.obj: ..\..\src\stc\scintilla\src\LexPLM.cxx
 $(OBJS)\wxscintilla_LexPOV.obj: ..\..\src\stc\scintilla\src\LexPOV.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexPOV.cxx
 
-$(OBJS)\wxscintilla_LexProgress.obj: ..\..\src\stc\scintilla\src\LexProgress.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexProgress.cxx
-
 $(OBJS)\wxscintilla_LexPS.obj: ..\..\src\stc\scintilla\src\LexPS.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexPS.cxx
 
@@ -6162,6 +6162,9 @@ $(OBJS)\wxscintilla_LexPowerPro.obj: ..\..\src\stc\scintilla\src\LexPowerPro.cxx
 $(OBJS)\wxscintilla_LexPowerShell.obj: ..\..\src\stc\scintilla\src\LexPowerShell.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexPowerShell.cxx
 
+$(OBJS)\wxscintilla_LexProgress.obj: ..\..\src\stc\scintilla\src\LexProgress.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexProgress.cxx
+
 $(OBJS)\wxscintilla_LexPython.obj: ..\..\src\stc\scintilla\src\LexPython.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexPython.cxx
 
@@ -6174,35 +6177,35 @@ $(OBJS)\wxscintilla_LexRebol.obj: ..\..\src\stc\scintilla\src\LexRebol.cxx
 $(OBJS)\wxscintilla_LexRuby.obj: ..\..\src\stc\scintilla\src\LexRuby.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexRuby.cxx
 
-$(OBJS)\wxscintilla_LexSQL.obj: ..\..\src\stc\scintilla\src\LexSQL.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSQL.cxx
-
 $(OBJS)\wxscintilla_LexSML.obj: ..\..\src\stc\scintilla\src\LexSML.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSML.cxx
 
-$(OBJS)\wxscintilla_LexSmalltalk.obj: ..\..\src\stc\scintilla\src\LexSmalltalk.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSmalltalk.cxx
-
-$(OBJS)\wxscintilla_LexTADS3.obj: ..\..\src\stc\scintilla\src\LexTADS3.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTADS3.cxx
+$(OBJS)\wxscintilla_LexSQL.obj: ..\..\src\stc\scintilla\src\LexSQL.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSQL.cxx
 
 $(OBJS)\wxscintilla_LexScriptol.obj: ..\..\src\stc\scintilla\src\LexScriptol.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexScriptol.cxx
 
-$(OBJS)\wxscintilla_LexSpecman.obj: ..\..\src\stc\scintilla\src\LexSpecman.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSpecman.cxx
+$(OBJS)\wxscintilla_LexSmalltalk.obj: ..\..\src\stc\scintilla\src\LexSmalltalk.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSmalltalk.cxx
 
 $(OBJS)\wxscintilla_LexSorcus.obj: ..\..\src\stc\scintilla\src\LexSorcus.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSorcus.cxx
 
+$(OBJS)\wxscintilla_LexSpecman.obj: ..\..\src\stc\scintilla\src\LexSpecman.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSpecman.cxx
+
 $(OBJS)\wxscintilla_LexSpice.obj: ..\..\src\stc\scintilla\src\LexSpice.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexSpice.cxx
 
-$(OBJS)\wxscintilla_LexTAL.obj: ..\..\src\stc\scintilla\src\LexTAL.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTAL.cxx
-
 $(OBJS)\wxscintilla_LexTACL.obj: ..\..\src\stc\scintilla\src\LexTACL.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTACL.cxx
+
+$(OBJS)\wxscintilla_LexTADS3.obj: ..\..\src\stc\scintilla\src\LexTADS3.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTADS3.cxx
+
+$(OBJS)\wxscintilla_LexTAL.obj: ..\..\src\stc\scintilla\src\LexTAL.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTAL.cxx
 
 $(OBJS)\wxscintilla_LexTCL.obj: ..\..\src\stc\scintilla\src\LexTCL.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexTCL.cxx
@@ -6240,11 +6243,11 @@ $(OBJS)\wxscintilla_RESearch.obj: ..\..\src\stc\scintilla\src\RESearch.cxx
 $(OBJS)\wxscintilla_RunStyles.obj: ..\..\src\stc\scintilla\src\RunStyles.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\RunStyles.cxx
 
-$(OBJS)\wxscintilla_Selection.obj: ..\..\src\stc\scintilla\src\Selection.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Selection.cxx
-
 $(OBJS)\wxscintilla_ScintillaBase.obj: ..\..\src\stc\scintilla\src\ScintillaBase.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\ScintillaBase.cxx
+
+$(OBJS)\wxscintilla_Selection.obj: ..\..\src\stc\scintilla\src\Selection.cxx
+	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Selection.cxx
 
 $(OBJS)\wxscintilla_Style.obj: ..\..\src\stc\scintilla\src\Style.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Style.cxx
@@ -6263,12 +6266,6 @@ $(OBJS)\wxscintilla_WindowAccessor.obj: ..\..\src\stc\scintilla\src\WindowAccess
 
 $(OBJS)\wxscintilla_XPM.obj: ..\..\src\stc\scintilla\src\XPM.cxx
 	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\XPM.cxx
-
-$(OBJS)\wxscintilla_LexMarkdown.obj: ..\..\src\stc\scintilla\src\LexMarkdown.cxx
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\LexMarkdown.cxx
-
-$(OBJS)\wxscintilla_Array.obj: ..\..\src\stc\scintilla\src\Array.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(WXSCINTILLA_CXXFLAGS) ..\..\src\stc\scintilla\src\Array.cpp
 
 $(OBJS)\monodll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

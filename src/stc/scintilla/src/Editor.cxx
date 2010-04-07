@@ -5407,9 +5407,9 @@ void Editor::CopySelectionRange(SelectionText *ss, bool allowLineCopy) {
 		int size = sel.Length() + delimiterLength * sel.Count();
 		char *text = new char[size + 1];
 		int j = 0;
-		SelRangeArray rangesInOrder = sel.RangesCopy();
+		wxVector<SelectionRange> rangesInOrder = sel.RangesCopy();
 		if (sel.selType == Selection::selRectangle)
-			SelRangeArraySort(rangesInOrder.begin(), rangesInOrder.end());
+			wxVectorSort(rangesInOrder);
 		for (size_t r=0; r<rangesInOrder.size(); r++) {
 			SelectionRange current = rangesInOrder[r];
 			for (int i = current.Start().Position();

@@ -130,13 +130,12 @@ struct SelectionRange {
 	void MinimizeVirtualSpace();
 };
 
-#include "Array.h"
-typedef Array SelRangeArray;
-#define SelRangeArraySort ArraySort
-
+    
+#include "wx/vector.h"
+    
 class Selection {
-	SelRangeArray ranges;
-	SelRangeArray rangesSaved;
+	wxVector<SelectionRange> ranges;
+	wxVector<SelectionRange> rangesSaved;
 	SelectionRange rangeRectangular;
 	size_t mainRange;
 	bool moveExtends;
@@ -179,7 +178,7 @@ public:
 	void RemoveDuplicates();
 	void RotateMain();
 	bool Tentative() const { return tentativeMain; }
-	SelRangeArray RangesCopy() const {
+	wxVector<SelectionRange> RangesCopy() const {
 		return ranges;
 	}
 };

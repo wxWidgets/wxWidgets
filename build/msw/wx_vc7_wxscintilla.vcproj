@@ -26,8 +26,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -48,8 +48,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -58,9 +58,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswud;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -82,8 +82,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -101,8 +101,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -111,9 +111,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswu;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -135,8 +135,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -157,8 +157,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -167,9 +167,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -191,8 +191,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -210,8 +210,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -220,9 +220,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_lib\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -244,8 +244,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -266,8 +266,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -276,9 +276,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswud;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -300,8 +300,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -319,8 +319,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -329,9 +329,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswu;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -353,8 +353,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
 				BasicRuntimeChecks="3"
@@ -375,8 +375,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -385,9 +385,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="_DEBUG;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivud;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -409,8 +409,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -428,8 +428,8 @@
 				SuppressStartupBanner="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				PreprocessorDefinitions="WIN32;_LIB;NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -438,9 +438,9 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;__WX__;SCI_LEXER;LINK_LEXERS"
+				PreprocessorDefinitions="NDEBUG;_CRT_SECURE_NO_WARNINGS;WXUSINGDLL;__WX__;__WXMSW__;SCI_LEXER;LINK_LEXERS"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src"/>
+				AdditionalIncludeDirectories="..\..\src\stc\scintilla\include;..\..\src\stc\scintilla\src;..\..\lib\vc_dll\mswunivu;..\..\include"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -461,9 +461,6 @@
 			Name="Source Files"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
-			<File
-				RelativePath="..\..\src\stc\scintilla\src\Array.cpp">
-			</File>
 			<File
 				RelativePath="..\..\src\stc\scintilla\src\AutoComplete.cxx">
 			</File>
