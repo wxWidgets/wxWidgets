@@ -360,7 +360,7 @@ struct colormap *cm;
 		freedfa(s);
 		return v->err;
 	}
-
+    cold = NULL;// WX: fix gcc warnings about cold being possibly uninitialized
 	ret = cfindloop(v, cnfa, cm, d, s, &cold);
 
 	freedfa(d);
