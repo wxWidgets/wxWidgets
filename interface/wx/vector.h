@@ -20,7 +20,7 @@
     @nolibrary
     @category{containers}
 
-    @see @ref overview_container, wxList<T>, wxArray<T>
+    @see @ref overview_container, wxList<T>, wxArray<T>, wxVectorSort<T>
 */
 template<typename T>
 class wxVector<T>
@@ -237,3 +237,19 @@ public:
     size_type size() const;
 };
 
+
+/**
+   Sort the contents of a @c wxVector<T>.  In a STL build this function will
+   be defined as a thin wrapper around std::sort.  To be sortable the
+   contained type must support the less-than operator.
+
+   @code
+   wxVector<SomeClass> v;
+   ... // items are added to the vector v...
+   wxVectorSort(v);
+   @endcode
+      
+   @see wxVector<T>
+*/
+template<typename T>
+void wxVectorSort(wxVector<T>& v);
