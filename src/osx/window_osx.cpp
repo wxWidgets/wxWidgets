@@ -1089,6 +1089,7 @@ bool wxWindowMac::OSXShowWithEffect(bool show,
 void wxWindowMac::DoEnable(bool enable)
 {
     m_peer->Enable( enable ) ;
+    MacInvalidateBorders();
 }
 
 //
