@@ -2561,6 +2561,9 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
 
 
     // this one is for configuring the buttons
+    wxSizer * const
+    sizerBtnsBox = new wxStaticBoxSizer(wxVERTICAL, this, "&Buttons");
+    
     wxFlexGridSizer * const sizerBtns = new wxFlexGridSizer(2, 5, 5);
     sizerBtns->AddGrowableCol(1);
 
@@ -2582,8 +2585,6 @@ TestMessageBoxDialog::TestMessageBoxDialog(wxWindow *parent)
                              this);
     }
 
-    wxSizer * const
-        sizerBtnsBox = new wxStaticBoxSizer(wxVERTICAL, this, "&Buttons");
     sizerBtnsBox->Add(sizerBtns, wxSizerFlags(1).Expand());
     sizerTop->Add(sizerBtnsBox, wxSizerFlags().Expand().Border());
 
