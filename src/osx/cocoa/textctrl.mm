@@ -323,11 +323,10 @@ wxNSTextViewControl::~wxNSTextViewControl()
 
 bool wxNSTextViewControl::CanFocus() const
 {
-    // we need to override so that we don't return the CanFocus value of
-    // the text view's overriding scroll view.
-    if (m_textView)
-        return [m_textView canBecomeKeyView];
-    return false;
+    // since this doesn't work (return false), we hardcode
+    // if (m_textView)
+    //    return [m_textView canBecomeKeyView];
+    return true;
 }
 
 wxString wxNSTextViewControl::GetStringValue() const
