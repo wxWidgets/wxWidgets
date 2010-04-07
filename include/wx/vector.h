@@ -450,7 +450,7 @@ namespace wxPrivate
     // not be used directly in user's code.
 
 template<typename T>
-int wxVectorSort_compare(const void* pitem1, const void* pitem2, const void* )
+int wxCMPFUNC_CONV wxVectorSort_compare(const void* pitem1, const void* pitem2, const void* )
 {
     const T& item1 = *reinterpret_cast<const T*>(pitem1);
     const T& item2 = *reinterpret_cast<const T*>(pitem2);
