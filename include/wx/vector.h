@@ -17,6 +17,8 @@
 #if wxUSE_STL
 
 #include <vector>
+#include <algorithm>
+
 #define wxVector std::vector
 template<typename T>
 inline void wxVectorSort(wxVector<T>& v)
