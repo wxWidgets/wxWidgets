@@ -192,12 +192,16 @@ void wxNativeFontInfo::OSXValidateNSFontDescriptor()
 
     if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
         traits |= NSFontItalicTrait;
-
+    
+    NSDictionary* traitsdict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithUnsignedInt:traits], NSFontSymbolicTrait,
+                           nil] ;
+     
     desc = [NSFontDescriptor fontDescriptorWithFontAttributes:
         [NSDictionary dictionaryWithObjectsAndKeys:
             wxCFStringRef(m_faceName).AsNSString(), NSFontFamilyAttribute,
             [NSNumber numberWithFloat:m_pointSize], NSFontSizeAttribute,
-            [NSNumber numberWithUnsignedInt:traits], NSFontSymbolicTrait,
+            traitsdict, NSFontTraitsAttribute,
             [NSNumber numberWithFloat:weight],NSFontWeightTrait,
             nil]];
 
