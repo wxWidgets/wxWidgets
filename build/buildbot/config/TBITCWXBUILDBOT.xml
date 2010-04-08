@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Name:       heathcliff.xml
+    Name:       TBITCWXBUILDBOT.xml
     RCS-ID:     $Id$
 -->
 
@@ -10,8 +10,8 @@
 <xi:include href="include/unix.xml"/>
 
 <build>
-    <name>Linux x86_64 wxGTK trunk</name>
-    <builddir>heathcliff_gtk</builddir>
+    <name>Linux wxGTK trunk</name>
+    <builddir>tbitcwxbuildbot_gtk</builddir>
     <!--scheduler>trunk_quick</scheduler-->
     <steps>
         <checkout/>
