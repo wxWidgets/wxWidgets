@@ -191,17 +191,9 @@ int RunMixedFontDialog(wxFontDialog* dialog)
     else
         [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
 #endif
-
-    NSModalSession session = [NSApp beginModalSessionForWindow:fontPanel];
-
-    for (;;)
-    {
-        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
-            break;
-    }
-
-    [NSApp endModalSession:session];
-
+    
+    [NSApp runModalForWindow:fontPanel];
+    
     // if we don't reenable it, FPShowHideFontPanel does not work
     [[fontPanel standardWindowButton:NSWindowCloseButton] setEnabled:YES] ;
 #if wxOSX_USE_CARBON
