@@ -94,37 +94,51 @@ void wxGUIEventLoop::DoStop()
     QuitApplicationEventLoop();
 }
 
-wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+// TODO move into a evtloop_osx.cpp
+
+wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
-    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
     wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
+
+wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
+{
+    m_modalWindow = NULL;
+    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalNativeWindow = modalNativeWindow;
+}
+
+// END move into a evtloop_osx.cpp
 
 void wxModalEventLoop::DoRun()
 {
     wxMacAutoreleasePool autoreleasepool;
-    WindowRef windowRef = m_modalWindow->GetWXWindow();
+
+    bool resetGroupParent = false;
 
     WindowGroupRef windowGroup = NULL;
     WindowGroupRef formerParentGroup = NULL;
-    bool resetGroupParent = false;
     
     // make sure modal dialogs are in the right layer so that they are not covered
-    
-    if ( m_modalWindow->GetParent() == NULL )
+    if ( m_modalWindow != NULL )
     {
-        windowGroup = GetWindowGroup(windowRef) ;
-        if ( windowGroup != GetWindowGroupOfClass( kMovableModalWindowClass ) )
+        if ( m_modalWindow->GetParent() == NULL )
         {
-            formerParentGroup = GetWindowGroupParent( windowGroup );
-            SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
-            resetGroupParent = true;
+            windowGroup = GetWindowGroup(m_modalNativeWindow) ;
+            if ( windowGroup != GetWindowGroupOfClass( kMovableModalWindowClass ) )
+            {
+                formerParentGroup = GetWindowGroupParent( windowGroup );
+                SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
+                resetGroupParent = true;
+            }
         }
     }
 
     m_modalWindow->SetFocus();
     
-    RunAppModalLoopForWindow(windowRef);
+    RunAppModalLoopForWindow(m_modalNativeWindow);
 
     if ( resetGroupParent )
     {
@@ -136,8 +150,7 @@ void wxModalEventLoop::DoRun()
 void wxModalEventLoop::DoStop()
 {
     wxMacAutoreleasePool autoreleasepool;
-    WindowRef theWindow = m_modalWindow->GetWXWindow();
-    QuitAppModalLoopForWindow(theWindow);
+    QuitAppModalLoopForWindow(m_modalNativeWindow);
 }
 
 

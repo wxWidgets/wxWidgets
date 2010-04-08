@@ -97,11 +97,24 @@ void wxGUIEventLoop::DoRun()
     }
 }
 
-wxModalEventLoop::wxModalEventLoop(wxWindow *winModal)
+// TODO move into a evtloop_osx.cpp
+
+wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
-    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (winModal);
+    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
     wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }
+
+wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
+{
+    m_modalWindow = NULL;
+    wxASSERT_MSG( modalNativeWindow != NULL, "must pass in a toplevel window for modal event loop" );
+    m_modalNativeWindow = modalNativeWindow;
+}
+
+// END move into a evtloop_osx.cpp
+
 
 void wxModalEventLoop::DoRun()
 {

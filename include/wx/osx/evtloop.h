@@ -98,7 +98,8 @@ class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 class WXDLLIMPEXP_CORE wxModalEventLoop : public wxGUIEventLoop
 {
 public:
-    wxModalEventLoop(wxWindow *winModal);
+    wxModalEventLoop(wxWindow *modalWindow);
+    wxModalEventLoop(WXWindow modalNativeWindow);
     
 protected:
     virtual void DoRun();
@@ -107,6 +108,7 @@ protected:
     
     // (in case) the modal window for this event loop
     wxNonOwnedWindow* m_modalWindow;
+    WXWindow m_modalNativeWindow;
 };
 
 #endif // wxUSE_GUI
