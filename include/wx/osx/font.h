@@ -27,7 +27,7 @@ enum wxOSXSystemFont
     wxOSX_SYSTEM_FONT_MINI,
     wxOSX_SYSTEM_FONT_MINI_BOLD,
     wxOSX_SYSTEM_FONT_LABELS,
-    wxOSX_SYSTEM_FONT_VIEWS
+    wxOSX_SYSTEM_FONT_VIEWS,
 };
 
 
@@ -36,6 +36,8 @@ class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 public:
     // ctors and such
     wxFont() { }
+    
+    wxFont( wxOSXSystemFont systemFont );
 
 #if wxOSX_USE_COCOA
     wxFont(WX_NSFont nsfont);
@@ -93,8 +95,6 @@ public:
     wxFont(const wxString& fontDesc);
 
     bool Create(const wxNativeFontInfo& info);
-
-    bool CreateSystemFont(wxOSXSystemFont font);
 
     virtual ~wxFont();
 

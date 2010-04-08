@@ -4307,8 +4307,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                       );
 
 #if defined( __WXMAC__ )
-        wxFont font;
-        font.CreateSystemFont( wxOSX_SYSTEM_FONT_SMALL );
+        static wxFont font( wxOSX_SYSTEM_FONT_SMALL );
         m_headerWin->SetFont( font );
 #endif
 

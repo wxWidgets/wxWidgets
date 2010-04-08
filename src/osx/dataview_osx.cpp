@@ -614,7 +614,8 @@ wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-    attr.font.CreateSystemFont(wxOSX_SYSTEM_FONT_VIEWS);
+    static wxFont font = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
+    attr.font = font;
 
     return attr;
 }

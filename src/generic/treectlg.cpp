@@ -973,7 +973,7 @@ void wxGenericTreeCtrl::Init()
     m_lastOnSame = false;
 
 #if defined( __WXMAC__ )
-    m_normalFont.CreateSystemFont(wxOSX_SYSTEM_FONT_VIEWS);
+    m_normalFont = wxFont(wxOSX_SYSTEM_FONT_VIEWS);
 #else
     m_normalFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
 #endif

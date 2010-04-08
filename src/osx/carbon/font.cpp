@@ -499,6 +499,11 @@ bool wxFont::Create(const wxNativeFontInfo& info)
     return true;
 }
 
+wxFont::wxFont(wxOSXSystemFont font)
+{
+    m_refData = new wxFontRefData( font, 0 );
+}
+
 wxFont::wxFont(const wxString& fontdesc)
 {
     wxNativeFontInfo info;
@@ -553,15 +558,6 @@ bool wxFont::Create(int pointSize,
         underlined, faceName, encoding);
 
     m_refData = new wxFontRefData(info);
-
-    return true;
-}
-
-bool wxFont::CreateSystemFont(wxOSXSystemFont font)
-{
-    UnRef();
-
-    m_refData = new wxFontRefData( font, 0 );
 
     return true;
 }

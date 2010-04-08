@@ -338,36 +338,33 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
 #endif
 
-    wxFont font ;
-
-    wxOSXSystemFont systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
-
+    
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL :
-            systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
+            static wxFont sysNormal(wxOSX_SYSTEM_FONT_NORMAL);
+            SetFont(sysNormal) ;
             break ;
 
         case wxWINDOW_VARIANT_SMALL :
-            systemFont = wxOSX_SYSTEM_FONT_SMALL ;
+            static wxFont sysSmall(wxOSX_SYSTEM_FONT_SMALL);
+            SetFont(sysSmall) ;
             break ;
 
         case wxWINDOW_VARIANT_MINI :
-            systemFont = wxOSX_SYSTEM_FONT_MINI ;
+            static wxFont sysMini(wxOSX_SYSTEM_FONT_MINI);
+            SetFont(sysMini) ;
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
-            systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
+            static wxFont sysLarge(wxOSX_SYSTEM_FONT_NORMAL);
+            SetFont(sysLarge) ;
             break ;
 
         default:
             wxFAIL_MSG(wxT("unexpected window variant"));
             break ;
     }
-
-    font.CreateSystemFont( systemFont ) ;
-
-    SetFont( font ) ;
 }
 
 void wxWindowMac::MacUpdateControlFont()

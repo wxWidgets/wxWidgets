@@ -59,12 +59,10 @@ const wxFont* wxStockGDIMac::GetFont(Item item)
         switch (item)
         {
         case FONT_NORMAL:
-            font = new wxFont;
-            font->CreateSystemFont(wxOSX_SYSTEM_FONT_NORMAL);
+            font = new wxFont(wxOSX_SYSTEM_FONT_NORMAL);
             break;
         case FONT_SMALL:
-            font = new wxFont;
-            font->CreateSystemFont(wxOSX_SYSTEM_FONT_SMALL);
+            font = new wxFont(wxOSX_SYSTEM_FONT_SMALL);
             break;
         default:
             font = const_cast<wxFont*>(super::GetFont(item));
