@@ -208,20 +208,7 @@ int RunMixedFontDialog(wxFontDialog* dialog)
 #if wxOSX_USE_COCOA
         NSFont* theFont = [fontPanel panelConvertFont:[NSFont userFontOfSize:0]];
 
-        //Get more information about the user's chosen font
-        NSFontTraitMask theTraits = [[NSFontManager sharedFontManager] traitsOfFont:theFont];
-        int theFontWeight = [[NSFontManager sharedFontManager] weightOfFont:theFont];
-        int theFontSize = (int) [theFont pointSize];
-
-        wxFontFamily fontFamily = wxFONTFAMILY_DEFAULT;
-        //Set the wx font to the appropriate data
-        if(theTraits & NSFixedPitchFontMask)
-            fontFamily = wxFONTFAMILY_TELETYPE;
-
-        fontdata.m_chosenFont = wxFont( theFontSize, fontFamily,
-            theTraits & NSItalicFontMask ? wxFONTSTYLE_ITALIC : 0,
-            theFontWeight < 5 ? wxLIGHT : theFontWeight >= 9 ? wxBOLD : wxNORMAL,
-            false, wxStringWithNSString([theFont familyName]) );
+        fontdata.m_chosenFont = wxFont( theFont );
 
         //Get the shared color panel along with the chosen color and set the chosen color
         NSColor* theColor = [[[NSColorPanel sharedColorPanel] color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];

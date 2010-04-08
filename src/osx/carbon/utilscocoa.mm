@@ -23,6 +23,10 @@
 
 #include "wx/fontutil.h"
 
+#if wxOSX_USE_COCOA
+#include "wx/cocoa/string.h"
+#endif
+
 #ifdef __WXMAC__
 
 #if wxOSX_USE_CARBON
@@ -110,31 +114,39 @@ wxFont::wxFont(WX_NSFont nsfont)
     Create(info);
 }
 
-void wxFont::SetNativeInfoFromNSFont(WX_NSFont nsfont, wxNativeFontInfo* info)
+void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
 {   
-    NSFontDescriptor*desc = [[nsfont fontDescriptor] retain];
     if ( info->m_faceName.empty())
     {
+        //Get more information about the user's chosen font
+        NSFontTraitMask theTraits = [[NSFontManager sharedFontManager] traitsOfFont:theFont];
+        int theFontWeight = [[NSFontManager sharedFontManager] weightOfFont:theFont];
+
+        wxFontFamily fontFamily = wxFONTFAMILY_DEFAULT;
+        //Set the wx font to the appropriate data
+        if(theTraits & NSFixedPitchFontMask)
+            fontFamily = wxFONTFAMILY_TELETYPE;
+
         wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
         wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
         bool underlined = false;
 
-        int size = (int) ([desc pointSize]+0.5);
-        NSFontSymbolicTraits traits = [desc symbolicTraits];
-
-        if ( traits & NSFontBoldTrait )
+        int size = (int) ([theFont pointSize]+0.5);
+ 
+        if ( theFontWeight >= 9 )
             fontweight = wxFONTWEIGHT_BOLD ;
+        else if ( theFontWeight < 5 )
+            fontweight = wxFONTWEIGHT_LIGHT;
         else
             fontweight = wxFONTWEIGHT_NORMAL ;
-        if ( traits & NSFontItalicTrait )
+            
+        if ( theTraits & NSItalicFontMask )
             fontstyle = wxFONTSTYLE_ITALIC ;
 
-        wxCFStringRef fontname( [desc postscriptName] );
-        info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
-            fontname.AsString(), wxFONTENCODING_DEFAULT);
+        info->Init(size,fontFamily,fontstyle,fontweight,underlined,
+            wxStringWithNSString([theFont familyName]), wxFONTENCODING_DEFAULT);
 
     }
-    info->m_nsFontDescriptor = desc;
 }
 
 WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
@@ -176,43 +188,26 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
     return nsfont;
 }
 
-void wxNativeFontInfo::OSXValidateNSFontDescriptor()
-{
-    NSFontDescriptor* desc  = nil;
-    NSFontSymbolicTraits traits = 0;
-    float weight = 0;
-
-    if (m_weight == wxFONTWEIGHT_BOLD)
-    {
-        traits |= NSFontBoldTrait;
-        weight = 1.0;
-    }
-    else if (m_weight == wxFONTWEIGHT_LIGHT)
-        weight = -1;
-
-    if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
-        traits |= NSFontItalicTrait;
-    
-    NSDictionary* traitsdict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithUnsignedInt:traits], NSFontSymbolicTrait,
-                           nil] ;
-     
-    desc = [NSFontDescriptor fontDescriptorWithFontAttributes:
-        [NSDictionary dictionaryWithObjectsAndKeys:
-            wxCFStringRef(m_faceName).AsNSString(), NSFontFamilyAttribute,
-            [NSNumber numberWithFloat:m_pointSize], NSFontSizeAttribute,
-            traitsdict, NSFontTraitsAttribute,
-            [NSNumber numberWithFloat:weight],NSFontWeightTrait,
-            nil]];
-
-    wxMacCocoaRetain(desc);
-    m_nsFontDescriptor = desc;
-}
-
 WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 {
     NSFont* nsFont;
-    nsFont = [NSFont fontWithDescriptor:info->m_nsFontDescriptor size:info->m_pointSize];
+    int weight = 5;
+    NSFontTraitMask traits = 0;
+    if (info->m_weight == wxFONTWEIGHT_BOLD)
+    {
+        traits |= NSBoldFontMask;
+        weight = 9;
+    }
+    else if (info->m_weight == wxFONTWEIGHT_LIGHT)
+        weight = 3;
+
+    if (info->m_style == wxFONTSTYLE_ITALIC || info->m_style == wxFONTSTYLE_SLANT)
+        traits |= NSItalicFontMask;
+    
+    nsFont = [[NSFontManager sharedFontManager] fontWithFamily:wxCFStringRef(info->m_faceName).AsNSString() 
+        traits:traits weight:weight size:info->m_pointSize];
+
+    wxASSERT_MSG(nsFont != nil,wxT("Couldn't create nsFont")) ;
     wxMacCocoaRetain(nsFont);
     return nsFont;
 }
