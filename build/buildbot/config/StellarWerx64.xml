@@ -22,7 +22,7 @@
 </build>
 
 <build>
-    <name>Linux x86_64 wx11 trunk</name>
+    <name>Linux x86_64 wxX11 trunk</name>
     <builddir>stellarwerx64_wxx11</builddir>
     <scheduler>daily_0700</scheduler>
     <steps>

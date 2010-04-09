@@ -22,7 +22,7 @@
 </build>
 
 <build>
-    <name>Linux x86 wx11 stable</name>
+    <name>Linux x86 wxX11 stable</name>
     <builddir>stellarwerx32_wxx11</builddir>
     <scheduler>daily_0600</scheduler>
     <steps>
