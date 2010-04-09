@@ -10,24 +10,36 @@
 <xi:include href="include/unix.xml"/>
 
 <build>
-    <name>Linux x86 wxGTK trunk STL debug</name>
-    <builddir>stellarwerx32_wxgtk_debug</builddir>
-    <scheduler>daily_0600</scheduler>
+    <name>Linux x86 wxGTK trunk STL</name>
+    <builddir>stellarwerx32_wxgtk</builddir>
+    <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
-        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+        <configure options="--enable-stl"/>
         <compile-all/>
         <run-tests/>
     </steps>
 </build>
 
 <build>
-    <name>Linux x86 wxGTK trunk STL release</name>
-    <builddir>stellarwerx32_wxgtk_release</builddir>
-    <scheduler>trunk_quick</scheduler>
+    <name>Linux x86 wx11 stable</name>
+    <builddir>stellarwerx32_wxx11</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-x11"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk ANSI</name>
+    <builddir>stellarwerx32_wxgtk_ansi</builddir>
+    <scheduler>daily_0600</scheduler>
     <steps>
         <checkout/>
-        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
+        <configure options="--disable-unicode"/>
         <compile-all/>
         <run-tests/>
     </steps>

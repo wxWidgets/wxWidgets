@@ -10,13 +10,36 @@
 <xi:include href="include/unix.xml"/>
 
 <build>
-    <name>Linux x86 wxGTK trunk static</name>
+    <name>Linux x86 wxGTK trunk</name>
     <builddir>brandt32_gtk</builddir>
-    <!--scheduler>daily_0800</scheduler-->
+    <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
-        <configure options="--disable-shared --enable-opengl --enable-svg
-                            --enable-aui --with-gtk=2 --enable-graphics_ctx"/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK trunk static</name>
+    <builddir>brandt32_gtk_trunk_static</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--disable-shared"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxGTK stable static</name>
+    <builddir>brandt32_gtk_stable_static</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--disable-shared"/>
         <compile-all/>
         <run-tests/>
     </steps>

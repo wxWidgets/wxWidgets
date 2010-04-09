@@ -10,49 +10,37 @@
 <xi:include href="include/unix.xml"/>
 
 <build>
-    <name>Linux x86_64 wxGTK trunk STL debug</name>
-    <builddir>stellarwerx64_wxgtk_debug</builddir>
-    <scheduler>daily_0600</scheduler>
-    <steps>
-        <checkout/>
-        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
-        <compile-all/>
-        <run-tests/>
-    </steps>
-</build>
-
-<build>
-    <name>Linux x86_64 wxGTK trunk STL release</name>
-    <builddir>stellarwerx64_wxgtk_release</builddir>
-    <scheduler>trunk_quick</scheduler>
-    <steps>
-        <checkout/>
-        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
-        <compile-all/>
-        <run-tests/>
-    </steps>
-</build>
-
-<build>
-    <name>Linux x86_64 wxGTK stable STL debug</name>
-    <builddir>stellarwerx64_wxgtk_stable_debug</builddir>
-    <scheduler>daily_0600</scheduler>
-    <steps>
-        <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-        <compile-all utils="false"/>
-        <run-tests/>
-    </steps>
-</build>
-
-<build>
-    <name>Linux x86_64 wxGTK stable STL release</name>
-    <builddir>stellarwerx64_wxgtk_stable_release</builddir>
+    <name>Linux x86_64 wxGTK stable</name>
+    <builddir>stellarwerx64_wxgtk</builddir>
     <scheduler>stable_quick</scheduler>
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-        <compile-all utils="false"/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86_64 wx11 trunk</name>
+    <builddir>stellarwerx64_wxx11</builddir>
+    <scheduler>daily_0700</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-x11"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86_64 wxGTK stable ANSI</name>
+    <builddir>stellarwerx64_wxgtk_ansi</builddir>
+    <scheduler>daily_0700</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--disable-unicode"/>
+        <compile-all/>
         <run-tests/>
     </steps>
 </build>
