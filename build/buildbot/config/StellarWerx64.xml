@@ -16,7 +16,7 @@
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure/>
-        <compile-all/>
+        <compile-all utils="false"/>
         <run-tests/>
     </steps>
 </build>
@@ -40,7 +40,7 @@
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure options="--disable-unicode"/>
-        <compile-all/>
+        <compile-all utils="false"/>
         <run-tests/>
     </steps>
 </build>

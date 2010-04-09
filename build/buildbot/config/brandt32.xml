@@ -40,7 +40,7 @@
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure options="--disable-shared"/>
-        <compile-all/>
+        <compile-all utils="false"/>
         <run-tests/>
     </steps>
 </build>
@@ -48,7 +48,7 @@
 <build>
     <name>Linux x86 wxDFB trunk</name>
     <builddir>brandt32_dfb_trunk</builddir>
-    <-scheduler>daily_0600</scheduler>
+    <!--scheduler>daily_0600</scheduler-->
     <steps>
         <checkout/>
         <configure options="--with-directfb"/>
@@ -60,11 +60,11 @@
 <build>
     <name>Linux x86 wxDFB stable</name>
     <builddir>brandt32_dfb_stable</builddir>
-    <scheduler>daily_0600</scheduler>
+    <!--scheduler>daily_0600</scheduler-->
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure options="--with-directfb"/>
-        <compile-all/>
+        <compile-all utils="false"/>
         <run-tests/>
     </steps>
 </build>

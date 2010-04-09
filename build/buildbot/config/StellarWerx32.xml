@@ -28,7 +28,7 @@
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure options="--with-x11"/>
-        <compile-all/>
+        <compile-all utils="false"/>
         <run-tests/>
     </steps>
 </build>
