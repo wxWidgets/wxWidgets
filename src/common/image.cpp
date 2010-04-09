@@ -1857,6 +1857,17 @@ void wxImage::InitAlpha()
     }
 }
 
+void wxImage::ClearAlpha()
+{
+    wxCHECK_RET( HasAlpha(), wxT("image already doesn't have an alpha channel") );
+
+    if ( !M_IMGDATA->m_staticAlpha )
+        free( M_IMGDATA->m_alpha );
+
+    M_IMGDATA->m_alpha = NULL;
+}
+
+
 // ----------------------------------------------------------------------------
 // mask support
 // ----------------------------------------------------------------------------

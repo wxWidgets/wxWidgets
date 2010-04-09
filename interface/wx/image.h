@@ -1397,6 +1397,16 @@ public:
     void SetAlpha(int x, int y, unsigned char alpha);
 
     /**
+        Removes the alpha channel from the image.
+
+        This function should only be called if the image has alpha channel data,
+        use HasAlpha() to check for this.
+
+        @since 2.9.1
+    */
+    void ClearAlpha();
+
+    /**
         Sets the image data without performing checks.
 
         The data given must have the size (width*height*3) or results will be

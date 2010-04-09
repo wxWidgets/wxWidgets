@@ -451,6 +451,7 @@ public:
     bool HasAlpha() const { return GetAlpha() != NULL; }
     void SetAlpha(unsigned char *alpha = NULL, bool static_data=false);
     void InitAlpha();
+    void ClearAlpha();
 
     // return true if this pixel is masked or has alpha less than specified
     // threshold

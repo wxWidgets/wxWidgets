@@ -428,6 +428,7 @@ All:
 - Fix output buffer overflow in wxBase64Decode() (Eric W. Savage).
 - Added bilinear image resizing algorithm to wxImage (bishop).
 - Fix bug with position argument in wxImage::Size() (Byron Sorgdrager).
+- Added wxImage::ClearAlpha() (Javier Torres).
 - Fix bug with parsing concatenated switches in wxCmdLineParser (Mike Funduc).
 - Added wxMBConv::cMB2WC(wxCharBuffer) and cWC2MB(wxWCharBuffer) overloads.
 - Added wxAny class; a modern, backwards-incompatible replacement for
