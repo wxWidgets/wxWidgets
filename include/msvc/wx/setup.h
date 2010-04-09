@@ -177,3 +177,26 @@
         #pragma comment(lib, wx3RD_PARTY_LIB_NAME("scintilla"))
     #endif
 #endif // wxUSE_GUI
+
+
+#ifndef WXUSINGDLL
+    // Make sure all required system libraries are added to the linker too when
+    // using static libraries.
+    #pragma comment(lib, "kernel32")
+    #pragma comment(lib, "user32")
+    #pragma comment(lib, "gdi32")
+    #pragma comment(lib, "comdlg32")
+    #pragma comment(lib, "winspool")
+    #pragma comment(lib, "winmm")
+    #pragma comment(lib, "shell32")
+    #pragma comment(lib, "comctl32")
+    #pragma comment(lib, "ole32")
+    #pragma comment(lib, "oleaut32")
+    #pragma comment(lib, "uuid")
+    #pragma comment(lib, "rpcrt4")
+    #pragma comment(lib, "advapi32")
+    #pragma comment(lib, "wsock32")
+    #if wxUSE_URL_NATIVE
+        #pragma comment(lib, "wininet")
+    #endif
+#endif // !WXUSINGDLL
