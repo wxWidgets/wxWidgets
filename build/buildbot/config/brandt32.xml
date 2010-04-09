@@ -45,4 +45,28 @@
     </steps>
 </build>
 
+<build>
+    <name>Linux x86 wxDFB trunk</name>
+    <builddir>brandt32_dfb_trunk</builddir>
+    <-scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout/>
+        <configure options="--with-directfb"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
+<build>
+    <name>Linux x86 wxDFB stable</name>
+    <builddir>brandt32_dfb_stable</builddir>
+    <scheduler>daily_0600</scheduler>
+    <steps>
+        <checkout branch="{$STABLE_BRANCH}"/>
+        <configure options="--with-directfb"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+
 </bot>
