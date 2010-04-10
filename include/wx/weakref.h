@@ -206,6 +206,8 @@ class wxWeakRef : public
 #endif
 {
 public:
+    typedef T element_type;
+
     // Default ctor
     wxWeakRef() { }
 
@@ -222,13 +224,6 @@ public:
     wxWeakRef(const wxWeakRef<T>& wr)
     {
         Assign(wr.get());
-    }
-
-    template <class TDerived>
-    wxWeakRef<T>& operator=(TDerived* pobj)
-    {
-        this->Assign(pobj);
-        return *this;
     }
 
     wxWeakRef<T>& operator=(const wxWeakRef<T>& wr)

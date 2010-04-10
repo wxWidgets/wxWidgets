@@ -102,6 +102,9 @@ template<typename T>
 class wxWeakRef<T> : public wxTrackerNode
 {
 public:
+    /// Type of the element stored by this reference.
+    typedef T element_type;
+
     /**
         Constructor. The weak reference is initialized to @e pobj.
     */
@@ -115,7 +118,7 @@ public:
     /**
         Destructor.
     */
-    ~wxWeakRef();
+    virtual ~wxWeakRef();
 
     /**
         Called when the tracked object is destroyed. Be default sets
