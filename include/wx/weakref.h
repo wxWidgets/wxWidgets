@@ -211,6 +211,13 @@ public:
     // Default ctor
     wxWeakRef() { }
 
+    // Ctor from the object of this type: this is needed as the template ctor
+    // below is not used by at least g++4 when a literal NULL is used
+    wxWeakRef(T *pobj)
+    {
+        Assign(pobj);
+    }
+
     // When we have the full type here, static_cast<> will always work
     // (or give a straight compiler error).
     template <class TDerived>

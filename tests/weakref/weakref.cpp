@@ -79,6 +79,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WeakRefTestCase, "WeakRefTestCase" );
 void WeakRefTestCase::DeclareTest()
 {
     {
+        // Not initializing or initializing with NULL should work too
+        wxWeakRef<wxEvtHandler> wroDef;
+        wxWeakRef<wxEvtHandler> wro0(NULL);
+
         wxObject o; // Should not work
         wxEvtHandler eh;
         wxObjectTrackable ot;
@@ -121,6 +125,19 @@ void WeakRefTestCase::AssignTest()
     }
 
     // Should be reset now
+    CPPUNIT_ASSERT( !wro1 );
+    CPPUNIT_ASSERT( !wro2 );
+
+    // Explicitly resetting should work too
+    wxEvtHandler eh;
+    wxObjectTrackable ot;
+
+    wro1 = &eh;
+    wro2 = &ot;
+
+    wro1 = NULL;
+    wro2 = NULL;
+
     CPPUNIT_ASSERT( !wro1 );
     CPPUNIT_ASSERT( !wro2 );
 }
