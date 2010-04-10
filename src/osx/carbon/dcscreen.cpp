@@ -64,6 +64,11 @@ wxScreenDCImpl::~wxScreenDCImpl()
 #endif
 }
 
+#if wxOSX_USE_IPHONE
+// Apple has allowed usage of this API as of 15th Dec 2009w
+extern CGImageRef UIGetScreenImage();
+#endif
+
 // TODO Switch to CGWindowListCreateImage for 10.5 and above
 
 wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
@@ -90,8 +95,12 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     wxASSERT_MSG(image, wxT("wxScreenDC::GetAsBitmap - unable to get screenshot."));
 
     CGContextDrawImage(context, srcRect, image);
+    
+    CGImageRelease(image);
 
     CGContextRestoreGState(context);
+#else
+    // TODO implement using UIGetScreenImage, CGImageCreateWithImageInRect, CGContextDrawImage
 #endif
     return bmp;
 }
