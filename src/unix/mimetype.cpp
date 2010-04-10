@@ -1525,15 +1525,20 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
     {
         // set the flag first to prevent recursion
         m_initialized = true;
-        
-        wxString wm = wxTheApp->GetTraits()->GetDesktopEnvironment();
-        
-        if (wm == wxT("KDE"))
-            Initialize( wxMAILCAP_KDE  );
-        else if (wm == wxT("GNOME"))
-            Initialize( wxMAILCAP_GNOME );
-        else
-            Initialize();
+
+        int mailcapStyles = wxMAILCAP_ALL;
+        if ( wxAppTraits * const traits = wxApp::GetTraitsIfExists() )
+        {
+            wxString wm = traits->GetDesktopEnvironment();
+
+            if ( wm == "KDE" )
+                mailcapStyles = wxMAILCAP_KDE;
+            else if ( wm == "GNOME" )
+                mailcapStyles = wxMAILCAP_GNOME;
+            //else: unknown, use the default
+        }
+
+        Initialize(mailcapStyles);
     }
 }
 
