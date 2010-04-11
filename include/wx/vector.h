@@ -448,22 +448,26 @@ inline typename wxVector<T>::size_type wxVector<T>::erase(size_type n)
 
 namespace wxPrivate
 {
-    // This function is a helper for the wxVectorSort function, and should
-    // not be used directly in user's code.
 
+// This is a helper for the wxVectorSort function, and should not be used
+// directly in user's code.
 template<typename T>
-int wxCMPFUNC_CONV wxVectorSort_compare(const void* pitem1, const void* pitem2, const void* )
+struct wxVectorSort
 {
-    const T& item1 = *reinterpret_cast<const T*>(pitem1);
-    const T& item2 = *reinterpret_cast<const T*>(pitem2);
+    static int wxCMPFUNC_CONV
+    Compare(const void* pitem1, const void* pitem2, const void* )
+    {
+        const T& item1 = *reinterpret_cast<const T*>(pitem1);
+        const T& item2 = *reinterpret_cast<const T*>(pitem2);
 
-    if (item1 < item2)
-        return -1;
-    else if (item2 < item1)
-        return 1;
-    else
-        return 0;
-}
+        if (item1 < item2)
+            return -1;
+        else if (item2 < item1)
+            return 1;
+        else
+            return 0;
+    }
+};
 
 }  // namespace wxPrivate
 
@@ -473,7 +477,7 @@ template<typename T>
 void wxVectorSort(wxVector<T>& v)
 {
     wxQsort(v.begin(), v.size(), sizeof(T),
-            wxPrivate::wxVectorSort_compare<T>, NULL);
+            wxPrivate::wxVectorSort<T>::Compare, NULL);
 }
 
 
