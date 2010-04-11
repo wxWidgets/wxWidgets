@@ -767,7 +767,7 @@ public:
         in release ones.
 
         @remarks This template function does not work on some older compilers
-                (such as Visual C++ 6.0). For full compiler ccompatibility
+                (such as Visual C++ 6.0). For full compiler compatibility
                 please use wxANY_AS(any, T) macro instead.
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported

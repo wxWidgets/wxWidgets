@@ -378,7 +378,7 @@ public:
         a specific C++ data type.
 
         @remarks This template function does not work on some older compilers
-                (such as Visual C++ 6.0). For full compiler ccompatibility
+                (such as Visual C++ 6.0). For full compiler compatibility
                 please use wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T) macro
                 instead.
 
