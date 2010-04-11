@@ -559,15 +559,22 @@ void StdStringTestCase::StdConversion()
 
     wxString s4("hello");
 
-    // wxString -> std::string conversion is only available in wxUSE_STL case,
-    // because it conflicts with conversion to const char*/wchar_t*:
+    // notice that implicit wxString -> std::string conversion is only
+    // available in wxUSE_STL case, because it conflicts with conversion to
+    // const char*/wchar_t*
 #if wxUSE_STL
     std::string s5 = s4;
+#else
+    std::string s5 = s4.ToStdString();
+#endif
     CPPUNIT_ASSERT_EQUAL( "hello", s5 );
 
+#if wxUSE_STL
     wxStdWideString s6 = s4;
-    CPPUNIT_ASSERT_EQUAL( "hello", s6 );
+#else
+    wxStdWideString s6 = s4.ToStdWstring();
 #endif
+    CPPUNIT_ASSERT_EQUAL( "hello", s6 );
 
     std::string s7(s4);
     CPPUNIT_ASSERT( s7 == "hello" );

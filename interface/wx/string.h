@@ -181,11 +181,15 @@ public:
     /**
        Constructs a string from @a str using the using the current locale encoding
        to convert it to Unicode (wxConvLibc).
+
+       @see ToStdString()
     */
     wxString(const std::string& str);
 
     /**
        Constructs a string from @a str.
+
+       @see ToStdWstring()
     */
     wxString(const std::wstring& str);
 
@@ -508,6 +512,36 @@ public:
         @overload
     */
     const wxCharBuffer ToAscii() const;
+
+    /**
+        Return the string as an std::string in current locale encoding.
+
+        Note that if the conversion of (Unicode) string contents to the current
+        locale fails, the return string will be empty. Be sure to check for
+        this to avoid silent data loss.
+
+        Instead of using this function it's also possible to write
+        @code
+        std::string s;
+        wxString wxs;
+        ...
+        s = std::string(wxs);
+        @endcode
+        but using ToStdString() may make the code more clear.
+
+        @since 2.9.1
+    */
+    std::string ToStdString() const;
+
+    /**
+        Return the string as an std::wstring.
+
+        Unlike ToStdString(), there is no danger of data loss when using this
+        function.
+
+        @since 2.9.1
+    */
+    std::wstring ToStdWstring() const;
 
     /**
         Same as utf8_str().

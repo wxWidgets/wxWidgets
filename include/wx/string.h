@@ -1341,14 +1341,18 @@ public:
 
   // Unlike ctor from std::string, we provide conversion to std::string only
   // if wxUSE_STL and not merely wxUSE_STD_STRING (which is on by default),
-  // because it conflicts with operator const char/wchar_t*:
-#if wxUSE_STL
+  // because it conflicts with operator const char/wchar_t* but we still
+  // provide explicit conversions to std::[w]string for convenience in any case
+#if wxUSE_STD_STRING
+  // We can avoid a copy if we already use this string type internally,
+  // otherwise we create a copy on the fly:
   #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
-    // wxStringImpl is std::string in the encoding we want
-    operator const wxStdWideString&() const { return m_impl; }
+    #define wxStringToStdWstringRetType const wxStdWideString&
+    const wxStdWideString& ToStdWstring() const { return m_impl; }
   #else
     // wxStringImpl is either not std::string or needs conversion
-    operator wxStdWideString() const
+    #define wxStringToStdWstringRetType wxStdWideString
+    wxStdWideString ToStdWstring() const
     {
         wxScopedWCharBuffer buf(wc_str());
         return wxStdWideString(buf.data(), buf.length());
@@ -1357,16 +1361,30 @@ public:
 
   #if (!wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY) && wxUSE_STL_BASED_WXSTRING
     // wxStringImpl is std::string in the encoding we want
-    operator const std::string&() const { return m_impl; }
+    #define wxStringToStdStringRetType const std::string&
+    const std::string& ToStdString() const { return m_impl; }
   #else
     // wxStringImpl is either not std::string or needs conversion
-    operator std::string() const
+    #define wxStringToStdStringRetType std::string
+    std::string ToStdString() const
     {
         wxScopedCharBuffer buf(mb_str());
         return std::string(buf.data(), buf.length());
     }
   #endif
+
+#if wxUSE_STL
+  // In wxUSE_STL case we also provide implicit conversions as there is no
+  // ambiguity with the const char/wchar_t* ones as they are disabled in this
+  // build (for consistency with std::basic_string<>)
+  operator wxStringToStdStringRetType() const { return ToStdString(); }
+  operator wxStringToStdWstringRetType() const { return ToStdWstring(); }
 #endif // wxUSE_STL
+
+#undef wxStringToStdStringRetType
+#undef wxStringToStdWstringRetType
+
+#endif // wxUSE_STD_STRING
 
   wxString Clone() const
   {
