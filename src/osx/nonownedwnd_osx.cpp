@@ -453,6 +453,8 @@ bool wxNonOwnedWindow::DoSetShape(const wxRegion& region)
     wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), false,
                  wxT("Shaped windows must be created with the wxFRAME_SHAPED style."));
 
+    m_shape = region;
+    
     // The empty region signifies that the shape
     // should be removed from the window.
     if ( region.IsEmpty() )

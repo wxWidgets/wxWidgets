@@ -485,6 +485,12 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     [m_macWindow setDelegate:controller];
 
     [m_macWindow setAcceptsMouseMovedEvents: YES];
+    
+    if ( ( style & wxFRAME_SHAPED) )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setAlphaValue:1.0];
+    }
 }
 
 

@@ -75,6 +75,7 @@ public:
     // --------------------------
 
     virtual bool DoSetShape(const wxRegion& region);
+    const wxRegion& GetShape() const { return m_shape; }
 
     // activation hooks only necessary for MDI Implementation
     static void MacDelayedDeactivation(long timestamp);
@@ -126,7 +127,9 @@ protected:
 //    wxWindowMac* m_macFocus ;
 
     static wxNonOwnedWindow *s_macDeactivateWindow;
+    
 private :
+    wxRegion m_shape;
 };
 
 // list of all frames and modeless dialogs

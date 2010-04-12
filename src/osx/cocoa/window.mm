@@ -1092,15 +1092,23 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     [slf getRectsBeingDrawn:&rects count:&count];
     for ( int i = 0 ; i < count ; ++i )
     {
-        updateRgn.Union(wxFromNSRect(slf, rects[i]) );
+        updateRgn.Union(wxFromNSRect(slf, rects[i]));
     }
 
     wxWindow* wxpeer = GetWXPeer();
+    if ( wxpeer->MacGetTopLevelWindow()->GetWindowStyle() & wxFRAME_SHAPED )
+    {
+        int xoffset = 0, yoffset = 0;
+        wxRegion rgn = wxpeer->MacGetTopLevelWindow()->GetShape();
+        wxpeer->MacRootWindowToWindow( &xoffset, &yoffset );
+        rgn.Offset( xoffset, yoffset );
+        updateRgn.Intersect(rgn);
+    }
+    
     wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
 
     bool handled = wxpeer->MacDoRedraw( 0 );
-
     CGContextRestoreGState( context );
 
     CGContextSaveGState( context );
@@ -2077,6 +2085,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
     NSWindow* tlw = now->GetWXWindow();
     wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
+
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( now, v, true );
     c->InstallEventHandler();
     [tlw setContentView:v];
