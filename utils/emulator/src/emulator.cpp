@@ -349,7 +349,7 @@ void wxEmulatorContainer::DoResize()
     wxSize sz = GetClientSize();
     if (wxGetApp().m_xnestWindow
 #ifdef __WXX11__
-        && wxGetApp().m_xnestWindow->GetMainWindow()
+        && wxGetApp().m_xnestWindow->X11GetMainWindow()
 #endif
         )
     {
