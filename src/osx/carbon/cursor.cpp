@@ -233,12 +233,12 @@ wxCursorRefData::wxCursorRefData()
 
 wxCursorRefData::wxCursorRefData(const wxCursorRefData& cursor)
 {
-    // FIXME: need to copy the cursor
     m_hCursor = NULL;
 
 #if wxOSX_USE_COCOA
-    wxUnusedVar(cursor);
+    m_hCursor = (WX_NSCursor) wxMacCocoaRetain(cursor.m_hCursor);
 #elif wxOSX_USE_CARBON
+    // FIXME: need to copy the cursor
     m_disposeHandle = false;
     m_releaseHandle = false;
     m_isColorCursor = cursor.m_isColorCursor;
