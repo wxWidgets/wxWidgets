@@ -1079,9 +1079,15 @@ size_t wxString::find_last_not_of(const wxOtherCharType* sz, size_t nStart,
 int wxString::CmpNoCase(const wxString& s) const
 {
 #if defined(__WXMSW__) && !wxUSE_UNICODE_UTF8
-    // prefer to use CompareString() if available as it's more efficient than
-    // doing it manual or even using wxStricmp() (see #10375)
-    switch ( ::CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE,
+    // Prefer to use CompareString() if available as it's more efficient than
+    // doing it manually or even using wxStricmp() (see #10375)
+    //
+    // Also note that not using NORM_STRINGSORT may result in not having a
+    // strict weak ordering (e.g. s1 < s2 and s2 < s3 but s3 < s1) and so break
+    // algorithms such as std::sort that rely on it. It's also more consistent
+    // with the fall back version below.
+    switch ( ::CompareString(LOCALE_USER_DEFAULT,
+                             NORM_IGNORECASE | SORT_STRINGSORT,
                              m_impl.c_str(), m_impl.length(),
                              s.m_impl.c_str(), s.m_impl.length()) )
     {
