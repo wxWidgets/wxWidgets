@@ -1028,7 +1028,7 @@ IconRef wxBitmap::CreateIconRef() const
 WX_NSImage wxBitmap::GetNSImage() const
 {
     wxCFRef< CGImageRef > cgimage(CreateCGImage());
-    return wxOSXCreateNSImageFromCGImage( cgimage );
+    return wxOSXGetNSImageFromCGImage( cgimage );
 }
 
 #endif
@@ -1038,7 +1038,7 @@ WX_NSImage wxBitmap::GetNSImage() const
 WX_UIImage wxBitmap::GetUIImage() const
 {
     wxCFRef< CGImageRef > cgimage(CreateCGImage());
-    return wxOSXCreateUIImageFromCGImage( cgimage );
+    return wxOSXGetUIImageFromCGImage( cgimage );
 }
 
 #endif

@@ -27,7 +27,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
 
-WX_UIImage WXDLLIMPEXP_CORE wxOSXCreateUIImageFromCGImage( CGImageRef image );
+WX_UIImage WXDLLIMPEXP_CORE wxOSXGetUIImageFromCGImage( CGImageRef image );
 
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {

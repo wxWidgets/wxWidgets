@@ -283,7 +283,7 @@ WX_UIFont wxFont::OSXCreateUIFont(const wxNativeFontInfo* info)
 
 #if wxOSX_USE_IPHONE
 
-WX_UIImage  wxOSXCreateUIImageFromCGImage( CGImageRef image )
+WX_UIImage  wxOSXGetUIImageFromCGImage( CGImageRef image )
 {
     UIImage  *newImage = [UIImage imageWithCGImage:image];
     [newImage autorelease];
@@ -295,7 +295,7 @@ WX_UIImage  wxOSXCreateUIImageFromCGImage( CGImageRef image )
 #if wxOSX_USE_COCOA
 
 //  From "Cocoa Drawing Guide:Working with Images"
-WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image )
+WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image )
 {
     NSRect      imageRect    = NSMakeRect(0.0, 0.0, 0.0, 0.0);
 
@@ -543,10 +543,8 @@ WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hot
         firstTime = NO;
     }
 
-    NSImage    *nsImage  = wxOSXCreateNSImageFromCGImage( cgImageRef );
+    NSImage    *nsImage  = wxOSXGetNSImageFromCGImage( cgImageRef );
     NSCursor  *cursor    = [[NSCursor alloc] initWithImage:nsImage hotSpot:NSMakePoint( hotSpotX, hotSpotY )];
-
-    [nsImage release];
 
     return cursor;
 }

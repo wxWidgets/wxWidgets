@@ -51,7 +51,7 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
-WX_NSImage WXDLLIMPEXP_CORE wxOSXCreateNSImageFromCGImage( CGImageRef image );
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image );
 CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage );
 #endif
 
