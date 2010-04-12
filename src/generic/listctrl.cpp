@@ -1650,6 +1650,15 @@ wxListMainWindow::~wxListMainWindow()
     delete m_renameTimer;
 }
 
+void wxListMainWindow::SetReportView(bool inReportView)
+{
+    const size_t count = m_lines.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_lines[n].SetReportView(inReportView);
+    }
+}
+
 void wxListMainWindow::CacheLineData(size_t line)
 {
     wxGenericListCtrl *listctrl = GetListCtrl();
@@ -4443,12 +4452,22 @@ void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 
 void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 {
+    const bool wasInReportView = HasFlag(wxLC_REPORT);
+
     // update the window style first so that the header is created or destroyed
     // corresponding to the new style
     wxWindow::SetWindowStyleFlag( flag );
 
     if (m_mainWin)
     {
+        const bool inReportView = (flag & wxLC_REPORT) != 0;
+        if ( inReportView != wasInReportView )
+        {
+            // we need to notify the main window about this change as it must
+            // update its data structures
+            m_mainWin->SetReportView(inReportView);
+        }
+
         // m_mainWin->DeleteEverything();  wxMSW doesn't do that
 
         CreateOrDestroyHeaderWindowAsNeeded();

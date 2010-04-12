@@ -213,6 +213,21 @@ public:
         delete m_gi;
     }
 
+    // called by the owner when it toggles report view
+    void SetReportView(bool inReportView)
+    {
+        // we only need m_gi when we're not in report view so update as needed
+        if ( inReportView )
+        {
+            delete m_gi;
+            m_gi = NULL;
+        }
+        else
+        {
+            m_gi = new GeometryInfo;
+        }
+    }
+
     // are we in report mode?
     inline bool InReportView() const;
 
@@ -424,6 +439,10 @@ public:
 
     virtual ~wxListMainWindow();
 
+    // called by the main control when its mode changes
+    void SetReportView(bool inReportView);
+
+    // helper to simplify testing for wxLC_XXX flags
     bool HasFlag(int flag) const { return m_parent->HasFlag(flag); }
 
     // return true if this is a virtual list control
