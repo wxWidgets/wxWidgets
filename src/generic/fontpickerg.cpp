@@ -47,8 +47,8 @@ bool wxGenericFontButton::Create( wxWindow *parent, wxWindowID id,
                         const wxValidator& validator, const wxString &name)
 {
     wxString label = (style & wxFNTP_FONTDESC_AS_LABEL) ?
-                        wxEmptyString : // label will be updated by UpdateFont
-                        wxT("Choose font");
+                        wxString() : // label will be updated by UpdateFont
+                        _("Choose font");
 
     // create this button
     if (!wxButton::Create( parent, id, label, pos,
