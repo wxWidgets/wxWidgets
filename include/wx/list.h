@@ -1010,11 +1010,22 @@ private:
         iterator insert(const iterator& it, const_reference v)              \
         {                                                                   \
             if ( it == end() )                                              \
+            {                                                               \
                 Append((const_base_reference)v);                            \
+                /*                                                          \
+                    note that this is the new end(), the old one was        \
+                    invalidated by the Append() call, and this is why we    \
+                    can't use the same code as in the normal case below     \
+                 */                                                         \
+                iterator itins(end());                                      \
+                return --itins;                                             \
+            }                                                               \
             else                                                            \
+            {                                                               \
                 Insert(it.m_node, (const_base_reference)v);                 \
-            iterator itprev(it);                                            \
-            return itprev--;                                                \
+                iterator itins(it);                                         \
+                return --itins;                                             \
+            }                                                               \
         }                                                                   \
         void insert(const iterator& it, size_type n, const_reference v)     \
         {                                                                   \
