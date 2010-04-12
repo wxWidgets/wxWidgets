@@ -228,7 +228,7 @@ public:
     { return ((wxWindow*)m_hScrollBar == sb || (wxWindow*)m_vScrollBar == sb) ; }
     virtual bool IsClientAreaChild(const wxWindow *child) const
     {
-        return !MacIsWindowScrollbar(child) &&
+        return !MacIsWindowScrollbar(child) && !((wxWindow*)m_growBox==child) &&
                wxWindowBase::IsClientAreaChild(child);
     }
 
@@ -295,7 +295,7 @@ protected:
     wxScrollBar*        m_vScrollBar ;
     bool                m_hScrollBarAlwaysShown;
     bool                m_vScrollBarAlwaysShown;
-    wxPanel*            m_growBox ;
+    wxWindow*           m_growBox ;
     wxString            m_label ;
 
     // set to true if we do a sharp clip at the content area of this window

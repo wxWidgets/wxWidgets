@@ -93,6 +93,81 @@ END_EVENT_TABLE()
 // implementation
 // ===========================================================================
 
+// the grow box has to be implemented as an inactive window, so that nothing can direct
+// the focus to it
+
+class WXDLLIMPEXP_CORE wxBlindPlateWindow : public wxWindow
+{
+public:
+    wxBlindPlateWindow() { Init(); }
+    
+    // Old-style constructor (no default values for coordinates to avoid
+    // ambiguity with the new one)
+    wxBlindPlateWindow(wxWindow *parent,
+            int x, int y, int width, int height,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr)
+    {
+        Init();
+        
+        Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), style, name);
+    }
+    
+    // Constructor
+    wxBlindPlateWindow(wxWindow *parent,
+            wxWindowID winid = wxID_ANY,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+            const wxString& name = wxPanelNameStr)
+    {
+        Init();
+        
+        Create(parent, winid, pos, size, style, name);
+    }
+    
+    // Pseudo ctor
+    bool Create(wxWindow *parent,
+                wxWindowID winid = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTAB_TRAVERSAL | wxNO_BORDER,
+                const wxString& name = wxPanelNameStr)
+    {
+        if ( !wxWindow::Create(parent, winid, pos, size, style, name) )
+            return false;
+        
+        // so that non-solid background renders correctly under GTK+:
+        SetThemeEnabled(true);
+    }
+    
+    virtual ~wxBlindPlateWindow();
+    
+    virtual bool AcceptsFocus() const
+    {
+        return false;
+    }
+    
+protected:
+    // common part of all ctors
+    void Init()
+    {
+    }
+        
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxBlindPlateWindow)
+    DECLARE_EVENT_TABLE()
+};
+
+wxBlindPlateWindow::~wxBlindPlateWindow()
+{
+}
+
+IMPLEMENT_DYNAMIC_CLASS(wxBlindPlateWindow, wxWindow)
+
+BEGIN_EVENT_TABLE(wxBlindPlateWindow, wxWindow)
+END_EVENT_TABLE()
+
+
 // ----------------------------------------------------------------------------
  // constructors and such
 // ----------------------------------------------------------------------------
@@ -398,6 +473,14 @@ bool wxWindowMac::SetForegroundColour(const wxColour& col )
 
 bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 {
+    if (m_growBox)
+    {
+        if ( m_backgroundColour.Ok() )
+            m_growBox->SetBackgroundColour(m_backgroundColour);
+        else
+            m_growBox->SetBackgroundColour(*wxWHITE);
+    }
+
     if ( !wxWindowBase::SetBackgroundColour(col) && m_hasBgCol )
         return false ;
 
@@ -1531,15 +1614,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         child = node->GetData();
         if (child == NULL)
             continue;
-#if wxUSE_SCROLLBAR
-        if (child == m_vScrollBar)
-            continue;
-        if (child == m_hScrollBar)
-            continue;
-        if (child == m_growBox)
-            continue;
-#endif
+
         if (child->IsTopLevel())
+            continue;
+        
+        if ( !IsClientAreaChild(child) )
             continue;
 
         child->GetPosition( &x, &y );
@@ -1890,7 +1969,8 @@ bool wxWindowMac::MacDoRedraw( long time )
             wxFAIL_MSG( "unsupported background style" );
     }
 
-    MacPaintGrowBox();
+    // as this is a full window, shouldn't be necessary anymore
+    // MacPaintGrowBox();
 
     // calculate a client-origin version of the update rgn and set
     // m_updateRegion to that
@@ -2069,7 +2149,7 @@ void wxWindowMac::MacCreateScrollBars( long style )
 
         wxPoint gPoint(width - scrlsize, height - scrlsize);
         wxSize gSize(scrlsize, scrlsize);
-        m_growBox = new wxPanel((wxWindow *)this, wxID_ANY, gPoint, gSize, 0);
+        m_growBox = new wxBlindPlateWindow((wxWindow *)this, wxID_ANY, gPoint, gSize, 0);
     }
 
     // because the create does not take into account the client area origin
