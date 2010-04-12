@@ -1160,7 +1160,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
         // draw the text and image clipping them so that they
         // don't overwrite the column boundary
-        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
+        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h);
 
         // if we have an image, draw it on the right of the label
         if ( imageList )
@@ -1170,13 +1170,13 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                         image,
                         dc,
                         xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
-                        HEADER_OFFSET_Y + (h - 4 - iy)/2,
+                        HEADER_OFFSET_Y + (h - iy)/2,
                         wxIMAGELIST_DRAW_TRANSPARENT
                        );
         }
 
         dc.DrawText( item.GetText(),
-                     xAligned + EXTRA_WIDTH, h / 2 - hLabel / 2 ); //HEADER_OFFSET_Y + EXTRA_HEIGHT );
+                     xAligned + EXTRA_WIDTH, (h - hLabel) / 2 );
 
         x += wCol;
     }
