@@ -2538,6 +2538,14 @@ void wxAuiManager::Update()
                 */
                 }
 
+                // update whether the pane is resizable or not
+                long style = p.frame->GetWindowStyleFlag();
+                if (p.IsFixed())
+                    style &= ~wxRESIZE_BORDER;
+                else
+                    style |= wxRESIZE_BORDER;
+                p.frame->SetWindowStyleFlag(style);
+
                 if (p.frame->IsShown() != p.IsShown())
                     p.frame->Show(p.IsShown());
             }
