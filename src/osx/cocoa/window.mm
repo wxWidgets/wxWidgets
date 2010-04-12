@@ -689,7 +689,7 @@ void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event)
     impl->mouseEvent(event, self, _cmd);
 }
 
-BOOL wxOSX_acceptsFirstMouse(NSView* self, SEL _cmd, NSEvent *event)
+BOOL wxOSX_acceptsFirstMouse(NSView* WXUNUSED(self), SEL WXUNUSED(_cmd), NSEvent *WXUNUSED(event))
 {
     // This is needed to support click through, otherwise the first click on a window
     // will not do anything unless it is the active window already.
@@ -1333,6 +1333,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 - (void)animationDidEnd:(NSAnimation*)animation
 {
+    wxUnusedVar(animation);
     m_isDone = true;
 }
 
@@ -1949,10 +1950,20 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     {
         if ( !result )
         {
-            if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
-                [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
+            if ( wxevent.GetKeyCode() < WXK_SPACE || wxevent.GetKeyCode() == WXK_DELETE || wxevent.GetKeyCode() >= WXK_START )
+            {
+                // eventually we could setup a doCommandBySelector catcher and retransform this into the wx key chars
+                wxKeyEvent wxevent2(wxevent) ;
+                wxevent2.SetEventType(wxEVT_CHAR);
+                GetWXPeer()->OSXHandleKeyEvent(wxevent2);
+            }
             else
-                [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+            {
+                if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+                    [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
+                else
+                    [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+            }
             result = true;
         }
     }
