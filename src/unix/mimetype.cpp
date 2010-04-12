@@ -1527,7 +1527,8 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
         m_initialized = true;
 
         int mailcapStyles = wxMAILCAP_ALL;
-        if ( wxAppTraits * const traits = wxApp::GetTraitsIfExists() )
+        if ( wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits()
+                                                   : NULL )
         {
             wxString wm = traits->GetDesktopEnvironment();
 
