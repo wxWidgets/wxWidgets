@@ -97,9 +97,8 @@ void wxOverlayImpl::CreateOverlayWindow()
                                                       defer:YES];
     }
     [m_overlayWindow setOpaque:NO];
-    [m_overlayWindow setHasShadow:YES];
     [m_overlayWindow setIgnoresMouseEvents:YES];
-    [m_overlayWindow setAlphaValue:0.5];
+    [m_overlayWindow setAlphaValue:1.0];
     
     [m_overlayWindow orderFront:nil];
 }
