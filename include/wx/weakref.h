@@ -211,12 +211,16 @@ public:
     // Default ctor
     wxWeakRef() { }
 
+    // Enabling this ctor for VC6 results in mysterious compilation failures in
+    // wx/window.h when assigning wxWindow pointers (FIXME-VC6)
+#ifndef __VISUALC6__
     // Ctor from the object of this type: this is needed as the template ctor
     // below is not used by at least g++4 when a literal NULL is used
     wxWeakRef(T *pobj)
     {
         Assign(pobj);
     }
+#endif // !__VISUALC6__
 
     // When we have the full type here, static_cast<> will always work
     // (or give a straight compiler error).
