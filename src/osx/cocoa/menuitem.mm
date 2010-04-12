@@ -68,7 +68,7 @@ void wxMacCocoaMenuItemSetAccelerator( NSMenuItem* menuItem, wxAcceleratorEntry*
     int key = entry->GetKeyCode() ;
     if ( key )
     {
-        if (entry->GetFlags() & wxACCEL_CTRL);
+        if (entry->GetFlags() & wxACCEL_CTRL)
             modifiers |= NSCommandKeyMask;
 
         if (entry->GetFlags() & wxACCEL_ALT)
