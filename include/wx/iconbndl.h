@@ -33,7 +33,9 @@ public:
 
     // initializes the bundle with the icon(s) found in the file
 #if wxUSE_STREAMS && wxUSE_IMAGE
+#if wxUSE_FFILE || wxUSE_FILE
     wxIconBundle(const wxString& file, wxBitmapType type = wxBITMAP_TYPE_ANY);
+#endif // wxUSE_FFILE || wxUSE_FILE
     wxIconBundle(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 #endif // wxUSE_STREAMS && wxUSE_IMAGE
 
@@ -46,7 +48,9 @@ public:
     // if the collection already contains icons with the same
     // width and height, they are replaced
 #if wxUSE_STREAMS && wxUSE_IMAGE
+#if wxUSE_FFILE || wxUSE_FILE
     void AddIcon(const wxString& file, wxBitmapType type = wxBITMAP_TYPE_ANY);
+#endif // wxUSE_FFILE || wxUSE_FILE
     void AddIcon(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 #endif // wxUSE_STREAMS && wxUSE_IMAGE
 
@@ -83,6 +87,7 @@ public:
     bool IsEmpty() const { return GetIconCount() == 0; }
 
 #if WXWIN_COMPATIBILITY_2_8
+#if wxUSE_STREAMS && wxUSE_IMAGE && (wxUSE_FFILE || wxUSE_FILE)
     wxDEPRECATED( void AddIcon(const wxString& file, long type)
         {
             AddIcon(file, (wxBitmapType)type);
@@ -94,6 +99,7 @@ public:
             AddIcon(file, (wxBitmapType)type);
         }
     )
+#endif // wxUSE_STREAMS && wxUSE_IMAGE && (wxUSE_FFILE || wxUSE_FILE)
 #endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
