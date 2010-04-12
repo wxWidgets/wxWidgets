@@ -106,7 +106,7 @@ void strStream::CheckString(const wxString& text)
 {
     wxStringOutputStream sos;
 
-    const wxScopedCharBuffer buf(text.mb_str());
+    const wxCharBuffer buf(text.mb_str());
     sos.Write(buf, buf.length());
 
     CPPUNIT_ASSERT_EQUAL( text, sos.GetString() );
