@@ -1648,8 +1648,8 @@ bool wxWidgetCocoaImpl::SetFocus()
     if ( !CanFocus() )
         return false;
 
-    [[m_osxView window] makeFirstResponder: m_osxView] ;
     [[m_osxView window] makeKeyAndOrderFront:nil] ;
+    [[m_osxView window] makeFirstResponder: m_osxView] ;
     return true;
 }
 
