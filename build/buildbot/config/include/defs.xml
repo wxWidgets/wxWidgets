@@ -367,11 +367,11 @@ cd tests &amp;&amp; runtests.bat
 
 <xsl:template name="run-tests-unix">
     <xsl:param name="options"/>
-<normalize-space>
-cd tests &amp;&amp;
-./test <xsl:value-of select="normalize-space($options)"/> &amp;&amp;
-if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui; fi
-</normalize-space>
+ERR=0
+cd tests
+./test <xsl:value-of select="normalize-space($options)"/> || ERR=$?
+if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui || ERR=$?; fi
+exit $ERR
 </xsl:template>
 
 <!--
