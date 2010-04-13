@@ -52,6 +52,11 @@ wxFileDialog::wxFileDialog(
 {
 }
 
+bool wxFileDialog::SupportsExtraControl() const
+{
+    return false;
+}
+
 NSArray* GetTypesFromFilter( const wxString filter )
 {
     NSMutableArray* types = nil;

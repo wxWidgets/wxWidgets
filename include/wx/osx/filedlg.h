@@ -44,6 +44,8 @@ public:
     virtual void ModalFinishedCallback(void* panel, int resultCode);
 #endif
 
+    virtual bool SupportsExtraControl() const;
+    
 protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
