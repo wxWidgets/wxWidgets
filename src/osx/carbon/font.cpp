@@ -454,6 +454,9 @@ void wxFontRefData::CreateATSUFont()
 }
 #endif
 
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+static const CGAffineTransform kSlantTransform = CGAffineTransformMake( 1, 0, tan(DegToRad(11)), 1, 0, 0 );
+
 void wxFontRefData::MacFindFont()
 {
     if ( m_fontValid )
@@ -481,9 +484,47 @@ void wxFontRefData::MacFindFont()
         if ( !m_ctFont )
         {
             m_ctFont.reset(CTFontCreateWithName( wxCFStringRef(m_info.m_faceName), m_info.m_pointSize , NULL ));
-            if ( traits != 0 )
+            if ( m_ctFont.get() == NULL )
             {
-                m_ctFont.reset(CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, traits, traits ));
+                // TODO try fallbacks according to font type
+                m_ctFont.reset(CTFontCreateUIFontForLanguage( kCTFontSystemFontType, m_info.m_pointSize , NULL ));
+            }
+            else
+            {
+                if ( traits != 0 )
+                {
+                    // attempt native font variant, if not available, fallback to italic emulation mode and remove bold
+                    CTFontRef fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, traits, traits );
+                    if ( fontWithTraits == NULL )
+                    {
+                        CTFontSymbolicTraits remainingTraits = traits;
+                        const CGAffineTransform* remainingTransform = NULL;
+                        
+                        if( remainingTraits & kCTFontItalicTrait )
+                        {
+                            remainingTraits &= ~kCTFontItalicTrait;
+                            remainingTransform = &kSlantTransform;
+                            if ( remainingTraits & kCTFontBoldTrait )
+                            {
+                                // first try an emulated oblique with an existing bold font
+                                fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, remainingTransform, remainingTraits, remainingTraits );
+                                if ( fontWithTraits == NULL )
+                                {
+                                    // give in on the bold, try native oblique
+                                    fontWithTraits = CTFontCreateCopyWithSymbolicTraits( m_ctFont, 0, NULL, kCTFontItalicTrait, kCTFontItalicTrait );
+                                }
+                            }
+                        }
+                        
+                        if ( fontWithTraits == NULL )
+                        {
+                            fontWithTraits = CTFontCreateWithName( wxCFStringRef(m_info.m_faceName), m_info.m_pointSize, remainingTransform );
+                        }
+                            
+                    }
+                    if ( fontWithTraits != NULL )
+                        m_ctFont.reset(fontWithTraits);
+                }
             }
         }
         
@@ -859,7 +900,7 @@ const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
-#if wxOSX_USE_CORE_TEXT
+#if 0 // wxOSX_USE_CORE_TEXT
 
 /* from Core Text Manual Common Operations */
 

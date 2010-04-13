@@ -188,6 +188,9 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
     return nsfont;
 }
 
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+static const NSAffineTransformStruct kSlantNSTransformStruct = { 1, 0, tan(DegToRad(11)), 1, 0, 0  };
+
 WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 {
     NSFont* nsFont;
@@ -206,7 +209,62 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
     
     nsFont = [[NSFontManager sharedFontManager] fontWithFamily:wxCFStringRef(info->m_faceName).AsNSString() 
         traits:traits weight:weight size:info->m_pointSize];
-
+    
+    if ( nsFont == nil )
+    {
+        NSFontTraitMask remainingTraits = traits;
+        nsFont = [[NSFontManager sharedFontManager] fontWithFamily:wxCFStringRef(info->m_faceName).AsNSString() 
+                                                            traits:0 weight:5 size:info->m_pointSize];
+        if ( nsFont == nil )
+        {
+            if ( info->m_weight == wxFONTWEIGHT_BOLD )
+            {
+                nsFont = [NSFont boldSystemFontOfSize:info->m_pointSize];
+                remainingTraits &= ~NSBoldFontMask;
+            }
+            else
+                nsFont = [NSFont systemFontOfSize:info->m_pointSize];
+        }
+        
+        // fallback - if in doubt, let go of the bold attribute
+        if ( nsFont && (remainingTraits & NSItalicFontMask) )
+        {
+            NSFont* nsFontWithTraits = nil;
+            if ( remainingTraits & NSBoldFontMask)
+            {
+                nsFontWithTraits = [[NSFontManager sharedFontManager] convertFont:nsFont toHaveTrait:NSBoldFontMask];
+                if ( nsFontWithTraits == nil )
+                {
+                    nsFontWithTraits = [[NSFontManager sharedFontManager] convertFont:nsFont toHaveTrait:NSItalicFontMask];
+                    if ( nsFontWithTraits != nil )
+                        remainingTraits &= ~NSItalicFontMask;
+                }
+                else
+                {
+                    remainingTraits &= ~NSBoldFontMask;
+                }
+            }
+            if ( remainingTraits & NSItalicFontMask)
+            {
+                if ( nsFontWithTraits == nil )
+                    nsFontWithTraits = nsFont;
+                
+                NSAffineTransform* transform = [NSAffineTransform transform];
+                [transform setTransformStruct:kSlantNSTransformStruct];
+                [transform scaleBy:info->m_pointSize];
+                NSFontDescriptor* italicDesc = [[nsFontWithTraits fontDescriptor] fontDescriptorWithMatrix:transform];
+                if ( italicDesc != nil )
+                {
+                    NSFont* f = [NSFont fontWithDescriptor:italicDesc size:(CGFloat)(info->m_pointSize)];
+                    if ( f != nil )
+                        nsFontWithTraits = f;
+                }
+            }
+            if ( nsFontWithTraits != nil )
+                nsFont = nsFontWithTraits;
+        }
+    }
+            
     wxASSERT_MSG(nsFont != nil,wxT("Couldn't create nsFont")) ;
     wxMacCocoaRetain(nsFont);
     return nsFont;
