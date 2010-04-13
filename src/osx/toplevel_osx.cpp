@@ -114,6 +114,9 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
 
 bool wxTopLevelWindowMac::IsMaximized() const
 {
+    if ( m_nowpeer == NULL )
+        return false;
+    
     return m_nowpeer->IsMaximized();
 }
 
@@ -125,6 +128,9 @@ void wxTopLevelWindowMac::Iconize(bool iconize)
 
 bool wxTopLevelWindowMac::IsIconized() const
 {
+    if ( m_nowpeer == NULL )
+        return false;
+
     return m_nowpeer->IsIconized();
 }
 
