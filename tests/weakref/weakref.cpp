@@ -80,8 +80,12 @@ void WeakRefTestCase::DeclareTest()
 {
     {
         // Not initializing or initializing with NULL should work too
+        //
+        // FIXME-VC6: but it doesn't with VC6, see comment in wx/weakref.h
+#ifndef __VISUALC6__
         wxWeakRef<wxEvtHandler> wroDef;
         wxWeakRef<wxEvtHandler> wro0(NULL);
+#endif // __VISUALC6__
 
         wxObject o; // Should not work
         wxEvtHandler eh;
@@ -129,6 +133,9 @@ void WeakRefTestCase::AssignTest()
     CPPUNIT_ASSERT( !wro2 );
 
     // Explicitly resetting should work too
+    //
+    // FIXME-VC6: as above, it doesn't work with VC6, see wx/weakref.h
+#ifndef __VISUALC6__
     wxEvtHandler eh;
     wxObjectTrackable ot;
 
@@ -140,6 +147,7 @@ void WeakRefTestCase::AssignTest()
 
     CPPUNIT_ASSERT( !wro1 );
     CPPUNIT_ASSERT( !wro2 );
+#endif // __VISUALC6__
 }
 
 void WeakRefTestCase::AssignWeakRefTest()
