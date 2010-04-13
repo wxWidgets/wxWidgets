@@ -188,7 +188,13 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     OSStatus err = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) ;
                     if ( err != noErr )
                     {
-                        wxFAIL_MSG("Unable to retrieve CGContextRef");
+                        // for non-composite drawing, since we don't support it ourselves, send it through the
+                        // the default handler
+                        // CallNextEventHandler( handler,event ) ;
+                        // result = noErr ;
+                        if ( allocatedRgn )
+                            CFRelease( allocatedRgn ) ;
+                        break;
                     }
 
                     thisWindow->MacSetCGContextRef( cgContext ) ;
@@ -1515,6 +1521,8 @@ wxWidgetImplType* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     }
 
     // the root control level handler
-    contentview->InstallEventHandler() ;
+    if ( !now->IsNativeWindowWrapper() )
+        contentview->InstallEventHandler() ;
+    
     return contentview;
 }

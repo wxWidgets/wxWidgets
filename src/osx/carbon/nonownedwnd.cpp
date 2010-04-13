@@ -1134,7 +1134,7 @@ wxNonOwnedWindowCarbonImpl::~wxNonOwnedWindowCarbonImpl()
         m_macEventHandler = NULL ;
     }
 
-    if ( m_macWindow )
+    if ( m_macWindow && !m_wxPeer->IsNativeWindowWrapper())
         DisposeWindow( m_macWindow );
 
     FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
@@ -1192,30 +1192,37 @@ void wxNonOwnedWindowCarbonImpl::MacInstallTopLevelWindowEventHandler()
 
 void wxNonOwnedWindowCarbonImpl::Create(
     wxWindow* parent,
-    const wxPoint& pos,
-    const wxSize& size,
-    long style, long extraStyle,
-    const wxString& WXUNUSED(name) )
+    WXWindow nativeWindow )
 {
+    m_macWindow = nativeWindow;
+}
 
+void wxNonOwnedWindowCarbonImpl::Create(
+                                        wxWindow* parent,
+                                        const wxPoint& pos,
+                                        const wxSize& size,
+                                        long style, long extraStyle,
+                                        const wxString& WXUNUSED(name) )
+{
+    
     OSStatus err = noErr ;
     Rect theBoundsRect;
-
+    
     int x = (int)pos.x;
     int y = (int)pos.y;
-
+    
     int w = size.x;
     int h = size.y;
-
+    
     ::SetRect(&theBoundsRect, x, y , x + w, y + h);
-
+    
     // translate the window attributes in the appropriate window class and attributes
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
     WindowGroupRef group = NULL ;
     bool activationScopeSet = false;
     WindowActivationScope activationScope = kWindowActivationScopeNone;
-
+    
     if ( style & wxFRAME_TOOL_WINDOW )
     {
         if (
@@ -1228,7 +1235,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
                 wclass = kUtilityWindowClass;
             else
                 wclass = kFloatingWindowClass ;
-
+            
             if ( ( style &wxTINY_CAPTION_VERT) )
                 attr |= kWindowSideTitlebarAttribute ;
         }
@@ -1287,81 +1294,81 @@ void wxNonOwnedWindowCarbonImpl::Create(
             wclass = kPlainWindowClass ;
         }
     }
-
+    
     if ( wclass != kPlainWindowClass )
     {
         if ( ( style & wxMINIMIZE_BOX ) )
             attr |= kWindowCollapseBoxAttribute ;
-
+        
         if ( ( style & wxMAXIMIZE_BOX ) )
             attr |= kWindowFullZoomAttribute ;
-
+        
         if ( ( style & wxRESIZE_BORDER ) )
             attr |= kWindowResizableAttribute ;
-
+        
         if ( ( style & wxCLOSE_BOX) )
             attr |= kWindowCloseBoxAttribute ;
     }
     attr |= kWindowLiveResizeAttribute;
-
+    
     if ( ( style &wxSTAY_ON_TOP) )
         group = GetWindowGroupOfClass(kUtilityWindowClass) ;
-
+    
     if ( ( style & wxFRAME_FLOAT_ON_PARENT ) )
         group = GetWindowGroupOfClass(kFloatingWindowClass) ;
-
+    
     if ( group == NULL && parent != NULL )
     {
         WindowRef parenttlw = (WindowRef) parent->MacGetTopLevelWindowRef();
         if( parenttlw )
             group = GetWindowGroupParent( GetWindowGroup( parenttlw ) );
     }
-
+    
     attr |= kWindowCompositingAttribute;
 #if 0 // TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;
 #endif
-
+    
     if ( ( style &wxFRAME_SHAPED) )
     {
         WindowDefSpec customWindowDefSpec;
         customWindowDefSpec.defType = kWindowDefProcPtr;
         customWindowDefSpec.u.defProc =
 #ifdef __LP64__
-            (WindowDefUPP) wxShapedMacWindowDef;
+        (WindowDefUPP) wxShapedMacWindowDef;
 #else
-            NewWindowDefUPP(wxShapedMacWindowDef);
+        NewWindowDefUPP(wxShapedMacWindowDef);
 #endif
         err = ::CreateCustomWindow( &customWindowDefSpec, wclass,
-                              attr, &theBoundsRect,
-                              (WindowRef*) &m_macWindow);
+                                   attr, &theBoundsRect,
+                                   (WindowRef*) &m_macWindow);
     }
     else
     {
         err = ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     }
-
+    
     if ( err == noErr && m_macWindow != NULL && group != NULL )
         SetWindowGroup( (WindowRef) m_macWindow , group ) ;
-
+    
     wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
-
+    
     // setup a separate group for each window, so that overlays can be handled easily
-
+    
     WindowGroupRef overlaygroup = NULL;
     verify_noerr( CreateWindowGroup( kWindowGroupAttrMoveTogether | kWindowGroupAttrLayerTogether | kWindowGroupAttrHideOnCollapse, &overlaygroup ));
     verify_noerr( SetWindowGroupParent( overlaygroup, GetWindowGroup( (WindowRef) m_macWindow )));
     verify_noerr( SetWindowGroup( (WindowRef) m_macWindow , overlaygroup ));
-
+    
     if ( activationScopeSet )
     {
         verify_noerr( SetWindowActivationScope( (WindowRef) m_macWindow , activationScope ));
     }
-
+    
     // the create commands are only for content rect,
     // so we have to set the size again as structure bounds
     SetWindowBounds( m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
-
+    
     // Causes the inner part of the window not to be metal
     // if the style is used before window creation.
 #if 0 // TARGET_API_MAC_OSX
@@ -1371,24 +1378,24 @@ void wxNonOwnedWindowCarbonImpl::Create(
             MacSetMetalAppearance( true ) ;
     }
 #endif
-
+    
     if ( m_macWindow != NULL )
     {
         MacSetUnifiedAppearance( true ) ;
     }
-
+    
     HIViewRef growBoxRef = 0 ;
     err = HIViewFindByID( HIViewGetRoot( m_macWindow ), kHIViewWindowGrowBoxID, &growBoxRef  );
     if ( err == noErr && growBoxRef != 0 )
         HIGrowBoxViewSetTransparent( growBoxRef, true ) ;
-
+    
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(m_macWindow) ) ;
     MacInstallTopLevelWindowEventHandler() ;
-
+    
     if ( extraStyle & wxFRAME_EX_METAL)
         MacSetMetalAppearance(true);
-
+    
     if ( ( style &wxFRAME_SHAPED) )
     {
         // default shape matches the window size
@@ -1689,3 +1696,11 @@ wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWind
     now->Create( parent, pos, size, style , extraStyle, name );
     return now;
 }
+
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow nativeWindow )
+{
+    wxNonOwnedWindowCarbonImpl* now = new wxNonOwnedWindowCarbonImpl( wxpeer );
+    now->Create( parent, nativeWindow );
+    return now;
+}
+

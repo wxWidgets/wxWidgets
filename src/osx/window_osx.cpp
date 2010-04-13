@@ -206,6 +206,7 @@ void wxWindowMac::Init()
     m_macIsUserPane = true;
     m_clipChildren = false ;
     m_cachedClippedRectValid = false ;
+    m_isNativeWindowWrapper = false;
 }
 
 wxWindowMac::~wxWindowMac()

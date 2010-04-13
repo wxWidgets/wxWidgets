@@ -361,14 +361,20 @@ wxNonOwnedWindowCocoaImpl::wxNonOwnedWindowCocoaImpl()
 
 wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
 {
-    [m_macWindow setImplementation:nil];
-    [m_macWindow setDelegate:nil];
-    [m_macWindow release];
+    if ( !m_wxPeer->IsNativeWindowWrapper() )
+    {
+        [m_macWindow setImplementation:nil];
+        [m_macWindow setDelegate:nil];
+        [m_macWindow release];
+    }
 }
 
 void wxNonOwnedWindowCocoaImpl::WillBeDestroyed()
 {
-    [m_macWindow setDelegate:nil];
+    if ( !m_wxPeer->IsNativeWindowWrapper() )
+    {
+        [m_macWindow setDelegate:nil];
+    }
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
@@ -493,6 +499,10 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
     }
 }
 
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )
+{
+    m_macWindow = nativeWindow;
+}
 
 WXWindow wxNonOwnedWindowCocoaImpl::GetWXWindow() const
 {
@@ -785,6 +795,13 @@ void wxNonOwnedWindowCocoaImpl::SetModified(bool modified)
 bool wxNonOwnedWindowCocoaImpl::IsModified() const
 {
     return [m_macWindow isDocumentEdited];
+}
+
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow nativeWindow)
+{
+    wxNonOwnedWindowCocoaImpl* now = new wxNonOwnedWindowCocoaImpl( wxpeer );
+    now->Create( parent, nativeWindow );
+    return now;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,

@@ -55,6 +55,8 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
 
+    bool Create(wxWindow *parent, WXWindow nativeWindow);
+    
     virtual ~wxNonOwnedWindow();
 
     virtual wxPoint GetClientAreaOrigin() const;
@@ -106,7 +108,7 @@ public:
     virtual void HandleResizing( double timestampsec, wxRect* rect );
     
     virtual bool Destroy();
-
+    
 protected:
     // common part of all ctors
     void Init();

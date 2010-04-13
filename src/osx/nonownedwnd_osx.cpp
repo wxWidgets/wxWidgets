@@ -98,6 +98,7 @@ wxNonOwnedWindow *wxNonOwnedWindow::s_macDeactivateWindow = NULL;
 void wxNonOwnedWindow::Init()
 {
     m_nowpeer = NULL;
+    m_isNativeWindowWrapper = false;
 }
 
 bool wxNonOwnedWindow::Create(wxWindow *parent,
@@ -107,9 +108,6 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
-    // init our fields
-    Init();
-
     m_windowStyle = style;
 
     SetName( name );
@@ -147,6 +145,19 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     if ( parent )
         parent->AddChild(this);
 
+    return true;
+}
+
+bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
+{
+    m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, nativeWindow );
+    m_isNativeWindowWrapper = true;
+    wxAssociateWindowWithWXWindow( m_nowpeer->GetWXWindow() , this ) ;
+    m_peer = wxWidgetImpl::CreateContentView(this);
+
+    if ( parent )
+        parent->AddChild(this);
+    
     return true;
 }
 

@@ -263,6 +263,8 @@ public:
 
     virtual bool        OSXHandleClicked( double timestampsec );
     virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
+    
+    bool                IsNativeWindowWrapper() const { return m_isNativeWindowWrapper; }
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
@@ -297,6 +299,8 @@ protected:
     bool                m_vScrollBarAlwaysShown;
     wxWindow*           m_growBox ;
     wxString            m_label ;
+    
+    bool                m_isNativeWindowWrapper;
 
     // set to true if we do a sharp clip at the content area of this window
     // must be dynamic as eg a panel normally is not clipping precisely, but if

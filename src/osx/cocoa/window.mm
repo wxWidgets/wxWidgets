@@ -2084,10 +2084,18 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
 wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 {
     NSWindow* tlw = now->GetWXWindow();
-    wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
-
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( now, v, true );
-    c->InstallEventHandler();
-    [tlw setContentView:v];
+    
+    wxWidgetCocoaImpl* c = NULL;
+    if ( now->IsNativeWindowWrapper() )
+    {
+        c = new wxWidgetCocoaImpl( now, [tlw contentView], true );
+    }
+    else
+    {
+        wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
+        c = new wxWidgetCocoaImpl( now, v, true );
+        c->InstallEventHandler();
+        [tlw setContentView:v];
+    }
     return c;
 }
