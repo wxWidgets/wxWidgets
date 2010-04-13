@@ -83,7 +83,7 @@
     <xsl:param name="options"/>
     <configure>
         <copy-with-defaults content="{$content}">
-            <command>../src/configure <xsl:value-of select="normalize-space($options)"/> --disable-precomp-headers --disable-compat28 --disable-compat26</command>
+            <command>../src/configure --disable-precomp-headers --disable-compat28 --disable-compat26 <xsl:value-of select="normalize-space($options)"/></command>
         </copy-with-defaults>
         <command>find . -name Makefile | xargs perl -pi -e 's/^(?:CC|CXX) = /$&amp;ccache /'</command>
     </configure>
