@@ -13,7 +13,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
-    #include "wx/nonownedwnd.h"
+    #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
 #endif
