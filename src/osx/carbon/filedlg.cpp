@@ -48,8 +48,8 @@ public:
     bool FilterCallback( AEDesc *theItem, void *info, NavFilterModes filterMode );
     void EventProc( NavEventCallbackMessage inSelector, NavCBRecPtr ioParams );
 
-    int GetCurrentFilter() const {return currentfilter;}
-    CFArrayRef GetMenuItems() const { return menuitems;}
+    int GetCurrentFilter() const {return m_currentfilter;}
+    CFArrayRef GetMenuItems() const { return m_menuitems;}
     
      
 private:
@@ -62,38 +62,42 @@ private:
     bool CheckFile( const wxString &filename , OSType type);
     void MakeUserDataRec( const wxString& filter);
     
-    wxFileDialog*      dialog;
-    int                currentfilter ;
-    wxString           defaultLocation;
-    wxArrayString      extensions ;
-    wxArrayLong        filtermactypes ;
-    CFMutableArrayRef         menuitems ;
-    wxArrayString      name ;
-    bool               saveMode ;
+    wxFileDialog*       m_dialog;
+    int                 m_currentfilter;
+    wxString            m_defaultLocation;
+    wxArrayString       m_extensions;
+    wxArrayLong         m_filtermactypes;
+    CFMutableArrayRef   m_menuitems;
+    wxArrayString       m_name;
+    bool                m_saveMode;
+    SInt16              m_lastRight;
+    SInt16              m_lastBottom;
+    bool                m_firstAdjustRect;
 };
 
 OpenUserDataRec::OpenUserDataRec( wxFileDialog* d)
 {
-    dialog = d;
-    saveMode = dialog->HasFdFlag(wxFD_SAVE);
+    m_dialog = d;
+    m_firstAdjustRect = true;
+    m_saveMode = m_dialog->HasFdFlag(wxFD_SAVE);
     
-    defaultLocation = dialog->GetDirectory();
-    MakeUserDataRec(dialog->GetWildcard());
-    currentfilter = dialog->GetFilterIndex();
+    m_defaultLocation = m_dialog->GetDirectory();
+    MakeUserDataRec(m_dialog->GetWildcard());
+    m_currentfilter = m_dialog->GetFilterIndex();
     
-    menuitems = NULL;
+    m_menuitems = NULL;
     
-    size_t numFilters = extensions.GetCount();
+    size_t numFilters = m_extensions.GetCount();
     if (numFilters)
     {
-        menuitems = CFArrayCreateMutable( kCFAllocatorDefault ,
+        m_menuitems = CFArrayCreateMutable( kCFAllocatorDefault ,
                                          numFilters , &kCFTypeArrayCallBacks ) ;
         for ( size_t i = 0 ; i < numFilters ; ++i )
         {
-            CFArrayAppendValue( menuitems , (CFStringRef) wxCFStringRef( name[i] ) ) ;
+            CFArrayAppendValue( m_menuitems , (CFStringRef) wxCFStringRef( m_name[i] ) ) ;
         }
     }
-    
+    m_lastRight = m_lastBottom = 0;
 }
 
 void OpenUserDataRec::EventProc(NavEventCallbackMessage inSelector,NavCBRecPtr ioParams)
@@ -136,7 +140,7 @@ void OpenUserDataRec::EventProcCBEventMouseDown(NavCBRecPtr callBackParms)
 {
     EventRecord *evt = callBackParms->eventData.eventDataParms.event;
     Point where = evt->where;
-    GlobalToLocal(&where);
+    QDGlobalToLocalPoint(GetWindowPort(callBackParms->window), &where);
     
     ControlRef whichControl = FindControlUnderMouse(where, callBackParms->window, NULL);
     if (whichControl != NULL)
@@ -144,9 +148,11 @@ void OpenUserDataRec::EventProcCBEventMouseDown(NavCBRecPtr callBackParms)
         ControlKind theKind;
         GetControlKind(whichControl, &theKind);
         
-        // Moving the focus if we clicked in an editable text control
-        // In this sample, we only have a Clock and an Unicode Edit controls
-        if ((theKind.kind == kControlKindEditUnicodeText) || (theKind.kind == kControlKindClock))
+        // Moving the focus if we clicked in an focusable control
+        if ((theKind.kind == kControlKindEditUnicodeText) || 
+            (theKind.kind == kControlKindEditText) || 
+            (theKind.kind == kControlKindDataBrowser) || 
+            (theKind.kind == kControlKindListBox))
         {
             ControlRef currentlyFocusedControl;
             GetKeyboardFocus(callBackParms->window, &currentlyFocusedControl);
@@ -159,29 +165,29 @@ void OpenUserDataRec::EventProcCBEventMouseDown(NavCBRecPtr callBackParms)
 
 void OpenUserDataRec::EventProcCBStart(NavCBRecPtr ioParams)
 {
-    if (!defaultLocation.empty())
+    if (!m_defaultLocation.empty())
     {
         // Set default location for the modern Navigation APIs
         // Apple Technical Q&A 1151
         FSRef theFile;
-        wxMacPathToFSRef(defaultLocation, &theFile);
+        wxMacPathToFSRef(m_defaultLocation, &theFile);
         AEDesc theLocation = { typeNull, NULL };
         if (noErr == ::AECreateDesc(typeFSRef, &theFile, sizeof(FSRef), &theLocation))
             ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
     }
     
-    if( extensions.GetCount() > 0 )
+    if( m_extensions.GetCount() > 0 )
     {
         NavMenuItemSpec  menuItem;
         memset( &menuItem, 0, sizeof(menuItem) );
         menuItem.version = kNavMenuItemSpecVersion;
-        menuItem.menuType = currentfilter;
+        menuItem.menuType = m_currentfilter;
         ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
     }
     
-    if (dialog->GetExtraControl())
+    if (m_dialog->GetExtraControl())
     {
-        ControlRef ref = dialog->GetExtraControl()->GetPeer()->GetControlRef();
+        ControlRef ref = m_dialog->GetExtraControl()->GetPeer()->GetControlRef();
         NavCustomControl(ioParams->context, kNavCtlAddControl, ref);
     }
     
@@ -190,17 +196,17 @@ void OpenUserDataRec::EventProcCBStart(NavCBRecPtr ioParams)
 void OpenUserDataRec::EventProcCBPopupMenuSelect(NavCBRecPtr ioParams)
 {
     NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
-    const size_t numFilters = extensions.GetCount();
+    const size_t numFilters = m_extensions.GetCount();
     
     if ( menu->menuType < numFilters )
     {
-        currentfilter = menu->menuType ;
-        if ( saveMode )
+        m_currentfilter = menu->menuType ;
+        if ( m_saveMode )
         {
             int i = menu->menuType ;
             
             // isolate the first extension string
-            wxString firstExtension = extensions[i].BeforeFirst('|').BeforeFirst(';');
+            wxString firstExtension = m_extensions[i].BeforeFirst('|').BeforeFirst(';');
             
             wxString extension = firstExtension.AfterLast('.') ;
             wxString sfilename ;
@@ -221,24 +227,57 @@ void OpenUserDataRec::EventProcCBPopupMenuSelect(NavCBRecPtr ioParams)
 
 void OpenUserDataRec::EventProcCBCustomize(NavCBRecPtr ioParams)
 {
-    if (ioParams->customRect.right == 0 && ioParams->customRect.bottom == 0 && dialog->GetExtraControl())
+    wxWindow* control = m_dialog->GetExtraControl();
+    
+    if ( control )
     {
-        wxSize size = dialog->GetExtraControl()->GetSize();
-        ioParams->customRect.right = size.x;
-        ioParams->customRect.bottom = size.y;
+        SInt16 neededRight, neededBottom;
+        
+        wxSize size = m_dialog->GetExtraControl()->GetSize();
+        neededRight = ioParams->customRect.left + size.x;
+        neededBottom = ioParams->customRect.top + size.y;
+        
+        if (ioParams->customRect.right == 0 && ioParams->customRect.bottom == 0)
+        {
+            ioParams->customRect.right = neededRight;
+            ioParams->customRect.bottom = neededBottom;
+        }
+        else 
+        {
+            if ( ioParams->customRect.right != m_lastRight )
+            {
+                if ( ioParams->customRect.right < neededRight )
+                    ioParams->customRect.right = neededRight;
+            }
+            if ( ioParams->customRect.bottom != m_lastBottom )
+            {
+                if ( ioParams->customRect.bottom < neededBottom )
+                    ioParams->customRect.bottom = neededBottom;
+            }
+        }
+        m_lastRight = ioParams->customRect.right;
+        m_lastBottom = ioParams->customRect.bottom;
     }
 }
 
 void OpenUserDataRec::EventProcCBAdjustRect(NavCBRecPtr ioParams)
 {
+    wxWindow* control = m_dialog->GetExtraControl();
+    
+    if ( control )
+    {
+        // workaround because the first time this is called it still seems to be 
+        // in composited coordinates, while later it is not
+        if ( !m_firstAdjustRect )
+        {
+            control->Move(ioParams->customRect.left , ioParams->customRect.top);
+        }
+        m_firstAdjustRect = false;
+    }
 }
 
 void OpenUserDataRec::MakeUserDataRec( const wxString& filter )
 {
-    menuitems = NULL ;
-    currentfilter = 0 ;
-    saveMode = false ;
-
     if ( !filter.empty() )
     {
         wxString filter2(filter) ;
@@ -252,11 +291,11 @@ void OpenUserDataRec::MakeUserDataRec( const wxString& filter )
             {
                 if ( isName )
                 {
-                    name.Add( current ) ;
+                    m_name.Add( current ) ;
                 }
                 else
                 {
-                    extensions.Add( current ) ;
+                    m_extensions.Add( current ) ;
                     ++filterIndex ;
                 }
 
@@ -273,19 +312,19 @@ void OpenUserDataRec::MakeUserDataRec( const wxString& filter )
 
         wxASSERT_MSG( filterIndex == 0 || !isName , wxT("incorrect format of format string") ) ;
         if ( current.empty() )
-            extensions.Add( name[filterIndex] ) ;
+            m_extensions.Add( m_name[filterIndex] ) ;
         else
-            extensions.Add( current ) ;
+            m_extensions.Add( current ) ;
         if ( filterIndex == 0 || isName )
-            name.Add( current ) ;
+            m_name.Add( current ) ;
 
         ++filterIndex ;
 
-        const size_t extCount = extensions.GetCount();
+        const size_t extCount = m_extensions.GetCount();
         for ( size_t i = 0 ; i < extCount; i++ )
         {
             wxUint32 fileType, creator;
-            wxString extension = extensions[i];
+            wxString extension = m_extensions[i];
 
             // Remove leading '*'
             if (extension.length() && (extension.GetChar(0) == '*'))
@@ -296,9 +335,9 @@ void OpenUserDataRec::MakeUserDataRec( const wxString& filter )
                 extension = extension.Mid( 1 );
 
             if (wxFileName::MacFindDefaultTypeAndCreator( extension, &fileType, &creator ))
-                filtermactypes.Add( (OSType)fileType );
+                m_filtermactypes.Add( (OSType)fileType );
             else
-                filtermactypes.Add( '****' ); // We'll fail safe if it's not recognized
+                m_filtermactypes.Add( '****' ); // We'll fail safe if it's not recognized
         }
     }
 }
@@ -308,18 +347,18 @@ bool OpenUserDataRec::CheckFile( const wxString &filename , OSType type)
     wxString file(filename) ;
     file.MakeUpper() ;
 
-    if ( extensions.GetCount() > 0 )
+    if ( m_extensions.GetCount() > 0 )
     {
         //for ( int i = 0 ; i < data->numfilters ; ++i )
-        int i = currentfilter ;
-        if ( extensions[i].Right(2) == wxT(".*") )
+        int i = m_currentfilter ;
+        if ( m_extensions[i].Right(2) == wxT(".*") )
             return true ;
 
         {
-            if ( type == (OSType)filtermactypes[i] )
+            if ( type == (OSType)m_filtermactypes[i] )
                 return true ;
 
-            wxStringTokenizer tokenizer( extensions[i] , wxT(";") ) ;
+            wxStringTokenizer tokenizer( m_extensions[i] , wxT(";") ) ;
             while ( tokenizer.HasMoreTokens() )
             {
                 wxString extension = tokenizer.GetNextToken() ;
