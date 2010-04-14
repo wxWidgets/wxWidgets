@@ -349,8 +349,8 @@ public:
     {
         // we can't use Add() here as it relies on having start/end stops as
         // first/last array elements so do it manually
-        m_stops.push_back(wxGraphicsGradientStop(startCol, 0.));
-        m_stops.push_back(wxGraphicsGradientStop(endCol, 1.));
+        m_stops.push_back(wxGraphicsGradientStop(startCol, 0.f));
+        m_stops.push_back(wxGraphicsGradientStop(endCol, 1.f));
     }
 
     // default copy ctor, assignment operator and dtor are ok for this class
