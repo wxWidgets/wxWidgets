@@ -97,6 +97,15 @@ void wxGUIEventLoop::DoRun()
     }
 }
 
+int wxGUIEventLoop::DoDispatchTimeout(unsigned long timeout)
+{
+    return wxCFEventLoop::DoDispatchTimeout(timeout);
+}
+
+void wxGUIEventLoop::DoStop()
+{
+    return wxCFEventLoop::DoStop();
+}
 // TODO move into a evtloop_osx.cpp
 
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)

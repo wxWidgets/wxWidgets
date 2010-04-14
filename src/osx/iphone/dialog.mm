@@ -34,32 +34,3 @@ void wxDialog::DoShowWindowModal()
 void wxDialog::EndWindowModal()
 {
 }
-
-void wxDialog::DoShowModal()
-{
-    wxCHECK_RET( !IsModal(), wxT("DoShowModal() called twice") );
-
-    wxModalDialogs.Append(this);
-
-    SetFocus() ;
-/*
-    WindowGroupRef windowGroup;
-    WindowGroupRef formerParentGroup;
-    bool resetGroupParent = false;
-
-    if ( GetParent() == NULL )
-    {
-        windowGroup = GetWindowGroup(windowRef) ;
-        formerParentGroup = GetWindowGroupParent( windowGroup );
-        SetWindowGroupParent( windowGroup, GetWindowGroupOfClass( kMovableModalWindowClass ) );
-        resetGroupParent = true;
-    }
-*/
-
-/*
-    if ( resetGroupParent )
-    {
-        SetWindowGroupParent( windowGroup , formerParentGroup );
-    }
-*/
-}
