@@ -1532,9 +1532,9 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
         {
             wxString wm = traits->GetDesktopEnvironment();
 
-            if ( wm == "KDE" )
+            if ( wm == wxT("KDE") )
                 mailcapStyles = wxMAILCAP_KDE;
-            else if ( wm == "GNOME" )
+            else if ( wm == wxT("GNOME") )
                 mailcapStyles = wxMAILCAP_GNOME;
             //else: unknown, use the default
         }
