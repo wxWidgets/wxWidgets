@@ -399,7 +399,11 @@ bool wxAppBase::SendIdleEvents(wxWindow* win, wxIdleEvent& event)
 wxLog *wxGUIAppTraitsBase::CreateLogTarget()
 {
 #if wxUSE_LOGGUI
+#ifndef __WXOSX_IPHONE__
     return new wxLogGui;
+#else
+    return new wxLogStderr;
+#endif
 #else
     // we must have something!
     return new wxLogStderr;
