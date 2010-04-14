@@ -12,7 +12,7 @@
 <build>
     <name>MinGW x86 trunk</name>
     <builddir>tbitcwxbuildbot_mingw_trunk</builddir>
-    <!--scheduler>daily_0600</scheduler-->
+    <scheduler>trunk_quick</scheduler>
     <steps>
         <checkout/>
         <configure options="--host=i586-mingw32msvc
@@ -24,7 +24,7 @@
 <build>
     <name>MinGW x86 stable</name>
     <builddir>tbitcwxbuildbot_mingw_stable</builddir>
-    <!--scheduler>daily_0600</scheduler-->
+    <scheduler>daily_0600</scheduler>
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
         <configure options="--host=i586-mingw32msvc

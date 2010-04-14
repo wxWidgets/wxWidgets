@@ -15,7 +15,7 @@
     <scheduler>stable_quick</scheduler>
     <steps>
         <checkout branch="{$STABLE_BRANCH}"/>
-        <configure/>
+        <configure options="--enable-compat26"/>
         <compile-all utils="false"/>
         <run-tests/>
     </steps>
