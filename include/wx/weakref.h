@@ -149,7 +149,7 @@ protected:
         DoAssign( pobj, ptbase );
     }
 
-#ifdef HAVE_DYNAMIC_CAST
+#ifndef wxNO_RTTI
     void AssignHelper(T* pobj, wxInt2Type<false>)
     {
         // A last way to get a trackable pointer
@@ -165,7 +165,7 @@ protected:
             Release();
         }
     }
-#endif // HAVE_DYNAMIC_CAST
+#endif // RTTI enabled
 
     void AssignCopy(const wxWeakRefImpl& wr)
     {
@@ -254,7 +254,7 @@ public:
 };
 
 
-#ifdef HAVE_DYNAMIC_CAST
+#ifndef wxNO_RTTI
 
 // Weak ref implementation assign objects are queried for wxTrackable
 // using dynamic_cast<>
@@ -338,7 +338,7 @@ protected:
     T *m_pobj;
 };
 
-#endif // #ifdef HAVE_DYNAMIC_CAST
+#endif // RTTI enabled
 
 
 // Provide some basic types of weak references

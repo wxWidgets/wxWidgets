@@ -76,6 +76,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION( WeakRefTestCase );
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WeakRefTestCase, "WeakRefTestCase" );
 
+
+// Test weak reference to an incomplete type, this should work if the type is
+// fully defined before it is used (but currently doesn't, see #11916)
+struct ForwardDeclaredClass;
+wxWeakRef<ForwardDeclaredClass> g_incompleteWeakRef;
+
+struct ForwardDeclaredClass : wxEvtHandler { };
+
 void WeakRefTestCase::DeclareTest()
 {
     {
@@ -110,6 +118,17 @@ void WeakRefTestCase::DeclareTest()
         CPPUNIT_ASSERT( wreh.get() == &eh );
         CPPUNIT_ASSERT( wrot.get() == &ot );
     }
+
+    // This test requires a working dynamic_cast<>
+#ifndef wxNO_RTTI
+    {
+        ForwardDeclaredClass fdc;
+        g_incompleteWeakRef = &fdc;
+        CPPUNIT_ASSERT( g_incompleteWeakRef );
+    }
+
+    CPPUNIT_ASSERT( !g_incompleteWeakRef );
+#endif // RTTI enabled
 }
 
 void WeakRefTestCase::AssignTest()
