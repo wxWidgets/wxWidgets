@@ -149,6 +149,13 @@ bool wxNonOwnedWindowCarbonImpl::SetBackgroundStyle(wxBackgroundStyle style)
         err = ReshapeCustomWindow( m_macWindow );
         verify_noerr( err );
     }
+    else
+    {
+        OSStatus err = HIWindowChangeFeatures( m_macWindow, kWindowIsOpaque, 0 );
+        verify_noerr( err );
+        err = ReshapeCustomWindow( m_macWindow );
+        verify_noerr( err );
+    }
 
     return true ;
 }
@@ -254,6 +261,7 @@ void wxNonOwnedWindowCarbonImpl::MacSetUnifiedAppearance( bool set )
 
 static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
 
+void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent );
 
 // ---------------------------------------------------------------------------
 // Carbon Events
@@ -929,7 +937,7 @@ wxNonOwnedWindowEventHandler(EventHandlerCallRef WXUNUSED(handler),
 // mix this in from window.cpp
 pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
 
-pascal OSStatus wxNonOwnedEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus wxNonOwnedEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
@@ -1154,7 +1162,7 @@ void wxNonOwnedWindowCarbonImpl::WillBeDestroyed()
     }
 }
 
-void wxNonOwnedWindowInstallTopLevelWindowEventHandler(WindowRef window, EventHandlerRef* handler, void *ref)
+static void wxNonOwnedWindowInstallTopLevelWindowEventHandler(WindowRef window, EventHandlerRef* handler, void *ref)
 {
     InstallWindowEventHandler(window, GetwxNonOwnedEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, ref, handler );
