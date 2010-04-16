@@ -408,8 +408,9 @@ enum wxLocaleInfo
 
 enum wxLocaleInitFlags
 {
-    wxLOCALE_LOAD_DEFAULT  = 0x0001,     // load wxwin.mo?
-    wxLOCALE_CONV_ENCODING = 0x0002      // convert encoding on the fly?
+    wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     // don't load wxwin.mo
+    wxLOCALE_LOAD_DEFAULT      = 0x0001,     // load wxwin.mo?
+    wxLOCALE_CONV_ENCODING     = 0x0002      // convert encoding on the fly?
 };
 
 class WXDLLIMPEXP_BASE wxLocale

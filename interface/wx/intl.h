@@ -762,6 +762,7 @@ public:
             - wxLOCALE_LOAD_DEFAULT: Load the message catalog for the given locale
               containing the translations of standard wxWidgets messages
               automatically.
+            - wxLOCALE_DONT_LOAD_DEFAULT: Negation of wxLOCALE_LOAD_DEFAULT.
             - wxLOCALE_CONV_ENCODING: Automatically convert message catalogs to
               platform's default encoding. Note that it will do only basic
               conversion between well-known pair like iso8859-1 and windows-1252 or
