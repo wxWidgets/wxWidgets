@@ -23,8 +23,6 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_WCHAR_T
-
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif //WX_PRECOMP
@@ -318,5 +316,3 @@ wxConvAuto::FromWChar(char *dst, size_t dstLen,
 
     return m_conv->FromWChar(dst, dstLen, src, srcLen);
 }
-
-#endif // wxUSE_WCHAR_T

@@ -1038,10 +1038,6 @@ wxTextCtrl::StreamIn(const wxString& value,
         wxLogLastError(wxT("EM_STREAMIN"));
     }
 
-#if !wxUSE_WCHAR_T
-    free(wchBuf);
-#endif // !wxUSE_WCHAR_T
-
     return true;
 }
 
@@ -1054,13 +1050,8 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
 
     const int len = GetWindowTextLength(GetHwnd());
 
-#if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf(len);
     wchar_t *wpc = wchBuf.data();
-#else
-    wchar_t *wchBuf = (wchar_t *)malloc((len + 1)*sizeof(wchar_t));
-    wchar_t *wpc = wchBuf;
-#endif
 
     wxStreamOutData data;
     data.wpc = wpc;
@@ -1099,10 +1090,6 @@ wxTextCtrl::StreamOut(wxFontEncoding encoding, bool selectionOnly) const
             conv.WC2MB(wxStringBuffer(out, lenNeeded), wchBuf, lenNeeded);
         }
     }
-
-#if !wxUSE_WCHAR_T
-    free(wchBuf);
-#endif // !wxUSE_WCHAR_T
 
     return out;
 }

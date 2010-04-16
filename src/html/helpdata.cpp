@@ -569,7 +569,6 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     // Now store the contents range
     bookr->SetContentsRange(cont_start, m_contents.size());
 
-#if wxUSE_WCHAR_T
     // MS HTML Help files [written by MS HTML Help Workshop] are broken
     // in that the data are iso-8859-1 (including HTML entities), but must
     // be interpreted as being in language's windows charset. Correct the
@@ -597,11 +596,6 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
         }
         #undef CORRECT_STR
     }
-#else
-    wxUnusedVar(IndexOld);
-    wxUnusedVar(ContentsOld);
-    wxASSERT_MSG(encoding == wxFONTENCODING_SYSTEM, wxT("Help files need charset conversion, but wxUSE_WCHAR_T is 0"));
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
     m_bookRecords.Add(bookr);
     if (!m_index.empty())

@@ -59,37 +59,35 @@
     #endif
 #endif
 
-#if wxUSE_WCHAR_T
-    #ifdef HAVE_WCHAR_H
-        /* the current (as of Nov 2002) version of cygwin has a bug in its */
-        /* wchar.h -- there is no extern "C" around the declarations in it */
-        /* and this results in linking errors later; also, at least on some */
-        /* Cygwin versions, wchar.h requires sys/types.h */
-        #ifdef __CYGWIN__
-            #include <sys/types.h>
-            #ifdef __cplusplus
-                extern "C" {
-            #endif
-        #endif /* Cygwin */
+#ifdef HAVE_WCHAR_H
+    /* the current (as of Nov 2002) version of cygwin has a bug in its */
+    /* wchar.h -- there is no extern "C" around the declarations in it */
+    /* and this results in linking errors later; also, at least on some */
+    /* Cygwin versions, wchar.h requires sys/types.h */
+    #ifdef __CYGWIN__
+        #include <sys/types.h>
+        #ifdef __cplusplus
+            extern "C" {
+        #endif
+    #endif /* Cygwin */
 
-        #include <wchar.h>
+    #include <wchar.h>
 
-        #if defined(__CYGWIN__) && defined(__cplusplus)
-            }
-        #endif /* Cygwin and C++ */
+    #if defined(__CYGWIN__) && defined(__cplusplus)
+        }
+    #endif /* Cygwin and C++ */
 
-    #elif defined(HAVE_WCSTR_H)
-        /* old compilers have relevant declarations here */
-        #include <wcstr.h>
-    #elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
-        /* include stdlib.h for wchar_t */
-        #include <stdlib.h>
-    #endif /* HAVE_WCHAR_H */
+#elif defined(HAVE_WCSTR_H)
+    /* old compilers have relevant declarations here */
+    #include <wcstr.h>
+#elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
+    /* include stdlib.h for wchar_t */
+    #include <stdlib.h>
+#endif /* HAVE_WCHAR_H */
 
-    #ifdef HAVE_WIDEC_H
-        #include <widec.h>
-    #endif
-#endif /* wxUSE_WCHAR_T */
+#ifdef HAVE_WIDEC_H
+    #include <widec.h>
+#endif
 
 /* -------------------------------------------------------------------------- */
 /* define wxHAVE_TCHAR_SUPPORT for the compilers which support the TCHAR type */

@@ -531,7 +531,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     gtk_set_locale();
 
-    // We should have the wxUSE_WCHAR_T test on the _outside_
     if (!wxOKlibc())
         wxConvCurrent = &wxConvLocal;
 

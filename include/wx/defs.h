@@ -908,7 +908,7 @@ typedef wxUint16 wxWord;
         #if defined(__MACH__) && !defined(SIZEOF_WCHAR_T)
             #define SIZEOF_WCHAR_T 4
         #endif
-        #if wxUSE_WCHAR_T && !defined(SIZEOF_WCHAR_T)
+        #if !defined(SIZEOF_WCHAR_T)
             /*  also assume that sizeof(wchar_t) == 2 (under Unix the most */
             /*  common case is 4 but there configure would have defined */
             /*  SIZEOF_WCHAR_T for us) */
@@ -917,9 +917,13 @@ typedef wxUint16 wxWord;
                                     Wchar_tMustBeExactly2Bytes);
 
             #define SIZEOF_WCHAR_T 2
-        #endif /*  wxUSE_WCHAR_T */
+        #endif /*  !defined(SIZEOF_WCHAR_T) */
     #endif
 #endif /*  Win/!Win */
+
+#ifndef SIZEOF_WCHAR_T
+    #error "SIZEOF_WCHAR_T must be defined, but isn't"
+#endif
 
 /* also define C99-like sized MIN/MAX constants */
 #define wxINT8_MIN CHAR_MIN
@@ -1248,14 +1252,14 @@ typedef double wxDouble;
 
 /* Define wxChar16 and wxChar32                                              */
 
-#if wxUSE_WCHAR_T && (!defined(SIZEOF_WCHAR_T) || (SIZEOF_WCHAR_T == 2))
+#if SIZEOF_WCHAR_T == 2
     #define wxWCHAR_T_IS_WXCHAR16
     typedef wchar_t wxChar16;
 #else
     typedef wxUint16 wxChar16;
 #endif
 
-#if wxUSE_WCHAR_T && defined(SIZEOF_WCHAR_T) && (SIZEOF_WCHAR_T == 4)
+#if SIZEOF_WCHAR_T == 4
     #define wxWCHAR_T_IS_WXCHAR32
     typedef wchar_t wxChar32;
 #else

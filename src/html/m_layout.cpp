@@ -285,7 +285,7 @@ TAG_HANDLER_BEGIN(TITLE, "TITLE")
         if (winIface)
         {
             wxString title(tag.GetBeginIter(), tag.GetEndIter1());
-#if !wxUSE_UNICODE && wxUSE_WCHAR_T
+#if !wxUSE_UNICODE
             const wxFontEncoding enc = m_WParser->GetInputEncoding();
             if ( enc != wxFONTENCODING_DEFAULT )
             {

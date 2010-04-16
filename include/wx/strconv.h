@@ -29,8 +29,6 @@
 #include <stdlib.h>
 #endif // ! __WXPALMOS5__
 
-#if wxUSE_WCHAR_T
-
 class WXDLLIMPEXP_FWD_BASE wxString;
 
 // the error value returned by wxMBConv methods
@@ -642,33 +640,6 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 #endif
     #define wxFNSTRINGCAST WXSTRINGCAST
 #endif
-
-#else // !wxUSE_WCHAR_T
-
-// ----------------------------------------------------------------------------
-// stand-ins in absence of wchar_t
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxMBConv
-{
-public:
-    const char* cMB2WX(const char *psz) const { return psz; }
-    const char* cWX2MB(const char *psz) const { return psz; }
-};
-
-#define wxConvFile wxConvLocal
-
-extern WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
-                                       wxConvLocal,
-                                       wxConvISO8859_1,
-                                       wxConvUTF8;
-extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
-
-#define wxFNCONV(name) name
-#define wxFNSTRINGCAST WXSTRINGCAST
-
-#endif
-  // wxUSE_WCHAR_T
 
 // ----------------------------------------------------------------------------
 // macros for the most common conversions

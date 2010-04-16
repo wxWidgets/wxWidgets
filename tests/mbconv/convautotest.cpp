@@ -17,8 +17,6 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_WCHAR_T
-
 #include "wx/convauto.h"
 
 #include "wx/mstream.h"
@@ -207,6 +205,3 @@ void ConvAutoTestCase::StreamUTF32BE()
                    "\0\0\x03\xB2",
                    20, line1, line2);
 }
-
-#endif // wxUSE_WCHAR_T
-

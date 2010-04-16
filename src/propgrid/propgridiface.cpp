@@ -73,10 +73,8 @@ wxPGProperty* wxPGPropArgCls::GetPtr( wxPropertyGridInterface* iface ) const
         return iface->GetPropertyByNameA(*m_ptr.stringName);
     else if ( m_flags & IsCharPtr )
         return iface->GetPropertyByNameA(m_ptr.charName);
-#if wxUSE_WCHAR_T
     else if ( m_flags & IsWCharPtr )
         return iface->GetPropertyByNameA(m_ptr.wcharName);
-#endif
 
     return NULL;
 }

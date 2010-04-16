@@ -10,8 +10,7 @@
     @class wxEncodingConverter
 
     This class is capable of converting strings between two 8-bit encodings/charsets.
-    It can also convert from/to Unicode (but only if you compiled wxWidgets
-    with @c wxUSE_WCHAR_T set to 1).
+    It can also convert from/to Unicode.
 
     Only a limited subset of encodings is supported by wxEncodingConverter:
     @c wxFONTENCODING_ISO8859_1..15, @c wxFONTENCODING_CP1250..1257 and
@@ -64,9 +63,6 @@ public:
         considered a lossless operation.
 
         @note You must call Init() before using this method!
-
-        @note wchar_t versions of the method are not available if wxWidgets was
-              compiled with @c wxUSE_WCHAR_T set to 0.
     */
     bool Convert(const char* input, char* output) const;
     bool Convert(const wchar_t* input, wchar_t* output) const;

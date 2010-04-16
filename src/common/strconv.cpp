@@ -28,8 +28,6 @@
 
 #include "wx/strconv.h"
 
-#if wxUSE_WCHAR_T
-
 #ifndef __WXWINCE__
 #include <errno.h>
 #endif
@@ -3455,14 +3453,3 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
 #else // !__DARWIN__
                                     wxGet_wxConvLibcPtr();
 #endif // __DARWIN__/!__DARWIN__
-
-#else // !wxUSE_WCHAR_T
-
-// FIXME-UTF8: remove this, wxUSE_WCHAR_T is required now
-// stand-ins in absence of wchar_t
-WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
-                                wxConvISO8859_1,
-                                wxConvLocal,
-                                wxConvUTF8;
-
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T

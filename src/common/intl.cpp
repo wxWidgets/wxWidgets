@@ -65,7 +65,6 @@
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/fontmap.h"
-#include "wx/encconv.h"
 #include "wx/scopedptr.h"
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
@@ -1326,7 +1325,6 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     }
 #endif // wxUSE_UNICODE/wxUSE_FONTMAP
 
-#if wxUSE_WCHAR_T
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv,
             *inputConvPtr = NULL; // same as inputConv but safely deleteable
@@ -1353,43 +1351,6 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                             ? NULL
                             : new wxCSConv(msgIdCharset);
 
-#elif wxUSE_FONTMAP
-    wxASSERT_MSG( msgIdCharset.empty(),
-                wxS("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
-
-    wxEncodingConverter converter;
-    if ( convertEncoding )
-    {
-        wxFontEncoding targetEnc = wxFONTENCODING_SYSTEM;
-        wxFontEncoding enc = wxFontMapperBase::Get()->CharsetToEncoding(m_charset, false);
-        if ( enc == wxFONTENCODING_SYSTEM )
-        {
-            convertEncoding = false; // unknown encoding
-        }
-        else
-        {
-            targetEnc = wxLocale::GetSystemEncoding();
-            if (targetEnc == wxFONTENCODING_SYSTEM)
-            {
-                wxFontEncodingArray a = wxEncodingConverter::GetPlatformEquivalents(enc);
-                if (a[0] == enc)
-                    // no conversion needed, locale uses native encoding
-                    convertEncoding = false;
-                if (a.GetCount() == 0)
-                    // we don't know common equiv. under this platform
-                    convertEncoding = false;
-                targetEnc = a[0];
-            }
-        }
-
-        if ( convertEncoding )
-        {
-            converter.Init(enc, targetEnc);
-        }
-    }
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
-    (void)convertEncoding; // get rid of warnings about unused parameter
-
     for (size_t32 i = 0; i < m_numStrings; i++)
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
@@ -1400,12 +1361,10 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #if wxUSE_UNICODE
         msgid = wxString(data, *inputConv);
 #else // ASCII
-        #if wxUSE_WCHAR_T
-            if ( inputConv && sourceConv )
-                msgid = wxString(inputConv->cMB2WC(data), *sourceConv);
-            else
-        #endif
-                msgid = data;
+        if ( inputConv && sourceConv )
+            msgid = wxString(inputConv->cMB2WC(data), *sourceConv);
+        else
+            msgid = data;
 #endif // wxUSE_UNICODE
 
         data = StringAtOfs(m_pTransTable, i);
@@ -1422,19 +1381,12 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             wxString msgstr;
 #if wxUSE_UNICODE
             msgstr = wxString(str, *inputConv);
-#elif wxUSE_WCHAR_T
+#else
             if ( inputConv )
                 msgstr = wxString(inputConv->cMB2WC(str), *wxConvUI);
             else
                 msgstr = str;
-#else // !wxUSE_WCHAR_T
-        #if wxUSE_FONTMAP
-            if ( bConvertEncoding )
-                msgstr = wxString(converter.Convert(str));
-            else
-        #endif
-                msgstr = str;
-#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
             if ( !msgstr.empty() )
             {
@@ -1452,10 +1404,8 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
         }
     }
 
-#if wxUSE_WCHAR_T
     delete sourceConv;
     delete inputConvPtr;
-#endif // wxUSE_WCHAR_T
 
     return true;
 }

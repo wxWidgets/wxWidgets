@@ -1313,15 +1313,6 @@
 #   endif
 #endif /* wxUSE_TEXTFILE */
 
-#if wxUSE_XML && !wxUSE_WCHAR_T
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_XML requires wxUSE_WCHAR_T"
-#   else
-#       undef wxUSE_XML
-#       define wxUSE_XML 0
-#   endif
-#endif /* wxUSE_XML */
-
 #if !wxUSE_DYNLIB_CLASS
 #   if wxUSE_DYNAMIC_LOADER
 #       ifdef wxABORT_ON_CONFIG_ERROR

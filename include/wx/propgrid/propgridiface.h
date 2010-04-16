@@ -64,13 +64,11 @@ public:
         m_ptr.charName = str;
         m_flags = IsCharPtr;
     }
-#if wxUSE_WCHAR_T
     wxPGPropArgCls( const wchar_t* str )
     {
         m_ptr.wcharName = str;
         m_flags = IsWCharPtr;
     }
-#endif
     /** This constructor is required for NULL. */
     wxPGPropArgCls( int )
     {
@@ -100,9 +98,7 @@ private:
     {
         wxPGProperty* property;
         const char* charName;
-#if wxUSE_WCHAR_T
         const wchar_t* wcharName;
-#endif
         const wxString* stringName;
     } m_ptr;
     unsigned char m_flags;
@@ -1171,12 +1167,10 @@ public:
         wxVariant v(value);
         SetPropVal( id, v );
     }
-#if wxUSE_WCHAR_T
     void SetPropertyValue( wxPGPropArg id, const wchar_t* value )
     {
         SetPropertyValueString( id, wxString(value) );
     }
-#endif
     void SetPropertyValue( wxPGPropArg id, const char* value )
     {
         SetPropertyValueString( id, wxString(value) );

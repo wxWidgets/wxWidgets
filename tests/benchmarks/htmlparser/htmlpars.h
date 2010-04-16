@@ -250,7 +250,7 @@ public:
     virtual ~wx28HtmlEntitiesParser();
 
     // Sets encoding of output string.
-    // Has no effect if wxUSE_WCHAR_T==0 or wxUSE_UNICODE==1
+    // Has no effect if wxUSE_UNICODE==1
     void SetEncoding(wxFontEncoding encoding);
 
     // Parses entities in input and replaces them with respective characters
@@ -268,7 +268,7 @@ public:
 #endif
 
 protected:
-#if wxUSE_WCHAR_T && !wxUSE_UNICODE
+#if !wxUSE_UNICODE
     wxMBConv *m_conv;
     wxFontEncoding m_encoding;
 #endif

@@ -81,7 +81,6 @@ using namespace std ;
     #include <xlocale.h>
 #endif
 
-#if wxUSE_WCHAR_T
 WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
   // assume that we have mbsrtowcs() too if we have wcsrtombs()
@@ -141,7 +140,6 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
   return wxWcstombs(NULL, pwz, 0);
 #endif
 }
-#endif // wxUSE_WCHAR_T
 
 char* wxSetlocale(int category, const char *locale)
 {
@@ -735,7 +733,6 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 }
 #endif // wxUSE_UNICODE
 
-#if wxUSE_WCHAR_T
 
 // ----------------------------------------------------------------------------
 // ctype.h stuff (currently unused)
@@ -953,8 +950,6 @@ wxCRT_StrftimeW(wchar_t *s, size_t maxsize, const wchar_t *fmt, const struct tm 
 }
 #endif // !wxCRT_StrftimeW
 
-#endif // wxUSE_WCHAR_T
-
 #ifdef wxLongLong_t
 template<typename T>
 static wxULongLong_t
@@ -1109,7 +1104,7 @@ wxULongLong_t wxCRT_StrtoullW(const wchar_t* nptr, wchar_t** endptr, int base)
 #endif // wxLongLong_t
 
 // ----------------------------------------------------------------------------
-// functions which we may need even if !wxUSE_WCHAR_T
+// strtok() functions
 // ----------------------------------------------------------------------------
 
 template<typename T>

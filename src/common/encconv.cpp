@@ -25,12 +25,6 @@
     #include "unictabl.inc"
 #endif
 
-#if wxUSE_WCHAR_T
-    typedef wchar_t tchar;
-#else
-    typedef char tchar;
-#endif
-
 #ifdef __WXMAC__
     #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFStringEncodingExt.h>
@@ -124,10 +118,6 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 
-#if !wxUSE_WCHAR_T
-    if (input_enc == wxFONTENCODING_UNICODE || output_enc == wxFONTENCODING_UNICODE) return false;
-#endif
-
     if (input_enc == output_enc) {m_JustCopy = true; return true;}
 
     m_UnicodeOutput = (output_enc == wxFONTENCODING_UNICODE);
@@ -137,18 +127,18 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
     {
         if ((out_tbl = GetEncTable(output_enc)) == NULL) return false;
 
-        m_Table = new tchar[65536];
-        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
-        for (i = 128; i < 65536; i++)  m_Table[i] = (tchar)0;
+        m_Table = new wchar_t[65536];
+        for (i = 0; i < 128; i++)  m_Table[i] = (wchar_t)i; // 7bit ASCII
+        for (i = 128; i < 65536; i++)  m_Table[i] = (wchar_t)0;
 
         if (method == wxCONVERT_SUBSTITUTE)
         {
             for (i = 0; i < encoding_unicode_fallback_count; i++)
-                m_Table[encoding_unicode_fallback[i].c] = (tchar) encoding_unicode_fallback[i].s;
+                m_Table[encoding_unicode_fallback[i].c] = (wchar_t) encoding_unicode_fallback[i].s;
         }
 
         for (i = 0; i < 128; i++)
-            m_Table[out_tbl[i]] = (tchar)(128 + i);
+            m_Table[out_tbl[i]] = (wchar_t)(128 + i);
 
         m_UnicodeInput = true;
     }
@@ -160,12 +150,12 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
         m_UnicodeInput = false;
 
-        m_Table = new tchar[256];
-        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
+        m_Table = new wchar_t[256];
+        for (i = 0; i < 128; i++)  m_Table[i] = (wchar_t)i; // 7bit ASCII
 
         if (output_enc == wxFONTENCODING_UNICODE)
         {
-            for (i = 0; i < 128; i++)  m_Table[128 + i] = (tchar)in_tbl[i];
+            for (i = 0; i < 128; i++)  m_Table[128 + i] = (wchar_t)in_tbl[i];
             return true;
         }
         else // output !Unicode
@@ -182,13 +172,9 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
                     item = (CharsetItem*) bsearch(&key, encoding_unicode_fallback,
                                 encoding_unicode_fallback_count, sizeof(CharsetItem), CompareCharsetItems);
                 if (item)
-                    m_Table[128 + i] = (tchar)item -> c;
+                    m_Table[128 + i] = (wchar_t)item -> c;
                 else
-#if wxUSE_WCHAR_T
                     m_Table[128 + i] = (wchar_t)(128 + i);
-#else
-                    m_Table[128 + i] = (char)(128 + i);
-#endif
             }
 
             delete[] rev;
@@ -199,11 +185,11 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 }
 
 
-#define REPLACEMENT_CHAR  ((tchar)'?')
+#define REPLACEMENT_CHAR  (L'?')
 
-inline tchar GetTableValue(const tchar *table, tchar value, bool& repl)
+inline wchar_t GetTableValue(const wchar_t *table, wchar_t value, bool& repl)
 {
-    tchar r = table[value];
+    wchar_t r = table[value];
     if (r == 0 && value != 0)
     {
         r = REPLACEMENT_CHAR;
@@ -239,8 +225,6 @@ bool wxEncodingConverter::Convert(const char* input, char* output) const
     return !replaced;
 }
 
-
-#if wxUSE_WCHAR_T
 
 bool wxEncodingConverter::Convert(const char* input, wchar_t* output) const
 {
@@ -330,8 +314,6 @@ bool wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output) const
 
     return !replaced;
 }
-
-#endif // wxUSE_WCHAR_T
 
 
 wxString wxEncodingConverter::Convert(const wxString& input) const

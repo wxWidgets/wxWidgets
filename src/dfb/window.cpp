@@ -967,13 +967,11 @@ static long GetUntraslatedKeyCode(DFBInputDeviceKeyIdentifier key_id,
                 return key_symbol;
             else
             {
-#if wxUSE_WCHAR_T
                 wchar_t chr = key_symbol;
                 wxCharBuffer buf(wxConvUI->cWC2MB(&chr, 1, NULL));
                 if ( buf )
                     return *buf; // may be 0 if failed
                 else
-#endif // wxUSE_WCHAR_T
                     return 0;
             }
 #endif

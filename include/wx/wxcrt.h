@@ -39,26 +39,16 @@ inline bool wxIsEmpty(const wxCStrData& s) { return s.AsString().empty(); }
 
 /* multibyte to wide char conversion functions and macros */
 
-#if wxUSE_WCHAR_T
-    /* multibyte<->widechar conversion */
-    WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
-    WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
+/* multibyte<->widechar conversion */
+WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
+WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 
-    #if wxUSE_UNICODE
-        #define wxMB2WX wxMB2WC
-        #define wxWX2MB wxWC2MB
-        #define wxWC2WX wxStrncpy
-        #define wxWX2WC wxStrncpy
-    #else
-        #define wxMB2WX wxStrncpy
-        #define wxWX2MB wxStrncpy
-        #define wxWC2WX wxWC2MB
-        #define wxWX2WC wxMB2WC
-    #endif
-#else /* !wxUSE_UNICODE */
-    /* No wxUSE_WCHAR_T: we have to do something (JACS) */
-    #define wxMB2WC wxStrncpy
-    #define wxWC2MB wxStrncpy
+#if wxUSE_UNICODE
+    #define wxMB2WX wxMB2WC
+    #define wxWX2MB wxWC2MB
+    #define wxWC2WX wxStrncpy
+    #define wxWX2WC wxStrncpy
+#else
     #define wxMB2WX wxStrncpy
     #define wxWX2MB wxStrncpy
     #define wxWC2WX wxWC2MB

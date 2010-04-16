@@ -226,10 +226,8 @@ public:
   // template Read() would be used
   wxString Read(const wxString& key, const char* defVal) const
     { return Read(key, wxString(defVal)); }
-#if wxUSE_WCHAR_T
   wxString Read(const wxString& key, const wchar_t* defVal) const
     { return Read(key, wxString(defVal)); }
-#endif
 
   long ReadLong(const wxString& key, long defVal) const
     { long l; (void)Read(key, &l, defVal); return l; }
@@ -273,10 +271,8 @@ public:
     { return Write(key, wxString(value)); }
   bool Write(const wxString& key, const unsigned char *value)
     { return Write(key, wxString(value)); }
-#if wxUSE_WCHAR_T
   bool Write(const wxString& key, const wchar_t *value)
     { return Write(key, wxString(value)); }
-#endif
 
 
   // we also have to provide specializations for other types which we want to

@@ -359,7 +359,6 @@ public:
     wxCharBuffer(const wxCStrData& cstr);
 };
 
-#if wxUSE_WCHAR_T
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxScopedCharTypeBuffer<wchar_t> )
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<wchar_t> )
 
@@ -379,7 +378,6 @@ public:
 
     wxWCharBuffer(const wxCStrData& cstr);
 };
-#endif // wxUSE_WCHAR_T
 
 // wxCharTypeBuffer<T> implicitly convertible to T*
 template <typename T>

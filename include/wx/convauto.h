@@ -14,8 +14,6 @@
 #include "wx/strconv.h"
 #include "wx/fontenc.h"
 
-#if wxUSE_WCHAR_T
-
 // ----------------------------------------------------------------------------
 // wxConvAuto: uses BOM to automatically detect input encoding
 // ----------------------------------------------------------------------------
@@ -143,8 +141,6 @@ private:
 
     wxDECLARE_NO_ASSIGN_CLASS(wxConvAuto);
 };
-
-#endif // wxUSE_WCHAR_T
 
 #endif // _WX_CONVAUTO_H_
 

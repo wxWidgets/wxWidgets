@@ -57,7 +57,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             virtual ~wxEncodingConverter() { if (m_Table) delete[] m_Table; }
 
             // Initialize conversion. Both output or input encoding may
-            // be wxFONTENCODING_UNICODE, but only if wxUSE_WCHAR_T is set to 1.
+            // be wxFONTENCODING_UNICODE.
             //
             // All subsequent calls to Convert() will interpret it's argument
             // as a string in input_enc encoding and will output string in
@@ -91,12 +91,11 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             bool Convert(char* str) const { return Convert(str, str); }
             wxString Convert(const wxString& input) const;
 
-#if wxUSE_WCHAR_T
             bool Convert(const char* input, wchar_t* output) const;
             bool Convert(const wchar_t* input, char* output) const;
             bool Convert(const wchar_t* input, wchar_t* output) const;
             bool Convert(wchar_t* str) const { return Convert(str, str); }
-#endif
+
             // Return equivalent(s) for given font that are used
             // under given platform. wxPLATFORM_CURRENT means the plaform
             // this binary was compiled for
@@ -144,12 +143,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             }
 
     private:
-
-#if wxUSE_WCHAR_T
             wchar_t *m_Table;
-#else
-            char *m_Table;
-#endif
             bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
 
