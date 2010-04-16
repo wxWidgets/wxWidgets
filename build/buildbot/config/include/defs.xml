@@ -369,8 +369,8 @@ cd tests &amp;&amp; runtests.bat
     <xsl:param name="options"/>
 ERR=0
 cd tests || exit 0
-./test <xsl:value-of select="normalize-space($options)"/> || ERR=$?
-if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui || ERR=$?; fi
+./test -t <xsl:value-of select="normalize-space($options)"/> || ERR=$?
+if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui -t || ERR=$?; fi
 exit $ERR
 </xsl:template>
 
