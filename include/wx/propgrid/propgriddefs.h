@@ -18,6 +18,7 @@
 #include "wx/vector.h"
 #include "wx/hashmap.h"
 #include "wx/variant.h"
+#include "wx/any.h"
 #include "wx/longlong.h"
 #include "wx/clntdata.h"
 
@@ -545,9 +546,12 @@ public:\
 \
     virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
 \
+    DECLARE_WXANY_CONVERSION() \
 protected:\
     classname m_value; \
 };\
+\
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(classname, classname##VariantData) \
 \
 wxString classname##VariantData::GetType() const\
 {\

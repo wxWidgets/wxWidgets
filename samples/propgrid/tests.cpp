@@ -502,6 +502,59 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        //
+        // Test wxAny<->wxVariant conversion
+        RT_START_TEST(WXVARIANT_TO_WXANY_CONVERSION)
+
+        wxPGProperty* prop;
+        wxAny any;
+
+#if wxUSE_DATETIME
+        prop = pgman->GetProperty("DateProperty");
+        wxDateTime testTime = wxDateTime::Now();
+        any = testTime;
+        prop->SetValue(any);
+        if ( prop->GetValue().GetAny().As<wxDateTime>() != testTime )
+            RT_FAILURE();
+#endif
+
+        prop = pgman->GetProperty("IntProperty");
+        int testInt = 25537983;
+        any = testInt;
+        prop->SetValue(any);
+        if ( prop->GetValue().GetAny().As<int>() != testInt )
+            RT_FAILURE();
+#ifdef wxLongLong_t
+        if ( prop->GetValue().GetAny().As<wxLongLong_t>() != testInt )
+            RT_FAILURE();
+#endif
+
+        prop = pgman->GetProperty("StringProperty");
+        wxString testString = "asd934jfyn3";
+        any = testString;
+        prop->SetValue(any);
+        if ( prop->GetValue().GetAny().As<wxString>() != testString )
+            RT_FAILURE();
+
+        // Test with a type generated with IMPLEMENT_VARIANT_OBJECT()
+        prop = pgman->GetProperty("ColourProperty");
+        wxColour testCol = *wxCYAN;
+        any = testCol;
+        prop->SetValue(any);
+        if ( prop->GetValue().GetAny().As<wxColour>() != testCol )
+            RT_FAILURE();
+
+        // Test with a type with custom wxVariantData defined by
+        // wxPG headers.
+        prop = pgman->GetProperty("Position");
+        wxPoint testPoint(199, 199);
+        any = testPoint;
+        prop->SetValue(any);
+        if ( prop->GetValue().GetAny().As<wxPoint>() != testPoint )
+            RT_FAILURE();
+    }
+
+    {
         RT_START_TEST(GetPropertyValues)
 
         for ( i=0; i<3; i++ )
