@@ -13,9 +13,9 @@
     The wxAny class represents a container for any type. Its value
     can be changed at run time, possibly to a different type of value.
 
-    wxAny is a backwards incompatible successor class for wxVariant,
-    essentially doing the same thing in a more modern, template-based manner
-    and with transparent support for any user data type.
+    wxAny is a backwards-incompatible (but convertible) successor class for
+    wxVariant, essentially doing the same thing in a more modern, template-
+    based manner and with transparent support for any user data type.
 
     Some pseudo-code'ish example of use with arbitrary user data:
 
@@ -88,6 +88,17 @@ public:
     wxAny(const wxAny& any);
 
     /**
+        Constructs wxAny, converting value from wxVariant.
+
+        @remarks Because of this conversion, it is not usually possible to
+                 have wxAny that actually holds a wxVariant. If wxVariant
+                 cannot be converted to a specific data type, wxAny will then
+                 hold and manage reference to wxVariantData* similar to how
+                 wxVariant does.
+    */
+    wxAny(const wxVariant& variant);
+
+    /**
         Destructor.
     */
     ~wxAny();
@@ -128,6 +139,16 @@ public:
     bool GetAs(T* value) const;
 
     /**
+        Specialization of GetAs() that allows conversion of wxAny into
+        wxVariant.
+
+        @return Returns @true if conversion was successful. Conversion usually
+                only fails if variant used custom wxVariantData that did not
+                implement the wxAny to wxVariant conversion functions.
+    */
+    bool GetAs(wxVariant* value) const;
+
+    /**
         Returns the value type as wxAnyValueType instance.
 
         @remarks You cannot reliably test whether two wxAnys are of
@@ -154,6 +175,7 @@ public:
     template<typename T>
     wxAny& operator=(const T &value);
     wxAny& operator=(const wxAny &any);
+    wxAny& operator=(const wxVariant &variant);
     //@}
 
     //@{

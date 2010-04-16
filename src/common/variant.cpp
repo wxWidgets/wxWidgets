@@ -193,6 +193,48 @@ bool wxVariant::IsValueKindOf(const wxClassInfo* type) const
     return info ? info->IsKindOf(type) : false ;
 }
 
+// -----------------------------------------------------------------
+// wxVariant <-> wxAny conversion code
+// -----------------------------------------------------------------
+
+#if wxUSE_ANY
+
+wxAnyToVariantRegistration::
+    wxAnyToVariantRegistration(wxVariantDataFactory factory)
+        : m_factory(factory)
+{
+    wxPreRegisterAnyToVariant(this);
+}
+
+wxVariant::wxVariant(const wxAny& any)
+    : wxObject()
+{
+    wxVariant variant;
+    if ( !any.GetAs(&variant) )
+    {
+        wxFAIL_MSG("wxAny of this type cannot be converted to wxVariant");
+        return;
+    }
+
+    *this = variant;
+}
+
+wxAny wxVariant::GetAny() const
+{
+    if ( IsNull() )
+        return wxAny();
+
+    wxVariantData* data = GetData();
+    wxAny any;
+
+    if ( data->GetAsAny(&any) )
+        return any;
+
+    // If everything else fails, wrap the whole wxVariantData
+    return wxAny(data);
+}
+
+#endif // wxUSE_ANY
 
 // -----------------------------------------------------------------
 // wxVariantDataLong
@@ -224,9 +266,26 @@ public:
 
     virtual wxString GetType() const { return wxT("long"); }
 
+    // Since wxAny does not have separate type for integers shorter than
+    // longlong, we do not usually implement wxVariant->wxAny conversion
+    // here (but in wxVariantDataLongLong instead).
+#ifndef wxLongLong_t
+    DECLARE_WXANY_CONVERSION()
+#else
+    bool GetAsAny(wxAny* any) const
+    {
+        *any = m_value;
+        return true;
+    }
+#endif
+
 protected:
     long m_value;
 };
+
+#ifndef wxLongLong_t
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(long, wxVariantDataLong)
+#endif
 
 bool wxVariantDataLong::Eq(wxVariantData& data) const
 {
@@ -373,9 +432,13 @@ public:
     virtual wxString GetType() const { return wxT("double"); }
 
     wxVariantData* Clone() const { return new wxVariantDoubleData(m_value); }
+
+    DECLARE_WXANY_CONVERSION()
 protected:
     double m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(double, wxVariantDoubleData)
 
 bool wxVariantDoubleData::Eq(wxVariantData& data) const
 {
@@ -509,9 +572,13 @@ public:
     virtual wxString GetType() const { return wxT("bool"); }
 
     wxVariantData* Clone() const { return new wxVariantDataBool(m_value); }
+
+    DECLARE_WXANY_CONVERSION()
 protected:
     bool m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(bool, wxVariantDataBool)
 
 bool wxVariantDataBool::Eq(wxVariantData& data) const
 {
@@ -646,9 +713,12 @@ public:
     virtual wxString GetType() const { return wxT("char"); }
     wxVariantData* Clone() const { return new wxVariantDataChar(m_value); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxUniChar m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxUniChar, wxVariantDataChar)
 
 bool wxVariantDataChar::Eq(wxVariantData& data) const
 {
@@ -798,9 +868,12 @@ public:
     virtual wxString GetType() const { return wxT("string"); }
     wxVariantData* Clone() const { return new wxVariantDataString(m_value); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxString m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxString, wxVariantDataString)
 
 bool wxVariantDataString::Eq(wxVariantData& data) const
 {
@@ -954,9 +1027,12 @@ public:
 
     virtual wxClassInfo* GetValueClassInfo();
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxObject* m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxObject*, wxVariantDataWxObjectPtr)
 
 bool wxVariantDataWxObjectPtr::Eq(wxVariantData& data) const
 {
@@ -1073,9 +1149,12 @@ public:
     virtual wxString GetType() const { return wxT("void*"); }
     virtual wxVariantData* Clone() const { return new wxVariantDataVoidPtr(m_value); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     void* m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(void*, wxVariantDataVoidPtr)
 
 bool wxVariantDataVoidPtr::Eq(wxVariantData& data) const
 {
@@ -1185,10 +1264,12 @@ public:
     virtual wxString GetType() const { return wxT("datetime"); }
     virtual wxVariantData* Clone() const { return new wxVariantDataDateTime(m_value); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxDateTime m_value;
 };
 
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxDateTime, wxVariantDataDateTime)
 
 bool wxVariantDataDateTime::Eq(wxVariantData& data) const
 {
@@ -1316,9 +1397,12 @@ public:
     virtual wxString GetType() const { return wxT("arrstring"); }
     virtual wxVariantData* Clone() const { return new wxVariantDataArrayString(m_value); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxArrayString m_value;
 };
+
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxArrayString, wxVariantDataArrayString)
 
 bool wxVariantDataArrayString::Eq(wxVariantData& data) const
 {
@@ -1449,9 +1533,47 @@ public:
 
     virtual wxString GetType() const { return wxS("longlong"); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxLongLong m_value;
 };
+
+//
+// wxLongLong type requires customized wxAny conversion code
+//
+#if wxUSE_ANY
+#ifdef wxLongLong_t
+
+bool wxVariantDataLongLong::GetAsAny(wxAny* any) const
+{
+    *any = m_value.GetValue();
+    return true;
+}
+
+wxVariantData* wxVariantDataLongLong::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataLongLong(wxANY_AS(any, wxLongLong_t));
+}
+
+REGISTER_WXANY_CONVERSION(wxLongLong_t, wxVariantDataLongLong)
+
+#else // if !defined(wxLongLong_t)
+
+bool wxVariantDataLongLong::GetAsAny(wxAny* any) const
+{
+    *any = m_value;
+    return true;
+}
+
+wxVariantData* wxVariantDataLongLong::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataLongLong(wxANY_AS(any, wxLongLong));
+}
+
+REGISTER_WXANY_CONVERSION(wxLongLong, wxVariantDataLongLong)
+
+#endif // defined(wxLongLong_t)/!defined(wxLongLong_t)
+#endif // wxUSE_ANY
 
 bool wxVariantDataLongLong::Eq(wxVariantData& data) const
 {
@@ -1610,9 +1732,48 @@ public:
 
     virtual wxString GetType() const { return wxS("ulonglong"); }
 
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxULongLong m_value;
 };
+
+//
+// wxULongLong type requires customized wxAny conversion code
+//
+#if wxUSE_ANY
+#ifdef wxLongLong_t
+
+bool wxVariantDataULongLong::GetAsAny(wxAny* any) const
+{
+    *any = m_value.GetValue();
+    return true;
+}
+
+wxVariantData* wxVariantDataULongLong::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataULongLong(wxANY_AS(any, wxULongLong_t));
+}
+
+REGISTER_WXANY_CONVERSION(wxULongLong_t, wxVariantDataULongLong)
+
+#else // if !defined(wxLongLong_t)
+
+bool wxVariantDataULongLong::GetAsAny(wxAny* any) const
+{
+    *any = m_value;
+    return true;
+}
+
+wxVariantData* wxVariantDataULongLong::VariantDataFactory(const wxAny& any)
+{
+    return new wxVariantDataULongLong(wxANY_AS(any, wxULongLong));
+}
+
+REGISTER_WXANY_CONVERSION(wxULongLong, wxVariantDataULongLong)
+
+#endif // defined(wxLongLong_t)/!defined(wxLongLong_t)
+#endif // wxUSE_ANY
+
 
 bool wxVariantDataULongLong::Eq(wxVariantData& data) const
 {
@@ -1764,9 +1925,53 @@ public:
     void Clear();
 
     wxVariantData* Clone() const { return new wxVariantDataList(m_value); }
+
+    DECLARE_WXANY_CONVERSION()
 protected:
     wxVariantList  m_value;
 };
+
+#if wxUSE_ANY
+
+//
+// Convert to/from list of wxAnys
+//
+
+WX_DEFINE_LIST(wxAnyList)
+
+bool wxVariantDataList::GetAsAny(wxAny* any) const
+{
+    wxAnyList dst;
+    wxVariantList::compatibility_iterator node = m_value.GetFirst();
+    while (node)
+    {
+        wxVariant* pVar = node->GetData();
+        dst.push_back(new wxAny(*pVar));
+        node = node->GetNext();
+    }
+
+    *any = dst;
+    return true;
+}
+
+wxVariantData* wxVariantDataList::VariantDataFactory(const wxAny& any)
+{
+    wxAnyList src = wxANY_AS(any, wxAnyList);
+    wxVariantList dst;
+    wxAnyList::compatibility_iterator node = src.GetFirst();
+    while (node)
+    {
+        wxAny* pAny = node->GetData();
+        dst.push_back(new wxVariant(*pAny));
+        node = node->GetNext();
+    }
+
+    return new wxVariantDataList(dst);
+}
+
+REGISTER_WXANY_CONVERSION(wxAnyList, wxVariantDataList)
+
+#endif // wxUSE_ANY
 
 wxVariantDataList::wxVariantDataList(const wxVariantList& list)
 {

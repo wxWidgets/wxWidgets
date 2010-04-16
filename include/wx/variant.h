@@ -29,6 +29,8 @@
 
 #include "wx/iosfwrap.h"
 
+class wxAny;
+
 /*
  * wxVariantData stores the actual data in a wxVariant object,
  * to allow it to store any type of data.
@@ -78,6 +80,11 @@ public:
     // a copy of the data.
     virtual wxVariantData* Clone() const { return NULL; }
 
+#if wxUSE_ANY
+    // Converts value to wxAny, if possible. Return true if successful.
+    virtual bool GetAsAny(wxAny* WXUNUSED(any)) const { return false; }
+#endif
+
 protected:
     // Protected dtor should make some incompatible code
     // break more louder. That is, they should do data->DecRef()
@@ -101,6 +108,9 @@ public:
 
     wxVariant(const wxVariant& variant);
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString);
+#if wxUSE_ANY
+    wxVariant(const wxAny& any);
+#endif
     virtual ~wxVariant();
 
     // generic assignment
@@ -149,6 +159,10 @@ public:
 
     // write contents to a string (e.g. for debugging)
     wxString MakeString() const;
+
+#if wxUSE_ANY
+    wxAny GetAny() const;
+#endif
 
     // double
     wxVariant(double val, const wxString& name = wxEmptyString);
@@ -341,6 +355,83 @@ private:
     DECLARE_DYNAMIC_CLASS(wxVariant)
 };
 
+
+//
+// wxVariant <-> wxAny conversion code
+//
+#if wxUSE_ANY
+
+#include "wx/any.h"
+
+// In order to convert wxAny to wxVariant, we need to be able to associate
+// wxAnyValueType with a wxVariantData factory function.
+typedef wxVariantData* (*wxVariantDataFactory)(const wxAny& any);
+
+// Actual Any-to-Variant registration must be postponed to a time when all
+// global variables have been initialized. Hence this arrangement.
+// wxAnyToVariantRegistration instances are kept in global scope and
+// wxAnyValueTypeGlobals in any.cpp will use their data when the time is
+// right.
+class WXDLLIMPEXP_BASE wxAnyToVariantRegistration
+{
+public:
+    wxAnyToVariantRegistration(wxVariantDataFactory factory);
+
+    virtual wxAnyValueType* GetAssociatedType() = 0;
+    wxVariantDataFactory GetFactory() const { return m_factory; }
+private:
+    wxVariantDataFactory    m_factory;
+};
+
+template<typename T>
+class wxAnyToVariantRegistrationImpl : public wxAnyToVariantRegistration
+{
+public:
+    wxAnyToVariantRegistrationImpl(wxVariantDataFactory factory)
+        : wxAnyToVariantRegistration(factory)
+    {
+    }
+
+    virtual wxAnyValueType* GetAssociatedType()
+    {
+        return wxAnyValueTypeImpl<T>::GetInstance();
+    }
+private:
+};
+
+#define DECLARE_WXANY_CONVERSION() \
+virtual bool GetAsAny(wxAny* any) const; \
+static wxVariantData* VariantDataFactory(const wxAny& any);
+
+#define REGISTER_WXANY_CONVERSION(T, CLASSNAME) \
+static wxAnyToVariantRegistrationImpl<T> \
+    gs_##CLASSNAME##AnyToVariantRegistration = \
+    wxAnyToVariantRegistrationImpl<T>(&CLASSNAME::VariantDataFactory);
+
+#define IMPLEMENT_TRIVIAL_WXANY_CONVERSION(T, CLASSNAME) \
+bool CLASSNAME::GetAsAny(wxAny* any) const \
+{ \
+    *any = m_value; \
+    return true; \
+} \
+wxVariantData* CLASSNAME::VariantDataFactory(const wxAny& any) \
+{ \
+    return new CLASSNAME(wxANY_AS(any, T)); \
+} \
+REGISTER_WXANY_CONVERSION(T, CLASSNAME)
+
+// This is needed for wxVariantList conversion
+WX_DECLARE_LIST_WITH_DECL(wxAny, wxAnyList, class WXDLLIMPEXP_BASE);
+
+#else // if !wxUSE_ANY
+
+#define DECLARE_WXANY_CONVERSION()
+#define REGISTER_WXANY_CONVERSION(T, CLASSNAME)
+#define IMPLEMENT_TRIVIAL_WXANY_CONVERSION(T, CLASSNAME)
+
+#endif // wxUSE_ANY/!wxUSE_ANY
+
+
 #define DECLARE_VARIANT_OBJECT(classname) \
     DECLARE_VARIANT_OBJECT_EXPORTED(classname, wxEMPTY_PARAMETER_VALUE)
 
@@ -367,6 +458,7 @@ public:\
 \
     virtual wxVariantData* Clone() const { return new classname##VariantData(m_value); } \
 \
+    DECLARE_WXANY_CONVERSION() \
 protected:\
     classname m_value; \
 };\
@@ -395,7 +487,8 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
     classname##VariantData *data = new classname##VariantData( value );\
     variant.SetData( data );\
     return variant;\
-}
+} \
+IMPLEMENT_TRIVIAL_WXANY_CONVERSION(classname, classname##VariantData)
 
 // implements a wxVariantData-derived class using for the Eq() method the
 // operator== which must have been provided by "classname"

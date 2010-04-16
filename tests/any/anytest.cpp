@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( As );
         CPPUNIT_TEST( GetAs );
         CPPUNIT_TEST( Null );
+        CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
     CPPUNIT_TEST_SUITE_END();
 
@@ -43,6 +44,7 @@ private:
     void As();
     void GetAs();
     void Null();
+    void wxVariantConversions();
     void CustomTemplateSpecialization();
 
     wxDateTime m_testDateTime;
@@ -66,6 +68,7 @@ private:
     wxAny   m_anyWxObjectPtr1;
     wxAny   m_anyVoidPtr1;
     wxAny   m_anyDateTime1;
+    wxAny   m_anyUniChar1;
 
     wxAny   m_anySignedChar2;
     wxAny   m_anySignedShort2;
@@ -156,6 +159,7 @@ wxAnyTestCase::wxAnyTestCase()
     m_anyFloatDouble2 = (float)TEST_FLOAT_CONST;
     m_anyDoubleDouble2 = (double)TEST_FLOAT_CONST;
     m_anyDateTime2 = m_testDateTime;
+    m_anyUniChar1 = wxUniChar('A');
     m_anyWxObjectPtr2 = dummyWxObjectPointer;
     m_anyVoidPtr2 = dummyVoidPointer;
 }
@@ -248,6 +252,8 @@ void wxAnyTestCase::As()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(o, TEST_FLOAT_CONST, FEQ_DELTA);
     double p = wxANY_AS(m_anyDoubleDouble1, double);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(p, TEST_FLOAT_CONST, FEQ_DELTA);
+    wxUniChar chr = wxANY_AS(m_anyUniChar1, wxUniChar);
+    CPPUNIT_ASSERT(chr == 'A');
     wxDateTime q = wxANY_AS(m_anyDateTime1, wxDateTime);
     CPPUNIT_ASSERT(q == m_testDateTime);
     wxObject* r = wxANY_AS(m_anyWxObjectPtr1, wxObject*);
@@ -370,8 +376,10 @@ void wxAnyTestCase::GetAs()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d2, TEST_FLOAT_CONST, FEQ_DELTA);
 }
 
+
 //
-// Test user data type specialization of wxAnyValueTypeImpl
+// Test user data type for wxAnyValueTypeImpl specialization
+// any hand-built wxVariantData
 //
 
 class MyClass
@@ -391,6 +399,173 @@ private:
     int     m_someValue;
 };
 
+
+#if wxUSE_VARIANT
+
+// For testing purposes, create dummy variant data implementation
+// that does not have wxAny conversion code
+class wxMyVariantData : public wxVariantData
+{
+public:
+    wxMyVariantData(const MyClass& value)
+    {
+        m_value = value;
+    }
+
+    virtual bool Eq(wxVariantData& WXUNUSED(data)) const
+    {
+        return false;
+    }
+
+    // What type is it? Return a string name.
+    virtual wxString GetType() const { return "MyClass"; }
+
+    virtual wxVariantData* Clone() const
+    {
+        return new wxMyVariantData(m_value);
+    }
+
+protected:
+    MyClass     m_value;
+};
+
+#endif // wxUSE_VARIANT
+
+
+void wxAnyTestCase::wxVariantConversions()
+{
+#if wxUSE_VARIANT
+    //
+    // Test various conversions to and from wxVariant
+    //
+    bool res;
+
+    // Prepare wxVariants
+    wxVariant vLong(123L);
+    wxVariant vString("ABC");
+    wxVariant vDouble(TEST_FLOAT_CONST);
+    wxVariant vBool((bool)true);
+    wxVariant vChar('A');
+#ifdef wxLongLong_t
+    wxVariant vLongLong(wxLongLong(wxLL(0xFFFFFFFFFF)));
+    wxVariant vULongLong(wxULongLong(wxULL(123456)));
+#endif
+    wxArrayString arrstr;
+    arrstr.push_back("test string");
+    wxVariant vArrayString(arrstr);
+    wxVariant vDateTime(m_testDateTime);
+    wxVariant vVoidPtr(dummyVoidPointer);
+    wxVariant vCustomType(new wxMyVariantData(MyClass(101)));
+    wxVariant vList;
+
+    vList.NullList();
+    vList.Append(15);
+    vList.Append("abc");
+
+    // Convert to wxAnys, and then back to wxVariants
+    wxVariant variant;
+
+    wxAny any(vLong);
+    CPPUNIT_ASSERT(any == 123L);
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant == 123L);
+
+    // Make sure integer variant has correct type information
+    CPPUNIT_ASSERT(variant.GetLong() == 123);
+    CPPUNIT_ASSERT(variant.GetType() == "long");
+
+    // Unsigned long wxAny should convert to "ulonglong" wxVariant
+    any = 1000UL;
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "ulonglong");
+    CPPUNIT_ASSERT(variant.GetLong() == 1000);
+
+    any = vString;
+    CPPUNIT_ASSERT(any == "ABC");
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetString() == "ABC");
+
+    any = vDouble;
+    double d = wxANY_AS(any, double);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_FLOAT_CONST, FEQ_DELTA);
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(variant.GetDouble(),
+                                 TEST_FLOAT_CONST,
+                                 FEQ_DELTA);
+
+    any = vBool;
+    CPPUNIT_ASSERT(wxANY_AS(any, bool) == true);
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetBool() == true);
+
+    any = vChar;
+    //CPPUNIT_ASSERT(wxANY_AS(any, wxUniChar) == 'A');
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetChar() == 'A');
+
+#ifdef wxLongLong_t
+    any = vLongLong;
+    CPPUNIT_ASSERT(any == wxLL(0xFFFFFFFFFF));
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetLongLong() == wxLongLong(wxLL(0xFFFFFFFFFF)));
+    CPPUNIT_ASSERT(variant.GetType() == "longlong");
+
+    any = vULongLong;
+    CPPUNIT_ASSERT(any == wxLL(123456));
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetULongLong() == wxULongLong(wxULL(123456)));
+#endif
+
+    // Cannot test equality for the rest, just test that they convert
+    // back correctly.
+    any = vArrayString;
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    wxArrayString arrstr2 = variant.GetArrayString();
+    CPPUNIT_ASSERT(arrstr2 == arrstr);
+
+    any = m_testDateTime;
+    CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
+    any = vDateTime;
+    CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant == m_testDateTime);
+
+    any = vVoidPtr;
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetVoidPtr() == dummyVoidPointer);
+
+    any = vList;
+    CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxAnyList));
+    wxAnyList anyList = wxANY_AS(any, wxAnyList);
+    CPPUNIT_ASSERT(anyList.GetCount() == 2);
+    CPPUNIT_ASSERT(wxANY_AS((*anyList[0]), int) == 15);
+    CPPUNIT_ASSERT(wxANY_AS((*anyList[1]), wxString) == "abc");
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "list");
+    CPPUNIT_ASSERT(variant.GetCount() == 2);
+    CPPUNIT_ASSERT(variant[0].GetLong() == 15);
+    CPPUNIT_ASSERT(variant[1].GetString() == "abc");
+
+    any = vCustomType;
+    CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxVariantData*));
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "MyClass");
+
+#endif // wxUSE_VARIANT
+}
 
 template<>
 class wxAnyValueTypeImpl<MyClass> :
