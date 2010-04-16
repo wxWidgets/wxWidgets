@@ -858,9 +858,7 @@ public:
               wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
-    bool FillHash(wxMessagesHash& hash,
-                  const wxString& msgIdCharset,
-                  bool convertEncoding) const;
+    bool FillHash(wxMessagesHash& hash, const wxString& msgIdCharset) const;
 
     // return the charset of the strings in this catalog or empty string if
     // none/unknown
@@ -951,7 +949,7 @@ public:
 
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxString& dirPrefix, const wxString& name,
-            const wxString& msgIdCharset, bool bConvertEncoding = false);
+              const wxString& msgIdCharset);
 
     // get name of the catalog
     wxString GetName() const { return m_name; }
@@ -1305,33 +1303,23 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 }
 
 bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
-                                const wxString& msgIdCharset,
-                                bool convertEncoding) const
+                                const wxString& msgIdCharset) const
 {
-#if wxUSE_UNICODE
-    // this parameter doesn't make sense, we always must convert encoding in
-    // Unicode build
-    convertEncoding = true;
-#elif wxUSE_FONTMAP
-    if ( convertEncoding )
-    {
-        // determine if we need any conversion at all
-        wxFontEncoding encCat = wxFontMapperBase::GetEncodingFromName(m_charset);
-        if ( encCat == wxLocale::GetSystemEncoding() )
-        {
-            // no need to convert
-            convertEncoding = false;
-        }
-    }
-#endif // wxUSE_UNICODE/wxUSE_FONTMAP
-
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv,
             *inputConvPtr = NULL; // same as inputConv but safely deleteable
-    if ( convertEncoding && !m_charset.empty() )
+
+    if ( !m_charset.empty() )
     {
-        inputConvPtr =
-        inputConv = new wxCSConv(m_charset);
+#if !wxUSE_UNICODE && wxUSE_FONTMAP
+        // determine if we need any conversion at all
+        wxFontEncoding encCat = wxFontMapperBase::GetEncodingFromName(m_charset);
+        if ( encCat != wxLocale::GetSystemEncoding() )
+#endif
+        {
+            inputConvPtr =
+            inputConv = new wxCSConv(m_charset);
+        }
     }
     else // no need or not possible to convert the encoding
     {
@@ -1339,9 +1327,7 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
         // we must somehow convert the narrow strings in the message catalog to
         // wide strings, so use the default conversion if we have no charset
         inputConv = wxConvCurrent;
-#else // !wxUSE_UNICODE
-        inputConv = NULL;
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+#endif
     }
 
     // conversion to apply to msgid strings before looking them up: we only
@@ -1433,7 +1419,7 @@ wxMsgCatalog::~wxMsgCatalog()
 #endif // !wxUSE_UNICODE
 
 bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
-                        const wxString& msgIdCharset, bool bConvertEncoding)
+                        const wxString& msgIdCharset)
 {
     wxMsgCatalogFile file;
 
@@ -1442,26 +1428,8 @@ bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
     if ( !file.Load(dirPrefix, name, m_pluralFormsCalculator) )
         return false;
 
-    if ( !file.FillHash(m_messages, msgIdCharset, bConvertEncoding) )
+    if ( !file.FillHash(m_messages, msgIdCharset) )
         return false;
-
-#if !wxUSE_UNICODE
-    // we should use a conversion compatible with the message catalog encoding
-    // in the GUI if we don't convert the strings to the current conversion but
-    // as the encoding is global, only change it once, otherwise we could get
-    // into trouble if we use several message catalogs with different encodings
-    //
-    // this is, of course, a hack but it at least allows the program to use
-    // message catalogs in any encodings without asking the user to change his
-    // locale
-    if ( !bConvertEncoding &&
-            !file.GetCharset().empty() &&
-                wxConvUI == &wxConvLocal )
-    {
-        wxConvUI =
-        m_conv = new wxCSConv(file.GetCharset());
-    }
-#endif // !wxUSE_UNICODE
 
     return true;
 }
@@ -1532,16 +1500,23 @@ void wxLocale::DoCommonInit()
 bool wxLocale::Init(const wxString& name,
                     const wxString& shortName,
                     const wxString& locale,
-                    bool            bLoadDefault,
-                    bool            bConvertEncoding)
+                    bool            bLoadDefault
+#if WXWIN_COMPATIBILITY_2_8
+                   ,bool            bConvertEncoding
+#endif
+                    )
 {
     wxASSERT_MSG( !m_initialized,
                     wxS("you can't call wxLocale::Init more than once") );
 
+#if WXWIN_COMPATIBILITY_2_8
+    wxASSERT_MSG( bConvertEncoding,
+                  wxS("wxLocale::Init with bConvertEncoding=false is no longer supported, add charset to your catalogs") );
+#endif
+
     m_initialized = true;
     m_strLocale = name;
     m_strShort = shortName;
-    m_bConvertEncoding = bConvertEncoding;
     m_language = wxLANGUAGE_UNKNOWN;
 
     // change current locale (default: same as long name)
@@ -1645,6 +1620,11 @@ static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 
 bool wxLocale::Init(int language, int flags)
 {
+#if WXWIN_COMPATIBILITY_2_8
+    wxASSERT_MSG( !(flags & wxLOCALE_CONV_ENCODING),
+                  wxS("wxLOCALE_CONV_ENCODING is no longer supported, add charset to your catalogs") );
+#endif
+
     bool ret = true;
 
     int lang = language;
@@ -1833,8 +1813,7 @@ bool wxLocale::Init(int language, int flags)
     }
 
     if ( !Init(name, canonical, retloc,
-            (flags & wxLOCALE_LOAD_DEFAULT) != 0,
-            (flags & wxLOCALE_CONV_ENCODING) != 0) )
+            (flags & wxLOCALE_LOAD_DEFAULT) != 0) )
     {
         ret = false;
     }
@@ -2491,7 +2470,7 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
 
     wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
-    if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) )
+    if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset) )
     {
         // add it to the head of the list so that in GetString it will
         // be searched before the catalogs added earlier

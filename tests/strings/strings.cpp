@@ -720,7 +720,7 @@ void StringTestCase::ToDouble()
     wxLocale *locale = new wxLocale;
     
     // don't load default catalog, it may be unavailable:
-    CPPUNIT_ASSERT( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING) );
+    CPPUNIT_ASSERT( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
     
     static const struct ToDoubleData doubleData2[] =
     {

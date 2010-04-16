@@ -75,7 +75,7 @@ void IntlTestCase::setUp()
     CPPUNIT_ASSERT( m_locale );
 
     // don't load default catalog, it may be unavailable:
-    bool loaded = m_locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+    bool loaded = m_locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT);
     CPPUNIT_ASSERT( loaded );
 
     m_locale->AddCatalog("internat");

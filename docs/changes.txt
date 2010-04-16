@@ -165,6 +165,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   indentation instead of being its double. Its default value was changed
   accordingly, to 2.
 
+- wxLOCALE_CONV_ENCODING flag has no effect now, catalogs are converted
+  regardless of whether the flag was specified or not. This only affects
+  legacy ANSI builds.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

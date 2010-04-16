@@ -479,8 +479,7 @@ public:
     /**
         See Init() for parameters description.
     */
-    wxLocale(int language,
-             int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+    wxLocale(int language, int flags = wxLOCALE_LOAD_DEFAULT);
 
     /**
         See Init() for parameters description.
@@ -495,8 +494,7 @@ public:
     wxLocale(const wxString& name,
              const wxString& short = wxEmptyString,
              const wxString& locale = wxEmptyString,
-             bool bLoadDefault = true,
-             bool bConvertEncoding = false);
+             bool bLoadDefault = true);
 
     /**
         The destructor, like the constructor, also has global side effects: the
@@ -763,17 +761,11 @@ public:
               containing the translations of standard wxWidgets messages
               automatically.
             - wxLOCALE_DONT_LOAD_DEFAULT: Negation of wxLOCALE_LOAD_DEFAULT.
-            - wxLOCALE_CONV_ENCODING: Automatically convert message catalogs to
-              platform's default encoding. Note that it will do only basic
-              conversion between well-known pair like iso8859-1 and windows-1252 or
-              iso8859-2 and windows-1250. See @ref overview_nonenglish for
-              detailed description of this behaviour.
-              Note that this flag is meaningless in Unicode build.
 
         @return @true on success or @false if the given locale couldn't be set.
     */
     bool Init(int language = wxLANGUAGE_DEFAULT,
-              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+              int flags = wxLOCALE_LOAD_DEFAULT);
 
     /**
         @deprecated
@@ -791,16 +783,9 @@ public:
             May be set to @false to prevent loading of the message catalog for the
             given locale containing the translations of standard wxWidgets messages.
             This parameter would be rarely used in normal circumstances.
-        @param bConvertEncoding
-            May be set to @true to do automatic conversion of message catalogs to
-            platform's native encoding. Note that it will do only basic conversion
-            between well-known pair like iso8859-1 and windows-1252 or iso8859-2
-            and windows-1250.
-            See @ref overview_nonenglish for detailed description of this behaviour.
     */
     bool Init(const wxString& name, const wxString& short = wxEmptyString,
-              const wxString& locale = wxEmptyString, bool bLoadDefault = true,
-              bool bConvertEncoding = false);
+              const wxString& locale = wxEmptyString, bool bLoadDefault = true);
 
     /**
         Check whether the operating system and/or C run time environment supports

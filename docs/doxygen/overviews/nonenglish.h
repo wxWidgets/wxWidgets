@@ -102,9 +102,7 @@ Windows).
 How is this done? When you tell the wxLocale class to load a message catalog
 that contains a correct header, it checks the charset. The catalog is then
 converted to the charset used (see wxLocale::GetSystemEncoding and
-wxLocale::GetSystemEncodingName) by the user's operating system. This is the
-default behaviour of the wxLocale class; you can disable it by @b not passing
-@c wxLOCALE_CONV_ENCODING to wxLocale::Init.
+wxLocale::GetSystemEncodingName) by the user's operating system.
 
 
 @section overview_nonenglish_strings Non-English Strings or 8-bit Characters in Source

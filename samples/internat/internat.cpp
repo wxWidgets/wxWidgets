@@ -229,7 +229,7 @@ bool MyApp::OnInit()
 
     // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
     // false just because it failed to load wxstd catalog
-    if ( !m_locale.Init(m_lang, wxLOCALE_DONT_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING) )
+    if ( !m_locale.Init(m_lang, wxLOCALE_DONT_LOAD_DEFAULT) )
     {
         wxLogWarning(_("This language is not supported by the system."));
 
