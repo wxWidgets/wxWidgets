@@ -767,7 +767,7 @@ public:
         wxPanel), the size returned by this function will be the same as the size
         the window would have had after calling Fit().
 
-        Note that when you write your own widget you need to overload the
+        Note that when you write your own widget you need to override the
         DoGetBestSize() function instead of this (non-virtual!) function.
 
         @see CacheBestSize(), @ref overview_windowsizing
@@ -971,12 +971,12 @@ public:
 
         @see @ref overview_windowsizing
     */
-    virtual void SetClientSize(int width, int height);
+    void SetClientSize(int width, int height);
 
     /**
         @overload
     */
-    virtual void SetClientSize(const wxSize& size);
+    void SetClientSize(const wxSize& size);
 
     /**
         This normally does not need to be called by user code.
@@ -1114,17 +1114,17 @@ public:
 
         @see Move(), @ref overview_windowsizing
     */
-    virtual void SetSize(const wxRect& rect);
+    void SetSize(const wxRect& rect);
 
     /**
         @overload
     */
-    virtual void SetSize(const wxSize& size);
+    void SetSize(const wxSize& size);
 
     /**
         @overload
     */
-    virtual void SetSize(int width, int height);
+    void SetSize(int width, int height);
 
     /**
         Use of this function for windows which are not toplevel windows

@@ -19,7 +19,7 @@
     and attributes) is managed by the main program and is requested by the control
     itself only when needed which allows to have controls with millions of items
     without consuming much memory. To use virtual list control you must use
-    wxListCtrl::SetItemCount first and overload at least wxListCtrl::OnGetItemText
+    wxListCtrl::SetItemCount first and override at least wxListCtrl::OnGetItemText
     (and optionally wxListCtrl::OnGetItemImage or wxListCtrl::OnGetItemColumnImage and
     wxListCtrl::OnGetItemAttr) to return the information about the items when the
     control requests it.
@@ -923,7 +923,7 @@ public:
 protected:
 
     /**
-        This function may be overloaded in the derived class for a control with
+        This function may be overridden in the derived class for a control with
         @c wxLC_VIRTUAL style. It should return the attribute for the specified
         @c item or @NULL to use the default appearance parameters.
 
@@ -955,7 +955,7 @@ protected:
     virtual wxListItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
     /**
-        Overload this function in the derived class for a control with
+        Override this function in the derived class for a control with
         @c wxLC_VIRTUAL and @c wxLC_REPORT styles in order to specify the image
         index for the given line and column.
 
@@ -968,9 +968,9 @@ protected:
     virtual int OnGetItemColumnImage(long item, long column) const;
 
     /**
-        This function must be overloaded in the derived class for a control with
+        This function must be overridden in the derived class for a control with
         @c wxLC_VIRTUAL style having an "image list" (see SetImageList(); if the
-        control doesn't have an image list, it is not necessary to overload it).
+        control doesn't have an image list, it is not necessary to override it).
         It should return the index of the items image in the controls image list
         or -1 for no image.
 
@@ -984,7 +984,7 @@ protected:
     virtual int OnGetItemImage(long item) const;
 
     /**
-        This function @b must be overloaded in the derived class for a control with
+        This function @b must be overridden in the derived class for a control with
         @c wxLC_VIRTUAL style. It should return the string containing the text of
         the given @a column for the specified @c item.
 
