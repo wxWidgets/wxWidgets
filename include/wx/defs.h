@@ -1495,8 +1495,11 @@ enum wxAlignment
 /* misc. flags for wxSizer items */
 enum wxSizerFlagBits
 {
-    /* for compatibility only, default now, don't use explicitly any more */
-#if WXWIN_COMPATIBILITY_2_8
+    // wxADJUST_MINSIZE doesn't do anything any more but we still define it for
+    // compatibility. Notice that it may be also predefined (as 0, hopefully)
+    // in the user code in order to use it even in !WXWIN_COMPATIBILITY_2_8
+    // builds so don't redefine it in such case.
+#if WXWIN_COMPATIBILITY_2_8 && !defined(wxADJUST_MINSIZE)
     wxADJUST_MINSIZE               = 0,
 #endif
     wxFIXED_MINSIZE                = 0x8000,
