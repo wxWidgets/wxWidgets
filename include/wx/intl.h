@@ -437,7 +437,11 @@ public:
         {
             DoCommonInit();
 
+#if WXWIN_COMPATIBILITY_2_8
             Init(name, shortName, locale, bLoadDefault, bConvertEncoding);
+#else
+            Init(name, shortName, locale, bLoadDefault);
+#endif
         }
 
     wxLocale(int language, // wxLanguage id or custom language
