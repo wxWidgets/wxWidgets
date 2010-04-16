@@ -5408,7 +5408,10 @@ fi
 
 if test "$GCC" = "yes" ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
-        WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fno-rtti"
+        dnl Define wxNO_RTTI on the command line because only g++ 4.3 and later
+        dnl define __GXX_RTTI which allows us to detect the use of -fno-rtti
+        dnl switch but we need to do it manually for the older versions.
+        WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -DwxNO_RTTI -fno-rtti"
     fi
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
         WXCONFIG_CXXFLAGS="$WXCONFIG_CXXFLAGS -fno-exceptions"

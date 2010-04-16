@@ -837,7 +837,11 @@
     g++) or by editing project files with MSVC so test for it here too.
  */
 #ifndef wxNO_RTTI
-#   ifdef __GNUG__
+    /*
+        Only 4.3 defines __GXX_RTTI by default so its absence is not an
+        indication of disabled RTTI with the previous versions.
+     */
+#   if wxCHECK_GCC_VERSION(4, 3)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif
