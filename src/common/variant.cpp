@@ -221,17 +221,18 @@ wxVariant::wxVariant(const wxAny& any)
 
 wxAny wxVariant::GetAny() const
 {
-    if ( IsNull() )
-        return wxAny();
-
-    wxVariantData* data = GetData();
     wxAny any;
 
+    if ( IsNull() )
+        return wxAny((const wxAny&)any);
+
+    wxVariantData* data = GetData();
+
     if ( data->GetAsAny(&any) )
-        return any;
+        return wxAny((const wxAny&)any);
 
     // If everything else fails, wrap the whole wxVariantData
-    return wxAny(data);
+    return wxAny(((wxVariantData*)data));
 }
 
 #endif // wxUSE_ANY
@@ -1946,7 +1947,7 @@ bool wxVariantDataList::GetAsAny(wxAny* any) const
     while (node)
     {
         wxVariant* pVar = node->GetData();
-        dst.push_back(new wxAny(*pVar));
+        dst.push_back(new wxAny(((const wxVariant&)*pVar)));
         node = node->GetNext();
     }
 
