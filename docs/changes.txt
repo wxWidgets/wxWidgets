@@ -508,6 +508,7 @@ All (GUI):
 - Allow overriding print preview frame creation in docview (troelsk).
 - Added support for gradient stops in wxGraphicsContext (Kit Bishop).
 - Added wxTransparentColour.
+- Added wxToolBar::GetToolByPos().
 
 GTK:
 
