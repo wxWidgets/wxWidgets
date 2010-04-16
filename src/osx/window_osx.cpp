@@ -472,6 +472,16 @@ bool wxWindowMac::SetForegroundColour(const wxColour& col )
     return retval;
 }
 
+bool wxWindowMac::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    if ( !wxWindowBase::SetBackgroundStyle(style) )
+        return false;
+    
+    if ( m_peer )
+        m_peer->SetBackgroundStyle(style);
+    return true;
+}
+
 bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 {
     if (m_growBox)

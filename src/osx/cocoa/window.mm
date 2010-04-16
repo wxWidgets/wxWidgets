@@ -131,6 +131,7 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setAction:(SEL)aSelector;
 - (void)setDoubleAction:(SEL)aSelector;
 - (void)setBackgroundColor:(NSColor*)aColor;
+- (void)setOpaque:(BOOL)opaque;
 - (void)setTextColor:(NSColor *)color;
 - (void)setImagePosition:(NSCellImagePosition)aPosition;
 @end
@@ -1690,6 +1691,18 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
     }
 }
 
+bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
+{
+    BOOL opaque = ( style == wxBG_STYLE_PAINT );
+    
+    if ( [m_osxView respondsToSelector:@selector(setOpaque:) ] )
+    {
+        [m_osxView setOpaque: opaque];
+    }
+    
+    return true ;
+}
+
 void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding )
 {
     if ( [m_osxView respondsToSelector:@selector(setTitle:) ] )
@@ -2088,7 +2101,13 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     wxWidgetCocoaImpl* c = NULL;
     if ( now->IsNativeWindowWrapper() )
     {
-        c = new wxWidgetCocoaImpl( now, [tlw contentView], true );
+        NSView* cv = [tlw contentView];
+        c = new wxWidgetCocoaImpl( now, cv, true );
+        // increase ref count, because the impl destructor will decrement it again
+        CFRetain(cv);
+        if ( !now->IsShown() )
+            [cv setHidden:NO];
+        
     }
     else
     {

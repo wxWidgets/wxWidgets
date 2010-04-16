@@ -970,7 +970,17 @@ void wxMacControl::GetContentArea(int &left , int &top , int &width , int &heigh
 
 void wxMacControl::Move(int x, int y, int width, int height)
 {
+    UInt32 attr = 0 ;
+    GetWindowAttributes( GetControlOwner(m_controlRef) , &attr ) ;
+
     HIRect hir = CGRectMake(x,y,width,height);
+    if ( !(attr & kWindowCompositingAttribute) )
+    {
+        HIRect parent;
+        HIViewGetFrame( HIViewGetSuperview(m_controlRef), &parent );
+        hir.origin.x += parent.origin.x;
+        hir.origin.y += parent.origin.y;
+    }
     HIViewSetFrame ( m_controlRef , &hir );
 }
 
@@ -980,6 +990,18 @@ void wxMacControl::GetPosition( int &x, int &y ) const
     GetControlBounds( m_controlRef , &r );
     x = r.left;
     y = r.top;
+
+    UInt32 attr = 0 ;
+    GetWindowAttributes( GetControlOwner(m_controlRef) , &attr ) ;
+
+    if ( !(attr & kWindowCompositingAttribute) )
+    {
+        HIRect parent;
+        HIViewGetFrame( HIViewGetSuperview(m_controlRef), &parent );
+        x -= parent.origin.x;
+        y -= parent.origin.y;
+    }
+    
 }
 
 void wxMacControl::GetSize( int &width, int &height ) const
@@ -1324,6 +1346,22 @@ void wxMacControl::SetBackgroundColour( const wxColour &WXUNUSED(col) )
 //    HITextViewSetBackgroundColor( m_textView , color );
 }
 
+bool wxMacControl::SetBackgroundStyle(wxBackgroundStyle style)
+{
+    if ( style != wxBG_STYLE_PAINT )
+    {
+        OSStatus err = HIViewChangeFeatures(m_controlRef , 0 , kHIViewIsOpaque);
+        verify_noerr( err );
+    }
+    else
+    {
+        OSStatus err = HIViewChangeFeatures(m_controlRef , kHIViewIsOpaque , 0);
+        verify_noerr( err );
+    }
+    
+    return true ;
+}
+
 void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
 {
     ::SetControl32BitMinimum( m_controlRef , minimum );
@@ -1393,7 +1431,7 @@ void wxMacControl::GetRectInWindowCoords( Rect *r )
         OffsetRect( r , (short) hiPoint.x , (short) hiPoint.y ) ;
     }
 }
-
+        
 void wxMacControl::GetBestRect( wxRect *rect ) const
 {
     short   baselineoffset;

@@ -215,6 +215,7 @@ public :
     virtual WXWidget    GetWXWidget() const = 0;
 
     virtual void        SetBackgroundColour( const wxColour& col ) = 0;
+    virtual bool        SetBackgroundStyle(wxBackgroundStyle style) = 0;
 
     // all coordinates in native parent widget relative coordinates
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const = 0;

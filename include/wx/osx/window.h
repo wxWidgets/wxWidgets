@@ -91,6 +91,8 @@ public:
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );
 
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
+
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
 

@@ -433,6 +433,7 @@ public :
 
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
     virtual void SetBackgroundColour( const wxColour& col );
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style);
     virtual ControlPartCode HandleKey(  SInt16 keyCode,  SInt16 charCode, EventModifiers modifiers );
     void SetActionProc( ControlActionUPP   actionProc );
     SInt32 GetViewSize() const;
