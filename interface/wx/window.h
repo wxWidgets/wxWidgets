@@ -1172,7 +1172,7 @@ public:
 
         @param direction
             Specifies the direction for the centring. May be wxHORIZONTAL, wxVERTICAL
-            or wxBOTH. It may also include wxCENTRE_ON_SCREEN flag
+            or wxBOTH. It may also include the wxCENTRE_ON_SCREEN flag
             if you want to centre the window on the entire screen and not on its
             parent window.
 
@@ -1198,6 +1198,21 @@ public:
         @see wxTopLevelWindow::CentreOnScreen
     */
     void CentreOnParent(int direction = wxBOTH);
+
+    /**
+        Centres the window.
+
+        @param direction
+            Specifies the direction for the centring. May be wxHORIZONTAL,
+            wxVERTICAL or wxBOTH. It may also include the wxCENTRE_ON_SCREEN
+            flag.
+
+        @remarks This function is not meant to be called directly by user code,
+                 but via Centre, Center, CentreOnParent, or CenterOnParent.
+                 This function can be overriden to fine-tune centring behaviour.
+    */
+    virtual void DoCentre(int direction);
+
     /**
         This gets the position of the window in pixels, relative to the parent window
         for the child windows or relative to the display origin for the top level windows.
