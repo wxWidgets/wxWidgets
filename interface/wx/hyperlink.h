@@ -91,7 +91,7 @@ public:
     /**
         Constructor. See Create() for more info.
     */
-    wxHyperLinkCtrl(wxWindow* parent, wxWindowID id,
+    wxHyperlinkCtrl(wxWindow* parent, wxWindowID id,
                     const wxString& label,
                     const wxString& url,
                     const wxPoint& pos = wxDefaultPosition,
