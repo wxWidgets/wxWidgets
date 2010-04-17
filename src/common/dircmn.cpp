@@ -347,8 +347,7 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
         return wxInvalidSize;
 
     wxDirTraverserSumSize traverser;
-    if (dir.Traverse(traverser) == (size_t)-1 ||
-        traverser.GetTotalSize() == 0)
+    if (dir.Traverse(traverser) == (size_t)-1 )
         return wxInvalidSize;
 
     if (filesSkipped)
