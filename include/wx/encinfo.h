@@ -41,7 +41,8 @@ struct WXDLLIMPEXP_CORE wxNativeEncodingInfo
 #if defined(__WXMSW__) || \
     defined(__WXPM__)  || \
     defined(__WXMAC__) || \
-    defined(__WXCOCOA__) // FIXME: __WXCOCOA__
+    defined(__WXCOCOA__) || \
+    defined(__WXQT__)
 
     wxNativeEncodingInfo()
         : facename()

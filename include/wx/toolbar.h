@@ -86,6 +86,8 @@ enum
        #include "wx/cocoa/toolbar.h"
     #elif defined(__WXPM__)
        #include "wx/os2/toolbar.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/toolbar.h"
     #endif
 #endif // wxUSE_TOOLBAR
 

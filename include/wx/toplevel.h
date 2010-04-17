@@ -350,6 +350,8 @@ protected:
 #elif defined(__WXMOTIF__)
     #include "wx/motif/toplevel.h"
     #define wxTopLevelWindowNative wxTopLevelWindowMotif
+#elif defined(__WXQT__)
+    #include "wx/qt/toplevel.h"
 #endif
 
 #ifdef __WXUNIVERSAL__

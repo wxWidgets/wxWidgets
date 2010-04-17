@@ -67,6 +67,8 @@ public:
 #elif defined(__WXPM__)
     #define wxCURSOR_DEFAULT_TYPE   wxBITMAP_TYPE_CUR_RESOURCE
     #include "wx/os2/cursor.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/cursor.h"
 #endif
 
 #include "wx/utils.h"

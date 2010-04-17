@@ -468,6 +468,8 @@ protected:
     #include "wx/generic/treectlg.h"
 #elif defined(__WXPM__)
     #include "wx/generic/treectlg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/treectrl.h"
 #endif
 
 #endif // wxUSE_TREECTRL

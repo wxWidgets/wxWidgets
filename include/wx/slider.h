@@ -145,6 +145,8 @@ private:
     #include "wx/os2/slider.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/slider.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/slider.h"
 #endif
 
 #endif // wxUSE_SLIDER

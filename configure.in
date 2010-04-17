@@ -103,7 +103,7 @@ NEEDS_D_REENTRANT_FOR_R_FUNCS=0
 dnl the list of all available toolkits
 dnl
 dnl update NUM_TOOLKITS calculation below when adding a new toolkit here!
-ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB"
+ALL_TOOLKITS="COCOA GTK OSX_CARBON OSX_COCOA OSX_IPHONE MGL MICROWIN MOTIF MSW PM X11 DFB QT"
 
 dnl NB: these wxUSE_XXX constants have value of 0 or 1 unlike all the other ones
 dnl     which are either yes or no
@@ -119,6 +119,7 @@ DEFAULT_wxUSE_MSW=0
 DEFAULT_wxUSE_PM=0
 DEFAULT_wxUSE_X11=0
 DEFAULT_wxUSE_DFB=0
+DEFAULT_wxUSE_QT=0
 
 dnl these are the values which are really default for the given platform:
 dnl they're used if no --with-<toolkit> options were given to detect the
@@ -135,6 +136,7 @@ DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_PM=0
 DEFAULT_DEFAULT_wxUSE_X11=0
 DEFAULT_DEFAULT_wxUSE_DFB=0
+DEFAULT_DEFAULT_wxUSE_QT=0
 
 PROGRAM_EXT=
 SAMPLES_RPATH_FLAG=
@@ -486,6 +488,7 @@ AC_ARG_WITH(mgl,           [  --with-mgl              use SciTech MGL], [wxUSE_M
 AC_ARG_WITH(directfb,      [  --with-directfb         use DirectFB], [wxUSE_DFB="$withval" wxUSE_UNIVERSAL="yes" CACHE_DFB=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(microwin,      [  --with-microwin         use MicroWindows], [wxUSE_MICROWIN="$withval" CACHE_MICROWIN=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(x11,           [  --with-x11              use X11], [wxUSE_X11="$withval" wxUSE_UNIVERSAL="yes" CACHE_X11=1 TOOLKIT_GIVEN=1])
+AC_ARG_WITH(qt,            [  --with-qt               use Qt], [wxUSE_QT="$withval" CACHE_QT=1 TOOLKIT_GIVEN=1])
 WX_ARG_ENABLE(nanox,       [  --enable-nanox          use NanoX], wxUSE_NANOX)
 
 AC_ARG_ENABLE(gtk2,        [  --disable-gtk2          use GTK+ 1.2 instead of 2.0], [wxUSE_GTK2="$enableval"])
@@ -542,7 +545,8 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_OLD_COCOA:-0} + ${wxUSE_GTK:-0} + ${wxUSE_OSX_CARBON:-0} \
                   + ${wxUSE_OSX_COCOA:-0} + ${wxUSE_OSX_IPHONE:-0} + ${wxUSE_MGL:-0} + ${wxUSE_DFB:-0} \
-                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} + ${wxUSE_X11:-0}`
+                  + ${wxUSE_MICROWIN:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MSW:-0} \
+                  + ${wxUSE_X11:-0} + ${wxUSE_QT:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     case "${host}" in
@@ -3637,6 +3641,15 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         fi
     fi
 
+    if test "$wxUSE_QT" = 1; then
+        TOOLKIT=QT
+        GUIDIST=QT_DIST
+        TOOLKIT_DIR="qt"
+        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I/usr/include/qt4"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -lQtCore -lQtGui"
+    fi
+
     dnl the name of the directory where the files for this toolkit live
     if test "$TOOLKIT" = "PM" ; then
         TOOLKIT_DIR="os2"
@@ -5359,6 +5372,10 @@ fi
 
 if test "$WXGPE" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGPE__,$WXGPE)
+fi
+
+if test "$WXQT" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXQT__,$WXQT)
 fi
 
 dnl DEBUG_CFLAGS contains debugging options (supposed to be the same for C and C++

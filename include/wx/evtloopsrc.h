@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxEventLoopSource class
 // Author:      Vadim Zeitlin
 // Created:     2009-10-21
-// RCS-ID:      $Id: wxhead.h,v 1.11 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,6 +91,8 @@ inline wxEventLoopSource::~wxEventLoopSource() { }
     #include "wx/gtk/evtloopsrc.h"
 #elif defined(__WXOSX__)
     #include "wx/osx/evtloopsrc.h"
+#elif defined(__WXQT__)
+     #include "wx/unix/evtloopsrc.h"
 #endif // platform
 
 #endif // wxUSE_EVENTLOOP_SOURCE

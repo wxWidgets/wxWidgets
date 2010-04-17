@@ -42,6 +42,8 @@ public:
     #include "wx/osx/palette.h"
 #elif defined(__WXPM__)
     #include "wx/os2/palette.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/palette.h"
 #endif
 
 #endif // wxUSE_PALETTE

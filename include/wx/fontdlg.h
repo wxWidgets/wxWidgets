@@ -100,6 +100,8 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
     #include "wx/os2/fontdlg.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/fontdlg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/fontdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------

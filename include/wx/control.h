@@ -199,6 +199,8 @@ protected:
     #include "wx/cocoa/control.h"
 #elif defined(__WXPM__)
     #include "wx/os2/control.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/control.h"
 #endif
 
 #endif // wxUSE_CONTROLS

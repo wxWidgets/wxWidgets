@@ -88,6 +88,8 @@ protected:
     #include "wx/palmos/tglbtn.h"
 #elif defined(__WXPM__)
     #include "wx/os2/tglbtn.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/tglbtn.h"
 #endif
 
 #endif // wxUSE_TOGGLEBTN

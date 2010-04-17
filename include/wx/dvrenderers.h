@@ -3,7 +3,7 @@
 // Purpose:     Declare all wxDataViewCtrl classes
 // Author:      Robert Roebling, Vadim Zeitlin
 // Created:     2009-11-08 (extracted from wx/dataview.h)
-// RCS-ID:      $Id: wxhead.h,v 1.11 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Robert Roebling
 //              (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
@@ -183,6 +183,8 @@ protected:
         #include "wx/gtk/dvrenderer.h"
     #elif defined(__WXMAC__)
         #include "wx/osx/dvrenderer.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/dvrenderer.h"
     #else
         #error "unknown native wxDataViewCtrl implementation"
     #endif
@@ -283,6 +285,8 @@ private:
     #include "wx/gtk/dvrenderers.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/dvrenderers.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/dvrenderers.h"
 #else
     #error "unknown native wxDataViewCtrl implementation"
 #endif

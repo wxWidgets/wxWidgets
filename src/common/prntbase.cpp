@@ -60,6 +60,9 @@
 #elif defined(__WXPM__)
 #include "wx/os2/dcprint.h"
 #include "wx/generic/prntdlgg.h"
+#elif defined(__WXQT__)
+#include "wx/qt/dcprint.h"
+#include "wx/qt/printdlg.h"
 #else
 #include "wx/generic/prntdlgg.h"
 #include "wx/dcps.h"
@@ -105,6 +108,8 @@ wxPrinterBase *wxNativePrintFactory::CreatePrinter( wxPrintDialogData *data )
     return new wxMacPrinter( data );
 #elif defined(__WXPM__)
     return new wxOS2Printer( data );
+#elif defined(__WXQT__)
+    return new wxQtPrinter( data );
 #else
     return new wxPostScriptPrinter( data );
 #endif
@@ -119,6 +124,8 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
     return new wxMacPrintPreview( preview, printout, data );
 #elif defined(__WXPM__)
     return new wxOS2PrintPreview( preview, printout, data );
+#elif defined(__WXQT__)
+    return new wxQtPrintPreview( preview, printout, data );
 #else
     return new wxPostScriptPrintPreview( preview, printout, data );
 #endif
@@ -133,6 +140,8 @@ wxPrintPreviewBase *wxNativePrintFactory::CreatePrintPreview( wxPrintout *previe
     return new wxMacPrintPreview( preview, printout, data );
 #elif defined(__WXPM__)
     return new wxOS2PrintPreview( preview, printout, data );
+#elif defined(__WXQT__)
+    return new wxQtPrintPreview( preview, printout, data );
 #else
     return new wxPostScriptPrintPreview( preview, printout, data );
 #endif
@@ -145,6 +154,8 @@ wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent,
     return new wxWindowsPrintDialog( parent, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintDialog( parent, data );
+#elif defined(__WXQT__)
+    return new wxQtPrintDialog( parent, data );
 #else
     return new wxGenericPrintDialog( parent, data );
 #endif
@@ -157,6 +168,8 @@ wxPrintDialogBase *wxNativePrintFactory::CreatePrintDialog( wxWindow *parent,
     return new wxWindowsPrintDialog( parent, data );
 #elif defined(__WXMAC__)
     return new wxMacPrintDialog( parent, data );
+#elif defined(__WXQT__)
+    return new wxQtPrintDialog( parent, data );
 #else
     return new wxGenericPrintDialog( parent, data );
 #endif
@@ -169,6 +182,8 @@ wxPageSetupDialogBase *wxNativePrintFactory::CreatePageSetupDialog( wxWindow *pa
     return new wxWindowsPageSetupDialog( parent, data );
 #elif defined(__WXMAC__)
     return new wxMacPageSetupDialog( parent, data );
+#elif defined(__WXQT__)
+    return new wxQtPageSetupDialog( parent, data );
 #else
     return new wxGenericPageSetupDialog( parent, data );
 #endif
@@ -198,6 +213,10 @@ wxDialog *wxNativePrintFactory::CreatePrintSetupDialog( wxWindow *parent,
     wxUnusedVar(data);
     return NULL;
 #elif defined(__WXMAC__)
+    wxUnusedVar(parent);
+    wxUnusedVar(data);
+    return NULL;
+#elif defined(__WXQT__)
     wxUnusedVar(parent);
     wxUnusedVar(data);
     return NULL;
@@ -262,6 +281,8 @@ wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
     return new wxWindowsPrintNativeData;
 #elif defined(__WXMAC__)
     return wxOSXCreatePrintData();
+#elif defined(__WXQT__)
+    return  new wxQtPrintNativeData;
 #else
     return new wxPostScriptPrintNativeData;
 #endif

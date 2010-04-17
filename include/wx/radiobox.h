@@ -168,6 +168,8 @@ private:
     #include "wx/os2/radiobox.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/radiobox.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/radiobox.h"
 #endif
 
 #endif // wxUSE_RADIOBOX

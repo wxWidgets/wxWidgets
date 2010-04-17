@@ -168,6 +168,8 @@ typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
     #include "wx/cocoa/clipbrd.h"
 #elif defined(__WXPM__)
     #include "wx/os2/clipbrd.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/clipbrd.h"
 #endif
 
 // ----------------------------------------------------------------------------

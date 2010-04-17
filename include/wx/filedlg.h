@@ -235,6 +235,8 @@ wxSaveFileSelector(const wxString& what,
 #elif defined(__WXPALMOS__)
     #define wxHAS_GENERIC_FILEDIALOG
     #include "wx/generic/filedlgg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/filedlg.h"
 #endif
 
 #endif // wxUSE_FILEDLG

@@ -119,6 +119,8 @@ protected:
     #include "wx/cocoa/gauge.h"
 #elif defined(__WXPM__)
     #include "wx/os2/gauge.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/gauge.h"
 #endif
 
 #endif // wxUSE_GAUGE

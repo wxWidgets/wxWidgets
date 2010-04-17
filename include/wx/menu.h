@@ -539,6 +539,8 @@ protected:
     #include "wx/cocoa/menu.h"
 #elif defined(__WXPM__)
     #include "wx/os2/menu.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/menu.h"
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 

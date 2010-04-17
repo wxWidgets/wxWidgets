@@ -24,6 +24,8 @@
     #include "wx/gtk/colordlg.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/colordlg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/colordlg.h"
 #else
     #include "wx/generic/colrdlgg.h"
 

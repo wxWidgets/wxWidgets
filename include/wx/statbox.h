@@ -69,6 +69,8 @@ protected:
     #include "wx/cocoa/statbox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/statbox.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/statbox.h"
 #endif
 
 #endif // wxUSE_STATBOX

@@ -56,6 +56,8 @@ public:
     #include "wx/cocoa/checklst.h"
 #elif defined(__WXPM__)
     #include "wx/os2/checklst.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/checklst.h"
 #endif
 
 #endif // wxUSE_CHECKLISTBOX

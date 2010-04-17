@@ -1994,7 +1994,7 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
 
 // MSW and OS X have their own native default renderers, but the other ports
 // use Cairo by default
-#if !(defined(__WXMSW__) || defined(__WXOSX__))
+#if !(defined(__WXMSW__) || defined(__WXOSX__) || defined(__WXQT__))
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
     return GetCairoRenderer();

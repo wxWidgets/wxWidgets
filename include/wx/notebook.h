@@ -147,6 +147,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
     #include  "wx/cocoa/notebook.h"
 #elif defined(__WXPM__)
     #include  "wx/os2/notebook.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/notebook.h"
 #endif
 
 #endif // wxUSE_NOTEBOOK

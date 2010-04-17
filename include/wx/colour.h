@@ -234,6 +234,8 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxColourBase* col);
     #include "wx/cocoa/colour.h"
 #elif defined(__WXPM__)
     #include "wx/os2/colour.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/colour.h"
 #endif
 
 #define wxColor wxColour

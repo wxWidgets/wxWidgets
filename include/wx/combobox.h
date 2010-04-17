@@ -76,6 +76,8 @@ public:
     #include "wx/cocoa/combobox.h"
 #elif defined(__WXPM__)
     #include "wx/os2/combobox.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/combobox.h"
 #endif
 
 #endif // wxUSE_COMBOBOX

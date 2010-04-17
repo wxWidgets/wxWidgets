@@ -233,6 +233,8 @@ protected:
     #include "wx/cocoa/region.h"
 #elif defined(__WXPM__)
     #include "wx/os2/region.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/region.h"
 #endif
 
 // ----------------------------------------------------------------------------

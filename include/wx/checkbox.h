@@ -151,6 +151,8 @@ private:
     #include "wx/os2/checkbox.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/checkbox.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/checkbox.h"
 #endif
 
 #endif // wxUSE_CHECKBOX

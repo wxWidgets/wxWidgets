@@ -134,6 +134,8 @@ private:
     #include "wx/os2/listbox.h"
 #elif defined(__WXCOCOA__)
     #include "wx/cocoa/listbox.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/listbox.h"
 #endif
 
 #endif // wxUSE_LISTBOX

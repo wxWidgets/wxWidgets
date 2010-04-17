@@ -25,11 +25,6 @@
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 
-extern WXDLLIMPEXP_DATA_CORE(const char) wxGetTextFromUserPromptStr[];
-extern WXDLLIMPEXP_DATA_CORE(const char) wxGetPasswordFromUserPromptStr[];
-
-#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE | wxWS_EX_VALIDATE_RECURSIVELY)
-
 // ----------------------------------------------------------------------------
 // wxTextEntryDialog: a dialog with text control, [ok] and [cancel] buttons
 // ----------------------------------------------------------------------------
@@ -88,28 +83,6 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPasswordEntryDialog)
     wxDECLARE_NO_COPY_CLASS(wxPasswordEntryDialog);
 };
-
-// ----------------------------------------------------------------------------
-// function to get a string from user
-// ----------------------------------------------------------------------------
-
-WXDLLIMPEXP_CORE wxString
-    wxGetTextFromUser(const wxString& message,
-                    const wxString& caption = wxGetTextFromUserPromptStr,
-                    const wxString& default_value = wxEmptyString,
-                    wxWindow *parent = NULL,
-                    wxCoord x = wxDefaultCoord,
-                    wxCoord y = wxDefaultCoord,
-                    bool centre = true);
-
-WXDLLIMPEXP_CORE wxString
-    wxGetPasswordFromUser(const wxString& message,
-                        const wxString& caption = wxGetPasswordFromUserPromptStr,
-                        const wxString& default_value = wxEmptyString,
-                        wxWindow *parent = NULL,
-                        wxCoord x = wxDefaultCoord,
-                        wxCoord y = wxDefaultCoord,
-                        bool centre = true);
 
 #endif
     // wxUSE_TEXTDLG

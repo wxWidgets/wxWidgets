@@ -77,6 +77,8 @@ public:
     #include "wx/cocoa/brush.h"
 #elif defined(__WXPM__)
     #include "wx/os2/brush.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/brush.h"
 #endif
 
 class WXDLLIMPEXP_CORE wxBrushList: public wxGDIObjListBase

@@ -265,6 +265,7 @@
         <set var="VARS_DONT_ELIMINATE" append="1">
             ALL_PORTS_BASE_HEADERS ALL_BASE_SOURCES WX_VERSION
         </set>
+        <fragment format="autoconf" file="qtrules.mk"/>
         <fragment format="autoconf" file="make_dist.mk"/>
 
     </if>

@@ -18,7 +18,7 @@
 // TODO: implement wxEventLoopSource for MSW (it should wrap a HANDLE and be
 //       monitored using MsgWaitForMultipleObjects())
 #if defined(__WXOSX__) || defined(__WXGTK20__) || defined(__WXDFB__) || \
-        (!wxUSE_GUI && defined(__UNIX__))
+        defined(__WXQT__) || (!wxUSE_GUI && defined(__UNIX__))
     #define wxUSE_EVENTLOOP_SOURCE 1
 #else
     #define wxUSE_EVENTLOOP_SOURCE 0
@@ -185,7 +185,8 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !defined(__WXOSX__))
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) \
+    || (defined(__UNIX__) && !defined(__WXOSX__) && !defined(__WXQT__))
 
 // this class can be used to implement a standard event loop logic using
 // Pending() and Dispatch()
@@ -243,6 +244,8 @@ private:
     // CoreFoundation-based event loop is currently in wxBase so include it in
     // any case too (although maybe it actually shouldn't be there at all)
     #include "wx/osx/evtloop.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/evtloop.h"
 #elif wxUSE_GUI
 
 // include the appropriate header defining wxGUIEventLoop
@@ -298,7 +301,7 @@ protected:
 #endif // wxUSE_GUI
 
 // include the header defining wxConsoleEventLoop for Unix systems
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__WXQT__)
 #include "wx/unix/evtloop.h"
 #endif
 

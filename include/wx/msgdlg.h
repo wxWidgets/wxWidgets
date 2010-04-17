@@ -217,7 +217,8 @@ protected:
 #if defined(__WXCOCOA__) || \
     defined(__WXGTK20__) || \
     defined(__WXMAC__) || \
-    defined(__WXMSW__)
+    defined(__WXMSW__) || \
+    defined(__WXQT__)
 
 class WXDLLIMPEXP_CORE wxMessageDialogWithCustomLabels
     : public wxMessageDialogBase
@@ -334,6 +335,8 @@ private:
     #include "wx/osx/msgdlg.h"
 #elif defined(__WXPM__)
     #include "wx/os2/msgdlg.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/msgdlg.h"
 #endif
 
 // ----------------------------------------------------------------------------

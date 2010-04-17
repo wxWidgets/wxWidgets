@@ -217,6 +217,8 @@ protected:
     #include "wx/os2/button.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/button.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/button.h"
 #endif
 
 #endif // wxUSE_BUTTON

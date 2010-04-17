@@ -331,6 +331,8 @@ public:
         #include "wx/cocoa/dialog.h"
     #elif defined(__WXPM__)
         #include "wx/os2/dialog.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/dialog.h"
     #endif
 #endif
 

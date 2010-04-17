@@ -298,6 +298,8 @@ private:
     #include "wx/motif/textentry.h"
 #elif defined(__WXPM__)
     #include "wx/os2/textentry.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/textentry.h"
 #else
     // no platform-specific implementation of wxTextEntry yet
     class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase

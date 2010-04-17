@@ -35,7 +35,7 @@
 /*  taskbar is implemented in the major ports */
 #if defined(__WXMSW__) || defined(__WXCOCOA__) \
     || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__) \
-    || defined(__WXOSX_MAC__) || defined(__WXCOCOA__)
+    || defined(__WXOSX_MAC__) || defined(__WXQT__)
     #define wxHAS_TASK_BAR_ICON
 #else
     #undef wxUSE_TASKBARICON
@@ -70,7 +70,7 @@
 
 /* This is defined when the underlying toolkit handles tab traversal natively.
    Otherwise we implement it ourselves in wxControlContainer. */
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) || defined(__WXQT__)
     #define wxHAS_NATIVE_TAB_TRAVERSAL
 #endif
 
@@ -86,7 +86,7 @@
 
 /* Direct access to bitmap data is not implemented in all ports yet */
 #if defined(__WXGTK20__) || defined(__WXMAC__) || defined(__WXDFB__) || \
-        defined(__WXMSW__)
+        defined(__WXMSW__) || defined(__WXQT__)
 
     /*
        These compilers can't deal with templates in wx/rawbmp.h:

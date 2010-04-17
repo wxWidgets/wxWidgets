@@ -86,6 +86,8 @@ private:
     #include "wx/os2/choice.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/choice.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/choice.h"
 #endif
 
 #endif // wxUSE_CHOICE

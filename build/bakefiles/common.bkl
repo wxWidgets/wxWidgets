@@ -22,6 +22,8 @@
         <set var="PLATFORM_MACOS">0</set>
     </if>
 
+    <set var="PLATFORM_QT">0</set>
+
     <!-- FIXME: PalmOS is another candidate to bakefiles -->
     <set var="PLATFORM_PALMOS">0</set>
 

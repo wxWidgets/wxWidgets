@@ -181,7 +181,9 @@ private:
     #include "wx/palmos/apptbase.h"
 #elif defined(__WIN32__)
     #include "wx/msw/apptbase.h"
-#elif defined(__UNIX__) && !defined(__EMX__)
+#elif defined(__WXQT__)
+    #include "wx/qt/apptbase.h"
+#elif defined(__UNIX__) && !defined(__EMX__) && !defined(__WXQT__)
     #include "wx/unix/apptbase.h"
 #elif defined(__OS2__)
     #include "wx/os2/apptbase.h"
@@ -278,9 +280,11 @@ public:
     #include "wx/palmos/apptrait.h"
 #elif defined(__WIN32__)
     #include "wx/msw/apptrait.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/apptrait.h"
 #elif defined(__OS2__)
     #include "wx/os2/apptrait.h"
-#elif defined(__UNIX__)
+#elif defined(__UNIX__) && !defined(__WXQT__)
     #include "wx/unix/apptrait.h"
 #elif defined(__DOS__)
     #include "wx/msdos/apptrait.h"

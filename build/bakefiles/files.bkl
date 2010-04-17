@@ -62,7 +62,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dir.cpp
     src/unix/dlunix.cpp
     src/unix/epolldispatcher.cpp
-    src/unix/evtloopunix.cpp
+    <!-- src/unix/evtloopunix.cpp -->
     src/unix/fdiounix.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
@@ -307,6 +307,202 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_MSDOS_HDR" hints="files">
     wx/msdos/mimetype.h
 </set>
+
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+<!--                               wxQT                                       -->
+<!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
+
+<set var="BASE_QT_HDR" hints="files">
+    wx/qt/evtloop.h
+</set>
+
+<set var="BASE_QT_SRC" hints="files">
+    src/qt/apptraits.cpp
+    src/qt/evtloop.cpp
+</set>
+
+<set var="QT_LOWLEVEL_HDR" hints="files">
+    wx/qt/accel.h
+    wx/qt/app.h
+    wx/qt/apptbase.h
+    wx/qt/apptrait.h
+    wx/qt/bitmap.h
+    wx/qt/bmpbuttn.h
+    wx/qt/brush.h
+    wx/qt/button.h
+    wx/qt/button_qt.h
+    wx/qt/checkbox.h
+    wx/qt/checklst.h
+    wx/qt/choice.h
+    wx/qt/clipbrd.h
+    wx/qt/clrpicker.h
+    wx/generic/collpaneg.h
+    wx/qt/colordlg.h
+    wx/qt/colour.h
+    wx/qt/combobox.h
+    wx/qt/control.h
+    wx/qt/converter.h
+    wx/qt/ctrlsub.h
+    wx/qt/cursor.h
+    wx/qt/dataform.h
+    wx/qt/dataobj2.h
+    wx/qt/dataobj.h
+    wx/qt/dcclient.h
+    wx/qt/dc.h
+    wx/qt/dcmemory.h
+    wx/qt/dcprint.h
+    wx/qt/dcscreen.h
+    wx/qt/defs.h
+    wx/qt/dialog.h
+    wx/qt/dirdlg.h
+    wx/qt/dnd.h
+    wx/qt/filedlg.h
+    wx/qt/font.h
+    wx/qt/fontdlg.h
+    wx/qt/frame.h
+    wx/qt/frame_qt.h
+    wx/qt/gauge.h
+    wx/qt/icon.h
+    wx/generic/imaglist.h
+    wx/qt/listbox.h
+    wx/qt/listctrl.h
+    wx/qt/mdi.h
+    wx/qt/menu.h
+    wx/qt/menuitem.h
+    wx/qt/msgdlg.h
+    wx/qt/notebook.h
+    wx/qt/palette.h
+    wx/qt/pen.h
+    wx/qt/popupwin.h
+    wx/qt/printdlg.h
+    wx/generic/prntdlgg.h
+    wx/qt/printqt.h
+    wx/qt/radiobox.h
+    wx/qt/radiobut.h
+    wx/qt/region.h
+    wx/qt/scrolbar.h
+    wx/qt/slider.h
+    wx/qt/spinbutt.h
+    wx/qt/statbmp.h
+    wx/qt/statbox.h
+    wx/qt/statline.h
+    wx/qt/statusbar.h
+    wx/qt/stattext.h
+    wx/qt/textctrl.h
+    wx/qt/textdlg.h
+    wx/qt/textentry.h
+    wx/qt/tglbtn.h
+    wx/qt/toolbar.h
+    wx/qt/tooltip.h
+    wx/qt/toplevel.h
+    wx/qt/treectrl.h
+    wx/qt/window.h
+</set>
+
+<set var="QT_LOWLEVEL_SRC" hints="files">
+    src/qt/accel.cpp
+    src/qt/app.cpp
+    src/qt/bitmap.cpp
+    src/qt/bmpbuttn.cpp
+    src/qt/brush.cpp
+    src/qt/button.cpp
+    src/qt/button_qt.cpp
+    src/qt/button_qt_moc.cpp
+    src/qt/checkbox.cpp
+    src/qt/checklst.cpp
+    src/qt/choice.cpp
+    src/qt/clipbrd.cpp
+    src/qt/clrpicker.cpp
+    src/generic/collpaneg.cpp
+    src/qt/colordlg.cpp
+    src/qt/colour.cpp
+    src/qt/combobox.cpp
+    src/qt/control.cpp
+    src/qt/ctrlsub.cpp
+    src/qt/cursor.cpp
+    src/qt/dataobj.cpp
+    src/qt/dcclient.cpp
+    src/qt/dc.cpp
+    src/qt/dcmemory.cpp
+    src/qt/dcprint.cpp
+    src/qt/dcscreen.cpp
+    src/qt/defs.cpp
+    src/qt/dialog.cpp
+    src/qt/dirdlg.cpp
+    src/qt/display.cpp
+    src/qt/dnd.cpp
+    src/qt/filedlg.cpp
+    src/generic/filepickerg.cpp
+    src/qt/font.cpp
+    src/qt/fontdlg.cpp
+    src/qt/fontutil.cpp
+    src/qt/fontenum.cpp
+    src/generic/fontpickerg.cpp
+    src/qt/frame.cpp
+    src/qt/frame_qt.cpp
+    src/qt/frame_qt_moc.cpp
+    src/qt/gauge.cpp
+    src/qt/graphics.cpp
+    src/qt/icon.cpp
+    src/generic/imaglist.cpp
+    src/qt/listbox.cpp
+    src/qt/listctrl.cpp
+    src/qt/mdi.cpp
+    src/qt/menu.cpp
+    src/qt/menuitem.cpp
+    src/qt/msgdlg.cpp
+    src/qt/notebook.cpp
+    src/qt/palette.cpp
+    src/qt/pen.cpp
+    src/qt/popupwin.cpp
+    src/qt/printdlg.cpp
+    src/generic/prntdlgg.cpp
+    src/qt/printqt.cpp
+    src/qt/radiobox.cpp
+    src/qt/radiobut.cpp
+    src/qt/region.cpp
+    src/qt/scrolbar.cpp
+    src/qt/settings.cpp
+    src/qt/slider.cpp
+    src/qt/spinbutt.cpp
+    src/qt/statbmp.cpp
+    src/qt/statbox.cpp
+    src/qt/statline.cpp
+    src/qt/stattext.cpp
+    src/qt/statusbar.cpp
+    src/qt/textctrl.cpp
+    src/qt/textdlg.cpp
+    src/qt/textentry.cpp
+    src/qt/tglbtn.cpp
+    src/qt/toolbar.cpp
+    src/qt/tooltip.cpp
+    src/qt/toplevel.cpp
+    src/qt/treectrl.cpp
+    src/qt/uiaction.cpp
+    src/qt/utils.cpp
+    src/qt/window.cpp
+</set>
+
+<set var="ADVANCED_QT_HDR" hints="files">
+    wx/qt/dataview.h
+    wx/qt/dvrenderer.h
+    wx/qt/dvrenderers.h
+    wx/qt/taskbar.h
+</set>
+
+<set var="ADVANCED_QT_SRC" hints="files">
+    src/qt/dataview.cpp
+    src/qt/dvrenderer.cpp
+    src/qt/dvrenderers.cpp
+    src/qt/taskbar.cpp
+</set>
+
+<set var="QT_HDR" hints="files">
+</set>
+
+<set var="QT_SRC" hints="files">
+</set>
+
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <!--                              Common                                    -->
@@ -759,10 +955,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/srchctlg.cpp
     src/generic/statbmpg.cpp
     src/generic/stattextg.cpp
-    src/generic/textdlgg.cpp
+    <!-- FIXME: src/generic/textdlgg.cpp -->
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
-    src/generic/treectlg.cpp
+    <!-- FIXME: src/generic/treectlg.cpp -->
     src/generic/treebkg.cpp
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
@@ -823,8 +1019,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/srchctlg.h
     wx/generic/statbmpg.h
     wx/generic/stattextg.h
-    wx/generic/textdlgg.h
-    wx/generic/treectlg.h
+    <!-- FIXME: wx/generic/textdlgg.h -->
+    <!-- FIXME: wx/generic/treectlg.h -->
     wx/graphics.h
     wx/headercol.h
     wx/headerctrl.h
@@ -3574,12 +3770,13 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_SRC" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
+        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC) $(BASE_QT_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC) $(BASE_WINCE_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_SHARED_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_SRC)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_SRC)</if>
+        <!-- <if cond="PLATFORM_QT=='1'">$(BASE_QT_SRC)</if> -->
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
         <if cond="TOOLKIT=='OSX_CARBON'">$(BASE_AND_GUI_OSX_CARBON_SRC)</if>
@@ -3609,12 +3806,13 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT==''">$(BASE_OSX_NOTWXMAC_HDR)</if>
     </set>
     <set var="BASE_PLATFORM_HDR" hints="files">
-        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
+        <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR) $(BASE_QT_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_HDR) $(BASE_WINCE_HDR)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_OSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
         <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_HDR)</if>
+        <!-- <if cond="PLATFORM_QT=='1'">$(BASE_QT_HDR)</if> -->
     </set>
 
     <set var="BASE_SRC" hints="files">
@@ -3657,6 +3855,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_SRC)</if>
     </set>
     <set var="LOWLEVEL_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_LOWLEVEL_HDR)</if>
@@ -3671,6 +3870,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='DFB'">$(DFB_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_LOWLEVEL_HDR)</if>
     </set>
 
     <set var="PLATFORM_SRC" hints="files">
@@ -3688,6 +3888,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_COCOA_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(GTK_HDR)</if>
@@ -3699,6 +3900,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='OSX_COCOA'">$(OSX_SHARED_HDR) $(OSX_COCOA_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(OS2_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(QT_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
@@ -3723,6 +3925,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
+        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR) $(ADVANCED_MSW_DESKTOP_HDR)</if>
@@ -3736,6 +3939,7 @@ src/osx/iphone/window.mm
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
+        <if cond="TOOLKIT=='QT'">$(ADVANCED_QT_HDR)</if>
     </set>
 
     <!-- wxAdv files not used by wxUniv -->

@@ -754,6 +754,8 @@ protected:
     #include "wx/os2/textctrl.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/textctrl.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/textctrl.h"
 #endif
 
 // ----------------------------------------------------------------------------

@@ -266,6 +266,8 @@ protected:
         #include "wx/cocoa/frame.h"
     #elif defined(__WXPM__)
         #include "wx/os2/frame.h"
+    #elif defined(__WXQT__)
+        #include "wx/qt/frame.h"
     #endif
 #endif
 

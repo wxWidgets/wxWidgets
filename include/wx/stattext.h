@@ -134,6 +134,8 @@ private:
     #include "wx/os2/stattext.h"
 #elif defined(__WXPALMOS__)
     #include "wx/palmos/stattext.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/stattext.h"
 #endif
 
 #endif // !wxNO_PORT_STATTEXT_INCLUDE

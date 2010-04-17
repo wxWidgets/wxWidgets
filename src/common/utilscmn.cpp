@@ -951,7 +951,7 @@ bool wxDoLaunchDefaultBrowser(const wxString& url, int flags);
 #else
 
 // a "generic" implementation:
-bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+bool wxDoLaunchDefaultBrowser(const wxString& url, int WXUNUSED( flags ))
 {
     // on other platforms try to use mime types or wxExecute...
 

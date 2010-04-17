@@ -225,6 +225,8 @@ protected:
     #include "wx/osx/dnd.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dnd.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/dnd.h"
 #endif
 
 // ----------------------------------------------------------------------------

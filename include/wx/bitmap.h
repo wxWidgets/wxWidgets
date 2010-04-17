@@ -74,7 +74,8 @@ protected:
     defined(__WXGTK__) || \
     defined(__WXCOCOA__) || \
     defined(__WXMOTIF__) || \
-    defined(__WXX11__)
+    defined(__WXX11__) || \
+    defined(__WXQT__)
     #define wxUSE_BITMAP_BASE 1
 #else
     #define wxUSE_BITMAP_BASE 0
@@ -270,6 +271,8 @@ protected:
 #elif defined(__WXPM__)
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/os2/bitmap.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/bitmap.h"
 #endif
 
 // we must include generic mask.h after wxBitmap definition

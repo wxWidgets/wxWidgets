@@ -836,6 +836,18 @@ dnl ### begin block 20_COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0[wx.bkl] ###
         COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0)
+dnl ### begin block 20_COND_TOOLKIT_QT[wx.bkl] ###
+    COND_TOOLKIT_QT="#"
+    if test "x$TOOLKIT" = "xQT" ; then
+        COND_TOOLKIT_QT=""
+    fi
+    AC_SUBST(COND_TOOLKIT_QT)
+dnl ### begin block 20_COND_TOOLKIT_QT_USE_GUI_1[wx.bkl] ###
+    COND_TOOLKIT_QT_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_QT_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_TOOLKIT_QT_USE_GUI_1)
 dnl ### begin block 20_COND_TOOLKIT_WINCE[wx.bkl] ###
     COND_TOOLKIT_WINCE="#"
     if test "x$TOOLKIT" = "xWINCE" ; then
