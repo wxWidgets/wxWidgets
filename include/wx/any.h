@@ -679,11 +679,19 @@ public:
     /**
         Various constructors.
     */
+    template<typename T>
+    wxAny(const T& value)
+    {
+        m_type = wxAnyValueTypeImpl<T>::sm_instance;
+        wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
+    }
+
     wxAny(const char* value)
     {
         m_type = wxAnyNullValueType;
         Assign(wxString(value));
     }
+
     wxAny(const wchar_t* value)
     {
         m_type = wxAnyNullValueType;
@@ -697,6 +705,7 @@ public:
     }
 
 #if wxUSE_VARIANT
+    template<>
     wxAny(const wxVariant& variant)
     {
         m_type = wxAnyNullValueType;
@@ -704,12 +713,6 @@ public:
     }
 #endif
 
-    template<typename T>
-    wxAny(const T& value)
-    {
-        m_type = wxAnyValueTypeImpl<T>::sm_instance;
-        wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
-    }
     //@}
 
     /**
@@ -914,6 +917,7 @@ public:
 
 #if wxUSE_VARIANT
     // GetAs() wxVariant specialization
+    template<>
     bool GetAs(wxVariant* value) const
     {
         return wxConvertAnyToVariant(*this, value);

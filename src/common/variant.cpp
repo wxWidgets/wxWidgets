@@ -224,15 +224,15 @@ wxAny wxVariant::GetAny() const
     wxAny any;
 
     if ( IsNull() )
-        return wxAny((const wxAny&)any);
+        return any;
 
     wxVariantData* data = GetData();
 
     if ( data->GetAsAny(&any) )
-        return wxAny((const wxAny&)any);
+        return any;
 
     // If everything else fails, wrap the whole wxVariantData
-    return wxAny(((wxVariantData*)data));
+    return wxAny(data);
 }
 
 #endif // wxUSE_ANY
