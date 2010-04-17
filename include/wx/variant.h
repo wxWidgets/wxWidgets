@@ -376,6 +376,7 @@ class WXDLLIMPEXP_BASE wxAnyToVariantRegistration
 {
 public:
     wxAnyToVariantRegistration(wxVariantDataFactory factory);
+    virtual ~wxAnyToVariantRegistration();
 
     virtual wxAnyValueType* GetAssociatedType() = 0;
     wxVariantDataFactory GetFactory() const { return m_factory; }

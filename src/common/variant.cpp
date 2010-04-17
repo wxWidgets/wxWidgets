@@ -206,6 +206,10 @@ wxAnyToVariantRegistration::
     wxPreRegisterAnyToVariant(this);
 }
 
+wxAnyToVariantRegistration::~wxAnyToVariantRegistration()
+{
+}
+
 wxVariant::wxVariant(const wxAny& any)
     : wxObject()
 {
