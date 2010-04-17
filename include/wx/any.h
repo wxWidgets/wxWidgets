@@ -705,7 +705,6 @@ public:
     }
 
 #if wxUSE_VARIANT
-    template<>
     wxAny(const wxVariant& variant)
     {
         m_type = wxAnyNullValueType;
@@ -917,7 +916,6 @@ public:
 
 #if wxUSE_VARIANT
     // GetAs() wxVariant specialization
-    template<>
     bool GetAs(wxVariant* value) const
     {
         return wxConvertAnyToVariant(*this, value);
