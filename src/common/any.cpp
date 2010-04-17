@@ -165,7 +165,7 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     if ( wxANY_CHECK_TYPE(any, signed int) )
     {
 #ifdef wxLongLong_t
-        wxLongLong_t ll;
+        wxLongLong_t ll = 0;
         if ( any.GetAs(&ll) )
         {
             if ( ll > LONG_MAX )
@@ -191,8 +191,8 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     wxVariantDataFactory f =
         g_wxAnyValueTypeGlobals->FindVariantDataFactory(any.GetType());
 
-    wxVariantData* data;
- 
+    wxVariantData* data = NULL;
+
     if ( f )
     {
         data = f(any);
