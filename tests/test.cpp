@@ -86,6 +86,12 @@ void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
         { wxCMD_LINE_SWITCH, _T("L"), _T("longlist"),
             _T("list the test cases, do not run them"),
             wxCMD_LINE_VAL_NONE, 0 },
+        { wxCMD_LINE_SWITCH, "d", "detail",
+            "print the test case names, run them (not implemented)",
+            wxCMD_LINE_VAL_NONE, 0 },
+        { wxCMD_LINE_SWITCH, "t", "timing",
+            "print names and mesure running time of individual test, run them (not implemented)",
+            wxCMD_LINE_VAL_NONE, 0 },
         { wxCMD_LINE_PARAM, 0, 0, _T("REGISTRY"), wxCMD_LINE_VAL_STRING,
             wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
         { wxCMD_LINE_NONE , 0, 0, 0, wxCMD_LINE_VAL_NONE, 0 }
