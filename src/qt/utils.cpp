@@ -14,7 +14,9 @@
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] )
 {
-    fprintf( stderr, "Missing implementation in %s(%d) of %s\n", fileName, lineNumber, feature );
+    // Make it look similar to the assert messages:
+
+    fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
 wxPoint wxGetMousePosition()
