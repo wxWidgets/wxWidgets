@@ -284,14 +284,27 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     {
         wxRect rect( (int) splitterRect.origin.x, (int) splitterRect.origin.y, (int) splitterRect.size.width,
                      (int) splitterRect.size.height );
-        win->Refresh( &rect );
-   }
+        win->RefreshRect( rect );
+    }
     else
     {
         CGContextRef cgContext;
         wxGCDCImpl *impl = (wxGCDCImpl*) dc.GetImpl();
         cgContext = (CGContextRef) impl->GetGraphicsContext()->GetNativeContext();
 
+        HIThemeBackgroundDrawInfo bgdrawInfo;
+        bgdrawInfo.version = 0;
+        bgdrawInfo.state = kThemeStateActive;
+        bgdrawInfo.kind = hasMetal ? kThemeBackgroundMetal : kThemeBackgroundPlacard;
+
+        if ( hasMetal )
+            HIThemeDrawBackground(&splitterRect, &bgdrawInfo, cgContext, kHIThemeOrientationNormal);
+        else 
+        {
+            CGContextSetFillColorWithColor(cgContext,win->GetBackgroundColour().GetCGColor());
+            CGContextFillRect(cgContext,splitterRect);
+        }
+        
         HIThemeSplitterDrawInfo drawInfo;
         drawInfo.version = 0;
         drawInfo.state = kThemeStateActive;
