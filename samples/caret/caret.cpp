@@ -412,7 +412,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     PrepareDC( dc );
     dc.Clear();
-
+    
     dc.SetFont( m_font );
 
     for ( int y = 0; y < m_yChars; y++ )
@@ -424,10 +424,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxChar ch = CharAt(x, y);
             if ( !ch )
                 ch = wxT(' ');
+#ifdef __WXOSX__
+            dc.DrawText(ch, m_xMargin + x * m_widthChar,
+                        m_yMargin + y * m_heightChar );
+#else
             line += ch;
+#endif
         }
 
+#ifndef __WXOSX__
         dc.DrawText( line, m_xMargin, m_yMargin + y * m_heightChar );
+#endif
     }
 }
 
