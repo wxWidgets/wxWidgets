@@ -97,7 +97,7 @@ void FontTestCase::GetSet()
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
-    for ( size_t n = 0; n < numFonts; n++ )
+    for ( unsigned n = 0; n < numFonts; n++ )
     {
         wxFont test(*pf++);
 
@@ -113,23 +113,17 @@ void FontTestCase::GetSet()
         // consider adding another branch to this #if
 #if defined(__WXMSW__) || defined(__WXOSX__)
         static const char *knownGoodFaceName = "Arial";
-#elif defined(__LINUX__)
-        static const char *knownGoodFaceName;
-        wxString distroname = wxGetLinuxDistributionInfo().Id;
-        
-        if (distroname.Contains("Ubuntu"))
-            knownGoodFaceName = "FreeSerif";
-                // ttf-freefont and ttf-dejavu packages are installed by default on [X,K]Ubuntu systems
-        else if (distroname == "Debian")
-            knownGoodFaceName = "Fixed";
-        else
-            knownGoodFaceName = "DejaVu Sans";
-                // this is very popular in many linux distro...
 #else
-        static const char *knownGoodFaceName = "Fixed";
+        static const char *knownGoodFaceName = "Monospace";
 #endif
 
-        CPPUNIT_ASSERT( test.SetFaceName(knownGoodFaceName) );
+        WX_ASSERT_MESSAGE
+        (
+            ("failed to set face name \"%s\" for test font #%u\n"
+             "(this failure is harmless if this face name is not "
+             "available on this system)", knownGoodFaceName, n),
+            test.SetFaceName(knownGoodFaceName)
+        );
         CPPUNIT_ASSERT( test.IsOk() );
 
 
