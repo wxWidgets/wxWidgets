@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/converter.h
-// Purpose:     Converter utility classes
+// Purpose:     Converter utility classes and functions
 // Author:      Peter Most
 // Created:     02/28/10
 // RCS-ID:      $Id$
@@ -11,41 +11,21 @@
 #ifndef _WX_QT_CONVERTER_H_
 #define _WX_QT_CONVERTER_H_
 
-#include <QtCore/QRect>
-#include <QtCore/QString>
+// Rely on overloading and let the compiler pick the correct version, which makes
+// them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
 
-#include <QtGui/QFont>
+class wxRect;
+class QRect;
+wxRect wxQtConvertRect( const QRect &rect );
+QRect  wxQtConvertRect( const wxRect &rect );
 
-class wxQtRect : public QRect
-{
-    public:
-        wxQtRect( const wxRect &rect )
-            : QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() )
-        { }
-};
+class wxString;
+class QString;
+wxString wxQtConvertString( const QString &str );
+QString  wxQtConvertString( const wxString &str );
 
-class wxQtString : public QString
-{
-public:
-    wxQtString( const wxString &str )
-        : QString( str.c_str() )
-    { }
-    
-    wxQtString( const QString &str )
-        : QString( str )
-    { }
-        
-    operator wxString () const
-    {
-        return ( wxString( qPrintable( *this )));
-    }
-};
-
-inline QFont wxFontToQFont( const wxFont & )
-{
-    return QFont();
-}
-
-
+class wxFont;
+class QFont;
+QFont wxQtConvertFont( const wxFont &font );
 #endif // _WX_QT_CONVERTER_H_
 

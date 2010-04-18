@@ -4883,6 +4883,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_colour.o \
 	monodll_qt_combobox.o \
 	monodll_qt_control.o \
+	monodll_converter.o \
 	monodll_qt_ctrlsub.o \
 	monodll_qt_cursor.o \
 	monodll_qt_dataobj.o \
@@ -5815,6 +5816,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_colour.o \
 	monodll_qt_combobox.o \
 	monodll_qt_control.o \
+	monodll_converter.o \
 	monodll_qt_ctrlsub.o \
 	monodll_qt_cursor.o \
 	monodll_qt_dataobj.o \
@@ -6883,6 +6885,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_colour.o \
 	monolib_qt_combobox.o \
 	monolib_qt_control.o \
+	monolib_converter.o \
 	monolib_qt_ctrlsub.o \
 	monolib_qt_cursor.o \
 	monolib_qt_dataobj.o \
@@ -7815,6 +7818,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_colour.o \
 	monolib_qt_combobox.o \
 	monolib_qt_control.o \
+	monolib_converter.o \
 	monolib_qt_ctrlsub.o \
 	monolib_qt_cursor.o \
 	monolib_qt_dataobj.o \
@@ -9072,6 +9076,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_colour.o \
 	coredll_qt_combobox.o \
 	coredll_qt_control.o \
+	coredll_converter.o \
 	coredll_qt_ctrlsub.o \
 	coredll_qt_cursor.o \
 	coredll_qt_dataobj.o \
@@ -10004,6 +10009,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_colour.o \
 	coredll_qt_combobox.o \
 	coredll_qt_control.o \
+	coredll_converter.o \
 	coredll_qt_ctrlsub.o \
 	coredll_qt_cursor.o \
 	coredll_qt_dataobj.o \
@@ -10745,6 +10751,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_colour.o \
 	corelib_qt_combobox.o \
 	corelib_qt_control.o \
+	corelib_converter.o \
 	corelib_qt_ctrlsub.o \
 	corelib_qt_cursor.o \
 	corelib_qt_dataobj.o \
@@ -11677,6 +11684,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_colour.o \
 	corelib_qt_combobox.o \
 	corelib_qt_control.o \
+	corelib_converter.o \
 	corelib_qt_ctrlsub.o \
 	corelib_qt_cursor.o \
 	corelib_qt_dataobj.o \
@@ -18700,6 +18708,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_control.o: $(srcdir)/src/qt/control.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_converter.o: $(srcdir)/src/qt/converter.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/converter.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_ctrlsub.o: $(srcdir)/src/qt/ctrlsub.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/ctrlsub.cpp
 
@@ -23796,6 +23807,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_control.o: $(srcdir)/src/qt/control.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/control.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_converter.o: $(srcdir)/src/qt/converter.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/converter.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_ctrlsub.o: $(srcdir)/src/qt/ctrlsub.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/ctrlsub.cpp
@@ -29077,6 +29091,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_control.o: $(srcdir)/src/qt/control.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/control.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_converter.o: $(srcdir)/src/qt/converter.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/converter.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_ctrlsub.o: $(srcdir)/src/qt/ctrlsub.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/ctrlsub.cpp
 
@@ -32892,6 +32909,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_control.o: $(srcdir)/src/qt/control.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/control.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_converter.o: $(srcdir)/src/qt/converter.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/converter.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_ctrlsub.o: $(srcdir)/src/qt/ctrlsub.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/ctrlsub.cpp

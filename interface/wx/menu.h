@@ -456,7 +456,7 @@ public:
         Constructs a wxMenu object.
 
         @param style
-            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
+            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK and wxQT only).
     */
     wxMenu(long style);
 
@@ -466,7 +466,7 @@ public:
         @param title
             Title at the top of the menu (not always supported).
         @param style
-            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK only).
+            If set to wxMENU_TEAROFF, the menu will be detachable (wxGTK and wxQT only).
     */
     wxMenu(const wxString& title, long style = 0);
 

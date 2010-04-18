@@ -62,13 +62,13 @@ bool wxWindow::Show( bool show )
 
 void wxWindow::SetLabel(const wxString& label)
 {
-    GetHandle()->setWindowTitle( wxQtString( label ));
+    GetHandle()->setWindowTitle( wxQtConvertString( label ));
 }
 
 
 wxString wxWindow::GetLabel() const
 {
-    return ( wxQtString( GetHandle()->windowTitle() ));
+    return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
     
 void wxWindow::SetFocus()
@@ -97,13 +97,13 @@ void wxWindow::WarpPointer(int x, int y)
 void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
     if ( rect != NULL )
-        GetHandle()->update( wxQtRect( *rect ));
+        GetHandle()->update( wxQtConvertRect( *rect ));
 }
 
     
 bool wxWindow::SetFont( const wxFont &font )
 {
-    GetHandle()->setFont( wxFontToQFont( font ));
+    GetHandle()->setFont( wxQtConvertFont( font ));
     
     return ( true );
 }
@@ -154,7 +154,7 @@ int wxWindow::GetScrollRange( int orient ) const
 void wxWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
     if ( rect != NULL )
-        GetHandle()->scroll( dx, dy, wxQtRect( *rect ));
+        GetHandle()->scroll( dx, dy, wxQtConvertRect( *rect ));
 }
     
 
@@ -253,7 +253,7 @@ void wxWindow::DoSetToolTip( wxToolTip *tip )
 {
     wxWindowBase::DoSetToolTip( tip );
     
-    GetHandle()->setToolTip( wxQtString( tip->GetTip() ));
+    GetHandle()->setToolTip( wxQtConvertString( tip->GetTip() ));
 }
 #endif // wxUSE_TOOLTIPS
 

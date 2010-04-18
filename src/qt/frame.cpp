@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/frame.h"
+#include "wx/menu.h"
 
 wxFrame::wxFrame()
 {
@@ -34,7 +35,14 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_qtFrame = new wxQtFrame( qtParent );
 
-    return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
+    return wxFrameBase::Create( parent, id, title, pos, size, style, name );
+}
+
+void wxFrame::SetMenuBar( wxMenuBar *menuBar )
+{
+    m_qtFrame->setMenuBar( menuBar->GetHandle() );
+
+    wxFrameBase::SetMenuBar( menuBar );
 }
 
 wxQtFrame *wxFrame::GetHandle() const

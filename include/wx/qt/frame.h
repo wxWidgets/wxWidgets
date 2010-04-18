@@ -18,28 +18,30 @@
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
-        wxFrame();
-        wxFrame(wxWindow *parent,
-                   wxWindowID id,
-                   const wxString& title,
-                   const wxPoint& pos = wxDefaultPosition,
-                   const wxSize& size = wxDefaultSize,
-                   long style = wxDEFAULT_FRAME_STYLE,
-                   const wxString& name = wxFrameNameStr);
+    wxFrame();
+    wxFrame(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxDEFAULT_FRAME_STYLE,
+               const wxString& name = wxFrameNameStr);
 
-        bool Create(wxWindow *parent,
-                    wxWindowID id,
-                    const wxString& title,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
+
+    virtual void SetMenuBar(wxMenuBar *menubar);
     
 protected:
-        virtual wxQtFrame *GetHandle() const;
+    virtual wxQtFrame *GetHandle() const;
 
 private:
-        QPointer< wxQtFrame > m_qtFrame;
+    QPointer< wxQtFrame > m_qtFrame;
 };
 
 #endif // _WX_QT_FRAME_H_

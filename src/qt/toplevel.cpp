@@ -71,11 +71,11 @@ bool wxTopLevelWindowNative::IsFullScreen() const
 
 void wxTopLevelWindowNative::SetTitle(const wxString& title)
 {
-    GetHandle()->setWindowTitle( wxQtString( title ));
+    GetHandle()->setWindowTitle( wxQtConvertString( title ));
 }
 
 wxString wxTopLevelWindowNative::GetTitle() const
 {
-    return ( wxQtString( GetHandle()->windowTitle() ));
+    return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
 

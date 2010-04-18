@@ -30,8 +30,11 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     if ( !wxAppBase::Initialize( argc, argv ))
         return false;
 
-    // Use the previously stored argc, argv to prevent crashing.
+    wxMISSING_IMPLEMENTATION( "Unicode argc, argv" );
+
     // (See: http://bugreports.qt.nokia.com/browse/QTBUG-7551)
+    // Need to store argc, argv. The argc, argv from wxAppBase are
+    // being initialized *after* Initialize();
 
     m_qtApplication = new QApplication( this->argc, this->argv, QApplication::GuiClient );
 

@@ -418,6 +418,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/colour.cpp
     src/qt/combobox.cpp
     src/qt/control.cpp
+    src/qt/converter.cpp
     src/qt/ctrlsub.cpp
     src/qt/cursor.cpp
     src/qt/dataobj.cpp
