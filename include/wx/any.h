@@ -772,7 +772,18 @@ public:
         return *this;
     }
 
-#if wxUSE_VARIANT
+#if wxUSE_VARIANT && (!defined(__VISUALC__) || __VISUALC__ >= 1300)
+    //
+    // Adding this operator for VC6 breaks wxAny, and also
+    // some cases of implicit conversion from wxVariant to wxAny.
+    //
+    // e.g. wxAny any = variant;  // should work
+    //
+    //      wxAny any;
+    //      any = 16;
+    //      any = variant;  // probably doesn't work - uses template
+    //                      // assignment, most likely
+    //
     wxAny& operator=(const wxVariant &variant)
     {
         AssignVariant(variant);

@@ -201,7 +201,13 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     {
         // Check if wxAny wrapped wxVariantData*
         if ( !any.GetAs(&data) )
+        {
+            // Ok, one last chance: while unlikely, it is possible that the
+            // wxAny actually contains wxVariant.
+            if ( wxANY_CHECK_TYPE(any, wxVariant) )
+                *variant = wxANY_AS(any, wxVariant);
             return false;
+        }
 
         // Wrapper's GetValue() does not increase reference
         // count, se have to do it before the data gets passed

@@ -482,13 +482,16 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(variant.GetType() == "ulonglong");
     CPPUNIT_ASSERT(variant.GetLong() == 1000);
 
-    any = vString;
+    // FIXME-VC6: for VC6, any = variant needs to be any = wxAny(variant).
+    //            Note that 'wxAny any = variant' does work, probably because
+    //            ctor is used in that case instead of assignment operator.
+    any = wxAny(vString);
     CPPUNIT_ASSERT(any == "ABC");
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetString() == "ABC");
 
-    any = vDouble;
+    any = wxAny(vDouble);
     double d = wxANY_AS(any, double);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_FLOAT_CONST, FEQ_DELTA);
     res = any.GetAs(&variant);
@@ -497,27 +500,27 @@ void wxAnyTestCase::wxVariantConversions()
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
 
-    any = vBool;
+    any = wxAny(vBool);
     CPPUNIT_ASSERT(wxANY_AS(any, bool) == true);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetBool() == true);
 
-    any = vChar;
+    any = wxAny(vChar);
     //CPPUNIT_ASSERT(wxANY_AS(any, wxUniChar) == 'A');
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetChar() == 'A');
 
 #ifdef wxLongLong_t
-    any = vLongLong;
+    any = wxAny(vLongLong);
     CPPUNIT_ASSERT(any == wxLL(0xFFFFFFFFFF));
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetLongLong() == wxLongLong(wxLL(0xFFFFFFFFFF)));
     CPPUNIT_ASSERT(variant.GetType() == "longlong");
 
-    any = vULongLong;
+    any = wxAny(vULongLong);
     CPPUNIT_ASSERT(any == wxLL(123456));
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
@@ -526,7 +529,7 @@ void wxAnyTestCase::wxVariantConversions()
 
     // Cannot test equality for the rest, just test that they convert
     // back correctly.
-    any = vArrayString;
+    any = wxAny(vArrayString);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     wxArrayString arrstr2 = variant.GetArrayString();
@@ -534,18 +537,18 @@ void wxAnyTestCase::wxVariantConversions()
 
     any = m_testDateTime;
     CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
-    any = vDateTime;
+    any = wxAny(vDateTime);
     CPPUNIT_ASSERT(wxANY_AS(any, wxDateTime) == m_testDateTime);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant == m_testDateTime);
 
-    any = vVoidPtr;
+    any = wxAny(vVoidPtr);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetVoidPtr() == dummyVoidPointer);
 
-    any = vList;
+    any = wxAny(vList);
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxAnyList));
     wxAnyList anyList = wxANY_AS(any, wxAnyList);
     CPPUNIT_ASSERT(anyList.GetCount() == 2);
@@ -558,7 +561,7 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(variant[0].GetLong() == 15);
     CPPUNIT_ASSERT(variant[1].GetString() == "abc");
 
-    any = vCustomType;
+    any = wxAny(vCustomType);
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(any, wxVariantData*));
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);

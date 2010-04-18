@@ -225,11 +225,10 @@ wxVariant::wxVariant(const wxAny& any)
 
 wxAny wxVariant::GetAny() const
 {
-    wxAny any;
-
     if ( IsNull() )
-        return any;
+        return wxAny();
 
+    wxAny any;
     wxVariantData* data = GetData();
 
     if ( data->GetAsAny(&any) )
