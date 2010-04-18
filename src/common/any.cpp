@@ -85,11 +85,8 @@ public:
     wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type_)
     {
         // Ideally we'd have the hash map of type 'const wxAnyValueType*',
-        // but WX_DECLARE_HASH_MAP() has some trouble with it. Also note
-        // that we must use C-style cast here instead of e.g.
-        // static_cast<>, which can cause compiler to complain when
-        // casting away constness.
-        wxAnyValueType* type = (wxAnyValueType*)(type_);
+        // but WX_DECLARE_HASH_MAP() has some trouble with it.
+        wxAnyValueType* type = const_cast<wxAnyValueType*>(type_);
 
         wxAnyTypeToVariantDataFactoryMap& anyToVariant = m_anyToVariant;
         wxAnyTypeToVariantDataFactoryMap::const_iterator it;
