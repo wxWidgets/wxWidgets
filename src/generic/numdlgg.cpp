@@ -77,7 +77,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
                                          long min,
                                          long max,
                                          const wxPoint& pos)
-                   : wxDialog(GetParentForModalDialog(parent),
+                   : wxDialog(GetParentForModalDialog(parent, 0),
                               wxID_ANY, caption,
                               pos, wxDefaultSize)
 {

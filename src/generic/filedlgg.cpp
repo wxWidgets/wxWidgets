@@ -164,7 +164,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 {
     m_bypassGenericImpl = bypassGenericImpl;
 
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, style);
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFile,
                                   wildCard, style, pos, sz, name))

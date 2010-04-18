@@ -62,7 +62,7 @@ bool wxPropertySheetDialog::Create(wxWindow* parent, wxWindowID id, const wxStri
                                        const wxPoint& pos, const wxSize& sz, long style,
                                        const wxString& name)
 {
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, style);
 
     if (!wxDialog::Create(parent, id, title, pos, sz, style|wxCLIP_CHILDREN, name))
         return false;

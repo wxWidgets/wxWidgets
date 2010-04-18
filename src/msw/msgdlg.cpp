@@ -443,8 +443,7 @@ int wxMessageDialog::ShowModal()
     }
 
     // use the top level window as parent if none specified
-    if ( !m_parent )
-        m_parent = GetParentForModalDialog();
+    m_parent = GetParentForModalDialog();
     HWND hWnd = m_parent ? GetHwndOf(m_parent) : NULL;
 
 #if wxUSE_INTL

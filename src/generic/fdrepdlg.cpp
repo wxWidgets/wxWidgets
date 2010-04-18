@@ -87,7 +87,7 @@ bool wxGenericFindReplaceDialog::Create(wxWindow *parent,
                                         const wxString& title,
                                         int style)
 {
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, style);
 
     if ( !wxDialog::Create(parent, wxID_ANY, title,
                            wxDefaultPosition, wxDefaultSize,

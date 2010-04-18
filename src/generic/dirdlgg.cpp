@@ -79,7 +79,7 @@ bool wxGenericDirDialog::Create(wxWindow* parent,
 {
     wxBusyCursor cursor;
 
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, style);
 
     if (!wxDirDialogBase::Create(parent, title, defaultPath, style, pos, sz, name))
         return false;
