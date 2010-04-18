@@ -10,7 +10,6 @@
 #include "wx/wxprec.h"
 
 #include "wx/menu.h"
-#include "wx/log.h"
 #include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxMenu, wxMenuBase )
@@ -106,15 +105,13 @@ wxMenuBar::~wxMenuBar()
 
 bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 {
-    // Menu title could be empty so use the given one:
+    if ( !wxMenuBarBase::Append( menu, title ))
+        return false;
+
+    // Override the stored menu title with the given one:
 
     QMenu *qtMenu = menu->GetHandle();
     qtMenu->setTitle( wxQtConvertString( title ));
-
-    if ( qtMenu->menuAction()->isVisible() && qtMenu->title().isEmpty() )
-    {
-        wxLogDebug( wxT( "Menu will not be visible!" ));
-    }
     m_qtMenuBar->addMenu( qtMenu );
     
     return true;

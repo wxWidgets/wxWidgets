@@ -616,9 +616,10 @@ wxMenu *wxMenuBarBase::GetMenu(size_t pos) const
     return node->GetData();
 }
 
-bool wxMenuBarBase::Append(wxMenu *menu, const wxString& WXUNUSED(title))
+bool wxMenuBarBase::Append(wxMenu *menu, const wxString &title)
 {
     wxCHECK_MSG( menu, false, wxT("can't append NULL menu") );
+    wxCHECK_MSG( !title.IsEmpty(), false, wxT("can't append menu with empty title") );
 
     m_menus.Append(menu);
     menu->Attach(this);
