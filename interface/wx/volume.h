@@ -70,13 +70,13 @@ public:
     /**
         Default ctor. Use Create() later.
     */
-    wxFSVolumeBase();
+    wxFSVolume();
 
     /**
         Create the volume object with the given @a name (which should be one of
         those returned by GetVolumes()).
     */
-    wxFSVolumeBase(const wxString& name);
+    wxFSVolume(const wxString& name);
 
     /**
         Create the volume object with the given @a name (which should be one of
@@ -90,6 +90,7 @@ public:
         Only the volumes with @e flags such that the expression
         @code (flags & flagsSet) == flagsSet && !(flags & flagsUnset) @endcode
         is @true, are returned. By default, all mounted ones are returned.
+        See ::wxFSVolumeFlags enumeration values for a list of valid flags.
 
         This operation may take a while and, even if this function is
         synchronous, it can be stopped using CancelSearch().
@@ -114,7 +115,7 @@ public:
     wxFSVolumeKind GetKind() const;
 
     /**
-        Returns the flags of this volume. See wxFSVolumeFlags.
+        Returns the flags of this volume. See ::wxFSVolumeFlags enumeration values.
     */
     int GetFlags() const;
 
