@@ -447,7 +447,7 @@ void wxAnyTestCase::wxVariantConversions()
     wxVariant vBool((bool)true);
     wxVariant vChar('A');
 #ifdef wxLongLong_t
-    wxVariant vLongLong(wxLongLong(wxLL(0xFFFFFFFFFF)));
+    wxVariant vLongLong(wxLongLong(wxLL(0xAABBBBCCCC)));
     wxVariant vULongLong(wxULongLong(wxULL(123456)));
 #endif
     wxArrayString arrstr;
@@ -514,16 +514,25 @@ void wxAnyTestCase::wxVariantConversions()
 
 #ifdef wxLongLong_t
     any = wxAny(vLongLong);
-    CPPUNIT_ASSERT(any == wxLL(0xFFFFFFFFFF));
+    CPPUNIT_ASSERT(any == wxLL(0xAABBBBCCCC));
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
-    CPPUNIT_ASSERT(variant.GetLongLong() == wxLongLong(wxLL(0xFFFFFFFFFF)));
     CPPUNIT_ASSERT(variant.GetType() == "longlong");
+    CPPUNIT_ASSERT(variant.GetLongLong() == wxLongLong(wxLL(0xAABBBBCCCC)));
+
+#if LONG_MAX == wxINT64_MAX
+    // As a sanity check, test that wxVariant of type 'long' converts
+    // seamlessly to 'longlong' (on some 64-bit systems)
+    any = 0xAABBBBCCCCL;
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(variant.GetLongLong() == wxLongLong(wxLL(0xAABBBBCCCC)));
+#endif
 
     any = wxAny(vULongLong);
     CPPUNIT_ASSERT(any == wxLL(123456));
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "ulonglong");
     CPPUNIT_ASSERT(variant.GetULongLong() == wxULongLong(wxULL(123456)));
 #endif
 
