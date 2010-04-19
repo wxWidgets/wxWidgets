@@ -139,6 +139,7 @@ public:
         
         // so that non-solid background renders correctly under GTK+:
         SetThemeEnabled(true);
+        return true;
     }
     
     virtual ~wxBlindPlateWindow();
