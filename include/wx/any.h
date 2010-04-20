@@ -765,32 +765,6 @@ public:
     /**
         Assignment operators.
     */
-    wxAny& operator=(const wxAny &any)
-    {
-        if (this != &any)
-            AssignAny(any);
-        return *this;
-    }
-
-#if wxUSE_VARIANT && (!defined(__VISUALC__) || __VISUALC__ >= 1300)
-    //
-    // Adding this operator for VC6 breaks wxAny, and also
-    // some cases of implicit conversion from wxVariant to wxAny.
-    //
-    // e.g. wxAny any = variant;  // should work
-    //
-    //      wxAny any;
-    //      any = 16;
-    //      any = variant;  // probably doesn't work - uses template
-    //                      // assignment, most likely
-    //
-    wxAny& operator=(const wxVariant &variant)
-    {
-        AssignVariant(variant);
-        return *this;
-    }
-#endif
-
     template<typename T>
     wxAny& operator=(const T &value)
     {
@@ -799,6 +773,21 @@ public:
         wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
         return *this;
     }
+
+    wxAny& operator=(const wxAny &any)
+    {
+        if (this != &any)
+            AssignAny(any);
+        return *this;
+    }
+
+#if wxUSE_VARIANT
+    wxAny& operator=(const wxVariant &variant)
+    {
+        AssignVariant(variant);
+        return *this;
+    }
+#endif
 
     wxAny& operator=(const char* value)
         { Assign(wxString(value)); return *this; }

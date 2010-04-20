@@ -482,16 +482,13 @@ void wxAnyTestCase::wxVariantConversions()
     CPPUNIT_ASSERT(variant.GetType() == "ulonglong");
     CPPUNIT_ASSERT(variant.GetLong() == 1000);
 
-    // FIXME-VC6: for VC6, any = variant needs to be any = wxAny(variant).
-    //            Note that 'wxAny any = variant' does work, probably because
-    //            ctor is used in that case instead of assignment operator.
-    any = wxAny(vString);
+    any = vString;
     CPPUNIT_ASSERT(any == "ABC");
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetString() == "ABC");
 
-    any = wxAny(vDouble);
+    any = vDouble;
     double d = wxANY_AS(any, double);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(d, TEST_FLOAT_CONST, FEQ_DELTA);
     res = any.GetAs(&variant);
@@ -500,7 +497,7 @@ void wxAnyTestCase::wxVariantConversions()
                                  TEST_FLOAT_CONST,
                                  FEQ_DELTA);
 
-    any = wxAny(vBool);
+    any = vBool;
     CPPUNIT_ASSERT(wxANY_AS(any, bool) == true);
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
