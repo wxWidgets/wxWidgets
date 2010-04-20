@@ -35,6 +35,8 @@ public:
         (void)Create(parent, id, title, pos, size, style, name);
     }
 
+    virtual ~wxTopLevelWindowMac();
+
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -42,9 +44,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
-
-    virtual ~wxTopLevelWindowMac();
-
+    
+    bool Create(wxWindow *parent, WXWindow nativeWindow);
+    
     virtual bool Destroy();
 
     virtual wxPoint GetClientAreaOrigin() const;

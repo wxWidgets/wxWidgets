@@ -86,6 +86,17 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     return true;
 }
 
+bool wxTopLevelWindowMac::Create(wxWindow *parent,
+                                 WXWindow nativeWindow)
+{
+    if ( !wxNonOwnedWindow::Create(parent, nativeWindow ) )
+        return false;
+    
+    wxTopLevelWindows.Append(this);
+    
+    return true;
+}
+
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
 }
