@@ -898,7 +898,7 @@ wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const
 // concatenates the matrix
 void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
 {
-    m_matrix = CGAffineTransformConcat(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()) );
+    m_matrix = CGAffineTransformConcat(*((CGAffineTransform*) t->GetNativeMatrix()), m_matrix);
 }
 
 // sets the matrix to the respective values
@@ -1425,10 +1425,10 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
 
         CGContextConcatCTM( m_cgContext, m_windowTransform );
-		CGContextSaveGState( m_cgContext );
-		m_releaseContext = true;
-		if ( (HIShapeRef) m_clipRgn != NULL )
-		{
+        CGContextSaveGState( m_cgContext );
+        m_releaseContext = true;
+        if ( (HIShapeRef) m_clipRgn != NULL )
+        {
             // the clip region is in device coordinates, so we convert this again to user coordinates
             wxMacCFRefHolder<HIMutableShapeRef> hishape ;
             hishape.Set( HIShapeCreateMutableCopy( m_clipRgn ) );
@@ -1445,9 +1445,9 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
                 HIShapeReplacePathInCGContext( hishape, m_cgContext );
                 CGContextClip( m_cgContext );
             }
-		}
-		CGContextSaveGState( m_cgContext );
-	}
+        }
+        CGContextSaveGState( m_cgContext );
+    }
 }
 
 bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
@@ -2077,7 +2077,7 @@ void wxMacCoreGraphicsContext::ConcatTransform( const wxGraphicsMatrix& matrix )
     if ( m_cgContext )
         CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) matrix.GetNativeMatrix());
     else
-        m_windowTransform = CGAffineTransformConcat(m_windowTransform, *(CGAffineTransform*) matrix.GetNativeMatrix());
+        m_windowTransform = CGAffineTransformConcat( *(CGAffineTransform*) matrix.GetNativeMatrix(),m_windowTransform);
 }
 
 // sets the transform of this context
