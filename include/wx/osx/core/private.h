@@ -795,6 +795,13 @@ public :
     
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 
+    static wxNonOwnedWindowImpl*
+                FindFromWXWindow(WXWindow window);
+    
+    static void  RemoveAssociations( wxNonOwnedWindowImpl* impl);
+    
+    static void  Associate( WXWindow window, wxNonOwnedWindowImpl *impl );
+    
     // static creation methods, must be implemented by all toolkits
 
     static wxNonOwnedWindowImpl* CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow native) ;
