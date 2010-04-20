@@ -2,12 +2,12 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 April 2010                                                       *
+# Date : 20 April 2010                                                       *
 #                                                                            *
 #*****************************************************************************
 
 .first
-	define wx [--.include.wx]
+	define wx [----.include.wx]
 
 .suffixes : .cpp
 
