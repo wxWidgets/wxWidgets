@@ -61,18 +61,26 @@ int wxMessageDialog::ShowModal()
             break;
     }
 
-
-    // work out what to display
-    // if the extended text is empty then we use the caption as the title
-    // and the message as the text (for backwards compatibility)
-    // but if the extended message is not empty then we use the message as the title
-    // and the extended message as the text because that makes more sense
-
+    // (the standard alert has two slots [title, text]
+    //  for the three wxStrings [caption, message, extended message])
+    //
+    // if the extended text is empty we use the caption and
+    // the message (for backwards compatibility)
+    //
+    // if the extended text is not empty we ignore the caption
+    // and use the message and the extended message
+    
+    
     wxString msgtitle,msgtext;
     if(m_extendedMessage.IsEmpty())
     {
-        msgtitle = m_caption;
-        msgtext  = m_message;
+        if ( m_caption.IsEmpty() )
+            msgtitle = m_message;
+        else
+        {
+            msgtitle = m_caption;
+            msgtext  = m_message;
+        }
     }
     else
     {
@@ -150,7 +158,7 @@ int wxMessageDialog::ShowModal()
         wxCFStringRef cfCancelString( GetCancelLabel().c_str(), GetFont().GetEncoding() );
 
         wxCFStringRef cfTitle( msgtitle, GetFont().GetEncoding() );
-        wxCFStringRef cfText( msgtext, GetFont().GetEncoding() );
+        wxCFStringRef cfText = msgtext.IsEmpty() ? NULL : wxCFStringRef( msgtext, GetFont().GetEncoding() );
 
         param.movable = true;
         param.flags = 0;
