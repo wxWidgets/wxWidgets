@@ -1414,7 +1414,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
 
 void wxTopLevelWindowMac::SetLabel(const wxString& title)
 {
-    wxWindow::SetLabel( title ) ;
+    m_label = title;
     UMASetWTitle( (WindowRef)m_macWindow , title , GetFont().GetEncoding() ) ;
 }
 
