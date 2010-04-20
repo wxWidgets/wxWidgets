@@ -466,7 +466,7 @@ wxFileDialog::wxFileDialog(
 
 void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
 {
-    wxNonOwnedWindow::Create( GetParent(), nativeWindow );
+    wxTopLevelWindow::Create( GetParent(), nativeWindow );
     
     if (HasExtraControlCreator())
     {
