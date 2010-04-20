@@ -538,6 +538,18 @@ void wxProgressDialog::SetRange(int maximum)
 #endif // __WXMSW__
 }
 
+
+bool wxProgressDialog::WasCancelled() const
+{
+    return m_hasAbortButton && m_state == Canceled;
+}
+
+bool wxProgressDialog::WasSkipped() const
+{
+    return m_hasSkipButton && m_skip;
+}
+
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------

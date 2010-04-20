@@ -509,6 +509,7 @@ All (GUI):
 - Added support for gradient stops in wxGraphicsContext (Kit Bishop).
 - Added wxTransparentColour.
 - Added wxToolBar::GetToolByPos().
+- Added wxProgressDialog::Was{Cancelled,Skipped}() (Julien Weinzorn).
 
 GTK:
 
