@@ -265,8 +265,8 @@ public :
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
-    WX_wxNSWindow         m_macWindow;
-    void *              m_macFullScreenData ;
+    WXWindow        m_macWindow;
+    void *          m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
 };
 
