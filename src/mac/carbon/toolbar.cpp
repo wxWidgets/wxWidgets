@@ -133,11 +133,11 @@ public:
         if ( m_toolbarItemRef )
         {
             CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
-			// different behaviour under Leopard
-			if ( UMAGetSystemVersion() < 0x1050 )
-			{
-				wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
-			}
+            // different behaviour under Leopard
+            if ( UMAGetSystemVersion() < 0x1050 )
+            {
+                wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+            }
             wxTheApp->MacAddToAutorelease(m_toolbarItemRef);
             CFRelease(m_toolbarItemRef);
             m_toolbarItemRef = NULL;
@@ -472,15 +472,21 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
 #ifdef __WXMAC_OSX__
     if ( toggle )
     {
-        int w = m_bmpNormal.GetWidth();
-        int h = m_bmpNormal.GetHeight();
+        int w = m_bmpNormal.GetWidth() + 6;
+        int h = m_bmpNormal.GetHeight() + 6;
         wxBitmap bmp( w, h );
         wxMemoryDC dc;
 
         dc.SelectObject( bmp );
-        dc.SetPen( wxPen(*wxBLACK) );
-        dc.SetBrush( wxBrush( *wxLIGHT_GREY ));
-        dc.DrawRectangle( 0, 0, w, h );
+        wxColour mid_grey_75   = wxColour(128, 128, 128, 196);
+        wxColour light_grey_75 = wxColour(196, 196, 196, 196);
+        dc.GradientFillLinear( wxRect(1, 1, w - 1, h-1),
+                                light_grey_75, mid_grey_75, wxNORTH);
+        wxColour black_50 = wxColour(0, 0, 0, 127);
+        dc.SetPen( wxPen(black_50) );
+        dc.DrawRoundedRectangle( 0, 0, w, h, 1.5 );
+        dc.DrawBitmap( m_bmpNormal, 3, 3, true );
+        
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
@@ -666,8 +672,8 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                             if ( count >= 1 )
                                 CFRelease( viewRef ) ;
                         }
-	                    free( object ) ;
-    	                result = noErr;
+                        free( object ) ;
+                        result = noErr;
                     }
                     break;
             }
@@ -679,7 +685,7 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                 case kEventToolbarItemCreateCustomView:
                 {
                     HIViewRef viewRef = object->viewRef ;
-               		HIViewRemoveFromSuperview( viewRef ) ;
+                       HIViewRemoveFromSuperview( viewRef ) ;
                     HIViewSetVisible(viewRef, true) ;
                     CFRetain( viewRef ) ;
                     result = SetEventParameter( inEvent, kEventParamControlRef, typeControlRef, sizeof( HIViewRef ), &viewRef );
@@ -900,11 +906,11 @@ wxToolBar::~wxToolBar()
             MacInstallNativeToolbar( false );
 
         CFIndex count = CFGetRetainCount( m_macHIToolbarRef ) ;
-		// Leopard seems to have one refcount more, so we cannot check reliably at the moment
-		if ( UMAGetSystemVersion() < 0x1050 )
-		{
-			wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
-		}
+        // Leopard seems to have one refcount more, so we cannot check reliably at the moment
+        if ( UMAGetSystemVersion() < 0x1050 )
+        {
+            wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
+        }
         CFRelease( (HIToolbarRef)m_macHIToolbarRef );
         m_macHIToolbarRef = NULL;
     }
