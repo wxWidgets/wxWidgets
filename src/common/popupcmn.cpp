@@ -109,7 +109,7 @@ BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+#if defined( __WXMSW__ ) || ( defined( __WXMAC__ ) && wxOSX_USE_CARBON )
     EVT_IDLE(wxPopupTransientWindow::OnIdle)
 #endif
 END_EVENT_TABLE()
@@ -405,7 +405,7 @@ bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
     return false;
 }
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+#if defined( __WXMSW__ ) || ( defined( __WXMAC__ ) && wxOSX_USE_CARBON )
 void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
