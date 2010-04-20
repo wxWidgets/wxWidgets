@@ -39,8 +39,10 @@ int wxMacPrintDialog::ShowModal()
     OSErr err = noErr;
     Boolean accepted;
     wxOSXPrintData* nativeData = (wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData();
+    wxDialog::OSXBeginModalDialog();
     err = PMSessionPrintDialog(nativeData->GetPrintSession(), nativeData->GetPrintSettings(),
         nativeData->GetPageFormat(), &accepted );
+    wxDialog::OSXEndModalDialog();
 
     if ((err == noErr) && !accepted)
     {
@@ -80,8 +82,10 @@ int wxMacPageSetupDialog::ShowModal()
     OSErr err = noErr;
     Boolean accepted;
 
+    wxDialog::OSXBeginModalDialog();
     err = PMSessionPageSetupDialog( nativeData->GetPrintSession(), nativeData->GetPageFormat(),
         &accepted );
+    wxDialog::OSXEndModalDialog();
 
     if ((err == noErr) && !accepted)
     {

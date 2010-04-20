@@ -216,7 +216,9 @@ int wxMessageDialog::ShowModal()
         {
             DialogRef alertRef;
             CreateStandardAlert( alertType, cfTitle, cfText, &param, &alertRef );
+            wxDialog::OSXBeginModalDialog();
             RunStandardAlert( alertRef, NULL, &result );
+            wxDialog::OSXEndModalDialog();
         }
         else
         {

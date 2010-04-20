@@ -541,7 +541,11 @@ int wxFileDialog::ShowModal()
     SetupExtraControls(NavDialogGetWindow(dialog));
     
     if (err == noErr)
+    {
+        wxDialog::OSXBeginModalDialog();
         err = ::NavDialogRun(dialog);
+        wxDialog::OSXEndModalDialog();
+    }
 
     // clean up filter related data, etc.
     if (navFilterUPP)
