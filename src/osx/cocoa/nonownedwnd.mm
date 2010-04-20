@@ -78,23 +78,64 @@ bool shouldHandleSelector(SEL selector)
 }
 
 //
-// wx native implementation classes
+// wx category for NSWindow (our own and wrapped instances)
 //
 
-typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector);
+@interface NSWindow (wxNSWindowSupport)
+
+- (wxNonOwnedWindowCocoaImpl*) WX_implementation;
+
+- (bool) WX_filterSendEvent:(NSEvent *) event;
+
+@end
+
+@implementation NSWindow (wxNSWindowSupport)
+
+- (wxNonOwnedWindowCocoaImpl*) WX_implementation
+{
+    return (wxNonOwnedWindowCocoaImpl*) wxNonOwnedWindowImpl::FindFromWXWindow( self );
+}
+
+// TODO in cocoa everything during a drag is sent to the NSWindow the mouse down occured, 
+// this does not conform to the wx behaviour if the window is not captured, so try to resend
+// or capture all wx mouse event handling at the tlw as we did for carbon
+
+- (bool) WX_filterSendEvent:(NSEvent *) event
+{
+    bool handled = false;
+    if ( ([event type] >= NSLeftMouseDown) && ([event type] <= NSMouseExited) )
+    {
+        wxWindow* cw = wxWindow::GetCapture();
+        if ( cw != NULL )
+        {
+            ((wxWidgetCocoaImpl*)cw->GetPeer())->DoHandleMouseEvent( event);
+            handled = true;
+        }
+    }
+    return handled;
+}
+@end
+
+//
+// wx native implementation 
+//
 
 @interface wxNSWindow : NSWindow
 {
-    wxNonOwnedWindowCocoaImpl* impl;
 }
 
+- (void) sendEvent:(NSEvent *)event;
 - (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen;
-- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
-- (wxNonOwnedWindowCocoaImpl*) implementation;
 - (void)noResponderFor: (SEL) selector;
 @end
 
 @implementation wxNSWindow
+
+- (void)sendEvent:(NSEvent *) event
+{
+    if ( ![self WX_filterSendEvent: event] )
+        [super sendEvent: event];
+}
 
 // The default implementation always moves the window back onto the screen,
 // even when the programmer explicitly wants to hide it.
@@ -102,16 +143,6 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 {
     wxUnusedVar(screen);
     return frameRect;
-}
-
-- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxNonOwnedWindowCocoaImpl*) implementation
-{
-    return impl;
 }
 
 - (void)doCommandBySelector:(SEL)selector
@@ -128,8 +159,6 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
         [super noResponderFor:selector];
-//        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
-//        superimpl(self, @selector(noResponderFor:), selector);
     }
 }
 
@@ -144,31 +173,18 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 @end
 
 @interface wxNSPanel : NSPanel
-
 {
-    wxNonOwnedWindowCocoaImpl* impl;
 }
 
-- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
-- (wxNonOwnedWindowCocoaImpl*) implementation;
 - (void)noResponderFor: (SEL) selector;
+- (void)sendEvent:(NSEvent *)event;
 @end
 
 @implementation wxNSPanel
 
-- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
 - (BOOL)canBecomeKeyWindow
 {
     return YES;
-}
-
-- (wxNonOwnedWindowCocoaImpl*) implementation
-{
-    return impl;
 }
 
 - (void)doCommandBySelector:(SEL)selector
@@ -183,9 +199,13 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
         [super noResponderFor:selector];
-//        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
-//        superimpl(self, @selector(noResponderFor:), selector);
     }
+}
+
+- (void)sendEvent:(NSEvent *) event
+{
+    if ( ![self WX_filterSendEvent: event] )
+        [super sendEvent: event];
 }
 
 @end
@@ -219,8 +239,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (BOOL)windowShouldClose:(id)nwindow
 {
-    wxNSWindow* window = (wxNSWindow*) nwindow;
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [(NSWindow*) nwindow WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -230,15 +249,15 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     return NO;
 }
 
-- (NSSize)windowWillResize:(NSWindow *)win
+- (NSSize)windowWillResize:(NSWindow *)window
                     toSize:(NSSize)proposedFrameSize
 {
-    NSRect frame = [win frame];
+    NSRect frame = [window frame];
     wxRect wxframe = wxFromNSRect( NULL, frame );
     wxframe.SetWidth( (int)proposedFrameSize.width );
     wxframe.SetHeight( (int)proposedFrameSize.height );
-    wxNSWindow* window = (wxNSWindow*) win;
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -255,8 +274,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (void)windowDidResize:(NSNotification *)notification
 {
-    wxNSWindow* window = (wxNSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -268,7 +287,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 - (void)windowDidMove:(NSNotification *)notification
 {
     wxNSWindow* window = (wxNSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -279,8 +298,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (void)windowDidBecomeKey:(NSNotification *)notification
 {
-    wxNSWindow* window = (wxNSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -291,8 +310,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (void)windowDidResignKey:(NSNotification *)notification
 {
-    wxNSWindow* window = (wxNSWindow*) [notification object];
-    wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
+    NSWindow* window = (NSWindow*) [notification object];
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -331,7 +350,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (BOOL)windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame
 {
-    wxNonOwnedWindowCocoaImpl* windowimpl = [(wxNSWindow*)window implementation];
+    wxUnusedVar(newFrame);
+    wxNonOwnedWindowCocoaImpl* windowimpl = [window WX_implementation];
     if ( windowimpl )
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
@@ -363,7 +383,6 @@ wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
 {
     if ( !m_wxPeer->IsNativeWindowWrapper() )
     {
-        [m_macWindow setImplementation:nil];
         [m_macWindow setDelegate:nil];
         [m_macWindow release];
     }
@@ -477,7 +496,6 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
 
-    [m_macWindow setImplementation:this];
     r = [NSWindow contentRectForFrameRect:r styleMask:windowstyle];
 
     [m_macWindow initWithContentRect:r
