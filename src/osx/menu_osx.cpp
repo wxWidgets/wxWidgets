@@ -409,6 +409,33 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         if (event.GetSetEnabled())
             Enable(id, event.GetEnabled());
     }
+    else 
+    {
+#if wxOSX_USE_CARBON
+        // these two items are also managed by the Carbon Menu Manager, therefore we must
+        // always reset them ourselves
+        UInt32 cmd = 0;
+        
+        if ( id == wxApp::s_macExitMenuItemId )
+        {
+            cmd = kHICommandQuit;
+        }
+        else if (id == wxApp::s_macPreferencesMenuItemId )
+        {
+            cmd = kHICommandPreferences;
+        }
+        
+        if ( cmd != 0 )
+        {
+            if ( !item->IsEnabled() || wxDialog::OSXHasModalDialogsOpen() )
+                DisableMenuCommand( NULL , cmd ) ;
+            else
+                EnableMenuCommand( NULL , cmd ) ;
+            
+        }
+#endif
+    }
+
     return processed;
 }
 
@@ -566,7 +593,7 @@ void wxMenuBar::MacInstallMenuBar()
         return ;
 
     m_rootMenu->GetPeer()->MakeRoot();
-    // DisableMenuCommand( NULL , kHICommandPreferences ) ;
+
 #if 0
 
     MenuBarHandle menubar = NULL ;
