@@ -27,6 +27,7 @@
     #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/frame.h"
+    #include "wx/dialog.h"
     #include "wx/menuitem.h"
 #endif
 
