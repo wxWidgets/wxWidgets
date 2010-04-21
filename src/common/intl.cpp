@@ -1305,6 +1305,8 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                                 const wxString& msgIdCharset) const
 {
+    wxUnusedVar(msgIdCharset); // silence warning in Unicode build
+
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv,
             *inputConvPtr = NULL; // same as inputConv but safely deleteable
@@ -1330,12 +1332,14 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #endif
     }
 
+#if !wxUSE_UNICODE
     // conversion to apply to msgid strings before looking them up: we only
     // need it if the msgids are neither in 7 bit ASCII nor in the same
     // encoding as the catalog
     wxCSConv *sourceConv = msgIdCharset.empty() || (msgIdCharset == m_charset)
                             ? NULL
                             : new wxCSConv(msgIdCharset);
+#endif // !wxUSE_UNICODE
 
     for (size_t32 i = 0; i < m_numStrings; i++)
     {
@@ -1390,7 +1394,9 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
         }
     }
 
+#if !wxUSE_UNICODE
     delete sourceConv;
+#endif
     delete inputConvPtr;
 
     return true;
