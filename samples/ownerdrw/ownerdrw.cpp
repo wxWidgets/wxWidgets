@@ -206,7 +206,7 @@ void OwnerDrawnFrame::InitMenu()
 
     drawn_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn2, wxT("&Cheked item"),
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn2, wxT("&Checked item"),
         wxT("check/uncheck me!"), wxITEM_CHECK);
     drawn_menu->Append(pItem);
     drawn_menu->Check(Menu_Drawn2, true);
@@ -232,7 +232,7 @@ void OwnerDrawnFrame::InitMenu()
 
     native_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(native_menu, Menu_Native2, wxT("&Cheked item"),
+    pItem = new wxMenuItem(native_menu, Menu_Native2, wxT("&Checked item"),
         wxT("check/uncheck me!"), wxITEM_CHECK);
     native_menu->Append(pItem);
     native_menu->Check(Menu_Native2, true);
