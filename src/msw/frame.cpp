@@ -896,11 +896,15 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 bool
 wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
 {
+    // sign extend to int from unsigned short we get from Windows
+    int item = (signed short)nItem;
+
     // WM_MENUSELECT is generated for both normal items and menus, including
     // the top level menus of the menu bar, which can't be represented using
-    // any valid identifier in wxMenuEvent so use -1 for them
-    // the menu highlight events for n
-    const int item = flags & (MF_POPUP | MF_SEPARATOR) ? -1 : nItem;
+    // any valid identifier in wxMenuEvent so use an otherwise unused value for
+    // them
+    if ( flags & (MF_POPUP | MF_SEPARATOR) )
+        item = -1;
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
     event.SetEventObject(this);
