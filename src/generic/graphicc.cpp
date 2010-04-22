@@ -929,9 +929,10 @@ void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
     }
 }
 
-bool wxCairoPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle) ) const
+bool wxCairoPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle ) const
 {
-    return cairo_in_stroke( m_pathContext, x, y) != 0;
+    cairo_set_fill_rule(m_pathContext,fillStyle==wxODDEVEN_RULE ? CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING);
+    return cairo_in_fill( m_pathContext, x, y) != 0;
 }
 
 //-----------------------------------------------------------------------------
