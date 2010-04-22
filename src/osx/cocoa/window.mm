@@ -70,7 +70,7 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 
 WXWidget wxWidgetImpl::FindFocus()
 {
-    return GetFocusedViewInWindow( [[NSApplication sharedApplication] keyWindow] );
+    return GetFocusedViewInWindow( [NSApp keyWindow] );
 }
 
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
