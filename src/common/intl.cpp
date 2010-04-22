@@ -1308,8 +1308,8 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     wxUnusedVar(msgIdCharset); // silence warning in Unicode build
 
     // conversion to use to convert catalog strings to the GUI encoding
-    wxMBConv *inputConv,
-            *inputConvPtr = NULL; // same as inputConv but safely deleteable
+    wxMBConv *inputConv = NULL;
+    wxMBConv *inputConvPtr = NULL; // same as inputConv but safely deleteable
 
     if ( !m_charset.empty() )
     {
