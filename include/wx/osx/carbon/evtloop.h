@@ -26,6 +26,8 @@ protected:
     virtual void DoRun();
     
     virtual void DoStop();
+
+    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 };
 
 #endif // _WX_MAC_CARBON_EVTLOOP_H_
