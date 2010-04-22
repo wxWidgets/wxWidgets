@@ -904,7 +904,7 @@ wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
     // any valid identifier in wxMenuEvent so use an otherwise unused value for
     // them
     if ( flags & (MF_POPUP | MF_SEPARATOR) )
-        item = -1;
+        item = wxID_NONE;
 
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
     event.SetEventObject(this);
@@ -915,7 +915,7 @@ wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
     // by default, i.e. if the event wasn't handled above, clear the status bar
     // text when an item which can't have any associated help string in wx API
     // is selected
-    if ( item == -1 )
+    if ( item == wxID_NONE )
         DoGiveHelp(wxEmptyString, true);
 
     return false;
