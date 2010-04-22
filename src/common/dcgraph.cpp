@@ -505,7 +505,7 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
     if (m_logicalFunctionSupported)
         m_logicalFunctionSupported = m_graphicContext->SetCompositionMode(mode);
 
-    if (mode == wxCOMPOSITION_XOR)
+    if ( function == wxXOR )
         m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
     else
         m_graphicContext->SetAntialiasMode(wxANTIALIAS_DEFAULT);
