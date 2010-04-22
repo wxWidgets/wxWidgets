@@ -3640,33 +3640,22 @@ void wxWindowMSW::MSWDestroyWindow()
 {
 }
 
-bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
+void wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
                                            const wxSize& size,
                                            int& x, int& y,
                                            int& w, int& h) const
 {
-    // yes, those are just some arbitrary hardcoded numbers
-    static const int DEFAULT_Y = 200;
+    // CW_USEDEFAULT can't be used for child windows so just position them at
+    // the origin by default
+    x = pos.x == wxDefaultCoord ? 0 : pos.x;
+    y = pos.y == wxDefaultCoord ? 0 : pos.y;
 
-    bool nonDefault = false;
+    AdjustForParentClientOrigin(x, y);
 
-    if ( pos.x == wxDefaultCoord )
-    {
-        // if x is set to CW_USEDEFAULT, y parameter is ignored anyhow so we
-        // can just as well set it to CW_USEDEFAULT as well
-        x =
-        y = CW_USEDEFAULT;
-    }
-    else
-    {
-        // OTOH, if x is not set to CW_USEDEFAULT, y shouldn't be set to it
-        // neither because it is not handled as a special value by Windows then
-        // and so we have to choose some default value for it
-        x = pos.x;
-        y = pos.y == wxDefaultCoord ? DEFAULT_Y : pos.y;
-
-        nonDefault = true;
-    }
+    // We don't have any clearly good choice for the size by default neither
+    // but we must use something non-zero.
+    w = WidthDefault(size.x);
+    h = HeightDefault(size.y);
 
     /*
       NB: there used to be some code here which set the initial size of the
@@ -3684,49 +3673,6 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
           this and ignore any attempts to change the window size to the size it
           already has - so no WM_SIZE would be sent.
      */
-
-
-    // we don't use CW_USEDEFAULT here for several reasons:
-    //
-    //  1. it results in huge frames on modern screens (1000*800 is not
-    //     uncommon on my 1280*1024 screen) which is way too big for a half
-    //     empty frame of most of wxWidgets samples for example)
-    //
-    //  2. it is buggy for frames with wxFRAME_TOOL_WINDOW style for which
-    //     the default is for whatever reason 8*8 which breaks client <->
-    //     window size calculations (it would be nice if it didn't, but it
-    //     does and the simplest way to fix it seemed to change the broken
-    //     default size anyhow)
-    //
-    //  3. there is just no advantage in doing it: with x and y it is
-    //     possible that [future versions of] Windows position the new top
-    //     level window in some smart way which we can't do, but we can
-    //     guess a reasonably good size for a new window just as well
-    //     ourselves
-
-    // However, on PocketPC devices, we must use the default
-    // size if possible.
-#ifdef _WIN32_WCE
-    if (size.x == wxDefaultCoord)
-        w = CW_USEDEFAULT;
-    else
-        w = size.x;
-    if (size.y == wxDefaultCoord)
-        h = CW_USEDEFAULT;
-    else
-        h = size.y;
-#else
-    if ( size.x == wxDefaultCoord || size.y == wxDefaultCoord)
-    {
-        nonDefault = true;
-    }
-    w = WidthDefault(size.x);
-    h = HeightDefault(size.y);
-#endif
-
-    AdjustForParentClientOrigin(x, y);
-
-    return nonDefault;
 }
 
 WXHWND wxWindowMSW::MSWGetParent() const

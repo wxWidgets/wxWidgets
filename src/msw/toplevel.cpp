@@ -615,7 +615,7 @@ void wxTopLevelWindowMSW::ShowWithoutActivating()
 {
     if ( !wxWindowBase::Show(true) )
         return;
-        
+
     DoShowWindow(SW_SHOWNA);
 }
 
@@ -843,6 +843,72 @@ void wxTopLevelWindowMSW::DoGetSize(int *width, int *height) const
 }
 
 #endif // __WXWINCE__
+
+void
+wxTopLevelWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
+                                              const wxSize& size,
+                                              int& x, int& y,
+                                              int& w, int& h) const
+{
+    // let the system position the window if no explicit position was specified
+    if ( pos.x == wxDefaultCoord )
+    {
+        // if x is set to CW_USEDEFAULT, y parameter is ignored anyhow so we
+        // can just as well set it to CW_USEDEFAULT as well
+        x =
+        y = CW_USEDEFAULT;
+    }
+    else
+    {
+        // OTOH, if x is not set to CW_USEDEFAULT, y shouldn't be set to it
+        // neither because it is not handled as a special value by Windows then
+        // and so we have to choose some default value for it, even if a
+        // completely arbitrary one
+        static const int DEFAULT_Y = 200;
+
+        x = pos.x;
+        y = pos.y == wxDefaultCoord ? DEFAULT_Y : pos.y;
+    }
+
+    if ( size.x == wxDefaultCoord || size.y == wxDefaultCoord )
+    {
+        // We don't use CW_USEDEFAULT here for several reasons:
+        //
+        //  1. It results in huge frames on modern screens (1000*800 is not
+        //     uncommon on my 1280*1024 screen) which is way too big for a half
+        //     empty frame of most of wxWidgets samples for example)
+        //
+        //  2. It is buggy for frames with wxFRAME_TOOL_WINDOW style for which
+        //     the default is for whatever reason 8*8 which breaks client <->
+        //     window size calculations (it would be nice if it didn't, but it
+        //     does and the simplest way to fix it seemed to change the broken
+        //     default size anyhow)
+        //
+        //  3. There is just no advantage in doing it: with x and y it is
+        //     possible that [future versions of] Windows position the new top
+        //     level window in some smart way which we can't do, but we can
+        //     guess a reasonably good size for a new window just as well
+        //     ourselves
+        //
+        // The only exception is for the Windows CE platform where the system
+        // does know better than we how should the windows be sized
+#ifdef _WIN32_WCE
+        w =
+        h = CW_USEDEFAULT;
+#else // !_WIN32_WCE
+        wxSize sizeReal = size;
+        sizeReal.SetDefaults(GetDefaultSize());
+
+        w = sizeReal.x;
+        h = sizeReal.y;
+#endif // _WIN32_WCE/!_WIN32_WCE
+    }
+    else
+    {
+        w = size.x;
+        h = size.y;
+    }
+}
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW fullscreen

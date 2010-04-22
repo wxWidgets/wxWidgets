@@ -147,6 +147,12 @@ protected:
     // returns true if the icon was set
     bool DoSelectAndSetIcon(const wxIconBundle& icons, int smX, int smY, int i);
 
+    // override wxWindow virtual method to use CW_USEDEFAULT if necessary
+    virtual void MSWGetCreateWindowCoords(const wxPoint& pos,
+                                          const wxSize& size,
+                                          int& x, int& y,
+                                          int& w, int& h) const;
+
 
     // is the window currently iconized?
     bool m_iconized;
