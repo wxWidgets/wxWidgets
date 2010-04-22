@@ -148,7 +148,7 @@ private:
 
 #include "wx/datetime.h"
 
-// the default renderer for the cells containing Time and dates..
+// the default renderer for the cells containing times and dates
 class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
@@ -170,7 +170,7 @@ public:
 
     virtual wxGridCellRenderer *Clone() const;
 
-    // parameters string format is "width[,precision]"
+    // output strptime()-like format string
     virtual void SetParameters(const wxString& params);
 
 protected:
@@ -184,7 +184,7 @@ protected:
 
 #endif // wxUSE_DATETIME
 
-// the default renderer for the cells containing Time and dates..
+// renders a number using the corresponding text string
 class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellStringRenderer
 {
 public:
@@ -205,7 +205,8 @@ public:
 
     virtual wxGridCellRenderer *Clone() const;
 
-    // parameters string format is "item1[,item2[...,itemN]]"
+    // parameters string format is "item1[,item2[...,itemN]]" where itemN will
+    // be used if the cell value is N-1
     virtual void SetParameters(const wxString& params);
 
 protected:

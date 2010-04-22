@@ -172,7 +172,7 @@ void wxGridCellDateTimeRenderer::SetParameters(const wxString& params)
 #endif // wxUSE_DATETIME
 
 // ----------------------------------------------------------------------------
-// wxGridCellChoiceNumberRenderer
+// wxGridCellEnumRenderer
 // ----------------------------------------------------------------------------
 // Renders a number as a textual equivalent.
 // eg data in cell is 0,1,2 ... n the cell could be rendered as "John","Fred"..."Bob"
