@@ -22,6 +22,8 @@ protected:
     virtual void DoRun();
 
     virtual void DoStop();
+    
+    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
 };
 
 #endif // _WX_OSX_COCOA_EVTLOOP_H_
