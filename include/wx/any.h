@@ -1018,13 +1018,13 @@ private:
 //
 // This method of checking the type is compatible with VC6
 #define wxANY_CHECK_TYPE(any, T) \
-    wxANY_VALUE_TYPE_CHECK_TYPE(any.GetType(), T)
+    wxANY_VALUE_TYPE_CHECK_TYPE((any).GetType(), T)
 
 
 //
 // This method of getting the value is compatible with VC6
 #define wxANY_AS(any, T) \
-    any.As(static_cast<T*>(NULL))
+    (any).As(static_cast<T*>(NULL))
 
 
 template<typename T>
