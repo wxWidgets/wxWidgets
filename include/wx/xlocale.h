@@ -302,8 +302,14 @@ extern WXDLLIMPEXP_DATA_BASE(wxXLocale) wxNullXLocale;
             { return wxCRT_Strtol_lW(c, endptr, base, loc.Get()); }
         inline unsigned long wxStrtoul_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc)
             { return wxCRT_Strtoul_lW(c, endptr, base, loc.Get()); }
-
-    #endif // wxUSE_UNICDE (ctype functions)
+    #else // !wxUSE_UNICODE
+        inline double wxStrtod_l(const char *c, char **endptr, const wxXLocale& loc)
+            { return wxCRT_Strtod_lA(c, endptr, loc.Get()); }
+        inline long wxStrtol_l(const char *c, char **endptr, int base, const wxXLocale& loc)
+            { return wxCRT_Strtol_lA(c, endptr, base, loc.Get()); }
+        inline unsigned long wxStrtoul_l(const char *c, char **endptr, int base, const wxXLocale& loc)
+            { return wxCRT_Strtoul_lA(c, endptr, base, loc.Get()); }
+    #endif // wxUSE_UNICODE
 #else // !wxHAS_XLOCALE_SUPPORT
     // ctype functions
     int WXDLLIMPEXP_BASE wxIsalnum_l(const wxUniChar& c, const wxXLocale& loc);
