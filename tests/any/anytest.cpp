@@ -32,6 +32,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( wxAnyTestCase );
+        CPPUNIT_TEST( CheckType );
         CPPUNIT_TEST( Equality );
         CPPUNIT_TEST( As );
         CPPUNIT_TEST( GetAs );
@@ -40,6 +41,7 @@ private:
         CPPUNIT_TEST( CustomTemplateSpecialization );
     CPPUNIT_TEST_SUITE_END();
 
+    void CheckType();
     void Equality();
     void As();
     void GetAs();
@@ -164,6 +166,19 @@ wxAnyTestCase::wxAnyTestCase()
     m_anyVoidPtr2 = dummyVoidPointer;
 }
 
+void wxAnyTestCase::CheckType()
+{
+    wxAny nullAny;
+    CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(nullAny, wxString));
+
+    CPPUNIT_ASSERT(wxANY_CHECK_TYPE(m_anyCharString2, const char*));
+    CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyCharString2, wxString));
+    CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyCharString2, const wchar_t*));
+    CPPUNIT_ASSERT(wxANY_CHECK_TYPE(m_anyWcharString2, const wchar_t*));
+    CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, wxString));
+    CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, const char*));
+}
+
 void wxAnyTestCase::Equality()
 {
     //
@@ -243,8 +258,12 @@ void wxAnyTestCase::As()
     wxString k = wxANY_AS(m_anyStringString1, wxString);
     CPPUNIT_ASSERT(k == "abc");
     wxString l = wxANY_AS(m_anyCharString1, wxString);
+    const char* cptr = wxANY_AS(m_anyCharString1, const char*);
     CPPUNIT_ASSERT(l == "abc");
+    CPPUNIT_ASSERT(cptr);
     wxString m = wxANY_AS(m_anyWcharString1, wxString);
+    const wchar_t* wcptr = wxANY_AS(m_anyWcharString1, const wchar_t*);
+    CPPUNIT_ASSERT(wcptr);
     CPPUNIT_ASSERT(m == "abc");
     bool n = wxANY_AS(m_anyBool1, bool);
     CPPUNIT_ASSERT(n);
@@ -487,6 +506,19 @@ void wxAnyTestCase::wxVariantConversions()
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetString() == "ABC");
+
+    // Must be able to build string wxVariant from wxAny built from
+    // string literal
+    any = "ABC";
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "string");
+    CPPUNIT_ASSERT(variant.GetString() == "ABC");
+    any = L"ABC";
+    res = any.GetAs(&variant);
+    CPPUNIT_ASSERT(res);
+    CPPUNIT_ASSERT(variant.GetType() == "string");
+    CPPUNIT_ASSERT(variant.GetString() == L"ABC");
 
     any = vDouble;
     double d = wxANY_AS(any, double);

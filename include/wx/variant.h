@@ -404,10 +404,13 @@ private:
 virtual bool GetAsAny(wxAny* any) const; \
 static wxVariantData* VariantDataFactory(const wxAny& any);
 
-#define REGISTER_WXANY_CONVERSION(T, CLASSNAME) \
+#define _REGISTER_WXANY_CONVERSION(T, CLASSNAME, FUNC) \
 static wxAnyToVariantRegistrationImpl<T> \
     gs_##CLASSNAME##AnyToVariantRegistration = \
-    wxAnyToVariantRegistrationImpl<T>(&CLASSNAME::VariantDataFactory);
+    wxAnyToVariantRegistrationImpl<T>(&FUNC);
+
+#define REGISTER_WXANY_CONVERSION(T, CLASSNAME) \
+_REGISTER_WXANY_CONVERSION(T, CLASSNAME, CLASSNAME::VariantDataFactory)
 
 #define IMPLEMENT_TRIVIAL_WXANY_CONVERSION(T, CLASSNAME) \
 bool CLASSNAME::GetAsAny(wxAny* any) const \

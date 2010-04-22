@@ -403,35 +403,55 @@ WX_ANY_DEFINE_SUB_TYPE(wxULongLong_t, Uint)
 
 
 //
+// This macro is used in header, but then in source file we must have:
+// WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl##TYPENAME)
+//
+#define _WX_ANY_DEFINE_CONVERTIBLE_TYPE(T, TYPENAME, CONVFUNC, GV) \
+class WXDLLIMPEXP_BASE wxAnyValueTypeImpl##TYPENAME : \
+    public wxAnyValueTypeImplBase<T> \
+{ \
+    WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl##TYPENAME) \
+public: \
+    wxAnyValueTypeImpl##TYPENAME() : \
+        wxAnyValueTypeImplBase<T>() { } \
+    virtual ~wxAnyValueTypeImpl##TYPENAME() { } \
+    virtual bool ConvertValue(const wxAnyValueBuffer& src, \
+                              wxAnyValueType* dstType, \
+                              wxAnyValueBuffer& dst) const \
+    { \
+        GV value = GetValue(src); \
+        return CONVFUNC(value, dstType, dst); \
+    } \
+}; \
+template<> \
+class wxAnyValueTypeImpl<T> : public wxAnyValueTypeImpl##TYPENAME \
+{ \
+public: \
+    wxAnyValueTypeImpl() : wxAnyValueTypeImpl##TYPENAME() { } \
+    virtual ~wxAnyValueTypeImpl() { } \
+};
+
+#define WX_ANY_DEFINE_CONVERTIBLE_TYPE(T, TYPENAME, CONVFUNC, BT) \
+_WX_ANY_DEFINE_CONVERTIBLE_TYPE(T, TYPENAME, CONVFUNC, BT) \
+
+#define WX_ANY_DEFINE_CONVERTIBLE_TYPE_BASE(T, TYPENAME, CONVFUNC) \
+_WX_ANY_DEFINE_CONVERTIBLE_TYPE(T, TYPENAME, \
+                                CONVFUNC, const T&) \
+
+//
 // String value type
 //
-class WXDLLIMPEXP_BASE wxAnyValueTypeImplString :
-    public wxAnyValueTypeImplBase<wxString>
-{
-    WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImplString)
-public:
-    wxAnyValueTypeImplString() :
-        wxAnyValueTypeImplBase<wxString>() { }
-    virtual ~wxAnyValueTypeImplString() { }
 
-    /**
-        Convert value into buffer of different type. Return false if
-        not possible.
-    */
-    virtual bool ConvertValue(const wxAnyValueBuffer& src,
-                              wxAnyValueType* dstType,
-                              wxAnyValueBuffer& dst) const;
+// Convert wxString to destination wxAny value type
+extern WXDLLIMPEXP_BASE bool wxAnyConvertString(const wxString& value,
+                                                wxAnyValueType* dstType,
+                                                wxAnyValueBuffer& dst);
 
-};
-
-template<>
-class wxAnyValueTypeImpl<wxString> : public wxAnyValueTypeImplString
-{
-public:
-    wxAnyValueTypeImpl() : wxAnyValueTypeImplString() { }
-    virtual ~wxAnyValueTypeImpl() { }
-};
-
+WX_ANY_DEFINE_CONVERTIBLE_TYPE_BASE(wxString, wxString, wxAnyConvertString)
+WX_ANY_DEFINE_CONVERTIBLE_TYPE(const char*, ConstCharPtr,
+                               wxAnyConvertString, wxString)
+WX_ANY_DEFINE_CONVERTIBLE_TYPE(const wchar_t*, ConstWchar_tPtr,
+                               wxAnyConvertString, wxString)
 
 //
 // Bool value type
@@ -686,16 +706,16 @@ public:
         wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
     }
 
+    // These two constructors are needed to deal with string literals
     wxAny(const char* value)
     {
-        m_type = wxAnyNullValueType;
-        Assign(wxString(value));
+        m_type = wxAnyValueTypeImpl<const char*>::sm_instance;
+        wxAnyValueTypeImpl<const char*>::SetValue(value, m_buffer);
     }
-
     wxAny(const wchar_t* value)
     {
-        m_type = wxAnyNullValueType;
-        Assign(wxString(value));
+        m_type = wxAnyValueTypeImpl<const wchar_t*>::sm_instance;
+        wxAnyValueTypeImpl<const wchar_t*>::SetValue(value, m_buffer);
     }
 
     wxAny(const wxAny& any)
@@ -789,11 +809,17 @@ public:
     }
 #endif
 
+    // These two operators are needed to deal with string literals
     wxAny& operator=(const char* value)
-        { Assign(wxString(value)); return *this; }
+    {
+        Assign(value);
+        return *this;
+    }
     wxAny& operator=(const wchar_t* value)
-        { Assign(wxString(value)); return *this; }
-    //@}
+    {
+        Assign(value);
+        return *this;
+    }
 
     //@{
     /**
@@ -801,12 +827,10 @@ public:
     */
     bool operator==(const wxString& value) const
     {
-        if ( !wxAnyValueTypeImpl<wxString>::IsSameClass(m_type) )
+        wxString value2;
+        if ( !GetAs(&value2) )
             return false;
-
-        return value ==
-            static_cast<wxString>
-                (wxAnyValueTypeImpl<wxString>::GetValue(m_buffer));
+        return value == value2;
     }
 
     bool operator==(const char* value) const
@@ -865,14 +889,17 @@ public:
     //@}
 
     /**
-        This template function converts wxAny into given type. No dynamic
-        conversion is performed, so if the type is incorrect an assertion
-        failure will occur in debug builds, and a bogus value is returned
-        in release ones.
+        This template function converts wxAny into given type. In most cases
+        no type conversion is performed, so if the type is incorrect an
+        assertion failure will occur.
 
-        @remarks This template function does not work on some older compilers
-                (such as Visual C++ 6.0). For full compiler compatibility
-                please use wxANY_AS(any, T) macro instead.
+        @remarks For conveniency, conversion is done when T is wxString. This
+                 is useful when a string literal (which are treated as
+                 const char* and const wchar_t*) has been assigned to wxAny.
+
+                 This template function may not work properly with Visual C++
+                 6. For full compiler compatibility, please use
+                 wxANY_AS(any, T) macro instead.
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported
     template<typename T>
@@ -884,6 +911,19 @@ public:
         }
 
         return static_cast<T>(wxAnyValueTypeImpl<T>::GetValue(m_buffer));
+    }
+
+    // Allow easy conversion from 'const char *' etc. to wxString
+    // FIXME-VC6: remove this hack when VC6 is no longer supported
+    //template<>
+    wxString As(wxString*) const
+    {
+        wxString value;
+        if ( !GetAs(&value) )
+        {
+            wxFAIL_MSG("Incorrect or non-convertible data type");
+        }
+        return value;
     }
 
     /**

@@ -374,12 +374,16 @@ bool wxAnyValueTypeImplUint::ConvertValue(const wxAnyValueBuffer& src,
     return true;
 }
 
-bool wxAnyValueTypeImplString::ConvertValue(const wxAnyValueBuffer& src,
-                                            wxAnyValueType* dstType,
-                                            wxAnyValueBuffer& dst) const
+// Convert wxString to destination wxAny value type
+bool wxAnyConvertString(const wxString& value,
+                        wxAnyValueType* dstType,
+                        wxAnyValueBuffer& dst)
 {
-    wxString value = GetValue(src);
-    if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
+    if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
+    {
+        wxAnyValueTypeImpl<wxString>::SetValue(value, dst);
+    }
+    else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
     {
         wxAnyBaseIntType value2;
 #ifdef wxLongLong_t
@@ -411,14 +415,15 @@ bool wxAnyValueTypeImplString::ConvertValue(const wxAnyValueBuffer& src,
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, bool) )
     {
         bool value2;
-        value.MakeLower();
-        if ( value == wxS("true") ||
-             value == wxS("yes") ||
-             value == wxS('1') )
+        wxString s(value);
+        s.MakeLower();
+        if ( s == wxS("true") ||
+             s == wxS("yes") ||
+             s == wxS('1') )
             value2 = true;
-        else if ( value == wxS("false") ||
-                  value == wxS("no") ||
-                  value == wxS('0') )
+        else if ( s == wxS("false") ||
+                  s == wxS("no") ||
+                  s == wxS('0') )
             value2 = false;
         else
             return false;
@@ -493,9 +498,12 @@ bool wxAnyValueTypeImplDouble::ConvertValue(const wxAnyValueBuffer& src,
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplInt)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplUint)
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplString)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<bool>)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplDouble)
+
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplwxString)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstCharPtr)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstWchar_tPtr)
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxObject*>)

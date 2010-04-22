@@ -879,6 +879,26 @@ protected:
 
 IMPLEMENT_TRIVIAL_WXANY_CONVERSION(wxString, wxVariantDataString)
 
+#if wxUSE_ANY
+// This allows converting string literal wxAnys to string variants
+wxVariantData* wxVariantDataFromConstCharPAny(const wxAny& any)
+{
+    return new wxVariantDataString(wxANY_AS(any, const char*));
+}
+
+wxVariantData* wxVariantDataFromConstWchar_tPAny(const wxAny& any)
+{
+    return new wxVariantDataString(wxANY_AS(any, const wchar_t*));
+}
+
+_REGISTER_WXANY_CONVERSION(const char*,
+                           ConstCharP,
+                           wxVariantDataFromConstCharPAny)
+_REGISTER_WXANY_CONVERSION(const wchar_t*,
+                           ConstWchar_tP,
+                           wxVariantDataFromConstWchar_tPAny)
+#endif
+
 bool wxVariantDataString::Eq(wxVariantData& data) const
 {
     wxASSERT_MSG( (data.GetType() == wxT("string")), wxT("wxVariantDataString::Eq: argument mismatch") );

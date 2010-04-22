@@ -104,14 +104,17 @@ public:
     ~wxAny();
 
     /**
-        This template function converts wxAny into given type. No dynamic
-        conversion is performed, so if the type is incorrect an assertion
-        failure will occur in debug builds, and a bogus value is returned
-        in release ones.
+        This template function converts wxAny into given type. In most cases
+        no type conversion is performed, so if the type is incorrect an
+        assertion failure will occur.
 
-        @remarks This template function may not work properly with Visual C++
-                6. For full compiler compatibility, please use
-                wxANY_AS(any, T) macro instead.
+        @remarks For conveniency, conversion is done when T is wxString. This
+                 is useful when a string literal (which are treated as
+                 const char* and const wchar_t*) has been assigned to wxAny.
+
+                 This template function may not work properly with Visual C++
+                 6. For full compiler compatibility, please use
+                 wxANY_AS(any, T) macro instead.
     */
     template<typename T>
     T As() const;
