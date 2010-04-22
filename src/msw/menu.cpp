@@ -984,12 +984,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 
 wxWindow *wxMenu::GetWindow() const
 {
-    if ( m_invokingWindow != NULL )
-        return m_invokingWindow;
-    else if ( GetMenuBar() != NULL)
-        return GetMenuBar()->GetFrame();
-
-    return NULL;
+    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
 }
 
 // ---------------------------------------------------------------------------

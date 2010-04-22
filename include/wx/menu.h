@@ -254,9 +254,12 @@ public:
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
 
-    // invoking window
-    void SetInvokingWindow(wxWindow *win) { m_invokingWindow = win; }
-    wxWindow *GetInvokingWindow() const { return m_invokingWindow; }
+    // Invoking window: this is set by wxWindow::PopupMenu() before showing a
+    // popup menu and reset after it's hidden. Notice that GetInvokingWindow()
+    // recurses upwards and will return the invoking window for any submenu of
+    // a popup menu as well as the menu itself.
+    void SetInvokingWindow(wxWindow *win);
+    wxWindow *GetInvokingWindow() const;
 
     // style
     long GetStyle() const { return m_style; }
