@@ -662,6 +662,16 @@ bool wxTopLevelWindowMSW::Show(bool show)
         nShowCmd = SW_HIDE;
     }
 
+    // we only set pending size if we're maximized before being shown, now that
+    // we're shown we don't need it any more (it is reset in size event handler
+    // for child windows but we have to do it ourselves for this parent window)
+    //
+    // make sure to reset it before actually showing the window as this will
+    // generate WM_SIZE events and we want to use the correct client size from
+    // them, not the size returned by WM_NCCALCSIZE in DoGetClientSize() which
+    // turns out to be wrong for maximized windows (see #11762)
+    m_pendingSize = wxDefaultSize;
+
     DoShowWindow(nShowCmd);
 
 #if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(__POCKETPC__) && !defined(__SMARTPHONE__))
@@ -670,11 +680,6 @@ bool wxTopLevelWindowMSW::Show(bool show)
     if (frame && frame->GetMenuBar())
         frame->GetMenuBar()->AddAdornments(GetWindowStyleFlag());
 #endif
-
-    // we only set pending size if we're maximized before being shown, now that
-    // we're shown we don't need it any more (it is reset in size event handler
-    // for child windows but we have to do it ourselves for this parent window)
-    m_pendingSize = wxDefaultSize;
 
     return true;
 }

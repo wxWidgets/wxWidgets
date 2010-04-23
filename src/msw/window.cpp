@@ -1819,6 +1819,18 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
     if ( m_pendingSize != wxDefaultSize )
     {
         // we need to calculate the client size corresponding to pending size
+        //
+        // FIXME: Unfortunately this doesn't work correctly for the maximized
+        //        top level windows, the returned values are too small (e.g.
+        //        under Windows 7 on a 1600*1200 screen with task bar on the
+        //        right the pending size for a maximized window is 1538*1200
+        //        and WM_NCCALCSIZE returns 1528*1172 even though the correct
+        //        client size of such window is 1538*1182). No idea how to fix
+        //        it though, setting WS_MAXIMIZE in GWL_STYLE before calling
+        //        WM_NCCALCSIZE doesn't help and AdjustWindowRectEx() doesn't
+        //        work in this direction neither. So we just have to live with
+        //        the slightly wrong results and relayout the window when it
+        //        gets finally shown in its maximized state (see #11762).
         RECT rect;
         rect.left = m_pendingPosition.x;
         rect.top = m_pendingPosition.y;
