@@ -115,10 +115,6 @@ wxMenuBar::wxMenuBar()
     Init(0, NULL, NULL, 0);
 }
 
-wxMenuBar::~wxMenuBar()
-{
-}
-
 static void
 wxMenubarUnsetInvokingWindow(wxMenu* menu, wxWindow* win, GtkWindow* tlw = NULL)
 {
