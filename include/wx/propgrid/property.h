@@ -1858,7 +1858,7 @@ public:
             By default changes are applied recursively. Set this paramter
             wxPG_DONT_RECURSE to prevent this.
     */
-    inline bool Hide( bool hide, int flags = wxPG_RECURSE );
+    bool Hide( bool hide, int flags = wxPG_RECURSE );
 
     bool IsExpanded() const
         { return (!(m_flags & wxPG_PROP_COLLAPSED) && GetChildCount()); }
@@ -2327,6 +2327,8 @@ protected:
                                   int argFlags = wxPG_VALUE_IS_CURRENT,
                                   const wxVariantList* valueOverrides = NULL,
                                   wxPGHashMapS2S* childResults = NULL ) const;
+
+    bool DoHide( bool hide, int flags );
 
     void DoSetName(const wxString& str) { m_name = str; }
 
