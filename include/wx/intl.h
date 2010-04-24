@@ -19,6 +19,10 @@
 #include "wx/defs.h"
 #include "wx/string.h"
 
+#if !wxUSE_UNICODE
+    #include "wx/hashmap.h"
+#endif
+
 // Make wxLayoutDirection enum available without need for wxUSE_INTL so wxWindow, wxApp
 // and other classes are not distrubed by wxUSE_INTL
 
@@ -57,6 +61,7 @@ enum wxLayoutDirection
 // forward decls
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_FWD_BASE wxTranslationsLoader;
 class WXDLLIMPEXP_FWD_BASE wxLocale;
 class WXDLLIMPEXP_FWD_BASE wxLanguageInfoArray;
 class wxMsgCatalog;
@@ -356,6 +361,111 @@ inline wxString wxLanguageInfo::GetLocaleName() const { return CanonicalName; }
 #endif // !__WXMSW__
 
 // ----------------------------------------------------------------------------
+// wxTranslations: message catalogs
+// ----------------------------------------------------------------------------
+
+// this class allows to get translations for strings
+class WXDLLIMPEXP_BASE wxTranslations
+{
+public:
+    wxTranslations();
+    ~wxTranslations();
+
+    // returns current translations object, may return NULL
+    static wxTranslations *Get();
+    // sets current translations object (takes ownership; may be NULL)
+    static void Set(wxTranslations *t);
+
+    // changes loader to non-default one; takes ownership of 'loader'
+    void SetLoader(wxTranslationsLoader *loader);
+
+    void SetLanguage(wxLanguage lang);
+    void SetLanguage(const wxString& lang);
+
+    // add standard wxWidgets catalog ("wxstd")
+    bool AddStdCatalog();
+
+    // add catalog with given domain name and language, looking it up via
+    // wxTranslationsLoader
+    bool AddCatalog(const wxString& domain);
+    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+#if !wxUSE_UNICODE
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage,
+                    const wxString& msgIdCharset);
+#endif
+
+    // check if the given catalog is loaded
+    bool IsLoaded(const wxString& domain) const;
+
+    // load catalog data directly from file
+    bool LoadCatalogFile(const wxString& filename,
+                         const wxString& domain = wxEmptyString);
+
+    // access to translations
+    const wxString& GetString(const wxString& origString,
+                              const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& origString2,
+                              size_t n,
+                              const wxString& domain = wxEmptyString) const;
+
+    wxString GetHeaderValue(const wxString& header,
+                            const wxString& domain = wxEmptyString) const;
+
+    // this is hack to work around a problem with wxGetTranslation() which
+    // returns const wxString& and not wxString, so when it returns untranslated
+    // string, it needs to have a copy of it somewhere
+    static const wxString& GetUntranslatedString(const wxString& str);
+
+private:
+    // find best translation for given domain
+    wxString ChooseLanguageForDomain(const wxString& domain,
+                                     const wxString& msgIdLang);
+
+    // find catalog by name in a linked list, return NULL if !found
+    wxMsgCatalog *FindCatalog(const wxString& domain) const;
+
+    // same as Set(), without taking ownership; only for wxLocale
+    static void SetNonOwned(wxTranslations *t);
+    friend class wxLocale;
+
+private:
+    wxString m_lang;
+    wxTranslationsLoader *m_loader;
+
+    wxMsgCatalog *m_pMsgCat; // pointer to linked list of catalogs
+
+#if !wxUSE_UNICODE
+    wxStringToStringHashMap m_msgIdCharset;
+#endif
+};
+
+
+// abstraction of translations discovery and loading
+class WXDLLIMPEXP_BASE wxTranslationsLoader
+{
+public:
+    wxTranslationsLoader() {}
+    virtual ~wxTranslationsLoader() {}
+
+    virtual bool LoadCatalog(wxTranslations *translations,
+                             const wxString& domain, const wxString& lang) = 0;
+};
+
+// standard wxTranslationsLoader implementation, using filesystem
+class WXDLLIMPEXP_BASE wxFileTranslationsLoader
+    : public wxTranslationsLoader
+{
+public:
+    static void AddCatalogLookupPathPrefix(const wxString& prefix);
+
+    virtual bool LoadCatalog(wxTranslations *translations,
+                             const wxString& domain, const wxString& lang);
+};
+
+
+// ----------------------------------------------------------------------------
 // wxLocaleCategory: the category of locale settings
 // ----------------------------------------------------------------------------
 
@@ -508,7 +618,8 @@ public:
     // (in this order).
     //
     // This only applies to subsequent invocations of AddCatalog()!
-    static void AddCatalogLookupPathPrefix(const wxString& prefix);
+    static void AddCatalogLookupPathPrefix(const wxString& prefix)
+        { wxFileTranslationsLoader::AddCatalogLookupPathPrefix(prefix); }
 
     // add a catalog: it's searched for in standard places (current directory
     // first, system one after), but the you may prepend additional directories to
@@ -517,7 +628,10 @@ public:
     // The loaded catalog will be used for message lookup by GetString().
     //
     // Returns 'true' if it was successfully loaded
-    bool AddCatalog(const wxString& domain);
+    bool AddCatalog(const wxString& domain)
+        { return m_translations.AddCatalog(domain); }
+    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+        { return m_translations.AddCatalog(domain, msgIdLanguage); }
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage, const wxString& msgIdCharset);
 
@@ -525,7 +639,8 @@ public:
     static bool IsAvailable(int lang);
 
     // check if the given catalog is loaded
-    bool IsLoaded(const wxString& domain) const;
+    bool IsLoaded(const wxString& domain) const
+        { return m_translations.IsLoaded(domain); }
 
     // Retrieve the language info struct for the given language
     //
@@ -535,6 +650,10 @@ public:
     // Returns language name in English or empty string if the language
     // is not in database
     static wxString GetLanguageName(int lang);
+
+    // Returns ISO code ("canonical name") of language or empty string if the
+    // language is not in database
+    static wxString GetLanguageCanonicalName(int lang);
 
     // Find the language for the given locale string which may be either a
     // canonical ISO 2 letter language code ("xx"), a language code followed by
@@ -559,25 +678,35 @@ public:
     //
     // domains are searched in the last to first order, i.e. catalogs
     // added later override those added before.
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& domain = wxEmptyString) const
+    {
+        return m_translations.GetString(origString, domain);
+    }
     // plural form version of the same:
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& origString2,
-                                      size_t n,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& origString2,
+                              size_t n,
+                              const wxString& domain = wxEmptyString) const
+    {
+        return m_translations.GetString(origString, origString2, n, domain);
+    }
 
     // this is hack to work around a problem with wxGetTranslation() which
     // returns const wxString& and not wxString, so when it returns untranslated
     // string, it needs to have a copy of it somewhere
-    static const wxString& GetUntranslatedString(const wxString& str);
+    static const wxString& GetUntranslatedString(const wxString& str)
+        { return wxTranslations::GetUntranslatedString(str); }
 
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
 
     // return the contents of .po file header
     wxString GetHeaderValue(const wxString& header,
-                            const wxString& domain = wxEmptyString) const;
+                            const wxString& domain = wxEmptyString) const
+    {
+        return m_translations.GetHeaderValue(header, domain);
+    }
 
     // These two methods are for internal use only. First one creates
     // ms_languagesDB if it doesn't already exist, second one destroys
@@ -586,8 +715,9 @@ public:
     static void DestroyLanguagesDB();
 
 private:
-    // find catalog by name in a linked list, return NULL if !found
-    wxMsgCatalog *FindCatalog(const wxString& domain) const;
+    bool DoInit(const wxString& name,
+                const wxString& shortName,
+                const wxString& locale);
 
     // copy default table of languages from global static array to
     // m_langugagesInfo, called by InitLanguagesDB
@@ -603,9 +733,9 @@ private:
     const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale
 
-    wxMsgCatalog  *m_pMsgCat;         // pointer to linked list of catalogs
-
     bool           m_initialized;
+
+    wxTranslations m_translations;
 
     static wxLanguageInfoArray *ms_languagesDB;
 
@@ -623,28 +753,28 @@ extern WXDLLIMPEXP_BASE wxLocale* wxGetLocale();
 inline const wxString& wxGetTranslation(const wxString& str,
                                         const wxString& domain = wxEmptyString)
 {
-    wxLocale *pLoc = wxGetLocale();
-    if (pLoc)
-        return pLoc->GetString(str, domain);
+    wxTranslations *trans = wxTranslations::Get();
+    if ( trans )
+        return trans->GetString(str, domain);
     else
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere
-        return wxLocale::GetUntranslatedString(str);
+        return wxTranslations::GetUntranslatedString(str);
 }
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
                                         size_t n,
                                         const wxString& domain = wxEmptyString)
 {
-    wxLocale *pLoc = wxGetLocale();
-    if (pLoc)
-        return pLoc->GetString(str1, str2, n, domain);
+    wxTranslations *trans = wxTranslations::Get();
+    if ( trans )
+        return trans->GetString(str1, str2, n, domain);
     else
         // NB: this function returns reference to a string, so we have to keep
         //     a copy of it somewhere
         return n == 1
-               ? wxLocale::GetUntranslatedString(str1)
-               : wxLocale::GetUntranslatedString(str2);
+               ? wxTranslations::GetUntranslatedString(str1)
+               : wxTranslations::GetUntranslatedString(str2);
 }
 
 #else // !wxUSE_INTL

@@ -419,8 +419,8 @@ enum wxLocaleInfo
     wxLocale class encapsulates all language-dependent settings and is a
     generalization of the C locale concept.
 
-    In wxWidgets this class manages message catalogs which contain the translations
-    of the strings used to the current language.
+    In wxWidgets this class manages current locale. It also initializes and
+    activates wxTranslations object that manages message catalogs.
 
     For a list of the supported languages, please see ::wxLanguage enum values.
     These constants may be used to specify the language in wxLocale::Init and
@@ -465,7 +465,7 @@ enum wxLocaleInfo
     @library{wxbase}
     @category{cfg}
 
-    @see @ref overview_i18n, @ref page_samples_internat, wxXLocale
+    @see @ref overview_i18n, @ref page_samples_internat, wxXLocale, wxTranslations
 */
 class wxLocale
 {
@@ -504,64 +504,23 @@ public:
     virtual ~wxLocale();
 
     /**
-        Add a catalog for use with the current locale: it is searched for in standard
-        places (current directory first, then the system one), but you may also prepend
-        additional directories to the search path with AddCatalogLookupPathPrefix().
-
-        All loaded catalogs will be used for message lookup by GetString() for
-        the current locale.
-
-        In this overload, @c msgid strings are assumed
-        to be in English and written only using 7-bit ASCII characters.
-        If you have to deal with non-English strings or 8-bit characters in the
-        source code, see the instructions in @ref overview_nonenglish.
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+        Calls wxTranslations::AddCatalog(const wxString&).
     */
     bool AddCatalog(const wxString& domain);
 
     /**
-        Add a catalog for use with the current locale: it is searched for in standard
-        places (current directory first, then the system one), but you may also prepend
-        additional directories to the search path with AddCatalogLookupPathPrefix().
+        Calls wxTranslations::AddCatalog(const wxString&, wxLanguage).
+    */
+    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
 
-        All loaded catalogs will be used for message lookup by GetString() for
-        the current locale.
-
-        This overload takes two additional arguments, @a msgIdLanguage and @a msgIdCharset.
-
-        @param domain
-            The catalog domain to add.
-
-        @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code
-            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
-            It is used if AddCatalog() cannot find any catalog for current language:
-            if the language is same as source code language, then strings from source
-            code are used instead.
-
-        @param msgIdCharset
-            Lets you specify the charset used for msgids in sources
-            in case they use 8-bit characters (e.g. German or French strings).
-            This argument has no effect in Unicode build, because literals in sources are
-            Unicode strings; you have to use compiler-specific method of setting the right
-            charset when compiling with Unicode.
-
-        @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+    /**
+        Calls wxTranslations::AddCatalog(const wxString&, wxLanguage, const wxString&).
     */
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage,
                     const wxString& msgIdCharset);
 
     /**
-        Add a prefix to the catalog lookup path: the message catalog files will
-        be looked up under prefix/lang/LC_MESSAGES, prefix/lang and prefix
-        (in this order).
-
-        This only applies to subsequent invocations of AddCatalog().
+        Calls wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
     */
     static void AddCatalogLookupPathPrefix(const wxString& prefix);
 
@@ -596,12 +555,7 @@ public:
     wxString GetCanonicalName() const;
 
     /**
-        Returns the header value for header @a header.
-        The search for @a header is case sensitive. If an @a domain is passed,
-        this domain is searched. Else all domains will be searched until a
-        header has been found.
-
-        The return value is the value of the header if found. Else this will be empty.
+        Calls wxTranslations::GetHeaderValue().
     */
     wxString GetHeaderValue(const wxString& header,
                             const wxString& domain = wxEmptyString) const;
@@ -635,6 +589,16 @@ public:
     static wxString GetLanguageName(int lang);
 
     /**
+        Returns canonical name (see GetCanonicalName()) of the given language
+        or empty string if this language is unknown.
+
+        See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
+
+        @since 2.9.1
+    */
+    static wxString GetLanguageCanonicalName(int lang);
+
+    /**
         Returns the locale name as passed to the constructor or Init().
 
         This is a full, human-readable name, e.g. "English" or "French".
@@ -648,45 +612,13 @@ public:
     const wxString& GetName() const;
 
     /**
-        Retrieves the translation for a string in all loaded domains unless the @a domain
-        parameter is specified (and then only this catalog/domain is searched).
-
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
-
-        @remarks Domains are searched in the last to first order, i.e. catalogs
-                 added later override those added before.
+        Calls wxTranslations::GetString(const wxString&, const wxString&) const.
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& domain = wxEmptyString) const;
 
     /**
-        Retrieves the translation for a string in all loaded domains unless the @a domain
-        parameter is specified (and then only this catalog/domain is searched).
-
-        Returns original string if translation is not available (in this case an
-        error message is generated the first time a string is not found; use
-        wxLogNull to suppress it).
-
-        This form is used when retrieving translation of string that has different
-        singular and plural form in English or different plural forms in some
-        other language.
-        It takes two extra arguments: @a origString parameter must contain the
-        singular form of the string to be converted.
-
-        It is also used as the key for the search in the catalog.
-        The @a origString2 parameter is the plural form (in English).
-
-        The parameter @a n is used to determine the plural form.
-        If no message catalog is found @a origString is returned if 'n == 1',
-        otherwise @a origString2.
-
-        See GNU gettext manual for additional information on plural forms handling.
-        This method is called by the wxGetTranslation() function and _() macro.
-
-        @remarks Domains are searched in the last to first order, i.e. catalogs
-                 added later override those added before.
+        Calls wxTranslations::GetString(const wxString&, const wxString&, size_t, const wxString&) const.
     */
     virtual const wxString& GetString(const wxString& origString,
                                       const wxString& origString2, size_t n,
@@ -803,12 +735,7 @@ public:
     static bool IsAvailable(int lang);
 
     /**
-        Check if the given catalog is loaded, and returns @true if it is.
-
-        According to GNU gettext tradition, each catalog normally corresponds to
-        'domain' which is more or less the application name.
-
-        @see AddCatalog()
+        Calls wxTranslations::IsLoaded().
     */
     bool IsLoaded(const wxString& domain) const;
 
@@ -818,6 +745,303 @@ public:
     bool IsOk() const;
 };
 
+
+/**
+    This class allows to get translations for strings.
+
+    In wxWidgets this class manages message catalogs which contain the
+    translations of the strings used to the current language. Unlike wxLocale,
+    it isn't bound to locale. It can be used either independently of, or in
+    conjunction with wxLocale. In the latter case, you should initialize
+    wxLocale (which creates wxTranslations instance) first; in the former, you
+    need to create a wxTranslations object and Set() it manually.
+
+    Only one wxTranslations instance is active at a time; it is set with the
+    Set() method and obtained using Get().
+
+    Unlike wxLocale, wxTranslations' primary mean of identifying language
+    is by its "canonical name", i.e. ISO 639 code, possibly combined with
+    ISO 3166 country code and additional modifiers (examples include
+    "fr", "en_GB" or "ca@valencia"; see wxLocale::GetCanonicalName() for
+    more information). This allows apps using wxTranslations API to use even
+    languages not recognized by the operating system or not listed in
+    wxLanguage enum.
+
+    @since 2.9.1
+
+    @see wxLocale
+ */
+class wxTranslations
+{
+public:
+    /// Constructor
+    wxTranslations();
+
+    /**
+        Returns current translations object, may return NULL.
+
+        You must either call this early in app initialization code, or let
+        wxLocale do it for you.
+     */
+    static wxTranslations *Get();
+
+    /**
+        Sets current translations object.
+
+        Deletes previous translation object and takes ownership of @a t.
+     */
+    static void Set(wxTranslations *t);
+
+    /**
+        Changes loader use to read catalogs to a non-default one.
+
+        Deletes previous loader and takes ownership of @a loader.
+
+        @see wxTranslationsLoader, wxFileTranslationsLoader
+     */
+    void SetLoader(wxTranslationsLoader *loader);
+
+    /**
+        Sets translations language to use.
+
+        wxLANGUAGE_DEFAULT has special meaning: best suitable translation,
+        given user's preference and available translations, will be used.
+     */
+    void SetLanguage(wxLanguage lang);
+
+    /**
+        Sets translations language to use.
+
+        Empty @a lang string has the same meaning as wxLANGUAGE_DEFAULT in
+        SetLanguage(wxLanguage): best suitable translation, given user's
+        preference and available translations, will be used.
+     */
+    void SetLanguage(const wxString& lang);
+
+    /**
+        Add standard wxWidgets catalogs ("wxstd" and possible port-specific
+        catalogs).
+
+        @return @true if a suitable catalog was found, @false otherwise
+
+        @see AddCatalog()
+     */
+    bool AddStdCatalog();
+
+    /**
+        Add a catalog for use with the current locale.
+
+        By default, it is searched for in standard places (see
+        wxFileTranslationsLoader), but you may also prepend additional
+        directories to the search path with
+        wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
+
+        All loaded catalogs will be used for message lookup by GetString() for
+        the current locale.
+
+        In this overload, @c msgid strings are assumed
+        to be in English and written only using 7-bit ASCII characters.
+        If you have to deal with non-English strings or 8-bit characters in the
+        source code, see the instructions in @ref overview_nonenglish.
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
+     */
+    bool AddCatalog(const wxString& domain);
+
+    /**
+        Same as AddCatalog(const wxString&), but takes an additional argument,
+        @a msgIdLanguage.
+
+        @param domain
+            The catalog domain to add.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+            It is used if AddCatalog() cannot find any catalog for current language:
+            if the language is same as source code language, then strings from source
+            code are used instead.
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
+     */
+    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
+
+    /**
+        Same as AddCatalog(const wxString&, wxLanguage), but takes two
+        additional arguments, @a msgIdLanguage and @a msgIdCharset.
+
+        This overload is only available in non-Unicode build.
+
+        @param domain
+            The catalog domain to add.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+            It is used if AddCatalog() cannot find any catalog for current language:
+            if the language is same as source code language, then strings from source
+            code are used instead.
+
+        @param msgIdCharset
+            Lets you specify the charset used for msgids in sources
+            in case they use 8-bit characters (e.g. German or French strings).
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
+     */
+    bool AddCatalog(const wxString& domain,
+                    wxLanguage msgIdLanguage,
+                    const wxString& msgIdCharset);
+
+    /**
+        Check if the given catalog is loaded, and returns @true if it is.
+
+        According to GNU gettext tradition, each catalog normally corresponds to
+        'domain' which is more or less the application name.
+
+        @see AddCatalog()
+     */
+    bool IsLoaded(const wxString& domain) const;
+
+    /**
+        Directly loads catalog from a file.
+
+        It is caller's responsibility to ensure that the catalog contains
+        correct language. This function is primarily intended for
+        wxTranslationsLoader implementations.
+
+        @param filename  Name of the MO file to load.
+        @param domain    Domain to load the translations into (typically
+                         matches file's basename).
+     */
+    bool LoadCatalogFile(const wxString& filename,
+                         const wxString& domain = wxEmptyString);
+
+    /**
+        Retrieves the translation for a string in all loaded domains unless the @a domain
+        parameter is specified (and then only this catalog/domain is searched).
+
+        Returns original string if translation is not available (in this case an
+        error message is generated the first time a string is not found; use
+        wxLogNull to suppress it).
+
+        @remarks Domains are searched in the last to first order, i.e. catalogs
+                 added later override those added before.
+    */
+    const wxString& GetString(const wxString& origString,
+                              const wxString& domain = wxEmptyString) const;
+
+    /**
+        Retrieves the translation for a string in all loaded domains unless the @a domain
+        parameter is specified (and then only this catalog/domain is searched).
+
+        Returns original string if translation is not available (in this case an
+        error message is generated the first time a string is not found; use
+        wxLogNull to suppress it).
+
+        This form is used when retrieving translation of string that has different
+        singular and plural form in English or different plural forms in some
+        other language.
+        It takes two extra arguments: @a origString parameter must contain the
+        singular form of the string to be converted.
+
+        It is also used as the key for the search in the catalog.
+        The @a origString2 parameter is the plural form (in English).
+
+        The parameter @a n is used to determine the plural form.
+        If no message catalog is found @a origString is returned if 'n == 1',
+        otherwise @a origString2.
+
+        See GNU gettext manual for additional information on plural forms handling.
+        This method is called by the wxGetTranslation() function and _() macro.
+
+        @remarks Domains are searched in the last to first order, i.e. catalogs
+                 added later override those added before.
+    */
+    const wxString& GetString(const wxString& origString,
+                              const wxString& origString2,
+                              size_t n,
+                              const wxString& domain = wxEmptyString) const;
+
+    /**
+        Returns the header value for header @a header.
+        The search for @a header is case sensitive. If an @a domain is passed,
+        this domain is searched. Else all domains will be searched until a
+        header has been found.
+
+        The return value is the value of the header if found. Else this will be empty.
+    */
+    wxString GetHeaderValue(const wxString& header,
+                            const wxString& domain = wxEmptyString) const;
+};
+
+
+/**
+    Abstraction of translations discovery and loading.
+
+    This interface makes it possible to override wxWidgets' default catalogs
+    loading mechanism and load MO files from locations other than the
+    filesystem (e.g. embed them in executable).
+
+    Implementations must implement the LoadCatalog() method.
+
+    @see wxFileTranslationsLoader
+ */
+class wxTranslationsLoader
+{
+public:
+    /// Constructor
+    wxTranslationsLoader() {}
+
+    /**
+        Called to load requested catalog.
+
+        If the catalog is found, LoadCatalog() should call LoadCatalogFile()
+        on @a translations to add the translation.
+
+        @param translations  wxTranslations requesting loading.
+        @param domain        Domain to load.
+        @param lang          Language to look for. This is "canonical name"
+                             (see wxLocale::GetCanonicalName()), i.e. ISO 639
+                             code, possibly combined with country code or
+                             additional modifiers (e.g. "fr", "en_GB" or
+                             "ca@valencia").
+
+        @return @true on successful load, @false otherwise
+     */
+    virtual bool LoadCatalog(wxTranslations *translations,
+                             const wxString& domain, const wxString& lang) = 0;
+};
+
+/**
+    Standard wxTranslationsLoader implementation.
+
+    This finds catalogs in the filesystem, using the standard Unix layout.
+    This is the default unless you change the loader with
+    wxTranslations::SetLoader().
+
+    Catalogs are searched for in standard places (current directory first, then
+    the system one), but you may also prepend additional directories to the
+    search path with AddCatalogLookupPathPrefix().
+ */
+class wxFileTranslationsLoader : public wxTranslationsLoader
+{
+public:
+    /**
+        Add a prefix to the catalog lookup path: the message catalog files will
+        be looked up under prefix/lang/LC_MESSAGES, prefix/lang and prefix
+        (in this order).
+
+        This only applies to subsequent invocations of
+        wxTranslations::AddCatalog().
+    */
+    static void AddCatalogLookupPathPrefix(const wxString& prefix);
+};
 
 
 
@@ -892,7 +1116,7 @@ public:
     provided: the _() macro is defined to do the same thing as
     wxGetTranslation().
 
-    This function calls wxLocale::GetString().
+    This function calls wxTranslations::GetString().
 
     @note This function is not suitable for literal strings in Unicode builds
           since the literal strings must be enclosed into _T() or wxT() macro

@@ -853,8 +853,8 @@ public:
     wxMsgCatalogFile();
     ~wxMsgCatalogFile();
 
-    // load the catalog from disk (szDirPrefix corresponds to language)
-    bool Load(const wxString& szDirPrefix, const wxString& szName,
+    // load the catalog from disk
+    bool Load(const wxString& filename,
               wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
@@ -947,12 +947,13 @@ public:
     ~wxMsgCatalog();
 #endif
 
-    // load the catalog from disk (szDirPrefix corresponds to language)
-    bool Load(const wxString& dirPrefix, const wxString& name,
+    // load the catalog from disk
+    bool Load(const wxString& filename,
+              const wxString& domain,
               const wxString& msgIdCharset);
 
     // get name of the catalog
-    wxString GetName() const { return m_name; }
+    wxString GetDomain() const { return m_domain; }
 
     // get the translated string: returns NULL if not found
     const wxString *GetString(const wxString& sz, size_t n = size_t(-1)) const;
@@ -962,7 +963,7 @@ public:
 
 private:
     wxMessagesHash  m_messages; // all messages in the catalog
-    wxString        m_name;     // name of the domain
+    wxString        m_domain;   // name of the domain
 
 #if !wxUSE_UNICODE
     // the conversion corresponding to this catalog charset if we installed it
@@ -973,12 +974,6 @@ private:
     wxPluralFormsCalculatorPtr  m_pluralFormsCalculator;
 };
 
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-// the list of the directories to search for message catalog files
-static wxArrayString gs_searchPrefixes;
 
 // ============================================================================
 // implementation
@@ -1047,7 +1042,7 @@ wxString wxLanguageInfo::GetLocaleName() const
 #endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
-// wxMsgCatalogFile class
+// wxMsgCatalogFile clas
 // ----------------------------------------------------------------------------
 
 wxMsgCatalogFile::wxMsgCatalogFile()
@@ -1058,146 +1053,11 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 {
 }
 
-// return the directories to search for message catalogs under the given
-// prefix, separated by wxPATH_SEP
-static
-wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
-{
-    // Search first in Unix-standard prefix/lang/LC_MESSAGES, then in
-    // prefix/lang and finally in just prefix.
-    //
-    // Note that we use LC_MESSAGES on all platforms and not just Unix, because
-    // it doesn't cost much to look into one more directory and doing it this
-    // way has two important benefits:
-    // a) we don't break compatibility with wx-2.6 and older by stopping to
-    //    look in a directory where the catalogs used to be and thus silently
-    //    breaking apps after they are recompiled against the latest wx
-    // b) it makes it possible to package app's support files in the same
-    //    way on all target platforms
-    const wxString pathPrefix = wxFileName(prefix, lang).GetFullPath();
-
-    wxString searchPath;
-    searchPath.reserve(4*pathPrefix.length());
-    searchPath << pathPrefix << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
-            << prefix << wxFILE_SEP_PATH << wxPATH_SEP
-            << pathPrefix;
-
-    return searchPath;
-}
-
-// construct the search path for the given language
-static wxString GetFullSearchPath(const wxString& lang)
-{
-    // first take the entries explicitly added by the program
-    wxArrayString paths;
-    paths.reserve(gs_searchPrefixes.size() + 1);
-    size_t n,
-        count = gs_searchPrefixes.size();
-    for ( n = 0; n < count; n++ )
-    {
-        paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
-    }
-
-
-#if wxUSE_STDPATHS
-    // then look in the standard location
-    const wxString stdp = wxStandardPaths::Get().
-        GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
-
-    if ( paths.Index(stdp) == wxNOT_FOUND )
-        paths.Add(stdp);
-#endif // wxUSE_STDPATHS
-
-    // last look in default locations
-#ifdef __UNIX__
-    // LC_PATH is a standard env var containing the search path for the .mo
-    // files
-    const char *pszLcPath = wxGetenv("LC_PATH");
-    if ( pszLcPath )
-    {
-        const wxString lcp = GetMsgCatalogSubdirs(pszLcPath, lang);
-        if ( paths.Index(lcp) == wxNOT_FOUND )
-            paths.Add(lcp);
-    }
-
-    // also add the one from where wxWin was installed:
-    wxString wxp = wxGetInstallPrefix();
-    if ( !wxp.empty() )
-    {
-        wxp = GetMsgCatalogSubdirs(wxp + wxS("/share/locale"), lang);
-        if ( paths.Index(wxp) == wxNOT_FOUND )
-            paths.Add(wxp);
-    }
-#endif // __UNIX__
-
-
-    // finally construct the full search path
-    wxString searchPath;
-    searchPath.reserve(500);
-    count = paths.size();
-    for ( n = 0; n < count; n++ )
-    {
-        searchPath += paths[n];
-        if ( n != count - 1 )
-            searchPath += wxPATH_SEP;
-    }
-
-    return searchPath;
-}
-
 // open disk file and read in it's contents
-bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
+bool wxMsgCatalogFile::Load(const wxString& filename,
                             wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
-    wxCHECK_MSG( szDirPrefix.length() >= LEN_LANG, false,
-                    "invalid language specification" );
-
-    wxString searchPath;
-
-#if wxUSE_FONTMAP
-    // first look for the catalog for this language and the current locale:
-    // notice that we don't use the system name for the locale as this would
-    // force us to install catalogs in different locations depending on the
-    // system but always use the canonical name
-    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
-    if ( encSys != wxFONTENCODING_SYSTEM )
-    {
-        wxString fullname(szDirPrefix);
-        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
-        searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
-    }
-#endif // wxUSE_FONTMAP
-
-
-    searchPath += GetFullSearchPath(szDirPrefix);
-    if ( szDirPrefix.length() > LEN_LANG && szDirPrefix[LEN_LANG] == wxS('_') )
-    {
-        // also add just base locale name: for things like "fr_BE" (Belgium
-        // French) we should use fall back on plain "fr" if no Belgium-specific
-        // message catalogs exist
-        searchPath << wxPATH_SEP
-                    << GetFullSearchPath(ExtractLang(szDirPrefix));
-    }
-
-    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
-                szName, searchPath);
-
-    wxFileName fn(szName);
-    fn.SetExt(wxS("mo"));
-
-    wxString strFullName;
-    if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-    {
-        wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
-        wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), szName);
-        return false;
-    }
-
-    // open file and read its data
-    wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
-    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
-
-    wxFile fileMsg(strFullName);
+    wxFile fileMsg(filename);
     if ( !fileMsg.IsOpened() )
         return false;
 
@@ -1230,7 +1090,7 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 
     if ( !bValid ) {
         // it's either too short or has incorrect magic number
-        wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
+        wxLogWarning(_("'%s' is not a valid message catalog."), filename.c_str());
 
         return false;
     }
@@ -1424,14 +1284,15 @@ wxMsgCatalog::~wxMsgCatalog()
 }
 #endif // !wxUSE_UNICODE
 
-bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
+bool wxMsgCatalog::Load(const wxString& filename,
+                        const wxString& domain,
                         const wxString& msgIdCharset)
 {
     wxMsgCatalogFile file;
 
-    m_name = name;
+    m_domain = domain;
 
-    if ( !file.Load(dirPrefix, name, m_pluralFormsCalculator) )
+    if ( !file.Load(filename, m_pluralFormsCalculator) )
         return false;
 
     if ( !file.FillHash(m_messages, msgIdCharset) )
@@ -1465,6 +1326,504 @@ const wxString *wxMsgCatalog::GetString(const wxString& str, size_t n) const
         return NULL;
 }
 
+
+// ----------------------------------------------------------------------------
+// wxTranslations
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+wxTranslations *gs_translations = NULL;
+bool gs_translationsOwned = false;
+
+} // anonymous namespace
+
+
+/*static*/
+wxTranslations *wxTranslations::Get()
+{
+    return gs_translations;
+}
+
+/*static*/
+void wxTranslations::Set(wxTranslations *t)
+{
+    if ( gs_translationsOwned )
+        delete gs_translations;
+    gs_translations = t;
+    gs_translationsOwned = true;
+}
+
+/*static*/
+void wxTranslations::SetNonOwned(wxTranslations *t)
+{
+    if ( gs_translationsOwned )
+        delete gs_translations;
+    gs_translations = t;
+    gs_translationsOwned = false;
+}
+
+
+wxTranslations::wxTranslations()
+{
+    m_pMsgCat = NULL;
+    m_loader = new wxFileTranslationsLoader;
+}
+
+
+wxTranslations::~wxTranslations()
+{
+    delete m_loader;
+
+    // free catalogs memory
+    wxMsgCatalog *pTmpCat;
+    while ( m_pMsgCat != NULL )
+    {
+        pTmpCat = m_pMsgCat;
+        m_pMsgCat = m_pMsgCat->m_pNext;
+        delete pTmpCat;
+    }
+}
+
+
+void wxTranslations::SetLoader(wxTranslationsLoader *loader)
+{
+    wxCHECK_RET( loader, "loader can't be NULL" );
+
+    delete m_loader;
+    m_loader = loader;
+}
+
+
+void wxTranslations::SetLanguage(wxLanguage lang)
+{
+    if ( lang == wxLANGUAGE_DEFAULT )
+        SetLanguage("");
+    else
+        SetLanguage(wxLocale::GetLanguageCanonicalName(lang));
+}
+
+void wxTranslations::SetLanguage(const wxString& lang)
+{
+    m_lang = lang;
+}
+
+
+bool wxTranslations::AddStdCatalog()
+{
+    if ( !AddCatalog(wxS("wxstd")) )
+        return false;
+
+    // there may be a catalog with toolkit specific overrides, it is not
+    // an error if this does not exist
+    wxString port(wxPlatformInfo::Get().GetPortIdName());
+    if ( !port.empty() )
+    {
+        AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
+    }
+
+    return true;
+}
+
+
+bool wxTranslations::AddCatalog(const wxString& domain)
+{
+    return AddCatalog(domain, wxLANGUAGE_ENGLISH_US);
+}
+
+#if !wxUSE_UNICODE
+bool wxTranslations::AddCatalog(const wxString& domain,
+                                wxLanguage msgIdLanguage,
+                                const wxString& msgIdCharset)
+{
+    m_msgIdCharset[domain] = msgIdCharset;
+    return AddCatalog(domain, msgIdLanguage);
+}
+#endif // !wxUSE_UNICODE
+
+bool wxTranslations::AddCatalog(const wxString& domain,
+                                wxLanguage msgIdLanguage)
+{
+    const wxString msgIdLang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
+    const wxString domain_lang = ChooseLanguageForDomain(domain, msgIdLang);
+
+    if ( domain_lang.empty() )
+    {
+        wxLogTrace(TRACE_I18N,
+                    wxS("no suitable translation for domain '%s' found"),
+                    domain);
+        return false;
+    }
+
+    wxLogTrace(TRACE_I18N,
+                wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
+                domain_lang, domain, msgIdLang);
+
+    // It is OK to not load catalog if the msgid language and m_language match,
+    // in which case we can directly display the texts embedded in program's
+    // source code:
+    if ( msgIdLang == domain_lang )
+        return true;
+
+    wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
+    return m_loader->LoadCatalog(this, domain, domain_lang);
+}
+
+
+// check if the given catalog is loaded
+bool wxTranslations::IsLoaded(const wxString& domain) const
+{
+    return FindCatalog(domain) != NULL;
+}
+
+
+bool wxTranslations::LoadCatalogFile(const wxString& filename,
+                                     const wxString& domain)
+{
+    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
+
+#if wxUSE_UNICODE
+    const bool ok = pMsgCat->Load(filename, domain, wxEmptyString/*unused*/);
+#else
+    const bool ok = pMsgCat->Load(filename, domain,
+                                  m_msgIdCharset[domain]);
+#endif
+
+    if ( !ok )
+    {
+        // don't add it because it couldn't be loaded anyway
+        delete pMsgCat;
+        return false;
+    }
+
+    // add it to the head of the list so that in GetString it will
+    // be searched before the catalogs added earlier
+    pMsgCat->m_pNext = m_pMsgCat;
+    m_pMsgCat = pMsgCat;
+
+    return true;
+}
+
+
+wxString wxTranslations::ChooseLanguageForDomain(const wxString& WXUNUSED(domain),
+                                                 const wxString& WXUNUSED(msgIdLang))
+{
+    // explicitly set language should always be respected
+    if ( !m_lang.empty() )
+        return m_lang;
+
+    // TODO: if the default language is used, pick the best (by comparing
+    //       available languages with user's preferences), instead of blindly
+    //       trusting availability of system language translation
+    return wxLocale::GetLanguageCanonicalName(wxLocale::GetSystemLanguage());
+}
+
+
+namespace
+{
+WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual,
+                    wxLocaleUntranslatedStrings);
+}
+
+/* static */
+const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
+{
+    static wxLocaleUntranslatedStrings s_strings;
+
+    wxLocaleUntranslatedStrings::iterator i = s_strings.find(str);
+    if ( i == s_strings.end() )
+        return *s_strings.insert(str).first;
+
+    return *i;
+}
+
+
+const wxString& wxTranslations::GetString(const wxString& origString,
+                                          const wxString& domain) const
+{
+    return GetString(origString, origString, size_t(-1), domain);
+}
+
+const wxString& wxTranslations::GetString(const wxString& origString,
+                                          const wxString& origString2,
+                                          size_t n,
+                                          const wxString& domain) const
+{
+    if ( origString.empty() )
+        return GetUntranslatedString(origString);
+
+    const wxString *trans = NULL;
+    wxMsgCatalog *pMsgCat;
+
+    if ( !domain.empty() )
+    {
+        pMsgCat = FindCatalog(domain);
+
+        // does the catalog exist?
+        if ( pMsgCat != NULL )
+            trans = pMsgCat->GetString(origString, n);
+    }
+    else
+    {
+        // search in all domains
+        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
+        {
+            trans = pMsgCat->GetString(origString, n);
+            if ( trans != NULL )   // take the first found
+                break;
+        }
+    }
+
+    if ( trans == NULL )
+    {
+        wxLogTrace
+        (
+            TRACE_I18N,
+            "string \"%s\"%s not found in %slocale '%s'.",
+            origString,
+            ((long)n) != -1 ? wxString::Format("[%ld]", (long)n) : wxString(),
+            !domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString(),
+            m_lang
+        );
+
+        if (n == size_t(-1))
+            return GetUntranslatedString(origString);
+        else
+            return GetUntranslatedString(n == 1 ? origString : origString2);
+    }
+
+    return *trans;
+}
+
+
+wxString wxTranslations::GetHeaderValue(const wxString& header,
+                                        const wxString& domain) const
+{
+    if ( header.empty() )
+        return wxEmptyString;
+
+    const wxString *trans = NULL;
+    wxMsgCatalog *pMsgCat;
+
+    if ( !domain.empty() )
+    {
+        pMsgCat = FindCatalog(domain);
+
+        // does the catalog exist?
+        if ( pMsgCat == NULL )
+            return wxEmptyString;
+
+        trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+    }
+    else
+    {
+        // search in all domains
+        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
+        {
+            trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+            if ( trans != NULL )   // take the first found
+                break;
+        }
+    }
+
+    if ( !trans || trans->empty() )
+        return wxEmptyString;
+
+    size_t found = trans->find(header);
+    if ( found == wxString::npos )
+        return wxEmptyString;
+
+    found += header.length() + 2 /* ': ' */;
+
+    // Every header is separated by \n
+
+    size_t endLine = trans->find(wxS('\n'), found);
+    size_t len = (endLine == wxString::npos) ?
+                wxString::npos : (endLine - found);
+
+    return trans->substr(found, len);
+}
+
+
+// find catalog by name in a linked list, return NULL if !found
+wxMsgCatalog *wxTranslations::FindCatalog(const wxString& domain) const
+{
+    // linear search in the linked list
+    wxMsgCatalog *pMsgCat;
+    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
+    {
+        if ( pMsgCat->GetDomain() == domain )
+            return pMsgCat;
+    }
+
+    return NULL;
+}
+
+// ----------------------------------------------------------------------------
+// wxFileTranslationsLoader
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+// the list of the directories to search for message catalog files
+wxArrayString gs_searchPrefixes;
+
+// return the directories to search for message catalogs under the given
+// prefix, separated by wxPATH_SEP
+wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
+{
+    // Search first in Unix-standard prefix/lang/LC_MESSAGES, then in
+    // prefix/lang and finally in just prefix.
+    //
+    // Note that we use LC_MESSAGES on all platforms and not just Unix, because
+    // it doesn't cost much to look into one more directory and doing it this
+    // way has two important benefits:
+    // a) we don't break compatibility with wx-2.6 and older by stopping to
+    //    look in a directory where the catalogs used to be and thus silently
+    //    breaking apps after they are recompiled against the latest wx
+    // b) it makes it possible to package app's support files in the same
+    //    way on all target platforms
+    const wxString pathPrefix = wxFileName(prefix, lang).GetFullPath();
+
+    wxString searchPath;
+    searchPath.reserve(4*pathPrefix.length());
+    searchPath << pathPrefix << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
+            << prefix << wxFILE_SEP_PATH << wxPATH_SEP
+            << pathPrefix;
+
+    return searchPath;
+}
+
+// construct the search path for the given language
+static wxString GetFullSearchPath(const wxString& lang)
+{
+    // first take the entries explicitly added by the program
+    wxArrayString paths;
+    paths.reserve(gs_searchPrefixes.size() + 1);
+    size_t n,
+        count = gs_searchPrefixes.size();
+    for ( n = 0; n < count; n++ )
+    {
+        paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
+    }
+
+
+#if wxUSE_STDPATHS
+    // then look in the standard location
+    const wxString stdp = wxStandardPaths::Get().
+        GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
+
+    if ( paths.Index(stdp) == wxNOT_FOUND )
+        paths.Add(stdp);
+#endif // wxUSE_STDPATHS
+
+    // last look in default locations
+#ifdef __UNIX__
+    // LC_PATH is a standard env var containing the search path for the .mo
+    // files
+    const char *pszLcPath = wxGetenv("LC_PATH");
+    if ( pszLcPath )
+    {
+        const wxString lcp = GetMsgCatalogSubdirs(pszLcPath, lang);
+        if ( paths.Index(lcp) == wxNOT_FOUND )
+            paths.Add(lcp);
+    }
+
+    // also add the one from where wxWin was installed:
+    wxString wxp = wxGetInstallPrefix();
+    if ( !wxp.empty() )
+    {
+        wxp = GetMsgCatalogSubdirs(wxp + wxS("/share/locale"), lang);
+        if ( paths.Index(wxp) == wxNOT_FOUND )
+            paths.Add(wxp);
+    }
+#endif // __UNIX__
+
+
+    // finally construct the full search path
+    wxString searchPath;
+    searchPath.reserve(500);
+    count = paths.size();
+    for ( n = 0; n < count; n++ )
+    {
+        searchPath += paths[n];
+        if ( n != count - 1 )
+            searchPath += wxPATH_SEP;
+    }
+
+    return searchPath;
+}
+
+} // anonymous namespace
+
+
+void wxFileTranslationsLoader::AddCatalogLookupPathPrefix(const wxString& prefix)
+{
+    if ( gs_searchPrefixes.Index(prefix) == wxNOT_FOUND )
+    {
+        gs_searchPrefixes.Add(prefix);
+    }
+    //else: already have it
+}
+
+
+bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
+                                           const wxString& domain,
+                                           const wxString& lang)
+{
+    wxCHECK_MSG( lang.length() >= LEN_LANG, false,
+                 "invalid language specification" );
+
+    wxString searchPath;
+
+#if wxUSE_FONTMAP
+    // first look for the catalog for this language and the current locale:
+    // notice that we don't use the system name for the locale as this would
+    // force us to install catalogs in different locations depending on the
+    // system but always use the canonical name
+    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
+    if ( encSys != wxFONTENCODING_SYSTEM )
+    {
+        wxString fullname(lang);
+        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
+        searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
+    }
+#endif // wxUSE_FONTMAP
+
+    searchPath += GetFullSearchPath(lang);
+    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
+    {
+        // also add just base locale name: for things like "fr_BE" (Belgium
+        // French) we should use fall back on plain "fr" if no Belgium-specific
+        // message catalogs exist
+        searchPath << wxPATH_SEP
+                    << GetFullSearchPath(ExtractLang(lang));
+    }
+
+    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
+                domain, searchPath);
+
+    wxFileName fn(domain);
+    fn.SetExt(wxS("mo"));
+
+    wxString strFullName;
+    if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
+    {
+        wxLogVerbose(_("catalog file for domain '%s' not found."), domain);
+        wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), domain);
+        return false;
+    }
+
+    // open file and read its data
+    wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());
+    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
+
+    return translations->LoadCatalogFile(strFullName, domain);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxLocale
 // ----------------------------------------------------------------------------
@@ -1496,8 +1855,8 @@ void wxLocale::DoCommonInit()
     m_pszOldLocale = NULL;
 
     m_pOldLocale = wxSetLocale(this);
+    wxTranslations::SetNonOwned(&m_translations);
 
-    m_pMsgCat = NULL;
     m_language = wxLANGUAGE_UNKNOWN;
     m_initialized = false;
 }
@@ -1512,13 +1871,28 @@ bool wxLocale::Init(const wxString& name,
 #endif
                     )
 {
-    wxASSERT_MSG( !m_initialized,
-                    wxS("you can't call wxLocale::Init more than once") );
-
 #if WXWIN_COMPATIBILITY_2_8
     wxASSERT_MSG( bConvertEncoding,
                   wxS("wxLocale::Init with bConvertEncoding=false is no longer supported, add charset to your catalogs") );
 #endif
+
+    bool ret = DoInit(name, shortName, locale);
+
+    // NB: don't use 'lang' here, 'language' may be wxLANGUAGE_DEFAULT
+    m_translations.SetLanguage(shortName);
+
+    if ( bLoadDefault )
+        m_translations.AddStdCatalog();
+
+    return ret;
+}
+
+bool wxLocale::DoInit(const wxString& name,
+                      const wxString& shortName,
+                      const wxString& locale)
+{
+    wxASSERT_MSG( !m_initialized,
+                    wxS("you can't call wxLocale::Init more than once") );
 
     m_initialized = true;
     m_strLocale = name;
@@ -1560,26 +1934,7 @@ bool wxLocale::Init(const wxString& name,
         }
     }
 
-    // load the default catalog with wxWidgets standard messages
-    m_pMsgCat = NULL;
-    bool bOk = true;
-    if ( bLoadDefault )
-    {
-        bOk = AddCatalog(wxS("wxstd"));
-
-        // there may be a catalog with toolkit specific overrides, it is not
-        // an error if this does not exist
-        if ( bOk )
-        {
-            wxString port(wxPlatformInfo::Get().GetPortIdName());
-            if ( !port.empty() )
-            {
-                AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
-            }
-        }
-    }
-
-    return bOk;
+    return true;
 }
 
 
@@ -1818,8 +2173,7 @@ bool wxLocale::Init(int language, int flags)
         // this language
     }
 
-    if ( !Init(name, canonical, retloc,
-            (flags & wxLOCALE_LOAD_DEFAULT) != 0) )
+    if ( !DoInit(name, canonical, retloc) )
     {
         ret = false;
     }
@@ -1827,19 +2181,14 @@ bool wxLocale::Init(int language, int flags)
     if (IsOk()) // setlocale() succeeded
         m_language = lang;
 
+    // NB: don't use 'lang' here, 'language'
+    m_translations.SetLanguage(wx_static_cast(wxLanguage, language));
+
+    if ( flags & wxLOCALE_LOAD_DEFAULT )
+        m_translations.AddStdCatalog();
+
     return ret;
 #endif // !WX_NO_LOCALE_SUPPORT
-}
-
-
-
-void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
-{
-    if ( gs_searchPrefixes.Index(prefix) == wxNOT_FOUND )
-    {
-        gs_searchPrefixes.Add(prefix);
-    }
-    //else: already have it
 }
 
 /*static*/ int wxLocale::GetSystemLanguage()
@@ -2216,11 +2565,27 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 /* static */
 wxString wxLocale::GetLanguageName(int lang)
 {
+    if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
+        return wxEmptyString;
+
     const wxLanguageInfo *info = GetLanguageInfo(lang);
     if ( !info )
         return wxEmptyString;
     else
         return info->Description;
+}
+
+/* static */
+wxString wxLocale::GetLanguageCanonicalName(int lang)
+{
+    if ( lang == wxLANGUAGE_DEFAULT || lang == wxLANGUAGE_UNKNOWN )
+        return wxEmptyString;
+
+    const wxLanguageInfo *info = GetLanguageInfo(lang);
+    if ( !info )
+        return wxEmptyString;
+    else
+        return info->CanonicalName;
 }
 
 /* static */
@@ -2267,12 +2632,13 @@ wxString wxLocale::GetSysName() const
 // clean up
 wxLocale::~wxLocale()
 {
-    // free memory
-    wxMsgCatalog *pTmpCat;
-    while ( m_pMsgCat != NULL ) {
-        pTmpCat = m_pMsgCat;
-        m_pMsgCat = m_pMsgCat->m_pNext;
-        delete pTmpCat;
+    // restore old translations object
+    if ( wxTranslations::Get() == &m_translations )
+    {
+        if ( m_pOldLocale )
+            wxTranslations::SetNonOwned(&m_pOldLocale->m_translations);
+        else
+            wxTranslations::Set(NULL);
     }
 
     // restore old locale pointer
@@ -2282,137 +2648,6 @@ wxLocale::~wxLocale()
     free((wxChar *)m_pszOldLocale);     // const_cast
 }
 
-// get the translation of given string in current locale
-const wxString& wxLocale::GetString(const wxString& origString,
-                                    const wxString& domain) const
-{
-    return GetString(origString, origString, size_t(-1), domain);
-}
-
-const wxString& wxLocale::GetString(const wxString& origString,
-                                    const wxString& origString2,
-                                    size_t n,
-                                    const wxString& domain) const
-{
-    if ( origString.empty() )
-        return GetUntranslatedString(origString);
-
-    const wxString *trans = NULL;
-    wxMsgCatalog *pMsgCat;
-
-    if ( !domain.empty() )
-    {
-        pMsgCat = FindCatalog(domain);
-
-        // does the catalog exist?
-        if ( pMsgCat != NULL )
-            trans = pMsgCat->GetString(origString, n);
-    }
-    else
-    {
-        // search in all domains
-        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
-        {
-            trans = pMsgCat->GetString(origString, n);
-            if ( trans != NULL )   // take the first found
-                break;
-        }
-    }
-
-    if ( trans == NULL )
-    {
-        wxLogTrace(TRACE_I18N,
-                wxS("string \"%s\"[%ld] not found in %slocale '%s'."),
-                origString, (long)n,
-                wxString::Format(wxS("domain '%s' "), domain).c_str(),
-                m_strLocale.c_str());
-
-        if (n == size_t(-1))
-            return GetUntranslatedString(origString);
-        else
-            return GetUntranslatedString(n == 1 ? origString : origString2);
-    }
-
-    return *trans;
-}
-
-WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual,
-                    wxLocaleUntranslatedStrings);
-
-/* static */
-const wxString& wxLocale::GetUntranslatedString(const wxString& str)
-{
-    static wxLocaleUntranslatedStrings s_strings;
-
-    wxLocaleUntranslatedStrings::iterator i = s_strings.find(str);
-    if ( i == s_strings.end() )
-        return *s_strings.insert(str).first;
-
-    return *i;
-}
-
-wxString wxLocale::GetHeaderValue(const wxString& header,
-                                const wxString& domain) const
-{
-    if ( header.empty() )
-        return wxEmptyString;
-
-    const wxString *trans = NULL;
-    wxMsgCatalog *pMsgCat;
-
-    if ( !domain.empty() )
-    {
-        pMsgCat = FindCatalog(domain);
-
-        // does the catalog exist?
-        if ( pMsgCat == NULL )
-            return wxEmptyString;
-
-        trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
-    }
-    else
-    {
-        // search in all domains
-        for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
-        {
-            trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
-            if ( trans != NULL )   // take the first found
-                break;
-        }
-    }
-
-    if ( !trans || trans->empty() )
-        return wxEmptyString;
-
-    size_t found = trans->find(header);
-    if ( found == wxString::npos )
-        return wxEmptyString;
-
-    found += header.length() + 2 /* ': ' */;
-
-    // Every header is separated by \n
-
-    size_t endLine = trans->find(wxS('\n'), found);
-    size_t len = (endLine == wxString::npos) ?
-                wxString::npos : (endLine - found);
-
-    return trans->substr(found, len);
-}
-
-
-// find catalog by name in a linked list, return NULL if !found
-wxMsgCatalog *wxLocale::FindCatalog(const wxString& domain) const
-{
-    // linear search in the linked list
-    wxMsgCatalog *pMsgCat;
-    for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
-    {
-        if ( pMsgCat->GetName() == domain )
-            return pMsgCat;
-    }
-
-    return NULL;
-}
 
 // check if the given locale is provided by OS and C run time
 /* static */
@@ -2446,61 +2681,17 @@ bool wxLocale::IsAvailable(int lang)
     return true;
 }
 
-// check if the given catalog is loaded
-bool wxLocale::IsLoaded(const wxString& szDomain) const
-{
-    return FindCatalog(szDomain) != NULL;
-}
-
-// add a catalog to our linked list
-bool wxLocale::AddCatalog(const wxString& szDomain)
-{
-    return AddCatalog(szDomain, wxLANGUAGE_ENGLISH_US, wxEmptyString);
-}
-
 // add a catalog to our linked list
 bool wxLocale::AddCatalog(const wxString& szDomain,
                         wxLanguage      msgIdLanguage,
                         const wxString& msgIdCharset)
-
 {
-    wxCHECK_MSG( !m_strShort.empty(), false, "must initialize catalog first" );
-
-
-    // It is OK to not load catalog if the msgid language and m_language match,
-    // in which case we can directly display the texts embedded in program's
-    // source code:
-    if ( msgIdLanguage == m_language )
-        return true;
-
-
-    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
-
-    if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset) )
-    {
-        // add it to the head of the list so that in GetString it will
-        // be searched before the catalogs added earlier
-        pMsgCat->m_pNext = m_pMsgCat;
-        m_pMsgCat = pMsgCat;
-
-        return true;
-    }
-
-    // don't add it because it couldn't be loaded anyway
-    delete pMsgCat;
-
-
-    // If there's no exact match, we may still get partial match where the
-    // (basic) language is same, but the country differs. For example, it's
-    // permitted to use en_US strings from sources even if m_language is en_GB:
-    const wxLanguageInfo *msgIdLangInfo = GetLanguageInfo(msgIdLanguage);
-    if ( msgIdLangInfo &&
-        ExtractLang(msgIdLangInfo->CanonicalName) == ExtractLang(m_strShort) )
-    {
-        return true;
-    }
-
-    return false;
+#if wxUSE_UNICODE
+    wxUnusedVar(msgIdCharset);
+    return m_translations.AddCatalog(szDomain, msgIdLanguage);
+#else
+    return m_translations.AddCatalog(szDomain, msgIdLanguage, msgIdCharset);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -3105,8 +3296,21 @@ class wxLocaleModule: public wxModule
     DECLARE_DYNAMIC_CLASS(wxLocaleModule)
     public:
         wxLocaleModule() {}
-        bool OnInit() { return true; }
-        void OnExit() { wxLocale::DestroyLanguagesDB(); }
+
+        bool OnInit()
+        {
+            return true;
+        }
+
+        void OnExit()
+        {
+            if ( gs_translationsOwned )
+                delete gs_translations;
+            gs_translations = NULL;
+            gs_translationsOwned = true;
+
+            wxLocale::DestroyLanguagesDB();
+        }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)

@@ -445,6 +445,7 @@ All:
 - Correct wxSocket::Peek() to not block (Anders Larsen).
 - Added IEC and SI units support to GetHumanReadableSize() (Julien Weinzorn).
 - Add convenient wxString::ToStd{String,Wstring}() helpers.
+- Added wxTranslations class to allow localization without changing locale.
 
 Unix:
 
