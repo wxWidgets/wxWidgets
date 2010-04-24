@@ -501,16 +501,8 @@ static void menuitem_select(GtkWidget*, wxMenuItem* item)
     if (!item->IsEnabled())
         return;
 
-    wxMenu* menu = item->GetMenu();
     wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item->GetId());
-    event.SetEventObject( menu );
-
-    wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->SafelyProcessEvent(event))
-        return;
-
-    wxWindow *win = menu->GetInvokingWindow();
-    if (win) win->HandleWindowEvent( event );
+    DoCommonMenuCallbackCode(item->GetMenu(), event);
 }
 }
 
@@ -524,17 +516,8 @@ static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
     if (!item->IsEnabled())
         return;
 
-    wxMenu* menu = item->GetMenu();
     wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
-    event.SetEventObject( menu );
-
-    wxEvtHandler* handler = menu->GetEventHandler();
-    if (handler && handler->SafelyProcessEvent(event))
-        return;
-
-    wxWindow *win = menu->GetInvokingWindow();
-    if (win)
-        win->HandleWindowEvent( event );
+    DoCommonMenuCallbackCode(item->GetMenu(), event);
 }
 }
 
