@@ -30,6 +30,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/menu.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -529,7 +530,7 @@ wxWindow *wxMenuBase::GetInvokingWindow() const
 
 wxWindow *wxMenuBase::GetWindow() const
 {
-    return GetMenuBar() ? (wxWindow*)GetMenuBar()->GetFrame() : GetInvokingWindow();
+    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
 }
 
 // ----------------------------------------------------------------------------
