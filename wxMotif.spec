@@ -176,6 +176,7 @@ wx/ioswrap.h
 wx/ipc.h
 wx/ipcbase.h
 wx/kbdstate.h
+wx/language.h
 wx/link.h
 wx/list.h
 wx/listimpl.cpp
@@ -227,6 +228,7 @@ wx/timer.h
 wx/tls.h
 wx/tokenzr.h
 wx/tracker.h
+wx/translation.h
 wx/txtstrm.h
 wx/typeinfo.h
 wx/types.h

@@ -389,6 +389,7 @@ ALL_BASE_HEADERS =  \
 	wx/ipc.h \
 	wx/ipcbase.h \
 	wx/kbdstate.h \
+	wx/language.h \
 	wx/link.h \
 	wx/list.h \
 	wx/listimpl.cpp \
@@ -440,6 +441,7 @@ ALL_BASE_HEADERS =  \
 	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
+	wx/translation.h \
 	wx/txtstrm.h \
 	wx/typeinfo.h \
 	wx/types.h \
@@ -554,6 +556,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/ipc.h \
 	wx/ipcbase.h \
 	wx/kbdstate.h \
+	wx/language.h \
 	wx/link.h \
 	wx/list.h \
 	wx/listimpl.cpp \
@@ -605,6 +608,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/tls.h \
 	wx/tokenzr.h \
 	wx/tracker.h \
+	wx/translation.h \
 	wx/txtstrm.h \
 	wx/typeinfo.h \
 	wx/types.h \
@@ -731,6 +735,7 @@ ALL_BASE_SOURCES =  \
 	src/common/init.cpp \
 	src/common/intl.cpp \
 	src/common/ipcbase.cpp \
+	src/common/languageinfo.cpp \
 	src/common/list.cpp \
 	src/common/log.cpp \
 	src/common/longlong.cpp \
@@ -760,6 +765,7 @@ ALL_BASE_SOURCES =  \
 	src/common/timercmn.cpp \
 	src/common/timerimpl.cpp \
 	src/common/tokenzr.cpp \
+	src/common/translation.cpp \
 	src/common/txtstrm.cpp \
 	src/common/unichar.cpp \
 	src/common/uri.cpp \
@@ -927,6 +933,7 @@ MONODLL_OBJECTS =  \
 	monodll_init.o \
 	monodll_intl.o \
 	monodll_ipcbase.o \
+	monodll_languageinfo.o \
 	monodll_list.o \
 	monodll_log.o \
 	monodll_longlong.o \
@@ -956,6 +963,7 @@ MONODLL_OBJECTS =  \
 	monodll_timercmn.o \
 	monodll_timerimpl.o \
 	monodll_tokenzr.o \
+	monodll_translation.o \
 	monodll_txtstrm.o \
 	monodll_unichar.o \
 	monodll_uri.o \
@@ -1057,6 +1065,7 @@ MONOLIB_OBJECTS =  \
 	monolib_init.o \
 	monolib_intl.o \
 	monolib_ipcbase.o \
+	monolib_languageinfo.o \
 	monolib_list.o \
 	monolib_log.o \
 	monolib_longlong.o \
@@ -1086,6 +1095,7 @@ MONOLIB_OBJECTS =  \
 	monolib_timercmn.o \
 	monolib_timerimpl.o \
 	monolib_tokenzr.o \
+	monolib_translation.o \
 	monolib_txtstrm.o \
 	monolib_unichar.o \
 	monolib_uri.o \
@@ -1182,6 +1192,7 @@ BASEDLL_OBJECTS =  \
 	basedll_init.o \
 	basedll_intl.o \
 	basedll_ipcbase.o \
+	basedll_languageinfo.o \
 	basedll_list.o \
 	basedll_log.o \
 	basedll_longlong.o \
@@ -1211,6 +1222,7 @@ BASEDLL_OBJECTS =  \
 	basedll_timercmn.o \
 	basedll_timerimpl.o \
 	basedll_tokenzr.o \
+	basedll_translation.o \
 	basedll_txtstrm.o \
 	basedll_unichar.o \
 	basedll_uri.o \
@@ -1290,6 +1302,7 @@ BASELIB_OBJECTS =  \
 	baselib_init.o \
 	baselib_intl.o \
 	baselib_ipcbase.o \
+	baselib_languageinfo.o \
 	baselib_list.o \
 	baselib_log.o \
 	baselib_longlong.o \
@@ -1319,6 +1332,7 @@ BASELIB_OBJECTS =  \
 	baselib_timercmn.o \
 	baselib_timerimpl.o \
 	baselib_tokenzr.o \
+	baselib_translation.o \
 	baselib_txtstrm.o \
 	baselib_unichar.o \
 	baselib_uri.o \
@@ -14851,6 +14865,9 @@ monodll_intl.o: $(srcdir)/src/common/intl.cpp $(MONODLL_ODEP)
 monodll_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/ipcbase.cpp
 
+monodll_languageinfo.o: $(srcdir)/src/common/languageinfo.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/languageinfo.cpp
+
 monodll_list.o: $(srcdir)/src/common/list.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/list.cpp
 
@@ -14937,6 +14954,9 @@ monodll_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(MONODLL_ODEP)
 
 monodll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
+
+monodll_translation.o: $(srcdir)/src/common/translation.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/translation.cpp
 
 monodll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
@@ -19699,6 +19719,9 @@ monolib_intl.o: $(srcdir)/src/common/intl.cpp $(MONOLIB_ODEP)
 monolib_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/ipcbase.cpp
 
+monolib_languageinfo.o: $(srcdir)/src/common/languageinfo.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/languageinfo.cpp
+
 monolib_list.o: $(srcdir)/src/common/list.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/list.cpp
 
@@ -19785,6 +19808,9 @@ monolib_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(MONOLIB_ODEP)
 
 monolib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
+
+monolib_translation.o: $(srcdir)/src/common/translation.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/translation.cpp
 
 monolib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
@@ -24547,6 +24573,9 @@ basedll_intl.o: $(srcdir)/src/common/intl.cpp $(BASEDLL_ODEP)
 basedll_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/ipcbase.cpp
 
+basedll_languageinfo.o: $(srcdir)/src/common/languageinfo.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/languageinfo.cpp
+
 basedll_list.o: $(srcdir)/src/common/list.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/list.cpp
 
@@ -24633,6 +24662,9 @@ basedll_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(BASEDLL_ODEP)
 
 basedll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
+
+basedll_translation.o: $(srcdir)/src/common/translation.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/translation.cpp
 
 basedll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
@@ -25042,6 +25074,9 @@ baselib_intl.o: $(srcdir)/src/common/intl.cpp $(BASELIB_ODEP)
 baselib_ipcbase.o: $(srcdir)/src/common/ipcbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/ipcbase.cpp
 
+baselib_languageinfo.o: $(srcdir)/src/common/languageinfo.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/languageinfo.cpp
+
 baselib_list.o: $(srcdir)/src/common/list.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/list.cpp
 
@@ -25128,6 +25163,9 @@ baselib_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(BASELIB_ODEP)
 
 baselib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
+
+baselib_translation.o: $(srcdir)/src/common/translation.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/translation.cpp
 
 baselib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp

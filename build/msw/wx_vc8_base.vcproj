@@ -1035,6 +1035,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\languageinfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\list.cpp"
 				>
 			</File>
@@ -1152,6 +1156,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\tokenzr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\common\translation.cpp"
 				>
 			</File>
 			<File
@@ -1934,6 +1942,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\language.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\link.h"
 				>
 			</File>
@@ -2131,6 +2143,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tracker.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\translation.h"
 				>
 			</File>
 			<File

@@ -165,6 +165,6 @@ def ReplaceGeneratedPartOfFile(fname, func):
     os.rename(fnameNew, fname)
 
 table = ReadTable()
-ReplaceGeneratedPartOfFile('include/wx/intl.h', WriteEnum)
-ReplaceGeneratedPartOfFile('interface/wx/intl.h', WriteEnum)
-ReplaceGeneratedPartOfFile('src/common/intl.cpp', WriteTable)
+ReplaceGeneratedPartOfFile('include/wx/language.h', WriteEnum)
+ReplaceGeneratedPartOfFile('interface/wx/language.h', WriteEnum)
+ReplaceGeneratedPartOfFile('src/common/languageinfo.cpp', WriteTable)

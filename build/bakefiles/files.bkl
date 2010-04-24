@@ -350,6 +350,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/init.cpp
     src/common/intl.cpp
     src/common/ipcbase.cpp
+    src/common/languageinfo.cpp
     src/common/list.cpp
     src/common/log.cpp
     src/common/longlong.cpp
@@ -379,6 +380,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/timercmn.cpp
     src/common/timerimpl.cpp
     src/common/tokenzr.cpp
+    src/common/translation.cpp
     src/common/txtstrm.cpp
     src/common/unichar.cpp
     src/common/uri.cpp
@@ -468,6 +470,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ipc.h
     wx/ipcbase.h
     wx/kbdstate.h
+    wx/language.h
     wx/link.h
     wx/list.h
     wx/listimpl.cpp
@@ -519,6 +522,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tls.h
     wx/tokenzr.h
     wx/tracker.h
+    wx/translation.h
     wx/txtstrm.h
     wx/typeinfo.h
     wx/types.h
