@@ -540,6 +540,11 @@ wxWindow *wxMenuBase::GetInvokingWindow() const
     return menu->m_invokingWindow;
 }
 
+wxWindow *wxMenuBase::GetWindow() const
+{
+    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
+}
+
 // ----------------------------------------------------------------------------
 // wxMenu functions forwarded to wxMenuItem
 // ----------------------------------------------------------------------------

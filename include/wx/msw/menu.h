@@ -67,10 +67,7 @@ public:
 
     bool MSWCommand(WXUINT param, WXWORD id);
 
-    // semi-private accessors
-        // get the window which contains this menu
-    wxWindow *GetWindow() const;
-        // get the menu handle
+    // get the native menu handle
     WXHMENU GetHMenu() const { return m_hMenu; }
 
 #if wxUSE_ACCEL
