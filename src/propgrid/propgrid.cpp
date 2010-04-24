@@ -3266,7 +3266,6 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     if ( m_inDoPropertyChanged )
         return true;
 
-    wxWindow* editor = GetEditorControl();
     wxPGProperty* selected = GetSelection();
 
     m_pState->m_anyModified = 1;
@@ -3289,6 +3288,10 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     }
 
     changedProperty->SetValue(value, &m_chgInfo_valueList, wxPG_SETVAL_BY_USER);
+
+    // NB: Call GetEditorControl() as late as possible, because OnSetValue()
+    //     and perhaps other user-defined virtual functions may change it.
+    wxWindow* editor = GetEditorControl();
 
     // Set as Modified (not if dragging just began)
     if ( !(p->m_flags & wxPG_PROP_MODIFIED) )
