@@ -545,7 +545,6 @@
 void wxLocale::InitLanguagesDB()
 {
    wxLanguageInfo info;
-   wxStringTokenizer tkn;
 
    LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , wxLayout_LeftToRight, "Abkhazian")
    LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , wxLayout_LeftToRight, "Afar")

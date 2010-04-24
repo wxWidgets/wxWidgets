@@ -115,7 +115,6 @@ def WriteTable(f, table):
 void wxLocale::InitLanguagesDB()
 {
    wxLanguageInfo info;
-   wxStringTokenizer tkn;
 
 %s
 }
