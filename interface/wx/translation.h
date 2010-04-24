@@ -252,6 +252,8 @@ public:
     Implementations must implement the LoadCatalog() method.
 
     @see wxFileTranslationsLoader
+
+    @since 2.9.1
  */
 class wxTranslationsLoader
 {
@@ -289,6 +291,8 @@ public:
     Catalogs are searched for in standard places (current directory first, then
     the system one), but you may also prepend additional directories to the
     search path with AddCatalogLookupPathPrefix().
+
+    @since 2.9.1
  */
 class wxFileTranslationsLoader : public wxTranslationsLoader
 {
