@@ -27,6 +27,7 @@
 // included wx/menu.h
 #include "wx/menuitem.h"
 
+class WXDLLIMPEXP_FWD_CORE wxFrame;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_CORE wxMenuBarBase;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
@@ -260,6 +261,11 @@ public:
     // a popup menu as well as the menu itself.
     void SetInvokingWindow(wxWindow *win);
     wxWindow *GetInvokingWindow() const;
+
+    // the window associated with this menu: this is the invoking window for
+    // popup menus or the top level window to which the menu bar is attached
+    // for menus which are part of a menu bar
+    wxWindow *GetWindow() const;
 
     // style
     long GetStyle() const { return m_style; }

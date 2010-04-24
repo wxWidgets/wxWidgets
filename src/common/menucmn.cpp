@@ -30,6 +30,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/menu.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -453,30 +454,17 @@ bool wxMenuBase::SendEvent(int id, int checked)
 
     bool processed = false;
 
-    // Try the menu's event handler
-    // if ( !processed )
-    {
-        wxEvtHandler *handler = GetEventHandler();
-        if ( handler )
-            processed = handler->SafelyProcessEvent(event);
-    }
+    // Try the menu's event handler first
+    wxEvtHandler *handler = GetEventHandler();
+    if ( handler )
+        processed = handler->SafelyProcessEvent(event);
 
-    // Try the window the menu was popped up from (and up through the
-    // hierarchy)
+    // Try the window the menu was popped up from or its menu bar belongs to
     if ( !processed )
     {
-        const wxMenuBase *menu = this;
-        while ( menu )
-        {
-            wxWindow *win = menu->GetInvokingWindow();
-            if ( win )
-            {
-                processed = win->HandleWindowEvent(event);
-                break;
-            }
-
-            menu = menu->GetParent();
-        }
+        wxWindow * const win = GetWindow();
+        if ( win )
+            processed = win->HandleWindowEvent(event);
     }
 
     return processed;
@@ -538,6 +526,11 @@ wxWindow *wxMenuBase::GetInvokingWindow() const
 
     // menu is a top level menu here
     return menu->m_invokingWindow;
+}
+
+wxWindow *wxMenuBase::GetWindow() const
+{
+    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
 }
 
 // ----------------------------------------------------------------------------

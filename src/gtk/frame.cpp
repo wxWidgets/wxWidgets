@@ -281,8 +281,6 @@ void wxFrame::DetachMenuBar()
 #if wxUSE_LIBHILDON || wxUSE_LIBHILDON2
         hildon_window_set_menu(HILDON_WINDOW(m_widget), NULL);
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-        m_frameMenuBar->UnsetInvokingWindow( this );
-
         gtk_widget_ref( m_frameMenuBar->m_widget );
 
         gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
@@ -305,8 +303,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
         hildon_window_set_menu(HILDON_WINDOW(m_widget),
                                GTK_MENU(m_frameMenuBar->m_menubar));
 #else // !wxUSE_LIBHILDON && !wxUSE_LIBHILDON2
-        m_frameMenuBar->SetInvokingWindow( this );
-
         m_frameMenuBar->SetParent(this);
 
         // menubar goes into top of vbox (m_mainWidget)
