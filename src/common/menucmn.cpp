@@ -529,7 +529,7 @@ wxWindow *wxMenuBase::GetInvokingWindow() const
 
 wxWindow *wxMenuBase::GetWindow() const
 {
-    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
+    return GetMenuBar() ? (wxWindow*)GetMenuBar()->GetFrame() : GetInvokingWindow();
 }
 
 // ----------------------------------------------------------------------------
