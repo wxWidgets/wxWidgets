@@ -52,8 +52,6 @@ static const int idMenuTitle = -3;
 // ============================================================================
 // implementation
 // ============================================================================
-static void wxMenubarUnsetInvokingWindow( wxMenu *menu ) ;
-static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win );
 
 // Menus
 
@@ -266,7 +264,7 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
 
     // Try the window the menu was popped up from
     // (and up through the hierarchy)
-    wxWindow *win = GetInvokingWindow();
+    wxWindow *win = GetWindow();
     if ( !processed && win )
         processed = win->HandleWindowEvent(event);
 
@@ -276,16 +274,6 @@ bool wxMenu::ProcessCommand(wxCommandEvent & event)
 // ---------------------------------------------------------------------------
 // other
 // ---------------------------------------------------------------------------
-
-wxWindow *wxMenu::GetWindow() const
-{
-    if ( m_invokingWindow != NULL )
-        return m_invokingWindow;
-    else if ( GetMenuBar() != NULL)
-        return (wxWindow *) GetMenuBar()->GetFrame();
-
-    return NULL;
-}
 
 // MacOS needs to know about submenus somewhere within this menu
 // before it can be displayed, also hide special menu items
@@ -381,18 +369,9 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
     // (and up through the hierarchy)
     if ( !processed )
     {
-        const wxMenuBase *menu = this;
-        while ( menu )
-        {
-            wxWindow *win = menu->GetInvokingWindow();
-            if ( win )
-            {
-                processed = win->HandleWindowEvent(event);
-                break;
-            }
-
-            menu = menu->GetParent();
-        }
+        wxWindow *win = GetWindow();
+        if ( win )
+            processed = win->HandleWindowEvent(event);
     }
 
     if ( !processed && senderWindow != NULL)
@@ -410,13 +389,13 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         if (event.GetSetEnabled())
             Enable(id, event.GetEnabled());
     }
-    else 
+    else
     {
 #if wxOSX_USE_CARBON
         // these two items are also managed by the Carbon Menu Manager, therefore we must
         // always reset them ourselves
         UInt32 cmd = 0;
-        
+
         if ( id == wxApp::s_macExitMenuItemId )
         {
             cmd = kHICommandQuit;
@@ -425,14 +404,14 @@ bool wxMenu::HandleCommandUpdateStatus( wxMenuItem* item, wxWindow* senderWindow
         {
             cmd = kHICommandPreferences;
         }
-        
+
         if ( cmd != 0 )
         {
             if ( !item->IsEnabled() || wxDialog::OSXHasModalDialogsOpen() )
                 DisableMenuCommand( NULL , cmd ) ;
             else
                 EnableMenuCommand( NULL , cmd ) ;
-            
+
         }
 #endif
     }
@@ -493,7 +472,7 @@ bool wxMenu::DoHandleMenuEvent(wxEvent& wxevent)
     }
     else
     {
-        wxWindow *win = GetInvokingWindow();
+        wxWindow *win = GetWindow();
         if (win)
         {
             if ( win->HandleWindowEvent(wxevent) )
@@ -531,8 +510,9 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_menuBarFrame = NULL;
-    m_invokingWindow = NULL;
     m_rootMenu = new wxMenu();
+    m_rootMenu->Attach(this);
+
     m_appleMenu = new wxMenu();
     m_appleMenu->SetAllowRearrange(false);
     m_appleMenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
@@ -865,9 +845,6 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     m_rootMenu->Remove(item);
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
 
-    if (m_invokingWindow)
-        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
-
     return menuOld;
 }
 
@@ -879,9 +856,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     m_titles.Insert(title, pos);
 
     m_rootMenu->Insert( pos+firstMenuPos, wxMenuItem::New( m_rootMenu, wxID_ANY, title, "", wxITEM_NORMAL, menu ) );
-
-    if (m_invokingWindow)
-        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
 
     return true;
 }
@@ -912,77 +886,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     m_rootMenu->AppendSubMenu(menu, title);
 
-    // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
-    // adding menu later on.
-    if (m_invokingWindow)
-        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
-
     return true;
-}
-
-static void wxMenubarUnsetInvokingWindow( wxMenu *menu )
-{
-    menu->SetInvokingWindow( NULL );
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-
-    while (node)
-    {
-        wxMenuItem *menuitem = node->GetData();
-        if (menuitem->IsSubMenu())
-            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu() );
-
-        node = node->GetNext();
-    }
-}
-
-static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
-{
-    menu->SetInvokingWindow( win );
-    wxMenuItem *menuitem;
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-
-    while (node)
-    {
-        menuitem = node->GetData();
-        if (menuitem->IsSubMenu())
-            wxMenubarSetInvokingWindow( menuitem->GetSubMenu() , win );
-
-        node = node->GetNext();
-    }
-}
-
-void wxMenuBar::UnsetInvokingWindow()
-{
-    m_invokingWindow = NULL;
-    wxMenubarUnsetInvokingWindow(m_appleMenu);
-
-    wxMenu *menu;
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-
-    while (node)
-    {
-        menu = node->GetData();
-        wxMenubarUnsetInvokingWindow( menu );
-
-        node = node->GetNext();
-    }
-}
-
-void wxMenuBar::SetInvokingWindow(wxFrame *frame)
-{
-    m_invokingWindow = frame;
-    wxMenubarSetInvokingWindow(m_appleMenu, frame);
-
-    wxMenu *menu;
-    wxMenuList::compatibility_iterator node = m_menus.GetFirst();
-
-    while (node)
-    {
-        menu = node->GetData();
-        wxMenubarSetInvokingWindow( menu, frame );
-
-        node = node->GetNext();
-    }
 }
 
 void wxMenuBar::Detach()
