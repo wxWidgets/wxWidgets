@@ -256,11 +256,11 @@ public:
     wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
 
     // Invoking window: this is set by wxWindow::PopupMenu() before showing a
-    // popup menu and reset after it's hidden. Notice that GetInvokingWindow()
-    // recurses upwards and will return the invoking window for any submenu of
-    // a popup menu as well as the menu itself.
+    // popup menu and reset after it's hidden. Notice that you probably want to
+    // use GetWindow() below instead of GetInvokingWindow() as the latter only
+    // returns non-NULL for the top level menus
     void SetInvokingWindow(wxWindow *win);
-    wxWindow *GetInvokingWindow() const;
+    wxWindow *GetInvokingWindow() const { return m_invokingWindow; }
 
     // the window associated with this menu: this is the invoking window for
     // popup menus or the top level window to which the menu bar is attached
