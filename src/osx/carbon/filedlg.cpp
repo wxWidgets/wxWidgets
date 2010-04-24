@@ -72,13 +72,13 @@ private:
     bool                m_saveMode;
     SInt16              m_lastRight;
     SInt16              m_lastBottom;
-    bool                m_firstAdjustRect;
+    bool                m_controlAdded;
 };
 
 OpenUserDataRec::OpenUserDataRec( wxFileDialog* d)
 {
     m_dialog = d;
-    m_firstAdjustRect = true;
+    m_controlAdded = false;
     m_saveMode = m_dialog->HasFdFlag(wxFD_SAVE);
     
     m_defaultLocation = m_dialog->GetDirectory();
@@ -187,6 +187,7 @@ void OpenUserDataRec::EventProcCBStart(NavCBRecPtr ioParams)
     
     if (m_dialog->GetExtraControl())
     {
+        m_controlAdded = true;
         ControlRef ref = m_dialog->GetExtraControl()->GetPeer()->GetControlRef();
         NavCustomControl(ioParams->context, kNavCtlAddControl, ref);
     }
@@ -264,15 +265,11 @@ void OpenUserDataRec::EventProcCBAdjustRect(NavCBRecPtr ioParams)
 {
     wxWindow* control = m_dialog->GetExtraControl();
     
-    if ( control )
+    if ( control && m_controlAdded)
     {
-        // workaround because the first time this is called it still seems to be 
-        // in composited coordinates, while later it is not
-        if ( !m_firstAdjustRect )
-        {
-            control->Move(ioParams->customRect.left , ioParams->customRect.top);
-        }
-        m_firstAdjustRect = false;
+        control->SetSize(ioParams->customRect.left , ioParams->customRect.top, 
+                         ioParams->customRect.right - ioParams->customRect.left,
+                         ioParams->customRect.bottom - ioParams->customRect.top);
     }
 }
 
@@ -467,6 +464,16 @@ wxFileDialog::wxFileDialog(
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
 }
 
+void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
+{
+    wxTopLevelWindow::Create( GetParent(), nativeWindow );
+    
+    if (HasExtraControlCreator())
+    {
+        CreateExtraControl();
+    }
+}
+
 int wxFileDialog::ShowModal()
 {
     m_paths.Empty();
@@ -531,15 +538,14 @@ int wxFileDialog::ShowModal()
             &dialog );
     }
     
-    wxNonOwnedWindow::Create( GetParent(), NavDialogGetWindow(dialog) );
-
-    if (HasExtraControlCreator())
-    {
-        CreateExtraControl();
-    }
+    SetupExtraControls(NavDialogGetWindow(dialog));
     
     if (err == noErr)
+    {
+        wxDialog::OSXBeginModalDialog();
         err = ::NavDialogRun(dialog);
+        wxDialog::OSXEndModalDialog();
+    }
 
     // clean up filter related data, etc.
     if (navFilterUPP)

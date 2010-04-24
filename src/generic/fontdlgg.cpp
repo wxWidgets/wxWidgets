@@ -282,7 +282,7 @@ void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 bool wxGenericFontDialog::DoCreate(wxWindow *parent)
 {
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, 0);
 
     if ( !wxDialog::Create( parent , wxID_ANY , wxT("Choose Font") ,
                             wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,

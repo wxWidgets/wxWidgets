@@ -2,12 +2,12 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 6 April 2010                                                        *
+# Date : 20 April 2010                                                       *
 #                                                                            *
 #*****************************************************************************
 
 .first
-	define wx [--.include.wx]
+	define wx [----.include.wx]
 
 .suffixes : .cpp
 
@@ -70,7 +70,7 @@ OBJECTS1=LexHTML.obj,LexInno.obj,LexKix.obj,LexLisp.obj,LexLout.obj,LexLua.obj,\
 	LexYAML.obj,LineMarker.obj,PositionCache.obj,PropSet.obj,RESearch.obj,\
 	RunStyles.obj,ScintillaBase.obj,Style.obj,StyleContext.obj,\
 	UniConversion.obj,ViewStyle.obj,WindowAccessor.obj,XPM.obj,\
-	PerLine.obj,Selection.obj,LexPowerPro.obj,Array.obj,LexCOBOL.obj,\
+	PerLine.obj,Selection.obj,LexPowerPro.obj,LexCOBOL.obj,\
 	LexMagik.obj,LexMarkdown.obj,LexMySQL.obj,LexNimrod.obj,\
 	LexPowerShell.obj,LexSML.obj,LexSorcus.obj,LexTACL.obj,LexTAL.obj
 
@@ -93,7 +93,7 @@ SOURCES=AutoComplete.cxx,CallTip.cxx,CellBuffer.cxx,CharClassify.cxx,\
 	LexYAML.cxx,LineMarker.cxx,PositionCache.cxx,PropSet.cxx,RESearch.cxx,\
 	RunStyles.cxx,ScintillaBase.cxx,Style.cxx,StyleContext.cxx,\
 	UniConversion.cxx,ViewStyle.cxx,WindowAccessor.cxx,XPM.cxx,\
-	PerLine.cxx,Selection.cxx,LexPowerPro.cxx,Array.cpp,LexCOBOL.cxx,\
+	PerLine.cxx,Selection.cxx,LexPowerPro.cxx,LexCOBOL.cxx,\
 	LexMagik.cxx,LexMarkdown.cxx,LexMySQL.cxx,LexNimrod.cxx,\
 	LexPowerShell.cxx,LexSML.cxx,LexSorcus.cxx,LexTACL.cxx,LexTAL.cxx
 
@@ -221,7 +221,6 @@ XPM.obj : XPM.cxx
 PerLine.obj : PerLine.cxx
 Selection.obj : Selection.cxx
 LexPowerPro.obj : LexPowerPro.cxx
-Array.obj : Array.cpp
 LexCOBOL.obj : LexCOBOL.cxx
 LexMagik.obj : LexMagik.cxx
 LexMarkdown.obj : LexMarkdown.cxx

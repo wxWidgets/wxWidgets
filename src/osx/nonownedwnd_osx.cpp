@@ -45,36 +45,30 @@ wxWindow* g_MacLastWindow = NULL ;
 // wxWindowMac utility functions
 // ---------------------------------------------------------------------------
 
-// Find an item given the Macintosh Window Reference
-
-WX_DECLARE_HASH_MAP(WXWindow, wxNonOwnedWindow*, wxPointerHash, wxPointerEqual, MacWindowMap);
+WX_DECLARE_HASH_MAP(WXWindow, wxNonOwnedWindowImpl*, wxPointerHash, wxPointerEqual, MacWindowMap);
 
 static MacWindowMap wxWinMacWindowList;
 
-wxNonOwnedWindow *wxFindWindowFromWXWindow(WXWindow inWindowRef)
+wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
 {
-    MacWindowMap::iterator node = wxWinMacWindowList.find(inWindowRef);
+    wxNonOwnedWindowImpl* impl = wxNonOwnedWindowImpl::FindFromWXWindow(win);
+    
+    return ( impl != NULL ? impl->GetWXPeer() : NULL ) ;
+}
 
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::FindFromWXWindow (WXWindow window)
+{
+    MacWindowMap::iterator node = wxWinMacWindowList.find(window);
+    
     return (node == wxWinMacWindowList.end()) ? NULL : node->second;
 }
 
-void wxAssociateWindowWithWXWindow(WXWindow inWindowRef, wxNonOwnedWindow *win) ;
-void wxAssociateWindowWithWXWindow(WXWindow inWindowRef, wxNonOwnedWindow *win)
-{
-    // adding NULL WindowRef is (first) surely a result of an error and
-    // nothing else :-)
-    wxCHECK_RET( inWindowRef != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
-
-    wxWinMacWindowList[inWindowRef] = win;
-}
-
-void wxRemoveWXWindowAssociation(wxNonOwnedWindow *win) ;
-void wxRemoveWXWindowAssociation(wxNonOwnedWindow *win)
+void wxNonOwnedWindowImpl::RemoveAssociations( wxNonOwnedWindowImpl* impl)
 {
     MacWindowMap::iterator it;
     for ( it = wxWinMacWindowList.begin(); it != wxWinMacWindowList.end(); ++it )
     {
-        if ( it->second == win )
+        if ( it->second == impl )
         {
             wxWinMacWindowList.erase(it);
             break;
@@ -82,9 +76,13 @@ void wxRemoveWXWindowAssociation(wxNonOwnedWindow *win)
     }
 }
 
-wxNonOwnedWindow* wxNonOwnedWindow::GetFromWXWindow( WXWindow win )
+void wxNonOwnedWindowImpl::Associate( WXWindow window, wxNonOwnedWindowImpl *impl )
 {
-    return wxFindWindowFromWXWindow( win );
+    // adding NULL WindowRef is (first) surely a result of an error and
+    // nothing else :-)
+    wxCHECK_RET( window != (WXWindow) NULL, wxT("attempt to add a NULL WindowRef to window list") );
+    
+    wxWinMacWindowList[window] = impl;
 }
 
 // ----------------------------------------------------------------------------
@@ -132,7 +130,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     int h = HeightDefault(size.y);
 
     m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, wxPoint(x,y) , wxSize(w,h) , style , GetExtraStyle(), name );
-    wxAssociateWindowWithWXWindow( m_nowpeer->GetWXWindow() , this ) ;
+    wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
     m_peer = wxWidgetImpl::CreateContentView(this);
 
     DoSetWindowVariant( m_windowVariant ) ;
@@ -152,7 +150,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent, WXWindow nativeWindow)
 {
     m_nowpeer = wxNonOwnedWindowImpl::CreateNonOwnedWindow(this, parent, nativeWindow );
     m_isNativeWindowWrapper = true;
-    wxAssociateWindowWithWXWindow( m_nowpeer->GetWXWindow() , this ) ;
+    wxNonOwnedWindowImpl::Associate( m_nowpeer->GetWXWindow() , m_nowpeer ) ;
     m_peer = wxWidgetImpl::CreateContentView(this);
 
     if ( parent )
@@ -165,7 +163,7 @@ wxNonOwnedWindow::~wxNonOwnedWindow()
 {
     SendDestroyEvent();
 
-    wxRemoveWXWindowAssociation( this ) ;
+    wxNonOwnedWindowImpl::RemoveAssociations(m_nowpeer) ;
 
     DestroyChildren();
 

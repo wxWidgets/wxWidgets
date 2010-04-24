@@ -300,11 +300,11 @@ public:
 
     virtual wxDirTraverseResult OnFile(const wxString& filename)
     {
-        wxULongLong sz = wxFileName::GetSize(filename);
-
         // wxFileName::GetSize won't use this class again as
         // we're passing it a file and not a directory;
         // thus we are sure to avoid an endless loop
+        wxULongLong sz = wxFileName::GetSize(filename);
+
         if (sz == wxInvalidSize)
         {
             // if the GetSize() failed (this can happen because e.g. a
@@ -327,7 +327,7 @@ public:
 
     wxULongLong GetTotalSize() const
         { return m_sz; }
-    wxArrayString &FilesSkipped()
+    const wxArrayString& GetSkippedFiles() const
         { return m_skippedFiles; }
 
 protected:
@@ -347,12 +347,11 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
         return wxInvalidSize;
 
     wxDirTraverserSumSize traverser;
-    if (dir.Traverse(traverser) == (size_t)-1 ||
-        traverser.GetTotalSize() == 0)
+    if (dir.Traverse(traverser) == (size_t)-1 )
         return wxInvalidSize;
 
     if (filesSkipped)
-        *filesSkipped = traverser.FilesSkipped();
+        *filesSkipped = traverser.GetSkippedFiles();
 
     return traverser.GetTotalSize();
 }

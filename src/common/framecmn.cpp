@@ -347,8 +347,10 @@ bool wxFrameBase::ShowMenuHelp(int menuId)
 {
 #if wxUSE_MENUS
     // if no help string found, we will clear the status bar text
+    //
+    // NB: wxID_NONE is used for (sub)menus themselves by wxMSW
     wxString helpString;
-    if ( menuId != wxID_SEPARATOR && menuId != -3 /* wxID_TITLE */ )
+    if ( menuId != wxID_SEPARATOR && menuId != wxID_NONE )
     {
         const wxMenuItem * const item = FindItemInMenuBar(menuId);
         if ( item && !item->IsSeparator() )

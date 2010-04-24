@@ -149,13 +149,10 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 }
 #endif // __WXWINCE__
 
-inline bool IsLessThanStdSize(const wxBitmap& bmp)
+inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
 {
-    // FIXME: these +4 are chosen so that 16*16 bitmaps pass this test with
-    //        default SM_CXMENUCHECK value but I have no idea what do we really
-    //        need to use here
-    return bmp.GetWidth() < ::GetSystemMetrics(SM_CXMENUCHECK) + 4 &&
-            bmp.GetHeight() < ::GetSystemMetrics(SM_CYMENUCHECK) + 4;
+    return bmp.GetWidth() > ::GetSystemMetrics(SM_CXMENUCHECK) ||
+            bmp.GetHeight() > ::GetSystemMetrics(SM_CYMENUCHECK);
 }
 
 } // anonymous namespace
@@ -529,8 +526,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 const wxBitmap& bmpUnchecked = pItem->GetBitmap(false),
                                 bmpChecked   = pItem->GetBitmap(true);
 
-                if ( (bmpUnchecked.Ok() && !IsLessThanStdSize(bmpUnchecked)) ||
-                     (bmpChecked.Ok()   && !IsLessThanStdSize(bmpChecked)) )
+                if ( (bmpUnchecked.Ok() && IsGreaterThanStdSize(bmpUnchecked)) ||
+                     (bmpChecked.Ok()   && IsGreaterThanStdSize(bmpChecked)) )
                 {
                     mustUseOwnerDrawn = true;
                 }
@@ -987,12 +984,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
 
 wxWindow *wxMenu::GetWindow() const
 {
-    if ( m_invokingWindow != NULL )
-        return m_invokingWindow;
-    else if ( GetMenuBar() != NULL)
-        return GetMenuBar()->GetFrame();
-
-    return NULL;
+    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
 }
 
 // ---------------------------------------------------------------------------

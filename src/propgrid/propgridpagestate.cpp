@@ -1397,18 +1397,7 @@ bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, unsigned int fl
 
 bool wxPropertyGridPageState::DoHideProperty( wxPGProperty* p, bool hide, int flags )
 {
-    if ( !hide )
-        p->ClearFlag( wxPG_PROP_HIDDEN );
-    else
-        p->SetFlag( wxPG_PROP_HIDDEN );
-
-    if ( flags & wxPG_RECURSE )
-    {
-        unsigned int i;
-        for ( i = 0; i < p->GetChildCount(); i++ )
-            DoHideProperty(p->Item(i), hide, flags | wxPG_RECURSE_STARTS);
-    }
-
+    p->DoHide(hide, flags);
     VirtualHeightChanged();
 
     return true;

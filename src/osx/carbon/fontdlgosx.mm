@@ -453,6 +453,7 @@ int wxFontDialog::ShowModal()
     //  the color panel until the color panel closes, switching
     //  back to the font panel modal loop once it does close.
     //
+    wxDialog::OSXBeginModalDialog();
     do
     {
         //
@@ -491,7 +492,8 @@ int wxFontDialog::ShowModal()
         //out of its modal loop because the color panel was
         //opened) return the font panel modal loop
     }while([theFPDelegate isClosed] == NO);
-
+    wxDialog::OSXEndModalDialog();
+    
     //free up the memory for the delegates - we don't need them anymore
     [theFPDelegate release];
     [theCPDelegate release];

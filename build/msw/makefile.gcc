@@ -349,6 +349,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_init.o \
 	$(OBJS)\monodll_intl.o \
 	$(OBJS)\monodll_ipcbase.o \
+	$(OBJS)\monodll_languageinfo.o \
 	$(OBJS)\monodll_list.o \
 	$(OBJS)\monodll_log.o \
 	$(OBJS)\monodll_longlong.o \
@@ -378,6 +379,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_timercmn.o \
 	$(OBJS)\monodll_timerimpl.o \
 	$(OBJS)\monodll_tokenzr.o \
+	$(OBJS)\monodll_translation.o \
 	$(OBJS)\monodll_txtstrm.o \
 	$(OBJS)\monodll_unichar.o \
 	$(OBJS)\monodll_uri.o \
@@ -495,6 +497,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_init.o \
 	$(OBJS)\monolib_intl.o \
 	$(OBJS)\monolib_ipcbase.o \
+	$(OBJS)\monolib_languageinfo.o \
 	$(OBJS)\monolib_list.o \
 	$(OBJS)\monolib_log.o \
 	$(OBJS)\monolib_longlong.o \
@@ -524,6 +527,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_timercmn.o \
 	$(OBJS)\monolib_timerimpl.o \
 	$(OBJS)\monolib_tokenzr.o \
+	$(OBJS)\monolib_translation.o \
 	$(OBJS)\monolib_txtstrm.o \
 	$(OBJS)\monolib_unichar.o \
 	$(OBJS)\monolib_uri.o \
@@ -639,6 +643,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_init.o \
 	$(OBJS)\basedll_intl.o \
 	$(OBJS)\basedll_ipcbase.o \
+	$(OBJS)\basedll_languageinfo.o \
 	$(OBJS)\basedll_list.o \
 	$(OBJS)\basedll_log.o \
 	$(OBJS)\basedll_longlong.o \
@@ -668,6 +673,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_timercmn.o \
 	$(OBJS)\basedll_timerimpl.o \
 	$(OBJS)\basedll_tokenzr.o \
+	$(OBJS)\basedll_translation.o \
 	$(OBJS)\basedll_txtstrm.o \
 	$(OBJS)\basedll_unichar.o \
 	$(OBJS)\basedll_uri.o \
@@ -767,6 +773,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_init.o \
 	$(OBJS)\baselib_intl.o \
 	$(OBJS)\baselib_ipcbase.o \
+	$(OBJS)\baselib_languageinfo.o \
 	$(OBJS)\baselib_list.o \
 	$(OBJS)\baselib_log.o \
 	$(OBJS)\baselib_longlong.o \
@@ -796,6 +803,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_timercmn.o \
 	$(OBJS)\baselib_timerimpl.o \
 	$(OBJS)\baselib_tokenzr.o \
+	$(OBJS)\baselib_translation.o \
 	$(OBJS)\baselib_txtstrm.o \
 	$(OBJS)\baselib_unichar.o \
 	$(OBJS)\baselib_uri.o \
@@ -5925,6 +5933,9 @@ $(OBJS)\monodll_intl.o: ../../src/common/intl.cpp
 $(OBJS)\monodll_ipcbase.o: ../../src/common/ipcbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_languageinfo.o: ../../src/common/languageinfo.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_list.o: ../../src/common/list.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6010,6 +6021,9 @@ $(OBJS)\monodll_timerimpl.o: ../../src/common/timerimpl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_tokenzr.o: ../../src/common/tokenzr.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_translation.o: ../../src/common/translation.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_txtstrm.o: ../../src/common/txtstrm.cpp
@@ -8115,6 +8129,9 @@ $(OBJS)\monolib_intl.o: ../../src/common/intl.cpp
 $(OBJS)\monolib_ipcbase.o: ../../src/common/ipcbase.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_languageinfo.o: ../../src/common/languageinfo.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_list.o: ../../src/common/list.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8200,6 +8217,9 @@ $(OBJS)\monolib_timerimpl.o: ../../src/common/timerimpl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_tokenzr.o: ../../src/common/tokenzr.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_translation.o: ../../src/common/translation.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_txtstrm.o: ../../src/common/txtstrm.cpp
@@ -10305,6 +10325,9 @@ $(OBJS)\basedll_intl.o: ../../src/common/intl.cpp
 $(OBJS)\basedll_ipcbase.o: ../../src/common/ipcbase.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_languageinfo.o: ../../src/common/languageinfo.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_list.o: ../../src/common/list.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10390,6 +10413,9 @@ $(OBJS)\basedll_timerimpl.o: ../../src/common/timerimpl.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_tokenzr.o: ../../src/common/tokenzr.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_translation.o: ../../src/common/translation.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_txtstrm.o: ../../src/common/txtstrm.cpp
@@ -10632,6 +10658,9 @@ $(OBJS)\baselib_intl.o: ../../src/common/intl.cpp
 $(OBJS)\baselib_ipcbase.o: ../../src/common/ipcbase.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\baselib_languageinfo.o: ../../src/common/languageinfo.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\baselib_list.o: ../../src/common/list.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10717,6 +10746,9 @@ $(OBJS)\baselib_timerimpl.o: ../../src/common/timerimpl.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_tokenzr.o: ../../src/common/tokenzr.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_translation.o: ../../src/common/translation.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_txtstrm.o: ../../src/common/txtstrm.cpp

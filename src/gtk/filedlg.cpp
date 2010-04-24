@@ -173,7 +173,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& name)
     : wxFileDialogBase()
 {
-    parent = GetParentForModalDialog(parent);
+    parent = GetParentForModalDialog(parent, style);
 
     if (!wxFileDialogBase::Create(parent, message, defaultDir, defaultFileName,
                                   wildCard, style, pos, sz, name))

@@ -13,9 +13,9 @@
     The wxAny class represents a container for any type. Its value
     can be changed at run time, possibly to a different type of value.
 
-    wxAny is a backwards incompatible successor class for wxVariant,
-    essentially doing the same thing in a more modern, template-based manner
-    and with transparent support for any user data type.
+    wxAny is a backwards-incompatible (but convertible) successor class for
+    wxVariant, essentially doing the same thing in a more modern, template-
+    based manner and with transparent support for any user data type.
 
     Some pseudo-code'ish example of use with arbitrary user data:
 
@@ -88,19 +88,33 @@ public:
     wxAny(const wxAny& any);
 
     /**
+        Constructs wxAny, converting value from wxVariant.
+
+        @remarks Because of this conversion, it is not usually possible to
+                 have wxAny that actually holds a wxVariant. If wxVariant
+                 cannot be converted to a specific data type, wxAny will then
+                 hold and manage reference to wxVariantData* similar to how
+                 wxVariant does.
+    */
+    wxAny(const wxVariant& variant);
+
+    /**
         Destructor.
     */
     ~wxAny();
 
     /**
-        This template function converts wxAny into given type. No dynamic
-        conversion is performed, so if the type is incorrect an assertion
-        failure will occur in debug builds, and a bogus value is returned
-        in release ones.
+        This template function converts wxAny into given type. In most cases
+        no type conversion is performed, so if the type is incorrect an
+        assertion failure will occur.
 
-        @remarks This template function may not work properly with Visual C++
-                6. For full compiler compatibility, please use
-                wxANY_AS(any, T) macro instead.
+        @remarks For conveniency, conversion is done when T is wxString. This
+                 is useful when a string literal (which are treated as
+                 const char* and const wchar_t*) has been assigned to wxAny.
+
+                 This template function may not work properly with Visual C++
+                 6. For full compiler compatibility, please use
+                 wxANY_AS(any, T) macro instead.
     */
     template<typename T>
     T As() const;
@@ -126,6 +140,16 @@ public:
     */
     template<typename T>
     bool GetAs(T* value) const;
+
+    /**
+        Specialization of GetAs() that allows conversion of wxAny into
+        wxVariant.
+
+        @return Returns @true if conversion was successful. Conversion usually
+                only fails if variant used custom wxVariantData that did not
+                implement the wxAny to wxVariant conversion functions.
+    */
+    bool GetAs(wxVariant* value) const;
 
     /**
         Returns the value type as wxAnyValueType instance.
@@ -154,6 +178,7 @@ public:
     template<typename T>
     wxAny& operator=(const T &value);
     wxAny& operator=(const wxAny &any);
+    wxAny& operator=(const wxVariant &variant);
     //@}
 
     //@{

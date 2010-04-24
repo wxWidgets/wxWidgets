@@ -366,6 +366,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_init.obj \
 	$(OBJS)\monodll_intl.obj \
 	$(OBJS)\monodll_ipcbase.obj \
+	$(OBJS)\monodll_languageinfo.obj \
 	$(OBJS)\monodll_list.obj \
 	$(OBJS)\monodll_log.obj \
 	$(OBJS)\monodll_longlong.obj \
@@ -395,6 +396,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_timercmn.obj \
 	$(OBJS)\monodll_timerimpl.obj \
 	$(OBJS)\monodll_tokenzr.obj \
+	$(OBJS)\monodll_translation.obj \
 	$(OBJS)\monodll_txtstrm.obj \
 	$(OBJS)\monodll_unichar.obj \
 	$(OBJS)\monodll_uri.obj \
@@ -518,6 +520,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_init.obj \
 	$(OBJS)\monolib_intl.obj \
 	$(OBJS)\monolib_ipcbase.obj \
+	$(OBJS)\monolib_languageinfo.obj \
 	$(OBJS)\monolib_list.obj \
 	$(OBJS)\monolib_log.obj \
 	$(OBJS)\monolib_longlong.obj \
@@ -547,6 +550,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_timercmn.obj \
 	$(OBJS)\monolib_timerimpl.obj \
 	$(OBJS)\monolib_tokenzr.obj \
+	$(OBJS)\monolib_translation.obj \
 	$(OBJS)\monolib_txtstrm.obj \
 	$(OBJS)\monolib_unichar.obj \
 	$(OBJS)\monolib_uri.obj \
@@ -666,6 +670,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_init.obj \
 	$(OBJS)\basedll_intl.obj \
 	$(OBJS)\basedll_ipcbase.obj \
+	$(OBJS)\basedll_languageinfo.obj \
 	$(OBJS)\basedll_list.obj \
 	$(OBJS)\basedll_log.obj \
 	$(OBJS)\basedll_longlong.obj \
@@ -695,6 +700,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_timercmn.obj \
 	$(OBJS)\basedll_timerimpl.obj \
 	$(OBJS)\basedll_tokenzr.obj \
+	$(OBJS)\basedll_translation.obj \
 	$(OBJS)\basedll_txtstrm.obj \
 	$(OBJS)\basedll_unichar.obj \
 	$(OBJS)\basedll_uri.obj \
@@ -800,6 +806,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_init.obj \
 	$(OBJS)\baselib_intl.obj \
 	$(OBJS)\baselib_ipcbase.obj \
+	$(OBJS)\baselib_languageinfo.obj \
 	$(OBJS)\baselib_list.obj \
 	$(OBJS)\baselib_log.obj \
 	$(OBJS)\baselib_longlong.obj \
@@ -829,6 +836,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_timercmn.obj \
 	$(OBJS)\baselib_timerimpl.obj \
 	$(OBJS)\baselib_tokenzr.obj \
+	$(OBJS)\baselib_translation.obj \
 	$(OBJS)\baselib_txtstrm.obj \
 	$(OBJS)\baselib_unichar.obj \
 	$(OBJS)\baselib_uri.obj \
@@ -6356,6 +6364,9 @@ $(OBJS)\monodll_intl.obj: ..\..\src\common\intl.cpp
 $(OBJS)\monodll_ipcbase.obj: ..\..\src\common\ipcbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\ipcbase.cpp
 
+$(OBJS)\monodll_languageinfo.obj: ..\..\src\common\languageinfo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\languageinfo.cpp
+
 $(OBJS)\monodll_list.obj: ..\..\src\common\list.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\list.cpp
 
@@ -6442,6 +6453,9 @@ $(OBJS)\monodll_timerimpl.obj: ..\..\src\common\timerimpl.cpp
 
 $(OBJS)\monodll_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\tokenzr.cpp
+
+$(OBJS)\monodll_translation.obj: ..\..\src\common\translation.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\translation.cpp
 
 $(OBJS)\monodll_txtstrm.obj: ..\..\src\common\txtstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\txtstrm.cpp
@@ -8546,6 +8560,9 @@ $(OBJS)\monolib_intl.obj: ..\..\src\common\intl.cpp
 $(OBJS)\monolib_ipcbase.obj: ..\..\src\common\ipcbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\ipcbase.cpp
 
+$(OBJS)\monolib_languageinfo.obj: ..\..\src\common\languageinfo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\languageinfo.cpp
+
 $(OBJS)\monolib_list.obj: ..\..\src\common\list.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\list.cpp
 
@@ -8632,6 +8649,9 @@ $(OBJS)\monolib_timerimpl.obj: ..\..\src\common\timerimpl.cpp
 
 $(OBJS)\monolib_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\tokenzr.cpp
+
+$(OBJS)\monolib_translation.obj: ..\..\src\common\translation.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\translation.cpp
 
 $(OBJS)\monolib_txtstrm.obj: ..\..\src\common\txtstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\txtstrm.cpp
@@ -10736,6 +10756,9 @@ $(OBJS)\basedll_intl.obj: ..\..\src\common\intl.cpp
 $(OBJS)\basedll_ipcbase.obj: ..\..\src\common\ipcbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\ipcbase.cpp
 
+$(OBJS)\basedll_languageinfo.obj: ..\..\src\common\languageinfo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\languageinfo.cpp
+
 $(OBJS)\basedll_list.obj: ..\..\src\common\list.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\list.cpp
 
@@ -10822,6 +10845,9 @@ $(OBJS)\basedll_timerimpl.obj: ..\..\src\common\timerimpl.cpp
 
 $(OBJS)\basedll_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\tokenzr.cpp
+
+$(OBJS)\basedll_translation.obj: ..\..\src\common\translation.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\translation.cpp
 
 $(OBJS)\basedll_txtstrm.obj: ..\..\src\common\txtstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\txtstrm.cpp
@@ -11063,6 +11089,9 @@ $(OBJS)\baselib_intl.obj: ..\..\src\common\intl.cpp
 $(OBJS)\baselib_ipcbase.obj: ..\..\src\common\ipcbase.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\ipcbase.cpp
 
+$(OBJS)\baselib_languageinfo.obj: ..\..\src\common\languageinfo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\languageinfo.cpp
+
 $(OBJS)\baselib_list.obj: ..\..\src\common\list.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\list.cpp
 
@@ -11149,6 +11178,9 @@ $(OBJS)\baselib_timerimpl.obj: ..\..\src\common\timerimpl.cpp
 
 $(OBJS)\baselib_tokenzr.obj: ..\..\src\common\tokenzr.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\tokenzr.cpp
+
+$(OBJS)\baselib_translation.obj: ..\..\src\common\translation.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\translation.cpp
 
 $(OBJS)\baselib_txtstrm.obj: ..\..\src\common\txtstrm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\txtstrm.cpp

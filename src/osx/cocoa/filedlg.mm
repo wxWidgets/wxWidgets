@@ -54,7 +54,7 @@ wxFileDialog::wxFileDialog(
 
 bool wxFileDialog::SupportsExtraControl() const
 {
-    return false;
+    return true;
 }
 
 NSArray* GetTypesFromFilter( const wxString filter )
@@ -167,6 +167,9 @@ void wxFileDialog::ShowWindowModal()
     if (HasFlag(wxFD_SAVE))
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
+
+        SetupExtraControls(sPanel);
+
         // makes things more convenient:
         [sPanel setCanCreateDirectories:YES];
         [sPanel setMessage:cf.AsNSString()];
@@ -187,6 +190,9 @@ void wxFileDialog::ShowWindowModal()
     {
         NSArray* types = GetTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
+        
+        SetupExtraControls(oPanel);
+
         [oPanel setTreatsFilePackagesAsDirectories:NO];
         [oPanel setCanChooseDirectories:NO];
         [oPanel setResolvesAliases:YES];
@@ -204,10 +210,31 @@ void wxFileDialog::ShowWindowModal()
     }
 }
 
+void wxFileDialog::SetupExtraControls(WXWindow nativeWindow)
+{
+    NSSavePanel* panel = (NSSavePanel*) nativeWindow;
+    
+    wxNonOwnedWindow::Create( GetParent(), nativeWindow );
+    
+    if (HasExtraControlCreator())
+    {
+        CreateExtraControl();
+        wxWindow* control = GetExtraControl();
+        if ( control )
+        {
+            NSView* accView = control->GetHandle();
+            [accView removeFromSuperview];
+            [panel setAccessoryView:accView];
+        }
+        else
+        {
+            [panel setAccessoryView:nil];
+        }
+    }
+}
+
 int wxFileDialog::ShowModal()
 {
-    NSSavePanel *panel = nil;
-
     wxCFStringRef cf( m_message );
 
     wxCFStringRef dir( m_dir );
@@ -230,6 +257,9 @@ int wxFileDialog::ShowModal()
     if (HasFlag(wxFD_SAVE))
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
+
+        SetupExtraControls(sPanel);
+
         // makes things more convenient:
         [sPanel setCanCreateDirectories:YES];
         [sPanel setMessage:cf.AsNSString()];
@@ -244,11 +274,16 @@ int wxFileDialog::ShowModal()
 
         returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
         ModalFinishedCallback(sPanel, returnCode);
+
+        [sPanel setAccessoryView:nil];
     }
     else
     {
         NSArray* types = GetTypesFromFilter( m_wildCard ) ;
         NSOpenPanel* oPanel = [NSOpenPanel openPanel];
+        
+        SetupExtraControls(oPanel);
+                
         [oPanel setTreatsFilePackagesAsDirectories:NO];
         [oPanel setCanChooseDirectories:NO];
         [oPanel setResolvesAliases:YES];
@@ -259,6 +294,8 @@ int wxFileDialog::ShowModal()
                         file:file.AsNSString() types:types];
 
         ModalFinishedCallback(oPanel, returnCode);
+        
+        [oPanel setAccessoryView:nil];
         
         if ( types != nil )
             [types release];
@@ -308,6 +345,8 @@ void wxFileDialog::ModalFinishedCallback(void* panel, int returnCode)
     
     if (GetModality() == wxDIALOG_MODALITY_WINDOW_MODAL)
         SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+    
+    [(NSSavePanel*) panel setAccessoryView:nil];
 }
 
 #endif // wxUSE_FILEDLG

@@ -162,7 +162,6 @@ wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
     return new wxEventLoop;
 }
 
-wxNonOwnedWindow *wxFindWindowFromWXWindow(WXWindow inWindowRef);
 wxWindow* wxFindWindowAtPoint(wxWindow* win, const wxPoint& pt);
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -174,7 +173,7 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
     if ( FindWindow( screenPoint , &windowRef ) )
     {
-        wxNonOwnedWindow *nonOwned = wxFindWindowFromWXWindow( windowRef );
+        wxNonOwnedWindow *nonOwned = wxNonOwnedWindow::GetFromWXWindow( windowRef );
 
         if ( nonOwned )
             return wxFindWindowAtPoint( nonOwned , pt );

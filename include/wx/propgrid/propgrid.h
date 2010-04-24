@@ -2200,11 +2200,6 @@ inline void wxPGProperty::SetEditor( const wxString& editorName )
     m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
 }
 
-inline bool wxPGProperty::Hide( bool hide, int flags )
-{
-    return GetGrid()->HideProperty(this, hide, flags);
-}
-
 inline bool wxPGProperty::SetMaxLength( int maxLen )
 {
     return GetGrid()->SetPropertyMaxLength(this,maxLen);

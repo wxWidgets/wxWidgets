@@ -70,7 +70,7 @@ NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 
 WXWidget wxWidgetImpl::FindFocus()
 {
-    return GetFocusedViewInWindow( [[NSApplication sharedApplication] keyWindow] );
+    return GetFocusedViewInWindow( [NSApp keyWindow] );
 }
 
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
@@ -394,14 +394,28 @@ void wxWidgetCocoaImpl::SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEve
 {
     int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
-    wxPoint screenMouseLocation = wxFromNSPoint( NULL, [nsEvent locationInWindow]);
+
+    NSPoint locationInWindow = [nsEvent locationInWindow];
+    
+    // adjust coordinates for the window of the target view
+    if ( [nsEvent window] != [m_osxView window] )
+    {
+        if ( [nsEvent window] != nil )
+            locationInWindow = [[nsEvent window] convertBaseToScreen:locationInWindow];
+
+        if ( [m_osxView window] != nil )
+            locationInWindow = [[m_osxView window] convertScreenToBase:locationInWindow];
+    }
+
+    NSPoint locationInView = [m_osxView convertPoint:locationInWindow fromView:nil];
+    wxPoint locationInViewWX = wxFromNSPoint( m_osxView, locationInView );
 
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = 0;
 
-    wxevent.m_x = screenMouseLocation.x;
-    wxevent.m_y = screenMouseLocation.y;
+    wxevent.m_x = locationInViewWX.x;
+    wxevent.m_y = locationInViewWX.y;
     wxevent.m_shiftDown = modifiers & NSShiftKeyMask;
     wxevent.m_controlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
@@ -1994,13 +2008,8 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
-    NSPoint clickLocation;
-    clickLocation = [m_osxView convertPoint:[event locationInWindow] fromView:nil];
-    wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent(wxevent , event) ;
-    wxevent.m_x = pt.x;
-    wxevent.m_y = pt.y;
 
     return GetWXPeer()->HandleWindowEvent(wxevent);
 }

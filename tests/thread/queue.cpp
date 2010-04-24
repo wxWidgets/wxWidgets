@@ -174,7 +174,7 @@ void *QueueTestCase::MyThread::Entry()
     while ( messagesReceived < m_maxMsgCount )
     {
         wxMessageQueueError result;
-        int msg;
+        int msg = -1; // just to suppress "possibly uninitialized" warnings
 
         if ( m_type == WaitWithTimeout )
             result = m_queue.ReceiveTimeout(1000, msg);

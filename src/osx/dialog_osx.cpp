@@ -23,10 +23,23 @@
 
 #include "wx/osx/private.h"
 
-// Lists to keep track of windows, so we can disable/enable them
-// for modal dialogs
+static int s_openDialogs = 0;
+bool wxDialog::OSXHasModalDialogsOpen()
+{
+    return s_openDialogs > 0;
+}
 
-wxList wxModalDialogs;
+void wxDialog::OSXBeginModalDialog()
+{
+    s_openDialogs++;
+}
+
+void wxDialog::OSXEndModalDialog()
+{
+    wxASSERT_MSG( s_openDialogs > 0, "incorrect internal modal dialog count");
+    s_openDialogs--;
+}
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxDialog, wxTopLevelWindow)
 
@@ -130,7 +143,9 @@ int wxDialog::ShowModal()
     wxModalEventLoop modalLoop(this);
     m_eventLoop = &modalLoop;
     
+    wxDialog::OSXBeginModalDialog();
     modalLoop.Run();
+    wxDialog::OSXEndModalDialog();
     
     m_eventLoop = NULL;
     

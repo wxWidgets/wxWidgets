@@ -116,12 +116,13 @@ wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
     return parent;
 }
 
-wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
+wxWindow *
+wxDialogBase::GetParentForModalDialog(wxWindow *parent, long style) const
 {
     // creating a parent-less modal dialog will result (under e.g. wxGTK2)
     // in an unfocused dialog, so try to find a valid parent for it unless we
     // were explicitly asked not to
-    if ( HasFlag(wxDIALOG_NO_PARENT) )
+    if ( style & wxDIALOG_NO_PARENT )
         return NULL;
 
     // first try the given parent

@@ -960,15 +960,15 @@ int wxFTP::GetFileSize(const wxString& fileName)
                     // substring containing the name we are looking for. We
                     // stop the iteration at the first occurrence of the
                     // filename. The search is not case-sensitive.
-                    bool foundIt = false;
-
+                    const size_t numFiles = fileList.size();
                     size_t i;
-                    for ( i = 0; !foundIt && i < fileList.GetCount(); i++ )
+                    for ( i = 0; i < fileList.GetCount(); i++ )
                     {
-                        foundIt = fileList[i].Upper().Contains(fileName.Upper());
+                        if ( fileList[i].Upper().Contains(fileName.Upper()) )
+                            break;
                     }
 
-                    if ( foundIt )
+                    if ( i != numFiles )
                     {
                         // The index i points to the first occurrence of
                         // fileName in the array Now we have to find out what

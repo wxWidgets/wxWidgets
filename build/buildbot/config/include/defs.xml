@@ -335,7 +335,8 @@
 -->
 <xsl:template name="run-tests">
     <xsl:param name="content"/>
-    <xsl:param name="options"/>
+    <xsl:param name="options" select="'-t'"/>
+    <xsl:param name="guioptions" select="$options"/>
     <xsl:param name="msw"><is-msw/></xsl:param>
     <test>
         <defaults content="{$content}">
@@ -347,10 +348,10 @@
             <command>
                 <xsl:choose>
                     <xsl:when test="$msw = 'true'">
-                        <run-tests-win options="{$options}"/>
+                        <run-tests-win options="{$options}" guioptions="{$guioptions}"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <run-tests-unix options="{$options}"/>
+                        <run-tests-unix options="{$options}" guioptions="{$guioptions}"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </command>
@@ -360,6 +361,7 @@
 
 <xsl:template name="run-tests-win">
     <xsl:param name="options"/>
+    <xsl:param name="guioptions"/>
 <normalize-space>
 cd tests &amp;&amp; runtests.bat
 </normalize-space>
@@ -367,10 +369,31 @@ cd tests &amp;&amp; runtests.bat
 
 <xsl:template name="run-tests-unix">
     <xsl:param name="options"/>
+    <xsl:param name="guioptions"/>
 ERR=0
 cd tests || exit 0
-./test <xsl:value-of select="normalize-space($options)"/> || ERR=$?
-if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui || ERR=$?; fi
+ulimit -c unlimited
+
+try()
+{
+    rm -f core
+    echo Running: "$@"
+    "$@" || ERR=$?
+
+    if [ -f core -a -x "`which gdb`" ]; then
+        echo Crashed, attempting to display backtrace:
+        gdb -batch -c core -ex 'set pagination off' -ex bt "$1"
+    fi
+
+    echo
+}
+
+try ./test <xsl:value-of select="normalize-space($options)"/>
+
+if [ -n "$DISPLAY" -a -x test_gui ]; then
+    try ./test_gui <xsl:value-of select="normalize-space($guioptions)"/>
+fi
+
 exit $ERR
 </xsl:template>
 

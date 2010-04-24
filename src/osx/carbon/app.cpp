@@ -249,18 +249,13 @@ short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 
 short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
-    wxWindow* win = GetTopWindow() ;
-    if ( win )
+    wxCloseEvent event;
+    wxTheApp->OnQueryEndSession(event);
+    if ( !event.GetVeto() )
     {
-        wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, s_macExitMenuItemId);
-        if (!win->GetEventHandler()->ProcessEvent(exitEvent))
-            win->Close(true) ;
+        wxCloseEvent event;
+        wxTheApp->OnEndSession(event);
     }
-    else
-    {
-        ExitMainLoop() ;
-    }
-
     return noErr ;
 }
 
@@ -1127,10 +1122,17 @@ void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))
 // user can veto the close, and therefore the end session.
 void wxApp::OnQueryEndSession(wxCloseEvent& event)
 {
-    if (GetTopWindow())
+    if ( !wxDialog::OSXHasModalDialogsOpen() )
     {
-        if (!GetTopWindow()->Close(!event.CanVeto()))
-            event.Veto(true);
+        if (GetTopWindow())
+        {
+            if (!GetTopWindow()->Close(!event.CanVeto()))
+                event.Veto(true);
+        }
+    }
+    else
+    {
+        event.Veto(true);
     }
 }
 

@@ -3557,6 +3557,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_init.obj &
 	$(OBJS)\monodll_intl.obj &
 	$(OBJS)\monodll_ipcbase.obj &
+	$(OBJS)\monodll_languageinfo.obj &
 	$(OBJS)\monodll_list.obj &
 	$(OBJS)\monodll_log.obj &
 	$(OBJS)\monodll_longlong.obj &
@@ -3586,6 +3587,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_timercmn.obj &
 	$(OBJS)\monodll_timerimpl.obj &
 	$(OBJS)\monodll_tokenzr.obj &
+	$(OBJS)\monodll_translation.obj &
 	$(OBJS)\monodll_txtstrm.obj &
 	$(OBJS)\monodll_unichar.obj &
 	$(OBJS)\monodll_uri.obj &
@@ -3701,6 +3703,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_init.obj &
 	$(OBJS)\monolib_intl.obj &
 	$(OBJS)\monolib_ipcbase.obj &
+	$(OBJS)\monolib_languageinfo.obj &
 	$(OBJS)\monolib_list.obj &
 	$(OBJS)\monolib_log.obj &
 	$(OBJS)\monolib_longlong.obj &
@@ -3730,6 +3733,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_timercmn.obj &
 	$(OBJS)\monolib_timerimpl.obj &
 	$(OBJS)\monolib_tokenzr.obj &
+	$(OBJS)\monolib_translation.obj &
 	$(OBJS)\monolib_txtstrm.obj &
 	$(OBJS)\monolib_unichar.obj &
 	$(OBJS)\monolib_uri.obj &
@@ -3843,6 +3847,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_init.obj &
 	$(OBJS)\basedll_intl.obj &
 	$(OBJS)\basedll_ipcbase.obj &
+	$(OBJS)\basedll_languageinfo.obj &
 	$(OBJS)\basedll_list.obj &
 	$(OBJS)\basedll_log.obj &
 	$(OBJS)\basedll_longlong.obj &
@@ -3872,6 +3877,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_timercmn.obj &
 	$(OBJS)\basedll_timerimpl.obj &
 	$(OBJS)\basedll_tokenzr.obj &
+	$(OBJS)\basedll_translation.obj &
 	$(OBJS)\basedll_txtstrm.obj &
 	$(OBJS)\basedll_unichar.obj &
 	$(OBJS)\basedll_uri.obj &
@@ -3970,6 +3976,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_init.obj &
 	$(OBJS)\baselib_intl.obj &
 	$(OBJS)\baselib_ipcbase.obj &
+	$(OBJS)\baselib_languageinfo.obj &
 	$(OBJS)\baselib_list.obj &
 	$(OBJS)\baselib_log.obj &
 	$(OBJS)\baselib_longlong.obj &
@@ -3999,6 +4006,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_timercmn.obj &
 	$(OBJS)\baselib_timerimpl.obj &
 	$(OBJS)\baselib_tokenzr.obj &
+	$(OBJS)\baselib_translation.obj &
 	$(OBJS)\baselib_txtstrm.obj &
 	$(OBJS)\baselib_unichar.obj &
 	$(OBJS)\baselib_uri.obj &
@@ -6183,6 +6191,9 @@ $(OBJS)\monodll_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
 $(OBJS)\monodll_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_languageinfo.obj :  .AUTODEPEND ..\..\src\common\languageinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6268,6 +6279,9 @@ $(OBJS)\monodll_timerimpl.obj :  .AUTODEPEND ..\..\src\common\timerimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_translation.obj :  .AUTODEPEND ..\..\src\common\translation.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
@@ -8373,6 +8387,9 @@ $(OBJS)\monolib_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
 $(OBJS)\monolib_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_languageinfo.obj :  .AUTODEPEND ..\..\src\common\languageinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8458,6 +8475,9 @@ $(OBJS)\monolib_timerimpl.obj :  .AUTODEPEND ..\..\src\common\timerimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_translation.obj :  .AUTODEPEND ..\..\src\common\translation.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
@@ -10563,6 +10583,9 @@ $(OBJS)\basedll_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
 $(OBJS)\basedll_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_languageinfo.obj :  .AUTODEPEND ..\..\src\common\languageinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10648,6 +10671,9 @@ $(OBJS)\basedll_timerimpl.obj :  .AUTODEPEND ..\..\src\common\timerimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_translation.obj :  .AUTODEPEND ..\..\src\common\translation.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
@@ -10890,6 +10916,9 @@ $(OBJS)\baselib_intl.obj :  .AUTODEPEND ..\..\src\common\intl.cpp
 $(OBJS)\baselib_ipcbase.obj :  .AUTODEPEND ..\..\src\common\ipcbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_languageinfo.obj :  .AUTODEPEND ..\..\src\common\languageinfo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_list.obj :  .AUTODEPEND ..\..\src\common\list.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -10975,6 +11004,9 @@ $(OBJS)\baselib_timerimpl.obj :  .AUTODEPEND ..\..\src\common\timerimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_translation.obj :  .AUTODEPEND ..\..\src\common\translation.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp

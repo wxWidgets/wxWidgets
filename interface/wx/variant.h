@@ -12,6 +12,11 @@
     The wxVariant class represents a container for any type. A variant's value
     can be changed at run time, possibly to a different type of value.
 
+    @note As of wxWidgets 2.9.1, wxAny has become the preferred variant class.
+          While most controls still use wxVariant in their interface, you
+          can start using wxAny in your code because of an implicit conversion
+          layer. See below for more information.
+
     As standard, wxVariant can store values of type bool, wxChar, double, long,
     string, string list, time, date, void pointer, list of strings, and list of
     variants. However, an application can extend wxVariant's capabilities by
@@ -85,10 +90,71 @@
     wxDynamicCast(), to use C++ RTTI type information instead of wxWidgets
     RTTI.
 
+    @section variant_wxanyconversion wxVariant to wxAny Conversion Layer
+
+    wxAny is a more modern, template-based variant class. It is not
+    directly compatible with wxVariant, but there is a transparent conversion
+    layer.
+
+    Following is an example how to use these conversions with wxPropertyGrid's
+    property class wxPGProperty (which currently uses wxVariants both
+    internally and in the public API):
+
+    @code
+        // Get property value as wxAny instead of wxVariant
+        wxAny value = property->GetValue();
+
+        // Do something with it
+        DoSomethingWithString(value.As<wxString>());
+
+        // Write back new value to property
+        value = "New Value";
+        property->SetValue(value);
+
+    @endcode
+
+    Some caveats:
+    @li In wxAny, there are no separate types for handling integers of
+        different sizes, so converting wxAny with 'long long' value
+        will yield wxVariant of "long" type when the value is small
+        enough to fit in without overflow. Otherwise, variant type
+        "longlong" is used. Also note that wxAny holding unsigned integer
+        will always be converted to "ulonglong" wxVariant type.
+
+    @li Unlike wxVariant, wxAny does not store a (rarely needed) name string.
+
+    @li Because of implicit conversion of wxVariant to wxAny, wxAny cannot
+        usually contain value of type wxVariant. In other words,
+        any.CheckType<wxVariant>() can never return @true.
+
+    Supplied conversion functions will automatically work with all
+    built-in wxVariant types, and also with all user-specified types generated
+    using IMPLEMENT_VARIANT_OBJECT(). For hand-built wxVariantData classes,
+    you will need to use supplied macros in a following manner:
+
+    @code
+
+    // Declare wxVariantData for data type Foo
+    class wxVariantDataFoo: public wxVariantData
+    {
+    public:
+        // interface
+        // ...
+
+        DECLARE_WXANY_CONVERSION()
+    protected:
+        // data storage etc
+        // ...
+    };
+
+    IMPLEMENT_TRIVIAL_WXANY_CONVERSION(Foo, wxVariantDataFoo)
+
+    @endcode
+
     @library{wxbase}
     @category{data}
 
-    @see wxVariantData
+    @see wxVariantData, wxAny
 */
 class wxVariant : public wxObject
 {
@@ -110,6 +176,11 @@ public:
         count.
     */
     wxVariant(const wxVariant& variant);
+
+    /**
+        Constructs a variant by converting it from wxAny.
+    */
+    wxVariant(const wxAny& any);
 
     /**
         Constructs a variant from a wide string literal.
@@ -264,6 +335,11 @@ public:
     bool Convert(wxULongLong* value) const;
     bool Convert(wxDateTime* value) const;
     //@}
+
+    /**
+        Converts wxVariant into wxAny.
+    */
+    wxAny GetAny() const;
 
     /**
         Returns the string array value.
@@ -551,6 +627,11 @@ public:
         Returns @true if this object is equal to @a data.
     */
     virtual bool Eq(wxVariantData& data) const = 0;
+
+    /**
+        Converts value to wxAny, if possible. Return @true if successful.
+    */
+    virtual bool GetAny(wxAny* any) const;
 
     /**
         Returns the string type of the data.

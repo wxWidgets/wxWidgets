@@ -439,6 +439,17 @@ public:
     virtual wxSize GetToolBitmapSize() const;
 
     /**
+        Returns a pointer to the tool at ordinal position @a pos.
+
+        Don't confuse this with FindToolForPosition().
+
+        @since 2.9.1
+
+        @see GetToolsCount()
+    */
+    const wxToolBarToolBase *GetToolByPos(int pos) const;
+
+    /**
         Get any client data associated with the tool.
 
         @param toolId

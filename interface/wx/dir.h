@@ -104,6 +104,8 @@ enum wxDirFlags
     wxDIR_HIDDEN    = 0x0004,   ///< Includes hidden files.
     wxDIR_DOTDOT    = 0x0008,   ///< Includes "." and "..".
 
+    //! Combination of the @c wxDIR_FILES, @c wxDIR_DIRS, @c wxDIR_HIDDEN flags
+    //! defined above.
     wxDIR_DEFAULT   = wxDIR_FILES | wxDIR_DIRS | wxDIR_HIDDEN
 };
 
@@ -195,6 +197,10 @@ public:
         would be unchanged and should include ::wxDIR_DIRS flag to recurse into
         subdirectories (both flags are included in the value by default).
         See ::wxDirFlags for the list of the possible flags.
+        
+        @return Returns the total number of files found while traversing
+                the directory @a dirname (i.e. the number of entries appended
+                to the @a files array).
 
         @see Traverse()
     */
@@ -277,7 +283,7 @@ public:
         given.
         See ::wxDirFlags for the list of the possible flags.
 
-        For each found directory, @ref wxDirTraverser::OnDir() "sink.OnDir()"
+        For each directory found, @ref wxDirTraverser::OnDir() "sink.OnDir()"
         is called and @ref wxDirTraverser::OnFile() "sink.OnFile()" is called
         for every file. Depending on the return value, the enumeration may
         continue or stop.

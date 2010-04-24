@@ -476,6 +476,10 @@ public:
     // return true if this is a vertical toolbar, otherwise false
     bool IsVertical() const;
 
+    // these methods allow to access tools by their index in the toolbar
+    size_t GetToolsCount() const { return m_tools.GetCount(); }
+    const wxToolBarToolBase *GetToolByPos(int pos) const { return m_tools[pos]; }
+
 #if WXWIN_COMPATIBILITY_2_8
     // the old versions of the various methods kept for compatibility
     // don't use in the new code!
@@ -558,8 +562,6 @@ public:
 
     // implementation only from now on
     // -------------------------------
-
-    size_t GetToolsCount() const { return m_tools.GetCount(); }
 
     // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) ;

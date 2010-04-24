@@ -86,6 +86,17 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     return true;
 }
 
+bool wxTopLevelWindowMac::Create(wxWindow *parent,
+                                 WXWindow nativeWindow)
+{
+    if ( !wxNonOwnedWindow::Create(parent, nativeWindow ) )
+        return false;
+    
+    wxTopLevelWindows.Append(this);
+    
+    return true;
+}
+
 wxTopLevelWindowMac::~wxTopLevelWindowMac()
 {
 }
@@ -153,7 +164,8 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
-    wxWindow::SetLabel( title ) ;
+    m_label = title ;
+
     if ( m_nowpeer )
         m_nowpeer->SetTitle(title, GetFont().GetEncoding() );
 }

@@ -926,25 +926,36 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     wxPGProperty* property = event.GetProperty();
 
     const wxString& name = property->GetName();
-    wxVariant value = property->GetValue();
+
+    // Properties store values internally as wxVariants, but it is preferred
+    // to use the more modern wxAny at the interface level
+    wxAny value = property->GetValue();
 
     // Don't handle 'unspecified' values
     if ( value.IsNull() )
         return;
 
+    //
+    // FIXME-VC6: In order to compile on Visual C++ 6.0, wxANY_AS()
+    //            macro is used. Unless you want to support this old
+    //            compiler in your own code, you can use the more
+    //            nicer form value.As<FOO>() instead of
+    //            wxANY_AS(value, FOO).
+    //
+
     // Some settings are disabled outside Windows platform
     if ( name == wxT("X") )
-        SetSize ( m_pPropGridManager->GetPropertyValueAsInt(property), -1, -1, -1, wxSIZE_USE_EXISTING );
+        SetSize( wxANY_AS(value, int), -1, -1, -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Y") )
     // wxPGVariantToInt is safe long int value getter
-        SetSize ( -1, value.GetLong(), -1, -1, wxSIZE_USE_EXISTING );
+        SetSize ( -1, wxANY_AS(value, int), -1, -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Width") )
-        SetSize ( -1, -1, m_pPropGridManager->GetPropertyValueAsInt(property), -1, wxSIZE_USE_EXISTING );
+        SetSize ( -1, -1, wxANY_AS(value, int), -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Height") )
-        SetSize ( -1, -1, -1, value.GetLong(), wxSIZE_USE_EXISTING );
+        SetSize ( -1, -1, -1, wxANY_AS(value, int), wxSIZE_USE_EXISTING );
     else if ( name == wxT("Label") )
     {
-        SetTitle ( m_pPropGridManager->GetPropertyValueAsString(property) );
+        SetTitle( wxANY_AS(value, wxString) );
     }
     else if ( name == wxT("Password") )
     {
@@ -958,8 +969,7 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     else
     if ( name == wxT("Font") )
     {
-        wxFont font;
-        font << value;
+        wxFont font = wxANY_AS(value, wxFont);
         wxASSERT( font.Ok() );
 
         m_pPropGridManager->SetFont( font );
@@ -967,26 +977,22 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
     else
     if ( name == wxT("Margin Colour") )
     {
-        wxColourPropertyValue cpv;
-        cpv << value;
+        wxColourPropertyValue cpv = wxANY_AS(value, wxColourPropertyValue);
         m_pPropGridManager->GetGrid()->SetMarginColour( cpv.m_colour );
     }
     else if ( name == wxT("Cell Colour") )
     {
-        wxColourPropertyValue cpv;
-        cpv << value;
+        wxColourPropertyValue cpv = wxANY_AS(value, wxColourPropertyValue);
         m_pPropGridManager->GetGrid()->SetCellBackgroundColour( cpv.m_colour );
     }
     else if ( name == wxT("Line Colour") )
     {
-        wxColourPropertyValue cpv;
-        cpv << value;
+        wxColourPropertyValue cpv = wxANY_AS(value, wxColourPropertyValue);
         m_pPropGridManager->GetGrid()->SetLineColour( cpv.m_colour );
     }
     else if ( name == wxT("Cell Text Colour") )
     {
-        wxColourPropertyValue cpv;
-        cpv << value;
+        wxColourPropertyValue cpv = wxANY_AS(value, wxColourPropertyValue);
         m_pPropGridManager->GetGrid()->SetCellTextColour( cpv.m_colour );
     }
 }

@@ -94,6 +94,11 @@ void wxGUIEventLoop::DoStop()
     QuitApplicationEventLoop();
 }
 
+CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
+{
+    return wxCFEventLoop::CFGetCurrentRunLoop();
+}
+
 // TODO move into a evtloop_osx.cpp
 
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
@@ -114,6 +119,7 @@ wxModalEventLoop::wxModalEventLoop(WXWindow modalNativeWindow)
 
 void wxModalEventLoop::DoRun()
 {
+    wxWindowDisabler disabler(m_modalWindow);
     wxMacAutoreleasePool autoreleasepool;
 
     bool resetGroupParent = false;

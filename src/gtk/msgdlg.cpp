@@ -44,10 +44,13 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
-               : wxMessageDialogWithCustomLabels(GetParentForModalDialog(parent),
-                                                 message,
-                                                 caption,
-                                                 style)
+               : wxMessageDialogWithCustomLabels
+                 (
+                    GetParentForModalDialog(parent, style),
+                    message,
+                    caption,
+                    style
+                 )
 {
 }
 

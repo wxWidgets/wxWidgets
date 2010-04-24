@@ -513,6 +513,34 @@ void wxMenuBase::Detach()
 }
 
 // ----------------------------------------------------------------------------
+// wxMenu invoking window handling
+// ----------------------------------------------------------------------------
+
+void wxMenuBase::SetInvokingWindow(wxWindow *win)
+{
+    wxASSERT_MSG( !GetParent(),
+                    "should only be called for top level popup menus" );
+    wxASSERT_MSG( !IsAttached(),
+                    "menus attached to menu bar can't have invoking window" );
+
+    m_invokingWindow = win;
+}
+
+wxWindow *wxMenuBase::GetInvokingWindow() const
+{
+    // only the popup menu itself has a non-NULL invoking window so recurse
+    // upwards until we find it
+    const wxMenuBase *menu = this;
+    while ( menu->GetParent() )
+    {
+        menu = menu->GetParent();
+    }
+
+    // menu is a top level menu here
+    return menu->m_invokingWindow;
+}
+
+// ----------------------------------------------------------------------------
 // wxMenu functions forwarded to wxMenuItem
 // ----------------------------------------------------------------------------
 
@@ -616,10 +644,10 @@ wxMenu *wxMenuBarBase::GetMenu(size_t pos) const
     return node->GetData();
 }
 
-bool wxMenuBarBase::Append(wxMenu *menu, const wxString &title)
+bool wxMenuBarBase::Append(wxMenu *menu, const wxString& title)
 {
     wxCHECK_MSG( menu, false, wxT("can't append NULL menu") );
-    wxCHECK_MSG( !title.IsEmpty(), false, wxT("can't append menu with empty title") );
+    wxCHECK_MSG( !title.empty(), false, wxT("can't append menu with empty title") );
 
     m_menus.Append(menu);
     menu->Attach(this);

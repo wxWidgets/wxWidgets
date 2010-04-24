@@ -48,7 +48,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     if (data)
         m_data = *data;
 
-    m_parent = GetParentForModalDialog(parent);
+    m_parent = GetParentForModalDialog(parent, 0);
     GtkWindow * const parentGTK = m_parent ? GTK_WINDOW(m_parent->m_widget)
                                            : NULL;
 

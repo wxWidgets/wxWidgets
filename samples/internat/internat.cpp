@@ -252,7 +252,7 @@ bool MyApp::OnInit()
 
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
     // a localized error message:
-    m_locale.AddCatalog("wxstd.mo");
+    m_locale.AddCatalog("wxstd");
         // NOTE: it's not an error if we couldn't find it!
 
     // this catalog is installed in standard location on Linux systems and

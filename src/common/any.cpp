@@ -27,6 +27,7 @@
 
 #include "wx/vector.h"
 #include "wx/module.h"
+#include "wx/hashmap.h"
 
 using namespace wxPrivate;
 
@@ -34,9 +35,19 @@ using namespace wxPrivate;
 // wxAnyValueTypeGlobals
 //-------------------------------------------------------------------------
 
+#if wxUSE_VARIANT
+
+WX_DECLARE_HASH_MAP(wxAnyValueType*,
+                    wxVariantDataFactory,
+                    wxPointerHash,
+                    wxPointerEqual,
+                    wxAnyTypeToVariantDataFactoryMap);
+
+#endif
+
 //
-// Helper class to manage wxAnyValueType instances and other
-// related global variables.
+// Helper class to manage wxAnyValueType instances and and other
+// related global variables (such as wxAny<->wxVariant type association).
 //
 // NB: We really need to have wxAnyValueType instances allocated
 //     in heap. They are stored as static template member variables,
@@ -51,6 +62,9 @@ public:
     }
     ~wxAnyValueTypeGlobals()
     {
+    #if wxUSE_VARIANT
+        m_anyToVariant.clear();
+    #endif
         for ( size_t i=0; i<m_valueTypes.size(); i++ )
             delete m_valueTypes[i];
     }
@@ -60,11 +74,159 @@ public:
         m_valueTypes.push_back(valueType);
     }
 
+#if wxUSE_VARIANT
+    void PreRegisterAnyToVariant(wxAnyToVariantRegistration* reg)
+    {
+        m_anyToVariantRegs.push_back(reg);
+    }
+
+    // Find wxVariantData factory function for given value type,
+    // (or compatible, if possible)
+    wxVariantDataFactory FindVariantDataFactory(const wxAnyValueType* type_)
+    {
+        // Ideally we'd have the hash map of type 'const wxAnyValueType*',
+        // but WX_DECLARE_HASH_MAP() has some trouble with it.
+        wxAnyValueType* type = const_cast<wxAnyValueType*>(type_);
+
+        wxAnyTypeToVariantDataFactoryMap& anyToVariant = m_anyToVariant;
+        wxAnyTypeToVariantDataFactoryMap::const_iterator it;
+        it = anyToVariant.find(type);
+        if ( it != anyToVariant.end() )
+            return it->second;
+
+        // Not found, handle pre-registrations
+        size_t i = m_anyToVariantRegs.size();
+        while ( i > 0 )
+        {
+            i--;
+            wxAnyToVariantRegistration* reg = m_anyToVariantRegs[i];
+            wxAnyValueType* assocType = reg->GetAssociatedType();
+            if ( assocType )
+            {
+                // Both variant data and wxAnyValueType have been
+                // now been properly initialized, so remove the
+                // pre-registration entry and move data to anyToVarian
+                // map.
+                anyToVariant[assocType] = reg->GetFactory();
+                m_anyToVariantRegs.erase( m_anyToVariantRegs.begin() + i );
+            }
+        }
+
+        // Then try again
+        it = anyToVariant.find(type);
+        if ( it != anyToVariant.end() )
+            return it->second;
+
+        // Finally, attempt to find a compatible type
+        for ( it = anyToVariant.begin(); it != anyToVariant.end(); it++ )
+        {
+            if ( type->IsSameType(it->first) )
+            {
+                wxVariantDataFactory f = it->second;
+                anyToVariant[type] = f;
+                return f;
+            }
+        }
+
+        // Nothing found
+        return NULL;
+    }
+#endif
+
 private:
-    wxVector<wxAnyValueType*>   m_valueTypes;
+    wxVector<wxAnyValueType*>               m_valueTypes;
+#if wxUSE_VARIANT
+    wxAnyTypeToVariantDataFactoryMap        m_anyToVariant;
+    wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
+#endif
 };
 
 static wxAnyValueTypeGlobals* g_wxAnyValueTypeGlobals = NULL;
+
+#if wxUSE_VARIANT
+
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplVariantData)
+
+void wxPreRegisterAnyToVariant(wxAnyToVariantRegistration* reg)
+{
+    if ( !g_wxAnyValueTypeGlobals )
+        g_wxAnyValueTypeGlobals = new wxAnyValueTypeGlobals();
+    g_wxAnyValueTypeGlobals->PreRegisterAnyToVariant(reg);
+}
+
+bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
+{
+    if ( any.IsNull() )
+    {
+        variant->MakeNull();
+        return true;
+    }
+
+    // (signed) integer is a special case, because there is only one type
+    // in wxAny, and two ("long" and "longlong") in wxVariant. For better
+    // backwards compatibility, convert all values that fit in "long",
+    // and others to "longlong".
+    if ( wxANY_CHECK_TYPE(any, signed int) )
+    {
+#ifdef wxLongLong_t
+        wxLongLong_t ll = 0;
+        if ( any.GetAs(&ll) )
+        {
+            // NB: Do not use LONG_MAX here. Explicitly using 32-bit
+            //     integer constraint yields more consistent behavior across
+            //     builds.
+            if ( ll > wxINT32_MAX || ll < wxINT32_MIN )
+                *variant = wxLongLong(ll);
+            else
+                *variant = (long) wxLongLong(ll).GetLo();
+        }
+        else
+        {
+            return false;
+        }
+#else
+        long l;
+        if ( any.GetAs(&l) )
+            *variant = l;
+        else
+            return false;
+#endif
+        return true;
+    }
+
+    // Find matching factory function
+    wxVariantDataFactory f =
+        g_wxAnyValueTypeGlobals->FindVariantDataFactory(any.GetType());
+
+    wxVariantData* data = NULL;
+
+    if ( f )
+    {
+        data = f(any);
+    }
+    else
+    {
+        // Check if wxAny wrapped wxVariantData*
+        if ( !any.GetAs(&data) )
+        {
+            // Ok, one last chance: while unlikely, it is possible that the
+            // wxAny actually contains wxVariant.
+            if ( wxANY_CHECK_TYPE(any, wxVariant) )
+                *variant = wxANY_AS(any, wxVariant);
+            return false;
+        }
+
+        // Wrapper's GetValue() does not increase reference
+        // count, se have to do it before the data gets passed
+        // to a new variant.
+        data->IncRef();
+    }
+
+    variant->SetData(data);
+    return true;
+}
+
+#endif // wxUSE_VARIANT
 
 //
 // This class is to make sure that wxAnyValueType instances
@@ -212,12 +374,16 @@ bool wxAnyValueTypeImplUint::ConvertValue(const wxAnyValueBuffer& src,
     return true;
 }
 
-bool wxAnyValueTypeImplString::ConvertValue(const wxAnyValueBuffer& src,
-                                            wxAnyValueType* dstType,
-                                            wxAnyValueBuffer& dst) const
+// Convert wxString to destination wxAny value type
+bool wxAnyConvertString(const wxString& value,
+                        wxAnyValueType* dstType,
+                        wxAnyValueBuffer& dst)
 {
-    wxString value = GetValue(src);
-    if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
+    if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxString) )
+    {
+        wxAnyValueTypeImpl<wxString>::SetValue(value, dst);
+    }
+    else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, wxAnyBaseIntType) )
     {
         wxAnyBaseIntType value2;
 #ifdef wxLongLong_t
@@ -249,14 +415,15 @@ bool wxAnyValueTypeImplString::ConvertValue(const wxAnyValueBuffer& src,
     else if ( wxANY_VALUE_TYPE_CHECK_TYPE(dstType, bool) )
     {
         bool value2;
-        value.MakeLower();
-        if ( value == wxS("true") ||
-             value == wxS("yes") ||
-             value == wxS('1') )
+        wxString s(value);
+        s.MakeLower();
+        if ( s == wxS("true") ||
+             s == wxS("yes") ||
+             s == wxS('1') )
             value2 = true;
-        else if ( value == wxS("false") ||
-                  value == wxS("no") ||
-                  value == wxS('0') )
+        else if ( s == wxS("false") ||
+                  s == wxS("no") ||
+                  s == wxS('0') )
             value2 = false;
         else
             return false;
@@ -331,9 +498,12 @@ bool wxAnyValueTypeImplDouble::ConvertValue(const wxAnyValueBuffer& src,
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplInt)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplUint)
-WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplString)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<bool>)
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplDouble)
+
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplwxString)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstCharPtr)
+WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplConstWchar_tPtr)
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxDateTime>)
 //WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<wxObject*>)

@@ -149,13 +149,6 @@ bool wxNonOwnedWindowCarbonImpl::SetBackgroundStyle(wxBackgroundStyle style)
         err = ReshapeCustomWindow( m_macWindow );
         verify_noerr( err );
     }
-    else
-    {
-        OSStatus err = HIWindowChangeFeatures( m_macWindow, kWindowIsOpaque, 0 );
-        verify_noerr( err );
-        err = ReshapeCustomWindow( m_macWindow );
-        verify_noerr( err );
-    }
 
     return true ;
 }

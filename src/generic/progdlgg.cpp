@@ -99,7 +99,7 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(GetParentForModalDialog(parent), wxID_ANY, title),
+                : wxDialog(GetParentForModalDialog(parent, style), wxID_ANY, title),
                   m_skip(false),
                   m_delay(3),
                   m_hasAbortButton(false),
@@ -537,6 +537,18 @@ void wxProgressDialog::SetRange(int maximum)
     m_maximum /= m_factor;
 #endif // __WXMSW__
 }
+
+
+bool wxProgressDialog::WasCancelled() const
+{
+    return m_hasAbortButton && m_state == Canceled;
+}
+
+bool wxProgressDialog::WasSkipped() const
+{
+    return m_hasSkipButton && m_skip;
+}
+
 
 // ----------------------------------------------------------------------------
 // event handlers

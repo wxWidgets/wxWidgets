@@ -61,6 +61,10 @@ public:
 
     // may be called to terminate the dialog with the given return code
     virtual void EndModal(int retCode);
+    
+    static bool OSXHasModalDialogsOpen();
+    static void OSXBeginModalDialog();
+    static void OSXEndModalDialog();
 
     // implementation
     // --------------

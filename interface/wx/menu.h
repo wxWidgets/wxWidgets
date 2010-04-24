@@ -73,7 +73,7 @@ public:
         @param menu
             The menu to add. Do not deallocate this menu after calling Append().
         @param title
-            The title of the menu.
+            The title of the menu, must be non-empty.
 
         @return @true on success, @false if an error occurred.
 
@@ -497,7 +497,7 @@ public:
             this string in the status line.
         @param kind
             May be @c wxITEM_SEPARATOR, @c wxITEM_NORMAL, @c wxITEM_CHECK or @c wxITEM_RADIO.
-        
+
         Example:
         @code
         m_pFileMenu->Append(ID_NEW_FILE, "&New file\tCTRL+N", "Creates a new XYZ document");

@@ -444,30 +444,52 @@ To use them, you have to include <wx/propgrid/advprops.h>.
 
 @section propgrid_processingvalues Processing Property Values
 
-Properties store their values internally in wxVariant. You can obtain
-this value using wxPGProperty::GetValue() or wxPropertyGridInterface::
-GetPropertyValue().
+Properties store their values internally as wxVariant, but is also possible to
+obtain them as wxAny, using implicit conversion. You can get property
+values with wxPGProperty::GetValue() and
+wxPropertyGridInterface::GetPropertyValue().
 
-If you wish to obtain property value in specific data type, you can
-call various getter functions, such as wxPropertyGridInterface::
-GetPropertyValueAsString(), which, as name might say, returns property
-value's string representation. While this particular function is very
-safe to use for any kind of property, some might display error message
-if property value is not in compatible enough format. For instance,
-wxPropertyGridInterface::GetPropertyValueAsLongLong() will support
-long as well as wxLongLong, but GetPropertyValueAsArrayString() only
-supports wxArrayString and nothing else.
+Below is a code example which handles wxEVT_PG_CHANGED event:
 
-In any case, you will need to take extra care when dealing with
-raw wxVariant values. For instance, wxIntProperty and wxUIntProperty,
-store value internally as wx(U)LongLong when number doesn't fit into
-standard long type. Using << operator to get wx(U)LongLong from wxVariant
-is customized to work quite safely with various types of variant data.
+@code
 
-You may have noticed that properties store, in wxVariant, values of many
-types which are not natively supported by it. Custom wxVariantDatas
-are therefore implemented and << and >> operators implemented to
-convert data from and to wxVariant.
+void MyWindowClass::OnPropertyGridChanged(wxPropertyGridEvent& event)
+{
+    wxPGProperty* property = event.GetProperty();
+
+    // Do nothing if event did not have associated property
+    if ( !property )
+        return;
+
+    // GetValue() returns wxVariant, but it is converted transparently to
+    // wxAny
+    wxAny value = property->GetValue();
+
+    // Also, handle the case where property value is unspecified
+    if ( value.IsNull() )
+        return;
+
+    // Handle changes in values, as needed
+    if ( property.GetName() == "MyStringProperty" )
+        OnMyStringPropertyChanged(value.As<wxString>());
+    else if ( property.GetName() == "MyColourProperty" )
+        OnMyColourPropertyChanged(value.As<wxColour>());
+}
+
+@endcode
+
+You can get a string-representation of property's value using
+wxPGProperty::GetValueAsString() or
+wxPropertyGridInterface::GetPropertyValueAsString(). This particular function
+is very safe to use with any kind of property.
+
+@note There is a one case in which you may want to take extra care when
+      dealing with raw wxVariant values. That is, integer-type properties,
+      such as wxIntProperty and wxUIntProperty, store value internally as
+      wx(U)LongLong when number doesn't fit into standard long type. Using
+      << operator to get wx(U)LongLong from wxVariant is customized to work
+      quite safely with various types of variant data. However, you can also
+      bypass this problem by using wxAny in your code instead of wxVariant.
 
 Note that in some cases property value can be Null variant, which means
 that property value is unspecified. This usually occurs only when

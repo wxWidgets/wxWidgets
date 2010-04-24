@@ -88,7 +88,9 @@ int wxDirDialog::ShowModal()
         err = NavCreateChooseFolderDialog(&options, sStandardNavEventFilter , NULL,  this , &dialog);
         if (err == noErr)
         {
+            wxDialog::OSXBeginModalDialog();
             err = NavDialogRun(dialog);
+            wxDialog::OSXEndModalDialog();
             if ( err == noErr )
             {
                 err = NavDialogGetReply(dialog, &reply);

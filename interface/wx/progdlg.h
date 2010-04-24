@@ -137,6 +137,32 @@ public:
     */
     void SetRange(int maximum);
 
+
+      /**
+         Returns true if the "Cancel" button was pressed.
+
+         Normally a Cancel button press is indicated by Update() returning
+         @false but sometimes it may be more convenient to check if the dialog
+         was cancelled from elsewhere in the code and this function allows to
+         do it.
+
+         It always returns @false if the Cancel button is not shown at all.
+
+         @since 2.9.1
+     */
+    bool WasCancelled() const;
+
+     /**
+         Returns true if the "Skip" button was pressed.
+
+         This is similar to WasCancelled() but returns @true if the "Skip"
+         button was pressed, not the "Cancel" one.
+
+         @since 2.9.1
+     */
+    bool WasSkipped() const;
+
+
     /**
         Updates the dialog, setting the progress bar to the new value and
         updating the message if new one is specified.

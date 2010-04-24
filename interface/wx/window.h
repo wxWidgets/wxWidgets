@@ -2099,6 +2099,12 @@ public:
     /**
         Raises the window to the top of the window hierarchy (Z-order).
 
+        Notice that this function only requests the window manager to raise
+        this window to the top of Z-order. Depending on its configuration, the
+        window manager may raise the window, not do it at all or indicate that
+        a window requested to be raised in some other way, e.g. by flashing its
+        icon if it is minimized.
+
         @remarks
         This function only works for wxTopLevelWindow-derived classes.
 

@@ -394,7 +394,7 @@ public:
     ArgsArray(wchar_t **wargv)
     {
         int argc = 0;
-        while ( *wargv++ )
+        while ( wargv[argc] )
             argc++;
 
         Init(argc);

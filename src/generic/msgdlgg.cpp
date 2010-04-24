@@ -60,7 +60,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& caption,
                                                 long style,
                                                 const wxPoint& pos)
-                      : wxMessageDialogBase(GetParentForModalDialog(parent),
+                      : wxMessageDialogBase(GetParentForModalDialog(parent, style),
                                             message,
                                             caption,
                                             style),

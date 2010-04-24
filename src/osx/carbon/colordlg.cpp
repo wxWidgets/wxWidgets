@@ -59,7 +59,9 @@ int wxColourDialog::ShowModal()
     info.theColor.color.rgb.red =  currentColor.red ;
     info.theColor.color.rgb.green =  currentColor.green ;
     info.theColor.color.rgb.blue =  currentColor.blue ;
+    wxDialog::OSXBeginModalDialog();
     err = NPickColor(&info);
+    wxDialog::OSXEndModalDialog();
     if ((err == noErr) && info.newColorChosen)
     {
         currentColor.red = info.theColor.color.rgb.red ;

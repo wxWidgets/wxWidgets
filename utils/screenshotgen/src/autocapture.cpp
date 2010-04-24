@@ -279,7 +279,7 @@ bool AutoCaptureMechanism::Union(wxBitmap* top, wxBitmap* bottom, wxBitmap* resu
 
 wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
 {
-    if( !(m_flag & AJ_DisableRegionAdjust) && (flag & AJ_RegionAdjust)
+    if( (!(m_flag & AJ_DisableRegionAdjust) && (flag & AJ_RegionAdjust))
         || (m_flag & AJ_AlwaysRegionAdjust) )
     {
         wxWindow * parent = ctrl->GetParent();

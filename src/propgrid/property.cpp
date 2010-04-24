@@ -1962,6 +1962,32 @@ const wxPGEditor* wxPGProperty::GetEditorClass() const
     return editor;
 }
 
+bool wxPGProperty::Hide( bool hide, int flags )
+{
+    wxPropertyGrid* pg = GetGrid();
+    if ( pg )
+        return pg->HideProperty(this, hide, flags);
+
+    return DoHide( hide, flags );
+}
+
+bool wxPGProperty::DoHide( bool hide, int flags )
+{
+    if ( !hide )
+        ClearFlag( wxPG_PROP_HIDDEN );
+    else
+        SetFlag( wxPG_PROP_HIDDEN );
+
+    if ( flags & wxPG_RECURSE )
+    {
+        unsigned int i;
+        for ( i = 0; i < GetChildCount(); i++ )
+            Item(i)->DoHide(hide, flags | wxPG_RECURSE_STARTS);
+    }
+
+    return true;
+}
+
 bool wxPGProperty::HasVisibleChildren() const
 {
     unsigned int i;

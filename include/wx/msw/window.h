@@ -234,15 +234,6 @@ public:
     // created yet)
     void MSWUpdateStyle(long flagsOld, long exflagsOld);
 
-    // translate wxWidgets coords into Windows ones suitable to be passed to
-    // ::CreateWindow()
-    //
-    // returns true if non default coords are returned, false otherwise
-    bool MSWGetCreateWindowCoords(const wxPoint& pos,
-                                  const wxSize& size,
-                                  int& x, int& y,
-                                  int& w, int& h) const;
-
     // get the HWND to be used as parent of this window with CreateWindow()
     virtual WXHWND MSWGetParent() const;
 
@@ -591,6 +582,13 @@ protected:
     // if action == UIS_INITIALIZE then it doesn't seem to matter what we use
     // for state as the system will decide for us what needs to be set
     void MSWUpdateUIState(int action, int state = 0);
+
+    // translate wxWidgets coords into Windows ones suitable to be passed to
+    // ::CreateWindow(), called from MSWCreate()
+    virtual void MSWGetCreateWindowCoords(const wxPoint& pos,
+                                          const wxSize& size,
+                                          int& x, int& y,
+                                          int& w, int& h) const;
 
 private:
     // common part of all ctors

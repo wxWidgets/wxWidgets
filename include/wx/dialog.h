@@ -98,8 +98,19 @@ public:
     // but fall back to the current active window or main application window as
     // last resort if it is unsuitable.
     //
+    // As this function is often called from the ctor, the window style may be
+    // not set yet and hence must be passed explicitly to it so that we could
+    // check whether it contains wxDIALOG_NO_PARENT bit.
+    //
     // This function always returns a valid top level window or NULL.
-    wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
+    wxWindow *GetParentForModalDialog(wxWindow *parent, long style) const;
+
+    // This overload can only be used for already initialized windows, i.e. not
+    // from the ctor. It uses the current window parent and style.
+    wxWindow *GetParentForModalDialog() const
+    {
+        return GetParentForModalDialog(GetParent(), GetWindowStyle());
+    }
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     // splits text up at newlines and places the

@@ -257,8 +257,9 @@ int wxFontDialog::ShowModal()
     if ( !FPIsFontPanelVisible() )
         FPShowHideFontPanel();
 #endif
+    wxDialog::OSXBeginModalDialog();
     int retval = RunMixedFontDialog(this);
-
+    wxDialog::OSXEndModalDialog();
 #if wxOSX_USE_CARBON
     ::RemoveEventHandler(handler);
 #endif

@@ -415,6 +415,10 @@ SOURCE=..\..\src\common\ipcbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\languageinfo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\list.cpp
 # End Source File
 # Begin Source File
@@ -532,6 +536,10 @@ SOURCE=..\..\src\common\timerimpl.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\tokenzr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\translation.cpp
 # End Source File
 # Begin Source File
 
@@ -1339,6 +1347,10 @@ SOURCE=..\..\include\wx\kbdstate.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\language.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\link.h
 # End Source File
 # Begin Source File
@@ -1536,6 +1548,10 @@ SOURCE=..\..\include\wx\tokenzr.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tracker.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\translation.h
 # End Source File
 # Begin Source File
 

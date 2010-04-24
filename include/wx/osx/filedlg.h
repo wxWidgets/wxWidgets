@@ -51,6 +51,8 @@ protected:
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
                            int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+    
+    void SetupExtraControls(WXWindow nativeWindow);
 };
 
 #endif // _WX_FILEDLG_H_

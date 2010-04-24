@@ -1114,13 +1114,6 @@ void wxMenu::OnItemAdded(wxMenuItem *item)
 #if wxUSE_ACCEL
     AddAccelFor(item);
 #endif // wxUSE_ACCEL
-
-    // the submenus of a popup menu should have the same invoking window as it
-    // has
-    if ( m_invokingWindow && item->IsSubMenu() )
-    {
-        item->GetSubMenu()->SetInvokingWindow(m_invokingWindow);
-    }
 }
 
 void wxMenu::EndRadioGroup()
@@ -1231,45 +1224,7 @@ void wxMenu::Detach()
 
 wxWindow *wxMenu::GetRootWindow() const
 {
-    if ( GetMenuBar() )
-    {
-        // simple case - a normal menu attached to the menubar
-        return GetMenuBar();
-    }
-
-    // we're a popup menu but the trouble is that only the top level popup menu
-    // has a pointer to the invoking window, so we must walk up the menu chain
-    // if needed
-    wxWindow *win = GetInvokingWindow();
-    if ( win )
-    {
-        // we already have it
-        return win;
-    }
-
-    wxMenu *menu = GetParent();
-    while ( menu )
-    {
-        // We are a submenu of a menu of a menubar
-        if (menu->GetMenuBar())
-           return menu->GetMenuBar();
-
-        win = menu->GetInvokingWindow();
-        if ( win )
-            break;
-
-        menu = menu->GetParent();
-    }
-
-    // we're probably going to crash in the caller anyhow, but try to detect
-    // this error as soon as possible
-    wxASSERT_MSG( win, wxT("menu without any associated window?") );
-
-    // also remember it in this menu so that we don't have to search for it the
-    // next time
-    wxConstCast(this, wxMenu)->m_invokingWindow = win;
-
-    return win;
+    return GetMenuBar() ? GetMenuBar() : GetInvokingWindow();
 }
 
 wxRenderer *wxMenu::GetRenderer() const
@@ -1338,12 +1293,10 @@ void wxMenu::OnDismiss(bool dismissParent)
         }
         else // popup menu
         {
-            wxCHECK_RET( m_invokingWindow, wxT("what kind of menu is this?") );
+            wxWindow * const win = GetInvokingWindow();
+            wxCHECK_RET( win, wxT("what kind of menu is this?") );
 
-            m_invokingWindow->DismissPopupMenu();
-
-            // Why reset it here? We need it for sending the event to...
-            // SetInvokingWindow(NULL);
+            win->DismissPopupMenu();
         }
     }
 }
@@ -2419,8 +2372,6 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
             // that we pass 0 as width to position the menu exactly below the
             // item, not to the right of it
             wxRect rectItem = GetItemRect(m_current);
-
-            m_menuShown->SetInvokingWindow(m_frameLast);
 
             m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
                                wxSize(0, rectItem.GetHeight()),

@@ -18,8 +18,10 @@
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellBoolRenderer, wxGridCellFloatRenderer,
-         wxGridCellNumberRenderer, wxGridCellStringRenderer
+    @see wxGridCellAutoWrapStringRenderer, wxGridCellBoolRenderer,
+         wxGridCellDateTimeRenderer, wxGridCellEnumRenderer,
+         wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
 */
 class wxGridCellRenderer
 {
@@ -51,6 +53,31 @@ public:
 };
 
 /**
+    @class wxGridCellAutoWrapStringRenderer
+
+    This class may be used to format string data in a cell. The too
+    long lines are wrapped to be shown entirely at word boundaries.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellBoolRenderer,
+         wxGridCellDateTimeRenderer, wxGridCellEnumRenderer,
+         wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
+*/
+
+class wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
+{
+public:
+    /**
+        Default constructor.
+    */
+    wxGridCellAutoWrapStringRenderer();
+};
+
+
+/**
     @class wxGridCellBoolRenderer
 
     This class may be used to format boolean data in a cell.
@@ -58,7 +85,9 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellDateTimeRenderer, wxGridCellEnumRenderer,
+         wxGridCellFloatRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
 class wxGridCellBoolRenderer : public wxGridCellRenderer
@@ -71,6 +100,85 @@ public:
 };
 
 /**
+    @class wxGridCellDateTimeRenderer
+
+    This class may be used to format a date/time data in a cell.
+    The class wxDateTime is used internally to display the local date/time
+    or to parse the string date entered in the cell thanks to the defined format.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellBoolRenderer, wxGridCellEnumRenderer,
+         wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
+*/
+class wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
+{
+public:
+    /**
+        Date/time renderer constructor.
+
+        @param outformat
+            strptime()-like format string used the parse the output date/time.
+        @param informat
+            strptime()-like format string used to parse the string entered in the cell.
+    */
+    wxGridCellDateTimeRenderer(const wxString& outformat = wxDefaultDateTimeFormat,
+                               const wxString& informat = wxDefaultDateTimeFormat);
+
+
+    /**
+        Sets the strptime()-like format string which will be used to parse
+        the date/time.
+
+        @param params
+            strptime()-like format string used to parse the date/time.
+    */
+    virtual void SetParameters(const wxString& params);
+};
+
+/**
+    @class wxGridCellEnumRenderer
+
+    This class may be used to render in a cell a number as a textual
+    equivalent.
+
+    The corresponding text strings are specified as comma-separated items in
+    the string passed to this renderer ctor or SetParameters() method. For
+    example, if this string is @c "John,Fred,Bob" the cell will be rendered as
+    "John", "Fred" or "Bob" if its contents is 0, 1 or 2 respectively.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellBoolRenderer, wxGridCellDateTimeRenderer,
+         wxGridCellFloatRenderer, wxGridCellNumberRenderer,
+         wxGridCellStringRenderer
+*/
+class wxGridCellEnumRenderer : public wxGridCellStringRenderer
+{
+public:
+    /**
+        Enum renderer ctor.
+
+        @param choices
+            Comma separated string parameters "item1[,item2[...,itemN]]".
+    */
+    wxGridCellEnumRenderer( const wxString& choices = wxEmptyString );
+
+    /**
+        Sets the comma separated string content of the enum.
+
+        @param params
+            Comma separated string parameters "item1[,item2[...,itemN]]".
+    */
+    virtual void SetParameters(const wxString& params);
+};
+
+/**
     @class wxGridCellFloatRenderer
 
     This class may be used to format floating point data in a cell.
@@ -78,13 +186,17 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellNumberRenderer,
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellBoolRenderer, wxGridCellDateTimeRenderer,
+         wxGridCellEnumRenderer, wxGridCellNumberRenderer,
          wxGridCellStringRenderer
 */
 class wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
 public:
     /**
+        Float cell renderer ctor.
+
         @param width
             Minimum number of characters to be shown.
         @param precision
@@ -126,7 +238,9 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellBoolRenderer, wxGridCellDateTimeRenderer,
+         wxGridCellEnumRenderer, wxGridCellFloatRenderer,
          wxGridCellStringRenderer
 */
 class wxGridCellNumberRenderer : public wxGridCellStringRenderer
@@ -147,7 +261,9 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellRenderer, wxGridCellBoolRenderer, wxGridCellFloatRenderer,
+    @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
+         wxGridCellBoolRenderer, wxGridCellDateTimeRenderer,
+         wxGridCellEnumRenderer, wxGridCellFloatRenderer,
          wxGridCellNumberRenderer
 */
 class wxGridCellStringRenderer : public wxGridCellRenderer
@@ -158,7 +274,6 @@ public:
     */
     wxGridCellStringRenderer();
 };
-
 
 
 /**
@@ -173,8 +288,10 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellBoolEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
-         wxGridCellNumberEditor, wxGridCellTextEditor
+    @see wxGridCellAutoWrapStringEditor, wxGridCellBoolEditor,
+         wxGridCellChoiceEditor, wxGridCellEnumEditor,
+         wxGridCellFloatEditor, wxGridCellNumberEditor,
+         wxGridCellTextEditor
 */
 class wxGridCellEditor
 {
@@ -296,6 +413,24 @@ protected:
 };
 
 /**
+    @class wxGridCellAutoWrapStringEditor
+
+    Grid cell editor for wrappable string/text data.
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellEnumEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor, wxGridCellTextEditor
+*/
+class wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
+{
+public:
+    wxGridCellAutoWrapStringEditor();
+};
+
+/**
     @class wxGridCellBoolEditor
 
     Grid cell editor for boolean data.
@@ -303,8 +438,10 @@ protected:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellChoiceEditor, wxGridCellFloatEditor,
-         wxGridCellNumberEditor, wxGridCellTextEditor
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellChoiceEditor, wxGridCellEnumEditor,
+         wxGridCellFloatEditor, wxGridCellNumberEditor,
+         wxGridCellTextEditor
 */
 class wxGridCellBoolEditor : public wxGridCellEditor
 {
@@ -340,13 +477,17 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellFloatEditor,
-         wxGridCellNumberEditor, wxGridCellTextEditor
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellBoolEditor, wxGridCellEnumEditor,
+         wxGridCellFloatEditor, wxGridCellNumberEditor,
+         wxGridCellTextEditor
 */
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     /**
+        Choice cell renderer ctor.
+
         @param count
             Number of strings from which the user can choose.
         @param choices
@@ -355,23 +496,45 @@ public:
             If allowOthers is @true, the user can type a string not in choices
             array.
     */
+    //@{
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
                            bool allowOthers = false);
-    /**
-        @param choices
-            An array of strings from which the user can choose.
-        @param allowOthers
-            If allowOthers is @true, the user can type a string not in choices
-            array.
-    */
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false);
+    //@}
 
     /**
         Parameters string format is "item1[,item2[...,itemN]]"
     */
     virtual void SetParameters(const wxString& params);
+};
+
+/**
+    @class wxGridCellEnumEditor
+
+    Grid cell editor which displays an enum number as a textual equivalent
+    (eg. data in cell is 0,1,2 ... n the cell could be displayed as
+    "John","Fred"..."Bob" in the combo choice box).
+
+    @library{wxadv}
+    @category{grid}
+
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellTextEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor
+*/
+class wxGridCellEnumEditor : public wxGridCellChoiceEditor
+{
+public:
+    /**
+        Enum cell editor ctor.
+
+        @param choices
+            Comma separated choice parameters "item1[,item2[...,itemN]]".
+    */
+    wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
 };
 
 /**
@@ -382,8 +545,10 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
-         wxGridCellFloatEditor, wxGridCellNumberEditor
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellEnumEditor, wxGridCellFloatEditor,
+         wxGridCellNumberEditor
 */
 class wxGridCellTextEditor : public wxGridCellEditor
 {
@@ -408,13 +573,17 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellNumberEditor, wxGridCellBoolEditor,
-    wxGridCellTextEditor, wxGridCellChoiceEditor
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellEnumEditor, wxGridCellNumberEditor,
+         wxGridCellTextEditor
 */
 class wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
     /**
+        Float cell editor ctor.
+
         @param width
             Minimum number of characters to be shown.
         @param precision
@@ -436,8 +605,10 @@ public:
     @library{wxadv}
     @category{grid}
 
-    @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
-         wxGridCellFloatEditor, wxGridCellTextEditor
+    @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
+         wxGridCellBoolEditor, wxGridCellChoiceEditor,
+         wxGridCellEnumEditor, wxGridCellFloatEditor,
+         wxGridCellTextEditor
 */
 class wxGridCellNumberEditor : public wxGridCellTextEditor
 {
