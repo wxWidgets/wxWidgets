@@ -12,6 +12,7 @@
 #include "wx/menuitem.h"
 #include "wx/menu.h"
 #include "wx/bitmap.h"
+#include "wx/qt/action_qt.h"
 #include "wx/qt/converter.h"
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu, int id, const wxString& name,
@@ -24,7 +25,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
         const wxString& help, wxItemKind kind, wxMenu *subMenu)
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
-    m_qtAction = new QAction( wxQtConvertString( text ), parentMenu->GetHandle() );
+    m_qtAction = new wxQtAction( this, wxQtConvertString( text ), parentMenu->GetHandle() );
     m_qtAction->setStatusTip( wxQtConvertString( help ));
     switch ( kind )
     {
@@ -60,6 +61,22 @@ const wxBitmap &wxMenuItem::GetBitmap() const
     static wxBitmap s_bitmap;
 
     return s_bitmap;
+}
+
+//void wxMenuItem::OnItemTriggered( bool checked )
+//{
+//    wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, GetId() );
+//    event.SetEventObject( this );
+//    event.SetInt( IsCheckable() ? checked : -1 );
+//    
+//    wxMenu *menu = GetMenu();
+//    menu->ProcessEvent( event );
+//}
+
+void wxMenuItem::OnItemTriggered( bool checked )
+{
+    wxMenu *menu = GetMenu();
+    menu->SendEvent( GetId(), IsCheckable() ? checked : -1 ); 
 }
 
 QAction *wxMenuItem::GetHandle() const

@@ -29,11 +29,12 @@ public:
 
     virtual QAction *GetHandle() const;
 
-//private slot:
-//    void OnTriggered();
-
 private:
-    // Qt doesn't have something like a menu item.
+    friend class wxQtAction;
+
+    void OnItemTriggered( bool checked );
+
+    // Qt is using an action instead of a menu item.
     QPointer< QAction > m_qtAction;
 
     wxDECLARE_NO_COPY_CLASS( wxMenuItem );
