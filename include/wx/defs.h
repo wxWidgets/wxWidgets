@@ -2929,6 +2929,7 @@ WX_MSW_DECLARE_HANDLE(HBITMAP);
 WX_MSW_DECLARE_HANDLE(HIMAGELIST);
 WX_MSW_DECLARE_HANDLE(HGLOBAL);
 WX_MSW_DECLARE_HANDLE(HDC);
+typedef WXHINSTANCE WXHMODULE;
 
 #undef WX_MSW_DECLARE_HANDLE
 
@@ -2986,6 +2987,8 @@ typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
 typedef unsigned long   WXHACCEL;
+typedef unsigned long   WXHINSTANCE;
+typedef unsigned long   WXHMODULE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHDC;
 typedef unsigned int    WXUINT;

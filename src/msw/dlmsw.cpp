@@ -296,7 +296,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 }
 
 /* static */
-WXHINSTANCE wxDynamicLibrary::MSWGetModuleHandle(const char *name, void *addr)
+WXHMODULE wxDynamicLibrary::MSWGetModuleHandle(const char *name, void *addr)
 {
     // we want to use GetModuleHandleEx() instead of usual GetModuleHandle()
     // because the former works correctly for comctl32.dll while the latter

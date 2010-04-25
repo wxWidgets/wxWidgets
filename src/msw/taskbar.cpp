@@ -31,6 +31,7 @@
 
 #include <string.h>
 #include "wx/taskbar.h"
+#include "wx/msw/private.h"
 #include "wx/dynlib.h"
 
 #ifndef NIN_BALLOONTIMEOUT
