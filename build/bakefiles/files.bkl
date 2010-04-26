@@ -1305,7 +1305,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/statbox.cpp
     src/gtk1/statline.cpp
     src/gtk1/stattext.cpp
-    src/gtk1/tooltip.cpp
+    src/gtk1/toolbar.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
 </set>
@@ -1351,7 +1351,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/statbox.h
     wx/gtk1/statline.h
     wx/gtk1/stattext.h
-    wx/gtk1/tooltip.h
+    wx/gtk1/toolbar.h
     wx/gtk1/textctrl.h
     wx/gtk1/tglbtn.h
     wx/gtk1/treectrl.h
