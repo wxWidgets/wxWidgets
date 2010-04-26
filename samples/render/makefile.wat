@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/msw/config.wat
+!include ../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -36,7 +36,7 @@ PORTNAME =
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = msw
+PORTNAME = pm
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
@@ -61,10 +61,10 @@ WXDLLFLAG = dll
 !endif
 LIBTYPE_SUFFIX =
 !ifeq SHARED 0
-LIBTYPE_SUFFIX = lib
+LIBTYPE_SUFFIX = pm_lib
 !endif
 !ifeq SHARED 1
-LIBTYPE_SUFFIX = dll
+LIBTYPE_SUFFIX = pm_dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -94,10 +94,14 @@ PLUGINSUFFIX =
 PLUGINSUFFIX = u
 !endif
 !endif
+__DLLFLAG_p =
+!ifeq SHARED 1
+__DLLFLAG_p = -dWXUSINGDLL
+!endif
 __renddll___depname =
 !ifeq SHARED 1
 __renddll___depname = &
-	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_wat.dll
+	$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT).dll
 !endif
 __DEBUGINFO =
 !ifeq BUILD debug
@@ -209,10 +213,6 @@ ____CAIRO_INCLUDEDIR_FILENAMES =
 !ifeq USE_CAIRO 1
 ____CAIRO_INCLUDEDIR_FILENAMES = -i=$(CAIRO_ROOT)\include\cairo
 !endif
-__DLLFLAG_p =
-!ifeq SHARED 1
-__DLLFLAG_p = -dWXUSINGDLL
-!endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_CORE_p = &
@@ -240,18 +240,6 @@ __LIB_PNG_p =
 !ifeq USE_GUI 1
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES = libpath $(CAIRO_ROOT)\lib
-!endif
 
 ### Variables: ###
 
@@ -262,7 +250,7 @@ LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 RENDER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
@@ -271,7 +259,7 @@ RENDER_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 RENDER_OBJECTS =  &
 	$(OBJS)\render_render.obj
 RENDDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
@@ -295,41 +283,38 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\render.exe del $(OBJS)\render.exe
-	-if exist $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_wat.dll del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_wat.dll
+	-del $(OBJS)\render.exe
+	-del $(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT).dll
 
-$(OBJS)\render.exe :  $(RENDER_OBJECTS) $(OBJS)\render_sample.res
+$(OBJS)\render.exe :  $(RENDER_OBJECTS)
 	@%create $(OBJS)\render.lbc
 	@%append $(OBJS)\render.lbc option quiet
 	@%append $(OBJS)\render.lbc name $^@
 	@%append $(OBJS)\render.lbc option caseexact
-	@%append $(OBJS)\render.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
+	@%append $(OBJS)\render.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system os2v2_pm $(LDFLAGS)
 	@for %i in ($(RENDER_OBJECTS)) do @%append $(OBJS)\render.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\render.lbc library %i
-	@%append $(OBJS)\render.lbc option resource=$(OBJS)\render_sample.res
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\render.lbc library %i
+	@%append $(OBJS)\render.lbc
 	@for %i in () do @%append $(OBJS)\render.lbc option stack=%i
 	wlink @$(OBJS)\render.lbc
 
 !ifeq SHARED 1
-$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT)_wat.dll :  $(RENDDLL_OBJECTS)
+$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(PLUGINSUFFIX)$(WX_RELEASE_NODOT).dll :  $(RENDDLL_OBJECTS)
 	@%create $(OBJS)\renddll.lbc
 	@%append $(OBJS)\renddll.lbc option quiet
 	@%append $(OBJS)\renddll.lbc name $^@
 	@%append $(OBJS)\renddll.lbc option caseexact
-	@%append $(OBJS)\renddll.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
+	@%append $(OBJS)\renddll.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(LDFLAGS)
 	@for %i in ($(RENDDLL_OBJECTS)) do @%append $(OBJS)\renddll.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\renddll.lbc library %i
+	@for %i in ( $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\renddll.lbc library %i
 	@%append $(OBJS)\renddll.lbc
 	@%append $(OBJS)\renddll.lbc system nt_dll
 	wlink @$(OBJS)\renddll.lbc
 !endif
 
-$(OBJS)\render_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
-
 $(OBJS)\render_render.obj :  .AUTODEPEND .\render.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RENDER_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(RENDER_CXXFLAGS) $<
 
 $(OBJS)\renddll_renddll.obj :  .AUTODEPEND .\renddll.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(RENDDLL_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(RENDDLL_CXXFLAGS) $<
 

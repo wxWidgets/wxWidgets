@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/msw/config.wat
+!include ../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -36,7 +36,7 @@ PORTNAME =
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = msw
+PORTNAME = pm
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
@@ -61,10 +61,10 @@ WXDLLFLAG = dll
 !endif
 LIBTYPE_SUFFIX =
 !ifeq SHARED 0
-LIBTYPE_SUFFIX = lib
+LIBTYPE_SUFFIX = pm_lib
 !endif
 !ifeq SHARED 1
-LIBTYPE_SUFFIX = dll
+LIBTYPE_SUFFIX = pm_dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -142,6 +142,51 @@ __EXCEPTIONSFLAG_8 =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG_8 = -xs
 !endif
+__WXUNIV_DEFINE_p =
+!ifeq WXUNIV 1
+__WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
+!endif
+__DEBUG_DEFINE_p =
+!ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+__NDEBUG_DEFINE_p =
+!ifeq BUILD release
+__NDEBUG_DEFINE_p = -dNDEBUG
+!endif
+__EXCEPTIONS_DEFINE_p =
+!ifeq USE_EXCEPTIONS 0
+__EXCEPTIONS_DEFINE_p = -dwxNO_EXCEPTIONS
+!endif
+__RTTI_DEFINE_p =
+!ifeq USE_RTTI 0
+__RTTI_DEFINE_p = -dwxNO_RTTI
+!endif
+__THREAD_DEFINE_p =
+!ifeq USE_THREADS 0
+__THREAD_DEFINE_p = -dwxNO_THREADS
+!endif
+__UNICODE_DEFINE_p =
+!ifeq UNICODE 1
+__UNICODE_DEFINE_p = -d_UNICODE
+!endif
+__GFXCTX_DEFINE_p =
+!ifeq USE_GDIPLUS 1
+__GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
+!endif
+____CAIRO_INCLUDEDIR_FILENAMES_p =
+!ifeq USE_CAIRO 1
+____CAIRO_INCLUDEDIR_FILENAMES_p = -i=$(CAIRO_ROOT)\include\cairo
+!endif
+__DLLFLAG_p =
+!ifeq SHARED 1
+__DLLFLAG_p = -dWXUSINGDLL
+!endif
 __WXLIB_XML_p =
 !ifeq MONOLITHIC 0
 __WXLIB_XML_p = &
@@ -184,63 +229,6 @@ __LIB_PNG_p =
 !ifeq USE_GUI 1
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES_p =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES_p = libpath $(CAIRO_ROOT)\lib
-!endif
-__WXUNIV_DEFINE_p =
-!ifeq WXUNIV 1
-__WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
-!endif
-__DEBUG_DEFINE_p =
-!ifeq BUILD debug
-!ifeq DEBUG_FLAG default
-__DEBUG_DEFINE_p = -d__WXDEBUG__
-!endif
-!endif
-!ifeq DEBUG_FLAG 1
-__DEBUG_DEFINE_p = -d__WXDEBUG__
-!endif
-__NDEBUG_DEFINE_p =
-!ifeq BUILD release
-__NDEBUG_DEFINE_p = -dNDEBUG
-!endif
-__EXCEPTIONS_DEFINE_p =
-!ifeq USE_EXCEPTIONS 0
-__EXCEPTIONS_DEFINE_p = -dwxNO_EXCEPTIONS
-!endif
-__RTTI_DEFINE_p =
-!ifeq USE_RTTI 0
-__RTTI_DEFINE_p = -dwxNO_RTTI
-!endif
-__THREAD_DEFINE_p =
-!ifeq USE_THREADS 0
-__THREAD_DEFINE_p = -dwxNO_THREADS
-!endif
-__UNICODE_DEFINE_p =
-!ifeq UNICODE 1
-__UNICODE_DEFINE_p = -d_UNICODE
-!endif
-__GFXCTX_DEFINE_p =
-!ifeq USE_GDIPLUS 1
-__GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
-!endif
-____CAIRO_INCLUDEDIR_FILENAMES =
-!ifeq USE_CAIRO 1
-____CAIRO_INCLUDEDIR_FILENAMES = -i=$(CAIRO_ROOT)\include\cairo
-!endif
-__DLLFLAG_p =
-!ifeq SHARED 1
-__DLLFLAG_p = -dWXUSINGDLL
-!endif
 
 ### Variables: ###
 
@@ -251,10 +239,10 @@ LIBDIRNAME = .\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WIDGETS_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
-	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS_6) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
-	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
+	-i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) -wx &
 	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\samples &
 	-dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 WIDGETS_OBJECTS =  &
@@ -297,89 +285,86 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\widgets.exe del $(OBJS)\widgets.exe
+	-del $(OBJS)\widgets.exe
 
-$(OBJS)\widgets.exe :  $(WIDGETS_OBJECTS) $(OBJS)\widgets_sample.res
+$(OBJS)\widgets.exe :  $(WIDGETS_OBJECTS)
 	@%create $(OBJS)\widgets.lbc
 	@%append $(OBJS)\widgets.lbc option quiet
 	@%append $(OBJS)\widgets.lbc name $^@
 	@%append $(OBJS)\widgets.lbc option caseexact
-	@%append $(OBJS)\widgets.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
+	@%append $(OBJS)\widgets.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system os2v2_pm $(LDFLAGS)
 	@for %i in ($(WIDGETS_OBJECTS)) do @%append $(OBJS)\widgets.lbc file %i
-	@for %i in ( $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\widgets.lbc library %i
-	@%append $(OBJS)\widgets.lbc option resource=$(OBJS)\widgets_sample.res
+	@for %i in ( $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\widgets.lbc library %i
+	@%append $(OBJS)\widgets.lbc
 	@for %i in () do @%append $(OBJS)\widgets.lbc option stack=%i
 	wlink @$(OBJS)\widgets.lbc
 
 $(OBJS)\widgets_bmpcombobox.obj :  .AUTODEPEND .\bmpcombobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_button.obj :  .AUTODEPEND .\button.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_checkbox.obj :  .AUTODEPEND .\checkbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_clrpicker.obj :  .AUTODEPEND .\clrpicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_combobox.obj :  .AUTODEPEND .\combobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_datepick.obj :  .AUTODEPEND .\datepick.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_dirctrl.obj :  .AUTODEPEND .\dirctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_filepicker.obj :  .AUTODEPEND .\filepicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_fontpicker.obj :  .AUTODEPEND .\fontpicker.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_gauge.obj :  .AUTODEPEND .\gauge.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_hyperlnk.obj :  .AUTODEPEND .\hyperlnk.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_listbox.obj :  .AUTODEPEND .\listbox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_notebook.obj :  .AUTODEPEND .\notebook.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_odcombobox.obj :  .AUTODEPEND .\odcombobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_searchctrl.obj :  .AUTODEPEND .\searchctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_slider.obj :  .AUTODEPEND .\slider.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_spinbtn.obj :  .AUTODEPEND .\spinbtn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_static.obj :  .AUTODEPEND .\static.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_textctrl.obj :  .AUTODEPEND .\textctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_toggle.obj :  .AUTODEPEND .\toggle.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_widgets.obj :  .AUTODEPEND .\widgets.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
-
-$(OBJS)\widgets_sample.res :  .AUTODEPEND .\..\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 

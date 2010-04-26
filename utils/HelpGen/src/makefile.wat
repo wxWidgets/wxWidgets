@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/msw/config.wat
+!include ../../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -36,7 +36,7 @@ PORTNAME =
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = msw
+PORTNAME = pm
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
@@ -61,10 +61,10 @@ WXDLLFLAG = dll
 !endif
 LIBTYPE_SUFFIX =
 !ifeq SHARED 0
-LIBTYPE_SUFFIX = lib
+LIBTYPE_SUFFIX = pm_lib
 !endif
 !ifeq SHARED 1
-LIBTYPE_SUFFIX = dll
+LIBTYPE_SUFFIX = pm_dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -197,18 +197,6 @@ __WXLIB_MONO_p =
 __WXLIB_MONO_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES_p =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES_p = libpath $(CAIRO_ROOT)\lib
-!endif
 
 ### Variables: ###
 
@@ -219,7 +207,7 @@ LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 HELPGEN_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
-	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS_6) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_p) &
@@ -250,41 +238,41 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\HelpGen.exe del $(OBJS)\HelpGen.exe
+	-del $(OBJS)\HelpGen.exe
 
 $(OBJS)\HelpGen.exe :  $(HELPGEN_OBJECTS)
 	@%create $(OBJS)\HelpGen.lbc
 	@%append $(OBJS)\HelpGen.lbc option quiet
 	@%append $(OBJS)\HelpGen.lbc name $^@
 	@%append $(OBJS)\HelpGen.lbc option caseexact
-	@%append $(OBJS)\HelpGen.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
+	@%append $(OBJS)\HelpGen.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system os2v2 $(LDFLAGS)
 	@for %i in ($(HELPGEN_OBJECTS)) do @%append $(OBJS)\HelpGen.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\HelpGen.lbc library %i
+	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\HelpGen.lbc library %i
 	@%append $(OBJS)\HelpGen.lbc
 	@for %i in () do @%append $(OBJS)\HelpGen.lbc option stack=%i
 	wlink @$(OBJS)\HelpGen.lbc
 
 $(OBJS)\HelpGen_HelpGen.obj :  .AUTODEPEND .\HelpGen.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_cjparser.obj :  .AUTODEPEND .\cjparser.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_docripper.obj :  .AUTODEPEND .\docripper.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_ifcontext.obj :  .AUTODEPEND .\ifcontext.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_markup.obj :  .AUTODEPEND .\markup.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_scriptbinder.obj :  .AUTODEPEND .\scriptbinder.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_sourcepainter.obj :  .AUTODEPEND .\sourcepainter.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 
 $(OBJS)\HelpGen_srcparser.obj :  .AUTODEPEND .\srcparser.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(HELPGEN_CXXFLAGS) $<
 

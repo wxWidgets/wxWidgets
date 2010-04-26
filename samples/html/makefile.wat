@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../build/msw/config.wat
+!include ../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!

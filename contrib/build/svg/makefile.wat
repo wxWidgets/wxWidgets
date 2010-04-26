@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/msw/config.wat
+!include ../../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -36,14 +36,7 @@ PORTNAME =
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = msw
-!endif
-VENDORTAG =
-!ifeq OFFICIAL_BUILD 0
-VENDORTAG = _$(VENDOR)
-!endif
-!ifeq OFFICIAL_BUILD 1
-VENDORTAG = 
+PORTNAME = pm
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
@@ -68,10 +61,10 @@ WXDLLFLAG = dll
 !endif
 LIBTYPE_SUFFIX =
 !ifeq SHARED 0
-LIBTYPE_SUFFIX = lib
+LIBTYPE_SUFFIX = pm_lib
 !endif
 !ifeq SHARED 1
-LIBTYPE_SUFFIX = dll
+LIBTYPE_SUFFIX = pm_dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -83,7 +76,7 @@ EXTRALIBS_FOR_BASE =
 __svgdll___depname =
 !ifeq SHARED 1
 __svgdll___depname = &
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.dll
 !endif
 __DEBUGINFO_2 =
 !ifeq BUILD debug
@@ -118,18 +111,6 @@ __LIB_JPEG_p = wxjpeg$(WXDEBUGFLAG).lib
 __LIB_PNG_p =
 !ifeq USE_GUI 1
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
-!endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES_p =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES_p = libpath $(CAIRO_ROOT)\lib
 !endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
@@ -249,7 +230,7 @@ LIBDIRNAME = ..\..\src\svg\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 SVGDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=..\..\src\svg\..\..\..\include &
@@ -261,7 +242,7 @@ SVGDLL_OBJECTS =  &
 	$(OBJS)\svgdll_dummy.obj &
 	$(OBJS)\svgdll_dcsvg.obj
 SVGLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=..\..\src\svg\..\..\..\include &
@@ -287,21 +268,21 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
+	-del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.dll
+	-del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
+	-del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib
 
 !ifeq SHARED 1
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG).dll :  $(SVGDLL_OBJECTS) $(OBJS)\svgdll_version.res
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.dll :  $(SVGDLL_OBJECTS)
 	@%create $(OBJS)\svgdll.lbc
 	@%append $(OBJS)\svgdll.lbc option quiet
 	@%append $(OBJS)\svgdll.lbc name $^@
 	@%append $(OBJS)\svgdll.lbc option caseexact
-	@%append $(OBJS)\svgdll.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
+	@%append $(OBJS)\svgdll.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(LDFLAGS)
 	@for %i in ($(SVGDLL_OBJECTS)) do @%append $(OBJS)\svgdll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\svgdll.lbc library %i
-	@%append $(OBJS)\svgdll.lbc option resource=$(OBJS)\svgdll_version.res
-	@%append $(OBJS)\svgdll.lbc system nt_dll
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\svgdll.lbc library %i
+	@%append $(OBJS)\svgdll.lbc
+	@%append $(OBJS)\svgdll.lbc system os2v2 dll
 	wlink @$(OBJS)\svgdll.lbc
 	wlib -q -n -b $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg.lib +$^@
 !endif
@@ -314,17 +295,14 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 !endif
 
 $(OBJS)\svgdll_dummy.obj :  .AUTODEPEND ..\..\src\svg\..\..\..\src\common\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
-
-$(OBJS)\svgdll_version.res :  .AUTODEPEND ..\..\src\svg\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\svg\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_svg_wat$(VENDORTAG) -i=..\..\src\svg\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_SVG $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
 $(OBJS)\svgdll_dcsvg.obj :  .AUTODEPEND ..\..\src\svg\dcsvg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(SVGDLL_CXXFLAGS) $<
 
 $(OBJS)\svglib_dummy.obj :  .AUTODEPEND ..\..\src\svg\..\..\..\src\common\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
 
 $(OBJS)\svglib_dcsvg.obj :  .AUTODEPEND ..\..\src\svg\dcsvg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(SVGLIB_CXXFLAGS) $<
 

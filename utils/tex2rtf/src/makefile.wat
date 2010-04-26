@@ -4,7 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-!include ../../../build/msw/config.wat
+!include ../../../build/os2/config.wat
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -36,7 +36,7 @@ PORTNAME =
 PORTNAME = base
 !endif
 !ifeq USE_GUI 1
-PORTNAME = msw
+PORTNAME = pm
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
@@ -61,10 +61,10 @@ WXDLLFLAG = dll
 !endif
 LIBTYPE_SUFFIX =
 !ifeq SHARED 0
-LIBTYPE_SUFFIX = lib
+LIBTYPE_SUFFIX = pm_lib
 !endif
 !ifeq SHARED 1
-LIBTYPE_SUFFIX = dll
+LIBTYPE_SUFFIX = pm_dll
 !endif
 EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 0
@@ -168,28 +168,6 @@ __EXCEPTIONSFLAG =
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
 !endif
-__WXLIB_BASE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_BASE_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__WXLIB_MONO_p =
-!ifeq MONOLITHIC 1
-__WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
-!endif
-__CAIRO_LIB_p =
-!ifeq USE_CAIRO 1
-__CAIRO_LIB_p = cairo.lib
-!endif
-____CAIRO_LIBDIR_FILENAMES =
-!ifeq USE_CAIRO 1
-____CAIRO_LIBDIR_FILENAMES = libpath $(CAIRO_ROOT)\lib
-!endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
@@ -235,6 +213,16 @@ __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
 !endif
+__WXLIB_BASE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__WXLIB_MONO_p =
+!ifeq MONOLITHIC 1
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
 
 ### Variables: ###
 
@@ -245,7 +233,7 @@ LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 TEX2RTF_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
@@ -261,7 +249,7 @@ TEX2RTF_OBJECTS =  &
 	$(OBJS)\tex2rtf_readshg.obj &
 	$(OBJS)\tex2rtf_table.obj
 TEX2RTF_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
+	$(__RUNTIME_LIBS) -d__WXPM__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
 	-i=$(SETUPHDIR) -i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
@@ -292,83 +280,80 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\tex2rtf.exe del $(OBJS)\tex2rtf.exe
-	-if exist $(OBJS)\tex2rtf_gui.exe del $(OBJS)\tex2rtf_gui.exe
+	-del $(OBJS)\tex2rtf.exe
+	-del $(OBJS)\tex2rtf_gui.exe
 
 $(OBJS)\tex2rtf.exe :  $(TEX2RTF_OBJECTS)
 	@%create $(OBJS)\tex2rtf.lbc
 	@%append $(OBJS)\tex2rtf.lbc option quiet
 	@%append $(OBJS)\tex2rtf.lbc name $^@
 	@%append $(OBJS)\tex2rtf.lbc option caseexact
-	@%append $(OBJS)\tex2rtf.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
+	@%append $(OBJS)\tex2rtf.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system os2v2 $(LDFLAGS)
 	@for %i in ($(TEX2RTF_OBJECTS)) do @%append $(OBJS)\tex2rtf.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\tex2rtf.lbc library %i
+	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\tex2rtf.lbc library %i
 	@%append $(OBJS)\tex2rtf.lbc
 	@for %i in () do @%append $(OBJS)\tex2rtf.lbc option stack=%i
 	wlink @$(OBJS)\tex2rtf.lbc
 
 !ifeq USE_GUI 1
-$(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
+$(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS)
 	@%create $(OBJS)\tex2rtf_gui.lbc
 	@%append $(OBJS)\tex2rtf_gui.lbc option quiet
 	@%append $(OBJS)\tex2rtf_gui.lbc name $^@
 	@%append $(OBJS)\tex2rtf_gui.lbc option caseexact
-	@%append $(OBJS)\tex2rtf_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)
+	@%append $(OBJS)\tex2rtf_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system os2v2_pm $(LDFLAGS)
 	@for %i in ($(TEX2RTF_GUI_OBJECTS)) do @%append $(OBJS)\tex2rtf_gui.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\tex2rtf_gui.lbc library %i
-	@%append $(OBJS)\tex2rtf_gui.lbc option resource=$(OBJS)\tex2rtf_gui_sample.res
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) upm32.lib) do @%append $(OBJS)\tex2rtf_gui.lbc library %i
+	@%append $(OBJS)\tex2rtf_gui.lbc
 	@for %i in () do @%append $(OBJS)\tex2rtf_gui.lbc option stack=%i
 	wlink @$(OBJS)\tex2rtf_gui.lbc
 !endif
 
 $(OBJS)\tex2rtf_tex2rtf.obj :  .AUTODEPEND .\tex2rtf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_tex2any.obj :  .AUTODEPEND .\tex2any.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_texutils.obj :  .AUTODEPEND .\texutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_rtfutils.obj :  .AUTODEPEND .\rtfutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_xlputils.obj :  .AUTODEPEND .\xlputils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_htmlutil.obj :  .AUTODEPEND .\htmlutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_readshg.obj :  .AUTODEPEND .\readshg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_table.obj :  .AUTODEPEND .\table.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
-
-$(OBJS)\tex2rtf_gui_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_tex2rtf.obj :  .AUTODEPEND .\tex2rtf.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_tex2any.obj :  .AUTODEPEND .\tex2any.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_texutils.obj :  .AUTODEPEND .\texutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_rtfutils.obj :  .AUTODEPEND .\rtfutils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_xlputils.obj :  .AUTODEPEND .\xlputils.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_htmlutil.obj :  .AUTODEPEND .\htmlutil.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_readshg.obj :  .AUTODEPEND .\readshg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
 $(OBJS)\tex2rtf_gui_table.obj :  .AUTODEPEND .\table.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
+	$(CXX) -bt=os2 -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
