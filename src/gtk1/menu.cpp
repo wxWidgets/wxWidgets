@@ -141,7 +141,7 @@ static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
     if (handler && handler->ProcessEvent(event))
         return;
 
-    wxWindow *win = menu->GetInvokingWindow();
+    wxWindow *win = menu->GetWindow();
     if (win)
         win->HandleWindowEvent( event );
 }
@@ -181,7 +181,6 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     // the parent window is known after wxFrame::SetMenu()
     m_needParent = false;
     m_style = style;
-    m_invokingWindow = NULL;
 
     if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
@@ -241,10 +240,8 @@ wxMenuBar::~wxMenuBar()
 {
 }
 
-static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
+static void DetachFromFrame( wxMenu *menu, wxWindow *win )
 {
-    menu->SetInvokingWindow( NULL );
-
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
@@ -257,15 +254,13 @@ static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
     {
         wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
-            wxMenubarUnsetInvokingWindow( menuitem->GetSubMenu(), win );
+            DetachFromFrame( menuitem->GetSubMenu(), win );
         node = node->GetNext();
     }
 }
 
-static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
+static void AttachToFrame( wxMenu *menu, wxWindow *win )
 {
-    menu->SetInvokingWindow( win );
-
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
@@ -280,14 +275,15 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
     {
         wxMenuItem *menuitem = node->GetData();
         if (menuitem->IsSubMenu())
-            wxMenubarSetInvokingWindow( menuitem->GetSubMenu(), win );
+            AttachToFrame( menuitem->GetSubMenu(), win );
         node = node->GetNext();
     }
 }
 
-void wxMenuBar::SetInvokingWindow( wxWindow *win )
+void wxMenuBar::Attach( wxFrame *win )
 {
-    m_invokingWindow = win;
+    wxMenuBarBase::Attach(win);
+
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
@@ -301,15 +297,14 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
     while (node)
     {
         wxMenu *menu = node->GetData();
-        wxMenubarSetInvokingWindow( menu, win );
+        AttachToFrame( menu, win );
         node = node->GetNext();
     }
 }
 
-void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
+void wxMenuBar::Detach()
 {
-    m_invokingWindow = NULL;
-    wxWindow *top_frame = win;
+    wxWindow *top_frame = m_menuBarFrame;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
 
@@ -320,9 +315,11 @@ void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
     while (node)
     {
         wxMenu *menu = node->GetData();
-        wxMenubarUnsetInvokingWindow( menu, win );
+        DetachFromFrame( menu, top_frame );
         node = node->GetNext();
     }
+
+    wxMenuBarBase::Detach();
 }
 
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
@@ -370,11 +367,9 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
                         GTK_SIGNAL_FUNC(gtk_menu_open_callback),
                         (gpointer)menu );
 
-    // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
-    // addings menu later on.
-    if (m_invokingWindow)
+    if (m_menuBarFrame)
     {
-        wxMenubarSetInvokingWindow( menu, m_invokingWindow );
+        AttachToFrame( menu, m_menuBarFrame );
 
             // OPTIMISE ME:  we should probably cache this, or pass it
             //               directly, but for now this is a minimal
@@ -382,10 +377,7 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title, int pos)
             //               see (and refactor :) similar code in Remove
             //               below.
 
-        wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
-
-        if( frame )
-            frame->UpdateMenuBarSize();
+            m_menuBarFrame->UpdateMenuBarSize();
     }
 
     return true;
@@ -429,13 +421,10 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     gtk_widget_destroy( menu->m_owner );
     menu->m_owner = NULL;
 
-    if (m_invokingWindow)
+    if (m_menuBarFrame)
     {
         // OPTIMISE ME:  see comment in GtkAppend
-        wxFrame *frame = wxDynamicCast( m_invokingWindow, wxFrame );
-
-        if( frame )
-            frame->UpdateMenuBarSize();
+        m_menuBarFrame->UpdateMenuBarSize();
     }
 
     return menu;
@@ -578,7 +567,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
-    wxASSERT_MSG( (id != -1) || (menu->GetInvokingWindow() != NULL),
+    wxASSERT_MSG( (id != -1) || (menu->GetWindow() != NULL),
                   wxT("menu item not found in gtk_menu_clicked_callback") );
 
     if (!menu->IsEnabled(id))
@@ -619,7 +608,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
     // FIXME: why do we have to call wxFrame::GetEventHandler() directly here?
     //        normally wxMenu::SendEvent() should be enough, if it doesn't work
-    //        in wxGTK then we have a bug in wxMenu::GetInvokingWindow() which
+    //        in wxGTK then we have a bug in wxMenu::GetWindow() which
     //        should be fixed instead of working around it here...
     if (frame)
     {
@@ -665,7 +654,7 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     if (handler && handler->ProcessEvent(event))
         return;
 
-    wxWindow *win = menu->GetInvokingWindow();
+    wxWindow *win = menu->GetWindow();
     if (win) win->HandleWindowEvent( event );
 }
 }
@@ -693,7 +682,7 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     if (handler && handler->ProcessEvent(event))
         return;
 
-    wxWindow *win = menu->GetInvokingWindow();
+    wxWindow *win = menu->GetWindow();
     if (win)
         win->HandleWindowEvent( event );
 }
@@ -1091,12 +1080,6 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
             gtk_menu_item_set_submenu( GTK_MENU_ITEM(menuItem), mitem->GetSubMenu()->m_menu );
 
             gtk_widget_show( mitem->GetSubMenu()->m_menu );
-
-            // if adding a submenu to a menu already existing in the menu bar, we
-            // must set invoking window to allow processing events from this
-            // submenu
-            if ( m_invokingWindow )
-                wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
         }
         else
         {

@@ -552,7 +552,7 @@ void wxFrame::DetachMenuBar()
 
     if ( m_frameMenuBar )
     {
-        m_frameMenuBar->UnsetInvokingWindow( this );
+        m_frameMenuBar->Attach( this );
 
         if (m_frameMenuBar->GetWindowStyle() & wxMB_DOCKABLE)
         {
@@ -577,8 +577,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
-        m_frameMenuBar->SetInvokingWindow( this );
-
         m_frameMenuBar->SetParent(this);
         gtk_pizza_put( GTK_PIZZA(m_mainWidget),
                 m_frameMenuBar->m_widget,

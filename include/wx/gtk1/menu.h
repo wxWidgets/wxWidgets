@@ -37,17 +37,15 @@ public:
     virtual void SetMenuLabel( size_t pos, const wxString& label );
     virtual wxString GetMenuLabel( size_t pos ) const;
 
-    // implementation only from now on
-    void SetInvokingWindow( wxWindow *win );
-    void UnsetInvokingWindow( wxWindow *win );
-
     // common part of Append and Insert
     bool GtkAppend(wxMenu *menu, const wxString& title, int pos=-1);
+
+    virtual void Attach(wxFrame *frame);
+    virtual void Detach();
 
     GtkAccelGroup   *m_accel;
     GtkWidget       *m_menubar;
     long             m_style;
-    wxWindow        *m_invokingWindow;
 
 private:
     void Init(size_t n, wxMenu *menus[], const wxString titles[], long style);
