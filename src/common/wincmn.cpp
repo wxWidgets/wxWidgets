@@ -2567,6 +2567,9 @@ bool wxWindowBase::PopupMenu(wxMenu *menu, int x, int y)
 {
     wxCHECK_MSG( menu, false, "can't popup NULL menu" );
 
+    wxMenuInvokingWindowSetter
+        setInvokingWin(*menu, static_cast<wxWindow *>(this));
+
     wxCurrentPopupMenu = menu;
     const bool rc = DoPopupMenu(menu, x, y);
     wxCurrentPopupMenu = NULL;

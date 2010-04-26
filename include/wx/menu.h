@@ -259,6 +259,9 @@ public:
     // popup menu and reset after it's hidden. Notice that you probably want to
     // use GetWindow() below instead of GetInvokingWindow() as the latter only
     // returns non-NULL for the top level menus
+    //
+    // NB: avoid calling SetInvokingWindow() directly if possible, use
+    //     wxMenuInvokingWindowSetter class below instead
     void SetInvokingWindow(wxWindow *win);
     wxWindow *GetInvokingWindow() const { return m_invokingWindow; }
 
@@ -551,7 +554,35 @@ protected:
 #endif
 #endif // wxUSE_BASE_CLASSES_ONLY/!wxUSE_BASE_CLASSES_ONLY
 
+// ----------------------------------------------------------------------------
+// Helper class used in the implementation only: sets the invoking window of
+// the given menu in its ctor and resets it in dtor.
+// ----------------------------------------------------------------------------
+
+class wxMenuInvokingWindowSetter
+{
+public:
+    // Ctor sets the invoking window for the given menu.
+    //
+    // The menu lifetime must be greater than that of this class.
+    wxMenuInvokingWindowSetter(wxMenu& menu, wxWindow *win)
+        : m_menu(menu)
+    {
+        menu.SetInvokingWindow(win);
+    }
+
+    // Dtor resets the invoking window.
+    ~wxMenuInvokingWindowSetter()
+    {
+        m_menu.SetInvokingWindow(NULL);
+    }
+
+private:
+    wxMenu& m_menu;
+
+    wxDECLARE_NO_COPY_CLASS(wxMenuInvokingWindowSetter);
+};
+
 #endif // wxUSE_MENUS
 
-#endif
-    // _WX_MENU_H_BASE_
+#endif // _WX_MENU_H_BASE_

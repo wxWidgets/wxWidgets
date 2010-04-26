@@ -3996,10 +3996,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
 
-    wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
-
-    menu->SetInvokingWindow( this );
-
     menu->UpdateUI();
 
     wxPoint pos;
@@ -4033,8 +4029,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     {
         gtk_main_iteration();
     }
-
-    menu->SetInvokingWindow( NULL );
 
     return true;
 }

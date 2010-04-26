@@ -2267,7 +2267,6 @@ static void wxYieldForCommandsOnly()
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    menu->SetInvokingWindow(this);
     menu->UpdateUI();
 
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
@@ -2309,8 +2308,6 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     // destroyed as soon as we return (it can be a local variable in the caller
     // for example) and so we do need to process the event immediately
     wxYieldForCommandsOnly();
-
-    menu->SetInvokingWindow(NULL);
 
     return true;
 }

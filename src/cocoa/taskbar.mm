@@ -311,8 +311,9 @@ bool wxTaskBarIconCustomStatusItemImpl::RemoveIcon()
 
 bool wxTaskBarIconCustomStatusItemImpl::PopupMenu(wxMenu *menu)
 {
-    wxASSERT(menu);
-    menu->SetInvokingWindow(m_iconWindow);
+    wxCHECK_MSG(menu, false, "can't popup a NULL menu");
+
+    wxMenuInvokingWindowSetter setInvokingWin(*menu, m_iconWindow);
     menu->UpdateUI();
 
     if([m_cocoaNSStatusItem respondsToSelector:@selector(popUpStatusItemMenu:)])
@@ -328,7 +329,6 @@ bool wxTaskBarIconCustomStatusItemImpl::PopupMenu(wxMenu *menu)
             eventNumber:0 clickCount:1 pressure:0.0];
         [NSMenu popUpContextMenu:menu->GetNSMenu() withEvent:nsevent forView:m_iconWindow->GetNSView()];
     }
-    menu->SetInvokingWindow(NULL);
     return true;
 }
 

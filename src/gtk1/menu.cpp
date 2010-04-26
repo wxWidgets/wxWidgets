@@ -1457,23 +1457,6 @@ void gtk_pop_hide_callback( GtkWidget *WXUNUSED(widget), bool* is_waiting  )
     *is_waiting = false;
 }
 
-WXDLLIMPEXP_CORE void SetInvokingWindow( wxMenu *menu, wxWindow* win )
-{
-    menu->SetInvokingWindow( win );
-
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
-    {
-        wxMenuItem *menuitem = node->GetData();
-        if (menuitem->IsSubMenu())
-        {
-            SetInvokingWindow( menuitem->GetSubMenu(), win );
-        }
-
-        node = node->GetNext();
-    }
-}
-
 extern "C" WXDLLIMPEXP_CORE
 void wxPopupMenuPositionCallback( GtkMenu *menu,
                                   gint *x, gint *y,
@@ -1502,8 +1485,6 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     // NOTE: if you change this code, you need to update
     //       the same code in taskbar.cpp as well. This
     //       is ugly code duplication, I know.
-
-    SetInvokingWindow( menu, this );
 
     menu->UpdateUI();
 

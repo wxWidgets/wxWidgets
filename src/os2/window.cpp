@@ -1788,7 +1788,6 @@ bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
     bool bIsWaiting = true;
     int nHeight;
 
-    pMenu->SetInvokingWindow(this);
     pMenu->UpdateUI();
 
     if ( nX == -1 && nY == -1 )
@@ -1824,7 +1823,6 @@ bool wxWindowOS2::DoPopupMenu( wxMenu* pMenu, int nX, int nY )
         ::WinDispatchMsg(vHabmain, (PQMSG)&vMsg);
     }
 
-    pMenu->SetInvokingWindow(NULL);
     return true;
 } // end of wxWindowOS2::DoPopupMenu
 #endif // wxUSE_MENUS_NATIVE
