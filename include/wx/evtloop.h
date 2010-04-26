@@ -17,8 +17,7 @@
 
 // TODO: implement wxEventLoopSource for MSW (it should wrap a HANDLE and be
 //       monitored using MsgWaitForMultipleObjects())
-#if defined(__WXOSX__) || defined(__WXGTK20__) || defined(__WXDFB__) || \
-        (!wxUSE_GUI && defined(__UNIX__))
+#if defined(__WXOSX__) || defined(__UNIX__)
     #define wxUSE_EVENTLOOP_SOURCE 1
 #else
     #define wxUSE_EVENTLOOP_SOURCE 0
@@ -264,6 +263,19 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 public:
     wxGUIEventLoop() { m_impl = NULL; }
     virtual ~wxGUIEventLoop();
+
+#if wxUSE_EVENTLOOP_SOURCE
+    // We need to define a base class pure virtual method but we can't provide
+    // a generic implementation for it so simply fail.
+    virtual wxEventLoopSource *
+    AddSourceForFD(int WXUNUSED(fd),
+                   wxEventLoopSourceHandler * WXUNUSED(handler),
+                   int WXUNUSED(flags))
+    {
+        wxFAIL_MSG( "support for event loop sources not implemented" );
+        return NULL;
+    }
+#endif // wxUSE_EVENTLOOP_SOURCE
 
     virtual int Run();
     virtual void Exit(int rc = 0);
