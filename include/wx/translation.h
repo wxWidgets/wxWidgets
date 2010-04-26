@@ -18,6 +18,7 @@
 
 #if wxUSE_INTL
 
+#include "wx/buffer.h"
 #include "wx/language.h"
 
 #if !wxUSE_UNICODE
@@ -90,8 +91,10 @@ public:
     // check if the given catalog is loaded
     bool IsLoaded(const wxString& domain) const;
 
-    // load catalog data directly from file
+    // load catalog data directly from file or memory
     bool LoadCatalogFile(const wxString& filename,
+                         const wxString& domain = wxEmptyString);
+    bool LoadCatalogData(const wxScopedCharTypeBuffer<char>& data,
                          const wxString& domain = wxEmptyString);
 
     // access to translations
@@ -148,6 +151,7 @@ public:
                              const wxString& domain, const wxString& lang) = 0;
 };
 
+
 // standard wxTranslationsLoader implementation, using filesystem
 class WXDLLIMPEXP_BASE wxFileTranslationsLoader
     : public wxTranslationsLoader
@@ -158,6 +162,25 @@ public:
     virtual bool LoadCatalog(wxTranslations *translations,
                              const wxString& domain, const wxString& lang);
 };
+
+
+#ifdef __WINDOWS__
+// loads translations from win32 resources
+class WXDLLIMPEXP_BASE wxResourceTranslationsLoader
+    : public wxTranslationsLoader
+{
+public:
+    virtual bool LoadCatalog(wxTranslations *translations,
+                             const wxString& domain, const wxString& lang);
+
+protected:
+    // returns resource type to use for translations
+    virtual wxString GetResourceType() const { return "MOFILE"; }
+
+    // returns module to load resources from
+    virtual WXHINSTANCE GetModule() const { return 0; }
+};
+#endif // __WINDOWS__
 
 
 // ----------------------------------------------------------------------------
