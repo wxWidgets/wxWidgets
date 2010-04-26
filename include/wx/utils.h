@@ -676,10 +676,31 @@ public:
 void WXDLLIMPEXP_CORE wxGetMousePosition( int* x, int* y );
 
 // MSW only: get user-defined resource from the .res file.
-// Returns NULL or newly-allocated memory, so use delete[] to clean up.
 #ifdef __WXMSW__
-    extern WXDLLIMPEXP_CORE const wxChar* wxUserResourceStr;
-    WXDLLIMPEXP_CORE char* wxLoadUserResource(const wxString& resourceName, const wxString& resourceType = wxUserResourceStr, int* pLen = NULL);
+    // default resource type for wxLoadUserResource()
+    extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxUserResourceStr;
+
+    // Return the pointer to the resource data. This pointer is read-only, use
+    // the overload below if you need to modify the data.
+    //
+    // Returns true on success, false on failure. Doesn't log an error message
+    // if the resource is not found (because this could be expected) but does
+    // log one if any other error occurs.
+    WXDLLIMPEXP_BASE bool
+    wxLoadUserResource(const void **outData,
+                       size_t *outLen,
+                       const wxString& resourceName,
+                       const wxString& resourceType = wxUserResourceStr);
+
+    // This function allocates a new buffer and makes a copy of the resource
+    // data, remember to delete[] the buffer. And avoid using it entirely if
+    // the overload above can be used.
+    //
+    // Returns NULL on failure.
+    WXDLLIMPEXP_BASE char*
+    wxLoadUserResource(const wxString& resourceName,
+                       const wxString& resourceType = wxUserResourceStr,
+                       int* pLen = NULL);
 #endif // MSW
 
 // ----------------------------------------------------------------------------
