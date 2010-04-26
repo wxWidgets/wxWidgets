@@ -468,6 +468,21 @@ private:
             delete this;
     }
 
+    void *release()
+    {
+        if ( m_data == NULL )
+            return NULL;
+
+        wxASSERT_MSG( m_ref == 1, "can't release shared buffer" );
+
+        void *p = m_data;
+        m_data = NULL;
+        m_len =
+        m_size = 0;
+
+        return p;
+    }
+
 
     // the buffer containing the data
     void  *m_data;
@@ -569,6 +584,13 @@ public:
     }
 
     operator const char *() const { return (const char*)GetData(); }
+
+    // gives up ownership of data, returns the pointer; after this call,
+    // data isn't freed by the buffer and its content is resent to empty
+    void *release()
+    {
+        return m_bufdata->release();
+    }
 
 private:
     wxMemoryBufferData*  m_bufdata;
