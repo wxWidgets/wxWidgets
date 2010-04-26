@@ -737,7 +737,8 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     wxLoadUserResource(const void **outData,
                        size_t *outLen,
                        const wxString& resourceName,
-                       const wxString& resourceType = wxUserResourceStr);
+                       const wxString& resourceType = wxUserResourceStr,
+                       WXHINSTANCE module = 0);
 
     // This function allocates a new buffer and makes a copy of the resource
     // data, remember to delete[] the buffer. And avoid using it entirely if
@@ -747,7 +748,8 @@ WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
     WXDLLIMPEXP_BASE char*
     wxLoadUserResource(const wxString& resourceName,
                        const wxString& resourceType = wxUserResourceStr,
-                       int* pLen = NULL);
+                       int* pLen = NULL,
+                       WXHINSTANCE module = 0);
 #endif // MSW
 
 #endif

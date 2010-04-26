@@ -1085,17 +1085,18 @@ bool
 wxLoadUserResource(const void **outData,
                    size_t *outLen,
                    const wxString& resourceName,
-                   const wxString& resourceType)
+                   const wxString& resourceType,
+                   WXHINSTANCE instance)
 {
     wxCHECK_MSG( outData && outLen, false, "output pointers can't be NULL" );
 
-    HRSRC hResource = ::FindResource(wxGetInstance(),
+    HRSRC hResource = ::FindResource(instance,
                                      resourceName.wx_str(),
                                      resourceType.wx_str());
     if ( !hResource )
         return false;
 
-    HGLOBAL hData = ::LoadResource(wxGetInstance(), hResource);
+    HGLOBAL hData = ::LoadResource(instance, hResource);
     if ( !hData )
     {
         wxLogSysError(_("Failed to load resource \"%s\"."), resourceName);
@@ -1109,7 +1110,7 @@ wxLoadUserResource(const void **outData,
         return false;
     }
 
-    *outLen = ::SizeofResource(wxGetInstance(), hResource);
+    *outLen = ::SizeofResource(instance, hResource);
 
     // Notice that we do not need to call neither UnlockResource() (which is
     // obsolete in Win32) nor GlobalFree() (resources are freed on process
@@ -1121,11 +1122,12 @@ wxLoadUserResource(const void **outData,
 char *
 wxLoadUserResource(const wxString& resourceName,
                    const wxString& resourceType,
-                   int* pLen)
+                   int* pLen,
+                   WXHINSTANCE instance)
 {
     const void *data;
     size_t len;
-    if ( !wxLoadUserResource(&data, &len, resourceName, resourceType) )
+    if ( !wxLoadUserResource(&data, &len, resourceName, resourceType, instance) )
         return NULL;
 
     char *s = new char[len + 1];
