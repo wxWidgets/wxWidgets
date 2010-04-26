@@ -1359,8 +1359,48 @@ bool wxTranslations::AddCatalog(const wxString& domain,
     if ( msgIdLang == domain_lang )
         return true;
 
+    return LoadCatalog(domain, domain_lang);
+}
+
+
+bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
+{
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
-    return m_loader->LoadCatalog(this, domain, domain_lang);
+
+#if wxUSE_FONTMAP
+    // first look for the catalog for this language and the current locale:
+    // notice that we don't use the system name for the locale as this would
+    // force us to install catalogs in different locations depending on the
+    // system but always use the canonical name
+    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
+    if ( encSys != wxFONTENCODING_SYSTEM )
+    {
+        wxString fullname(lang);
+        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
+
+        if ( m_loader->LoadCatalog(this, domain, fullname) )
+            return true;
+    }
+#endif // wxUSE_FONTMAP
+
+    // Next try: use the provided name language name:
+    if ( m_loader->LoadCatalog(this, domain, lang) )
+        return true;
+
+    // Also try just base locale name: for things like "fr_BE" (Belgium
+    // French) we should use fall back on plain "fr" if no Belgium-specific
+    // message catalogs exist
+    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
+    {
+        if ( m_loader->LoadCatalog(this, domain, ExtractLang(lang)) )
+            return true;
+    }
+
+    // Nothing worked, the catalog just isn't there
+    wxLogTrace(TRACE_I18N,
+               "Catalog \"%s.mo\" not found for language \"%s\".",
+               domain, lang);
+    return false;
 }
 
 
@@ -1669,31 +1709,7 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
     wxCHECK_MSG( lang.length() >= LEN_LANG, false,
                  "invalid language specification" );
 
-    wxString searchPath;
-
-#if wxUSE_FONTMAP
-    // first look for the catalog for this language and the current locale:
-    // notice that we don't use the system name for the locale as this would
-    // force us to install catalogs in different locations depending on the
-    // system but always use the canonical name
-    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
-    if ( encSys != wxFONTENCODING_SYSTEM )
-    {
-        wxString fullname(lang);
-        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
-        searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
-    }
-#endif // wxUSE_FONTMAP
-
-    searchPath += GetFullSearchPath(lang);
-    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
-    {
-        // also add just base locale name: for things like "fr_BE" (Belgium
-        // French) we should use fall back on plain "fr" if no Belgium-specific
-        // message catalogs exist
-        searchPath << wxPATH_SEP
-                    << GetFullSearchPath(ExtractLang(lang));
-    }
+    wxString searchPath = GetFullSearchPath(lang);
 
     wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
                 domain, searchPath);
@@ -1703,11 +1719,7 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
 
     wxString strFullName;
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-    {
-        wxLogVerbose(_("catalog file for domain '%s' not found."), domain);
-        wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), domain);
         return false;
-    }
 
     // open file and read its data
     wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());

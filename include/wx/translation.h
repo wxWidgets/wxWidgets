@@ -111,6 +111,9 @@ public:
     static const wxString& GetUntranslatedString(const wxString& str);
 
 private:
+    // perform loading of the catalog via m_loader
+    bool LoadCatalog(const wxString& domain, const wxString& lang);
+
     // find best translation for given domain
     wxString ChooseLanguageForDomain(const wxString& domain,
                                      const wxString& msgIdLang);
