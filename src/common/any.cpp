@@ -28,6 +28,7 @@
 #include "wx/vector.h"
 #include "wx/module.h"
 #include "wx/hashmap.h"
+#include "wx/hashset.h"
 
 using namespace wxPrivate;
 
@@ -44,6 +45,11 @@ WX_DECLARE_HASH_MAP(wxAnyValueType*,
                     wxAnyTypeToVariantDataFactoryMap);
 
 #endif
+
+WX_DECLARE_HASH_SET(wxAnyValueType*,
+                    wxPointerHash,
+                    wxPointerEqual,
+                    wxAnyValueTypePtrSet);
 
 //
 // Helper class to manage wxAnyValueType instances and and other
@@ -65,13 +71,20 @@ public:
     #if wxUSE_VARIANT
         m_anyToVariant.clear();
     #endif
-        for ( size_t i=0; i<m_valueTypes.size(); i++ )
-            delete m_valueTypes[i];
+
+        wxAnyValueTypePtrSet::iterator it;
+        for ( it = m_valueTypes.begin(); it != m_valueTypes.end(); ++it )
+        {
+            delete *it;
+        }
     }
 
     void RegisterValueType(wxAnyValueType* valueType)
     {
-        m_valueTypes.push_back(valueType);
+        // Let's store value types in set to prevent deleting the same object
+        // several times (it may be possible, under certain conditions, that
+        // the same wxAnyValueType instance gets registered twice)
+        m_valueTypes.insert(valueType);
     }
 
 #if wxUSE_VARIANT
@@ -134,7 +147,7 @@ public:
 #endif
 
 private:
-    wxVector<wxAnyValueType*>               m_valueTypes;
+    wxAnyValueTypePtrSet                    m_valueTypes;
 #if wxUSE_VARIANT
     wxAnyTypeToVariantDataFactoryMap        m_anyToVariant;
     wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
