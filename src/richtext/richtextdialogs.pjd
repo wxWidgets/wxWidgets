@@ -7,7 +7,7 @@
     <string name="author">""</string>
     <string name="description">""</string>
     <string name="xrc_filename">""</string>
-    <bool name="convert_images_to_xpm">0</bool>
+    <long name="image_mode">0</long>
     <bool name="inline_images">0</bool>
     <bool name="generate_cpp_for_xrc">0</bool>
     <long name="working_mode">1</long>
@@ -24,6 +24,7 @@
     <bool name="generate_virtual_eventhandlers">0</bool>
     <string name="current_platform">"&lt;All platforms&gt;"</string>
     <string name="target_wx_version">"&lt;Any&gt;"</string>
+    <string name="app_kind">"Standard"</string>
     <string name="cpp_header_comment">"/////////////////////////////////////////////////////////////////////////////
 // Name:        %HEADER-FILENAME%
 // Purpose:     
@@ -147,29 +148,42 @@
         <string name="Modularity">"Modular"</string>
         <string name="GUI mode">"GUI"</string>
         <string name="Toolkit">"wxMSW"</string>
+        <string name="Processor type">"Default"</string>
         <string name="Runtime linking">"Dynamic"</string>
         <string name="Use exceptions">"Yes"</string>
         <string name="Use ODBC">"No"</string>
+        <string name="Use XRC">"Yes"</string>
         <string name="Use OpenGL">"No"</string>
         <string name="Use wxMediaCtrl">"No"</string>
         <string name="Use wxRichTextCtrl">"Yes"</string>
-        <string name="wxWidgets version">"%WXVERSION%"</string>
+        <string name="Use wxHTML">"Yes"</string>
+        <string name="Use wxPropertyGrid">"Yes"</string>
+        <string name="Use wxAUI">"Yes"</string>
+        <string name="Use wxSTC">"Yes"</string>
+        <string name="Use wxRibbonControl">"Yes"</string>
         <string name="Executable name">"%EXECUTABLE%"</string>
         <string name="Program arguments">""</string>
         <string name="Working path">"%AUTO%"</string>
         <string name="Output path">"%AUTO%"</string>
         <string name="Objects path">"%AUTO%"</string>
-        <string name="Compiler location">"%AUTO%"</string>
-        <string name="wxWidgets location">"%AUTO%"</string>
-        <string name="C++ command">"%AUTO%"</string>
-        <string name="C command">"%AUTO%"</string>
-        <string name="Resource compiler">"%AUTO%"</string>
-        <string name="Make command">"%AUTO%"</string>
         <string name="Project makefile">"%AUTO%"</string>
+        <string name="wxWidgets version">"%WXVERSION%"</string>
         <string name="wxWidgets makefile">"%AUTO%"</string>
+        <string name="wxWidgets location">"%AUTO%"</string>
+        <string name="wxWidgets build path">"%AUTO%"</string>
+        <string name="wxWidgets build command">"%AUTO%"</string>
+        <string name="wxWidgets clean command">"%AUTO%"</string>
+        <string name="CFG">""</string>
+        <string name="Compiler location">"%AUTO%"</string>
         <string name="Compiler bin path">"%AUTO%"</string>
         <string name="Compiler include path">"%AUTO%"</string>
         <string name="Compiler lib path">"%AUTO%"</string>
+        <string name="PATH variable">"%AUTO%"</string>
+        <string name="C++ command">"%AUTO%"</string>
+        <string name="C command">"%AUTO%"</string>
+        <string name="Linker command">"%AUTO%"</string>
+        <string name="Resource compiler">"%AUTO%"</string>
+        <string name="Make command">"%AUTO%"</string>
         <string name="Preprocessor flags">"%AUTO%"</string>
         <string name="Optimizations">"%AUTO%"</string>
         <string name="Warnings">"%AUTO%"</string>
@@ -181,13 +195,8 @@
         <string name="Include path">"%AUTO%"</string>
         <string name="Resource flags">"%AUTO%"</string>
         <string name="Resource path">"%AUTO%"</string>
-        <string name="wxWidgets build path">"%AUTO%"</string>
-        <string name="wxWidgets build command">"%AUTO%"</string>
-        <string name="wxWidgets clean command">"%AUTO%"</string>
-        <string name="PATH variable">"%AUTO%"</string>
         <bool name="Suppress source rules">0</bool>
         <bool name="Enable makefile generation">1</bool>
-        <string name="CFG">""</string>
       </document>
     </document>
   </data>
@@ -227,6 +236,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTFONTPAGE"</string>
@@ -269,6 +279,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -433,6 +444,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -516,6 +528,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -582,6 +595,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -683,6 +697,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -766,6 +781,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -841,6 +857,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -963,6 +980,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1124,6 +1142,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1285,6 +1304,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1471,6 +1491,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1536,6 +1557,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1635,6 +1657,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -1699,6 +1722,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -2083,6 +2107,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -2132,6 +2157,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTINDENTSSPACINGPAGE"</string>
@@ -2174,6 +2200,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -2207,14 +2234,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -2339,6 +2358,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -2816,6 +2836,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -2935,6 +2956,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3086,6 +3108,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3194,6 +3217,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3265,6 +3289,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3373,6 +3398,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3445,6 +3471,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3553,6 +3580,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3625,6 +3653,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3776,6 +3805,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -3895,6 +3925,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4046,6 +4077,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4154,6 +4186,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4225,6 +4258,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4333,6 +4367,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4405,6 +4440,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4477,7 +4513,7 @@
                           <string name="proxy-Implementation filename">""</string>
                           <string name="proxy-Header filename">""</string>
                           <string name="proxy-Member variable name">"m_spacingLine"</string>
-                          <string name="proxy-Strings">"Single|1.5|2"</string>
+                          <string name="proxy-Strings">"Single|1.1|1.2|1.3|1.4|1.5|1.6|1.7|1.8|1.9|2"</string>
                           <string name="proxy-Initial value">"Single"</string>
                           <string name="proxy-Help text">"The line spacing."</string>
                           <string name="proxy-Tooltip text">""</string>
@@ -4591,6 +4627,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4640,6 +4677,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTTABSPAGE"</string>
@@ -4682,6 +4720,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4847,6 +4886,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -4929,6 +4969,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5004,6 +5045,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5126,6 +5168,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5376,6 +5419,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTBULLETSPAGE"</string>
@@ -5418,6 +5462,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5583,6 +5628,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5657,6 +5703,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -5977,6 +6024,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6126,6 +6174,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6271,6 +6320,7 @@
                       <bool name="proxy-wxNO_BORDER">0</bool>
                       <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                       <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                      <bool name="proxy-wxBORDER_THEME">0</bool>
                       <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                       <bool name="proxy-wxRAISED_BORDER">0</bool>
                       <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6504,6 +6554,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6668,6 +6719,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6832,6 +6884,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6906,6 +6959,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -6999,6 +7053,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7048,6 +7103,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTSTYLEPAGE"</string>
@@ -7090,6 +7146,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7256,6 +7313,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7338,6 +7396,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7409,6 +7468,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7543,6 +7603,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7680,6 +7741,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="variable-0">"m_fontName|wxString|FontName||0"</string>
@@ -7726,6 +7788,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -7759,6 +7822,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -7883,6 +7954,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8044,6 +8116,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8176,6 +8249,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8276,6 +8350,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8372,6 +8447,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8454,6 +8530,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -8551,6 +8628,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9031,6 +9109,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTSTYLEORGANISERDIALOG"</string>
@@ -9073,6 +9152,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9238,6 +9318,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9303,6 +9384,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9404,6 +9486,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9469,6 +9552,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -9570,6 +9654,7 @@
                     <bool name="proxy-wxNO_BORDER">0</bool>
                     <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                     <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                    <bool name="proxy-wxBORDER_THEME">0</bool>
                     <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                     <bool name="proxy-wxRAISED_BORDER">0</bool>
                     <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -10458,6 +10543,7 @@
           <string name="id-prefix">""</string>
           <bool name="use-id-suffix">0</bool>
           <string name="id-suffix">""</string>
+          <string name="app-kind">"Standard"</string>
           <long name="use-xrc">0</long>
           <long name="working-mode">0</long>
           <string name="proxy-Id name">"ID_RICHTEXTLISTSTYLEPAGE"</string>
@@ -10500,6 +10586,7 @@
           <bool name="proxy-wxNO_BORDER">0</bool>
           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+          <bool name="proxy-wxBORDER_THEME">0</bool>
           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
           <bool name="proxy-wxRAISED_BORDER">0</bool>
           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -10641,6 +10728,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -10715,6 +10803,7 @@
                   <bool name="proxy-wxNO_BORDER">0</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -10883,6 +10972,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -10950,6 +11040,7 @@
                   <bool name="proxy-wxNO_BORDER">1</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -11104,6 +11195,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -11178,6 +11270,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -11498,6 +11591,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -11647,6 +11741,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -11767,6 +11862,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -12025,6 +12121,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -12189,6 +12286,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -12326,6 +12424,7 @@
                   <bool name="proxy-wxNO_BORDER">1</bool>
                   <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                   <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                  <bool name="proxy-wxBORDER_THEME">0</bool>
                   <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                   <bool name="proxy-wxRAISED_BORDER">0</bool>
                   <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -12480,6 +12579,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -12957,6 +13057,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13076,6 +13177,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13227,6 +13329,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13335,6 +13438,7 @@
                                 <bool name="proxy-wxNO_BORDER">0</bool>
                                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                                <bool name="proxy-wxBORDER_THEME">0</bool>
                                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13407,6 +13511,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13515,6 +13620,7 @@
                                 <bool name="proxy-wxNO_BORDER">0</bool>
                                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                                <bool name="proxy-wxBORDER_THEME">0</bool>
                                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13587,6 +13693,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13695,6 +13802,7 @@
                                 <bool name="proxy-wxNO_BORDER">0</bool>
                                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                                <bool name="proxy-wxBORDER_THEME">0</bool>
                                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13783,6 +13891,7 @@
                         <bool name="proxy-wxNO_BORDER">0</bool>
                         <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                         <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                        <bool name="proxy-wxBORDER_THEME">0</bool>
                         <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                         <bool name="proxy-wxRAISED_BORDER">0</bool>
                         <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -13902,6 +14011,7 @@
                           <bool name="proxy-wxNO_BORDER">0</bool>
                           <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                           <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                          <bool name="proxy-wxBORDER_THEME">0</bool>
                           <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                           <bool name="proxy-wxRAISED_BORDER">0</bool>
                           <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14053,6 +14163,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14161,6 +14272,7 @@
                                 <bool name="proxy-wxNO_BORDER">0</bool>
                                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                                <bool name="proxy-wxBORDER_THEME">0</bool>
                                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14233,6 +14345,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14341,6 +14454,7 @@
                                 <bool name="proxy-wxNO_BORDER">0</bool>
                                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                                <bool name="proxy-wxBORDER_THEME">0</bool>
                                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                                 <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14413,6 +14527,7 @@
                               <bool name="proxy-wxNO_BORDER">0</bool>
                               <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                               <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                              <bool name="proxy-wxBORDER_THEME">0</bool>
                               <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                               <bool name="proxy-wxRAISED_BORDER">0</bool>
                               <bool name="proxy-wxSTATIC_BORDER">0</bool>
@@ -14576,6 +14691,7 @@
                 <bool name="proxy-wxNO_BORDER">0</bool>
                 <bool name="proxy-wxSIMPLE_BORDER">0</bool>
                 <bool name="proxy-wxDOUBLE_BORDER">0</bool>
+                <bool name="proxy-wxBORDER_THEME">0</bool>
                 <bool name="proxy-wxSUNKEN_BORDER">0</bool>
                 <bool name="proxy-wxRAISED_BORDER">0</bool>
                 <bool name="proxy-wxSTATIC_BORDER">0</bool>

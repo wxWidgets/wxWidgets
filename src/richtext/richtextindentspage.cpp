@@ -208,7 +208,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer24, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentLeft = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeft = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeft->SetHelpText(_("The left indent."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_indentLeft->SetToolTip(_("The left indent."));
@@ -220,7 +220,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer27, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentLeftFirst = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentLeftFirst = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_LEFT_FIRST, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentLeftFirst->SetHelpText(_("The first line indent."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_indentLeftFirst->SetToolTip(_("The first line indent."));
@@ -232,7 +232,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer30, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_indentRight = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_indentRight = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_INDENT_RIGHT, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_indentRight->SetHelpText(_("The right indent."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_indentRight->SetToolTip(_("The right indent."));
@@ -287,7 +287,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer43 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer41->Add(itemBoxSizer43, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_spacingBefore = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingBefore = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_BEFORE, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     m_spacingBefore->SetHelpText(_("The spacing before the paragraph."));
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_spacingBefore->SetToolTip(_("The spacing before the paragraph."));
@@ -299,7 +299,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     wxBoxSizer* itemBoxSizer46 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer41->Add(itemBoxSizer46, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
 
-    m_spacingAfter = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
+    m_spacingAfter = new wxTextCtrl( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_AFTER, wxEmptyString, wxDefaultPosition, wxSize(50, -1), 0 );
     if (wxRichTextIndentsSpacingPage::ShowToolTips())
         m_spacingAfter->SetToolTip(_("The spacing after the paragraph."));
     itemBoxSizer46->Add(m_spacingAfter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -312,7 +312,15 @@ void wxRichTextIndentsSpacingPage::CreateControls()
 
     wxArrayString m_spacingLineStrings;
     m_spacingLineStrings.Add(_("Single"));
+    m_spacingLineStrings.Add(_("1.1"));
+    m_spacingLineStrings.Add(_("1.2"));
+    m_spacingLineStrings.Add(_("1.3"));
+    m_spacingLineStrings.Add(_("1.4"));
     m_spacingLineStrings.Add(_("1.5"));
+    m_spacingLineStrings.Add(_("1.6"));
+    m_spacingLineStrings.Add(_("1.7"));
+    m_spacingLineStrings.Add(_("1.8"));
+    m_spacingLineStrings.Add(_("1.9"));
     m_spacingLineStrings.Add(_("2"));
     m_spacingLine = new wxComboBox( itemPanel1, ID_RICHTEXTINDENTSSPACINGPAGE_SPACING_LINE, _("Single"), wxDefaultPosition, wxSize(90, -1), m_spacingLineStrings, wxCB_READONLY );
     m_spacingLine->SetStringSelection(_("Single"));
@@ -437,12 +445,8 @@ bool wxRichTextIndentsSpacingPage::TransferDataFromWindow()
 
     int spacingIndex = m_spacingLine->GetSelection();
     int lineSpacing = 0;
-    if (spacingIndex == 0)
-        lineSpacing = 10;
-    else if (spacingIndex == 1)
-        lineSpacing = 15;
-    else if (spacingIndex == 2)
-        lineSpacing = 20;
+    if (spacingIndex != -1)
+        lineSpacing = 10 + spacingIndex;
 
     if (lineSpacing == 0)
         attr->SetFlags(attr->GetFlags() & (~wxTEXT_ATTR_LINE_SPACING));
@@ -526,12 +530,8 @@ bool wxRichTextIndentsSpacingPage::TransferDataToWindow()
         int index = 0;
 
         int lineSpacing = attr->GetLineSpacing();
-        if (lineSpacing == 10)
-            index = 0;
-        else if (lineSpacing == 15)
-            index = 1;
-        else if (lineSpacing == 20)
-            index = 2;
+        if (lineSpacing >= 10 && lineSpacing <= 20)
+            index = lineSpacing - 10;
         else
             index = -1;
 

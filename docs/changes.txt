@@ -88,6 +88,14 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.12:
+-------
+
+All (GUI):
+
+- wxRTC: fixed style selection resetting after editing a style.
+- wxRTC: can now edit line spacing in .1 increments from 1 to 2.
+
 2.8.11:
 -------
 
