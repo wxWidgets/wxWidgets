@@ -331,8 +331,6 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
                 m_inTable = true;
             }
 
-            OutputFont(thisStyle, str);
-
             if (((GetFlags() & wxRICHTEXT_HANDLER_USE_CSS) == 0) && (thisStyle.GetLeftSubIndent() < 0))
             {
                 str << SymbolicIndent( - thisStyle.GetLeftSubIndent());
@@ -366,16 +364,17 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttr& WXUNUSED(
 
         str << wxT(">");
     }
+    OutputFont(thisStyle, str);
 }
 
 /// End paragraph formatting
 void wxRichTextHTMLHandler::EndParagraphFormatting(const wxTextAttr& WXUNUSED(currentStyle), const wxTextAttr& thisStyle, wxTextOutputStream& stream)
 {
+    if (thisStyle.HasFont())
+        stream << wxT("</font>");
+
     if (m_inTable)
     {
-        if (thisStyle.HasFont())
-            stream << wxT("</font>");
-
         stream << wxT("</td></tr></table></p>\n");
         m_inTable = false;
     }
