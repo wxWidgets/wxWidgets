@@ -500,6 +500,8 @@ All (GUI):
 - wxRTC: added wxRICHTEXT_HANDLER_USE_CSS flag for HTML handler to use CSS
   where possible.
 - wxRTC: corrected centring and right-justification spacing.
+- wxRTC: fixed style selection reset after editing a style.
+- wxRTC: can now edit line spacing in .1 increments from 1 to 2.
 - Added wxBORDER_THEME to XRC.
 - wxGraphicsContext is now enabled by default if supported by the platform.
 - Fix building with using system libpng 1.4 (Volker Grabsch).
