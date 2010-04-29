@@ -247,10 +247,8 @@ public:
     // The loaded catalog will be used for message lookup by GetString().
     //
     // Returns 'true' if it was successfully loaded
-    bool AddCatalog(const wxString& domain)
-        { return m_translations.AddCatalog(domain); }
-    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
-        { return m_translations.AddCatalog(domain, msgIdLanguage); }
+    bool AddCatalog(const wxString& domain);
+    bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage);
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage, const wxString& msgIdCharset);
 
@@ -258,8 +256,7 @@ public:
     static bool IsAvailable(int lang);
 
     // check if the given catalog is loaded
-    bool IsLoaded(const wxString& domain) const
-        { return m_translations.IsLoaded(domain); }
+    bool IsLoaded(const wxString& domain) const;
 
     // Retrieve the language info struct for the given language
     //
@@ -300,7 +297,7 @@ public:
     const wxString& GetString(const wxString& origString,
                               const wxString& domain = wxEmptyString) const
     {
-        return m_translations.GetString(origString, domain);
+        return wxGetTranslation(origString, domain);
     }
     // plural form version of the same:
     const wxString& GetString(const wxString& origString,
@@ -308,7 +305,7 @@ public:
                               size_t n,
                               const wxString& domain = wxEmptyString) const
     {
-        return m_translations.GetString(origString, origString2, n, domain);
+        return wxGetTranslation(origString, origString2, n, domain);
     }
 
     // this is hack to work around a problem with wxGetTranslation() which
@@ -322,10 +319,7 @@ public:
 
     // return the contents of .po file header
     wxString GetHeaderValue(const wxString& header,
-                            const wxString& domain = wxEmptyString) const
-    {
-        return m_translations.GetHeaderValue(header, domain);
-    }
+                            const wxString& domain = wxEmptyString) const;
 
     // These two methods are for internal use only. First one creates
     // ms_languagesDB if it doesn't already exist, second one destroys
