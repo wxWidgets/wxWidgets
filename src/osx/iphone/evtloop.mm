@@ -106,6 +106,13 @@ void wxGUIEventLoop::DoStop()
 {
     return wxCFEventLoop::DoStop();
 }
+
+CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
+{
+    return wxCFEventLoop::CFGetCurrentRunLoop();
+}
+
+
 // TODO move into a evtloop_osx.cpp
 
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
