@@ -135,6 +135,11 @@ long style, long extraStyle, const wxString& name )
     [m_macWindow setWindowLevel:level];
 }
 
+void wxNonOwnedWindowIPhoneImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )
+{
+    m_macWindow = nativeWindow;
+}
+
 
 WXWindow wxNonOwnedWindowIPhoneImpl::GetWXWindow() const
 {
@@ -304,6 +309,14 @@ void wxNonOwnedWindowIPhoneImpl::WindowToScreen( int *x, int *y )
         *y = p.y;
 }
 
+wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, WXWindow nativeWindow)
+{
+    wxNonOwnedWindowIPhoneImpl* now = new wxNonOwnedWindowIPhoneImpl( wxpeer );
+    now->Create( parent, nativeWindow );
+    return now;
+}
+
+
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name )
 {
@@ -321,7 +334,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
 
     wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? frame : appframe ) ];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    wxUIContentViewController* controller = [[wxUIContentViewController alloc] init];
+    wxUIContentViewController* controller = [[wxUIContentViewController alloc] initWithNibName:nil bundle:nil];
     controller.wantsFullScreenLayout = fullscreen;
     controller.view = contentview;
     [contentview release];
