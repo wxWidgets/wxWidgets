@@ -50,6 +50,7 @@ public :
     virtual WXWidget    GetWXWidget() const { return m_osxView; }
 
     virtual void        SetBackgroundColour( const wxColour& col ) ;
+    virtual bool        SetBackgroundStyle(wxBackgroundStyle style) ;
 
     virtual void        GetContentArea( int &left , int &top , int &width , int &height ) const;
     virtual void        Move(int x, int y, int width, int height);
@@ -110,8 +111,8 @@ public :
 
     // action
 
-    virtual void        touchUpInsideAction(void* sender, WX_UIEvent evt, WXWidget slf, void* _cmd);
-
+    virtual void        controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent);
+    virtual void         controlTextDidChange();
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl)
@@ -128,6 +129,7 @@ public :
     virtual void WillBeDestroyed() ;
     void Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
     long style, long extraStyle, const wxString& name ) ;
+    void Create( wxWindow* parent, WXWindow nativeWindow );
 
     WXWindow GetWXWindow() const;
     void Raise();
@@ -203,6 +205,7 @@ protected :
     }
 
     @end // wxUIView
+
 
     void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);
 
