@@ -56,7 +56,9 @@ public:
     /**
         Default constructor.
     */
-    wxAnyValueType();
+    wxAnyValueType()
+    {
+    }
 
     /**
         Destructor.
@@ -114,6 +116,26 @@ public:
 private:
 };
 
+
+//
+// We need to allocate wxAnyValueType instances in heap, and need to use
+// scoped ptr to properly deallocate them in dynamic library use cases.
+// Here we have a minimal specialized scoped ptr implementation to deal
+// with various compiler-specific problems with template class' static
+// member variable of template type with explicit constructor which
+// is initialized in global scope.
+//
+class wxAnyValueTypeScopedPtr
+{
+public:
+    wxAnyValueTypeScopedPtr(wxAnyValueType* ptr) : m_ptr(ptr) { }
+    ~wxAnyValueTypeScopedPtr() { delete m_ptr; }
+    wxAnyValueType* get() const { return m_ptr; }
+private:
+    wxAnyValueType* m_ptr;
+};
+
+
 //
 // This method of checking the type is compatible with VC6
 #define wxANY_VALUE_TYPE_CHECK_TYPE(valueTypePtr, T) \
@@ -127,6 +149,11 @@ private:
     facilitate sub-type system which allows, for instance, wxAny with
     signed short '15' to be treated equal to wxAny with signed long long '15'.
     Having sm_instance is important here.
+
+    NB: We really need to have wxAnyValueType instances allocated
+        in heap. They are stored as static template member variables,
+        and with them we just can't be too careful (eg. not allocating
+        them in heap broke the type identification in GCC).
 */
 #define WX_DECLARE_ANY_VALUE_TYPE(CLS) \
     friend class wxAny; \
@@ -134,23 +161,23 @@ private:
 public: \
     static bool IsSameClass(const wxAnyValueType* otherType) \
     { \
-        return wxTypeId(*sm_instance) == wxTypeId(*otherType); \
+        return wxTypeId(*sm_instance.get()) == wxTypeId(*otherType); \
     } \
     virtual bool IsSameType(const wxAnyValueType* otherType) const \
     { \
         return IsSameClass(otherType); \
     } \
 private: \
-    static CLS* sm_instance; \
+    static wxAnyValueTypeScopedPtr sm_instance; \
 public: \
     static wxAnyValueType* GetInstance() \
     { \
-        return sm_instance; \
+        return sm_instance.get(); \
     }
 
 
 #define WX_IMPLEMENT_ANY_VALUE_TYPE(CLS) \
-    CLS* CLS::sm_instance = new CLS();
+wxAnyValueTypeScopedPtr CLS::sm_instance(new CLS());
 
 
 #ifdef __VISUALC6__
@@ -309,8 +336,7 @@ public:
 };
 
 template<typename T>
-wxAnyValueTypeImpl<T>* wxAnyValueTypeImpl<T>::sm_instance =
-    new wxAnyValueTypeImpl<T>();
+wxAnyValueTypeScopedPtr wxAnyValueTypeImpl<T>::sm_instance = new wxAnyValueTypeImpl<T>();
 
 
 //
@@ -702,19 +728,19 @@ public:
     template<typename T>
     wxAny(const T& value)
     {
-        m_type = wxAnyValueTypeImpl<T>::sm_instance;
+        m_type = wxAnyValueTypeImpl<T>::sm_instance.get();
         wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
     }
 
     // These two constructors are needed to deal with string literals
     wxAny(const char* value)
     {
-        m_type = wxAnyValueTypeImpl<const char*>::sm_instance;
+        m_type = wxAnyValueTypeImpl<const char*>::sm_instance.get();
         wxAnyValueTypeImpl<const char*>::SetValue(value, m_buffer);
     }
     wxAny(const wchar_t* value)
     {
-        m_type = wxAnyValueTypeImpl<const wchar_t*>::sm_instance;
+        m_type = wxAnyValueTypeImpl<const wchar_t*>::sm_instance.get();
         wxAnyValueTypeImpl<const wchar_t*>::SetValue(value, m_buffer);
     }
 
@@ -789,7 +815,7 @@ public:
     wxAny& operator=(const T &value)
     {
         m_type->DeleteValue(m_buffer);
-        m_type = wxAnyValueTypeImpl<T>::sm_instance;
+        m_type = wxAnyValueTypeImpl<T>::sm_instance.get();
         wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
         return *this;
     }
@@ -938,7 +964,7 @@ public:
         if ( !wxAnyValueTypeImpl<T>::IsSameClass(m_type) )
         {
             wxAnyValueType* otherType =
-                wxAnyValueTypeImpl<T>::sm_instance;
+                wxAnyValueTypeImpl<T>::sm_instance.get();
             wxAnyValueBuffer temp_buf;
 
             if ( !m_type->ConvertValue(m_buffer, otherType, temp_buf) )
@@ -995,7 +1021,7 @@ private:
         else
         {
             // If everything else fails, wrap the whole wxVariantData
-            m_type = wxAnyValueTypeImpl<wxVariantData*>::sm_instance;
+            m_type = wxAnyValueTypeImpl<wxVariantData*>::sm_instance.get();
             wxAnyValueTypeImpl<wxVariantData*>::SetValue(data, m_buffer);
         }
     }
@@ -1005,7 +1031,7 @@ private:
     void Assign(const T &value)
     {
         m_type->DeleteValue(m_buffer);
-        m_type = wxAnyValueTypeImpl<T>::sm_instance;
+        m_type = wxAnyValueTypeImpl<T>::sm_instance.get();
         wxAnyValueTypeImpl<T>::SetValue(value, m_buffer);
     }
 
