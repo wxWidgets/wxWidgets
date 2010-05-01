@@ -22,6 +22,7 @@ public:
     virtual bool PopupMenu(wxMenu *menu);
 
 protected:
+    DECLARE_DYNAMIC_CLASS(wxTaskBarIcon)
 
 private:
     QSystemTrayIcon m_qtSystemTrayIcon;

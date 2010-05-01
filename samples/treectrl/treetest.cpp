@@ -1001,7 +1001,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     AssignStateImageList(states);
 }
 
-#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+#if USE_GENERIC_TREECTRL // || !defined(__WXMSW__)
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
     if ( size == -1 )

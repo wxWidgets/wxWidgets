@@ -272,6 +272,7 @@ protected:
     #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_BMP_RESOURCE
     #include "wx/os2/bitmap.h"
 #elif defined(__WXQT__)
+    #define wxBITMAP_DEFAULT_TYPE    wxBITMAP_TYPE_XPM
     #include "wx/qt/bitmap.h"
 #endif
 

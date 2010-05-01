@@ -75,7 +75,7 @@ void wxDataViewColumn::SetReorderable( bool reorderable )
 {
 }
 
-void SetFlags(int flags)
+void wxDataViewColumn::SetFlags(int flags)
 {
 }
 

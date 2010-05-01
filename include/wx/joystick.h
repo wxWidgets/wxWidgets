@@ -30,6 +30,8 @@
 #include "wx/osx/joystick.h"
 #elif defined(__WXPM__)
 #include "wx/os2/joystick.h"
+#elif defined(__WXQT__)
+#include "wx/unix/joystick.h"
 #endif
 
 #endif // wxUSE_JOYSTICK

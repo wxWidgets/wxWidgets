@@ -43,7 +43,7 @@ public:
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
                           const wxPalette *palette = NULL) const;
-    virtual bool LoadFile(const wxString &name, wxBitmapType type);
+    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
 #if wxUSE_PALETTE
     virtual wxPalette *GetPalette() const;

@@ -9,6 +9,8 @@
 #ifndef _WX_QT_DND_H_
 #define _WX_QT_DND_H_
 
+#define wxDROP_ICON(name)   wxICON(name)
+
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:

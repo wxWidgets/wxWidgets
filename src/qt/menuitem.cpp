@@ -46,7 +46,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
             // Not applicable for menu items.
             break;
     }
-    // QObject::connect( m_qtAction, SIGNAL( triggered() ), this, SLOT( OnTriggered() ));
 }
 
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
@@ -62,16 +61,6 @@ const wxBitmap &wxMenuItem::GetBitmap() const
 
     return s_bitmap;
 }
-
-//void wxMenuItem::OnItemTriggered( bool checked )
-//{
-//    wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, GetId() );
-//    event.SetEventObject( this );
-//    event.SetInt( IsCheckable() ? checked : -1 );
-//    
-//    wxMenu *menu = GetMenu();
-//    menu->ProcessEvent( event );
-//}
 
 void wxMenuItem::OnItemTriggered( bool checked )
 {

@@ -12,13 +12,13 @@
 #include "wx/msgdlg.h"
 
 wxMessageDialog::wxMessageDialog()
+    : wxMessageDialogBase()
 {
 }
 
-wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message,
-                const wxString& caption,
-                long style,
-                const wxPoint& pos)
+wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
+        const wxString& caption, long style, const wxPoint& pos )
+    : wxMessageDialogBase( parent, message, caption, style )
 {
 }
 

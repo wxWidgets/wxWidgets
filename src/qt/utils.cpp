@@ -31,6 +31,11 @@ void wxGetMousePosition( int *x, int *y )
     *y = 0;
 }
 
+wxMouseState wxGetMouseState()
+{
+    return wxMouseState();
+}
+
 void wxBeginBusyCursor(const wxCursor *cursor)
 {
 }
@@ -94,3 +99,7 @@ bool wxColourDisplay()
     return true;
 }
 
+bool wxLaunchDefaultApplication(const wxString& path, int flags)
+{
+    return false;
+}

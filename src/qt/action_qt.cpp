@@ -15,7 +15,7 @@
 wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *parent )
     : QAction( text, parent ), wxQtSignalReceiver< wxMenuItem >( menuItem )
 {
-    connect( this, SIGNAL( triggered( bool ) ), this, SLOT( OnActionTriggered( bool ))); 
+    connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
 }
 
 void wxQtAction::OnActionTriggered( bool checked )

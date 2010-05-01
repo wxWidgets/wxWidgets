@@ -11,6 +11,8 @@
 
 #include "wx/tglbtn.h"
 
+wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+
 IMPLEMENT_DYNAMIC_CLASS( wxBitmapToggleButton, wxToggleButtonBase )
 
 wxBitmapToggleButton::wxBitmapToggleButton()

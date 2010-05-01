@@ -11,10 +11,16 @@
 
 #include "wx/taskbar.h"
 
+//=============================================================================
+
 bool wxTaskBarIconBase::IsAvailable()
 {
     return QSystemTrayIcon::isSystemTrayAvailable();
 }
+
+//=============================================================================
+
+IMPLEMENT_DYNAMIC_CLASS( wxTaskBarIcon, wxTaskBarIconBase )
 
 wxTaskBarIcon::wxTaskBarIcon()
 {

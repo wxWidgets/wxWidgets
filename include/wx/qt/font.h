@@ -41,6 +41,14 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 #endif
 
+    bool Create(int size,
+                wxFontFamily family,
+                wxFontStyle style,
+                wxFontWeight weight,
+                bool underlined = false,
+                const wxString& face = wxEmptyString,
+                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
     // accessors: get the font characteristics
     virtual int GetPointSize() const;
     virtual wxFontFamily GetFamily() const;

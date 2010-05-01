@@ -59,6 +59,13 @@ wxFont::wxFont(int size,
 
 #endif
 
+bool wxFont::Create(int size, wxFontFamily family, wxFontStyle style,
+        wxFontWeight weight, bool underlined, const wxString& face,
+        wxFontEncoding encoding )
+{
+    return false;
+}
+
 int wxFont::GetPointSize() const
 {
     return 0;

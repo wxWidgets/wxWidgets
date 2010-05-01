@@ -11,6 +11,11 @@
 
 #include "wx/cursor.h"
 
+void wxSetCursor(const wxCursor& cursor)
+{
+
+}
+
 IMPLEMENT_DYNAMIC_CLASS( wxCursor, wxGDIObject )
 
 wxCursor::wxCursor()

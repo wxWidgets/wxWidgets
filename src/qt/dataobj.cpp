@@ -100,3 +100,7 @@ wxFileDataObject::wxFileDataObject()
 {
 }
 
+void wxFileDataObject::AddFile( const wxString &filename )
+{
+
+}

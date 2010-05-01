@@ -26,6 +26,8 @@ class WXDLLIMPEXP_CORE wxFileDataObject : public wxFileDataObjectBase
 {
 public:
     wxFileDataObject();
+
+    void AddFile( const wxString &filename );
 };
 
 #endif // _WX_QT_DATAOBJ2_H_
