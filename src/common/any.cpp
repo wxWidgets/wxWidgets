@@ -28,14 +28,15 @@
 #include "wx/vector.h"
 #include "wx/module.h"
 #include "wx/hashmap.h"
+#include "wx/hashset.h"
 
 using namespace wxPrivate;
+
+#if wxUSE_VARIANT
 
 //-------------------------------------------------------------------------
 // wxAnyValueTypeGlobals
 //-------------------------------------------------------------------------
-
-#if wxUSE_VARIANT
 
 WX_DECLARE_HASH_MAP(wxAnyValueType*,
                     wxVariantDataFactory,
@@ -43,16 +44,9 @@ WX_DECLARE_HASH_MAP(wxAnyValueType*,
                     wxPointerEqual,
                     wxAnyTypeToVariantDataFactoryMap);
 
-#endif
-
 //
-// Helper class to manage wxAnyValueType instances and and other
-// related global variables (such as wxAny<->wxVariant type association).
-//
-// NB: We really need to have wxAnyValueType instances allocated
-//     in heap. They are stored as static template member variables,
-//     and with them we just can't be too careful (eg. not allocating
-//     them in heap broke the type identification in GCC).
+// Helper class to manage global variables related to type conversion
+// between wxAny and wxVariant.
 //
 class wxAnyValueTypeGlobals
 {
@@ -62,19 +56,9 @@ public:
     }
     ~wxAnyValueTypeGlobals()
     {
-    #if wxUSE_VARIANT
         m_anyToVariant.clear();
-    #endif
-        for ( size_t i=0; i<m_valueTypes.size(); i++ )
-            delete m_valueTypes[i];
     }
 
-    void RegisterValueType(wxAnyValueType* valueType)
-    {
-        m_valueTypes.push_back(valueType);
-    }
-
-#if wxUSE_VARIANT
     void PreRegisterAnyToVariant(wxAnyToVariantRegistration* reg)
     {
         m_anyToVariantRegs.push_back(reg);
@@ -131,19 +115,14 @@ public:
         // Nothing found
         return NULL;
     }
-#endif
 
 private:
-    wxVector<wxAnyValueType*>               m_valueTypes;
-#if wxUSE_VARIANT
     wxAnyTypeToVariantDataFactoryMap        m_anyToVariant;
     wxVector<wxAnyToVariantRegistration*>   m_anyToVariantRegs;
-#endif
 };
 
 static wxAnyValueTypeGlobals* g_wxAnyValueTypeGlobals = NULL;
 
-#if wxUSE_VARIANT
 
 WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImplVariantData)
 
@@ -226,8 +205,6 @@ bool wxConvertAnyToVariant(const wxAny& any, wxVariant* variant)
     return true;
 }
 
-#endif // wxUSE_VARIANT
-
 //
 // This class is to make sure that wxAnyValueType instances
 // etc. get freed correctly. We must use a separate wxAnyValueTypeGlobals
@@ -254,18 +231,8 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnyValueTypeGlobalsManager, wxModule)
 
+#endif // wxUSE_VARIANT
 
-//-------------------------------------------------------------------------
-// wxAnyValueType
-//-------------------------------------------------------------------------
-
-wxAnyValueType::wxAnyValueType()
-{
-    if ( !g_wxAnyValueTypeGlobals )
-        g_wxAnyValueTypeGlobals = new wxAnyValueTypeGlobals();
-
-    g_wxAnyValueTypeGlobals->RegisterValueType(this);
-}
 
 //-------------------------------------------------------------------------
 // Dynamic conversion member functions

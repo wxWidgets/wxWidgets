@@ -118,6 +118,8 @@ static const wxChar WX_SECTION[] = wxT("wxWindows");
 static const wxChar eUSERNAME[]  = wxT("UserName");
 #endif
 
+WXDLLIMPEXP_DATA_BASE(const wxChar *) wxUserResourceStr = wxT("TEXT");
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1073,6 +1075,69 @@ bool wxIsDebuggerRunning()
 #else
     return false;
 #endif
+}
+
+// ----------------------------------------------------------------------------
+// working with MSW resources
+// ----------------------------------------------------------------------------
+
+bool
+wxLoadUserResource(const void **outData,
+                   size_t *outLen,
+                   const wxString& resourceName,
+                   const wxString& resourceType,
+                   WXHINSTANCE instance)
+{
+    wxCHECK_MSG( outData && outLen, false, "output pointers can't be NULL" );
+
+    HRSRC hResource = ::FindResource(instance,
+                                     resourceName.wx_str(),
+                                     resourceType.wx_str());
+    if ( !hResource )
+        return false;
+
+    HGLOBAL hData = ::LoadResource(instance, hResource);
+    if ( !hData )
+    {
+        wxLogSysError(_("Failed to load resource \"%s\"."), resourceName);
+        return false;
+    }
+
+    *outData = ::LockResource(hData);
+    if ( !*outData )
+    {
+        wxLogSysError(_("Failed to lock resource \"%s\"."), resourceName);
+        return false;
+    }
+
+    *outLen = ::SizeofResource(instance, hResource);
+
+    // Notice that we do not need to call neither UnlockResource() (which is
+    // obsolete in Win32) nor GlobalFree() (resources are freed on process
+    // termination only)
+
+    return true;
+}
+
+char *
+wxLoadUserResource(const wxString& resourceName,
+                   const wxString& resourceType,
+                   int* pLen,
+                   WXHINSTANCE instance)
+{
+    const void *data;
+    size_t len;
+    if ( !wxLoadUserResource(&data, &len, resourceName, resourceType, instance) )
+        return NULL;
+
+    char *s = new char[len + 1];
+    memcpy(s, data, len);
+    s[len] = '\0'; // NUL-terminate in case the resource itself wasn't
+
+    if (pLen)
+      *pLen = len;
+
+    return s;
 }
 
 // ----------------------------------------------------------------------------

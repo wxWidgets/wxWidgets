@@ -101,55 +101,6 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     v.frame = r;
     wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
     return c;
-/*
-    OSStatus err;
-    Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
-    wxMacControl* peer = new wxMacControl(wxpeer) ;
-    if ( id == wxID_HELP )
-    {
-        ControlButtonContentInfo info ;
-        info.contentType = kControlContentIconRef ;
-        GetIconRef(kOnSystemDisk, kSystemIconsCreator, kHelpIcon, &info.u.iconRef);
-        err = CreateRoundButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-            &bounds, kControlRoundButtonNormalSize,
-            &info, peer->GetControlRefAddr() );
-    }
-    else if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
-    {
-        // Button height is static in Mac, can't be changed, so we need to force it here
-        int maxHeight;
-        switch (wxpeer->GetWindowVariant() )
-        {
-            case wxWINDOW_VARIANT_NORMAL:
-            case wxWINDOW_VARIANT_LARGE:
-                maxHeight = 20 ;
-                break;
-            case wxWINDOW_VARIANT_SMALL:
-                maxHeight = 17;
-            case wxWINDOW_VARIANT_MINI:
-                maxHeight = 15;
-            default:
-                break;
-        }
-        bounds.bottom = bounds.top + maxHeight ;
-        wxpeer->SetMaxSize( wxSize( wxpeer->GetMaxWidth() , maxHeight ));
-        err = CreatePushButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-            &bounds, CFSTR(""), peer->GetControlRefAddr() );
-    }
-    else
-    {
-        ControlButtonContentInfo info ;
-        info.contentType = kControlNoContent ;
-        err = CreateBevelButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, CFSTR(""),
-            kControlBevelButtonLargeBevel, kControlBehaviorPushbutton,
-            &info, 0, 0, 0, peer->GetControlRefAddr() );
-    }
-    verify_noerr( err );
-    return peer;
-    */
 }
 
 void wxWidgetIPhoneImpl::SetDefaultButton( bool isDefault )

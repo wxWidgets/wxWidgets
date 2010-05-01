@@ -41,10 +41,6 @@ public:
 
     bool ProcessCommand(wxCommandEvent& event);
 
-    // semi-private accessors
-
-    // get the window which contains this menu
-    wxWindow *GetWindow() const;
     // get the menu handle
     WXHMENU GetHMenu() const ;
 
@@ -155,12 +151,6 @@ public:
         // attach to a frame
     void Attach(wxFrame *frame);
 
-        // clear the invoking window for all menus and submenus
-    void UnsetInvokingWindow() ;
-
-        // set the invoking window for all menus and submenus
-    void SetInvokingWindow( wxFrame* frame ) ;
-
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh(bool eraseBackground = true, const wxRect *rect = NULL);
@@ -178,7 +168,6 @@ public:
 protected:
     // common part of all ctors
     void Init();
-    wxWindow        *m_invokingWindow;
 
     wxArrayString   m_titles;
     static bool     s_macAutoWindowMenu ;

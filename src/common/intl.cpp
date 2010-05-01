@@ -211,7 +211,24 @@ void wxLocale::DoCommonInit()
     m_pszOldLocale = NULL;
 
     m_pOldLocale = wxSetLocale(this);
-    wxTranslations::SetNonOwned(&m_translations);
+
+    // Set translations object, but only if the user didn't do so yet.
+    // This is to preserve compatibility with wx-2.8 where wxLocale was
+    // the only API for translations. wxLocale works as a stack, with
+    // latest-created one being the active one:
+    //     wxLocale loc_fr(wxLANGUAGE_FRENCH);
+    //     // _() returns French
+    //     {
+    //         wxLocale loc_cs(wxLANGUAGE_CZECH);
+    //         // _() returns Czech
+    //     }
+    //     // _() returns French again
+    wxTranslations *oldTrans = wxTranslations::Get();
+    if ( !oldTrans ||
+         (m_pOldLocale && oldTrans == &m_pOldLocale->m_translations) )
+    {
+        wxTranslations::SetNonOwned(&m_translations);
+    }
 
     m_language = wxLANGUAGE_UNKNOWN;
     m_initialized = false;
@@ -235,10 +252,14 @@ bool wxLocale::Init(const wxString& name,
     bool ret = DoInit(name, shortName, locale);
 
     // NB: don't use 'lang' here, 'language' may be wxLANGUAGE_DEFAULT
-    m_translations.SetLanguage(shortName);
+    wxTranslations *t = wxTranslations::Get();
+    if ( t )
+    {
+        t->SetLanguage(shortName);
 
-    if ( bLoadDefault )
-        m_translations.AddStdCatalog();
+        if ( bLoadDefault )
+            t->AddStdCatalog();
+    }
 
     return ret;
 }
@@ -538,10 +559,14 @@ bool wxLocale::Init(int language, int flags)
         m_language = lang;
 
     // NB: don't use 'lang' here, 'language'
-    m_translations.SetLanguage(wx_static_cast(wxLanguage, language));
+    wxTranslations *t = wxTranslations::Get();
+    if ( t )
+    {
+        t->SetLanguage(static_cast<wxLanguage>(language));
 
-    if ( flags & wxLOCALE_LOAD_DEFAULT )
-        m_translations.AddStdCatalog();
+        if ( flags & wxLOCALE_LOAD_DEFAULT )
+            t->AddStdCatalog();
+    }
 
     return ret;
 #endif // !WX_NO_LOCALE_SUPPORT
@@ -988,7 +1013,9 @@ wxString wxLocale::GetSysName() const
 // clean up
 wxLocale::~wxLocale()
 {
-    // restore old translations object
+    // Restore old translations object.
+    // See DoCommonInit() for explanation of why this is needed for backward
+    // compatibility.
     if ( wxTranslations::Get() == &m_translations )
     {
         if ( m_pOldLocale )
@@ -1037,17 +1064,54 @@ bool wxLocale::IsAvailable(int lang)
     return true;
 }
 
+
+bool wxLocale::AddCatalog(const wxString& domain)
+{
+    wxTranslations *t = wxTranslations::Get();
+    if ( !t )
+        return false;
+    return t->AddCatalog(domain);
+}
+
+bool wxLocale::AddCatalog(const wxString& domain, wxLanguage msgIdLanguage)
+{
+    wxTranslations *t = wxTranslations::Get();
+    if ( !t )
+        return false;
+    return t->AddCatalog(domain, msgIdLanguage);
+}
+
 // add a catalog to our linked list
 bool wxLocale::AddCatalog(const wxString& szDomain,
                         wxLanguage      msgIdLanguage,
                         const wxString& msgIdCharset)
 {
+    wxTranslations *t = wxTranslations::Get();
+    if ( !t )
+        return false;
 #if wxUSE_UNICODE
     wxUnusedVar(msgIdCharset);
-    return m_translations.AddCatalog(szDomain, msgIdLanguage);
+    return t->AddCatalog(szDomain, msgIdLanguage);
 #else
-    return m_translations.AddCatalog(szDomain, msgIdLanguage, msgIdCharset);
+    return t->AddCatalog(szDomain, msgIdLanguage, msgIdCharset);
 #endif
+}
+
+bool wxLocale::IsLoaded(const wxString& domain) const
+{
+    wxTranslations *t = wxTranslations::Get();
+    if ( !t )
+        return false;
+    return t->IsLoaded(domain);
+}
+
+wxString wxLocale::GetHeaderValue(const wxString& header,
+                                  const wxString& domain) const
+{
+    wxTranslations *t = wxTranslations::Get();
+    if ( !t )
+        return wxEmptyString;
+    return t->GetHeaderValue(header, domain);
 }
 
 // ----------------------------------------------------------------------------

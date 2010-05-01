@@ -41,6 +41,7 @@
 #include "wx/display_impl.h"
 #include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
+#include "wx/msw/private.h"
 
 // define this to use DirectDraw for display mode switching: this is disabled
 // by default because ddraw.h is now always available and also it's not really

@@ -100,7 +100,7 @@ class WXDLLIMPEXP_CORE wxBlindPlateWindow : public wxWindow
 {
 public:
     wxBlindPlateWindow() { Init(); }
-    
+
     // Old-style constructor (no default values for coordinates to avoid
     // ambiguity with the new one)
     wxBlindPlateWindow(wxWindow *parent,
@@ -109,10 +109,10 @@ public:
             const wxString& name = wxPanelNameStr)
     {
         Init();
-        
+
         Create(parent, wxID_ANY, wxPoint(x, y), wxSize(width, height), style, name);
     }
-    
+
     // Constructor
     wxBlindPlateWindow(wxWindow *parent,
             wxWindowID winid = wxID_ANY,
@@ -122,10 +122,10 @@ public:
             const wxString& name = wxPanelNameStr)
     {
         Init();
-        
+
         Create(parent, winid, pos, size, style, name);
     }
-    
+
     // Pseudo ctor
     bool Create(wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
@@ -136,25 +136,25 @@ public:
     {
         if ( !wxWindow::Create(parent, winid, pos, size, style, name) )
             return false;
-        
+
         // so that non-solid background renders correctly under GTK+:
         SetThemeEnabled(true);
         return true;
     }
-    
+
     virtual ~wxBlindPlateWindow();
-    
+
     virtual bool AcceptsFocus() const
     {
         return false;
     }
-    
+
 protected:
     // common part of all ctors
     void Init()
     {
     }
-        
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxBlindPlateWindow)
     DECLARE_EVENT_TABLE()
 };
@@ -415,7 +415,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
 #endif
 
-    
+
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL :
@@ -477,7 +477,7 @@ bool wxWindowMac::SetBackgroundStyle(wxBackgroundStyle style)
 {
     if ( !wxWindowBase::SetBackgroundStyle(style) )
         return false;
-    
+
     if ( m_peer )
         m_peer->SetBackgroundStyle(style);
     return true;
@@ -809,7 +809,6 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
 #ifndef __WXUNIVERSAL__
-    menu->SetInvokingWindow((wxWindow*)this);
     menu->UpdateUI();
 
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
@@ -823,7 +822,6 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
         ClientToScreen( &x , &y ) ;
     }
     menu->GetPeer()->PopUp(this, x, y);
-    menu->SetInvokingWindow( NULL );
     return true;
 #else
     // actually this shouldn't be called, because universal is having its own implementation
@@ -844,7 +842,7 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
     if ( m_tooltip )
         m_tooltip->SetWindow(this);
-        
+
     if (m_peer)
         m_peer->SetToolTip(tooltip);
 }
@@ -1154,16 +1152,16 @@ bool wxWindowMac::Show(bool show)
         m_peer->SetVisibility( show ) ;
 
 #ifdef __WXOSX_IPHONE__
-    // only when there's no native event support 
+    // only when there's no native event support
     if ( !IsTopLevel() )
 #endif
     {
         wxShowEvent eventShow(GetId(), show);
         eventShow.SetEventObject(this);
-    
+
         HandleWindowEvent(eventShow);
     }
-    
+
     return true;
 }
 
@@ -1629,7 +1627,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         if (child->IsTopLevel())
             continue;
-        
+
         if ( !IsClientAreaChild(child) )
             continue;
 

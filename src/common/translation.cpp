@@ -809,13 +809,17 @@ WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash);
 class wxMsgCatalogFile
 {
 public:
+    typedef wxScopedCharTypeBuffer<char> DataBuffer;
+
     // ctor & dtor
     wxMsgCatalogFile();
     ~wxMsgCatalogFile();
 
     // load the catalog from disk
-    bool Load(const wxString& filename,
-              wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
+    bool LoadFile(const wxString& filename,
+                  wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
+    bool LoadData(const DataBuffer& data,
+                  wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
     bool FillHash(wxMessagesHash& hash, const wxString& msgIdCharset) const;
@@ -847,7 +851,7 @@ private:
     };
 
     // all data is stored here
-    wxMemoryBuffer m_data;
+    DataBuffer m_data;
 
     // data description
     size_t32          m_numStrings;   // number of strings in this domain
@@ -865,25 +869,18 @@ private:
                             : ui;
     }
 
-    // just return the pointer to the start of the data as "char *" to
-    // facilitate doing pointer arithmetic with it
-    char *StringData() const
-    {
-        return static_cast<char *>(m_data.GetData());
-    }
-
     const char *StringAtOfs(wxMsgTableEntry *pTable, size_t32 n) const
     {
         const wxMsgTableEntry * const ent = pTable + n;
 
         // this check could fail for a corrupt message catalog
         size_t32 ofsString = Swap(ent->ofsString);
-        if ( ofsString + Swap(ent->nLen) > m_data.GetDataLen())
+        if ( ofsString + Swap(ent->nLen) > m_data.length())
         {
             return NULL;
         }
 
-        return StringData() + ofsString;
+        return m_data.data() + ofsString;
     }
 
     bool m_bSwapped;   // wrong endianness?
@@ -908,9 +905,13 @@ public:
 #endif
 
     // load the catalog from disk
-    bool Load(const wxString& filename,
-              const wxString& domain,
-              const wxString& msgIdCharset);
+    bool LoadFile(const wxString& filename,
+                  const wxString& domain,
+                  const wxString& msgIdCharset);
+
+    bool LoadData(const wxScopedCharTypeBuffer<char>& data,
+                  const wxString& domain,
+                  const wxString& msgIdCharset);
 
     // get name of the catalog
     wxString GetDomain() const { return m_domain; }
@@ -947,8 +948,8 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalogFile::Load(const wxString& filename,
-                            wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
+bool wxMsgCatalogFile::LoadFile(const wxString& filename,
+                                wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
     wxFile fileMsg(filename);
     if ( !fileMsg.IsOpened() )
@@ -962,17 +963,36 @@ bool wxMsgCatalogFile::Load(const wxString& filename,
     size_t nSize = wx_truncate_cast(size_t, lenFile);
     wxASSERT_MSG( nSize == lenFile + size_t(0), wxS("message catalog bigger than 4GB?") );
 
+    wxMemoryBuffer filedata;
+
     // read the whole file in memory
-    if ( fileMsg.Read(m_data.GetWriteBuf(nSize), nSize) != lenFile )
+    if ( fileMsg.Read(filedata.GetWriteBuf(nSize), nSize) != lenFile )
         return false;
 
-    m_data.UngetWriteBuf(nSize);
+    filedata.UngetWriteBuf(nSize);
+
+    bool ok = LoadData
+              (
+                  DataBuffer::CreateOwned((char*)filedata.release(), nSize),
+                  rPluralFormsCalculator
+              );
+    if ( !ok )
+    {
+        wxLogWarning(_("'%s' is not a valid message catalog."), filename.c_str());
+        return false;
+    }
+
+    return true;
+}
 
 
+bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
+                                wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
+{
     // examine header
-    bool bValid = m_data.GetDataLen() > sizeof(wxMsgCatalogHeader);
+    bool bValid = data.length() > sizeof(wxMsgCatalogHeader);
 
-    const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_data.GetData();
+    const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)data.data();
     if ( bValid ) {
         // we'll have to swap all the integers if it's true
         m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
@@ -983,16 +1003,17 @@ bool wxMsgCatalogFile::Load(const wxString& filename,
 
     if ( !bValid ) {
         // it's either too short or has incorrect magic number
-        wxLogWarning(_("'%s' is not a valid message catalog."), filename.c_str());
-
+        wxLogWarning(_("Invalid message catalog."));
         return false;
     }
 
+    m_data = data;
+
     // initialize
     m_numStrings  = Swap(pHeader->numStrings);
-    m_pOrigTable  = (wxMsgTableEntry *)(StringData() +
+    m_pOrigTable  = (wxMsgTableEntry *)(data.data() +
                     Swap(pHeader->ofsOrigTable));
-    m_pTransTable = (wxMsgTableEntry *)(StringData() +
+    m_pTransTable = (wxMsgTableEntry *)(data.data() +
                     Swap(pHeader->ofsTransTable));
 
     // now parse catalog's header and try to extract catalog charset and
@@ -1177,15 +1198,32 @@ wxMsgCatalog::~wxMsgCatalog()
 }
 #endif // !wxUSE_UNICODE
 
-bool wxMsgCatalog::Load(const wxString& filename,
-                        const wxString& domain,
-                        const wxString& msgIdCharset)
+bool wxMsgCatalog::LoadFile(const wxString& filename,
+                            const wxString& domain,
+                            const wxString& msgIdCharset)
 {
     wxMsgCatalogFile file;
 
     m_domain = domain;
 
-    if ( !file.Load(filename, m_pluralFormsCalculator) )
+    if ( !file.LoadFile(filename, m_pluralFormsCalculator) )
+        return false;
+
+    if ( !file.FillHash(m_messages, msgIdCharset) )
+        return false;
+
+    return true;
+}
+
+bool wxMsgCatalog::LoadData(const wxScopedCharTypeBuffer<char>& data,
+                            const wxString& domain,
+                            const wxString& msgIdCharset)
+{
+    wxMsgCatalogFile file;
+
+    m_domain = domain;
+
+    if ( !file.LoadData(data, m_pluralFormsCalculator) )
         return false;
 
     if ( !file.FillHash(m_messages, msgIdCharset) )
@@ -1359,8 +1397,48 @@ bool wxTranslations::AddCatalog(const wxString& domain,
     if ( msgIdLang == domain_lang )
         return true;
 
+    return LoadCatalog(domain, domain_lang);
+}
+
+
+bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
+{
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
-    return m_loader->LoadCatalog(this, domain, domain_lang);
+
+#if wxUSE_FONTMAP
+    // first look for the catalog for this language and the current locale:
+    // notice that we don't use the system name for the locale as this would
+    // force us to install catalogs in different locations depending on the
+    // system but always use the canonical name
+    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
+    if ( encSys != wxFONTENCODING_SYSTEM )
+    {
+        wxString fullname(lang);
+        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
+
+        if ( m_loader->LoadCatalog(this, domain, fullname) )
+            return true;
+    }
+#endif // wxUSE_FONTMAP
+
+    // Next try: use the provided name language name:
+    if ( m_loader->LoadCatalog(this, domain, lang) )
+        return true;
+
+    // Also try just base locale name: for things like "fr_BE" (Belgium
+    // French) we should use fall back on plain "fr" if no Belgium-specific
+    // message catalogs exist
+    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
+    {
+        if ( m_loader->LoadCatalog(this, domain, ExtractLang(lang)) )
+            return true;
+    }
+
+    // Nothing worked, the catalog just isn't there
+    wxLogTrace(TRACE_I18N,
+               "Catalog \"%s.mo\" not found for language \"%s\".",
+               domain, lang);
+    return false;
 }
 
 
@@ -1377,10 +1455,38 @@ bool wxTranslations::LoadCatalogFile(const wxString& filename,
     wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
 #if wxUSE_UNICODE
-    const bool ok = pMsgCat->Load(filename, domain, wxEmptyString/*unused*/);
+    const bool ok = pMsgCat->LoadFile(filename, domain, wxEmptyString/*unused*/);
 #else
-    const bool ok = pMsgCat->Load(filename, domain,
-                                  m_msgIdCharset[domain]);
+    const bool ok = pMsgCat->LoadFile(filename, domain,
+                                      m_msgIdCharset[domain]);
+#endif
+
+    if ( !ok )
+    {
+        // don't add it because it couldn't be loaded anyway
+        delete pMsgCat;
+        return false;
+    }
+
+    // add it to the head of the list so that in GetString it will
+    // be searched before the catalogs added earlier
+    pMsgCat->m_pNext = m_pMsgCat;
+    m_pMsgCat = pMsgCat;
+
+    return true;
+}
+
+
+bool wxTranslations::LoadCatalogData(const wxScopedCharTypeBuffer<char>& data,
+                                     const wxString& domain)
+{
+    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
+
+#if wxUSE_UNICODE
+    const bool ok = pMsgCat->LoadData(data, domain, wxEmptyString/*unused*/);
+#else
+    const bool ok = pMsgCat->LoadData(data, domain,
+                                      m_msgIdCharset[domain]);
 #endif
 
     if ( !ok )
@@ -1669,31 +1775,7 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
     wxCHECK_MSG( lang.length() >= LEN_LANG, false,
                  "invalid language specification" );
 
-    wxString searchPath;
-
-#if wxUSE_FONTMAP
-    // first look for the catalog for this language and the current locale:
-    // notice that we don't use the system name for the locale as this would
-    // force us to install catalogs in different locations depending on the
-    // system but always use the canonical name
-    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
-    if ( encSys != wxFONTENCODING_SYSTEM )
-    {
-        wxString fullname(lang);
-        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
-        searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
-    }
-#endif // wxUSE_FONTMAP
-
-    searchPath += GetFullSearchPath(lang);
-    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
-    {
-        // also add just base locale name: for things like "fr_BE" (Belgium
-        // French) we should use fall back on plain "fr" if no Belgium-specific
-        // message catalogs exist
-        searchPath << wxPATH_SEP
-                    << GetFullSearchPath(ExtractLang(lang));
-    }
+    wxString searchPath = GetFullSearchPath(lang);
 
     wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
                 domain, searchPath);
@@ -1703,11 +1785,7 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
 
     wxString strFullName;
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-    {
-        wxLogVerbose(_("catalog file for domain '%s' not found."), domain);
-        wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), domain);
         return false;
-    }
 
     // open file and read its data
     wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());
@@ -1715,6 +1793,41 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
 
     return translations->LoadCatalogFile(strFullName, domain);
 }
+
+
+// ----------------------------------------------------------------------------
+// wxResourceTranslationsLoader
+// ----------------------------------------------------------------------------
+
+#ifdef __WINDOWS__
+bool wxResourceTranslationsLoader::LoadCatalog(wxTranslations *translations,
+                                               const wxString& domain,
+                                               const wxString& lang)
+{
+
+    const void *mo_data = NULL;
+    size_t mo_size = 0;
+
+    const wxString resname = wxString::Format("%s_%s", domain, lang);
+
+    if ( !wxLoadUserResource(&mo_data, &mo_size,
+                             resname,
+                             GetResourceType(),
+                             GetModule()) )
+        return false;
+
+    wxLogTrace(TRACE_I18N,
+               "Using catalog from Windows resource \"%s\".", resname);
+
+    const bool ok = translations->LoadCatalogData(
+        wxCharBuffer::CreateNonOwned(static_cast<const char*>(mo_data), mo_size));
+    if ( !ok )
+        wxLogWarning(_("Resource '%s' is not a valid message catalog."), resname);
+
+    return ok;
+}
+#endif // __WINDOWS__
+
 
 // ----------------------------------------------------------------------------
 // wxTranslationsModule module (for destruction of gs_translations)

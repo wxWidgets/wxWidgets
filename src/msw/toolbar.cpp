@@ -1807,7 +1807,7 @@ WXHBRUSH wxToolBar::MSWGetToolbarBgBrush()
     wxBrush * const
         brush = wxTheBrushList->FindOrCreateBrush(colBg);
 
-    return brush ? brush->GetResourceHandle() : 0;
+    return brush ? static_cast<WXHBRUSH>(brush->GetResourceHandle()) : 0;
 }
 
 WXHBRUSH wxToolBar::MSWGetBgBrushForChild(WXHDC hDC, wxWindowMSW *child)

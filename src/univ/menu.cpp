@@ -2497,10 +2497,6 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     Update();
 #endif // 0
 
-    menu->SetInvokingWindow(this);
-
-    // wxLogDebug( "Name of invoking window %s", menu->GetInvokingWindow()->GetName().c_str() );
-
     menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize(0,0));
 
     // this is not very useful if the menu was popped up because of the mouse
@@ -2522,8 +2518,6 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
     // remove the handler
     PopEventHandler(true /* delete it */);
-
-    menu->SetInvokingWindow(NULL);
 
 #ifdef __WXMSW__
     SetCursor(cursorOld);

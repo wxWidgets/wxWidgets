@@ -3970,23 +3970,6 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
 #if wxUSE_MENUS_NATIVE
 
-static void SetInvokingWindow( wxMenu *menu, wxWindow* win )
-{
-    menu->SetInvokingWindow( win );
-
-    wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
-    while (node)
-    {
-        wxMenuItem *menuitem = node->GetData();
-        if (menuitem->IsSubMenu())
-        {
-            SetInvokingWindow( menuitem->GetSubMenu(), win );
-        }
-
-        node = node->GetNext();
-    }
-}
-
 extern "C" {
 static
 void wxPopupMenuPositionCallback( GtkMenu *menu,
@@ -4012,10 +3995,6 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
-
-    wxCHECK_MSG( menu != NULL, false, wxT("invalid popup-menu") );
-
-    SetInvokingWindow( menu, this );
 
     menu->UpdateUI();
 

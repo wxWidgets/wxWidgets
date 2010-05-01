@@ -514,23 +514,18 @@ void wxMenuBase::SetInvokingWindow(wxWindow *win)
     m_invokingWindow = win;
 }
 
-wxWindow *wxMenuBase::GetInvokingWindow() const
+wxWindow *wxMenuBase::GetWindow() const
 {
-    // only the popup menu itself has a non-NULL invoking window so recurse
-    // upwards until we find it
+    // only the top level menus have non-NULL invoking window or a pointer to
+    // the menu bar so recurse upwards until we find it
     const wxMenuBase *menu = this;
     while ( menu->GetParent() )
     {
         menu = menu->GetParent();
     }
 
-    // menu is a top level menu here
-    return menu->m_invokingWindow;
-}
-
-wxWindow *wxMenuBase::GetWindow() const
-{
-    return GetMenuBar() ? GetMenuBar()->GetFrame() : GetInvokingWindow();
+    return menu->GetMenuBar() ? menu->GetMenuBar()->GetFrame()
+                              : menu->GetInvokingWindow();
 }
 
 // ----------------------------------------------------------------------------

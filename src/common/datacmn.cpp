@@ -78,6 +78,3 @@ extern WXDLLEXPORT_DATA(const char) wxDirDialogNameStr[] = "wxDirCtrl";
 extern WXDLLEXPORT_DATA(const char) wxDirDialogDefaultFolderStr[] = "/";
 
 extern WXDLLEXPORT_DATA(const char) wxFileDialogNameStr[] = "filedlg";
-#if defined(__WXMSW__) || defined(__OS2__)
-WXDLLEXPORT_DATA(const wxChar *) wxUserResourceStr = wxT("TEXT");
-#endif

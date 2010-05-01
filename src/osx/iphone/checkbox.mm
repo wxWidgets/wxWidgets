@@ -34,17 +34,29 @@
     }
 }
 
-- (int) intValue
-{
-    return [self isOn] ? 1 : 0;
-}
-
-- (void) setIntValue: (int) v
-{
-    [self setOn:v != 0 animated:NO];
-}
-
 @end
+
+class wxCheckBoxIPhoneImpl : public wxWidgetIPhoneImpl
+{
+public:
+    wxCheckBoxIPhoneImpl(wxWindowMac *wxpeer, UISwitch *v)
+    : wxWidgetIPhoneImpl(wxpeer, v)
+    {
+        m_control = v;
+    }
+    
+    wxInt32  GetValue() const
+    {
+        return [m_control isOn] ? 1 : 0;
+    }
+    
+    void SetValue( wxInt32 v ) 
+    {
+        [m_control setOn:v != 0 animated:NO];
+    }
+private:
+    UISwitch* m_control;
+};
 
 wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -61,7 +73,7 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
 //    if (style & wxCHK_3STATE)
 //        [v setAllowsMixedState:YES];
 
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v );
+    wxCheckBoxIPhoneImpl* c = new wxCheckBoxIPhoneImpl( wxpeer, v );
     return c;
 }
 

@@ -2905,29 +2905,35 @@ typedef void *          WXRECTANGLEPTR;
 /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
 #if defined(__WIN32__)
 
-/*  the keywords needed for WinMain() declaration */
-#ifndef WXFAR
-#    define WXFAR
+/*  Stand-ins for Windows types to avoid #including all of windows.h */
+
+#ifndef NO_STRICT
+    #define WX_MSW_DECLARE_HANDLE(type) typedef struct type##__ * WX##type
+#else
+    #define WX_MSW_DECLARE_HANDLE(type) typedef void * WX##type
 #endif
 
-/*  Stand-ins for Windows types to avoid #including all of windows.h */
-typedef void *          WXHWND;
-typedef void *          WXHANDLE;
-typedef void *          WXHICON;
-typedef void *          WXHFONT;
-typedef void *          WXHMENU;
-typedef void *          WXHPEN;
-typedef void *          WXHBRUSH;
-typedef void *          WXHPALETTE;
-typedef void *          WXHCURSOR;
-typedef void *          WXHRGN;
-typedef void *          WXRECTPTR;
-typedef void *          WXHACCEL;
-typedef void WXFAR  *   WXHINSTANCE;
-typedef void *          WXHBITMAP;
-typedef void *          WXHIMAGELIST;
-typedef void *          WXHGLOBAL;
-typedef void *          WXHDC;
+typedef void* WXHANDLE;
+WX_MSW_DECLARE_HANDLE(HWND);
+WX_MSW_DECLARE_HANDLE(HICON);
+WX_MSW_DECLARE_HANDLE(HFONT);
+WX_MSW_DECLARE_HANDLE(HMENU);
+WX_MSW_DECLARE_HANDLE(HPEN);
+WX_MSW_DECLARE_HANDLE(HBRUSH);
+WX_MSW_DECLARE_HANDLE(HPALETTE);
+WX_MSW_DECLARE_HANDLE(HCURSOR);
+WX_MSW_DECLARE_HANDLE(HRGN);
+WX_MSW_DECLARE_HANDLE(RECTPTR);
+WX_MSW_DECLARE_HANDLE(HACCEL);
+WX_MSW_DECLARE_HANDLE(HINSTANCE);
+WX_MSW_DECLARE_HANDLE(HBITMAP);
+WX_MSW_DECLARE_HANDLE(HIMAGELIST);
+WX_MSW_DECLARE_HANDLE(HGLOBAL);
+WX_MSW_DECLARE_HANDLE(HDC);
+typedef WXHINSTANCE WXHMODULE;
+
+#undef WX_MSW_DECLARE_HANDLE
+
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
@@ -2982,6 +2988,8 @@ typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
 typedef unsigned long   WXHACCEL;
+typedef unsigned long   WXHINSTANCE;
+typedef unsigned long   WXHMODULE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHDC;
 typedef unsigned int    WXUINT;

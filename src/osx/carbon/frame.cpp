@@ -231,9 +231,6 @@ void wxFrame::HandleResized( double timestampsec )
 #if wxUSE_MENUS
 void wxFrame::DetachMenuBar()
 {
-    if ( m_frameMenuBar )
-        m_frameMenuBar->UnsetInvokingWindow();
-
     wxFrameBase::DetachMenuBar();
 }
 
@@ -257,7 +254,6 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
     if (m_frameMenuBar)
     {
-        m_frameMenuBar->SetInvokingWindow( this );
         if (makeCurrent)
             m_frameMenuBar->MacInstallMenuBar();
     }

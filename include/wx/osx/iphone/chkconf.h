@@ -95,9 +95,7 @@
 
 #undef wxUSE_STATUSBAR
 #undef wxUSE_NATIVE_STATUSBAR
-#undef wxUSE_TEXTCTRL
 #undef wxUSE_ABOUTDLG
-#undef wxUSE_STATTEXT
 #undef wxUSE_STATLINE
 #undef wxUSE_COLLPANE
 #undef wxUSE_STATBMP
@@ -109,9 +107,7 @@
 
 #define wxUSE_STATUSBAR 0
 #define wxUSE_NATIVE_STATUSBAR 0
-#define wxUSE_TEXTCTRL 0
 #define wxUSE_ABOUTDLG 0
-#define wxUSE_STATTEXT 0
 #define wxUSE_STATLINE 0
 #define wxUSE_COLLPANE 0
 #define wxUSE_STATBMP 0
@@ -134,12 +130,10 @@
 #undef wxUSE_BITMAPCOMBOBOX
 #undef wxUSE_BMPBUTTON
 #undef wxUSE_CHECKLISTBOX
-#undef wxUSE_GAUGE
 #undef wxUSE_GRID
 #undef wxUSE_LISTBOX
 #undef wxUSE_LISTCTRL
 #undef wxUSE_NOTEBOOK
-#undef wxUSE_SLIDER
 #undef wxUSE_SPINBTN
 #undef wxUSE_SPINCTRL
 #undef wxUSE_TREECTRL
@@ -165,12 +159,10 @@
 #define wxUSE_BITMAPCOMBOBOX 0
 #define wxUSE_BMPBUTTON 0
 #define wxUSE_CHECKLISTBOX 0
-#define wxUSE_GAUGE 0
 #define wxUSE_GRID 0
 #define wxUSE_LISTBOX 0
 #define wxUSE_LISTCTRL 0
 #define wxUSE_NOTEBOOK 0
-#define wxUSE_SLIDER 0
 #define wxUSE_SPINBTN 0
 #define wxUSE_SPINCTRL 0
 #define wxUSE_TREECTRL 0

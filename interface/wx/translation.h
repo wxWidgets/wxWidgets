@@ -58,7 +58,7 @@ public:
 
         Deletes previous loader and takes ownership of @a loader.
 
-        @see wxTranslationsLoader, wxFileTranslationsLoader
+        @see wxTranslationsLoader, wxFileTranslationsLoader, wxResourceTranslationsLoader
      */
     void SetLoader(wxTranslationsLoader *loader);
 
@@ -251,7 +251,7 @@ public:
 
     Implementations must implement the LoadCatalog() method.
 
-    @see wxFileTranslationsLoader
+    @see wxFileTranslationsLoader, wxResourceTranslationsLoader
 
     @since 2.9.1
  */
@@ -306,6 +306,53 @@ public:
         wxTranslations::AddCatalog().
     */
     static void AddCatalogLookupPathPrefix(const wxString& prefix);
+};
+
+/**
+    This loader makes it possible to load translations from Windows
+    resources.
+
+    If you wish to store translation MO files in resources, you have to
+    enable this loader before calling wxTranslations::AddCatalog() or
+    wxLocale::AddCatalog():
+
+    @code
+    wxTranslations::Get()->SetLoader(new wxResourceTranslationsLoader);
+    @endcode
+
+    Translations are stored in resources as compiled MO files, with type
+    set to "MOFILE" (unless you override GetResourceType()) and name
+    consisting of the domain, followed by underscore, followed by language
+    identification. For example, the relevant part of .rc file would look
+    like this:
+
+    @code
+    myapp_de     MOFILE   "catalogs/de/myapp.mo"
+    myapp_fr     MOFILE   "catalogs/fr/myapp.mo"
+    myapp_en_GB  MOFILE   "catalogs/en_GB/myapp.mo"
+    @endcode
+
+    This class is only available on Windows.
+
+    @since 2.9.1
+
+ */
+class wxResourceTranslationsLoader : public wxTranslationsLoader
+{
+protected:
+    /**
+        Returns resource type to use for translations.
+
+        Default type is "MOFILE".
+     */
+    virtual wxString GetResourceType() const;
+
+    /**
+        Returns handle of the module to load resources from.
+
+        By default, the main executable is used.
+     */
+    virtual WXHINSTANCE GetModule() const;
 };
 
 

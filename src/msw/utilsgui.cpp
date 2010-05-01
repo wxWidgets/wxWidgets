@@ -104,48 +104,6 @@ bool wxCheckForInterrupt(wxWindow *wnd)
     return true;
 }
 
-// MSW only: get user-defined resource from the .res file.
-// Returns NULL or newly-allocated memory, so use delete[] to clean up.
-
-#ifndef __WXMICROWIN__
-char *wxLoadUserResource(const wxString& resourceName, const wxString& resourceType, int* pLen /* = NULL */)
-{
-    HRSRC hResource = ::FindResource(wxGetInstance(),
-                                     resourceName.wx_str(),
-                                     resourceType.wx_str());
-    if ( hResource == 0 )
-        return NULL;
-
-    HGLOBAL hData = ::LoadResource(wxGetInstance(), hResource);
-    if ( hData == 0 )
-        return NULL;
-
-    void *theText = ::LockResource(hData);
-    if ( !theText )
-        return NULL;
-
-    // Not all compilers put a zero at the end of the resource (e.g. BC++ doesn't).
-    // so we need to find the length of the resource.
-    int len = ::SizeofResource(wxGetInstance(), hResource);
-    char *s = new char[len + 1];
-    memcpy(s, theText, len);
-    s[len] = '\0'; // NUL-terminate in case the resource itself wasn't
-
-    // Obsolete in WIN32
-#ifndef __WIN32__
-    UnlockResource(hData);
-#endif
-
-    // No need??
-    //  GlobalFree(hData);
-
-    if (pLen)
-      *pLen = len;
-
-    return s;
-}
-#endif // __WXMICROWIN__
-
 // ----------------------------------------------------------------------------
 // get display info
 // ----------------------------------------------------------------------------

@@ -19,14 +19,6 @@
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
-#if defined(__OS2__) || defined(__EMX__)
-#include "wx/os2/private.h"
-#endif
-
-#ifdef __WXMSW__
-#include "wx/msw/private.h"
-#endif
-
 // note that we have our own dlerror() implementation under Darwin
 #if (defined(HAVE_DLERROR) && !defined(__EMX__)) || defined(__DARWIN__)
     #define wxHAVE_DYNLIB_ERROR
@@ -41,7 +33,7 @@ class WXDLLIMPEXP_FWD_BASE wxDynamicLibraryDetailsCreator;
 // Note: __OS2__/EMX has to be tested first, since we want to use
 // native version, even if configure detected presence of DLOPEN.
 #if defined(__OS2__) || defined(__EMX__) || defined(__WINDOWS__)
-    typedef HMODULE             wxDllType;
+    typedef WXHMODULE           wxDllType;
 #elif defined(__DARWIN__)
     // Don't include dlfcn.h on Darwin, we may be using our own replacements.
     typedef void               *wxDllType;
@@ -367,7 +359,7 @@ public:
     // the returned handle reference count is not incremented so it doesn't
     // need to be freed using FreeLibrary() but it also means that it can
     // become invalid if the DLL is unloaded
-    static HINSTANCE MSWGetModuleHandle(const char *name, void *addr);
+    static WXHMODULE MSWGetModuleHandle(const char *name, void *addr);
 #endif // __WXMSW__
 
 protected:

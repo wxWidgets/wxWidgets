@@ -3,7 +3,7 @@
 // Purpose:     All generic wxDataViewCtrl renderer classes
 // Author:      Robert Roebling, Vadim Zeitlin
 // Created:     2009-11-07 (extracted from wx/generic/dataview.h)
-// RCS-ID:      $Id: wxhead.h,v 1.11 2009-06-29 10:23:04 zeitlin Exp $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2006 Robert Roebling
 //              (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence

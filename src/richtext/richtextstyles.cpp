@@ -520,6 +520,8 @@ void wxRichTextStyleListBox::UpdateStyles()
 {
     if (GetStyleSheet())
     {
+        int oldSel = GetSelection();
+
         SetSelection(wxNOT_FOUND);
 
         m_styleNames.Clear();
@@ -546,9 +548,15 @@ void wxRichTextStyleListBox::UpdateStyles()
 
         Refresh();
 
-        if (GetItemCount() > 0)
+        int newSel = -1;
+        if (oldSel >= 0 && oldSel < (int) GetItemCount())
+            newSel = oldSel;
+        else if (GetItemCount() > 0)
+            newSel = 0;
+
+        if (newSel >= 0)
         {
-            SetSelection(0);
+            SetSelection(newSel);
             SendSelectedEvent();
         }
     }
@@ -940,6 +948,7 @@ void wxRichTextStyleListCtrl::OnChooseType(wxCommandEvent& event)
             return;
 
         wxRichTextStyleListBox::wxRichTextStyleType styleType = StyleIndexToType(event.GetSelection());
+        m_styleListBox->SetSelection(-1);
         m_styleListBox->SetStyleType(styleType);
     }
 }

@@ -1083,7 +1083,6 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
     menu->SetId(1); /* Mark as popped-up */
     menu->CreateMenu(NULL, widget, menu, 0);
-    menu->SetInvokingWindow(this);
 
     menu->UpdateUI();
 

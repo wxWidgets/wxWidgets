@@ -98,7 +98,7 @@
     #include "wx/msw/gccpriv.h"
 #endif
 
-#ifdef __WXWINCE__
+#ifdef __WXMSW__
 #include "wx/msw/private.h"
 #endif
 

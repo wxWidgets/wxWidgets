@@ -39,6 +39,7 @@
 
 #include "wx/generic/choicdgg.h"
 
+#include "wx/msw/private.h"
 #include "wx/dynlib.h"
 
 wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );

@@ -31,6 +31,13 @@
 #include "wx/stattext.h"
 #include "wx/button.h"
 
+#ifndef __WXMSW__
+    #error "This sample is MSW-only"
+#endif
+
+#ifdef WXUSINGDLL
+    #error "This sample doesn't work with DLL build of wxWidgets"
+#endif
 
 // ----------------------------------------------------------------------------
 // GUI classes

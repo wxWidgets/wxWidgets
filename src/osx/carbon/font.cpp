@@ -883,6 +883,20 @@ NSFont* wxFont::OSXGetNSFont() const
 
 #endif
 
+#if wxOSX_USE_IPHONE
+
+UIFont* wxFont::OSXGetUIFont() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+    
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+    
+    return (M_FONTDATA->m_uiFont);
+}
+
+#endif
+
 const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
