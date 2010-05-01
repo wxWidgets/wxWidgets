@@ -25965,8 +25965,8 @@ $as_echo "$wx_cv_spbcdata" >&6; }
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I/usr/include/qt4"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -lQtCore -lQtGui"
+                TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config QtGui --cflags`"
+                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config QtGui --libs`"
     fi
 
         if test "$TOOLKIT" = "PM" ; then

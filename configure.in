@@ -3646,8 +3646,10 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         GUIDIST=QT_DIST
         TOOLKIT_DIR="qt"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXQT__"
-        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I/usr/include/qt4"
-        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -lQtCore -lQtGui"
+        dnl TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I/usr/include/qt4"
+        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} `pkg-config QtGui --cflags`"
+        dnl GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -lQtCore -lQtGui"
+        GUI_TK_LIBRARY="${GUI_TK_LIBRARY} `pkg-config QtGui --libs`"
     fi
 
     dnl the name of the directory where the files for this toolkit live
