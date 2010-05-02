@@ -506,9 +506,9 @@ All (GUI):
 - wxGraphicsContext is now enabled by default if supported by the platform.
 - Fix building with using system libpng 1.4 (Volker Grabsch).
 - Add wxComboBox::Popup() and Dismiss() methods (Igor Korot).
-- Added wxTreeCtrl::SelectChildren() (Nikolay Tjushkov).
+- Added wxTreeCtrl::SelectChildren() (Nikolay Tiushkov).
 - Show pages icons in window list menu in wxAuiNotebook (Ronny Krüger).
-- Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tjushkov).
+- Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tiushkov).
 - Implement wxDocument::Revert() (troelsk).
 - Allow overriding print preview frame creation in docview (troelsk).
 - Added support for gradient stops in wxGraphicsContext (Kit Bishop).
