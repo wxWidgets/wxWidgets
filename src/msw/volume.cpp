@@ -32,6 +32,7 @@
         #include "wx/icon.h"
     #endif
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/hashmap.h"
     #include "wx/filefn.h"
 #endif // WX_PRECOMP
