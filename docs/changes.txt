@@ -515,6 +515,7 @@ All (GUI):
 - Added wxTransparentColour.
 - Added wxToolBar::GetToolByPos().
 - Added wxProgressDialog::Was{Cancelled,Skipped}() (Julien Weinzorn).
+- Added wxTreeCtrl::{Clear,Set}FocusedItem() (Nikolay Tiushkov).
 
 GTK:
 

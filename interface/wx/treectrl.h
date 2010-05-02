@@ -437,6 +437,24 @@ public:
     */
     virtual wxTreeItemId GetFocusedItem() const;
 
+
+    /**
+        Clears the currently focused item
+
+        @since 2.9.1
+    */
+    virtual void ClearFocusedItem();
+
+    /**
+        Sets the currently focused item.
+
+        @param item
+            The item to make the current one. It must be valid.
+        @since 2.9.1
+    */
+    virtual void SetFocusedItem(const wxTreeItemId& item);
+
+
     /**
         Returns the normal image list.
     */

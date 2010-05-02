@@ -214,6 +214,13 @@ public:
         // equivalent to GetSelection() if not wxTR_MULTIPLE
     virtual wxTreeItemId GetFocusedItem() const = 0;
 
+
+        // Clears the currently focused item
+    virtual void ClearFocusedItem() = 0;
+        // Sets the currently focused item. Item should be valid
+    virtual void SetFocusedItem(const wxTreeItemId& item) = 0;
+
+
         // get the parent of this item (may return NULL if root)
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const = 0;
 
