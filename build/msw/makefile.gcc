@@ -1810,6 +1810,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -2056,6 +2057,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -2521,6 +2523,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -2767,6 +2770,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -3135,6 +3139,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3381,6 +3386,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3637,6 +3643,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -3883,6 +3890,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -7335,6 +7343,11 @@ $(OBJS)\monodll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9527,6 +9540,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11736,6 +11754,11 @@ $(OBJS)\coredll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13019,6 +13042,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

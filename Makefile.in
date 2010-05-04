@@ -3773,6 +3773,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/evtloopsrc.h \
 	wx/fdrepdlg.h \
 	wx/filectrl.h \
+	wx/filehistory.h \
 	wx/filepicker.h \
 	wx/fontpicker.h \
 	wx/fmappriv.h \
@@ -4294,6 +4295,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_effects.o \
 	monodll_fddlgcmn.o \
 	monodll_filectrlcmn.o \
+	monodll_filehistorycmn.o \
 	monodll_filepickercmn.o \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
@@ -4490,6 +4492,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_effects.o \
 	monodll_fddlgcmn.o \
 	monodll_filectrlcmn.o \
+	monodll_filehistorycmn.o \
 	monodll_filepickercmn.o \
 	monodll_fontpickercmn.o \
 	monodll_fldlgcmn.o \
@@ -6131,6 +6134,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_effects.o \
 	monolib_fddlgcmn.o \
 	monolib_filectrlcmn.o \
+	monolib_filehistorycmn.o \
 	monolib_filepickercmn.o \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
@@ -6327,6 +6331,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_effects.o \
 	monolib_fddlgcmn.o \
 	monolib_filectrlcmn.o \
+	monolib_filehistorycmn.o \
 	monolib_filepickercmn.o \
 	monolib_fontpickercmn.o \
 	monolib_fldlgcmn.o \
@@ -8157,6 +8162,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_effects.o \
 	coredll_fddlgcmn.o \
 	coredll_filectrlcmn.o \
+	coredll_filehistorycmn.o \
 	coredll_filepickercmn.o \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
@@ -8353,6 +8359,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_effects.o \
 	coredll_fddlgcmn.o \
 	coredll_filectrlcmn.o \
+	coredll_filehistorycmn.o \
 	coredll_filepickercmn.o \
 	coredll_fontpickercmn.o \
 	coredll_fldlgcmn.o \
@@ -9667,6 +9674,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_effects.o \
 	corelib_fddlgcmn.o \
 	corelib_filectrlcmn.o \
+	corelib_filehistorycmn.o \
 	corelib_filepickercmn.o \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
@@ -9863,6 +9871,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_effects.o \
 	corelib_fddlgcmn.o \
 	corelib_filectrlcmn.o \
+	corelib_filehistorycmn.o \
 	corelib_filepickercmn.o \
 	corelib_fontpickercmn.o \
 	corelib_fldlgcmn.o \
@@ -18960,6 +18969,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
 
+@COND_USE_GUI_1@monodll_filehistorycmn.o: $(srcdir)/src/common/filehistorycmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filehistorycmn.cpp
+
 @COND_USE_GUI_1@monodll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -23816,6 +23828,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
+@COND_USE_GUI_1@monolib_filehistorycmn.o: $(srcdir)/src/common/filehistorycmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filehistorycmn.cpp
 
 @COND_USE_GUI_1@monolib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
@@ -28863,6 +28878,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
 
+@COND_USE_GUI_1@coredll_filehistorycmn.o: $(srcdir)/src/common/filehistorycmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filehistorycmn.cpp
+
 @COND_USE_GUI_1@coredll_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp
 
@@ -32444,6 +32462,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_filectrlcmn.o: $(srcdir)/src/common/filectrlcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filectrlcmn.cpp
+
+@COND_USE_GUI_1@corelib_filehistorycmn.o: $(srcdir)/src/common/filehistorycmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filehistorycmn.cpp
 
 @COND_USE_GUI_1@corelib_filepickercmn.o: $(srcdir)/src/common/filepickercmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/filepickercmn.cpp

@@ -372,6 +372,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_effects.obj &
 	$(OBJS)\monodll_fddlgcmn.obj &
 	$(OBJS)\monodll_filectrlcmn.obj &
+	$(OBJS)\monodll_filehistorycmn.obj &
 	$(OBJS)\monodll_filepickercmn.obj &
 	$(OBJS)\monodll_fontpickercmn.obj &
 	$(OBJS)\monodll_fldlgcmn.obj &
@@ -618,6 +619,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_effects.obj &
 	$(OBJS)\monodll_fddlgcmn.obj &
 	$(OBJS)\monodll_filectrlcmn.obj &
+	$(OBJS)\monodll_filehistorycmn.obj &
 	$(OBJS)\monodll_filepickercmn.obj &
 	$(OBJS)\monodll_fontpickercmn.obj &
 	$(OBJS)\monodll_fldlgcmn.obj &
@@ -1088,6 +1090,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_effects.obj &
 	$(OBJS)\monolib_fddlgcmn.obj &
 	$(OBJS)\monolib_filectrlcmn.obj &
+	$(OBJS)\monolib_filehistorycmn.obj &
 	$(OBJS)\monolib_filepickercmn.obj &
 	$(OBJS)\monolib_fontpickercmn.obj &
 	$(OBJS)\monolib_fldlgcmn.obj &
@@ -1334,6 +1337,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_effects.obj &
 	$(OBJS)\monolib_fddlgcmn.obj &
 	$(OBJS)\monolib_filectrlcmn.obj &
+	$(OBJS)\monolib_filehistorycmn.obj &
 	$(OBJS)\monolib_filepickercmn.obj &
 	$(OBJS)\monolib_fontpickercmn.obj &
 	$(OBJS)\monolib_fldlgcmn.obj &
@@ -1713,6 +1717,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_effects.obj &
 	$(OBJS)\coredll_fddlgcmn.obj &
 	$(OBJS)\coredll_filectrlcmn.obj &
+	$(OBJS)\coredll_filehistorycmn.obj &
 	$(OBJS)\coredll_filepickercmn.obj &
 	$(OBJS)\coredll_fontpickercmn.obj &
 	$(OBJS)\coredll_fldlgcmn.obj &
@@ -1959,6 +1964,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_effects.obj &
 	$(OBJS)\coredll_fddlgcmn.obj &
 	$(OBJS)\coredll_filectrlcmn.obj &
+	$(OBJS)\coredll_filehistorycmn.obj &
 	$(OBJS)\coredll_filepickercmn.obj &
 	$(OBJS)\coredll_fontpickercmn.obj &
 	$(OBJS)\coredll_fldlgcmn.obj &
@@ -2217,6 +2223,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_effects.obj &
 	$(OBJS)\corelib_fddlgcmn.obj &
 	$(OBJS)\corelib_filectrlcmn.obj &
+	$(OBJS)\corelib_filehistorycmn.obj &
 	$(OBJS)\corelib_filepickercmn.obj &
 	$(OBJS)\corelib_fontpickercmn.obj &
 	$(OBJS)\corelib_fldlgcmn.obj &
@@ -2463,6 +2470,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_effects.obj &
 	$(OBJS)\corelib_fddlgcmn.obj &
 	$(OBJS)\corelib_filectrlcmn.obj &
+	$(OBJS)\corelib_filehistorycmn.obj &
 	$(OBJS)\corelib_filepickercmn.obj &
 	$(OBJS)\corelib_fontpickercmn.obj &
 	$(OBJS)\corelib_fldlgcmn.obj &
@@ -7593,6 +7601,11 @@ $(OBJS)\monodll_filectrlcmn.obj :  .AUTODEPEND ..\..\src\common\filectrlcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_filehistorycmn.obj :  .AUTODEPEND ..\..\src\common\filehistorycmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_filepickercmn.obj :  .AUTODEPEND ..\..\src\common\filepickercmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9785,6 +9798,11 @@ $(OBJS)\monolib_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_filectrlcmn.obj :  .AUTODEPEND ..\..\src\common\filectrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_filehistorycmn.obj :  .AUTODEPEND ..\..\src\common\filehistorycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11994,6 +12012,11 @@ $(OBJS)\coredll_filectrlcmn.obj :  .AUTODEPEND ..\..\src\common\filectrlcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_filehistorycmn.obj :  .AUTODEPEND ..\..\src\common\filehistorycmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_filepickercmn.obj :  .AUTODEPEND ..\..\src\common\filepickercmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13277,6 +13300,11 @@ $(OBJS)\corelib_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_filectrlcmn.obj :  .AUTODEPEND ..\..\src\common\filectrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_filehistorycmn.obj :  .AUTODEPEND ..\..\src\common\filehistorycmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

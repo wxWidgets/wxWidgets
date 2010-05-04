@@ -19,6 +19,7 @@
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/frame.h"
+#include "wx/filehistory.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
@@ -31,7 +32,6 @@ class WXDLLIMPEXP_FWD_CORE wxDocTemplate;
 class WXDLLIMPEXP_FWD_CORE wxDocManager;
 class WXDLLIMPEXP_FWD_CORE wxPrintInfo;
 class WXDLLIMPEXP_FWD_CORE wxCommandProcessor;
-class WXDLLIMPEXP_FWD_CORE wxFileHistory;
 class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 
 class wxDocChildFrameAnyBase;
@@ -827,72 +827,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocPrintout);
 };
 #endif // wxUSE_PRINTING_ARCHITECTURE
-
-// ----------------------------------------------------------------------------
-// File history management
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxFileHistory : public wxObject
-{
-public:
-    wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
-
-    // Operations
-    virtual void AddFileToHistory(const wxString& file);
-    virtual void RemoveFileFromHistory(size_t i);
-    virtual int GetMaxFiles() const { return (int)m_fileMaxFiles; }
-    virtual void UseMenu(wxMenu *menu);
-
-    // Remove menu from the list (MDI child may be closing)
-    virtual void RemoveMenu(wxMenu *menu);
-
-#if wxUSE_CONFIG
-    virtual void Load(const wxConfigBase& config);
-    virtual void Save(wxConfigBase& config);
-#endif // wxUSE_CONFIG
-
-    virtual void AddFilesToMenu();
-    virtual void AddFilesToMenu(wxMenu* menu); // Single menu
-
-    // Accessors
-    virtual wxString GetHistoryFile(size_t i) const { return m_fileHistory[i]; }
-    virtual size_t GetCount() const { return m_fileHistory.GetCount(); }
-
-    const wxList& GetMenus() const { return m_fileMenus; }
-
-    // Set/get base id
-    void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
-    wxWindowID GetBaseId() const { return m_idBase; }
-
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
-protected:
-    // Last n files
-    wxArrayString     m_fileHistory;
-
-    // Menus to maintain (may need several for an MDI app)
-    wxList            m_fileMenus;
-
-    // Max files to maintain
-    size_t            m_fileMaxFiles;
-
-private:
-    // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
-    wxWindowID m_idBase;
-
-    DECLARE_DYNAMIC_CLASS(wxFileHistory)
-    wxDECLARE_NO_COPY_CLASS(wxFileHistory);
-};
-
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxFileHistory::GetNoHistoryFiles() const
-{
-    return m_fileHistory.GetCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.

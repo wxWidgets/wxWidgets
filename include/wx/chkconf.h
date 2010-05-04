@@ -1804,6 +1804,15 @@
 #            define wxUSE_STREAMS 1
 #        endif
 #   endif
+
+#   if !wxUSE_FILE_HISTORY
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "DocView requires wxUSE_FILE_HISTORY"
+#        else
+#            undef wxUSE_FILE_HISTORY
+#            define wxUSE_FILE_HISTORY 1
+#        endif
+#   endif
 #endif /* wxUSE_DOC_VIEW_ARCHITECTURE */
 
 #if wxUSE_PRINTING_ARCHITECTURE

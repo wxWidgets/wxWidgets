@@ -1736,6 +1736,7 @@ Optional Features:
   --enable-exceptions     build exception-safe library
   --enable-ffile          use wxFFile class
   --enable-file           use wxFile class
+  --enable-filehistory    use wxFileHistory class
   --enable-filesystem     use virtual file systems classes
   --enable-fontenum       use wxFontEnumerator class
   --enable-fontmap        use font encodings conversion classes
@@ -7008,6 +7009,50 @@ fi
             fi
           else
             result=$wxUSE_FILE
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filehistory" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-filehistory... $ECHO_C" >&6; }
+          # Check whether --enable-filehistory was given.
+if test "${enable_filehistory+set}" = set; then
+  enableval=$enable_filehistory;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_filehistory='wxUSE_FILE_HISTORY=yes'
+                          else
+                            wx_cv_use_filehistory='wxUSE_FILE_HISTORY=no'
+                          fi
+
+else
+
+                          wx_cv_use_filehistory='wxUSE_FILE_HISTORY=${'DEFAULT_wxUSE_FILE_HISTORY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_filehistory"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_FILE_HISTORY = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_FILE_HISTORY
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -44098,6 +44143,13 @@ echo "$as_me: WARNING: wxTar requires wxArchive... disabled" >&2;}
 _ACEOF
 
   fi
+fi
+
+if test "$wxUSE_FILE_HISTORY" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FILE_HISTORY 1
+_ACEOF
+
 fi
 
 if test "$wxUSE_FILESYSTEM" = "yes"; then

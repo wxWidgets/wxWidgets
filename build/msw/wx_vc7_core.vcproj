@@ -691,6 +691,9 @@
 				RelativePath="..\..\src\common\filectrlcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\filehistorycmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\filepickercmn.cpp">
 			</File>
 			<File
@@ -5121,6 +5124,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\filedlg.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\filehistory.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\filepicker.h">
