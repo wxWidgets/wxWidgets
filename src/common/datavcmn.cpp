@@ -589,18 +589,6 @@ const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
     return const_cast<wxDataViewRendererBase*>(this)->GetOwner()->GetOwner();
 }
 
-class wxKillRef: public wxWindowRef
-{
-public:
-   wxKillRef( wxWindow *win ) : wxWindowRef( win ) { }
-   virtual void OnObjectDestroy()
-   {
-      get()->PopEventHandler( true );
-      m_pobj = NULL;
-      delete this;
-   }
-};
-
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
@@ -627,8 +615,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     if(!m_editorCtrl)
         return false;
 
-    (void) new wxKillRef( m_editorCtrl.get() );
-
     wxDataViewEditorCtrlEvtHandler *handler =
         new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
 
@@ -651,6 +637,18 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     return true;
 }
 
+void wxDataViewRendererBase::DestroyEditControl()
+{
+    // Hide the control immediately but don't delete it yet as there could be
+    // some pending messages for it.
+    m_editorCtrl->Hide();
+
+    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+
+    wxPendingDelete.Append(handler);
+    wxPendingDelete.Append(m_editorCtrl);
+}
+
 void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl)
@@ -658,8 +656,7 @@ void wxDataViewRendererBase::CancelEditing()
 
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 }
 
 bool wxDataViewRendererBase::FinishEditing()
@@ -674,8 +671,7 @@ bool wxDataViewRendererBase::FinishEditing()
 
     dv_ctrl->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 
     if (!Validate(value))
         return false;

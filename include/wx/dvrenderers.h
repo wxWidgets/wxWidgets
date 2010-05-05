@@ -154,6 +154,9 @@ public:
     wxControl *GetEditorCtrl() { return m_editorCtrl; }
 
 protected:
+    // Called from {Cancel,Finish}Editing() to cleanup m_editorCtrl
+    void DestroyEditControl();
+
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
     wxWeakRef<wxControl>    m_editorCtrl;
