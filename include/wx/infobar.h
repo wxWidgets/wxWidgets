@@ -21,7 +21,7 @@
 // wxInfoBar shows non-critical but important information to the user
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxInfoBarBase : public wxControl
+class WXDLLIMPEXP_CORE wxInfoBarBase : public wxControl
 {
 public:
     // real ctors are provided by the derived classes, just notice that unlike

@@ -3597,6 +3597,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\infobar.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\listbkg.cpp"
 				>
 			</File>

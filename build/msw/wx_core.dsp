@@ -2969,6 +2969,10 @@ SOURCE=..\..\src\generic\headerctrlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\infobar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\listbkg.cpp
 # End Source File
 # Begin Source File

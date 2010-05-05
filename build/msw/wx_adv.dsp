@@ -529,10 +529,6 @@ SOURCE=..\..\src\generic\hyperlinkg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\generic\infobar.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\generic\laywin.cpp
 # End Source File
 # Begin Source File
@@ -890,10 +886,6 @@ SOURCE=..\..\include\wx\generic\hyperlink.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\infobar.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File
@@ -967,10 +959,6 @@ SOURCE=..\..\include\wx\grid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\hyperlink.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\infobar.h
 # End Source File
 # Begin Source File
 

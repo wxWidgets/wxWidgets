@@ -735,9 +735,6 @@
 				RelativePath="..\..\src\generic\hyperlinkg.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\generic\infobar.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\generic\laywin.cpp">
 			</File>
 			<File
@@ -1006,9 +1003,6 @@
 				RelativePath="..\..\include\wx\generic\hyperlink.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\infobar.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\generic\laywin.h">
 			</File>
 			<File
@@ -1065,9 +1059,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\hyperlink.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\infobar.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\joystick.h">

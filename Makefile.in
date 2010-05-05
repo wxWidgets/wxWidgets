@@ -2771,13 +2771,14 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/gauge.h \
 	wx/gtk/gnome/gprint.h \
 	wx/gtk/gnome/gvfs.h \
-	wx/gtk/print.h \
+	wx/gtk/infobar.h \
 	wx/gtk/listbox.h \
 	wx/gtk/mdi.h \
 	wx/gtk/menu.h \
 	wx/gtk/menuitem.h \
 	wx/gtk/msgdlg.h \
 	wx/gtk/notebook.h \
+	wx/gtk/print.h \
 	wx/gtk/radiobox.h \
 	wx/gtk/radiobut.h \
 	wx/gtk/scrolbar.h \
@@ -3470,8 +3471,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
 	wx/gtk/dvrenderers.h \
-	wx/gtk/hyperlink.h \
-	wx/gtk/infobar.h
+	wx/gtk/hyperlink.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = \
 @COND_TOOLKIT_MSW@	wx/generic/animate.h wx/msw/bmpcbox.h wx/msw/calctrl.h \
@@ -3503,7 +3503,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
-	wx/generic/infobar.h \
 	wx/generic/laywin.h \
 	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
@@ -3512,7 +3511,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/wizard.h \
 	wx/grid.h \
 	wx/hyperlink.h \
-	wx/infobar.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/notifmsg.h \
@@ -3551,7 +3549,6 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
 	wx/generic/hyperlink.h \
-	wx/generic/infobar.h \
 	wx/generic/laywin.h \
 	wx/generic/notifmsg.h \
 	wx/generic/propdlg.h \
@@ -3560,7 +3557,6 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/wizard.h \
 	wx/grid.h \
 	wx/hyperlink.h \
-	wx/infobar.h \
 	wx/joystick.h \
 	wx/laywin.h \
 	wx/notifmsg.h \
@@ -3682,6 +3678,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/dragimgg.h \
 	wx/generic/filectrlg.h \
 	wx/generic/headerctrlg.h \
+	wx/generic/infobar.h \
 	wx/generic/logg.h \
 	wx/generic/msgdlgg.h \
 	wx/generic/numdlgg.h \
@@ -3703,6 +3700,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/headerctrl.h \
 	wx/helphtml.h \
 	wx/icon.h \
+	wx/infobar.h \
 	wx/layout.h \
 	wx/listbox.h \
 	wx/mdi.h \
@@ -4377,6 +4375,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_dragimgg.o \
 	monodll_filectrlg.o \
 	monodll_headerctrlg.o \
+	monodll_generic_infobar.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
@@ -4574,6 +4573,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_dragimgg.o \
 	monodll_filectrlg.o \
 	monodll_headerctrlg.o \
+	monodll_generic_infobar.o \
 	monodll_listbkg.o \
 	monodll_logg.o \
 	monodll_numdlgg.o \
@@ -5067,7 +5067,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_gauge.o \
 	monodll_gprint.o \
 	monodll_gvfs.o \
-	monodll_gtk_print.o \
+	monodll_gtk_infobar.o \
 	monodll_gtk_listbox.o \
 	monodll_gtk_mdi.o \
 	monodll_gtk_menu.o \
@@ -5075,6 +5075,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_msgdlg.o \
 	monodll_gtk_nativewin.o \
 	monodll_gtk_notebook.o \
+	monodll_gtk_print.o \
 	monodll_gtk_radiobox.o \
 	monodll_gtk_radiobut.o \
 	monodll_gtk_scrolbar.o \
@@ -5765,7 +5766,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
-	monodll_generic_infobar.o \
 	monodll_laywin.o \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
@@ -5795,7 +5795,6 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridsel.o \
 	monodll_helpext.o \
 	monodll_hyperlinkg.o \
-	monodll_generic_infobar.o \
 	monodll_laywin.o \
 	monodll_notifmsgg.o \
 	monodll_odcombo.o \
@@ -5813,8 +5812,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_gtk_bmpcbox.o \
 	monodll_gtk_calctrl.o \
 	monodll_gtk_dataview.o \
-	monodll_hyperlink.o \
-	monodll_gtk_infobar.o
+	monodll_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 	monodll_animateg.o \
@@ -6216,6 +6214,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_dragimgg.o \
 	monolib_filectrlg.o \
 	monolib_headerctrlg.o \
+	monolib_generic_infobar.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
@@ -6413,6 +6412,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_dragimgg.o \
 	monolib_filectrlg.o \
 	monolib_headerctrlg.o \
+	monolib_generic_infobar.o \
 	monolib_listbkg.o \
 	monolib_logg.o \
 	monolib_numdlgg.o \
@@ -6906,7 +6906,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_gauge.o \
 	monolib_gprint.o \
 	monolib_gvfs.o \
-	monolib_gtk_print.o \
+	monolib_gtk_infobar.o \
 	monolib_gtk_listbox.o \
 	monolib_gtk_mdi.o \
 	monolib_gtk_menu.o \
@@ -6914,6 +6914,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_msgdlg.o \
 	monolib_gtk_nativewin.o \
 	monolib_gtk_notebook.o \
+	monolib_gtk_print.o \
 	monolib_gtk_radiobox.o \
 	monolib_gtk_radiobut.o \
 	monolib_gtk_scrolbar.o \
@@ -7604,7 +7605,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
-	monolib_generic_infobar.o \
 	monolib_laywin.o \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
@@ -7634,7 +7634,6 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridsel.o \
 	monolib_helpext.o \
 	monolib_hyperlinkg.o \
-	monolib_generic_infobar.o \
 	monolib_laywin.o \
 	monolib_notifmsgg.o \
 	monolib_odcombo.o \
@@ -7652,8 +7651,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_gtk_bmpcbox.o \
 	monolib_gtk_calctrl.o \
 	monolib_gtk_dataview.o \
-	monolib_hyperlink.o \
-	monolib_gtk_infobar.o
+	monolib_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 	monolib_animateg.o \
@@ -8244,6 +8242,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_dragimgg.o \
 	coredll_filectrlg.o \
 	coredll_headerctrlg.o \
+	coredll_generic_infobar.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
@@ -8441,6 +8440,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_dragimgg.o \
 	coredll_filectrlg.o \
 	coredll_headerctrlg.o \
+	coredll_generic_infobar.o \
 	coredll_listbkg.o \
 	coredll_logg.o \
 	coredll_numdlgg.o \
@@ -8934,7 +8934,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_gauge.o \
 	coredll_gprint.o \
 	coredll_gvfs.o \
-	coredll_gtk_print.o \
+	coredll_gtk_infobar.o \
 	coredll_gtk_listbox.o \
 	coredll_gtk_mdi.o \
 	coredll_gtk_menu.o \
@@ -8942,6 +8942,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_msgdlg.o \
 	coredll_gtk_nativewin.o \
 	coredll_gtk_notebook.o \
+	coredll_gtk_print.o \
 	coredll_gtk_radiobox.o \
 	coredll_gtk_radiobut.o \
 	coredll_gtk_scrolbar.o \
@@ -9756,6 +9757,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_dragimgg.o \
 	corelib_filectrlg.o \
 	corelib_headerctrlg.o \
+	corelib_generic_infobar.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
@@ -9953,6 +9955,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_dragimgg.o \
 	corelib_filectrlg.o \
 	corelib_headerctrlg.o \
+	corelib_generic_infobar.o \
 	corelib_listbkg.o \
 	corelib_logg.o \
 	corelib_numdlgg.o \
@@ -10446,7 +10449,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_gauge.o \
 	corelib_gprint.o \
 	corelib_gvfs.o \
-	corelib_gtk_print.o \
+	corelib_gtk_infobar.o \
 	corelib_gtk_listbox.o \
 	corelib_gtk_mdi.o \
 	corelib_gtk_menu.o \
@@ -10454,6 +10457,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_msgdlg.o \
 	corelib_gtk_nativewin.o \
 	corelib_gtk_notebook.o \
+	corelib_gtk_print.o \
 	corelib_gtk_radiobox.o \
 	corelib_gtk_radiobut.o \
 	corelib_gtk_scrolbar.o \
@@ -11213,7 +11217,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
-	advdll_generic_infobar.o \
 	advdll_laywin.o \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
@@ -11243,7 +11246,6 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridsel.o \
 	advdll_helpext.o \
 	advdll_hyperlinkg.o \
-	advdll_generic_infobar.o \
 	advdll_laywin.o \
 	advdll_notifmsgg.o \
 	advdll_odcombo.o \
@@ -11261,8 +11263,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_gtk_bmpcbox.o \
 	advdll_gtk_calctrl.o \
 	advdll_gtk_dataview.o \
-	advdll_hyperlink.o \
-	advdll_gtk_infobar.o
+	advdll_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_2 =  \
 	advdll_animateg.o \
@@ -11310,7 +11311,6 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
-	advlib_generic_infobar.o \
 	advlib_laywin.o \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
@@ -11340,7 +11340,6 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridsel.o \
 	advlib_helpext.o \
 	advlib_hyperlinkg.o \
-	advlib_generic_infobar.o \
 	advlib_laywin.o \
 	advlib_notifmsgg.o \
 	advlib_odcombo.o \
@@ -11358,8 +11357,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_gtk_bmpcbox.o \
 	advlib_gtk_calctrl.o \
 	advlib_gtk_dataview.o \
-	advlib_hyperlink.o \
-	advlib_gtk_infobar.o
+	advlib_hyperlink.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_3 =  \
 	advlib_animateg.o \
@@ -15261,8 +15259,8 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 monodll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
-monodll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
+monodll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 monodll_gtk_listbox.o: $(srcdir)/src/gtk/listbox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/listbox.cpp
@@ -15284,6 +15282,9 @@ monodll_gtk_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(MONODLL_ODEP)
 
 monodll_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
+
+monodll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
 monodll_gtk_radiobox.o: $(srcdir)/src/gtk/radiobox.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/radiobox.cpp
@@ -16397,9 +16398,6 @@ monodll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
 
 monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
-
-monodll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 monodll_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -19215,6 +19213,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
+@COND_USE_GUI_1@monodll_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 @COND_USE_GUI_1@monodll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
 
@@ -19328,9 +19329,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
-
-@COND_USE_GUI_1@monodll_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -20121,8 +20119,8 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 monolib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
-monolib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
+monolib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 monolib_gtk_listbox.o: $(srcdir)/src/gtk/listbox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/listbox.cpp
@@ -20144,6 +20142,9 @@ monolib_gtk_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(MONOLIB_ODEP)
 
 monolib_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
+
+monolib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
 monolib_gtk_radiobox.o: $(srcdir)/src/gtk/radiobox.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/radiobox.cpp
@@ -21257,9 +21258,6 @@ monolib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
 
 monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
-
-monolib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 monolib_mediactrlcmn.o: $(srcdir)/src/common/mediactrlcmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mediactrlcmn.cpp
@@ -24075,6 +24073,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
+@COND_USE_GUI_1@monolib_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 @COND_USE_GUI_1@monolib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
 
@@ -24188,9 +24189,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
-
-@COND_USE_GUI_1@monolib_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -25698,8 +25696,8 @@ coredll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(COREDLL_ODEP)
 coredll_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
-coredll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
+coredll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 coredll_gtk_listbox.o: $(srcdir)/src/gtk/listbox.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/listbox.cpp
@@ -25721,6 +25719,9 @@ coredll_gtk_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(COREDLL_ODEP)
 
 coredll_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
+
+coredll_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
 coredll_gtk_radiobox.o: $(srcdir)/src/gtk/radiobox.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/radiobox.cpp
@@ -29124,6 +29125,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
+@COND_USE_GUI_1@coredll_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 @COND_USE_GUI_1@coredll_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
 
@@ -29283,8 +29287,8 @@ corelib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(CORELIB_ODEP)
 corelib_gvfs.o: $(srcdir)/src/gtk/gnome/gvfs.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/gnome/gvfs.cpp
 
-corelib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
+corelib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
 
 corelib_gtk_listbox.o: $(srcdir)/src/gtk/listbox.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/listbox.cpp
@@ -29306,6 +29310,9 @@ corelib_gtk_nativewin.o: $(srcdir)/src/gtk/nativewin.cpp $(CORELIB_ODEP)
 
 corelib_gtk_notebook.o: $(srcdir)/src/gtk/notebook.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/notebook.cpp
+
+corelib_gtk_print.o: $(srcdir)/src/gtk/print.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/print.cpp
 
 corelib_gtk_radiobox.o: $(srcdir)/src/gtk/radiobox.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/radiobox.cpp
@@ -32709,6 +32716,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_headerctrlg.o: $(srcdir)/src/generic/headerctrlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/headerctrlg.cpp
 
+@COND_USE_GUI_1@corelib_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
+
 @COND_USE_GUI_1@corelib_listbkg.o: $(srcdir)/src/generic/listbkg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/listbkg.cpp
 
@@ -32793,9 +32803,6 @@ advdll_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
 advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
-advdll_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
-
 advdll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
@@ -32849,9 +32856,6 @@ advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVDLL_ODEP)
 
 advdll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
-
-advdll_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -33123,9 +33127,6 @@ advlib_gtk_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
 advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
-advlib_gtk_infobar.o: $(srcdir)/src/gtk/infobar.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/infobar.cpp
-
 advlib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
@@ -33179,9 +33180,6 @@ advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVLIB_ODEP)
 
 advlib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
-
-advlib_generic_infobar.o: $(srcdir)/src/generic/infobar.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/infobar.cpp
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp

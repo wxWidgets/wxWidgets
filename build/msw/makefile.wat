@@ -454,6 +454,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_headerctrlg.obj &
+	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
@@ -701,6 +702,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dragimgg.obj &
 	$(OBJS)\monodll_filectrlg.obj &
 	$(OBJS)\monodll_headerctrlg.obj &
+	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_listbkg.obj &
 	$(OBJS)\monodll_logg.obj &
 	$(OBJS)\monodll_numdlgg.obj &
@@ -744,7 +746,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
 	$(OBJS)\monodll_hyperlinkg.obj &
-	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_laywin.obj &
 	$(OBJS)\monodll_notifmsgg.obj &
 	$(OBJS)\monodll_odcombo.obj &
@@ -784,7 +785,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
 	$(OBJS)\monodll_hyperlinkg.obj &
-	$(OBJS)\monodll_infobar.obj &
 	$(OBJS)\monodll_laywin.obj &
 	$(OBJS)\monodll_notifmsgg.obj &
 	$(OBJS)\monodll_odcombo.obj &
@@ -1172,6 +1172,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_headerctrlg.obj &
+	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
@@ -1419,6 +1420,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dragimgg.obj &
 	$(OBJS)\monolib_filectrlg.obj &
 	$(OBJS)\monolib_headerctrlg.obj &
+	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_listbkg.obj &
 	$(OBJS)\monolib_logg.obj &
 	$(OBJS)\monolib_numdlgg.obj &
@@ -1462,7 +1464,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
 	$(OBJS)\monolib_hyperlinkg.obj &
-	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_laywin.obj &
 	$(OBJS)\monolib_notifmsgg.obj &
 	$(OBJS)\monolib_odcombo.obj &
@@ -1502,7 +1503,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
 	$(OBJS)\monolib_hyperlinkg.obj &
-	$(OBJS)\monolib_infobar.obj &
 	$(OBJS)\monolib_laywin.obj &
 	$(OBJS)\monolib_notifmsgg.obj &
 	$(OBJS)\monolib_odcombo.obj &
@@ -1799,6 +1799,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_headerctrlg.obj &
+	$(OBJS)\coredll_infobar.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
@@ -2046,6 +2047,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dragimgg.obj &
 	$(OBJS)\coredll_filectrlg.obj &
 	$(OBJS)\coredll_headerctrlg.obj &
+	$(OBJS)\coredll_infobar.obj &
 	$(OBJS)\coredll_listbkg.obj &
 	$(OBJS)\coredll_logg.obj &
 	$(OBJS)\coredll_numdlgg.obj &
@@ -2305,6 +2307,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_headerctrlg.obj &
+	$(OBJS)\corelib_infobar.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
@@ -2552,6 +2555,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dragimgg.obj &
 	$(OBJS)\corelib_filectrlg.obj &
 	$(OBJS)\corelib_headerctrlg.obj &
+	$(OBJS)\corelib_infobar.obj &
 	$(OBJS)\corelib_listbkg.obj &
 	$(OBJS)\corelib_logg.obj &
 	$(OBJS)\corelib_numdlgg.obj &
@@ -2612,7 +2616,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
 	$(OBJS)\advdll_hyperlinkg.obj &
-	$(OBJS)\advdll_infobar.obj &
 	$(OBJS)\advdll_laywin.obj &
 	$(OBJS)\advdll_notifmsgg.obj &
 	$(OBJS)\advdll_odcombo.obj &
@@ -2652,7 +2655,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
 	$(OBJS)\advdll_hyperlinkg.obj &
-	$(OBJS)\advdll_infobar.obj &
 	$(OBJS)\advdll_laywin.obj &
 	$(OBJS)\advdll_notifmsgg.obj &
 	$(OBJS)\advdll_odcombo.obj &
@@ -2698,7 +2700,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
 	$(OBJS)\advlib_hyperlinkg.obj &
-	$(OBJS)\advlib_infobar.obj &
 	$(OBJS)\advlib_laywin.obj &
 	$(OBJS)\advlib_notifmsgg.obj &
 	$(OBJS)\advlib_odcombo.obj &
@@ -2738,7 +2739,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
 	$(OBJS)\advlib_hyperlinkg.obj &
-	$(OBJS)\advlib_infobar.obj &
 	$(OBJS)\advlib_laywin.obj &
 	$(OBJS)\advlib_notifmsgg.obj &
 	$(OBJS)\advlib_odcombo.obj &
@@ -8011,6 +8011,11 @@ $(OBJS)\monodll_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8197,11 +8202,6 @@ $(OBJS)\monodll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_hyperlinkg.obj :  .AUTODEPEND ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10212,6 +10212,11 @@ $(OBJS)\monolib_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10398,11 +10403,6 @@ $(OBJS)\monolib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_hyperlinkg.obj :  .AUTODEPEND ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12422,6 +12422,11 @@ $(OBJS)\coredll_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13714,6 +13719,11 @@ $(OBJS)\corelib_headerctrlg.obj :  .AUTODEPEND ..\..\src\generic\headerctrlg.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_listbkg.obj :  .AUTODEPEND ..\..\src\generic\listbkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13887,9 +13897,6 @@ $(OBJS)\advdll_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 $(OBJS)\advdll_hyperlinkg.obj :  .AUTODEPEND ..\..\src\generic\hyperlinkg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
 $(OBJS)\advdll_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -13999,9 +14006,6 @@ $(OBJS)\advlib_helpext.obj :  .AUTODEPEND ..\..\src\generic\helpext.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_hyperlinkg.obj :  .AUTODEPEND ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-$(OBJS)\advlib_infobar.obj :  .AUTODEPEND ..\..\src\generic\infobar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_laywin.obj :  .AUTODEPEND ..\..\src\generic\laywin.cpp
