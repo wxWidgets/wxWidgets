@@ -65,25 +65,6 @@ const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
 #define TRACE_I18N wxS("i18n")
 
-// the constants describing the format of ll_CC locale string
-static const size_t LEN_LANG = 2;
-
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// get just the language part
-inline wxString ExtractLang(const wxString& langFull)
-{
-    return langFull.Left(LEN_LANG);
-}
-
-} // anonymous namespace
-
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1428,9 +1409,10 @@ bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
     // Also try just base locale name: for things like "fr_BE" (Belgium
     // French) we should use fall back on plain "fr" if no Belgium-specific
     // message catalogs exist
-    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
+    wxString baselang = lang.BeforeFirst('_');
+    if ( lang != baselang )
     {
-        if ( m_loader->LoadCatalog(this, domain, ExtractLang(lang)) )
+        if ( m_loader->LoadCatalog(this, domain, baselang) )
             return true;
     }
 
@@ -1772,9 +1754,6 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
                                            const wxString& domain,
                                            const wxString& lang)
 {
-    wxCHECK_MSG( lang.length() >= LEN_LANG, false,
-                 "invalid language specification" );
-
     wxString searchPath = GetFullSearchPath(lang);
 
     wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
