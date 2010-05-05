@@ -24,7 +24,6 @@ class WXDLLIMPEXP_CORE wxWindowsPrinter : public wxPrinterBase
 
 public:
     wxWindowsPrinter(wxPrintDialogData *data = NULL);
-    virtual ~wxWindowsPrinter();
 
     virtual bool Print(wxWindow *parent,
                        wxPrintout *printout,
@@ -34,8 +33,6 @@ public:
     virtual bool Setup(wxWindow *parent);
 
 private:
-    WXFARPROC     m_lpAbortProc;
-
     wxDECLARE_NO_COPY_CLASS(wxWindowsPrinter);
 };
 
