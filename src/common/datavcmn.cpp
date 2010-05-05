@@ -32,6 +32,43 @@
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
+namespace
+{
+
+// Custom handler pushed on top of the edit control used by wxDataViewCtrl to
+// forward some events to the main control itself.
+class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
+{
+public:
+    wxDataViewEditorCtrlEvtHandler(wxControl *editor, wxDataViewRenderer *owner)
+    {
+        m_editorCtrl = editor;
+        m_owner = owner;
+
+        m_finished = false;
+    }
+
+    void AcceptChangesAndFinish();
+    void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnTextEnter( wxCommandEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    void OnIdle( wxIdleEvent &event );
+
+private:
+    wxDataViewRenderer     *m_owner;
+    wxControl              *m_editorCtrl;
+    bool                    m_finished;
+    bool                    m_focusOnIdle;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+} // anonymous namespace
+
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
@@ -816,16 +853,6 @@ BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
     EVT_TEXT_ENTER     (-1, wxDataViewEditorCtrlEvtHandler::OnTextEnter)
 END_EVENT_TABLE()
-
-wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
-                                wxControl *editorCtrl,
-                                wxDataViewRenderer *owner )
-{
-    m_owner = owner;
-    m_editorCtrl = editorCtrl;
-
-    m_finished = false;
-}
 
 void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
 {
