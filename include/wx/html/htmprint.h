@@ -176,15 +176,17 @@ public:
 private:
     // this function is called by the base class OnPreparePrinting()
     // implementation and by default checks whether the document fits into
-    // pageArea horizontally and warns the user if it does not, giving him
-    // the possibility to cancel printing in this case
+    // pageArea horizontally and warns the user if it does not and, if we're
+    // going to print and not just to preview the document, giving him the
+    // possibility to cancel printing
     //
     // you may override it to either suppress this check if truncation of the
     // HTML being printed is acceptable or, on the contrary, add more checks to
     // it, e.g. for the fit in the vertical direction if the document should
     // always appear on a single page
     //
-    // return true if printing should go ahead or false to cancel it
+    // return true if printing should go ahead or false to cancel it (the
+    // return value is ignored when previewing)
     virtual bool CheckFit(const wxSize& pageArea, const wxSize& docArea) const;
 
     void RenderPage(wxDC *dc, int page);
