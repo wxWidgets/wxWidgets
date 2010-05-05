@@ -24,6 +24,7 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/module.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/print.h"
