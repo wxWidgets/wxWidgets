@@ -320,10 +320,10 @@ class wxPluralFormsNode
 public:
     wxPluralFormsNode(const wxPluralFormsToken& token) : m_token(token) {}
     const wxPluralFormsToken& token() const { return m_token; }
-    const wxPluralFormsNode* node(size_t i) const
+    const wxPluralFormsNode* node(unsigned i) const
         { return m_nodes[i].get(); }
-    void setNode(size_t i, wxPluralFormsNode* n);
-    wxPluralFormsNode* releaseNode(size_t i);
+    void setNode(unsigned i, wxPluralFormsNode* n);
+    wxPluralFormsNode* releaseNode(unsigned i);
     wxPluralFormsToken::Number evaluate(wxPluralFormsToken::Number n) const;
 
 private:
@@ -351,12 +351,12 @@ void wxPluralFormsNodePtr::reset(wxPluralFormsNode *p)
 }
 
 
-void wxPluralFormsNode::setNode(size_t i, wxPluralFormsNode* n)
+void wxPluralFormsNode::setNode(unsigned i, wxPluralFormsNode* n)
 {
     m_nodes[i].reset(n);
 }
 
-wxPluralFormsNode*  wxPluralFormsNode::releaseNode(size_t i)
+wxPluralFormsNode*  wxPluralFormsNode::releaseNode(unsigned i)
 {
     return m_nodes[i].release();
 }
@@ -917,7 +917,7 @@ public:
     wxString GetDomain() const { return m_domain; }
 
     // get the translated string: returns NULL if not found
-    const wxString *GetString(const wxString& sz, size_t n = size_t(-1)) const;
+    const wxString *GetString(const wxString& sz, unsigned n = UINT_MAX) const;
 
     // public variable pointing to the next element in a linked list (or NULL)
     wxMsgCatalog *m_pNext;
@@ -1232,10 +1232,10 @@ bool wxMsgCatalog::LoadData(const wxScopedCharTypeBuffer<char>& data,
     return true;
 }
 
-const wxString *wxMsgCatalog::GetString(const wxString& str, size_t n) const
+const wxString *wxMsgCatalog::GetString(const wxString& str, unsigned n) const
 {
     int index = 0;
-    if (n != size_t(-1))
+    if (n != UINT_MAX)
     {
         index = m_pluralFormsCalculator->evaluate(n);
     }
@@ -1541,12 +1541,12 @@ const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 const wxString& wxTranslations::GetString(const wxString& origString,
                                           const wxString& domain) const
 {
-    return GetString(origString, origString, size_t(-1), domain);
+    return GetString(origString, origString, UINT_MAX, domain);
 }
 
 const wxString& wxTranslations::GetString(const wxString& origString,
                                           const wxString& origString2,
-                                          size_t n,
+                                          unsigned n,
                                           const wxString& domain) const
 {
     if ( origString.empty() )
@@ -1586,7 +1586,7 @@ const wxString& wxTranslations::GetString(const wxString& origString,
             m_lang
         );
 
-        if (n == size_t(-1))
+        if (n == UINT_MAX)
             return GetUntranslatedString(origString);
         else
             return GetUntranslatedString(n == 1 ? origString : origString2);
@@ -1613,14 +1613,14 @@ wxString wxTranslations::GetHeaderValue(const wxString& header,
         if ( pMsgCat == NULL )
             return wxEmptyString;
 
-        trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+        trans = pMsgCat->GetString(wxEmptyString, UINT_MAX);
     }
     else
     {
         // search in all domains
         for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
         {
-            trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+            trans = pMsgCat->GetString(wxEmptyString, UINT_MAX);
             if ( trans != NULL )   // take the first found
                 break;
         }

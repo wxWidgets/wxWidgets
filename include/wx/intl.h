@@ -302,7 +302,7 @@ public:
     // plural form version of the same:
     const wxString& GetString(const wxString& origString,
                               const wxString& origString2,
-                              size_t n,
+                              unsigned n,
                               const wxString& domain = wxEmptyString) const
     {
         return wxGetTranslation(origString, origString2, n, domain);

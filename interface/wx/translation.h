@@ -226,7 +226,7 @@ public:
     */
     const wxString& GetString(const wxString& origString,
                               const wxString& origString2,
-                              size_t n,
+                              unsigned n,
                               const wxString& domain = wxEmptyString) const;
 
     /**
@@ -436,7 +436,7 @@ protected:
           extracted to the message catalog. Instead, use the _() and wxPLURAL()
           macro for all literal strings.
 
-    @see wxGetTranslation(const wxString&, const wxString&, size_t, const wxString&)
+    @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
     @header{wx/intl.h}
 */
@@ -466,7 +466,7 @@ const wxString& wxGetTranslation(const wxString& string,
     @header{wx/intl.h}
 */
 const wxString& wxGetTranslation(const wxString& string,
-                                 const wxString& plural, size_t n,
+                                 const wxString& plural, unsigned n,
                                  const wxString& domain = wxEmptyString);
 
 /**

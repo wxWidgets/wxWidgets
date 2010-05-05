@@ -102,7 +102,7 @@ public:
                               const wxString& domain = wxEmptyString) const;
     const wxString& GetString(const wxString& origString,
                               const wxString& origString2,
-                              size_t n,
+                              unsigned n,
                               const wxString& domain = wxEmptyString) const;
 
     wxString GetHeaderValue(const wxString& header,
@@ -202,7 +202,7 @@ inline const wxString& wxGetTranslation(const wxString& str,
 
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
-                                        size_t n,
+                                        unsigned n,
                                         const wxString& domain = wxEmptyString)
 {
     wxTranslations *trans = wxTranslations::Get();
