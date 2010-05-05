@@ -39,6 +39,7 @@ class WXDLLIMPEXP_FWD_CORE wxPreviewControlBar;
 class WXDLLIMPEXP_FWD_CORE wxPreviewFrame;
 class WXDLLIMPEXP_FWD_CORE wxPrintFactory;
 class WXDLLIMPEXP_FWD_CORE wxPrintNativeDataBase;
+class WXDLLIMPEXP_FWD_CORE wxPrintPreview;
 
 //----------------------------------------------------------------------------
 // error consts
@@ -293,13 +294,17 @@ public:
     void SetPaperRectPixels(const wxRect& paperRectPixels) { m_paperRectPixels = paperRectPixels; }
     wxRect GetPaperRectPixels() const { return m_paperRectPixels; }
 
-    virtual bool IsPreview() const { return m_isPreview; }
+    // This must be called by wxPrintPreview to associate itself with the
+    // printout it uses.
+    virtual void SetPreview(wxPrintPreview *preview) { m_preview = preview; }
 
-    virtual void SetIsPreview(bool p) { m_isPreview = p; }
+    wxPrintPreview *GetPreview() const { return m_preview; }
+    virtual bool IsPreview() const { return GetPreview() != NULL; }
 
 private:
     wxString         m_printoutTitle;
     wxDC*            m_printoutDC;
+    wxPrintPreview  *m_preview;
 
     int              m_pageWidthPixels;
     int              m_pageHeightPixels;
@@ -313,8 +318,6 @@ private:
     int              m_PPIPrinterY;
 
     wxRect           m_paperRectPixels;
-
-    bool             m_isPreview;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxPrintout)

@@ -836,8 +836,6 @@ bool wxGtkPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 
     native->SetPrintJob( printOp );
 
-    printout->SetIsPreview(false);
-
     wxPrinterToGtkData dataToSend;
     dataToSend.printer = this;
     dataToSend.printout = printout;
