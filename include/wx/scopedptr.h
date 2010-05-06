@@ -63,7 +63,7 @@ public:
     {
         if ( ptr != m_ptr )
         {
-            delete m_ptr;
+            wxCHECKED_DELETE(m_ptr);
             m_ptr = ptr;
         }
     }
@@ -133,7 +133,7 @@ public:                             \
     {                               \
         if (m_ptr != ptr)           \
         {                           \
-            delete m_ptr;           \
+            wxCHECKED_DELETE(m_ptr);\
             m_ptr = ptr;            \
         }                           \
     }                               \
