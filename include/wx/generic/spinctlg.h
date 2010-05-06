@@ -105,8 +105,13 @@ protected:
     void DoSetRange(double min_val, double max_val);
     void DoSetIncrement(double inc);
 
-    // Ensure that the textctrl shows correct value
-    void SyncSpinToText();
+    // update our value to reflect the text control contents (if it has been
+    // modified by user, do nothing otherwise)
+    //
+    // can also change the text control if its value is invalid
+    //
+    // return true if our value has changed
+    bool SyncSpinToText();
 
     // Send the correct event type
     virtual void DoSendEvent() = 0;
