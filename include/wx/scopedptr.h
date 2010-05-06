@@ -129,14 +129,7 @@ public:                             \
                                     \
     ~name();                        \
                                     \
-    void reset(T * ptr = NULL)      \
-    {                               \
-        if (m_ptr != ptr)           \
-        {                           \
-            wxCHECKED_DELETE(m_ptr);\
-            m_ptr = ptr;            \
-        }                           \
-    }                               \
+    void reset(T * ptr = NULL);     \
                                     \
     T *release()                    \
     {                               \
@@ -171,6 +164,14 @@ public:                             \
 };
 
 #define wxDEFINE_SCOPED_PTR(T, name)\
+void name::reset(T * ptr)           \
+{                                   \
+    if (m_ptr != ptr)               \
+    {                               \
+        wxCHECKED_DELETE(m_ptr);    \
+        m_ptr = ptr;                \
+    }                               \
+}                                   \
 name::~name()                       \
 {                                   \
     wxCHECKED_DELETE(m_ptr);        \
