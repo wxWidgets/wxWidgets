@@ -2141,7 +2141,7 @@ public:
         @remarks This operation deselects the property and clears its
                  value.
     */
-    bool SetChoices( wxPGChoices& choices );
+    bool SetChoices( const wxPGChoices& choices );
 
     /** Set max length of text in text editor.
     */
