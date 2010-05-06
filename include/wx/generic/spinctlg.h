@@ -92,6 +92,10 @@ public:
     void OnTextEnter(wxCommandEvent& event);
     void OnTextChar(wxKeyEvent& event);
 
+    // this window itself is used only as a container for its sub windows so it
+    // shouldn't accept the focus at all
+    virtual bool AcceptsFocus() const { return false; }
+
     friend class wxSpinCtrlTextGeneric;
 
 protected:
