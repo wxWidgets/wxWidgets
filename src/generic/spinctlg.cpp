@@ -419,10 +419,10 @@ void wxSpinCtrlGenericBase::SyncSpinToText()
         else if (textValue < m_min)
             textValue = m_min;
 
-        if (m_value != textValue)
-        {
-            DoSetValue(textValue);
-        }
+        // we must always set the value here, even if it's equal to m_value, as
+        // otherwise we could be left with an out of range value when leaving
+        // the text control and the current value is already m_max for example
+        DoSetValue(textValue);
     }
     else
     {
