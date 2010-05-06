@@ -43,7 +43,7 @@ public:
 
     wxEXPLICIT wxScopedPtr(T * ptr = NULL) : m_ptr(ptr) { }
 
-    ~wxScopedPtr() { delete m_ptr; }
+    ~wxScopedPtr() { wxCHECKED_DELETE(m_ptr); }
 
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
