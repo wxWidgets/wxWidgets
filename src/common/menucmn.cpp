@@ -67,7 +67,12 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
 
         case wxID_SEPARATOR:
             m_id = wxID_SEPARATOR;
-            m_kind = wxITEM_SEPARATOR;
+
+            // there is a lot of existing code just doing Append(wxID_SEPARATOR)
+            // and it makes sense to omit the following optional parameters,
+            // including the kind one which doesn't default to wxITEM_SEPARATOR,
+            // of course, so override it here
+            kind = wxITEM_SEPARATOR;
             break;
 
         default:
