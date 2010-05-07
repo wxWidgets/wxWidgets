@@ -1039,6 +1039,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/dnd.cpp
     src/gtk/evtloop.cpp
     src/gtk/filectrl.cpp
+    src/gtk/filehistory.cpp
     src/gtk/font.cpp
     src/gtk/sockgtk.cpp
     src/gtk/minifram.cpp
@@ -1077,6 +1078,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/evtloop.h
     wx/gtk/evtloopsrc.h
     wx/gtk/font.h
+    wx/gtk/filehistory.h
     wx/gtk/minifram.h
     wx/gtk/pen.h
     wx/gtk/popupwin.h

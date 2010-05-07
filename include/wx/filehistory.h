@@ -28,10 +28,10 @@ class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 // File history management
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxFileHistory : public wxObject
+class WXDLLIMPEXP_CORE wxFileHistoryBase : public wxObject
 {
 public:
-    wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
+    wxFileHistoryBase(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
 
     // Operations
     virtual void AddFileToHistory(const wxString& file);
@@ -79,16 +79,30 @@ private:
     // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
     wxWindowID m_idBase;
 
-    DECLARE_DYNAMIC_CLASS(wxFileHistory)
-    wxDECLARE_NO_COPY_CLASS(wxFileHistory);
+    wxDECLARE_NO_COPY_CLASS(wxFileHistoryBase);
 };
 
 #if WXWIN_COMPATIBILITY_2_6
-inline size_t wxFileHistory::GetNoHistoryFiles() const
+inline size_t wxFileHistoryBase::GetNoHistoryFiles() const
 {
     return m_fileHistory.GetCount();
 }
 #endif // WXWIN_COMPATIBILITY_2_6
+
+
+#if defined(__WXGTK20__)
+    #include "wx/gtk/filehistory.h"
+#else
+    // no platform-specific implementation of wxFileHistory yet
+    class WXDLLIMPEXP_CORE wxFileHistory : public wxFileHistoryBase
+    {
+    public:
+        wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1)
+            : wxFileHistoryBase(maxFiles, idBase) {}
+
+        DECLARE_DYNAMIC_CLASS(wxFileHistory)
+    };
+#endif
 
 #endif // wxUSE_FILE_HISTORY
 

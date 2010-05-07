@@ -62,13 +62,13 @@ wxString GetMRUEntryLabel(int n, const wxString& path)
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 
-wxFileHistory::wxFileHistory(size_t maxFiles, wxWindowID idBase)
+wxFileHistoryBase::wxFileHistoryBase(size_t maxFiles, wxWindowID idBase)
 {
     m_fileMaxFiles = maxFiles;
     m_idBase = idBase;
 }
 
-void wxFileHistory::AddFileToHistory(const wxString& file)
+void wxFileHistoryBase::AddFileToHistory(const wxString& file)
 {
     // check if we don't already have this file
     const wxFileName fnNew(file);
@@ -138,11 +138,11 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     }
 }
 
-void wxFileHistory::RemoveFileFromHistory(size_t i)
+void wxFileHistoryBase::RemoveFileFromHistory(size_t i)
 {
     size_t numFiles = m_fileHistory.size();
     wxCHECK_RET( i < numFiles,
-                 wxT("invalid index in wxFileHistory::RemoveFileFromHistory") );
+                 wxT("invalid index in wxFileHistoryBase::RemoveFileFromHistory") );
 
     // delete the element from the array
     m_fileHistory.RemoveAt(i);
@@ -181,19 +181,19 @@ void wxFileHistory::RemoveFileFromHistory(size_t i)
     }
 }
 
-void wxFileHistory::UseMenu(wxMenu *menu)
+void wxFileHistoryBase::UseMenu(wxMenu *menu)
 {
     if ( !m_fileMenus.Member(menu) )
         m_fileMenus.Append(menu);
 }
 
-void wxFileHistory::RemoveMenu(wxMenu *menu)
+void wxFileHistoryBase::RemoveMenu(wxMenu *menu)
 {
     m_fileMenus.DeleteObject(menu);
 }
 
 #if wxUSE_CONFIG
-void wxFileHistory::Load(const wxConfigBase& config)
+void wxFileHistoryBase::Load(const wxConfigBase& config)
 {
     m_fileHistory.Clear();
 
@@ -213,7 +213,7 @@ void wxFileHistory::Load(const wxConfigBase& config)
     AddFilesToMenu();
 }
 
-void wxFileHistory::Save(wxConfigBase& config)
+void wxFileHistoryBase::Save(wxConfigBase& config)
 {
     size_t i;
     for (i = 0; i < m_fileMaxFiles; i++)
@@ -228,7 +228,7 @@ void wxFileHistory::Save(wxConfigBase& config)
 }
 #endif // wxUSE_CONFIG
 
-void wxFileHistory::AddFilesToMenu()
+void wxFileHistoryBase::AddFilesToMenu()
 {
     if ( m_fileHistory.empty() )
         return;
@@ -241,7 +241,7 @@ void wxFileHistory::AddFilesToMenu()
     }
 }
 
-void wxFileHistory::AddFilesToMenu(wxMenu* menu)
+void wxFileHistoryBase::AddFilesToMenu(wxMenu* menu)
 {
     if ( m_fileHistory.empty() )
         return;
