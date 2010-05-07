@@ -415,9 +415,12 @@ void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
     wxSize new_size = evt.GetSize();
 
-    wxMemoryDC temp_dc;
-    wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
-    Refresh(true, &invalid_rect);
+    if (m_art)
+    {
+        wxMemoryDC temp_dc;
+        wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
+        Refresh(true, &invalid_rect);
+    }
 
     m_old_size = new_size;
 
