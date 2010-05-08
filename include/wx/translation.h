@@ -61,6 +61,12 @@ wxDECLARE_SCOPED_PTR(wxPluralFormsCalculator, wxPluralFormsCalculatorPtr)
 class WXDLLIMPEXP_BASE wxMsgCatalog
 {
 public:
+    // Ctor is protected, because CreateFromXXX functions must be used,
+    // but destruction should be unrestricted
+#if !wxUSE_UNICODE
+    ~wxMsgCatalog();
+#endif
+
     // load the catalog from disk or from data; caller is responsible for
     // deleting them if not NULL
     static wxMsgCatalog *CreateFromFile(const wxString& filename,
@@ -82,9 +88,6 @@ protected:
         , m_conv(NULL)
 #endif
     {}
-#if !wxUSE_UNICODE
-    ~wxMsgCatalog();
-#endif
 
 private:
     // variable pointing to the next element in a linked list (or NULL)
