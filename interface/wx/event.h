@@ -512,9 +512,9 @@ public:
         the chain until the event is processed or the chain is exhausted.
 
         This function is called from ProcessEvent() and, in turn, calls
-        ProcessEventHere() for each handler in turn. It is not virtual and so
-        cannot be overridden but can, and should, be called to forward an event
-        to another handler instead of ProcessEvent() which would result in a
+        TryThis() for each handler in turn. It is not virtual and so cannot be
+        overridden but can, and should, be called to forward an event to
+        another handler instead of ProcessEvent() which would result in a
         duplicate call to TryAfter(), e.g. resulting in all unprocessed events
         being sent to the application object multiple times.
 
@@ -527,25 +527,6 @@ public:
             event.
      */
     bool ProcessEventLocally(wxEvent& event);
-
-    /**
-        Try to process the event in this event handler.
-
-        This method is called from ProcessEventLocally() and thus,
-        indirectly, from ProcessEvent(), please see the detailed description of
-        the event processing logic there.
-
-        It is @em not virtual and so may not be overridden.
-
-        @since 2.9.1
-
-        @param event
-            Event to process.
-        @return
-            @true if this object itself defines a handler for this event and
-            the handler didn't skip the event.
-     */
-    bool ProcessEventHere(wxEvent& event);
 
     /**
         Processes an event by calling ProcessEvent() and handles any exceptions
@@ -1111,9 +1092,28 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryBefore(wxEvent& event);
+
+    /**
+        Try to process the event in this event handler.
+
+        This method is called from ProcessEventLocally() and thus, indirectly,
+        from ProcessEvent(), please see the detailed description of the event
+        processing logic there.
+
+        It is currently @em not virtual and so may not be overridden.
+
+        @since 2.9.1
+
+        @param event
+            Event to process.
+        @return
+            @true if this object itself defines a handler for this event and
+            the handler didn't skip the event.
+     */
+    bool TryThis(wxEvent& event);
 
     /**
         Method called by ProcessEvent() as last resort.
@@ -1140,7 +1140,7 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryAfter(wxEvent& event);
 };

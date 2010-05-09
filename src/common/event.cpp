@@ -1379,7 +1379,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // Short circuit the event processing logic if we're requested to process
     // this event in this handler only, see DoTryChain() for more details.
     if ( event.ShouldProcessHereOnly() )
-        return ProcessEventHere(event);
+        return TryHere(event);
 
 
     // Try to process the event in this handler itself.
@@ -1405,7 +1405,7 @@ bool wxEvtHandler::ProcessEventLocally(wxEvent& event)
     // Then try this handler itself, notice that we should not call
     // ProcessEvent() on this one as we're already called from it, which
     // explains why we do it here and not in DoTryChain()
-    if ( ProcessEventHere(event) )
+    if ( TryHere(event) )
         return true;
 
     // Finally try the event handlers chained to this one,
@@ -1426,16 +1426,16 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
         // ProcessEvent() from which we were called or will be done by it when
         // we return.
         //
-        // However we must call ProcessEvent() and not ProcessEventHere()
-        // because the existing code (including some in wxWidgets itself)
-        // expects the overridden ProcessEvent() in its custom event handlers
-        // pushed on a window to be called.
+        // However we must call ProcessEvent() and not TryHere() because the
+        // existing code (including some in wxWidgets itself) expects the
+        // overridden ProcessEvent() in its custom event handlers pushed on a
+        // window to be called.
         //
         // So we must call ProcessEvent() but it must not do what it usually
         // does. To resolve this paradox we pass a special "process here only"
         // flag to ProcessEvent() via the event object itself. This ensures
         // that if our own, base class, version is called, it will just call
-        // ProcessEventHere() and won't do anything else, just as we want it to.
+        // TryHere() and won't do anything else, just as we want it to.
         wxEventProcessHereOnly processHereOnly(event);
         if ( h->ProcessEvent(event) )
             return true;
@@ -1444,7 +1444,7 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
     return false;
 }
 
-bool wxEvtHandler::ProcessEventHere(wxEvent& event)
+bool wxEvtHandler::TryHere(wxEvent& event)
 {
     // If the event handler is disabled it doesn't process any events
     if ( !GetEvtHandlerEnabled() )

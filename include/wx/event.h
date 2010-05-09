@@ -1026,8 +1026,8 @@ protected:
     bool m_wasProcessed;
 
     // this flag is used by ProcessEventLocally() to prevent ProcessEvent()
-    // from doing its usual stuff and force it to just call ProcessEventHere()
-    // instead, see the comment there explaining why is this needed
+    // from doing its usual stuff and force it to just call TryHere() instead,
+    // see the comment there explaining why is this needed
     bool m_processHereOnly;
 
 protected:
@@ -3232,13 +3232,6 @@ public:
     void OnSinkDestroyed( wxEvtHandler *sink );
 
 
-    // The method tries to process the event in this event handler.
-    //
-    // It is called from ProcessEventLocally() and normally shouldn't be called
-    // directly as doing it would ignore any chained event handlers.
-    bool ProcessEventHere(wxEvent& event);
-
-
 private:
     void DoBind(int winid,
                    int lastId,
@@ -3262,6 +3255,12 @@ protected:
     // in the event handlers overriding the default logic, this is used by e.g.
     // validators.
     virtual bool TryBefore(wxEvent& event);
+
+    // this one is not a hook but just a helper which looks up the handler in
+    // this object itself called from ProcessEventLocally() and normally
+    // shouldn't be called directly as doing it would ignore any chained event
+    // handlers
+    bool TryHere(wxEvent& event);
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it

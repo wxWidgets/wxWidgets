@@ -1846,8 +1846,8 @@ public:
         This method is similar to ProcessWindowEvent() but can be used to
         search for the event handler only in this window and any event handlers
         pushed on top of it. Unlike ProcessWindowEvent() it won't propagate the
-        event upwards. But unlike wxEvtHandler::ProcessEventHere() it will use
-        the event handlers associated with this window.
+        event upwards. But it will use the validator and event handlers
+        associated with this window, if any.
 
         @since 2.9.1
      */
