@@ -996,6 +996,11 @@ public:
         return false;
     }
 
+    // This is also used only internally by ProcessEvent() to check if it
+    // should process the event normally or only restrict the search for the
+    // event handler to this object itself.
+    bool ShouldProcessHereOnly() const { return m_processHereOnly; }
+
 protected:
     wxObject*         m_eventObject;
     wxEventType       m_eventType;
@@ -1020,6 +1025,11 @@ protected:
     // once for this event
     bool m_wasProcessed;
 
+    // this flag is used by ProcessEventLocally() to prevent ProcessEvent()
+    // from doing its usual stuff and force it to just call ProcessEventHere()
+    // instead, see the comment there explaining why is this needed
+    bool m_processHereOnly;
+
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()
     wxEvent& operator=(const wxEvent&); // for derived classes operator=()
@@ -1027,6 +1037,10 @@ protected:
 private:
     // it needs to access our m_propagationLevel
     friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
+
+    // and this one needs to access our m_processHereOnly
+    friend class WXDLLIMPEXP_FWD_BASE wxEventProcessHereOnly;
+
 
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
@@ -1079,6 +1093,32 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
+// A helper used by ProcessEventLocally() to restrict the event processing
+// to this handler only.
+class WXDLLIMPEXP_BASE wxEventProcessHereOnly
+{
+public:
+    wxEventProcessHereOnly(wxEvent& event) : m_event(event)
+    {
+        // This would be unexpected and would also restore the wrong value in
+        // this class dtor so if even does happen legitimately we'd need to
+        // store the value in ctor and restore it in dtor.
+        wxASSERT_MSG( !m_event.m_processHereOnly,
+                      "shouldn't be used twice for the same event" );
+
+        m_event.m_processHereOnly = true;
+    }
+
+    ~wxEventProcessHereOnly()
+    {
+        m_event.m_processHereOnly = false;
+    }
+
+private:
+    wxEvent& m_event;
+
+    wxDECLARE_NO_COPY_CLASS(wxEventProcessHereOnly);
+};
 
 #if wxUSE_GUI
 
@@ -2966,6 +3006,20 @@ public:
     bool SafelyProcessEvent(wxEvent& event);
         // NOTE: uses ProcessEvent()
 
+    // This method tries to process the event in this event handler, including
+    // any preprocessing done by TryBefore() and all the handlers chained to
+    // it, but excluding the post-processing done in TryAfter().
+    //
+    // It is meant to be called from ProcessEvent() only and is not virtual,
+    // additional event handlers can be hooked into the normal event processing
+    // logic using TryBefore() and TryAfter() hooks.
+    //
+    // You can also call it yourself to forward an event to another handler but
+    // without propagating it upwards if it's unhandled (this is usually
+    // unwanted when forwarding as the original handler would already do it if
+    // needed normally).
+    bool ProcessEventLocally(wxEvent& event);
+
     // Schedule the given event to be processed later. It takes ownership of
     // the event pointer, i.e. it will be deleted later. This is safe to call
     // from multiple threads although you still need to ensure that wxString
@@ -3180,9 +3234,8 @@ public:
 
     // The method tries to process the event in this event handler.
     //
-    // It is meant to be called from ProcessEvent() only and is not virtual,
-    // additional event handlers can be hooked into the normal event processing
-    // logic using TryBefore() and TryAfter() hooks.
+    // It is called from ProcessEventLocally() and normally shouldn't be called
+    // directly as doing it would ignore any chained event handlers.
     bool ProcessEventHere(wxEvent& event);
 
 
@@ -3273,6 +3326,9 @@ protected:
 private:
     // pass the event to wxTheApp instance, called from TryAfter()
     bool DoTryApp(wxEvent& event);
+
+    // try to process events in all handlers chained to this one
+    bool DoTryChain(wxEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };

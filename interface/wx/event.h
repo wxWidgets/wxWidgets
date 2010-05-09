@@ -489,8 +489,8 @@ public:
            processed, ProcessEvent() on wxTheApp object is called as the last
            step.
 
-        Notice that steps (3)-(5) are performed in ProcessEventHere() which is
-        called by this function.
+        Notice that steps (2)-(6) are performed in ProcessEventLocally()
+        which is called by this function.
 
         @param event
             Event to process.
@@ -503,12 +503,41 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     /**
+        Try to process the event in this handler and all those chained to it.
+
+        As explained in ProcessEvent() documentation, the event handlers may be
+        chained in a doubly-linked list. This function tries to process the
+        event in this handler (including performing any pre-processing done in
+        TryBefore(), e.g. applying validators) and all those following it in
+        the chain until the event is processed or the chain is exhausted.
+
+        This function is called from ProcessEvent() and, in turn, calls
+        ProcessEventHere() for each handler in turn. It is not virtual and so
+        cannot be overridden but can, and should, be called to forward an event
+        to another handler instead of ProcessEvent() which would result in a
+        duplicate call to TryAfter(), e.g. resulting in all unprocessed events
+        being sent to the application object multiple times.
+
+        @since 2.9.1
+
+        @param event
+            Event to process.
+        @return
+            @true if this handler of one of those chained to it processed the
+            event.
+     */
+    bool ProcessEventLocally(wxEvent& event);
+
+    /**
         Try to process the event in this event handler.
 
-        This method is called from ProcessEvent(), please see the detailed
-        description of the event processing logic there.
+        This method is called from ProcessEventLocally() and thus,
+        indirectly, from ProcessEvent(), please see the detailed description of
+        the event processing logic there.
 
         It is @em not virtual and so may not be overridden.
+
+        @since 2.9.1
 
         @param event
             Event to process.
