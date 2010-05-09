@@ -94,6 +94,17 @@ wxVListBoxComboPopup::~wxVListBoxComboPopup()
     Clear();
 }
 
+#ifdef __WXMSW__
+
+void wxVListBoxComboPopup::SetFocus()
+{
+    // Suppress SetFocus() warning by simply not calling it. This combo popup
+    // has already been designed with the assumption that SetFocus() may not
+    // do anything useful, so it really doesn't need to be called.
+}
+
+#endif // __WXMSW__
+
 bool wxVListBoxComboPopup::LazyCreate()
 {
     // NB: There is a bug with wxVListBox that can be avoided by creating

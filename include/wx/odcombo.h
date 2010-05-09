@@ -174,6 +174,13 @@ protected:
     // Stop partial completion (when some other event occurs)
     void StopPartialCompletion();
 
+#ifdef __WXMSW__
+    // Added to work around a SetFocus() log error. Overriding virtual member
+    // function from the primary base class (in this case, wxVListBox) should
+    // be ABI compatible.
+    virtual void SetFocus();
+#endif
+
     wxArrayString           m_strings;
     wxArrayPtrVoid          m_clientDatas;
 
