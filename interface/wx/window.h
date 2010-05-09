@@ -1841,6 +1841,19 @@ public:
     bool ProcessWindowEvent(wxEvent& event);
 
     /**
+        Wrapper for wxEvtHandler::ProcessEventLocally().
+
+        This method is similar to ProcessWindowEvent() but can be used to
+        search for the event handler only in this window and any event handlers
+        pushed on top of it. Unlike ProcessWindowEvent() it won't propagate the
+        event upwards. But unlike wxEvtHandler::ProcessEventHere() it will use
+        the event handlers associated with this window.
+
+        @since 2.9.1
+     */
+    bool ProcessWindowEventLocally(wxEvent& event);
+
+    /**
         Removes and returns the top-most event handler on the event handler stack.
 
         E.g. in the case of:

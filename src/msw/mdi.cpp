@@ -686,7 +686,7 @@ bool wxMDIParentFrame::TryBefore(wxEvent& event)
     if ( event.GetEventType() == wxEVT_COMMAND_MENU_SELECTED )
     {
         wxMDIChildFrame * const child = GetActiveChild();
-        if ( child && child->ProcessEventHere(event) )
+        if ( child && child->ProcessWindowEventLocally(event) )
             return true;
     }
 
