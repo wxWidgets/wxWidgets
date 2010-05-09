@@ -26,12 +26,12 @@ public:
     ~wxUIActionSimulator();
 
     // Mouse related
-    bool        MouseMove(long x, long y);
-    bool        MouseDown(int button = wxMOUSE_BTN_LEFT);
-    bool        MouseUp(int button = wxMOUSE_BTN_LEFT);
-    bool        MouseClick(int button = wxMOUSE_BTN_LEFT);
-    bool        MouseDblClick(int button = wxMOUSE_BTN_LEFT);
-    bool        MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
+    bool MouseMove(long x, long y);
+    bool MouseDown(int button = wxMOUSE_BTN_LEFT);
+    bool MouseUp(int button = wxMOUSE_BTN_LEFT);
+    bool MouseClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDblClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
 
     // Keyboard related:
 

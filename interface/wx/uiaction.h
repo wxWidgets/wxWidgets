@@ -47,7 +47,7 @@ class wxUIActionSimulator
         @param y
             y coordinate to move to, in screen coordinates.
     */
-    bool        MouseMove(long x, long y);
+    bool MouseMove(long x, long y);
 
     /**
         Press a mouse button.
@@ -55,7 +55,7 @@ class wxUIActionSimulator
         @param button
             Button to press. Valid constants are wxMOUSE_BTN_LEFT, wxMOUSE_BTN_MIDDLE, and wxMOUSE_BTN_RIGHT.
     */
-    bool        MouseDown(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDown(int button = wxMOUSE_BTN_LEFT);
 
     /**
         Release a mouse button.
@@ -63,21 +63,21 @@ class wxUIActionSimulator
         @param button
             Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
     */
-    bool        MouseUp(int button = wxMOUSE_BTN_LEFT);
+    bool MouseUp(int button = wxMOUSE_BTN_LEFT);
     /**
         Click a mouse button.
 
         @param button
             Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
     */
-    bool        MouseClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseClick(int button = wxMOUSE_BTN_LEFT);
     /**
         Double-click a mouse button.
 
         @param button
             Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
     */
-    bool        MouseDblClick(int button = wxMOUSE_BTN_LEFT);
+    bool MouseDblClick(int button = wxMOUSE_BTN_LEFT);
 
     /**
         Perform a drag and drop operation.
@@ -97,7 +97,7 @@ class wxUIActionSimulator
         @param button
             Button to press. See wxUIActionSimulator::MouseDown for a list of valid constants.
     */
-    bool        MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
+    bool MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
 
     /**
         Press a key.
