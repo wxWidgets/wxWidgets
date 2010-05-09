@@ -35,20 +35,20 @@ public:
 
     // Keyboard related:
 
-    bool        KeyDown(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false)
-                    { return Key(keycode, true, shiftDown, cmdDown, altDown); }
+    bool KeyDown(int keycode, int modifiers = wxMOD_NONE)
+            { return Key(keycode, true, modifiers); }
 
-    bool        KeyUp(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false)
-                    { return Key(keycode, false, shiftDown, cmdDown, altDown); }
+    bool KeyUp(int keycode, int modifiers = wxMOD_NONE)
+            { return Key(keycode, false, modifiers); }
 
-    bool        Char(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool Char(int keycode, int modifiers = wxMOD_NONE);
 
 protected:
     // Implementation-wise, since key events take more code to set up on GTK and Mac, it makes
     // sense to handle both key down and key up in one method. However, I wanted the API for pressing
     // and releasing the mouse and keyboard to be consistent, and I don't really like using a bool
     // for pressed state, so I'm leaving this as an implementation detail.
-    bool        Key(int keycode, bool isDown=true, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool Key(int keycode, bool isDown = true, int modifiers = wxMOD_NONE);
 };
 
 #endif // wxUSE_UIACTIONSIMULATOR

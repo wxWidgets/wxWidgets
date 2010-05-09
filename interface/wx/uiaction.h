@@ -103,51 +103,33 @@ class wxUIActionSimulator
         Press a key.
 
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given keycode.
     */
-    bool        KeyDown(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool KeyDown(int keycode, int modifiers = wxMOD_NONE);
 
     /**
         Release a key.
 
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given keycode.
     */
-    bool        KeyUp(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool KeyUp(int keycode, int modifiers = wxMOD_NONE);
 
     /**
         Press and release a key.
 
         @param keycode
-            key to operate on, as an integer.
+            Key to operate on, as an integer.
 
-        @param shiftDown
-            true if the shift key should be pressed, false otherwise.
-
-        @param cmdDown
-            true if the cmd key should be pressed, false otherwise.
-
-        @param altDown
-            true if the alt key should be pressed, false otherwise.
+        @param modifiers
+            A combination of ::wxKeyModifier flags to be pressed with the given keycode.
     */
-    bool        Char(int keycode, bool shiftDown=false, bool cmdDown=false, bool altDown=false);
+    bool Char(int keycode, int modifiers = wxMOD_NONE);
 };
 

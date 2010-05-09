@@ -89,7 +89,7 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, bool WXUNUSED(shiftDown), bool WXUNUSED(cmdDown), bool WXUNUSED(altDown))
+bool wxUIActionSimulator::Key(int keycode, bool isDown, int WXUNUSED(modifiers))
 {
     Display *display = XOpenDisplay(0);
     wxASSERT_MSG(display, "No display available!");

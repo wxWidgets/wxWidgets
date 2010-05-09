@@ -65,7 +65,7 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, bool shiftDown, bool cmdDown, bool altDown)
+bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
 {
     DWORD flags = 0;
     if (!isDown)

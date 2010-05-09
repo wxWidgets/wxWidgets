@@ -111,22 +111,22 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, bool shiftDown, bool cmdDown, bool altDown)
+bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
 {
-    if (shiftDown)
+    if (modifiers & wxMOD_SHIFT)
         SendCharCode((CGCharCode)56, true);
-    if (altDown)
+    if (modifiers & wxMOD_ALT)
         SendCharCode((CGCharCode)58, true);
-    if (cmdDown)
+    if (modifiers & wxMOD_CMD)
         SendCharCode((CGCharCode)55, true);
 
     SendCharCode((CGCharCode)keycode, isDown);
 
-    if (shiftDown)
+    if (modifiers & wxMOD_SHIFT)
         SendCharCode((CGCharCode)56, false);
-    if (altDown)
+    if (modifiers & wxMOD_ALT)
         SendCharCode((CGCharCode)58, false);
-    if (cmdDown)
+    if (modifiers & wxMOD_CMD)
         SendCharCode((CGCharCode)55, false);
 
     return true;
