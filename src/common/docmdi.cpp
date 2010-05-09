@@ -70,7 +70,7 @@ void wxDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
 
 bool wxDocMDIParentFrame::TryBefore(wxEvent& event)
 {
-    if ( m_docManager && m_docManager->ProcessEventHere(event) )
+    if ( m_docManager && m_docManager->ProcessEventLocally(event) )
         return true;
 
     return wxMDIParentFrame::TryBefore(event);

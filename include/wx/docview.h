@@ -580,7 +580,7 @@ protected:
     // a chance to process the message before the frame event handlers are used
     bool TryProcessEvent(wxEvent& event)
     {
-        return m_childView && m_childView->ProcessEventHere(event);
+        return m_childView && m_childView->ProcessEventLocally(event);
     }
 
     // called from EVT_CLOSE handler in the frame: check if we can close and do

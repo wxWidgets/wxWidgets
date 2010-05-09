@@ -689,7 +689,7 @@ void wxView::SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame)
 bool wxView::TryBefore(wxEvent& event)
 {
     wxDocument * const doc = GetDocument();
-    return doc && doc->ProcessEventHere(event);
+    return doc && doc->ProcessEventLocally(event);
 }
 
 void wxView::OnActivateView(bool WXUNUSED(activate),
@@ -1252,7 +1252,7 @@ wxView *wxDocManager::GetActiveView() const
 bool wxDocManager::TryBefore(wxEvent& event)
 {
     wxView * const view = GetActiveView();
-    return view && view->ProcessEventHere(event);
+    return view && view->ProcessEventLocally(event);
 }
 
 namespace
@@ -1970,7 +1970,7 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 // Extend event processing to search the view's event table
 bool wxDocParentFrame::TryBefore(wxEvent& event)
 {
-    if ( m_docManager && m_docManager->ProcessEventHere(event) )
+    if ( m_docManager && m_docManager->ProcessEventLocally(event) )
         return true;
 
     return wxFrame::TryBefore(event);
