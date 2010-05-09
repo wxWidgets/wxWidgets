@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     2010-03-06
 // RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
-// Copyright:   (c) Kevin Ollivier
+// Copyright:   (c) Kevin Ollivier, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -53,7 +53,13 @@ bool wxUIActionSimulator::MouseDown(int button)
 
 bool wxUIActionSimulator::MouseMove(long x, long y)
 {
-    mouse_event(MOUSEEVENTF_MOVE, x, y, 0, 0);
+    //Because MOUSEEVENTF_ABSOLUTE takes measurements scaled between 0 & 65535
+    //we need to scale our input too
+    int displayx, displayy, scaledx, scaledy;
+    wxDisplaySize(&displayx, &displayy);
+    scaledx = ((float)x / displayx) * 65535;
+    scaledy = ((float)y / displayy) * 65535;
+    mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, scaledx, scaledy, 0, 0);
     return true;
 }
 
