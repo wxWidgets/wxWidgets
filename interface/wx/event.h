@@ -463,10 +463,10 @@ public:
         The normal order of event table searching is as follows:
         -# wxApp::FilterEvent() is called. If it returns anything but @c -1
            (default) the processing stops here.
-        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-           the function skips to step (7).
         -# TryBefore() is called (this is where wxValidator are taken into
            account for wxWindow objects). If this returns @true, the function exits.
+        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
+           the function skips to step (7).
         -# Dynamic event table of the handlers bound using Bind<>() is
            searched. If a handler is found, it is executed and the function
            returns @true unless the handler used wxEvent::Skip() to indicate
@@ -489,7 +489,7 @@ public:
            processed, ProcessEvent() on wxTheApp object is called as the last
            step.
 
-        Notice that steps (2)-(6) are performed in ProcessEventHere() which is
+        Notice that steps (3)-(5) are performed in ProcessEventHere() which is
         called by this function.
 
         @param event
@@ -508,8 +508,7 @@ public:
         This method is called from ProcessEvent(), please see the detailed
         description of the event processing logic there.
 
-        It is @em not virtual and so may not be overridden but it does call
-        virtual TryBefore() which may be overridden.
+        It is @em not virtual and so may not be overridden.
 
         @param event
             Event to process.

@@ -1361,6 +1361,10 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
+    // Try the hooks which should be called before our own handlers
+    if ( TryBefore(event) )
+        return true;
+
     if ( ProcessEventHere(event) )
         return true;
 
@@ -1380,10 +1384,6 @@ bool wxEvtHandler::ProcessEventHere(wxEvent& event)
     // If the event handler is disabled it doesn't process any events
     if ( !GetEvtHandlerEnabled() )
         return false;
-
-    // Try the hooks which should be called before our own handlers
-    if ( TryBefore(event) )
-        return true;
 
     // Handle per-instance dynamic event tables first
     if ( m_dynamicEvents && SearchDynamicEventTable(event) )
