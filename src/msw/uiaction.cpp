@@ -67,10 +67,25 @@ bool wxUIActionSimulator::MouseUp(int button)
 
 bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
 {
+    if (modifiers & wxMOD_SHIFT)
+        keybd_event(VK_SHIFT, 0, 0, 0);
+    if (modifiers & wxMOD_ALT)
+        keybd_event(VK_MENU, 0, 0, 0);
+    if (modifiers & wxMOD_CMD)
+        keybd_event(VK_CONTROL, 0, 0, 0);
+
     DWORD flags = 0;
     if (!isDown)
         flags = KEYEVENTF_KEYUP;
     keybd_event(keycode, 0, flags, 0);
+
+    if (modifiers & wxMOD_SHIFT)
+        keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
+    if (modifiers & wxMOD_ALT)
+        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+    if (modifiers & wxMOD_CMD)
+        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+
     return true;
 }
 
