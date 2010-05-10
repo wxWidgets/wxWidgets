@@ -40,7 +40,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
     |15|14|13|12|11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
     +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
       |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxDIALOG_NO_PARENT
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxCENTRE
       |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxFRAME_NO_TASKBAR
       |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxFRAME_TOOL_WINDOW
       |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxFRAME_FLOAT_ON_PARENT
@@ -48,7 +48,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
       |  |  |  |  |  |  |  |  |  |  \________________
       |  |  |  |  |  |  |  |  |  \___________________ wxRESIZE_BORDER
       |  |  |  |  |  |  |  |  \______________________ wxTINY_CAPTION_VERT
-      |  |  |  |  |  |  |  \_________________________
+      |  |  |  |  |  |  |  \_________________________ wxDIALOG_NO_PARENT
       |  |  |  |  |  |  \____________________________ wxMAXIMIZE_BOX
       |  |  |  |  |  \_______________________________ wxMINIMIZE_BOX
       |  |  |  |  \__________________________________ wxSYSTEM_MENU
@@ -62,6 +62,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
     bits (wxYES, wxOK wxNO, wxCANCEL, wxAPPLY, wxCLOSE and wxNO_DEFAULT) which
     can be combined with the dialog style for several standard dialogs and
     hence shouldn't overlap with any styles which can be used for the dialogs.
+    Additionally, wxCENTRE can be used with frames also.
  */
 
 // style common to both wxFrame and wxDialog
