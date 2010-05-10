@@ -246,9 +246,7 @@ WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
         // Invalid for frame windows under PM
     }
 
-    if (lStyle & wxTINY_CAPTION_VERT)
-        lMsflags |= FCF_TASKLIST;
-    if (lStyle & wxTINY_CAPTION_HORIZ)
+    if (lStyle & wxTINY_CAPTION)
         lMsflags |= FCF_TASKLIST;
 
     if ((lStyle & wxRESIZE_BORDER) == 0)

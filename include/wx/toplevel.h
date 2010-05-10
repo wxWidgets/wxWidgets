@@ -48,7 +48,7 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
       |  |  |  |  |  |  |  |  |  |  \________________
       |  |  |  |  |  |  |  |  |  \___________________ wxRESIZE_BORDER
       |  |  |  |  |  |  |  |  \______________________ wxTINY_CAPTION_VERT
-      |  |  |  |  |  |  |  \_________________________ wxTINY_CAPTION_HORIZ
+      |  |  |  |  |  |  |  \_________________________
       |  |  |  |  |  |  \____________________________ wxMAXIMIZE_BOX
       |  |  |  |  |  \_______________________________ wxMINIMIZE_BOX
       |  |  |  |  \__________________________________ wxSYSTEM_MENU
@@ -74,9 +74,16 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
-#define wxTINY_CAPTION_HORIZ    0x0100
-#define wxTINY_CAPTION_VERT     0x0080
+
+#define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
 #define wxRESIZE_BORDER         0x0040
+
+#if WXWIN_COMPATIBILITY_2_8
+    // HORIZ and VERT styles are equivalent anyhow so don't use different names
+    // for them
+    #define wxTINY_CAPTION_HORIZ    wxTINY_CAPTION
+    #define wxTINY_CAPTION_VERT     wxTINY_CAPTION
+#endif
 
 #if WXWIN_COMPATIBILITY_2_6
 
