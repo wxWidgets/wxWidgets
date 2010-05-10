@@ -103,7 +103,9 @@ class wxUIActionSimulator
         Press a key.
 
         @param keycode
-            Key to operate on, as an integer.
+            Key to operate on, as an integer. Under Windows this is interpreted
+            as a wxKeyCode, under other operating systems it is the native 
+            keycode type.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
@@ -114,7 +116,9 @@ class wxUIActionSimulator
         Release a key.
 
         @param keycode
-            Key to operate on, as an integer.
+            Key to operate on, as an integer. Under Windows this is interpreted
+            as a wxKeyCode, under other operating systems it is the native 
+            keycode type.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
@@ -125,7 +129,9 @@ class wxUIActionSimulator
         Press and release a key.
 
         @param keycode
-            Key to operate on, as an integer.
+            Key to operate on, as an integer. Under Windows this is interpreted
+            as a wxKeyCode, under other operating systems it is the native 
+            keycode type.
 
         @param modifiers
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.

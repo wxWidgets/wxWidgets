@@ -187,6 +187,7 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
     m_text->SetFocus();
     sim.Char(65);
     sim.Char(65, wxMOD_SHIFT);
+    sim.Char(WXK_RETURN);
     sim.Char(90);
     sim.Char(90, wxMOD_SHIFT);
 }

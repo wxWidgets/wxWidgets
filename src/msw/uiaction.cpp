@@ -81,9 +81,10 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
         keybd_event(VK_CONTROL, 0, 0, 0);
 
     DWORD flags = 0;
+    DWORD vkkeycode = wxCharCodeWXToMSW(keycode);
     if (!isDown)
         flags = KEYEVENTF_KEYUP;
-    keybd_event(keycode, 0, flags, 0);
+    keybd_event(vkkeycode, 0, flags, 0);
 
     if (modifiers & wxMOD_SHIFT)
         keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
