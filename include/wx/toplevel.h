@@ -32,6 +32,38 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 // constants
 // ----------------------------------------------------------------------------
 
+/*
+    Summary of the bits used (some of them are defined in wx/frame.g and
+    wx/dialog.h and not here):
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |15|14|13|12|11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxDIALOG_NO_PARENT
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxFRAME_NO_TASKBAR
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxFRAME_TOOL_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxFRAME_FLOAT_ON_PARENT
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxFRAME_SHAPED
+      |  |  |  |  |  |  |  |  |  |  \________________
+      |  |  |  |  |  |  |  |  |  \___________________ wxRESIZE_BORDER
+      |  |  |  |  |  |  |  |  \______________________ wxTINY_CAPTION_VERT
+      |  |  |  |  |  |  |  \_________________________ wxTINY_CAPTION_HORIZ
+      |  |  |  |  |  |  \____________________________ wxMAXIMIZE_BOX
+      |  |  |  |  |  \_______________________________ wxMINIMIZE_BOX
+      |  |  |  |  \__________________________________ wxSYSTEM_MENU
+      |  |  |  \_____________________________________ wxCLOSE_BOX
+      |  |  \________________________________________ wxMAXIMIZE
+      |  \___________________________________________ wxMINIMIZE
+      \______________________________________________ wxSTAY_ON_TOP
+
+
+    Notice that the 8 lower bits overlap with wxCENTRE and the button selection
+    bits (wxYES, wxOK wxNO, wxCANCEL, wxAPPLY, wxCLOSE and wxNO_DEFAULT) which
+    can be combined with the dialog style for several standard dialogs and
+    hence shouldn't overlap with any styles which can be used for the dialogs.
+ */
+
 // style common to both wxFrame and wxDialog
 #define wxSTAY_ON_TOP           0x8000
 #define wxICONIZE               0x4000

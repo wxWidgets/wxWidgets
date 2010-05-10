@@ -23,6 +23,8 @@ class WXDLLIMPEXP_FWD_CORE wxDialog;
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrolledWindow;
 
+// Also see the bit summary table in wx/toplevel.h.
+
 #define wxDIALOG_NO_PARENT      0x0001  // Don't make owned by apps top window
 
 #ifdef __WXWINCE__
