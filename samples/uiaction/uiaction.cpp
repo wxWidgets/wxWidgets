@@ -163,7 +163,8 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
 {
     wxUIActionSimulator sim;
     wxWindow* button = FindWindow(wxString("TheButton"));
-    wxPoint globalPoint = button->ClientToScreen(wxPoint(20, 10));
+    //We add some extra distance to take account of window decorations
+    wxPoint globalPoint = button->GetScreenPosition() + wxPoint(10, 10);
     sim.MouseMove(globalPoint.x, globalPoint.y);
     sim.MouseClick(wxMOUSE_BTN_LEFT);
     
