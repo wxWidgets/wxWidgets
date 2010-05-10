@@ -728,6 +728,9 @@
 				RelativePath=".\streams\memstream.cpp">
 			</File>
 			<File
+				RelativePath=".\thread\misc.cpp">
+			</File>
+			<File
 				RelativePath=".\misc\misctests.cpp">
 			</File>
 			<File

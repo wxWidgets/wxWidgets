@@ -89,6 +89,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_textfiletest.o \
 	$(OBJS)\test_atomic.o \
+	$(OBJS)\test_misc.o \
 	$(OBJS)\test_queue.o \
 	$(OBJS)\test_tls.o \
 	$(OBJS)\test_uris.o \
@@ -553,6 +554,9 @@ $(OBJS)\test_textfiletest.o: ./textfile/textfiletest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_atomic.o: ./thread/atomic.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_misc.o: ./thread/misc.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_queue.o: ./thread/queue.cpp
