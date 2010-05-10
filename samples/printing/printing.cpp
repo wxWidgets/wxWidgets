@@ -247,7 +247,7 @@ void MyApp::Draw(wxDC&dc)
         gc->StrokePath(path);
 
         // draw some text
-        wxString text("This text is drawn by wxGraphicsContext");
+        wxString text("Text by wxGraphicsContext");
         gc->SetFont( m_testFont, *wxBLUE );
         gc->DrawText(text, 50.0, 50.0);
 
