@@ -1504,6 +1504,8 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
         m_context->MeasureString((const wchar_t *) s , wcslen(s) , f, layoutRect, &strFormat, &bounds ) ;
         if ( width )
             *width = bounds.Width;
+        if ( height )
+            *height = bounds.Height;
     }
 }
 
