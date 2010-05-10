@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Kevin Ollivier
+// Copyright:   (c) Kevin Ollivier, Steven Lamerton
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +52,8 @@
 enum
 {
     // menu items
-    TheButton = 100,
+    Button = 100,
+    TextCtrl,
     RunSimulation
 };
 
@@ -86,11 +87,14 @@ private:
     bool m_buttonPressed;
     bool m_menuSelected;
 
+    wxButton* m_button;
+    wxTextCtrl* m_text;
+
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_BUTTON(TheButton, MyFrame::OnButtonPressed)
+    EVT_BUTTON(Button, MyFrame::OnButtonPressed)
     EVT_MENU(RunSimulation, MyFrame::OnRunSimulation)
 END_EVENT_TABLE()
 
@@ -152,8 +156,16 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
-    wxButton* button = new wxButton(this, TheButton, "Button");
-    button->SetName("TheButton");
+    wxPanel *panel = new wxPanel(this);
+
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    panel->SetSizer(sizer);
+
+    m_button = new wxButton(panel, Button, "Button");
+    sizer->Add(m_button, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+
+    m_text = new wxTextCtrl(panel, TextCtrl, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    sizer->Add(m_text, 1, wxEXPAND|wxALL, 5);
 }
 
 
@@ -162,9 +174,8 @@ MyFrame::MyFrame(const wxString& title)
 void MyFrame::OnRunSimulation(wxCommandEvent&)
 {
     wxUIActionSimulator sim;
-    wxWindow* button = FindWindow(wxString("TheButton"));
     //We add some extra distance to take account of window decorations
-    wxPoint globalPoint = button->GetScreenPosition() + wxPoint(10, 10);
+    wxPoint globalPoint = m_button->GetScreenPosition() + wxPoint(10, 10);
     sim.MouseMove(globalPoint.x, globalPoint.y);
     sim.MouseClick(wxMOUSE_BTN_LEFT);
     
@@ -172,6 +183,12 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
     
     if (ButtonPressed())
         wxMessageBox("Button automagically pressed!");
+
+    m_text->SetFocus();
+    sim.Char(65);
+    sim.Char(65, wxMOD_SHIFT);
+    sim.Char(90);
+    sim.Char(90, wxMOD_SHIFT);
 }
 
 void MyFrame::OnButtonPressed(wxCommandEvent&)
