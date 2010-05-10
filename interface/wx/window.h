@@ -1423,8 +1423,14 @@ public:
     //@{
 
     /**
-        Clears the window by filling it with the current background colour. Does not
-        cause an erase background event to be generated.
+        Clears the window by filling it with the current background colour.
+
+        Does not cause an erase background event to be generated.
+
+        Notice that this uses wxClientDC to draw on the window and the results
+        of doing it while also drawing on wxPaintDC for this window are
+        undefined. Hence this method shouldn't be used from EVT_PAINT handlers,
+        just use wxDC::Clear() on the wxPaintDC you already use there instead.
     */
     virtual void ClearBackground();
 

@@ -185,11 +185,8 @@ private:
     {
         wxPaintDC dc(this);
 
-#ifndef __WXOSX__
-        // on OSX the immediate Update from within ClearBackground leads to a recursion
         if ( GetMenuBar()->IsChecked(ID_PAINT_BG) )
-            ClearBackground();
-#endif
+            dc.Clear();
 
         dc.SetUserScale(m_zoom, m_zoom);
 
