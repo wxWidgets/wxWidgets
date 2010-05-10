@@ -589,11 +589,12 @@ public:
     bool GetItemPosition( long item, wxPoint& pos ) const;
     int GetSelectedItemCount() const;
 
-    wxString GetItemText(long item) const
+    wxString GetItemText(long item, int col = 0) const
     {
         wxListItem info;
         info.m_mask = wxLIST_MASK_TEXT;
         info.m_itemId = item;
+        info.m_col = col;
         GetItem( info );
         return info.m_text;
     }
