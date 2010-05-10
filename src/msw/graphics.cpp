@@ -1151,6 +1151,14 @@ void wxGDIPlusContext::SetDefaults()
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
+
+    // Setup page scale, based on DPI ratio.
+    // Antecedent should be 100dpi when the default page unit (UnitDisplay)
+    // is used. Page unit UnitDocument would require 300dpi instead.
+    // Note that calling SetPageScale() does not have effect on non-printing
+    // DCs (that is, any other than wxPrinterDC or wxEnhMetaFileDC).
+    REAL dpiRatio = 100.0 / m_context->GetDpiY();
+    m_context->SetPageScale(dpiRatio);
 }
 
 wxGDIPlusContext::~wxGDIPlusContext()
