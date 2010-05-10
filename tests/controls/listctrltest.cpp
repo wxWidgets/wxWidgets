@@ -41,6 +41,7 @@ private:
         CPPUNIT_TEST( ColumnsOrder );
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
         CPPUNIT_TEST( ItemRect );
+        CPPUNIT_TEST( ItemText );
         CPPUNIT_TEST( ChangeMode );
     CPPUNIT_TEST_SUITE_END();
 
@@ -48,6 +49,7 @@ private:
     void ColumnsOrder();
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
     void ItemRect();
+    void ItemText();
     void ChangeMode();
 
     wxListCtrl *m_list;
@@ -176,6 +178,19 @@ void ListCtrlTestCase::ItemRect()
     CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
 
     WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
+}
+
+void ListCtrlTestCase::ItemText()
+{
+    m_list->InsertColumn(0, "First");
+    m_list->InsertColumn(1, "Second");
+
+    m_list->InsertItem(0, "0,0");
+    CPPUNIT_ASSERT_EQUAL( "0,0", m_list->GetItemText(0) );
+    CPPUNIT_ASSERT_EQUAL( "", m_list->GetItemText(0, 1) );
+
+    m_list->SetItem(0, 1, "0,1");
+    CPPUNIT_ASSERT_EQUAL( "0,1", m_list->GetItemText(0, 1) );
 }
 
 void ListCtrlTestCase::ChangeMode()

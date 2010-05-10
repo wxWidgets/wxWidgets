@@ -449,8 +449,14 @@ public:
 
     /**
         Gets the item text for this item.
+
+        @param item
+            Item (zero-based) index.
+        @param col
+            Item column (zero-based) index. Column 0 is the default. This
+            parameter is new in wxWidgets 2.9.1.
     */
-    wxString GetItemText(long item) const;
+    wxString GetItemText(long item, int col = 0) const;
 
     /**
         Returns the colour for this item.

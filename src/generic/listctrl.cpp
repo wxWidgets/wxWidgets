@@ -4562,9 +4562,9 @@ wxGenericListCtrl::SetItemColumnImage( long item, long column, int image )
     return true;
 }
 
-wxString wxGenericListCtrl::GetItemText( long item ) const
+wxString wxGenericListCtrl::GetItemText( long item, int col ) const
 {
-    return m_mainWin->GetItemText(item);
+    return m_mainWin->GetItemText(item, col);
 }
 
 void wxGenericListCtrl::SetItemText( long item, const wxString& str )

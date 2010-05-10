@@ -724,6 +724,7 @@ All (GUI):
 - Added wxGenericStaticBitmap suitable for display of large bitmaps.
 - Support wxListCtrl::GetViewRect() in report view too.
 - Implement wxListCtrl::GetSubItemRect() in generic version (David Barnard).
+- Add column parameter to wxListCtrl::GetItemText() (Allann Jones).
 - Added wxVListBox::GetItemRect() (Javier Urien).
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
 - Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).
