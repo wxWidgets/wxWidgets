@@ -8,7 +8,7 @@
 
 /**
 
-@page page_samples wxWidgets Samples Overview
+@page page_samples Samples Overview
 
 @brief Overview of the examples provided with wxWidgets.
 
