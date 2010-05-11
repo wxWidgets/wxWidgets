@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 April 2010                                                       *
+# Date : 10 May 2010                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -217,7 +217,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj,\
 		regex.obj,any.obj,archive.obj,fs_arc.obj,arcall.obj,\
 		arcfind.obj,tarstrm.obj,datavcmn.obj,debugrpt.obj,\
-		translation.obj,languageinfo.obj
+		translation.obj,languageinfo.obj,filehistorycmn.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -668,3 +668,4 @@ datavcmn.obj : datavcmn.cpp
 debugrpt.obj : debugrpt.cpp
 translation.obj : translation.cpp
 languageinfo.obj : languageinfo.cpp
+filehistorycmn.obj : filehistorycmn.cpp
