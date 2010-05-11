@@ -289,7 +289,7 @@ void wxDisableAsserts();
     Will always generate an assert error with specified message if this code is
     reached (in debug mode).
 
-    This macro is useful for marking unreachable" code areas, for example it
+    This macro is useful for marking "unreachable" code areas, for example it
     may be used in the "default:" branch of a switch statement if all possible
     cases are processed above.
 
