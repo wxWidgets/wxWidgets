@@ -1529,11 +1529,10 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                             membernode->GetAttribute("kind") == "function" &&
                             (accessSpec == "public" || accessSpec == "protected"))
                         {
-
                             wxMethod m;
                             if (!ParseMethod(membernode, m, header)) {
                                 wxLogError("The method '%s' could not be added to class '%s'",
-                                         m.GetName(), klass.GetName());
+                                           m.GetName(), klass.GetName());
                                 return false;
                             }
 
@@ -1548,9 +1547,11 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                                 absoluteFile = header;
                             else if (header != absoluteFile)
                             {
-                                wxLogError("The method '%s' is documented in a different "
-                                            "file from others (which belong to '%s') ?",
-                                            header, absoluteFile);
+                                wxLogError("Found inconsistency in the XML file '%s': "
+                                           "the method '%s' is documented in the "
+                                           "file '%s' but the other methods of the same "
+                                           "class are documented in the file '%s'",
+                                            filename, m.GetName(), header, absoluteFile);
                                 return false;
                             }
 
