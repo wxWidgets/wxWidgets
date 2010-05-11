@@ -5619,20 +5619,10 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
     event.SetTimestamp(::GetMessageTime());
 #endif
 
-    // translate the position to client coords
-    POINT pt;
-#ifdef __WXWINCE__
-    GetCursorPosWinCE(&pt);
-#else
-    GetCursorPos(&pt);
-#endif
-    RECT rect;
-    GetWindowRect(GetHwnd(),&rect);
-    pt.x -= rect.left;
-    pt.y -= rect.top;
-
-    event.m_x = pt.x;
-    event.m_y = pt.y;
+    // translate the position to client coordinates
+    const wxPoint mousePos = ScreenToClient(wxGetMousePosition());
+    event.m_x = mousePos.x;
+    event.m_y = mousePos.y;
 
     return event;
 }
