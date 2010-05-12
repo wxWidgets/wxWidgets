@@ -1088,6 +1088,16 @@ public:
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
 
+        @code
+        wxString str;
+
+        str.Printf(wxT("%d %d %d"), 1, 2, 3);
+        // str now contains "1 2 3"
+
+        str.Printf(wxT("%2$d %3$d %1$d"), 1, 2, 3);
+        // str now contains "2 3 1"
+        @endcode
+
         @note This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
