@@ -1889,54 +1889,11 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// Default parent frame
+// wxDocParentFrameAnyBase
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
-    EVT_MENU(wxID_EXIT, wxDocParentFrame::OnExit)
-    EVT_MENU_RANGE(wxID_FILE1, wxID_FILE9, wxDocParentFrame::OnMRUFile)
-    EVT_CLOSE(wxDocParentFrame::OnCloseWindow)
-END_EVENT_TABLE()
-
-wxDocParentFrame::wxDocParentFrame()
+void wxDocParentFrameAnyBase::DoOpenMRUFile(unsigned n)
 {
-    m_docManager = NULL;
-}
-
-wxDocParentFrame::wxDocParentFrame(wxDocManager *manager,
-                                   wxFrame *frame,
-                                   wxWindowID id,
-                                   const wxString& title,
-                                   const wxPoint& pos,
-                                   const wxSize& size,
-                                   long style,
-                                   const wxString& name)
-                : wxFrame(frame, id, title, pos, size, style, name)
-{
-    m_docManager = manager;
-}
-
-bool wxDocParentFrame::Create(wxDocManager *manager,
-                              wxFrame *frame,
-                              wxWindowID id,
-                              const wxString& title,
-                              const wxPoint& pos,
-                              const wxSize& size,
-                              long style,
-                              const wxString& name)
-{
-    m_docManager = manager;
-    return base_type::Create(frame, id, title, pos, size, style, name);
-}
-
-void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
-{
-    Close();
-}
-
-void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
-{
-    int n = event.GetId() - wxID_FILE1;  // the index in MRU list
     wxString filename(m_docManager->GetHistoryFile(n));
     if ( filename.empty() )
         return;
@@ -1965,27 +1922,6 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
     wxLogError(errMsg + '\n' +
                _("It has been removed from the most recently used files list."),
                filename);
-}
-
-// Extend event processing to search the view's event table
-bool wxDocParentFrame::TryBefore(wxEvent& event)
-{
-    if ( m_docManager && m_docManager->ProcessEventLocally(event) )
-        return true;
-
-    return wxFrame::TryBefore(event);
-}
-
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
-void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
-{
-    if (m_docManager->Clear(!event.CanVeto()))
-    {
-        Destroy();
-    }
-    else
-        event.Veto();
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE

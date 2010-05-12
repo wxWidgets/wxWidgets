@@ -751,26 +751,55 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrame);
 };
 
-#ifdef __VISUALC6__
-    #pragma warning (pop)
-#endif
-
 // ----------------------------------------------------------------------------
-// A default parent frame
+// wxDocParentFrame and related classes.
+//
+// As with wxDocChildFrame we define a template base class used by both normal
+// and MDI versions
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDocParentFrame : public wxFrame
+// Base class containing type-independent code of wxDocParentFrameAny
+//
+// Similarly to wxDocChildFrameAnyBase, this class is a mix-in and doesn't
+// derive from wxWindow.
+class WXDLLIMPEXP_CORE wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrame();
-    wxDocParentFrame(wxDocManager *manager,
-                     wxFrame *frame,
-                     wxWindowID id,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr);
+    wxDocParentFrameAnyBase() { m_docManager = NULL; }
+
+    wxDocManager *GetDocumentManager() const { return m_docManager; }
+
+protected:
+    // Open the MRU file with the given index in our associated file history.
+    //
+    // This is called from the derived class event handler for the MRU menu
+    // items.
+    void DoOpenMRUFile(unsigned n);
+
+    wxDocManager *m_docManager;
+
+    wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
+};
+
+// This is similar to wxDocChildFrameAny and is used to provide common
+// implementation for both wxDocParentFrame and wxDocMDIParentFrame
+template <class BaseFrame>
+class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
+                                             public wxDocParentFrameAnyBase
+{
+public:
+    wxDocParentFrameAny() { }
+    wxDocParentFrameAny(wxDocManager *manager,
+                        wxFrame *frame,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = wxFrameNameStr)
+    {
+        Create(manager, frame, id, title, pos, size, style, name);
+    }
 
     bool Create(wxDocManager *manager,
                 wxFrame *frame,
@@ -779,26 +808,105 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxFrameNameStr)
+    {
+        m_docManager = manager;
 
-    wxDocManager *GetDocumentManager() const { return m_docManager; }
+        if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
+            return false;
 
-    void OnExit(wxCommandEvent& event);
-    void OnMRUFile(wxCommandEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
+        this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+                      wxCommandEventHandler(wxDocParentFrameAny::OnExit));
+        this->Connect(wxID_FILE1, wxID_FILE9, wxEVT_COMMAND_MENU_SELECTED,
+                      wxCommandEventHandler(wxDocParentFrameAny::OnMRUFile));
+        this->Connect(wxEVT_CLOSE_WINDOW,
+                      wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
+
+        return true;
+    }
 
 protected:
     // hook the document manager into event handling chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event)
+    {
+        if ( m_docManager && m_docManager->ProcessEventLocally(event) )
+            return true;
 
-    wxDocManager *m_docManager;
+        return BaseFrame::TryBefore(event);
+    }
 
 private:
-    typedef wxFrame base_type;
+    void OnExit(wxCommandEvent& WXUNUSED(event))
+    {
+        this->Close();
+    }
+
+    void OnMRUFile(wxCommandEvent& event)
+    {
+        DoOpenMRUFile(event.GetId() - wxID_FILE1);
+    }
+
+    void OnCloseWindow(wxCloseEvent& event)
+    {
+        if ( m_docManager && !m_docManager->Clear(!event.CanVeto()) )
+        {
+            // The user decided not to close finally, abort.
+            event.Veto();
+        }
+        else
+        {
+            // Just skip the event, base class handler will destroy the window.
+            event.Skip();
+        }
+    }
+
+
+    wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAny);
+};
+
+typedef wxDocParentFrameAny<wxFrame> wxDocParentFrameBase;
+
+class WXDLLIMPEXP_CORE wxDocParentFrame : public wxDocParentFrameBase
+{
+public:
+    wxDocParentFrame() : wxDocParentFrameBase() { }
+
+    wxDocParentFrame(wxDocManager *manager,
+                     wxFrame *parent,
+                     wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxFrameNameStr)
+        : wxDocParentFrameBase(manager,
+                               parent, id, title, pos, size, style, name)
+    {
+    }
+
+    bool Create(wxDocManager *manager,
+                wxFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr)
+    {
+        return wxDocParentFrameBase::Create(manager,
+                                            parent, id, title,
+                                            pos, size, style, name);
+    }
+
+private:
     DECLARE_CLASS(wxDocParentFrame)
-    DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrame);
 };
+
+#ifdef __VISUALC6__
+    // reenable warning 4275
+    #pragma warning (pop)
+#endif
 
 // ----------------------------------------------------------------------------
 // Provide simple default printing facilities
