@@ -230,6 +230,12 @@ void MyApp::Draw(wxDC&dc)
     if (window_dc)
         gc = wxGraphicsContext::Create( *window_dc );
 
+#ifdef __WXMSW__
+    wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
+    if (emf_dc)
+        gc = wxGraphicsContext::Create( *emf_dc );
+#endif
+
     if (gc)
     {
         // make a path that contains a circle and some lines, centered at 100,100

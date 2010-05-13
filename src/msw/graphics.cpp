@@ -40,6 +40,7 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/enhmeta.h"
 #include "wx/dcgraph.h"
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
@@ -1631,6 +1632,8 @@ public :
 
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
 
+    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
+
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window );
@@ -1756,6 +1759,14 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
+}
+
+wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
