@@ -129,6 +129,8 @@ public:
     // deletes the document if this is there are no more views.
     virtual void OnChangedViewList();
 
+    // Called from OnCloseDocument(), does nothing by default but may be
+    // overridden. Return value is ignored.
     virtual bool DeleteContents();
 
     virtual bool Draw(wxDC&);

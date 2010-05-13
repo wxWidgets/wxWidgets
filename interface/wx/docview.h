@@ -1142,6 +1142,18 @@ public:
     virtual bool DeleteAllViews();
 
     /**
+        Virtual method called from OnCloseDocument().
+
+        This method may be overridden to perform any additional cleanup which
+        might be needed when the document is closed.
+
+        The return value of this method is currently ignored.
+
+        The default version does nothing and simply returns @true.
+     */
+    virtual bool DeleteContents();
+
+    /**
         Returns a pointer to the command processor associated with this
         document.
 
@@ -1258,10 +1270,10 @@ public:
     /**
         This virtual function is called when the document is being closed.
 
-        The default implementation calls DeleteContents() (an empty
-        implementation) and sets the modified flag to @false. You can override
-        it to supply additional behaviour when the document is closed with
-        Close().
+        The default implementation calls DeleteContents() (which may be
+        overridden to perform additional cleanup) and sets the modified flag to
+        @false. You can override it to supply additional behaviour when the
+        document is closed with Close().
 
         Notice that previous wxWidgets versions used to call this function also
         from OnNewDocument(), rather counter-intuitively. This is no longer the

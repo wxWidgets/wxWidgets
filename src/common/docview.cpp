@@ -135,8 +135,6 @@ bool wxDocument::DeleteContents()
 
 wxDocument::~wxDocument()
 {
-    DeleteContents();
-
     delete m_commandProcessor;
 
     if (GetDocumentManager())
