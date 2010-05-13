@@ -755,11 +755,13 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 
     WidgetsPage *page = CurrentPage();
 
-    page->GetWidget()->SetToolTip(s_tip);
-
-    wxControl *ctrl2 = page->GetWidget2();
-    if ( ctrl2 )
-        ctrl2->SetToolTip(s_tip);
+    const Widgets widgets = page->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
+    {
+        (*it)->SetToolTip(s_tip);
+    }
 }
 
 #endif // wxUSE_TOOLTIPS
@@ -779,14 +781,13 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
 
     m_colFg = col;
 
-    page->GetWidget()->SetForegroundColour(m_colFg);
-    page->GetWidget()->Refresh();
-
-    wxControl *ctrl2 = page->GetWidget2();
-    if ( ctrl2 )
+    const Widgets widgets = page->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
     {
-        ctrl2->SetForegroundColour(m_colFg);
-        ctrl2->Refresh();
+        (*it)->SetForegroundColour(m_colFg);
+        (*it)->Refresh();
     }
 #else
     wxLogMessage(wxT("Colour selection dialog not available in current build."));
@@ -807,14 +808,13 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 
     m_colBg = col;
 
-    page->GetWidget()->SetBackgroundColour(m_colBg);
-    page->GetWidget()->Refresh();
-
-    wxControl *ctrl2 = page->GetWidget2();
-    if ( ctrl2 )
+    const Widgets widgets = page->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
     {
-        ctrl2->SetBackgroundColour(m_colFg);
-        ctrl2->Refresh();
+        (*it)->SetBackgroundColour(m_colBg);
+        (*it)->Refresh();
     }
 #else
     wxLogMessage(wxT("Colour selection dialog not available in current build."));
@@ -835,14 +835,13 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 
     m_font = font;
 
-    page->GetWidget()->SetFont(m_font);
-    page->GetWidget()->Refresh();
-
-    wxControl *ctrl2 = page->GetWidget2();
-    if ( ctrl2 )
+    const Widgets widgets = page->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
     {
-        ctrl2->SetFont(m_font);
-        ctrl2->Refresh();
+        (*it)->SetFont(m_font);
+        (*it)->Refresh();
     }
 #else
     wxLogMessage(wxT("Font selection dialog not available in current build."));
@@ -851,9 +850,13 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
-    CurrentPage()->GetWidget()->Enable(event.IsChecked());
-    if (CurrentPage()->GetWidget2())
-        CurrentPage()->GetWidget2()->Enable(event.IsChecked());
+    const Widgets widgets = CurrentPage()->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
+    {
+        (*it)->Enable(event.IsChecked());
+    }
 }
 
 void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
@@ -893,9 +896,16 @@ void WidgetsFrame::OnToggleGlobalBusyCursor(wxCommandEvent& event)
 
 void WidgetsFrame::OnToggleBusyCursor(wxCommandEvent& event)
 {
-    CurrentPage()->GetWidget()->SetCursor(*(event.IsChecked()
-                                                ? wxHOURGLASS_CURSOR
-                                                : wxSTANDARD_CURSOR));
+    wxCursor cursor(*(event.IsChecked() ? wxHOURGLASS_CURSOR
+                                        : wxSTANDARD_CURSOR));
+
+    const Widgets widgets = CurrentPage()->GetWidgets();
+    for ( Widgets::const_iterator it = widgets.begin();
+          it != widgets.end();
+          ++it )
+    {
+        (*it)->SetCursor(cursor);
+    }
 }
 
 void WidgetsFrame::OnDisableAutoComplete(wxCommandEvent& WXUNUSED(event))
