@@ -121,6 +121,14 @@
 #   endif
 #endif /* !defined(wxUSE_EXCEPTIONS) */
 
+#ifndef wxUSE_FILE_HISTORY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILE_HISTORY must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_FILE_HISTORY 0
+#   endif
+#endif /* !defined(wxUSE_FILE_HISTORY) */
+
 #ifndef wxUSE_FILESYSTEM
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FILESYSTEM must be defined, please read comment near the top of this file."
