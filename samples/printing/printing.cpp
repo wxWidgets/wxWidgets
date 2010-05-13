@@ -254,14 +254,14 @@ void MyApp::Draw(wxDC&dc)
 
         // draw some text
         wxString text("Text by wxGraphicsContext");
-        gc->SetFont( m_testFont, *wxBLUE );
-        gc->DrawText(text, 50.0, 50.0);
+        gc->SetFont( m_testFont, *wxBLACK );
+        gc->DrawText(text, 25.0, 60.0);
 
         // draw rectangle around the text
         double w, h, d, el;
         gc->GetTextExtent(text, &w, &h, &d, &el);
-        gc->SetPen( *wxBLUE_PEN );
-        gc->DrawRectangle(50.0, 50.0, w, h);
+        gc->SetPen( *wxBLACK_PEN );
+        gc->DrawRectangle(25.0, 60.0, w, h);
 
         delete gc;
     }
