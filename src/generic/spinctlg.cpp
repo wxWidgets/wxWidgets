@@ -282,8 +282,13 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 
 bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
-    if ( !wxControl::Enable(enable) )
+    // Notice that we never enable this control itself, it must stay disabled
+    // to avoid interfering with the siblings event handling (see e.g. #12045
+    // for the kind of problems which arise otherwise).
+    if ( enable == m_isEnabled )
         return false;
+
+    m_isEnabled = enable;
 
     m_spinButton->Enable(enable);
     m_textCtrl->Enable(enable);
