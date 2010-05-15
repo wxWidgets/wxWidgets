@@ -54,8 +54,5 @@ wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
     : QMainWindow( parent )
 {
     m_frame = frame;
-
-    connect( this, SIGNAL( show() ), this, SLOT( OnShow() ));
-    connect( this, SIGNAL( hide() ), this, SLOT( OnHide() ));
 }
 

@@ -12,6 +12,7 @@
 #include "wx/menuitem.h"
 #include "wx/menu.h"
 #include "wx/bitmap.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu, int id, const wxString& name,

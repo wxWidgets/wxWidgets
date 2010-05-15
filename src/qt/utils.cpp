@@ -10,6 +10,10 @@
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+#include "wx/qt/utils.h"
+#include "wx/qt/converter.h"
+
+#include <QtGui/QCursor>
 
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] )
@@ -21,14 +25,15 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 
 wxPoint wxGetMousePosition()
 {
-    // return wxQtPoint( QCursor::pos() );
-    return wxPoint();
+    return wxQtConvertPoint( QCursor::pos() );
 }
 
 void wxGetMousePosition( int *x, int *y )
 {
-    *x = 0;
-    *y = 0;
+    wxPoint position = wxGetMousePosition();
+
+    *x = position.x;
+    *y = position.y;
 }
 
 wxMouseState wxGetMouseState()
@@ -38,51 +43,68 @@ wxMouseState wxGetMouseState()
 
 void wxBeginBusyCursor(const wxCursor *cursor)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
 void wxEndBusyCursor()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
 
 wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return NULL;
 }
 
 wxWindow *wxFindWindowAtPointer(wxPoint& pt)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return NULL;
 }
 
 bool wxGetKeyState(wxKeyCode key)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return false;
 }
 
 int wxDisplayDepth()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return 0;
 }
 
 void wxDisplaySize(int *width, int *height)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     *width = 0;
     *height = 0;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     *width = 0;
     *height = 0;
 }
 
 void wxBell()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     *x = 0;
     *y = 0;
     *width = 0;
@@ -91,15 +113,21 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 wxWindow *wxGetActiveWindow()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return NULL;
 }
 
 bool wxColourDisplay()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return true;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int flags)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return false;
 }

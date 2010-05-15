@@ -13,12 +13,6 @@
 
 typedef class QWidget *WXWidget;
 
-void wxMissingImplementation( const char fileName[], unsigned lineNumber,
-    const char feature[] );
-
-#define wxMISSING_IMPLEMENTATION( feature )\
-    wxMissingImplementation( __FILE__, __LINE__, feature )
-
 #endif 
 
 #endif /* _WX_QT_DEFS_H_ */

@@ -1,44 +1,21 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/qt/colour.cpp
-// Author:      Peter Most
-// Id:          $Id$
+// Name:        wx/qt/colour.h
+// Purpose:     wxColour class implementation for wxQt
+// Author:      Peter Most, Kolya Kosenko
+// Created:     2010-05-12
+// RCS-ID:      $Id$
 // Copyright:   (c) Peter Most
+//              (C) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 #include "wx/colour.h"
 
-wxColour::ChannelType wxColour::Red() const
-{
-    return ChannelType();
-}
-
-wxColour::ChannelType wxColour::Green() const
-{
-    return ChannelType();
-}
-
-wxColour::ChannelType wxColour::Blue() const
-{
-    return ChannelType();
-}
-
-
-bool wxColour::operator != ( const wxColour & ) const
-{
-    return false;
-}
-
-bool wxColour::operator == ( const wxColour & ) const
-{
-    return false;
-}
-
-void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
-{
-}
-
-
+IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)

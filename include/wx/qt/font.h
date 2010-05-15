@@ -9,7 +9,7 @@
 #ifndef _WX_QT_FONT_H_
 #define _WX_QT_FONT_H_
 
-// #include <QtGui/QFont>
+#include <QtGui/QFont>
 
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
@@ -68,6 +68,8 @@ public:
     virtual void SetEncoding(wxFontEncoding encoding);
     
     wxDECLARE_COMMON_FONT_METHODS();
+
+    virtual QFont *GetHandle() const;
     
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
@@ -76,7 +78,7 @@ protected:
     DECLARE_DYNAMIC_CLASS( wxFont )
     
 private:
-    // QFont m_qtFont;
+    QFont *m_qtFont;
 };
 
 

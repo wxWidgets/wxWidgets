@@ -486,6 +486,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_QT_HDR" hints="files">
     wx/generic/animate.h
+    wx/qt/calctrl.h
     wx/qt/dataview.h
     wx/qt/dvrenderer.h
     wx/qt/dvrenderers.h
@@ -494,6 +495,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_QT_SRC" hints="files">
     src/generic/animateg.cpp
+    src/qt/calctrl.cpp
+    src/qt/calctrl.moc.cpp
     src/qt/dataview.cpp
     src/qt/dvrenderer.cpp
     src/qt/dvrenderers.cpp

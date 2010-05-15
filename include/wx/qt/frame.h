@@ -55,10 +55,11 @@ class WXDLLIMPEXP_CORE wxQtFrame : public QMainWindow
 public:
     wxQtFrame( wxFrame *frame, QWidget *parent );
 
+private Q_SLOTS:
+
 private:
     wxFrame *m_frame;
 
-private Q_SLOTS:
 };
 
 

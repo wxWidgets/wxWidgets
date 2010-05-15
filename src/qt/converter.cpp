@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/converter.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Kolya Kosenko
 // Id:          $Id$
 // Copyright:   (c) Peter Most
+//              (c) 2010 Kolya Kosenko
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -16,18 +17,66 @@
 #include <QtCore/QString>
 #include <QtGui/QFont>
 
+#if wxUSE_DATETIME
+    #include "wx/datetime.h"
+    #include <QtCore/QDate>
+#endif // wxUSE_DATETIME
+
+wxPoint wxQtConvertPoint( const QPoint &point )
+{
+    return wxPoint( point.x(), point.y() );
+}
+
+QPoint wxQtConvertPoint( const wxPoint &point )
+{
+    return QPoint( point.x, point.y );
+}
+
+
 QRect wxQtConvertRect( const wxRect &rect )
-    { return QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() ); }
+{
+    return QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() );
+}
+
+wxRect wxQtConvertRect( const QRect &rect )
+{
+    return wxRect( rect.x(), rect.y(), rect.width(), rect.height() );
+}
 
 
 
 wxString wxQtConvertString( const QString &str )
-    { return wxString( qPrintable( str )); }
+{
+    return wxString( qPrintable( str ));
+}
 
 QString  wxQtConvertString( const wxString &str )
-    { return QString( str.c_str() ); }
+{
+    return QString( str.c_str() );
+}
 
 
 
-QFont wxQtConvertFont( const wxFont &font )
-    { return QFont(); }
+
+#if wxUSE_DATETIME
+
+wxDateTime wxQtConvertDate(const QDate& date)
+{
+    if ( date.isValid() )
+        return wxDateTime(date.day(),
+            static_cast<wxDateTime::Month>(date.month() - 1),
+            date.year(), 0, 0, 0, 0);
+    else
+        return wxDateTime();
+}
+
+QDate wxQtConvertDate(const wxDateTime& date)
+{
+    if ( date.IsValid() )
+        return QDate(date.GetYear(), date.GetMonth() + 1, date.GetDay());
+    else
+        return QDate();
+}
+
+#endif // wxUSE_DATETIME
+

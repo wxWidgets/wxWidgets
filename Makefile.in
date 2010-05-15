@@ -3530,6 +3530,7 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_PM@	wx/generic/animate.h wx/os2/joystick.h wx/os2/sound.h
 COND_TOOLKIT_QT_ADVANCED_PLATFORM_HDR =  \
 	wx/generic/animate.h \
+	wx/qt/calctrl.h \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderer.h \
 	wx/qt/dvrenderers.h \
@@ -13307,6 +13308,8 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 @COND_TOOLKIT_PM@	monodll_os2_sound.o
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_animateg.o \
+	monodll_qt_calctrl.o \
+	monodll_calctrl_moc.o \
 	monodll_qt_dataview.o \
 	monodll_dvrenderer.o \
 	monodll_dvrenderers.o \
@@ -13499,6 +13502,8 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 @COND_TOOLKIT_PM@	monolib_os2_sound.o
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_animateg.o \
+	monolib_qt_calctrl.o \
+	monolib_calctrl_moc.o \
 	monolib_qt_dataview.o \
 	monolib_dvrenderer.o \
 	monolib_dvrenderers.o \
@@ -13788,6 +13793,8 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_PM@	advdll_os2_sound.o
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_animateg.o \
+	advdll_qt_calctrl.o \
+	advdll_calctrl_moc.o \
 	advdll_qt_dataview.o \
 	advdll_dvrenderer.o \
 	advdll_dvrenderers.o \
@@ -13883,6 +13890,8 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 @COND_TOOLKIT_PM@	advlib_os2_sound.o
 COND_TOOLKIT_QT___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_animateg.o \
+	advlib_qt_calctrl.o \
+	advlib_calctrl_moc.o \
 	advlib_qt_dataview.o \
 	advlib_dvrenderer.o \
 	advlib_dvrenderers.o \
@@ -20615,6 +20624,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp
 
@@ -25747,6 +25762,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp
@@ -34925,6 +34946,12 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@advdll_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
 
+@COND_TOOLKIT_QT@advdll_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
+
+@COND_TOOLKIT_QT@advdll_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
+
 @COND_TOOLKIT_QT@advdll_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp
 
@@ -35278,6 +35305,12 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_PM@advlib_os2_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
+
+@COND_TOOLKIT_QT@advlib_qt_calctrl.o: $(srcdir)/src/qt/calctrl.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.cpp
+
+@COND_TOOLKIT_QT@advlib_calctrl_moc.o: $(srcdir)/src/qt/calctrl.moc.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/calctrl.moc.cpp
 
 @COND_TOOLKIT_QT@advlib_qt_dataview.o: $(srcdir)/src/qt/dataview.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_QT@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/qt/dataview.cpp

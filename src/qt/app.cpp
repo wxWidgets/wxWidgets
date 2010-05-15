@@ -11,6 +11,7 @@
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 IMPLEMENT_DYNAMIC_CLASS( wxApp, wxAppBase )

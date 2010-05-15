@@ -11,6 +11,7 @@
 
 #include "wx/window.h"
 #include "wx/tooltip.h"
+#include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
 
@@ -25,12 +26,16 @@ static wxWindow *s_capturedWindow = NULL;
 
 wxWindow *wxWindowBase::DoFindFocus()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
     return NULL;
 }
 
 
 wxWindow::wxWindow()
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
 }
 
 
@@ -103,7 +108,7 @@ void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
     
 bool wxWindow::SetFont( const wxFont &font )
 {
-    GetHandle()->setFont( wxQtConvertFont( font ));
+    GetHandle()->setFont( *font.GetHandle() );
     
     return ( true );
 }
@@ -230,6 +235,8 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 {
+    wxMISSING_IMPLEMENTATION( "sizeFlags" );
+
     DoMoveWindow( x, y, width, height );
 }
 
