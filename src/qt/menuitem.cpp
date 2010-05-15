@@ -12,7 +12,6 @@
 #include "wx/menuitem.h"
 #include "wx/menu.h"
 #include "wx/bitmap.h"
-#include "wx/qt/action_qt.h"
 #include "wx/qt/converter.h"
 
 wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu, int id, const wxString& name,
@@ -71,5 +70,20 @@ void wxMenuItem::OnItemTriggered( bool checked )
 QAction *wxMenuItem::GetHandle() const
 {
     return m_qtAction;
+}
+
+//=============================================================================
+
+wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *parent )
+    : QAction( text, parent )
+{
+    m_menuItem = menuItem;
+
+    connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
+}
+
+void wxQtAction::OnActionTriggered( bool checked )
+{
+    m_menuItem->OnItemTriggered( checked );
 }
 

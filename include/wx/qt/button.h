@@ -9,6 +9,7 @@
 #ifndef _WX_QT_BUTTON_H_
 #define _WX_QT_BUTTON_H_
 
+#include "wx/button.h"
 #include <QtGui/QPushButton>
 
 class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
@@ -31,6 +32,15 @@ public:
 
 protected:
     virtual QPushButton *GetHandle() const;
+};
+
+
+class WXDLLIMPEXP_CORE wxQtButton : public QPushButton
+{
+    Q_OBJECT
+
+    public:
+        wxQtButton( const QString &text, QWidget *parent );
 };
 
 #endif // _WX_QT_BUTTON_H_

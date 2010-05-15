@@ -323,7 +323,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="QT_LOWLEVEL_HDR" hints="files">
     wx/qt/accel.h
-    wx/qt/action_qt.h
     wx/qt/app.h
     wx/qt/apptbase.h
     wx/qt/apptrait.h
@@ -331,7 +330,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
     wx/qt/button.h
-    wx/qt/button_qt.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
@@ -361,7 +359,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/font.h
     wx/qt/fontdlg.h
     wx/qt/frame.h
-    wx/qt/frame_qt.h
     wx/qt/gauge.h
     wx/qt/icon.h
     wx/generic/imaglist.h
@@ -402,16 +399,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="QT_LOWLEVEL_SRC" hints="files">
     src/qt/accel.cpp
-    src/qt/action_qt.cpp
-    src/qt/action_qt_h.moc.cpp
-    src/qt/action_qt_cpp.moc.cpp
     src/qt/app.cpp
     src/qt/bitmap.cpp
     src/qt/bmpbuttn.cpp
     src/qt/brush.cpp
     src/qt/button.cpp
-    src/qt/button_qt.cpp
-    src/qt/button_qt_h.moc.cpp
+    src/qt/button.moc.cpp
     src/generic/caret.cpp
     src/qt/checkbox.cpp
     src/qt/checklst.cpp
@@ -447,8 +440,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/fontenum.cpp
     src/generic/fontpickerg.cpp
     src/qt/frame.cpp
-    src/qt/frame_qt.cpp
-    src/qt/frame_qt_h.moc.cpp
+    src/qt/frame.moc.cpp
     src/qt/gauge.cpp
     src/qt/graphics.cpp
     src/qt/icon.cpp
@@ -458,6 +450,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/mdi.cpp
     src/qt/menu.cpp
     src/qt/menuitem.cpp
+    src/qt/menuitem.moc.cpp
     src/qt/msgdlg.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp

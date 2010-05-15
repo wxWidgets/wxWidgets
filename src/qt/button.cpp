@@ -41,3 +41,10 @@ QPushButton *wxButton::GetHandle() const
     return NULL;
 }
 
+//=============================================================================
+
+wxQtButton::wxQtButton( const QString &text, QWidget *parent )
+    : QPushButton( text, parent )
+{
+}
+

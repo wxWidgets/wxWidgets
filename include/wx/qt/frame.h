@@ -12,8 +12,10 @@
 #ifndef _WX_QT_FRAME_H_
 #define _WX_QT_FRAME_H_
 
-#include "wx/qt/frame_qt.h"
+#include "wx/frame.h"
+
 #include <QtCore/QPointer>
+#include <QtGui/QMainWindow>
 
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
@@ -38,10 +40,26 @@ public:
     virtual void SetMenuBar(wxMenuBar *menubar);
     
 protected:
-    virtual wxQtFrame *GetHandle() const;
+    virtual QMainWindow *GetHandle() const;
 
 private:
-    QPointer< wxQtFrame > m_qtFrame;
+    QPointer< QMainWindow > m_qtFrame;
 };
+
+
+
+class WXDLLIMPEXP_CORE wxQtFrame : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    wxQtFrame( wxFrame *frame, QWidget *parent );
+
+private:
+    wxFrame *m_frame;
+
+private Q_SLOTS:
+};
+
 
 #endif // _WX_QT_FRAME_H_
