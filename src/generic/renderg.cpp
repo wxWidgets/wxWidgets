@@ -324,8 +324,10 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
         wxColour c = (params && params->m_arrowColour.Ok()) ?
             params->m_arrowColour : wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
-        dc.SetPen(wxPen(c));
-        dc.SetBrush(wxBrush(c));
+
+        wxDCPenChanger setPen(dc, c);
+        wxDCBrushChanger setBrush(dc, c);
+
         dc.DrawPolygon( 3, triPt, ar.x, ar.y);
     }
     labelWidth += arrowSpace;
