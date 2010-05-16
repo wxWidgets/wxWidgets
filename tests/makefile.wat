@@ -279,6 +279,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_evthandler.obj &
 	$(OBJS)\test_evtsource.obj &
+	$(OBJS)\test_stopwatch.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
 	$(OBJS)\test_filetest.obj &
@@ -467,6 +468,9 @@ $(OBJS)\test_evthandler.obj :  .AUTODEPEND .\events\evthandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_evtsource.obj :  .AUTODEPEND .\events\evtsource.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_stopwatch.obj :  .AUTODEPEND .\events\stopwatch.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp

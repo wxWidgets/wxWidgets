@@ -429,6 +429,10 @@ SOURCE=.\strings\stdstrings.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\stopwatch.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\strings.cpp
 # End Source File
 # Begin Source File

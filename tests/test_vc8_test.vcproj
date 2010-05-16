@@ -1084,6 +1084,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\stopwatch.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\strings\strings.cpp"
 				>
 			</File>

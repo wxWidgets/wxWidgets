@@ -25,7 +25,10 @@
 #include "wx/evtloop.h"
 #include "wx/timer.h"
 
+// --------------------------------------------------------------------------
 // helper class counting the number of timer events
+// --------------------------------------------------------------------------
+
 class TimerCounterHandler : public wxEvtHandler
 {
 public:

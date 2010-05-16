@@ -65,6 +65,7 @@ TEST_OBJECTS =  \
 	test_datetimetest.o \
 	test_evthandler.o \
 	test_evtsource.o \
+	test_stopwatch.o \
 	test_timertest.o \
 	test_exec.o \
 	test_filetest.o \
@@ -388,6 +389,9 @@ test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
 
 test_evtsource.o: $(srcdir)/events/evtsource.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evtsource.cpp
+
+test_stopwatch.o: $(srcdir)/events/stopwatch.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/stopwatch.cpp
 
 test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp

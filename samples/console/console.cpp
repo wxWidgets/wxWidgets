@@ -131,10 +131,9 @@
     #define TEST_STACKWALKER
     #define TEST_STDPATHS
     #define TEST_STREAMS
-    #define TEST_TIMER
-//    #define TEST_VOLUME   --FIXME! (RN)
 #else // #if TEST_ALL
     #define TEST_DATETIME
+    #define TEST_VOLUME
 #endif
 
 // some tests are interactive, define this to run them
@@ -2828,113 +2827,6 @@ static void TestMemoryStream()
 #endif // TEST_STREAMS
 
 // ----------------------------------------------------------------------------
-// timers
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_TIMER
-
-#include "wx/stopwatch.h"
-#include "wx/utils.h"
-
-static void TestStopWatch()
-{
-    wxPuts(wxT("*** Testing wxStopWatch ***\n"));
-
-    wxStopWatch sw;
-    sw.Pause();
-    wxPrintf(wxT("Initially paused, after 2 seconds time is..."));
-    fflush(stdout);
-    wxSleep(2);
-    wxPrintf(wxT("\t%ldms\n"), sw.Time());
-
-    wxPrintf(wxT("Resuming stopwatch and sleeping 3 seconds..."));
-    fflush(stdout);
-    sw.Resume();
-    wxSleep(3);
-    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
-
-    sw.Pause();
-    wxPrintf(wxT("Pausing agan and sleeping 2 more seconds..."));
-    fflush(stdout);
-    wxSleep(2);
-    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
-
-    sw.Resume();
-    wxPrintf(wxT("Finally resuming and sleeping 2 more seconds..."));
-    fflush(stdout);
-    wxSleep(2);
-    wxPrintf(wxT("\telapsed time: %ldms\n"), sw.Time());
-
-    wxStopWatch sw2;
-    wxPuts(wxT("\nChecking for 'backwards clock' bug..."));
-    for ( size_t n = 0; n < 70; n++ )
-    {
-        sw2.Start();
-
-        for ( size_t m = 0; m < 100000; m++ )
-        {
-            if ( sw.Time() < 0 || sw2.Time() < 0 )
-            {
-                wxPuts(wxT("\ntime is negative - ERROR!"));
-            }
-        }
-
-        wxPutchar('.');
-        fflush(stdout);
-    }
-
-    wxPuts(wxT(", ok."));
-}
-
-#include "wx/timer.h"
-#include "wx/evtloop.h"
-
-void TestTimer()
-{
-    wxPuts(wxT("*** Testing wxTimer ***\n"));
-
-    class MyTimer : public wxTimer
-    {
-    public:
-        MyTimer() : wxTimer() { m_num = 0; }
-
-        virtual void Notify()
-        {
-            wxPrintf(wxT("%d"), m_num++);
-            fflush(stdout);
-
-            if ( m_num == 10 )
-            {
-                wxPrintf(wxT("... exiting the event loop"));
-                Stop();
-
-                wxEventLoop::GetActive()->Exit(0);
-                wxPuts(wxT(", ok."));
-            }
-
-            fflush(stdout);
-        }
-
-    private:
-        int m_num;
-    };
-
-    wxEventLoop loop;
-
-    wxTimer timer1;
-    timer1.Start(100, true /* one shot */);
-    timer1.Stop();
-    timer1.Start(100, true /* one shot */);
-
-    MyTimer timer;
-    timer.Start(500);
-
-    loop.Run();
-}
-
-#endif // TEST_TIMER
-
-// ----------------------------------------------------------------------------
 // wxVolume tests
 // ----------------------------------------------------------------------------
 
@@ -3308,11 +3200,6 @@ int main(int argc, char **argv)
     #endif
         TestMemoryStream();
 #endif // TEST_STREAMS
-
-#ifdef TEST_TIMER
-    TestStopWatch();
-    TestTimer();
-#endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
     #if TEST_INTERACTIVE
