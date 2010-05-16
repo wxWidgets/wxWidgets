@@ -32,6 +32,7 @@
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
+    #include "wx/control.h"
 #endif //WX_PRECOMP
 
 #include "wx/splitter.h"
