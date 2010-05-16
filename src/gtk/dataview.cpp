@@ -623,7 +623,10 @@ wxgtk_tree_model_iter_children (GtkTreeModel *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
-    g_return_val_if_fail (wxtree_model->stamp == parent->stamp, FALSE);
+    if (parent)
+    {
+        g_return_val_if_fail (wxtree_model->stamp == parent->stamp, FALSE);
+    }
 
     return wxtree_model->internal->iter_children( iter, parent );
 }
@@ -3619,7 +3622,10 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return TRUE;
         }
 
-        wxDataViewItem item( (void*) parent->user_data );
+        
+        wxDataViewItem item;
+        if (parent)
+            item = wxDataViewItem( (void*) parent->user_data );
 
         if (!m_wx_model->IsContainer( item ))
             return FALSE;
