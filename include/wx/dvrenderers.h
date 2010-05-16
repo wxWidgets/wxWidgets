@@ -333,6 +333,9 @@ public:
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
 
+    wxString GetChoice(size_t index) const { return m_choices[index]; }
+    const wxArrayString& GetChoices() const { return m_choices; }
+
 private:
     wxArrayString m_choices;
     wxString      m_data;
