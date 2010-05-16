@@ -343,6 +343,38 @@ private:
 
 #endif // generic or Carbon versions
 
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceRendererByIndex
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceRendererByIndex: public wxDataViewChoiceRenderer
+{
+public:
+    wxDataViewChoiceRendererByIndex( const wxArrayString &choices,
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT ) :
+      wxDataViewChoiceRenderer( choices, mode, alignment )
+    {
+    }
+                            
+    virtual bool SetValue( const wxVariant &value )
+    {
+        wxVariant string_value = GetChoice( value.GetLong() );
+        return wxDataViewChoiceRenderer::SetValue( string_value );
+    }
+    
+    virtual bool GetValue( wxVariant &value ) const
+    {
+        wxVariant string_value;
+        if (!wxDataViewChoiceRenderer::GetValue( string_value ))
+            return false;
+            
+        value = (long) GetChoices().Index( string_value.GetString() );
+        return true;
+    }
+};
+
+
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more
 #define wxDataViewTextRendererAttr wxDataViewTextRenderer
