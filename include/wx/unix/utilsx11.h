@@ -23,7 +23,11 @@
 #if defined(__WXGTK__)
 typedef void WXDisplay;
 typedef void* WXWindow;
+typedef unsigned long WXKeySym;
 #endif
+
+int wxCharCodeXToWX(WXKeySym keySym);
+WXKeySym wxCharCodeWXToX(int id);
 
 class wxIconBundle;
 

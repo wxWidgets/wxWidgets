@@ -14,10 +14,13 @@
 #if wxUSE_UIACTIONSIMULATOR
 
 #include "wx/uiaction.h"
+#include "wx/unix/utilsx11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/XTest.h>
+
+namespace
+{
 
 void SendButtonEvent(int button, bool isDown)
 {
@@ -66,6 +69,28 @@ void SendButtonEvent(int button, bool isDown)
     XCloseDisplay(display);
 }
 
+void SendKey(Display *display, Window focus, KeyCode keycode, int type, int mask)
+{
+    XKeyEvent event;
+    event.display = display;
+    event.window = focus;
+    event.root = RootWindow(event.display, DefaultScreen(event.display));
+    event.subwindow = None;
+    event.time = CurrentTime;
+    event.x = 1;
+    event.y = 1;
+    event.x_root = 1;
+    event.y_root = 1;
+    event.same_screen = True;
+    event.type = type;
+    event.state = 0;
+    event.keycode = keycode;
+
+    XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
+}
+
+}
+
 bool wxUIActionSimulator::MouseDown(int button)
 {
     SendButtonEvent(button, true);
@@ -94,31 +119,34 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, int WXUNUSED(modifiers))
     Display *display = XOpenDisplay(0);
     wxASSERT_MSG(display, "No display available!");
 
-    XKeyEvent event;
-    int mask = 0xfff;
-    memset(&event, 0x00, sizeof(event));
+    int mask, type;
 
     if (isDown) {
-        event.type = KeyPress;
+        type = KeyPress;
         mask = KeyPressMask;
     }
     else {
-        event.type = KeyRelease;
+        type = KeyRelease;
         mask = KeyReleaseMask;
     }
-    event.same_screen = True;
 
-    XQueryPointer(display, RootWindow(display, DefaultScreen(display)), &event.root, &event.window, &event.x_root, &event.y_root, &event.x, &event.y, &event.state);
-    event.subwindow = event.window;
-
-    while (event.subwindow)
+    WXKeySym xkeysym = wxCharCodeWXToX(keycode);
+    KeyCode xkeycode = XKeysymToKeycode(display, xkeysym);
+    if (xkeycode == NoSymbol)
     {
-        event.window = event.subwindow;
-        XQueryPointer(display, event.window, &event.root, &event.subwindow, &event.x_root, &event.y_root, &event.x, &event.y, &event.state);
+        return false;
     }
 
-    XSendEvent(display, PointerWindow, True, mask, (XEvent*) &event);
-    XFlush(display);
+    Window focus;
+    int revert;
+    XGetInputFocus(display, &focus, &revert);
+    if (focus == None)
+    {
+        return false;
+    }
+
+    SendKey(display, focus, xkeycode, type, mask);
+
     XCloseDisplay(display);
 
     return true;

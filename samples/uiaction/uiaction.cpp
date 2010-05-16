@@ -178,11 +178,13 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
     wxPoint globalPoint = m_button->GetScreenPosition() + wxPoint(10, 10);
     sim.MouseMove(globalPoint.x, globalPoint.y);
     sim.MouseClick(wxMOUSE_BTN_LEFT);
-    
+
     wxYield();
-    
+
     if (ButtonPressed())
         wxMessageBox("Button automagically pressed!");
+
+    wxYield();
 
     m_text->SetFocus();
     sim.Char(65);
@@ -190,6 +192,8 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
     sim.Char(WXK_RETURN);
     sim.Char(90);
     sim.Char(90, wxMOD_SHIFT);
+
+    wxYield();
 }
 
 void MyFrame::OnButtonPressed(wxCommandEvent&)
