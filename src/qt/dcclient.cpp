@@ -15,12 +15,12 @@
 //##############################################################################
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
-    : wxQTDCImpl( owner )
+    : wxQtDCImpl( owner )
 {
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
-    : wxQTDCImpl( owner )
+    : wxQtDCImpl( owner )
 {
 }
 

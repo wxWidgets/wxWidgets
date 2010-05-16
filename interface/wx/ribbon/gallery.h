@@ -249,16 +249,16 @@ public:
 
     @see wxRibbonBar
 */
-class wxRibbonButtonBarEvent : public wxCommandEvent
+class wxRibbonGalleryEvent : public wxCommandEvent
 {
 public:
     /**
         Constructor.
     */
-    wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
-                       wxRibbonGallery* gallery = NULL,
-                       wxRibbonGalleryItem* item = NULL);
+    wxRibbonGalleryEvent(wxEventType command_type = wxEVT_NULL,
+                         int win_id = 0,
+                         wxRibbonGallery* gallery = NULL,
+                         wxRibbonGalleryItem* item = NULL);
 
     /**
         Returns the gallery which the event relates to.

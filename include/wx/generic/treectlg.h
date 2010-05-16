@@ -122,6 +122,9 @@ public:
     virtual size_t GetSelections(wxArrayTreeItemIds&) const;
     virtual wxTreeItemId GetFocusedItem() const { return m_current; }
 
+    virtual void ClearFocusedItem();
+    virtual void SetFocusedItem(const wxTreeItemId& item);
+
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item,
                                        wxTreeItemIdValue& cookie) const;

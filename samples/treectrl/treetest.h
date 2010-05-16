@@ -212,6 +212,8 @@ public:
     void OnSelectChildren(wxCommandEvent& event);
 #endif // NO_MULTIPLE_SELECTION
     void OnSelectRoot(wxCommandEvent& event);
+    void OnSetFocusedRoot(wxCommandEvent& event);
+    void OnClearFocused(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
@@ -355,6 +357,8 @@ enum
     TreeTest_Select,
     TreeTest_Unselect,
     TreeTest_SelectRoot,
+    TreeTest_ClearFocused,
+    TreeTest_SetFocusedRoot,
     TreeTest_SelectChildren,
     TreeTest_ShowFirstVisible,
     TreeTest_ShowLastVisible,

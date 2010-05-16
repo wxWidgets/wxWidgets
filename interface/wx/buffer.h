@@ -74,7 +74,7 @@ public:
         @param len If specified, length of the string, otherwise the string
                    is considered to be NUL-terminated.
      */
-    static const wxScopedCharTypeBuffer CreateOwned(const CharType *str, size_t len = wxNO_LEN);
+    static const wxScopedCharTypeBuffer CreateOwned(CharType *str, size_t len = wxNO_LEN);
 
     /**
         Copy constructor.

@@ -1911,7 +1911,7 @@ void wxPGProperty::SetChoiceSelection( int newValue )
     }
 }
 
-bool wxPGProperty::SetChoices( wxPGChoices& choices )
+bool wxPGProperty::SetChoices( const wxPGChoices& choices )
 {
     // Property must be de-selected first (otherwise choices in
     // the control would be de-synced with true choices)

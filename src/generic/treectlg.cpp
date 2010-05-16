@@ -1953,6 +1953,20 @@ void wxGenericTreeCtrl::Unselect()
     }
 }
 
+void wxGenericTreeCtrl::ClearFocusedItem()
+{
+    wxTreeItemId item = GetFocusedItem();
+    if ( item.IsOk() )
+        SelectItem(item, false);
+}
+
+void wxGenericTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
+{
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
+    SelectItem(item, true);
+}
+
 void wxGenericTreeCtrl::UnselectAllChildren(wxGenericTreeItem *item)
 {
     if (item->IsSelected())
@@ -3062,6 +3076,21 @@ void wxGenericTreeCtrl::OnChar( wxKeyEvent &event )
     // end   : go to last item without opening parents
     // alnum : start or continue searching for the item with this prefix
     int keyCode = event.GetKeyCode();
+
+#ifdef __WXOSX__
+    // Make the keys work as they do in the native control:
+    // right => expand
+    // left => collapse if current item is expanded
+    if (keyCode == WXK_RIGHT)
+    {
+        keyCode = '+';
+    }
+    else if (keyCode == WXK_LEFT && IsExpanded(m_current))
+    {
+        keyCode = '-';
+    }
+#endif // __WXOSX__
+
     switch ( keyCode )
     {
         case '+':

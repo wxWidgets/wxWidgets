@@ -129,6 +129,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(ToggleIcon)
     MENU_LINK(ToggleState)
     MENU_LINK(SelectRoot)
+    MENU_LINK(SetFocusedRoot)
+    MENU_LINK(ClearFocused)
 
     MENU_LINK(ShowFirstVisible)
 #ifdef wxHAS_LAST_VISIBLE
@@ -263,6 +265,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_DeleteChildren, wxT("Delete &children"));
     tree_menu->Append(TreeTest_DeleteAll, wxT("Delete &all items"));
     tree_menu->Append(TreeTest_SelectRoot, wxT("Select root item"));
+    tree_menu->AppendSeparator();
+    tree_menu->Append(TreeTest_SetFocusedRoot, wxT("Set focus to root item"));
+    tree_menu->Append(TreeTest_ClearFocused, wxT("Reset focus"));
 
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_Count, wxT("Count children of current item"));
@@ -590,6 +595,17 @@ void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
 {
     if ( !m_treeCtrl->HasFlag(wxTR_HIDE_ROOT) )
         m_treeCtrl->SelectItem(m_treeCtrl->GetRootItem());
+}
+
+void MyFrame::OnSetFocusedRoot(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !m_treeCtrl->HasFlag(wxTR_HIDE_ROOT) )
+        m_treeCtrl->SetFocusedItem(m_treeCtrl->GetRootItem());
+}
+
+void MyFrame::OnClearFocused(wxCommandEvent& WXUNUSED(event))
+{
+    m_treeCtrl->ClearFocusedItem();
 }
 
 void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))

@@ -327,6 +327,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_zlibstream.obj &
 	$(OBJS)\test_textfiletest.obj &
 	$(OBJS)\test_atomic.obj &
+	$(OBJS)\test_misc.obj &
 	$(OBJS)\test_queue.obj &
 	$(OBJS)\test_tls.obj &
 	$(OBJS)\test_uris.obj &
@@ -610,6 +611,9 @@ $(OBJS)\test_textfiletest.obj :  .AUTODEPEND .\textfile\textfiletest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_atomic.obj :  .AUTODEPEND .\thread\atomic.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_misc.obj :  .AUTODEPEND .\thread\misc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_queue.obj :  .AUTODEPEND .\thread\queue.cpp

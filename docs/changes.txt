@@ -506,15 +506,16 @@ All (GUI):
 - wxGraphicsContext is now enabled by default if supported by the platform.
 - Fix building with using system libpng 1.4 (Volker Grabsch).
 - Add wxComboBox::Popup() and Dismiss() methods (Igor Korot).
-- Added wxTreeCtrl::SelectChildren() (Nikolay Tjushkov).
+- Added wxTreeCtrl::SelectChildren() (Nikolay Tiushkov).
 - Show pages icons in window list menu in wxAuiNotebook (Ronny Krüger).
-- Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tjushkov).
+- Add "initial selection" parameter to wxGetSingleChoice() (Nikolay Tiushkov).
 - Implement wxDocument::Revert() (troelsk).
 - Allow overriding print preview frame creation in docview (troelsk).
 - Added support for gradient stops in wxGraphicsContext (Kit Bishop).
 - Added wxTransparentColour.
 - Added wxToolBar::GetToolByPos().
 - Added wxProgressDialog::Was{Cancelled,Skipped}() (Julien Weinzorn).
+- Added wxTreeCtrl::{Clear,Set}FocusedItem() (Nikolay Tiushkov).
 
 GTK:
 
@@ -723,6 +724,7 @@ All (GUI):
 - Added wxGenericStaticBitmap suitable for display of large bitmaps.
 - Support wxListCtrl::GetViewRect() in report view too.
 - Implement wxListCtrl::GetSubItemRect() in generic version (David Barnard).
+- Add column parameter to wxListCtrl::GetItemText() (Allann Jones).
 - Added wxVListBox::GetItemRect() (Javier Urien).
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
 - Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).

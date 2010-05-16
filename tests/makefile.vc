@@ -91,6 +91,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_zlibstream.obj \
 	$(OBJS)\test_textfiletest.obj \
 	$(OBJS)\test_atomic.obj \
+	$(OBJS)\test_misc.obj \
 	$(OBJS)\test_queue.obj \
 	$(OBJS)\test_tls.obj \
 	$(OBJS)\test_uris.obj \
@@ -699,6 +700,9 @@ $(OBJS)\test_textfiletest.obj: .\textfile\textfiletest.cpp
 
 $(OBJS)\test_atomic.obj: .\thread\atomic.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\thread\atomic.cpp
+
+$(OBJS)\test_misc.obj: .\thread\misc.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\thread\misc.cpp
 
 $(OBJS)\test_queue.obj: .\thread\queue.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\thread\queue.cpp

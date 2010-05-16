@@ -12,82 +12,82 @@
 #include "wx/dc.h"
 #include "wx/qt/dc.h"
 
-wxQTDCImpl::wxQTDCImpl( wxDC *owner )
+wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
 }
 
-bool wxQTDCImpl::CanDrawBitmap() const
+bool wxQtDCImpl::CanDrawBitmap() const
 {
     return false;
 }
 
-bool wxQTDCImpl::CanGetTextExtent() const
+bool wxQtDCImpl::CanGetTextExtent() const
 {
     return false;
 }
 
-void wxQTDCImpl::DoGetSize(int *width, int *height) const
+void wxQtDCImpl::DoGetSize(int *width, int *height) const
 {
 }
 
-void wxQTDCImpl::DoGetSizeMM(int* width, int* height) const
+void wxQtDCImpl::DoGetSizeMM(int* width, int* height) const
 {
 }
 
-int wxQTDCImpl::GetDepth() const
+int wxQtDCImpl::GetDepth() const
 {
     return 0;
 }
 
-wxSize wxQTDCImpl::GetPPI() const
+wxSize wxQtDCImpl::GetPPI() const
 {
     return wxSize();
 }
 
-void wxQTDCImpl::SetFont(const wxFont& font)
+void wxQtDCImpl::SetFont(const wxFont& font)
 {
 }
 
-void wxQTDCImpl::SetPen(const wxPen& pen)
+void wxQtDCImpl::SetPen(const wxPen& pen)
 {
 }
 
-void wxQTDCImpl::SetBrush(const wxBrush& brush)
+void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
 }
 
-void wxQTDCImpl::SetBackground(const wxBrush& brush)
+void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
 }
 
-void wxQTDCImpl::SetBackgroundMode(int mode)
+void wxQtDCImpl::SetBackgroundMode(int mode)
 {
 }
 
 
 #if wxUSE_PALETTE
-void wxQTDCImpl::SetPalette(const wxPalette& palette)
+void wxQtDCImpl::SetPalette(const wxPalette& palette)
 {
 }
 #endif // wxUSE_PALETTE
 
-void wxQTDCImpl::SetLogicalFunction(wxRasterOperationMode function)
+void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
 }
 
 
-wxCoord wxQTDCImpl::GetCharHeight() const
-{
-    return wxCoord();
-}
-
-wxCoord wxQTDCImpl::GetCharWidth() const
+wxCoord wxQtDCImpl::GetCharHeight() const
 {
     return wxCoord();
 }
 
-void wxQTDCImpl::DoGetTextExtent(const wxString& string,
+wxCoord wxQtDCImpl::GetCharWidth() const
+{
+    return wxCoord();
+}
+
+void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *x, wxCoord *y,
                              wxCoord *descent,
                              wxCoord *externalLeading,
@@ -95,88 +95,88 @@ void wxQTDCImpl::DoGetTextExtent(const wxString& string,
 {
 }
 
-void wxQTDCImpl::Clear()
+void wxQtDCImpl::Clear()
 {
 }
 
-void wxQTDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
+void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
 }
 
-void wxQTDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
+void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
 }
 
-bool wxQTDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
+bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                          wxFloodFillStyle style )
 {
     return false;
 }
 
-bool wxQTDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
     return false;
 }
 
-void wxQTDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
+void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
 }
 
-void wxQTDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
+void wxQtDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
 }
 
 
-void wxQTDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
+void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                        wxCoord x2, wxCoord y2,
                        wxCoord xc, wxCoord yc)
 {
 }
 
-void wxQTDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
+void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                double sa, double ea)
 {
 }
 
-void wxQTDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
+void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
 }
 
-void wxQTDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
+void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
                                     wxCoord width, wxCoord height,
                                     double radius)
 {
 }
 
-void wxQTDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
+void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
                            wxCoord width, wxCoord height)
 {
 }
 
-void wxQTDCImpl::DoCrossHair(wxCoord x, wxCoord y)
+void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
 }
 
-void wxQTDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
+void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
 }
 
-void wxQTDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
+void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
 }
 
-void wxQTDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
+void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
 }
 
-void wxQTDCImpl::DoDrawRotatedText(const wxString& text,
+void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
 }
 
-bool wxQTDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
+bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord width, wxCoord height,
                     wxDC *source,
                     wxCoord xsrc, wxCoord ysrc,
@@ -188,12 +188,12 @@ bool wxQTDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     return false;
 }
 
-void wxQTDCImpl::DoDrawLines(int n, wxPoint points[],
+void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset )
 {
 }
 
-void wxQTDCImpl::DoDrawPolygon(int n, wxPoint points[],
+void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {

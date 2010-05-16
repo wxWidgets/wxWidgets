@@ -771,6 +771,7 @@ WX_ARG_FEATURE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibr
 WX_ARG_FEATURE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
 WX_ARG_FEATURE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
 WX_ARG_FEATURE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
+WX_ARG_FEATURE(filehistory,   [  --enable-filehistory    use wxFileHistory class], wxUSE_FILE_HISTORY)
 WX_ARG_FEATURE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
 WX_ARG_FEATURE(fontenum,      [  --enable-fontenum       use wxFontEnumerator class], wxUSE_FONTENUM)
 WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
@@ -5909,6 +5910,10 @@ if test "$wxUSE_TARSTREAM" = "yes"; then
   else
     AC_DEFINE(wxUSE_TARSTREAM)
   fi
+fi
+
+if test "$wxUSE_FILE_HISTORY" = "yes"; then
+  AC_DEFINE(wxUSE_FILE_HISTORY)
 fi
 
 if test "$wxUSE_FILESYSTEM" = "yes"; then

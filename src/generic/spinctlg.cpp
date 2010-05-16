@@ -93,8 +93,8 @@ public:
     {
         if (m_spin)
         {
-            m_spin->SyncSpinToText();
-            m_spin->DoSendEvent();
+            if ( m_spin->SyncSpinToText() )
+                m_spin->DoSendEvent();
         }
 
         event.Skip();
@@ -282,8 +282,13 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
 
 bool wxSpinCtrlGenericBase::Enable(bool enable)
 {
-    if ( !wxControl::Enable(enable) )
+    // Notice that we never enable this control itself, it must stay disabled
+    // to avoid interfering with the siblings event handling (see e.g. #12045
+    // for the kind of problems which arise otherwise).
+    if ( enable == m_isEnabled )
         return false;
+
+    m_isEnabled = enable;
 
     m_spinButton->Enable(enable);
     m_textCtrl->Enable(enable);
@@ -328,8 +333,7 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 
     // Sync the textctrl since the user expects that the button will modify
     // what they see in the textctrl.
-    if ( m_textCtrl && m_textCtrl->IsModified() )
-        SyncSpinToText();
+    SyncSpinToText();
 
     int spin_value = event.GetPosition();
     double step = (event.GetEventType() == wxEVT_SCROLL_LINEUP) ? 1 : -1;
@@ -395,8 +399,7 @@ void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
 
     value = AdjustToFitInRange(value);
 
-    if ( m_textCtrl && m_textCtrl->IsModified() )
-        SyncSpinToText();
+    SyncSpinToText();
 
     if ( DoSetValue(value) )
         DoSendEvent();
@@ -406,10 +409,10 @@ void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
 // Textctrl functions
 // ----------------------------------------------------------------------------
 
-void wxSpinCtrlGenericBase::SyncSpinToText()
+bool wxSpinCtrlGenericBase::SyncSpinToText()
 {
-    if (!m_textCtrl)
-        return;
+    if ( !m_textCtrl || !m_textCtrl->IsModified() )
+        return false;
 
     double textValue;
     if ( m_textCtrl->GetValue().ToDouble(&textValue) )
@@ -418,17 +421,17 @@ void wxSpinCtrlGenericBase::SyncSpinToText()
             textValue = m_max;
         else if (textValue < m_min)
             textValue = m_min;
-
-        if (m_value != textValue)
-        {
-            DoSetValue(textValue);
-        }
     }
-    else
+    else // text contents is not a valid number at all
     {
-        // textctrl is out of sync, discard and reset
-        DoSetValue(m_value);
+        // replace its contents with the last valid value
+        textValue = m_value;
     }
+
+    // we must always set the value here, even if it's equal to m_value, as
+    // otherwise we could be left with an out of range value when leaving the
+    // text control and the current value is already m_max for example
+    return DoSetValue(textValue);
 }
 
 // ----------------------------------------------------------------------------

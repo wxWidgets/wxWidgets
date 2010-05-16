@@ -32,6 +32,43 @@
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
+namespace
+{
+
+// Custom handler pushed on top of the edit control used by wxDataViewCtrl to
+// forward some events to the main control itself.
+class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
+{
+public:
+    wxDataViewEditorCtrlEvtHandler(wxControl *editor, wxDataViewRenderer *owner)
+    {
+        m_editorCtrl = editor;
+        m_owner = owner;
+
+        m_finished = false;
+    }
+
+    void AcceptChangesAndFinish();
+    void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnTextEnter( wxCommandEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    void OnIdle( wxIdleEvent &event );
+
+private:
+    wxDataViewRenderer     *m_owner;
+    wxControl              *m_editorCtrl;
+    bool                    m_finished;
+    bool                    m_focusOnIdle;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+} // anonymous namespace
+
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
@@ -589,18 +626,6 @@ const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
     return const_cast<wxDataViewRendererBase*>(this)->GetOwner()->GetOwner();
 }
 
-class wxKillRef: public wxWindowRef
-{
-public:
-   wxKillRef( wxWindow *win ) : wxWindowRef( win ) { }
-   virtual void OnObjectDestroy()
-   {
-      get()->PopEventHandler( true );
-      m_pobj = NULL;
-      delete this;
-   }
-};
-
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
@@ -627,8 +652,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     if(!m_editorCtrl)
         return false;
 
-    (void) new wxKillRef( m_editorCtrl.get() );
-
     wxDataViewEditorCtrlEvtHandler *handler =
         new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
 
@@ -651,6 +674,18 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     return true;
 }
 
+void wxDataViewRendererBase::DestroyEditControl()
+{
+    // Hide the control immediately but don't delete it yet as there could be
+    // some pending messages for it.
+    m_editorCtrl->Hide();
+
+    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+
+    wxPendingDelete.Append(handler);
+    wxPendingDelete.Append(m_editorCtrl);
+}
+
 void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl)
@@ -658,8 +693,7 @@ void wxDataViewRendererBase::CancelEditing()
 
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 }
 
 bool wxDataViewRendererBase::FinishEditing()
@@ -674,8 +708,7 @@ bool wxDataViewRendererBase::FinishEditing()
 
     dv_ctrl->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 
     if (!Validate(value))
         return false;
@@ -820,16 +853,6 @@ BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
     EVT_TEXT_ENTER     (-1, wxDataViewEditorCtrlEvtHandler::OnTextEnter)
 END_EVENT_TABLE()
-
-wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
-                                wxControl *editorCtrl,
-                                wxDataViewRenderer *owner )
-{
-    m_owner = owner;
-    m_editorCtrl = editorCtrl;
-
-    m_finished = false;
-}
 
 void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
 {

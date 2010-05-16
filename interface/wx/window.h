@@ -1423,8 +1423,14 @@ public:
     //@{
 
     /**
-        Clears the window by filling it with the current background colour. Does not
-        cause an erase background event to be generated.
+        Clears the window by filling it with the current background colour.
+
+        Does not cause an erase background event to be generated.
+
+        Notice that this uses wxClientDC to draw on the window and the results
+        of doing it while also drawing on wxPaintDC for this window are
+        undefined. Hence this method shouldn't be used from EVT_PAINT handlers,
+        just use wxDC::Clear() on the wxPaintDC you already use there instead.
     */
     virtual void ClearBackground();
 
@@ -1839,6 +1845,19 @@ public:
         associated with the window; use this function instead.
     */
     bool ProcessWindowEvent(wxEvent& event);
+
+    /**
+        Wrapper for wxEvtHandler::ProcessEventLocally().
+
+        This method is similar to ProcessWindowEvent() but can be used to
+        search for the event handler only in this window and any event handlers
+        pushed on top of it. Unlike ProcessWindowEvent() it won't propagate the
+        event upwards. But it will use the validator and event handlers
+        associated with this window, if any.
+
+        @since 2.9.1
+     */
+    bool ProcessWindowEventLocally(wxEvent& event);
 
     /**
         Removes and returns the top-most event handler on the event handler stack.

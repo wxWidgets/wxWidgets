@@ -1229,7 +1229,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
         if (
             ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
             ( style & wxSYSTEM_MENU ) || ( style & wxCAPTION ) ||
-            ( style &wxTINY_CAPTION_HORIZ) ||  ( style &wxTINY_CAPTION_VERT)
+            ( style & wxTINY_CAPTION)
             )
         {
             if ( ( style & wxSTAY_ON_TOP ) )
@@ -1237,7 +1237,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
             else
                 wclass = kFloatingWindowClass ;
 
-            if ( ( style &wxTINY_CAPTION_VERT) )
+            if ( ( style & wxTINY_CAPTION) )
                 attr |= kWindowSideTitlebarAttribute ;
         }
         else

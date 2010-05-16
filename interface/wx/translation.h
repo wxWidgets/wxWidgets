@@ -170,20 +170,6 @@ public:
     bool IsLoaded(const wxString& domain) const;
 
     /**
-        Directly loads catalog from a file.
-
-        It is caller's responsibility to ensure that the catalog contains
-        correct language. This function is primarily intended for
-        wxTranslationsLoader implementations.
-
-        @param filename  Name of the MO file to load.
-        @param domain    Domain to load the translations into (typically
-                         matches file's basename).
-     */
-    bool LoadCatalogFile(const wxString& filename,
-                         const wxString& domain = wxEmptyString);
-
-    /**
         Retrieves the translation for a string in all loaded domains unless the @a domain
         parameter is specified (and then only this catalog/domain is searched).
 
@@ -226,7 +212,7 @@ public:
     */
     const wxString& GetString(const wxString& origString,
                               const wxString& origString2,
-                              size_t n,
+                              unsigned n,
                               const wxString& domain = wxEmptyString) const;
 
     /**
@@ -264,10 +250,10 @@ public:
     /**
         Called to load requested catalog.
 
-        If the catalog is found, LoadCatalog() should call LoadCatalogFile()
-        on @a translations to add the translation.
+        If the catalog is found, LoadCatalog() should create wxMsgCatalog
+        instance with its data and return it. The caller will take ownership
+        of the catalog.
 
-        @param translations  wxTranslations requesting loading.
         @param domain        Domain to load.
         @param lang          Language to look for. This is "canonical name"
                              (see wxLocale::GetCanonicalName()), i.e. ISO 639
@@ -275,10 +261,10 @@ public:
                              additional modifiers (e.g. "fr", "en_GB" or
                              "ca@valencia").
 
-        @return @true on successful load, @false otherwise
+        @return Loaded catalog or NULL on failure.
      */
-    virtual bool LoadCatalog(wxTranslations *translations,
-                             const wxString& domain, const wxString& lang) = 0;
+    virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
+                                      const wxString& lang) = 0;
 };
 
 /**
@@ -335,7 +321,6 @@ public:
     This class is only available on Windows.
 
     @since 2.9.1
-
  */
 class wxResourceTranslationsLoader : public wxTranslationsLoader
 {
@@ -355,6 +340,42 @@ protected:
     virtual WXHINSTANCE GetModule() const;
 };
 
+
+/**
+    Represents a loaded translations message catalog.
+
+    This class should only be used directly by wxTranslationsLoader
+    implementations.
+
+    @since 2.9.1
+ */
+class wxMsgCatalog
+{
+public:
+    /**
+        Creates catalog loaded from a MO file.
+
+        @param filename  Path to the MO file to load.
+        @param domain    Catalog's domain. This typically matches
+                         the @a filename.
+
+        @return Successfully loaded catalog or NULL on failure.
+     */
+    static wxMsgCatalog *CreateFromFile(const wxString& filename,
+                                        const wxString& domain);
+
+    /**
+        Creates catalog from MO file data in memory buffer.
+
+        @param data      Data in MO file format.
+        @param domain    Catalog's domain. This typically matches
+                         the @a filename.
+
+        @return Successfully loaded catalog or NULL on failure.
+     */
+    static wxMsgCatalog *CreateFromData(const wxScopedCharBuffer& data,
+                                        const wxString& domain);
+};
 
 
 // ============================================================================
@@ -436,7 +457,7 @@ protected:
           extracted to the message catalog. Instead, use the _() and wxPLURAL()
           macro for all literal strings.
 
-    @see wxGetTranslation(const wxString&, const wxString&, size_t, const wxString&)
+    @see wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&)
 
     @header{wx/intl.h}
 */
@@ -466,7 +487,7 @@ const wxString& wxGetTranslation(const wxString& string,
     @header{wx/intl.h}
 */
 const wxString& wxGetTranslation(const wxString& string,
-                                 const wxString& plural, size_t n,
+                                 const wxString& plural, unsigned n,
                                  const wxString& domain = wxEmptyString);
 
 /**

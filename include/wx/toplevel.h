@@ -32,6 +32,39 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 // constants
 // ----------------------------------------------------------------------------
 
+/*
+    Summary of the bits used (some of them are defined in wx/frame.g and
+    wx/dialog.h and not here):
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |15|14|13|12|11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxCENTRE
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxFRAME_NO_TASKBAR
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxFRAME_TOOL_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxFRAME_FLOAT_ON_PARENT
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxFRAME_SHAPED
+      |  |  |  |  |  |  |  |  |  |  \________________
+      |  |  |  |  |  |  |  |  |  \___________________ wxRESIZE_BORDER
+      |  |  |  |  |  |  |  |  \______________________ wxTINY_CAPTION_VERT
+      |  |  |  |  |  |  |  \_________________________ wxDIALOG_NO_PARENT
+      |  |  |  |  |  |  \____________________________ wxMAXIMIZE_BOX
+      |  |  |  |  |  \_______________________________ wxMINIMIZE_BOX
+      |  |  |  |  \__________________________________ wxSYSTEM_MENU
+      |  |  |  \_____________________________________ wxCLOSE_BOX
+      |  |  \________________________________________ wxMAXIMIZE
+      |  \___________________________________________ wxMINIMIZE
+      \______________________________________________ wxSTAY_ON_TOP
+
+
+    Notice that the 8 lower bits overlap with wxCENTRE and the button selection
+    bits (wxYES, wxOK wxNO, wxCANCEL, wxAPPLY, wxCLOSE and wxNO_DEFAULT) which
+    can be combined with the dialog style for several standard dialogs and
+    hence shouldn't overlap with any styles which can be used for the dialogs.
+    Additionally, wxCENTRE can be used with frames also.
+ */
+
 // style common to both wxFrame and wxDialog
 #define wxSTAY_ON_TOP           0x8000
 #define wxICONIZE               0x4000
@@ -42,9 +75,16 @@ class WXDLLIMPEXP_FWD_CORE wxTopLevelWindowBase;
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
-#define wxTINY_CAPTION_HORIZ    0x0100
-#define wxTINY_CAPTION_VERT     0x0080
+
+#define wxTINY_CAPTION          0x0080  // clashes with wxNO_DEFAULT
 #define wxRESIZE_BORDER         0x0040
+
+#if WXWIN_COMPATIBILITY_2_8
+    // HORIZ and VERT styles are equivalent anyhow so don't use different names
+    // for them
+    #define wxTINY_CAPTION_HORIZ    wxTINY_CAPTION
+    #define wxTINY_CAPTION_VERT     wxTINY_CAPTION
+#endif
 
 #if WXWIN_COMPATIBILITY_2_6
 

@@ -9,10 +9,10 @@
 #ifndef _WX_QT_DC_H_
 #define _WX_QT_DC_H_
 
-class WXDLLIMPEXP_CORE wxQTDCImpl : public wxDCImpl
+class WXDLLIMPEXP_CORE wxQtDCImpl : public wxDCImpl
 {
 public:
-    wxQTDCImpl( wxDC *owner );
+    wxQtDCImpl( wxDC *owner );
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;

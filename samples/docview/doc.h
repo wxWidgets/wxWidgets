@@ -198,33 +198,24 @@ public:
 };
 
 // ----------------------------------------------------------------------------
-// A basic image document class
+// A document class representing an image
 // ----------------------------------------------------------------------------
 
-class wxImageDocument : public wxDocument
+class ImageDocument : public wxDocument
 {
+public:
+    ImageDocument() : wxDocument() { }
+
+    wxImage GetImage() const { return m_image; }
+
 protected:
-    wxImage m_image;
-public:
-    wxImageDocument();
-
-    wxImage*       GetImage()       { return &m_image; }
-    const wxImage& GetImage() const { return m_image; }
-
-    bool SaveFile(wxOutputStream*, wxBitmapType) const;
-
-public:
-    virtual ~wxImageDocument();
-    virtual bool DeleteContents();
-
     virtual bool DoOpenDocument(const wxString& file);
-    virtual bool DoSaveDocument(const wxString& file);
 
-    virtual bool DoOpenDocument(wxInputStream*);
-    virtual bool DoSaveDocument(wxOutputStream*) const;
+private:
+    wxImage m_image;
 
-    wxDECLARE_NO_COPY_CLASS(wxImageDocument);
-    DECLARE_DYNAMIC_CLASS(wxImageDocument)
+    wxDECLARE_NO_COPY_CLASS(ImageDocument);
+    DECLARE_DYNAMIC_CLASS(ImageDocument)
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_DOC_H_

@@ -230,11 +230,17 @@ void MyApp::Draw(wxDC&dc)
     if (window_dc)
         gc = wxGraphicsContext::Create( *window_dc );
 
+#ifdef __WXMSW__
+    wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
+    if (emf_dc)
+        gc = wxGraphicsContext::Create( *emf_dc );
+#endif
+
     if (gc)
     {
         // make a path that contains a circle and some lines, centered at 100,100
         gc->SetPen( *wxRED_PEN );
-        gc->SetFont( m_testFont, *wxGREEN );
+
         wxGraphicsPath path = gc->CreatePath();
         path.AddCircle( 50.0, 50.0, 50.0 );
         path.MoveToPoint(0.0, 50.0);
@@ -245,6 +251,17 @@ void MyApp::Draw(wxDC&dc)
         path.AddRectangle(25.0, 25.0, 50.0, 50.0);
 
         gc->StrokePath(path);
+
+        // draw some text
+        wxString text("Text by wxGraphicsContext");
+        gc->SetFont( m_testFont, *wxBLACK );
+        gc->DrawText(text, 25.0, 60.0);
+
+        // draw rectangle around the text
+        double w, h, d, el;
+        gc->GetTextExtent(text, &w, &h, &d, &el);
+        gc->SetPen( *wxBLACK_PEN );
+        gc->DrawRectangle(25.0, 60.0, w, h);
 
         delete gc;
     }

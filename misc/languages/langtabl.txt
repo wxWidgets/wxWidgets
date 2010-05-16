@@ -35,6 +35,7 @@ wxLANGUAGE_BENGALI                     bn     LANG_BENGALI     SUBLANG_DEFAULT  
 wxLANGUAGE_BHUTANI                     dz     -                -                                   LTR    "Bhutani"
 wxLANGUAGE_BIHARI                      bh     -                -                                   LTR    "Bihari"
 wxLANGUAGE_BISLAMA                     bi     -                -                                   LTR    "Bislama"
+wxLANGUAGE_BOSNIAN                     bs     LANG_BOSNIAN     SUBLANG_BOSNIAN_BOSNIA_HERZEGOVINA_LATIN  LTR    "Bosnian"
 wxLANGUAGE_BRETON                      br     -                -                                   LTR    "Breton"
 wxLANGUAGE_BULGARIAN                   bg_BG  LANG_BULGARIAN   SUBLANG_DEFAULT                     LTR    "Bulgarian"
 wxLANGUAGE_BURMESE                     my     -                -                                   LTR    "Burmese"

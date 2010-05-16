@@ -129,6 +129,10 @@ public:
     virtual size_t GetSelections(wxArrayTreeItemIds& selections) const;
     virtual wxTreeItemId GetFocusedItem() const;
 
+    virtual void ClearFocusedItem();
+    virtual void SetFocusedItem(const wxTreeItemId& item);
+
+
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item,
                                        wxTreeItemIdValue& cookie) const;
@@ -285,9 +289,6 @@ private:
     // and the tree has wxTR_HIDE_ROOT style)
     bool IsHiddenRoot(const wxTreeItemId& item) const;
 
-    // clears/sets the currently focused item
-    void ClearFocusedItem();
-    void SetFocusedItem(const wxTreeItemId& item);
 
     // check if the given flags (taken from TV_HITTESTINFO structure)
     // indicate a position "on item": this is less trivial than just checking

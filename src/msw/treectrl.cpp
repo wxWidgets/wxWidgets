@@ -2137,6 +2137,8 @@ void wxTreeCtrl::ClearFocusedItem()
 
 void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
 {
+    wxCHECK_RET( item.IsOk(), wxT("invalid tree item") );
+
     TempSetter set(m_changingSelection);
 
     ::SetFocus(GetHwnd(), HITEM(item));

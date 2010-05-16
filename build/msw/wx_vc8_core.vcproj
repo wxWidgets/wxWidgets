@@ -955,6 +955,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\filehistorycmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\filepickercmn.cpp"
 				>
 			</File>
@@ -3594,6 +3598,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\headerctrlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\infobar.cpp"
 				>
 			</File>
 			<File
@@ -6845,6 +6853,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\filedlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\filehistory.h"
 				>
 			</File>
 			<File

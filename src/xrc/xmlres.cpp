@@ -1189,18 +1189,11 @@ float wxXmlResourceHandler::GetFloat(const wxString& param, float defaultv)
 {
     wxString str = GetParamValue(param);
 
-#if wxUSE_INTL
-    // strings in XRC always use C locale but wxString::ToDouble() uses the
-    // current one, so transform the string to it supposing that the only
-    // difference between them is the decimal separator
-    //
-    // TODO: use wxString::ToCDouble() when we have it
-    str.Replace(wxT("."), wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
-                                            wxLOCALE_CAT_NUMBER));
-#endif // wxUSE_INTL
-
+    // strings in XRC always use C locale so make sure to use the
+    // locale-independent wxString::ToCDouble() and not ToDouble() which uses
+    // the current locale with a potentially different decimal point character
     double value;
-    if (!str.ToDouble(&value))
+    if (!str.ToCDouble(&value))
         value = defaultv;
 
     return wx_truncate_cast(float, value);

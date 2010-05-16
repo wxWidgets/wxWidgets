@@ -19,6 +19,7 @@
 #include "wx/list.h"
 #include "wx/string.h"
 #include "wx/frame.h"
+#include "wx/filehistory.h"
 
 #if wxUSE_PRINTING_ARCHITECTURE
     #include "wx/print.h"
@@ -31,7 +32,6 @@ class WXDLLIMPEXP_FWD_CORE wxDocTemplate;
 class WXDLLIMPEXP_FWD_CORE wxDocManager;
 class WXDLLIMPEXP_FWD_CORE wxPrintInfo;
 class WXDLLIMPEXP_FWD_CORE wxCommandProcessor;
-class WXDLLIMPEXP_FWD_CORE wxFileHistory;
 class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 
 class wxDocChildFrameAnyBase;
@@ -129,6 +129,8 @@ public:
     // deletes the document if this is there are no more views.
     virtual void OnChangedViewList();
 
+    // Called from OnCloseDocument(), does nothing by default but may be
+    // overridden. Return value is ignored.
     virtual bool DeleteContents();
 
     virtual bool Draw(wxDC&);
@@ -580,7 +582,7 @@ protected:
     // a chance to process the message before the frame event handlers are used
     bool TryProcessEvent(wxEvent& event)
     {
-        return m_childView && m_childView->ProcessEventHere(event);
+        return m_childView && m_childView->ProcessEventLocally(event);
     }
 
     // called from EVT_CLOSE handler in the frame: check if we can close and do
@@ -751,26 +753,55 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrame);
 };
 
-#ifdef __VISUALC6__
-    #pragma warning (pop)
-#endif
-
 // ----------------------------------------------------------------------------
-// A default parent frame
+// wxDocParentFrame and related classes.
+//
+// As with wxDocChildFrame we define a template base class used by both normal
+// and MDI versions
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDocParentFrame : public wxFrame
+// Base class containing type-independent code of wxDocParentFrameAny
+//
+// Similarly to wxDocChildFrameAnyBase, this class is a mix-in and doesn't
+// derive from wxWindow.
+class WXDLLIMPEXP_CORE wxDocParentFrameAnyBase
 {
 public:
-    wxDocParentFrame();
-    wxDocParentFrame(wxDocManager *manager,
-                     wxFrame *frame,
-                     wxWindowID id,
-                     const wxString& title,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize,
-                     long style = wxDEFAULT_FRAME_STYLE,
-                     const wxString& name = wxFrameNameStr);
+    wxDocParentFrameAnyBase() { m_docManager = NULL; }
+
+    wxDocManager *GetDocumentManager() const { return m_docManager; }
+
+protected:
+    // Open the MRU file with the given index in our associated file history.
+    //
+    // This is called from the derived class event handler for the MRU menu
+    // items.
+    void DoOpenMRUFile(unsigned n);
+
+    wxDocManager *m_docManager;
+
+    wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
+};
+
+// This is similar to wxDocChildFrameAny and is used to provide common
+// implementation for both wxDocParentFrame and wxDocMDIParentFrame
+template <class BaseFrame>
+class WXDLLIMPEXP_CORE wxDocParentFrameAny : public BaseFrame,
+                                             public wxDocParentFrameAnyBase
+{
+public:
+    wxDocParentFrameAny() { }
+    wxDocParentFrameAny(wxDocManager *manager,
+                        wxFrame *frame,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = wxFrameNameStr)
+    {
+        Create(manager, frame, id, title, pos, size, style, name);
+    }
 
     bool Create(wxDocManager *manager,
                 wxFrame *frame,
@@ -779,26 +810,105 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
+                const wxString& name = wxFrameNameStr)
+    {
+        m_docManager = manager;
 
-    wxDocManager *GetDocumentManager() const { return m_docManager; }
+        if ( !BaseFrame::Create(frame, id, title, pos, size, style, name) )
+            return false;
 
-    void OnExit(wxCommandEvent& event);
-    void OnMRUFile(wxCommandEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
+        this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
+                      wxCommandEventHandler(wxDocParentFrameAny::OnExit));
+        this->Connect(wxID_FILE1, wxID_FILE9, wxEVT_COMMAND_MENU_SELECTED,
+                      wxCommandEventHandler(wxDocParentFrameAny::OnMRUFile));
+        this->Connect(wxEVT_CLOSE_WINDOW,
+                      wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
+
+        return true;
+    }
 
 protected:
     // hook the document manager into event handling chain here
-    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event)
+    {
+        if ( m_docManager && m_docManager->ProcessEventLocally(event) )
+            return true;
 
-    wxDocManager *m_docManager;
+        return BaseFrame::TryBefore(event);
+    }
 
 private:
-    typedef wxFrame base_type;
+    void OnExit(wxCommandEvent& WXUNUSED(event))
+    {
+        this->Close();
+    }
+
+    void OnMRUFile(wxCommandEvent& event)
+    {
+        DoOpenMRUFile(event.GetId() - wxID_FILE1);
+    }
+
+    void OnCloseWindow(wxCloseEvent& event)
+    {
+        if ( m_docManager && !m_docManager->Clear(!event.CanVeto()) )
+        {
+            // The user decided not to close finally, abort.
+            event.Veto();
+        }
+        else
+        {
+            // Just skip the event, base class handler will destroy the window.
+            event.Skip();
+        }
+    }
+
+
+    wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAny);
+};
+
+typedef wxDocParentFrameAny<wxFrame> wxDocParentFrameBase;
+
+class WXDLLIMPEXP_CORE wxDocParentFrame : public wxDocParentFrameBase
+{
+public:
+    wxDocParentFrame() : wxDocParentFrameBase() { }
+
+    wxDocParentFrame(wxDocManager *manager,
+                     wxFrame *parent,
+                     wxWindowID id,
+                     const wxString& title,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
+                     long style = wxDEFAULT_FRAME_STYLE,
+                     const wxString& name = wxFrameNameStr)
+        : wxDocParentFrameBase(manager,
+                               parent, id, title, pos, size, style, name)
+    {
+    }
+
+    bool Create(wxDocManager *manager,
+                wxFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr)
+    {
+        return wxDocParentFrameBase::Create(manager,
+                                            parent, id, title,
+                                            pos, size, style, name);
+    }
+
+private:
     DECLARE_CLASS(wxDocParentFrame)
-    DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrame);
 };
+
+#ifdef __VISUALC6__
+    // reenable warning 4275
+    #pragma warning (pop)
+#endif
 
 // ----------------------------------------------------------------------------
 // Provide simple default printing facilities
@@ -827,72 +937,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocPrintout);
 };
 #endif // wxUSE_PRINTING_ARCHITECTURE
-
-// ----------------------------------------------------------------------------
-// File history management
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxFileHistory : public wxObject
-{
-public:
-    wxFileHistory(size_t maxFiles = 9, wxWindowID idBase = wxID_FILE1);
-
-    // Operations
-    virtual void AddFileToHistory(const wxString& file);
-    virtual void RemoveFileFromHistory(size_t i);
-    virtual int GetMaxFiles() const { return (int)m_fileMaxFiles; }
-    virtual void UseMenu(wxMenu *menu);
-
-    // Remove menu from the list (MDI child may be closing)
-    virtual void RemoveMenu(wxMenu *menu);
-
-#if wxUSE_CONFIG
-    virtual void Load(const wxConfigBase& config);
-    virtual void Save(wxConfigBase& config);
-#endif // wxUSE_CONFIG
-
-    virtual void AddFilesToMenu();
-    virtual void AddFilesToMenu(wxMenu* menu); // Single menu
-
-    // Accessors
-    virtual wxString GetHistoryFile(size_t i) const { return m_fileHistory[i]; }
-    virtual size_t GetCount() const { return m_fileHistory.GetCount(); }
-
-    const wxList& GetMenus() const { return m_fileMenus; }
-
-    // Set/get base id
-    void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
-    wxWindowID GetBaseId() const { return m_idBase; }
-
-#if WXWIN_COMPATIBILITY_2_6
-    // deprecated, use GetCount() instead
-    wxDEPRECATED( size_t GetNoHistoryFiles() const );
-#endif // WXWIN_COMPATIBILITY_2_6
-
-protected:
-    // Last n files
-    wxArrayString     m_fileHistory;
-
-    // Menus to maintain (may need several for an MDI app)
-    wxList            m_fileMenus;
-
-    // Max files to maintain
-    size_t            m_fileMaxFiles;
-
-private:
-    // The ID of the first history menu item (Doesn't have to be wxID_FILE1)
-    wxWindowID m_idBase;
-
-    DECLARE_DYNAMIC_CLASS(wxFileHistory)
-    wxDECLARE_NO_COPY_CLASS(wxFileHistory);
-};
-
-#if WXWIN_COMPATIBILITY_2_6
-inline size_t wxFileHistory::GetNoHistoryFiles() const
-{
-    return m_fileHistory.GetCount();
-}
-#endif // WXWIN_COMPATIBILITY_2_6
 
 // For compatibility with existing file formats:
 // converts from/to a stream to/from a temporary file.

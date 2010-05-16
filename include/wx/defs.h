@@ -1558,12 +1558,40 @@ enum wxBorder
  * Some styles are used across more than one group,
  * so the values mustn't clash with others in the group.
  * Otherwise, numbers can be reused across groups.
- *
- * From version 1.66:
- * Window (cross-group) styles now take up the first half
- * of the flag, and control-specific styles the
- * second half.
- *
+ */
+
+/*
+    Summary of the bits used by various styles.
+
+    High word, containing styles which can be used with many windows:
+
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |31|30|29|28|27|26|25|24|23|22|21|20|19|18|17|16|
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  \_ wxFULL_REPAINT_ON_RESIZE
+      |  |  |  |  |  |  |  |  |  |  |  |  |  |  \____ wxPOPUP_WINDOW
+      |  |  |  |  |  |  |  |  |  |  |  |  |  \_______ wxWANTS_CHARS
+      |  |  |  |  |  |  |  |  |  |  |  |  \__________ wxTAB_TRAVERSAL
+      |  |  |  |  |  |  |  |  |  |  |  \_____________ wxTRANSPARENT_WINDOW
+      |  |  |  |  |  |  |  |  |  |  \________________ wxBORDER_NONE
+      |  |  |  |  |  |  |  |  |  \___________________ wxCLIP_CHILDREN
+      |  |  |  |  |  |  |  |  \______________________ wxALWAYS_SHOW_SB
+      |  |  |  |  |  |  |  \_________________________ wxBORDER_STATIC
+      |  |  |  |  |  |  \____________________________ wxBORDER_SIMPLE
+      |  |  |  |  |  \_______________________________ wxBORDER_RAISED
+      |  |  |  |  \__________________________________ wxBORDER_SUNKEN
+      |  |  |  \_____________________________________ wxBORDER_{DOUBLE,THEME}
+      |  |  \________________________________________ wxCAPTION/wxCLIP_SIBLINGS
+      |  \___________________________________________ wxHSCROLL
+      \______________________________________________ wxVSCROLL
+
+
+    Low word style bits is class-specific meaning that the same bit can have
+    different meanings for different controls (e.g. 0x10 is wxCB_READONLY
+    meaning that the control can't be modified for wxComboBox but wxLB_SORT
+    meaning that the control should be kept sorted for wxListBox, while
+    wxLB_SORT has a different value -- and this is just fine).
  */
 
 /*

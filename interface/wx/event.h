@@ -463,10 +463,10 @@ public:
         The normal order of event table searching is as follows:
         -# wxApp::FilterEvent() is called. If it returns anything but @c -1
            (default) the processing stops here.
-        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-           the function skips to step (7).
         -# TryBefore() is called (this is where wxValidator are taken into
            account for wxWindow objects). If this returns @true, the function exits.
+        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
+           the function skips to step (7).
         -# Dynamic event table of the handlers bound using Bind<>() is
            searched. If a handler is found, it is executed and the function
            returns @true unless the handler used wxEvent::Skip() to indicate
@@ -489,8 +489,8 @@ public:
            processed, ProcessEvent() on wxTheApp object is called as the last
            step.
 
-        Notice that steps (2)-(6) are performed in ProcessEventHere() which is
-        called by this function.
+        Notice that steps (2)-(6) are performed in ProcessEventLocally()
+        which is called by this function.
 
         @param event
             Event to process.
@@ -503,21 +503,30 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     /**
-        Try to process the event in this event handler.
+        Try to process the event in this handler and all those chained to it.
 
-        This method is called from ProcessEvent(), please see the detailed
-        description of the event processing logic there.
+        As explained in ProcessEvent() documentation, the event handlers may be
+        chained in a doubly-linked list. This function tries to process the
+        event in this handler (including performing any pre-processing done in
+        TryBefore(), e.g. applying validators) and all those following it in
+        the chain until the event is processed or the chain is exhausted.
 
-        It is @em not virtual and so may not be overridden but it does call
-        virtual TryBefore() which may be overridden.
+        This function is called from ProcessEvent() and, in turn, calls
+        TryThis() for each handler in turn. It is not virtual and so cannot be
+        overridden but can, and should, be called to forward an event to
+        another handler instead of ProcessEvent() which would result in a
+        duplicate call to TryAfter(), e.g. resulting in all unprocessed events
+        being sent to the application object multiple times.
+
+        @since 2.9.1
 
         @param event
             Event to process.
         @return
-            @true if this object itself defines a handler for this event and
-            the handler didn't skip the event.
+            @true if this handler of one of those chained to it processed the
+            event.
      */
-    bool ProcessEventHere(wxEvent& event);
+    bool ProcessEventLocally(wxEvent& event);
 
     /**
         Processes an event by calling ProcessEvent() and handles any exceptions
@@ -1083,9 +1092,28 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryBefore(wxEvent& event);
+
+    /**
+        Try to process the event in this event handler.
+
+        This method is called from ProcessEventLocally() and thus, indirectly,
+        from ProcessEvent(), please see the detailed description of the event
+        processing logic there.
+
+        It is currently @em not virtual and so may not be overridden.
+
+        @since 2.9.1
+
+        @param event
+            Event to process.
+        @return
+            @true if this object itself defines a handler for this event and
+            the handler didn't skip the event.
+     */
+    bool TryThis(wxEvent& event);
 
     /**
         Method called by ProcessEvent() as last resort.
@@ -1112,7 +1140,7 @@ protected:
         };
         @endcode
 
-        @see ProcessEvent(), ProcessEventHere()
+        @see ProcessEvent()
      */
     virtual bool TryAfter(wxEvent& event);
 };

@@ -115,13 +115,13 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxImageCanvas
+// ImageCanvas
 // ----------------------------------------------------------------------------
 
-class wxImageCanvas : public wxScrolledWindow
+class ImageCanvas : public wxScrolledWindow
 {
 public:
-    wxImageCanvas(wxView*, wxWindow* parent);
+    ImageCanvas(wxView*, wxWindow* parent);
 
     virtual void OnDraw(wxDC& dc);
 
@@ -144,35 +144,31 @@ public:
         m_view = NULL;
     }
 
-protected:
+private:
     wxView *m_view;
-
-    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
-// wxImageView
+// ImageView
 // ----------------------------------------------------------------------------
 
-class wxImageDocument;
-class wxImageView : public wxView
+class ImageView : public wxView
 {
 public:
-    wxImageView() : wxView(), m_frame(NULL) {}
+    ImageView() : wxView(), m_frame(NULL) {}
 
     virtual bool OnCreate(wxDocument*, long flags);
     virtual void OnDraw(wxDC*);
     virtual bool OnClose(bool deleteWindow = true);
     virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
 
-    wxImageDocument* GetDocument();
+    ImageDocument* GetDocument();
 
-protected:
+private:
     wxFrame* m_frame;
-    wxImageCanvas* m_canvas;
+    ImageCanvas* m_canvas;
 
-    DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxImageView)
+    DECLARE_DYNAMIC_CLASS(ImageView)
 };
 
 #endif // _WX_SAMPLES_DOCVIEW_VIEW_H_

@@ -398,6 +398,10 @@ SOURCE=..\..\src\common\filectrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\filehistorycmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\filepickercmn.cpp
 # End Source File
 # Begin Source File
@@ -2962,6 +2966,10 @@ SOURCE=..\..\src\generic\graphicc.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\headerctrlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\infobar.cpp
 # End Source File
 # Begin Source File
 
@@ -6019,6 +6027,10 @@ SOURCE=..\..\include\wx\filectrl.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\filedlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\filehistory.h
 # End Source File
 # Begin Source File
 

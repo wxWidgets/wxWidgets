@@ -693,8 +693,7 @@ bool wxSetWMDecorations(Window w, long style)
     }
 
     if ((style & wxCAPTION) ||
-        (style & wxTINY_CAPTION_HORIZ) ||
-        (style & wxTINY_CAPTION_VERT))
+        (style & wxTINY_CAPTION))
     {
         wmProp.props |= GR_WM_PROPS_CAPTION ;
         wmProp.flags |= GR_WM_FLAGS_PROPS ;

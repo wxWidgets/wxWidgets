@@ -366,6 +366,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType)
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
     m_wasProcessed = false;
+    m_processHereOnly = false;
 }
 
 wxEvent::wxEvent(const wxEvent& src)
@@ -379,6 +380,7 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
     , m_wasProcessed(false)
+    , m_processHereOnly(false)
 {
 }
 
@@ -395,7 +397,7 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     m_skipped = src.m_skipped;
     m_isCommandEvent = src.m_isCommandEvent;
 
-    // don't change m_wasProcessed
+    // don't change m_wasProcessed nor m_processHereOnly
 
     return *this;
 }
@@ -1330,6 +1332,18 @@ bool wxEvtHandler::TryBefore(wxEvent& event)
 
 bool wxEvtHandler::TryAfter(wxEvent& event)
 {
+    // We only want to pass the window to the application object once even if
+    // there are several chained handlers. Ensure that this is what happens by
+    // only calling DoTryApp() if there is no next handler (which would do it).
+    //
+    // Notice that, unlike simply calling TryAfter() on the last handler in the
+    // chain only from ProcessEvent(), this also works with wxWindow object in
+    // the middle of the chain: its overridden TryAfter() will still be called
+    // and propagate the event upwards the window hierarchy even if it's not
+    // the last one in the chain (which, admittedly, shouldn't happen often).
+    if ( GetNextHandler() )
+        return GetNextHandler()->TryAfter(event);
+
 #if WXWIN_COMPATIBILITY_2_8
     // as above, call the old virtual function for compatibility
     return TryParent(event);
@@ -1340,11 +1354,12 @@ bool wxEvtHandler::TryAfter(wxEvent& event)
 
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
-    // allow the application to hook into event processing
+    // The very first thing we do is to allow the application to hook into
+    // event processing in order to globally pre-process all events.
     //
-    // note that we should only do it if we're the first event handler called
+    // Note that we should only do it if we're the first event handler called
     // to avoid calling FilterEvent() multiple times as the event goes through
-    // the event handler chain and possibly upwards the window hierarchy
+    // the event handler chain and possibly upwards the window hierarchy.
     if ( !event.WasProcessed() )
     {
         if ( wxTheApp )
@@ -1361,29 +1376,79 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
-    if ( ProcessEventHere(event) )
+    // Short circuit the event processing logic if we're requested to process
+    // this event in this handler only, see DoTryChain() for more details.
+    if ( event.ShouldProcessHereOnly() )
+        return TryHere(event);
+
+
+    // Try to process the event in this handler itself.
+    if ( ProcessEventLocally(event) )
         return true;
 
-    // pass the event to the next handler, notice that we shouldn't call
-    // TryAfter() even if it doesn't handle the event as the last handler in
-    // the chain will do it
-    if ( GetNextHandler() )
-        return GetNextHandler()->ProcessEvent(event);
+    // If we still didn't find a handler, propagate the event upwards the
+    // window chain and/or to the application object.
+    if ( TryAfter(event) )
+        return true;
 
-    // propagate the event upwards the window chain and/or to the application
-    // object if it wasn't processed at this level
-    return TryAfter(event);
+
+    // No handler found anywhere, bail out.
+    return false;
 }
 
-bool wxEvtHandler::ProcessEventHere(wxEvent& event)
+bool wxEvtHandler::ProcessEventLocally(wxEvent& event)
+{
+    // First try the hooks which should be called before our own handlers
+    if ( TryBefore(event) )
+        return true;
+
+    // Then try this handler itself, notice that we should not call
+    // ProcessEvent() on this one as we're already called from it, which
+    // explains why we do it here and not in DoTryChain()
+    if ( TryHere(event) )
+        return true;
+
+    // Finally try the event handlers chained to this one,
+    if ( DoTryChain(event) )
+        return true;
+
+    // And return false to indicate that we didn't find any handler at this
+    // level.
+    return false;
+}
+
+bool wxEvtHandler::DoTryChain(wxEvent& event)
+{
+    for ( wxEvtHandler *h = GetNextHandler(); h; h = h->GetNextHandler() )
+    {
+        // We need to process this event at the level of this handler only
+        // right now, the pre-/post-processing was either already done by
+        // ProcessEvent() from which we were called or will be done by it when
+        // we return.
+        //
+        // However we must call ProcessEvent() and not TryHere() because the
+        // existing code (including some in wxWidgets itself) expects the
+        // overridden ProcessEvent() in its custom event handlers pushed on a
+        // window to be called.
+        //
+        // So we must call ProcessEvent() but it must not do what it usually
+        // does. To resolve this paradox we pass a special "process here only"
+        // flag to ProcessEvent() via the event object itself. This ensures
+        // that if our own, base class, version is called, it will just call
+        // TryHere() and won't do anything else, just as we want it to.
+        wxEventProcessHereOnly processHereOnly(event);
+        if ( h->ProcessEvent(event) )
+            return true;
+    }
+
+    return false;
+}
+
+bool wxEvtHandler::TryHere(wxEvent& event)
 {
     // If the event handler is disabled it doesn't process any events
     if ( !GetEvtHandlerEnabled() )
         return false;
-
-    // Try the hooks which should be called before our own handlers
-    if ( TryBefore(event) )
-        return true;
 
     // Handle per-instance dynamic event tables first
     if ( m_dynamicEvents && SearchDynamicEventTable(event) )

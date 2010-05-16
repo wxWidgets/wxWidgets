@@ -496,13 +496,21 @@ public:
             If allowOthers is @true, the user can type a string not in choices
             array.
     */
-    //@{
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
                            bool allowOthers = false);
+
+    /**
+        Choice cell renderer ctor.
+
+        @param choices
+            An array of strings from which the user can choose.
+        @param allowOthers
+            If allowOthers is @true, the user can type a string not in choices
+            array.
+    */
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false);
-    //@}
 
     /**
         Parameters string format is "item1[,item2[...,itemN]]"

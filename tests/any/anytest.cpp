@@ -104,7 +104,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( wxAnyTestCase, "wxAnyTestCase" );
 // Let's use a number with first digit after decimal dot less than 5,
 // so that we don't have to worry about whether conversion from float
 // to int truncates or rounds.
-const double TEST_FLOAT_CONST = 123.456;
+const float TEST_FLOAT_CONST = 123.456f;
+const double TEST_DOUBLE_CONST = 123.456;
 
 const double FEQ_DELTA = 0.001;
 
@@ -133,8 +134,8 @@ wxAnyTestCase::wxAnyTestCase()
       m_anyCharString1("abc"),
       m_anyWcharString1(L"abc"),
       m_anyBool1(true),
-      m_anyFloatDouble1((float)TEST_FLOAT_CONST),
-      m_anyDoubleDouble1((double)TEST_FLOAT_CONST),
+      m_anyFloatDouble1(TEST_FLOAT_CONST),
+      m_anyDoubleDouble1(TEST_DOUBLE_CONST),
       m_anyWxObjectPtr1(dummyWxObjectPointer),
       m_anyVoidPtr1(dummyVoidPointer),
       m_anyDateTime1(wxDateTime::Now())
@@ -158,8 +159,8 @@ wxAnyTestCase::wxAnyTestCase()
     m_anyCharString2 = "abc";
     m_anyWcharString2 = L"abc";
     m_anyBool2 = true;
-    m_anyFloatDouble2 = (float)TEST_FLOAT_CONST;
-    m_anyDoubleDouble2 = (double)TEST_FLOAT_CONST;
+    m_anyFloatDouble2 = TEST_FLOAT_CONST;
+    m_anyDoubleDouble2 = TEST_DOUBLE_CONST;
     m_anyDateTime2 = m_testDateTime;
     m_anyUniChar1 = wxUniChar('A');
     m_anyWxObjectPtr2 = dummyWxObjectPointer;
@@ -267,10 +268,15 @@ void wxAnyTestCase::As()
     CPPUNIT_ASSERT(m == "abc");
     bool n = wxANY_AS(m_anyBool1, bool);
     CPPUNIT_ASSERT(n);
+
+    // Make sure the stored float that comes back is -identical-.
+    // So do not use delta comparison here.
     float o = wxANY_AS(m_anyFloatDouble1, float);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(o, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_EQUAL(o, TEST_FLOAT_CONST);
+
     double p = wxANY_AS(m_anyDoubleDouble1, double);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(p, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_EQUAL(p, TEST_DOUBLE_CONST);
+
     wxUniChar chr = wxANY_AS(m_anyUniChar1, wxUniChar);
     CPPUNIT_ASSERT(chr == 'A');
     wxDateTime q = wxANY_AS(m_anyDateTime1, wxDateTime);

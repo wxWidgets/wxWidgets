@@ -11,7 +11,7 @@
 
 #include "wx/qt/dc.h"
 
-class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxQTDCImpl
+class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxQtDCImpl
 {
 public:
     wxWindowDCImpl( wxDC *owner );

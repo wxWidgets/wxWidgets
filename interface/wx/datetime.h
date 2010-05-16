@@ -881,15 +881,15 @@ public:
         @see Format()
     */
     bool ParseFormat(const wxString& date,
-                     const wxString& format = wxDefaultDateTimeFormat,
-                     const wxDateTime& dateDef = wxDefaultDateTime,
+                     const wxString& format,
+                     const wxDateTime& dateDef,
                      wxString::const_iterator *end);
 
     /**
         @overload
     */
     bool ParseFormat(const wxString& date,
-                     const wxString& format = wxDefaultDateTimeFormat,
+                     const wxString& format,
                      wxString::const_iterator *end);
 
     /**

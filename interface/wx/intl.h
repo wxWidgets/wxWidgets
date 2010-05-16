@@ -361,10 +361,10 @@ public:
                                       const wxString& domain = wxEmptyString) const;
 
     /**
-        Calls wxTranslations::GetString(const wxString&, const wxString&, size_t, const wxString&) const.
+        Calls wxTranslations::GetString(const wxString&, const wxString&, unsigned, const wxString&) const.
     */
     virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& origString2, size_t n,
+                                      const wxString& origString2, unsigned n,
                                       const wxString& domain = wxEmptyString) const;
 
     /**

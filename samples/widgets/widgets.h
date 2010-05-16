@@ -52,6 +52,7 @@ class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 class WidgetsPageInfo;
 
 #include "wx/panel.h"
+#include "wx/vector.h"
 
 // INTRODUCING NEW PAGES DON'T FORGET TO ADD ENTRIES TO 'WidgetsCategories'
 enum
@@ -83,6 +84,8 @@ enum
     ALL_CTRLS        = 1 << ALL_PAGE
 };
 
+typedef wxVector<wxControl *> Widgets;
+
 // ----------------------------------------------------------------------------
 // WidgetsPage: a book page demonstrating some widget
 // ----------------------------------------------------------------------------
@@ -103,8 +106,14 @@ public:
     // lazy creation of the content
     virtual void CreateContent() = 0;
 
-    // some pages show 2 controls, in this case override this one as well
-    virtual wxControl *GetWidget2() const { return NULL; }
+    // some pages show additional controls, in this case override this one to
+    // return all of them (including the one returned by GetWidget())
+    virtual Widgets GetWidgets() const
+    {
+        Widgets widgets;
+        widgets.push_back(GetWidget());
+        return widgets;
+    }
 
     // recreate the control shown by this page
     //

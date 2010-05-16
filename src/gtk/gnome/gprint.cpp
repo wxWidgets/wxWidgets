@@ -843,8 +843,6 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     native->SetPrintJob( job );
 
 
-    printout->SetIsPreview(false);
-
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
@@ -859,9 +857,6 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
 #else
         dc = new wxGnomePrinterDC( printdata );  // TODO: check that this works
 #endif
-
-    if (m_native_preview)
-        printout->SetIsPreview(true);
 
     if (!dc)
     {

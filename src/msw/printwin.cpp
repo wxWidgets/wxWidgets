@@ -53,15 +53,11 @@
 
 #include <stdlib.h>
 
-#ifndef __WIN32__
-    #include <print.h>
-#endif
-
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
 
-LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
+BOOL CALLBACK wxAbortProc(HDC hdc, int error);
 
 // ---------------------------------------------------------------------------
 // wxWin macros
@@ -81,16 +77,6 @@ LONG APIENTRY _EXPORT wxAbortProc(HDC hPr, int Code);
 wxWindowsPrinter::wxWindowsPrinter(wxPrintDialogData *data)
                 : wxPrinterBase(data)
 {
-    m_lpAbortProc = (WXFARPROC)wxAbortProc;
-}
-
-wxWindowsPrinter::~wxWindowsPrinter()
-{
-    // avoids warning about statement with no effect (FreeProcInstance
-    // doesn't do anything under Win32)
-#if !defined(__WIN32__) && !defined(__NT__)
-    FreeProcInstance((FARPROC) m_lpAbortProc);
-#endif
 }
 
 bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
@@ -103,8 +89,6 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
         sm_lastError = wxPRINTER_ERROR;
         return false;
     }
-
-    printout->SetIsPreview(false);
 
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
@@ -185,24 +169,7 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     wxWindow *win = CreateAbortWindow(parent, printout);
     wxYield();
 
-#if defined(__WATCOMC__) || defined(__BORLANDC__) || defined(__GNUWIN32__) || !defined(__WIN32__)
-#ifdef STRICT
-    ::SetAbortProc((HDC) impl->GetHDC(), (ABORTPROC) m_lpAbortProc);
-#else
-    ::SetAbortProc((HDC) impl->GetHDC(), (FARPROC) m_lpAbortProc);
-#endif
-#else
-    ::SetAbortProc((HDC) impl->GetHDC(), (int (_stdcall *)
-        // cast it to right type only if required
-        // FIXME it's really cdecl and we're casting it to stdcall - either there is
-        //       something I don't understand or it will crash at first usage
-#ifdef STRICT
-        (HDC, int)
-#else
-        ()
-#endif
-        )m_lpAbortProc);
-#endif
+    ::SetAbortProc(GetHdcOf(*impl), wxAbortProc);
 
     if (!win)
     {
@@ -471,15 +438,7 @@ bool wxWindowsPrintPreview::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
 }
 
 
-/****************************************************************************
-
-  FUNCTION: wxAbortProc()
-
-    PURPOSE:  Processes messages for the Abort Dialog box
-
-****************************************************************************/
-
-LONG APIENTRY _EXPORT wxAbortProc(HDC WXUNUSED(hPr), int WXUNUSED(Code))
+BOOL CALLBACK wxAbortProc(HDC WXUNUSED(hdc), int WXUNUSED(error))
 {
     MSG msg;
 

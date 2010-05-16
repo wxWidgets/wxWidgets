@@ -145,6 +145,8 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const { return false; }
 
+    virtual void OnInternalIdle();
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
 
@@ -164,8 +166,8 @@ protected:
     // this can't be called DoHitTest() because wxWindow already has this method
     virtual int DoHitTestList(const wxPoint& point) const;
 
-    bool m_updateHorizontalExtent;
-    virtual void OnInternalIdle();
+    // free memory (common part of Clear() and dtor)
+    void Free();
 
     unsigned int m_noItems;
 
@@ -175,6 +177,14 @@ protected:
 #endif
 
 private:
+    // call this when items are added to or deleted from the listbox or an
+    // items text changes
+    void MSWOnItemsChanged();
+
+    // flag indicating whether the max horizontal extent should be updated,
+    // i.e. if we need to call SetHorizontalExtent() from OnInternalIdle()
+    bool m_updateHorizontalExtent;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox)
 };
 

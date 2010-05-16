@@ -418,34 +418,6 @@ private:
 };
 #endif
 
-//-----------------------------------------------------------------------------
-// wxDataViewEditorCtrlEvtHandler
-//-----------------------------------------------------------------------------
-
-class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
-{
-public:
-    wxDataViewEditorCtrlEvtHandler( wxControl *editor, wxDataViewRenderer *owner );
-
-    void AcceptChangesAndFinish();
-    void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
-
-protected:
-    void OnChar( wxKeyEvent &event );
-    void OnTextEnter( wxCommandEvent &event );
-    void OnKillFocus( wxFocusEvent &event );
-    void OnIdle( wxIdleEvent &event );
-
-private:
-    wxDataViewRenderer     *m_owner;
-    wxControl              *m_editorCtrl;
-    bool                    m_finished;
-    bool                    m_focusOnIdle;
-
-private:
-    DECLARE_EVENT_TABLE()
-};
-
 // ----------------------------------------------------------------------------
 // wxDataViewRenderer and related classes
 // ----------------------------------------------------------------------------

@@ -173,6 +173,16 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
     return 0;
 }
 
+void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
+{
+
+}
+
+void wxTreeCtrl::ClearFocusedItem()
+{
+
+}
+
 wxTreeItemId wxTreeCtrl::GetFocusedItem() const
 {
     return wxTreeItemId();

@@ -88,6 +88,7 @@
             streams/zlibstream.cpp
             textfile/textfiletest.cpp
             thread/atomic.cpp
+            thread/misc.cpp
             thread/queue.cpp
             thread/tls.cpp
             uris/uris.cpp

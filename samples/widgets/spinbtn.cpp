@@ -86,8 +86,14 @@ public:
     virtual ~SpinBtnWidgetsPage(){};
 
     virtual wxControl *GetWidget() const { return m_spinbtn; }
-    virtual wxControl *GetWidget2() const { return m_spinctrl; }
-    virtual wxControl *GetWidget3() const { return m_spinctrldbl; }
+    virtual Widgets GetWidgets() const
+    {
+        Widgets widgets(WidgetsPage::GetWidgets());
+        widgets.push_back(m_spinctrl);
+        widgets.push_back(m_spinctrldbl);
+        return widgets;
+    }
+
     virtual void RecreateWidget() { CreateSpin(); }
 
     // lazy creation of the content
