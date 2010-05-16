@@ -357,7 +357,7 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
 
     m_nextFreeID = new_size + 1;
 
-    wxDataViewModel::Cleared();
+    /* wxDataViewModel:: */ Cleared();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
@@ -400,7 +400,7 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
     m_ordered = false;
 
     wxDataViewItem item( m_hash[row] );
-    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
     m_hash.RemoveAt( row );
 }
 
@@ -418,7 +418,7 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
             wxDataViewItem item( m_hash[rows[i]] );
             array.Add( item );
     }
-    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 
     for (i = 0; i < sorted.GetCount(); i++)
            m_hash.RemoveAt( sorted[i] );
@@ -426,12 +426,12 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )
 {
-    wxDataViewModel::ItemChanged( GetItem(row) );
+    /* wxDataViewModel:: */ ItemChanged( GetItem(row) );
 }
 
 void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int col )
 {
-    wxDataViewModel::ValueChanged( GetItem(row), col );
+    /* wxDataViewModel:: */ ValueChanged( GetItem(row), col );
 }
 
 unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
@@ -501,7 +501,7 @@ void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
     m_size = new_size;
 
-    wxDataViewModel::Cleared();
+    /* wxDataViewModel:: */ Cleared();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()
@@ -529,7 +529,7 @@ void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
     m_size--;
     wxDataViewItem item( wxUIntToPtr(row+1) );
-    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
@@ -546,17 +546,17 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
             wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
             array.Add( item );
     }
-    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 }
 
 void wxDataViewVirtualListModel::RowChanged( unsigned int row )
 {
-    wxDataViewModel::ItemChanged( GetItem(row) );
+    /* wxDataViewModel:: */ ItemChanged( GetItem(row) );
 }
 
 void wxDataViewVirtualListModel::RowValueChanged( unsigned int row, unsigned int col )
 {
-    wxDataViewModel::ValueChanged( GetItem(row), col );
+    /* wxDataViewModel:: */ ValueChanged( GetItem(row), col );
 }
 
 unsigned int wxDataViewVirtualListModel::GetRow( const wxDataViewItem &item ) const
