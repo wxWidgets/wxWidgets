@@ -134,7 +134,6 @@
     #define TEST_TIMER
 //    #define TEST_VOLUME   --FIXME! (RN)
     #define TEST_WCHAR
-    #define TEST_ZIP
 #else // #if TEST_ALL
     #define TEST_DATETIME
 #endif
@@ -3111,95 +3110,6 @@ static void TestEncodingConverter()
 
 #endif // TEST_WCHAR
 
-// ----------------------------------------------------------------------------
-// ZIP stream
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_ZIP
-
-#include "wx/filesys.h"
-#include "wx/fs_zip.h"
-#include "wx/zipstrm.h"
-
-static const wxChar *TESTFILE_ZIP = wxT("testdata.zip");
-
-static void TestZipStreamRead()
-{
-    wxPuts(wxT("*** Testing ZIP reading ***\n"));
-
-    static const wxString filename = wxT("foo");
-    wxFFileInputStream in(TESTFILE_ZIP);
-    wxZipInputStream istr(in);
-    wxZipEntry entry(filename);
-    istr.OpenEntry(entry);
-
-    wxPrintf(wxT("Archive size: %u\n"), istr.GetSize());
-
-    wxPrintf(wxT("Dumping the file '%s':\n"), filename.c_str());
-    int c;
-    while ( (c=istr.GetC()) != wxEOF )
-    {
-        wxPutchar(c);
-        fflush(stdout);
-    }
-
-    wxPuts(wxT("\n----- done ------"));
-}
-
-static void DumpZipDirectory(wxFileSystem& fs,
-                             const wxString& dir,
-                             const wxString& indent)
-{
-    wxString prefix = wxString::Format(wxT("%s#zip:%s"),
-                                         TESTFILE_ZIP, dir.c_str());
-    wxString wildcard = prefix + wxT("/*");
-
-    wxString dirname = fs.FindFirst(wildcard, wxDIR);
-    while ( !dirname.empty() )
-    {
-        if ( !dirname.StartsWith(prefix + wxT('/'), &dirname) )
-        {
-            wxPrintf(wxT("ERROR: unexpected wxFileSystem::FindNext result\n"));
-
-            break;
-        }
-
-        wxPrintf(wxT("%s%s\n"), indent.c_str(), dirname.c_str());
-
-        DumpZipDirectory(fs, dirname,
-                         indent + wxString(wxT(' '), 4));
-
-        dirname = fs.FindNext();
-    }
-
-    wxString filename = fs.FindFirst(wildcard, wxFILE);
-    while ( !filename.empty() )
-    {
-        if ( !filename.StartsWith(prefix, &filename) )
-        {
-            wxPrintf(wxT("ERROR: unexpected wxFileSystem::FindNext result\n"));
-
-            break;
-        }
-
-        wxPrintf(wxT("%s%s\n"), indent.c_str(), filename.c_str());
-
-        filename = fs.FindNext();
-    }
-}
-
-static void TestZipFileSystem()
-{
-    wxPuts(wxT("*** Testing ZIP file system ***\n"));
-
-    wxFileSystem::AddHandler(new wxZipFSHandler);
-    wxFileSystem fs;
-    wxPrintf(wxT("Dumping all files in the archive %s:\n"), TESTFILE_ZIP);
-
-    DumpZipDirectory(fs, wxT(""), wxString(wxT(' '), 4));
-}
-
-#endif // TEST_ZIP
 
 // ----------------------------------------------------------------------------
 // date time
@@ -3555,11 +3465,6 @@ int main(int argc, char **argv)
     TestUtf8();
     TestEncodingConverter();
 #endif // TEST_WCHAR
-
-#ifdef TEST_ZIP
-    TestZipStreamRead();
-    TestZipFileSystem();
-#endif // TEST_ZIP
 
 #if wxUSE_UNICODE
     {
