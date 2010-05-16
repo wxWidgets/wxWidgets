@@ -131,7 +131,6 @@
     #define TEST_STACKWALKER
     #define TEST_STDPATHS
     #define TEST_STREAMS
-    #define TEST_TEXTSTREAM
     #define TEST_TIMER
 //    #define TEST_VOLUME   --FIXME! (RN)
     #define TEST_WCHAR
@@ -3445,45 +3444,6 @@ static void TestTimeSpanFormat()
 
 #endif // TEST_DATETIME
 
-// ----------------------------------------------------------------------------
-// wxTextInput/OutputStream
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_TEXTSTREAM
-
-#include "wx/txtstrm.h"
-#include "wx/wfstream.h"
-
-static void TestTextInputStream()
-{
-    wxPuts(wxT("\n*** wxTextInputStream test ***"));
-
-    wxString filename = wxT("testdata.fc");
-    wxFileInputStream fsIn(filename);
-    if ( !fsIn.Ok() )
-    {
-        wxPuts(wxT("ERROR: couldn't open file."));
-    }
-    else
-    {
-        wxTextInputStream tis(fsIn);
-
-        size_t line = 1;
-        for ( ;; )
-        {
-            const wxString s = tis.ReadLine();
-
-            // line could be non empty if the last line of the file isn't
-            // terminated with EOL
-            if ( fsIn.Eof() && s.empty() )
-                break;
-
-            wxPrintf(wxT("Line %d: %s\n"), line++, s.c_str());
-        }
-    }
-}
-
-#endif // TEST_TEXTSTREAM
 
 // ----------------------------------------------------------------------------
 // entry point
@@ -3747,10 +3707,6 @@ int main(int argc, char **argv)
     #endif
         TestMemoryStream();
 #endif // TEST_STREAMS
-
-#ifdef TEST_TEXTSTREAM
-    TestTextInputStream();
-#endif // TEST_TEXTSTREAM
 
 #ifdef TEST_TIMER
     TestStopWatch();
