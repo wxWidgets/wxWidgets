@@ -1252,7 +1252,23 @@ void wxNotebook::UpdateBgBrush()
 
 WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child)
 {
-    if ( m_hbrBackground )
+    // Only apply to notebook pages and transparent children, see
+    // wxWindow::MSWGetBgBrushForChild() for explanation
+    bool shouldApply;
+    if ( child->GetParent() == this )
+    {
+        // notebook page -- apply background
+        shouldApply = true;
+    }
+    else
+    {
+        // controls in a notebook page with transparent background should
+        // be handled too
+        shouldApply = child->HasTransparentBackground() &&
+                      child->GetParent()->GetParent() == this;
+    }
+
+    if ( m_hbrBackground && shouldApply )
     {
         // before drawing with the background brush, we need to position it
         // correctly
