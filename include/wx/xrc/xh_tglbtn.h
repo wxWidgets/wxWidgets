@@ -23,6 +23,10 @@ public:
     wxToggleButtonXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
+
+protected:
+    virtual void DoCreateToggleButton(wxObject *control);
+    virtual void DoCreateBitmapToggleButton(wxObject *control);
 };
 
 #endif // wxUSE_XRC && wxUSE_TOGGLEBTN
