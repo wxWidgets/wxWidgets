@@ -101,7 +101,7 @@
 
 // what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
 // test, define it to 1 to do all tests.
-#define TEST_ALL 1
+#define TEST_ALL 0
 
 
 #if TEST_ALL
@@ -136,7 +136,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_FTP
+    #define TEST_DATETIME
 #endif
 
 // some tests are interactive, define this to run them
@@ -145,7 +145,7 @@
 
     #define TEST_INTERACTIVE 1
 #else
-    #define TEST_INTERACTIVE 0
+    #define TEST_INTERACTIVE 1
 #endif
 
 // ============================================================================
@@ -3210,90 +3210,6 @@ static void TestZipFileSystem()
 #include "wx/math.h"
 #include "wx/datetime.h"
 
-// this test miscellaneous static wxDateTime functions
-
-#if TEST_ALL
-
-static void TestTimeStatic()
-{
-    wxPuts(wxT("\n*** wxDateTime static methods test ***"));
-
-    // some info about the current date
-    int year = wxDateTime::GetCurrentYear();
-    wxPrintf(wxT("Current year %d is %sa leap one and has %d days.\n"),
-           year,
-           wxDateTime::IsLeapYear(year) ? "" : "not ",
-           wxDateTime::GetNumberOfDays(year));
-
-    wxDateTime::Month month = wxDateTime::GetCurrentMonth();
-    wxPrintf(wxT("Current month is '%s' ('%s') and it has %d days\n"),
-           wxDateTime::GetMonthName(month, wxDateTime::Name_Abbr).c_str(),
-           wxDateTime::GetMonthName(month).c_str(),
-           wxDateTime::GetNumberOfDays(month));
-}
-
-// test time zones stuff
-static void TestTimeZones()
-{
-    wxPuts(wxT("\n*** wxDateTime timezone test ***"));
-
-    wxDateTime now = wxDateTime::Now();
-
-    wxPrintf(wxT("Current GMT time:\t%s\n"), now.Format(wxT("%c"), wxDateTime::GMT0).c_str());
-    wxPrintf(wxT("Unix epoch (GMT):\t%s\n"), wxDateTime((time_t)0).Format(wxT("%c"), wxDateTime::GMT0).c_str());
-    wxPrintf(wxT("Unix epoch (EST):\t%s\n"), wxDateTime((time_t)0).Format(wxT("%c"), wxDateTime::EST).c_str());
-    wxPrintf(wxT("Current time in Paris:\t%s\n"), now.Format(wxT("%c"), wxDateTime::CET).c_str());
-    wxPrintf(wxT("               Moscow:\t%s\n"), now.Format(wxT("%c"), wxDateTime::MSK).c_str());
-    wxPrintf(wxT("             New York:\t%s\n"), now.Format(wxT("%c"), wxDateTime::EST).c_str());
-
-    wxPrintf(wxT("%s\n"), wxDateTime::Now().Format(wxT("Our timezone is %Z")).c_str());
-
-    wxDateTime::Tm tm = now.GetTm();
-    if ( wxDateTime(tm) != now )
-    {
-        wxPrintf(wxT("ERROR: got %s instead of %s\n"),
-                 wxDateTime(tm).Format().c_str(), now.Format().c_str());
-    }
-}
-
-// test some minimal support for the dates outside the standard range
-static void TestTimeRange()
-{
-    wxPuts(wxT("\n*** wxDateTime out-of-standard-range dates test ***"));
-
-    static const wxChar *fmt = wxT("%d-%b-%Y %H:%M:%S");
-
-    wxPrintf(wxT("Unix epoch:\t%s\n"),
-             wxDateTime(2440587.5).Format(fmt).c_str());
-    wxPrintf(wxT("Feb 29, 0: \t%s\n"),
-             wxDateTime(29, wxDateTime::Feb, 0).Format(fmt).c_str());
-    wxPrintf(wxT("JDN 0:     \t%s\n"),
-             wxDateTime(0.0).Format(fmt).c_str());
-    wxPrintf(wxT("Jan 1, 1AD:\t%s\n"),
-             wxDateTime(1, wxDateTime::Jan, 1).Format(fmt).c_str());
-    wxPrintf(wxT("May 29, 2099:\t%s\n"),
-             wxDateTime(29, wxDateTime::May, 2099).Format(fmt).c_str());
-}
-
-// test DST calculations
-static void TestTimeDST()
-{
-    wxPuts(wxT("\n*** wxDateTime DST test ***"));
-
-    wxPrintf(wxT("DST is%s in effect now.\n\n"),
-             wxDateTime::Now().IsDST() ? wxEmptyString : wxT(" not"));
-
-    for ( int year = 1990; year < 2005; year++ )
-    {
-        wxPrintf(wxT("DST period in Europe for year %d: from %s to %s\n"),
-                 year,
-                 wxDateTime::GetBeginDST(year, wxDateTime::Country_EEC).Format().c_str(),
-                 wxDateTime::GetEndDST(year, wxDateTime::Country_EEC).Format().c_str());
-    }
-}
-
-#endif // TEST_ALL
-
 #if TEST_INTERACTIVE
 
 static void TestDateTimeInteractive()
@@ -3336,114 +3252,7 @@ static void TestDateTimeInteractive()
 }
 
 #endif // TEST_INTERACTIVE
-
-#if TEST_ALL
-
-static void TestTimeMS()
-{
-    wxPuts(wxT("*** testing millisecond-resolution support in wxDateTime ***"));
-
-    wxDateTime dt1 = wxDateTime::Now(),
-               dt2 = wxDateTime::UNow();
-
-    wxPrintf(wxT("Now = %s\n"), dt1.Format(wxT("%H:%M:%S:%l")).c_str());
-    wxPrintf(wxT("UNow = %s\n"), dt2.Format(wxT("%H:%M:%S:%l")).c_str());
-    wxPrintf(wxT("Dummy loop: "));
-    for ( int i = 0; i < 6000; i++ )
-    {
-        //for ( int j = 0; j < 10; j++ )
-        {
-            wxString s;
-            s.Printf(wxT("%g"), sqrt((float)i));
-        }
-
-        if ( !(i % 100) )
-            wxPutchar('.');
-    }
-    wxPuts(wxT(", done"));
-
-    dt1 = dt2;
-    dt2 = wxDateTime::UNow();
-    wxPrintf(wxT("UNow = %s\n"), dt2.Format(wxT("%H:%M:%S:%l")).c_str());
-
-    wxPrintf(wxT("Loop executed in %s ms\n"), (dt2 - dt1).Format(wxT("%l")).c_str());
-
-    wxPuts(wxT("\n*** done ***"));
-}
-
-static void TestTimeHolidays()
-{
-    wxPuts(wxT("\n*** testing wxDateTimeHolidayAuthority ***\n"));
-
-    wxDateTime::Tm tm = wxDateTime(29, wxDateTime::May, 2000).GetTm();
-    wxDateTime dtStart(1, tm.mon, tm.year),
-               dtEnd = dtStart.GetLastMonthDay();
-
-    wxDateTimeArray hol;
-    wxDateTimeHolidayAuthority::GetHolidaysInRange(dtStart, dtEnd, hol);
-
-    const wxChar *format = wxT("%d-%b-%Y (%a)");
-
-    wxPrintf(wxT("All holidays between %s and %s:\n"),
-           dtStart.Format(format).c_str(), dtEnd.Format(format).c_str());
-
-    size_t count = hol.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        wxPrintf(wxT("\t%s\n"), hol[n].Format(format).c_str());
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestTimeZoneBug()
-{
-    wxPuts(wxT("\n*** testing for DST/timezone bug ***\n"));
-
-    wxDateTime date = wxDateTime(1, wxDateTime::Mar, 2000);
-    for ( int i = 0; i < 31; i++ )
-    {
-        wxPrintf(wxT("Date %s: week day %s.\n"),
-               date.Format(wxT("%d-%m-%Y")).c_str(),
-               date.GetWeekDayName(date.GetWeekDay()).c_str());
-
-        date += wxDateSpan::Day();
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestTimeSpanFormat()
-{
-    wxPuts(wxT("\n*** wxTimeSpan tests ***"));
-
-    static const wxChar *formats[] =
-    {
-        wxT("(default) %H:%M:%S"),
-        wxT("%E weeks and %D days"),
-        wxT("%l milliseconds"),
-        wxT("(with ms) %H:%M:%S:%l"),
-        wxT("100%% of minutes is %M"),       // test "%%"
-        wxT("%D days and %H hours"),
-        wxT("or also %S seconds"),
-    };
-
-    wxTimeSpan ts1(1, 2, 3, 4),
-                ts2(111, 222, 333);
-    for ( size_t n = 0; n < WXSIZEOF(formats); n++ )
-    {
-        wxPrintf(wxT("ts1 = %s\tts2 = %s\n"),
-               ts1.Format(formats[n]).c_str(),
-               ts2.Format(formats[n]).c_str());
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-#endif // TEST_ALL
-
 #endif // TEST_DATETIME
-
 
 // ----------------------------------------------------------------------------
 // entry point
@@ -3714,18 +3523,6 @@ int main(int argc, char **argv)
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
-    #if TEST_ALL
-        TestTimeStatic();
-        TestTimeRange();
-        TestTimeZones();
-        TestTimeDST();
-        TestTimeHolidays();
-        TestTimeSpanFormat();
-        TestTimeMS();
-
-        TestTimeZoneBug();
-    #endif
-
     #if TEST_INTERACTIVE
         TestDateTimeInteractive();
     #endif
