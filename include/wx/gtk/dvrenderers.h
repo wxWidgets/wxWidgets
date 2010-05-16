@@ -268,6 +268,9 @@ public:
 
     void SetAlignment( int align );
 
+    wxString GetChoice(size_t index) const { return m_choices[index]; }
+    const wxArrayString& GetChoices() const { return m_choices; }
+
 private:
     wxArrayString m_choices;
     wxString      m_data;
