@@ -133,7 +133,6 @@
     #define TEST_STREAMS
     #define TEST_TIMER
 //    #define TEST_VOLUME   --FIXME! (RN)
-    #define TEST_WCHAR
 #else // #if TEST_ALL
     #define TEST_DATETIME
 #endif
@@ -2995,123 +2994,6 @@ static void TestFSVolume()
 #endif // TEST_VOLUME
 
 // ----------------------------------------------------------------------------
-// wide char and Unicode support
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_WCHAR
-
-#include "wx/strconv.h"
-#include "wx/fontenc.h"
-#include "wx/encconv.h"
-#include "wx/buffer.h"
-
-static const unsigned char utf8koi8r[] =
-{
-    208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
-    208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
-    176, 208, 180, 208, 190, 208, 178, 208, 176, 208, 187, 32, 208, 188,
-    208, 181, 208, 189, 209, 143, 32, 209, 129, 208, 178, 208, 190, 208,
-    181, 208, 185, 32, 208, 186, 209, 128, 209, 131, 209, 130, 208, 181,
-    208, 185, 209, 136, 208, 181, 208, 185, 32, 208, 189, 208, 190, 208,
-    178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
-};
-
-static const unsigned char utf8iso8859_1[] =
-{
-    0x53, 0x79, 0x73, 0x74, 0xc3, 0xa8, 0x6d, 0x65, 0x73, 0x20, 0x49, 0x6e,
-    0x74, 0xc3, 0xa9, 0x67, 0x72, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x20, 0x65,
-    0x6e, 0x20, 0x4d, 0xc3, 0xa9, 0x63, 0x61, 0x6e, 0x69, 0x71, 0x75, 0x65,
-    0x20, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x69, 0x71, 0x75, 0x65, 0x20, 0x65,
-    0x74, 0x20, 0x51, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x71, 0x75, 0x65, 0
-};
-
-static const unsigned char utf8Invalid[] =
-{
-    0x3c, 0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79, 0x3e, 0x32, 0x30, 0x30,
-    0x32, 0xe5, 0xb9, 0xb4, 0x30, 0x39, 0xe6, 0x9c, 0x88, 0x32, 0x35, 0xe6,
-    0x97, 0xa5, 0x20, 0x30, 0x37, 0xe6, 0x99, 0x82, 0x33, 0x39, 0xe5, 0x88,
-    0x86, 0x35, 0x37, 0xe7, 0xa7, 0x92, 0x3c, 0x2f, 0x64, 0x69, 0x73, 0x70,
-    0x6c, 0x61, 0x79, 0
-};
-
-static const struct Utf8Data
-{
-    const unsigned char *text;
-    size_t len;
-    const wxChar *charset;
-    wxFontEncoding encoding;
-} utf8data[] =
-{
-    { utf8Invalid, WXSIZEOF(utf8Invalid), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
-    { utf8koi8r, WXSIZEOF(utf8koi8r), wxT("koi8-r"), wxFONTENCODING_KOI8 },
-    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
-};
-
-static void TestUtf8()
-{
-    wxPuts(wxT("*** Testing UTF8 support ***\n"));
-
-    char buf[1024];
-    wchar_t wbuf[1024];
-
-    for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
-    {
-        const Utf8Data& u8d = utf8data[n];
-        if ( wxConvUTF8.MB2WC(wbuf, (const char *)u8d.text,
-                              WXSIZEOF(wbuf)) == (size_t)-1 )
-        {
-            wxPuts(wxT("ERROR: UTF-8 decoding failed."));
-        }
-        else
-        {
-            wxCSConv conv(u8d.charset);
-            if ( conv.WC2MB(buf, wbuf, WXSIZEOF(buf)) == (size_t)-1 )
-            {
-                wxPrintf(wxT("ERROR: conversion to %s failed.\n"), u8d.charset);
-            }
-            else
-            {
-                wxPrintf(wxT("String in %s: %s\n"), u8d.charset, buf);
-            }
-        }
-
-        wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text));
-        if ( s.empty() )
-            s = wxT("<< conversion failed >>");
-        wxPrintf(wxT("String in current cset: %s\n"), s.c_str());
-
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestEncodingConverter()
-{
-    wxPuts(wxT("*** Testing wxEncodingConverter ***\n"));
-
-    // using wxEncodingConverter should give the same result as above
-    char buf[1024];
-    wchar_t wbuf[1024];
-    if ( wxConvUTF8.MB2WC(wbuf, (const char *)utf8koi8r,
-                          WXSIZEOF(utf8koi8r)) == (size_t)-1 )
-    {
-        wxPuts(wxT("ERROR: UTF-8 decoding failed."));
-    }
-    else
-    {
-        wxEncodingConverter ec;
-        ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
-        ec.Convert(wbuf, buf);
-        wxPrintf(wxT("The same KOI8-R string using wxEC: %s\n"), buf);
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-#endif // TEST_WCHAR
-
-
-// ----------------------------------------------------------------------------
 // date time
 // ----------------------------------------------------------------------------
 
@@ -3460,11 +3342,6 @@ int main(int argc, char **argv)
 #ifdef TEST_VOLUME
     TestFSVolume();
 #endif // TEST_VOLUME
-
-#ifdef TEST_WCHAR
-    TestUtf8();
-    TestEncodingConverter();
-#endif // TEST_WCHAR
 
 #if wxUSE_UNICODE
     {

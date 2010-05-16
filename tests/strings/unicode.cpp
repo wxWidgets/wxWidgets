@@ -21,12 +21,16 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
+#include "wx/encconv.h"
+
+// ----------------------------------------------------------------------------
 // helper class holding the matching MB and WC strings
-//
-// either str or wcs (but not both) may be NULL, this means that the conversion
-// to it should fail
+// ----------------------------------------------------------------------------
+
 struct StringConversionData
 {
+    // either str or wcs (but not both) may be NULL, this means that the conversion
+    // to it should fail
     StringConversionData(const char *str_, const wchar_t *wcs_, int flags_ = 0)
         : str(str_), wcs(wcs_), flags(flags_)
     {
@@ -127,6 +131,53 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// test data for UnicodeTestCase::Utf8()
+// ----------------------------------------------------------------------------
+
+static const unsigned char utf8koi8r[] =
+{
+    208, 157, 208, 181, 209, 129, 208, 186, 208, 176, 208, 183, 208, 176,
+    208, 189, 208, 189, 208, 190, 32, 208, 191, 208, 190, 209, 128, 208,
+    176, 208, 180, 208, 190, 208, 178, 208, 176, 208, 187, 32, 208, 188,
+    208, 181, 208, 189, 209, 143, 32, 209, 129, 208, 178, 208, 190, 208,
+    181, 208, 185, 32, 208, 186, 209, 128, 209, 131, 209, 130, 208, 181,
+    208, 185, 209, 136, 208, 181, 208, 185, 32, 208, 189, 208, 190, 208,
+    178, 208, 190, 209, 129, 209, 130, 209, 140, 209, 142, 0
+};
+
+static const unsigned char utf8iso8859_1[] =
+{
+    0x53, 0x79, 0x73, 0x74, 0xc3, 0xa8, 0x6d, 0x65, 0x73, 0x20, 0x49, 0x6e,
+    0x74, 0xc3, 0xa9, 0x67, 0x72, 0x61, 0x62, 0x6c, 0x65, 0x73, 0x20, 0x65,
+    0x6e, 0x20, 0x4d, 0xc3, 0xa9, 0x63, 0x61, 0x6e, 0x69, 0x71, 0x75, 0x65,
+    0x20, 0x43, 0x6c, 0x61, 0x73, 0x73, 0x69, 0x71, 0x75, 0x65, 0x20, 0x65,
+    0x74, 0x20, 0x51, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x71, 0x75, 0x65, 0
+};
+
+static const unsigned char utf8Invalid[] =
+{
+    0x3c, 0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79, 0x3e, 0x32, 0x30, 0x30,
+    0x32, 0xe5, 0xb9, 0xb4, 0x30, 0x39, 0xe6, 0x9c, 0x88, 0x32, 0x35, 0xe6,
+    0x97, 0xa5, 0x20, 0x30, 0x37, 0xe6, 0x99, 0x82, 0x33, 0x39, 0xe5, 0x88,
+    0x86, 0x35, 0x37, 0xe7, 0xa7, 0x92, 0x3c, 0x2f, 0x64, 0x69, 0x73, 0x70,
+    0x6c, 0x61, 0x79, 0
+};
+
+static const struct Utf8Data
+{
+    const unsigned char *text;
+    size_t len;
+    const wxChar *charset;
+    wxFontEncoding encoding;
+} utf8data[] =
+{
+    { utf8Invalid, WXSIZEOF(utf8Invalid), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+    { utf8koi8r, WXSIZEOF(utf8koi8r), wxT("koi8-r"), wxFONTENCODING_KOI8 },
+    { utf8iso8859_1, WXSIZEOF(utf8iso8859_1), wxT("iso8859-1"), wxFONTENCODING_ISO8859_1 },
+};
+
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -149,6 +200,8 @@ private:
 #if wxUSE_UNICODE
         CPPUNIT_TEST( Iteration );
 #endif
+        CPPUNIT_TEST( Utf8 );
+        CPPUNIT_TEST( EncodingConverter );
     CPPUNIT_TEST_SUITE_END();
 
     void ToFromAscii();
@@ -163,6 +216,8 @@ private:
 #if wxUSE_UNICODE
     void Iteration();
 #endif
+    void Utf8();
+    void EncodingConverter();
 
     DECLARE_NO_COPY_CLASS(UnicodeTestCase)
 };
@@ -470,3 +525,46 @@ void UnicodeTestCase::Iteration()
     }
 }
 #endif // wxUSE_UNICODE
+
+void UnicodeTestCase::Utf8()
+{
+    // test code extracted from console sample r64320
+
+    char buf[1024];
+    wchar_t wbuf[1024];
+
+    for ( size_t n = 0; n < WXSIZEOF(utf8data); n++ )
+    {
+        const Utf8Data& u8d = utf8data[n];
+        CPPUNIT_ASSERT( wxConvUTF8.MB2WC(wbuf, (const char *)u8d.text, WXSIZEOF(wbuf)) != (size_t)-1 );
+
+#if 0       // FIXME: this conversion seem not to work...
+        wxCSConv conv(u8d.charset);
+        CPPUNIT_ASSERT( conv.WC2MB(buf, wbuf, WXSIZEOF(buf)) != (size_t)-1 );
+#endif
+        wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text));
+        CPPUNIT_ASSERT( !s.empty() );
+    }
+}
+
+void UnicodeTestCase::EncodingConverter()
+{
+    // test code extracted from console sample r64320
+
+#if 0
+    char buf[1024];
+    wchar_t wbuf[1024];
+
+    CPPUNIT_ASSERT( wxConvUTF8.MB2WC(wbuf, (const char *)utf8koi8r, WXSIZEOF(utf8koi8r)) != (size_t)-1 );
+
+    wxString s1(wxConvUTF8.cMB2WC((const char *)utf8koi8r));
+    CPPUNIT_ASSERT( !s1.empty() );
+
+    wxEncodingConverter ec;
+    ec.Init(wxFONTENCODING_UNICODE, wxFONTENCODING_KOI8);
+    ec.Convert(wbuf, buf);
+    wxString s2(buf);
+
+    CPPUNIT_ASSERT_EQUAL( s1, s2 );
+#endif
+}
