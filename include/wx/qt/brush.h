@@ -1,13 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/brush.h
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_BRUSH_H_
 #define _WX_QT_BRUSH_H_
+
+#include <QtCore/Qt>
 
 class WXDLLIMPEXP_CORE wxBrush : public wxBrushBase
 {
@@ -34,6 +36,8 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    static Qt::BrushStyle wxQtBrushStyle(wxBrushStyle style);
+    static wxBrushStyle wxQtBrushStyle(Qt::BrushStyle style);
 };
 
 #endif // _WX_QT_BRUSH_H_
