@@ -159,6 +159,8 @@ wxString wxHTTP::GetCookie(const wxString& cookie) const
 
 wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) const
 {
+    // TODO: Use wxBase64Encode() now that we have it instead of reproducing it
+
     static const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     wxString buf;
