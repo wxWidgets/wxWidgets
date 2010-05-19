@@ -87,11 +87,6 @@ void wxApp::DoCleanUp()
 {
 }
 
-void wxMacWakeUp()
-{
-    // TODO
-}
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI

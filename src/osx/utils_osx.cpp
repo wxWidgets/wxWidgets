@@ -83,6 +83,18 @@ void wxDisplaySize(int *width, int *height)
         *height = (int)bounds.size.height;
 }
 
+#if wxUSE_BASE
+
+void wxMacWakeUp()
+{
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+
+    if ( loop )
+        loop->WakeUp();
+}
+
+#endif
+
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
