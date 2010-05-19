@@ -38,9 +38,14 @@ public:
         By default, connection is made to the port 80 of the specified @a host.
         You may connect to a non-default port by specifying it explicitly using
         the second overload.
+
+        Currently wxHTTP only supports IPv4.
+
+        For the overload taking wxSockAddress, the @a wait argument is ignored.
      */
     virtual bool Connect(const wxString& host);
     virtual bool Connect(const wxString& host, unsigned short port);
+    virtual bool Connect(const wxSockAddress& addr, bool wait);
     //@}
 
     /**
