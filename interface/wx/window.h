@@ -3172,6 +3172,8 @@ public:
         The search is recursive in both cases.
 
         @see FindWindow()
+
+        @return Window with the given @a id or @NULL if not found.
     */
     static wxWindow* FindWindowById(long id, const wxWindow* parent = 0);
 
@@ -3185,6 +3187,8 @@ public:
         The search is recursive in both cases.
 
         @see FindWindow()
+
+        @return Window with the given @a label or @NULL if not found.
     */
     static wxWindow* FindWindowByLabel(const wxString& label,
                                        const wxWindow* parent = 0);
@@ -3201,6 +3205,8 @@ public:
         FindWindowByLabel() is called.
 
         @see FindWindow()
+
+        @return Window with the given @a name or @NULL if not found.
     */
     static wxWindow* FindWindowByName(const wxString& name,
                                       const wxWindow* parent = 0);
