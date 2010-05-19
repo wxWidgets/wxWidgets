@@ -54,8 +54,8 @@ bool wxUIActionSimulator::MouseDragDrop(long x1, long y1, long x2, long y2, int 
 
 bool  wxUIActionSimulator::Char(int keycode, int modifiers)
 {
-    Key(keycode, false, modifiers);
     Key(keycode, true, modifiers);
+    Key(keycode, false, modifiers);
 
     return true;
 }
