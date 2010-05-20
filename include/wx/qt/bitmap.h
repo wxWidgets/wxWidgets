@@ -66,6 +66,8 @@ public:
 
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
+    
+    QPixmap *GetPixmap() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

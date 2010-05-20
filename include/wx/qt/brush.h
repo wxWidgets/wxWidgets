@@ -11,6 +11,8 @@
 
 #include <QtCore/Qt>
 
+class QBrush;
+
 class WXDLLIMPEXP_CORE wxBrush : public wxBrushBase
 {
 public:
@@ -32,6 +34,8 @@ public:
     virtual wxColour GetColour() const;
     virtual wxBrushStyle GetStyle() const;
     virtual wxBitmap *GetStipple() const;
+    
+    QBrush GetBrush() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

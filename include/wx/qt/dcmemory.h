@@ -2,7 +2,7 @@
 // Name:        wx/qt/dcmemory.h
 // Author:      Peter Most
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -18,6 +18,7 @@ public:
     wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap );
     wxMemoryDCImpl( wxMemoryDC *owner, wxDC *dc );
 
+    virtual void DoSelect(const wxBitmap& bitmap);
 protected:
 
 private:

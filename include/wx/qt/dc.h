@@ -2,12 +2,14 @@
 // Name:        wx/qt/dc.h
 // Author:      Peter Most
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_DC_H_
 #define _WX_QT_DC_H_
+
+#include <QtGui/QPainter>
 
 class WXDLLIMPEXP_CORE wxQtDCImpl : public wxDCImpl
 {
@@ -98,6 +100,7 @@ public:
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
 protected:
+    QPainter m_qtPainter;
 
 private:
 };

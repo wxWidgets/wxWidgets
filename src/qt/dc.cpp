@@ -2,7 +2,7 @@
 // Name:        src/qt/dc.cpp
 // Author:      Peter Most
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -55,6 +55,7 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
+    m_qtPainter.setBrush(brush.GetBrush());
 }
 
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
@@ -141,6 +142,7 @@ void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 
 void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    m_qtPainter.drawRect(x, y, width, height);
 }
 
 void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,

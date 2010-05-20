@@ -120,6 +120,10 @@ wxBitmap *wxBrush::GetStipple() const
     return NULL;
 }
 
+QBrush wxBrush::GetBrush() const
+{
+    return M_BRUSHDATA;
+}
 
 wxGDIRefData *wxBrush::CreateGDIRefData() const
 {

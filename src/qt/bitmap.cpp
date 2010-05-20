@@ -26,6 +26,7 @@ class wxBitmapRefData: public wxGDIRefData
     public:
         wxBitmapRefData() : wxGDIRefData()
         {
+            m_qtPixmap = new QPixmap();
         }
         
         wxBitmapRefData( const wxBitmapRefData& data ) : wxGDIRefData()
@@ -33,26 +34,29 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtPixmap = data.m_qtPixmap;
         }
         
-        wxBitmapRefData( int width, int height ) : wxGDIRefData(), m_qtPixmap( width, height )
+        wxBitmapRefData( int width, int height ) : wxGDIRefData()
         {
+            m_qtPixmap = new QPixmap( width, height );
         }
         
-        wxBitmapRefData( const char bits[] ) : wxGDIRefData(), m_qtPixmap( bits )
+        wxBitmapRefData( const char bits[] ) : wxGDIRefData()
         {
+            m_qtPixmap = new QPixmap(bits);
         }
         
-        wxBitmapRefData( QPixmap pix ) : wxGDIRefData(), m_qtPixmap( pix )
+        wxBitmapRefData( QPixmap pix ) : wxGDIRefData()
         {
+            m_qtPixmap = new QPixmap(pix);
         }
 
-        QPixmap m_qtPixmap;
+        QPixmap *m_qtPixmap;
 };
 
 //-----------------------------------------------------------------------------
 // wxBitmap
 //-----------------------------------------------------------------------------
 
-#define M_PIXDATA ((wxBitmapRefData *)m_refData)->m_qtPixmap
+#define M_PIXDATA (*((wxBitmapRefData *)m_refData)->m_qtPixmap)
 
 void wxBitmap::InitStandardHandlers()
 {
@@ -96,9 +100,20 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
+
+#include <QtGui>
+
 wxBitmap::wxBitmap(const wxImage& image, int WXUNUSED(depth) )
 {
     m_refData = new wxBitmapRefData(QPixmap::fromImage(wxQtImage(image)));
+    
+    QDialog d;
+    QLabel l;
+    l.setPixmap(M_PIXDATA);
+    d.setLayout(new QVBoxLayout);
+    d.layout()->addWidget(&l);
+    
+    d.exec();
 }
 
 
@@ -254,6 +269,10 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
+QPixmap *wxBitmap::GetPixmap() const
+{
+    return ((wxBitmapRefData *)m_refData)->m_qtPixmap;
+}
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {
