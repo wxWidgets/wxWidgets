@@ -217,6 +217,18 @@ void wxCFEventLoop::WakeUp()
     CFRunLoopWakeUp(m_runLoop);
 }
 
+#if wxUSE_BASE
+
+void wxMacWakeUp()
+{
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+    
+    if ( loop )
+        loop->WakeUp();
+}
+
+#endif
+
 bool wxCFEventLoop::YieldFor(long eventsToProcess)
 {
 #if wxUSE_THREADS

@@ -64,18 +64,6 @@ bool wxColourDisplay()
     return true;
 }
 
-#if wxUSE_BASE
-
-void wxMacWakeUp()
-{
-    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
-
-    if ( loop )
-        loop->WakeUp();
-}
-
-#endif
-
 #if wxOSX_USE_COCOA_OR_CARBON
 // Returns depth of screen
 int wxDisplayDepth()
