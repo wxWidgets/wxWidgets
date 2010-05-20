@@ -204,7 +204,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     m_hasDrawnWindow = true;
 
     // pass it on to the real handler
-    bool processed = wxEvtHandler::ProcessEvent(event);
+    bool processed = m_nextHandler->ProcessEventLocally(event);
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()
