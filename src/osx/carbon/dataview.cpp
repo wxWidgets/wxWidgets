@@ -1183,7 +1183,7 @@ wxDataViewColumn* wxMacDataViewDataBrowserListViewControl::GetSortingColumn() co
 
 void wxMacDataViewDataBrowserListViewControl::Resort()
 {
-  (void) Resort();
+    (void) wxMacDataBrowserListViewControl::Resort();
 }
 
 //
