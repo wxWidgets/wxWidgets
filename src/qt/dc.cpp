@@ -11,6 +11,8 @@
 
 #include "wx/dc.h"
 #include "wx/qt/dc.h"
+#include "wx/qt/converter.h"
+#include "wx/qt/utils.h"
 
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
@@ -29,28 +31,34 @@ bool wxQtDCImpl::CanGetTextExtent() const
 
 void wxQtDCImpl::DoGetSize(int *width, int *height) const
 {
+    *width  = m_qtPainter.device()->width();
+    *height = m_qtPainter.device()->height();
 }
 
 void wxQtDCImpl::DoGetSizeMM(int* width, int* height) const
 {
+    *width  = m_qtPainter.device()->widthMM();
+    *height = m_qtPainter.device()->heightMM();
 }
 
 int wxQtDCImpl::GetDepth() const
 {
-    return 0;
+    return m_qtPainter.device()->depth();
 }
 
 wxSize wxQtDCImpl::GetPPI() const
 {
-    return wxSize();
+    return wxSize(m_qtPainter.device()->logicalDpiX(), m_qtPainter.device()->logicalDpiY());
 }
 
 void wxQtDCImpl::SetFont(const wxFont& font)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::SetPen(const wxPen& pen)
 {
+    m_qtPainter.setPen(pen.GetPen());
 }
 
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
@@ -60,31 +68,46 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
 
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
+    m_qtPainter.setBackground(brush.GetBrush());
 }
 
 void wxQtDCImpl::SetBackgroundMode(int mode)
 {
+    switch (mode) {
+        case wxSOLID:
+            m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+            break;
+        case wxTRANSPARENT:
+            m_qtPainter.setBackgroundMode(Qt::TransparentMode);
+            break;
+        default:
+            wxFAIL_MSG( "Unknown wxDC background mode" );
+    }
 }
 
 
 #if wxUSE_PALETTE
 void wxQtDCImpl::SetPalette(const wxPalette& palette)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 #endif // wxUSE_PALETTE
 
 void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 
 wxCoord wxQtDCImpl::GetCharHeight() const
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
     return wxCoord();
 }
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
     return wxCoord();
 }
 
@@ -94,38 +117,49 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::Clear()
 {
+    int width, height;
+    DoGetSize(&width, &height);
+    
+    m_qtPainter.eraseRect(QRect(0, 0, width, height));
 }
 
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                          wxFloodFillStyle style )
 {
+    m_qtPainter.device()->logicalDpiX();
     return false;
 }
 
 bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 {
+    m_qtPainter.device()->logicalDpiX();
     return false;
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
+    m_qtPainter.drawPoint(x, y);
 }
 
 void wxQtDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
+    m_qtPainter.drawLine(x1, y1, x2, y2);
 }
 
 
@@ -133,11 +167,13 @@ void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                        wxCoord x2, wxCoord y2,
                        wxCoord xc, wxCoord yc)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                double sa, double ea)
 {
+    m_qtPainter.device()->logicalDpiX();
 }
 
 void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -149,33 +185,48 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
                                     wxCoord width, wxCoord height,
                                     double radius)
 {
+    m_qtPainter.drawRoundedRect(x, y, width, height, radius, radius);
 }
 
 void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
                            wxCoord width, wxCoord height)
 {
+    m_qtPainter.drawEllipse(x, y, width, height);
 }
 
 void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
 }
 
 void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
+    //TODO: Don't use mask if useMask is false
+    m_qtPainter.drawPixmap(x, y, *bmp.GetPixmap());
 }
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    m_qtPainter.drawText(x, y, wxQtConvertString(text));
 }
 
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
+    //Move and rotate
+    m_qtPainter.translate(x, y);
+    m_qtPainter.rotate(angle);
+    
+    m_qtPainter.drawText(0, 0, wxQtConvertString(text));
+    
+    //Reset to default
+    m_qtPainter.resetTransform();
 }
 
 bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
@@ -187,18 +238,37 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord xsrcMask,
                     wxCoord ysrcMask )
 {
+    wxMISSING_IMPLEMENTATION(__FUNCTION__);
     return false;
 }
 
 void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset )
 {
+    QVector<QPoint> qtPoints;
+    for (int i = 0; i < n; i++) {
+        qtPoints << wxQtConvertPoint(points[i]);
+    }
+
+    m_qtPainter.translate(xoffset, yoffset);
+    m_qtPainter.drawLines(qtPoints);
+    m_qtPainter.resetTransform();
 }
 
 void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
                        wxCoord xoffset, wxCoord yoffset,
                        wxPolygonFillMode fillStyle )
 {
+    QPolygon qtPoints;
+    for (int i = 0; i < n; i++) {
+        qtPoints << wxQtConvertPoint(points[i]);
+    }
+
+    Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
+    
+    m_qtPainter.translate(xoffset, yoffset);
+    m_qtPainter.drawPolygon(qtPoints, fill);
+    m_qtPainter.resetTransform();
 }
 
 

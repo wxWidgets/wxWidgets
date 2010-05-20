@@ -174,6 +174,11 @@ int wxPen::GetDashes(wxDash **ptr) const
     return ((wxPenRefData *)m_refData)->m_dashesSize;
 }
 
+QPen wxPen::GetPen() const
+{
+    return M_PENDATA;
+}
+
 wxGDIRefData *wxPen::CreateGDIRefData() const
 {
     return new wxPenRefData;

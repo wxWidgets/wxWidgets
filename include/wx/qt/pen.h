@@ -11,6 +11,8 @@
 
 #include <QtCore/Qt>
 
+class QPen;
+
 class WXDLLIMPEXP_CORE wxPen : public wxPenBase
 {
 public:
@@ -41,6 +43,8 @@ public:
     virtual wxPenCap GetCap() const;
     virtual int GetWidth() const;
     virtual int GetDashes(wxDash **ptr) const;
+    
+    QPen GetPen() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

@@ -100,20 +100,9 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-
-#include <QtGui>
-
 wxBitmap::wxBitmap(const wxImage& image, int WXUNUSED(depth) )
 {
     m_refData = new wxBitmapRefData(QPixmap::fromImage(wxQtImage(image)));
-    
-    QDialog d;
-    QLabel l;
-    l.setPixmap(M_PIXDATA);
-    d.setLayout(new QVBoxLayout);
-    d.layout()->addWidget(&l);
-    
-    d.exec();
 }
 
 
