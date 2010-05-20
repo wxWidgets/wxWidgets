@@ -11,11 +11,12 @@
 #include "wx/wxprec.h"
 
 #include "wx/gdicmn.h"
-#include "wx/string.h"
+#include "wx/gdicmn.h"
 
 #include <QtCore/QRect>
 #include <QtCore/QString>
 #include <QtGui/QFont>
+#include <QtCore/QSize>
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -80,3 +81,12 @@ QDate wxQtConvertDate(const wxDateTime& date)
 
 #endif // wxUSE_DATETIME
 
+wxSize wxQtConvertSize( const QSize  &size )
+{
+    return wxSize(size.width(), size.height());
+}
+
+QSize  wxQtConvertSize( const wxSize &size )
+{
+    return QSize(size.GetWidth(), size.GetHeight());
+}

@@ -2,7 +2,7 @@
 // Name:        wx/qt/bitmap.h
 // Author:      Peter Most
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -11,10 +11,16 @@
 
 class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 
+class WXDLLIMPEXP_FWD_CORE wxImage;
+class QImage;
+
+class QPixmap;
+
 class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 {
 public:
     wxBitmap();
+    wxBitmap(QPixmap pix);
     wxBitmap(const wxBitmap& bmp);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -64,6 +70,10 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+
+private:
+    static wxImage wxQtImage( QImage  img );
+    static QImage  wxQtImage( const wxImage &img );
 
 };
 

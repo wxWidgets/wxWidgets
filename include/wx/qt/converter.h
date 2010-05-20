@@ -40,6 +40,10 @@ QDate wxQtConvertDate(const wxDateTime& date);
 
 #endif // wxUSE_DATETIME
 
+class WXDLLIMPEXP_FWD_BASE wxSize;
+class QSize;
+wxSize wxQtConvertSize( const QSize  &size );
+QSize  wxQtConvertSize( const wxSize &size );
 
 #endif // _WX_QT_CONVERTER_H_
 
