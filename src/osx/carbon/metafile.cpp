@@ -216,7 +216,7 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
     m_refData = new wxMetafileRefData((CFDataRef)mf);
 }
 
-#ifndef __LP64__
+#if wxOSX_USE_COCOA_OR_CARBON && !defined( __LP64__ )
 void wxMetafile::SetPICT(void* pictHandle)
 {
     UnRef();
