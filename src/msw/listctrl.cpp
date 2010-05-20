@@ -1561,14 +1561,10 @@ bool wxListCtrl::EndEditLabel(bool cancel)
     if ( !hwnd )
         return false;
 
-    if ( cancel )
-        ::SetWindowText(hwnd, wxEmptyString); // dubious but better than nothing
-
-    // we shouldn't destroy the control ourselves according to MSDN, which
-    // proposes WM_CANCELMODE to do this, but it doesn't seem to work
-    //
-    // posting WM_CLOSE to it does seem to work without any side effects
-    ::PostMessage(hwnd, WM_CLOSE, 0, 0);
+    // We shouldn't destroy the control ourselves according to MSDN, which
+    // proposes WM_CANCELMODE to do this, but it doesn't seem to work so
+    // emulate the corresponding user action instead.
+    ::SendMessage(hwnd, WM_KEYDOWN, cancel ? VK_ESCAPE : VK_RETURN, 0);
 
     return true;
 }

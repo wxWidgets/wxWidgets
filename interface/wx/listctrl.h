@@ -248,6 +248,23 @@ public:
                           wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
 
     /**
+        Finish editing the label.
+
+        This method allows to programmatically end editing a list control item
+        in place. Usually it will only be called when editing is in progress,
+        i.e. if GetEditControl() returns non-NULL.
+
+        Currently only implemented in wxMSW.
+
+        @param cancel If @true, discard the changes made by user, as if @c
+            Escape key was pressed. Otherwise, accept the changes as if @c
+            Return was pressed.
+        @return @true if item editing wad finished or @false if no item as
+            being edited.
+     */
+    bool EndEditLabel(bool cancel);
+
+    /**
         Ensures this item is visible.
     */
     bool EnsureVisible(long item);

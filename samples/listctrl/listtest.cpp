@@ -840,16 +840,26 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
 {
-    long itemCur = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
-                                           wxLIST_STATE_FOCUSED);
-
-    if ( itemCur != -1 )
+    // demonstrate cancelling editing: this currently is wxMSW-only
+#ifdef __WXMSW__
+    if ( m_listCtrl->GetEditControl() )
     {
-        m_listCtrl->EditLabel(itemCur);
+        m_listCtrl->EndEditLabel(true);
     }
-    else
+    else // start editing
+#endif // __WXMSW__
     {
-        m_logWindow->WriteText(wxT("No item to edit"));
+        long itemCur = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                               wxLIST_STATE_FOCUSED);
+
+        if ( itemCur != -1 )
+        {
+            m_listCtrl->EditLabel(itemCur);
+        }
+        else
+        {
+            m_logWindow->WriteText(wxT("No item to edit"));
+        }
     }
 }
 
