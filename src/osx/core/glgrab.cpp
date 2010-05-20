@@ -30,6 +30,8 @@
  OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "wx/wxprec.h"
+
 #if wxOSX_USE_COCOA_OR_CARBON
 
 #import <CoreFoundation/CoreFoundation.h>
