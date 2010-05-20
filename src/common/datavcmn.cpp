@@ -543,8 +543,8 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
     unsigned int i;
     for (i = 0; i < sorted.GetCount(); i++)
     {
-            wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
-            array.Add( item );
+        wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
+        array.Add( item );
     }
     /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 }

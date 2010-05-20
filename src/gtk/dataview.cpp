@@ -3529,6 +3529,10 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
 
     if (m_wx_model->IsVirtualListModel())
     {
+        // iter is root, add nothing
+        if (!iter->user_data)
+           return retval;
+        
         // user_data is just the index +1
         int i = ( (wxUIntPtr) iter->user_data ) -1;
         gtk_tree_path_append_index (retval, i);
@@ -3776,13 +3780,21 @@ gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *ch
 // item can be deleted already in the model    
 int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
-    wxGtkTreeModelNode *parent_node = FindNode( parent );
-    wxGtkTreeModelChildren &children = parent_node->GetChildren();
-    size_t j;
-    for (j = 0; j < children.GetCount(); j++)
+    if (m_wx_model->IsVirtualListModel())
     {
-       if (children[j] == item.GetID())
-          return j;
+        int index = ((int)(item.GetID())) - 1;
+        return index;
+    }
+    else
+    {
+        wxGtkTreeModelNode *parent_node = FindNode( parent );
+        wxGtkTreeModelChildren &children = parent_node->GetChildren();
+        size_t j;
+        for (j = 0; j < children.GetCount(); j++)
+        {
+            if (children[j] == item.GetID())
+               return j;
+        }
     }
     return -1;
 }
