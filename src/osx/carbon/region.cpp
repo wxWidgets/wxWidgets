@@ -10,6 +10,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
 #include "wx/region.h"
 
 #ifndef WX_PRECOMP
@@ -606,3 +608,5 @@ long wxRegionIterator::GetH() const
 
     return 0;
 }
+
+#endif

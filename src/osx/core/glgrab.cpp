@@ -30,6 +30,8 @@
  OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
 #import <CoreFoundation/CoreFoundation.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import <OpenGL/OpenGL.h>
@@ -212,3 +214,4 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     return image;
 }
 
+#endif

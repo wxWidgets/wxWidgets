@@ -289,6 +289,41 @@
 #define wxOSX_USE_NATIVE_TOOLBAR 0
 #endif
 
+#if wxUSE_RIBBON
+#undef wxUSE_RIBBON
+#define wxUSE_RIBBON 0
+#endif
+
+#if wxUSE_INFOBAR
+#undef wxUSE_INFOBAR
+#define wxUSE_INFOBAR 0
+#endif
+
+#if wxUSE_FILE_HISTORY
+#undef wxUSE_FILE_HISTORY
+#define wxUSE_FILE_HISTORY 0
+#endif
+
+#if wxUSE_NOTIFICATION_MESSAGE
+#undef wxUSE_NOTIFICATION_MESSAGE
+#define wxUSE_NOTIFICATION_MESSAGE 0
+#endif
+
+#if wxUSE_PROPGRID
+#undef wxUSE_PROPGRID
+#define wxUSE_PROPGRID 0
+#endif
+
+#if wxUSE_WEBKIT
+#undef wxUSE_WEBKIT
+#define wxUSE_WEBKIT 0
+#endif
+
+#if wxUSE_DATAOBJ
+#undef wxUSE_DATAOBJ
+#define wxUSE_DATAOBJ 0
+#endif
+
 #endif
     /* _WX_OSX_IPHONE_CHKCONF_H_ */
 

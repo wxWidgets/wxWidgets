@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
 #include "wx/icon.h"
 
 #ifndef WX_PRECOMP
@@ -360,4 +362,6 @@ bool  wxICONResourceHandler::LoadFile(
     }
     return false;
 }
+
+#endif
 

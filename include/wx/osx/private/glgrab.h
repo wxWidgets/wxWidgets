@@ -4,7 +4,8 @@
     extern "C" {
 #endif
 
-    CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect);
+    CGImageRef grabViaOpenGL(CGDirectDisplayID display, 
+                             CGRect srcRect);
 
 #if defined __cplusplus
     }
