@@ -104,6 +104,10 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel, wxWindow)
 void wxPanel::Init()
 {
     WX_INIT_CONTROL_CONTAINER();
+
+#ifdef __WXMSW__
+    m_isTransparent = false;
+#endif // __WXMSW__
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,

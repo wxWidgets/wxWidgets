@@ -818,6 +818,14 @@ bool wxNotebook::InsertPage(size_t nPage,
     // succeeded: save the pointer to the page
     m_pages.Insert(pPage, nPage);
 
+    // also ensure that the notebook background is used for its pages by making
+    // them transparent: this ensures that MSWGetBgBrush() queries the notebook
+    // for the background brush to be used for erasing them
+    if ( wxPanel *panel = wxDynamicCast(pPage, wxPanel) )
+    {
+        panel->MSWSetTransparentBackground();
+    }
+
     // we may need to adjust the size again if the notebook size changed:
     // normally this only happens for the first page we add (the tabs which
     // hadn't been there before are now shown) but for a multiline notebook it
@@ -1252,23 +1260,7 @@ void wxNotebook::UpdateBgBrush()
 
 WXHBRUSH wxNotebook::MSWGetBgBrushForChild(WXHDC hDC, wxWindow *child)
 {
-    // Only apply to notebook pages and transparent children, see
-    // wxWindow::MSWGetBgBrushForChild() for explanation
-    bool shouldApply;
-    if ( child->GetParent() == this )
-    {
-        // notebook page -- apply background
-        shouldApply = true;
-    }
-    else
-    {
-        // controls in a notebook page with transparent background should
-        // be handled too
-        shouldApply = child->HasTransparentBackground() &&
-                      child->GetParent()->GetParent() == this;
-    }
-
-    if ( m_hbrBackground && shouldApply )
+    if ( m_hbrBackground )
     {
         // before drawing with the background brush, we need to position it
         // correctly

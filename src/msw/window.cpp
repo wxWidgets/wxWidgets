@@ -4916,41 +4916,31 @@ bool wxWindowMSW::DoEraseBackground(WXHDC hDC)
 }
 
 WXHBRUSH
-wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC), wxWindowMSW *child)
+wxWindowMSW::MSWGetBgBrushForChild(WXHDC WXUNUSED(hDC),
+                                   wxWindowMSW * WXUNUSED(child))
 {
     if ( m_hasBgCol )
     {
-        // our background colour applies to:
-        //  1. this window itself, always
-        //  2. all children unless the colour is "not inheritable"
-        //  3. even if it is not inheritable, our immediate transparent
-        //     children should still inherit it -- but not any transparent
-        //     children because it would look wrong if a child of non
-        //     transparent child would show our bg colour when the child itself
-        //     does not
-        if ( child == this ||
-                m_inheritBgCol ||
-                    (child->HasTransparentBackground() &&
-                        child->GetParent() == this) )
-        {
-            // draw children with the same colour as the parent
-            wxBrush *
-                brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
+        wxBrush *
+            brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour());
 
-            return (WXHBRUSH)GetHbrushOf(*brush);
-        }
+        return (WXHBRUSH)GetHbrushOf(*brush);
     }
 
     return 0;
 }
 
-WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC, wxWindowMSW *child)
+WXHBRUSH wxWindowMSW::MSWGetBgBrush(WXHDC hDC)
 {
     for ( wxWindowMSW *win = this; win; win = win->GetParent() )
     {
-        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, child);
+        WXHBRUSH hBrush = win->MSWGetBgBrushForChild(hDC, this);
         if ( hBrush )
             return hBrush;
+
+        // don't use the parent background if we're not transparent
+        if ( !win->HasTransparentBackground() )
+            break;
 
         // background is not inherited beyond top level windows
         if ( win->IsTopLevel() )
