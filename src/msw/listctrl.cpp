@@ -1561,10 +1561,21 @@ bool wxListCtrl::EndEditLabel(bool cancel)
     if ( !hwnd )
         return false;
 
-    // We shouldn't destroy the control ourselves according to MSDN, which
-    // proposes WM_CANCELMODE to do this, but it doesn't seem to work so
-    // emulate the corresponding user action instead.
-    ::SendMessage(hwnd, WM_KEYDOWN, cancel ? VK_ESCAPE : VK_RETURN, 0);
+    // Newer versions of Windows have a special message for cancelling editing,
+    // use it if available.
+#ifdef ListView_CancelEditLabel
+    if ( cancel && (wxApp::GetComCtl32Version() >= 600) )
+    {
+        ListView_CancelEditLabel(GetHwnd());
+    }
+    else
+#endif // ListView_CancelEditLabel
+    {
+        // We shouldn't destroy the control ourselves according to MSDN, which
+        // proposes WM_CANCELMODE to do this, but it doesn't seem to work so
+        // emulate the corresponding user action instead.
+        ::SendMessage(hwnd, WM_KEYDOWN, cancel ? VK_ESCAPE : VK_RETURN, 0);
+    }
 
     return true;
 }

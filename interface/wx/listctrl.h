@@ -252,7 +252,13 @@ public:
 
         This method allows to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
-        i.e. if GetEditControl() returns non-NULL.
+        i.e. if GetEditControl() returns non-NULL. In particular, do not call
+        it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
+        yet fully created by then, just veto the event in this handler instead
+        to prevent the editing from even starting.
+
+        Notice that calling this method will result in EVT_LIST_END_LABEL_EDIT
+        event being generated.
 
         Currently only implemented in wxMSW.
 
