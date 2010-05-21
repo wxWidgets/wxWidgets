@@ -820,21 +820,30 @@ typedef wxUint16 wxWord;
     #define SIZEOF_VOID_P 4
     #define SIZEOF_SIZE_T 4
 #elif defined(__WINDOWS__)
-    /*  Win64 uses LLP64 model and so ints and longs have the same size as in */
-    /*  Win32 */
     #if defined(__WIN32__)
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
-        /* Assume that if SIZEOF_INT is defined that all the other ones except
-           SIZEOF_SIZE_T, are too.  See next #if below.  */
+        /*
+            Win64 uses LLP64 model and so ints and longs have the same size as
+            in Win32.
+         */
         #ifndef SIZEOF_INT
             #define SIZEOF_INT 4
-            #define SIZEOF_LONG 4
-            #define SIZEOF_WCHAR_T 2
+        #endif
 
+        #ifndef SIZEOF_LONG
+            #define SIZEOF_LONG 4
+        #endif
+
+        #ifndef SIZEOF_WCHAR_T
+            /* Windows uses UTF-16 */
+            #define SIZEOF_WCHAR_T 2
+        #endif
+
+        #ifndef SIZEOF_SIZE_T
             /*
-               under Win64 sizeof(size_t) == 8 and so it is neither unsigned
+               Under Win64 sizeof(size_t) == 8 and so it is neither unsigned
                int nor unsigned long!
              */
             #ifdef __WIN64__
@@ -847,25 +856,14 @@ typedef wxUint16 wxWord;
                 #define wxSIZE_T_IS_UINT
             #endif
             #undef wxSIZE_T_IS_ULONG
+        #endif
 
+        #ifndef SIZEOF_VOID_P
             #ifdef __WIN64__
                 #define SIZEOF_VOID_P 8
             #else /*  Win32 */
                 #define SIZEOF_VOID_P 4
             #endif /*  Win64/32 */
-        #endif /*  !defined(SIZEOF_INT) */
-
-        /*
-          If Python.h was included first, it defines all of the SIZEOF's above
-          except for SIZEOF_SIZE_T, so we need to do it here to avoid
-          triggering the #error in the ssize_t typedefs below...
-        */
-        #ifndef SIZEOF_SIZE_T
-            #ifdef __WIN64__
-                #define SIZEOF_SIZE_T 8
-            #else /* Win32 */
-                #define SIZEOF_SIZE_T 4
-            #endif
         #endif
     #else
         #error "Unsupported Windows version"
