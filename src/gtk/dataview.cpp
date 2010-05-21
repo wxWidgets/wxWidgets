@@ -111,7 +111,7 @@ public:
     wxDataViewCtrl* GetOwner()          { return m_owner; }
     GtkWxTreeModel* GetGtkModel()       { return m_gtk_model; }
 
-    // item can be deleted already in the model    
+    // item can be deleted already in the model
     int GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item );
 
 protected:
@@ -1419,7 +1419,7 @@ bool wxGtkDataViewModelNotifier::ItemDeleted( const wxDataViewItem &parent, cons
     int index = m_owner->GtkGetInternal()->GetIndexOf( parent, item );
     gtk_tree_path_append_index( path, index );
 #endif
-     
+
     gtk_tree_model_row_deleted(
         GTK_TREE_MODEL(m_wxgtk_model), path );
     gtk_tree_path_free (path);
@@ -3532,7 +3532,7 @@ GtkTreePath *wxDataViewCtrlInternal::get_path( GtkTreeIter *iter )
         // iter is root, add nothing
         if (!iter->user_data)
            return retval;
-        
+
         // user_data is just the index +1
         int i = ( (wxUIntPtr) iter->user_data ) -1;
         gtk_tree_path_append_index (retval, i);
@@ -3626,7 +3626,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return TRUE;
         }
 
-        
+
         wxDataViewItem item;
         if (parent)
             item = wxDataViewItem( (void*) parent->user_data );
@@ -3777,13 +3777,12 @@ gboolean wxDataViewCtrlInternal::iter_parent( GtkTreeIter *iter, GtkTreeIter *ch
     }
 }
 
-// item can be deleted already in the model    
+// item can be deleted already in the model
 int wxDataViewCtrlInternal::GetIndexOf( const wxDataViewItem &parent, const wxDataViewItem &item )
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        int index = ((int)(item.GetID())) - 1;
-        return index;
+        return wxPtrToUInt(item.GetID()) - 1;
     }
     else
     {
