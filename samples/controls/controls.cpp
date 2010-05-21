@@ -2011,9 +2011,9 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
         if ( focus )
         {
             msg.Printf(
-                    wxT("Focus: %s")
+                    "Focus: %s"
 #ifdef __WXMSW__
-                    , wxT(", HWND = %08x")
+                    ", HWND = %08x"
 #endif
                     , s_windowFocus->GetName().c_str()
 #ifdef __WXMSW__
