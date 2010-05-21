@@ -5572,6 +5572,11 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     }
     else
     {
+        // It is reported that we need to erase the background to avoid display
+        // artefacts, see #12055.
+        wxDCBrushChanger setBrush(dc, m_colWindow->GetBackgroundColour());
+        dc.DrawRectangle(rect);
+
         rend.DrawBorder(*this, dc, rect);
     }
 
