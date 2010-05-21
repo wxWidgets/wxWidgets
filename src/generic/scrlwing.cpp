@@ -203,8 +203,18 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // user code defined OnPaint() in the derived class)
     m_hasDrawnWindow = true;
 
-    // pass it on to the real handler
-    bool processed = m_nextHandler->ProcessEventLocally(event);
+    // Pass it on to the real handler: notice that we must not call
+    // ProcessEvent() on this object itself as it wouldn't pass it to the next
+    // handler (i.e. the real window) if we're called from a previous handler
+    // (as indicated by "process here only" flag being set) and we do want to
+    // execute the handler defined in the window we're associated with right
+    // now, without waiting until TryAfter() is called from wxEvtHandler.
+    //
+    // Note that this means that the handler in the window will be called twice
+    // if there is a preceding event handler in the chain because we do it from
+    // here now and the base class DoTryChain() will also call it itself when
+    // we return. But this unfortunately seems unavoidable.
+    bool processed = m_nextHandler->ProcessEvent(event);
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()

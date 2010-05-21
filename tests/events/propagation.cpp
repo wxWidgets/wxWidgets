@@ -264,20 +264,27 @@ void EventPropagationTestCase::WindowWithHandler()
 
 void EventPropagationTestCase::ScrollWindowWithoutHandler()
 {
-    TestScrollWindow * const
-        win = new TestScrollWindow(wxTheApp->GetTopWindow());
-    wxON_BLOCK_EXIT_OBJ0( *win, wxWindow::Destroy );
+    TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
+    wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
+
+    TestScrollWindow * const win = new TestScrollWindow(parent);
 
     wxPaintEvent event(win->GetId());
     win->ProcessWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "PD", g_str );
+
+    g_str.clear();
+    wxCommandEvent eventCmd(TEST_EVT);
+    win->HandleWindowEvent(eventCmd);
+    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
 void EventPropagationTestCase::ScrollWindowWithHandler()
 {
-    TestScrollWindow * const
-        win = new TestScrollWindow(wxTheApp->GetTopWindow());
-    wxON_BLOCK_EXIT_OBJ0( *win, wxWindow::Destroy );
+    TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
+    wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
+
+    TestScrollWindow * const win = new TestScrollWindow(parent);
 
     TestPaintEvtHandler h('h');
     win->PushEventHandler(&h);
@@ -286,5 +293,10 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     wxPaintEvent event(win->GetId());
     win->ProcessWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "ohPD", g_str );
+
+    g_str.clear();
+    wxCommandEvent eventCmd(TEST_EVT);
+    win->HandleWindowEvent(eventCmd);
+    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 
