@@ -341,39 +341,26 @@ private:
     wxString      m_data;
 };
 
-#endif // generic or Carbon versions
-
 // ----------------------------------------------------------------------------
-// wxDataViewChoiceRendererByIndex
+// wxDataViewChoiceByIndexRenderer
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewChoiceRendererByIndex: public wxDataViewChoiceRenderer
+class WXDLLIMPEXP_ADV wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
 {
 public:
-    wxDataViewChoiceRendererByIndex( const wxArrayString &choices,
+    wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
-                              int alignment = wxDVR_DEFAULT_ALIGNMENT ) :
-      wxDataViewChoiceRenderer( choices, mode, alignment )
-    {
-    }
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
                             
-    virtual bool SetValue( const wxVariant &value )
-    {
-        wxVariant string_value = GetChoice( value.GetLong() );
-        return wxDataViewChoiceRenderer::SetValue( string_value );
-    }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
     
-    virtual bool GetValue( wxVariant &value ) const
-    {
-        wxVariant string_value;
-        if (!wxDataViewChoiceRenderer::GetValue( string_value ))
-            return false;
-            
-        value = (long) GetChoices().Index( string_value.GetString() );
-        return true;
-    }
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
 };
 
+
+#endif // generic or Carbon versions
 
 // this class is obsolete, its functionality was merged in
 // wxDataViewTextRenderer itself now, don't use it any more

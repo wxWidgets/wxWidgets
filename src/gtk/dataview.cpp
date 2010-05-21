@@ -2407,7 +2407,7 @@ bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
     {
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
-        g_value_set_string( &gvalue, wxGTK_CONV_FONT( value.GetString(), GetOwner()->GetOwner()->GetFont() ) );
+        g_value_set_string( &gvalue, wxGTK_CONV( value.GetString() ) );
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
     }
@@ -2426,8 +2426,7 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
         g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-        wxString temp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ),
-                const_cast<wxDataViewChoiceRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
+        wxString temp = wxGTK_CONV_BACK( g_value_get_string( &gvalue ) );
         g_value_unset( &gvalue );
         value = temp;
 
@@ -2460,6 +2459,48 @@ void wxDataViewChoiceRenderer::SetAlignment( int align )
     g_value_set_enum( &gvalue, pangoAlign );
     g_object_set_property( G_OBJECT(m_renderer), "alignment", &gvalue );
     g_value_unset( &gvalue );
+}
+
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                              wxDataViewCellMode mode, int alignment ) :
+      wxDataViewChoiceRenderer( choices, mode, alignment )
+{
+}
+                            
+void wxDataViewChoiceByIndexRenderer::GtkOnTextEdited(const gchar *itempath, const wxString& str)
+{
+    wxVariant value( (long) GetChoices().Index( str ) );
+
+    if (!Validate( value ))
+        return;
+
+    GtkTreePath *path = gtk_tree_path_new_from_string( itempath );
+    GtkTreeIter iter;
+    GetOwner()->GetOwner()->GtkGetInternal()->get_iter( &iter, path );
+    wxDataViewItem item( (void*) iter.user_data );;
+    gtk_tree_path_free( path );
+
+    GtkOnCellChanged(value, item, GetOwner()->GetModelColumn());
+}
+
+bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
+{
+    wxVariant string_value = GetChoice( value.GetLong() );
+    return wxDataViewChoiceRenderer::SetValue( string_value );
+}
+    
+bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
+{
+    wxVariant string_value;
+    if (!wxDataViewChoiceRenderer::GetValue( string_value ))
+         return false;
+            
+    value = (long) GetChoices().Index( string_value.GetString() );
+    return true;
 }
 
 // ---------------------------------------------------------

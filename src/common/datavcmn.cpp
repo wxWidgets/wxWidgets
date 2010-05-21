@@ -1433,6 +1433,49 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
     return true;
 }
 
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                                  wxDataViewCellMode mode, int alignment ) :
+      wxDataViewChoiceRenderer( choices, mode, alignment )
+{
+}
+                            
+wxControl* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{
+    wxVariant string_value = GetChoice( value.GetLong() );
+    
+    return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
+}
+
+bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{
+    wxVariant string_value;
+    if (!wxDataViewChoiceRenderer::GetValueFromEditorCtrl( editor, string_value ))
+        return false;
+
+    value = (long) GetChoices().Index( string_value.GetString() );
+    return true;
+}
+
+bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
+{
+    wxVariant string_value = GetChoice( value.GetLong() );
+    return wxDataViewChoiceRenderer::SetValue( string_value );
+}
+    
+bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
+{
+    wxVariant string_value;
+    if (!wxDataViewChoiceRenderer::GetValue( string_value ))
+        return false;
+            
+    value = (long) GetChoices().Index( string_value.GetString() );
+    return true;
+}
+
 #endif
 
 //-----------------------------------------------------------------------------
