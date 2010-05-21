@@ -364,7 +364,26 @@ public:
     void AssociateTemplate(wxDocTemplate* temp);
 
     /**
+        Closes the specified document.
+
+        If @a force is @true, the document is closed even if it has unsaved
+        changes.
+
+        @param doc
+            The document to close, must be non-@NULL.
+        @param force
+            If @true, close the document even if wxDocument::Close() returns
+            @false.
+        @return
+            @true if the document was closed or @false if closing it was
+            cancelled by user (only in @a force = @false case).
+     */
+    bool CloseDocument(wxDocument *doc, bool force = false);
+
+    /**
         Closes all currently opened documents.
+
+        @see CloseDocument()
     */
     bool CloseDocuments(bool force = true);
 
