@@ -402,10 +402,11 @@ MyFrame::MyFrame()
     RecreateBook();
 
     m_panel->SetSizer(m_sizerFrame);
+    m_panel->Layout();
 
-    m_sizerFrame->SetSizeHints(this);
-
-    Centre(wxBOTH);
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_panel, wxSizerFlags(1).Expand());
+    SetSizerAndFit(sizer);
 }
 
 MyFrame::~MyFrame()
