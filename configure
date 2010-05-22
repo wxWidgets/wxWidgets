@@ -3606,8 +3606,10 @@ echo "$as_me: error: Please specify at most one toolkit" >&2;}
     # to be removed when --disable-gtk2 isn't needed
     if test "x$wxUSE_GTK2" = "xyes"; then
         wxGTK_VERSION=2
+        wxUSE_GTK1=0
     elif test "x$wxUSE_GTK2" = "xno"; then
         wxGTK_VERSION=1
+        wxUSE_GTK1=1
     fi
 
     for toolkit in $ALL_TOOLKITS; do
@@ -33538,8 +33540,9 @@ fi
 
 
 
+USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+        if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
         { echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
 
@@ -33571,96 +33574,10 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
             fi
+            USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-
-            { echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
-echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
-
-  ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-            if test "$ac_find_libraries" != "" ; then
-                { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-
-for ac_header in X11/extensions/xf86vmode.h
-do
-as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $ac_header" >&5
-echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                                      #if HAVE_X11_XLIB_H
-                                        #include <X11/Xlib.h>
-                                      #endif
-
-
-#include <$ac_header>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  eval "$as_ac_Header=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	eval "$as_ac_Header=no"
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-ac_res=`eval echo '${'$as_ac_Header'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_Header'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
-
-fi
-
-done
-
-            else
-                { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-            fi
-
         else
             { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
@@ -33669,7 +33586,7 @@ echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
-        { echo "$as_me:$LINENO: checking for ddraw.h" >&5
+                { echo "$as_me:$LINENO: checking for ddraw.h" >&5
 echo $ECHO_N "checking for ddraw.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_ddraw_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -33715,6 +33632,96 @@ fi
 echo "${ECHO_T}$ac_cv_header_ddraw_h" >&6; }
 
 
+    fi
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+        if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
+        { echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
+echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "$ac_find_libraries" != "" ; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+for ac_header in X11/extensions/xf86vmode.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                  #if HAVE_X11_XLIB_H
+                                    #include <X11/Xlib.h>
+                                  #endif
+
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Header=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+                              GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+
+fi
+
+done
+
+        else
+            { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
     fi
 fi
 
