@@ -43,10 +43,12 @@ private:
     CPPUNIT_TEST_SUITE( BoxSizerTestCase );
         CPPUNIT_TEST( Size1 );
         CPPUNIT_TEST( Size3 );
+        CPPUNIT_TEST( CalcMin );
     CPPUNIT_TEST_SUITE_END();
 
     void Size1();
     void Size3();
+    void CalcMin();
 
     wxWindow *m_win;
     wxSizer *m_sizer;
@@ -246,5 +248,56 @@ void BoxSizerTestCase::Size3()
             if ( ltd.dontPermute )
                 break;
         }
+    }
+}
+
+void BoxSizerTestCase::CalcMin()
+{
+    static const unsigned NUM_TEST_ITEM = 3;
+
+    static const struct CalcMinTestData
+    {
+        // proportions of the elements, if one of them is -1 it means to not
+        // use this window at all in this test
+        int prop[NUM_TEST_ITEM];
+
+        // minimal sizes of the elements in the sizer direction
+        int minsize[NUM_TEST_ITEM];
+
+        // the expected minimal sizer size
+        int total;
+    } calcMinTestData[] =
+    {
+        { {  1,  1, -1 }, {  30,  50,   0 },  100 },
+        { {  1,  1,  0 }, {  30,  50,  20 },  120 },
+        { { 10, 10, -1 }, {  30,  50,   0 },  100 },
+        { {  1,  2,  2 }, {  50,  50,  80 },  250 },
+        { {  1,  2,  2 }, { 100,  50,  80 },  500 },
+    };
+
+    unsigned n;
+    wxWindow *child[NUM_TEST_ITEM];
+    for ( n = 0; n < NUM_TEST_ITEM; n++ )
+        child[n] = new wxWindow(m_win, wxID_ANY);
+
+    for ( unsigned i = 0; i < WXSIZEOF(calcMinTestData); i++ )
+    {
+        m_sizer->Clear();
+
+        const CalcMinTestData& cmtd = calcMinTestData[i];
+        for ( n = 0; n < NUM_TEST_ITEM; n++ )
+        {
+            if ( cmtd.prop[n] != -1 )
+            {
+                child[n]->SetInitialSize(wxSize(cmtd.minsize[n], -1));
+                m_sizer->Add(child[n], wxSizerFlags(cmtd.prop[n]));
+            }
+        }
+
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            ("In test #%u", i),
+            cmtd.total, m_sizer->CalcMin().x
+        );
     }
 }
