@@ -20,6 +20,8 @@
     should terminate as there is no other way to gracefully shutdown a thread
     waiting on the message queue.
 
+    @since 2.9.0
+
     @nolibrary
     @category{threading}
 
@@ -34,6 +36,17 @@ public:
         Use wxMessageQueue::IsOk to check if the object was successfully initialized.
     */
     wxMessageQueue();
+
+    /**
+        Remove all messages from the queue.
+
+        This method is meant to be called from the same thread(s) that call
+        Post() to discard any still pending requests if they became
+        unnecessary.
+
+        @since 2.9.1
+     */
+    wxMessageQueueError Clear();
 
     /**
         Returns @true if the object had been initialized successfully, @false
