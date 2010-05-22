@@ -3812,6 +3812,29 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         }
         else
         {
+            if ( m_selection )
+            {
+                // In row or column selection mode just clicking on the cell
+                // should select the row or column containing it: this is more
+                // convenient for the kinds of controls that use such selection
+                // mode and is compatible with 2.8 behaviour (see #12062).
+                switch ( m_selection->GetSelectionMode() )
+                {
+                    case wxGridSelectCells:
+                    case wxGridSelectRowsOrColumns:
+                        // nothing to do in these cases
+                        break;
+
+                    case wxGridSelectRows:
+                        m_selection->SelectRow(coords.GetRow());
+                        break;
+
+                    case wxGridSelectColumns:
+                        m_selection->SelectCol(coords.GetCol());
+                        break;
+                }
+            }
+
             m_waitForSlowClick = m_currentCellCoords == coords &&
                                         coords != wxGridNoCellCoords;
             SetCurrentCell( coords );
