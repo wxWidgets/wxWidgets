@@ -130,7 +130,6 @@
 //    #define TEST_SOCKETS  --FIXME! (RN)
     #define TEST_STACKWALKER
     #define TEST_STDPATHS
-    #define TEST_STREAMS
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -2756,77 +2755,6 @@ static void TestStandardPaths()
 #endif // TEST_STDPATHS
 
 // ----------------------------------------------------------------------------
-// streams
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_STREAMS
-
-#include "wx/wfstream.h"
-#include "wx/mstream.h"
-
-static void TestFileStream()
-{
-    wxPuts(wxT("*** Testing wxFileInputStream ***"));
-
-    static const wxString filename = wxT("testdata.fs");
-    {
-        wxFileOutputStream fsOut(filename);
-        fsOut.Write("foo", 3);
-    }
-
-    {
-        wxFileInputStream fsIn(filename);
-        wxPrintf(wxT("File stream size: %u\n"), fsIn.GetSize());
-        int c;
-        while ( (c=fsIn.GetC()) != wxEOF  )
-        {
-            wxPutchar(c);
-        }
-    }
-
-    if ( !wxRemoveFile(filename) )
-    {
-        wxPrintf(wxT("ERROR: failed to remove the file '%s'.\n"), filename.c_str());
-    }
-
-    wxPuts(wxT("\n*** wxFileInputStream test done ***"));
-}
-
-static void TestMemoryStream()
-{
-    wxPuts(wxT("*** Testing wxMemoryOutputStream ***"));
-
-    wxMemoryOutputStream memOutStream;
-    wxPrintf(wxT("Initially out stream offset: %lu\n"),
-             (unsigned long)memOutStream.TellO());
-
-    for ( const wxChar *p = wxT("Hello, stream!"); *p; p++ )
-    {
-        memOutStream.PutC(*p);
-    }
-
-    wxPrintf(wxT("Final out stream offset: %lu\n"),
-             (unsigned long)memOutStream.TellO());
-
-    wxPuts(wxT("*** Testing wxMemoryInputStream ***"));
-
-    wxChar buf[1024];
-    size_t len = memOutStream.CopyTo(buf, WXSIZEOF(buf));
-
-    wxMemoryInputStream memInpStream(buf, len);
-    wxPrintf(wxT("Memory stream size: %u\n"), memInpStream.GetSize());
-    int c;
-    while ( (c=memInpStream.GetC()) != wxEOF )
-    {
-        wxPutchar(c);
-    }
-
-    wxPuts(wxT("\n*** wxMemoryInputStream test done ***"));
-}
-
-#endif // TEST_STREAMS
-
-// ----------------------------------------------------------------------------
 // wxVolume tests
 // ----------------------------------------------------------------------------
 
@@ -3193,13 +3121,6 @@ int main(int argc, char **argv)
     TestSocketServer();
     TestSocketClient();
 #endif // TEST_SOCKETS
-
-#ifdef TEST_STREAMS
-    #if TEST_ALL
-        TestFileStream();
-    #endif
-        TestMemoryStream();
-#endif // TEST_STREAMS
 
 #ifdef TEST_DATETIME
     #if TEST_INTERACTIVE
