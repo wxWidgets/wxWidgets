@@ -62,9 +62,6 @@
         #include <X11/Xlibint.h>
 
         #include <X11/extensions/Xinerama.h>
-        #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
-            #include <X11/extensions/xf86vmode.h>
-        #endif
     }
 
     typedef XineramaScreenInfo ScreenInfo;
@@ -221,6 +218,8 @@ wxDisplayImpl *wxDisplayFactoryX11::CreateDisplay(unsigned n)
 // ============================================================================
 
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
+
+#include <X11/extensions/xf86vmode.h>
 
 //
 //  See (http://www.xfree86.org/4.2.0/XF86VidModeDeleteModeLine.3.html) for more
