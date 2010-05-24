@@ -69,26 +69,6 @@ void SendButtonEvent(int button, bool isDown)
     XCloseDisplay(display);
 }
 
-void SendKey(Display *display, Window focus, KeyCode keycode, int type, int mask)
-{
-    XKeyEvent event;
-    event.display = display;
-    event.window = focus;
-    event.root = RootWindow(event.display, DefaultScreen(event.display));
-    event.subwindow = None;
-    event.time = CurrentTime;
-    event.x = 1;
-    event.y = 1;
-    event.x_root = 1;
-    event.y_root = 1;
-    event.same_screen = True;
-    event.type = type;
-    event.state = 0;
-    event.keycode = keycode;
-
-    XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
-}
-
 }
 
 bool wxUIActionSimulator::MouseDown(int button)
@@ -114,8 +94,14 @@ bool wxUIActionSimulator::MouseUp(int button)
     return true;
 }
 
-bool wxUIActionSimulator::Key(int keycode, bool isDown, int WXUNUSED(modifiers))
+bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
 {
+
+    wxASSERT_MSG( !(modifiers & wxMOD_CONTROL), "wxMOD_CONTROL is not implemented, use wxMOD_CMD instead" );
+    wxASSERT_MSG( !(modifiers & wxMOD_ALTGR ), "wxMOD_ALTGR is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_META ), "wxMOD_META is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_WIN ), "wxMOD_WIN is not implemented" );
+
     Display *display = XOpenDisplay(0);
     wxASSERT_MSG(display, "No display available!");
 
@@ -145,7 +131,32 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, int WXUNUSED(modifiers))
         return false;
     }
 
-    SendKey(display, focus, xkeycode, type, mask);
+    int mod = 0; 
+
+    if (modifiers & wxMOD_SHIFT)
+        mod |= ShiftMask;
+    //Mod1 is alt in the vast majority of cases
+    if (modifiers & wxMOD_ALT)
+        mod |= Mod1Mask;
+    if (modifiers & wxMOD_CMD)
+        mod |= ControlMask;
+
+    XKeyEvent event;
+    event.display = display;
+    event.window = focus;
+    event.root = RootWindow(event.display, DefaultScreen(event.display));
+    event.subwindow = None;
+    event.time = CurrentTime;
+    event.x = 1;
+    event.y = 1;
+    event.x_root = 1;
+    event.y_root = 1;
+    event.same_screen = True;
+    event.type = type;
+    event.state = mod;
+    event.keycode = xkeycode;
+
+    XSendEvent(event.display, event.window, True, mask, (XEvent*) &event);
 
     XCloseDisplay(display);
 

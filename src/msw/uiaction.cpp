@@ -73,12 +73,20 @@ bool wxUIActionSimulator::MouseUp(int button)
 
 bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
 {
-    if (modifiers & wxMOD_SHIFT)
-        keybd_event(VK_SHIFT, 0, 0, 0);
-    if (modifiers & wxMOD_ALT)
-        keybd_event(VK_MENU, 0, 0, 0);
-    if (modifiers & wxMOD_CMD)
-        keybd_event(VK_CONTROL, 0, 0, 0);
+    wxASSERT_MSG( !(modifiers & wxMOD_CONTROL), "wxMOD_CONTROL is not implemented, use wxMOD_CMD instead" );
+    wxASSERT_MSG( !(modifiers & wxMOD_ALTGR ), "wxMOD_ALTGR is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_META ), "wxMOD_META is not implemented" );
+    wxASSERT_MSG( !(modifiers & wxMOD_WIN ), "wxMOD_WIN is not implemented" );
+
+    if (isDown)
+    {
+        if (modifiers & wxMOD_SHIFT)
+            keybd_event(VK_SHIFT, 0, 0, 0);
+        if (modifiers & wxMOD_ALT)
+            keybd_event(VK_MENU, 0, 0, 0);
+        if (modifiers & wxMOD_CMD)
+            keybd_event(VK_CONTROL, 0, 0, 0);
+    }
 
     DWORD flags = 0;
     DWORD vkkeycode = wxCharCodeWXToMSW(keycode);
@@ -86,12 +94,15 @@ bool wxUIActionSimulator::Key(int keycode, bool isDown, int modifiers)
         flags = KEYEVENTF_KEYUP;
     keybd_event(vkkeycode, 0, flags, 0);
 
-    if (modifiers & wxMOD_SHIFT)
-        keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
-    if (modifiers & wxMOD_ALT)
-        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
-    if (modifiers & wxMOD_CMD)
-        keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+    if (!isDown)
+    {
+        if (modifiers & wxMOD_SHIFT)
+            keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
+        if (modifiers & wxMOD_ALT)
+            keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);
+        if (modifiers & wxMOD_CMD)
+            keybd_event(VK_CONTROL, 0, KEYEVENTF_KEYUP, 0);
+    }
 
     return true;
 }

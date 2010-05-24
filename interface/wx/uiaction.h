@@ -100,7 +100,8 @@ class wxUIActionSimulator
     bool MouseDragDrop(long x1, long y1, long x2, long y2, int button = wxMOUSE_BTN_LEFT);
 
     /**
-        Press a key.
+        Press a key. If you are using modifiers then it needs to be paired with
+        an identical KeyUp or the modifiers will not be released (MSW and OSX).
 
         @param keycode
             Key to operate on, as an integer. Under Windows and Unix this is 
