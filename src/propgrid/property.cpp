@@ -1364,6 +1364,12 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 }
                 i++;
             }
+
+            // Always call OnSetValue() for a parent property (do not call it
+            // here if the value is non-null because it will then be called
+            // below)
+            if ( value.IsNull() )
+                OnSetValue();
         }
 
         if ( !value.IsNull() )
