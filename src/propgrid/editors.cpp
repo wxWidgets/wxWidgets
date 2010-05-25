@@ -848,6 +848,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         else
         {
             renderFlags |= wxPGCellRenderer::ChoicePopup;
+
+            // For consistency, always use normal font when drawing drop down
+            // items
+            dc.SetFont(GetFont());
         }
 
         // If not drawing a selected popup item, then give property's
