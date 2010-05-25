@@ -2360,6 +2360,26 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
+bool wxTextCtrl::SetFont(const wxFont& font)
+{
+    if ( !wxTextCtrlBase::SetFont(font) )
+        return false;
+
+    if ( IsRich() )
+    {
+        // Using WM_SETFONT doesn't work reliably with rich edit controls: as
+        // an example, if we set a fixed width font for a richedit 4.1 control,
+        // it's used for the ASCII characters but inserting any non-ASCII ones
+        // switches the font to a proportional one, whether it's done
+        // programmatically or not. So just use EM_SETCHARFORMAT for this too.
+        wxTextAttr attr;
+        attr.SetFont(font);
+        SetDefaultStyle(attr);
+    }
+
+    return true;
+}
+
 // ----------------------------------------------------------------------------
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
