@@ -75,6 +75,12 @@ enum
     wxCC_POPUP_ON_MOUSE_UP          = 0x0002,
     // All text is not automatically selected on click
     wxCC_NO_TEXT_AUTO_SELECT        = 0x0004,
+    // Drop-button stays down as long as popup is displayed.
+    wxCC_BUTTON_STAYS_DOWN          = 0x0008,
+    // Drop-button covers the entire control.
+    wxCC_FULL_BUTTON                = 0x0010,
+    // Drop-button goes over the custom-border (used under WinVista).
+    wxCC_BUTTON_COVERS_BORDER       = 0x0020,
 
     // Internal use: signals creation is complete
     wxCC_IFLAG_CREATED              = 0x0100,
@@ -426,7 +432,8 @@ protected:
     // flags for DrawButton()
     enum
     {
-        Draw_PaintBg = 1
+        Draw_PaintBg = 1,
+        Draw_BitmapOnly  = 2
     };
 
     // Draws dropbutton. Using wxRenderer or bitmaps, as appropriate.

@@ -96,6 +96,11 @@ All (GUI):
 - wxRTC: fixed style selection resetting after editing a style.
 - wxRTC: can now edit line spacing in .1 increments from 1 to 2.
 
+wxMSW:
+
+- Backported improved wxOwnerDrawnComboBox and wxComboCtrl appearance under
+  Windows Vista/7.
+
 2.8.11:
 -------
 

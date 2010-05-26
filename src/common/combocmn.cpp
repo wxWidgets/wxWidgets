@@ -1326,7 +1326,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC&, const wxRect&, int ) const
 }
 #endif
 
-void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
+void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int flags )
 {
     int drawState = m_btnState;
 
@@ -1353,8 +1353,11 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
 
     if ( !m_bmpNormal.Ok() )
     {
+        if ( flags & Draw_BitmapOnly )
+            return;
+
         // Need to clear button background even if m_btn is present
-        if ( paintBg )
+        if ( flags & Draw_PaintBg )
         {
             wxColour bgCol;
 
@@ -1393,7 +1396,7 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
         {
             // If using blank button background, we need to clear its background
             // with button face colour instead of colour for rest of the control.
-            if ( paintBg )
+            if ( flags & Draw_PaintBg )
             {
                 wxColour bgCol = GetParent()->GetBackgroundColour(); //wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
                 //wxColour bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
@@ -1413,7 +1416,7 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
         {
             // Need to clear button background even if m_btn is present
             // (assume non-button background was cleared just before this call so brushes are good)
-            if ( paintBg )
+            if ( flags & Draw_PaintBg )
                 dc.DrawRectangle(rect);
         }
 
