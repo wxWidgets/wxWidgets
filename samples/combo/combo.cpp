@@ -107,15 +107,15 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    ComboControl_Compare = wxID_HIGHEST,
+    ComboCtrl_Compare = wxID_HIGHEST,
 
     // menu items
-    ComboControl_Quit = wxID_EXIT,
+    ComboCtrl_Quit = wxID_EXIT,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
-    ComboControl_About = wxID_ABOUT
+    ComboCtrl_About = wxID_ABOUT
 };
 
 // ----------------------------------------------------------------------------
@@ -129,9 +129,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TEXT(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_COMBOBOX(wxID_ANY,MyFrame::OnComboBoxUpdate)
 
-    EVT_MENU(ComboControl_Compare,  MyFrame::OnShowComparison)
-    EVT_MENU(ComboControl_Quit,     MyFrame::OnQuit)
-    EVT_MENU(ComboControl_About,    MyFrame::OnAbout)
+    EVT_MENU(ComboCtrl_Compare,  MyFrame::OnShowComparison)
+    EVT_MENU(ComboCtrl_Quit,     MyFrame::OnQuit)
+    EVT_MENU(ComboCtrl_About,    MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -720,12 +720,12 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ComboControl_About, _T("&About...\tF1"), _T("Show about dialog"));
+    helpMenu->Append(ComboCtrl_About, _T("&About...\tF1"), _T("Show about dialog"));
 
-    fileMenu->Append(ComboControl_Compare, _T("&Compare against wxComboBox..."),
+    fileMenu->Append(ComboCtrl_Compare, _T("&Compare against wxComboBox..."),
         _T("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ComboControl_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    fileMenu->Append(ComboCtrl_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -849,7 +849,7 @@ MyFrame::MyFrame(const wxString& title)
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("List View wxComboCtrl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxComboControl:")), 1,
+    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxComboCtrl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
 
