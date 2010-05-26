@@ -323,11 +323,6 @@ void wxControl::OnInternalIdle()
     if ( GTKShowFromOnIdle() )
         return;
 
-    if ( GTK_WIDGET_REALIZED(m_widget) )
-    {
-        GTKUpdateCursor();
-    }
-
     if ( wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen() )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }

@@ -217,8 +217,6 @@ private:
 
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);
-    GdkCursor *m_gdkHandCursor;
-    GdkCursor *m_gdkXTermCursor;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
