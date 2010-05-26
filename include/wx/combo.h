@@ -371,8 +371,8 @@ public:
     bool ShouldDrawFocus() const
     {
         const wxWindow* curFocus = FindFocus();
-        return ( !IsPopupShown() &&
-                 (curFocus == this || (m_btn && curFocus == m_btn)) &&
+        return ( IsPopupWindowState(Hidden) &&
+                 (curFocus == m_mainCtrlWnd || (m_btn && curFocus == m_btn)) &&
                  (m_windowStyle & wxCB_READONLY) );
     }
 
