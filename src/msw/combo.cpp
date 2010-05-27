@@ -43,6 +43,16 @@
 #include "wx/msw/uxtheme.h"
 #endif
 
+//
+// Define wxUSE_COMBOCTRL_VISTA_RENDERING as 1 to have read-only wxComboCtrl
+// and wxOwnerDrawnComboBox appear much nicer on Win Vista/7. Disabled by
+// default as this may cause some subtle rendering bugs with custom
+// wxComboCtrls.
+//
+#ifndef wxUSE_COMBOCTRL_VISTA_RENDERING
+    #define wxUSE_COMBOCTRL_VISTA_RENDERING 0
+#endif
+
 // Change to #if 1 to include tmschema.h for easier testing of theme
 // parameters.
 #if 0
@@ -514,7 +524,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 #if wxUSE_UXTHEME
     if ( hTheme )
     {
+  #if wxUSE_COMBOCTRL_VISTA_RENDERING
         const bool useVistaComboBox = ::wxGetWinVersion() >= wxWinVersion_Vista;
+  #else
+        const bool useVistaComboBox = false;
+  #endif
 
         RECT rFull;
         wxCopyRectToRECT(borderRect, rFull);
@@ -554,12 +568,17 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         int comboBoxPart = 0;  // For XP, use the 'default' part
         RECT* rUseForBg = &rBorder;
 
-        bool drawFullButton = false;
         int bgState = butState;
-        const bool isFocused = (FindFocus() == GetMainWindowOfCompositeControl()) ? true : false;
+
+  #if wxUSE_COMBOCTRL_VISTA_RENDERING
+        bool drawFullButton = false;
 
         if ( useVistaComboBox )
         {
+            const bool isFocused =
+                (FindFocus() == GetMainWindowOfCompositeControl()) ?
+                    true : false;
+
             // FIXME: Either SetBackgroundColour or GetBackgroundColour
             //        doesn't work under Vista, so here's a temporary
             //        workaround.
@@ -591,6 +610,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
                     bgState = CBB_NORMAL;
             }
         }
+  #endif
 
         //
         // Draw parent's background, if necessary
@@ -627,6 +647,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
             int butPart = CP_DROPDOWNBUTTON;
 
+  #if wxUSE_COMBOCTRL_VISTA_RENDERING
             if ( useVistaComboBox )
             {
                 if ( drawFullButton )
@@ -644,6 +665,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
                     butPart = CP_DROPDOWNBUTTONLEFT;
 
             }
+  #endif
             theme->DrawThemeBackground( hTheme, hDc, butPart, butState, &rButton, NULL );
         }
         else if ( useVistaComboBox &&
