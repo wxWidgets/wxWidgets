@@ -36,7 +36,7 @@ wxObject *wxToggleButtonXmlHandler::DoCreateResource()
 
    wxObject *control = m_instance;
 
-#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !defined(__WXPALMOS__) && !defined(__WXPM__)
+#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !defined(__WXPALMOS__) && !defined(__WXPM__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
 
     if (m_class == wxT("wxBitmapToggleButton"))
     {
@@ -88,6 +88,7 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
     button->SetValue(GetBool( wxT("checked")));
 }
 
+#if !defined(__WXUNIVERSAL__) && !defined(__WXMOTIF__) && !defined(__WXPALMOS__) && !defined(__WXPM__) && !(defined(__WXGTK__) && !defined(__WXGTK20__))
 void wxToggleButtonXmlHandler::DoCreateBitmapToggleButton(wxObject *control)
 {
     wxBitmapToggleButton *button = wxDynamicCast(control, wxBitmapToggleButton);
@@ -102,5 +103,5 @@ void wxToggleButtonXmlHandler::DoCreateBitmapToggleButton(wxObject *control)
 
     button->SetValue(GetBool( wxT("checked")));
 }
-
+#endif
 #endif // wxUSE_XRC && wxUSE_TOGGLEBTN
