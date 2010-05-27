@@ -354,6 +354,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/list.cpp
     src/common/log.cpp
     src/common/longlong.cpp
+    src/common/maskededit.cpp
+    src/common/maskedfield.cpp
     src/common/memory.cpp
     src/common/mimecmn.cpp
     src/common/module.cpp
@@ -477,6 +479,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/log.h
     wx/longlong.h
     wx/math.h
+    wx/maskedfield.h
+    wx/maskededit.h
     wx/memconf.h
     wx/memory.h
     wx/memtext.h

@@ -353,6 +353,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_list.o \
 	$(OBJS)\monodll_log.o \
 	$(OBJS)\monodll_longlong.o \
+	$(OBJS)\monodll_maskededit.o \
+	$(OBJS)\monodll_maskedfield.o \
 	$(OBJS)\monodll_memory.o \
 	$(OBJS)\monodll_mimecmn.o \
 	$(OBJS)\monodll_module.o \
@@ -501,6 +503,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_list.o \
 	$(OBJS)\monolib_log.o \
 	$(OBJS)\monolib_longlong.o \
+	$(OBJS)\monolib_maskededit.o \
+	$(OBJS)\monolib_maskedfield.o \
 	$(OBJS)\monolib_memory.o \
 	$(OBJS)\monolib_mimecmn.o \
 	$(OBJS)\monolib_module.o \
@@ -647,6 +651,8 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_list.o \
 	$(OBJS)\basedll_log.o \
 	$(OBJS)\basedll_longlong.o \
+	$(OBJS)\basedll_maskededit.o \
+	$(OBJS)\basedll_maskedfield.o \
 	$(OBJS)\basedll_memory.o \
 	$(OBJS)\basedll_mimecmn.o \
 	$(OBJS)\basedll_module.o \
@@ -777,6 +783,8 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_list.o \
 	$(OBJS)\baselib_log.o \
 	$(OBJS)\baselib_longlong.o \
+	$(OBJS)\baselib_maskededit.o \
+	$(OBJS)\baselib_maskedfield.o \
 	$(OBJS)\baselib_memory.o \
 	$(OBJS)\baselib_mimecmn.o \
 	$(OBJS)\baselib_module.o \
@@ -5945,6 +5953,12 @@ $(OBJS)\monodll_log.o: ../../src/common/log.cpp
 $(OBJS)\monodll_longlong.o: ../../src/common/longlong.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_maskedfield.o: ../../src/common/maskedfield.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_memory.o: ../../src/common/memory.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8139,6 +8153,12 @@ $(OBJS)\monolib_log.o: ../../src/common/log.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_longlong.o: ../../src/common/longlong.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_memory.o: ../../src/common/memory.cpp
@@ -10337,6 +10357,12 @@ $(OBJS)\basedll_log.o: ../../src/common/log.cpp
 $(OBJS)\basedll_longlong.o: ../../src/common/longlong.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_maskedfield.o: ../../src/common/maskedfield.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_memory.o: ../../src/common/memory.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10668,6 +10694,12 @@ $(OBJS)\baselib_log.o: ../../src/common/log.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_longlong.o: ../../src/common/longlong.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_maskededit.o: ../../src/common/maskededit.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_maskedfield.o: ../../src/common/maskedfield.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_memory.o: ../../src/common/memory.cpp

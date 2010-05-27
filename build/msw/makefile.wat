@@ -3561,6 +3561,8 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_list.obj &
 	$(OBJS)\monodll_log.obj &
 	$(OBJS)\monodll_longlong.obj &
+	$(OBJS)\monodll_maskededit.obj &
+	$(OBJS)\monodll_maskedfield.obj &
 	$(OBJS)\monodll_memory.obj &
 	$(OBJS)\monodll_mimecmn.obj &
 	$(OBJS)\monodll_module.obj &
@@ -3707,6 +3709,8 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_list.obj &
 	$(OBJS)\monolib_log.obj &
 	$(OBJS)\monolib_longlong.obj &
+	$(OBJS)\monolib_maskededit.obj &
+	$(OBJS)\monolib_maskedfield.obj &
 	$(OBJS)\monolib_memory.obj &
 	$(OBJS)\monolib_mimecmn.obj &
 	$(OBJS)\monolib_module.obj &
@@ -3851,6 +3855,8 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_list.obj &
 	$(OBJS)\basedll_log.obj &
 	$(OBJS)\basedll_longlong.obj &
+	$(OBJS)\basedll_maskededit.obj &
+	$(OBJS)\basedll_maskedfield.obj &
 	$(OBJS)\basedll_memory.obj &
 	$(OBJS)\basedll_mimecmn.obj &
 	$(OBJS)\basedll_module.obj &
@@ -3980,6 +3986,8 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_list.obj &
 	$(OBJS)\baselib_log.obj &
 	$(OBJS)\baselib_longlong.obj &
+	$(OBJS)\baselib_maskededit.obj &
+	$(OBJS)\baselib_maskedfield.obj &
 	$(OBJS)\baselib_memory.obj &
 	$(OBJS)\baselib_mimecmn.obj &
 	$(OBJS)\baselib_module.obj &
@@ -6203,6 +6211,12 @@ $(OBJS)\monodll_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
 $(OBJS)\monodll_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_maskededit.obj :  .AUTODEPEND ..\..\src\common\maskededit.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_maskedfield.obj :  .AUTODEPEND ..\..\src\common\maskedfield.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8397,6 +8411,12 @@ $(OBJS)\monolib_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_maskededit.obj :  .AUTODEPEND ..\..\src\common\maskededit.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_maskedfield.obj :  .AUTODEPEND ..\..\src\common\maskedfield.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
@@ -10595,6 +10615,12 @@ $(OBJS)\basedll_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
 $(OBJS)\basedll_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_maskededit.obj :  .AUTODEPEND ..\..\src\common\maskededit.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_maskedfield.obj :  .AUTODEPEND ..\..\src\common\maskedfield.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10926,6 +10952,12 @@ $(OBJS)\baselib_log.obj :  .AUTODEPEND ..\..\src\common\log.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_longlong.obj :  .AUTODEPEND ..\..\src\common\longlong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_maskededit.obj :  .AUTODEPEND ..\..\src\common\maskededit.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_maskedfield.obj :  .AUTODEPEND ..\..\src\common\maskedfield.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_memory.obj :  .AUTODEPEND ..\..\src\common\memory.cpp

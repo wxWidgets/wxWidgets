@@ -431,6 +431,14 @@ SOURCE=..\..\src\common\longlong.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\maskededit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\maskedfield.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\memory.cpp
 # End Source File
 # Begin Source File
@@ -1364,6 +1372,14 @@ SOURCE=..\..\include\wx\log.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\longlong.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\maskededit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\maskedfield.h
 # End Source File
 # Begin Source File
 

@@ -207,6 +207,8 @@ wx/listimpl.cpp
 wx/log.h
 wx/longlong.h
 wx/math.h
+wx/maskedfield.h
+wx/maskededit.h
 wx/memconf.h
 wx/memory.h
 wx/memtext.h

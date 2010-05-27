@@ -396,6 +396,8 @@ ALL_BASE_HEADERS =  \
 	wx/log.h \
 	wx/longlong.h \
 	wx/math.h \
+	wx/maskedfield.h \
+	wx/maskededit.h \
 	wx/memconf.h \
 	wx/memory.h \
 	wx/memtext.h \
@@ -563,6 +565,8 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/log.h \
 	wx/longlong.h \
 	wx/math.h \
+	wx/maskedfield.h \
+	wx/maskededit.h \
 	wx/memconf.h \
 	wx/memory.h \
 	wx/memtext.h \
@@ -739,6 +743,8 @@ ALL_BASE_SOURCES =  \
 	src/common/list.cpp \
 	src/common/log.cpp \
 	src/common/longlong.cpp \
+	src/common/maskededit.cpp \
+	src/common/maskedfield.cpp \
 	src/common/memory.cpp \
 	src/common/mimecmn.cpp \
 	src/common/module.cpp \
@@ -937,6 +943,8 @@ MONODLL_OBJECTS =  \
 	monodll_list.o \
 	monodll_log.o \
 	monodll_longlong.o \
+	monodll_maskededit.o \
+	monodll_maskedfield.o \
 	monodll_memory.o \
 	monodll_mimecmn.o \
 	monodll_module.o \
@@ -1069,6 +1077,8 @@ MONOLIB_OBJECTS =  \
 	monolib_list.o \
 	monolib_log.o \
 	monolib_longlong.o \
+	monolib_maskededit.o \
+	monolib_maskedfield.o \
 	monolib_memory.o \
 	monolib_mimecmn.o \
 	monolib_module.o \
@@ -1196,6 +1206,8 @@ BASEDLL_OBJECTS =  \
 	basedll_list.o \
 	basedll_log.o \
 	basedll_longlong.o \
+	basedll_maskededit.o \
+	basedll_maskedfield.o \
 	basedll_memory.o \
 	basedll_mimecmn.o \
 	basedll_module.o \
@@ -1306,6 +1318,8 @@ BASELIB_OBJECTS =  \
 	baselib_list.o \
 	baselib_log.o \
 	baselib_longlong.o \
+	baselib_maskededit.o \
+	baselib_maskedfield.o \
 	baselib_memory.o \
 	baselib_mimecmn.o \
 	baselib_module.o \
@@ -14877,6 +14891,12 @@ monodll_log.o: $(srcdir)/src/common/log.cpp $(MONODLL_ODEP)
 monodll_longlong.o: $(srcdir)/src/common/longlong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
 
+monodll_maskededit.o: $(srcdir)/src/common/maskededit.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/maskededit.cpp
+
+monodll_maskedfield.o: $(srcdir)/src/common/maskedfield.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/maskedfield.cpp
+
 monodll_memory.o: $(srcdir)/src/common/memory.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/memory.cpp
 
@@ -19733,6 +19753,12 @@ monolib_log.o: $(srcdir)/src/common/log.cpp $(MONOLIB_ODEP)
 
 monolib_longlong.o: $(srcdir)/src/common/longlong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
+
+monolib_maskededit.o: $(srcdir)/src/common/maskededit.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/maskededit.cpp
+
+monolib_maskedfield.o: $(srcdir)/src/common/maskedfield.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/maskedfield.cpp
 
 monolib_memory.o: $(srcdir)/src/common/memory.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/memory.cpp
@@ -24591,6 +24617,12 @@ basedll_log.o: $(srcdir)/src/common/log.cpp $(BASEDLL_ODEP)
 basedll_longlong.o: $(srcdir)/src/common/longlong.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
 
+basedll_maskededit.o: $(srcdir)/src/common/maskededit.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/maskededit.cpp
+
+basedll_maskedfield.o: $(srcdir)/src/common/maskedfield.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/maskedfield.cpp
+
 basedll_memory.o: $(srcdir)/src/common/memory.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/memory.cpp
 
@@ -25091,6 +25123,12 @@ baselib_log.o: $(srcdir)/src/common/log.cpp $(BASELIB_ODEP)
 
 baselib_longlong.o: $(srcdir)/src/common/longlong.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/longlong.cpp
+
+baselib_maskededit.o: $(srcdir)/src/common/maskededit.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/maskededit.cpp
+
+baselib_maskedfield.o: $(srcdir)/src/common/maskedfield.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/maskedfield.cpp
 
 baselib_memory.o: $(srcdir)/src/common/memory.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/memory.cpp
