@@ -539,7 +539,8 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         RECT rBorder;
         wxCopyRectToRECT(borderRect, rBorder);
 
-        wxUint32 isNonStdButton = (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE);
+        bool isNonStdButton = (m_iFlags & wxCC_IFLAG_BUTTON_OUTSIDE) ||
+                              (m_iFlags & wxCC_IFLAG_HAS_NONSTANDARD_BUTTON);
 
         //
         // Get some states for themed drawing

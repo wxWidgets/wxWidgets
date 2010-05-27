@@ -2110,6 +2110,9 @@ void wxComboCtrlBase::SetButtonPosition( int width, int height,
     m_btnSide = side;
     m_btnSpacingX = spacingX;
 
+    if ( width > 0 || height > 0 || spacingX )
+        m_iFlags |= wxCC_IFLAG_HAS_NONSTANDARD_BUTTON;
+
     RecalcAndRefresh();
 }
 

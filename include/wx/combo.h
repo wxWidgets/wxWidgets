@@ -93,7 +93,11 @@ enum
     // Internal use: Secondary popup window type should be used (if available).
     wxCC_IFLAG_USE_ALT_POPUP        = 0x1000,
     // Internal use: Skip popup animation.
-    wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000
+    wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000,
+    // Internal use: Drop-button is a bitmap button or has non-default size
+    // (but can still be on either side of the control), regardless whether
+    // specified by the platform or the application.
+    wxCC_IFLAG_HAS_NONSTANDARD_BUTTON   = 0x4000
 };
 
 
