@@ -100,6 +100,8 @@ wxMSW:
 
 - Backported improved wxOwnerDrawnComboBox and wxComboCtrl appearance under
   Windows Vista/7.
+- wxOwnerDrawnComboBox and wxComboCtrl with wxCB_READONLY window style now
+  have more native-like focus indicator rendering.
 
 2.8.11:
 -------
