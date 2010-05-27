@@ -706,15 +706,15 @@ void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 
     event.Skip();
 
-    if ( evtType == wxEVT_MOTION ||
-         evtType == wxEVT_LEFT_DOWN ||
-         evtType == wxEVT_RIGHT_DOWN )
+    // Block motion and click events outside the popup
+    if ( (!isInside || !m_combo->IsPopupShown())
+            &&
+         (evtType == wxEVT_MOTION ||
+          evtType == wxEVT_LEFT_DOWN ||
+          evtType == wxEVT_LEFT_UP ||
+          evtType == wxEVT_RIGHT_DOWN) )
     {
-        // Block motion and click events outside the popup
-        if ( !isInside || !m_combo->IsPopupShown() )
-        {
-            event.Skip(false);
-        }
+        event.Skip(false);
     }
     else if ( evtType == wxEVT_LEFT_UP )
     {
