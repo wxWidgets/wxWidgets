@@ -35,6 +35,7 @@ wxMaskedField::wxMaskedField(const wxMaskedField& maskedField)
 
 wxMaskedField::wxMaskedField( wxString& mask
                  , const wxString& formatCodes
+                 , const wxString& defaultValue
                  , const wxArrayString& choices
                  , const bool  autoSelect
                  , const wxChar groupChar, const wxChar decimalPoint
@@ -42,8 +43,10 @@ wxMaskedField::wxMaskedField( wxString& mask
 {
     unsigned int it;
 
+    //FIXME ajouter des tests
     m_mask         = mask;
     m_formatCodes  = formatCodes;
+    m_defaultValue = defaultValue;
     m_autoSelect   = autoSelect;
     m_groupChar    = groupChar;
     m_decimalPoint = decimalPoint;
@@ -87,6 +90,18 @@ bool wxMaskedField::IsPunctuation(const wxChar character) const
         || character == '.' || character == ':' || character == '!';
 }
 
+wxString wxMaskedField::ApplyFormatCodes(wxString& string)
+{
+    if(m_formatCodes.Contains(wxT("!")))
+    {
+        return string.Upper();
+    }
+    else if(m_formatCodes.Contains(wxT("^")))
+    {
+        return string.Lower();
+    }
+}
+
 
 bool wxMaskedField::IsCharValid(const wxChar maskChar, const wxChar character) const
 {
@@ -120,6 +135,8 @@ bool wxMaskedField::IsCharValid(const wxChar maskChar, const wxChar character) c
             res = true;
         break;
         default:
+            if(maskChar == character)
+                res = true;
             res = false;
     }
 
@@ -139,7 +156,14 @@ bool wxMaskedField::IsValid(const wxString& string) const
     
     for(it = 0; it < m_mask.Len() && res; it++)
     {
-        if(!IsCharValid(m_mask[it], string[it]))
+        if(m_mask[it] == '\\' && it != m_mask.Len() - 1)
+        {
+            if(string[it] != m_mask[it + 1])
+                res = false;
+
+            it++;
+        }
+        else if(!IsCharValid(m_mask[it], string[it]))
         {
             res = false;
         }

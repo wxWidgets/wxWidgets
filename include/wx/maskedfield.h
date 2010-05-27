@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 #define wxDEFAULT_FORMAT_CODES (wxT("F"))
+#define wxDEFAULT_VALUE   (wxT(" "))
 
 class wxMaskedField
 {
@@ -25,6 +26,7 @@ public:
     
     wxMaskedField( wxString& mask        
                  , const wxString& formatCodes  = wxDEFAULT_FORMAT_CODES
+                 , const wxString& defaultValue = wxDEFAULT_VALUE
                  , const wxArrayString& choices = NULL
                  , const bool  autoSelect = false
                  , const wxChar groupChar = ' ',const wxChar decimalPoint = '.'
@@ -33,7 +35,8 @@ public:
 
     bool IsEmpty(const wxString& string) const;
 
-    bool IsCharValid(const wxChar maskChar, const wxChar character) const;
+    wxString ApplyFormatCodes(wxString& string);
+    
     bool IsValid(const wxString& string) const;
 
     wxString GetMask() const;
@@ -54,6 +57,9 @@ private:
     
     // The format codes, see wxMaskedEdit
     wxString m_formatCodes;
+
+    // The default value
+    wxString m_defaultValue;
     
     // The default choices
     wxArrayString m_choices;
@@ -68,6 +74,7 @@ private:
     // Use (###) in place of -###
     bool m_useParensForNegatives;
 
+    bool IsCharValid(const wxChar maskChar, const wxChar character) const;
     bool IsNumber(const wxChar character) const;
     bool IsLowerCase(const wxChar character) const;    
     bool IsUpperCase(const wxChar character) const;
