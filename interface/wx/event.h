@@ -2014,17 +2014,17 @@ public:
     @event{EVT_RIGHT_DCLICK(func)}
         Process a @c wxEVT_RIGHT_DCLICK event.
     @event{EVT_MOUSE_AUX1_DOWN(func)}
-        Process a @c wxEVT_MOUSE_AUX1_DOWN event.
+        Process a @c wxEVT_AUX1_DOWN event.
     @event{EVT_MOUSE_AUX1_UP(func)}
-        Process a @c wxEVT_MOUSE_AUX1_UP event.
+        Process a @c wxEVT_AUX1_UP event.
     @event{EVT_MOUSE_AUX1_DCLICK(func)}
-        Process a @c wxEVT_MOUSE_AUX1_DCLICK event.
+        Process a @c wxEVT_AUX1_DCLICK event.
     @event{EVT_MOUSE_AUX2_DOWN(func)}
-        Process a @c wxEVT_MOUSE_AUX2_DOWN event.
+        Process a @c wxEVT_AUX2_DOWN event.
     @event{EVT_MOUSE_AUX2_UP(func)}
-        Process a @c wxEVT_MOUSE_AUX2_UP event.
+        Process a @c wxEVT_AUX2_UP event.
     @event{EVT_MOUSE_AUX2_DCLICK(func)}
-        Process a @c wxEVT_MOUSE_AUX2_DCLICK event.
+        Process a @c wxEVT_AUX2_DCLICK event.
     @event{EVT_MOTION(func)}
         Process a @c wxEVT_MOTION event.
     @event{EVT_ENTER_WINDOW(func)}
