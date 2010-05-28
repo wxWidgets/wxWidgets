@@ -12,10 +12,66 @@
     This class represents the file chooser dialog.
 
     The path and filename are distinct elements of a full file pathname.
-    If path is wxEmptyString, the current directory will be used.
-    If filename is wxEmptyString, no default filename will be supplied.
+    If path is ::wxEmptyString, the current directory will be used.
+    If filename is ::wxEmptyString, no default filename will be supplied.
     The wildcard determines what files are displayed in the file selector,
     and file extension supplies a type extension for the required filename.
+
+    The typical usage for the open file dialog is:
+    @code
+    void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
+    {
+        if (...current content has not been saved...)
+        {
+            if (wxMessageBox(_("Current content has not been saved! Proceed?"), _("Please confirm"),
+                             wxICON_QUESTION | wxYES_NO, this) == wxNO )
+                return;
+            //else: proceed asking to the user the new file to open
+        }
+        
+        wxFileDialog 
+            openFileDialog(this, _("Open XYZ file"), "", "",
+                           "XYZ files (*.xyz)|*.xyz", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+
+        if (openFileDialog.ShowModal() == wxID_CANCEL)
+            return;     // the user changed idea...
+        
+        // proceed loading the file chosen by the user;
+        // this can be done with e.g. wxWidgets input streams:
+        wxFileInputStream input_stream(openFileDialog.GetPath());
+        if (!input_stream.IsOk())
+        {
+            wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
+            return;
+        }
+        
+        ...
+    }
+    @endcode
+    
+    The typical usage for the save file dialog is instead somewhat simpler:
+    @code
+    void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
+    {
+        wxFileDialog 
+            saveFileDialog(this, _("Save XYZ file"), "", "",
+                           "XYZ files (*.xyz)|*.xyz", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+
+        if (saveFileDialog.ShowModal() == wxID_CANCEL)
+            return;     // the user changed idea...
+        
+        // save the current contents in the file;
+        // this can be done with e.g. wxWidgets output streams:
+        wxFileOutputStream output_stream(saveFileDialog.GetPath());
+        if (!output_stream.IsOk())
+        {
+            wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
+            return;
+        }
+        
+        ...
+    }
+    @endcode
 
     @remarks
     All implementations of the wxFileDialog provide a wildcard filter. Typing a filename
@@ -34,13 +90,13 @@
 
     @beginStyleTable
     @style{wxFD_DEFAULT_STYLE}
-           Equivalent to wxFD_OPEN.
+           Equivalent to @c wxFD_OPEN.
     @style{wxFD_OPEN}
            This is an open dialog; usually this means that the default
-           button's label of the dialog is "Open". Cannot be combined with wxFD_SAVE.
+           button's label of the dialog is "Open". Cannot be combined with @c wxFD_SAVE.
     @style{wxFD_SAVE}
            This is a save dialog; usually this means that the default button's
-           label of the dialog is "Save". Cannot be combined with wxFD_OPEN.
+           label of the dialog is "Save". Cannot be combined with @c wxFD_OPEN.
     @style{wxFD_OVERWRITE_PROMPT}
            For save dialog only: prompt for a confirmation if a file will be
            overwritten.
@@ -49,8 +105,8 @@
     @style{wxFD_MULTIPLE}
            For open dialog only: allows selecting multiple files.
     @style{wxFD_CHANGE_DIR}
-           Change the current working directory to the directory where the
-           file(s) chosen by the user are.
+           Change the current working directory (when the dialog is dismissed) 
+           to the directory where the file(s) chosen by the user are.
     @style{wxFD_PREVIEW}
            Show the preview of the selected files (currently only supported by
            wxGTK).
@@ -80,7 +136,7 @@ public:
             Note that the native Motif dialog has some limitations with respect to
             wildcards; see the Remarks section above.
         @param style
-            A dialog style. See wxFD_* styles for more info.
+            A dialog style. See @c wxFD_* styles for more info.
         @param pos
             Dialog position. Not implemented.
         @param size
@@ -228,7 +284,7 @@ public:
     virtual void SetWildcard(const wxString& wildCard);
 
     /**
-        Shows the dialog, returning wxID_OK if the user pressed OK, and wxID_CANCEL
+        Shows the dialog, returning @c wxID_OK if the user pressed OK, and @c wxID_CANCEL
         otherwise.
     */
     virtual int ShowModal();
