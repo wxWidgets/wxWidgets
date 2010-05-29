@@ -28,10 +28,20 @@ const char wxFileCtrlNameStr[] = "wxfilectrl";
 wxDEFINE_EVENT( wxEVT_FILECTRL_SELECTIONCHANGED, wxFileCtrlEvent );
 wxDEFINE_EVENT( wxEVT_FILECTRL_FILEACTIVATED, wxFileCtrlEvent );
 wxDEFINE_EVENT( wxEVT_FILECTRL_FOLDERCHANGED, wxFileCtrlEvent );
+wxDEFINE_EVENT( wxEVT_FILECTRL_FILTERCHANGED, wxFileCtrlEvent );
 
 IMPLEMENT_DYNAMIC_CLASS( wxFileCtrlEvent, wxCommandEvent )
 
 // some helper functions
+
+void GenerateFilterChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd )
+{
+    wxFileCtrlEvent event( wxEVT_FILECTRL_FILTERCHANGED, wnd, wnd->GetId() );
+
+    event.SetFilterIndex( fileCtrl->GetFilterIndex() );
+
+    wnd->GetEventHandler()->ProcessEvent( event );
+}
 
 void GenerateFolderChangedEvent( wxFileCtrlBase *fileCtrl, wxWindow *wnd )
 {

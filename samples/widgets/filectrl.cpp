@@ -130,6 +130,7 @@ BEGIN_EVENT_TABLE( FileCtrlWidgetsPage, WidgetsPage )
     EVT_CHECKBOX( wxID_ANY, FileCtrlWidgetsPage::OnCheckBox )
     EVT_RADIOBOX( wxID_ANY, FileCtrlWidgetsPage::OnRadioBox )
 
+    EVT_FILECTRL_FILTERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FOLDERCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_SELECTIONCHANGED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
     EVT_FILECTRL_FILEACTIVATED( wxID_ANY, FileCtrlWidgetsPage::OnFileCtrl )
@@ -316,6 +317,11 @@ void FileCtrlWidgetsPage::OnFileCtrl( wxFileCtrlEvent& event )
     else if ( event.GetEventType() == wxEVT_FILECTRL_SELECTIONCHANGED )
     {
         wxLogMessage("Selection changed event: %s", wxJoin(event.GetFiles(), ' '));
+    }
+    else if ( event.GetEventType() == wxEVT_FILECTRL_FILTERCHANGED )
+    {
+        wxLogMessage("Filter changed event: filter %d selected",
+                     event.GetFilterIndex() + 1);
     }
 }
 
