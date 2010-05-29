@@ -689,7 +689,10 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
 
         wxFontData data;
         wxFont font;
-        font << useValue;
+
+        if ( useValue.GetType() == wxS("wxFont") )
+            font << useValue;
+
         data.SetInitialFont( font );
         data.SetColour(*wxBLACK);
 
