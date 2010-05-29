@@ -345,6 +345,10 @@ SOURCE=.\fswatcher\fswatchertest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uris\ftp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\hashes\hashes.cpp
 # End Source File
 # Begin Source File

@@ -331,6 +331,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_misc.obj &
 	$(OBJS)\test_queue.obj &
 	$(OBJS)\test_tls.obj &
+	$(OBJS)\test_ftp.obj &
 	$(OBJS)\test_uris.obj &
 	$(OBJS)\test_url.obj &
 	$(OBJS)\test_vectors.obj &
@@ -624,6 +625,9 @@ $(OBJS)\test_queue.obj :  .AUTODEPEND .\thread\queue.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_tls.obj :  .AUTODEPEND .\thread\tls.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_ftp.obj :  .AUTODEPEND .\uris\ftp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp

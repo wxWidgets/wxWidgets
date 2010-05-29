@@ -695,6 +695,9 @@
 				RelativePath=".\fswatcher\fswatchertest.cpp">
 			</File>
 			<File
+				RelativePath=".\uris\ftp.cpp">
+			</File>
+			<File
 				RelativePath=".\hashes\hashes.cpp">
 			</File>
 			<File

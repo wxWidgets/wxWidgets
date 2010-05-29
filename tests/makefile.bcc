@@ -101,6 +101,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_misc.obj \
 	$(OBJS)\test_queue.obj \
 	$(OBJS)\test_tls.obj \
+	$(OBJS)\test_ftp.obj \
 	$(OBJS)\test_uris.obj \
 	$(OBJS)\test_url.obj \
 	$(OBJS)\test_vectors.obj \
@@ -587,6 +588,9 @@ $(OBJS)\test_queue.obj: .\thread\queue.cpp
 
 $(OBJS)\test_tls.obj: .\thread\tls.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\thread\tls.cpp
+
+$(OBJS)\test_ftp.obj: .\uris\ftp.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\uris\ftp.cpp
 
 $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\uris\uris.cpp

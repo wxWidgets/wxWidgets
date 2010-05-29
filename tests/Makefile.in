@@ -117,6 +117,7 @@ TEST_OBJECTS =  \
 	test_misc.o \
 	test_queue.o \
 	test_tls.o \
+	test_ftp.o \
 	test_uris.o \
 	test_url.o \
 	test_vectors.o \
@@ -545,6 +546,9 @@ test_queue.o: $(srcdir)/thread/queue.cpp $(TEST_ODEP)
 
 test_tls.o: $(srcdir)/thread/tls.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/tls.cpp
+
+test_ftp.o: $(srcdir)/uris/ftp.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/ftp.cpp
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp

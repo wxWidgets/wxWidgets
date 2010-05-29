@@ -92,6 +92,7 @@
             thread/misc.cpp
             thread/queue.cpp
             thread/tls.cpp
+            uris/ftp.cpp
             uris/uris.cpp
             uris/url.cpp
             vectors/vectors.cpp
