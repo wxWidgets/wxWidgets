@@ -39,9 +39,9 @@ public:
     
     
     
-    //    Return the value of the wxTextEntry associated
+    //    Return the value of the wstring associated
     //    without the mask
-    wxString GetPlainValue();
+    wxString GetPlainValue(wxString string);
     
     
     //Clear the mask and the cursor return in the beginning of the mask
@@ -49,16 +49,17 @@ public:
     
  
     //Set the value in the text control associated
-    bool SetValue(wxString value);
+   // bool SetValue(wxString value);
     
     //Test if the current sequence is valid
-    bool IsValid() const;
+    bool IsValid(wxString string) const;
     
     //Test if the current sequence is empty 
-    bool IsEmpty() const;
+    bool IsEmpty(wxString string) const;
     
     //Set the mask to a new value. 
     void SetMask(wxString mask);
+
     
     wxString GetMask() const;
     
@@ -94,8 +95,9 @@ public:
     
 private:
     fieldsArray m_mask;
-    int m_cursor_field;
-    int m_cursor_inside_field;
+    wxString m_maskValue;
+    int m_cursorField;
+    int m_cursorInsideField;
 
         
 };   

@@ -57,6 +57,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_logtest.obj \
 	$(OBJS)\test_longlongtest.obj \
+	$(OBJS)\test_maskedfield.obj \
 	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_misctests.obj \
@@ -597,6 +598,9 @@ $(OBJS)\test_logtest.obj: .\log\logtest.cpp
 
 $(OBJS)\test_longlongtest.obj: .\longlong\longlongtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\longlong\longlongtest.cpp
+
+$(OBJS)\test_maskedfield.obj: .\masked\maskedfield.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\masked\maskedfield.cpp
 
 $(OBJS)\test_convautotest.obj: .\mbconv\convautotest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\mbconv\convautotest.cpp

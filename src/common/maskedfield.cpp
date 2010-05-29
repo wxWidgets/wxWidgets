@@ -90,7 +90,7 @@ bool wxMaskedField::IsPunctuation(const wxChar character) const
         || character == '.' || character == ':' || character == '!';
 }
 
-wxString wxMaskedField::ApplyFormatCodes(wxString& string)
+wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 {
     if(m_formatCodes.Contains(wxT("!")))
     {
@@ -147,6 +147,7 @@ bool wxMaskedField::IsCharValid(const wxChar maskChar, const wxChar character) c
 bool wxMaskedField::IsValid(const wxString& string) const
 {
     unsigned int it;
+    unsigned int itMask;
     bool res = true;
 
     if(string.Len() > m_mask.Len())
@@ -154,16 +155,16 @@ bool wxMaskedField::IsValid(const wxString& string) const
         res = false;
     }
     
-    for(it = 0; it < m_mask.Len() && res; it++)
+    for(it = 0, itMask = 0; itMask < m_mask.Len() && res && it < string.Len(); it++, itMask++)
     {
-        if(m_mask[it] == '\\' && it != m_mask.Len() - 1)
+        if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
         {
-            if(string[it] != m_mask[it + 1])
+            if(string[it] != m_mask[itMask + 1])
                 res = false;
 
-            it++;
+            itMask++;
         }
-        else if(!IsCharValid(m_mask[it], string[it]))
+        else if(!IsCharValid(m_mask[itMask], string[it]))
         {
             res = false;
         }
@@ -205,3 +206,39 @@ bool wxMaskedField::IsAutoSelect() const
 
 
 
+wxString wxMaskedField::GetPlainValue(const wxString& string)
+{
+    unsigned int it;
+    unsigned int itMask;
+    wxString res;
+    wxString formatString = ApplyFormatCodes(string);
+    
+    if(!IsValid(formatString))
+    {
+        res = wxEmptyString;
+    }
+    else
+    {
+        for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
+        {
+            if(string[it] != m_mask[it])
+            {
+                res << string[itMask];
+
+                if(m_mask[itMask] == '\\')
+                    itMask++;
+            }
+            else
+            {
+                if(m_mask[it] == 'C' || m_mask[it] == 'A' || m_mask[it] == 'a' ||
+                   m_mask[it] == 'X' || m_mask[it] == '&' || m_mask[it] == '*' ||
+                   m_mask[it] == 'N')
+                {
+                    res << string[itMask];
+                }
+            }
+        }   
+    }
+
+    return res;
+}

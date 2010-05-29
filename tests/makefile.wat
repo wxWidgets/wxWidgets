@@ -293,6 +293,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_logtest.obj &
 	$(OBJS)\test_longlongtest.obj &
+	$(OBJS)\test_maskedfield.obj &
 	$(OBJS)\test_convautotest.obj &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_misctests.obj &
@@ -508,6 +509,9 @@ $(OBJS)\test_logtest.obj :  .AUTODEPEND .\log\logtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_longlongtest.obj :  .AUTODEPEND .\longlong\longlongtest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_maskedfield.obj :  .AUTODEPEND .\masked\maskedfield.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_convautotest.obj :  .AUTODEPEND .\mbconv\convautotest.cpp

@@ -79,6 +79,7 @@ TEST_OBJECTS =  \
 	test_lists.o \
 	test_logtest.o \
 	test_longlongtest.o \
+	test_maskedfield.o \
 	test_convautotest.o \
 	test_mbconvtest.o \
 	test_misctests.o \
@@ -429,6 +430,9 @@ test_logtest.o: $(srcdir)/log/logtest.cpp $(TEST_ODEP)
 
 test_longlongtest.o: $(srcdir)/longlong/longlongtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/longlong/longlongtest.cpp
+
+test_maskedfield.o: $(srcdir)/masked/maskedfield.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/masked/maskedfield.cpp
 
 test_convautotest.o: $(srcdir)/mbconv/convautotest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/mbconv/convautotest.cpp

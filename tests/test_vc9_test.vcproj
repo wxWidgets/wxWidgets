@@ -1008,6 +1008,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\masked\maskedfield.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\mbconv\mbconvtest.cpp"
 				>
 			</File>

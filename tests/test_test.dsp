@@ -381,6 +381,10 @@ SOURCE=.\longlong\longlongtest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\masked\maskedfield.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\mbconv\mbconvtest.cpp
 # End Source File
 # Begin Source File

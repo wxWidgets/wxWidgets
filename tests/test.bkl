@@ -54,6 +54,7 @@
             lists/lists.cpp
             log/logtest.cpp
             longlong/longlongtest.cpp
+            masked/maskedfield.cpp
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
             misc/misctests.cpp

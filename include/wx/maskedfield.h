@@ -35,7 +35,7 @@ public:
 
     bool IsEmpty(const wxString& string) const;
 
-    wxString ApplyFormatCodes(wxString& string);
+    wxString ApplyFormatCodes(const wxString& string);
     
     bool IsValid(const wxString& string) const;
 
@@ -50,6 +50,8 @@ public:
     bool IsParensForNegatives() const;
 
     bool IsAutoSelect() const;
+
+    wxString GetPlainValue(const wxString& string);
     
 private:
     // The mask in the field see wxMaskedEdit
