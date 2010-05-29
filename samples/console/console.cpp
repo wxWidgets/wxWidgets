@@ -126,7 +126,6 @@
     #define TEST_REGISTRY
     #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
-//    #define TEST_SOCKETS  --FIXME! (RN)
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -147,25 +146,6 @@
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// helper functions
-// ----------------------------------------------------------------------------
-
-#if defined(TEST_SOCKETS)
-
-// replace TABs with \t and CRs with \n
-static wxString MakePrintable(const wxChar *s)
-{
-    wxString str(s);
-    (void)str.Replace(wxT("\t"), wxT("\\t"));
-    (void)str.Replace(wxT("\n"), wxT("\\n"));
-    (void)str.Replace(wxT("\r"), wxT("\\r"));
-
-    return str;
-}
-
-#endif // MakePrintable() is used
 
 // ----------------------------------------------------------------------------
 // wxCmdLineParser
@@ -2208,152 +2188,6 @@ static void TestScopeGuard()
 #endif
 
 // ----------------------------------------------------------------------------
-// sockets
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_SOCKETS
-
-#include "wx/socket.h"
-#include "wx/protocol/protocol.h"
-#include "wx/protocol/http.h"
-
-static void TestSocketServer()
-{
-    wxPuts(wxT("*** Testing wxSocketServer ***\n"));
-
-    static const int PORT = 3000;
-
-    wxIPV4address addr;
-    addr.Service(PORT);
-
-    wxSocketServer *server = new wxSocketServer(addr);
-    if ( !server->Ok() )
-    {
-        wxPuts(wxT("ERROR: failed to bind"));
-
-        return;
-    }
-
-    bool quit = false;
-    while ( !quit )
-    {
-        wxPrintf(wxT("Server: waiting for connection on port %d...\n"), PORT);
-
-        wxSocketBase *socket = server->Accept();
-        if ( !socket )
-        {
-            wxPuts(wxT("ERROR: wxSocketServer::Accept() failed."));
-            break;
-        }
-
-        wxPuts(wxT("Server: got a client."));
-
-        server->SetTimeout(60); // 1 min
-
-        bool close = false;
-        while ( !close && socket->IsConnected() )
-        {
-            wxString s;
-            wxChar ch = wxT('\0');
-            for ( ;; )
-            {
-                if ( socket->Read(&ch, sizeof(ch)).Error() )
-                {
-                    // don't log error if the client just close the connection
-                    if ( socket->IsConnected() )
-                    {
-                        wxPuts(wxT("ERROR: in wxSocket::Read."));
-                    }
-
-                    break;
-                }
-
-                if ( ch == '\r' )
-                    continue;
-
-                if ( ch == '\n' )
-                    break;
-
-                s += ch;
-            }
-
-            if ( ch != '\n' )
-            {
-                break;
-            }
-
-            wxPrintf(wxT("Server: got '%s'.\n"), s.c_str());
-            if ( s == wxT("close") )
-            {
-                wxPuts(wxT("Closing connection"));
-
-                close = true;
-            }
-            else if ( s == wxT("quit") )
-            {
-                close =
-                quit = true;
-
-                wxPuts(wxT("Shutting down the server"));
-            }
-            else // not a special command
-            {
-                socket->Write(s.MakeUpper().c_str(), s.length());
-                socket->Write("\r\n", 2);
-                wxPrintf(wxT("Server: wrote '%s'.\n"), s.c_str());
-            }
-        }
-
-        if ( !close )
-        {
-            wxPuts(wxT("Server: lost a client unexpectedly."));
-        }
-
-        socket->Destroy();
-    }
-
-    // same as "delete server" but is consistent with GUI programs
-    server->Destroy();
-}
-
-static void TestSocketClient()
-{
-    wxPuts(wxT("*** Testing wxSocketClient ***\n"));
-
-    static const wxChar *hostname = wxT("www.wxwidgets.org");
-
-    wxIPV4address addr;
-    addr.Hostname(hostname);
-    addr.Service(80);
-
-    wxPrintf(wxT("--- Attempting to connect to %s:80...\n"), hostname);
-
-    wxSocketClient client;
-    if ( !client.Connect(addr) )
-    {
-        wxPrintf(wxT("ERROR: failed to connect to %s\n"), hostname);
-    }
-    else
-    {
-        wxPrintf(wxT("--- Connected to %s:%u...\n"),
-               addr.Hostname().c_str(), addr.Service());
-
-        wxChar buf[8192];
-
-        // could use simply "GET" here I suppose
-        wxString cmdGet =
-            wxString::Format(wxT("GET http://%s/\r\n"), hostname);
-        client.Write(cmdGet, cmdGet.length());
-        wxPrintf(wxT("--- Sent command '%s' to the server\n"),
-               MakePrintable(cmdGet).c_str());
-        client.Read(buf, WXSIZEOF(buf));
-        wxPrintf(wxT("--- Server replied:\n%s"), buf);
-    }
-}
-
-#endif // TEST_SOCKETS
-
-// ----------------------------------------------------------------------------
 // FTP
 // ----------------------------------------------------------------------------
 
@@ -2946,11 +2780,6 @@ int main(int argc, char **argv)
     TestRegistryRead();
     TestRegistryAssociation();
 #endif // TEST_REGISTRY
-
-#ifdef TEST_SOCKETS
-    TestSocketServer();
-    TestSocketClient();
-#endif // TEST_SOCKETS
 
 #ifdef TEST_DATETIME
     #if TEST_INTERACTIVE
