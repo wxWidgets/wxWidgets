@@ -105,7 +105,6 @@
 
 
 #if TEST_ALL
-    #define TEST_CMDLINE
     #define TEST_DATETIME
     #define TEST_DIR
     #define TEST_DYNLIB
@@ -125,13 +124,13 @@
     #define TEST_REGEX
     #define TEST_REGISTRY
     #define TEST_SCOPEGUARD
-    #define TEST_SNGLINST
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
     #define TEST_STDPATHS
     #define TEST_STACKWALKER
     #define TEST_FTP
+    #define TEST_SNGLINST
 #endif
 
 // some tests are interactive, define this to run them
@@ -146,79 +145,6 @@
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxCmdLineParser
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_CMDLINE
-
-#include "wx/cmdline.h"
-#include "wx/datetime.h"
-
-#if wxUSE_CMDLINE_PARSER
-
-static void ShowCmdLine(const wxCmdLineParser& parser)
-{
-    wxString s = wxT("Command line parsed successfully:\nInput files: ");
-
-    size_t count = parser.GetParamCount();
-    for ( size_t param = 0; param < count; param++ )
-    {
-        s << parser.GetParam(param) << ' ';
-    }
-
-    s << '\n'
-      << wxT("Verbose:\t") << (parser.Found(wxT("v")) ? wxT("yes") : wxT("no")) << '\n'
-      << wxT("Quiet:\t") << (parser.Found(wxT("q")) ? wxT("yes") : wxT("no")) << '\n';
-
-    wxString strVal;
-    long lVal;
-    double dVal;
-    wxDateTime dt;
-    if ( parser.Found(wxT("o"), &strVal) )
-        s << wxT("Output file:\t") << strVal << '\n';
-    if ( parser.Found(wxT("i"), &strVal) )
-        s << wxT("Input dir:\t") << strVal << '\n';
-    if ( parser.Found(wxT("s"), &lVal) )
-        s << wxT("Size:\t") << lVal << '\n';
-    if ( parser.Found(wxT("f"), &dVal) )
-        s << wxT("Double:\t") << dVal << '\n';
-    if ( parser.Found(wxT("d"), &dt) )
-        s << wxT("Date:\t") << dt.FormatISODate() << '\n';
-    if ( parser.Found(wxT("project_name"), &strVal) )
-        s << wxT("Project:\t") << strVal << '\n';
-
-    wxLogMessage(s);
-}
-
-#endif // wxUSE_CMDLINE_PARSER
-
-static void TestCmdLineConvert()
-{
-    static const wxChar *cmdlines[] =
-    {
-        wxT("arg1 arg2"),
-        wxT("-a \"-bstring 1\" -c\"string 2\" \"string 3\""),
-        wxT("literal \\\" and \"\""),
-    };
-
-    for ( size_t n = 0; n < WXSIZEOF(cmdlines); n++ )
-    {
-        const wxChar *cmdline = cmdlines[n];
-        wxPrintf(wxT("Parsing: %s\n"), cmdline);
-        wxArrayString args = wxCmdLineParser::ConvertStringToArgs(cmdline);
-
-        size_t count = args.GetCount();
-        wxPrintf(wxT("\targc = %u\n"), count);
-        for ( size_t arg = 0; arg < count; arg++ )
-        {
-            wxPrintf(wxT("\targv[%u] = %s\n"), arg, args[arg].c_str());
-        }
-    }
-}
-
-#endif // TEST_CMDLINE
 
 // ----------------------------------------------------------------------------
 // wxDir
@@ -2247,6 +2173,7 @@ static bool TestFtpConnect()
     return true;
 }
 
+#if TEST_INTERACTIVE
 static void TestFtpInteractive()
 {
     wxPuts(wxT("\n*** Interactive wxFTP test ***"));
@@ -2305,9 +2232,9 @@ static void TestFtpInteractive()
         }
     }
 
-    wxPuts(wxT("\n*** done ***"));
+    wxPuts(wxT("\n"));
 }
-
+#endif // TEST_INTERACTIVE
 #endif // TEST_FTP
 
 // ----------------------------------------------------------------------------
@@ -2371,7 +2298,7 @@ protected:
 
 static void TestStackWalk(const char *argv0)
 {
-    wxPuts(wxT("*** Testing wxStackWalker ***\n"));
+    wxPuts(wxT("*** Testing wxStackWalker ***"));
 
     StackDump dump(argv0);
     dump.Walk();
@@ -2394,7 +2321,7 @@ static void TestStackWalk(const char *argv0)
 
 static void TestStandardPaths()
 {
-    wxPuts(wxT("*** Testing wxStandardPaths ***\n"));
+    wxPuts(wxT("*** Testing wxStandardPaths ***"));
 
     wxTheApp->SetAppName(wxT("console"));
 
@@ -2541,12 +2468,47 @@ static void TestDateTimeInteractive()
 #endif // TEST_DATETIME
 
 // ----------------------------------------------------------------------------
-// entry point
+// single instance
 // ----------------------------------------------------------------------------
 
 #ifdef TEST_SNGLINST
-    #include "wx/snglinst.h"
+
+#include "wx/snglinst.h"
+
+static bool TestSingleIstance()
+{
+    wxPuts(wxT("\n*** Testing wxSingleInstanceChecker ***"));
+
+    wxSingleInstanceChecker checker;
+    if ( checker.Create(wxT(".wxconsole.lock")) )
+    {
+        if ( checker.IsAnotherRunning() )
+        {
+            wxPrintf(wxT("Another instance of the program is running, exiting.\n"));
+
+            return false;
+        }
+
+        // wait some time to give time to launch another instance
+        wxPuts(wxT("If you try to run another instance of this program now, it won't start."));
+        wxPrintf(wxT("Press \"Enter\" to exit wxSingleInstanceChecker test and proceed..."));
+        wxFgetc(stdin);
+    }
+    else // failed to create
+    {
+        wxPrintf(wxT("Failed to init wxSingleInstanceChecker.\n"));
+    }
+    
+    wxPuts("\n");
+    
+    return true;
+}
 #endif // TEST_SNGLINST
+
+
+// ----------------------------------------------------------------------------
+// entry point
+// ----------------------------------------------------------------------------
 
 int main(int argc, char **argv)
 {
@@ -2579,75 +2541,9 @@ int main(int argc, char **argv)
     }
 
 #ifdef TEST_SNGLINST
-    wxSingleInstanceChecker checker;
-    if ( checker.Create(wxT(".wxconsole.lock")) )
-    {
-        if ( checker.IsAnotherRunning() )
-        {
-            wxPrintf(wxT("Another instance of the program is running, exiting.\n"));
-
-            return 1;
-        }
-
-        // wait some time to give time to launch another instance
-        wxPrintf(wxT("Press \"Enter\" to continue..."));
-        wxFgetc(stdin);
-    }
-    else // failed to create
-    {
-        wxPrintf(wxT("Failed to init wxSingleInstanceChecker.\n"));
-    }
+    if (!TestSingleIstance())
+        return 1;
 #endif // TEST_SNGLINST
-
-#ifdef TEST_CMDLINE
-    TestCmdLineConvert();
-
-#if wxUSE_CMDLINE_PARSER
-    static const wxCmdLineEntryDesc cmdLineDesc[] =
-    {
-        { wxCMD_LINE_SWITCH, "h", "help", "show this help message",
-            wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-        { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
-        { wxCMD_LINE_SWITCH, "q", "quiet",   "be quiet" },
-
-        { wxCMD_LINE_OPTION, "o", "output",  "output file" },
-        { wxCMD_LINE_OPTION, "i", "input",   "input dir" },
-        { wxCMD_LINE_OPTION, "s", "size",    "output block size",
-            wxCMD_LINE_VAL_NUMBER },
-        { wxCMD_LINE_OPTION, "d", "date",    "output file date",
-            wxCMD_LINE_VAL_DATE },
-        { wxCMD_LINE_OPTION, "f", "double",  "output double",
-            wxCMD_LINE_VAL_DOUBLE },
-
-        { wxCMD_LINE_PARAM,  NULL, NULL, "input file",
-            wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
-
-        { wxCMD_LINE_NONE }
-    };
-
-    wxCmdLineParser parser(cmdLineDesc, argc, wxArgv);
-
-    parser.AddOption(wxT("project_name"), wxT(""), wxT("full path to project file"),
-                     wxCMD_LINE_VAL_STRING,
-                     wxCMD_LINE_OPTION_MANDATORY | wxCMD_LINE_NEEDS_SEPARATOR);
-
-    switch ( parser.Parse() )
-    {
-        case -1:
-            wxLogMessage(wxT("Help was given, terminating."));
-            break;
-
-        case 0:
-            ShowCmdLine(parser);
-            break;
-
-        default:
-            wxLogMessage(wxT("Syntax error detected, aborting."));
-            break;
-    }
-#endif // wxUSE_CMDLINE_PARSER
-
-#endif // TEST_CMDLINE
 
 #ifdef TEST_DIR
     #if TEST_ALL
@@ -2727,11 +2623,8 @@ int main(int argc, char **argv)
     // wxWidgets internals after it has been initialized
     ftp = new wxFTP;
     ftp->SetLog(new wxProtocolLog(FTP_TRACE_MASK));
-
     if ( TestFtpConnect() )
-    {
         TestFtpInteractive();
-    }
     //else: connecting to the FTP server failed
 
     delete ftp;
