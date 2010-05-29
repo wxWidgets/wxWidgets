@@ -123,7 +123,6 @@
     #define TEST_REGCONF
     #define TEST_REGEX
     #define TEST_REGISTRY
-    #define TEST_SCOPEGUARD
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -2078,42 +2077,6 @@ static void TestRegistryAssociation()
 #endif // TEST_REGISTRY
 
 // ----------------------------------------------------------------------------
-// scope guard
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_SCOPEGUARD
-
-#include "wx/scopeguard.h"
-
-static void function0() { puts("function0()"); }
-static void function1(int n) { printf("function1(%d)\n", n); }
-static void function2(double x, char c) { printf("function2(%g, %c)\n", x, c); }
-
-struct Object
-{
-    void method0() { printf("method0()\n"); }
-    void method1(int n) { printf("method1(%d)\n", n); }
-    void method2(double x, char c) { printf("method2(%g, %c)\n", x, c); }
-};
-
-static void TestScopeGuard()
-{
-    wxON_BLOCK_EXIT0(function0);
-    wxON_BLOCK_EXIT1(function1, 17);
-    wxON_BLOCK_EXIT2(function2, 3.14, 'p');
-
-    Object obj;
-    wxON_BLOCK_EXIT_OBJ0(obj, Object::method0);
-    wxON_BLOCK_EXIT_OBJ1(obj, Object::method1, 7);
-    wxON_BLOCK_EXIT_OBJ2(obj, Object::method2, 2.71, 'e');
-
-    wxScopeGuard dismissed = wxMakeGuard(function0);
-    dismissed.Dismiss();
-}
-
-#endif
-
-// ----------------------------------------------------------------------------
 // FTP
 // ----------------------------------------------------------------------------
 
@@ -2679,10 +2642,6 @@ int main(int argc, char **argv)
         TestDateTimeInteractive();
     #endif
 #endif // TEST_DATETIME
-
-#ifdef TEST_SCOPEGUARD
-    TestScopeGuard();
-#endif
 
 #ifdef TEST_STACKWALKER
 #if wxUSE_STACKWALKER
