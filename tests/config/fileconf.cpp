@@ -82,6 +82,7 @@ private:
         CPPUNIT_TEST( AddToExistingRoot );
         CPPUNIT_TEST( ReadNonExistent );
         CPPUNIT_TEST( ReadEmpty );
+        CPPUNIT_TEST( ReadFloat );
     CPPUNIT_TEST_SUITE_END();
 
     void Path();
@@ -105,6 +106,7 @@ private:
     void AddToExistingRoot();
     void ReadNonExistent();
     void ReadEmpty();
+    void ReadFloat();
 
 
     static wxString ChangePath(wxFileConfig& fc, const wxChar *path)
@@ -657,6 +659,25 @@ void FileConfigTestCase::ReadEmpty()
 
     wxStringInputStream sis(confTest);
     wxFileConfig fc(sis);
+}
+
+void FileConfigTestCase::ReadFloat()
+{
+    static const char *confTest =
+        "x=1.234\n"
+        "y=-9876.5432\n"
+        "z=2e+308\n"
+    ;
+
+    wxStringInputStream sis(confTest);
+    wxFileConfig fc(sis);
+
+    float f;
+    CPPUNIT_ASSERT( fc.Read("x", &f) );
+    CPPUNIT_ASSERT_EQUAL( 1.234f, f );
+
+    CPPUNIT_ASSERT( fc.Read("y", &f) );
+    CPPUNIT_ASSERT_EQUAL( -9876.5432f, f );
 }
 
 #endif // wxUSE_FILECONFIG

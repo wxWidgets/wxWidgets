@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <limits.h>     // for INT_MAX
+#include <float.h>      // for FLT_MAX
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -178,6 +179,36 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
     wxASSERT_MSG( l < INT_MAX, wxT("int overflow in wxConfig::Read") );
     *pi = (int)l;
     return r;
+}
+
+// Read floats as doubles then just type cast it down.
+bool wxConfigBase::Read(const wxString& key, float* val) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    double temp;
+    if ( !Read(key, &temp) )
+        return false;
+
+    wxCHECK_MSG( fabs(temp) <= FLT_MAX, false,
+                     wxT("float overflow in wxConfig::Read") );
+    wxCHECK_MSG( (temp == 0.0) || (fabs(temp) >= FLT_MIN), false,
+                     wxT("float underflow in wxConfig::Read") );
+
+    *val = static_cast<float>(temp);
+
+    return true;
+}
+
+bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    if ( Read(key, val) )
+        return true;
+
+    *val = defVal;
+    return false;
 }
 
 // the DoReadXXX() for the other types have implementation in the base class
