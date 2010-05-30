@@ -1295,6 +1295,17 @@ wxDocTemplates GetVisibleTemplates(const wxList& allTemplates)
 
 } // anonymous namespace
 
+void wxDocManager::ActivateDocument(wxDocument *doc)
+{
+    wxView * const view = doc->GetFirstView();
+    if ( !view )
+        return;
+
+    view->Activate(true);
+    if ( wxWindow *win = view->GetFrame() )
+        win->SetFocus();
+}
+
 wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
 {
     // this ought to be const but SelectDocumentType/Path() are not
@@ -1349,13 +1360,7 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
             if ( fn == doc->GetFilename() )
             {
                 // file already open, just activate it and return
-                if ( doc->GetFirstView() )
-                {
-                    ActivateView(doc->GetFirstView());
-                    if ( doc->GetDocumentWindow() )
-                        doc->GetDocumentWindow()->SetFocus();
-                    return doc;
-                }
+                ActivateDocument(doc);
             }
         }
     }
@@ -1401,6 +1406,11 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
     // this document to be retrievable from the file extension
     if ( !(flags & wxDOC_NEW) && temp->FileMatchesTemplate(path) )
         AddFileToHistory(path);
+
+    // at least under Mac (where views are top level windows) it seems to be
+    // necessary to manually activate the new document to bring it to the
+    // forefront -- and it shouldn't hurt doing this under the other platforms
+    ActivateDocument(docNew);
 
     return docNew;
 }

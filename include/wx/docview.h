@@ -501,6 +501,9 @@ protected:
     // view and returns it then
     wxView *GetActiveView() const;
 
+    // activate the first view of the given document if any
+    void ActivateDocument(wxDocument *doc);
+
 
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
