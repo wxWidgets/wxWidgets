@@ -559,6 +559,31 @@ void wxHtmlWinParser::SetDC(wxDC *dc, double pixel_scale, double font_scale)
     m_FontScale = font_scale;
 }
 
+void wxHtmlWinParser::SetFontPointSize(int pt)
+{
+    if (pt <= m_FontsSizes[0])
+        m_FontSize = 1;
+    else if (pt >= m_FontsSizes[6])
+        m_FontSize = 7;
+    else
+    {
+        // Find the font closest to the given value with a simple linear search
+        // (binary search is not worth it here for so small number of elements)
+        for ( int n = 0; n < 6; n++ )
+        {
+            if ( (pt > m_FontsSizes[n]) && (pt <= m_FontsSizes[n + 1]) )
+            {
+                // In this range, find out which entry it is closest to
+                if ( (pt - m_FontsSizes[n]) < (m_FontsSizes[n + 1] - pt) )
+                    m_FontSize = n;
+                else
+                    m_FontSize = n + 1;
+
+                break;
+            }
+        }
+    }
+}
 
 wxFont* wxHtmlWinParser::CreateCurrentFont()
 {

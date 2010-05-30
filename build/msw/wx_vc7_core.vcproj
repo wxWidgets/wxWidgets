@@ -4897,6 +4897,9 @@
 				RelativePath="..\..\include\wx\html\m_templ.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\html\styleparams.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\html\winpars.h">
 			</File>
 		</Filter>

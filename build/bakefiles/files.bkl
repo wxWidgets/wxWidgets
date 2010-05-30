@@ -3249,8 +3249,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/html/m_links.cpp
     src/html/m_list.cpp
     src/html/m_pre.cpp
+    src/html/m_span.cpp
     src/html/m_style.cpp
     src/html/m_tables.cpp
+    src/html/styleparams.cpp
     src/html/winpars.cpp
     <!-- wxHTML users: -->
     src/generic/htmllbox.cpp
@@ -3273,6 +3275,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/html/htmlwin.h
     wx/html/htmprint.h
     wx/html/m_templ.h
+    wx/html/styleparams.h
     wx/html/winpars.h
     wx/wxhtml.h
     <!-- wxHTML users: -->

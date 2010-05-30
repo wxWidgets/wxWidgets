@@ -6547,6 +6547,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\html\styleparams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\html\winpars.h"
 				>
 			</File>

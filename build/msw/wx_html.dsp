@@ -381,11 +381,19 @@ SOURCE=..\..\src\html\m_pre.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\html\m_span.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\html\m_style.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\html\m_tables.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\html\styleparams.cpp
 # End Source File
 # Begin Source File
 
@@ -691,6 +699,10 @@ SOURCE=..\..\include\wx\html\htmprint.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\html\m_templ.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\html\styleparams.h
 # End Source File
 # Begin Source File
 

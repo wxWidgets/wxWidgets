@@ -5722,6 +5722,10 @@ SOURCE=..\..\include\wx\html\m_templ.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\html\styleparams.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\html\winpars.h
 # End Source File
 # End Group

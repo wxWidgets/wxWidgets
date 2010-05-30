@@ -123,8 +123,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_m_links.obj &
 	$(OBJS)\monodll_m_list.obj &
 	$(OBJS)\monodll_m_pre.obj &
+	$(OBJS)\monodll_m_span.obj &
 	$(OBJS)\monodll_m_style.obj &
 	$(OBJS)\monodll_m_tables.obj &
+	$(OBJS)\monodll_styleparams.obj &
 	$(OBJS)\monodll_winpars.obj &
 	$(OBJS)\monodll_htmllbox.obj &
 	$(OBJS)\monodll_debugrpt.obj &
@@ -841,8 +843,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_m_links.obj &
 	$(OBJS)\monolib_m_list.obj &
 	$(OBJS)\monolib_m_pre.obj &
+	$(OBJS)\monolib_m_span.obj &
 	$(OBJS)\monolib_m_style.obj &
 	$(OBJS)\monolib_m_tables.obj &
+	$(OBJS)\monolib_styleparams.obj &
 	$(OBJS)\monolib_winpars.obj &
 	$(OBJS)\monolib_htmllbox.obj &
 	$(OBJS)\monolib_debugrpt.obj &
@@ -4227,8 +4231,10 @@ HTMLDLL_OBJECTS =  &
 	$(OBJS)\htmldll_m_links.obj &
 	$(OBJS)\htmldll_m_list.obj &
 	$(OBJS)\htmldll_m_pre.obj &
+	$(OBJS)\htmldll_m_span.obj &
 	$(OBJS)\htmldll_m_style.obj &
 	$(OBJS)\htmldll_m_tables.obj &
+	$(OBJS)\htmldll_styleparams.obj &
 	$(OBJS)\htmldll_winpars.obj &
 	$(OBJS)\htmldll_htmllbox.obj
 HTMLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
@@ -4262,8 +4268,10 @@ HTMLLIB_OBJECTS =  &
 	$(OBJS)\htmllib_m_links.obj &
 	$(OBJS)\htmllib_m_list.obj &
 	$(OBJS)\htmllib_m_pre.obj &
+	$(OBJS)\htmllib_m_span.obj &
 	$(OBJS)\htmllib_m_style.obj &
 	$(OBJS)\htmllib_m_tables.obj &
+	$(OBJS)\htmllib_styleparams.obj &
 	$(OBJS)\htmllib_winpars.obj &
 	$(OBJS)\htmllib_htmllbox.obj
 QADLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
@@ -6835,10 +6843,16 @@ $(OBJS)\monodll_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
 $(OBJS)\monodll_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_m_span.obj :  .AUTODEPEND ..\..\src\html\m_span.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_styleparams.obj :  .AUTODEPEND ..\..\src\html\styleparams.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
@@ -9036,10 +9050,16 @@ $(OBJS)\monolib_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
 $(OBJS)\monolib_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_m_span.obj :  .AUTODEPEND ..\..\src\html\m_span.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_styleparams.obj :  .AUTODEPEND ..\..\src\html\styleparams.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
@@ -14152,10 +14172,16 @@ $(OBJS)\htmldll_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
 $(OBJS)\htmldll_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
+$(OBJS)\htmldll_m_span.obj :  .AUTODEPEND ..\..\src\html\m_span.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+
 $(OBJS)\htmldll_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
+
+$(OBJS)\htmldll_styleparams.obj :  .AUTODEPEND ..\..\src\html\styleparams.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLDLL_CXXFLAGS) $<
 
 $(OBJS)\htmldll_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp
@@ -14227,10 +14253,16 @@ $(OBJS)\htmllib_m_list.obj :  .AUTODEPEND ..\..\src\html\m_list.cpp
 $(OBJS)\htmllib_m_pre.obj :  .AUTODEPEND ..\..\src\html\m_pre.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
+$(OBJS)\htmllib_m_span.obj :  .AUTODEPEND ..\..\src\html\m_span.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+
 $(OBJS)\htmllib_m_style.obj :  .AUTODEPEND ..\..\src\html\m_style.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_m_tables.obj :  .AUTODEPEND ..\..\src\html\m_tables.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
+
+$(OBJS)\htmllib_styleparams.obj :  .AUTODEPEND ..\..\src\html\styleparams.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLLIB_CXXFLAGS) $<
 
 $(OBJS)\htmllib_winpars.obj :  .AUTODEPEND ..\..\src\html\winpars.cpp

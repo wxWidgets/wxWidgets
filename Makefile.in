@@ -1548,8 +1548,10 @@ HTMLDLL_OBJECTS =  \
 	htmldll_m_links.o \
 	htmldll_m_list.o \
 	htmldll_m_pre.o \
+	htmldll_m_span.o \
 	htmldll_m_style.o \
 	htmldll_m_tables.o \
+	htmldll_styleparams.o \
 	htmldll_winpars.o \
 	htmldll_htmllbox.o
 HTMLDLL_ODEP =  $(_____pch_wxprec_htmldll_wx_wxprec_h_gch___depname)
@@ -1579,8 +1581,10 @@ HTMLLIB_OBJECTS =  \
 	htmllib_m_links.o \
 	htmllib_m_list.o \
 	htmllib_m_pre.o \
+	htmllib_m_span.o \
 	htmllib_m_style.o \
 	htmllib_m_tables.o \
+	htmllib_styleparams.o \
 	htmllib_winpars.o \
 	htmllib_htmllbox.o
 HTMLLIB_ODEP =  $(_____pch_wxprec_htmllib_wx_wxprec_h_gch___depname)
@@ -4003,6 +4007,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/html/htmlwin.h \
 	wx/html/htmprint.h \
 	wx/html/m_templ.h \
+	wx/html/styleparams.h \
 	wx/html/winpars.h \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
@@ -4287,8 +4292,10 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_m_links.o \
 	monodll_m_list.o \
 	monodll_m_pre.o \
+	monodll_m_span.o \
 	monodll_m_style.o \
 	monodll_m_tables.o \
+	monodll_styleparams.o \
 	monodll_winpars.o \
 	monodll_htmllbox.o \
 	monodll_debugrpt.o \
@@ -6153,8 +6160,10 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_m_links.o \
 	monolib_m_list.o \
 	monolib_m_pre.o \
+	monolib_m_span.o \
 	monolib_m_style.o \
 	monolib_m_tables.o \
+	monolib_styleparams.o \
 	monolib_winpars.o \
 	monolib_htmllbox.o \
 	monolib_debugrpt.o \
@@ -16768,11 +16777,17 @@ monodll_m_list.o: $(srcdir)/src/html/m_list.cpp $(MONODLL_ODEP)
 monodll_m_pre.o: $(srcdir)/src/html/m_pre.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/m_pre.cpp
 
+monodll_m_span.o: $(srcdir)/src/html/m_span.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/m_span.cpp
+
 monodll_m_style.o: $(srcdir)/src/html/m_style.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/m_style.cpp
 
 monodll_m_tables.o: $(srcdir)/src/html/m_tables.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/m_tables.cpp
+
+monodll_styleparams.o: $(srcdir)/src/html/styleparams.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/styleparams.cpp
 
 monodll_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/html/winpars.cpp
@@ -21964,11 +21979,17 @@ monolib_m_list.o: $(srcdir)/src/html/m_list.cpp $(MONOLIB_ODEP)
 monolib_m_pre.o: $(srcdir)/src/html/m_pre.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/m_pre.cpp
 
+monolib_m_span.o: $(srcdir)/src/html/m_span.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/m_span.cpp
+
 monolib_m_style.o: $(srcdir)/src/html/m_style.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/m_style.cpp
 
 monolib_m_tables.o: $(srcdir)/src/html/m_tables.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/m_tables.cpp
+
+monolib_styleparams.o: $(srcdir)/src/html/styleparams.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/styleparams.cpp
 
 monolib_winpars.o: $(srcdir)/src/html/winpars.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/html/winpars.cpp
@@ -35173,11 +35194,17 @@ htmldll_m_list.o: $(srcdir)/src/html/m_list.cpp $(HTMLDLL_ODEP)
 htmldll_m_pre.o: $(srcdir)/src/html/m_pre.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/m_pre.cpp
 
+htmldll_m_span.o: $(srcdir)/src/html/m_span.cpp $(HTMLDLL_ODEP)
+	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/m_span.cpp
+
 htmldll_m_style.o: $(srcdir)/src/html/m_style.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/m_style.cpp
 
 htmldll_m_tables.o: $(srcdir)/src/html/m_tables.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/m_tables.cpp
+
+htmldll_styleparams.o: $(srcdir)/src/html/styleparams.cpp $(HTMLDLL_ODEP)
+	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/styleparams.cpp
 
 htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLDLL_ODEP)
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $(srcdir)/src/html/winpars.cpp
@@ -35251,11 +35278,17 @@ htmllib_m_list.o: $(srcdir)/src/html/m_list.cpp $(HTMLLIB_ODEP)
 htmllib_m_pre.o: $(srcdir)/src/html/m_pre.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/m_pre.cpp
 
+htmllib_m_span.o: $(srcdir)/src/html/m_span.cpp $(HTMLLIB_ODEP)
+	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/m_span.cpp
+
 htmllib_m_style.o: $(srcdir)/src/html/m_style.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/m_style.cpp
 
 htmllib_m_tables.o: $(srcdir)/src/html/m_tables.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/m_tables.cpp
+
+htmllib_styleparams.o: $(srcdir)/src/html/styleparams.cpp $(HTMLLIB_ODEP)
+	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/styleparams.cpp
 
 htmllib_winpars.o: $(srcdir)/src/html/winpars.cpp $(HTMLLIB_ODEP)
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $(srcdir)/src/html/winpars.cpp
