@@ -844,9 +844,12 @@ void XmlResApp::OutputGettext()
 
     for (ExtractedStrings::const_iterator i = str.begin(); i != str.end(); ++i)
     {
-        wxString s;
+        const wxFileName filename(i->filename);
 
-        s.Printf("#line %d \"%s\"\n", i->lineNo, i->filename);
+        wxString s;
+        s.Printf("#line %d \"%s\"\n",
+                 i->lineNo, filename.GetFullPath(wxPATH_UNIX));
+
         fout.Write(s);
         fout.Write("_(\"" + i->str + "\");\n");
     }
