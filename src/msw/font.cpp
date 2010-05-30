@@ -1067,10 +1067,19 @@ bool wxFont::IsFixedWidth() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
-    // the two low-order bits specify the pitch of the font, the rest is
-    // family
-    BYTE pitch =
-        (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
+    // LOGFONT doesn't contain the correct pitch information so we need to call
+    // GetTextMetrics() to get it
+    ScreenHDC hdc;
+    SelectInHDC selectFont(hdc, M_FONTDATA->GetHFONT());
 
-    return pitch == FIXED_PITCH;
+    TEXTMETRIC tm;
+    if ( !::GetTextMetrics(hdc, &tm) )
+    {
+        wxLogLastError(wxT("GetTextMetrics"));
+        return false;
+    }
+
+    // Quoting MSDN description of TMPF_FIXED_PITCH: "Note very carefully that
+    // those meanings are the opposite of what the constant name implies."
+    return !(tm.tmPitchAndFamily & TMPF_FIXED_PITCH);
 }
