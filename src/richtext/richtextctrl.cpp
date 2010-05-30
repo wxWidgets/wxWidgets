@@ -2606,8 +2606,7 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
         m_selectionAnchor = from-1;
         m_selectionRange.SetRange(from, to-1);
 
-        // Have to subtract 2, one because of endPos+1 rule (SetSelection docs) and another to turn into caret position.
-        m_caretPosition = wxMax(-1, to-2);
+        m_caretPosition = wxMax(-1, to-1);
 
         wxRichTextCtrlRefreshForSelectionChange(*this, oldSelection, m_selectionRange);
         PositionCaret();
