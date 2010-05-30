@@ -192,6 +192,8 @@ void MyFrame::OnRunSimulation(wxCommandEvent&)
     sim.Char(WXK_RETURN);
     sim.Char(90);
     sim.Char(90, wxMOD_SHIFT);
+    sim.Char(WXK_RETURN);
+    sim.Text("aAbBcC");
 
     wxYield();
 }

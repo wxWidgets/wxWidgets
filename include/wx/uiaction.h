@@ -43,6 +43,8 @@ public:
 
     bool Char(int keycode, int modifiers = wxMOD_NONE);
 
+    bool Text(const wxString& text);
+
 protected:
     // Implementation-wise, since key events take more code to set up on GTK and Mac, it makes
     // sense to handle both key down and key up in one method. However, I wanted the API for pressing

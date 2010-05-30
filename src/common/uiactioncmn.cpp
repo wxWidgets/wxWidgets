@@ -60,4 +60,26 @@ bool  wxUIActionSimulator::Char(int keycode, int modifiers)
     return true;
 }
 
+bool wxUIActionSimulator::Text(const wxString& test)
+{
+    for ( unsigned int i = 0; i < test.length(); i++ )
+    {
+        wxUniChar uchar = test[i];
+        char achar = 0;
+        if ( uchar.GetAsChar(&achar) && isalpha(achar) )
+        {
+            int mod = 0;
+            if ( isupper(achar) )
+                mod = wxMOD_SHIFT;
+            Char(achar, mod);
+        }
+        else
+        {
+            wxFAIL_MSG( "Only characters a-z & A-Z are supported" );
+            return false;
+        }
+    }
+    return true;
+}
+
 #endif // wxUSE_UIACTIONSIMULATOR

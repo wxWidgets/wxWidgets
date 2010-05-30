@@ -135,5 +135,14 @@ class wxUIActionSimulator
             A combination of ::wxKeyModifier flags to be pressed with the given keycode.
     */
     bool Char(int keycode, int modifiers = wxMOD_NONE);
+
+    /**
+        Press a series of keys representing the given string. Currently only 
+        characters a-z & A-Z are supported.
+
+        @param text
+            The string to type.
+    */
+    bool Text(const wxString& text);
 };
 
