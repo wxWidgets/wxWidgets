@@ -4388,7 +4388,7 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 {
     GdkWindow* window = NULL;
     if (m_wxwindow)
-        window = WX_PIZZA(m_wxwindow)->m_draw_window;
+        window = m_wxwindow->window;
     return window;
 }
 
