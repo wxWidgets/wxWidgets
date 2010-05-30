@@ -1845,6 +1845,8 @@ gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
     win->GTKProcessEvent( event );
+
+    win->GTKUpdateCursor(true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -3402,37 +3404,22 @@ void wxWindowGTK::GTKUpdateCursor(bool update_self /*=true*/, bool recurse /*=tr
         wxCursor cursor(g_globalCursor.Ok() ? g_globalCursor : GetCursor());
         if ( cursor.Ok() )
         {
-            if (m_wxwindow && (m_wxwindow != m_widget))
+            wxArrayGdkWindows windowsThis;
+            GdkWindow* window = GTKGetWindow(windowsThis);
+            if (window)
+                gdk_window_set_cursor( window, cursor.GetCursor() );
+            else
             {
-                wxArrayGdkWindows windowsThis;
-                GdkWindow* window = GTKGetDrawingWindow();
-                if (window)
-                    gdk_window_set_cursor( window, cursor.GetCursor() );
-                else
+                const size_t count = windowsThis.size();
+                for ( size_t n = 0; n < count; n++ )
                 {
-                    const size_t count = windowsThis.size();
-                    for ( size_t n = 0; n < count; n++ )
+                    GdkWindow *win = windowsThis[n];
+                    // It can be zero if the window has not been realized yet.
+                    if ( win )
                     {
-                        GdkWindow *win = windowsThis[n];
-                        if ( !win )
-                        {
-                            wxFAIL_MSG(wxT("NULL window returned by GTKGetWindow()?"));
-                            continue;
-                        }
                         gdk_window_set_cursor(win, cursor.GetCursor());
                     }
                 }
-
-                window = m_widget->window;
-                if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
-                    gdk_window_set_cursor( window, cursor.GetCursor() );
-
-            }
-            else if ( m_widget )
-            {
-                GdkWindow *window = m_widget->window;
-                if ( window && !GTK_WIDGET_NO_WINDOW(m_widget) )
-                    gdk_window_set_cursor( window, cursor.GetCursor() );
             }
         }
     }
