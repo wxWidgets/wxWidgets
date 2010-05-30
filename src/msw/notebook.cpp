@@ -1138,11 +1138,21 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         // the wxObject* casts are required to avoid MinGW GCC 2.95.3 ICE
         const bool isFromParent = event.GetEventObject() == (wxObject*) parent;
         const bool isFromSelf = event.GetEventObject() == (wxObject*) this;
+        const bool isForward = event.GetDirection();
 
-        if ( isFromParent || isFromSelf )
+        if ( isFromSelf && !isForward )
+        {
+            // focus is currently on notebook tab and should leave
+            // it backwards (Shift-TAB)
+            event.SetCurrentFocus(this);
+            parent->HandleWindowEvent(event);
+        }
+        else if ( isFromParent || isFromSelf )
         {
             // no, it doesn't come from child, case (b) or (c): forward to a
-            // page but only if direction is backwards (TAB) or from ourselves,
+            // page but only if entering notebook page (i.e. direction is
+            // backwards (Shift-TAB) comething from out-of-notebook, or
+            // direction is forward (TAB) from ourselves),
             if ( m_nSelection != wxNOT_FOUND &&
                     (!event.GetDirection() || isFromSelf) )
             {
@@ -1168,7 +1178,7 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
             // if the direction is forwards. Otherwise set the focus to the
             // notebook itself. The notebook is always the 'first' control of a
             // page.
-            if ( !event.GetDirection() )
+            if ( !isForward )
             {
                 SetFocus();
             }
