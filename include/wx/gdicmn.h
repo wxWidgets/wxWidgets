@@ -493,6 +493,76 @@ inline wxPoint operator-(const wxPoint& p)
     return wxPoint(-p.x, -p.y);
 }
 
+inline wxPoint operator/(const wxPoint& s, int i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, int i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(int i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, unsigned int i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, unsigned int i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(unsigned int i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, long i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, long i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(long i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, unsigned long i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, unsigned long i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(unsigned long i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(const wxPoint& s, double i)
+{
+    return wxPoint(int(s.x * i), int(s.y * i));
+}
+
+inline wxPoint operator*(double i, const wxPoint& s)
+{
+    return wxPoint(int(s.x * i), int(s.y * i));
+}
+
 WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);
 
 // ---------------------------------------------------------------------------
