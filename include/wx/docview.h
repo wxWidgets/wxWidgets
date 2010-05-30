@@ -371,8 +371,11 @@ public:
     void OnFileRevert(wxCommandEvent& event);
     void OnFileSave(wxCommandEvent& event);
     void OnFileSaveAs(wxCommandEvent& event);
+#if wxUSE_PRINTING_ARCHITECTURE
     void OnPrint(wxCommandEvent& event);
     void OnPreview(wxCommandEvent& event);
+    void OnPageSetup(wxCommandEvent& event);
+#endif // wxUSE_PRINTING_ARCHITECTURE
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
 
@@ -479,6 +482,7 @@ public:
     wxDEPRECATED( size_t GetNoHistoryFiles() const );
 #endif // WXWIN_COMPATIBILITY_2_6
 
+
 protected:
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
@@ -506,6 +510,10 @@ protected:
     wxFileHistory*    m_fileHistory;
     wxString          m_lastDirectory;
     static wxDocManager* sm_docManager;
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxPageSetupDialogData m_pageSetupDialogData;
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxDocManager)

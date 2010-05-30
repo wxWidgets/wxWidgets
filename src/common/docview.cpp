@@ -897,10 +897,12 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
 #if wxUSE_PRINTING_ARCHITECTURE
     EVT_MENU(wxID_PRINT, wxDocManager::OnPrint)
     EVT_MENU(wxID_PREVIEW, wxDocManager::OnPreview)
+    EVT_MENU(wxID_PRINT_SETUP, wxDocManager::OnPageSetup)
 
     EVT_UPDATE_UI(wxID_PRINT, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_PREVIEW, wxDocManager::OnUpdateDisableIfNoDoc)
-#endif
+    EVT_UPDATE_UI(wxID_PRINT_SETUP, wxDocManager::OnUpdateDisableIfNoDoc)
+#endif // wxUSE_PRINTING_ARCHITECTURE
 END_EVENT_TABLE()
 
 wxDocManager* wxDocManager::sm_docManager = NULL;
@@ -1080,9 +1082,10 @@ void wxDocManager::OnFileSaveAs(wxCommandEvent& WXUNUSED(event))
     doc->SaveAs();
 }
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_PRINTING_ARCHITECTURE
     wxView *view = GetActiveView();
     if (!view)
         return;
@@ -1090,26 +1093,32 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
     wxPrintout *printout = view->OnCreatePrintout();
     if (printout)
     {
-        wxPrinter printer;
+        wxPrintDialogData printDialogData(m_pageSetupDialogData.GetPrintData());
+        wxPrinter printer(&printDialogData);
         printer.Print(view->GetFrame(), printout, true);
 
         delete printout;
     }
-#endif // wxUSE_PRINTING_ARCHITECTURE
 }
 
-#if wxUSE_PRINTING_ARCHITECTURE
+void wxDocManager::OnPageSetup(wxCommandEvent& WXUNUSED(event))
+{
+    wxPageSetupDialog dlg(wxTheApp->GetTopWindow(), &m_pageSetupDialogData);
+    if ( dlg.ShowModal() == wxID_OK )
+    {
+        m_pageSetupDialogData = dlg.GetPageSetupData();
+    }
+}
+
 wxPreviewFrame* wxDocManager::CreatePreviewFrame(wxPrintPreviewBase* preview,
                                                  wxWindow *parent,
                                                  const wxString& title)
 {
     return new wxPreviewFrame(preview, parent, title);
 }
-#endif // wxUSE_PRINTING_ARCHITECTURE
 
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_PRINTING_ARCHITECTURE
     wxBusyCursor busy;
     wxView *view = GetActiveView();
     if (!view)
@@ -1118,9 +1127,13 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
     wxPrintout *printout = view->OnCreatePrintout();
     if (printout)
     {
+        wxPrintDialogData printDialogData(m_pageSetupDialogData.GetPrintData());
+
         // Pass two printout objects: for preview, and possible printing.
         wxPrintPreviewBase *
-            preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+            preview = new wxPrintPreview(printout,
+                                         view->OnCreatePrintout(),
+                                         &printDialogData);
         if ( !preview->Ok() )
         {
             delete preview;
@@ -1137,8 +1150,8 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
         frame->Initialize();
         frame->Show(true);
     }
-#endif // wxUSE_PRINTING_ARCHITECTURE
 }
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
 void wxDocManager::OnUndo(wxCommandEvent& event)
 {
