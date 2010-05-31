@@ -2280,7 +2280,6 @@ public:
       // convert to a double
   bool ToDouble(double *val) const;
 
-#if wxUSE_XLOCALE
   // conversions to numbers using C locale
       // convert to a signed integer
   bool ToCLong(long *val, int base = 10) const;
@@ -2288,7 +2287,6 @@ public:
   bool ToCULong(unsigned long *val, int base = 10) const;
       // convert to a double
   bool ToCDouble(double *val) const;
-#endif
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output
