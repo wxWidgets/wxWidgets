@@ -689,6 +689,14 @@ public:
     /**
         Writes the double value to the config file and returns @true on
         success.
+
+        Notice that if floating point numbers are saved as strings (as is the
+        case with the configuration files used by wxFileConfig), this function
+        uses the C locale for writing out the number, i.e. it will always use a
+        period as the decimal separator, irrespectively of the current locale.
+        This behaviour is new since wxWidgets 2.9.1 as the current locale was
+        used before, but the change should be transparent because both C and
+        current locales are tried when reading the numbers back.
     */
     bool Write(const wxString& key, double value);
     /**

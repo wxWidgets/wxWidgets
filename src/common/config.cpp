@@ -233,7 +233,14 @@ bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
     wxString str;
     if ( Read(key, &str) )
     {
-        return str.ToDouble(val);
+        if ( str.ToCDouble(val) )
+            return true;
+
+        // Previous versions of wxFileConfig wrote the numbers out using the
+        // current locale and not the C one as now, so attempt to parse the
+        // string as a number in the current locale too, for compatibility.
+        if ( str.ToDouble(val) )
+            return true;
     }
 
     return false;
@@ -256,7 +263,10 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {
-    return DoWriteString(key, wxString::Format(wxT("%g"), val));
+    // Notice that we always write out the numbers in C locale and not the
+    // current one. This makes the config files portable between machines using
+    // different locales.
+    return DoWriteString(key, wxString::FromCDouble(val));
 }
 
 bool wxConfigBase::DoWriteBool(const wxString& key, bool value)
