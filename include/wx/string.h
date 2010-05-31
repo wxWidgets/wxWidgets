@@ -2288,6 +2288,13 @@ public:
       // convert to a double
   bool ToCDouble(double *val) const;
 
+  // create a string representing the given floating point number
+    // in the current locale
+  static wxString FromDouble(double val)
+    { return wxString::Format(wxS("%g"), val); }
+    // in C locale
+  static wxString FromCDouble(double val);
+
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error

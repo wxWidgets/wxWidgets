@@ -53,6 +53,7 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
+        CPPUNIT_TEST( FromDouble );
         CPPUNIT_TEST( StringBuf );
         CPPUNIT_TEST( UTF8Buf );
         CPPUNIT_TEST( CStrDataTernaryOperator );
@@ -85,6 +86,7 @@ private:
     void ToULongLong();
 #endif // wxLongLong_t
     void ToDouble();
+    void FromDouble();
     void StringBuf();
     void UTF8Buf();
     void CStrDataTernaryOperator();
@@ -744,6 +746,41 @@ void StringTestCase::ToDouble()
         CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToDouble(&d) );
         if ( ld.ok )
             CPPUNIT_ASSERT_EQUAL( ld.value, d );
+    }
+}
+
+void StringTestCase::FromDouble()
+{
+    static const struct FromDoubleTestData
+    {
+        double value;
+        const char *str;
+    } testData[] =
+    {
+        { 1.23,             "1.23" },
+        { -3e-10,           "-3e-10" },
+        { -0.45678,         "-0.45678" },
+    };
+
+    for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        const FromDoubleTestData& td = testData[n];
+        CPPUNIT_ASSERT_EQUAL( td.str, wxString::FromCDouble(td.value) );
+    }
+
+    if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
+        return;
+
+    wxLocale locale;
+    CPPUNIT_ASSERT( locale.Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
+
+    for ( unsigned m = 0; m < WXSIZEOF(testData); m++ )
+    {
+        const FromDoubleTestData& td = testData[m];
+
+        wxString str(td.str);
+        str.Replace(".", ",");
+        CPPUNIT_ASSERT_EQUAL( str, wxString::FromDouble(td.value) );
     }
 }
 

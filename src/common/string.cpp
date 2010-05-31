@@ -45,6 +45,10 @@
     #include "wx/msw/wrapwin.h"
 #endif // __WXMSW__
 
+#if wxUSE_STD_IOSTREAM
+    #include <sstream>
+#endif
+
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
     #define wxStringMemcpy   memcpy
@@ -1784,6 +1788,37 @@ bool wxString::ToCDouble(double *pVal) const
 }
 
 #endif  // wxUSE_XLOCALE/!wxUSE_XLOCALE
+
+// ----------------------------------------------------------------------------
+// number to string conversion
+// ----------------------------------------------------------------------------
+
+/* static */
+wxString wxString::FromCDouble(double val)
+{
+#if wxUSE_STD_IOSTREAM && wxUSE_STD_STRING
+    // We assume that we can use the ostream and not wstream for numbers.
+    wxSTD ostringstream os;
+    os << val;
+    return os.str();
+#else // wxUSE_STD_IOSTREAM
+    // Can't use iostream locale support, fall back to the manual method
+    // instead.
+    wxString s = FromDouble(val);
+#if wxUSE_INTL
+    wxString sep = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                     wxLOCALE_CAT_NUMBER);
+#else // !wxUSE_INTL
+    // As above, this is the most common alternative value. Notice that here it
+    // doesn't matter if we guess wrongly and the current separator is already
+    // ".": we'll just waste a call to Replace() in this case.
+    wxString sep(",");
+#endif // wxUSE_INTL/!wxUSE_INTL
+
+    s.Replace(sep, ".");
+    return s;
+#endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
+}
 
 // ---------------------------------------------------------------------------
 // formatted output

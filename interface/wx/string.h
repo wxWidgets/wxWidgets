@@ -1507,6 +1507,36 @@ public:
     static wxString FromAscii(char c);
     //@}
 
+    /**
+        Returns a string with the textual representation of the number in C
+        locale.
+
+        Unlike FromDouble() the string returned by this function always uses
+        the period character as decimal separator, independently of the current
+        locale.
+
+        @since 2.9.1
+
+        @see ToCDouble()
+     */
+    static wxString FromCDouble(double val);
+
+    /**
+        Returns a string with the textual representation of the number.
+
+        This is a simple wrapper for @code wxString::Format("%g", val)
+        @endcode.
+
+        Notice that the string returned by this function uses the decimal
+        separator appropriate for the current locale, e.g. @c "," and not a
+        period in French locale. Use FromCDouble() if this is unwanted.
+
+        @since 2.9.1
+
+        @see ToDouble()
+     */
+    static wxString FromDouble(double val);
+
     //@{
     /**
         Converts C string encoded in UTF-8 to wxString.
