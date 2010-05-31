@@ -551,7 +551,7 @@ protected:
     void OnFloatingPaneMoved(wxWindow* window, wxDirection dir);
     void OnFloatingPaneActivated(wxWindow* window);
     void OnFloatingPaneClosed(wxWindow* window, wxCloseEvent& evt);
-    void OnFloatingPaneResized(wxWindow* window, const wxSize& size);
+    void OnFloatingPaneResized(wxWindow* window, const wxRect& rect);
     void Render(wxDC* dc);
     void Repaint(wxDC* dc = NULL);
     void ProcessMgrEvent(wxAuiManagerEvent& event);
