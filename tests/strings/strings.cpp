@@ -590,7 +590,7 @@ void StringTestCase::ToLong()
 
         if ( ld.flags & (Number_LongLong | Number_Unsigned) )
             continue;
-        
+
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
 
@@ -631,7 +631,7 @@ void StringTestCase::ToULong()
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCULong(&ul) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
-        
+
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
@@ -711,17 +711,17 @@ void StringTestCase::ToDouble()
 
 
     // test ToDouble() now:
-    // NOTE: for the test to be reliable, we need to set the locale explicitely
+    // NOTE: for the test to be reliable, we need to set the locale explicitly
     //       so that we know the decimal point character to use
 
     if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
         return;     // you should have french support installed to continue this test!
 
-    wxLocale *locale = new wxLocale;
-    
+    wxLocale locale;
+
     // don't load default catalog, it may be unavailable:
-    CPPUNIT_ASSERT( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
-    
+    CPPUNIT_ASSERT( locale.Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
+
     static const struct ToDoubleData doubleData2[] =
     {
         { wxT("1"), 1, true },
@@ -745,8 +745,6 @@ void StringTestCase::ToDouble()
         if ( ld.ok )
             CPPUNIT_ASSERT_EQUAL( ld.value, d );
     }
-    
-    delete locale;
 }
 
 void StringTestCase::StringBuf()
