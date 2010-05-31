@@ -929,7 +929,7 @@ private:
 class WXDLLIMPEXP_CORE wxDocPrintout : public wxPrintout
 {
 public:
-    wxDocPrintout(wxView *view = NULL, const wxString& title = wxT("Printout"));
+    wxDocPrintout(wxView *view = NULL, const wxString& title = _("Printout"));
 
     // implement wxPrintout methods
     virtual bool OnPrintPage(int page);
