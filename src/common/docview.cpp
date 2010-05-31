@@ -901,7 +901,8 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
 
     EVT_UPDATE_UI(wxID_PRINT, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_PREVIEW, wxDocManager::OnUpdateDisableIfNoDoc)
-    EVT_UPDATE_UI(wxID_PRINT_SETUP, wxDocManager::OnUpdateDisableIfNoDoc)
+    // NB: we keep "Print setup" menu item always enabled as it can be used
+    //     even without an active document
 #endif // wxUSE_PRINTING_ARCHITECTURE
 END_EVENT_TABLE()
 
