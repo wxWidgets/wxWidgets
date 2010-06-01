@@ -670,6 +670,10 @@ public:
     {
         m_combo = combo;
         m_beenInside = false;
+
+        // Let's make it so that the popup control will not receive mouse
+        // events until mouse left button has been up.
+        m_blockEventsToPopup = true;
     }
     virtual ~wxComboPopupExtraEventHandler() { }
 
@@ -679,12 +683,14 @@ public:
     void OnPopupDismiss()
     {
         m_beenInside = false;
+        m_blockEventsToPopup = true;
     }
 
 protected:
     wxComboCtrlBase*     m_combo;
 
-    bool                    m_beenInside;
+    bool                m_beenInside;
+    bool                m_blockEventsToPopup;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -706,43 +712,83 @@ void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 
     event.Skip();
 
-    // Block motion and click events outside the popup
-    if ( (!isInside || !m_combo->IsPopupShown())
-            &&
-         (evtType == wxEVT_MOTION ||
-          evtType == wxEVT_LEFT_DOWN ||
-          evtType == wxEVT_LEFT_UP ||
-          evtType == wxEVT_RIGHT_DOWN) )
+    if ( !isInside || !m_combo->IsPopupShown() )
     {
-        event.Skip(false);
+        // Mouse is outside the popup or popup is not actually shown (yet)
+
+        if ( evtType == wxEVT_MOTION ||
+             evtType == wxEVT_LEFT_DOWN ||
+             evtType == wxEVT_LEFT_UP ||
+             evtType == wxEVT_RIGHT_DOWN )
+        {
+            // Block motion and click events outside the popup
+            event.Skip(false);
+        }
     }
-    else if ( evtType == wxEVT_LEFT_UP )
+    else
+    {
+        // Mouse is inside the popup, which is fully shown
+
+        m_beenInside = true;
+
+        // Do not let the popup control respond to mouse events until
+        // mouse press used to display the popup has been lifted. This
+        // is important for users with slower mouse fingers or mouse
+        // drivers. Note that we have some redundancy here, just in
+        // case the popup is some native control that does not emit all
+        // mouse event types.
+        if ( evtType == wxEVT_MOTION )
+        {
+            if ( m_blockEventsToPopup )
+            {
+                if ( event.LeftIsDown() )
+                    event.Skip(false);
+                else
+                    m_blockEventsToPopup = false;
+            }
+        }
+        else if ( evtType == wxEVT_LEFT_DOWN )
+        {
+            if ( m_blockEventsToPopup )
+                m_blockEventsToPopup = false;
+        }
+        else if ( evtType == wxEVT_LEFT_UP )
+        {
+            if ( m_blockEventsToPopup )
+            {
+                // On first left up, stop blocking mouse events (but still
+                // block this one)
+                m_blockEventsToPopup = false;
+                event.Skip(false);
+            }
+        }
+        else if ( m_blockEventsToPopup )
+        {
+            event.Skip(false);
+        }
+    }
+
+    //
+    // Some mouse events to popup that happen outside it, before cursor
+    // has been inside the popup, need to be ignored by it but relayed to
+    // the dropbutton.
+    //
+    if ( evtType == wxEVT_LEFT_UP )
     {
         if ( !m_combo->IsPopupShown() )
         {
             event.Skip(false);
             relayToButton = true;
         }
-        else if ( !m_beenInside )
+        else if ( !isInside && !m_beenInside )
         {
-            if ( isInside )
-            {
-                m_beenInside = true;
-            }
-            else
-            {
-                relayToButton = true;
-            }
+            // Popup is shown but the cursor is not inside, nor it has been
+            relayToButton = true;
         }
     }
 
     if ( relayToButton )
     {
-        //
-        // Some mouse events to popup that happen outside it, before cursor
-        // has been inside the popup, need to be ignored by it but relayed to
-        // the dropbutton.
-        //
         wxWindow* eventSink = m_combo;
         wxWindow* btn = m_combo->GetButton();
         if ( btn )
