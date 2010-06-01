@@ -554,6 +554,8 @@ MSW:
 - Fix sending of wxEVT_COMMAND_LIST_COL_DRAGGING events in wxListCtrl.
 - Allow putting the UAC symbol on buttons (Chris Spencer).
 - Fix wxTaskBarIcon for older Windows systems (Daniel Wyatt).
+- Fixed wxOwnerDrawnComboBox keyboard handling: drop-down is no longer
+  displayed when arrow key is pressed (without Alt).
 - Fixed wxComboCtrl::SetButtonPosition() on Vista/Win7.
 
 i18n:

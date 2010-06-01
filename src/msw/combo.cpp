@@ -833,18 +833,10 @@ bool wxComboCtrl::IsKeyPopupToggle(const wxKeyEvent& event) const
         case WXK_UP:
         case WXK_NUMPAD_DOWN:
         case WXK_NUMPAD_UP:
-            // On XP or with writable combo in Classic, arrows don't open the
-            // popup but Alt-arrow does
-            if ( event.AltDown() ||
-                    ( !isPopupShown &&
-                      HasFlag(wxCB_READONLY)
-#if wxUSE_UXTHEME
-                      && !wxUxThemeEngine::GetIfActive()
-#endif
-                    ) )
-            {
+            // Arrow keys (and mouse wheel) toggle the popup in the native
+            // combo boxes
+            if ( event.AltDown() )
                 return true;
-            }
             break;
     }
 
