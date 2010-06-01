@@ -760,6 +760,12 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
                 // block this one)
                 m_blockEventsToPopup = false;
                 event.Skip(false);
+
+                // Also, this button press was (probably) used to display
+                // the popup, so relay it back to the drop-down button
+                // (which supposedly originated it). This is necessary to
+                // refresh it properly.
+                relayToButton = true;
             }
         }
         else if ( m_blockEventsToPopup )
@@ -789,12 +795,14 @@ void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
 
     if ( relayToButton )
     {
-        wxWindow* eventSink = m_combo;
         wxWindow* btn = m_combo->GetButton();
         if ( btn )
-            eventSink = btn;
-
-        eventSink->GetEventHandler()->ProcessEvent(event);
+            btn->GetEventHandler()->ProcessEvent(event);
+        else
+            // Bypass the event handling mechanism. Using it would be
+            // confusing for the platform-specific wxComboCtrl
+            // implementations.
+            m_combo->HandleButtonMouseEvent(event, 0);
     }
 }
 

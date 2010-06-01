@@ -142,6 +142,7 @@ struct wxComboCtrlFeatures
 class WXDLLIMPEXP_CORE wxComboCtrlBase : public wxControl
 {
     friend class wxComboPopup;
+    friend class wxComboPopupEvtHandler;
 public:
     // ctors and such
     wxComboCtrlBase() : wxControl() { Init(); }
