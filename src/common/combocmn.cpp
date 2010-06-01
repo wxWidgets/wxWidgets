@@ -661,11 +661,11 @@ void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
 // This is pushed to the event handler queue of the control in popup.
 //
 
-class wxComboPopupExtraEventHandler : public wxEvtHandler
+class wxComboPopupEvtHandler : public wxEvtHandler
 {
 public:
 
-    wxComboPopupExtraEventHandler( wxComboCtrlBase* combo )
+    wxComboPopupEvtHandler( wxComboCtrlBase* combo )
         : wxEvtHandler()
     {
         m_combo = combo;
@@ -675,7 +675,7 @@ public:
         // events until mouse left button has been up.
         m_blockEventsToPopup = true;
     }
-    virtual ~wxComboPopupExtraEventHandler() { }
+    virtual ~wxComboPopupEvtHandler() { }
 
     void OnMouseEvent( wxMouseEvent& event );
 
@@ -697,12 +697,12 @@ private:
 };
 
 
-BEGIN_EVENT_TABLE(wxComboPopupExtraEventHandler, wxEvtHandler)
-    EVT_MOUSE_EVENTS(wxComboPopupExtraEventHandler::OnMouseEvent)
+BEGIN_EVENT_TABLE(wxComboPopupEvtHandler, wxEvtHandler)
+    EVT_MOUSE_EVENTS(wxComboPopupEvtHandler::OnMouseEvent)
 END_EVENT_TABLE()
 
 
-void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
+void wxComboPopupEvtHandler::OnMouseEvent( wxMouseEvent& event )
 {
     wxPoint pt = event.GetPosition();
     wxSize sz = m_combo->GetPopupControl()->GetControl()->GetClientSize();
@@ -849,7 +849,7 @@ void wxComboCtrlBase::Init()
     m_text = NULL;
     m_popupInterface = NULL;
 
-    m_popupExtraHandler = NULL;
+    m_popupEvtHandler = NULL;
     m_textEvtHandler = NULL;
 
 #if INSTALL_TOPLEV_HANDLER
@@ -1986,8 +1986,8 @@ void wxComboCtrlBase::CreatePopup()
     popupInterface->Create(m_winPopup);
     m_popup = popup = popupInterface->GetControl();
 
-    m_popupExtraHandler = new wxComboPopupExtraEventHandler(this);
-    popup->PushEventHandler( m_popupExtraHandler );
+    m_popupEvtHandler = new wxComboPopupEvtHandler(this);
+    popup->PushEventHandler( m_popupEvtHandler );
 
     // This may be helpful on some platforms
     //   (eg. it bypasses a wxGTK popupwindow bug where
@@ -2003,9 +2003,9 @@ void wxComboCtrlBase::DestroyPopup()
     HidePopup(true);
 
     if ( m_popup )
-        m_popup->RemoveEventHandler(m_popupExtraHandler);
+        m_popup->RemoveEventHandler(m_popupEvtHandler);
 
-    delete m_popupExtraHandler;
+    delete m_popupEvtHandler;
 
     delete m_popupInterface;
 
@@ -2017,7 +2017,7 @@ void wxComboCtrlBase::DestroyPopup()
         m_winPopup->Destroy();
     }
 
-    m_popupExtraHandler = NULL;
+    m_popupEvtHandler = NULL;
     m_popupInterface = NULL;
     m_winPopup = NULL;
     m_popup = NULL;
@@ -2309,8 +2309,8 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
     // Inform popup control itself
     m_popupInterface->OnDismiss();
 
-    if ( m_popupExtraHandler )
-        ((wxComboPopupExtraEventHandler*)m_popupExtraHandler)->OnPopupDismiss();
+    if ( m_popupEvtHandler )
+        ((wxComboPopupEvtHandler*)m_popupEvtHandler)->OnPopupDismiss();
 
 #if INSTALL_TOPLEV_HANDLER
     // Remove top level window event handler

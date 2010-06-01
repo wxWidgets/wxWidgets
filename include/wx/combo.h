@@ -583,7 +583,7 @@ protected:
     wxEvtHandler*           m_toplevEvtHandler;
 
     // this is for the control in popup
-    wxEvtHandler*           m_popupExtraHandler;
+    wxEvtHandler*           m_popupEvtHandler;
 
     // this is for the popup window
     wxEvtHandler*           m_popupWinEvtHandler;
