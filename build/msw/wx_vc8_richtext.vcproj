@@ -1075,6 +1075,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\richtext\richtextimagepage.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h"
 				>
 			</File>
@@ -1114,6 +1118,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\richtext\richtexthtml.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\richtext\richtextimagepage.cpp"
 				>
 			</File>
 			<File

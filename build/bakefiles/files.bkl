@@ -3528,6 +3528,7 @@ src/osx/iphone/window.mm
     src/richtext/richtextsymboldlg.cpp
     src/richtext/richtextstyledlg.cpp
     src/richtext/richtextprint.cpp
+    src/richtext/richtextimagepage.cpp
 </set>
 <set var="RICHTEXT_HDR" hints="files">
     wx/richtext/richtextctrl.h
@@ -3539,6 +3540,7 @@ src/osx/iphone/window.mm
     wx/richtext/richtextsymboldlg.h
     wx/richtext/richtextstyledlg.h
     wx/richtext/richtextprint.h
+    wx/richtext/richtextimagepage.h
 </set>
 
 
