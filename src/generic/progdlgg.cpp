@@ -139,11 +139,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
 
     m_parentTop = wxGetTopLevelParent(parent);
 
-    wxClientDC dc(this);
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    wxCoord widthText = 0;
-    dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
-
     // top-level sizerTop
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
