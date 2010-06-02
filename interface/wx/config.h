@@ -16,11 +16,10 @@
     However, usually you don't even need to know the precise nature of the
     class you're working with but you would just use the wxConfigBase methods.
     This allows you to write the same code regardless of whether you're working
-    with the registry under Win32 or text-based config files under Unix (or
-    even Windows 3.1 .INI files if you're really unlucky). To make writing the
-    portable code even easier, wxWidgets provides a typedef wxConfig which is
-    mapped onto the native wxConfigBase implementation on the given platform:
-    i.e. wxRegConfig under Win32 and wxFileConfig otherwise.
+    with the registry under Windows or text-based config files under Unix. 
+    To make writing the portable code even easier, wxWidgets provides a typedef 
+    wxConfig which is mapped onto the native wxConfigBase implementation on the 
+    given platform: i.e. wxRegConfig under Windows and wxFileConfig otherwise.
 
     See @ref overview_config for a description of all features of this class.
 
@@ -281,39 +280,39 @@ public:
             Some config classes require a global filename. If this is not
             present, but required, the application name will be used instead.
         @param style
-            Can be one of wxCONFIG_USE_LOCAL_FILE and wxCONFIG_USE_GLOBAL_FILE.
-            The style interpretation depends on the config class and is ignored
+            Can be one of @c wxCONFIG_USE_LOCAL_FILE and @c wxCONFIG_USE_GLOBAL_FILE.
+            @n The style interpretation depends on the config class and is ignored
             by some implementations. For wxFileConfig, these styles determine
             whether a local or global config file is created or used: if
-            wxCONFIG_USE_GLOBAL_FILE is used, then settings are read from the
-            global config file and if wxCONFIG_USE_LOCAL_FILE is used, settings
+            @c wxCONFIG_USE_GLOBAL_FILE is used, then settings are read from the
+            global config file and if @c wxCONFIG_USE_LOCAL_FILE is used, settings
             are read from and written to local config file (if they are both
             set, global file is read first, then local file, overwriting global
             settings). If the flag is present but the parameter is empty, the
             parameter will be set to a default. If the parameter is present but
             the style flag not, the relevant flag will be added to the style.
-            For wxRegConfig, thie GLOBAL flag refers to HKLM key while LOCAL
-            one is for the usual HKCU one.
-            @n For wxFileConfig you can also add wxCONFIG_USE_RELATIVE_PATH by
+            For wxRegConfig, the GLOBAL flag refers to the @c HKLM key while LOCAL
+            one is for the usual @c HKCU one.
+            @n For wxFileConfig you can also add @c wxCONFIG_USE_RELATIVE_PATH by
             logically or'ing it to either of the _FILE options to tell
             wxFileConfig to use relative instead of absolute paths.
             @n On non-VMS Unix systems, the default local configuration file is
             "~/.appname". However, this path may be also used as user data
             directory (see wxStandardPaths::GetUserDataDir()) if the
             application has several data files. In this case
-            wxCONFIG_USE_SUBDIR flag, which changes the default local
+            @c wxCONFIG_USE_SUBDIR flag, which changes the default local
             configuration file to "~/.appname/appname" should be used. Notice
-            that this flag is ignored if localFilename is provided.
-            wxCONFIG_USE_SUBDIR is new since wxWidgets version 2.8.2.
+            that this flag is ignored if @a localFilename is provided.
+            @c wxCONFIG_USE_SUBDIR is new since wxWidgets version 2.8.2.
             @n For wxFileConfig, you can also add
-            wxCONFIG_USE_NO_ESCAPE_CHARACTERS which will turn off character
+            @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS which will turn off character
             escaping for the values of entries stored in the config file: for
             example a foo key with some backslash characters will be stored as
             "foo=C:\mydir" instead of the usual storage of "foo=C:\\mydir".
-            @n The wxCONFIG_USE_NO_ESCAPE_CHARACTERS style can be helpful if your
+            @n The @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS style can be helpful if your
             config file must be read or written to by a non-wxWidgets program
             (which might not understand the escape characters). Note, however,
-            that if wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is is
+            that if @c wxCONFIG_USE_NO_ESCAPE_CHARACTERS style is used, it is is
             now your application's responsibility to ensure that there is no
             newline or other illegal characters in a value, before writing that
             value to the file.
