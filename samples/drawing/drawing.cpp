@@ -1052,8 +1052,15 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
         gc->PopState();
     }
     gc->PopState();
+
+    gc->PushState();
+    gc->Translate(60, 400);
+    gc->DrawText("Scaled smiley inside a square", 0, 0);
+    gc->DrawRectangle(BASE2, BASE2, 100, 100);
+    gc->DrawBitmap(m_smile_bmp, BASE2, BASE2, 100, 100);
+    gc->PopState();
 }
-#endif
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 void MyCanvas::DrawCircles(wxDC& dc)
 {
