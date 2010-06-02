@@ -143,6 +143,8 @@ private:
         CPPUNIT_TEST( WrongFormatStrings );
 #endif // wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( Miscellaneous );
+        CPPUNIT_TEST( GlibcMisc1 );
+        CPPUNIT_TEST( GlibcMisc2 );
     CPPUNIT_TEST_SUITE_END();
 
     void C();
@@ -176,6 +178,9 @@ private:
     void DoMisc(int expectedLen, const wxString& expectedString,
                 size_t max, const wxChar *format, ...);
     void Miscellaneous();
+
+    void GlibcMisc1();
+    void GlibcMisc2();
 
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
 };
@@ -599,4 +604,59 @@ void VsnprintfTestCase::Miscellaneous()
     DoMisc(6,  wxT("%%%%12"),  7, wxT("%%%%%%%%%d"), 12);
 }
 
+
+/* (C) Copyright C E Chew
+*
+* Feel free to copy, use and distribute this software provided:
+*
+*        1. you do not pretend that you wrote it
+*        2. you leave this copyright notice intact.
+*/
+
+void VsnprintfTestCase::GlibcMisc1()
+{
+    CMP3("     ",    "%5.s", "xyz");
+    CMP3("   33",    "%5.f", 33.3);
+#if defined(__VISUALC__)
+    // see the previous notes about the minimum width of mantissa:
+    CMP3("  3e+008", "%8.e", 33.3e7);
+    CMP3("  3E+008", "%8.E", 33.3e7);
+    CMP3("3e+001",    "%.g",  33.3);
+    CMP3("3E+001",    "%.G",  33.3);
+#else
+    CMP3("   3e+08", "%8.e", 33.3e7);
+    CMP3("   3E+08", "%8.E", 33.3e7);
+    CMP3("3e+01",    "%.g",  33.3);
+    CMP3("3E+01",    "%.G",  33.3);
+#endif
+}
+
+void VsnprintfTestCase::GlibcMisc2()
+{
+    int prec;
+    wxString test_format;
+
+    prec = 0;
+    CMP4("3", "%.*g", prec, 3.3);
+
+    prec = 0;
+    CMP4("3", "%.*G", prec, 3.3);
+
+    prec = 0;
+    CMP4("      3", "%7.*G", prec, 3.33);
+
+    prec = 3;
+    CMP4(" 041", "%04.*o", prec, 33);
+
+    prec = 7;
+    CMP4("  0000033", "%09.*u", prec, 33);
+
+    prec = 3;
+    CMP4(" 021", "%04.*x", prec, 33);
+
+    prec = 3;
+    CMP4(" 021", "%04.*X", prec, 33);
+}
+
 #endif // wxUSE_WXVSNPRINTF
+
