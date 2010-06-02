@@ -105,12 +105,10 @@
 
 
 #if TEST_ALL
-    #define TEST_DATETIME
     #define TEST_DIR
     #define TEST_DYNLIB
     #define TEST_ENVIRON
     #define TEST_FILE
-    #define TEST_FILECONF
     #define TEST_FILENAME
     #define TEST_FILETIME
     #define TEST_INFO_FUNCTIONS
@@ -621,75 +619,6 @@ static void TestTempFile()
 }
 
 #endif // TEST_FILE
-
-// ----------------------------------------------------------------------------
-// wxFileConfig
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_FILECONF
-
-#include "wx/confbase.h"
-#include "wx/fileconf.h"
-
-static const struct FileConfTestData
-{
-    const wxChar *name;      // value name
-    const wxChar *value;     // the value from the file
-} fcTestData[] =
-{
-    { wxT("value1"),                       wxT("one") },
-    { wxT("value2"),                       wxT("two") },
-    { wxT("novalue"),                      wxT("default") },
-};
-
-static void TestFileConfRead()
-{
-    wxPuts(wxT("*** testing wxFileConfig loading/reading ***"));
-
-    wxFileConfig fileconf(wxT("test"), wxEmptyString,
-                          wxT("testdata.fc"), wxEmptyString,
-                          wxCONFIG_USE_RELATIVE_PATH);
-
-    // test simple reading
-    wxPuts(wxT("\nReading config file:"));
-    wxString defValue(wxT("default")), value;
-    for ( size_t n = 0; n < WXSIZEOF(fcTestData); n++ )
-    {
-        const FileConfTestData& data = fcTestData[n];
-        value = fileconf.Read(data.name, defValue);
-        wxPrintf(wxT("\t%s = %s "), data.name, value.c_str());
-        if ( value == data.value )
-        {
-            wxPuts(wxT("(ok)"));
-        }
-        else
-        {
-            wxPrintf(wxT("(ERROR: should be %s)\n"), data.value);
-        }
-    }
-
-    // test enumerating the entries
-    wxPuts(wxT("\nEnumerating all root entries:"));
-    long dummy;
-    wxString name;
-    bool cont = fileconf.GetFirstEntry(name, dummy);
-    while ( cont )
-    {
-        wxPrintf(wxT("\t%s = %s\n"),
-               name.c_str(),
-               fileconf.Read(name.c_str(), wxT("ERROR")).c_str());
-
-        cont = fileconf.GetNextEntry(name, dummy);
-    }
-
-    static const wxChar *testEntry = wxT("TestEntry");
-    wxPrintf(wxT("\nTesting deletion of newly created \"Test\" entry: "));
-    fileconf.Write(testEntry, wxT("A value"));
-    fileconf.DeleteEntry(testEntry);
-    wxPrintf(fileconf.HasEntry(testEntry) ? wxT("ERROR\n") : wxT("ok\n"));
-}
-
-#endif // TEST_FILECONF
 
 // ----------------------------------------------------------------------------
 // wxFileName
@@ -1998,10 +1927,6 @@ int main(int argc, char **argv)
 #ifdef TEST_ENVIRON
     TestEnvironment();
 #endif // TEST_ENVIRON
-
-#ifdef TEST_FILECONF
-    TestFileConfRead();
-#endif // TEST_FILECONF
 
 #ifdef TEST_LOCALE
     TestDefaultLang();

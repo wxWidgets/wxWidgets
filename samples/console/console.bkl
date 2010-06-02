@@ -10,8 +10,4 @@
         <wx-lib>base</wx-lib>
     </exe>
 
-    <wx-data id="data">
-        <files>testdata.fc</files>
-    </wx-data>
-
 </makefile>
