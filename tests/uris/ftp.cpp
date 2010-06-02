@@ -75,8 +75,9 @@ private:
     DECLARE_NO_COPY_CLASS(FTPTestCase)
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( FTPTestCase );
+// NOTE: we do not run FTPTestCase suite by default because buildslaves typically
+//       do not have FTP connectivity enabled by default...
+//CPPUNIT_TEST_SUITE_REGISTRATION( FTPTestCase );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FTPTestCase, "FTPTestCase" );
