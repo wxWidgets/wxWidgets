@@ -120,9 +120,7 @@
     #define TEST_MODULE
     #define TEST_PATHLIST
     #define TEST_PRINTF
-    #define TEST_REGCONF
     #define TEST_REGEX
-    #define TEST_REGISTRY
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -1928,155 +1926,6 @@ rfg2 (void)
 #endif // TEST_PRINTF
 
 // ----------------------------------------------------------------------------
-// registry and related stuff
-// ----------------------------------------------------------------------------
-
-// this is for MSW only
-#ifndef __WXMSW__
-    #undef TEST_REGCONF
-    #undef TEST_REGISTRY
-#endif
-
-#ifdef TEST_REGCONF
-
-#include "wx/confbase.h"
-#include "wx/msw/regconf.h"
-
-#if 0
-static void TestRegConfWrite()
-{
-    wxConfig *config = new wxConfig(wxT("myapp"));
-    config->SetPath(wxT("/group1"));
-    config->Write(wxT("entry1"), wxT("foo"));
-    config->SetPath(wxT("/group2"));
-    config->Write(wxT("entry1"), wxT("bar"));
-}
-#endif
-
-static void TestRegConfRead()
-{
-    wxRegConfig *config = new wxRegConfig(wxT("myapp"));
-
-    wxString str;
-    long dummy;
-    config->SetPath(wxT("/"));
-    wxPuts(wxT("Enumerating / subgroups:"));
-    bool bCont = config->GetFirstGroup(str, dummy);
-    while(bCont)
-    {
-        wxPuts(str);
-        bCont = config->GetNextGroup(str, dummy);
-    }
-}
-
-#endif // TEST_REGCONF
-
-#ifdef TEST_REGISTRY
-
-#include "wx/msw/registry.h"
-
-// I chose this one because I liked its name, but it probably only exists under
-// NT
-static const wxChar *TESTKEY =
-    wxT("HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet001\\Control\\CrashControl");
-
-static void TestRegistryRead()
-{
-    wxPuts(wxT("*** testing registry reading ***"));
-
-    wxRegKey key(TESTKEY);
-    wxPrintf(wxT("The test key name is '%s'.\n"), key.GetName().c_str());
-    if ( !key.Open() )
-    {
-        wxPuts(wxT("ERROR: test key can't be opened, aborting test."));
-
-        return;
-    }
-
-    size_t nSubKeys, nValues;
-    if ( key.GetKeyInfo(&nSubKeys, NULL, &nValues, NULL) )
-    {
-        wxPrintf(wxT("It has %u subkeys and %u values.\n"), nSubKeys, nValues);
-    }
-
-    wxPrintf(wxT("Enumerating values:\n"));
-
-    long dummy;
-    wxString value;
-    bool cont = key.GetFirstValue(value, dummy);
-    while ( cont )
-    {
-        wxPrintf(wxT("Value '%s': type "), value.c_str());
-        switch ( key.GetValueType(value) )
-        {
-            case wxRegKey::Type_None:   wxPrintf(wxT("ERROR (none)")); break;
-            case wxRegKey::Type_String: wxPrintf(wxT("SZ")); break;
-            case wxRegKey::Type_Expand_String: wxPrintf(wxT("EXPAND_SZ")); break;
-            case wxRegKey::Type_Binary: wxPrintf(wxT("BINARY")); break;
-            case wxRegKey::Type_Dword: wxPrintf(wxT("DWORD")); break;
-            case wxRegKey::Type_Multi_String: wxPrintf(wxT("MULTI_SZ")); break;
-            default: wxPrintf(wxT("other (unknown)")); break;
-        }
-
-        wxPrintf(wxT(", value = "));
-        if ( key.IsNumericValue(value) )
-        {
-            long val;
-            key.QueryValue(value, &val);
-            wxPrintf(wxT("%ld"), val);
-        }
-        else // string
-        {
-            wxString val;
-            key.QueryValue(value, val);
-            wxPrintf(wxT("'%s'"), val.c_str());
-
-            key.QueryRawValue(value, val);
-            wxPrintf(wxT(" (raw value '%s')"), val.c_str());
-        }
-
-        wxPutchar('\n');
-
-        cont = key.GetNextValue(value, dummy);
-    }
-}
-
-static void TestRegistryAssociation()
-{
-    /*
-       The second call to deleteself genertaes an error message, with a
-       messagebox saying .flo is crucial to system operation, while the .ddf
-       call also fails, but with no error message
-    */
-
-    wxRegKey key;
-
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\.ddf") );
-    key.Create();
-    key = wxT("ddxf_auto_file") ;
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\.flo") );
-    key.Create();
-    key = wxT("ddxf_auto_file") ;
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
-    key.Create();
-    key = wxT("program,0") ;
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
-    key.Create();
-    key = wxT("program \"%1\"") ;
-
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\.ddf") );
-    key.DeleteSelf();
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\.flo") );
-    key.DeleteSelf();
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\DefaultIcon"));
-    key.DeleteSelf();
-    key.SetName(wxT("HKEY_CLASSES_ROOT\\ddxf_auto_file\\shell\\open\\command"));
-    key.DeleteSelf();
-}
-
-#endif // TEST_REGISTRY
-
-// ----------------------------------------------------------------------------
 // FTP
 // ----------------------------------------------------------------------------
 
@@ -2621,21 +2470,9 @@ int main(int argc, char **argv)
     TestPrintf();
 #endif // TEST_PRINTF
 
-#ifdef TEST_REGCONF
-    #if 0
-    TestRegConfWrite();
-    #endif
-    TestRegConfRead();
-#endif // TEST_REGCONF
-
 #if defined TEST_REGEX && TEST_INTERACTIVE
     TestRegExInteractive();
 #endif // defined TEST_REGEX && TEST_INTERACTIVE
-
-#ifdef TEST_REGISTRY
-    TestRegistryRead();
-    TestRegistryAssociation();
-#endif // TEST_REGISTRY
 
 #ifdef TEST_DATETIME
     #if TEST_INTERACTIVE

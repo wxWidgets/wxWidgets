@@ -740,6 +740,9 @@
 				RelativePath=".\thread\queue.cpp">
 			</File>
 			<File
+				RelativePath=".\config\regconf.cpp">
+			</File>
+			<File
 				RelativePath=".\regex\regextest.cpp">
 			</File>
 			<File

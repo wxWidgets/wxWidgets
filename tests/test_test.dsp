@@ -405,6 +405,10 @@ SOURCE=.\thread\queue.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\config\regconf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\regex\regextest.cpp
 # End Source File
 # Begin Source File

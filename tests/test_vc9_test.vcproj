@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;F:\cppunit\include;."
+				AdditionalIncludeDirectories=".\..\lib\vc_lib\mswud;.\..\include;.;F:\cppunit\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;__WXMSW__;_UNICODE;_CONSOLE;wxUSE_GUI=0"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -1021,6 +1021,10 @@
 			</File>
 			<File
 				RelativePath=".\thread\queue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\config\regconf.cpp"
 				>
 			</File>
 			<File

@@ -276,6 +276,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_base64.obj &
 	$(OBJS)\test_cmdlinetest.obj &
 	$(OBJS)\test_fileconf.obj &
+	$(OBJS)\test_regconf.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_evthandler.obj &
 	$(OBJS)\test_evtsource.obj &
@@ -460,6 +461,9 @@ $(OBJS)\test_cmdlinetest.obj :  .AUTODEPEND .\cmdline\cmdlinetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_fileconf.obj :  .AUTODEPEND .\config\fileconf.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_regconf.obj :  .AUTODEPEND .\config\regconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp

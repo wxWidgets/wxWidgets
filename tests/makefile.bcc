@@ -46,6 +46,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_base64.obj \
 	$(OBJS)\test_cmdlinetest.obj \
 	$(OBJS)\test_fileconf.obj \
+	$(OBJS)\test_regconf.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_evthandler.obj \
 	$(OBJS)\test_evtsource.obj \
@@ -423,6 +424,9 @@ $(OBJS)\test_cmdlinetest.obj: .\cmdline\cmdlinetest.cpp
 
 $(OBJS)\test_fileconf.obj: .\config\fileconf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\config\fileconf.cpp
+
+$(OBJS)\test_regconf.obj: .\config\regconf.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\config\regconf.cpp
 
 $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\datetime\datetimetest.cpp

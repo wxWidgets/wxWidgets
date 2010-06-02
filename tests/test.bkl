@@ -37,6 +37,7 @@
             base64/base64.cpp
             cmdline/cmdlinetest.cpp
             config/fileconf.cpp
+            config/regconf.cpp
             datetime/datetimetest.cpp
             events/evthandler.cpp
             events/evtsource.cpp
