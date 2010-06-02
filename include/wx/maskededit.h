@@ -28,9 +28,9 @@ public:
     wxMaskedEdit(const wxMaskedEdit& maskedEdit);
     
 
-    wxMaskedEdit( wxString& mask 
-                , const wxString& formatCode   = wxDEFAULT_FORMAT_CODES
-                , const wxString& defaultValue = wxDEFAULT_VALUE);
+    wxMaskedEdit( const wxString& mask 
+                , const wxString &formatCode   = wxDEFAULT_FORMAT_CODES
+                , const wxString &defaultValue = wxDEFAULT_VALUE);
                 
   
     wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode = NULL
@@ -58,40 +58,40 @@ public:
     bool IsEmpty(wxString string) const;
     
     //Set the mask to a new value. 
-    void SetMask(wxString mask);
+    bool SetMask(const wxString& mask);
 
-    
+   //* 
     wxString GetMask() const;
-    
+   //* 
     wxString GetFormatCode() const;
-
+//*
     wxString GetDefaultValue() const;
-    
+   //* 
     wxArrayString GetChoices() const;
-    
-    bool AddDefaultChoice(wxString choice);
-
-    bool AddDefaultChoices(const wxArrayString& choices);  
-
-    int GetNumberOfFields();
+   //* 
+    bool AddChoice(wxString& choice);
+    //*
+    bool AddChoices(const wxArrayString& choices);  
+//*
+    int GetNumberOfFields() const ;
     
     void SetEmptyBackgroundColour(const wxColour& colour);
      
     void SetInvalidBackgroundColour(const wxColour& colour);       
 
     void SetValidBackgroundColour(const wxColour& colour);
-  
-    void SetMask(int fieldIndex, wxString mask);
-    
-    wxString GetMask(int fieldIndex) const;
-    
-    wxArrayString GetFormatCodes(int fieldIndex) const;
-    
-    wxArrayString GetChoices(int fieldIndex) const;        
-        
-    bool AddDefaultChoice(int fieldIndex, wxString choice);
-
-    bool AddDefaultChoices(int fieldIndex, const wxArrayString& choices);  
+ //* 
+    bool SetMask(unsigned int fieldIndex, wxString& mask);
+   //* 
+    wxString GetMask(unsigned int fieldIndex) const;
+   //*
+    wxString GetFormatCodes(unsigned int fieldIndex) const;
+   //* 
+    wxArrayString GetChoices(unsigned int fieldIndex) const;        
+    //* 
+    bool AddChoice(unsigned int fieldIndex, const wxString& choice);
+//*
+    bool AddChoices(unsigned int fieldIndex, const wxArrayString& choices);  
     
 private:
     fieldsArray m_mask;
@@ -101,5 +101,10 @@ private:
 
         
 };   
+
+#include <wx/arrimpl.cpp> // This is a magic incantation which must be done!
+WX_DEFINE_OBJARRAY(fieldsArray);
+
+
 
 #endif

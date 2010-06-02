@@ -1036,6 +1036,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\masked\maskededit.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\masked\maskedfield.cpp"
 				>
 			</File>

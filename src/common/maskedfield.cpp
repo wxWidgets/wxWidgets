@@ -33,7 +33,7 @@ wxMaskedField::wxMaskedField(const wxMaskedField& maskedField)
     m_useParensForNegatives = maskedField.IsParensForNegatives();
 }
 
-wxMaskedField::wxMaskedField( wxString& mask
+wxMaskedField::wxMaskedField( const wxString& mask
                  , const wxString& formatCodes
                  , const wxString& defaultValue
                  , const wxArrayString& choices
@@ -43,16 +43,21 @@ wxMaskedField::wxMaskedField( wxString& mask
 {
     unsigned int it;
 
-    //FIXME ajouter des tests
     m_mask         = mask;
     m_formatCodes  = formatCodes;
-    m_defaultValue = defaultValue;
     m_autoSelect   = autoSelect;
     m_groupChar    = groupChar;
     m_decimalPoint = decimalPoint;
     m_useParensForNegatives = useParensForNegatives;
     
-    
+    if(IsValid(defaultValue))
+    {
+        m_defaultValue = defaultValue;
+    }
+    else
+    {
+        m_defaultValue = wxT(" ");
+    }
     
     for(it = 0; it < choices.size(); it++)
     {
@@ -63,10 +68,9 @@ wxMaskedField::wxMaskedField( wxString& mask
     }
 }
 
-// FIXME change the default value
 bool wxMaskedField::IsEmpty(const wxString& string) const
 {
-    return string.Cmp(wxT(" ")) == 0;
+    return string.Cmp(m_defaultValue) == 0;
 }
 
 bool wxMaskedField::IsNumber(const wxChar character) const
@@ -99,6 +103,10 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
     else if(m_formatCodes.Contains(wxT("^")))
     {
         return string.Lower();
+    }
+    else
+    {   
+        return string;
     }
 }
 
@@ -166,12 +174,68 @@ bool wxMaskedField::IsValid(const wxString& string) const
         }
         else if(!IsCharValid(m_mask[itMask], string[it]))
         {
-            res = false;
+            if(m_formatCodes.Contains('_'))
+            {
+                it--;
+            }
+            else
+            {
+                res = false;
+            }
         }
     }
     
     return res;
     
+}
+
+bool wxMaskedField::AddChoice(const wxString& choice)
+{
+    bool res = true;
+    if(IsValid(choice))
+        m_choices.Add(choice);
+    else
+        res = false;
+
+    return res;
+}
+
+bool wxMaskedField::AddChoices(const wxArrayString& choices)
+{
+    bool res = true;
+    unsigned int it;
+
+    for(it = 0; it < choices.size() && res; it++)
+    {
+        if(!IsValid(choices[it]))
+            res = false;
+    }
+
+    for(it = 0; it < choices.size() && res; it++)
+    {
+        m_choices.Add(choices[it]);
+    }
+
+    return res;
+}
+
+void wxMaskedField::SetMask(const wxString& mask)
+{
+    m_mask = mask;
+    unsigned int it;
+
+    if(!IsValid(m_defaultValue))
+        m_defaultValue = wxDEFAULT_VALUE;
+
+    for(it = 0; it < m_choices.Count(); it++)
+    {
+        if(!IsValid(m_choices[it]))
+        {
+            m_choices.RemoveAt(it);
+            it --;
+        }
+    }
+
 }
 
 wxString wxMaskedField::GetMask() const
@@ -192,6 +256,16 @@ wxUniChar wxMaskedField::GetGroupChar() const
 wxUniChar wxMaskedField::GetDecimalPoint() const
 {
     return m_decimalPoint;
+}
+
+wxString wxMaskedField::GetDefaultValue() const
+{
+    return m_defaultValue;
+}
+
+wxArrayString wxMaskedField::GetChoices() const
+{
+    return m_choices;    
 }
 
 bool wxMaskedField::IsParensForNegatives() const
@@ -237,7 +311,7 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
                     res << string[itMask];
                 }
             }
-        }   
+        }
     }
 
     return res;

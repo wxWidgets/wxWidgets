@@ -28,7 +28,9 @@ wxMaskedEdit::wxMaskedEdit()
 {
 
 }
-    
+
+// FIXME watch how to copy constructor
+#if 0
 wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
 {
     m_mask.Add(new wxMaskedField( maskedEdit.GetMask(), maskedEdit.GetFormatCode()
@@ -39,9 +41,10 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
     m_cursorInsideField = 0;
 
 }
+#endif
     
 
-wxMaskedEdit::wxMaskedEdit( wxString& mask 
+wxMaskedEdit::wxMaskedEdit( const wxString& mask 
                           , const wxString& formatCode
                           , const wxString& defaultValue)
 {
@@ -155,3 +158,141 @@ bool wxMaskedEdit::IsEmpty(wxString string) const
    
 }
 #endif
+
+bool wxMaskedEdit::SetMask( const wxString& mask)
+{
+    bool res = true;
+
+    if(m_mask.GetCount() == 1)
+        m_mask[0].SetMask(mask);
+    else
+        res = false;
+
+    return res;
+}
+
+wxString wxMaskedEdit::GetMask() const
+{
+    return m_maskValue;
+
+}
+
+wxString wxMaskedEdit::GetFormatCode() const
+{
+    if(m_mask.GetCount() == 1)
+        return m_mask[0].GetFormatCodes();
+    else
+        return wxEmptyString;
+}
+
+wxString wxMaskedEdit::GetDefaultValue() const
+{
+    unsigned int it;
+    wxString res;
+
+    for(it = 0; it < m_mask.GetCount(); it++)
+    {
+        res << m_mask[it].GetDefaultValue();
+    }
+
+    return res;
+}
+
+
+wxArrayString wxMaskedEdit::GetChoices() const
+{
+    if(m_mask.GetCount() == 1)
+        return m_mask[0].GetChoices();
+    else
+        return NULL;
+}
+
+bool wxMaskedEdit::AddChoice(wxString& choice)
+{
+    bool res = true;
+    if(m_mask.GetCount() == 1)
+         res = m_mask[0].AddChoice(choice);
+    else
+        res = false;
+
+    return res;
+}
+
+bool wxMaskedEdit::AddChoices(const wxArrayString& choices)  
+{
+    bool res = true;
+    if(m_mask.GetCount() == 1)
+         res = m_mask[0].AddChoices(choices);
+    else
+        res = false;
+
+    return res;
+}
+int wxMaskedEdit::GetNumberOfFields() const
+{
+    return m_mask.GetCount();
+}
+
+bool wxMaskedEdit::SetMask(unsigned int fieldIndex, wxString& mask)
+{
+    bool res = true;
+
+    if(fieldIndex >= m_mask.GetCount())
+        res = false;
+    else
+        m_mask[fieldIndex].SetMask(mask);
+
+    return res;
+}
+
+
+
+wxString wxMaskedEdit::GetMask(unsigned int fieldIndex) const
+{
+    if(fieldIndex >= m_mask.GetCount())
+        return wxEmptyString;
+
+    return m_mask[fieldIndex].GetMask();
+
+}
+wxString wxMaskedEdit::GetFormatCodes(unsigned int fieldIndex) const
+{
+    if(fieldIndex >= m_mask.GetCount())
+        return wxEmptyString;
+    
+    return m_mask[fieldIndex].GetFormatCodes();
+}
+
+wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
+{
+    if(fieldIndex >= m_mask.GetCount())
+        return NULL;
+    else
+        return m_mask[fieldIndex].GetChoices();
+}
+ 
+bool wxMaskedEdit::AddChoice(unsigned int fieldIndex, const wxString& choice)
+{
+    bool res = true;
+    if(fieldIndex >= m_mask.GetCount())
+        res = m_mask[fieldIndex].AddChoice(choice);
+    else
+        res = false;
+
+    return res;
+
+}
+
+bool wxMaskedEdit::AddChoices(unsigned int fieldIndex, const wxArrayString& choices)
+{
+    bool res = true;
+    if(fieldIndex >= m_mask.GetCount())
+        res = m_mask[fieldIndex].AddChoices(choices);
+    else
+        res = false;
+
+    return res;
+} 
+
+
+

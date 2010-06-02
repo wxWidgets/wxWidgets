@@ -24,7 +24,7 @@ public:
  
     wxMaskedField(const wxMaskedField& maskedField);
     
-    wxMaskedField( wxString& mask        
+    wxMaskedField( const wxString& mask        
                  , const wxString& formatCodes  = wxDEFAULT_FORMAT_CODES
                  , const wxString& defaultValue = wxDEFAULT_VALUE
                  , const wxArrayString& choices = NULL
@@ -39,6 +39,14 @@ public:
     
     bool IsValid(const wxString& string) const;
 
+    bool AddChoice(const wxString& choice);
+
+    bool AddChoices(const wxArrayString& choices); 
+
+    wxString GetDefaultValue() const; 
+
+    void SetMask(const wxString& mask);
+
     wxString GetMask() const;
 
     wxString GetFormatCodes() const;
@@ -47,12 +55,16 @@ public:
 
     wxUniChar GetDecimalPoint() const;
 
+    wxArrayString GetChoices() const;
+
     bool IsParensForNegatives() const;
 
     bool IsAutoSelect() const;
 
     wxString GetPlainValue(const wxString& string);
     
+    bool IsCharValid(const wxChar maskChar, const wxChar character) const;
+
 private:
     // The mask in the field see wxMaskedEdit
     wxString m_mask;
@@ -76,7 +88,6 @@ private:
     // Use (###) in place of -###
     bool m_useParensForNegatives;
 
-    bool IsCharValid(const wxChar maskChar, const wxChar character) const;
     bool IsNumber(const wxChar character) const;
     bool IsLowerCase(const wxChar character) const;    
     bool IsUpperCase(const wxChar character) const;
