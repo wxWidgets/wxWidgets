@@ -999,7 +999,21 @@ public:
     // This is also used only internally by ProcessEvent() to check if it
     // should process the event normally or only restrict the search for the
     // event handler to this object itself.
-    bool ShouldProcessHereOnly() const { return m_processHereOnly; }
+    bool ShouldProcessOnlyIn(wxEvtHandler *h) const
+    {
+        return h == m_handlerToProcessOnlyIn;
+    }
+
+    // Called to indicate that the result of ShouldProcessOnlyIn() wasn't taken
+    // into account. The existence of this function may seem counterintuitive
+    // but unfortunately it's needed by wxScrollHelperEvtHandler, see comments
+    // there. Don't even think of using this in your own code, this is a gross
+    // hack and is only needed because of wx complicated history and should
+    // never be used anywhere else.
+    void DidntHonourProcessOnlyIn()
+    {
+        m_handlerToProcessOnlyIn = NULL;
+    }
 
 protected:
     wxObject*         m_eventObject;
@@ -1010,6 +1024,10 @@ protected:
 public:
     // m_callbackUserData is for internal usage only
     wxObject*         m_callbackUserData;
+
+private:
+    // If this handler
+    wxEvtHandler *m_handlerToProcessOnlyIn;
 
 protected:
     // the propagation level: while it is positive, we propagate the event to
@@ -1025,11 +1043,6 @@ protected:
     // once for this event
     bool m_wasProcessed;
 
-    // this flag is used by ProcessEventLocally() to prevent ProcessEvent()
-    // from doing its usual stuff and force it to just call TryHere() instead,
-    // see the comment there explaining why is this needed
-    bool m_processHereOnly;
-
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()
     wxEvent& operator=(const wxEvent&); // for derived classes operator=()
@@ -1038,8 +1051,8 @@ private:
     // it needs to access our m_propagationLevel
     friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
 
-    // and this one needs to access our m_processHereOnly
-    friend class WXDLLIMPEXP_FWD_BASE wxEventProcessHereOnly;
+    // and this one needs to access our m_handlerToProcessOnlyIn
+    friend class WXDLLIMPEXP_FWD_BASE wxEventProcessInHandlerOnly;
 
 
     DECLARE_ABSTRACT_CLASS(wxEvent)
@@ -1093,31 +1106,28 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
-// A helper used by ProcessEventLocally() to restrict the event processing
-// to this handler only.
-class WXDLLIMPEXP_BASE wxEventProcessHereOnly
+// A helper object used to temporarily make wxEvent::ShouldProcessOnlyIn()
+// return true for the handler passed to its ctor.
+class wxEventProcessInHandlerOnly
 {
 public:
-    wxEventProcessHereOnly(wxEvent& event) : m_event(event)
+    wxEventProcessInHandlerOnly(wxEvent& event, wxEvtHandler *handler)
+        : m_event(event),
+          m_handlerToProcessOnlyInOld(event.m_handlerToProcessOnlyIn)
     {
-        // This would be unexpected and would also restore the wrong value in
-        // this class dtor so if even does happen legitimately we'd need to
-        // store the value in ctor and restore it in dtor.
-        wxASSERT_MSG( !m_event.m_processHereOnly,
-                      "shouldn't be used twice for the same event" );
-
-        m_event.m_processHereOnly = true;
+        m_event.m_handlerToProcessOnlyIn = handler;
     }
 
-    ~wxEventProcessHereOnly()
+    ~wxEventProcessInHandlerOnly()
     {
-        m_event.m_processHereOnly = false;
+        m_event.m_handlerToProcessOnlyIn = m_handlerToProcessOnlyInOld;
     }
 
 private:
     wxEvent& m_event;
+    wxEvtHandler * const m_handlerToProcessOnlyInOld;
 
-    wxDECLARE_NO_COPY_CLASS(wxEventProcessHereOnly);
+    wxDECLARE_NO_COPY_CLASS(wxEventProcessInHandlerOnly);
 };
 
 #if wxUSE_GUI

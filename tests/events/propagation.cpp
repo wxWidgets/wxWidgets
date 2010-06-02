@@ -178,6 +178,7 @@ private:
         CPPUNIT_TEST( TwoHandlers );
         CPPUNIT_TEST( WindowWithoutHandler );
         CPPUNIT_TEST( WindowWithHandler );
+        CPPUNIT_TEST( ForwardEvent );
         CPPUNIT_TEST( ScrollWindowWithoutHandler );
         CPPUNIT_TEST( ScrollWindowWithHandler );
     CPPUNIT_TEST_SUITE_END();
@@ -186,6 +187,7 @@ private:
     void TwoHandlers();
     void WindowWithoutHandler();
     void WindowWithHandler();
+    void ForwardEvent();
     void ScrollWindowWithoutHandler();
     void ScrollWindowWithHandler();
 
@@ -260,6 +262,48 @@ void EventPropagationTestCase::WindowWithHandler()
 
     child->HandleWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "oa2o1cpA", g_str );
+}
+
+void EventPropagationTestCase::ForwardEvent()
+{
+    // The idea of this test is to check that the events explicitly forwarded
+    // to another event handler still get pre/post-processed as usual as this
+    // used to be broken by the fixes trying to avoid duplicate processing.
+    TestWindow * const win = new TestWindow(wxTheApp->GetTopWindow(), 'w');
+    wxON_BLOCK_EXIT_OBJ0( *win, wxWindow::Destroy );
+
+    TestEvtHandler h1('1');
+    win->PushEventHandler(&h1);
+    wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
+
+    class ForwardEvtHandler : public wxEvtHandler
+    {
+    public:
+        ForwardEvtHandler(wxEvtHandler& h) : m_h(&h) { }
+
+        virtual bool ProcessEvent(wxEvent& event)
+        {
+            g_str += 'f';
+
+            return m_h->ProcessEvent(event);
+        }
+
+    private:
+        wxEvtHandler *m_h;
+    } f(h1);
+
+    // First send the event directly to f.
+    wxCommandEvent event1(TEST_EVT);
+    f.ProcessEvent(event1);
+    CPPUNIT_ASSERT_EQUAL( "foa1wA", g_str );
+    g_str.clear();
+
+    // And then also test sending it to f indirectly.
+    wxCommandEvent event2(TEST_EVT);
+    TestEvtHandler h2('2');
+    h2.SetNextHandler(&f);
+    h2.ProcessEvent(event2);
+    CPPUNIT_ASSERT_EQUAL( "oa2fo1wAA", g_str );
 }
 
 void EventPropagationTestCase::ScrollWindowWithoutHandler()

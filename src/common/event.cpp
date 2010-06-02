@@ -363,10 +363,10 @@ wxEvent::wxEvent(int theId, wxEventType commandType)
     m_id = theId;
     m_skipped = false;
     m_callbackUserData = NULL;
+    m_handlerToProcessOnlyIn = NULL;
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
     m_wasProcessed = false;
-    m_processHereOnly = false;
 }
 
 wxEvent::wxEvent(const wxEvent& src)
@@ -376,11 +376,11 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_timeStamp(src.m_timeStamp)
     , m_id(src.m_id)
     , m_callbackUserData(src.m_callbackUserData)
+    , m_handlerToProcessOnlyIn(NULL)
     , m_propagationLevel(src.m_propagationLevel)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
     , m_wasProcessed(false)
-    , m_processHereOnly(false)
 {
 }
 
@@ -393,11 +393,12 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     m_timeStamp = src.m_timeStamp;
     m_id = src.m_id;
     m_callbackUserData = src.m_callbackUserData;
+    m_handlerToProcessOnlyIn = NULL;
     m_propagationLevel = src.m_propagationLevel;
     m_skipped = src.m_skipped;
     m_isCommandEvent = src.m_isCommandEvent;
 
-    // don't change m_wasProcessed nor m_processHereOnly
+    // don't change m_wasProcessed
 
     return *this;
 }
@@ -1378,7 +1379,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
     // Short circuit the event processing logic if we're requested to process
     // this event in this handler only, see DoTryChain() for more details.
-    if ( event.ShouldProcessHereOnly() )
+    if ( event.ShouldProcessOnlyIn(this) )
         return TryHere(event);
 
 
@@ -1432,12 +1433,21 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
         // window to be called.
         //
         // So we must call ProcessEvent() but it must not do what it usually
-        // does. To resolve this paradox we pass a special "process here only"
-        // flag to ProcessEvent() via the event object itself. This ensures
-        // that if our own, base class, version is called, it will just call
-        // TryHere() and won't do anything else, just as we want it to.
-        wxEventProcessHereOnly processHereOnly(event);
-        if ( h->ProcessEvent(event) )
+        // does. To resolve this paradox we set up a special flag inside the
+        // object itself to let ProcessEvent() know that it shouldn't do any
+        // pre/post-processing for this event if it gets it. Note that this
+        // only applies to this handler, if the event is passed to another one
+        // by explicitly calling its ProcessEvent(), pre/post-processing should
+        // be done as usual.
+        //
+        // Final complication is that if the implementation of ProcessEvent()
+        // called wxEvent::DidntHonourProcessOnlyIn() (as the gross hack that
+        // is wxScrollHelperEvtHandler::ProcessEvent() does) and ignored our
+        // request to process event in this handler only, we have to compensate
+        // for it by not processing the event further because this was already
+        // done by that rogue event handler.
+        wxEventProcessInHandlerOnly processInHandlerOnly(event, h);
+        if ( h->ProcessEvent(event) || !event.ShouldProcessOnlyIn(h) )
             return true;
     }
 

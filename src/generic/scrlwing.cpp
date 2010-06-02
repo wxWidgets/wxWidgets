@@ -209,11 +209,6 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // (as indicated by "process here only" flag being set) and we do want to
     // execute the handler defined in the window we're associated with right
     // now, without waiting until TryAfter() is called from wxEvtHandler.
-    //
-    // Note that this means that the handler in the window will be called twice
-    // if there is a preceding event handler in the chain because we do it from
-    // here now and the base class DoTryChain() will also call it itself when
-    // we return. But this unfortunately seems unavoidable.
     bool processed = m_nextHandler->ProcessEvent(event);
 
     // always process the size events ourselves, even if the user code handles
@@ -309,6 +304,17 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     }
 
     event.Skip(wasSkipped);
+
+    // We called ProcessEvent() on the next handler, meaning that we explicitly
+    // worked around the request to process the event in this handler only. As
+    // explained above, this is unfortunately really necessary but the trouble
+    // is that the event will continue to be post-processed by the previous
+    // handler resulting in duplicate calls to event handlers. Call the special
+    // function below to prevent this from happening, base class DoTryChain()
+    // will check for it and behave accordingly.
+    //
+    // And if we're not called from DoTryChain(), this won't do anything anyhow.
+    event.DidntHonourProcessOnlyIn();
 
     return processed;
 }
