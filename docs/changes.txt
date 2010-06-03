@@ -102,6 +102,8 @@ wxMSW:
   have more native-like focus indicator rendering.
 - Fixed wxOwnerDrawnComboBox keyboard handling: drop-down is no longer
   displayed when arrow key is pressed (without Alt).
+- In some rare cases wxOwnerDrawnComboBox drop-down animation could display
+  as garbage. This has now been greatly reduced (mcben).
 
 2.8.11:
 -------
