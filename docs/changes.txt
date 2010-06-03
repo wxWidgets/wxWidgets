@@ -556,6 +556,8 @@ MSW:
 - Fix wxTaskBarIcon for older Windows systems (Daniel Wyatt).
 - Fixed wxOwnerDrawnComboBox keyboard handling: drop-down is no longer
   displayed when arrow key is pressed (without Alt).
+- In some rare cases wxOwnerDrawnComboBox drop-down animation could display
+  as garbage. This has now been greatly reduced (mcben).
 - Fixed wxComboCtrl::SetButtonPosition() on Vista/Win7.
 
 i18n:

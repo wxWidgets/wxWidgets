@@ -730,6 +730,7 @@ void wxComboCtrl::DoTimerEvent()
 {
     bool stopTimer = false;
 
+    wxWindow* win = GetPopupWindow();
     wxWindow* popup = GetPopupControl()->GetControl();
 
     // Popup was hidden before it was fully shown?
@@ -741,7 +742,6 @@ void wxComboCtrl::DoTimerEvent()
     {
         wxLongLong t = ::wxGetLocalTimeMillis();
         const wxRect& rect = m_animRect;
-        wxWindow* win = GetPopupWindow();
 
         int pos = (int) (t-m_animStart).GetLo();
         if ( pos < COMBOBOX_ANIMATION_DURATION )
@@ -759,8 +759,10 @@ void wxComboCtrl::DoTimerEvent()
             }
             else
             {
-                popup->Move( 0, -y );
+                // Note that apparently Move() should be called after
+                // SetSize() to reduce (or even eliminate) animation garbage
                 win->SetSize( rect.x, rect.y, rect.width, h );
+                popup->Move( 0, -y );
             }
         }
         else
@@ -771,9 +773,13 @@ void wxComboCtrl::DoTimerEvent()
 
     if ( stopTimer )
     {
-        popup->Move( 0, 0 );
         m_animTimer.Stop();
         DoShowPopup( m_animRect, m_animFlags );
+        popup->Move( 0, 0 );
+
+        // Do a one final refresh to clean up the rare cases of animation
+        // garbage
+        win->Refresh();
     }
 }
 #endif
