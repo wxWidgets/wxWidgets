@@ -3484,15 +3484,15 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                         // if we're on the "near" (usually left but right in
                         // RTL case) part of the column, the actual position we
                         // should be placed in is actually the one before it
-                        bool near;
+                        bool onNearPart;
                         const int middle = GetColLeft(colValid) +
                                                 GetColWidth(colValid)/2;
                         if ( GetLayoutDirection() == wxLayout_LeftToRight )
-                            near = x <= middle;
+                            onNearPart = (x <= middle);
                         else // wxLayout_RightToLeft
-                            near = x > middle;
+                            onNearPart = (x > middle);
 
-                        if ( near )
+                        if ( onNearPart )
                             pos--;
                     }
 
