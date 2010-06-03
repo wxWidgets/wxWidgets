@@ -4059,8 +4059,11 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     {
         ResetVisibleLinesRange();
 
+        const unsigned col = item.GetColumn();
+        wxCHECK_RET( col < m_aColWidths.size(), "invalid item column" );
+
         // calculate the width of the item and adjust the max column width
-        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(item.GetColumn());
+        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(col);
         int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
         if (width > pWidthInfo->nMaxWidth)
