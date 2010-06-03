@@ -3469,7 +3469,34 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    DoEndMoveCol(XToPos(x));
+                    // get the position of the column we're over
+                    int pos = XToPos(x);
+
+                    // we may need to adjust the drop position but don't bother
+                    // checking for it if we can't anyhow
+                    if ( pos > 1 )
+                    {
+                        // also find the index of the column we're over: notice
+                        // that the existing "col" variable may be invalid but
+                        // we need a valid one here
+                        const int colValid = GetColAt(pos);
+
+                        // if we're on the "near" (usually left but right in
+                        // RTL case) part of the column, the actual position we
+                        // should be placed in is actually the one before it
+                        bool near;
+                        const int middle = GetColLeft(colValid) +
+                                                GetColWidth(colValid)/2;
+                        if ( GetLayoutDirection() == wxLayout_LeftToRight )
+                            near = x <= middle;
+                        else // wxLayout_RightToLeft
+                            near = x > middle;
+
+                        if ( near )
+                            pos--;
+                    }
+
+                    DoEndMoveCol(pos);
                 }
                 break;
 
