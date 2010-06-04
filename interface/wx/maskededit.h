@@ -204,6 +204,11 @@ public:
         @return return a wxArrayString with all formats code.
     */
     wxArrayString GetFormatCodes() const;
+
+    /**
+        @eturn the default value. 
+    */
+    wxString GetDefaultValue() const;
     
     /**
         This methods return the list of possible choices. If there is more than one field
@@ -218,7 +223,7 @@ public:
             The choice added.
         @return return if the choice is added or not
     */
-    bool AddDefaultChoice(wxString choice);
+    bool AddChoice(wxString choice);
 
     /**
         This methods add a list of default choices.
@@ -226,7 +231,7 @@ public:
             The choice added.
         @return return if the choices are added or not
     */
-    bool AddDefaultChoices(const wxArrayString& choices);  
+    bool AddChoices(const wxArrayString& choices);  
 
     /**
         Provide the number of field
@@ -298,7 +303,7 @@ public:
             The choice added.
         @return return if the choice is added or not
     */
-    bool AddDefaultChoice(int fieldIndex, wxString choice);
+    bool AddChoice(int fieldIndex, wxString choice);
 
     /**
         This methods add a list of default choices.
@@ -308,7 +313,7 @@ public:
             The choice added.
         @return return if the choices are added or not
     */
-    bool AddDefaultChoices(int fieldIndex, const wxArrayString& choices);  
+    bool AddChoices(int fieldIndex, const wxArrayString& choices);  
     
         
-   
+}; 

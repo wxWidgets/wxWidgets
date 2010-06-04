@@ -54,13 +54,51 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask
     m_cursorInsideField = 0;
 }
 
-#if 0
 wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode
                           , const wxString& defaultValue)
 {
+    wxString tmp;
+    unsigned int it;
+    
+    m_maskValue = mask;
+    m_cursorField = 0;
+    m_cursorInsideField = 0;
+
+    for(it = 0; it < mask.Len(); it++)
+    {
+        if(mask[it] != '|')
+        {
+            tmp << mask[it];
+        }
+        else
+        {
+            if(formatCode.GetCount() > it + 1)
+                m_mask.Add(new wxMaskedField(tmp, formatCode[it]));
+            else
+                m_mask.Add(new wxMaskedField(tmp));
+            
+            tmp.Clear();
+        }
+
+
+    }
+    if(mask[it] != '|')
+    {
+        tmp << mask[it];
+    }
+    else
+    {
+        m_mask.Add(new wxMaskedField(tmp));
+        tmp.Clear();
+    }
+
+    if(IsValid(defaultValue))
+    {
+       //FIXME ajout d une valeur par defaut 
+    }
+
 }
 
-#endif
 
 wxString wxMaskedEdit::GetPlainValue(wxString string)
 {
@@ -163,7 +201,7 @@ bool wxMaskedEdit::SetMask( const wxString& mask)
 {
     bool res = true;
 
-    if(m_mask.GetCount() == 1)
+    if(m_mask.GetCount() == 1 && !mask.Contains(wxT("|")))
         m_mask[0].SetMask(mask);
     else
         res = false;
@@ -204,7 +242,7 @@ wxArrayString wxMaskedEdit::GetChoices() const
     if(m_mask.GetCount() == 1)
         return m_mask[0].GetChoices();
     else
-        return NULL;
+        return wxArrayString();
 }
 
 bool wxMaskedEdit::AddChoice(wxString& choice)
@@ -266,7 +304,7 @@ wxString wxMaskedEdit::GetFormatCodes(unsigned int fieldIndex) const
 wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
 {
     if(fieldIndex >= m_mask.GetCount())
-        return NULL;
+        return wxArrayString();
     else
         return m_mask[fieldIndex].GetChoices();
 }

@@ -76,7 +76,7 @@ public:
         which follow the format codes.
         @param string the original string
         @return a new string which the format codes apply
-    **/
+    */
     wxString ApplyFormatCodes(const wxString& string);
     
     /**
@@ -160,7 +160,7 @@ public:
 
         @param string the string with the mask.
         @return a new string without the mask.
-    **/
+    */
     wxString GetPlainValue(const wxString& string);
    
 
@@ -170,7 +170,7 @@ public:
         @param maskChar the mask represented by a character.
         @param character the tested character.
         @return if the character is valid from the mask.
-
+    */
     bool IsCharValid(const wxChar maskChar, const wxChar character) const;
 
 }

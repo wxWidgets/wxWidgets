@@ -94,20 +94,33 @@ bool wxMaskedField::IsPunctuation(const wxChar character) const
         || character == '.' || character == ':' || character == '!';
 }
 
+// FIXME add space
 wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 {
+    wxString res;
+    unsigned int it;
+
+    if(m_formatCodes.Contains(wxT("_")))
+    {
+        for(it = 0; it < m_mask.Len(); it++)
+        {
+            if(!IsCharValid(m_mask[it], string[it]))
+                res << wxT("");
+            else
+                res << string[it];
+        }
+    }
+
+
     if(m_formatCodes.Contains(wxT("!")))
     {
-        return string.Upper();
+        res =  string.Upper();
     }
     else if(m_formatCodes.Contains(wxT("^")))
     {
-        return string.Lower();
+        res =  string.Lower();
     }
-    else
-    {   
-        return string;
-    }
+    return res;
 }
 
 

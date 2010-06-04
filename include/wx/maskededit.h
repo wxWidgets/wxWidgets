@@ -33,7 +33,7 @@ public:
                 , const wxString &defaultValue = wxDEFAULT_VALUE);
                 
   
-    wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode = NULL
+    wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode = wxArrayString()
                 , const wxString& defaultValue  = wxEmptyString);
     
     
@@ -49,7 +49,7 @@ public:
     
  
     //Set the value in the text control associated
-   // bool SetValue(wxString value);
+    // bool SetValue(wxString value);
     
     //Test if the current sequence is valid
     bool IsValid(wxString string) const;
@@ -60,19 +60,19 @@ public:
     //Set the mask to a new value. 
     bool SetMask(const wxString& mask);
 
-   //* 
+    
     wxString GetMask() const;
-   //* 
+    
     wxString GetFormatCode() const;
-//*
+
     wxString GetDefaultValue() const;
-   //* 
+ 
     wxArrayString GetChoices() const;
-   //* 
+ 
     bool AddChoice(wxString& choice);
-    //*
+ 
     bool AddChoices(const wxArrayString& choices);  
-//*
+
     int GetNumberOfFields() const ;
     
     void SetEmptyBackgroundColour(const wxColour& colour);
@@ -80,17 +80,17 @@ public:
     void SetInvalidBackgroundColour(const wxColour& colour);       
 
     void SetValidBackgroundColour(const wxColour& colour);
- //* 
+  
     bool SetMask(unsigned int fieldIndex, wxString& mask);
-   //* 
+  
     wxString GetMask(unsigned int fieldIndex) const;
-   //*
+
     wxString GetFormatCodes(unsigned int fieldIndex) const;
-   //* 
+  
     wxArrayString GetChoices(unsigned int fieldIndex) const;        
-    //* 
+ 
     bool AddChoice(unsigned int fieldIndex, const wxString& choice);
-//*
+
     bool AddChoices(unsigned int fieldIndex, const wxArrayString& choices);  
     
 private:
