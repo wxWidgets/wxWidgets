@@ -88,7 +88,7 @@
            Begin dragging with the left mouse button.
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button..
-    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
            Finish editing a label. This can be prevented by calling Veto().
