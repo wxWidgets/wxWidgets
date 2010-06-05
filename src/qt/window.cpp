@@ -24,7 +24,7 @@ IMPLEMENT_DYNAMIC_CLASS( wxWindow, wxWindowBase )
 
 static wxWindow *s_capturedWindow = NULL;
 
-wxWindow *wxWindowBase::DoFindFocus()
+/* static */ wxWindow *wxWindowBase::DoFindFocus()
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 
@@ -57,9 +57,7 @@ bool wxWindow::Create( wxWindow * WXUNUSED( parent ), wxWindowID WXUNUSED( id ),
 
 bool wxWindow::Show( bool show )
 {
-    QWidget *qtWidget = GetHandle();
-    // GetHandle()->setVisible( show );
-    qtWidget->setVisible( show );
+    GetHandle()->setVisible( show );
 
     return wxWindowBase::Show( show );
 }
@@ -78,7 +76,7 @@ wxString wxWindow::GetLabel() const
     
 void wxWindow::SetFocus()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    GetHandle()->setFocus();
 }
 
 
