@@ -99,7 +99,6 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
     m_subMenu     = subMenu;
     m_isEnabled   = true;
     m_isChecked   = false;
-    m_id          = id;
     m_kind        = kind;
 
     SetItemLabel(text);
