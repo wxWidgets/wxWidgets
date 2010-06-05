@@ -686,7 +686,27 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     // We get events even when mouse is clicked outside of any valid item from
     // Windows, just ignore them.
-    return n != wxNOT_FOUND && SendEvent(evtType, n, true /* selection */);
+    if ( n == wxNOT_FOUND )
+       return false;
+
+    // As we don't use m_oldSelections in single selection mode, we store the
+    // last item that we notified the user about in it in this case because we
+    // need to remember it to be able to filter out the dummy LBN_SELCHANGE
+    // messages that we get when the user clicks on an already selected item.
+    if ( param == LBN_SELCHANGE )
+    {
+        if ( !m_oldSelections.empty() && *m_oldSelections.begin() == n )
+        {
+            // Same item as the last time.
+            return false;
+        }
+
+        m_oldSelections.clear();
+        m_oldSelections.push_back(n);
+    }
+
+    // Do generate an event otherwise.
+    return SendEvent(evtType, n, true /* selection */);
 }
 
 WXLRESULT

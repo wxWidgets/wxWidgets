@@ -101,9 +101,6 @@ public:
     // send the appropriate event if they differ, otherwise just return false.
     bool CalcAndSendEvent();
 
-    wxArrayInt m_oldSelections;
-    void UpdateOldSelections();
-
 protected:
     virtual void DoSetFirstItem(int n) = 0;
 
@@ -117,6 +114,16 @@ protected:
     //
     // Returns true if the event was processed.
     bool SendEvent(wxEventType evtType, int item, bool selected);
+
+    // Array storing the indices of all selected items that we already notified
+    // the user code about for multi selection list boxes.
+    //
+    // TODO-OPT: wxSelectionStore would be more efficient for big list boxes.
+    wxArrayInt m_oldSelections;
+
+    // Update m_oldSelections with currently selected items (does nothing in
+    // single selection mode).
+    void UpdateOldSelections();
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxListBoxBase);
