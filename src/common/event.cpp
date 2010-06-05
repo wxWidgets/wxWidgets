@@ -1447,8 +1447,11 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
         // for it by not processing the event further because this was already
         // done by that rogue event handler.
         wxEventProcessInHandlerOnly processInHandlerOnly(event, h);
-        if ( h->ProcessEvent(event) || !event.ShouldProcessOnlyIn(h) )
+        if ( h->ProcessEvent(event) )
             return true;
+
+        if ( !event.ShouldProcessOnlyIn(h) )
+            break;
     }
 
     return false;
