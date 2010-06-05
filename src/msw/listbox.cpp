@@ -153,6 +153,7 @@ void wxListBox::Init()
 {
     m_noItems = 0;
     m_updateHorizontalExtent = false;
+    m_selectedByKeyboard = false;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -644,16 +645,28 @@ wxSize wxListBox::DoGetBestClientSize() const
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
     wxEventType evtType;
-    int n;
+    int n = wxNOT_FOUND;
     if ( param == LBN_SELCHANGE )
     {
         if ( HasMultipleSelection() )
             return CalcAndSendEvent();
 
         evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
-        n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
 
-        // NB: conveniently enough, LB_ERR is the same as wxNOT_FOUND
+        if ( m_selectedByKeyboard )
+        {
+            // We shouldn't use the mouse position to find the item as mouse
+            // can be anywhere, ask the listbox itself. Notice that this can't
+            // be used when the item is selected using the mouse however as
+            // LB_GETCARETINDEX will always return a valid item, even if the
+            // mouse is clicked below all the items, which is why we find the
+            // item ourselves below in this case.
+            n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+        }
+        else
+        {
+            n = HitTest(ScreenToClient(wxGetMousePosition()));
+        }
     }
     else if ( param == LBN_DBLCLK )
     {
@@ -668,6 +681,20 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
     // only send an event if we have a valid item
     return n != wxNOT_FOUND && SendEvent(evtType, n, true /* selection */);
+}
+
+WXLRESULT
+wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // Remember whether there was a keyboard or mouse event before
+    // LBN_SELCHANGE: this allows us to correctly determine the item affected
+    // by it in MSWCommand() above in any case.
+    if ( WM_KEYFIRST <= nMsg && nMsg <= WM_KEYLAST )
+        m_selectedByKeyboard = true;
+    else if ( WM_MOUSEFIRST <= nMsg && nMsg <= WM_MOUSELAST )
+        m_selectedByKeyboard = false;
+
+    return wxListBoxBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------

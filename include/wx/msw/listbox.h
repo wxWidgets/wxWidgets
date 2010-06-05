@@ -149,6 +149,8 @@ public:
 
     virtual void OnInternalIdle();
 
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
 
@@ -189,6 +191,11 @@ private:
     // flag indicating whether the max horizontal extent should be updated,
     // i.e. if we need to call SetHorizontalExtent() from OnInternalIdle()
     bool m_updateHorizontalExtent;
+
+    // flag set to true when we get a keyboard event and reset to false when we
+    // get a mouse one: this is used to find the correct item for the selection
+    // event
+    bool m_selectedByKeyboard;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox)
 };
