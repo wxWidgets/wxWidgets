@@ -149,8 +149,7 @@ wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 // creation
 // ----------------------------------------------------------------------------
 
-// Listbox item
-wxListBox::wxListBox()
+void wxListBox::Init()
 {
     m_noItems = 0;
     m_updateHorizontalExtent = false;
@@ -165,9 +164,6 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    m_noItems = 0;
-    m_updateHorizontalExtent = false;
-
     // initialize base class fields
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;

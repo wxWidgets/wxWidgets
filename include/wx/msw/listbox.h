@@ -38,7 +38,7 @@ class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
     // ctors and such
-    wxListBox();
+    wxListBox() { Init(); }
     wxListBox(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -47,6 +47,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     wxListBox(wxWindow *parent, wxWindowID id,
@@ -177,6 +179,9 @@ protected:
 #endif
 
 private:
+    // common part of all ctors
+    void Init();
+
     // call this when items are added to or deleted from the listbox or an
     // items text changes
     void MSWOnItemsChanged();
