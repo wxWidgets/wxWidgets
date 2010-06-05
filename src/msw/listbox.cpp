@@ -663,15 +663,11 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             // item ourselves below in this case.
             n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
         }
-        else
-        {
-            n = HitTest(ScreenToClient(wxGetMousePosition()));
-        }
+        //else: n will be determined below from the mouse position
     }
     else if ( param == LBN_DBLCLK )
     {
         evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
-        n = HitTest(ScreenToClient(wxGetMousePosition()));
     }
     else
     {
@@ -679,7 +675,17 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return false;
     }
 
-    // only send an event if we have a valid item
+    // Find the item position if it was a mouse-generated selection event or a
+    // double click event (which is always generated using the mouse)
+    if ( n == wxNOT_FOUND )
+    {
+        const DWORD pos = ::GetMessagePos();
+        const wxPoint pt(GET_X_LPARAM(pos), GET_Y_LPARAM(pos));
+        n = HitTest(ScreenToClient(wxPoint(pt)));
+    }
+
+    // We get events even when mouse is clicked outside of any valid item from
+    // Windows, just ignore them.
     return n != wxNOT_FOUND && SendEvent(evtType, n, true /* selection */);
 }
 
