@@ -27,6 +27,15 @@ public:
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = NULL);
 
+    virtual void SetItemLabel(const wxString& str);
+    virtual void SetCheckable(bool checkable);
+
+    virtual void Enable(bool enable = true);
+    virtual bool IsEnabled() const;
+
+    virtual void Check(bool check = true);
+    virtual bool IsChecked() const;
+
     void SetBitmap(const wxBitmap& bitmap);
     const wxBitmap& GetBitmap() const;
 

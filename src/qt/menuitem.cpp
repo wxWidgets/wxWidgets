@@ -21,22 +21,25 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu, int id, const wxString& name
     return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
 
+
+
 wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
         const wxString& help, wxItemKind kind, wxMenu *subMenu)
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
     m_qtAction = new wxQtAction( this, wxQtConvertString( text ), parentMenu->GetHandle() );
     m_qtAction->setStatusTip( wxQtConvertString( help ));
+    if ( id == wxID_SEPARATOR )
+        m_qtAction->setSeparator( true );
+
     switch ( kind )
     {
         case wxITEM_SEPARATOR:
             m_qtAction->setSeparator( true );
             break;
         case wxITEM_CHECK:
-            m_qtAction->setChecked( true );
-            break;
         case wxITEM_RADIO:
-            wxMISSING_IMPLEMENTATION( "wxITEM_RADIO" );
+            m_qtAction->setCheckable( true );
             break;
         case wxITEM_NORMAL:
             // Normal for a menu item.
@@ -47,6 +50,67 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
             break;
     }
 }
+
+
+
+void wxMenuItem::SetItemLabel( const wxString &label )
+{
+    wxMenuItemBase::SetItemLabel( label );
+
+    m_qtAction->setText( wxQtConvertString( label ));
+}
+
+
+
+void wxMenuItem::SetCheckable( bool checkable )
+{
+    wxMenuItemBase::SetCheckable( checkable );
+
+    m_qtAction->setCheckable( checkable );
+}
+
+
+
+void wxMenuItem::Enable( bool enable )
+{
+    wxMenuItemBase::Enable( enable );
+
+    m_qtAction->setEnabled( enable );
+}
+
+
+
+bool wxMenuItem::IsEnabled() const
+{
+    bool isEnabled = m_qtAction->isEnabled();
+
+    // Make sure the enabled stati are in synch:
+    wxASSERT( isEnabled == wxMenuItemBase::IsEnabled() );
+
+    return isEnabled;
+}
+
+
+
+void wxMenuItem::Check( bool checked )
+{
+    wxMenuItemBase::Check( checked );
+
+    m_qtAction->setChecked( checked );
+}
+
+
+
+bool wxMenuItem::IsChecked() const
+{
+    bool isChecked = m_qtAction->isChecked();
+
+    // Make sure the checked stati are in synch:
+    wxASSERT( isChecked == wxMenuItemBase::IsChecked() );
+
+    return isChecked;
+}
+
 
 void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
@@ -82,6 +146,8 @@ wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *pare
 
     connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
 }
+
+
 
 void wxQtAction::OnActionTriggered( bool checked )
 {

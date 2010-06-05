@@ -21,12 +21,9 @@ public:
     virtual QMenu *GetHandle() const;
 
 protected:
-    virtual wxMenuItem* DoAppend(wxMenuItem *item);
-    virtual wxMenuItem* DoInsert(size_t pos, wxMenuItem *item);
-
+    virtual wxMenuItem *DoAppend(wxMenuItem *item);
+    virtual wxMenuItem *DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
-    virtual bool DoDelete(wxMenuItem *item);
-    virtual bool DoDestroy(wxMenuItem *item);
 
 private:
     QPointer< QMenu > m_qtMenu;
@@ -42,9 +39,10 @@ public:
     wxMenuBar();
     wxMenuBar(long style);
     wxMenuBar(size_t n, wxMenu *menus[], const wxString titles[], long style = 0);
-    ~wxMenuBar();
 
     virtual bool Append(wxMenu *menu, const wxString& title);
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Remove(size_t pos);
 
     virtual void EnableTop(size_t pos, bool enable);
 
