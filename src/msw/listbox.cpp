@@ -647,16 +647,13 @@ wxSize wxListBox::DoGetBestClientSize() const
 
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    if ((param == LBN_SELCHANGE) && HasMultipleSelection())
-    {
-        CalcAndSendEvent();
-        return true;
-    }
-
     wxEventType evtType;
     int n;
     if ( param == LBN_SELCHANGE )
     {
+        if ( HasMultipleSelection() )
+            return CalcAndSendEvent();
+
         evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
         n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
 
@@ -673,22 +670,8 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return false;
     }
 
-    // retrieve the affected item
-    if ( n == wxNOT_FOUND )
-        return false;
-
-    wxCommandEvent event(evtType, m_windowId);
-    event.SetEventObject(this);
-
-    if ( HasClientObjectData() )
-        event.SetClientObject( GetClientObject(n) );
-    else if ( HasClientUntypedData() )
-        event.SetClientData( GetClientData(n) );
-
-    event.SetString(GetString(n));
-    event.SetInt(n);
-
-    return HandleWindowEvent(event);
+    // only send an event if we have a valid item
+    return n != wxNOT_FOUND && SendEvent(evtType, n, true /* selection */);
 }
 
 // ----------------------------------------------------------------------------

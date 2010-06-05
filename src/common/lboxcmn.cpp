@@ -90,29 +90,33 @@ void wxListBoxBase::UpdateOldSelections()
         GetSelections( m_oldSelections );
 }
 
-static void LBSendEvent( wxCommandEvent &event, wxListBoxBase *listbox, int item )
+bool wxListBoxBase::SendEvent(wxEventType evtType, int item, bool selected)
 {
-    event.SetInt( item );
-    event.SetString( listbox->GetString( item ) );
-    if ( listbox->HasClientObjectData() )
-        event.SetClientObject( listbox->GetClientObject(item) );
-    else if ( listbox->HasClientUntypedData() )
-        event.SetClientData( listbox->GetClientData(item) );
-    listbox->HandleWindowEvent( event );
+    wxCommandEvent event(evtType, GetId());
+    event.SetEventObject(this);
+
+    event.SetInt(item);
+    event.SetString(GetString(item));
+    event.SetExtraLong(selected);
+
+    if ( HasClientObjectData() )
+        event.SetClientObject(GetClientObject(item));
+    else if ( HasClientUntypedData() )
+        event.SetClientData(GetClientData(item));
+
+    return HandleWindowEvent(event);
 }
 
-void wxListBoxBase::CalcAndSendEvent()
+bool wxListBoxBase::CalcAndSendEvent()
 {
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
-    event.SetEventObject( this );
-
     wxArrayInt selections;
     GetSelections(selections);
+    bool selected = true;
 
     if ( selections.empty() && m_oldSelections.empty() )
     {
         // nothing changed, just leave
-        return;
+        return false;
     }
 
     const size_t countSel = selections.size(),
@@ -131,14 +135,13 @@ void wxListBoxBase::CalcAndSendEvent()
 
         // nothing changed, just leave
         if ( !changed )
-           return;
+           return false;
     }
 
     int item = wxNOT_FOUND;
     if ( selections.empty() )
     {
-        // indicate that this is a deselection
-        event.SetExtraLong(0);
+        selected = false;
         item = m_oldSelections[0];
     }
     else // we [still] have some selections
@@ -155,14 +158,9 @@ void wxListBoxBase::CalcAndSendEvent()
             }
         }
 
-        if ( any_new_selected )
+        if ( !any_new_selected )
         {
-            // indicate that this is a selection
-            event.SetExtraLong(1);
-        }
-        else // no new items selected
-        {
-            // Now test if any new item is deselected
+            // No new items selected, now test if any new item is deselected
             bool any_new_deselected = false;
             for ( size_t idx = 0; idx < countSelOld; idx++ )
             {
@@ -177,7 +175,7 @@ void wxListBoxBase::CalcAndSendEvent()
             if ( any_new_deselected )
             {
                 // indicate that this is a selection
-                event.SetExtraLong(0);
+                selected = false;
             }
             else
             {
@@ -191,7 +189,7 @@ void wxListBoxBase::CalcAndSendEvent()
 
     m_oldSelections = selections;
 
-    LBSendEvent(event, this, item);
+    return SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED, item, selected);
 }
 
 // ----------------------------------------------------------------------------
