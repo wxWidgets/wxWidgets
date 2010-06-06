@@ -504,7 +504,7 @@ protected:
         wxWindow* win = GetPopupWindow();
         win->SetSize(rect);
         win->Raise();  // This is needed
-        win->ShowWithEffect(wxSHOW_EFFECT_SLIDE_TO_BOTTOM);
+        win->ShowWithEffect(wxSHOW_EFFECT_BLEND);
         return true;
     }
 };
@@ -743,8 +743,10 @@ MyFrame::MyFrame(const wxString& title)
     //
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("List View wxComboCtrl:")), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+    rowSizer->Add( new wxStaticText(panel,
+                        wxID_ANY,
+                        "List View wxComboCtrl (custom animation):"),
+                   1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxComboCtrl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
