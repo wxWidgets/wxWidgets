@@ -221,6 +221,26 @@ enum
 #endif
 
 
+// Returns true if given popup window type can be classified as perfect
+// on this platform.
+static inline bool IsPopupWinTypePerfect( wxByte popupWinType )
+{
+#if POPUPWIN_IS_PERFECT && TRANSIENT_POPUPWIN_IS_PERFECT
+    wxUnusedVar(popupWinType);
+    return true;
+#else
+    return ( popupWinType == POPUPWIN_GENERICTLW
+        #if POPUPWIN_IS_PERFECT
+             || popupWinType == POPUPWIN_WXPOPUPWINDOW 
+        #endif
+        #if TRANSIENT_POPUPWIN_IS_PERFECT
+             || popupWinType == POPUPWIN_WXPOPUPTRANSIENTWINDOW 
+        #endif
+            );
+#endif
+}
+
+
 //
 // ** TODO **
 // * wxComboPopupWindow for external use (ie. replace old wxUniv wxPopupComboWindow)
@@ -2288,6 +2308,13 @@ void wxComboCtrlBase::DoShowPopup( const wxRect& rect, int WXUNUSED(flags) )
             winPopup->Show();
 
         m_popupWinState = Visible;
+
+        // If popup window was a generic top-level window, or the
+        // wxPopupWindow implemenation on this platform is classified as
+        // perfect, then we should be able to safely set focus to the popup
+        // control.
+        if ( IsPopupWinTypePerfect(m_popupWinType) )
+            m_popup->SetFocus();
     }
     else if ( IsPopupWindowState(Hidden) )
     {
