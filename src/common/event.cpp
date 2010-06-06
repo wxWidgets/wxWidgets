@@ -1385,7 +1385,15 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
     // Try to process the event in this handler itself.
     if ( ProcessEventLocally(event) )
-        return true;
+    {
+        // It is possible that DoTryChain() called from ProcessEventLocally()
+        // returned true but the event was not really processed: this happens
+        // if a custom handler ignores the request to process the event in this
+        // handler only and in this case we should skip the post processing
+        // done in TryAfter() but still return the correct value ourselves to
+        // indicate whether we did or did not find a handler for this event.
+        return !event.GetSkipped();
+    }
 
     // If we still didn't find a handler, propagate the event upwards the
     // window chain and/or to the application object.
@@ -1448,10 +1456,24 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
         // done by that rogue event handler.
         wxEventProcessInHandlerOnly processInHandlerOnly(event, h);
         if ( h->ProcessEvent(event) )
+        {
+            // Make sure "skipped" flag is not set as the event was really
+            // processed in this case. Normally it shouldn't be set anyhow but
+            // make sure just in case the user code does something strange.
+            event.Skip(false);
+
             return true;
+        }
 
         if ( !event.ShouldProcessOnlyIn(h) )
-            break;
+        {
+            // Still return true to indicate that no further processing should
+            // be undertaken but ensure that "skipped" flag is set so that the
+            // caller knows that the event was not really processed.
+            event.Skip();
+
+            return true;
+        }
     }
 
     return false;
