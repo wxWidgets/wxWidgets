@@ -23,6 +23,7 @@
 
 #include "wx/filename.h"
 #include "wx/filefn.h"
+#include "wx/stdpaths.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/registry.h"
@@ -131,6 +132,8 @@ private:
 #endif // __WINDOWS__
         CPPUNIT_TEST( TestUNC );
         CPPUNIT_TEST( TestVolumeUniqueName );
+        CPPUNIT_TEST( TestCreateTempFileName );
+        CPPUNIT_TEST( TestGetTimes );
     CPPUNIT_TEST_SUITE_END();
 
     void TestConstruction();
@@ -146,6 +149,8 @@ private:
 #endif // __WINDOWS__
     void TestUNC();
     void TestVolumeUniqueName();
+    void TestCreateTempFileName();
+    void TestGetTimes();
 
     DECLARE_NO_COPY_CLASS(FileNameTestCase)
 };
@@ -502,15 +507,22 @@ void FileNameTestCase::TestGetHumanReadable()
     {
         const TestData& td = testData[n];
 
+        // take care of using the decimal point for the current locale before
+        // the actual comparison
+        wxString result_localized = wxString(td.result);
+        result_localized.Replace(".", wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER));
+
         CPPUNIT_ASSERT_EQUAL
         (
-            td.result,
+            result_localized,
             wxFileName::GetHumanReadableSize(td.size, "NA", td.prec, td.conv)
         );
     }
 
     // also test the default convention value
-    CPPUNIT_ASSERT_EQUAL( "1.4 MB", wxFileName::GetHumanReadableSize(1512993, "") );
+    wxString result_localized = wxString("1.4 MB");
+    result_localized.Replace(".", wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER));
+    CPPUNIT_ASSERT_EQUAL( result_localized, wxFileName::GetHumanReadableSize(1512993, "") );
 }
 
 void FileNameTestCase::TestStrip()
@@ -567,4 +579,58 @@ void FileNameTestCase::TestVolumeUniqueName()
     CPPUNIT_ASSERT_EQUAL( "\\\\?\\Volume{8089d7d7-d0ac-11db-9dd0-806d6172696f}\\"
                           "Program Files\\setup.exe",
                           fn.GetFullPath(wxPATH_DOS) );
+}
+
+void FileNameTestCase::TestCreateTempFileName()
+{
+    static const struct TestData
+    {
+        const char *prefix;
+        const char *expectedFolder;
+        bool shouldFail;
+    } testData[] =
+    {
+        { "", "$SYSTEM_TEMP", false },
+        { "foo", "$SYSTEM_TEMP", false },
+        { "..", "$SYSTEM_TEMP", false },
+        { "../bar", "..", false },
+        { "c:\\a\\place\\which\\does\\not\\exist", "", true },
+#ifdef __UNIX__
+        { "/tmp/foo", "/tmp", false },
+        { "/tmp/foo/bar", "", true },
+#endif // __UNIX__
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        wxString path = wxFileName::CreateTempFileName(testData[n].prefix);
+        CPPUNIT_ASSERT_EQUAL( path.empty(), testData[n].shouldFail );
+
+        if (!testData[n].shouldFail)
+        {
+            // test the place where the temp file has been created
+            wxString expected = testData[n].expectedFolder;
+            expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
+            CPPUNIT_ASSERT_EQUAL(expected, wxFileName(path).GetPath());
+
+            // the temporary file is created with full permissions for the current process
+            // so we should always be able to remove it:
+            CPPUNIT_ASSERT( wxRemoveFile(path) );
+        }
+    }
+}
+
+void FileNameTestCase::TestGetTimes()
+{
+    wxFileName fn(wxFileName::CreateTempFileName("filenametest"));
+    CPPUNIT_ASSERT( fn.IsOk() );
+
+    wxDateTime dtAccess, dtMod, dtCreate;
+    CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
+
+    // make sure all retrieved dates are equal to the current date&time 
+    // with an accuracy up to 1 minute
+    CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
+    CPPUNIT_ASSERT(dtAccess.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
 }

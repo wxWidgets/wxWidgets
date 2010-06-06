@@ -109,8 +109,6 @@
     #define TEST_DYNLIB
     #define TEST_ENVIRON
     #define TEST_FILE
-    #define TEST_FILENAME
-    #define TEST_FILETIME
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -477,7 +475,7 @@ static void TestFileRead()
 {
     wxPuts(wxT("*** wxFile read test ***"));
 
-    wxFile file(wxT("testdata.fc"));
+    wxFile file(wxT("makefile.vc"));
     if ( file.IsOpened() )
     {
         wxPrintf(wxT("File length: %lu\n"), file.Length());
@@ -515,7 +513,7 @@ static void TestTextFileRead()
 {
     wxPuts(wxT("*** wxTextFile read test ***"));
 
-    wxTextFile file(wxT("testdata.fc"));
+    wxTextFile file(wxT("makefile.vc"));
     if ( file.Open() )
     {
         wxPrintf(wxT("Number of lines: %u\n"), file.GetLineCount());
@@ -551,7 +549,7 @@ static void TestFileCopy()
 {
     wxPuts(wxT("*** Testing wxCopyFile ***"));
 
-    static const wxChar *filename1 = wxT("testdata.fc");
+    static const wxChar *filename1 = wxT("makefile.vc");
     static const wxChar *filename2 = wxT("test2");
     if ( !wxCopyFile(filename1, filename2) )
     {
@@ -615,152 +613,6 @@ static void TestTempFile()
 }
 
 #endif // TEST_FILE
-
-// ----------------------------------------------------------------------------
-// wxFileName
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_FILENAME
-
-#include "wx/filename.h"
-
-#if 0
-static void DumpFileName(const wxChar *desc, const wxFileName& fn)
-{
-    wxPuts(desc);
-
-    wxString full = fn.GetFullPath();
-
-    wxString vol, path, name, ext;
-    wxFileName::SplitPath(full, &vol, &path, &name, &ext);
-
-    wxPrintf(wxT("'%s'-> vol '%s', path '%s', name '%s', ext '%s'\n"),
-             full.c_str(), vol.c_str(), path.c_str(), name.c_str(), ext.c_str());
-
-    wxFileName::SplitPath(full, &path, &name, &ext);
-    wxPrintf(wxT("or\t\t-> path '%s', name '%s', ext '%s'\n"),
-             path.c_str(), name.c_str(), ext.c_str());
-
-    wxPrintf(wxT("path is also:\t'%s'\n"), fn.GetPath().c_str());
-    wxPrintf(wxT("with volume: \t'%s'\n"),
-             fn.GetPath(wxPATH_GET_VOLUME).c_str());
-    wxPrintf(wxT("with separator:\t'%s'\n"),
-             fn.GetPath(wxPATH_GET_SEPARATOR).c_str());
-    wxPrintf(wxT("with both:   \t'%s'\n"),
-             fn.GetPath(wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME).c_str());
-
-    wxPuts(wxT("The directories in the path are:"));
-    wxArrayString dirs = fn.GetDirs();
-    size_t count = dirs.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        wxPrintf(wxT("\t%u: %s\n"), n, dirs[n].c_str());
-    }
-}
-#endif
-
-static void TestFileNameTemp()
-{
-    wxPuts(wxT("*** testing wxFileName temp file creation ***"));
-
-    static const wxChar *tmpprefixes[] =
-    {
-        wxT(""),
-        wxT("foo"),
-        wxT(".."),
-        wxT("../bar"),
-#ifdef __UNIX__
-        wxT("/tmp/foo"),
-        wxT("/tmp/foo/bar"), // this one must be an error
-#endif // __UNIX__
-    };
-
-    for ( size_t n = 0; n < WXSIZEOF(tmpprefixes); n++ )
-    {
-        wxString path = wxFileName::CreateTempFileName(tmpprefixes[n]);
-        if ( path.empty() )
-        {
-            // "error" is not in upper case because it may be ok
-            wxPrintf(wxT("Prefix '%s'\t-> error\n"), tmpprefixes[n]);
-        }
-        else
-        {
-            wxPrintf(wxT("Prefix '%s'\t-> temp file '%s'\n"),
-                   tmpprefixes[n], path.c_str());
-
-            if ( !wxRemoveFile(path) )
-            {
-                wxLogWarning(wxT("Failed to remove temp file '%s'"),
-                             path.c_str());
-            }
-        }
-    }
-}
-
-static void TestFileNameDirManip()
-{
-    // TODO: test AppendDir(), RemoveDir(), ...
-}
-
-static void TestFileNameComparison()
-{
-    // TODO!
-}
-
-static void TestFileNameOperations()
-{
-    // TODO!
-}
-
-static void TestFileNameCwd()
-{
-    // TODO!
-}
-
-#endif // TEST_FILENAME
-
-// ----------------------------------------------------------------------------
-// wxFileName time functions
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_FILETIME
-
-#include "wx/filename.h"
-#include "wx/datetime.h"
-
-static void TestFileGetTimes()
-{
-    wxFileName fn(wxT("testdata.fc"));
-
-    wxDateTime dtAccess, dtMod, dtCreate;
-    if ( !fn.GetTimes(&dtAccess, &dtMod, &dtCreate) )
-    {
-        wxPrintf(wxT("ERROR: GetTimes() failed.\n"));
-    }
-    else
-    {
-        static const wxChar *fmt = wxT("%Y-%b-%d %H:%M:%S");
-
-        wxPrintf(wxT("File times for '%s':\n"), fn.GetFullPath().c_str());
-        wxPrintf(wxT("Creation:    \t%s\n"), dtCreate.Format(fmt).c_str());
-        wxPrintf(wxT("Last read:   \t%s\n"), dtAccess.Format(fmt).c_str());
-        wxPrintf(wxT("Last write:  \t%s\n"), dtMod.Format(fmt).c_str());
-    }
-}
-
-#if 0
-static void TestFileSetTimes()
-{
-    wxFileName fn(wxT("testdata.fc"));
-
-    if ( !fn.Touch() )
-    {
-        wxPrintf(wxT("ERROR: Touch() failed.\n"));
-    }
-}
-#endif
-
-#endif // TEST_FILETIME
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -1501,21 +1353,6 @@ int main(int argc, char **argv)
     TestFileCopy();
     TestTempFile();
 #endif // TEST_FILE
-
-#ifdef TEST_FILENAME
-    TestFileNameTemp();
-    TestFileNameCwd();
-    TestFileNameDirManip();
-    TestFileNameComparison();
-    TestFileNameOperations();
-#endif // TEST_FILENAME
-
-#ifdef TEST_FILETIME
-    TestFileGetTimes();
-    #if 0
-    TestFileSetTimes();
-    #endif
-#endif // TEST_FILETIME
 
 #ifdef TEST_FTP
     wxLog::AddTraceMask(FTP_TRACE_MASK);
