@@ -503,26 +503,25 @@ void FileNameTestCase::TestGetHumanReadable()
         { "304 KB",    304351, 0, wxSIZE_CONV_SI          },
     };
 
+    CLocaleSetter loc;      // we want to use "C" locale for LC_NUMERIC
+                            // so that regardless of the system's locale
+                            // the decimal point used by GetHumanReadableSize()
+                            // is always '.'
     for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
     {
         const TestData& td = testData[n];
 
         // take care of using the decimal point for the current locale before
         // the actual comparison
-        wxString result_localized = wxString(td.result);
-        result_localized.Replace(".", wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER));
-
         CPPUNIT_ASSERT_EQUAL
         (
-            result_localized,
+            td.result,
             wxFileName::GetHumanReadableSize(td.size, "NA", td.prec, td.conv)
         );
     }
 
     // also test the default convention value
-    wxString result_localized = wxString("1.4 MB");
-    result_localized.Replace(".", wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER));
-    CPPUNIT_ASSERT_EQUAL( result_localized, wxFileName::GetHumanReadableSize(1512993, "") );
+    CPPUNIT_ASSERT_EQUAL( "1.4 MB", wxFileName::GetHumanReadableSize(1512993, "") );
 }
 
 void FileNameTestCase::TestStrip()
@@ -594,8 +593,9 @@ void FileNameTestCase::TestCreateTempFileName()
         { "foo", "$SYSTEM_TEMP", false },
         { "..", "$SYSTEM_TEMP", false },
         { "../bar", "..", false },
+#ifdef __WXMSW__
         { "c:\\a\\place\\which\\does\\not\\exist", "", true },
-#ifdef __UNIX__
+#else if defined( __UNIX__ )
         { "/tmp/foo", "/tmp", false },
         { "/tmp/foo/bar", "", true },
 #endif // __UNIX__
