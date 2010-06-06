@@ -2407,7 +2407,9 @@ bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
     {
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
-        g_value_set_string( &gvalue, wxGTK_CONV( value.GetString() ) );
+        g_value_set_string(&gvalue,
+                           wxGTK_CONV_FONT(value.GetString(),
+                                           GetOwner()->GetOwner()->GetFont()));
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
     }
@@ -2426,7 +2428,8 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
         g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-        wxString temp = wxGTK_CONV_BACK( g_value_get_string( &gvalue ) );
+        wxString temp = wxGTK_CONV_BACK_FONT(g_value_get_string(&gvalue),
+                                             GetOwner()->GetOwner()->GetFont());
         g_value_unset( &gvalue );
         value = temp;
 
