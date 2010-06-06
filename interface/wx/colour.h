@@ -268,6 +268,7 @@ public:
 /** @name Predefined colors. */
 //@{
 wxColour wxNullColour;
+wxColour wxTransparentColour;
 wxColour* wxBLACK;
 wxColour* wxBLUE;
 wxColour* wxCYAN;
