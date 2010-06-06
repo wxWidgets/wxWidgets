@@ -59,6 +59,8 @@
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
             misc/misctests.cpp
+            misc/module.cpp
+            misc/pathlist.cpp
             misc/typeinfotest.cpp
             net/ipc.cpp
             net/socket.cpp

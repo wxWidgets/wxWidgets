@@ -111,12 +111,6 @@
     #define TEST_FILE
     #define TEST_FILENAME
     #define TEST_FILETIME
-    #define TEST_INFO_FUNCTIONS
-    #define TEST_LOCALE
-    #define TEST_LOG
-    #define TEST_MIME
-    #define TEST_MODULE
-    #define TEST_PATHLIST
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -125,6 +119,8 @@
     #define TEST_FTP
     #define TEST_SNGLINST
     #define TEST_REGEX
+    #define TEST_INFO_FUNCTIONS
+    #define TEST_MIME
 #endif
 
 // some tests are interactive, define this to run them
@@ -767,306 +763,6 @@ static void TestFileSetTimes()
 #endif // TEST_FILETIME
 
 // ----------------------------------------------------------------------------
-// wxLocale
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_LOCALE
-
-#include "wx/intl.h"
-#include "wx/utils.h"   // for wxSetEnv
-
-static wxLocale gs_localeDefault;
-    // NOTE: don't init it here as it needs a wxAppTraits object
-    //       and thus must be init-ed after creation of the wxInitializer
-    //       class in the main()
-
-// find the name of the language from its value
-static const wxChar *GetLangName(int lang)
-{
-    static const wxChar *languageNames[] =
-    {
-        wxT("DEFAULT"),
-        wxT("UNKNOWN"),
-        wxT("ABKHAZIAN"),
-        wxT("AFAR"),
-        wxT("AFRIKAANS"),
-        wxT("ALBANIAN"),
-        wxT("AMHARIC"),
-        wxT("ARABIC"),
-        wxT("ARABIC_ALGERIA"),
-        wxT("ARABIC_BAHRAIN"),
-        wxT("ARABIC_EGYPT"),
-        wxT("ARABIC_IRAQ"),
-        wxT("ARABIC_JORDAN"),
-        wxT("ARABIC_KUWAIT"),
-        wxT("ARABIC_LEBANON"),
-        wxT("ARABIC_LIBYA"),
-        wxT("ARABIC_MOROCCO"),
-        wxT("ARABIC_OMAN"),
-        wxT("ARABIC_QATAR"),
-        wxT("ARABIC_SAUDI_ARABIA"),
-        wxT("ARABIC_SUDAN"),
-        wxT("ARABIC_SYRIA"),
-        wxT("ARABIC_TUNISIA"),
-        wxT("ARABIC_UAE"),
-        wxT("ARABIC_YEMEN"),
-        wxT("ARMENIAN"),
-        wxT("ASSAMESE"),
-        wxT("AYMARA"),
-        wxT("AZERI"),
-        wxT("AZERI_CYRILLIC"),
-        wxT("AZERI_LATIN"),
-        wxT("BASHKIR"),
-        wxT("BASQUE"),
-        wxT("BELARUSIAN"),
-        wxT("BENGALI"),
-        wxT("BHUTANI"),
-        wxT("BIHARI"),
-        wxT("BISLAMA"),
-        wxT("BRETON"),
-        wxT("BULGARIAN"),
-        wxT("BURMESE"),
-        wxT("CAMBODIAN"),
-        wxT("CATALAN"),
-        wxT("CHINESE"),
-        wxT("CHINESE_SIMPLIFIED"),
-        wxT("CHINESE_TRADITIONAL"),
-        wxT("CHINESE_HONGKONG"),
-        wxT("CHINESE_MACAU"),
-        wxT("CHINESE_SINGAPORE"),
-        wxT("CHINESE_TAIWAN"),
-        wxT("CORSICAN"),
-        wxT("CROATIAN"),
-        wxT("CZECH"),
-        wxT("DANISH"),
-        wxT("DUTCH"),
-        wxT("DUTCH_BELGIAN"),
-        wxT("ENGLISH"),
-        wxT("ENGLISH_UK"),
-        wxT("ENGLISH_US"),
-        wxT("ENGLISH_AUSTRALIA"),
-        wxT("ENGLISH_BELIZE"),
-        wxT("ENGLISH_BOTSWANA"),
-        wxT("ENGLISH_CANADA"),
-        wxT("ENGLISH_CARIBBEAN"),
-        wxT("ENGLISH_DENMARK"),
-        wxT("ENGLISH_EIRE"),
-        wxT("ENGLISH_JAMAICA"),
-        wxT("ENGLISH_NEW_ZEALAND"),
-        wxT("ENGLISH_PHILIPPINES"),
-        wxT("ENGLISH_SOUTH_AFRICA"),
-        wxT("ENGLISH_TRINIDAD"),
-        wxT("ENGLISH_ZIMBABWE"),
-        wxT("ESPERANTO"),
-        wxT("ESTONIAN"),
-        wxT("FAEROESE"),
-        wxT("FARSI"),
-        wxT("FIJI"),
-        wxT("FINNISH"),
-        wxT("FRENCH"),
-        wxT("FRENCH_BELGIAN"),
-        wxT("FRENCH_CANADIAN"),
-        wxT("FRENCH_LUXEMBOURG"),
-        wxT("FRENCH_MONACO"),
-        wxT("FRENCH_SWISS"),
-        wxT("FRISIAN"),
-        wxT("GALICIAN"),
-        wxT("GEORGIAN"),
-        wxT("GERMAN"),
-        wxT("GERMAN_AUSTRIAN"),
-        wxT("GERMAN_BELGIUM"),
-        wxT("GERMAN_LIECHTENSTEIN"),
-        wxT("GERMAN_LUXEMBOURG"),
-        wxT("GERMAN_SWISS"),
-        wxT("GREEK"),
-        wxT("GREENLANDIC"),
-        wxT("GUARANI"),
-        wxT("GUJARATI"),
-        wxT("HAUSA"),
-        wxT("HEBREW"),
-        wxT("HINDI"),
-        wxT("HUNGARIAN"),
-        wxT("ICELANDIC"),
-        wxT("INDONESIAN"),
-        wxT("INTERLINGUA"),
-        wxT("INTERLINGUE"),
-        wxT("INUKTITUT"),
-        wxT("INUPIAK"),
-        wxT("IRISH"),
-        wxT("ITALIAN"),
-        wxT("ITALIAN_SWISS"),
-        wxT("JAPANESE"),
-        wxT("JAVANESE"),
-        wxT("KANNADA"),
-        wxT("KASHMIRI"),
-        wxT("KASHMIRI_INDIA"),
-        wxT("KAZAKH"),
-        wxT("KERNEWEK"),
-        wxT("KINYARWANDA"),
-        wxT("KIRGHIZ"),
-        wxT("KIRUNDI"),
-        wxT("KONKANI"),
-        wxT("KOREAN"),
-        wxT("KURDISH"),
-        wxT("LAOTHIAN"),
-        wxT("LATIN"),
-        wxT("LATVIAN"),
-        wxT("LINGALA"),
-        wxT("LITHUANIAN"),
-        wxT("MACEDONIAN"),
-        wxT("MALAGASY"),
-        wxT("MALAY"),
-        wxT("MALAYALAM"),
-        wxT("MALAY_BRUNEI_DARUSSALAM"),
-        wxT("MALAY_MALAYSIA"),
-        wxT("MALTESE"),
-        wxT("MANIPURI"),
-        wxT("MAORI"),
-        wxT("MARATHI"),
-        wxT("MOLDAVIAN"),
-        wxT("MONGOLIAN"),
-        wxT("NAURU"),
-        wxT("NEPALI"),
-        wxT("NEPALI_INDIA"),
-        wxT("NORWEGIAN_BOKMAL"),
-        wxT("NORWEGIAN_NYNORSK"),
-        wxT("OCCITAN"),
-        wxT("ORIYA"),
-        wxT("OROMO"),
-        wxT("PASHTO"),
-        wxT("POLISH"),
-        wxT("PORTUGUESE"),
-        wxT("PORTUGUESE_BRAZILIAN"),
-        wxT("PUNJABI"),
-        wxT("QUECHUA"),
-        wxT("RHAETO_ROMANCE"),
-        wxT("ROMANIAN"),
-        wxT("RUSSIAN"),
-        wxT("RUSSIAN_UKRAINE"),
-        wxT("SAMOAN"),
-        wxT("SANGHO"),
-        wxT("SANSKRIT"),
-        wxT("SCOTS_GAELIC"),
-        wxT("SERBIAN"),
-        wxT("SERBIAN_CYRILLIC"),
-        wxT("SERBIAN_LATIN"),
-        wxT("SERBO_CROATIAN"),
-        wxT("SESOTHO"),
-        wxT("SETSWANA"),
-        wxT("SHONA"),
-        wxT("SINDHI"),
-        wxT("SINHALESE"),
-        wxT("SISWATI"),
-        wxT("SLOVAK"),
-        wxT("SLOVENIAN"),
-        wxT("SOMALI"),
-        wxT("SPANISH"),
-        wxT("SPANISH_ARGENTINA"),
-        wxT("SPANISH_BOLIVIA"),
-        wxT("SPANISH_CHILE"),
-        wxT("SPANISH_COLOMBIA"),
-        wxT("SPANISH_COSTA_RICA"),
-        wxT("SPANISH_DOMINICAN_REPUBLIC"),
-        wxT("SPANISH_ECUADOR"),
-        wxT("SPANISH_EL_SALVADOR"),
-        wxT("SPANISH_GUATEMALA"),
-        wxT("SPANISH_HONDURAS"),
-        wxT("SPANISH_MEXICAN"),
-        wxT("SPANISH_MODERN"),
-        wxT("SPANISH_NICARAGUA"),
-        wxT("SPANISH_PANAMA"),
-        wxT("SPANISH_PARAGUAY"),
-        wxT("SPANISH_PERU"),
-        wxT("SPANISH_PUERTO_RICO"),
-        wxT("SPANISH_URUGUAY"),
-        wxT("SPANISH_US"),
-        wxT("SPANISH_VENEZUELA"),
-        wxT("SUNDANESE"),
-        wxT("SWAHILI"),
-        wxT("SWEDISH"),
-        wxT("SWEDISH_FINLAND"),
-        wxT("TAGALOG"),
-        wxT("TAJIK"),
-        wxT("TAMIL"),
-        wxT("TATAR"),
-        wxT("TELUGU"),
-        wxT("THAI"),
-        wxT("TIBETAN"),
-        wxT("TIGRINYA"),
-        wxT("TONGA"),
-        wxT("TSONGA"),
-        wxT("TURKISH"),
-        wxT("TURKMEN"),
-        wxT("TWI"),
-        wxT("UIGHUR"),
-        wxT("UKRAINIAN"),
-        wxT("URDU"),
-        wxT("URDU_INDIA"),
-        wxT("URDU_PAKISTAN"),
-        wxT("UZBEK"),
-        wxT("UZBEK_CYRILLIC"),
-        wxT("UZBEK_LATIN"),
-        wxT("VIETNAMESE"),
-        wxT("VOLAPUK"),
-        wxT("WELSH"),
-        wxT("WOLOF"),
-        wxT("XHOSA"),
-        wxT("YIDDISH"),
-        wxT("YORUBA"),
-        wxT("ZHUANG"),
-        wxT("ZULU"),
-    };
-
-    if ( (size_t)lang < WXSIZEOF(languageNames) )
-        return languageNames[lang];
-    else
-        return wxT("INVALID");
-}
-
-static void TestDefaultLang()
-{
-    wxPuts(wxT("*** Testing wxLocale::GetSystemLanguage ***"));
-
-    gs_localeDefault.Init(wxLANGUAGE_ENGLISH);
-
-    static const wxChar *langStrings[] =
-    {
-        NULL,               // system default
-        wxT("C"),
-        wxT("fr"),
-        wxT("fr_FR"),
-        wxT("en"),
-        wxT("en_GB"),
-        wxT("en_US"),
-        wxT("de_DE.iso88591"),
-        wxT("german"),
-        wxT("?"),            // invalid lang spec
-        wxT("klingonese"),   // I bet on some systems it does exist...
-    };
-
-    wxPrintf(wxT("The default system encoding is %s (%d)\n"),
-             wxLocale::GetSystemEncodingName().c_str(),
-             wxLocale::GetSystemEncoding());
-
-    for ( size_t n = 0; n < WXSIZEOF(langStrings); n++ )
-    {
-        const wxChar *langStr = langStrings[n];
-        if ( langStr )
-        {
-            // FIXME: this doesn't do anything at all under Windows, we need
-            //        to create a new wxLocale!
-            wxSetEnv(wxT("LC_ALL"), langStr);
-        }
-
-        int lang = gs_localeDefault.GetSystemLanguage();
-        wxPrintf(wxT("Locale for '%s' is %s.\n"),
-                 langStr ? langStr : wxT("system default"), GetLangName(lang));
-    }
-}
-
-#endif // TEST_LOCALE
-
-// ----------------------------------------------------------------------------
 // MIME types
 // ----------------------------------------------------------------------------
 
@@ -1093,7 +789,7 @@ static void TestMimeEnum()
             wxTheMimeTypesManager->GetFileTypeFromMimeType(mimetypes[n]);
         if ( !filetype )
         {
-            wxPrintf(wxT("nothing known about the filetype '%s'!\n"),
+            wxPrintf(wxT("   nothing known about the filetype '%s'!\n"),
                    mimetypes[n].c_str());
             continue;
         }
@@ -1111,7 +807,7 @@ static void TestMimeEnum()
             extsAll += exts[e];
         }
 
-        wxPrintf(wxT("\t%s: %s (%s)\n"),
+        wxPrintf(wxT("   %s: %s (%s)\n"),
                mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
     }
 
@@ -1152,41 +848,12 @@ static void TestMimeFilename()
             else
                 cmd = wxString(wxT('"')) + cmd + wxT('"');
 
-            wxPrintf(wxT("To open %s (%s) do %s.\n"),
+            wxPrintf(wxT("To open %s (%s) run:\n   %s\n"),
                      fname.c_str(), desc.c_str(), cmd.c_str());
 
             delete ft;
         }
     }
-
-    wxPuts(wxEmptyString);
-}
-
-// these tests were broken by wxMimeTypesManager changes, temporarily disabling
-#if 0
-
-static void TestMimeOverride()
-{
-    wxPuts(wxT("*** Testing wxMimeTypesManager additional files loading ***\n"));
-
-    static const wxChar *mailcap = wxT("/tmp/mailcap");
-    static const wxChar *mimetypes = wxT("/tmp/mime.types");
-
-    if ( wxFile::Exists(mailcap) )
-        wxPrintf(wxT("Loading mailcap from '%s': %s\n"),
-                 mailcap,
-                 wxTheMimeTypesManager->ReadMailcap(mailcap) ? wxT("ok") : wxT("ERROR"));
-    else
-        wxPrintf(wxT("WARN: mailcap file '%s' doesn't exist, not loaded.\n"),
-                 mailcap);
-
-    if ( wxFile::Exists(mimetypes) )
-        wxPrintf(wxT("Loading mime.types from '%s': %s\n"),
-                 mimetypes,
-                 wxTheMimeTypesManager->ReadMimeTypes(mimetypes) ? wxT("ok") : wxT("ERROR"));
-    else
-        wxPrintf(wxT("WARN: mime.types file '%s' doesn't exist, not loaded.\n"),
-                 mimetypes);
 
     wxPuts(wxEmptyString);
 }
@@ -1219,83 +886,8 @@ static void TestMimeAssociate()
     wxPuts(wxEmptyString);
 }
 
-#endif // 0
-
 #endif // TEST_MIME
 
-// ----------------------------------------------------------------------------
-// module dependencies feature
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_MODULE
-
-#include "wx/module.h"
-
-class wxTestModule : public wxModule
-{
-protected:
-    virtual bool OnInit() { wxPrintf(wxT("Load module: %s\n"), GetClassInfo()->GetClassName()); return true; }
-    virtual void OnExit() { wxPrintf(wxT("Unload module: %s\n"), GetClassInfo()->GetClassName()); }
-};
-
-class wxTestModuleA : public wxTestModule
-{
-public:
-    wxTestModuleA();
-private:
-    DECLARE_DYNAMIC_CLASS(wxTestModuleA)
-};
-
-class wxTestModuleB : public wxTestModule
-{
-public:
-    wxTestModuleB();
-private:
-    DECLARE_DYNAMIC_CLASS(wxTestModuleB)
-};
-
-class wxTestModuleC : public wxTestModule
-{
-public:
-    wxTestModuleC();
-private:
-    DECLARE_DYNAMIC_CLASS(wxTestModuleC)
-};
-
-class wxTestModuleD : public wxTestModule
-{
-public:
-    wxTestModuleD();
-private:
-    DECLARE_DYNAMIC_CLASS(wxTestModuleD)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxTestModuleC, wxModule)
-wxTestModuleC::wxTestModuleC()
-{
-    AddDependency(CLASSINFO(wxTestModuleD));
-}
-
-IMPLEMENT_DYNAMIC_CLASS(wxTestModuleA, wxModule)
-wxTestModuleA::wxTestModuleA()
-{
-    AddDependency(CLASSINFO(wxTestModuleB));
-    AddDependency(CLASSINFO(wxTestModuleD));
-}
-
-IMPLEMENT_DYNAMIC_CLASS(wxTestModuleD, wxModule)
-wxTestModuleD::wxTestModuleD()
-{
-}
-
-IMPLEMENT_DYNAMIC_CLASS(wxTestModuleB, wxModule)
-wxTestModuleB::wxTestModuleB()
-{
-    AddDependency(CLASSINFO(wxTestModuleD));
-    AddDependency(CLASSINFO(wxTestModuleC));
-}
-
-#endif // TEST_MODULE
 
 // ----------------------------------------------------------------------------
 // misc information functions
@@ -1313,12 +905,15 @@ static void TestDiskInfo()
     for ( ;; )
     {
         wxChar pathname[128];
-        wxPrintf(wxT("\nEnter a directory name: "));
+        wxPrintf(wxT("\nEnter a directory name (or 'quit' to escape): "));
         if ( !wxFgets(pathname, WXSIZEOF(pathname), stdin) )
             break;
 
         // kill the last '\n'
         pathname[wxStrlen(pathname) - 1] = 0;
+        
+        if (wxStrcmp(pathname, "quit") == 0)
+            break;
 
         wxLongLong total, free;
         if ( !wxGetDiskSpace(pathname, &total, &free) )
@@ -1385,37 +980,6 @@ static void TestUserInfo()
 #endif // TEST_INFO_FUNCTIONS
 
 // ----------------------------------------------------------------------------
-// path list
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_PATHLIST
-
-#ifdef __UNIX__
-    #define CMD_IN_PATH wxT("ls")
-#else
-    #define CMD_IN_PATH wxT("command.com")
-#endif
-
-static void TestPathList()
-{
-    wxPuts(wxT("*** Testing wxPathList ***\n"));
-
-    wxPathList pathlist;
-    pathlist.AddEnvList(wxT("PATH"));
-    wxString path = pathlist.FindValidPath(CMD_IN_PATH);
-    if ( path.empty() )
-    {
-        wxPrintf(wxT("ERROR: command not found in the path.\n"));
-    }
-    else
-    {
-        wxPrintf(wxT("Command found in the path as '%s'.\n"), path.c_str());
-    }
-}
-
-#endif // TEST_PATHLIST
-
-// ----------------------------------------------------------------------------
 // regular expressions
 // ----------------------------------------------------------------------------
 
@@ -1430,13 +994,16 @@ static void TestRegExInteractive()
     for ( ;; )
     {
         wxChar pattern[128];
-        wxPrintf(wxT("\nEnter a pattern: "));
+        wxPrintf(wxT("\nEnter a pattern (or 'quit' to escape): "));
         if ( !wxFgets(pattern, WXSIZEOF(pattern), stdin) )
             break;
 
         // kill the last '\n'
         pattern[wxStrlen(pattern) - 1] = 0;
 
+        if (wxStrcmp(pattern, "quit") == 0)
+            break;
+            
         wxRegEx re;
         if ( !re.Compile(pattern) )
         {
@@ -1928,34 +1495,6 @@ int main(int argc, char **argv)
     TestEnvironment();
 #endif // TEST_ENVIRON
 
-#ifdef TEST_LOCALE
-    TestDefaultLang();
-#endif // TEST_LOCALE
-
-#ifdef TEST_LOG
-    wxPuts(wxT("*** Testing wxLog ***"));
-
-    wxString s;
-    for ( size_t n = 0; n < 8000; n++ )
-    {
-        s << (wxChar)(wxT('A') + (n % 26));
-    }
-
-    wxLogWarning(wxT("The length of the string is %lu"),
-                 (unsigned long)s.length());
-
-    wxString msg;
-    msg.Printf(wxT("A very very long message: '%s', the end!\n"), s.c_str());
-
-    // this one shouldn't be truncated
-    wxPrintf(msg);
-
-    // but this one will because log functions use fixed size buffer
-    // (note that it doesn't need '\n' at the end neither - will be added
-    //  by wxLog anyhow)
-    wxLogMessage(wxT("A very very long message 2: '%s', the end!"), s.c_str());
-#endif // TEST_LOG
-
 #ifdef TEST_FILE
     TestFileRead();
     TestTextFileRead();
@@ -1995,10 +1534,7 @@ int main(int argc, char **argv)
 #ifdef TEST_MIME
     //wxLog::AddTraceMask(wxT("mime"));
     TestMimeEnum();
-#if 0
-    TestMimeOverride();
     TestMimeAssociate();
-#endif
     TestMimeFilename();
 #endif // TEST_MIME
 
@@ -2011,10 +1547,6 @@ int main(int argc, char **argv)
         TestDiskInfo();
     #endif
 #endif // TEST_INFO_FUNCTIONS
-
-#ifdef TEST_PATHLIST
-    TestPathList();
-#endif // TEST_PATHLIST
 
 #ifdef TEST_PRINTF
     TestPrintf();

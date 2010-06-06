@@ -60,6 +60,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_convautotest.o \
 	$(OBJS)\test_mbconvtest.o \
 	$(OBJS)\test_misctests.o \
+	$(OBJS)\test_module.o \
+	$(OBJS)\test_pathlist.o \
 	$(OBJS)\test_typeinfotest.o \
 	$(OBJS)\test_ipc.o \
 	$(OBJS)\test_socket.o \
@@ -470,6 +472,12 @@ $(OBJS)\test_mbconvtest.o: ./mbconv/mbconvtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_misctests.o: ./misc/misctests.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_module.o: ./misc/module.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_pathlist.o: ./misc/pathlist.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_typeinfotest.o: ./misc/typeinfotest.cpp

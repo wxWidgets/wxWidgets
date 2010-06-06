@@ -401,6 +401,14 @@ SOURCE=.\misc\misctests.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\module.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\pathlist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\thread\queue.cpp
 # End Source File
 # Begin Source File

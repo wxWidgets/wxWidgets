@@ -1020,6 +1020,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\module.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\pathlist.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\thread\queue.cpp"
 				>
 			</File>
