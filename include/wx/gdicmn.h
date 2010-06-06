@@ -403,12 +403,10 @@ inline bool operator==(const wxRealPoint& p1, const wxRealPoint& p2)
     return wxIsSameDouble(p1.x, p2.x) && wxIsSameDouble(p1.y, p2.y);
 }
 
-
 inline bool operator!=(const wxRealPoint& p1, const wxRealPoint& p2)
 {
     return !(p1 == p2);
 }
-
 
 inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
 {
@@ -419,6 +417,77 @@ inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
 inline wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
 {
     return wxRealPoint(p1.x - p2.x, p1.y - p2.y);
+}
+
+
+inline wxRealPoint operator/(const wxRealPoint& s, int i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, int i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(int i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, unsigned int i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, unsigned int i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(unsigned int i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, long i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, long i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(long i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, unsigned long i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, unsigned long i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, double i)
+{
+    return wxRealPoint(int(s.x * i), int(s.y * i));
+}
+
+inline wxRealPoint operator*(double i, const wxRealPoint& s)
+{
+    return wxRealPoint(int(s.x * i), int(s.y * i));
 }
 
 
