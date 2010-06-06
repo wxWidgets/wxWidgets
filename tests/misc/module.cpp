@@ -18,6 +18,7 @@
 #endif
 
 #include "wx/module.h"
+#include "wx/wxcrt.h"       // for wxStrcat()
 
 // ----------------------------------------------------------------------------
 // test classes derived from wxModule
