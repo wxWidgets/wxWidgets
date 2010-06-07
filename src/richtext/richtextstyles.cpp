@@ -56,17 +56,35 @@ bool wxRichTextStyleDefinition::Eq(const wxRichTextStyleDefinition& def) const
 /// Gets the style combined with the base style
 wxRichTextAttr wxRichTextStyleDefinition::GetStyleMergedWithBase(const wxRichTextStyleSheet* sheet) const
 {
-    if (!m_baseStyle.IsEmpty())
+    if (m_baseStyle.IsEmpty())
+        return m_style;
+        
+    // Collect the styles, detecting loops
+    wxArrayString styleNames;
+    wxList styles;
+    const wxRichTextStyleDefinition* def = this;
+    while (def)
     {
-        wxRichTextStyleDefinition* baseStyle = sheet->FindStyle(m_baseStyle);
-        if (baseStyle)
-        {
-            wxRichTextAttr baseAttr = baseStyle->GetStyleMergedWithBase(sheet);
-            baseAttr.Apply(m_style, NULL);
-            return baseAttr;
-        }
+        styles.Insert((wxObject*) def);
+        styleNames.Add(def->GetName());
+        
+        wxString baseStyleName = def->GetBaseStyle();
+        if (!baseStyleName.IsEmpty() && styleNames.Index(baseStyleName) == wxNOT_FOUND)
+            def = sheet->FindStyle(baseStyleName);
+        else
+            def = NULL;
     }
-    return m_style;
+    
+    wxRichTextAttr attr;
+    wxList::compatibility_iterator node = styles.GetFirst();
+    while (node)
+    {
+        wxRichTextStyleDefinition* def = (wxRichTextStyleDefinition*) node->GetData();
+        attr.Apply(def->GetStyle(), NULL);
+        node = node->GetNext();
+    }
+    
+    return attr;
 }
 
 /*!
