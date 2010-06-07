@@ -16,7 +16,7 @@
 #define wxDEFAULT_FORMAT_CODES (wxT("F"))
 #define wxDEFAULT_VALUE   (wxT(" "))
 
-class wxMaskedField
+class WXDLLIMPEXP_BASE wxMaskedField
 {
 public:
 

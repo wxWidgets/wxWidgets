@@ -18,9 +18,9 @@ typedef long wxTextPos;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
+class WXDLLIMPEXP_FWD_BASE wxMaskedEdit;
 
 #include "wx/gdicmn.h"              // for wxPoint
-
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
 // ----------------------------------------------------------------------------
@@ -143,7 +143,7 @@ public:
     virtual bool SetHint(const wxString& hint);
     virtual wxString GetHint() const;
 
-
+    
     // margins
     // -------
 
@@ -158,6 +158,9 @@ public:
     wxPoint GetMargins() const
         { return DoGetMargins(); }
 
+    // mask
+    // ----
+    virtual void SetMask(wxMaskedEdit* mask);
 
     // implementation only
     // -------------------
@@ -246,6 +249,8 @@ protected:
         if ( EventsAllowed() )
             SendTextUpdatedEvent();
     }
+
+    wxMaskedEdit *m_maskCtrl;
 
 
 private:

@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( AddChoiceTest    );
         CPPUNIT_TEST( AddChoicesTest   );
         CPPUNIT_TEST( SetMaskFieldTest );
+        CPPUNIT_TEST( AddChoiceFieldTest);
     CPPUNIT_TEST_SUITE_END();
 
     void GetPlainValueTest();
@@ -44,6 +45,7 @@ private:
     void AddChoiceTest();
     void AddChoicesTest();
     void SetMaskFieldTest();
+    void AddChoiceFieldTest();
 
     wxDECLARE_NO_COPY_CLASS(MaskedEditTestCase);
 };
@@ -73,17 +75,18 @@ void MaskedEditTestCase::GetPlainValueTest()
     }
     maskedPlainValue[]=
     {
-        {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
-        {wxT("###.|###.|###.|###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
-        {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.a2&"), wxT("111.AAA.a2&  ")},
-        {wxT("###.A|AA|.aC|\\&"), wxT("F!"), wxT("111.aaa.a2&"), wxT("111.AAA.a2&  ")},
-        {wxT("CXX."), wxT("F!_"), wxT("3rt."), wxT("3RT.")},
-        {wxT("CX|X."), wxT("F!_"), wxT("3rt."), wxT("3RT.")},
+        {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  2  3  4  ")},
+        {wxT("###.|###.|###.|###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  2  3  4  ")},
+        {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.a2&"), wxT("111AAAaZ")},
+        {wxT("###.A|AA|.aX|\\&"), wxT("F!"), wxT("111.aaa.a2&"), wxT("111AAAaZ")},
+        {wxT("#XX."), wxT("F!_"), wxT("3rt."), wxT("3rt")},
+        {wxT("#X|X."), wxT("F!_"), wxT("3rt."), wxT("3rt")},
     };
 
 
     for(unsigned int n = 0; n< WXSIZEOF(maskedPlainValue); n++)
     {
+        printf("%d\n", n);
         wxMaskedEdit mask(maskedPlainValue[n].mask, maskedPlainValue[n].formatCodes); 
         wxString res = mask.GetPlainValue(maskedPlainValue[n].test); 
         CPPUNIT_ASSERT( res.Cmp(maskedPlainValue[n].result) == 0 );    
@@ -123,13 +126,13 @@ void MaskedEditTestCase::IsValidTest()
 
         //with more than one field
         {wxT("AAa|.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AA|a.#|X*") , wxT("AZc3,|")  , false}, // correct or not?
-        {wxT("AAa.#X*") , wxT("aZc.|.|") , false},
+        {wxT("AA|a.#|X*"), wxT("AZc3,|")  , false}, // correct or not?
+        {wxT("AAa.#X*")  , wxT("aZc.|.|") , false},
         {wxT("A|Aa.#X*") , wxT("")        , false},  // correct or not?
         {wxT("AAa.|#X*") , wxT("AZc.3,|4"), false},
 
         {wxT("#|##\\*#|##") , wxT("") , true},
-        {wxT("###\\*###") , wxT("123*593") , true},
+        {wxT("###\\*###")   , wxT("123*593") , true},
         {wxT("|###\\*#|##") , wxT("123456") , false}, //correct or not?
         {wxT("|###\\*###|") , wxT("124\\*45") , false}
 
@@ -227,3 +230,29 @@ void MaskedEditTestCase::SetMaskFieldTest()
    
 }
 
+void MaskedEditTestCase::AddChoiceFieldTest()
+{
+    static struct TestChoice
+    {
+        wxString mask;
+        wxString choice;
+        unsigned int field;
+        bool result;
+    }
+    masked[]=
+    {
+        {wxT("###.###")  , wxT("111.111") , 0 , true},
+        {wxT("###|.###") , wxT("111.111") , 0 , false},
+        {wxT("###.###")  , wxT("1.1")     , 0 , false},
+        {wxT("###|.###") , wxT("111")     , 0 , true},
+        {wxT("###|.###") , wxT("111")     , 1 , false},
+        {wxT("###.###")  , wxT("1a2.34t") , 1 , false},
+        {wxT("###|.###") , wxT("123|.111"), 1 , false},
+    }; 
+
+    for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
+    {
+        wxMaskedEdit mask(masked[n].mask, wxT(""));
+        CPPUNIT_ASSERT( mask.AddChoice(masked[n].choice) == masked[n].result); 
+    }
+}

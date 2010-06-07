@@ -94,32 +94,57 @@ bool wxMaskedField::IsPunctuation(const wxChar character) const
         || character == '.' || character == ':' || character == '!';
 }
 
-// FIXME add space
 wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 {
     wxString res;
     unsigned int it;
+    unsigned int itMask;
 
-    if(m_formatCodes.Contains(wxT("_")))
+
+    for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
     {
-        for(it = 0; it < m_mask.Len(); it++)
+
+        if(IsCharValid(m_mask[itMask], string[it]))
         {
-            if(!IsCharValid(m_mask[it], string[it]))
-                res << wxT("");
-            else
-                res << string[it];
+
+            res << string[it];
+        }
+        else if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
+        {
+            if(string[it] == m_mask[itMask + 1])
+                res << string[it] ;
+
+            itMask++;
+        }
+        else
+        {
+            if(m_formatCodes.Contains(wxT("!")))
+            {
+                if(IsLowerCase(string[it]) && (m_mask[itMask] == 'A'
+                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
+                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
+                {
+                    res << string.SubString(it, it).Upper(); 
+                }
+            }
+            else if(m_formatCodes.Contains(wxT("^")))
+            {
+                if(IsUpperCase(string[it]) && (m_mask[itMask] == 'a'
+                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
+                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
+                {
+                    res << string.SubString(it, it).Lower(); 
+                }
+            }
+            else if(m_formatCodes.Contains(wxT("_")))
+            {
+                res << wxT(" ");
+                it --;
+            }
+            
         }
     }
-
-
-    if(m_formatCodes.Contains(wxT("!")))
-    {
-        res =  string.Upper();
-    }
-    else if(m_formatCodes.Contains(wxT("^")))
-    {
-        res =  string.Lower();
-    }
+        
     return res;
 }
 
@@ -127,7 +152,6 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 bool wxMaskedField::IsCharValid(const wxChar maskChar, const wxChar character) const
 {
     bool res;
-    
     switch(maskChar)
     {
         case '#':
@@ -158,7 +182,8 @@ bool wxMaskedField::IsCharValid(const wxChar maskChar, const wxChar character) c
         default:
             if(maskChar == character)
                 res = true;
-            res = false;
+            else
+                res = false;
     }
 
     return res;
@@ -171,11 +196,11 @@ bool wxMaskedField::IsValid(const wxString& string) const
     unsigned int itMask;
     bool res = true;
 
-    if(string.Len() > m_mask.Len())
+    if(string.Len() > m_mask.Len() ||( string.Len() == 0 && m_mask.Len() !=0))
     {
         res = false;
     }
-    
+
     for(it = 0, itMask = 0; itMask < m_mask.Len() && res && it < string.Len(); it++, itMask++)
     {
         if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
@@ -300,7 +325,7 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     wxString res;
     wxString formatString = ApplyFormatCodes(string);
     
-    if(!IsValid(formatString))
+    if(!IsValid(formatString)||( string.Len() == 0 && m_mask.Len() !=0))
     {
         res = wxEmptyString;
     }
@@ -308,12 +333,15 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     {
         for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
         {
-            if(string[it] != m_mask[it])
+            if(m_mask[itMask] == '\\')
             {
-                res << string[itMask];
+                itMask++;
+            }
+            else if(formatString[it] != m_mask[it])
+            {
+                res << formatString[itMask];
 
-                if(m_mask[itMask] == '\\')
-                    itMask++;
+                
             }
             else
             {
@@ -321,11 +349,10 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
                    m_mask[it] == 'X' || m_mask[it] == '&' || m_mask[it] == '*' ||
                    m_mask[it] == 'N')
                 {
-                    res << string[itMask];
+                    res << formatString[itMask];
                 }
             }
         }
     }
-
     return res;
 }

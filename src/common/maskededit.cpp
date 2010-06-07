@@ -99,7 +99,7 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
 
 }
 
-
+// FIXME Problem with formats code
 wxString wxMaskedEdit::GetPlainValue(wxString string)
 {
     wxString res;
@@ -110,23 +110,16 @@ wxString wxMaskedEdit::GetPlainValue(wxString string)
 
     for(itMask = 0, it = 0; itMask < m_maskValue.Len(); it++, itMask++)
     {
-        if(m_maskValue != '|')
+        if(m_maskValue[itMask] != '|')
         {
-            tmp << string[it];
+
         }
         else
         {
-            it--;
-            tmp = m_mask[fieldNumber].GetPlainValue(tmp);
-            
-            if(tmp == wxEmptyString)
-                return wxEmptyString;
-            
-            res << tmp;
-            tmp.Clear();
+            m_mask[fieldNumber].GetPlainValue(tmp); 
+ 
+            fieldNumber++;
         }
-            
-        
     }
 
     tmp = m_mask[fieldNumber].GetPlainValue(tmp);
@@ -137,6 +130,8 @@ wxString wxMaskedEdit::GetPlainValue(wxString string)
     res << tmp;
     tmp.Clear();
 
+
+    printf("%s\n%s\n%s\n",(const char*)res.mb_str(wxConvUTF8),(const char*)string.mb_str(wxConvUTF8),(const char*)m_maskValue.mb_str(wxConvUTF8));
     return res;
 }
 

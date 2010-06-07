@@ -15,11 +15,11 @@
 #include "wx/dynarray.h"
 #include "wx/maskedfield.h"
 
-class wxMaskedField;
+class WXDLLIMPEXP_BASE wxMaskedField;
 WX_DECLARE_OBJARRAY(wxMaskedField, fieldsArray);
 
 
-class wxMaskedEdit
+class WXDLLIMPEXP_BASE wxMaskedEdit
 {
 public:
 
