@@ -6410,7 +6410,7 @@ SOURCE=..\..\include\wx\richtext\richtexthtml.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\richtext\richtextimagepage.h
+SOURCE=..\..\include\wx\richtext\richtextimagedlg.h
 # End Source File
 # Begin Source File
 

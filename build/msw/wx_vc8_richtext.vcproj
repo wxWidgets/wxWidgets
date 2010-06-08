@@ -1075,7 +1075,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\richtext\richtextimagepage.h"
+				RelativePath="..\..\include\wx\richtext\richtextimagedlg.h"
 				>
 			</File>
 			<File
@@ -1121,7 +1121,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\richtext\richtextimagepage.cpp"
+				RelativePath="..\..\src\richtext\richtextimagedlg.cpp"
 				>
 			</File>
 			<File

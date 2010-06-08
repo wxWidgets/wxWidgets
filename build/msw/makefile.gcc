@@ -1399,7 +1399,7 @@ RICHTEXTDLL_OBJECTS =  \
 	$(OBJS)\richtextdll_richtextsymboldlg.o \
 	$(OBJS)\richtextdll_richtextstyledlg.o \
 	$(OBJS)\richtextdll_richtextprint.o \
-	$(OBJS)\richtextdll_richtextimagepage.o
+	$(OBJS)\richtextdll_richtextimagedlg.o
 RICHTEXTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -1420,7 +1420,7 @@ RICHTEXTLIB_OBJECTS =  \
 	$(OBJS)\richtextlib_richtextsymboldlg.o \
 	$(OBJS)\richtextlib_richtextstyledlg.o \
 	$(OBJS)\richtextlib_richtextprint.o \
-	$(OBJS)\richtextlib_richtextimagepage.o
+	$(OBJS)\richtextlib_richtextimagedlg.o
 STCDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1664,7 +1664,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_richtextsymboldlg.o \
 	$(OBJS)\monodll_richtextstyledlg.o \
 	$(OBJS)\monodll_richtextprint.o \
-	$(OBJS)\monodll_richtextimagepage.o \
+	$(OBJS)\monodll_richtextimagedlg.o \
 	$(OBJS)\monodll_stc.o \
 	$(OBJS)\monodll_PlatWX.o \
 	$(OBJS)\monodll_ScintillaWX.o
@@ -2376,7 +2376,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_richtextsymboldlg.o \
 	$(OBJS)\monolib_richtextstyledlg.o \
 	$(OBJS)\monolib_richtextprint.o \
-	$(OBJS)\monolib_richtextimagepage.o \
+	$(OBJS)\monolib_richtextimagedlg.o \
 	$(OBJS)\monolib_stc.o \
 	$(OBJS)\monolib_PlatWX.o \
 	$(OBJS)\monolib_ScintillaWX.o
@@ -6873,7 +6873,7 @@ $(OBJS)\monodll_richtextstyledlg.o: ../../src/richtext/richtextstyledlg.cpp
 $(OBJS)\monodll_richtextprint.o: ../../src/richtext/richtextprint.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_richtextimagepage.o: ../../src/richtext/richtextimagepage.cpp
+$(OBJS)\monodll_richtextimagedlg.o: ../../src/richtext/richtextimagedlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_stc.o: ../../src/stc/stc.cpp
@@ -9072,7 +9072,7 @@ $(OBJS)\monolib_richtextstyledlg.o: ../../src/richtext/richtextstyledlg.cpp
 $(OBJS)\monolib_richtextprint.o: ../../src/richtext/richtextprint.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_richtextimagepage.o: ../../src/richtext/richtextimagepage.cpp
+$(OBJS)\monolib_richtextimagedlg.o: ../../src/richtext/richtextimagedlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_stc.o: ../../src/stc/stc.cpp
@@ -14580,7 +14580,7 @@ $(OBJS)\richtextdll_richtextstyledlg.o: ../../src/richtext/richtextstyledlg.cpp
 $(OBJS)\richtextdll_richtextprint.o: ../../src/richtext/richtextprint.cpp
 	$(CXX) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\richtextdll_richtextimagepage.o: ../../src/richtext/richtextimagepage.cpp
+$(OBJS)\richtextdll_richtextimagedlg.o: ../../src/richtext/richtextimagedlg.cpp
 	$(CXX) -c -o $@ $(RICHTEXTDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\richtextlib_dummy.o: ../../src/common/dummy.cpp
@@ -14613,7 +14613,7 @@ $(OBJS)\richtextlib_richtextstyledlg.o: ../../src/richtext/richtextstyledlg.cpp
 $(OBJS)\richtextlib_richtextprint.o: ../../src/richtext/richtextprint.cpp
 	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\richtextlib_richtextimagepage.o: ../../src/richtext/richtextimagepage.cpp
+$(OBJS)\richtextlib_richtextimagedlg.o: ../../src/richtext/richtextimagedlg.cpp
 	$(CXX) -c -o $@ $(RICHTEXTLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\stcdll_dummy.o: ../../src/common/dummy.cpp

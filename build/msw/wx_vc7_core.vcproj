@@ -5414,7 +5414,7 @@
 				RelativePath="..\..\include\wx\richtext\richtexthtml.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\richtext\richtextimagepage.h">
+				RelativePath="..\..\include\wx\richtext\richtextimagedlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h">

@@ -792,7 +792,7 @@
 				RelativePath="..\..\include\wx\richtext\richtexthtml.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\richtext\richtextimagepage.h">
+				RelativePath="..\..\include\wx\richtext\richtextimagedlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\richtext\richtextprint.h">
@@ -827,7 +827,7 @@
 				RelativePath="..\..\src\richtext\richtexthtml.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\richtext\richtextimagepage.cpp">
+				RelativePath="..\..\src\richtext\richtextimagedlg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\richtext\richtextprint.cpp">

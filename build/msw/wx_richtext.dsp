@@ -546,7 +546,7 @@ SOURCE=..\..\include\wx\richtext\richtexthtml.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\richtext\richtextimagepage.h
+SOURCE=..\..\include\wx\richtext\richtextimagedlg.h
 # End Source File
 # Begin Source File
 
@@ -590,7 +590,7 @@ SOURCE=..\..\src\richtext\richtexthtml.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\richtext\richtextimagepage.cpp
+SOURCE=..\..\src\richtext\richtextimagedlg.cpp
 # End Source File
 # Begin Source File
 
