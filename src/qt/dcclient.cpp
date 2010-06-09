@@ -17,11 +17,13 @@
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
     : wxQtDCImpl( owner )
 {
+    m_ok = false;
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
+    m_ok = m_qtPainter.begin(win->GetHandle());
 }
 
 //##############################################################################
