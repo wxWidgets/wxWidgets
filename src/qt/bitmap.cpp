@@ -276,8 +276,7 @@ wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 wxImage wxBitmap::wxQtImage( QImage  img )
 {
     bool hasAlpha = img.hasAlphaChannel();
-    wxImage res(wxQtConvertSize(img.size()), false);
-    
+
     int numPixels = img.height() * img.width();
     
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
@@ -307,12 +306,11 @@ wxImage wxBitmap::wxQtImage( QImage  img )
         }
     }
     
-    res.SetData(startData);
     if (hasAlpha) {
-        res.SetAlpha(startAlpha);
+        return wxImage(wxQtConvertSize(img.size()), startData, startAlpha);
+    } else {
+        return wxImage(wxQtConvertSize(img.size()), startData);
     }
-    
-    return res;
 }
 
 QImage  wxBitmap::wxQtImage( const wxImage &img )
