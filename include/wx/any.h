@@ -112,7 +112,7 @@ public:
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported
     template <typename T>
-    bool CheckType(T* reserved = NULL);
+    bool CheckType(T* reserved = NULL) const;
 private:
 };
 
@@ -772,7 +772,7 @@ public:
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported
     template <typename T>
-    bool CheckType(T* = NULL)
+    bool CheckType(T* = NULL) const
     {
         return m_type->CheckType<T>();
     }
@@ -1054,7 +1054,7 @@ private:
 
 
 template<typename T>
-inline bool wxAnyValueType::CheckType(T* reserved)
+inline bool wxAnyValueType::CheckType(T* reserved) const
 {
     wxUnusedVar(reserved);
     return wxAnyValueTypeImpl<T>::IsSameClass(this);
