@@ -25,7 +25,7 @@
 
 wxPoint wxQtConvertPoint( const QPoint &point )
 {
-    if (!point.isNull())
+    if (point.isNull())
         return wxDefaultPosition;
 
     return wxPoint( point.x(), point.y() );
@@ -89,7 +89,7 @@ QDate wxQtConvertDate(const wxDateTime& date)
 
 wxSize wxQtConvertSize( const QSize  &size )
 {
-    if (!size.isNull())
+    if (size.isNull())
         return wxDefaultSize;
 
     return wxSize(size.width(), size.height());
