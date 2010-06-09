@@ -130,7 +130,7 @@ public:
         @see wxAnyValueType::CheckType()
     */
     template<typename T>
-    bool CheckType();
+    bool CheckType() const;
 
     /**
         Template function that retrieves and converts the value of this
@@ -410,7 +410,7 @@ public:
         @see wxAny::CheckType()
     */
     template <typename T>
-    bool CheckType();
+    bool CheckType() const;
 
     /**
         Convert value into buffer of different type. Return false if
