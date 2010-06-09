@@ -1,0 +1,21 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        src/qt/window_qt.cpp
+// Author:      Javier Torres
+// Id:          $Id$
+// Copyright:   (c) Javier Torres
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+#include "wx/qt/window_qt.h"
+
+wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
+: QWidget( parent )
+{
+    m_wxWindow = window;
+}
+
+void wxQtWidget::paintEvent ( QPaintEvent * event )
+{
+    wxPaintEvent e;
+    m_wxWindow->ProcessWindowEvent(e);
+}

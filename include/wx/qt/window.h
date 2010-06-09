@@ -111,6 +111,7 @@ protected:
 #endif // wxUSE_MENUS
         
 private:
+    QPointer< QWidget > m_qtWindow;
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )
 };

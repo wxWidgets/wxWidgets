@@ -2633,7 +2633,8 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/tooltip.h \
 	wx/qt/toplevel.h \
 	wx/qt/treectrl.h \
-	wx/qt/window.h
+	wx/qt/window.h \
+	wx/qt/window_qt.h
 @COND_TOOLKIT_QT@LOWLEVEL_HDR = $(COND_TOOLKIT_QT_LOWLEVEL_HDR)
 COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
 	wx/msw/ole/activex.h \
@@ -4974,7 +4975,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_treectrl.o \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
-	monodll_qt_window.o
+	monodll_qt_window.o \
+	monodll_window_qt.o \
+	monodll_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_activex.o \
@@ -5911,7 +5914,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_treectrl.o \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
-	monodll_qt_window.o
+	monodll_qt_window.o \
+	monodll_window_qt.o \
+	monodll_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_activex.o \
@@ -6987,7 +6992,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_treectrl.o \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
-	monolib_qt_window.o
+	monolib_qt_window.o \
+	monolib_window_qt.o \
+	monolib_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_activex.o \
@@ -7924,7 +7931,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_treectrl.o \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
-	monolib_qt_window.o
+	monolib_qt_window.o \
+	monolib_window_qt.o \
+	monolib_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_activex.o \
@@ -9189,7 +9198,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_treectrl.o \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
-	coredll_qt_window.o
+	coredll_qt_window.o \
+	coredll_window_qt.o \
+	coredll_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_activex.o \
@@ -10126,7 +10137,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_treectrl.o \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
-	coredll_qt_window.o
+	coredll_qt_window.o \
+	coredll_window_qt.o \
+	coredll_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_activex.o \
@@ -10877,7 +10890,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_treectrl.o \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
-	corelib_qt_window.o
+	corelib_qt_window.o \
+	corelib_window_qt.o \
+	corelib_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_activex.o \
@@ -11814,7 +11829,9 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_treectrl.o \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
-	corelib_qt_window.o
+	corelib_qt_window.o \
+	corelib_window_qt.o \
+	corelib_window_qt_moc.o
 @COND_TOOLKIT_QT@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_activex.o \
@@ -19116,6 +19133,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
+
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
@@ -24260,6 +24283,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_unix_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
@@ -29595,6 +29624,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
+
 @COND_PLATFORM_UNIX_1_USE_GUI_1@coredll_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp
 
@@ -33437,6 +33472,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_window_qt.o: $(srcdir)/src/qt/window_qt.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_window_qt_moc.o: $(srcdir)/src/qt/window_qt.moc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window_qt.moc.cpp
 
 @COND_PLATFORM_UNIX_1_USE_GUI_1@corelib_apptraits.o: $(srcdir)/src/unix/apptraits.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/apptraits.cpp

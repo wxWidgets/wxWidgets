@@ -395,6 +395,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/toplevel.h
     wx/qt/treectrl.h
     wx/qt/window.h
+    wx/qt/window_qt.h
 </set>
 
 <set var="QT_LOWLEVEL_SRC" hints="files">
@@ -482,6 +483,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
+    src/qt/window_qt.cpp
+    src/qt/window_qt.moc.cpp
 </set>
 
 <set var="ADVANCED_QT_HDR" hints="files">

@@ -13,6 +13,7 @@
 #include "wx/tooltip.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/window_qt.h"
 
 
 //##############################################################################
@@ -45,13 +46,26 @@ wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wx
     Create( parent, id, pos, size, style, name );
 }
 
-    
-bool wxWindow::Create( wxWindow * WXUNUSED( parent ), wxWindowID WXUNUSED( id ),
-    const wxPoint & WXUNUSED( pos ), const wxSize & WXUNUSED( size ),
+bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
+    const wxPoint & pos, const wxSize & size,
     long WXUNUSED( style ), const wxString & WXUNUSED( name ))
 {
-    // Should have already been created in the derived class:
+    // Should have already been created in the derived class in most cases
     
+    if (GetHandle() == NULL) {
+        // Window has not been created yet (wxPanel subclass, plain wxWindow, etc.)
+        
+        QWidget *qtParent = NULL;
+        if ( parent != NULL )
+            qtParent = parent->GetHandle();
+        
+        m_qtWindow = new wxQtWidget(this, qtParent);
+        
+    }
+    
+    Move(pos);
+    SetSize(size);
+
     return ( true );
 }
 
@@ -248,6 +262,17 @@ void wxWindow::DoSetClientSize(int width, int height)
 void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
+
+    if (x == wxDefaultCoord)
+        x = GetHandle()->x();
+    if (y == wxDefaultCoord)
+        y = GetHandle()->y();
+
+    if (width == wxDefaultCoord)
+        width = GetHandle()->width();
+    if (height == wxDefaultCoord)
+        height = GetHandle()->height();
+    
     qtWidget->move( x, y );
     qtWidget->resize( width, height );
 }
@@ -273,7 +298,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
 QWidget *wxWindow::GetHandle() const
 {
-    return NULL;
+    return m_qtWindow;
 }
 
 
