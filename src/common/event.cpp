@@ -118,7 +118,7 @@ wxEventHashTable &wxEvtHandler::GetEventHashTable() const
 wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-    { DECLARE_EVENT_TABLE_TERMINATOR() };
+    { wxDECLARE_EVENT_TABLE_TERMINATOR() };
 
 
 // wxUSE_MEMORY_TRACING considers memory freed from the static objects dtors
@@ -151,8 +151,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 
 const wxEventType wxEVT_FIRST = 10000;
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
+const wxEventType wxEVT_NULL = wxNewEventType();
 
-DEFINE_EVENT_TYPE(wxEVT_NULL)
 wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent );
 
 #endif // wxUSE_BASE

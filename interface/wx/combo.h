@@ -254,13 +254,13 @@ struct wxComboCtrlFeatures
         int m_value; // current item index
 
     private:
-        DECLARE_EVENT_TABLE()
+        wxDECLARE_EVENT_TABLE();
     };
 
-    BEGIN_EVENT_TABLE(wxListViewComboPopup, wxListView)
+    wxBEGIN_EVENT_TABLE(wxListViewComboPopup, wxListView)
         EVT_MOTION(wxListViewComboPopup::OnMouseMove)
         EVT_LEFT_UP(wxListViewComboPopup::OnMouseClick)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
     @endcode
 
     Here's how you would create and populate it in a dialog constructor:

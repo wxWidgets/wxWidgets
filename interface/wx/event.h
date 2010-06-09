@@ -3855,13 +3855,6 @@ typedef int wxEventType;
 wxEventType wxEVT_NULL;
 
 /**
-    Initializes a new event type using wxNewEventType().
-
-    @deprecated Use wxDEFINE_EVENT() instead
-*/
-#define DEFINE_EVENT_TYPE(name)     const wxEventType name = wxNewEventType();
-
-/**
     Generates a new unique event type.
 
     Usually this function is only used by wxDEFINE_EVENT() and not called
@@ -3957,9 +3950,9 @@ wxEventType wxNewEventType();
 
     ...
 
-    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
         EVT_MY(wxID_ANY, MyFrame::OnMyEvent)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
     @endcode
 
     @param evt
@@ -3989,38 +3982,39 @@ wxEventType wxNewEventType();
 #define wx__DECLARE_EVT0(evt, fn) \
     wx__DECLARE_EVT1(evt, wxID_ANY, fn)
 
-
 /**
     Use this macro inside a class declaration to declare a @e static event table
     for that class.
 
-    In the implementation file you'll need to use the BEGIN_EVENT_TABLE()
-    and the END_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
+    In the implementation file you'll need to use the wxBEGIN_EVENT_TABLE()
+    and the wxEND_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
     to capture events.
+    
+    Note that this macro requires a final semicolon.
 
     @see @ref overview_events_eventtables
 */
-#define DECLARE_EVENT_TABLE()
+#define wxDECLARE_EVENT_TABLE()
 
 /**
     Use this macro in a source file to start listing @e static event handlers
     for a specific class.
 
-    Use END_EVENT_TABLE() to terminate the event-declaration block.
+    Use wxEND_EVENT_TABLE() to terminate the event-declaration block.
 
     @see @ref overview_events_eventtables
 */
-#define BEGIN_EVENT_TABLE(theClass, baseClass)
+#define wxBEGIN_EVENT_TABLE(theClass, baseClass)
 
 /**
     Use this macro in a source file to end listing @e static event handlers
     for a specific class.
 
-    Use BEGIN_EVENT_TABLE() to start the event-declaration block.
+    Use wxBEGIN_EVENT_TABLE() to start the event-declaration block.
 
     @see @ref overview_events_eventtables
 */
-#define END_EVENT_TABLE()
+#define wxEND_EVENT_TABLE()
 
 /**
     In a GUI application, this function posts @a event to the specified @e dest
