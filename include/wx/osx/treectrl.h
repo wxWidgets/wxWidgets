@@ -215,7 +215,7 @@ public:
     bool DeleteAllItems();
 
     // Edit the label (tree must have the focus)
-    wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+    wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
 
     // End label editing, optionally cancelling the edit
     bool EndEditLabel(bool cancel);

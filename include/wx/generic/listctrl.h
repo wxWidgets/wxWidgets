@@ -121,7 +121,7 @@ public:
     void SetItemCount(long count);
 
     wxTextCtrl *EditLabel(long item,
-                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
     wxTextCtrl* GetEditControl() const;
     void Edit( long item ) { EditLabel(item); }
 

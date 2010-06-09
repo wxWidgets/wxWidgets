@@ -217,7 +217,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   void ClearAll();
 
   // Edit the label
-  wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+  wxTextCtrl* EditLabel(long item, wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
 
   // End label editing, optionally cancelling the edit
   bool EndEditLabel(bool cancel);

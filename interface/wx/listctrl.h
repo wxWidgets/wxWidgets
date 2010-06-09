@@ -245,7 +245,7 @@ public:
         will be sent which can be vetoed as well.
     */
     wxTextCtrl* EditLabel(long item,
-                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
 
     /**
         Finish editing the label.
