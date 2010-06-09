@@ -395,6 +395,16 @@ public:
 
     wxRealPoint() : x(0.0), y(0.0) { }
     wxRealPoint(double xx, double yy) : x(xx), y(yy) { }
+    wxRealPoint(const wxPoint& pt);
+    
+    // no copy ctor or assignment operator - the defaults are ok
+
+    //assignment operators
+    wxRealPoint& operator+=(const wxRealPoint& p) { x += p.x; y += p.y; return *this; }
+    wxRealPoint& operator-=(const wxRealPoint& p) { x -= p.x; y -= p.y; return *this; }
+
+    wxRealPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
+    wxRealPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 };
 
 
@@ -502,6 +512,7 @@ public:
 
     wxPoint() : x(0), y(0) { }
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
+    wxPoint(const wxRealPoint& pt) : x(pt.x), y(pt.y) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
