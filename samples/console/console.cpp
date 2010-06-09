@@ -913,12 +913,8 @@ static wxFTP *ftp;
 
 #ifdef FTP_ANONYMOUS
     static const wxChar *hostname = wxT("ftp.wxwidgets.org");
-    static const wxChar *directory = wxT("/pub");
-    static const wxChar *filename = wxT("welcome.msg");
 #else
     static const wxChar *hostname = "localhost";
-    static const wxChar *directory = wxT("/etc");
-    static const wxChar *filename = wxT("issue");
 #endif
 
 static bool TestFtpConnect()
@@ -1369,7 +1365,6 @@ int main(int argc, char **argv)
 #endif // TEST_FTP
 
 #ifdef TEST_MIME
-    //wxLog::AddTraceMask(wxT("mime"));
     TestMimeEnum();
     TestMimeAssociate();
     TestMimeFilename();
@@ -1408,11 +1403,6 @@ int main(int argc, char **argv)
 #ifdef TEST_STDPATHS
     TestStandardPaths();
 #endif
-
-#ifdef TEST_USLEEP
-    wxPuts(wxT("Sleeping for 3 seconds... z-z-z-z-z..."));
-    wxUsleep(3000);
-#endif // TEST_USLEEP
 
 #ifdef TEST_VOLUME
     TestFSVolume();
