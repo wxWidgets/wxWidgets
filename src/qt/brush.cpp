@@ -46,6 +46,7 @@ class wxBrushRefData: public wxGDIRefData
 
 wxBrush::wxBrush()
 {
+    m_refData = new wxBrushRefData();
 }
 
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )

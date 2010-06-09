@@ -47,6 +47,7 @@ class wxPenRefData: public wxGDIRefData
 
 wxPen::wxPen()
 {
+    m_refData = new wxPenRefData();
 }
 
 wxPen::wxPen( const wxColour &colour, int width, wxPenStyle style)
