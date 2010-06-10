@@ -53,7 +53,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
+class wxDataViewColumn;
+class wxDataViewHeaderWindow;
 class wxDataViewCtrl;
+
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
 
 static const int SCROLL_UNIT_X = 15;
 
@@ -75,6 +81,29 @@ static const int EXPANDER_OFFSET = 1;
 static wxDataViewModel* g_model;
 static int g_column = -2;
 static bool g_asending = true;
+
+//-----------------------------------------------------------------------------
+// wxDataViewColumn
+//-----------------------------------------------------------------------------
+
+void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
+{
+    m_width = width == wxCOL_WIDTH_DEFAULT ? wxDVC_DEFAULT_WIDTH : width;
+    m_minWidth = 0;
+    m_align = align;
+    m_flags = flags;
+    m_sort = false;
+    m_sortAscending = true;
+}
+    
+void wxDataViewColumn::UpdateDisplay()
+{
+    if (m_owner)
+    {
+        int idx = m_owner->GetColumnIndex( this );
+        m_owner->OnColumnChange( idx );
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindow
@@ -4046,6 +4075,18 @@ bool wxDataViewCtrl::ClearColumns()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
+#if 1
+    unsigned int len = GetColumnCount();
+    for ( unsigned int i = 0; i < len; i++ )
+    {
+        wxDataViewColumn * col = GetColumnAt(i);
+        if (column==col)
+            return i;
+    }
+    
+    return wxNOT_FOUND;
+#else
+    // This returns the position in pixels which is not what we want.
     int ret = 0,
         dummy = 0;
     unsigned int len = GetColumnCount();
@@ -4062,6 +4103,7 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
         }
     }
     return ret;
+#endif
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const

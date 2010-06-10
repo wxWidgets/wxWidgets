@@ -2842,7 +2842,7 @@ void wxDataViewColumn::OnInternalIdle()
 {
     if (m_isConnected)
         return;
-
+               
     if (GTK_WIDGET_REALIZED(GetOwner()->m_treeview))
     {
         GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
@@ -2851,6 +2851,9 @@ void wxDataViewColumn::OnInternalIdle()
             g_signal_connect(column->button, "button_press_event",
                       G_CALLBACK (gtk_dataview_header_button_press_callback), this);
 
+            // otherwise the event will be blocked by GTK+
+            gtk_tree_view_column_set_clickable( column, TRUE ); 
+            
             m_isConnected = true;
         }
     }
