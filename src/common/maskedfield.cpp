@@ -99,7 +99,10 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
     wxString res;
     unsigned int it;
     unsigned int itMask;
+    bool tmp = false; //FIXME change name
 
+    if(string.Len() > m_mask.Len())
+        return wxEmptyString;
 
     for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
     {
@@ -124,7 +127,8 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                    || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
                    || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
                 {
-                    res << string.SubString(it, it).Upper(); 
+                    res << string.SubString(it, it).Upper();
+                    tmp = true;
                 }
             }
             else if(m_formatCodes.Contains(wxT("^")))
@@ -133,18 +137,40 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                    || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
                    || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
                 {
-                    res << string.SubString(it, it).Lower(); 
+                    res << string.SubString(it, it).Lower();
+                    tmp = true;
                 }
             }
-            else if(m_formatCodes.Contains(wxT("_")))
+            
+            
+            if(m_formatCodes.Contains(wxT("_")) && tmp == false)
             {
                 res << wxT(" ");
                 it --;
             }
+
+            tmp = false;
             
         }
     }
-        
+       
+   
+    for(it = 0; it < string.Len(); it++)
+    {
+        if(!res.Contains(string[it]))
+        {
+            if((m_formatCodes.Contains(wxT("^")) || m_formatCodes.Contains(wxT("!")) ) && ( res.Contains(string.SubString(it,it).Upper()) || res.Contains(string.SubString(it,it).Lower() )))
+
+            {
+            }
+            else
+            {
+                it = string.Len() +1;
+                res = wxEmptyString;
+            }
+        }
+    }
+    
     return res;
 }
 
@@ -214,7 +240,10 @@ bool wxMaskedField::IsValid(const wxString& string) const
         {
             if(m_formatCodes.Contains('_'))
             {
-                it--;
+                if(string[it] != ' ')
+                {
+                    res = false;
+                }
             }
             else
             {
@@ -222,6 +251,9 @@ bool wxMaskedField::IsValid(const wxString& string) const
             }
         }
     }
+
+    if(it != string.Len())
+        res = false;
     
     return res;
     
@@ -323,9 +355,8 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     unsigned int it;
     unsigned int itMask;
     wxString res;
-    wxString formatString = ApplyFormatCodes(string);
     
-    if(!IsValid(formatString)||( string.Len() == 0 && m_mask.Len() !=0))
+    if(!IsValid(string)||( string.Len() == 0 && m_mask.Len() !=0))
     {
         res = wxEmptyString;
     }
@@ -337,9 +368,9 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
             {
                 itMask++;
             }
-            else if(formatString[it] != m_mask[it])
+            else if(string[it] != m_mask[it])
             {
-                res << formatString[itMask];
+                res << string[itMask];
 
                 
             }
@@ -349,7 +380,7 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
                    m_mask[it] == 'X' || m_mask[it] == '&' || m_mask[it] == '*' ||
                    m_mask[it] == 'N')
                 {
-                    res << formatString[itMask];
+                    res << string[itMask];
                 }
             }
         }

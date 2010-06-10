@@ -37,7 +37,8 @@ public:
                 , const wxString& defaultValue  = wxEmptyString);
     
     
-    
+    //Apply formatCodes on the string
+    wxString ApplyFormatCodes(const wxString& string);
     
     //    Return the value of the wstring associated
     //    without the mask

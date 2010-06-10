@@ -59,10 +59,12 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
 {
     wxString tmp;
     unsigned int it;
+    unsigned int numberOfFields = 0;
     
     m_maskValue = mask;
     m_cursorField = 0;
     m_cursorInsideField = 0;
+
 
     for(it = 0; it < mask.Len(); it++)
     {
@@ -72,8 +74,11 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
         }
         else
         {
-            if(formatCode.GetCount() > it + 1)
-                m_mask.Add(new wxMaskedField(tmp, formatCode[it]));
+            if(formatCode.GetCount() > numberOfFields)
+            {
+                m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
+                numberOfFields++;
+            }
             else
                 m_mask.Add(new wxMaskedField(tmp));
             
@@ -82,15 +87,14 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
 
 
     }
-    if(mask[it] != '|')
+    
+    if(formatCode.GetCount() > numberOfFields)
     {
-        tmp << mask[it];
+        m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
+        numberOfFields++;
     }
     else
-    {
         m_mask.Add(new wxMaskedField(tmp));
-        tmp.Clear();
-    }
 
     if(IsValid(defaultValue))
     {
@@ -99,39 +103,73 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
 
 }
 
-// FIXME Problem with formats code
+wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
+{
+    unsigned int it;
+    unsigned int fieldIndex = 0;
+    wxString res;
+    wxString tmp;
+    wxString formatTmp;
+    wxString alreadyUsed = wxEmptyString; 
+    
+    for(it = 0; it < string.Len() && fieldIndex < m_mask.GetCount();it++)
+    {
+        tmp = string;
+        
+        if(alreadyUsed != wxEmptyString)
+            tmp.Replace(alreadyUsed, wxEmptyString);
+        
+        formatTmp = m_mask[fieldIndex].ApplyFormatCodes(tmp);
+  
+
+        while(!m_mask[fieldIndex].IsValid(formatTmp))
+        {
+            tmp.RemoveLast();
+            formatTmp = m_mask[fieldIndex].ApplyFormatCodes(tmp);
+        }
+
+        res << formatTmp;
+        alreadyUsed << tmp;
+        fieldIndex++;
+    } 
+
+    return res;
+}
+
+// FIXME How to get plain value with mutiple fields
 wxString wxMaskedEdit::GetPlainValue(wxString string)
 {
     wxString res;
     wxString tmp;
     unsigned int it;
     unsigned int itMask;
-    unsigned int fieldNumber = 0;
+    unsigned int fieldIndex = 0;
+    wxString input;
 
-    for(itMask = 0, it = 0; itMask < m_maskValue.Len(); it++, itMask++)
+
+    if(m_mask.GetCount() == 1)
     {
-        if(m_maskValue[itMask] != '|')
+        res = m_mask[0].GetPlainValue(string);
+    }
+    else
+    {
+        for(it = 0, itMask = 0; it < string.Len(); it++, itMask++)
         {
-
-        }
-        else
-        {
-            m_mask[fieldNumber].GetPlainValue(tmp); 
- 
-            fieldNumber++;
+            input << string[it];
+         
+            if(m_maskValue[itMask] == '|')
+            {
+                input.RemoveLast();
+                res << m_mask[fieldIndex].GetPlainValue(input);
+                fieldIndex++;
+                input.Empty();
+                it--;
+            }
         }
     }
 
-    tmp = m_mask[fieldNumber].GetPlainValue(tmp);
-    
-    if(tmp == wxEmptyString)
-        return tmp;
-            
-    res << tmp;
-    tmp.Clear();
+    res << m_mask[fieldIndex].GetPlainValue(input);
 
-
-    printf("%s\n%s\n%s\n",(const char*)res.mb_str(wxConvUTF8),(const char*)string.mb_str(wxConvUTF8),(const char*)m_maskValue.mb_str(wxConvUTF8));
     return res;
 }
 
@@ -151,26 +189,31 @@ bool wxMaskedEdit::IsValid(wxString string) const
     unsigned int itMask;
     unsigned int fieldNumber = 0;
 
+    if(string.Len() > m_maskValue.Len() 
+       || (string.Len() >= m_maskValue.Len() && m_mask.GetCount() > 1))
+        return false;
+
     for(itMask = 0, it = 0; itMask < m_maskValue.Len(); it++, itMask++)
     {
-        if(m_maskValue != '|')
+        if(m_maskValue[itMask] != '|' && string.Len() >= itMask)
         {
+            if(m_maskValue[itMask] == '\\')
+                itMask++;
             tmp << string[it];
         }
         else
         {
             it--;
             
-            
             if(!m_mask[fieldNumber].IsValid(tmp))
                 return false;
-           
+            fieldNumber++;       
             tmp.Clear();
         }
             
         
     }
-            
+       
     if(!m_mask[fieldNumber].IsValid(tmp))
         return false;
 
@@ -307,8 +350,11 @@ wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
 bool wxMaskedEdit::AddChoice(unsigned int fieldIndex, const wxString& choice)
 {
     bool res = true;
-    if(fieldIndex >= m_mask.GetCount())
+
+    if(fieldIndex < m_mask.GetCount())
+    {
         res = m_mask[fieldIndex].AddChoice(choice);
+    }
     else
         res = false;
 
