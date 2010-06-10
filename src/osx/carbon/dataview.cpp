@@ -2750,6 +2750,17 @@ void wxDataViewColumn::SetWidth(int width)
   }
 }
 
+void wxDataViewColumn::SetHidden(bool WXUNUSED(hidden))
+{
+    // How to do that?
+}
+
+bool wxDataViewColumn::IsHidden() const
+{
+    return true;
+}
+
+
 void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
 {
     // see wxGTK native wxDataViewColumn implementation

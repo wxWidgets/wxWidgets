@@ -49,14 +49,14 @@ public:
     virtual int GetMinWidth() const { return m_minWidth; }
     virtual wxString GetTitle() const { return m_title; }
     virtual int GetWidth() const;
-    virtual bool IsHidden() const { return false; } // TODO
     virtual bool IsSortOrderAscending() const { return m_ascending; }
     virtual bool IsSortKey() const;
+    virtual bool IsHidden() const;
 
     virtual void SetAlignment  (wxAlignment align);
     virtual void SetBitmap     (wxBitmap const& bitmap);
     virtual void SetFlags      (int flags) { SetIndividualFlags(flags); }
-    virtual void SetHidden     (bool WXUNUSED(hidden)) { } // TODO
+    virtual void SetHidden     (bool hidden);
     virtual void SetMaxWidth   (int maxWidth);
     virtual void SetMinWidth   (int minWidth);
     virtual void SetReorderable(bool reorderable);
