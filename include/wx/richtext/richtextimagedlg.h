@@ -21,6 +21,7 @@
  */
 
 ////@begin includes
+#include "wx/richtext/richtextbuffer.h"
 ////@end includes
 
 /*!
@@ -85,6 +86,16 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
+    /// Set the image attribute
+    void SetImageAttr(const wxRichTextImageAttr& attr);
+    void ApplyImageAttr(wxRichTextImage* image);
+
+    virtual bool TransferDataFromWindow();
+    virtual bool TransferDataToWindow();
+private:
+    /// Convert CM to MM
+    bool ConvertFromString(const wxString& string, int& ret);
+private:
 ////@begin wxRichTextImageDlg member variables
     wxComboBox* m_alignment;
     wxComboBox* m_float;
@@ -94,6 +105,7 @@ public:
     wxComboBox* m_scaleH;
     wxButton* m_saveButton;
     wxButton* m_cancelButton;
+    wxRichTextImageAttr m_attr;
     /// Control identifiers
     enum {
         ID_WXRICHTEXTIMAGEPAGE = 10015,

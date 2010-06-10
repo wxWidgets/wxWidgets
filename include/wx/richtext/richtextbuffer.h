@@ -232,6 +232,31 @@ enum wxRichTextHitTestFlags
 
 #define wxSCRIPT_MUL_FACTOR             1.5
 
+// Image align/floating
+#define wxRICHTEXT_FLOAT_NONE     0x0
+#define wxRICHTEXT_LEFT     0x01
+#define wxRICHTEXT_CENTRE   0x02
+#define wxRICHTEXT_RIGHT    0x03
+
+// Image width/height scale
+#define wxRICHTEXT_PX   0x00
+#define wxRICHTEXT_MM   0x01
+
+/*!
+ * wxRichTextImageAttr class declaration
+ */
+class WXDLLIMPEXP_RICHTEXT wxRichTextImageAttr
+{
+    public:
+        wxRichTextImageAttr() {};
+        ~wxRichTextImageAttr() {};
+
+        int m_align;
+        int m_floating;
+        int m_scaleW, m_scaleH;
+        int m_width, m_height;
+};
+
 /*!
  * wxRichTextFontTable
  * Manages quick access to a pool of fonts for rendering rich text
@@ -376,6 +401,9 @@ public:
 
     /// Returns true if the object is empty
     virtual bool IsEmpty() const { return false; }
+
+    /// Whether this object floatalbe
+    virtual bool IsFloatable() const { return false; }
 
     /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& WXUNUSED(range)) const { return wxEmptyString; }
@@ -1238,6 +1266,9 @@ public:
     /// Returns true if the object is empty
     virtual bool IsEmpty() const { return !m_image.Ok(); }
 
+    /// An image is floatable
+    virtual bool IsFloatable() const { return true; }
+
 // Accessors
 
     /// Get the image
@@ -1249,6 +1280,9 @@ public:
     /// Get the image block containing the raw data
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
+    /// Get the image attribute
+    wxRichTextImageAttr GetAttribute() { return m_attr; }
+    void SetAttribute(const wxRichTextImageAttr& attr) { m_attr = attr; }
 // Operations
 
     /// Copy
@@ -1268,6 +1302,7 @@ protected:
     wxImage                 m_image;
     wxBitmap                m_bitmap;
     wxRichTextImageBlock    m_imageBlock;
+    wxRichTextImageAttr     m_attr;
 };
 
 

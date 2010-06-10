@@ -258,3 +258,105 @@ wxIcon wxRichTextImageDlg::GetIconResource( const wxString& name )
     return wxNullIcon;
 ////@end wxRichTextImageDlg icon retrieval
 }
+
+/*!
+ * Set the image attribute
+ */
+void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
+{
+   m_attr = attr;
+}
+
+/*!
+ * Apply the new style
+ */
+void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
+{
+    image->SetAttribute(m_attr);
+    // TODO: to invoke layout with some method. :)
+}
+
+bool wxRichTextImageDlg::TransferDataFromWindow()
+{
+    m_alignment->SetSelection(m_attr.m_align);
+    m_float->SetSelection(m_attr.m_floating);
+
+    // Update scale
+    m_scaleW->SetSelection(m_attr.m_scaleW);
+    m_scaleH->SetSelection(m_attr.m_scaleH);
+
+    // Update metric
+    m_width->Clear();
+    if (m_attr.m_scaleW == wxRICHTEXT_MM)
+    {
+        float value = m_attr.m_width/10; 
+        *m_width << value;
+    }
+    else
+    {
+        *m_width << m_attr.m_width;
+    }
+
+    m_height->Clear();
+    if (m_attr.m_scaleH == wxRICHTEXT_MM)
+    {
+        float value = m_attr.m_height/10;
+        *m_height << value;
+    }
+    else
+    {
+        *m_height << m_attr.m_height;
+    }
+
+    return true;
+}
+
+bool wxRichTextImageDlg::TransferDataToWindow()
+{
+    wxString width = m_width->GetValue();
+    wxString height = m_height->GetValue();
+    int w, h;
+
+    m_attr.m_align = m_alignment->GetSelection();
+    m_attr.m_floating = m_float->GetSelection();
+
+    m_attr.m_scaleW = m_scaleW->GetSelection();
+    m_attr.m_scaleH = m_scaleH->GetSelection();
+
+    if (ConvertFromString(width, w))
+        m_attr.m_width = w;
+    if (ConvertFromString(height, h))
+        m_attr.m_height = h;
+
+    return true;
+}
+
+bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret)
+{
+    const wxChar* chars = string.GetData();
+    int remain = 1;
+    bool dot = false;
+    ret = 0;
+
+    for (unsigned int i = 0; i < string.Len() && remain; i++)
+    {
+        if ((chars[i] < '0' || chars[i] > '9') && chars[i] != '.')
+            return false;
+
+        if (chars[i] == '.')
+        {
+            dot = true;
+            continue;
+        }
+
+        if (dot)
+            remain--;
+
+        ret = ret * 10 + chars[i] - '0';
+    }
+
+    if (remain)
+        ret *= 10;
+
+    return true;
+}

@@ -145,6 +145,8 @@ public:
     void OnIndentLess(wxCommandEvent& event);
 
     void OnFont(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
+    void OnUpdateImage(wxUpdateUIEvent& event);
     void OnParagraph(wxCommandEvent& event);
     void OnFormat(wxCommandEvent& event);
     void OnUpdateFormat(wxUpdateUIEvent& event);
@@ -211,6 +213,7 @@ enum
     ID_FORMAT_ITALIC,
     ID_FORMAT_UNDERLINE,
     ID_FORMAT_FONT,
+    ID_FORMAT_IMAGE,
     ID_FORMAT_PARAGRAPH,
     ID_FORMAT_CONTENT,
 
@@ -286,10 +289,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_FORMAT_ALIGN_RIGHT,  MyFrame::OnUpdateAlignRight)
 
     EVT_MENU(ID_FORMAT_FONT,  MyFrame::OnFont)
+    EVT_MENU(ID_FORMAT_IMAGE, MyFrame::OnImage)
     EVT_MENU(ID_FORMAT_PARAGRAPH,  MyFrame::OnParagraph)
     EVT_MENU(ID_FORMAT_CONTENT,  MyFrame::OnFormat)
     EVT_UPDATE_UI(ID_FORMAT_CONTENT,  MyFrame::OnUpdateFormat)
     EVT_UPDATE_UI(ID_FORMAT_FONT,  MyFrame::OnUpdateFormat)
+    EVT_UPDATE_UI(ID_FORMAT_IMAGE, MyFrame::OnUpdateImage)
     EVT_UPDATE_UI(ID_FORMAT_PARAGRAPH,  MyFrame::OnUpdateFormat)
     EVT_MENU(ID_FORMAT_INDENT_MORE,  MyFrame::OnIndentMore)
     EVT_MENU(ID_FORMAT_INDENT_LESS,  MyFrame::OnIndentLess)
@@ -621,6 +626,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     formatMenu->Append(ID_FORMAT_LINE_SPACING_DOUBLE, _("Double Line Spacing"));
     formatMenu->AppendSeparator();
     formatMenu->Append(ID_FORMAT_FONT, _("&Font..."));
+    formatMenu->Append(ID_FORMAT_IMAGE, _("Image Property"));
     formatMenu->Append(ID_FORMAT_PARAGRAPH, _("&Paragraph..."));
     formatMenu->Append(ID_FORMAT_CONTENT, _("Font and Pa&ragraph...\tShift+Ctrl+F"));
     formatMenu->AppendSeparator();
@@ -689,6 +695,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxEmptyString, wxBitmap(indentmore_xpm), _("Indent More"));
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxEmptyString, wxBitmap(font_xpm), _("Font"));
+    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxNullBitmap, _("Image Property"));
 
     wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
     toolBar->AddControl(combo);
@@ -1152,6 +1159,19 @@ void MyFrame::OnFont(wxCommandEvent& WXUNUSED(event))
         }
     }
 #endif
+}
+
+void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxRichTextRange range;
+    wxRichTextImage* image;
+    assert(m_richTextCtrl->HasSelection());
+
+    range = m_richTextCtrl->GetSelectionRange();
+    assert(range.GetLength() == 1);
+
+    image = m_richTextCtrl->GetLeafObjectAtPosition(range.GetStart());
+    assert(image != NULL);
 }
 
 void MyFrame::OnParagraph(wxCommandEvent& WXUNUSED(event))
