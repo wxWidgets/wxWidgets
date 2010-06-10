@@ -512,7 +512,7 @@ public:
 
     wxPoint() : x(0), y(0) { }
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
-    wxPoint(const wxRealPoint& pt) : x(pt.x), y(pt.y) { }
+    wxPoint(const wxRealPoint& pt) : x(int(pt.x)), y(int(pt.y)) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
