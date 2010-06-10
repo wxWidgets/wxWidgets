@@ -59,6 +59,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, choices, style, validator, name);
     }
 
