@@ -1403,6 +1403,10 @@ SOURCE=..\..\include\wx\msgout.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msgqueue.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\mstream.h
 # End Source File
 # Begin Source File

@@ -190,6 +190,7 @@ wx/mimetype.h
 wx/module.h
 wx/mousestate.h
 wx/msgout.h
+wx/msgqueue.h
 wx/mstream.h
 wx/object.h
 wx/platform.h

@@ -1994,6 +1994,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msgqueue.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\mstream.h"
 				>
 			</File>
