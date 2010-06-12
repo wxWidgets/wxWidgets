@@ -1022,14 +1022,13 @@ void wxPropertyGrid::OnLabelEditorKeyPress( wxKeyEvent& event )
 {
     int keycode = event.GetKeyCode();
 
-    // If key code was registered as action trigger, then trigger that action
     if ( keycode == WXK_ESCAPE )
     {
         DoEndLabelEdit(false);
     }
     else
     {
-        event.Skip();
+        HandleKeyEvent(event, true);
     }
 }
 
@@ -5612,11 +5611,26 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
             p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
             if ( p )
             {
-                // If editor was focused, then make the next editor focused as well
                 int selFlags = 0;
+                int reopenLabelEditorCol = -1;
+
                 if ( editorFocused )
+                {
+                    // If editor was focused, then make the next editor
+                    // focused as well
                     selFlags |= wxPG_SEL_FOCUS;
+                }
+                else
+                {
+                    // Also maintain the same label editor focus state
+                    if ( m_labelEditor )
+                        reopenLabelEditorCol = m_selColumn;
+                }
+
                 DoSelectProperty(p, selFlags);
+
+                if ( reopenLabelEditorCol >= 0 )
+                    DoBeginLabelEdit(reopenLabelEditorCol);
             }
             wasHandled = true;
         }
