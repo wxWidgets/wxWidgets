@@ -1193,9 +1193,7 @@ void wxTextCtrl::AppendText(const wxString& text)
     // don't do this if we're frozen, saves some time
     if ( !IsFrozen() && IsMultiLine() && GetRichVersion() > 1 )
     {
-        // setting the caret to the end and showing it simply doesn't work for
-        // RichEdit 2.0 -- force it to still do what we want
-        ::SendMessage(GetHwnd(), EM_LINESCROLL, 0, GetNumberOfLines());
+        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, NULL);
     }
 #endif // wxUSE_RICHEDIT
 }
