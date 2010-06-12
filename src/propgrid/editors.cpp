@@ -1919,6 +1919,13 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     }
 #endif
 
+    // This code is repeated from DoSelectProperty(). However, font boldness
+    // must be set before margin is set up below in FixPosForTextCtrl().
+    if ( forColumn == 1 &&
+         prop->HasFlag(wxPG_PROP_MODIFIED) &&
+         HasFlag(wxPG_BOLD_MODIFIED) )
+         tc->SetFont( m_captionFont );
+
     // Center the control vertically
     if ( !hasSpecialSize )
         FixPosForTextCtrl(tc, forColumn);

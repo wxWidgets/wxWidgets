@@ -1635,8 +1635,8 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 // Control font changer helper.
 void wxPropertyGrid::SetCurControlBoldFont()
 {
-    wxASSERT( m_wndEditor );
-    m_wndEditor->SetFont( m_captionFont );
+    wxWindow* editor = GetEditorControl();
+    editor->SetFont( m_captionFont );
 }
 
 // -----------------------------------------------------------------------
