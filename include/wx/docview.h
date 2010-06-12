@@ -371,6 +371,7 @@ public:
     void OnFileRevert(wxCommandEvent& event);
     void OnFileSave(wxCommandEvent& event);
     void OnFileSaveAs(wxCommandEvent& event);
+    void OnMRUFile(wxCommandEvent& event);
 #if wxUSE_PRINTING_ARCHITECTURE
     void OnPrint(wxCommandEvent& event);
     void OnPreview(wxCommandEvent& event);
@@ -484,6 +485,8 @@ public:
 
 
 protected:
+    // Open the MRU file with the given index in our associated file history.
+    void DoOpenMRUFile(unsigned n);
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
                                                wxWindow *parent,
@@ -783,12 +786,6 @@ public:
     wxDocManager *GetDocumentManager() const { return m_docManager; }
 
 protected:
-    // Open the MRU file with the given index in our associated file history.
-    //
-    // This is called from the derived class event handler for the MRU menu
-    // items.
-    void DoOpenMRUFile(unsigned n);
-
     wxDocManager *m_docManager;
 
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
@@ -830,8 +827,6 @@ public:
 
         this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
                       wxCommandEventHandler(wxDocParentFrameAny::OnExit));
-        this->Connect(wxID_FILE1, wxID_FILE9, wxEVT_COMMAND_MENU_SELECTED,
-                      wxCommandEventHandler(wxDocParentFrameAny::OnMRUFile));
         this->Connect(wxEVT_CLOSE_WINDOW,
                       wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
 
@@ -852,11 +847,6 @@ private:
     void OnExit(wxCommandEvent& WXUNUSED(event))
     {
         this->Close();
-    }
-
-    void OnMRUFile(wxCommandEvent& event)
-    {
-        DoOpenMRUFile(event.GetId() - wxID_FILE1);
     }
 
     void OnCloseWindow(wxCloseEvent& event)

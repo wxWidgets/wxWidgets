@@ -884,6 +884,11 @@ BEGIN_EVENT_TABLE(wxDocManager, wxEvtHandler)
     EVT_MENU(wxID_UNDO, wxDocManager::OnUndo)
     EVT_MENU(wxID_REDO, wxDocManager::OnRedo)
 
+    // We don't know in advance how many items can there be in the MRU files
+    // list so set up OnMRUFile() as a handler for all menu events and do the
+    // check for the id of the menu item clicked inside it.
+    EVT_MENU(wxID_ANY, wxDocManager::OnMRUFile)
+
     EVT_UPDATE_UI(wxID_OPEN, wxDocManager::OnUpdateFileOpen)
     EVT_UPDATE_UI(wxID_CLOSE, wxDocManager::OnUpdateDisableIfNoDoc)
     EVT_UPDATE_UI(wxID_CLOSE_ALL, wxDocManager::OnUpdateDisableIfNoDoc)
@@ -1081,6 +1086,53 @@ void wxDocManager::OnFileSaveAs(wxCommandEvent& WXUNUSED(event))
     if (!doc)
         return;
     doc->SaveAs();
+}
+
+void wxDocManager::OnMRUFile(wxCommandEvent& event)
+{
+    // Check if the id is in the range assigned to MRU list entries.
+    const int id = event.GetId();
+    if ( id >= wxID_FILE1 &&
+            id < wxID_FILE1 + m_fileHistory->GetBaseId() )
+    {
+        DoOpenMRUFile(id - wxID_FILE1);
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+void wxDocManager::DoOpenMRUFile(unsigned n)
+{
+    wxString filename(GetHistoryFile(n));
+    if ( filename.empty() )
+        return;
+
+    wxString errMsg; // must contain exactly one "%s" if non-empty
+    if ( wxFile::Exists(filename) )
+    {
+        // try to open it
+        if ( CreateDocument(filename, wxDOC_SILENT) )
+            return;
+
+        errMsg = _("The file '%s' couldn't be opened.");
+    }
+    else // file doesn't exist
+    {
+        errMsg = _("The file '%s' doesn't exist and couldn't be opened.");
+    }
+
+
+    wxASSERT_MSG( !errMsg.empty(), "should have an error message" );
+
+    // remove the file which we can't open from the MRU list
+    RemoveFileFromHistory(n);
+
+    // and tell the user about it
+    wxLogError(errMsg + '\n' +
+               _("It has been removed from the most recently used files list."),
+               filename);
 }
 
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -1913,38 +1965,6 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 // ----------------------------------------------------------------------------
 // wxDocParentFrameAnyBase
 // ----------------------------------------------------------------------------
-
-void wxDocParentFrameAnyBase::DoOpenMRUFile(unsigned n)
-{
-    wxString filename(m_docManager->GetHistoryFile(n));
-    if ( filename.empty() )
-        return;
-
-    wxString errMsg; // must contain exactly one "%s" if non-empty
-    if ( wxFile::Exists(filename) )
-    {
-        // try to open it
-        if ( m_docManager->CreateDocument(filename, wxDOC_SILENT) )
-            return;
-
-        errMsg = _("The file '%s' couldn't be opened.");
-    }
-    else // file doesn't exist
-    {
-        errMsg = _("The file '%s' doesn't exist and couldn't be opened.");
-    }
-
-
-    wxASSERT_MSG( !errMsg.empty(), "should have an error message" );
-
-    // remove the file which we can't open from the MRU list
-    m_docManager->RemoveFileFromHistory(n);
-
-    // and tell the user about it
-    wxLogError(errMsg + '\n' +
-               _("It has been removed from the most recently used files list."),
-               filename);
-}
 
 #if wxUSE_PRINTING_ARCHITECTURE
 
