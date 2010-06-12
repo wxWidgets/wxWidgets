@@ -340,6 +340,19 @@ WX_DECLARE_HASH_MAP_WITH_DECL(wxInt32,
                               wxPGHashMapI2I,
                               class WXDLLIMPEXP_PROPGRID);
 
+// Utility to find if specific item is in a vector. Returns index to
+// the item, or wxNOT_FOUND if not present.
+template<typename CONTAINER, typename T>
+int wxPGFindInVector( CONTAINER vector, const T& item )
+{
+    for ( unsigned int i=0; i<vector.size(); i++ )
+    {
+        if ( vector[i] == item )
+            return (int) i;
+    }
+    return wxNOT_FOUND;
+}
+
 // -----------------------------------------------------------------------
 
 enum wxPG_GETPROPERTYVALUES_FLAGS

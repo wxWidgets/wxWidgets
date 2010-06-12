@@ -709,11 +709,33 @@ public:
 
     /** Adds given key combination to trigger given action.
 
+        Here is a sample code to make Enter key press move focus to
+        the next property.
+
+        @code
+            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                                       WXK_RETURN);
+            propGrid->DedicateKey(WXK_RETURN);
+        @endcode
+
         @param action
             Which action to trigger. See @link pgactions List of list of
             wxPropertyGrid actions@endlink.
     */
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+
+    /**
+        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        key presses will not be redirected to editor controls.
+
+        Using this function allows, for example, navigation between
+        properties using arrow keys even when the focus is in the editor
+        control.
+    */
+    void DedicateKey( int keycode )
+    {
+        m_dedicatedKeys.push_back(keycode);
+    }
 
     /**
         This static function enables or disables automatic use of
@@ -1813,6 +1835,10 @@ protected:
     /** List of properties to be deleted/removed in idle event handler. */
     wxArrayPGProperty   m_deletedProperties;
     wxArrayPGProperty   m_removedProperties;
+
+    /** List of key codes that will not be handed over to editor controls. */
+    // FIXME: Make this a hash set once there is template-based wxHashSet.
+    wxVector<int>       m_dedicatedKeys;
 
     //
     // Temporary values

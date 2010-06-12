@@ -692,12 +692,7 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    for ( unsigned int i = 0; i<m_children.size(); i++ )
-    {
-        if ( p == m_children[i] )
-            return i;
-    }
-    return wxNOT_FOUND;
+    return wxPGFindInVector(m_children, p);
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const

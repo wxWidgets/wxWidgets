@@ -691,7 +691,8 @@ enum
     ID_RUNMINIMAL,
     ID_ENABLELABELEDITING,
     ID_VETOCOLDRAG,
-    ID_SHOWHEADER
+    ID_SHOWHEADER,
+    ID_ONEXTENDEDKEYNAV
 };
 
 // -----------------------------------------------------------------------
@@ -756,6 +757,7 @@ BEGIN_EVENT_TABLE(FormMain, wxFrame)
     EVT_MENU( ID_ITERATE2, FormMain::OnIterate2Click )
     EVT_MENU( ID_ITERATE3, FormMain::OnIterate3Click )
     EVT_MENU( ID_ITERATE4, FormMain::OnIterate4Click )
+    EVT_MENU( ID_ONEXTENDEDKEYNAV, FormMain::OnExtendedKeyNav )
     EVT_MENU( ID_SETBGCOLOUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_SETBGCOLOURRECUR, FormMain::OnSetBackgroundColour )
     EVT_MENU( ID_CLEARMODIF, FormMain::OnClearModifyStatusClick )
@@ -2308,6 +2310,11 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTools2->Append(ID_ITERATE3, wxT("Reverse Iterate Over Properties") );
     menuTools2->Append(ID_ITERATE4, wxT("Iterate Over Categories") );
     menuTools2->AppendSeparator();
+    menuTools2->Append(ID_ONEXTENDEDKEYNAV, "Extend Keyboard Navigation",
+                       "This will set Enter to navigate to next property, "
+                       "and allows arrow keys to navigate even when in "
+                       "editor control.");
+    menuTools2->AppendSeparator();
     menuTools2->Append(ID_SETPROPERTYVALUE, wxT("Set Property Value") );
     menuTools2->Append(ID_CLEARMODIF, wxT("Clear Modified Status"), wxT("Clears wxPG_MODIFIED flag from all properties.") );
     menuTools2->AppendSeparator();
@@ -2680,6 +2687,25 @@ void FormMain::OnIterate4Click( wxCommandEvent& WXUNUSED(event) )
         int res = IterateMessage( p );
         if ( res == wxCANCEL ) break;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnExtendedKeyNav( wxCommandEvent& WXUNUSED(event) )
+{
+    // Use AddActionTrigger() and DedicateKey() to set up Enter,
+    // Up, and Down keys for navigating between properties.
+    wxPropertyGrid* propGrid = m_pPropGridManager->GetGrid();
+
+    propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                               WXK_RETURN);
+    propGrid->DedicateKey(WXK_RETURN);
+
+    // Up and Down keys are alredy associated with navigation,
+    // but we must also prevent them from being eaten by
+    // editor controls.
+    propGrid->DedicateKey(WXK_UP);
+    propGrid->DedicateKey(WXK_DOWN);
 }
 
 // -----------------------------------------------------------------------

@@ -1022,6 +1022,7 @@ void wxPropertyGrid::OnLabelEditorKeyPress( wxKeyEvent& event )
 {
     int keycode = event.GetKeyCode();
 
+    // If key code was registered as action trigger, then trigger that action
     if ( keycode == WXK_ESCAPE )
     {
         DoEndLabelEdit(false);
@@ -5553,8 +5554,10 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
-    // Except for TAB and ESC, handle child control events in child control
-    if ( fromChild )
+    // Except for TAB, ESC, and any keys specifically dedicated to
+    // wxPropertyGrid itself, handle child control events in child control.
+    if ( fromChild &&
+         wxPGFindInVector(m_dedicatedKeys, keycode) == wxNOT_FOUND )
     {
         // Only propagate event if it had modifiers
         if ( !event.HasModifiers() )
@@ -5608,7 +5611,13 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         {
             p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
             if ( p )
-                DoSelectProperty(p);
+            {
+                // If editor was focused, then make the next editor focused as well
+                int selFlags = 0;
+                if ( editorFocused )
+                    selFlags |= wxPG_SEL_FOCUS;
+                DoSelectProperty(p, selFlags);
+            }
             wasHandled = true;
         }
     }
