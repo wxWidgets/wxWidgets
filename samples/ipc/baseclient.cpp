@@ -229,18 +229,23 @@ void MyClient::Notify()
 
         case 15:
             testfunc = &MyClient::TestDisconnect;
+            // We don't need the timer any more, we're going to exit soon.
+            Stop();
             break;
+
+        default:
+            // No need to wake up idle handling.
+            return;
     }
 
-    if ( testfunc )
-        m_tests.push_back(testfunc);
+    m_tests.push_back(testfunc);
 
     wxWakeUpIdle();
 }
 
 void MyClient::StartNextTestIfNecessary()
 {
-    if ( !m_tests.empty() )
+    while ( !m_tests.empty() )
     {
         MyClientTestFunc testfunc = m_tests.front();
         m_tests.erase(m_tests.begin());
