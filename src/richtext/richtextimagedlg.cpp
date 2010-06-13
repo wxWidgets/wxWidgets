@@ -213,11 +213,11 @@ void wxRichTextImageDlg::CreateControls()
 
     itemBoxSizer23->Add(5, 5, 10, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_saveButton = new wxButton( itemDialog1, ID_SAVE, _("Save"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_saveButton = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
     m_saveButton->SetDefault();
     itemBoxSizer23->Add(m_saveButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    m_cancelButton = new wxButton( itemDialog1, ID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    m_cancelButton = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer23->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 ////@end wxRichTextImageDlg content construction
@@ -265,6 +265,7 @@ wxIcon wxRichTextImageDlg::GetIconResource( const wxString& name )
 void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
 {
    m_attr = attr;
+   TransferDataToWindow();
 }
 
 /*!
@@ -272,11 +273,12 @@ void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
  */
 void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
 {
+    TransferDataFromWindow();
     image->SetAttribute(m_attr);
     // TODO: to invoke layout with some method. :)
 }
 
-bool wxRichTextImageDlg::TransferDataFromWindow()
+bool wxRichTextImageDlg::TransferDataToWindow()
 {
     m_alignment->SetSelection(m_attr.m_align);
     m_float->SetSelection(m_attr.m_floating);
@@ -311,7 +313,7 @@ bool wxRichTextImageDlg::TransferDataFromWindow()
     return true;
 }
 
-bool wxRichTextImageDlg::TransferDataToWindow()
+bool wxRichTextImageDlg::TransferDataFromWindow()
 {
     wxString width = m_width->GetValue();
     wxString height = m_height->GetValue();
@@ -360,3 +362,8 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret)
 
     return true;
 }
+
+
+
+
+

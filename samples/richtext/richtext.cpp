@@ -78,6 +78,7 @@
 #include "wx/richtext/richtextsymboldlg.h"
 #include "wx/richtext/richtextstyledlg.h"
 #include "wx/richtext/richtextprint.h"
+#include "wx/richtext/richtextimagedlg.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -695,7 +696,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     toolBar->AddTool(ID_FORMAT_INDENT_MORE, wxEmptyString, wxBitmap(indentmore_xpm), _("Indent More"));
     toolBar->AddSeparator();
     toolBar->AddTool(ID_FORMAT_FONT, wxEmptyString, wxBitmap(font_xpm), _("Font"));
-    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxNullBitmap, _("Image Property"));
+    toolBar->AddTool(ID_FORMAT_IMAGE, wxString("Im"), wxBitmap(font_xpm), _("Image Property"));
 
     wxRichTextStyleComboCtrl* combo = new wxRichTextStyleComboCtrl(toolBar, ID_RICHTEXT_STYLE_COMBO, wxDefaultPosition, wxSize(200, -1));
     toolBar->AddControl(combo);
@@ -1165,13 +1166,24 @@ void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
 {
     wxRichTextRange range;
     wxRichTextImage* image;
+    wxRichTextObject *obj;
     assert(m_richTextCtrl->HasSelection());
 
     range = m_richTextCtrl->GetSelectionRange();
-    assert(range.GetLength() == 1);
+    assert(range.ToInternal().GetLength() == 1);
 
-    image = m_richTextCtrl->GetLeafObjectAtPosition(range.GetStart());
-    assert(image != NULL);
+    obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
+    assert(obj != NULL);
+    assert(obj->IsKindOf(CLASSINFO(wxRichTextImage)));
+    image = dynamic_cast<wxRichTextImage *>(obj);
+
+    wxRichTextImageDlg imageDlg(this);
+    imageDlg.SetImageAttr(image->GetAttribute());
+
+    if (imageDlg.ShowModal() == wxID_OK)
+    {
+        imageDlg.ApplyImageAttr(image);
+    }
 }
 
 void MyFrame::OnParagraph(wxCommandEvent& WXUNUSED(event))
@@ -1215,6 +1227,25 @@ void MyFrame::OnFormat(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 {
     event.Enable(m_richTextCtrl->HasSelection());
+}
+
+void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
+{
+    wxRichTextRange range;
+    wxRichTextObject *obj;
+
+    range = m_richTextCtrl->GetSelectionRange();
+    if (range.ToInternal().GetLength() == 1)
+    {
+        obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
+        if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
+        {
+            event.Enable(true);
+            return;
+        }
+    }
+
+    event.Enable(false);
 }
 
 void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))

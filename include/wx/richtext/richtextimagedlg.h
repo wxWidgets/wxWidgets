@@ -19,9 +19,8 @@
 /*!
  * Includes
  */
-
-////@begin includes
 #include "wx/richtext/richtextbuffer.h"
+////@begin includes
 ////@end includes
 
 /*!
@@ -48,7 +47,7 @@
  * wxRichTextImageDlg class declaration
  */
 
-class wxRichTextImageDlg: public wxDialog
+class WXDLLIMPEXP_RICHTEXT wxRichTextImageDlg: public wxDialog
 {    
     DECLARE_DYNAMIC_CLASS( wxRichTextImageDlg )
     DECLARE_EVENT_TABLE()
@@ -96,6 +95,7 @@ private:
     /// Convert CM to MM
     bool ConvertFromString(const wxString& string, int& ret);
 private:
+    wxRichTextImageAttr m_attr;
 ////@begin wxRichTextImageDlg member variables
     wxComboBox* m_alignment;
     wxComboBox* m_float;
@@ -105,7 +105,6 @@ private:
     wxComboBox* m_scaleH;
     wxButton* m_saveButton;
     wxButton* m_cancelButton;
-    wxRichTextImageAttr m_attr;
     /// Control identifiers
     enum {
         ID_WXRICHTEXTIMAGEPAGE = 10015,
@@ -114,9 +113,7 @@ private:
         ID_TEXTCTRL_WIDTH = 10017,
         ID_COMBOBOX_SCALE_W = 10018,
         ID_TEXTCTRL_HEIGHT = 10000,
-        ID_COMBOBOX_SCALE_H = 10002,
-        ID_SAVE = 10020,
-        ID_CANCEL = 10021
+        ID_COMBOBOX_SCALE_H = 10002
     };
 ////@end wxRichTextImageDlg member variables
 };
