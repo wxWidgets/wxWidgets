@@ -1175,7 +1175,7 @@ void MyFrame::OnImage(wxCommandEvent& WXUNUSED(event))
     obj = m_richTextCtrl->GetBuffer().GetLeafObjectAtPosition(range.GetStart());
     assert(obj != NULL);
     assert(obj->IsKindOf(CLASSINFO(wxRichTextImage)));
-    image = dynamic_cast<wxRichTextImage *>(obj);
+    image = wxDynamicCast(obj, wxRichTextImage);
 
     wxRichTextImageDlg imageDlg(this);
     imageDlg.SetImageAttr(image->GetImageAttr());

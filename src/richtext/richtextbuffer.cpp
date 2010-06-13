@@ -7153,19 +7153,23 @@ bool wxRichTextImage::MakeBlock()
 /// Draw the item
 bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int WXUNUSED(descent), int WXUNUSED(style))
 {
+    wxSize size = GetCachedSize();
+    wxImage img;
+
     if (!m_image.Ok() && m_imageBlock.Ok())
         LoadFromBlock();
 
     if (!m_image.Ok())
         return false;
 
-    if (m_image.Ok() && !m_bitmap.Ok())
-        m_bitmap = wxBitmap(m_image);
+    img = m_image;
+    img.Rescale(size.x, size.y);
+    wxBitmap bitmap(img);
 
-    int y = rect.y + (rect.height - m_image.GetHeight());
+    int y = rect.y + (rect.height - img.GetHeight());
 
-    if (m_bitmap.Ok())
-        dc.DrawBitmap(m_bitmap, rect.x, y, true);
+    if (bitmap.Ok())
+        dc.DrawBitmap(bitmap, rect.x, y, true);
 
     if (selectionRange.Contains(range.GetStart()))
     {
@@ -7218,8 +7222,7 @@ bool wxRichTextImage::Layout(wxDC& dc, const wxRect& rect, int WXUNUSED(style))
         int width, height;
         InitializeAttribute();
         UpdateImageSize(dc, width, height);
-        m_image.Rescale(width, height);
-        SetCachedSize(wxSize(m_image.GetWidth(), m_image.GetHeight()));
+        SetCachedSize(wxSize(width, height));
         SetPosition(rect.GetPosition());
     }
 

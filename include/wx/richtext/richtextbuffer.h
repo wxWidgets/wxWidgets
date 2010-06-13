@@ -1311,7 +1311,6 @@ private:
 protected:
     // TODO: reduce the multiple representations of data
     wxImage                 m_image;
-    wxBitmap                m_bitmap;
     wxRichTextImageBlock    m_imageBlock;
     wxRichTextImageAttr     m_attr;
     bool                    m_attrInit;

@@ -285,6 +285,8 @@ void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
 
 bool wxRichTextImageDlg::TransferDataToWindow()
 {
+    int remain = 100;
+
     m_alignment->SetSelection(m_attr.m_align);
     m_float->SetSelection(m_attr.m_floating);
 
@@ -296,8 +298,8 @@ bool wxRichTextImageDlg::TransferDataToWindow()
     m_width->Clear();
     if (m_attr.m_scaleW == wxRICHTEXT_MM)
     {
-        int remainder = m_attr.m_width % 10;
-        *m_width << m_attr.m_width / 10;
+        int remainder = m_attr.m_width % remain;
+        *m_width << m_attr.m_width / remain;
         if (remainder)
         {
             *m_width << '.' << remainder;
@@ -311,8 +313,8 @@ bool wxRichTextImageDlg::TransferDataToWindow()
     m_height->Clear();
     if (m_attr.m_scaleH == wxRICHTEXT_MM)
     {
-        int remainder = m_attr.m_height % 10;
-        *m_height << m_attr.m_height / 10;
+        int remainder = m_attr.m_height % remain;
+        *m_height << m_attr.m_height / remain;
         if (remainder)
         {
             *m_height << '.' << remainder;
@@ -349,7 +351,7 @@ bool wxRichTextImageDlg::TransferDataFromWindow()
 bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret, int scale)
 {
     const wxChar* chars = string.GetData();
-    int remain = 1;
+    int remain = 2;
     bool dot = false;
     ret = 0;
 
@@ -361,7 +363,6 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret, int
         if (chars[i] == '.')
         {
             dot = true;
-            remain = 1;
             continue;
         }
 
@@ -371,7 +372,7 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret, int
         ret = ret * 10 + chars[i] - '0';
     }
 
-    if (remain && scale == wxRICHTEXT_MM)
+    while (remain-- > 0 && scale == wxRICHTEXT_MM)
         ret *= 10;
 
     return true;
