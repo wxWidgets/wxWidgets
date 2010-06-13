@@ -154,7 +154,7 @@ void wxRichTextObject::SetMargins(int leftMargin, int rightMargin, int topMargin
 }
 
 // Convert units in tenths of a millimetre to device units
-int wxRichTextObject::ConvertTenthsMMToPixels(wxDC& dc, int units)
+int wxRichTextObject::ConvertTenthsMMToPixels(wxDC& dc, int units) const
 {
     int p = ConvertTenthsMMToPixels(dc.GetPPI().x, units);
 
@@ -1884,6 +1884,35 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
         GetRichTextCtrl()->GetBuffer().SubmitAction(action);
 
     return true;
+}
+
+void wxRichTextParagraphLayoutBox::SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& attr, int flags)
+{
+    bool withUndo = flags & wxRICHTEXT_SETSTYLE_WITH_UNDO;
+    bool haveControl = (GetRichTextCtrl() != NULL);
+    wxRichTextParagraph* newPara wxDUMMY_INITIALIZE(NULL);
+    wxRichTextParagraph* para = GetParagraphAtPosition(image->GetRange().GetStart());
+    wxRichTextAction *action = NULL;
+    wxRichTextImageAttr oldAttr = image->GetImageAttr();
+
+    if (haveControl && withUndo)
+    {
+        action = new wxRichTextAction(NULL, _("Change Image Style"), wxRICHTEXT_CHANGE_STYLE, & GetRichTextCtrl()->GetBuffer(), GetRichTextCtrl());
+        action->SetRange(image->GetRange().FromInternal());
+        action->SetPosition(GetRichTextCtrl()->GetCaretPosition());
+        image->SetImageAttr(attr);
+        // Set the new attribute
+        newPara = new wxRichTextParagraph(*para);
+        action->GetNewParagraphs().AppendChild(newPara);
+        // Change back to the old one
+        image->SetImageAttr(oldAttr);
+        action->GetOldParagraphs().AppendChild(new wxRichTextParagraph(*para));
+    }
+    else
+        newPara = para;
+
+    if (haveControl && withUndo)
+        GetRichTextCtrl()->GetBuffer().SubmitAction(action);
 }
 
 /// Get the text attributes for this position.
@@ -7086,6 +7115,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject)
 wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxTextAttr* charStyle):
     wxRichTextObject(parent)
 {
+    m_attrInit = false;
     m_image = image;
     if (charStyle)
         SetAttributes(*charStyle);
@@ -7094,6 +7124,7 @@ wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent,
 wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxTextAttr* charStyle):
     wxRichTextObject(parent)
 {
+    m_attrInit = false;
     m_imageBlock = imageBlock;
     m_imageBlock.Load(m_image);
     if (charStyle)
@@ -7148,14 +7179,46 @@ bool wxRichTextImage::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichT
     return true;
 }
 
+void wxRichTextImage::UpdateImageSize(wxDC& dc, int& width, int& height) const
+{
+    if (m_attrInit == false)
+    {
+        width = m_image.GetWidth();
+        height = m_image.GetHeight();
+        return;
+    }
+
+    // Calculate the user specified length
+    if (m_attr.m_scaleW == wxRICHTEXT_MM)
+    {
+        width = ConvertTenthsMMToPixels(dc, m_attr.m_width);
+    }
+    else
+    {
+        width = m_attr.m_width;
+    }
+    if (m_attr.m_scaleH == wxRICHTEXT_MM)
+    {
+        height = ConvertTenthsMMToPixels(dc, m_attr.m_height);
+    }
+    else
+    {
+        height = m_attr.m_height;
+    }
+}
+
 /// Lay the item out
-bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSED(style))
+bool wxRichTextImage::Layout(wxDC& dc, const wxRect& rect, int WXUNUSED(style))
 {
     if (!m_image.Ok())
         LoadFromBlock();
 
     if (m_image.Ok())
     {
+        int width, height;
+        InitializeAttribute();
+        UpdateImageSize(dc, width, height);
+        m_image.Rescale(width, height);
         SetCachedSize(wxSize(m_image.GetWidth(), m_image.GetHeight()));
         SetPosition(rect.GetPosition());
     }
@@ -7165,18 +7228,22 @@ bool wxRichTextImage::Layout(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSE
 
 /// Get/set the object size for the given range. Returns false if the range
 /// is invalid for this object.
-bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& WXUNUSED(dc), int WXUNUSED(flags), wxPoint WXUNUSED(position), wxArrayInt* partialExtents) const
+bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& WXUNUSED(descent), wxDC& dc, int WXUNUSED(flags), wxPoint WXUNUSED(position), wxArrayInt* partialExtents) const
 {
+    int width, height;
+
     if (!range.IsWithin(GetRange()))
         return false;
 
     if (!m_image.Ok())
         ((wxRichTextImage*) this)->LoadFromBlock();
 
+    UpdateImageSize(dc, width, height);
+
     if (partialExtents)
     {
         if (m_image.Ok())
-            partialExtents->Add(m_image.GetWidth());
+            partialExtents->Add(width);
         else
             partialExtents->Add(0);
     }
@@ -7184,8 +7251,8 @@ bool wxRichTextImage::GetRangeSize(const wxRichTextRange& range, wxSize& size, i
     if (!m_image.Ok())
         return false;
 
-    size.x = m_image.GetWidth();
-    size.y = m_image.GetHeight();
+    size.x = width;
+    size.y = height;
 
     return true;
 }
@@ -7205,6 +7272,11 @@ wxRichTextImageAttr wxRichTextImage::GetImageAttr()
 {
     InitializeAttribute();
     return m_attr;
+}
+
+void wxRichTextImage::SetImageAttr(const wxRichTextImageAttr& attr)
+{
+    m_attr = attr;
 }
 
 void wxRichTextImage::InitializeAttribute()

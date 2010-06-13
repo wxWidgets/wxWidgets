@@ -28,6 +28,7 @@
 ////@end includes
 
 #include "wx/richtext/richtextimagedlg.h"
+#include "wx/richtext/richtextctrl.h"
 
 ////@begin XPM images
 ////@end XPM images
@@ -274,7 +275,11 @@ void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
 void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
 {
     TransferDataFromWindow();
-    image->SetImageAttr(m_attr);
+    wxRichTextCtrl *ctrl = image->GetBuffer()->GetRichTextCtrl();
+    if (ctrl)
+    {
+        ctrl->SetImageStyle(image, m_attr);
+    }
     // TODO: to invoke layout with some method. :)
 }
 

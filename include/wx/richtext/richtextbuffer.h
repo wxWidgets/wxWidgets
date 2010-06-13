@@ -113,6 +113,7 @@ enum wxRichTextFileType
 
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCtrl;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObject;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextImage;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextCacheObject;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextObjectList;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextLine;
@@ -486,7 +487,7 @@ public:
     void Dereference();
 
     /// Convert units in tenths of a millimetre to device units
-    int ConvertTenthsMMToPixels(wxDC& dc, int units);
+    int ConvertTenthsMMToPixels(wxDC& dc, int units) const;
     static int ConvertTenthsMMToPixels(int ppi, int units);
 
 protected:
@@ -756,6 +757,9 @@ public:
 
     /// Set text attributes: character and/or paragraph styles.
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
+
+    /// Set image attribute
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& style, int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /// Get the conbined text attributes for this position.
     virtual bool GetStyle(long position, wxTextAttr& style);
@@ -1285,7 +1289,7 @@ public:
 
     /// Get the image attribute
     wxRichTextImageAttr GetImageAttr();
-    void SetImageAttr(const wxRichTextImageAttr& attr) { m_attr = attr; }
+    void SetImageAttr(const wxRichTextImageAttr& attr);
 // Operations
 
     /// Copy
@@ -1303,6 +1307,7 @@ public:
 private:
     /// Initialize the attribute struct
     void InitializeAttribute();
+    void UpdateImageSize(wxDC& dc, int& width, int& height) const;
 protected:
     // TODO: reduce the multiple representations of data
     wxImage                 m_image;

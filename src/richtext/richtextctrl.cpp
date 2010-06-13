@@ -2844,6 +2844,11 @@ bool wxRichTextCtrl::SetStyle(const wxRichTextRange& range, const wxTextAttr& st
     return GetBuffer().SetStyle(range.ToInternal(), style);
 }
 
+void wxRichTextCtrl::SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& attr)
+{
+    GetBuffer().SetImageStyle(image, attr);
+}
+
 // extended style setting operation with flags including:
 // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY.
 // see richtextbuffer.h for more details.

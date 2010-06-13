@@ -222,6 +222,9 @@ public:
     virtual bool SetStyle(const wxRichTextRange& range, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
 
+    // Set an image style
+    void SetImageStyle(wxRichTextImage *image, const wxRichTextImageAttr& style);
+
     // get the common set of styles for the range
     virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttr& style);
     // extended style setting operation with flags including:
