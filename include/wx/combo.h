@@ -402,6 +402,10 @@ public:
     wxPoint GetMargins() const
         { return DoGetMargins(); }
 
+    // Set custom style flags for embedded wxTextCtrl. Usually must be used
+    // with two-step creation, before Create() call.
+    void SetTextCtrlStyle( int style );
+
     // Return internal flags
     wxUint32 GetInternalFlags() const { return m_iFlags; }
 
@@ -648,6 +652,9 @@ protected:
 
     // platform-dependant customization and other flags
     wxUint32                m_iFlags;
+
+    // custom style for m_text
+    int                     m_textCtrlStyle;
 
     // draw blank button background under bitmap?
     bool                    m_blankButtonBg;

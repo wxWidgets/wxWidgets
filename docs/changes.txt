@@ -523,6 +523,7 @@ All (GUI):
 - Added wxTreeCtrl::{Clear,Set}FocusedItem() (Nikolay Tiushkov).
 - Added "filter changed" event to wxFileCtrl (Bill Jones).
 - wxAUI: update floating window position and not only size on resize (MacGyver).
+- Added wxComboCtrl::SetTextCtrlStyle().
 
 GTK:
 

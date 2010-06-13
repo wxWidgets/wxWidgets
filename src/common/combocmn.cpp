@@ -905,6 +905,7 @@ void wxComboCtrlBase::Init()
     m_extRight = 0;
     m_marginLeft = -1;
     m_iFlags = 0;
+    m_textCtrlStyle = 0;
     m_timeCanAcceptClick = 0;
 
     m_resetFocus = false;
@@ -968,7 +969,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         // not used by the wxPropertyGrid and therefore the tab is processed by
         // looking at ancestors to see if they have wxTAB_TRAVERSAL. The
         // navigation event is then sent to the wrong window.
-        style |= wxTE_PROCESS_TAB;
+        style |= wxTE_PROCESS_TAB | m_textCtrlStyle;
 
         if ( HasFlag(wxTE_PROCESS_ENTER) )
             style |= wxTE_PROCESS_ENTER;
@@ -2543,6 +2544,14 @@ wxCoord wxComboCtrlBase::GetTextIndent() const
 wxCoord wxComboCtrlBase::GetNativeTextIndent() const
 {
     return DEFAULT_TEXT_INDENT;
+}
+
+void wxComboCtrlBase::SetTextCtrlStyle( int style )
+{
+    m_textCtrlStyle = style;
+
+    if ( m_text )
+        m_text->SetWindowStyle(style);
 }
 
 // ----------------------------------------------------------------------------

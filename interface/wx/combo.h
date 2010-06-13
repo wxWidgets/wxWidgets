@@ -735,6 +735,22 @@ public:
     void SetText(const wxString& value);
 
     /**
+        Set a custom window style for the embedded wxTextCtrl. Usually you
+        will need to use this during two-step creation, just before Create().
+        For example:
+
+        @code
+            wxComboCtrl* comboCtrl = new wxComboCtrl();
+
+            // Let's make the text right-aligned
+            comboCtrl->SetTextCtrlStyle(wxTE_RIGHT);
+
+            comboCtrl->Create(parent, wxID_ANY, wxEmptyString);
+        @endcode
+    */
+    void SetTextCtrlStyle( int style );
+
+    /**
         This will set the space in pixels between left edge of the control and
         the text, regardless whether control is read-only or not. Value -1 can
         be given to indicate platform default.
