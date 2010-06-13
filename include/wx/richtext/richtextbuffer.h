@@ -1284,8 +1284,8 @@ public:
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
     /// Get the image attribute
-    wxRichTextImageAttr GetAttribute();
-    void SetAttribute(const wxRichTextImageAttr& attr) { m_attr = attr; }
+    wxRichTextImageAttr GetImageAttr();
+    void SetImageAttr(const wxRichTextImageAttr& attr) { m_attr = attr; }
 // Operations
 
     /// Copy

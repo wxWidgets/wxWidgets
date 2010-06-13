@@ -7201,7 +7201,7 @@ void wxRichTextImage::Copy(const wxRichTextImage& obj)
     m_attrInit = obj.m_attrInit;
 }
 
-wxRichTextImageAttr wxRichTextImage::GetAttribute()
+wxRichTextImageAttr wxRichTextImage::GetImageAttr()
 {
     InitializeAttribute();
     return m_attr;

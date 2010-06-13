@@ -274,7 +274,7 @@ void wxRichTextImageDlg::SetImageAttr(const wxRichTextImageAttr& attr)
 void wxRichTextImageDlg::ApplyImageAttr(wxRichTextImage* image)
 {
     TransferDataFromWindow();
-    image->SetAttribute(m_attr);
+    image->SetImageAttr(m_attr);
     // TODO: to invoke layout with some method. :)
 }
 
