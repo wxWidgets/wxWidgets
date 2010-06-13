@@ -233,10 +233,13 @@ enum wxRichTextHitTestFlags
 #define wxSCRIPT_MUL_FACTOR             1.5
 
 // Image align/floating
-#define wxRICHTEXT_FLOAT_NONE     0x0
-#define wxRICHTEXT_LEFT     0x01
-#define wxRICHTEXT_CENTRE   0x02
-#define wxRICHTEXT_RIGHT    0x03
+#define wxRICHTEXT_LEFT     0x00
+#define wxRICHTEXT_CENTRE   0x01
+#define wxRICHTEXT_RIGHT    0x02
+
+#define wxRICHTEXT_FLOAT_NONE   0x00
+#define wxRICHTEXT_FLOAT_LEFT   0x01
+#define wxRICHTEXT_FLOAT_RIGHT  0x01
 
 // Image width/height scale
 #define wxRICHTEXT_PX   0x00
@@ -1246,7 +1249,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextObject
 public:
 // Constructors
 
-    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { }
+    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { m_attrInit = false; }
     wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject() { Copy(obj); }
@@ -1281,7 +1284,7 @@ public:
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
     /// Get the image attribute
-    wxRichTextImageAttr GetAttribute() { return m_attr; }
+    wxRichTextImageAttr GetAttribute();
     void SetAttribute(const wxRichTextImageAttr& attr) { m_attr = attr; }
 // Operations
 
@@ -1297,12 +1300,16 @@ public:
     /// Make block from the wxImage
     virtual bool MakeBlock();
 
+private:
+    /// Initialize the attribute struct
+    void InitializeAttribute();
 protected:
     // TODO: reduce the multiple representations of data
     wxImage                 m_image;
     wxBitmap                m_bitmap;
     wxRichTextImageBlock    m_imageBlock;
     wxRichTextImageAttr     m_attr;
+    bool                    m_attrInit;
 };
 
 

@@ -291,8 +291,12 @@ bool wxRichTextImageDlg::TransferDataToWindow()
     m_width->Clear();
     if (m_attr.m_scaleW == wxRICHTEXT_MM)
     {
-        float value = m_attr.m_width/10; 
-        *m_width << value;
+        int remainder = m_attr.m_width % 10;
+        *m_width << m_attr.m_width / 10;
+        if (remainder)
+        {
+            *m_width << '.' << remainder;
+        }
     }
     else
     {
@@ -302,8 +306,12 @@ bool wxRichTextImageDlg::TransferDataToWindow()
     m_height->Clear();
     if (m_attr.m_scaleH == wxRICHTEXT_MM)
     {
-        float value = m_attr.m_height/10;
-        *m_height << value;
+        int remainder = m_attr.m_height % 10;
+        *m_height << m_attr.m_height / 10;
+        if (remainder)
+        {
+            *m_height << '.' << remainder;
+        }
     }
     else
     {
@@ -325,15 +333,15 @@ bool wxRichTextImageDlg::TransferDataFromWindow()
     m_attr.m_scaleW = m_scaleW->GetSelection();
     m_attr.m_scaleH = m_scaleH->GetSelection();
 
-    if (ConvertFromString(width, w))
+    if (ConvertFromString(width, w, m_attr.m_scaleW))
         m_attr.m_width = w;
-    if (ConvertFromString(height, h))
+    if (ConvertFromString(height, h, m_attr.m_scaleH))
         m_attr.m_height = h;
 
     return true;
 }
 
-bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret)
+bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret, int scale)
 {
     const wxChar* chars = string.GetData();
     int remain = 1;
@@ -342,12 +350,13 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret)
 
     for (unsigned int i = 0; i < string.Len() && remain; i++)
     {
-        if ((chars[i] < '0' || chars[i] > '9') && chars[i] != '.')
+        if (!(chars[i] >= '0' && chars[i] <= '9') && !(scale == wxRICHTEXT_MM && chars[i] == '.'))
             return false;
 
         if (chars[i] == '.')
         {
             dot = true;
+            remain = 1;
             continue;
         }
 
@@ -357,13 +366,8 @@ bool wxRichTextImageDlg::ConvertFromString(const wxString& string, int& ret)
         ret = ret * 10 + chars[i] - '0';
     }
 
-    if (remain)
+    if (remain && scale == wxRICHTEXT_MM)
         ret *= 10;
 
     return true;
 }
-
-
-
-
-

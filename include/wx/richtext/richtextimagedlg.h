@@ -93,7 +93,7 @@ public:
     virtual bool TransferDataToWindow();
 private:
     /// Convert CM to MM
-    bool ConvertFromString(const wxString& string, int& ret);
+    bool ConvertFromString(const wxString& string, int& ret, int scale);
 private:
     wxRichTextImageAttr m_attr;
 ////@begin wxRichTextImageDlg member variables

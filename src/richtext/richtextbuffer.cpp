@@ -7197,6 +7197,27 @@ void wxRichTextImage::Copy(const wxRichTextImage& obj)
 
     m_image = obj.m_image;
     m_imageBlock = obj.m_imageBlock;
+    m_attr = obj.m_attr;
+    m_attrInit = obj.m_attrInit;
+}
+
+wxRichTextImageAttr wxRichTextImage::GetAttribute()
+{
+    InitializeAttribute();
+    return m_attr;
+}
+
+void wxRichTextImage::InitializeAttribute()
+{
+    if (m_attrInit)
+        return;
+
+    m_attr.m_align = wxRICHTEXT_LEFT;
+    m_attr.m_floating = wxRICHTEXT_FLOAT_NONE;
+    m_attr.m_scaleW = m_attr.m_scaleH = wxRICHTEXT_PX;
+    m_attr.m_width = m_image.GetWidth();
+    m_attr.m_height = m_image.GetHeight();
+    m_attrInit = true;
 }
 
 /*!
