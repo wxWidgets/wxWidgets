@@ -47,6 +47,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_stopwatch.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
+	$(OBJS)\test_filefn.obj \
 	$(OBJS)\test_filetest.obj \
 	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
@@ -61,6 +62,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_longlongtest.obj \
 	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
+	$(OBJS)\test_dynamiclib.obj \
+	$(OBJS)\test_environ.obj \
 	$(OBJS)\test_misctests.obj \
 	$(OBJS)\test_module.obj \
 	$(OBJS)\test_pathlist.obj \
@@ -574,6 +577,9 @@ $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 $(OBJS)\test_exec.obj: .\exec\exec.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\exec\exec.cpp
 
+$(OBJS)\test_filefn.obj: .\file\filefn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\file\filefn.cpp
+
 $(OBJS)\test_filetest.obj: .\file\filetest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\file\filetest.cpp
 
@@ -615,6 +621,12 @@ $(OBJS)\test_convautotest.obj: .\mbconv\convautotest.cpp
 
 $(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\mbconv\mbconvtest.cpp
+
+$(OBJS)\test_dynamiclib.obj: .\misc\dynamiclib.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\misc\dynamiclib.cpp
+
+$(OBJS)\test_environ.obj: .\misc\environ.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\misc\environ.cpp
 
 $(OBJS)\test_misctests.obj: .\misc\misctests.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\misc\misctests.cpp

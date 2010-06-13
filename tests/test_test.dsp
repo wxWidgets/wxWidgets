@@ -285,6 +285,14 @@ SOURCE=.\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\dynamiclib.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\misc\environ.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\weakref\evtconnection.cpp
 # End Source File
 # Begin Source File
@@ -310,6 +318,10 @@ SOURCE=.\streams\fileback.cpp
 # Begin Source File
 
 SOURCE=.\config\fileconf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\file\filefn.cpp
 # End Source File
 # Begin Source File
 

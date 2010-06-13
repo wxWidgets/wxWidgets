@@ -106,9 +106,6 @@
 
 #if TEST_ALL
     #define TEST_DIR
-    #define TEST_DYNLIB
-    #define TEST_ENVIRON
-    #define TEST_FILE
 #else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -119,6 +116,7 @@
     #define TEST_REGEX
     #define TEST_INFO_FUNCTIONS
     #define TEST_MIME
+    #define TEST_DYNLIB
 #endif
 
 // some tests are interactive, define this to run them
@@ -328,79 +326,13 @@ static void TestDirExists()
 
 #include "wx/dynlib.h"
 
-static void TestDllLoad()
-{
-#if defined(__WXMSW__)
-    static const wxChar *LIB_NAME = wxT("kernel32.dll");
-    static const wxChar *FUNC_NAME = wxT("lstrlenA");
-#elif defined(__UNIX__)
-    // weird: using just libc.so does *not* work!
-    static const wxChar *LIB_NAME = wxT("/lib/libc.so.6");
-    static const wxChar *FUNC_NAME = wxT("strlen");
-#else
-    #error "don't know how to test wxDllLoader on this platform"
-#endif
-
-    wxPuts(wxT("*** testing basic wxDynamicLibrary functions ***\n"));
-
-    wxDynamicLibrary lib(LIB_NAME);
-    if ( !lib.IsLoaded() )
-    {
-        wxPrintf(wxT("ERROR: failed to load '%s'.\n"), LIB_NAME);
-    }
-    else
-    {
-        typedef int (wxSTDCALL *wxStrlenType)(const char *);
-        wxStrlenType pfnStrlen = (wxStrlenType)lib.GetSymbol(FUNC_NAME);
-        if ( !pfnStrlen )
-        {
-            wxPrintf(wxT("ERROR: function '%s' wasn't found in '%s'.\n"),
-                     FUNC_NAME, LIB_NAME);
-        }
-        else
-        {
-            wxPrintf(wxT("Calling %s dynamically loaded from %s "),
-                     FUNC_NAME, LIB_NAME);
-
-            if ( pfnStrlen("foo") != 3 )
-            {
-                wxPrintf(wxT("ERROR: loaded function is not wxStrlen()!\n"));
-            }
-            else
-            {
-                wxPuts(wxT("... ok"));
-            }
-        }
-
-#ifdef __WXMSW__
-        static const wxChar *FUNC_NAME_AW = wxT("lstrlen");
-
-        typedef int (wxSTDCALL *wxStrlenTypeAorW)(const wxChar *);
-        wxStrlenTypeAorW
-            pfnStrlenAorW = (wxStrlenTypeAorW)lib.GetSymbolAorW(FUNC_NAME_AW);
-        if ( !pfnStrlenAorW )
-        {
-            wxPrintf(wxT("ERROR: function '%s' wasn't found in '%s'.\n"),
-                     FUNC_NAME_AW, LIB_NAME);
-        }
-        else
-        {
-            if ( pfnStrlenAorW(wxT("foobar")) != 6 )
-            {
-                wxPrintf(wxT("ERROR: loaded function is not wxStrlen()!\n"));
-            }
-        }
-#endif // __WXMSW__
-    }
-}
-
 #if defined(__WXMSW__) || defined(__UNIX__)
 
 static void TestDllListLoaded()
 {
     wxPuts(wxT("*** testing wxDynamicLibrary::ListLoaded() ***\n"));
 
-    puts("\nLoaded modules:");
+    wxPuts("Loaded modules:");
     wxDynamicLibraryDetailsArray dlls = wxDynamicLibrary::ListLoaded();
     const size_t count = dlls.GetCount();
     for ( size_t n = 0; n < count; ++n )
@@ -418,201 +350,13 @@ static void TestDllListLoaded()
 
         printf(" %s\n", (const char *)details.GetVersion().mb_str());
     }
+    
+    wxPuts(wxEmptyString);
 }
 
 #endif
 
 #endif // TEST_DYNLIB
-
-// ----------------------------------------------------------------------------
-// wxGet/SetEnv
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_ENVIRON
-
-#include "wx/utils.h"
-
-static wxString MyGetEnv(const wxString& var)
-{
-    wxString val;
-    if ( !wxGetEnv(var, &val) )
-        val = wxT("<empty>");
-    else
-        val = wxString(wxT('\'')) + val + wxT('\'');
-
-    return val;
-}
-
-static void TestEnvironment()
-{
-    const wxChar *var = wxT("wxTestVar");
-
-    wxPuts(wxT("*** testing environment access functions ***"));
-
-    wxPrintf(wxT("Initially getenv(%s) = %s\n"), var, MyGetEnv(var).c_str());
-    wxSetEnv(var, wxT("value for wxTestVar"));
-    wxPrintf(wxT("After wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
-    wxSetEnv(var, wxT("another value"));
-    wxPrintf(wxT("After 2nd wxSetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
-    wxUnsetEnv(var);
-    wxPrintf(wxT("After wxUnsetEnv: getenv(%s) = %s\n"),  var, MyGetEnv(var).c_str());
-    wxPrintf(wxT("PATH = %s\n"),  MyGetEnv(wxT("PATH")).c_str());
-}
-
-#endif // TEST_ENVIRON
-
-// ----------------------------------------------------------------------------
-// file
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_FILE
-
-#include "wx/file.h"
-#include "wx/ffile.h"
-#include "wx/textfile.h"
-
-static void TestFileRead()
-{
-    wxPuts(wxT("*** wxFile read test ***"));
-
-    wxFile file(wxT("makefile.vc"));
-    if ( file.IsOpened() )
-    {
-        wxPrintf(wxT("File length: %lu\n"), file.Length());
-
-        wxPuts(wxT("File dump:\n----------"));
-
-        static const size_t len = 1024;
-        wxChar buf[len];
-        for ( ;; )
-        {
-            size_t nRead = file.Read(buf, len);
-            if ( nRead == (size_t)wxInvalidOffset )
-            {
-                wxPrintf(wxT("Failed to read the file."));
-                break;
-            }
-
-            fwrite(buf, nRead, 1, stdout);
-
-            if ( nRead < len )
-                break;
-        }
-
-        wxPuts(wxT("----------"));
-    }
-    else
-    {
-        wxPrintf(wxT("ERROR: can't open test file.\n"));
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestTextFileRead()
-{
-    wxPuts(wxT("*** wxTextFile read test ***"));
-
-    wxTextFile file(wxT("makefile.vc"));
-    if ( file.Open() )
-    {
-        wxPrintf(wxT("Number of lines: %u\n"), file.GetLineCount());
-        wxPrintf(wxT("Last line: '%s'\n"), file.GetLastLine().c_str());
-
-        wxString s;
-
-        wxPuts(wxT("\nDumping the entire file:"));
-        for ( s = file.GetFirstLine(); !file.Eof(); s = file.GetNextLine() )
-        {
-            wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
-        }
-        wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
-
-        wxPuts(wxT("\nAnd now backwards:"));
-        for ( s = file.GetLastLine();
-              file.GetCurrentLine() != 0;
-              s = file.GetPrevLine() )
-        {
-            wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
-        }
-        wxPrintf(wxT("%6u: %s\n"), file.GetCurrentLine() + 1, s.c_str());
-    }
-    else
-    {
-        wxPrintf(wxT("ERROR: can't open '%s'\n"), file.GetName());
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestFileCopy()
-{
-    wxPuts(wxT("*** Testing wxCopyFile ***"));
-
-    static const wxChar *filename1 = wxT("makefile.vc");
-    static const wxChar *filename2 = wxT("test2");
-    if ( !wxCopyFile(filename1, filename2) )
-    {
-        wxPuts(wxT("ERROR: failed to copy file"));
-    }
-    else
-    {
-        wxFFile f1(filename1, wxT("rb")),
-                f2(filename2, wxT("rb"));
-
-        if ( !f1.IsOpened() || !f2.IsOpened() )
-        {
-            wxPuts(wxT("ERROR: failed to open file(s)"));
-        }
-        else
-        {
-            wxString s1, s2;
-            if ( !f1.ReadAll(&s1) || !f2.ReadAll(&s2) )
-            {
-                wxPuts(wxT("ERROR: failed to read file(s)"));
-            }
-            else
-            {
-                if ( (s1.length() != s2.length()) ||
-                     (memcmp(s1.c_str(), s2.c_str(), s1.length()) != 0) )
-                {
-                    wxPuts(wxT("ERROR: copy error!"));
-                }
-                else
-                {
-                    wxPuts(wxT("File was copied ok."));
-                }
-            }
-        }
-    }
-
-    if ( !wxRemoveFile(filename2) )
-    {
-        wxPuts(wxT("ERROR: failed to remove the file"));
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-static void TestTempFile()
-{
-    wxPuts(wxT("*** wxTempFile test ***"));
-
-    wxTempFile tmpFile;
-    if ( tmpFile.Open(wxT("test2")) && tmpFile.Write(wxT("the answer is 42")) )
-    {
-        if ( tmpFile.Commit() )
-            wxPuts(wxT("File committed."));
-        else
-            wxPuts(wxT("ERROR: could't commit temp file."));
-
-        wxRemoveFile(wxT("test2"));
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-#endif // TEST_FILE
 
 // ----------------------------------------------------------------------------
 // MIME types
@@ -1335,20 +1079,8 @@ int main(int argc, char **argv)
 #endif // TEST_DIR
 
 #ifdef TEST_DYNLIB
-    TestDllLoad();
     TestDllListLoaded();
 #endif // TEST_DYNLIB
-
-#ifdef TEST_ENVIRON
-    TestEnvironment();
-#endif // TEST_ENVIRON
-
-#ifdef TEST_FILE
-    TestFileRead();
-    TestTextFileRead();
-    TestFileCopy();
-    TestTempFile();
-#endif // TEST_FILE
 
 #ifdef TEST_FTP
     wxLog::AddTraceMask(FTP_TRACE_MASK);

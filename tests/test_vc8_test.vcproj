@@ -940,6 +940,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\misc\dynamiclib.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\environ.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\weakref\evtconnection.cpp"
 				>
 			</File>
@@ -965,6 +973,10 @@
 			</File>
 			<File
 				RelativePath=".\config\fileconf.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\file\filefn.cpp"
 				>
 			</File>
 			<File
