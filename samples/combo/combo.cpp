@@ -753,6 +753,11 @@ MyFrame::MyFrame(const wxString& title)
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     cc = new wxComboCtrlWithCustomPopupAnim();
+
+    // Let's set a custom style for the contained wxTextCtrl. We need to
+    // use two-step creation for it to work properly.
+    cc->SetTextCtrlStyle(wxTE_RIGHT);
+
     cc->Create(panel, wxID_ANY, wxEmptyString);
 
     // Make sure we use popup that allows focusing the listview.
