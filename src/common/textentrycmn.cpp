@@ -279,16 +279,6 @@ wxPoint wxTextEntryBase::DoGetMargins() const
     return wxPoint(-1, -1);
 }
 
-// ----------------------------------------------------------------------------
-// Mask.
-// ----------------------------------------------------------------------------
-
-void wxTextEntryBase::SetMask(wxMaskedEdit* mask)
-{
-    m_maskCtrl = mask;
-    //m_maskCtrl->AttachCtrl(GetID);
-}
-
 
 // ----------------------------------------------------------------------------
 // events

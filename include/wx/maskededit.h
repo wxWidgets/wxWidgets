@@ -10,12 +10,10 @@
 #define _WX_MASKED_EDIT_H_
 
 #include "wx/defs.h"
-#include <stdlib.h>
 #include "wx/colour.h"
-#include "wx/dynarray.h"
 #include "wx/maskedfield.h"
 
-class WXDLLIMPEXP_BASE wxMaskedField;
+
 WX_DECLARE_OBJARRAY(wxMaskedField, fieldsArray);
 
 
@@ -33,10 +31,15 @@ public:
                 , const wxString &defaultValue = wxDEFAULT_VALUE);
                 
   
-    wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode = wxArrayString()
+    wxMaskedEdit( const wxString& mask 
+                , const wxArrayString& formatCode = wxArrayString()
                 , const wxString& defaultValue  = wxEmptyString);
     
     
+    void Create(  const wxString& mask 
+                , const wxArrayString& formatCode = wxArrayString()
+                , const wxString& defaultValue  = wxEmptyString);
+
     //Apply formatCodes on the string
     wxString ApplyFormatCodes(const wxString& string);
     
@@ -95,15 +98,20 @@ public:
     bool AddChoices(unsigned int fieldIndex, const wxArrayString& choices);  
     
 private:
+    //mask caracteristics
     fieldsArray m_mask;
     wxString m_maskValue;
     int m_cursorField;
     int m_cursorInsideField;
 
+    //Control behavior
+    wxColour m_emptyBg;
+    wxColour m_invalidBg;
+    wxColour m_validBg;
         
 };   
 
-#include <wx/arrimpl.cpp> // This is a magic incantation which must be done!
+#include "wx/arrimpl.cpp" // This is a magic incantation which must be done!
 WX_DEFINE_OBJARRAY(fieldsArray);
 
 

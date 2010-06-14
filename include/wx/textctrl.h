@@ -24,6 +24,7 @@
 #include "wx/textentry.h"       // single-line text entry interface
 #include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
+#include "wx/maskededit.h"
 
 // some compilers don't have standard compliant rdbuf() (and MSVC has it only
 // in its new iostream library, not in the old one used with iostream.h)
@@ -585,11 +586,13 @@ public:
     virtual wxString GetValue() const = 0;
     virtual void SetValue(const wxString& value) = 0;
 
+
 protected:
     // implementation of loading/saving
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
+    
 
     // the name of the last file loaded with LoadFile() which will be used by
     // SaveFile() by default
@@ -598,6 +601,8 @@ protected:
     // the text style which will be used for any new text added to the control
     wxTextAttr m_defaultStyle;
 
+    //Mask
+    wxMaskedEdit* m_maskCtrl;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAreaBase);
 };
@@ -625,6 +630,8 @@ public:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlIface);
+    
+   
 };
 
 // ----------------------------------------------------------------------------
@@ -700,7 +707,11 @@ public:
        wxTextEntry::SetValue(value);
     }
 
+    //mask
+   
+    void SetMask(wxMaskedEdit* mask);
     // wxWindow overrides
+    
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
         return GetClassDefaultAttributes(GetWindowVariant());
@@ -723,6 +734,9 @@ protected:
 
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }
+     //Mask event methods
+    void ApplyMask(wxCommandEvent& event);
+
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)

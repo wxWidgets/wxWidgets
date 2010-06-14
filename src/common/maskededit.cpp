@@ -15,12 +15,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
+    #include <stdio.h>
 #endif
 
 #include "wx/maskededit.h"
-#include "wx/maskedfield.h"
-
 
 
 
@@ -29,7 +27,7 @@ wxMaskedEdit::wxMaskedEdit()
 
 }
 
-// FIXME watch how to copy constructor
+
 #if 0
 wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
 {
@@ -48,60 +46,75 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask
                           , const wxString& formatCode
                           , const wxString& defaultValue)
 {
-    m_mask.Add(new wxMaskedField(mask, formatCode, defaultValue));
-    m_maskValue = mask;
-    m_cursorField = 0;
-    m_cursorInsideField = 0;
+    wxArrayString formatCodes;
+    formatCodes.Add(formatCode);
+    
+    Create(mask, formatCodes ,defaultValue);
 }
 
 wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode
                           , const wxString& defaultValue)
 {
-    wxString tmp;
-    unsigned int it;
-    unsigned int numberOfFields = 0;
-    
-    m_maskValue = mask;
-    m_cursorField = 0;
-    m_cursorInsideField = 0;
+    Create(mask, formatCode, defaultValue);
+}
 
-
-    for(it = 0; it < mask.Len(); it++)
+void wxMaskedEdit::Create( const wxString& mask 
+                         , const wxArrayString& formatCode
+                         , const wxString& defaultValue)
+{
+    if(!mask.Contains('|'))
     {
-        if(mask[it] != '|')
-        {
-            tmp << mask[it];
-        }
-        else
-        {
-            if(formatCode.GetCount() > numberOfFields)
-            {
-                m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
-                numberOfFields++;
-            }
-            else
-                m_mask.Add(new wxMaskedField(tmp));
-            
-            tmp.Clear();
-        }
-
-
-    }
-    
-    if(formatCode.GetCount() > numberOfFields)
-    {
-        m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
-        numberOfFields++;
+        m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
+        m_maskValue = mask;
     }
     else
-        m_mask.Add(new wxMaskedField(tmp));
-
-    if(IsValid(defaultValue))
     {
-       //FIXME ajout d une valeur par defaut 
+        wxString tmp;
+        unsigned int it;
+        unsigned int numberOfFields = 0;
+        
+        for(it = 0; it < mask.Len(); it++)
+        {
+            if(mask[it] != '|')
+            {
+                tmp << mask[it];
+            }
+            else
+            {
+                if(formatCode.GetCount() > numberOfFields)
+                {
+                    m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
+                    numberOfFields++;
+                }
+                else
+                    m_mask.Add(new wxMaskedField(tmp));
+                
+                tmp.Clear();
+            }
+        }
+        
+        if(formatCode.GetCount() > numberOfFields)
+        {
+            m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
+            numberOfFields++;
+        }
+        else
+            m_mask.Add(new wxMaskedField(tmp));
+
+        if(IsValid(defaultValue))
+        {
+           //FIXME ajout d une valeur par defaut 
+        }
     }
 
+    m_maskValue          = mask;
+    m_cursorField        = 0;
+    m_cursorInsideField  = 0;
+    m_emptyBg   = wxColour(255,255,255);
+    m_invalidBg = wxColour(255,255,255);
+    m_validBg   = wxColour(255,255,255);
 }
+
 
 wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
 {
@@ -307,6 +320,21 @@ bool wxMaskedEdit::AddChoices(const wxArrayString& choices)
 int wxMaskedEdit::GetNumberOfFields() const
 {
     return m_mask.GetCount();
+}
+
+void wxMaskedEdit::SetEmptyBackgroundColour(const wxColour& colour)
+{
+    m_emptyBg = colour;
+}
+     
+void wxMaskedEdit::SetInvalidBackgroundColour(const wxColour& colour)       
+{
+    m_invalidBg = colour;
+}
+
+void wxMaskedEdit::SetValidBackgroundColour(const wxColour& colour)
+{
+    m_validBg = colour;
 }
 
 bool wxMaskedEdit::SetMask(unsigned int fieldIndex, wxString& mask)

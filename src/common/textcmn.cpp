@@ -742,6 +742,38 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 }
 
 // ----------------------------------------------------------------------------
+// Mask methods
+// ----------------------------------------------------------------------------
+
+void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
+{
+    if(mask != NULL)
+    {
+        m_maskCtrl = mask;
+        Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
+    }
+    else
+    {
+        if(m_maskCtrl != NULL)
+            delete m_maskCtrl;
+        Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
+    }
+}
+
+void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
+{
+    printf("It is working\n");
+
+    unsigned int size = GetValue().Len();
+
+    if(!m_maskCtrl->IsValid(GetValue()))
+    {
+        Remove(size - 1, size - 1);
+    }
+
+}
+
+// ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------
 

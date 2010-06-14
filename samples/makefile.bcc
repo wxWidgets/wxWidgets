@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets wizard wrapsizer xrc
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dll dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl maskededit mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render ribbon richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -198,6 +198,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>listctrl.bat
 	call listctrl.bat
 	@del listctrl.bat
+	@echo cd maskededit >maskededit.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>maskededit.bat
+	call maskededit.bat
+	@del maskededit.bat
 	@echo cd mdi >mdi.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mdi.bat
 	call mdi.bat
@@ -588,6 +592,12 @@ listctrl:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>listctrl.bat
 	call listctrl.bat
 	@del listctrl.bat
+
+maskededit: 
+	@echo cd maskededit >maskededit.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>maskededit.bat
+	call maskededit.bat
+	@del maskededit.bat
 
 mdi: 
 	@echo cd mdi >mdi.bat

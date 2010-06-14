@@ -18,7 +18,7 @@ typedef long wxTextPos;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_BASE wxMaskedEdit;
+class WXDLLIMPEXP_FWD_CORE wxMaskedEdit;
 
 #include "wx/gdicmn.h"              // for wxPoint
 // ----------------------------------------------------------------------------
@@ -160,7 +160,7 @@ public:
 
     // mask
     // ----
-    virtual void SetMask(wxMaskedEdit* mask);
+    virtual void SetMask(wxMaskedEdit* mask){};
 
     // implementation only
     // -------------------
@@ -250,7 +250,6 @@ protected:
             SendTextUpdatedEvent();
     }
 
-    wxMaskedEdit *m_maskCtrl;
 
 
 private:
