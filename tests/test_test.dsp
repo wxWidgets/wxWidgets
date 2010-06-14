@@ -405,6 +405,10 @@ SOURCE=.\streams\memstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\metatest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\thread\misc.cpp
 # End Source File
 # Begin Source File

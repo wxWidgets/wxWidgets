@@ -61,6 +61,7 @@
             mbconv/mbconvtest.cpp
             misc/dynamiclib.cpp
             misc/environ.cpp
+            misc/metatest.cpp
             misc/misctests.cpp
             misc/module.cpp
             misc/pathlist.cpp

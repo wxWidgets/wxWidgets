@@ -17,7 +17,7 @@
 #if wxUSE_ANY
 
 #include "wx/string.h"
-#include "wx/meta/movable.h"
+#include "wx/meta/pod.h"
 #include "wx/meta/if.h"
 #include "wx/typeinfo.h"
 
@@ -193,7 +193,7 @@ namespace wxPrivate
 {
 
 template<typename T>
-class wxAnyValueTypeOpsMovable
+class wxAnyValueTypeOpsPOD
 {
 public:
     static void DeleteValue(wxAnyValueBuffer& buf)
@@ -270,9 +270,9 @@ public:
 template<typename T>
 class wxAnyValueTypeImplBase : public wxAnyValueType
 {
-    typedef typename wxIf< wxIsMovable<T>::value &&
+    typedef typename wxIf< wxIsPod<T>::value &&
                                 sizeof(T) <= WX_ANY_VALUE_BUFFER_SIZE,
-                           wxPrivate::wxAnyValueTypeOpsMovable<T>,
+                           wxPrivate::wxAnyValueTypeOpsPOD<T>,
                            wxPrivate::wxAnyValueTypeOpsGeneric<T> >::value
             Ops;
 

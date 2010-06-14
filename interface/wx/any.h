@@ -45,23 +45,27 @@
 
     When compared to wxVariant, there are various internal implementation
     differences as well. For instance, wxAny only allocates separate data
-    object in heap for large (ie. size in bytes more than
-    WX_ANY_VALUE_BUFFER_SIZE) or 'non-movable' data types. Pointers, integers,
-    bools etc. are fitted in the wxAny's own buffer without need for any extra
-    allocation. Use following code to declare your own data type as 'movable':
+    object in heap for large (i.e. size in bytes more than
+    WX_ANY_VALUE_BUFFER_SIZE) or non-POD (Plain Old Data) data types.
+    Pointers, integers, bools etc. are fitted in the wxAny's internal buffer
+    without need for any extra allocation. It is possible that wxAny cannot
+    automatically determine if your own data structure is considered a
+    POD or not, so you may need to declare it as such explicitly, using
+    code like this:
 
     @code
-    #include "wx/meta/movable.h"
-    WX_DECLARE_TYPE_MOVABLE(MyClass)
+    #include "wx/meta/pod.h"
+    WX_DECLARE_TYPE_POD(MyPodStruct)
     @endcode
 
-    However, you must be aware that 'movable' means such data that can be
-    copied with memcpy() without corrupting program integrity. For instance,
-    movable objects usually cannot contain pointers or references to other
-    data. wxRect, wxPoint, and wxSize are good examples of movable classes.
+    Be extra careful what you declare as Plain Old Data. It must be such data
+    that can be copied with memcpy() without corrupting program integrity. For
+    instance, POD structures usually cannot contain pointers or references to
+    other data. wxRect, wxPoint, and wxSize are good examples of POD
+    classes.
 
-    Note that pointers to any and all classes are already automatically
-    declared as movable data.
+    Note that pointers to any and all types are already automatically
+    declared as Plain Old Data.
 
     @library{wxbase}
     @category{data}

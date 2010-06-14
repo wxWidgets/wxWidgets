@@ -1032,6 +1032,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\metatest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\thread\misc.cpp"
 				>
 			</File>

@@ -2014,6 +2014,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\meta\pod.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\power.h"
 				>
 			</File>

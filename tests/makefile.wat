@@ -300,6 +300,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_mbconvtest.obj &
 	$(OBJS)\test_dynamiclib.obj &
 	$(OBJS)\test_environ.obj &
+	$(OBJS)\test_metatest.obj &
 	$(OBJS)\test_misctests.obj &
 	$(OBJS)\test_module.obj &
 	$(OBJS)\test_pathlist.obj &
@@ -538,6 +539,9 @@ $(OBJS)\test_dynamiclib.obj :  .AUTODEPEND .\misc\dynamiclib.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_environ.obj :  .AUTODEPEND .\misc\environ.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_metatest.obj :  .AUTODEPEND .\misc\metatest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_misctests.obj :  .AUTODEPEND .\misc\misctests.cpp

@@ -1423,6 +1423,10 @@ SOURCE=..\..\include\wx\platinfo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\meta\pod.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\power.h
 # End Source File
 # Begin Source File

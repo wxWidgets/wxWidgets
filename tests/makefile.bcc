@@ -70,6 +70,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_mbconvtest.obj \
 	$(OBJS)\test_dynamiclib.obj \
 	$(OBJS)\test_environ.obj \
+	$(OBJS)\test_metatest.obj \
 	$(OBJS)\test_misctests.obj \
 	$(OBJS)\test_module.obj \
 	$(OBJS)\test_pathlist.obj \
@@ -501,6 +502,9 @@ $(OBJS)\test_dynamiclib.obj: .\misc\dynamiclib.cpp
 
 $(OBJS)\test_environ.obj: .\misc\environ.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\environ.cpp
+
+$(OBJS)\test_metatest.obj: .\misc\metatest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\metatest.cpp
 
 $(OBJS)\test_misctests.obj: .\misc\misctests.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\misctests.cpp
