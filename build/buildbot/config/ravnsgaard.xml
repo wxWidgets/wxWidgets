@@ -26,7 +26,7 @@
         <scheduler>daily_0600</scheduler>
         <steps>
             <checkout/>
-            <configure options="--disable-all-features"/>
+            <configure options="--disable-gui"/>
             <compile-all/>
             <run-tests/>
         </steps>
@@ -38,8 +38,8 @@
         <scheduler>daily_0600</scheduler>
         <steps>
             <checkout/>
-            <configure options="--disable-gui"/>
-            <compile-all/>
+            <configure options="--disable-all-features"/>
+            <compile-all utils="false"/>
             <run-tests/>
         </steps>
     </build>
