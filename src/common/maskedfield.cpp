@@ -117,7 +117,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
     bool tmp = false; //FIXME change name
 
     if(string.Len() > m_mask.Len())
-        return wxEmptyString;
+        return string;
 
     for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
     {
@@ -181,7 +181,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             else
             {
                 it = string.Len() +1;
-                res = wxEmptyString;
+                res = string;
             }
         }
     }
@@ -237,7 +237,9 @@ bool wxMaskedField::IsValid(const wxString& string) const
     unsigned int itMask;
     bool res = true;
 
-    if(string.Len() > m_mask.Len() ||( string.Len() == 0 && m_mask.Len() !=0))
+    if(string.Len() > m_mask.Len() 
+      ||( string.Len() == 0 && m_mask.Len() !=0)
+      ||( string.Len() != 0 && m_mask.Len() ==0))
     {
         res = false;
     }
@@ -253,7 +255,7 @@ bool wxMaskedField::IsValid(const wxString& string) const
         }
         else if(!IsCharValid(m_mask[itMask], string[it]))
         {
-            if(m_formatCodes.Contains('_'))
+            if(m_formatCodes.Contains(wxT("_")))
             {
                 if(string[it] != ' ')
                 {

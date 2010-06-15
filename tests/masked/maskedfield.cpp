@@ -163,40 +163,46 @@ void MaskedFieldTestCase::TestIsCharValid()
 
 void MaskedFieldTestCase::TestIsValid()
 {
+    wxString formatString;
     static struct TestValid
     {
         wxString mask;
+        wxString formatCodes;
         wxString test;
         bool result;
     }
     listTest[]=
     {
-        {wxT("") , wxT("") , true}, 
-        {wxT("") , wxT("azd") , false},
-        {wxT("###") , wxT("123") , true},
-        {wxT("###") , wxT("12"), true},
-        {wxT("###") , wxT("Az3") , false},
-        {wxT("###") , wxT("wx.;") , false},
-        {wxT("###.") , wxT("1.2") , false},
-        {wxT("###.") , wxT("1  .") , true},
-        {wxT("###.") , wxT("1.") , false},
+        {wxT("")     , wxT("F")  , wxT("")     , true}, 
+        {wxT("")     , wxT("_!") , wxT("azd")  , false},
+        {wxT("###")  , wxT("_")  , wxT("123")  , true},
+        {wxT("###")  , wxT("")   , wxT("12")   , true},
+        {wxT("###")  , wxT("")   , wxT("Az3")  , false},
+        {wxT("###")  , wxT("")   , wxT("wx.;") , false},
+        {wxT("###.") , wxT("")   , wxT("1.2")  , false},
+        {wxT("###.") , wxT("")   , wxT("1  .") , false},
+        {wxT("###.") , wxT("_")  , wxT("1  .") , true},
+        {wxT("###.") , wxT("")   , wxT("1.")   , false},
+        {wxT("###.") , wxT("_")  , wxT("1.")   , true},
 
-        {wxT("AAa.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AAa.#X*") , wxT("AZc3,|")  , false}, // correct or not?
-        {wxT("AAa.#X*") , wxT("aZc.|.|") , false},
-        {wxT("AAa.#X*") , wxT("")        , false},  // correct or not?
-        {wxT("AAa.#X*") , wxT("AZc.3,|4"), false},
+        {wxT("AAa.#X*") , wxT("F"), wxT("AZc.3,|") , true},
+        {wxT("AAa.#X*") , wxT("F"), wxT("AZc3,|")  , false},
+        {wxT("AAa.#X*") , wxT("F"), wxT("aZc.|.|") , false},
+        {wxT("AAa.#X*") , wxT("F"), wxT("")        , false},
+        {wxT("AAa.#X*") , wxT("F"), wxT("AZc.3,|4"), false},
 
-        {wxT("###\\*###") , wxT("") , false},
-        {wxT("###\\*###") , wxT("123*593") , true},
-        {wxT("###\\*###") , wxT("123456") , false}, //correct or not?
-        {wxT("###\\*###") , wxT("124\\*45") , false}
+        {wxT("###\\*###") , wxT("F"), wxT("")         , false},
+        {wxT("###\\*###") , wxT("F"), wxT("123*593")  , true},
+        {wxT("###\\*###") , wxT("F"), wxT("123456")   , false},
+        {wxT("###\\*###") , wxT("F"), wxT("124\\*45") , false}
     };
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
-        wxMaskedField mask(listTest[n].mask, wxT("F!_"));
-        CPPUNIT_ASSERT_EQUAL( listTest[n].result, mask.IsValid(listTest[n].test)); 
+        wxMaskedField mask(listTest[n].mask, listTest[n].formatCodes);
+        formatString = mask.ApplyFormatCodes(listTest[n].test);
+
+        CPPUNIT_ASSERT_EQUAL( listTest[n].result, mask.IsValid(formatString));
     }
 
 }
@@ -245,11 +251,12 @@ void MaskedFieldTestCase::TestApplyFormatsCode()
     {
         {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
         {wxT("###.A"), wxT("F!"), wxT("111.a"), wxT("111.A")},
-        {wxT("###.A"), wxT("F!"), wxT("111.aaa"), wxEmptyString},
+        {wxT("###.A"), wxT("F!"), wxT("111.aaa"), wxT("111.aaa")},
+        {wxT("###"), wxT("F_"), wxT("1a"), wxT("1a")},
 
         {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.ab&"), wxT("111.AAA.ab&")},
         {wxT("CX.X"), wxT("F!_"), wxT("rt."), wxT("rt. ")},
-        {wxT("CX.X"), wxT("F!_"), wxT("2242"), wxEmptyString},
+        {wxT("CX.X"), wxT("F!_"), wxT("2242"), wxT("2242")},
 
         {wxT("###."), wxT("F!_"), wxT("1."), wxT("1  .")}
     };

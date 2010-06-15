@@ -762,19 +762,22 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
     }
 }
 
-void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
+void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
-    printf("It is working\n");
 
     unsigned int size = GetValue().Len();
-
-    if(!m_maskCtrl->IsValid(GetValue()))
+    wxString formatString = m_maskCtrl->ApplyFormatCodes(GetValue());
+    printf("Len: %d\nMask: %s\n val: %s\nformat :%s\n", size, (const char*)m_maskCtrl->GetMask().mb_str(wxConvUTF8) ,(const char*)GetValue().mb_str(wxConvUTF8), (const char*)formatString.mb_str(wxConvUTF8));
+            
+    if(!m_maskCtrl->IsValid(formatString))
     {
+        printf("Invalid\n");
         SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
         Remove(size - 1, size - 1);
     }
     else
     {
+        printf("Valid\n");
         SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
     }
 

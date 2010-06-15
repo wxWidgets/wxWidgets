@@ -124,7 +124,8 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
     wxString res;
     wxString tmp;
     wxString formatTmp;
-    wxString alreadyUsed = wxEmptyString; 
+    wxString alreadyUsed = wxEmptyString;
+
     
     for(it = 0; it < string.Len() && fieldIndex < m_mask.GetCount();it++)
     {
@@ -134,23 +135,29 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
             tmp.Replace(alreadyUsed, wxEmptyString);
         
         formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
-  
+        printf("tmp: %s\n formatTmp: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
 
-        while(!m_mask[fieldIndex]->IsValid(formatTmp))
+        while(!m_mask[fieldIndex]->IsValid(formatTmp) 
+            || formatTmp.Cmp(wxT("")) == 0)
         {
             tmp.RemoveLast();
             formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
         }
 
+        printf("tmp1: %s\n formatTmp1: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
         res << formatTmp;
         alreadyUsed << tmp;
         fieldIndex++;
     } 
 
+        printf("tmp2: %s\n formatTmp2: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
+    if(tmp.Cmp(wxT("")) == 0 || string.Len() > res.Len() 
+      || alreadyUsed.Cmp(string) != 0)
+        res = string;
+
     return res;
 }
 
-// FIXME How to get plain value with mutiple fields
 wxString wxMaskedEdit::GetPlainValue(const wxString& string)
 {
     wxString res;
@@ -206,7 +213,7 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
 
     for(itMask = 0, it = 0; itMask < m_maskValue.Len(); it++, itMask++)
     {
-        if(m_maskValue[itMask] != '|' && string.Len() >= itMask)
+        if(m_maskValue[itMask] != '|')
         {
             if(m_maskValue[itMask] == '\\')
                 itMask++;
@@ -224,7 +231,7 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
             
         
     }
-       
+            
     if(!m_mask[fieldNumber]->IsValid(tmp))
         return false;
 

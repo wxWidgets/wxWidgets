@@ -78,9 +78,11 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
     }
     maskedFormat[]=
     {
+        {wxT("###"), wxT("F_"), wxT("1a"), wxT("1a")},
         {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
         {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.aZ&"), wxT("111.AAA.aZ&")},
         {wxT("#XX."), wxT("F!_"), wxT("3rt."), wxT("3rt.")},
+        {wxT("#XX."), wxT("F!_"), wxT("3rt.."), wxT("3rt..")},
         
         {wxT("###.|###.|###.|###"), wxEmptyString, wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
         {wxT("###.A|AA|.aX|\\&"), wxEmptyString, wxT("111.aaa.aZ&"), wxT("111.AAA.aZ&")},
@@ -89,6 +91,7 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
 
     for(unsigned int n = 0; n< WXSIZEOF( maskedFormat ) ; n++)
     {
+        printf("n = %d\n", n);
 
         if(n < 3)
         {
@@ -160,7 +163,9 @@ void MaskedEditTestCase::GetPlainValueTest()
 
 
 void MaskedEditTestCase::IsValidTest()
-{
+{ 
+    wxMaskedEdit mask;
+    wxString formatString; 
     static struct TestValid
     {
         wxString mask;
@@ -175,7 +180,8 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("###") , wxT("123") , true},
         {wxT("###") , wxT("Az3") , false},
         {wxT("###") , wxT("wx.;") , false},
-        {wxT("###") , wxT("12,") , false},
+        {wxT("###") , wxT("1A2") , false},
+        {wxT("###") , wxT("1..") , false},
 
         {wxT("AAa.#X*") , wxT("AZc.3,|") , true},
         {wxT("AAa.#X*") , wxT("AZc3,|")  , false}, // correct or not?
@@ -204,7 +210,12 @@ void MaskedEditTestCase::IsValidTest()
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
-        wxMaskedEdit mask(listTest[n].mask, wxArrayString());
+        if(!listTest[n].mask.Contains('|'))
+            mask = wxMaskedEdit(listTest[n].mask, wxT("F"));
+        else
+            mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
+
+        
         CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(listTest[n].test)); 
     }
 
@@ -213,6 +224,7 @@ void MaskedEditTestCase::IsValidTest()
 
 void MaskedEditTestCase::SetMaskTest()
 {
+    wxMaskedEdit mask;
     wxString formatCode;
     wxArrayString formatCodes;
     static struct TestMask
@@ -232,7 +244,6 @@ void MaskedEditTestCase::SetMaskTest()
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
-        wxMaskedEdit mask;
         if(masked[n].mask.Contains('|'))
             mask = wxMaskedEdit(masked[n].mask, formatCodes);
         else
@@ -284,6 +295,8 @@ void MaskedEditTestCase::AddChoicesTest()
 
 void MaskedEditTestCase::SetMaskFieldTest()
 {
+    wxMaskedEdit mask;
+    
     static struct TestMask
     {
         wxString mask;
@@ -294,16 +307,17 @@ void MaskedEditTestCase::SetMaskFieldTest()
     masked[]=
     {
         {wxT("AAa.#X*")   , wxT("AZc.3,")  , 0 , true},
-        {wxT("AA|a.#|X*") , wxT("AZc3,|")  , 1 , false},
-        {wxT("AAa.#X*")   , wxT("AZc..")   , 1 , false},
+        {wxT("AA|a.#|X*") , wxT("AZc#,|")  , 1 , true},
+        {wxT("AAa.#X*")   , wxT("AZc#.")   , 1 , false},
         {wxT("A|Aa.#X*")  , wxT("")        , 0 , true},
         {wxT("AAa.|#X*")  , wxT("AZc.3,|4"), 2 , false},
     }; 
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
-        wxMaskedEdit mask(masked[n].mask, wxT(""));
-        CPPUNIT_ASSERT( mask.SetMask(masked[n].field, masked[n].newMask) == masked[n].result); 
+        printf("n =%d\n", n);
+        mask = wxMaskedEdit(masked[n].mask, wxT(""));
+        CPPUNIT_ASSERT_EQUAL(masked[n].result , mask.SetMask(masked[n].field, masked[n].newMask)); 
     }
    
 }
