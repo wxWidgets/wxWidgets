@@ -100,6 +100,29 @@ inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
 }
 
 /*!
+ * wxRichTextImageAttr
+ */
+wxRichTextImageAttr::wxRichTextImageAttr(const wxRichTextImageAttr& attr)
+{
+    Copy(attr);
+}
+
+void wxRichTextImageAttr::operator= (const wxRichTextImageAttr& attr)
+{
+    Copy(attr);
+}
+
+void wxRichTextImageAttr::Copy(const wxRichTextImageAttr& attr)
+{
+    m_align = attr.m_align;
+    m_floating = attr.m_floating;
+    m_scaleW = attr.m_scaleW;
+    m_scaleH = attr.m_scaleH;
+    m_width = attr.m_width;
+    m_height = attr.m_height;
+}
+
+/*!
  * wxRichTextObject
  * This is the base for drawable objects.
  */

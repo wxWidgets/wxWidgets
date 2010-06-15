@@ -134,17 +134,11 @@ void wxRichTextImageDlg::CreateControls()
     wxBoxSizer* itemBoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer2->Add(itemBoxSizer3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
+    itemBoxSizer3->Add(itemFlexGridSizer4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer4->Add(itemBoxSizer5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer5->Add(itemBoxSizer6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("Alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer6->Add(itemStaticText7, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Alignment:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_alignmentStrings;
     m_alignmentStrings.Add(_("Left"));
@@ -152,13 +146,10 @@ void wxRichTextImageDlg::CreateControls()
     m_alignmentStrings.Add(_("Right"));
     m_alignment = new wxComboBox( itemDialog1, ID_COMBOBOX_ALIGN, _("Left"), wxDefaultPosition, wxSize(80, -1), m_alignmentStrings, wxCB_READONLY );
     m_alignment->SetStringSelection(_("Left"));
-    itemBoxSizer6->Add(m_alignment, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer4->Add(m_alignment, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer9 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer5->Add(itemBoxSizer9, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxStaticText* itemStaticText10 = new wxStaticText( itemDialog1, wxID_STATIC, _("Floating:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText7 = new wxStaticText( itemDialog1, wxID_STATIC, _("Floating:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer4->Add(itemStaticText7, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_floatStrings;
     m_floatStrings.Add(_("None"));
@@ -166,60 +157,48 @@ void wxRichTextImageDlg::CreateControls()
     m_floatStrings.Add(_("Right"));
     m_float = new wxComboBox( itemDialog1, ID_COMBOBOX, _("None"), wxDefaultPosition, wxSize(80, -1), m_floatStrings, wxCB_READONLY );
     m_float->SetStringSelection(_("None"));
-    itemBoxSizer9->Add(m_float, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer4->Add(m_float, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer12 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer3->Add(itemBoxSizer12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxFlexGridSizer* itemFlexGridSizer9 = new wxFlexGridSizer(2, 3, 0, 0);
+    itemBoxSizer3->Add(itemFlexGridSizer9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer13 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer12->Add(itemBoxSizer13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxVERTICAL);
-    itemBoxSizer13->Add(itemBoxSizer14, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
-
-    wxBoxSizer* itemBoxSizer15 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer14->Add(itemBoxSizer15, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxStaticText* itemStaticText16 = new wxStaticText( itemDialog1, wxID_STATIC, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer15->Add(itemStaticText16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText10 = new wxStaticText( itemDialog1, wxID_STATIC, _("Width:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer9->Add(itemStaticText10, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_width = new wxTextCtrl( itemDialog1, ID_TEXTCTRL_WIDTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer15->Add(m_width, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer9->Add(m_width, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_scaleWStrings;
     m_scaleWStrings.Add(_("px"));
     m_scaleWStrings.Add(_("cm"));
-    m_scaleW = new wxComboBox( itemDialog1, ID_COMBOBOX_SCALE_W, _("px"), wxDefaultPosition, wxSize(60, -1), m_scaleWStrings, wxCB_DROPDOWN );
+    m_scaleW = new wxComboBox( itemDialog1, ID_COMBOBOX_SCALE_W, _("px"), wxDefaultPosition, wxSize(60, -1), m_scaleWStrings, wxCB_READONLY );
     m_scaleW->SetStringSelection(_("px"));
-    itemBoxSizer15->Add(m_scaleW, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer9->Add(m_scaleW, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer19 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer14->Add(itemBoxSizer19, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
-
-    wxStaticText* itemStaticText20 = new wxStaticText( itemDialog1, wxID_STATIC, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(itemStaticText20, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    wxStaticText* itemStaticText13 = new wxStaticText( itemDialog1, wxID_STATIC, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemFlexGridSizer9->Add(itemStaticText13, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_height = new wxTextCtrl( itemDialog1, ID_TEXTCTRL_HEIGHT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer19->Add(m_height, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer9->Add(m_height, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxArrayString m_scaleHStrings;
     m_scaleHStrings.Add(_("px"));
     m_scaleHStrings.Add(_("cm"));
-    m_scaleH = new wxComboBox( itemDialog1, ID_COMBOBOX_SCALE_H, _("px"), wxDefaultPosition, wxSize(60, -1), m_scaleHStrings, wxCB_DROPDOWN );
+    m_scaleH = new wxComboBox( itemDialog1, ID_COMBOBOX_SCALE_H, _("px"), wxDefaultPosition, wxSize(60, -1), m_scaleHStrings, wxCB_READONLY );
     m_scaleH->SetStringSelection(_("px"));
-    itemBoxSizer19->Add(m_scaleH, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemFlexGridSizer9->Add(m_scaleH, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer23 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer23, 0, wxGROW|wxALL, 5);
+    wxBoxSizer* itemBoxSizer16 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer16, 0, wxGROW|wxALL, 5);
 
-    itemBoxSizer23->Add(5, 5, 10, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer16->Add(5, 5, 10, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_saveButton = new wxButton( itemDialog1, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
     m_saveButton->SetDefault();
-    itemBoxSizer23->Add(m_saveButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer16->Add(m_saveButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_cancelButton = new wxButton( itemDialog1, wxID_CANCEL, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer23->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    itemBoxSizer16->Add(m_cancelButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 ////@end wxRichTextImageDlg content construction
 }

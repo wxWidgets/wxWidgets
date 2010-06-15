@@ -255,6 +255,10 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextImageAttr
         wxRichTextImageAttr() {};
         ~wxRichTextImageAttr() {};
 
+        wxRichTextImageAttr(const wxRichTextImageAttr& attr);
+        void operator= (const wxRichTextImageAttr& attr);
+        void Copy(const wxRichTextImageAttr& attr);
+
         int m_align;
         int m_floating;
         int m_scaleW, m_scaleH;
