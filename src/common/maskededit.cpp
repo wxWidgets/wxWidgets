@@ -35,8 +35,6 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
                                 , maskedEdit.GetDefaultValue()));
 
     m_maskValue = maskedEdit.GetMask();
-    m_cursorField = 0;
-    m_cursorInsideField = 0;
 
 }
 #endif
@@ -56,6 +54,11 @@ wxMaskedEdit::wxMaskedEdit( const wxString& mask , const wxArrayString& formatCo
                           , const wxString& defaultValue)
 {
     Create(mask, formatCode, defaultValue);
+}
+
+wxMaskedEdit::~wxMaskedEdit()
+{
+    m_mask.Clear();
 }
 
 void wxMaskedEdit::Create( const wxString& mask 
@@ -107,9 +110,7 @@ void wxMaskedEdit::Create( const wxString& mask
         }
     }
 
-    m_maskValue          = mask;
-    m_cursorField        = 0;
-    m_cursorInsideField  = 0;
+    m_maskValue = mask;
     m_emptyBg   = wxColour(255,255,255);
     m_invalidBg = wxColour(255,255,255);
     m_validBg   = wxColour(255,255,255);
@@ -132,13 +133,13 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
         if(alreadyUsed != wxEmptyString)
             tmp.Replace(alreadyUsed, wxEmptyString);
         
-        formatTmp = m_mask[fieldIndex].ApplyFormatCodes(tmp);
+        formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
   
 
-        while(!m_mask[fieldIndex].IsValid(formatTmp))
+        while(!m_mask[fieldIndex]->IsValid(formatTmp))
         {
             tmp.RemoveLast();
-            formatTmp = m_mask[fieldIndex].ApplyFormatCodes(tmp);
+            formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
         }
 
         res << formatTmp;
@@ -150,7 +151,7 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
 }
 
 // FIXME How to get plain value with mutiple fields
-wxString wxMaskedEdit::GetPlainValue(wxString string)
+wxString wxMaskedEdit::GetPlainValue(const wxString& string)
 {
     wxString res;
     wxString tmp;
@@ -162,7 +163,7 @@ wxString wxMaskedEdit::GetPlainValue(wxString string)
 
     if(m_mask.GetCount() == 1)
     {
-        res = m_mask[0].GetPlainValue(string);
+        res = m_mask[0]->GetPlainValue(string);
     }
     else
     {
@@ -173,7 +174,7 @@ wxString wxMaskedEdit::GetPlainValue(wxString string)
             if(m_maskValue[itMask] == '|')
             {
                 input.RemoveLast();
-                res << m_mask[fieldIndex].GetPlainValue(input);
+                res << m_mask[fieldIndex]->GetPlainValue(input);
                 fieldIndex++;
                 input.Empty();
                 it--;
@@ -181,7 +182,7 @@ wxString wxMaskedEdit::GetPlainValue(wxString string)
         }
     }
 
-    res << m_mask[fieldIndex].GetPlainValue(input);
+    res << m_mask[fieldIndex]->GetPlainValue(input);
 
     return res;
 }
@@ -190,12 +191,9 @@ void wxMaskedEdit::ClearValue()
 {
     m_mask.Clear();
     m_maskValue.Clear();
-    m_cursorField = 0;
-    m_cursorInsideField = 0;
-
 }
     
-bool wxMaskedEdit::IsValid(wxString string) const
+bool wxMaskedEdit::IsValid(const wxString& string) const
 {
     wxString tmp;
     unsigned int it;
@@ -218,7 +216,7 @@ bool wxMaskedEdit::IsValid(wxString string) const
         {
             it--;
             
-            if(!m_mask[fieldNumber].IsValid(tmp))
+            if(!m_mask[fieldNumber]->IsValid(tmp))
                 return false;
             fieldNumber++;       
             tmp.Clear();
@@ -227,7 +225,7 @@ bool wxMaskedEdit::IsValid(wxString string) const
         
     }
        
-    if(!m_mask[fieldNumber].IsValid(tmp))
+    if(!m_mask[fieldNumber]->IsValid(tmp))
         return false;
 
     tmp.Clear();
@@ -253,7 +251,7 @@ bool wxMaskedEdit::SetMask( const wxString& mask)
     bool res = true;
 
     if(m_mask.GetCount() == 1 && !mask.Contains(wxT("|")))
-        m_mask[0].SetMask(mask);
+        m_mask[0]->SetMask(mask);
     else
         res = false;
 
@@ -269,7 +267,7 @@ wxString wxMaskedEdit::GetMask() const
 wxString wxMaskedEdit::GetFormatCode() const
 {
     if(m_mask.GetCount() == 1)
-        return m_mask[0].GetFormatCodes();
+        return m_mask[0]->GetFormatCodes();
     else
         return wxEmptyString;
 }
@@ -281,7 +279,7 @@ wxString wxMaskedEdit::GetDefaultValue() const
 
     for(it = 0; it < m_mask.GetCount(); it++)
     {
-        res << m_mask[it].GetDefaultValue();
+        res << m_mask[it]->GetDefaultValue();
     }
 
     return res;
@@ -291,7 +289,7 @@ wxString wxMaskedEdit::GetDefaultValue() const
 wxArrayString wxMaskedEdit::GetChoices() const
 {
     if(m_mask.GetCount() == 1)
-        return m_mask[0].GetChoices();
+        return m_mask[0]->GetChoices();
     else
         return wxArrayString();
 }
@@ -300,7 +298,7 @@ bool wxMaskedEdit::AddChoice(wxString& choice)
 {
     bool res = true;
     if(m_mask.GetCount() == 1)
-         res = m_mask[0].AddChoice(choice);
+         res = m_mask[0]->AddChoice(choice);
     else
         res = false;
 
@@ -311,7 +309,7 @@ bool wxMaskedEdit::AddChoices(const wxArrayString& choices)
 {
     bool res = true;
     if(m_mask.GetCount() == 1)
-         res = m_mask[0].AddChoices(choices);
+         res = m_mask[0]->AddChoices(choices);
     else
         res = false;
 
@@ -337,6 +335,21 @@ void wxMaskedEdit::SetValidBackgroundColour(const wxColour& colour)
     m_validBg = colour;
 }
 
+wxColour wxMaskedEdit::GetEmptyBackgroundColour() const
+{
+    return m_emptyBg;
+}
+
+wxColour wxMaskedEdit::GetInvalidBackgroundColour() const       
+{
+    return m_invalidBg;
+}
+
+wxColour wxMaskedEdit::GetValidBackgroundColour() const
+{
+    return m_validBg;
+}
+
 bool wxMaskedEdit::SetMask(unsigned int fieldIndex, wxString& mask)
 {
     bool res = true;
@@ -344,7 +357,7 @@ bool wxMaskedEdit::SetMask(unsigned int fieldIndex, wxString& mask)
     if(fieldIndex >= m_mask.GetCount())
         res = false;
     else
-        m_mask[fieldIndex].SetMask(mask);
+        m_mask[fieldIndex]->SetMask(mask);
 
     return res;
 }
@@ -356,7 +369,7 @@ wxString wxMaskedEdit::GetMask(unsigned int fieldIndex) const
     if(fieldIndex >= m_mask.GetCount())
         return wxEmptyString;
 
-    return m_mask[fieldIndex].GetMask();
+    return m_mask[fieldIndex]->GetMask();
 
 }
 wxString wxMaskedEdit::GetFormatCodes(unsigned int fieldIndex) const
@@ -364,7 +377,7 @@ wxString wxMaskedEdit::GetFormatCodes(unsigned int fieldIndex) const
     if(fieldIndex >= m_mask.GetCount())
         return wxEmptyString;
     
-    return m_mask[fieldIndex].GetFormatCodes();
+    return m_mask[fieldIndex]->GetFormatCodes();
 }
 
 wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
@@ -372,7 +385,7 @@ wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
     if(fieldIndex >= m_mask.GetCount())
         return wxArrayString();
     else
-        return m_mask[fieldIndex].GetChoices();
+        return m_mask[fieldIndex]->GetChoices();
 }
  
 bool wxMaskedEdit::AddChoice(unsigned int fieldIndex, const wxString& choice)
@@ -381,7 +394,7 @@ bool wxMaskedEdit::AddChoice(unsigned int fieldIndex, const wxString& choice)
 
     if(fieldIndex < m_mask.GetCount())
     {
-        res = m_mask[fieldIndex].AddChoice(choice);
+        res = m_mask[fieldIndex]->AddChoice(choice);
     }
     else
         res = false;
@@ -394,7 +407,7 @@ bool wxMaskedEdit::AddChoices(unsigned int fieldIndex, const wxArrayString& choi
 {
     bool res = true;
     if(fieldIndex >= m_mask.GetCount())
-        res = m_mask[fieldIndex].AddChoices(choices);
+        res = m_mask[fieldIndex]->AddChoices(choices);
     else
         res = false;
 

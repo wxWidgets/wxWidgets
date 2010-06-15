@@ -22,7 +22,6 @@
 
 #include "wx/control.h"         // the base class
 #include "wx/textentry.h"       // single-line text entry interface
-#include "wx/dynarray.h"        // wxArrayInt
 #include "wx/gdicmn.h"          // wxPoint
 #include "wx/maskededit.h"
 

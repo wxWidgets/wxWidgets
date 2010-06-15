@@ -31,7 +31,16 @@ public:
                  , const bool  autoSelect = false
                  , const wxChar groupChar = ' ',const wxChar decimalPoint = '.'
                  , const bool useParensForNegatives = false);
+   
     
+    void Create(   const wxString& mask        
+                 , const wxString& formatCodes  = wxDEFAULT_FORMAT_CODES
+                 , const wxString& defaultValue = wxDEFAULT_VALUE
+                 , const wxArrayString& choices = wxArrayString()
+                 , const bool  autoSelect = false
+                 , const wxChar groupChar = ' ',const wxChar decimalPoint = '.'
+                 , const bool useParensForNegatives = false);
+
 
     bool IsEmpty(const wxString& string) const;
 

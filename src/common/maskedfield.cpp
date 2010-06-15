@@ -26,14 +26,29 @@ wxMaskedField::wxMaskedField()
 
 wxMaskedField::wxMaskedField(const wxMaskedField& maskedField)
 {
-    m_mask         = maskedField.GetMask();
-    m_formatCodes  = maskedField.GetFormatCodes();
-    m_autoSelect   = maskedField.IsAutoSelect();
-    m_decimalPoint = maskedField.GetDecimalPoint();
-    m_useParensForNegatives = maskedField.IsParensForNegatives();
+    Create( maskedField.GetMask()
+          , maskedField.GetFormatCodes()
+          , maskedField.GetDefaultValue()
+          , maskedField.GetChoices()
+          , maskedField.IsAutoSelect()
+          , maskedField.GetGroupChar()
+          , maskedField.GetDecimalPoint()
+          , maskedField.IsParensForNegatives());
 }
 
 wxMaskedField::wxMaskedField( const wxString& mask
+                 , const wxString& formatCodes
+                 , const wxString& defaultValue
+                 , const wxArrayString& choices
+                 , const bool  autoSelect
+                 , const wxChar groupChar, const wxChar decimalPoint
+                 , const bool useParensForNegatives)
+{
+    Create(mask, formatCodes, defaultValue, choices
+         , autoSelect, groupChar, decimalPoint, useParensForNegatives);
+}
+
+void wxMaskedField::Create( const wxString& mask
                  , const wxString& formatCodes
                  , const wxString& defaultValue
                  , const wxArrayString& choices

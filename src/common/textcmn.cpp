@@ -750,6 +750,8 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
     if(mask != NULL)
     {
         m_maskCtrl = mask;
+        ChangeValue(m_maskCtrl->GetDefaultValue());
+        SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
         Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
     }
     else
@@ -768,7 +770,12 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
 
     if(!m_maskCtrl->IsValid(GetValue()))
     {
+        SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
         Remove(size - 1, size - 1);
+    }
+    else
+    {
+        SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
     }
 
 }

@@ -18,7 +18,7 @@ typedef long wxTextPos;
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
-class WXDLLIMPEXP_FWD_CORE wxMaskedEdit;
+class WXDLLIMPEXP_FWD_BASE wxMaskedEdit;
 
 #include "wx/gdicmn.h"              // for wxPoint
 // ----------------------------------------------------------------------------
