@@ -41,12 +41,18 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "wx/arrstr.h"
+#include "wx/dir.h"
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/fontmap.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -1286,6 +1292,14 @@ void wxTranslations::SetLanguage(const wxString& lang)
 }
 
 
+wxArrayString wxTranslations::GetAvailableTranslations(const wxString& domain) const
+{
+    wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
+
+    return m_loader->GetAvailableTranslations(domain);
+}
+
+
 bool wxTranslations::AddStdCatalog()
 {
     if ( !AddCatalog(wxS("wxstd")) )
@@ -1348,6 +1362,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
 
 bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
 {
+    m_loader->GetAvailableTranslations(domain);
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
 
     wxMsgCatalog *cat = NULL;
@@ -1599,25 +1614,33 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
     return searchPath;
 }
 
-// construct the search path for the given language
-static wxString GetFullSearchPath(const wxString& lang)
+bool HasMsgCatalogInDir(const wxString& dir, const wxString& domain)
 {
-    // first take the entries explicitly added by the program
-    wxArrayString paths;
-    paths.reserve(gs_searchPrefixes.size() + 1);
-    size_t n,
-        count = gs_searchPrefixes.size();
-    for ( n = 0; n < count; n++ )
-    {
-        paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
-    }
+    return wxFileName(dir, domain, "mo").FileExists() ||
+           wxFileName(dir + wxFILE_SEP_PATH + "LC_MESSAGES", domain, "mo").FileExists();
+}
 
+// get prefixes to locale directories; if lang is empty, don't point to
+// OSX's .lproj bundles
+wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
+{
+    wxArrayString paths;
+
+    // first take the entries explicitly added by the program
+    paths = gs_searchPrefixes;
 
 #if wxUSE_STDPATHS
     // then look in the standard location
-    const wxString stdp = wxStandardPaths::Get().
-        GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
-
+    wxString stdp;
+    if ( lang.empty() )
+    {
+        stdp = wxStandardPaths::Get().GetResourcesDir();
+    }
+    else
+    {
+        stdp = wxStandardPaths::Get().
+            GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
+    }
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
 #endif // wxUSE_STDPATHS
@@ -1629,7 +1652,7 @@ static wxString GetFullSearchPath(const wxString& lang)
     const char *pszLcPath = wxGetenv("LC_PATH");
     if ( pszLcPath )
     {
-        const wxString lcp = GetMsgCatalogSubdirs(pszLcPath, lang);
+        const wxString lcp = pszLcPath;
         if ( paths.Index(lcp) == wxNOT_FOUND )
             paths.Add(lcp);
     }
@@ -1638,22 +1661,32 @@ static wxString GetFullSearchPath(const wxString& lang)
     wxString wxp = wxGetInstallPrefix();
     if ( !wxp.empty() )
     {
-        wxp = GetMsgCatalogSubdirs(wxp + wxS("/share/locale"), lang);
+        wxp += wxS("/share/locale");
         if ( paths.Index(wxp) == wxNOT_FOUND )
             paths.Add(wxp);
     }
 #endif // __UNIX__
 
+    return paths;
+}
 
-    // finally construct the full search path
+// construct the search path for the given language
+wxString GetFullSearchPath(const wxString& lang)
+{
     wxString searchPath;
     searchPath.reserve(500);
-    count = paths.size();
-    for ( n = 0; n < count; n++ )
+
+    const wxArrayString prefixes = GetSearchPrefixes(lang);
+
+    for ( wxArrayString::const_iterator i = prefixes.begin();
+          i != prefixes.end();
+          ++i )
     {
-        searchPath += paths[n];
-        if ( n != count - 1 )
+        const wxString p = GetMsgCatalogSubdirs(*i, lang);
+
+        if ( !searchPath.empty() )
             searchPath += wxPATH_SEP;
+        searchPath += p;
     }
 
     return searchPath;
@@ -1695,15 +1728,57 @@ wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
 }
 
 
+wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString& domain) const
+{
+    wxArrayString langs;
+    const wxArrayString prefixes = GetSearchPrefixes();
+
+    wxLogTrace(TRACE_I18N,
+               "looking for available translations of \"%s\" in search path \"%s\"",
+               domain, wxJoin(prefixes, wxPATH_SEP[0]));
+
+    for ( wxArrayString::const_iterator i = prefixes.begin();
+          i != prefixes.end();
+          ++i )
+    {
+        wxDir dir;
+        if ( !dir.Open(*i) )
+            continue;
+
+        wxString lang;
+        for ( bool ok = dir.GetFirst(&lang, "", wxDIR_DIRS);
+              ok;
+              ok = dir.GetNext(&lang) )
+        {
+            const wxString langdir = *i + wxFILE_SEP_PATH + lang;
+            if ( HasMsgCatalogInDir(langdir, domain) )
+            {
+#ifdef __WXOSX__
+                wxString rest;
+                if ( lang.EndsWith(".lproj", &rest) )
+                    lang = rest;
+#endif // __WXOSX__
+
+                wxLogTrace(TRACE_I18N,
+                           "found %s translation of \"%s\"", lang, domain);
+                langs.push_back(lang);
+            }
+        }
+    }
+
+    return langs;
+}
+
+
 // ----------------------------------------------------------------------------
 // wxResourceTranslationsLoader
 // ----------------------------------------------------------------------------
 
 #ifdef __WINDOWS__
+
 wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
                                                         const wxString& lang)
 {
-
     const void *mo_data = NULL;
     size_t mo_size = 0;
 
@@ -1727,6 +1802,55 @@ wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
 
     return cat;
 }
+
+namespace
+{
+
+struct EnumCallbackData
+{
+    wxString prefix;
+    wxArrayString langs;
+};
+
+BOOL CALLBACK EnumTranslations(HMODULE WXUNUSED(hModule),
+                               LPCTSTR WXUNUSED(lpszType),
+                               LPTSTR lpszName,
+                               LONG_PTR lParam)
+{
+    wxString name(lpszName);
+    name.MakeLower(); // resource names are case insensitive
+
+    EnumCallbackData *data = reinterpret_cast<EnumCallbackData*>(lParam);
+
+    wxString lang;
+    if ( name.StartsWith(data->prefix, &lang) && !lang.empty() )
+        data->langs.push_back(lang);
+
+    return TRUE; // continue enumeration
+}
+
+} // anonymous namespace
+
+
+wxArrayString wxResourceTranslationsLoader::GetAvailableTranslations(const wxString& domain) const
+{
+    EnumCallbackData data;
+    data.prefix = domain + "_";
+    data.prefix.MakeLower(); // resource names are case insensitive
+
+    if ( !EnumResourceNames(GetModule(),
+                            GetResourceType(),
+                            EnumTranslations,
+                            reinterpret_cast<LONG_PTR>(&data)) )
+    {
+        const DWORD err = GetLastError();
+        if ( err != NO_ERROR && err != ERROR_RESOURCE_TYPE_NOT_FOUND )
+            wxLogSysError(_("Couldn't enumerate translations"));
+    }
+
+    return data.langs;
+}
+
 #endif // __WINDOWS__
 
 

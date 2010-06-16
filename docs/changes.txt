@@ -446,6 +446,7 @@ All:
 - Added IEC and SI units support to GetHumanReadableSize() (Julien Weinzorn).
 - Add convenient wxString::ToStd{String,Wstring}() helpers.
 - Added wxTranslations class to allow localization without changing locale.
+  It provides more flexible languages enumeration API as well.
 - Added wxResourceTranslationsLoader for loading translations from Windows
   resources.
 - Added wxMessageQueue::Clear().

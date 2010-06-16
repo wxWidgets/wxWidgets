@@ -80,6 +80,15 @@ public:
     void SetLanguage(const wxString& lang);
 
     /**
+        Returns list of all translations of @a domain that were found.
+
+        This method can be used e.g. to populate list of application's
+        translations offered to the user. To do this, pass the app's main
+        catalog as @a domain.
+     */
+    wxArrayString GetAvailableTranslations(const wxString& domain) const;
+
+    /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific
         catalogs).
 
@@ -265,6 +274,11 @@ public:
      */
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;
+
+    /**
+        Implements wxTranslations::GetAvailableTranslations().
+     */
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const = 0;
 };
 
 /**
