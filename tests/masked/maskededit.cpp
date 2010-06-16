@@ -78,8 +78,9 @@ void MaskedEditTestCase::ApplyFormatCodesTest()
     }
     maskedFormat[]=
     {
-        {wxT("###"), wxT("F_"), wxT("1a"), wxT("1a")},
-        {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
+        {wxT("")                , wxT("F_") , wxT("azd")    , wxT("azd")},
+        {wxT("###")             , wxT("F_") , wxT("1a")     , wxT("1a") },
+        {wxT("###.###.###.###") , wxT("F_") , wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
         {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.aZ&"), wxT("111.AAA.aZ&")},
         {wxT("#XX."), wxT("F!_"), wxT("3rt."), wxT("3rt.")},
         {wxT("#XX."), wxT("F!_"), wxT("3rt.."), wxT("3rt..")},
@@ -182,28 +183,31 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("###") , wxT("wx.;") , false},
         {wxT("###") , wxT("1A2") , false},
         {wxT("###") , wxT("1..") , false},
+        {wxT("###.") , wxT("1") , true},
 
         {wxT("AAa.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AAa.#X*") , wxT("AZc3,|")  , false}, // correct or not?
+        {wxT("AAa.#X*") , wxT("AZc3,|")  , false}, 
         {wxT("AAa.#X*") , wxT("aZc.|.|") , false},
-        {wxT("AAa.#X*") , wxT("")        , false},  // correct or not?
+        {wxT("AAa.#X*") , wxT("")        , false}, 
         {wxT("AAa.#X*") , wxT("AZc.3,|4"), false},
 
+        {wxT("AAa.\\*A") , wxT("AZa.*Aa"), false},
+        
         {wxT("###\\*###") , wxT("") , false},
         {wxT("###\\*###") , wxT("123*593") , true},
-        {wxT("###\\*###") , wxT("123456") , false}, //correct or not?
+        {wxT("###\\*###") , wxT("123456") , false},
         {wxT("###\\*###") , wxT("124\\*45") , false},
 
         //with more than one field
         {wxT("AAa|.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AA|a.#|X*"), wxT("AZc3,|")  , false}, // correct or not?
+        {wxT("AA|a.#|X*"), wxT("AZc3,|")  , false},
         {wxT("AAa.#X*")  , wxT("aZc.|.|") , false},
-        {wxT("A|Aa.#X*") , wxT("")        , false},  // correct or not?
+        {wxT("A|Aa.#X*") , wxT("")        , false},
         {wxT("AAa.|#X*") , wxT("AZc.3,|4"), false},
 
         {wxT("#|##\\*#|##") , wxT("") , false},
         {wxT("###\\*###")   , wxT("123*593") , true},
-        {wxT("|###\\*#|##") , wxT("123456") , false}, //correct or not?
+        {wxT("|###\\*#|##") , wxT("123456") , false}, 
         {wxT("|###\\*###|") , wxT("124\\*45") , false}
     
     };
@@ -211,12 +215,14 @@ void MaskedEditTestCase::IsValidTest()
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
         if(!listTest[n].mask.Contains('|'))
-            mask = wxMaskedEdit(listTest[n].mask, wxT("F"));
+            mask = wxMaskedEdit(listTest[n].mask, wxT("F_"));
         else
             mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
 
+        printf("n = %d\n", n);
+        formatString = mask.ApplyFormatCodes(listTest[n].test); 
         
-        CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(listTest[n].test)); 
+        CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(formatString)); 
     }
 
 }

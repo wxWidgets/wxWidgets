@@ -135,22 +135,19 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
             tmp.Replace(alreadyUsed, wxEmptyString);
         
         formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
-        printf("tmp: %s\n formatTmp: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
 
         while(!m_mask[fieldIndex]->IsValid(formatTmp) 
-            || formatTmp.Cmp(wxT("")) == 0)
+            && tmp.Len() != 0)
         {
             tmp.RemoveLast();
             formatTmp = m_mask[fieldIndex]->ApplyFormatCodes(tmp);
         }
 
-        printf("tmp1: %s\n formatTmp1: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
         res << formatTmp;
         alreadyUsed << tmp;
         fieldIndex++;
     } 
 
-        printf("tmp2: %s\n formatTmp2: %s\n", (const char*)tmp.mb_str(wxConvUTF8), (const char*)formatTmp.mb_str(wxConvUTF8));               
     if(tmp.Cmp(wxT("")) == 0 || string.Len() > res.Len() 
       || alreadyUsed.Cmp(string) != 0)
         res = string;
@@ -206,12 +203,19 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
     unsigned int it;
     unsigned int itMask;
     unsigned int fieldNumber = 0;
+    unsigned int numberOfSlash = 0;
+    unsigned int numberOfPipe = 0;
+    bool res = true;
 
-    if(string.Len() > m_maskValue.Len() 
-       || (string.Len() >= m_maskValue.Len() && m_mask.GetCount() > 1))
-        return false;
+    tmp = m_maskValue;
+    numberOfSlash = tmp.Replace('\\', ' ');
+    numberOfPipe  = tmp.Replace('|', ' ');
 
-    for(itMask = 0, it = 0; itMask < m_maskValue.Len(); it++, itMask++)
+    if(string.Len() > m_maskValue.Len() - numberOfSlash - numberOfPipe )
+        res =  false;
+    tmp.Empty();
+
+    for(itMask = 0, it = 0; itMask < m_maskValue.Len() && res && it < string.Len() ; it++, itMask++)
     {
         if(m_maskValue[itMask] != '|')
         {
@@ -224,7 +228,8 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
             it--;
             
             if(!m_mask[fieldNumber]->IsValid(tmp))
-                return false;
+                res = false;
+            
             fieldNumber++;       
             tmp.Clear();
         }
@@ -232,12 +237,13 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
         
     }
             
+
     if(!m_mask[fieldNumber]->IsValid(tmp))
-        return false;
+        res = false;
 
     tmp.Clear();
 
-    return true;
+    return res;
 }
  
 #if 0

@@ -181,9 +181,16 @@ void MaskedFieldTestCase::TestIsValid()
         {wxT("###")  , wxT("")   , wxT("wx.;") , false},
         {wxT("###.") , wxT("")   , wxT("1.2")  , false},
         {wxT("###.") , wxT("")   , wxT("1  .") , false},
+        {wxT("###.") , wxT("_")   , wxT("1")   , true},
         {wxT("###.") , wxT("_")  , wxT("1  .") , true},
         {wxT("###.") , wxT("")   , wxT("1.")   , false},
         {wxT("###.") , wxT("_")  , wxT("1.")   , true},
+
+
+        {wxT("aaa")      , wxT("_")  , wxT("a")       , true},
+        {wxT("AaA.")     , wxT("_")  , wxT("a")       , true},
+        {wxT("Aaa\\*.")  , wxT("_")  , wxT("A")       , true},
+        {wxT("Aaa\\*.A") , wxT("_")  , wxT("Aaa*.Aa") , false},
 
         {wxT("AAa.#X*") , wxT("F"), wxT("AZc.3,|") , true},
         {wxT("AAa.#X*") , wxT("F"), wxT("AZc3,|")  , false},
@@ -202,6 +209,7 @@ void MaskedFieldTestCase::TestIsValid()
         wxMaskedField mask(listTest[n].mask, listTest[n].formatCodes);
         formatString = mask.ApplyFormatCodes(listTest[n].test);
 
+    
         CPPUNIT_ASSERT_EQUAL( listTest[n].result, mask.IsValid(formatString));
     }
 
@@ -249,10 +257,16 @@ void MaskedFieldTestCase::TestApplyFormatsCode()
     }
     maskedFormatCode[]=
     {
-        {wxT("###.###.###.###"), wxT("F_"), wxT("1.2.3.4"), wxT("1  .2  .3  .4  ")},
+        {wxT("")               , wxT("F_") , wxT("azd")     , wxT("azd")},
+        {wxT("###")            , wxT("F_") , wxT("")        , wxT("   ")},
+        {wxT("###.###.###.###"), wxT("F_") , wxT("1.2.3.4") , wxT("1  .2  .3  .4  ")},
         {wxT("###.A"), wxT("F!"), wxT("111.a"), wxT("111.A")},
         {wxT("###.A"), wxT("F!"), wxT("111.aaa"), wxT("111.aaa")},
         {wxT("###"), wxT("F_"), wxT("1a"), wxT("1a")},
+        {wxT("#A#."), wxT("F_"), wxT("11"), wxT("1 1")},
+        {wxT("###."), wxT("F_"), wxT("1111"), wxT("1111")},
+        {wxT("Aaa\\*."), wxT("F_"), wxT("A"), wxT("A  ")},
+        
 
         {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.ab&"), wxT("111.AAA.ab&")},
         {wxT("CX.X"), wxT("F!_"), wxT("rt."), wxT("rt. ")},

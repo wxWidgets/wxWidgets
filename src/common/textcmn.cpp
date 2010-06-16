@@ -772,13 +772,13 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
     if(!m_maskCtrl->IsValid(formatString))
     {
         printf("Invalid\n");
-        SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
-        Remove(size - 1, size - 1);
+        SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
+        Remove(size - 1, size);
     }
     else
     {
         printf("Valid\n");
-        SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
+        SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
     }
 
 }

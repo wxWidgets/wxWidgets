@@ -112,6 +112,7 @@ bool wxMaskedField::IsPunctuation(const wxChar character) const
 wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 {
     wxString res;
+    wxString verification;
     unsigned int it;
     unsigned int itMask;
     bool tmp = false; //FIXME change name
@@ -124,7 +125,6 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 
         if(IsCharValid(m_mask[itMask], string[it]))
         {
-
             res << string[it];
         }
         else if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
@@ -158,7 +158,11 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             }
             
             
-            if(m_formatCodes.Contains(wxT("_")) && tmp == false)
+            if(m_formatCodes.Contains(wxT("_")) && tmp == false 
+               &&  (  m_mask[itMask] == 'a' || m_mask[itMask] == 'A'
+                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
+                   || m_mask[itMask] == '#' || m_mask[itMask] == '&' 
+                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
             {
                 res << wxT(" ");
                 it --;
@@ -169,10 +173,12 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
         }
     }
        
-   
+  
+    verification = res;
+
     for(it = 0; it < string.Len(); it++)
     {
-        if(!res.Contains(string[it]))
+        if(!verification.Contains(string[it]))
         {
             if((m_formatCodes.Contains(wxT("^")) || m_formatCodes.Contains(wxT("!")) ) && ( res.Contains(string.SubString(it,it).Upper()) || res.Contains(string.SubString(it,it).Lower() )))
 
@@ -184,7 +190,14 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                 res = string;
             }
         }
+        else
+        {
+            verification[it] = ' ';
+        }
     }
+
+    if(string.Len() > res.Len())
+            res = string;
     
     return res;
 }
