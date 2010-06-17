@@ -136,7 +136,7 @@ private:
     {
         if ( !wxFrame::Create(parent, wxID_ANY,
                               wxString::Format(wxT("Image from %s"), desc),
-                              wxDefaultPosition, wxSize(1000,3000),
+                              wxDefaultPosition, wxDefaultSize,
                               wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE) )
             return false;
 
@@ -674,7 +674,7 @@ MyFrame::MyFrame()
     SetStatusWidths( 2, widths );
 #endif // wxUSE_STATUSBAR
 
-    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(1000,10000) );
+    m_canvas = new MyCanvas( this, wxID_ANY, wxPoint(0,0), wxSize(10,10) );
 
     // 500 width * 2750 height
     m_canvas->SetScrollbars( 10, 10, 50, 275 );
