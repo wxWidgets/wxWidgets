@@ -21,6 +21,8 @@
     @category{ctrl}
 
     @see wxTextCtrl, wxComboBox
+
+    @since 2.9.0
 */
 class wxTextEntry
 {
