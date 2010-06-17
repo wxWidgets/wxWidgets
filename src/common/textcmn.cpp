@@ -767,7 +767,7 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 
     unsigned int size = GetValue().Len();
     wxString formatString = m_maskCtrl->ApplyFormatCodes(GetValue());
-    printf("Len: %d\nMask: %s\n val: %s\nformat :%s\n", size, (const char*)m_maskCtrl->GetMask().mb_str(wxConvUTF8) ,(const char*)GetValue().mb_str(wxConvUTF8), (const char*)formatString.mb_str(wxConvUTF8));
+    printf("val: %s\n",(const char*)GetValue().mb_str(wxConvUTF8) );
             
     if(!m_maskCtrl->IsValid(formatString))
     {

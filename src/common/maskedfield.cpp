@@ -172,7 +172,6 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             
         }
     }
-       
   
     verification = res;
 
@@ -192,7 +191,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
         }
         else
         {
-            verification[it] = ' ';
+            verification.Replace(string[it], wxT(""), false);
         }
     }
 

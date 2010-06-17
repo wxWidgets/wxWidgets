@@ -35,7 +35,7 @@ public:
   
     wxMaskedEdit( const wxString& mask 
                 , const wxArrayString& formatCode = wxArrayString()
-                , const wxString& defaultValue  = wxEmptyString);
+                , const wxString& defaultValue  = wxDEFAULT_VALUE);
    
     ~wxMaskedEdit();
     

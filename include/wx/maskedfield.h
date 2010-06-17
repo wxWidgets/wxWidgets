@@ -14,7 +14,7 @@
 #include <stdlib.h>
 
 #define wxDEFAULT_FORMAT_CODES (wxT("F"))
-#define wxDEFAULT_VALUE   (wxT(" "))
+#define wxDEFAULT_VALUE   (wxT(""))
 
 class WXDLLIMPEXP_BASE wxMaskedField
 {
