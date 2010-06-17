@@ -58,17 +58,17 @@ void wxQtDCImpl::SetFont(const wxFont& font)
 
 void wxQtDCImpl::SetPen(const wxPen& pen)
 {
-    m_qtPainter.setPen(pen.GetPen());
+    m_qtPainter.setPen(pen.GetHandle());
 }
 
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
-    m_qtPainter.setBrush(brush.GetBrush());
+    m_qtPainter.setBrush(brush.GetHandle());
 }
 
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
-    m_qtPainter.setBackground(brush.GetBrush());
+    m_qtPainter.setBackground(brush.GetHandle());
 }
 
 void wxQtDCImpl::SetBackgroundMode(int mode)
@@ -208,7 +208,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     //TODO: Don't use mask if useMask is false
-    m_qtPainter.drawPixmap(x, y, *bmp.GetPixmap());
+    m_qtPainter.drawPixmap(x, y, *bmp.GetHandle());
 }
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)

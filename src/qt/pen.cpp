@@ -36,20 +36,20 @@ static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
     }
 }
 
-// static wxPenStyle ConvertPenStyle(Qt::PenStyle style)
-// {
-//     switch (style) {
-//         case Qt::SolidLine: return wxPENSTYLE_SOLID;
-//         case Qt::NoPen: return wxPENSTYLE_TRANSPARENT;
-//         case Qt::DotLine: return wxPENSTYLE_DOT;
-//         case Qt::DashLine: return wxPENSTYLE_SHORT_DASH;
-//         case Qt::DashDotLine: return wxPENSTYLE_DOT_DASH;
-//         case Qt::CustomDashLine: return wxPENSTYLE_USER_DASH;
-//         
-//         default: wxFAIL_MSG( "Unknown QPen style" );
-//     }
-//     return wxPENSTYLE_SOLID;
-// }
+static wxPenStyle ConvertPenStyle(Qt::PenStyle style)
+{
+    switch (style) {
+        case Qt::SolidLine: return wxPENSTYLE_SOLID;
+        case Qt::NoPen: return wxPENSTYLE_TRANSPARENT;
+        case Qt::DotLine: return wxPENSTYLE_DOT;
+        case Qt::DashLine: return wxPENSTYLE_SHORT_DASH;
+        case Qt::DashDotLine: return wxPENSTYLE_DOT_DASH;
+        case Qt::CustomDashLine: return wxPENSTYLE_USER_DASH;
+
+        default: wxFAIL_MSG( "Unknown QPen style" );
+    }
+    return wxPENSTYLE_SOLID;
+}
 
 static Qt::PenCapStyle ConvertPenCapStyle(wxPenCap style)
 {
@@ -62,17 +62,17 @@ static Qt::PenCapStyle ConvertPenCapStyle(wxPenCap style)
     }
 }
 
-// static wxPenCap ConvertPenCapStyle(Qt::PenCapStyle style)
-// {
-//     switch (style) {
-//         case Qt::FlatCap: return wxCAP_BUTT;
-//         case Qt::SquareCap: return wxCAP_PROJECTING;
-//         case Qt::RoundCap: return wxCAP_ROUND;
-//         
-//         default: wxFAIL_MSG( "Unknown QPen cap style" );
-//     }
-//     return wxCAP_PROJECTING;
-// }
+static wxPenCap ConvertPenCapStyle(Qt::PenCapStyle style)
+{
+    switch (style) {
+        case Qt::FlatCap: return wxCAP_BUTT;
+        case Qt::SquareCap: return wxCAP_PROJECTING;
+        case Qt::RoundCap: return wxCAP_ROUND;
+
+        default: wxFAIL_MSG( "Unknown QPen cap style" );
+    }
+    return wxCAP_PROJECTING;
+}
 
 static Qt::PenJoinStyle ConvertPenJoinStyle(wxPenJoin style)
 {
@@ -86,17 +86,17 @@ static Qt::PenJoinStyle ConvertPenJoinStyle(wxPenJoin style)
     
 }
 
-// static wxPenJoin ConvertPenJoinStyle(Qt::PenJoinStyle style)
-// {
-//     switch (style) {
-//         case Qt::BevelJoin: return wxJOIN_BEVEL;
-//         case Qt::MiterJoin: return wxJOIN_MITER;
-//         case Qt::RoundJoin: return wxJOIN_ROUND;
-//         
-//         default: wxFAIL_MSG( "Unknown QPen join style" );
-//     }
-//     return wxJOIN_BEVEL;
-// }
+static wxPenJoin ConvertPenJoinStyle(Qt::PenJoinStyle style)
+{
+    switch (style) {
+        case Qt::BevelJoin: return wxJOIN_BEVEL;
+        case Qt::MiterJoin: return wxJOIN_MITER;
+        case Qt::RoundJoin: return wxJOIN_ROUND;
+
+        default: wxFAIL_MSG( "Unknown QPen join style" );
+    }
+    return wxJOIN_BEVEL;
+}
 
 //-----------------------------------------------------------------------------
 // wxPen
@@ -235,17 +235,17 @@ wxBitmap *wxPen::GetStipple() const
 
 wxPenStyle wxPen::GetStyle() const
 {
-    return wxQtPenStyle(M_PENDATA.style());
+    return ConvertPenStyle(M_PENDATA.style());
 }
 
 wxPenJoin wxPen::GetJoin() const
 {
-    return wxQtPenJoinStyle(M_PENDATA.joinStyle());
+    return ConvertPenJoinStyle(M_PENDATA.joinStyle());
 }
 
 wxPenCap wxPen::GetCap() const
 {
-    return wxQtPenCapStyle(M_PENDATA.capStyle());
+    return ConvertPenCapStyle(M_PENDATA.capStyle());
 }
 
 int wxPen::GetWidth() const

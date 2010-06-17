@@ -49,14 +49,6 @@ public:
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
-
-private:
-    static Qt::PenStyle wxQtPenStyle(wxPenStyle style);
-    static wxPenStyle wxQtPenStyle(Qt::PenStyle style);
-    static Qt::PenCapStyle wxQtPenCapStyle(wxPenCap style);
-    static wxPenCap wxQtPenCapStyle(Qt::PenCapStyle style);
-    static Qt::PenJoinStyle wxQtPenJoinStyle(wxPenJoin style);
-    static wxPenJoin wxQtPenJoinStyle(Qt::PenJoinStyle style);
 };
 
 #endif // _WX_QT_PEN_H_
