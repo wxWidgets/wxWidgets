@@ -120,7 +120,7 @@ void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
     
 bool wxWindow::SetFont( const wxFont &font )
 {
-    GetHandle()->setFont( *font.GetHandle() );
+    GetHandle()->setFont( font.GetHandle() );
     
     return ( true );
 }

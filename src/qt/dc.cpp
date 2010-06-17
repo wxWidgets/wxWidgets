@@ -58,7 +58,7 @@ wxSize wxQtDCImpl::GetPPI() const
 
 void wxQtDCImpl::SetFont(const wxFont& font)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    m_qtPainter.setFont(font.GetHandle());
 }
 
 void wxQtDCImpl::SetPen(const wxPen& pen)

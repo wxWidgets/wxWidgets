@@ -1,15 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/font.h
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // RCS-ID:      $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_FONT_H_
 #define _WX_QT_FONT_H_
 
-#include <QtGui/QFont>
+class QFont;
 
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
@@ -69,16 +69,14 @@ public:
     
     wxDECLARE_COMMON_FONT_METHODS();
 
-    virtual QFont *GetHandle() const;
+    virtual QFont GetHandle() const;
     
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
     DECLARE_DYNAMIC_CLASS( wxFont )
-    
-private:
-    QFont *m_qtFont;
+
 };
 
 
