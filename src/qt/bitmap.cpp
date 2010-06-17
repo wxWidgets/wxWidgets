@@ -15,13 +15,17 @@
 #include "wx/qt/utils.h"
 
 #include <QtGui/QPixmap>
-#include <QtGui/QImage>
+#include <QtGui/QBitmap>
+#include <QtGui/QLabel>
 
 static wxImage ConvertImage( QImage  img )
 {
     bool hasAlpha = img.hasAlphaChannel();
     
     int numPixels = img.height() * img.width();
+
+    //Convert to ARGB32 for scanLine
+    img = img.convertToFormat(QImage::Format_ARGB32);
     
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
@@ -107,11 +111,6 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtPixmap = new QPixmap( width, height );
         }
         
-        wxBitmapRefData( const char bits[] ) : wxGDIRefData()
-        {
-            m_qtPixmap = new QPixmap(bits);
-        }
-        
         wxBitmapRefData( QPixmap pix ) : wxGDIRefData()
         {
             m_qtPixmap = new QPixmap(pix);
@@ -144,9 +143,9 @@ wxBitmap::wxBitmap(const wxBitmap& bmp)
     Ref(bmp);
 }
 
-wxBitmap::wxBitmap(const char bits[], int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(depth) )
+wxBitmap::wxBitmap(const char bits[], int width, int height, int WXUNUSED(depth) )
 {
-    m_refData = new wxBitmapRefData(bits);
+    m_refData = new wxBitmapRefData(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
 }
 
 wxBitmap::wxBitmap(int width, int height, int depth)
