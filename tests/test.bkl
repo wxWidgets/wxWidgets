@@ -113,6 +113,7 @@
 
         <sources>
             test.cpp
+            testableframe.cpp
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp

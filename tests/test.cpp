@@ -51,6 +51,7 @@
     #include "wx/osx/private.h"
 #endif
 
+#include "testableframe.h"
 #include "wx/socket.h"
 
 using namespace std;
@@ -418,7 +419,7 @@ bool TestApp::OnInit()
 
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
-    new wxFrame(NULL, wxID_ANY, "Hidden wx test frame");
+    new wxTestableFrame(NULL, wxID_ANY, "Hidden wx test frame");
 #endif // wxUSE_GUI
 
     return true;
