@@ -14,6 +14,8 @@
 #include "wx/qt/converter.h"
 
 #include <QtGui/QCursor>
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
 
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] )
@@ -82,18 +84,14 @@ int wxDisplayDepth()
 
 void wxDisplaySize(int *width, int *height)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    *width = 0;
-    *height = 0;
+    *width = QApplication::desktop()->width();
+    *height = QApplication::desktop()->height();
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    *width = 0;
-    *height = 0;
+    *width = QApplication::desktop()->widthMM();
+    *height = QApplication::desktop()->heightMM();
 }
 
 void wxBell()
@@ -103,12 +101,12 @@ void wxBell()
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    QRect r = QApplication::desktop()->availableGeometry();
 
-    *x = 0;
-    *y = 0;
-    *width = 0;
-    *height = 0;
+    *x = r.x();
+    *y = r.y();
+    *width = r.width();
+    *height = r.height();
 }
 
 wxWindow *wxGetActiveWindow()
@@ -120,9 +118,7 @@ wxWindow *wxGetActiveWindow()
 
 bool wxColourDisplay()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return true;
+    return QApplication::desktop()->depth() > 1;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int flags)
