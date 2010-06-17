@@ -215,7 +215,6 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
     //TODO: Don't use mask if useMask is false
 
     QPixmap pix = *bmp.GetHandle();
-    printf("Drawing with depth %d\n", pix.depth());
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
         

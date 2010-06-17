@@ -106,9 +106,13 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtPixmap = data.m_qtPixmap;
         }
         
-        wxBitmapRefData( int width, int height ) : wxGDIRefData()
+        wxBitmapRefData( int width, int height, int depth ) : wxGDIRefData()
         {
-            m_qtPixmap = new QPixmap( width, height );
+            if (depth == 1) {
+                m_qtPixmap = new QBitmap( width, height );
+            } else {
+                m_qtPixmap = new QPixmap( width, height );
+            }
         }
         
         wxBitmapRefData( QPixmap pix ) : wxGDIRefData()
@@ -143,10 +147,15 @@ wxBitmap::wxBitmap(const wxBitmap& bmp)
     Ref(bmp);
 }
 
-wxBitmap::wxBitmap(const char bits[], int width, int height, int WXUNUSED(depth) )
+wxBitmap::wxBitmap(const char bits[], int width, int height, int depth )
 {
-    m_refData = new wxBitmapRefData();
-    ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
+    if (depth == 1) {
+        m_refData = new wxBitmapRefData();
+        ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
+    } else {
+        wxMISSING_IMPLEMENTATION("wxBitmap(bits, width, height, depth constructor) for depth != 1");
+        m_refData = new wxBitmapRefData();
+    }
 }
 
 wxBitmap::wxBitmap(int width, int height, int depth)
@@ -168,16 +177,19 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
     LoadFile(filename, type);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int WXUNUSED(depth) )
+wxBitmap::wxBitmap(const wxImage& image, int depth )
 {
-    m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image)));
+    Qt::ImageConversionFlags flags = 0;
+    if (depth == 1)
+        flags = Qt::MonoOnly;
+    m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image), flags));
 }
 
 
-bool wxBitmap::Create(int width, int height, int WXUNUSED(depth) )
+bool wxBitmap::Create(int width, int height, int depth )
 {
     UnRef();
-    m_refData = new wxBitmapRefData(width, height);
+    m_refData = new wxBitmapRefData(width, height, depth);
     
     return true;
 }
