@@ -1294,7 +1294,7 @@ void wxTranslations::SetLanguage(const wxString& lang)
 
 wxArrayString wxTranslations::GetAvailableTranslations(const wxString& domain) const
 {
-    wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
+    wxCHECK_MSG( m_loader, wxArrayString(), "loader can't be NULL" );
 
     return m_loader->GetAvailableTranslations(domain);
 }
