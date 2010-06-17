@@ -145,7 +145,8 @@ wxBitmap::wxBitmap(const wxBitmap& bmp)
 
 wxBitmap::wxBitmap(const char bits[], int width, int height, int WXUNUSED(depth) )
 {
-    m_refData = new wxBitmapRefData(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
+    m_refData = new wxBitmapRefData();
+    ((wxBitmapRefData *)m_refData)->m_qtPixmap = new QBitmap(QBitmap::fromData(QSize(width, height), (const uchar*)bits));
 }
 
 wxBitmap::wxBitmap(int width, int height, int depth)

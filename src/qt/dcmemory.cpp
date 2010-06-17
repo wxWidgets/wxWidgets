@@ -38,6 +38,8 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     
     m_ok = false;
     
-    if (bitmap.IsOk())
+    if (bitmap.IsOk()) {
         m_ok = m_qtPainter.begin(bitmap.GetHandle());
+        if (m_ok) PrepareQPainter();
+    }
 }

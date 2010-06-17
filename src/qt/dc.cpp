@@ -19,6 +19,12 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
 {
 }
 
+void wxQtDCImpl::PrepareQPainter()
+{
+    //Qt defaults to transparent mode and wx to solid
+    m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+}
+
 bool wxQtDCImpl::CanDrawBitmap() const
 {
     return false;
@@ -208,7 +214,29 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     //TODO: Don't use mask if useMask is false
-    m_qtPainter.drawPixmap(x, y, *bmp.GetHandle());
+
+    QPixmap pix = *bmp.GetHandle();
+    printf("Drawing with depth %d\n", pix.depth());
+    if (pix.depth() == 1) {
+        //Monochrome bitmap, draw using text fore/background
+        
+        //Save pen/brush
+        QBrush savedBrush = m_qtPainter.background();
+        QPen savedPen = m_qtPainter.pen();
+        
+        //Use text colors
+        m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+        
+        //Draw
+        m_qtPainter.drawPixmap(x, y, pix);
+        
+        //Restore saved settings
+        m_qtPainter.setBackground(savedBrush);
+        m_qtPainter.setPen(savedPen);
+    } else {
+        m_qtPainter.drawPixmap(x, y, pix);
+    }
 }
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)

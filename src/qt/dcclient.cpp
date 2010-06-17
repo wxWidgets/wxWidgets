@@ -24,6 +24,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     m_ok = m_qtPainter.begin(win->GetHandle());
+    if (m_ok) PrepareQPainter();
 }
 
 //##############################################################################

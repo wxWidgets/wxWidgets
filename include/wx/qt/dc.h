@@ -101,6 +101,7 @@ public:
 
 protected:
     QPainter m_qtPainter;
+    void PrepareQPainter();
 
 private:
 };
