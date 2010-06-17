@@ -21,8 +21,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
 
 void wxQtDCImpl::PrepareQPainter()
 {
-    //Qt defaults to transparent mode and wx to solid
-    m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+    //Do here all QPainter initialization (called after each begin())
 }
 
 bool wxQtDCImpl::CanDrawBitmap() const
@@ -223,10 +222,14 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         //Save pen/brush
         QBrush savedBrush = m_qtPainter.background();
         QPen savedPen = m_qtPainter.pen();
+        Qt::BGMode savedMode = m_qtPainter.backgroundMode();
+
+        
         
         //Use text colors
         m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
         m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+        m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
         
         //Draw
         m_qtPainter.drawPixmap(x, y, pix);
@@ -234,6 +237,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         //Restore saved settings
         m_qtPainter.setBackground(savedBrush);
         m_qtPainter.setPen(savedPen);
+        m_qtPainter.setBackgroundMode(savedMode);
     } else {
         m_qtPainter.drawPixmap(x, y, pix);
     }
@@ -241,7 +245,20 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
-    m_qtPainter.drawText(x, y, wxQtConvertString(text));
+    //Save pen/brush
+    QBrush savedBrush = m_qtPainter.background();
+    QPen savedPen = m_qtPainter.pen();
+    
+    //Use text colors
+    m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+    m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+
+    //Draw
+    m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+
+    //Restore saved settings
+    m_qtPainter.setBackground(savedBrush);
+    m_qtPainter.setPen(savedPen);
 }
 
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
@@ -250,9 +267,22 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     //Move and rotate
     m_qtPainter.translate(x, y);
     m_qtPainter.rotate(angle);
+
+    //Save pen/brush
+    QBrush savedBrush = m_qtPainter.background();
+    QPen savedPen = m_qtPainter.pen();
     
+    //Use text colors
+    m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+    m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+    
+    //Draw
     m_qtPainter.drawText(0, 0, wxQtConvertString(text));
     
+    //Restore saved settings
+    m_qtPainter.setBackground(savedBrush);
+    m_qtPainter.setPen(savedPen);
+
     //Reset to default
     m_qtPainter.resetTransform();
 }
