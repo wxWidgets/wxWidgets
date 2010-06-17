@@ -17,6 +17,74 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QImage>
 
+static wxImage ConvertImage( QImage  img )
+{
+    bool hasAlpha = img.hasAlphaChannel();
+    
+    int numPixels = img.height() * img.width();
+    
+    unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
+    unsigned char *startData = data;
+    
+    unsigned char *alpha = NULL;
+    if (hasAlpha) {
+        alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
+    }
+    unsigned char *startAlpha = alpha;
+    
+    for (int y = 0; y < img.height(); y++) {
+        QRgb *line = (QRgb*)img.scanLine(y);
+        
+        for (int x = 0; x < img.width(); x++) {
+            QRgb colour = line[x];
+            
+            data[0] = qRed(colour);
+            data[1] = qGreen(colour);
+            data[2] = qBlue(colour);
+            
+            if (hasAlpha) {
+                alpha[0] = qAlpha(colour);
+                alpha++;
+            }
+            data += 3;
+        }
+    }
+    
+    if (hasAlpha) {
+        return wxImage(wxQtConvertSize(img.size()), startData, startAlpha);
+    } else {
+        return wxImage(wxQtConvertSize(img.size()), startData);
+    }
+}
+
+static QImage  ConvertImage( const wxImage &img )
+{
+    bool hasAlpha = img.HasAlpha();
+    QImage res(wxQtConvertSize(img.GetSize()), (hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32));
+    
+    unsigned char *data = img.GetData();
+    unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL;
+    QRgb colour;
+    
+    for (int y = 0; y < img.GetHeight(); y++) {
+        for (int x = 0; x < img.GetWidth(); x++) {
+            if (hasAlpha) {
+                colour = alpha[0] << 24;
+                alpha++;
+            } else {
+                colour = 0;
+            }
+            
+            colour += (data[0] << 16) + (data[1] << 8) + data[2];
+            res.setPixel(x, y, colour);
+            
+            data += 3;
+        }
+    }
+    
+    return res;
+}
+
 //-----------------------------------------------------------------------------
 // wxBitmapRefData
 //-----------------------------------------------------------------------------
@@ -102,7 +170,7 @@ wxBitmap::wxBitmap(const wxString &filename, wxBitmapType type )
 
 wxBitmap::wxBitmap(const wxImage& image, int WXUNUSED(depth) )
 {
-    m_refData = new wxBitmapRefData(QPixmap::fromImage(wxQtImage(image)));
+    m_refData = new wxBitmapRefData(QPixmap::fromImage(ConvertImage(image)));
 }
 
 
@@ -139,7 +207,7 @@ int wxBitmap::GetDepth() const
 #if wxUSE_IMAGE
 wxImage wxBitmap::ConvertToImage() const
 {
-    return wxQtImage(M_PIXDATA.toImage());
+    return ConvertImage(M_PIXDATA.toImage());
 }
 
 #endif // wxUSE_IMAGE
@@ -258,7 +326,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& data)
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
 
-QPixmap *wxBitmap::GetPixmap() const
+QPixmap *wxBitmap::GetHandle() const
 {
     return ((wxBitmapRefData *)m_refData)->m_qtPixmap;
 }
@@ -271,74 +339,6 @@ wxGDIRefData *wxBitmap::CreateGDIRefData() const
 wxGDIRefData *wxBitmap::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBitmapRefData(*(wxBitmapRefData *)data);
-}
-
-wxImage wxBitmap::wxQtImage( QImage  img )
-{
-    bool hasAlpha = img.hasAlphaChannel();
-
-    int numPixels = img.height() * img.width();
-    
-    unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
-    unsigned char *startData = data;
-    
-    unsigned char *alpha = NULL;    
-    if (hasAlpha) {
-        alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
-    }
-    unsigned char *startAlpha = alpha;
-    
-    for (int y = 0; y < img.height(); y++) {
-        QRgb *line = (QRgb*)img.scanLine(y);
-        
-        for (int x = 0; x < img.width(); x++) {
-            QRgb colour = line[x];
-            
-            data[0] = qRed(colour);
-            data[1] = qGreen(colour);
-            data[2] = qBlue(colour);
-            
-            if (hasAlpha) {
-                alpha[0] = qAlpha(colour);
-                alpha++;
-            }
-            data += 3;
-        }
-    }
-    
-    if (hasAlpha) {
-        return wxImage(wxQtConvertSize(img.size()), startData, startAlpha);
-    } else {
-        return wxImage(wxQtConvertSize(img.size()), startData);
-    }
-}
-
-QImage  wxBitmap::wxQtImage( const wxImage &img )
-{
-    bool hasAlpha = img.HasAlpha();
-    QImage res(wxQtConvertSize(img.GetSize()), (hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32));
-    
-    unsigned char *data = img.GetData();
-    unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL;
-    QRgb colour;
-    
-    for (int y = 0; y < img.GetHeight(); y++) {
-        for (int x = 0; x < img.GetWidth(); x++) {
-            if (hasAlpha) {
-                colour = alpha[0] << 24;
-                alpha++;
-            } else {
-                colour = 0;
-            }
-            
-            colour += (data[0] << 16) + (data[1] << 8) + data[2];
-            res.setPixel(x, y, colour);
-            
-            data += 3;
-        }
-    }
-    
-    return res;
 }
 
 //-----------------------------------------------------------------------------

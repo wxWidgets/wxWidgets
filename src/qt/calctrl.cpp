@@ -227,7 +227,7 @@ void wxCalendarCtrl::SetHoliday(size_t day)
     date.setDate(date.year(), date.month(), day);
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
-    format.setForeground(m_colHolidayFg.GetPixel());
+    format.setForeground(m_colHolidayFg.GetHandle());
     m_qtCalendar->setDateTextFormat(date, format);
 }
 
@@ -247,9 +247,9 @@ void wxCalendarCtrl::RefreshHolidays()
     if ( m_windowStyle & wxCAL_SHOW_HOLIDAYS )
     {
         if ( m_colHolidayFg.IsOk() )
-            format.setForeground(m_colHolidayFg.GetPixel());
+            format.setForeground(m_colHolidayFg.GetHandle());
         if ( m_colHolidayBg.IsOk() )
-            format.setBackground(m_colHolidayBg.GetPixel());
+            format.setBackground(m_colHolidayBg.GetHandle());
     }
     else
     {
@@ -276,9 +276,9 @@ void wxCalendarCtrl::SetHeaderColours(const wxColour& colFg, const wxColour& col
 
     QTextCharFormat format = m_qtCalendar->headerTextFormat();
     if ( m_colHeaderFg.IsOk() )
-        format.setForeground(m_colHeaderFg.GetPixel());
+        format.setForeground(m_colHeaderFg.GetHandle());
     if ( m_colHeaderBg.IsOk() )
-        format.setBackground(m_colHeaderBg.GetPixel());
+        format.setBackground(m_colHeaderBg.GetHandle());
     m_qtCalendar->setHeaderTextFormat(format);
 }
 
@@ -301,9 +301,9 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
 
     QTextCharFormat format = m_qtCalendar->dateTextFormat(date);
     if ( attr->HasTextColour() )
-        format.setForeground(attr->GetTextColour().GetPixel());
+        format.setForeground(attr->GetTextColour().GetHandle());
     if ( attr->HasBackgroundColour() )
-        format.setBackground(attr->GetBackgroundColour().GetPixel());
+        format.setBackground(attr->GetBackgroundColour().GetHandle());
 
     wxMISSING_IMPLEMENTATION( "Setting font" );
 

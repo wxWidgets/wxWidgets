@@ -35,13 +35,11 @@ public:
     virtual wxBrushStyle GetStyle() const;
     virtual wxBitmap *GetStipple() const;
     
-    QBrush GetBrush() const;
+    QBrush GetHandle() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
-    static Qt::BrushStyle wxQtBrushStyle(wxBrushStyle style);
-    static wxBrushStyle wxQtBrushStyle(Qt::BrushStyle style);
 };
 
 #endif // _WX_QT_BRUSH_H_

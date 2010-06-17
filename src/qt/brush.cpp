@@ -15,6 +15,45 @@
 
 #include <QtGui/QBrush>
 
+
+static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
+{
+    switch (style) {
+        case wxBRUSHSTYLE_SOLID: return Qt::SolidPattern;
+        case wxBRUSHSTYLE_TRANSPARENT: return Qt::NoBrush;
+        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxBRUSHSTYLE_STIPPLE_MASK: wxMISSING_IMPLEMENTATION( "wxBrush stipple masks" );
+        case wxBRUSHSTYLE_STIPPLE: return Qt::TexturePattern;
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH: return Qt::BDiagPattern;
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH: return Qt::DiagCrossPattern;
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH: return Qt::FDiagPattern;
+        case wxBRUSHSTYLE_CROSS_HATCH: return Qt::CrossPattern;
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH: return Qt::HorPattern;
+        case wxBRUSHSTYLE_VERTICAL_HATCH: return Qt::VerPattern;
+        
+        default: return Qt::SolidPattern;
+    }
+}
+
+static wxBrushStyle ConvertBrushStyle(Qt::BrushStyle style)
+{
+    switch (style) {
+        case Qt::SolidPattern: return wxBRUSHSTYLE_SOLID;
+        case Qt::NoBrush: return wxBRUSHSTYLE_TRANSPARENT;
+        case Qt::TexturePattern: return wxBRUSHSTYLE_STIPPLE;
+        case Qt::BDiagPattern: return wxBRUSHSTYLE_BDIAGONAL_HATCH;
+        case Qt::DiagCrossPattern: return wxBRUSHSTYLE_CROSSDIAG_HATCH;
+        case Qt::FDiagPattern: return wxBRUSHSTYLE_FDIAGONAL_HATCH;
+        case Qt::CrossPattern: return wxBRUSHSTYLE_CROSS_HATCH;
+        case Qt::HorPattern: return wxBRUSHSTYLE_HORIZONTAL_HATCH;
+        case Qt::VerPattern: return wxBRUSHSTYLE_VERTICAL_HATCH;
+        
+        default: wxFAIL_MSG( "Unknown QBrush style" );
+    }
+    
+    return wxBRUSHSTYLE_SOLID;
+}
+
 //-----------------------------------------------------------------------------
 // wxBrush
 //-----------------------------------------------------------------------------
@@ -52,16 +91,16 @@ wxBrush::wxBrush()
 wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetPixel());
-    M_BRUSHDATA.setStyle(wxQtBrushStyle(style));
+    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setStyle(ConvertBrushStyle(style));
 }
 
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
 wxBrush::wxBrush(const wxColour& col, int style)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setColor(col.GetPixel());
-    M_BRUSHDATA.setStyle(wxQtBrushStyle((wxBrushStyle)style));
+    M_BRUSHDATA.setColor(col.GetHandle());
+    M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
 }
 
 #endif
@@ -74,7 +113,7 @@ wxBrush::wxBrush(const wxBitmap& WXUNUSED(stipple))
 void wxBrush::SetColour(const wxColour& col)
 {
     AllocExclusive();
-    M_BRUSHDATA.setColor(col.GetPixel());
+    M_BRUSHDATA.setColor(col.GetHandle());
 }
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
@@ -86,7 +125,7 @@ void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 void wxBrush::SetStyle(wxBrushStyle style)
 {
     AllocExclusive();
-    M_BRUSHDATA.setStyle(wxQtBrushStyle((wxBrushStyle)style));
+    M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
 }
 
 void wxBrush::SetStipple(const wxBitmap& WXUNUSED(stipple))
@@ -112,7 +151,7 @@ wxColour wxBrush::GetColour() const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    return wxQtBrushStyle(M_BRUSHDATA.style());
+    return ConvertBrushStyle(M_BRUSHDATA.style());
 }
 
 wxBitmap *wxBrush::GetStipple() const
@@ -121,7 +160,7 @@ wxBitmap *wxBrush::GetStipple() const
     return NULL;
 }
 
-QBrush wxBrush::GetBrush() const
+QBrush wxBrush::GetHandle() const
 {
     return M_BRUSHDATA;
 }
@@ -134,42 +173,4 @@ wxGDIRefData *wxBrush::CreateGDIRefData() const
 wxGDIRefData *wxBrush::CloneGDIRefData(const wxGDIRefData *data) const
 {
     return new wxBrushRefData(*(wxBrushRefData *)data);
-}
-
-Qt::BrushStyle wxBrush::wxQtBrushStyle(wxBrushStyle style)
-{
-    switch (style) {
-        case wxBRUSHSTYLE_SOLID: return Qt::SolidPattern;
-        case wxBRUSHSTYLE_TRANSPARENT: return Qt::NoBrush;
-        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
-        case wxBRUSHSTYLE_STIPPLE_MASK: wxMISSING_IMPLEMENTATION( "wxBrush stipple masks" );
-        case wxBRUSHSTYLE_STIPPLE: return Qt::TexturePattern;
-        case wxBRUSHSTYLE_BDIAGONAL_HATCH: return Qt::BDiagPattern;
-        case wxBRUSHSTYLE_CROSSDIAG_HATCH: return Qt::DiagCrossPattern;
-        case wxBRUSHSTYLE_FDIAGONAL_HATCH: return Qt::FDiagPattern;
-        case wxBRUSHSTYLE_CROSS_HATCH: return Qt::CrossPattern;
-        case wxBRUSHSTYLE_HORIZONTAL_HATCH: return Qt::HorPattern;
-        case wxBRUSHSTYLE_VERTICAL_HATCH: return Qt::VerPattern;
-        
-        default: return Qt::SolidPattern;
-    }
-}
-
-wxBrushStyle wxBrush::wxQtBrushStyle(Qt::BrushStyle style)
-{
-    switch (style) {
-        case Qt::SolidPattern: return wxBRUSHSTYLE_SOLID;
-        case Qt::NoBrush: return wxBRUSHSTYLE_TRANSPARENT;
-        case Qt::TexturePattern: return wxBRUSHSTYLE_STIPPLE;
-        case Qt::BDiagPattern: return wxBRUSHSTYLE_BDIAGONAL_HATCH;
-        case Qt::DiagCrossPattern: return wxBRUSHSTYLE_CROSSDIAG_HATCH;
-        case Qt::FDiagPattern: return wxBRUSHSTYLE_FDIAGONAL_HATCH;
-        case Qt::CrossPattern: return wxBRUSHSTYLE_CROSS_HATCH;
-        case Qt::HorPattern: return wxBRUSHSTYLE_HORIZONTAL_HATCH;
-        case Qt::VerPattern: return wxBRUSHSTYLE_VERTICAL_HATCH;
-        
-        default: wxFAIL_MSG( "Unknown QBrush style" );
-    }
-    
-    return wxBRUSHSTYLE_SOLID;
 }

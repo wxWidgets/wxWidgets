@@ -44,7 +44,7 @@ public:
     virtual int GetWidth() const;
     virtual int GetDashes(wxDash **ptr) const;
     
-    QPen GetPen() const;
+    QPen GetHandle() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

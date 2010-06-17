@@ -67,15 +67,11 @@ public:
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
     
-    QPixmap *GetPixmap() const;
+    QPixmap *GetHandle() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
-
-private:
-    static wxImage wxQtImage( QImage  img );
-    static QImage  wxQtImage( const wxImage &img );
 
 };
 
