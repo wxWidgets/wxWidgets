@@ -806,7 +806,7 @@ public:
     }
 
     /**
-        Tests if wxAny is null (that is, whether there is data).
+        Tests if wxAny is null (that is, whether there is no data).
     */
     bool IsNull() const
     {
