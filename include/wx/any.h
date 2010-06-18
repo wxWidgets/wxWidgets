@@ -16,8 +16,8 @@
 
 #if wxUSE_ANY
 
+#include <new> // for placement new
 #include "wx/string.h"
-#include "wx/meta/pod.h"
 #include "wx/meta/if.h"
 #include "wx/typeinfo.h"
 
@@ -193,18 +193,24 @@ namespace wxPrivate
 {
 
 template<typename T>
-class wxAnyValueTypeOpsPOD
+class wxAnyValueTypeOpsInplace
 {
 public:
     static void DeleteValue(wxAnyValueBuffer& buf)
     {
-        wxUnusedVar(buf);
+        T* value = reinterpret_cast<T*>(&buf.m_buffer[0]);
+        value->~T();
+
+        // Some compiler may given 'unused variable' warnings without this
+        wxUnusedVar(value);
     }
 
     static void SetValue(const T& value,
                          wxAnyValueBuffer& buf)
     {
-        memcpy(buf.m_buffer, &value, sizeof(T));
+        // Use placement new
+        void* const place = buf.m_buffer;
+        ::new(place) T(value);
     }
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
@@ -270,9 +276,8 @@ public:
 template<typename T>
 class wxAnyValueTypeImplBase : public wxAnyValueType
 {
-    typedef typename wxIf< wxIsPod<T>::value &&
-                                sizeof(T) <= WX_ANY_VALUE_BUFFER_SIZE,
-                           wxPrivate::wxAnyValueTypeOpsPOD<T>,
+    typedef typename wxIf< sizeof(T) <= WX_ANY_VALUE_BUFFER_SIZE,
+                           wxPrivate::wxAnyValueTypeOpsInplace<T>,
                            wxPrivate::wxAnyValueTypeOpsGeneric<T> >::value
             Ops;
 
