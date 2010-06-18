@@ -29,7 +29,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     QWidget *qtParent = NULL;
     if ( parent != NULL )
-        qtParent = parent->GetHandle();
+        qtParent = parent->GetContainer();
 
     m_qtFrame = new wxQtFrame( this, qtParent );
 
@@ -48,11 +48,17 @@ QMainWindow *wxFrame::GetHandle() const
     return m_qtFrame;
 }
 
+QWidget *wxFrame::GetContainer() const
+{
+    return m_qtFrame->centralWidget();
+}
+
 //=============================================================================
 
 wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
     : QMainWindow( parent )
 {
     m_frame = frame;
+    setCentralWidget(new QWidget());
 }
 

@@ -38,9 +38,9 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual void SetMenuBar(wxMenuBar *menubar);
-    
-protected:
+
     virtual QMainWindow *GetHandle() const;
+    virtual WXWidget GetContainer() const;
 
 private:
     QPointer< QMainWindow > m_qtFrame;
