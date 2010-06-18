@@ -11,6 +11,8 @@
 
 #include "wx/frame.h"
 #include "wx/menu.h"
+#include "wx/qt/converter.h"
+#include <QtGui/QResizeEvent>
 
 wxFrame::wxFrame()
 {
@@ -28,8 +30,10 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     // Create the Qt frame first so that GetHandle() works in the base classes:
 
     QWidget *qtParent = NULL;
-    if ( parent != NULL )
+    if ( parent != NULL ) {
         qtParent = parent->GetContainer();
+        parent->AddChild(this);
+    }
 
     m_qtFrame = new wxQtFrame( this, qtParent );
 
@@ -62,3 +66,8 @@ wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
     setCentralWidget(new QWidget());
 }
 
+void wxQtFrame::resizeEvent ( QResizeEvent * event )
+{
+    wxSizeEvent e(wxQtConvertSize(event->size()));
+    m_frame->ProcessWindowEvent(e);
+}

@@ -55,6 +55,9 @@ class WXDLLIMPEXP_CORE wxQtFrame : public QMainWindow
 public:
     wxQtFrame( wxFrame *frame, QWidget *parent );
 
+protected:
+    virtual void resizeEvent ( QResizeEvent * event );
+    
 private Q_SLOTS:
 
 private:

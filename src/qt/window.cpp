@@ -56,8 +56,10 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
         // Window has not been created yet (wxPanel subclass, plain wxWindow, etc.)
         
         QWidget *qtParent = NULL;
-        if ( parent != NULL )
+        if ( parent != NULL ) {
             qtParent = parent->GetContainer();
+            parent->AddChild(this);
+        }
         
         m_qtWindow = new wxQtWidget(this, qtParent);
         
