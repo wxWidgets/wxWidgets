@@ -6588,6 +6588,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\art.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\art_internal.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\artprov.h"
 				>
 			</File>
@@ -6601,6 +6609,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\auibook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>
 			<File
@@ -6633,6 +6645,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\button.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\buttonbar.h"
 				>
 			</File>
 			<File
@@ -6705,6 +6721,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\control.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\control.h"
 				>
 			</File>
 			<File
@@ -6901,6 +6921,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\framemanager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\gallery.h"
 				>
 			</File>
 			<File
@@ -7132,11 +7156,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\page.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\palette.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\panel.h"
 				>
 			</File>
 			<File
@@ -7389,6 +7421,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipwin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\toolbar.h"
 				>
 			</File>
 			<File

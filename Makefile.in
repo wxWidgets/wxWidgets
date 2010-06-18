@@ -4095,6 +4095,15 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/propgrid/propgridiface.h \
 	wx/propgrid/propgridpagestate.h \
 	wx/propgrid/props.h \
+	wx/ribbon/art.h \
+	wx/ribbon/art_internal.h \
+	wx/ribbon/bar.h \
+	wx/ribbon/buttonbar.h \
+	wx/ribbon/control.h \
+	wx/ribbon/gallery.h \
+	wx/ribbon/page.h \
+	wx/ribbon/panel.h \
+	wx/ribbon/toolbar.h \
 	wx/richtext/richtextctrl.h \
 	wx/richtext/richtextbuffer.h \
 	wx/richtext/richtexthtml.h \
