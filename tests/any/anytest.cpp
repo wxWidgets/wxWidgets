@@ -178,6 +178,10 @@ void wxAnyTestCase::CheckType()
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(m_anyWcharString2, const wchar_t*));
     CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, wxString));
     CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, const char*));
+
+    // HasSameType()
+    CPPUNIT_ASSERT( m_anyWcharString1.HasSameType(m_anyWcharString2) );
+    CPPUNIT_ASSERT( !m_anyWcharString1.HasSameType(m_anyBool1) );
 }
 
 void wxAnyTestCase::Equality()

@@ -140,11 +140,18 @@ public:
         Returns the value type as wxAnyValueType instance.
 
         @remarks You cannot reliably test whether two wxAnys are of
-                same value type by simply comparing return values
-                of wxAny::GetType(). Instead use
-                wxAnyValueType::CheckType<T>() template function.
+                 same value type by simply comparing return values
+                 of wxAny::GetType(). Instead, use wxAny::HasSameType().
+
+        @see HasSameType()
     */
     const wxAnyValueType* GetType() const;
+
+    /**
+        Returns @true if this and another wxAny have the same
+        value type.
+    */
+    bool HasSameType(const wxAny& other) const;
 
     /**
         Tests if wxAny is null (that is, whether there is data).
