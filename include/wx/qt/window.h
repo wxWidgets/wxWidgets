@@ -70,6 +70,7 @@ public:
                                const wxRect* rect = NULL );
     
     virtual WXWidget GetHandle() const;
+    virtual WXWidget GetContainer() const;
     
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     

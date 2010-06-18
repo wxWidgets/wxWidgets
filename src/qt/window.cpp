@@ -57,7 +57,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
         
         QWidget *qtParent = NULL;
         if ( parent != NULL )
-            qtParent = parent->GetHandle();
+            qtParent = parent->GetContainer();
         
         m_qtWindow = new wxQtWidget(this, qtParent);
         
@@ -297,6 +297,11 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 #endif // wxUSE_MENUS
 
 QWidget *wxWindow::GetHandle() const
+{
+    return m_qtWindow;
+}
+
+QWidget *wxWindow::GetContainer() const
 {
     return m_qtWindow;
 }
