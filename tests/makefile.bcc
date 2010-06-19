@@ -53,6 +53,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_stopwatch.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
+	$(OBJS)\test_dir.obj \
 	$(OBJS)\test_filefn.obj \
 	$(OBJS)\test_filetest.obj \
 	$(OBJS)\test_filekind.obj \
@@ -451,6 +452,9 @@ $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 
 $(OBJS)\test_exec.obj: .\exec\exec.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\exec\exec.cpp
+
+$(OBJS)\test_dir.obj: .\file\dir.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\file\dir.cpp
 
 $(OBJS)\test_filefn.obj: .\file\filefn.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\file\filefn.cpp

@@ -844,6 +844,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\file\dir.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dummy.cpp"
 				>
 				<FileConfiguration

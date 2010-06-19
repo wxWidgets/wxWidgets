@@ -101,12 +101,9 @@
 
 // what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
 // test, define it to 1 to do all tests.
-#define TEST_ALL 0
-
+#define TEST_ALL 1
 
 #if TEST_ALL
-    #define TEST_DIR
-#else // #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
     #define TEST_STDPATHS
@@ -117,6 +114,7 @@
     #define TEST_INFO_FUNCTIONS
     #define TEST_MIME
     #define TEST_DYNLIB
+#else // #if TEST_ALL
 #endif
 
 // some tests are interactive, define this to run them
@@ -131,192 +129,6 @@
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wxDir
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_DIR
-
-#include "wx/dir.h"
-
-#ifdef __UNIX__
-    static const wxChar *ROOTDIR = wxT("/");
-    static const wxChar *TESTDIR = wxT("/usr/local/share");
-#elif defined(__WXMSW__) || defined(__DOS__) || defined(__OS2__)
-    static const wxChar *ROOTDIR = wxT("c:\\");
-    static const wxChar *TESTDIR = wxT("d:\\");
-#else
-    #error "don't know where the root directory is"
-#endif
-
-static void TestDirEnumHelper(wxDir& dir,
-                              int flags = wxDIR_DEFAULT,
-                              const wxString& filespec = wxEmptyString)
-{
-    wxString filename;
-
-    if ( !dir.IsOpened() )
-        return;
-
-    bool cont = dir.GetFirst(&filename, filespec, flags);
-    while ( cont )
-    {
-        wxPrintf(wxT("\t%s\n"), filename.c_str());
-
-        cont = dir.GetNext(&filename);
-    }
-
-    wxPuts(wxEmptyString);
-}
-
-#if TEST_ALL
-
-static void TestDirEnum()
-{
-    wxPuts(wxT("*** Testing wxDir::GetFirst/GetNext ***"));
-
-    wxString cwd = wxGetCwd();
-    if ( !wxDir::Exists(cwd) )
-    {
-        wxPrintf(wxT("ERROR: current directory '%s' doesn't exist?\n"), cwd.c_str());
-        return;
-    }
-
-    wxDir dir(cwd);
-    if ( !dir.IsOpened() )
-    {
-        wxPrintf(wxT("ERROR: failed to open current directory '%s'.\n"), cwd.c_str());
-        return;
-    }
-
-    wxPuts(wxT("Enumerating everything in current directory:"));
-    TestDirEnumHelper(dir);
-
-    wxPuts(wxT("Enumerating really everything in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT | wxDIR_DOTDOT);
-
-    wxPuts(wxT("Enumerating object files in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT, wxT("*.o*"));
-
-    wxPuts(wxT("Enumerating directories in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_DIRS);
-
-    wxPuts(wxT("Enumerating files in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_FILES);
-
-    wxPuts(wxT("Enumerating files including hidden in current directory:"));
-    TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
-
-    dir.Open(ROOTDIR);
-
-    wxPuts(wxT("Enumerating everything in root directory:"));
-    TestDirEnumHelper(dir, wxDIR_DEFAULT);
-
-    wxPuts(wxT("Enumerating directories in root directory:"));
-    TestDirEnumHelper(dir, wxDIR_DIRS);
-
-    wxPuts(wxT("Enumerating files in root directory:"));
-    TestDirEnumHelper(dir, wxDIR_FILES);
-
-    wxPuts(wxT("Enumerating files including hidden in root directory:"));
-    TestDirEnumHelper(dir, wxDIR_FILES | wxDIR_HIDDEN);
-
-    wxPuts(wxT("Enumerating files in non existing directory:"));
-    wxDir dirNo(wxT("nosuchdir"));
-    TestDirEnumHelper(dirNo);
-}
-
-#endif // TEST_ALL
-
-class DirPrintTraverser : public wxDirTraverser
-{
-public:
-    virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
-    {
-        return wxDIR_CONTINUE;
-    }
-
-    virtual wxDirTraverseResult OnDir(const wxString& dirname)
-    {
-        wxString path, name, ext;
-        wxFileName::SplitPath(dirname, &path, &name, &ext);
-
-        if ( !ext.empty() )
-            name << wxT('.') << ext;
-
-        wxString indent;
-        for ( const wxChar *p = path.c_str(); *p; p++ )
-        {
-            if ( wxIsPathSeparator(*p) )
-                indent += wxT("    ");
-        }
-
-        wxPrintf(wxT("%s%s\n"), indent.c_str(), name.c_str());
-
-        return wxDIR_CONTINUE;
-    }
-};
-
-static void TestDirTraverse()
-{
-    wxPuts(wxT("*** Testing wxDir::Traverse() ***"));
-
-    // enum all files
-    wxArrayString files;
-    size_t n = wxDir::GetAllFiles(TESTDIR, &files);
-    wxPrintf(wxT("There are %u files under '%s'\n"), n, TESTDIR);
-    if ( n > 1 )
-    {
-        wxPrintf(wxT("First one is '%s'\n"), files[0u].c_str());
-        wxPrintf(wxT(" last one is '%s'\n"), files[n - 1].c_str());
-    }
-
-    // enum again with custom traverser
-    wxPuts(wxT("Now enumerating directories:"));
-    wxDir dir(TESTDIR);
-    DirPrintTraverser traverser;
-    dir.Traverse(traverser, wxEmptyString, wxDIR_DIRS | wxDIR_HIDDEN);
-}
-
-#if TEST_ALL
-
-static void TestDirExists()
-{
-    wxPuts(wxT("*** Testing wxDir::Exists() ***"));
-
-    static const wxChar *dirnames[] =
-    {
-        wxT("."),
-#if defined(__WXMSW__)
-        wxT("c:"),
-        wxT("c:\\"),
-        wxT("\\\\share\\file"),
-        wxT("c:\\dos"),
-        wxT("c:\\dos\\"),
-        wxT("c:\\dos\\\\"),
-        wxT("c:\\autoexec.bat"),
-#elif defined(__UNIX__)
-        wxT("/"),
-        wxT("//"),
-        wxT("/usr/bin"),
-        wxT("/usr//bin"),
-        wxT("/usr///bin"),
-#endif
-    };
-
-    for ( size_t n = 0; n < WXSIZEOF(dirnames); n++ )
-    {
-        wxPrintf(wxT("%-40s: %s\n"),
-                 dirnames[n],
-                 wxDir::Exists(dirnames[n]) ? wxT("exists")
-                                            : wxT("doesn't exist"));
-    }
-}
-
-#endif // TEST_ALL
-
-#endif // TEST_DIR
 
 // ----------------------------------------------------------------------------
 // wxDllLoader
@@ -1069,14 +881,6 @@ int main(int argc, char **argv)
     if (!TestSingleIstance())
         return 1;
 #endif // TEST_SNGLINST
-
-#ifdef TEST_DIR
-    #if TEST_ALL
-        TestDirExists();
-        TestDirEnum();
-    #endif
-    TestDirTraverse();
-#endif // TEST_DIR
 
 #ifdef TEST_DYNLIB
     TestDllListLoaded();

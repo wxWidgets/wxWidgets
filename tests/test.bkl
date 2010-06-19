@@ -44,6 +44,7 @@
             events/stopwatch.cpp
             events/timertest.cpp
             exec/exec.cpp
+            file/dir.cpp
             file/filefn.cpp
             file/filetest.cpp
             filekind/filekind.cpp

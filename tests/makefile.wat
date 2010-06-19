@@ -283,6 +283,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_stopwatch.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
+	$(OBJS)\test_dir.obj &
 	$(OBJS)\test_filefn.obj &
 	$(OBJS)\test_filetest.obj &
 	$(OBJS)\test_filekind.obj &
@@ -488,6 +489,9 @@ $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_exec.obj :  .AUTODEPEND .\exec\exec.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_dir.obj :  .AUTODEPEND .\file\dir.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filefn.obj :  .AUTODEPEND .\file\filefn.cpp
