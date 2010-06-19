@@ -18,6 +18,7 @@
 #include "wx/any.h"
 #include "wx/datetime.h"
 #include "wx/object.h"
+#include "wx/vector.h"
 
 #include <math.h>
 
@@ -39,6 +40,7 @@ private:
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
+        CPPUNIT_TEST( Misc );
     CPPUNIT_TEST_SUITE_END();
 
     void CheckType();
@@ -48,6 +50,7 @@ private:
     void Null();
     void wxVariantConversions();
     void CustomTemplateSpecialization();
+    void Misc();
 
     wxDateTime m_testDateTime;
 
@@ -408,15 +411,41 @@ void wxAnyTestCase::GetAs()
 
 //
 // Test user data type for wxAnyValueTypeImpl specialization
-// any hand-built wxVariantData
+// any hand-built wxVariantData. Also for inplace allocation
+// sanity checks.
 //
+
+class MyClass;
+
+static wxVector<MyClass*> gs_myClassInstances;
 
 class MyClass
 {
 public:
     MyClass( int someValue = 32768 )
     {
+        Init();
         m_someValue = someValue;
+    }
+    MyClass( const MyClass& other )
+    {
+        Init();
+        m_someValue = other.m_someValue;
+    }
+    virtual ~MyClass()
+    {
+        for ( size_t i=0; i<gs_myClassInstances.size(); i++ )
+        {
+            if ( gs_myClassInstances[i] == this )
+            {
+                gs_myClassInstances.erase(gs_myClassInstances.begin()+i);
+            }
+        }
+    }
+
+    int GetValue() const
+    {
+        return m_someValue;
     }
 
     wxString ToString()
@@ -425,6 +454,12 @@ public:
     }
 
 private:
+    void Init()
+    {
+        // We use this for some sanity checking
+        gs_myClassInstances.push_back(this);
+    }
+
     int     m_someValue;
 };
 
@@ -666,6 +701,39 @@ void wxAnyTestCase::CustomTemplateSpecialization()
     res = any.GetAs(&str);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(str, myObject.ToString());
+}
+
+void wxAnyTestCase::Misc()
+{
+    // Do some (inplace) allocation sanity checks
+    {
+
+        // Do it inside a scope so we can easily test instance count
+        // afterwards
+        MyClass myObject(15);
+        wxAny any = myObject;
+
+        // There must be two instances - first in myObject,
+        // and second copied in any.
+        CPPUNIT_ASSERT_EQUAL(gs_myClassInstances.size(), 2);
+
+        // Check that it is allocated in-place, as supposed
+        if ( sizeof(MyClass) <= WX_ANY_VALUE_BUFFER_SIZE )
+        {
+            // Memory block of the instance second must be inside the any
+            size_t anyBegin = reinterpret_cast<size_t>(&any);
+            size_t anyEnd = anyBegin + sizeof(wxAny);
+            size_t pos = reinterpret_cast<size_t>(gs_myClassInstances[1]);
+            CPPUNIT_ASSERT( pos >= anyBegin );
+            CPPUNIT_ASSERT( pos < anyEnd );
+        }
+
+        wxAny any2 = any;
+        CPPUNIT_ASSERT( any2.As<MyClass>().GetValue() == 15 );
+    }
+
+    // Make sure allocations and deallocations match
+    CPPUNIT_ASSERT_EQUAL(gs_myClassInstances.size(), 0);
 }
 
 #endif // wxUSE_ANY
