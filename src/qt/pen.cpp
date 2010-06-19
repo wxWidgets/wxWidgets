@@ -16,84 +16,183 @@
 
 static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
 {
-    switch(style) {
-        case wxPENSTYLE_SOLID: return Qt::SolidLine;
-        case wxPENSTYLE_TRANSPARENT: return Qt::NoPen;
-        case wxPENSTYLE_DOT: return Qt::DotLine;
+    switch(style)
+    {
+        case wxPENSTYLE_SOLID:
+            return Qt::SolidLine;
+
+        case wxPENSTYLE_TRANSPARENT:
+            return Qt::NoPen;
+
+        case wxPENSTYLE_DOT:
+            return Qt::DotLine;
+
         case wxPENSTYLE_LONG_DASH:
-        case wxPENSTYLE_SHORT_DASH: return Qt::DashLine;
-        case wxPENSTYLE_DOT_DASH: return Qt::DashDotLine;
-        case wxPENSTYLE_USER_DASH: return Qt::CustomDashLine;
+        case wxPENSTYLE_SHORT_DASH:
+            return Qt::DashLine;
+
+        case wxPENSTYLE_DOT_DASH:
+            return Qt::DotLine;
+
+        case wxPENSTYLE_USER_DASH:
+            return Qt::CustomDashLine;
         
         case wxPENSTYLE_STIPPLE:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_STIPPLE" );
+            break;
+
         case wxPENSTYLE_BDIAGONAL_HATCH:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_BDIAGONAL_HATCH" );
+            break;
+
         case wxPENSTYLE_CROSSDIAG_HATCH:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_CROSSDIAG_HATCH" );
+            break;
+
         case wxPENSTYLE_FDIAGONAL_HATCH:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_FDIAGONAL_HATCH" );
+            break;
+
         case wxPENSTYLE_CROSS_HATCH:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_CROSS_HATCH" );
+            break;
+
         case wxPENSTYLE_HORIZONTAL_HATCH:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_HORIZONTAL_HATCH" );
+            break;
+
         case wxPENSTYLE_VERTICAL_HATCH:
-        default: wxMISSING_IMPLEMENTATION( "wxPen styles" ); return Qt::SolidLine;
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_VERTICAL_HATCH" );
+            break;
+
+        case wxPENSTYLE_STIPPLE_MASK:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_STIPPLE_MASK" );
+            break;
+
+        case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+            wxMISSING_IMPLEMENTATION( "wxPENSTYLE_STIPPLE_MASK_OPAQUE" );
+            break;
+
+        case wxPENSTYLE_INVALID:
+            wxFAIL_MSG( "Invalid pen style value" );
+            break;
     }
+    return Qt::SolidLine;
 }
 
 static wxPenStyle ConvertPenStyle(Qt::PenStyle style)
 {
-    switch (style) {
-        case Qt::SolidLine: return wxPENSTYLE_SOLID;
-        case Qt::NoPen: return wxPENSTYLE_TRANSPARENT;
-        case Qt::DotLine: return wxPENSTYLE_DOT;
-        case Qt::DashLine: return wxPENSTYLE_SHORT_DASH;
-        case Qt::DashDotLine: return wxPENSTYLE_DOT_DASH;
-        case Qt::CustomDashLine: return wxPENSTYLE_USER_DASH;
+    switch (style)
+    {
+        case Qt::SolidLine:
+            return wxPENSTYLE_SOLID;
 
-        default: wxFAIL_MSG( "Unknown QPen style" );
+        case Qt::NoPen:
+            return wxPENSTYLE_TRANSPARENT;
+
+        case Qt::DotLine:
+            return wxPENSTYLE_DOT;
+
+        case Qt::DashLine:
+            return wxPENSTYLE_SHORT_DASH;
+
+        case Qt::DashDotLine:
+            return wxPENSTYLE_DOT_DASH;
+
+        case Qt::DashDotDotLine:
+            wxMISSING_IMPLEMENTATION( "Qt::DashDotDotLine" );
+            return wxPENSTYLE_DOT_DASH;
+
+        case Qt::CustomDashLine:
+            return wxPENSTYLE_USER_DASH;
+
+        case Qt::MPenStyle:
+            wxMISSING_IMPLEMENTATION( "Qt::MPenStyle" );
+            break;
     }
     return wxPENSTYLE_SOLID;
 }
 
 static Qt::PenCapStyle ConvertPenCapStyle(wxPenCap style)
 {
-    switch (style) {
-        case wxCAP_BUTT: return Qt::FlatCap;
-        case wxCAP_PROJECTING: return Qt::SquareCap;
-        case wxCAP_ROUND: return Qt::RoundCap;
-        
-        default: return Qt::SquareCap;
+    switch (style)
+    {
+        case wxCAP_BUTT:
+            return Qt::FlatCap;
+
+        case wxCAP_PROJECTING:
+            return Qt::SquareCap;
+
+        case wxCAP_ROUND:
+            return Qt::RoundCap;
+
+        case wxCAP_INVALID:
+            wxFAIL_MSG( "Invalid pen cap value" );
+            break;
     }
+    return Qt::SquareCap;
 }
 
 static wxPenCap ConvertPenCapStyle(Qt::PenCapStyle style)
 {
-    switch (style) {
-        case Qt::FlatCap: return wxCAP_BUTT;
-        case Qt::SquareCap: return wxCAP_PROJECTING;
-        case Qt::RoundCap: return wxCAP_ROUND;
+    switch (style)
+    {
+        case Qt::FlatCap:
+            return wxCAP_BUTT;
 
-        default: wxFAIL_MSG( "Unknown QPen cap style" );
+        case Qt::SquareCap:
+            return wxCAP_PROJECTING;
+
+        case Qt::RoundCap:
+            return wxCAP_ROUND;
+
+        case Qt::MPenCapStyle:
+            wxMISSING_IMPLEMENTATION( "Qt::MPenCapStyle" );
+            break;
     }
     return wxCAP_PROJECTING;
 }
 
 static Qt::PenJoinStyle ConvertPenJoinStyle(wxPenJoin style)
 {
-    switch (style) {
-        case wxJOIN_BEVEL: return Qt::BevelJoin;
-        case wxJOIN_MITER: return Qt::MiterJoin;
-        case wxJOIN_ROUND: return Qt::RoundJoin;
-        
-        default: return Qt::BevelJoin;
+    switch (style)
+    {
+        case wxJOIN_BEVEL:
+            return Qt::BevelJoin;
+
+        case wxJOIN_MITER:
+            return Qt::MiterJoin;
+
+        case wxJOIN_ROUND:
+            return Qt::RoundJoin;
+
+        case wxJOIN_INVALID:
+            wxFAIL_MSG( "Invalid pen join value" );
+            break;
     }
-    
+    return Qt::BevelJoin;
 }
 
 static wxPenJoin ConvertPenJoinStyle(Qt::PenJoinStyle style)
 {
-    switch (style) {
-        case Qt::BevelJoin: return wxJOIN_BEVEL;
-        case Qt::MiterJoin: return wxJOIN_MITER;
-        case Qt::RoundJoin: return wxJOIN_ROUND;
+    switch (style)
+    {
+        case Qt::BevelJoin:
+            return wxJOIN_BEVEL;
 
-        default: wxFAIL_MSG( "Unknown QPen join style" );
+        case Qt::MiterJoin:
+            return wxJOIN_MITER;
+
+        case Qt::RoundJoin:
+            return wxJOIN_ROUND;
+
+        case Qt::SvgMiterJoin:
+            wxMISSING_IMPLEMENTATION( "Qt::SvgMiterJoin" );
+            return wxJOIN_MITER;
+
+        case Qt::MPenJoinStyle:
+            wxMISSING_IMPLEMENTATION( "Qt::MPenJoinStyle" );
+            break;
     }
     return wxJOIN_BEVEL;
 }

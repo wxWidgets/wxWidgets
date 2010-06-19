@@ -18,75 +18,78 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QLabel>
 
-static wxImage ConvertImage( QImage  img )
+static wxImage ConvertImage( QImage qtImage )
 {
-    bool hasAlpha = img.hasAlphaChannel();
+    bool hasAlpha = qtImage.hasAlphaChannel();
     
-    int numPixels = img.height() * img.width();
+    int numPixels = qtImage.height() * qtImage.width();
 
     //Convert to ARGB32 for scanLine
-    img = img.convertToFormat(QImage::Format_ARGB32);
+    qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
     
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
     
     unsigned char *alpha = NULL;
-    if (hasAlpha) {
+    if (hasAlpha)
         alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
-    }
+
     unsigned char *startAlpha = alpha;
     
-    for (int y = 0; y < img.height(); y++) {
-        QRgb *line = (QRgb*)img.scanLine(y);
+    for (int y = 0; y < qtImage.height(); y++)
+    {
+        QRgb *line = (QRgb*)qtImage.scanLine(y);
         
-        for (int x = 0; x < img.width(); x++) {
+        for (int x = 0; x < qtImage.width(); x++)
+        {
             QRgb colour = line[x];
             
             data[0] = qRed(colour);
             data[1] = qGreen(colour);
             data[2] = qBlue(colour);
             
-            if (hasAlpha) {
+            if (hasAlpha)
+            {
                 alpha[0] = qAlpha(colour);
                 alpha++;
             }
             data += 3;
         }
     }
-    
-    if (hasAlpha) {
-        return wxImage(wxQtConvertSize(img.size()), startData, startAlpha);
-    } else {
-        return wxImage(wxQtConvertSize(img.size()), startData);
-    }
+    if (hasAlpha)
+        return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
+    else
+        return wxImage(wxQtConvertSize(qtImage.size()), startData);
 }
 
-static QImage  ConvertImage( const wxImage &img )
+static QImage ConvertImage( const wxImage &image )
 {
-    bool hasAlpha = img.HasAlpha();
-    QImage res(wxQtConvertSize(img.GetSize()), (hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32));
+    bool hasAlpha = image.HasAlpha();
+    QImage qtImage(wxQtConvertSize(image.GetSize()), (hasAlpha ? QImage::Format_ARGB32 : QImage::Format_RGB32));
     
-    unsigned char *data = img.GetData();
-    unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL;
+    unsigned char *data = image.GetData();
+    unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL;
     QRgb colour;
     
-    for (int y = 0; y < img.GetHeight(); y++) {
-        for (int x = 0; x < img.GetWidth(); x++) {
-            if (hasAlpha) {
+    for (int y = 0; y < image.GetHeight(); y++)
+    {
+        for (int x = 0; x < image.GetWidth(); x++)
+        {
+            if (hasAlpha)
+            {
                 colour = alpha[0] << 24;
                 alpha++;
-            } else {
-                colour = 0;
             }
+            else
+                colour = 0;
             
             colour += (data[0] << 16) + (data[1] << 8) + data[2];
-            res.setPixel(x, y, colour);
+            qtImage.setPixel(x, y, colour);
             
             data += 3;
         }
     }
-    
-    return res;
+    return qtImage;
 }
 
 //-----------------------------------------------------------------------------

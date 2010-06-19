@@ -18,39 +18,74 @@
 
 static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 {
-    switch (style) {
-        case wxBRUSHSTYLE_SOLID: return Qt::SolidPattern;
-        case wxBRUSHSTYLE_TRANSPARENT: return Qt::NoBrush;
-        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
-        case wxBRUSHSTYLE_STIPPLE_MASK: wxMISSING_IMPLEMENTATION( "wxBrush stipple masks" );
-        case wxBRUSHSTYLE_STIPPLE: return Qt::TexturePattern;
-        case wxBRUSHSTYLE_BDIAGONAL_HATCH: return Qt::BDiagPattern;
-        case wxBRUSHSTYLE_CROSSDIAG_HATCH: return Qt::DiagCrossPattern;
-        case wxBRUSHSTYLE_FDIAGONAL_HATCH: return Qt::FDiagPattern;
-        case wxBRUSHSTYLE_CROSS_HATCH: return Qt::CrossPattern;
-        case wxBRUSHSTYLE_HORIZONTAL_HATCH: return Qt::HorPattern;
-        case wxBRUSHSTYLE_VERTICAL_HATCH: return Qt::VerPattern;
+    switch (style)
+    {
+        case wxBRUSHSTYLE_SOLID:
+            return Qt::SolidPattern;
+
+        case wxBRUSHSTYLE_TRANSPARENT:
+            return Qt::NoBrush;
+
+        case wxBRUSHSTYLE_STIPPLE:
+            return Qt::TexturePattern;
+
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+            return Qt::BDiagPattern;
+
+        case wxBRUSHSTYLE_CROSSDIAG_HATCH:
+            return Qt::DiagCrossPattern;
+
+        case wxBRUSHSTYLE_FDIAGONAL_HATCH:
+            return Qt::FDiagPattern;
+
+        case wxBRUSHSTYLE_CROSS_HATCH:
+            return Qt::CrossPattern;
+
+        case wxBRUSHSTYLE_HORIZONTAL_HATCH:
+            return Qt::HorPattern;
+
+        case wxBRUSHSTYLE_VERTICAL_HATCH:
+            return Qt::VerPattern;
         
-        default: return Qt::SolidPattern;
+        case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxBRUSHSTYLE_STIPPLE_MASK:
+            wxMISSING_IMPLEMENTATION( "wxBrush stipple masks" );
+            break;
     }
+    return Qt::SolidPattern;
 }
 
 static wxBrushStyle ConvertBrushStyle(Qt::BrushStyle style)
 {
-    switch (style) {
-        case Qt::SolidPattern: return wxBRUSHSTYLE_SOLID;
-        case Qt::NoBrush: return wxBRUSHSTYLE_TRANSPARENT;
-        case Qt::TexturePattern: return wxBRUSHSTYLE_STIPPLE;
-        case Qt::BDiagPattern: return wxBRUSHSTYLE_BDIAGONAL_HATCH;
-        case Qt::DiagCrossPattern: return wxBRUSHSTYLE_CROSSDIAG_HATCH;
-        case Qt::FDiagPattern: return wxBRUSHSTYLE_FDIAGONAL_HATCH;
-        case Qt::CrossPattern: return wxBRUSHSTYLE_CROSS_HATCH;
-        case Qt::HorPattern: return wxBRUSHSTYLE_HORIZONTAL_HATCH;
-        case Qt::VerPattern: return wxBRUSHSTYLE_VERTICAL_HATCH;
-        
-        default: wxFAIL_MSG( "Unknown QBrush style" );
+    switch (style)
+    {
+        case Qt::SolidPattern:
+            return wxBRUSHSTYLE_SOLID;
+
+        case Qt::NoBrush:
+            return wxBRUSHSTYLE_TRANSPARENT;
+
+        case Qt::TexturePattern:
+            return wxBRUSHSTYLE_STIPPLE;
+
+        case Qt::BDiagPattern:
+            return wxBRUSHSTYLE_BDIAGONAL_HATCH;
+
+        case Qt::DiagCrossPattern:
+            return wxBRUSHSTYLE_CROSSDIAG_HATCH;
+
+        case Qt::FDiagPattern:
+            return wxBRUSHSTYLE_FDIAGONAL_HATCH;
+
+        case Qt::CrossPattern:
+            return wxBRUSHSTYLE_CROSS_HATCH;
+
+        case Qt::HorPattern:
+            return wxBRUSHSTYLE_HORIZONTAL_HATCH;
+
+        case Qt::VerPattern:
+            return wxBRUSHSTYLE_VERTICAL_HATCH;
     }
-    
     return wxBRUSHSTYLE_SOLID;
 }
 

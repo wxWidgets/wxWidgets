@@ -18,26 +18,54 @@
 
 static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {
-    switch (family) {
-        case wxFONTFAMILY_DEFAULT: return QFont::AnyStyle;
-        case wxFONTFAMILY_DECORATIVE: return QFont::Decorative;
-        case wxFONTFAMILY_ROMAN: return QFont::Serif;
-        case wxFONTFAMILY_SCRIPT: return QFont::Decorative;
-        case wxFONTFAMILY_SWISS: return QFont::SansSerif;
-        case wxFONTFAMILY_MODERN: return QFont::TypeWriter;
-        case wxFONTFAMILY_TELETYPE: return QFont::TypeWriter;
-        default: return QFont::AnyStyle;
+    switch (family)
+    {
+        case wxFONTFAMILY_DEFAULT:
+            return QFont::AnyStyle;
+
+        case wxFONTFAMILY_DECORATIVE:
+            return QFont::Decorative;
+
+        case wxFONTFAMILY_ROMAN:
+            return QFont::Serif;
+
+        case wxFONTFAMILY_SCRIPT:
+            return QFont::Decorative;
+
+        case wxFONTFAMILY_SWISS:
+            return QFont::SansSerif;
+
+        case wxFONTFAMILY_MODERN:
+            return QFont::TypeWriter;
+
+        case wxFONTFAMILY_TELETYPE:
+            return QFont::TypeWriter;
+
+        case wxFONTFAMILY_MAX:
+            wxFAIL_MSG( "Invalid font family value" );
+            break;
     }
+    return QFont::AnyStyle;
 }
 
-static QFont::Weight ConvertFontWeight(wxFontWeight family)
+static QFont::Weight ConvertFontWeight(wxFontWeight weight)
 {
-    switch (family) {
-        case wxFONTWEIGHT_NORMAL: return QFont::Normal;
-        case wxFONTWEIGHT_LIGHT: return QFont::Light;
-        case wxFONTWEIGHT_BOLD: return QFont::Bold;
-        default: return QFont::Normal;
+    switch (weight)
+    {
+        case wxFONTWEIGHT_NORMAL:
+            return QFont::Normal;
+
+        case wxFONTWEIGHT_LIGHT:
+            return QFont::Light;
+
+        case wxFONTWEIGHT_BOLD:
+            return QFont::Bold;
+
+        case wxFONTWEIGHT_MAX:
+            wxFAIL_MSG( "Invalid font weight value" );
+            break;
     }
+    return QFont::Normal;
 }
 
 class wxFontRefData: public wxGDIRefData
