@@ -31,7 +31,6 @@
     #include "wx/log.h"
 #endif // PCH
 
-#include "wx/filefn.h"          // for wxDirExists()
 #include "wx/filename.h"
 #include "wx/osx/private.h"
 
@@ -183,16 +182,6 @@ bool wxDirData::Read(wxString *filename)
 
     *filename = name ;
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// wxDir helpers
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxDir::Exists(const wxString& dir)
-{
-    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------

@@ -83,8 +83,6 @@ class WXDLLIMPEXP_FWD_BASE wxDirData;
 class WXDLLIMPEXP_BASE wxDir
 {
 public:
-    // test for existence of a directory with the given name
-    static bool Exists(const wxString& dir);
 
     // ctors
     // -----
@@ -106,6 +104,7 @@ public:
 
     // get the full name of the directory (without '/' at the end)
     wxString GetName() const;
+    
 
     // file enumeration routines
     // -------------------------
@@ -150,6 +149,20 @@ public:
     // returns the size of all directories recursively found in given path
     static wxULongLong GetTotalSize(const wxString &dir, wxArrayString *filesSkipped = NULL);
 #endif // wxUSE_LONGLONG
+
+
+    // static utilities for directory management
+    // (alias to wxFileName's functions for dirs)
+    // -----------------------------------------
+    
+    // test for existence of a directory with the given name
+    static bool Exists(const wxString& dir);
+
+    static bool Make(const wxString &dir, int perm = wxS_DIR_DEFAULT,
+                     int flags = 0);
+
+    static bool Remove(const wxString &dir, int flags = 0);
+    
 
 private:
     friend class wxDirData;
