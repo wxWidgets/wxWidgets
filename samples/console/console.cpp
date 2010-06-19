@@ -103,6 +103,9 @@
 // test, define it to 1 to do all tests.
 #define TEST_ALL 1
 
+// some tests are interactive, define this to run them
+#define TEST_INTERACTIVE 1
+
 #if TEST_ALL
     #define TEST_DATETIME
     #define TEST_VOLUME
@@ -115,15 +118,6 @@
     #define TEST_MIME
     #define TEST_DYNLIB
 #else // #if TEST_ALL
-#endif
-
-// some tests are interactive, define this to run them
-#ifdef TEST_INTERACTIVE
-    #undef TEST_INTERACTIVE
-
-    #define TEST_INTERACTIVE 1
-#else
-    #define TEST_INTERACTIVE 1
 #endif
 
 // ============================================================================
@@ -313,14 +307,14 @@ static void TestDiskInfo()
     for ( ;; )
     {
         wxChar pathname[128];
-        wxPrintf(wxT("\nEnter a directory name (or 'quit' to escape): "));
+        wxPrintf(wxT("Enter a directory name (press ENTER or type 'quit' to escape): "));
         if ( !wxFgets(pathname, WXSIZEOF(pathname), stdin) )
             break;
 
         // kill the last '\n'
         pathname[wxStrlen(pathname) - 1] = 0;
         
-        if (wxStrcmp(pathname, "quit") == 0)
+        if (pathname[0] == '\0' || wxStrcmp(pathname, "quit") == 0)
             break;
 
         wxLongLong total, free;
@@ -335,7 +329,11 @@ static void TestDiskInfo()
                     (free / 1024).ToString().c_str(),
                     pathname);
         }
+        
+        wxPuts("\n");
     }
+
+    wxPuts("\n");
 }
 #endif // TEST_INTERACTIVE
 
@@ -402,14 +400,14 @@ static void TestRegExInteractive()
     for ( ;; )
     {
         wxChar pattern[128];
-        wxPrintf(wxT("\nEnter a pattern (or 'quit' to escape): "));
+        wxPrintf(wxT("Enter a pattern (press ENTER or type 'quit' to escape): "));
         if ( !wxFgets(pattern, WXSIZEOF(pattern), stdin) )
             break;
 
         // kill the last '\n'
         pattern[wxStrlen(pattern) - 1] = 0;
 
-        if (wxStrcmp(pattern, "quit") == 0)
+        if (pattern[0] == '\0' || wxStrcmp(pattern, "quit") == 0)
             break;
             
         wxRegEx re;
@@ -449,6 +447,8 @@ static void TestRegExInteractive()
                 }
             }
         }
+        
+        wxPuts("\n");
     }
 }
 
@@ -458,13 +458,12 @@ static void TestRegExInteractive()
 // FTP
 // ----------------------------------------------------------------------------
 
-#ifdef TEST_FTP
+#if defined(TEST_FTP) && TEST_INTERACTIVE
 
 #include "wx/protocol/ftp.h"
 #include "wx/protocol/log.h"
 
 #define FTP_ANONYMOUS
-
 static wxFTP *ftp;
 
 #ifdef FTP_ANONYMOUS
@@ -473,9 +472,9 @@ static wxFTP *ftp;
     static const wxChar *hostname = "localhost";
 #endif
 
-static bool TestFtpConnect()
+static void TestFtpInteractive()
 {
-    wxPuts(wxT("*** Testing FTP connect ***"));
+    wxPuts(wxT("\n*** Interactive wxFTP test ***"));
 
 #ifdef FTP_ANONYMOUS
     wxPrintf(wxT("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
@@ -498,34 +497,27 @@ static bool TestFtpConnect()
     {
         wxPrintf(wxT("ERROR: failed to connect to %s\n"), hostname);
 
-        return false;
+        return;
     }
     else
     {
         wxPrintf(wxT("--- Connected to %s, current directory is '%s'\n"),
                  hostname, ftp->Pwd().c_str());
-        ftp->Close();
     }
-
-    return true;
-}
-
-#if TEST_INTERACTIVE
-static void TestFtpInteractive()
-{
-    wxPuts(wxT("\n*** Interactive wxFTP test ***"));
-
+    
     wxChar buf[128];
-
     for ( ;; )
     {
-        wxPrintf(wxT("Enter FTP command (or 'quit' to escape): "));
+        wxPrintf(wxT("Enter FTP command (press ENTER or type 'quit' to escape): "));
         if ( !wxFgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
         // kill the last '\n'
         buf[wxStrlen(buf) - 1] = 0;
 
+        if (buf[0] == '\0' || wxStrcmp(buf, "quit") == 0)
+            break;
+            
         // special handling of LIST and NLST as they require data connection
         wxString start(buf, 4);
         start.MakeUpper();
@@ -552,10 +544,6 @@ static void TestFtpInteractive()
                 wxPuts(wxT("--- End of the file list"));
             }
         }
-        else if ( start == wxT("QUIT") )
-        {
-            break;      // get out of here!
-        }
         else // !list
         {
             wxChar ch = ftp->SendCommand(buf);
@@ -571,7 +559,6 @@ static void TestFtpInteractive()
 
     wxPuts(wxT("\n"));
 }
-#endif // TEST_INTERACTIVE
 #endif // TEST_FTP
 
 // ----------------------------------------------------------------------------
@@ -767,14 +754,14 @@ static void TestDateTimeInteractive()
 
     for ( ;; )
     {
-        wxPrintf(wxT("Enter a date (or 'quit' to escape): "));
+        wxPrintf(wxT("Enter a date (press ENTER or type 'quit' to escape): "));
         if ( !wxFgets(buf, WXSIZEOF(buf), stdin) )
             break;
 
         // kill the last '\n'
         buf[wxStrlen(buf) - 1] = 0;
         
-        if ( wxString(buf).CmpNoCase("quit") == 0 )
+        if ( buf[0] == '\0' || wxStrcmp(buf, "quit") == 0 )
             break;
 
         wxDateTime dt;
@@ -808,7 +795,7 @@ static void TestDateTimeInteractive()
 // single instance
 // ----------------------------------------------------------------------------
 
-#ifdef TEST_SNGLINST
+#if defined(TEST_SNGLINST) && TEST_INTERACTIVE
 
 #include "wx/snglinst.h"
 
@@ -840,7 +827,7 @@ static bool TestSingleIstance()
     
     return true;
 }
-#endif // TEST_SNGLINST
+#endif // defined(TEST_SNGLINST) && TEST_INTERACTIVE
 
 
 // ----------------------------------------------------------------------------
@@ -849,24 +836,6 @@ static bool TestSingleIstance()
 
 int main(int argc, char **argv)
 {
-#if wxUSE_UNICODE
-    wxChar **wxArgv = new wxChar *[argc + 1];
-
-    {
-        int n;
-
-        for (n = 0; n < argc; n++ )
-        {
-            wxMB2WXbuf warg = wxConvertMB2WX(argv[n]);
-            wxArgv[n] = wxStrdup(warg);
-        }
-
-        wxArgv[n] = NULL;
-    }
-#else // !wxUSE_UNICODE
-    #define wxArgv argv
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
     wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "program");
 
     wxInitializer initializer;
@@ -877,28 +846,13 @@ int main(int argc, char **argv)
         return -1;
     }
 
-#ifdef TEST_SNGLINST
-    if (!TestSingleIstance())
-        return 1;
-#endif // TEST_SNGLINST
+
+    // run all non-interactive tests:
+    // ------------------------------
 
 #ifdef TEST_DYNLIB
     TestDllListLoaded();
 #endif // TEST_DYNLIB
-
-#ifdef TEST_FTP
-    wxLog::AddTraceMask(FTP_TRACE_MASK);
-
-    // wxFTP cannot be a static variable as its ctor needs to access
-    // wxWidgets internals after it has been initialized
-    ftp = new wxFTP;
-    ftp->SetLog(new wxProtocolLog(FTP_TRACE_MASK));
-    if ( TestFtpConnect() )
-        TestFtpInteractive();
-    //else: connecting to the FTP server failed
-
-    delete ftp;
-#endif // TEST_FTP
 
 #ifdef TEST_MIME
     TestMimeEnum();
@@ -910,25 +864,11 @@ int main(int argc, char **argv)
     TestOsInfo();
     TestPlatformInfo();
     TestUserInfo();
-
-    #if TEST_INTERACTIVE
-        TestDiskInfo();
-    #endif
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_PRINTF
     TestPrintf();
 #endif // TEST_PRINTF
-
-#if defined TEST_REGEX && TEST_INTERACTIVE
-    TestRegExInteractive();
-#endif // defined TEST_REGEX && TEST_INTERACTIVE
-
-#ifdef TEST_DATETIME
-    #if TEST_INTERACTIVE
-        TestDateTimeInteractive();
-    #endif
-#endif // TEST_DATETIME
 
 #ifdef TEST_STACKWALKER
 #if wxUSE_STACKWALKER
@@ -944,14 +884,43 @@ int main(int argc, char **argv)
     TestFSVolume();
 #endif // TEST_VOLUME
 
-#if wxUSE_UNICODE
-    {
-        for ( int n = 0; n < argc; n++ )
-            free(wxArgv[n]);
 
-        delete [] wxArgv;
-    }
-#endif // wxUSE_UNICODE
+    // run all interactive tests:
+    // --------------------------
+
+#if TEST_INTERACTIVE
+
+    wxPuts(wxT("***************** INTERACTIVE TESTS *****************\n"));
+    
+#ifdef TEST_SNGLINST
+    if (!TestSingleIstance())
+        return 1;
+#endif // TEST_SNGLINST
+
+#ifdef TEST_FTP
+    wxLog::AddTraceMask(FTP_TRACE_MASK);
+
+    // wxFTP cannot be a static variable as its ctor needs to access
+    // wxWidgets internals after it has been initialized
+    ftp = new wxFTP;
+    ftp->SetLog(new wxProtocolLog(FTP_TRACE_MASK));
+    TestFtpInteractive();
+    delete ftp;
+#endif // TEST_FTP
+
+#ifdef TEST_INFO_FUNCTIONS
+    TestDiskInfo();
+#endif // TEST_INFO_FUNCTIONS
+
+#if defined TEST_REGEX
+    TestRegExInteractive();
+#endif // defined TEST_REGEX
+
+#ifdef TEST_DATETIME
+    TestDateTimeInteractive();
+#endif // TEST_DATETIME
+
+#endif  // TEST_INTERACTIVE
 
     wxUnusedVar(argc);
     wxUnusedVar(argv);
