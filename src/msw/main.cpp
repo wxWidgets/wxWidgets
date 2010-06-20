@@ -333,8 +333,7 @@ struct wxMSWCommandLineArguments
             free(argv[i]);
         }
 
-        delete [] argv;
-        argv = NULL;
+        wxDELETEA(argv);
         argc = 0;
     }
 

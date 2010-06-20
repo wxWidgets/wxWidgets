@@ -250,8 +250,7 @@ void wxHtmlParser::DestroyDOMTree()
     }
     m_Tags = m_CurTag = NULL;
 
-    delete m_TextPieces;
-    m_TextPieces = NULL;
+    wxDELETE(m_TextPieces);
 }
 
 void wxHtmlParser::DoParsing()

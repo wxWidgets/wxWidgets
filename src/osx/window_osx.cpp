@@ -257,11 +257,7 @@ wxWindowMac::~wxWindowMac()
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
-    if ( m_dropTarget != NULL )
-    {
-        delete m_dropTarget;
-        m_dropTarget = NULL;
-    }
+    wxDELETE(m_dropTarget);
 #endif
 
     delete m_peer ;

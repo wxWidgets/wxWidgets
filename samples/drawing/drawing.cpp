@@ -366,21 +366,13 @@ bool MyApp::OnInit()
 
 void MyApp::DeleteBitmaps()
 {
-    delete gs_bmpNoMask;
-    delete gs_bmpWithColMask;
-    delete gs_bmpMask;
-    delete gs_bmpWithMask;
-    delete gs_bmp4;
-    delete gs_bmp4_mono;
-    delete gs_bmp36;
-
-    gs_bmpNoMask = NULL;
-    gs_bmpWithColMask = NULL;
-    gs_bmpMask = NULL;
-    gs_bmpWithMask = NULL;
-    gs_bmp4 = NULL;
-    gs_bmp4_mono = NULL;
-    gs_bmp36 = NULL;
+    wxDELETE(gs_bmpNoMask);
+    wxDELETE(gs_bmpWithColMask);
+    wxDELETE(gs_bmpMask);
+    wxDELETE(gs_bmpWithMask);
+    wxDELETE(gs_bmp4);
+    wxDELETE(gs_bmp4_mono);
+    wxDELETE(gs_bmp36);
 }
 
 // ----------------------------------------------------------------------------

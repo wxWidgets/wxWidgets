@@ -926,11 +926,7 @@ bool wxScrollHelperBase::SendAutoScrollEvents(wxScrollWinEvent& event) const
 void wxScrollHelperBase::StopAutoScrolling()
 {
 #if wxUSE_TIMER
-    if ( m_timerAutoScroll )
-    {
-        delete m_timerAutoScroll;
-        m_timerAutoScroll = NULL;
-    }
+    wxDELETE(m_timerAutoScroll);
 #endif
 }
 

@@ -1096,11 +1096,7 @@ const wxMenuGeometryInfo& wxMenu::GetGeometryInfo() const
 
 void wxMenu::InvalidateGeometryInfo()
 {
-    if ( m_geometry )
-    {
-        delete m_geometry;
-        m_geometry = NULL;
-    }
+    wxDELETE(m_geometry);
 }
 
 // ----------------------------------------------------------------------------
@@ -2513,8 +2509,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     ms_evtLoopPopup = new wxEventLoop;
     ms_evtLoopPopup->Run();
 
-    delete ms_evtLoopPopup;
-    ms_evtLoopPopup = NULL;
+    wxDELETE(ms_evtLoopPopup);
 
     // remove the handler
     PopEventHandler(true /* delete it */);

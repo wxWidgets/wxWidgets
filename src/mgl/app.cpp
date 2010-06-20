@@ -120,8 +120,7 @@ static bool wxCreateMGL_WM(const wxVideoMode& displayMode)
     g_displayDC = new MGLDisplayDC(mode, 1, refresh);
     if ( !g_displayDC->isValid() )
     {
-        delete g_displayDC;
-        g_displayDC = NULL;
+        wxDELETE(g_displayDC);
         return false;
     }
 
@@ -139,11 +138,7 @@ static void wxDestroyMGL_WM()
         MGL_wmDestroy(g_winMng);
         g_winMng = NULL;
     }
-    if ( g_displayDC )
-    {
-        delete g_displayDC;
-        g_displayDC = NULL;
-    }
+    wxDELETE(g_displayDC);
 }
 
 //-----------------------------------------------------------------------------

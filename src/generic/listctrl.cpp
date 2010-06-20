@@ -4329,9 +4329,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
     {
         GetSizer()->Detach( m_headerWin );
 
-        delete m_headerWin;
-
-        m_headerWin = NULL;
+        wxDELETE(m_headerWin);
     }
 }
 

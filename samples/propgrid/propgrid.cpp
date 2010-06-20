@@ -264,11 +264,7 @@ wxAdvImageFileProperty::wxAdvImageFileProperty( const wxString& label,
 wxAdvImageFileProperty::~wxAdvImageFileProperty ()
 {
     // Delete old image
-    if ( m_pImage )
-    {
-        delete m_pImage;
-        m_pImage = (wxImage*) NULL;
-    }
+    wxDELETE(m_pImage);
 }
 
 void wxAdvImageFileProperty::OnSetValue()
@@ -276,11 +272,7 @@ void wxAdvImageFileProperty::OnSetValue()
     wxFileProperty::OnSetValue();
 
     // Delete old image
-    if ( m_pImage )
-    {
-        delete m_pImage;
-        m_pImage = (wxImage*) NULL;
-    }
+    wxDELETE(m_pImage);
 
     wxString imagename = GetValueAsString(0);
 
@@ -398,11 +390,7 @@ void wxAdvImageFileProperty::LoadThumbnails( size_t index )
 
         }
 
-        if ( m_pImage )
-        {
-            delete m_pImage;
-            m_pImage = (wxImage*) NULL;
-        }
+        wxDELETE(m_pImage);
     }
 }
 

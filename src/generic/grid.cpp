@@ -2100,8 +2100,7 @@ wxGrid::SetTable(wxGridTableBase *table,
             m_table = NULL;
         }
 
-        delete m_selection;
-        m_selection = NULL;
+        wxDELETE(m_selection);
 
         m_ownTable = false;
         m_numRows = 0;

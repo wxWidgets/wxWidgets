@@ -2028,8 +2028,7 @@ bool wxGnomePrintModule::OnInit()
 
 void wxGnomePrintModule::OnExit()
 {
-    delete gs_libGnomePrint;
-    gs_libGnomePrint = NULL;
+    wxDELETE(gs_libGnomePrint);
 }
 
 IMPLEMENT_DYNAMIC_CLASS(wxGnomePrintModule, wxModule)

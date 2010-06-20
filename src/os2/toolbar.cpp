@@ -423,11 +423,7 @@ bool wxToolBar::Create( wxWindow* pParent,
 
 wxToolBar::~wxToolBar()
 {
-    if (m_pToolTip)
-    {
-        delete m_pToolTip;
-        m_pToolTip = NULL;
-    }
+    wxDELETE(m_pToolTip);
 } // end of wxToolBar::~wxToolBar
 
 bool wxToolBar::Realize()

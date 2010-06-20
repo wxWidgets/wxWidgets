@@ -269,8 +269,7 @@ void wxApp::CleanUp()
 {
     wxAppBase::CleanUp();
 
-    delete wxWidgetHashTable;
-    wxWidgetHashTable = NULL;
+    wxDELETE(wxWidgetHashTable);
 
     delete m_mainLoop;
 

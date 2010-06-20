@@ -1953,8 +1953,7 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
         // deleted directly not by us as indicated by its doc child frame
         // pointer still being set
         m_childView->SetDocChildFrame(NULL);
-        delete m_childView;
-        m_childView = NULL;
+        wxDELETE(m_childView);
     }
 
     m_childDocument = NULL;

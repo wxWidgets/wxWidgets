@@ -623,8 +623,7 @@ wxPropertyGridManager::~wxPropertyGridManager()
     END_MOUSE_CAPTURE
 
     //m_pPropGrid->ClearSelection();
-    delete m_pPropGrid;
-    m_pPropGrid = NULL;
+    wxDELETE(m_pPropGrid);
 
     size_t i;
     for ( i=0; i<m_arrPages.size(); i++ )

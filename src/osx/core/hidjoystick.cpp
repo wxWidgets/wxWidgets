@@ -157,8 +157,7 @@ wxJoystick::wxJoystick(int joystick)
     }
     else
     {
-        delete m_hid;
-        m_hid = NULL;
+        wxDELETE(m_hid);
     }
 }
 

@@ -497,8 +497,7 @@ void wxListCtrl::DeleteEditControl()
     {
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
     }
 }
 
@@ -1539,8 +1538,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     if ( !hWnd )
     {
         // failed to start editing
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
 
         return NULL;
     }
@@ -2246,8 +2244,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         if ( m_internalData[n] == data )
                         {
                             m_internalData.erase(m_internalData.begin() + n);
-                            delete data;
-                            data = NULL;
+                            wxDELETE(data);
                             break;
                         }
                     }

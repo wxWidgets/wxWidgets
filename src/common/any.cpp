@@ -223,8 +223,7 @@ public:
     }
     virtual void OnExit()
     {
-        delete g_wxAnyValueTypeGlobals;
-        g_wxAnyValueTypeGlobals = NULL;
+        wxDELETE(g_wxAnyValueTypeGlobals);
     }
 private:
 };

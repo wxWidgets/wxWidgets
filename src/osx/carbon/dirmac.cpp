@@ -226,8 +226,7 @@ wxString wxDir::GetName() const
 
 wxDir::~wxDir()
 {
-    delete m_data;
-    m_data = NULL;
+    wxDELETE(m_data);
 }
 
 // ----------------------------------------------------------------------------

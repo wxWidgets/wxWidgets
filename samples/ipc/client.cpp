@@ -234,8 +234,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
 {
     if (m_client)
     {
-        delete m_client;
-        m_client = NULL;
+        wxDELETE(m_client);
     }
     event.Skip();
 }
@@ -261,8 +260,7 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
 
     if (!retval)
     {
-        delete m_client;
-        m_client = NULL;
+        wxDELETE(m_client);
     }
     EnableControls();
 }
@@ -316,8 +314,7 @@ void MyFrame::OnDisconnect(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::Disconnect()
 {
-    delete m_client;
-    m_client = NULL;
+    wxDELETE(m_client);
     EnableControls();
 }
 
@@ -399,8 +396,7 @@ void MyClient::Disconnect()
     if (m_connection)
     {
         m_connection->Disconnect();
-        delete m_connection;
-        m_connection = NULL;
+        wxDELETE(m_connection);
         wxGetApp().GetFrame()->EnableControls();
         wxLogMessage(wxT("Client disconnected from server"));
     }

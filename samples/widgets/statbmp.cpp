@@ -115,8 +115,7 @@ void StatBmpWidgetsPage::CreateContent()
 
 void StatBmpWidgetsPage::RecreateWidget()
 {
-    delete m_statbmp;
-    m_statbmp = NULL;
+    wxDELETE(m_statbmp);
 
     wxString filepath = m_filepicker->GetPath();
     if ( filepath.empty() )

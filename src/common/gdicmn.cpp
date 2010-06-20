@@ -526,8 +526,7 @@ void wxStockGDI::DeleteAll()
 {
     for (unsigned i = 0; i < ITEMCOUNT; i++)
     {
-        delete ms_stockObject[i];
-        ms_stockObject[i] = NULL;
+        wxDELETE(ms_stockObject[i]);
     }
 }
 

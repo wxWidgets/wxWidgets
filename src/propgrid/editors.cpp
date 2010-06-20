@@ -1512,8 +1512,7 @@ END_EVENT_TABLE()
 
 wxSimpleCheckBox::~wxSimpleCheckBox()
 {
-    delete ms_doubleBuffer;
-    ms_doubleBuffer = NULL;
+    wxDELETE(ms_doubleBuffer);
 }
 
 wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = NULL;

@@ -108,8 +108,7 @@ wxListBox::~wxListBox()
     m_blockEvents = false;
 
     // make sure no native events get sent to a object in destruction
-    delete m_peer;
-    m_peer = NULL;
+    wxDELETE(m_peer);
 
     if ( IsSorted() )
         delete m_strings.sorted;

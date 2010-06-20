@@ -147,8 +147,7 @@ wxAppConsoleBase::wxAppConsoleBase()
     // In unicode mode the SetTraceMasks call can cause an apptraits to be
     // created, but since we are still in the constructor the wrong kind will
     // be created for GUI apps.  Destroy it so it can be created again later.
-    delete m_traits;
-    m_traits = NULL;
+    wxDELETE(m_traits);
 #endif
 #endif
 }
@@ -214,11 +213,7 @@ wxEventLoopBase *wxAppConsoleBase::CreateMainLoop()
 
 void wxAppConsoleBase::CleanUp()
 {
-    if ( m_mainLoop )
-    {
-        delete m_mainLoop;
-        m_mainLoop = NULL;
-    }
+    wxDELETE(m_mainLoop);
 }
 
 // ----------------------------------------------------------------------------

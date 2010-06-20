@@ -369,8 +369,7 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
     }
 
 #if wxUSE_ACCEL
-    delete m_accelWindowMenu;
-    m_accelWindowMenu = NULL;
+    wxDELETE(m_accelWindowMenu);
 
     if ( menu && menu->HasAccels() )
         m_accelWindowMenu = menu->CreateAccelTable();

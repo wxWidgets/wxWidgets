@@ -66,8 +66,7 @@ private:
     void InvalidateItem(size_t n)
     {
         m_items[n] = (size_t)-1;
-        delete m_cells[n];
-        m_cells[n] = NULL;
+        wxDELETE(m_cells[n]);
     }
 
 public:

@@ -79,8 +79,7 @@ int wxGUIEventLoop::Run()
     OnExit();
 
     int exitcode = m_impl->GetExitCode();
-    delete m_impl;
-    m_impl = NULL;
+    wxDELETE(m_impl);
 
     return exitcode;
 }

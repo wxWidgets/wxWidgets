@@ -251,16 +251,14 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
     wxIPV4address *addr;
 
     if (m_addr) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         Close();
     }
 
     m_addr = addr = new wxIPV4address();
 
     if (!addr->Hostname(host)) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         m_lastError = wxPROTO_NETERR;
         return false;
     }

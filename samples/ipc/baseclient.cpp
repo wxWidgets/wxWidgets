@@ -184,8 +184,7 @@ void MyClient::Disconnect()
     if (m_connection)
     {
         m_connection->Disconnect();
-        delete m_connection;
-        m_connection = NULL;
+        wxDELETE(m_connection);
         wxLogMessage("Client disconnected from server");
     }
     wxGetApp().ExitMainLoop();

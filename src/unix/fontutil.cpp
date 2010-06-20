@@ -1465,9 +1465,7 @@ bool wxFontModule::OnInit()
 
 void wxFontModule::OnExit()
 {
-    delete g_fontHash;
-
-    g_fontHash = NULL;
+    wxDELETE(g_fontHash);
 }
 
 #endif // GTK 2.0/1.x

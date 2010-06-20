@@ -682,17 +682,13 @@ AppAbout::AppAbout (wxWindow *parent,
 }
 
 AppAbout::~AppAbout () {
-    if (m_timer)  {
-        delete m_timer;
-        m_timer = NULL;
-    }
+    wxDELETE(m_timer);
 }
 
 //----------------------------------------------------------------------------
 // event handlers
 void AppAbout::OnTimerEvent (wxTimerEvent &WXUNUSED(event)) {
-    if (m_timer) delete m_timer;
-    m_timer = NULL;
+    wxDELETE(m_timer);
     EndModal (wxID_OK);
 }
 

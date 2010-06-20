@@ -875,11 +875,7 @@ wxMediaState wxQTMediaBackend::GetState()
 void wxQTMediaBackend::Cleanup()
 {
     m_bPlaying = false;
-    if (m_timer)
-    {
-        delete m_timer;
-        m_timer = NULL;
-    }
+    wxDELETE(m_timer);
 
     // Stop the movie:
     // Apple samples with CreateMovieControl typically

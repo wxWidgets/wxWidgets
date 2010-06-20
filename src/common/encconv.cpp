@@ -116,7 +116,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
     const wxUint16 *in_tbl;
     const wxUint16 *out_tbl = NULL;
 
-    if (m_Table) {delete[] m_Table; m_Table = NULL;}
+    wxDELETEA(m_Table);
 
     if (input_enc == output_enc) {m_JustCopy = true; return true;}
 

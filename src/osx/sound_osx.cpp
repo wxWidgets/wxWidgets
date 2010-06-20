@@ -73,11 +73,7 @@ void wxSoundData::MarkForDeletion()
 void wxSoundData::Stop()
 {
     DoStop();
-    if ( m_pTimer )
-    {
-        delete m_pTimer;
-        m_pTimer = NULL;
-    }
+    wxDELETE(m_pTimer);
 }
 
 //Time between timer calls

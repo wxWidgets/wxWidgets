@@ -318,8 +318,7 @@ void wxMetafileDCImpl::DoGetSize(int *width, int *height) const
 
 wxMetaFile *wxMetafileDCImpl::Close()
 {
-    delete m_graphicContext;
-    m_graphicContext = NULL;
+    wxDELETE(m_graphicContext);
     m_ok = false;
 
     M_METAFILEREFDATA(*m_metaFile)->Close();

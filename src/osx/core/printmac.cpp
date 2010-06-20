@@ -718,8 +718,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     if (sm_abortWindow)
     {
         sm_abortWindow->Show(false);
-        delete sm_abortWindow;
-        sm_abortWindow = NULL;
+        wxDELETE(sm_abortWindow);
     }
 
     wxEndBusyCursor();

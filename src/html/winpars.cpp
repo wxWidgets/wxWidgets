@@ -606,8 +606,7 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
 #endif
                             ))
     {
-        delete *fontptr;
-        *fontptr = NULL;
+        wxDELETE(*fontptr);
     }
 
     if (*fontptr == NULL)
@@ -669,11 +668,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
     m_nbsp = 0;
 
     m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
-    if (m_EncConv)
-    {
-        delete m_EncConv;
-        m_EncConv = NULL;
-    }
+    wxDELETE(m_EncConv);
 
     if (enc == wxFONTENCODING_DEFAULT)
         return;
@@ -738,8 +733,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
         wxLogError(_("Failed to display HTML document in %s encoding"),
                    wxFontMapper::GetEncodingName(enc).c_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
-        delete m_EncConv;
-        m_EncConv = NULL;
+        wxDELETE(m_EncConv);
     }
 }
 #endif

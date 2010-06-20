@@ -725,8 +725,7 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_tbar )
     {
-        delete m_tbar;
-        m_tbar = NULL;
+        wxDELETE(m_tbar);
     }
     else
     {

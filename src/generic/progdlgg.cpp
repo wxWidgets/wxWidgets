@@ -635,8 +635,7 @@ void wxProgressDialog::ReenableOtherWindows()
 {
     if ( HasFlag(wxPD_APP_MODAL) )
     {
-        delete m_winDisabler;
-        m_winDisabler = NULL;
+        wxDELETE(m_winDisabler);
     }
     else
     {

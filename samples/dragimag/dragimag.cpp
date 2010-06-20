@@ -135,8 +135,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
         m_dragImage->Hide();
         m_dragImage->EndDrag();
-        delete m_dragImage;
-        m_dragImage = NULL;
+        wxDELETE(m_dragImage);
 
         m_draggedShape->SetShow(true);
 
@@ -203,8 +202,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             if (!m_dragImage->BeginDrag(beginDragHotSpot, this, fullScreen))
             {
-                delete m_dragImage;
-                m_dragImage = (wxDragImage*) NULL;
+                wxDELETE(m_dragImage);
                 m_dragMode = TEST_DRAG_NONE;
 
             } else

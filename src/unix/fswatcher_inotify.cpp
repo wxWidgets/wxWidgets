@@ -91,8 +91,7 @@ public:
         wxCHECK_RET( IsOk(),
                     "Inotify not initialized or invalid inotify descriptor" );
 
-        delete m_source;
-        m_source = NULL;
+        wxDELETE(m_source);
 
         if ( close(m_ifd) != 0 )
         {

@@ -147,7 +147,7 @@ class wxPGGlobalVarsClassManager : public wxModule
 public:
     wxPGGlobalVarsClassManager() {}
     virtual bool OnInit() { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; }
-    virtual void OnExit() { delete wxPGGlobalVars; wxPGGlobalVars = NULL; }
+    virtual void OnExit() { wxDELETE(wxPGGlobalVars); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
@@ -1123,8 +1123,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         else
         {
         #if wxPG_DOUBLE_BUFFER
-            delete m_doubleBuffer;
-            m_doubleBuffer = NULL;
+            wxDELETE(m_doubleBuffer);
         #endif
         }
     }

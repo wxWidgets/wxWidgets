@@ -1789,8 +1789,7 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr,
 
     if (m_impl->CreateServer() != wxSOCKET_NOERROR)
     {
-        delete m_impl;
-        m_impl = NULL;
+        wxDELETE(m_impl);
 
         wxLogTrace( wxTRACE_Socket, wxT("*** CreateServer() failed") );
         return;
@@ -2030,8 +2029,7 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
 
     if ( m_impl->CreateUDP() != wxSOCKET_NOERROR )
     {
-        delete m_impl;
-        m_impl = NULL;
+        wxDELETE(m_impl);
         return;
     }
 

@@ -4349,11 +4349,7 @@ void wxDataViewCtrl::OnInternalIdle()
 
 bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 {
-    if ( m_internal )
-    {
-        delete m_internal;
-        m_internal = NULL;
-    }
+    wxDELETE(m_internal);
 
     if (!wxDataViewCtrlBase::AssociateModel( model ))
         return false;

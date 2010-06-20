@@ -98,11 +98,7 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
-        if ( gs_factory )
-        {
-            delete gs_factory;
-            gs_factory = NULL;
-        }
+        wxDELETE(gs_factory);
     }
 
     DECLARE_DYNAMIC_CLASS(wxDisplayModule)

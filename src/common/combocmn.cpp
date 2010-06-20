@@ -2034,21 +2034,18 @@ void wxComboCtrlBase::DestroyPopup()
     if ( m_popup )
         m_popup->RemoveEventHandler(m_popupEvtHandler);
 
-    delete m_popupEvtHandler;
+    wxDELETE(m_popupEvtHandler);
 
-    delete m_popupInterface;
+    wxDELETE(m_popupInterface);
 
     if ( m_winPopup )
     {
         m_winPopup->RemoveEventHandler(m_popupWinEvtHandler);
-        delete m_popupWinEvtHandler;
-        m_popupWinEvtHandler = NULL;
+        wxDELETE(m_popupWinEvtHandler);
         m_winPopup->Destroy();
+        m_winPopup = NULL;
     }
 
-    m_popupEvtHandler = NULL;
-    m_popupInterface = NULL;
-    m_winPopup = NULL;
     m_popup = NULL;
 }
 

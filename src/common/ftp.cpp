@@ -203,8 +203,7 @@ wxSocketBase *wxFTP::AcceptIfActive(wxSocketBase *sock)
     {
         m_lastError = wxPROTO_CONNERR;
         wxLogError(_("Timeout while waiting for FTP server to connect, try passive mode."));
-        delete sock;
-        sock = NULL;
+        wxDELETE(sock);
     }
     else
     {

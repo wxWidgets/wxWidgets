@@ -1285,18 +1285,15 @@ void wxThreadModule::OnExit()
         wxLogLastError(wxT("TlsFree failed."));
     }
 
-    delete gs_critsectThreadDelete;
-    gs_critsectThreadDelete = NULL;
+    wxDELETE(gs_critsectThreadDelete);
 
     if ( gs_critsectGui )
     {
         gs_critsectGui->Leave();
-        delete gs_critsectGui;
-        gs_critsectGui = NULL;
+        wxDELETE(gs_critsectGui);
     }
 
-    delete gs_critsectWaitingForGui;
-    gs_critsectWaitingForGui = NULL;
+    wxDELETE(gs_critsectWaitingForGui);
 }
 
 // ----------------------------------------------------------------------------

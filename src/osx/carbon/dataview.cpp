@@ -2092,8 +2092,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                   dataObject->Add(textDataObject);
                 else
                 {
-                  delete textDataObject;
-                  textDataObject = NULL;
+                  wxDELETE(textDataObject);
                 }
               }
             } /* block */
@@ -2124,8 +2123,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                       dataObject->Add(textDataObject);
                     else
                     {
-                      delete textDataObject;
-                      textDataObject = NULL;
+                      wxDELETE(textDataObject);
                     }
                   }
                   else // overwrite data because the 'utxt' flavor has priority over the 'TEXT' flavor

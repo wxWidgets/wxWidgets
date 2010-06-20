@@ -749,8 +749,7 @@ public:
 
         if ( gs_mimeTypesManager.m_impl != NULL )
         {
-            delete gs_mimeTypesManager.m_impl;
-            gs_mimeTypesManager.m_impl = NULL;
+            wxDELETE(gs_mimeTypesManager.m_impl);
             gs_mimeTypesManager.m_fallbacks.Clear();
         }
     }

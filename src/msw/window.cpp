@@ -3987,8 +3987,7 @@ bool wxWindowMSW::HandleDestroy()
     {
         m_dropTarget->Revoke(m_hWnd);
 
-        delete m_dropTarget;
-        m_dropTarget = NULL;
+        wxDELETE(m_dropTarget);
     }
 #endif // wxUSE_DRAG_AND_DROP
 

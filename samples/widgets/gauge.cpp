@@ -335,8 +335,7 @@ void GaugeWidgetsPage::StopTimer(wxButton *clicked)
     wxCHECK_RET( m_timer, wxT("shouldn't be called") );
 
     m_timer->Stop();
-    delete m_timer;
-    m_timer = NULL;
+    wxDELETE(m_timer);
 
     if (clicked->GetId() == GaugePage_Progress)
     {

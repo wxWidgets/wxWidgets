@@ -205,8 +205,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     for ( wxHtmlTagsCacheData::iterator i = Cache().begin();
           i != Cache().end(); ++i )
     {
-        delete[] i->Name;
-        i->Name = NULL;
+        wxDELETEA(i->Name);
     }
 }
 

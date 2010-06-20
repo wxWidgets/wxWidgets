@@ -34,8 +34,7 @@ public:
     virtual bool OnInit() { return true; }
     virtual void OnExit()
     {
-        delete gs_fontDefault;
-        gs_fontDefault = NULL;
+        wxDELETE(gs_fontDefault);
     }
 
 private:

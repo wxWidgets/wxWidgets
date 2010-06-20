@@ -107,8 +107,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
         {
             if (!Load(fileName))
             {
-                delete m_imp;
-                m_imp = NULL;
+                wxDELETE(m_imp);
                 return false;
             }
         }
@@ -172,8 +171,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 
         if (!Load(location))
         {
-            delete m_imp;
-            m_imp = NULL;
+            wxDELETE(m_imp);
             return false;
         }
 

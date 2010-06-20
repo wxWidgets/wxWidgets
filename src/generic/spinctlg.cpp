@@ -248,8 +248,7 @@ wxSpinCtrlGenericBase::~wxSpinCtrlGenericBase()
         delete text;
     }
 
-    delete m_spinButton;
-    m_spinButton = NULL;
+    wxDELETE(m_spinButton);
 }
 
 // ----------------------------------------------------------------------------

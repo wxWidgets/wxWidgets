@@ -887,8 +887,7 @@ void wxEventHashTable::Clear()
         delete eTTnode;
     }
 
-    delete[] m_eventTypeTable;
-    m_eventTypeTable = NULL;
+    wxDELETEA(m_eventTypeTable);
 
     m_size = 0;
 }

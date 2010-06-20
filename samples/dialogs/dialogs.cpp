@@ -1949,8 +1949,7 @@ void MyFrame::ShowReplaceDialog( wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_dlgReplace )
     {
-        delete m_dlgReplace;
-        m_dlgReplace = NULL;
+        wxDELETE(m_dlgReplace);
     }
     else
     {
@@ -1970,8 +1969,7 @@ void MyFrame::ShowFindDialog( wxCommandEvent& WXUNUSED(event) )
 {
     if ( m_dlgFind )
     {
-        delete m_dlgFind;
-        m_dlgFind = NULL;
+        wxDELETE(m_dlgFind);
     }
     else
     {
@@ -2147,9 +2145,7 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
 {
     if ( event.GetEventObject() == m_btnDelete )
     {
-        delete m_btnModal;
-        m_btnModal = NULL;
-
+        wxDELETE(m_btnModal);
         m_btnDelete->Disable();
     }
     else if ( event.GetEventObject() == m_btnModal )

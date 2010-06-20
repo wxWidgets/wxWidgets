@@ -346,11 +346,7 @@ wxRegionIterator::wxRegionIterator()
 
 wxRegionIterator::~wxRegionIterator()
 {
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
@@ -375,11 +371,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& iterator)
  */
 void wxRegionIterator::SetRects(long numRects, wxRect *rects)
 {
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 
     if (rects && (numRects > 0))
     {
@@ -483,11 +475,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
     m_current = 0;
     m_region = region;
 
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 
     if (m_region.IsEmpty())
     {
