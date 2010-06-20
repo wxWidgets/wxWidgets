@@ -43,6 +43,7 @@
 #include "wx/filename.h"
 #include "wx/msgout.h"
 #include "wx/scopedptr.h"
+#include "wx/sysopt.h"
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 
@@ -1027,6 +1028,10 @@ wxDefaultAssertHandler(const wxString& file,
                        const wxString& cond,
                        const wxString& msg)
 {
+    // If this option is set, we should abort immediately when assert happens.
+    if ( wxSystemOptions::GetOptionInt("exit-on-assert") )
+        abort();
+
     // FIXME MT-unsafe
     static int s_bInAssert = 0;
 

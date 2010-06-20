@@ -28,6 +28,17 @@
 
     These options are currently recognised by wxWidgets:
 
+    @section sysopt_all All platforms
+
+    @beginFlagTable
+    @flag{exit-on-assert}
+        If set to non-zero value, abort the program if an assertion fails. The
+        default behaviour in case of assertion failure depends on the build mode
+        and can be changed by overriding wxApp::OnAssertFailure() but setting
+        this option allows to change it without modifying the program code and
+        also applies to asserts which may happen before the wxApp object
+        creation or after its destruction.
+    @endFlagTable
 
     @section sysopt_win Windows
 
