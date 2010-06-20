@@ -1194,6 +1194,21 @@ wxString wxFileName::GetTempDir()
         dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
 #endif // systems with native way
     }
+    else // we got directory from an environment variable
+    {
+        // remove any trailing path separators, we don't want to ever return
+        // them from this function for consistency
+        const size_t lastNonSep = dir.find_last_not_of(GetPathSeparators());
+        if ( lastNonSep == wxString::npos )
+        {
+            // the string consists entirely of separators, leave only one
+            dir = GetPathSeparator();
+        }
+        else
+        {
+            dir.erase(lastNonSep + 1);
+        }
+    }
 
     // fall back to hard coded value
     if ( dir.empty() )
