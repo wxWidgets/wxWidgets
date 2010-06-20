@@ -104,10 +104,7 @@ void wxMaskedEdit::Create( const wxString& mask
         else
             m_mask.Add(new wxMaskedField(tmp));
 
-        if(IsValid(defaultValue))
-        {
-           //FIXME ajout d une valeur par defaut 
-        }
+        SetDefaultValue(defaultValue);
     }
 
     m_maskValue = mask;
@@ -298,6 +295,56 @@ wxString wxMaskedEdit::GetDefaultValue() const
     return res;
 }
 
+bool wxMaskedEdit::SetDefaultValue(const wxString& defaultValue)
+{
+    unsigned int it;
+    unsigned int fieldIndex = 0;
+    wxString tmp;
+    wxString formatTmp;
+    wxString alreadyUsed = wxEmptyString;
+    bool res = true;
+
+    if(!IsValid(defaultValue))
+    {
+        res = false;
+    }
+    else
+    {
+        if(m_mask.GetCount() == 1)
+        {
+            res = m_mask[0]->SetDefaultValue(defaultValue);
+        }
+        else
+        {
+            for(it = 0; it < defaultValue.Len() 
+                && fieldIndex < m_mask.GetCount() && res;it++)
+            {
+                tmp = defaultValue;
+                
+                if(alreadyUsed != wxEmptyString)
+                    tmp.Replace(alreadyUsed, wxEmptyString, false);
+                    
+                while(!m_mask[fieldIndex]->SetDefaultValue(tmp)
+                    && tmp.Len() != 0)
+                {
+                printf("Tmp = %s\nMask= %s\n", (const char*)tmp.mb_str(wxConvUTF8),(const char*)m_mask[fieldIndex]->GetMask().mb_str(wxConvUTF8) );
+                    tmp.RemoveLast();
+                }
+                printf("Tmp = %s\n", (const char*)tmp.mb_str(wxConvUTF8));
+
+                if(tmp.Len() == 0)
+                {
+
+        printf("Tmp = 0\n");
+                    res = false;
+                }
+                alreadyUsed << tmp;
+                fieldIndex++;
+            } 
+        }
+    }
+    return res;
+}
 
 wxArrayString wxMaskedEdit::GetChoices() const
 {
@@ -328,6 +375,107 @@ bool wxMaskedEdit::AddChoices(const wxArrayString& choices)
 
     return res;
 }
+
+wxString wxMaskedEdit::GetNextChoices() const
+{
+    wxString res;
+
+    if(m_mask.GetCount() != 1)
+        res = wxEmptyString;
+    else
+        res = m_mask[0]->GetNextChoices();
+
+    return res;
+
+}
+    
+wxString wxMaskedEdit::GetCurrentChoices() const
+{
+    wxString res;
+
+    if(m_mask.GetCount() != 1)
+        res = wxEmptyString;
+    else
+        res = m_mask[0]->GetCurrentChoices();
+
+    return res;
+}
+
+wxString wxMaskedEdit::GetPreviousChoices() const
+{
+    wxString res;
+
+    if(m_mask.GetCount() != 1)
+        res = wxEmptyString;
+    else
+        res = m_mask[0]->GetPreviousChoices();
+
+    return res;
+
+}
+wxString wxMaskedEdit::GetChoice(unsigned int fieldIndex, unsigned int index)
+{
+    wxString res;
+
+    if(fieldIndex > m_mask.GetCount())
+        res = wxEmptyString;
+    else
+        res = m_mask[fieldIndex]->GetChoice(fieldIndex);
+
+    return res;
+}
+
+wxString wxMaskedEdit::GetNextChoices(unsigned int fieldIndex) const
+{
+    wxString res;
+
+    if(fieldIndex >= m_mask.GetCount())
+        res = wxEmptyString;
+    else
+        res = m_mask[fieldIndex]->GetNextChoices();
+
+    return res;
+
+}
+    
+wxString wxMaskedEdit::GetCurrentChoices(unsigned int fieldIndex) const
+{
+    wxString res;
+
+    if(fieldIndex >= m_mask.GetCount())
+        res = wxEmptyString;
+    else
+        res = m_mask[fieldIndex]->GetCurrentChoices();
+
+    return res;
+}
+
+wxString wxMaskedEdit::GetPreviousChoices(unsigned int fieldIndex) const
+{
+    wxString res;
+
+    if(fieldIndex >= m_mask.GetCount())
+        res = wxEmptyString;
+    else
+        res = m_mask[fieldIndex]->GetPreviousChoices();
+
+    return res;
+
+}
+
+unsigned int wxMaskedEdit::NumberOfChoices()
+{
+    unsigned int res;
+    unsigned int it;
+    for(it = 0; it < m_mask.GetCount(); it++)
+    {
+        res += m_mask[it]->GetNumberOfChoices();
+    }
+
+    return res;
+
+}
+
 int wxMaskedEdit::GetNumberOfFields() const
 {
     return m_mask.GetCount();

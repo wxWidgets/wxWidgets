@@ -122,82 +122,69 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 
     for(it = 0, itMask = 0; itMask < m_mask.Len(); it++, itMask++)
     {
-
-        if(IsCharValid(m_mask[itMask], string[it]))
+        if(it < string.Len())
         {
-            res << string[it];
-        }
-        else if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
-        {
-            if(string[it] == m_mask[itMask + 1])
-                res << string[it] ;
+            if(IsCharValid(m_mask[itMask], string[it]))
+            {
+                res << string[it];
+            }
+            else if(m_mask[itMask] == '\\' && it != m_mask.Len() - 1)
+            {
+                if(string[it] == m_mask[itMask + 1])
+                    res << string[it] ;
 
-            itMask++;
+                itMask++;
+            }
+            else
+            {
+                if(m_formatCodes.Contains(wxT("!")))
+                {
+                    if(IsLowerCase(string[it]) && (m_mask[itMask] == 'A'
+                       || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
+                       || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
+                    {
+                        res << string.SubString(it, it).Upper();
+                        tmp = true;
+                    }
+                }
+                else if(m_formatCodes.Contains(wxT("^")))
+                {
+                    if(IsUpperCase(string[it]) && (m_mask[itMask] == 'a'
+                       || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
+                       || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
+                    {
+                        res << string.SubString(it, it).Lower();
+                        tmp = true;
+                    }
+                }
+            
+            } 
+            //verification
+
+            if(string.Len() != 0 && res[it] != string[it] && tmp == false)
+            {
+                res = string;
+                itMask = m_mask.Len();
+            }
+             
+            tmp = false;
         }
         else
         {
-            if(m_formatCodes.Contains(wxT("!")))
-            {
-                if(IsLowerCase(string[it]) && (m_mask[itMask] == 'A'
-                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
-                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
-                {
-                    res << string.SubString(it, it).Upper();
-                    tmp = true;
-                }
-            }
-            else if(m_formatCodes.Contains(wxT("^")))
-            {
-                if(IsUpperCase(string[it]) && (m_mask[itMask] == 'a'
-                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
-                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
-                {
-                    res << string.SubString(it, it).Lower();
-                    tmp = true;
-                }
-            }
-            
-            
-            if(m_formatCodes.Contains(wxT("_")) && tmp == false 
-               &&  (  m_mask[itMask] == 'a' || m_mask[itMask] == 'A'
+            if(m_formatCodes.Contains(wxT("_"))
+               &&( string.Len() == 0 || m_mask[itMask -1] != '\\')
+               &&( m_mask[itMask] == 'a' || m_mask[itMask] == 'A'
                    || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
                    || m_mask[itMask] == '#' || m_mask[itMask] == '&' 
                    || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
             {
                 res << wxT(" ");
-                it --;
             }
-
-            tmp = false;
-            
         }
     }
-  
-    verification = res;
-
-    for(it = 0; it < string.Len(); it++)
-    {
-        if(!verification.Contains(string[it]))
-        {
-            if((m_formatCodes.Contains(wxT("^")) || m_formatCodes.Contains(wxT("!")) ) && ( res.Contains(string.SubString(it,it).Upper()) || res.Contains(string.SubString(it,it).Lower() )))
-
-            {
-            }
-            else
-            {
-                it = string.Len() +1;
-                res = string;
-            }
-        }
-        else
-        {
-            verification.Replace(string[it], wxT(""), false);
-        }
-    }
-
+    
     if(string.Len() > res.Len())
             res = string;
-    
     return res;
 }
 
@@ -318,6 +305,76 @@ bool wxMaskedField::AddChoices(const wxArrayString& choices)
     return res;
 }
 
+wxString wxMaskedField::GetChoice(unsigned int index)
+{
+    wxString res;
+
+    if(index > m_choices.GetCount() || index < 0)
+        res = wxEmptyString;
+    else
+        res = m_choices[index];
+
+    return res;
+}
+
+unsigned int wxMaskedField::GetNumberOfChoices()
+{
+    return m_choices.GetCount();
+}
+
+wxString wxMaskedField::GetNextChoices()
+{
+    wxString res;
+
+    if(m_choices.GetCount() != 0)
+    {
+        if(m_choiceIndex < m_choices.GetCount() -1)
+            m_choiceIndex++;
+        else
+            m_choiceIndex = 0;
+
+        res = m_choices[m_choiceIndex];
+    }
+    else
+        res = wxEmptyString;
+
+    return res;
+}
+
+wxString wxMaskedField::GetCurrentChoices()
+{
+    wxString res;
+
+    if(m_choices.GetCount() != 0)
+    {
+        res = m_choices[m_choiceIndex];
+    }
+    else
+        res = wxEmptyString;
+
+    return res;
+}
+
+wxString wxMaskedField::GetPreviousChoices()
+{
+    wxString res;
+
+    if(m_choices.GetCount() != 0)
+    {
+        if(m_choiceIndex == 0)
+            m_choiceIndex = m_choices.GetCount() - 1;
+        else
+            m_choiceIndex--;
+
+        res = m_choices[m_choiceIndex];
+    }
+    else
+        res = wxEmptyString;
+
+    return res;
+}
+
+
 void wxMaskedField::SetMask(const wxString& mask)
 {
     m_mask = mask;
@@ -342,6 +399,7 @@ wxString wxMaskedField::GetMask() const
     return m_mask;
 }
 
+
 wxString wxMaskedField::GetFormatCodes() const
 {
     return m_formatCodes;
@@ -360,6 +418,22 @@ wxUniChar wxMaskedField::GetDecimalPoint() const
 wxString wxMaskedField::GetDefaultValue() const
 {
     return m_defaultValue;
+}
+
+
+bool wxMaskedField::SetDefaultValue(const wxString& defaultValue)
+{
+    bool res = true;
+    if(IsValid(defaultValue))
+    {
+        m_defaultValue = defaultValue;
+    }
+    else
+    {
+        res = false;
+    }
+
+    return res;
 }
 
 wxArrayString wxMaskedField::GetChoices() const
@@ -387,7 +461,7 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     
     if(!IsValid(string)||( string.Len() == 0 && m_mask.Len() !=0))
     {
-        res = wxEmptyString;
+        res = string;
     }
     else
     {

@@ -753,34 +753,59 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
         ChangeValue(m_maskCtrl->GetDefaultValue());
         SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
         Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
+        Bind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
     }
     else
     {
         if(m_maskCtrl != NULL)
             delete m_maskCtrl;
         Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
+        Unbind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
     }
 }
+
 
 void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
 
     unsigned int size = GetValue().Len();
     wxString formatString = m_maskCtrl->ApplyFormatCodes(GetValue());
-    printf("val: %s\n",(const char*)GetValue().mb_str(wxConvUTF8) );
-            
+    
     if(!m_maskCtrl->IsValid(formatString))
     {
-        printf("Invalid\n");
         SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
         Remove(size - 1, size);
     }
     else
     {
-        printf("Valid\n");
+        if(formatString.Cmp(GetValue()) != 0)
+            ChangeValue(formatString);
+
         SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
     }
 
+}
+
+void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
+{
+    if(event.GetKeyCode() == WXK_PAGEUP)
+    {
+        if(m_maskCtrl->GetNumberOfFields() == 1)
+        {
+            ChangeValue(m_maskCtrl->GetNextChoices()); 
+        }
+    }
+    else if(event.GetKeyCode()== WXK_PAGEDOWN)
+    {
+        if(m_maskCtrl->GetNumberOfFields() == 1)
+        {
+            ChangeValue(m_maskCtrl->GetPreviousChoices()); 
+        }
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -993,6 +1018,8 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 
     if ( ch )
     {
+
+        printf("Hello %c\n",ch);
         WriteText(ch);
 
         return true;

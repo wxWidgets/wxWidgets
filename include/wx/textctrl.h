@@ -735,6 +735,8 @@ protected:
     virtual wxWindow *GetEditableWindow() { return this; }
      //Mask event methods
     void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+
 
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);

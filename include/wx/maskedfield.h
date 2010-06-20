@@ -13,7 +13,7 @@
 #include "wx/defs.h"
 #include <stdlib.h>
 
-#define wxDEFAULT_FORMAT_CODES (wxT("F"))
+#define wxDEFAULT_FORMAT_CODES (wxT("F_"))
 #define wxDEFAULT_VALUE   (wxT(""))
 
 class WXDLLIMPEXP_BASE wxMaskedField
@@ -50,9 +50,15 @@ public:
 
     bool AddChoice(const wxString& choice);
 
-    bool AddChoices(const wxArrayString& choices); 
+    bool AddChoices(const wxArrayString& choices);
+
+    wxString GetChoice(unsigned int index);
+    
+    unsigned int GetNumberOfChoices();
 
     wxString GetDefaultValue() const; 
+
+    bool SetDefaultValue(const wxString& defaultValue);
 
     void SetMask(const wxString& mask);
 
@@ -66,6 +72,12 @@ public:
 
     wxArrayString GetChoices() const;
 
+    wxString GetNextChoices();
+    
+    wxString GetCurrentChoices();
+    
+    wxString GetPreviousChoices();
+
     bool IsParensForNegatives() const;
 
     bool IsAutoSelect() const;
@@ -73,6 +85,7 @@ public:
     wxString GetPlainValue(const wxString& string);
     
     bool IsCharValid(const wxChar maskChar, const wxChar character) const;
+
 
 private:
     // The mask in the field see wxMaskedEdit
@@ -86,6 +99,10 @@ private:
     
     // The default choices
     wxArrayString m_choices;
+
+    // The current user choice
+    unsigned int m_choiceIndex;
+   
     bool m_autoSelect;
     
     // The default groupchar if the field is a integer

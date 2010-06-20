@@ -73,13 +73,23 @@ public:
     wxString GetFormatCode() const;
 
     wxString GetDefaultValue() const;
+
+    bool SetDefaultValue(const wxString& defaultValue);
  
     wxArrayString GetChoices() const;
  
     bool AddChoice(wxString& choice);
  
-    bool AddChoices(const wxArrayString& choices);  
+    bool AddChoices(const wxArrayString& choices);
 
+    wxString GetChoice(unsigned int index);
+ 
+    wxString GetNextChoices() const;
+    
+    wxString GetCurrentChoices() const;
+    
+    wxString GetPreviousChoices() const;
+ 
     int GetNumberOfFields() const ;
     
     void SetEmptyBackgroundColour(const wxColour& colour);
@@ -103,10 +113,21 @@ public:
   
     wxArrayString GetChoices(unsigned int fieldIndex) const;        
  
+
     bool AddChoice(unsigned int fieldIndex, const wxString& choice);
 
     bool AddChoices(unsigned int fieldIndex, const wxArrayString& choices);  
+ 
+    wxString GetChoice(unsigned int fieldIndex, unsigned int index);
+ 
+    wxString GetNextChoices(unsigned int fieldIndex) const;
     
+    wxString GetCurrentChoices(unsigned int fieldIndex) const;
+    
+    wxString GetPreviousChoices(unsigned int fieldIndex) const;
+ 
+    unsigned int NumberOfChoices();
+   
 private:
     //mask caracteristics
     fieldsArray m_mask;
