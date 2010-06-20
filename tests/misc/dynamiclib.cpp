@@ -50,8 +50,12 @@ void DynamicLibraryTestCase::Load()
     static const wxChar *LIB_NAME = wxT("kernel32.dll");
     static const wxChar *FUNC_NAME = wxT("lstrlenA");
 #elif defined(__UNIX__)
+#ifdef __DARWIN__
+    static const wxChar *LIB_NAME = wxT("/usr/lib/libc.dylib");
+#else
     // weird: using just libc.so does *not* work!
     static const wxChar *LIB_NAME = wxT("/lib/libc.so.6");
+#endif
     static const wxChar *FUNC_NAME = wxT("strlen");
 #else
     #error "don't know how to test wxDllLoader on this platform"
