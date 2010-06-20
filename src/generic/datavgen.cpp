@@ -844,12 +844,12 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell),
-                                        wxDataViewModel *model,
-                                        const wxDataViewItem & item, unsigned int col)
+void wxDataViewToggleRenderer::WXOnActivate(wxDataViewModel *model,
+                                            const wxVariant& valueOld,
+                                            const wxDataViewItem & item,
+                                            unsigned int col)
 {
-    model->ChangeValue(!m_toggle, item, col);
-    return true;
+    model->ChangeValue(!valueOld.GetBool(), item, col);
 }
 
 wxSize wxDataViewToggleRenderer::GetSize() const
@@ -1005,24 +1005,23 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *model,
-                                    const wxDataViewItem & item, unsigned int col )
+void wxDataViewDateRenderer::WXOnActivate(wxDataViewModel *model,
+                                          const wxVariant& valueOld,
+                                          const wxDataViewItem & item,
+                                          unsigned int col )
 {
-    wxVariant variant;
-    model->GetValue( variant, item, col );
-    wxDateTime value = variant.GetDateTime();
+    wxDateTime dtOld = valueOld.GetDateTime();
 
 #if wxUSE_DATE_RENDERER_POPUP
     wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
-        GetOwner()->GetOwner()->GetParent(), &value, model, item, col);
+        GetOwner()->GetOwner()->GetParent(), &dtOld, model, item, col);
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
     popup->Layout();
     popup->Popup( popup->m_cal );
 #else // !wxUSE_DATE_RENDERER_POPUP
-    wxMessageBox(value.Format());
+    wxMessageBox(dtOld.Format());
 #endif // wxUSE_DATE_RENDERER_POPUP/!wxUSE_DATE_RENDERER_POPUP
-    return true;
 }
 
 // ---------------------------------------------------------
@@ -3585,14 +3584,20 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
+                const unsigned colIdx = col->GetModelColumn();
+
+                wxVariant value;
+                model->GetValue( value, item, colIdx );
+
+                cell->WXOnActivate(model, value, item, colIdx);
+
                 if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
                 {
-                    wxVariant value;
-                    model->GetValue( value, item, col->GetModelColumn() );
-                    custom->SetValue( value );
+                    cell->SetValue( value );
+
                     wxRect cell_rect( xpos, GetLineStart( current ),
                                     col->GetWidth(), GetLineHeight( current ) );
-                    custom->Activate( cell_rect, model, item, col->GetModelColumn() );
+                    custom->Activate( cell_rect, model, item, colIdx );
                 }
             }
             else
