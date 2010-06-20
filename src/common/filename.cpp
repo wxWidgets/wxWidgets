@@ -1191,7 +1191,7 @@ wxString wxFileName::GetTempDir()
             wxLogLastError(wxT("GetTempPath"));
         }
 #elif defined(__WXMAC__) && wxOSX_USE_CARBON
-        dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
+        dir = wxMacFindFolderNoSeparator(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
 #endif // systems with native way
     }
     else // we got directory from an environment variable
