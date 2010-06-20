@@ -51,10 +51,7 @@ public:
     virtual bool SetForegroundColour(const wxColour& col);
     virtual bool SetBackgroundColour(const wxColour& col);
 
-
-    void SetIndeterminateMode();
-    void SetDeterminateMode();
-    void Pulse();
+    virtual void Pulse();
 
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
@@ -63,6 +60,15 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+private:
+    // returns true if the control is currently in indeterminate (a.k.a.
+    // "marquee") mode
+    bool IsInIndeterminateMode() const;
+
+    // switch to/from indeterminate mode
+    void SetIndeterminateMode();
+    void SetDeterminateMode();
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge)
 };

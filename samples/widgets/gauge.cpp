@@ -389,6 +389,8 @@ void GaugeWidgetsPage::OnButtonIndeterminateProgress(wxCommandEvent& event)
     {
         StopTimer(b);
 
+        m_gauge->SetValue(0);
+
         wxLogMessage(wxT("Stopped the timer."));
     }
 }
