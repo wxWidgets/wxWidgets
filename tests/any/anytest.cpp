@@ -729,7 +729,7 @@ void wxAnyTestCase::Misc()
         }
 
         wxAny any2 = any;
-        CPPUNIT_ASSERT( any2.As<MyClass>().GetValue() == 15 );
+        CPPUNIT_ASSERT( wxANY_AS(any2, MyClass).GetValue() == 15 );
     }
 
     // Make sure allocations and deallocations match
