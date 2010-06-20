@@ -256,7 +256,7 @@ SOURCE=.\griddemo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\griddemo.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"
