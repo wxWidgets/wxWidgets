@@ -21,7 +21,7 @@ plist
         key "CFBundleSignature" value string __OUTPUT_CREATOR__
         key "CFBundleExecutable" value string __OUTPUT_FILENAME__
         key "CFBundleVersion" value string "1.0"
-        key "CFBundleIconFile" value string "mondrian"
+        key "CFBundleIconFile" value string "sample"
 
         key "CFBundleDevelopmentRegion" value string "English"
         key "CFBundleInfoDictionaryVersion" value string "6.0"

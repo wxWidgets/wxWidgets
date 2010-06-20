@@ -256,7 +256,7 @@ SOURCE=.\accesstest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\accesstest.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

@@ -252,11 +252,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\virtual.cpp
+SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\virtual.rc
+SOURCE=.\virtual.cpp
 # End Source File
 # End Group
 # End Target

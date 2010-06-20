@@ -256,7 +256,7 @@ SOURCE=.\help.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\help.rc
+SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

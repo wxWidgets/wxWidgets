@@ -32,12 +32,12 @@
 // we're using TCP/IP or real DDE.
 #include "ipcsetup.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-#include "mondrian.xpm"
-#endif
-
 #include "wx/datetime.h"
 #include "client.h"
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -97,7 +97,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
         : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300))
 {
     // Give it an icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

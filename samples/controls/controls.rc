@@ -1,4 +1,4 @@
-mondrian ICON "mondrian.ico"
+#include "../sample.rc"
 
 choice	BITMAP "icons/choice.bmp"
 combo	BITMAP "icons/combo.bmp"
@@ -6,5 +6,3 @@ gauge	BITMAP "icons/gauge.bmp"
 list	BITMAP "icons/list.bmp"
 radio	BITMAP "icons/radio.bmp"
 text	BITMAP "icons/text.bmp"
-
-#include "wx/msw/wx.rc"

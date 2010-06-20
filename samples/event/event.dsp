@@ -256,7 +256,7 @@ SOURCE=.\event.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\event.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

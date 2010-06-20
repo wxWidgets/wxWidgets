@@ -265,7 +265,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxChar *title,
          : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // set the icon
-    SetIcon(wxIcon(wxT("mondrian")));
+    SetIcon(wxICON(sample));
 
     // create the menu
     InitMenu();

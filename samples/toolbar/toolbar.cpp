@@ -61,7 +61,7 @@
 // ----------------------------------------------------------------------------
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #if USE_XPM_BITMAPS
@@ -543,7 +543,7 @@ MyFrame::MyFrame(wxFrame* parent,
 #endif
 
     // Give it an icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;

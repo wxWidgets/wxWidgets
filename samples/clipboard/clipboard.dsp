@@ -256,7 +256,7 @@ SOURCE=.\clipboard.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\clipboard.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

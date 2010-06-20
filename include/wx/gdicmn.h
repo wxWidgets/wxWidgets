@@ -160,12 +160,12 @@ enum wxStockCursor
 
 /* Useful macro for creating icons portably, for example:
 
-    wxIcon *icon = new wxICON(mondrian);
+    wxIcon *icon = new wxICON(sample);
 
   expands into:
 
-    wxIcon *icon = new wxIcon("mondrian");      // On wxMSW
-    wxIcon *icon = new wxIcon(mondrian_xpm);    // On wxGTK
+    wxIcon *icon = new wxIcon("sample");      // On wxMSW
+    wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK
  */
 
 #ifdef __WXMSW__

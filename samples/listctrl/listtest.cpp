@@ -21,7 +21,7 @@
 #endif
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #ifndef __WXMSW__
@@ -173,7 +173,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_numListItems = 10;
 
     // Give it an icon
-    SetIcon( wxICON(mondrian) );
+    SetIcon(wxICON(sample));
 
     // Make an image list containing large icons
     m_imageListNormal = new wxImageList(32, 32, true);

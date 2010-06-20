@@ -109,7 +109,7 @@ MyFrame::MyFrame(wxWindow* parent)
     wxXmlResource::Get()->LoadFrame(this, parent, wxT("main_frame"));
 
     // Set the icon for the frame.
-    SetIcon(wxICON(appicon));
+    SetIcon(wxICON(sample));
 
     // Load the menubar from XRC and set this frame's menubar to it.
     SetMenuBar(wxXmlResource::Get()->LoadMenuBar(wxT("main_menu")));

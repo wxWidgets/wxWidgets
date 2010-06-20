@@ -33,12 +33,7 @@
 #endif // __WXMSW__
 #endif // wxUSE_TOOLTIPS
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #define USE_XPM
-#endif
-
-#ifdef USE_XPM
-    #include "mondrian.xpm"
+#ifndef __WXMSW__
     #include "icons/choice.xpm"
     #include "icons/combo.xpm"
     #include "icons/list.xpm"
@@ -60,6 +55,10 @@
 #if !wxUSE_TOGGLEBTN
     #define wxToggleButton wxCheckBox
     #define EVT_TOGGLEBUTTON EVT_CHECKBOX
+#endif
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 //----------------------------------------------------------------------
@@ -662,7 +661,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
         wxT("examples.")
     };
 
-#ifdef USE_XPM
+#ifndef __WXMSW__
     // image ids
     enum
     {
@@ -691,7 +690,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     imagelist-> Add( wxBitmap( gauge_xpm ));
 #endif // wxUSE_GAUGE
     m_book->SetImageList(imagelist);
-#elif defined(__WXMSW__)
+#else
     // load images from resources
     enum
     {
@@ -730,19 +729,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     }
 
     m_book->SetImageList(imagelist);
-#else
-
-    // No images for now
-#define    Image_List -1
-#define    Image_Choice -1
-#define    Image_Combo -1
-#define    Image_Text -1
-#define    Image_Radio -1
-#if wxUSE_GAUGE
-#define    Image_Gauge -1
-#endif // wxUSE_GAUGE
-#define    Image_Max -1
-
 #endif
 
     wxPanel *panel = new wxPanel(m_book);
@@ -1800,9 +1786,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
     // The wxICON() macros loads an icon from a resource under Windows
     // and uses an #included XPM image under GTK+ and Motif
 
-#ifdef USE_XPM
-    SetIcon( wxICON(mondrian) );
-#endif
+    SetIcon( wxICON(sample) );
 
     wxMenu *file_menu = new wxMenu;
 

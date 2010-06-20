@@ -36,9 +36,9 @@
 
 #include "dragimag.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-#include "mondrian.xpm"
-#include "dragicon.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+    #include "dragicon.xpm"
 #endif
 
 // main program
@@ -327,7 +327,7 @@ MyFrame::MyFrame()
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append(file_menu, wxT("&File"));
 
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
     SetMenuBar( menu_bar );
 
 #if wxUSE_STATUSBAR

@@ -496,7 +496,7 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
 {
-    SetIcon(sample_xpm);
+    SetIcon(wxICON(sample));
 
 #if USE_MODAL_PRESENTATION
     m_dialog = (MyModelessDialog *)NULL;

@@ -51,8 +51,8 @@
 
 #include "printing.h"
 
-#ifndef __WXMSW__
-    #include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 // Global print data, to remember settings during the session
@@ -212,7 +212,7 @@ void MyApp::Draw(wxDC&dc)
     str.Printf( wxT("---- Text at angle %d ----"), i );
     dc.DrawRotatedText( str, 100, 300, i );
 
-    wxIcon my_icon = wxICON(mondrian);
+    wxIcon my_icon = wxICON(sample);
 
     dc.DrawIcon( my_icon, 100, 100);
 
@@ -303,7 +303,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
 #endif // wxUSE_STATUSBAR
 
     // Load icon and bitmap
-    SetIcon( wxICON( mondrian) );
+    SetIcon( wxICON( sample) );
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

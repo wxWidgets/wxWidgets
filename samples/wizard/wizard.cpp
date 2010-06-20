@@ -389,7 +389,7 @@ MyWizard::MyWizard(wxFrame *frame, bool useSizer)
     Create(frame,wxID_ANY,wxT("Absolutely Useless Wizard"),
                    wxBitmap(wiztest_xpm),wxDefaultPosition,
                    wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
-    SetIcon(wxIcon(sample_xpm));
+    SetIcon(wxICON(sample));
 
     // Allow the bitmap to be expanded to fit the page height
     if (frame->GetMenuBar()->IsChecked(Wizard_ExpandBitmap))

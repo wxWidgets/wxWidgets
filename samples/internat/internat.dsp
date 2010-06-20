@@ -256,7 +256,7 @@ SOURCE=.\internat.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\internat.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

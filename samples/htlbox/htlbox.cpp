@@ -241,7 +241,7 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(500, 500))
 {
     // set the frame icon
-    SetIcon(wxIcon(sample_xpm));
+    SetIcon(wxICON(sample));
 
 #if wxUSE_MENUS
     // create a menu bar
