@@ -1076,10 +1076,14 @@ void wxWindowMSW::SetScrollbar(int orient,
         info.nMax = range - 1;      //  as both nMax and nMax are inclusive
         info.nPos = pos;
 
-        // enable the scrollbar if it had been disabled before by specifying
-        // SIF_DISABLENOSCROLL below: as we can't know whether this had been
-        // done or not just do it always
-        ::EnableScrollBar(hwnd, WXOrientToSB(orient), ESB_ENABLE_BOTH);
+        // We normally also reenable scrollbar in case it had been previously
+        // disabled by specifying SIF_DISABLENOSCROLL below but we should only
+        // do this if it has valid range, otherwise it would be enabled but not
+        // do anything.
+        if ( range >= pageSize )
+        {
+            ::EnableScrollBar(hwnd, WXOrientToSB(orient), ESB_ENABLE_BOTH);
+        }
     }
     //else: leave all the fields to be 0
 
