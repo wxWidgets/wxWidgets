@@ -14,6 +14,18 @@
     used to optimize behaviour that doesn't deserve a distinct API,
     but is still important to be able to configure.
 
+    System options can be set by the program itself using SetOption() method
+    and they also can be set from the program environment by defining an
+    environment variable @c wx_option to set the given option for all wxWidgets
+    applications or @c wx_appname_option to set it just for the application
+    with the given name (as returned by wxApp::GetAppName()). Notice that any
+    characters not allowed in the environment variables names, such as periods
+    and dashes, should be replaced with underscores. E.g. to define a system
+    option "foo-bar" you need to define the environment variable "wx_foo_bar".
+
+    The program may use system options for its own needs but they are mostly
+    used to control the behaviour of wxWidgets library itself.
+
     These options are currently recognised by wxWidgets:
 
 
