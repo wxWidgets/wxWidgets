@@ -27,6 +27,9 @@ public:
 
     // Mouse related
     bool MouseMove(long x, long y);
+    bool MouseMove(wxPoint point)
+            { return MouseMove(point.x, point.y); }
+
     bool MouseDown(int button = wxMOUSE_BTN_LEFT);
     bool MouseUp(int button = wxMOUSE_BTN_LEFT);
     bool MouseClick(int button = wxMOUSE_BTN_LEFT);

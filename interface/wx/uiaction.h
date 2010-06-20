@@ -50,6 +50,14 @@ class wxUIActionSimulator
     bool MouseMove(long x, long y);
 
     /**
+        Move the mouse to the specified coordinates.
+
+        @param point
+            Point to move to, in screen coordinates.
+    */
+    bool MouseMove(wxPoint point);
+
+    /**
         Press a mouse button.
 
         @param button
