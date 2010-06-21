@@ -19,6 +19,7 @@
 
 #include "wx/dir.h"
 #include "wx/filename.h"
+#include "wx/stdpaths.h"
 
 #define DIRTEST_FOLDER      wxString("dirTest_folder")
 #define SEP                 wxFileName::GetPathSeparator()
@@ -79,7 +80,7 @@ void DirTestCase::setUp()
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-
+    
     CreateTempFile(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     CreateTempFile(DIRTEST_FOLDER + SEP + "dummy");
 }
@@ -172,42 +173,45 @@ void DirTestCase::DirExists()
     {
         const char *dirname;
         bool shouldExist;
-    } testData[] =
+    } testData[] = 
     {
         { ".", true },
         { "..", true },
+        { "$USER_DOCS_DIR", true },
 #if defined(__WXMSW__)
+        { "$USER_DOCS_DIR\\", true },
+        { "$USER_DOCS_DIR\\\\", true },
         { "..\\..", true },
-        { "..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..", true },
         { "c:", true },
         { "c:\\", true },
         { "c:\\\\", true },
-        { "\\\\share\\file", false },
+        { "\\\\non_existent_share\\file", false },
         { "c:\\a\\directory\\which\\does\\not\\exist", false },
         { "c:\\a\\directory\\which\\does\\not\\exist\\", false },
         { "c:\\a\\directory\\which\\does\\not\\exist\\\\", false },
-        { "test.exe", false }       // not a directory!
+        { "test.exe", false }            // not a directory!
 #elif defined(__UNIX__)
         { "../..", true },
-        { "../../../../../../../../../../../../../../../../../../../..", true },
         { "/", true },
         { "//", true },
         { "/usr/bin", true },
-        { "/usr//bin", false },
-        { "/usr///bin", false }
+        { "/usr//bin", true },
+        { "/usr///bin", true },
+        { "/tmp/a/directory/which/does/not/exist", false },
+        { "/bin/ls", false }             // not a directory!
 #endif
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
     {
-        wxString errDesc = wxString::Format("failed on directory '%s'", testData[n].dirname);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc.ToStdString(), testData[n].shouldExist, wxDir::Exists(testData[n].dirname));
+        wxString dirname = testData[n].dirname;
+        dirname.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+        
+        std::string errDesc = wxString::Format("failed on directory '%s'", dirname).ToStdString();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(errDesc, testData[n].shouldExist, wxDir::Exists(dirname));
 
-        if (!testData[n].shouldExist)
-        {
-            wxDir d(testData[n].dirname);
-            CPPUNIT_ASSERT(!d.IsOpened());
-        }
+        wxDir d(dirname);
+        CPPUNIT_ASSERT_EQUAL(testData[n].shouldExist, d.IsOpened());
     }
 
     CPPUNIT_ASSERT( wxDir::Exists(wxGetCwd()) );
