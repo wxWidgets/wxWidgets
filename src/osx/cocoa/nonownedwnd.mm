@@ -13,6 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
     #include "wx/frame.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/osx/private.h"
