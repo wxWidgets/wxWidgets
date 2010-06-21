@@ -328,4 +328,8 @@ void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
     m_qtPainter.resetTransform();
 }
 
-
+void wxQtDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y) {
+    QTransform t;
+    t.translate(x,y);
+    m_qtPainter.setTransform(t);
+}
