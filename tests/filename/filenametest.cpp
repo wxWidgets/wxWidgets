@@ -586,36 +586,46 @@ void FileNameTestCase::TestCreateTempFileName()
     {
         const char *prefix;
         const char *expectedFolder;
-        bool shouldFail;
+        bool shouldSucceed;
     } testData[] =
     {
-        { "", "$SYSTEM_TEMP", false },
-        { "foo", "$SYSTEM_TEMP", false },
-        { "..", "$SYSTEM_TEMP", false },
-        { "../bar", "..", false },
+        { "", "$SYSTEM_TEMP", true },
+        { "foo", "$SYSTEM_TEMP", true },
+        { "..", "$SYSTEM_TEMP", true },
+        { "../bar", "..", true },
 #ifdef __WXMSW__
-        { "c:\\a\\place\\which\\does\\not\\exist", "", true },
+        { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
+        { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
 #else if defined( __UNIX__ )
-        { "/tmp/foo", "/tmp", false },
-        { "/tmp/foo/bar", "", true },
+        { "$USER_DOCS_DIR/", "$USER_DOCS_DIR", true },
+        { "/tmp/foo", "/tmp", true },
+        { "/tmp/a/directory/which/does/not/exist", "", false },
 #endif // __UNIX__
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testData); n++ )
     {
-        wxString path = wxFileName::CreateTempFileName(testData[n].prefix);
-        CPPUNIT_ASSERT_EQUAL( path.empty(), testData[n].shouldFail );
+        wxString prefix = testData[n].prefix;
+        prefix.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
 
-        if (!testData[n].shouldFail)
+        std::string errDesc = wxString::Format("failed on prefix '%s'", prefix).ToStdString();
+
+        wxString path = wxFileName::CreateTempFileName(prefix);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, !testData[n].shouldSucceed, path.empty() );
+
+        if (testData[n].shouldSucceed)
         {
+            errDesc += "; path is " + path.ToStdString();
+        
             // test the place where the temp file has been created
             wxString expected = testData[n].expectedFolder;
             expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
-            CPPUNIT_ASSERT_EQUAL(expected, wxFileName(path).GetPath());
+            expected.Replace("$USER_DOCS_DIR", wxStandardPaths::Get().GetDocumentsDir());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( errDesc, expected, wxFileName(path).GetPath() );
 
             // the temporary file is created with full permissions for the current process
             // so we should always be able to remove it:
-            CPPUNIT_ASSERT( wxRemoveFile(path) );
+            CPPUNIT_ASSERT_MESSAGE( errDesc, wxRemoveFile(path) );
         }
     }
 }
