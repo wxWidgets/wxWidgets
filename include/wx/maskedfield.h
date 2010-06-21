@@ -86,6 +86,7 @@ public:
     
     bool IsCharValid(const wxChar maskChar, const wxChar character) const;
 
+    wxString GetLockedMask();
 
 private:
     // The mask in the field see wxMaskedEdit

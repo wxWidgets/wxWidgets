@@ -769,16 +769,31 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
 
     unsigned int size = GetValue().Len();
-    wxString formatString = m_maskCtrl->ApplyFormatCodes(GetValue());
-    
+    wxString string = GetValue();
+
+    wxString formatString = m_maskCtrl->ApplyFormatCodes(string.SubString(0, GetInsertionPoint()));
+    wxString lockedMask;
+
     if(!m_maskCtrl->IsValid(formatString))
     {
+        printf("Invalid\n");
         SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
         Remove(size - 1, size);
     }
     else
     {
-        if(formatString.Cmp(GetValue()) != 0)
+        printf("Valid: %d\n",GetInsertionPoint() );
+        lockedMask = m_maskCtrl->GetLockedMask();
+       
+        if(lockedMask.Len() > formatString.Len() 
+           && lockedMask[formatString.Len()] != ' ')
+        {
+            printf("Add locked char\n");
+            formatString << lockedMask[formatString.Len()];
+            SetInsertionPoint(GetInsertionPoint() + 1);
+        }
+
+        if(formatString.Cmp(string.SubString(0, GetInsertionPoint())) != 0)
             ChangeValue(formatString);
 
         SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
@@ -788,23 +803,56 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 
 void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 {
-    if(event.GetKeyCode() == WXK_PAGEUP)
+    int keycode = event.GetKeyCode();
+    unsigned int cursor = GetInsertionPoint();
+    printf("keycode: %d\ncursor: %d\n", keycode, cursor);
+
+    switch(keycode)
     {
-        if(m_maskCtrl->GetNumberOfFields() == 1)
-        {
-            ChangeValue(m_maskCtrl->GetNextChoices()); 
-        }
-    }
-    else if(event.GetKeyCode()== WXK_PAGEDOWN)
-    {
-        if(m_maskCtrl->GetNumberOfFields() == 1)
-        {
-            ChangeValue(m_maskCtrl->GetPreviousChoices()); 
-        }
-    }
-    else
-    {
-        event.Skip();
+        case(WXK_PAGEUP):
+            if(m_maskCtrl->GetNumberOfFields() == 1 
+            && m_maskCtrl->NumberOfChoices() != 0)
+            {
+            printf("PAGE UP\n");
+                ChangeValue(m_maskCtrl->GetNextChoices()); 
+            }
+        break;
+        case(WXK_PAGEDOWN):
+            if(m_maskCtrl->GetNumberOfFields() == 1
+            && m_maskCtrl->NumberOfChoices() != 0)
+            {
+            printf("PAGE DOWN\n");
+                ChangeValue(m_maskCtrl->GetPreviousChoices()); 
+            }
+        break;
+        case(WXK_DELETE):
+            if(cursor < GetValue().Len())
+            {
+                Replace(cursor, cursor, wxT(" "));
+            }
+
+            printf("DELETE\n");
+        break;
+        case(WXK_BACK):
+            printf("BACK\n");
+            if(cursor > 0)
+            {
+                SetInsertionPoint(cursor - 1);
+                Replace(cursor, cursor, wxT(" "));
+            }
+        break;
+        default:
+            if(keycode < 256 && keycode >= 0 && wxIsprint(keycode))
+            {
+                if ( !event.ShiftDown() )
+                {
+                    keycode = wxTolower(keycode);
+                }
+                Replace(cursor, cursor, wxString((wxChar)keycode));
+                cursor++;
+                SetInsertionPoint(cursor);
+          }
+        break;
     }
 }
 

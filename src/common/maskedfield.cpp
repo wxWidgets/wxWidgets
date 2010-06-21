@@ -490,3 +490,32 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     }
     return res;
 }
+
+wxString wxMaskedField::GetLockedMask()
+{
+    wxString res = wxEmptyString;
+    unsigned int it;
+    
+
+    for(it = 0; it < m_mask.Len(); it++)
+    {
+
+        if(m_mask[it] != 'C' && m_mask[it] != 'A' 
+        && m_mask[it] != 'a' && m_mask[it] != 'X' 
+        && m_mask[it] != '&' && m_mask[it] != '*' 
+        && m_mask[it] != 'N' && m_mask[it] != '#')
+        {
+            if(m_mask[it] == '\\' && it + 1 != m_mask.Len())
+            {
+                it++;
+            }
+            
+            res << m_mask[it]; 
+        }
+        else
+        {
+            res << ' ';
+        }
+    }
+    return res;
+}

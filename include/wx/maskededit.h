@@ -127,6 +127,8 @@ public:
     wxString GetPreviousChoices(unsigned int fieldIndex) const;
  
     unsigned int NumberOfChoices();
+
+    wxString GetLockedMask();
    
 private:
     //mask caracteristics
