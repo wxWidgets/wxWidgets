@@ -165,9 +165,9 @@ protected:
 #endif
     virtual wxWindow *GetEditableWindow() { return this; }
 
-#if wxOSX_USE_CARBON
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
+#if wxOSX_USE_CARBON
     virtual void DoMoveWindow(int x, int y, int width, int height);
 #endif
 
