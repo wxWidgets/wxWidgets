@@ -713,6 +713,9 @@
 				RelativePath=".\hashes\hashes.cpp">
 			</File>
 			<File
+				RelativePath=".\interactive\input.cpp">
+			</File>
+			<File
 				RelativePath=".\intl\intltest.cpp">
 			</File>
 			<File
@@ -753,6 +756,9 @@
 			</File>
 			<File
 				RelativePath=".\misc\module.cpp">
+			</File>
+			<File
+				RelativePath=".\interactive\output.cpp">
 			</File>
 			<File
 				RelativePath=".\misc\pathlist.cpp">

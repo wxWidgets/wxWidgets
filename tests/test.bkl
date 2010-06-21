@@ -54,6 +54,8 @@
             formatconverter/formatconvertertest.cpp
             fswatcher/fswatchertest.cpp
             hashes/hashes.cpp
+            interactive/output.cpp
+            interactive/input.cpp
             intl/intltest.cpp
             lists/lists.cpp
             log/logtest.cpp

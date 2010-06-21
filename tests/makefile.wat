@@ -293,6 +293,8 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_fswatchertest.obj &
 	$(OBJS)\test_hashes.obj &
+	$(OBJS)\test_output.obj &
+	$(OBJS)\test_input.obj &
 	$(OBJS)\test_intltest.obj &
 	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_logtest.obj &
@@ -519,6 +521,12 @@ $(OBJS)\test_fswatchertest.obj :  .AUTODEPEND .\fswatcher\fswatchertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_output.obj :  .AUTODEPEND .\interactive\output.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_input.obj :  .AUTODEPEND .\interactive\input.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_intltest.obj :  .AUTODEPEND .\intl\intltest.cpp

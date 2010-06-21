@@ -63,6 +63,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_fswatchertest.obj \
 	$(OBJS)\test_hashes.obj \
+	$(OBJS)\test_output.obj \
+	$(OBJS)\test_input.obj \
 	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_logtest.obj \
@@ -482,6 +484,12 @@ $(OBJS)\test_fswatchertest.obj: .\fswatcher\fswatchertest.cpp
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\hashes\hashes.cpp
+
+$(OBJS)\test_output.obj: .\interactive\output.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\interactive\output.cpp
+
+$(OBJS)\test_input.obj: .\interactive\input.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\interactive\input.cpp
 
 $(OBJS)\test_intltest.obj: .\intl\intltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\intl\intltest.cpp

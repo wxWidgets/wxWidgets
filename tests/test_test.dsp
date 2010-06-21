@@ -369,6 +369,10 @@ SOURCE=.\hashes\hashes.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\interactive\input.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\intl\intltest.cpp
 # End Source File
 # Begin Source File
@@ -422,6 +426,10 @@ SOURCE=.\misc\misctests.cpp
 # Begin Source File
 
 SOURCE=.\misc\module.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\interactive\output.cpp
 # End Source File
 # Begin Source File
 

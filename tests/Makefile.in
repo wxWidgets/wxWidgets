@@ -79,6 +79,8 @@ TEST_OBJECTS =  \
 	test_formatconvertertest.o \
 	test_fswatchertest.o \
 	test_hashes.o \
+	test_output.o \
+	test_input.o \
 	test_intltest.o \
 	test_lists.o \
 	test_logtest.o \
@@ -440,6 +442,12 @@ test_fswatchertest.o: $(srcdir)/fswatcher/fswatchertest.cpp $(TEST_ODEP)
 
 test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/hashes/hashes.cpp
+
+test_output.o: $(srcdir)/interactive/output.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/interactive/output.cpp
+
+test_input.o: $(srcdir)/interactive/input.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/interactive/input.cpp
 
 test_intltest.o: $(srcdir)/intl/intltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/intl/intltest.cpp
