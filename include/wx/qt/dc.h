@@ -98,7 +98,7 @@ public:
     virtual void DoDrawPolygon(int n, wxPoint points[],
                            wxCoord xoffset, wxCoord yoffset,
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
-
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
 protected:
     QPainter m_qtPainter;
     void PrepareQPainter();
