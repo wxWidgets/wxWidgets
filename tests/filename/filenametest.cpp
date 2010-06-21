@@ -596,7 +596,7 @@ void FileNameTestCase::TestCreateTempFileName()
 #ifdef __WXMSW__
         { "$USER_DOCS_DIR\\", "$USER_DOCS_DIR", true },
         { "c:\\a\\directory\\which\\does\\not\\exist", "", false },
-#else if defined( __UNIX__ )
+#elif defined( __UNIX__ )
         { "$USER_DOCS_DIR/", "$USER_DOCS_DIR", true },
         { "/tmp/foo", "/tmp", true },
         { "/tmp/a/directory/which/does/not/exist", "", false },

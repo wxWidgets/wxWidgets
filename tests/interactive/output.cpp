@@ -21,6 +21,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/app.h"
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
@@ -381,7 +383,6 @@ void InteractiveOutputTestCase::TestStackWalk()
 // standard paths
 // ----------------------------------------------------------------------------
 
-
 #include "wx/stdpaths.h"
 #include "wx/wxchar.h"      // wxPrintf
 
@@ -425,8 +426,9 @@ void InteractiveOutputTestCase::TestStandardPaths()
     #undef TEST_VOLUME
 #endif
 
-#include "wx/volume.h"
+#ifdef TEST_VOLUME
 
+#include "wx/volume.h"
 static const wxChar *volumeKinds[] =
 {
     wxT("floppy"),
@@ -436,6 +438,8 @@ static const wxChar *volumeKinds[] =
     wxT("network volume"),
     wxT("other volume"),
 };
+
+#endif
 
 void InteractiveOutputTestCase::TestFSVolume()
 {
