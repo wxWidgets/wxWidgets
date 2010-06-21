@@ -135,6 +135,7 @@ public :
     // accessing content
 
     virtual unsigned int    ListGetCount() const ;
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const;
 
     int                     ListGetColumnType( int col )
     {
@@ -145,6 +146,7 @@ public :
 
     virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
 
+    
 protected :
     wxNSTableView*          m_tableView ;
 
@@ -559,108 +561,14 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     return c;
 }
 
-int wxListBox::DoListHitTest(const wxPoint& WXUNUSED(inpoint)) const
+int wxListWidgetCocoaImpl::DoListHitTest(const wxPoint& inpoint) const
 {
-#if wxOSX_USE_CARBON
-    OSStatus err;
-
-    // There are few reasons why this is complicated:
-    // 1) There is no native HitTest function for Mac
-    // 2) GetDataBrowserItemPartBounds only works on visible items
-    // 3) We can't do it through GetDataBrowserTableView[Item]RowHeight
-    //    because what it returns is basically inaccurate in the context
-    //    of the coordinates we want here, but we use this as a guess
-    //    for where the first visible item lies
-
-    wxPoint point = inpoint;
-
-    // get column property ID (req. for call to itempartbounds)
-    DataBrowserTableViewColumnID colId = 0;
-    err = GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
-    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewColumnProperty"));
-
-    // OK, first we need to find the first visible item we have -
-    // this will be the "low" for our binary search. There is no real
-    // easy way around this, as we will need to do a SLOW linear search
-    // until we find a visible item, but we can do a cheap calculation
-    // via the row height to speed things up a bit
-    UInt32 scrollx, scrolly;
-    err = GetDataBrowserScrollPosition(m_peer->GetControlRef(), &scrollx, &scrolly);
-    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserScrollPosition"));
-
-    UInt16 height;
-    err = GetDataBrowserTableViewRowHeight(m_peer->GetControlRef(), &height);
-    wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewRowHeight"));
-
-    // these indices are 0-based, as usual, so we need to add 1 to them when
-    // passing them to data browser functions which use 1-based indices
-    int low = scrolly / height,
-        high = GetCount() - 1;
-
-    // search for the first visible item (note that the scroll guess above
-    // is the low bounds of where the item might lie so we only use that as a
-    // starting point - we should reach it within 1 or 2 iterations of the loop)
-    while ( low <= high )
-    {
-        Rect bounds;
-        err = GetDataBrowserItemPartBounds(
-            m_peer->GetControlRef(), low + 1, colId,
-            kDataBrowserPropertyEnclosingPart,
-            &bounds); // note +1 to translate to Mac ID
-        if ( err == noErr )
-            break;
-
-        // errDataBrowserItemNotFound is expected as it simply means that the
-        // item is not currently visible -- but other errors are not
-        wxCHECK_MSG( err == errDataBrowserItemNotFound, wxNOT_FOUND,
-                     wxT("Unexpected error from GetDataBrowserItemPartBounds") );
-
-        low++;
-    }
-
-    // NOW do a binary search for where the item lies, searching low again if
-    // we hit an item that isn't visible
-    while ( low <= high )
-    {
-        int mid = (low + high) / 2;
-
-        Rect bounds;
-        err = GetDataBrowserItemPartBounds(
-            m_peer->GetControlRef(), mid + 1, colId,
-            kDataBrowserPropertyEnclosingPart,
-            &bounds); //note +1 to trans to mac id
-        wxCHECK_MSG( err == noErr || err == errDataBrowserItemNotFound,
-                     wxNOT_FOUND,
-                     wxT("Unexpected error from GetDataBrowserItemPartBounds") );
-
-        if ( err == errDataBrowserItemNotFound )
-        {
-            // item not visible, attempt to find a visible one
-            // search lower
-            high = mid - 1;
-        }
-        else // visible item, do actual hitttest
-        {
-            // if point is within the bounds, return this item (since we assume
-            // all x coords of items are equal we only test the x coord in
-            // equality)
-            if ((point.x >= bounds.left && point.x <= bounds.right) &&
-                (point.y >= bounds.top && point.y <= bounds.bottom) )
-            {
-                // found!
-                return mid;
-            }
-
-            if ( point.y < bounds.top )
-                // index(bounds) greater then key(point)
-                high = mid - 1;
-            else
-                // index(bounds) less then key(point)
-                low = mid + 1;
-        }
-    }
-#endif
-    return wxNOT_FOUND;
+    // translate inpoint to listpoint via scrollview
+    NSPoint p = wxToNSPoint( m_osxView, inpoint );
+    p = [m_osxView convertPoint:p toView:m_tableView];
+    // hittest using new point
+    NSInteger i = [m_tableView rowAtPoint:p];
+    return i;
 }
 
 #endif // wxUSE_LISTBOX

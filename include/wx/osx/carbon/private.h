@@ -896,6 +896,7 @@ public:
     // accessing content
 
     virtual unsigned int    ListGetCount() const;
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const;
 
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL );
     virtual void            UpdateLineToEnd( unsigned int n) ;

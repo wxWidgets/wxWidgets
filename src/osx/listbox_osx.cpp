@@ -207,6 +207,11 @@ int wxListBox::GetSelection() const
     return GetListPeer()->ListGetSelection();
 }
 
+int wxListBox::DoListHitTest(const wxPoint& inpoint) const
+{
+    return GetListPeer()->DoListHitTest( inpoint );
+}
+
 // ----------------------------------------------------------------------------
 // display
 // ----------------------------------------------------------------------------
