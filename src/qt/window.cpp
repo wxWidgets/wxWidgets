@@ -112,6 +112,10 @@ void wxWindow::WarpPointer(int x, int y)
     GetHandle()->move( x, y );
 }
 
+void wxWindow::Update()
+{
+    GetHandle()->update();
+}
 
 void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {

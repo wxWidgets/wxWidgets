@@ -46,6 +46,7 @@ public:
     // move the mouse to the specified position
     virtual void WarpPointer(int x, int y);
 
+    virtual void Update();
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
