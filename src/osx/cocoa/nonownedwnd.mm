@@ -134,7 +134,18 @@ bool shouldHandleSelector(SEL selector)
 - (void)sendEvent:(NSEvent *) event
 {
     if ( ![self WX_filterSendEvent: event] )
+    {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(event, NULL);
+
         [super sendEvent: event];
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
+    }
 }
 
 // The default implementation always moves the window back onto the screen,

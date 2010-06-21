@@ -118,10 +118,16 @@ bool wxGUIEventLoop::Dispatch()
                 inMode:NSDefaultRunLoopMode
                 dequeue: YES])
     {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
         if (wxTheApp)
             wxTheApp->MacSetCurrentEvent(event, NULL);
         m_sleepTime = 0.0;
         [NSApp sendEvent: event];
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
     }
     else
     {
