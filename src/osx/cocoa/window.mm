@@ -16,6 +16,7 @@
     #include "wx/frame.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
+    #include "wx/combobox.h"
 #endif
 
 #ifdef __WXMAC__
@@ -1157,10 +1158,17 @@ void wxWidgetCocoaImpl::controlTextDidChange()
     wxWindow* wxpeer = (wxWindow*)GetWXPeer();
     if ( wxpeer ) 
     {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-        event.SetEventObject( wxpeer );
-        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-        wxpeer->HandleWindowEvent( event );
+        // since native rtti doesn't have to be enabled and wx' rtti is not aware of the mixin wxTextEntry, workaround is needed
+        wxTextCtrl *tc = wxDynamicCast( wxpeer , wxTextCtrl );
+        wxComboBox *cb = wxDynamicCast( wxpeer , wxComboBox );
+        if ( tc )
+            tc->SendTextUpdatedEventIfAllowed();
+        else if ( cb )
+            cb->SendTextUpdatedEventIfAllowed();
+        else 
+        {
+            wxFAIL_MSG("Unexpected class for controlTextDidChange event");
+        }
     }
 }
 
