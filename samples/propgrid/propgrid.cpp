@@ -3047,8 +3047,8 @@ void FormMain::OnCatColours( wxCommandEvent& event )
 
 void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
 {
-    int style;
-    int extraStyle;
+    int style = 0;
+    int extraStyle = 0;
 
     {
         wxArrayString chs;
