@@ -9,13 +9,12 @@
 #include "wx/qt/window_qt.h"
 
 wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
-: QWidget( parent )
+: WindowEventForwarder< QWidget >( parent )
 {
     m_wxWindow = window;
 }
 
-void wxQtWidget::paintEvent ( QPaintEvent * event )
+wxWindow *wxQtWidget::GetEventReceiver()
 {
-    wxPaintEvent e;
-    m_wxWindow->ProcessWindowEvent(e);
+    return m_wxWindow;
 }

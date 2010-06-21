@@ -13,6 +13,7 @@
 #define _WX_QT_FRAME_H_
 
 #include "wx/frame.h"
+#include "wx/qt/winevent_qt.h"
 
 #include <QtCore/QPointer>
 #include <QtGui/QMainWindow>
@@ -48,7 +49,7 @@ private:
 
 
 
-class WXDLLIMPEXP_CORE wxQtFrame : public QMainWindow
+class WXDLLIMPEXP_CORE wxQtFrame : public WindowEventForwarder< QMainWindow >
 {
     Q_OBJECT
 
@@ -56,7 +57,7 @@ public:
     wxQtFrame( wxFrame *frame, QWidget *parent );
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * event );
+    virtual wxWindow *GetEventReceiver();
     
 private Q_SLOTS:
 

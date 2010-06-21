@@ -60,14 +60,13 @@ QWidget *wxFrame::GetContainer() const
 //=============================================================================
 
 wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
-    : QMainWindow( parent )
+    : WindowEventForwarder< QMainWindow >( parent )
 {
     m_frame = frame;
     setCentralWidget(new QWidget());
 }
 
-void wxQtFrame::resizeEvent ( QResizeEvent * event )
+wxWindow *wxQtFrame::GetEventReceiver()
 {
-    wxSizeEvent e(wxQtConvertSize(event->size()));
-    m_frame->ProcessWindowEvent(e);
+    return m_frame;
 }

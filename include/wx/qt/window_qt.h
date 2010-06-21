@@ -11,8 +11,9 @@
 
 #include "wx/window.h"
 #include <QtGui/QWidget>
+#include "wx/qt/winevent_qt.h"
 
-class WXDLLIMPEXP_CORE wxQtWidget : public QWidget
+class WXDLLIMPEXP_CORE wxQtWidget : public WindowEventForwarder< QWidget >
 {
     Q_OBJECT
 
@@ -20,7 +21,7 @@ class WXDLLIMPEXP_CORE wxQtWidget : public QWidget
         wxQtWidget( wxWindow *window, QWidget *parent );
         
     protected:
-        virtual void paintEvent ( QPaintEvent * event );
+        virtual wxWindow *GetEventReceiver();
 
     private:
         wxWindow *m_wxWindow;

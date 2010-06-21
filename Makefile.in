@@ -2634,7 +2634,8 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/toplevel.h \
 	wx/qt/treectrl.h \
 	wx/qt/window.h \
-	wx/qt/window_qt.h
+	wx/qt/window_qt.h \
+	wx/qt/winevent_qt.h
 @COND_TOOLKIT_QT@LOWLEVEL_HDR = $(COND_TOOLKIT_QT_LOWLEVEL_HDR)
 COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
 	wx/msw/ole/activex.h \

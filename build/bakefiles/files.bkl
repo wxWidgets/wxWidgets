@@ -396,6 +396,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/treectrl.h
     wx/qt/window.h
     wx/qt/window_qt.h
+    wx/qt/winevent_qt.h
 </set>
 
 <set var="QT_LOWLEVEL_SRC" hints="files">
