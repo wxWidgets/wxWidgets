@@ -22,6 +22,8 @@
 #endif
 
 #include "wx/app.h"
+#include "wx/wxcrt.h"           // for wxPuts
+#include "wx/wxcrtvararg.h"     // for wxPrintf
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -315,6 +317,8 @@ void InteractiveOutputTestCase::TestUserInfo()
 // stack backtrace
 // ----------------------------------------------------------------------------
 
+#if wxUSE_STACKWALKER
+
 #include "wx/stackwalk.h"
 
 class StackDump : public wxStackWalker
@@ -324,7 +328,7 @@ public:
         : wxStackWalker(argv0)
     {
     }
-
+    
     virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH)
     {
         wxPuts(wxT("Stack dump:"));
@@ -365,16 +369,19 @@ protected:
         }
     }
 };
+#endif
 
 void InteractiveOutputTestCase::TestStackWalk()
 {
 #ifdef TEST_STACKWALKER
+#if wxUSE_STACKWALKER
     wxPuts(wxT("*** Testing wxStackWalker ***"));
 
-    StackDump dump(wxTheApp->argv[0]);
+    StackDump dump((const char*)wxTheApp->argv[0]);
     dump.Walk();
     
     wxPuts("\n");
+#endif
 #endif // TEST_STACKWALKER
 }
 
