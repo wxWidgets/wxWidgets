@@ -79,7 +79,7 @@ void DirTestCase::setUp()
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder2", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
     wxDir::Make(DIRTEST_FOLDER + SEP + "folder3" + SEP + "subfolder1", wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-    
+
     CreateTempFile(DIRTEST_FOLDER + SEP + "folder1" + SEP + "subfolder2" + SEP + "dummy");
     CreateTempFile(DIRTEST_FOLDER + SEP + "dummy");
 }
@@ -172,14 +172,13 @@ void DirTestCase::DirExists()
     {
         const char *dirname;
         bool shouldExist;
-    } testData[] = 
+    } testData[] =
     {
         { ".", true },
         { "..", true },
 #if defined(__WXMSW__)
         { "..\\..", true },
-        { "..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..", /*false*/ true },
-                // FIXME: should fail but it doesn't... looks like a bug in GetFileAttributes() win API
+        { "..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..\\..", true },
         { "c:", true },
         { "c:\\", true },
         { "c:\\\\", true },
@@ -190,7 +189,7 @@ void DirTestCase::DirExists()
         { "test.exe", false }       // not a directory!
 #elif defined(__UNIX__)
         { "../..", true },
-        { "../../../../../../../../../../../../../../../../../../../..", false },
+        { "../../../../../../../../../../../../../../../../../../../..", true },
         { "/", true },
         { "//", true },
         { "/usr/bin", true },
