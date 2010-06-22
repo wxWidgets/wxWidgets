@@ -43,9 +43,10 @@ void TextEntryTestCase::TextChangeEvents()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    GetTestWindow()->Bind(wxEVT_COMMAND_TEXT_UPDATED,
-                          &wxTestableFrame::OnEvent,
-                          frame);
+    GetTestWindow()->Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                             wxEventHandler(wxTestableFrame::OnEvent),
+                             NULL,
+                             frame);
 
     wxTextEntry * const entry = GetTestEntry();
 
