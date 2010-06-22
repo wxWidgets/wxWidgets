@@ -40,8 +40,9 @@
     @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}
         The current folder of the file control has been changed
     @event{EVT_FILECTRL_FILTERCHANGED(id, func)}
-        The current file filter of the file control has been changed. This
-        event is new in wxWidgets 2.9.1.
+        The current file filter of the file control has been changed.
+        @since 2.9.1.
+
     @endEventTable
 
     @library{wxbase}
