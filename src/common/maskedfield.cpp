@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/maskedfield.h"
+#include "wx/regex.h"
 
 wxMaskedField::wxMaskedField()
 {
@@ -57,8 +58,16 @@ void wxMaskedField::Create( const wxString& mask
                  , const bool useParensForNegatives)
 {
     unsigned int it;
+    wxRegEx regCtrl(wxT(".*((A-a-#-C-{[0-9]\\^})*.*"));
 
-    m_mask         = mask;
+    m_mask = wxT("");
+    
+    if(regCtrl.IsValid() && regCtrl.Matches(mask) )
+    {
+        m_mask = mask;
+        printf("YATAAAAAAAAAA\n");
+    }
+
     m_formatCodes  = formatCodes;
     m_autoSelect   = autoSelect;
     m_groupChar    = groupChar;

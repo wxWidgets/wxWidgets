@@ -769,11 +769,14 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
 
     unsigned int size = GetValue().Len();
+    unsigned int it;
     wxString string = GetValue();
 
-    wxString formatString = m_maskCtrl->ApplyFormatCodes(string.SubString(0, GetInsertionPoint()));
-    wxString lockedMask;
+    wxString formatString = m_maskCtrl->ApplyFormatCodes(string);
+    wxString lockedMask = m_maskCtrl->GetLockedMask();
 
+
+    //If the string is not valid
     if(!m_maskCtrl->IsValid(formatString))
     {
         printf("Invalid\n");
@@ -782,30 +785,30 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        printf("Valid: %d\n",GetInsertionPoint() );
-        lockedMask = m_maskCtrl->GetLockedMask();
-       
-        if(lockedMask.Len() > formatString.Len() 
-           && lockedMask[formatString.Len()] != ' ')
+        
+        //Add locked caracter
+        if(lockedMask.Len() != formatString.Len() 
+         &&lockedMask.GetChar(formatString.Len())!= ' ')
         {
-            printf("Add locked char\n");
-            formatString << lockedMask[formatString.Len()];
-            SetInsertionPoint(GetInsertionPoint() + 1);
+             AppendText(lockedMask.GetChar(formatString.Len()));
         }
 
-        if(formatString.Cmp(string.SubString(0, GetInsertionPoint())) != 0)
+
+        //If the test is upper or lower case after Applying formats codes
+        if(formatString.Cmp(string) != 0)
+        {
             ChangeValue(formatString);
+        }
 
         SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
     }
-
+    printf("End Apply Mask\n");
 }
 
 void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
     unsigned int cursor = GetInsertionPoint();
-    printf("keycode: %d\ncursor: %d\n", keycode, cursor);
 
     switch(keycode)
     {
@@ -825,33 +828,8 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                 ChangeValue(m_maskCtrl->GetPreviousChoices()); 
             }
         break;
-        case(WXK_DELETE):
-            if(cursor < GetValue().Len())
-            {
-                Replace(cursor, cursor, wxT(" "));
-            }
-
-            printf("DELETE\n");
-        break;
-        case(WXK_BACK):
-            printf("BACK\n");
-            if(cursor > 0)
-            {
-                SetInsertionPoint(cursor - 1);
-                Replace(cursor, cursor, wxT(" "));
-            }
-        break;
         default:
-            if(keycode < 256 && keycode >= 0 && wxIsprint(keycode))
-            {
-                if ( !event.ShiftDown() )
-                {
-                    keycode = wxTolower(keycode);
-                }
-                Replace(cursor, cursor, wxString((wxChar)keycode));
-                cursor++;
-                SetInsertionPoint(cursor);
-          }
+            event.Skip();
         break;
     }
 }
@@ -1067,7 +1045,6 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
     if ( ch )
     {
 
-        printf("Hello %c\n",ch);
         WriteText(ch);
 
         return true;

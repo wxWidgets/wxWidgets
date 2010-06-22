@@ -21,7 +21,6 @@
 #include "wx/maskededit.h"
 
 
-
 wxMaskedEdit::wxMaskedEdit()
 {
 
@@ -65,6 +64,8 @@ void wxMaskedEdit::Create( const wxString& mask
                          , const wxArrayString& formatCode
                          , const wxString& defaultValue)
 {
+    wxString tmp;
+
     if(!mask.Contains('|'))
     {
         m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
@@ -72,12 +73,12 @@ void wxMaskedEdit::Create( const wxString& mask
     }
     else
     {
-        wxString tmp;
         unsigned int it;
         unsigned int numberOfFields = 0;
         
         for(it = 0; it < mask.Len(); it++)
         {
+
             if(mask[it] != '|')
             {
                 tmp << mask[it];
@@ -218,6 +219,7 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
         {
             if(m_maskValue[itMask] == '\\')
                 itMask++;
+
             tmp << string[it];
         }
         else
