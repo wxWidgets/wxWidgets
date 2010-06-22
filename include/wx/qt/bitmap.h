@@ -15,6 +15,7 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
 class QImage;
 
 class QPixmap;
+class QBitmap;
 
 class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 {
@@ -102,9 +103,13 @@ public:
     bool Create(const wxBitmap& bitmap);
 
     // Implementation
+    QBitmap *GetHandle() const;
 
 protected:
     DECLARE_DYNAMIC_CLASS(wxMask)
+
+private:
+    QBitmap *m_qtBitmap;
 };
 
 #endif // _WX_QT_BITMAP_H_

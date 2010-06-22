@@ -364,41 +364,70 @@ IMPLEMENT_DYNAMIC_CLASS( wxMask, wxObject )
 
 wxMask::wxMask()
 {
+    m_qtBitmap = NULL;
 }
 
 wxMask::wxMask(const wxMask &mask)
 {
+    m_qtBitmap = new QBitmap(*mask.GetHandle());
 }
 
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
+    m_qtBitmap = NULL;
+    Create(bitmap, colour);
 }
 
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 {
+    m_qtBitmap = NULL;
+    Create(bitmap, paletteIndex);
 }
 
 wxMask::wxMask(const wxBitmap& bitmap)
 {
+    m_qtBitmap = NULL;
+    Create(bitmap);
 }
-
 
 wxMask::~wxMask()
 {
+    if (m_qtBitmap)
+        delete m_qtBitmap;
 }
 
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
-    return false;
+    if (!bitmap.IsOk())
+        return false;
+
+    if (m_qtBitmap)
+        delete m_qtBitmap;
+
+    m_qtBitmap = new QBitmap(bitmap.GetHandle()->createMaskFromColor(colour.GetHandle()));
+    return true;
 }
 
 bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 {
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return false;
 }
 
 bool wxMask::Create(const wxBitmap& bitmap)
 {
-    return false;
+    //Only for mono bitmaps
+    if (!bitmap.IsOk() || bitmap.GetDepth() != 1)
+        return false;
+
+    if (m_qtBitmap)
+        delete m_qtBitmap;
+
+    m_qtBitmap = new QBitmap(*bitmap.GetHandle());
+    return true;
 }
 
+QBitmap *wxMask::GetHandle() const
+{
+    return m_qtBitmap;
+}
