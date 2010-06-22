@@ -283,8 +283,7 @@ void wxClassInfo::Unregister()
         sm_classTable->Delete(m_className);
         if ( sm_classTable->GetCount() == 0 )
         {
-            delete sm_classTable;
-            sm_classTable = NULL;
+            wxDELETE(sm_classTable);
         }
     }
 }

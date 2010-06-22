@@ -147,7 +147,7 @@ class wxPGGlobalVarsClassManager : public wxModule
 public:
     wxPGGlobalVarsClassManager() {}
     virtual bool OnInit() { wxPGGlobalVars = new wxPGGlobalVarsClass(); return true; }
-    virtual void OnExit() { delete wxPGGlobalVars; wxPGGlobalVars = NULL; }
+    virtual void OnExit() { wxDELETE(wxPGGlobalVars); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
@@ -1028,7 +1028,7 @@ void wxPropertyGrid::OnLabelEditorKeyPress( wxKeyEvent& event )
     }
     else
     {
-        event.Skip();
+        HandleKeyEvent(event, true);
     }
 }
 
@@ -1123,8 +1123,7 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
         else
         {
         #if wxPG_DOUBLE_BUFFER
-            delete m_doubleBuffer;
-            m_doubleBuffer = NULL;
+            wxDELETE(m_doubleBuffer);
         #endif
         }
     }
@@ -1635,8 +1634,8 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 // Control font changer helper.
 void wxPropertyGrid::SetCurControlBoldFont()
 {
-    wxASSERT( m_wndEditor );
-    m_wndEditor->SetFont( m_captionFont );
+    wxWindow* editor = GetEditorControl();
+    editor->SetFont( m_captionFont );
 }
 
 // -----------------------------------------------------------------------
@@ -5553,8 +5552,10 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         return;
     }
 
-    // Except for TAB and ESC, handle child control events in child control
-    if ( fromChild )
+    // Except for TAB, ESC, and any keys specifically dedicated to
+    // wxPropertyGrid itself, handle child control events in child control.
+    if ( fromChild &&
+         wxPGFindInVector(m_dedicatedKeys, keycode) == wxNOT_FOUND )
     {
         // Only propagate event if it had modifiers
         if ( !event.HasModifiers() )
@@ -5608,7 +5609,28 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         {
             p = wxPropertyGridIterator::OneStep( m_pState, wxPG_ITERATE_VISIBLE, p, selectDir );
             if ( p )
-                DoSelectProperty(p);
+            {
+                int selFlags = 0;
+                int reopenLabelEditorCol = -1;
+
+                if ( editorFocused )
+                {
+                    // If editor was focused, then make the next editor
+                    // focused as well
+                    selFlags |= wxPG_SEL_FOCUS;
+                }
+                else
+                {
+                    // Also maintain the same label editor focus state
+                    if ( m_labelEditor )
+                        reopenLabelEditorCol = m_selColumn;
+                }
+
+                DoSelectProperty(p, selFlags);
+
+                if ( reopenLabelEditorCol >= 0 )
+                    DoBeginLabelEdit(reopenLabelEditorCol);
+            }
             wasHandled = true;
         }
     }

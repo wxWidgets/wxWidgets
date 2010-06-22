@@ -48,7 +48,7 @@
 // implementation classes:
 #if defined(__WXMSW__)
     #include "wx/msw/mimetype.h"
-#elif ( defined(__WXMAC__) && wxOSX_USE_CARBON )
+#elif ( defined(__WXMAC__) )
     #include "wx/osx/mimetype.h"
 #elif defined(__WXPM__) || defined (__EMX__)
     #include "wx/os2/mimetype.h"
@@ -192,22 +192,28 @@ wxString wxFileType::ExpandCommand(const wxString& command,
 {
     bool hasFilename = false;
 
+    // We consider that only the file names with spaces in them need to be
+    // handled specially. This is not perfect, but this can be done easily
+    // under all platforms while handling the file names with quotes in them,
+    // for example, needs to be done differently.
+    const bool needToQuoteFilename = params.GetFileName().find_first_of(" \t")
+                                        != wxString::npos;
+
     wxString str;
     for ( const wxChar *pc = command.c_str(); *pc != wxT('\0'); pc++ ) {
         if ( *pc == wxT('%') ) {
             switch ( *++pc ) {
                 case wxT('s'):
-                    // '%s' expands into file name (quoted because it might
-                    // contain spaces) - except if there are already quotes
-                    // there because otherwise some programs may get confused
-                    // by double double quotes
-#if 0
-                    if ( *(pc - 2) == wxT('"') )
-                        str << params.GetFileName();
-                    else
+                    // don't quote the file name if it's already quoted: notice
+                    // that we check for a quote following it and not preceding
+                    // it as at least under Windows we can have commands
+                    // containing "file://%s" (with quotes) in them so the
+                    // argument may be quoted even if there is no quote
+                    // directly before "%s" itself
+                    if ( needToQuoteFilename && pc[1] != '"' )
                         str << wxT('"') << params.GetFileName() << wxT('"');
-#endif
-                    str << params.GetFileName();
+                    else
+                        str << params.GetFileName();
                     hasFilename = true;
                     break;
 
@@ -264,8 +270,14 @@ wxString wxFileType::ExpandCommand(const wxString& command,
 #ifdef __UNIX__
                       && !str.StartsWith(wxT("test "))
 #endif // Unix
-       ) {
-        str << wxT(" < '") << params.GetFileName() << wxT('\'');
+       )
+    {
+        str << wxT(" < ");
+        if ( needToQuoteFilename )
+            str << '"';
+        str << params.GetFileName();
+        if ( needToQuoteFilename )
+            str << '"';
     }
 
     return str;
@@ -737,8 +749,7 @@ public:
 
         if ( gs_mimeTypesManager.m_impl != NULL )
         {
-            delete gs_mimeTypesManager.m_impl;
-            gs_mimeTypesManager.m_impl = NULL;
+            wxDELETE(gs_mimeTypesManager.m_impl);
             gs_mimeTypesManager.m_fallbacks.Clear();
         }
     }

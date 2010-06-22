@@ -267,11 +267,28 @@ public:
     bool IsOpened() const;
 
     /**
+        Creates a directory.
+        
+        This is just an alias for wxFileName::Mkdir(); refer to that function
+        for more info.
+    */
+    static bool Make(const wxString &dir, int perm = wxS_DIR_DEFAULT,
+                     int flags = 0);
+
+    /**
         Open the directory for enumerating, returns @true on success or @false
         if an error occurred.
     */
     bool Open(const wxString& dir);
 
+    /**
+        Removes a directory.
+        
+        This is just an alias for wxFileName::Rmdir(); refer to that function
+        for more info.
+    */
+    static bool Remove(const wxString &dir, int flags = 0);
+    
     /**
         Enumerate all files and directories under the given directory
         recursively calling the element of the provided wxDirTraverser object

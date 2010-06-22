@@ -20,6 +20,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/event.h"
+    #include "wx/scrolwin.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
@@ -34,37 +35,58 @@ wxString g_str;
 // a custom event
 wxDEFINE_EVENT(TEST_EVT, wxCommandEvent);
 
-// a custom event handler
-class TestEvtHandler : public wxEvtHandler
+// a custom event handler tracing the propagation of the events of the
+// specified types
+template <class Event>
+class TestEvtHandlerBase : public wxEvtHandler
 {
 public:
-    TestEvtHandler(char tag)
-        : m_tag(tag)
+    TestEvtHandlerBase(wxEventType evtType, char tag)
+        : m_evtType(evtType),
+          m_tag(tag)
     {
-        Connect(TEST_EVT, wxCommandEventHandler(TestEvtHandler::OnTest));
+        Connect(evtType,
+                static_cast<wxEventFunction>(&TestEvtHandlerBase::OnTest));
     }
 
     // override ProcessEvent() to confirm that it is called for all event
     // handlers in the chain
     virtual bool ProcessEvent(wxEvent& event)
     {
-        if ( event.GetEventType() == TEST_EVT )
+        if ( event.GetEventType() == m_evtType )
             g_str += 'o'; // "o" == "overridden"
 
         return wxEvtHandler::ProcessEvent(event);
     }
 
 private:
-    void OnTest(wxCommandEvent& event)
+    void OnTest(wxEvent& event)
     {
         g_str += m_tag;
 
         event.Skip();
     }
 
+    const wxEventType m_evtType;
     const char m_tag;
 
-    DECLARE_NO_COPY_CLASS(TestEvtHandler)
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(TestEvtHandlerBase, Event);
+};
+
+struct TestEvtHandler : TestEvtHandlerBase<wxCommandEvent>
+{
+    TestEvtHandler(char tag)
+        : TestEvtHandlerBase<wxCommandEvent>(TEST_EVT, tag)
+    {
+    }
+};
+
+struct TestPaintEvtHandler : TestEvtHandlerBase<wxPaintEvent>
+{
+    TestPaintEvtHandler(char tag)
+        : TestEvtHandlerBase<wxPaintEvent>(wxEVT_PAINT, tag)
+    {
+    }
 };
 
 // a window handling the test event
@@ -89,6 +111,35 @@ private:
     const char m_tag;
 
     DECLARE_NO_COPY_CLASS(TestWindow)
+};
+
+// a scroll window handling paint event: we want to have a special test case
+// for this because the event propagation is complicated even further than
+// usual here by the presence of wxScrollHelperEvtHandler in the event handlers
+// chain and the fact that OnDraw() virtual method must be called if EVT_PAINT
+// is not handled
+class TestScrollWindow : public wxScrolledWindow
+{
+public:
+    TestScrollWindow(wxWindow *parent)
+        : wxScrolledWindow(parent, wxID_ANY)
+    {
+        Connect(wxEVT_PAINT, wxPaintEventHandler(TestScrollWindow::OnPaint));
+    }
+
+    virtual void OnDraw(wxDC& WXUNUSED(dc))
+    {
+        g_str += 'D';   // draw
+    }
+
+private:
+    void OnPaint(wxPaintEvent& event)
+    {
+        g_str += 'P';   // paint
+        event.Skip();
+    }
+
+    wxDECLARE_NO_COPY_CLASS(TestScrollWindow);
 };
 
 int DoFilterEvent(wxEvent& event)
@@ -127,12 +178,18 @@ private:
         CPPUNIT_TEST( TwoHandlers );
         CPPUNIT_TEST( WindowWithoutHandler );
         CPPUNIT_TEST( WindowWithHandler );
+        CPPUNIT_TEST( ForwardEvent );
+        CPPUNIT_TEST( ScrollWindowWithoutHandler );
+        CPPUNIT_TEST( ScrollWindowWithHandler );
     CPPUNIT_TEST_SUITE_END();
 
     void OneHandler();
     void TwoHandlers();
     void WindowWithoutHandler();
     void WindowWithHandler();
+    void ForwardEvent();
+    void ScrollWindowWithoutHandler();
+    void ScrollWindowWithHandler();
 
     DECLARE_NO_COPY_CLASS(EventPropagationTestCase)
 };
@@ -205,5 +262,85 @@ void EventPropagationTestCase::WindowWithHandler()
 
     child->HandleWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "oa2o1cpA", g_str );
+}
+
+void EventPropagationTestCase::ForwardEvent()
+{
+    // The idea of this test is to check that the events explicitly forwarded
+    // to another event handler still get pre/post-processed as usual as this
+    // used to be broken by the fixes trying to avoid duplicate processing.
+    TestWindow * const win = new TestWindow(wxTheApp->GetTopWindow(), 'w');
+    wxON_BLOCK_EXIT_OBJ0( *win, wxWindow::Destroy );
+
+    TestEvtHandler h1('1');
+    win->PushEventHandler(&h1);
+    wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
+
+    class ForwardEvtHandler : public wxEvtHandler
+    {
+    public:
+        ForwardEvtHandler(wxEvtHandler& h) : m_h(&h) { }
+
+        virtual bool ProcessEvent(wxEvent& event)
+        {
+            g_str += 'f';
+
+            return m_h->ProcessEvent(event);
+        }
+
+    private:
+        wxEvtHandler *m_h;
+    } f(h1);
+
+    // First send the event directly to f.
+    wxCommandEvent event1(TEST_EVT);
+    f.ProcessEvent(event1);
+    CPPUNIT_ASSERT_EQUAL( "foa1wA", g_str );
+    g_str.clear();
+
+    // And then also test sending it to f indirectly.
+    wxCommandEvent event2(TEST_EVT);
+    TestEvtHandler h2('2');
+    h2.SetNextHandler(&f);
+    h2.ProcessEvent(event2);
+    CPPUNIT_ASSERT_EQUAL( "oa2fo1wAA", g_str );
+}
+
+void EventPropagationTestCase::ScrollWindowWithoutHandler()
+{
+    TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
+    wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
+
+    TestScrollWindow * const win = new TestScrollWindow(parent);
+
+    wxPaintEvent event(win->GetId());
+    win->ProcessWindowEvent(event);
+    CPPUNIT_ASSERT_EQUAL( "PD", g_str );
+
+    g_str.clear();
+    wxCommandEvent eventCmd(TEST_EVT);
+    win->HandleWindowEvent(eventCmd);
+    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
+}
+
+void EventPropagationTestCase::ScrollWindowWithHandler()
+{
+    TestWindow * const parent = new TestWindow(wxTheApp->GetTopWindow(), 'p');
+    wxON_BLOCK_EXIT_OBJ0( *parent, wxWindow::Destroy );
+
+    TestScrollWindow * const win = new TestScrollWindow(parent);
+
+    TestPaintEvtHandler h('h');
+    win->PushEventHandler(&h);
+    wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
+
+    wxPaintEvent event(win->GetId());
+    win->ProcessWindowEvent(event);
+    CPPUNIT_ASSERT_EQUAL( "ohPD", g_str );
+
+    g_str.clear();
+    wxCommandEvent eventCmd(TEST_EVT);
+    win->HandleWindowEvent(eventCmd);
+    CPPUNIT_ASSERT_EQUAL( "apA", g_str );
 }
 

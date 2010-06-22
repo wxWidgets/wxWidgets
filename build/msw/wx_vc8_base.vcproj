@@ -1998,6 +1998,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msgqueue.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\mstream.h"
 				>
 			</File>
@@ -2011,6 +2015,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\platinfo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\meta\pod.h"
 				>
 			</File>
 			<File

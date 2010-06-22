@@ -307,7 +307,7 @@ public:
         @see EndEditLabel(), wxTreeEvent
     */
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
-                                  wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
+                                  wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl));
 
     /**
         Ends label editing. If @a cancelEdit is @true, the edit will be
@@ -751,8 +751,8 @@ public:
         zero or positive value if the first item is less than, equal to or
         greater than the second one.
 
-        Please note that you @b must use wxRTTI macros DECLARE_DYNAMIC_CLASS()
-        and IMPLEMENT_DYNAMIC_CLASS() if you override this function because
+        Please note that you @b must use wxRTTI macros wxDECLARE_DYNAMIC_CLASS()
+        and wxIMPLEMENT_DYNAMIC_CLASS() if you override this function because
         otherwise the base class considers that it is not overridden and uses
         the default comparison, i.e. sorts the items alphabetically, which
         allows it optimize away the calls to the virtual function completely.

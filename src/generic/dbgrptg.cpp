@@ -46,6 +46,7 @@
 
 #ifdef __WXMSW__
     #include "wx/evtloop.h"     // for SetCriticalWindow()
+    #include "wx/scopeguard.h"
 #endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
@@ -517,6 +518,9 @@ bool wxDebugReportPreviewStd::Show(wxDebugReport& dbgrpt) const
     // before entering the event loop (from ShowModal()), block the event
     // handling for all other windows as this could result in more crashes
     wxEventLoop::SetCriticalWindow(&dlg);
+
+    wxON_BLOCK_EXIT1( wxEventLoop::SetCriticalWindow,
+                        static_cast<wxWindow *>(NULL) );
 #endif // __WXMSW__
 
     return dlg.ShowModal() == wxID_OK && dbgrpt.GetFilesCount() != 0;

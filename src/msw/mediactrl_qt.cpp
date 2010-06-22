@@ -1068,11 +1068,7 @@ void wxQTMediaBackend::Cleanup()
 {
     m_bPlaying = false;
 
-    if (m_timer)
-    {
-        delete m_timer;
-        m_timer = NULL;
-    }
+    wxDELETE(m_timer);
 
     m_lib.StopMovie(m_movie);
 

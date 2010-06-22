@@ -33,7 +33,7 @@ include the XPM inline as below, since it's C code, or you can load it at
 run-time.
 
 @code
-#include "mondrian.xpm"
+#include "sample.xpm"
 @endcode
 
 Sometimes you wish to use a .ico resource on Windows, and XPMs on other
@@ -44,16 +44,16 @@ A macro, wxICON(), is available which creates an icon using an XPM on the
 appropriate platform, or an icon resource on Windows:
 
 @code
-wxIcon icon(wxICON(mondrian));
+wxIcon icon(wxICON(sample));
 
 // The above line is equivalent to this:
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
-    wxIcon icon(mondrian_xpm);
+    wxIcon icon(sample_xpm);
 #endif
 
 #if defined(__WXMSW__)
-    wxIcon icon("mondrian");
+    wxIcon icon("sample");
 #endif
 @endcode
 

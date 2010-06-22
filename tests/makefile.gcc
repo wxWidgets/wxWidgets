@@ -38,11 +38,15 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_base64.o \
 	$(OBJS)\test_cmdlinetest.o \
 	$(OBJS)\test_fileconf.o \
+	$(OBJS)\test_regconf.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_evthandler.o \
 	$(OBJS)\test_evtsource.o \
+	$(OBJS)\test_stopwatch.o \
 	$(OBJS)\test_timertest.o \
 	$(OBJS)\test_exec.o \
+	$(OBJS)\test_dir.o \
+	$(OBJS)\test_filefn.o \
 	$(OBJS)\test_filetest.o \
 	$(OBJS)\test_filekind.o \
 	$(OBJS)\test_filenametest.o \
@@ -51,13 +55,20 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_formatconvertertest.o \
 	$(OBJS)\test_fswatchertest.o \
 	$(OBJS)\test_hashes.o \
+	$(OBJS)\test_output.o \
+	$(OBJS)\test_input.o \
 	$(OBJS)\test_intltest.o \
 	$(OBJS)\test_lists.o \
 	$(OBJS)\test_logtest.o \
 	$(OBJS)\test_longlongtest.o \
 	$(OBJS)\test_convautotest.o \
 	$(OBJS)\test_mbconvtest.o \
+	$(OBJS)\test_dynamiclib.o \
+	$(OBJS)\test_environ.o \
+	$(OBJS)\test_metatest.o \
 	$(OBJS)\test_misctests.o \
+	$(OBJS)\test_module.o \
+	$(OBJS)\test_pathlist.o \
 	$(OBJS)\test_typeinfotest.o \
 	$(OBJS)\test_ipc.o \
 	$(OBJS)\test_socket.o \
@@ -89,8 +100,10 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_zlibstream.o \
 	$(OBJS)\test_textfiletest.o \
 	$(OBJS)\test_atomic.o \
+	$(OBJS)\test_misc.o \
 	$(OBJS)\test_queue.o \
 	$(OBJS)\test_tls.o \
+	$(OBJS)\test_ftp.o \
 	$(OBJS)\test_uris.o \
 	$(OBJS)\test_url.o \
 	$(OBJS)\test_vectors.o \
@@ -402,6 +415,9 @@ $(OBJS)\test_cmdlinetest.o: ./cmdline/cmdlinetest.cpp
 $(OBJS)\test_fileconf.o: ./config/fileconf.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_regconf.o: ./config/regconf.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -411,10 +427,19 @@ $(OBJS)\test_evthandler.o: ./events/evthandler.cpp
 $(OBJS)\test_evtsource.o: ./events/evtsource.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_stopwatch.o: ./events/stopwatch.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_timertest.o: ./events/timertest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_exec.o: ./exec/exec.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_dir.o: ./file/dir.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_filefn.o: ./file/filefn.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_filetest.o: ./file/filetest.cpp
@@ -441,6 +466,12 @@ $(OBJS)\test_fswatchertest.o: ./fswatcher/fswatchertest.cpp
 $(OBJS)\test_hashes.o: ./hashes/hashes.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_output.o: ./interactive/output.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_input.o: ./interactive/input.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_intltest.o: ./intl/intltest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -459,7 +490,22 @@ $(OBJS)\test_convautotest.o: ./mbconv/convautotest.cpp
 $(OBJS)\test_mbconvtest.o: ./mbconv/mbconvtest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_dynamiclib.o: ./misc/dynamiclib.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_environ.o: ./misc/environ.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_metatest.o: ./misc/metatest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_misctests.o: ./misc/misctests.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_module.o: ./misc/module.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_pathlist.o: ./misc/pathlist.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_typeinfotest.o: ./misc/typeinfotest.cpp
@@ -555,10 +601,16 @@ $(OBJS)\test_textfiletest.o: ./textfile/textfiletest.cpp
 $(OBJS)\test_atomic.o: ./thread/atomic.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_misc.o: ./thread/misc.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_queue.o: ./thread/queue.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_tls.o: ./thread/tls.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_ftp.o: ./uris/ftp.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp

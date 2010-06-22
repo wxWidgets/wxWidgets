@@ -54,11 +54,7 @@ wxTopLevelWindowMSW::ButtonMenu::ButtonMenu()
 
 wxTopLevelWindowMSW::ButtonMenu::~ButtonMenu()
 {
-    if(m_menu)
-    {
-        delete m_menu;
-        m_menu = NULL;
-    };
+    wxDELETE(m_menu);
 }
 
 void wxTopLevelWindowMSW::SetLeftMenu(int id, const wxString& label, wxMenu *subMenu)

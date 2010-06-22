@@ -141,9 +141,7 @@ bool wxStaticBitmap::ImageIsOk() const
 
 void wxStaticBitmap::Free()
 {
-    if (m_pImage)
-        delete m_pImage;
-    m_pImage = NULL;
+    wxDELETE(m_pImage);
 } // end of wxStaticBitmap::Free
 
 wxSize wxStaticBitmap::DoGetBestSize() const

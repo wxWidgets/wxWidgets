@@ -793,9 +793,8 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
                 gdk_gc_set_ts_origin(gc, 0, 0);
         }
 
-        if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
+        if ( m_pen.IsOk() && m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT )
         {
-#if 1
             if ((m_pen.GetWidth() == 2) && (m_pen.GetCap() == wxCAP_ROUND) &&
                 (m_pen.GetJoin() == wxJOIN_ROUND) && (m_pen.GetStyle() == wxPENSTYLE_SOLID))
             {
@@ -818,7 +817,6 @@ void wxWindowDCImpl::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoo
                 gdk_gc_set_line_attributes( m_penGC, 2, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
             }
             else
-#endif
             {
                 // Just use X11 for other cases
                 gdk_draw_rectangle( m_gdkwindow, m_penGC, FALSE, xx, yy, ww-1, hh-1 );

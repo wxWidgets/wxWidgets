@@ -164,7 +164,7 @@ public:
     virtual void ScrollTo(const wxTreeItemId& item);
 
     virtual wxTextCtrl *EditLabel(const wxTreeItemId& item,
-                          wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl));
     virtual wxTextCtrl *GetEditControl() const;
     virtual void EndEditLabel(const wxTreeItemId& item,
                               bool discardChanges = false);

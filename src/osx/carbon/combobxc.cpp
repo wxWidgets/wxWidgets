@@ -478,10 +478,9 @@ void wxComboBox::SetEditable(bool editable)
     {
         m_text = new wxComboBoxText( this );
     }
-    else if ( ( m_text != NULL ) && !editable )
+    else if ( !editable )
     {
-        delete m_text;
-        m_text = NULL;
+        wxDELETE(m_text);
     }
 
     int currentX, currentY;

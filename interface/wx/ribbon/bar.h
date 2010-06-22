@@ -24,9 +24,9 @@ public:
     /**
         Constructor.
     */
-      wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
-                       int win_id = 0,
-                       wxRibbonPage* page = NULL);
+    wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
+                     int win_id = 0,
+                     wxRibbonPage* page = NULL);
 
     /**
         Returns the page being changed to, or being clicked on.

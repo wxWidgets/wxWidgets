@@ -37,11 +37,15 @@
             base64/base64.cpp
             cmdline/cmdlinetest.cpp
             config/fileconf.cpp
+            config/regconf.cpp
             datetime/datetimetest.cpp
             events/evthandler.cpp
             events/evtsource.cpp
+            events/stopwatch.cpp
             events/timertest.cpp
             exec/exec.cpp
+            file/dir.cpp
+            file/filefn.cpp
             file/filetest.cpp
             filekind/filekind.cpp
             filename/filenametest.cpp
@@ -50,13 +54,20 @@
             formatconverter/formatconvertertest.cpp
             fswatcher/fswatchertest.cpp
             hashes/hashes.cpp
+            interactive/output.cpp
+            interactive/input.cpp
             intl/intltest.cpp
             lists/lists.cpp
             log/logtest.cpp
             longlong/longlongtest.cpp
             mbconv/convautotest.cpp
             mbconv/mbconvtest.cpp
+            misc/dynamiclib.cpp
+            misc/environ.cpp
+            misc/metatest.cpp
             misc/misctests.cpp
+            misc/module.cpp
+            misc/pathlist.cpp
             misc/typeinfotest.cpp
             net/ipc.cpp
             net/socket.cpp
@@ -88,8 +99,10 @@
             streams/zlibstream.cpp
             textfile/textfiletest.cpp
             thread/atomic.cpp
+            thread/misc.cpp
             thread/queue.cpp
             thread/tls.cpp
+            uris/ftp.cpp
             uris/uris.cpp
             uris/url.cpp
             vectors/vectors.cpp

@@ -297,7 +297,7 @@ public:
         // been before. textCtrlClass parameter allows you to create an edit
         // control of arbitrary user-defined class deriving from wxTextCtrl.
     wxTextCtrl* EditLabel(const wxTreeItemId& item,
-                          wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textCtrlClass = wxCLASSINFO(wxTextCtrl));
         // returns the same pointer as StartEdit() if the item is being edited,
         // NULL otherwise (it's assumed that no more than one item may be
         // edited simultaneously)

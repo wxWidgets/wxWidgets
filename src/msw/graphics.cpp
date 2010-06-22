@@ -40,6 +40,7 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
+#include "wx/msw/enhmeta.h"
 #include "wx/dcgraph.h"
 
 #include "wx/msw/private.h" // needs to be before #include <commdlg.h>
@@ -1043,7 +1044,7 @@ void wxGDIPlusMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 // add the rotation to this matrix (radians)
 void wxGDIPlusMatrixData::Rotate( wxDouble angle )
 {
-    m_matrix->Rotate( angle );
+    m_matrix->Rotate( RadToDeg(angle) );
 }
 
 //
@@ -1151,6 +1152,14 @@ void wxGDIPlusContext::SetDefaults()
     m_context->SetSmoothingMode(SmoothingModeHighQuality);
     m_state1 = m_context->Save();
     m_state2 = m_context->Save();
+
+    // Setup page scale, based on DPI ratio.
+    // Antecedent should be 100dpi when the default page unit (UnitDisplay)
+    // is used. Page unit UnitDocument would require 300dpi instead.
+    // Note that calling SetPageScale() does not have effect on non-printing
+    // DCs (that is, any other than wxPrinterDC or wxEnhMetaFileDC).
+    REAL dpiRatio = 100.0 / m_context->GetDpiY();
+    m_context->SetPageScale(dpiRatio);
 }
 
 wxGDIPlusContext::~wxGDIPlusContext()
@@ -1496,6 +1505,8 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
         m_context->MeasureString((const wchar_t *) s , wcslen(s) , f, layoutRect, &strFormat, &bounds ) ;
         if ( width )
             *width = bounds.Width;
+        if ( height )
+            *height = bounds.Height;
     }
 }
 
@@ -1620,6 +1631,8 @@ public :
     virtual wxGraphicsContext * CreateContext( const wxMemoryDC& dc);
 
     virtual wxGraphicsContext * CreateContext( const wxPrinterDC& dc);
+
+    virtual wxGraphicsContext * CreateContext( const wxEnhMetaFileDC& dc);
 
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context );
 
@@ -1746,6 +1759,14 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxWindowDC& dc)
 }
 
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxPrinterDC& dc)
+{
+    ENSURE_LOADED_OR_RETURN(NULL);
+    wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
+    wxSize sz = dc.GetSize();
+    return new wxGDIPlusContext(this,(HDC) msw->GetHDC(), sz.x, sz.y);
+}
+
+wxGraphicsContext * wxGDIPlusRenderer::CreateContext( const wxEnhMetaFileDC& dc)
 {
     ENSURE_LOADED_OR_RETURN(NULL);
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );

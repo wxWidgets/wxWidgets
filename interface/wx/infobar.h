@@ -64,7 +64,7 @@
     native implementation requires a recent -- as of this writing -- GTK+ 2.18
     version.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{miscwnd}
 
     @see wxStatusBar, wxMessageDialog

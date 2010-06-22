@@ -263,16 +263,16 @@ public:
         wxActiveXContainer* m_pAX;
         wxAutomationObject m_PDF;
 
-        DECLARE_DYNAMIC_CLASS(wxPDFMediaBackend)
+        wxDECLARE_DYNAMIC_CLASS(wxPDFMediaBackend)
     };
 
-    IMPLEMENT_DYNAMIC_CLASS(wxPDFMediaBackend, wxMediaBackend);
-    Put this in one of your existant source files and then create a wxMediaCtrl with
-
-    //[this] is the parent window, "myfile.pdf" is the PDF file to open
+    wxIMPLEMENT_DYNAMIC_CLASS(wxPDFMediaBackend, wxMediaBackend);
+    
+    // Put this in one of your existant source files and then create a wxMediaCtrl with
     wxMediaCtrl* mymediactrl = new wxMediaCtrl(this, "myfile.pdf", wxID_ANY,
                                             wxDefaultPosition, wxSize(300,300),
                                             0, "wxPDFMediaBackend");
+            // [this] is the parent window, "myfile.pdf" is the PDF file to open
     @endcode
 
 

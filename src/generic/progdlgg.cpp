@@ -139,11 +139,6 @@ wxProgressDialog::wxProgressDialog(const wxString& title,
 
     m_parentTop = wxGetTopLevelParent(parent);
 
-    wxClientDC dc(this);
-    dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    wxCoord widthText = 0;
-    dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
-
     // top-level sizerTop
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
 
@@ -313,6 +308,9 @@ wxProgressDialog::CreateLabel(const wxString& text, wxSizer *sizer)
 bool
 wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 {
+    if ( !DoBeforeUpdate(skip) )
+        return false;
+
     wxASSERT_MSG( value == -1 || m_gauge, wxT("cannot update non existent dialog") );
 
 #ifdef __WXMSW__
@@ -428,7 +426,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
     }
     else // not at maximum yet
     {
-        return DoAfterUpdate(skip);
+        DoAfterUpdate();
     }
 
     // update the display in case yielding above didn't do it
@@ -439,6 +437,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
 
 bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 {
+    if ( !DoBeforeUpdate(skip) )
+        return false;
+
     wxASSERT_MSG( m_gauge, wxT("cannot update non existent dialog") );
 
     // show a bit of progress
@@ -455,13 +456,15 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
         SetTimeLabel((unsigned long)-1, m_remaining);
     }
 
-    return DoAfterUpdate(skip);
+    DoAfterUpdate();
+
+    return m_state != Canceled;
 }
 
-bool wxProgressDialog::DoAfterUpdate(bool *skip)
+bool wxProgressDialog::DoBeforeUpdate(bool *skip)
 {
     wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
-                "wxProgressDialog::DoAfterUpdate needs a running event loop");
+                "wxProgressDialog::DoBeforeUpdate needs a running event loop");
 
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
@@ -479,6 +482,17 @@ bool wxProgressDialog::DoAfterUpdate(bool *skip)
     }
 
     return m_state != Canceled;
+}
+
+void wxProgressDialog::DoAfterUpdate()
+{
+    wxCHECK_RET(wxEventLoopBase::GetActive(),
+                "wxProgressDialog::DoAfterUpdate needs a running event loop");
+
+    // allow the window to repaint:
+    // NOTE: since we yield only for UI events with this call, there
+    //       should be no side-effects
+    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
 }
 
 void wxProgressDialog::Resume()
@@ -621,8 +635,7 @@ void wxProgressDialog::ReenableOtherWindows()
 {
     if ( HasFlag(wxPD_APP_MODAL) )
     {
-        delete m_winDisabler;
-        m_winDisabler = NULL;
+        wxDELETE(m_winDisabler);
     }
     else
     {

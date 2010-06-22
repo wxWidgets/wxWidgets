@@ -1571,8 +1571,8 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
 #endif
 
 // macro which disables debug logging in release builds: this is done by
-// default by IMPLEMENT_APP() so usually it doesn't need to be used explicitly
-#ifdef NDEBUG
+// default by wxIMPLEMENT_APP() so usually it doesn't need to be used explicitly
+#if defined(NDEBUG) && wxUSE_LOG_DEBUG
     #define wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD() \
         wxLog::SetLogLevel(wxLOG_Info)
 #else // !NDEBUG

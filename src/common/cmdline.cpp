@@ -37,6 +37,7 @@
 #if wxUSE_CMDLINE_PARSER
 
 #include <ctype.h>
+#include <locale.h>             // for LC_ALL
 
 #include "wx/datetime.h"
 #include "wx/msgout.h"

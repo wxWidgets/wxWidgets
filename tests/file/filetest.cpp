@@ -37,6 +37,7 @@ private:
         CPPUNIT_TEST( RoundTripUTF8 );
         CPPUNIT_TEST( RoundTripUTF16 );
         CPPUNIT_TEST( RoundTripUTF32 );
+        CPPUNIT_TEST( TempFile );
     CPPUNIT_TEST_SUITE_END();
 
     void RoundTripUTF8() { DoRoundTripTest(wxConvUTF8); }
@@ -44,6 +45,7 @@ private:
     void RoundTripUTF32() { DoRoundTripTest(wxMBConvUTF32()); }
 
     void DoRoundTripTest(const wxMBConv& conv);
+    void TempFile();
 
     wxDECLARE_NO_COPY_CLASS(FileTestCase);
 };
@@ -90,6 +92,14 @@ void FileTestCase::DoRoundTripTest(const wxMBConv& conv)
         );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
     }
+}
+
+void FileTestCase::TempFile()
+{
+    wxTempFile tmpFile;
+    CPPUNIT_ASSERT( tmpFile.Open(wxT("test2")) && tmpFile.Write(wxT("the answer is 42")) );
+    CPPUNIT_ASSERT( tmpFile.Commit() );
+    CPPUNIT_ASSERT( wxRemoveFile(wxT("test2")) );
 }
 
 #endif // wxUSE_FILE

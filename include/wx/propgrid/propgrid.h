@@ -709,11 +709,33 @@ public:
 
     /** Adds given key combination to trigger given action.
 
+        Here is a sample code to make Enter key press move focus to
+        the next property.
+
+        @code
+            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                                       WXK_RETURN);
+            propGrid->DedicateKey(WXK_RETURN);
+        @endcode
+
         @param action
             Which action to trigger. See @link pgactions List of list of
             wxPropertyGrid actions@endlink.
     */
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+
+    /**
+        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        key presses will not be redirected to editor controls.
+
+        Using this function allows, for example, navigation between
+        properties using arrow keys even when the focus is in the editor
+        control.
+    */
+    void DedicateKey( int keycode )
+    {
+        m_dedicatedKeys.push_back(keycode);
+    }
 
     /**
         This static function enables or disables automatic use of
@@ -1814,6 +1836,10 @@ protected:
     wxArrayPGProperty   m_deletedProperties;
     wxArrayPGProperty   m_removedProperties;
 
+    /** List of key codes that will not be handed over to editor controls. */
+    // FIXME: Make this a hash set once there is template-based wxHashSet.
+    wxVector<int>       m_dedicatedKeys;
+
     //
     // Temporary values
     //
@@ -2258,20 +2284,20 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 
-#define EVT_PG_SELECTED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGING(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGED(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_HIGHLIGHTED(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_RIGHT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_DOUBLE_CLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_PAGE_CHANGED(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_COLLAPSED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_BEGIN_DRAG(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_DRAGGING(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_END_DRAG(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_SELECTED(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_CHANGING(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_CHANGED(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_HIGHLIGHTED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_RIGHT_CLICK(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_DOUBLE_CLICK(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_PAGE_CHANGED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_ITEM_COLLAPSED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_ITEM_EXPANDED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_BEGIN_DRAG(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_DRAGGING(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_END_DRAG(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
 
 #define wxPropertyGridEventHandler(fn) \
     wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn )

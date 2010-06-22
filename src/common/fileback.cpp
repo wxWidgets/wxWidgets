@@ -168,11 +168,9 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
                     m_filelen += count;
 
                     if (count < m_buflen) {
-                        delete m_stream;
-                        m_stream = NULL;
+                        wxDELETE(m_stream);
                         if (count > 0) {
-                            delete[] m_buf;
-                            m_buf = NULL;
+                            wxDELETEA(m_buf);
                             m_buflen = 0;
                         }
                         m_parenterror = wxSTREAM_READ_ERROR;
@@ -182,8 +180,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
                     m_buflen = 0;
 
                     if (!m_stream) {
-                        delete[] m_buf;
-                        m_buf = NULL;
+                        wxDELETEA(m_buf);
                     }
                 }
 
@@ -197,8 +194,7 @@ wxStreamError wxBackingFileImpl::ReadAt(wxFileOffset pos,
                     m_parenterror = m_stream->GetLastError();
                     if (m_parenterror == wxSTREAM_NO_ERROR)
                         m_parenterror = wxSTREAM_EOF;
-                    delete m_stream;
-                    m_stream = NULL;
+                    wxDELETE(m_stream);
                 }
             }
 

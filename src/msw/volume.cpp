@@ -32,6 +32,7 @@
         #include "wx/icon.h"
     #endif
     #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/hashmap.h"
     #include "wx/filefn.h"
 #endif // WX_PRECOMP
@@ -40,6 +41,9 @@
 #include "wx/dynlib.h"
 #include "wx/arrimpl.cpp"
 
+// some compilers require including <windows.h> before <shellapi.h> so do it
+// even if this is not necessary with most of them
+#include "wx/msw/wrapwin.h"
 #include <shellapi.h>
 #include <shlobj.h>
 #include "wx/msw/missing.h"

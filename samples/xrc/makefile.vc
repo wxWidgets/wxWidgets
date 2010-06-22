@@ -35,7 +35,7 @@ XRCDEMO_OBJECTS =  \
 	$(OBJS)\xrcdemo_derivdlg.obj \
 	$(OBJS)\xrcdemo_custclas.obj
 XRCDEMO_RESOURCES =  \
-	$(OBJS)\xrcdemo_xrcdemo.res
+	$(OBJS)\xrcdemo_sample.res
 
 ### Conditionally set variables: ###
 
@@ -358,14 +358,17 @@ clean:
 	-if exist $(OBJS)\xrcdemo.ilk del $(OBJS)\xrcdemo.ilk
 	-if exist $(OBJS)\xrcdemo.pdb del $(OBJS)\xrcdemo.pdb
 
-$(OBJS)\xrcdemo.exe: $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_xrcdemo.res
+$(OBJS)\xrcdemo.exe: $(XRCDEMO_OBJECTS) $(OBJS)\xrcdemo_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\xrcdemo.pdb" $(__DEBUGINFO_2)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
 	$(XRCDEMO_OBJECTS) $(XRCDEMO_RESOURCES)  $(__WXLIB_XRC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib
 <<
 
 data: 
 	if not exist $(OBJS)\rc mkdir $(OBJS)\rc
-	for %f in (appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
+	for %f in (artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm) do if not exist $(OBJS)\rc\%f copy .\rc\%f $(OBJS)\rc
+
+$(OBJS)\xrcdemo_sample.res: .\..\..\samples\sample.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\..\samples\sample.rc
 
 $(OBJS)\xrcdemo_xrcdemo.obj: .\xrcdemo.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDEMO_CXXFLAGS) .\xrcdemo.cpp
@@ -378,7 +381,4 @@ $(OBJS)\xrcdemo_derivdlg.obj: .\derivdlg.cpp
 
 $(OBJS)\xrcdemo_custclas.obj: .\custclas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(XRCDEMO_CXXFLAGS) .\custclas.cpp
-
-$(OBJS)\xrcdemo_xrcdemo.res: .\xrcdemo.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_3_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_1_p) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\xrcdemo.rc
 

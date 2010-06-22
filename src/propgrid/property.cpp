@@ -692,12 +692,7 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    for ( unsigned int i = 0; i<m_children.size(); i++ )
-    {
-        if ( p == m_children[i] )
-            return i;
-    }
-    return wxNOT_FOUND;
+    return wxPGFindInVector(m_children, p);
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -1364,6 +1359,12 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 }
                 i++;
             }
+
+            // Always call OnSetValue() for a parent property (do not call it
+            // here if the value is non-null because it will then be called
+            // below)
+            if ( value.IsNull() )
+                OnSetValue();
         }
 
         if ( !value.IsNull() )
@@ -1911,7 +1912,7 @@ void wxPGProperty::SetChoiceSelection( int newValue )
     }
 }
 
-bool wxPGProperty::SetChoices( wxPGChoices& choices )
+bool wxPGProperty::SetChoices( const wxPGChoices& choices )
 {
     // Property must be de-selected first (otherwise choices in
     // the control would be de-synced with true choices)

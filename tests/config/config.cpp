@@ -7,7 +7,10 @@
 // Copyright:   (c) 2007 Marcin Wojdyr
 ///////////////////////////////////////////////////////////////////////////////
 
-// see also tests/fileconf/fileconftest.cpp for wxFileConfig specific tests
+// NOTE: this test is compiled in test_gui because it uses wxColour for
+//       its testing purpose.
+// See also tests/config/fileconf.cpp for wxFileConfig specific tests and
+// tests/config/regconf.cpp for wxRegConfig specific tests.
 
 // ----------------------------------------------------------------------------
 // headers

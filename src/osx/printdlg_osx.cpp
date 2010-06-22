@@ -67,10 +67,9 @@ bool wxMacPrintDialog::Create( wxWindow *p, wxPrintDialogData *data )
 
 wxMacPrintDialog::~wxMacPrintDialog()
 {
-    if (m_destroyDC && m_printerDC)
+    if (m_destroyDC)
     {
-        delete m_printerDC;
-        m_printerDC = NULL;
+        wxDELETE(m_printerDC);
     }
 }
 

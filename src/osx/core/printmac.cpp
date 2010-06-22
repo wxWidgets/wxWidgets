@@ -131,7 +131,7 @@ void wxOSXPrintData::UpdateToPMState()
 {
 }
 
-bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
+void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
 {
     CFArrayRef printerList;
     CFIndex index, count;
@@ -158,10 +158,13 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             PMSessionSetCurrentPMPrinter(m_macPrintSession, printer);
         CFRelease(printerList);
     }
+}
 
+void wxOSXPrintData::TransferPaperInfoFrom( const wxPrintData &data )
+{
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
-
+    
     wxSize papersize = wxDefaultSize;
     const wxPaperSize paperId = data.GetPaperId();
     if ( paperId != wxPAPER_NONE && wxThePrintPaperDatabase )
@@ -177,16 +180,16 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     {
         papersize = data.GetPaperSize();
     }
-
+    
     if ( papersize != wxDefaultSize )
     {
         papersize.x = (wxInt32) (papersize.x * mm2pt);
         papersize.y = (wxInt32) (papersize.y * mm2pt);
-
+        
         double height, width;
         PMPaperGetHeight(m_macPaper, &height);
         PMPaperGetWidth(m_macPaper, &width);
-
+        
         if ( fabs( width - papersize.x ) >= 5 ||
             fabs( height - papersize.y ) >= 5 )
         {
@@ -215,19 +218,19 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
                     const PMPaperMargins margins = { 0.0, 0.0, 0.0, 0.0 };
                     wxString id, name(wxT("Custom paper"));
                     id.Printf(wxT("wxPaperCustom%dx%d"), papersize.x, papersize.y);
-
+                    
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
                     if ( PMPaperCreateCustom != NULL)
                     {
                         PMPaperCreateCustom(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ),
-                            papersize.x, papersize.y, &margins, &paper);
+                                            papersize.x, papersize.y, &margins, &paper);
                     }
 #endif
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
                     if ( paper == kPMNoData )
                     {
                         PMPaperCreate(printer, wxCFStringRef( id, wxFont::GetDefaultEncoding() ), wxCFStringRef( name, wxFont::GetDefaultEncoding() ),
-                            papersize.x, papersize.y, &margins, &paper);
+                                      papersize.x, papersize.y, &margins, &paper);
                     }
 #endif
                 }
@@ -243,16 +246,16 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             }
         }
     }
-
+    
     PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
     PMSetCollate(m_macPrintSettings, data.GetCollate());
     if ( data.IsOrientationReversed() )
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
-            kPMReverseLandscape : kPMReversePortrait , false ) ;
+                         kPMReverseLandscape : kPMReversePortrait , false ) ;
     else
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
-            kPMLandscape : kPMPortrait , false ) ;
-
+                         kPMLandscape : kPMPortrait , false ) ;
+    
     PMDuplexMode mode = 0 ;
     switch( data.GetDuplex() )
     {
@@ -268,14 +271,20 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             break ;
     }
     PMSetDuplex(  m_macPrintSettings, mode ) ;
-
-
+    
+    
     if ( data.IsOrientationReversed() )
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
-            kPMReverseLandscape : kPMReversePortrait , false ) ;
+                         kPMReverseLandscape : kPMReversePortrait , false ) ;
     else
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
-            kPMLandscape : kPMPortrait , false ) ;
+                         kPMLandscape : kPMPortrait , false ) ;
+}
+
+void wxOSXPrintData::TransferResolutionFrom( const wxPrintData &data )
+{
+    PMPrinter printer;
+    PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
 
     UInt32 resCount;
     PMResolution *resolutions = GetSupportedResolutions(printer, &resCount);
@@ -296,16 +305,25 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
             PMSetResolution( m_macPageFormat, &res);
 #endif
         }
-
+        
         free(resolutions);
     }
+}
+
+bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
+{
+    TransferPrinterNameFrom(data);
+    TransferPaperInfoFrom(data);
+    TransferResolutionFrom(data);
+    
     // after setting the new resolution the format has to be updated, otherwise the page rect remains
     // at the 'old' scaling
-
+    
     PMSessionValidatePageFormat(m_macPrintSession,
-        m_macPageFormat, kPMDontWantBoolean);
+                                m_macPageFormat, kPMDontWantBoolean);
     PMSessionValidatePrintSettings(m_macPrintSession,
-        m_macPrintSettings, kPMDontWantBoolean);
+                                   m_macPrintSettings, kPMDontWantBoolean);
+
 #if wxOSX_USE_COCOA
     UpdateFromPMState();
 #endif
@@ -313,17 +331,31 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
     return true ;
 }
 
-bool wxOSXPrintData::TransferTo( wxPrintData &data )
+void wxOSXPrintData::TransferPrinterNameTo( wxPrintData &data )
 {
+    CFStringRef name;
+    PMPrinter printer ;
+    PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
+    if (PMPrinterIsDefault(printer))
+        data.SetPrinterName(wxEmptyString);
+    else
+    {
+        name = PMPrinterGetName(printer);
+        CFRetain(name);
+        data.SetPrinterName(wxCFStringRef(name).AsString());
+    }
+}
+
+void wxOSXPrintData::TransferPaperInfoTo( wxPrintData &data )
+{
+    PMPrinter printer ;
+    PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
     OSStatus err = noErr ;
-#if wxOSX_USE_COCOA
-    UpdateToPMState();
-#endif
     UInt32 copies ;
     err = PMGetCopies( m_macPrintSettings , &copies ) ;
     if ( err == noErr )
         data.SetNoCopies( copies ) ;
-
+    
     PMOrientation orientation ;
     err = PMGetOrientation(  m_macPageFormat , &orientation ) ;
     if ( err == noErr )
@@ -339,23 +371,12 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
             data.SetOrientationReversed( orientation == kPMReverseLandscape );
         }
     }
-
+    
     Boolean collate;
     if (PMGetCollate(m_macPrintSettings, &collate) == noErr)
         data.SetCollate(collate);
-
-    CFStringRef name;
-    PMPrinter printer ;
-    PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
-    if (PMPrinterIsDefault(printer))
-        data.SetPrinterName(wxEmptyString);
-    else
-    {
-        name = PMPrinterGetName(printer);
-        CFRetain(name);
-        data.SetPrinterName(wxCFStringRef(name).AsString());
-    }
-
+    
+    
     PMDuplexMode mode = 0 ;
     PMGetDuplex(  m_macPrintSettings, &mode ) ;
     switch( mode )
@@ -371,6 +392,25 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
             data.SetDuplex(wxDUPLEX_SIMPLEX);
             break ;
     }
+    
+    double height, width;
+    PMPaperGetHeight(m_macPaper, &height);
+    PMPaperGetWidth(m_macPaper, &width);
+    
+    wxSize sz((int)(width * pt2mm + 0.5 ) ,
+              (int)(height * pt2mm + 0.5 ));
+    data.SetPaperSize(sz);
+    wxPaperSize id = wxThePrintPaperDatabase->GetSize(wxSize(sz.x* 10, sz.y * 10));
+    if (id != wxPAPER_NONE)
+    {
+        data.SetPaperId(id);
+    }
+}
+
+void wxOSXPrintData::TransferResolutionTo( wxPrintData &data )
+{
+    PMPrinter printer ;
+    PMSessionGetCurrentPrinter( m_macPrintSession, &printer );
 
     /* assume high quality, will change below if we are able to */
     data.SetQuality(wxPRINT_QUALITY_HIGH);
@@ -405,20 +445,18 @@ bool wxOSXPrintData::TransferTo( wxPrintData &data )
                 data.SetQuality((((i + 1) * 3) / resCount) + wxPRINT_QUALITY_DRAFT);
         }
         free(resolutions);
-    }
+    }    
+}
 
-    double height, width;
-    PMPaperGetHeight(m_macPaper, &height);
-    PMPaperGetWidth(m_macPaper, &width);
+bool wxOSXPrintData::TransferTo( wxPrintData &data )
+{
+#if wxOSX_USE_COCOA
+    UpdateToPMState();
+#endif
 
-    wxSize sz((int)(width * pt2mm + 0.5 ) ,
-         (int)(height * pt2mm + 0.5 ));
-    data.SetPaperSize(sz);
-    wxPaperSize id = wxThePrintPaperDatabase->GetSize(wxSize(sz.x* 10, sz.y * 10));
-    if (id != wxPAPER_NONE)
-    {
-        data.SetPaperId(id);
-    }
+    TransferPrinterNameTo(data);
+    TransferPaperInfoTo(data);
+    TransferResolutionTo(data);
     return true ;
 }
 
@@ -558,8 +596,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         return false;
     }
 
-    printout->SetIsPreview(false);
-
     if (m_printDialogData.GetMinPage() < 1)
         m_printDialogData.SetMinPage(1);
     if (m_printDialogData.GetMaxPage() < 1)
@@ -682,8 +718,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     if (sm_abortWindow)
     {
         sm_abortWindow->Show(false);
-        delete sm_abortWindow;
-        sm_abortWindow = NULL;
+        wxDELETE(sm_abortWindow);
     }
 
     wxEndBusyCursor();

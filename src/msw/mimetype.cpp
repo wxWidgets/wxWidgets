@@ -95,6 +95,15 @@ static bool CanonicalizeParams(wxString& command)
         }
     }
 
+    if ( foundFilename )
+    {
+        // Some values also contain an addition %* expansion string which is
+        // presumably supposed to be replaced with the names of the other files
+        // accepted by the command. As we don't support more than one file
+        // anyhow, simply ignore it.
+        command.Replace(" %*", "");
+    }
+
     return foundFilename;
 }
 

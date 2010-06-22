@@ -364,8 +364,7 @@ wxWindowBase::~wxWindowBase()
         // This removes any dangling pointers to this window in other windows'
         // constraintsInvolvedIn lists.
         UnsetConstraints(m_constraints);
-        delete m_constraints;
-        m_constraints = NULL;
+        wxDELETE(m_constraints);
     }
 #endif // wxUSE_CONSTRAINTS
 
@@ -1254,8 +1253,7 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
 
     if ( deleteHandler )
     {
-        delete firstHandler;
-        firstHandler = NULL;
+        wxDELETE(firstHandler);
     }
 
     return firstHandler;
@@ -2076,8 +2074,7 @@ void wxWindowBase::DeleteRelatedConstraints()
             node = next;
         }
 
-        delete m_constraintsInvolvedIn;
-        m_constraintsInvolvedIn = NULL;
+        wxDELETE(m_constraintsInvolvedIn);
     }
 }
 
@@ -2983,7 +2980,7 @@ bool wxWindowBase::TryBefore(wxEvent& event)
     if ( event.GetEventObject() == this )
     {
         wxValidator * const validator = GetValidator();
-        if ( validator && validator->ProcessEventHere(event) )
+        if ( validator && validator->ProcessEventLocally(event) )
         {
             return true;
         }

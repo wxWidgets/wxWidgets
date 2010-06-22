@@ -1023,8 +1023,10 @@ HTMLDLL_OBJECTS =  \
 	$(OBJS)\htmldll_m_links.o \
 	$(OBJS)\htmldll_m_list.o \
 	$(OBJS)\htmldll_m_pre.o \
+	$(OBJS)\htmldll_m_span.o \
 	$(OBJS)\htmldll_m_style.o \
 	$(OBJS)\htmldll_m_tables.o \
+	$(OBJS)\htmldll_styleparams.o \
 	$(OBJS)\htmldll_winpars.o \
 	$(OBJS)\htmldll_htmllbox.o
 HTMLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
@@ -1058,8 +1060,10 @@ HTMLLIB_OBJECTS =  \
 	$(OBJS)\htmllib_m_links.o \
 	$(OBJS)\htmllib_m_list.o \
 	$(OBJS)\htmllib_m_pre.o \
+	$(OBJS)\htmllib_m_span.o \
 	$(OBJS)\htmllib_m_style.o \
 	$(OBJS)\htmllib_m_tables.o \
+	$(OBJS)\htmllib_styleparams.o \
 	$(OBJS)\htmllib_winpars.o \
 	$(OBJS)\htmllib_htmllbox.o
 QADLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
@@ -1562,8 +1566,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_m_links.o \
 	$(OBJS)\monodll_m_list.o \
 	$(OBJS)\monodll_m_pre.o \
+	$(OBJS)\monodll_m_span.o \
 	$(OBJS)\monodll_m_style.o \
 	$(OBJS)\monodll_m_tables.o \
+	$(OBJS)\monodll_styleparams.o \
 	$(OBJS)\monodll_winpars.o \
 	$(OBJS)\monodll_htmllbox.o \
 	$(OBJS)\monodll_debugrpt.o \
@@ -1810,6 +1816,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -1891,6 +1898,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
 	$(OBJS)\monodll_headerctrlg.o \
+	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -2056,6 +2064,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_effects.o \
 	$(OBJS)\monodll_fddlgcmn.o \
 	$(OBJS)\monodll_filectrlcmn.o \
+	$(OBJS)\monodll_filehistorycmn.o \
 	$(OBJS)\monodll_filepickercmn.o \
 	$(OBJS)\monodll_fontpickercmn.o \
 	$(OBJS)\monodll_fldlgcmn.o \
@@ -2137,6 +2146,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_dragimgg.o \
 	$(OBJS)\monodll_filectrlg.o \
 	$(OBJS)\monodll_headerctrlg.o \
+	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_listbkg.o \
 	$(OBJS)\monodll_logg.o \
 	$(OBJS)\monodll_numdlgg.o \
@@ -2179,7 +2189,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_hyperlinkg.o \
-	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_notifmsgg.o \
 	$(OBJS)\monodll_odcombo.o \
@@ -2219,7 +2228,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_gridsel.o \
 	$(OBJS)\monodll_helpext.o \
 	$(OBJS)\monodll_hyperlinkg.o \
-	$(OBJS)\monodll_infobar.o \
 	$(OBJS)\monodll_laywin.o \
 	$(OBJS)\monodll_notifmsgg.o \
 	$(OBJS)\monodll_odcombo.o \
@@ -2273,8 +2281,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_m_links.o \
 	$(OBJS)\monolib_m_list.o \
 	$(OBJS)\monolib_m_pre.o \
+	$(OBJS)\monolib_m_span.o \
 	$(OBJS)\monolib_m_style.o \
 	$(OBJS)\monolib_m_tables.o \
+	$(OBJS)\monolib_styleparams.o \
 	$(OBJS)\monolib_winpars.o \
 	$(OBJS)\monolib_htmllbox.o \
 	$(OBJS)\monolib_debugrpt.o \
@@ -2521,6 +2531,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -2602,6 +2613,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
 	$(OBJS)\monolib_headerctrlg.o \
+	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2767,6 +2779,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_effects.o \
 	$(OBJS)\monolib_fddlgcmn.o \
 	$(OBJS)\monolib_filectrlcmn.o \
+	$(OBJS)\monolib_filehistorycmn.o \
 	$(OBJS)\monolib_filepickercmn.o \
 	$(OBJS)\monolib_fontpickercmn.o \
 	$(OBJS)\monolib_fldlgcmn.o \
@@ -2848,6 +2861,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_dragimgg.o \
 	$(OBJS)\monolib_filectrlg.o \
 	$(OBJS)\monolib_headerctrlg.o \
+	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_listbkg.o \
 	$(OBJS)\monolib_logg.o \
 	$(OBJS)\monolib_numdlgg.o \
@@ -2890,7 +2904,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_hyperlinkg.o \
-	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_notifmsgg.o \
 	$(OBJS)\monolib_odcombo.o \
@@ -2930,7 +2943,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_gridsel.o \
 	$(OBJS)\monolib_helpext.o \
 	$(OBJS)\monolib_hyperlinkg.o \
-	$(OBJS)\monolib_infobar.o \
 	$(OBJS)\monolib_laywin.o \
 	$(OBJS)\monolib_notifmsgg.o \
 	$(OBJS)\monolib_odcombo.o \
@@ -3135,6 +3147,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3216,6 +3229,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
 	$(OBJS)\coredll_headerctrlg.o \
+	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -3381,6 +3395,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_effects.o \
 	$(OBJS)\coredll_fddlgcmn.o \
 	$(OBJS)\coredll_filectrlcmn.o \
+	$(OBJS)\coredll_filehistorycmn.o \
 	$(OBJS)\coredll_filepickercmn.o \
 	$(OBJS)\coredll_fontpickercmn.o \
 	$(OBJS)\coredll_fldlgcmn.o \
@@ -3462,6 +3477,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_dragimgg.o \
 	$(OBJS)\coredll_filectrlg.o \
 	$(OBJS)\coredll_headerctrlg.o \
+	$(OBJS)\coredll_infobar.o \
 	$(OBJS)\coredll_listbkg.o \
 	$(OBJS)\coredll_logg.o \
 	$(OBJS)\coredll_numdlgg.o \
@@ -3637,6 +3653,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -3718,6 +3735,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
 	$(OBJS)\corelib_headerctrlg.o \
+	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -3883,6 +3901,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_effects.o \
 	$(OBJS)\corelib_fddlgcmn.o \
 	$(OBJS)\corelib_filectrlcmn.o \
+	$(OBJS)\corelib_filehistorycmn.o \
 	$(OBJS)\corelib_filepickercmn.o \
 	$(OBJS)\corelib_fontpickercmn.o \
 	$(OBJS)\corelib_fldlgcmn.o \
@@ -3964,6 +3983,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_dragimgg.o \
 	$(OBJS)\corelib_filectrlg.o \
 	$(OBJS)\corelib_headerctrlg.o \
+	$(OBJS)\corelib_infobar.o \
 	$(OBJS)\corelib_listbkg.o \
 	$(OBJS)\corelib_logg.o \
 	$(OBJS)\corelib_numdlgg.o \
@@ -4020,7 +4040,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_hyperlinkg.o \
-	$(OBJS)\advdll_infobar.o \
 	$(OBJS)\advdll_laywin.o \
 	$(OBJS)\advdll_notifmsgg.o \
 	$(OBJS)\advdll_odcombo.o \
@@ -4060,7 +4079,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_gridsel.o \
 	$(OBJS)\advdll_helpext.o \
 	$(OBJS)\advdll_hyperlinkg.o \
-	$(OBJS)\advdll_infobar.o \
 	$(OBJS)\advdll_laywin.o \
 	$(OBJS)\advdll_notifmsgg.o \
 	$(OBJS)\advdll_odcombo.o \
@@ -4104,7 +4122,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_hyperlinkg.o \
-	$(OBJS)\advlib_infobar.o \
 	$(OBJS)\advlib_laywin.o \
 	$(OBJS)\advlib_notifmsgg.o \
 	$(OBJS)\advlib_odcombo.o \
@@ -4144,7 +4161,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_gridsel.o \
 	$(OBJS)\advlib_helpext.o \
 	$(OBJS)\advlib_hyperlinkg.o \
-	$(OBJS)\advlib_infobar.o \
 	$(OBJS)\advlib_laywin.o \
 	$(OBJS)\advlib_notifmsgg.o \
 	$(OBJS)\advlib_odcombo.o \
@@ -6569,10 +6585,16 @@ $(OBJS)\monodll_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\monodll_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_winpars.o: ../../src/html/winpars.cpp
@@ -7335,6 +7357,11 @@ $(OBJS)\monodll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7740,6 +7767,11 @@ $(OBJS)\monodll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7926,11 +7958,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -8765,10 +8792,16 @@ $(OBJS)\monolib_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\monolib_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_winpars.o: ../../src/html/winpars.cpp
@@ -9531,6 +9564,11 @@ $(OBJS)\monolib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9936,6 +9974,11 @@ $(OBJS)\monolib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10122,11 +10165,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11736,6 +11774,11 @@ $(OBJS)\coredll_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12137,6 +12180,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_headerctrlg.o: ../../src/generic/headerctrlg.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13023,6 +13071,11 @@ $(OBJS)\corelib_filectrlcmn.o: ../../src/common/filectrlcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_filehistorycmn.o: ../../src/common/filehistorycmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_filepickercmn.o: ../../src/common/filepickercmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13428,6 +13481,11 @@ $(OBJS)\corelib_headerctrlg.o: ../../src/generic/headerctrlg.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_infobar.o: ../../src/generic/infobar.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_listbkg.o: ../../src/generic/listbkg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13601,9 +13659,6 @@ $(OBJS)\advdll_helpext.o: ../../src/generic/helpext.cpp
 $(OBJS)\advdll_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_infobar.o: ../../src/generic/infobar.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\advdll_laywin.o: ../../src/generic/laywin.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -13713,9 +13768,6 @@ $(OBJS)\advlib_helpext.o: ../../src/generic/helpext.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_hyperlinkg.o: ../../src/generic/hyperlinkg.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\advlib_infobar.o: ../../src/generic/infobar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_laywin.o: ../../src/generic/laywin.cpp
@@ -13862,10 +13914,16 @@ $(OBJS)\htmldll_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\htmldll_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmldll_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmldll_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmldll_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(HTMLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_winpars.o: ../../src/html/winpars.cpp
@@ -13937,10 +13995,16 @@ $(OBJS)\htmllib_m_list.o: ../../src/html/m_list.cpp
 $(OBJS)\htmllib_m_pre.o: ../../src/html/m_pre.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\htmllib_m_span.o: ../../src/html/m_span.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\htmllib_m_style.o: ../../src/html/m_style.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_m_tables.o: ../../src/html/m_tables.cpp
+	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\htmllib_styleparams.o: ../../src/html/styleparams.cpp
 	$(CXX) -c -o $@ $(HTMLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmllib_winpars.o: ../../src/html/winpars.cpp

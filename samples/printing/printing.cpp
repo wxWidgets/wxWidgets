@@ -51,8 +51,8 @@
 
 #include "printing.h"
 
-#ifndef __WXMSW__
-    #include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 // Global print data, to remember settings during the session
@@ -212,7 +212,7 @@ void MyApp::Draw(wxDC&dc)
     str.Printf( wxT("---- Text at angle %d ----"), i );
     dc.DrawRotatedText( str, 100, 300, i );
 
-    wxIcon my_icon = wxICON(mondrian);
+    wxIcon my_icon = wxICON(sample);
 
     dc.DrawIcon( my_icon, 100, 100);
 
@@ -230,11 +230,17 @@ void MyApp::Draw(wxDC&dc)
     if (window_dc)
         gc = wxGraphicsContext::Create( *window_dc );
 
+#ifdef __WXMSW__
+    wxEnhMetaFileDC *emf_dc = wxDynamicCast( &dc, wxEnhMetaFileDC );
+    if (emf_dc)
+        gc = wxGraphicsContext::Create( *emf_dc );
+#endif
+
     if (gc)
     {
         // make a path that contains a circle and some lines, centered at 100,100
         gc->SetPen( *wxRED_PEN );
-        gc->SetFont( m_testFont, *wxGREEN );
+
         wxGraphicsPath path = gc->CreatePath();
         path.AddCircle( 50.0, 50.0, 50.0 );
         path.MoveToPoint(0.0, 50.0);
@@ -245,6 +251,17 @@ void MyApp::Draw(wxDC&dc)
         path.AddRectangle(25.0, 25.0, 50.0, 50.0);
 
         gc->StrokePath(path);
+
+        // draw some text
+        wxString text("Text by wxGraphicsContext");
+        gc->SetFont( m_testFont, *wxBLACK );
+        gc->DrawText(text, 25.0, 60.0);
+
+        // draw rectangle around the text
+        double w, h, d, el;
+        gc->GetTextExtent(text, &w, &h, &d, &el);
+        gc->SetPen( *wxBLACK_PEN );
+        gc->DrawRectangle(25.0, 60.0, w, h);
 
         delete gc;
     }
@@ -286,7 +303,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, const wxPoint&pos, const 
 #endif // wxUSE_STATUSBAR
 
     // Load icon and bitmap
-    SetIcon( wxICON( mondrian) );
+    SetIcon( wxICON( sample) );
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

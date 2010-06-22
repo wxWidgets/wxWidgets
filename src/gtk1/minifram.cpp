@@ -88,8 +88,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 
     if (!win->GetTitle().empty() &&
         ((win->GetWindowStyle() & wxCAPTION) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
+         (win->GetWindowStyle() & wxTINY_CAPTION)))
     {
         wxClientDC dc(win);
         dc.SetFont( *wxSMALL_FONT );
@@ -134,8 +133,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
     if (!win->GetTitle().empty() &&
         ((win->GetWindowStyle() & wxCAPTION) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_HORIZ) ||
-         (win->GetWindowStyle() & wxTINY_CAPTION_VERT)))
+         (win->GetWindowStyle() & wxTINY_CAPTION)))
     {
         wxClientDC dc(win);
         dc.SetFont( *wxSMALL_FONT );
@@ -330,7 +328,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
 {
     style = style | wxCAPTION;
 
-    if ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT))
+    if ((style & wxCAPTION) || (style & wxTINY_CAPTION))
         m_miniTitle = 13;
 
     m_miniEdge = 3;
@@ -348,7 +346,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     }
 
     if ((style & wxSYSTEM_MENU) &&
-        ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
+        ((style & wxCAPTION) || (style & wxTINY_CAPTION)))
     {
         GdkBitmap *mask = NULL;
         GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d

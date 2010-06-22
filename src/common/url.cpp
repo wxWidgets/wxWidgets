@@ -365,8 +365,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
         if ( ms_proxyDefault )
         {
             ms_proxyDefault->Close();
-            delete ms_proxyDefault;
-            ms_proxyDefault = NULL;
+            wxDELETE(ms_proxyDefault);
         }
     }
     else
@@ -487,8 +486,7 @@ bool wxURLModule::OnInit()
 void wxURLModule::OnExit()
 {
 #if wxUSE_PROTOCOL_HTTP
-    delete wxURL::ms_proxyDefault;
-    wxURL::ms_proxyDefault = NULL;
+    wxDELETE(wxURL::ms_proxyDefault);
 #endif // wxUSE_PROTOCOL_HTTP
 }
 

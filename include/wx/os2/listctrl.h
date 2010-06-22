@@ -308,7 +308,7 @@ public:
     // Edit the label
     //
     wxTextCtrl* EditLabel( long         lItem
-                          ,wxClassInfo* pTextControlClass = CLASSINFO(wxTextCtrl)
+                          ,wxClassInfo* pTextControlClass = wxCLASSINFO(wxTextCtrl)
                          );
 
     //

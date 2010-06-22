@@ -1183,7 +1183,7 @@ wxDataViewColumn* wxMacDataViewDataBrowserListViewControl::GetSortingColumn() co
 
 void wxMacDataViewDataBrowserListViewControl::Resort()
 {
-  (void) Resort();
+    (void) wxMacDataBrowserListViewControl::Resort();
 }
 
 //
@@ -2092,8 +2092,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                   dataObject->Add(textDataObject);
                 else
                 {
-                  delete textDataObject;
-                  textDataObject = NULL;
+                  wxDELETE(textDataObject);
                 }
               }
             } /* block */
@@ -2124,8 +2123,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                       dataObject->Add(textDataObject);
                     else
                     {
-                      delete textDataObject;
-                      textDataObject = NULL;
+                      wxDELETE(textDataObject);
                     }
                   }
                   else // overwrite data because the 'utxt' flavor has priority over the 'TEXT' flavor
@@ -2749,6 +2747,17 @@ void wxDataViewColumn::SetWidth(int width)
     }
   }
 }
+
+void wxDataViewColumn::SetHidden(bool WXUNUSED(hidden))
+{
+    // How to do that?
+}
+
+bool wxDataViewColumn::IsHidden() const
+{
+    return true;
+}
+
 
 void wxDataViewColumn::SetAsSortKey(bool WXUNUSED(sort))
 {

@@ -209,8 +209,7 @@ void wxApp::CleanUp()
     // unregister the classes now
     UnregisterWindowClasses();
 
-    delete wxWinHandleHash;
-    wxWinHandleHash = NULL;
+    wxDELETE(wxWinHandleHash);
 }
 
 // ----------------------------------------------------------------------------

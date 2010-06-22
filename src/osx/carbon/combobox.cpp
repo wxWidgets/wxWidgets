@@ -230,17 +230,8 @@ wxComboBox::~wxComboBox()
     // delete the controls now, don't leave them alive even though they would
     // still be eventually deleted by our parent - but it will be too late, the
     // user code expects them to be gone now
-    if (m_text != NULL)
-    {
-        delete m_text;
-        m_text = NULL;
-    }
-
-    if (m_choice != NULL)
-    {
-        delete m_choice;
-        m_choice = NULL;
-    }
+    wxDELETE(m_text);
+    wxDELETE(m_choice);
 }
 
 // ----------------------------------------------------------------------------
@@ -471,10 +462,9 @@ void wxComboBox::SetEditable(bool editable)
     {
         m_text = new wxComboBoxText( this );
     }
-    else if ( ( m_text != NULL ) && !editable )
+    else if ( !editable )
     {
-        delete m_text;
-        m_text = NULL;
+        wxDELETE(m_text);
     }
 
     int currentX, currentY;

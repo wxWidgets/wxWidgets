@@ -178,6 +178,7 @@ public:
 wxRibbonButtonBar::wxRibbonButtonBar()
 {
     m_layouts_valid = false;
+    CommonInit (0);
 }
 
 wxRibbonButtonBar::wxRibbonButtonBar(wxWindow* parent,

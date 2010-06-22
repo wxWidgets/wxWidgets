@@ -563,8 +563,10 @@ if test "$wxUSE_GUI" = "yes"; then
     # to be removed when --disable-gtk2 isn't needed
     if test "x$wxUSE_GTK2" = "xyes"; then
         wxGTK_VERSION=2
+        wxUSE_GTK1=0
     elif test "x$wxUSE_GTK2" = "xno"; then
         wxGTK_VERSION=1
+        wxUSE_GTK1=1
     fi
 
     for toolkit in $ALL_TOOLKITS; do
@@ -767,6 +769,7 @@ WX_ARG_FEATURE(dynamicloader, [  --enable-dynamicloader  use (new) wxDynamicLibr
 WX_ARG_FEATURE(exceptions,    [  --enable-exceptions     build exception-safe library], wxUSE_EXCEPTIONS)
 WX_ARG_FEATURE(ffile,         [  --enable-ffile          use wxFFile class], wxUSE_FFILE)
 WX_ARG_FEATURE(file,          [  --enable-file           use wxFile class], wxUSE_FILE)
+WX_ARG_FEATURE(filehistory,   [  --enable-filehistory    use wxFileHistory class], wxUSE_FILE_HISTORY)
 WX_ARG_FEATURE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
 WX_ARG_FEATURE(fontenum,      [  --enable-fontenum       use wxFontEnumerator class], wxUSE_FONTENUM)
 WX_ARG_FEATURE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
@@ -3711,14 +3714,13 @@ fi
 
 
 dnl ---------------------------------------------------------------------------
-dnl wxDisplay Sanity checks
+dnl wxDisplay checks
 dnl ---------------------------------------------------------------------------
 
+USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-dnl ---------------------------------------------------------------------------
-dnl Xinerama (for unix ) - Brian Victor
-dnl ---------------------------------------------------------------------------
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+    dnl Xinerama is used for wxGTK1/wxX11/wxMotif only
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
         AC_MSG_CHECKING([for Xinerama])
         WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xinerama)
         if test "$ac_find_libraries" != "" ; then
@@ -3726,37 +3728,40 @@ dnl ---------------------------------------------------------------------------
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
             fi
+            USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             AC_MSG_RESULT([yes])
-
-            AC_MSG_CHECKING([for Xxf86vm extension])
-            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
-            if test "$ac_find_libraries" != "" ; then
-                AC_MSG_RESULT([yes])
-                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
-                                 [
-                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
-                                 ],
-                                 [],
-                                 [
-                                      #if HAVE_X11_XLIB_H
-                                        #include <X11/Xlib.h>
-                                      #endif
-                                 ])
-            else
-                AC_MSG_RESULT([no])
-            fi
-
         else
             AC_MSG_RESULT([no])
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
-dnl ---------------------------------------------------------------------------
-dnl DirectDraw for MSW - optionally used by WxDisplay.
-dnl ---------------------------------------------------------------------------
+        dnl DirectDraw for MSW - optionally used by WxDisplay.
         AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
+    fi
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+    dnl wxGTK2 needs Xxf86vm as well as Xinerama-using ports from above
+    if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
+        AC_MSG_CHECKING([for Xxf86vm extension])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
+        if test "$ac_find_libraries" != "" ; then
+            AC_MSG_RESULT([yes])
+            AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                             [
+                              GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+                             ],
+                             [],
+                             [
+                                  #if HAVE_X11_XLIB_H
+                                    #include <X11/Xlib.h>
+                                  #endif
+                             ])
+        else
+            AC_MSG_RESULT([no])
+        fi
     fi
 fi
 
@@ -5891,6 +5896,10 @@ if test "$wxUSE_TARSTREAM" = "yes"; then
   else
     AC_DEFINE(wxUSE_TARSTREAM)
   fi
+fi
+
+if test "$wxUSE_FILE_HISTORY" = "yes"; then
+  AC_DEFINE(wxUSE_FILE_HISTORY)
 fi
 
 if test "$wxUSE_FILESYSTEM" = "yes"; then

@@ -252,6 +252,11 @@ wxRect operator*(const wxRect& r1, const wxRect& r2)
     return wxRect(x1, y1, x2-x1, y2-y1);
 }
 
+wxRealPoint::wxRealPoint(const wxPoint& pt)
+ : x(pt.x), y(pt.y) 
+{
+}
+
 // ============================================================================
 // wxColourDatabase
 // ============================================================================
@@ -521,8 +526,7 @@ void wxStockGDI::DeleteAll()
 {
     for (unsigned i = 0; i < ITEMCOUNT; i++)
     {
-        delete ms_stockObject[i];
-        ms_stockObject[i] = NULL;
+        wxDELETE(ms_stockObject[i]);
     }
 }
 

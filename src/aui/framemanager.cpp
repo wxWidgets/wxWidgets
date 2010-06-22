@@ -3676,13 +3676,16 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     HideHint();
 }
 
-void wxAuiManager::OnFloatingPaneResized(wxWindow* wnd, const wxSize& size)
+void wxAuiManager::OnFloatingPaneResized(wxWindow* wnd, const wxRect& rect)
 {
     // try to find the pane
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-    pane.floating_size = size;
+    pane.FloatingSize(rect.GetWidth(), rect.GetHeight());
+
+    // the top-left position may change as well as the size
+    pane.FloatingPosition(rect.x, rect.y);
 }
 
 

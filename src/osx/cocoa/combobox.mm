@@ -154,4 +154,33 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxWindowMac* wxpeer,
     return c;
 }
 
+wxSize wxComboBox::DoGetBestSize() const
+{
+    int lbWidth = GetCount() > 0 ? 20 : 100;  // some defaults
+    wxSize baseSize = wxWindow::DoGetBestSize();
+    int lbHeight = baseSize.y;
+    int wLine;
+    
+    {
+        wxClientDC dc(const_cast<wxComboBox*>(this));
+        
+        // Find the widest line
+        for(unsigned int i = 0; i < GetCount(); i++)
+        {
+            wxString str(GetString(i));
+            
+            wxCoord width, height ;
+            dc.GetTextExtent( str , &width, &height);
+            wLine = width ;
+            
+            lbWidth = wxMax( lbWidth, wLine ) ;
+        }
+        
+        // Add room for the popup arrow
+        lbWidth += 2 * lbHeight ;
+    }
+    
+    return wxSize( lbWidth, lbHeight );
+}
+
 #endif // wxUSE_COMBOBOX

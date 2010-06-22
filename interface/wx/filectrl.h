@@ -11,8 +11,10 @@
 
     This control allows the user to select a file.
 
-    Two implemetations exist, one for Gtk and another generic one for anything
-    other than Gtk. It is only available if @c wxUSE_FILECTRL is set to 1.
+    Two implementations of this class exist, one for Gtk and another generic
+    one for all the other ports.
+
+    This class is only available if @c wxUSE_FILECTRL is set to 1.
 
     @beginStyleTable
     @style{wxFC_DEFAULT_STYLE}
@@ -37,6 +39,9 @@
         The user changed the current selection(by selecting or deselecting a file)
     @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}
         The current folder of the file control has been changed
+    @event{EVT_FILECTRL_FILTERCHANGED(id, func)}
+        The current file filter of the file control has been changed. This
+        event is new in wxWidgets 2.9.1.
     @endEventTable
 
     @library{wxbase}
@@ -195,6 +200,8 @@ public:
         The user changed the current selection(by selecting or deselecting a file)
     @event{EVT_FILECTRL_FOLDERCHANGED(id, func)}
         The current folder of the file control has been changed
+    @event{EVT_FILECTRL_FILTERCHANGED(id, func)}
+        The current file filter of the file control has been changed
     @endEventTable
 
     @library{wxbase}
@@ -230,6 +237,16 @@ public:
     wxArrayString GetFiles() const;
 
     /**
+        Returns the current file filter index.
+
+        For a @b EVT_FILECTRL_FILTERCHANGED event, this method returns the new
+        file filter index.
+
+        @since 2.9.1
+    */
+    int GetFilterIndex() const;
+
+    /**
         Sets the files changed by this event.
     */
     void SetFiles(const wxArrayString& files);
@@ -239,5 +256,12 @@ public:
         Sets the directory of this event.
     */
     void SetDirectory( const wxString &directory );
+
+    /**
+        Sets the filter index changed by this event.
+
+        @since 2.9.1
+    */
+    void SetFilterIndex(int index);
 };
 

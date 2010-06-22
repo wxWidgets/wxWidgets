@@ -159,6 +159,8 @@ wxString wxHTTP::GetCookie(const wxString& cookie) const
 
 wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) const
 {
+    // TODO: Use wxBase64Encode() now that we have it instead of reproducing it
+
     static const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
     wxString buf;
@@ -249,16 +251,14 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
     wxIPV4address *addr;
 
     if (m_addr) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         Close();
     }
 
     m_addr = addr = new wxIPV4address();
 
     if (!addr->Hostname(host)) {
-        delete m_addr;
-        m_addr = NULL;
+        wxDELETE(m_addr);
         m_lastError = wxPROTO_NETERR;
         return false;
     }

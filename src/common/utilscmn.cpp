@@ -355,8 +355,7 @@ void wxPlatform::AddPlatform(int platform)
 
 void wxPlatform::ClearPlatforms()
 {
-    delete sm_customPlatforms;
-    sm_customPlatforms = NULL;
+    wxDELETE(sm_customPlatforms);
 }
 
 /// Function for testing current platform

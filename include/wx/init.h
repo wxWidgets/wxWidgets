@@ -55,7 +55,7 @@ extern int WXDLLIMPEXP_BASE wxEntry(int& argc, char **argv);
 
 // ----------------------------------------------------------------------------
 // Using the library without (explicit) application object: you may avoid using
-// DECLARE_APP and IMPLEMENT_APP macros and call the functions below instead at
+// wxDECLARE_APP and wxIMPLEMENT_APP macros and call the functions below instead at
 // the program startup and termination
 // ----------------------------------------------------------------------------
 

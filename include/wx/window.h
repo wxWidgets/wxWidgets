@@ -803,6 +803,13 @@ public:
     bool ProcessWindowEvent(wxEvent& event)
         { return GetEventHandler()->ProcessEvent(event); }
 
+        // Call GetEventHandler()->ProcessEventLocally(): this should be used
+        // instead of calling ProcessEventLocally() directly on the window
+        // itself as this wouldn't take any pushed event handlers into account
+        // correctly
+    bool ProcessWindowEventLocally(wxEvent& event)
+        { return GetEventHandler()->ProcessEventLocally(event); }
+
         // Process an event by calling GetEventHandler()->ProcessEvent() and
         // handling any exceptions thrown by event handlers. It's mostly useful
         // when processing wx events when called from C code (e.g. in GTK+
@@ -830,6 +837,7 @@ protected:
     //       The same holds for all other wxEvtHandler functions.
 
     using wxEvtHandler::ProcessEvent;
+    using wxEvtHandler::ProcessEventLocally;
 #if wxUSE_THREADS
     using wxEvtHandler::ProcessThreadEvent;
 #endif

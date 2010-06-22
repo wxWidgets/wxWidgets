@@ -32,6 +32,43 @@
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
 
+namespace
+{
+
+// Custom handler pushed on top of the edit control used by wxDataViewCtrl to
+// forward some events to the main control itself.
+class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
+{
+public:
+    wxDataViewEditorCtrlEvtHandler(wxControl *editor, wxDataViewRenderer *owner)
+    {
+        m_editorCtrl = editor;
+        m_owner = owner;
+
+        m_finished = false;
+    }
+
+    void AcceptChangesAndFinish();
+    void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnTextEnter( wxCommandEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    void OnIdle( wxIdleEvent &event );
+
+private:
+    wxDataViewRenderer     *m_owner;
+    wxControl              *m_editorCtrl;
+    bool                    m_finished;
+    bool                    m_focusOnIdle;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+} // anonymous namespace
+
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
@@ -320,7 +357,7 @@ void wxDataViewIndexListModel::Reset( unsigned int new_size )
 
     m_nextFreeID = new_size + 1;
 
-    wxDataViewModel::Cleared();
+    /* wxDataViewModel:: */ Cleared();
 }
 
 void wxDataViewIndexListModel::RowPrepended()
@@ -363,7 +400,7 @@ void wxDataViewIndexListModel::RowDeleted( unsigned int row )
     m_ordered = false;
 
     wxDataViewItem item( m_hash[row] );
-    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
     m_hash.RemoveAt( row );
 }
 
@@ -381,7 +418,7 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
             wxDataViewItem item( m_hash[rows[i]] );
             array.Add( item );
     }
-    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 
     for (i = 0; i < sorted.GetCount(); i++)
            m_hash.RemoveAt( sorted[i] );
@@ -389,12 +426,12 @@ void wxDataViewIndexListModel::RowsDeleted( const wxArrayInt &rows )
 
 void wxDataViewIndexListModel::RowChanged( unsigned int row )
 {
-    wxDataViewModel::ItemChanged( GetItem(row) );
+    /* wxDataViewModel:: */ ItemChanged( GetItem(row) );
 }
 
 void wxDataViewIndexListModel::RowValueChanged( unsigned int row, unsigned int col )
 {
-    wxDataViewModel::ValueChanged( GetItem(row), col );
+    /* wxDataViewModel:: */ ValueChanged( GetItem(row), col );
 }
 
 unsigned int wxDataViewIndexListModel::GetRow( const wxDataViewItem &item ) const
@@ -464,7 +501,7 @@ void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 {
     m_size = new_size;
 
-    wxDataViewModel::Cleared();
+    /* wxDataViewModel:: */ Cleared();
 }
 
 void wxDataViewVirtualListModel::RowPrepended()
@@ -492,7 +529,7 @@ void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
     m_size--;
     wxDataViewItem item( wxUIntToPtr(row+1) );
-    wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
+    /* wxDataViewModel:: */ ItemDeleted( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
@@ -506,20 +543,20 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
     unsigned int i;
     for (i = 0; i < sorted.GetCount(); i++)
     {
-            wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
-            array.Add( item );
+        wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
+        array.Add( item );
     }
-    wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
+    /* wxDataViewModel:: */ ItemsDeleted( wxDataViewItem(0), array );
 }
 
 void wxDataViewVirtualListModel::RowChanged( unsigned int row )
 {
-    wxDataViewModel::ItemChanged( GetItem(row) );
+    /* wxDataViewModel:: */ ItemChanged( GetItem(row) );
 }
 
 void wxDataViewVirtualListModel::RowValueChanged( unsigned int row, unsigned int col )
 {
-    wxDataViewModel::ValueChanged( GetItem(row), col );
+    /* wxDataViewModel:: */ ValueChanged( GetItem(row), col );
 }
 
 unsigned int wxDataViewVirtualListModel::GetRow( const wxDataViewItem &item ) const
@@ -589,18 +626,6 @@ const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
     return const_cast<wxDataViewRendererBase*>(this)->GetOwner()->GetOwner();
 }
 
-class wxKillRef: public wxWindowRef
-{
-public:
-   wxKillRef( wxWindow *win ) : wxWindowRef( win ) { }
-   virtual void OnObjectDestroy()
-   {
-      get()->PopEventHandler( true );
-      m_pobj = NULL;
-      delete this;
-   }
-};
-
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
     wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
@@ -627,8 +652,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     if(!m_editorCtrl)
         return false;
 
-    (void) new wxKillRef( m_editorCtrl.get() );
-
     wxDataViewEditorCtrlEvtHandler *handler =
         new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
 
@@ -651,6 +674,18 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
     return true;
 }
 
+void wxDataViewRendererBase::DestroyEditControl()
+{
+    // Hide the control immediately but don't delete it yet as there could be
+    // some pending messages for it.
+    m_editorCtrl->Hide();
+
+    wxEvtHandler * const handler = m_editorCtrl->PopEventHandler();
+
+    wxPendingDelete.Append(handler);
+    wxPendingDelete.Append(m_editorCtrl);
+}
+
 void wxDataViewRendererBase::CancelEditing()
 {
     if (!m_editorCtrl)
@@ -658,8 +693,7 @@ void wxDataViewRendererBase::CancelEditing()
 
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 }
 
 bool wxDataViewRendererBase::FinishEditing()
@@ -674,8 +708,7 @@ bool wxDataViewRendererBase::FinishEditing()
 
     dv_ctrl->GetMainWindow()->SetFocus();
 
-    m_editorCtrl->Hide();
-    wxPendingDelete.Append( m_editorCtrl );
+    DestroyEditControl();
 
     if (!Validate(value))
         return false;
@@ -820,16 +853,6 @@ BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
     EVT_TEXT_ENTER     (-1, wxDataViewEditorCtrlEvtHandler::OnTextEnter)
 END_EVENT_TABLE()
-
-wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
-                                wxControl *editorCtrl,
-                                wxDataViewRenderer *owner )
-{
-    m_owner = owner;
-    m_editorCtrl = editorCtrl;
-
-    m_finished = false;
-}
 
 void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
 {
@@ -1407,6 +1430,49 @@ bool wxDataViewChoiceRenderer::SetValue( const wxVariant &value )
 bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
 {
     value = m_data;
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+wxDataViewChoiceByIndexRenderer::wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                                  wxDataViewCellMode mode, int alignment ) :
+      wxDataViewChoiceRenderer( choices, mode, alignment )
+{
+}
+                            
+wxControl* wxDataViewChoiceByIndexRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+{
+    wxVariant string_value = GetChoice( value.GetLong() );
+    
+    return wxDataViewChoiceRenderer::CreateEditorCtrl( parent, labelRect, string_value );
+}
+
+bool wxDataViewChoiceByIndexRenderer::GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+{
+    wxVariant string_value;
+    if (!wxDataViewChoiceRenderer::GetValueFromEditorCtrl( editor, string_value ))
+        return false;
+
+    value = (long) GetChoices().Index( string_value.GetString() );
+    return true;
+}
+
+bool wxDataViewChoiceByIndexRenderer::SetValue( const wxVariant &value )
+{
+    wxVariant string_value = GetChoice( value.GetLong() );
+    return wxDataViewChoiceRenderer::SetValue( string_value );
+}
+    
+bool wxDataViewChoiceByIndexRenderer::GetValue( wxVariant &value ) const
+{
+    wxVariant string_value;
+    if (!wxDataViewChoiceRenderer::GetValue( string_value ))
+        return false;
+            
+    value = (long) GetChoices().Index( string_value.GetString() );
     return true;
 }
 

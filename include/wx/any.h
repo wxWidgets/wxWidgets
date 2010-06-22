@@ -16,8 +16,8 @@
 
 #if wxUSE_ANY
 
+#include <new> // for placement new
 #include "wx/string.h"
-#include "wx/meta/movable.h"
 #include "wx/meta/if.h"
 #include "wx/typeinfo.h"
 
@@ -112,7 +112,7 @@ public:
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported
     template <typename T>
-    bool CheckType(T* reserved = NULL);
+    bool CheckType(T* reserved = NULL) const;
 private:
 };
 
@@ -193,18 +193,24 @@ namespace wxPrivate
 {
 
 template<typename T>
-class wxAnyValueTypeOpsMovable
+class wxAnyValueTypeOpsInplace
 {
 public:
     static void DeleteValue(wxAnyValueBuffer& buf)
     {
-        wxUnusedVar(buf);
+        T* value = reinterpret_cast<T*>(&buf.m_buffer[0]);
+        value->~T();
+
+        // Some compiler may given 'unused variable' warnings without this
+        wxUnusedVar(value);
     }
 
     static void SetValue(const T& value,
                          wxAnyValueBuffer& buf)
     {
-        memcpy(buf.m_buffer, &value, sizeof(T));
+        // Use placement new
+        void* const place = buf.m_buffer;
+        ::new(place) T(value);
     }
 
     static const T& GetValue(const wxAnyValueBuffer& buf)
@@ -270,9 +276,8 @@ public:
 template<typename T>
 class wxAnyValueTypeImplBase : public wxAnyValueType
 {
-    typedef typename wxIf< wxIsMovable<T>::value &&
-                                sizeof(T) <= WX_ANY_VALUE_BUFFER_SIZE,
-                           wxPrivate::wxAnyValueTypeOpsMovable<T>,
+    typedef typename wxIf< sizeof(T) <= WX_ANY_VALUE_BUFFER_SIZE,
+                           wxPrivate::wxAnyValueTypeOpsInplace<T>,
                            wxPrivate::wxAnyValueTypeOpsGeneric<T> >::value
             Ops;
 
@@ -772,7 +777,7 @@ public:
     */
     // FIXME-VC6: remove this hack when VC6 is no longer supported
     template <typename T>
-    bool CheckType(T* = NULL)
+    bool CheckType(T* = NULL) const
     {
         return m_type->CheckType<T>();
     }
@@ -782,8 +787,9 @@ public:
 
         @remarks You cannot reliably test whether two wxAnys are of
                  same value type by simply comparing return values
-                 of wxAny::GetType(). Instead use
-                 wxAnyValueType::CheckType<T>() template function.
+                 of wxAny::GetType(). Instead, use wxAny::HasSameType().
+
+        @see HasSameType()
     */
     const wxAnyValueType* GetType() const
     {
@@ -791,7 +797,16 @@ public:
     }
 
     /**
-        Tests if wxAny is null (that is, whether there is data).
+        Returns @true if this and another wxAny have the same
+        value type.
+    */
+    bool HasSameType(const wxAny& other) const
+    {
+        return GetType()->IsSameType(other.GetType());
+    }
+
+    /**
+        Tests if wxAny is null (that is, whether there is no data).
     */
     bool IsNull() const
     {
@@ -1054,7 +1069,7 @@ private:
 
 
 template<typename T>
-inline bool wxAnyValueType::CheckType(T* reserved)
+inline bool wxAnyValueType::CheckType(T* reserved) const
 {
     wxUnusedVar(reserved);
     return wxAnyValueTypeImpl<T>::IsSameClass(this);

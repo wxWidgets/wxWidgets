@@ -45,8 +45,7 @@ wxAcceleratorRefData::wxAcceleratorRefData()
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-    delete[] m_entries;
-    m_entries = NULL;
+    wxDELETEA(m_entries);
     m_count = 0;
 }
 

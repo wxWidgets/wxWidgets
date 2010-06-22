@@ -29,7 +29,6 @@
 
 @interface wxNSStaticTextView : NSTextField
 {
-    wxWidgetCocoaImpl* impl;
 }
 @end
 

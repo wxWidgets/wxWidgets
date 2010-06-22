@@ -18,6 +18,7 @@
 #include "wx/any.h"
 #include "wx/datetime.h"
 #include "wx/object.h"
+#include "wx/vector.h"
 
 #include <math.h>
 
@@ -39,6 +40,7 @@ private:
         CPPUNIT_TEST( Null );
         CPPUNIT_TEST( wxVariantConversions );
         CPPUNIT_TEST( CustomTemplateSpecialization );
+        CPPUNIT_TEST( Misc );
     CPPUNIT_TEST_SUITE_END();
 
     void CheckType();
@@ -48,6 +50,7 @@ private:
     void Null();
     void wxVariantConversions();
     void CustomTemplateSpecialization();
+    void Misc();
 
     wxDateTime m_testDateTime;
 
@@ -104,7 +107,8 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( wxAnyTestCase, "wxAnyTestCase" );
 // Let's use a number with first digit after decimal dot less than 5,
 // so that we don't have to worry about whether conversion from float
 // to int truncates or rounds.
-const double TEST_FLOAT_CONST = 123.456;
+const float TEST_FLOAT_CONST = 123.456f;
+const double TEST_DOUBLE_CONST = 123.456;
 
 const double FEQ_DELTA = 0.001;
 
@@ -133,8 +137,8 @@ wxAnyTestCase::wxAnyTestCase()
       m_anyCharString1("abc"),
       m_anyWcharString1(L"abc"),
       m_anyBool1(true),
-      m_anyFloatDouble1((float)TEST_FLOAT_CONST),
-      m_anyDoubleDouble1((double)TEST_FLOAT_CONST),
+      m_anyFloatDouble1(TEST_FLOAT_CONST),
+      m_anyDoubleDouble1(TEST_DOUBLE_CONST),
       m_anyWxObjectPtr1(dummyWxObjectPointer),
       m_anyVoidPtr1(dummyVoidPointer),
       m_anyDateTime1(wxDateTime::Now())
@@ -158,8 +162,8 @@ wxAnyTestCase::wxAnyTestCase()
     m_anyCharString2 = "abc";
     m_anyWcharString2 = L"abc";
     m_anyBool2 = true;
-    m_anyFloatDouble2 = (float)TEST_FLOAT_CONST;
-    m_anyDoubleDouble2 = (double)TEST_FLOAT_CONST;
+    m_anyFloatDouble2 = TEST_FLOAT_CONST;
+    m_anyDoubleDouble2 = TEST_DOUBLE_CONST;
     m_anyDateTime2 = m_testDateTime;
     m_anyUniChar1 = wxUniChar('A');
     m_anyWxObjectPtr2 = dummyWxObjectPointer;
@@ -177,6 +181,10 @@ void wxAnyTestCase::CheckType()
     CPPUNIT_ASSERT(wxANY_CHECK_TYPE(m_anyWcharString2, const wchar_t*));
     CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, wxString));
     CPPUNIT_ASSERT(!wxANY_CHECK_TYPE(m_anyWcharString2, const char*));
+
+    // HasSameType()
+    CPPUNIT_ASSERT( m_anyWcharString1.HasSameType(m_anyWcharString2) );
+    CPPUNIT_ASSERT( !m_anyWcharString1.HasSameType(m_anyBool1) );
 }
 
 void wxAnyTestCase::Equality()
@@ -267,10 +275,15 @@ void wxAnyTestCase::As()
     CPPUNIT_ASSERT(m == "abc");
     bool n = wxANY_AS(m_anyBool1, bool);
     CPPUNIT_ASSERT(n);
+
+    // Make sure the stored float that comes back is -identical-.
+    // So do not use delta comparison here.
     float o = wxANY_AS(m_anyFloatDouble1, float);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(o, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_EQUAL(o, TEST_FLOAT_CONST);
+
     double p = wxANY_AS(m_anyDoubleDouble1, double);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(p, TEST_FLOAT_CONST, FEQ_DELTA);
+    CPPUNIT_ASSERT_EQUAL(p, TEST_DOUBLE_CONST);
+
     wxUniChar chr = wxANY_AS(m_anyUniChar1, wxUniChar);
     CPPUNIT_ASSERT(chr == 'A');
     wxDateTime q = wxANY_AS(m_anyDateTime1, wxDateTime);
@@ -398,15 +411,41 @@ void wxAnyTestCase::GetAs()
 
 //
 // Test user data type for wxAnyValueTypeImpl specialization
-// any hand-built wxVariantData
+// any hand-built wxVariantData. Also for inplace allocation
+// sanity checks.
 //
+
+class MyClass;
+
+static wxVector<MyClass*> gs_myClassInstances;
 
 class MyClass
 {
 public:
     MyClass( int someValue = 32768 )
     {
+        Init();
         m_someValue = someValue;
+    }
+    MyClass( const MyClass& other )
+    {
+        Init();
+        m_someValue = other.m_someValue;
+    }
+    virtual ~MyClass()
+    {
+        for ( size_t i=0; i<gs_myClassInstances.size(); i++ )
+        {
+            if ( gs_myClassInstances[i] == this )
+            {
+                gs_myClassInstances.erase(gs_myClassInstances.begin()+i);
+            }
+        }
+    }
+
+    int GetValue() const
+    {
+        return m_someValue;
     }
 
     wxString ToString()
@@ -415,6 +454,12 @@ public:
     }
 
 private:
+    void Init()
+    {
+        // We use this for some sanity checking
+        gs_myClassInstances.push_back(this);
+    }
+
     int     m_someValue;
 };
 
@@ -656,6 +701,39 @@ void wxAnyTestCase::CustomTemplateSpecialization()
     res = any.GetAs(&str);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT_EQUAL(str, myObject.ToString());
+}
+
+void wxAnyTestCase::Misc()
+{
+    // Do some (inplace) allocation sanity checks
+    {
+
+        // Do it inside a scope so we can easily test instance count
+        // afterwards
+        MyClass myObject(15);
+        wxAny any = myObject;
+
+        // There must be two instances - first in myObject,
+        // and second copied in any.
+        CPPUNIT_ASSERT_EQUAL(gs_myClassInstances.size(), 2);
+
+        // Check that it is allocated in-place, as supposed
+        if ( sizeof(MyClass) <= WX_ANY_VALUE_BUFFER_SIZE )
+        {
+            // Memory block of the instance second must be inside the any
+            size_t anyBegin = reinterpret_cast<size_t>(&any);
+            size_t anyEnd = anyBegin + sizeof(wxAny);
+            size_t pos = reinterpret_cast<size_t>(gs_myClassInstances[1]);
+            CPPUNIT_ASSERT( pos >= anyBegin );
+            CPPUNIT_ASSERT( pos < anyEnd );
+        }
+
+        wxAny any2 = any;
+        CPPUNIT_ASSERT( wxANY_AS(any2, MyClass).GetValue() == 15 );
+    }
+
+    // Make sure allocations and deallocations match
+    CPPUNIT_ASSERT_EQUAL(gs_myClassInstances.size(), 0);
 }
 
 #endif // wxUSE_ANY

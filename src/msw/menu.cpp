@@ -82,7 +82,7 @@
 // ----------------------------------------------------------------------------
 
 // the (popup) menu title has this special id
-static const UINT idMenuTitle = (UINT)-3;
+static const int idMenuTitle = wxID_NONE;
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -281,8 +281,9 @@ void wxMenu::Init()
     // if we have a title, insert it in the beginning of the menu
     if ( !m_title.empty() )
     {
-        Append(idMenuTitle, m_title);
-        AppendSeparator();
+        const wxString title = m_title;
+        m_title.clear(); // so that SetTitle() knows there was no title before
+        SetTitle(title);
     }
 }
 
@@ -694,7 +695,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
 
     // if we just appended the title, highlight it
-    if ( id == idMenuTitle )
+    if ( id == (UINT_PTR)idMenuTitle )
     {
         // visually select the menu title
         SetDefaultMenuItem(GetHmenu(), id);
@@ -900,7 +901,7 @@ void wxMenu::SetTitle(const wxString& label)
         if ( !label.empty() )
         {
             if ( !::InsertMenu(hMenu, 0u, MF_BYPOSITION | MF_STRING,
-                               idMenuTitle, m_title.wx_str()) ||
+                               (UINT_PTR)idMenuTitle, m_title.wx_str()) ||
                  !::InsertMenu(hMenu, 1u, MF_BYPOSITION, (unsigned)-1, NULL) )
             {
                 wxLogLastError(wxT("InsertMenu"));
@@ -936,7 +937,7 @@ void wxMenu::SetTitle(const wxString& label)
 #else
             if ( !ModifyMenu(hMenu, 0u,
                              MF_BYPOSITION | MF_STRING,
-                             idMenuTitle, m_title.wx_str()) )
+                             (UINT_PTR)idMenuTitle, m_title.wx_str()) )
             {
                 wxLogLastError(wxT("ModifyMenu"));
             }
@@ -948,7 +949,7 @@ void wxMenu::SetTitle(const wxString& label)
     // put the title string in bold face
     if ( !m_title.empty() )
     {
-        SetDefaultMenuItem(GetHmenu(), idMenuTitle);
+        SetDefaultMenuItem(GetHmenu(), (UINT_PTR)idMenuTitle);
     }
 #endif // Win32
 }
@@ -962,7 +963,7 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
     const int id = (signed short)id_;
 
     // ignore commands from the menu title
-    if ( id != (int)idMenuTitle )
+    if ( id != idMenuTitle )
     {
         // update the check item when it's clicked
         wxMenuItem * const item = FindItem(id);

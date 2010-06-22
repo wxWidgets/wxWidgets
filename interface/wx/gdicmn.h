@@ -136,7 +136,49 @@ public:
         Initializes the point with the given coordinates.
     */
     wxRealPoint(double x, double y);
+    
+    /**
+        Converts the given wxPoint (with integer coordinates) to a wxRealPoint.
+    */
+    wxRealPoint(const wxPoint& pt);
 
+    /**
+        @name Miscellaneous operators
+        
+        Note that these operators are documented as class members
+        (to make them easier to find) but, as their prototype shows,
+        they are implemented as global operators; note that this is
+        transparent to the user but it helps to understand why the
+        following functions are documented to take the wxPoint they
+        operate on as an explicit argument.
+    */
+    //@{
+    wxRealPoint& operator=(const wxRealPoint& pt);
+
+    bool operator ==(const wxRealPoint& p1, const wxRealPoint& p2);
+    bool operator !=(const wxRealPoint& p1, const wxRealPoint& p2);
+
+    wxRealPoint operator +(const wxRealPoint& p1, const wxRealPoint& p2);
+    wxRealPoint operator -(const wxRealPoint& p1, const wxRealPoint& p2);
+
+    wxRealPoint& operator +=(const wxRealPoint& pt);
+    wxRealPoint& operator -=(const wxRealPoint& pt);
+
+    wxRealPoint operator +(const wxRealPoint& pt, const wxSize& sz);
+    wxRealPoint operator -(const wxRealPoint& pt, const wxSize& sz);
+    wxRealPoint operator +(const wxSize& sz, const wxRealPoint& pt);
+    wxRealPoint operator -(const wxSize& sz, const wxRealPoint& pt);
+
+    wxRealPoint& operator +=(const wxSize& sz);
+    wxRealPoint& operator -=(const wxSize& sz);
+    
+    wxSize operator /(const wxRealPoint& sz, int factor);
+    wxSize operator *(const wxRealPoint& sz, int factor);
+    wxSize operator *(int factor, const wxSize& sz);
+    wxSize& operator /=(int factor);
+    wxSize& operator *=(int factor);
+    //@}
+    
     /**
         X coordinate of this point.
     */
@@ -497,9 +539,22 @@ public:
         Initializes the point object with the given @a x and @a y coordinates.
     */
     wxPoint(int x, int y);
+    
+    /**
+        Converts the given wxRealPoint (with floating point coordinates) to a
+        wxPoint instance.
+    */
+    wxPoint(const wxRealPoint& pt);
 
     /**
         @name Miscellaneous operators
+        
+        Note that these operators are documented as class members
+        (to make them easier to find) but, as their prototype shows,
+        they are implemented as global operators; note that this is
+        transparent to the user but it helps to understand why the
+        following functions are documented to take the wxPoint they
+        operate on as an explicit argument.
     */
     //@{
     wxPoint& operator=(const wxPoint& pt);
@@ -520,6 +575,12 @@ public:
 
     wxPoint& operator +=(const wxSize& sz);
     wxPoint& operator -=(const wxSize& sz);
+    
+    wxSize operator /(const wxPoint& sz, int factor);
+    wxSize operator *(const wxPoint& sz, int factor);
+    wxSize operator *(int factor, const wxSize& sz);
+    wxSize& operator /=(int factor);
+    wxSize& operator *=(int factor);
     //@}
     
     /**
@@ -806,6 +867,13 @@ public:
     
     /**
         @name Miscellaneous operators
+        
+        Note that these operators are documented as class members
+        (to make them easier to find) but, as their prototype shows,
+        they are implemented as global operators; note that this is
+        transparent to the user but it helps to understand why the
+        following functions are documented to take the wxSize they
+        operate on as an explicit argument.
     */
     //@{
     wxSize& operator=(const wxSize& sz);

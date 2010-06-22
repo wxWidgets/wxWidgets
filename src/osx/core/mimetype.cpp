@@ -1,785 +1,662 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/core/mimetype.cpp
-// Purpose:     classes and functions to manage MIME types
-// Author:      Vadim Zeitlin, Stefan Csomor
+// Purpose:     Mac OS X implementation for wx MIME-related classes
+// Author:      Neil Perkins
 // Modified by:
-// Created:     23.09.98
+// Created:     2010-05-15
 // RCS-ID:      $Id: mimetype.cpp 54734 2008-07-21 01:33:51Z VZ $
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence (part of wxExtra library)
+// Copyright:   (C) 2010 Neil Perkins
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// for compilers that support precompilation, includes "wx.h".
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
-
-#if wxUSE_MIMETYPE && wxUSE_FILE
-
-#include "wx/unix/mimetype.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/dynarray.h"
-    #include "wx/string.h"
-    #include "wx/intl.h"
-    #include "wx/log.h"
-    #include "wx/utils.h"
+#include "wx/defs.h"
 #endif
 
-#include "wx/file.h"
-#include "wx/confbase.h"
+#if wxUSE_MIMETYPE
 
-#include "wx/ffile.h"
-#include "wx/dir.h"
-#include "wx/tokenzr.h"
-#include "wx/iconloc.h"
-#include "wx/filename.h"
-#include "wx/app.h"
-#include "wx/apptrait.h"
+#include "wx/osx/mimetype.h"
+#include "wx/osx/private.h"
 
-// other standard headers
-#include <ctype.h>
+/////////////////////////////////////////////////////////////////////////////
+// Helper functions
+/////////////////////////////////////////////////////////////////////////////
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
 
-// MIME code tracing mask
-#define TRACE_MIME wxT("mime")
-
-// ----------------------------------------------------------------------------
-// wxFileTypeImpl (Unix)
-// ----------------------------------------------------------------------------
-
-wxString wxFileTypeImpl::GetExpandedCommand(const wxString & verb, const wxFileType::MessageParameters& params) const
+// Read a string or array of strings from a CFDictionary for a given key
+// Return an empty list on error
+wxArrayString ReadStringListFromCFDict( CFDictionaryRef dictionary, CFStringRef key )
 {
-    wxString sTmp;
-    size_t i = 0;
-    while ( (i < m_index.GetCount() ) && sTmp.empty() )
+    // Create an empty list
+    wxArrayString results;
+
+    // Look up the requested key
+    CFTypeRef valueData = CFDictionaryGetValue( dictionary, key );
+
+    if( valueData )
     {
-        sTmp = m_manager->GetCommand( verb, m_index[i] );
-        i++;
-    }
-
-    return wxFileType::ExpandCommand(sTmp, params);
-}
-
-bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
-{
-    wxString sTmp;
-    size_t i = 0;
-    while ( (i < m_index.GetCount() ) && sTmp.empty() )
-    {
-        sTmp = m_manager->m_aIcons[m_index[i]];
-        i++;
-    }
-
-    if ( sTmp.empty() )
-        return false;
-
-    if ( iconLoc )
-    {
-        iconLoc->SetFileName(sTmp);
-    }
-
-    return true;
-}
-
-bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
-{
-    mimeTypes.Clear();
-    size_t nCount = m_index.GetCount();
-    for (size_t i = 0; i < nCount; i++)
-        mimeTypes.Add(m_manager->m_aTypes[m_index[i]]);
-
-    return true;
-}
-
-size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
-                                  wxArrayString *commands,
-                                  const wxFileType::MessageParameters& params) const
-{
-    wxString vrb, cmd, sTmp;
-    size_t count = 0;
-    wxMimeTypeCommands * sPairs;
-
-    // verbs and commands have been cleared already in mimecmn.cpp...
-    // if we find no entries in the exact match, try the inexact match
-    for (size_t n = 0; ((count == 0) && (n < m_index.GetCount())); n++)
-    {
-        // list of verb = command pairs for this mimetype
-        sPairs = m_manager->m_aEntries [m_index[n]];
-        size_t i;
-        for ( i = 0; i < sPairs->GetCount(); i++ )
+        // Value is an array
+        if( CFGetTypeID( valueData ) == CFArrayGetTypeID() )
         {
-            vrb = sPairs->GetVerb(i);
-            // some gnome entries have "." inside
-            vrb = vrb.AfterLast(wxT('.'));
-            cmd = sPairs->GetCmd(i);
-            if (! cmd.empty() )
+            CFArrayRef valueList = reinterpret_cast< CFArrayRef >( valueData );
+
+            CFTypeRef itemData;
+            wxCFStringRef item;
+
+            // Look at each item in the array
+            for( CFIndex i = 0, n = CFArrayGetCount( valueList ); i < n; i++ )
             {
-                 cmd = wxFileType::ExpandCommand(cmd, params);
-                 count++;
-                 if ( vrb.IsSameAs(wxT("open")))
-                 {
-                     if ( verbs )
-                        verbs->Insert(vrb, 0u);
-                     if ( commands )
-                        commands ->Insert(cmd, 0u);
-                 }
-                 else
-                 {
-                     if ( verbs )
-                        verbs->Add(vrb);
-                     if ( commands )
-                        commands->Add(cmd);
-                 }
-             }
-        }
-    }
+                itemData = CFArrayGetValueAtIndex( valueList, i );
 
-    return count;
-}
-
-bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
-{
-    const wxString strExtensions = m_manager->GetExtension(m_index[0]);
-    extensions.Empty();
-
-    // one extension in the space or comma-delimited list
-    wxString strExt;
-    wxString::const_iterator end = strExtensions.end();
-    for ( wxString::const_iterator p = strExtensions.begin(); /* nothing */; ++p )
-    {
-        if ( p == end || *p == wxT(' ') || *p == wxT(',') )
-        {
-            if ( !strExt.empty() )
-            {
-                extensions.Add(strExt);
-                strExt.Empty();
-            }
-            //else: repeated spaces
-            // (shouldn't happen, but it's not that important if it does happen)
-
-            if ( p == end )
-                break;
-        }
-        else if ( *p == wxT('.') )
-        {
-            // remove the dot from extension (but only if it's the first char)
-            if ( !strExt.empty() )
-            {
-                strExt += wxT('.');
-            }
-            //else: no, don't append it
-        }
-        else
-        {
-            strExt += *p;
-        }
-    }
-
-    return true;
-}
-
-// set an arbitrary command:
-// could adjust the code to ask confirmation if it already exists and
-// overwriteprompt is true, but this is currently ignored as *Associate* has
-// no overwrite prompt
-bool
-wxFileTypeImpl::SetCommand(const wxString& cmd,
-                           const wxString& verb,
-                           bool WXUNUSED(overwriteprompt))
-{
-    wxArrayString strExtensions;
-    wxString strDesc, strIcon;
-
-    wxArrayString strTypes;
-    GetMimeTypes(strTypes);
-    if ( strTypes.IsEmpty() )
-        return false;
-
-    wxMimeTypeCommands *entry = new wxMimeTypeCommands();
-    entry->Add(verb + wxT("=")  + cmd + wxT(" %s "));
-
-    bool ok = false;
-    size_t nCount = strTypes.GetCount();
-    for ( size_t i = 0; i < nCount; i++ )
-    {
-        if ( m_manager->DoAssociation
-                        (
-                            strTypes[i],
-                            strIcon,
-                            entry,
-                            strExtensions,
-                            strDesc
-                        ) )
-        {
-            // DoAssociation() took ownership of entry, don't delete it below
-            ok = true;
-        }
-    }
-
-    if ( !ok )
-        delete entry;
-
-    return ok;
-}
-
-// ignore index on the grounds that we only have one icon in a Unix file
-bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int WXUNUSED(index))
-{
-    if (strIcon.empty())
-        return false;
-
-    wxArrayString strExtensions;
-    wxString strDesc;
-
-    wxArrayString strTypes;
-    GetMimeTypes(strTypes);
-    if ( strTypes.IsEmpty() )
-        return false;
-
-    wxMimeTypeCommands *entry = new wxMimeTypeCommands();
-    bool ok = false;
-    size_t nCount = strTypes.GetCount();
-    for ( size_t i = 0; i < nCount; i++ )
-    {
-        if ( m_manager->DoAssociation
-                        (
-                            strTypes[i],
-                            strIcon,
-                            entry,
-                            strExtensions,
-                            strDesc
-                        ) )
-        {
-            // we don't need to free entry now, DoAssociation() took ownership
-            // of it
-            ok = true;
-        }
-    }
-
-    if ( !ok )
-        delete entry;
-
-    return ok;
-}
-
-// ----------------------------------------------------------------------------
-// wxMimeTypesManagerImpl (Unix)
-// ----------------------------------------------------------------------------
-
-wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
-{
-    m_initialized = false;
-}
-
-void wxMimeTypesManagerImpl::InitIfNeeded()
-{
-    if ( !m_initialized )
-    {
-        // set the flag first to prevent recursion
-        m_initialized = true;
-
-        wxString wm = wxTheApp->GetTraits()->GetDesktopEnvironment();
-
-        if (wm == wxT("KDE"))
-            Initialize( wxMAILCAP_KDE  );
-        else if (wm == wxT("GNOME"))
-            Initialize( wxMAILCAP_GNOME );
-        else
-            Initialize();
-    }
-}
-
-
-
-// read system and user mailcaps and other files
-void wxMimeTypesManagerImpl::Initialize(int WXUNUSED(mailcapStyles),
-                                        const wxString& WXUNUSED(sExtraDir))
-{
-#ifdef __VMS
-    // XDG tables are never installed on OpenVMS
-    return;
-#endif
-#if 0
-    // Read MIME type - extension associations
-    LoadXDGGlobs( "/usr/share/mime/globs" );
-    LoadXDGGlobs( "/usr/local/share/mime/globs" );
-
-    // Load desktop files for XDG, and then override them with the defaults.
-    // We will override them one desktop file at a time, rather
-    // than one mime type at a time, but it should be a reasonable
-    // heuristic.
-    {
-        wxString xdgDataHome = wxGetenv("XDG_DATA_HOME");
-        if ( xdgDataHome.empty() )
-            xdgDataHome = wxGetHomeDir() + "/.local/share";
-        wxString xdgDataDirs = wxGetenv("XDG_DATA_DIRS");
-        if ( xdgDataDirs.empty() )
-        {
-            xdgDataDirs = "/usr/local/share:/usr/share";
-            if (mailcapStyles & wxMAILCAP_GNOME)
-                xdgDataDirs += ":/usr/share/gnome:/opt/gnome/share";
-            if (mailcapStyles & wxMAILCAP_KDE)
-                xdgDataDirs += ":/usr/share/kde3:/opt/kde3/share";
-        }
-        if ( !sExtraDir.empty() )
-        {
-           xdgDataDirs += ':';
-           xdgDataDirs += sExtraDir;
-        }
-
-        wxArrayString dirs;
-        wxStringTokenizer tokenizer(xdgDataDirs, ":");
-        while ( tokenizer.HasMoreTokens() )
-        {
-            wxString p = tokenizer.GetNextToken();
-            dirs.Add(p);
-        }
-        dirs.insert(dirs.begin(), xdgDataHome);
-
-        wxString defaultsList;
-        size_t i;
-        for (i = 0; i < dirs.GetCount(); i++)
-        {
-            wxString f = dirs[i];
-            if (f.Last() != '/') f += '/';
-            f += "applications/defaults.list";
-            if (wxFileExists(f))
-            {
-                defaultsList = f;
-                break;
-            }
-        }
-
-        // Load application files and associate them to corresponding mime types.
-        size_t nDirs = dirs.GetCount();
-        for (size_t nDir = 0; nDir < nDirs; nDir++)
-        {
-            wxString dirStr = dirs[nDir];
-            if (dirStr.Last() != '/') dirStr += '/';
-            dirStr += "applications";
-            LoadXDGAppsFilesFromDir(dirStr);
-        }
-
-        if (!defaultsList.IsEmpty())
-        {
-            wxArrayString deskTopFilesSeen;
-
-            wxMimeTextFile textfile(defaultsList);
-            if ( textfile.Open() )
-            {
-                int nIndex = textfile.pIndexOf( wxT("[Default Applications]") );
-                if (nIndex != wxNOT_FOUND)
+                // Make sure the item is a string
+                if( CFGetTypeID( itemData ) == CFStringGetTypeID() )
                 {
-                    for (i = nIndex+1; i < textfile.GetLineCount(); i++)
-                    {
-                        if (textfile.GetLine(i).Find(wxT("=")) != wxNOT_FOUND)
-                        {
-                            wxString mimeType = textfile.GetVerb(i);
-                            wxString desktopFile = textfile.GetCmd(i);
+                    // wxCFStringRef will automatically CFRelease, so an extra CFRetain is needed
+                    item = reinterpret_cast< CFStringRef >( itemData );
+                    wxCFRetain( item.get() );
 
-                            if (deskTopFilesSeen.Index(desktopFile) == wxNOT_FOUND)
-                            {
-                                deskTopFilesSeen.Add(desktopFile);
-                                size_t j;
-                                for (j = 0; j < dirs.GetCount(); j++)
-                                {
-                                    wxString desktopPath = dirs[j];
-                                    if (desktopPath.Last() != '/') desktopPath += '/';
-                                    desktopPath += "applications/";
-                                    desktopPath += desktopFile;
-
-                                    if (wxFileExists(desktopPath))
-                                        LoadXDGApp(desktopPath);
-                                }
-                            }
-                        }
-                    }
+                    // Add the string to the list
+                    results.Add( item.AsString() );
                 }
             }
         }
-    }
-#endif
-}
 
-// clear data so you can read another group of WM files
-void wxMimeTypesManagerImpl::ClearData()
-{
-    m_aTypes.Clear();
-    m_aIcons.Clear();
-    m_aExtensions.Clear();
-    m_aDescriptions.Clear();
-
-    WX_CLEAR_ARRAY(m_aEntries);
-    m_aEntries.Empty();
-}
-
-wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
-{
-    ClearData();
-}
-
-wxFileType * wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& ftInfo)
-{
-    InitIfNeeded();
-
-    wxString strType = ftInfo.GetMimeType();
-    wxString strDesc = ftInfo.GetDescription();
-    wxString strIcon = ftInfo.GetIconFile();
-
-    wxMimeTypeCommands *entry = new wxMimeTypeCommands();
-
-    if ( ! ftInfo.GetOpenCommand().empty())
-        entry->Add(wxT("open=")  + ftInfo.GetOpenCommand() + wxT(" %s "));
-    if ( ! ftInfo.GetPrintCommand().empty())
-        entry->Add(wxT("print=") + ftInfo.GetPrintCommand() + wxT(" %s "));
-
-    // now find where these extensions are in the data store and remove them
-    wxArrayString sA_Exts = ftInfo.GetExtensions();
-    wxString sExt, sExtStore;
-    size_t i, nIndex;
-    size_t nExtCount = sA_Exts.GetCount();
-    for (i=0; i < nExtCount; i++)
-    {
-        sExt = sA_Exts.Item(i);
-
-        // clean up to just a space before and after
-        sExt.Trim().Trim(false);
-        sExt = wxT(' ') + sExt + wxT(' ');
-        size_t nCount = m_aExtensions.GetCount();
-        for (nIndex = 0; nIndex < nCount; nIndex++)
+        // Value is a single string - return a list of one item
+        else if( CFGetTypeID( valueData ) == CFStringGetTypeID() )
         {
-            sExtStore = m_aExtensions.Item(nIndex);
-            if (sExtStore.Replace(sExt, wxT(" ") ) > 0)
-                m_aExtensions.Item(nIndex) = sExtStore;
+            // wxCFStringRef will automatically CFRelease, so an extra CFRetain is needed
+            wxCFStringRef value = reinterpret_cast< CFStringRef >( valueData );
+            wxCFRetain( value.get() );
+
+            // Add the string to the list
+            results.Add( value.AsString() );
         }
     }
 
-    if ( !DoAssociation(strType, strIcon, entry, sA_Exts, strDesc) )
-        return NULL;
-
-    return GetFileTypeFromMimeType(strType);
+    // Return the list. If the dictionary did not contain key,
+    // or contained the wrong data type, the list will be empty
+    return results;
 }
 
-bool wxMimeTypesManagerImpl::DoAssociation(const wxString& strType,
-                                           const wxString& strIcon,
-                                           wxMimeTypeCommands *entry,
-                                           const wxArrayString& strExtensions,
-                                           const wxString& strDesc)
-{
-    int nIndex = AddToMimeData(strType, strIcon, entry, strExtensions, strDesc, true);
 
-    if ( nIndex == wxNOT_FOUND )
+// Given a single CFDictionary representing document type data, check whether
+// it matches a particular file extension. Return true for a match, false otherwise
+bool CheckDocTypeMatchesExt( CFDictionaryRef docType, CFStringRef requiredExt )
+{
+    const static wxCFStringRef extKey( "CFBundleTypeExtensions" );
+
+    CFTypeRef extData = CFDictionaryGetValue( docType, extKey );
+
+    if( !extData )
         return false;
 
-    return true;
-}
-
-int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
-                                          const wxString& strIcon,
-                                          wxMimeTypeCommands *entry,
-                                          const wxArrayString& strExtensions,
-                                          const wxString& strDesc,
-                                          bool replaceExisting)
-{
-    InitIfNeeded();
-
-    // ensure mimetype is always lower case
-    wxString mimeType = strType.Lower();
-
-    // is this a known MIME type?
-    int nIndex = m_aTypes.Index(mimeType);
-    if ( nIndex == wxNOT_FOUND )
+    if( CFGetTypeID( extData ) == CFArrayGetTypeID() )
     {
-        // new file type
-        m_aTypes.Add(mimeType);
-        m_aIcons.Add(strIcon);
-        m_aEntries.Add(entry ? entry : new wxMimeTypeCommands);
+        CFArrayRef extList = reinterpret_cast< CFArrayRef >( extData );
+        CFTypeRef extItem;
 
-        // change nIndex so we can use it below to add the extensions
-        m_aExtensions.Add(wxEmptyString);
-        nIndex = m_aExtensions.size() - 1;
-
-        m_aDescriptions.Add(strDesc);
-    }
-    else // yes, we already have it
-    {
-        if ( replaceExisting )
+        for( CFIndex i = 0, n = CFArrayGetCount( extList ); i < n; i++ )
         {
-            // if new description change it
-            if ( !strDesc.empty())
-                m_aDescriptions[nIndex] = strDesc;
+            extItem = CFArrayGetValueAtIndex( extList, i );
 
-            // if new icon change it
-            if ( !strIcon.empty())
-                m_aIcons[nIndex] = strIcon;
-
-            if ( entry )
+            if( CFGetTypeID( extItem ) == CFStringGetTypeID() )
             {
-                delete m_aEntries[nIndex];
-                m_aEntries[nIndex] = entry;
-            }
-        }
-        else // add data we don't already have ...
-        {
-            // if new description add only if none
-            if ( m_aDescriptions[nIndex].empty() )
-                m_aDescriptions[nIndex] = strDesc;
+                CFStringRef ext = reinterpret_cast< CFStringRef >( extItem );
 
-            // if new icon and no existing icon
-            if ( m_aIcons[nIndex].empty() )
-                m_aIcons[nIndex] = strIcon;
-
-            // add any new entries...
-            if ( entry )
-            {
-                wxMimeTypeCommands *entryOld = m_aEntries[nIndex];
-
-                size_t count = entry->GetCount();
-                for ( size_t i = 0; i < count; i++ )
-                {
-                    const wxString& verb = entry->GetVerb(i);
-                    if ( !entryOld->HasVerb(verb) )
-                    {
-                        entryOld->AddOrReplaceVerb(verb, entry->GetCmd(i));
-                    }
-                }
-
-                // as we don't store it anywhere, it won't be deleted later as
-                // usual -- do it immediately instead
-                delete entry;
+                if( CFStringCompare( ext, requiredExt, kCFCompareCaseInsensitive ) == kCFCompareEqualTo )
+                    return true;
             }
         }
     }
 
-    // always add the extensions to this mimetype
-    wxString& exts = m_aExtensions[nIndex];
-
-    // add all extensions we don't have yet
-    wxString ext;
-    size_t count = strExtensions.GetCount();
-    for ( size_t i = 0; i < count; i++ )
+    if( CFGetTypeID( extData ) == CFStringGetTypeID() )
     {
-        ext = strExtensions[i];
-        ext += wxT(' ');
+        CFStringRef ext = reinterpret_cast< CFStringRef >( extData );
 
-        if ( exts.Find(ext) == wxNOT_FOUND )
-        {
-            exts += ext;
-        }
+        if( CFStringCompare( ext, requiredExt, kCFCompareCaseInsensitive ) == kCFCompareEqualTo )
+            return true;
     }
 
-    // check data integrity
-    wxASSERT( m_aTypes.GetCount() == m_aEntries.GetCount() &&
-              m_aTypes.GetCount() == m_aExtensions.GetCount() &&
-              m_aTypes.GetCount() == m_aIcons.GetCount() &&
-              m_aTypes.GetCount() == m_aDescriptions.GetCount() );
-
-    return nIndex;
+    return false;
 }
 
-wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
+
+// Given a data structure representing document type data, or a list of such
+// structures, find the one which matches a particular file extension
+// The result will be a CFDictionary containining document type data
+// if a match is found, or null otherwise
+CFDictionaryRef GetDocTypeForExt( CFTypeRef docTypeData, CFStringRef requiredExt )
 {
-    if (ext.empty() )
+    CFDictionaryRef docType;
+    CFArrayRef docTypes;
+    CFTypeRef item;
+
+    if( !docTypeData )
         return NULL;
 
-    InitIfNeeded();
-
-    size_t count = m_aExtensions.GetCount();
-    for ( size_t n = 0; n < count; n++ )
+    if( CFGetTypeID( docTypeData ) == CFArrayGetTypeID() )
     {
-        wxStringTokenizer tk(m_aExtensions[n], wxT(' '));
+        docTypes = reinterpret_cast< CFArrayRef >( docTypeData );
 
-        while ( tk.HasMoreTokens() )
+        for( CFIndex i = 0, n = CFArrayGetCount( docTypes ); i < n; i++ )
         {
-            // consider extensions as not being case-sensitive
-            if ( tk.GetNextToken().IsSameAs(ext, false /* no case */) )
-            {
-                // found
-                wxFileType *fileType = new wxFileType;
-                fileType->m_impl->Init(this, n);
+            item = CFArrayGetValueAtIndex( docTypes, i );
 
-                return fileType;
+            if( CFGetTypeID( item ) == CFDictionaryGetTypeID() )
+            {
+                docType = reinterpret_cast< CFDictionaryRef >( item );
+
+                if( CheckDocTypeMatchesExt( docType, requiredExt ) )
+                    return docType;
             }
         }
+    }
+
+    if( CFGetTypeID( docTypeData ) == CFDictionaryGetTypeID() )
+    {
+        CFDictionaryRef docType = reinterpret_cast< CFDictionaryRef >( docTypeData );
+
+        if( CheckDocTypeMatchesExt( docType, requiredExt ) )
+            return docType;
     }
 
     return NULL;
 }
 
-wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
+
+// Given an application bundle reference and the name of an icon file
+// which is a resource in that bundle, look up the full (posix style)
+// path to that icon. Returns the path, or an empty wxString on failure
+wxString GetPathForIconFile( CFBundleRef bundle, CFStringRef iconFile )
 {
-    InitIfNeeded();
+    // If either parameter is NULL there is no hope of success
+    if( !bundle || !iconFile )
+        return wxEmptyString;
 
-    wxFileType * fileType = NULL;
-    // mime types are not case-sensitive
-    wxString mimetype(mimeType);
-    mimetype.MakeLower();
+    // Create a range object representing the whole string
+    CFRange wholeString;
+    wholeString.location = 0;
+    wholeString.length = CFStringGetLength( iconFile );
 
-    // first look for an exact match
-    int index = m_aTypes.Index(mimetype);
+    // Index of the period in the file name for iconFile
+    UniCharCount periodIndex;
 
-    if ( index != wxNOT_FOUND )
+    // In order to locate the period delimiting the extension,
+    // iconFile must be represented as UniChar[]
     {
-        fileType = new wxFileType;
-        fileType->m_impl->Init(this, index);
+        // Allocate a buffer and copy in the iconFile string
+        UniChar* buffer = new UniChar[ wholeString.length ];
+        CFStringGetCharacters( iconFile, wholeString, buffer );
+
+        // Locate the period character
+        OSStatus status = LSGetExtensionInfo( wholeString.length, buffer, &periodIndex );
+
+        // Deallocate the buffer
+        delete buffer;
+
+        // If the period could not be located it will not be possible to get the URL
+        if( status != noErr || periodIndex == kLSInvalidExtensionIndex )
+            return wxEmptyString;
     }
 
-    // then try to find "text/*" as match for "text/plain" (for example)
-    // NB: if mimeType doesn't contain '/' at all, BeforeFirst() will return
-    //     the whole string - ok.
+    // Range representing the name part of iconFile
+    CFRange iconNameRange;
+    iconNameRange.location = 0;
+    iconNameRange.length = periodIndex - 1;
 
-    index = wxNOT_FOUND;
-    wxString strCategory = mimetype.BeforeFirst(wxT('/'));
+    // Range representing the extension part of iconFile
+    CFRange iconExtRange;
+    iconExtRange.location = periodIndex;
+    iconExtRange.length = wholeString.length - periodIndex;
 
-    size_t nCount = m_aTypes.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
-    {
-        if ( (m_aTypes[n].BeforeFirst(wxT('/')) == strCategory ) &&
-                m_aTypes[n].AfterFirst(wxT('/')) == wxT("*") )
-        {
-            index = n;
-            break;
-        }
-    }
+    // Get the name and extension strings
+    wxCFStringRef iconName = CFStringCreateWithSubstring( kCFAllocatorDefault, iconFile, iconNameRange );
+    wxCFStringRef iconExt = CFStringCreateWithSubstring( kCFAllocatorDefault, iconFile, iconExtRange );
 
-    if ( index != wxNOT_FOUND )
-    {
-       // don't throw away fileType that was already found
-        if (!fileType)
-            fileType = new wxFileType;
-        fileType->m_impl->Init(this, index);
-    }
+    // Now it is possible to query the URL for the icon as a resource
+    wxCFRef< CFURLRef > iconUrl = wxCFRef< CFURLRef >( CFBundleCopyResourceURL( bundle, iconName, iconExt, NULL ) );
 
-    return fileType;
+    if( !iconUrl.get() )
+        return wxEmptyString;
+
+    // All being well, return the icon path
+    return wxCFStringRef( CFURLCopyFileSystemPath( iconUrl, kCFURLPOSIXPathStyle ) ).AsString();
 }
 
-wxString wxMimeTypesManagerImpl::GetCommand(const wxString & verb, size_t nIndex) const
+
+wxMimeTypesManagerImpl::wxMimeTypesManagerImpl()
 {
-    wxString command, testcmd, sV, sTmp;
-    sV = verb + wxT("=");
-
-    // list of verb = command pairs for this mimetype
-    wxMimeTypeCommands * sPairs = m_aEntries [nIndex];
-
-    size_t i;
-    size_t nCount = sPairs->GetCount();
-    for ( i = 0; i < nCount; i++ )
-    {
-        sTmp = sPairs->GetVerbCmd (i);
-        if ( sTmp.Contains(sV) )
-            command = sTmp.AfterFirst(wxT('='));
-    }
-
-    return command;
 }
 
-void wxMimeTypesManagerImpl::AddFallback(const wxFileTypeInfo& filetype)
+wxMimeTypesManagerImpl::~wxMimeTypesManagerImpl()
 {
-    InitIfNeeded();
-
-    wxString extensions;
-    const wxArrayString& exts = filetype.GetExtensions();
-    size_t nExts = exts.GetCount();
-    for ( size_t nExt = 0; nExt < nExts; nExt++ )
-    {
-        if ( nExt > 0 )
-            extensions += wxT(' ');
-
-        extensions += exts[nExt];
-    }
-
-    AddMimeTypeInfo(filetype.GetMimeType(),
-                    extensions,
-                    filetype.GetDescription());
 }
 
-void wxMimeTypesManagerImpl::AddMimeTypeInfo(const wxString& strMimeType,
-                                             const wxString& strExtensions,
-                                             const wxString& strDesc)
+
+/////////////////////////////////////////////////////////////////////////////
+// Init / shutdown functions
+//
+// The Launch Services / UTI API provides no helpful way of getting a list
+// of all registered types. Instead the API is focused arround looking up
+// information for a particular file type once you already have some
+// identifying piece of information. In order to get a list of registered
+// types it would first be necessary to get a list of all bundles exporting
+// type information (all application bundles may be sufficient) then look at
+// the Info.plist file for those bundles and store the type information. As
+// this would require trawling the hard disk when a wxWidgets program starts
+// up it was decided instead to load the information lazily.
+//
+// If this behaviour really messes up your app, please feel free to implement
+// the trawling approach (perhaps with a configure switch?). A good place to
+// start would be CFBundleCreateBundlesFromDirectory( NULL, "/Applications", "app" )
+/////////////////////////////////////////////////////////////////////////////
+
+
+void wxMimeTypesManagerImpl::Initialize(int WXUNUSED(mailcapStyles), const wxString& WXUNUSED(extraDir))
 {
-    // reading mailcap may find image/* , while
-    // reading mime.types finds image/gif and no match is made
-    // this means all the get functions don't work  fix this
-    wxString strIcon;
-    wxString sTmp = strExtensions;
-
-    wxArrayString sExts;
-    sTmp.Trim().Trim(false);
-
-    while (!sTmp.empty())
-    {
-        sExts.Add(sTmp.AfterLast(wxT(' ')));
-        sTmp = sTmp.BeforeLast(wxT(' '));
-    }
-
-    AddToMimeData(strMimeType, strIcon, NULL, sExts, strDesc, true);
+    // NO-OP
 }
 
-size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
+void wxMimeTypesManagerImpl::ClearData()
 {
-    InitIfNeeded();
-
-    mimetypes.Empty();
-
-    size_t count = m_aTypes.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        // don't return template types from here (i.e. anything containg '*')
-        const wxString &type = m_aTypes[n];
-        if ( type.Find(wxT('*')) == wxNOT_FOUND )
-        {
-            mimetypes.Add(type);
-        }
-    }
-
-    return mimetypes.GetCount();
+    // NO-OP
 }
 
-// ----------------------------------------------------------------------------
-// writing to MIME type files
-// ----------------------------------------------------------------------------
 
-bool wxMimeTypesManagerImpl::Unassociate(wxFileType *ft)
+/////////////////////////////////////////////////////////////////////////////
+// Lookup functions
+//
+// Apple uses a number of different systems for file type information.
+// As of Spring 2010, these include:
+//
+// OS Types / OS Creators
+// File Extensions
+// Mime Types
+// Uniform Type Identifiers (UTI)
+//
+// This implementation of the type manager for Mac supports all except OS
+// Type / OS Creator codes, which have been deprecated for some time with
+// less and less support in recent versions of OS X.
+//
+// The UTI system is the internal system used by OS X, as such it offers a
+// one-to-one mapping with file types understood by Mac OS X and is the
+// easiest way to convert between type systems. However, UTI meta-data is
+// not stored with data files (as of OS X 10.6), instead the OS looks at
+// the file extension and uses this to determine the UTI. Simillarly, most
+// applications do not yet advertise the file types they can handle by UTI.
+//
+// The result is that no one typing system is suitable for all tasks. Further,
+// as there is not a one-to-one mapping between type systems for the
+// description of any given type, it follows that ambiguity cannot be precluded,
+// whichever system is taken to be the "master".
+//
+// In the implementation below I have used UTI as the master key for looking
+// up file types. Extensions and mime types are mapped to UTIs and the data
+// for each UTI contains a list of all associated extensions and mime types.
+// This has the advantage that unknown types will still be assigned a unique
+// ID, while using any other system as the master could result in conflicts
+// if there were no mime type assigned to an extension or vice versa. However
+// there is still plenty of room for ambiguity if two or more applications
+// are fighting over ownership of a particular type or group of types.
+//
+// If this proves to be serious issue it may be helpful to add some slightly
+// more cleve logic to the code so that the key used to look up a file type is
+// always first in the list in the resulting wxFileType object. I.e, if you
+// look up .mpeg3 the list you get back could be .mpeg3, mp3, .mpg3, while
+// looking up .mp3 would give .mp3, .mpg3, .mpeg3. The simplest way to do
+// this would probably to keep two separate sets of data, one for lookup
+// by extetnsion and one for lookup by mime type.
+//
+// One other point which may require consideration is handling of unrecognised
+// types. Using UTI these will be assigned a unique ID of dyn.xxx. This will
+// result in a wxFileType object being returned, although querying properties
+// on that object will fail. If it would be more helpful to return NULL in this
+// case a suitable check can be added.
+/////////////////////////////////////////////////////////////////////////////
+
+// Look up a file type by extension
+// The extensions if mapped to a UTI
+// If the requested extension is not know the OS is querried and the results saved
+wxFileType *wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
-    InitIfNeeded();
+    wxString uti;
 
-    wxArrayString sMimeTypes;
-    ft->GetMimeTypes(sMimeTypes);
+    const TagMap::const_iterator extItr = m_extMap.find( ext );
 
-    size_t i;
-    size_t nCount = sMimeTypes.GetCount();
-    for (i = 0; i < nCount; i ++)
+    if( extItr == m_extMap.end() )
     {
-        const wxString &sMime = sMimeTypes.Item(i);
-        int nIndex = m_aTypes.Index(sMime);
-        if ( nIndex == wxNOT_FOUND)
-        {
-            // error if we get here ??
-            return false;
-        }
-        else
-        {
-            m_aTypes.RemoveAt(nIndex);
-            m_aEntries.RemoveAt(nIndex);
-            m_aExtensions.RemoveAt(nIndex);
-            m_aDescriptions.RemoveAt(nIndex);
-            m_aIcons.RemoveAt(nIndex);
-        }
+        wxCFStringRef utiRef = UTTypeCreatePreferredIdentifierForTag( kUTTagClassFilenameExtension, wxCFStringRef( ext ), NULL );
+        m_extMap[ ext ] = uti = utiRef.AsString();
     }
-    // check data integrity
-    wxASSERT( m_aTypes.GetCount() == m_aEntries.GetCount() &&
-            m_aTypes.GetCount() == m_aExtensions.GetCount() &&
-            m_aTypes.GetCount() == m_aIcons.GetCount() &&
-            m_aTypes.GetCount() == m_aDescriptions.GetCount() );
+    else
+        uti = extItr->second;
 
+    return GetFileTypeFromUti( uti );
+}
+
+// Look up a file type by mime type
+// The mime type is mapped to a UTI
+// If the requested extension is not know the OS is querried and the results saved
+wxFileType *wxMimeTypesManagerImpl::GetFileTypeFromMimeType(const wxString& mimeType)
+{
+    wxString uti;
+
+    const TagMap::const_iterator mimeItr = m_mimeMap.find( mimeType );
+
+    if( mimeItr == m_mimeMap.end() )
+    {
+        wxCFStringRef utiRef = UTTypeCreatePreferredIdentifierForTag( kUTTagClassFilenameExtension, wxCFStringRef( mimeType ), NULL );
+        m_mimeMap[ mimeType ] = uti = utiRef.AsString();
+    }
+    else
+        uti = mimeItr->second;
+
+    return GetFileTypeFromUti( uti );
+}
+
+// Look up a file type by UTI
+// If the requested extension is not know the OS is querried and the results saved
+wxFileType *wxMimeTypesManagerImpl::GetFileTypeFromUti(const wxString& uti)
+{
+    UtiMap::const_iterator utiItr = m_utiMap.find( uti );
+
+    if( utiItr == m_utiMap.end() )
+    {
+        LoadTypeDataForUti( uti );
+        LoadDisplayDataForUti( uti );
+    }
+
+    wxFileType* const ft = new wxFileType;
+    ft->m_impl->m_uti = uti;
+    ft->m_impl->m_manager = this;
+
+    return ft;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Load functions
+//
+// These functions query the OS for information on a particular file type
+/////////////////////////////////////////////////////////////////////////////
+
+
+// Look up all extensions and mime types associated with a UTI
+void wxMimeTypesManagerImpl::LoadTypeDataForUti(const wxString& uti)
+{
+    // Keys in to the UTI declaration plist
+    const static wxCFStringRef tagsKey( "UTTypeTagSpecification" );
+    const static wxCFStringRef extKey( "public.filename-extension" );
+    const static wxCFStringRef mimeKey( "public.mime-type" );
+
+    // Get the UTI as a CFString
+    wxCFStringRef utiRef( uti );
+
+    // Get a copy of the UTI declaration
+    wxCFRef< CFDictionaryRef > utiDecl;
+    utiDecl = wxCFRef< CFDictionaryRef >( UTTypeCopyDeclaration( utiRef ) );
+
+    if( !utiDecl )
+        return;
+
+    // Get the tags spec (the section of a UTI declaration containing mappings to other type systems)
+    CFTypeRef tagsData = CFDictionaryGetValue( utiDecl, tagsKey );
+
+    if( CFGetTypeID( tagsData ) != CFDictionaryGetTypeID() )
+        return;
+
+    CFDictionaryRef tags = reinterpret_cast< CFDictionaryRef >( tagsData );
+
+    // Read tags for extensions and mime types
+    m_utiMap[ uti ].extensions = ReadStringListFromCFDict( tags, extKey );
+    m_utiMap[ uti ].mimeTypes = ReadStringListFromCFDict( tags, mimeKey );
+}
+
+
+// Look up the (locale) display name and icon file associated with a UTI
+void wxMimeTypesManagerImpl::LoadDisplayDataForUti(const wxString& uti)
+{
+    // Keys in to Info.plist
+    const static wxCFStringRef docTypesKey( "CFBundleDocumentTypes" );
+    const static wxCFStringRef descKey( "CFBundleTypeName" );
+    const static wxCFStringRef iconKey( "CFBundleTypeIconFile" );
+
+    // The call for finding the preferred application for a UTI is LSCopyDefaultRoleHandlerForContentType
+    // This returns an empty string on OS X 10.5
+    // Instead it is necessary to get the primary extension and use LSGetApplicationForInfo
+    wxCFStringRef ext = UTTypeCopyPreferredTagWithClass( wxCFStringRef( uti ), kUTTagClassFilenameExtension );
+
+    // Look up the preferred application
+    CFURLRef appUrl;
+    OSStatus status = LSGetApplicationForInfo( kLSUnknownType, kLSUnknownCreator, ext, kLSRolesAll, NULL, &appUrl );
+
+    if( status != noErr )
+        return;
+
+    // Create a bundle object for that application
+    wxCFRef< CFBundleRef > bundle;
+    bundle = wxCFRef< CFBundleRef >( CFBundleCreate( kCFAllocatorDefault, appUrl ) );
+
+    if( !bundle )
+        return;
+
+    // Get a all the document type data in this bundle
+    CFTypeRef docTypeData;
+    docTypeData = CFBundleGetValueForInfoDictionaryKey( bundle, docTypesKey );
+
+    if( !docTypeData )
+        return;
+
+    // Find the document type entry that matches ext
+    CFDictionaryRef docType;
+    docType = GetDocTypeForExt( docTypeData, ext );
+
+    if( !docType )
+        return;
+
+    // Get the display name for docType
+    wxCFStringRef description = reinterpret_cast< CFStringRef >( CFDictionaryGetValue( docType, descKey ) );
+    wxCFRetain( description.get() );
+    m_utiMap[ uti ].description = description.AsString();
+
+    // Get the icon path for docType
+    CFStringRef iconFile = reinterpret_cast< CFStringRef > ( CFDictionaryGetValue( docType, iconKey ) );
+    m_utiMap[ uti ].iconLoc.SetFileName( GetPathForIconFile( bundle, iconFile ) );
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+// The remaining functionality from the public interface of
+// wxMimeTypesManagerImpl is not implemented.
+//
+// Please see the note further up this file on Initialise/Clear to explain why
+// EnumAllFileTypes is not available.
+//
+// Some thought will be needed before implementing Associate / Unassociate
+// for OS X to ensure proper integration with the many file type and
+// association mechanisms already used by the OS. Leaving these methods as
+// NO-OP on OS X and asking client apps to put suitable entries in their
+// Info.plist files when building their OS X bundle may well be the
+// correct solution.
+/////////////////////////////////////////////////////////////////////////////
+
+
+size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& WXUNUSED(mimetypes))
+{
+    return 0;
+}
+
+wxFileType *wxMimeTypesManagerImpl::Associate(const wxFileTypeInfo& WXUNUSED(ftInfo))
+{
+    return 0;
+}
+
+bool wxMimeTypesManagerImpl::Unassociate(wxFileType *WXUNUSED(ft))
+{
+    return false;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Getter methods
+//
+// These methods are private and should only ever be called by wxFileTypeImpl
+// after the required information has been loaded. It should not be possible
+// to get a wxFileTypeImpl for a UTI without information for that UTI being
+// querried, however it is possible that some information may not have been
+// found.
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+bool wxMimeTypesManagerImpl::GetExtensions(const wxString& uti, wxArrayString& extensions)
+{
+    const UtiMap::const_iterator itr = m_utiMap.find( uti );
+
+    if( itr == m_utiMap.end() || itr->second.extensions.GetCount() < 1 )
+    {
+        extensions.Clear();
+        return false;
+    }
+
+    extensions = itr->second.extensions;
     return true;
 }
 
-#endif
-  // wxUSE_MIMETYPE && wxUSE_FILE
+bool wxMimeTypesManagerImpl::GetMimeType(const wxString& uti, wxString *mimeType)
+{
+    const UtiMap::const_iterator itr = m_utiMap.find( uti );
+
+    if( itr == m_utiMap.end() || itr->second.mimeTypes.GetCount() < 1 )
+    {
+        *mimeType = wxEmptyString;
+        return false;
+    }
+
+    *mimeType = itr->second.mimeTypes[ 0 ];
+    return true;
+}
+
+bool wxMimeTypesManagerImpl::GetMimeTypes(const wxString& uti, wxArrayString& mimeTypes)
+{
+    const UtiMap::const_iterator itr = m_utiMap.find( uti );
+
+    if( itr == m_utiMap.end() || itr->second.mimeTypes.GetCount() < 1 )
+    {
+        mimeTypes.Clear();
+        return false;
+    }
+
+    mimeTypes = itr->second.mimeTypes;
+    return true;
+}
+
+bool wxMimeTypesManagerImpl::GetIcon(const wxString& uti, wxIconLocation *iconLoc)
+{
+    const UtiMap::const_iterator itr = m_utiMap.find( uti );
+
+    if( itr == m_utiMap.end() || !itr->second.iconLoc.IsOk() )
+    {
+        *iconLoc = wxIconLocation();
+        return false;
+    }
+
+    *iconLoc = itr->second.iconLoc;
+    return true;
+}
+
+bool wxMimeTypesManagerImpl::GetDescription(const wxString& uti, wxString *desc)
+{
+    const UtiMap::const_iterator itr = m_utiMap.find( uti );
+
+    if( itr == m_utiMap.end() || itr->second.description.IsNull() )
+    {
+        *desc = wxEmptyString;
+        return false;
+    }
+
+    *desc = itr->second.description;
+    return true;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// The remaining functionality has not yet been implemented for OS X
+/////////////////////////////////////////////////////////////////////////////
+
+wxFileTypeImpl::wxFileTypeImpl() 
+{
+}
+
+wxFileTypeImpl::~wxFileTypeImpl() 
+{
+}
+
+// Query wxMimeTypesManagerImple to get real information for a file type
+bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions) const 
+{ 
+    return m_manager->GetExtensions( m_uti, extensions ); 
+}
+
+bool wxFileTypeImpl::GetMimeType(wxString *mimeType) const 
+{ 
+    return m_manager->GetMimeType( m_uti, mimeType ); 
+}
+
+bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const 
+{ 
+    return m_manager->GetMimeTypes( m_uti, mimeTypes ); 
+}
+
+bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const 
+{ 
+    return m_manager->GetIcon( m_uti, iconLoc ); 
+}
+
+bool wxFileTypeImpl::GetDescription(wxString *desc) const 
+{ 
+    return m_manager->GetDescription( m_uti, desc ); 
+}
+
+bool wxFileTypeImpl::GetOpenCommand(wxString *WXUNUSED(openCmd), const wxFileType::MessageParameters& WXUNUSED(params)) const
+{
+    return false;
+}
+
+bool wxFileTypeImpl::GetPrintCommand(wxString *WXUNUSED(printCmd), const wxFileType::MessageParameters& WXUNUSED(params)) const
+{
+    return false;
+}
+
+size_t wxFileTypeImpl::GetAllCommands(wxArrayString *WXUNUSED(verbs), wxArrayString *WXUNUSED(commands), const wxFileType::MessageParameters& WXUNUSED(params)) const
+{
+    return false;
+}
+
+bool wxFileTypeImpl::SetCommand(const wxString& WXUNUSED(cmd), const wxString& WXUNUSED(verb), bool WXUNUSED(overwriteprompt))
+{
+    return false;
+}
+
+bool wxFileTypeImpl::SetDefaultIcon(const wxString& WXUNUSED(strIcon), int WXUNUSED(index))
+{
+    return false;
+}
+
+bool wxFileTypeImpl::Unassociate(wxFileType *WXUNUSED(ft))
+{
+    return false;
+}
+
+
+#endif // wxUSE_MIMETYPE
+
+

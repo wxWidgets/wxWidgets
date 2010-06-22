@@ -369,8 +369,7 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
     }
 
 #if wxUSE_ACCEL
-    delete m_accelWindowMenu;
-    m_accelWindowMenu = NULL;
+    wxDELETE(m_accelWindowMenu);
 
     if ( menu && menu->HasAccels() )
         m_accelWindowMenu = menu->CreateAccelTable();
@@ -686,7 +685,7 @@ bool wxMDIParentFrame::TryBefore(wxEvent& event)
     if ( event.GetEventType() == wxEVT_COMMAND_MENU_SELECTED )
     {
         wxMDIChildFrame * const child = GetActiveChild();
-        if ( child && child->ProcessEventHere(event) )
+        if ( child && child->ProcessWindowEventLocally(event) )
             return true;
     }
 

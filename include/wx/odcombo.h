@@ -80,6 +80,7 @@ public:
     // required virtuals
     virtual void Init();
     virtual bool Create(wxWindow* parent);
+    virtual void SetFocus();
     virtual wxWindow *GetControl() { return this; }
     virtual void SetStringValue( const wxString& value );
     virtual wxString GetStringValue() const;

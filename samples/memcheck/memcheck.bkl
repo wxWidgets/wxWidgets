@@ -7,7 +7,6 @@
         <sources>memcheck.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>memcheck.rc</win32-res>
     </exe>
 
 </makefile>

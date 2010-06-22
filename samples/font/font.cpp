@@ -302,7 +302,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 {
     m_fontSize = wxNORMAL_FONT->GetPointSize();
 
-    SetIcon(wxIcon(sample_xpm));
+    SetIcon(wxICON(sample));
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;

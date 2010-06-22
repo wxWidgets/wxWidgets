@@ -1403,6 +1403,10 @@ SOURCE=..\..\include\wx\msgout.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msgqueue.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\mstream.h
 # End Source File
 # Begin Source File
@@ -1416,6 +1420,10 @@ SOURCE=..\..\include\wx\platform.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\platinfo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\meta\pod.h
 # End Source File
 # Begin Source File
 

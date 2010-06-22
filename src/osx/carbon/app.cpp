@@ -775,11 +775,6 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
 
 #endif // wxDEBUG_LEVEL
 
-extern "C" void macPostedEventCallback(void *WXUNUSED(unused))
-{
-    wxTheApp->ProcessPendingEvents();
-}
-
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
@@ -823,16 +818,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxSetWorkingDirectory( cwd ) ;
     }
 
-    /* connect posted events to common-mode run loop so that wxPostEvent events
-       are handled even while we're in the menu or on a scrollbar */
-       /*
-    CFRunLoopSourceContext event_posted_context = {0};
-    event_posted_context.perform = macPostedEventCallback;
-    m_macEventPosted = CFRunLoopSourceCreate(NULL,0,&event_posted_context);
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
-    // run loop takes ownership
-    CFRelease(m_macEventPosted);
-        */
     return true;
 }
 
@@ -945,12 +930,6 @@ void wxApp::CleanUp()
     wxToolTip::RemoveToolTips() ;
 #endif
 
-    if (m_macEventPosted)
-    {
-        CFRunLoopRemoveSource(CFRunLoopGetCurrent(), m_macEventPosted, kCFRunLoopCommonModes);
-        m_macEventPosted = NULL;
-    }
-
     DoCleanUp();
 
     wxAppBase::CleanUp();
@@ -1058,7 +1037,6 @@ wxApp::wxApp()
 
     m_macCurrentEvent = NULL ;
     m_macCurrentEventHandlerCallRef = NULL ;
-    m_macEventPosted = NULL ;
     m_macPool = new wxMacAutoreleasePool();
 }
 
@@ -1104,12 +1082,10 @@ void wxApp::OnIdle(wxIdleEvent& WXUNUSED(event))
 
 void wxApp::WakeUpIdle()
 {
-    if (m_macEventPosted)
-    {
-        CFRunLoopSourceSignal(m_macEventPosted);
-    }
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-    wxMacWakeUp() ;
+    if ( loop )
+        loop->WakeUp();
 }
 
 void wxApp::OnEndSession(wxCloseEvent& WXUNUSED(event))

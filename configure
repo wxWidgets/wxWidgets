@@ -889,6 +889,8 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
+COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1
+COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_USE_GUI_1
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1
@@ -950,6 +952,8 @@ COND_TOOLKIT_OSX_CARBON_USE_GUI_1
 COND_TOOLKIT_OSX_COCOA
 COND_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_TOOLKIT_OSX_IPHONE
+COND_TOOLKIT_OSX_IPHONE_USE_GUI_1
+COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_PM
 COND_TOOLKIT_PM_USE_GUI_1
 COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0
@@ -1736,6 +1740,7 @@ Optional Features:
   --enable-exceptions     build exception-safe library
   --enable-ffile          use wxFFile class
   --enable-file           use wxFile class
+  --enable-filehistory    use wxFileHistory class
   --enable-filesystem     use virtual file systems classes
   --enable-fontenum       use wxFontEnumerator class
   --enable-fontmap        use font encodings conversion classes
@@ -3605,8 +3610,10 @@ echo "$as_me: error: Please specify at most one toolkit" >&2;}
     # to be removed when --disable-gtk2 isn't needed
     if test "x$wxUSE_GTK2" = "xyes"; then
         wxGTK_VERSION=2
+        wxUSE_GTK1=0
     elif test "x$wxUSE_GTK2" = "xno"; then
         wxGTK_VERSION=1
+        wxUSE_GTK1=1
     fi
 
     for toolkit in $ALL_TOOLKITS; do
@@ -7008,6 +7015,50 @@ fi
             fi
           else
             result=$wxUSE_FILE
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filehistory" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-filehistory... $ECHO_C" >&6; }
+          # Check whether --enable-filehistory was given.
+if test "${enable_filehistory+set}" = set; then
+  enableval=$enable_filehistory;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_filehistory='wxUSE_FILE_HISTORY=yes'
+                          else
+                            wx_cv_use_filehistory='wxUSE_FILE_HISTORY=no'
+                          fi
+
+else
+
+                          wx_cv_use_filehistory='wxUSE_FILE_HISTORY=${'DEFAULT_wxUSE_FILE_HISTORY":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_filehistory"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_FILE_HISTORY = no; then
+              result=yes
+            else
+              result=no
+            fi
+          else
+            result=$wxUSE_FILE_HISTORY
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -33493,8 +33544,9 @@ fi
 
 
 
+USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+        if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
         { echo "$as_me:$LINENO: checking for Xinerama" >&5
 echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
 
@@ -33526,96 +33578,10 @@ echo $ECHO_N "checking for Xinerama... $ECHO_C" >&6; }
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
             fi
+            USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-
-            { echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
-echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
-
-  ac_find_libraries=
-  for ac_dir in $SEARCH_LIB;
-  do
-    for ac_extension in a so sl dylib dll.a; do
-      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
-        ac_find_libraries=$ac_dir
-        break 2
-      fi
-    done
-  done
-
-            if test "$ac_find_libraries" != "" ; then
-                { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-
-for ac_header in X11/extensions/xf86vmode.h
-do
-as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $ac_header" >&5
-echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
-if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-                                      #if HAVE_X11_XLIB_H
-                                        #include <X11/Xlib.h>
-                                      #endif
-
-
-#include <$ac_header>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  eval "$as_ac_Header=yes"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	eval "$as_ac_Header=no"
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-ac_res=`eval echo '${'$as_ac_Header'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_Header'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
-_ACEOF
-
-                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
-
-fi
-
-done
-
-            else
-                { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-            fi
-
         else
             { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
@@ -33624,7 +33590,7 @@ echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
-        { echo "$as_me:$LINENO: checking for ddraw.h" >&5
+                { echo "$as_me:$LINENO: checking for ddraw.h" >&5
 echo $ECHO_N "checking for ddraw.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_ddraw_h+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -33670,6 +33636,96 @@ fi
 echo "${ECHO_T}$ac_cv_header_ddraw_h" >&6; }
 
 
+    fi
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+        if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
+        { echo "$as_me:$LINENO: checking for Xxf86vm extension" >&5
+echo $ECHO_N "checking for Xxf86vm extension... $ECHO_C" >&6; }
+
+  ac_find_libraries=
+  for ac_dir in $SEARCH_LIB;
+  do
+    for ac_extension in a so sl dylib dll.a; do
+      if test -f "$ac_dir/libXxf86vm.$ac_extension"; then
+        ac_find_libraries=$ac_dir
+        break 2
+      fi
+    done
+  done
+
+        if test "$ac_find_libraries" != "" ; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+for ac_header in X11/extensions/xf86vmode.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                  #if HAVE_X11_XLIB_H
+                                    #include <X11/Xlib.h>
+                                  #endif
+
+
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  eval "$as_ac_Header=yes"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	eval "$as_ac_Header=no"
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+                              GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+
+fi
+
+done
+
+        else
+            { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+        fi
     fi
 fi
 
@@ -44100,6 +44156,13 @@ _ACEOF
   fi
 fi
 
+if test "$wxUSE_FILE_HISTORY" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_FILE_HISTORY 1
+_ACEOF
+
+fi
+
 if test "$wxUSE_FILESYSTEM" = "yes"; then
   if test "$wxUSE_STREAMS" != yes -o \( "$wxUSE_FILE" != yes -a "$wxUSE_FFILE" != yes \); then
     { echo "$as_me:$LINENO: WARNING: wxFileSystem requires wxStreams and wxFile or wxFFile... disabled" >&5
@@ -50929,6 +50992,16 @@ EOF
         COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
     fi
 
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_IPHONE" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1=""
+    fi
+
+    COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xOSX_IPHONE" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0=""
+    fi
+
     COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_USE_GUI_1=""
@@ -51232,6 +51305,16 @@ EOF
     COND_TOOLKIT_OSX_IPHONE="#"
     if test "x$TOOLKIT" = "xOSX_IPHONE" ; then
         COND_TOOLKIT_OSX_IPHONE=""
+    fi
+
+    COND_TOOLKIT_OSX_IPHONE_USE_GUI_1="#"
+    if test "x$TOOLKIT" = "xOSX_IPHONE" -a "x$USE_GUI" = "x1" ; then
+        COND_TOOLKIT_OSX_IPHONE_USE_GUI_1=""
+    fi
+
+    COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_IPHONE" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_PM="#"
@@ -52992,6 +53075,8 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1!$COND_PLATFORM_MACOSX_1_TOOL
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0$ac_delim
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1$ac_delim
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0$ac_delim
+COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1$ac_delim
+COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0!$COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0$ac_delim
 COND_PLATFORM_MACOSX_1_USE_GUI_1!$COND_PLATFORM_MACOSX_1_USE_GUI_1$ac_delim
 COND_PLATFORM_MACOSX_1_USE_OPENGL_1!$COND_PLATFORM_MACOSX_1_USE_OPENGL_1$ac_delim
 COND_PLATFORM_MACOSX_1_USE_SOVERSION_1!$COND_PLATFORM_MACOSX_1_USE_SOVERSION_1$ac_delim
@@ -53008,8 +53093,6 @@ COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1!$COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE
 COND_PLATFORM_UNIX_1_USE_GUI_1!$COND_PLATFORM_UNIX_1_USE_GUI_1$ac_delim
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0!$COND_PLATFORM_UNIX_1_USE_PLUGINS_0$ac_delim
 COND_PLATFORM_WIN32_0!$COND_PLATFORM_WIN32_0$ac_delim
-COND_PLATFORM_WIN32_1!$COND_PLATFORM_WIN32_1$ac_delim
-COND_PLATFORM_WIN32_1_SHARED_0!$COND_PLATFORM_WIN32_1_SHARED_0$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -53051,6 +53134,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_PLATFORM_WIN32_1!$COND_PLATFORM_WIN32_1$ac_delim
+COND_PLATFORM_WIN32_1_SHARED_0!$COND_PLATFORM_WIN32_1_SHARED_0$ac_delim
 COND_SHARED_0!$COND_SHARED_0$ac_delim
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0$ac_delim
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0!$COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0$ac_delim
@@ -53094,6 +53179,8 @@ COND_TOOLKIT_OSX_CARBON_USE_GUI_1!$COND_TOOLKIT_OSX_CARBON_USE_GUI_1$ac_delim
 COND_TOOLKIT_OSX_COCOA!$COND_TOOLKIT_OSX_COCOA$ac_delim
 COND_TOOLKIT_OSX_COCOA_USE_GUI_1!$COND_TOOLKIT_OSX_COCOA_USE_GUI_1$ac_delim
 COND_TOOLKIT_OSX_IPHONE!$COND_TOOLKIT_OSX_IPHONE$ac_delim
+COND_TOOLKIT_OSX_IPHONE_USE_GUI_1!$COND_TOOLKIT_OSX_IPHONE_USE_GUI_1$ac_delim
+COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0$ac_delim
 COND_TOOLKIT_PM!$COND_TOOLKIT_PM$ac_delim
 COND_TOOLKIT_PM_USE_GUI_1!$COND_TOOLKIT_PM_USE_GUI_1$ac_delim
 COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0$ac_delim
@@ -53144,10 +53231,6 @@ COND_WXUSE_LIBTIFF_BUILTIN!$COND_WXUSE_LIBTIFF_BUILTIN$ac_delim
 COND_WXUSE_REGEX_BUILTIN!$COND_WXUSE_REGEX_BUILTIN$ac_delim
 COND_WXUSE_ZLIB_BUILTIN!$COND_WXUSE_ZLIB_BUILTIN$ac_delim
 COND_wxUSE_EXPAT_builtin!$COND_wxUSE_EXPAT_builtin$ac_delim
-COND_wxUSE_LIBJPEG_builtin!$COND_wxUSE_LIBJPEG_builtin$ac_delim
-COND_wxUSE_LIBPNG_builtin!$COND_wxUSE_LIBPNG_builtin$ac_delim
-COND_wxUSE_LIBTIFF_builtin!$COND_wxUSE_LIBTIFF_builtin$ac_delim
-COND_wxUSE_REGEX_builtin!$COND_wxUSE_REGEX_builtin$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -53189,6 +53272,10 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_wxUSE_LIBJPEG_builtin!$COND_wxUSE_LIBJPEG_builtin$ac_delim
+COND_wxUSE_LIBPNG_builtin!$COND_wxUSE_LIBPNG_builtin$ac_delim
+COND_wxUSE_LIBTIFF_builtin!$COND_wxUSE_LIBTIFF_builtin$ac_delim
+COND_wxUSE_REGEX_builtin!$COND_wxUSE_REGEX_builtin$ac_delim
 COND_wxUSE_ZLIB_builtin!$COND_wxUSE_ZLIB_builtin$ac_delim
 DEREZ!$DEREZ$ac_delim
 SHARED!$SHARED$ac_delim
@@ -53237,7 +53324,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 50; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

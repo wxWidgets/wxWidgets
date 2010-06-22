@@ -121,6 +121,14 @@
 #   endif
 #endif /* !defined(wxUSE_EXCEPTIONS) */
 
+#ifndef wxUSE_FILE_HISTORY
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_FILE_HISTORY must be defined, please read comment near the top of this file."
+#   else
+#       define wxUSE_FILE_HISTORY 0
+#   endif
+#endif /* !defined(wxUSE_FILE_HISTORY) */
+
 #ifndef wxUSE_FILESYSTEM
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_FILESYSTEM must be defined, please read comment near the top of this file."
@@ -1802,6 +1810,15 @@
 #        else
 #            undef wxUSE_STREAMS
 #            define wxUSE_STREAMS 1
+#        endif
+#   endif
+
+#   if !wxUSE_FILE_HISTORY
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "DocView requires wxUSE_FILE_HISTORY"
+#        else
+#            undef wxUSE_FILE_HISTORY
+#            define wxUSE_FILE_HISTORY 1
 #        endif
 #   endif
 #endif /* wxUSE_DOC_VIEW_ARCHITECTURE */

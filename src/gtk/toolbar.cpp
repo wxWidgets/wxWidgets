@@ -733,45 +733,6 @@ void wxToolBar::OnInternalIdle()
     // Check if we have to show window now
     if (GTKShowFromOnIdle()) return;
 
-    wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
-
-    if (cursor.Ok())
-    {
-        /* I now set the cursor the anew in every OnInternalIdle call
-           as setting the cursor in a parent window also effects the
-           windows above so that checking for the current cursor is
-           not possible. */
-
-        if (HasFlag(wxTB_DOCKABLE) && (m_widget->window))
-        {
-            /* if the toolbar is dockable, then m_widget stands for the
-               GtkHandleBox widget, which uses its own window so that we
-               can set the cursor for it. if the toolbar is not dockable,
-               m_widget comes from m_toolbar which uses its parent's
-               window ("windowless windows") and thus we cannot set the
-               cursor. */
-            gdk_window_set_cursor( m_widget->window, cursor.GetCursor() );
-        }
-
-        wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-        while ( node )
-        {
-            wxToolBarTool *tool = (wxToolBarTool *)node->GetData();
-            node = node->GetNext();
-
-            if (tool->m_item)
-            {
-                GdkWindow* window = GTK_WIDGET(tool->m_item)->window;
-
-                if ( window )
-                {
-                    gdk_window_set_cursor( window, cursor.GetCursor() );
-                }
-            }
-        }
-    }
-
     if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }

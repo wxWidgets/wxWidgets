@@ -446,8 +446,12 @@ All:
 - Added IEC and SI units support to GetHumanReadableSize() (Julien Weinzorn).
 - Add convenient wxString::ToStd{String,Wstring}() helpers.
 - Added wxTranslations class to allow localization without changing locale.
+  It provides more flexible languages enumeration API as well.
 - Added wxResourceTranslationsLoader for loading translations from Windows
   resources.
+- Added wxMessageQueue::Clear().
+- Added wxConfig::Read(float *) overload (Terry Farnham).
+- Always use decimal point (and not the current locale separator) in wxConfig.
 
 Unix:
 
@@ -470,6 +474,7 @@ All (GUI):
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
 - wxGrid: allow changing the horizontal alignment of numeric cells.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
+- wxHTML: add limited support for span elements styles (Nigel Paton).
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.
 - Fixed wxDataViewCtrl::Set{Foreground,Background}Colour().
@@ -490,6 +495,7 @@ All (GUI):
   dismissed immediately as text control grabbed the focus).
 - wxPropertyGrid: added wxPG_EX_MULTIPLE_SELECTION.
 - wxPropertyGrid: added functions for editing property labels.
+- wxPropertyGrid: Added wxPropertyGrid::DedicateKey().
 - wxPropertyGridManager: added wxPG_NO_INTERNAL_BORDER,
   wxPG_EX_NO_TOOLBAR_DIVIDER and wxPG_EX_TOOLBAR_SEPARATOR styles for finer
   control over borders. Borders around property grid are now native for
@@ -516,6 +522,9 @@ All (GUI):
 - Added wxToolBar::GetToolByPos().
 - Added wxProgressDialog::Was{Cancelled,Skipped}() (Julien Weinzorn).
 - Added wxTreeCtrl::{Clear,Set}FocusedItem() (Nikolay Tiushkov).
+- Added "filter changed" event to wxFileCtrl (Bill Jones).
+- wxAUI: update floating window position and not only size on resize (MacGyver).
+- Added wxComboCtrl::SetTextCtrlStyle().
 
 GTK:
 
@@ -548,6 +557,11 @@ MSW:
 - Fix sending of wxEVT_COMMAND_LIST_COL_DRAGGING events in wxListCtrl.
 - Allow putting the UAC symbol on buttons (Chris Spencer).
 - Fix wxTaskBarIcon for older Windows systems (Daniel Wyatt).
+- Fixed wxOwnerDrawnComboBox keyboard handling: drop-down is no longer
+  displayed when arrow key is pressed (without Alt).
+- In some rare cases wxOwnerDrawnComboBox drop-down animation could display
+  as garbage. This has now been greatly reduced (mcben).
+- Fixed wxComboCtrl::SetButtonPosition() on Vista/Win7.
 
 i18n:
 
@@ -625,6 +639,7 @@ All:
 - wxImage handlers can now support multiple extensions (Ivan Krestinin).
 - Added wxFileName::StripExtension() (troelsk).
 - Added wxLOCALE_DATE/TIME_FMT support to wxLocale::GetInfo().
+- Store page setup data directly in wxDocManager (troelsk).
 
 All (Unix):
 
@@ -724,6 +739,7 @@ All (GUI):
 - Added wxGenericStaticBitmap suitable for display of large bitmaps.
 - Support wxListCtrl::GetViewRect() in report view too.
 - Implement wxListCtrl::GetSubItemRect() in generic version (David Barnard).
+- Add column parameter to wxListCtrl::GetItemText() (Allann Jones).
 - Added wxVListBox::GetItemRect() (Javier Urien).
 - Show busy cursor in wxLaunchDefaultBrowser and add wxBROWSER_NOBUSYCURSOR.
 - Added wxFlexGridSizer::Is{Row,Col}Growable() (Marcin Wojdyr).

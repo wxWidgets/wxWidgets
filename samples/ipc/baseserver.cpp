@@ -211,8 +211,7 @@ void MyServer::Disconnect()
     if ( m_connection )
     {
         m_connection->Disconnect();
-        delete m_connection;
-        m_connection = NULL;
+        wxDELETE(m_connection);
         wxLogMessage("Disconnected client");
     }
 }

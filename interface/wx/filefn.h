@@ -24,6 +24,9 @@
 class wxPathList : public wxArrayString
 {
 public:
+    /**
+        Standard constructor.
+    */
     wxPathList();
 
     /**

@@ -1299,13 +1299,8 @@ bool wxPropertyGridPageState::DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wx
 
 bool wxPropertyGridPageState::DoIsPropertySelected( wxPGProperty* prop ) const
 {
-    const wxArrayPGProperty& selection = m_selection;
-
-    for ( unsigned int i=0; i<selection.size(); i++ )
-    {
-        if ( selection[i] == prop )
-            return true;
-    }
+    if ( wxPGFindInVector(m_selection, prop) != wxNOT_FOUND )
+        return true;
 
     return false;
 }

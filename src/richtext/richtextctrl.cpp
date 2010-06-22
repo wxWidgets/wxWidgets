@@ -2600,7 +2600,7 @@ void wxRichTextCtrl::SetSelection(long from, long to)
         m_selectionAnchor = from-1;
         m_selectionRange.SetRange(from, to-1);
 
-        m_caretPosition = wxMax(-1, to-2);
+        m_caretPosition = wxMax(-1, to-1);
 
         RefreshForSelectionChange(oldSelection, m_selectionRange);
         PositionCaret();

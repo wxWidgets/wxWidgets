@@ -254,13 +254,13 @@ struct wxComboCtrlFeatures
         int m_value; // current item index
 
     private:
-        DECLARE_EVENT_TABLE()
+        wxDECLARE_EVENT_TABLE();
     };
 
-    BEGIN_EVENT_TABLE(wxListViewComboPopup, wxListView)
+    wxBEGIN_EVENT_TABLE(wxListViewComboPopup, wxListView)
         EVT_MOTION(wxListViewComboPopup::OnMouseMove)
         EVT_LEFT_UP(wxListViewComboPopup::OnMouseClick)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
     @endcode
 
     Here's how you would create and populate it in a dialog constructor:
@@ -733,6 +733,22 @@ public:
         @c wxCB_READONLY style.
     */
     void SetText(const wxString& value);
+
+    /**
+        Set a custom window style for the embedded wxTextCtrl. Usually you
+        will need to use this during two-step creation, just before Create().
+        For example:
+
+        @code
+            wxComboCtrl* comboCtrl = new wxComboCtrl();
+
+            // Let's make the text right-aligned
+            comboCtrl->SetTextCtrlStyle(wxTE_RIGHT);
+
+            comboCtrl->Create(parent, wxID_ANY, wxEmptyString);
+        @endcode
+    */
+    void SetTextCtrlStyle( int style );
 
     /**
         This will set the space in pixels between left edge of the control and

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/uris/uris.cpp
+// Name:        tests/streams/textstreamtest.cpp
 // Purpose:     wxTextXXXStream unit test
 // Author:      Ryan Norton, Vince Harron
 // Created:     2004-08-14
@@ -44,6 +44,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( TextStreamTestCase );
         CPPUNIT_TEST( Endline );
+        CPPUNIT_TEST( MiscTests );
 
 #if wxUSE_LONGLONG
         CPPUNIT_TEST( TestLongLong );
@@ -60,6 +61,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void Endline();
+    void MiscTests();
 
 #if wxUSE_LONGLONG
     void TestLongLong();
@@ -121,6 +123,24 @@ void TextStreamTestCase::Endline()
     CPPUNIT_ASSERT( memcmp(&szIn[9], NEWLINE, NEWLINELEN) == 0 );
 
     delete pInFile;
+}
+
+void TextStreamTestCase::MiscTests()
+{
+    wxString filename = wxT("testdata.fc");
+    wxFileInputStream fsIn(filename);
+    if ( !fsIn.Ok() )
+    {
+        return;
+    }
+
+    wxTextInputStream tis(fsIn);
+    CPPUNIT_ASSERT_EQUAL("# this is the test data file for wxFileConfig tests", tis.ReadLine());
+    CPPUNIT_ASSERT_EQUAL("value1=one", tis.ReadLine());
+    CPPUNIT_ASSERT_EQUAL("# a comment here", tis.ReadLine());
+    CPPUNIT_ASSERT_EQUAL("value2=two", tis.ReadLine());
+    CPPUNIT_ASSERT_EQUAL("value\\ with\\ spaces\\ inside\\ it=nothing special", tis.ReadLine());
+    CPPUNIT_ASSERT_EQUAL("path=$PATH", tis.ReadLine());
 }
 
 #if wxUSE_LONGLONG

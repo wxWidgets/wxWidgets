@@ -256,7 +256,7 @@ SOURCE=.\calendar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\calendar.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

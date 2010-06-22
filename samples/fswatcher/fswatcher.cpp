@@ -279,8 +279,7 @@ void MyFrame::OnWatch(wxCommandEvent& event)
     {
         wxCHECK_RET(m_watcher, "Watcher not initialized");
         m_filesList->DeleteAllItems();
-        delete m_watcher;
-        m_watcher = NULL;
+        wxDELETE(m_watcher);
     }
 }
 

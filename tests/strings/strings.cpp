@@ -53,6 +53,7 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
+        CPPUNIT_TEST( FromDouble );
         CPPUNIT_TEST( StringBuf );
         CPPUNIT_TEST( UTF8Buf );
         CPPUNIT_TEST( CStrDataTernaryOperator );
@@ -85,6 +86,7 @@ private:
     void ToULongLong();
 #endif // wxLongLong_t
     void ToDouble();
+    void FromDouble();
     void StringBuf();
     void UTF8Buf();
     void CStrDataTernaryOperator();
@@ -590,7 +592,7 @@ void StringTestCase::ToLong()
 
         if ( ld.flags & (Number_LongLong | Number_Unsigned) )
             continue;
-        
+
         // NOTE: unless you're using some exotic locale, ToCLong and ToLong
         //       should behave the same for our test data set:
 
@@ -631,7 +633,7 @@ void StringTestCase::ToULong()
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCULong(&ul) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
-        
+
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
@@ -711,17 +713,17 @@ void StringTestCase::ToDouble()
 
 
     // test ToDouble() now:
-    // NOTE: for the test to be reliable, we need to set the locale explicitely
+    // NOTE: for the test to be reliable, we need to set the locale explicitly
     //       so that we know the decimal point character to use
 
     if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
         return;     // you should have french support installed to continue this test!
 
-    wxLocale *locale = new wxLocale;
-    
+    wxLocale locale;
+
     // don't load default catalog, it may be unavailable:
-    CPPUNIT_ASSERT( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
-    
+    CPPUNIT_ASSERT( locale.Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
+
     static const struct ToDoubleData doubleData2[] =
     {
         { wxT("1"), 1, true },
@@ -745,8 +747,48 @@ void StringTestCase::ToDouble()
         if ( ld.ok )
             CPPUNIT_ASSERT_EQUAL( ld.value, d );
     }
-    
-    delete locale;
+}
+
+void StringTestCase::FromDouble()
+{
+    static const struct FromDoubleTestData
+    {
+        double value;
+        const char *str;
+    } testData[] =
+    {
+        { 1.23,             "1.23" },
+        // NB: there are no standards about the minimum exponent width
+        //     and newer MSVC versions use 3 digits as minimum exponent
+        //     width while GNU libc uses 2 digits as minimum width...
+#ifdef __VISUALC__
+        { -3e-10,           "-3e-010" },
+#else
+        { -3e-10,           "-3e-10" },
+#endif
+        { -0.45678,         "-0.45678" },
+    };
+
+    for ( unsigned n = 0; n < WXSIZEOF(testData); n++ )
+    {
+        const FromDoubleTestData& td = testData[n];
+        CPPUNIT_ASSERT_EQUAL( td.str, wxString::FromCDouble(td.value) );
+    }
+
+    if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
+        return;
+
+    wxLocale locale;
+    CPPUNIT_ASSERT( locale.Init(wxLANGUAGE_FRENCH, wxLOCALE_DONT_LOAD_DEFAULT) );
+
+    for ( unsigned m = 0; m < WXSIZEOF(testData); m++ )
+    {
+        const FromDoubleTestData& td = testData[m];
+
+        wxString str(td.str);
+        str.Replace(".", ",");
+        CPPUNIT_ASSERT_EQUAL( str, wxString::FromDouble(td.value) );
+    }
 }
 
 void StringTestCase::StringBuf()

@@ -386,8 +386,7 @@ bool wxApp::RegisterWindowClasses( HAB vHab )
 //
 void wxApp::CleanUp()
 {
-    delete[] wxBuffer;
-    wxBuffer = NULL;
+    wxDELETEA(wxBuffer);
 
     //
     // PM-SPECIFIC CLEANUP
@@ -414,8 +413,7 @@ void wxApp::CleanUp()
 // TODO:        ::DeleteObject( wxDisableButtonBrush );
     }
 
-    delete wxWinHandleHash;
-    wxWinHandleHash = NULL;
+    wxDELETE(wxWinHandleHash);
 
     // Delete Message queue
     if (wxTheApp->m_hMq)

@@ -43,7 +43,7 @@ BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_SIZE(wxRibbonPanel::OnSize)
 END_EVENT_TABLE()
 
-wxRibbonPanel::wxRibbonPanel()
+wxRibbonPanel::wxRibbonPanel() : m_expanded_dummy(NULL), m_expanded_panel(NULL)
 {
 }
 

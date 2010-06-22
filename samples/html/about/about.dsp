@@ -256,7 +256,7 @@ SOURCE=.\about.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\about.rc
+SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

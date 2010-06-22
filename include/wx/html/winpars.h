@@ -107,6 +107,8 @@ public:
 
     int GetFontSize() const {return m_FontSize;}
     void SetFontSize(int s);
+    // Try to map a font size in points to the HTML 1-7 font size range.
+    void SetFontPointSize(int pt);
     int GetFontBold() const {return m_FontBold;}
     void SetFontBold(int x) {m_FontBold = x;}
     int GetFontItalic() const {return m_FontItalic;}

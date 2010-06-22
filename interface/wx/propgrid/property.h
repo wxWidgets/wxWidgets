@@ -621,7 +621,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @endcode
 
     Since wxPGProperty derives from wxObject, you can use standard
-    DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS macros. From the
+    wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS macros. From the
     above example they were omitted for sake of simplicity, and besides,
     they are only really needed if you need to use wxRTTI with your
     property class.

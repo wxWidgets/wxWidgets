@@ -12,6 +12,8 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxOSX_USE_COCOA_OR_CARBON
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -806,3 +808,5 @@ void wxRendererMac::DrawTitleBarBitmap(wxWindow *win,
 }
 
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
+
+#endif

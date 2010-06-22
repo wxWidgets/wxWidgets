@@ -1072,8 +1072,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
                 wxT("cannot set palette for bitmap of this depth"));
 
     AllocExclusive();
-    delete M_BMPDATA->m_palette;
-    M_BMPDATA->m_palette = NULL;
+    wxDELETE(M_BMPDATA->m_palette);
 
     if (!palette.Ok()) return;
 

@@ -2300,7 +2300,12 @@ wxSize wxBoxSizer::CalcMin()
     m_totalProportion = 0;
     m_minSize = wxSize(0, 0);
 
-    // calculate the minimal sizes for all items and count sum of proportions
+    // The minimal size for the sizer should be big enough to allocate its
+    // element at least its minimal size but also, and this is the non trivial
+    // part, to respect the children proportion. To satisfy the latter
+    // condition we must find the greatest min-size-to-proportion ratio for all
+    // elements with non-zero proportion.
+    float maxMinSizeToProp = 0.;
     for ( wxSizerItemList::const_iterator i = m_children.begin();
           i != m_children.end();
           ++i )
@@ -2311,12 +2316,30 @@ wxSize wxBoxSizer::CalcMin()
             continue;
 
         const wxSize sizeMinThis = item->CalcMin();
-        SizeInMajorDir(m_minSize) += GetSizeInMajorDir(sizeMinThis);
+        if ( const int propThis = item->GetProportion() )
+        {
+            float minSizeToProp = GetSizeInMajorDir(sizeMinThis);
+            minSizeToProp /= propThis;
+
+            if ( minSizeToProp > maxMinSizeToProp )
+                maxMinSizeToProp = minSizeToProp;
+
+            m_totalProportion += item->GetProportion();
+        }
+        else // fixed size item
+        {
+            // Just account for its size directly
+            SizeInMajorDir(m_minSize) += GetSizeInMajorDir(sizeMinThis);
+        }
+
+        // In the transversal direction we just need to find the maximum.
         if ( GetSizeInMinorDir(sizeMinThis) > GetSizeInMinorDir(m_minSize) )
             SizeInMinorDir(m_minSize) = GetSizeInMinorDir(sizeMinThis);
-
-        m_totalProportion += item->GetProportion();
     }
+
+    // Using the max ratio ensures that the min size is big enough for all
+    // items to have their min size and satisfy the proportions among them.
+    SizeInMajorDir(m_minSize) += maxMinSizeToProp*m_totalProportion;
 
     return m_minSize;
 }

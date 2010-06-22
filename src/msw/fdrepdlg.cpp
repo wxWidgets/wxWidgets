@@ -443,8 +443,7 @@ bool wxFindReplaceDialog::Show(bool show)
         wxLogError(_("Failed to create the standard find/replace dialog (error code %d)"),
                    ::CommDlgExtendedError());
 
-        delete m_impl;
-        m_impl = NULL;
+        wxDELETE(m_impl);
 
         return false;
     }

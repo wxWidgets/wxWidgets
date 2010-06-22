@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 6 April 2010                                                       *
+ * Date : 28 May 2010                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -254,7 +254,7 @@ typedef pid_t GPid;
 #define wxUSE_INTL          1
 #include <locale.h>
 
-#if defined (__WXMOTIF__) || defined( __WXX11__ )
+#if defined (__WXMOTIF__)
 #define wxUSE_XLOCALE 0
 #else
 #define wxUSE_XLOCALE 1
@@ -512,6 +512,8 @@ typedef pid_t GPid;
 #define wxUSE_WIZARDDLG 1
 
 #define wxUSE_ABOUTDLG 1
+
+#define wxUSE_FILE_HISTORY 1
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0

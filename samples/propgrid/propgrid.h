@@ -226,6 +226,8 @@ public:
     void OnIterate3Click( wxCommandEvent& event );
     void OnIterate4Click( wxCommandEvent& event );
 
+    void OnExtendedKeyNav( wxCommandEvent& event );
+
     void OnPropertyGridChange( wxPropertyGridEvent& event );
     void OnPropertyGridChanging( wxPropertyGridEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );

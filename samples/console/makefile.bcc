@@ -174,7 +174,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\console.exe data
+all: $(OBJS)\console.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -191,10 +191,6 @@ $(OBJS)\console.exe: $(CONSOLE_OBJECTS)
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @&&|
 	c0x32.obj $(CONSOLE_OBJECTS),$@,, $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,,
 |
-
-data: 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\console_console.obj: .\console.cpp
 	$(CXX) -q -c -P -o$@ $(CONSOLE_CXXFLAGS) .\console.cpp

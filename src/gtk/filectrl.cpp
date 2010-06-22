@@ -26,6 +26,7 @@
 #include "wx/gtk/private.h"
 #include "wx/filedlg.h"
 #include "wx/filename.h"
+#include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 
 //-----------------------------------------------------------------------------
@@ -126,6 +127,9 @@ void wxGtkFileChooser::SetWildcard( const wxString& wildCard )
         GSList* ifilters = gtk_file_chooser_list_filters( chooser );
         GSList* filters = ifilters;
 
+        m_ignoreNextFilterEvent = true;
+        wxON_BLOCK_EXIT_SET(m_ignoreNextFilterEvent, false);
+
         while ( ifilters )
         {
             gtk_file_chooser_remove_filter( chooser, GTK_FILE_FILTER( ifilters->data ) );
@@ -201,6 +205,11 @@ int wxGtkFileChooser::GetFilterIndex() const
         return index;
 }
 
+bool wxGtkFileChooser::HasFilterChoice() const
+{
+    return gtk_file_chooser_get_filter( m_widget ) != NULL;
+}
+
 //-----------------------------------------------------------------------------
 // end wxGtkFileChooser Implementation
 //-----------------------------------------------------------------------------
@@ -257,6 +266,21 @@ extern "C"
     }
 }
 
+extern "C"
+{
+    static void
+    gtkfilechooserwidget_notify_callback( GObject *WXUNUSED( gobject ), GParamSpec *arg1, wxGtkFileCtrl *fileCtrl )
+    {
+        const char *name = g_param_spec_get_name (arg1);
+        if ( strcmp( name, "filter" ) == 0 &&
+             fileCtrl->HasFilterChoice() &&
+             !fileCtrl->GTKShouldIgnoreNextFilterEvent() )
+        {
+            GenerateFilterChangedEvent( fileCtrl, fileCtrl );
+        }
+    }
+}
+
 // wxGtkFileCtrl implementation
 
 IMPLEMENT_DYNAMIC_CLASS( wxGtkFileCtrl, wxControl )
@@ -309,6 +333,10 @@ bool wxGtkFileCtrl::Create( wxWindow *parent,
 
     g_signal_connect ( m_fcWidget, "selection-changed",
                        G_CALLBACK ( gtkfilechooserwidget_selection_changed_callback ),
+                       this );
+
+    g_signal_connect ( m_fcWidget, "notify",
+                       G_CALLBACK ( gtkfilechooserwidget_notify_callback ),
                        this );
 
     m_fc.SetWidget( m_fcWidget );

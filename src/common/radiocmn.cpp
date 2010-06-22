@@ -189,8 +189,7 @@ void wxRadioBoxBase::SetItemToolTip(unsigned int item, const wxString& text)
         if ( tooltip )
         {
             // delete the tooltip
-            delete tooltip;
-            tooltip = NULL;
+            wxDELETE(tooltip);
         }
         else // nothing to do
         {

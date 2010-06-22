@@ -563,6 +563,8 @@ public:
     // accessing content
 
     virtual unsigned int    ListGetCount() const = 0;
+    
+    virtual int             DoListHitTest( const wxPoint& inpoint ) const = 0;
 };
 
 //

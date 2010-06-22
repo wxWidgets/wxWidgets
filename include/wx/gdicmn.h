@@ -160,12 +160,12 @@ enum wxStockCursor
 
 /* Useful macro for creating icons portably, for example:
 
-    wxIcon *icon = new wxICON(mondrian);
+    wxIcon *icon = new wxICON(sample);
 
   expands into:
 
-    wxIcon *icon = new wxIcon("mondrian");      // On wxMSW
-    wxIcon *icon = new wxIcon(mondrian_xpm);    // On wxGTK
+    wxIcon *icon = new wxIcon("sample");      // On wxMSW
+    wxIcon *icon = new wxIcon(sample_xpm);    // On wxGTK
  */
 
 #ifdef __WXMSW__
@@ -395,6 +395,16 @@ public:
 
     wxRealPoint() : x(0.0), y(0.0) { }
     wxRealPoint(double xx, double yy) : x(xx), y(yy) { }
+    wxRealPoint(const wxPoint& pt);
+    
+    // no copy ctor or assignment operator - the defaults are ok
+
+    //assignment operators
+    wxRealPoint& operator+=(const wxRealPoint& p) { x += p.x; y += p.y; return *this; }
+    wxRealPoint& operator-=(const wxRealPoint& p) { x -= p.x; y -= p.y; return *this; }
+
+    wxRealPoint& operator+=(const wxSize& s) { x += s.GetWidth(); y += s.GetHeight(); return *this; }
+    wxRealPoint& operator-=(const wxSize& s) { x -= s.GetWidth(); y -= s.GetHeight(); return *this; }
 };
 
 
@@ -403,12 +413,10 @@ inline bool operator==(const wxRealPoint& p1, const wxRealPoint& p2)
     return wxIsSameDouble(p1.x, p2.x) && wxIsSameDouble(p1.y, p2.y);
 }
 
-
 inline bool operator!=(const wxRealPoint& p1, const wxRealPoint& p2)
 {
     return !(p1 == p2);
 }
-
 
 inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
 {
@@ -419,6 +427,77 @@ inline wxRealPoint operator+(const wxRealPoint& p1, const wxRealPoint& p2)
 inline wxRealPoint operator-(const wxRealPoint& p1, const wxRealPoint& p2)
 {
     return wxRealPoint(p1.x - p2.x, p1.y - p2.y);
+}
+
+
+inline wxRealPoint operator/(const wxRealPoint& s, int i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, int i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(int i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, unsigned int i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, unsigned int i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(unsigned int i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, long i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, long i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(long i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator/(const wxRealPoint& s, unsigned long i)
+{
+    return wxRealPoint(s.x / i, s.y / i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, unsigned long i)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(unsigned long i, const wxRealPoint& s)
+{
+    return wxRealPoint(s.x * i, s.y * i);
+}
+
+inline wxRealPoint operator*(const wxRealPoint& s, double i)
+{
+    return wxRealPoint(int(s.x * i), int(s.y * i));
+}
+
+inline wxRealPoint operator*(double i, const wxRealPoint& s)
+{
+    return wxRealPoint(int(s.x * i), int(s.y * i));
 }
 
 
@@ -433,6 +512,7 @@ public:
 
     wxPoint() : x(0), y(0) { }
     wxPoint(int xx, int yy) : x(xx), y(yy) { }
+    wxPoint(const wxRealPoint& pt) : x(int(pt.x)), y(int(pt.y)) { }
 
     // no copy ctor or assignment operator - the defaults are ok
 
@@ -491,6 +571,76 @@ inline wxPoint operator-(const wxSize& s, const wxPoint& p)
 inline wxPoint operator-(const wxPoint& p)
 {
     return wxPoint(-p.x, -p.y);
+}
+
+inline wxPoint operator/(const wxPoint& s, int i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, int i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(int i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, unsigned int i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, unsigned int i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(unsigned int i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, long i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, long i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(long i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator/(const wxPoint& s, unsigned long i)
+{
+    return wxPoint(s.x / i, s.y / i);
+}
+
+inline wxPoint operator*(const wxPoint& s, unsigned long i)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(unsigned long i, const wxPoint& s)
+{
+    return wxPoint(s.x * i, s.y * i);
+}
+
+inline wxPoint operator*(const wxPoint& s, double i)
+{
+    return wxPoint(int(s.x * i), int(s.y * i));
+}
+
+inline wxPoint operator*(double i, const wxPoint& s)
+{
+    return wxPoint(int(s.x * i), int(s.y * i));
 }
 
 WX_DECLARE_LIST_WITH_DECL(wxPoint, wxPointList, class WXDLLIMPEXP_CORE);

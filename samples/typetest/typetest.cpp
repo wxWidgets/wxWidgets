@@ -25,8 +25,8 @@
 
 #include "typetest.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
-#include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 #ifdef new
@@ -80,7 +80,7 @@ bool MyApp::OnInit()
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Give it an icon
-    frame->SetIcon(wxICON(mondrian));
+    frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

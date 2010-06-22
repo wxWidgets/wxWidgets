@@ -597,11 +597,7 @@ void wxDialUpManagerMSW::CleanUpThreadData()
         m_hThread = 0;
     }
 
-    if ( m_data )
-    {
-        delete m_data;
-        m_data = NULL;
-    }
+    wxDELETE(m_data);
 }
 
 // ----------------------------------------------------------------------------

@@ -445,6 +445,15 @@ public:
     /**
         Adds given key combination to trigger given action.
 
+        Here is a sample code to make Enter key press move focus to
+        the next property.
+
+        @code
+            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                                       WXK_RETURN);
+            propGrid->DedicateKey(WXK_RETURN);
+        @endcode
+
         @param action
             Which action to trigger. See @ref propgrid_keyboard_actions.
         @param keycode
@@ -545,6 +554,16 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxPG_DEFAULT_STYLE,
                 const wxChar* name = wxPropertyGridNameStr );
+
+    /**
+        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        key presses will not be redirected to editor controls.
+
+        Using this function allows, for example, navigation between
+        properties using arrow keys even when the focus is in the editor
+        control.
+    */
+    void DedicateKey( int keycode );
 
     /**
         Enables or disables (shows/hides) categories according to parameter

@@ -29,8 +29,8 @@ HTMLHELP_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	-I.\..\..\..\samples -DNOPCH $(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 HTMLHELP_OBJECTS =  \
-	$(OBJS)\htmlhelp_help.o \
-	$(OBJS)\htmlhelp_help_rc.o
+	$(OBJS)\htmlhelp_sample_rc.o \
+	$(OBJS)\htmlhelp_help.o
 
 ### Conditionally set variables: ###
 
@@ -222,18 +222,18 @@ clean:
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\htmlhelp.exe del $(OBJS)\htmlhelp.exe
 
-$(OBJS)\htmlhelp.exe: $(HTMLHELP_OBJECTS) $(OBJS)\htmlhelp_help_rc.o
+$(OBJS)\htmlhelp.exe: $(HTMLHELP_OBJECTS) $(OBJS)\htmlhelp_sample_rc.o
 	$(CXX) -o $@ $(HTMLHELP_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 data: 
 	if not exist $(OBJS)\helpfiles mkdir $(OBJS)\helpfiles
 	for %%f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%%f copy .\helpfiles\%%f $(OBJS)\helpfiles
 
+$(OBJS)\htmlhelp_sample_rc.o: ./../../../samples/sample.rc
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
+
 $(OBJS)\htmlhelp_help.o: ./help.cpp
 	$(CXX) -c -o $@ $(HTMLHELP_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\htmlhelp_help_rc.o: ./help.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__NDEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
 
 .PHONY: all clean data
 

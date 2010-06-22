@@ -309,14 +309,14 @@ public:
             char m_data[1024];
             wxCriticalSection m_dataCS; // protects field above
 
-            DECLARE_EVENT_TABLE()
+            wxDECLARE_EVENT_TABLE();
         };
 
         wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)
-        BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+        wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
             EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
             EVT_CLOSE(MyFrame::OnClose)
-        END_EVENT_TABLE()
+        wxEND_EVENT_TABLE()
 
         void MyFrame::DoStartALongTask()
         {
@@ -687,15 +687,15 @@ enum
         MyThread *m_pThread;
         wxCriticalSection m_pThreadCS;    // protects the m_pThread pointer
 
-        DECLARE_EVENT_TABLE()
+        wxDECLARE_EVENT_TABLE();
     };
 
-    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
         EVT_CLOSE(MyFrame::OnClose)
         EVT_MENU(Minimal_Start,  MyFrame::DoStartThread)
         EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
         EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_COMPLETED, MyFrame::OnThreadCompletion)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
 
     wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_COMPLETED, wxThreadEvent)
     wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)

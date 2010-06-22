@@ -222,7 +222,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxComboBox::DisableEvents()
+void wxComboBox::GTKDisableEvents()
 {
     if ( GetEntry() )
         g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
@@ -234,7 +234,7 @@ void wxComboBox::DisableEvents()
         (gpointer)gtkcombobox_popupshown_callback, this);
 }
 
-void wxComboBox::EnableEvents()
+void wxComboBox::GTKEnableEvents()
 {
     if ( GetEntry() )
         g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,

@@ -267,15 +267,10 @@ wxFrame::~wxFrame()
     if (m_frameMenuBar)
     {
         m_frameMenuBar->DestroyMenuBar();
-        delete m_frameMenuBar;
-        m_frameMenuBar = NULL;
+        wxDELETE(m_frameMenuBar);
     }
 
-    if (m_frameStatusBar)
-    {
-        delete m_frameStatusBar;
-        m_frameStatusBar = NULL;
-    }
+    wxDELETE(m_frameStatusBar);
 
     PreDestroy();
 

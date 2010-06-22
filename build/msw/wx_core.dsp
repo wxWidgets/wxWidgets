@@ -398,6 +398,10 @@ SOURCE=..\..\src\common\filectrlcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\filehistorycmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\filepickercmn.cpp
 # End Source File
 # Begin Source File
@@ -2962,6 +2966,10 @@ SOURCE=..\..\src\generic\graphicc.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\headerctrlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\infobar.cpp
 # End Source File
 # Begin Source File
 
@@ -5714,6 +5722,10 @@ SOURCE=..\..\include\wx\html\m_templ.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\html\styleparams.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\html\winpars.h
 # End Source File
 # End Group
@@ -5750,6 +5762,14 @@ SOURCE=..\..\include\wx\animdecod.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\ribbon\art.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\art_internal.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\artprov.h
 # End Source File
 # Begin Source File
@@ -5763,6 +5783,10 @@ SOURCE=..\..\include\wx\aui\auibar.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\aui\auibook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\bar.h
 # End Source File
 # Begin Source File
 
@@ -5795,6 +5819,10 @@ SOURCE=..\..\include\wx\busyinfo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\button.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\buttonbar.h
 # End Source File
 # Begin Source File
 
@@ -5867,6 +5895,10 @@ SOURCE=..\..\include\wx\combobox.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\control.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\control.h
 # End Source File
 # Begin Source File
 
@@ -6022,6 +6054,10 @@ SOURCE=..\..\include\wx\filedlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\filehistory.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\filepicker.h
 # End Source File
 # Begin Source File
@@ -6059,6 +6095,10 @@ SOURCE=..\..\include\wx\frame.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\aui\framemanager.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\gallery.h
 # End Source File
 # Begin Source File
 
@@ -6290,11 +6330,19 @@ SOURCE=..\..\include\wx\ownerdrw.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\ribbon\page.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\palette.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\panel.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\panel.h
 # End Source File
 # Begin Source File
 
@@ -6547,6 +6595,10 @@ SOURCE=..\..\include\wx\tipdlg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\tipwin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\ribbon\toolbar.h
 # End Source File
 # Begin Source File
 

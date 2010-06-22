@@ -97,6 +97,10 @@ public:
     //                           (or ("WhaT.jpg") if with_quotes == true)
     wxString GetParam(const wxString& par, bool with_quotes = false) const;
 
+    // Return true if the string could be parsed as an HTML colour and false
+    // otherwise.
+    static bool ParseAsColour(const wxString& str, wxColour *clr);
+
     // Convenience functions:
     bool GetParamAsColour(const wxString& par, wxColour *clr) const;
     bool GetParamAsInt(const wxString& par, int *clr) const;
