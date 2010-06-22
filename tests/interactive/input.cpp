@@ -21,6 +21,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/app.h"
+#include "wx/wxcrt.h"           // for wxPuts
+#include "wx/wxcrtvararg.h"     // for wxPrintf
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
