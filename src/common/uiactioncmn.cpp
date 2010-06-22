@@ -4,7 +4,7 @@
 // Author:      Kevin Ollivier
 // Modified by:
 // Created:     2010-03-06
-// RCS-ID:      $Id: menu.cpp 54129 2008-06-11 19:30:52Z SC $
+// RCS-ID:      $Id$
 // Copyright:   (c) Kevin Ollivier
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@
 // Name:        testableframe.cpp
 // Purpose:     An improved wxFrame for unit-testing
 // Author:      Steven Lamerton
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
