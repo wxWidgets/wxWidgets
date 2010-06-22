@@ -624,6 +624,7 @@ public:
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
+    void OnImage(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
 
     void OnUpdateCut(wxUpdateUIEvent& event);
@@ -632,6 +633,7 @@ public:
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
+    void OnUpdateImage(wxUpdateUIEvent& event);
     void OnUpdateClear(wxUpdateUIEvent& event);
 
     // Show a context menu for Rich Edit controls (the standard
@@ -881,6 +883,9 @@ private:
     wxCursor                m_urlCursor;
 
     static wxArrayString    sm_availableFontNames;
+    /// The wxRichTextImage object under mouse if any
+    wxRichTextImage*        m_image;
+    long                    m_imagePropertyId;
 };
 
 /*!

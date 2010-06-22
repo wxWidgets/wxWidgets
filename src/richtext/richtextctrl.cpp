@@ -20,6 +20,7 @@
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
+#include "wx/richtext/richtextimagedlg.h"
 
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
@@ -300,12 +301,21 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     m_contextMenu->AppendSeparator();
     m_contextMenu->Append(wxID_SELECTALL, _("Select &All"));
 
+    long ids = wxNewId();
+    m_contextMenu->AppendSeparator();
+    m_contextMenu->Append(ids, _("Image Property"));
+
+    Connect(ids, wxEVT_UPDATE_UI, wxUpdateUIEventHandler(wxRichTextCtrl::OnUpdateImage));
+    Connect(ids, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxRichTextCtrl::OnImage));
+    m_imagePropertyId = ids;
     return true;
 }
 
 wxRichTextCtrl::~wxRichTextCtrl()
 {
     GetBuffer().RemoveEventHandler(this);
+    Disconnect(m_imagePropertyId, wxEVT_UPDATE_UI, wxUpdateUIEventHandler(wxRichTextCtrl::OnUpdateImage));
+    Disconnect(m_imagePropertyId, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(wxRichTextCtrl::OnImage));
 
     delete m_contextMenu;
 }
@@ -326,6 +336,7 @@ void wxRichTextCtrl::Init()
     m_fullLayoutSavedPosition = 0;
     m_delayedLayoutThreshold = wxRICHTEXT_DEFAULT_DELAYED_LAYOUT_THRESHOLD;
     m_caretPositionForDefaultStyle = -2;
+    m_image = NULL;
 }
 
 void wxRichTextCtrl::DoThaw()
@@ -2821,12 +2832,55 @@ void wxRichTextCtrl::OnUpdateSelectAll(wxUpdateUIEvent& event)
     event.Enable(GetLastPosition() > 0);
 }
 
+void wxRichTextCtrl::OnImage(wxCommandEvent& WXUNUSED(event))
+{
+    assert(m_image);
+
+    wxRichTextImageDlg imageDlg(this);
+    imageDlg.SetImageAttr(m_image->GetImageAttr());
+
+    if (imageDlg.ShowModal() == wxID_OK)
+    {
+        imageDlg.ApplyImageAttr(m_image);
+    }
+}
+
+void wxRichTextCtrl::OnUpdateImage(wxUpdateUIEvent& event)
+{
+    event.Enable(m_image != NULL);
+}
+
 void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 {
     if (event.GetEventObject() != this)
     {
         event.Skip();
         return;
+    }
+
+    wxClientDC dc(this);
+    PrepareDC(dc);
+    dc.SetFont(GetFont());
+
+    long position = 0;
+    wxPoint pt = event.GetPosition();
+    wxPoint logicalPt(dc.DeviceToLogicalX(pt.x), dc.DeviceToLogicalY(pt.y));
+    int hit = GetBuffer().HitTest(dc, logicalPt, position);
+    if (hit & wxRICHTEXT_HITTEST_ON)
+    {
+        wxRichTextObject *image = GetBuffer().GetLeafObjectAtPosition(position);
+        if (image && image->IsKindOf(CLASSINFO(wxRichTextImage)))
+        {
+            m_image = wxDynamicCast(image, wxRichTextImage);
+        }
+        else
+        {
+            m_image = NULL;
+        }
+    }
+    else
+    {
+        m_image = NULL;
     }
 
     if (m_contextMenu)
