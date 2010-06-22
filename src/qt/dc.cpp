@@ -302,14 +302,18 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
                          wxCoord xoffset, wxCoord yoffset )
 {
-    QVector<QPoint> qtPoints;
-    for (int i = 0; i < n; i++) {
-        qtPoints << wxQtConvertPoint(points[i]);
-    }
+    if (n > 0)
+    {
+        QPainterPath path(wxQtConvertPoint(points[0]));
+        for (int i = 1; i < n; i++)
+        {
+            path.lineTo(wxQtConvertPoint(points[i]));
+        }
 
-    m_qtPainter.translate(xoffset, yoffset);
-    m_qtPainter.drawLines(qtPoints);
-    m_qtPainter.resetTransform();
+        m_qtPainter.translate(xoffset, yoffset);
+        m_qtPainter.drawPath(path);
+        m_qtPainter.resetTransform();
+    }
 }
 
 void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
