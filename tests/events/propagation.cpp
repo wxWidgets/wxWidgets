@@ -331,6 +331,7 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
+#ifndef __WXOSX__
     TestPaintEvtHandler h('h');
     win->PushEventHandler(&h);
     wxON_BLOCK_EXIT_OBJ1( *win, wxWindow::PopEventHandler, false );
@@ -338,6 +339,7 @@ void EventPropagationTestCase::ScrollWindowWithHandler()
     wxPaintEvent event(win->GetId());
     win->ProcessWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "ohPD", g_str );
+#endif
 
     g_str.clear();
     wxCommandEvent eventCmd(TEST_EVT);
