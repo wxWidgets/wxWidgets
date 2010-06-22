@@ -313,10 +313,11 @@ void EventPropagationTestCase::ScrollWindowWithoutHandler()
 
     TestScrollWindow * const win = new TestScrollWindow(parent);
 
+#ifndef __WXOSX__
     wxPaintEvent event(win->GetId());
     win->ProcessWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "PD", g_str );
-
+#endif
     g_str.clear();
     wxCommandEvent eventCmd(TEST_EVT);
     win->HandleWindowEvent(eventCmd);
