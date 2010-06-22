@@ -419,7 +419,7 @@ bool TestApp::OnInit()
 
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
-    new wxTestableFrame(NULL, wxID_ANY, "Hidden wx test frame");
+    wxTestableFrame* frame = new wxTestableFrame();
 #endif // wxUSE_GUI
 
     return true;

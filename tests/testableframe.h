@@ -8,21 +8,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/frame.h"
+#include "wx/hashmap.h"
+#include "wx/event.h"
 
 class wxTestableFrame : public wxFrame
 {
 public:
-    wxTestableFrame(wxWindow *parent,
-                    wxWindowID winid,
-                    const wxString& title,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr);
+    wxTestableFrame();
 
     void OnEvent(wxEvent& evt);
-    int GetEventCount();
+
+    //wxEVT_ANY get the count for all events or a type can be specified
+    int GetEventCount(wxEventType type = wxEVT_ANY);
 
 private:
-    int m_count;
+    wxLongToLongHashMap m_count;
 };

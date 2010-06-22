@@ -16,26 +16,36 @@
 
 #include "testableframe.h"
 
-wxTestableFrame::wxTestableFrame(wxWindow *parent, 
-                                 wxWindowID winid, 
-                                 const wxString& title,
-                                 const wxPoint& pos,
-                                 const wxSize& size, 
-                                 long style,
-                                 const wxString& name)
+wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, "Test Frame")
 {
-    wxFrame::Create(parent, winid, title, pos, size, style, name);
-    m_count = 0;
 }
 
-void wxTestableFrame::OnEvent(wxEvent& WXUNUSED(evt))
+void wxTestableFrame::OnEvent(wxEvent& evt)
 {
-    m_count++;
+    m_count[evt.GetEventType()]++;
 }
 
-int wxTestableFrame::GetEventCount()
+int wxTestableFrame::GetEventCount(wxEventType type)
 {
-    int count = m_count;
-    m_count = 0;
-    return count;
+    if (type == wxEVT_ANY)
+    {
+        //Get the total event count
+        long total = 0;
+
+        for(wxLongToLongHashMap::iterator iter = m_count.begin(); 
+            iter != m_count.end(); 
+            iter++)
+        {
+            total += iter->second;
+            iter->second = 0;
+        }
+
+        return total;
+    }
+    else
+    {
+        long count = m_count[type];
+        m_count[type] = 0;
+        return count;
+    }
 }
