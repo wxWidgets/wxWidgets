@@ -1839,7 +1839,7 @@ wxArrayString wxResourceTranslationsLoader::GetAvailableTranslations(const wxStr
     data.prefix.MakeLower(); // resource names are case insensitive
 
     if ( !EnumResourceNames(GetModule(),
-                            GetResourceType(),
+                            GetResourceType().t_str(),
                             EnumTranslations,
                             reinterpret_cast<LONG_PTR>(&data)) )
     {
