@@ -2864,9 +2864,9 @@ void wxRichTextCtrl::OnContextMenu(wxContextMenuEvent& event)
 
     long position = 0;
     wxPoint pt = event.GetPosition();
-    wxPoint logicalPt(dc.DeviceToLogicalX(pt.x), dc.DeviceToLogicalY(pt.y));
+    wxPoint logicalPt = GetLogicalPoint(ScreenToClient(pt));
     int hit = GetBuffer().HitTest(dc, logicalPt, position);
-    if (hit & wxRICHTEXT_HITTEST_ON)
+    if (hit == wxRICHTEXT_HITTEST_ON || hit == wxRICHTEXT_HITTEST_BEFORE || hit == wxRICHTEXT_HITTEST_AFTER)
     {
         wxRichTextObject *image = GetBuffer().GetLeafObjectAtPosition(position);
         if (image && image->IsKindOf(CLASSINFO(wxRichTextImage)))

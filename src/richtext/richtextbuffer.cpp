@@ -4076,7 +4076,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
                         // Let's see if we can be more precise about
                         // which side of the position it's on.
 
-                        int midPoint = (nextX - lastX)/2 + lastX;
+                        int midPoint = (nextX + lastX)/2;
                         if (pt.x >= midPoint)
                             return wxRICHTEXT_HITTEST_AFTER;
                         else
@@ -4107,7 +4107,7 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
                         // Let's see if we can be more precise about
                         // which side of the position it's on.
 
-                        int midPoint = (nextX - lastX)/2 + lastX;
+                        int midPoint = (nextX + lastX)/2;
                         if (pt.x >= midPoint)
                             return wxRICHTEXT_HITTEST_AFTER;
                         else
