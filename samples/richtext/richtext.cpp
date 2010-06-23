@@ -184,6 +184,7 @@ public:
     void OnPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
 
+    void OnInsertImage(wxCommandEvent& event);
 protected:
 
     // Forward command events to the current rich text control, if any
@@ -222,6 +223,7 @@ enum
 
     ID_INSERT_SYMBOL,
     ID_INSERT_URL,
+    ID_INSERT_IMAGE,
 
     ID_FORMAT_ALIGN_LEFT,
     ID_FORMAT_ALIGN_CENTRE,
@@ -311,6 +313,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(ID_INSERT_SYMBOL,  MyFrame::OnInsertSymbol)
     EVT_MENU(ID_INSERT_URL,  MyFrame::OnInsertURL)
+    EVT_MENU(ID_INSERT_IMAGE, MyFrame::OnInsertImage)
 
     EVT_MENU(ID_FORMAT_NUMBER_LIST, MyFrame::OnNumberList)
     EVT_MENU(ID_FORMAT_BULLETS_AND_NUMBERING, MyFrame::OnBulletsAndNumbering)
@@ -647,6 +650,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxMenu* insertMenu = new wxMenu;
     insertMenu->Append(ID_INSERT_SYMBOL, _("&Symbol...\tCtrl+I"));
     insertMenu->Append(ID_INSERT_URL, _("&URL..."));
+    insertMenu->Append(ID_INSERT_IMAGE, _("&Image..."));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -1610,6 +1614,16 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
         m_richTextCtrl->WriteText(url);
         m_richTextCtrl->EndURL();
         m_richTextCtrl->EndStyle();
+    }
+}
+
+void MyFrame::OnInsertImage(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dialog(this, _("Choose an image"), "", "", "BMP and GIF files (*.bmp;*.gif)|*.bmp;*.gif|PNG files (*.png)|*.png");
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxString path = dialog.GetPath();
+        m_richTextCtrl->WriteImage(path, wxBITMAP_TYPE_ANY);
     }
 }
 
