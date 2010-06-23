@@ -53,6 +53,7 @@
 
 #include "testableframe.h"
 #include "wx/socket.h"
+#include "wx/evtloop.h"
 
 using namespace std;
 
@@ -285,6 +286,9 @@ private:
     wxArrayString m_registries;
     wxLocale *m_locale;
 
+    // event loop for GUI tests
+    wxEventLoop* m_eventloop;
+
     // event handling hooks
     FilterEventFunc m_filterEventFunc;
     ProcessEventFunc m_processEventFunc;
@@ -401,6 +405,7 @@ TestApp::TestApp()
     m_processEventFunc = NULL;
 
     m_locale = NULL;
+    m_eventloop = NULL;
 }
 
 // Init
@@ -420,6 +425,10 @@ bool TestApp::OnInit()
 #if wxUSE_GUI
     // create a hidden parent window to be used as parent for the GUI controls
     wxTestableFrame* frame = new wxTestableFrame();
+    frame->Show();
+
+    m_eventloop = new wxEventLoop;
+    wxEventLoop::SetActive(m_eventloop);
 #endif // wxUSE_GUI
 
     return true;
@@ -587,6 +596,8 @@ int TestApp::OnExit()
 
 #if wxUSE_GUI
     delete GetTopWindow();
+    wxEventLoop::SetActive(NULL);
+    delete m_eventloop;
 #endif // wxUSE_GUI
 
     return 0;
