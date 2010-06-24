@@ -642,6 +642,9 @@ wxFormatString::ArgumentType DoGetArgumentType(const CharType *format,
 
     wxPrintfConvSpecParser<CharType> parser(format);
 
+    wxCHECK_MSG( n <= parser.nargs, wxFormatString::Arg_Unknown,
+                 "more arguments than format string specifiers?" );
+
     wxCHECK_MSG( parser.pspec[n-1] != NULL, wxFormatString::Arg_Unknown,
                  "requested argument not found - invalid format string?" );
 
