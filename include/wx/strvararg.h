@@ -22,6 +22,16 @@
 #include "wx/buffer.h"
 #include "wx/unichar.h"
 
+#if defined(HAVE_TYPE_TRAITS)
+    #include <type_traits>
+#elif defined(HAVE_TR1_TYPE_TRAITS)
+    #ifdef __VISUALC__
+        #include <type_traits>
+    #else
+        #include <tr1/type_traits>
+    #endif
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxCStrData;
 class WXDLLIMPEXP_FWD_BASE wxString;
 
@@ -140,12 +150,41 @@ public:
     wxFormatString(const wxScopedWCharBuffer& str)
         : m_wchar(str), m_str(NULL), m_cstr(NULL) {}
 
-
+    // Possible argument types. These are or-combinable for wxASSERT_ARG_TYPE
+    // convenience.
     enum ArgumentType
     {
-        Arg_Char,    // character as char
+        Arg_Char        = 0x0001,    // character as char %c
+        Arg_Pointer     = 0x0002,    // %p
+        Arg_String      = 0x0004,    // any form of string
 
-        Arg_Other    // something else, for example int for %d
+        Arg_Int         = 0x0008,
+#if SIZEOF_INT == SIZEOF_LONG
+        Arg_LongInt     = Arg_Int,
+#else
+        Arg_LongInt     = 0x0010,
+#endif
+#if defined(SIZEOF_LONG_LONG) && SIZEOF_LONG_LONG == SIZEOF_LONG
+        Arg_LongLongInt = Arg_LongInt,
+#elif defined(wxLongLong_t)
+        Arg_LongLongInt = 0x0020,
+#endif
+
+        Arg_Double      = 0x0040,
+        Arg_LongDouble  = 0x0080,
+
+#ifdef wxSIZE_T_IS_UINT
+        Arg_Size_t      = Arg_Int,
+#endif
+#ifdef wxSIZE_T_IS_ULONG
+        Arg_Size_t      = Arg_LongInt,
+#endif
+
+        Arg_IntPtr      = 0x0100,    // %n -- store # of chars written
+        Arg_ShortIntPtr = 0x0200,
+        Arg_LongIntPtr  = 0x0400,
+
+        Arg_Unknown     = 0x8000     // unrecognized specifier (likely error)
     };
 
     // returns the type of format specifier for n-th variadic argument (this is
@@ -260,6 +299,126 @@ struct wxFormatStringArgumentFinder<wxWCharBuffer>
 // wxArgNormalizer*<T> converters
 // ----------------------------------------------------------------------------
 
+#if wxDEBUG_LEVEL
+    // Check that the format specifier for index-th argument in 'fmt' has
+    // the correct type (one of wxFormatString::Arg_XXX or-combination in
+    // 'expected_mask').
+    #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)                    \
+        do                                                                  \
+        {                                                                   \
+            if ( !fmt )                                                     \
+                break;                                                      \
+            const int argtype = fmt->GetArgumentType(index);                \
+            wxASSERT_MSG( (argtype & (expected_mask)) == argtype,           \
+                          "format specifier doesn't match argument type" ); \
+        } while ( wxFalse )
+#else
+    #define wxASSERT_ARG_TYPE(fmt, index, expected_mask)
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
+
+
+#if defined(HAVE_TYPE_TRAITS) || defined(HAVE_TR1_TYPE_TRAITS)
+
+// Note: this type is misnamed, so that the error message is easier to
+// understand (no error happens for enums, because the IsEnum=true case is
+// specialized).
+template<bool IsEnum>
+struct wxFormatStringSpecifierNonPodType {};
+
+template<>
+struct wxFormatStringSpecifierNonPodType<true>
+{
+    enum { value = wxFormatString::Arg_Int };
+};
+
+template<typename T>
+struct wxFormatStringSpecifier
+{
+#ifdef HAVE_TYPE_TRAITS
+    typedef std::is_enum<T> is_enum;
+#elif defined HAVE_TR1_TYPE_TRAITS
+    typedef std::tr1::is_enum<T> is_enum;
+#endif
+    enum { value = wxFormatStringSpecifierNonPodType<is_enum::value>::value };
+};
+
+#else // !HAVE_(TR1_)TYPE_TRAITS
+
+template<typename T>
+struct wxFormatStringSpecifier
+{
+    // We can't detect enums without is_enum, so the only thing we can
+    // do is to accept unknown types. However, the only acceptable unknown
+    // types still are enums, which are promoted to ints, so return Arg_Int
+    // here. This will at least catch passing of non-POD types through ... at
+    // runtime.
+    //
+    // Furthermore, if the compiler doesn't have partial template
+    // specialization, we didn't cover pointers either.
+#ifdef HAVE_PARTIAL_SPECIALIZATION
+    enum { value = wxFormatString::Arg_Int };
+#else
+    enum { value = wxFormatString::Arg_Int | wxFormatString::Arg_Pointer };
+#endif
+};
+
+#endif // HAVE_TR1_TYPE_TRAITS/!HAVE_TR1_TYPE_TRAITS
+
+
+#ifdef HAVE_PARTIAL_SPECIALIZATION
+template<typename T>
+struct wxFormatStringSpecifier<T*>
+{
+    enum { value = wxFormatString::Arg_Pointer };
+};
+
+template<typename T>
+struct wxFormatStringSpecifier<const T*>
+{
+    enum { value = wxFormatString::Arg_Pointer };
+};
+#endif // !HAVE_PARTIAL_SPECIALIZATION
+
+
+#define wxFORMAT_STRING_SPECIFIER(T, arg)                                   \
+    template<> struct wxFormatStringSpecifier<T>                            \
+    {                                                                       \
+        enum { value = arg };                                               \
+    };
+
+wxFORMAT_STRING_SPECIFIER(bool, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(int, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(unsigned int, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(short int, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(short unsigned int, wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(long int, wxFormatString::Arg_LongInt)
+wxFORMAT_STRING_SPECIFIER(long unsigned int, wxFormatString::Arg_LongInt)
+#ifdef wxLongLong_t
+wxFORMAT_STRING_SPECIFIER(wxLongLong_t, wxFormatString::Arg_LongLongInt)
+wxFORMAT_STRING_SPECIFIER(wxULongLong_t, wxFormatString::Arg_LongLongInt)
+#endif
+wxFORMAT_STRING_SPECIFIER(float, wxFormatString::Arg_Double)
+wxFORMAT_STRING_SPECIFIER(double, wxFormatString::Arg_Double)
+wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
+
+wxFORMAT_STRING_SPECIFIER(wchar_t, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+
+wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(signed char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(const char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(const unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(const signed char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(wchar_t*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(const wchar_t*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+
+wxFORMAT_STRING_SPECIFIER(int*, wxFormatString::Arg_IntPtr | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(short int*, wxFormatString::Arg_ShortIntPtr | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(long int*, wxFormatString::Arg_LongIntPtr | wxFormatString::Arg_Pointer)
+
+#undef wxFORMAT_STRING_SPECIFIER
+
+
 // Converts an argument passed to wxPrint etc. into standard form expected,
 // by wxXXX functions, e.g. all strings (wxString, char*, wchar_t*) are
 // converted into wchar_t* or char* depending on the build.
@@ -271,8 +430,11 @@ struct wxArgNormalizer
     // use format string and 'index' is index of 'value' in variadic arguments
     // list (starting at 1)
     wxArgNormalizer(T value,
-                    const wxFormatString *WXUNUSED(fmt), unsigned WXUNUSED(index))
-        : m_value(value) {}
+                    const wxFormatString *fmt, unsigned index)
+        : m_value(value)
+    {
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatStringSpecifier<T>::value );
+    }
 
     // Returns the value in a form that can be safely passed to real vararg
     // functions. In case of strings, this is char* in ANSI build and wchar_t*
@@ -326,9 +488,13 @@ struct wxArgNormalizerWithBuffer
 
     wxArgNormalizerWithBuffer() {}
     wxArgNormalizerWithBuffer(const CharBuffer& buf,
-                              const wxFormatString *WXUNUSED(fmt),
-                              unsigned WXUNUSED(index))
-        : m_value(buf) {}
+                              const wxFormatString *fmt,
+                              unsigned index)
+        : m_value(buf)
+    {
+        wxASSERT_ARG_TYPE( fmt, index,
+                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+    }
 
     const CharType *get() const { return m_value; }
 
@@ -340,9 +506,12 @@ template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizerNative<const wxString&>
 {
     wxArgNormalizerNative(const wxString& s,
-                          const wxFormatString *WXUNUSED(fmt),
-                          unsigned WXUNUSED(index))
-        : m_value(s) {}
+                          const wxFormatString *fmt,
+                          unsigned index)
+        : m_value(s)
+    {
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_String );
+    }
 
     const wxStringCharType *get() const;
 
@@ -354,9 +523,13 @@ template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizerNative<const wxCStrData&>
 {
     wxArgNormalizerNative(const wxCStrData& value,
-                          const wxFormatString *WXUNUSED(fmt),
-                          unsigned WXUNUSED(index))
-        : m_value(value) {}
+                          const wxFormatString *fmt,
+                          unsigned index)
+        : m_value(value)
+    {
+        wxASSERT_ARG_TYPE( fmt, index,
+                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+    }
 
     const wxStringCharType *get() const;
 
@@ -412,9 +585,12 @@ struct wxArgNormalizerUtf8<const char*>
     : public wxArgNormalizerWithBuffer<char>
 {
     wxArgNormalizerUtf8(const char* s,
-                        const wxFormatString *WXUNUSED(fmt),
-                        unsigned WXUNUSED(index))
+                        const wxFormatString *fmt,
+                        unsigned index)
     {
+        wxASSERT_ARG_TYPE( fmt, index,
+                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+
         if ( wxLocaleIsUtf8 )
         {
             m_value = wxScopedCharBuffer::CreateNonOwned(s);
@@ -577,6 +753,9 @@ struct wxArgNormalizerNarrowChar
     wxArgNormalizerNarrowChar(T value,
                               const wxFormatString *fmt, unsigned index)
     {
+        wxASSERT_ARG_TYPE( fmt, index,
+                           wxFormatString::Arg_Char | wxFormatString::Arg_Int );
+
         // FIXME-UTF8: which one is better default in absence of fmt string
         //             (i.e. when used like e.g. Foo("foo", "bar", 'c', NULL)?
         if ( !fmt || fmt->GetArgumentType(index) == wxFormatString::Arg_Char )
@@ -631,6 +810,8 @@ WX_ARG_NORMALIZER_FORWARD(const signed char&, signed char);
 
 #undef WX_ARG_NORMALIZER_FORWARD
 #undef _WX_ARG_NORMALIZER_FORWARD_IMPL
+
+#undef wxASSERT_ARG_TYPE
 
 // ----------------------------------------------------------------------------
 // WX_VA_ARG_STRING

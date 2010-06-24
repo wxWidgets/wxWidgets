@@ -325,6 +325,12 @@ typedef short int WXTYPE;
     #endif
 #endif
 
+#ifndef HAVE_TR1_TYPE_TRAITS
+    #if defined(__VISUALC__) && (_MSC_FULL_VER >= 150030729)
+        #define HAVE_TR1_TYPE_TRAITS
+    #endif
+#endif
+
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 
 /* could be already defined by configure or the user */
