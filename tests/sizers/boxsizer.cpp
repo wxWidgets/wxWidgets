@@ -233,7 +233,7 @@ void BoxSizerTestCase::Size3()
                 WX_ASSERT_EQUAL_MESSAGE
                 (
                     (
-                        "test %lu, permutation #%d: wrong size for child #%d "
+                        "test %lu, permutation #%lu: wrong size for child #%d "
                         "for total size %d",
                         static_cast<unsigned long>(i),
                         static_cast<unsigned long>(p),
