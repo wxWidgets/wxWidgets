@@ -47,11 +47,13 @@ private:
         CPPUNIT_TEST( MultiLineReplace );
         CPPUNIT_TEST( ReadOnly );
         CPPUNIT_TEST( MaxLength );
+        CPPUNIT_TEST( Hint );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
     void ReadOnly();
     void MaxLength();
+    void Hint();
 
     wxTextCtrl *m_text;
 
@@ -189,4 +191,14 @@ void TextCtrlTestCase::MaxLength()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+}
+
+void TextCtrlTestCase::Hint()
+{
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    m_text->SetHint("This is a hint");
+
+    CPPUNIT_ASSERT_EQUAL("", m_text->GetValue());
 }
