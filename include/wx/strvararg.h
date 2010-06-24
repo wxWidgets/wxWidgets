@@ -607,6 +607,15 @@ struct wxArgNormalizer<unsigned char>
         : wxArgNormalizerNarrowChar<unsigned char>(value, fmt, index) {}
 };
 
+template<>
+struct wxArgNormalizer<signed char>
+    : public wxArgNormalizerNarrowChar<signed char>
+{
+    wxArgNormalizer(signed char value,
+                    const wxFormatString *fmt, unsigned index)
+        : wxArgNormalizerNarrowChar<signed char>(value, fmt, index) {}
+};
+
 #endif // wxUSE_UNICODE
 
 // convert references:
@@ -617,6 +626,7 @@ WX_ARG_NORMALIZER_FORWARD(const wchar_t&, wchar_t);
 
 WX_ARG_NORMALIZER_FORWARD(const char&, char);
 WX_ARG_NORMALIZER_FORWARD(const unsigned char&, unsigned char);
+WX_ARG_NORMALIZER_FORWARD(const signed char&, signed char);
 
 
 #undef WX_ARG_NORMALIZER_FORWARD
