@@ -201,6 +201,7 @@ void wxPrintfConvSpec<CharType>::Init()
     m_pArgPos = m_pArgEnd = NULL;
     m_type = wxPAT_INVALID;
 
+    memset(m_szFlags, 0, sizeof(m_szFlags));
     // this character will never be removed from m_szFlags array and
     // is important when calling sprintf() in wxPrintfConvSpec::Process() !
     m_szFlags[0] = '%';
@@ -387,7 +388,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('X'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 if (ilen == 0)
                     m_type = wxPAT_INT;
                 else if (ilen == -1)
@@ -415,7 +415,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('G'):
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 if (ilen == 2)
                     m_type = wxPAT_LONGDOUBLE;
                 else
@@ -426,7 +425,6 @@ bool wxPrintfConvSpec<CharType>::Parse(const CharType *format)
             case wxT('p'):
                 m_type = wxPAT_POINTER;
                 m_szFlags[flagofs++] = char(ch);
-                m_szFlags[flagofs] = '\0';
                 done = true;
                 break;
 
