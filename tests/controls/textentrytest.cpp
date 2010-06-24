@@ -203,3 +203,8 @@ void TextEntryTestCase::Editable()
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
 }
 
+void TextEntryTestCase::Hint()
+{
+    GetTestEntry()->SetHint("This is a hint");
+    CPPUNIT_ASSERT_EQUAL("", GetTestEntry()->GetValue());
+}

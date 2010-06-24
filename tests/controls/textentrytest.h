@@ -39,7 +39,8 @@ protected:
         CPPUNIT_TEST( Selection ); \
         CPPUNIT_TEST( InsertionPoint ); \
         CPPUNIT_TEST( Replace ); \
-        CPPUNIT_TEST( Editable )
+        CPPUNIT_TEST( Editable ); \
+        CPPUNIT_TEST( Hint )
 
     void SetValue();
     void TextChangeEvents();
@@ -47,6 +48,7 @@ protected:
     void InsertionPoint();
     void Replace();
     void Editable();
+    void Hint();
 
 private:
     // Selection() test helper: verify that selection is as described by the

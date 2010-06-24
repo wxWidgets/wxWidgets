@@ -47,13 +47,11 @@ private:
         CPPUNIT_TEST( MultiLineReplace );
         CPPUNIT_TEST( ReadOnly );
         CPPUNIT_TEST( MaxLength );
-        CPPUNIT_TEST( Hint );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
     void ReadOnly();
     void MaxLength();
-    void Hint();
 
     wxTextCtrl *m_text;
 
@@ -107,6 +105,9 @@ void TextCtrlTestCase::MultiLineReplace()
     m_text->Replace(13, -1, "");
     CPPUNIT_ASSERT_EQUAL("Hello changed", m_text->GetValue());
     CPPUNIT_ASSERT_EQUAL(13, m_text->GetInsertionPoint());
+
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
 void TextCtrlTestCase::ReadOnly()
@@ -142,14 +143,13 @@ void TextCtrlTestCase::ReadOnly()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_text->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
 }
 
 void TextCtrlTestCase::MaxLength()
 {
-    // we need a single line control for this test as wxGTK requires it
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -191,14 +191,4 @@ void TextCtrlTestCase::MaxLength()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
-}
-
-void TextCtrlTestCase::Hint()
-{
-    delete m_text;
-    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-
-    m_text->SetHint("This is a hint");
-
-    CPPUNIT_ASSERT_EQUAL("", m_text->GetValue());
 }
