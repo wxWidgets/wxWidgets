@@ -108,7 +108,7 @@ void wxMaskedEdit::Create( const wxString& mask
         SetDefaultValue(defaultValue);
     }
 
-    m_maskValue = mask;
+    m_maskValue = GetMask();
     m_emptyBg   = wxColour(255,255,255);
     m_invalidBg = wxColour(255,255,255);
     m_validBg   = wxColour(255,255,255);
@@ -204,8 +204,8 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
     unsigned int numberOfSlash = 0;
     unsigned int numberOfPipe = 0;
     bool res = true;
-
-    tmp = m_maskValue;
+    
+    tmp = GetMask();
     numberOfSlash = tmp.Replace('\\', ' ');
     numberOfPipe  = tmp.Replace('|', ' ');
 
@@ -236,11 +236,8 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
         
     }
             
-
     if(!m_mask[fieldNumber]->IsValid(tmp))
         res = false;
-
-    tmp.Clear();
 
     return res;
 }
@@ -272,8 +269,17 @@ bool wxMaskedEdit::SetMask( const wxString& mask)
 
 wxString wxMaskedEdit::GetMask() const
 {
-    return m_maskValue;
+    unsigned int it;
+    wxString res;
 
+    for(it = 0; it < m_mask.GetCount(); it++)
+    {
+        res << m_mask[it]->GetMask();
+        res << wxT("|");
+    }
+    res.RemoveLast();
+
+    return res;
 }
 
 wxString wxMaskedEdit::GetFormatCode() const

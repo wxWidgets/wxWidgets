@@ -775,7 +775,7 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
     wxString formatString = m_maskCtrl->ApplyFormatCodes(string);
     wxString lockedMask = m_maskCtrl->GetLockedMask();
 
-
+    printf("Applying Mask : %s\n", (const char*) formatString.mb_str(wxConvUTF8));
     //If the string is not valid
     if(!m_maskCtrl->IsValid(formatString))
     {
@@ -785,6 +785,7 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
+        printf("Valid\n");
         
         //Add locked caracter
         if(lockedMask.Len() != formatString.Len() 

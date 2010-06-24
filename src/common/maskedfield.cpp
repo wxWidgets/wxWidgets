@@ -19,7 +19,6 @@
 #endif
 
 #include "wx/maskedfield.h"
-#include "wx/regex.h"
 
 wxMaskedField::wxMaskedField()
 {
@@ -49,7 +48,7 @@ wxMaskedField::wxMaskedField( const wxString& mask
          , autoSelect, groupChar, decimalPoint, useParensForNegatives);
 }
 
-void wxMaskedField::Create( const wxString& mask
+bool wxMaskedField::Create( const wxString& mask
                  , const wxString& formatCodes
                  , const wxString& defaultValue
                  , const wxArrayString& choices
@@ -58,15 +57,85 @@ void wxMaskedField::Create( const wxString& mask
                  , const bool useParensForNegatives)
 {
     unsigned int it;
-    wxRegEx regCtrl(wxT(".*((A-a-#-C-{[0-9]\\^})*.*"));
+    unsigned int indexOfAcc = 0;
+    unsigned int indexOfBackAcc = 0;
+    unsigned long numberOfOccurences = 0;
+    bool res = true;
 
     m_mask = wxT("");
-    
-    if(regCtrl.IsValid() && regCtrl.Matches(mask) )
+
+    for(it = 0; it < mask.Len(); it++)
     {
-        m_mask = mask;
-        printf("YATAAAAAAAAAA\n");
+        if(it == 0 && (mask[it] == '{' || mask[it] == '}'))
+        {
+            m_mask = wxT("");
+            it = mask.Len();
+            res = false;
+        }
+        else if(mask[it] == '{')
+        {
+            if(indexOfAcc == 0 && indexOfBackAcc == 0 
+            && mask[it -1] != '\\' 
+            &&( mask[it-1] == 'a' || mask[it-1] == 'A'
+             || mask[it-1] == 'N' || mask[it-1] == 'C' 
+             || mask[it-1] == '#' || mask[it-1] == '&' 
+             || mask[it-1] == 'X' || mask[it-1] == '*'))
+            {
+                if(it == 1 || m_mask[it -2] != '\\')
+                    indexOfAcc = it;
+            }
+            else
+            {
+                m_mask = wxT("");
+                it = mask.Len();
+                res = false;
+            }
+        }
+        else if(mask[it] == '}')
+        {
+            if(mask[it - 1] != '\\' 
+            && (indexOfAcc == 0 || indexOfBackAcc != 0))
+            {
+                m_mask = wxT("");
+                it = mask.Len();
+                res = false;
+            }
+            else
+            {
+                indexOfBackAcc = it;
+                wxString tmp;
+
+                tmp = mask.SubString(indexOfAcc + 1 , indexOfBackAcc -1) ;
+
+                if( tmp.ToULong(&numberOfOccurences))
+                {
+                    for(unsigned int i = 1; i < numberOfOccurences; i++)
+                    {
+                        m_mask << mask[indexOfAcc - 1];
+                    }   
+                    indexOfAcc     = 0;
+                    indexOfBackAcc = 0;
+                }
+                else
+                {
+                    m_mask = wxT("");
+                    it = mask.Len();
+                    res = false;
+                }
+            }
+        }
+        else if(indexOfAcc == 0)
+        {
+            m_mask << mask[it];
+        }
     }
+
+    if(indexOfAcc != 0 || indexOfAcc != 0)
+    {
+        m_mask = wxT("");
+        res = false;
+    }
+
 
     m_formatCodes  = formatCodes;
     m_autoSelect   = autoSelect;
@@ -90,6 +159,8 @@ void wxMaskedField::Create( const wxString& mask
             m_choices.Add(choices[it]);
         }
     }
+
+    return res;
 }
 
 bool wxMaskedField::IsEmpty(const wxString& string) const
@@ -166,6 +237,12 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                         tmp = true;
                     }
                 }
+                
+                if(m_formatCodes.Contains(wxT("_")) && string[it] == ' ')
+                {
+                    res << ' ';
+                    tmp = true;
+                }
             
             } 
             //verification
@@ -178,22 +255,11 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
              
             tmp = false;
         }
-        else
-        {
-            if(m_formatCodes.Contains(wxT("_"))
-               &&( string.Len() == 0 || m_mask[itMask -1] != '\\')
-               &&( m_mask[itMask] == 'a' || m_mask[itMask] == 'A'
-                   || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
-                   || m_mask[itMask] == '#' || m_mask[itMask] == '&' 
-                   || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
-            {
-                res << wxT(" ");
-            }
-        }
     }
     
     if(string.Len() > res.Len())
             res = string;
+
     return res;
 }
 

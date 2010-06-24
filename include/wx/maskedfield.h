@@ -33,7 +33,7 @@ public:
                  , const bool useParensForNegatives = false);
    
     
-    void Create(   const wxString& mask        
+    bool Create(   const wxString& mask        
                  , const wxString& formatCodes  = wxDEFAULT_FORMAT_CODES
                  , const wxString& defaultValue = wxDEFAULT_VALUE
                  , const wxArrayString& choices = wxArrayString()

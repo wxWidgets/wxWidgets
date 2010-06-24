@@ -210,7 +210,9 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("#|##\\*#|##") , wxT("") , false},
         {wxT("###\\*###")   , wxT("123*593") , true},
         {wxT("|###\\*#|##") , wxT("123456") , false}, 
-        {wxT("|###\\*###|") , wxT("124\\*45") , false}
+        {wxT("|###\\*###|") , wxT("124\\*45") , false},
+        
+        {wxT("Aa{5} A{5}")  , wxT("A"), true}
     
     };
 
@@ -303,7 +305,6 @@ void MaskedEditTestCase::SetDefaultValueTest()
         {
             mask = wxMaskedEdit(maskedDefaultValue[n].mask, maskedDefaultValue[n].formatCodes);
         }
-        printf("n = %d\n", n);
 
         tmp = mask.ApplyFormatCodes(maskedDefaultValue[n].test);
         CPPUNIT_ASSERT_EQUAL( maskedDefaultValue[n].result, mask.SetDefaultValue(tmp)  );    
