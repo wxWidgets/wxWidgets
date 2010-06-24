@@ -48,12 +48,14 @@ private:
         CPPUNIT_TEST( ReadOnly );
         CPPUNIT_TEST( MaxLength );
         CPPUNIT_TEST( StreamInput );
+        CPPUNIT_TEST( Redirector );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
     void ReadOnly();
     void MaxLength();
     void StreamInput();
+    void Redirector();
 
     wxTextCtrl *m_text;
 
@@ -222,6 +224,24 @@ void TextCtrlTestCase::StreamInput()
            << 'a';
 
     stream.flush();
+
+    CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
+
+#endif
+}
+
+void TextCtrlTestCase::Redirector()
+{
+#if wxHAS_TEXT_WINDOW_STREAM && wxUSE_STD_IOSTREAM
+
+    wxStreamToTextRedirector redirect(m_text);
+
+    std::cout << "stringinput"
+              << 10
+              << 1000L
+              << 3.14f
+              << 2.71
+              << 'a';
 
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
