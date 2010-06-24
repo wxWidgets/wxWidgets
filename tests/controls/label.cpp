@@ -210,4 +210,6 @@ void LabelTestCase::Statics()
     CPPUNIT_ASSERT_EQUAL( "&mnemonic", wxControl::RemoveMnemonics("&&mnemonic") );
     CPPUNIT_ASSERT_EQUAL( "&mnemonic", wxControl::RemoveMnemonics("&&&mnemonic") );
     CPPUNIT_ASSERT_EQUAL( "", wxStaticText::RemoveMarkup("<b></b>") );
+    CPPUNIT_ASSERT_EQUAL( "&lt;b&gt;&lt;/b&gt;&amp;&quot;&quot;&apos;", 
+                          wxStaticText::EscapeMarkup("<b></b>&\"\"'") );
 }
