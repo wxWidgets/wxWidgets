@@ -46,10 +46,12 @@ private:
         wxTEXT_ENTRY_TESTS();
         CPPUNIT_TEST( MultiLineReplace );
         CPPUNIT_TEST( ReadOnly );
+        CPPUNIT_TEST( MaxLength );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
     void ReadOnly();
+    void MaxLength();
 
     wxTextCtrl *m_text;
 
@@ -140,3 +142,51 @@ void TextCtrlTestCase::ReadOnly()
     CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
 }
 
+void TextCtrlTestCase::MaxLength()
+{
+    // we need a single line control for this test as wxGTK requires it
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    m_text->Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_text->Connect(wxEVT_COMMAND_TEXT_MAXLEN,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_text->SetFocus();
+    m_text->SetMaxLength(10);
+
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
+
+    sim.Text("ghij");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
+    CPPUNIT_ASSERT_EQUAL(10, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+
+    sim.Text("k");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+
+    m_text->SetMaxLength(0);
+
+    sim.Text("k");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+}
