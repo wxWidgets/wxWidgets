@@ -10,10 +10,10 @@ I. CppUnit Installation
 -----------------------
 
 1. Get it from http://www.sourceforge.net/projects/cppunit
-   (latest version as of the time of this writing is 1.8.0)
+   (latest version as of the time of this writing is 1.10.2)
 
 2. Build the library:
- a) Under Windows using VC++ (both versions 6 and 7 work):
+ a) Under Windows using VC++ (versions 6, 7, 8 & 9 work):
     - build everything in CppUnitLibraries.dsw work space
     - add include and lib subdirectories of the directory
       where you installed cppunit to the compiler search path
@@ -41,7 +41,11 @@ II. Writing tests with CppUnit
     // also include in it's own registry so that these tests can be run alone
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MBConvTestCase, "MBConvTestCase");
 
-   Read CppUnit documentation for more.
+    Read CppUnit documentation for more.
+ d) wxUIActionSimulator can be used when user input is required, for example 
+    clicking buttons or typing text. A simple example of this can be found 
+    in controls/buttontest.cpp. After simulating some user input always 
+    wxYield to allow event processing.
 
 3. add a '<sources>' tag for your source file to tests/test.bkl
 
