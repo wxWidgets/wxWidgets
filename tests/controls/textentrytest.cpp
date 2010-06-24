@@ -18,6 +18,7 @@
 
 #include "textentrytest.h"
 #include "testableframe.h"
+#include "wx/uiaction.h"
 
 void TextEntryTestCase::SetValue()
 {
@@ -170,5 +171,35 @@ void TextEntryTestCase::Replace()
     entry->Replace(0, 6, "Un");
     CPPUNIT_ASSERT_EQUAL("Unchanged", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
+}
+
+void TextEntryTestCase::Editable()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    wxTextEntry * const entry = GetTestEntry();
+    wxWindow * const window = GetTestWindow();
+
+    window->Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    window->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+
+    entry->SetEditable(false);
+    sim.Text("gh");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
 }
 

@@ -38,13 +38,15 @@ protected:
         CPPUNIT_TEST( TextChangeEvents ); \
         CPPUNIT_TEST( Selection ); \
         CPPUNIT_TEST( InsertionPoint ); \
-        CPPUNIT_TEST( Replace )
+        CPPUNIT_TEST( Replace ); \
+        CPPUNIT_TEST( Editable )
 
     void SetValue();
     void TextChangeEvents();
     void Selection();
     void InsertionPoint();
     void Replace();
+    void Editable();
 
 private:
     // Selection() test helper: verify that selection is as described by the
