@@ -42,6 +42,7 @@ private:
 #endif
         CPPUNIT_TEST( Sscanf );
         CPPUNIT_TEST( RepeatedPrintf );
+        CPPUNIT_TEST( ArgsValidation );
     CPPUNIT_TEST_SUITE_END();
 
     void StringPrintf();
@@ -51,6 +52,7 @@ private:
 #endif
     void Sscanf();
     void RepeatedPrintf();
+    void ArgsValidation();
 
     DECLARE_NO_COPY_CLASS(VarArgTestCase)
 };
@@ -182,4 +184,35 @@ void VarArgTestCase::RepeatedPrintf()
 
     s = wxString::Format("buffer %s, len %d", buffer, (int)wxStrlen(buffer));
     CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
+}
+
+void VarArgTestCase::ArgsValidation()
+{
+    void *ptr = this;
+    int written;
+    short int swritten;
+
+    // these are valid:
+    wxString::Format("a string(%s,%s), ptr %p, int %i",
+                     wxString(), "foo", "char* as pointer", 1);
+
+    wxString::Format("foo%i%n", 42, &written);
+    CPPUNIT_ASSERT_EQUAL( 5, written );
+
+    // but these are not:
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i: too many arguments", 42, 1, 2, 3) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i", "foo") );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", (void*)this) );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", &written) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%n", ptr) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
+
+#if !defined(HAVE_TYPE_TRAITS) && !defined(HAVE_TR1_TYPE_TRAITS)
+    // this fails at compile-time with <type_traits>
+    VarArgTestCase& somePOD = *this;
+    WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", somePOD) );
+#endif
 }
