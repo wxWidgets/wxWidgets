@@ -23,6 +23,8 @@
 #endif // WX_PRECOMP
 
 #include "textentrytest.h"
+#include "testableframe.h"
+#include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -43,9 +45,11 @@ private:
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
         wxTEXT_ENTRY_TESTS();
         CPPUNIT_TEST( MultiLineReplace );
+        CPPUNIT_TEST( ReadOnly );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
+    void ReadOnly();
 
     wxTextCtrl *m_text;
 
@@ -99,5 +103,40 @@ void TextCtrlTestCase::MultiLineReplace()
     m_text->Replace(13, -1, "");
     CPPUNIT_ASSERT_EQUAL("Hello changed", m_text->GetValue());
     CPPUNIT_ASSERT_EQUAL(13, m_text->GetInsertionPoint());
+}
+
+void TextCtrlTestCase::ReadOnly()
+{
+    // we need a read only control for this test so recreate it
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_READONLY);
+
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    m_text->Connect(wxEVT_COMMAND_TEXT_UPDATED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_text->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("", m_text->GetValue());
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+
+    //SetEditable is suuposed to override wxTE_READONLY
+    m_text->SetEditable(true);
+
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", m_text->GetValue());
+    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
 }
 
