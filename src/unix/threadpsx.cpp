@@ -60,11 +60,8 @@
     #include <sys/resource.h>   // for setpriority()
 #endif
 
-#ifdef __VMS
-    #define THR_ID(thr) ((long long)(thr)->GetId())
-#else
-    #define THR_ID(thr) ((long)(thr)->GetId())
-#endif
+#define THR_ID_CAST(id)  (reinterpret_cast<void*>(id))
+#define THR_ID(thr)      THR_ID_CAST((thr)->GetId())
 
 // ----------------------------------------------------------------------------
 // constants
@@ -593,14 +590,14 @@ wxSemaError wxSemaphoreInternal::Wait()
     {
         wxLogTrace(TRACE_SEMA,
                    wxT("Thread %p waiting for semaphore to become signalled"),
-                   wxThread::GetCurrentId());
+                   THR_ID_CAST(wxThread::GetCurrentId()));
 
         if ( m_cond.Wait() != wxCOND_NO_ERROR )
             return wxSEMA_MISC_ERROR;
 
         wxLogTrace(TRACE_SEMA,
                    wxT("Thread %p finished waiting for semaphore, count = %lu"),
-                   wxThread::GetCurrentId(), (unsigned long)m_count);
+                   THR_ID_CAST(wxThread::GetCurrentId()), (unsigned long)m_count);
     }
 
     m_count--;
@@ -667,7 +664,7 @@ wxSemaError wxSemaphoreInternal::Post()
 
     wxLogTrace(TRACE_SEMA,
                wxT("Thread %p about to signal semaphore, count = %lu"),
-               wxThread::GetCurrentId(), (unsigned long)m_count);
+               THR_ID_CAST(wxThread::GetCurrentId()), (unsigned long)m_count);
 
     return m_cond.Signal() == wxCOND_NO_ERROR ? wxSEMA_NO_ERROR
                                               : wxSEMA_MISC_ERROR;
@@ -733,7 +730,7 @@ public:
         };
 
         wxLogTrace(TRACE_THREADS, wxT("Thread %p: %s => %s."),
-                   GetId(), stateNames[m_state], stateNames[state]);
+                   THR_ID(this), stateNames[m_state], stateNames[state]);
 #endif // wxUSE_LOG_TRACE
 
         m_state = state;
@@ -1392,7 +1389,7 @@ wxThreadError wxThread::Resume()
     {
         case STATE_PAUSED:
             wxLogTrace(TRACE_THREADS, wxT("Thread %p suspended, resuming."),
-                       GetId());
+                       THR_ID(this));
 
             m_internal->Resume();
 
@@ -1400,7 +1397,7 @@ wxThreadError wxThread::Resume()
 
         case STATE_EXITED:
             wxLogTrace(TRACE_THREADS, wxT("Thread %p exited, won't resume."),
-                       GetId());
+                       THR_ID(this));
             return wxTHREAD_NO_ERROR;
 
         default:
@@ -1621,8 +1618,8 @@ wxThread::~wxThread()
     if ( m_internal->GetState() != STATE_EXITED &&
          m_internal->GetState() != STATE_NEW )
     {
-        wxLogDebug(wxT("The thread %ld is being destroyed although it is still running! The application may crash."),
-                   (long)GetId());
+        wxLogDebug(wxT("The thread %p is being destroyed although it is still running! The application may crash."),
+                   THR_ID(this));
     }
 
     m_critsect.Leave();
@@ -1782,7 +1779,7 @@ static void ScheduleThreadForDeletion()
 
 static void DeleteThread(wxThread *This)
 {
-    wxLogTrace(TRACE_THREADS, wxT("Thread %p auto deletes."), This->GetId());
+    wxLogTrace(TRACE_THREADS, wxT("Thread %p auto deletes."), THR_ID(This));
 
     delete This;
 
