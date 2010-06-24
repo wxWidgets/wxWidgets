@@ -721,7 +721,7 @@ void DateTimeTestCase::TestTimeFormat()
             {
                 // conversion failed - should it have?
                 WX_ASSERT_MESSAGE(
-                    ("Test #%lu failed: failed to parse \"%s\"", n, s),
+                    ("Test #%u failed: failed to parse \"%s\"", n, s),
                     kind == CompareNone
                 );
             }
@@ -735,7 +735,7 @@ void DateTimeTestCase::TestTimeFormat()
                     result++;
 
                 WX_ASSERT_MESSAGE(
-                    ("Test #%lu failed: \"%s\" was left unparsed in \"%s\"",
+                    ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
                      n, result, s),
                     !*result
                 );

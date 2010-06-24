@@ -177,9 +177,9 @@ void VarArgTestCase::RepeatedPrintf()
     *p = 'i';
 
     wxString s;
-    s = wxString::Format("buffer %s, len %d", buffer, wxStrlen(buffer));
+    s = wxString::Format("buffer %s, len %d", buffer, (int)wxStrlen(buffer));
     CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
 
-    s = wxString::Format("buffer %s, len %d", buffer, wxStrlen(buffer));
+    s = wxString::Format("buffer %s, len %d", buffer, (int)wxStrlen(buffer));
     CPPUNIT_ASSERT_EQUAL("buffer hi, len 2", s);
 }
