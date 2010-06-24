@@ -47,11 +47,13 @@ private:
         CPPUNIT_TEST( MultiLineReplace );
         CPPUNIT_TEST( ReadOnly );
         CPPUNIT_TEST( MaxLength );
+        CPPUNIT_TEST( StreamInput );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
     void ReadOnly();
     void MaxLength();
+    void StreamInput();
 
     wxTextCtrl *m_text;
 
@@ -191,4 +193,37 @@ void TextCtrlTestCase::MaxLength()
 
     CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_MAXLEN));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_UPDATED));
+}
+
+void TextCtrlTestCase::StreamInput()
+{
+    *m_text << "stringinput"
+            << 10
+            << 1000L
+            << 3.14f
+            << 2.71
+            << 'a'
+            << L'b';
+
+    CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71ab", m_text->GetValue());
+
+    m_text->SetValue("");
+
+#if wxHAS_TEXT_WINDOW_STREAM 
+
+    std::ostream stream(m_text);
+
+    //We don't test a wide character as this is not a wide stream
+    stream << "stringinput"
+           << 10
+           << 1000L
+           << 3.14f
+           << 2.71
+           << 'a';
+
+    stream.flush();
+
+    CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
+
+#endif
 }
