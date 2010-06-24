@@ -165,7 +165,7 @@ bool wxMaskedField::Create( const wxString& mask
 
 bool wxMaskedField::IsEmpty(const wxString& string) const
 {
-    return string.Cmp(m_defaultValue) == 0;
+    return string.Cmp(GetEmptyMask()) == 0 ;
 }
 
 bool wxMaskedField::IsNumber(const wxChar character) const
@@ -566,7 +566,7 @@ wxString wxMaskedField::GetPlainValue(const wxString& string)
     return res;
 }
 
-wxString wxMaskedField::GetLockedMask()
+wxString wxMaskedField::GetEmptyMask() const
 {
     wxString res = wxEmptyString;
     unsigned int it;

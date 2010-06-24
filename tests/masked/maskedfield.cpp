@@ -75,7 +75,7 @@ private:
         CPPUNIT_TEST( TestSetMask          );
         CPPUNIT_TEST( TestSetDefaultValue  );
         CPPUNIT_TEST( TestGetPlainValue    );
-        CPPUNIT_TEST( TestGetLockedMask    );
+        CPPUNIT_TEST( TestGetEmptyedMask    );
     CPPUNIT_TEST_SUITE_END();
 
     void TestCreate();
@@ -88,7 +88,7 @@ private:
     void TestSetMask();
     void TestSetDefaultValue();
     void TestGetPlainValue();
-    void TestGetLockedMask();
+    void TestGetEmptyedMask();
 
     DECLARE_NO_COPY_CLASS(MaskedFieldTestCase)
 };
@@ -461,16 +461,16 @@ void MaskedFieldTestCase::TestGetPlainValue()
 
 }
 
-void MaskedFieldTestCase::TestGetLockedMask()
+void MaskedFieldTestCase::TestGetEmptyedMask()
 { 
-    static struct TestLockedMask
+    static struct TestEmptyedMask
     {
         wxString mask;      
         wxString result;
 
 
     }
-    maskedLock[]=
+    maskedEmpty[]=
     {
         {wxT("###.###.###.###") , wxT("   .   .   .   ")},
         {wxT("###.AAA.aC\\&")   , wxT("   .   .  &")},
@@ -479,11 +479,11 @@ void MaskedFieldTestCase::TestGetLockedMask()
     };
 
 
-    for(unsigned int n = 0; n< WXSIZEOF(maskedLock); n++)
+    for(unsigned int n = 0; n< WXSIZEOF(maskedEmpty); n++)
     {
-        wxMaskedField mask(maskedLock[n].mask, wxT("F"));
+        wxMaskedField mask(maskedEmpty[n].mask, wxT("F"));
         
-        CPPUNIT_ASSERT( mask.GetLockedMask().Cmp(maskedLock[n].result) == 0 );    
+        CPPUNIT_ASSERT( mask.GetEmptyedMask().Cmp(maskedEmpty[n].result) == 0 );    
     }
 
 

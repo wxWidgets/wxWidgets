@@ -242,18 +242,10 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
     return res;
 }
  
-#if 0
-//FIXME  what is an empty string for the mask
-bool wxMaskedEdit::IsEmpty(wxString string) const
+bool wxMaskedEdit::IsEmpty(const wxString& string) 
 {
-    bool res;
-    unsigned int it;
-
-
-
-   
+    return string.Cmp(GetEmptyMask()) == 0;   
 }
-#endif
 
 bool wxMaskedEdit::SetMask( const wxString& mask)
 {
@@ -579,14 +571,14 @@ bool wxMaskedEdit::AddChoices(unsigned int fieldIndex, const wxArrayString& choi
     return res;
 } 
 
-wxString wxMaskedEdit::GetLockedMask()
+wxString wxMaskedEdit::GetEmptyMask()const
 {
     unsigned int it;
     wxString res = wxEmptyString;
 
     for(it = 0; it < m_mask.GetCount(); it++)
     {
-        res << m_mask[it]->GetLockedMask();
+        res << m_mask[it]->GetEmptyMask();
     }
 
     return res;

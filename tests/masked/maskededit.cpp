@@ -39,7 +39,7 @@ private:
         CPPUNIT_TEST( AddChoicesTest       );
         CPPUNIT_TEST( SetMaskFieldTest     );
         CPPUNIT_TEST( AddChoiceFieldTest   );
-        CPPUNIT_TEST( GetLockedMaskTest    );
+        CPPUNIT_TEST( GetEmptyMaskTest    );
     CPPUNIT_TEST_SUITE_END();
 
     void ApplyFormatCodesTest();
@@ -51,7 +51,7 @@ private:
     void AddChoicesTest();
     void SetMaskFieldTest();
     void AddChoiceFieldTest();
-    void GetLockedMaskTest();
+    void GetEmptyMaskTest();
     wxDECLARE_NO_COPY_CLASS(MaskedEditTestCase);
 };
 
@@ -417,16 +417,16 @@ void MaskedEditTestCase::AddChoiceFieldTest()
     }
 }
 
-void MaskedEditTestCase::GetLockedMaskTest()
+void MaskedEditTestCase::GetEmptyMaskTest()
 {
-    static struct TestLockedMask
+    static struct TestEmptyMask
     {
         wxString mask;
         wxString result;
 
 
     }
-    maskedLock[]=
+    maskedEmpty[]=
     {
         //Same as Masked field
         {wxT("###.###.###.###") , wxT("   .   .   .   ")},
@@ -441,10 +441,10 @@ void MaskedEditTestCase::GetLockedMaskTest()
    };
 
 
-    for(unsigned int n = 0; n< WXSIZEOF(maskedLock); n++)
+    for(unsigned int n = 0; n< WXSIZEOF(maskedEmpty); n++)
     {
-        wxMaskedEdit mask(maskedLock[n].mask, wxT("F"));
-        CPPUNIT_ASSERT( mask.GetLockedMask().Cmp(maskedLock[n].result) == 0 );
+        wxMaskedEdit mask(maskedEmpty[n].mask, wxT("F"));
+        CPPUNIT_ASSERT( mask.GetEmptyMask().Cmp(maskedEmpty[n].result) == 0 );
     }
 
 

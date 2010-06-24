@@ -767,38 +767,37 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
 
 void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
+    unsigned int cursorIndex = GetInsertionPoint();
 
-    unsigned int size = GetValue().Len();
-    unsigned int it;
     wxString string = GetValue();
+    wxString userInput;
+    wxString formatString;
 
-    wxString formatString = m_maskCtrl->ApplyFormatCodes(string);
-    wxString lockedMask = m_maskCtrl->GetLockedMask();
+    unsigned int spaceIndex = string.Find(' ');
+    
 
-    printf("Applying Mask : %s\n", (const char*) formatString.mb_str(wxConvUTF8));
+    userInput = string.SubString(0, spaceIndex - 1);
+    formatString = m_maskCtrl->ApplyFormatCodes(userInput);
+
+    printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
+    
     //If the string is not valid
     if(!m_maskCtrl->IsValid(formatString))
     {
         printf("Invalid\n");
         SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
-        Remove(size - 1, size);
+        Replace(formatString.Len() - 1, formatString.Len(), ' ');
     }
     else
     {
         printf("Valid\n");
         
-        //Add locked caracter
-        if(lockedMask.Len() != formatString.Len() 
-         &&lockedMask.GetChar(formatString.Len())!= ' ')
-        {
-             AppendText(lockedMask.GetChar(formatString.Len()));
-        }
-
-
         //If the test is upper or lower case after Applying formats codes
-        if(formatString.Cmp(string) != 0)
+        if(formatString.Cmp(userInput) != 0)
         {
-            ChangeValue(formatString);
+           Replace(0, formatString.Len() , formatString);
+
+           printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
         }
 
         SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
@@ -811,6 +810,7 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     int keycode = event.GetKeyCode();
     unsigned int cursor = GetInsertionPoint();
 
+    printf("User input\n");
     switch(keycode)
     {
         case(WXK_PAGEUP):
@@ -829,9 +829,54 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                 ChangeValue(m_maskCtrl->GetPreviousChoices()); 
             }
         break;
-        default:
-            event.Skip();
+        case(WXK_LEFT):
+        case(WXK_RIGHT):
+            if(m_maskCtrl->GetFormatCodes(0).Contains('_'))
+                    event.Skip();
         break;
+        case(WXK_BACK):
+            if(cursor > 0)
+            {
+
+                if(cursor == 1)
+                {
+                    Replace(0, 1, wxT("  "));
+                    Remove(0, 1);
+
+                }
+                else
+                {
+                    Replace(cursor -2, cursor , 
+                            GetValue().SubString(cursor -2, cursor -2) + wxT(" "));
+                }
+            }
+
+
+        break;
+        default:
+        {        
+            if( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
+            {
+                wxString string = GetValue();
+                wxChar ch;
+
+                if( !event.ShiftDown() )
+                {
+                    keycode = wxTolower(keycode);
+                }
+                
+                
+                if(string[cursor] == ' ')
+                    ch = (wxChar)keycode;
+                else
+                    ch = string[cursor];
+                printf("cursor: %d\n", cursor);
+                Replace(cursor, cursor+1, ch);
+           }
+            else
+                event.Skip();
+    
+        }
     }
 }
 

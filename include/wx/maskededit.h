@@ -62,7 +62,7 @@ public:
     bool IsValid(const wxString& string) const;
     
     //Test if the current sequence is empty 
-    bool IsEmpty(const wxString& string) const;
+    bool IsEmpty(const wxString& string);
     
     //Set the mask to a new value. 
     bool SetMask(const wxString& mask);
@@ -128,7 +128,7 @@ public:
  
     unsigned int NumberOfChoices();
 
-    wxString GetLockedMask();
+    wxString GetEmptyMask() const;
    
 private:
     //mask caracteristics
