@@ -401,7 +401,9 @@ wxFORMAT_STRING_SPECIFIER(float, wxFormatString::Arg_Double)
 wxFORMAT_STRING_SPECIFIER(double, wxFormatString::Arg_Double)
 wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
 
+#if wxWCHAR_T_IS_REAL_TYPE
 wxFORMAT_STRING_SPECIFIER(wchar_t, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+#endif
 
 wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
