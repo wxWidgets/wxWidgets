@@ -923,6 +923,10 @@ typedef wxUint16 wxWord;
     #error "SIZEOF_WCHAR_T must be defined, but isn't"
 #endif
 
+#if !defined(wxSIZE_T_IS_UINT) && !defined(wxSIZE_T_IS_ULONG)
+    #error "wxSIZE_T_IS_UINT or wxSIZE_T_IS_ULONG must be defined"
+#endif
+
 /* also define C99-like sized MIN/MAX constants */
 #define wxINT8_MIN CHAR_MIN
 #define wxINT8_MAX CHAR_MAX
