@@ -45,6 +45,7 @@ private:
         CPPUNIT_TEST( ItemRect );
         CPPUNIT_TEST( ChangeMode );
         CPPUNIT_TEST( ItemClick );
+        CPPUNIT_TEST( KeyDown );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -53,6 +54,7 @@ private:
     void ItemRect();
     void ChangeMode();
     void ItemClick();
+    void KeyDown();
 
     wxListCtrl *m_list;
 
@@ -252,5 +254,24 @@ void ListCtrlTestCase::ItemClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK));
+
+    //tidy up when we are finished
+    m_list->ClearAll();
+}
+
+void ListCtrlTestCase::KeyDown()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_KEY_DOWN);
+
+    wxUIActionSimulator sim;
+
+    m_list->SetFocus();
+    sim.Text("aAbB");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
 }
 
