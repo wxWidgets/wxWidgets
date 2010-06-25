@@ -114,6 +114,30 @@ static void realize(GtkWidget* widget)
     }
 }
 
+static void show(GtkWidget* widget)
+{
+    if (widget->parent && WX_PIZZA(widget)->m_border_style)
+    {
+        // invalidate whole allocation so borders will be drawn properly
+        const GtkAllocation& a = widget->allocation;
+        gtk_widget_queue_draw_area(widget->parent, a.x, a.y, a.width, a.height);
+    }
+
+    parent_class->show(widget);
+}
+
+static void hide(GtkWidget* widget)
+{
+    if (widget->parent && WX_PIZZA(widget)->m_border_style)
+    {
+        // invalidate whole allocation so borders will be erased properly
+        const GtkAllocation& a = widget->allocation;
+        gtk_widget_queue_draw_area(widget->parent, a.x, a.y, a.width, a.height);
+    }
+
+    parent_class->hide(widget);
+}
+
 // not used, but needs to exist so gtk_widget_set_scroll_adjustments will work
 static void set_scroll_adjustments(GtkWidget*, GtkAdjustment*, GtkAdjustment*)
 {
@@ -163,6 +187,8 @@ static void class_init(void* g_class, void*)
     GtkWidgetClass* widget_class = (GtkWidgetClass*)g_class;
     widget_class->size_allocate = size_allocate;
     widget_class->realize = realize;
+    widget_class->show = show;
+    widget_class->hide = hide;
     wxPizzaClass* klass = (wxPizzaClass*)g_class;
 
     // needed to make widget appear scrollable to GTK+

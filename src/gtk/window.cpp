@@ -305,6 +305,9 @@ expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
     if (gdk_event->window != gtk_widget_get_parent_window(win->m_wxwindow))
         return false;
 
+    if (!win->IsShown())
+        return false;
+
     const GtkAllocation& alloc = win->m_wxwindow->allocation;
     const int x = alloc.x;
     const int y = alloc.y;
