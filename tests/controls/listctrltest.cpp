@@ -46,6 +46,7 @@ private:
         CPPUNIT_TEST( ChangeMode );
         CPPUNIT_TEST( ItemClick );
         CPPUNIT_TEST( KeyDown );
+        CPPUNIT_TEST( DeleteItems );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -55,6 +56,7 @@ private:
     void ChangeMode();
     void ItemClick();
     void KeyDown();
+    void DeleteItems();
 
     wxListCtrl *m_list;
 
@@ -275,3 +277,31 @@ void ListCtrlTestCase::KeyDown()
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
 }
 
+void ListCtrlTestCase::DeleteItems()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_DELETE_ITEM);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
+
+
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+    m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
+    m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
+
+    m_list->InsertItem(0, "Item 0");
+    m_list->InsertItem(1, "Item 1");
+    m_list->InsertItem(2, "Item 1");
+
+    m_list->DeleteItem(0);
+    m_list->DeleteItem(0);
+    m_list->DeleteAllItems();
+
+    //tidy up when we are finished, we put this before the asserts as it
+    //actually sends a DELETE_ALL_ITEMS event
+    m_list->ClearAll();
+
+    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
+    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+}
