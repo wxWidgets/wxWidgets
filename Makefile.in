@@ -2918,6 +2918,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/colour.h \
 	wx/msw/combo.h \
 	wx/msw/combobox.h \
+	wx/msw/commandlinkbutton.h \
 	wx/msw/control.h \
 	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
@@ -3440,6 +3441,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/colour.h \
 	wx/msw/combo.h \
 	wx/msw/combobox.h \
+	wx/msw/commandlinkbutton.h \
 	wx/msw/control.h \
 	wx/msw/ctrlsub.h \
 	wx/msw/cursor.h \
@@ -3795,6 +3797,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/collpane.h \
 	wx/combo.h \
 	wx/combobox.h \
+	wx/commandlinkbutton.h \
 	wx/control.h \
 	wx/ctrlsub.h \
 	wx/cursor.h \
@@ -4528,6 +4531,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
+	monodll_commandlinkbuttong.o \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
@@ -4726,6 +4730,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_choicdgg.o \
 	monodll_choicbkg.o \
 	monodll_combog.o \
+	monodll_commandlinkbuttong.o \
 	monodll_dcpsg.o \
 	monodll_dirctrlg.o \
 	monodll_dragimgg.o \
@@ -5339,6 +5344,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_colordlg.o \
 	monodll_combo.o \
 	monodll_msw_combobox.o \
+	monodll_commandlinkbutton.o \
 	monodll_msw_control.o \
 	monodll_msw_dialog.o \
 	monodll_msw_dirdlg.o \
@@ -5574,6 +5580,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_colordlg.o \
 	monodll_combo.o \
 	monodll_msw_combobox.o \
+	monodll_commandlinkbutton.o \
 	monodll_msw_control.o \
 	monodll_msw_dialog.o \
 	monodll_msw_dirdlg.o \
@@ -6396,6 +6403,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
+	monolib_commandlinkbuttong.o \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
@@ -6594,6 +6602,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_choicdgg.o \
 	monolib_choicbkg.o \
 	monolib_combog.o \
+	monolib_commandlinkbuttong.o \
 	monolib_dcpsg.o \
 	monolib_dirctrlg.o \
 	monolib_dragimgg.o \
@@ -7207,6 +7216,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_colordlg.o \
 	monolib_combo.o \
 	monolib_msw_combobox.o \
+	monolib_commandlinkbutton.o \
 	monolib_msw_control.o \
 	monolib_msw_dialog.o \
 	monolib_msw_dirdlg.o \
@@ -7442,6 +7452,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_colordlg.o \
 	monolib_combo.o \
 	monolib_msw_combobox.o \
+	monolib_commandlinkbutton.o \
 	monolib_msw_control.o \
 	monolib_msw_dialog.o \
 	monolib_msw_dirdlg.o \
@@ -8451,6 +8462,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_combog.o \
+	coredll_commandlinkbuttong.o \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
@@ -8649,6 +8661,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_choicdgg.o \
 	coredll_choicbkg.o \
 	coredll_combog.o \
+	coredll_commandlinkbuttong.o \
 	coredll_dcpsg.o \
 	coredll_dirctrlg.o \
 	coredll_dragimgg.o \
@@ -9262,6 +9275,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_colordlg.o \
 	coredll_combo.o \
 	coredll_msw_combobox.o \
+	coredll_commandlinkbutton.o \
 	coredll_msw_control.o \
 	coredll_msw_dialog.o \
 	coredll_msw_dirdlg.o \
@@ -9497,6 +9511,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_colordlg.o \
 	coredll_combo.o \
 	coredll_msw_combobox.o \
+	coredll_commandlinkbutton.o \
 	coredll_msw_control.o \
 	coredll_msw_dialog.o \
 	coredll_msw_dirdlg.o \
@@ -9992,6 +10007,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_combog.o \
+	corelib_commandlinkbuttong.o \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
@@ -10190,6 +10206,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_choicdgg.o \
 	corelib_choicbkg.o \
 	corelib_combog.o \
+	corelib_commandlinkbuttong.o \
 	corelib_dcpsg.o \
 	corelib_dirctrlg.o \
 	corelib_dragimgg.o \
@@ -10803,6 +10820,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_colordlg.o \
 	corelib_combo.o \
 	corelib_msw_combobox.o \
+	corelib_commandlinkbutton.o \
 	corelib_msw_control.o \
 	corelib_msw_dialog.o \
 	corelib_msw_dirdlg.o \
@@ -11038,6 +11056,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_colordlg.o \
 	corelib_combo.o \
 	corelib_msw_combobox.o \
+	corelib_commandlinkbutton.o \
 	corelib_msw_control.o \
 	corelib_msw_dialog.o \
 	corelib_msw_dirdlg.o \
@@ -18725,6 +18744,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_combobox.o: $(srcdir)/src/msw/combobox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/combobox.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_control.o: $(srcdir)/src/msw/control.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/control.cpp
 
@@ -19810,6 +19835,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_combog.o: $(srcdir)/src/generic/combog.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
+@COND_USE_GUI_1@monodll_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
 
 @COND_USE_GUI_1@monodll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
@@ -23927,6 +23955,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_combobox.o: $(srcdir)/src/msw/combobox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/combobox.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_control.o: $(srcdir)/src/msw/control.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/control.cpp
 
@@ -25012,6 +25046,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_combog.o: $(srcdir)/src/generic/combog.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
+@COND_USE_GUI_1@monolib_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
 
 @COND_USE_GUI_1@monolib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
@@ -29315,6 +29352,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_combobox.o: $(srcdir)/src/msw/combobox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/combobox.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_control.o: $(srcdir)/src/msw/control.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/control.cpp
 
@@ -30400,6 +30443,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_combog.o: $(srcdir)/src/generic/combog.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
+@COND_USE_GUI_1@coredll_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
 
 @COND_USE_GUI_1@coredll_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp
@@ -33233,6 +33279,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_combobox.o: $(srcdir)/src/msw/combobox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/combobox.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_commandlinkbutton.o: $(srcdir)/src/msw/commandlinkbutton.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/commandlinkbutton.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_control.o: $(srcdir)/src/msw/control.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/control.cpp
 
@@ -34318,6 +34370,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_combog.o: $(srcdir)/src/generic/combog.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/combog.cpp
+
+@COND_USE_GUI_1@corelib_commandlinkbuttong.o: $(srcdir)/src/generic/commandlinkbuttong.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/commandlinkbuttong.cpp
 
 @COND_USE_GUI_1@corelib_dcpsg.o: $(srcdir)/src/generic/dcpsg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/dcpsg.cpp

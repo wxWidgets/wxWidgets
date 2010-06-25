@@ -1728,6 +1728,26 @@
 				/>
 			</File>
 			<File
+				RelativePath="..\..\src\msw\commandlinkbutton.cpp"
+				>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+					ExcludedFromBuild="true"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+					ExcludedFromBuild="true"
+				/>
+			</File>
+			<File
 				RelativePath="..\..\src\msw\control.cpp"
 				>
 				<FileConfiguration
@@ -3450,6 +3470,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\combog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\commandlinkbuttong.cpp"
 				>
 			</File>
 			<File
@@ -5648,6 +5672,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\msw\commandlinkbutton.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msw\control.h"
 				>
 			</File>
@@ -6713,6 +6741,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\combobox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\commandlinkbutton.h"
 				>
 			</File>
 			<File

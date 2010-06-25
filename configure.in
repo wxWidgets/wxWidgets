@@ -6796,6 +6796,11 @@ if test "$wxUSE_COMBOCTRL" = "yes"; then
   USES_CONTROLS=1
 fi
 
+if test "$wxUSE_COMMANDLINKBUTTON" = "yes"; then
+  AC_DEFINE(wxUSE_COMMANDLINKBUTTON)
+  USES_CONTROLS=1
+fi
+
 if test "$wxUSE_CHOICE" = "yes"; then
   AC_DEFINE(wxUSE_CHOICE)
   USES_CONTROLS=1

@@ -88,13 +88,17 @@ protected:
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
     virtual void DoSetBitmapPosition(wxDirection dir);
 
+    // Increases the passed in size if necessary to account for the
+    // button image, if any
+    void AdjustForBitmapSize(wxSize& size) const;
+
     class wxButtonImageData *m_imageData;
 
     // true if the UAC symbol is shown
     bool m_authNeeded;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxButton)
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
 
 #endif // _WX_BUTTON_H_

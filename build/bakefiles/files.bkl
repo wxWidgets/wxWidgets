@@ -751,6 +751,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/choicdgg.cpp
     src/generic/choicbkg.cpp
     src/generic/combog.cpp
+    src/generic/commandlinkbuttong.cpp
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
@@ -792,6 +793,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/collpane.h
     wx/combo.h
     wx/combobox.h
+    wx/commandlinkbutton.h
     wx/control.h
     wx/ctrlsub.h
     wx/cursor.h
@@ -1695,6 +1697,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/colordlg.cpp
     src/msw/combo.cpp
     src/msw/combobox.cpp
+    src/msw/commandlinkbutton.cpp
     src/msw/control.cpp
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
@@ -1753,6 +1756,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/colour.h
     wx/msw/combo.h
     wx/msw/combobox.h
+    wx/msw/commandlinkbutton.h
     wx/msw/control.h
     wx/msw/ctrlsub.h
     wx/msw/cursor.h

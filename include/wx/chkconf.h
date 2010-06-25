@@ -1425,6 +1425,17 @@
 #    endif
 #endif /* wxUSE_BMPBUTTON */
 
+#if wxUSE_COMMANDLINKBUTTON
+#    if !wxUSE_BUTTON
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_COMMANDLINKBUTTON requires wxUSE_BUTTON"
+#        else
+#            undef wxUSE_BUTTON
+#            define wxUSE_BUTTON 1
+#        endif
+#    endif
+#endif /* wxUSE_COMMANDLINKBUTTON */
+
 /*
    wxUSE_BOOKCTRL should be only used if any of the controls deriving from it
    are used

@@ -297,6 +297,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_colordlg.obj &
 	$(OBJS)\monodll_combo.obj &
 	$(OBJS)\monodll_msw_combobox.obj &
+	$(OBJS)\monodll_commandlinkbutton.obj &
 	$(OBJS)\monodll_msw_control.obj &
 	$(OBJS)\monodll_msw_dialog.obj &
 	$(OBJS)\monodll_dirdlg.obj &
@@ -451,6 +452,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_combog.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_dcpsg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
@@ -699,6 +701,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_choicdgg.obj &
 	$(OBJS)\monodll_choicbkg.obj &
 	$(OBJS)\monodll_combog.obj &
+	$(OBJS)\monodll_commandlinkbuttong.obj &
 	$(OBJS)\monodll_dcpsg.obj &
 	$(OBJS)\monodll_dirctrlg.obj &
 	$(OBJS)\monodll_dragimgg.obj &
@@ -1017,6 +1020,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_colordlg.obj &
 	$(OBJS)\monolib_combo.obj &
 	$(OBJS)\monolib_msw_combobox.obj &
+	$(OBJS)\monolib_commandlinkbutton.obj &
 	$(OBJS)\monolib_msw_control.obj &
 	$(OBJS)\monolib_msw_dialog.obj &
 	$(OBJS)\monolib_dirdlg.obj &
@@ -1171,6 +1175,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_combog.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_dcpsg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
@@ -1419,6 +1424,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_choicdgg.obj &
 	$(OBJS)\monolib_choicbkg.obj &
 	$(OBJS)\monolib_combog.obj &
+	$(OBJS)\monolib_commandlinkbuttong.obj &
 	$(OBJS)\monolib_dcpsg.obj &
 	$(OBJS)\monolib_dirctrlg.obj &
 	$(OBJS)\monolib_dragimgg.obj &
@@ -1644,6 +1650,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_colordlg.obj &
 	$(OBJS)\coredll_combo.obj &
 	$(OBJS)\coredll_msw_combobox.obj &
+	$(OBJS)\coredll_commandlinkbutton.obj &
 	$(OBJS)\coredll_msw_control.obj &
 	$(OBJS)\coredll_msw_dialog.obj &
 	$(OBJS)\coredll_dirdlg.obj &
@@ -1798,6 +1805,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_choicdgg.obj &
 	$(OBJS)\coredll_choicbkg.obj &
 	$(OBJS)\coredll_combog.obj &
+	$(OBJS)\coredll_commandlinkbuttong.obj &
 	$(OBJS)\coredll_dcpsg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
@@ -2046,6 +2054,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_choicdgg.obj &
 	$(OBJS)\coredll_choicbkg.obj &
 	$(OBJS)\coredll_combog.obj &
+	$(OBJS)\coredll_commandlinkbuttong.obj &
 	$(OBJS)\coredll_dcpsg.obj &
 	$(OBJS)\coredll_dirctrlg.obj &
 	$(OBJS)\coredll_dragimgg.obj &
@@ -2152,6 +2161,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_colordlg.obj &
 	$(OBJS)\corelib_combo.obj &
 	$(OBJS)\corelib_msw_combobox.obj &
+	$(OBJS)\corelib_commandlinkbutton.obj &
 	$(OBJS)\corelib_msw_control.obj &
 	$(OBJS)\corelib_msw_dialog.obj &
 	$(OBJS)\corelib_dirdlg.obj &
@@ -2306,6 +2316,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_choicdgg.obj &
 	$(OBJS)\corelib_choicbkg.obj &
 	$(OBJS)\corelib_combog.obj &
+	$(OBJS)\corelib_commandlinkbuttong.obj &
 	$(OBJS)\corelib_dcpsg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
@@ -2554,6 +2565,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_choicdgg.obj &
 	$(OBJS)\corelib_choicbkg.obj &
 	$(OBJS)\corelib_combog.obj &
+	$(OBJS)\corelib_commandlinkbuttong.obj &
 	$(OBJS)\corelib_dcpsg.obj &
 	$(OBJS)\corelib_dirctrlg.obj &
 	$(OBJS)\corelib_dragimgg.obj &
@@ -6489,6 +6501,9 @@ $(OBJS)\monodll_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
 $(OBJS)\monodll_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -8000,6 +8015,11 @@ $(OBJS)\monodll_combog.obj :  .AUTODEPEND ..\..\src\generic\combog.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8694,6 +8714,9 @@ $(OBJS)\monolib_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
@@ -10207,6 +10230,11 @@ $(OBJS)\monolib_combog.obj :  .AUTODEPEND ..\..\src\generic\combog.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -11309,6 +11337,9 @@ $(OBJS)\coredll_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
@@ -12417,6 +12448,11 @@ $(OBJS)\coredll_combog.obj :  .AUTODEPEND ..\..\src\generic\combog.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_dcpsg.obj :  .AUTODEPEND ..\..\src\generic\dcpsg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12606,6 +12642,9 @@ $(OBJS)\corelib_combo.obj :  .AUTODEPEND ..\..\src\msw\combo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_combobox.obj :  .AUTODEPEND ..\..\src\msw\combobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_commandlinkbutton.obj :  .AUTODEPEND ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msw_control.obj :  .AUTODEPEND ..\..\src\msw\control.cpp
@@ -13710,6 +13749,11 @@ $(OBJS)\corelib_choicbkg.obj :  .AUTODEPEND ..\..\src\generic\choicbkg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_combog.obj :  .AUTODEPEND ..\..\src\generic\combog.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_commandlinkbuttong.obj :  .AUTODEPEND ..\..\src\generic\commandlinkbuttong.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

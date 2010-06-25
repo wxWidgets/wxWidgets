@@ -1115,6 +1115,41 @@ SOURCE=..\..\src\msw\combobox.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\commandlinkbutton.cpp
+
+!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "core - Win32 Release"
+
+
+!ELSEIF  "$(CFG)" == "core - Win32 Debug"
+
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\control.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -2794,6 +2829,10 @@ SOURCE=..\..\src\generic\colrdlgg.cpp
 # Begin Source File
 
 SOURCE=..\..\src\generic\combog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\generic\commandlinkbuttong.cpp
 # End Source File
 # Begin Source File
 
@@ -4835,6 +4874,10 @@ SOURCE=..\..\include\wx\msw\combobox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\commandlinkbutton.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\control.h
 # End Source File
 # Begin Source File
@@ -5891,6 +5934,10 @@ SOURCE=..\..\include\wx\combo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\combobox.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\commandlinkbutton.h
 # End Source File
 # Begin Source File
 
