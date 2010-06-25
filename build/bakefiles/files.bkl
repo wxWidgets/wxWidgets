@@ -360,7 +360,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/fontdlg.h
     wx/qt/frame.h
     wx/qt/gauge.h
-    wx/qt/icon.h
+    wx/generic/icon.h
     wx/generic/imaglist.h
     wx/qt/listbox.h
     wx/qt/listctrl.h
@@ -445,7 +445,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/frame.moc.cpp
     src/qt/gauge.cpp
     src/qt/graphics.cpp
-    src/qt/icon.cpp
+    src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp

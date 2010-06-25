@@ -63,7 +63,7 @@
   #include "wx/os2/icon.h"
 #elif defined(__WXQT__)
   #define wxICON_DEFAULT_TYPE   wxBITMAP_TYPE_XPM
-  #include "wx/qt/icon.h"
+  #include "wx/generic/icon.h"
 #endif
 
 //-----------------------------------------------------------------------------
