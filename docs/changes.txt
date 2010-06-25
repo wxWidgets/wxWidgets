@@ -452,6 +452,7 @@ All:
 - Added wxMessageQueue::Clear().
 - Added wxConfig::Read(float *) overload (Terry Farnham).
 - Always use decimal point (and not the current locale separator) in wxConfig.
+- Fix posting of binary data using wxHTTP (Catalin Raceanu).
 
 Unix:
 
