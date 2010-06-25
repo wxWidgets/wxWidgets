@@ -687,6 +687,9 @@ public:
     /// Paint the background
     virtual void PaintBackground(wxDC& dc);
 
+    /// Other user defined painting after everything else (i.e. all text) is painted
+    virtual void PaintAboveContent(wxDC& dc) {}
+
 #if wxRICHTEXT_BUFFERED_PAINTING
     /// Recreate buffer bitmap if necessary
     virtual bool RecreateBuffer(const wxSize& size = wxDefaultSize);

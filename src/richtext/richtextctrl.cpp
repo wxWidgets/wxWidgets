@@ -409,6 +409,9 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
         dc.DestroyClippingRegion();
 
+        // Other user defined painting after everything else (i.e. all text) is painted
+        PaintAboveContent(dc);
+
 #if wxRICHTEXT_USE_OWN_CARET
         if (GetCaret()->IsVisible())
         {
