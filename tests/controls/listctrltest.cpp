@@ -214,30 +214,11 @@ void ListCtrlTestCase::ItemClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_SELECTED,
-                    wxEventHandler(wxTestableFrame::OnEvent),
-                    NULL,
-                    frame);
-
-    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_FOCUSED,
-                    wxEventHandler(wxTestableFrame::OnEvent),
-                    NULL,
-                    frame);
-
-    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
-                    wxEventHandler(wxTestableFrame::OnEvent),
-                    NULL,
-                    frame);
-
-    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
-                    wxEventHandler(wxTestableFrame::OnEvent),
-                    NULL,
-                    frame);
-
-    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
-                    wxEventHandler(wxTestableFrame::OnEvent),
-                    NULL,
-                    frame);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_SELECTED); 
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK);
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);

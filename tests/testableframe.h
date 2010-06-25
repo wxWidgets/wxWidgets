@@ -21,6 +21,9 @@ public:
     //wxEVT_ANY get the count for all events or a type can be specified
     int GetEventCount(wxEventType type = wxEVT_ANY);
 
+    //A quicker way of connecting events
+    void CountWindowEvents(wxWindow* win, wxEventType type);
+
 private:
     wxLongToLongHashMap m_count;
 };

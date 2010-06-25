@@ -62,11 +62,8 @@ void ButtonTestCase::Click()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    //We use connect instead of bind for maximum compatibility
-    m_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
-                      wxEventHandler(wxTestableFrame::OnEvent),
-                      NULL,
-                      frame);
+    //We use CountWindowEvents to reduce the typing need for Connect
+    frame->CountWindowEvents(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 
@@ -85,10 +82,7 @@ void ButtonTestCase::Disabled()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    m_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED,
-                      wxEventHandler(wxTestableFrame::OnEvent),
-                      NULL,
-                      frame);
+    frame->CountWindowEvents(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 

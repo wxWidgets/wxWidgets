@@ -49,3 +49,11 @@ int wxTestableFrame::GetEventCount(wxEventType type)
         return count;
     }
 }
+
+void wxTestableFrame::CountWindowEvents(wxWindow* win, wxEventType type)
+{
+    win->Connect(type,
+                 wxEventHandler(wxTestableFrame::OnEvent),
+                 NULL,
+                 this);
+}
