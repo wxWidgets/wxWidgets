@@ -237,10 +237,8 @@ void ListCtrlTestCase::ItemClick()
     wxRect pos;
     m_list->GetItemRect(0, pos);
 
-    wxPoint point = pos.GetPosition() + m_list->GetScreenPosition();
-
     //We move in slightly so we are not on the edge
-    point += wxPoint(2, 2);
+    wxPoint point = m_list->ClientToScreen(pos.GetPosition()) + wxPoint(2, 2);
 
     sim.MouseMove(point);
     sim.MouseClick();
