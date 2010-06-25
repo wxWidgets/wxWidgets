@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "testableframe.h"
+#include "wx/uiaction.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -42,6 +44,7 @@ private:
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
         CPPUNIT_TEST( ItemRect );
         CPPUNIT_TEST( ChangeMode );
+        CPPUNIT_TEST( ItemClick );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -49,6 +52,7 @@ private:
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
     void ItemRect();
     void ChangeMode();
+    void ItemClick();
 
     wxListCtrl *m_list;
 
@@ -145,6 +149,9 @@ void ListCtrlTestCase::ColumnsOrder()
     li.SetColumn(2);
     CPPUNIT_ASSERT( m_list->GetItem(li) );
     CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
+
+    //tidy up when we are finished
+    m_list->ClearAll();
 }
 
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
@@ -176,6 +183,9 @@ void ListCtrlTestCase::ItemRect()
     CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
 
     WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
+
+    //tidy up when we are finished
+    m_list->ClearAll();
 }
 
 void ListCtrlTestCase::ChangeMode()
@@ -194,5 +204,72 @@ void ListCtrlTestCase::ChangeMode()
     m_list->SetWindowStyle(wxLC_REPORT);
     CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
     CPPUNIT_ASSERT_EQUAL( "First", m_list->GetItemText(0) );
+
+    //tidy up when we are finished
+    m_list->ClearAll();
+}
+
+void ListCtrlTestCase::ItemClick()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_SELECTED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_FOCUSED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_list->Connect(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK,
+                    wxEventHandler(wxTestableFrame::OnEvent),
+                    NULL,
+                    frame);
+
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+    m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
+    m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
+
+    m_list->InsertItem(0, "Item 0");
+    m_list->SetItem(0, 1, "first column");
+    m_list->SetItem(0, 2, "second column");
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    m_list->GetItemRect(0, pos);
+
+    wxPoint point = pos.GetPosition() + m_list->GetScreenPosition();
+
+    //We move in slightly so we are not on the edge
+    point += wxPoint(2, 2);
+
+    sim.MouseMove(point);
+    sim.MouseClick();
+    sim.MouseDblClick();
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.MouseClick(wxMOUSE_BTN_MIDDLE);
+    wxYield();
+
+    //when the first item was selected the focus chages to it, but not
+    //on subsequent clicks
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_FOCUSED));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_SELECTED));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK));
 }
 
