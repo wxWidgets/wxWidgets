@@ -1180,6 +1180,13 @@ public:
     virtual void PaintBackground(wxDC& dc);
 
     /**
+        Other user defined painting after everything else (i.e. all text) is painted.
+
+        @since 2.9.1
+    */
+    virtual void PaintAboveContent(wxDC& dc);
+
+    /**
         Pastes content from the clipboard to the buffer.
     */
     virtual void Paste();
