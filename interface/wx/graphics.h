@@ -201,7 +201,7 @@ public:
 };
 
 /**
-    Anti-aliasing modes used by wxGraphicsContext::SetAntialisingMode
+    Anti-aliasing modes used by wxGraphicsContext::SetAntialiasMode().
 */
 enum wxAntialiasMode
 {
@@ -215,7 +215,7 @@ enum wxAntialiasMode
 /**
     Compositing is done using Porter-Duff compositions
     (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
-    wxGraphicsContext::SetCompositionMode
+    wxGraphicsContext::SetCompositionMode().
 
     The description give a short equation on how the values of a resulting
     pixel are calculated.
