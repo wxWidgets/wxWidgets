@@ -33,11 +33,13 @@ private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         CPPUNIT_TEST( CellEdit );
         CPPUNIT_TEST( CellClick );
+        CPPUNIT_TEST( CellSelect );
         CPPUNIT_TEST( LabelClick );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
     void CellClick();
+    void CellSelect();
     void LabelClick();
 
     wxGrid *m_grid;
@@ -131,6 +133,37 @@ void GridTestCase::CellClick()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_CLICK));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_DCLICK)); 
+}
+
+void GridTestCase::CellSelect()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_SELECT_CELL);
+
+    wxUIActionSimulator sim;
+
+    wxRect rect = m_grid->CellToRect(0, 0);
+    wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
+    point = frame->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
+                                                  m_grid->GetColLabelSize())
+                                        + wxPoint(4, 4));
+
+    sim.MouseMove(point);
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_SELECT_CELL));
+
+    m_grid->SetGridCursor(1, 1);
+    m_grid->GoToCell(1, 0);
+
+    sim.MouseMove(point);
+    sim.MouseDblClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(3, frame->GetEventCount(wxEVT_GRID_SELECT_CELL));
 }
 
 void GridTestCase::LabelClick()
