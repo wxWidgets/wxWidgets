@@ -35,12 +35,14 @@ private:
         CPPUNIT_TEST( CellClick );
         CPPUNIT_TEST( CellSelect );
         CPPUNIT_TEST( LabelClick );
+        CPPUNIT_TEST( SortClick );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
     void CellClick();
     void CellSelect();
     void LabelClick();
+    void SortClick();
 
     wxGrid *m_grid;
 
@@ -205,4 +207,27 @@ void GridTestCase::LabelClick()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+}
+
+void GridTestCase::SortClick()
+{
+    m_grid->SetSortingColumn(0);
+
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_COL_SORT);
+
+    wxUIActionSimulator sim;
+
+    wxPoint pos(m_grid->GetRowLabelSize() + 4, 4);
+    pos = m_grid->ClientToScreen(pos);
+
+    sim.MouseMove(pos);
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+
+    m_grid->SetSortingColumn(wxNOT_FOUND);
 }
