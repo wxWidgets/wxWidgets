@@ -47,6 +47,7 @@ private:
         CPPUNIT_TEST( ItemClick );
         CPPUNIT_TEST( KeyDown );
         CPPUNIT_TEST( DeleteItems );
+        CPPUNIT_TEST( ColumnClick );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -57,6 +58,7 @@ private:
     void ItemClick();
     void KeyDown();
     void DeleteItems();
+    void ColumnClick();
 
     wxListCtrl *m_list;
 
@@ -302,4 +304,28 @@ void ListCtrlTestCase::DeleteItems()
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ITEM));
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS));
+}
+
+void ListCtrlTestCase::ColumnClick()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
+
+
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+
+    wxUIActionSimulator sim;
+
+    sim.MouseMove(m_list->ClientToScreen(wxPoint(4, 4)));
+    sim.MouseClick();
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_RIGHT_CLICK));
+
+    m_list->ClearAll();
 }
