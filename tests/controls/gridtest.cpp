@@ -3,7 +3,7 @@
 // Purpose:     wxListBox unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-25
-// RCS-ID:      $Id: $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2010 Steven Lamerton
 ///////////////////////////////////////////////////////////////////////////////
 
