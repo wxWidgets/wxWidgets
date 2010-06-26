@@ -48,6 +48,7 @@ private:
         CPPUNIT_TEST( KeyDown );
         CPPUNIT_TEST( DeleteItems );
         CPPUNIT_TEST( ColumnClick );
+        CPPUNIT_TEST( InsertItem );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -59,6 +60,7 @@ private:
     void KeyDown();
     void DeleteItems();
     void ColumnClick();
+    void InsertItem();
 
     wxListCtrl *m_list;
 
@@ -329,3 +331,25 @@ void ListCtrlTestCase::ColumnClick()
 
     m_list->ClearAll();
 }
+
+void ListCtrlTestCase::InsertItem()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_INSERT_ITEM);
+
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+
+    wxListItem item;
+    item.SetId(0);
+    item.SetText("some text");
+
+    m_list->InsertItem(item);
+    m_list->InsertItem(1, "more text");
+
+    CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_LIST_INSERT_ITEM));
+
+    m_list->ClearAll();
+}
+
