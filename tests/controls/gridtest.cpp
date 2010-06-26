@@ -33,10 +33,12 @@ private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         CPPUNIT_TEST( CellEdit );
         CPPUNIT_TEST( CellClick );
+        CPPUNIT_TEST( LabelClick );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
     void CellClick();
+    void LabelClick();
 
     wxGrid *m_grid;
 
@@ -129,4 +131,45 @@ void GridTestCase::CellClick()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_CLICK));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_RIGHT_DCLICK)); 
+}
+
+void GridTestCase::LabelClick()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
+    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_RIGHT_DCLICK);
+
+    wxUIActionSimulator sim;
+
+    wxPoint pos(m_grid->GetRowLabelSize() + 2, 2);
+    pos = m_grid->ClientToScreen(pos);
+
+    sim.MouseMove(pos);
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_CLICK));
+
+    sim.MouseDblClick();
+    wxYield();
+
+    //A double click event sends a single click event first
+    //test to ensure this still happens in the future
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_LEFT_DCLICK));
+
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
+
+    sim.MouseDblClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
 }
