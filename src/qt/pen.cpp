@@ -204,14 +204,22 @@ static wxPenJoin ConvertPenJoinStyle(Qt::PenJoinStyle style)
 class wxPenRefData: public wxGDIRefData
 {
     public:
+        void defaultPen()
+        {
+            m_qtPen.setCapStyle(Qt::RoundCap);
+            m_qtPen.setJoinStyle(Qt::RoundJoin);
+        }
+        
         wxPenRefData()
         {
+            defaultPen();
         }
         
         wxPenRefData( const wxPenRefData& data )
         : wxGDIRefData()
         {
             m_qtPen = data.m_qtPen;
+            defaultPen();
         }
         
         bool operator == (const wxPenRefData& data) const
