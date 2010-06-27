@@ -78,16 +78,11 @@ void wxQtDCImpl::SetBackground(const wxBrush& brush)
 
 void wxQtDCImpl::SetBackgroundMode(int mode)
 {
-    switch (mode) {
-        case wxSOLID:
-            m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
-            break;
-        case wxTRANSPARENT:
-            m_qtPainter.setBackgroundMode(Qt::TransparentMode);
-            break;
-        default:
-            wxFAIL_MSG( "Unknown wxDC background mode" );
-    }
+    /* Do not change QPainter, as wx uses this background mode
+     * only for drawing text, where Qt uses it for everything.
+     * Always let QPainter mode to transparent, and change it
+     * when needed */
+    m_backgroundMode = mode;
 }
 
 
@@ -220,23 +215,18 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         
         //Save pen/brush
         QBrush savedBrush = m_qtPainter.background();
-        QPen savedPen = m_qtPainter.pen();
-        Qt::BGMode savedMode = m_qtPainter.backgroundMode();
-
-        
+        QPen savedPen = m_qtPainter.pen();       
         
         //Use text colors
         m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
         m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
-        m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
-        
+
         //Draw
         m_qtPainter.drawPixmap(x, y, pix);
         
         //Restore saved settings
         m_qtPainter.setBackground(savedBrush);
         m_qtPainter.setPen(savedPen);
-        m_qtPainter.setBackgroundMode(savedMode);
     } else {
         m_qtPainter.drawPixmap(x, y, pix);
     }
@@ -244,6 +234,9 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    if (m_backgroundMode == wxSOLID)
+        m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+    
     //Save pen/brush
     QBrush savedBrush = m_qtPainter.background();
     QPen savedPen = m_qtPainter.pen();
@@ -258,14 +251,19 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     //Restore saved settings
     m_qtPainter.setBackground(savedBrush);
     m_qtPainter.setPen(savedPen);
+
+    m_qtPainter.setBackgroundMode(Qt::TransparentMode);
 }
 
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
-    //Move and rotate
+    if (m_backgroundMode == wxSOLID)
+        m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+    
+    //Move and rotate (reverse angle direction in Qt and wx)
     m_qtPainter.translate(x, y);
-    m_qtPainter.rotate(angle);
+    m_qtPainter.rotate(-angle);
 
     //Save pen/brush
     QBrush savedBrush = m_qtPainter.background();
@@ -283,7 +281,9 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     m_qtPainter.setPen(savedPen);
 
     //Reset to default
-    m_qtPainter.resetTransform();
+    ComputeScaleAndOrigin();
+
+    m_qtPainter.setBackgroundMode(Qt::TransparentMode);
 }
 
 bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
@@ -332,8 +332,22 @@ void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
     m_qtPainter.resetTransform();
 }
 
-void wxQtDCImpl::SetDeviceOrigin(wxCoord x, wxCoord y) {
+void wxQtDCImpl::ComputeScaleAndOrigin()
+{
     QTransform t;
-    t.translate(x,y);
-    m_qtPainter.setTransform(t);
+
+    // First apply device origin
+    t.translate( m_deviceOriginX + m_deviceLocalOriginX,
+                 m_deviceOriginY + m_deviceLocalOriginY );
+
+    // Second, scale
+    m_scaleX = m_logicalScaleX * m_userScaleX;
+    m_scaleY = m_logicalScaleY * m_userScaleY;
+    t.scale( m_scaleX * m_signX, m_scaleY * m_signY );
+
+    // Finally, logical origin
+    t.translate( m_logicalOriginX, m_logicalOriginY );
+
+    // Apply transform to QPainter, overwriting the previous one
+    m_qtPainter.setWorldTransform(t, false);
 }
