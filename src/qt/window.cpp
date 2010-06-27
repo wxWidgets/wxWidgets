@@ -121,6 +121,8 @@ void wxWindow::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
 {
     if ( rect != NULL )
         GetHandle()->update( wxQtConvertRect( *rect ));
+    else
+        GetHandle()->update();
 }
 
     
