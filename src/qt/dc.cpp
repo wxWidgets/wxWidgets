@@ -13,6 +13,7 @@
 #include "wx/qt/dc.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/utils.h"
+#include <QtGui/QBitmap>
 
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
@@ -68,7 +69,29 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
-    m_qtPainter.setBrush(brush.GetHandle());
+    if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
+    {
+        // Use a monochrome mask: use foreground color for the mask
+        QBrush b(brush.GetHandle());
+        b.setColor(m_textForegroundColour.GetHandle());
+        b.setTexture(b.texture().mask());
+        m_qtPainter.setBrush(b);
+    }
+    else if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE)
+    {
+        //Don't use the mask
+        QBrush b(brush.GetHandle());
+
+        QPixmap p = b.texture();
+        p.setMask(QBitmap());
+        b.setTexture(p);
+
+        m_qtPainter.setBrush(b);
+    }
+    else
+    {
+        m_qtPainter.setBrush(brush.GetHandle());
+    }
 }
 
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
@@ -256,24 +279,28 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     if (m_backgroundMode == wxSOLID)
+    {
         m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
     
-    //Save pen/brush
-    QBrush savedBrush = m_qtPainter.background();
-    QPen savedPen = m_qtPainter.pen();
-    
-    //Use text colors
-    m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
-    m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+        //Save pen/brush
+        QBrush savedBrush = m_qtPainter.background();
+        QPen savedPen = m_qtPainter.pen();
 
-    //Draw
-    m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        //Use text colors
+        m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
 
-    //Restore saved settings
-    m_qtPainter.setBackground(savedBrush);
-    m_qtPainter.setPen(savedPen);
+        //Draw
+        m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
-    m_qtPainter.setBackgroundMode(Qt::TransparentMode);
+        //Restore saved settings
+        m_qtPainter.setBackground(savedBrush);
+        m_qtPainter.setPen(savedPen);
+
+        m_qtPainter.setBackgroundMode(Qt::TransparentMode);
+    }
+    else
+        m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 }
 
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
@@ -286,25 +313,32 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     m_qtPainter.translate(x, y);
     m_qtPainter.rotate(-angle);
 
-    //Save pen/brush
-    QBrush savedBrush = m_qtPainter.background();
-    QPen savedPen = m_qtPainter.pen();
-    
-    //Use text colors
-    m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
-    m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
-    
-    //Draw
-    m_qtPainter.drawText(0, 0, wxQtConvertString(text));
-    
-    //Restore saved settings
-    m_qtPainter.setBackground(savedBrush);
-    m_qtPainter.setPen(savedPen);
+    if (m_backgroundMode == wxSOLID)
+    {
+        m_qtPainter.setBackgroundMode(Qt::OpaqueMode);
+        
+        //Save pen/brush
+        QBrush savedBrush = m_qtPainter.background();
+        QPen savedPen = m_qtPainter.pen();
+        
+        //Use text colors
+        m_qtPainter.setBackground(QBrush(m_textBackgroundColour.GetHandle()));
+        m_qtPainter.setPen(QPen(m_textForegroundColour.GetHandle()));
+        
+        //Draw
+        m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
+        
+        //Restore saved settings
+        m_qtPainter.setBackground(savedBrush);
+        m_qtPainter.setPen(savedPen);
+        
+        m_qtPainter.setBackgroundMode(Qt::TransparentMode);
+    }
+    else
+        m_qtPainter.drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
 
     //Reset to default
     ComputeScaleAndOrigin();
-
-    m_qtPainter.setBackgroundMode(Qt::TransparentMode);
 }
 
 bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,

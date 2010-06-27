@@ -245,6 +245,7 @@ void wxBitmap::SetMask(wxMask *mask)
         delete bitmapMask;
 
     bitmapMask = mask;
+    ((wxBitmapRefData *)m_refData)->m_mask = mask;
     M_PIXDATA.setMask( *mask->GetHandle() );
 }
 

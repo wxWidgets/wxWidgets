@@ -12,6 +12,7 @@
 #include "wx/brush.h"
 #include "wx/colour.h"
 #include "wx/qt/utils.h"
+#include "wx/bitmap.h"
 
 #include <QtGui/QBrush>
 
@@ -25,9 +26,6 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
         case wxBRUSHSTYLE_TRANSPARENT:
             return Qt::NoBrush;
-
-        case wxBRUSHSTYLE_STIPPLE:
-            return Qt::TexturePattern;
 
         case wxBRUSHSTYLE_BDIAGONAL_HATCH:
             return Qt::BDiagPattern;
@@ -46,47 +44,14 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
         case wxBRUSHSTYLE_VERTICAL_HATCH:
             return Qt::VerPattern;
-        
+            
+        case wxBRUSHSTYLE_STIPPLE:
         case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
         case wxBRUSHSTYLE_STIPPLE_MASK:
-            wxMISSING_IMPLEMENTATION( "wxBrush stipple masks" );
+            return Qt::TexturePattern;
             break;
     }
     return Qt::SolidPattern;
-}
-
-static wxBrushStyle ConvertBrushStyle(Qt::BrushStyle style)
-{
-    switch (style)
-    {
-        case Qt::SolidPattern:
-            return wxBRUSHSTYLE_SOLID;
-
-        case Qt::NoBrush:
-            return wxBRUSHSTYLE_TRANSPARENT;
-
-        case Qt::TexturePattern:
-            return wxBRUSHSTYLE_STIPPLE;
-
-        case Qt::BDiagPattern:
-            return wxBRUSHSTYLE_BDIAGONAL_HATCH;
-
-        case Qt::DiagCrossPattern:
-            return wxBRUSHSTYLE_CROSSDIAG_HATCH;
-
-        case Qt::FDiagPattern:
-            return wxBRUSHSTYLE_FDIAGONAL_HATCH;
-
-        case Qt::CrossPattern:
-            return wxBRUSHSTYLE_CROSS_HATCH;
-
-        case Qt::HorPattern:
-            return wxBRUSHSTYLE_HORIZONTAL_HATCH;
-
-        case Qt::VerPattern:
-            return wxBRUSHSTYLE_VERTICAL_HATCH;
-    }
-    return wxBRUSHSTYLE_SOLID;
 }
 
 //-----------------------------------------------------------------------------
@@ -112,11 +77,15 @@ class wxBrushRefData: public wxGDIRefData
         }
         
         QBrush m_qtBrush;
+
+        // To keep if mask is stippled 
+        wxBrushStyle m_style;
 };
 
 //-----------------------------------------------------------------------------
 
 #define M_BRUSHDATA ((wxBrushRefData *)m_refData)->m_qtBrush
+#define M_STYLEDATA ((wxBrushRefData *)m_refData)->m_style
 
 wxBrush::wxBrush()
 {
@@ -128,6 +97,7 @@ wxBrush::wxBrush(const wxColour& col, wxBrushStyle style )
     m_refData = new wxBrushRefData();
     M_BRUSHDATA.setColor(col.GetHandle());
     M_BRUSHDATA.setStyle(ConvertBrushStyle(style));
+    M_STYLEDATA = style;
 }
 
 #if FUTURE_WXWIN_COMPATIBILITY_3_0
@@ -136,12 +106,18 @@ wxBrush::wxBrush(const wxColour& col, int style)
     m_refData = new wxBrushRefData();
     M_BRUSHDATA.setColor(col.GetHandle());
     M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
+    M_STYLEDATA = (wxBrushStyle)style;
 }
 
 #endif
-wxBrush::wxBrush(const wxBitmap& WXUNUSED(stipple))
+wxBrush::wxBrush(const wxBitmap& stipple)
 {
-    wxMISSING_IMPLEMENTATION( "wxBrush stipples" );
+    m_refData = new wxBrushRefData();
+    M_BRUSHDATA.setTexture(*stipple.GetHandle());
+    if (stipple.GetMask() != NULL)
+        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+    else
+        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
 }
 
 
@@ -161,11 +137,18 @@ void wxBrush::SetStyle(wxBrushStyle style)
 {
     AllocExclusive();
     M_BRUSHDATA.setStyle(ConvertBrushStyle((wxBrushStyle)style));
+    M_STYLEDATA = style;
 }
 
-void wxBrush::SetStipple(const wxBitmap& WXUNUSED(stipple))
+void wxBrush::SetStipple(const wxBitmap& stipple)
 {
-    wxMISSING_IMPLEMENTATION( "wxBrush stipples" );
+    AllocExclusive();
+    M_BRUSHDATA.setTexture(*stipple.GetHandle());
+
+    if (stipple.GetMask() != NULL)
+        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
+    else
+        M_STYLEDATA = wxBRUSHSTYLE_STIPPLE;
 }
 
 
@@ -186,13 +169,17 @@ wxColour wxBrush::GetColour() const
 
 wxBrushStyle wxBrush::GetStyle() const
 {
-    return ConvertBrushStyle(M_BRUSHDATA.style());
+    return M_STYLEDATA;
 }
 
 wxBitmap *wxBrush::GetStipple() const
 {
-    wxMISSING_IMPLEMENTATION( "wxBrush stipples" );
-    return NULL;
+    QPixmap p = M_BRUSHDATA.texture();
+
+    if (p.isNull())
+        return new wxBitmap();
+    else
+        return new wxBitmap(p);
 }
 
 QBrush wxBrush::GetHandle() const
