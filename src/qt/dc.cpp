@@ -101,14 +101,15 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 
 wxCoord wxQtDCImpl::GetCharHeight() const
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
-    return wxCoord();
+    QFontMetrics metrics(m_qtPainter.font());
+    return wxCoord( metrics.height() );
 }
 
 wxCoord wxQtDCImpl::GetCharWidth() const
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
-    return wxCoord();
+    //FIXME: Returning max width, instead of average
+    QFontMetrics metrics(m_qtPainter.font());
+    return wxCoord( metrics.maxWidth() );
 }
 
 void wxQtDCImpl::DoGetTextExtent(const wxString& string,
@@ -117,7 +118,27 @@ void wxQtDCImpl::DoGetTextExtent(const wxString& string,
                              wxCoord *externalLeading,
                              const wxFont *theFont ) const
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    QFont f = m_qtPainter.font();
+    if (theFont != NULL)
+        f = theFont->GetHandle();
+
+    QFontMetrics metrics(f);
+    if (x != NULL || y != NULL)
+    {
+        QRect bounding = metrics.boundingRect( wxQtConvertString(string) );
+
+        if (x != NULL)
+            *x = bounding.width();
+        if (y != NULL)
+            *y = bounding.height();
+    }
+
+    if (descent != NULL)
+        *descent = metrics.descent();
+
+    wxMISSING_IMPLEMENTATION( "DoGetTextExtent: externalLeading" );
+    if (externalLeading != NULL)
+        *externalLeading = 0;
 }
 
 void wxQtDCImpl::Clear()
