@@ -206,7 +206,7 @@ shutil.rmtree(copyDir)
 # build any docs packages:
 doc_formats = string.split(options.docs, ",")
 doxy_dir = "docs/doxygen"
-output_dir = "out"
+output_dir = os.path.join(rootDir,"docs/doxygen/out")
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
