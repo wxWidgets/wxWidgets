@@ -22,6 +22,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/treectrl.h"
+#include "wx/uiaction.h"
+#include "testableframe.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -37,6 +39,7 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
+        CPPUNIT_TEST( ItemClick );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -45,6 +48,7 @@ private:
         CPPUNIT_TEST( HasChildren );
     CPPUNIT_TEST_SUITE_END();
 
+    void ItemClick();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -93,6 +97,11 @@ void TreeCtrlTestCase::setUp()
     m_child1 = m_tree->AppendItem(m_root, "child1");
     m_child2 = m_tree->AppendItem(m_root, "child2");
     m_grandchild = m_tree->AppendItem(m_child1, "grandchild");
+
+    m_tree->SetSize(400, 200);
+    m_tree->ExpandAll();
+    m_tree->Refresh();
+    m_tree->Update();
 }
 
 void TreeCtrlTestCase::tearDown()
@@ -180,5 +189,33 @@ void TreeCtrlTestCase::SelectItemMulti()
     m_tree->UnselectItem(m_child1);
     CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
     CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+}
+
+void TreeCtrlTestCase::ItemClick()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK);
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    m_tree->GetBoundingRect(m_child1, pos, true);
+
+    //We move in slightly so we are not on the edge
+    wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
+
+    sim.MouseMove(point);
+    sim.MouseDblClick();
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    sim.MouseClick(wxMOUSE_BTN_MIDDLE);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 }
 
