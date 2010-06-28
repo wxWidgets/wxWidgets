@@ -41,6 +41,7 @@ private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
         CPPUNIT_TEST( ItemClick );
         CPPUNIT_TEST( DeleteItem );
+        CPPUNIT_TEST( LabelEdit );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -51,6 +52,7 @@ private:
 
     void ItemClick();
     void DeleteItem();
+    void LabelEdit();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -87,7 +89,11 @@ bool TreeCtrlTestCase::ms_hiddenRoot = false;
 
 void TreeCtrlTestCase::setUp()
 {
-    m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow());
+    m_tree = new wxTreeCtrl(wxTheApp->GetTopWindow(), 
+                            wxID_ANY, 
+                            wxDefaultPosition, 
+                            wxSize(400, 200),
+                            wxTR_DEFAULT_STYLE | wxTR_EDIT_LABELS);
 
     if ( ms_multiSelect )
         m_tree->ToggleWindowStyle(wxTR_MULTIPLE);
@@ -234,4 +240,28 @@ void TreeCtrlTestCase::DeleteItem()
     //are not generated.
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_DELETE_ITEM));
+}
+
+void TreeCtrlTestCase::LabelEdit()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
+
+    wxUIActionSimulator sim;
+
+    m_tree->SetFocusedItem(m_tree->GetRootItem());
+    m_tree->EditLabel(m_tree->GetRootItem());
+
+    sim.Text("newroottext");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+
+    sim.Char(WXK_RETURN);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 }
