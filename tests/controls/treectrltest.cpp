@@ -239,7 +239,14 @@ void TreeCtrlTestCase::DeleteItem()
     //We do not test DeleteAllItems as under some versions of Windows events
     //are not generated.
 
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_DELETE_ITEM));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+
+    //We specifically disconnect here as deletion events are generated in other
+    //tests
+    m_tree->Disconnect(wxEVT_COMMAND_TREE_DELETE_ITEM,
+                       wxEventHandler(wxTestableFrame::OnEvent),
+                       NULL,
+                       frame);
 }
 
 void TreeCtrlTestCase::LabelEdit()
