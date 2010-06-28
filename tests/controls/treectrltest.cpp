@@ -45,6 +45,7 @@ private:
         CPPUNIT_TEST( KeyDown );
         CPPUNIT_TEST( CollapseExpand );
         CPPUNIT_TEST( SelectionChange );
+        CPPUNIT_TEST( Menu );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -59,6 +60,7 @@ private:
     void KeyDown();
     void CollapseExpand();
     void SelectionChange();
+    void Menu();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -358,4 +360,25 @@ void TreeCtrlTestCase::SelectionChange()
 
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGED));
     CPPUNIT_ASSERT_EQUAL(2, frame->GetEventCount(wxEVT_COMMAND_TREE_SEL_CHANGING));
+}
+
+void TreeCtrlTestCase::Menu()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    m_tree->GetBoundingRect(m_child1, pos, true);
+
+    //We move in slightly so we are not on the edge
+    wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
+
+    sim.MouseMove(point);
+    sim.MouseClick(wxMOUSE_BTN_RIGHT);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MENU));
 }
