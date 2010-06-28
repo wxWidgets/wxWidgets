@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( DeleteItem );
         CPPUNIT_TEST( LabelEdit );
         CPPUNIT_TEST( KeyDown );
+        CPPUNIT_TEST( CollapseExpand );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -55,6 +56,7 @@ private:
     void DeleteItem();
     void LabelEdit();
     void KeyDown();
+    void CollapseExpand();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -289,4 +291,38 @@ void TreeCtrlTestCase::KeyDown()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
+}
+
+void TreeCtrlTestCase::CollapseExpand()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    m_tree->CollapseAll();
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
+
+    wxUIActionSimulator sim;
+
+    wxRect pos;
+    m_tree->GetBoundingRect(m_root, pos, true);
+
+    //We move in slightly so we are not on the edge
+    wxPoint point = m_tree->ClientToScreen(pos.GetPosition()) + wxPoint(4, 4);
+
+    sim.MouseMove(point);
+    sim.MouseDblClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_EXPANDING));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_EXPANDED));
+
+    sim.MouseDblClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSING));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_COLLAPSED));
 }
