@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 7 October 2009                                                      *
+# Date : 28 June 2010                                                        *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -114,6 +114,7 @@ sockunix.obj : sockunix.cpp
 	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn sockunix.cpp
 mimetype.obj : mimetype.cpp
 threadpsx.obj : threadpsx.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn threadpsx.cpp
 utilsunx.obj : utilsunx.cpp
 utilsx11.obj : utilsx11.cpp
 joystick.obj : joystick.cpp
