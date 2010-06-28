@@ -63,7 +63,7 @@ void ButtonTestCase::Click()
                                           wxTestableFrame);
 
     //We use CountWindowEvents to reduce the typing need for Connect
-    frame->CountWindowEvents(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 
@@ -82,7 +82,7 @@ void ButtonTestCase::Disabled()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
+    EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
 

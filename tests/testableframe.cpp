@@ -14,6 +14,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/app.h"
 #include "testableframe.h"
 
 wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, "Test Frame")
@@ -50,10 +51,26 @@ int wxTestableFrame::GetEventCount(wxEventType type)
     }
 }
 
-void wxTestableFrame::CountWindowEvents(wxWindow* win, wxEventType type)
+EventCounter::EventCounter(wxWindow* win, wxEventType type) : m_type(type), 
+                                                              m_win(win)
+
 {
-    win->Connect(type,
-                 wxEventHandler(wxTestableFrame::OnEvent),
-                 NULL,
-                 this);
+    m_frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                           wxTestableFrame);
+
+    m_win->Connect(m_type,
+                   wxEventHandler(wxTestableFrame::OnEvent),
+                   NULL,
+                   m_frame);
+}
+
+EventCounter::~EventCounter()
+{
+    m_win->Disconnect(m_type,
+                      wxEventHandler(wxTestableFrame::OnEvent),
+                      NULL,
+                      m_frame);
+
+    m_frame = NULL;
+    m_win = NULL;
 }

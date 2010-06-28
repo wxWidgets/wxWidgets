@@ -74,8 +74,8 @@ void GridTestCase::CellEdit()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_CHANGING);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_CHANGED);
+    EventCounter count(m_grid, wxEVT_GRID_CELL_CHANGING);
+    EventCounter count1(m_grid, wxEVT_GRID_CELL_CHANGED);
 
     wxUIActionSimulator sim;
 
@@ -97,10 +97,10 @@ void GridTestCase::CellClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_LEFT_DCLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_RIGHT_CLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_CELL_RIGHT_DCLICK);
+    EventCounter count(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
+    EventCounter count1(m_grid, wxEVT_GRID_CELL_LEFT_DCLICK);
+    EventCounter count2(m_grid, wxEVT_GRID_CELL_RIGHT_CLICK);
+    EventCounter count3(m_grid, wxEVT_GRID_CELL_RIGHT_DCLICK);
 
 
     wxUIActionSimulator sim;
@@ -142,7 +142,7 @@ void GridTestCase::CellSelect()
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_SELECT_CELL);
+    EventCounter count(m_grid, wxEVT_GRID_SELECT_CELL);
 
     wxUIActionSimulator sim;
 
@@ -173,10 +173,10 @@ void GridTestCase::LabelClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_LABEL_RIGHT_DCLICK);
+    EventCounter count(m_grid, wxEVT_GRID_LABEL_LEFT_CLICK);
+    EventCounter count1(m_grid, wxEVT_GRID_LABEL_LEFT_DCLICK);
+    EventCounter count2(m_grid, wxEVT_GRID_LABEL_RIGHT_CLICK);
+    EventCounter count3(m_grid, wxEVT_GRID_LABEL_RIGHT_DCLICK);
 
     wxUIActionSimulator sim;
 
@@ -216,7 +216,7 @@ void GridTestCase::SortClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_grid, wxEVT_GRID_COL_SORT);
+    EventCounter count(m_grid, wxEVT_GRID_COL_SORT);
 
     wxUIActionSimulator sim;
 

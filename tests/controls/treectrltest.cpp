@@ -212,9 +212,9 @@ void TreeCtrlTestCase::ItemClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
+    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
+    EventCounter count2(m_tree, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -240,7 +240,7 @@ void TreeCtrlTestCase::DeleteItem()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->Delete(todelete);
@@ -248,13 +248,6 @@ void TreeCtrlTestCase::DeleteItem()
     //are not generated.
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
-
-    //We specifically disconnect here as deletion events are generated in other
-    //tests
-    m_tree->Disconnect(wxEVT_COMMAND_TREE_DELETE_ITEM,
-                       wxEventHandler(wxTestableFrame::OnEvent),
-                       NULL,
-                       frame);
 }
 
 void TreeCtrlTestCase::LabelEdit()
@@ -262,8 +255,8 @@ void TreeCtrlTestCase::LabelEdit()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT);
+    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_END_LABEL_EDIT);
 
     wxUIActionSimulator sim;
 
@@ -286,7 +279,7 @@ void TreeCtrlTestCase::KeyDown()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -304,10 +297,10 @@ void TreeCtrlTestCase::CollapseExpand()
 
     m_tree->CollapseAll();
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
+    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
+    EventCounter count2(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDED);
+    EventCounter count3(m_tree, wxEVT_COMMAND_TREE_ITEM_EXPANDING);
 
     wxUIActionSimulator sim;
 
@@ -339,8 +332,8 @@ void TreeCtrlTestCase::SelectionChange()
     m_tree->ExpandAll();
     m_tree->UnselectAll();
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGED);
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGING);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGED);
+    EventCounter count1(m_tree, wxEVT_COMMAND_TREE_SEL_CHANGING);
 
     wxUIActionSimulator sim;
 
@@ -367,7 +360,7 @@ void TreeCtrlTestCase::Menu()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
+    EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_MENU);
     wxUIActionSimulator sim;
 
     wxRect pos;

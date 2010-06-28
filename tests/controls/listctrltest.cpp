@@ -222,11 +222,11 @@ void ListCtrlTestCase::ItemClick()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_SELECTED); 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK);
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_ITEM_SELECTED); 
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
+    EventCounter count2(m_list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
+    EventCounter count3(m_list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
+    EventCounter count4(m_list, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK);
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
@@ -268,7 +268,7 @@ void ListCtrlTestCase::KeyDown()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_KEY_DOWN);
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_KEY_DOWN);
 
     wxUIActionSimulator sim;
 
@@ -284,8 +284,8 @@ void ListCtrlTestCase::DeleteItems()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_DELETE_ITEM);
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_DELETE_ITEM);
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS);
 
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -313,8 +313,8 @@ void ListCtrlTestCase::ColumnClick()
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_CLICK);
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_RIGHT_CLICK);
 
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
@@ -337,7 +337,7 @@ void ListCtrlTestCase::InsertItem()
    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_list, wxEVT_COMMAND_LIST_INSERT_ITEM);
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_INSERT_ITEM);
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
 

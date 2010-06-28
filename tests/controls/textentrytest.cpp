@@ -44,7 +44,7 @@ void TextEntryTestCase::TextChangeEvents()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(GetTestWindow(), wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter count(GetTestWindow(), wxEVT_COMMAND_TEXT_UPDATED);
 
     wxTextEntry * const entry = GetTestEntry();
 
@@ -178,7 +178,7 @@ void TextEntryTestCase::Editable()
     wxTextEntry * const entry = GetTestEntry();
     wxWindow * const window = GetTestWindow();
 
-    frame->CountWindowEvents(window, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter count(window, wxEVT_COMMAND_TEXT_UPDATED);
 
     window->SetFocus();
 

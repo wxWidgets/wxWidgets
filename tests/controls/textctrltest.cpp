@@ -125,7 +125,7 @@ void TextCtrlTestCase::ReadOnly()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_text, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter count(m_text, wxEVT_COMMAND_TEXT_UPDATED);
 
     m_text->SetFocus();
 
@@ -154,8 +154,8 @@ void TextCtrlTestCase::MaxLength()
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    frame->CountWindowEvents(m_text, wxEVT_COMMAND_TEXT_UPDATED);
-    frame->CountWindowEvents(m_text, wxEVT_COMMAND_TEXT_MAXLEN);
+    EventCounter count(m_text, wxEVT_COMMAND_TEXT_UPDATED);
+    EventCounter count1(m_text, wxEVT_COMMAND_TEXT_MAXLEN);
 
     m_text->SetFocus();
     m_text->SetMaxLength(10);
