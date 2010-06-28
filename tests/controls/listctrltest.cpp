@@ -49,6 +49,7 @@ private:
         CPPUNIT_TEST( DeleteItems );
         CPPUNIT_TEST( ColumnClick );
         CPPUNIT_TEST( InsertItem );
+        CPPUNIT_TEST( ColumnDrag );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -61,6 +62,7 @@ private:
     void DeleteItems();
     void ColumnClick();
     void InsertItem();
+    void ColumnDrag();
 
     wxListCtrl *m_list;
 
@@ -81,6 +83,7 @@ void ListCtrlTestCase::setUp()
 {
     m_list = new wxListCtrl(wxTheApp->GetTopWindow());
     m_list->SetWindowStyle(wxLC_REPORT);
+    m_list->SetSize(400, 200);
 }
 
 void ListCtrlTestCase::tearDown()
@@ -353,3 +356,31 @@ void ListCtrlTestCase::InsertItem()
     m_list->ClearAll();
 }
 
+void ListCtrlTestCase::ColumnDrag()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_list, wxEVT_COMMAND_LIST_COL_BEGIN_DRAG);
+    EventCounter count1(m_list, wxEVT_COMMAND_LIST_COL_DRAGGING);
+    EventCounter count2(m_list, wxEVT_COMMAND_LIST_COL_END_DRAG);
+
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertColumn(1, "Column 1");
+    m_list->InsertColumn(2, "Column 2");
+    m_list->Update();
+    m_list->SetFocus();
+
+    wxUIActionSimulator sim;
+
+    wxPoint pt = m_list->ClientToScreen(wxPoint(m_list->GetColumnWidth(0), 5));
+
+    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_BEGIN_DRAG));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_DRAGGING));
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
+
+    m_list->ClearAll();
+}
