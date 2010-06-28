@@ -40,6 +40,7 @@ public:
 private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
         CPPUNIT_TEST( ItemClick );
+        CPPUNIT_TEST( DeleteItem );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -49,6 +50,7 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void ItemClick();
+    void DeleteItem();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -219,3 +221,17 @@ void TreeCtrlTestCase::ItemClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 }
 
+void TreeCtrlTestCase::DeleteItem()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_DELETE_ITEM);
+
+    wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
+    m_tree->Delete(todelete);
+    //We do not test DeleteAllItems as under some versions of Windows events
+    //are not generated.
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_DELETE_ITEM));
+}
