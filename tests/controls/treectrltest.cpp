@@ -42,6 +42,7 @@ private:
         CPPUNIT_TEST( ItemClick );
         CPPUNIT_TEST( DeleteItem );
         CPPUNIT_TEST( LabelEdit );
+        CPPUNIT_TEST( KeyDown );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -53,6 +54,7 @@ private:
     void ItemClick();
     void DeleteItem();
     void LabelEdit();
+    void KeyDown();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -271,4 +273,20 @@ void TreeCtrlTestCase::LabelEdit()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+}
+
+void TreeCtrlTestCase::KeyDown()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    frame->CountWindowEvents(m_tree, wxEVT_COMMAND_TREE_KEY_DOWN);
+
+    wxUIActionSimulator sim;
+
+    m_tree->SetFocus();
+    sim.Text("aAbB");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
 }
