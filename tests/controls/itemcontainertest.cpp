@@ -1,0 +1,151 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        tests/controls/itemcontainertest.cpp
+// Purpose:     wxItemContainer unit test
+// Author:      Steven Lamerton
+// Created:     2010-06-29
+// RCS-ID:      $Id$
+// Copyright:   (c) 2010 Steven Lamerton
+///////////////////////////////////////////////////////////////////////////////
+
+#include "testprec.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/ctrlsub.h"
+#endif // WX_PRECOMP
+
+#include "itemcontainertest.h"
+
+void ItemContainerTestCase::Append()
+{
+    wxItemContainer * const container = GetContainer();
+
+    container->Append("item 0");
+
+    CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
+
+    wxArrayString testitems;
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+
+    container->Append(testitems);
+
+    CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(2));
+
+    wxString arritems[] = { "item 3", "item 4" };
+
+    container->Append(2, arritems);
+
+    CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(4));
+
+    container->Clear();
+}
+
+void ItemContainerTestCase::Insert()
+{
+    wxItemContainer * const container = GetContainer();
+
+    container->Insert("item 0", 0);
+
+    CPPUNIT_ASSERT_EQUAL("item 0", container->GetString(0));
+
+    wxArrayString testitems;
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+
+    container->Insert(testitems, 0);
+
+    CPPUNIT_ASSERT_EQUAL("item 1", container->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("item 2", container->GetString(1));
+
+    wxString arritems[] = { "item 3", "item 4" };
+
+    container->Insert(2, arritems, 1);
+
+    CPPUNIT_ASSERT_EQUAL("item 3", container->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("item 4", container->GetString(2));
+
+    container->Clear();
+}
+
+void ItemContainerTestCase::Count()
+{
+    wxItemContainer * const container = GetContainer();
+
+    CPPUNIT_ASSERT(container->IsEmpty());
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+    testitems.Add("item 3");
+
+    container->Append(testitems);
+
+    CPPUNIT_ASSERT(!container->IsEmpty());
+    CPPUNIT_ASSERT_EQUAL(4, container->GetCount());
+
+    container->Delete(0);
+
+    CPPUNIT_ASSERT_EQUAL(3, container->GetCount());
+
+    container->Delete(0);
+    container->Delete(0);
+
+    CPPUNIT_ASSERT_EQUAL(1, container->GetCount());
+
+    container->Insert(testitems, 1);
+
+    CPPUNIT_ASSERT_EQUAL(5, container->GetCount());
+
+    container->Clear();
+}
+
+void ItemContainerTestCase::Selection()
+{
+    wxItemContainer * const container = GetContainer();
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+    testitems.Add("item 3");
+
+    container->Append(testitems);
+
+    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("", container->GetStringSelection());
+
+    container->SetSelection(1);
+
+    CPPUNIT_ASSERT_EQUAL(1, container->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 1", container->GetStringSelection());
+
+    container->SetStringSelection("item 2");
+
+    CPPUNIT_ASSERT_EQUAL(2, container->GetSelection());
+    CPPUNIT_ASSERT_EQUAL("item 2", container->GetStringSelection());
+
+    container->Clear();
+}
+
+void ItemContainerTestCase::FindString()
+{
+   wxItemContainer * const container = GetContainer();
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+    testitems.Add("item 3");
+
+    container->Append(testitems);
+
+    CPPUNIT_ASSERT_EQUAL(1, container->FindString("item 1"));
+    CPPUNIT_ASSERT_EQUAL(1, container->FindString("ITEM 1"));
+    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->FindString("ITEM 1", true));
+
+    container->Clear();
+}

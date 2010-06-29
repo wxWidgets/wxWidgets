@@ -123,10 +123,13 @@
             graphics/measuring.cpp
             config/config.cpp
             controls/buttontest.cpp
+            controls/choicetest.cpp
             controls/comboboxtest.cpp
             controls/grid.cpp
             controls/headerctrltest.cpp
+            controls/itemcontainertest.cpp
             controls/label.cpp
+            controls/listboxtest.cpp
             controls/listctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
