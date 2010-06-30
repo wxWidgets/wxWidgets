@@ -34,7 +34,10 @@ private:
 
     CPPUNIT_TEST_SUITE( ListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
+        CPPUNIT_TEST( Sort );
     CPPUNIT_TEST_SUITE_END();
+
+    void Sort();
 
     wxListBox* m_list;
 
@@ -55,5 +58,34 @@ void ListBoxTestCase::setUp()
 void ListBoxTestCase::tearDown()
 {
     wxDELETE(m_list);
+}
+
+void ListBoxTestCase::Sort()
+{
+    wxDELETE(m_list);
+    m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY, 
+                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxLB_SORT);
+
+    wxArrayString testitems;
+    testitems.Add("aaa");
+    testitems.Add("Aaa");
+    testitems.Add("aba");
+    testitems.Add("aaab");
+    testitems.Add("aab");
+    testitems.Add("AAA");
+
+    m_list->Append(testitems);
+
+    CPPUNIT_ASSERT_EQUAL("AAA", m_list->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_list->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("aaa", m_list->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_list->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_list->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_list->GetString(5));
+
+    m_list->Append("a");
+
+    CPPUNIT_ASSERT_EQUAL("a", m_list->GetString(0));
 }
 
