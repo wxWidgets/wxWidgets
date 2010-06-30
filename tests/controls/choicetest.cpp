@@ -34,7 +34,10 @@ private:
 
     CPPUNIT_TEST_SUITE( ChoiceTestCase );
         wxITEM_CONTAINER_TESTS();
+        CPPUNIT_TEST( Sort );
     CPPUNIT_TEST_SUITE_END();
+
+    void Sort();
 
     wxChoice* m_choice;
 
@@ -55,4 +58,33 @@ void ChoiceTestCase::setUp()
 void ChoiceTestCase::tearDown()
 {
     wxDELETE(m_choice);
+}
+
+void ChoiceTestCase::Sort()
+{
+    wxDELETE(m_choice);
+    m_choice = new wxChoice(wxTheApp->GetTopWindow(), wxID_ANY, 
+                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxCB_SORT);
+
+    wxArrayString testitems;
+    testitems.Add("aaa");
+    testitems.Add("Aaa");
+    testitems.Add("aba");
+    testitems.Add("aaab");
+    testitems.Add("aab");
+    testitems.Add("AAA");
+
+    m_choice->Append(testitems);
+
+    CPPUNIT_ASSERT_EQUAL("AAA", m_choice->GetString(0));
+    CPPUNIT_ASSERT_EQUAL("Aaa", m_choice->GetString(1));
+    CPPUNIT_ASSERT_EQUAL("aaa", m_choice->GetString(2));
+    CPPUNIT_ASSERT_EQUAL("aaab", m_choice->GetString(3));
+    CPPUNIT_ASSERT_EQUAL("aab", m_choice->GetString(4));
+    CPPUNIT_ASSERT_EQUAL("aba", m_choice->GetString(5));
+
+    m_choice->Append("a");
+
+    CPPUNIT_ASSERT_EQUAL("a", m_choice->GetString(0));
 }
