@@ -16,6 +16,10 @@
 
 #include "itemcontainertest.h"
 
+//----------------------------------------------------------------
+//Please also update tests in CombeBoxTestCase when updating below
+//----------------------------------------------------------------
+
 void ItemContainerTestCase::Append()
 {
     wxItemContainer * const container = GetContainer();
