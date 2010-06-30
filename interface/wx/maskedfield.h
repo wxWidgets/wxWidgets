@@ -2,7 +2,7 @@
 // Name:        wx/maskedField.h
 // Purpose:     interface of wxMaskedField
 // Author:      Julien Weinzorn
-// Created:        2010-05-24
+// Created:     2010-05-24
 // RCS-ID:      $Id: ??????????? $
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,19 @@ public:
                  , const bool  autoSelect = false,
                  , const wxUniChar& groupChar = '', const wxUniChar& decimalPoint = '.'
                  , const bool useParensForNegatives = false);
-    
+
+    /**
+        Used by the constructor to create a new MaskedField
+        @return true if the mask is valid else false
+    */
+    bool Create(   const wxString& mask        
+                 , const wxString& formatCodes  = wxDEFAULT_FORMAT_CODES
+                 , const wxString& defaultValue = wxDEFAULT_VALUE
+                 , const wxArrayString& choices = wxArrayString()
+                 , const bool  autoSelect = false
+                 , const wxChar groupChar = ' ',const wxChar decimalPoint = '.'
+                 , const bool useParensForNegatives = false);
+                 
     /**
         Indicates if the string is considered empty for the field
         @param string
@@ -103,13 +115,32 @@ public:
         @return if the list is added or not.
     */
     bool AddChoices(const wxArrayString& choices); 
-
-
+    
+    /**
+        This function return the possible user choice according to the index
+        @param index index of desired choice
+        @return the choice if the index is valid else wxEmptyString
+    */
+    wxString GetChoice(unsigned int index);
+ 
+    /**
+        this method return the possible user choice number
+        @return number of possible user choice
+    */
+    unsigned int GetNumberOfChoices();
+    
     /**
         Return the default value.
         @return the default value.
     */
     wxString GetDefaultValue() const; 
+    
+    /**
+        Set the default value wich is get by the associated @see wxTextCtrl
+        @param defaultValue the new default value
+        @return true if the default value is valid according to the mask else false
+    */
+    bool SetDefaultValue(const wxString& defaultValue);
 
     /**
         This method set the mask. It control to if the choices is already 
@@ -122,10 +153,12 @@ public:
         @return the current mask.
     */
     wxString GetMask() const;
+  
     /**
         @return the current format codes.
     */
     wxString GetFormatCodes() const;
+  
     /**
         @return the current group char.
     */
@@ -141,6 +174,29 @@ public:
     */
     wxArrayString GetChoices() const;
 
+    /**
+        return the next choice in user choices list. If the current choice is the last,
+        the next choice will be the first. If it is no user choice list, this method
+        return wxEmptyString
+        @return the next choice
+    */
+    wxString GetNextChoices();
+    
+    /**
+        return the current choice, if it is no choice, this
+        method return wxEmptyString 
+        @return the current choice
+    */
+    wxString GetCurrentChoices();
+    
+    /**
+        return the previous choice, if it is no choice, this
+        method return wxEmptyString. If the current choice is the first, 
+        thismethod return the last choice
+        @return the previous choice
+    */    
+    wxString GetPreviousChoices();
+    
     /**
         test if parens is used.
         @return if parens is used.
@@ -161,8 +217,7 @@ public:
         @param string the string with the mask.
         @return a new string without the mask.
     */
-    wxString GetPlainValue(const wxString& string);
-   
+    wxString GetPlainValue(const wxString& string);  
 
     /**
         This method test if a character is valid compared in a maskChar.
@@ -172,5 +227,12 @@ public:
         @return if the character is valid from the mask.
     */
     bool IsCharValid(const wxChar maskChar, const wxChar character) const;
-
+    
+    /**
+        return the empty mask. An empty mask is a mask without the 
+        char choice example "(###) ###-####" -> (   )    -    "
+        
+        @return the empty value
+     */
+    wxString GetEmptyMask() const;
 }
