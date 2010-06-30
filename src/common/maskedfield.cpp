@@ -66,6 +66,7 @@ bool wxMaskedField::Create( const wxString& mask
 
     for(it = 0; it < mask.Len(); it++)
     {
+        //Mask beginning with { or } is invalid
         if(it == 0 && (mask[it] == '{' || mask[it] == '}'))
         {
             m_mask = wxT("");
@@ -105,7 +106,7 @@ bool wxMaskedField::Create( const wxString& mask
                 indexOfBackAcc = it;
                 wxString tmp;
 
-                tmp = mask.SubString(indexOfAcc + 1 , indexOfBackAcc -1) ;
+                tmp = mask.Mid(indexOfAcc + 1 , indexOfBackAcc - indexOfAcc - 1) ;
 
                 if( tmp.ToULong(&numberOfOccurences))
                 {
@@ -163,6 +164,10 @@ bool wxMaskedField::Create( const wxString& mask
     return res;
 }
 
+wxString wxMaskedField::ChangeAccolade(const wxString& string)
+{
+}
+
 bool wxMaskedField::IsEmpty(const wxString& string) const
 {
     return string.Cmp(GetEmptyMask()) == 0 ;
@@ -195,7 +200,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
     wxString verification;
     unsigned int it;
     unsigned int itMask;
-    bool tmp = false; //FIXME change name
+    bool format = false;
 
     if(string.Len() > m_mask.Len())
         return string;
@@ -217,31 +222,31 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             }
             else
             {
-                if(m_formatCodes.Contains(wxT("!")))
+                if(m_formatCodes.Find(wxT("!")))
                 {
                     if(IsLowerCase(string[it]) && (m_mask[itMask] == 'A'
                        || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
                        || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
                     {
-                        res << string.SubString(it, it).Upper();
-                        tmp = true;
+                        res << string.Mid(it, 1).Upper();
+                        format = true;
                     }
                 }
-                else if(m_formatCodes.Contains(wxT("^")))
+                else if(m_formatCodes.Find(wxT("^")))
                 {
                     if(IsUpperCase(string[it]) && (m_mask[itMask] == 'a'
                        || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
                        || m_mask[itMask] == 'X' || m_mask[itMask] == '*'))
                     {
-                        res << string.SubString(it, it).Lower();
-                        tmp = true;
+                        res << string.Mid(it, 1).Lower();
+                        format = true;
                     }
                 }
                 
-                if(m_formatCodes.Contains(wxT("_")) && string[it] == ' ')
+                if(m_formatCodes.Find(wxT("_")) && string[it] == ' ')
                 {
                     res << ' ';
-                    tmp = true;
+                    format = true;
                 }
             
             } 
@@ -329,7 +334,7 @@ bool wxMaskedField::IsValid(const wxString& string) const
         }
         else if(!IsCharValid(m_mask[itMask], string[it]))
         {
-            if(m_formatCodes.Contains(wxT("_")))
+            if(m_formatCodes.Find(wxT("_")))
             {
                 if(string[it] != ' ')
                 {
@@ -384,7 +389,7 @@ wxString wxMaskedField::GetChoice(unsigned int index)
 {
     wxString res;
 
-    if(index > m_choices.GetCount() || index < 0)
+    if(index > m_choices.GetCount())
         res = wxEmptyString;
     else
         res = m_choices[index];
@@ -449,16 +454,21 @@ wxString wxMaskedField::GetPreviousChoices()
     return res;
 }
 
-
-void wxMaskedField::SetMask(const wxString& mask)
+//FIXME Use this with caution, {  and |, verification
+bool wxMaskedField::SetMask(const wxString& mask)
 {
+
     m_mask = mask;
     unsigned int it;
+    bool res = true
+    
+    if(mask.Find('|'))
+        res = false;
 
-    if(!IsValid(m_defaultValue))
+    if(!IsValid(m_defaultValue) && res)
         m_defaultValue = wxDEFAULT_VALUE;
 
-    for(it = 0; it < m_choices.Count(); it++)
+    for(it = 0; it < m_choices.Count() && res; it++)
     {
         if(!IsValid(m_choices[it]))
         {
@@ -466,6 +476,8 @@ void wxMaskedField::SetMask(const wxString& mask)
             it --;
         }
     }
+    
+    return true
 
 }
 

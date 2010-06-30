@@ -149,8 +149,27 @@ public:
     */
     wxMaskedEdit( const wxString& mask , const wxArrayString& formatCode = NULL
                 , const wxString& defaultValue  = wxEmptyString);
+
+    /**
+        Destructor, destroying the mask
+    */
+    ~wxMaskedEdit();   
     
-    
+    /**
+        Create a new wxMaskedEdit, this function is used by the constructor
+    */
+    void Create(  const wxString& mask 
+                , const wxArrayString& formatCode = wxArrayString()
+                , const wxString& defaultValue  = wxEmptyString);    
+
+    /**
+        this function apply the format code to a string ( only ! and ^)
+        if the string is not valid and the format string to, this method
+        return the string, else it return the format string.
+        @param string the initial string
+        @return the format string or the string
+    */
+    wxString ApplyFormatCodes(const wxString& string);    
     
     /**
         Return the value of the wxTextEntry associated
@@ -209,6 +228,13 @@ public:
         @eturn the default value. 
     */
     wxString GetDefaultValue() const;
+
+    /**
+        set the default value
+        @param the new default value
+        @return true if the new default value is corect and corectly set
+    */
+    bool SetDefaultValue(const wxString& defaultValue);
     
     /**
         This methods return the list of possible choices. If there is more than one field
@@ -234,6 +260,47 @@ public:
     bool AddChoices(const wxArrayString& choices);  
 
     /**
+        Return the choice according to the index.
+        If the index is out of bound, this method return
+        wxEmptyString. This method can be used only with
+        single field mask, else it return only the first field
+        choice
+        @param index the index
+        @return the choice according to the index or wxEmptyString
+    */
+    wxString GetChoice(unsigned int index);
+
+    /**
+        Return the next choice in user choices list. If the current choice is the last,
+        the next choice will be the first. If it is no user choice list, this method
+        return wxEmptyString. This method can be used only with
+        single field mask, else it return only the first fiield
+        choice
+        @return the next choice
+    */    
+    wxString GetNextChoices() const;
+ 
+    /**
+        Return the current choice in user choices list. 
+        If it is no user choice list, this method
+        return wxEmptyString. This method can be used only with
+        single field mask, else it return only the first field
+        choice
+        @return the current choice
+    */   
+    wxString GetCurrentChoices() const;
+  
+    /**
+        Return the previous choice in user choices list. If the current choice is the first,
+        the previous choice will be the last. If it is no user choice list, this method
+        return wxEmptyString. This method can be used only with
+        single field mask, else it return only the first fiield
+        choice
+        @return the next choice
+    */      
+    wxString GetPreviousChoices() const;
+   
+    /**
         Provide the number of field
         @return return the number of fields or -1 if it is a single field
     */
@@ -252,12 +319,31 @@ public:
             the new colour
     */
     void SetInvalidBackgroundColour(const wxColour& colour);       
+    
     /**
         Change the control background colour when it is valid.
         @param colour 
             the new colour
     */
     void SetValidBackgroundColour(const wxColour& colour);
+
+    /**
+        return the empty color, it is used by the associated @see wxTextCtrl
+        @return the empty colour
+    */
+    wxColour GetEmptyBackgroundColour() const;
+    
+    /**
+        return the invalid color, it is used by the associated @see wxTextCtrl
+        @return the invalid colour
+    */     
+    wxColour GetInvalidBackgroundColour() const;       
+    
+    /**
+        return the valid color, it is used by the associated @see wxTextCtrl
+        @return the valid colour
+    */
+    wxColour GetValidBackgroundColour() const;    
     
     /**
         Set the mask in a field to a new value. This operation coud be change the choices. 
@@ -314,6 +400,52 @@ public:
         @return return if the choices are added or not
     */
     bool AddChoices(int fieldIndex, const wxArrayString& choices);  
-    
+ 
+    /**
+        Return the next choice in user choices list. If the current choice is the last,
+        the next choice will be the first. If it is no user choice list, this method
+        return wxEmptyString. This method can be used with
+        multiple fields. If the fieldIndex is out of bound, this method return wxEmptyString
+        choice.
         
+        @param the fieldIndex
+        @return the next choice or wxEmptyString
+    */    
+    wxString GetNextChoices(unsigned int fieldIndex) const;
+    
+    /**
+        Return the current choice in user choices list. If it is no user choice list, this method
+        return wxEmptyString. This method can be used with
+        multiple fields. If the fieldIndex is out of bound, this method return wxEmptyString
+        choice.
+        
+        @param the fieldIndex
+        @return the current choice or wxEmptyString
+    */           
+    wxString GetCurrentChoices(unsigned int fieldIndex) const;
+    
+    /**
+        Return the previous choice in user choices list. If the current choice is the first,
+        the previous choice will be the last. If it is no user choice list, this method
+        return wxEmptyString. This method can be used with
+        multiple fields. If the fieldIndex is out of bound, this method return wxEmptyString
+        choice.
+        
+        @param the fieldIndex
+        @return the next choice or wxEmptyString
+    */
+    wxString GetPreviousChoices(unsigned int fieldIndex) const;
+
+    /**
+        ???????????????????????????????
+    */
+    unsigned int NumberOfChoices();
+
+    /**
+        return the empty mask. An empty mask is a mask without the 
+        char choice example "(###) ###-####" -> "(   )    -    "
+        
+        @return the empty value
+     */
+    wxString GetEmptyMask() const;        
 }; 

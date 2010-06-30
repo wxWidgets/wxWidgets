@@ -66,7 +66,7 @@ void wxMaskedEdit::Create( const wxString& mask
 {
     wxString tmp;
 
-    if(!mask.Contains('|'))
+    if(!mask.Find('|'))
     {
         m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
         m_maskValue = mask;
@@ -251,8 +251,8 @@ bool wxMaskedEdit::SetMask( const wxString& mask)
 {
     bool res = true;
 
-    if(m_mask.GetCount() == 1 && !mask.Contains(wxT("|")))
-        m_mask[0]->SetMask(mask);
+    if(m_mask.GetCount() <= 1 && !mask.Find(wxT("|")))
+        res = m_mask[0]->SetMask(mask);
     else
         res = false;
 
@@ -276,10 +276,11 @@ wxString wxMaskedEdit::GetMask() const
 
 wxString wxMaskedEdit::GetFormatCode() const
 {
-    if(m_mask.GetCount() == 1)
-        return m_mask[0]->GetFormatCodes();
-    else
-        return wxEmptyString;
+    wxString res = wxEmptyString;
+    if(m_mask.GetCount() <= 1)
+        res = m_mask[0]->GetFormatCodes();
+    
+    return res;
 }
 
 wxString wxMaskedEdit::GetDefaultValue() const

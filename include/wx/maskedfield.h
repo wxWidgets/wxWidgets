@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 // Name:        wx/maskedfield.h
 // Purpose:
 // Author:      Julien Weinzorn
@@ -60,7 +60,7 @@ public:
 
     bool SetDefaultValue(const wxString& defaultValue);
 
-    void SetMask(const wxString& mask);
+    bool SetMask(const wxString& mask);
 
     wxString GetMask() const;
 
@@ -119,5 +119,7 @@ private:
     bool IsLowerCase(const wxChar character) const;    
     bool IsUpperCase(const wxChar character) const;
     bool IsPunctuation(const wxChar character) const;
+    wxString ChangeAccolade(const wxString& string)
+
 };
 #endif

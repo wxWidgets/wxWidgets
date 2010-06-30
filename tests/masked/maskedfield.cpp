@@ -2,7 +2,7 @@
 // Name:        tests/filename/maskedfield.cpp
 // Purpose:     wxMaskedField unit test
 // Author:      Julien Weinzorn
-// Created:     2004-07-25
+// Created:     20***-07-25
 // RCS-ID:      $Id: ??????????????? $
 // Copyright:   (c) 2010 Julien Weinzorn
 ///////////////////////////////////////////////////////////////////////////////
@@ -27,30 +27,6 @@
 
 #include "wx/maskedfield.h"
 
-// ----------------------------------------------------------------------------
-// test data
-// ----------------------------------------------------------------------------
-
-static struct TestMaskedField
-{
-    wxString test;
-    wxString mask;        
-    wxString formatCode;
-    wxString defaultValue;
-    wxArrayString choices;
-    bool autoSelect;
-    wxChar groupChar;
-    wxChar decimalPoint;
-    bool useParensForNegatives;
-
-}
-masked[]=
-    {
-        //various mask and different format code
-        {wxT("127.000.000.001") , wxT("###.###.###.###") , wxT("F") , wxT(" "), wxArrayString(), true , ' ' , '.', false},
-        {wxT("127.AVc.bAc")     , wxT("###.CCC.aAC")     , wxT("F!"), wxT(" "), wxArrayString(), true , ' ', '.', false},
-        {wxT("12#.AC?fA")       , wxT("##\\#.C\\C?a\\A") , wxT("F") , wxT(" "), wxArrayString(), false, ' ', '.', false},
-    };
 
 // ----------------------------------------------------------------------------
 // test class
@@ -66,9 +42,7 @@ private:
         CPPUNIT_TEST( TestCreate      );
         CPPUNIT_TEST( TestIsCharValid );
         CPPUNIT_TEST( TestIsValid     );
-#if 0
         CPPUNIT_TEST( TestIsEmpty     );
-#endif
         CPPUNIT_TEST( TestApplyFormatsCode );
         CPPUNIT_TEST( TestAddChoice        );
         CPPUNIT_TEST( TestAddChoices       );
@@ -114,6 +88,7 @@ void MaskedFieldTestCase::TestCreate()
         {wxT("###.")    , wxT("###.")    , true},
         {wxT("Aa*\\*")  , wxT("Aa*\\*")  , true},
         {wxT("A{10}##") , wxT("AAAAAAAAAA##") , true},
+        {wxT("Aa\\")    , wxT("")        , false},
         {wxT("{43}A#")  , wxT("")        , false},
         {wxT("#{23A}*") , wxT("")        , false},
         {wxT("\\*{23}#"), wxT("")        , false},
@@ -131,8 +106,7 @@ void MaskedFieldTestCase::TestCreate()
         wxMaskedField mask(listTest[n].mask);
     
         CPPUNIT_ASSERT_EQUAL( listTest[n].result, mask.Create(listTest[n].mask));
-        CPPUNIT_ASSERT(listTest[n].maskRes.Cmp(mask.GetMask()) == 0); 
-    
+        CPPUNIT_ASSERT(listTest[n].maskRes.Cmp(mask.GetMask()) == 0);    
     }
 
 }
@@ -265,8 +239,6 @@ void MaskedFieldTestCase::TestIsEmpty()
     static struct TestEmpty
     {
         wxString mask;      
-        wxString formatCodes;
-        wxString defaultValue;
         wxString test;
         bool result;
 
@@ -274,17 +246,20 @@ void MaskedFieldTestCase::TestIsEmpty()
     }
     maskedEmpty[]=
     {
-        {wxT("###.###.###.###"), wxT(""),   wxT("...")            , wxT("...")            , false},
-        {wxT("###.###.###.###"), wxT("_"),  wxT("...")            , wxT("...")            , false},
-        {wxT("###.###.###.###"), wxT("F_"), wxT("   .   .   .   "), wxT("   .   .   .   "), true},
-        {wxT("###.###.###.###"), wxT("_"),  wxT("1  .2  .123.111"), wxT("1  .2  .123.111"), true },
-        {wxT("###.###.###.###"), wxT(""),   wxT("123.000.000.111"), wxT("123.000.000.111"), true},
+        {wxT("###.###.###.###"), wxT("...")            , false},
+        {wxT("###.###.###.###"), wxT("   .   .   .   "), true },
+        {wxT("###.###.###.###"), wxT("1  .2  .123.111"), false},
+        {wxT("###.###.###.###"), wxT("123.000.000.111"), false},
+        
+        {wxT("\\CAA--#{3}\\*"} , wxT("\\CAA--#{3}\\*") , false},
+        {wxT("\\CAA--#{3}\\*"} , wxT("CAF--123*")      , false},
+        {wxT("\\CAA--#{3}\\*"} , wxT("C  --   *")      , true},
     };
 
 
     for(unsigned int n = 0; n< WXSIZEOF(maskedEmpty); n++)
     {
-        wxMaskedField mask(maskedEmpty[n].mask, maskedEmpty[n].formatCodes, maskedEmpty[n].defaultValue); 
+        wxMaskedField mask(maskedEmpty[n].mask, wxT("F_")); 
         CPPUNIT_ASSERT_EQUAL( maskedEmpty[n].result , mask.IsEmpty(maskedEmpty[n].test) );    
     }
 
@@ -409,7 +384,7 @@ void MaskedFieldTestCase::TestSetDefaultValue()
         {wxT("###.AAA.aC\\&")   , wxT("F!")  , wxT("111.aaa.aZ&")   , true},
         {wxT("#XX.")            , wxT("F!_") , wxT("3rt.")          , true},
         {wxT("###.")            , wxT("F_")  , wxT("1.")            , false},
-        {wxT("###")             , wxT("F")  , wxT("111")            , true},
+        {wxT("###")             , wxT("F")   , wxT("111")           , true},
 
     };
 
@@ -440,10 +415,10 @@ void MaskedFieldTestCase::TestGetPlainValue()
     }
     maskedPlainValue[]=
     {
-        {wxT("###.###.###.###") , wxT("F_")  , wxT("1.2.3.4"), wxT("1.2.3.4")},
+        {wxT("###.###.###.###") , wxT("F_")  , wxT("1.2.3.4")    , wxT("1.2.3.4")},
         {wxT("###.AAA.aC\\&")   , wxT("F!")  , wxT("111.aaa.aZ&"), wxT("111AAAaZ")},
-        {wxT("#XX."), wxT("F!_"), wxT("3rt."), wxT("3rt")},
-        {wxT("###."), wxT("F_") , wxT("1.")  , wxT("1.")}
+        {wxT("#XX.")            , wxT("F!_") , wxT("3rt.")       , wxT("3rt")},
+        {wxT("###.")            , wxT("F_")  , wxT("1.")         , wxT("1.")}
     };
 
 
@@ -457,8 +432,6 @@ void MaskedFieldTestCase::TestGetPlainValue()
         res = mask.GetPlainValue(tmp); 
         CPPUNIT_ASSERT( res.Cmp(maskedPlainValue[n].result) == 0 );    
     }
-
-
 }
 
 void MaskedFieldTestCase::TestGetEmptyedMask()
