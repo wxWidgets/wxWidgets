@@ -57,86 +57,13 @@ bool wxMaskedField::Create( const wxString& mask
                  , const bool useParensForNegatives)
 {
     unsigned int it;
-    unsigned int indexOfAcc = 0;
-    unsigned int indexOfBackAcc = 0;
-    unsigned long numberOfOccurences = 0;
     bool res = true;
 
-    m_mask = wxT("");
+    m_mask = ChangeAccolade(mask);
 
-    for(it = 0; it < mask.Len(); it++)
-    {
-        //Mask beginning with { or } is invalid
-        if(it == 0 && (mask[it] == '{' || mask[it] == '}'))
-        {
-            m_mask = wxT("");
-            it = mask.Len();
-            res = false;
-        }
-        else if(mask[it] == '{')
-        {
-            if(indexOfAcc == 0 && indexOfBackAcc == 0 
-            && mask[it -1] != '\\' 
-            &&( mask[it-1] == 'a' || mask[it-1] == 'A'
-             || mask[it-1] == 'N' || mask[it-1] == 'C' 
-             || mask[it-1] == '#' || mask[it-1] == '&' 
-             || mask[it-1] == 'X' || mask[it-1] == '*'))
-            {
-                if(it == 1 || m_mask[it -2] != '\\')
-                    indexOfAcc = it;
-            }
-            else
-            {
-                m_mask = wxT("");
-                it = mask.Len();
-                res = false;
-            }
-        }
-        else if(mask[it] == '}')
-        {
-            if(mask[it - 1] != '\\' 
-            && (indexOfAcc == 0 || indexOfBackAcc != 0))
-            {
-                m_mask = wxT("");
-                it = mask.Len();
-                res = false;
-            }
-            else
-            {
-                indexOfBackAcc = it;
-                wxString tmp;
-
-                tmp = mask.Mid(indexOfAcc + 1 , indexOfBackAcc - indexOfAcc - 1) ;
-
-                if( tmp.ToULong(&numberOfOccurences))
-                {
-                    for(unsigned int i = 1; i < numberOfOccurences; i++)
-                    {
-                        m_mask << mask[indexOfAcc - 1];
-                    }   
-                    indexOfAcc     = 0;
-                    indexOfBackAcc = 0;
-                }
-                else
-                {
-                    m_mask = wxT("");
-                    it = mask.Len();
-                    res = false;
-                }
-            }
-        }
-        else if(indexOfAcc == 0)
-        {
-            m_mask << mask[it];
-        }
-    }
-
-    if(indexOfAcc != 0 || indexOfAcc != 0)
-    {
-        m_mask = wxT("");
+    if(mask.Cmp(wxEmptyString) != 0 
+    && ChangeAccolade(mask).Cmp(wxEmptyString) == 0)
         res = false;
-    }
-
 
     m_formatCodes  = formatCodes;
     m_autoSelect   = autoSelect;
@@ -150,7 +77,7 @@ bool wxMaskedField::Create( const wxString& mask
     }
     else
     {
-        m_defaultValue = wxT(" ");
+        m_defaultValue = GetEmptyMask();
     }
     
     for(it = 0; it < choices.size(); it++)
@@ -164,8 +91,85 @@ bool wxMaskedField::Create( const wxString& mask
     return res;
 }
 
-wxString wxMaskedField::ChangeAccolade(const wxString& string)
+wxString wxMaskedField::ChangeAccolade(const wxString& mask)
 {
+    unsigned int it;
+    unsigned int indexOfAcc = 0;
+    unsigned int indexOfBackAcc = 0;
+    unsigned long numberOfOccurences = 0;
+    wxString res = wxEmptyString;
+
+    for(it = 0; it < mask.Len(); it++)
+    {
+        //Mask beginning with { or } is invalid
+        if(it == 0 && (mask[it] == '{' || mask[it] == '}'))
+        {
+            res = wxEmptyString;
+            it = mask.Len();
+        }
+        else if(mask[it] == '{')
+        {
+            if(indexOfAcc == 0 && indexOfBackAcc == 0 
+            && mask[it -1] != '\\' 
+            &&( mask[it-1] == 'a' || mask[it-1] == 'A'
+             || mask[it-1] == 'N' || mask[it-1] == 'C' 
+             || mask[it-1] == '#' || mask[it-1] == '&' 
+             || mask[it-1] == 'X' || mask[it-1] == '*'))
+            {
+                if(it == 1 || mask[it -2] != '\\')
+                    indexOfAcc = it;
+            }
+            else
+            {
+                res = wxEmptyString;
+                it = mask.Len();
+
+            }
+        }
+        else if(mask[it] == '}')
+        {
+            if(mask[it - 1] != '\\' 
+            && (indexOfAcc == 0 || indexOfBackAcc != 0))
+            {
+                res = wxEmptyString;
+                it = mask.Len();
+            }
+            else
+            {
+                indexOfBackAcc = it;
+                wxString tmp;
+
+                tmp = mask.Mid(indexOfAcc + 1 , indexOfBackAcc - indexOfAcc - 1) ;
+
+                if( tmp.ToULong(&numberOfOccurences))
+                {
+                    for(unsigned int i = 1; i < numberOfOccurences; i++)
+                    {
+                        res << mask[indexOfAcc - 1];
+                    }   
+                    indexOfAcc     = 0;
+                    indexOfBackAcc = 0;
+                }
+                else
+                {
+                    res = wxEmptyString;
+                    it = mask.Len();
+                }
+            }
+        }
+        else if(indexOfAcc == 0)
+        {
+            m_mask << mask[it];
+        }
+    }
+
+    if(indexOfAcc != 0 || indexOfAcc != 0)
+    {
+        m_mask = wxEmptyString;
+    }
+
+    return res;
+
 }
 
 bool wxMaskedField::IsEmpty(const wxString& string) const
@@ -252,13 +256,13 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             } 
             //verification
 
-            if(string.Len() != 0 && res[it] != string[it] && tmp == false)
+            if(string.Len() != 0 && res[it] != string[it] && format == false)
             {
                 res = string;
                 itMask = m_mask.Len();
             }
              
-            tmp = false;
+            format = false;
         }
     }
     
@@ -460,10 +464,16 @@ bool wxMaskedField::SetMask(const wxString& mask)
 
     m_mask = mask;
     unsigned int it;
-    bool res = true
+    bool res = true;
     
     if(mask.Find('|'))
         res = false;
+
+    if(mask.Cmp(wxEmptyString) != 0 
+    && ChangeAccolade(mask).Cmp(wxEmptyString) == 0)
+        res = false;
+    
+
 
     if(!IsValid(m_defaultValue) && res)
         m_defaultValue = wxDEFAULT_VALUE;
@@ -477,7 +487,7 @@ bool wxMaskedField::SetMask(const wxString& mask)
         }
     }
     
-    return true
+    return true;
 
 }
 

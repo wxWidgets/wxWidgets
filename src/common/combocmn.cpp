@@ -41,7 +41,6 @@
 #include "wx/combo.h"
 
 
-
 // constants
 // ----------------------------------------------------------------------------
 
@@ -53,7 +52,7 @@
 
 #define DEFAULT_TEXT_INDENT                     3
 
-#define COMBO_MARGIN                            2 // spacing right of wxTextCtrl
+#define COMBO_MARGIN                            2 // spacing right of wxComboBox
 
 
 #if defined(__WXMSW__)
@@ -756,10 +755,10 @@ void wxComboPopupExtraEventHandler::OnMouseEvent( wxMouseEvent& event )
 // wxComboCtrlTextCtrl
 // ----------------------------------------------------------------------------
 
-class wxComboCtrlTextCtrl : public wxTextCtrl
+class wxComboCtrlTextCtrl : public wxComboBox
 {
 public:
-    wxComboCtrlTextCtrl() : wxTextCtrl() { }
+    wxComboCtrlTextCtrl() : wxComboBox() { }
     virtual ~wxComboCtrlTextCtrl() { }
 
     virtual wxWindow *GetMainWindowOfCompositeControl()
@@ -907,7 +906,7 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
         else
             m_ignoreEvtText = 0;
 
-        m_text = new wxComboCtrlTextCtrl();
+        m_text = new wxTextCtrl();
         m_text->Create(this, wxID_ANY, m_valueString,
                        wxDefaultPosition, wxSize(10,-1),
                        style, validator);
@@ -961,6 +960,8 @@ wxComboCtrlBase::~wxComboCtrlBase()
 
     delete m_textEvtHandler;
 }
+
+
 
 
 // ----------------------------------------------------------------------------
@@ -1113,7 +1114,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         if ( !m_widthCustomPaint )
         {
             // No special custom paint area - we can use 0 left margin
-            // with wxTextCtrl.
+            // with wxComboBox.
             if ( m_text->SetMargins(0) )
                 textCtrlXAdjust = 0;
             x = m_tcArea.x + m_marginLeft + textCtrlXAdjust;
@@ -1121,7 +1122,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         else
         {
             // There is special custom paint area - it is better to
-            // use some margin with the wxTextCtrl.
+            // use some margin with the wxComboBox.
             m_text->SetMargins(m_marginLeft);
             x = m_tcArea.x + m_widthCustomPaint + 
                 m_marginLeft + textCtrlXAdjust;
@@ -1280,7 +1281,7 @@ bool wxComboCtrlBase::SetFont ( const wxFont& font )
 
     if ( m_text )
     {
-        // Without hiding the wxTextCtrl there would be some
+        // Without hiding the wxComboBox there would be some
         // visible 'flicker' (at least on Windows XP).
         m_text->Hide();
         m_text->SetFont(font);
@@ -1350,6 +1351,164 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
         return true;
     }
     return false;
+}
+
+// ----------------------------------------------------------------------------
+// Mask
+// ----------------------------------------------------------------------------
+
+
+void wxComboCtrlBase::SetMask(wxMaskedEdit* mask)
+{
+    if(mask != NULL)
+    {
+        m_maskCtrl = mask;
+        SetValue(m_maskCtrl->GetDefaultValue());
+        SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
+        Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxComboCtrlBase::ApplyMask, this);
+        Bind(wxEVT_CHAR, &wxComboCtrlBase::KeyPressedMask, this);
+    }
+    else
+    {
+        if(m_maskCtrl != NULL)
+            delete m_maskCtrl;
+        Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxComboCtrlBase::ApplyMask, this);
+        Unbind(wxEVT_CHAR, &wxComboCtrlBase::KeyPressedMask, this);
+    }
+}
+
+
+void wxComboCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+{
+    unsigned int cursorIndex = GetInsertionPoint();
+
+    wxString string = GetValue();
+    wxString userInput;
+    wxString formatString;
+
+    unsigned int spaceIndex = string.Find(' ');
+   
+    if(string != m_maskCtrl->GetEmptyMask())
+    {
+        userInput = string.SubString(0, spaceIndex - 1);
+        formatString = m_maskCtrl->ApplyFormatCodes(userInput);
+
+        printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
+        
+        //If the string is not valid
+        if(!m_maskCtrl->IsValid(formatString))
+        {
+            printf("Invalid\n");
+            SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
+            Replace(formatString.Len() - 1, formatString.Len(), ' ');
+        }
+        else
+        {
+            printf("Valid\n");
+            
+            //If the test is upper or lower case after Applying formats codes
+            if(formatString.Cmp(userInput) != 0)
+            {
+               Replace(0, formatString.Len() , formatString);
+
+               printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
+            }
+
+            SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
+        }
+        printf("End Apply Mask\n");
+    }
+}
+
+void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
+{
+    int keycode = event.GetKeyCode();
+    unsigned int cursor = GetInsertionPoint();
+
+    printf("User input\n");
+    switch(keycode)
+    {
+        case(WXK_PAGEUP):
+            if(m_maskCtrl->GetNumberOfFields() == 1 
+            && m_maskCtrl->NumberOfChoices() != 0)
+            {
+            printf("PAGE UP\n");
+                SetValue(m_maskCtrl->GetNextChoices()); 
+            }
+        break;
+        case(WXK_PAGEDOWN):
+            if(m_maskCtrl->GetNumberOfFields() == 1
+            && m_maskCtrl->NumberOfChoices() != 0)
+            {
+            printf("PAGE DOWN\n");
+                SetValue(m_maskCtrl->GetPreviousChoices()); 
+            }
+        break;
+        case(WXK_LEFT):
+        case(WXK_RIGHT):
+            if(m_maskCtrl->GetFormatCodes(0).Contains('_'))
+                    event.Skip();
+        break;
+        case(WXK_BACK):
+            if(cursor > 0)
+            {
+                wxString mask = m_maskCtrl->GetEmptyMask()[cursor - 1];
+
+                if(mask == ' ')
+                { 
+                    Replace(cursor - 1, cursor , 
+                            wxT(" "));
+                    
+                    cursor = GetInsertionPoint();
+                    SetInsertionPoint(cursor -1);
+                }
+                else
+                {
+                    SetInsertionPoint(cursor -1);
+                }
+
+            }
+        break;
+        case(WXK_DELETE):
+            if(cursor < GetValue().Len() && m_maskCtrl->GetFormatCodes(0).Contains('_'))
+            {
+                wxString mask = m_maskCtrl->GetEmptyMask()[cursor];
+
+                if(mask == ' ')
+                { 
+                    Replace(cursor , cursor + 1 , 
+                            wxT(" "));
+                    
+                    cursor = GetInsertionPoint();
+                    SetInsertionPoint(cursor);
+                }
+            }
+
+        break;
+        default:
+        {        
+            if( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
+            {
+                wxString string = GetValue();
+                wxChar ch;
+
+                if( !event.ShiftDown() )
+                {
+                    keycode = wxTolower(keycode);
+                }
+                
+                if(string[cursor] == ' ')
+                    ch = (wxChar)keycode;
+                else
+                    ch = string[cursor];
+                printf("cursor: %d\n", cursor);
+                Replace(cursor, cursor+1, ch);
+           }
+            else
+                event.Skip();
+    
+        }
+    }
 }
 // ----------------------------------------------------------------------------
 // painting
@@ -2462,7 +2621,7 @@ wxCoord wxComboCtrlBase::GetNativeTextIndent() const
 }
 
 // ----------------------------------------------------------------------------
-// methods forwarded to wxTextCtrl
+// methods forwarded to wxComboBox
 // ----------------------------------------------------------------------------
 
 wxString wxComboCtrlBase::GetValue() const

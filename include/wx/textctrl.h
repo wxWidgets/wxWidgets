@@ -23,7 +23,7 @@
 #include "wx/control.h"         // the base class
 #include "wx/textentry.h"       // single-line text entry interface
 #include "wx/gdicmn.h"          // wxPoint
-#include "wx/maskededit.h"
+#include "wx/maskededit.h"      // mask include
 
 // some compilers don't have standard compliant rdbuf() (and MSVC has it only
 // in its new iostream library, not in the old one used with iostream.h)

@@ -119,7 +119,7 @@ private:
     bool IsLowerCase(const wxChar character) const;    
     bool IsUpperCase(const wxChar character) const;
     bool IsPunctuation(const wxChar character) const;
-    wxString ChangeAccolade(const wxString& string)
+    wxString ChangeAccolade(const wxString& string);
 
 };
 #endif
