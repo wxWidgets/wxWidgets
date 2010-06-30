@@ -35,9 +35,11 @@ private:
     CPPUNIT_TEST_SUITE( ListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Sort );
+        CPPUNIT_TEST( MultipleSelect );
     CPPUNIT_TEST_SUITE_END();
 
     void Sort();
+    void MultipleSelect();
 
     wxListBox* m_list;
 
@@ -89,3 +91,45 @@ void ListBoxTestCase::Sort()
     CPPUNIT_ASSERT_EQUAL("a", m_list->GetString(0));
 }
 
+void ListBoxTestCase::MultipleSelect()
+{
+    wxDELETE(m_list);
+    m_list = new wxListBox(wxTheApp->GetTopWindow(), wxID_ANY, 
+                            wxDefaultPosition, wxDefaultSize, 0, 0,
+                            wxLB_MULTIPLE);
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+    testitems.Add("item 2");
+    testitems.Add("item 3");
+
+    m_list->Append(testitems);
+
+    m_list->SetSelection(0);
+
+    wxArrayInt selected;
+    m_list->GetSelections(selected);
+
+    CPPUNIT_ASSERT_EQUAL(1, selected.Count());
+    CPPUNIT_ASSERT_EQUAL(0, selected.Item(0));
+
+    m_list->SetSelection(2);
+
+    m_list->GetSelections(selected);
+
+    CPPUNIT_ASSERT_EQUAL(2, selected.Count());
+    CPPUNIT_ASSERT_EQUAL(2, selected.Item(1));
+
+    m_list->Deselect(0);
+
+    m_list->GetSelections(selected);
+
+    CPPUNIT_ASSERT_EQUAL(1, selected.Count());
+    CPPUNIT_ASSERT_EQUAL(2, selected.Item(0));
+
+    CPPUNIT_ASSERT(!m_list->IsSelected(0));
+    CPPUNIT_ASSERT(!m_list->IsSelected(1));
+    CPPUNIT_ASSERT(m_list->IsSelected(2));
+    CPPUNIT_ASSERT(!m_list->IsSelected(3));
+}
