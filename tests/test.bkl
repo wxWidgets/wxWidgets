@@ -123,6 +123,7 @@
             graphics/measuring.cpp
             config/config.cpp
             controls/buttontest.cpp
+            controls/checklistboxtest.cpp
             controls/choicetest.cpp
             controls/comboboxtest.cpp
             controls/grid.cpp
