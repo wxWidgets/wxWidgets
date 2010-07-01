@@ -408,6 +408,12 @@ wxFORMAT_STRING_SPECIFIER(long double, wxFormatString::Arg_LongDouble)
 wxFORMAT_STRING_SPECIFIER(wchar_t, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 #endif
 
+#if !wxUSE_UNICODE
+wxFORMAT_STRING_SPECIFIER(char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(signed char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+wxFORMAT_STRING_SPECIFIER(unsigned char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
+#endif
+
 wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(signed char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
