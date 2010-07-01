@@ -492,12 +492,7 @@ public:
 
         @see wxString::From8BitData()
     */
-    const char* To8BitData() const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer To8BitData() const;
+    const wxScopedCharBuffer To8BitData() const;
 
     /**
         Converts the string to an ASCII, 7-bit string in the form of

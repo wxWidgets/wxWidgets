@@ -1800,7 +1800,8 @@ public:
     // version for NUL-terminated data:
     static wxString From8BitData(const char *data)
       { return wxString(data); }
-    const char *To8BitData() const { return c_str(); }
+    const wxScopedCharBuffer To8BitData() const
+        { return wxScopedCharBuffer::CreateNonOwned(wx_str(), length()); }
 #endif // Unicode/ANSI
 
     // conversions with (possible) format conversions: have to return a
