@@ -173,16 +173,19 @@ public:
         Arg_Double      = 0x0040,
         Arg_LongDouble  = 0x0080,
 
-#ifdef wxSIZE_T_IS_UINT
+#if defined(wxSIZE_T_IS_UINT)
         Arg_Size_t      = Arg_Int,
-#endif
-#ifdef wxSIZE_T_IS_ULONG
+#elif defined(wxSIZE_T_IS_ULONG)
         Arg_Size_t      = Arg_LongInt,
+#elif defined(SIZEOF_LONG_LONG) && SIZEOF_SIZE_T == SIZEOF_LONG_LONG
+        Arg_Size_t      = Arg_LongLongInt,
+#else
+        Arg_Size_t      = 0x0100,
 #endif
 
-        Arg_IntPtr      = 0x0100,    // %n -- store # of chars written
-        Arg_ShortIntPtr = 0x0200,
-        Arg_LongIntPtr  = 0x0400,
+        Arg_IntPtr      = 0x0200,    // %n -- store # of chars written
+        Arg_ShortIntPtr = 0x0400,
+        Arg_LongIntPtr  = 0x0800,
 
         Arg_Unknown     = 0x8000     // unrecognized specifier (likely error)
     };
