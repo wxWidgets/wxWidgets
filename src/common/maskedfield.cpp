@@ -59,10 +59,18 @@ bool wxMaskedField::Create( const wxString& mask
     unsigned int it;
     bool res = true;
 
-    m_mask = ChangeAccolade(mask);
+
+    if(mask.EndsWith(wxT("\\")))
+    {
+        m_mask = wxEmptyString;
+    }
+    else
+    {
+        m_mask = ChangeAccolade(mask);
+    }
 
     if(mask.Cmp(wxEmptyString) != 0 
-    && ChangeAccolade(mask).Cmp(wxEmptyString) == 0)
+    && m_mask.Cmp(wxEmptyString) == 0)
         res = false;
 
     m_formatCodes  = formatCodes;
@@ -98,6 +106,12 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
     unsigned int indexOfBackAcc = 0;
     unsigned long numberOfOccurences = 0;
     wxString res = wxEmptyString;
+
+    if(mask.Find('{') == wxNOT_FOUND  && mask.Find('}') == wxNOT_FOUND)
+    {
+        res = mask;
+        return res;
+    }
 
     for(it = 0; it < mask.Len(); it++)
     {
@@ -147,7 +161,7 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
                     {
                         res << mask[indexOfAcc - 1];
                     }   
-                    indexOfAcc     = 0;
+                   indexOfAcc     = 0;
                     indexOfBackAcc = 0;
                 }
                 else
@@ -159,13 +173,13 @@ wxString wxMaskedField::ChangeAccolade(const wxString& mask)
         }
         else if(indexOfAcc == 0)
         {
-            m_mask << mask[it];
+            res << mask[it];
         }
     }
 
     if(indexOfAcc != 0 || indexOfAcc != 0)
     {
-        m_mask = wxEmptyString;
+        res = wxEmptyString;
     }
 
     return res;
@@ -226,7 +240,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
             }
             else
             {
-                if(m_formatCodes.Find(wxT("!")))
+                if(m_formatCodes.Find(wxT("!")) != wxNOT_FOUND)
                 {
                     if(IsLowerCase(string[it]) && (m_mask[itMask] == 'A'
                        || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
@@ -236,7 +250,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                         format = true;
                     }
                 }
-                else if(m_formatCodes.Find(wxT("^")))
+                else if(m_formatCodes.Find(wxT("^"))!= wxNOT_FOUND)
                 {
                     if(IsUpperCase(string[it]) && (m_mask[itMask] == 'a'
                        || m_mask[itMask] == 'N' || m_mask[itMask] == 'C' 
@@ -247,7 +261,7 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                     }
                 }
                 
-                if(m_formatCodes.Find(wxT("_")) && string[it] == ' ')
+                if(m_formatCodes.Find(wxT("_")) != wxNOT_FOUND && string[it] == ' ')
                 {
                     res << ' ';
                     format = true;
@@ -338,7 +352,7 @@ bool wxMaskedField::IsValid(const wxString& string) const
         }
         else if(!IsCharValid(m_mask[itMask], string[it]))
         {
-            if(m_formatCodes.Find(wxT("_")))
+            if(m_formatCodes.Find(wxT("_")) != wxNOT_FOUND)
             {
                 if(string[it] != ' ')
                 {

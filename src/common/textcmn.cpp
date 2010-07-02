@@ -767,12 +767,11 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
 
 void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 {
-    unsigned int cursorIndex = GetInsertionPoint();
-
     wxString string = GetValue();
     wxString userInput;
     wxString formatString;
     unsigned int cursor = GetInsertionPoint();
+    bool invalid;
 
     unsigned int spaceIndex = string.Find(' ');
    
@@ -783,16 +782,15 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 
         printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
         
+        invalid = !m_maskCtrl->IsValid(formatString);
+
         //If the string is not valid
-        if(!m_maskCtrl->IsValid(formatString))
+        if(invalid)
         {
             printf("Invalid\n");
             SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
-            Replace(cursor - 1, cursor , wxT(" "));
+            Replace(cursor, cursor +1, wxT(" "));
                     
-            cursor = GetInsertionPoint();
-            SetInsertionPoint(cursor -1);
-
         }
         else
         {
@@ -809,32 +807,39 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
             SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
         }
         printf("End Apply Mask\n");
+
+        if(invalid)
+        {
+            cursor = GetInsertionPoint();
+            SetInsertionPoint ( cursor - 2);
+        }
     }
+
 }
 
 void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
     unsigned int cursor = GetInsertionPoint();
+    unsigned int fieldIndex = m_maskCtrl->GetFieldIndex(cursor);
 
     printf("User input\n");
     switch(keycode)
     {
         case(WXK_PAGEUP):
-            if(m_maskCtrl->GetNumberOfFields() == 1 
-            && m_maskCtrl->NumberOfChoices() != 0)
-            {
+
             printf("PAGE UP\n");
-                ChangeValue(m_maskCtrl->GetNextChoices()); 
-            }
+            Replace(m_maskCtrl->GetMinFieldPosition(fieldIndex), 
+                    m_maskCtrl->GetMaxFieldPosition(fieldIndex),
+                    m_maskCtrl->GetNextChoices()); 
         break;
         case(WXK_PAGEDOWN):
-            if(m_maskCtrl->GetNumberOfFields() == 1
-            && m_maskCtrl->NumberOfChoices() != 0)
-            {
             printf("PAGE DOWN\n");
-                ChangeValue(m_maskCtrl->GetPreviousChoices()); 
-            }
+
+            Replace(m_maskCtrl->GetMinFieldPosition(fieldIndex), 
+                    m_maskCtrl->GetMaxFieldPosition(fieldIndex),
+                    m_maskCtrl->GetPreviousChoices()); 
+
         break;
         case(WXK_LEFT):
         case(WXK_RIGHT):

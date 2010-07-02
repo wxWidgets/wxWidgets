@@ -78,7 +78,7 @@ public:
  
     wxArrayString GetChoices() const;
  
-    bool AddChoice(wxString& choice);
+    bool AddChoice(const wxString& choice);
  
     bool AddChoices(const wxArrayString& choices);
 
@@ -129,6 +129,10 @@ public:
     unsigned int NumberOfChoices();
 
     wxString GetEmptyMask() const;
+
+    unsigned int GetFieldIndex(unsigned int position);
+    unsigned int GetMinFieldPosition(unsigned int fieldIndex);
+    unsigned int GetMaxFieldPosition(unsigned int fieldIndex);
    
 private:
     //mask caracteristics

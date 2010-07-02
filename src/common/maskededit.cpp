@@ -66,7 +66,7 @@ void wxMaskedEdit::Create( const wxString& mask
 {
     wxString tmp;
 
-    if(!mask.Find('|'))
+    if(mask.Find('|') == wxNOT_FOUND)
     {
         m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
         m_maskValue = mask;
@@ -149,6 +149,7 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
     if(tmp.Cmp(wxT("")) == 0 || string.Len() > res.Len() 
       || alreadyUsed.Cmp(string) != 0)
         res = string;
+
 
     return res;
 }
@@ -351,13 +352,10 @@ wxArrayString wxMaskedEdit::GetChoices() const
         return wxArrayString();
 }
 
-bool wxMaskedEdit::AddChoice(wxString& choice)
+bool wxMaskedEdit::AddChoice(const wxString& choice)
 {
     bool res = true;
-    if(m_mask.GetCount() == 1)
-         res = m_mask[0]->AddChoice(choice);
-    else
-        res = false;
+    res = m_mask[0]->AddChoice(choice);
 
     return res;
 }
@@ -365,10 +363,7 @@ bool wxMaskedEdit::AddChoice(wxString& choice)
 bool wxMaskedEdit::AddChoices(const wxArrayString& choices)  
 {
     bool res = true;
-    if(m_mask.GetCount() == 1)
-         res = m_mask[0]->AddChoices(choices);
-    else
-        res = false;
+    res = m_mask[0]->AddChoices(choices);
 
     return res;
 }
@@ -377,10 +372,7 @@ wxString wxMaskedEdit::GetNextChoices() const
 {
     wxString res;
 
-    if(m_mask.GetCount() != 1)
-        res = wxEmptyString;
-    else
-        res = m_mask[0]->GetNextChoices();
+    res = m_mask[0]->GetNextChoices();
 
     return res;
 
@@ -390,10 +382,7 @@ wxString wxMaskedEdit::GetCurrentChoices() const
 {
     wxString res;
 
-    if(m_mask.GetCount() != 1)
-        res = wxEmptyString;
-    else
-        res = m_mask[0]->GetCurrentChoices();
+    res = m_mask[0]->GetCurrentChoices();
 
     return res;
 }
@@ -402,10 +391,7 @@ wxString wxMaskedEdit::GetPreviousChoices() const
 {
     wxString res;
 
-    if(m_mask.GetCount() != 1)
-        res = wxEmptyString;
-    else
-        res = m_mask[0]->GetPreviousChoices();
+    res = m_mask[0]->GetPreviousChoices();
 
     return res;
 
@@ -585,3 +571,60 @@ wxString wxMaskedEdit::GetEmptyMask()const
     return res;
 
 }
+
+unsigned int wxMaskedEdit::GetFieldIndex(unsigned int position)
+{
+    unsigned int it;
+    unsigned int res = 0;
+
+    for(it = 0; it < m_mask.GetCount(); it++)
+    {
+        if(position >= GetMinFieldPosition(it) 
+        && position <= GetMaxFieldPosition(it))
+        {
+            res = it;
+            it = m_mask.GetCount();
+        }
+    }
+
+    return res;
+
+}
+
+unsigned int wxMaskedEdit::GetMinFieldPosition(unsigned int fieldIndex)
+{
+    unsigned int res = 0;
+    unsigned int currentField = 0;
+
+    if(fieldIndex >= m_mask.GetCount())
+    {
+        return 0;
+    }
+
+    while(fieldIndex > currentField && currentField < m_mask.GetCount())
+    {
+        res += m_mask[currentField]->GetMask().Len();
+        currentField++;
+
+    }
+
+    return res;
+
+
+}
+
+unsigned int wxMaskedEdit::GetMaxFieldPosition(unsigned int fieldIndex)
+{
+    unsigned int res = 0;
+
+    res = GetMinFieldPosition(fieldIndex);
+    
+    if(fieldIndex < m_mask.GetCount())
+    {
+        res += m_mask[fieldIndex]->GetMask().Len() - 1;
+    }
+    
+    return res;
+
+}
+

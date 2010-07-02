@@ -40,6 +40,9 @@ private:
         CPPUNIT_TEST( SetMaskFieldTest     );
         CPPUNIT_TEST( AddChoiceFieldTest   );
         CPPUNIT_TEST( GetEmptyMaskTest     );
+        CPPUNIT_TEST( GetFieldIndexTest    );
+        CPPUNIT_TEST( GetMinFieldPositionTest );
+        CPPUNIT_TEST( GetMaxFieldPositionTest );
     CPPUNIT_TEST_SUITE_END();
 
     void ApplyFormatCodesTest();
@@ -52,6 +55,9 @@ private:
     void SetMaskFieldTest();
     void AddChoiceFieldTest();
     void GetEmptyMaskTest();
+    void GetFieldIndexTest();
+    void GetMinFieldPositionTest();
+    void GetMaxFieldPositionTest();
     wxDECLARE_NO_COPY_CLASS(MaskedEditTestCase);
 };
 
@@ -145,7 +151,7 @@ void MaskedEditTestCase::GetPlainValueTest()
     for(unsigned int n = 0; n< WXSIZEOF( maskedPlainValue ) ; n++)
     {
 
-        if(maskedFormat[n].formatCodes.Cmp(wxEmptyString) != 0)
+        if(maskedPlainValue[n].formatCodes.Cmp(wxEmptyString) != 0)
         {
             mask = wxMaskedEdit(maskedPlainValue[n].mask,  maskedPlainValue[n].formatCodes);
         }
@@ -221,7 +227,6 @@ void MaskedEditTestCase::IsValidTest()
             mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
 
         formatString = mask.ApplyFormatCodes(listTest[n].test); 
-        
         CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(formatString)); 
     }
 
@@ -250,6 +255,7 @@ void MaskedEditTestCase::SetMaskTest()
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
+        printf("N = %d\n", n);
         if(masked[n].mask.Contains('|'))
             mask = wxMaskedEdit(masked[n].mask, formatCodes);
         else
@@ -447,3 +453,103 @@ void MaskedEditTestCase::GetEmptyMaskTest()
 
 
 }
+void MaskedEditTestCase::GetFieldIndexTest()
+{    
+    static struct TestFieldIndex
+    {
+        wxString mask;
+        unsigned int test;
+        unsigned int result;
+    }
+    maskedTest[]=
+    {
+        //Same as Masked field
+        {wxT("###.###.###.###") , 0  , 0},
+        {wxT("###.###.###.###") , 1  , 0},
+        {wxT("###.###.###.###") , 14 , 0},
+        {wxT("###.###.###.###") , 15 , 0},
+
+        //With multiple fields
+        {wxT("###|.###.|###.|###") , 0 , 0},
+        {wxT("###|.###.|###.|###") , 2 , 0},
+        {wxT("###|.###.|###.|###") , 3 , 1},
+        {wxT("###|.###.|###.|###") , 4 , 1},
+        {wxT("###|.###.|###.|###") , 7 , 1},
+        {wxT("###|.###.|###.|###") , 8 , 2},
+        {wxT("###|.###.|###.|###") , 10 ,2},
+        {wxT("###|.###.|###.|###") , 21, 0}
+   };
+
+
+    for(unsigned int n = 0; n< WXSIZEOF(maskedTest); n++)
+    {
+        wxMaskedEdit mask(maskedTest[n].mask, wxT("F"));
+        CPPUNIT_ASSERT_EQUAL(maskedTest[n].result,  mask.GetFieldIndex(maskedTest[n].test));
+    }
+
+
+
+}
+void MaskedEditTestCase::GetMinFieldPositionTest()
+{   
+    static struct TestMinFieldIndex
+    {
+        wxString mask;
+        unsigned int test;
+        unsigned int result;
+    }
+    maskedTest[]=
+    {
+        //Same as Masked field
+        {wxT("###.###.###.###") , 0   , 0},
+        {wxT("###.###.###.###") , 1   , 0},
+        {wxT("###.###.###.###") , 14  , 0},
+        {wxT("###.###.###.###") , 15  , 0},
+
+        //With multiple fields
+        {wxT("###|.###.|###.|###") , 0 , 0},
+        {wxT("###|.###.|###.|###") , 1 , 3},
+        {wxT("###|.###.|###.|###") , 2 , 8},
+        {wxT("###|.###.|###.|###") , 3 , 12},
+        {wxT("###|.###.|###.|###") , 4 , 0},
+   };
+
+
+    for(unsigned int n = 0; n< WXSIZEOF(maskedTest); n++)
+    {
+        wxMaskedEdit mask(maskedTest[n].mask, wxT("F"));
+        CPPUNIT_ASSERT_EQUAL(maskedTest[n].result,  mask.GetMinFieldPosition(maskedTest[n].test));
+    }
+
+}
+
+void MaskedEditTestCase::GetMaxFieldPositionTest()
+{  
+    static struct TestMasFieldIndex
+    {
+        wxString mask;
+        unsigned int test;
+        unsigned int result;
+    }
+    maskedTest[]=
+    {
+        //Same as Masked field
+        {wxT("###.###.###.###") , 0  , 14},
+        {wxT("###.###.###.###") , 1  , 0},
+
+        //With multiple fields
+        {wxT("###|.###.|###.|###") , 0 , 2},
+        {wxT("###|.###.|###.|###") , 1 , 7},
+        {wxT("###|.###.|###.|###") , 2 , 11},
+        {wxT("###|.###.|###.|###") , 3 , 14},
+        {wxT("###|.###.|###.|###") , 4 , 0},
+   };
+
+
+    for(unsigned int n = 0; n< WXSIZEOF(maskedTest); n++)
+    {
+        wxMaskedEdit mask(maskedTest[n].mask, wxT("F"));
+        CPPUNIT_ASSERT_EQUAL(maskedTest[n].result,  mask.GetMaxFieldPosition(maskedTest[n].test));
+    }
+}
+

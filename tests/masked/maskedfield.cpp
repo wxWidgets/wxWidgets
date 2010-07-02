@@ -226,9 +226,9 @@ void MaskedFieldTestCase::TestIsValid()
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
+
         wxMaskedField mask(listTest[n].mask, listTest[n].formatCodes);
         formatString = mask.ApplyFormatCodes(listTest[n].test);
-    
         CPPUNIT_ASSERT_EQUAL( listTest[n].result, mask.IsValid(formatString));
     }
 
@@ -251,9 +251,9 @@ void MaskedFieldTestCase::TestIsEmpty()
         {wxT("###.###.###.###"), wxT("1  .2  .123.111"), false},
         {wxT("###.###.###.###"), wxT("123.000.000.111"), false},
         
-        {wxT("\\CAA--#{3}\\*"} , wxT("\\CAA--#{3}\\*") , false},
-        {wxT("\\CAA--#{3}\\*"} , wxT("CAF--123*")      , false},
-        {wxT("\\CAA--#{3}\\*"} , wxT("C  --   *")      , true},
+        {wxT("\\CAA--#{3}\\*") , wxT("\\CAA--#{3}\\*") , false},
+        {wxT("\\CAA--#{3}\\*") , wxT("CAF--123*")      , false},
+        {wxT("\\CAA--#{3}\\*") , wxT("C  --   *")      , true},
     };
 
 
@@ -278,6 +278,7 @@ void MaskedFieldTestCase::TestApplyFormatsCode()
     maskedFormatCode[]=
     {
         {wxT("")               , wxT("F_") , wxT("azd")     , wxT("azd")},
+        {wxT("Aaa")            , wxT("F_") , wxT("a")     , wxT("a")},
         {wxT("###")            , wxT("F_") , wxT("")        , wxT("")},
         {wxT("###.###.###.###"), wxT("F_") , wxT("1.2.3.4") , wxT("1.2.3.4")},
         {wxT("###.A"), wxT("F!"), wxT("111.a"), wxT("111.A")},
@@ -286,6 +287,7 @@ void MaskedFieldTestCase::TestApplyFormatsCode()
         {wxT("#A#."), wxT("F_"), wxT("11"), wxT("11")},
         {wxT("###."), wxT("F_"), wxT("1111"), wxT("1111")},
         {wxT("Aaa\\*."), wxT("F_"), wxT("A"), wxT("A")},
+        {wxT("Aaa\\*."), wxT("F!_"), wxT("abc"), wxT("Abc")},
         
         {wxT("###.AAA.aC\\&"), wxT("F!"), wxT("111.aaa.ab&"), wxT("111.AAA.ab&")},
         {wxT("CX.X"), wxT("F!_"), wxT("rt."), wxT("rt.")},
@@ -456,7 +458,7 @@ void MaskedFieldTestCase::TestGetEmptyedMask()
     {
         wxMaskedField mask(maskedEmpty[n].mask, wxT("F"));
         
-        CPPUNIT_ASSERT( mask.GetEmptyedMask().Cmp(maskedEmpty[n].result) == 0 );    
+        CPPUNIT_ASSERT( mask.GetEmptyMask().Cmp(maskedEmpty[n].result) == 0 );    
     }
 
 
