@@ -288,9 +288,17 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
         if ( value < min )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->SetFailureMessage(
-                    wxString::Format(_("Value must be %lld or higher"),min)
-                    );
+            {
+                wxString msg;
+                if ( !maxOk )
+                    msg = wxString::Format(
+                                _("Value must be %lld or higher."), min);
+                else
+                    msg = wxString::Format(
+                                _("Value must be between %lld and %lld."),
+                                min, max);
+                pValidationInfo->SetFailureMessage(msg);
+            }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = min;
             else
@@ -304,9 +312,17 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property, wxLongLong_t& va
         if ( value > max )
         {
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-                pValidationInfo->SetFailureMessage(
-                    wxString::Format(_("Value must be %lld or higher"),min)
-                    );
+            {
+                wxString msg;
+                if ( !minOk )
+                    msg = wxString::Format(
+                                _("Value must be %lld or lower."), max);
+                else
+                    msg = wxString::Format(
+                                _("Value must be between %lld and %lld."),
+                                min, max);
+                pValidationInfo->SetFailureMessage(msg);
+            }
             else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
                 value = max;
             else
