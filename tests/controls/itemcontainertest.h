@@ -10,8 +10,6 @@
 #ifndef _WX_TESTS_CONTROLS_ITEMCONTAINERTEST_H_
 #define _WX_TESTS_CONTROLS_ITEMCONTAINERTEST_H_
 
-#
-
 class ItemContainerTestCase : public CppUnit::TestCase
 {
 public:
@@ -20,12 +18,12 @@ public:
 protected:
     // this function must be overridden by the derived classes to return the
     // text entry object we're testing, typically this is done by creating a
-    // control implementing wxTextEntry interface in setUp() virtual method and
+    // control implementing wxItemContainer interface in setUp() virtual method and
     // just returning it from here
     virtual wxItemContainer *GetContainer() const = 0;
 
     // and this one must be overridden to return the window which implements
-    // wxTextEntry interface -- usually it will return the same pointer as
+    // wxItemContainer interface -- usually it will return the same pointer as
     // GetTestEntry(), just as a different type
     virtual wxWindow *GetContainerWindow() const = 0;
 
