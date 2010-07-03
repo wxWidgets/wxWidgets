@@ -765,7 +765,7 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
 }
 
 
-void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
 {
     wxString string = GetValue();
     wxString userInput;
@@ -774,10 +774,21 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
     bool invalid;
 
     unsigned int spaceIndex = string.Find(' ');
+
+    if(spaceIndex < cursor 
+    && m_maskCtrl->GetFormatCode().Find('_') == wxNOT_FOUND)
+    {
+        SetInsertionPoint(cursor -1);
+        cursor --;
+    }
    
     if(string != m_maskCtrl->GetEmptyMask())
     {
-        userInput = string.SubString(0, spaceIndex - 1);
+        if(m_maskCtrl->GetFormatCode().Find('_') == wxNOT_FOUND)
+            userInput = string.SubString(0, spaceIndex - 1);
+        else
+            userInput = string;
+        
         formatString = m_maskCtrl->ApplyFormatCodes(userInput);
 
         printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
@@ -896,7 +907,14 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                 printf("cursor: %d\n", cursor);
                 Replace(cursor, cursor+1, ch);
         break;
-
+        case (WXK_SPACE):
+              if(m_maskCtrl->GetFormatCode().Find('_') != wxNOT_FOUND)
+              {
+                  ch = (wxChar)keycode;
+                  printf("WXK_SPACE\n");
+                  Replace(cursor, cursor+1, ch);
+              }
+        break;
         default:
         {        
             if( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )

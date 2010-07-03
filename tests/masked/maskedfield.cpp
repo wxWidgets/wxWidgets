@@ -221,11 +221,18 @@ void MaskedFieldTestCase::TestIsValid()
         {wxT("###\\*###") , wxT("F"), wxT("124\\*45") , false},
         
         {wxT("#{4}") , wxT("F"), wxT("1234")  , true},
-        {wxT("Aa{5} A{5}"), wxT("F!_"), wxT("A"), true}
+        {wxT("Aa{5} A{5}"), wxT("F!_"), wxT("A"), true},
+
+        {wxT("###")  , wxT("F-")   , wxT("1")  , true},
+        {wxT("###")  , wxT("F-_")   , wxT("1")  , true},
+        {wxT("###")  , wxT("F-")   , wxT("111")  , true},
+        {wxT("###")  , wxT("F-")   , wxT("-111") , true},
+ 
     };
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
+        printf("N= %d\n", n);
 
         wxMaskedField mask(listTest[n].mask, listTest[n].formatCodes);
         formatString = mask.ApplyFormatCodes(listTest[n].test);

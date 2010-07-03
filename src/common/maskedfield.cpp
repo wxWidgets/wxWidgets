@@ -334,7 +334,7 @@ bool wxMaskedField::IsValid(const wxString& string) const
     unsigned int itMask;
     bool res = true;
 
-    if(string.Len() > m_mask.Len() 
+    if((string.Len() > m_mask.Len() && m_formatCodes.Find('-') == wxNOT_FOUND)
       ||( string.Len() == 0 && m_mask.Len() !=0)
       ||( string.Len() != 0 && m_mask.Len() ==0))
     {
@@ -352,7 +352,26 @@ bool wxMaskedField::IsValid(const wxString& string) const
         }
         else if(!IsCharValid(m_mask[itMask], string[it]))
         {
-            if(m_formatCodes.Find(wxT("_")) != wxNOT_FOUND)
+            if(m_formatCodes.Find('-') != wxNOT_FOUND)
+            {
+                if(it != 0 || string[0] != '-')
+                {
+                    res = false;
+                }
+                else
+                {
+                    if(!IsCharValid(m_mask[0], string[1]))
+                    {
+                printf("- found\n");
+                        res = false;
+                    }
+                    else
+                    {
+                        it++;
+                    }
+                } 
+            }
+            if(m_formatCodes.Find('_') != wxNOT_FOUND)
             {
                 if(string[it] != ' ')
                 {

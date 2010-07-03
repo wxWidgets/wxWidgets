@@ -215,14 +215,21 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("|###\\*#|##") , wxT("123456")  , false}, 
         {wxT("|###\\*###|") , wxT("124\\*45"), false},
         {wxT("|###\\*###|") , wxT("124*45")  , true},
-        {wxT("Aa{5} A{5}")  , wxT("A")       , true}
+        {wxT("Aa{5} A{5}")  , wxT("A")       , true},
     
+        {wxT("###")    , wxT("1")  , true},
+        {wxT("###")     , wxT("1")  , true},
+        {wxT("###")    , wxT("111")  , true},
+        {wxT("###")    , wxT("-111") , true},
+ 
+
     };
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
+        printf("N= %d\n", n);
         if(!listTest[n].mask.Contains('|'))
-            mask = wxMaskedEdit(listTest[n].mask, wxT("F_"));
+            mask = wxMaskedEdit(listTest[n].mask, wxT("F_-"));
         else
             mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
 

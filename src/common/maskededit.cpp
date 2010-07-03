@@ -252,11 +252,13 @@ bool wxMaskedEdit::SetMask( const wxString& mask)
 {
     bool res = true;
 
-    if(m_mask.GetCount() <= 1 && !mask.Find(wxT("|")))
+    if(m_mask.GetCount() <= 1 && mask.Find(wxT("|")) == wxNOT_FOUND)
         res = m_mask[0]->SetMask(mask);
     else
+    {
         res = false;
 
+    }
     return res;
 }
 
