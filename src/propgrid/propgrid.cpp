@@ -2987,6 +2987,7 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
     //
 
     m_validationInfo.m_failureBehavior = m_permanentValidationFailureBehavior;
+    m_validationInfo.m_isFailing = true;
 
     //
     // Variant list a special value that cannot be validated
@@ -3118,6 +3119,8 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
         m_chgInfo_changedProperty = NULL;
         pendingValue = value;
     }
+
+    m_validationInfo.m_isFailing = false;
 
     return true;
 }
@@ -3255,6 +3258,8 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
             DrawItemAndChildren(property);
         }
     }
+
+    m_validationInfo.m_isFailing = false;
 }
 
 // -----------------------------------------------------------------------
@@ -3270,6 +3275,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     m_pState->m_anyModified = 1;
 
     m_inDoPropertyChanged = 1;
+
+    // If property's value is being changed, assume it is valid
+    OnValidationFailureReset(selected);
 
     // Maybe need to update control
     wxASSERT( m_chgInfo_changedProperty != NULL );
@@ -3544,6 +3552,13 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
                                                       selected,
                                                       wnd ) )
                         valueIsPending = true;
+
+                    // Mark value always as pending if validation is currently
+                    // failing and value was not unspecified
+                    if ( !valueIsPending &&
+                         !pendingValue.IsNull() &&
+                         m_validationInfo.m_isFailing )
+                         valueIsPending = true;
                 }
                 else
                 {

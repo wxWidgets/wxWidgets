@@ -420,6 +420,16 @@ class WXDLLIMPEXP_PROPGRID wxPGValidationInfo
 {
     friend class wxPropertyGrid;
 public:
+    wxPGValidationInfo()
+    {
+        m_failureBehavior = 0;
+        m_isFailing = false;
+    }
+
+    ~wxPGValidationInfo()
+    {
+    }
+
     /**
         @return Returns failure behavior which is a combination of
                @ref propgrid_vfbflags.
@@ -468,6 +478,9 @@ private:
     /** Validation failure behavior. Use wxPG_VFB_XXX flags.
     */
     wxPGVFBFlags    m_failureBehavior;
+
+    // True when validation is currently failing.
+    bool            m_isFailing;
 };
 
 // -----------------------------------------------------------------------
