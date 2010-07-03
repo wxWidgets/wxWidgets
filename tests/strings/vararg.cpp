@@ -215,4 +215,8 @@ void VarArgTestCase::ArgsValidation()
     VarArgTestCase& somePOD = *this;
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%s", somePOD) );
 #endif
+
+    // %c should accept integers too
+    wxString::Format("%c", 80);
+    wxString::Format("%c", wxChar(80) + wxChar(1));
 }

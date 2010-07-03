@@ -160,7 +160,7 @@ public:
         Arg_Pointer     = 0x0002,    // %p
         Arg_String      = 0x0004 | Arg_Pointer, // any form of string (%s and %p too)
 
-        Arg_Int         = 0x0008,
+        Arg_Int         = 0x0008 | Arg_Char, // (ints can be used with %c)
 #if SIZEOF_INT == SIZEOF_LONG
         Arg_LongInt     = Arg_Int,
 #else
