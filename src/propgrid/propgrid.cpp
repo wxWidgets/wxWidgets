@@ -3127,6 +3127,22 @@ bool wxPropertyGrid::PerformValidation( wxPGProperty* p, wxVariant& pendingValue
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_STATUSBAR
+wxStatusBar* wxPropertyGrid::GetStatusBar()
+{
+    wxWindow* topWnd = ::wxGetTopLevelParent(this);
+    if ( topWnd && topWnd->IsKindOf(CLASSINFO(wxFrame)) )
+    {
+        wxFrame* pFrame = wxStaticCast(topWnd, wxFrame);
+        if ( pFrame )
+            return pFrame->GetStatusBar();
+    }
+    return NULL;
+}
+#endif
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), const wxString& msg )
 {
     if ( !msg.length() )
@@ -3135,24 +3151,33 @@ void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), cons
 #if wxUSE_STATUSBAR
     if ( !wxPGGlobalVars->m_offline )
     {
-        wxWindow* topWnd = ::wxGetTopLevelParent(this);
-        if ( topWnd )
+        wxStatusBar* pStatusBar = GetStatusBar();
+        if ( pStatusBar )
         {
-            wxFrame* pFrame = wxDynamicCast(topWnd, wxFrame);
-            if ( pFrame )
-            {
-                wxStatusBar* pStatusBar = pFrame->GetStatusBar();
-                if ( pStatusBar )
-                {
-                    pStatusBar->SetStatusText(msg);
-                    return;
-                }
-            }
+            pStatusBar->SetStatusText(msg);
+            return;
         }
     }
 #endif
 
     ::wxMessageBox(msg, wxT("Property Error"));
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::DoHidePropertyError( wxPGProperty* WXUNUSED(property) )
+{
+#if wxUSE_STATUSBAR
+    if ( !wxPGGlobalVars->m_offline )
+    {
+        wxStatusBar* pStatusBar = GetStatusBar();
+        if ( pStatusBar )
+        {
+            pStatusBar->SetStatusText(wxEmptyString);
+            return;
+        }
+    }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -3257,6 +3282,11 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
         {
             DrawItemAndChildren(property);
         }
+    }
+
+    if ( vfb & wxPG_VFB_SHOW_MESSAGE )
+    {
+        DoHidePropertyError(property);
     }
 
     m_validationInfo.m_isFailing = false;
@@ -4214,14 +4244,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
     if ( !(GetExtraStyle() & wxPG_EX_HELP_AS_TOOLTIPS) )
     {
-        wxStatusBar* statusbar = NULL;
-        if ( !(m_iFlags & wxPG_FL_NOSTATUSBARHELP) )
-        {
-            wxFrame* frame = wxDynamicCast(::wxGetTopLevelParent(this),wxFrame);
-            if ( frame )
-                statusbar = frame->GetStatusBar();
-        }
-
+        wxStatusBar* statusbar = GetStatusBar();
         if ( statusbar )
         {
             const wxString* pHelpString = (const wxString*) NULL;

@@ -1044,6 +1044,45 @@ public:
     */
     void SetVerticalSpacing( int vspacing );
 
+    /**
+        @name wxPropertyGrid customization
+
+        Reimplement these member functions in derived class for better
+        control over wxPropertyGrid behavior.
+    */
+    //@{
+    
+    /**
+        Override in derived class to display error messages in custom manner
+        (these message usually only result from validation failure).
+
+        @remarks If you implement this, then you also need to implement
+                 DoHidePropertyError() - possibly to do nothing, if error
+                 does not need hiding (e.g. it was logged or shown in a
+                 message box).
+
+        @see DoHidePropertyError()
+    */
+    virtual void DoShowPropertyError( wxPGProperty* property,
+                                      const wxString& msg );
+
+    /**
+        Override in derived class to hide an error displayed by
+        DoShowPropertyError().
+
+        @see DoShowPropertyError()
+    */
+    virtual void DoHidePropertyError( wxPGProperty* property );
+
+    /**
+        Return wxStatusBar that is used by this wxPropertyGrid. You can
+        reimplement this member function in derived class to override
+        the default behavior of using the top-level wxFrame's status
+        bar, if any.
+    */
+    virtual wxStatusBar* GetStatusBar();
+
+    //@}
 
     /**
         @name Property development functions
