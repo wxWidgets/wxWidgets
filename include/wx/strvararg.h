@@ -151,12 +151,14 @@ public:
         : m_wchar(str), m_str(NULL), m_cstr(NULL) {}
 
     // Possible argument types. These are or-combinable for wxASSERT_ARG_TYPE
-    // convenience.
+    // convenience. Some of the values are or-combined with another value, this
+    // expresses "supertypes" for use with wxASSERT_ARG_TYPE masks. For example,
+    // a char* string is also a pointer and an integer is also a char.
     enum ArgumentType
     {
         Arg_Char        = 0x0001,    // character as char %c
         Arg_Pointer     = 0x0002,    // %p
-        Arg_String      = 0x0004,    // any form of string
+        Arg_String      = 0x0004 | Arg_Pointer, // any form of string (%s and %p too)
 
         Arg_Int         = 0x0008,
 #if SIZEOF_INT == SIZEOF_LONG
@@ -414,14 +416,14 @@ wxFORMAT_STRING_SPECIFIER(signed char, wxFormatString::Arg_Char | wxFormatString
 wxFORMAT_STRING_SPECIFIER(unsigned char, wxFormatString::Arg_Char | wxFormatString::Arg_Int)
 #endif
 
-wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(signed char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(const char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(const unsigned char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(const signed char*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(wchar_t*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
-wxFORMAT_STRING_SPECIFIER(const wchar_t*, wxFormatString::Arg_String | wxFormatString::Arg_Pointer)
+wxFORMAT_STRING_SPECIFIER(char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(unsigned char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(signed char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(const char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(const unsigned char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(const signed char*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(wchar_t*, wxFormatString::Arg_String)
+wxFORMAT_STRING_SPECIFIER(const wchar_t*, wxFormatString::Arg_String)
 
 wxFORMAT_STRING_SPECIFIER(int*, wxFormatString::Arg_IntPtr | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(short int*, wxFormatString::Arg_ShortIntPtr | wxFormatString::Arg_Pointer)
@@ -503,8 +505,7 @@ struct wxArgNormalizerWithBuffer
                               unsigned index)
         : m_value(buf)
     {
-        wxASSERT_ARG_TYPE( fmt, index,
-                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_String );
     }
 
     const CharType *get() const { return m_value; }
@@ -538,8 +539,7 @@ struct WXDLLIMPEXP_BASE wxArgNormalizerNative<const wxCStrData&>
                           unsigned index)
         : m_value(value)
     {
-        wxASSERT_ARG_TYPE( fmt, index,
-                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_String );
     }
 
     const wxStringCharType *get() const;
@@ -599,8 +599,7 @@ struct wxArgNormalizerUtf8<const char*>
                         const wxFormatString *fmt,
                         unsigned index)
     {
-        wxASSERT_ARG_TYPE( fmt, index,
-                           wxFormatString::Arg_String | wxFormatString::Arg_Pointer );
+        wxASSERT_ARG_TYPE( fmt, index, wxFormatString::Arg_String );
 
         if ( wxLocaleIsUtf8 )
         {
