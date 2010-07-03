@@ -219,4 +219,12 @@ void VarArgTestCase::ArgsValidation()
     // %c should accept integers too
     wxString::Format("%c", 80);
     wxString::Format("%c", wxChar(80) + wxChar(1));
+
+    // check size_t handling
+    size_t len = sizeof(*this);
+#ifdef __WXMSW__
+    wxString::Format("%Iu", len);
+#else
+    wxString::Format("%zu", len);
+#endif
 }
