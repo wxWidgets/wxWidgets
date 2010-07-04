@@ -957,6 +957,10 @@ without warnings or errors.
     with keyboard. This change allowed fixing broken tab traversal on wxGTK
     (which is open issue in wxPropertyGrid 1.4).
 
+  - wxPG_EX_UNFOCUS_ON_ENTER style is removed and is now default behavior.
+    That is, when enter is pressed, editing is considered done and focus
+    moves back to the property grid from the editor control.
+
   - A few member functions were removed from wxPropertyGridInterface.
     Please use wxPGProperty's counterparts from now on.
 
