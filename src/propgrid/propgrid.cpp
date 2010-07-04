@@ -4000,13 +4000,11 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     if ( m_inDoSelectProperty )
         return true;
 
-    m_inDoSelectProperty = 1;
+    m_inDoSelectProperty = true;
+    wxON_BLOCK_EXIT_SET(m_inDoSelectProperty, false);
 
     if ( !m_pState )
-    {
-        m_inDoSelectProperty = 0;
         return false;
-    }
 
     wxArrayPGProperty prevSelection = m_pState->m_selection;
     wxPGProperty* prevFirstSel;
@@ -4072,7 +4070,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                 }
             }
 
-            m_inDoSelectProperty = 0;
             return true;
         }
 
@@ -4088,7 +4085,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     // Validation has failed, so we can't exit the previous editor
                     //::wxMessageBox(_("Please correct the value or press ESC to cancel the edit."),
                     //               _("Invalid Value"),wxOK|wxICON_ERROR);
-                    m_inDoSelectProperty = 0;
                     return false;
                 }
             }
@@ -4326,8 +4322,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         }
     }
 #endif
-
-    m_inDoSelectProperty = 0;
 
     // call wx event handler (here so that it also occurs on deselection)
     if ( !(flags & wxPG_SEL_DONT_SEND_EVENT) )

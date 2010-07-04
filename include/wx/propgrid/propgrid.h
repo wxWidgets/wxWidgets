@@ -1938,7 +1938,7 @@ protected:
     unsigned char       m_inCommitChangesFromEditor;
 
     /** 1 if in DoSelectProperty() */
-    unsigned char       m_inDoSelectProperty;
+    bool                m_inDoSelectProperty;
 
     bool                m_inOnValidationFailure;
 
