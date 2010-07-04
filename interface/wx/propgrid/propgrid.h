@@ -233,9 +233,29 @@ wxPG_VFB_BEEP                       = 0x02,
 wxPG_VFB_MARK_CELL                  = 0x04,
 
 /**
-    Display customizable text message explaining the situation.
+    Display a text message explaining the situation. 
+
+    To customize the way the message is displayed, you need to
+    reimplement wxPropertyGrid::DoShowPropertyError() in a
+    derived class. Default behavior is to display the text on
+    the top-level frame's status bar, if present, and otherwise
+    using wxMessageBox.
 */
 wxPG_VFB_SHOW_MESSAGE               = 0x08,
+
+/**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message using wxMessageBox.
+*/
+wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
+
+/**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message on the status bar (when present - you can reimplement
+    wxPropertyGrid::GetStatusBar() in a derived class to specify
+    this yourself).
+*/
+wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
 
 /**
     Defaults.

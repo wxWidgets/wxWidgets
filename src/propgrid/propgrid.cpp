@@ -3247,14 +3247,32 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
         }
     }
 
-    if ( vfb & wxPG_VFB_SHOW_MESSAGE )
+    if ( vfb & (wxPG_VFB_SHOW_MESSAGE |
+                wxPG_VFB_SHOW_MESSAGEBOX |
+                wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR) )
     {
         wxString msg = m_validationInfo.m_failureMessage;
 
         if ( !msg.length() )
-            msg = wxT("You have entered invalid value. Press ESC to cancel editing.");
+            msg = _("You have entered invalid value. Press ESC to cancel editing.");
 
-        DoShowPropertyError(property, msg);
+    #if wxUSE_STATUSBAR
+        if ( vfb & wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR )
+        {
+            if ( !wxPGGlobalVars->m_offline )
+            {
+                wxStatusBar* pStatusBar = GetStatusBar();
+                if ( pStatusBar )
+                    pStatusBar->SetStatusText(msg);
+            }
+        }
+    #endif
+
+        if ( vfb & wxPG_VFB_SHOW_MESSAGE )
+            DoShowPropertyError(property, msg);
+
+        if ( vfb & wxPG_VFB_SHOW_MESSAGEBOX )
+            ::wxMessageBox(msg, _("Property Error"));
     }
 
     return (vfb & wxPG_VFB_STAY_IN_PROPERTY) ? false : true;
@@ -3283,6 +3301,18 @@ void wxPropertyGrid::DoOnValidationFailureReset( wxPGProperty* property )
             DrawItemAndChildren(property);
         }
     }
+
+#if wxUSE_STATUSBAR
+    if ( vfb & wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR )
+    {
+        if ( !wxPGGlobalVars->m_offline )
+        {
+            wxStatusBar* pStatusBar = GetStatusBar();
+            if ( pStatusBar )
+                pStatusBar->SetStatusText(wxEmptyString);
+        }
+    }
+#endif
 
     if ( vfb & wxPG_VFB_SHOW_MESSAGE )
     {
