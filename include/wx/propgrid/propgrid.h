@@ -1940,6 +1940,8 @@ protected:
     /** 1 if in DoSelectProperty() */
     unsigned char       m_inDoSelectProperty;
 
+    bool                m_inOnValidationFailure;
+
     wxPGVFBFlags        m_permanentValidationFailureBehavior;  // Set by app
 
     // DoEditorValidate() recursion guard

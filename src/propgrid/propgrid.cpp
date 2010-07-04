@@ -344,6 +344,7 @@ void wxPropertyGrid::Init1()
     m_inDoPropertyChanged = 0;
     m_inCommitChangesFromEditor = 0;
     m_inDoSelectProperty = 0;
+    m_inOnValidationFailure = false;
     m_permanentValidationFailureBehavior = wxPG_VFB_DEFAULT;
     m_dragStatus = 0;
     m_mouseSide = 16;
@@ -3185,7 +3186,27 @@ void wxPropertyGrid::DoHidePropertyError( wxPGProperty* WXUNUSED(property) )
 bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
                                           wxVariant& invalidValue )
 {
+    if ( m_inOnValidationFailure )
+        return true;
+
+    m_inOnValidationFailure = true;
+    wxON_BLOCK_EXIT_SET(m_inOnValidationFailure, false);
+
     wxWindow* editor = GetEditorControl();
+    int vfb = m_validationInfo.m_failureBehavior;
+
+    if ( m_inDoSelectProperty )
+    {
+        // When property selection is being changed, do not display any
+        // messages, if some were already shown for this property.
+        if ( property->HasFlag(wxPG_PROP_INVALID_VALUE) )
+        {
+            m_validationInfo.m_failureBehavior =
+                vfb & ~(wxPG_VFB_SHOW_MESSAGE |
+                        wxPG_VFB_SHOW_MESSAGEBOX |
+                        wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR);
+        }
+    }
 
     // First call property's handler
     property->OnValidationFailure(invalidValue);
@@ -3529,6 +3550,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
     // Possibly, but very rare.
     if ( !selected ||
           selected->HasFlag(wxPG_PROP_BEING_DELETED) ||
+          m_inOnValidationFailure ||
           // Also don't handle editor event if wxEVT_PG_CHANGED or
           // similar is currently doing something (showing a
           // message box, for instance).
@@ -4058,8 +4080,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         // First, deactivate previous
         if ( prevFirstSel )
         {
-            OnValidationFailureReset(prevFirstSel);
-
             // Must double-check if this is an selected in case of forceswitch
             if ( p != prevFirstSel )
             {
@@ -4072,6 +4092,11 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     return false;
                 }
             }
+
+            // This should be called after CommitChangesFromEditor(), so that
+            // OnValidationFailure() still has information on property's
+            // validation state.
+            OnValidationFailureReset(prevFirstSel);
 
             FreeEditors();
 
