@@ -1932,10 +1932,10 @@ protected:
     unsigned char       m_keyComboConsumed;
 
     /** 1 if in DoPropertyChanged() */
-    unsigned char       m_inDoPropertyChanged;
+    bool                m_inDoPropertyChanged;
 
     /** 1 if in CommitChangesFromEditor() */
-    unsigned char       m_inCommitChangesFromEditor;
+    bool                m_inCommitChangesFromEditor;
 
     /** 1 if in DoSelectProperty() */
     bool                m_inDoSelectProperty;

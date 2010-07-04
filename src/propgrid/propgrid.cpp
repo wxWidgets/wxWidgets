@@ -341,9 +341,9 @@ void wxPropertyGrid::Init1()
     m_curFocused = NULL;
     m_processedEvent = NULL;
     m_sortFunction = NULL;
-    m_inDoPropertyChanged = 0;
-    m_inCommitChangesFromEditor = 0;
-    m_inDoSelectProperty = 0;
+    m_inDoPropertyChanged = false;
+    m_inCommitChangesFromEditor = false;
+    m_inDoSelectProperty = false;
     m_inOnValidationFailure = false;
     m_permanentValidationFailureBehavior = wxPG_VFB_DEFAULT;
     m_dragStatus = 0;
@@ -2909,7 +2909,7 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
          (m_iFlags & wxPG_FL_INITIALIZED) &&
          selected )
     {
-        m_inCommitChangesFromEditor = 1;
+        m_inCommitChangesFromEditor = true;
 
         wxVariant variant(selected->GetValueRef());
         bool valueIsPending = false;
@@ -2944,9 +2944,9 @@ bool wxPropertyGrid::CommitChangesFromEditor( wxUint32 flags )
             EditorsValueWasNotModified();
         }
 
-        bool res = true;
+        m_inCommitChangesFromEditor = false;
 
-        m_inCommitChangesFromEditor = 0;
+        bool res = true;
 
         if ( validationFailure && !forceSuccess )
         {
@@ -3351,11 +3351,12 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     if ( m_inDoPropertyChanged )
         return true;
 
+    m_inDoPropertyChanged = true;
+    wxON_BLOCK_EXIT_SET(m_inDoPropertyChanged, false);
+
     wxPGProperty* selected = GetSelection();
 
     m_pState->m_anyModified = 1;
-
-    m_inDoPropertyChanged = 1;
 
     // If property's value is being changed, assume it is valid
     OnValidationFailureReset(selected);
@@ -3447,8 +3448,6 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     }
 
     SendEvent( wxEVT_PG_CHANGED, changedProperty, NULL );
-
-    m_inDoPropertyChanged = 0;
 
     return true;
 }
