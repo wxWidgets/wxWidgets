@@ -754,6 +754,7 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
         SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
         Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
         Bind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
+        Bind(wxLEFT_DOWN, &wxTextCtrlBase::MouseClickedMask, this);
     }
     else
     {
@@ -761,6 +762,7 @@ void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
             delete m_maskCtrl;
         Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
         Unbind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
+        Unbind(wxLEFT_DOWN, &wxTextCtrlBase::MouseClickedMask, this);
     }
 }
 
@@ -810,11 +812,10 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(userInput) != 0)
             {
-               if(m_maskCtrl->GetFormatCodes.Find('-') != wxNOT_FOUND && userInput[0] == '-')
+               if(m_maskCtrl->GetFormatCode().Find('-') == wxNOT_FOUND)
                {
+                    Replace(0, formatString.Len() , formatString);
                }
-
-               Replace(0, formatString.Len() , formatString);
 
                printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
             }
@@ -945,6 +946,21 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     }
 }
 
+
+void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
+{
+    unsigned int spaceIndex = string.Find(' ');
+    
+    if(m_maskCtrl->GetFormatCode().Find('_') != wxNOT_FOUND)
+    {
+        event.Skip();
+    }
+    else
+    {
+        SetInsertionPoint(spaceIndex);
+    }
+
+}
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------

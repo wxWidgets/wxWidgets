@@ -736,6 +736,7 @@ protected:
      //Mask event methods
     void ApplyMask(wxCommandEvent& event);
     void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
 
 
 
