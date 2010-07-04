@@ -260,7 +260,8 @@ wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
 /**
     Defaults.
 */
-wxPG_VFB_DEFAULT                    = wxPG_VFB_STAY_IN_PROPERTY|wxPG_VFB_BEEP,
+wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
+                                      wxPG_VFB_SHOW_MESSAGEBOX,
 };
 
 /** @}

@@ -725,7 +725,7 @@ message.
                     event.Veto();
                     event.SetValidationFailureBehavior(wxPG_VFB_STAY_IN_PROPERTY |
                                                        wxPG_VFB_BEEP |
-                                                       wxPG_VFB_SHOW_MESSAGE);
+                                                       wxPG_VFB_SHOW_MESSAGEBOX);
                 }
             }
         }
@@ -978,6 +978,12 @@ without warnings or errors.
     on its own), use the wxPG_EX_ENABLE_TLP_TRACKING extra style.
 
   - Extended window style wxPG_EX_LEGACY_VALIDATORS was removed.
+
+  - Default property validation failure behavior has been changed to
+    (wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGEBOX), which means that the
+    cell is marked red and wxMessageBox is shown. This is more user-friendly
+    than the old behavior, which simply beeped and prevented leaving the
+    property editor until a valid value was entered.
 
   - wxPropertyGridManager now has same Get/SetSelection() semantics as
     wxPropertyGrid.
