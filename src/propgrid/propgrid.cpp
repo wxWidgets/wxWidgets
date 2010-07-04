@@ -3160,7 +3160,7 @@ void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), cons
     }
 #endif
 
-    ::wxMessageBox(msg, wxT("Property Error"));
+    ::wxMessageBox(msg, _("Property Error"));
 }
 
 // -----------------------------------------------------------------------
