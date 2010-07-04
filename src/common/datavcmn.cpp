@@ -1391,14 +1391,9 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices
 
 wxControl* wxDataViewChoiceRenderer::CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
 {
-    wxString s = value;
-    wxSize size = labelRect.GetSize();
-#ifdef __WXMAC__
-    size = wxSize( wxMax(70,labelRect.width ), -1 );
-#endif
-    wxChoice *c = new wxChoice( parent, wxID_ANY, labelRect.GetTopLeft(), size, m_choices );
+    wxChoice* c = new wxChoice(parent, wxID_ANY, labelRect.GetTopLeft(), wxDefaultSize, m_choices );
+    c->Move(labelRect.GetRight() - c->GetRect().width, wxDefaultCoord);
     c->SetStringSelection( value.GetString() );
-
     return c;
 }
 
