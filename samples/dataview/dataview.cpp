@@ -896,8 +896,9 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
     if (!m_log)
         return;
 
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %d;  Column: %d",
-                  event.GetItem().GetID(), event.GetColumn() );
+    wxString title = m_music_model->GetTitle( event.GetItem() );
+    wxLogMessage( "wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %s;  Column: %d",
+                  title, event.GetColumn() );
 }
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
