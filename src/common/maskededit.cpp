@@ -146,7 +146,7 @@ wxString wxMaskedEdit::ApplyFormatCodes(const wxString& string)
         fieldIndex++;
     } 
 
-    if(tmp.Cmp(wxT("")) == 0 || string.Len() > res.Len() 
+    if(tmp.Cmp(wxT("")) == 0 
       || alreadyUsed.Cmp(string) != 0)
         res = string;
 
@@ -199,8 +199,8 @@ void wxMaskedEdit::ClearValue()
 bool wxMaskedEdit::IsValid(const wxString& string) const
 {
     wxString tmp;
-    unsigned int it;
-    unsigned int itMask;
+    unsigned int it = 0;
+    unsigned int itMask = 0;
     unsigned int fieldNumber = 0;
     unsigned int numberOfSlash = 0;
     unsigned int numberOfPipe = 0;
@@ -210,8 +210,10 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
     numberOfSlash = tmp.Replace('\\', ' ');
     numberOfPipe  = tmp.Replace('|', ' ');
 
-    if(string.Len() > m_maskValue.Len() - numberOfSlash - numberOfPipe )
+    if(string.Len() > m_maskValue.Len() - numberOfSlash - numberOfPipe
+       && m_mask[0]->GetFormatCodes().Find('-') == wxNOT_FOUND)
         res =  false;
+    
     tmp.Empty();
 
     for(itMask = 0, it = 0; itMask < m_maskValue.Len() && res && it < string.Len() ; it++, itMask++)
@@ -234,11 +236,10 @@ bool wxMaskedEdit::IsValid(const wxString& string) const
             tmp.Clear();
         }
             
-        
     }
-            
-    if(!m_mask[fieldNumber]->IsValid(tmp))
-        res = false;
+
+    tmp << string.Mid(it);
+    res = res && m_mask[fieldNumber]->IsValid(tmp);
 
     return res;
 }

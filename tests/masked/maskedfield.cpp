@@ -212,21 +212,26 @@ void MaskedFieldTestCase::TestIsValid()
         {wxT("AAa.#X*") , wxT("F"), wxT("AZc.3,|") , true},
         {wxT("AAa.#X*") , wxT("F"), wxT("AZc3,|")  , false},
         {wxT("AAa.#X*") , wxT("F"), wxT("aZc.|.|") , false},
-        {wxT("AAa.#X*") , wxT("F"), wxT("")        , false},
+        {wxT("AAa.#X*") , wxT("F"), wxT("")        , true},
         {wxT("AAa.#X*") , wxT("F"), wxT("AZc.3,|4"), false},
 
-        {wxT("###\\*###") , wxT("F"), wxT("")         , false},
+        {wxT("###\\*###") , wxT("F"), wxT("")         , true},
         {wxT("###\\*###") , wxT("F"), wxT("123*593")  , true},
         {wxT("###\\*###") , wxT("F"), wxT("123456")   , false},
         {wxT("###\\*###") , wxT("F"), wxT("124\\*45") , false},
         
-        {wxT("#{4}") , wxT("F"), wxT("1234")  , true},
+        {wxT("#{5}") , wxT("F"), wxT("12345")  , true},
         {wxT("Aa{5} A{5}"), wxT("F!_"), wxT("A"), true},
 
         {wxT("###")  , wxT("F-")   , wxT("1")  , true},
-        {wxT("###")  , wxT("F-_")   , wxT("1")  , true},
+        {wxT("###")  , wxT("F-_")  , wxT("1")  , true},
         {wxT("###")  , wxT("F-")   , wxT("111")  , true},
         {wxT("###")  , wxT("F-")   , wxT("-111") , true},
+        {wxT("#{6}") , wxT("F-")   , wxT("-") , true},
+        {wxT("#{6}") , wxT("F_-")   , wxT("1") , true},
+        {wxT("#{6}") , wxT("F_-")   , wxT("1") , true},
+        {wxT("#{6}") , wxT("F_-")   , wxT("1     ") , true},
+        {wxT("#{6}") , wxT("F_-")    , wxT("-     ") , true},
  
     };
 
@@ -337,7 +342,7 @@ void MaskedFieldTestCase::TestAddChoice()
         {wxT("###.###.###.###"), wxT("111.222.333.444"), true},
         {wxT("###.###.###.###"), wxT("111.2z2.333.444"), false},
         {wxT("###.###.###.###"), wxT("111.222.3.444"),   false},
-        {wxT("###.###.###.###"), wxT(""), false},
+        {wxT("###.###.###.###"), wxT(""), true},
     };
 
 

@@ -810,6 +810,10 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(userInput) != 0)
             {
+               if(m_maskCtrl->GetFormatCodes.Find('-') != wxNOT_FOUND && userInput[0] == '-')
+               {
+               }
+
                Replace(0, formatString.Len() , formatString);
 
                printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
