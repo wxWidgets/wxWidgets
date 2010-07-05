@@ -17,7 +17,7 @@
 #include "itemcontainertest.h"
 
 //----------------------------------------------------------------
-//Please also update tests in CombeBoxTestCase when updating below
+//Please also update tests in ComboBoxTestCase when updating below
 //----------------------------------------------------------------
 
 void ItemContainerTestCase::Append()
@@ -152,4 +152,29 @@ void ItemContainerTestCase::FindString()
     CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, container->FindString("ITEM 1", true));
 
     container->Clear();
+}
+
+void ItemContainerTestCase::ClientData()
+{
+    wxItemContainer * const container = GetContainer();
+
+    wxStringClientData* item0data = new wxStringClientData("item0data");
+    wxStringClientData* item1data = new wxStringClientData("item1data");
+    wxStringClientData* item2data = new wxStringClientData("item2data");
+    
+    container->Append("item 0", item0data);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item0data), 
+                         container->GetClientObject(0));
+
+    container->Append("item 1");
+    container->SetClientObject(1, item1data);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item1data),
+                         container->GetClientObject(1));
+
+    container->Insert("item 2", 2, item2data);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data),
+                         container->GetClientObject(2));
 }

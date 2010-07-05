@@ -34,13 +34,15 @@ protected:
         CPPUNIT_TEST( Insert ); \
         CPPUNIT_TEST( Count ); \
         CPPUNIT_TEST( Selection ); \
-        CPPUNIT_TEST( FindString )
+        CPPUNIT_TEST( FindString ); \
+        CPPUNIT_TEST( ClientData )
 
     void Append();
     void Insert();
     void Count();
     void Selection();
     void FindString();
+    void ClientData();
 
 private:
     DECLARE_NO_COPY_CLASS(ItemContainerTestCase)
