@@ -136,6 +136,7 @@
             controls/listboxtest.cpp
             controls/listctrltest.cpp
             controls/notebooktest.cpp
+            controls/rearrangelisttest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/treebooktest.cpp
