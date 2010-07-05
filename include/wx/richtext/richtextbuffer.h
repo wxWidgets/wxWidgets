@@ -1245,6 +1245,33 @@ protected:
     wxBitmapType        m_imageType;
 };
 
+/*!
+ * wxRichTextPlaceHoldingOjbect class declaration
+ * This object is a place holding object, it means that
+ * this object take no space at all, but its 'real object'
+ * such as a 'floating image' takes space.
+ */
+class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextOjbect
+{
+    DECLARE_DYNAMIC_CLASS(wxRichTextImage)
+public:
+// Constructors
+    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL);
+    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL, wxRichTextObject *real);
+
+// Overrideables
+    /// Draw the object
+    virtual bool Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionrange, const wxRect& rect, int descent, int style);
+    /// Layout the real floating objects
+    virtual bool Layout(wxDC& dc, const wxRect& rect, int style);
+    /// Get the object size for the given range. Returns false if the range
+    /// is invalid for this object.
+    virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
+
+private:
+    wxRichTextObject* m_real;
+};
+
 
 /*!
  * wxRichTextImage class declaration

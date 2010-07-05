@@ -53,6 +53,51 @@ WX_DEFINE_LIST(wxRichTextLineList)
 
 const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 
+// Helper classes for floating layout
+struct FloatRectMap
+{
+    int startY, endY;
+    int width;
+};
+
+class wxFloatCollector
+{
+public:
+    wxFloatCollector();
+    ~wxFloatCollector();
+
+    // Collect the floating objects info in the given paragraph
+    bool CollectFloat(wxRichTextParagraph* para);
+    // Return the last paragraph we collected
+    wxRichTextParagraph* LastParagraph();
+    // Given the start y position and the height of the line,
+    // find out how wide the line can be
+    wxRect GetAvailableWidth(int startY, int height);
+private:
+    FloatRectMap* m_left;
+    FloatRectMap* m_right;
+};
+
+wxFloatCollector::wxFloatCollector()
+{
+}
+
+wxFloatCollector::~wxFloatCollector()
+{
+}
+
+bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
+{
+}
+
+wxRichTextParagraph* wxFloatCollector::LastParagraph()
+{
+}
+
+wxRect wxFloatCollector::GetAvailableWidth(int startY, int height)
+{
+}
+
 // Helpers for efficiency
 
 inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
@@ -7126,6 +7171,32 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
         m_end = range.m_end;
 
     return true;
+}
+
+/*!
+ * wxRichTextPlaceHoldingObject implementation
+ */
+
+IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject, wxRichTextObject)
+
+wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject* parent)
+{
+}
+
+wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextObject *real)
+{
+}
+
+bool wxRichTextPlaceHoldingObject::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionrange, const wxRect& rect, int descent, int style)
+{
+}
+
+bool wxRichTextPlaceHoldingObject::Layout(wxDC& dc, const wxRect& rect, int style)
+{
+}
+
+bool wxRichTextPlaceHoldingObject::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents)
+{
 }
 
 /*!
