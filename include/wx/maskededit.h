@@ -90,7 +90,7 @@ public:
     
     wxString GetPreviousChoices() const;
  
-    int GetNumberOfFields() const ;
+    unsigned int GetNumberOfFields() const ;
     
     void SetEmptyBackgroundColour(const wxColour& colour);
      
@@ -133,11 +133,15 @@ public:
     unsigned int GetFieldIndex(unsigned int position);
     unsigned int GetMinFieldPosition(unsigned int fieldIndex);
     unsigned int GetMaxFieldPosition(unsigned int fieldIndex);
-   
+  
+    bool IsNumber();
+
+    wxString GetDecimalPoint();
 private:
     //mask caracteristics
     fieldsArray m_mask;
     wxString m_maskValue;
+    bool m_isNumber;
 
     //Control behavior
     wxColour m_emptyBg;

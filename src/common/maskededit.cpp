@@ -27,16 +27,21 @@ wxMaskedEdit::wxMaskedEdit()
 }
 
 
-#if 0
 wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
 {
-    m_mask.Add(new wxMaskedField( maskedEdit.GetMask(), maskedEdit.GetFormatCode()
-                                , maskedEdit.GetDefaultValue()));
 
-    m_maskValue = maskedEdit.GetMask();
+    wxArrayString formatCodes;
+    unsigned int it;
 
+    for(it = 0; it < maskedEdit.GetNumberOfFields(); it++)
+    {
+        formatCodes.Add(maskedEdit.GetFormatCodes(it));
+    }
+
+    Create(maskedEdit.GetMask(), formatCodes, maskedEdit.GetDefaultValue());
+
+    AddChoices(maskedEdit.GetChoices(0));
 }
-#endif
     
 
 wxMaskedEdit::wxMaskedEdit( const wxString& mask 
@@ -70,6 +75,7 @@ void wxMaskedEdit::Create( const wxString& mask
     {
         m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
         m_maskValue = mask;
+        m_isNumber = m_mask[0]->IsNumber();
     }
     else
     {
@@ -90,6 +96,8 @@ void wxMaskedEdit::Create( const wxString& mask
                     m_mask.Add(new wxMaskedField(tmp, formatCode[numberOfFields]));
                     numberOfFields++;
                 }
+                else if(formatCode.GetCount() == 1)
+                    m_mask.Add(new wxMaskedField(tmp, formatCode[0]));
                 else
                     m_mask.Add(new wxMaskedField(tmp));
                 
@@ -105,10 +113,12 @@ void wxMaskedEdit::Create( const wxString& mask
         else
             m_mask.Add(new wxMaskedField(tmp));
 
+        
         SetDefaultValue(defaultValue);
+        m_maskValue = GetMask();
+        m_isNumber = false;
     }
 
-    m_maskValue = GetMask();
     m_emptyBg   = wxColour(255,255,255);
     m_invalidBg = wxColour(255,255,255);
     m_validBg   = wxColour(255,255,255);
@@ -462,7 +472,7 @@ unsigned int wxMaskedEdit::NumberOfChoices()
 
 }
 
-int wxMaskedEdit::GetNumberOfFields() const
+unsigned int wxMaskedEdit::GetNumberOfFields() const
 {
     return m_mask.GetCount();
 }
@@ -631,3 +641,22 @@ unsigned int wxMaskedEdit::GetMaxFieldPosition(unsigned int fieldIndex)
 
 }
 
+bool wxMaskedEdit::IsNumber()
+{
+    return m_mask.GetCount() == 1 && m_mask[0]->IsNumber();
+}
+
+wxString wxMaskedEdit::GetDecimalPoint()
+{
+    wxString res;
+    if(m_mask.GetCount() != 1)
+    {
+        res = wxEmptyString;
+    }
+    else
+    {
+        res = m_mask[0]->GetDecimalPoint();
+    }
+
+    return res;
+}

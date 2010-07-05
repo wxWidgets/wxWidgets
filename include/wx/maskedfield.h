@@ -88,6 +88,7 @@ public:
 
     wxString GetEmptyMask() const;
 
+    bool IsNumber();
 private:
     // The mask in the field see wxMaskedEdit
     wxString m_mask;

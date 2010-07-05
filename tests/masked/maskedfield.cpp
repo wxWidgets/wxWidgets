@@ -49,7 +49,8 @@ private:
         CPPUNIT_TEST( TestSetMask          );
         CPPUNIT_TEST( TestSetDefaultValue  );
         CPPUNIT_TEST( TestGetPlainValue    );
-        CPPUNIT_TEST( TestGetEmptyedMask    );
+        CPPUNIT_TEST( TestGetEmptyedMask   );
+        CPPUNIT_TEST( TestIsNumber         );
     CPPUNIT_TEST_SUITE_END();
 
     void TestCreate();
@@ -63,6 +64,7 @@ private:
     void TestSetDefaultValue();
     void TestGetPlainValue();
     void TestGetEmptyedMask();
+    void TestIsNumber();
 
     DECLARE_NO_COPY_CLASS(MaskedFieldTestCase)
 };
@@ -471,6 +473,33 @@ void MaskedFieldTestCase::TestGetEmptyedMask()
         wxMaskedField mask(maskedEmpty[n].mask, wxT("F"));
         
         CPPUNIT_ASSERT( mask.GetEmptyMask().Cmp(maskedEmpty[n].result) == 0 );    
+    }
+}
+
+void MaskedFieldTestCase::TestIsNumber()
+{ 
+    static struct TestIsNumber
+    {
+        wxString mask;      
+        bool result;
+    }
+    maskedNumber[]=
+    {
+        {wxT("###.###.###.###") , false },
+        {wxT("###.AAA.aC\\&")   , false },
+        {wxT("#XX.")            , false },
+        {wxT("(###) - ###-####"), false },
+        {wxT("###.##"), true},
+        {wxT("##A.##"), false},
+        {wxT("###1.##"), false},
+    };
+
+
+    for(unsigned int n = 0; n< WXSIZEOF(maskedNumber); n++)
+    {
+        wxMaskedField mask(maskedNumber[n].mask, wxT("F"));
+                
+        CPPUNIT_ASSERT_EQUAL(maskedNumber[n].result, mask.IsNumber());    
     }
 
 

@@ -431,7 +431,7 @@ public:
         { return m_mainCtrlWnd; }
 
     //mask
-    void SetMask(wxMaskedEdit* mask);
+    void SetMask(const wxMaskedEdit& mask);
     void ApplyMask(wxCommandEvent& WXUNUSED(event));
     void KeyPressedMask(wxKeyEvent& event);
 
@@ -664,7 +664,7 @@ protected:
     // should the focus be reset to the textctrl in idle time?
     bool                    m_resetFocus;
     // Mask
-    wxMaskedEdit* m_maskCtrl;
+    wxMaskedEdit m_maskCtrl;
 
 
 private:

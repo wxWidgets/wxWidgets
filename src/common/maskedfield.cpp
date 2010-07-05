@@ -271,7 +271,10 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
                 if(m_formatCodes.Find(wxT("-")) != wxNOT_FOUND && string[0] == '-')
                 {
                     printf("Pre gagne\n");
-                    if(res.Len() == 0 && ((string.Len() > 0 &&( IsCharValid(m_mask[0], string[1])) || string[1] == ' ') || string.Len() == 1))
+                    if(res.Len() == 0 && 
+                    ((string.Len() > 0 &&( IsCharValid(m_mask[0], string[1])) 
+                        || string[1] == ' ') 
+                            || string.Len() == 1))
                     {
                         printf("Gagne\n");
                         it++;
@@ -650,5 +653,26 @@ wxString wxMaskedField::GetEmptyMask() const
             res << ' ';
         }
     }
+    return res;
+}
+
+bool wxMaskedField::IsNumber()
+{
+    bool res = true;
+    unsigned int it;
+
+    if(m_mask.Find(m_decimalPoint) != m_mask.Find(m_decimalPoint, true))
+    {
+        res = false;
+    }
+    
+    for(it = 0; it < m_mask.Len() && res; it++)
+    {
+        if(m_mask[it] != '#' && m_mask[it] != m_decimalPoint)
+        {
+            res = false;
+        }
+    }
+
     return res;
 }

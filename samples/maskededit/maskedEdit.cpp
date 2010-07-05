@@ -68,6 +68,7 @@ public:
     MyFrame(const wxString& title);
 
     void CreateFirstPage(wxPanel* pan);
+    void CreateSecondPage(wxPanel* pan);
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -186,6 +187,11 @@ MyFrame::MyFrame(const wxString& title)
     CreateFirstPage(firstPagePanel);
     tab->AddPage(firstPagePanel, wxT("Basic example"));
 
+    wxPanel* secondPagePanel = new wxPanel(tab);
+    CreateSecondPage(secondPagePanel);
+    tab->AddPage(secondPagePanel, wxT("User choice example"));
+
+
     globalSizer->Add(tab,wxALL|wxEXPAND );
   
     SetSizer(globalSizer);
@@ -200,10 +206,10 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
     wxStaticText* ipMask     = new wxStaticText(pan, wxID_ANY, wxT("###.###.###.###")); 
     wxStaticText* ipFormat   = new wxStaticText(pan, wxID_ANY, wxT("F")); 
     wxTextCtrl*   ipCtrl     = new wxTextCtrl(pan, wxID_ANY); 
-    wxMaskedEdit* ipMaskEdit = new wxMaskedEdit(wxT("###.###.###.###"), wxT("F"));
+    wxMaskedEdit ipMaskEdit(wxT("###.###.###.###"), wxT("F"));
 
     ipCtrl->SetMask(ipMaskEdit);
-    ipCtrl->ChangeValue(ipMaskEdit->GetEmptyMask());
+    ipCtrl->ChangeValue(ipMaskEdit.GetEmptyMask());
 
     gridSizer->Add(ipText, wxALL|wxEXPAND);
     gridSizer->Add(ipMask, wxALL|wxEXPAND);
@@ -214,10 +220,10 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
     wxStaticText* phoneMask     = new wxStaticText(pan, wxID_ANY, wxT("(###) ###-####")); 
     wxStaticText* phoneFormat   = new wxStaticText(pan, wxID_ANY, wxT("F")); 
     wxTextCtrl*   phoneCtrl     = new wxTextCtrl(pan, wxID_ANY); 
-    wxMaskedEdit* phoneMaskEdit = new wxMaskedEdit(wxT("(###) ###-####"), wxT("F"));
+    wxMaskedEdit phoneMaskEdit(wxT("(###) ###-####"), wxT("F"));
 
     phoneCtrl->SetMask(phoneMaskEdit);
-    phoneCtrl->ChangeValue(phoneMaskEdit->GetEmptyMask());
+    phoneCtrl->ChangeValue(phoneMaskEdit.GetEmptyMask());
 
     gridSizer->Add(phoneText, wxALL|wxEXPAND);
     gridSizer->Add(phoneMask, wxALL|wxEXPAND);
@@ -229,10 +235,10 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
     wxStaticText* fullNameMask     = new wxStaticText(pan, wxID_ANY, wxT("C{14}")); 
     wxStaticText* fullNameFormat   = new wxStaticText(pan, wxID_ANY, wxT("F_")); 
     wxTextCtrl*   fullNameCtrl     = new wxTextCtrl(pan, wxID_ANY); 
-    wxMaskedEdit* fullNameMaskEdit = new wxMaskedEdit(wxT("C{14}"), wxT("F_"));
+    wxMaskedEdit fullNameMaskEdit(wxT("C{14}"), wxT("F_"));
 
     fullNameCtrl->SetMask(fullNameMaskEdit);
-    fullNameCtrl->ChangeValue(fullNameMaskEdit->GetEmptyMask());
+    fullNameCtrl->ChangeValue(fullNameMaskEdit.GetEmptyMask());
 
     gridSizer->Add(fullNameText, wxALL|wxEXPAND);
     gridSizer->Add(fullNameMask, wxALL|wxEXPAND);
@@ -243,15 +249,29 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
     wxStaticText* intMask     = new wxStaticText(pan, wxID_ANY, wxT("#{6}")); 
     wxStaticText* intFormat   = new wxStaticText(pan, wxID_ANY, wxT("F-_")); 
     wxTextCtrl*   intCtrl     = new wxTextCtrl(pan, wxID_ANY); 
-    wxMaskedEdit* intMaskEdit = new wxMaskedEdit(wxT("#{6}"), wxT("F-_"));
+    wxMaskedEdit intMaskEdit(wxT("#{6}"), wxT("F-_"));
 
     intCtrl->SetMask(intMaskEdit);
-    intCtrl->ChangeValue(intMaskEdit->GetEmptyMask());
+    intCtrl->ChangeValue(intMaskEdit.GetEmptyMask());
 
     gridSizer->Add(intText, wxALL|wxEXPAND);
     gridSizer->Add(intMask, wxALL|wxEXPAND);
     gridSizer->Add(intFormat, wxALL|wxEXPAND);
     gridSizer->Add(intCtrl, wxALL|wxEXPAND);
+
+    wxStaticText* floatText     = new wxStaticText(pan, wxID_ANY, wxT("Floating number"));
+    wxStaticText* floatMask     = new wxStaticText(pan, wxID_ANY, wxT("#{6}.#{2}")); 
+    wxStaticText* floatFormat   = new wxStaticText(pan, wxID_ANY, wxT("F-_")); 
+    wxTextCtrl*   floatCtrl     = new wxTextCtrl(pan, wxID_ANY); 
+    wxMaskedEdit floatMaskEdit(wxT("#{6}.#{2}"), wxT("F-_"));
+
+    floatCtrl->SetMask(floatMaskEdit);
+    floatCtrl->ChangeValue(floatMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(floatText, wxALL|wxEXPAND);
+    gridSizer->Add(floatMask, wxALL|wxEXPAND);
+    gridSizer->Add(floatFormat, wxALL|wxEXPAND);
+    gridSizer->Add(floatCtrl, wxALL|wxEXPAND);
 
 
     pan->SetSizer(gridSizer);
@@ -259,6 +279,63 @@ void MyFrame::CreateFirstPage(wxPanel* pan)
 }
 
 
+void MyFrame::CreateSecondPage(wxPanel* pan)
+{
+    wxGridSizer* gridSizer = new wxGridSizer(4);
+
+    wxStaticText* zipText     = new wxStaticText(pan, wxID_ANY, wxT("French zip"));
+    wxStaticText* zipMask     = new wxStaticText(pan, wxID_ANY, wxT("#####")); 
+    wxStaticText* zipFormat   = new wxStaticText(pan, wxID_ANY, wxT("F")); 
+    wxTextCtrl*   zipCtrl     = new wxTextCtrl(pan, wxID_ANY); 
+
+
+    wxArrayString choice;
+    
+    choice.Add("57990");
+    choice.Add("67000");
+    choice.Add("75000");
+    choice.Add("69000");
+    
+    wxMaskedEdit  zipMaskEdit(wxT("#####"), wxT("F"));
+    zipMaskEdit.AddChoices(choice);
+
+    zipCtrl->SetMask(zipMaskEdit);
+    zipCtrl->ChangeValue(zipMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(zipText, wxALL|wxEXPAND);
+    gridSizer->Add(zipMask, wxALL|wxEXPAND);
+    gridSizer->Add(zipFormat, wxALL|wxEXPAND);
+    gridSizer->Add(zipCtrl, wxALL|wxEXPAND);
+ 
+    wxStaticText* houreText    = new wxStaticText(pan, wxID_ANY, wxT("2 houre format"));
+    wxStaticText* houreMask    = new wxStaticText(pan, wxID_ANY, wxT("##|h|##m"));
+    wxStaticText* houreFormat  = new wxStaticText(pan, wxID_ANY, wxT("F"));
+    wxTextCtrl*   houreCtrl    = new wxTextCtrl(pan, wxID_ANY);
+    wxMaskedEdit  houreMaskEdit(wxT("##|h|##m"), wxT("F"));
+
+    
+    choice.Clear();
+
+    choice.Add(wxT("00"));
+    choice.Add(wxT("01"));
+    choice.Add(wxT("02"));
+    choice.Add(wxT("03"));
+    choice.Add(wxT("04"));
+    choice.Add(wxT("05"));
+    
+    houreMaskEdit.AddChoices(0, choice);
+
+    houreCtrl->SetMask(houreMaskEdit);
+    houreCtrl->ChangeValue(houreMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(houreText, wxALL|wxEXPAND);
+    gridSizer->Add(houreMask, wxALL|wxEXPAND);
+    gridSizer->Add(houreFormat, wxALL|wxEXPAND);
+    gridSizer->Add(houreCtrl, wxALL|wxEXPAND);
+ 
+    pan->SetSizer(gridSizer);
+    gridSizer->SetSizeHints(pan);
+}
 // event handlers
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))

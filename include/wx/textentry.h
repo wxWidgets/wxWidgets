@@ -160,7 +160,7 @@ public:
 
     // mask
     // ----
-    virtual void SetMask(wxMaskedEdit* WXUNUSED(mask)){};
+    virtual void SetMask(const wxMaskedEdit& WXUNUSED(mask)){};
 
     // implementation only
     // -------------------

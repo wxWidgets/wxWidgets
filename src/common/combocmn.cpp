@@ -1358,23 +1358,13 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 // ----------------------------------------------------------------------------
 
 
-void wxComboCtrlBase::SetMask(wxMaskedEdit* mask)
+void wxComboCtrlBase::SetMask(const wxMaskedEdit& mask)
 {
-    if(mask != NULL)
-    {
         m_maskCtrl = mask;
-        SetValue(m_maskCtrl->GetDefaultValue());
-        SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
+        SetValue(m_maskCtrl.GetDefaultValue());
+        SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
         Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxComboCtrlBase::ApplyMask, this);
         Bind(wxEVT_CHAR, &wxComboCtrlBase::KeyPressedMask, this);
-    }
-    else
-    {
-        if(m_maskCtrl != NULL)
-            delete m_maskCtrl;
-        Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxComboCtrlBase::ApplyMask, this);
-        Unbind(wxEVT_CHAR, &wxComboCtrlBase::KeyPressedMask, this);
-    }
 }
 
 
@@ -1388,18 +1378,18 @@ void wxComboCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
 
     unsigned int spaceIndex = string.Find(' ');
    
-    if(string != m_maskCtrl->GetEmptyMask())
+    if(string != m_maskCtrl.GetEmptyMask())
     {
         userInput = string.SubString(0, spaceIndex - 1);
-        formatString = m_maskCtrl->ApplyFormatCodes(userInput);
+        formatString = m_maskCtrl.ApplyFormatCodes(userInput);
 
         printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
         
         //If the string is not valid
-        if(!m_maskCtrl->IsValid(formatString))
+        if(!m_maskCtrl.IsValid(formatString))
         {
             printf("Invalid\n");
-            SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
+            SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
             Replace(formatString.Len() - 1, formatString.Len(), ' ');
         }
         else
@@ -1414,7 +1404,7 @@ void wxComboCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
                printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
             }
 
-            SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
+            SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
         }
         printf("End Apply Mask\n");
     }
@@ -1429,30 +1419,30 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
     switch(keycode)
     {
         case(WXK_PAGEUP):
-            if(m_maskCtrl->GetNumberOfFields() == 1 
-            && m_maskCtrl->NumberOfChoices() != 0)
+            if(m_maskCtrl.GetNumberOfFields() == 1 
+            && m_maskCtrl.NumberOfChoices() != 0)
             {
             printf("PAGE UP\n");
-                SetValue(m_maskCtrl->GetNextChoices()); 
+                SetValue(m_maskCtrl.GetNextChoices()); 
             }
         break;
         case(WXK_PAGEDOWN):
-            if(m_maskCtrl->GetNumberOfFields() == 1
-            && m_maskCtrl->NumberOfChoices() != 0)
+            if(m_maskCtrl.GetNumberOfFields() == 1
+            && m_maskCtrl.NumberOfChoices() != 0)
             {
             printf("PAGE DOWN\n");
-                SetValue(m_maskCtrl->GetPreviousChoices()); 
+                SetValue(m_maskCtrl.GetPreviousChoices()); 
             }
         break;
         case(WXK_LEFT):
         case(WXK_RIGHT):
-            if(m_maskCtrl->GetFormatCodes(0).Contains('_'))
+            if(m_maskCtrl.GetFormatCodes(0).Contains('_'))
                     event.Skip();
         break;
         case(WXK_BACK):
             if(cursor > 0)
             {
-                wxString mask = m_maskCtrl->GetEmptyMask()[cursor - 1];
+                wxString mask = m_maskCtrl.GetEmptyMask()[cursor - 1];
 
                 if(mask == ' ')
                 { 
@@ -1470,9 +1460,9 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
             }
         break;
         case(WXK_DELETE):
-            if(cursor < GetValue().Len() && m_maskCtrl->GetFormatCodes(0).Contains('_'))
+            if(cursor < GetValue().Len() && m_maskCtrl.GetFormatCodes(0).Contains('_'))
             {
-                wxString mask = m_maskCtrl->GetEmptyMask()[cursor];
+                wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
 
                 if(mask == ' ')
                 { 

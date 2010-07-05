@@ -601,7 +601,7 @@ protected:
     wxTextAttr m_defaultStyle;
 
     //Mask
-    wxMaskedEdit* m_maskCtrl;
+    wxMaskedEdit m_maskCtrl;
 
     wxDECLARE_NO_COPY_CLASS(wxTextAreaBase);
 };
@@ -708,7 +708,7 @@ public:
 
     //mask
    
-    void SetMask(wxMaskedEdit* mask);
+    void SetMask(const wxMaskedEdit& mask);
     // wxWindow overrides
     
     virtual wxVisualAttributes GetDefaultAttributes() const
@@ -734,6 +734,8 @@ protected:
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }
      //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
     void ApplyMask(wxCommandEvent& event);
     void KeyPressedMask(wxKeyEvent& event);
     void MouseClickedMask(wxMouseEvent& event);

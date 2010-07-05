@@ -745,29 +745,28 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 // Mask methods
 // ----------------------------------------------------------------------------
 
-void wxTextCtrlBase::SetMask(wxMaskedEdit* mask)
+void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
 {
-    if(mask != NULL)
-    {
-        m_maskCtrl = mask;
-        ChangeValue(m_maskCtrl->GetDefaultValue());
-        SetBackgroundColour(m_maskCtrl->GetEmptyBackgroundColour());
-        Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
-        Bind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
-        Bind(wxLEFT_DOWN, &wxTextCtrlBase::MouseClickedMask, this);
-    }
+        m_maskCtrl = wxMaskedEdit(mask);
+        ChangeValue(m_maskCtrl.GetDefaultValue());
+        SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
+        Connect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxTextCtrlBase::ApplyMask));
+        Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
+        Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
+#if 0
     else
     {
         if(m_maskCtrl != NULL)
             delete m_maskCtrl;
-        Unbind(wxEVT_COMMAND_TEXT_UPDATED, &wxTextCtrlBase::ApplyMask, this);
-        Unbind(wxEVT_CHAR, &wxTextCtrlBase::KeyPressedMask, this);
-        Unbind(wxLEFT_DOWN, &wxTextCtrlBase::MouseClickedMask, this);
+         Disconnect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxTextCtrlBase::ApplyMask));
+         Disconnect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
+         Disconnect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
     }
+#endif
 }
 
 
-void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
+void wxTextCtrlBase::ApplySingleFieldMask()
 {
     wxString string = GetValue();
     wxString userInput;
@@ -775,54 +774,49 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
     unsigned int cursor = GetInsertionPoint();
     bool invalid;
 
+    printf("MaskApply\n");
     unsigned int spaceIndex = string.Find(' ');
 
     if(spaceIndex < cursor 
-    && m_maskCtrl->GetFormatCode().Find('_') == wxNOT_FOUND)
+    && m_maskCtrl.GetFormatCode().Find('_') == wxNOT_FOUND)
     {
         SetInsertionPoint(cursor -1);
         cursor --;
     }
    
-    if(string != m_maskCtrl->GetEmptyMask())
+    if(string != m_maskCtrl.GetEmptyMask())
     {
-        if(m_maskCtrl->GetFormatCode().Find('_') == wxNOT_FOUND)
+        if(m_maskCtrl.GetFormatCode().Find('_') == wxNOT_FOUND)
             userInput = string.SubString(0, spaceIndex - 1);
         else
             userInput = string;
         
-        formatString = m_maskCtrl->ApplyFormatCodes(userInput);
+        formatString = m_maskCtrl.ApplyFormatCodes(userInput);
 
-        printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
-        
-        invalid = !m_maskCtrl->IsValid(formatString);
+        invalid = !m_maskCtrl.IsValid(formatString);
 
         //If the string is not valid
         if(invalid)
         {
-            printf("Invalid\n");
-            SetBackgroundColour(m_maskCtrl->GetInvalidBackgroundColour());
+    printf("Invalid\n");
+            SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
             Replace(cursor, cursor +1, wxT(" "));
                     
         }
         else
         {
-            printf("Valid\n");
-            
+    printf("Valid\n");
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(userInput) != 0)
             {
-               if(m_maskCtrl->GetFormatCode().Find('-') == wxNOT_FOUND)
+               if(m_maskCtrl.GetFormatCode().Find('-') == wxNOT_FOUND)
                {
                     Replace(0, formatString.Len() , formatString);
                }
-
-               printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
             }
 
-            SetBackgroundColour(m_maskCtrl->GetValidBackgroundColour());
+            SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
         }
-        printf("End Apply Mask\n");
 
         if(invalid)
         {
@@ -831,41 +825,76 @@ void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
         }
     }
 
+
+}
+void wxTextCtrlBase::ApplyMultipleFieldsMask()
+{
+}
+
+void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+{
+    bool oneField = true;
+    unsigned int it = 0;
+    wxString mask = m_maskCtrl.GetMask();
+
+    for(it = 0; it < mask.Len(); it++)
+    {
+        if(mask[it] == '|')
+        {
+            if (it == 0)
+            {
+                oneField = false;
+            }
+            else
+            {
+                if(mask[it - 1] != '\\')
+                {
+                    oneField = false;
+                }
+            }
+        }
+    }
+
+    if(oneField)
+    {
+        ApplySingleFieldMask();
+    }
+    else
+    {
+        ApplyMultipleFieldsMask();
+    }
 }
 
 void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
     unsigned int cursor = GetInsertionPoint();
-    unsigned int fieldIndex = m_maskCtrl->GetFieldIndex(cursor);
+    unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
+    unsigned int it;
 
-    printf("User input\n");
     switch(keycode)
     {
         case(WXK_PAGEUP):
-
-            printf("PAGE UP\n");
-            Replace(m_maskCtrl->GetMinFieldPosition(fieldIndex), 
-                    m_maskCtrl->GetMaxFieldPosition(fieldIndex),
-                    m_maskCtrl->GetNextChoices()); 
+            Replace(m_maskCtrl.GetMinFieldPosition(fieldIndex), 
+                    m_maskCtrl.GetMaxFieldPosition(fieldIndex) + 1,
+                    m_maskCtrl.GetNextChoices());
         break;
         case(WXK_PAGEDOWN):
-            printf("PAGE DOWN\n");
 
-            Replace(m_maskCtrl->GetMinFieldPosition(fieldIndex), 
-                    m_maskCtrl->GetMaxFieldPosition(fieldIndex),
-                    m_maskCtrl->GetPreviousChoices()); 
+            Replace(m_maskCtrl.GetMinFieldPosition(fieldIndex), 
+                    m_maskCtrl.GetMaxFieldPosition(fieldIndex) + 1,
+                    m_maskCtrl.GetPreviousChoices()); 
 
         break;
         case(WXK_LEFT):
         case(WXK_RIGHT):
-            if(m_maskCtrl->GetFormatCodes(0).Contains('_'))
+            if(m_maskCtrl.GetFormatCodes(0).Contains('_'))
                     event.Skip();
         break;
         case(WXK_BACK):
             if(cursor > 0)
             {
-                wxString mask = m_maskCtrl->GetEmptyMask()[cursor - 1];
+                wxString mask = m_maskCtrl.GetEmptyMask()[cursor - 1];
 
                 if(mask == ' ')
                 { 
@@ -881,10 +910,64 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 
             }
         break;
-        case(WXK_DELETE):
-            if(cursor < GetValue().Len() && m_maskCtrl->GetFormatCodes(0).Contains('_'))
+        case(WXK_RETURN):
+            if(m_maskCtrl.IsNumber())
             {
-                wxString mask = m_maskCtrl->GetEmptyMask()[cursor];
+                bool firstNumber = false;
+                bool decimalPointTest = false;
+                unsigned int numberOfSpaceBefore = 0;
+                unsigned int numberOfSpaceAfter = 0;
+                wxString string = GetValue();
+                wxString newString;
+                wxString tmp;
+
+                for(it = 0; it < string.Len(); it++)
+                {
+                    if(string[it] != m_maskCtrl.GetDecimalPoint() 
+                    && string[it] != ' ' &&  !firstNumber)
+                    {
+                        firstNumber = true;
+                    }
+                    else if(string[it] == m_maskCtrl.GetDecimalPoint())
+                    {
+                        decimalPointTest = true;
+                    }
+                    else if(firstNumber && string[it] == ' ' && !decimalPointTest)
+                    {
+                        numberOfSpaceBefore++;
+                    }
+                    else if(firstNumber && string[it] == ' ' && decimalPointTest)
+                    {
+                        numberOfSpaceAfter++;
+                    }
+                    
+                    if(string[it] != ' ')
+                    {
+                        newString << string[it];
+                    }
+                }
+                
+                for(it = 0; it < numberOfSpaceBefore; it++)
+                {
+                    tmp << wxT(" ");
+                }
+                newString.Prepend(tmp);
+                tmp.Clear();
+                
+                for(it = 0; it < numberOfSpaceAfter; it++)
+                {
+                    tmp << wxT(" ");
+                }
+                newString.Append(tmp);
+
+                ChangeValue(newString);
+            }
+        break;
+        case(WXK_DELETE):
+            event.StopPropagation();
+            if(cursor < GetValue().Len() && m_maskCtrl.GetFormatCodes(0).Contains('_'))
+            {
+                wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
 
                 if(mask == ' ')
                 { 
@@ -909,15 +992,25 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                 wxChar ch;
 
                 ch = (wxChar)keycode;
-                printf("cursor: %d\n", cursor);
                 Replace(cursor, cursor+1, ch);
         break;
         case (WXK_SPACE):
-              if(m_maskCtrl->GetFormatCode().Find('_') != wxNOT_FOUND)
-              {
-                  ch = (wxChar)keycode;
-                  printf("WXK_SPACE\n");
-                  Replace(cursor, cursor+1, ch);
+                  
+            ch = (wxChar)keycode;
+            if(m_maskCtrl.GetFormatCode().Find('_') != wxNOT_FOUND)
+            {
+                  wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
+
+                  if(mask == ' ')
+                  { 
+                      Replace(cursor , cursor + 1 , ch);
+                  }
+                  else
+                  {
+                      cursor = GetInsertionPoint();
+                      SetInsertionPoint(cursor + 1);
+                  }
+
               }
         break;
         default:
@@ -936,7 +1029,6 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                     ch = (wxChar)keycode;
                 else
                     ch = string[cursor];
-                printf("cursor: %d\n", cursor);
                 Replace(cursor, cursor+1, ch);
            }
             else
@@ -949,14 +1041,16 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
 
 void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
 {
-    unsigned int spaceIndex = string.Find(' ');
-    
-    if(m_maskCtrl->GetFormatCode().Find('_') != wxNOT_FOUND)
+    unsigned int spaceIndex = GetValue().Find(' ');
+   
+    if(m_maskCtrl.GetFormatCode().Find('_') == wxNOT_FOUND)
     {
         event.Skip();
     }
     else
     {
+        if(!HasFocus())
+            SetFocus();
         SetInsertionPoint(spaceIndex);
     }
 
