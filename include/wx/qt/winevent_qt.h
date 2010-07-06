@@ -33,52 +33,52 @@ protected:
         * wxPowerEvent, wxScrollWinEvent, wxSysColourChangedEvent */
 
     //wxActivateEvent
-    virtual void changeEvent ( QEvent * event ) { }
+    //virtual void changeEvent ( QEvent * event ) { }
     
     //wxCloseEvent
-    virtual void closeEvent ( QCloseEvent * event ) { }
+    //virtual void closeEvent ( QCloseEvent * event ) { }
     
     //wxContextMenuEvent
-    virtual void contextMenuEvent ( QContextMenuEvent * event ) { }
+    //virtual void contextMenuEvent ( QContextMenuEvent * event ) { }
     
     //wxDropFilesEvent
-    virtual void dropEvent ( QDropEvent * event ) { }
+    //virtual void dropEvent ( QDropEvent * event ) { }
     
     //wxMouseEvent
-    virtual void enterEvent ( QEvent * event ) { }
+    //virtual void enterEvent ( QEvent * event ) { }
     
     //wxFocusEvent.
-    virtual void focusInEvent ( QFocusEvent * event ) { }
+    //virtual void focusInEvent ( QFocusEvent * event ) { }
     
     //wxFocusEvent.
-    virtual void focusOutEvent ( QFocusEvent * event ) { }
+    //virtual void focusOutEvent ( QFocusEvent * event ) { }
     
     //wxShowEvent
-    virtual void hideEvent ( QHideEvent * event ) { }
+    //virtual void hideEvent ( QHideEvent * event ) { }
     
     //wxKeyEvent
-    virtual void keyPressEvent ( QKeyEvent * event ) { }
+    //virtual void keyPressEvent ( QKeyEvent * event ) { }
     
     //wxKeyEvent
-    virtual void keyReleaseEvent ( QKeyEvent * event ) { }
+    //virtual void keyReleaseEvent ( QKeyEvent * event ) { }
     
     //wxMouseEvent
-    virtual void leaveEvent ( QEvent * event ) { }
+    //virtual void leaveEvent ( QEvent * event ) { }
     
     //wxMouseEvent
-    virtual void mouseDoubleClickEvent ( QMouseEvent * event ) { }
+    //virtual void mouseDoubleClickEvent ( QMouseEvent * event ) { }
     
     //wxMouseEvent
-    virtual void mouseMoveEvent ( QMouseEvent * event ) { }
+    //virtual void mouseMoveEvent ( QMouseEvent * event ) { }
     
     //wxMouseEvent
-    virtual void mousePressEvent ( QMouseEvent * event ) { }
+    //virtual void mousePressEvent ( QMouseEvent * event ) { }
     
     //wxMouseEvent
-    virtual void mouseReleaseEvent ( QMouseEvent * event ) { }
+    //virtual void mouseReleaseEvent ( QMouseEvent * event ) { }
     
     //wxMoveEvent
-    virtual void moveEvent ( QMoveEvent * event ) { }
+    //virtual void moveEvent ( QMoveEvent * event ) { }
     
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
@@ -89,7 +89,8 @@ protected:
         GetEventReceiver()->ProcessWindowEvent(erase);
 
         wxPaintEvent paint;
-        GetEventReceiver()->ProcessWindowEvent(paint);
+        if (!GetEventReceiver()->ProcessWindowEvent(paint))
+            T::paintEvent(event);
     }
     
     //wxSizeEvent
@@ -98,11 +99,12 @@ protected:
         event->accept();
 
         wxSizeEvent e(wxQtConvertSize(event->size()));
-        GetEventReceiver()->ProcessWindowEvent(e);
+        if (!GetEventReceiver()->ProcessWindowEvent(e))
+            T::resizeEvent(event);
     }
     
     //wxShowEvent
-    virtual void showEvent ( QShowEvent * event ) { }
+    //virtual void showEvent ( QShowEvent * event ) { }
     
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
@@ -115,7 +117,8 @@ protected:
         e.m_linesPerAction = 3;
         e.m_wheelDelta = 120;
 
-        GetEventReceiver()->ProcessWindowEvent(e);
+        if (!GetEventReceiver()->ProcessWindowEvent(e))
+            T::wheelEvent(event);
     }
 
     /* Unused Qt events
