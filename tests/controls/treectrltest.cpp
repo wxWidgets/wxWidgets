@@ -46,6 +46,7 @@ private:
         CPPUNIT_TEST( CollapseExpand );
         CPPUNIT_TEST( SelectionChange );
         CPPUNIT_TEST( Menu );
+        CPPUNIT_TEST( ItemData );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -61,6 +62,7 @@ private:
     void CollapseExpand();
     void SelectionChange();
     void Menu();
+    void ItemData();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -374,4 +376,27 @@ void TreeCtrlTestCase::Menu()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MENU));
+}
+
+void TreeCtrlTestCase::ItemData()
+{
+    wxTreeItemData* child1data = new wxTreeItemData();
+    wxTreeItemData* appenddata = new wxTreeItemData();
+    wxTreeItemData* insertdata = new wxTreeItemData();
+
+    m_tree->SetItemData(m_child1, child1data);
+
+    CPPUNIT_ASSERT_EQUAL(child1data, m_tree->GetItemData(m_child1));
+    CPPUNIT_ASSERT_EQUAL(m_child1, child1data->GetId());
+
+    wxTreeItemId append = m_tree->AppendItem(m_root, "new", -1, -1, appenddata);
+
+    CPPUNIT_ASSERT_EQUAL(appenddata, m_tree->GetItemData(append));
+    CPPUNIT_ASSERT_EQUAL(append, appenddata->GetId());
+
+    wxTreeItemId insert = m_tree->InsertItem(m_root, m_child1, "new", -1, -1, 
+                                             insertdata);
+
+    CPPUNIT_ASSERT_EQUAL(insertdata, m_tree->GetItemData(insert));
+    CPPUNIT_ASSERT_EQUAL(insert, insertdata->GetId());
 }
