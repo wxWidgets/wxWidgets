@@ -15,6 +15,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/bookctrl.h"
+#include "wx/toolbook.h"
+#include "wx/toolbar.h"
 #include "bookctrlbasetest.h"
 #include "testableframe.h"
 
@@ -26,9 +28,14 @@ void BookCtrlBaseTestCase::AddPanels()
     m_panel2 = new wxPanel(base);
     m_panel3 = new wxPanel(base);
 
-    base->AddPage(m_panel1, "Panel 1");
-    base->AddPage(m_panel2, "Panel 2");
-    base->AddPage(m_panel3, "Panel 3");
+    int imageindex = -1;
+
+    if(base->GetImageList())
+        imageindex = 0;
+
+    base->AddPage(m_panel1, "Panel 1", false, imageindex);
+    base->AddPage(m_panel2, "Panel 2", false, imageindex);
+    base->AddPage(m_panel3, "Panel 3", false, imageindex);
 }
 
 void BookCtrlBaseTestCase::Selection()
@@ -75,9 +82,19 @@ void BookCtrlBaseTestCase::PageManagement()
 {
     wxBookCtrlBase * const base = GetBase();
 
-    base->InsertPage(1, new wxPanel(base), "New Panel", true);
+    int imageindex = -1;
 
-    CPPUNIT_ASSERT_EQUAL(1, base->GetSelection());
+    if(base->GetImageList())
+        imageindex = 0;
+
+    base->InsertPage(0, new wxPanel(base), "New Panel", true, imageindex);
+
+    wxToolbook *book = wxDynamicCast(base, wxToolbook);
+
+    if(book)
+        book->GetToolBar()->Realize();
+
+    CPPUNIT_ASSERT_EQUAL(0, base->GetSelection());
     CPPUNIT_ASSERT_EQUAL(4, base->GetPageCount());
 
     base->DeletePage(1);
