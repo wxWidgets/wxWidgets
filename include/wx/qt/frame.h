@@ -39,6 +39,7 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual void SetMenuBar(wxMenuBar *menubar);
+    virtual void SetStatusBar(wxStatusBar *statusBar );
 
     virtual QMainWindow *GetHandle() const;
     virtual WXWidget GetContainer() const;

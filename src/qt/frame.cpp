@@ -47,6 +47,16 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     wxFrameBase::SetMenuBar( menuBar );
 }
 
+void wxFrame::SetStatusBar( wxStatusBar *statusBar )
+{
+    m_qtFrame->setStatusBar( statusBar->GetHandle() );
+
+    // Update statusbar sizes now that it has a size
+    statusBar->Refresh();
+    
+    wxFrameBase::SetStatusBar( statusBar );
+}
+
 QMainWindow *wxFrame::GetHandle() const
 {
     return m_qtFrame;
