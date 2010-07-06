@@ -36,6 +36,7 @@
 #include "wx/sstream.h"
 #include "wx/textfile.h"
 #include "wx/hashmap.h"
+#include "wx/dynarray.h"
 
 #include "wx/richtext/richtextctrl.h"
 #include "wx/richtext/richtextstyles.h"
@@ -60,6 +61,13 @@ struct FloatRectMap
     int width;
 };
 
+WX_DEFINE_SORTED_ARRAY(FloatRectMap*, FloatRectMapArray);
+
+int FloatRectMapCmp(FloatRectMap* r1, FloatRectMap* r2)
+{
+    return r1->startY - r2->startY;
+}
+
 class wxFloatCollector
 {
 public:
@@ -74,37 +82,131 @@ public:
     // find out how wide the line can be
     wxRect GetAvailableRect(int startY, int endY);
 private:
-    FloatRectMap* m_left;
-    FloatRectMap* m_right;
+    FloatRectMapArray m_left;
+    FloatRectMapArray m_right;
     int m_width;
+    wxRichTextParagraph* m_para;
 };
 
-wxFloatCollector::wxFloatCollector(int width)
+wxFloatCollector::wxFloatCollector(int width) : m_left(FloatRectMapCmp), m_right(FloatRectMapCmp)
 {
     m_width = width;
-    m_left = m_right = NULL;
+    m_para = NULL;
 }
 
 wxFloatCollector::~wxFloatCollector()
 {
-    if (m_left)
-        delete m_left;
-    m_left = NULL;
-    if (m_right)
-        delete m_right;
-    m_right = NULL;
 }
 
 bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
 {
+    wxRichTextObjectList::compatibility_iterator node = para->m_anchoredObjects.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* floating = node->GetData();
+        assert(floating->IsFloatable());
+        wxRichTextPlaceHoldingObject* ph = wxDynamicCast(floating, wxRichTextPlaceHoldingObject);
+        floating = ph->GetRealObject();
+        int direction = floating->GetFloatingDirection();
+        wxPoint pos = floating->GetPosition();
+        wxSize size = floating->GetCachedSize();
+        FloatRectMap map = {pos.y, pos.y+size.y, size.x};
+
+        switch (direction)
+        {
+            case wxRICHTEXT_FLOAT_NONE:
+                break;
+            case wxRICHTEXT_FLOAT_LEFT:
+                // Just a not-enough simple assertion
+                assert(m_left.Index(map) == wxNOT_FOUND);
+                m_left.Insert(map);
+                break;
+            case wxRICHTEXT_FLOAT_RIGHT:
+                assert(m_right.Index(map) == wxNOT_FOUND);
+                m_right.Insert(map);
+                break;
+            default:
+                assert("Must some error occurs");
+        }
+
+        node = node->GetNext();
+    }
+
+    m_para = para;
 }
 
 wxRichTextParagraph* wxFloatCollector::LastParagraph()
 {
+    return m_para;
+}
+
+// Binary search helper function
+int SearchAdjacentRect(const FloatRectMapArray& array, int point)
+{
+    int end = array.GetCount() - 1;
+    int start = 0;
+    int ret = 0;
+
+    while (true)
+    {
+        if (start > end)
+        {
+            break;
+        }
+
+        int mid = (start + end) / 2;
+        if (array[mid]->startY <= point && array[mid]->endY >= point)
+            return mid;
+        else if (array[mid]->startY > point)
+        {
+            end = mid - 1;
+            ret = mid;
+        }
+        else if (array[mid]->endY < point)
+        {
+            start = mid + 1;
+            ret = start;
+        }
+    }
+
+    return ret;
+}
+
+int GetWidthFromFloatRect(const FloatRectMapArray& array, int index, int startY, int endY)
+{
+    int ret = 0;
+    int len = array.GetCount();
+
+    if (array[index]->startY < startY)
+    {
+        assert(array[index]->endY > startY);
+        ret = ret < array[index]->width ? array[index]->width : ret;
+        while (array[index]->startY <= endY && index < len)
+        {
+            ret = ret < array[index]->width ? array[index]->width : ret;
+            index++;
+        }
+    }
+    else
+    {
+        while (array[index]->startY <= endY && index < len)
+        {
+            ret = ret < array[index]->width ? array[index]->width : ret;
+            index++;
+        }
+    }
+
+    return ret;
 }
 
 wxRect wxFloatCollector::GetAvailableRect(int startY, int endY)
 {
+    int i = SearchAdjacentRect(m_left, startY);
+    int j = SearchAdjacentRect(m_right, startY);
+    int widthLeft = GetWidthFromFloatRect(m_left, i, startY, endY);
+    int widthRight = GetWidthFromFloatRect(m_right, j, startY, endY);
+
+    return wxRect(widthLeft, 0, m_width - widthLeft - widthRight, 0);
 }
 
 // Helpers for efficiency

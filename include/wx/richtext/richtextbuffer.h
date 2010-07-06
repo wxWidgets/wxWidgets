@@ -414,6 +414,9 @@ public:
     /// Whether this object floatalbe
     virtual bool IsFloatable() const { return false; }
 
+    /// Floating direction
+    virtual int GetFloatDirection() const { return wxRICHTEXT_FLOAT_NONE; }
+
     /// Get any text in this object for the given range
     virtual wxString GetTextForRange(const wxRichTextRange& WXUNUSED(range)) const { return wxEmptyString; }
 
@@ -1096,6 +1099,9 @@ protected:
 
     /// The anchored objects
     wxRichTextObjectList m_anchoredObjects;
+
+friend:
+    class wxFloatCollector;
 };
 
 /*!
@@ -1266,7 +1272,7 @@ protected:
  */
 class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextOjbect
 {
-    DECLARE_DYNAMIC_CLASS(wxRichTextImage)
+    DECLARE_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject)
 public:
 // Constructors
     wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL);
@@ -1281,6 +1287,8 @@ public:
     /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
+    /// Get the real object of this place holding one
+    wxRichTextObject* GetRealObject() { return m_real; }
 private:
     wxRichTextObject* m_real;
 };
@@ -1319,6 +1327,9 @@ public:
 
     /// An image is floatable
     virtual bool IsFloatable() const { return true; }
+
+    /// The floating direction
+    virtual int GetFloatingDirection() const { return m_attr.m_floating; }
 
 // Accessors
 
