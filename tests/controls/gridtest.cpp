@@ -80,6 +80,7 @@ void GridTestCase::CellEdit()
 
     EventCounter count(m_grid, wxEVT_GRID_CELL_CHANGING);
     EventCounter count1(m_grid, wxEVT_GRID_CELL_CHANGED);
+    EventCounter count2(m_grid, wxEVT_GRID_EDITOR_CREATED);
 
     wxUIActionSimulator sim;
 
@@ -92,6 +93,7 @@ void GridTestCase::CellEdit()
 
     wxYield();
 
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_EDITOR_CREATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGING));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_CELL_CHANGED));
 }
