@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/controls/listbox.cpp
-// Purpose:     wxListBox unit test
+// Name:        tests/controls/gridtest.cpp
+// Purpose:     wxGrid unit test
 // Author:      Steven Lamerton
 // Created:     2010-06-25
 // RCS-ID:      $Id$
@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( CellSelect );
         CPPUNIT_TEST( LabelClick );
         CPPUNIT_TEST( SortClick );
+        CPPUNIT_TEST( Size );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -43,6 +44,7 @@ private:
     void CellSelect();
     void LabelClick();
     void SortClick();
+    void Size();
 
     wxGrid *m_grid;
 
@@ -230,4 +232,31 @@ void GridTestCase::SortClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
 
     m_grid->SetSortingColumn(wxNOT_FOUND);
+}
+
+void GridTestCase::Size()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_grid, wxEVT_GRID_COL_SIZE);
+    EventCounter count1(m_grid, wxEVT_GRID_ROW_SIZE);
+
+    wxUIActionSimulator sim;
+
+    wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() + 
+                                        m_grid->GetColSize(0), 5));
+
+    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_COL_SIZE));
+
+    pt = m_grid->ClientToScreen(wxPoint(5, m_grid->GetColLabelSize() +
+                                        m_grid->GetRowSize(0)));
+
+    sim.MouseDragDrop(pt.x, pt.y, pt.x, pt.y + 50);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_ROW_SIZE));
 }
