@@ -37,6 +37,7 @@ private:
         CPPUNIT_TEST( LabelClick );
         CPPUNIT_TEST( SortClick );
         CPPUNIT_TEST( Size );
+        CPPUNIT_TEST( RangeSelect );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -45,6 +46,7 @@ private:
     void LabelClick();
     void SortClick();
     void Size();
+    void RangeSelect();
 
     wxGrid *m_grid;
 
@@ -259,4 +261,24 @@ void GridTestCase::Size()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_ROW_SIZE));
+}
+
+void GridTestCase::RangeSelect()
+{
+   wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_grid, wxEVT_GRID_RANGE_SELECT);
+
+    wxUIActionSimulator sim;
+
+    //We add the extra 10 to ensure that we are inside the cell
+    wxPoint pt = m_grid->ClientToScreen(wxPoint(m_grid->GetRowLabelSize() + 10,
+                                                m_grid->GetColLabelSize() + 10)
+                                                );
+
+    sim.MouseDragDrop(pt.x, pt.y, pt.x + 50, pt.y + 50);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_RANGE_SELECT));
 }
