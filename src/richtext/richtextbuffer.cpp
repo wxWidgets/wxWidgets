@@ -63,7 +63,7 @@ struct FloatRectMap
 class wxFloatCollector
 {
 public:
-    wxFloatCollector();
+    wxFloatCollector(int width);
     ~wxFloatCollector();
 
     // Collect the floating objects info in the given paragraph
@@ -72,18 +72,27 @@ public:
     wxRichTextParagraph* LastParagraph();
     // Given the start y position and the height of the line,
     // find out how wide the line can be
-    wxRect GetAvailableWidth(int startY, int height);
+    wxRect GetAvailableRect(int startY, int endY);
 private:
     FloatRectMap* m_left;
     FloatRectMap* m_right;
+    int m_width;
 };
 
-wxFloatCollector::wxFloatCollector()
+wxFloatCollector::wxFloatCollector(int width)
 {
+    m_width = width;
+    m_left = m_right = NULL;
 }
 
 wxFloatCollector::~wxFloatCollector()
 {
+    if (m_left)
+        delete m_left;
+    m_left = NULL;
+    if (m_right)
+        delete m_right;
+    m_right = NULL;
 }
 
 bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
@@ -94,7 +103,7 @@ wxRichTextParagraph* wxFloatCollector::LastParagraph()
 {
 }
 
-wxRect wxFloatCollector::GetAvailableWidth(int startY, int height)
+wxRect wxFloatCollector::GetAvailableRect(int startY, int endY)
 {
 }
 
@@ -3409,6 +3418,14 @@ static int wxRichTextGetRangeWidth(const wxRichTextParagraph& para, const wxRich
 /// Lay the item out
 bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
+    // Deal with floating objects firstly before the normal layout
+    wxRichTextBuffer* buffer = GetBuffer();
+    assert(buffer);
+    wxFloatCollector* collector = buffer->GetFloatCollector();
+    assert(collector);
+    LayoutFloat(dc, rect, style, collector);
+    collector->CollectFloat(this);
+
     wxTextAttr attr = GetCombinedAttributes();
 
     // ClearLines();
@@ -3430,18 +3447,14 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         lineSpacing = (ConvertTenthsMMToPixels(dc, dc.GetCharHeight()) * attr.GetLineSpacing())/10;
     }
 
-    // Available space for text on each line differs.
-    int availableTextSpaceFirstLine = rect.GetWidth() - leftIndent - rightIndent;
-
     // Bullets start the text at the same position as subsequent lines
     if (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE)
         availableTextSpaceFirstLine -= leftSubIndent;
 
-    int availableTextSpaceSubsequentLines = rect.GetWidth() - leftIndent - rightIndent - leftSubIndent;
-
     // Start position for each line relative to the paragraph
     int startPositionFirstLine = leftIndent;
     int startPositionSubsequentLines = leftIndent + leftSubIndent;
+    wxRect availableRect;
 
     // If we have a bullet in this paragraph, the start position for the first line's text
     // is actually leftIndent + leftSubIndent.
@@ -3510,11 +3523,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         // can't tell the position until the size is determined. So possibly introduce
         // another layout phase.
 
-        // Available width depends on whether we're on the first or subsequent lines
-        int availableSpaceForText = (lineCount == 0 ? availableTextSpaceFirstLine : availableTextSpaceSubsequentLines);
-
-        currentPosition.x = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
-
         // We may only be looking at part of a child, if we searched back for wrapping
         // and found a suitable point some way into the child. So get the size for the fragment
         // if necessary.
@@ -3545,19 +3553,34 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 #endif
         }
 
+        // Available width depends on the floating objects and the line height
+        // Note: the floating objects may be placed vertically along the two side of
+        //       buffer, so we may have different available line width with different
+        //       [startY, endY]. So, we should can't determine how wide the available
+        //       space is until we know the exact line height.
+        maxDescent = wxMax(childDescent, maxDescent);
+        maxAscent = wxMax(childSize.y-childDescent, maxAscent);
+        lineHeight = maxDescent + maxAscent;
+        availableRect = collecotr->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
+
+        currentPosition.x = (lineCount == 0 ? availableRect.x + startPositionFirstLine : availableRect.x + startPositionSubsequentLines);
+
         // Cases:
         // 1) There was a line break BEFORE the natural break
         // 2) There was a line break AFTER the natural break
         // 3) The child still fits (carry on)
 
-        if ((lineBreakInThisObject && (childSize.x + currentWidth <= availableSpaceForText)) ||
-            (childSize.x + currentWidth > availableSpaceForText))
+        if ((lineBreakInThisObject && (childSize.x + currentWidth <= availableRect.width)) ||
+            (childSize.x + currentWidth > availableRect.width))
         {
             long wrapPosition = 0;
 
             // Find a place to wrap. This may walk back to previous children,
             // for example if a word spans several objects.
-            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableSpaceForText, wrapPosition, & partialExtents))
+            // Note: one object must contains only one wxTextAtrr, so the line height will not
+            //       change inside one object. Thus, we can pass the remain line width to the
+            //       FindWrapPosition function.
+            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableRect.width, wrapPosition, & partialExtents))
             {
                 // If the function failed, just cut it off at the end of this child.
                 wrapPosition = child->GetRange().GetEnd();
@@ -3639,11 +3662,14 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         }
     }
 
+    /*
+     * To comment this, I don't know what this means.
+     *
     // Add the last line - it's the current pos -> last para pos
     // Substract -1 because the last position is always the end-paragraph position.
     if (lastCompletedEndPos <= GetRange().GetEnd()-1)
     {
-        currentPosition.x = (lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines);
+        currentPosition.x = (lineCount == 0 ? availableRect.x + startPositionFirstLine : availableRect.x + startPositionSubsequentLines);
 
         wxRichTextLine* line = AllocateLine(lineCount);
 
@@ -3672,6 +3698,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         currentPosition.y += lineSpacing;
         lineCount ++;
     }
+    */
 
     // Remove remaining unused line objects, if any
     ClearUnusedLines(lineCount);
@@ -4595,6 +4622,11 @@ void wxRichTextParagraph::InitDefaultTabs()
 void wxRichTextParagraph::ClearDefaultTabs()
 {
     sm_defaultTabs.Clear();
+}
+
+bool wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector)
+{
+    return true;
 }
 
 /// Get the first position from pos that has a line break character.

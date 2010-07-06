@@ -124,6 +124,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
+class wxFloatCollector;
 
 /*!
  * Flags determining the available space, passed to Layout
@@ -864,6 +865,9 @@ public:
     /// Get invalid range, rounding to entire paragraphs if argument is true.
     wxRichTextRange GetInvalidRange(bool wholeParagraphs = false) const;
 
+    /// Get the wxFloatCollector of this object
+    wxFloatCollector* GetFloatCollector() { return m_floatCollector; }
+
 protected:
     wxRichTextCtrl* m_ctrl;
     wxTextAttr  m_defaultAttributes;
@@ -873,6 +877,9 @@ protected:
 
     // Is the last paragraph partial or complete?
     bool            m_partialParagraph;
+
+    // The floating layout state
+    wxFloatCollector* m_floatCollector;
 };
 
 /*!
@@ -1077,12 +1084,18 @@ public:
     /// Get default tabstop array
     static const wxArrayInt& GetDefaultTabs() { return sm_defaultTabs; }
 
+    /// Layout the floats object
+    bool LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector);
+
 protected:
     /// The lines that make up the wrapped paragraph
     wxRichTextLineList m_cachedLines;
 
     /// Default tabstops
     static wxArrayInt  sm_defaultTabs;
+
+    /// The anchored objects
+    wxRichTextObjectList m_anchoredObjects;
 };
 
 /*!
