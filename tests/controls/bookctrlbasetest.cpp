@@ -14,6 +14,8 @@
     #include "wx/panel.h"
 #endif // WX_PRECOMP
 
+#include "wx/artprov.h"
+#include "wx/imaglist.h"
 #include "wx/bookctrl.h"
 #include "wx/toolbook.h"
 #include "wx/toolbar.h"
@@ -24,18 +26,28 @@ void BookCtrlBaseTestCase::AddPanels()
 {
     wxBookCtrlBase * const base = GetBase();
 
+    wxSize size(32, 32);
+
+    m_list = new wxImageList(size.x, size.y);
+    m_list->Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, size));
+    m_list->Add(wxArtProvider::GetIcon(wxART_QUESTION, wxART_OTHER, size));
+    m_list->Add(wxArtProvider::GetIcon(wxART_WARNING, wxART_OTHER, size));
+
+    base->AssignImageList(m_list);
+
+    //We need to realize the toolbar if we ware running the wxToolbook tests
+    wxToolbook *book = wxDynamicCast(base, wxToolbook);
+
+    if(book)
+        book->GetToolBar()->Realize();
+
     m_panel1 = new wxPanel(base);
     m_panel2 = new wxPanel(base);
     m_panel3 = new wxPanel(base);
 
-    int imageindex = -1;
-
-    if(base->GetImageList())
-        imageindex = 0;
-
-    base->AddPage(m_panel1, "Panel 1", false, imageindex);
-    base->AddPage(m_panel2, "Panel 2", false, imageindex);
-    base->AddPage(m_panel3, "Panel 3", false, imageindex);
+    base->AddPage(m_panel1, "Panel 1", false, 0);
+    base->AddPage(m_panel2, "Panel 2", false, 1);
+    base->AddPage(m_panel3, "Panel 3", false, 2);
 }
 
 void BookCtrlBaseTestCase::Selection()
@@ -82,13 +94,9 @@ void BookCtrlBaseTestCase::PageManagement()
 {
     wxBookCtrlBase * const base = GetBase();
 
-    int imageindex = -1;
+    base->InsertPage(0, new wxPanel(base), "New Panel", true, 0);
 
-    if(base->GetImageList())
-        imageindex = 0;
-
-    base->InsertPage(0, new wxPanel(base), "New Panel", true, imageindex);
-
+    //We need to realize the toolbar if we ware running the wxToolbook tests
     wxToolbook *book = wxDynamicCast(base, wxToolbook);
 
     if(book)
@@ -143,4 +151,19 @@ void BookCtrlBaseTestCase::ChangeEvents()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangingEvent()));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(GetChangedEvent()));
+}
+
+void BookCtrlBaseTestCase::Image()
+{
+    wxBookCtrlBase * const base = GetBase();
+
+    //Check AddPanels() set things correctly
+    CPPUNIT_ASSERT_EQUAL(m_list, base->GetImageList());
+    CPPUNIT_ASSERT_EQUAL(0, base->GetPageImage(0));
+    CPPUNIT_ASSERT_EQUAL(1, base->GetPageImage(1));
+    CPPUNIT_ASSERT_EQUAL(2, base->GetPageImage(2));
+
+    base->SetPageImage(0, 2);
+
+    CPPUNIT_ASSERT_EQUAL(2, base->GetPageImage(2));
 }

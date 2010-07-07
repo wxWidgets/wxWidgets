@@ -41,6 +41,7 @@ private:
 
     CPPUNIT_TEST_SUITE( NotebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
+        CPPUNIT_TEST( Image );
     CPPUNIT_TEST_SUITE_END();
 
     wxNotebook *m_notebook;

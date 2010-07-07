@@ -18,10 +18,7 @@
     #include "wx/panel.h"
 #endif // WX_PRECOMP
 
-#include "wx/artprov.h"
-#include "wx/imaglist.h"
 #include "wx/toolbook.h"
-#include "wx/toolbar.h"
 #include "bookctrlbasetest.h"
 
 class ToolbookTestCase : public BookCtrlBaseTestCase
@@ -59,15 +56,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ToolbookTestCase, "ToolbookTestCase" );
 void ToolbookTestCase::setUp()
 {
     m_toolbook = new wxToolbook(wxTheApp->GetTopWindow(), wxID_ANY, wxDefaultPosition, wxSize(400, 200));
-
-    wxImageList* list = new wxImageList(32, 32);
-    list->Add(wxArtProvider::GetIcon(wxART_INFORMATION, wxART_OTHER, wxSize(32, 32)));
-
-    m_toolbook->AssignImageList(list);
-
     AddPanels();
-
-    m_toolbook->GetToolBar()->Realize();
 }
 
 void ToolbookTestCase::tearDown()

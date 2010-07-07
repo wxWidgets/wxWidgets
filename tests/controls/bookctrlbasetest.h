@@ -39,6 +39,10 @@ protected:
     void PageManagement();
     void ChangeEvents();
 
+    //You need to add CPPUNIT_TEST( Image ) specifically if you want it to be
+    //tested as only wxNotebook and wxTreebook support images correctly
+    void Image();
+
     //Call this from the setUp function of a specific test to add panels to
     //the ctrl.
     void AddPanels();
@@ -46,6 +50,8 @@ protected:
     wxPanel* m_panel1;
     wxPanel* m_panel2;
     wxPanel* m_panel3;
+
+    wxImageList* m_list;
 
 private:
     DECLARE_NO_COPY_CLASS(BookCtrlBaseTestCase)

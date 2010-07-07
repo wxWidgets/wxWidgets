@@ -40,6 +40,7 @@ private:
 
     CPPUNIT_TEST_SUITE( TreebookTestCase );
         wxBOOK_CTRL_BASE_TESTS();
+        CPPUNIT_TEST( Image );
     CPPUNIT_TEST_SUITE_END();
 
     wxTreebook *m_treebook;
