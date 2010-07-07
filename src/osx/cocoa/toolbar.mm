@@ -150,7 +150,7 @@ public:
         return wxPoint( m_x, m_y );
     }
 
-    bool DoEnable( bool enable );
+    bool Enable( bool enable );
 
     void UpdateImages();
 
@@ -265,6 +265,7 @@ private:
 - (void)setImplementation: (wxToolBarTool *) theImplementation;
 - (wxToolBarTool*) implementation;
 - (void) clickedAction: (id) sender;
+- (BOOL) validateToolbarItem:(NSToolbarItem *)theItem;
 
 @end
 
@@ -330,6 +331,12 @@ private:
 - (wxToolBarTool*) implementation
 {
     return impl;
+}
+
+- (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
+{
+    wxUnusedVar(theItem);
+    return impl->IsEnabled() ? YES:NO;
 }
 
 @end
@@ -422,8 +429,11 @@ private:
 
 @end
 
-bool wxToolBarTool::DoEnable( bool enable )
+bool wxToolBarTool::Enable( bool enable )
 {
+    if ( wxToolBarToolBase::Enable( enable ) == false )
+        return false;
+
     if ( IsControl() )
     {
         GetControl()->Enable( enable );
@@ -1177,10 +1187,9 @@ wxString wxToolBar::MacGetToolTipString( wxPoint &pt )
     return wxEmptyString;
 }
 
-void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
+void wxToolBar::DoEnableTool(wxToolBarToolBase * WXUNUSED(t), bool WXUNUSED(enable))
 {
-    if ( t != NULL )
-        ((wxToolBarTool*)t)->DoEnable( enable );
+    // everything already done in the tool's Enable implementation
 }
 
 void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
