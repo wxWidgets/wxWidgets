@@ -527,6 +527,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [m_macWindow setOpaque:NO];
         [m_macWindow setAlphaValue:1.0];
     }
+    
+    if ( !(style & wxFRAME_TOOL_WINDOW) )
+        [m_macWindow setHidesOnDeactivate:NO];
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )
