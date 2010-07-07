@@ -13,6 +13,7 @@
 
 #include <QtCore/QPointer>
 #include <QtGui/QWidget>
+#include <QtGui/QScrollBar>
 
 /* wxQt specific notes:
  * Remember to implement the Qt object getters on all subclasses:
@@ -130,6 +131,8 @@ protected:
 private:
     QPointer< QWidget > m_qtWindow;
     QPointer< QWidget > m_qtContainer;
+
+    QScrollBar *GetScrollBar( int orient, bool create = false ) const;
     
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )

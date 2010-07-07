@@ -11,6 +11,7 @@
 
 #include "wx/window.h"
 #include <QtGui/QWidget>
+#include <QtGui/QScrollBar>
 #include "wx/qt/winevent_qt.h"
 
 class WXDLLIMPEXP_CORE wxQtWidget : public WindowEventForwarder< QWidget >
@@ -26,6 +27,23 @@ class WXDLLIMPEXP_CORE wxQtWidget : public WindowEventForwarder< QWidget >
     private:
         wxWindow *m_wxWindow;
 
+};
+
+class WXDLLIMPEXP_CORE wxQtScrollBarEventForwarder : public QScrollBar
+{
+    Q_OBJECT
+
+    public:
+        wxQtScrollBarEventForwarder( wxWindow *window,
+                                     Qt::Orientation orient,
+                                     QWidget *parent = 0 );
+
+    private Q_SLOTS:
+        void OnActionTriggered( int action );
+        void OnSliderReleased();
+        
+    private:
+        wxWindow *m_wxWindow;    
 };
 
 #endif
