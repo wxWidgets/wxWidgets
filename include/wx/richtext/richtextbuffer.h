@@ -241,7 +241,7 @@ enum wxRichTextHitTestFlags
 
 #define wxRICHTEXT_FLOAT_NONE   0x00
 #define wxRICHTEXT_FLOAT_LEFT   0x01
-#define wxRICHTEXT_FLOAT_RIGHT  0x01
+#define wxRICHTEXT_FLOAT_RIGHT  0x02
 
 // Image width/height scale
 #define wxRICHTEXT_PX   0x00
@@ -1100,8 +1100,7 @@ protected:
     /// The anchored objects
     wxRichTextObjectList m_anchoredObjects;
 
-friend:
-    class wxFloatCollector;
+friend class wxFloatCollector;
 };
 
 /*!
@@ -1270,13 +1269,13 @@ protected:
  * this object take no space at all, but its 'real object'
  * such as a 'floating image' takes space.
  */
-class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextOjbect
+class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject)
 public:
 // Constructors
-    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL);
-    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL, wxRichTextObject *real);
+    wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL, wxRichTextObject *real = NULL);
+    ~wxRichTextPlaceHoldingObject();
 
 // Overrideables
     /// Draw the object
@@ -1329,7 +1328,7 @@ public:
     virtual bool IsFloatable() const { return true; }
 
     /// The floating direction
-    virtual int GetFloatingDirection() const { return m_attr.m_floating; }
+    virtual int GetFloatDirection() const { return m_attr.m_floating; }
 
 // Accessors
 

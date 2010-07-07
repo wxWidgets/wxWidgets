@@ -57,6 +57,13 @@ const wxChar wxRichTextLineBreakChar = (wxChar) 29;
 // Helper classes for floating layout
 struct FloatRectMap
 {
+    FloatRectMap(int sY, int eY, int w)
+    {
+        startY = sY;
+        endY = eY;
+        width = w;
+    }
+
     int startY, endY;
     int width;
 };
@@ -81,6 +88,8 @@ public:
     // Given the start y position and the height of the line,
     // find out how wide the line can be
     wxRect GetAvailableRect(int startY, int endY);
+    // Find the last y position
+    int GetLastRectBottom();
 private:
     FloatRectMapArray m_left;
     FloatRectMapArray m_right;
@@ -107,10 +116,10 @@ bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
         assert(floating->IsFloatable());
         wxRichTextPlaceHoldingObject* ph = wxDynamicCast(floating, wxRichTextPlaceHoldingObject);
         floating = ph->GetRealObject();
-        int direction = floating->GetFloatingDirection();
+        int direction = floating->GetFloatDirection();
         wxPoint pos = floating->GetPosition();
         wxSize size = floating->GetCachedSize();
-        FloatRectMap map = {pos.y, pos.y+size.y, size.x};
+        FloatRectMap *map = new FloatRectMap(pos.y, pos.y+size.y, size.x);
 
         switch (direction)
         {
@@ -119,11 +128,11 @@ bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
             case wxRICHTEXT_FLOAT_LEFT:
                 // Just a not-enough simple assertion
                 assert(m_left.Index(map) == wxNOT_FOUND);
-                m_left.Insert(map);
+                m_left.Add(map);
                 break;
             case wxRICHTEXT_FLOAT_RIGHT:
                 assert(m_right.Index(map) == wxNOT_FOUND);
-                m_right.Insert(map);
+                m_right.Add(map);
                 break;
             default:
                 assert("Must some error occurs");
@@ -177,6 +186,9 @@ int GetWidthFromFloatRect(const FloatRectMapArray& array, int index, int startY,
     int ret = 0;
     int len = array.GetCount();
 
+    if (len == 0)
+        return 0;
+
     if (array[index]->startY < startY)
     {
         assert(array[index]->endY > startY);
@@ -207,6 +219,21 @@ wxRect wxFloatCollector::GetAvailableRect(int startY, int endY)
     int widthRight = GetWidthFromFloatRect(m_right, j, startY, endY);
 
     return wxRect(widthLeft, 0, m_width - widthLeft - widthRight, 0);
+}
+
+int wxFloatCollector::GetLastRectBottom()
+{
+    int ret = 0;
+    int len = m_left.GetCount();
+    if (len) {
+        ret = ret > m_left[len-1]->endY ? ret : m_left[len-1]->endY;
+    }
+    len = m_right.GetCount();
+    if (len) {
+        ret = ret > m_right[len-1]->endY ? ret : m_right[len-1]->endY;
+    }
+
+    return ret;
 }
 
 // Helpers for efficiency
@@ -746,6 +773,7 @@ void wxRichTextParagraphLayoutBox::Init()
     m_topMargin = 4;
     m_bottomMargin = 4;
     m_partialParagraph = false;
+    m_floatCollector = NULL;
 }
 
 /// Draw the item
@@ -852,6 +880,18 @@ bool wxRichTextParagraphLayoutBox::Layout(wxDC& dc, const wxRect& rect, int styl
                 layoutAll = false;
             }
         }
+    }
+
+    // Collect the floats layout state
+    if (m_floatCollector)
+        delete m_floatCollector;
+    m_floatCollector = new wxFloatCollector(availableSpace.width);
+    wxRichTextObjectList::compatibility_iterator para = m_children.GetFirst();
+    while (para && para != node)
+    {
+        wxRichTextParagraph* paragraph = wxDynamicCast(para->GetData(), wxRichTextParagraph);
+        m_floatCollector->CollectFloat(paragraph);
+        para = para->GetNext();
     }
 
     // A way to force speedy rest-of-buffer layout (the 'else' below)
@@ -3549,10 +3589,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         lineSpacing = (ConvertTenthsMMToPixels(dc, dc.GetCharHeight()) * attr.GetLineSpacing())/10;
     }
 
-    // Bullets start the text at the same position as subsequent lines
-    if (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE)
-        availableTextSpaceFirstLine -= leftSubIndent;
-
     // Start position for each line relative to the paragraph
     int startPositionFirstLine = leftIndent;
     int startPositionSubsequentLines = leftIndent + leftSubIndent;
@@ -3663,7 +3699,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         maxDescent = wxMax(childDescent, maxDescent);
         maxAscent = wxMax(childSize.y-childDescent, maxAscent);
         lineHeight = maxDescent + maxAscent;
-        availableRect = collecotr->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
+        availableRect = collector->GetAvailableRect(rect.y + currentPosition.y, rect.y + currentPosition.y + lineHeight);
 
         currentPosition.x = (lineCount == 0 ? availableRect.x + startPositionFirstLine : availableRect.x + startPositionSubsequentLines);
 
@@ -3677,12 +3713,14 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         {
             long wrapPosition = 0;
 
+            int indent = lineCount == 0 ? startPositionFirstLine : startPositionSubsequentLines;
+            indent += rightIndent;
             // Find a place to wrap. This may walk back to previous children,
             // for example if a word spans several objects.
             // Note: one object must contains only one wxTextAtrr, so the line height will not
             //       change inside one object. Thus, we can pass the remain line width to the
             //       FindWrapPosition function.
-            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableRect.width, wrapPosition, & partialExtents))
+            if (!FindWrapPosition(wxRichTextRange(lastCompletedEndPos+1, child->GetRange().GetEnd()), dc, availableRect.width - indent, wrapPosition, & partialExtents))
             {
                 // If the function failed, just cut it off at the end of this child.
                 wrapPosition = child->GetRange().GetEnd();
@@ -7313,24 +7351,30 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject, wxRichTextObject)
 
-wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject* parent)
+wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextObject *real)
+                            : wxRichTextObject(parent), m_real(real)
 {
 }
 
-wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextObject *real)
+wxRichTextPlaceHoldingObject::~wxRichTextPlaceHoldingObject()
 {
 }
 
 bool wxRichTextPlaceHoldingObject::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionrange, const wxRect& rect, int descent, int style)
 {
+    return true;
 }
 
 bool wxRichTextPlaceHoldingObject::Layout(wxDC& dc, const wxRect& rect, int style)
 {
+    SetCachedSize(wxSize(0, 0));
+    return true;
 }
 
-bool wxRichTextPlaceHoldingObject::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents)
+bool wxRichTextPlaceHoldingObject::GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position, wxArrayInt* partialExtents) const
 {
+    size.x = size.y = 0;
+    return true;
 }
 
 /*!
