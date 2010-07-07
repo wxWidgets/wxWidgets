@@ -202,3 +202,41 @@ void TextEntryTestCase::Hint()
     GetTestEntry()->SetHint("This is a hint");
     CPPUNIT_ASSERT_EQUAL("", GetTestEntry()->GetValue());
 }
+
+void TextEntryTestCase::CopyPaste()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->AppendText("sometext");
+    entry->SelectAll();
+
+    if(entry->CanCopy() && entry->CanPaste())
+    {
+        entry->Copy();
+        entry->Clear();
+        CPPUNIT_ASSERT(entry->IsEmpty());
+
+        entry->Paste();
+        CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+    }
+}
+
+void TextEntryTestCase::UndoRedo()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->AppendText("sometext");
+
+    if(entry->CanUndo())
+    {
+        entry->Undo();
+        CPPUNIT_ASSERT(entry->IsEmpty());
+
+        if(entry->CanRedo())
+        {
+            entry->Redo();
+            CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
+        }
+    }
+}
+

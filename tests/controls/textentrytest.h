@@ -40,7 +40,9 @@ protected:
         CPPUNIT_TEST( InsertionPoint ); \
         CPPUNIT_TEST( Replace ); \
         CPPUNIT_TEST( Editable ); \
-        CPPUNIT_TEST( Hint )
+        CPPUNIT_TEST( Hint ); \
+        CPPUNIT_TEST( CopyPaste ); \
+        CPPUNIT_TEST( UndoRedo )
 
     void SetValue();
     void TextChangeEvents();
@@ -49,6 +51,8 @@ protected:
     void Replace();
     void Editable();
     void Hint();
+    void CopyPaste();
+    void UndoRedo();
 
 private:
     // Selection() test helper: verify that selection is as described by the
