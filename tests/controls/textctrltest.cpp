@@ -49,6 +49,9 @@ private:
         CPPUNIT_TEST( MaxLength );
         CPPUNIT_TEST( StreamInput );
         CPPUNIT_TEST( Redirector );
+        //CPPUNIT_TEST( ProcessEnter );
+        CPPUNIT_TEST( Url );
+        CPPUNIT_TEST( Style );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
@@ -56,6 +59,9 @@ private:
     void MaxLength();
     void StreamInput();
     void Redirector();
+    //void ProcessEnter();
+    void Url();
+    void Style();
 
     wxTextCtrl *m_text;
 
@@ -79,8 +85,7 @@ void TextCtrlTestCase::setUp()
 
 void TextCtrlTestCase::tearDown()
 {
-    delete m_text;
-    m_text = NULL;
+    wxDELETE(m_text);
 }
 
 // ----------------------------------------------------------------------------
@@ -236,4 +241,126 @@ void TextCtrlTestCase::Redirector()
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
 #endif
+}
+
+#if 0
+void TextCtrlTestCase::ProcessEnter()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_text, wxEVT_COMMAND_TEXT_ENTER);
+
+    m_text->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.Char(WXK_RETURN);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount(wxEVT_COMMAND_TEXT_ENTER));
+
+    // we need a text control with wxTE_PROCESS_ENTER for this test
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_PROCESS_ENTER);
+
+    m_text->SetFocus();
+
+    sim.Char(WXK_RETURN);
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TEXT_ENTER));
+}
+#endif
+
+void TextCtrlTestCase::Url()
+{
+#if defined(__WXMSW__) || defined(__WXGTK__)
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_MULTILINE | wxTE_RICH | wxTE_AUTO_URL);
+
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_text, wxEVT_COMMAND_TEXT_URL);
+
+    m_text->AppendText("http://www.wxwidgets.org");
+
+    wxUIActionSimulator sim;
+    sim.MouseMove(m_text->ClientToScreen(wxPoint(5, 5)));
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount());
+#endif
+}
+
+void TextCtrlTestCase::Style()
+{
+    delete m_text;
+    //We need wxTE_RICH under windows for style support
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize, wxTE_RICH);
+
+    //Red text on a white background
+    m_text->SetDefaultStyle(wxTextAttr(*wxRED, *wxWHITE));
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
+                         wxColour(*wxRED).GetRGB());
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
+                         wxColour(*wxWHITE).GetRGB());
+
+    m_text->AppendText("red on white ");
+
+    //Red text on a grey backgroud
+    m_text->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
+                         wxColour(*wxRED).GetRGB());
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
+                         wxColour(*wxLIGHT_GREY).GetRGB());
+
+    m_text->AppendText("red on grey ");
+
+    //Blue text on a grey backgroud
+    m_text->SetDefaultStyle(wxTextAttr(*wxBLUE));
+
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetTextColour().GetRGB(), 
+                         wxColour(*wxBLUE).GetRGB());
+
+    CPPUNIT_ASSERT_EQUAL(m_text->GetDefaultStyle().GetBackgroundColour().GetRGB(), 
+                         wxColour(*wxLIGHT_GREY).GetRGB());
+
+    m_text->AppendText("blue on grey");
+
+    //Get getting the style at a specific location
+    wxTextAttr style;
+
+    //We have to check that styles are supported
+    if(m_text->GetStyle(3, style))
+    {
+        CPPUNIT_ASSERT_EQUAL(style.GetTextColour().GetRGB(), 
+                             wxColour(*wxRED).GetRGB());
+
+        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour().GetRGB(), 
+                             wxColour(*wxWHITE).GetRGB());
+    }
+
+    //And then setting the style
+    if(m_text->SetStyle(15, 18, style))
+    {
+        m_text->GetStyle(17, style);
+
+        CPPUNIT_ASSERT_EQUAL(style.GetTextColour().GetRGB(), 
+                             wxColour(*wxRED).GetRGB());
+
+        CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour().GetRGB(), 
+                             wxColour(*wxWHITE).GetRGB());
+    }
 }
