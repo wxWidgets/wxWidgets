@@ -137,6 +137,7 @@
             controls/listctrltest.cpp
             controls/notebooktest.cpp
             controls/rearrangelisttest.cpp
+            controls/richtextctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/toolbooktest.cpp
@@ -162,6 +163,7 @@
             window/clientsize.cpp
             window/setsize.cpp
         </sources>
+        <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
