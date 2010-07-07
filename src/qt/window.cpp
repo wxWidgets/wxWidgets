@@ -15,6 +15,11 @@
 #include "wx/qt/converter.h"
 #include "wx/qt/window_qt.h"
 
+#include <QtGui/QGridLayout>
+#include <QtGui/QScrollBar>
+
+#define VERT_SCROLLBAR_POSITION 0, 1
+#define HORZ_SCROLLBAR_POSITION 1, 0
 
 //##############################################################################
 
@@ -64,7 +69,19 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
         m_qtWindow = new wxQtWidget(this, qtParent);
         
     }
-    
+
+    // Create layout for built-in scrolling bars
+    if ( GetScrollBarsContainer() )
+    {
+        QGridLayout *scrollLayout = new QGridLayout();
+        GetScrollBarsContainer()->setLayout( scrollLayout );
+
+        // Container at top-left
+        // Scrollbars are lazily initialized
+        m_qtContainer = new QWidget( GetHandle() );
+        scrollLayout->addWidget( m_qtContainer, 0, 0 );
+    }
+
     Move(pos);
     SetSize(size);
 
@@ -145,32 +162,98 @@ int wxWindow::GetCharWidth() const
     return ( GetHandle()->fontMetrics().averageCharWidth() );
 }
 
+/* Returns a scrollbar for the given orientation, or NULL if the scrollbar
+ * has not been previously created and create is false */
+QScrollBar *GetScrollBar( QWidget *container, int orient, bool create = false )
+{
+    wxCHECK_MSG( container, NULL, "This window can't have scrollbars" );
+    
+    QLayoutItem *qtLayoutItem = NULL;
+    QScrollBar *qtScrollBar = NULL;
+    
+    QGridLayout *scrollLayout = qobject_cast< QGridLayout* >( container->layout() );
+    wxCHECK_MSG( scrollLayout, NULL, "Window without scrolling layout" );
+    
+    if ( orient == wxHORIZONTAL )
+        qtLayoutItem = scrollLayout->itemAtPosition( HORZ_SCROLLBAR_POSITION );
+    else
+        qtLayoutItem = scrollLayout->itemAtPosition( VERT_SCROLLBAR_POSITION );
+    
+    if ( !qtLayoutItem )
+    {
+        // No item at that position, create scrollbar
+        if (create )
+        {
+            qtScrollBar = new QScrollBar( orient == wxHORIZONTAL ? Qt::Horizontal : Qt:: Vertical );
+
+            if ( orient == wxHORIZONTAL )
+                scrollLayout->addWidget( qtScrollBar, HORZ_SCROLLBAR_POSITION );
+            else
+                scrollLayout->addWidget( qtScrollBar, VERT_SCROLLBAR_POSITION );
+        }
+    }
+    else
+    {
+        // Cast the item to a scrollbar
+        qtScrollBar = qobject_cast< QScrollBar* >( qtLayoutItem->widget() );
+        wxCHECK_MSG( qtScrollBar, NULL, "Invalid scrolling layout" );
+    }
+
+    return qtScrollBar;
+}
+
 void wxWindow::SetScrollbar( int orient, int pos, int thumbvisible, int range, bool refresh )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    //If range is zero, don't create the scrollbar
+    QScrollBar *qtScrollBar = GetScrollBar( GetScrollBarsContainer(), orient, range != 0 );
+    
+    // Configure the scrollbar
+    if (range != 0 )
+    {
+        wxCHECK_RET( qtScrollBar, "Invalid scrollbar" );
+        
+        qtScrollBar->setRange( 0, range - thumbvisible );
+        qtScrollBar->setPageStep( thumbvisible );
+        qtScrollBar->setValue( pos );
+        qtScrollBar->show();
+    }
+    else if ( qtScrollBar )
+    {
+        // If range is zero and scrollbar exists, hide it
+        qtScrollBar->hide();
+    }
 }
 
 void wxWindow::SetScrollPos( int orient, int pos, bool refresh )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    QScrollBar *qtScrollBar = GetScrollBar( GetScrollBarsContainer(), orient );
+    wxCHECK_RET( qtScrollBar, "Invalid scrollbar" );
+
+    qtScrollBar->setValue( pos );
 }
 
 int wxWindow::GetScrollPos( int orient ) const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    QScrollBar *qtScrollBar = GetScrollBar( GetScrollBarsContainer(), orient );
+    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    
+    return qtScrollBar->value();
 }
 
 int wxWindow::GetScrollThumb( int orient ) const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    QScrollBar *qtScrollBar = GetScrollBar( GetScrollBarsContainer(), orient );
+    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    
+    return qtScrollBar->pageStep();
 }
 
 int wxWindow::GetScrollRange( int orient ) const
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-    return 0;
+    QScrollBar *qtScrollBar = GetScrollBar( GetScrollBarsContainer(), orient );
+    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    
+    return qtScrollBar->maximum();
 }
 
 
@@ -247,7 +330,7 @@ void wxWindow::DoGetSize(int *width, int *height) const
     
 void wxWindow::DoGetClientSize(int *width, int *height) const
 {
-    QSize size = GetHandle()->size();
+    QSize size = GetContainer()->size();
     *width = size.width();
     *height = size.height();
 }
@@ -311,7 +394,13 @@ QWidget *wxWindow::GetHandle() const
 
 QWidget *wxWindow::GetContainer() const
 {
-    return m_qtWindow;
+    if ( m_qtContainer )
+        return m_qtContainer;
+    else
+        return GetHandle();
 }
 
-
+QWidget *wxWindow::GetScrollBarsContainer() const
+{
+    return m_qtWindow;
+}

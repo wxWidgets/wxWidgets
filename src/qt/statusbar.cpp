@@ -50,7 +50,8 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
     }
     
     m_qtStatusBar = new wxQtStatusBar( this, qtParent );
-    return true;
+
+    return wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style, name);
 }
 
 bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
@@ -114,9 +115,14 @@ void wxStatusBar::UpdateFields()
     }
 }
 
-QStatusBar *wxStatusBar::GetHandle() const
+WXWidget wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
+}
+
+WXWidget wxStatusBar::GetScrollBarsContainer() const
+{
+    return 0;
 }
 
 wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )

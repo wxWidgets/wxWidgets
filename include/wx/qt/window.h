@@ -14,6 +14,19 @@
 #include <QtCore/QPointer>
 #include <QtGui/QWidget>
 
+/* wxQt specific notes:
+ * Remember to implement the Qt object getters on all subclasses:
+ *  GetHandle() returns the Qt object
+ *  GetScrollBarsContainer() returns the widget where the scrollbars are placed
+ *  GetContainer() returns the widget where the children are placed. Usually
+ *    there is no need to reimplement this one.
+ *
+ * For example, for wxFrame, GetHandle() is the QMainWindow, GetScrollBarsContainer()
+ * is the central widget and GetContainer() is a widget in a layout inside the central
+ * widget that also contains the scrollbars.
+ * Return 0 from GetScrollBarsContainer() to disable SetScrollBar() and friends for a
+ * a wxWindow subclasses
+ */
 class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
 {
 public:
@@ -111,9 +124,13 @@ protected:
 #if wxUSE_MENUS
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
+
+    virtual WXWidget GetScrollBarsContainer() const;
         
 private:
     QPointer< QWidget > m_qtWindow;
+    QPointer< QWidget > m_qtContainer;
+    
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )
 };

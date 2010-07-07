@@ -62,7 +62,7 @@ QMainWindow *wxFrame::GetHandle() const
     return m_qtFrame;
 }
 
-QWidget *wxFrame::GetContainer() const
+QWidget *wxFrame::GetScrollBarsContainer() const
 {
     return m_qtFrame->centralWidget();
 }

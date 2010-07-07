@@ -33,7 +33,8 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
-    virtual QStatusBar *GetHandle() const;
+    virtual WXWidget GetHandle() const;
+    virtual WXWidget GetScrollBarsContainer() const;
 protected:
     virtual void DoUpdateStatusText(int number);
 
