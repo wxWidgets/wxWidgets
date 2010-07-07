@@ -52,6 +52,7 @@ private:
         //CPPUNIT_TEST( ProcessEnter );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( Style );
+        CPPUNIT_TEST( Lines );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
@@ -62,6 +63,7 @@ private:
     //void ProcessEnter();
     void Url();
     void Style();
+    void Lines();
 
     wxTextCtrl *m_text;
 
@@ -363,4 +365,26 @@ void TextCtrlTestCase::Style()
         CPPUNIT_ASSERT_EQUAL(style.GetBackgroundColour().GetRGB(), 
                              wxColour(*wxWHITE).GetRGB());
     }
+}
+
+void TextCtrlTestCase::Lines()
+{
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxSize(400, 200), wxTE_MULTILINE | wxTE_DONTWRAP);
+
+    m_text->SetValue("line1\nline2\nlong long line 3");
+    m_text->Refresh();
+    m_text->Update();
+
+    CPPUNIT_ASSERT_EQUAL(3, m_text->GetNumberOfLines());
+    CPPUNIT_ASSERT_EQUAL(5, m_text->GetLineLength(0));
+    CPPUNIT_ASSERT_EQUAL("line2", m_text->GetLineText(1));
+    CPPUNIT_ASSERT_EQUAL(16, m_text->GetLineLength(2));
+
+    m_text->AppendText("\n\nMore text on line 5");
+
+    CPPUNIT_ASSERT_EQUAL(5, m_text->GetNumberOfLines());
+    CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
+    CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
 }
