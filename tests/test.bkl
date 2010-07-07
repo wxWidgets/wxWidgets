@@ -122,13 +122,13 @@
             graphics/ellipsization.cpp
             graphics/measuring.cpp
             config/config.cpp
-            controls/bookctrlbase.cpp
+            controls/bookctrlbasetest.cpp
             controls/buttontest.cpp
             controls/checklistboxtest.cpp
             controls/choicebooktest.cpp
             controls/choicetest.cpp
             controls/comboboxtest.cpp
-            controls/grid.cpp
+            controls/gridtest.cpp
             controls/headerctrltest.cpp
             controls/itemcontainertest.cpp
             controls/label.cpp
@@ -139,6 +139,7 @@
             controls/rearrangelisttest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
+            controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
             events/clone.cpp
