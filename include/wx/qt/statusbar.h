@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/statusbar.h
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@ public:
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL );
 
-    virtual WXWidget GetHandle() const;
+    virtual QStatusBar *GetHandle() const;
     virtual WXWidget GetScrollBarsContainer() const;
 protected:
     virtual void DoUpdateStatusText(int number);

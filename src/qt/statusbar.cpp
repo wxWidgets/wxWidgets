@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/statusbar.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -115,7 +115,7 @@ void wxStatusBar::UpdateFields()
     }
 }
 
-WXWidget wxStatusBar::GetHandle() const
+QStatusBar *wxStatusBar::GetHandle() const
 {
     return m_qtStatusBar;
 }

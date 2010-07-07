@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/window.h
 // Purpose:     wxWindow class
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Created:     09/08/09
 // RCS-ID:      $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,17 +16,26 @@
 #include <QtGui/QScrollBar>
 
 /* wxQt specific notes:
- * Remember to implement the Qt object getters on all subclasses:
- *  GetHandle() returns the Qt object
- *  GetScrollBarsContainer() returns the widget where the scrollbars are placed
- *  GetContainer() returns the widget where the children are placed. Usually
- *    there is no need to reimplement this one.
  *
- * For example, for wxFrame, GetHandle() is the QMainWindow, GetScrollBarsContainer()
- * is the central widget and GetContainer() is a widget in a layout inside the central
- * widget that also contains the scrollbars.
- * Return 0 from GetScrollBarsContainer() to disable SetScrollBar() and friends for a
- * a wxWindow subclasses
+ * Remember to implement the Qt object getters on all subclasses:
+ *  - GetHandle() returns the Qt object
+ *  - GetScrollBarsContainer() returns the widget where scrollbars are placed
+ *  - GetContainer() returns the widget where the children are placed. Usually
+ *    there is no need to reimplement this one.
+ * For example, for wxFrame, GetHandle() is the QMainWindow,
+ * GetScrollBarsContainer() is the central widget and GetContainer() is a widget
+ * in a layout inside the central widget that also contains the scrollbars.
+ * Return 0 from GetScrollBarsContainer() to disable SetScrollBar() and friends
+ * for wxWindow subclasses.
+ *
+ *
+ * Event handling is achieved by using the template class WindowEventForwarder
+ * found in winevent_qt.(h|cpp) to send all Qt events here to HandleOnQtxxx()
+ * methods. All these methods receive the Qt event and the receiver. This is
+ * done because events of the containers (the scrolled part of the window) are
+ * sent to the same wxWindow instance, that must be able to differenciate them
+ * as some events need different handling (paintEvent) depending on that.
+ * We pass the QWidget pointer to all event handlers for consistency.
  */
 class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
 {
@@ -89,6 +98,9 @@ public:
     
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
+    // Qt event handling
+    bool HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event );
+    
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
@@ -127,7 +139,7 @@ protected:
 #endif // wxUSE_MENUS
 
     virtual WXWidget GetScrollBarsContainer() const;
-        
+
 private:
     QPointer< QWidget > m_qtWindow;
     QPointer< QWidget > m_qtContainer;

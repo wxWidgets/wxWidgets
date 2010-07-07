@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dcclient.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,7 +23,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
-    m_ok = m_qtPainter.begin(win->GetHandle());
+    // Paint to the container (the real part of the window)
+    m_ok = m_qtPainter.begin(win->GetContainer());
     if (m_ok) PrepareQPainter();
 }
 

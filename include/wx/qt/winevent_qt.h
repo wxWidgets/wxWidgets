@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     21.06.10
 // RCS-ID:      $Id$
-// Copyright:   Javier Torres
+// Copyright:   (c) Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -26,7 +26,7 @@ public:
 protected:
     //Must be implemented by all classes using this template
     //to return the window where the events will be sent
-    virtual wxWindow *GetEventReceiver() { return NULL; }
+    virtual wxWindow *GetEventReceiver() = 0;
 
     /* Not implemented here: wxChildFocusEvent, wxHelpEvent, wxIdleEvent
         * wxJoystickEvent, wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
@@ -85,11 +85,7 @@ protected:
     {
         event->accept();
 
-        wxEraseEvent erase;
-        GetEventReceiver()->ProcessWindowEvent(erase);
-
-        wxPaintEvent paint;
-        if (!GetEventReceiver()->ProcessWindowEvent(paint))
+        if ( !GetEventReceiver()->HandleQtPaintEvent(this, event) )
             T::paintEvent(event);
     }
     

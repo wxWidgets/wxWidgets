@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/window.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -73,11 +73,12 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     if ( GetScrollBarsContainer() )
     {
         QGridLayout *scrollLayout = new QGridLayout();
+        scrollLayout->setContentsMargins( 0, 0, 0, 0 );
         GetScrollBarsContainer()->setLayout( scrollLayout );
 
         // Container at top-left
         // Scrollbars are lazily initialized
-        m_qtContainer = new QWidget( GetHandle() );
+        m_qtContainer = new wxQtWidget( this, GetHandle() );
         scrollLayout->addWidget( m_qtContainer, 0, 0 );
     }
 
@@ -386,6 +387,28 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     return ( false );
 }
 #endif // wxUSE_MENUS
+
+bool wxWindow::HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event )
+{
+    /* If this window has scrollbars, only let wx handle the event if it is
+     * for the client area (the scrolled part). Events for the whole window
+     * (including scrollbars and maybe status or menu bars are handled by Qt */
+    
+    if ( m_qtContainer && receiver != m_qtContainer )
+    {
+        return false;
+    }
+    else
+    {
+        // Send event
+        wxEraseEvent erase;
+        ProcessWindowEvent(erase);
+        wxPaintEvent paint;
+        ProcessWindowEvent(paint);
+
+        return ProcessWindowEvent(paint);
+    }
+}
 
 QWidget *wxWindow::GetHandle() const
 {
