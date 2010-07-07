@@ -110,7 +110,7 @@ return information is passed via the argument, which is why it is non-const).
 You also need to insert a macro
 
 @code
-DECLARE_EVENT_TABLE()
+wxDECLARE_EVENT_TABLE()
 @endcode
 
 somewhere in the class declaration. It doesn't matter where it appears but
@@ -150,12 +150,12 @@ placed in an implementation file. The event table tells wxWidgets how to map
 events to member functions and in our example it could look like this:
 
 @code
-BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(DO_TEST, MyFrame::DoTest)
     EVT_SIZE(MyFrame::OnSize)
     EVT_BUTTON(BUTTON1, MyFrame::OnButton1)
-END_EVENT_TABLE()
+wxEND_EVENT_TABLE()
 @endcode
 
 Notice that you must mention a method you want to use for the event handling in
@@ -537,7 +537,7 @@ and their parent-child relation are well understood by the programmer while it
 may be difficult, if not impossible, to track down all the dialogs that
 may be popped up in a complex program (remember that some are created
 automatically by wxWidgets). If you need to specify a different behaviour for
-some reason, you can use wxWindow::SetExtraStyle(wxWS_EX_BLOCK_EVENTS)
+some reason, you can use <tt>wxWindow::SetExtraStyle(wxWS_EX_BLOCK_EVENTS)</tt>
 explicitly to prevent the events from being propagated beyond the given window
 or unset this flag for the dialogs that have it on by default.
 
@@ -593,6 +593,16 @@ either wxEvent (which doesn't provide any extra information) or wxCommandEvent
 Both strategies are described in details below. See also the @ref
 page_samples_event for a complete example of code defining and working with the
 custom event types.
+
+Finally, you will need to generate and post your custom events.
+Generation is as simple as instancing your custom event class and initializing
+its internal fields.
+For posting events to a certain event handler there are two possibilities: 
+using wxEvtHandler::AddPendingEvent or using wxEvtHandler::QueueEvent.
+Basically you will need to use the latter when doing inter-thread communication;
+when you use only the main thread you can also safely use the former.
+Last, note that there are also two simple global wrapper functions associated
+to the two wxEvtHandler mentioned functions: wxPostEvent() and wxQueueEvent().
 
 
 @subsection overview_events_custom_existing Using Existing Event Classes
