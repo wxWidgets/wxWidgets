@@ -42,6 +42,9 @@ private:
         CPPUNIT_TEST( CutCopyPaste );
         CPPUNIT_TEST( UndoRedo );
         CPPUNIT_TEST( CaretPosition );
+        CPPUNIT_TEST( Selection );
+        CPPUNIT_TEST( Editable );
+        CPPUNIT_TEST( Range );
     CPPUNIT_TEST_SUITE_END();
 
     void Character();
@@ -54,6 +57,9 @@ private:
     void CutCopyPaste();
     void UndoRedo();
     void CaretPosition();
+    void Selection();
+    void Editable();
+    void Range();
 
     wxRichTextCtrl* m_rich;
 
@@ -318,4 +324,91 @@ void RichTextCtrlTestCase::CaretPosition()
     m_rich->MoveToLineEnd();
 
     CPPUNIT_ASSERT_EQUAL(21, m_rich->GetCaretPosition());
+}
+
+void RichTextCtrlTestCase::Selection()
+{
+    m_rich->SetValue("some more text");
+
+    m_rich->SelectAll();
+
+    CPPUNIT_ASSERT_EQUAL("some more text", m_rich->GetStringSelection());
+
+    m_rich->SelectNone();
+
+    CPPUNIT_ASSERT_EQUAL("", m_rich->GetStringSelection());
+
+    m_rich->SelectWord(1);
+
+    CPPUNIT_ASSERT_EQUAL("some", m_rich->GetStringSelection());
+
+    m_rich->SetSelection(5, 14);
+
+    CPPUNIT_ASSERT_EQUAL("more text", m_rich->GetStringSelection());
+
+    wxRichTextRange range(5, 9);
+
+    m_rich->SetSelectionRange(range);
+
+    CPPUNIT_ASSERT_EQUAL("more", m_rich->GetStringSelection());
+}
+
+void RichTextCtrlTestCase::Editable()
+{
+    wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
+                                          wxTestableFrame);
+
+    EventCounter count(m_rich, wxEVT_COMMAND_TEXT_UPDATED);
+
+    m_rich->SetFocus();
+
+    wxUIActionSimulator sim;
+    sim.Text("abcdef");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
+    CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+
+    m_rich->SetEditable(false);
+    sim.Text("gh");
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
+    CPPUNIT_ASSERT_EQUAL(0, frame->GetEventCount());
+}
+
+void RichTextCtrlTestCase::Range()
+{
+    wxRichTextRange range(0, 10);
+
+    CPPUNIT_ASSERT_EQUAL(0, range.GetStart());
+    CPPUNIT_ASSERT_EQUAL(10, range.GetEnd());
+    CPPUNIT_ASSERT_EQUAL(11, range.GetLength());
+    CPPUNIT_ASSERT(range.Contains(5));
+
+    wxRichTextRange outside(12, 14);
+
+    CPPUNIT_ASSERT(outside.IsOutside(range));
+
+    wxRichTextRange inside(6, 7);
+
+    CPPUNIT_ASSERT(inside.IsWithin(range));
+
+    range.LimitTo(inside);
+
+    CPPUNIT_ASSERT(inside == range);
+    CPPUNIT_ASSERT(inside + range == outside);
+    CPPUNIT_ASSERT(outside - range == inside);
+
+    range.SetStart(4);
+    range.SetEnd(6);
+
+    CPPUNIT_ASSERT_EQUAL(4, range.GetStart());
+    CPPUNIT_ASSERT_EQUAL(6, range.GetEnd());
+    CPPUNIT_ASSERT_EQUAL(3, range.GetLength());
+
+    inside.SetRange(6, 4);
+    inside.Swap();
+
+    CPPUNIT_ASSERT(inside == range);
 }
