@@ -31,6 +31,11 @@
  * turning off capabilities that don't work under iphone yet
  */
 
+#if wxUSE_MIMETYPE
+#undef wxUSE_MIMETYPE
+#define wxUSE_MIMETYPE 0
+#endif
+
 #if wxUSE_MDI
 #undef wxUSE_MDI
 #define wxUSE_MDI 0

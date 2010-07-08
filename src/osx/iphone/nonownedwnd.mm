@@ -335,7 +335,11 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     wxUIContentView* contentview = [[wxUIContentView alloc] initWithFrame:( fullscreen ? frame : appframe ) ];
     contentview.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     wxUIContentViewController* controller = [[wxUIContentViewController alloc] initWithNibName:nil bundle:nil];
+
+#ifdef __IPHONE_3_0
     controller.wantsFullScreenLayout = fullscreen;
+#endif
+
     controller.view = contentview;
     [contentview release];
     [contentview setController:controller];

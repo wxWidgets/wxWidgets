@@ -227,6 +227,7 @@ bool wxToolBar::Create(
     
     switch ( [[UIApplication sharedApplication] statusBarStyle] ) 
     {
+#ifdef __IPHONE_3_0
         case UIStatusBarStyleBlackOpaque:
             toolbar.barStyle = UIBarStyleBlack;
             break;
@@ -234,6 +235,7 @@ bool wxToolBar::Create(
             toolbar.barStyle = UIBarStyleBlack;
             toolbar.translucent = YES;
             break;
+#endif
         default:
             toolbar.barStyle = UIBarStyleDefault;
             break;
