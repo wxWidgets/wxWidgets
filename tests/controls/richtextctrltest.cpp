@@ -40,6 +40,7 @@ private:
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( Text );
         CPPUNIT_TEST( CutCopyPaste );
+        CPPUNIT_TEST( UndoRedo );
     CPPUNIT_TEST_SUITE_END();
 
     void Character();
@@ -50,6 +51,7 @@ private:
     void Url();
     void Text();
     void CutCopyPaste();
+    void UndoRedo();
 
     wxRichTextCtrl* m_rich;
 
@@ -232,4 +234,53 @@ void RichTextCtrlTestCase::CutCopyPaste()
         m_rich->Paste();
         CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
     }
+}
+
+void RichTextCtrlTestCase::UndoRedo()
+{
+    m_rich->AppendText("sometext");
+
+    CPPUNIT_ASSERT(m_rich->CanUndo());
+
+    m_rich->Undo();
+        
+    CPPUNIT_ASSERT(m_rich->IsEmpty());
+    CPPUNIT_ASSERT(m_rich->CanRedo());
+            
+    m_rich->Redo();
+            
+    CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+
+    m_rich->AppendText("Batch undo");
+    m_rich->SelectAll();
+
+    //Also test batch operations
+    m_rich->BeginBatchUndo("batchtest");
+
+    m_rich->ApplyBoldToSelection();
+    m_rich->ApplyItalicToSelection();
+
+    m_rich->EndBatchUndo();
+
+    CPPUNIT_ASSERT(m_rich->CanUndo());
+
+    m_rich->Undo();
+        
+    CPPUNIT_ASSERT(!m_rich->IsSelectionBold());
+    CPPUNIT_ASSERT(!m_rich->IsSelectionItalics());
+    CPPUNIT_ASSERT(m_rich->CanRedo());
+
+    m_rich->Redo();
+
+    CPPUNIT_ASSERT(m_rich->IsSelectionBold());
+    CPPUNIT_ASSERT(m_rich->IsSelectionItalics());
+
+    //And surpressing undo
+    m_rich->BeginSuppressUndo();
+
+    m_rich->AppendText("Can't undo this");
+
+    CPPUNIT_ASSERT(m_rich->CanUndo());
+
+    m_rich->EndSuppressUndo();
 }
