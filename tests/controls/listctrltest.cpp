@@ -50,6 +50,7 @@ private:
         CPPUNIT_TEST( ColumnClick );
         CPPUNIT_TEST( InsertItem );
         CPPUNIT_TEST( ColumnDrag );
+        CPPUNIT_TEST( Find );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -63,6 +64,7 @@ private:
     void ColumnClick();
     void InsertItem();
     void ColumnDrag();
+    void Find();
 
     wxListCtrl *m_list;
 
@@ -383,4 +385,28 @@ void ListCtrlTestCase::ColumnDrag()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_COL_END_DRAG));
 
     m_list->ClearAll();
+}
+
+void ListCtrlTestCase::Find()
+{
+    // set up for the test
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertColumn(1, "Column 1");
+
+    m_list->InsertItem(0, "Item 0");
+    m_list->SetItem(0, 1, "first column");
+
+    m_list->InsertItem(1, "Item 1");
+    m_list->SetItem(1, 1, "first column");
+
+    m_list->InsertItem(2, "Item 40");
+    m_list->SetItem(2, 1, "first column");
+
+    m_list->InsertItem(3, "ITEM 01");
+    m_list->SetItem(3, 1, "first column");
+
+    CPPUNIT_ASSERT_EQUAL(1, m_list->FindItem(-1, "Item 1"));
+    CPPUNIT_ASSERT_EQUAL(2, m_list->FindItem(-1, "Item 4", true));
+    CPPUNIT_ASSERT_EQUAL(2, m_list->FindItem(1, "Item 40"));
+    CPPUNIT_ASSERT_EQUAL(3, m_list->FindItem(2, "Item 0", true));
 }
