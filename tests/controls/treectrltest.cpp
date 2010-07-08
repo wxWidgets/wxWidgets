@@ -43,10 +43,13 @@ private:
         CPPUNIT_TEST( DeleteItem );
         CPPUNIT_TEST( LabelEdit );
         CPPUNIT_TEST( KeyDown );
-        CPPUNIT_TEST( CollapseExpand );
+        CPPUNIT_TEST( CollapseExpandEvents );
         CPPUNIT_TEST( SelectionChange );
         CPPUNIT_TEST( Menu );
         CPPUNIT_TEST( ItemData );
+        CPPUNIT_TEST( Iteration );
+        CPPUNIT_TEST( Parent );
+        CPPUNIT_TEST( CollapseExpand );
         CPPUNIT_TEST( HasChildren );
         CPPUNIT_TEST( SelectItemSingle );
         CPPUNIT_TEST( PseudoTest_MultiSelect );
@@ -59,10 +62,13 @@ private:
     void DeleteItem();
     void LabelEdit();
     void KeyDown();
-    void CollapseExpand();
+    void CollapseExpandEvents();
     void SelectionChange();
     void Menu();
     void ItemData();
+    void Iteration();
+    void Parent();
+    void CollapseExpand();
     void HasChildren();
     void SelectItemSingle();
     void SelectItemMulti();
@@ -292,7 +298,7 @@ void TreeCtrlTestCase::KeyDown()
     CPPUNIT_ASSERT_EQUAL(4, frame->GetEventCount());
 }
 
-void TreeCtrlTestCase::CollapseExpand()
+void TreeCtrlTestCase::CollapseExpandEvents()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
@@ -399,4 +405,61 @@ void TreeCtrlTestCase::ItemData()
 
     CPPUNIT_ASSERT_EQUAL(insertdata, m_tree->GetItemData(insert));
     CPPUNIT_ASSERT_EQUAL(insert, insertdata->GetId());
+}
+
+void TreeCtrlTestCase::Iteration()
+{
+    //Get first / next / last child
+    wxTreeItemIdValue cookie;
+    CPPUNIT_ASSERT_EQUAL(m_tree->GetFirstChild(m_root, cookie), m_child1);
+    CPPUNIT_ASSERT_EQUAL(m_tree->GetNextChild(m_root, cookie), 
+                         m_tree->GetLastChild(m_root));
+    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetLastChild(m_root));
+
+    //Get next / previous sibling
+    CPPUNIT_ASSERT_EQUAL(m_child2, m_tree->GetNextSibling(m_child1));
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetPrevSibling(m_child2));
+}
+
+void TreeCtrlTestCase::Parent()
+{
+    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetRootItem());
+    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetItemParent(m_child1));
+    CPPUNIT_ASSERT_EQUAL(m_root, m_tree->GetItemParent(m_child2));
+    CPPUNIT_ASSERT_EQUAL(m_child1, m_tree->GetItemParent(m_grandchild));
+}
+
+void TreeCtrlTestCase::CollapseExpand()
+{
+    m_tree->ExpandAll();
+
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+
+    m_tree->CollapseAll();
+
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_child1));
+
+    m_tree->ExpandAllChildren(m_root);
+
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_root));
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+
+    m_tree->CollapseAllChildren(m_child1);
+
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_child1));
+
+    m_tree->Expand(m_child1);
+
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+
+    m_tree->Collapse(m_root);
+
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
+    CPPUNIT_ASSERT(m_tree->IsExpanded(m_child1));
+
+    m_tree->CollapseAndReset(m_root);
+
+    CPPUNIT_ASSERT(!m_tree->IsExpanded(m_root));
 }
