@@ -284,8 +284,12 @@
 
 // iphone has a toolbar that is a regular UIView
 
+#ifdef wxOSX_USE_NATIVE_TOOLBAR
 #if wxOSX_USE_NATIVE_TOOLBAR
 #undef wxOSX_USE_NATIVE_TOOLBAR
+#define wxOSX_USE_NATIVE_TOOLBAR 0
+#endif
+#else
 #define wxOSX_USE_NATIVE_TOOLBAR 0
 #endif
 
