@@ -18,11 +18,12 @@
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
 
-template <typename T> class WindowEventForwarder : public T
+template <typename QtWidget>
+class wxQtEventForwarder : public QtWidget
 {
 public:
-    WindowEventForwarder<T>(QWidget *parent) : T(parent) { }
-    
+    wxQtEventForwarder(QWidget *parent) : QtWidget(parent){ }
+
 protected:
     //Must be implemented by all classes using this template
     //to return the window where the events will be sent
@@ -34,46 +35,46 @@ protected:
 
     //wxActivateEvent
     //virtual void changeEvent ( QEvent * event ) { }
-    
+
     //wxCloseEvent
     //virtual void closeEvent ( QCloseEvent * event ) { }
-    
+
     //wxContextMenuEvent
     //virtual void contextMenuEvent ( QContextMenuEvent * event ) { }
-    
+
     //wxDropFilesEvent
     //virtual void dropEvent ( QDropEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void enterEvent ( QEvent * event ) { }
-    
+
     //wxFocusEvent.
     //virtual void focusInEvent ( QFocusEvent * event ) { }
-    
+
     //wxFocusEvent.
     //virtual void focusOutEvent ( QFocusEvent * event ) { }
-    
+
     //wxShowEvent
     //virtual void hideEvent ( QHideEvent * event ) { }
-    
+
     //wxKeyEvent
     //virtual void keyPressEvent ( QKeyEvent * event ) { }
-    
+
     //wxKeyEvent
     //virtual void keyReleaseEvent ( QKeyEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void leaveEvent ( QEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void mouseDoubleClickEvent ( QMouseEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void mouseMoveEvent ( QMouseEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void mousePressEvent ( QMouseEvent * event ) { }
-    
+
     //wxMouseEvent
     //virtual void mouseReleaseEvent ( QMouseEvent * event ) { }
     
@@ -86,9 +87,9 @@ protected:
         event->accept();
 
         if ( !GetEventReceiver()->HandleQtPaintEvent(this, event) )
-            T::paintEvent(event);
+            QtWidget::paintEvent(event);
     }
-    
+
     //wxSizeEvent
     virtual void resizeEvent ( QResizeEvent * event )
     {
@@ -96,9 +97,9 @@ protected:
 
         wxSizeEvent e(wxQtConvertSize(event->size()));
         if (!GetEventReceiver()->ProcessWindowEvent(e))
-            T::resizeEvent(event);
+            QtWidget::resizeEvent(event);
     }
-    
+
     //wxShowEvent
     //virtual void showEvent ( QShowEvent * event ) { }
     
@@ -114,7 +115,7 @@ protected:
         e.m_wheelDelta = 120;
 
         if (!GetEventReceiver()->ProcessWindowEvent(e))
-            T::wheelEvent(event);
+            QtWidget::wheelEvent(event);
     }
 
     /* Unused Qt events

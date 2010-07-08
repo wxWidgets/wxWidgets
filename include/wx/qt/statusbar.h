@@ -48,7 +48,7 @@ private:
     DECLARE_DYNAMIC_CLASS( wxStatusBar )
 };
 
-class WXDLLIMPEXP_CORE wxQtStatusBar : public WindowEventForwarder< QStatusBar >
+class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventForwarder< QStatusBar >
 {
     public:
         wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent );

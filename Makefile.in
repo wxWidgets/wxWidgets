@@ -2599,7 +2599,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/fontdlg.h \
 	wx/qt/frame.h \
 	wx/qt/gauge.h \
-	wx/qt/icon.h \
+	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/qt/listbox.h \
 	wx/qt/listctrl.h \
@@ -4938,7 +4938,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_frame_moc.o \
 	monodll_qt_gauge.o \
 	monodll_qt_graphics.o \
-	monodll_qt_icon.o \
+	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_qt_listbox.o \
 	monodll_qt_listctrl.o \
@@ -5877,7 +5877,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_frame_moc.o \
 	monodll_qt_gauge.o \
 	monodll_qt_graphics.o \
-	monodll_qt_icon.o \
+	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_qt_listbox.o \
 	monodll_qt_listctrl.o \
@@ -6955,7 +6955,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_frame_moc.o \
 	monolib_qt_gauge.o \
 	monolib_qt_graphics.o \
-	monolib_qt_icon.o \
+	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_qt_listbox.o \
 	monolib_qt_listctrl.o \
@@ -7894,7 +7894,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_frame_moc.o \
 	monolib_qt_gauge.o \
 	monolib_qt_graphics.o \
-	monolib_qt_icon.o \
+	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_qt_listbox.o \
 	monolib_qt_listctrl.o \
@@ -9161,7 +9161,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_frame_moc.o \
 	coredll_qt_gauge.o \
 	coredll_qt_graphics.o \
-	coredll_qt_icon.o \
+	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_qt_listbox.o \
 	coredll_qt_listctrl.o \
@@ -10100,7 +10100,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_frame_moc.o \
 	coredll_qt_gauge.o \
 	coredll_qt_graphics.o \
-	coredll_qt_icon.o \
+	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_qt_listbox.o \
 	coredll_qt_listctrl.o \
@@ -10853,7 +10853,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_frame_moc.o \
 	corelib_qt_gauge.o \
 	corelib_qt_graphics.o \
-	corelib_qt_icon.o \
+	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_qt_listbox.o \
 	corelib_qt_listctrl.o \
@@ -11792,7 +11792,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_frame_moc.o \
 	corelib_qt_gauge.o \
 	corelib_qt_graphics.o \
-	corelib_qt_icon.o \
+	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_qt_listbox.o \
 	corelib_qt_listctrl.o \
@@ -17898,6 +17898,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
@@ -18992,9 +18995,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_icon.o: $(srcdir)/src/qt/icon.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -23049,6 +23049,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
@@ -24143,9 +24146,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_icon.o: $(srcdir)/src/qt/icon.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -28389,6 +28389,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
@@ -29483,9 +29486,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_icon.o: $(srcdir)/src/qt/icon.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp
@@ -32238,6 +32238,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_paletteg.o: $(srcdir)/src/generic/paletteg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/paletteg.cpp
 
@@ -33332,9 +33335,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
-
-@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_icon.o: $(srcdir)/src/qt/icon.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_listbox.o: $(srcdir)/src/qt/listbox.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/listbox.cpp

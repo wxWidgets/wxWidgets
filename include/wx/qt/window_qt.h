@@ -14,7 +14,7 @@
 #include <QtGui/QScrollBar>
 #include "wx/qt/winevent_qt.h"
 
-class WXDLLIMPEXP_CORE wxQtWidget : public WindowEventForwarder< QWidget >
+class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< QWidget >
 {
     Q_OBJECT
 

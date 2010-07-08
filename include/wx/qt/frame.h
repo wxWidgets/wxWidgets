@@ -50,7 +50,7 @@ private:
 
 
 
-class WXDLLIMPEXP_CORE wxQtFrame : public WindowEventForwarder< QMainWindow >
+class WXDLLIMPEXP_CORE wxQtFrame : public wxQtEventForwarder< QMainWindow >
 {
     Q_OBJECT
 
