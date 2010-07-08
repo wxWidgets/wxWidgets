@@ -39,6 +39,7 @@ private:
         CPPUNIT_TEST( BufferReset );
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( Text );
+        CPPUNIT_TEST( CutCopyPaste );
     CPPUNIT_TEST_SUITE_END();
 
     void Character();
@@ -48,6 +49,7 @@ private:
     void BufferReset();
     void Url();
     void Text();
+    void CutCopyPaste();
 
     wxRichTextCtrl* m_rich;
 
@@ -203,4 +205,31 @@ void RichTextCtrlTestCase::Text()
 
     CPPUNIT_ASSERT_EQUAL("abcdef", m_rich->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, frame->GetEventCount());
+}
+
+void RichTextCtrlTestCase::CutCopyPaste()
+{
+    m_rich->AppendText("sometext");
+    m_rich->SelectAll();
+
+    if(m_rich->CanCut() && m_rich->CanPaste())
+    {
+        m_rich->Cut();
+        CPPUNIT_ASSERT(m_rich->IsEmpty());
+
+        m_rich->Paste();
+        CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+    }
+
+    m_rich->SelectAll();
+
+    if(m_rich->CanCopy() && m_rich->CanPaste())
+    {
+        m_rich->Copy();
+        m_rich->Clear();
+        CPPUNIT_ASSERT(m_rich->IsEmpty());
+
+        m_rich->Paste();
+        CPPUNIT_ASSERT_EQUAL("sometext", m_rich->GetValue());
+    }
 }
