@@ -41,6 +41,7 @@ private:
         CPPUNIT_TEST( Text );
         CPPUNIT_TEST( CutCopyPaste );
         CPPUNIT_TEST( UndoRedo );
+        CPPUNIT_TEST( CaretPosition );
     CPPUNIT_TEST_SUITE_END();
 
     void Character();
@@ -52,6 +53,7 @@ private:
     void Text();
     void CutCopyPaste();
     void UndoRedo();
+    void CaretPosition();
 
     wxRichTextCtrl* m_rich;
 
@@ -283,4 +285,37 @@ void RichTextCtrlTestCase::UndoRedo()
     CPPUNIT_ASSERT(m_rich->CanUndo());
 
     m_rich->EndSuppressUndo();
+}
+
+void RichTextCtrlTestCase::CaretPosition()
+{
+    m_rich->AddParagraph("This is paragraph one");
+    m_rich->AddParagraph("Paragraph two\n has \nlots of\n lines");
+
+    m_rich->MoveCaret(1);
+
+    CPPUNIT_ASSERT_EQUAL(1, m_rich->GetCaretPosition());
+
+    m_rich->MoveToParagraphStart();
+
+    CPPUNIT_ASSERT_EQUAL(0, m_rich->GetCaretPosition());
+
+    m_rich->MoveRight();
+    m_rich->MoveRight(2);
+    m_rich->MoveLeft(1);
+    m_rich->MoveLeft(0);
+
+    CPPUNIT_ASSERT_EQUAL(2, m_rich->GetCaretPosition());
+
+    m_rich->MoveToParagraphEnd();
+
+    CPPUNIT_ASSERT_EQUAL(21, m_rich->GetCaretPosition());
+
+    m_rich->MoveToLineStart();
+
+    CPPUNIT_ASSERT_EQUAL(0, m_rich->GetCaretPosition());
+
+    m_rich->MoveToLineEnd();
+
+    CPPUNIT_ASSERT_EQUAL(21, m_rich->GetCaretPosition());
 }
