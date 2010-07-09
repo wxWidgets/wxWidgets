@@ -270,13 +270,11 @@ wxString wxMaskedField::ApplyFormatCodes(const wxString& string)
 
                 if(m_formatCodes.Find(wxT("-")) != wxNOT_FOUND && string[0] == '-')
                 {
-                    printf("Pre gagne\n");
                     if(res.Len() == 0 && 
                     ((string.Len() > 0 &&( IsCharValid(m_mask[0], string[1])) 
                         || string[1] == ' ') 
                             || string.Len() == 1))
                     {
-                        printf("Gagne\n");
                         it++;
                         format = true;
                         negative = true;
@@ -358,7 +356,6 @@ bool wxMaskedField::IsValid(const wxString& string) const
     if((string.Len() > m_mask.Len() && m_formatCodes.Find('-') == wxNOT_FOUND)
       ||( string.Len() != 0 && m_mask.Len() ==0))
     {
-        printf("Catch\n");
         res = false;
     }
     

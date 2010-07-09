@@ -30,10 +30,10 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( MaskedEditTestCase );
-  /*      CPPUNIT_TEST( ApplyFormatCodesTest );
+        CPPUNIT_TEST( ApplyFormatCodesTest );
         CPPUNIT_TEST( GetPlainValueTest    );
-    */    CPPUNIT_TEST( IsValidTest          );
-      /*  CPPUNIT_TEST( SetMaskTest          );
+        CPPUNIT_TEST( IsValidTest          );
+        CPPUNIT_TEST( SetMaskTest          );
         CPPUNIT_TEST( SetDefaultValueTest  );
         CPPUNIT_TEST( AddChoiceTest        );
         CPPUNIT_TEST( AddChoicesTest       );
@@ -43,7 +43,7 @@ private:
         CPPUNIT_TEST( GetFieldIndexTest    );
         CPPUNIT_TEST( GetMinFieldPositionTest );
         CPPUNIT_TEST( GetMaxFieldPositionTest );
- */   CPPUNIT_TEST_SUITE_END();
+    CPPUNIT_TEST_SUITE_END();
 
     void ApplyFormatCodesTest();
     void GetPlainValueTest();
@@ -203,18 +203,6 @@ void MaskedEditTestCase::IsValidTest()
         {wxT("###\\*###") , wxT("123456") , false},
         {wxT("###\\*###") , wxT("124\\*45") , false},
 
-        //with more than one field
-        {wxT("AAa|.#X*") , wxT("AZc.3,|") , true},
-        {wxT("AA|a.#|X*"), wxT("AZc3,|")  , false},
-        {wxT("AAa.#X*")  , wxT("aZc.|.|") , false},
-        {wxT("A|Aa.#X*") , wxT("")        , true},
-        {wxT("AAa.|#X*") , wxT("AZc.3,|4"), false},
-
-        {wxT("#|##\\*#|##") , wxT("")        , true},
-        {wxT("###\\*###")   , wxT("123*593") , true},
-        {wxT("|###\\*#|##") , wxT("123456")  , false}, 
-        {wxT("|###\\*###|") , wxT("124\\*45"), false},
-        {wxT("|###\\*###|") , wxT("124*45")  , true},
         {wxT("Aa{5} A{5}")  , wxT("A")       , true},
     
         {wxT("###")    , wxT("1")  , true},
@@ -227,18 +215,31 @@ void MaskedEditTestCase::IsValidTest()
  
 
 
+        //with more than one field
+        {wxT("AAa|.#X*") , wxT("AZc.3,|") , true},
+        {wxT("AA|a.#|X*"), wxT("AZc3,|")  , false},
+        {wxT("AAa.#X*")  , wxT("aZc.|.|") , false},
+        {wxT("A|Aa.#X*") , wxT("")        , true},
+        {wxT("AAa.|#X*") , wxT("AZc.3,|4"), false},
+
+        {wxT("#|##\\*#|##") , wxT("")        , true},
+        {wxT("###\\*###")   , wxT("123*593") , true},
+        {wxT("|###\\*#|##") , wxT("123456")  , false}, 
+        {wxT("|###\\*###|") , wxT("124\\*45"), false},
+        {wxT("|###\\*###|") , wxT("124*45")  , true},
+
+        {wxT("##|h|##|m") , wxT("1")         , true}
+        
     };
 
     for(unsigned int n = 0; n< WXSIZEOF(listTest); n++)
     {
-        printf("N= %d\n", n);
         if(!listTest[n].mask.Contains('|'))
             mask = wxMaskedEdit(listTest[n].mask, wxT("F_-"));
         else
             mask = wxMaskedEdit(listTest[n].mask, wxArrayString());
 
         formatString = mask.ApplyFormatCodes(listTest[n].test); 
-        printf("?%s?\n", (const char *) formatString.mb_str(wxConvUTF8));
         CPPUNIT_ASSERT_EQUAL(listTest[n].result ,mask.IsValid(formatString)); 
     }
 
@@ -267,7 +268,6 @@ void MaskedEditTestCase::SetMaskTest()
 
     for(unsigned int n = 0; n< WXSIZEOF(masked); n++)
     {
-        printf("N = %d\n", n);
         if(masked[n].mask.Contains('|'))
             mask = wxMaskedEdit(masked[n].mask, formatCodes);
         else
@@ -489,7 +489,11 @@ void MaskedEditTestCase::GetFieldIndexTest()
         {wxT("###|.###.|###.|###") , 7 , 1},
         {wxT("###|.###.|###.|###") , 8 , 2},
         {wxT("###|.###.|###.|###") , 10 ,2},
-        {wxT("###|.###.|###.|###") , 21, 0}
+        {wxT("###|.###.|###.|###") , 21, 0},
+
+        {wxT("##|h|##m"), 2, 1},
+        {wxT("##|h|##m"), 3, 2},
+        {wxT("##|h|##m"), 0, 0},
    };
 
 

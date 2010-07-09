@@ -307,11 +307,11 @@ void MyFrame::CreateSecondPage(wxPanel* pan)
     gridSizer->Add(zipFormat, wxALL|wxEXPAND);
     gridSizer->Add(zipCtrl, wxALL|wxEXPAND);
  
-    wxStaticText* houreText    = new wxStaticText(pan, wxID_ANY, wxT("2 houre format"));
-    wxStaticText* houreMask    = new wxStaticText(pan, wxID_ANY, wxT("##|h|##m"));
+    wxStaticText* houreText    = new wxStaticText(pan, wxID_ANY, wxT("hour format HH:MM"));
+    wxStaticText* houreMask    = new wxStaticText(pan, wxID_ANY, wxT("##|:|##"));
     wxStaticText* houreFormat  = new wxStaticText(pan, wxID_ANY, wxT("F"));
     wxTextCtrl*   houreCtrl    = new wxTextCtrl(pan, wxID_ANY);
-    wxMaskedEdit  houreMaskEdit(wxT("##|h|##m"), wxT("F"));
+    wxMaskedEdit  houreMaskEdit(wxT("##|:|##"), wxT("F"));
 
     
     choice.Clear();
@@ -325,7 +325,12 @@ void MyFrame::CreateSecondPage(wxPanel* pan)
     
     houreMaskEdit.AddChoices(0, choice);
 
+    houreMaskEdit.AddChoices(2, choice);
+
+    
+
     houreCtrl->SetMask(houreMaskEdit);
+
     houreCtrl->ChangeValue(houreMaskEdit.GetEmptyMask());
 
     gridSizer->Add(houreText, wxALL|wxEXPAND);

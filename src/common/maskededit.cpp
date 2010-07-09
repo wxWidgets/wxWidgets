@@ -33,14 +33,13 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
     wxArrayString formatCodes;
     unsigned int it;
 
-    for(it = 0; it < maskedEdit.GetNumberOfFields(); it++)
-    {
-        formatCodes.Add(maskedEdit.GetFormatCodes(it));
-    }
-
     Create(maskedEdit.GetMask(), formatCodes, maskedEdit.GetDefaultValue());
 
-    AddChoices(maskedEdit.GetChoices(0));
+    for(it = 0; it < GetNumberOfFields(); it++)
+    {
+       AddChoices(it, maskedEdit.GetChoices(it));
+
+    }
 }
     
 
@@ -73,7 +72,11 @@ void wxMaskedEdit::Create( const wxString& mask
 
     if(mask.Find('|') == wxNOT_FOUND)
     {
-        m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
+        if(formatCode.IsEmpty())
+            m_mask.Add(new wxMaskedField(mask, wxT("F"), defaultValue)); 
+        else
+            m_mask.Add(new wxMaskedField(mask, formatCode[0], defaultValue));
+        
         m_maskValue = mask;
         m_isNumber = m_mask[0]->IsNumber();
     }
@@ -539,8 +542,10 @@ wxString wxMaskedEdit::GetFormatCodes(unsigned int fieldIndex) const
 
 wxArrayString wxMaskedEdit::GetChoices(unsigned int fieldIndex) const
 {
-    if(fieldIndex >= m_mask.GetCount())
+    if(fieldIndex > m_mask.GetCount())
+    {
         return wxArrayString();
+    }
     else
         return m_mask[fieldIndex]->GetChoices();
 }
@@ -563,7 +568,7 @@ bool wxMaskedEdit::AddChoice(unsigned int fieldIndex, const wxString& choice)
 bool wxMaskedEdit::AddChoices(unsigned int fieldIndex, const wxArrayString& choices)
 {
     bool res = true;
-    if(fieldIndex >= m_mask.GetCount())
+    if(fieldIndex < m_mask.GetCount())
         res = m_mask[fieldIndex]->AddChoices(choices);
     else
         res = false;
