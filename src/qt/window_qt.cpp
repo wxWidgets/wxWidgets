@@ -9,7 +9,7 @@
 #include "wx/qt/window_qt.h"
 
 wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
-: WindowEventForwarder< QWidget >( parent )
+: wxQtEventForwarder< QWidget >( parent )
 {
     m_wxWindow = window;
 }
@@ -61,7 +61,7 @@ void wxQtScrollBarEventForwarder::OnActionTriggered( int action )
 
     wxScrollWinEvent e( wxAction, sliderPosition(),
                         orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
-                        
+
     m_wxWindow->ProcessWindowEvent(e);
 }
 
@@ -69,6 +69,6 @@ void wxQtScrollBarEventForwarder::OnSliderReleased()
 {
     wxScrollWinEvent e( wxEVT_SCROLLWIN_THUMBRELEASE, sliderPosition(),
                         orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
-                        
+
     m_wxWindow->ProcessWindowEvent(e);
 }

@@ -48,7 +48,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID winid,
         qtParent = parent->GetHandle();
         parent->AddChild( this );
     }
-    
+
     m_qtStatusBar = new wxQtStatusBar( this, qtParent );
 
     return wxWindow::Create(parent, winid, wxDefaultPosition, wxDefaultSize, style, name);
@@ -126,11 +126,11 @@ WXWidget wxStatusBar::GetScrollBarsContainer() const
 }
 
 wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )
-    : WindowEventForwarder< QStatusBar >(parent)
+    : wxQtEventForwarder< QStatusBar >(parent)
 {
     m_statusBar = statusBar;
 }
-        
+
 wxWindow *wxQtStatusBar::GetEventReceiver()
 {
     return m_statusBar;

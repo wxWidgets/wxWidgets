@@ -53,7 +53,7 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
     // Update statusbar sizes now that it has a size
     statusBar->Refresh();
-    
+
     wxFrameBase::SetStatusBar( statusBar );
 }
 
@@ -70,7 +70,7 @@ QWidget *wxFrame::GetScrollBarsContainer() const
 //=============================================================================
 
 wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
-    : WindowEventForwarder< QMainWindow >( parent )
+    : wxQtEventForwarder< QMainWindow >( parent )
 {
     m_frame = frame;
     setCentralWidget(new QWidget());
