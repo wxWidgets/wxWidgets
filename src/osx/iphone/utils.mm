@@ -37,7 +37,7 @@
 
 #include <AudioToolbox/AudioServices.h>
 
-#if wxUSE_BASE
+#if 1 // wxUSE_BASE
 
 // Emit a beeeeeep
 void wxBell()
