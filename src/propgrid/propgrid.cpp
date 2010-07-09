@@ -63,6 +63,7 @@
 
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
+#include "wx/scopeguard.h"
 
 // Two pics for the expand / collapse buttons.
 // Files are not supplied with this project (since it is
