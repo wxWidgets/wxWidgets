@@ -7664,7 +7664,11 @@ dnl all additional libraries (except wxWidgets itself) we link with
 EXTRA_FRAMEWORKS=
 if test "$wxUSE_MAC" = 1 ; then
     if test "$USE_DARWIN" = 1; then
-        EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+            EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CoreServices -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
+        else
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        fi
     fi
 fi
 if test "$wxUSE_OLD_COCOA" = 1 ; then
