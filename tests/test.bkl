@@ -144,6 +144,7 @@
             controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
+            controls/windowtest.cpp
             events/clone.cpp
             events/propagation.cpp
             font/fonttest.cpp
