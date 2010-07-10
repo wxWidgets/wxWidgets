@@ -58,10 +58,22 @@ protected:
     //virtual void hideEvent ( QHideEvent * event ) { }
 
     //wxKeyEvent
-    //virtual void keyPressEvent ( QKeyEvent * event ) { }
+    virtual void keyPressEvent ( QKeyEvent * event )
+    {
+        if ( !GetEventReceiver()->HandleQtKeyEvent(this, event) )
+            QtWidget::keyPressEvent(event);
+        else
+            event->accept();
+    }
 
     //wxKeyEvent
-    //virtual void keyReleaseEvent ( QKeyEvent * event ) { }
+    virtual void keyReleaseEvent ( QKeyEvent * event )
+    {
+        if ( !GetEventReceiver()->HandleQtKeyEvent(this, event) )
+            QtWidget::keyReleaseEvent(event);
+        else
+            event->accept();
+    }
 
     //wxMouseEvent
     //virtual void leaveEvent ( QEvent * event ) { }

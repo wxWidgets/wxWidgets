@@ -102,6 +102,7 @@ public:
     virtual bool HandleQtPaintEvent  ( QWidget *receiver, QPaintEvent *event );
     virtual bool HandleQtResizeEvent ( QWidget *receiver, QResizeEvent *event );
     virtual bool HandleQtWheelEvent  ( QWidget *receiver, QWheelEvent *event );
+    virtual bool HandleQtKeyEvent    ( QWidget *receiver, QKeyEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,

@@ -80,6 +80,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
         // Scrollbars are lazily initialized
         m_qtContainer = new wxQtWidget( this, GetHandle() );
         scrollLayout->addWidget( m_qtContainer, 0, 0 );
+        m_qtContainer->setFocus();
     }
 
     Move(pos);
@@ -426,6 +427,145 @@ bool wxWindow::HandleQtWheelEvent ( QWidget *receiver, QWheelEvent *event )
     e.m_wheelDelta = 120;
     
     return ProcessWindowEvent( e );
+}
+
+/* Auxiliar function for key events. Returns the wx keycode for a qt one.
+ * The event is needed to check it flags (numpad key or not) */
+wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
+{
+    /* First treat common ranges and then handle specific values
+     * The macro takes Qt first and last codes and the first wx code
+     * to make the conversion */
+    #define WXQT_KEY_GROUP( firstQT, lastQT, firstWX ) \
+        if ( key >= firstQT && key <= lastQT ) \
+            return (wxKeyCode)(key - (firstQT - firstWX));
+
+    int key = event->key();
+
+    if ( event->modifiers().testFlag( Qt::KeypadModifier ) )
+    {
+        // This is a numpad event
+        WXQT_KEY_GROUP( Qt::Key_0, Qt::Key_9, WXK_NUMPAD0 )
+        WXQT_KEY_GROUP( Qt::Key_F1, Qt::Key_F4, WXK_NUMPAD_F1 )
+        WXQT_KEY_GROUP( Qt::Key_Left, Qt::Key_Down, WXK_NUMPAD_LEFT )
+
+        // * + , - . /
+        WXQT_KEY_GROUP( Qt::Key_Asterisk, Qt::Key_Slash, WXK_NUMPAD_MULTIPLY )
+
+        switch (key)
+        {
+            case Qt::Key_Space: return WXK_NUMPAD_SPACE;
+            case Qt::Key_Tab: return WXK_NUMPAD_TAB;
+            case Qt::Key_Enter: return WXK_NUMPAD_ENTER;
+            case Qt::Key_Home: return WXK_NUMPAD_HOME;
+            case Qt::Key_PageUp: return WXK_NUMPAD_PAGEUP;
+            case Qt::Key_PageDown: return WXK_NUMPAD_PAGEDOWN;
+            case Qt::Key_End: return WXK_NUMPAD_END;
+            case Qt::Key_Insert: return WXK_NUMPAD_INSERT;
+            case Qt::Key_Delete: return WXK_NUMPAD_DELETE;
+            case Qt::Key_Clear: return WXK_NUMPAD_BEGIN;
+            case Qt::Key_Equal: return WXK_NUMPAD_EQUAL;
+        }
+
+        // All other possible numpads button have no equivalent in wx
+        return (wxKeyCode)0;
+    }
+        
+    // ASCII (basic and extended) values are the same in Qt and wx
+    WXQT_KEY_GROUP( 32, 255, 32 );
+
+    // Arrow keys
+    WXQT_KEY_GROUP( Qt::Key_Left, Qt::Key_Down, WXK_LEFT )
+    
+    // F-keys (Note: Qt has up to F35, wx up to F24)
+    WXQT_KEY_GROUP( Qt::Key_F1, Qt::Key_F24, WXK_F1 )
+    
+    // * + , - . /
+    WXQT_KEY_GROUP( Qt::Key_Asterisk, Qt::Key_Slash, WXK_MULTIPLY )
+
+    // Special keys in wx. Seems most appropriate to map to LaunchX
+    WXQT_KEY_GROUP( Qt::Key_Launch0, Qt::Key_LaunchF, WXK_SPECIAL1 )
+
+    // All other cases
+    switch ( key )
+    {
+        case Qt::Key_Backspace: return WXK_BACK;
+        case Qt::Key_Tab: return WXK_TAB;
+        case Qt::Key_Return: return WXK_RETURN;
+        case Qt::Key_Escape: return WXK_ESCAPE;
+        case Qt::Key_Cancel: return WXK_CANCEL;
+        case Qt::Key_Clear: return WXK_CLEAR;
+        case Qt::Key_Shift: return WXK_SHIFT;
+        case Qt::Key_Alt: return WXK_ALT;
+        case Qt::Key_Control: return WXK_CONTROL;
+        case Qt::Key_Menu: return WXK_MENU;
+        case Qt::Key_Pause: return WXK_PAUSE;
+        case Qt::Key_CapsLock: return WXK_CAPITAL;
+        case Qt::Key_End: return WXK_END;
+        case Qt::Key_Home: return WXK_HOME;
+        case Qt::Key_Select: return WXK_SELECT;
+        case Qt::Key_SysReq: return WXK_PRINT;
+        case Qt::Key_Execute: return WXK_EXECUTE;
+        case Qt::Key_Insert: return WXK_INSERT;
+        case Qt::Key_Help: return WXK_HELP;
+        case Qt::Key_NumLock: return WXK_NUMLOCK;
+        case Qt::Key_ScrollLock: return WXK_SCROLL;
+        case Qt::Key_PageUp: return WXK_PAGEUP;
+        case Qt::Key_PageDown: return WXK_PAGEDOWN;
+        case Qt::Key_Meta: return WXK_WINDOWS_LEFT;
+    }
+
+    // Missing wx-codes: WXK_START, WXK_LBUTTON, WXK_RBUTTON, WXK_MBUTTON
+    // WXK_SPECIAL(17-20), WXK_WINDOWS_RIGHT, WXK_WINDOWS_MENU, WXK_COMMAND
+    // WXK_SNAPSHOT
+    
+    return (wxKeyCode)0;
+    
+    #undef WXQT_KEY_GROUP
+}
+
+bool wxWindow::HandleQtKeyEvent ( QWidget *receiver, QKeyEvent *event )
+{
+    bool handled = false;
+
+    // Build the event
+    wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
+    // TODO: m_x, m_y
+    e.m_keyCode = ConvertQtKeyCode( event );
+
+    if ( event->text().isEmpty() )
+        e.m_uniChar = 0;
+    else
+        e.m_uniChar = event->text().at( 0 ).unicode();
+    
+    e.m_rawCode = event->nativeVirtualKey();
+    e.m_rawFlags = event->nativeModifiers();
+
+    // Modifiers
+    e.m_controlDown = event->modifiers().testFlag( Qt::ControlModifier );
+    e.m_shiftDown = event->modifiers().testFlag( Qt::ShiftModifier );
+    e.m_altDown = event->modifiers().testFlag( Qt::AltModifier );
+    e.m_metaDown = event->modifiers().testFlag( Qt::MetaModifier );
+
+    handled = ProcessWindowEvent( e );
+
+    // On key presses, send the EVT_CHAR event
+    // TODO: Check accelerators
+    if ( event->type() == QEvent::KeyPress )
+    {
+        e.SetEventType( wxEVT_CHAR );
+
+        // Translated key code (including control + letter -> 1-26)
+        int translated = 0;
+        if ( !event->text().isEmpty() )
+            translated = event->text().at( 0 ).toAscii();
+        if ( translated )
+            e.m_keyCode = translated;
+        
+        handled |= ProcessWindowEvent( e );
+    }
+    
+    return handled;
 }
 
 QWidget *wxWindow::GetHandle() const
