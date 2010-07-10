@@ -5844,6 +5844,13 @@ bool wxPropertyGrid::IsEditorFocused() const
 // Called by focus event handlers. newFocused is the window that becomes focused.
 void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
 {
+    //
+    // Never allow focus to be changed when handling editor event.
+    // Especially because they may be displaing a dialog which
+    // could cause all kinds of weird (native) focus changes.
+    if ( HasInternalFlag(wxPG_FL_IN_HANDLECUSTOMEDITOREVENT) )
+        return;
+
     unsigned int oldFlags = m_iFlags;
     bool wasEditorFocused = false;
     wxWindow* wndEditor = m_wndEditor;
