@@ -84,20 +84,19 @@ protected:
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
     {
-        event->accept();
-
         if ( !GetEventReceiver()->HandleQtPaintEvent(this, event) )
             QtWidget::paintEvent(event);
+        else
+            event->accept();
     }
 
     //wxSizeEvent
     virtual void resizeEvent ( QResizeEvent * event )
     {
-        event->accept();
-
-        wxSizeEvent e(wxQtConvertSize(event->size()));
-        if (!GetEventReceiver()->ProcessWindowEvent(e))
+        if ( !GetEventReceiver()->HandleQtResizeEvent(this, event) )
             QtWidget::resizeEvent(event);
+        else
+            event->accept();
     }
 
     //wxShowEvent
@@ -106,16 +105,10 @@ protected:
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
     {
-        event->accept();
-
-        wxMouseEvent e(wxEVT_MOUSEWHEEL);
-        e.m_wheelAxis = (event->orientation() == Qt::Vertical) ? 0 : 1;
-        e.m_wheelRotation = event->delta();
-        e.m_linesPerAction = 3;
-        e.m_wheelDelta = 120;
-
-        if (!GetEventReceiver()->ProcessWindowEvent(e))
+        if ( !GetEventReceiver()->HandleQtWheelEvent(this, event) )
             QtWidget::wheelEvent(event);
+        else
+            event->accept();
     }
 
     /* Unused Qt events

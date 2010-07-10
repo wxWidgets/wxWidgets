@@ -29,7 +29,7 @@
  * for wxWindow subclasses.
  *
  *
- * Event handling is achieved by using the template class WindowEventForwarder
+ * Event handling is achieved by using the template class wxQtEventForwarder
  * found in winevent_qt.(h|cpp) to send all Qt events here to HandleOnQtxxx()
  * methods. All these methods receive the Qt event and the receiver. This is
  * done because events of the containers (the scrolled part of the window) are
@@ -99,7 +99,9 @@ public:
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
     // Qt event handling
-    bool HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event );
+    virtual bool HandleQtPaintEvent  ( QWidget *receiver, QPaintEvent *event );
+    virtual bool HandleQtResizeEvent ( QWidget *receiver, QResizeEvent *event );
+    virtual bool HandleQtWheelEvent  ( QWidget *receiver, QWheelEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,

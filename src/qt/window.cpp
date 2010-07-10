@@ -410,6 +410,24 @@ bool wxWindow::HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event )
     }
 }
 
+bool wxWindow::HandleQtResizeEvent ( QWidget *receiver, QResizeEvent *event )
+{
+    wxSizeEvent e( wxQtConvertSize( event->size() ) );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::HandleQtWheelEvent ( QWidget *receiver, QWheelEvent *event )
+{
+    wxMouseEvent e( wxEVT_MOUSEWHEEL );
+    e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? 0 : 1;
+    e.m_wheelRotation = event->delta();
+    e.m_linesPerAction = 3;
+    e.m_wheelDelta = 120;
+    
+    return ProcessWindowEvent( e );
+}
+
 QWidget *wxWindow::GetHandle() const
 {
     return m_qtWindow;
