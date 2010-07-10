@@ -995,6 +995,10 @@ without warnings or errors.
   - Various wxPropertyGridManager page-related functions now return pointer
     to the page object instead of index.
 
+  - wxArrayEditorDialog used by wxArrayStringProperty and some sample
+    properties has been renamed to wxPGArrayEditorDialog. Also, it now uses
+    wxEditableListBox for editing.
+
   - Instead of calling wxPropertyGrid::SetButtonShortcut(), use
     wxPropertyGrid::SetActionTrigger(wxPG_ACTION_PRESS_BUTTON).
 
