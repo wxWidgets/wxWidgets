@@ -1357,56 +1357,183 @@ bool wxComboCtrlBase::SetBackgroundColour(const wxColour& colour)
 // Mask
 // ----------------------------------------------------------------------------
 
-
 void wxComboCtrlBase::SetMask(const wxMaskedEdit& mask)
 {
-        m_maskCtrl = mask;
+        m_maskCtrl = wxMaskedEdit(mask);
+        
         SetValue(m_maskCtrl.GetDefaultValue());
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
-        Bind(wxEVT_COMMAND_TEXT_UPDATED, &wxComboCtrlBase::ApplyMask, this);
-        Bind(wxEVT_CHAR, &wxComboCtrlBase::KeyPressedMask, this);
+        Connect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxComboCtrlBase::ApplyMask));
+        Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxComboCtrlBase::KeyPressedMask));
+        Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxComboCtrlBase::MouseClickedMask));
+#if 0
+    else
+    {
+        if(m_maskCtrl != NULL)
+            delete m_maskCtrl;
+         Disconnect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxTextCtrlBase::ApplyMask));
+         Disconnect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
+         Disconnect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
+    }
+#endif
 }
 
 
-void wxComboCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+void wxComboCtrlBase::ApplySingleFieldMask()
 {
-    unsigned int cursorIndex = GetInsertionPoint();
-
     wxString string = GetValue();
     wxString userInput;
     wxString formatString;
+    unsigned int cursor = GetInsertionPoint();
+    bool invalid;
 
+    printf("MaskApply\n");
     unsigned int spaceIndex = string.Find(' ');
+
+    if(spaceIndex < cursor 
+    && m_maskCtrl.GetFormatCode().Find('_') == wxNOT_FOUND)
+    {
+        SetInsertionPoint(cursor -1);
+        cursor --;
+    }
    
     if(string != m_maskCtrl.GetEmptyMask())
     {
-        userInput = string.SubString(0, spaceIndex - 1);
+        if(m_maskCtrl.GetFormatCode().Find('_') == wxNOT_FOUND)
+            userInput = string.SubString(0, spaceIndex - 1);
+        else
+            userInput = string;
+        
         formatString = m_maskCtrl.ApplyFormatCodes(userInput);
 
-        printf("Applying Mask : ?%s?\n", (const char*) userInput.mb_str(wxConvUTF8));
-        
+        invalid = !m_maskCtrl.IsValid(formatString);
+
         //If the string is not valid
-        if(!m_maskCtrl.IsValid(formatString))
+        if(invalid)
         {
-            printf("Invalid\n");
+    printf("Invalid\n");
             SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
-            Replace(formatString.Len() - 1, formatString.Len(), ' ');
+            Replace(cursor, cursor +1, wxT(" "));
+      
+            cursor = GetInsertionPoint();
+            SetInsertionPoint ( cursor - 5);
+                
         }
         else
         {
-            printf("Valid\n");
-            
+    printf("Valid\n");
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(userInput) != 0)
             {
-               Replace(0, formatString.Len() , formatString);
-
-               printf("Mask : ?%s?\n", (const char*) formatString.mb_str(wxConvUTF8));
+               if(m_maskCtrl.GetFormatCode().Find('-') == wxNOT_FOUND)
+               {
+                    Replace(0, formatString.Len() , formatString);
+               }
             }
 
             SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
         }
-        printf("End Apply Mask\n");
+
+    }
+
+
+}
+
+void wxComboCtrlBase::ApplyMultipleFieldsMask()
+{
+    wxString string = GetValue();
+    wxString userInput;
+    wxString formatString;
+    unsigned int cursor = GetInsertionPoint();
+    unsigned int currentField; 
+    bool invalid;
+
+    printf("MaskApply multiple field = %s\nstring = ?%s?\n", (const char*) m_maskCtrl.GetMask().mb_str(wxConvUTF8),  (const char *) string.mb_str(wxConvUTF8));
+    unsigned int spaceIndex = string.Find(' ');
+
+    do
+    {
+        currentField = m_maskCtrl.GetFieldIndex(cursor);
+
+        if(spaceIndex < cursor 
+        && m_maskCtrl.GetFormatCodes(currentField).Find('_') == wxNOT_FOUND)
+        {
+            SetInsertionPoint(cursor -1);
+            cursor --;
+        }
+    }
+    while(currentField != m_maskCtrl.GetFieldIndex(cursor));
+    
+
+    if(string != m_maskCtrl.GetEmptyMask())
+    {
+        if(m_maskCtrl.GetFormatCodes(currentField).Find('_') == wxNOT_FOUND)
+            userInput = string.SubString(0, spaceIndex - 1);
+        else
+            userInput = string;
+        
+
+        formatString = m_maskCtrl.ApplyFormatCodes(userInput);
+
+        invalid = !m_maskCtrl.IsValid(formatString);
+
+        //If the string is not valid
+        if(invalid)
+        {
+    printf("Invalid\n");
+            SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
+            Replace(cursor, cursor +1, wxT(" "));
+                    
+        }
+        else
+        {
+    printf("Valid\n");
+            //If the test is upper or lower case after Applying formats codes
+            if(formatString.Cmp(userInput) != 0)
+            {
+                Replace(0, formatString.Len() , formatString);
+            }
+
+            SetBackgroundColour(m_maskCtrl.GetValidBackgroundColour());
+        }
+
+    }
+
+
+}
+
+void wxComboCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+{
+    
+    bool oneField = true;
+    unsigned int it = 0;
+    wxString mask = m_maskCtrl.GetMask();
+
+    for(it = 0; it < mask.Len(); it++)
+    {
+        if(mask[it] == '|')
+        {
+            if (it == 0)
+            {
+                oneField = false;
+            }
+            else
+            {
+                if(mask[it - 1] != '\\')
+                {
+                    oneField = false;
+                }
+            }
+        }
+    }
+
+    if(oneField)
+    {
+        ApplySingleFieldMask();
+    }
+    else
+    {
+        ApplyMultipleFieldsMask();
     }
 }
 
@@ -1414,29 +1541,59 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
 {
     int keycode = event.GetKeyCode();
     unsigned int cursor = GetInsertionPoint();
+    unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
+    unsigned int fieldMinPos;
+    unsigned int it;
+    wxString choice;
 
-    printf("User input\n");
+    fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
+
+    printf("fieldIndex = %d\n", fieldIndex);
+   
+    if(keycode == WXK_PAGEUP || keycode == WXK_PAGEDOWN)
+    {
+        if(cursor == GetValue().Len())
+        {
+            fieldIndex = m_maskCtrl.GetNumberOfFields() - 1;
+            fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
+        }
+        else if(cursor == fieldMinPos && fieldIndex != 0 
+        && !m_maskCtrl.GetChoices(fieldIndex - 1).IsEmpty())
+        {
+           fieldIndex--;
+           fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
+        }
+    }
+
+    printf("fieldIndex = %d\n", fieldIndex);
     switch(keycode)
     {
         case(WXK_PAGEUP):
-            if(m_maskCtrl.GetNumberOfFields() == 1 
-            && m_maskCtrl.NumberOfChoices() != 0)
+            printf("Page up\n");
+            choice = m_maskCtrl.GetNextChoices(fieldIndex);   
+            if(choice.Cmp(wxEmptyString) != 0)
             {
-            printf("PAGE UP\n");
-                SetValue(m_maskCtrl.GetNextChoices()); 
+                Replace(fieldMinPos,
+                    fieldMinPos + choice.Len() ,
+                    choice);
+                SetInsertionPoint(m_maskCtrl.GetMaxFieldPosition(fieldIndex) + 1);
             }
         break;
         case(WXK_PAGEDOWN):
-            if(m_maskCtrl.GetNumberOfFields() == 1
-            && m_maskCtrl.NumberOfChoices() != 0)
+            printf("Page down\n");
+            choice = m_maskCtrl.GetPreviousChoices(fieldIndex);
+
+            if(choice.Cmp(wxEmptyString) != 0)
             {
-            printf("PAGE DOWN\n");
-                SetValue(m_maskCtrl.GetPreviousChoices()); 
+                Replace(fieldMinPos,
+                    fieldMinPos + choice.Len(),
+                    choice); 
             }
+            SetInsertionPoint(m_maskCtrl.GetMaxFieldPosition(fieldIndex) + 1);
         break;
         case(WXK_LEFT):
         case(WXK_RIGHT):
-            if(m_maskCtrl.GetFormatCodes(0).Contains('_'))
+            if(m_maskCtrl.GetFormatCodes(fieldIndex).Find('_') == wxNOT_FOUND)
                     event.Skip();
         break;
         case(WXK_BACK):
@@ -1446,8 +1603,7 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
 
                 if(mask == ' ')
                 { 
-                    Replace(cursor - 1, cursor , 
-                            wxT(" "));
+                    Replace(cursor - 1, cursor , wxT(" "));
                     
                     cursor = GetInsertionPoint();
                     SetInsertionPoint(cursor -1);
@@ -1459,21 +1615,118 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
 
             }
         break;
+        case(WXK_RETURN):
+            if(m_maskCtrl.IsNumber())
+            {
+                bool firstNumber = false;
+                bool decimalPointTest = false;
+                unsigned int numberOfSpaceBefore = 0;
+                unsigned int numberOfSpaceAfter = 0;
+                wxString string = GetValue();
+                wxString newString;
+                wxString tmp;
+
+                for(it = 0; it < string.Len(); it++)
+                {
+                    if(string[it] != m_maskCtrl.GetDecimalPoint() 
+                    && string[it] != ' ' &&  !firstNumber)
+                    {
+                        firstNumber = true;
+                    }
+                    else if(string[it] == m_maskCtrl.GetDecimalPoint())
+                    {
+                        decimalPointTest = true;
+                    }
+                    else if(firstNumber && string[it] == ' ' && !decimalPointTest)
+                    {
+                        numberOfSpaceBefore++;
+                    }
+                    else if(firstNumber && string[it] == ' ' && decimalPointTest)
+                    {
+                        numberOfSpaceAfter++;
+                    }
+                    
+                    if(string[it] != ' ')
+                    {
+                        newString << string[it];
+                    }
+                }
+                
+                for(it = 0; it < numberOfSpaceBefore; it++)
+                {
+                    tmp << wxT(" ");
+                }
+                newString.Prepend(tmp);
+                tmp.Clear();
+                
+                for(it = 0; it < numberOfSpaceAfter; it++)
+                {
+                    tmp << wxT(" ");
+                }
+                newString.Append(tmp);
+
+                SetValue(newString);
+            }
+        break;
         case(WXK_DELETE):
+            event.StopPropagation();
             if(cursor < GetValue().Len() && m_maskCtrl.GetFormatCodes(0).Contains('_'))
             {
                 wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
 
                 if(mask == ' ')
                 { 
-                    Replace(cursor , cursor + 1 , 
-                            wxT(" "));
+                    Replace(cursor , cursor + 1 , wxT(" "));
                     
                     cursor = GetInsertionPoint();
                     SetInsertionPoint(cursor);
                 }
             }
 
+        break;
+        case(WXK_TAB):
+            if(m_maskCtrl.GetNumberOfFields() == 1 
+            || fieldIndex == m_maskCtrl.GetNumberOfFields() - 1)
+                event.Skip();
+            else
+            {
+                event.StopPropagation();
+                SetInsertionPoint(m_maskCtrl.GetMinFieldPosition(fieldIndex + 1)); 
+            }
+        break;
+        case (WXK_NUMPAD0):
+        case (WXK_NUMPAD1):
+        case (WXK_NUMPAD2):
+        case (WXK_NUMPAD3):
+        case (WXK_NUMPAD4):
+        case (WXK_NUMPAD5):
+        case (WXK_NUMPAD6):
+        case (WXK_NUMPAD7):
+        case (WXK_NUMPAD8):
+        case (WXK_NUMPAD9): 
+                wxChar ch;
+
+                ch = (wxChar)keycode;
+                Replace(cursor, cursor+1, ch);
+        break;
+        case (WXK_SPACE):
+                  
+            ch = (wxChar)keycode;
+            if(m_maskCtrl.GetFormatCode().Find('_') != wxNOT_FOUND)
+            {
+                  wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
+
+                  if(mask == ' ')
+                  { 
+                      Replace(cursor , cursor + 1 , ch);
+                  }
+                  else
+                  {
+                      cursor = GetInsertionPoint();
+                      SetInsertionPoint(cursor + 1);
+                  }
+
+              }
         break;
         default:
         {        
@@ -1491,7 +1744,6 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
                     ch = (wxChar)keycode;
                 else
                     ch = string[cursor];
-                printf("cursor: %d\n", cursor);
                 Replace(cursor, cursor+1, ch);
            }
             else
@@ -1500,6 +1752,25 @@ void wxComboCtrlBase::KeyPressedMask(wxKeyEvent& event)
         }
     }
 }
+
+
+void wxComboCtrlBase::MouseClickedMask(wxMouseEvent& event)
+{
+    unsigned int spaceIndex = GetValue().Find(' ');
+   
+    if(m_maskCtrl.GetFormatCode().Find('_') != wxNOT_FOUND)
+    {
+        event.Skip();
+    }
+    else
+    {
+        if(!HasFocus())
+            SetFocus();
+        SetInsertionPoint(spaceIndex);
+    }
+
+}
+
 // ----------------------------------------------------------------------------
 // painting
 // ----------------------------------------------------------------------------

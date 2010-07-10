@@ -430,12 +430,7 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return m_mainCtrlWnd; }
 
-    //mask
     void SetMask(const wxMaskedEdit& mask);
-    void ApplyMask(wxCommandEvent& WXUNUSED(event));
-    void KeyPressedMask(wxKeyEvent& event);
-
-
 
 protected:
 
@@ -563,6 +558,14 @@ protected:
     // margins functions
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
+
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
+
 
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
