@@ -1291,7 +1291,7 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
         MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
-    endif
+    fi
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
