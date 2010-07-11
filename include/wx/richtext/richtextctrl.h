@@ -688,7 +688,7 @@ public:
     virtual void PaintBackground(wxDC& dc);
 
     /// Other user defined painting after everything else (i.e. all text) is painted
-    virtual void PaintAboveContent(wxDC& dc) {}
+    virtual void PaintAboveContent(wxDC& WXUNUSED(dc)) {}
 
 #if wxRICHTEXT_BUFFERED_PAINTING
     /// Recreate buffer bitmap if necessary
