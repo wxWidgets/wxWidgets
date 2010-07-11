@@ -60,7 +60,7 @@ bool wxRegionBase::IsEqual(const wxRegion& region) const
 wxBitmap wxRegionBase::ConvertToBitmap() const
 {
     wxRect box = GetBox();
-    wxBitmap bmp(box.GetRight(), box.GetBottom());
+    wxBitmap bmp(box.GetWidth(), box.GetHeight());
     wxMemoryDC dc;
     dc.SelectObject(bmp);
     dc.SetBackground(*wxBLACK_BRUSH);
