@@ -1,4 +1,4 @@
-#include "wx/msw/wx.rc"
+#include "../sample.rc"
 
 doc                 ICON    "doc.ico"
 chrt                ICON    "chart.ico"

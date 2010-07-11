@@ -32,12 +32,12 @@
 // we're using TCP/IP or real DDE.
 #include "ipcsetup.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-#include "mondrian.xpm"
-#endif
-
 #include "wx/datetime.h"
 #include "client.h"
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -97,7 +97,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
         : wxFrame(frame, wxID_ANY, title, wxDefaultPosition, wxSize(400, 300))
 {
     // Give it an icon
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -234,8 +234,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
 {
     if (m_client)
     {
-        delete m_client;
-        m_client = NULL;
+        wxDELETE(m_client);
     }
     event.Skip();
 }
@@ -261,8 +260,7 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
 
     if (!retval)
     {
-        delete m_client;
-        m_client = NULL;
+        wxDELETE(m_client);
     }
     EnableControls();
 }
@@ -316,8 +314,7 @@ void MyFrame::OnDisconnect(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::Disconnect()
 {
-    delete m_client;
-    m_client = NULL;
+    wxDELETE(m_client);
     EnableControls();
 }
 
@@ -399,8 +396,7 @@ void MyClient::Disconnect()
     if (m_connection)
     {
         m_connection->Disconnect();
-        delete m_connection;
-        m_connection = NULL;
+        wxDELETE(m_connection);
         wxGetApp().GetFrame()->EnableControls();
         wxLogMessage(wxT("Client disconnected from server"));
     }

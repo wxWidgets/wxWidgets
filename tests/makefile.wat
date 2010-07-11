@@ -276,11 +276,15 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_base64.obj &
 	$(OBJS)\test_cmdlinetest.obj &
 	$(OBJS)\test_fileconf.obj &
+	$(OBJS)\test_regconf.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_evthandler.obj &
 	$(OBJS)\test_evtsource.obj &
+	$(OBJS)\test_stopwatch.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
+	$(OBJS)\test_dir.obj &
+	$(OBJS)\test_filefn.obj &
 	$(OBJS)\test_filetest.obj &
 	$(OBJS)\test_filekind.obj &
 	$(OBJS)\test_filenametest.obj &
@@ -289,13 +293,20 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_fswatchertest.obj &
 	$(OBJS)\test_hashes.obj &
+	$(OBJS)\test_output.obj &
+	$(OBJS)\test_input.obj &
 	$(OBJS)\test_intltest.obj &
 	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_logtest.obj &
 	$(OBJS)\test_longlongtest.obj &
 	$(OBJS)\test_convautotest.obj &
 	$(OBJS)\test_mbconvtest.obj &
+	$(OBJS)\test_dynamiclib.obj &
+	$(OBJS)\test_environ.obj &
+	$(OBJS)\test_metatest.obj &
 	$(OBJS)\test_misctests.obj &
+	$(OBJS)\test_module.obj &
+	$(OBJS)\test_pathlist.obj &
 	$(OBJS)\test_typeinfotest.obj &
 	$(OBJS)\test_ipc.obj &
 	$(OBJS)\test_socket.obj &
@@ -330,6 +341,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_misc.obj &
 	$(OBJS)\test_queue.obj &
 	$(OBJS)\test_tls.obj &
+	$(OBJS)\test_ftp.obj &
 	$(OBJS)\test_uris.obj &
 	$(OBJS)\test_url.obj &
 	$(OBJS)\test_vectors.obj &
@@ -460,6 +472,9 @@ $(OBJS)\test_cmdlinetest.obj :  .AUTODEPEND .\cmdline\cmdlinetest.cpp
 $(OBJS)\test_fileconf.obj :  .AUTODEPEND .\config\fileconf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_regconf.obj :  .AUTODEPEND .\config\regconf.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -469,10 +484,19 @@ $(OBJS)\test_evthandler.obj :  .AUTODEPEND .\events\evthandler.cpp
 $(OBJS)\test_evtsource.obj :  .AUTODEPEND .\events\evtsource.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_stopwatch.obj :  .AUTODEPEND .\events\stopwatch.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_exec.obj :  .AUTODEPEND .\exec\exec.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_dir.obj :  .AUTODEPEND .\file\dir.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_filefn.obj :  .AUTODEPEND .\file\filefn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filetest.obj :  .AUTODEPEND .\file\filetest.cpp
@@ -499,6 +523,12 @@ $(OBJS)\test_fswatchertest.obj :  .AUTODEPEND .\fswatcher\fswatchertest.cpp
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_output.obj :  .AUTODEPEND .\interactive\output.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_input.obj :  .AUTODEPEND .\interactive\input.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_intltest.obj :  .AUTODEPEND .\intl\intltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -517,7 +547,22 @@ $(OBJS)\test_convautotest.obj :  .AUTODEPEND .\mbconv\convautotest.cpp
 $(OBJS)\test_mbconvtest.obj :  .AUTODEPEND .\mbconv\mbconvtest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_dynamiclib.obj :  .AUTODEPEND .\misc\dynamiclib.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_environ.obj :  .AUTODEPEND .\misc\environ.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_metatest.obj :  .AUTODEPEND .\misc\metatest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_misctests.obj :  .AUTODEPEND .\misc\misctests.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_module.obj :  .AUTODEPEND .\misc\module.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_pathlist.obj :  .AUTODEPEND .\misc\pathlist.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_typeinfotest.obj :  .AUTODEPEND .\misc\typeinfotest.cpp
@@ -620,6 +665,9 @@ $(OBJS)\test_queue.obj :  .AUTODEPEND .\thread\queue.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_tls.obj :  .AUTODEPEND .\thread\tls.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_ftp.obj :  .AUTODEPEND .\uris\ftp.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp

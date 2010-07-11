@@ -680,8 +680,7 @@ bool wxStandardDialogLayoutAdapter::DoLayoutAdaptation(wxDialog* dialog)
                     stdButtonSizer->Realize();
                 else
                 {
-                    delete buttonSizer;
-                    buttonSizer = NULL;
+                    wxDELETE(buttonSizer);
                 }
             }
 

@@ -646,8 +646,7 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
     if ( !m_impl->Compile(expr, flags) )
     {
         // error message already given in wxRegExImpl::Compile
-        delete m_impl;
-        m_impl = NULL;
+        wxDELETE(m_impl);
 
         return false;
     }

@@ -143,11 +143,7 @@ bool wxDialog::Show(bool show)
         // if we had disabled other app windows, reenable them back now because
         // if they stay disabled Windows will activate another window (one
         // which is enabled, anyhow) and we will lose activation
-        if ( m_windowDisabler )
-        {
-            delete m_windowDisabler;
-            m_windowDisabler = NULL;
-        }
+        wxDELETE(m_windowDisabler);
 
         if ( IsModal() )
             EndModal(wxID_CANCEL);

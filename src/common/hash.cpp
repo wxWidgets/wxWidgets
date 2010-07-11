@@ -135,9 +135,7 @@ void wxHashTableBase::Destroy()
 {
     Clear();
 
-    delete[] m_table;
-
-    m_table = NULL;
+    wxDELETEA(m_table);
     m_size = 0;
 }
 

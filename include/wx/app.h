@@ -399,7 +399,7 @@ public:
                           const wxChar *msg);
 
     // check that the wxBuildOptions object (constructed in the application
-    // itself, usually the one from IMPLEMENT_APP() macro) matches the build
+    // itself, usually the one from wxIMPLEMENT_APP() macro) matches the build
     // options of the library and abort if it doesn't
     static bool CheckBuildOptions(const char *optionsSignature,
                                   const char *componentName);
@@ -730,7 +730,7 @@ protected:
 // object of type wxApp
 //
 // note that instead of using of wxTheApp in application code you should
-// consider using DECLARE_APP() after which you may call wxGetApp() which will
+// consider using wxDECLARE_APP() after which you may call wxGetApp() which will
 // return the object of the correct type (i.e. MyApp and not wxApp)
 //
 // the cast is safe as in GUI build we only use wxApp, not wxAppConsole, and in
@@ -775,11 +775,11 @@ public:
         { wxApp::SetInitializerFunction(fn); }
 };
 
-// the code below defines a IMPLEMENT_WXWIN_MAIN macro which you can use if
+// the code below defines a wxIMPLEMENT_WXWIN_MAIN macro which you can use if
 // your compiler really, really wants main() to be in your main program (e.g.
-// hello.cpp). Now IMPLEMENT_APP should add this code if required.
+// hello.cpp). Now wxIMPLEMENT_APP should add this code if required.
 
-#define IMPLEMENT_WXWIN_MAIN_CONSOLE                                          \
+#define wxIMPLEMENT_WXWIN_MAIN_CONSOLE                                        \
     int main(int argc, char **argv)                                           \
     {                                                                         \
         wxDISABLE_DEBUG_SUPPORT();                                            \
@@ -788,26 +788,26 @@ public:
     }
 
 // port-specific header could have defined it already in some special way
-#ifndef IMPLEMENT_WXWIN_MAIN
-    #define IMPLEMENT_WXWIN_MAIN IMPLEMENT_WXWIN_MAIN_CONSOLE
-#endif // defined(IMPLEMENT_WXWIN_MAIN)
+#ifndef wxIMPLEMENT_WXWIN_MAIN
+    #define wxIMPLEMENT_WXWIN_MAIN          wxIMPLEMENT_WXWIN_MAIN_CONSOLE
+#endif // defined(wxIMPLEMENT_WXWIN_MAIN)
 
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
 
     #ifdef wxUNIV_DEFAULT_THEME
-        #define IMPLEMENT_WX_THEME_SUPPORT \
+        #define wxIMPLEMENT_WX_THEME_SUPPORT \
             WX_USE_THEME(wxUNIV_DEFAULT_THEME);
     #else
-        #define IMPLEMENT_WX_THEME_SUPPORT
+        #define wxIMPLEMENT_WX_THEME_SUPPORT
     #endif
 #else
-    #define IMPLEMENT_WX_THEME_SUPPORT
+    #define wxIMPLEMENT_WX_THEME_SUPPORT
 #endif
 
 // Use this macro if you want to define your own main() or WinMain() function
 // and call wxEntry() from there.
-#define IMPLEMENT_APP_NO_MAIN(appname)                                      \
+#define wxIMPLEMENT_APP_NO_MAIN(appname)                                    \
     wxAppConsole *wxCreateApp()                                             \
     {                                                                       \
         wxAppConsole::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE,         \
@@ -816,36 +816,54 @@ public:
     }                                                                       \
     wxAppInitializer                                                        \
         wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp);        \
-    DECLARE_APP(appname)                                                    \
-    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }
+    appname& wxGetApp() { return *static_cast<appname*>(wxApp::GetInstance()); }    \
+    wxDECLARE_APP(appname)
 
-// Same as IMPLEMENT_APP() normally but doesn't include themes support in
+// Same as wxIMPLEMENT_APP() normally but doesn't include themes support in
 // wxUniversal builds
-#define IMPLEMENT_APP_NO_THEMES(appname)    \
-    IMPLEMENT_APP_NO_MAIN(appname)          \
-    IMPLEMENT_WXWIN_MAIN
+#define wxIMPLEMENT_APP_NO_THEMES(appname)  \
+    wxIMPLEMENT_WXWIN_MAIN                  \
+    wxIMPLEMENT_APP_NO_MAIN(appname)
 
 // Use this macro exactly once, the argument is the name of the wxApp-derived
 // class which is the class of your application.
-#define IMPLEMENT_APP(appname)              \
-    IMPLEMENT_APP_NO_THEMES(appname)        \
-    IMPLEMENT_WX_THEME_SUPPORT
+#define wxIMPLEMENT_APP(appname)            \
+    wxIMPLEMENT_WX_THEME_SUPPORT            \
+    wxIMPLEMENT_APP_NO_THEMES(appname)
 
 // Same as IMPLEMENT_APP(), but for console applications.
-#define IMPLEMENT_APP_CONSOLE(appname)      \
-    IMPLEMENT_APP_NO_MAIN(appname)          \
-    IMPLEMENT_WXWIN_MAIN_CONSOLE
+#define wxIMPLEMENT_APP_CONSOLE(appname)    \
+    wxIMPLEMENT_WXWIN_MAIN_CONSOLE          \
+    wxIMPLEMENT_APP_NO_MAIN(appname)
 
 // this macro can be used multiple times and just allows you to use wxGetApp()
 // function
-#define DECLARE_APP(appname) extern appname& wxGetApp();
+#define wxDECLARE_APP(appname)              \
+    extern appname& wxGetApp()
 
 
-// declare the stuff defined by IMPLEMENT_APP() macro, it's not really needed
+// declare the stuff defined by wxIMPLEMENT_APP() macro, it's not really needed
 // anywhere else but at the very least it suppresses icc warnings about
 // defining extern symbols without prior declaration, and it shouldn't do any
 // harm
 extern wxAppConsole *wxCreateApp();
 extern wxAppInitializer wxTheAppInitializer;
+
+// ----------------------------------------------------------------------------
+// Compatibility macro aliases
+// ----------------------------------------------------------------------------
+
+// deprecated variants _not_ requiring a semicolon after them
+// (note that also some wx-prefixed macro do _not_ require a semicolon because
+//  it's not always possible to force the compire to require it)
+
+#define IMPLEMENT_WXWIN_MAIN_CONSOLE            wxIMPLEMENT_WXWIN_MAIN_CONSOLE
+#define IMPLEMENT_WXWIN_MAIN                    wxIMPLEMENT_WXWIN_MAIN
+#define IMPLEMENT_WX_THEME_SUPPORT              wxIMPLEMENT_WX_THEME_SUPPORT
+#define IMPLEMENT_APP_NO_MAIN(app)              wxIMPLEMENT_APP_NO_MAIN(app);
+#define IMPLEMENT_APP_NO_THEMES(app)            wxIMPLEMENT_APP_NO_THEMES(app);
+#define IMPLEMENT_APP(app)                      wxIMPLEMENT_APP(app);
+#define IMPLEMENT_APP_CONSOLE(app)              wxIMPLEMENT_APP_CONSOLE(app);
+#define DECLARE_APP(app)                        wxDECLARE_APP(app);
 
 #endif // _WX_APP_H_BASE_

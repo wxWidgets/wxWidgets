@@ -103,7 +103,7 @@ CFRunLoopRef wxGUIEventLoop::CFGetCurrentRunLoop() const
 
 wxModalEventLoop::wxModalEventLoop(wxWindow *modalWindow)
 {
-    m_modalWindow = dynamic_cast<wxNonOwnedWindow*> (modalWindow);
+    m_modalWindow = wxDynamicCast(modalWindow, wxNonOwnedWindow);
     wxASSERT_MSG( m_modalWindow != NULL, "must pass in a toplevel window for modal event loop" );
     m_modalNativeWindow = m_modalWindow->GetWXWindow();
 }

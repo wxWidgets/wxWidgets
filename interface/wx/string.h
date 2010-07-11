@@ -492,12 +492,7 @@ public:
 
         @see wxString::From8BitData()
     */
-    const char* To8BitData() const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer To8BitData() const;
+    const wxScopedCharBuffer To8BitData() const;
 
     /**
         Converts the string to an ASCII, 7-bit string in the form of
@@ -1506,6 +1501,36 @@ public:
     static wxString FromAscii(const unsigned char* s, size_t len);
     static wxString FromAscii(char c);
     //@}
+
+    /**
+        Returns a string with the textual representation of the number in C
+        locale.
+
+        Unlike FromDouble() the string returned by this function always uses
+        the period character as decimal separator, independently of the current
+        locale.
+
+        @since 2.9.1
+
+        @see ToCDouble()
+     */
+    static wxString FromCDouble(double val);
+
+    /**
+        Returns a string with the textual representation of the number.
+
+        This is a simple wrapper for @code wxString::Format("%g", val)
+        @endcode.
+
+        Notice that the string returned by this function uses the decimal
+        separator appropriate for the current locale, e.g. @c "," and not a
+        period in French locale. Use FromCDouble() if this is unwanted.
+
+        @since 2.9.1
+
+        @see ToDouble()
+     */
+    static wxString FromDouble(double val);
 
     //@{
     /**

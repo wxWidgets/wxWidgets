@@ -125,16 +125,45 @@ bool wxRearrangeList::MoveCurrentDown()
 
 void wxRearrangeList::Swap(int pos1, int pos2)
 {
+    // update the internally stored order
     wxSwap(m_order[pos1], m_order[pos2]);
 
-    const wxString stringTmp = GetString(pos1);
-    const bool checkedTmp = IsChecked(pos1);
 
+    // and now also swap all the attributes of the items
+
+    // first the label
+    const wxString stringTmp = GetString(pos1);
     SetString(pos1, GetString(pos2));
     Check(pos1, IsChecked(pos2));
 
+    // then the checked state
+    const bool checkedTmp = IsChecked(pos1);
     SetString(pos2, stringTmp);
     Check(pos2, checkedTmp);
+
+    // and finally the client data, if necessary
+    switch ( GetClientDataType() )
+    {
+        case wxClientData_None:
+            // nothing to do
+            break;
+
+        case wxClientData_Object:
+            {
+                wxClientData * const dataTmp = GetClientObject(pos1);
+                SetClientObject(pos1, GetClientObject(pos2));
+                SetClientObject(pos2, dataTmp);
+            }
+            break;
+
+        case wxClientData_Void:
+            {
+                void * const dataTmp = GetClientData(pos1);
+                SetClientData(pos1, GetClientData(pos2));
+                SetClientData(pos2, dataTmp);
+            }
+            break;
+    }
 }
 
 void wxRearrangeList::OnCheck(wxCommandEvent& event)

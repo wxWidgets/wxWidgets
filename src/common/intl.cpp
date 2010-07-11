@@ -200,8 +200,7 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
 /*static*/ void wxLocale::DestroyLanguagesDB()
 {
-    delete ms_languagesDB;
-    ms_languagesDB = NULL;
+    wxDELETE(ms_languagesDB);
 }
 
 

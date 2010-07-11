@@ -1031,8 +1031,7 @@ void RegTreeCtrl::TreeNode::OnCollapse()
 {
     DestroyChildren();
 
-    delete m_pKey;
-    m_pKey = NULL;
+    wxDELETE(m_pKey);
 }
 
 void RegTreeCtrl::TreeNode::Refresh()

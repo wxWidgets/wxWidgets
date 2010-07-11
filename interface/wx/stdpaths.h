@@ -140,7 +140,7 @@ public:
         Example return values:
         - Unix: @c /usr/local/bin/exename
         - Windows: @c "C:\Programs\AppFolder\exename.exe"
-        - Mac: @c /Programs/exename
+        - Mac: @c /Applications/exename.app/Contents/MacOS/exename
     */
     virtual wxString GetExecutablePath() const;
 

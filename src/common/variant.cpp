@@ -270,18 +270,20 @@ public:
 
     virtual wxString GetType() const { return wxT("long"); }
 
+#if wxUSE_ANY
     // Since wxAny does not have separate type for integers shorter than
     // longlong, we do not usually implement wxVariant->wxAny conversion
     // here (but in wxVariantDataLongLong instead).
-#ifndef wxLongLong_t
+  #ifndef wxLongLong_t
     DECLARE_WXANY_CONVERSION()
-#else
+  #else
     bool GetAsAny(wxAny* any) const
     {
         *any = m_value;
         return true;
     }
-#endif
+  #endif
+#endif // wxUSE_ANY
 
 protected:
     long m_value;
@@ -983,6 +985,20 @@ wxVariant::wxVariant(const wxScopedWCharBuffer& val, const wxString& name)
     m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
+
+#if wxUSE_STD_STRING
+wxVariant::wxVariant(const std::string& val, const wxString& name)
+{
+    m_refData = new wxVariantDataString(wxString(val));
+    m_name = name;
+}
+
+wxVariant::wxVariant(const wxStdWideString& val, const wxString& name)
+{
+    m_refData = new wxVariantDataString(wxString(val));
+    m_name = name;
+}
+#endif // wxUSE_STD_STRING
 
 bool wxVariant::operator== (const wxString& value) const
 {

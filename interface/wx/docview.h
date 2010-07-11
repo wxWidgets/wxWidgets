@@ -43,13 +43,13 @@ public:
             A name that should be unique for a given view.
         @param docClassInfo
             A pointer to the run-time document class information as returned by
-            the CLASSINFO() macro, e.g. CLASSINFO(MyDocumentClass). If this is
+            the wxCLASSINFO() macro, e.g. wxCLASSINFO(MyDocumentClass). If this is
             not supplied, you will need to derive a new wxDocTemplate class and
             override the CreateDocument() member to return a new document
             instance on demand.
         @param viewClassInfo
             A pointer to the run-time view class information as returned by the
-            CLASSINFO() macro, e.g. CLASSINFO(MyViewClass). If this is not
+            wxCLASSINFO() macro, e.g. wxCLASSINFO(MyViewClass). If this is not
             supplied, you will need to derive a new wxDocTemplate class and
             override the CreateView() member to return a new view instance on
             demand.
@@ -364,7 +364,26 @@ public:
     void AssociateTemplate(wxDocTemplate* temp);
 
     /**
+        Closes the specified document.
+
+        If @a force is @true, the document is closed even if it has unsaved
+        changes.
+
+        @param doc
+            The document to close, must be non-@NULL.
+        @param force
+            If @true, close the document even if wxDocument::Close() returns
+            @false.
+        @return
+            @true if the document was closed or @false if closing it was
+            cancelled by user (only in @a force = @false case).
+     */
+    bool CloseDocument(wxDocument *doc, bool force = false);
+
+    /**
         Closes all currently opened documents.
+
+        @see CloseDocument()
     */
     bool CloseDocuments(bool force = true);
 

@@ -271,6 +271,9 @@ data : .SYMBOLIC
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (stctest.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
+$(OBJS)\stctest_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
+
 $(OBJS)\stctest_stctest.obj :  .AUTODEPEND .\stctest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCTEST_CXXFLAGS) $<
 
@@ -279,7 +282,4 @@ $(OBJS)\stctest_edit.obj :  .AUTODEPEND .\edit.cpp
 
 $(OBJS)\stctest_prefs.obj :  .AUTODEPEND .\prefs.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(STCTEST_CXXFLAGS) $<
-
-$(OBJS)\stctest_sample.res :  .AUTODEPEND .\..\sample.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  -i=$(SETUPHDIR) -i=.\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 

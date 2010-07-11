@@ -13,6 +13,7 @@
 #ifndef WX_PRECOMP
     #include "wx/nonownedwnd.h"
     #include "wx/frame.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/osx/private.h"
@@ -134,7 +135,18 @@ bool shouldHandleSelector(SEL selector)
 - (void)sendEvent:(NSEvent *) event
 {
     if ( ![self WX_filterSendEvent: event] )
+    {
+        WXEVENTREF formerEvent = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEvent();
+        WXEVENTHANDLERCALLREF formerHandler = wxTheApp == NULL ? NULL : wxTheApp->MacGetCurrentEventHandlerCallRef();
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(event, NULL);
+
         [super sendEvent: event];
+
+        if (wxTheApp)
+            wxTheApp->MacSetCurrentEvent(formerEvent , formerHandler);
+    }
 }
 
 // The default implementation always moves the window back onto the screen,
@@ -515,6 +527,9 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
         [m_macWindow setOpaque:NO];
         [m_macWindow setAlphaValue:1.0];
     }
+    
+    if ( !(style & wxFRAME_TOOL_WINDOW) )
+        [m_macWindow setHidesOnDeactivate:NO];
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )

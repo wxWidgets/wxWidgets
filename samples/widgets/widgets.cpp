@@ -75,6 +75,7 @@ enum
 #endif // wxUSE_TOOLTIPS
     Widgets_SetFgColour,
     Widgets_SetBgColour,
+    Widgets_SetPageBg,
     Widgets_SetFont,
     Widgets_Enable,
 
@@ -159,6 +160,7 @@ protected:
 #endif // wxUSE_TOOLTIPS
     void OnSetFgCol(wxCommandEvent& event);
     void OnSetBgCol(wxCommandEvent& event);
+    void OnSetPageBg(wxCommandEvent& event);
     void OnSetFont(wxCommandEvent& event);
     void OnEnable(wxCommandEvent& event);
     void OnSetBorder(wxCommandEvent& event);
@@ -285,6 +287,7 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
 
     EVT_MENU(Widgets_SetFgColour, WidgetsFrame::OnSetFgCol)
     EVT_MENU(Widgets_SetBgColour, WidgetsFrame::OnSetBgCol)
+    EVT_MENU(Widgets_SetPageBg,   WidgetsFrame::OnSetPageBg)
     EVT_MENU(Widgets_SetFont,     WidgetsFrame::OnSetFont)
     EVT_MENU(Widgets_Enable,      WidgetsFrame::OnEnable)
 
@@ -358,8 +361,7 @@ bool WidgetsApp::OnInit()
 WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title)
 {
-    SetName("Main");
-    const bool sizeSet = wxPersistentRegisterAndRestore(this);
+    const bool sizeSet = wxPersistentRegisterAndRestore(this, "Main");
 
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -381,6 +383,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #endif // wxUSE_TOOLTIPS
     menuWidget->Append(Widgets_SetFgColour, wxT("Set &foreground...\tCtrl-F"));
     menuWidget->Append(Widgets_SetBgColour, wxT("Set &background...\tCtrl-B"));
+    menuWidget->Append(Widgets_SetPageBg,   wxT("Set &page background...\tShift-Ctrl-B"));
     menuWidget->Append(Widgets_SetFont,     wxT("Set f&ont...\tCtrl-O"));
     menuWidget->AppendCheckItem(Widgets_Enable,  wxT("&Enable/disable\tCtrl-E"));
 
@@ -766,16 +769,35 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
 
 #endif // wxUSE_TOOLTIPS
 
-void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
+namespace
+{
+
+// Trivial wrapper for wxGetColourFromUser() which also does something even if
+// the colour dialog is not available in the current build (which may happen
+// for the ports in development and it is still useful to see how colours work)
+wxColour GetColourFromUser(wxWindow *parent, const wxColour& colDefault)
 {
 #if wxUSE_COLOURDLG
+    return wxGetColourFromUser(parent, colDefault);
+#else // !wxUSE_COLOURDLG
+    if ( colDefault == *wxBLACK )
+        return *wxWHITE;
+    else
+        return *wxBLACK;
+#endif // wxUSE_COLOURDLG/!wxUSE_COLOURDLG
+}
+
+} // anonymous namespace
+
+void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
+{
     // allow for debugging the default colour the first time this is called
     WidgetsPage *page = CurrentPage();
 
     if (!m_colFg.Ok())
         m_colFg = page->GetForegroundColour();
 
-    wxColour col = wxGetColourFromUser(this, m_colFg);
+    wxColour col = GetColourFromUser(this, m_colFg);
     if ( !col.Ok() )
         return;
 
@@ -789,20 +811,16 @@ void WidgetsFrame::OnSetFgCol(wxCommandEvent& WXUNUSED(event))
         (*it)->SetForegroundColour(m_colFg);
         (*it)->Refresh();
     }
-#else
-    wxLogMessage(wxT("Colour selection dialog not available in current build."));
-#endif
 }
 
 void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
 {
-#if wxUSE_COLOURDLG
     WidgetsPage *page = CurrentPage();
 
     if ( !m_colBg.Ok() )
         m_colBg = page->GetBackgroundColour();
 
-    wxColour col = wxGetColourFromUser(this, m_colBg);
+    wxColour col = GetColourFromUser(this, m_colBg);
     if ( !col.Ok() )
         return;
 
@@ -816,9 +834,16 @@ void WidgetsFrame::OnSetBgCol(wxCommandEvent& WXUNUSED(event))
         (*it)->SetBackgroundColour(m_colBg);
         (*it)->Refresh();
     }
-#else
-    wxLogMessage(wxT("Colour selection dialog not available in current build."));
-#endif
+}
+
+void WidgetsFrame::OnSetPageBg(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour col = GetColourFromUser(this, GetBackgroundColour());
+    if ( !col.Ok() )
+        return;
+
+    CurrentPage()->SetBackgroundColour(col);
+    CurrentPage()->Refresh();
 }
 
 void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))

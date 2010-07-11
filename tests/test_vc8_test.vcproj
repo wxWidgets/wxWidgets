@@ -872,6 +872,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\file\dir.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dummy.cpp"
 				>
 				<FileConfiguration
@@ -940,6 +944,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\misc\dynamiclib.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\environ.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\weakref\evtconnection.cpp"
 				>
 			</File>
@@ -965,6 +977,10 @@
 			</File>
 			<File
 				RelativePath=".\config\fileconf.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\file\filefn.cpp"
 				>
 			</File>
 			<File
@@ -1000,7 +1016,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\uris\ftp.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\hashes\hashes.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interactive\input.cpp"
 				>
 			</File>
 			<File
@@ -1044,6 +1068,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\metatest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\thread\misc.cpp"
 				>
 			</File>
@@ -1052,7 +1080,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\module.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\interactive\output.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\misc\pathlist.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\thread\queue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\config\regconf.cpp"
 				>
 			</File>
 			<File
@@ -1081,6 +1125,10 @@
 			</File>
 			<File
 				RelativePath=".\strings\stdstrings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\events\stopwatch.cpp"
 				>
 			</File>
 			<File

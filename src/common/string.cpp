@@ -24,6 +24,7 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/wxcrtvararg.h"
+    #include "wx/intl.h"
     #include "wx/log.h"
 #endif
 
@@ -43,6 +44,10 @@
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
 #endif // __WXMSW__
+
+#if wxUSE_STD_IOSTREAM
+    #include <sstream>
+#endif
 
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
@@ -1733,7 +1738,87 @@ bool wxString::ToCDouble(double *pVal) const
     WX_STRING_TO_X_TYPE_END
 }
 
-#endif  // wxUSE_XLOCALE
+#else // wxUSE_XLOCALE
+
+// Provide implementation of these functions even when wxUSE_XLOCALE is
+// disabled, we still need them in wxWidgets internal code.
+
+// For integers we just assume the current locale uses the same number
+// representation as the C one as there is nothing else we can do.
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    return ToLong(pVal, base);
+}
+
+bool wxString::ToCULong(unsigned long *pVal, int base) const
+{
+    return ToULong(pVal, base);
+}
+
+// For floating point numbers we have to handle the problem of the decimal
+// point which is different in different locales.
+bool wxString::ToCDouble(double *pVal) const
+{
+    // Create a copy of this string using the decimal point instead of whatever
+    // separator the current locale uses.
+#if wxUSE_INTL
+    wxString sep = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                     wxLOCALE_CAT_NUMBER);
+    if ( sep == "." )
+    {
+        // We can avoid an unnecessary string copy in this case.
+        return ToDouble(pVal);
+    }
+#else // !wxUSE_INTL
+    // We don't know what the current separator is so it might even be a point
+    // already, try to parse the string as a double:
+    if ( ToDouble(pVal) )
+    {
+        // It must have been the point, nothing else to do.
+        return true;
+    }
+
+    // Try to guess the separator, using the most common alternative value.
+    wxString sep(",");
+#endif // wxUSE_INTL/!wxUSE_INTL
+    wxString cstr(*this);
+    cstr.Replace(".", sep);
+
+    return cstr.ToDouble(pVal);
+}
+
+#endif  // wxUSE_XLOCALE/!wxUSE_XLOCALE
+
+// ----------------------------------------------------------------------------
+// number to string conversion
+// ----------------------------------------------------------------------------
+
+/* static */
+wxString wxString::FromCDouble(double val)
+{
+#if wxUSE_STD_IOSTREAM && wxUSE_STD_STRING
+    // We assume that we can use the ostream and not wstream for numbers.
+    wxSTD ostringstream os;
+    os << val;
+    return os.str();
+#else // wxUSE_STD_IOSTREAM
+    // Can't use iostream locale support, fall back to the manual method
+    // instead.
+    wxString s = FromDouble(val);
+#if wxUSE_INTL
+    wxString sep = wxLocale::GetInfo(wxLOCALE_DECIMAL_POINT,
+                                     wxLOCALE_CAT_NUMBER);
+#else // !wxUSE_INTL
+    // As above, this is the most common alternative value. Notice that here it
+    // doesn't matter if we guess wrongly and the current separator is already
+    // ".": we'll just waste a call to Replace() in this case.
+    wxString sep(",");
+#endif // wxUSE_INTL/!wxUSE_INTL
+
+    s.Replace(sep, ".");
+    return s;
+#endif // wxUSE_STD_IOSTREAM/!wxUSE_STD_IOSTREAM
+}
 
 // ---------------------------------------------------------------------------
 // formatted output

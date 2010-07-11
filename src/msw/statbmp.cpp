@@ -239,9 +239,7 @@ wxBitmap wxStaticBitmap::GetBitmap() const
 
 void wxStaticBitmap::Free()
 {
-    delete m_image;
-
-    m_image = NULL;
+    wxDELETE(m_image);
 }
 
 wxSize wxStaticBitmap::DoGetBestSize() const

@@ -497,8 +497,7 @@ void wxListCtrl::DeleteEditControl()
     {
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
     }
 }
 
@@ -1539,8 +1538,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
     if ( !hWnd )
     {
         // failed to start editing
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
 
         return NULL;
     }
@@ -1561,14 +1559,21 @@ bool wxListCtrl::EndEditLabel(bool cancel)
     if ( !hwnd )
         return false;
 
-    if ( cancel )
-        ::SetWindowText(hwnd, wxEmptyString); // dubious but better than nothing
-
-    // we shouldn't destroy the control ourselves according to MSDN, which
-    // proposes WM_CANCELMODE to do this, but it doesn't seem to work
-    //
-    // posting WM_CLOSE to it does seem to work without any side effects
-    ::PostMessage(hwnd, WM_CLOSE, 0, 0);
+    // Newer versions of Windows have a special message for cancelling editing,
+    // use it if available.
+#ifdef ListView_CancelEditLabel
+    if ( cancel && (wxApp::GetComCtl32Version() >= 600) )
+    {
+        ListView_CancelEditLabel(GetHwnd());
+    }
+    else
+#endif // ListView_CancelEditLabel
+    {
+        // We shouldn't destroy the control ourselves according to MSDN, which
+        // proposes WM_CANCELMODE to do this, but it doesn't seem to work so
+        // emulate the corresponding user action instead.
+        ::SendMessage(hwnd, WM_KEYDOWN, cancel ? VK_ESCAPE : VK_RETURN, 0);
+    }
 
     return true;
 }
@@ -2239,8 +2244,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         if ( m_internalData[n] == data )
                         {
                             m_internalData.erase(m_internalData.begin() + n);
-                            delete data;
-                            data = NULL;
+                            wxDELETE(data);
                             break;
                         }
                     }

@@ -689,7 +689,10 @@ bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(prima
 
         wxFontData data;
         wxFont font;
-        font << useValue;
+
+        if ( useValue.GetType() == wxS("wxFont") )
+            font << useValue;
+
         data.SetInitialFont( font );
         data.SetColour(*wxBLACK);
 
@@ -1818,16 +1821,8 @@ void wxImageFileProperty::OnSetValue()
     wxFileProperty::OnSetValue();
 
     // Delete old image
-    if ( m_pImage )
-    {
-        delete m_pImage;
-        m_pImage = NULL;
-    }
-    if ( m_pBitmap )
-    {
-        delete m_pBitmap;
-        m_pBitmap = NULL;
-    }
+    wxDELETE(m_pImage);
+    wxDELETE(m_pBitmap);
 
     wxFileName filename = GetFileName();
 
@@ -1856,8 +1851,7 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
         {
             m_pImage->Rescale( rect.width, rect.height );
             m_pBitmap = new wxBitmap( *m_pImage );
-            delete m_pImage;
-            m_pImage = NULL;
+            wxDELETE(m_pImage);
         }
 
         dc.DrawBitmap( *m_pBitmap, rect.x, rect.y, false );

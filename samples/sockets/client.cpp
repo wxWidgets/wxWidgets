@@ -39,7 +39,9 @@
 // --------------------------------------------------------------------------
 
 // the application icon
-#include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 // --------------------------------------------------------------------------
 // classes
@@ -206,7 +208,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
                              wxDefaultPosition, wxSize(300, 200))
 {
   // Give the frame an icon
-  SetIcon(wxICON(mondrian));
+  SetIcon(wxICON(sample));
 
   // Make menus
   m_menuFile = new wxMenu();

@@ -42,6 +42,8 @@
     is to use wxRearrangeCtrl which combines it with two standard buttons to
     move the current item up or down.
 
+    @since 2.9.0
+
     @library{wxcore}
     @category{ctrl}
 */
@@ -173,6 +175,8 @@ public:
     the "Up" and "Down" buttons to move the currently selected item up or down.
     It is used as the main part of a wxRearrangeDialog.
 
+    @since 2.9.0
+
     @library{wxcore}
     @category{ctrl}
  */
@@ -259,6 +263,8 @@ public:
             }
         }
     @endcode
+
+    @since 2.9.0
 
     @library{wxcore}
     @category{cmndlg}

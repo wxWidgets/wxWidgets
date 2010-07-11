@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+#include "wx/cursor.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 
@@ -25,6 +26,8 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
+
+#if wxUSE_GUI
 wxPoint wxGetMousePosition()
 {
     return wxQtConvertPoint( QCursor::pos() );
@@ -37,21 +40,14 @@ void wxGetMousePosition( int *x, int *y )
     *x = position.x;
     *y = position.y;
 }
+#endif
 
+#if wxUSE_GUI
 wxMouseState wxGetMouseState()
 {
     return wxMouseState();
 }
-
-void wxBeginBusyCursor(const wxCursor *cursor)
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-}
-
-void wxEndBusyCursor()
-{
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-}
+#endif
 
 
 wxWindow *wxFindWindowAtPoint(const wxPoint& pt)

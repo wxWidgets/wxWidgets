@@ -72,6 +72,22 @@ public:
         return wxMSGQUEUE_NO_ERROR;
     }
 
+    // Remove all messages from the queue.
+    //
+    // This method is meant to be called from the same thread(s) that call
+    // Post() to discard any still pending requests if they became unnecessary.
+    wxMessageQueueError Clear()
+    {
+        wxCHECK( IsOk(), wxMSGQUEUE_MISC_ERROR );
+
+        wxMutexLocker locker(m_mutex);
+
+        std::queue<T> empty;
+        std::swap(m_messages, empty);
+
+        return wxMSGQUEUE_NO_ERROR;
+    }
+
     // Wait no more than timeout milliseconds until a message becomes available.
     //
     // Setting timeout to 0 is equivalent to an infinite timeout. See Receive().

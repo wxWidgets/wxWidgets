@@ -337,10 +337,32 @@ public:
     virtual bool SetValue( const wxVariant &value );
     virtual bool GetValue( wxVariant &value ) const;
 
+    wxString GetChoice(size_t index) const { return m_choices[index]; }
+    const wxArrayString& GetChoices() const { return m_choices; }
+
 private:
     wxArrayString m_choices;
     wxString      m_data;
 };
+
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
+{
+public:
+    wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
+                            
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+    
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
+};
+
 
 #endif // generic or Carbon versions
 

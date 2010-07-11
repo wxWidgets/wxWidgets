@@ -1471,10 +1471,10 @@ void wxCairoContext::DrawBitmap(const wxGraphicsBitmap &bmp, wxDouble x, wxDoubl
 
     wxDouble scaleX = w / size.GetWidth();
     wxDouble scaleY = h / size.GetHeight();
-    cairo_scale(m_context, scaleX, scaleY);
 
     // prepare to draw the image
     cairo_translate(m_context, x, y);
+    cairo_scale(m_context, scaleX, scaleY);
     cairo_set_source(m_context, pattern);
     // use the original size here since the context is scaled already...
     cairo_rectangle(m_context, 0, 0, size.GetWidth(), size.GetHeight());

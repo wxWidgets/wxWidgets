@@ -1044,7 +1044,7 @@ void wxGDIPlusMatrixData::Scale( wxDouble xScale , wxDouble yScale )
 // add the rotation to this matrix (radians)
 void wxGDIPlusMatrixData::Rotate( wxDouble angle )
 {
-    m_matrix->Rotate( angle );
+    m_matrix->Rotate( RadToDeg(angle) );
 }
 
 //

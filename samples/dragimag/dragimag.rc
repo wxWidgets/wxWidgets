@@ -1,5 +1,4 @@
-mondrian ICON "mondrian.ico"
-dragicon ICON "dragicon.ico"
+#include "../sample.rc"
 
-#include "wx/msw/wx.rc"
+dragicon ICON "dragicon.ico"
 

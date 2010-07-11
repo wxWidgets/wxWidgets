@@ -86,8 +86,7 @@ Palette::Palette() {
 
 Palette::~Palette() {
     Release();
-    delete [] entries;
-    entries = 0;
+    wxDELETEA(entries);
 }
 
 void Palette::Release() {
@@ -1144,14 +1143,8 @@ ListBoxImpl::ListBoxImpl()
 }
 
 ListBoxImpl::~ListBoxImpl() {
-    if (imgList) {
-        delete imgList;
-        imgList = NULL;
-    }
-    if (imgTypeMap) {
-        delete imgTypeMap;
-        imgTypeMap = NULL;
-    }
+    wxDELETE(imgList);
+    wxDELETE(imgTypeMap);
 }
 
 
@@ -1329,14 +1322,8 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
 }
 
 void ListBoxImpl::ClearRegisteredImages() {
-    if (imgList) {
-        delete imgList;
-        imgList = NULL;
-    }
-    if (imgTypeMap) {
-        delete imgTypeMap;
-        imgTypeMap = NULL;
-    }
+    wxDELETE(imgList);
+    wxDELETE(imgTypeMap);
     if (wid)
         GETLB(wid)->SetImageList(NULL, wxIMAGE_LIST_SMALL);
 }

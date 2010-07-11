@@ -356,4 +356,26 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
     return traverser.GetTotalSize();
 }
 
+// ----------------------------------------------------------------------------
+// wxDir helpers
+// ----------------------------------------------------------------------------
+
+/* static */
+bool wxDir::Exists(const wxString& dir)
+{
+    return wxFileName::DirExists(dir);
+}
+
+/* static */
+bool wxDir::Make(const wxString &dir, int perm, int flags)
+{
+    return wxFileName::Mkdir(dir, perm, flags);
+}
+
+/* static */
+bool wxDir::Remove(const wxString &dir, int flags)
+{
+    return wxFileName::Rmdir(dir, flags);
+}
+    
 #endif // wxUSE_LONGLONG

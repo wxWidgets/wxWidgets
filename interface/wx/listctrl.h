@@ -88,7 +88,7 @@
            Begin dragging with the left mouse button.
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}
            Begin dragging with the right mouse button..
-    @event{EVT_BEGIN_LABEL_EDIT(id, func)}
+    @event{EVT_LIST_BEGIN_LABEL_EDIT(id, func)}
            Begin editing a label. This can be prevented by calling Veto().
     @event{EVT_LIST_END_LABEL_EDIT(id, func)}
            Finish editing a label. This can be prevented by calling Veto().
@@ -245,7 +245,30 @@ public:
         will be sent which can be vetoed as well.
     */
     wxTextCtrl* EditLabel(long item,
-                          wxClassInfo* textControlClass = CLASSINFO(wxTextCtrl));
+                          wxClassInfo* textControlClass = wxCLASSINFO(wxTextCtrl));
+
+    /**
+        Finish editing the label.
+
+        This method allows to programmatically end editing a list control item
+        in place. Usually it will only be called when editing is in progress,
+        i.e. if GetEditControl() returns non-NULL. In particular, do not call
+        it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
+        yet fully created by then, just veto the event in this handler instead
+        to prevent the editing from even starting.
+
+        Notice that calling this method will result in EVT_LIST_END_LABEL_EDIT
+        event being generated.
+
+        Currently only implemented in wxMSW.
+
+        @param cancel If @true, discard the changes made by user, as if @c
+            Escape key was pressed. Otherwise, accept the changes as if @c
+            Return was pressed.
+        @return @true if item editing wad finished or @false if no item as
+            being edited.
+     */
+    bool EndEditLabel(bool cancel);
 
     /**
         Ensures this item is visible.

@@ -17,6 +17,8 @@
     This is a singleton class and its unique instance can be retrieved using
     Get() method.
 
+    @since 2.9.0
+
     @library{wxcore}
  */
 class wxPersistenceManager
@@ -270,12 +272,23 @@ wxPersistentObject *wxCreatePersistentObject(T *obj);
 
     This function simply calls wxPersistenceManager::RegisterAndRestore() but
     using it results in slightly shorter code as it calls
-    wxPersistenceManager::Get() internally.
+    wxPersistenceManager::Get() internally. As an additional convenience, this
+    function can also set the window name.
 
-    For the implementation reasons, this function @em mucst be used instead of
+    For the implementation reasons, this function @em must be used instead of
     the template method when using Microsoft Visual C++ 6 compiler.
+
+    @param obj wxWindow-derived object to register with persistence manager and
+        to try to restore the settings for.
+    @param name If not empty, @a obj name is changed to the provided value
+        before registering it.
+    @return true if the settings were restored or false otherwise (this will
+        always be the case when the program runs for the first time, for
+        example).
+
+    @since 2.9.0, @a name is new in 2.9.1.
 
     @header{wx/persist.h}
  */
 template <class T>
-bool wxPersistentRegisterAndRestore(T *obj);
+bool wxPersistentRegisterAndRestore(T *obj, const wxString& name = wxString());

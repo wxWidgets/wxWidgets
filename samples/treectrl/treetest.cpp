@@ -142,6 +142,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(ShowPrevSibling)
     MENU_LINK(ShowNextSibling)
     MENU_LINK(ScrollTo)
+    MENU_LINK(SelectLast)
 #undef MENU_LINK
 
 END_EVENT_TABLE()
@@ -308,6 +309,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->AppendSeparator();
     item_menu->Append(TreeTest_ScrollTo, "Scroll &to item",
                       "Scroll to the last by one top level child");
+    item_menu->Append(TreeTest_SelectLast, "Select &last item",
+                      "Select the last item");
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
@@ -876,6 +879,24 @@ void MyFrame::OnScrollTo(wxCommandEvent& WXUNUSED(event))
     CHECK_ITEM( item );
 
     m_treeCtrl->ScrollTo(item);
+}
+
+void MyFrame::OnSelectLast(wxCommandEvent& WXUNUSED(event))
+{
+    // select the very last item of the tree
+    wxTreeItemId item = m_treeCtrl->GetRootItem();
+    for ( ;; )
+    {
+        wxTreeItemId itemChild = m_treeCtrl->GetLastChild(item);
+        if ( !itemChild.IsOk() )
+            break;
+
+        item = itemChild;
+    }
+
+    CHECK_ITEM( item );
+
+    m_treeCtrl->SelectItem(item);
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))

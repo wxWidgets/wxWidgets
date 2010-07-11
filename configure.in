@@ -567,8 +567,10 @@ if test "$wxUSE_GUI" = "yes"; then
     # to be removed when --disable-gtk2 isn't needed
     if test "x$wxUSE_GTK2" = "xyes"; then
         wxGTK_VERSION=2
+        wxUSE_GTK1=0
     elif test "x$wxUSE_GTK2" = "xno"; then
         wxGTK_VERSION=1
+        wxUSE_GTK1=1
     fi
 
     for toolkit in $ALL_TOOLKITS; do
@@ -1289,7 +1291,11 @@ if test "x$NEEDS_GCC40" == "xyes"; then
 fi
 
 if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
-    MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    if test "$wxUSE_OSX_IPHONE" = 1; then
+        MACOSX_VERSION_MIN_OPTS="-miphoneos-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    else
+        MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
+    fi
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
@@ -2134,6 +2140,8 @@ if test "$wxUSE_STL" = "yes"; then
         fi
     fi
 fi
+
+AC_CHECK_HEADERS([type_traits tr1/type_traits])
 
 dnl check for atomic operations builtins for wx/atomic.h:
 WX_ATOMIC_BUILTINS
@@ -3726,14 +3734,13 @@ fi
 
 
 dnl ---------------------------------------------------------------------------
-dnl wxDisplay Sanity checks
+dnl wxDisplay checks
 dnl ---------------------------------------------------------------------------
 
+USE_XINERAMA=0
 if test "$wxUSE_DISPLAY" = "yes"; then
-dnl ---------------------------------------------------------------------------
-dnl Xinerama (for unix ) - Brian Victor
-dnl ---------------------------------------------------------------------------
-    if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1 -a "$wxUSE_OLD_COCOA" != 1; then
+    dnl Xinerama is used for wxGTK1/wxX11/wxMotif only
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_GTK1" = 1; then
         AC_MSG_CHECKING([for Xinerama])
         WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xinerama)
         if test "$ac_find_libraries" != "" ; then
@@ -3741,37 +3748,40 @@ dnl ---------------------------------------------------------------------------
             if test "$ac_path_to_link" != " -L/usr/lib" ; then
                 LDFLAGS="$LDFLAGS $ac_path_to_link"
             fi
+            USE_XINERAMA=1
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXinerama"
             AC_MSG_RESULT([yes])
-
-            AC_MSG_CHECKING([for Xxf86vm extension])
-            WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
-            if test "$ac_find_libraries" != "" ; then
-                AC_MSG_RESULT([yes])
-                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
-                                 [
-                                  GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
-                                 ],
-                                 [],
-                                 [
-                                      #if HAVE_X11_XLIB_H
-                                        #include <X11/Xlib.h>
-                                      #endif
-                                 ])
-            else
-                AC_MSG_RESULT([no])
-            fi
-
         else
             AC_MSG_RESULT([no])
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
-dnl ---------------------------------------------------------------------------
-dnl DirectDraw for MSW - optionally used by WxDisplay.
-dnl ---------------------------------------------------------------------------
+        dnl DirectDraw for MSW - optionally used by WxDisplay.
         AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
+    fi
+fi
+
+if test "$wxUSE_DISPLAY" = "yes"; then
+    dnl wxGTK2 needs Xxf86vm as well as Xinerama-using ports from above
+    if test "$USE_XINERAMA" = 1 -o "$wxUSE_GTK" = 1; then
+        AC_MSG_CHECKING([for Xxf86vm extension])
+        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
+        if test "$ac_find_libraries" != "" ; then
+            AC_MSG_RESULT([yes])
+            AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                             [
+                              GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
+                             ],
+                             [],
+                             [
+                                  #if HAVE_X11_XLIB_H
+                                    #include <X11/Xlib.h>
+                                  #endif
+                             ])
+        else
+            AC_MSG_RESULT([no])
+        fi
     fi
 fi
 
@@ -7676,7 +7686,11 @@ dnl all additional libraries (except wxWidgets itself) we link with
 EXTRA_FRAMEWORKS=
 if test "$wxUSE_MAC" = 1 ; then
     if test "$USE_DARWIN" = 1; then
-        EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        if test "$wxUSE_OSX_IPHONE" = 1; then
+            EXTRA_FRAMEWORKS="-framework IOKit -framework UIKit -framework CFNetwork -framework AudioToolbox -framework CoreFoundation -framework CoreGraphics -framework OpenGLES -framework Foundation -framework QuartzCore"
+        else
+            EXTRA_FRAMEWORKS="-framework IOKit -framework Carbon -framework Cocoa -framework AudioToolbox -framework System -framework OpenGL -framework QuickTime"
+        fi
     fi
 fi
 if test "$wxUSE_OLD_COCOA" = 1 ; then

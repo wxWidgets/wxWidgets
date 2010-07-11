@@ -168,7 +168,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\console.exe data
+all: $(OBJS)\console.exe
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -178,14 +178,10 @@ clean:
 $(OBJS)\console.exe: $(CONSOLE_OBJECTS)
 	$(CXX) -o $@ $(CONSOLE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
-data: 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (testdata.fc) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
-
 $(OBJS)\console_console.o: ./console.cpp
 	$(CXX) -c -o $@ $(CONSOLE_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data
+.PHONY: all clean
 
 
 SHELL := $(COMSPEC)

@@ -88,7 +88,7 @@ enum wxStringTokenizerMode
     @library{wxbase}
     @category{data}
 
-    @see wxStringTokenize()
+    @see ::wxStringTokenize()
 */
 class wxStringTokenizer : public wxObject
 {
@@ -158,3 +158,25 @@ public:
                    const wxString& delims = " \t\r\n",
                    wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
 };
+
+
+/** @addtogroup group_funcmacro_string */
+//@{
+
+/**
+    This is a convenience function wrapping wxStringTokenizer which simply 
+    returns all tokens found in the given @a str as an array.
+
+    Please see wxStringTokenizer::wxStringTokenizer for the description 
+    of the other parameters.
+
+    @return The array with the parsed tokens.
+
+    @header{wx/string.h}
+*/
+wxArrayString 
+wxStringTokenize(const wxString& str,
+                 const wxString& delims = wxDEFAULT_DELIMITERS,
+                 wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
+                 
+//@}

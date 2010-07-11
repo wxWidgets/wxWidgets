@@ -44,7 +44,10 @@
     just as you would with wxTextCtrl.
     @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
         Respond to a wxEVT_SEARCHCTRL_SEARCH_BTN event, generated when the
-        search button is clicked. Note that this does not initiate a search.
+        search button is clicked. Note that this does not initiate a search on
+        its own, you need to perform the appropriate action in your event
+        handler. You may use @code event.GetString() @endcode to retrieve the
+        string to search for in the event handler code.
     @event{EVT_SEARCHCTRL_CANCEL_BTN(id, func)}
         Respond to a wxEVT_SEARCHCTRL_CANCEL_BTN event, generated when the
         cancel button is clicked.

@@ -1415,7 +1415,7 @@ void wxVLogSysError(const char* formatString, va_list argPtr);
     @def wxDISABLE_DEBUG_LOGGING_IN_RELEASE_BUILD()
 
     Use this macro to disable logging at debug and trace levels in release
-    build when not using IMPLEMENT_APP().
+    build when not using wxIMPLEMENT_APP().
 
     @see wxDISABLE_DEBUG_SUPPORT(),
          wxDISABLE_ASSERTS_IN_RELEASE_BUILD(),

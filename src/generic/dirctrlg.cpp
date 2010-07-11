@@ -1496,11 +1496,7 @@ public:
     bool OnInit() { wxTheFileIconsTable = new wxFileIconsTable; return true; }
     void OnExit()
     {
-        if (wxTheFileIconsTable)
-        {
-            delete wxTheFileIconsTable;
-            wxTheFileIconsTable = NULL;
-        }
+        wxDELETE(wxTheFileIconsTable);
     }
 };
 

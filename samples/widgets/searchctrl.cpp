@@ -84,6 +84,8 @@ protected:
     void OnToggleCancelButton(wxCommandEvent&);
     void OnToggleSearchMenu(wxCommandEvent&);
 
+    void OnSearch(wxCommandEvent& event);
+
     wxMenu* CreateTestMenu();
     
     // (re)create the control
@@ -111,6 +113,8 @@ BEGIN_EVENT_TABLE(SearchCtrlWidgetsPage, WidgetsPage)
     EVT_CHECKBOX(ID_SEARCH_CB, SearchCtrlWidgetsPage::OnToggleSearchButton)
     EVT_CHECKBOX(ID_CANCEL_CB, SearchCtrlWidgetsPage::OnToggleCancelButton)
     EVT_CHECKBOX(ID_MENU_CB, SearchCtrlWidgetsPage::OnToggleSearchMenu)
+
+    EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, SearchCtrlWidgetsPage::OnSearch)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -222,5 +226,9 @@ void SearchCtrlWidgetsPage::OnToggleSearchMenu(wxCommandEvent&)
         m_srchCtrl->SetMenu(NULL);
 }
 
+void SearchCtrlWidgetsPage::OnSearch(wxCommandEvent& event)
+{
+    wxLogMessage("Search button: search for \"%s\".", event.GetString());
+}
 
 #endif  //  wxUSE_SEARCHCTRL

@@ -16,7 +16,7 @@
 
 // -----------------------------------------------------------------------
 
-class wxArrayEditorDialog;
+class wxPGArrayEditorDialog;
 
 #include "wx/propgrid/editors.h"
 
@@ -742,8 +742,8 @@ public:
                                 wxWindow* primary,
                                 const wxChar* cbt );
 
-    // Creates wxArrayEditorDialog for string editing. Called in OnButtonClick.
-    virtual wxArrayEditorDialog* CreateEditorDialog();
+    // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
+    virtual wxPGArrayEditorDialog* CreateEditorDialog();
 
 protected:
     wxString        m_display; // Cache for displayed text.
@@ -834,21 +834,26 @@ wxValidator* PROPNAME::DoGetValidator () const \
 
 
 // -----------------------------------------------------------------------
-// wxArrayEditorDialog
+// wxPGArrayEditorDialog
 // -----------------------------------------------------------------------
+
+#if wxUSE_EDITABLELISTBOX
+
+class WXDLLIMPEXP_FWD_ADV wxEditableListBox;
+class WXDLLIMPEXP_FWD_CORE wxListEvent;
 
 #define wxAEDIALOG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
 
-class WXDLLIMPEXP_PROPGRID wxArrayEditorDialog : public wxDialog
+class WXDLLIMPEXP_PROPGRID wxPGArrayEditorDialog : public wxDialog
 {
 public:
-    wxArrayEditorDialog();
-    virtual ~wxArrayEditorDialog() { }
+    wxPGArrayEditorDialog();
+    virtual ~wxPGArrayEditorDialog() { }
 
     void Init();
 
-    wxArrayEditorDialog( wxWindow *parent,
+    wxPGArrayEditorDialog( wxWindow *parent,
                          const wxString& message,
                          const wxString& caption,
                          long style = wxAEDIALOG_STYLE,
@@ -893,37 +898,36 @@ public:
     // Returns true if array was actually modified
     bool IsModified() const { return m_modified; }
 
+    // wxEditableListBox utilities
+    int GetSelection() const;
+
     //const wxArrayString& GetStrings() const { return m_array; }
 
     // implementation from now on
-    void OnUpdateClick(wxCommandEvent& event);
     void OnAddClick(wxCommandEvent& event);
     void OnDeleteClick(wxCommandEvent& event);
-    void OnListBoxClick(wxCommandEvent& event);
     void OnUpClick(wxCommandEvent& event);
     void OnDownClick(wxCommandEvent& event);
-    //void OnCustomEditClick(wxCommandEvent& event);
+    void OnEndLabelEdit(wxListEvent& event);
     void OnIdle(wxIdleEvent& event);
 
 protected:
-    wxTextCtrl*     m_edValue;
-    wxListBox*      m_lbStrings;
+    wxEditableListBox*  m_elb;
+    wxButton*           m_butCustom;    // required for disabling/enabling changing.
+    wxButton*           m_butUp;
+    wxButton*           m_butDown;
 
-    wxButton*       m_butAdd;       // Button pointers
-    wxButton*       m_butCustom;    // required for disabling/enabling changing.
-    wxButton*       m_butUpdate;
-    wxButton*       m_butRemove;
-    wxButton*       m_butUp;
-    wxButton*       m_butDown;
-
-    //wxArrayString   m_array;
+    // These are used for focus repair
+    wxWindow*           m_elbSubPanel;
+    wxWindow*           m_lastFocused;
 
     const wxChar*   m_custBtText;
-    //wxArrayStringPropertyClass*     m_pCallingClass;
+
+    // A new item, edited by user, is pending at this index.
+    // It will be committed once list ctrl item editing is done.
+    int             m_itemPendingAtIndex;
 
     bool            m_modified;
-
-    unsigned char   m_curFocus;
 
     // These must be overridden - must return true on success.
     virtual wxString ArrayGet( size_t index ) = 0;
@@ -934,16 +938,18 @@ protected:
     virtual void ArraySwap( size_t first, size_t second ) = 0;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayEditorDialog)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxPGArrayEditorDialog)
     DECLARE_EVENT_TABLE()
 };
+
+#endif // wxUSE_EDITABLELISTBOX
 
 // -----------------------------------------------------------------------
 // wxPGArrayStringEditorDialog
 // -----------------------------------------------------------------------
 
 class WXDLLIMPEXP_PROPGRID
-    wxPGArrayStringEditorDialog : public wxArrayEditorDialog
+    wxPGArrayStringEditorDialog : public wxPGArrayEditorDialog
 {
 public:
     wxPGArrayStringEditorDialog();

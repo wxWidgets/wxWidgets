@@ -149,11 +149,11 @@ wxOwnerDrawn *wxListBox::CreateLboxItem(size_t WXUNUSED(n))
 // creation
 // ----------------------------------------------------------------------------
 
-// Listbox item
-wxListBox::wxListBox()
+void wxListBox::Init()
 {
     m_noItems = 0;
     m_updateHorizontalExtent = false;
+    m_selectedByKeyboard = false;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -165,9 +165,6 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    m_noItems = 0;
-    m_updateHorizontalExtent = false;
-
     // initialize base class fields
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -647,25 +644,30 @@ wxSize wxListBox::DoGetBestClientSize() const
 
 bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    if ((param == LBN_SELCHANGE) && HasMultipleSelection())
-    {
-        CalcAndSendEvent();
-        return true;
-    }
-
     wxEventType evtType;
-    int n;
+    int n = wxNOT_FOUND;
     if ( param == LBN_SELCHANGE )
     {
-        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
-        n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+        if ( HasMultipleSelection() )
+            return CalcAndSendEvent();
 
-        // NB: conveniently enough, LB_ERR is the same as wxNOT_FOUND
+        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+
+        if ( m_selectedByKeyboard )
+        {
+            // We shouldn't use the mouse position to find the item as mouse
+            // can be anywhere, ask the listbox itself. Notice that this can't
+            // be used when the item is selected using the mouse however as
+            // LB_GETCARETINDEX will always return a valid item, even if the
+            // mouse is clicked below all the items, which is why we find the
+            // item ourselves below in this case.
+            n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+        }
+        //else: n will be determined below from the mouse position
     }
     else if ( param == LBN_DBLCLK )
     {
         evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
-        n = HitTest(ScreenToClient(wxGetMousePosition()));
     }
     else
     {
@@ -673,22 +675,52 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return false;
     }
 
-    // retrieve the affected item
+    // Find the item position if it was a mouse-generated selection event or a
+    // double click event (which is always generated using the mouse)
     if ( n == wxNOT_FOUND )
-        return false;
+    {
+        const DWORD pos = ::GetMessagePos();
+        const wxPoint pt(GET_X_LPARAM(pos), GET_Y_LPARAM(pos));
+        n = HitTest(ScreenToClient(wxPoint(pt)));
+    }
 
-    wxCommandEvent event(evtType, m_windowId);
-    event.SetEventObject(this);
+    // We get events even when mouse is clicked outside of any valid item from
+    // Windows, just ignore them.
+    if ( n == wxNOT_FOUND )
+       return false;
 
-    if ( HasClientObjectData() )
-        event.SetClientObject( GetClientObject(n) );
-    else if ( HasClientUntypedData() )
-        event.SetClientData( GetClientData(n) );
+    // As we don't use m_oldSelections in single selection mode, we store the
+    // last item that we notified the user about in it in this case because we
+    // need to remember it to be able to filter out the dummy LBN_SELCHANGE
+    // messages that we get when the user clicks on an already selected item.
+    if ( param == LBN_SELCHANGE )
+    {
+        if ( !m_oldSelections.empty() && *m_oldSelections.begin() == n )
+        {
+            // Same item as the last time.
+            return false;
+        }
 
-    event.SetString(GetString(n));
-    event.SetInt(n);
+        m_oldSelections.clear();
+        m_oldSelections.push_back(n);
+    }
 
-    return HandleWindowEvent(event);
+    // Do generate an event otherwise.
+    return SendEvent(evtType, n, true /* selection */);
+}
+
+WXLRESULT
+wxListBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    // Remember whether there was a keyboard or mouse event before
+    // LBN_SELCHANGE: this allows us to correctly determine the item affected
+    // by it in MSWCommand() above in any case.
+    if ( WM_KEYFIRST <= nMsg && nMsg <= WM_KEYLAST )
+        m_selectedByKeyboard = true;
+    else if ( WM_MOUSEFIRST <= nMsg && nMsg <= WM_MOUSELAST )
+        m_selectedByKeyboard = false;
+
+    return wxListBoxBase::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ----------------------------------------------------------------------------

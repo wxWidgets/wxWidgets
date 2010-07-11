@@ -244,8 +244,7 @@ bool wxToolBar::Create(wxWindow *parent,
 
 wxToolBar::~wxToolBar()
 {
-    delete wxTheToolBarTimer;
-    wxTheToolBarTimer = NULL;
+    wxDELETE(wxTheToolBarTimer);
 }
 
 bool wxToolBar::Realize()

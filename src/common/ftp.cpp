@@ -155,11 +155,15 @@ bool wxFTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
     return true;
 }
 
-bool wxFTP::Connect(const wxString& host)
+bool wxFTP::Connect(const wxString& host, unsigned short port)
 {
     wxIPV4address addr;
     addr.Hostname(host);
-    addr.Service(wxT("ftp"));
+
+    if ( port )
+        addr.Service(port);
+    else if (!addr.Service(wxT("ftp")))
+        addr.Service(21);
 
     return Connect(addr);
 }
@@ -199,8 +203,7 @@ wxSocketBase *wxFTP::AcceptIfActive(wxSocketBase *sock)
     {
         m_lastError = wxPROTO_CONNERR;
         wxLogError(_("Timeout while waiting for FTP server to connect, try passive mode."));
-        delete sock;
-        sock = NULL;
+        wxDELETE(sock);
     }
     else
     {

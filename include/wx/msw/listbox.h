@@ -38,7 +38,7 @@ class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
 public:
     // ctors and such
-    wxListBox();
+    wxListBox() { Init(); }
     wxListBox(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -47,6 +47,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
     wxListBox(wxWindow *parent, wxWindowID id,
@@ -57,6 +59,8 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxListBoxNameStr)
     {
+        Init();
+
         Create(parent, id, pos, size, choices, style, validator, name);
     }
 
@@ -147,6 +151,8 @@ public:
 
     virtual void OnInternalIdle();
 
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+
 protected:
     virtual wxSize DoGetBestClientSize() const;
 
@@ -177,6 +183,9 @@ protected:
 #endif
 
 private:
+    // common part of all ctors
+    void Init();
+
     // call this when items are added to or deleted from the listbox or an
     // items text changes
     void MSWOnItemsChanged();
@@ -184,6 +193,11 @@ private:
     // flag indicating whether the max horizontal extent should be updated,
     // i.e. if we need to call SetHorizontalExtent() from OnInternalIdle()
     bool m_updateHorizontalExtent;
+
+    // flag set to true when we get a keyboard event and reset to false when we
+    // get a mouse one: this is used to find the correct item for the selection
+    // event
+    bool m_selectedByKeyboard;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxListBox)
 };

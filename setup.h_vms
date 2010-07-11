@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 7 May 2010                                                         *
+ * Date : 1 July 2010                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -191,7 +191,7 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
-#if defined( __WXX11__ ) || defined ( __WXMOTIF__ )
+#if defined( __WXX11__ )
     #define wxUSE_UNICODE 0
 #else
     #define wxUSE_UNICODE 1
@@ -254,7 +254,7 @@ typedef pid_t GPid;
 #define wxUSE_INTL          1
 #include <locale.h>
 
-#if defined (__WXMOTIF__) || defined( __WXX11__ )
+#if defined (__WXMOTIF__)
 #define wxUSE_XLOCALE 0
 #else
 #define wxUSE_XLOCALE 1
@@ -753,6 +753,16 @@ typedef pid_t GPid;
  * Define if your compiler has std::tr1::unordered_set
  */
 #undef HAVE_TR1_UNORDERED_SET
+
+/*
+ * Define if your compiler has <tr1/type_traits>
+ */
+#undef HAVE_TR1_TYPE_TRAITS
+
+/*
+ * Define if your compiler has <type_traits>
+ */
+#undef HAVE_TYPE_TRAITS
 
 /*
  * Define if the compiler supports simple visibility declarations.

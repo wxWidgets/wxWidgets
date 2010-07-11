@@ -180,8 +180,7 @@ void wxArrowButton::StopTimerCallback( Widget w, XtPointer clientData,
         return;
 
     wxArrowButton* btn = (wxArrowButton*)clientData;
-    delete btn->m_timer;
-    btn->m_timer = 0;
+    wxDELETE(btn->m_timer);
 }
 
 bool wxArrowButton::Create( wxSpinButton* parent,

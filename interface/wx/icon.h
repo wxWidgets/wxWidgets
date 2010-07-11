@@ -118,15 +118,15 @@ public:
         the appropriate platform, or an icon resource on Windows.
 
         @code
-        wxIcon icon(wxICON(mondrian));
+        wxIcon icon(wxICON(sample));
 
         // Equivalent to:
         #if defined(__WXGTK__) || defined(__WXMOTIF__)
-        wxIcon icon(mondrian_xpm);
+        wxIcon icon(sample_xpm);
         #endif
 
         #if defined(__WXMSW__)
-        wxIcon icon("mondrian");
+        wxIcon icon("sample");
         #endif
         @endcode
 

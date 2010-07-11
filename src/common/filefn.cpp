@@ -1600,7 +1600,7 @@ wxString wxGetOSDirectory()
     GetWindowsDirectory(buf, 256);
     return wxString(buf);
 #elif defined(__WXMAC__) && wxOSX_USE_CARBON
-    return wxMacFindFolder(kOnSystemDisk, 'macs', false);
+    return wxMacFindFolderNoSeparator(kOnSystemDisk, 'macs', false);
 #else
     return wxEmptyString;
 #endif

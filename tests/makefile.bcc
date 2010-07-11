@@ -46,11 +46,15 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_base64.obj \
 	$(OBJS)\test_cmdlinetest.obj \
 	$(OBJS)\test_fileconf.obj \
+	$(OBJS)\test_regconf.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_evthandler.obj \
 	$(OBJS)\test_evtsource.obj \
+	$(OBJS)\test_stopwatch.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
+	$(OBJS)\test_dir.obj \
+	$(OBJS)\test_filefn.obj \
 	$(OBJS)\test_filetest.obj \
 	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
@@ -59,13 +63,20 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_fswatchertest.obj \
 	$(OBJS)\test_hashes.obj \
+	$(OBJS)\test_output.obj \
+	$(OBJS)\test_input.obj \
 	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_logtest.obj \
 	$(OBJS)\test_longlongtest.obj \
 	$(OBJS)\test_convautotest.obj \
 	$(OBJS)\test_mbconvtest.obj \
+	$(OBJS)\test_dynamiclib.obj \
+	$(OBJS)\test_environ.obj \
+	$(OBJS)\test_metatest.obj \
 	$(OBJS)\test_misctests.obj \
+	$(OBJS)\test_module.obj \
+	$(OBJS)\test_pathlist.obj \
 	$(OBJS)\test_typeinfotest.obj \
 	$(OBJS)\test_ipc.obj \
 	$(OBJS)\test_socket.obj \
@@ -100,6 +111,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_misc.obj \
 	$(OBJS)\test_queue.obj \
 	$(OBJS)\test_tls.obj \
+	$(OBJS)\test_ftp.obj \
 	$(OBJS)\test_uris.obj \
 	$(OBJS)\test_url.obj \
 	$(OBJS)\test_vectors.obj \
@@ -422,6 +434,9 @@ $(OBJS)\test_cmdlinetest.obj: .\cmdline\cmdlinetest.cpp
 $(OBJS)\test_fileconf.obj: .\config\fileconf.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\config\fileconf.cpp
 
+$(OBJS)\test_regconf.obj: .\config\regconf.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\config\regconf.cpp
+
 $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\datetime\datetimetest.cpp
 
@@ -431,11 +446,20 @@ $(OBJS)\test_evthandler.obj: .\events\evthandler.cpp
 $(OBJS)\test_evtsource.obj: .\events\evtsource.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\evtsource.cpp
 
+$(OBJS)\test_stopwatch.obj: .\events\stopwatch.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\stopwatch.cpp
+
 $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\events\timertest.cpp
 
 $(OBJS)\test_exec.obj: .\exec\exec.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\exec\exec.cpp
+
+$(OBJS)\test_dir.obj: .\file\dir.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\file\dir.cpp
+
+$(OBJS)\test_filefn.obj: .\file\filefn.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\file\filefn.cpp
 
 $(OBJS)\test_filetest.obj: .\file\filetest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\file\filetest.cpp
@@ -461,6 +485,12 @@ $(OBJS)\test_fswatchertest.obj: .\fswatcher\fswatchertest.cpp
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\hashes\hashes.cpp
 
+$(OBJS)\test_output.obj: .\interactive\output.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\interactive\output.cpp
+
+$(OBJS)\test_input.obj: .\interactive\input.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\interactive\input.cpp
+
 $(OBJS)\test_intltest.obj: .\intl\intltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\intl\intltest.cpp
 
@@ -479,8 +509,23 @@ $(OBJS)\test_convautotest.obj: .\mbconv\convautotest.cpp
 $(OBJS)\test_mbconvtest.obj: .\mbconv\mbconvtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\mbconv\mbconvtest.cpp
 
+$(OBJS)\test_dynamiclib.obj: .\misc\dynamiclib.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\dynamiclib.cpp
+
+$(OBJS)\test_environ.obj: .\misc\environ.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\environ.cpp
+
+$(OBJS)\test_metatest.obj: .\misc\metatest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\metatest.cpp
+
 $(OBJS)\test_misctests.obj: .\misc\misctests.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\misctests.cpp
+
+$(OBJS)\test_module.obj: .\misc\module.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\module.cpp
+
+$(OBJS)\test_pathlist.obj: .\misc\pathlist.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\pathlist.cpp
 
 $(OBJS)\test_typeinfotest.obj: .\misc\typeinfotest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\misc\typeinfotest.cpp
@@ -583,6 +628,9 @@ $(OBJS)\test_queue.obj: .\thread\queue.cpp
 
 $(OBJS)\test_tls.obj: .\thread\tls.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\thread\tls.cpp
+
+$(OBJS)\test_ftp.obj: .\uris\ftp.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\uris\ftp.cpp
 
 $(OBJS)\test_uris.obj: .\uris\uris.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\uris\uris.cpp

@@ -239,5 +239,15 @@ inline bool wxPersistentRegisterAndRestore(T *obj)
 
 }
 
+// A helper function which also sets the name for the (wxWindow-derived) object
+// before registering and restoring it.
+template <typename T>
+inline bool wxPersistentRegisterAndRestore(T *obj, const wxString& name)
+{
+    obj->SetName(name);
+
+    return wxPersistentRegisterAndRestore(obj);
+}
+
 #endif // _WX_PERSIST_H_
 

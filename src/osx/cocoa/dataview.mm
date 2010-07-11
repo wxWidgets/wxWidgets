@@ -2937,6 +2937,18 @@ void wxDataViewColumn::SetReorderable(bool reorderable)
 {
 }
 
+void wxDataViewColumn::SetHidden(bool hidden)
+{
+    // How to set flag here?
+
+    [m_NativeDataPtr->GetNativeColumnPtr() setHidden:hidden];
+}
+
+bool wxDataViewColumn::IsHidden() const
+{
+    return [m_NativeDataPtr->GetNativeColumnPtr() isHidden];
+}
+
 void wxDataViewColumn::SetResizeable(bool resizeable)
 {
     wxDataViewColumnBase::SetResizeable(resizeable);

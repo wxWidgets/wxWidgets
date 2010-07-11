@@ -45,23 +45,8 @@
 
     When compared to wxVariant, there are various internal implementation
     differences as well. For instance, wxAny only allocates separate data
-    object in heap for large (ie. size in bytes more than
-    WX_ANY_VALUE_BUFFER_SIZE) or 'non-movable' data types. Pointers, integers,
-    bools etc. are fitted in the wxAny's own buffer without need for any extra
-    allocation. Use following code to declare your own data type as 'movable':
-
-    @code
-    #include "wx/meta/movable.h"
-    WX_DECLARE_TYPE_MOVABLE(MyClass)
-    @endcode
-
-    However, you must be aware that 'movable' means such data that can be
-    copied with memcpy() without corrupting program integrity. For instance,
-    movable objects usually cannot contain pointers or references to other
-    data. wxRect, wxPoint, and wxSize are good examples of movable classes.
-
-    Note that pointers to any and all classes are already automatically
-    declared as movable data.
+    object in heap for large objects (i.e. ones with size more than
+    WX_ANY_VALUE_BUFFER_SIZE, which at the time of writing is 16 bytes).
 
     @library{wxbase}
     @category{data}
@@ -130,7 +115,7 @@ public:
         @see wxAnyValueType::CheckType()
     */
     template<typename T>
-    bool CheckType();
+    bool CheckType() const;
 
     /**
         Template function that retrieves and converts the value of this
@@ -155,14 +140,21 @@ public:
         Returns the value type as wxAnyValueType instance.
 
         @remarks You cannot reliably test whether two wxAnys are of
-                same value type by simply comparing return values
-                of wxAny::GetType(). Instead use
-                wxAnyValueType::CheckType<T>() template function.
+                 same value type by simply comparing return values
+                 of wxAny::GetType(). Instead, use wxAny::HasSameType().
+
+        @see HasSameType()
     */
     const wxAnyValueType* GetType() const;
 
     /**
-        Tests if wxAny is null (that is, whether there is data).
+        Returns @true if this and another wxAny have the same
+        value type.
+    */
+    bool HasSameType(const wxAny& other) const;
+
+    /**
+        Tests if wxAny is null (that is, whether there is no data).
     */
     bool IsNull() const;
 
@@ -410,7 +402,7 @@ public:
         @see wxAny::CheckType()
     */
     template <typename T>
-    bool CheckType();
+    bool CheckType() const;
 
     /**
         Convert value into buffer of different type. Return false if

@@ -848,6 +848,10 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         else
         {
             renderFlags |= wxPGCellRenderer::ChoicePopup;
+
+            // For consistency, always use normal font when drawing drop down
+            // items
+            dc.SetFont(GetFont());
         }
 
         // If not drawing a selected popup item, then give property's
@@ -1508,8 +1512,7 @@ END_EVENT_TABLE()
 
 wxSimpleCheckBox::~wxSimpleCheckBox()
 {
-    delete ms_doubleBuffer;
-    ms_doubleBuffer = NULL;
+    wxDELETE(ms_doubleBuffer);
 }
 
 wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = NULL;
@@ -1914,6 +1917,13 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
         tc->SetBackgroundColour(vattrs.colBg);
     }
 #endif
+
+    // This code is repeated from DoSelectProperty(). However, font boldness
+    // must be set before margin is set up below in FixPosForTextCtrl().
+    if ( forColumn == 1 &&
+         prop->HasFlag(wxPG_PROP_MODIFIED) &&
+         HasFlag(wxPG_BOLD_MODIFIED) )
+         tc->SetFont( m_captionFont );
 
     // Center the control vertically
     if ( !hasSpecialSize )

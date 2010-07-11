@@ -2100,8 +2100,7 @@ wxGrid::SetTable(wxGridTableBase *table,
             m_table = NULL;
         }
 
-        delete m_selection;
-        m_selection = NULL;
+        wxDELETE(m_selection);
 
         m_ownTable = false;
         m_numRows = 0;
@@ -3469,7 +3468,34 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    DoEndMoveCol(XToPos(x));
+                    // get the position of the column we're over
+                    int pos = XToPos(x);
+
+                    // we may need to adjust the drop position but don't bother
+                    // checking for it if we can't anyhow
+                    if ( pos > 1 )
+                    {
+                        // also find the index of the column we're over: notice
+                        // that the existing "col" variable may be invalid but
+                        // we need a valid one here
+                        const int colValid = GetColAt(pos);
+
+                        // if we're on the "near" (usually left but right in
+                        // RTL case) part of the column, the actual position we
+                        // should be placed in is actually the one before it
+                        bool onNearPart;
+                        const int middle = GetColLeft(colValid) +
+                                                GetColWidth(colValid)/2;
+                        if ( GetLayoutDirection() == wxLayout_LeftToRight )
+                            onNearPart = (x <= middle);
+                        else // wxLayout_RightToLeft
+                            onNearPart = (x > middle);
+
+                        if ( onNearPart )
+                            pos--;
+                    }
+
+                    DoEndMoveCol(pos);
                 }
                 break;
 
@@ -3812,6 +3838,29 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         }
         else
         {
+            if ( m_selection )
+            {
+                // In row or column selection mode just clicking on the cell
+                // should select the row or column containing it: this is more
+                // convenient for the kinds of controls that use such selection
+                // mode and is compatible with 2.8 behaviour (see #12062).
+                switch ( m_selection->GetSelectionMode() )
+                {
+                    case wxGridSelectCells:
+                    case wxGridSelectRowsOrColumns:
+                        // nothing to do in these cases
+                        break;
+
+                    case wxGridSelectRows:
+                        m_selection->SelectRow(coords.GetRow());
+                        break;
+
+                    case wxGridSelectColumns:
+                        m_selection->SelectCol(coords.GetCol());
+                        break;
+                }
+            }
+
             m_waitForSlowClick = m_currentCellCoords == coords &&
                                         coords != wxGridNoCellCoords;
             SetCurrentCell( coords );
@@ -5572,6 +5621,11 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     }
     else
     {
+        // It is reported that we need to erase the background to avoid display
+        // artefacts, see #12055.
+        wxDCBrushChanger setBrush(dc, m_colWindow->GetBackgroundColour());
+        dc.DrawRectangle(rect);
+
         rend.DrawBorder(*this, dc, rect);
     }
 
@@ -7811,24 +7865,29 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     HideCellEditControl();
     SaveEditControlValue();
 
-    // initialize both of them just to avoid compiler warnings
-    int row = -1,
+    // initialize both of them just to avoid compiler warnings even if only
+    // really needs to be initialized here
+    int row,
+        col;
+    if ( column )
+    {
+        row = -1;
+        col = colOrRow;
+    }
+    else
+    {
+        row = colOrRow;
         col = -1;
+    }
 
     wxCoord extent, extentMax = 0;
     int max = column ? m_numRows : m_numCols;
     for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
     {
         if ( column )
-        {
             row = rowOrCol;
-            col = colOrRow;
-        }
         else
-        {
-            row = colOrRow;
             col = rowOrCol;
-        }
 
         // we need to account for the cells spanning multiple columns/rows:
         // while they may need a lot of space, they don't need all of it in

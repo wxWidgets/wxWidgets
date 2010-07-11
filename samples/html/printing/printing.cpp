@@ -223,8 +223,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 // frame destructor
 MyFrame::~MyFrame()
 {
-    delete m_Prn;
-    m_Prn = (wxHtmlEasyPrinting *) NULL;
+    wxDELETE(m_Prn);
 }
 
 

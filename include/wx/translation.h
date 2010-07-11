@@ -48,6 +48,7 @@
 // forward decls
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_BASE wxTranslationsLoader;
 class WXDLLIMPEXP_FWD_BASE wxLocale;
 
@@ -128,6 +129,9 @@ public:
     void SetLanguage(wxLanguage lang);
     void SetLanguage(const wxString& lang);
 
+    // get languages available for this app
+    wxArrayString GetAvailableTranslations(const wxString& domain) const;
+
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
 
@@ -192,6 +196,8 @@ public:
 
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang) = 0;
+
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const = 0;
 };
 
 
@@ -204,6 +210,8 @@ public:
 
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang);
+
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const;
 };
 
 
@@ -215,6 +223,8 @@ class WXDLLIMPEXP_BASE wxResourceTranslationsLoader
 public:
     virtual wxMsgCatalog *LoadCatalog(const wxString& domain,
                                       const wxString& lang);
+
+    virtual wxArrayString GetAvailableTranslations(const wxString& domain) const;
 
 protected:
     // returns resource type to use for translations

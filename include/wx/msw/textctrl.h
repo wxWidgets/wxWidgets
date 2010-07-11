@@ -125,10 +125,11 @@ public:
     int GetRichVersion() const { return m_verRichEdit; }
     bool IsRich() const { return m_verRichEdit != 0; }
 
-    // rich edit controls are not compatible with normal ones and wem ust set
-    // the colours for them otherwise
+    // rich edit controls are not compatible with normal ones and we must set
+    // the colours and font for them otherwise
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
+    virtual bool SetFont(const wxFont& font);
 #else
     bool IsRich() const { return false; }
 #endif // wxUSE_RICHEDIT

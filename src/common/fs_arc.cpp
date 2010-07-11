@@ -135,10 +135,8 @@ wxArchiveFSEntry *wxArchiveFSCacheDataImpl::AddToCache(wxArchiveEntry *entry)
 
 void wxArchiveFSCacheDataImpl::CloseStreams()
 {
-    delete m_archive;
-    m_archive = NULL;
-    delete m_stream;
-    m_stream = NULL;
+    wxDELETE(m_archive);
+    wxDELETE(m_stream);
 }
 
 wxArchiveEntry *wxArchiveFSCacheDataImpl::Get(const wxString& name)

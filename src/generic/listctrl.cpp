@@ -737,30 +737,19 @@ void wxListLineData::Draw( wxDC *dc )
     wxListItemAttr *attr = GetAttr();
 
     if ( SetAttributes(dc, attr, highlighted) )
-#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
-        dc->DrawRectangle( m_gi->m_rectHighlight );
-    }
-#else
-    {
+        int flags = 0;
         if (highlighted)
-        {
-            int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus()
+            flags |= wxCONTROL_SELECTED;
+        if (m_owner->HasFocus()
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)m_owner->GetHandle() )
+            && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
-            )
-                flags |= wxCONTROL_FOCUSED;
-            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
-
-        }
-        else
-        {
-            dc->DrawRectangle( m_gi->m_rectHighlight );
-        }
+        )
+            flags |= wxCONTROL_FOCUSED;
+        wxRendererNative::Get().
+            DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
     }
-#endif
 
     // just for debugging to better see where the items are
 #if 0
@@ -801,29 +790,16 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
     if ( SetAttributes(dc, attr, highlighted) )
-#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
-        dc->DrawRectangle( rectHL );
-
-        wxUnusedVar(current);
-    }
-#else
-    {
+        int flags = 0;
         if (highlighted)
-        {
-            int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus())
-                flags |= wxCONTROL_FOCUSED;
-            if (current)
-               flags |= wxCONTROL_CURRENT;
-            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
-        }
-        else
-        {
-            dc->DrawRectangle( rectHL );
-        }
+            flags |= wxCONTROL_SELECTED;
+        if (m_owner->HasFocus())
+            flags |= wxCONTROL_FOCUSED;
+        if (current)
+           flags |= wxCONTROL_CURRENT;
+        wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
     }
-#endif
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
             yMid = rect.y + rect.height/2;
@@ -2138,20 +2114,15 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
-#if !defined( __WXMAC__) && !defined(__WXGTK20__)
-    // Don't draw rect outline under Mac at all.
-    // Draw it elsewhere under GTK.
     if ( HasCurrent() )
     {
-        if ( m_hasFocus )
-        {
-            wxRect rect( GetLineHighlightRect( m_current ) );
-            dc.SetPen( *wxBLACK_PEN );
-            dc.SetBrush( *wxTRANSPARENT_BRUSH );
-            dc.DrawRectangle( rect );
-        }
+        int flags = 0;
+        if ( IsHighlighted(m_current) )
+            flags |= wxCONTROL_SELECTED;
+
+        wxRendererNative::Get().
+            DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
-#endif
 }
 
 void wxListMainWindow::HighlightAll( bool on )
@@ -2753,21 +2724,11 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         parent->GetEventHandler()->ProcessEvent( le );
     }
 
-    if ( (event.GetKeyCode() != WXK_UP) &&
-         (event.GetKeyCode() != WXK_DOWN) &&
-         (event.GetKeyCode() != WXK_RIGHT) &&
-         (event.GetKeyCode() != WXK_LEFT) &&
-         (event.GetKeyCode() != WXK_PAGEUP) &&
-         (event.GetKeyCode() != WXK_PAGEDOWN) &&
-         (event.GetKeyCode() != WXK_END) &&
-         (event.GetKeyCode() != WXK_HOME) )
-    {
-        // propagate the char event upwards
-        wxKeyEvent ke(event);
-        ke.SetEventObject( parent );
-        if (parent->GetEventHandler()->ProcessEvent( ke ))
-            return;
-    }
+    // propagate the char event upwards
+    wxKeyEvent ke(event);
+    ke.SetEventObject( parent );
+    if (parent->GetEventHandler()->ProcessEvent( ke ))
+        return;
 
     if ( HandleAsNavigationKey(event) )
         return;
@@ -4059,8 +4020,11 @@ void wxListMainWindow::InsertItem( wxListItem &item )
     {
         ResetVisibleLinesRange();
 
+        const unsigned col = item.GetColumn();
+        wxCHECK_RET( col < m_aColWidths.size(), "invalid item column" );
+
         // calculate the width of the item and adjust the max column width
-        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(item.GetColumn());
+        wxColWidthInfo *pWidthInfo = m_aColWidths.Item(col);
         int width = GetItemWidthWithImage(&item);
         item.SetWidth(width);
         if (width > pWidthInfo->nMaxWidth)
@@ -4326,9 +4290,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
     {
         GetSizer()->Detach( m_headerWin );
 
-        delete m_headerWin;
-
-        m_headerWin = NULL;
+        wxDELETE(m_headerWin);
     }
 }
 
@@ -4357,6 +4319,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
     SetTargetWindow( m_mainWin );
+
+    // We use the cursor keys for moving the selection, not scrolling, so call
+    // this method to ensure wxScrollHelperEvtHandler doesn't catch all
+    // keyboard events forwarded to us from wxListMainWindow.
+    DisableKeyboardScrolling();
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( m_mainWin, 1, wxGROW );
@@ -4452,6 +4419,11 @@ void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 
 void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 {
+    // we add wxHSCROLL and wxVSCROLL in ctor unconditionally and it never
+    // makes sense to remove them as we'll always add scrollbars anyhow when
+    // needed
+    flag |= wxHSCROLL | wxVSCROLL;
+
     const bool wasInReportView = HasFlag(wxLC_REPORT);
 
     // update the window style first so that the header is created or destroyed
@@ -5106,12 +5078,63 @@ void wxGenericListCtrl::SetFocus()
         m_mainWin->SetFocus();
 }
 
-wxSize wxGenericListCtrl::DoGetBestSize() const
+wxSize wxGenericListCtrl::DoGetBestClientSize() const
 {
-    // Something is better than nothing...
-    // 100x80 is what the MSW version will get from the default
-    // wxControl::DoGetBestSize
-    return wxSize(100, 80);
+    // Something is better than nothing even if this is completely arbitrary.
+    wxSize sizeBest(100, 80);
+
+    if ( !InReportView() )
+    {
+        // Ensure that our minimal width is at least big enough to show all our
+        // items. This is important for wxListbook to size itself correctly.
+
+        // Remember the offset of the first item: this corresponds to the
+        // margins around the item so we will add it to the minimal size below
+        // to ensure that we have equal margins on all sides.
+        wxPoint ofs;
+
+        // We can iterate over all items as there shouldn't be too many of them
+        // in non-report view. If it ever becomes a problem, we could examine
+        // just the first few items probably, the determination of the best
+        // size is less important if we will need scrollbars anyhow.
+        for ( int n = 0; n < GetItemCount(); n++ )
+        {
+            const wxRect itemRect = m_mainWin->GetLineRect(n);
+            if ( !n )
+            {
+                // Remember the position of the first item as all the rest are
+                // offset by at least this number of pixels too.
+                ofs = itemRect.GetPosition();
+            }
+
+            sizeBest.IncTo(itemRect.GetSize());
+        }
+
+        sizeBest.IncBy(2*ofs);
+
+
+        // If we have the scrollbars we need to account for them too. And to
+        // make sure the scrollbars status is up to date we need to call this
+        // function to set them.
+        m_mainWin->RecalculatePositions(true /* no refresh */);
+
+        // Unfortunately we can't use wxWindow::HasScrollbar() here as we need
+        // to use m_mainWin client/virtual size for determination of whether we
+        // use scrollbars and not the size of this window itself. Maybe that
+        // function should be extended to work correctly in the case when our
+        // scrollbars manage a different window from this one but currently it
+        // doesn't work.
+        const wxSize sizeClient = m_mainWin->GetClientSize();
+        const wxSize sizeVirt = m_mainWin->GetVirtualSize();
+
+        if ( sizeVirt.x > sizeClient.x /* HasScrollbar(wxHORIZONTAL) */ )
+            sizeBest.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+
+        if ( sizeVirt.y > sizeClient.y /* HasScrollbar(wxVERTICAL) */ )
+            sizeBest.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    }
+
+    return sizeBest;
 }
 
 // ----------------------------------------------------------------------------

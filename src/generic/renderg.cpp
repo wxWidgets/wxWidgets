@@ -183,10 +183,7 @@ wxRendererNative& wxRendererNative::GetGeneric()
 
 void wxRendererGeneric::Cleanup()
 {
-    if (sm_rendererGeneric)
-        delete sm_rendererGeneric;
-
-    sm_rendererGeneric = NULL;
+    wxDELETE(sm_rendererGeneric);
 }
 
 wxRendererGeneric* wxRendererGeneric::sm_rendererGeneric = NULL;

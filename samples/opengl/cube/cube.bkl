@@ -15,7 +15,6 @@
         <wx-lib>gl</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>cube.rc</win32-res>
     </exe>
 
 </makefile>

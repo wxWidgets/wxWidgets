@@ -10,11 +10,30 @@
 #include "wx/wxprec.h"
 
 #include "wx/cursor.h"
+#include "wx/qt/utils.h"
 
 void wxSetCursor(const wxCursor& cursor)
 {
-
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
+
+void wxBeginBusyCursor(const wxCursor *cursor)
+{
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+}
+
+bool wxIsBusy()
+{
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+
+    return false;
+}
+
+void wxEndBusyCursor()
+{
+    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+}
+
 
 IMPLEMENT_DYNAMIC_CLASS( wxCursor, wxGDIObject )
 

@@ -1350,15 +1350,16 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
 }
 
 // Gets the item text
-wxString wxListCtrl::GetItemText(long item) const
+wxString wxListCtrl::GetItemText(long item, int column) const
 {
     if (m_genericImpl)
-        return m_genericImpl->GetItemText(item);
+        return m_genericImpl->GetItemText(item, column);
 
     wxListItem info;
 
     info.m_mask = wxLIST_MASK_TEXT;
     info.m_itemId = item;
+    info.m_col = column;
 
     if (!GetItem(info))
         return wxEmptyString;

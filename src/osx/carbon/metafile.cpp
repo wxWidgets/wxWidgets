@@ -216,7 +216,7 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
     m_refData = new wxMetafileRefData((CFDataRef)mf);
 }
 
-#ifndef __LP64__
+#if wxOSX_USE_COCOA_OR_CARBON && !defined( __LP64__ )
 void wxMetafile::SetPICT(void* pictHandle)
 {
     UnRef();
@@ -318,8 +318,7 @@ void wxMetafileDCImpl::DoGetSize(int *width, int *height) const
 
 wxMetaFile *wxMetafileDCImpl::Close()
 {
-    delete m_graphicContext;
-    m_graphicContext = NULL;
+    wxDELETE(m_graphicContext);
     m_ok = false;
 
     M_METAFILEREFDATA(*m_metaFile)->Close();

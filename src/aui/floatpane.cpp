@@ -157,11 +157,11 @@ wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
 }
 
 
-void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
+void wxAuiFloatingFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (m_owner_mgr)
     {
-        m_owner_mgr->OnFloatingPaneResized(m_pane_window, event.GetSize());
+        m_owner_mgr->OnFloatingPaneResized(m_pane_window, GetRect());
     }
 }
 

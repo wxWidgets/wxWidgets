@@ -193,8 +193,9 @@ wxSize wxGauge::DoGetBestSize() const
 
 void wxGauge::SetRange(int r)
 {
-    // switch to determinate mode if required
-    SetDeterminateMode();
+    // Changing range implicitly means we're using determinate mode.
+    if ( IsInIndeterminateMode() )
+        SetDeterminateMode();
 
     m_rangeMax = r;
 
@@ -208,16 +209,16 @@ void wxGauge::SetRange(int r)
 
 void wxGauge::SetValue(int pos)
 {
-    // Setting the (same) position produces flicker on Vista,
-    // especially noticable if ownerdrawn
-    if (GetValue() == pos) return;
+    // Setting the value implicitly means that we're using determinate mode.
+    if ( IsInIndeterminateMode() )
+        SetDeterminateMode();
 
-    // switch to determinate mode if required
-    SetDeterminateMode();
+    if ( GetValue() != pos )
+    {
+        m_gaugePos = pos;
 
-    m_gaugePos = pos;
-
-    ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
+        ::SendMessage(GetHwnd(), PBM_SETPOS, pos, 0);
+    }
 }
 
 bool wxGauge::SetForegroundColour(const wxColour& col)
@@ -240,24 +241,30 @@ bool wxGauge::SetBackgroundColour(const wxColour& col)
     return true;
 }
 
+bool wxGauge::IsInIndeterminateMode() const
+{
+    return (::GetWindowLong(GetHwnd(), GWL_STYLE) & PBS_MARQUEE) != 0;
+}
+
 void wxGauge::SetIndeterminateMode()
 {
-    // add the PBS_MARQUEE style to the progress bar
-    LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ((style & PBS_MARQUEE) == 0)
-        ::SetWindowLong(GetHwnd(), GWL_STYLE, style|PBS_MARQUEE);
-
-    // now the control can only run in indeterminate mode
+    // Switch the control into indeterminate mode if necessary.
+    if ( !IsInIndeterminateMode() )
+    {
+        const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        ::SetWindowLong(GetHwnd(), GWL_STYLE, style | PBS_MARQUEE);
+        ::SendMessage(GetHwnd(), PBM_SETMARQUEE, TRUE, 0);
+    }
 }
 
 void wxGauge::SetDeterminateMode()
 {
-    // remove the PBS_MARQUEE style to the progress bar
-    LONG style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ((style & PBS_MARQUEE) != 0)
+    if ( IsInIndeterminateMode() )
+    {
+        const long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+        ::SendMessage(GetHwnd(), PBM_SETMARQUEE, FALSE, 0);
         ::SetWindowLong(GetHwnd(), GWL_STYLE, style & ~PBS_MARQUEE);
-
-    // now the control can only run in determinate mode
+    }
 }
 
 void wxGauge::Pulse()
@@ -267,10 +274,7 @@ void wxGauge::Pulse()
         // switch to indeterminate mode if required
         SetIndeterminateMode();
 
-        // NOTE: when in indeterminate mode, the PBM_SETPOS message will just make
-        //       the bar's blocks move a bit and the WPARAM value is just ignored
-        //       so that we can safely use zero
-        SendMessage(GetHwnd(), (UINT) PBM_SETPOS, (WPARAM)0, (LPARAM)0);
+        SendMessage(GetHwnd(), PBM_STEPIT, 0, 0);
     }
     else
     {

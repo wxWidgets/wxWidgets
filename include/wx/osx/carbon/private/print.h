@@ -39,6 +39,15 @@ public:
     PMPageFormat            GetPageFormat() { return m_macPageFormat; }
     PMPrintSettings         GetPrintSettings() { return m_macPrintSettings; }
 protected :
+    virtual void            TransferPrinterNameFrom( const wxPrintData &data );
+    virtual void            TransferPaperInfoFrom( const wxPrintData &data );
+    virtual void            TransferResolutionFrom( const wxPrintData &data );
+
+    virtual void            TransferPrinterNameTo( wxPrintData &data );
+    virtual void            TransferPaperInfoTo( wxPrintData &data );
+    virtual void            TransferResolutionTo( wxPrintData &data );
+
+    
     virtual void            UpdateFromPMState();
     virtual void            UpdateToPMState();
 

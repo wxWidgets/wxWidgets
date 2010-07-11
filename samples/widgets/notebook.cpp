@@ -335,11 +335,7 @@ void BookWidgetsPage::CreateImageList()
     }
     else // no images
     {
-        if ( m_imageList )
-        {
-            delete m_imageList;
-            m_imageList = NULL;
-        }
+        wxDELETE(m_imageList);
     }
 
     // because of the bug in wxMSW we can't use SetImageList(NULL) - although

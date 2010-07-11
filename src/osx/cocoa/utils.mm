@@ -45,35 +45,6 @@ void wxBell()
     NSBeep();
 }
 
-// ----------------------------------------------------------------------------
-// Common Event Support
-// ----------------------------------------------------------------------------
-
-void wxMacWakeUp()
-{
-    // ensure that we have an auto release pool in place because the event will
-    // be autoreleased from NSEvent:otherEventWithType and we might not have a
-    // global pool during startup or shutdown and we actually never have it if
-    // we're called from another thread
-    //
-    // FIXME: we can't use wxMacAutoreleasePool here because it's in core and
-    //        we're in base
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    NSEvent* wakeupEvent = [NSEvent otherEventWithType:NSApplicationDefined
-                                    location:NSZeroPoint
-                                    modifierFlags:NSAnyEventMask
-                                    timestamp:0
-                                    windowNumber:0
-                                    context:nil
-                                    subtype:0
-                                    data1:0
-                                    data2:0];
-    [NSApp postEvent:wakeupEvent atStart:NO];
-
-    [pool release];
-}
-
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
@@ -234,11 +205,13 @@ bool wxApp::DoInitGui()
     if (!sm_isEmbedded)
     {
         wxNSAppController* controller = [[wxNSAppController alloc] init];
-        [[NSApplication sharedApplication] setDelegate:controller];
+        [NSApp setDelegate:controller];
 
         NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
         [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
             forEventClass:kInternetEventClass andEventID:kAEGetURL];
+        
+        [NSApp finishLaunching];
     }
     return true;
 }

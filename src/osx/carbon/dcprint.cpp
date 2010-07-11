@@ -105,6 +105,10 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
         {
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
             m_err = PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res);
+            if ( m_err != noErr )
+            {
+                m_err = PMGetResolution((PMPageFormat) (native->GetPageFormat()), &res);
+            }
 #endif
         }
     }
@@ -168,7 +172,10 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
 #endif
         {
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-            m_err = PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res);
+            if ( PMPrinterGetPrinterResolution(printer, kPMCurrentValue, &res) != noErr )
+            {
+                res.hRes = res.vRes = 300;
+            }
 #endif
         }
     }

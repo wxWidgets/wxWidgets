@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <limits.h>     // for INT_MAX
+#include <float.h>      // for FLT_MAX
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -180,6 +181,36 @@ bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
     return r;
 }
 
+// Read floats as doubles then just type cast it down.
+bool wxConfigBase::Read(const wxString& key, float* val) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    double temp;
+    if ( !Read(key, &temp) )
+        return false;
+
+    wxCHECK_MSG( fabs(temp) <= FLT_MAX, false,
+                     wxT("float overflow in wxConfig::Read") );
+    wxCHECK_MSG( (temp == 0.0) || (fabs(temp) >= FLT_MIN), false,
+                     wxT("float underflow in wxConfig::Read") );
+
+    *val = static_cast<float>(temp);
+
+    return true;
+}
+
+bool wxConfigBase::Read(const wxString& key, float* val, float defVal) const
+{
+    wxCHECK_MSG( val, false, wxT("wxConfig::Read(): NULL parameter") );
+
+    if ( Read(key, val) )
+        return true;
+
+    *val = defVal;
+    return false;
+}
+
 // the DoReadXXX() for the other types have implementation in the base class
 // but can be overridden in the derived ones
 bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
@@ -202,7 +233,14 @@ bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
     wxString str;
     if ( Read(key, &str) )
     {
-        return str.ToDouble(val);
+        if ( str.ToCDouble(val) )
+            return true;
+
+        // Previous versions of wxFileConfig wrote the numbers out using the
+        // current locale and not the C one as now, so attempt to parse the
+        // string as a number in the current locale too, for compatibility.
+        if ( str.ToDouble(val) )
+            return true;
     }
 
     return false;
@@ -225,7 +263,10 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 
 bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
 {
-    return DoWriteString(key, wxString::Format(wxT("%g"), val));
+    // Notice that we always write out the numbers in C locale and not the
+    // current one. This makes the config files portable between machines using
+    // different locales.
+    return DoWriteString(key, wxString::FromCDouble(val));
 }
 
 bool wxConfigBase::DoWriteBool(const wxString& key, bool value)

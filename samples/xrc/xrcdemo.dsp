@@ -264,11 +264,11 @@ SOURCE=.\myframe.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xrcdemo.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\xrcdemo.rc
+SOURCE=.\xrcdemo.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

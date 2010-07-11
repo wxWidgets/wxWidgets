@@ -405,11 +405,7 @@ void wxToolBar::Recreate()
         m_hBitmap = 0;
     }
 
-    if ( m_disabledImgList )
-    {
-        delete m_disabledImgList;
-        m_disabledImgList = NULL;
-    }
+    wxDELETE(m_disabledImgList);
 
     Realize();
 }
@@ -610,11 +606,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::CreateDisabledImageList()
 {
-    if (m_disabledImgList != NULL)
-    {
-        delete m_disabledImgList;
-        m_disabledImgList = NULL;
-    }
+    wxDELETE(m_disabledImgList);
 
     // as we can't use disabled image list with older versions of comctl32.dll,
     // don't even bother creating it

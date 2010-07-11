@@ -19,4 +19,28 @@
             <run-tests/>
         </steps>
     </build>
+
+    <build>
+        <name>Linux i386 wxGTK trunk no gui</name>
+        <builddir>ravnsgaard_wxgtk_nogui</builddir>
+        <scheduler>daily_0600</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--disable-gui"/>
+            <compile-all/>
+            <run-tests/>
+        </steps>
+    </build>
+
+    <build>
+        <name>Linux i386 wxGTK trunk no features</name>
+        <builddir>ravnsgaard_wxgtk_nofeatures</builddir>
+        <scheduler>daily_0600</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--disable-all-features"/>
+            <compile-all utils="false"/>
+            <run-tests/>
+        </steps>
+    </build>
 </bot>

@@ -236,8 +236,7 @@ wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
    bool rc = m_timer->Start(nSeconds*1000);
    if(! rc)
    {
-      delete m_timer;
-      m_timer = NULL;
+      wxDELETE(m_timer);
    }
    return rc;
 }
@@ -247,8 +246,7 @@ wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
 {
    wxASSERT(m_timer != NULL);
    m_timer->Stop();
-   delete m_timer;
-   m_timer = NULL;
+   wxDELETE(m_timer);
 }
 
 

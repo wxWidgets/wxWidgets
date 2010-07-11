@@ -61,7 +61,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)
 
 wxToolBarToolBase::~wxToolBarToolBase()
 {
+#if wxUSE_MENUS
     delete m_dropdownMenu;
+#endif
+
     if ( IsControl() )
         GetControl()->Destroy();
 }
@@ -121,11 +124,13 @@ bool wxToolBarToolBase::SetLongHelp(const wxString& help)
 }
 
 
+#if wxUSE_MENUS
 void wxToolBarToolBase::SetDropdownMenu(wxMenu* menu)
 {
     delete m_dropdownMenu;
     m_dropdownMenu = menu;
 }
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -729,6 +734,7 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
+#if wxUSE_MENUS
 bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 {
     wxToolBarToolBase * const tool = FindById(toolid);
@@ -741,6 +747,7 @@ bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
 
     return true;
 }
+#endif
 
 #if WXWIN_COMPATIBILITY_2_8
 

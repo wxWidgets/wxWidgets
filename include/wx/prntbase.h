@@ -244,7 +244,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrintout: public wxObject
 {
 public:
-    wxPrintout(const wxString& title = wxT("Printout"));
+    wxPrintout(const wxString& title = _("Printout"));
     virtual ~wxPrintout();
 
     virtual bool OnBeginDocument(int startPage, int endPage);
@@ -376,7 +376,7 @@ class WXDLLIMPEXP_CORE wxPreviewFrame: public wxFrame
 public:
     wxPreviewFrame(wxPrintPreviewBase *preview,
                    wxWindow *parent,
-                   const wxString& title = wxT("Print Preview"),
+                   const wxString& title = _("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,

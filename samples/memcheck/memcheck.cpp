@@ -22,8 +22,8 @@
 
 #include "wx/datetime.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__)
-#include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 #ifndef __WXDEBUG__
@@ -57,13 +57,13 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
   if ( !wxApp::OnInit() )
-	  return false;
+      return false;
 
   // Create the main frame window
   MyFrame *frame = new MyFrame((wxFrame *) NULL);
 
   // Give it an icon
-  frame->SetIcon(wxICON(mondrian));
+  frame->SetIcon(wxICON(sample));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

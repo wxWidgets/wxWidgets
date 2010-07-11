@@ -265,8 +265,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
             doc->Modify(true);
         }
 
-        delete m_currentSegment;
-        m_currentSegment = NULL;
+        wxDELETE(m_currentSegment);
     }
 
     // is this the start of a new segment?

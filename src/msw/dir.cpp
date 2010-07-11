@@ -30,7 +30,6 @@
 #endif // PCH
 
 #include "wx/dir.h"
-#include "wx/filefn.h"          // for wxDirExists()
 
 #ifdef __WINDOWS__
     #include "wx/msw/private.h"
@@ -285,16 +284,6 @@ bool wxDirData::Read(wxString *filename)
     }
 
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// wxDir helpers
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxDir::Exists(const wxString& dir)
-{
-    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------

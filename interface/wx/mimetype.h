@@ -9,21 +9,23 @@
 /**
     @class wxMimeTypesManager
 
-    This class allows the application to retrieve the information about all known
+    This class allows the application to retrieve informations about all known
     MIME types from a system-specific location and the filename extensions to the
-    MIME types and vice versa. After initialization the functions
-    GetFileTypeFromMimeType() and GetFileTypeFromExtension()
-    may be called: they will return a wxFileType object which may be further
-    queried for file description, icon and other attributes.
-
+    MIME types and vice versa. 
+    
+    MIME stands for "Multipurpose Internet Mail Extensions" and was originally
+    used in mail protocols. It's standardized by several RFCs.
+    
     Under Windows, the MIME type information is queried from registry.
     Under Linux and Unix, it is queried from the XDG data directories.
 
-    Currently, wxMimeTypesManager is limited to reading MIME type information.
+    Currently, wxMimeTypesManager is limited to @e reading MIME type information.
 
     The application should not construct its own manager: it should use the
-    object pointer ::wxTheMimeTypesManger.
-
+    object pointer ::wxTheMimeTypesManager.
+    The functions GetFileTypeFromMimeType() and GetFileTypeFromExtension()
+    return a wxFileType object which may be further queried for file description, 
+    icon and other attributes.
 
     @section mimetypemanager_helpers Helper functions
 
@@ -34,38 +36,15 @@
 
     - wxMimeTypesManager::IsOfType()
 
-
-    @section mimetypemanager_ctor Constructor and destructor
-
-    NB: You won't normally need to use more than one wxMimeTypesManager object
-    in a program.
-
-    - wxMimeTypesManager::wxMimeTypesManager()
-    - wxMimeTypesManager::~wxMimeTypesManager()
-
-
     @section mimetypemanager_query Query database
 
     These functions are the heart of this class: they allow to find a file type
     object from either file extension or MIME type.
     If the function is successful, it returns a pointer to the wxFileType object
-    which must be deleted by the caller, otherwise NULL will be returned.
+    which must be deleted by the caller, otherwise @NULL will be returned.
 
     - wxMimeTypesManager::GetFileTypeFromMimeType()
     - wxMimeTypesManager::GetFileTypeFromExtension()
-
-
-    @section mimetypemanager_init Initialization functions
-
-    Unix: These functions may be used to load additional files (except for the
-    default ones which are loaded automatically) containing MIME information in
-    either mailcap(5) or mime.types(5) format.
-
-    - wxMimeTypesManager::ReadMailcap()
-    - wxMimeTypesManager::ReadMimeTypes()
-    - wxMimeTypesManager::AddFallbacks()
-
-
 
     @library{wxbase}
     @category{cfg}

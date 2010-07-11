@@ -256,7 +256,7 @@ SOURCE=.\oleauto.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\oleauto.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # End Target

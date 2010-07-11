@@ -43,6 +43,7 @@
 #include "wx/filename.h"
 #include "wx/msgout.h"
 #include "wx/scopedptr.h"
+#include "wx/sysopt.h"
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 
@@ -146,8 +147,7 @@ wxAppConsoleBase::wxAppConsoleBase()
     // In unicode mode the SetTraceMasks call can cause an apptraits to be
     // created, but since we are still in the constructor the wrong kind will
     // be created for GUI apps.  Destroy it so it can be created again later.
-    delete m_traits;
-    m_traits = NULL;
+    wxDELETE(m_traits);
 #endif
 #endif
 }
@@ -213,11 +213,7 @@ wxEventLoopBase *wxAppConsoleBase::CreateMainLoop()
 
 void wxAppConsoleBase::CleanUp()
 {
-    if ( m_mainLoop )
-    {
-        delete m_mainLoop;
-        m_mainLoop = NULL;
-    }
+    wxDELETE(m_mainLoop);
 }
 
 // ----------------------------------------------------------------------------
@@ -1027,6 +1023,10 @@ wxDefaultAssertHandler(const wxString& file,
                        const wxString& cond,
                        const wxString& msg)
 {
+    // If this option is set, we should abort immediately when assert happens.
+    if ( wxSystemOptions::GetOptionInt("exit-on-assert") )
+        abort();
+
     // FIXME MT-unsafe
     static int s_bInAssert = 0;
 

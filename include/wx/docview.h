@@ -371,8 +371,12 @@ public:
     void OnFileRevert(wxCommandEvent& event);
     void OnFileSave(wxCommandEvent& event);
     void OnFileSaveAs(wxCommandEvent& event);
+    void OnMRUFile(wxCommandEvent& event);
+#if wxUSE_PRINTING_ARCHITECTURE
     void OnPrint(wxCommandEvent& event);
     void OnPreview(wxCommandEvent& event);
+    void OnPageSetup(wxCommandEvent& event);
+#endif // wxUSE_PRINTING_ARCHITECTURE
     void OnUndo(wxCommandEvent& event);
     void OnRedo(wxCommandEvent& event);
 
@@ -479,7 +483,10 @@ public:
     wxDEPRECATED( size_t GetNoHistoryFiles() const );
 #endif // WXWIN_COMPATIBILITY_2_6
 
+
 protected:
+    // Open the MRU file with the given index in our associated file history.
+    void DoOpenMRUFile(unsigned n);
 #if wxUSE_PRINTING_ARCHITECTURE
     virtual wxPreviewFrame* CreatePreviewFrame(wxPrintPreviewBase* preview,
                                                wxWindow *parent,
@@ -497,6 +504,9 @@ protected:
     // view and returns it then
     wxView *GetActiveView() const;
 
+    // activate the first view of the given document if any
+    void ActivateDocument(wxDocument *doc);
+
 
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
@@ -506,6 +516,10 @@ protected:
     wxFileHistory*    m_fileHistory;
     wxString          m_lastDirectory;
     static wxDocManager* sm_docManager;
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    wxPageSetupDialogData m_pageSetupDialogData;
+#endif // wxUSE_PRINTING_ARCHITECTURE
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxDocManager)
@@ -772,12 +786,6 @@ public:
     wxDocManager *GetDocumentManager() const { return m_docManager; }
 
 protected:
-    // Open the MRU file with the given index in our associated file history.
-    //
-    // This is called from the derived class event handler for the MRU menu
-    // items.
-    void DoOpenMRUFile(unsigned n);
-
     wxDocManager *m_docManager;
 
     wxDECLARE_NO_COPY_CLASS(wxDocParentFrameAnyBase);
@@ -819,8 +827,6 @@ public:
 
         this->Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
                       wxCommandEventHandler(wxDocParentFrameAny::OnExit));
-        this->Connect(wxID_FILE1, wxID_FILE9, wxEVT_COMMAND_MENU_SELECTED,
-                      wxCommandEventHandler(wxDocParentFrameAny::OnMRUFile));
         this->Connect(wxEVT_CLOSE_WINDOW,
                       wxCloseEventHandler(wxDocParentFrameAny::OnCloseWindow));
 
@@ -841,11 +847,6 @@ private:
     void OnExit(wxCommandEvent& WXUNUSED(event))
     {
         this->Close();
-    }
-
-    void OnMRUFile(wxCommandEvent& event)
-    {
-        DoOpenMRUFile(event.GetId() - wxID_FILE1);
     }
 
     void OnCloseWindow(wxCloseEvent& event)
@@ -918,7 +919,7 @@ private:
 class WXDLLIMPEXP_CORE wxDocPrintout : public wxPrintout
 {
 public:
-    wxDocPrintout(wxView *view = NULL, const wxString& title = wxT("Printout"));
+    wxDocPrintout(wxView *view = NULL, const wxString& title = _("Printout"));
 
     // implement wxPrintout methods
     virtual bool OnPrintPage(int page);

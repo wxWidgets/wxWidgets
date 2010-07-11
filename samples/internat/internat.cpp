@@ -37,8 +37,8 @@
 #include "wx/log.h"
 #include "wx/cmdline.h"
 
-#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
-#include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -287,7 +287,7 @@ MyFrame::MyFrame(wxLocale& locale)
                  _("International wxWidgets App")),
          m_locale(locale)
 {
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;

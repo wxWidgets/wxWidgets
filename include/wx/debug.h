@@ -148,7 +148,7 @@ inline void wxDisableAsserts() { wxSetAssertHandler(NULL); }
 /*
     A macro which disables asserts for applications compiled in release build.
 
-    By default, IMPLEMENT_APP (or rather IMPLEMENT_WXWIN_MAIN) disable the
+    By default, wxIMPLEMENT_APP (or rather wxIMPLEMENT_WXWIN_MAIN) disable the
     asserts in the applications compiled in the release build by calling this.
     It does nothing if NDEBUG is not defined.
  */

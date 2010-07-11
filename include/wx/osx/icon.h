@@ -58,6 +58,11 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxIcon)
+
+    bool LoadIconFromSystemResource(const wxString& resourceName, int desiredWidth, int desiredHeight);
+    bool LoadIconFromBundleResource(const wxString& resourceName, int desiredWidth, int desiredHeight);
+    bool LoadIconFromFile(const wxString& filename, int desiredWidth, int desiredHeight);
+    bool LoadIconAsBitmap(const wxString& filename, wxBitmapType flags = wxICON_DEFAULT_TYPE, int desiredWidth = -1, int desiredHeight = -1);
 };
 
 class WXDLLIMPEXP_CORE wxICONResourceHandler: public wxBitmapHandler

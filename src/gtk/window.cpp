@@ -183,14 +183,12 @@
 
    Cursors, too, have been a constant source of pleasure. The main difficulty
    is that a GdkWindow inherits a cursor if the programmer sets a new cursor
-   for the parent. To prevent this from doing too much harm, I use idle time
-   to set the cursor over and over again, starting from the toplevel windows
-   and ending with the youngest generation (speaking of parent and child windows).
+   for the parent. To prevent this from doing too much harm, SetCursor calls
+   GTKUpdateCursor, which will recursively re-set the cursors of all child windows.
    Also don't forget that cursors (like much else) are connected to GdkWindows,
    not GtkWidgets and that the "window" field of a GtkWidget might very well
    point to the GdkWindow of the parent widget (-> "window-less widget") and
    that the two obviously have very different meanings.
-
 */
 
 //-----------------------------------------------------------------------------
@@ -305,6 +303,9 @@ static gboolean
 expose_event_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 {
     if (gdk_event->window != gtk_widget_get_parent_window(win->m_wxwindow))
+        return false;
+
+    if (!win->IsShown())
         return false;
 
     const GtkAllocation& alloc = win->m_wxwindow->allocation;
@@ -1847,6 +1848,8 @@ gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
     win->GTKProcessEvent( event );
+
+    win->GTKUpdateCursor(true, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -2565,38 +2568,6 @@ void wxWindowGTK::OnInternalIdle()
         m_needsStyleChange = false;
     }
 
-    wxCursor cursor = m_cursor;
-    if (g_globalCursor.Ok()) cursor = g_globalCursor;
-
-    if (cursor.Ok())
-    {
-        /* I now set the cursor anew in every OnInternalIdle call
-           as setting the cursor in a parent window also effects the
-           windows above so that checking for the current cursor is
-           not possible. */
-
-        if (m_wxwindow && (m_wxwindow != m_widget))
-        {
-            GdkWindow* window = GTKGetDrawingWindow();
-            if (window)
-                gdk_window_set_cursor( window, cursor.GetCursor() );
-
-            if (!g_globalCursor.Ok())
-                cursor = *wxSTANDARD_CURSOR;
-
-            window = m_widget->window;
-            if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
-                gdk_window_set_cursor( window, cursor.GetCursor() );
-
-        }
-        else if ( m_widget )
-        {
-            GdkWindow *window = m_widget->window;
-            if ( window && !GTK_WIDGET_NO_WINDOW(m_widget) )
-               gdk_window_set_cursor( window, cursor.GetCursor() );
-        }
-    }
-
     if (wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen())
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
@@ -2672,10 +2643,9 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
             }
         }
 
-        int border_x, border_y;
-        WX_PIZZA(m_wxwindow)->get_border_widths(border_x, border_y);
-        w -= 2 * border_x;
-        h -= 2 * border_y;
+        const wxSize sizeBorders = DoGetBorderSize();
+        w -= sizeBorders.x;
+        h -= sizeBorders.y;
 
         if (w < 0)
             w = 0;
@@ -2685,6 +2655,17 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
 
     if (width) *width = w;
     if (height) *height = h;
+}
+
+wxSize wxWindowGTK::DoGetBorderSize() const
+{
+    if ( !m_wxwindow )
+        return wxWindowBase::DoGetBorderSize();
+
+    int x, y;
+    WX_PIZZA(m_wxwindow)->get_border_widths(x, y);
+
+    return 2*wxSize(x, y);
 }
 
 void wxWindowGTK::DoGetPosition( int *x, int *y ) const
@@ -3429,31 +3410,38 @@ bool wxWindowGTK::SetCursor( const wxCursor &cursor )
     return true;
 }
 
-void wxWindowGTK::GTKUpdateCursor()
+void wxWindowGTK::GTKUpdateCursor(bool update_self /*=true*/, bool recurse /*=true*/)
 {
-    wxCursor cursor(g_globalCursor.Ok() ? g_globalCursor : GetCursor());
-    if ( cursor.Ok() )
+    if (update_self)
     {
-        wxArrayGdkWindows windowsThis;
-        GdkWindow * const winThis = GTKGetWindow(windowsThis);
-        if ( winThis )
+        wxCursor cursor(g_globalCursor.Ok() ? g_globalCursor : GetCursor());
+        if ( cursor.Ok() )
         {
-            gdk_window_set_cursor(winThis, cursor.GetCursor());
-        }
-        else
-        {
-            const size_t count = windowsThis.size();
-            for ( size_t n = 0; n < count; n++ )
+            wxArrayGdkWindows windowsThis;
+            GdkWindow* window = GTKGetWindow(windowsThis);
+            if (window)
+                gdk_window_set_cursor( window, cursor.GetCursor() );
+            else
             {
-                GdkWindow *win = windowsThis[n];
-                if ( !win )
+                const size_t count = windowsThis.size();
+                for ( size_t n = 0; n < count; n++ )
                 {
-                    wxFAIL_MSG(wxT("NULL window returned by GTKGetWindow()?"));
-                    continue;
+                    GdkWindow *win = windowsThis[n];
+                    // It can be zero if the window has not been realized yet.
+                    if ( win )
+                    {
+                        gdk_window_set_cursor(win, cursor.GetCursor());
+                    }
                 }
-
-                gdk_window_set_cursor(win, cursor.GetCursor());
             }
+        }
+    }
+
+    if (recurse)
+    {
+        for (wxWindowList::iterator it = GetChildren().begin(); it != GetChildren().end(); ++it)
+        {
+            (*it)->GTKUpdateCursor( true );
         }
     }
 }
@@ -4400,7 +4388,7 @@ GdkWindow* wxWindowGTK::GTKGetDrawingWindow() const
 {
     GdkWindow* window = NULL;
     if (m_wxwindow)
-        window = WX_PIZZA(m_wxwindow)->m_draw_window;
+        window = m_wxwindow->window;
     return window;
 }
 

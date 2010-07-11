@@ -199,10 +199,12 @@ public:
     virtual void Detach() { m_tbar = NULL; }
     virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
 
+#if wxUSE_MENUS
     // these methods are only for tools of wxITEM_DROPDOWN kind (but even such
     // tools can have a NULL associated menu)
     virtual void SetDropdownMenu(wxMenu *menu);
     wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
+#endif
 
 protected:
     // common part of all ctors
@@ -222,7 +224,10 @@ protected:
         m_toggled = false;
         m_enabled = true;
 
+#if wxUSE_MENUS
         m_dropdownMenu = NULL;
+#endif
+
     }
 
     wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
@@ -257,7 +262,9 @@ protected:
     wxString m_shortHelpString;
     wxString m_longHelpString;
 
+#if wxUSE_MENUS
     wxMenu *m_dropdownMenu;
+#endif
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxToolBarToolBase)
 };
@@ -569,8 +576,10 @@ public:
     // don't want toolbars to accept the focus
     virtual bool AcceptsFocus() const { return false; }
 
+#if wxUSE_MENUS
     // Set dropdown menu
     bool SetDropdownMenu(int toolid, wxMenu *menu);
+#endif
 
 protected:
     // to implement in derived classes

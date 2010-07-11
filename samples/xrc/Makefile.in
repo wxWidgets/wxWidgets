@@ -50,12 +50,12 @@ XRCDEMO_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 XRCDEMO_OBJECTS =  \
+	$(__xrcdemo___win32rc) \
 	$(__xrcdemo_os2_lib_res) \
 	xrcdemo_xrcdemo.o \
 	xrcdemo_myframe.o \
 	xrcdemo_derivdlg.o \
-	xrcdemo_custclas.o \
-	$(__xrcdemo___win32rc)
+	xrcdemo_custclas.o
 
 ### Conditionally set variables: ###
 
@@ -92,6 +92,7 @@ COND_PLATFORM_OS2_1___xrcdemo___os2_emxbindcmd = $(NM) xrcdemo$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__xrcdemo___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___xrcdemo___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__xrcdemo___win32rc = xrcdemo_sample_rc.o
 @COND_PLATFORM_OS2_1@__xrcdemo_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__xrcdemo_app_Contents_PkgInfo___depname \
@@ -125,7 +126,6 @@ COND_MONOLITHIC_0___WXLIB_XML_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__xrcdemo___win32rc = xrcdemo_xrcdemo_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -195,7 +195,7 @@ xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
 
 data: 
 	@mkdir -p ./rc
-	@for f in appicon.ico appicon.xpm artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm; do \
+	@for f in artprov.xpm artprov.xrc basicdlg.xpm basicdlg.xrc controls.xpm controls.xrc custclas.xpm custclas.xrc derivdlg.xpm derivdlg.xrc fileopen.gif filesave.gif frame.xrc fuzzy.gif menu.xrc platform.xpm platform.xrc quotes.gif resource.xrc toolbar.xrc uncenter.xpm uncenter.xrc update.gif variable.xpm variable.xrc throbber.gif stop.xpm; do \
 	if test ! -f ./rc/$$f -a ! -d ./rc/$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/rc/$$f -newer ./rc/$$f -print` ; \
@@ -204,6 +204,9 @@ data:
 	cp -pRf $(srcdir)/rc/$$f ./rc ;; \
 	esac; \
 	done
+
+xrcdemo_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 xrcdemo_xrcdemo.o: $(srcdir)/xrcdemo.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $(srcdir)/xrcdemo.cpp
@@ -216,9 +219,6 @@ xrcdemo_derivdlg.o: $(srcdir)/derivdlg.cpp
 
 xrcdemo_custclas.o: $(srcdir)/custclas.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $(srcdir)/custclas.cpp
-
-xrcdemo_xrcdemo_rc.o: $(srcdir)/xrcdemo.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

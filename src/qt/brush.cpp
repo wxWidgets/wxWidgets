@@ -21,6 +21,7 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 {
     switch (style)
     {
+        case wxBRUSHSTYLE_INVALID:
         case wxBRUSHSTYLE_SOLID:
             return Qt::SolidPattern;
 

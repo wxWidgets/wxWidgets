@@ -175,6 +175,14 @@ public:
     }
 
 
+    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
+    // events are not currently disabled
+    void SendTextUpdatedEventIfAllowed()
+    {
+        if ( EventsAllowed() )
+            SendTextUpdatedEvent();
+    }
+
     // this function is provided solely for the purpose of forwarding text
     // change notifications state from one control to another, e.g. it can be
     // used by a wxComboBox which derives from wxTextEntry if it delegates all
@@ -238,15 +246,6 @@ protected:
     };
 
     friend class EventsSuppressor;
-
-    // generate the wxEVT_COMMAND_TEXT_UPDATED event for this window if the
-    // events are not currently disabled
-    void SendTextUpdatedEventIfAllowed()
-    {
-        if ( EventsAllowed() )
-            SendTextUpdatedEvent();
-    }
-
 
 private:
     // suppress or resume the text changed events generation: don't use these

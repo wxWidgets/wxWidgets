@@ -2029,8 +2029,7 @@ void wxTreeCtrl::DeleteTextCtrl()
 
         m_textCtrl->UnsubclassWin();
         m_textCtrl->SetHWND(0);
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
 
         m_idEdited.Unset();
     }
@@ -2051,8 +2050,7 @@ wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item,
     // returned false
     if ( !hWnd )
     {
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        wxDELETE(m_textCtrl);
         return NULL;
     }
 
@@ -3134,8 +3132,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 if ( m_dragImage )
                 {
                     m_dragImage->EndDrag();
-                    delete m_dragImage;
-                    m_dragImage = NULL;
+                    wxDELETE(m_dragImage);
 
                     // generate the drag end event
                     wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG,
@@ -3275,8 +3272,7 @@ wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             if ( m_dragImage )
             {
                 m_dragImage->EndDrag();
-                delete m_dragImage;
-                m_dragImage = NULL;
+                wxDELETE(m_dragImage);
 
                 // if we don't do it, the tree seems to think that 2 items
                 // are selected simultaneously which is quite weird

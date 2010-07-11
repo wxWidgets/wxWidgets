@@ -427,13 +427,13 @@ g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
 Using this way, a make file for the minimal sample would look
 like this
 
-CC = gcc
+CXX = g++
 
 minimal: minimal.o
-	$(CC) -o minimal minimal.o `wx-config --libs`
+	$(CXX) -o minimal minimal.o `wx-config --libs`
 
-minimal.o: minimal.cpp mondrian.xpm
-	$(CC) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
+minimal.o: minimal.cpp
+	$(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
 clean:
 	rm -f *.o minimal

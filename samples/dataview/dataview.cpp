@@ -111,6 +111,7 @@ public:     // event handlers
     void OnEditingDone( wxDataViewEvent &event );
 
     void OnHeaderClick( wxDataViewEvent &event );
+    void OnAttrHeaderClick( wxDataViewEvent &event );
     void OnHeaderRightClick( wxDataViewEvent &event );
     void OnSorted( wxDataViewEvent &event );
 
@@ -119,6 +120,8 @@ public:     // event handlers
     void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
+    void OnHideAttributes( wxCommandEvent &event);
+    void OnShowAttributes( wxCommandEvent &event);
 
     void OnBeginDrag( wxDataViewEvent &event );
     void OnDropPossible( wxDataViewEvent &event );
@@ -139,6 +142,7 @@ private:
     // other data:
 
     wxDataViewColumn* m_col;
+    wxDataViewColumn* m_attributes;
 
     wxTextCtrl* m_log;
     wxLog *m_logOld;
@@ -264,6 +268,7 @@ enum
     // control IDs
 
     ID_MUSIC_CTRL       = 50,
+    ID_ATTR_CTRL        = 51,
 
     ID_ADD_MOZART       = 100,
     ID_DELETE_MUSIC     = 101,
@@ -276,6 +281,9 @@ enum
     ID_DELETE_LIST      = 201,
     ID_GOTO             = 202,
     ID_ADD_MANY         = 203,
+    ID_HIDE_ATTRIBUTES  = 204,
+    ID_SHOW_ATTRIBUTES  = 205,
+    
     // Fourth page.
     ID_DELETE_TREE_ITEM = 400,
     ID_DELETE_ALL_TREE_ITEMS = 401,
@@ -305,6 +313,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
     EVT_BUTTON( ID_ADD_MANY, MyFrame::OnAddMany)
+    EVT_BUTTON( ID_HIDE_ATTRIBUTES, MyFrame::OnHideAttributes)
+    EVT_BUTTON( ID_SHOW_ATTRIBUTES, MyFrame::OnShowAttributes)
     // Fourth page.
     EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
     EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )
@@ -335,6 +345,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
+    
+    EVT_DATAVIEW_COLUMN_HEADER_CLICK(ID_ATTR_CTRL, MyFrame::OnAttrHeaderClick)
+    
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int h):
@@ -415,10 +428,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     BuildDataViewCtrl(secondPanel, 1);    // sets m_ctrl[1]
 
     wxBoxSizer *button_sizer2 = new wxBoxSizer( wxHORIZONTAL );
-    button_sizer2->Add( new wxButton( secondPanel, ID_PREPEND_LIST,"Prepend"),         0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_DELETE_LIST, "Delete selected"), 0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_GOTO,        "Goto 50"),         0, wxALL, 10 );
-    button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),        0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_PREPEND_LIST,"Prepend"),                0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_DELETE_LIST, "Delete selected"),        0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_GOTO,        "Goto 50"),                0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),               0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), 0, wxALL, 10 );
+    button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), 0, wxALL, 10 );
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
     secondPanelSz->Add(m_ctrl[1], 1, wxGROW|wxALL, 5);
@@ -569,7 +584,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
     case 1:
         {
             wxASSERT(!m_ctrl[1] && !m_list_model);
-            m_ctrl[1] = new wxDataViewCtrl( parent, wxID_ANY, wxDefaultPosition,
+            m_ctrl[1] = new wxDataViewCtrl( parent, ID_ATTR_CTRL, wxDefaultPosition,
                                             wxDefaultSize, style );
 
             m_list_model = new MyListModel;
@@ -582,11 +597,15 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[1]->AppendIconTextColumn("icon",
                                             MyListModel::Col_IconText,
                                             wxDATAVIEW_CELL_EDITABLE);
-            m_ctrl[1]->AppendColumn(
+                                            
+            m_attributes = 
                 new wxDataViewColumn("attributes",
                                      new wxDataViewTextRenderer,
-                                     MyListModel::Col_TextWithAttr)
-            );
+                                     MyListModel::Col_TextWithAttr,
+                                     80,
+                                     wxALIGN_RIGHT,
+                                     wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
+            m_ctrl[1]->AppendColumn( m_attributes );
 
             m_ctrl[1]->AppendColumn(
                 new wxDataViewColumn("custom renderer",
@@ -877,8 +896,9 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
     if (!m_log)
         return;
 
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %d;  Column: %d",
-                  event.GetItem().GetID(), event.GetColumn() );
+    wxString title = m_music_model->GetTitle( event.GetItem() );
+    wxLogMessage( "wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, Item Id: %s;  Column: %d",
+                  title, event.GetColumn() );
 }
 
 void MyFrame::OnActivated( wxDataViewEvent &event )
@@ -995,6 +1015,21 @@ void MyFrame::OnContextMenu( wxDataViewEvent &event )
     m_ctrl[0]->PopupMenu(&menu);
 }
 
+void MyFrame::OnAttrHeaderClick( wxDataViewEvent &event )
+{
+    // we need to skip the event to let the default behaviour of sorting by
+    // this column when it is clicked to take place
+    event.Skip();
+
+    if (!m_log)
+        return;
+
+    int pos = m_ctrl[1]->GetColumnPosition( event.GetDataViewColumn() );
+
+    wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d", pos );
+    wxLogMessage( "Column title: %s  Column width: %d", event.GetDataViewColumn()->GetTitle(), event.GetDataViewColumn()->GetWidth() );
+}
+
 void MyFrame::OnHeaderClick( wxDataViewEvent &event )
 {
     // we need to skip the event to let the default behaviour of sorting by
@@ -1066,6 +1101,16 @@ void MyFrame::OnGoto(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAddMany(wxCommandEvent& WXUNUSED(event))
 {
     m_list_model->AddMany();
+}
+
+void MyFrame::OnHideAttributes(wxCommandEvent& WXUNUSED(event))
+{
+    m_attributes->SetHidden(true);
+}
+
+void MyFrame::OnShowAttributes(wxCommandEvent& WXUNUSED(event))
+{
+    m_attributes->SetHidden(false);
 }
 
 // ----------------------------------------------------------------------------

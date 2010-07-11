@@ -358,8 +358,7 @@ bool wxGenericDragImage::EndDrag()
 #else
         m_windowDC->DestroyClippingRegion();
 #endif
-        delete m_windowDC;
-        m_windowDC = NULL;
+        wxDELETE(m_windowDC);
     }
 
 #ifndef wxHAS_NATIVE_OVERLAY
