@@ -31,6 +31,7 @@
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/button.h"
+    #include "wx/bmpbuttn.h"
     #include "wx/pen.h"
     #include "wx/brush.h"
     #include "wx/cursor.h"
