@@ -2291,7 +2291,9 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         if ( (constr->width.GetRelationship() != wxAsIs ) ||
              (constr->height.GetRelationship() != wxAsIs) )
         {
-            SetSize(x, y, w, h);
+            // We really shouldn't set negative sizes for the windows so make
+            // them at least of 1*1 size
+            SetSize(x, y, w > 0 ? w : 1, h > 0 ? h : 1);
         }
         else
         {
