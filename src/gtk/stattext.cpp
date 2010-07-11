@@ -72,12 +72,6 @@ bool wxStaticText::Create(wxWindow *parent,
 
     gtk_label_set_justify(GTK_LABEL(m_widget), justify);
 
-    // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
-    static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
-    gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
-
-    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
-
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
@@ -93,6 +87,12 @@ bool wxStaticText::Create(wxWindow *parent,
         gtk_label_set_ellipsize( GTK_LABEL(m_widget), ellipsizeMode );
     }
 #endif // __WXGTK26__
+
+    // GTK_JUSTIFY_LEFT is 0, RIGHT 1 and CENTER 2
+    static const float labelAlignments[] = { 0.0, 1.0, 0.5 };
+    gtk_misc_set_alignment(GTK_MISC(m_widget), labelAlignments[justify], 0.0);
+
+    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
     SetLabel(label);
 
