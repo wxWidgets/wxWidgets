@@ -255,10 +255,12 @@ public:
         { if ( sz.x < x ) x = sz.x; if ( sz.y < y ) y = sz.y; }
 
     void IncBy(int dx, int dy) { x += dx; y += dy; }
+    void IncBy(const wxPoint& pt);
     void IncBy(const wxSize& sz) { IncBy(sz.x, sz.y); }
     void IncBy(int d) { IncBy(d, d); }
 
     void DecBy(int dx, int dy) { IncBy(-dx, -dy); }
+    void DecBy(const wxPoint& pt);
     void DecBy(const wxSize& sz) { DecBy(sz.x, sz.y); }
     void DecBy(int d) { DecBy(d, d); }
 
@@ -396,7 +398,7 @@ public:
     wxRealPoint() : x(0.0), y(0.0) { }
     wxRealPoint(double xx, double yy) : x(xx), y(yy) { }
     wxRealPoint(const wxPoint& pt);
-    
+
     // no copy ctor or assignment operator - the defaults are ok
 
     //assignment operators
@@ -826,6 +828,11 @@ inline bool wxRect::Inside(const wxPoint& pt) const { return Contains(pt); }
 inline bool wxRect::Inside(const wxRect& rect) const { return Contains(rect); }
 #endif // WXWIN_COMPATIBILITY_2_6
 
+
+// define functions which couldn't be defined above because of declarations
+// order
+inline void wxSize::IncBy(const wxPoint& pt) { IncBy(pt.x, pt.y); }
+inline void wxSize::DecBy(const wxPoint& pt) { DecBy(pt.x, pt.y); }
 
 // ---------------------------------------------------------------------------
 // Management of pens, brushes and fonts

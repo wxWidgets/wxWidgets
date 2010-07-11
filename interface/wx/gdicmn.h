@@ -113,10 +113,10 @@ enum wxStockCursor
 
     A wxRealPoint is a useful data structure for graphics operations.
 
-    It contains floating point @e x and @e y members. 
+    It contains floating point @e x and @e y members.
     See wxPoint for an integer version.
 
-    Note that the coordinates stored inside a wxRealPoint object may be negative 
+    Note that the coordinates stored inside a wxRealPoint object may be negative
     and that wxRealPoint functions do not perform any check against negative values.
 
     @library{wxcore}
@@ -136,7 +136,7 @@ public:
         Initializes the point with the given coordinates.
     */
     wxRealPoint(double x, double y);
-    
+
     /**
         Converts the given wxPoint (with integer coordinates) to a wxRealPoint.
     */
@@ -144,7 +144,7 @@ public:
 
     /**
         @name Miscellaneous operators
-        
+
         Note that these operators are documented as class members
         (to make them easier to find) but, as their prototype shows,
         they are implemented as global operators; note that this is
@@ -171,14 +171,14 @@ public:
 
     wxRealPoint& operator +=(const wxSize& sz);
     wxRealPoint& operator -=(const wxSize& sz);
-    
+
     wxSize operator /(const wxRealPoint& sz, int factor);
     wxSize operator *(const wxRealPoint& sz, int factor);
     wxSize operator *(int factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator *=(int factor);
     //@}
-    
+
     /**
         X coordinate of this point.
     */
@@ -197,8 +197,8 @@ public:
 
     A class for manipulating rectangles.
 
-    Note that the x, y coordinates and the width and height stored inside a wxRect 
-    object may be negative and that wxRect functions do not perform any check against 
+    Note that the x, y coordinates and the width and height stored inside a wxRect
+    object may be negative and that wxRect functions do not perform any check against
     negative values.
 
     @library{wxcore}
@@ -511,7 +511,7 @@ public:
 
     A wxPoint is a useful data structure for graphics operations.
 
-    It contains integer @e x and @e y members. 
+    It contains integer @e x and @e y members.
     See wxRealPoint for a floating point version.
 
     Note that the width and height stored inside a wxPoint object may be negative
@@ -534,12 +534,12 @@ public:
         Initializes the internal x and y coordinates to zero.
     */
     wxPoint();
-    
+
     /**
         Initializes the point object with the given @a x and @a y coordinates.
     */
     wxPoint(int x, int y);
-    
+
     /**
         Converts the given wxRealPoint (with floating point coordinates) to a
         wxPoint instance.
@@ -548,7 +548,7 @@ public:
 
     /**
         @name Miscellaneous operators
-        
+
         Note that these operators are documented as class members
         (to make them easier to find) but, as their prototype shows,
         they are implemented as global operators; note that this is
@@ -575,14 +575,14 @@ public:
 
     wxPoint& operator +=(const wxSize& sz);
     wxPoint& operator -=(const wxSize& sz);
-    
+
     wxSize operator /(const wxPoint& sz, int factor);
     wxSize operator *(const wxPoint& sz, int factor);
     wxSize operator *(int factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator *=(int factor);
     //@}
-    
+
     /**
         x member.
     */
@@ -727,9 +727,9 @@ public:
 /**
     @class wxSize
 
-    A wxSize is a useful data structure for graphics operations. 
+    A wxSize is a useful data structure for graphics operations.
     It simply contains integer @e width and @e height members.
-    
+
     Note that the width and height stored inside a wxSize object may be negative
     and that wxSize functions do not perform any check against negative values
     (this is used to e.g. store the special -1 value in ::wxDefaultSize instance).
@@ -760,7 +760,7 @@ public:
         Initializes this size object with zero width and height.
     */
     wxSize();
-    
+
     /**
         Initializes this size object with the given @a width and @a height.
     */
@@ -772,6 +772,7 @@ public:
 
         @see IncBy()
     */
+    void DecBy(const wxPoint& pt);
     void DecBy(const wxSize& size);
     void DecBy(int dx, int dy);
     void DecBy(int d);
@@ -801,6 +802,7 @@ public:
 
         @see DecBy()
     */
+    void IncBy(const wxPoint& pt);
     void IncBy(const wxSize& size);
     void IncBy(int dx, int dy);
     void IncBy(int d);
@@ -864,10 +866,10 @@ public:
     */
     void SetWidth(int width);
 
-    
+
     /**
         @name Miscellaneous operators
-        
+
         Note that these operators are documented as class members
         (to make them easier to find) but, as their prototype shows,
         they are implemented as global operators; note that this is
