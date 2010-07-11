@@ -156,6 +156,8 @@ int SearchAdjacentRect(const FloatRectMapArray& array, int point)
     int start = 0;
     int ret = 0;
 
+    assert(end >= 0);
+
     while (true)
     {
         if (start > end)
@@ -186,8 +188,7 @@ int GetWidthFromFloatRect(const FloatRectMapArray& array, int index, int startY,
     int ret = 0;
     int len = array.GetCount();
 
-    if (len == 0)
-        return 0;
+    assert(index >= 0 && index < len);
 
     if (array[index]->startY < startY)
     {
@@ -213,10 +214,19 @@ int GetWidthFromFloatRect(const FloatRectMapArray& array, int index, int startY,
 
 wxRect wxFloatCollector::GetAvailableRect(int startY, int endY)
 {
-    int i = SearchAdjacentRect(m_left, startY);
-    int j = SearchAdjacentRect(m_right, startY);
-    int widthLeft = GetWidthFromFloatRect(m_left, i, startY, endY);
-    int widthRight = GetWidthFromFloatRect(m_right, j, startY, endY);
+    int widthLeft = 0, widthRight = 0;
+    if (m_left.GetCount() != 0)
+    {
+        int i = SearchAdjacentRect(m_left, startY);
+        if (i >= 0)
+            widthLeft = GetWidthFromFloatRect(m_left, i, startY, endY);
+    }
+    if (m_right.GetCount() != 0)
+    {
+        int j = SearchAdjacentRect(m_right, startY);
+        if (j >= 0)
+            widthRight = GetWidthFromFloatRect(m_right, j, startY, endY);
+    }
 
     return wxRect(widthLeft, 0, m_width - widthLeft - widthRight, 0);
 }
