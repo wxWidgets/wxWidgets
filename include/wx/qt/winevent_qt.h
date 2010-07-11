@@ -60,7 +60,7 @@ protected:
     //wxKeyEvent
     virtual void keyPressEvent ( QKeyEvent * event )
     {
-        if ( !GetEventReceiver()->HandleQtKeyEvent(this, event) )
+        if ( !GetEventReceiver()->QtHandleKeyEvent(this, event) )
             QtWidget::keyPressEvent(event);
         else
             event->accept();
@@ -69,7 +69,7 @@ protected:
     //wxKeyEvent
     virtual void keyReleaseEvent ( QKeyEvent * event )
     {
-        if ( !GetEventReceiver()->HandleQtKeyEvent(this, event) )
+        if ( !GetEventReceiver()->QtHandleKeyEvent(this, event) )
             QtWidget::keyReleaseEvent(event);
         else
             event->accept();
@@ -96,7 +96,7 @@ protected:
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
     {
-        if ( !GetEventReceiver()->HandleQtPaintEvent(this, event) )
+        if ( !GetEventReceiver()->QtHandlePaintEvent(this, event) )
             QtWidget::paintEvent(event);
         else
             event->accept();
@@ -105,7 +105,7 @@ protected:
     //wxSizeEvent
     virtual void resizeEvent ( QResizeEvent * event )
     {
-        if ( !GetEventReceiver()->HandleQtResizeEvent(this, event) )
+        if ( !GetEventReceiver()->QtHandleResizeEvent(this, event) )
             QtWidget::resizeEvent(event);
         else
             event->accept();
@@ -117,7 +117,7 @@ protected:
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
     {
-        if ( !GetEventReceiver()->HandleQtWheelEvent(this, event) )
+        if ( !GetEventReceiver()->QtHandleWheelEvent(this, event) )
             QtWidget::wheelEvent(event);
         else
             event->accept();

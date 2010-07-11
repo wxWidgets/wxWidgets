@@ -34,7 +34,7 @@ public:
                           const wxRect *rect = (const wxRect *) NULL );
 
     virtual QStatusBar *GetHandle() const;
-    virtual WXWidget GetScrollBarsContainer() const;
+    virtual WXWidget QtGetScrollBarsContainer() const;
 protected:
     virtual void DoUpdateStatusText(int number);
 

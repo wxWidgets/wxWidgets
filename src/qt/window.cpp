@@ -61,7 +61,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
         
         QWidget *qtParent = NULL;
         if ( parent != NULL ) {
-            qtParent = parent->GetContainer();
+            qtParent = parent->QtGetContainer();
             parent->AddChild(this);
         }
         
@@ -70,11 +70,11 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     }
 
     // Create layout for built-in scrolling bars
-    if ( GetScrollBarsContainer() )
+    if ( QtGetScrollBarsContainer() )
     {
         QGridLayout *scrollLayout = new QGridLayout();
         scrollLayout->setContentsMargins( 0, 0, 0, 0 );
-        GetScrollBarsContainer()->setLayout( scrollLayout );
+        QtGetScrollBarsContainer()->setLayout( scrollLayout );
 
         // Container at top-left
         // Scrollbars are lazily initialized
@@ -165,30 +165,30 @@ int wxWindow::GetCharWidth() const
 
 /* Returns a scrollbar for the given orientation, or NULL if the scrollbar
  * has not been previously created and create is false */
-QScrollBar *wxWindow::GetScrollBar( int orient, bool create ) const
+QScrollBar *wxWindow::QtGetScrollBar( int orientation, bool create ) const
 {
-    wxCHECK_MSG( GetScrollBarsContainer(), NULL, "This window can't have scrollbars" );
+    wxCHECK_MSG( QtGetScrollBarsContainer(), NULL, "This window can't have scrollbars" );
     
     QLayoutItem *qtLayoutItem = NULL;
     QScrollBar *qtScrollBar = NULL;
     
-    QGridLayout *scrollLayout = qobject_cast< QGridLayout* >( GetScrollBarsContainer()->layout() );
+    QGridLayout *scrollLayout = qobject_cast< QGridLayout* >( QtGetScrollBarsContainer()->layout() );
     wxCHECK_MSG( scrollLayout, NULL, "Window without scrolling layout" );
     
-    if ( orient == wxHORIZONTAL )
+    if ( orientation == wxHORIZONTAL )
         qtLayoutItem = scrollLayout->itemAtPosition( HORZ_SCROLLBAR_POSITION );
     else
         qtLayoutItem = scrollLayout->itemAtPosition( VERT_SCROLLBAR_POSITION );
     
-    if ( !qtLayoutItem )
+    if ( qtLayoutItem == NULL )
     {
         // No item at that position, create scrollbar
-        if (create )
+        if ( create )
         {
-            qtScrollBar = new wxQtScrollBarEventForwarder( (wxWindow*)this,
-                orient == wxHORIZONTAL ? Qt::Horizontal : Qt:: Vertical );
+            qtScrollBar = new wxQtScrollBarEventForwarder( const_cast< wxWindow * >( this ),
+                orientation == wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
 
-            if ( orient == wxHORIZONTAL )
+            if ( orientation == wxHORIZONTAL )
                 scrollLayout->addWidget( qtScrollBar, HORZ_SCROLLBAR_POSITION );
             else
                 scrollLayout->addWidget( qtScrollBar, VERT_SCROLLBAR_POSITION );
@@ -204,10 +204,10 @@ QScrollBar *wxWindow::GetScrollBar( int orient, bool create ) const
     return qtScrollBar;
 }
 
-void wxWindow::SetScrollbar( int orient, int pos, int thumbvisible, int range, bool refresh )
+void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool WXUNUSED( refresh ))
 {
     //If range is zero, don't create the scrollbar
-    QScrollBar *qtScrollBar = GetScrollBar( orient, range != 0 );
+    QScrollBar *qtScrollBar = QtGetScrollBar( orientation, range != 0 );
     
     // Configure the scrollbar
     if (range != 0 )
@@ -226,33 +226,33 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbvisible, int range, b
     }
 }
 
-void wxWindow::SetScrollPos( int orient, int pos, bool refresh )
+void wxWindow::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
 {
-    QScrollBar *qtScrollBar = GetScrollBar( orient );
+    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
     wxCHECK_RET( qtScrollBar, "Invalid scrollbar" );
 
     qtScrollBar->setValue( pos );
 }
 
-int wxWindow::GetScrollPos( int orient ) const
+int wxWindow::GetScrollPos( int orientation ) const
 {
-    QScrollBar *qtScrollBar = GetScrollBar( orient );
+    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
     
     return qtScrollBar->value();
 }
 
-int wxWindow::GetScrollThumb( int orient ) const
+int wxWindow::GetScrollThumb( int orientation ) const
 {
-    QScrollBar *qtScrollBar = GetScrollBar( orient );
+    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
     
     return qtScrollBar->pageStep();
 }
 
-int wxWindow::GetScrollRange( int orient ) const
+int wxWindow::GetScrollRange( int orientation ) const
 {
-    QScrollBar *qtScrollBar = GetScrollBar( orient );
+    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
     
     return qtScrollBar->maximum();
@@ -332,7 +332,7 @@ void wxWindow::DoGetSize(int *width, int *height) const
     
 void wxWindow::DoGetClientSize(int *width, int *height) const
 {
-    QSize size = GetContainer()->size();
+    QSize size = QtGetContainer()->size();
     *width = size.width();
     *height = size.height();
 }
@@ -389,7 +389,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 }
 #endif // wxUSE_MENUS
 
-bool wxWindow::HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event )
+bool wxWindow::QtHandlePaintEvent ( QWidget *receiver, QPaintEvent * WXUNUSED( event ))
 {
     /* If this window has scrollbars, only let wx handle the event if it is
      * for the client area (the scrolled part). Events for the whole window
@@ -411,14 +411,14 @@ bool wxWindow::HandleQtPaintEvent ( QWidget *receiver, QPaintEvent *event )
     }
 }
 
-bool wxWindow::HandleQtResizeEvent ( QWidget *receiver, QResizeEvent *event )
+bool wxWindow::QtHandleResizeEvent ( QWidget *WXUNUSED( receiver ), QResizeEvent *event )
 {
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
 
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::HandleQtWheelEvent ( QWidget *receiver, QWheelEvent *event )
+bool wxWindow::QtHandleWheelEvent ( QWidget *WXUNUSED( receiver ), QWheelEvent *event )
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? 0 : 1;
@@ -431,7 +431,7 @@ bool wxWindow::HandleQtWheelEvent ( QWidget *receiver, QWheelEvent *event )
 
 /* Auxiliar function for key events. Returns the wx keycode for a qt one.
  * The event is needed to check it flags (numpad key or not) */
-wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
+static wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
 {
     /* First treat common ranges and then handle specific values
      * The macro takes Qt first and last codes and the first wx code
@@ -454,17 +454,28 @@ wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
 
         switch (key)
         {
-            case Qt::Key_Space: return WXK_NUMPAD_SPACE;
-            case Qt::Key_Tab: return WXK_NUMPAD_TAB;
-            case Qt::Key_Enter: return WXK_NUMPAD_ENTER;
-            case Qt::Key_Home: return WXK_NUMPAD_HOME;
-            case Qt::Key_PageUp: return WXK_NUMPAD_PAGEUP;
-            case Qt::Key_PageDown: return WXK_NUMPAD_PAGEDOWN;
-            case Qt::Key_End: return WXK_NUMPAD_END;
-            case Qt::Key_Insert: return WXK_NUMPAD_INSERT;
-            case Qt::Key_Delete: return WXK_NUMPAD_DELETE;
-            case Qt::Key_Clear: return WXK_NUMPAD_BEGIN;
-            case Qt::Key_Equal: return WXK_NUMPAD_EQUAL;
+            case Qt::Key_Space:
+                return WXK_NUMPAD_SPACE;
+            case Qt::Key_Tab:
+                return WXK_NUMPAD_TAB;
+            case Qt::Key_Enter:
+                return WXK_NUMPAD_ENTER;
+            case Qt::Key_Home:
+                return WXK_NUMPAD_HOME;
+            case Qt::Key_PageUp:
+                return WXK_NUMPAD_PAGEUP;
+            case Qt::Key_PageDown:
+                return WXK_NUMPAD_PAGEDOWN;
+            case Qt::Key_End:
+                return WXK_NUMPAD_END;
+            case Qt::Key_Insert:
+                return WXK_NUMPAD_INSERT;
+            case Qt::Key_Delete:
+                return WXK_NUMPAD_DELETE;
+            case Qt::Key_Clear:
+                return WXK_NUMPAD_BEGIN;
+            case Qt::Key_Equal:
+                return WXK_NUMPAD_EQUAL;
         }
 
         // All other possible numpads button have no equivalent in wx
@@ -489,30 +500,54 @@ wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
     // All other cases
     switch ( key )
     {
-        case Qt::Key_Backspace: return WXK_BACK;
-        case Qt::Key_Tab: return WXK_TAB;
-        case Qt::Key_Return: return WXK_RETURN;
-        case Qt::Key_Escape: return WXK_ESCAPE;
-        case Qt::Key_Cancel: return WXK_CANCEL;
-        case Qt::Key_Clear: return WXK_CLEAR;
-        case Qt::Key_Shift: return WXK_SHIFT;
-        case Qt::Key_Alt: return WXK_ALT;
-        case Qt::Key_Control: return WXK_CONTROL;
-        case Qt::Key_Menu: return WXK_MENU;
-        case Qt::Key_Pause: return WXK_PAUSE;
-        case Qt::Key_CapsLock: return WXK_CAPITAL;
-        case Qt::Key_End: return WXK_END;
-        case Qt::Key_Home: return WXK_HOME;
-        case Qt::Key_Select: return WXK_SELECT;
-        case Qt::Key_SysReq: return WXK_PRINT;
-        case Qt::Key_Execute: return WXK_EXECUTE;
-        case Qt::Key_Insert: return WXK_INSERT;
-        case Qt::Key_Help: return WXK_HELP;
-        case Qt::Key_NumLock: return WXK_NUMLOCK;
-        case Qt::Key_ScrollLock: return WXK_SCROLL;
-        case Qt::Key_PageUp: return WXK_PAGEUP;
-        case Qt::Key_PageDown: return WXK_PAGEDOWN;
-        case Qt::Key_Meta: return WXK_WINDOWS_LEFT;
+        case Qt::Key_Backspace:
+            return WXK_BACK;
+        case Qt::Key_Tab:
+            return WXK_TAB;
+        case Qt::Key_Return:
+            return WXK_RETURN;
+        case Qt::Key_Escape:
+            return WXK_ESCAPE;
+        case Qt::Key_Cancel:
+            return WXK_CANCEL;
+        case Qt::Key_Clear:
+            return WXK_CLEAR;
+        case Qt::Key_Shift:
+            return WXK_SHIFT;
+        case Qt::Key_Alt:
+            return WXK_ALT;
+        case Qt::Key_Control:
+            return WXK_CONTROL;
+        case Qt::Key_Menu:
+            return WXK_MENU;
+        case Qt::Key_Pause:
+            return WXK_PAUSE;
+        case Qt::Key_CapsLock:
+            return WXK_CAPITAL;
+        case Qt::Key_End:
+            return WXK_END;
+        case Qt::Key_Home:
+            return WXK_HOME;
+        case Qt::Key_Select:
+            return WXK_SELECT;
+        case Qt::Key_SysReq:
+            return WXK_PRINT;
+        case Qt::Key_Execute:
+            return WXK_EXECUTE;
+        case Qt::Key_Insert:
+            return WXK_INSERT;
+        case Qt::Key_Help:
+            return WXK_HELP;
+        case Qt::Key_NumLock:
+            return WXK_NUMLOCK;
+        case Qt::Key_ScrollLock:
+            return WXK_SCROLL;
+        case Qt::Key_PageUp:
+            return WXK_PAGEUP;
+        case Qt::Key_PageDown:
+            return WXK_PAGEDOWN;
+        case Qt::Key_Meta:
+            return WXK_WINDOWS_LEFT;
     }
 
     // Missing wx-codes: WXK_START, WXK_LBUTTON, WXK_RBUTTON, WXK_MBUTTON
@@ -524,7 +559,7 @@ wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
     #undef WXQT_KEY_GROUP
 }
 
-bool wxWindow::HandleQtKeyEvent ( QWidget *receiver, QKeyEvent *event )
+bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *event )
 {
     bool handled = false;
 
@@ -573,7 +608,7 @@ QWidget *wxWindow::GetHandle() const
     return m_qtWindow;
 }
 
-QWidget *wxWindow::GetContainer() const
+QWidget *wxWindow::QtGetContainer() const
 {
     if ( m_qtContainer )
         return m_qtContainer;
@@ -581,7 +616,7 @@ QWidget *wxWindow::GetContainer() const
         return GetHandle();
 }
 
-QWidget *wxWindow::GetScrollBarsContainer() const
+QWidget *wxWindow::QtGetScrollBarsContainer() const
 {
     return m_qtWindow;
 }

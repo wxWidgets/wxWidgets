@@ -31,7 +31,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     QWidget *qtParent = NULL;
     if ( parent != NULL ) {
-        qtParent = parent->GetContainer();
+        qtParent = parent->QtGetContainer();
         parent->AddChild(this);
     }
 
@@ -62,7 +62,7 @@ QMainWindow *wxFrame::GetHandle() const
     return m_qtFrame;
 }
 
-QWidget *wxFrame::GetScrollBarsContainer() const
+QWidget *wxFrame::QtGetScrollBarsContainer() const
 {
     return m_qtFrame->centralWidget();
 }

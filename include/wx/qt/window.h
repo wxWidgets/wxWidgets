@@ -19,18 +19,18 @@
  *
  * Remember to implement the Qt object getters on all subclasses:
  *  - GetHandle() returns the Qt object
- *  - GetScrollBarsContainer() returns the widget where scrollbars are placed
- *  - GetContainer() returns the widget where the children are placed. Usually
+ *  - QtGetScrollBarsContainer() returns the widget where scrollbars are placed
+ *  - QtGetContainer() returns the widget where the children are placed. Usually
  *    there is no need to reimplement this one.
  * For example, for wxFrame, GetHandle() is the QMainWindow,
- * GetScrollBarsContainer() is the central widget and GetContainer() is a widget
+ * QtGetScrollBarsContainer() is the central widget and QtGetContainer() is a widget
  * in a layout inside the central widget that also contains the scrollbars.
- * Return 0 from GetScrollBarsContainer() to disable SetScrollBar() and friends
+ * Return 0 from QtGetScrollBarsContainer() to disable SetScrollBar() and friends
  * for wxWindow subclasses.
  *
  *
  * Event handling is achieved by using the template class wxQtEventForwarder
- * found in winevent_qt.(h|cpp) to send all Qt events here to HandleOnQtxxx()
+ * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
  * methods. All these methods receive the Qt event and the receiver. This is
  * done because events of the containers (the scrolled part of the window) are
  * sent to the same wxWindow instance, that must be able to differenciate them
@@ -94,15 +94,17 @@ public:
                                const wxRect* rect = NULL );
     
     virtual WXWidget GetHandle() const;
-    virtual WXWidget GetContainer() const;
     
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
-    // Qt event handling
-    virtual bool HandleQtPaintEvent  ( QWidget *receiver, QPaintEvent *event );
-    virtual bool HandleQtResizeEvent ( QWidget *receiver, QResizeEvent *event );
-    virtual bool HandleQtWheelEvent  ( QWidget *receiver, QWheelEvent *event );
-    virtual bool HandleQtKeyEvent    ( QWidget *receiver, QKeyEvent *event );
+    // wxQt implementation internals:
+
+    virtual WXWidget QtGetContainer() const;
+
+    virtual bool QtHandlePaintEvent  ( QWidget *receiver, QPaintEvent *event );
+    virtual bool QtHandleResizeEvent ( QWidget *receiver, QResizeEvent *event );
+    virtual bool QtHandleWheelEvent  ( QWidget *receiver, QWheelEvent *event );
+    virtual bool QtHandleKeyEvent    ( QWidget *receiver, QKeyEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,
@@ -141,13 +143,13 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 #endif // wxUSE_MENUS
 
-    virtual WXWidget GetScrollBarsContainer() const;
+    virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
     QPointer< QWidget > m_qtWindow;
     QPointer< QWidget > m_qtContainer;
 
-    QScrollBar *GetScrollBar( int orient, bool create = false ) const;
+    QScrollBar *QtGetScrollBar( int orientation, bool create = false ) const;
     
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )

@@ -120,7 +120,7 @@ QStatusBar *wxStatusBar::GetHandle() const
     return m_qtStatusBar;
 }
 
-WXWidget wxStatusBar::GetScrollBarsContainer() const
+WXWidget wxStatusBar::QtGetScrollBarsContainer() const
 {
     return 0;
 }

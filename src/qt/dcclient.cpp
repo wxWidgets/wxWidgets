@@ -24,7 +24,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
     : wxQtDCImpl( owner )
 {
     // Paint to the container (the real part of the window)
-    m_ok = m_qtPainter.begin(win->GetContainer());
+    m_ok = m_qtPainter.begin(win->QtGetContainer());
     if (m_ok) PrepareQPainter();
 }
 

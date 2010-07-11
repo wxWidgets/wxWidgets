@@ -42,7 +42,7 @@ public:
     virtual void SetStatusBar(wxStatusBar *statusBar );
 
     virtual QMainWindow *GetHandle() const;
-    virtual WXWidget GetScrollBarsContainer() const;
+    virtual WXWidget QtGetScrollBarsContainer() const;
 
 private:
     QPointer< QMainWindow > m_qtFrame;
