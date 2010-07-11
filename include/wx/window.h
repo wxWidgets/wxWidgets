@@ -1679,8 +1679,9 @@ protected:
     // of the left and the right border in the x component of the returned size
     // and the sum of the heights of the top and bottom borders in the y one
     //
-    // NB: this is currently only implemented by wxMSW and wxUniv so far and
-    //     simply asserts in the other ports
+    // NB: this is currently only implemented properly for wxMSW, wxGTK and
+    //     wxUniv and doesn't behave correctly in the presence of scrollbars in
+    //     the other ports
     virtual wxSize DoGetBorderSize() const;
 
     // move the window to the specified location and resize it: this is called

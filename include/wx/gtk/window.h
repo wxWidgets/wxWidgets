@@ -314,6 +314,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+    virtual wxSize DoGetBorderSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoEnable(bool enable);
 
