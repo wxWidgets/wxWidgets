@@ -737,30 +737,19 @@ void wxListLineData::Draw( wxDC *dc )
     wxListItemAttr *attr = GetAttr();
 
     if ( SetAttributes(dc, attr, highlighted) )
-#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
-        dc->DrawRectangle( m_gi->m_rectHighlight );
-    }
-#else
-    {
+        int flags = 0;
         if (highlighted)
-        {
-            int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus()
+            flags |= wxCONTROL_SELECTED;
+        if (m_owner->HasFocus()
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__) && wxOSX_USE_CARBON
-                && IsControlActive( (ControlRef)m_owner->GetHandle() )
+            && IsControlActive( (ControlRef)m_owner->GetHandle() )
 #endif
-            )
-                flags |= wxCONTROL_FOCUSED;
-            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
-
-        }
-        else
-        {
-            dc->DrawRectangle( m_gi->m_rectHighlight );
-        }
+        )
+            flags |= wxCONTROL_FOCUSED;
+        wxRendererNative::Get().
+            DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
     }
-#endif
 
     // just for debugging to better see where the items are
 #if 0
@@ -801,29 +790,16 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
     if ( SetAttributes(dc, attr, highlighted) )
-#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
-        dc->DrawRectangle( rectHL );
-
-        wxUnusedVar(current);
-    }
-#else
-    {
+        int flags = 0;
         if (highlighted)
-        {
-            int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus())
-                flags |= wxCONTROL_FOCUSED;
-            if (current)
-               flags |= wxCONTROL_CURRENT;
-            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
-        }
-        else
-        {
-            dc->DrawRectangle( rectHL );
-        }
+            flags |= wxCONTROL_SELECTED;
+        if (m_owner->HasFocus())
+            flags |= wxCONTROL_FOCUSED;
+        if (current)
+           flags |= wxCONTROL_CURRENT;
+        wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
     }
-#endif
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
             yMid = rect.y + rect.height/2;
@@ -2138,20 +2114,15 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
-#if !defined( __WXMAC__) && !defined(__WXGTK20__)
-    // Don't draw rect outline under Mac at all.
-    // Draw it elsewhere under GTK.
     if ( HasCurrent() )
     {
-        if ( m_hasFocus )
-        {
-            wxRect rect( GetLineHighlightRect( m_current ) );
-            dc.SetPen( *wxBLACK_PEN );
-            dc.SetBrush( *wxTRANSPARENT_BRUSH );
-            dc.DrawRectangle( rect );
-        }
+        int flags = 0;
+        if ( IsHighlighted(m_current) )
+            flags |= wxCONTROL_SELECTED;
+
+        wxRendererNative::Get().
+            DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
-#endif
 }
 
 void wxListMainWindow::HighlightAll( bool on )
