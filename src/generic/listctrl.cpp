@@ -2753,21 +2753,11 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         parent->GetEventHandler()->ProcessEvent( le );
     }
 
-    if ( (event.GetKeyCode() != WXK_UP) &&
-         (event.GetKeyCode() != WXK_DOWN) &&
-         (event.GetKeyCode() != WXK_RIGHT) &&
-         (event.GetKeyCode() != WXK_LEFT) &&
-         (event.GetKeyCode() != WXK_PAGEUP) &&
-         (event.GetKeyCode() != WXK_PAGEDOWN) &&
-         (event.GetKeyCode() != WXK_END) &&
-         (event.GetKeyCode() != WXK_HOME) )
-    {
-        // propagate the char event upwards
-        wxKeyEvent ke(event);
-        ke.SetEventObject( parent );
-        if (parent->GetEventHandler()->ProcessEvent( ke ))
-            return;
-    }
+    // propagate the char event upwards
+    wxKeyEvent ke(event);
+    ke.SetEventObject( parent );
+    if (parent->GetEventHandler()->ProcessEvent( ke ))
+        return;
 
     if ( HandleAsNavigationKey(event) )
         return;
@@ -4358,6 +4348,11 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
     SetTargetWindow( m_mainWin );
+
+    // We use the cursor keys for moving the selection, not scrolling, so call
+    // this method to ensure wxScrollHelperEvtHandler doesn't catch all
+    // keyboard events forwarded to us from wxListMainWindow.
+    DisableKeyboardScrolling();
 
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( m_mainWin, 1, wxGROW );

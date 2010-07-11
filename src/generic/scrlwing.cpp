@@ -343,6 +343,8 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
     m_xScrollingEnabled =
     m_yScrollingEnabled = true;
 
+    m_kbdScrollingEnabled = true;
+
     m_scaleX =
     m_scaleY = 1.0;
 #if wxUSE_MOUSEWHEEL
@@ -844,6 +846,12 @@ void wxScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 // this they always have the priority
 void wxScrollHelperBase::HandleOnChar(wxKeyEvent& event)
 {
+    if ( !m_kbdScrollingEnabled )
+    {
+        event.Skip();
+        return;
+    }
+
     // prepare the event this key press maps to
     wxScrollWinEvent newEvent;
 
