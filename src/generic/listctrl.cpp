@@ -5078,12 +5078,63 @@ void wxGenericListCtrl::SetFocus()
         m_mainWin->SetFocus();
 }
 
-wxSize wxGenericListCtrl::DoGetBestSize() const
+wxSize wxGenericListCtrl::DoGetBestClientSize() const
 {
-    // Something is better than nothing...
-    // 100x80 is what the MSW version will get from the default
-    // wxControl::DoGetBestSize
-    return wxSize(100, 80);
+    // Something is better than nothing even if this is completely arbitrary.
+    wxSize sizeBest(100, 80);
+
+    if ( !InReportView() )
+    {
+        // Ensure that our minimal width is at least big enough to show all our
+        // items. This is important for wxListbook to size itself correctly.
+
+        // Remember the offset of the first item: this corresponds to the
+        // margins around the item so we will add it to the minimal size below
+        // to ensure that we have equal margins on all sides.
+        wxPoint ofs;
+
+        // We can iterate over all items as there shouldn't be too many of them
+        // in non-report view. If it ever becomes a problem, we could examine
+        // just the first few items probably, the determination of the best
+        // size is less important if we will need scrollbars anyhow.
+        for ( int n = 0; n < GetItemCount(); n++ )
+        {
+            const wxRect itemRect = m_mainWin->GetLineRect(n);
+            if ( !n )
+            {
+                // Remember the position of the first item as all the rest are
+                // offset by at least this number of pixels too.
+                ofs = itemRect.GetPosition();
+            }
+
+            sizeBest.IncTo(itemRect.GetSize());
+        }
+
+        sizeBest.IncBy(2*ofs);
+
+
+        // If we have the scrollbars we need to account for them too. And to
+        // make sure the scrollbars status is up to date we need to call this
+        // function to set them.
+        m_mainWin->RecalculatePositions(true /* no refresh */);
+
+        // Unfortunately we can't use wxWindow::HasScrollbar() here as we need
+        // to use m_mainWin client/virtual size for determination of whether we
+        // use scrollbars and not the size of this window itself. Maybe that
+        // function should be extended to work correctly in the case when our
+        // scrollbars manage a different window from this one but currently it
+        // doesn't work.
+        const wxSize sizeClient = m_mainWin->GetClientSize();
+        const wxSize sizeVirt = m_mainWin->GetVirtualSize();
+
+        if ( sizeVirt.x > sizeClient.x /* HasScrollbar(wxHORIZONTAL) */ )
+            sizeBest.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+
+        if ( sizeVirt.y > sizeClient.y /* HasScrollbar(wxVERTICAL) */ )
+            sizeBest.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+    }
+
+    return sizeBest;
 }
 
 // ----------------------------------------------------------------------------

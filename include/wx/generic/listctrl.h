@@ -221,7 +221,7 @@ protected:
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
 
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;
