@@ -205,6 +205,11 @@ bool wxSearchCtrl::HandleSearchFieldSearchHit()
 {
     wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, m_windowId );
     event.SetEventObject(this);
+
+    // provide the string to search for directly in the event, this is more
+    // convenient than retrieving it from the control in event handler code
+    event.SetString(GetValue());
+
     return ProcessCommand(event);
 }
 
