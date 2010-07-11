@@ -3812,9 +3812,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         }
     }
 
-    /*
-     * To comment this, I don't know what this means.
-     *
     // Add the last line - it's the current pos -> last para pos
     // Substract -1 because the last position is always the end-paragraph position.
     if (lastCompletedEndPos <= GetRange().GetEnd()-1)
@@ -3848,7 +3845,6 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         currentPosition.y += lineSpacing;
         lineCount ++;
     }
-    */
 
     // Remove remaining unused line objects, if any
     ClearUnusedLines(lineCount);
