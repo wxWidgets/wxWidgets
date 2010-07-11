@@ -4419,6 +4419,11 @@ void wxGenericListCtrl::SetSingleStyle( long style, bool add )
 
 void wxGenericListCtrl::SetWindowStyleFlag( long flag )
 {
+    // we add wxHSCROLL and wxVSCROLL in ctor unconditionally and it never
+    // makes sense to remove them as we'll always add scrollbars anyhow when
+    // needed
+    flag |= wxHSCROLL | wxVSCROLL;
+
     const bool wasInReportView = HasFlag(wxLC_REPORT);
 
     // update the window style first so that the header is created or destroyed
