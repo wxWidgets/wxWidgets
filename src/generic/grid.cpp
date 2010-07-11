@@ -7865,24 +7865,29 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     HideCellEditControl();
     SaveEditControlValue();
 
-    // initialize both of them just to avoid compiler warnings
-    int row = -1,
+    // initialize both of them just to avoid compiler warnings even if only
+    // really needs to be initialized here
+    int row,
+        col;
+    if ( column )
+    {
+        row = -1;
+        col = colOrRow;
+    }
+    else
+    {
+        row = colOrRow;
         col = -1;
+    }
 
     wxCoord extent, extentMax = 0;
     int max = column ? m_numRows : m_numCols;
     for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
     {
         if ( column )
-        {
             row = rowOrCol;
-            col = colOrRow;
-        }
         else
-        {
-            row = colOrRow;
             col = rowOrCol;
-        }
 
         // we need to account for the cells spanning multiple columns/rows:
         // while they may need a lot of space, they don't need all of it in
