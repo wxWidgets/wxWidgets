@@ -644,6 +644,15 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
 */
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
+/**
+    wxArrayStringProperty's string delimiter character. If this is aquotation
+    mark or hyphen, then strings will be quoted instead (with given
+    character).
+
+    Default delimiter is quotation mark.
+*/
+#define wxPG_ARRAY_DELIMITER                wxS("Delimiter")
+
 /** Sets displayed date format for wxDateProperty.
 */
 #define wxPG_DATE_FORMAT                    wxS("DateFormat")

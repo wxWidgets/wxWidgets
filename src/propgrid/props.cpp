@@ -2397,8 +2397,28 @@ void wxArrayStringProperty::OnSetValue()
     GenerateValueAsString();
 }
 
-#define ARRSTRPROP_ARRAY_TO_STRING(STRING,ARRAY) \
-    wxPropertyGrid::ArrayStringToString(STRING,ARRAY,wxS('"'),wxS('"'),1)
+void
+wxArrayStringProperty::ConvertArrayToString(const wxArrayString& arr,
+                                            wxString* pString,
+                                            const wxUniChar& delimiter) const
+{
+    if ( delimiter == '"' || delimiter == '\'' )
+    {
+        // Quoted strings
+        ArrayStringToString(*pString,
+                            arr,
+                            delimiter,
+                            Escape | QuoteStrings);
+    }
+    else
+    {
+        // Regular delimiter
+        ArrayStringToString(*pString,
+                            arr,
+                            delimiter,
+                            0);
+    }
+}
 
 wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
                                                int argFlags ) const
@@ -2412,48 +2432,46 @@ wxString wxArrayStringProperty::ValueToString( wxVariant& WXUNUSED(value),
 
     wxArrayString arr = m_value.GetArrayString();
     wxString s;
-    ARRSTRPROP_ARRAY_TO_STRING(s, arr);
+    ConvertArrayToString(arr, &s, m_delimiter);
     return s;
 }
 
 // Converts wxArrayString to a string separated by delimeters and spaces.
 // preDelim is useful for "str1" "str2" style. Set flags to 1 to do slash
 // conversion.
-void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& src,
-                                          wxChar preDelim, wxChar postDelim,
-                                          int flags )
+void
+wxArrayStringProperty::ArrayStringToString( wxString& dst,
+                                            const wxArrayString& src,
+                                            wxUniChar delimiter, int flags )
 {
     wxString pdr;
+    wxString preas;
 
     unsigned int i;
     unsigned int itemCount = src.size();
 
-    wxChar preas[2] = { 0, 0 };
-
     dst.Empty();
 
-    if ( flags & 1 )
+    if ( flags & Escape )
     {
-        preas[0] = preDelim;
+        preas[0] = delimiter;
         pdr = wxS("\\");
-        pdr += preDelim;
+        pdr += delimiter;
     }
 
     if ( itemCount )
         dst.append( preas );
 
-    wxASSERT( postDelim );
-    wxString postDelimStr(postDelim);
-    //wxString preDelimStr(preDelim);
+    wxString delimStr(delimiter);
 
     for ( i = 0; i < itemCount; i++ )
     {
         wxString str( src.Item(i) );
 
         // Do some character conversion.
-        // Convertes \ to \\ and <preDelim> to \<preDelim>
-        // Useful when preDelim and postDelim are "\"".
-        if ( flags & 1 )
+        // Converts \ to \\ and $delimiter to \$delimiter
+        // Useful when quoting.
+        if ( flags & Escape )
         {
             str.Replace( wxS("\\"), wxS("\\\\"), true );
             if ( pdr.length() )
@@ -2464,19 +2482,19 @@ void wxPropertyGrid::ArrayStringToString( wxString& dst, const wxArrayString& sr
 
         if ( i < (itemCount-1) )
         {
-            dst.append( postDelimStr );
+            dst.append( delimStr );
             dst.append( wxS(" ") );
             dst.append( preas );
         }
-        else if ( preDelim )
-            dst.append( postDelimStr );
+        else if ( flags & QuoteStrings )
+            dst.append( delimStr );
     }
 }
 
 void wxArrayStringProperty::GenerateValueAsString()
 {
     wxArrayString arr = m_value.GetArrayString();
-    ARRSTRPROP_ARRAY_TO_STRING(m_display, arr);
+    ConvertArrayToString(arr, &m_display, m_delimiter);
 }
 
 // Default implementation doesn't do anything.
@@ -2534,9 +2552,10 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
             {
                 wxArrayString actualValue = value.GetArrayString();
                 wxString tempStr;
-                ARRSTRPROP_ARRAY_TO_STRING(tempStr, actualValue);
+                ConvertArrayToString(actualValue, &tempStr, m_delimiter);
             #if wxUSE_VALIDATORS
-                if ( dialogValidator.DoValidate( propGrid, validator, tempStr ) )
+                if ( dialogValidator.DoValidate(propGrid, validator,
+                                                tempStr) )
             #endif
                 {
                     SetValueInEvent( actualValue );
@@ -2565,22 +2584,45 @@ bool wxArrayStringProperty::OnEvent( wxPropertyGrid* propGrid,
     return false;
 }
 
-bool wxArrayStringProperty::StringToValue( wxVariant& variant, const wxString& text, int ) const
+bool wxArrayStringProperty::StringToValue( wxVariant& variant,
+                                           const wxString& text, int ) const
 {
     wxArrayString arr;
 
-    WX_PG_TOKENIZER2_BEGIN(text,wxS('"'))
+    if ( m_delimiter == '"' || m_delimiter == '\'' )
+    {
+        // Quoted strings
+        WX_PG_TOKENIZER2_BEGIN(text, m_delimiter)
 
-        // Need to replace backslashes with empty characters
-        // (opposite what is done in GenerateValueString).
-        token.Replace ( wxS("\\\\"), wxS("\\"), true );
+            // Need to replace backslashes with empty characters
+            // (opposite what is done in ConvertArrayToString()).
+            token.Replace ( wxS("\\\\"), wxS("\\"), true );
 
-        arr.Add( token );
+            arr.Add( token );
 
-    WX_PG_TOKENIZER2_END()
+        WX_PG_TOKENIZER2_END()
+    }
+    else
+    {
+        // Regular delimiter
+        WX_PG_TOKENIZER1_BEGIN(text, m_delimiter)
+            arr.Add( token );
+        WX_PG_TOKENIZER1_END()
+    }
 
     variant = arr;
 
+    return true;
+}
+
+bool wxArrayStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
+{
+    if ( name == wxPG_ARRAY_DELIMITER )
+    {
+        m_delimiter = value.GetChar();
+        GenerateValueAsString();
+        return false;
+    }
     return true;
 }
 

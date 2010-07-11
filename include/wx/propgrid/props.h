@@ -716,7 +716,6 @@ class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxPGProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxArrayStringProperty)
 public:
-
     wxArrayStringProperty( const wxString& label = wxPG_LABEL,
                            const wxString& name = wxPG_LABEL,
                            const wxArrayString& value = wxArrayString() );
@@ -729,8 +728,12 @@ public:
                                 int argFlags = 0 ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
-    virtual void GenerateValueAsString();
+    // Implement in derived class for custom array-to-string conversion.
+    virtual void ConvertArrayToString(const wxArrayString& arr,
+                                      wxString* pString,
+                                      const wxUniChar& delimiter) const;
 
     // Shows string editor dialog. Value to be edited should be read from
     // value, and if dialog is not cancelled, it should be stored back and true
@@ -745,8 +748,27 @@ public:
     // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
     virtual wxPGArrayEditorDialog* CreateEditorDialog();
 
+    enum ConversionFlags
+    {
+        Escape          = 0x01,
+        QuoteStrings    = 0x02
+    };
+
+    /**
+        Generates contents for string dst based on the contents of
+        wxArrayString src.
+    */
+    static void ArrayStringToString( wxString& dst, const wxArrayString& src,
+                                     wxUniChar delimiter, int flags );
+
 protected:
+    // Previously this was to be implemented in derived class for array-to-
+    // string conversion. Now you should implement ConvertValueToString()
+    // instead.
+    virtual void GenerateValueAsString();
+
     wxString        m_display; // Cache for displayed text.
+    wxUniChar       m_delimiter;
 };
 
 // -----------------------------------------------------------------------
@@ -761,9 +783,6 @@ public: \
               const wxString& name = wxPG_LABEL, \
               const wxArrayString& value = wxArrayString() ); \
     ~PROPNAME(); \
-    virtual void GenerateValueAsString(); \
-    virtual bool StringToValue( wxVariant& value, \
-                                const wxString& text, int = 0 ) const; \
     virtual bool OnEvent( wxPropertyGrid* propgrid, \
                           wxWindow* primary, wxEvent& event ); \
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ); \
@@ -785,32 +804,9 @@ PROPNAME::PROPNAME( const wxString& label, \
     : wxArrayStringProperty(label,name,value) \
 { \
     PROPNAME::GenerateValueAsString(); \
+    m_delimiter = DELIMCHAR; \
 } \
 PROPNAME::~PROPNAME() { } \
-void PROPNAME::GenerateValueAsString() \
-{ \
-    wxChar delimChar = DELIMCHAR; \
-    if ( delimChar == wxS('"') ) \
-        wxArrayStringProperty::GenerateValueAsString(); \
-    else \
-        wxPropertyGrid::ArrayStringToString(m_display, \
-                                            m_value.GetArrayString(), \
-                                            0,DELIMCHAR,0); \
-} \
-bool PROPNAME::StringToValue( wxVariant& variant, \
-                              const wxString& text, int ) const \
-{ \
-    wxChar delimChar = DELIMCHAR; \
-    if ( delimChar == wxS('"') ) \
-        return wxArrayStringProperty::StringToValue(variant, text, 0); \
-    \
-    wxArrayString arr; \
-    WX_PG_TOKENIZER1_BEGIN(text,DELIMCHAR) \
-        arr.Add( token ); \
-    WX_PG_TOKENIZER1_END() \
-    variant = arr; \
-    return true; \
-} \
 bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
                         wxWindow* primary, wxEvent& event ) \
 { \
