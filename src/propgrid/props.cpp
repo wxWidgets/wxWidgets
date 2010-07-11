@@ -2053,8 +2053,8 @@ wxPGArrayEditorDialog::wxPGArrayEditorDialog()
 
 void wxPGArrayEditorDialog::Init()
 {
-    m_custBtText = NULL;
     m_lastFocused = NULL;
+    m_hasCustomNewAction = false;
     m_itemPendingAtIndex = -1;
 }
 
@@ -2196,9 +2196,29 @@ int wxPGArrayEditorDialog::GetSelection() const
 void wxPGArrayEditorDialog::OnAddClick(wxCommandEvent& event)
 {
     wxListCtrl* lc = m_elb->GetListCtrl();
-    m_itemPendingAtIndex = lc->GetItemCount() - 1;
+    int newItemIndex = lc->GetItemCount() - 1;
 
-    event.Skip();
+    if ( m_hasCustomNewAction ) 
+    {
+        wxString str;
+        if ( OnCustomNewAction(&str) )
+        {
+            if ( ArrayInsert(str, newItemIndex) )
+            {
+                lc->InsertItem(newItemIndex, str);
+                m_modified = true;
+            }
+        }
+
+        // Do *not* skip the event! We do not want the wxEditableListBox
+        // to do anything.
+    }
+    else
+    {
+        m_itemPendingAtIndex = newItemIndex;
+
+        event.Skip();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2293,7 +2313,6 @@ void wxPGArrayEditorDialog::OnEndLabelEdit(wxListEvent& event)
 IMPLEMENT_DYNAMIC_CLASS(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog)
 
 BEGIN_EVENT_TABLE(wxPGArrayStringEditorDialog, wxPGArrayEditorDialog)
-    EVT_BUTTON(28, wxPGArrayStringEditorDialog::OnCustomEditClick)
 END_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
@@ -2347,17 +2366,10 @@ void wxPGArrayStringEditorDialog::Init()
     m_pCallingClass = NULL;
 }
 
-void wxPGArrayStringEditorDialog::OnCustomEditClick(wxCommandEvent& )
+bool
+wxPGArrayStringEditorDialog::OnCustomNewAction(wxString* resString)
 {
-    /*wxASSERT( m_pCallingClass );
-    wxString str = m_edValue->GetValue();
-    if ( m_pCallingClass->OnCustomStringEdit(m_parent,str) )
-    {
-        //m_edValue->SetValue ( str );
-        m_lbStrings->Append ( str );
-        m_array.Add ( str );
-        m_modified = true;
-    }*/
+    return m_pCallingClass->OnCustomStringEdit(m_parent, *resString);
 }
 
 // -----------------------------------------------------------------------
