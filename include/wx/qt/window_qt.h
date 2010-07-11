@@ -10,9 +10,9 @@
 #define _WX_QT_WIDGET_QT_H_
 
 #include "wx/window.h"
+#include "wx/qt/winevent_qt.h"
 #include <QtGui/QWidget>
 #include <QtGui/QScrollBar>
-#include "wx/qt/winevent_qt.h"
 
 class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< QWidget >
 {
@@ -29,12 +29,12 @@ class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< QWidget >
 
 };
 
-class WXDLLIMPEXP_CORE wxQtScrollBarEventForwarder : public QScrollBar
+class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar
 {
     Q_OBJECT
 
     public:
-        wxQtScrollBarEventForwarder( wxWindow *window,
+        wxQtScrollBar( wxWindow *window,
                                      Qt::Orientation orient,
                                      QWidget *parent = 0 );
 

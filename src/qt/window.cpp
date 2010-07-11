@@ -185,7 +185,7 @@ QScrollBar *wxWindow::QtGetScrollBar( int orientation, bool create ) const
         // No item at that position, create scrollbar
         if ( create )
         {
-            qtScrollBar = new wxQtScrollBarEventForwarder( const_cast< wxWindow * >( this ),
+            qtScrollBar = new wxQtScrollBar( const_cast< wxWindow * >( this ),
                 orientation == wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
 
             if ( orientation == wxHORIZONTAL )
