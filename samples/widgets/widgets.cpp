@@ -361,8 +361,7 @@ bool WidgetsApp::OnInit()
 WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title)
 {
-    SetName("Main");
-    const bool sizeSet = wxPersistentRegisterAndRestore(this);
+    const bool sizeSet = wxPersistentRegisterAndRestore(this, "Main");
 
     // set the frame icon
     SetIcon(wxICON(sample));
