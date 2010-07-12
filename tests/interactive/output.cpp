@@ -119,7 +119,7 @@ void InteractiveOutputTestCase::TestDllListLoaded()
 
         printf(" %s\n", (const char *)details.GetVersion().mb_str());
     }
-    
+
     wxPuts(wxEmptyString);
 #endif // TEST_DYNLIB
 }
@@ -328,7 +328,7 @@ public:
         : wxStackWalker(argv0)
     {
     }
-    
+
     virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH)
     {
         wxPuts(wxT("Stack dump:"));
@@ -377,9 +377,9 @@ void InteractiveOutputTestCase::TestStackWalk()
 #if wxUSE_STACKWALKER
     wxPuts(wxT("*** Testing wxStackWalker ***"));
 
-    StackDump dump((const char*)wxTheApp->argv[0]);
+    StackDump dump(wxTheApp->argv[0].utf8_str());
     dump.Walk();
-    
+
     wxPuts("\n");
 #endif
 #endif // TEST_STACKWALKER
@@ -419,7 +419,7 @@ void InteractiveOutputTestCase::TestStandardPaths()
                     wxT("fr"),
                     wxStandardPaths::ResourceCat_Messages
                   ).c_str());
-                  
+
     wxPuts("\n");
 #endif // TEST_STDPATHS
 }
@@ -482,7 +482,7 @@ void InteractiveOutputTestCase::TestFSVolume()
                  vol.GetFlags() & wxFS_VOL_REMOVABLE ? wxT("removable")
                                                      : wxT("fixed"));
     }
-    
+
     wxPuts("\n");
 #endif // TEST_VOLUME
 }
