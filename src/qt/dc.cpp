@@ -18,6 +18,7 @@
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
+    m_clippingRegion = new wxRegion;
 }
 
 void wxQtDCImpl::PrepareQPainter()
@@ -175,12 +176,70 @@ void wxQtDCImpl::Clear()
 void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
                                  wxCoord width, wxCoord height)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    // Special case: Empty region -> DestroyClippingRegion()
+    if ( width == 0 && height == 0 )
+    {
+        DestroyClippingRegion();
+    }
+    else
+    {
+        // Set QPainter clipping (intersection if not the first one)
+        m_qtPainter.setClipRect( x, y, width, height,
+                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+
+        // Set internal state for getters
+        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
+         * keep the region manually, which should be faster */
+        if ( m_clipping )
+            m_clippingRegion->Union( wxRect( x, y, width, height ) );
+        else
+            m_clippingRegion->Intersect( wxRect( x, y, width, height ) );
+
+        wxRect clipRect = m_clippingRegion->GetBox();
+
+        m_clipX1 = clipRect.GetLeft();
+        m_clipX2 = clipRect.GetRight();
+        m_clipY1 = clipRect.GetTop();
+        m_clipY2 = clipRect.GetBottom();
+        m_clipping = true;
+    }
 }
 
 void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    if ( region.IsEmpty() )
+    {
+        DestroyClippingRegion();
+    }
+    else
+    {
+        // Set QPainter clipping (intersection if not the first one)
+        m_qtPainter.setClipRegion( region.GetHandle(), 
+                                 m_clipping ? Qt::IntersectClip : Qt::ReplaceClip );
+                                 
+        // Set internal state for getters
+        /* Note: Qt states that QPainter::clipRegion() may be slow, so we
+        * keep the region manually, which should be faster */
+        if ( m_clipping )
+            m_clippingRegion->Union( region );
+        else
+            m_clippingRegion->Intersect( region );
+
+        wxRect clipRect = m_clippingRegion->GetBox();
+
+        m_clipX1 = clipRect.GetLeft();
+        m_clipX2 = clipRect.GetRight();
+        m_clipY1 = clipRect.GetTop();
+        m_clipY2 = clipRect.GetBottom();
+        m_clipping = true;
+    }
+}
+
+void wxQtDCImpl::DestroyClippingRegion()
+{
+    ResetClipping();
+    m_clippingRegion->Clear();
+    m_qtPainter.setClipping( false );
 }
 
 bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
@@ -371,7 +430,9 @@ void wxQtDCImpl::DoDrawLines(int n, wxPoint points[],
 
         m_qtPainter.translate(xoffset, yoffset);
         m_qtPainter.drawPath(path);
-        m_qtPainter.resetTransform();
+
+        // Reset transform
+        ComputeScaleAndOrigin();
     }
 }
 
@@ -388,7 +449,8 @@ void wxQtDCImpl::DoDrawPolygon(int n, wxPoint points[],
     
     m_qtPainter.translate(xoffset, yoffset);
     m_qtPainter.drawPolygon(qtPoints, fill);
-    m_qtPainter.resetTransform();
+    // Reset transform
+    ComputeScaleAndOrigin();
 }
 
 void wxQtDCImpl::ComputeScaleAndOrigin()

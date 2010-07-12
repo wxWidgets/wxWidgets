@@ -11,6 +11,8 @@
 
 #include <QtGui/QPainter>
 
+class WXDLLIMPEXP_FWD_CORE wxRegion;
+
 class WXDLLIMPEXP_CORE wxQtDCImpl : public wxDCImpl
 {
 public:
@@ -51,6 +53,7 @@ public:
                                      wxCoord width, wxCoord height);
 
     virtual void DoSetDeviceClippingRegion(const wxRegion& region);
+    virtual void DestroyClippingRegion();
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE);
@@ -106,6 +109,7 @@ protected:
     QPainter m_qtPainter;
     void PrepareQPainter();
 
+    wxRegion *m_clippingRegion;
 private:
 };
 
