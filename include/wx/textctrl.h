@@ -733,10 +733,8 @@ protected:
 
     // implement the wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() { return this; }
-     //Mask event methods
-    void ApplySingleFieldMask();
-    void ApplyMultipleFieldsMask();
-    void ApplyMask(wxCommandEvent& event);
+    //Mask event methods
+    void ApplyMask();
     void KeyPressedMask(wxKeyEvent& event);
     void MouseClickedMask(wxMouseEvent& event);
 

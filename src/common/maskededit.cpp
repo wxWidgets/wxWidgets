@@ -33,6 +33,9 @@ wxMaskedEdit::wxMaskedEdit(const wxMaskedEdit& maskedEdit)
     wxArrayString formatCodes;
     unsigned int it;
 
+    for(it = 0; it < maskedEdit.GetNumberOfFields(); it++)
+        formatCodes.Add(maskedEdit.GetFormatCodes(it));
+
     Create(maskedEdit.GetMask(), formatCodes, maskedEdit.GetDefaultValue());
 
     for(it = 0; it < GetNumberOfFields(); it++)
