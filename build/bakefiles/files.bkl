@@ -470,6 +470,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/radiobut.cpp
     src/qt/region.cpp
     src/qt/scrolbar.cpp
+    src/qt/scrolbar.moc.cpp
     src/qt/settings.cpp
     src/qt/slider.cpp
     src/qt/spinbutt.cpp

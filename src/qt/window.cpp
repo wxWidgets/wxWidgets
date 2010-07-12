@@ -70,6 +70,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     }
 
     // Create layout for built-in scrolling bars
+    m_horzScrollBar = m_vertScrollBar = NULL;
     if ( QtGetScrollBarsContainer() )
     {
         QGridLayout *scrollLayout = new QGridLayout();
@@ -165,99 +166,126 @@ int wxWindow::GetCharWidth() const
 
 /* Returns a scrollbar for the given orientation, or NULL if the scrollbar
  * has not been previously created and create is false */
-QScrollBar *wxWindow::QtGetScrollBar( int orientation, bool create ) const
+wxScrollBar *wxWindow::QtGetScrollBar( int orientation ) const
 {
     wxCHECK_MSG( QtGetScrollBarsContainer(), NULL, "This window can't have scrollbars" );
-    
-    QLayoutItem *qtLayoutItem = NULL;
-    QScrollBar *qtScrollBar = NULL;
-    
-    QGridLayout *scrollLayout = qobject_cast< QGridLayout* >( QtGetScrollBarsContainer()->layout() );
-    wxCHECK_MSG( scrollLayout, NULL, "Window without scrolling layout" );
-    
+
+    wxScrollBar *scrollBar = NULL;
+
     if ( orientation == wxHORIZONTAL )
-        qtLayoutItem = scrollLayout->itemAtPosition( HORZ_SCROLLBAR_POSITION );
+        scrollBar = m_horzScrollBar;
     else
-        qtLayoutItem = scrollLayout->itemAtPosition( VERT_SCROLLBAR_POSITION );
+        scrollBar = m_vertScrollBar;
     
-    if ( qtLayoutItem == NULL )
-    {
-        // No item at that position, create scrollbar
-        if ( create )
-        {
-            qtScrollBar = new wxQtScrollBar( const_cast< wxWindow * >( this ),
-                orientation == wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
-
-            if ( orientation == wxHORIZONTAL )
-                scrollLayout->addWidget( qtScrollBar, HORZ_SCROLLBAR_POSITION );
-            else
-                scrollLayout->addWidget( qtScrollBar, VERT_SCROLLBAR_POSITION );
-        }
-    }
-    else
-    {
-        // Cast the item to a scrollbar
-        qtScrollBar = qobject_cast< QScrollBar* >( qtLayoutItem->widget() );
-        wxCHECK_MSG( qtScrollBar, NULL, "Invalid scrolling layout" );
-    }
-
-    return qtScrollBar;
+    return scrollBar;
 }
 
-void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool WXUNUSED( refresh ))
+void wxWindow::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
 {
     //If range is zero, don't create the scrollbar
-    QScrollBar *qtScrollBar = QtGetScrollBar( orientation, range != 0 );
-    
-    // Configure the scrollbar
-    if (range != 0 )
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+
+    // Create a new scrollbar if needed
+    if ( !scrollBar && range != 0 )
     {
-        wxCHECK_RET( qtScrollBar, "Invalid scrollbar" );
+        QGridLayout *scrollLayout = qobject_cast< QGridLayout* >( QtGetScrollBarsContainer()->layout() );
+        wxCHECK_RET( scrollLayout, "Window without scrolling layout" );
         
-        qtScrollBar->setRange( 0, range - thumbvisible );
-        qtScrollBar->setPageStep( thumbvisible );
-        qtScrollBar->setValue( pos );
-        qtScrollBar->show();
+        scrollBar = new wxScrollBar( const_cast< wxWindow* >( this ), wxID_ANY,
+                                     wxDefaultPosition, wxDefaultSize,
+                                     orientation == wxHORIZONTAL ? wxSB_HORIZONTAL : wxSB_VERTICAL);
+
+        // Connect scrollbar events to this window
+        scrollBar->Bind( wxEVT_SCROLL_LINEUP, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_LINEDOWN, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_PAGEUP, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_PAGEDOWN, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_TOP, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_BOTTOM, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_THUMBTRACK, &wxWindow::QtOnScrollBarEvent, this );
+        scrollBar->Bind( wxEVT_SCROLL_THUMBRELEASE, &wxWindow::QtOnScrollBarEvent, this );
+        
+        // Let Qt handle layout
+        if ( orientation == wxHORIZONTAL )
+        {
+            scrollLayout->addWidget( scrollBar->GetHandle(), HORZ_SCROLLBAR_POSITION );
+            m_horzScrollBar = scrollBar;
+        }
+        else
+        {
+            scrollLayout->addWidget( scrollBar->GetHandle(), VERT_SCROLLBAR_POSITION );
+            m_vertScrollBar = scrollBar;
+        }
     }
-    else if ( qtScrollBar )
-    {
-        // If range is zero and scrollbar exists, hide it
-        qtScrollBar->hide();
-    }
+    
+    // Configure the scrollbar if it exists. If range is zero we can get here with
+    // scrollBar == NULL and it is not a problem
+    if ( scrollBar )
+        scrollBar->SetScrollbar( pos, thumbvisible, range, thumbvisible, refresh );
 }
 
 void wxWindow::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
 {
-    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
-    wxCHECK_RET( qtScrollBar, "Invalid scrollbar" );
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    wxCHECK_RET( scrollBar, "Invalid scrollbar" );
 
-    qtScrollBar->setValue( pos );
+    scrollBar->SetThumbPosition( pos );
 }
 
 int wxWindow::GetScrollPos( int orientation ) const
 {
-    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
-    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
     
-    return qtScrollBar->value();
+    return scrollBar->GetThumbPosition();
 }
 
 int wxWindow::GetScrollThumb( int orientation ) const
 {
-    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
-    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
     
-    return qtScrollBar->pageStep();
+    return scrollBar->GetThumbSize();
 }
 
 int wxWindow::GetScrollRange( int orientation ) const
 {
-    QScrollBar *qtScrollBar = QtGetScrollBar( orientation );
-    wxCHECK_MSG( qtScrollBar, 0, "Invalid scrollbar" );
+    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
     
-    return qtScrollBar->maximum();
+    return scrollBar->GetRange();
 }
 
+// Handle event from scrollbars
+void wxWindow::QtOnScrollBarEvent( wxScrollEvent& event )
+{
+    wxEventType winEventType = 0;
+    wxEventType scrollBarEventType = event.GetEventType();
+    
+    if ( scrollBarEventType == wxEVT_SCROLL_TOP )
+        winEventType = wxEVT_SCROLLWIN_TOP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_BOTTOM )
+        winEventType = wxEVT_SCROLLWIN_BOTTOM;
+    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEUP )
+        winEventType = wxEVT_SCROLLWIN_PAGEUP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEDOWN )
+        winEventType = wxEVT_SCROLLWIN_PAGEDOWN;
+    else if ( scrollBarEventType == wxEVT_SCROLL_LINEUP )
+        winEventType = wxEVT_SCROLLWIN_LINEUP;
+    else if ( scrollBarEventType == wxEVT_SCROLL_LINEDOWN )
+        winEventType = wxEVT_SCROLLWIN_LINEDOWN;
+    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBTRACK )
+        winEventType = wxEVT_SCROLLWIN_THUMBTRACK;
+    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBRELEASE )
+        winEventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+
+    if ( winEventType )
+    {
+        wxScrollWinEvent e( winEventType, event.GetPosition(),
+                            event.GetOrientation() );
+        ProcessWindowEvent( e );
+    }
+}
 
     // scroll window to the specified position
 
