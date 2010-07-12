@@ -51,6 +51,7 @@ private:
         CPPUNIT_TEST( InsertItem );
         CPPUNIT_TEST( ColumnDrag );
         CPPUNIT_TEST( Find );
+        CPPUNIT_TEST( ColumnOrder );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
@@ -65,6 +66,7 @@ private:
     void InsertItem();
     void ColumnDrag();
     void Find();
+    void ColumnOrder();
 
     wxListCtrl *m_list;
 
@@ -407,4 +409,34 @@ void ListCtrlTestCase::Find()
     CPPUNIT_ASSERT_EQUAL(2, m_list->FindItem(-1, "Item 4", true));
     CPPUNIT_ASSERT_EQUAL(2, m_list->FindItem(1, "Item 40"));
     CPPUNIT_ASSERT_EQUAL(3, m_list->FindItem(2, "Item 0", true));
+}
+
+void ListCtrlTestCase::ColumnOrder()
+{
+#ifdef wxHAS_LISTCTRL_COLUMN_ORDER 
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertColumn(1, "Column 1");
+    m_list->InsertColumn(2, "Column 2");
+    m_list->InsertColumn(3, "Column 3");
+
+    CPPUNIT_ASSERT_EQUAL(4, m_list->GetColumnCount());
+
+    wxArrayInt neworder;
+    neworder.push_back(1);
+    neworder.push_back(3);
+    neworder.push_back(2);
+    neworder.push_back(0);
+
+    m_list->SetColumnsOrder(neworder);
+
+    CPPUNIT_ASSERT_EQUAL(1, m_list->GetColumnIndexFromOrder(0));
+    CPPUNIT_ASSERT_EQUAL(3, m_list->GetColumnIndexFromOrder(1));
+    CPPUNIT_ASSERT_EQUAL(2, m_list->GetColumnIndexFromOrder(2));
+    CPPUNIT_ASSERT_EQUAL(0, m_list->GetColumnIndexFromOrder(3));
+
+    CPPUNIT_ASSERT_EQUAL(0, m_list->GetColumnOrder(1));
+    CPPUNIT_ASSERT_EQUAL(1, m_list->GetColumnOrder(3));
+    CPPUNIT_ASSERT_EQUAL(2, m_list->GetColumnOrder(2));
+    CPPUNIT_ASSERT_EQUAL(3, m_list->GetColumnOrder(0));
+#endif
 }
