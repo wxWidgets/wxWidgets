@@ -71,15 +71,9 @@ void wxToggleButtonXmlHandler::DoCreateToggleButton(wxObject *control)
 {
     wxToggleButton *button = wxDynamicCast(control, wxToggleButton);
 
-    wxString label = GetText(wxT("label"));
-
     button->Create(m_parentAsWindow,
                    GetID(),
-#if defined(__WXUNIVERSAL__)
-                   !label.empty() ? label : GetBitmap(wxT("bitmap"), wxART_BUTTON),
-#else
-                   label,
-#endif
+                   GetText(wxT("label")),
                    GetPosition(), GetSize(),
                    GetStyle(),
                    wxDefaultValidator,
