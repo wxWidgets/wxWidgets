@@ -44,6 +44,7 @@ private:
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( LineFormatting );
         CPPUNIT_TEST( SortSupport );
+        CPPUNIT_TEST( Labels );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -59,6 +60,7 @@ private:
     void ColumnOrder();
     void LineFormatting();
     void SortSupport();
+    void Labels();
 
     wxGrid *m_grid;
 
@@ -468,4 +470,29 @@ void GridTestCase::SortSupport()
 
     CPPUNIT_ASSERT(!m_grid->IsSortingBy(0));
     CPPUNIT_ASSERT(!m_grid->IsSortingBy(1));
+}
+
+void GridTestCase::Labels()
+{
+    CPPUNIT_ASSERT_EQUAL("A", m_grid->GetColLabelValue(0));
+    CPPUNIT_ASSERT_EQUAL("1", m_grid->GetRowLabelValue(0));
+
+    m_grid->SetColLabelValue(0, "Column 1");
+    m_grid->SetRowLabelValue(0, "Row 1");
+
+    CPPUNIT_ASSERT_EQUAL("Column 1", m_grid->GetColLabelValue(0));
+    CPPUNIT_ASSERT_EQUAL("Row 1", m_grid->GetRowLabelValue(0));
+
+    m_grid->SetLabelTextColour(wxColour(*wxGREEN));
+    m_grid->SetLabelBackgroundColour(wxColour(*wxRED));
+
+    CPPUNIT_ASSERT_EQUAL(wxColour(*wxGREEN).GetRGB(), 
+                         m_grid->GetLabelTextColour().GetRGB());
+    CPPUNIT_ASSERT_EQUAL(wxColour(*wxRED).GetRGB(), 
+                         m_grid->GetLabelBackgroundColour().GetRGB());
+
+    m_grid->SetColLabelTextOrientation(wxVERTICAL);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(wxVERTICAL), 
+                         static_cast<int>(m_grid->GetColLabelTextOrientation()));
 }
