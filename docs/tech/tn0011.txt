@@ -9,17 +9,18 @@
 
    configure.in
    *.spec
-   include/wx/version.h
-   include/msvc/wx/setup.h [only major.minor used here]
-   samples/minimal/borland_ide.cpp
+   build/bakefiles/version.bkl {C:R:A}
+   build/osx/wxvers.xcconfig
+   docs/changes.txt
    docs/doxygen/Doxyfile_inc (PROJECT_NUMBER)
+   docs/doxygen/latexdocstart.inc
    docs/doxygen/mainpages/manual.h (just date)
    docs/msw/install.txt {major release only}
-   docs/changes.txt
-   build/bakefiles/version.bkl {C:R:A}
-   build/script/win_docs.bat {windows doc and setup file}
-   distrib/scripts/build-environ.cfg {SVN tar and zip files}
+   include/wx/version.h
    include/wx/osx/config_xcode.h
+   samples/Info.plist
+   samples/docview/Info.plist
+   samples/minimal/borland_ide.cpp {major release only}
 
    The script misc/scripts/inc_release can be used for incrementing
    the release field of the version, i.e. changing 2.8.x to 2.8.x+1.
