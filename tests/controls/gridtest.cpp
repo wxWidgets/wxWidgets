@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( AddRowCol );
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( LineFormatting );
+        CPPUNIT_TEST( SortSupport );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -57,6 +58,7 @@ private:
     void AddRowCol();
     void ColumnOrder();
     void LineFormatting();
+    void SortSupport();
 
     wxGrid *m_grid;
 
@@ -444,4 +446,26 @@ void GridTestCase::LineFormatting()
 
     CPPUNIT_ASSERT_EQUAL(m_grid->GetGridLineColour().GetRGB(), 
                          wxColour(*wxRED).GetRGB());
+}
+
+void GridTestCase::SortSupport()
+{
+    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_grid->GetSortingColumn());
+
+    m_grid->SetSortingColumn(1);
+
+    CPPUNIT_ASSERT(!m_grid->IsSortingBy(0));
+    CPPUNIT_ASSERT(m_grid->IsSortingBy(1));
+    CPPUNIT_ASSERT(m_grid->IsSortOrderAscending());
+
+    m_grid->SetSortingColumn(0, false);
+
+    CPPUNIT_ASSERT(m_grid->IsSortingBy(0));
+    CPPUNIT_ASSERT(!m_grid->IsSortingBy(1));
+    CPPUNIT_ASSERT(!m_grid->IsSortOrderAscending());
+
+    m_grid->UnsetSortingColumn();
+
+    CPPUNIT_ASSERT(!m_grid->IsSortingBy(0));
+    CPPUNIT_ASSERT(!m_grid->IsSortingBy(1));
 }
