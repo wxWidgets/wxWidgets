@@ -563,7 +563,9 @@ void wxAnyTestCase::wxVariantConversions()
     res = any.GetAs(&variant);
     CPPUNIT_ASSERT(res);
     CPPUNIT_ASSERT(variant.GetType() == "string");
+#if wxUSE_UNICODE
     CPPUNIT_ASSERT(variant.GetString() == L"ABC");
+#endif
 
     any = vDouble;
     double d = wxANY_AS(any, double);
