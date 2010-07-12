@@ -4669,25 +4669,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(0, 0);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? 0
+                                             : m_currentCellCoords.GetRow(),
+                         0);
                 break;
 
             case WXK_END:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(m_numRows - 1, m_numCols - 1);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? m_numRows - 1
+                                             : m_currentCellCoords.GetRow(),
+                         m_numCols - 1);
                 break;
 
             case WXK_PAGEUP:
