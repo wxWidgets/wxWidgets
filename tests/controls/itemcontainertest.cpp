@@ -178,3 +178,28 @@ void ItemContainerTestCase::ClientData()
     CPPUNIT_ASSERT_EQUAL(static_cast<wxClientData*>(item2data),
                          container->GetClientObject(2));
 }
+
+void ItemContainerTestCase::VoidData()
+{
+    wxItemContainer * const container = GetContainer();
+
+    wxString item0data("item0data"), item1data("item0data"),
+             item2data("item0data");
+
+    void* item0 = &item0data;
+    void* item1 = &item1data;
+    void* item2 = &item2data;
+    
+    container->Append("item 0", item0);
+
+    CPPUNIT_ASSERT_EQUAL(item0, container->GetClientData(0));
+
+    container->Append("item 1");
+    container->SetClientData(1, item1);
+
+    CPPUNIT_ASSERT_EQUAL(item1, container->GetClientData(1));
+
+    container->Insert("item 2", 2, item2);
+
+    CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
+}
