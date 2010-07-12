@@ -146,13 +146,7 @@ private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const;
-    virtual void EnableTextChangedEvents(bool enable)
-    {
-        if ( enable )
-            EnableEvents();
-        else
-            DisableEvents();
-    }
+    virtual void EnableTextChangedEvents(bool enable);
 
     void Init();
 

@@ -222,11 +222,26 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     event.Skip();
 }
 
-void wxComboBox::GTKDisableEvents()
+void wxComboBox::EnableTextChangedEvents(bool enable)
 {
-    if ( GetEntry() )
+    if ( !GetEntry() )
+        return;
+
+    if ( enable )
+    {
+        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
+    }
+    else // disable
+    {
         g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
             (gpointer)gtkcombobox_text_changed_callback, this);
+    }
+}
+
+void wxComboBox::GTKDisableEvents()
+{
+    EnableTextChangedEvents(false);
 
     g_signal_handlers_block_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
@@ -236,9 +251,7 @@ void wxComboBox::GTKDisableEvents()
 
 void wxComboBox::GTKEnableEvents()
 {
-    if ( GetEntry() )
-        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
-            (gpointer)gtkcombobox_text_changed_callback, this);
+    EnableTextChangedEvents(true);
 
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
