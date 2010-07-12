@@ -24,6 +24,9 @@ wxTestableFrame::wxTestableFrame() : wxFrame(NULL, wxID_ANY, "Test Frame")
 void wxTestableFrame::OnEvent(wxEvent& evt)
 {
     m_count[evt.GetEventType()]++;
+
+    if(! evt.IsCommandEvent() )
+        evt.Skip();
 }
 
 int wxTestableFrame::GetEventCount(wxEventType type)
