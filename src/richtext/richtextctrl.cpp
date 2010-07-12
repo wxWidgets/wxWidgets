@@ -2395,34 +2395,34 @@ void wxRichTextCtrl::AppendText(const wxString& text)
 }
 
 /// Write an image at the current insertion point
-bool wxRichTextCtrl::WriteImage(const wxImage& image, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxImage& image, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     wxRichTextImageBlock imageBlock;
 
     wxImage image2 = image;
     if (imageBlock.MakeImageBlock(image2, bitmapType))
-        return WriteImage(imageBlock);
+        return WriteImage(imageBlock, attr);
 
     return false;
 }
 
-bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxString& filename, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     wxRichTextImageBlock imageBlock;
 
     wxImage image;
     if (imageBlock.MakeImageBlock(filename, bitmapType, image, false))
-        return WriteImage(imageBlock);
+        return WriteImage(imageBlock, attr);
 
     return false;
 }
 
-bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock)
+bool wxRichTextCtrl::WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAnchoredObjectAttr& attr)
 {
-    return GetBuffer().InsertImageWithUndo(m_caretPosition+1, imageBlock, this);
+    return GetBuffer().InsertImageWithUndo(m_caretPosition+1, imageBlock, this, NULL, attr);
 }
 
-bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType)
+bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr)
 {
     if (bitmap.Ok())
     {
@@ -2430,7 +2430,7 @@ bool wxRichTextCtrl::WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType)
 
         wxImage image = bitmap.ConvertToImage();
         if (image.Ok() && imageBlock.MakeImageBlock(image, bitmapType))
-            return WriteImage(imageBlock);
+            return WriteImage(imageBlock, attr);
     }
 
     return false;

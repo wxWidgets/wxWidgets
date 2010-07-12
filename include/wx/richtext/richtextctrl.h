@@ -312,17 +312,17 @@ public:
 
     /// Write an image at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxImage& image, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Write a bitmap at the current insertion point. Supply optional type to use
     /// for internal and file storage of the raw data.
-    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG);
+    virtual bool WriteImage(const wxBitmap& bitmap, wxBitmapType bitmapType = wxBITMAP_TYPE_PNG, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Load an image from file and write at the current insertion point.
-    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType);
+    virtual bool WriteImage(const wxString& filename, wxBitmapType bitmapType, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Write an image block at the current insertion point.
-    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock);
+    virtual bool WriteImage(const wxRichTextImageBlock& imageBlock, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
 
     /// Insert a newline (actually paragraph) at the current insertion point.
     virtual bool Newline();

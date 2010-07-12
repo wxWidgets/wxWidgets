@@ -248,22 +248,38 @@ enum wxRichTextHitTestFlags
 #define wxRICHTEXT_MM   0x01
 
 /*!
+ * wxRichTextAnchoredObjectAttr class declaration
+ */
+class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObjectAttr
+{
+public:
+    wxRichTextAnchoredObjectAttr();
+    ~wxRichTextAnchoredObjectAttr() {};
+
+    wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr);
+    void operator= (const wxRichTextAnchoredObjectAttr& attr);
+    void Copy(const wxRichTextAnchoredObjectAttr& attr);
+
+    bool m_anchored;
+    int m_align;
+    int m_floating;
+};
+
+/*!
  * wxRichTextImageAttr class declaration
  */
-class WXDLLIMPEXP_RICHTEXT wxRichTextImageAttr
+class WXDLLIMPEXP_RICHTEXT wxRichTextImageAttr : public wxRichTextAnchoredObjectAttr
 {
-    public:
-        wxRichTextImageAttr() {};
-        ~wxRichTextImageAttr() {};
+public:
+    wxRichTextImageAttr() : wxRichTextAnchoredObjectAttr() {};
+    ~wxRichTextImageAttr() {};
 
-        wxRichTextImageAttr(const wxRichTextImageAttr& attr);
-        void operator= (const wxRichTextImageAttr& attr);
-        void Copy(const wxRichTextImageAttr& attr);
+    wxRichTextImageAttr(const wxRichTextImageAttr& attr);
+    void operator= (const wxRichTextImageAttr& attr);
+    void Copy(const wxRichTextImageAttr& attr);
 
-        int m_align;
-        int m_floating;
-        int m_scaleW, m_scaleH;
-        int m_width, m_height;
+    int m_scaleW, m_scaleH;
+    int m_width, m_height;
 };
 
 /*!
@@ -1292,22 +1308,40 @@ private:
     wxRichTextObject* m_real;
 };
 
+/*!
+ * wxRichTextAnchoredObject class declaration
+ * This object is an abstract one that represent some objects which can floats
+ */
+class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObject: public wxRichTextObject
+{
+    DECLARE_CLASS(wxRichTextAnchoredObject)
+public:
+// Constructors
+    wxRichTextAnchoredObject(wxRichTextObject* parent = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    ~wxRichTextAnchoredObject() {};
+
+// Accessors
+    wxRichTextAnchoredObjectAttr GetAnchoredAttr();
+    void SetAnchoredAttr(const wxRichTextAnchoredObjectAttr& attr);
+private:
+    wxRichTextAnchoredObjectAttr m_attr;
+};
 
 /*!
  * wxRichTextImage class declaration
  * This object represents an image.
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextObject
+class WXDLLIMPEXP_RICHTEXT wxRichTextImage: public wxRichTextAnchoredObject
 {
     DECLARE_DYNAMIC_CLASS(wxRichTextImage)
 public:
 // Constructors
 
-    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextObject(parent) { m_attrInit = false; }
-    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
-    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
-    wxRichTextImage(const wxRichTextImage& obj): wxRichTextObject() { Copy(obj); }
+    wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextAnchoredObject(parent) { m_attrInit = false; }
+    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    wxRichTextImage(const wxRichTextImage& obj): wxRichTextAnchoredObject() { Copy(obj); }
 
 // Overrideables
 
@@ -1341,9 +1375,10 @@ public:
     /// Get the image block containing the raw data
     wxRichTextImageBlock& GetImageBlock() { return m_imageBlock; }
 
-    /// Get the image attribute
+    /// Get/Set the image attribute
     wxRichTextImageAttr GetImageAttr();
     void SetImageAttr(const wxRichTextImageAttr& attr);
+
 // Operations
 
     /// Copy
@@ -1635,7 +1670,7 @@ public:
     bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to insert the given image
-    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0);
+    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0, const wxRichTextAnchoredObjectAttr& imgAttr = wxRichTextAnchoredObjectAttr());
 
     /// Submit command to delete this range
     bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl);

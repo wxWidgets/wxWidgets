@@ -756,6 +756,16 @@ void MyFrame::WriteInitialText()
 
     r.BeginParagraphSpacing(0, 20);
 
+    r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
+    wxRichTextAnchoredObjectAttr anchoredAttr;
+    anchoredAttr.m_anchored = true;
+    anchoredAttr.m_floating = wxRICHTEXT_FLOAT_LEFT;
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, anchoredAttr);
+    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.EndAlignment();
+    r.Newline();
+
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
     r.BeginBold();
 

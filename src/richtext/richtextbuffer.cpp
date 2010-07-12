@@ -292,6 +292,30 @@ inline void wxCheckSetBrush(wxDC& dc, const wxBrush& brush)
     dc.SetBrush(brush);
 }
 
+wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr()
+{
+    m_anchored = false;
+    m_align = wxRICHTEXT_CENTRE;
+    m_floating = wxRICHTEXT_FLOAT_NONE;
+}
+
+wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr)
+{
+    Copy(attr);
+}
+
+void wxRichTextAnchoredObjectAttr::operator= (const wxRichTextAnchoredObjectAttr& attr)
+{
+    Copy(attr);
+}
+
+void wxRichTextAnchoredObjectAttr::Copy(const wxRichTextAnchoredObjectAttr& attr)
+{
+    m_anchored = attr.m_anchored;
+    m_align = attr.m_align;
+    m_floating = attr.m_floating;
+}
+
 /*!
  * wxRichTextImageAttr
  */
@@ -307,8 +331,7 @@ void wxRichTextImageAttr::operator= (const wxRichTextImageAttr& attr)
 
 void wxRichTextImageAttr::Copy(const wxRichTextImageAttr& attr)
 {
-    m_align = attr.m_align;
-    m_floating = attr.m_floating;
+    wxRichTextAnchoredObjectAttr::Copy(attr);
     m_scaleW = attr.m_scaleW;
     m_scaleH = attr.m_scaleH;
     m_width = attr.m_width;
@@ -5698,7 +5721,7 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
 }
 
 /// Submit command to insert the given image
-bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags)
+bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags, const wxRichTextAnchoredObjectAttr& imgAttr)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Image"), wxRICHTEXT_INSERT, this, ctrl, false);
 
@@ -5717,7 +5740,7 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
     if (p)
         newPara->SetAttributes(*p);
 
-    wxRichTextImage* imageObject = new wxRichTextImage(imageBlock, newPara);
+    wxRichTextImage* imageObject = new wxRichTextImage(imageBlock, newPara, NULL, imgAttr);
     newPara->AppendChild(imageObject);
     action->GetNewParagraphs().AppendChild(newPara);
     action->GetNewParagraphs().UpdateRanges();
@@ -7384,14 +7407,34 @@ bool wxRichTextPlaceHoldingObject::GetRangeSize(const wxRichTextRange& range, wx
 }
 
 /*!
+ * wxRichTextAnchoredObject implementation
+ */
+IMPLEMENT_CLASS(wxRichTextAnchoredObject, wxRichTextObject)
+
+wxRichTextAnchoredObject::wxRichTextAnchoredObject(wxRichTextObject* parent, const wxRichTextAnchoredObjectAttr& attr):
+    wxRichTextObject(parent), m_attr(attr)
+{
+}
+
+wxRichTextAnchoredObjectAttr wxRichTextAnchoredObject::GetAnchoredAttr()
+{
+    return m_attr;
+}
+
+void wxRichTextAnchoredObject::SetAnchoredAttr(const wxRichTextAnchoredObjectAttr& attr)
+{
+    m_attr = attr;
+}
+
+/*!
  * wxRichTextImage implementation
  * This object represents an image.
  */
 
-IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextObject)
+IMPLEMENT_DYNAMIC_CLASS(wxRichTextImage, wxRichTextAnchoredObject)
 
-wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxTextAttr* charStyle):
-    wxRichTextObject(parent)
+wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent, wxTextAttr* charStyle, const wxRichTextAnchoredObjectAttr& attr):
+    wxRichTextAnchoredObject(parent, attr)
 {
     m_attrInit = false;
     m_image = image;
@@ -7399,8 +7442,8 @@ wxRichTextImage::wxRichTextImage(const wxImage& image, wxRichTextObject* parent,
         SetAttributes(*charStyle);
 }
 
-wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxTextAttr* charStyle):
-    wxRichTextObject(parent)
+wxRichTextImage::wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent, wxTextAttr* charStyle, const wxRichTextAnchoredObjectAttr& attr):
+    wxRichTextAnchoredObject(parent, attr)
 {
     m_attrInit = false;
     m_imageBlock = imageBlock;
@@ -7565,8 +7608,8 @@ void wxRichTextImage::InitializeAttribute()
     if (m_attrInit)
         return;
 
-    m_attr.m_align = wxRICHTEXT_LEFT;
-    m_attr.m_floating = wxRICHTEXT_FLOAT_NONE;
+    wxRichTextAnchoredObjectAttr& attr = m_attr;
+    attr = GetAnchoredAttr();
     m_attr.m_scaleW = m_attr.m_scaleH = wxRICHTEXT_PX;
     m_attr.m_width = m_image.GetWidth();
     m_attr.m_height = m_image.GetHeight();
