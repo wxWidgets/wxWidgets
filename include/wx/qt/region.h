@@ -26,6 +26,7 @@ public:
     virtual bool IsEmpty() const;
     virtual void Clear();
 
+    virtual QRegion GetHandle() const;
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
@@ -45,7 +46,6 @@ protected:
     virtual bool DoXor(const wxRegion& region);
     
 private:
-    // QRegion m_qtRegion;
 };
 
 
