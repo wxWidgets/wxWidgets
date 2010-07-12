@@ -1,16 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/qt/region.h
 // Purpose:     header for wxRegion
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // RCS-ID:      $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_QT_REGION_H_
 #define _WX_QT_REGION_H_
-
-// #include <QtGui/QRegion>
 
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
@@ -76,8 +74,10 @@ public:
     wxCoord GetH() const;
     wxCoord GetHeight() const;
     wxRect GetRect() const;
-
+    
 private:
+    QVector< QRect > *m_qtRects;
+    int m_pos;
 };
 
 #endif // _WX_QT_REGION_H_
