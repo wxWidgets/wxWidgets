@@ -222,7 +222,6 @@ void TreeCtrlTestCase::ItemClick()
 
     EventCounter count(m_tree, wxEVT_COMMAND_TREE_ITEM_ACTIVATED);
     EventCounter count1(m_tree, wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK);
-    EventCounter count2(m_tree, wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK);
 
     wxUIActionSimulator sim;
 
@@ -240,7 +239,6 @@ void TreeCtrlTestCase::ItemClick()
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_ACTIVATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK));
 }
 
 void TreeCtrlTestCase::DeleteItem()

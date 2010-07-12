@@ -231,7 +231,6 @@ void ListCtrlTestCase::ItemClick()
     EventCounter count1(m_list, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
     EventCounter count2(m_list, wxEVT_COMMAND_LIST_ITEM_ACTIVATED);
     EventCounter count3(m_list, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK);
-    EventCounter count4(m_list, wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK);
 
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
@@ -262,7 +261,6 @@ void ListCtrlTestCase::ItemClick()
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_SELECTED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_ACTIVATED));
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK));
 
     //tidy up when we are finished
     m_list->ClearAll();
