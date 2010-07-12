@@ -708,7 +708,7 @@ public:
 
     //mask
    
-    void SetMask(const wxMaskedEdit& mask);
+    virtual void SetMask(const wxMaskedEdit& mask);
     // wxWindow overrides
     
     virtual wxVisualAttributes GetDefaultAttributes() const

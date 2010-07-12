@@ -45,7 +45,6 @@
 #include "wx/control.h"
 #include "wx/renderer.h" // this is needed for wxCONTROL_XXX flags
 #include "wx/bitmap.h" // wxBitmap used by-value
-#include "wx/maskededit.h"
 
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 class WXDLLIMPEXP_FWD_CORE wxComboPopup;
@@ -430,7 +429,6 @@ public:
     virtual wxWindow *GetMainWindowOfCompositeControl()
         { return m_mainCtrlWnd; }
 
-    void SetMask(const wxMaskedEdit& mask);
 
 protected:
 
@@ -559,14 +557,7 @@ protected:
     virtual bool DoSetMargins(const wxPoint& pt);
     virtual wxPoint DoGetMargins() const;
 
-    //Mask event methods
-    void ApplySingleFieldMask();
-    void ApplyMultipleFieldsMask();
-    void ApplyMask(wxCommandEvent& event);
-    void KeyPressedMask(wxKeyEvent& event);
-    void MouseClickedMask(wxMouseEvent& event);
-
-
+ 
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;
 
@@ -666,9 +657,7 @@ protected:
 
     // should the focus be reset to the textctrl in idle time?
     bool                    m_resetFocus;
-    // Mask
-    wxMaskedEdit m_maskCtrl;
-
+   
 
 private:
     void Init();

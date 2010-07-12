@@ -151,6 +151,8 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 #if wxOSX_USE_COCOA
     wxComboWidgetImpl* GetComboPeer() const;
 #endif
+    
+    virtual void SetMask(const wxMaskedEdit& mask);
 protected:
     // common part of all ctors
     void Init();
@@ -183,6 +185,18 @@ protected:
 #endif
 
     virtual void EnableTextChangedEvents(bool enable);
+
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
+
+    // Mask
+    wxMaskedEdit m_maskCtrl;
+
+
 
     // the subcontrols
     wxComboBoxText*     m_text;

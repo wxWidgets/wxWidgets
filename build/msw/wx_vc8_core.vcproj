@@ -803,6 +803,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\comboboxcmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\combocmn.cpp"
 				>
 			</File>

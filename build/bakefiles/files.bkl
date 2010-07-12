@@ -651,6 +651,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/clrpickercmn.cpp
     src/common/colourcmn.cpp
     src/common/combocmn.cpp
+    src/common/comboboxcmn.cpp
     src/common/cmdproc.cpp
     src/common/cmndata.cpp
     src/common/containr.cpp

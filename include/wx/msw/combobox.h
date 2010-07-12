@@ -122,6 +122,7 @@ public:
     virtual bool SetHint(const wxString& hint);
 #endif // wxUSE_UXTHEME
 
+    virtual void SetMask(const wxMaskedEdit& mask);
 protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
@@ -141,6 +142,17 @@ protected:
     {
         m_allowTextEvents = enable;
     }
+
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
+    //Mask
+    wxMaskedEdit m_maskCtrl;
+
+
 
 private:
     // there are the overridden wxTextEntry methods which should only be called

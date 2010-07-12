@@ -69,6 +69,7 @@ public:
 
     void CreateFirstPage(wxPanel* pan);
     void CreateSecondPage(wxPanel* pan);
+    void CreateThirdPage(wxPanel* pan);
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -190,6 +191,10 @@ MyFrame::MyFrame(const wxString& title)
     wxPanel* secondPagePanel = new wxPanel(tab);
     CreateSecondPage(secondPagePanel);
     tab->AddPage(secondPagePanel, wxT("User choice example"));
+
+    wxPanel* thirdPagePanel = new wxPanel(tab);
+    CreateThirdPage(thirdPagePanel);
+    tab->AddPage(thirdPagePanel, wxT("Other mask"));
 
 
     globalSizer->Add(tab,wxALL|wxEXPAND );
@@ -340,6 +345,26 @@ void MyFrame::CreateSecondPage(wxPanel* pan)
  
     pan->SetSizer(gridSizer);
     gridSizer->SetSizeHints(pan);
+}
+    
+void MyFrame::CreateThirdPage(wxPanel* pan)
+{
+    wxGridSizer* gridSizer = new wxGridSizer(2);
+
+    wxStaticText* telText     = new wxStaticText(pan, wxID_ANY, wxT("French phone number"));
+    wxComboBox*   telCombo     = new wxComboBox(pan, wxID_ANY); 
+    wxMaskedEdit  telMaskEdit(wxT("##-##-##-##-##"), wxT("F"));
+
+    telCombo->SetMask(telMaskEdit);
+    telCombo->ChangeValue(telMaskEdit.GetEmptyMask());
+
+    gridSizer->Add(telText, wxALL|wxEXPAND);
+    gridSizer->Add(telCombo, wxALL|wxEXPAND);
+
+    pan->SetSizer(gridSizer);
+    gridSizer->SetSizeHints(pan);
+
+
 }
 // event handlers
 

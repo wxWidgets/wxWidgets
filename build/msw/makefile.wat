@@ -351,6 +351,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_clrpickercmn.obj &
 	$(OBJS)\monodll_colourcmn.obj &
 	$(OBJS)\monodll_combocmn.obj &
+	$(OBJS)\monodll_comboboxcmn.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
 	$(OBJS)\monodll_containr.obj &
@@ -597,6 +598,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_clrpickercmn.obj &
 	$(OBJS)\monodll_colourcmn.obj &
 	$(OBJS)\monodll_combocmn.obj &
+	$(OBJS)\monodll_comboboxcmn.obj &
 	$(OBJS)\monodll_cmdproc.obj &
 	$(OBJS)\monodll_cmndata.obj &
 	$(OBJS)\monodll_containr.obj &
@@ -1067,6 +1069,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_clrpickercmn.obj &
 	$(OBJS)\monolib_colourcmn.obj &
 	$(OBJS)\monolib_combocmn.obj &
+	$(OBJS)\monolib_comboboxcmn.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
 	$(OBJS)\monolib_containr.obj &
@@ -1313,6 +1316,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_clrpickercmn.obj &
 	$(OBJS)\monolib_colourcmn.obj &
 	$(OBJS)\monolib_combocmn.obj &
+	$(OBJS)\monolib_comboboxcmn.obj &
 	$(OBJS)\monolib_cmdproc.obj &
 	$(OBJS)\monolib_cmndata.obj &
 	$(OBJS)\monolib_containr.obj &
@@ -1692,6 +1696,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_clrpickercmn.obj &
 	$(OBJS)\coredll_colourcmn.obj &
 	$(OBJS)\coredll_combocmn.obj &
+	$(OBJS)\coredll_comboboxcmn.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
 	$(OBJS)\coredll_containr.obj &
@@ -1938,6 +1943,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_clrpickercmn.obj &
 	$(OBJS)\coredll_colourcmn.obj &
 	$(OBJS)\coredll_combocmn.obj &
+	$(OBJS)\coredll_comboboxcmn.obj &
 	$(OBJS)\coredll_cmdproc.obj &
 	$(OBJS)\coredll_cmndata.obj &
 	$(OBJS)\coredll_containr.obj &
@@ -2196,6 +2202,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_clrpickercmn.obj &
 	$(OBJS)\corelib_colourcmn.obj &
 	$(OBJS)\corelib_combocmn.obj &
+	$(OBJS)\corelib_comboboxcmn.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
 	$(OBJS)\corelib_containr.obj &
@@ -2442,6 +2449,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_clrpickercmn.obj &
 	$(OBJS)\corelib_colourcmn.obj &
 	$(OBJS)\corelib_combocmn.obj &
+	$(OBJS)\corelib_comboboxcmn.obj &
 	$(OBJS)\corelib_cmdproc.obj &
 	$(OBJS)\corelib_cmndata.obj &
 	$(OBJS)\corelib_containr.obj &
@@ -7502,6 +7510,11 @@ $(OBJS)\monodll_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_comboboxcmn.obj :  .AUTODEPEND ..\..\src\common\comboboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9700,6 +9713,11 @@ $(OBJS)\monolib_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_comboboxcmn.obj :  .AUTODEPEND ..\..\src\common\comboboxcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11921,6 +11939,11 @@ $(OBJS)\coredll_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_comboboxcmn.obj :  .AUTODEPEND ..\..\src\common\comboboxcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_cmdproc.obj :  .AUTODEPEND ..\..\src\common\cmdproc.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13204,6 +13227,11 @@ $(OBJS)\corelib_colourcmn.obj :  .AUTODEPEND ..\..\src\common\colourcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_combocmn.obj :  .AUTODEPEND ..\..\src\common\combocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_comboboxcmn.obj :  .AUTODEPEND ..\..\src\common\comboboxcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

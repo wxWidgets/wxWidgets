@@ -161,7 +161,6 @@ public:
     // mask
     // ----
     virtual void SetMask(const wxMaskedEdit& WXUNUSED(mask)){};
-
     // implementation only
     // -------------------
 

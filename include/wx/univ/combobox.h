@@ -150,6 +150,7 @@ public:
     virtual wxClientDataType GetClientDataType() const;
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
+    virtual void SetMask(const wxMaskedEdit& mask);
 protected:
     virtual wxString DoGetValue() const;
 
@@ -166,6 +167,17 @@ protected:
 
     // get the associated listbox
     wxListBox *GetLBox() const { return m_lbox; }
+
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
+
+    // Mask
+    wxMaskedEdit m_maskCtrl;
+
 
 private:
     // implement wxTextEntry pure virtual method

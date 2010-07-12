@@ -1797,6 +1797,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_clrpickercmn.o \
 	$(OBJS)\monodll_colourcmn.o \
 	$(OBJS)\monodll_combocmn.o \
+	$(OBJS)\monodll_comboboxcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -2043,6 +2044,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_clrpickercmn.o \
 	$(OBJS)\monodll_colourcmn.o \
 	$(OBJS)\monodll_combocmn.o \
+	$(OBJS)\monodll_comboboxcmn.o \
 	$(OBJS)\monodll_cmdproc.o \
 	$(OBJS)\monodll_cmndata.o \
 	$(OBJS)\monodll_containr.o \
@@ -2508,6 +2510,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_clrpickercmn.o \
 	$(OBJS)\monolib_colourcmn.o \
 	$(OBJS)\monolib_combocmn.o \
+	$(OBJS)\monolib_comboboxcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -2754,6 +2757,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_clrpickercmn.o \
 	$(OBJS)\monolib_colourcmn.o \
 	$(OBJS)\monolib_combocmn.o \
+	$(OBJS)\monolib_comboboxcmn.o \
 	$(OBJS)\monolib_cmdproc.o \
 	$(OBJS)\monolib_cmndata.o \
 	$(OBJS)\monolib_containr.o \
@@ -3122,6 +3126,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_clrpickercmn.o \
 	$(OBJS)\coredll_colourcmn.o \
 	$(OBJS)\coredll_combocmn.o \
+	$(OBJS)\coredll_comboboxcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -3368,6 +3373,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_clrpickercmn.o \
 	$(OBJS)\coredll_colourcmn.o \
 	$(OBJS)\coredll_combocmn.o \
+	$(OBJS)\coredll_comboboxcmn.o \
 	$(OBJS)\coredll_cmdproc.o \
 	$(OBJS)\coredll_cmndata.o \
 	$(OBJS)\coredll_containr.o \
@@ -3624,6 +3630,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_clrpickercmn.o \
 	$(OBJS)\corelib_colourcmn.o \
 	$(OBJS)\corelib_combocmn.o \
+	$(OBJS)\corelib_comboboxcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -3870,6 +3877,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_clrpickercmn.o \
 	$(OBJS)\corelib_colourcmn.o \
 	$(OBJS)\corelib_combocmn.o \
+	$(OBJS)\corelib_comboboxcmn.o \
 	$(OBJS)\corelib_cmdproc.o \
 	$(OBJS)\corelib_cmndata.o \
 	$(OBJS)\corelib_containr.o \
@@ -7244,6 +7252,11 @@ $(OBJS)\monodll_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9442,6 +9455,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11663,6 +11681,11 @@ $(OBJS)\coredll_combocmn.o: ../../src/common/combocmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_cmdproc.o: ../../src/common/cmdproc.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12946,6 +12969,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_combocmn.o: ../../src/common/combocmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_comboboxcmn.o: ../../src/common/comboboxcmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

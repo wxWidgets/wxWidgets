@@ -346,4 +346,7 @@ void wxComboBox::Dismiss()
 {
     gtk_combo_box_popdown( GTK_COMBO_BOX(m_widget) );
 }
+
+
+
 #endif // wxUSE_COMBOBOX

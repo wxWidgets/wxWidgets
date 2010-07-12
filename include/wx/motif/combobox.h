@@ -101,6 +101,7 @@ public:
     WXWidget GetTopWidget() const { return m_mainWidget; }
     WXWidget GetMainWidget() const { return m_mainWidget; }
 
+    virtual void SetMask(const wxMaskedEdit& mask);
 protected:
     virtual wxSize DoGetBestSize() const;
     virtual void DoSetSize(int x, int y,
@@ -110,6 +111,13 @@ protected:
     // implement wxTextEntry pure virtual methods
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual WXWidget GetTextWidget() const;
+ 
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
 
 private:
     // only implemented for native combo box

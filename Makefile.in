@@ -4287,6 +4287,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
 	monodll_combocmn.o \
+	monodll_comboboxcmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -4483,6 +4484,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_clrpickercmn.o \
 	monodll_colourcmn.o \
 	monodll_combocmn.o \
+	monodll_comboboxcmn.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -6124,6 +6126,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
 	monolib_combocmn.o \
+	monolib_comboboxcmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -6320,6 +6323,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_clrpickercmn.o \
 	monolib_colourcmn.o \
 	monolib_combocmn.o \
+	monolib_comboboxcmn.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -8150,6 +8154,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
 	coredll_combocmn.o \
+	coredll_comboboxcmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -8346,6 +8351,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_clrpickercmn.o \
 	coredll_colourcmn.o \
 	coredll_combocmn.o \
+	coredll_comboboxcmn.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -9660,6 +9666,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
 	corelib_combocmn.o \
+	corelib_comboboxcmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -9856,6 +9863,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_clrpickercmn.o \
 	corelib_colourcmn.o \
 	corelib_combocmn.o \
+	corelib_comboboxcmn.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -18917,6 +18925,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
+@COND_USE_GUI_1@monodll_comboboxcmn.o: $(srcdir)/src/common/comboboxcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/comboboxcmn.cpp
+
 @COND_USE_GUI_1@monodll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
 
@@ -23779,6 +23790,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
+
+@COND_USE_GUI_1@monolib_comboboxcmn.o: $(srcdir)/src/common/comboboxcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/comboboxcmn.cpp
 
 @COND_USE_GUI_1@monolib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
@@ -28838,6 +28852,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
 
+@COND_USE_GUI_1@coredll_comboboxcmn.o: $(srcdir)/src/common/comboboxcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/comboboxcmn.cpp
+
 @COND_USE_GUI_1@coredll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp
 
@@ -32419,6 +32436,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_combocmn.o: $(srcdir)/src/common/combocmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/combocmn.cpp
+
+@COND_USE_GUI_1@corelib_comboboxcmn.o: $(srcdir)/src/common/comboboxcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/comboboxcmn.cpp
 
 @COND_USE_GUI_1@corelib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/cmdproc.cpp

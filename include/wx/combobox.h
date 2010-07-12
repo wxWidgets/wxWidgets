@@ -25,6 +25,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 #include "wx/ctrlsub.h"
 #include "wx/textentry.h"
 
+
 class WXDLLIMPEXP_CORE wxComboBoxBase : public wxItemContainer,
                                         public wxTextEntry
 {
@@ -54,8 +55,6 @@ public:
     // dropdown is shown and the user selected, but not yet accepted, a value
     // different from the old one in it
     virtual int GetCurrentSelection() const { return GetSelection(); }
-
-
 };
 
 // ----------------------------------------------------------------------------

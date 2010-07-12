@@ -308,6 +308,10 @@ SOURCE=..\..\src\common\colourcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\comboboxcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\combocmn.cpp
 # End Source File
 # Begin Source File

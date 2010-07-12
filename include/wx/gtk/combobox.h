@@ -12,6 +12,7 @@
 #define _WX_GTK_COMBOBOX_H_
 
 #include "wx/choice.h"
+#include "wx/maskededit.h"
 
 typedef struct _GtkEntry GtkEntry;
 
@@ -120,6 +121,9 @@ public:
 
     virtual void DisableEvents();
     virtual void EnableEvents();
+    
+    virtual void SetMask(const wxMaskedEdit& mask);
+    
     GtkWidget* GetConnectWidget();
 
     static wxVisualAttributes
@@ -139,7 +143,18 @@ protected:
 
     virtual GtkEntry *GetEntry() const
         { return m_entry; }
+ 
+    //Mask event methods
+    void ApplySingleFieldMask();
+    void ApplyMultipleFieldsMask();
+    void ApplyMask(wxCommandEvent& event);
+    void KeyPressedMask(wxKeyEvent& event);
+    void MouseClickedMask(wxMouseEvent& event);
 
+    // Mask
+    wxMaskedEdit m_maskCtrl;
+
+   
     GtkEntry*   m_entry;
 
 private:
@@ -156,6 +171,7 @@ private:
 
     void Init();
 
+ 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxComboBox)
     DECLARE_EVENT_TABLE()
 };

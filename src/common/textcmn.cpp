@@ -802,9 +802,9 @@ void wxTextCtrlBase::ApplySingleFieldMask()
     printf("Invalid\n");
             SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
             Replace(cursor, cursor +1, wxT(" "));
-      
+    
             cursor = GetInsertionPoint();
-            SetInsertionPoint ( cursor - 5);
+            SetInsertionPoint ( cursor - 1);
                 
         }
         else
@@ -868,14 +868,11 @@ void wxTextCtrlBase::ApplyMultipleFieldsMask()
         //If the string is not valid
         if(invalid)
         {
-    printf("Invalid\n");
             SetBackgroundColour(m_maskCtrl.GetInvalidBackgroundColour());
-            Replace(cursor, cursor +1, wxT(" "));
-                    
+            printf("invalid\n");
         }
         else
         {
-    printf("Valid\n");
             //If the test is upper or lower case after Applying formats codes
             if(formatString.Cmp(userInput) != 0)
             {
@@ -890,9 +887,8 @@ void wxTextCtrlBase::ApplyMultipleFieldsMask()
 
 }
 
-void wxTextCtrlBase::ApplyMask(wxCommandEvent& WXUNUSED(event))
+void wxTextCtrlBase::ApplyMask(wxCommandEvent& event)
 {
-    
     bool oneField = true;
     unsigned int it = 0;
     wxString mask = m_maskCtrl.GetMask();
@@ -1134,7 +1130,7 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                     ch = string[cursor];
                 Replace(cursor, cursor+1, ch);
            }
-            else
+           else
                 event.Skip();
     
         }
