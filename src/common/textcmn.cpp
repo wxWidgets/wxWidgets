@@ -748,22 +748,21 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
 void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
 {
         m_maskCtrl = wxMaskedEdit(mask);
-        
+     
+    if(m_maskCtrl.GetMask().Cmp(wxEmptyString) != 0)
+    {
+
         ChangeValue(m_maskCtrl.GetDefaultValue());
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
-      //  Connect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxTextCtrlBase::ApplyMask));
         Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
         Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
-#if 0
+        Connect(wxID_ANY, wxEVT_ACTIVATE, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
+    }
     else
     {
-        if(m_maskCtrl != NULL)
-            delete m_maskCtrl;
-         Disconnect(wxID_ANY, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler(wxTextCtrlBase::ApplyMask));
          Disconnect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
          Disconnect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
     }
-#endif
 }
 
 void wxTextCtrlBase::ApplyMask()
@@ -777,8 +776,6 @@ void wxTextCtrlBase::ApplyMask()
     {
         
         formatString = m_maskCtrl.ApplyFormatCodes(string.Mid(0, GetInsertionPoint()));
-
-    
         invalid = !m_maskCtrl.IsValid(formatString);
 
         //If the string is not valid
@@ -1052,6 +1049,12 @@ void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
     }
 
 }
+
+void wxTextCtrlBase::FocusMask(wxFocusEvent& WXUNUSED(event))
+{
+    printf("Activated\n");
+}
+
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------

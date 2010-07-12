@@ -113,9 +113,7 @@ protected:
     virtual WXWidget GetTextWidget() const;
  
     //Mask event methods
-    void ApplySingleFieldMask();
-    void ApplyMultipleFieldsMask();
-    void ApplyMask(wxCommandEvent& event);
+    void ApplyMask(event);
     void KeyPressedMask(wxKeyEvent& event);
     void MouseClickedMask(wxMouseEvent& event);
 

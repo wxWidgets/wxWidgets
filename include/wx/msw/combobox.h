@@ -144,9 +144,7 @@ protected:
     }
 
     //Mask event methods
-    void ApplySingleFieldMask();
-    void ApplyMultipleFieldsMask();
-    void ApplyMask(wxCommandEvent& event);
+    void ApplyMask();
     void KeyPressedMask(wxKeyEvent& event);
     void MouseClickedMask(wxMouseEvent& event);
     //Mask
