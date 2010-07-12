@@ -196,8 +196,14 @@ void VarArgTestCase::ArgsValidation()
     wxString::Format("a string(%s,%s), ptr %p, int %i",
                      wxString(), "foo", "char* as pointer", 1);
 
+#if !wxCHECK_VISUALC_VERSION(8)
+    // Microsoft has helpfully disabled support for "%n" in their CRT by
+    // default starting from VC8 and somehow even calling
+    // _set_printf_count_output() doesn't help here, so just disable this test
+    // for it.
     wxString::Format("foo%i%n", 42, &written);
     CPPUNIT_ASSERT_EQUAL( 5, written );
+#endif // VC8+
 
     // but these are not:
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i: too many arguments", 42, 1, 2, 3) );
