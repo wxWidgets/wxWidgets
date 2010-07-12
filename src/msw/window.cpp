@@ -5724,7 +5724,8 @@ int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                 //  menu creation code
                 wxMenuItem *item = (wxMenuItem*)mii.dwItemData;
 
-                const wxChar *p = wxStrchr(item->GetItemLabel().wx_str(), wxT('&'));
+                const wxString label(item->GetItemLabel());
+                const wxChar *p = wxStrchr(label.wx_str(), wxT('&'));
                 while ( p++ )
                 {
                     if ( *p == wxT('&') )
