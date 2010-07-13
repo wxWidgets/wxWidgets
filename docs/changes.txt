@@ -532,6 +532,7 @@ All (GUI):
 - wxAUI: update floating window position and not only size on resize (MacGyver).
 - Added wxComboCtrl::SetTextCtrlStyle().
 - Also update client data in wxRearrangeList control (John Roberts).
+- Generate more click events in wxGrid when using native header (John Roberts).
 
 GTK:
 

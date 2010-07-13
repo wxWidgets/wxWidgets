@@ -170,6 +170,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxGridHeaderCtrl::OnClick)
+    EVT_HEADER_DCLICK(wxID_ANY, wxGridHeaderCtrl::OnDoubleClick)
+    EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxGridHeaderCtrl::OnRightClick)
 
     EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnBeginResize)
     EVT_HEADER_RESIZING(wxID_ANY, wxGridHeaderCtrl::OnResizing)

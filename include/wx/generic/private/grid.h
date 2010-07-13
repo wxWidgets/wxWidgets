@@ -158,6 +158,15 @@ protected:
 private:
     wxGrid *GetOwner() const { return static_cast<wxGrid *>(GetParent()); }
 
+    static wxMouseEvent GetDummyMouseEvent()
+    {
+        // make up a dummy event for the grid event to use -- unfortunately we
+        // can't do anything else here
+        wxMouseEvent e;
+        e.SetState(wxGetMouseState());
+        return e;
+    }
+
     // override the base class method to update our m_columns array
     virtual void OnColumnCountChanging(unsigned int count)
     {
@@ -195,12 +204,8 @@ private:
 
         // as this is done by the user we should notify the main program about
         // it
-
-        // make up a dummy event for the grid event to use -- unfortunately we
-        // can't do anything else here
-        wxMouseEvent e;
-        e.SetState(wxGetMouseState());
-        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx, e);
+        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx,
+                                      GetDummyMouseEvent());
     }
 
     // overridden to react to the columns order changes in the customization
@@ -214,7 +219,31 @@ private:
     // event handlers forwarding wxHeaderCtrl events to wxGrid
     void OnClick(wxHeaderCtrlEvent& event)
     {
+        GetOwner()->SendEvent(wxEVT_GRID_LABEL_LEFT_CLICK,
+                              -1, event.GetColumn(),
+                              GetDummyMouseEvent());
+
         GetOwner()->DoColHeaderClick(event.GetColumn());
+    }
+
+    void OnDoubleClick(wxHeaderCtrlEvent& event)
+    {
+        if ( !GetOwner()->SendEvent(wxEVT_GRID_LABEL_LEFT_DCLICK,
+                                    -1, event.GetColumn(),
+                                    GetDummyMouseEvent()) )
+        {
+            event.Skip();
+        }
+    }
+
+    void OnRightClick(wxHeaderCtrlEvent& event)
+    {
+        if ( !GetOwner()->SendEvent(wxEVT_GRID_LABEL_RIGHT_CLICK,
+                                    -1, event.GetColumn(),
+                                    GetDummyMouseEvent()) )
+        {
+            event.Skip();
+        }
     }
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
