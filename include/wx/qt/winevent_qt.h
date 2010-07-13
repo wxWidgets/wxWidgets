@@ -46,7 +46,13 @@ protected:
     //virtual void dropEvent ( QDropEvent * event ) { }
 
     //wxMouseEvent
-    //virtual void enterEvent ( QEvent * event ) { }
+    virtual void enterEvent ( QEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleEnterEvent(this, event) )
+            QtWidget::enterEvent(event);
+        else
+            event->accept();
+    }
 
     //wxFocusEvent.
     //virtual void focusInEvent ( QFocusEvent * event ) { }
@@ -76,22 +82,52 @@ protected:
     }
 
     //wxMouseEvent
-    //virtual void leaveEvent ( QEvent * event ) { }
+    virtual void leaveEvent ( QEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleEnterEvent(this, event) )
+            QtWidget::leaveEvent(event);
+        else
+            event->accept();
+    }
 
     //wxMouseEvent
-    //virtual void mouseDoubleClickEvent ( QMouseEvent * event ) { }
+    virtual void mouseDoubleClickEvent ( QMouseEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleMouseEvent(this, event) )
+            QtWidget::mouseDoubleClickEvent(event);
+        else
+            event->accept();
+    }
 
     //wxMouseEvent
-    //virtual void mouseMoveEvent ( QMouseEvent * event ) { }
+    virtual void mouseMoveEvent ( QMouseEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleMouseEvent(this, event) )
+            QtWidget::mouseMoveEvent(event);
+        else
+            event->accept();
+    }
 
     //wxMouseEvent
-    //virtual void mousePressEvent ( QMouseEvent * event ) { }
+    virtual void mousePressEvent ( QMouseEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleMouseEvent(this, event) )
+            QtWidget::mousePressEvent(event);
+        else
+            event->accept();
+    }
 
     //wxMouseEvent
-    //virtual void mouseReleaseEvent ( QMouseEvent * event ) { }
+    virtual void mouseReleaseEvent ( QMouseEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleMouseEvent(this, event) )
+            QtWidget::mouseReleaseEvent(event);
+        else
+            event->accept();
+    }
     
     //wxMoveEvent
-    //virtual void moveEvent ( QMoveEvent * event ) { }
+    virtual void moveEvent ( QMoveEvent * event ) { }
     
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )

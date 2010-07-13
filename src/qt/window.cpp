@@ -587,6 +587,23 @@ static wxKeyCode ConvertQtKeyCode( QKeyEvent *event )
     #undef WXQT_KEY_GROUP
 }
 
+static void FillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardState *state )
+{
+    state->SetControlDown( modifiers.testFlag( Qt::ControlModifier ) );
+    state->SetShiftDown( modifiers.testFlag( Qt::ShiftModifier ) );
+    state->SetAltDown( modifiers.testFlag( Qt::AltModifier ) );
+    state->SetMetaDown( modifiers.testFlag( Qt::MetaModifier ) );
+}
+
+static void FillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
+{
+    state->SetLeftDown( buttons.testFlag( Qt::LeftButton ) );
+    state->SetRightDown( buttons.testFlag( Qt::RightButton ) );
+    state->SetMiddleDown( buttons.testFlag( Qt::MidButton ) );
+    state->SetAux1Down( buttons.testFlag( Qt::XButton1 ) );
+    state->SetAux2Down( buttons.testFlag( Qt::XButton2 ) );
+}
+
 bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *event )
 {
     bool handled = false;
@@ -605,10 +622,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *even
     e.m_rawFlags = event->nativeModifiers();
 
     // Modifiers
-    e.m_controlDown = event->modifiers().testFlag( Qt::ControlModifier );
-    e.m_shiftDown = event->modifiers().testFlag( Qt::ShiftModifier );
-    e.m_altDown = event->modifiers().testFlag( Qt::AltModifier );
-    e.m_metaDown = event->modifiers().testFlag( Qt::MetaModifier );
+    FillKeyboardModifiers( event->modifiers(), &e );
 
     handled = ProcessWindowEvent( e );
 
@@ -629,6 +643,113 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *even
     }
     
     return handled;
+}
+
+bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *event )
+{
+    // Convert event type
+    wxEventType wxType = 0;
+    switch ( event->type() )
+    {
+        case QEvent::MouseButtonDblClick:
+            switch ( event->button() )
+            {
+                case Qt::LeftButton:
+                    wxType = wxEVT_LEFT_DCLICK;
+                    break;
+                case Qt::RightButton:
+                    wxType = wxEVT_RIGHT_DCLICK;
+                    break;
+                case Qt::MidButton:
+                    wxType = wxEVT_MIDDLE_DCLICK;
+                    break;
+                case Qt::XButton1:
+                    wxType = wxEVT_AUX1_DCLICK;
+                    break;
+                case Qt::XButton2:
+                    wxType = wxEVT_AUX2_DCLICK;
+                    break;
+                case Qt::NoButton:
+                    return false;
+            }
+            break;
+        case QEvent::MouseButtonPress:
+            switch ( event->button() )
+            {
+                case Qt::LeftButton:
+                    wxType = wxEVT_LEFT_DOWN;
+                    break;
+                case Qt::RightButton:
+                    wxType = wxEVT_RIGHT_DOWN;
+                    break;
+                case Qt::MidButton:
+                    wxType = wxEVT_MIDDLE_DOWN;
+                    break;
+                case Qt::XButton1:
+                    wxType = wxEVT_AUX1_DOWN;
+                    break;
+                case Qt::XButton2:
+                    wxType = wxEVT_AUX2_DOWN;
+                case Qt::NoButton:
+                    return false;
+            }
+            break;
+        case QEvent::MouseButtonRelease:
+            switch ( event->button() )
+            {
+                case Qt::LeftButton:
+                    wxType = wxEVT_LEFT_UP;
+                    break;
+                case Qt::RightButton:
+                    wxType = wxEVT_RIGHT_UP;
+                    break;
+                case Qt::MidButton:
+                    wxType = wxEVT_MIDDLE_UP;
+                    break;
+                case Qt::XButton1:
+                    wxType = wxEVT_AUX1_UP;
+                    break;
+                case Qt::XButton2:
+                    wxType = wxEVT_AUX2_UP;
+                case Qt::NoButton:
+                    return false;
+            }
+            break;
+        case QEvent::MouseMove:
+            wxType = wxEVT_MOTION;
+            break;
+        default:
+            // Unknown event type
+            wxFAIL_MSG( "Unknown mouse event type" );
+    }
+
+    // Fill the event
+    wxMouseEvent e( wxType );
+    e.m_clickCount = -1;
+    e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
+
+    // Mouse buttons
+    FillMouseButtons( event->buttons(), &e );
+
+    // Keyboard modifiers
+    FillKeyboardModifiers( event->modifiers(), &e );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleEnterEvent ( QWidget *WXUNUSED( receiver ), QEvent *event )
+{
+    wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
+    e.m_clickCount = 0;
+    e.SetPosition( wxQtConvertPoint( QCursor::pos() ) );
+    
+    // Mouse buttons
+    FillMouseButtons( QApplication::mouseButtons(), &e );
+    
+    // Keyboard modifiers
+    FillKeyboardModifiers( QApplication::keyboardModifiers(), &e );
+    
+    return ProcessWindowEvent( e );
 }
 
 QWidget *wxWindow::GetHandle() const

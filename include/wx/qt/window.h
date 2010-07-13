@@ -107,6 +107,8 @@ public:
     virtual bool QtHandleResizeEvent ( QWidget *receiver, QResizeEvent *event );
     virtual bool QtHandleWheelEvent  ( QWidget *receiver, QWheelEvent *event );
     virtual bool QtHandleKeyEvent    ( QWidget *receiver, QKeyEvent *event );
+    virtual bool QtHandleMouseEvent  ( QWidget *receiver, QMouseEvent *event );
+    virtual bool QtHandleEnterEvent  ( QWidget *receiver, QEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,
