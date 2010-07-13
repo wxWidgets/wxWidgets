@@ -14,7 +14,7 @@
 // abstract base class testing wxTextEntry methods
 // ----------------------------------------------------------------------------
 
-class TextEntryTestCase : public CppUnit::TestCase
+class TextEntryTestCase
 {
 public:
     TextEntryTestCase() { }

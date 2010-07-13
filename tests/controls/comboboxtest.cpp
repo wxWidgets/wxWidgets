@@ -23,12 +23,14 @@
 #endif // WX_PRECOMP
 
 #include "textentrytest.h"
+#include "itemcontainertest.h"
 
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
-class ComboBoxTestCase : public TextEntryTestCase
+class ComboBoxTestCase : public TextEntryTestCase, public ItemContainerTestCase,
+                         public CppUnit::TestCase
 {
 public:
     ComboBoxTestCase() { }
@@ -40,6 +42,9 @@ private:
     virtual wxTextEntry *GetTestEntry() const { return m_combo; }
     virtual wxWindow *GetTestWindow() const { return m_combo; }
 
+    virtual wxItemContainer *GetContainer() const { return m_combo; }
+    virtual wxWindow *GetContainerWindow() const { return m_combo; }
+
     virtual void CheckStringSelection(const char * WXUNUSED(sel))
     {
         // do nothing here, as explained in TextEntryTestCase comment, our
@@ -49,21 +54,11 @@ private:
 
     CPPUNIT_TEST_SUITE( ComboBoxTestCase );
         wxTEXT_ENTRY_TESTS();
-
+        wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Size );
-        CPPUNIT_TEST( Append );
-        CPPUNIT_TEST( Insert );
-        CPPUNIT_TEST( Count );
-        CPPUNIT_TEST( ItemSelect );
-        CPPUNIT_TEST( FindString );
     CPPUNIT_TEST_SUITE_END();
 
     void Size();
-    void Append();
-    void Insert();
-    void Count();
-    void ItemSelect();
-    void FindString();
 
     wxComboBox *m_combo;
 
@@ -119,129 +114,3 @@ void ComboBoxTestCase::Size()
     m_combo->SetSize(-1, heightOrig);
     CPPUNIT_ASSERT_EQUAL( heightOrig, m_combo->GetSize().y );
 }
-
-//---------------------------------------------------------------------
-//Please also update tests in ItemContainerTestCase when updating below
-//---------------------------------------------------------------------
-
-void ComboBoxTestCase::Append()
-{
-    m_combo->Append("item 0");
-
-    CPPUNIT_ASSERT_EQUAL("item 0", m_combo->GetString(0));
-
-    wxArrayString testitems;
-    testitems.Add("item 1");
-    testitems.Add("item 2");
-
-    m_combo->Append(testitems);
-
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetString(2));
-
-    wxString arritems[] = { "item 3", "item 4" };
-
-    m_combo->Append(2, arritems);
-
-    CPPUNIT_ASSERT_EQUAL("item 3", m_combo->GetString(3));
-    CPPUNIT_ASSERT_EQUAL("item 4", m_combo->GetString(4));
-
-    m_combo->Clear();
-}
-
-void ComboBoxTestCase::Insert()
-{
-    m_combo->Insert("item 0", 0);
-
-    CPPUNIT_ASSERT_EQUAL("item 0", m_combo->GetString(0));
-
-    wxArrayString testitems;
-    testitems.Add("item 1");
-    testitems.Add("item 2");
-
-    m_combo->Insert(testitems, 0);
-
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetString(0));
-    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetString(1));
-
-    wxString arritems[] = { "item 3", "item 4" };
-
-    m_combo->Insert(2, arritems, 1);
-
-    CPPUNIT_ASSERT_EQUAL("item 3", m_combo->GetString(1));
-    CPPUNIT_ASSERT_EQUAL("item 4", m_combo->GetString(2));
-
-    m_combo->Clear();
-}
-
-void ComboBoxTestCase::Count()
-{
-    wxArrayString testitems;
-    testitems.Add("item 0");
-    testitems.Add("item 1");
-    testitems.Add("item 2");
-    testitems.Add("item 3");
-
-    m_combo->Append(testitems);
-
-    CPPUNIT_ASSERT_EQUAL(4, m_combo->GetCount());
-
-    m_combo->Delete(0);
-
-    CPPUNIT_ASSERT_EQUAL(3, m_combo->GetCount());
-
-    m_combo->Delete(0);
-    m_combo->Delete(0);
-
-    CPPUNIT_ASSERT_EQUAL(1, m_combo->GetCount());
-
-    m_combo->Insert(testitems, 1);
-
-    CPPUNIT_ASSERT_EQUAL(5, m_combo->GetCount());
-
-    m_combo->Clear();
-}
-
-void ComboBoxTestCase::ItemSelect()
-{
-    wxArrayString testitems;
-    testitems.Add("item 0");
-    testitems.Add("item 1");
-    testitems.Add("item 2");
-    testitems.Add("item 3");
-
-    m_combo->Append(testitems);
-
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_combo->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("", m_combo->GetStringSelection());
-
-    m_combo->SetSelection(1);
-
-    CPPUNIT_ASSERT_EQUAL(1, m_combo->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("item 1", m_combo->GetStringSelection());
-
-    m_combo->SetStringSelection("item 2");
-
-    CPPUNIT_ASSERT_EQUAL(2, m_combo->GetSelection());
-    CPPUNIT_ASSERT_EQUAL("item 2", m_combo->GetStringSelection());
-
-    m_combo->Clear();
-}
-
-void ComboBoxTestCase::FindString()
-{
-    wxArrayString testitems;
-    testitems.Add("item 0");
-    testitems.Add("item 1");
-    testitems.Add("item 2");
-    testitems.Add("item 3");
-
-    m_combo->Append(testitems);
-
-    CPPUNIT_ASSERT_EQUAL(1, m_combo->FindString("item 1"));
-    CPPUNIT_ASSERT_EQUAL(1, m_combo->FindString("ITEM 1"));
-    CPPUNIT_ASSERT_EQUAL(wxNOT_FOUND, m_combo->FindString("ITEM 1", true));
-
-    m_combo->Clear();
-}
-

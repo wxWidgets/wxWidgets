@@ -20,7 +20,7 @@
 
 #include "itemcontainertest.h"
 
-class ChoiceTestCase : public ItemContainerTestCase
+class ChoiceTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 {
 public:
     ChoiceTestCase() { }

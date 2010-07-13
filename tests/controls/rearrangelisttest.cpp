@@ -21,7 +21,7 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
-class RearrangeListTestCase : public ItemContainerTestCase
+class RearrangeListTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 {
 public:
     RearrangeListTestCase() { }

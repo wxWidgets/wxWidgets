@@ -30,7 +30,7 @@
 // test class
 // ----------------------------------------------------------------------------
 
-class TextCtrlTestCase : public TextEntryTestCase
+class TextCtrlTestCase : public TextEntryTestCase, public CppUnit::TestCase
 {
 public:
     TextCtrlTestCase() { }

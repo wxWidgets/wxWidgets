@@ -21,7 +21,7 @@
 #include "wx/toolbook.h"
 #include "bookctrlbasetest.h"
 
-class ToolbookTestCase : public BookCtrlBaseTestCase
+class ToolbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
     ToolbookTestCase() { }

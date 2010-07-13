@@ -10,7 +10,7 @@
 #ifndef _WX_TESTS_CONTROLS_BOOKCTRLBASETEST_H_
 #define _WX_TESTS_CONTROLS_BOOKCTRLBASETEST_H_
 
-class BookCtrlBaseTestCase : public CppUnit::TestCase
+class BookCtrlBaseTestCase
 {
 public:
     BookCtrlBaseTestCase() { }

@@ -21,7 +21,7 @@
 #include "wx/treebook.h"
 #include "bookctrlbasetest.h"
 
-class TreebookTestCase : public BookCtrlBaseTestCase
+class TreebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
     TreebookTestCase() { }

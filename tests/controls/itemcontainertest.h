@@ -10,7 +10,7 @@
 #ifndef _WX_TESTS_CONTROLS_ITEMCONTAINERTEST_H_
 #define _WX_TESTS_CONTROLS_ITEMCONTAINERTEST_H_
 
-class ItemContainerTestCase : public CppUnit::TestCase
+class ItemContainerTestCase
 {
 public:
     ItemContainerTestCase() { }
@@ -33,7 +33,7 @@ protected:
         CPPUNIT_TEST( Append ); \
         CPPUNIT_TEST( Insert ); \
         CPPUNIT_TEST( Count ); \
-        CPPUNIT_TEST( Selection ); \
+        CPPUNIT_TEST( ItemSelection ); \
         CPPUNIT_TEST( FindString ); \
         CPPUNIT_TEST( ClientData ); \
         CPPUNIT_TEST( VoidData );
@@ -41,7 +41,7 @@ protected:
     void Append();
     void Insert();
     void Count();
-    void Selection();
+    void ItemSelection();
     void FindString();
     void ClientData();
     void VoidData();

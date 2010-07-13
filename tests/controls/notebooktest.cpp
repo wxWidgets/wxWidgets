@@ -21,7 +21,7 @@
 
 #include "bookctrlbasetest.h"
 
-class NotebookTestCase : public BookCtrlBaseTestCase
+class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
     NotebookTestCase() { }

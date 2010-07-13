@@ -16,10 +16,6 @@
 
 #include "itemcontainertest.h"
 
-//----------------------------------------------------------------
-//Please also update tests in ComboBoxTestCase when updating below
-//----------------------------------------------------------------
-
 void ItemContainerTestCase::Append()
 {
     wxItemContainer * const container = GetContainer();
@@ -107,7 +103,7 @@ void ItemContainerTestCase::Count()
     container->Clear();
 }
 
-void ItemContainerTestCase::Selection()
+void ItemContainerTestCase::ItemSelection()
 {
     wxItemContainer * const container = GetContainer();
 

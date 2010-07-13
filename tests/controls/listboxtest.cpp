@@ -20,7 +20,7 @@
 
 #include "itemcontainertest.h"
 
-class ListBoxTestCase : public ItemContainerTestCase
+class ListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 {
 public:
     ListBoxTestCase() { }

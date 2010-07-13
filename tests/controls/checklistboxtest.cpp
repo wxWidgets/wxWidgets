@@ -21,7 +21,7 @@
 #include "itemcontainertest.h"
 #include "testableframe.h"
 
-class CheckListBoxTestCase : public ItemContainerTestCase
+class CheckListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestCase
 {
 public:
     CheckListBoxTestCase() { }

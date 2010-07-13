@@ -21,7 +21,7 @@
 #include "wx/listbook.h"
 #include "bookctrlbasetest.h"
 
-class ListbookTestCase : public BookCtrlBaseTestCase
+class ListbookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
     ListbookTestCase() { }

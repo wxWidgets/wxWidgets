@@ -21,7 +21,7 @@
 #include "wx/choicebk.h"
 #include "bookctrlbasetest.h"
 
-class ChoicebookTestCase : public BookCtrlBaseTestCase
+class ChoicebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
 public:
     ChoicebookTestCase() { }
