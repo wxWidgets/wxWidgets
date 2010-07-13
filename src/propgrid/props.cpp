@@ -2388,6 +2388,7 @@ wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxArrayString& array )
     : wxPGProperty(label,name)
 {
+    m_delimiter = '"';
     SetValue( array );
 }
 
@@ -2455,9 +2456,8 @@ wxArrayStringProperty::ArrayStringToString( wxString& dst,
 
     if ( flags & Escape )
     {
-        preas[0] = delimiter;
-        pdr = wxS("\\");
-        pdr += delimiter;
+        preas = delimiter;
+        pdr = wxS("\\") + static_cast<wchar_t>(delimiter);
     }
 
     if ( itemCount )
