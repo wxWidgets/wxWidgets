@@ -5,9 +5,9 @@
 #               in the future...)
 # Author:       Vadim Zeitlin
 # Created:      2009-01-04
-# RCS-Id:       $Id:$
+# RCS-Id:       $Id$
 # Copyright:    (c) 2009 Vadim Zeitlin
-# License:      wxWindows licence
+# Licence:      wxWindows licence
 ###############################################################################
 
 # Define wxFooPrinter class implementing (at least) to_string() method for each

@@ -6,7 +6,7 @@
 // Created:     2007/08/10 (move from NSSlider.mm)
 // RCS-ID:      $Id$
 // Copyright:   (c) 2007 Software 2000 Ltd.
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_COCOA_OBJC_NSSLIDER_H__

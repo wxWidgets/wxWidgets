@@ -4,7 +4,7 @@
 // Purpose:     Part of the widgets sample showing wxComboBox
 // Created:     20.07.07
 // Id:          $Id$
-// License:     wxWindows license
+// License:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SAMPLE_WIDGETS_ITEMCONTAINER_H_

@@ -3,7 +3,7 @@
 // Purpose:     interface of various doc/view framework classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPropertySheetDialog
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

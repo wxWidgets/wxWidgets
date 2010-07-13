@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2005 Robert Roebling
 //              (c) 2005-2009 Vadim Zeitlin
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

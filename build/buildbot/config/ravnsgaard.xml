@@ -3,7 +3,7 @@
 <!--
     Name:       ravnsgaard.xml
     RCS-ID:     $Id$
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 -->
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:include href="include/unix.xml"/>

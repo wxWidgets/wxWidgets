@@ -4,7 +4,7 @@
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 // Modified by:
 // RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward, Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

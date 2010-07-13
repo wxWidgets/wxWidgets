@@ -3,7 +3,7 @@
 // Purpose:     Graphics Device Interface function and macro docs
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

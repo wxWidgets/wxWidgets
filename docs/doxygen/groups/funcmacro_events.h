@@ -3,7 +3,7 @@
 // Purpose:     Event functions and macro group doc
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

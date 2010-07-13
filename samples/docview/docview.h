@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_SAMPLES_DOCVIEW_DOCVIEW_H_

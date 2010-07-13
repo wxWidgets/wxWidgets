@@ -7,7 +7,7 @@
 //             (C) 1999-2000, Guillermo Rodriguez Garcia
 //             (C) 2008 Vadim Zeitlin
 // RCS_ID:     $Id$
-// License:    wxWindows licence
+// Licence:    wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ==========================================================================

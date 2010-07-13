@@ -5,7 +5,7 @@
 // Created:     2008-10-17
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Vadim Zeitlin <vadim@wxwidgets.org>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/strconv.h"

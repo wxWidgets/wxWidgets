@@ -5,7 +5,7 @@
     Author:     Laurent Humbertclaude
     RCS-ID:     $Id$
     Copyright:  (c) 2008 Laurent Humbertclaude
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 -->
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:include href="include/xp_vc.xml"/>

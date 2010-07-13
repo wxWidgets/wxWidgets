@@ -3,7 +3,7 @@
 // Purpose:     Implement the Application Frame
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

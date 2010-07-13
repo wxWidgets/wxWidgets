@@ -3,7 +3,7 @@
 // Purpose:     List of wxWidgets available translations
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

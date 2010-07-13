@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin, Mike Wetherell
 // RCS-ID:      $Id$
 // Copyright:   Vadim Zeitlin, Mike Wetherell
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"

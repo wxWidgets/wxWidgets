@@ -3,7 +3,7 @@
 // Purpose:     wxUSE preprocessor symbols
 // Author:      Tim Stahlhut
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

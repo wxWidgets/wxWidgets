@@ -6,7 +6,7 @@
     Author:     Mike Wetherell
     RCS-ID:     $Id$
     Copyright:  (c) 2007 Mike Wetherell
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 
     There is one xml file such as this per build slave containing a <build>
     element for each build the slave runs. Each <build> corresponds to a

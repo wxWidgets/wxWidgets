@@ -3,7 +3,7 @@
 // Purpose:     wxWidgets version numbers
 // Author:      wxWidgets team
 // RCS-ID:      $Id: numdlg.h 52425 2008-03-10 15:24:38Z FM $
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_version */

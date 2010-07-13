@@ -5,7 +5,7 @@
 // Created:     December 2006
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Lukasz Michalski
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

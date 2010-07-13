@@ -14,7 +14,7 @@
 // Created:     13-Jan-2000
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 by Total Control Software
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /*

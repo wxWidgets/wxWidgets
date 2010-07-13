@@ -3,7 +3,7 @@
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /** @addtogroup group_funcmacro_debug */

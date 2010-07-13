@@ -20,7 +20,7 @@
 
 /* 
 
-Permission to use this file under wxWindows license given by
+Permission to use this file under wxWindows licence given by
 copyright holder:
 --------
 From andersca@gnu.org Tue Dec  9 13:01:56 2003
@@ -89,10 +89,10 @@ On tis, 2003-12-09 at 11:42 +0100, Vaclav Slavik wrote:
 > have to be included in our sources and it is under the LGPL license. 
 > The problem is that wxWindows' license is more permissive (see 
 > http://www.opensource.org/licenses/wxwindows.php for details) and so 
-> I can't take your code and put it under wxWindows License. And I 
+> I can't take your code and put it under wxWindows licence. And I
 > can't put code that can't be used under the terms of wxWindows 
 > License into wxWindows either. Do you think it would be possible to 
-> get permission to include eggtrayicon under wxWindows license?
+> get permission to include eggtrayicon under wxWindows licence?
 > 
 > Thanks,
 > Vaclav

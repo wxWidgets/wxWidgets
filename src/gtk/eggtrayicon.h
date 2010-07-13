@@ -1,5 +1,5 @@
 /*
-    Permission to use this file under wxWindows license granted by
+    Permission to use this file under wxWindows licence granted by
     the copyright holder, see eggtrayicon.c for details.
  */
 

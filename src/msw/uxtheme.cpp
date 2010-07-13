@@ -6,7 +6,7 @@
 // Created:     2003
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 John Platts, Vadim Zeitlin
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

@@ -3,7 +3,7 @@
  ** Purpose:     The wxWidgets documentation javascript
  ** Author:      Doxygen team
  ** RCS-ID:      $Id$
- ** Licence:     wxWindows license
+ ** Licence:     wxWindows licence
  *****************************************************************************/
 
 // from w3schools

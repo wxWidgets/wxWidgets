@@ -7,7 +7,7 @@
 // Copyright:   (c) Julian Smart
 //              (c) 2004 ABX
 //              (c) Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

@@ -3,7 +3,7 @@
 ## Purpose:     Doxygen configuration file for generating HTML only
 ## Author:      Francesco Montorsi
 ## RCS-ID:      $Id$
-## Licence:     wxWindows license
+## Licence:     wxWindows licence
 #############################################################################
 
 @INCLUDE = Doxyfile_inc

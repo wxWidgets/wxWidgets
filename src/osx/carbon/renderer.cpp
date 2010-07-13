@@ -6,7 +6,7 @@
 // Created:     20.07.2003
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // for compilers that support precompilation, includes "wx.h".

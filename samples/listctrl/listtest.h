@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // not all ports have support for EVT_CONTEXT_MENU yet, don't define

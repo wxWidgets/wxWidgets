@@ -5,7 +5,7 @@
 // Modified by: Santiago Palacios
 // RCS-ID:      $Id$
 // Copyright:   (c) Michael Bedward, Julian Smart, Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
