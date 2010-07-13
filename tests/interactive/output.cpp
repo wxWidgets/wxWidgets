@@ -377,7 +377,8 @@ void InteractiveOutputTestCase::TestStackWalk()
 #if wxUSE_STACKWALKER
     wxPuts(wxT("*** Testing wxStackWalker ***"));
 
-    StackDump dump(wxTheApp->argv[0].utf8_str());
+    wxString progname(wxTheApp->argv[0]);
+    StackDump dump(progname.utf8_str());
     dump.Walk();
 
     wxPuts("\n");
