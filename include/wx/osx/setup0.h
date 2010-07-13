@@ -1387,7 +1387,7 @@
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
-// native toolbar does support embedding controls, but not comples panels, please test
+// native toolbar does support embedding controls, but not complex panels, please test
 #define wxOSX_USE_NATIVE_TOOLBAR 1
 
 // make sure we have the proper dispatcher for the console event loop
