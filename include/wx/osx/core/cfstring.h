@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/corefoundation/cfstring.h
+// Name:        wx/osx/core/cfstring.h
 // Purpose:     wxCFStringRef and other string functions
 // Author:      Stefan Csomor
 // Modified by:

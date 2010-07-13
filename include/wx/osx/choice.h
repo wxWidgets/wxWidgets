@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/choice.h
+// Name:        wx/osx/choice.h
 // Purpose:     wxChoice class
 // Author:      Stefan Csomor
 // Modified by:

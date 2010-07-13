@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/msw/gdiimage.h
+// Name:        wx/msw/gdiimage.h
 // Purpose:     wxGDIImage class: base class for wxBitmap, wxIcon, wxCursor
 //              under MSW
 // Author:      Vadim Zeitlin

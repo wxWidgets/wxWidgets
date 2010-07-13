@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/srchctrl.h
+// Name:        wx/osx/srchctrl.h
 // Purpose:     mac carbon wxSearchCtrl class
 // Author:      Vince Harron
 // Created:     2006-02-19

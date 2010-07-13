@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/scrolwin.h
+// Name:        wx/scrolwin.h
 // Purpose:     wxScrolledWindow, wxScrolledControl and wxScrollHelper
 // Author:      Vadim Zeitlin
 // Modified by:

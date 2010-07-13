@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/dnd.h
+// Name:        wx/osx/dnd.h
 // Purpose:     Declaration of the wxDropTarget, wxDropSource class etc.
 // Author:      Stefan Csomor
 // RCS-ID:      $Id$

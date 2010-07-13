@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/wx_cwcocoa_cm.h
+// Name:        wx/wx_cwcocoa_cm.h
 // Purpose:     Metrowerks wxCocoa PCH common definitions
 // Author:      Tommy Tian (tommy.tian@webex.com)
 // Modified by:

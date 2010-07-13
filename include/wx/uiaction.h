@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/uiaction.cpp
+// Name:        wx/uiaction.h
 // Purpose:     wxUIActionSimulator interface
 // Author:      Kevin Ollivier
 // Modified by:

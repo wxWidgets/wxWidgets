@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/statusbr.h
+// Name:        wx/osx/statusbr.h
 // Purpose:     native implementation of wxStatusBar.
 //              Optional: can use generic version instead.
 // Author:      Stefan Csomor

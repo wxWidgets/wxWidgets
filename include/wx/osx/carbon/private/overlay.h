@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/private/overlay.h
+// Name:        wx/osx/carbon/private/overlay.h
 // Purpose:     wxOverlayImpl declaration
 // Author:      Stefan Csomor
 // Modified by:

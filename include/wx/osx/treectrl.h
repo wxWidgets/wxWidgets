@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/treectrl.h
+// Name:        wx/osx/treectrl.h
 // Purpose:     wxTreeCtrl class
 // Author:      Stefan Csomor
 // Modified by:

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/evtloop.h
+// Name:        wx/osx/carbon/evtloop.h
 // Purpose:     declaration of wxEventLoop for wxMac
 // Author:      Vadim Zeitlin
 // Modified by:

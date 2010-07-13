@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/checklst.h
+// Name:        wx/osx/checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
 // Author:      Stefan Csomor

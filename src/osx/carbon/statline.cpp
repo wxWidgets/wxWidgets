@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/mac/carbon/statline.cpp
+// Name:        src/osx/carbon/statline.cpp
 // Purpose:     wxStaticLine class
 // Author:      Vadim Zeitlin
 // Created:     28.06.99

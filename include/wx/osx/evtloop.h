@@ -1,7 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/osx/evtloop.h
-// Purpose:     simply forwards to wx/mac/carbon/evtloop.h for consistency with
-//              the other Mac headers
+// Name:        wx/osx/evtloop.h
+// Purpose:     simply forwards to wx/osx/carbon/evtloop.h or
+//              wx/osx/cocoa/evtloop.h for consistency with the other Mac
+//              headers
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2006-01-12
