@@ -199,3 +199,32 @@ void ItemContainerTestCase::VoidData()
 
     CPPUNIT_ASSERT_EQUAL(item2, container->GetClientData(2));
 }
+
+void ItemContainerTestCase::Set()
+{
+    wxItemContainer * const container = GetContainer();
+
+    wxArrayString testitems;
+    testitems.Add("item 0");
+    testitems.Add("item 1");
+
+    container->Append(testitems);
+
+    wxArrayString newtestitems;
+    newtestitems.Add("new item 0");
+    newtestitems.Add("new item 1");
+    newtestitems.Add("new item 2");
+    newtestitems.Add("new item 3");
+
+    container->Set(newtestitems);
+
+    CPPUNIT_ASSERT_EQUAL(4, container->GetCount());
+    CPPUNIT_ASSERT_EQUAL("new item 1", container->GetString(1));
+
+    wxString arrnewitems[] = { "even newer 0", "event newer 1" };
+
+    container->Set(2, arrnewitems);
+
+    CPPUNIT_ASSERT_EQUAL(2, container->GetCount());
+    CPPUNIT_ASSERT_EQUAL("even newer 0", container->GetString(0));
+}
