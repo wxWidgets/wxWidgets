@@ -95,7 +95,8 @@
     @event{EVT_TREE_ITEM_RIGHT_CLICK(id, func)}
           The user has clicked the item with the right mouse button.
     @event{EVT_TREE_ITEM_MIDDLE_CLICK(id, func)}
-          The user has clicked the item with the middle mouse button.
+          The user has clicked the item with the middle mouse button. This is 
+          only supported by the generic control.
     @event{EVT_TREE_SEL_CHANGED(id, func)}
           Selection has changed.
     @event{EVT_TREE_SEL_CHANGING(id, func)}

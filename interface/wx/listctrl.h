@@ -105,7 +105,8 @@
     @event{EVT_LIST_ITEM_FOCUSED(id, func)}
            The currently focused item has changed.
     @event{EVT_LIST_ITEM_MIDDLE_CLICK(id, func)}
-           The middle mouse button has been clicked on an item.
+           The middle mouse button has been clicked on an item. This is
+           only supported by the generic control.
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
           The right mouse button has been clicked on an item.
     @event{EVT_LIST_KEY_DOWN(id, func)}
