@@ -4630,6 +4630,7 @@ void wxGrid::Init()
 
     m_currentCellCoords = wxGridNoCellCoords;
 
+    m_batchCount = 0; // used by ClearSelection() so init before calling it
     ClearSelection();
 
     m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
@@ -4638,7 +4639,6 @@ void wxGrid::Init()
     m_editable = true;  // default for whole grid
 
     m_inOnKeyDown = false;
-    m_batchCount = 0;
 
     m_extraWidth =
     m_extraHeight = 0;
