@@ -16,6 +16,8 @@
 #include "wx/qt/window_qt.h"
 
 #include <QtGui/QGridLayout>
+#include <QtGui/QPicture>
+#include <QtGui/QPainter>
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
@@ -86,6 +88,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
 
     Move(pos);
     SetSize(size);
+    m_qtPicture = new QPicture();
 
     return ( true );
 }
@@ -433,10 +436,21 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *receiver, QPaintEvent * WXUNUSED( e
         wxEraseEvent erase;
         ProcessWindowEvent(erase);
         wxPaintEvent paint;
-        ProcessWindowEvent(paint);
-
         return ProcessWindowEvent(paint);
     }
+}
+
+void wxWindow::QtPaintClientDCPicture( QWidget *receiver )
+{
+    if ( m_qtContainer && receiver != m_qtContainer )
+        return;
+
+    // Paint wxClientDC data
+    QPainter painter( receiver );
+    painter.drawPicture( 0, 0, *m_qtPicture );
+
+    // Reset picture
+    m_qtPicture->setData( NULL, 0 );
 }
 
 bool wxWindow::QtHandleResizeEvent ( QWidget *WXUNUSED( receiver ), QResizeEvent *event )
@@ -768,4 +782,9 @@ QWidget *wxWindow::QtGetContainer() const
 QWidget *wxWindow::QtGetScrollBarsContainer() const
 {
     return m_qtWindow;
+}
+
+QPicture *wxWindow::QtGetPicture() const
+{
+    return m_qtPicture;
 }

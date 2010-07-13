@@ -102,6 +102,8 @@ public:
     // wxQt implementation internals:
 
     virtual WXWidget QtGetContainer() const;
+    virtual QPicture *QtGetPicture() const;
+    virtual void QtPaintClientDCPicture( QWidget *receiver );
 
     virtual bool QtHandlePaintEvent  ( QWidget *receiver, QPaintEvent *event );
     virtual bool QtHandleResizeEvent ( QWidget *receiver, QResizeEvent *event );
@@ -158,6 +160,8 @@ private:
     void QtOnScrollBarEvent( wxScrollEvent& event );
     
     wxScrollBar *QtGetScrollBar( int orientation ) const;
+
+    QPicture *m_qtPicture;
     
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )

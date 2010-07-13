@@ -17,6 +17,7 @@ class WXDLLIMPEXP_CORE wxQtDCImpl : public wxDCImpl
 {
 public:
     wxQtDCImpl( wxDC *owner );
+    ~wxQtDCImpl();
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;

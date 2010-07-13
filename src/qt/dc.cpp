@@ -21,6 +21,15 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     m_clippingRegion = new wxRegion;
 }
 
+wxQtDCImpl::~wxQtDCImpl()
+{
+    if ( m_qtPainter.isActive() )
+        m_qtPainter.end();
+
+    if ( m_clippingRegion != NULL )
+        delete m_clippingRegion;
+}
+
 void wxQtDCImpl::PrepareQPainter()
 {
     //Do here all QPainter initialization (called after each begin())

@@ -28,10 +28,15 @@ class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
 public:
     wxClientDCImpl( wxDC *owner );
     wxClientDCImpl( wxDC *owner, wxWindow *win );
+
+    ~wxClientDCImpl();
+
+private:
+    wxWindow *m_window;
 };
 
 
-class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
+class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxWindowDCImpl
 {
 public:
     wxPaintDCImpl( wxDC *owner );

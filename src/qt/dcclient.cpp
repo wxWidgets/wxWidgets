@@ -12,6 +12,8 @@
 #include "wx/dcclient.h"
 #include "wx/qt/dcclient.h"
 
+#include <QtGui/QPicture>
+
 //##############################################################################
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
@@ -34,22 +36,36 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *win )
 wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
+    m_window = NULL;
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
-    : wxWindowDCImpl( owner, win )
+    : wxWindowDCImpl( owner )
 {
+    /* Paint to a QPicture that will then be painted in the next
+     * paint event of that window (a paint event will be generated
+     * when this wxClientDC is done). */
+    m_window = win;
+    m_ok = m_qtPainter.begin( win->QtGetPicture() );
+    if (m_ok) PrepareQPainter();    
+}
+
+wxClientDCImpl::~wxClientDCImpl()
+{
+    m_qtPainter.end();
+    if ( m_window != NULL )
+        m_window->Refresh();
 }
 
 //##############################################################################
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
-    : wxClientDCImpl( owner )
+    : wxWindowDCImpl( owner )
 {
 }
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
-    : wxClientDCImpl( owner, win )
+    : wxWindowDCImpl( owner, win )
 {
 }
 
