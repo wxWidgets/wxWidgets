@@ -330,13 +330,15 @@ void wxWindow::DoScreenToClient( int *x, int *y ) const
 
 void wxWindow::DoCaptureMouse()
 {
-    GetHandle()->grabMouse();
+    QtGetContainer()->grabMouse();
+    s_capturedWindow = this;
 }
 
 
 void wxWindow::DoReleaseMouse()
 {
-    GetHandle()->releaseMouse();
+    QtGetContainer()->releaseMouse();
+    s_capturedWindow = NULL;
 }
 
 wxWindow *wxWindowBase::GetCapture()
