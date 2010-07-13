@@ -1359,7 +1359,7 @@
 // override some settings for Metrowerks
 //
 // VZ: isn't this file only used when building with Metrowerks anyhow?
-// CS: no, it is also used by the XCode projects
+// CS: no, it is also used by the Xcode projects
 #ifdef __MWERKS__
     #undef wxUSE_DEBUG_CONTEXT
     #define wxUSE_DEBUG_CONTEXT 1
