@@ -218,7 +218,10 @@ public:
     void AssignImageList(wxImageList* imageList, int which);
 
     /**
-        Deletes all items and all columns.
+        Deletes all items and all columns. 
+
+        @note  This sends an event of type @c wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS 
+               under all platforms.
     */
     void ClearAll();
 
