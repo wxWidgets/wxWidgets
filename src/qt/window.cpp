@@ -740,7 +740,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *
     // Fill the event
     wxMouseEvent e( wxType );
     e.m_clickCount = -1;
-    e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
+    e.SetPosition( wxQtConvertPoint( event->pos() ) );
 
     // Mouse buttons
     FillMouseButtons( event->buttons(), &e );
@@ -751,11 +751,11 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleEnterEvent ( QWidget *WXUNUSED( receiver ), QEvent *event )
+bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )
 {
     wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
     e.m_clickCount = 0;
-    e.SetPosition( wxQtConvertPoint( QCursor::pos() ) );
+    e.SetPosition( wxQtConvertPoint( receiver->mapFromGlobal( QCursor::pos() ) ) );
     
     // Mouse buttons
     FillMouseButtons( QApplication::mouseButtons(), &e );
