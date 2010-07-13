@@ -279,13 +279,35 @@ void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                        wxCoord x2, wxCoord y2,
                        wxCoord xc, wxCoord yc)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    // Calculate the rectangle that contains the circle
+    QLineF l1( xc, yc, x1, y1 );
+    QLineF l2( xc, yc, x2, y2 );
+    QPointF center( xc, yc );
+    
+    qreal lenRadius = l1.length();
+    QPointF centerToCorner( lenRadius, lenRadius );
+    
+    QRect rectangle = QRectF( center - centerToCorner, center + centerToCorner ).toRect();
+
+    // Calculate the angles
+    int startAngle = (int)( l1.angle() * 16 );
+    int endAngle = (int)( l2.angle() * 16 );
+    int spanAngle = endAngle - startAngle;
+    if ( spanAngle < 0 )
+    {
+        spanAngle = -spanAngle;
+    }
+    
+    if ( spanAngle == 0 )
+        m_qtPainter.drawEllipse( rectangle );
+    else
+        m_qtPainter.drawPie( rectangle, startAngle, spanAngle );
 }
 
 void wxQtDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                double sa, double ea)
 {
-    m_qtPainter.device()->logicalDpiX();
+    m_qtPainter.drawPie( x, y, w, h, (int)( sa * 16 ), (int)( ( ea - sa ) * 16 ) );
 }
 
 void wxQtDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -313,7 +335,7 @@ void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 
 void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 {
-    wxMISSING_IMPLEMENTATION(__FUNCTION__);
+    DoDrawBitmap( icon, x, y, true );
 }
 
 void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
