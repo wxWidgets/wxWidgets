@@ -82,12 +82,16 @@ public:
     ~wxFloatCollector();
 
     // Collect the floating objects info in the given paragraph
-    bool CollectFloat(wxRichTextParagraph* para);
+    void CollectFloat(wxRichTextParagraph* para);
+    void CollectFloat(wxRichTextParagraph* para, wxRichTextObject* floating);
     // Return the last paragraph we collected
     wxRichTextParagraph* LastParagraph();
     // Given the start y position and the height of the line,
     // find out how wide the line can be
     wxRect GetAvailableRect(int startY, int endY);
+    // Given a floating box, find its fit position
+    long GetFitPosition(int direction, int start, int height);
+    long GetFitPosition(const FloatRectMapArray& array, int start, int height);
     // Find the last y position
     int GetLastRectBottom();
 private:
@@ -97,59 +101,12 @@ private:
     wxRichTextParagraph* m_para;
 };
 
-wxFloatCollector::wxFloatCollector(int width) : m_left(FloatRectMapCmp), m_right(FloatRectMapCmp)
-{
-    m_width = width;
-    m_para = NULL;
-}
-
-wxFloatCollector::~wxFloatCollector()
-{
-}
-
-bool wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
-{
-    wxRichTextObjectList::compatibility_iterator node = para->m_anchoredObjects.GetFirst();
-    while (node)
-    {
-        wxRichTextObject* floating = node->GetData();
-        assert(floating->IsFloatable());
-        wxRichTextPlaceHoldingObject* ph = wxDynamicCast(floating, wxRichTextPlaceHoldingObject);
-        floating = ph->GetRealObject();
-        int direction = floating->GetFloatDirection();
-        wxPoint pos = floating->GetPosition();
-        wxSize size = floating->GetCachedSize();
-        FloatRectMap *map = new FloatRectMap(pos.y, pos.y+size.y, size.x);
-
-        switch (direction)
-        {
-            case wxRICHTEXT_FLOAT_NONE:
-                break;
-            case wxRICHTEXT_FLOAT_LEFT:
-                // Just a not-enough simple assertion
-                assert(m_left.Index(map) == wxNOT_FOUND);
-                m_left.Add(map);
-                break;
-            case wxRICHTEXT_FLOAT_RIGHT:
-                assert(m_right.Index(map) == wxNOT_FOUND);
-                m_right.Add(map);
-                break;
-            default:
-                assert("Must some error occurs");
-        }
-
-        node = node->GetNext();
-    }
-
-    m_para = para;
-}
-
-wxRichTextParagraph* wxFloatCollector::LastParagraph()
-{
-    return m_para;
-}
-
-// Binary search helper function
+/*
+ * Binary search helper function
+ * The argument point is the Y coordinate, and this fuction
+ * always return the floating rect that contain this coordinate
+ * or under this coordinate.
+ */
 int SearchAdjacentRect(const FloatRectMapArray& array, int point)
 {
     int end = array.GetCount() - 1;
@@ -210,6 +167,95 @@ int GetWidthFromFloatRect(const FloatRectMapArray& array, int index, int startY,
     }
 
     return ret;
+}
+
+wxFloatCollector::wxFloatCollector(int width) : m_left(FloatRectMapCmp), m_right(FloatRectMapCmp)
+{
+    m_width = width;
+    m_para = NULL;
+}
+
+wxFloatCollector::~wxFloatCollector()
+{
+}
+
+long wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start, int height)
+{
+    if (array.GetCount() == 0)
+        return start;
+
+    int i = SearchAdjacentRect(array, start);
+    int last = start;
+    while (i < array.GetCount())
+    {
+        if (array[i]->startY - last >= height)
+            return last;
+        last = array[i]->endY;
+        i++;
+    }
+
+    return array[i]->endY + 1;
+}
+
+long wxFloatCollector::GetFitPosition(int direction, int start, int height)
+{
+    if (direction == wxRICHTEXT_FLOAT_LEFT)
+        return GetFitPosition(m_left, start, height);
+    else if (direction == wxRICHTEXT_FLOAT_RIGHT)
+        return GetFitPosition(m_right, start, height);
+    else
+    {
+        assert("Never should be here");
+        return start;
+    }
+}
+
+void wxFloatCollector::CollectFloat(wxRichTextParagraph* para, wxRichTextObject* floating)
+{
+        int direction = floating->GetFloatDirection();
+        wxPoint pos = floating->GetPosition();
+        wxSize size = floating->GetCachedSize();
+        FloatRectMap *map = new FloatRectMap(pos.y, pos.y+size.y, size.x);
+
+        switch (direction)
+        {
+            case wxRICHTEXT_FLOAT_NONE:
+                break;
+            case wxRICHTEXT_FLOAT_LEFT:
+                // Just a not-enough simple assertion
+                assert(m_left.Index(map) == wxNOT_FOUND);
+                m_left.Add(map);
+                break;
+            case wxRICHTEXT_FLOAT_RIGHT:
+                assert(m_right.Index(map) == wxNOT_FOUND);
+                m_right.Add(map);
+                break;
+            default:
+                assert("Must some error occurs");
+        }
+
+        m_para = para;
+}
+
+void wxFloatCollector::CollectFloat(wxRichTextParagraph* para)
+{
+    wxRichTextObjectList::compatibility_iterator node = para->m_anchoredObjects.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* floating = node->GetData();
+        assert(floating->IsFloatable());
+        wxRichTextPlaceHoldingObject* ph = wxDynamicCast(floating, wxRichTextPlaceHoldingObject);
+        floating = ph->GetRealObject();
+        CollectFloat(para, floating);
+        node = node->GetNext();
+    }
+
+    m_para = para;
+}
+
+wxRichTextParagraph* wxFloatCollector::LastParagraph()
+{
+    return m_para;
 }
 
 wxRect wxFloatCollector::GetAvailableRect(int startY, int endY)
@@ -4793,9 +4839,23 @@ void wxRichTextParagraph::ClearDefaultTabs()
     sm_defaultTabs.Clear();
 }
 
-bool wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector)
+void wxRichTextParagraph::CollectFloat()
 {
-    return true;
+    m_anchoredObjects.Clear();
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* obj = node->GetData();
+        if (obj->IsPlaceHolding())
+        {
+            m_anchoredObjects.Append(obj);
+        }
+    }
+}
+
+void wxRichTextParagraph::LayoutFloat(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSED(style), const wxFloatCollector* floatCollector)
+{
+    
 }
 
 /// Get the first position from pos that has a line break character.

@@ -430,6 +430,9 @@ public:
     /// Whether this object floatalbe
     virtual bool IsFloatable() const { return false; }
 
+    /// Whether this object is a place holding one
+    virtual bool IsPlaceHolding() const { return false; }
+
     /// Floating direction
     virtual int GetFloatDirection() const { return wxRICHTEXT_FLOAT_NONE; }
 
@@ -1103,8 +1106,11 @@ public:
     /// Get default tabstop array
     static const wxArrayInt& GetDefaultTabs() { return sm_defaultTabs; }
 
+    /// Collect all the floats from the paragraph
+    void CollectFloat();
+
     /// Layout the floats object
-    bool LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector);
+    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector);
 
 protected:
     /// The lines that make up the wrapped paragraph
@@ -1304,6 +1310,9 @@ public:
 
     /// Get the real object of this place holding one
     wxRichTextObject* GetRealObject() { return m_real; }
+
+    /// Whether this object is a place holding one
+    virtual bool IsPlaceHolding() const { return true; }
 private:
     wxRichTextObject* m_real;
 };
