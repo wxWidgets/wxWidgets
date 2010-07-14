@@ -54,7 +54,7 @@ wxWindow::wxWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wx
 
 bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     const wxPoint & pos, const wxSize & size,
-    long WXUNUSED( style ), const wxString & WXUNUSED( name ))
+    long style, const wxString & WXUNUSED( name ))
 {
     // Should have already been created in the derived class in most cases
     
@@ -90,6 +90,8 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     SetSize(size);
     m_qtPicture = new QPicture();
     m_mouseInside = false;
+
+    m_windowStyle = style;
 
     return ( true );
 }
