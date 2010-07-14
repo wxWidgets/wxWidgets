@@ -124,6 +124,7 @@
             config/config.cpp
             controls/bookctrlbasetest.cpp
             controls/buttontest.cpp
+            controls/checkboxtest.cpp
             controls/checklistboxtest.cpp
             controls/choicebooktest.cpp
             controls/choicetest.cpp
