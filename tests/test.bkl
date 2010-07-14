@@ -143,6 +143,7 @@
             controls/richtextctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
+            controls/togglebuttontest.cpp
             controls/toolbooktest.cpp
             controls/treebooktest.cpp
             controls/treectrltest.cpp
