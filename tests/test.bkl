@@ -138,6 +138,7 @@
             controls/listboxtest.cpp
             controls/listctrltest.cpp
             controls/notebooktest.cpp
+            controls/radioboxtest.cpp
             controls/rearrangelisttest.cpp
             controls/richtextctrltest.cpp
             controls/textctrltest.cpp
