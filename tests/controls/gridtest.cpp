@@ -45,6 +45,10 @@ private:
         CPPUNIT_TEST( LineFormatting );
         CPPUNIT_TEST( SortSupport );
         CPPUNIT_TEST( Labels );
+        CPPUNIT_TEST( PseudoTest_Native );
+        CPPUNIT_TEST( LabelClick );
+        CPPUNIT_TEST( SortClick );
+        CPPUNIT_TEST( ColumnOrder );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -61,6 +65,9 @@ private:
     void LineFormatting();
     void SortSupport();
     void Labels();
+    void PseudoTest_Native() { ms_native = true; }
+
+    static bool ms_native;
 
     wxGrid *m_grid;
 
@@ -72,6 +79,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION( GridTestCase );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( GridTestCase, "GridTestCase" );
+
+//initialise the static variable
+bool GridTestCase::ms_native = false;
 
 void GridTestCase::setUp()
 {
@@ -190,6 +200,9 @@ void GridTestCase::CellSelect()
 
 void GridTestCase::LabelClick()
 {
+    if( ms_native )
+        m_grid->UseNativeColHeader();
+
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
@@ -226,11 +239,17 @@ void GridTestCase::LabelClick()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_CLICK));
-    CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
+
+    //Right double click not supported with native headers
+    if( !ms_native )
+        CPPUNIT_ASSERT_EQUAL(1, frame->GetEventCount(wxEVT_GRID_LABEL_RIGHT_DCLICK));
 }
 
 void GridTestCase::SortClick()
 {
+    if( ms_native )
+        m_grid->UseNativeColHeader();
+
     m_grid->SetSortingColumn(0);
 
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
@@ -404,6 +423,9 @@ void GridTestCase::AddRowCol()
 
 void GridTestCase::ColumnOrder()
 {
+    if( ms_native )
+        m_grid->UseNativeColHeader();
+
     m_grid->AppendCols(2);
 
     CPPUNIT_ASSERT_EQUAL(4, m_grid->GetNumberCols());
