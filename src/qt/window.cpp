@@ -89,6 +89,7 @@ bool wxWindow::Create( wxWindow * parent, wxWindowID WXUNUSED( id ),
     Move(pos);
     SetSize(size);
     m_qtPicture = new QPicture();
+    m_mouseInside = false;
 
     return ( true );
 }
@@ -661,7 +662,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *even
     return handled;
 }
 
-bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *event )
+bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
 {
     // Convert event type
     wxEventType wxType = 0;
@@ -740,9 +741,10 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *
     }
 
     // Fill the event
+    QPoint mousePos = event->pos();
     wxMouseEvent e( wxType );
     e.m_clickCount = -1;
-    e.SetPosition( wxQtConvertPoint( event->pos() ) );
+    e.SetPosition( wxQtConvertPoint( mousePos ) );
 
     // Mouse buttons
     FillMouseButtons( event->buttons(), &e );
@@ -750,7 +752,37 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *WXUNUSED( receiver ), QMouseEvent *
     // Keyboard modifiers
     FillKeyboardModifiers( event->modifiers(), &e );
 
-    return ProcessWindowEvent( e );
+    bool handled = ProcessWindowEvent( e );
+
+    // Determine if mouse is inside the widget
+    bool mouseInside = true;
+    if ( mousePos.x() < 0 || mousePos.x() > receiver->width() ||
+        mousePos.y() < 0 || mousePos.y() > receiver->height() )
+        mouseInside = false;
+    
+    if ( e.GetEventType() == wxEVT_MOTION )
+    {
+        /* Qt doesn't emit leave/enter events while the mouse is grabbed
+        * and it automatically grabs the mouse while dragging. In that cases
+        * we emulate the enter and leave events */
+
+        // Mouse enter/leaves
+        if ( m_mouseInside != mouseInside )
+        {
+            if ( mouseInside )
+                e.SetEventType( wxEVT_ENTER_WINDOW );
+            else
+                e.SetEventType( wxEVT_LEAVE_WINDOW );
+
+            printf("Evento sintetico\n");
+            ProcessWindowEvent( e );
+            m_mouseInside = mouseInside;
+        }
+    }
+
+    m_mouseInside = mouseInside;
+    
+    return handled;
 }
 
 bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )

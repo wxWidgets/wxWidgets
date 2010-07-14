@@ -162,6 +162,8 @@ private:
     wxScrollBar *QtGetScrollBar( int orientation ) const;
 
     QPicture *m_qtPicture;
+
+    bool m_mouseInside;
     
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxWindow )
