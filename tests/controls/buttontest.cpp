@@ -15,7 +15,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/event.h"
     #include "wx/button.h"
 #endif // WX_PRECOMP
 
@@ -57,12 +56,18 @@ void ButtonTestCase::setUp()
     m_button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
 }
 
+void ButtonTestCase::tearDown()
+{
+    wxDELETE(m_button);
+}
+
 void ButtonTestCase::Click()
 {
     wxTestableFrame* frame = wxStaticCast(wxTheApp->GetTopWindow(),
                                           wxTestableFrame);
 
-    //We use CountWindowEvents to reduce the typing need for Connect
+    //We use the internal class EventCounter which handles connecting and
+    //disconnecting the control to the wxTestableFrame
     EventCounter count(m_button, wxEVT_COMMAND_BUTTON_CLICKED);
 
     wxUIActionSimulator sim;
@@ -95,13 +100,4 @@ void ButtonTestCase::Disabled()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL( 0, frame->GetEventCount() );
-
-    //Always remember to return controls to their default state
-    //for following tests
-    m_button->Enable();
-}
-
-void ButtonTestCase::tearDown()
-{
-    delete m_button;
 }
