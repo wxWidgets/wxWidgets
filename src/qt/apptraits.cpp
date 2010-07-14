@@ -13,6 +13,8 @@
 #include "wx/stdpaths.h"
 #include "wx/evtloop.h"
 
+#include "wx/qt/timer.h"
+
 wxAppTraits::wxAppTraits()
 {
 }
@@ -85,7 +87,7 @@ wxEventLoopBase *wxAppTraits::CreateEventLoop()
 #if wxUSE_TIMER
 wxTimerImpl *wxAppTraits::CreateTimerImpl(wxTimer *timer)
 {
-    return NULL;
+    return new wxQtTimerImpl( timer );
 }
 #endif
 

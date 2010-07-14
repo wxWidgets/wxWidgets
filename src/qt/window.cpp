@@ -776,7 +776,6 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
             else
                 e.SetEventType( wxEVT_LEAVE_WINDOW );
 
-            printf("Evento sintetico\n");
             ProcessWindowEvent( e );
             m_mouseInside = mouseInside;
         }

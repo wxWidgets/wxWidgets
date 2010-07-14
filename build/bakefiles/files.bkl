@@ -394,6 +394,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
+    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
@@ -483,6 +484,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/textdlg.cpp
     src/qt/textentry.cpp
     src/qt/tglbtn.cpp
+    src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp

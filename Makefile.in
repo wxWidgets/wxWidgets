@@ -2660,6 +2660,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/textdlg.h \
 	wx/qt/textentry.h \
 	wx/qt/tglbtn.h \
+	wx/qt/timer.h \
 	wx/qt/toolbar.h \
 	wx/qt/tooltip.h \
 	wx/qt/toplevel.h \
@@ -5130,6 +5131,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
+	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -6092,6 +6094,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_textdlg.o \
 	monodll_qt_textentry.o \
 	monodll_qt_tglbtn.o \
+	monodll_qt_timer.o \
 	monodll_qt_toolbar.o \
 	monodll_qt_tooltip.o \
 	monodll_qt_toplevel.o \
@@ -7176,6 +7179,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
+	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -8138,6 +8142,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_textdlg.o \
 	monolib_qt_textentry.o \
 	monolib_qt_tglbtn.o \
+	monolib_qt_timer.o \
 	monolib_qt_toolbar.o \
 	monolib_qt_tooltip.o \
 	monolib_qt_toplevel.o \
@@ -9409,6 +9414,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
+	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -10371,6 +10377,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_textdlg.o \
 	coredll_qt_textentry.o \
 	coredll_qt_tglbtn.o \
+	coredll_qt_timer.o \
 	coredll_qt_toolbar.o \
 	coredll_qt_tooltip.o \
 	coredll_qt_toplevel.o \
@@ -11127,6 +11134,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
+	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -12089,6 +12097,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_textdlg.o \
 	corelib_qt_textentry.o \
 	corelib_qt_tglbtn.o \
+	corelib_qt_timer.o \
 	corelib_qt_toolbar.o \
 	corelib_qt_tooltip.o \
 	corelib_qt_toplevel.o \
@@ -19538,6 +19547,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -25036,6 +25048,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
@@ -30716,6 +30731,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
 
@@ -34891,6 +34909,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_tglbtn.o: $(srcdir)/src/qt/tglbtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/tglbtn.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_timer.o: $(srcdir)/src/qt/timer.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/timer.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_toolbar.o: $(srcdir)/src/qt/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/toolbar.cpp
