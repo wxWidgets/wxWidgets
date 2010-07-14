@@ -83,7 +83,7 @@ public:     // event handlers
     void OnPageChanged(wxBookCtrlEvent& event);
 
     void OnAddMozart(wxCommandEvent& event);
-    void OnDeleteMusic(wxCommandEvent& event);
+    void OnDeleteSelected(wxCommandEvent& event);
     void OnDeleteYear(wxCommandEvent& event);
     void OnSelectNinth(wxCommandEvent& event);
     void OnCollapse(wxCommandEvent& event);
@@ -271,7 +271,7 @@ enum
     ID_ATTR_CTRL        = 51,
 
     ID_ADD_MOZART       = 100,
-    ID_DELETE_MUSIC     = 101,
+    ID_DELETE_SEL       = 101,
     ID_DELETE_YEAR      = 102,
     ID_SELECT_NINTH     = 103,
     ID_COLLAPSE         = 104,
@@ -303,7 +303,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_NOTEBOOK_PAGE_CHANGED( wxID_ANY, MyFrame::OnPageChanged )
 
     EVT_BUTTON( ID_ADD_MOZART, MyFrame::OnAddMozart )
-    EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
+    EVT_BUTTON( ID_DELETE_SEL, MyFrame::OnDeleteSelected )
     EVT_BUTTON( ID_DELETE_YEAR, MyFrame::OnDeleteYear )
     EVT_BUTTON( ID_SELECT_NINTH, MyFrame::OnSelectNinth )
     EVT_BUTTON( ID_COLLAPSE, MyFrame::OnCollapse )
@@ -404,7 +404,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     button_sizer->Add( new wxButton( firstPanel, ID_ADD_MOZART,  "Add Mozart"),             0, wxALL, 10 );
-    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_MUSIC,"Delete selected"),        0, wxALL, 10 );
+    button_sizer->Add( new wxButton( firstPanel, ID_DELETE_SEL,  "Delete selected"),        0, wxALL, 10 );
     button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, "Delete \"Year\" column"), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,"Select ninth symphony"),  0, wxALL, 10 );
     button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    "Collapse"),               0, wxALL, 10 );
@@ -851,7 +851,7 @@ void MyFrame::OnAddMozart( wxCommandEvent& WXUNUSED(event) )
     m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", 1787 );
 }
 
-void MyFrame::OnDeleteMusic( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnDeleteSelected( wxCommandEvent& WXUNUSED(event) )
 {
     wxDataViewItemArray items;
     int len = m_ctrl[0]->GetSelections( items );
