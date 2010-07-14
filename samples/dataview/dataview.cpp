@@ -71,8 +71,8 @@ public:
                            unsigned int nPanel,
                            unsigned long style = 0);
 
-public:     // event handlers
-
+private:
+    // event handlers
     void OnStyleChange(wxCommandEvent& event);
     void OnSetBackgroundColour(wxCommandEvent& event);
     void OnSetForegroundColour(wxCommandEvent& event);
@@ -127,7 +127,12 @@ public:     // event handlers
     void OnDropPossible( wxDataViewEvent &event );
     void OnDrop( wxDataViewEvent &event );
 
-private:
+    void OnDataViewChar(wxKeyEvent& event);
+
+    // helper used by both OnDeleteSelected() and OnDataViewChar()
+    void DeleteSelectedItems();
+
+
     wxNotebook* m_notebook;
 
     // the controls stored in the various tabs of the main notebook:
@@ -510,6 +515,9 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[0] =
                 new wxDataViewCtrl( parent, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize, style );
+            m_ctrl[0]->Connect(wxEVT_CHAR,
+                               wxKeyEventHandler(MyFrame::OnDataViewChar),
+                               NULL, this);
 
             m_music_model = new MyMusicTreeModel;
             m_ctrl[0]->AssociateModel( m_music_model.get() );
@@ -851,13 +859,18 @@ void MyFrame::OnAddMozart( wxCommandEvent& WXUNUSED(event) )
     m_music_model->AddToClassical( "Kleine Nachtmusik", "Wolfgang Mozart", 1787 );
 }
 
-void MyFrame::OnDeleteSelected( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::DeleteSelectedItems()
 {
     wxDataViewItemArray items;
     int len = m_ctrl[0]->GetSelections( items );
     for( int i = 0; i < len; i ++ )
         if (items[i].IsOk())
             m_music_model->Delete( items[i] );
+}
+
+void MyFrame::OnDeleteSelected( wxCommandEvent& WXUNUSED(event) )
+{
+    DeleteSelectedItems();
 }
 
 void MyFrame::OnDeleteYear( wxCommandEvent& WXUNUSED(event) )
@@ -1074,6 +1087,13 @@ void MyFrame::OnRightClick( wxMouseEvent &event )
                  event.GetX(), event.GetY() );
 }
 
+void MyFrame::OnDataViewChar(wxKeyEvent& event)
+{
+    if ( event.GetKeyCode() == WXK_DELETE )
+        DeleteSelectedItems();
+    else
+        event.Skip();
+}
 
 // ----------------------------------------------------------------------------
 // MyFrame - event handlers for the second page

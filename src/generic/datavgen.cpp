@@ -3281,7 +3281,15 @@ void wxDataViewMainWindow::DestroyTree()
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 {
-    if ( GetParent()->HandleAsNavigationKey(event) )
+    wxWindow * const parent = GetParent();
+
+    // propagate the char event upwards
+    wxKeyEvent eventForParent(event);
+    eventForParent.SetEventObject(parent);
+    if ( parent->ProcessWindowEvent(eventForParent) )
+        return;
+
+    if ( parent->HandleAsNavigationKey(event) )
         return;
 
     // no item -> nothing to do
@@ -3299,7 +3307,6 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     {
         case WXK_RETURN:
             {
-                wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
                                    parent->GetId());
                 le.SetItem( GetItemByRow(m_currentRow) );
@@ -3860,6 +3867,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 #endif
 
     m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );
+
+    // We use the cursor keys for moving the selection, not scrolling, so call
+    // this method to ensure wxScrollHelperEvtHandler doesn't catch all
+    // keyboard events forwarded to us from wxListMainWindow.
+    DisableKeyboardScrolling();
 
     if (HasFlag(wxDV_NO_HEADER))
         m_headerArea = NULL;
