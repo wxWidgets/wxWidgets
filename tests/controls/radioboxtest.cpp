@@ -65,7 +65,7 @@ void RadioBoxTestCase::setUp()
 
 void RadioBoxTestCase::tearDown()
 {
-    wxDELETE(m_radio);
+    wxTheApp->GetTopWindow()->DestroyChildren();
 }
 
 void RadioBoxTestCase::FindString()
@@ -159,3 +159,4 @@ void RadioBoxTestCase::HelpText()
 
     CPPUNIT_ASSERT_EQUAL(wxEmptyString, m_radio->GetItemHelpText(1));
 }
+
