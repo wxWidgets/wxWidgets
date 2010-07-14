@@ -756,7 +756,6 @@ void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
         Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
         Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
-        Connect(wxID_ANY, wxEVT_ACTIVATE, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
     }
     else
     {
@@ -979,8 +978,6 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
                 Replace(cursor, cursor+1, ch);
         break;
         case (WXK_SPACE):
-                  
-            
             ch = (wxChar)keycode;
             if(m_maskCtrl.GetFormatCode().Find('_') != wxNOT_FOUND)
             {
@@ -1048,11 +1045,6 @@ void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
         SetInsertionPoint(spaceIndex);
     }
 
-}
-
-void wxTextCtrlBase::FocusMask(wxFocusEvent& WXUNUSED(event))
-{
-    printf("Activated\n");
 }
 
 // ----------------------------------------------------------------------------

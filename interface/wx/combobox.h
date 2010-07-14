@@ -220,6 +220,11 @@ public:
     virtual long GetInsertionPoint() const;
 
     /**
+        Sets the @see wxMaskedEdit
+    */
+    void SetMask(const wxMaskedEdit& mask);
+
+    /**
         Same as wxTextEntry::SetSelection().
 
         @beginWxPythonOnly

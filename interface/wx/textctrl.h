@@ -756,6 +756,11 @@ public:
     void SetListStyleName(const wxString& name);
 
     /**
+        Sets the @see wxMaskedEdit
+    */
+    void SetMask(const wxMaskedEdit& mask);
+    
+    /**
         Specifies the outline level. Zero represents normal text.
         At present, the outline level is not used, but may be used in future for
         determining list levels and for applications that need to store document

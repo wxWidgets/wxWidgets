@@ -131,7 +131,9 @@ public:
     wxString GetEmptyMask() const;
 
     unsigned int GetFieldIndex(unsigned int position);
+
     unsigned int GetMinFieldPosition(unsigned int fieldIndex);
+    
     unsigned int GetMaxFieldPosition(unsigned int fieldIndex);
   
     bool IsNumber();

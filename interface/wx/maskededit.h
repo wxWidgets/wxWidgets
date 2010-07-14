@@ -225,7 +225,7 @@ public:
     wxArrayString GetFormatCodes() const;
 
     /**
-        @eturn the default value. 
+        @return the default value. 
     */
     wxString GetDefaultValue() const;
 
@@ -237,8 +237,10 @@ public:
     bool SetDefaultValue(const wxString& defaultValue);
     
     /**
-        This methods return the list of possible choices. If there is more than one field
-        , this function return an empty choices because all fields have its own choices.
+        This methods return the list of possible choices. 
+        If there is more than one field
+        , this function return an empty choices because all 
+        fields have its own choices.
         @return return a wxArrayString with all possible choice.
     */
     wxArrayString GetChoices() const;
@@ -437,15 +439,54 @@ public:
     wxString GetPreviousChoices(unsigned int fieldIndex) const;
 
     /**
-        ???????????????????????????????
+        Return the number of possible choice.
+        @return number of possible choice
     */
     unsigned int NumberOfChoices();
 
     /**
-        return the empty mask. An empty mask is a mask without the 
+        Return the empty mask. An empty mask is a mask without the 
         char choice example "(###) ###-####" -> "(   )    -    "
         
         @return the empty value
      */
     wxString GetEmptyMask() const;        
+ 
+    /**
+        Return the field according to a position in the mask.
+        use this function with caution, if the position is out of bound,
+        this method return the last field index.
+        @param position, the position.
+        @return the field index.
+    */
+    int GetFieldIndex(unsigned int position);
+
+    /**  
+        Return the first position on a field. The first field position
+        beginning with 0.
+        @param fieldIndex the field index.
+        @return the min position in the field.
+    */
+    unsigned int GetMinFieldPosition(unsigned int fieldIndex);
+ 
+    /** 
+        Return the last position in a field.
+        @param fieldIndex the field index.
+        @return the min position in the field.
+    */
+    unsigned int GetMaxFieldPosition(unsigned int fieldIndex);
+ 
+    /**
+        Test if the mask coud be a number or not.Example
+        ###.### is a number with "." is the decimal point.
+        @return if the mask is a number or not.
+    */
+    bool IsNumber();
+
+    /**
+        Return the decimal point. If there is more than 1 field,
+        this method return wxEmptyString.
+    */
+    wxString GetDecimalPoint();
+
 }; 

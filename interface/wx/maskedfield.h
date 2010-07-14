@@ -96,11 +96,11 @@ public:
         @param string
             string to be tested
     */
-    IsValid(const wxString& string) const;
+    bool IsValid(const wxString& string) const;
  
     /**
         This method add a new default choice. If the choice is not correct 
-        compared to the mask, this method return false.
+        according to the mask, this method return false.
         @param choice the new choice value
         @return if the choice is added or not
     **/
@@ -235,4 +235,10 @@ public:
         @return the empty value
      */
     wxString GetEmptyMask() const;
+
+    /**
+        test if the mask is a number. A mask is a number like this:
+        ###.##. "." is the decimal point.
+    */
+    bool IsNumber();
 }
