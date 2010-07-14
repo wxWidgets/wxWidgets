@@ -2114,6 +2114,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
+    // DrawFocusRect() is unusable under Mac, it draws outside of the highlight
+    // rectangle somehow and so leaves traces when the item is not selected any
+    // more, see #12229.
+#ifndef __WXMAC__
     if ( HasCurrent() )
     {
         int flags = 0;
@@ -2123,6 +2127,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxRendererNative::Get().
             DrawFocusRect(this, dc, GetLineHighlightRect(m_current), flags);
     }
+#endif // !__WXMAC__
 }
 
 void wxListMainWindow::HighlightAll( bool on )
