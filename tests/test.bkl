@@ -130,6 +130,7 @@
             controls/choicetest.cpp
             controls/comboboxtest.cpp
             controls/frametest.cpp
+            controls/gaugetest.cpp
             controls/gridtest.cpp
             controls/headerctrltest.cpp
             controls/itemcontainertest.cpp
