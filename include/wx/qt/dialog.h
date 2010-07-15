@@ -9,7 +9,6 @@
 #ifndef _WX_QT_DIALOG_H_
 #define _WX_QT_DIALOG_H_
 
-#include "wx/qt/winevent_qt.h"
 #include <QtGui/QDialog>
 
 class WXDLLIMPEXP_CORE wxDialog : public wxDialogBase
@@ -38,21 +37,6 @@ public:
 
 private:
     QPointer< QDialog > m_qtDialog;
-};
-
-class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventForwarder< QDialog >
-{
-    Q_OBJECT
-    
-    public:
-        wxQtDialog( wxDialog *frame, QWidget *parent );
-        
-    protected:
-        virtual wxWindow *GetEventReceiver();
-        
-    private:
-        wxDialog *m_dialog;
-        
 };
 
 #endif // _WX_QT_DIALOG_H_

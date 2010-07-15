@@ -357,6 +357,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dcscreen.h
     wx/qt/defs.h
     wx/qt/dialog.h
+    wx/qt/dialog_qt.h
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/filedlg.h
@@ -435,7 +436,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/qt/dialog.moc.cpp
+    src/qt/dialog_qt.cpp
+    src/qt/dialog_qt.moc.cpp
     src/unix/dialup.cpp
     src/qt/dirdlg.cpp
     src/qt/display.cpp
@@ -461,6 +463,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/menuitem.cpp
     src/qt/menuitem.moc.cpp
     src/qt/msgdlg.cpp
+    src/qt/msgdlg.moc.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp

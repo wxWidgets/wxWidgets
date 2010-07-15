@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dialog.h"
+#include "wx/qt/dialog_qt.h"
 
 wxDialog::wxDialog()
 {
@@ -76,17 +77,4 @@ QDialog *wxDialog::GetHandle() const
 WXWidget wxDialog::QtGetScrollBarsContainer() const
 {
     return m_qtDialog;
-}
-
-//=============================================================================
-
-wxQtDialog::wxQtDialog( wxDialog *dialog, QWidget *parent )
-: wxQtEventForwarder< QDialog >( parent )
-{
-    m_dialog = dialog;
-}
-
-wxWindow *wxQtDialog::GetEventReceiver()
-{
-    return m_dialog;
 }

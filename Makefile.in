@@ -2623,6 +2623,7 @@ COND_TOOLKIT_QT_LOWLEVEL_HDR =  \
 	wx/qt/dcscreen.h \
 	wx/qt/defs.h \
 	wx/qt/dialog.h \
+	wx/qt/dialog_qt.h \
 	wx/qt/dirdlg.h \
 	wx/qt/dnd.h \
 	wx/qt/filedlg.h \
@@ -5082,6 +5083,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_dcscreen.o \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
+	monodll_dialog_qt.o \
+	monodll_dialog_qt_moc.o \
 	monodll_unix_dialup.o \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
@@ -6045,6 +6048,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_dcscreen.o \
 	monodll_defs.o \
 	monodll_qt_dialog.o \
+	monodll_dialog_qt.o \
+	monodll_dialog_qt_moc.o \
 	monodll_unix_dialup.o \
 	monodll_qt_dirdlg.o \
 	monodll_qt_display.o \
@@ -7130,6 +7135,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_dcscreen.o \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
+	monolib_dialog_qt.o \
+	monolib_dialog_qt_moc.o \
 	monolib_unix_dialup.o \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
@@ -8093,6 +8100,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_dcscreen.o \
 	monolib_defs.o \
 	monolib_qt_dialog.o \
+	monolib_dialog_qt.o \
+	monolib_dialog_qt_moc.o \
 	monolib_unix_dialup.o \
 	monolib_qt_dirdlg.o \
 	monolib_qt_display.o \
@@ -9365,6 +9374,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_dcscreen.o \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
+	coredll_dialog_qt.o \
+	coredll_dialog_qt_moc.o \
 	coredll_unix_dialup.o \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
@@ -10328,6 +10339,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_dcscreen.o \
 	coredll_defs.o \
 	coredll_qt_dialog.o \
+	coredll_dialog_qt.o \
+	coredll_dialog_qt_moc.o \
 	coredll_unix_dialup.o \
 	coredll_qt_dirdlg.o \
 	coredll_qt_display.o \
@@ -11085,6 +11098,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_dcscreen.o \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
+	corelib_dialog_qt.o \
+	corelib_dialog_qt_moc.o \
 	corelib_unix_dialup.o \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
@@ -12048,6 +12063,8 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_dcscreen.o \
 	corelib_defs.o \
 	corelib_qt_dialog.o \
+	corelib_dialog_qt.o \
+	corelib_dialog_qt_moc.o \
 	corelib_unix_dialup.o \
 	corelib_qt_dirdlg.o \
 	corelib_qt_display.o \
@@ -19286,6 +19303,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -24787,6 +24810,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
@@ -30470,6 +30499,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
 
@@ -34648,6 +34683,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dialog.o: $(srcdir)/src/qt/dialog.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_dialog_qt.o: $(srcdir)/src/qt/dialog_qt.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_dialog_qt_moc.o: $(srcdir)/src/qt/dialog_qt.moc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dialog_qt.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_dirdlg.o: $(srcdir)/src/qt/dirdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/dirdlg.cpp
