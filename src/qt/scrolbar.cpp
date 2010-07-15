@@ -17,6 +17,12 @@ wxScrollBar::wxScrollBar()
 {
 }
 
+wxScrollBar::~wxScrollBar()
+{
+    delete m_qtScrollBar;
+}
+
+
 wxScrollBar::wxScrollBar( wxWindow *parent, wxWindowID id,
        const wxPoint& pos,
        const wxSize& size,

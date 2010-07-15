@@ -19,9 +19,7 @@ wxStatusBar::wxStatusBar()
 
 wxStatusBar::~wxStatusBar()
 {
-    delete m_qtStatusBar;
-    while ( !m_qtPanes.isEmpty() )
-        delete m_qtPanes.takeFirst();
+    delete m_qtStatusBar; // This also destroys the panes
 }
 
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,

@@ -53,12 +53,8 @@ wxWindow::~wxWindow()
     if ( s_capturedWindow == this )
         s_capturedWindow = NULL;
 
-    DestroyChildren();
+    DestroyChildren(); // This also destroys scrollbars
 
-    if ( m_horzScrollBar )
-        delete m_horzScrollBar;
-    if ( m_vertScrollBar )
-        delete m_vertScrollBar;
     delete m_qtWindow; // This also destroys the container
     if ( m_qtPicture )
         delete m_qtPicture;
