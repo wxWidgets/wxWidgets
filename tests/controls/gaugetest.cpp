@@ -55,7 +55,7 @@ void GaugeTestCase::setUp()
 
 void GaugeTestCase::tearDown()
 {
-    wxDELETE(m_gauge);
+    wxTheApp->GetTopWindow()->DestroyChildren();
 }
 
 void GaugeTestCase::Direction()
