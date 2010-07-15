@@ -111,6 +111,12 @@ public:
     virtual bool QtHandleKeyEvent    ( QWidget *receiver, QKeyEvent *event );
     virtual bool QtHandleMouseEvent  ( QWidget *receiver, QMouseEvent *event );
     virtual bool QtHandleEnterEvent  ( QWidget *receiver, QEvent *event );
+    virtual bool QtHandleMoveEvent   ( QWidget *receiver, QMoveEvent *event );
+    virtual bool QtHandleShowEvent   ( QWidget *receiver, QEvent *event );
+    virtual bool QtHandleChangeEvent ( QWidget *receiver, QEvent *event );
+    virtual bool QtHandleCloseEvent  ( QWidget *receiver, QCloseEvent *event );
+    virtual bool QtHandleCMenuEvent  ( QWidget *receiver, QContextMenuEvent *event );
+    virtual bool QtHandleFocusEvent  ( QWidget *receiver, QFocusEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,

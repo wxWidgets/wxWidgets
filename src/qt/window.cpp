@@ -689,6 +689,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
                     wxType = wxEVT_AUX2_DCLICK;
                     break;
                 case Qt::NoButton:
+                case Qt::MouseButtonMask: // Not documented ?
                     return false;
             }
             break;
@@ -710,6 +711,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
                 case Qt::XButton2:
                     wxType = wxEVT_AUX2_DOWN;
                 case Qt::NoButton:
+                case Qt::MouseButtonMask: // Not documented ?
                     return false;
             }
             break;
@@ -731,6 +733,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
                 case Qt::XButton2:
                     wxType = wxEVT_AUX2_UP;
                 case Qt::NoButton:
+                case Qt::MouseButtonMask: // Not documented ?
                     return false;
             }
             break;
@@ -799,6 +802,76 @@ bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )
     FillKeyboardModifiers( QApplication::keyboardModifiers(), &e );
     
     return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleMoveEvent ( QWidget *receiver, QMoveEvent *event )
+{
+    if ( GetHandle() != receiver )
+        return false;
+    
+    wxMoveEvent e( wxQtConvertPoint( event->pos() ) );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleShowEvent ( QWidget *receiver, QEvent *event )
+{
+    if ( GetHandle() != receiver )
+        return false;
+    
+    wxShowEvent e;
+    e.SetShow( event->type() == QEvent::Show );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleChangeEvent ( QWidget *receiver, QEvent *event )
+{
+    if ( GetHandle() != receiver )
+        return false;
+
+    if ( event->type() == QEvent::ActivationChange )
+    {
+        wxActivateEvent e( wxEVT_ACTIVATE, receiver->isActiveWindow() );
+
+        return ProcessWindowEvent( e );
+    }
+    else
+        return false;
+}
+
+bool wxWindow::QtHandleCloseEvent ( QWidget *receiver, QCloseEvent *WXUNUSED( event ) )
+{
+    if ( GetHandle() != receiver )
+        return false;
+    
+    wxCloseEvent e( wxEVT_CLOSE_WINDOW );
+
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleCMenuEvent ( QWidget *receiver, QContextMenuEvent *event )
+{
+    wxContextMenuEvent e( wxEVT_CONTEXT_MENU );
+    e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
+    
+    return ProcessWindowEvent( e );
+}
+
+bool wxWindow::QtHandleFocusEvent ( QWidget *receiver, QFocusEvent *event )
+{
+    wxFocusEvent e( event->gotFocus() ? wxEVT_SET_FOCUS : wxEVT_KILL_FOCUS );
+
+    bool handled = ProcessWindowEvent( e );
+
+    wxWindow *parent = GetParent();
+    if ( event->gotFocus() && parent )
+    {
+        wxChildFocusEvent childEvent( this );
+        parent->ProcessWindowEvent( childEvent );
+    }
+    
+    return handled;
 }
 
 QWidget *wxWindow::GetHandle() const

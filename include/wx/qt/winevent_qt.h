@@ -29,18 +29,36 @@ protected:
     //to return the window where the events will be sent
     virtual wxWindow *GetEventReceiver() = 0;
 
-    /* Not implemented here: wxChildFocusEvent, wxHelpEvent, wxIdleEvent
-        * wxJoystickEvent, wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
-        * wxPowerEvent, wxScrollWinEvent, wxSysColourChangedEvent */
+    /* Not implemented here: wxHelpEvent, wxIdleEvent wxJoystickEvent,
+     * wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent,
+     * wxPowerEvent, wxScrollWinEvent, wxSysColourChangedEvent */
 
     //wxActivateEvent
-    //virtual void changeEvent ( QEvent * event ) { }
+    virtual void changeEvent ( QEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleChangeEvent(this, event) )
+            QtWidget::changeEvent(event);
+        else
+            event->accept();
+    }
 
     //wxCloseEvent
-    //virtual void closeEvent ( QCloseEvent * event ) { }
+    virtual void closeEvent ( QCloseEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleCloseEvent(this, event) )
+            QtWidget::closeEvent(event);
+        else
+            event->accept();
+    }
 
     //wxContextMenuEvent
-    //virtual void contextMenuEvent ( QContextMenuEvent * event ) { }
+    virtual void contextMenuEvent ( QContextMenuEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleCMenuEvent(this, event) )
+            QtWidget::contextMenuEvent(event);
+        else
+            event->accept();
+    }
 
     //wxDropFilesEvent
     //virtual void dropEvent ( QDropEvent * event ) { }
@@ -55,13 +73,31 @@ protected:
     }
 
     //wxFocusEvent.
-    //virtual void focusInEvent ( QFocusEvent * event ) { }
+    virtual void focusInEvent ( QFocusEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleFocusEvent(this, event) )
+            QtWidget::focusInEvent(event);
+        else
+            event->accept();
+    }
 
     //wxFocusEvent.
-    //virtual void focusOutEvent ( QFocusEvent * event ) { }
+    virtual void focusOutEvent ( QFocusEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleFocusEvent(this, event) )
+            QtWidget::focusOutEvent(event);
+        else
+            event->accept();
+    }
 
     //wxShowEvent
-    //virtual void hideEvent ( QHideEvent * event ) { }
+    virtual void hideEvent ( QHideEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleShowEvent(this, event) )
+            QtWidget::hideEvent(event);
+        else
+            event->accept();
+    }
 
     //wxKeyEvent
     virtual void keyPressEvent ( QKeyEvent * event )
@@ -127,7 +163,13 @@ protected:
     }
     
     //wxMoveEvent
-    virtual void moveEvent ( QMoveEvent * event ) { }
+    virtual void moveEvent ( QMoveEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleMoveEvent(this, event) )
+            QtWidget::moveEvent(event);
+        else
+            event->accept();
+    }
     
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
@@ -153,7 +195,13 @@ protected:
     }
 
     //wxShowEvent
-    //virtual void showEvent ( QShowEvent * event ) { }
+    virtual void showEvent ( QShowEvent * event )
+    {
+        if ( !GetEventReceiver()->QtHandleShowEvent(this, event) )
+            QtWidget::showEvent(event);
+        else
+            event->accept();
+    }
     
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
