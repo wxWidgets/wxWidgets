@@ -42,7 +42,7 @@ static wxWindow *s_capturedWindow = NULL;
 wxWindow::wxWindow()
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
+    m_qtPicture = new QPicture();
 }
 
 

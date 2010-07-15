@@ -217,8 +217,7 @@ protected:
 #if defined(__WXCOCOA__) || \
     defined(__WXGTK20__) || \
     defined(__WXMAC__) || \
-    defined(__WXMSW__) || \
-    defined(__WXQT__)
+    defined(__WXMSW__)
 
 class WXDLLIMPEXP_CORE wxMessageDialogWithCustomLabels
     : public wxMessageDialogBase

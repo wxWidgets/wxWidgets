@@ -5110,6 +5110,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_qt_menuitem.o \
 	monodll_menuitem_moc.o \
 	monodll_qt_msgdlg.o \
+	monodll_msgdlg_moc.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
 	monodll_qt_pen.o \
@@ -6075,6 +6076,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_qt_menuitem.o \
 	monodll_menuitem_moc.o \
 	monodll_qt_msgdlg.o \
+	monodll_msgdlg_moc.o \
 	monodll_qt_notebook.o \
 	monodll_qt_palette.o \
 	monodll_qt_pen.o \
@@ -7162,6 +7164,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_qt_menuitem.o \
 	monolib_menuitem_moc.o \
 	monolib_qt_msgdlg.o \
+	monolib_msgdlg_moc.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
 	monolib_qt_pen.o \
@@ -8127,6 +8130,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_qt_menuitem.o \
 	monolib_menuitem_moc.o \
 	monolib_qt_msgdlg.o \
+	monolib_msgdlg_moc.o \
 	monolib_qt_notebook.o \
 	monolib_qt_palette.o \
 	monolib_qt_pen.o \
@@ -9401,6 +9405,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_qt_menuitem.o \
 	coredll_menuitem_moc.o \
 	coredll_qt_msgdlg.o \
+	coredll_msgdlg_moc.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
 	coredll_qt_pen.o \
@@ -10366,6 +10371,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_qt_menuitem.o \
 	coredll_menuitem_moc.o \
 	coredll_qt_msgdlg.o \
+	coredll_msgdlg_moc.o \
 	coredll_qt_notebook.o \
 	coredll_qt_palette.o \
 	coredll_qt_pen.o \
@@ -11125,6 +11131,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_qt_menuitem.o \
 	corelib_menuitem_moc.o \
 	corelib_qt_msgdlg.o \
+	corelib_msgdlg_moc.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
 	corelib_qt_pen.o \
@@ -12090,6 +12097,7 @@ COND_TOOLKIT_QT___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_qt_menuitem.o \
 	corelib_menuitem_moc.o \
 	corelib_qt_msgdlg.o \
+	corelib_msgdlg_moc.o \
 	corelib_qt_notebook.o \
 	corelib_qt_palette.o \
 	corelib_qt_pen.o \
@@ -19468,6 +19476,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@monodll_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@monodll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
@@ -24975,6 +24986,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@monolib_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@monolib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
@@ -30664,6 +30678,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
 
+@COND_TOOLKIT_QT_USE_GUI_1@coredll_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
+
 @COND_TOOLKIT_QT_USE_GUI_1@coredll_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
 
@@ -34848,6 +34865,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_msgdlg.o: $(srcdir)/src/qt/msgdlg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1@corelib_msgdlg_moc.o: $(srcdir)/src/qt/msgdlg.moc.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/msgdlg.moc.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1@corelib_qt_notebook.o: $(srcdir)/src/qt/notebook.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/notebook.cpp
