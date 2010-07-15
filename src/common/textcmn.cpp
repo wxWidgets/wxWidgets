@@ -756,6 +756,7 @@ void wxTextCtrlBase::SetMask(const wxMaskedEdit& mask)
         SetBackgroundColour(m_maskCtrl.GetEmptyBackgroundColour());
         Connect(wxID_ANY, wxEVT_CHAR, wxKeyEventHandler(wxTextCtrlBase::KeyPressedMask));
         Connect(wxID_ANY, wxEVT_LEFT_DOWN, wxMouseEventHandler(wxTextCtrlBase::MouseClickedMask));
+        Connect(wxID_ANY, wxEVT_SET_FOCUS, wxFocusEventHandler(wxTextCtrlBase::FocusMask));
     }
     else
     {
@@ -801,8 +802,6 @@ void wxTextCtrlBase::ApplyMask()
         }
 
     }
-
-
 }
 
 void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
@@ -812,15 +811,15 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
     unsigned int fieldIndex = m_maskCtrl.GetFieldIndex(cursor);
     unsigned int fieldMinPos;
     unsigned int it;
+    wxString string = GetValue();
     wxString choice;
     wxString mask = m_maskCtrl.GetEmptyMask()[cursor];
 
     fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
 
-    printf("i am %s\n", (const char*) m_maskCtrl.GetEmptyMask().mb_str(wxConvUTF8)); 
     if(keycode == WXK_PAGEUP || keycode == WXK_PAGEDOWN)
     {
-        if(cursor == GetValue().Len())
+        if(cursor == string.Len())
         {
             fieldIndex = m_maskCtrl.GetNumberOfFields() - 1;
             fieldMinPos = m_maskCtrl.GetMinFieldPosition(fieldIndex);
@@ -833,11 +832,9 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
         }
     }
 
-    printf("fieldIndex = %d\n", fieldIndex);
     switch(keycode)
     {
         case(WXK_PAGEUP):
-            printf("Page up\n");
             choice = m_maskCtrl.GetNextChoices(fieldIndex);   
             if(choice.Cmp(wxEmptyString) != 0)
             {
@@ -848,7 +845,6 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
             }
         break;
         case(WXK_PAGEDOWN):
-            printf("Page down\n");
             choice = m_maskCtrl.GetPreviousChoices(fieldIndex);
 
             if(choice.Cmp(wxEmptyString) != 0)
@@ -861,8 +857,20 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
         break;
         case(WXK_LEFT):
         case(WXK_RIGHT):
-            if(m_maskCtrl.GetFormatCodes(fieldIndex).Find('_') == wxNOT_FOUND)
-                    event.Skip();
+            if(m_maskCtrl.GetFormatCodes(fieldIndex).Find('_') != wxNOT_FOUND)
+                event.Skip();
+            else
+            {
+                for(it = 0; it < string.Len(); it++)
+                {
+                    if(string[it] == ' ' && m_maskCtrl.GetMask()[it] != ' ')
+                    {
+                        SetInsertionPoint(it);
+                        it = string.Len();
+                    }
+                }
+            }
+                
         break;
         case(WXK_BACK):
             if(cursor > 0)
@@ -955,7 +963,7 @@ void wxTextCtrlBase::KeyPressedMask(wxKeyEvent& event)
             if(m_maskCtrl.GetNumberOfFields() == 1 
             || fieldIndex == m_maskCtrl.GetNumberOfFields() - 1)
             {
-                event.Skip();
+                Navigate();
             }
             else
             {
@@ -1047,6 +1055,12 @@ void wxTextCtrlBase::MouseClickedMask(wxMouseEvent& event)
 
 }
 
+void wxTextCtrlBase::FocusMask(wxFocusEvent& event)
+{
+    SetInsertionPoint(0);
+    SetSelection(0,1);
+    printf("FOCUS\n");
+}
 // ----------------------------------------------------------------------------
 // file IO functions
 // ----------------------------------------------------------------------------
