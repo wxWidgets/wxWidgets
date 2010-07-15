@@ -43,6 +43,25 @@ wxWindow::wxWindow()
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     m_qtPicture = new QPicture();
+    m_horzScrollBar = m_vertScrollBar = NULL;
+}
+
+wxWindow::~wxWindow()
+{
+    SendDestroyEvent();
+
+    if ( s_capturedWindow == this )
+        s_capturedWindow = NULL;
+
+    DestroyChildren();
+
+    if ( m_horzScrollBar )
+        delete m_horzScrollBar;
+    if ( m_vertScrollBar )
+        delete m_vertScrollBar;
+    delete m_qtWindow; // This also destroys the container
+    if ( m_qtPicture )
+        delete m_qtPicture;
 }
 
 

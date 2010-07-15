@@ -12,10 +12,16 @@
 #include "wx/frame.h"
 #include "wx/menu.h"
 #include "wx/qt/converter.h"
-#include <QtGui/QResizeEvent>
 
 wxFrame::wxFrame()
 {
+}
+
+wxFrame::~wxFrame()
+{
+    SendDestroyEvent();
+    
+    delete m_qtFrame;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,

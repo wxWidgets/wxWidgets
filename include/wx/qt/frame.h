@@ -22,6 +22,7 @@ class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
     wxFrame();
+    ~wxFrame();
     wxFrame(wxWindow *parent,
                wxWindowID id,
                const wxString& title,

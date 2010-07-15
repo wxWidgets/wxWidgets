@@ -16,6 +16,13 @@ wxDialog::wxDialog()
 {
 }
 
+wxDialog::~wxDialog()
+{
+    SendDestroyEvent();
+    
+    delete m_qtDialog;
+}
+
 wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
         const wxString &title,
         const wxPoint &pos,

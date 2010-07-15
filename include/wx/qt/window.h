@@ -43,6 +43,7 @@ class WXDLLIMPEXP_CORE wxWindow : public wxWindowBase
 {
 public:
     wxWindow();
+    ~wxWindow();
     wxWindow(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
