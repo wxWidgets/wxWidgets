@@ -122,6 +122,7 @@
             graphics/ellipsization.cpp
             graphics/measuring.cpp
             config/config.cpp
+            controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
             controls/bookctrlbasetest.cpp
             controls/buttontest.cpp
