@@ -420,7 +420,7 @@ void wxWindow::DoSetToolTip( wxToolTip *tip )
 #if wxUSE_MENUS
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    QAction *result = menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
+    menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
 
     return ( true );
 }
@@ -615,15 +615,6 @@ static void FillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardSt
     state->SetMetaDown( modifiers.testFlag( Qt::MetaModifier ) );
 }
 
-static void FillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
-{
-    state->SetLeftDown( buttons.testFlag( Qt::LeftButton ) );
-    state->SetRightDown( buttons.testFlag( Qt::RightButton ) );
-    state->SetMiddleDown( buttons.testFlag( Qt::MidButton ) );
-    state->SetAux1Down( buttons.testFlag( Qt::XButton1 ) );
-    state->SetAux2Down( buttons.testFlag( Qt::XButton2 ) );
-}
-
 bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *event )
 {
     bool handled = false;
@@ -753,7 +744,7 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
     e.SetPosition( wxQtConvertPoint( mousePos ) );
 
     // Mouse buttons
-    FillMouseButtons( event->buttons(), &e );
+    wxQtFillMouseButtons( event->buttons(), &e );
 
     // Keyboard modifiers
     FillKeyboardModifiers( event->modifiers(), &e );
@@ -797,7 +788,7 @@ bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )
     e.SetPosition( wxQtConvertPoint( receiver->mapFromGlobal( QCursor::pos() ) ) );
     
     // Mouse buttons
-    FillMouseButtons( QApplication::mouseButtons(), &e );
+    wxQtFillMouseButtons( QApplication::mouseButtons(), &e );
     
     // Keyboard modifiers
     FillKeyboardModifiers( QApplication::keyboardModifiers(), &e );

@@ -11,6 +11,8 @@
 #ifndef _WX_QT_UTILS_H_
 #define _WX_QT_UTILS_H_
 
+void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state );
+
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] );
 

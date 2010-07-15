@@ -17,6 +17,8 @@
 #include <QtGui/QCursor>
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
+#include <QtGui/QDesktopServices>
+#include <QtCore/QUrl>
 
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     const char feature[] )
@@ -26,6 +28,14 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
     fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
+void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )
+{
+    state->SetLeftDown( buttons.testFlag( Qt::LeftButton ) );
+    state->SetRightDown( buttons.testFlag( Qt::RightButton ) );
+    state->SetMiddleDown( buttons.testFlag( Qt::MidButton ) );
+    state->SetAux1Down( buttons.testFlag( Qt::XButton1 ) );
+    state->SetAux2Down( buttons.testFlag( Qt::XButton2 ) );
+}
 
 #if wxUSE_GUI
 wxPoint wxGetMousePosition()
@@ -45,37 +55,55 @@ void wxGetMousePosition( int *x, int *y )
 #if wxUSE_GUI
 wxMouseState wxGetMouseState()
 {
-    return wxMouseState();
+    wxMouseState ms;
+    wxQtFillMouseButtons( QApplication::mouseButtons(), &ms );
+
+    return ms;
 }
 #endif
 
 
 wxWindow *wxFindWindowAtPoint(const wxPoint& pt)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return NULL;
+    /* Another option is to use QApplication::topLevelAt()
+     * but that gives the QWidget so the wxWindow list must
+     * be traversed comparing with this, or use the pointer from
+     * a wxQtWidget/wxQtFrame to the window, but they have
+     * no standard interface to return that. */
+    return wxGenericFindWindowAtPoint( pt );
 }
 
 wxWindow *wxFindWindowAtPointer(wxPoint& pt)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return NULL;
+    pt = wxQtConvertPoint( QCursor::pos() );
+    
+    return wxFindWindowAtPoint( pt );
 }
 
 bool wxGetKeyState(wxKeyCode key)
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return false;
+    /* FIXME: Qt doesn't provide a method to check the state of keys others
+     * than modifiers (shift, control, alt, meta). A platform-specific method
+     * is needed, probably one per platform Qt runs on. */
+    switch ( key )
+    {
+        case WXK_CONTROL:
+            return QApplication::keyboardModifiers().testFlag(Qt::ControlModifier);
+        case WXK_SHIFT:
+            return QApplication::keyboardModifiers().testFlag(Qt::ShiftModifier);
+        case WXK_ALT:
+            return QApplication::keyboardModifiers().testFlag(Qt::AltModifier);
+        case WXK_WINDOWS_LEFT:
+            return QApplication::keyboardModifiers().testFlag(Qt::MetaModifier);
+        default:
+            wxMISSING_IMPLEMENTATION( "wxGetKeyState for non-modifiers keys" );
+            return false;
+    }
 }
 
 int wxDisplayDepth()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return 0;
+    return QApplication::desktop()->depth();
 }
 
 void wxDisplaySize(int *width, int *height)
@@ -92,7 +120,7 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxBell()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    QApplication::beep();
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
@@ -107,7 +135,17 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 
 wxWindow *wxGetActiveWindow()
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    QWidget *w = QApplication::activeWindow();
+
+    wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetLast();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        if ( win->GetHandle() == w )
+            return win;
+        
+        node = node->GetPrevious();
+    }
 
     return NULL;
 }
@@ -117,9 +155,7 @@ bool wxColourDisplay()
     return QApplication::desktop()->depth() > 1;
 }
 
-bool wxLaunchDefaultApplication(const wxString& path, int flags)
+bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return false;
+    return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );
 }
