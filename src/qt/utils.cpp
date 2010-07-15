@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/utils.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

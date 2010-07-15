@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/qt/dialog.cpp
-// Author:      Peter Most
+// Author:      Peter Most, Javier Torres
 // Id:          $Id$
-// Copyright:   (c) Peter Most
+// Copyright:   (c) Peter Most, Javier Torres
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,6 +22,7 @@ wxDialog::wxDialog( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
+    Create( parent, id, title, pos, size, style, name );
 }
 
 bool wxDialog::Create( wxWindow *parent, wxWindowID id,
@@ -31,20 +32,61 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
         long style,
         const wxString &name)
 {
-    return false;
+    if ( GetHandle() == NULL ) {
+        // Window has not been created yet
+        
+        QWidget *qtParent = NULL;
+        if ( parent != NULL ) {
+            qtParent = parent->QtGetContainer();
+            parent->AddChild( this );
+        }
+        
+        m_qtDialog = new wxQtDialog( this, qtParent );
+    }
+    
+    return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
 int wxDialog::ShowModal()
 {
-    return 0;
+    wxCHECK_MSG( m_qtDialog, -1, "Invalid dialog" );
+    
+    return GetHandle()->exec();
 }
 
 void wxDialog::EndModal(int retCode)
 {
+    wxCHECK_RET( m_qtDialog, "Invalid dialog" );
+    
+    GetHandle()->done( retCode );
 }
 
 bool wxDialog::IsModal() const
 {
-    return false;
+    wxCHECK_MSG( m_qtDialog, false, "Invalid dialog" );
+
+    return GetHandle()->isModal();
 }
 
+QDialog *wxDialog::GetHandle() const
+{
+    return m_qtDialog;
+}
+
+WXWidget wxDialog::QtGetScrollBarsContainer() const
+{
+    return m_qtDialog;
+}
+
+//=============================================================================
+
+wxQtDialog::wxQtDialog( wxDialog *dialog, QWidget *parent )
+: wxQtEventForwarder< QDialog >( parent )
+{
+    m_dialog = dialog;
+}
+
+wxWindow *wxQtDialog::GetEventReceiver()
+{
+    return m_dialog;
+}

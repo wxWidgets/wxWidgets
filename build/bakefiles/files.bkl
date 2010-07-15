@@ -435,6 +435,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
+    src/qt/dialog.moc.cpp
     src/unix/dialup.cpp
     src/qt/dirdlg.cpp
     src/qt/display.cpp
