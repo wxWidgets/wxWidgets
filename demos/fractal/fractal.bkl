@@ -4,6 +4,7 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="fractal" template="wx_sample" template_append="wx_append">
+        <if cond="FORMAT=='autoconf'"><ldflags>$(HEADER_PAD_OPTION)</ldflags></if>
         <sources>
             fractal.cpp
         </sources>

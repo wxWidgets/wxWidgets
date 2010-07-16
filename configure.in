@@ -4442,6 +4442,8 @@ done
 \${inst_cmd} \${3}
 EOF
             chmod +x change-install-names
+
+            HEADER_PAD_OPTION="-headerpad_max_install_names"
         fi
       ;;
 
@@ -8131,6 +8133,7 @@ AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_RPATH_POSTLINK)
+AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
