@@ -90,8 +90,8 @@ public:
     // find out how wide the line can be
     wxRect GetAvailableRect(int startY, int endY);
     // Given a floating box, find its fit position
-    long GetFitPosition(int direction, int start, int height);
-    long GetFitPosition(const FloatRectMapArray& array, int start, int height);
+    int GetFitPosition(int direction, int start, int height) const;
+    int GetFitPosition(const FloatRectMapArray& array, int start, int height) const;
     // Find the last y position
     int GetLastRectBottom();
 private:
@@ -179,7 +179,7 @@ wxFloatCollector::~wxFloatCollector()
 {
 }
 
-long wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start, int height)
+int wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start, int height) const
 {
     if (array.GetCount() == 0)
         return start;
@@ -197,7 +197,7 @@ long wxFloatCollector::GetFitPosition(const FloatRectMapArray& array, int start,
     return array[i]->endY + 1;
 }
 
-long wxFloatCollector::GetFitPosition(int direction, int start, int height)
+int wxFloatCollector::GetFitPosition(int direction, int start, int height) const
 {
     if (direction == wxRICHTEXT_FLOAT_LEFT)
         return GetFitPosition(m_left, start, height);
@@ -343,6 +343,7 @@ wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr()
     m_anchored = false;
     m_align = wxRICHTEXT_CENTRE;
     m_floating = wxRICHTEXT_FLOAT_NONE;
+    m_offset = 0;
 }
 
 wxRichTextAnchoredObjectAttr::wxRichTextAnchoredObjectAttr(const wxRichTextAnchoredObjectAttr& attr)
@@ -360,6 +361,7 @@ void wxRichTextAnchoredObjectAttr::Copy(const wxRichTextAnchoredObjectAttr& attr
     m_anchored = attr.m_anchored;
     m_align = attr.m_align;
     m_floating = attr.m_floating;
+    m_offset = attr.m_offset;
 }
 
 /*!
@@ -4848,14 +4850,38 @@ void wxRichTextParagraph::CollectFloat()
         wxRichTextObject* obj = node->GetData();
         if (obj->IsPlaceHolding())
         {
-            m_anchoredObjects.Append(obj);
+            wxRichTextPlaceHoldingObject* ph = wxDynamicCast(obj, wxRichTextPlaceHoldingObject);
+            wxRichTextAnchoredObject* anchored = ph->GetRealObject();
+            wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
+            if (attr.m_floating != wxRICHTEXT_FLOAT_NONE)
+                m_anchoredObjects.Append(obj);
         }
     }
 }
 
-void wxRichTextParagraph::LayoutFloat(wxDC& WXUNUSED(dc), const wxRect& rect, int WXUNUSED(style), const wxFloatCollector* floatCollector)
+void wxRichTextParagraph::LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector)
 {
-    
+    CollectFloat();
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextPlaceHoldingObject* obj = wxDynamicCast(node->GetData(), wxRichTextPlaceHoldingObject);
+        wxRichTextAnchoredObject* anchored = obj->GetRealObject();
+        assert(anchored);
+
+        wxSize size;
+        int descent, x;
+        anchored->SetRange(obj->GetRange());
+        anchored->GetRangeSize(obj->GetRange(), size, descent, dc, style);
+        wxRichTextAnchoredObjectAttr attr = anchored->GetAnchoredAttr();
+        int pos = floatCollector->GetFitPosition(attr.m_floating, rect.x + attr.m_offset, size.x);
+        if (attr.m_floating == wxRICHTEXT_FLOAT_LEFT)
+            x = 0;
+        else if (attr.m_floating == wxRICHTEXT_FLOAT_RIGHT)
+            x = rect.width - size.x;
+        anchored->SetPosition(wxPoint(x, pos));
+        anchored->SetCachedSize(size);
+    }
 }
 
 /// Get the first position from pos that has a line break character.
@@ -7440,7 +7466,7 @@ bool wxRichTextRange::LimitTo(const wxRichTextRange& range)
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextPlaceHoldingObject, wxRichTextObject)
 
-wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextObject *real)
+wxRichTextPlaceHoldingObject::wxRichTextPlaceHoldingObject(wxRichTextObject *parent, wxRichTextAnchoredObject *real)
                             : wxRichTextObject(parent), m_real(real)
 {
 }
