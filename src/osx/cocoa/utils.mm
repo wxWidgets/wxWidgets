@@ -210,8 +210,12 @@ bool wxApp::DoInitGui()
         NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
         [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
             forEventClass:kInternetEventClass andEventID:kAEGetURL];
-        
+   
+        // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
+        // to the duplication of menus under 10.5 and a warning under 10.6
+#if 0
         [NSApp finishLaunching];
+#endif
     }
     return true;
 }
