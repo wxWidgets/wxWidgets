@@ -3,7 +3,7 @@
 // Purpose:     interface of wxStyledTextEvent
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -2799,18 +2799,6 @@ public:
     */
     void ZoomOut();
 
-
-
-    
-    /**
-       Set the size of the dots used to mark space characters.
-    */
-    void SetWhitespaceSize(int size);
-
-    /**
-       Get the size of the dots used to mark space characters.
-    */
-    int GetWhitespaceSize() const;
 
     /**
        Sets how wrapped sublines are placed. Default is fixed.

@@ -170,6 +170,8 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
     EVT_HEADER_CLICK(wxID_ANY, wxGridHeaderCtrl::OnClick)
+    EVT_HEADER_DCLICK(wxID_ANY, wxGridHeaderCtrl::OnDoubleClick)
+    EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxGridHeaderCtrl::OnRightClick)
 
     EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnBeginResize)
     EVT_HEADER_RESIZING(wxID_ANY, wxGridHeaderCtrl::OnResizing)
@@ -1911,7 +1913,6 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
 
     Create();
     SetInitialSize(size);
-    SetScrollRate(m_scrollLineX, m_scrollLineY);
     CalcDimensions();
 
     return true;
@@ -2100,8 +2101,7 @@ wxGrid::SetTable(wxGridTableBase *table,
             m_table = NULL;
         }
 
-        delete m_selection;
-        m_selection = NULL;
+        wxDELETE(m_selection);
 
         m_ownTable = false;
         m_numRows = 0;
@@ -2250,8 +2250,11 @@ void wxGrid::Init()
     m_extraWidth =
     m_extraHeight = 0;
 
-    m_scrollLineX = GRID_SCROLL_LINE_X;
-    m_scrollLineY = GRID_SCROLL_LINE_Y;
+    // we can't call SetScrollRate() as the window isn't created yet but OTOH
+    // we don't need to call it neither as the scroll position is (0, 0) right
+    // now anyhow, so just set the parameters directly
+    m_xScrollPixelsPerLine = GRID_SCROLL_LINE_X;
+    m_yScrollPixelsPerLine = GRID_SCROLL_LINE_Y;
 }
 
 // ----------------------------------------------------------------------------
@@ -3469,7 +3472,34 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    DoEndMoveCol(XToPos(x));
+                    // get the position of the column we're over
+                    int pos = XToPos(x);
+
+                    // we may need to adjust the drop position but don't bother
+                    // checking for it if we can't anyhow
+                    if ( pos > 1 )
+                    {
+                        // also find the index of the column we're over: notice
+                        // that the existing "col" variable may be invalid but
+                        // we need a valid one here
+                        const int colValid = GetColAt(pos);
+
+                        // if we're on the "near" (usually left but right in
+                        // RTL case) part of the column, the actual position we
+                        // should be placed in is actually the one before it
+                        bool onNearPart;
+                        const int middle = GetColLeft(colValid) +
+                                                GetColWidth(colValid)/2;
+                        if ( GetLayoutDirection() == wxLayout_LeftToRight )
+                            onNearPart = (x <= middle);
+                        else // wxLayout_RightToLeft
+                            onNearPart = (x > middle);
+
+                        if ( onNearPart )
+                            pos--;
+                    }
+
+                    DoEndMoveCol(pos);
                 }
                 break;
 
@@ -3812,6 +3842,29 @@ wxGrid::DoGridCellLeftDown(wxMouseEvent& event,
         }
         else
         {
+            if ( m_selection )
+            {
+                // In row or column selection mode just clicking on the cell
+                // should select the row or column containing it: this is more
+                // convenient for the kinds of controls that use such selection
+                // mode and is compatible with 2.8 behaviour (see #12062).
+                switch ( m_selection->GetSelectionMode() )
+                {
+                    case wxGridSelectCells:
+                    case wxGridSelectRowsOrColumns:
+                        // nothing to do in these cases
+                        break;
+
+                    case wxGridSelectRows:
+                        m_selection->SelectRow(coords.GetRow());
+                        break;
+
+                    case wxGridSelectColumns:
+                        m_selection->SelectCol(coords.GetCol());
+                        break;
+                }
+            }
+
             m_waitForSlowClick = m_currentCellCoords == coords &&
                                         coords != wxGridNoCellCoords;
             SetCurrentCell( coords );
@@ -4620,25 +4673,15 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_HOME:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(0, 0);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? 0
+                                             : m_currentCellCoords.GetRow(),
+                         0);
                 break;
 
             case WXK_END:
-                if ( event.ControlDown() )
-                {
-                    GoToCell(m_numRows - 1, m_numCols - 1);
-                }
-                else
-                {
-                    event.Skip();
-                }
+                GoToCell(event.ControlDown() ? m_numRows - 1
+                                             : m_currentCellCoords.GetRow(),
+                         m_numCols - 1);
                 break;
 
             case WXK_PAGEUP:
@@ -5572,6 +5615,11 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     }
     else
     {
+        // It is reported that we need to erase the background to avoid display
+        // artefacts, see #12055.
+        wxDCBrushChanger setBrush(dc, m_colWindow->GetBackgroundColour());
+        dc.DrawRectangle(rect);
+
         rend.DrawBorder(*this, dc, rect);
     }
 
@@ -6361,7 +6409,7 @@ void wxGrid::MakeCellVisible( int row, int col )
             //
             // Sometimes GRID_SCROLL_LINE / 2 is not enough,
             // so just add a full scroll unit...
-            ypos += m_scrollLineY;
+            ypos += m_yScrollPixelsPerLine;
         }
 
         // special handling for wide cells - show always left part of the cell!
@@ -6380,15 +6428,15 @@ void wxGrid::MakeCellVisible( int row, int col )
             xpos = x0 + (right - cw);
 
             // see comment for ypos above
-            xpos += m_scrollLineX;
+            xpos += m_xScrollPixelsPerLine;
         }
 
         if ( xpos != -1 || ypos != -1 )
         {
             if ( xpos != -1 )
-                xpos /= m_scrollLineX;
+                xpos /= m_xScrollPixelsPerLine;
             if ( ypos != -1 )
-                ypos /= m_scrollLineY;
+                ypos /= m_yScrollPixelsPerLine;
             Scroll( xpos, ypos );
             AdjustScrollbars();
         }
@@ -7811,24 +7859,29 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     HideCellEditControl();
     SaveEditControlValue();
 
-    // initialize both of them just to avoid compiler warnings
-    int row = -1,
+    // initialize both of them just to avoid compiler warnings even if only
+    // really needs to be initialized here
+    int row,
+        col;
+    if ( column )
+    {
+        row = -1;
+        col = colOrRow;
+    }
+    else
+    {
+        row = colOrRow;
         col = -1;
+    }
 
     wxCoord extent, extentMax = 0;
     int max = column ? m_numRows : m_numCols;
     for ( int rowOrCol = 0; rowOrCol < max; rowOrCol++ )
     {
         if ( column )
-        {
             row = rowOrCol;
-            col = colOrRow;
-        }
         else
-        {
-            row = colOrRow;
             col = rowOrCol;
-        }
 
         // we need to account for the cells spanning multiple columns/rows:
         // while they may need a lot of space, they don't need all of it in
@@ -8066,10 +8119,8 @@ void wxGrid::AutoSize()
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
     // client size but also leave space for (not needed any more) scrollbars
-    SetScrollbars(0, 0, 0, 0, 0, 0, true);
-
-    // restore the scroll rate parameters overwritten by SetScrollbars()
-    SetScrollRate(m_scrollLineX, m_scrollLineY);
+    SetScrollbars(m_xScrollPixelsPerLine, m_yScrollPixelsPerLine,
+                  0, 0, 0, 0, true);
 
     SetClientSize(size.x + m_rowLabelWidth, size.y + m_colLabelHeight);
 }

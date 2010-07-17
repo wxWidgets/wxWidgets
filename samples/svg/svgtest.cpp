@@ -4,7 +4,7 @@
 // Author:      Chris Elliott
 // Modified by:
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ===========================================================================
@@ -31,12 +31,14 @@
 #include "wx/dcsvg.h"
 #include "wx/vector.h"
 
-#include "mondrian.xpm"
-
 #include "bitmaps/new.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/help.xpm"
 #include "SVGlogo24.xpm"
+
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+#endif
 
 class MyChild;
 class MyCanvas;
@@ -175,7 +177,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
 {
     m_nWinCreated = 0;
 
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -228,7 +230,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 
     // Give it a title and icon
     subframe->SetTitle(title);
-    subframe->SetIcon(wxICON(mondrian));
+    subframe->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -486,7 +488,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             break;
 
         case 6:
-            dc.DrawIcon( wxIcon(mondrian_xpm), 10, 10 );
+            dc.DrawIcon( wxICON(sample), 10, 10 );
             dc.DrawBitmap ( wxBitmap(svgbitmap_xpm), 50,15);
 #if wxUSE_STATUSBAR
             s = wxT("Icon and Bitmap ");

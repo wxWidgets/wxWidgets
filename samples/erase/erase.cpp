@@ -35,9 +35,10 @@
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
+
 // the application icon
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -169,7 +170,7 @@ MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "Erase sample",
                  wxPoint(50, 50), wxSize(450, 340))
 {
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
     menuFile->AppendCheckItem(Erase_Menu_UseBuffer, "&Use memory DC\tCtrl-M");
@@ -252,7 +253,7 @@ MyCanvas::MyCanvas(wxFrame *parent)
 
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
 
-    m_bitmap = wxBitmap( wxICON(mondrian) );
+    m_bitmap = wxBitmap( wxICON(sample) );
 
     new wxStaticBitmap( this, wxID_ANY, m_bitmap, wxPoint(80,20) );
 

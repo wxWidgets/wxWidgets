@@ -53,7 +53,13 @@
 // classes
 //-----------------------------------------------------------------------------
 
+class wxDataViewColumn;
+class wxDataViewHeaderWindow;
 class wxDataViewCtrl;
+
+//-----------------------------------------------------------------------------
+// classes
+//-----------------------------------------------------------------------------
 
 static const int SCROLL_UNIT_X = 15;
 
@@ -75,6 +81,29 @@ static const int EXPANDER_OFFSET = 1;
 static wxDataViewModel* g_model;
 static int g_column = -2;
 static bool g_asending = true;
+
+//-----------------------------------------------------------------------------
+// wxDataViewColumn
+//-----------------------------------------------------------------------------
+
+void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
+{
+    m_width = width == wxCOL_WIDTH_DEFAULT ? wxDVC_DEFAULT_WIDTH : width;
+    m_minWidth = 0;
+    m_align = align;
+    m_flags = flags;
+    m_sort = false;
+    m_sortAscending = true;
+}
+    
+void wxDataViewColumn::UpdateDisplay()
+{
+    if (m_owner)
+    {
+        int idx = m_owner->GetColumnIndex( this );
+        m_owner->OnColumnChange( idx );
+    }
+}
 
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindow
@@ -815,12 +844,12 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell),
-                                        wxDataViewModel *model,
-                                        const wxDataViewItem & item, unsigned int col)
+void wxDataViewToggleRenderer::WXOnActivate(wxDataViewModel *model,
+                                            const wxVariant& valueOld,
+                                            const wxDataViewItem & item,
+                                            unsigned int col)
 {
-    model->ChangeValue(!m_toggle, item, col);
-    return true;
+    model->ChangeValue(!valueOld.GetBool(), item, col);
 }
 
 wxSize wxDataViewToggleRenderer::GetSize() const
@@ -976,24 +1005,23 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewModel *model,
-                                    const wxDataViewItem & item, unsigned int col )
+void wxDataViewDateRenderer::WXOnActivate(wxDataViewModel *model,
+                                          const wxVariant& valueOld,
+                                          const wxDataViewItem & item,
+                                          unsigned int col )
 {
-    wxVariant variant;
-    model->GetValue( variant, item, col );
-    wxDateTime value = variant.GetDateTime();
+    wxDateTime dtOld = valueOld.GetDateTime();
 
 #if wxUSE_DATE_RENDERER_POPUP
     wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
-        GetOwner()->GetOwner()->GetParent(), &value, model, item, col);
+        GetOwner()->GetOwner()->GetParent(), &dtOld, model, item, col);
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
     popup->Layout();
     popup->Popup( popup->m_cal );
 #else // !wxUSE_DATE_RENDERER_POPUP
-    wxMessageBox(value.Format());
+    wxMessageBox(dtOld.Format());
 #endif // wxUSE_DATE_RENDERER_POPUP/!wxUSE_DATE_RENDERER_POPUP
-    return true;
 }
 
 // ---------------------------------------------------------
@@ -3253,7 +3281,15 @@ void wxDataViewMainWindow::DestroyTree()
 
 void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
 {
-    if ( GetParent()->HandleAsNavigationKey(event) )
+    wxWindow * const parent = GetParent();
+
+    // propagate the char event upwards
+    wxKeyEvent eventForParent(event);
+    eventForParent.SetEventObject(parent);
+    if ( parent->ProcessWindowEvent(eventForParent) )
+        return;
+
+    if ( parent->HandleAsNavigationKey(event) )
         return;
 
     // no item -> nothing to do
@@ -3271,7 +3307,6 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     {
         case WXK_RETURN:
             {
-                wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
                                    parent->GetId());
                 le.SetItem( GetItemByRow(m_currentRow) );
@@ -3556,14 +3591,20 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
+                const unsigned colIdx = col->GetModelColumn();
+
+                wxVariant value;
+                model->GetValue( value, item, colIdx );
+
+                cell->WXOnActivate(model, value, item, colIdx);
+
                 if ( wxDataViewCustomRenderer *custom = cell->WXGetAsCustom() )
                 {
-                    wxVariant value;
-                    model->GetValue( value, item, col->GetModelColumn() );
-                    custom->SetValue( value );
+                    cell->SetValue( value );
+
                     wxRect cell_rect( xpos, GetLineStart( current ),
                                     col->GetWidth(), GetLineHeight( current ) );
-                    custom->Activate( cell_rect, model, item, col->GetModelColumn() );
+                    custom->Activate( cell_rect, model, item, colIdx );
                 }
             }
             else
@@ -3827,6 +3868,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_clientArea = new wxDataViewMainWindow( this, wxID_ANY );
 
+    // We use the cursor keys for moving the selection, not scrolling, so call
+    // this method to ensure wxScrollHelperEvtHandler doesn't catch all
+    // keyboard events forwarded to us from wxListMainWindow.
+    DisableKeyboardScrolling();
+
     if (HasFlag(wxDV_NO_HEADER))
         m_headerArea = NULL;
     else
@@ -4046,6 +4092,18 @@ bool wxDataViewCtrl::ClearColumns()
 
 int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
 {
+#if 1
+    unsigned int len = GetColumnCount();
+    for ( unsigned int i = 0; i < len; i++ )
+    {
+        wxDataViewColumn * col = GetColumnAt(i);
+        if (column==col)
+            return i;
+    }
+    
+    return wxNOT_FOUND;
+#else
+    // This returns the position in pixels which is not what we want.
     int ret = 0,
         dummy = 0;
     unsigned int len = GetColumnCount();
@@ -4062,6 +4120,7 @@ int wxDataViewCtrl::GetColumnPosition( const wxDataViewColumn *column ) const
         }
     }
     return ret;
+#endif
 }
 
 wxDataViewColumn *wxDataViewCtrl::GetSortingColumn() const

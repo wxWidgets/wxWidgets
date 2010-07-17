@@ -86,8 +86,6 @@ public:
     void OnIdle( wxIdleEvent& event );
 
 
-    wxCheckBox*     m_cbUseAnim;
-
 protected:
     wxTextCtrl*     m_logWin;
     wxLog*          m_logOld;
@@ -107,15 +105,15 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    ComboControl_Compare = wxID_HIGHEST,
+    ComboCtrl_Compare = wxID_HIGHEST,
 
     // menu items
-    ComboControl_Quit = wxID_EXIT,
+    ComboCtrl_Quit = wxID_EXIT,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
-    ComboControl_About = wxID_ABOUT
+    ComboCtrl_About = wxID_ABOUT
 };
 
 // ----------------------------------------------------------------------------
@@ -129,9 +127,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_TEXT(wxID_ANY,MyFrame::OnComboBoxUpdate)
     EVT_COMBOBOX(wxID_ANY,MyFrame::OnComboBoxUpdate)
 
-    EVT_MENU(ComboControl_Compare,  MyFrame::OnShowComparison)
-    EVT_MENU(ComboControl_Quit,     MyFrame::OnQuit)
-    EVT_MENU(ComboControl_About,    MyFrame::OnAbout)
+    EVT_MENU(ComboCtrl_Compare,  MyFrame::OnShowComparison)
+    EVT_MENU(ComboCtrl_Quit,     MyFrame::OnQuit)
+    EVT_MENU(ComboCtrl_About,    MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -495,128 +493,21 @@ BEGIN_EVENT_TABLE(TreeCtrlComboPopup, wxTreeCtrl)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
-// wxComboCtrl with custom popup animation. We use EVT_TIMER, which is quite
-// safe, but requires much more can than doing it in a single function (ie.
-// AnimateShow) and using combination of wxSleep and wxSafeYield.
+// wxComboCtrl with custom popup animation, using wxWindow::ShowWithEffect().
 // ----------------------------------------------------------------------------
-
-#if wxUSE_TIMER
-
-#define CUSTOM_COMBOBOX_ANIMATION_DURATION  200  // In milliseconds
-
-#include "wx/timer.h"
 
 class wxComboCtrlWithCustomPopupAnim : public wxComboCtrl
 {
-public:
-
-    virtual bool AnimateShow( const wxRect& rect, int flags )
+protected:
+    virtual bool AnimateShow( const wxRect& rect, int WXUNUSED(flags) )
     {
-        MyFrame* myFrame = (MyFrame*) ::wxGetTopLevelParent(this);
-
-        if ( !myFrame->m_cbUseAnim->GetValue() )
-            return true;
-
-        m_animStart = ::wxGetLocalTimeMillis();
-        m_animRect = rect;
-        m_animFlags = flags;
-
-        wxScreenDC dc;
-
-        wxBitmap bitmap( rect.width, rect.height, -1 );
-        wxMemoryDC memdc( bitmap );
-        memdc.Blit( 0, 0, rect.width, rect.height, &dc, rect.x, rect.y );
-        memdc.SelectObject(wxNullBitmap); 
-        m_animBackBitmap = bitmap;
-
-        m_animTimer.SetOwner( this, wxID_ANY );
-        m_animTimer.Start( 10, wxTIMER_CONTINUOUS );
-
-        DoOnTimer();
-        return false;
+        wxWindow* win = GetPopupWindow();
+        win->SetSize(rect);
+        win->Raise();  // This is needed
+        win->ShowWithEffect(wxSHOW_EFFECT_BLEND);
+        return true;
     }
-
-private:
-    void OnTimerEvent( wxTimerEvent& WXUNUSED(event) )
-    {
-        DoOnTimer();
-    }
-
-    void DoOnTimer()
-    {
-        bool stopTimer = false;
-
-        wxWindow* popup = GetPopupControl()->GetControl();
-        wxScreenDC dc;
-        const wxRect& rect = m_animRect;
-
-        // Popup was hidden before it was fully shown?
-        if ( IsPopupWindowState(Hidden) )
-        {
-            stopTimer = true;
-        }
-        else
-        {
-            wxLongLong t = ::wxGetLocalTimeMillis();
-
-            int pos = (int) (t-m_animStart).GetLo();
-            if ( pos < CUSTOM_COMBOBOX_ANIMATION_DURATION )
-            {
-                //
-                // Actual animation happens here
-                //
-                int width = rect.width;
-                int height = rect.height;
-
-                int center_x = rect.x + (width/2);
-                int center_y = rect.y + (height/2);
-
-                double d_height = (double) height;
-
-                dc.SetPen( *wxBLACK_PEN );
-                dc.SetBrush( *wxTRANSPARENT_BRUSH );
-
-                int w = (((pos*256)/CUSTOM_COMBOBOX_ANIMATION_DURATION)*width)/256;
-
-                double ratio = ((double)w / (double)width);
-                int h = (int)(d_height * ratio);
-                dc.DrawBitmap( m_animBackBitmap, rect.x, rect.y );
-                dc.DrawRectangle( center_x - w/2, center_y - h/2, w, h );
-            }
-            else
-            {
-                stopTimer = true;
-            }
-        }
-
-        if ( stopTimer )
-        {
-            dc.DrawBitmap( m_animBackBitmap, rect.x, rect.y );
-            popup->Move( 0, 0 );
-            m_animTimer.Stop();
-            DoShowPopup( m_animRect, m_animFlags );
-        }
-    }
-
-    // Popup animation related
-    wxLongLong  m_animStart;
-    wxTimer     m_animTimer;
-    wxRect      m_animRect;
-    wxBitmap    m_animBackBitmap;
-    int         m_animFlags;
-
-    DECLARE_EVENT_TABLE()
 };
-
-BEGIN_EVENT_TABLE(wxComboCtrlWithCustomPopupAnim, wxComboCtrl)
-    EVT_TIMER(wxID_ANY, wxComboCtrlWithCustomPopupAnim::OnTimerEvent)
-END_EVENT_TABLE()
-
-#else
-
-#define wxComboCtrlWithCustomPopupAnim wxComboCtrl
-
-#endif
 
 // ----------------------------------------------------------------------------
 // wxComboCtrl with entirely custom button action (opens file dialog)
@@ -724,12 +615,12 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ComboControl_About, wxT("&About...\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(ComboCtrl_About, wxT("&About...\tF1"), wxT("Show about dialog"));
 
-    fileMenu->Append(ComboControl_Compare, wxT("&Compare against wxComboBox..."),
+    fileMenu->Append(ComboCtrl_Compare, wxT("&Compare against wxComboBox..."),
         wxT("Show some wxOwnerDrawnComboBoxes side-by-side with native wxComboBoxes."));
     fileMenu->AppendSeparator();
-    fileMenu->Append(ComboControl_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    fileMenu->Append(ComboCtrl_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
@@ -852,14 +743,21 @@ MyFrame::MyFrame(const wxString& title)
     //
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("List View wxComboCtrl:")), 1,
-                   wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
-    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxComboControl:")), 1,
+    rowSizer->Add( new wxStaticText(panel,
+                        wxID_ANY,
+                        "List View wxComboCtrl (custom animation):"),
+                   1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
+    rowSizer->Add( new wxStaticText(panel,wxID_ANY,wxT("Tree Ctrl wxComboCtrl:")), 1,
                    wxALIGN_CENTER_VERTICAL|wxRIGHT, 4 );
     colSizer->Add( rowSizer, 0, wxEXPAND|wxALL, 5 );
 
     rowSizer = new wxBoxSizer( wxHORIZONTAL );
     cc = new wxComboCtrlWithCustomPopupAnim();
+
+    // Let's set a custom style for the contained wxTextCtrl. We need to
+    // use two-step creation for it to work properly.
+    cc->SetTextCtrlStyle(wxTE_RIGHT);
+
     cc->Create(panel, wxID_ANY, wxEmptyString);
 
     // Make sure we use popup that allows focusing the listview.
@@ -1010,16 +908,6 @@ MyFrame::MyFrame(const wxString& title)
 
     colSizer = new wxBoxSizer( wxVERTICAL );
 
-    wxStaticBoxSizer* sbSizer = new wxStaticBoxSizer( new wxStaticBox(panel,
-                                                                      wxID_ANY,
-                                                                      wxT("Options")),
-                                                      wxVERTICAL );
-
-    m_cbUseAnim = new wxCheckBox(panel, wxID_ANY, wxT("Custom popup animation for ListView wxComboCtrl"));
-    m_cbUseAnim->SetValue(true);
-    sbSizer->Add( m_cbUseAnim, 0, wxALL, 3 );
-
-    colSizer->Add( sbSizer, 0, wxEXPAND|wxALL, 3 );
     colSizer->AddSpacer(8);
     colSizer->Add( new wxStaticText(panel, wxID_ANY, wxT("Log Messages:")), 0, wxTOP|wxLEFT, 3 );
     colSizer->Add( m_logWin, 1, wxEXPAND|wxALL, 3 );

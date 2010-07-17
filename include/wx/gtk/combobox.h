@@ -118,8 +118,8 @@ public:
     void OnUpdateDelete(wxUpdateUIEvent& event);
     void OnUpdateSelectAll(wxUpdateUIEvent& event);
 
-    virtual void DisableEvents();
-    virtual void EnableEvents();
+    virtual void GTKDisableEvents();
+    virtual void GTKEnableEvents();
     GtkWidget* GetConnectWidget();
 
     static wxVisualAttributes
@@ -146,13 +146,7 @@ private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const;
-    virtual void EnableTextChangedEvents(bool enable)
-    {
-        if ( enable )
-            EnableEvents();
-        else
-            DisableEvents();
-    }
+    virtual void EnableTextChangedEvents(bool enable);
 
     void Init();
 

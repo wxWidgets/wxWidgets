@@ -204,11 +204,8 @@ wxArtProvider::~wxArtProvider()
         while ( !sm_providers->empty() )
             delete *sm_providers->begin();
 
-        delete sm_providers;
-        sm_providers = NULL;
-
-        delete sm_cache;
-        sm_cache = NULL;
+        wxDELETE(sm_providers);
+        wxDELETE(sm_cache);
     }
 }
 

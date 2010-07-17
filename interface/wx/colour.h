@@ -3,7 +3,7 @@
 // Purpose:     interface of wxColour
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -268,6 +268,7 @@ public:
 /** @name Predefined colors. */
 //@{
 wxColour wxNullColour;
+wxColour wxTransparentColour;
 wxColour* wxBLACK;
 wxColour* wxBLUE;
 wxColour* wxCYAN;

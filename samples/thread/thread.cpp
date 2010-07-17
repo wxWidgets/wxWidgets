@@ -6,7 +6,7 @@
 // Created:     06/16/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2009 wxWidgets team
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -351,7 +351,7 @@ MyFrame::MyFrame(const wxString& title)
 {
     m_oldLogger = wxLog::GetActiveTarget();
 
-    SetIcon(wxIcon(sample_xpm));
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenuBar *menuBar = new wxMenuBar;

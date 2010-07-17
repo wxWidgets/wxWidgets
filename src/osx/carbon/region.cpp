@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// File:      src/mac/carbon/region.cpp
+// File:      src/osx/carbon/region.cpp
 // Purpose:   Region class
 // Author:    Stefan Csomor
 // Created:   Fri Oct 24 10:46:34 MET 1997
@@ -9,6 +9,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxOSX_USE_COCOA_OR_CARBON
 
 #include "wx/region.h"
 
@@ -344,11 +346,7 @@ wxRegionIterator::wxRegionIterator()
 
 wxRegionIterator::~wxRegionIterator()
 {
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 }
 
 wxRegionIterator::wxRegionIterator(const wxRegionIterator& iterator)
@@ -373,11 +371,7 @@ wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& iterator)
  */
 void wxRegionIterator::SetRects(long numRects, wxRect *rects)
 {
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 
     if (rects && (numRects > 0))
     {
@@ -481,11 +475,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
     m_current = 0;
     m_region = region;
 
-    if (m_rects)
-    {
-        delete [] m_rects;
-        m_rects = NULL;
-    }
+    wxDELETEA(m_rects);
 
     if (m_region.IsEmpty())
     {
@@ -606,3 +596,5 @@ long wxRegionIterator::GetH() const
 
     return 0;
 }
+
+#endif

@@ -188,7 +188,7 @@ enum wxPosixPermissions
 // Implemented in filefnwce.cpp
 #if defined( __WXWINCE__)
     typedef __int64 wxFileOffset;
-    #define wxFileOffsetFmtSpec _("I64")
+    #define wxFileOffsetFmtSpec wxT("I64")
     WXDLLIMPEXP_BASE int wxCRT_Open(const wxChar *filename, int oflag, int WXUNUSED(pmode));
     WXDLLIMPEXP_BASE int wxCRT_Access(const wxChar *name, int WXUNUSED(how));
     WXDLLIMPEXP_BASE int wxClose(int fd);

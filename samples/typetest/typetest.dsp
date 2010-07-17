@@ -252,11 +252,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\typetest.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\typetest.rc
+SOURCE=.\typetest.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

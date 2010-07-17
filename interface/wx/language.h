@@ -3,7 +3,7 @@
 // Purpose:     wxLanguage enum
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -60,6 +60,7 @@ enum wxLanguage
     wxLANGUAGE_BHUTANI,
     wxLANGUAGE_BIHARI,
     wxLANGUAGE_BISLAMA,
+    wxLANGUAGE_BOSNIAN,
     wxLANGUAGE_BRETON,
     wxLANGUAGE_BULGARIAN,
     wxLANGUAGE_BURMESE,

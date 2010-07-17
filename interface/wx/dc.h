@@ -3,7 +3,7 @@
 // Purpose:     interface of wxDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -222,19 +222,20 @@ public:
 
     /**
         Draws an arc of a circle, centred on (@a xc, @a yc), with starting
-        point (@a x1, @a y1) and ending at (@a x2, @a y2). The current pen is
-        used for the outline and the current brush for filling the shape.
+        point (@a xStart, @a yStart) and ending at (@a xEnd, @a yEnd). 
+        The current pen is used for the outline and the current brush for 
+        filling the shape.
 
         The arc is drawn in a counter-clockwise direction from the start point
         to the end point.
     */
-    void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
+    void DrawArc(wxCoord xStart, wxCoord yStart, wxCoord xEnd, wxCoord yEnd,
                  wxCoord xc, wxCoord yc);
 
     /**
         @overload
     */
-    void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre);
+    void DrawArc(const wxPoint& ptStart, const wxPoint& ptEnd, const wxPoint& centre);
 
     /**
         Draw a bitmap on the device context at the specified point. If

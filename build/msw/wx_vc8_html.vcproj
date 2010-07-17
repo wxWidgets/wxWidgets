@@ -926,11 +926,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\html\m_span.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\html\m_style.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\src\html\m_tables.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\html\styleparams.cpp"
 				>
 			</File>
 			<File
@@ -1222,6 +1230,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\html\m_templ.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\html\styleparams.h"
 				>
 			</File>
 			<File

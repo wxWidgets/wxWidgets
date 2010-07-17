@@ -335,11 +335,8 @@ bool wxZlibOutputStream::Close()
  {
   DoFlush(true);
    deflateEnd(m_deflate);
-   delete m_deflate;
-
-  m_deflate = NULL;
-   delete[] m_z_buffer;
-  m_z_buffer = NULL;
+   wxDELETE(m_deflate);
+   wxDELETEA(m_z_buffer);
 
   return wxFilterOutputStream::Close() && IsOk();
  }

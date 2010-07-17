@@ -800,7 +800,7 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
                     + VERT_MARGIN;
 #ifdef __WXMAC__
         // the spin control get clipped otherwise
-        width += 10;
+        width += 25;
 #endif
 
         wxCoord w2 = bestSizeCombo.x + HORZ_MARGIN + GetCharWidth()*6;

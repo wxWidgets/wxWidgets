@@ -121,12 +121,9 @@ wxIFFDecoder::wxIFFDecoder(wxInputStream *s)
 
 void wxIFFDecoder::Destroy()
 {
-    delete m_image;
-    m_image = 0;
-    delete [] databuf;
-    databuf = 0;
-    delete [] decomp_mem;
-    decomp_mem = 0;
+    wxDELETE(m_image);
+    wxDELETEA(databuf);
+    wxDELETEA(decomp_mem);
 }
 
 //---------------------------------------------------------------------------
@@ -420,8 +417,7 @@ int wxIFFDecoder::ReadIFF()
         const byte *cmapptr = dataptr + 8;
         colors = chunkLen / 3;                  // calc no of colors
 
-        delete m_image->pal;
-        m_image->pal = 0;
+        wxDELETE(m_image->pal);
         m_image->colors = colors;
         if (colors > 0) {
         m_image->pal = new byte[3*colors];
@@ -479,8 +475,7 @@ int wxIFFDecoder::ReadIFF()
         decomprle(bodyptr, decomp_mem, chunkLen, decomp_bufsize);
         bodyptr = decomp_mem;                 // -> uncompressed BODY
         chunkLen = decomp_bufsize;
-        delete [] databuf;
-        databuf = 0;
+        wxDELETEA(databuf);
         }
 
         // the following determines the type of the ILBM file.

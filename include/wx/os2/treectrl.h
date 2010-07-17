@@ -442,7 +442,7 @@ public:
     // interface compatibility, only.
     //
     wxTextCtrl* EditLabel( const wxTreeItemId& rItem
-                          ,wxClassInfo*        pTextCtrlClass = CLASSINFO(wxTextCtrl)
+                          ,wxClassInfo*        pTextCtrlClass = wxCLASSINFO(wxTextCtrl)
                          );
 
     //

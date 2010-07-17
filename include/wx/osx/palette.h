@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/palette.h
+// Name:        wx/osx/palette.h
 // Purpose:     wxPalette class
 // Author:      Stefan Csomor
 // Modified by:

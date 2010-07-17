@@ -52,38 +52,35 @@ public:
     }
 
     // implement wxHeaderColumnBase methods
-    virtual void SetTitle(const wxString& title) { m_title = title; }
+    virtual void SetTitle(const wxString& title) { m_title = title; UpdateDisplay(); }
     virtual wxString GetTitle() const { return m_title; }
 
-    virtual void SetWidth(int width) { m_width = width; }
+    virtual void SetWidth(int width) { m_width = width; UpdateDisplay(); }
     virtual int GetWidth() const { return m_width; }
 
-    virtual void SetMinWidth(int minWidth) { m_minWidth = minWidth; }
+    virtual void SetMinWidth(int minWidth) { m_minWidth = minWidth; UpdateDisplay(); }
     virtual int GetMinWidth() const { return m_minWidth; }
 
-    virtual void SetAlignment(wxAlignment align) { m_align = align; }
+    virtual void SetAlignment(wxAlignment align) { m_align = align; UpdateDisplay(); }
     virtual wxAlignment GetAlignment() const { return m_align; }
 
-    virtual void SetFlags(int flags) { m_flags = flags; }
+    virtual void SetFlags(int flags) { m_flags = flags; UpdateDisplay(); }
     virtual int GetFlags() const { return m_flags; }
 
-    virtual void SetAsSortKey(bool sort = true) { m_sort = sort; }
+    virtual void SetAsSortKey(bool sort = true) { m_sort = sort; UpdateDisplay(); }
     virtual bool IsSortKey() const { return m_sort; }
 
-    virtual void SetSortOrder(bool ascending) { m_sortAscending = ascending; }
+    virtual void SetSortOrder(bool ascending) { m_sortAscending = ascending; UpdateDisplay(); }
     virtual bool IsSortOrderAscending() const { return m_sortAscending; }
+
+    virtual void SetBitmap( const wxBitmap& bitmap ) { wxDataViewColumnBase::SetBitmap(bitmap); UpdateDisplay(); }
+
 
 private:
     // common part of all ctors
-    void Init(int width, wxAlignment align, int flags)
-    {
-        m_width = width == wxCOL_WIDTH_DEFAULT ? wxDVC_DEFAULT_WIDTH : width;
-        m_minWidth = 0;
-        m_align = align;
-        m_flags = flags;
-        m_sort = false;
-        m_sortAscending = true;
-    }
+    void Init(int width, wxAlignment align, int flags);
+    
+    void UpdateDisplay();
 
     wxString m_title;
     int m_width,

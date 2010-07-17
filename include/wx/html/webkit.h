@@ -216,21 +216,21 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBe
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent );
 
 #define EVT_WEBKIT_STATE_CHANGED(func) \
-            DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
+            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitStateChangedEventHandler( func ), \
                             NULL ),
 
 #define EVT_WEBKIT_BEFORE_LOAD(func) \
-            DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_BEFORE_LOAD, \
+            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_BEFORE_LOAD, \
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitBeforeLoadEventHandler( func ), \
                             NULL ),
 
 #define EVT_WEBKIT_NEW_WINDOW(func)                              \
-            DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
+            wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitNewWindowEventFunction( func ), \

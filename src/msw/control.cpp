@@ -368,7 +368,7 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     if ( !colBg.Ok() )
     {
         if ( wxWindow *win = wxFindWinFromHandle(hWnd) )
-            hbr = MSWGetBgBrush(pDC, win);
+            hbr = win->MSWGetBgBrush(pDC);
 
         // if the control doesn't have any bg colour, foreground colour will be
         // ignored as the return value would be 0 -- so forcefully give it a

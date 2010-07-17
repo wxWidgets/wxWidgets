@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/mimetype.h
+// Name:        wx/osx/carbon/mimetype.h
 // Purpose:     Mac Carbon implementation for wx mime-related classes
 // Author:      Ryan Norton
 // Modified by:

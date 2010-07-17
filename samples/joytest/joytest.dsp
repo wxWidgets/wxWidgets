@@ -256,7 +256,7 @@ SOURCE=.\joytest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\joytest.rc
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # End Group
 # Begin Group "Header Files"

@@ -144,11 +144,7 @@ wxSound::~wxSound()
 
 void wxSound::Free()
 {
-    if ( m_data )
-    {
-        delete m_data;
-        m_data = NULL;
-    }
+    wxDELETE(m_data);
 }
 
 bool wxSound::CheckCreatedOk()

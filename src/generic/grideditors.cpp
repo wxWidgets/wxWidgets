@@ -399,7 +399,10 @@ void wxGridCellTextEditor::DoCreate(wxWindow* parent,
                                     wxEvtHandler* evtHandler,
                                     long style)
 {
-    style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER;
+    // Use of wxTE_RICH2 is a strange hack to work around the bug #11681: a
+    // plain text control seems to lose its caret somehow when we hide it and
+    // show it again for a different cell.
+    style |= wxTE_PROCESS_ENTER | wxTE_PROCESS_TAB | wxNO_BORDER | wxTE_RICH2;
 
     m_control = new wxTextCtrl(parent, id, wxEmptyString,
                                wxDefaultPosition, wxDefaultSize,

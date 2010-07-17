@@ -95,7 +95,7 @@ public:
     // Creates "owned" buffer, i.e. takes over ownership of 'str' and frees it
     // in dtor (if ref.count reaches 0).
     static
-    const wxScopedCharTypeBuffer CreateOwned(const CharType *str,
+    const wxScopedCharTypeBuffer CreateOwned(CharType *str,
                                              size_t len = wxNO_LEN )
     {
         if ( len == wxNO_LEN )
@@ -103,7 +103,7 @@ public:
 
         wxScopedCharTypeBuffer buf;
         if ( str )
-            buf.m_data = new Data(StrCopy(str, len), len);
+            buf.m_data = new Data(str, len);
         return buf;
     }
 

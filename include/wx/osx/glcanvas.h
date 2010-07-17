@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/glcanvas.h
+// Name:        wx/osx/glcanvas.h
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
 // Modified by:

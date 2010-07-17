@@ -3,7 +3,7 @@
 // Purpose:     interface of wxMiniFrame
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -34,10 +34,6 @@
         Stay on top of other windows (Windows only).
     @style{wxSYSTEM_MENU}
         Displays a system menu (Windows and Motif only).
-    @style{wxTINY_CAPTION_HORIZ}
-        This style is obsolete and not used any longer.
-    @style{wxTINY_CAPTION_VERT}
-        This style is obsolete and not used any longer.
     @style{wxRESIZE_BORDER}
         Displays a resizeable border around the window.
     @endStyleTable

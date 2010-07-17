@@ -1,6 +1,4 @@
-aaaa     ICON "mondrian.ico"
-mondrian ICON "mondrian.ico"
-#include "wx/msw/wx.rc"
+#include "../sample.rc"
 
 icon1       ICON    "bitmaps/toolbrai.ico"
 icon2       ICON    "bitmaps/toolchar.ico"

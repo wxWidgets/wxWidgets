@@ -258,11 +258,13 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 info.description = ButtonStyle()->font_desc;
                 gs_fontSystem = wxFont(info);
 
+#if wxUSE_FONTENUM
                 // (try to) heal the default font (on some common systems e.g. Ubuntu
                 // it's "Sans Serif" but the real font is called "Sans"):
                 if (!wxFontEnumerator::IsValidFacename(gs_fontSystem.GetFaceName()) &&
                     gs_fontSystem.GetFaceName() == "Sans Serif")
                     gs_fontSystem.SetFaceName("Sans");
+#endif // wxUSE_FONTENUM
 
                 info.description = NULL;
             }
@@ -273,7 +275,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
             break;
     }
 
-    wxASSERT(font.IsOk() && wxFontEnumerator::IsValidFacename(font.GetFaceName()));
+    wxASSERT( font.IsOk() );
 
     return font;
 }

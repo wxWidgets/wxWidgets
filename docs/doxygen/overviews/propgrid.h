@@ -3,7 +3,7 @@
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -555,8 +555,17 @@ This example reverse-iterates through all visible items:
 
 @endcode
 
-<b>wxPython Note:</b> Instead of ++ operator, use Next() method, and instead of
+@beginWxPythonOnly
+PropertyGridInterface has some useful pythonic iterators as attributes.
+@c Properties lets you iterate through all items that are not category
+captions or private children. @c Items lets you iterate through everything
+except private children. Also, there are GetPyIterator() and GetPyVIterator(),
+which return pythonic iterators instead of normal wxPropertyGridIterator.
+
+If you need to use C++ style iterators in wxPython code, note that
+Instead of ++ operator, use Next() method, and instead of
 * operator, use GetProperty() method.
+@endWxPythonOnly
 
 GetIterator() only works with wxPropertyGrid and the individual pages
 of wxPropertyGridManager. In order to iterate through an arbitrary
@@ -716,7 +725,7 @@ message.
                     event.Veto();
                     event.SetValidationFailureBehavior(wxPG_VFB_STAY_IN_PROPERTY |
                                                        wxPG_VFB_BEEP |
-                                                       wxPG_VFB_SHOW_MESSAGE);
+                                                       wxPG_VFB_SHOW_MESSAGEBOX);
                 }
             }
         }
@@ -948,6 +957,10 @@ without warnings or errors.
     with keyboard. This change allowed fixing broken tab traversal on wxGTK
     (which is open issue in wxPropertyGrid 1.4).
 
+  - wxPG_EX_UNFOCUS_ON_ENTER style is removed and is now default behavior.
+    That is, when enter is pressed, editing is considered done and focus
+    moves back to the property grid from the editor control.
+
   - A few member functions were removed from wxPropertyGridInterface.
     Please use wxPGProperty's counterparts from now on.
 
@@ -970,11 +983,21 @@ without warnings or errors.
 
   - Extended window style wxPG_EX_LEGACY_VALIDATORS was removed.
 
+  - Default property validation failure behavior has been changed to
+    (wxPG_VFB_MARK_CELL | wxPG_VFB_SHOW_MESSAGEBOX), which means that the
+    cell is marked red and wxMessageBox is shown. This is more user-friendly
+    than the old behavior, which simply beeped and prevented leaving the
+    property editor until a valid value was entered.
+
   - wxPropertyGridManager now has same Get/SetSelection() semantics as
     wxPropertyGrid.
 
   - Various wxPropertyGridManager page-related functions now return pointer
     to the page object instead of index.
+
+  - wxArrayEditorDialog used by wxArrayStringProperty and some sample
+    properties has been renamed to wxPGArrayEditorDialog. Also, it now uses
+    wxEditableListBox for editing.
 
   - Instead of calling wxPropertyGrid::SetButtonShortcut(), use
     wxPropertyGrid::SetActionTrigger(wxPG_ACTION_PRESS_BUTTON).

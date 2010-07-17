@@ -6,7 +6,7 @@
 // Created:     28.05.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -54,11 +54,7 @@ wxTopLevelWindowMSW::ButtonMenu::ButtonMenu()
 
 wxTopLevelWindowMSW::ButtonMenu::~ButtonMenu()
 {
-    if(m_menu)
-    {
-        delete m_menu;
-        m_menu = NULL;
-    };
+    wxDELETE(m_menu);
 }
 
 void wxTopLevelWindowMSW::SetLeftMenu(int id, const wxString& label, wxMenu *subMenu)

@@ -81,7 +81,10 @@ private:
     void UpdateMessage(const wxString &newmsg);
 
     // common part of Update() and Pulse(), returns true if not cancelled
-    bool DoAfterUpdate(bool *skip);
+    bool DoBeforeUpdate(bool *skip);
+
+    // common part of Update() and Pulse()
+    void DoAfterUpdate();
 
     // shortcuts for enabling buttons
     void EnableClose();

@@ -1,174 +1,119 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/osx/core/mimetype.h
-// Purpose:     classes and functions to manage MIME types
-// Author:      Vadim Zeitlin
+// Purpose:     Mac implementation for wx mime-related classes
+// Author:      Neil Perkins
 // Modified by:
-// Created:     23.09.98
+// Created:     2010-05-15
 // RCS-ID:      $Id: mimetype.h 54448 2008-07-01 09:28:08Z RR $
-// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows licence (part of wxExtra library)
+// Copyright:   (C) 2010 Neil Perkins
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
-#include "wx/mimetype.h"
+#include "wx/defs.h"
 
 #if wxUSE_MIMETYPE
 
-class wxMimeTypeCommands;
+#include "wx/mimetype.h"
+#include "wx/hashmap.h"
+#include "wx/iconloc.h"
 
-WX_DEFINE_ARRAY_PTR(wxMimeTypeCommands *, wxMimeCommandsArray);
 
-// this is the real wxMimeTypesManager for Unix
+// This class implements mime type functionality for Mac OS X using UTIs and Launch Services
+// Currently only the GetFileTypeFromXXXX public functions have been implemented
 class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl
 {
 public:
-    // ctor and dtor
+
     wxMimeTypesManagerImpl();
     virtual ~wxMimeTypesManagerImpl();
 
-    // load all data into memory - done when it is needed for the first time
-    void Initialize(int mailcapStyles = wxMAILCAP_ALL,
-                    const wxString& extraDir = wxEmptyString);
-
-    // and delete the data here
+    // These functions are not needed on Mac OS X and have no-op implementations
+    void Initialize(int mailcapStyles = wxMAILCAP_STANDARD, const wxString& extraDir = wxEmptyString);
     void ClearData();
 
-    // implement containing class functions
+    // Functions to look up types by ext, mime or UTI
     wxFileType *GetFileTypeFromExtension(const wxString& ext);
     wxFileType *GetFileTypeFromMimeType(const wxString& mimeType);
+    wxFileType *GetFileTypeFromUti(const wxString& uti);
 
+    // These functions are only stubs on Mac OS X
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
-
-    void AddFallback(const wxFileTypeInfo& filetype);
-
-    // add information about the given mimetype
-    void AddMimeTypeInfo(const wxString& mimetype,
-                         const wxString& extensions,
-                         const wxString& description);
-    void AddMailcapInfo(const wxString& strType,
-                        const wxString& strOpenCmd,
-                        const wxString& strPrintCmd,
-                        const wxString& strTest,
-                        const wxString& strDesc);
-
-    // add a new record to the user .mailcap/.mime.types files
     wxFileType *Associate(const wxFileTypeInfo& ftInfo);
-    // remove association
     bool Unassociate(wxFileType *ft);
 
-    // accessors
-        // get the string containing space separated extensions for the given
-        // file type
-    wxString GetExtension(size_t index) { return m_aExtensions[index]; }
+private:
 
-protected:
-    void InitIfNeeded();
+    // The work of querying the OS for type data is done in these two functions
+    void LoadTypeDataForUti(const wxString& uti);
+    void LoadDisplayDataForUti(const wxString& uti);
 
-    wxArrayString m_aTypes,         // MIME types
-                  m_aDescriptions,  // descriptions (just some text)
-                  m_aExtensions,    // space separated list of extensions
-                  m_aIcons;         // Icon filenames
+    // These functions are pass-throughs from wxFileTypeImpl
+    bool GetExtensions(const wxString& uti, wxArrayString& extensions);
+    bool GetMimeType(const wxString& uti, wxString *mimeType);
+    bool GetMimeTypes(const wxString& uti, wxArrayString& mimeTypes);
+    bool GetIcon(const wxString& uti, wxIconLocation *iconLoc);
+    bool GetDescription(const wxString& uti, wxString *desc);
 
-    // verb=command pairs for this file type
-    wxMimeCommandsArray m_aEntries;
+    // Structure to represent file types
+    typedef struct FileTypeData
+    {
+        wxArrayString extensions;
+        wxArrayString mimeTypes;
+        wxIconLocation iconLoc;
+        wxString description;
+    }
+    FileTypeInfo;
 
-    // are we initialized?
-    bool m_initialized;
+    // Map types
+    WX_DECLARE_STRING_HASH_MAP( wxString, TagMap );
+    WX_DECLARE_STRING_HASH_MAP( FileTypeData, UtiMap );
 
-    wxString GetCommand(const wxString &verb, size_t nIndex) const;
+    // Data store
+    TagMap m_extMap;
+    TagMap m_mimeMap;
+    UtiMap m_utiMap;
 
-    // Read XDG *.desktop file
-    void LoadXDGApp(const wxString& filename);
-    // Scan XDG directory
-    void LoadXDGAppsFilesFromDir(const wxString& dirname);
-
-    // Load XDG globs files
-    void LoadXDGGlobs(const wxString& filename);
-
-    // functions used to do associations
-    virtual int AddToMimeData(const wxString& strType,
-                      const wxString& strIcon,
-                      wxMimeTypeCommands *entry,
-                      const wxArrayString& strExtensions,
-                      const wxString& strDesc,
-                      bool replaceExisting = true);
-    virtual bool DoAssociation(const wxString& strType,
-                       const wxString& strIcon,
-                       wxMimeTypeCommands *entry,
-                       const wxArrayString& strExtensions,
-                       const wxString& strDesc);
-
-    // give it access to m_aXXX variables
-    friend class WXDLLIMPEXP_FWD_BASE wxFileTypeImpl;
+    friend class wxFileTypeImpl;
 };
 
+
+// This class provides the interface between wxFileType and wxMimeTypesManagerImple for Mac OS X
+// Currently only extension, mimetype, description and icon information is available
+// All other methods have no-op implementation
 class WXDLLIMPEXP_BASE wxFileTypeImpl
 {
 public:
-    // initialization functions
-    // this is used to construct a list of mimetypes which match;
-    // if built with GetFileTypeFromMimetype index 0 has the exact match and
-    // index 1 the type / * match
-    // if built with GetFileTypeFromExtension, index 0 has the mimetype for
-    // the first extension found, index 1 for the second and so on
 
-    void Init(wxMimeTypesManagerImpl *manager, size_t index)
-        { m_manager = manager; m_index.Add(index); }
+    wxFileTypeImpl();
+    virtual ~wxFileTypeImpl();
 
-    // accessors
-    bool GetExtensions(wxArrayString& extensions);
-    bool GetMimeType(wxString *mimeType) const
-        { *mimeType = m_manager->m_aTypes[m_index[0]]; return true; }
-    bool GetMimeTypes(wxArrayString& mimeTypes) const;
-    bool GetIcon(wxIconLocation *iconLoc) const;
+    bool GetExtensions(wxArrayString& extensions) const ;
+    bool GetMimeType(wxString *mimeType) const ;
+    bool GetMimeTypes(wxArrayString& mimeTypes) const ;
+    bool GetIcon(wxIconLocation *iconLoc) const ;
+    bool GetDescription(wxString *desc) const ;
 
-    bool GetDescription(wxString *desc) const
-        { *desc = m_manager->m_aDescriptions[m_index[0]]; return true; }
-
-    bool GetOpenCommand(wxString *openCmd,
-                        const wxFileType::MessageParameters& params) const
-    {
-        *openCmd = GetExpandedCommand(wxT("open"), params);
-        return (! openCmd -> IsEmpty() );
-    }
-
-    bool GetPrintCommand(wxString *printCmd,
-                         const wxFileType::MessageParameters& params) const
-    {
-        *printCmd = GetExpandedCommand(wxT("print"), params);
-        return (! printCmd -> IsEmpty() );
-    }
-
-        // return the number of commands defined for this file type, 0 if none
-    size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands,
-                          const wxFileType::MessageParameters& params) const;
-
-
-    // remove the record for this file type
-    // probably a mistake to come here, use wxMimeTypesManager.Unassociate (ft) instead
-    bool Unassociate(wxFileType *ft)
-    {
-        return m_manager->Unassociate(ft);
-    }
-
-    // set an arbitrary command, ask confirmation if it already exists and
-    // overwriteprompt is TRUE
-    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = true);
+    // These functions are only stubs on Mac OS X
+    bool GetOpenCommand(wxString *openCmd, const wxFileType::MessageParameters& params) const;
+    bool GetPrintCommand(wxString *printCmd, const wxFileType::MessageParameters& params) const;
+    size_t GetAllCommands(wxArrayString *verbs, wxArrayString *commands, const wxFileType::MessageParameters& params) const;
+    bool SetCommand(const wxString& cmd, const wxString& verb, bool overwriteprompt = TRUE);
     bool SetDefaultIcon(const wxString& strIcon = wxEmptyString, int index = 0);
+    bool Unassociate(wxFileType *ft);
 
 private:
-    wxString
-    GetExpandedCommand(const wxString & verb,
-                       const wxFileType::MessageParameters& params) const;
 
-    wxMimeTypesManagerImpl *m_manager;
-    wxArrayInt              m_index; // in the wxMimeTypesManagerImpl arrays
+    // All that is needed to query type info - UTI and pointer to the manager
+    wxString m_uti;
+    wxMimeTypesManagerImpl* m_manager;
+
+    friend class wxMimeTypesManagerImpl;
 };
 
 #endif // wxUSE_MIMETYPE
-
-#endif // _MIMETYPE_IMPL_H
+#endif //_MIMETYPE_IMPL_H
 
 

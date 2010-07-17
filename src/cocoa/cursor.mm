@@ -8,7 +8,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Ryan Norton
 //              2007, Software 2000 Ltd.
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -35,7 +35,7 @@ typedef struct tagClassicCursor
 }ClassicCursor;
 
 ///////////////////////////////////////////////////////////////////////////
-// This is a direct copy from src/mac/carbon/cursor.cpp and should be
+// This is a direct copy from src/osx/carbon/cursor.cpp and should be
 // changed to use common code if we plan on keeping it this way.
 // Note that this is basically an array of classic 'CURS' resources.
 
@@ -181,7 +181,7 @@ ClassicCursor gMacCursors[kwxCursorLast+1] =
 
 } ;
 
-// End of data copied from src/mac/carbon/cursor.cpp
+// End of data copied from src/osx/carbon/cursor.cpp
 ///////////////////////////////////////////////////////////////////////////
 
 /* NSCursorCreateWithPrivateId

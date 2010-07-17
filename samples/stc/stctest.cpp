@@ -39,17 +39,13 @@
 #include "edit.h"        // Edit module
 #include "prefs.h"       // Prefs
 
-#ifndef __WXMSW__
-    #include "../sample.xpm"
-#endif
-
 //----------------------------------------------------------------------------
 // resources
 //----------------------------------------------------------------------------
 
 // the application icon (under Windows and OS/2 it is in resources)
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-    #include "mondrian.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
 #endif
 
 //============================================================================
@@ -316,12 +312,11 @@ AppFrame::AppFrame (const wxString &title)
 {
     SetIcon(wxICON(sample));
 
-    // intitialize important variables
+    // initialize important variables
     m_edit = NULL;
 
     // set icon and background
     SetTitle (*g_appname);
-    SetIcon (wxICON (mondrian));
     SetBackgroundColour (wxT("WHITE"));
 
     // about box shown for 1 seconds
@@ -656,7 +651,7 @@ AppAbout::AppAbout (wxWindow *parent,
 
     // about icontitle//info
     wxBoxSizer *aboutpane = new wxBoxSizer (wxHORIZONTAL);
-    wxBitmap bitmap = wxBitmap(wxICON (mondrian));
+    wxBitmap bitmap = wxBitmap(wxICON (sample));
     aboutpane->Add (new wxStaticBitmap (this, wxID_ANY, bitmap),
                     0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 20);
     aboutpane->Add (aboutinfo, 1, wxEXPAND);
@@ -683,17 +678,13 @@ AppAbout::AppAbout (wxWindow *parent,
 }
 
 AppAbout::~AppAbout () {
-    if (m_timer)  {
-        delete m_timer;
-        m_timer = NULL;
-    }
+    wxDELETE(m_timer);
 }
 
 //----------------------------------------------------------------------------
 // event handlers
 void AppAbout::OnTimerEvent (wxTimerEvent &WXUNUSED(event)) {
-    if (m_timer) delete m_timer;
-    m_timer = NULL;
+    wxDELETE(m_timer);
     EndModal (wxID_OK);
 }
 

@@ -6,7 +6,7 @@
 // Created:     19.05.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -356,4 +356,26 @@ wxULongLong wxDir::GetTotalSize(const wxString &dirname, wxArrayString *filesSki
     return traverser.GetTotalSize();
 }
 
+// ----------------------------------------------------------------------------
+// wxDir helpers
+// ----------------------------------------------------------------------------
+
+/* static */
+bool wxDir::Exists(const wxString& dir)
+{
+    return wxFileName::DirExists(dir);
+}
+
+/* static */
+bool wxDir::Make(const wxString &dir, int perm, int flags)
+{
+    return wxFileName::Mkdir(dir, perm, flags);
+}
+
+/* static */
+bool wxDir::Remove(const wxString &dir, int flags)
+{
+    return wxFileName::Rmdir(dir, flags);
+}
+    
 #endif // wxUSE_LONGLONG

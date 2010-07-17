@@ -782,11 +782,7 @@ void wxBitmapRefData::Free()
         m_hBitmap = NULL ;
     }
 
-    if (m_bitmapMask)
-    {
-        delete m_bitmapMask;
-        m_bitmapMask = NULL;
-    }
+    wxDELETE(m_bitmapMask);
 }
 
 wxBitmapRefData::~wxBitmapRefData()

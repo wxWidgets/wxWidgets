@@ -3,14 +3,14 @@
 // Purpose:     interface of wxBufferedDC
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
     @class wxBufferedDC
 
     This class provides a simple way to avoid flicker: when drawing on it,
-    everything is in fact first drawn on an in-memory buffer (a wxBitmap) and
+    everything is infact first drawn on an in-memory buffer (a wxBitmap) and
     then copied to the screen, using the associated wxDC, only once, when this
     object is destroyed. wxBufferedDC itself is typically associated with
     wxClientDC, if you want to use it in your @c EVT_PAINT handler, you should
@@ -48,7 +48,6 @@ public:
     */
     wxBufferedDC();
 
-    //@{
     /**
         Creates a buffer for the provided @a dc. Init() must not be called when
         using this constructor.
@@ -89,7 +88,6 @@ public:
     */
     wxBufferedDC(wxDC* dc, wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA);
-    //@}
 
     /**
         Copies everything drawn on the DC so far to the underlying DC

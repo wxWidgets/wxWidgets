@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/osx/carbon/dataview.h
+// Name:        wx/osx/cocoa/dataview.h
 // Purpose:     wxDataViewCtrl native implementation header for carbon
 // Author:
 // Id:          $Id: dataview.h 57374 2009-01-27

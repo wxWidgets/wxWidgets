@@ -31,6 +31,11 @@
  * turning off capabilities that don't work under iphone yet
  */
 
+#if wxUSE_MIMETYPE
+#undef wxUSE_MIMETYPE
+#define wxUSE_MIMETYPE 0
+#endif
+
 #if wxUSE_MDI
 #undef wxUSE_MDI
 #define wxUSE_MDI 0
@@ -284,9 +289,48 @@
 
 // iphone has a toolbar that is a regular UIView
 
+#ifdef wxOSX_USE_NATIVE_TOOLBAR
 #if wxOSX_USE_NATIVE_TOOLBAR
 #undef wxOSX_USE_NATIVE_TOOLBAR
 #define wxOSX_USE_NATIVE_TOOLBAR 0
+#endif
+#else
+#define wxOSX_USE_NATIVE_TOOLBAR 0
+#endif
+
+#if wxUSE_RIBBON
+#undef wxUSE_RIBBON
+#define wxUSE_RIBBON 0
+#endif
+
+#if wxUSE_INFOBAR
+#undef wxUSE_INFOBAR
+#define wxUSE_INFOBAR 0
+#endif
+
+#if wxUSE_FILE_HISTORY
+#undef wxUSE_FILE_HISTORY
+#define wxUSE_FILE_HISTORY 0
+#endif
+
+#if wxUSE_NOTIFICATION_MESSAGE
+#undef wxUSE_NOTIFICATION_MESSAGE
+#define wxUSE_NOTIFICATION_MESSAGE 0
+#endif
+
+#if wxUSE_PROPGRID
+#undef wxUSE_PROPGRID
+#define wxUSE_PROPGRID 0
+#endif
+
+#if wxUSE_WEBKIT
+#undef wxUSE_WEBKIT
+#define wxUSE_WEBKIT 0
+#endif
+
+#if wxUSE_DATAOBJ
+#undef wxUSE_DATAOBJ
+#define wxUSE_DATAOBJ 0
 #endif
 
 #endif

@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -265,8 +265,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
             doc->Modify(true);
         }
 
-        delete m_currentSegment;
-        m_currentSegment = NULL;
+        wxDELETE(m_currentSegment);
     }
 
     // is this the start of a new segment?
@@ -284,70 +283,66 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 }
 
 // ----------------------------------------------------------------------------
-// wxImageCanvas implementation
+// ImageCanvas implementation
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxImageCanvas, wxScrolledWindow)
-END_EVENT_TABLE()
-
 // Define a constructor for my canvas
-wxImageCanvas::wxImageCanvas(wxView* view, wxWindow* parent)
+ImageCanvas::ImageCanvas(wxView* view, wxWindow* parent)
     : wxScrolledWindow(parent, wxID_ANY, wxPoint(0, 0), parent->GetClientSize())
 {
+    SetScrollRate( 10, 10 );
+
     m_view = view;
 }
 
 // Define the repainting behaviour
-void wxImageCanvas::OnDraw(wxDC& dc)
+void ImageCanvas::OnDraw(wxDC& dc)
 {
     if ( m_view )
         m_view->OnDraw(& dc);
 }
 
 // ----------------------------------------------------------------------------
-// wxImageView implementation
+// ImageView implementation
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxImageView, wxView)
+IMPLEMENT_DYNAMIC_CLASS(ImageView, wxView)
 
-BEGIN_EVENT_TABLE(wxImageView, wxView)
-END_EVENT_TABLE()
-
-wxImageDocument* wxImageView::GetDocument()
+ImageDocument* ImageView::GetDocument()
 {
-    return wxStaticCast(wxView::GetDocument(), wxImageDocument);
+    return wxStaticCast(wxView::GetDocument(), ImageDocument);
 }
 
-bool wxImageView::OnCreate(wxDocument* doc, long WXUNUSED(flags))
+bool ImageView::OnCreate(wxDocument* doc, long WXUNUSED(flags))
 {
     m_frame = wxGetApp().CreateChildFrame(doc, this, false);
     m_frame->SetTitle("Image View");
-    m_canvas = new wxImageCanvas(this, m_frame);
+    m_canvas = new ImageCanvas(this, m_frame);
     m_frame->Show(true);
     Activate(true);
     return true;
 }
 
-void wxImageView::OnUpdate(wxView* sender, wxObject* hint)
+void ImageView::OnUpdate(wxView* sender, wxObject* hint)
 {
     wxView::OnUpdate(sender, hint);
-    const wxImage* image = GetDocument()->GetImage();
-    if (image->IsOk())
+    wxImage image = GetDocument()->GetImage();
+    if ( image.IsOk() )
     {
-        m_canvas->SetScrollbars( 1, 1, image->GetWidth(), image->GetHeight() );
+        m_canvas->SetVirtualSize(image.GetWidth(), image.GetHeight());
     }
 }
 
-void wxImageView::OnDraw(wxDC* dc)
+void ImageView::OnDraw(wxDC* dc)
 {
-    const wxImage* image = GetDocument()->GetImage();
-    if (image->IsOk())
+    wxImage image = GetDocument()->GetImage();
+    if ( image.IsOk() )
     {
-        dc->DrawBitmap(wxBitmap(*image), 0, 0);
+        dc->DrawBitmap(wxBitmap(image), 0, 0);
     }
 }
 
-bool wxImageView::OnClose(bool deleteWindow)
+bool ImageView::OnClose(bool deleteWindow)
 {
     if ( !GetDocument()->Close() )
         return false;

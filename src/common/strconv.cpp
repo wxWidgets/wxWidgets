@@ -3013,10 +3013,9 @@ wxCSConv& wxCSConv::operator=(const wxCSConv& conv)
 void wxCSConv::Clear()
 {
     free(m_name);
-    delete m_convReal;
+    wxDELETE(m_convReal);
 
     m_name = NULL;
-    m_convReal = NULL;
 }
 
 void wxCSConv::SetName(const char *charset)

@@ -43,7 +43,7 @@ public:
 
     wxEXPLICIT wxScopedPtr(T * ptr = NULL) : m_ptr(ptr) { }
 
-    ~wxScopedPtr() { delete m_ptr; }
+    ~wxScopedPtr() { wxCHECKED_DELETE(m_ptr); }
 
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
@@ -63,7 +63,7 @@ public:
     {
         if ( ptr != m_ptr )
         {
-            delete m_ptr;
+            wxCHECKED_DELETE(m_ptr);
             m_ptr = ptr;
         }
     }
@@ -129,14 +129,7 @@ public:                             \
                                     \
     ~name();                        \
                                     \
-    void reset(T * ptr = NULL)      \
-    {                               \
-        if (m_ptr != ptr)           \
-        {                           \
-            delete m_ptr;           \
-            m_ptr = ptr;            \
-        }                           \
-    }                               \
+    void reset(T * ptr = NULL);     \
                                     \
     T *release()                    \
     {                               \
@@ -171,6 +164,14 @@ public:                             \
 };
 
 #define wxDEFINE_SCOPED_PTR(T, name)\
+void name::reset(T * ptr)           \
+{                                   \
+    if (m_ptr != ptr)               \
+    {                               \
+        wxCHECKED_DELETE(m_ptr);    \
+        m_ptr = ptr;                \
+    }                               \
+}                                   \
 name::~name()                       \
 {                                   \
     wxCHECKED_DELETE(m_ptr);        \

@@ -195,10 +195,8 @@ bool wxApp::Initialize(int& argC, wxChar **argV)
 
 void wxApp::CleanUp()
 {
-    delete wxWidgetHashTable;
-    wxWidgetHashTable = NULL;
-    delete wxClientWidgetHashTable;
-    wxClientWidgetHashTable = NULL;
+    wxDELETE(wxWidgetHashTable);
+    wxDELETE(wxClientWidgetHashTable);
 
     wxAppBase::CleanUp();
 }

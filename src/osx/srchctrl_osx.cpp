@@ -5,7 +5,7 @@
 // Created:     2006-02-19
 // RCS-ID:      $Id: srchctrl.cpp 54820 2008-07-29 20:04:11Z SC $
 // Copyright:   Vince Harron
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
@@ -205,6 +205,11 @@ bool wxSearchCtrl::HandleSearchFieldSearchHit()
 {
     wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, m_windowId );
     event.SetEventObject(this);
+
+    // provide the string to search for directly in the event, this is more
+    // convenient than retrieving it from the control in event handler code
+    event.SetString(GetValue());
+
     return ProcessCommand(event);
 }
 

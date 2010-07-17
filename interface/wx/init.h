@@ -3,7 +3,7 @@
 // Purpose:     interface of global functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -90,7 +90,7 @@ void wxEntryCleanup();
     Initialize the library (may be called as many times as needed, but each
     call to wxInitialize() must be matched by wxUninitialize()).
 
-    With this function you may avoid DECLARE_APP() and IMPLEMENT_APP() macros
+    With this function you may avoid wxDECLARE_APP() and wxIMPLEMENT_APP() macros
     and use wxInitialize() and wxUninitialize() dynamically in the
     program startup and termination.
 

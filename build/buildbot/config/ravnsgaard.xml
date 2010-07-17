@@ -3,7 +3,7 @@
 <!--
     Name:       ravnsgaard.xml
     RCS-ID:     $Id$
-    Licence:    wxWidgets licence
+    Licence:    wxWindows licence
 -->
 <bot xmlns:xi="http://www.w3.org/2001/XInclude">
     <xi:include href="include/unix.xml"/>
@@ -15,6 +15,30 @@
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
             <configure options="--enable-stl"/>
+            <compile-all utils="false"/>
+            <run-tests/>
+        </steps>
+    </build>
+
+    <build>
+        <name>Linux i386 wxGTK trunk no gui</name>
+        <builddir>ravnsgaard_wxgtk_nogui</builddir>
+        <scheduler>daily_0600</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--disable-gui"/>
+            <compile-all/>
+            <run-tests/>
+        </steps>
+    </build>
+
+    <build>
+        <name>Linux i386 wxGTK trunk no features</name>
+        <builddir>ravnsgaard_wxgtk_nofeatures</builddir>
+        <scheduler>daily_0600</scheduler>
+        <steps>
+            <checkout/>
+            <configure options="--disable-all-features"/>
             <compile-all utils="false"/>
             <run-tests/>
         </steps>

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxControlWithItems
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -346,6 +346,26 @@ public:
         @see Clear()
     */
     void Delete(unsigned int n);
+
+
+    /**
+       Returns true, if either untyped data (@c void*) or object data (wxClientData*)
+       is associated with the items of the control.
+    */
+    bool HasClientData() const;
+    
+    /**
+       Returns true, if object data (wxClientData*)
+       is associated with the items of the control.
+    */
+    bool HasClientObjectData() const;
+
+    /**
+       Returns true, if untyped data (@c void*) 
+       is associated with the items of the control.
+    */
+    bool HasClientUntypedData() const;
+
 
     //@{
 

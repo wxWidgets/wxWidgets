@@ -6,7 +6,7 @@
 // Created:     2004-09-25
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPGRID_H_
@@ -30,6 +30,10 @@ extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
 #endif
 
 class wxPGComboBox;
+
+#if wxUSE_STATUSBAR
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
+#endif
 
 // -----------------------------------------------------------------------
 // Global variables
@@ -389,12 +393,34 @@ wxPG_VFB_BEEP                       = 0x02,
 */
 wxPG_VFB_MARK_CELL                  = 0x04,
 
-/** Display customizable text message explaining the situation.
+/**
+    Display a text message explaining the situation. 
+
+    To customize the way the message is displayed, you need to
+    reimplement wxPropertyGrid::DoShowPropertyError() in a
+    derived class. Default behavior is to display the text on
+    the top-level frame's status bar, if present, and otherwise
+    using wxMessageBox.
 */
 wxPG_VFB_SHOW_MESSAGE               = 0x08,
 
+/**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message using wxMessageBox.
+*/
+wxPG_VFB_SHOW_MESSAGEBOX            = 0x10,
+
+/**
+    Similar to wxPG_VFB_SHOW_MESSAGE, except always displays the
+    message on the status bar (when present - you can reimplement
+    wxPropertyGrid::GetStatusBar() in a derived class to specify
+    this yourself).
+*/
+wxPG_VFB_SHOW_MESSAGE_ON_STATUSBAR  = 0x20,
+
 /** Defaults. */
-wxPG_VFB_DEFAULT                    = wxPG_VFB_STAY_IN_PROPERTY|wxPG_VFB_BEEP,
+wxPG_VFB_DEFAULT                    = wxPG_VFB_MARK_CELL |
+                                      wxPG_VFB_SHOW_MESSAGEBOX,
 
 /** Only used internally. */
 wxPG_VFB_UNDEFINED                  = 0x80
@@ -420,6 +446,16 @@ class WXDLLIMPEXP_PROPGRID wxPGValidationInfo
 {
     friend class wxPropertyGrid;
 public:
+    wxPGValidationInfo()
+    {
+        m_failureBehavior = 0;
+        m_isFailing = false;
+    }
+
+    ~wxPGValidationInfo()
+    {
+    }
+
     /**
         @return Returns failure behavior which is a combination of
                @ref propgrid_vfbflags.
@@ -468,6 +504,9 @@ private:
     /** Validation failure behavior. Use wxPG_VFB_XXX flags.
     */
     wxPGVFBFlags    m_failureBehavior;
+
+    // True when validation is currently failing.
+    bool            m_isFailing;
 };
 
 // -----------------------------------------------------------------------
@@ -709,11 +748,33 @@ public:
 
     /** Adds given key combination to trigger given action.
 
+        Here is a sample code to make Enter key press move focus to
+        the next property.
+
+        @code
+            propGrid->AddActionTrigger(wxPG_ACTION_NEXT_PROPERTY,
+                                       WXK_RETURN);
+            propGrid->DedicateKey(WXK_RETURN);
+        @endcode
+
         @param action
             Which action to trigger. See @link pgactions List of list of
             wxPropertyGrid actions@endlink.
     */
     void AddActionTrigger( int action, int keycode, int modifiers = 0 );
+
+    /**
+        Dedicates a specific keycode to wxPropertyGrid. This means that such
+        key presses will not be redirected to editor controls.
+
+        Using this function allows, for example, navigation between
+        properties using arrow keys even when the focus is in the editor
+        control.
+    */
+    void DedicateKey( int keycode )
+    {
+        m_dedicatedKeys.push_back(keycode);
+    }
 
     /**
         This static function enables or disables automatic use of
@@ -1463,18 +1524,6 @@ public:
     // Events from editor controls are forward to this function
     void HandleCustomEditorEvent( wxEvent &event );
 
-    /**
-        Generates contents for string dst based on the contents of
-        wxArrayString src.
-
-        Format will be "(preDelim)str1(postDelim) (preDelim)str2(postDelim) and
-        so on. Set flags to 1 inorder to convert backslashes to double-back-
-        slashes and "(preDelims)"'s to "(preDelims)".
-    */
-    static void ArrayStringToString( wxString& dst, const wxArrayString& src,
-                                     wxChar preDelim, wxChar postDelim,
-                                     int flags );
-
     // Mostly useful for page switching.
     void SwitchState( wxPropertyGridPageState* pNewState );
 
@@ -1566,11 +1615,37 @@ public:
         m_validationInfo.m_failureMessage.clear();
     }
 
-    /** Override in derived class to display error messages in custom manner
+    /**
+        Override in derived class to display error messages in custom manner
         (these message usually only result from validation failure).
+
+        @remarks If you implement this, then you also need to implement
+                 DoHidePropertyError() - possibly to do nothing, if error
+                 does not need hiding (e.g. it was logged or shown in a
+                 message box).
+
+        @see DoHidePropertyError()
     */
     virtual void DoShowPropertyError( wxPGProperty* property,
                                       const wxString& msg );
+
+    /**
+        Override in derived class to hide an error displayed by
+        DoShowPropertyError().
+
+        @see DoShowPropertyError()
+    */
+    virtual void DoHidePropertyError( wxPGProperty* property );
+
+#if wxUSE_STATUSBAR
+    /**
+        Return wxStatusBar that is used by this wxPropertyGrid. You can
+        reimplement this member function in derived class to override
+        the default behavior of using the top-level wxFrame's status
+        bar, if any.
+    */
+    virtual wxStatusBar* GetStatusBar();
+#endif
 
     /** Override to customize property validation failure behavior.
         @param invalidValue
@@ -1814,6 +1889,10 @@ protected:
     wxArrayPGProperty   m_deletedProperties;
     wxArrayPGProperty   m_removedProperties;
 
+    /** List of key codes that will not be handed over to editor controls. */
+    // FIXME: Make this a hash set once there is template-based wxHashSet.
+    wxVector<int>       m_dedicatedKeys;
+
     //
     // Temporary values
     //
@@ -1845,13 +1924,15 @@ protected:
     unsigned char       m_keyComboConsumed;
 
     /** 1 if in DoPropertyChanged() */
-    unsigned char       m_inDoPropertyChanged;
+    bool                m_inDoPropertyChanged;
 
     /** 1 if in CommitChangesFromEditor() */
-    unsigned char       m_inCommitChangesFromEditor;
+    bool                m_inCommitChangesFromEditor;
 
     /** 1 if in DoSelectProperty() */
-    unsigned char       m_inDoSelectProperty;
+    bool                m_inDoSelectProperty;
+
+    bool                m_inOnValidationFailure;
 
     wxPGVFBFlags        m_permanentValidationFailureBehavior;  // Set by app
 
@@ -2258,20 +2339,20 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 
-#define EVT_PG_SELECTED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGING(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_CHANGED(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_HIGHLIGHTED(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_RIGHT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_DOUBLE_CLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_PAGE_CHANGED(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_COLLAPSED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_BEGIN_DRAG(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_DRAGGING(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
-#define EVT_PG_COL_END_DRAG(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_SELECTED(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_CHANGING(id, fn)              wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_CHANGED(id, fn)               wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_HIGHLIGHTED(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_RIGHT_CLICK(id, fn)           wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_DOUBLE_CLICK(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_PAGE_CHANGED(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_ITEM_COLLAPSED(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_ITEM_EXPANDED(id, fn)         wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_LABEL_EDIT_BEGIN(id, fn)      wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_BEGIN, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_LABEL_EDIT_ENDING(id, fn)     wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_LABEL_EDIT_ENDING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_BEGIN_DRAG(id, fn)        wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_BEGIN_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_DRAGGING(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_DRAGGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
+#define EVT_PG_COL_END_DRAG(id, fn)          wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_COL_END_DRAG, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), NULL ),
 
 #define wxPropertyGridEventHandler(fn) \
     wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn )

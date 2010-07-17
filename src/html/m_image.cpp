@@ -534,11 +534,11 @@ void wxHtmlImageCell::Layout(int w)
         if (!m_bmpHpresent && m_bitmap != NULL)
             m_Height = m_bitmap->GetHeight()*m_Width/m_bitmap->GetWidth();
         else
-            m_Height = m_scale*m_bmpH;
+            m_Height = static_cast<int>(m_scale*m_bmpH);
     } else
     {
-        m_Width  = m_scale*m_bmpW;
-        m_Height = m_scale*m_bmpH;
+        m_Width  = static_cast<int>(m_scale*m_bmpW);
+        m_Height = static_cast<int>(m_scale*m_bmpH);
     }
 
     switch (m_align)

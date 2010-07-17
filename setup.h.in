@@ -485,6 +485,8 @@
 
 #define wxUSE_ABOUTDLG 0
 
+#define wxUSE_FILE_HISTORY 0
+
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0
@@ -715,6 +717,16 @@
  * Define if your compiler has std::tr1::unordered_set
  */
 #undef HAVE_TR1_UNORDERED_SET
+
+/*
+ * Define if your compiler has <tr1/type_traits>
+ */
+#undef HAVE_TR1_TYPE_TRAITS
+
+/*
+ * Define if your compiler has <type_traits>
+ */
+#undef HAVE_TYPE_TRAITS
 
 /*
  * Define if the compiler supports simple visibility declarations.

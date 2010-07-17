@@ -744,7 +744,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
                            *wxConvCurrent);
             wxLogError(_("XML parsing error: '%s' at line %d"),
                        error.c_str(),
-                       XML_GetCurrentLineNumber(parser));
+                       (int)XML_GetCurrentLineNumber(parser));
             ok = false;
             break;
         }

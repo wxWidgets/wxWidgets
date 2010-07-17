@@ -127,7 +127,7 @@ inline int wxApp::GetShell32Version()
 #endif // __WXWINCE__
 
 // ----------------------------------------------------------------------------
-// MSW-specific wxEntry() overload and IMPLEMENT_WXWIN_MAIN definition
+// MSW-specific wxEntry() overload and wxIMPLEMENT_WXWIN_MAIN definition
 // ----------------------------------------------------------------------------
 
 // we need HINSTANCE declaration to define WinMain()
@@ -164,11 +164,11 @@ extern WXDLLIMPEXP_CORE int
     // command line flag is used, the linker expects to find wWinMain instead
     // of WinMain. This flag causes the compiler to define _UNICODE and
     // UNICODE symbols and there's no way to detect its use, so we have to
-    // define both WinMain and wWinMain so that IMPLEMENT_WXWIN_MAIN works
+    // define both WinMain and wWinMain so that wxIMPLEMENT_WXWIN_MAIN works
     // for both code compiled with and without -WU.
     // See http://sourceforge.net/tracker/?func=detail&atid=309863&aid=1935997&group_id=9863
     // for more details.
-    #define IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD                        \
+    #define wxIMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD                      \
         extern "C" int WINAPI wWinMain(HINSTANCE hInstance,                 \
                                       HINSTANCE hPrevInstance,              \
                                       wchar_t * WXUNUSED(lpCmdLine),        \
@@ -182,10 +182,10 @@ extern WXDLLIMPEXP_CORE int
             return wxEntry(hInstance, hPrevInstance, NULL, nCmdShow);       \
         }
 #else
-    #define IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
+    #define wxIMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
 #endif // defined(__BORLANDC__) && wxUSE_UNICODE
 
-#define IMPLEMENT_WXWIN_MAIN \
+#define wxIMPLEMENT_WXWIN_MAIN                                              \
     extern "C" int WINAPI WinMain(HINSTANCE hInstance,                      \
                                   HINSTANCE hPrevInstance,                  \
                                   wxCmdLineArgType WXUNUSED(lpCmdLine),     \
@@ -199,7 +199,7 @@ extern WXDLLIMPEXP_CORE int
         /*     wWinMain() above too.                                     */ \
         return wxEntry(hInstance, hPrevInstance, NULL, nCmdShow);           \
     }                                                                       \
-    IMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
+    wxIMPLEMENT_WXWIN_MAIN_BORLAND_NONSTANDARD
 
 
 #endif // _WX_APP_H_

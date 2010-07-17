@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**

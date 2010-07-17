@@ -47,9 +47,9 @@ INTERNAT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 INTERNAT_OBJECTS =  \
+	$(__internat___win32rc) \
 	$(__internat_os2_lib_res) \
-	internat_internat.o \
-	$(__internat___win32rc)
+	internat_internat.o
 
 ### Conditionally set variables: ###
 
@@ -85,6 +85,7 @@ COND_PLATFORM_OS2_1___internat___os2_emxbindcmd = $(NM) internat$(EXEEXT) | if \
 @COND_PLATFORM_OS2_1@__internat___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___internat___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__internat___win32rc = internat_sample_rc.o
 @COND_PLATFORM_OS2_1@__internat_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__internat_app_Contents_PkgInfo___depname \
@@ -106,7 +107,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__internat___win32rc = internat_internat_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -318,11 +318,11 @@ ja_JP.EUC-JP:
 	esac; \
 	done
 
+internat_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+
 internat_internat.o: $(srcdir)/internat.cpp
 	$(CXXC) -c -o $@ $(INTERNAT_CXXFLAGS) $(srcdir)/internat.cpp
-
-internat_internat_rc.o: $(srcdir)/internat.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

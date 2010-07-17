@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTimer
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -149,11 +149,12 @@ public:
 
     private:
         wxTimer m_timer;
+        wxDECLARE_EVENT_TABLE();
     };
 
-    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
         EVT_TIMER(TIMER_ID, MyFrame::OnTimer)
-    END_EVENT_TABLE()
+    wxEND_EVENT_TABLE()
 
     MyFrame::MyFrame()
            : m_timer(this, TIMER_ID)

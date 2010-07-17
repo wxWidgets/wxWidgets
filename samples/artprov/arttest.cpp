@@ -6,7 +6,7 @@
 // Created:     2002/03/25
 // RCS-ID:      $Id$
 // Copyright:   (c) Vaclav Slavik
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -21,7 +21,7 @@
 #endif
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #include "wx/artprov.h"
@@ -150,7 +150,7 @@ wxBitmap MyArtProvider::CreateBitmap(const wxArtID& id,
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
        : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;

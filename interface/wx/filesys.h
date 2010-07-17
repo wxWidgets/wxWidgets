@@ -3,7 +3,7 @@
 // Purpose:     interface of wxFileSystem, wxFileSystemHandler, wxFSFile
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -160,6 +160,11 @@ public:
         Passing @e "wxFS_READ | wxFS_SEEKABLE" for @a flags will back
         a stream that is not natively seekable with memory or a file
         and return a stream that is always seekable.
+
+        @note
+        The @a location argument is, despite this method's name @em not
+        a filename. It is a "location", aka wxFileSystem URL (see
+        @ref overview_fs).
     */
     wxFSFile* OpenFile(const wxString& location,
                        int flags = wxFS_READ);

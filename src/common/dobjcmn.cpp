@@ -111,31 +111,9 @@ wxDataObjectComposite::GetObject(const wxDataFormat& format, wxDataObjectBase::D
 
 void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
 {
-   // check if the data format of the passed object already exists in the composite data object, if this is the case
-   // do not add the data object and display a message in debug mode (otherwise this method fails silently):
-   // start checking if the data format exists for the 'GET' direction:
-    size_t indexFormats;
-    size_t noOfFormats;
-    wxDataFormat* formats;
-
-    noOfFormats = dataObject->GetFormatCount(wxDataObjectBase::Get);
-    formats = new wxDataFormat[noOfFormats];
-    for (indexFormats=0; indexFormats<noOfFormats; ++indexFormats)
-      wxCHECK_RET(this->GetObject(formats[indexFormats],wxDataObjectBase::Get) == NULL,
-                  _("The data format for the GET-direction of the to be added data object already exists"));
-    delete[] formats;
-   // do the same with the 'SET' direction:
-    noOfFormats = dataObject->GetFormatCount(wxDataObjectBase::Set);
-
-    formats = new wxDataFormat[noOfFormats];
-    for (indexFormats=0; indexFormats<noOfFormats; ++indexFormats)
-      wxCHECK_RET(this->GetObject(formats[indexFormats],wxDataObjectBase::Set) == NULL,
-                  _("The data format for the SET-direction of the to be added data object already exists"));
-    delete[] formats;
-
-   // if we reach this location the data object can simply be appended:
     if ( preferred )
         m_preferred = m_dataObjects.GetCount();
+
     m_dataObjects.Append( dataObject );
 }
 

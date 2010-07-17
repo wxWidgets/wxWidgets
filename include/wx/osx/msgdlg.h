@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/msgdlg.h
+// Name:        wx/osx/msgdlg.h
 // Purpose:     wxMessageDialog class. Use generic version if no
 //              platform-specific implementation.
 // Author:      Stefan Csomor

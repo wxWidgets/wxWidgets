@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #define USE_GENERIC_TREECTRL 0
@@ -272,6 +272,7 @@ public:
         { DoShowRelativeItem(&wxTreeCtrl::GetNextSibling, "next sibling"); }
 
     void OnScrollTo(wxCommandEvent& event);
+    void OnSelectLast(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
@@ -368,5 +369,6 @@ enum
     TreeTest_ShowPrevSibling,
     TreeTest_ShowNextSibling,
     TreeTest_ScrollTo,
+    TreeTest_SelectLast,
     TreeTest_Ctrl = 1000
 };

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/mac/carbon/window.h
+// Name:        wx/osx/window.h
 // Purpose:     wxWindowMac class
 // Author:      Stefan Csomor
 // Modified by:

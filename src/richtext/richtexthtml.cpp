@@ -85,8 +85,7 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         customEncoding = new wxCSConv(GetEncoding());
         if (!customEncoding->IsOk())
         {
-            delete customEncoding;
-            customEncoding = NULL;
+            wxDELETE(customEncoding);
         }
     }
     if (customEncoding)

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxGrid and related classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -496,13 +496,21 @@ public:
             If allowOthers is @true, the user can type a string not in choices
             array.
     */
-    //@{
     wxGridCellChoiceEditor(size_t count = 0,
                            const wxString choices[] = NULL,
                            bool allowOthers = false);
+
+    /**
+        Choice cell renderer ctor.
+
+        @param choices
+            An array of strings from which the user can choose.
+        @param allowOthers
+            If allowOthers is @true, the user can type a string not in choices
+            array.
+    */
     wxGridCellChoiceEditor(const wxArrayString& choices,
                            bool allowOthers = false);
-    //@}
 
     /**
         Parameters string format is "item1[,item2[...,itemN]]"
@@ -2014,10 +2022,18 @@ public:
         are using the grid to display tabular data and don't have thousands of
         columns in it.
 
-        Also note that currently @c wxEVT_GRID_LABEL_LEFT_DCLICK and
-        @c wxEVT_GRID_LABEL_RIGHT_DCLICK events are not generated for the column
-        labels if the native columns header is used (but this limitation could
-        possibly be lifted in the future).
+        Another difference between the default behaviour and the native header
+        behaviour is that the latter provides the user with a context menu
+        (which appears on right clicking the header) allowing to rearrange the
+        grid columns if CanDragColMove() returns @true. If you want to prevent
+        this from happening for some reason, you need to define a handler for
+        @c wxEVT_GRID_LABEL_RIGHT_CLICK event which simply does nothing (in
+        particular doesn't skip the event) as this will prevent the default
+        right click handling from working.
+
+        Also note that currently @c wxEVT_GRID_LABEL_RIGHT_DCLICK event is not
+        generated for the column labels if the native columns header is used
+        (but this limitation could possibly be lifted in the future).
      */
     void UseNativeColHeader(bool native = true);
 

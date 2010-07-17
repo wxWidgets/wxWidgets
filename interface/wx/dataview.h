@@ -3,7 +3,7 @@
 // Purpose:     interface of wxDataView* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -1114,6 +1114,7 @@ enum wxDataViewCellRenderState
     - wxDataViewBitmapRenderer,
     - wxDataViewDateRenderer,
     - wxDataViewSpinRenderer.
+    - wxDataViewChoiceRenderer.
 
     Additionally, the user can write own renderers by deriving from
     wxDataViewCustomRenderer.
@@ -1352,6 +1353,38 @@ public:
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 };
 
+
+/**
+    @class wxDataViewChoiceRenderer
+
+    This class is used by wxDataViewCtrl to render choice controls.
+    It stores a string so that SetValue() and GetValue() operate
+    on a variant holding a string.
+
+    @library{wxadv}
+    @category{dvc}
+*/
+
+class wxDataViewChoiceRenderer: public wxDataViewRenderer
+{
+public:
+    /**
+        The ctor.
+    */
+    wxDataViewChoiceRenderer( const wxArrayString &choices,
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
+
+    /**
+        Returns the choice referred to by index.
+    */
+    wxString GetChoice(size_t index) const;
+    
+    /**
+        Returns all choices.
+    */
+    const wxArrayString& GetChoices() const;
+};
 
 
 /**

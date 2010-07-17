@@ -100,10 +100,13 @@ public:
     bool GetValue( wxVariant &value ) const;
 
     bool Render( wxRect cell, wxDC *dc, int state );
-    bool Activate( wxRect cell, wxDataViewModel *model, const wxDataViewItem & item,
-                            unsigned int col );
     wxSize GetSize() const;
 
+    // Implementation only, don't use nor override
+    virtual void WXOnActivate(wxDataViewModel *model,
+                              const wxVariant& valueOld,
+                              const wxDataViewItem& item,
+                              unsigned int col);
 private:
     bool    m_toggle;
 
@@ -182,10 +185,12 @@ public:
 
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
-    virtual bool Activate( wxRect cell,
-                           wxDataViewModel *model,
-                           const wxDataViewItem& item,
-                           unsigned int col );
+
+    // Implementation only, don't use nor override
+    virtual void WXOnActivate(wxDataViewModel *model,
+                              const wxVariant& valueOld,
+                              const wxDataViewItem& item,
+                              unsigned int col);
 
 private:
     wxDateTime    m_date;

@@ -204,8 +204,7 @@ static void FreeConvertedArgs()
             free(gs_initData.argv[i]);
         }
 
-        delete [] gs_initData.argv;
-        gs_initData.argv = NULL;
+        wxDELETEA(gs_initData.argv);
         gs_initData.argc = 0;
     }
 }

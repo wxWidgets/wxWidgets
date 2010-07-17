@@ -62,11 +62,15 @@ TEST_OBJECTS =  \
 	test_base64.o \
 	test_cmdlinetest.o \
 	test_fileconf.o \
+	test_regconf.o \
 	test_datetimetest.o \
 	test_evthandler.o \
 	test_evtsource.o \
+	test_stopwatch.o \
 	test_timertest.o \
 	test_exec.o \
+	test_dir.o \
+	test_filefn.o \
 	test_filetest.o \
 	test_filekind.o \
 	test_filenametest.o \
@@ -75,13 +79,20 @@ TEST_OBJECTS =  \
 	test_formatconvertertest.o \
 	test_fswatchertest.o \
 	test_hashes.o \
+	test_output.o \
+	test_input.o \
 	test_intltest.o \
 	test_lists.o \
 	test_logtest.o \
 	test_longlongtest.o \
 	test_convautotest.o \
 	test_mbconvtest.o \
+	test_dynamiclib.o \
+	test_environ.o \
+	test_metatest.o \
 	test_misctests.o \
+	test_module.o \
+	test_pathlist.o \
 	test_typeinfotest.o \
 	test_ipc.o \
 	test_socket.o \
@@ -113,8 +124,10 @@ TEST_OBJECTS =  \
 	test_zlibstream.o \
 	test_textfiletest.o \
 	test_atomic.o \
+	test_misc.o \
 	test_queue.o \
 	test_tls.o \
+	test_ftp.o \
 	test_uris.o \
 	test_url.o \
 	test_vectors.o \
@@ -379,6 +392,9 @@ test_cmdlinetest.o: $(srcdir)/cmdline/cmdlinetest.cpp $(TEST_ODEP)
 test_fileconf.o: $(srcdir)/config/fileconf.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/config/fileconf.cpp
 
+test_regconf.o: $(srcdir)/config/regconf.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/config/regconf.cpp
+
 test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/datetime/datetimetest.cpp
 
@@ -388,11 +404,20 @@ test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
 test_evtsource.o: $(srcdir)/events/evtsource.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evtsource.cpp
 
+test_stopwatch.o: $(srcdir)/events/stopwatch.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/stopwatch.cpp
+
 test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp
 
 test_exec.o: $(srcdir)/exec/exec.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/exec/exec.cpp
+
+test_dir.o: $(srcdir)/file/dir.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/file/dir.cpp
+
+test_filefn.o: $(srcdir)/file/filefn.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/file/filefn.cpp
 
 test_filetest.o: $(srcdir)/file/filetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/file/filetest.cpp
@@ -418,6 +443,12 @@ test_fswatchertest.o: $(srcdir)/fswatcher/fswatchertest.cpp $(TEST_ODEP)
 test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/hashes/hashes.cpp
 
+test_output.o: $(srcdir)/interactive/output.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/interactive/output.cpp
+
+test_input.o: $(srcdir)/interactive/input.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/interactive/input.cpp
+
 test_intltest.o: $(srcdir)/intl/intltest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/intl/intltest.cpp
 
@@ -436,8 +467,23 @@ test_convautotest.o: $(srcdir)/mbconv/convautotest.cpp $(TEST_ODEP)
 test_mbconvtest.o: $(srcdir)/mbconv/mbconvtest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/mbconv/mbconvtest.cpp
 
+test_dynamiclib.o: $(srcdir)/misc/dynamiclib.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/dynamiclib.cpp
+
+test_environ.o: $(srcdir)/misc/environ.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/environ.cpp
+
+test_metatest.o: $(srcdir)/misc/metatest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/metatest.cpp
+
 test_misctests.o: $(srcdir)/misc/misctests.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/misctests.cpp
+
+test_module.o: $(srcdir)/misc/module.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/module.cpp
+
+test_pathlist.o: $(srcdir)/misc/pathlist.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/pathlist.cpp
 
 test_typeinfotest.o: $(srcdir)/misc/typeinfotest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/misc/typeinfotest.cpp
@@ -532,11 +578,17 @@ test_textfiletest.o: $(srcdir)/textfile/textfiletest.cpp $(TEST_ODEP)
 test_atomic.o: $(srcdir)/thread/atomic.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/atomic.cpp
 
+test_misc.o: $(srcdir)/thread/misc.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/misc.cpp
+
 test_queue.o: $(srcdir)/thread/queue.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/queue.cpp
 
 test_tls.o: $(srcdir)/thread/tls.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/thread/tls.cpp
+
+test_ftp.o: $(srcdir)/uris/ftp.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/ftp.cpp
 
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp

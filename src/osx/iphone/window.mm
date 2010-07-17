@@ -20,6 +20,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/textctrl.h"
+
 #include <objc/runtime.h>
 
 WXWidget wxWidgetImpl::FindFocus()
@@ -296,6 +298,34 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
     class_addMethod(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_CGRect={_CGPoint=ff}{_CGSize=ff}}" );
 }
 
+//
+// UIControl extensions
+//
+
+@interface UIControl (wxUIControlActionSupport)
+
+- (void) WX_touchUpInsideAction:(id)sender event:(UIEvent*)event;
+- (void) WX_valueChangedAction:(id)sender event:(UIEvent*)event;
+
+@end
+
+@implementation UIControl (wxUIControlActionSupport)
+
+- (void) WX_touchUpInsideAction:(id)sender event:(UIEvent*)event
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl != NULL)
+        impl->controlAction(sender, UIControlEventTouchUpInside, event);
+}
+
+- (void) WX_valueChangedAction:(id)sender event:(UIEvent*)event
+{
+    wxWidgetIPhoneImpl* impl = (wxWidgetIPhoneImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl != NULL)
+        impl->controlAction(sender, UIControlEventValueChanged, event);
+}
+
+@end
 
 IMPLEMENT_DYNAMIC_CLASS( wxWidgetIPhoneImpl , wxWidgetImpl )
 
@@ -445,6 +475,11 @@ void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
     m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
 }
 
+bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 
+{
+    [m_osxView setOpaque: (style == wxBG_STYLE_PAINT) ];
+}
+
 void wxWidgetIPhoneImpl::SetLabel(const wxString& title, wxFontEncoding encoding)
 {
     if ( [m_osxView respondsToSelector:@selector(setTitle:forState:) ] )
@@ -557,13 +592,12 @@ void wxWidgetIPhoneImpl::InstallEventHandler( WXWidget control )
 {
     WXWidget c =  control ? control : (WXWidget) m_osxView;
     wxWidgetImpl::Associate( c, this ) ;
-
-   if ([c isKindOfClass:[UIControl class] ])
+    
+    if ([c isKindOfClass:[UIControl class] ])
     {
         UIControl* cc = (UIControl*) c;
-        /*
-        [cc addTarget:self action:@selector(touchUpInsideAction:event:) forControlEvents:UIControlEventTouchUpInside];
-        */
+        [cc addTarget:cc action:@selector(WX_touchUpInsideAction:event:) forControlEvents:UIControlEventTouchUpInside];
+        [cc addTarget:cc action:@selector(WX_valueChangedAction:event:) forControlEvents:UIControlEventValueChanged];
     }
 }
 
@@ -715,8 +749,22 @@ void wxWidgetIPhoneImpl::touchEvent(NSSet* touches, UIEvent *event, WXWidget slf
     }
 }
 
-void wxWidgetIPhoneImpl::touchUpInsideAction(void* sender, WX_UIEvent evt, WXWidget slf, void* _cmd)
+void wxWidgetIPhoneImpl::controlAction(void* sender, wxUint32 controlEvent, WX_UIEvent rawEvent)
 {
+    if ( controlEvent == UIControlEventTouchUpInside )
+        GetWXPeer()->OSXHandleClicked(0);
+}
+
+void wxWidgetIPhoneImpl::controlTextDidChange()
+{
+    wxTextCtrl* wxpeer = wxDynamicCast((wxWindow*)GetWXPeer(),wxTextCtrl);
+    if ( wxpeer ) 
+    {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+        event.SetEventObject( wxpeer );
+        event.SetString( wxpeer->GetValue() );
+        wxpeer->HandleWindowEvent( event );
+    }
 }
 
 //

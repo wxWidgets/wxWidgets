@@ -3,7 +3,7 @@
 // Purpose:     Defines the Application Class
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _SCREENSHOT_APP_H_

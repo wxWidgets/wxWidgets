@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mac/carbon/aboutdlg.cpp
+// Name:        osx/carbon/aboutdlg.cpp
 // Purpose:     native wxAboutBox() implementation for wxMac
 // Author:      Vadim Zeitlin
 // Created:     2006-10-08

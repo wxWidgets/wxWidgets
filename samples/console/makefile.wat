@@ -226,7 +226,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\console.exe data
+all : .SYMBOLIC $(OBJS)\console.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -247,10 +247,6 @@ $(OBJS)\console.exe :  $(CONSOLE_OBJECTS)
 	@%append $(OBJS)\console.lbc
 	@for %i in () do @%append $(OBJS)\console.lbc option stack=%i
 	wlink @$(OBJS)\console.lbc
-
-data : .SYMBOLIC 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\console_console.obj :  .AUTODEPEND .\console.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CONSOLE_CXXFLAGS) $<

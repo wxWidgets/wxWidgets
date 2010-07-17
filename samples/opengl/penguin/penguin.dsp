@@ -260,7 +260,7 @@ SOURCE=.\penguin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\penguin.rc
+SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 

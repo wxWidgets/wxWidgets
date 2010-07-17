@@ -6,7 +6,7 @@
 // Created:     2005/02/16
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 David Elliott
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 //

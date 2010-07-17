@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/scrolwin.h
+// Name:        wx/scrolwin.h
 // Purpose:     wxScrolledWindow, wxScrolledControl and wxScrollHelper
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -107,6 +107,17 @@ public:
     // Clear() is necessary. Disable for when the scroll increment is used to
     // actually scroll a non-constant distance
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
+
+    // Disable use of keyboard keys for scrolling. By default cursor movement
+    // keys (including Home, End, Page Up and Down) are used to scroll the
+    // window appropriately. If the derived class uses these keys for something
+    // else, e.g. changing the currently selected item, this function can be
+    // used to disable this behaviour as it's not only not necessary then but
+    // can actually be actively harmful if another object forwards a keyboard
+    // event corresponding to one of the above keys to us using
+    // ProcessWindowEvent() because the event will always be processed which
+    // can be undesirable.
+    void DisableKeyboardScrolling() { m_kbdScrollingEnabled = false; }
 
     // Get the view start
     void GetViewStart(int *x, int *y) const { DoGetViewStart(x, y); }
@@ -283,6 +294,8 @@ protected:
 
     bool                  m_xScrollingEnabled;
     bool                  m_yScrollingEnabled;
+
+    bool                  m_kbdScrollingEnabled;
 
 #if wxUSE_MOUSEWHEEL
     int m_wheelRotation;

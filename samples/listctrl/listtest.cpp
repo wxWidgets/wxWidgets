@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -21,7 +21,7 @@
 #endif
 
 #if !defined(__WXMSW__) && !defined(__WXPM__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
 #endif
 
 #ifndef __WXMSW__
@@ -173,7 +173,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_numListItems = 10;
 
     // Give it an icon
-    SetIcon( wxICON(mondrian) );
+    SetIcon(wxICON(sample));
 
     // Make an image list containing large icons
     m_imageListNormal = new wxImageList(32, 32, true);
@@ -840,16 +840,26 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnEdit(wxCommandEvent& WXUNUSED(event))
 {
-    long itemCur = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
-                                           wxLIST_STATE_FOCUSED);
-
-    if ( itemCur != -1 )
+    // demonstrate cancelling editing: this currently is wxMSW-only
+#ifdef __WXMSW__
+    if ( m_listCtrl->GetEditControl() )
     {
-        m_listCtrl->EditLabel(itemCur);
+        m_listCtrl->EndEditLabel(true);
     }
-    else
+    else // start editing
+#endif // __WXMSW__
     {
-        m_logWindow->WriteText(wxT("No item to edit"));
+        long itemCur = m_listCtrl->GetNextItem(-1, wxLIST_NEXT_ALL,
+                                               wxLIST_STATE_FOCUSED);
+
+        if ( itemCur != -1 )
+        {
+            m_listCtrl->EditLabel(itemCur);
+        }
+        else
+        {
+            m_logWindow->WriteText(wxT("No item to edit"));
+        }
     }
 }
 

@@ -223,11 +223,7 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
 
 void wxPrintData::SetPrivData( char *privData, int len )
 {
-    if (m_privData)
-    {
-        delete [] m_privData;
-        m_privData = NULL;
-    }
+    wxDELETEA(m_privData);
     m_privDataLen = len;
     if (m_privDataLen > 0)
     {
@@ -287,11 +283,7 @@ wxPrintData& wxPrintData::operator=(const wxPrintData& data)
     m_nativeData = data.GetNativeData();
     m_nativeData->m_ref++;
 
-    if (m_privData)
-    {
-        delete [] m_privData;
-        m_privData = NULL;
-    }
+    wxDELETEA(m_privData);
     m_privDataLen = data.GetPrivDataLen();
     if (m_privDataLen > 0)
     {

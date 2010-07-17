@@ -336,8 +336,7 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
         m_DialPId = (int)wxExecute(cmd, false, m_DialProcess);
         if(m_DialPId == 0)
         {
-            delete m_DialProcess;
-            m_DialProcess = NULL;
+            wxDELETE(m_DialProcess);
             return false;
         }
         else
@@ -379,8 +378,7 @@ bool wxDialUpManagerImpl::EnableAutoCheckOnlineStatus(size_t nSeconds)
    bool rc = m_timer->Start(nSeconds*1000);
    if(! rc)
    {
-      delete m_timer;
-      m_timer = NULL;
+      wxDELETE(m_timer);
    }
    return rc;
 }
@@ -390,8 +388,7 @@ void wxDialUpManagerImpl::DisableAutoCheckOnlineStatus()
    if(m_timer != NULL)
    {
       m_timer->Stop();
-      delete m_timer;
-      m_timer = NULL;
+      wxDELETE(m_timer);
    }
 }
 

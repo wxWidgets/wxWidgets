@@ -6,7 +6,7 @@
 // Created:     03.04.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -1031,8 +1031,7 @@ void RegTreeCtrl::TreeNode::OnCollapse()
 {
     DestroyChildren();
 
-    delete m_pKey;
-    m_pKey = NULL;
+    wxDELETE(m_pKey);
 }
 
 void RegTreeCtrl::TreeNode::Refresh()

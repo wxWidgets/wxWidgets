@@ -307,8 +307,7 @@ int wxDialog::ShowModal()
     // Now process all events in case they get sent to a destroyed dialog
     wxFlushEvents( display );
 
-    delete m_eventLoop;
-    m_eventLoop = NULL;
+    wxDELETE(m_eventLoop);
 
     // TODO: is it safe to call this, if the dialog may have been deleted
     // by now? Probably only if we're using delayed deletion of dialogs.

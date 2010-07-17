@@ -199,11 +199,7 @@ void wxMacToolTip::Setup( WindowRef win  , const wxString& text , const wxPoint&
 wxMacToolTip::~wxMacToolTip()
 {
 #if wxUSE_TIMER
-    if ( m_timer )
-    {
-        delete m_timer ;
-        m_timer = NULL;
-    }
+    wxDELETE(m_timer);
 #endif // wxUSE_TIMER
     if ( m_backpict )
         Clear() ;
@@ -251,11 +247,7 @@ void wxMacToolTip::Clear()
 {
     m_mark++ ;
 #if wxUSE_TIMER
-    if ( m_timer )
-    {
-        delete m_timer ;
-        m_timer = NULL ;
-    }
+    wxDELETE(m_timer);
 #endif // wxUSE_TIMER
     if ( !m_shown )
         return ;

@@ -6,7 +6,7 @@
 // Created:     24.09.01
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -225,7 +225,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
         msflags |= WS_MAXIMIZE;
 
     // Keep this here because it saves recoding this function in wxTinyFrame
-    if ( style & (wxTINY_CAPTION_VERT | wxTINY_CAPTION_HORIZ) )
+    if ( style & wxTINY_CAPTION )
         msflags |= WS_CAPTION;
 
     if ( exflags )

@@ -3,7 +3,7 @@
 // Purpose:     Defines the window containing all controls.
 // Author:      Utensil Candel (UtensilCandel@@gmail.com)
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _GUIFRAME_H_

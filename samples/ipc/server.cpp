@@ -160,11 +160,7 @@ void MyFrame::UpdateUI()
 
 void MyFrame::OnClose(wxCloseEvent& event)
 {
-    if (m_server)
-    {
-        delete m_server;
-        m_server = NULL;
-    }
+    wxDELETE(m_server);
     event.Skip();
 }
 
@@ -185,8 +181,7 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
     else
     {
         wxLogMessage("Server %s failed to start", servername);
-        delete m_server;
-        m_server = NULL;
+        wxDELETE(m_server);
     }
     UpdateUI();
 }
@@ -262,8 +257,7 @@ void MyServer::Disconnect()
 {
     if ( m_connection )
     {
-        delete m_connection;
-        m_connection = NULL;
+        wxDELETE(m_connection);
         wxGetApp().GetFrame()->UpdateUI();
         wxLogMessage("Disconnected client");
     }

@@ -56,8 +56,7 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
 
 wxScreenDCImpl::~wxScreenDCImpl()
 {
-    delete m_graphicContext;
-    m_graphicContext = NULL;
+    wxDELETE(m_graphicContext);
 #if wxOSX_USE_COCOA_OR_IPHONE
 #else
     DisposeWindow((WindowRef) m_overlayWindow );

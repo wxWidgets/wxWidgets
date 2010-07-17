@@ -3,7 +3,7 @@
 // Purpose:     interface of wxStringBuffer, wxString
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -492,12 +492,7 @@ public:
 
         @see wxString::From8BitData()
     */
-    const char* To8BitData() const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer To8BitData() const;
+    const wxScopedCharBuffer To8BitData() const;
 
     /**
         Converts the string to an ASCII, 7-bit string in the form of
@@ -1088,6 +1083,16 @@ public:
         Note that if @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function supports
         Unix98-style positional parameters:
 
+        @code
+        wxString str;
+
+        str.Printf(wxT("%d %d %d"), 1, 2, 3);
+        // str now contains "1 2 3"
+
+        str.Printf(wxT("%2$d %3$d %1$d"), 1, 2, 3);
+        // str now contains "2 3 1"
+        @endcode
+
         @note This function will use a safe version of @e vsprintf() (usually called
         @e vsnprintf()) whenever available to always allocate the buffer of correct
         size. Unfortunately, this function is not available on all platforms and the
@@ -1496,6 +1501,36 @@ public:
     static wxString FromAscii(const unsigned char* s, size_t len);
     static wxString FromAscii(char c);
     //@}
+
+    /**
+        Returns a string with the textual representation of the number in C
+        locale.
+
+        Unlike FromDouble() the string returned by this function always uses
+        the period character as decimal separator, independently of the current
+        locale.
+
+        @since 2.9.1
+
+        @see ToCDouble()
+     */
+    static wxString FromCDouble(double val);
+
+    /**
+        Returns a string with the textual representation of the number.
+
+        This is a simple wrapper for @code wxString::Format("%g", val)
+        @endcode.
+
+        Notice that the string returned by this function uses the decimal
+        separator appropriate for the current locale, e.g. @c "," and not a
+        period in French locale. Use FromCDouble() if this is unwanted.
+
+        @since 2.9.1
+
+        @see ToDouble()
+     */
+    static wxString FromDouble(double val);
 
     //@{
     /**

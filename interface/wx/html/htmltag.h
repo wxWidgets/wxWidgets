@@ -3,7 +3,7 @@
 // Purpose:     interface of wxHtmlTag
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -108,6 +108,8 @@ public:
 
         Returns @true on success and @false if @a par is not colour specification or
         if the tag has no such parameter.
+
+        @see ParseAsColour()
     */
     bool GetParamAsColour(const wxString& par, wxColour* clr) const;
 
@@ -147,6 +149,21 @@ public:
             the parameter you're looking for.
     */
     bool HasParam(const wxString& par) const;
+
+    /**
+        Parses the given string as an HTML colour.
+
+        This function recognizes the standard named HTML 4 colours as well as
+        the usual RGB syntax.
+
+        @since 2.9.1
+
+        @see wxColour::Set()
+
+        @return @true if the string was successfully parsed and @a clr was
+            filled with the result or @false otherwise.
+     */
+    static bool ParseAsColour(const wxString& str, wxColour *clr);
 
     //@{
     /**

@@ -48,9 +48,9 @@ HTLBOX_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
 HTLBOX_OBJECTS =  \
+	$(__htlbox___win32rc) \
 	$(__htlbox_os2_lib_res) \
-	htlbox_htlbox.o \
-	$(__htlbox___win32rc)
+	htlbox_htlbox.o
 
 ### Conditionally set variables: ###
 
@@ -86,6 +86,7 @@ COND_PLATFORM_OS2_1___htlbox___os2_emxbindcmd = $(NM) htlbox$(EXEEXT) | if grep 
 @COND_PLATFORM_OS2_1@__htlbox___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___htlbox___os2_emxbindcmd)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_1 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
+@COND_PLATFORM_WIN32_1@__htlbox___win32rc = htlbox_sample_rc.o
 @COND_PLATFORM_OS2_1@__htlbox_os2_lib_res = \
 @COND_PLATFORM_OS2_1@	$(top_srcdir)/include/wx/os2/wx.res
 @COND_PLATFORM_MACOSX_1@__htlbox_app_Contents_PkgInfo___depname \
@@ -110,7 +111,6 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
-@COND_PLATFORM_WIN32_1@__htlbox___win32rc = htlbox_htlbox_rc.o
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -178,11 +178,11 @@ htlbox$(EXEEXT): $(HTLBOX_OBJECTS) $(__htlbox___win32rc)
 
 @COND_PLATFORM_MACOSX_1@htlbox_bundle: $(____htlbox_BUNDLE_TGT_REF_DEP)
 
+htlbox_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
+
 htlbox_htlbox.o: $(srcdir)/htlbox.cpp
 	$(CXXC) -c -o $@ $(HTLBOX_CXXFLAGS) $(srcdir)/htlbox.cpp
-
-htlbox_htlbox_rc.o: $(srcdir)/htlbox.rc
-	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) $(__DEBUG_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
 
 # Include dependency info, if present:

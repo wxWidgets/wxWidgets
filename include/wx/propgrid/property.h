@@ -6,7 +6,7 @@
 // Created:     2008-08-23
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROPGRID_PROPERTY_H_
@@ -643,6 +643,15 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     Sets a specific message for the dir dialog.
 */
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
+
+/**
+    wxArrayStringProperty's string delimiter character. If this is aquotation
+    mark or hyphen, then strings will be quoted instead (with given
+    character).
+
+    Default delimiter is quotation mark.
+*/
+#define wxPG_ARRAY_DELIMITER                wxS("Delimiter")
 
 /** Sets displayed date format for wxDateProperty.
 */
@@ -2141,7 +2150,7 @@ public:
         @remarks This operation deselects the property and clears its
                  value.
     */
-    bool SetChoices( wxPGChoices& choices );
+    bool SetChoices( const wxPGChoices& choices );
 
     /** Set max length of text in text editor.
     */

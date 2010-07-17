@@ -6,7 +6,7 @@
 // Created:     2008-08-24
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __WX_PROPGRID_PROPGRIDIFACE_H__

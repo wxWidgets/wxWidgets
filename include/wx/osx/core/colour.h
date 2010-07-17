@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/colour.h
+// Name:        wx/osx/core/colour.h
 // Purpose:     wxColour class
 // Author:      Stefan Csomor
 // Modified by:

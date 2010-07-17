@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Vadim Zeitlin
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".

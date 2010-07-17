@@ -24,6 +24,7 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/module.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/print.h"
@@ -31,6 +32,7 @@
 #include "wx/html/htmprint.h"
 #include "wx/wxhtml.h"
 #include "wx/wfstream.h"
+#include "wx/infobar.h"
 
 
 // default font size of normal text (HTML font size 0) for printing, in points:
@@ -225,8 +227,42 @@ void wxHtmlPrintout::AddFilter(wxHtmlFilter *filter)
 bool
 wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
 {
-    if ( docArea.x > pageArea.x )
+    // Nothing to do if the contents fits horizontally.
+    if ( docArea.x <= pageArea.x )
+        return true;
+
+    // Otherwise warn the user more or less intrusively depending on whether
+    // we're previewing or printing:
+    if ( wxPrintPreview * const preview = GetPreview() )
     {
+        // Don't annoy the user too much when previewing by using info bar
+        // instead of a dialog box.
+#if wxUSE_INFOBAR
+        wxFrame * const parent = preview->GetFrame();
+        wxCHECK_MSG( parent, false, "No parent preview frame?" );
+
+        wxSizer * const sizer = parent->GetSizer();
+        wxCHECK_MSG( sizer, false, "Preview frame should be using sizers" );
+
+        wxInfoBar * const bar = new wxInfoBar(parent);
+        sizer->Add(bar, wxSizerFlags().Expand());
+
+        // Note that the message here is similar to the one below but not
+        // exactly the same, notably we don't use the document title here
+        // because it's already clear which document it pertains to and the
+        // title may be long enough to make the text not fit in the window.
+        bar->ShowMessage
+             (
+              _("This document doesn't fit on the page horizontally and "
+                "will be truncated when it is printed."),
+              wxICON_WARNING
+             );
+#endif // wxUSE_INFOBAR
+    }
+    else // We're going to really print and not just preview.
+    {
+        // This is our last chance to warn the user that the output will be
+        // mangled so do show a message box.
         wxMessageDialog
             dlg
             (
@@ -323,7 +359,7 @@ void wxHtmlPrintout::OnPreparePrinting()
 
     if ( CheckFit(wxSize(printAreaW, printAreaH),
                   wxSize(m_Renderer->GetTotalWidth(),
-                         m_Renderer->GetTotalHeight())) )
+                         m_Renderer->GetTotalHeight())) || IsPreview() )
     {
         // do paginate the document
         CountPages();

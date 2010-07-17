@@ -9,7 +9,6 @@
         <sources>nettest.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>nettest.rc</win32-res>
     </exe>
 
 </makefile>

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPGProperty
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -129,6 +129,15 @@
     Sets a specific message for the dir dialog.
 */
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
+
+/**
+    wxArrayStringProperty's string delimiter character. If this is aquotation
+    mark or hyphen, then strings will be quoted instead (with given
+    character).
+
+    Default delimiter is quotation mark.
+*/
+#define wxPG_ARRAY_DELIMITER                wxS("Delimiter")
 
 /** Sets displayed date format for wxDateProperty.
 */
@@ -621,7 +630,7 @@ wxPG_PROP_BEING_DELETED             = 0x00200000
     @endcode
 
     Since wxPGProperty derives from wxObject, you can use standard
-    DECLARE_DYNAMIC_CLASS and IMPLEMENT_DYNAMIC_CLASS macros. From the
+    wxDECLARE_DYNAMIC_CLASS and wxIMPLEMENT_DYNAMIC_CLASS macros. From the
     above example they were omitted for sake of simplicity, and besides,
     they are only really needed if you need to use wxRTTI with your
     property class.

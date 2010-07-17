@@ -1082,6 +1082,13 @@
 //                      use this function
 #define wxUSE_ABOUTDLG 1
 
+// wxFileHistory class
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_FILE_HISTORY 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------

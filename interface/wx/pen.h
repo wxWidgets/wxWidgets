@@ -3,11 +3,14 @@
 // Purpose:     interface of wxPen* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
     The possible styles for a wxPen.
+
+    Note that hatched pen styles are not supported by X11-based ports,
+    including wxGTK.
 */
 enum wxPenStyle
 {

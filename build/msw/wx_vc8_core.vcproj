@@ -955,6 +955,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\filehistorycmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\filepickercmn.cpp"
 				>
 			</File>
@@ -3594,6 +3598,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\headerctrlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\generic\infobar.cpp"
 				>
 			</File>
 			<File
@@ -6539,6 +6547,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\html\styleparams.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\html\winpars.h"
 				>
 			</File>
@@ -6576,6 +6588,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\art.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\art_internal.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\artprov.h"
 				>
 			</File>
@@ -6589,6 +6609,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\auibook.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>
 			<File
@@ -6621,6 +6645,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\button.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\buttonbar.h"
 				>
 			</File>
 			<File
@@ -6693,6 +6721,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\control.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\control.h"
 				>
 			</File>
 			<File
@@ -6848,6 +6880,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\filehistory.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\filepicker.h"
 				>
 			</File>
@@ -6885,6 +6921,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\framemanager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\gallery.h"
 				>
 			</File>
 			<File
@@ -7116,11 +7156,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\page.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\palette.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\include\wx\panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\panel.h"
 				>
 			</File>
 			<File
@@ -7373,6 +7421,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\tipwin.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\ribbon\toolbar.h"
 				>
 			</File>
 			<File

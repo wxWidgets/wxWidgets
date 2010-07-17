@@ -534,7 +534,7 @@ wxPrintout::wxPrintout(const wxString& title)
     m_PPIScreenY = 0;
     m_PPIPrinterX = 0;
     m_PPIPrinterY = 0;
-    m_isPreview = false;
+    m_preview = NULL;
 }
 
 wxPrintout::~wxPrintout()
@@ -1375,7 +1375,7 @@ void wxPrintPreviewBase::Init(wxPrintout *printout,
     m_isOk = true;
     m_previewPrintout = printout;
     if (m_previewPrintout)
-        m_previewPrintout->SetIsPreview(true);
+        m_previewPrintout->SetPreview(static_cast<wxPrintPreview *>(this));
 
     m_printPrintout = printoutForPrinting;
 

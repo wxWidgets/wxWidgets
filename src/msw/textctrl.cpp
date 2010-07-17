@@ -1193,9 +1193,7 @@ void wxTextCtrl::AppendText(const wxString& text)
     // don't do this if we're frozen, saves some time
     if ( !IsFrozen() && IsMultiLine() && GetRichVersion() > 1 )
     {
-        // setting the caret to the end and showing it simply doesn't work for
-        // RichEdit 2.0 -- force it to still do what we want
-        ::SendMessage(GetHwnd(), EM_LINESCROLL, 0, GetNumberOfLines());
+        ::SendMessage(GetHwnd(), WM_VSCROLL, SB_BOTTOM, NULL);
     }
 #endif // wxUSE_RICHEDIT
 }
@@ -2355,6 +2353,26 @@ bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
         cf.dwMask = CFM_COLOR;
         cf.crTextColor = wxColourToRGB(colour);
         ::SendMessage(GetHwnd(), EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cf);
+    }
+
+    return true;
+}
+
+bool wxTextCtrl::SetFont(const wxFont& font)
+{
+    if ( !wxTextCtrlBase::SetFont(font) )
+        return false;
+
+    if ( IsRich() )
+    {
+        // Using WM_SETFONT doesn't work reliably with rich edit controls: as
+        // an example, if we set a fixed width font for a richedit 4.1 control,
+        // it's used for the ASCII characters but inserting any non-ASCII ones
+        // switches the font to a proportional one, whether it's done
+        // programmatically or not. So just use EM_SETCHARFORMAT for this too.
+        wxTextAttr attr;
+        attr.SetFont(font);
+        SetDefaultStyle(attr);
     }
 
     return true;

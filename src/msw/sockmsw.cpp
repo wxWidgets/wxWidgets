@@ -7,7 +7,7 @@
 //             (C) 1999-2000, Guillermo Rodriguez Garcia
 //             (C) 2008 Vadim Zeitlin
 // RCS_ID:     $Id$
-// License:    wxWindows licence
+// Licence:    wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -30,6 +30,7 @@
 
 #include "wx/private/socket.h"
 #include "wx/msw/private.h"     // for wxGetInstance()
+#include "wx/private/fd.h"
 #include "wx/apptrait.h"
 #include "wx/thread.h"
 #include "wx/dynlib.h"
@@ -336,9 +337,25 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
         wxASSERT_MSG( socket->m_fd == (SOCKET)wParam,
                       "mismatch between message and socket?" );
 
-        switch WSAGETSELECTEVENT(lParam)
+        switch ( WSAGETSELECTEVENT(lParam) )
         {
             case FD_READ:
+                // We may get a FD_READ notification even when there is no data
+                // to read on the socket, in particular this happens on socket
+                // creation when we seem to always get FD_CONNECT, FD_WRITE and
+                // FD_READ notifications all at once (but it doesn't happen
+                // only then). Ignore such dummy notifications.
+                {
+                    fd_set fds;
+                    timeval tv = { 0 };
+
+                    wxFD_ZERO(&fds);
+                    wxFD_SET(socket->m_fd, &fds);
+
+                    if ( select(socket->m_fd + 1, &fds, NULL, NULL, &tv) != 1 )
+                        return 0;
+                }
+
                 event = wxSOCKET_INPUT;
                 break;
 

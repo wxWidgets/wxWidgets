@@ -599,6 +599,9 @@
 				RelativePath=".\datetime\datetimetest.cpp">
 			</File>
 			<File
+				RelativePath=".\file\dir.cpp">
+			</File>
+			<File
 				RelativePath=".\dummy.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -650,6 +653,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\misc\dynamiclib.cpp">
+			</File>
+			<File
+				RelativePath=".\misc\environ.cpp">
+			</File>
+			<File
 				RelativePath=".\weakref\evtconnection.cpp">
 			</File>
 			<File
@@ -669,6 +678,9 @@
 			</File>
 			<File
 				RelativePath=".\config\fileconf.cpp">
+			</File>
+			<File
+				RelativePath=".\file\filefn.cpp">
 			</File>
 			<File
 				RelativePath=".\filekind\filekind.cpp">
@@ -695,7 +707,13 @@
 				RelativePath=".\fswatcher\fswatchertest.cpp">
 			</File>
 			<File
+				RelativePath=".\uris\ftp.cpp">
+			</File>
+			<File
 				RelativePath=".\hashes\hashes.cpp">
+			</File>
+			<File
+				RelativePath=".\interactive\input.cpp">
 			</File>
 			<File
 				RelativePath=".\intl\intltest.cpp">
@@ -728,10 +746,28 @@
 				RelativePath=".\streams\memstream.cpp">
 			</File>
 			<File
+				RelativePath=".\misc\metatest.cpp">
+			</File>
+			<File
+				RelativePath=".\thread\misc.cpp">
+			</File>
+			<File
 				RelativePath=".\misc\misctests.cpp">
 			</File>
 			<File
+				RelativePath=".\misc\module.cpp">
+			</File>
+			<File
+				RelativePath=".\interactive\output.cpp">
+			</File>
+			<File
+				RelativePath=".\misc\pathlist.cpp">
+			</File>
+			<File
 				RelativePath=".\thread\queue.cpp">
+			</File>
+			<File
+				RelativePath=".\config\regconf.cpp">
 			</File>
 			<File
 				RelativePath=".\regex\regextest.cpp">
@@ -753,6 +789,9 @@
 			</File>
 			<File
 				RelativePath=".\strings\stdstrings.cpp">
+			</File>
+			<File
+				RelativePath=".\events\stopwatch.cpp">
 			</File>
 			<File
 				RelativePath=".\strings\strings.cpp">

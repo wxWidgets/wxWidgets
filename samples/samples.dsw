@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "artprov"=.\artprov\artprov.dsp - Package Owner=<4>
+Project: "access"=.\access\access.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -27,7 +27,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "aui"=.\aui\auidemo.dsp - Package Owner=<4>
+Project: "artprov"=.\artprov\artprov.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -39,7 +39,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "caret"=.\caret\caret.dsp - Package Owner=<4>
+Project: "aui"=.\aui\auidemo.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -63,6 +63,30 @@ Package=<4>
 
 ###############################################################################
 
+Project: "caret"=.\caret\caret.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "clipboard"=.\clipboard\clipboard.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "collpane"=.\collpane\collpane.dsp - Package Owner=<4>
 
 Package=<5>
@@ -75,7 +99,31 @@ Package=<4>
 
 ###############################################################################
 
+Project: "combo"=.\combo\combo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "config"=.\config\config.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "console"=.\console\console.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -111,6 +159,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "debugrpt"=.\debugrpt\debugrpt.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "dialogs"=.\dialogs\dialogs.dsp - Package Owner=<4>
 
 Package=<5>
@@ -124,6 +184,54 @@ Package=<4>
 ###############################################################################
 
 Project: "dialup"=.\dialup\dialup.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "display"=.\display\display.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dll_my_dll"=.\dll\dll_my_dll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dll_sdk_exe"=.\dll\dll_sdk_exe.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "dll_wx_exe"=.\dll\dll_wx_exe.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -207,6 +315,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "except"=.\except\except.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "exec"=.\exec\exec.dsp - Package Owner=<4>
 
 Package=<5>
@@ -219,7 +339,31 @@ Package=<4>
 
 ###############################################################################
 
+Project: "flash"=.\flash\flash.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "font"=.\font\font.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fswatcher"=.\fswatcher\fswatcher.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -280,6 +424,18 @@ Package=<4>
 ###############################################################################
 
 Project: "help"=.\help\help.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "htlbox"=.\htlbox\htlbox.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -447,6 +603,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "keyboard"=.\keyboard\keyboard.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "layout"=.\layout\layout.dsp - Package Owner=<4>
 
 Package=<5>
@@ -603,6 +771,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "power"=.\power\power.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "printing"=.\printing\printing.dsp - Package Owner=<4>
 
 Package=<5>
@@ -628,6 +808,30 @@ Package=<4>
 ###############################################################################
 
 Project: "regtest"=.\regtest\regtest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "renddll"=.\render\render_renddll.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "render"=.\render\render_render.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -687,6 +891,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "shaped"=.\shaped\shaped.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "socketclient"=.\sockets\sockets_client.dsp - Package Owner=<4>
 
 Package=<5>
@@ -700,6 +916,30 @@ Package=<4>
 ###############################################################################
 
 Project: "socketserver"=.\sockets\sockets_server.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "sound"=.\sound\sound.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "splash"=.\splash\splash.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -736,6 +976,30 @@ Package=<4>
 ###############################################################################
 
 Project: "stc"=.\stc\stctest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "svg"=.\svg\svgtest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "taborder"=.\taborder\taborder.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -819,7 +1083,31 @@ Package=<4>
 
 ###############################################################################
 
+Project: "uiaction"=.\uiaction\uiaction.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "validate"=.\validate\validate.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "vscroll"=.\vscroll\vscroll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -844,6 +1132,18 @@ Package=<4>
 ###############################################################################
 
 Project: "wizard"=.\wizard\wizard.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "wrapsizer"=.\wrapsizer\wrapsizer.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

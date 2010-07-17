@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        include/wx/mac/corefoundation/strconv_cf.h
+// Name:        wx/osx/core/private/strconv_cf.h
 // Purpose:     Unicode conversion classes
 // Author:      David Elliott, Ryan Norton
 // Modified by:

@@ -3,7 +3,7 @@
 // Purpose:     XRC format specification
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 

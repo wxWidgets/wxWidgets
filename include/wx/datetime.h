@@ -947,12 +947,15 @@ public:
     // SYSTEMTIME format
     // ------------------------------------------------------------------------
 #ifdef __WXMSW__
-
     // convert SYSTEMTIME to wxDateTime
-    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME&);
+    wxDateTime& SetFromMSWSysTime(const struct _SYSTEMTIME& st);
 
     // convert wxDateTime to SYSTEMTIME
-    void GetAsMSWSysTime(struct _SYSTEMTIME*) const;
+    void GetAsMSWSysTime(struct _SYSTEMTIME* st) const;
+
+    // same as above but only take date part into account, time is always zero
+    wxDateTime& SetFromMSWSysDate(const struct _SYSTEMTIME& st);
+    void GetAsMSWSysDate(struct _SYSTEMTIME* st) const;
 #endif // __WXMSW__
 
     // comparison (see also functions below for operator versions)

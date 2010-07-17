@@ -203,8 +203,13 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     // user code defined OnPaint() in the derived class)
     m_hasDrawnWindow = true;
 
-    // pass it on to the real handler
-    bool processed = wxEvtHandler::ProcessEvent(event);
+    // Pass it on to the real handler: notice that we must not call
+    // ProcessEvent() on this object itself as it wouldn't pass it to the next
+    // handler (i.e. the real window) if we're called from a previous handler
+    // (as indicated by "process here only" flag being set) and we do want to
+    // execute the handler defined in the window we're associated with right
+    // now, without waiting until TryAfter() is called from wxEvtHandler.
+    bool processed = m_nextHandler->ProcessEvent(event);
 
     // always process the size events ourselves, even if the user code handles
     // them as well, as we need to AdjustScrollbars()
@@ -300,6 +305,17 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
 
     event.Skip(wasSkipped);
 
+    // We called ProcessEvent() on the next handler, meaning that we explicitly
+    // worked around the request to process the event in this handler only. As
+    // explained above, this is unfortunately really necessary but the trouble
+    // is that the event will continue to be post-processed by the previous
+    // handler resulting in duplicate calls to event handlers. Call the special
+    // function below to prevent this from happening, base class DoTryChain()
+    // will check for it and behave accordingly.
+    //
+    // And if we're not called from DoTryChain(), this won't do anything anyhow.
+    event.DidntHonourProcessOnlyIn();
+
     return processed;
 }
 
@@ -326,6 +342,8 @@ wxScrollHelperBase::wxScrollHelperBase(wxWindow *win)
 
     m_xScrollingEnabled =
     m_yScrollingEnabled = true;
+
+    m_kbdScrollingEnabled = true;
 
     m_scaleX =
     m_scaleY = 1.0;
@@ -828,6 +846,12 @@ void wxScrollHelperBase::HandleOnPaint(wxPaintEvent& WXUNUSED(event))
 // this they always have the priority
 void wxScrollHelperBase::HandleOnChar(wxKeyEvent& event)
 {
+    if ( !m_kbdScrollingEnabled )
+    {
+        event.Skip();
+        return;
+    }
+
     // prepare the event this key press maps to
     wxScrollWinEvent newEvent;
 
@@ -910,11 +934,7 @@ bool wxScrollHelperBase::SendAutoScrollEvents(wxScrollWinEvent& event) const
 void wxScrollHelperBase::StopAutoScrolling()
 {
 #if wxUSE_TIMER
-    if ( m_timerAutoScroll )
-    {
-        delete m_timerAutoScroll;
-        m_timerAutoScroll = NULL;
-    }
+    wxDELETE(m_timerAutoScroll);
 #endif
 }
 

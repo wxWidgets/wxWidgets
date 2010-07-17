@@ -36,9 +36,9 @@
 
 #include "dragimag.h"
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
-#include "mondrian.xpm"
-#include "dragicon.xpm"
+#if !defined(__WXMSW__) && !defined(__WXPM__)
+    #include "../sample.xpm"
+    #include "dragicon.xpm"
 #endif
 
 // main program
@@ -135,8 +135,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
         m_dragImage->Hide();
         m_dragImage->EndDrag();
-        delete m_dragImage;
-        m_dragImage = NULL;
+        wxDELETE(m_dragImage);
 
         m_draggedShape->SetShow(true);
 
@@ -203,8 +202,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 
             if (!m_dragImage->BeginDrag(beginDragHotSpot, this, fullScreen))
             {
-                delete m_dragImage;
-                m_dragImage = (wxDragImage*) NULL;
+                wxDELETE(m_dragImage);
                 m_dragMode = TEST_DRAG_NONE;
 
             } else
@@ -327,7 +325,7 @@ MyFrame::MyFrame()
     wxMenuBar *menu_bar = new wxMenuBar();
     menu_bar->Append(file_menu, wxT("&File"));
 
-    SetIcon(wxICON(mondrian));
+    SetIcon(wxICON(sample));
     SetMenuBar( menu_bar );
 
 #if wxUSE_STATUSBAR

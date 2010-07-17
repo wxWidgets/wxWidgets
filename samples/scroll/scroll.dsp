@@ -252,11 +252,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\scroll.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\scroll.rc
+SOURCE=.\scroll.cpp
 # End Source File
 # End Group
 # End Target

@@ -1370,8 +1370,7 @@ void MyPipeFrame::OnProcessTerm(wxProcessEvent& WXUNUSED(event))
 {
     DoGet();
 
-    delete m_process;
-    m_process = NULL;
+    wxDELETE(m_process);
 
     wxLogWarning(wxT("The other process has terminated, closing"));
 

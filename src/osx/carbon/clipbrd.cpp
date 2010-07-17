@@ -61,11 +61,7 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
-    if (m_data != NULL)
-    {
-        delete m_data;
-        m_data = NULL;
-    }
+    wxDELETE(m_data);
 
     OSStatus err = PasteboardClear( m_pasteboard );
     if (err != noErr)
@@ -139,11 +135,7 @@ void wxClipboard::Close()
     // Get rid of cached object.
     // If this is not done, copying data from
     // another application will only work once
-    if (m_data)
-    {
-        delete m_data;
-        m_data = NULL;
-    }
+    wxDELETE(m_data);
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )

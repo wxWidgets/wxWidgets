@@ -4,7 +4,7 @@
 // Author:      Mike Wetherell
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 Mike Wetherell
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -451,7 +451,7 @@ void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
             "print the test case names, run them",
             wxCMD_LINE_VAL_NONE, 0 },
         { wxCMD_LINE_SWITCH, "t", "timing",
-            "print names and mesure running time of individual test, run them",
+            "print names and measure running time of individual test, run them",
             wxCMD_LINE_VAL_NONE, 0 },
         { wxCMD_LINE_OPTION, "", "locale",
             "locale to use when running the program",
@@ -540,8 +540,17 @@ int TestApp::OnRun()
 
     if ( m_registries.empty() )
     {
-        // run or list all tests
+        // run or list all tests which use the CPPUNIT_TEST_SUITE_REGISTRATION() macro
+        // (i.e. those registered in the "All tests" registry); if there are other
+        // tests not registered with the CPPUNIT_TEST_SUITE_REGISTRATION() macro
+        // then they won't be listed/run!
         AddTest(runner, TestFactoryRegistry::getRegistry().makeTest());
+
+        if (m_list)
+        {
+            cout << "\nNote that the list above is not complete as it doesn't include the \n";
+            cout << "tests disabled by default.\n";
+        }
     }
     else // run only the selected tests
     {

@@ -6,7 +6,7 @@
 // Created:     13.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -265,7 +265,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxChar *title,
          : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // set the icon
-    SetIcon(wxIcon(wxT("mondrian")));
+    SetIcon(wxICON(sample));
 
     // create the menu
     InitMenu();

@@ -3,7 +3,7 @@
 // Purpose:     interface of wxRefCounter
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /** @class wxObjectRefData
@@ -42,7 +42,7 @@
         virtual wxObjectRefData *CreateRefData() const;
         virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
-        DECLARE_DYNAMIC_CLASS(MyCar)
+        wxDECLARE_DYNAMIC_CLASS(MyCar)
     };
 
 
@@ -83,7 +83,7 @@
 
 
     #define M_CARDATA ((MyCarRefData *)m_refData)
-    IMPLEMENT_DYNAMIC_CLASS(MyCar,wxObject)
+    wxIMPLEMENT_DYNAMIC_CLASS(MyCar, wxObject);
 
     MyCar::MyCar( int price )
     {
@@ -275,12 +275,12 @@ public:
         Example:
 
         @code
-        bool tmp = obj->IsKindOf(CLASSINFO(wxFrame));
+        bool tmp = obj->IsKindOf(wxCLASSINFO(wxFrame));
         @endcode
 
         @param info
             A pointer to a class information object, which may be obtained
-            by using the ::CLASSINFO macro.
+            by using the ::wxCLASSINFO macro.
 
         @return @true if the class represented by info is the same class as this
                  one or is derived from it.
@@ -412,8 +412,8 @@ protected:
     This class stores meta-information about classes.
 
     Instances of this class are not generally defined directly by an application,
-    but indirectly through use of macros such as ::DECLARE_DYNAMIC_CLASS and
-    ::IMPLEMENT_DYNAMIC_CLASS.
+    but indirectly through use of macros such as ::wxDECLARE_DYNAMIC_CLASS and
+    ::wxIMPLEMENT_DYNAMIC_CLASS.
 
     @library{wxbase}
     @category{rtti}
@@ -655,21 +655,12 @@ public:
 
     @header{wx/object.h}
 */
-#define CLASSINFO( className )
-
-/**
-    Used inside a class declaration to declare that the class should be made
-    known to the class hierarchy, but objects of this class cannot be created
-    dynamically. The same as DECLARE_ABSTRACT_CLASS().
-
-    @header{wx/object.h}
-*/
-#define DECLARE_CLASS( className )
+#define wxCLASSINFO( className )
 
 /**
     Used inside a class declaration to declare that the class should be
     made known to the class hierarchy, but objects of this class cannot be created
-    dynamically. The same as DECLARE_CLASS().
+    dynamically.
 
     @header{wx/object.h}
 
@@ -678,7 +669,7 @@ public:
     @code
     class wxCommand: public wxObject
     {
-        DECLARE_ABSTRACT_CLASS(wxCommand)
+        wxDECLARE_ABSTRACT_CLASS(wxCommand);
 
     private:
         ...
@@ -687,14 +678,14 @@ public:
     };
     @endcode
 */
-#define DECLARE_ABSTRACT_CLASS( className )
+#define wxDECLARE_ABSTRACT_CLASS( className )
 
 /**
     Used inside a class declaration to make the class known to wxWidgets RTTI
     system and also declare that the objects of this class should be
     dynamically creatable from run-time type information. Notice that this
     implies that the class should have a default constructor, if this is not
-    the case consider using DECLARE_CLASS().
+    the case consider using wxDECLARE_ABSTRACT_CLASS().
 
     @header{wx/object.h}
 
@@ -703,7 +694,7 @@ public:
     @code
     class wxFrame: public wxWindow
     {
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+        wxDECLARE_DYNAMIC_CLASS(wxFrame);
 
     private:
         const wxString& frameTitle;
@@ -712,35 +703,27 @@ public:
     };
     @endcode
 */
-#define DECLARE_DYNAMIC_CLASS( className )
+#define wxDECLARE_DYNAMIC_CLASS( className )
 
 /**
-    Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information. The same as IMPLEMENT_ABSTRACT_CLASS().
+    Used inside a class declaration to declare that the class should be made
+    known to the class hierarchy, but objects of this class cannot be created
+    dynamically. The same as wxDECLARE_DYNAMIC_CLASS().
 
     @header{wx/object.h}
 */
-#define IMPLEMENT_CLASS( className, baseClassName )
+#define wxDECLARE_CLASS( className )
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information and two base classes. The same as
-    IMPLEMENT_ABSTRACT_CLASS2().
-
-    @header{wx/object.h}
-*/
-#define IMPLEMENT_CLASS2( className, baseClassName1, baseClassName2 )
-
-/**
-    Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information. The same as IMPLEMENT_CLASS().
-
+    that has run-time type information.
+    
     @header{wx/object.h}
 
     Example:
 
     @code
-    IMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject)
+    wxIMPLEMENT_ABSTRACT_CLASS(wxCommand, wxObject);
 
     wxCommand::wxCommand(void)
     {
@@ -748,16 +731,15 @@ public:
     }
     @endcode
 */
-#define IMPLEMENT_ABSTRACT_CLASS( className, baseClassName )
+#define wxIMPLEMENT_ABSTRACT_CLASS( className, baseClassName )
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information and two base classes. The same as
-    IMPLEMENT_CLASS2().
+    that has run-time type information and two base classes. 
 
     @header{wx/object.h}
 */
-#define IMPLEMENT_ABSTRACT_CLASS2( className, baseClassName1, baseClassName2 )
+#define wxIMPLEMENT_ABSTRACT_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
@@ -769,7 +751,7 @@ public:
     Example:
 
     @code
-    IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
+    wxIMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow);
 
     wxFrame::wxFrame(void)
     {
@@ -777,7 +759,7 @@ public:
     }
     @endcode
 */
-#define IMPLEMENT_DYNAMIC_CLASS( className, baseClassName )
+#define wxIMPLEMENT_DYNAMIC_CLASS( className, baseClassName )
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
@@ -786,7 +768,25 @@ public:
 
     @header{wx/object.h}
 */
-#define IMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
+#define wxIMPLEMENT_DYNAMIC_CLASS2( className, baseClassName1, baseClassName2 )
+
+/**
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information, and whose instances can be created
+    dynamically. The same as wxIMPLEMENT_DYNAMIC_CLASS().
+
+    @header{wx/object.h}
+*/
+#define wxIMPLEMENT_CLASS( className, baseClassName )
+
+/**
+    Used in a C++ implementation file to complete the declaration of a class
+    that has run-time type information and two base classes, and whose instances 
+    can be created dynamically. The same as wxIMPLEMENT_DYNAMIC_CLASS2().
+
+    @header{wx/object.h}
+*/
+#define wxIMPLEMENT_CLASS2( className, baseClassName1, baseClassName2 )
 
 /**
     Same as @c const_cast<T>(x) if the compiler supports const cast or @c (T)x for

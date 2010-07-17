@@ -3,7 +3,7 @@
 // Purpose:     interface of wxPreviewControlBar
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -708,8 +708,25 @@ public:
 
     /**
         Returns @true if the printout is currently being used for previewing.
+
+        @see GetPreview()
     */
     virtual bool IsPreview() const;
+
+    /**
+        Returns the associated preview object if any.
+
+        If this printout object is used for previewing, returns the associated
+        wxPrintPreview. Otherwise returns @NULL.
+
+        The returned pointer is not owned by the printout and must not be
+        deleted.
+
+        @see IsPreview()
+
+        @since 2.9.1.
+     */
+    wxPrintPreview *GetPreview() const;
 
     /**
         Set the user scale and device origin of the wxDC associated with this wxPrintout

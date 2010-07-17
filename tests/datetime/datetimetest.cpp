@@ -83,18 +83,6 @@ private:
 
 #endif // CHANGE_SYSTEM_DATE
 
-// helper class setting the locale to "C" for its lifetime
-class CLocaleSetter
-{
-public:
-    CLocaleSetter() : m_locOld(setlocale(LC_ALL, "C")) { }
-    ~CLocaleSetter() { setlocale(LC_ALL, m_locOld); }
-
-private:
-    const char * const m_locOld;
-    wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
-};
-
 // helper function translating week day/month names from English to the current
 // locale
 static wxString TranslateDate(const wxString& str)
@@ -733,7 +721,7 @@ void DateTimeTestCase::TestTimeFormat()
             {
                 // conversion failed - should it have?
                 WX_ASSERT_MESSAGE(
-                    ("Test #%lu failed: failed to parse \"%s\"", n, s),
+                    ("Test #%u failed: failed to parse \"%s\"", n, s),
                     kind == CompareNone
                 );
             }
@@ -747,7 +735,7 @@ void DateTimeTestCase::TestTimeFormat()
                     result++;
 
                 WX_ASSERT_MESSAGE(
-                    ("Test #%lu failed: \"%s\" was left unparsed in \"%s\"",
+                    ("Test #%u failed: \"%s\" was left unparsed in \"%s\"",
                      n, result, s),
                     !*result
                 );

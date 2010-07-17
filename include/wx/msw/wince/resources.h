@@ -6,7 +6,7 @@
 // Created:     01.05.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // Windows CE dummy menu for SHCreateMenuBar()

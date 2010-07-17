@@ -6,7 +6,7 @@
 // Created:     2006-03-05
 // RCS-ID:      $Id$
 // Copyright:   (c) Jaakko Salli
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -277,7 +277,8 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
 // Dirs Property
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty,wxT(','),wxT("Browse"))
+WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',',
+                                                    "Browse")
 
 #if wxUSE_VALIDATORS
 
@@ -314,7 +315,7 @@ bool wxDirsProperty::OnCustomStringEdit( wxWindow* parent, wxString& value )
 // by replacing each ArrayDouble with ArrayXXX.
 //
 
-class wxArrayDoubleEditorDialog : public wxArrayEditorDialog
+class wxArrayDoubleEditorDialog : public wxPGArrayEditorDialog
 {
 public:
     wxArrayDoubleEditorDialog();
@@ -368,7 +369,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxArrayDoubleEditorDialog)
 };
 
-IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxArrayEditorDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxArrayDoubleEditorDialog, wxPGArrayEditorDialog)
 
 //
 // Array dialog array access and manipulation
@@ -426,14 +427,14 @@ void wxArrayDoubleEditorDialog::ArraySwap( size_t first, size_t second )
 //
 
 wxArrayDoubleEditorDialog::wxArrayDoubleEditorDialog()
-    : wxArrayEditorDialog()
+    : wxPGArrayEditorDialog()
 {
     Init();
 }
 
 void wxArrayDoubleEditorDialog::Init()
 {
-    wxArrayEditorDialog::Init();
+    wxPGArrayEditorDialog::Init();
     SetPrecision(-1);
 }
 
@@ -444,7 +445,7 @@ wxArrayDoubleEditorDialog::wxArrayDoubleEditorDialog(wxWindow *parent,
                               long style,
                               const wxPoint& pos,
                               const wxSize& sz )
-                              : wxArrayEditorDialog()
+                              : wxPGArrayEditorDialog()
 {
     Init();
     Create(parent,message,caption,array,style,pos,sz);
@@ -461,7 +462,7 @@ bool wxArrayDoubleEditorDialog::Create(wxWindow *parent,
 
     m_array = array;
 
-    return wxArrayEditorDialog::Create (parent,message,caption,style,pos,sz);
+    return wxPGArrayEditorDialog::Create (parent,message,caption,style,pos,sz);
 }
 
 // -----------------------------------------------------------------------

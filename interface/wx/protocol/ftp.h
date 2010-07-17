@@ -3,7 +3,7 @@
 // Purpose:     interface of wxFTP
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -111,6 +111,22 @@ public:
     virtual ~wxFTP();
 
 
+
+    //@{
+    /**
+        Connect to the FTP server to default port (21) of the specified @a host.
+     */
+    virtual bool Connect(const wxString& host);
+
+    /**
+        Connect to the FTP server to any port of the specified @a host.
+        By default (@a port = 0), connection is made to default FTP port (21)
+        of the specified @a host.
+
+        @since 2.9.1
+     */
+    virtual bool Connect(const wxString& host, unsigned short port);
+    //@}
 
     /**
         @name Functions for managing the FTP connection

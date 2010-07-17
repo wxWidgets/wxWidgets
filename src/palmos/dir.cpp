@@ -30,7 +30,6 @@
 #endif // PCH
 
 #include "wx/dir.h"
-#include "wx/filefn.h"          // for wxDirExists()
 
 #include "pfall.h"
 
@@ -196,16 +195,6 @@ bool wxDirData::Read(wxString *filename)
     *filename = de_d_name;
 
     return true;
-}
-
-// ----------------------------------------------------------------------------
-// wxDir helpers
-// ----------------------------------------------------------------------------
-
-/* static */
-bool wxDir::Exists(const wxString& dir)
-{
-    return wxDirExists(dir);
 }
 
 // ----------------------------------------------------------------------------

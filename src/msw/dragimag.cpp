@@ -250,7 +250,13 @@ bool wxDragImage::Create(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
         ImageList_Destroy(GetHimageList());
     m_hImageList = (WXHIMAGELIST)
         TreeView_CreateDragImage(GetHwndOf(&treeCtrl), (HTREEITEM) id.m_pItem);
-    return m_hImageList != 0;
+    if ( !m_hImageList )
+    {
+        // fall back on just the item text if there is no image
+        return Create(treeCtrl.GetItemText(id));
+    }
+
+    return true;
 }
 #endif
 
@@ -261,8 +267,17 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
     POINT pt;
-    pt.x = 0; pt.y = 0;
-    m_hImageList = (WXHIMAGELIST) ListView_CreateDragImage((HWND) listCtrl.GetHWND(), id, & pt);
+    pt.x =
+    pt.y = 0;
+    m_hImageList = (WXHIMAGELIST)
+        ListView_CreateDragImage(GetHwndOf(&listCtrl), id, &pt);
+
+    if ( !m_hImageList )
+    {
+        // as for wxTreeCtrl, fall back on dragging just the item text
+        return Create(listCtrl.GetItemText(id));
+    }
+
     return true;
 }
 #endif

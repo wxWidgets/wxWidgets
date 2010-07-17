@@ -268,10 +268,33 @@ public:
 
     void SetAlignment( int align );
 
+    wxString GetChoice(size_t index) const { return m_choices[index]; }
+    const wxArrayString& GetChoices() const { return m_choices; }
+
 private:
     wxArrayString m_choices;
     wxString      m_data;
 };
+
+// ----------------------------------------------------------------------------
+// wxDataViewChoiceByIndexRenderer
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewChoiceByIndexRenderer: public wxDataViewChoiceRenderer
+{
+public:
+    wxDataViewChoiceByIndexRenderer( const wxArrayString &choices,
+                              wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
+                              int alignment = wxDVR_DEFAULT_ALIGNMENT );
+                            
+    virtual bool SetValue( const wxVariant &value );
+    virtual bool GetValue( wxVariant &value ) const;
+    
+private:
+    virtual void GtkOnTextEdited(const gchar *itempath, const wxString& str);
+};
+
+
 
 #endif // _WX_GTK_DVRENDERERS_H_
 

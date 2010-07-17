@@ -21,7 +21,7 @@ Maintainer: The wxWidgets Developers <devel@nowhere.com>
 Packager: Anonymous <anonymous@nowhere.com>
 Summary: wxMinimal is an example minimal program based on wxGTK.
 URL: http://www.site.org/
-License: wxWindows license
+Licence: wxWindows licence
 SoftwareVersion: 1.0
 AutopackageTarget: 1.2
 Revision: 1

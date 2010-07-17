@@ -43,7 +43,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     return control;
 }
 
-int wxListBox::DoListHitTest(const wxPoint& inpoint) const
+int wxMacDataBrowserListControl::DoListHitTest(const wxPoint& inpoint) const
 {
     OSStatus err;
 
@@ -59,7 +59,7 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
 
     // get column property ID (req. for call to itempartbounds)
     DataBrowserTableViewColumnID colId = 0;
-    err = GetDataBrowserTableViewColumnProperty(m_peer->GetControlRef(), 0, &colId);
+    err = GetDataBrowserTableViewColumnProperty(GetControlRef(), 0, &colId);
     wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewColumnProperty"));
 
     // OK, first we need to find the first visible item we have -
@@ -68,17 +68,19 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
     // until we find a visible item, but we can do a cheap calculation
     // via the row height to speed things up a bit
     UInt32 scrollx, scrolly;
-    err = GetDataBrowserScrollPosition(m_peer->GetControlRef(), &scrollx, &scrolly);
+    err = GetDataBrowserScrollPosition(GetControlRef(), &scrollx, &scrolly);
     wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserScrollPosition"));
 
     UInt16 height;
-    err = GetDataBrowserTableViewRowHeight(m_peer->GetControlRef(), &height);
+    err = GetDataBrowserTableViewRowHeight(GetControlRef(), &height);
     wxCHECK_MSG(err == noErr, wxNOT_FOUND, wxT("Unexpected error from GetDataBrowserTableViewRowHeight"));
+
+    wxListBox *list = wxDynamicCast( GetWXPeer() , wxListBox );
 
     // these indices are 0-based, as usual, so we need to add 1 to them when
     // passing them to data browser functions which use 1-based indices
     int low = scrolly / height,
-        high = GetCount() - 1;
+        high = list->GetCount() - 1;
 
     // search for the first visible item (note that the scroll guess above
     // is the low bounds of where the item might lie so we only use that as a
@@ -87,7 +89,7 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
     {
         Rect bounds;
         err = GetDataBrowserItemPartBounds(
-            m_peer->GetControlRef(), low + 1, colId,
+            GetControlRef(), low + 1, colId,
             kDataBrowserPropertyEnclosingPart,
             &bounds); // note +1 to translate to Mac ID
         if ( err == noErr )
@@ -109,7 +111,7 @@ int wxListBox::DoListHitTest(const wxPoint& inpoint) const
 
         Rect bounds;
         err = GetDataBrowserItemPartBounds(
-            m_peer->GetControlRef(), mid + 1, colId,
+            GetControlRef(), mid + 1, colId,
             kDataBrowserPropertyEnclosingPart,
             &bounds); //note +1 to trans to mac id
         wxCHECK_MSG( err == noErr || err == errDataBrowserItemNotFound,

@@ -409,11 +409,7 @@ bool wxDockTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(too
 //-----------------------------------------------------------------------------
 bool wxDockTaskBarIcon::RemoveIcon()
 {
-    if (m_pMenu)
-    {
-        delete m_pMenu;
-        m_pMenu = NULL;
-    }
+    wxDELETE(m_pMenu);
 
     // restore old icon to the dock
     OSStatus err = RestoreApplicationDockTileImage();

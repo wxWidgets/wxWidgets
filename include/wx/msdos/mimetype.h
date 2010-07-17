@@ -35,10 +35,6 @@ public :
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // this are NOPs under MacOS
-    bool ReadMailcap(const wxString& WXUNUSED(filename), bool WXUNUSED(fallback) = TRUE) { return TRUE; }
-    bool ReadMimeTypes(const wxString& WXUNUSED(filename)) { return TRUE; }
-
     void AddFallback(const wxFileTypeInfo& ft) { m_fallbacks.Add(ft); }
 
     // create a new filetype association

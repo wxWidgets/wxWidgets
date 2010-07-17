@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/corefoundation/stdpaths.h
+// Name:        wx/osx/core/stdpaths.h
 // Purpose:     wxStandardPaths for CoreFoundation systems
 // Author:      David Elliott
 // Modified by:

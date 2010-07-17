@@ -3,7 +3,7 @@
 // Purpose:     topic overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -543,6 +543,7 @@ P               ALIGN=[alignment]
 PRE
 SAMP
 SMALL
+SPAN
 STRIKE
 STRONG
 SUB
@@ -575,6 +576,13 @@ TT
 U
 UL
 @endcode
+
+@subsection overview_html_suppstyles_list List of supported styles
+
+wxHTML doesn't really have CSS support but it does support a few simple styles:
+you can use @c "text-align", @c "width", @c "vertical-align" and @c
+"background" with all elements and for @c SPAN elements the @c "color", @c
+"font-size" and @c "font-weight" are additionally recognized.
 
 */
 

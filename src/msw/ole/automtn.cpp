@@ -54,13 +54,16 @@
 #include "wx/datetime.h"
 #endif // wxUSE_DATETIME
 
-// static void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned int uiArgErr);
-
 #if wxUSE_OLE_AUTOMATION
 
-/*
- * wxAutomationObject
- */
+// Report an OLE error to the user via wxLog.
+static void
+ShowException(const wxString& member,
+              HRESULT hr,
+              EXCEPINFO *pexcep,
+              unsigned int uiArgErr);
+
+// wxAutomationObject
 
 wxAutomationObject::wxAutomationObject(WXIDISPATCH* dispatchPtr)
 {
@@ -144,7 +147,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
                                 1 + namedArgCount, LOCALE_SYSTEM_DEFAULT, dispIds);
     if (FAILED(hr))
     {
-//        ShowException(szMember, hr, NULL, 0);
+        ShowException(member, hr, NULL, 0);
         delete[] argNames;
         delete[] dispIds;
         return false;
@@ -198,7 +201,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     if (FAILED(hr))
     {
         // display the exception information if appropriate:
-//        ShowException((const char*) member, hr, &excep, uiArgErr);
+        ShowException(member, hr, &excep, uiArgErr);
 
         // free exception structure information
         SysFreeString(excep.bstrSource);
@@ -493,25 +496,32 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
     if (m_dispatchPtr)
         return false;
 
+    HRESULT hr;
     CLSID clsId;
     IUnknown * pUnk = NULL;
 
     wxBasicString unicodeName(classId);
 
-    if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId)))
+    hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
+    if (FAILED(hr))
     {
+        ShowException(classId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
     }
 
-    if (FAILED(GetActiveObject(clsId, NULL, &pUnk)))
+    hr = GetActiveObject(clsId, NULL, &pUnk);
+    if (FAILED(hr))
     {
+        ShowException(classId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot find an active object"));
         return false;
     }
 
-    if (pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr) != S_OK)
+    hr = pUnk->QueryInterface(IID_IDispatch, (LPVOID*) &m_dispatchPtr);
+    if (FAILED(hr))
     {
+        ShowException(classId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot find IDispatch interface"));
         return false;
     }
@@ -526,12 +536,15 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
     if (m_dispatchPtr)
         return false;
 
+    HRESULT hr;
     CLSID clsId;
 
     wxBasicString unicodeName(classId);
 
-    if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId)))
+    hr = CLSIDFromProgID((BSTR) unicodeName, &clsId);
+    if (FAILED(hr))
     {
+        ShowException(classId, hr, NULL, 0);
         wxLogWarning(wxT("Cannot obtain CLSID from ProgID"));
         return false;
     }
@@ -541,77 +554,92 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
     // NB: using CLSCTX_INPROC_HANDLER results in failure when getting
     //     Automation interface for Microsoft Office applications so don't use
     //     CLSCTX_ALL which includes it
-    if (FAILED(CoCreateInstance(clsId, NULL, CLSCTX_SERVER, IID_IDispatch,
-                                (void**)&m_dispatchPtr)))
+    hr = CoCreateInstance(clsId, NULL, CLSCTX_SERVER, IID_IDispatch,
+                                (void**)&m_dispatchPtr);
+    if (FAILED(hr))
     {
-        wxLogWarning(wxT("Cannot start an instance of this class."));
+        ShowException(classId, hr, NULL, 0);
+        wxLogWarning(wxT("Could not start an instance of this class."));
         return false;
     }
 
     return true;
 }
 
-#endif // wxUSE_OLE_AUTOMATION
-
-#if 0
-
-void ShowException(LPOLESTR szMember, HRESULT hr, EXCEPINFO *pexcep, unsigned int uiArgErr)
+static void
+ShowException(const wxString& member,
+              HRESULT hr,
+              EXCEPINFO *pexcep,
+              unsigned int uiArgErr)
 {
-    TCHAR szBuf[512];
-
+    wxString message;
     switch (GetScode(hr))
     {
         case DISP_E_UNKNOWNNAME:
-            wsprintf(szBuf, L"%s: Unknown name or named argument.", szMember);
+            message = wxT("Unknown name or named argument.");
             break;
 
         case DISP_E_BADPARAMCOUNT:
-            wsprintf(szBuf, L"%s: Incorrect number of arguments.", szMember);
+            message = wxT("Incorrect number of arguments.");
             break;
 
         case DISP_E_EXCEPTION:
-            wsprintf(szBuf, L"%s: Error %d: ", szMember, pexcep->wCode);
-            if (pexcep->bstrDescription != NULL)
-                lstrcat(szBuf, pexcep->bstrDescription);
-            else
-                lstrcat(szBuf, L"<<No Description>>");
+            {
+                message = wxT("Error Code (");
+                message << pexcep->wCode ;// unsigned short
+                message += wxT(")");
+                if (pexcep->bstrDescription != NULL)
+                    message += pexcep->bstrDescription;
+                else
+                    message += wxT("<<No Description>>");
+            }
             break;
 
         case DISP_E_MEMBERNOTFOUND:
-            wsprintf(szBuf, L"%s: method or property not found.", szMember);
+            message = wxT("Method or property not found.");
             break;
 
         case DISP_E_OVERFLOW:
-            wsprintf(szBuf, L"%s: Overflow while coercing argument values.", szMember);
+            message = wxT("Overflow while coercing argument values.");
             break;
 
         case DISP_E_NONAMEDARGS:
-            wsprintf(szBuf, L"%s: Object implementation does not support named arguments.",
-                        szMember);
+            message = wxT("Object implementation does not support named arguments.");
             break;
 
         case DISP_E_UNKNOWNLCID:
-            wsprintf(szBuf, L"%s: The locale ID is unknown.", szMember);
+            message = wxT("The locale ID is unknown.");
             break;
 
         case DISP_E_PARAMNOTOPTIONAL:
-            wsprintf(szBuf, L"%s: Missing a required parameter.", szMember);
+            message = wxT("Missing a required parameter.");
             break;
 
         case DISP_E_PARAMNOTFOUND:
-            wsprintf(szBuf, L"%s: Argument not found, argument %d.", szMember, uiArgErr);
+            message = wxT("Argument not found, argument.");
+            message << uiArgErr;
             break;
 
         case DISP_E_TYPEMISMATCH:
-            wsprintf(szBuf, L"%s: Type mismatch, argument %d.", szMember, uiArgErr);
+            message = wxT("Type mismatch, argument.");
+            message << uiArgErr;
+            break;
+
+        case ERROR_FILE_NOT_FOUND:
+            message = wxT("The system cannot find the file specified.");
+            break;
+
+        case REGDB_E_CLASSNOTREG:
+            message = wxT("Class not registered.");
             break;
 
         default:
-            wsprintf(szBuf, L"%s: Unknown error occurred.", szMember);
+            message = wxT("Unknown error occurred. Return value is ");
+            message << hr;
             break;
     }
 
-    wxLogWarning(szBuf);
+    wxLogDebug("OLE Automation error in %s: %s", member, message);
 }
 
-#endif
+#endif // wxUSE_OLE_AUTOMATION

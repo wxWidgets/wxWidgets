@@ -238,8 +238,7 @@ void wxBitmapRefData::Free()
         }
     }
 
-    delete m_bitmapMask;
-    m_bitmapMask = NULL;
+    wxDELETE(m_bitmapMask);
 }
 
 // ----------------------------------------------------------------------------

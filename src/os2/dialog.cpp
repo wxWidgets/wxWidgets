@@ -180,11 +180,7 @@ bool wxDialog::Show( bool bShow )
         // and we will lose activation
         m_modalData->ExitLoop();
 #if 0
-        if (m_pWindowDisabler)
-        {
-            delete m_pWindowDisabler;
-            m_pWindowDisabler = NULL;
-        }
+        wxDELETE(m_pWindowDisabler);
 #endif
     }
 

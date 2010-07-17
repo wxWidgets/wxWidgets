@@ -79,24 +79,11 @@ typedef int wxEventType;
 // the wxEVENT_HANDLER_CAST-macro.
 #define wxStaticCastEvent(type, val) static_cast<type>(val)
 
-#define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
+#define wxDECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
     wxEventTableEntry(type, winid, idLast, wxNewEventTableFunctor(type, fn), obj)
 
-#define DECLARE_EVENT_TABLE_TERMINATOR() \
+#define wxDECLARE_EVENT_TABLE_TERMINATOR() \
     wxEventTableEntry(wxEVT_NULL, 0, 0, 0, 0)
-
-// obsolete event declaration/definition macros, we don't need them any longer
-// but we keep them for compatibility as it doesn't cost us anything anyhow
-#define BEGIN_DECLARE_EVENT_TYPES()
-#define END_DECLARE_EVENT_TYPES()
-#define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
-    extern expdecl const wxEventType name;
-#define DECLARE_EVENT_TYPE(name, value) \
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
-#define DECLARE_LOCAL_EVENT_TYPE(name, value) \
-    DECLARE_EXPORTED_EVENT_TYPE(wxEMPTY_PARAMETER_VALUE, name, value)
-#define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
-#define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
@@ -277,7 +264,7 @@ wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
     return new wxObjectEventFunctor(method, handler);
 }
 
-// This version is used by DECLARE_EVENT_TABLE_ENTRY()
+// This version is used by wxDECLARE_EVENT_TABLE_ENTRY()
 inline wxObjectEventFunctor *
 wxNewEventTableFunctor(const wxEventType& WXUNUSED(evtType),
                        wxObjectEventFunction method)
@@ -611,7 +598,7 @@ wxMakeEventFunctor(const EventTag&,
                 method, handler);
 }
 
-// Create an event functor for the event table via DECLARE_EVENT_TABLE_ENTRY:
+// Create an event functor for the event table via wxDECLARE_EVENT_TABLE_ENTRY:
 // in this case we don't have the handler (as it's always the same as the
 // object which generated the event) so we must use Class as its type
 template <typename EventTag, typename Class, typename EventArg>
@@ -996,6 +983,25 @@ public:
         return false;
     }
 
+    // This is also used only internally by ProcessEvent() to check if it
+    // should process the event normally or only restrict the search for the
+    // event handler to this object itself.
+    bool ShouldProcessOnlyIn(wxEvtHandler *h) const
+    {
+        return h == m_handlerToProcessOnlyIn;
+    }
+
+    // Called to indicate that the result of ShouldProcessOnlyIn() wasn't taken
+    // into account. The existence of this function may seem counterintuitive
+    // but unfortunately it's needed by wxScrollHelperEvtHandler, see comments
+    // there. Don't even think of using this in your own code, this is a gross
+    // hack and is only needed because of wx complicated history and should
+    // never be used anywhere else.
+    void DidntHonourProcessOnlyIn()
+    {
+        m_handlerToProcessOnlyIn = NULL;
+    }
+
 protected:
     wxObject*         m_eventObject;
     wxEventType       m_eventType;
@@ -1005,6 +1011,10 @@ protected:
 public:
     // m_callbackUserData is for internal usage only
     wxObject*         m_callbackUserData;
+
+private:
+    // If this handler
+    wxEvtHandler *m_handlerToProcessOnlyIn;
 
 protected:
     // the propagation level: while it is positive, we propagate the event to
@@ -1027,6 +1037,10 @@ protected:
 private:
     // it needs to access our m_propagationLevel
     friend class WXDLLIMPEXP_FWD_BASE wxPropagateOnce;
+
+    // and this one needs to access our m_handlerToProcessOnlyIn
+    friend class WXDLLIMPEXP_FWD_BASE wxEventProcessInHandlerOnly;
+
 
     DECLARE_ABSTRACT_CLASS(wxEvent)
 };
@@ -1079,6 +1093,29 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
+// A helper object used to temporarily make wxEvent::ShouldProcessOnlyIn()
+// return true for the handler passed to its ctor.
+class wxEventProcessInHandlerOnly
+{
+public:
+    wxEventProcessInHandlerOnly(wxEvent& event, wxEvtHandler *handler)
+        : m_event(event),
+          m_handlerToProcessOnlyInOld(event.m_handlerToProcessOnlyIn)
+    {
+        m_event.m_handlerToProcessOnlyIn = handler;
+    }
+
+    ~wxEventProcessInHandlerOnly()
+    {
+        m_event.m_handlerToProcessOnlyIn = m_handlerToProcessOnlyInOld;
+    }
+
+private:
+    wxEvent& m_event;
+    wxEvtHandler * const m_handlerToProcessOnlyInOld;
+
+    wxDECLARE_NO_COPY_CLASS(wxEventProcessInHandlerOnly);
+};
 
 #if wxUSE_GUI
 
@@ -2966,6 +3003,20 @@ public:
     bool SafelyProcessEvent(wxEvent& event);
         // NOTE: uses ProcessEvent()
 
+    // This method tries to process the event in this event handler, including
+    // any preprocessing done by TryBefore() and all the handlers chained to
+    // it, but excluding the post-processing done in TryAfter().
+    //
+    // It is meant to be called from ProcessEvent() only and is not virtual,
+    // additional event handlers can be hooked into the normal event processing
+    // logic using TryBefore() and TryAfter() hooks.
+    //
+    // You can also call it yourself to forward an event to another handler but
+    // without propagating it upwards if it's unhandled (this is usually
+    // unwanted when forwarding as the original handler would already do it if
+    // needed normally).
+    bool ProcessEventLocally(wxEvent& event);
+
     // Schedule the given event to be processed later. It takes ownership of
     // the event pointer, i.e. it will be deleted later. This is safe to call
     // from multiple threads although you still need to ensure that wxString
@@ -3178,14 +3229,6 @@ public:
     void OnSinkDestroyed( wxEvtHandler *sink );
 
 
-    // The method tries to process the event in this event handler.
-    //
-    // It is meant to be called from ProcessEvent() only and is not virtual,
-    // additional event handlers can be hooked into the normal event processing
-    // logic using TryBefore() and TryAfter() hooks.
-    bool ProcessEventHere(wxEvent& event);
-
-
 private:
     void DoBind(int winid,
                    int lastId,
@@ -3209,6 +3252,12 @@ protected:
     // in the event handlers overriding the default logic, this is used by e.g.
     // validators.
     virtual bool TryBefore(wxEvent& event);
+
+    // this one is not a hook but just a helper which looks up the handler in
+    // this object itself called from ProcessEventLocally() and normally
+    // shouldn't be called directly as doing it would ignore any chained event
+    // handlers
+    bool TryHere(wxEvent& event);
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it
@@ -3273,6 +3322,9 @@ protected:
 private:
     // pass the event to wxTheApp instance, called from TryAfter()
     bool DoTryApp(wxEvent& event);
+
+    // try to process events in all handlers chained to this one
+    bool DoTryChain(wxEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };
@@ -3503,20 +3555,20 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // N.B. In GNU-WIN32, you *have* to take the address of a member function
 // (use &) or the compiler crashes...
 
-#define DECLARE_EVENT_TABLE() \
-    private: \
-        static const wxEventTableEntry sm_eventTableEntries[]; \
-    protected: \
-        static const wxEventTable        sm_eventTable; \
-        virtual const wxEventTable*      GetEventTable() const; \
-        static wxEventHashTable          sm_eventHashTable; \
-        virtual wxEventHashTable&        GetEventHashTable() const;
+#define wxDECLARE_EVENT_TABLE()                                         \
+    private:                                                            \
+        static const wxEventTableEntry sm_eventTableEntries[];          \
+    protected:                                                          \
+        static const wxEventTable        sm_eventTable;                 \
+        virtual const wxEventTable*      GetEventTable() const;         \
+        static wxEventHashTable          sm_eventHashTable;             \
+        virtual wxEventHashTable&        GetEventHashTable() const
 
 // N.B.: when building DLL with Borland C++ 5.5 compiler, you must initialize
 //       sm_eventTable before using it in GetEventTable() or the compiler gives
 //       E2233 (see http://groups.google.com/groups?selm=397dcc8a%241_2%40dnews)
 
-#define BEGIN_EVENT_TABLE(theClass, baseClass) \
+#define wxBEGIN_EVENT_TABLE(theClass, baseClass) \
     const wxEventTable theClass::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass::sm_eventTableEntries[0] }; \
     const wxEventTable *theClass::GetEventTable() const \
@@ -3526,7 +3578,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
         { return theClass::sm_eventHashTable; } \
     const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE1(theClass, baseClass, T1) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE1(theClass, baseClass, T1) \
     template<typename T1> \
     const wxEventTable theClass<T1>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1>::sm_eventTableEntries[0] }; \
@@ -3541,7 +3593,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1> \
     const wxEventTableEntry theClass<T1>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE2(theClass, baseClass, T1, T2) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE2(theClass, baseClass, T1, T2) \
     template<typename T1, typename T2> \
     const wxEventTable theClass<T1, T2>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2>::sm_eventTableEntries[0] }; \
@@ -3556,7 +3608,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2> \
     const wxEventTableEntry theClass<T1, T2>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE3(theClass, baseClass, T1, T2, T3) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE3(theClass, baseClass, T1, T2, T3) \
     template<typename T1, typename T2, typename T3> \
     const wxEventTable theClass<T1, T2, T3>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3>::sm_eventTableEntries[0] }; \
@@ -3571,7 +3623,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3> \
     const wxEventTableEntry theClass<T1, T2, T3>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE4(theClass, baseClass, T1, T2, T3, T4) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE4(theClass, baseClass, T1, T2, T3, T4) \
     template<typename T1, typename T2, typename T3, typename T4> \
     const wxEventTable theClass<T1, T2, T3, T4>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4>::sm_eventTableEntries[0] }; \
@@ -3586,7 +3638,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4> \
     const wxEventTableEntry theClass<T1, T2, T3, T4>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE5(theClass, baseClass, T1, T2, T3, T4, T5) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE5(theClass, baseClass, T1, T2, T3, T4, T5) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5> \
     const wxEventTable theClass<T1, T2, T3, T4, T5>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[0] }; \
@@ -3601,7 +3653,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE7(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE7(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
     const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[0] }; \
@@ -3616,7 +3668,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7>::sm_eventTableEntries[] = { \
 
-#define BEGIN_EVENT_TABLE_TEMPLATE8(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7, T8) \
+#define wxBEGIN_EVENT_TABLE_TEMPLATE8(theClass, baseClass, T1, T2, T3, T4, T5, T6, T7, T8) \
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
     const wxEventTable theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTable = \
         { &baseClass::sm_eventTable, &theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[0] }; \
@@ -3631,7 +3683,8 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
     template<typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8> \
     const wxEventTableEntry theClass<T1, T2, T3, T4, T5, T6, T7, T8>::sm_eventTableEntries[] = { \
 
-#define END_EVENT_TABLE() DECLARE_EVENT_TABLE_TERMINATOR() };
+#define wxEND_EVENT_TABLE() \
+    wxDECLARE_EVENT_TABLE_TERMINATOR() };
 
 /*
  * Event table macros
@@ -3645,7 +3698,7 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 //  - id1, id2 ids of the first/last id
 //  - fn the function (should be cast to the right type)
 #define wx__DECLARE_EVT2(evt, id1, id2, fn) \
-    DECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
+    wxDECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
 #define wx__DECLARE_EVT1(evt, id, fn) \
     wx__DECLARE_EVT2(evt, id, wxID_ANY, fn)
 #define wx__DECLARE_EVT0(evt, fn) \
@@ -3956,5 +4009,40 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 WXDLLIMPEXP_CORE wxWindow* wxFindFocusDescendant(wxWindow* ancestor);
 
 #endif // wxUSE_GUI
+
+
+// ----------------------------------------------------------------------------
+// Compatibility macro aliases
+// ----------------------------------------------------------------------------
+
+// deprecated variants _not_ requiring a semicolon after them and without wx prefix
+// (note that also some wx-prefixed macro do _not_ require a semicolon because
+//  it's not always possible to force the compire to require it)
+
+#define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
+    wxDECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj)
+#define DECLARE_EVENT_TABLE_TERMINATOR()               wxDECLARE_EVENT_TABLE_TERMINATOR()
+#define DECLARE_EVENT_TABLE()                          wxDECLARE_EVENT_TABLE();
+#define BEGIN_EVENT_TABLE(a,b)                         wxBEGIN_EVENT_TABLE(a,b)
+#define BEGIN_EVENT_TABLE_TEMPLATE1(a,b,c)             wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c)
+#define BEGIN_EVENT_TABLE_TEMPLATE2(a,b,c,d)           wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c,d)
+#define BEGIN_EVENT_TABLE_TEMPLATE3(a,b,c,d,e)         wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c,d,e)
+#define BEGIN_EVENT_TABLE_TEMPLATE4(a,b,c,d,e,f)       wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c,d,e,f)
+#define BEGIN_EVENT_TABLE_TEMPLATE5(a,b,c,d,e,f,g)     wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c,d,e,f,g)
+#define BEGIN_EVENT_TABLE_TEMPLATE6(a,b,c,d,e,f,g,h)   wxBEGIN_EVENT_TABLE_TEMPLATE1(a,b,c,d,e,f,g,h)
+#define END_EVENT_TABLE()                              wxEND_EVENT_TABLE()
+
+// other obsolete event declaration/definition macros; we don't need them any longer
+// but we keep them for compatibility as it doesn't cost us anything anyhow
+#define BEGIN_DECLARE_EVENT_TYPES()
+#define END_DECLARE_EVENT_TYPES()
+#define DECLARE_EXPORTED_EVENT_TYPE(expdecl, name, value) \
+    extern expdecl const wxEventType name;
+#define DECLARE_EVENT_TYPE(name, value) \
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_CORE, name, value)
+#define DECLARE_LOCAL_EVENT_TYPE(name, value) \
+    DECLARE_EXPORTED_EVENT_TYPE(wxEMPTY_PARAMETER_VALUE, name, value)
+#define DEFINE_EVENT_TYPE(name) const wxEventType name = wxNewEventType();
+#define DEFINE_LOCAL_EVENT_TYPE(name) DEFINE_EVENT_TYPE(name)
 
 #endif // _WX_EVENT_H_

@@ -1381,11 +1381,17 @@ string ArchiveTestSuite::Description(const wxString& type,
 
     if (!archiver.empty()) {
         const wxChar *fn = (options & PipeOut) != 0 ? wxT("-") : wxT("file");
-        descr << wxT(" (") << wxString::Format(archiver, fn) << wxT(")");
+        const wxString cmd = archiver.Contains("%s")
+                             ? wxString::Format(archiver, fn)
+                             : archiver;
+        descr << wxT(" (") << cmd << wxT(")");
     }
     if (!unarchiver.empty()) {
         const wxChar *fn = (options & PipeIn) != 0 ? wxT("-") : wxT("file");
-        descr << wxT(" (") << wxString::Format(unarchiver, fn) << wxT(")");
+        const wxString cmd = unarchiver.Contains("%s")
+                             ? wxString::Format(unarchiver, fn)
+                             : unarchiver;
+        descr << wxT(" (") << cmd << wxT(")");
     }
 
     wxString optstr;

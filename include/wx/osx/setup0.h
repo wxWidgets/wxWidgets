@@ -1084,6 +1084,13 @@
 //                      use this function
 #define wxUSE_ABOUTDLG 1
 
+// wxFileHistory class
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_FILE_HISTORY 1
+
 // ----------------------------------------------------------------------------
 // Metafiles support
 // ----------------------------------------------------------------------------
@@ -1352,7 +1359,7 @@
 // override some settings for Metrowerks
 //
 // VZ: isn't this file only used when building with Metrowerks anyhow?
-// CS: no, it is also used by the XCode projects
+// CS: no, it is also used by the Xcode projects
 #ifdef __MWERKS__
     #undef wxUSE_DEBUG_CONTEXT
     #define wxUSE_DEBUG_CONTEXT 1
@@ -1380,7 +1387,7 @@
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
-// native toolbar does support embedding controls, but not comples panels, please test
+// native toolbar does support embedding controls, but not complex panels, please test
 #define wxOSX_USE_NATIVE_TOOLBAR 1
 
 // make sure we have the proper dispatcher for the console event loop

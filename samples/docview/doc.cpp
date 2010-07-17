@@ -7,7 +7,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
 //              (c) 2008 Vadim Zeitlin
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -250,56 +250,13 @@ wxTextCtrl* TextEditDocument::GetTextCtrl() const
 }
 
 // ----------------------------------------------------------------------------
-// wxImageDocument implementation
+// ImageDocument and wxImageDetailsDocument implementation
 // ----------------------------------------------------------------------------
 
-/////////////////////////////////////////////////////////////////////////////
-// wxImageDocument
+IMPLEMENT_DYNAMIC_CLASS(ImageDocument, wxDocument)
 
-IMPLEMENT_DYNAMIC_CLASS(wxImageDocument, wxDocument)
-
-wxImageDocument::wxImageDocument() : wxDocument()
+bool ImageDocument::DoOpenDocument(const wxString& file)
 {
-}
-
-wxImageDocument::~wxImageDocument()
-{
-}
-
-bool wxImageDocument::DeleteContents()
-{
-    bool ok = wxDocument::DeleteContents();
-    if (ok && m_image.IsOk())
-    {
-        m_image.Destroy();
-    }
-    return ok;
-}
-
-bool wxImageDocument::SaveFile(wxOutputStream* stream, wxBitmapType type) const
-{
-    return m_image.IsOk() && m_image.SaveFile(*stream, type);
-}
-
-bool wxImageDocument::DoOpenDocument(const wxString& file)
-{
-    wxFileInputStream stream(file);
-    return stream.IsOk() && DoOpenDocument(&stream);
-}
-
-bool wxImageDocument::DoSaveDocument(const wxString& file)
-{
-    wxFileOutputStream stream(file);
-    return stream.IsOk() && DoSaveDocument(&stream);
-}
-
-bool wxImageDocument::DoOpenDocument(wxInputStream* stream)
-{
-    return m_image.LoadFile(*stream);
-}
-
-bool wxImageDocument::DoSaveDocument(wxOutputStream* stream) const
-{
-    return m_image.IsOk() && SaveFile(stream, m_image.GetType());
+    return m_image.LoadFile(file);
 }
 

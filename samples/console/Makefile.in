@@ -84,7 +84,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: console$(EXEEXT) data
+all: console$(EXEEXT)
 
 install: 
 
@@ -105,18 +105,6 @@ console$(EXEEXT): $(CONSOLE_OBJECTS)
 	
 	$(__console___mac_setfilecmd)
 
-data: 
-	@mkdir -p .
-	@for f in testdata.fc; do \
-	if test ! -f ./$$f -a ! -d ./$$f ; \
-	then x=yep ; \
-	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
-	fi; \
-	case "$$x" in ?*) \
-	cp -pRf $(srcdir)/$$f . ;; \
-	esac; \
-	done
-
 console_console.o: $(srcdir)/console.cpp
 	$(CXXC) -c -o $@ $(CONSOLE_CXXFLAGS) $(srcdir)/console.cpp
 
@@ -124,4 +112,4 @@ console_console.o: $(srcdir)/console.cpp
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 
-.PHONY: all install uninstall clean distclean data
+.PHONY: all install uninstall clean distclean

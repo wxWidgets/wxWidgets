@@ -247,7 +247,7 @@ AC_DEFUN([WX_CHECK_FUNCS],
 
     if eval test \$wx_cv_func_$wx_func = yes
     then
-      AC_DEFINE_UNQUOTED([AS_TR_CPP([HAVE_$wx_func])])
+      AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$wx_func]))
       $2
     else
       :

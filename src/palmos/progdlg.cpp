@@ -6,7 +6,7 @@
 // Created:     29.12.2004
 // RCS-ID:      $Id$
 // Copyright:   (c) Wlodzimierz Skiba
-// License:     wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".

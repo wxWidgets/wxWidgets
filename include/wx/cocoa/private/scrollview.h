@@ -6,7 +6,7 @@
 // Created:     2008/02/14
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003- David Elliott
-// Licence:     wxWidgets licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_SCROLLVIEW_H__

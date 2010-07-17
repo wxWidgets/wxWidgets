@@ -41,13 +41,18 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#include "wx/arrstr.h"
+#include "wx/dir.h"
 #include "wx/file.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
 #include "wx/fontmap.h"
-#include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/hashset.h"
+
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // simple types
@@ -65,28 +70,21 @@ const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
 #define TRACE_I18N wxS("i18n")
 
-// the constants describing the format of ll_CC locale string
-static const size_t LEN_LANG = 2;
-
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
+// ============================================================================
+// implementation
+// ============================================================================
 
 namespace
 {
 
-// get just the language part
-inline wxString ExtractLang(const wxString& langFull)
-{
-    return langFull.Left(LEN_LANG);
-}
+#if !wxUSE_UNICODE
+// We need to keep track of (char*) msgids in non-Unicode legacy builds. Instead
+// of making the public wxMsgCatalog and wxTranslationsLoader APIs ugly, we
+// store them in this global map.
+wxStringToStringHashMap gs_msgIdCharset;
+#endif
 
 } // anonymous namespace
-
-
-// ============================================================================
-// implementation
-// ============================================================================
 
 // ----------------------------------------------------------------------------
 // Plural forms parser
@@ -320,10 +318,10 @@ class wxPluralFormsNode
 public:
     wxPluralFormsNode(const wxPluralFormsToken& token) : m_token(token) {}
     const wxPluralFormsToken& token() const { return m_token; }
-    const wxPluralFormsNode* node(size_t i) const
+    const wxPluralFormsNode* node(unsigned i) const
         { return m_nodes[i].get(); }
-    void setNode(size_t i, wxPluralFormsNode* n);
-    wxPluralFormsNode* releaseNode(size_t i);
+    void setNode(unsigned i, wxPluralFormsNode* n);
+    wxPluralFormsNode* releaseNode(unsigned i);
     wxPluralFormsToken::Number evaluate(wxPluralFormsToken::Number n) const;
 
 private:
@@ -351,12 +349,12 @@ void wxPluralFormsNodePtr::reset(wxPluralFormsNode *p)
 }
 
 
-void wxPluralFormsNode::setNode(size_t i, wxPluralFormsNode* n)
+void wxPluralFormsNode::setNode(unsigned i, wxPluralFormsNode* n)
 {
     m_nodes[i].reset(n);
 }
 
-wxPluralFormsNode*  wxPluralFormsNode::releaseNode(size_t i)
+wxPluralFormsNode*  wxPluralFormsNode::releaseNode(unsigned i)
 {
     return m_nodes[i].release();
 }
@@ -433,7 +431,7 @@ private:
     wxPluralFormsNodePtr m_plural;
 };
 
-wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator)
+wxDEFINE_SCOPED_PTR(wxPluralFormsCalculator, wxPluralFormsCalculatorPtr)
 
 void wxPluralFormsCalculator::init(wxPluralFormsToken::Number nplurals,
                                 wxPluralFormsNode* plural)
@@ -804,12 +802,10 @@ wxPluralFormsCalculator* wxPluralFormsCalculator::make(const char* s)
 //       http://www.gnu.org/software/autoconf/manual/gettext/MO-Files.html
 // ----------------------------------------------------------------------------
 
-WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash);
-
 class wxMsgCatalogFile
 {
 public:
-    typedef wxScopedCharTypeBuffer<char> DataBuffer;
+    typedef wxScopedCharBuffer DataBuffer;
 
     // ctor & dtor
     wxMsgCatalogFile();
@@ -822,7 +818,7 @@ public:
                   wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
-    bool FillHash(wxMessagesHash& hash, const wxString& msgIdCharset) const;
+    bool FillHash(wxStringToStringHashMap& hash, const wxString& domain) const;
 
     // return the charset of the strings in this catalog or empty string if
     // none/unknown
@@ -886,53 +882,6 @@ private:
     bool m_bSwapped;   // wrong endianness?
 
     wxDECLARE_NO_COPY_CLASS(wxMsgCatalogFile);
-};
-
-
-// ----------------------------------------------------------------------------
-// wxMsgCatalog corresponds to one loaded message catalog.
-//
-// This is a "low-level" class and is used only by wxLocale (that's why
-// it's designed to be stored in a linked list)
-// ----------------------------------------------------------------------------
-
-class wxMsgCatalog
-{
-public:
-#if !wxUSE_UNICODE
-    wxMsgCatalog() { m_conv = NULL; }
-    ~wxMsgCatalog();
-#endif
-
-    // load the catalog from disk
-    bool LoadFile(const wxString& filename,
-                  const wxString& domain,
-                  const wxString& msgIdCharset);
-
-    bool LoadData(const wxScopedCharTypeBuffer<char>& data,
-                  const wxString& domain,
-                  const wxString& msgIdCharset);
-
-    // get name of the catalog
-    wxString GetDomain() const { return m_domain; }
-
-    // get the translated string: returns NULL if not found
-    const wxString *GetString(const wxString& sz, size_t n = size_t(-1)) const;
-
-    // public variable pointing to the next element in a linked list (or NULL)
-    wxMsgCatalog *m_pNext;
-
-private:
-    wxMessagesHash  m_messages; // all messages in the catalog
-    wxString        m_domain;   // name of the domain
-
-#if !wxUSE_UNICODE
-    // the conversion corresponding to this catalog charset if we installed it
-    // as the global one
-    wxCSConv *m_conv;
-#endif
-
-    wxPluralFormsCalculatorPtr  m_pluralFormsCalculator;
 };
 
 // ----------------------------------------------------------------------------
@@ -1076,10 +1025,10 @@ bool wxMsgCatalogFile::LoadData(const DataBuffer& data,
     return true;
 }
 
-bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
-                                const wxString& msgIdCharset) const
+bool wxMsgCatalogFile::FillHash(wxStringToStringHashMap& hash,
+                                const wxString& domain) const
 {
-    wxUnusedVar(msgIdCharset); // silence warning in Unicode build
+    wxUnusedVar(domain); // silence warning in Unicode build
 
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv = NULL;
@@ -1107,6 +1056,8 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     }
 
 #if !wxUSE_UNICODE
+    wxString msgIdCharset = gs_msgIdCharset[domain];
+
     // conversion to apply to msgid strings before looking them up: we only
     // need it if the msgids are neither in 7 bit ASCII nor in the same
     // encoding as the catalog
@@ -1198,48 +1149,48 @@ wxMsgCatalog::~wxMsgCatalog()
 }
 #endif // !wxUSE_UNICODE
 
-bool wxMsgCatalog::LoadFile(const wxString& filename,
-                            const wxString& domain,
-                            const wxString& msgIdCharset)
+/* static */
+wxMsgCatalog *wxMsgCatalog::CreateFromFile(const wxString& filename,
+                                           const wxString& domain)
 {
+    wxScopedPtr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
+
     wxMsgCatalogFile file;
 
-    m_domain = domain;
+    if ( !file.LoadFile(filename, cat->m_pluralFormsCalculator) )
+        return NULL;
 
-    if ( !file.LoadFile(filename, m_pluralFormsCalculator) )
-        return false;
+    if ( !file.FillHash(cat->m_messages, domain) )
+        return NULL;
 
-    if ( !file.FillHash(m_messages, msgIdCharset) )
-        return false;
-
-    return true;
+    return cat.release();
 }
 
-bool wxMsgCatalog::LoadData(const wxScopedCharTypeBuffer<char>& data,
-                            const wxString& domain,
-                            const wxString& msgIdCharset)
+/* static */
+wxMsgCatalog *wxMsgCatalog::CreateFromData(const wxScopedCharBuffer& data,
+                                           const wxString& domain)
 {
+    wxScopedPtr<wxMsgCatalog> cat(new wxMsgCatalog(domain));
+
     wxMsgCatalogFile file;
 
-    m_domain = domain;
+    if ( !file.LoadData(data, cat->m_pluralFormsCalculator) )
+        return NULL;
 
-    if ( !file.LoadData(data, m_pluralFormsCalculator) )
-        return false;
+    if ( !file.FillHash(cat->m_messages, domain) )
+        return NULL;
 
-    if ( !file.FillHash(m_messages, msgIdCharset) )
-        return false;
-
-    return true;
+    return cat.release();
 }
 
-const wxString *wxMsgCatalog::GetString(const wxString& str, size_t n) const
+const wxString *wxMsgCatalog::GetString(const wxString& str, unsigned n) const
 {
     int index = 0;
-    if (n != size_t(-1))
+    if (n != UINT_MAX)
     {
         index = m_pluralFormsCalculator->evaluate(n);
     }
-    wxMessagesHash::const_iterator i;
+    wxStringToStringHashMap::const_iterator i;
     if (index != 0)
     {
         i = m_messages.find(wxString(str) + wxChar(index));   // plural
@@ -1341,6 +1292,14 @@ void wxTranslations::SetLanguage(const wxString& lang)
 }
 
 
+wxArrayString wxTranslations::GetAvailableTranslations(const wxString& domain) const
+{
+    wxCHECK_MSG( m_loader, wxArrayString(), "loader can't be NULL" );
+
+    return m_loader->GetAvailableTranslations(domain);
+}
+
+
 bool wxTranslations::AddStdCatalog()
 {
     if ( !AddCatalog(wxS("wxstd")) )
@@ -1368,7 +1327,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                                 wxLanguage msgIdLanguage,
                                 const wxString& msgIdCharset)
 {
-    m_msgIdCharset[domain] = msgIdCharset;
+    gs_msgIdCharset[domain] = msgIdCharset;
     return AddCatalog(domain, msgIdLanguage);
 }
 #endif // !wxUSE_UNICODE
@@ -1403,7 +1362,10 @@ bool wxTranslations::AddCatalog(const wxString& domain,
 
 bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
 {
+    m_loader->GetAvailableTranslations(domain);
     wxCHECK_MSG( m_loader, false, "loader can't be NULL" );
+
+    wxMsgCatalog *cat = NULL;
 
 #if wxUSE_FONTMAP
     // first look for the catalog for this language and the current locale:
@@ -1416,92 +1378,49 @@ bool wxTranslations::LoadCatalog(const wxString& domain, const wxString& lang)
         wxString fullname(lang);
         fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
 
-        if ( m_loader->LoadCatalog(this, domain, fullname) )
-            return true;
+        cat = m_loader->LoadCatalog(domain, fullname);
     }
 #endif // wxUSE_FONTMAP
 
-    // Next try: use the provided name language name:
-    if ( m_loader->LoadCatalog(this, domain, lang) )
-        return true;
-
-    // Also try just base locale name: for things like "fr_BE" (Belgium
-    // French) we should use fall back on plain "fr" if no Belgium-specific
-    // message catalogs exist
-    if ( lang.length() > LEN_LANG && lang[LEN_LANG] == wxS('_') )
+    if ( !cat )
     {
-        if ( m_loader->LoadCatalog(this, domain, ExtractLang(lang)) )
-            return true;
+        // Next try: use the provided name language name:
+        cat = m_loader->LoadCatalog(domain, lang);
     }
 
-    // Nothing worked, the catalog just isn't there
-    wxLogTrace(TRACE_I18N,
-               "Catalog \"%s.mo\" not found for language \"%s\".",
-               domain, lang);
-    return false;
-}
+    if ( !cat )
+    {
+        // Also try just base locale name: for things like "fr_BE" (Belgium
+        // French) we should use fall back on plain "fr" if no Belgium-specific
+        // message catalogs exist
+        wxString baselang = lang.BeforeFirst('_');
+        if ( lang != baselang )
+            cat = m_loader->LoadCatalog(domain, baselang);
+    }
 
+    if ( cat )
+    {
+        // add it to the head of the list so that in GetString it will
+        // be searched before the catalogs added earlier
+        cat->m_pNext = m_pMsgCat;
+        m_pMsgCat = cat;
+
+        return true;
+    }
+    else
+    {
+        // Nothing worked, the catalog just isn't there
+        wxLogTrace(TRACE_I18N,
+                   "Catalog \"%s.mo\" not found for language \"%s\".",
+                   domain, lang);
+        return false;
+    }
+}
 
 // check if the given catalog is loaded
 bool wxTranslations::IsLoaded(const wxString& domain) const
 {
     return FindCatalog(domain) != NULL;
-}
-
-
-bool wxTranslations::LoadCatalogFile(const wxString& filename,
-                                     const wxString& domain)
-{
-    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
-
-#if wxUSE_UNICODE
-    const bool ok = pMsgCat->LoadFile(filename, domain, wxEmptyString/*unused*/);
-#else
-    const bool ok = pMsgCat->LoadFile(filename, domain,
-                                      m_msgIdCharset[domain]);
-#endif
-
-    if ( !ok )
-    {
-        // don't add it because it couldn't be loaded anyway
-        delete pMsgCat;
-        return false;
-    }
-
-    // add it to the head of the list so that in GetString it will
-    // be searched before the catalogs added earlier
-    pMsgCat->m_pNext = m_pMsgCat;
-    m_pMsgCat = pMsgCat;
-
-    return true;
-}
-
-
-bool wxTranslations::LoadCatalogData(const wxScopedCharTypeBuffer<char>& data,
-                                     const wxString& domain)
-{
-    wxMsgCatalog *pMsgCat = new wxMsgCatalog;
-
-#if wxUSE_UNICODE
-    const bool ok = pMsgCat->LoadData(data, domain, wxEmptyString/*unused*/);
-#else
-    const bool ok = pMsgCat->LoadData(data, domain,
-                                      m_msgIdCharset[domain]);
-#endif
-
-    if ( !ok )
-    {
-        // don't add it because it couldn't be loaded anyway
-        delete pMsgCat;
-        return false;
-    }
-
-    // add it to the head of the list so that in GetString it will
-    // be searched before the catalogs added earlier
-    pMsgCat->m_pNext = m_pMsgCat;
-    m_pMsgCat = pMsgCat;
-
-    return true;
 }
 
 
@@ -1541,12 +1460,12 @@ const wxString& wxTranslations::GetUntranslatedString(const wxString& str)
 const wxString& wxTranslations::GetString(const wxString& origString,
                                           const wxString& domain) const
 {
-    return GetString(origString, origString, size_t(-1), domain);
+    return GetString(origString, origString, UINT_MAX, domain);
 }
 
 const wxString& wxTranslations::GetString(const wxString& origString,
                                           const wxString& origString2,
-                                          size_t n,
+                                          unsigned n,
                                           const wxString& domain) const
 {
     if ( origString.empty() )
@@ -1581,12 +1500,12 @@ const wxString& wxTranslations::GetString(const wxString& origString,
             TRACE_I18N,
             "string \"%s\"%s not found in %slocale '%s'.",
             origString,
-            ((long)n) != -1 ? wxString::Format("[%ld]", (long)n) : wxString(),
+            n != UINT_MAX ? wxString::Format("[%ld]", (long)n) : wxString(),
             !domain.empty() ? wxString::Format("domain '%s' ", domain) : wxString(),
             m_lang
         );
 
-        if (n == size_t(-1))
+        if (n == UINT_MAX)
             return GetUntranslatedString(origString);
         else
             return GetUntranslatedString(n == 1 ? origString : origString2);
@@ -1613,14 +1532,14 @@ wxString wxTranslations::GetHeaderValue(const wxString& header,
         if ( pMsgCat == NULL )
             return wxEmptyString;
 
-        trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+        trans = pMsgCat->GetString(wxEmptyString, UINT_MAX);
     }
     else
     {
         // search in all domains
         for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
         {
-            trans = pMsgCat->GetString(wxEmptyString, (size_t)-1);
+            trans = pMsgCat->GetString(wxEmptyString, UINT_MAX);
             if ( trans != NULL )   // take the first found
                 break;
         }
@@ -1695,25 +1614,33 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
     return searchPath;
 }
 
-// construct the search path for the given language
-static wxString GetFullSearchPath(const wxString& lang)
+bool HasMsgCatalogInDir(const wxString& dir, const wxString& domain)
 {
-    // first take the entries explicitly added by the program
-    wxArrayString paths;
-    paths.reserve(gs_searchPrefixes.size() + 1);
-    size_t n,
-        count = gs_searchPrefixes.size();
-    for ( n = 0; n < count; n++ )
-    {
-        paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
-    }
+    return wxFileName(dir, domain, "mo").FileExists() ||
+           wxFileName(dir + wxFILE_SEP_PATH + "LC_MESSAGES", domain, "mo").FileExists();
+}
 
+// get prefixes to locale directories; if lang is empty, don't point to
+// OSX's .lproj bundles
+wxArrayString GetSearchPrefixes(const wxString& lang = wxString())
+{
+    wxArrayString paths;
+
+    // first take the entries explicitly added by the program
+    paths = gs_searchPrefixes;
 
 #if wxUSE_STDPATHS
     // then look in the standard location
-    const wxString stdp = wxStandardPaths::Get().
-        GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
-
+    wxString stdp;
+    if ( lang.empty() )
+    {
+        stdp = wxStandardPaths::Get().GetResourcesDir();
+    }
+    else
+    {
+        stdp = wxStandardPaths::Get().
+            GetLocalizedResourcesDir(lang, wxStandardPaths::ResourceCat_Messages);
+    }
     if ( paths.Index(stdp) == wxNOT_FOUND )
         paths.Add(stdp);
 #endif // wxUSE_STDPATHS
@@ -1725,7 +1652,7 @@ static wxString GetFullSearchPath(const wxString& lang)
     const char *pszLcPath = wxGetenv("LC_PATH");
     if ( pszLcPath )
     {
-        const wxString lcp = GetMsgCatalogSubdirs(pszLcPath, lang);
+        const wxString lcp = pszLcPath;
         if ( paths.Index(lcp) == wxNOT_FOUND )
             paths.Add(lcp);
     }
@@ -1734,22 +1661,32 @@ static wxString GetFullSearchPath(const wxString& lang)
     wxString wxp = wxGetInstallPrefix();
     if ( !wxp.empty() )
     {
-        wxp = GetMsgCatalogSubdirs(wxp + wxS("/share/locale"), lang);
+        wxp += wxS("/share/locale");
         if ( paths.Index(wxp) == wxNOT_FOUND )
             paths.Add(wxp);
     }
 #endif // __UNIX__
 
+    return paths;
+}
 
-    // finally construct the full search path
+// construct the search path for the given language
+wxString GetFullSearchPath(const wxString& lang)
+{
     wxString searchPath;
     searchPath.reserve(500);
-    count = paths.size();
-    for ( n = 0; n < count; n++ )
+
+    const wxArrayString prefixes = GetSearchPrefixes(lang);
+
+    for ( wxArrayString::const_iterator i = prefixes.begin();
+          i != prefixes.end();
+          ++i )
     {
-        searchPath += paths[n];
-        if ( n != count - 1 )
+        const wxString p = GetMsgCatalogSubdirs(*i, lang);
+
+        if ( !searchPath.empty() )
             searchPath += wxPATH_SEP;
+        searchPath += p;
     }
 
     return searchPath;
@@ -1768,13 +1705,9 @@ void wxFileTranslationsLoader::AddCatalogLookupPathPrefix(const wxString& prefix
 }
 
 
-bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
-                                           const wxString& domain,
-                                           const wxString& lang)
+wxMsgCatalog *wxFileTranslationsLoader::LoadCatalog(const wxString& domain,
+                                                    const wxString& lang)
 {
-    wxCHECK_MSG( lang.length() >= LEN_LANG, false,
-                 "invalid language specification" );
-
     wxString searchPath = GetFullSearchPath(lang);
 
     wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
@@ -1785,13 +1718,57 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
 
     wxString strFullName;
     if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
-        return false;
+        return NULL;
 
     // open file and read its data
     wxLogVerbose(_("using catalog '%s' from '%s'."), domain, strFullName.c_str());
     wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
 
-    return translations->LoadCatalogFile(strFullName, domain);
+    return wxMsgCatalog::CreateFromFile(strFullName, domain);
+}
+
+
+wxArrayString wxFileTranslationsLoader::GetAvailableTranslations(const wxString& domain) const
+{
+    wxArrayString langs;
+    const wxArrayString prefixes = GetSearchPrefixes();
+
+    wxLogTrace(TRACE_I18N,
+               "looking for available translations of \"%s\" in search path \"%s\"",
+               domain, wxJoin(prefixes, wxPATH_SEP[0]));
+
+    for ( wxArrayString::const_iterator i = prefixes.begin();
+          i != prefixes.end();
+          ++i )
+    {
+        if (i->length() == 0)
+            continue;
+        wxDir dir;
+        if ( !dir.Open(*i) )
+            continue;
+
+        wxString lang;
+        for ( bool ok = dir.GetFirst(&lang, "", wxDIR_DIRS);
+              ok;
+              ok = dir.GetNext(&lang) )
+        {
+            const wxString langdir = *i + wxFILE_SEP_PATH + lang;
+            if ( HasMsgCatalogInDir(langdir, domain) )
+            {
+#ifdef __WXOSX__
+                wxString rest;
+                if ( lang.EndsWith(".lproj", &rest) )
+                    lang = rest;
+#endif // __WXOSX__
+
+                wxLogTrace(TRACE_I18N,
+                           "found %s translation of \"%s\"", lang, domain);
+                langs.push_back(lang);
+            }
+        }
+    }
+
+    return langs;
 }
 
 
@@ -1800,11 +1777,10 @@ bool wxFileTranslationsLoader::LoadCatalog(wxTranslations *translations,
 // ----------------------------------------------------------------------------
 
 #ifdef __WINDOWS__
-bool wxResourceTranslationsLoader::LoadCatalog(wxTranslations *translations,
-                                               const wxString& domain,
-                                               const wxString& lang)
-{
 
+wxMsgCatalog *wxResourceTranslationsLoader::LoadCatalog(const wxString& domain,
+                                                        const wxString& lang)
+{
     const void *mo_data = NULL;
     size_t mo_size = 0;
 
@@ -1819,13 +1795,64 @@ bool wxResourceTranslationsLoader::LoadCatalog(wxTranslations *translations,
     wxLogTrace(TRACE_I18N,
                "Using catalog from Windows resource \"%s\".", resname);
 
-    const bool ok = translations->LoadCatalogData(
-        wxCharBuffer::CreateNonOwned(static_cast<const char*>(mo_data), mo_size));
-    if ( !ok )
+    wxMsgCatalog *cat = wxMsgCatalog::CreateFromData(
+        wxCharBuffer::CreateNonOwned(static_cast<const char*>(mo_data), mo_size),
+        domain);
+
+    if ( !cat )
         wxLogWarning(_("Resource '%s' is not a valid message catalog."), resname);
 
-    return ok;
+    return cat;
 }
+
+namespace
+{
+
+struct EnumCallbackData
+{
+    wxString prefix;
+    wxArrayString langs;
+};
+
+BOOL CALLBACK EnumTranslations(HMODULE WXUNUSED(hModule),
+                               LPCTSTR WXUNUSED(lpszType),
+                               LPTSTR lpszName,
+                               LONG_PTR lParam)
+{
+    wxString name(lpszName);
+    name.MakeLower(); // resource names are case insensitive
+
+    EnumCallbackData *data = reinterpret_cast<EnumCallbackData*>(lParam);
+
+    wxString lang;
+    if ( name.StartsWith(data->prefix, &lang) && !lang.empty() )
+        data->langs.push_back(lang);
+
+    return TRUE; // continue enumeration
+}
+
+} // anonymous namespace
+
+
+wxArrayString wxResourceTranslationsLoader::GetAvailableTranslations(const wxString& domain) const
+{
+    EnumCallbackData data;
+    data.prefix = domain + "_";
+    data.prefix.MakeLower(); // resource names are case insensitive
+
+    if ( !EnumResourceNames(GetModule(),
+                            GetResourceType().t_str(),
+                            EnumTranslations,
+                            reinterpret_cast<LONG_PTR>(&data)) )
+    {
+        const DWORD err = GetLastError();
+        if ( err != NO_ERROR && err != ERROR_RESOURCE_TYPE_NOT_FOUND )
+            wxLogSysError(_("Couldn't enumerate translations"));
+    }
+
+    return data.langs;
+}
+
 #endif // __WINDOWS__
 
 

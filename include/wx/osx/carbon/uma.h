@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/uma.h
+// Name:        wx/osx/carbon/uma.h
 // Purpose:     Universal MacOS API
 // Author:      Stefan Csomor
 // Modified by:

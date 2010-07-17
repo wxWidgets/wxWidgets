@@ -3,7 +3,7 @@
 // Purpose:     interface of wxScrolled template
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -198,6 +198,22 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxHSCROLL | wxVSCROLL,
                 const wxString& name = "scrolledWindow");
+
+    /**
+        Disable use of keyboard keys for scrolling.
+
+        By default cursor movement keys (including Home, End, Page Up and Down)
+        are used to scroll the window appropriately. If the derived class uses
+        these keys for something else, e.g. changing the currently selected
+        item, this function can be used to disable this behaviour as it's not
+        only not necessary then but can actually be actively harmful if another
+        object forwards a keyboard event corresponding to one of the above keys
+        to us using ProcessWindowEvent() because the event will always be
+        processed which can be undesirable.
+
+        @since 2.9.1
+    */
+    void DisableKeyboardScrolling();
 
     /**
         Call this function to prepare the device context for drawing a scrolled
