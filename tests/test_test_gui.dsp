@@ -54,8 +54,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\test_gui.exe" /debug /pdb:"vc_mswunivudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\test_gui.exe" /debug /pdb:"vc_mswunivudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxmswuniv29u_richtext.lib wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\test_gui.exe" /debug /pdb:"vc_mswunivudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxmswuniv29u_richtext.lib wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\test_gui.exe" /debug /pdb:"vc_mswunivudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 DLL Universal Debug"
 
@@ -77,8 +77,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\test_gui.exe" /debug /pdb:"vc_mswunivuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\test_gui.exe" /debug /pdb:"vc_mswunivuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxmswuniv29ud_richtext.lib wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\test_gui.exe" /debug /pdb:"vc_mswunivuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxmswuniv29ud_richtext.lib wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\test_gui.exe" /debug /pdb:"vc_mswunivuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 DLL Release"
 
@@ -100,8 +100,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\test_gui.exe" /debug /pdb:"vc_mswudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\test_gui.exe" /debug /pdb:"vc_mswudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxmsw29u_richtext.lib wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\test_gui.exe" /debug /pdb:"vc_mswudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxmsw29u_richtext.lib wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\test_gui.exe" /debug /pdb:"vc_mswudll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 DLL Debug"
 
@@ -123,8 +123,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\test_gui.exe" /debug /pdb:"vc_mswuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\test_gui.exe" /debug /pdb:"vc_mswuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxmsw29ud_richtext.lib wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\test_gui.exe" /debug /pdb:"vc_mswuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxmsw29ud_richtext.lib wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\test_gui.exe" /debug /pdb:"vc_mswuddll\test_gui.pdb" /libpath:".\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 Universal Release"
 
@@ -146,8 +146,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\test_gui.exe" /debug /pdb:"vc_mswunivu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\test_gui.exe" /debug /pdb:"vc_mswunivu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxmswuniv29u_richtext.lib wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\test_gui.exe" /debug /pdb:"vc_mswunivu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxmswuniv29u_richtext.lib wxmswuniv29u_media.lib wxmswuniv29u_xrc.lib wxbase29u_xml.lib wxmswuniv29u_adv.lib wxmswuniv29u_html.lib wxmswuniv29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\test_gui.exe" /debug /pdb:"vc_mswunivu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 Universal Debug"
 
@@ -169,8 +169,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\test_gui.exe" /debug /pdb:"vc_mswunivud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\test_gui.exe" /debug /pdb:"vc_mswunivud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxmswuniv29ud_richtext.lib wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\test_gui.exe" /debug /pdb:"vc_mswunivud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxmswuniv29ud_richtext.lib wxmswuniv29ud_media.lib wxmswuniv29ud_xrc.lib wxbase29ud_xml.lib wxmswuniv29ud_adv.lib wxmswuniv29ud_html.lib wxmswuniv29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\test_gui.exe" /debug /pdb:"vc_mswunivud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 Release"
 
@@ -192,8 +192,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\test_gui.exe" /debug /pdb:"vc_mswu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\test_gui.exe" /debug /pdb:"vc_mswu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxmsw29u_richtext.lib wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\test_gui.exe" /debug /pdb:"vc_mswu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxmsw29u_richtext.lib wxmsw29u_media.lib wxmsw29u_xrc.lib wxbase29u_xml.lib wxmsw29u_adv.lib wxmsw29u_html.lib wxmsw29u_core.lib wxbase29u_net.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\test_gui.exe" /debug /pdb:"vc_mswu\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "test_gui - Win32 Debug"
 
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\test_gui.exe" /debug /pdb:"vc_mswud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\test_gui.exe" /debug /pdb:"vc_mswud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxmsw29ud_richtext.lib wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\test_gui.exe" /debug /pdb:"vc_mswud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxmsw29ud_richtext.lib wxmsw29ud_media.lib wxmsw29ud_xrc.lib wxbase29ud_xml.lib wxmsw29ud_adv.lib wxmsw29ud_html.lib wxmsw29ud_core.lib wxbase29ud_net.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\test_gui.exe" /debug /pdb:"vc_mswud\test_gui.pdb" /libpath:".\..\lib\vc_lib" /subsystem:console
 
 !ENDIF
 
@@ -239,7 +239,39 @@ SOURCE=.\graphics\bitmap.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\bitmapcomboboxtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\bitmaptogglebuttontest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\bookctrlbasetest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\sizers\boxsizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\buttontest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\checkboxtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\checklistboxtest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\choicebooktest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\choicetest.cpp
 # End Source File
 # Begin Source File
 
@@ -277,7 +309,19 @@ SOURCE=.\font\fonttest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\frametest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\misc\garbage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\gaugetest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\gridtest.cpp
 # End Source File
 # Begin Source File
 
@@ -297,7 +341,19 @@ SOURCE=.\image\image.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\itemcontainertest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\label.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\listbooktest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\listboxtest.cpp
 # End Source File
 # Begin Source File
 
@@ -309,6 +365,10 @@ SOURCE=.\graphics\measuring.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\notebooktest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File
@@ -317,11 +377,23 @@ SOURCE=.\events\propagation.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\radioboxtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\image\rawbmp.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\rearrangelisttest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\rect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\richtextctrltest.cpp
 # End Source File
 # Begin Source File
 
@@ -353,6 +425,10 @@ SOURCE=.\test.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\testableframe.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\textctrltest.cpp
 # End Source File
 # Begin Source File
@@ -361,7 +437,23 @@ SOURCE=.\controls\textentrytest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\controls\togglebuttontest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\toolbooktest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\treebooktest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\controls\treectrltest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\controls\windowtest.cpp
 # End Source File
 # End Group
 # End Target
