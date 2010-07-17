@@ -124,6 +124,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextListStyleDefinition;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextEvent;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextRenderer;
 class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextBuffer;
+class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextPlaceHoldingObject;
 class wxFloatCollector;
 
 /*!
@@ -713,6 +714,8 @@ public:
     virtual wxRichTextStyleSheet* GetStyleSheet() const { return NULL; }
 
 // Operations
+    /// Draw the floats of this buffer
+    void DrawFloats(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int style);
 
     /// Initialize the object.
     void Init();
@@ -1111,7 +1114,7 @@ public:
     void CollectFloat();
 
     /// Layout the floats object
-    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, const wxFloatCollector* floatCollector);
+    void LayoutFloat(wxDC& dc, const wxRect& rect, int style, wxFloatCollector* floatCollector);
 
 protected:
     /// The lines that make up the wrapped paragraph
@@ -1296,13 +1299,30 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextAnchoredObject: public wxRichTextObject
 public:
 // Constructors
     wxRichTextAnchoredObject(wxRichTextObject* parent = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
-    ~wxRichTextAnchoredObject() {};
+    wxRichTextAnchoredObject(const wxRichTextAnchoredObject& obj) : wxRichTextObject(obj), m_ph(NULL) { Copy(obj); }
+    ~wxRichTextAnchoredObject();
+
+// Virtuals
+    virtual bool IsFloatable() const { return true; }
 
 // Accessors
     wxRichTextAnchoredObjectAttr GetAnchoredAttr();
     void SetAnchoredAttr(const wxRichTextAnchoredObjectAttr& attr);
+
+    /// The floating direction
+    virtual int GetFloatDirection() const { return m_anchoredAttr.m_floating; }
+
+    // Get the place holding object
+    wxRichTextPlaceHoldingObject* GetPlaceHoldingObject();
+    void SetPlaceHoldingObject(wxRichTextPlaceHoldingObject* obj) { m_ph = obj; }
+
+    void operator=(const wxRichTextAnchoredObject&) { wxASSERT("Nobody can reset this object using ="); }
+
+// Functions
+    void Copy(const wxRichTextAnchoredObject& obj);
 private:
-    wxRichTextAnchoredObjectAttr m_attr;
+    wxRichTextAnchoredObjectAttr m_anchoredAttr;
+    wxRichTextPlaceHoldingObject* m_ph;
 };
 
 /*!
@@ -1317,6 +1337,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextPlaceHoldingObject: public wxRichTextObject
 public:
 // Constructors
     wxRichTextPlaceHoldingObject(wxRichTextObject *parent = NULL, wxRichTextAnchoredObject *real = NULL);
+    wxRichTextPlaceHoldingObject(const wxRichTextPlaceHoldingObject& obj) : wxRichTextObject(obj), m_real(NULL) { Copy(obj); }
     ~wxRichTextPlaceHoldingObject();
 
 // Overrideables
@@ -1328,11 +1349,22 @@ public:
     /// is invalid for this object.
     virtual bool GetRangeSize(const wxRichTextRange& range, wxSize& size, int& descent, wxDC& dc, int flags, wxPoint position = wxPoint(0,0), wxArrayInt* partialExtents = NULL) const;
 
+    // Clone function
+    virtual wxRichTextObject* Clone() const { return new wxRichTextPlaceHoldingObject(*this); }
+
     /// Get the real object of this place holding one
     wxRichTextAnchoredObject* GetRealObject() { return m_real; }
 
+    /// Set the real object of this place holding one
+    void SetRealObject(wxRichTextAnchoredObject* obj) { m_real = obj; }
+
     /// Whether this object is a place holding one
     virtual bool IsPlaceHolding() const { return true; }
+
+    void operator=(const wxRichTextPlaceHoldingObject&) { wxASSERT("Nobody can reset this object using ="); }
+
+    // Copy function
+    void Copy(const wxRichTextPlaceHoldingObject&);
 private:
     wxRichTextAnchoredObject* m_real;
 };
@@ -1349,8 +1381,8 @@ public:
 // Constructors
 
     wxRichTextImage(wxRichTextObject* parent = NULL): wxRichTextAnchoredObject(parent) { m_attrInit = false; }
-    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
-    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL, const wxRichTextAnchoredObjectAttr& attr = wxRichTextAnchoredObjectAttr());
+    wxRichTextImage(const wxImage& image, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
+    wxRichTextImage(const wxRichTextImageBlock& imageBlock, wxRichTextObject* parent = NULL, wxTextAttr* charStyle = NULL);
     wxRichTextImage(const wxRichTextImage& obj): wxRichTextAnchoredObject() { Copy(obj); }
 
 // Overrideables
@@ -1367,12 +1399,6 @@ public:
 
     /// Returns true if the object is empty
     virtual bool IsEmpty() const { return !m_image.Ok(); }
-
-    /// An image is floatable
-    virtual bool IsFloatable() const { return true; }
-
-    /// The floating direction
-    virtual int GetFloatDirection() const { return m_attr.m_floating; }
 
 // Accessors
 
@@ -1680,7 +1706,7 @@ public:
     bool InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to insert the given image
-    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0, const wxRichTextAnchoredObjectAttr& imgAttr = wxRichTextAnchoredObjectAttr());
+    bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0, const wxRichTextAnchoredObjectAttr& floatAttr = wxRichTextAnchoredObjectAttr());
 
     /// Submit command to delete this range
     bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl);
