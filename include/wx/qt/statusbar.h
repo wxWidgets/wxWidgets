@@ -54,7 +54,7 @@ class WXDLLIMPEXP_CORE wxQtStatusBar : public wxQtEventForwarder< QStatusBar >
         wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent );
         
     protected:
-        virtual wxWindow *GetEventReceiver();
+        virtual wxWindow *GetEventHandler() const;
         virtual void resizeEvent ( QResizeEvent * event );
         
     private:

@@ -441,13 +441,13 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 }
 #endif // wxUSE_MENUS
 
-bool wxWindow::QtHandlePaintEvent ( QWidget *receiver, QPaintEvent * WXUNUSED( event ))
+bool wxWindow::QtHandlePaintEvent ( QWidget *handler, QPaintEvent * WXUNUSED( event ))
 {
     /* If this window has scrollbars, only let wx handle the event if it is
      * for the client area (the scrolled part). Events for the whole window
      * (including scrollbars and maybe status or menu bars are handled by Qt */
     
-    if ( m_qtContainer && receiver != m_qtContainer )
+    if ( m_qtContainer && handler != m_qtContainer )
     {
         return false;
     }
@@ -461,27 +461,27 @@ bool wxWindow::QtHandlePaintEvent ( QWidget *receiver, QPaintEvent * WXUNUSED( e
     }
 }
 
-void wxWindow::QtPaintClientDCPicture( QWidget *receiver )
+void wxWindow::QtPaintClientDCPicture( QWidget *handler )
 {
-    if ( m_qtContainer && receiver != m_qtContainer )
+    if ( m_qtContainer && handler != m_qtContainer )
         return;
 
     // Paint wxClientDC data
-    QPainter painter( receiver );
+    QPainter painter( handler );
     painter.drawPicture( 0, 0, *m_qtPicture );
 
     // Reset picture
     m_qtPicture->setData( NULL, 0 );
 }
 
-bool wxWindow::QtHandleResizeEvent ( QWidget *WXUNUSED( receiver ), QResizeEvent *event )
+bool wxWindow::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
 {
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
 
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleWheelEvent ( QWidget *WXUNUSED( receiver ), QWheelEvent *event )
+bool wxWindow::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent *event )
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? 0 : 1;
@@ -630,7 +630,7 @@ static void FillKeyboardModifiers( Qt::KeyboardModifiers modifiers, wxKeyboardSt
     state->SetMetaDown( modifiers.testFlag( Qt::MetaModifier ) );
 }
 
-bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *event )
+bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *event )
 {
     bool handled = false;
 
@@ -671,7 +671,7 @@ bool wxWindow::QtHandleKeyEvent ( QWidget *WXUNUSED( receiver ), QKeyEvent *even
     return handled;
 }
 
-bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
+bool wxWindow::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 {
     // Convert event type
     wxEventType wxType = 0;
@@ -768,8 +768,8 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
 
     // Determine if mouse is inside the widget
     bool mouseInside = true;
-    if ( mousePos.x() < 0 || mousePos.x() > receiver->width() ||
-        mousePos.y() < 0 || mousePos.y() > receiver->height() )
+    if ( mousePos.x() < 0 || mousePos.x() > handler->width() ||
+        mousePos.y() < 0 || mousePos.y() > handler->height() )
         mouseInside = false;
     
     if ( e.GetEventType() == wxEVT_MOTION )
@@ -796,11 +796,11 @@ bool wxWindow::QtHandleMouseEvent ( QWidget *receiver, QMouseEvent *event )
     return handled;
 }
 
-bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )
+bool wxWindow::QtHandleEnterEvent ( QWidget *handler, QEvent *event )
 {
     wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
     e.m_clickCount = 0;
-    e.SetPosition( wxQtConvertPoint( receiver->mapFromGlobal( QCursor::pos() ) ) );
+    e.SetPosition( wxQtConvertPoint( handler->mapFromGlobal( QCursor::pos() ) ) );
     
     // Mouse buttons
     wxQtFillMouseButtons( QApplication::mouseButtons(), &e );
@@ -811,9 +811,9 @@ bool wxWindow::QtHandleEnterEvent ( QWidget *receiver, QEvent *event )
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleMoveEvent ( QWidget *receiver, QMoveEvent *event )
+bool wxWindow::QtHandleMoveEvent ( QWidget *handler, QMoveEvent *event )
 {
-    if ( GetHandle() != receiver )
+    if ( GetHandle() != handler )
         return false;
     
     wxMoveEvent e( wxQtConvertPoint( event->pos() ) );
@@ -821,9 +821,9 @@ bool wxWindow::QtHandleMoveEvent ( QWidget *receiver, QMoveEvent *event )
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleShowEvent ( QWidget *receiver, QEvent *event )
+bool wxWindow::QtHandleShowEvent ( QWidget *handler, QEvent *event )
 {
-    if ( GetHandle() != receiver )
+    if ( GetHandle() != handler )
         return false;
     
     wxShowEvent e;
@@ -832,14 +832,14 @@ bool wxWindow::QtHandleShowEvent ( QWidget *receiver, QEvent *event )
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleChangeEvent ( QWidget *receiver, QEvent *event )
+bool wxWindow::QtHandleChangeEvent ( QWidget *handler, QEvent *event )
 {
-    if ( GetHandle() != receiver )
+    if ( GetHandle() != handler )
         return false;
 
     if ( event->type() == QEvent::ActivationChange )
     {
-        wxActivateEvent e( wxEVT_ACTIVATE, receiver->isActiveWindow() );
+        wxActivateEvent e( wxEVT_ACTIVATE, handler->isActiveWindow() );
 
         return ProcessWindowEvent( e );
     }
@@ -847,9 +847,9 @@ bool wxWindow::QtHandleChangeEvent ( QWidget *receiver, QEvent *event )
         return false;
 }
 
-bool wxWindow::QtHandleCloseEvent ( QWidget *receiver, QCloseEvent *WXUNUSED( event ) )
+bool wxWindow::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( event ) )
 {
-    if ( GetHandle() != receiver )
+    if ( GetHandle() != handler )
         return false;
     
     wxCloseEvent e( wxEVT_CLOSE_WINDOW );
@@ -857,7 +857,7 @@ bool wxWindow::QtHandleCloseEvent ( QWidget *receiver, QCloseEvent *WXUNUSED( ev
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleCMenuEvent ( QWidget *receiver, QContextMenuEvent *event )
+bool wxWindow::QtHandleContextMenuEvent ( QWidget *handler, QContextMenuEvent *event )
 {
     wxContextMenuEvent e( wxEVT_CONTEXT_MENU );
     e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
@@ -865,7 +865,7 @@ bool wxWindow::QtHandleCMenuEvent ( QWidget *receiver, QContextMenuEvent *event 
     return ProcessWindowEvent( e );
 }
 
-bool wxWindow::QtHandleFocusEvent ( QWidget *receiver, QFocusEvent *event )
+bool wxWindow::QtHandleFocusEvent ( QWidget *handler, QFocusEvent *event )
 {
     wxFocusEvent e( event->gotFocus() ? wxEVT_SET_FOCUS : wxEVT_KILL_FOCUS );
 

@@ -129,7 +129,7 @@ wxQtStatusBar::wxQtStatusBar( wxStatusBar *statusBar, QWidget *parent )
     m_statusBar = statusBar;
 }
 
-wxWindow *wxQtStatusBar::GetEventReceiver()
+wxWindow *wxQtStatusBar::GetEventHandler() const
 {
     return m_statusBar;
 }

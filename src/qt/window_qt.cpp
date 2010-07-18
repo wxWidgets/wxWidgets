@@ -14,7 +14,7 @@ wxQtWidget::wxQtWidget( wxWindow *window, QWidget *parent )
     m_wxWindow = window;
 }
 
-wxWindow *wxQtWidget::GetEventReceiver()
+wxWindow *wxQtWidget::GetEventHandler() const
 {
     return m_wxWindow;
 }

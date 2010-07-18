@@ -82,7 +82,7 @@ wxQtFrame::wxQtFrame( wxFrame *frame, QWidget *parent )
     setCentralWidget(new QWidget());
 }
 
-wxWindow *wxQtFrame::GetEventReceiver()
+wxWindow *wxQtFrame::GetEventHandler() const
 {
     return m_frame;
 }

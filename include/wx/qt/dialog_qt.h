@@ -21,7 +21,7 @@ class WXDLLIMPEXP_CORE wxQtDialog : public wxQtEventForwarder< QDialog >
         wxQtDialog( wxDialog *dialog, QWidget *parent );
 
     protected:
-        virtual wxWindow *GetEventReceiver();
+        virtual wxWindow *GetEventHandler() const;
 
     private:
         wxDialog *m_dialog;

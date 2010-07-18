@@ -21,7 +21,7 @@ class WXDLLIMPEXP_CORE wxQtWidget : public wxQtEventForwarder< QWidget >
         wxQtWidget( wxWindow *window, QWidget *parent );
         
     protected:
-        virtual wxWindow *GetEventReceiver();
+        virtual wxWindow *GetEventHandler() const;
 
     private:
         wxWindow *m_wxWindow;

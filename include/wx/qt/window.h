@@ -33,7 +33,7 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
  *
  * Event handling is achieved by using the template class wxQtEventForwarder
  * found in winevent_qt.(h|cpp) to send all Qt events here to QtHandleXXXEvent()
- * methods. All these methods receive the Qt event and the receiver. This is
+ * methods. All these methods receive the Qt event and the handler. This is
  * done because events of the containers (the scrolled part of the window) are
  * sent to the same wxWindow instance, that must be able to differenciate them
  * as some events need different handling (paintEvent) depending on that.
@@ -104,20 +104,20 @@ public:
 
     virtual WXWidget QtGetContainer() const;
     virtual QPicture *QtGetPicture() const;
-    virtual void QtPaintClientDCPicture( QWidget *receiver );
+    virtual void QtPaintClientDCPicture( QWidget *handler );
 
-    virtual bool QtHandlePaintEvent  ( QWidget *receiver, QPaintEvent *event );
-    virtual bool QtHandleResizeEvent ( QWidget *receiver, QResizeEvent *event );
-    virtual bool QtHandleWheelEvent  ( QWidget *receiver, QWheelEvent *event );
-    virtual bool QtHandleKeyEvent    ( QWidget *receiver, QKeyEvent *event );
-    virtual bool QtHandleMouseEvent  ( QWidget *receiver, QMouseEvent *event );
-    virtual bool QtHandleEnterEvent  ( QWidget *receiver, QEvent *event );
-    virtual bool QtHandleMoveEvent   ( QWidget *receiver, QMoveEvent *event );
-    virtual bool QtHandleShowEvent   ( QWidget *receiver, QEvent *event );
-    virtual bool QtHandleChangeEvent ( QWidget *receiver, QEvent *event );
-    virtual bool QtHandleCloseEvent  ( QWidget *receiver, QCloseEvent *event );
-    virtual bool QtHandleCMenuEvent  ( QWidget *receiver, QContextMenuEvent *event );
-    virtual bool QtHandleFocusEvent  ( QWidget *receiver, QFocusEvent *event );
+    virtual bool QtHandlePaintEvent  ( QWidget *handler, QPaintEvent *event );
+    virtual bool QtHandleResizeEvent ( QWidget *handler, QResizeEvent *event );
+    virtual bool QtHandleWheelEvent  ( QWidget *handler, QWheelEvent *event );
+    virtual bool QtHandleKeyEvent    ( QWidget *handler, QKeyEvent *event );
+    virtual bool QtHandleMouseEvent  ( QWidget *handler, QMouseEvent *event );
+    virtual bool QtHandleEnterEvent  ( QWidget *handler, QEvent *event );
+    virtual bool QtHandleMoveEvent   ( QWidget *handler, QMoveEvent *event );
+    virtual bool QtHandleShowEvent   ( QWidget *handler, QEvent *event );
+    virtual bool QtHandleChangeEvent ( QWidget *handler, QEvent *event );
+    virtual bool QtHandleCloseEvent  ( QWidget *handler, QCloseEvent *event );
+    virtual bool QtHandleContextMenuEvent  ( QWidget *handler, QContextMenuEvent *event );
+    virtual bool QtHandleFocusEvent  ( QWidget *handler, QFocusEvent *event );
     
 protected:
     virtual void DoGetTextExtent(const wxString& string,

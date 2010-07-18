@@ -153,7 +153,7 @@ wxQtMessageDialog::wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent )
     m_messageDialog = dialog;
 }
 
-wxWindow *wxQtMessageDialog::GetEventReceiver()
+wxWindow *wxQtMessageDialog::GetEventHandler() const
 {
     return m_messageDialog;
 }

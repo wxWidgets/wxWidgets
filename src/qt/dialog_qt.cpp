@@ -14,7 +14,7 @@ wxQtDialog::wxQtDialog( wxDialog *dialog, QWidget *parent )
     m_dialog = dialog;
 }
 
-wxWindow *wxQtDialog::GetEventReceiver()
+wxWindow *wxQtDialog::GetEventHandler() const
 {
     return m_dialog;
 }

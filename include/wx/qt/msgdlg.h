@@ -42,7 +42,7 @@ class WXDLLIMPEXP_CORE wxQtMessageDialog : public wxQtEventForwarder< QMessageBo
         wxQtMessageDialog( wxMessageDialog *dialog, QWidget *parent );
         
     protected:
-        virtual wxWindow *GetEventReceiver();
+        virtual wxWindow *GetEventHandler() const;
         
     private:
         wxMessageDialog *m_messageDialog;

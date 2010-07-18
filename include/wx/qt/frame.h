@@ -59,7 +59,7 @@ public:
     wxQtFrame( wxFrame *frame, QWidget *parent );
 
 protected:
-    virtual wxWindow *GetEventReceiver();
+    virtual wxWindow *GetEventHandler() const;
     
 private Q_SLOTS:
 
