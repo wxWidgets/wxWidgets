@@ -196,14 +196,30 @@ void VarArgTestCase::ArgsValidation()
     wxString::Format("a string(%s,%s), ptr %p, int %i",
                      wxString(), "foo", "char* as pointer", 1);
 
-#if !wxCHECK_VISUALC_VERSION(8)
     // Microsoft has helpfully disabled support for "%n" in their CRT by
     // default starting from VC8 and somehow even calling
-    // _set_printf_count_output() doesn't help here, so just disable this test
-    // for it.
+    // _set_printf_count_output() doesn't help here, so don't use "%n" at all
+    // with it.
+#if wxCHECK_VISUALC_VERSION(8)
+    #define wxNO_PRINTF_PERCENT_N
+#endif // VC8+
+
+    // Similarly, many modern Linux distributions ship with g++ that uses
+    // -D_FORTIFY_SOURCE=2 flag by default and this option prevents "%n" from
+    // being used in a string outside of read-only memory, meaning that it
+    // can't be used in wxString to which we (may, depending on build options)
+    // assign it, so also disable testing of "%n" in this case lest we die with
+    // an abort inside vswprintf().
+#if defined(_FORTIFY_SOURCE)
+    #if _FORTIFY_SOURCE >= 2
+        #define wxNO_PRINTF_PERCENT_N
+    #endif
+#endif
+
+#ifndef wxNO_PRINTF_PERCENT_N
     wxString::Format("foo%i%n", 42, &written);
     CPPUNIT_ASSERT_EQUAL( 5, written );
-#endif // VC8+
+#endif
 
     // but these are not:
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%i: too many arguments", 42, 1, 2, 3) );
@@ -212,6 +228,8 @@ void VarArgTestCase::ArgsValidation()
 
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("%d", ptr) );
 
+    // we don't check wxNO_PRINTF_PERCENT_N here as these expressions should
+    // result in an assert in our code before the CRT functions are even called
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", &written) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%n", ptr) );
     WX_ASSERT_FAILS_WITH_ASSERT( wxString::Format("foo%i%n", 42, &swritten) );
