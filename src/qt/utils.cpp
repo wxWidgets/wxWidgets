@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/utils.h"
+#include "wx/window.h"
 #include "wx/cursor.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"

@@ -317,7 +317,8 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
 //=============================================================================
 
 wxQtCalendarCtrl::wxQtCalendarCtrl(wxCalendarCtrl *calendar, QWidget *parent)
-    : QCalendarWidget(parent), m_calendar(calendar)
+    : QCalendarWidget(parent),
+      wxQtSignalForwarder< wxCalendarCtrl >( calendar )
 {
     m_date = selectedDate();
     connect(this, SIGNAL(selectionChanged()), this, SLOT(OnSelectionChanged()));
@@ -326,13 +327,13 @@ wxQtCalendarCtrl::wxQtCalendarCtrl(wxCalendarCtrl *calendar, QWidget *parent)
 
 void wxQtCalendarCtrl::OnSelectionChanged()
 {
-    m_calendar->GenerateAllChangeEvents(wxQtConvertDate(m_date));
+    GetSignalHandler()->GenerateAllChangeEvents(wxQtConvertDate(m_date));
     m_date = selectedDate();
 }
 
 void wxQtCalendarCtrl::OnActivated(const QDate &WXUNUSED(date))
 {
-    m_calendar->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
+    GetSignalHandler()->GenerateEvent(wxEVT_CALENDAR_DOUBLECLICKED);
 }
 
 #endif // wxUSE_CALENDARCTRL

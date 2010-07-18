@@ -225,4 +225,23 @@ protected:
     virtual bool x11Event ( XEvent * event ) { } */
 };
 
+template < typename WxWindow >
+class wxQtSignalForwarder
+{
+public:
+    wxQtSignalForwarder( WxWindow *window )
+    {
+        m_window = window;
+    }
+
+    WxWindow *GetSignalHandler() const
+    {
+        return m_window;
+    }
+
+private:
+    WxWindow *m_window;
+};
+
+
 #endif

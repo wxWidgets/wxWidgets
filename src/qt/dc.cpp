@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/dc.h"
+#include "wx/icon.h"
 #include "wx/qt/dc.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/utils.h"
@@ -342,6 +343,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     //TODO: Don't use mask if useMask is false
+    wxMISSING_IMPLEMENTATION( "useMask ");
 
     QPixmap pix = *bmp.GetHandle();
     if (pix.depth() == 1) {

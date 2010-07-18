@@ -125,10 +125,10 @@ WXWidget wxScrollBar::QtGetScrollBarsContainer() const
 // wxQtScrollBar
 /////////////////////////////////////////////////////////////////////////////
 
-wxQtScrollBar::wxQtScrollBar( wxWindow *window, Qt::Orientation orient, QWidget *parent )
-: QScrollBar( orient, parent )
+wxQtScrollBar::wxQtScrollBar( wxScrollBar *scrollBar, Qt::Orientation orient, QWidget *parent )
+    : QScrollBar( orient, parent ),
+      wxQtSignalForwarder< wxScrollBar >( scrollBar )
 {
-    m_wxWindow = window;
     connect( this, SIGNAL( actionTriggered(int) ), this, SLOT( OnActionTriggered(int) ) );
     connect( this, SIGNAL( sliderReleased() ), this, SLOT( OnSliderReleased() ) );
     connect( this, SIGNAL( valueChanged(int) ), this, SLOT( OnValueChanged(int) ) );
@@ -164,24 +164,27 @@ void wxQtScrollBar::OnActionTriggered( int action )
             return;
     }
     
-    wxScrollEvent e( eventType, m_wxWindow->GetId(), sliderPosition(),
+    wxScrollBar *scrollBar = GetSignalHandler();
+    wxScrollEvent e( eventType, scrollBar->GetId(), sliderPosition(),
                         orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
                         
-    m_wxWindow->ProcessWindowEvent(e);
+    scrollBar->ProcessWindowEvent(e);
 }
 
 void wxQtScrollBar::OnSliderReleased()
 {
-    wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, m_wxWindow->GetId(), sliderPosition(),
+    wxScrollBar *scrollBar = GetSignalHandler();
+    wxScrollEvent e( wxEVT_SCROLL_THUMBRELEASE, scrollBar->GetId(), sliderPosition(),
                         orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
                         
-    m_wxWindow->ProcessWindowEvent(e);
+    scrollBar->ProcessWindowEvent(e);
 }
 
 void wxQtScrollBar::OnValueChanged( int position )
 {
-    wxScrollEvent e( wxEVT_SCROLL_CHANGED, m_wxWindow->GetId(), position,
+    wxScrollBar *scrollBar = GetSignalHandler();
+    wxScrollEvent e( wxEVT_SCROLL_CHANGED, scrollBar->GetId(), position,
                      orientation() == Qt::Horizontal ? wxHORIZONTAL : wxVERTICAL );
                      
-    m_wxWindow->ProcessWindowEvent(e);
+    scrollBar->ProcessWindowEvent(e);
 }

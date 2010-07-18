@@ -17,11 +17,6 @@ wxStatusBar::wxStatusBar()
 {
 }
 
-wxStatusBar::~wxStatusBar()
-{
-    delete m_qtStatusBar; // This also destroys the panes
-}
-
 wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
             long style,
             const wxString& name)
@@ -29,6 +24,10 @@ wxStatusBar::wxStatusBar(wxWindow *parent, wxWindowID winid,
     Create( parent, winid, style, name );
 }
 
+wxStatusBar::~wxStatusBar()
+{
+    delete m_qtStatusBar; // This also destroys the panes
+}
 
 void wxStatusBar::Init()
 {

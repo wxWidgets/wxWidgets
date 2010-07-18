@@ -9,6 +9,9 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
+#include <QtCore/QPointer>
+#include <QtGui/QTextEdit>
+
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
@@ -48,10 +51,15 @@ public:
 
     virtual void ShowPosition(long pos);
     
+//    virtual QTextEdit *GetHandle() const;
+
 protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
     
+private:
+    QPointer< QTextEdit > m_qtTextEdit;
+
 };
 
 #endif // _WX_QT_TEXTCTRL_H_

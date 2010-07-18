@@ -12,6 +12,7 @@
 #if wxUSE_TIMER
 
 #include "wx/qt/timer.h"
+#include <QtCore/QTimerEvent>
 
 wxQtTimerImpl::wxQtTimerImpl( wxTimer* timer )
     : wxTimerImpl( timer )

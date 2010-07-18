@@ -11,6 +11,9 @@
 #ifndef _WX_QT_UTILS_H_
 #define _WX_QT_UTILS_H_
 
+#include "wx/mousestate.h"
+#include <QtCore/Qt>
+
 void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state );
 
 void wxMissingImplementation( const char fileName[], unsigned lineNumber,

@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/textctrl.h"
+#include "wx/qt/converter.h"
 
 wxTextCtrl::wxTextCtrl()
 {
@@ -24,6 +25,7 @@ wxTextCtrl::wxTextCtrl(wxWindow *parent,
            const wxValidator& validator,
            const wxString &name)
 {
+    Create( parent, id, value, pos, size, style, validator, name );
 }
 
 bool wxTextCtrl::Create(wxWindow *parent,
@@ -35,7 +37,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString &name)
 {
-    return false;
+    m_qtTextEdit = new QTextEdit( wxQtConvertString( value ), parent->GetHandle() );
+
+    return true;
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -105,3 +109,7 @@ bool wxTextCtrl::DoSaveFile(const wxString& file, int fileType)
     return false;
 }
 
+//QLineEdit *wxTextCtrl::GetHandle() const
+//{
+//    return m_qtTextEdit;
+//}

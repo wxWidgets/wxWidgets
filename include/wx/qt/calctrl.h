@@ -13,6 +13,8 @@
 
 #include "wx/calctrl.h"
 #include "wx/qt/converter.h"
+#include "wx/qt/winevent_qt.h"
+#include <QtCore/QPointer>
 #include <QtGui/QCalendarWidget>
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
@@ -73,8 +75,7 @@ public:
     // Temporary stub
     void SetPosition(const wxPoint& pt);
 
-    bool GenerateAllChangeEvents(const wxDateTime& dateOld)
-        { return wxCalendarCtrlBase::GenerateAllChangeEvents(dateOld); }
+    using wxCalendarCtrlBase::GenerateAllChangeEvents;
 
 protected:
     virtual void RefreshHolidays();
@@ -83,7 +84,7 @@ private:
     void Init();
     void UpdateStyle();
 
-    QCalendarWidget *m_qtCalendar;
+    QPointer< QCalendarWidget > m_qtCalendar;
     wxColour m_colHeaderFg,
              m_colHeaderBg,
              m_colHolidayFg,
@@ -97,7 +98,8 @@ private:
 
 
 
-class wxQtCalendarCtrl : public QCalendarWidget
+class wxQtCalendarCtrl : public QCalendarWidget,
+    public wxQtSignalForwarder< wxCalendarCtrl >
 {
     Q_OBJECT
 
@@ -109,7 +111,6 @@ private Q_SLOTS:
     void OnActivated(const QDate &date);
 
 private:
-    wxCalendarCtrl *m_calendar;
     QDate m_date;
 };
 

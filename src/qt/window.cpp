@@ -10,14 +10,17 @@
 #include "wx/wxprec.h"
 
 #include "wx/window.h"
+#include "wx/menu.h"
 #include "wx/tooltip.h"
+#include "wx/scrolbar.h"
 #include "wx/qt/utils.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/window_qt.h"
 
-#include <QtGui/QGridLayout>
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
+#include <QtGui/QGridLayout>
+#include <QtGui/QApplication>
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0

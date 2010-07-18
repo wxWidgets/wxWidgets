@@ -18,10 +18,12 @@ class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
     wxStatusBar();
-    ~wxStatusBar();
     wxStatusBar(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
+
+    virtual ~wxStatusBar();
+
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
                 long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);

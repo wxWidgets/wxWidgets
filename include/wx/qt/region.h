@@ -10,6 +10,8 @@
 #ifndef _WX_QT_REGION_H_
 #define _WX_QT_REGION_H_
 
+#include <QtGui/QRegion>
+
 class WXDLLIMPEXP_CORE wxRegion : public wxRegionBase
 {
 public:
@@ -25,6 +27,7 @@ public:
     virtual void Clear();
 
     virtual QRegion GetHandle() const;
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

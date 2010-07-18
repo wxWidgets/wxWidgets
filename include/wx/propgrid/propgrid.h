@@ -31,6 +31,10 @@ extern WXDLLIMPEXP_DATA_PROPGRID(const char) wxPropertyGridNameStr[];
 
 class wxPGComboBox;
 
+#if wxUSE_STATUSBAR
+class WXDLLIMPEXP_FWD_CORE wxStatusBar;
+#endif
+
 // -----------------------------------------------------------------------
 // Global variables
 // -----------------------------------------------------------------------

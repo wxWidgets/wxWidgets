@@ -10,7 +10,7 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
-
+#include "wx/qt/winevent_qt.h"
 #include <QtGui/QAction>
 #include <QtCore/QPointer>
 
@@ -42,10 +42,6 @@ public:
     virtual QAction *GetHandle() const;
 
 private:
-    friend class wxQtAction;
-
-    void OnItemTriggered( bool checked );
-
     // Qt is using an action instead of a menu item.
     QPointer< QAction > m_qtAction;
 
@@ -54,7 +50,7 @@ private:
 
 
 
-class WXDLLIMPEXP_CORE wxQtAction : public QAction
+class WXDLLIMPEXP_CORE wxQtAction : public QAction, public wxQtSignalForwarder< wxMenuItem >
 {
     Q_OBJECT
 
@@ -63,9 +59,6 @@ public:
 
 private Q_SLOTS:
     void OnActionTriggered( bool checked );
-
-private:
-    wxMenuItem *m_menuItem;
 };
 
 

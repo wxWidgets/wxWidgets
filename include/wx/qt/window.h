@@ -97,7 +97,7 @@ public:
                                const wxRect* rect = NULL );
     
     virtual WXWidget GetHandle() const;
-    
+
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     
     // wxQt implementation internals:

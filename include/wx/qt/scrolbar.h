@@ -10,6 +10,7 @@
 #define _WX_QT_SCROLBAR_H_
 
 #include "wx/scrolbar.h"
+#include "wx/qt/winevent_qt.h"
 
 #include <QtGui/QScrollBar>
 
@@ -52,12 +53,13 @@ private:
 };
 
 
-class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar
+class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar,
+    public wxQtSignalForwarder< wxScrollBar >
 {
     Q_OBJECT
     
     public:
-        wxQtScrollBar( wxWindow *window,
+        wxQtScrollBar( wxScrollBar *scrollBar,
                        Qt::Orientation orient,
                        QWidget *parent = 0 );
                        
@@ -65,9 +67,6 @@ class WXDLLIMPEXP_CORE wxQtScrollBar : public QScrollBar
         void OnActionTriggered( int action );
         void OnSliderReleased();
         void OnValueChanged( int position );
-        
-    private:
-        wxWindow *m_wxWindow;
 };
 
 #endif // _WX_QT_SCROLBAR_H_

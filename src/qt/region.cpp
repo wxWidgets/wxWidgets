@@ -10,6 +10,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/region.h"
+#include "wx/bitmap.h"
 #include "wx/qt/converter.h"
 #include "wx/qt/utils.h"
 

@@ -126,12 +126,6 @@ const wxBitmap &wxMenuItem::GetBitmap() const
     return s_bitmap;
 }
 
-void wxMenuItem::OnItemTriggered( bool checked )
-{
-    wxMenu *menu = GetMenu();
-    menu->SendEvent( GetId(), IsCheckable() ? checked : -1 ); 
-}
-
 QAction *wxMenuItem::GetHandle() const
 {
     return m_qtAction;
@@ -140,10 +134,9 @@ QAction *wxMenuItem::GetHandle() const
 //=============================================================================
 
 wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *parent )
-    : QAction( text, parent )
+    : QAction( text, parent ),
+      wxQtSignalForwarder< wxMenuItem >( menuItem )
 {
-    m_menuItem = menuItem;
-
     connect( this, SIGNAL( triggered( bool )), this, SLOT( OnActionTriggered( bool )));
 }
 
@@ -151,6 +144,8 @@ wxQtAction::wxQtAction( wxMenuItem *menuItem, const QString &text, QObject *pare
 
 void wxQtAction::OnActionTriggered( bool checked )
 {
-    m_menuItem->OnItemTriggered( checked );
+    wxMenuItem *menuItem = GetSignalHandler();
+    wxMenu *menu = menuItem->GetMenu();
+    menu->SendEvent( menuItem->GetId(), menuItem->IsCheckable() ? checked : -1 );
 }
 
