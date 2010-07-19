@@ -53,6 +53,7 @@ private:
         CPPUNIT_TEST( Url );
         CPPUNIT_TEST( Style );
         CPPUNIT_TEST( Lines );
+        CPPUNIT_TEST( LogTextCtrl );
     CPPUNIT_TEST_SUITE_END();
 
     void MultiLineReplace();
@@ -64,6 +65,7 @@ private:
     void Url();
     void Style();
     void Lines();
+    void LogTextCtrl();
 
     wxTextCtrl *m_text;
 
@@ -387,4 +389,24 @@ void TextCtrlTestCase::Lines()
     CPPUNIT_ASSERT_EQUAL(5, m_text->GetNumberOfLines());
     CPPUNIT_ASSERT_EQUAL(0, m_text->GetLineLength(3));
     CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(3));
+}
+
+void TextCtrlTestCase::LogTextCtrl()
+{
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxSize(400, 200), 
+                            wxTE_MULTILINE);
+
+    CPPUNIT_ASSERT(m_text->IsEmpty());
+
+    wxLogTextCtrl* logtext = new wxLogTextCtrl(m_text);
+
+    wxLog* old = wxLog::SetActiveTarget(logtext);
+
+    logtext->LogText("text");
+
+    delete wxLog::SetActiveTarget(old);
+
+    CPPUNIT_ASSERT(!m_text->IsEmpty());
 }
