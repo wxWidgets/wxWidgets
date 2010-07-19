@@ -1379,7 +1379,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // Short circuit the event processing logic if we're requested to process
     // this event in this handler only, see DoTryChain() for more details.
     if ( event.ShouldProcessOnlyIn(this) )
-        return TryHere(event);
+        return TryBeforeAndHere(event);
 
 
     // Try to process the event in this handler itself.
@@ -1406,23 +1406,11 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
 bool wxEvtHandler::ProcessEventLocally(wxEvent& event)
 {
-    // First try the hooks which should be called before our own handlers
-    if ( TryBefore(event) )
-        return true;
-
-    // Then try this handler itself, notice that we should not call
-    // ProcessEvent() on this one as we're already called from it, which
-    // explains why we do it here and not in DoTryChain()
-    if ( TryHere(event) )
-        return true;
-
-    // Finally try the event handlers chained to this one,
-    if ( DoTryChain(event) )
-        return true;
-
-    // And return false to indicate that we didn't find any handler at this
-    // level.
-    return false;
+    // Try the hooks which should be called before our own handlers and this
+    // handler itself first. Notice that we should not call ProcessEvent() on
+    // this one as we're already called from it, which explains why we do it
+    // here and not in DoTryChain()
+    return TryBeforeAndHere(event) || DoTryChain(event);
 }
 
 bool wxEvtHandler::DoTryChain(wxEvent& event)
@@ -1434,7 +1422,7 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
         // ProcessEvent() from which we were called or will be done by it when
         // we return.
         //
-        // However we must call ProcessEvent() and not TryHere() because the
+        // However we must call ProcessEvent() and not TryHereOnly() because the
         // existing code (including some in wxWidgets itself) expects the
         // overridden ProcessEvent() in its custom event handlers pushed on a
         // window to be called.
@@ -1478,7 +1466,7 @@ bool wxEvtHandler::DoTryChain(wxEvent& event)
     return false;
 }
 
-bool wxEvtHandler::TryHere(wxEvent& event)
+bool wxEvtHandler::TryHereOnly(wxEvent& event)
 {
     // If the event handler is disabled it doesn't process any events
     if ( !GetEvtHandlerEnabled() )

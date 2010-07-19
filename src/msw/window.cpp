@@ -2716,9 +2716,14 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // trace all messages: useful for the debugging but noticeably slows down
     // the code so don't do it by default
 #if wxDEBUG_LEVEL >= 2
+    // notice that we cast wParam and lParam to long to avoid mismatch with
+    // format specifiers in 64 bit builds where they are both int64 quantities
+    //
+    // casting like this loses information, of course, but it shouldn't matter
+    // much for this diagnostic code and it keeps the code simple
     wxLogTrace("winmsg",
                wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
-               wxGetMessageName(message), hWnd, (long)wParam, lParam);
+               wxGetMessageName(message), hWnd, (long)wParam, (long)lParam);
 #endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);

@@ -2546,6 +2546,9 @@ void wxAuiManager::Update()
                     style |= wxRESIZE_BORDER;
                 p.frame->SetWindowStyleFlag(style);
 
+                if (p.frame->GetLabel() != p.caption)
+                    p.frame->SetLabel(p.caption);
+
                 if (p.frame->IsShown() != p.IsShown())
                     p.frame->Show(p.IsShown());
             }
