@@ -25,6 +25,8 @@ public:
 
 private:
     QPointer< QApplication > m_qtApplication;
+    int m_qtArgc;
+    char **m_qtArgv;
     
     DECLARE_DYNAMIC_CLASS_NO_COPY( wxApp )
 };
